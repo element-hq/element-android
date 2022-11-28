@@ -88,7 +88,7 @@ class TimelineItemFactory @Inject constructor(
                     EventType.STATE_ROOM_ENCRYPTION -> encryptionItemFactory.create(params)
                     // State room create
                     EventType.STATE_ROOM_CREATE -> roomCreateItemFactory.create(params)
-                    in EventType.STATE_ROOM_BEACON_INFO -> messageItemFactory.create(params)
+                    in EventType.STATE_ROOM_BEACON_INFO.values -> messageItemFactory.create(params)
                     VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO -> messageItemFactory.create(params)
                     // Unhandled state event types
                     else -> {
@@ -101,7 +101,7 @@ class TimelineItemFactory @Inject constructor(
                 when (event.root.getClearType()) {
                     // Message itemsX
                     EventType.STICKER,
-                    in EventType.POLL_START,
+                    in EventType.POLL_START.values,
                     EventType.MESSAGE -> messageItemFactory.create(params)
                     EventType.REDACTION,
                     EventType.KEY_VERIFICATION_ACCEPT,
@@ -114,9 +114,9 @@ class TimelineItemFactory @Inject constructor(
                     EventType.CALL_SELECT_ANSWER,
                     EventType.CALL_NEGOTIATE,
                     EventType.REACTION,
-                    in EventType.POLL_RESPONSE,
-                    in EventType.POLL_END -> noticeItemFactory.create(params)
-                    in EventType.BEACON_LOCATION_DATA -> {
+                    in EventType.POLL_RESPONSE.values,
+                    in EventType.POLL_END.values -> noticeItemFactory.create(params)
+                    in EventType.BEACON_LOCATION_DATA.values -> {
                         if (event.root.isRedacted()) {
                             messageItemFactory.create(params)
                         } else {

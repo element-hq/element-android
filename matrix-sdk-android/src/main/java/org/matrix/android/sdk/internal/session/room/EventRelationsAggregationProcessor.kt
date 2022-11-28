@@ -91,7 +91,12 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
             EventType.KEY_VERIFICATION_READY,
             EventType.KEY_VERIFICATION_KEY,
             EventType.ENCRYPTED
-    ) + EventType.POLL_START + EventType.POLL_RESPONSE + EventType.POLL_END + EventType.STATE_ROOM_BEACON_INFO + EventType.BEACON_LOCATION_DATA
+    ) +
+            EventType.POLL_START.values +
+            EventType.POLL_RESPONSE.values +
+            EventType.POLL_END.values +
+            EventType.STATE_ROOM_BEACON_INFO.values +
+            EventType.BEACON_LOCATION_DATA.values
 
     override fun shouldProcess(eventId: String, eventType: String, insertType: EventInsertType): Boolean {
         return allowedTypes.contains(eventType)
@@ -208,7 +213,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                         }
                     }
                 }
-                in EventType.POLL_START -> {
+                in EventType.POLL_START.values -> {
                     val content: MessagePollContent? = event.content.toModel()
                     if (content?.relatesTo?.type == RelationType.REPLACE) {
                         Timber.v("###REPLACE in room $roomId for event ${event.eventId}")
@@ -216,26 +221,26 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                         handleReplace(realm, event, roomId, isLocalEcho, content.relatesTo.eventId)
                     }
                 }
-                in EventType.POLL_RESPONSE -> {
+                in EventType.POLL_RESPONSE.values -> {
                     event.content.toModel<MessagePollResponseContent>(catchError = true)?.let {
                         sessionManager.getSessionComponent(sessionId)?.session()?.let { session ->
                             pollAggregationProcessor.handlePollResponseEvent(session, realm, event)
                         }
                     }
                 }
-                in EventType.POLL_END -> {
+                in EventType.POLL_END.values -> {
                     sessionManager.getSessionComponent(sessionId)?.session()?.let { session ->
                         getPowerLevelsHelper(event.roomId)?.let {
                             pollAggregationProcessor.handlePollEndEvent(session, it, realm, event)
                         }
                     }
                 }
-                in EventType.STATE_ROOM_BEACON_INFO -> {
+                in EventType.STATE_ROOM_BEACON_INFO.values -> {
                     event.content.toModel<MessageBeaconInfoContent>(catchError = true)?.let {
                         liveLocationAggregationProcessor.handleBeaconInfo(realm, event, it, roomId, isLocalEcho)
                     }
                 }
-                in EventType.BEACON_LOCATION_DATA -> {
+                in EventType.BEACON_LOCATION_DATA.values -> {
                     handleBeaconLocationData(event, realm, roomId, isLocalEcho)
                 }
                 else -> Timber.v("UnHandled event ${event.eventId}")
@@ -324,7 +329,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
             }
         }
 
-        if (event.getClearType() in EventType.POLL_START) {
+        if (event.getClearType() in EventType.POLL_START.values) {
             pollAggregationProcessor.handlePollStartEvent(realm, event)
         }
 

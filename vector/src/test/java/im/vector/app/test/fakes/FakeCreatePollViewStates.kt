@@ -63,7 +63,7 @@ object FakeCreatePollViewStates {
     )
 
     private val A_POLL_START_EVENT = Event(
-            type = EventType.POLL_START.first(),
+            type = EventType.POLL_START.stable,
             eventId = A_FAKE_EVENT_ID,
             originServerTs = 1652435922563,
             senderId = A_FAKE_USER_ID,
@@ -80,8 +80,8 @@ object FakeCreatePollViewStates {
     )
 
     val initialCreatePollViewState = CreatePollViewState(createPollArgs).copy(
-        canCreatePoll = false,
-        canAddMoreOptions = true
+            canCreatePoll = false,
+            canAddMoreOptions = true
     )
 
     val pollViewStateWithOnlyQuestion = initialCreatePollViewState.copy(

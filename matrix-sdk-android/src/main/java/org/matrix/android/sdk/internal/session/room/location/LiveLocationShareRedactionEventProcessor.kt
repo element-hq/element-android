@@ -48,7 +48,7 @@ internal class LiveLocationShareRedactionEventProcessor @Inject constructor() : 
         val redactedEvent = EventEntity.where(realm, eventId = event.redacts).findFirst()
                 ?: return
 
-        if (redactedEvent.type in EventType.STATE_ROOM_BEACON_INFO) {
+        if (redactedEvent.type in EventType.STATE_ROOM_BEACON_INFO.values) {
             val liveSummary = LiveLocationShareAggregatedSummaryEntity.get(realm, eventId = redactedEvent.eventId)
 
             if (liveSummary != null) {

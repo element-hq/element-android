@@ -66,7 +66,7 @@ class PollAggregationTest : InstrumentedTest {
 
         val aliceEventsListener = object : Timeline.Listener {
             override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
-                snapshot.firstOrNull { it.root.getClearType() in EventType.POLL_START }?.let { pollEvent ->
+                snapshot.firstOrNull { it.root.getClearType() in EventType.POLL_START.values }?.let { pollEvent ->
                     val pollEventId = pollEvent.eventId
                     val pollContent = pollEvent.root.content?.toModel<MessagePollContent>()
                     val pollSummary = pollEvent.annotations?.pollResponseSummary

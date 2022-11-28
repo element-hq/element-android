@@ -122,17 +122,17 @@ class DisplayableEventFormatter @Inject constructor(
             EventType.CALL_CANDIDATES -> {
                 span { }
             }
-            in EventType.POLL_START -> {
+            in EventType.POLL_START.values -> {
                 timelineEvent.root.getClearContent().toModel<MessagePollContent>(catchError = true)?.getBestPollCreationInfo()?.question?.getBestQuestion()
                         ?: stringProvider.getString(R.string.sent_a_poll)
             }
-            in EventType.POLL_RESPONSE -> {
+            in EventType.POLL_RESPONSE.values -> {
                 stringProvider.getString(R.string.poll_response_room_list_preview)
             }
-            in EventType.POLL_END -> {
+            in EventType.POLL_END.values -> {
                 stringProvider.getString(R.string.poll_end_room_list_preview)
             }
-            in EventType.STATE_ROOM_BEACON_INFO -> {
+            in EventType.STATE_ROOM_BEACON_INFO.values -> {
                 simpleFormat(senderName, stringProvider.getString(R.string.sent_live_location), appendAuthor)
             }
             else -> {
@@ -220,17 +220,17 @@ class DisplayableEventFormatter @Inject constructor(
                     emojiSpanify.spanify(stringProvider.getString(R.string.sent_a_reaction, it.key))
                 } ?: span { }
             }
-            in EventType.POLL_START -> {
+            in EventType.POLL_START.values -> {
                 event.getClearContent().toModel<MessagePollContent>(catchError = true)?.pollCreationInfo?.question?.question
                         ?: stringProvider.getString(R.string.sent_a_poll)
             }
-            in EventType.POLL_RESPONSE -> {
+            in EventType.POLL_RESPONSE.values -> {
                 stringProvider.getString(R.string.poll_response_room_list_preview)
             }
-            in EventType.POLL_END -> {
+            in EventType.POLL_END.values -> {
                 stringProvider.getString(R.string.poll_end_room_list_preview)
             }
-            in EventType.STATE_ROOM_BEACON_INFO -> {
+            in EventType.STATE_ROOM_BEACON_INFO.values -> {
                 stringProvider.getString(R.string.sent_live_location)
             }
             else -> {

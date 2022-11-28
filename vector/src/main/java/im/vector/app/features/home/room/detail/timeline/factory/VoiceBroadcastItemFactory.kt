@@ -23,6 +23,7 @@ import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvide
 import im.vector.app.features.home.room.detail.timeline.helper.VoiceBroadcastEventsGroup
 import im.vector.app.features.home.room.detail.timeline.item.AbsMessageItem
 import im.vector.app.features.home.room.detail.timeline.item.AbsMessageVoiceBroadcastItem
+import im.vector.app.features.home.room.detail.timeline.item.BaseEventItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceBroadcastListeningItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceBroadcastListeningItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceBroadcastRecordingItem
@@ -47,6 +48,7 @@ class VoiceBroadcastItemFactory @Inject constructor(
         private val voiceBroadcastRecorder: VoiceBroadcastRecorder?,
         private val voiceBroadcastPlayer: VoiceBroadcastPlayer,
         private val playbackTracker: AudioMessagePlaybackTracker,
+        private val noticeItemFactory: NoticeItemFactory,
 ) {
 
     fun create(
@@ -54,9 +56,11 @@ class VoiceBroadcastItemFactory @Inject constructor(
             messageContent: MessageVoiceBroadcastInfoContent,
             highlight: Boolean,
             attributes: AbsMessageItem.Attributes,
-    ): AbsMessageVoiceBroadcastItem<*>? {
+    ): BaseEventItem<*>? {
         // Only display item of the initial event with updated data
-        if (messageContent.voiceBroadcastState != VoiceBroadcastState.STARTED) return null
+        if (messageContent.voiceBroadcastState != VoiceBroadcastState.STARTED) {
+            return noticeItemFactory.create(params)
+        }
 
         val voiceBroadcastEventsGroup = params.eventsGroup?.let { VoiceBroadcastEventsGroup(it) } ?: return null
         val voiceBroadcastEvent = voiceBroadcastEventsGroup.getLastDisplayableEvent().root.asVoiceBroadcastEvent() ?: return null
