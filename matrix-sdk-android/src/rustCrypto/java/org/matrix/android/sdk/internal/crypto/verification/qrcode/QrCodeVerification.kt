@@ -24,22 +24,21 @@ import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
+import org.matrix.android.sdk.api.session.crypto.verification.QRCodeVerificationState
 import org.matrix.android.sdk.api.session.crypto.verification.QrCodeVerificationTransaction
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
-import org.matrix.android.sdk.api.session.crypto.verification.safeValueOf
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.util.fromBase64
 import org.matrix.android.sdk.internal.crypto.OlmMachine
 import org.matrix.android.sdk.internal.crypto.network.RequestSender
 import org.matrix.android.sdk.internal.crypto.verification.VerificationListenersHolder
 import org.matrix.android.sdk.internal.crypto.verification.VerificationRequest
-import uniffi.olm.CryptoStoreException
-import uniffi.olm.QrCode
-import uniffi.olm.Verification
+import org.matrix.rustcomponents.sdk.crypto.CryptoStoreException
+import org.matrix.rustcomponents.sdk.crypto.QrCode
 
 /** Class representing a QR code based verification flow */
 internal class QrCodeVerification @AssistedInject constructor(
         @Assisted private var request: VerificationRequest,
-        @Assisted private var inner: QrCode?,
+        @Assisted private var inner: QrCode,
         private val olmMachine: OlmMachine,
         private val sender: RequestSender,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
@@ -48,8 +47,11 @@ internal class QrCodeVerification @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory {
-        fun create(request: VerificationRequest, inner: QrCode?): QrCodeVerification
+        fun create(request: VerificationRequest, inner: QrCode): QrCodeVerification
     }
+
+    override val method: VerificationMethod
+        get() = VerificationMethod.QR_CODE_SCAN
 
     private val innerMachine = olmMachine.inner()
 
@@ -72,17 +74,17 @@ internal class QrCodeVerification @AssistedInject constructor(
      */
     override val qrCodeText: String?
         get() {
-            val data = inner?.let { innerMachine.generateQrCode(it.otherUserId, it.flowId) }
+            val data = inner.generateQrCode()
 
             // TODO Why are we encoding this to ISO_8859_1? If we're going to encode, why not base64?
             return data?.fromBase64()?.toString(Charsets.ISO_8859_1)
         }
 
     /** Pass the data from a scanned QR code into the QR code verification object */
-    override suspend fun userHasScannedOtherQrCode(otherQrCodeText: String) {
-        request.scanQrCode(otherQrCodeText)
-        dispatchTxUpdated()
-    }
+//    override suspend fun userHasScannedOtherQrCode(otherQrCodeText: String) {
+//        request.scanQrCode(otherQrCodeText)
+//        dispatchTxUpdated()
+//    }
 
     /** Confirm that the other side has indeed scanned the QR code we presented */
     override suspend fun otherUserScannedMyQrCode() {
@@ -95,32 +97,35 @@ internal class QrCodeVerification @AssistedInject constructor(
         cancelHelper(CancelCode.MismatchedKeys)
     }
 
-    override var state: VerificationTxState
-        get() {
-            refreshData()
-            val inner = inner
-            val cancelInfo = inner?.cancelInfo
-
-            return if (inner != null) {
-                when {
-                    cancelInfo != null     -> {
-                        val cancelCode = safeValueOf(cancelInfo.cancelCode)
-                        val byMe = cancelInfo.cancelledByUs
-                        VerificationTxState.Cancelled(cancelCode, byMe)
-                    }
-                    inner.isDone           -> VerificationTxState.Verified
-                    inner.reciprocated     -> VerificationTxState.Started
-                    inner.hasBeenConfirmed -> VerificationTxState.WaitingOtherReciprocateConfirm
-                    inner.otherSideScanned -> VerificationTxState.QrScannedByOther
-                    else                   -> VerificationTxState.None
-                }
-            } else {
-                VerificationTxState.None
-            }
-        }
-        @Suppress("UNUSED_PARAMETER")
-        set(value) {
-        }
+    override fun state(): QRCodeVerificationState {
+        return QRCodeVerificationState.Reciprocated
+    }
+//    override var state: VerificationTxState
+//        get() {
+//            refreshData()
+//            val inner = inner
+//            val cancelInfo = inner?.cancelInfo
+//
+//            return if (inner != null) {
+//                when {
+//                    cancelInfo != null     -> {
+//                        val cancelCode = safeValueOf(cancelInfo.cancelCode)
+//                        val byMe = cancelInfo.cancelledByUs
+//                        VerificationTxState.Cancelled(cancelCode, byMe)
+//                    }
+//                    inner.isDone           -> VerificationTxState.Verified
+//                    inner.reciprocated     -> VerificationTxState.Started
+//                    inner.hasBeenConfirmed -> VerificationTxState.WaitingOtherReciprocateConfirm
+//                    inner.otherSideScanned -> VerificationTxState.QrScannedByOther
+//                    else                   -> VerificationTxState.None
+//                }
+//            } else {
+//                VerificationTxState.None
+//            }
+//        }
+//        @Suppress("UNUSED_PARAMETER")
+//        set(value) {
+//        }
 
     /** Get the unique id of this verification */
     override val transactionId: String
@@ -185,7 +190,7 @@ internal class QrCodeVerification @AssistedInject constructor(
     @Throws(CryptoStoreException::class)
     private suspend fun confirm() {
         val result = withContext(coroutineDispatchers.io) {
-            innerMachine.confirmVerification(request.otherUser(), request.flowId())
+            inner.confirm()
         } ?: return
         dispatchTxUpdated()
         try {
@@ -202,7 +207,7 @@ internal class QrCodeVerification @AssistedInject constructor(
     }
 
     private suspend fun cancelHelper(code: CancelCode) = withContext(NonCancellable) {
-        val request = innerMachine.cancelVerification(request.otherUser(), request.flowId(), code.value) ?: return@withContext
+        val request = inner.cancel(code.value) ?: return@withContext
         dispatchTxUpdated()
         tryOrNull("Fail to send cancel verification request") {
             sender.sendVerificationRequest(request, retryCount = Int.MAX_VALUE)
@@ -211,13 +216,17 @@ internal class QrCodeVerification @AssistedInject constructor(
 
     /** Fetch fresh data from the Rust side for our verification flow */
     private fun refreshData() {
-        when (val verification = innerMachine.getVerification(request.otherUser(), request.flowId())) {
-            is Verification.QrCodeV1 -> {
-                inner = verification.qrcode
-            }
-            else                     -> {
-            }
-        }
+        innerMachine.getVerification(request.otherUser(), request.flowId())
+                ?.asQr()?.let {
+                    inner = it
+                }
+//        when (val verification = innerMachine.getVerification(request.otherUser(), request.flowId())) {
+//            is Verification.QrCodeV1 -> {
+//                inner = verification.qrcode
+//            }
+//            else                     -> {
+//            }
+//        }
 
         return
     }
@@ -225,7 +234,7 @@ internal class QrCodeVerification @AssistedInject constructor(
     override fun toString(): String {
         return "QrCodeVerification(" +
                 "qrCodeText=$qrCodeText, " +
-                "state=$state, " +
+                "state=${state()}, " +
                 "transactionId='$transactionId', " +
                 "otherUserId='$otherUserId', " +
                 "otherDeviceId=$otherDeviceId, " +

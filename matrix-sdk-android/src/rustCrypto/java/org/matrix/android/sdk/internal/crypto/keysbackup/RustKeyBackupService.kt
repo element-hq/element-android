@@ -61,9 +61,9 @@ import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.util.JsonCanonicalizer
 import org.matrix.olm.OlmException
+import org.matrix.rustcomponents.sdk.crypto.Request
+import org.matrix.rustcomponents.sdk.crypto.RequestType
 import timber.log.Timber
-import uniffi.olm.Request
-import uniffi.olm.RequestType
 import java.security.InvalidParameterException
 import javax.inject.Inject
 import kotlin.random.Random

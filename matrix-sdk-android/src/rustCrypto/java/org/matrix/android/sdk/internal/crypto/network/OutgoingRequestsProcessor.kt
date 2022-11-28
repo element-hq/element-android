@@ -29,9 +29,9 @@ import org.matrix.android.sdk.internal.crypto.ComputeShieldForGroupUseCase
 import org.matrix.android.sdk.internal.crypto.CryptoSessionInfoProvider
 import org.matrix.android.sdk.internal.crypto.OlmMachine
 import org.matrix.android.sdk.internal.session.SessionScope
+import org.matrix.rustcomponents.sdk.crypto.Request
+import org.matrix.rustcomponents.sdk.crypto.RequestType
 import timber.log.Timber
-import uniffi.olm.Request
-import uniffi.olm.RequestType
 import javax.inject.Inject
 
 private val loggerTag = LoggerTag("OutgoingRequestsProcessor", LoggerTag.CRYPTO)

@@ -21,8 +21,8 @@ import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.internal.crypto.network.OutgoingRequestsProcessor
 import org.matrix.android.sdk.internal.crypto.network.RequestSender
-import uniffi.olm.Request
-import uniffi.olm.RequestType
+import org.matrix.rustcomponents.sdk.crypto.Request
+import org.matrix.rustcomponents.sdk.crypto.RequestType
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Provider

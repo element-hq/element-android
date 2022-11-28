@@ -25,14 +25,16 @@ import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.EmojiRepresentation
+import org.matrix.android.sdk.api.session.crypto.verification.SasTransactionState
 import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.crypto.verification.safeValueOf
 import org.matrix.android.sdk.internal.crypto.OlmMachine
 import org.matrix.android.sdk.internal.crypto.network.RequestSender
-import uniffi.olm.CryptoStoreException
-import uniffi.olm.Sas
-import uniffi.olm.Verification
+import org.matrix.rustcomponents.sdk.crypto.CryptoStoreException
+import org.matrix.rustcomponents.sdk.crypto.Sas
+import org.matrix.rustcomponents.sdk.crypto.SasListener
+import org.matrix.rustcomponents.sdk.crypto.SasState
 
 /** Class representing a short auth string verification flow */
 internal class SasVerification @AssistedInject constructor(
@@ -40,60 +42,67 @@ internal class SasVerification @AssistedInject constructor(
         private val olmMachine: OlmMachine,
         private val sender: RequestSender,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val verificationListenersHolder: VerificationListenersHolder
+        private val verificationListenersHolder: VerificationListenersHolder,
 ) :
-        SasVerificationTransaction {
+        SasVerificationTransaction, SasListener {
+
+    init {
+        inner.setChangesListener(this)
+    }
+
+    var innerState: SasState = SasState.Started
 
     @AssistedFactory
     interface Factory {
         fun create(inner: Sas): SasVerification
     }
 
-    private val innerMachine = olmMachine.inner()
-
-    private fun dispatchTxUpdated() {
-        refreshData()
-        verificationListenersHolder.dispatchTxUpdated(this)
-    }
-
     /** The user ID of the other user that is participating in this verification flow */
-    override val otherUserId: String = inner.otherUserId
+    override val otherUserId: String = inner.otherUserId()
 
     /** Get the device id of the other user's device participating in this verification flow */
-    override var otherDeviceId: String?
-        get() = inner.otherDeviceId
-        @Suppress("UNUSED_PARAMETER")
-        set(value) {
-        }
+    override val otherDeviceId: String
+        get() = inner.otherDeviceId()
 
     /** Did the other side initiate this verification flow */
     override val isIncoming: Boolean
-        get() = !inner.weStarted
+        get() = !inner.weStarted()
 
-    override var state: VerificationTxState
-        get() {
-            refreshData()
-            val cancelInfo = inner.cancelInfo
+    private var decimals: List<Int>? = null
+    private var emojis: List<Int>? = null
 
-            return when {
-                cancelInfo != null    -> {
-                    val cancelCode = safeValueOf(cancelInfo.cancelCode)
-                    VerificationTxState.Cancelled(cancelCode, cancelInfo.cancelledByUs)
-                }
-                inner.isDone          -> VerificationTxState.Verified
-                inner.haveWeConfirmed -> VerificationTxState.SasMacSent
-                inner.canBePresented  -> VerificationTxState.SasShortCodeReady
-                inner.hasBeenAccepted -> VerificationTxState.SasAccepted
-                else                  -> VerificationTxState.SasStarted
+    override fun state(): SasTransactionState {
+        return when (val state = innerState) {
+            SasState.Started -> SasTransactionState.SasStarted
+            SasState.Accepted -> SasTransactionState.SasAccepted
+            is SasState.KeysExchanged -> {
+                this.decimals = state.decimals
+                this.emojis = state.emojis
+                SasTransactionState.SasShortCodeReady
             }
+            SasState.Confirmed -> SasTransactionState.SasMacSent
+            SasState.Done -> SasTransactionState.Done(false)
+            is SasState.Cancelled -> SasTransactionState.Cancelled(safeValueOf(state.cancelInfo.cancelCode), state.cancelInfo.cancelledByUs)
         }
-        @Suppress("UNUSED_PARAMETER")
-        set(v) {
-        }
+//        refreshData()
+//        val cancelInfo = inner.cancelInfo
+//
+//        return when {
+//            cancelInfo != null -> {
+//                val cancelCode = safeValueOf(cancelInfo.cancelCode)
+//                SasTransactionState.Cancelled(cancelCode, cancelInfo.cancelledByUs)
+//            }
+//            inner.isDone -> SasTransactionState.Done(true)
+//            inner.haveWeConfirmed -> SasTransactionState.SasAccepted
+//            inner.canBePresented -> SasTransactionState.SasShortCodeReady
+//            inner.hasBeenAccepted -> SasTransactionState.SasAccepted
+//            else -> SasTransactionState.SasStarted
+//        }
+    }
 
     /** Get the unique id of this verification */
     override val transactionId: String
-        get() = inner.flowId
+        get() = inner.flowId()
 
     /** Cancel the verification flow
      *
@@ -136,13 +145,15 @@ internal class SasVerification @AssistedInject constructor(
         cancelHelper(CancelCode.MismatchedSas)
     }
 
+    override val method: VerificationMethod
+        get() = VerificationMethod.QR_CODE_SCAN
+
     /** Is this verification happening over to-device messages */
-    override fun isToDeviceTransport(): Boolean = inner.roomId == null
+    override fun isToDeviceTransport(): Boolean = inner.roomId() == null
 
     /** Does the verification flow support showing emojis as the short auth string */
     override fun supportsEmoji(): Boolean {
-        refreshData()
-        return inner.supportsEmoji
+        return inner.supportsEmoji()
     }
 
     /** Confirm that the short authentication code matches on both sides
@@ -177,8 +188,6 @@ internal class SasVerification @AssistedInject constructor(
      * in a presentable state.
      */
     override fun getDecimalCodeRepresentation(): String {
-        val decimals = innerMachine.getDecimals(inner.otherUserId, inner.flowId)
-
         return decimals?.joinToString(" ") ?: ""
     }
 
@@ -189,14 +198,13 @@ internal class SasVerification @AssistedInject constructor(
      * state.
      */
     override fun getEmojiCodeRepresentation(): List<EmojiRepresentation> {
-        val emojiIndex = innerMachine.getEmojiIndex(inner.otherUserId, inner.flowId)
-
-        return emojiIndex?.map { getEmojiForCode(it) } ?: listOf()
+        return emojis?.map { getEmojiForCode(it) } ?: listOf()
     }
 
     internal suspend fun accept() {
-        val request = innerMachine.acceptSasVerification(inner.otherUserId, inner.flowId) ?: return
-        dispatchTxUpdated()
+        val request = inner.accept() ?: return Unit.also {
+            // TODO should throw here?
+        }
         try {
             sender.sendVerificationRequest(request)
         } catch (failure: Throwable) {
@@ -207,10 +215,8 @@ internal class SasVerification @AssistedInject constructor(
     @Throws(CryptoStoreException::class)
     private suspend fun confirm() {
         val result = withContext(coroutineDispatchers.io) {
-            innerMachine.confirmVerification(inner.otherUserId, inner.flowId)
+            inner.confirm()
         } ?: return
-
-        dispatchTxUpdated()
         try {
             for (verificationRequest in result.requests) {
                 sender.sendVerificationRequest(verificationRequest)
@@ -225,24 +231,28 @@ internal class SasVerification @AssistedInject constructor(
     }
 
     private suspend fun cancelHelper(code: CancelCode) = withContext(NonCancellable) {
-        val request = innerMachine.cancelVerification(inner.otherUserId, inner.flowId, code.value) ?: return@withContext
-        dispatchTxUpdated()
+        val request = inner.cancel(code.value) ?: return@withContext
         tryOrNull("Fail to send cancel request") {
             sender.sendVerificationRequest(request, retryCount = Int.MAX_VALUE)
         }
     }
 
     /** Fetch fresh data from the Rust side for our verification flow */
-    private fun refreshData() {
-        when (val verification = innerMachine.getVerification(inner.otherUserId, inner.flowId)) {
-            is Verification.SasV1 -> {
-                inner = verification.sas
-            }
-            else                  -> {
-            }
-        }
+//    private fun refreshData() {
+//        when (val verification = innerMachine.getVerification(inner.otherUserId, inner.flowId)) {
+//            is Verification.SasV1 -> {
+//                inner = verification.sas
+//            }
+//            else -> {
+//            }
+//        }
+//
+//        return
+//    }
 
-        return
+    override fun onChange(state: SasState) {
+        innerState = state
+        verificationListenersHolder.dispatchTxUpdated(this)
     }
 
     override fun toString(): String {
@@ -250,7 +260,7 @@ internal class SasVerification @AssistedInject constructor(
                 "otherUserId='$otherUserId', " +
                 "otherDeviceId=$otherDeviceId, " +
                 "isIncoming=$isIncoming, " +
-                "state=$state, " +
+                "state=${state()}, " +
                 "transactionId='$transactionId')"
     }
 }

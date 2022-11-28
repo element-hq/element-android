@@ -30,9 +30,10 @@ import org.matrix.android.sdk.internal.crypto.network.RequestSender
 import org.matrix.android.sdk.internal.crypto.verification.SasVerification
 import org.matrix.android.sdk.internal.crypto.verification.VerificationRequest
 import org.matrix.android.sdk.internal.crypto.verification.prepareMethods
-import uniffi.olm.CryptoStoreException
-import uniffi.olm.SignatureException
-import uniffi.olm.Device as InnerDevice
+import org.matrix.rustcomponents.sdk.crypto.CryptoStoreException
+import org.matrix.rustcomponents.sdk.crypto.LocalTrust
+import org.matrix.rustcomponents.sdk.crypto.SignatureException
+import org.matrix.rustcomponents.sdk.crypto.Device as InnerDevice
 
 /** Class representing a device that supports E2EE in the Matrix world
  *
@@ -88,7 +89,7 @@ internal class Device @AssistedInject constructor(
                 requestSender.sendVerificationRequest(result.request)
                 verificationRequestFactory.create(result.verification)
             } catch (failure: Throwable) {
-                innerMachine.cancelVerification(result.verification.otherUserId, result.verification.flowId, CancelCode.UserError.value)
+                // innerMachine.cancelVerification(result.verification.otherUserId, result.verification.flowId, CancelCode.UserError.value)
                 null
             }
         } else {
@@ -115,7 +116,8 @@ internal class Device @AssistedInject constructor(
                 requestSender.sendVerificationRequest(result.request)
                 sasVerificationFactory.create(result.sas)
             } catch (failure: Throwable) {
-                innerMachine.cancelVerification(result.sas.otherUserId, result.sas.flowId, CancelCode.UserError.value)
+                result.sas.cancel(CancelCode.UserError.value)
+//                innerMachine.cancelVerification(result.sas.otherUserId, result.sas.flowId, CancelCode.UserError.value)
                 null
             }
         } else {
@@ -132,7 +134,7 @@ internal class Device @AssistedInject constructor(
     @Throws(CryptoStoreException::class)
     suspend fun markAsTrusted() {
         withContext(coroutineDispatchers.io) {
-            innerMachine.markDeviceAsTrusted(innerDevice.userId, innerDevice.deviceId)
+            innerMachine.setLocalTrust(innerDevice.userId, innerDevice.deviceId, LocalTrust.VERIFIED)
         }
     }
 
@@ -169,18 +171,21 @@ internal class Device @AssistedInject constructor(
      * This will not fetch out fresh data from the Rust side.
      **/
     internal fun toCryptoDeviceInfo(): CryptoDeviceInfo {
-        val keys = innerDevice.keys.map { (keyId, key) -> "$keyId:$innerDevice.deviceId" to key }.toMap()
+//        val keys = innerDevice.keys.map { (keyId, key) -> keyId to key }.toMap()
 
         return CryptoDeviceInfo(
                 deviceId = innerDevice.deviceId,
                 userId = innerDevice.userId,
                 algorithms = innerDevice.algorithms,
-                keys = keys,
+                keys = innerDevice.keys,
                 // The Kotlin side doesn't need to care about signatures,
                 // so we're not filling this out
                 signatures = mapOf(),
                 unsigned = UnsignedDeviceInfo(innerDevice.displayName),
-                trustLevel = DeviceTrustLevel(crossSigningVerified = innerDevice.crossSigningTrusted, locallyVerified = innerDevice.locallyTrusted),
+                trustLevel = DeviceTrustLevel(
+                        crossSigningVerified = innerDevice.crossSigningTrusted,
+                        locallyVerified = innerDevice.locallyTrusted
+                ),
                 isBlocked = innerDevice.isBlocked,
                 // TODO
                 firstTimeSeenLocalTs = null

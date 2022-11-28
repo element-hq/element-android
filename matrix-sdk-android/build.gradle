@@ -169,8 +169,6 @@ dependencies {
     implementation libs.jetbrains.coroutinesCore
     implementation libs.jetbrains.coroutinesAndroid
 
-    implementation 'org.matrix.rustcomponents:crypto-android:0.2.1-SNAPSHOT'
-    //implementation files('libs/crypto-android-release.aar')
 
 //    implementation(name: 'crypto-android-release', ext: 'aar')
     implementation 'net.java.dev.jna:jna:5.10.0@aar'
@@ -236,7 +234,8 @@ dependencies {
 
     implementation libs.google.phonenumber
 
-    rustCryptoImplementation 'org.matrix.rustcomponents:crypto-android:0.2.1-SNAPSHOT'
+    // rustCryptoImplementation 'org.matrix.rustcomponents:crypto-android:0.2.1-SNAPSHOT'
+    rustCryptoImplementation files('libs/matrix-rust-sdk-crypto.aar')
 
     testImplementation libs.tests.junit
     // Note: version sticks to 1.9.2 due to https://github.com/mockk/mockk/issues/281

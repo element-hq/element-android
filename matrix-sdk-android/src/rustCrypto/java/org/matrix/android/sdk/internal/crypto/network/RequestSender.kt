@@ -62,11 +62,11 @@ import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.network.DEFAULT_REQUEST_RETRY_COUNT
 import org.matrix.android.sdk.internal.network.parsing.CheckNumberType
 import org.matrix.android.sdk.internal.session.room.send.SendResponse
+import org.matrix.rustcomponents.sdk.crypto.OutgoingVerificationRequest
+import org.matrix.rustcomponents.sdk.crypto.Request
+import org.matrix.rustcomponents.sdk.crypto.SignatureUploadRequest
+import org.matrix.rustcomponents.sdk.crypto.UploadSigningKeysRequest
 import timber.log.Timber
-import uniffi.olm.OutgoingVerificationRequest
-import uniffi.olm.Request
-import uniffi.olm.SignatureUploadRequest
-import uniffi.olm.UploadSigningKeysRequest
 import javax.inject.Inject
 
 internal class RequestSender @Inject constructor(

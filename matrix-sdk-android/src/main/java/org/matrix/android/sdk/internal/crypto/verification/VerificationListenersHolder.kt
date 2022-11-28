@@ -16,82 +16,49 @@
 
 package org.matrix.android.sdk.internal.crypto.verification
 
-import android.os.Handler
-import android.os.Looper
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationEvent
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.internal.session.SessionScope
 import timber.log.Timber
 import javax.inject.Inject
 
 @SessionScope
-internal class VerificationListenersHolder @Inject constructor() {
+internal class VerificationListenersHolder @Inject constructor(
+        private val coroutineDispatchers: MatrixCoroutineDispatchers
+) {
 
-    private val listeners = ArrayList<VerificationService.Listener>()
-
-    private val uiHandler = Handler(Looper.getMainLooper())
-
-    fun listeners(): List<VerificationService.Listener> = listeners
-
-    fun addListener(listener: VerificationService.Listener) {
-        uiHandler.post {
-            if (!this.listeners.contains(listener)) {
-                this.listeners.add(listener)
-            }
-        }
-    }
-
-    fun removeListener(listener: VerificationService.Listener) {
-        uiHandler.post { this.listeners.remove(listener) }
-    }
+    val scope = CoroutineScope(SupervisorJob() + coroutineDispatchers.dmVerif)
+    val eventFlow = MutableSharedFlow<VerificationEvent>(extraBufferCapacity = 20, onBufferOverflow = BufferOverflow.SUSPEND)
 
     fun dispatchTxAdded(tx: VerificationTransaction) {
-        uiHandler.post {
-            this.listeners.forEach {
-                try {
-                    it.transactionCreated(tx)
-                } catch (e: Throwable) {
-                    Timber.e(e, "## Error while notifying listeners")
-                }
-            }
+        scope.launch {
+            eventFlow.emit(VerificationEvent.TransactionAdded(tx))
         }
     }
 
     fun dispatchTxUpdated(tx: VerificationTransaction) {
-        uiHandler.post {
-            this.listeners.forEach {
-                try {
-                    it.transactionUpdated(tx)
-                } catch (e: Throwable) {
-                    Timber.e(e, "## Error while notifying listeners")
-                }
-            }
+        scope.launch {
+            eventFlow.emit(VerificationEvent.TransactionUpdated(tx))
         }
     }
 
     fun dispatchRequestAdded(verificationRequest: PendingVerificationRequest) {
         Timber.v("## SAS dispatchRequestAdded txId:${verificationRequest.transactionId} $verificationRequest")
-        uiHandler.post {
-            this.listeners.forEach {
-                try {
-                    it.verificationRequestCreated(verificationRequest)
-                } catch (e: Throwable) {
-                    Timber.e(e, "## Error while notifying listeners")
-                }
-            }
+        scope.launch {
+            eventFlow.emit(VerificationEvent.RequestAdded(verificationRequest))
         }
     }
 
     fun dispatchRequestUpdated(verificationRequest: PendingVerificationRequest) {
-        uiHandler.post {
-            listeners.forEach {
-                try {
-                    it.verificationRequestUpdated(verificationRequest)
-                } catch (e: Throwable) {
-                    Timber.e(e, "## Error while notifying listeners")
-                }
-            }
+        scope.launch {
+            eventFlow.emit(VerificationEvent.RequestUpdated(verificationRequest))
         }
     }
 }

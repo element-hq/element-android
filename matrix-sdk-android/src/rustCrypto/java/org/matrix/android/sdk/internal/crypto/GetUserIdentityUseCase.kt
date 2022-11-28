@@ -23,7 +23,7 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.internal.crypto.model.rest.RestKeyInfo
 import org.matrix.android.sdk.internal.crypto.network.RequestSender
 import org.matrix.android.sdk.internal.crypto.verification.VerificationRequest
-import uniffi.olm.CryptoStoreException
+import org.matrix.rustcomponents.sdk.crypto.CryptoStoreException
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -44,7 +44,7 @@ internal class GetUserIdentityUseCase @Inject constructor(
         val adapter = moshi.adapter(RestKeyInfo::class.java)
 
         return when (identity) {
-            is uniffi.olm.UserIdentity.Other -> {
+            is org.matrix.rustcomponents.sdk.crypto.UserIdentity.Other -> {
                 val verified = innerMachine.isIdentityVerified(userId)
                 val masterKey = adapter.fromJson(identity.masterKey)!!.toCryptoModel().apply {
                     trustLevel = DeviceTrustLevel(verified, verified)
@@ -62,7 +62,7 @@ internal class GetUserIdentityUseCase @Inject constructor(
                         verificationRequestFactory = verificationRequestFactory
                 )
             }
-            is uniffi.olm.UserIdentity.Own   -> {
+            is org.matrix.rustcomponents.sdk.crypto.UserIdentity.Own   -> {
                 val verified = innerMachine.isIdentityVerified(userId)
 
                 val masterKey = adapter.fromJson(identity.masterKey)!!.toCryptoModel().apply {

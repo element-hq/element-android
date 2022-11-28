@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.api.session.crypto.keysbackup
 
-import uniffi.olm.BackupRecoveryKey as InnerBackupRecoveryKey
+import org.matrix.rustcomponents.sdk.crypto.BackupRecoveryKey as InnerBackupRecoveryKey
 
 class BackupRecoveryKey internal constructor(internal val inner: InnerBackupRecoveryKey) : IBackupRecoveryKey {
 

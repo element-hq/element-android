@@ -104,7 +104,7 @@ interface VerificationService {
             scannedData: String
     ): String?
 
-    suspend fun sasCodeMatch(theyMatch: Boolean, transactionId: String)
+//    suspend fun sasCodeMatch(theyMatch: Boolean, transactionId: String)
 
     // This starts the short SAS flow, the one that doesn't start with a request, deprecated
 

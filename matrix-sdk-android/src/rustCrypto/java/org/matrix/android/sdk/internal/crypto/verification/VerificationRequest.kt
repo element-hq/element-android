@@ -24,18 +24,21 @@ import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
+import org.matrix.android.sdk.api.session.crypto.verification.EVerificationState
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
-import org.matrix.android.sdk.api.session.crypto.verification.ValidVerificationInfoReady
-import org.matrix.android.sdk.api.session.crypto.verification.ValidVerificationInfoRequest
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.crypto.verification.safeValueOf
 import org.matrix.android.sdk.api.util.toBase64NoPadding
 import org.matrix.android.sdk.internal.crypto.OlmMachine
 import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_QR_CODE_SCAN
+import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_QR_CODE_SHOW
+import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_RECIPROCATE
+import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_SAS
 import org.matrix.android.sdk.internal.crypto.network.RequestSender
 import org.matrix.android.sdk.internal.crypto.verification.qrcode.QrCodeVerification
 import org.matrix.android.sdk.internal.util.time.Clock
-import uniffi.olm.VerificationRequest as InnerVerificationRequest
+import org.matrix.rustcomponents.sdk.crypto.QrCode
+import org.matrix.rustcomponents.sdk.crypto.VerificationRequest as InnerVerificationRequest
 
 /** A verification request object
  *
@@ -74,12 +77,12 @@ internal class VerificationRequest @AssistedInject constructor(
      * event that initiated the flow.
      */
     internal fun flowId(): String {
-        return innerVerificationRequest.flowId
+        return innerVerificationRequest.flowId()
     }
 
     /** The user ID of the other user that is participating in this verification flow */
     internal fun otherUser(): String {
-        return innerVerificationRequest.otherUserId
+        return innerVerificationRequest.otherUserId()
     }
 
     /** The device ID of the other user's device that is participating in this verification flow
@@ -89,12 +92,12 @@ internal class VerificationRequest @AssistedInject constructor(
      * */
     internal fun otherDeviceId(): String? {
         refreshData()
-        return innerVerificationRequest.otherDeviceId
+        return innerVerificationRequest.otherDeviceId()
     }
 
     /** Did we initiate this verification flow */
     internal fun weStarted(): Boolean {
-        return innerVerificationRequest.weStarted
+        return innerVerificationRequest.weStarted()
     }
 
     /** Get the id of the room where this verification is happening
@@ -102,7 +105,7 @@ internal class VerificationRequest @AssistedInject constructor(
      * Will be null if the verification is not happening inside a room.
      */
     internal fun roomId(): String? {
-        return innerVerificationRequest.roomId
+        return innerVerificationRequest.roomId()
     }
 
     /** Did the non-initiating side respond with a m.key.verification.read event
@@ -113,13 +116,13 @@ internal class VerificationRequest @AssistedInject constructor(
      */
     internal fun isReady(): Boolean {
         refreshData()
-        return innerVerificationRequest.isReady
+        return innerVerificationRequest.isReady()
     }
 
     /** Did we advertise that we're able to scan QR codes */
     internal fun canScanQrCodes(): Boolean {
         refreshData()
-        return innerVerificationRequest.ourMethods?.contains(VERIFICATION_METHOD_QR_CODE_SCAN) ?: false
+        return innerVerificationRequest.ourSupportedMethods()?.contains(VERIFICATION_METHOD_QR_CODE_SCAN) ?: false
     }
 
     /** Accept the verification request advertising the given methods as supported
@@ -138,19 +141,27 @@ internal class VerificationRequest @AssistedInject constructor(
     suspend fun acceptWithMethods(methods: List<VerificationMethod>) {
         val stringMethods = prepareMethods(methods)
 
-        val request = innerOlmMachine.acceptVerificationRequest(
-                innerVerificationRequest.otherUserId,
-                innerVerificationRequest.flowId,
-                stringMethods
-        ) ?: return
+        val request = innerVerificationRequest.accept(stringMethods)
+                ?: return // should throw here?
+//        val request = innerOlmMachine.acceptVerificationRequest(
+//                innerVerificationRequest.otherUserId(),
+//                innerVerificationRequest.flowId,
+//                stringMethods
+//        ) ?: return
 
         try {
             dispatchRequestUpdated()
             requestSender.sendVerificationRequest(request)
+
+            if (innerVerificationRequest.isReady()) {
+                activeQRCode = innerVerificationRequest.startQrVerification()
+            }
         } catch (failure: Throwable) {
             cancel(CancelCode.UserError)
         }
     }
+
+    var activeQRCode: QrCode? = null
 
     /** Transition from a ready verification request into emoji verification
      *
@@ -167,7 +178,10 @@ internal class VerificationRequest @AssistedInject constructor(
      */
     internal suspend fun startSasVerification(): SasVerification? {
         return withContext(coroutineDispatchers.io) {
-            val result = innerOlmMachine.startSasVerification(innerVerificationRequest.otherUserId, innerVerificationRequest.flowId) ?: return@withContext null
+            val result = innerVerificationRequest.startSasVerification()
+                    ?: return@withContext null
+//            sasStartResult.request
+//            val result = innerOlmMachine.startSasVerification(innerVerificationRequest.otherUserId, innerVerificationRequest.flowId) ?: return@withContext null
             try {
                 requestSender.sendVerificationRequest(result.request)
                 sasVerificationFactory.create(result.sas)
@@ -195,7 +209,8 @@ internal class VerificationRequest @AssistedInject constructor(
         // TODO again, what's the deal with ISO_8859_1?
         val byteArray = data.toByteArray(Charsets.ISO_8859_1)
         val encodedData = byteArray.toBase64NoPadding()
-        val result = innerOlmMachine.scanQrCode(otherUser(), flowId(), encodedData) ?: return null
+//        val result = innerOlmMachine.scanQrCode(otherUser(), flowId(), encodedData) ?: return null
+        val result = innerVerificationRequest.scanQrCode(encodedData) ?: return null
         try {
             requestSender.sendVerificationRequest(result.request)
         } catch (failure: Throwable) {
@@ -223,9 +238,12 @@ internal class VerificationRequest @AssistedInject constructor(
      * QR code verification, or null if we can't yet transition into QR code verification.
      */
     internal fun startQrVerification(): QrCodeVerification? {
-        val qrcode = innerOlmMachine.startQrVerification(innerVerificationRequest.otherUserId, innerVerificationRequest.flowId)
-        return if (qrcode != null) {
-            qrCodeVerificationFactory.create(this, qrcode)
+        activeQRCode = innerVerificationRequest.startQrVerification()
+//        val qrcode = innerOlmMachine.startQrVerification(innerVerificationRequest.otherUserId, innerVerificationRequest.flowId)
+        return if (activeQRCode != null) {
+            TODO("Is this reciprocate or just doing nothing?")
+//            activeQRCode.
+//            qrCodeVerificationFactory.create(this, qrcode)
         } else {
             null
         }
@@ -242,11 +260,13 @@ internal class VerificationRequest @AssistedInject constructor(
      * The method turns into a noop, if the verification flow has already been cancelled.
      */
     internal suspend fun cancel(cancelCode: CancelCode = CancelCode.User) = withContext(NonCancellable) {
-        val request = innerOlmMachine.cancelVerification(
-                innerVerificationRequest.otherUserId,
-                innerVerificationRequest.flowId,
-                cancelCode.value
-        ) ?: return@withContext
+        // TODO damir how to add the code?
+        val request = innerVerificationRequest.cancel() ?: return@withContext
+//        val request = innerOlmMachine.cancelVerification(
+//                innerVerificationRequest.otherUserId,
+//                innerVerificationRequest.flowId,
+//                cancelCode.value
+//        ) ?: return@withContext
         dispatchRequestUpdated()
         tryOrNull("Fail to send cancel request") {
             requestSender.sendVerificationRequest(request, retryCount = Int.MAX_VALUE)
@@ -255,11 +275,22 @@ internal class VerificationRequest @AssistedInject constructor(
 
     /** Fetch fresh data from the Rust side for our verification flow */
     private fun refreshData() {
-        val request = innerOlmMachine.getVerificationRequest(innerVerificationRequest.otherUserId, innerVerificationRequest.flowId)
+        val request = innerOlmMachine.getVerificationRequest(innerVerificationRequest.otherUserId(), innerVerificationRequest.flowId())
 
         if (request != null) {
             innerVerificationRequest = request
         }
+    }
+
+    private fun state(): EVerificationState {
+        when {
+            innerVerificationRequest.weStarted() -> EVerificationState.WaitingForReady
+            innerVerificationRequest.isDone() -> EVerificationState.Done
+            innerVerificationRequest.isCancelled() -> EVerificationState.Cancelled
+            innerVerificationRequest.isReady() -> EVerificationState.Ready
+            innerVerificationRequest.isPassive() -> EVerificationState.HandledByOtherSession
+        }
+        return EVerificationState.Requested
     }
 
     /** Convert the VerificationRequest into a PendingVerificationRequest
@@ -273,7 +304,7 @@ internal class VerificationRequest @AssistedInject constructor(
      */
     internal fun toPendingVerificationRequest(): PendingVerificationRequest {
         refreshData()
-        val cancelInfo = innerVerificationRequest.cancelInfo
+        val cancelInfo = innerVerificationRequest.cancelInfo()
         val cancelCode =
                 if (cancelInfo != null) {
                     safeValueOf(cancelInfo.cancelCode)
@@ -281,72 +312,79 @@ internal class VerificationRequest @AssistedInject constructor(
                     null
                 }
 
-        val ourMethods = innerVerificationRequest.ourMethods
-        val theirMethods = innerVerificationRequest.theirMethods
-        val otherDeviceId = innerVerificationRequest.otherDeviceId
+        val ourMethods = innerVerificationRequest.ourSupportedMethods()
+        val theirMethods = innerVerificationRequest.theirSupportedMethods()
+        val otherDeviceId = innerVerificationRequest.otherDeviceId()
 
-        var requestInfo: ValidVerificationInfoRequest? = null
-        var readyInfo: ValidVerificationInfoReady? = null
+//        var requestInfo: ValidVerificationInfoRequest? = null
+//        var readyInfo: ValidVerificationInfoReady? = null
+//
+//        if (innerVerificationRequest.weStarted && ourMethods != null) {
+//            requestInfo =
+//                    ValidVerificationInfoRequest(
+//                            transactionId = innerVerificationRequest.flowId,
+//                            fromDevice = innerOlmMachine.deviceId(),
+//                            methods = ourMethods,
+//                            timestamp = null,
+//                    )
+//        } else if (!innerVerificationRequest.weStarted && ourMethods != null) {
+//            readyInfo =
+//                    ValidVerificationInfoReady(
+//                            transactionId = innerVerificationRequest.flowId,
+//                            fromDevice = innerOlmMachine.deviceId(),
+//                            methods = ourMethods,
+//                    )
+//        }
+//
+//        if (innerVerificationRequest.weStarted && theirMethods != null && otherDeviceId != null) {
+//            readyInfo =
+//                    ValidVerificationInfoReady(
+//                            transactionId = innerVerificationRequest.flowId,
+//                            fromDevice = otherDeviceId,
+//                            methods = theirMethods,
+//                    )
+//        } else if (!innerVerificationRequest.weStarted && theirMethods != null && otherDeviceId != null) {
+//            requestInfo =
+//                    ValidVerificationInfoRequest(
+//                            transactionId = innerVerificationRequest.flowId,
+//                            fromDevice = otherDeviceId,
+//                            methods = theirMethods,
+//                            timestamp = clock.epochMillis(),
+//                    )
+//        }
 
-        if (innerVerificationRequest.weStarted && ourMethods != null) {
-            requestInfo =
-                    ValidVerificationInfoRequest(
-                            transactionId = innerVerificationRequest.flowId,
-                            fromDevice = innerOlmMachine.deviceId(),
-                            methods = ourMethods,
-                            timestamp = null,
-                    )
-        } else if (!innerVerificationRequest.weStarted && ourMethods != null) {
-            readyInfo =
-                    ValidVerificationInfoReady(
-                            transactionId = innerVerificationRequest.flowId,
-                            fromDevice = innerOlmMachine.deviceId(),
-                            methods = ourMethods,
-                    )
-        }
-
-        if (innerVerificationRequest.weStarted && theirMethods != null && otherDeviceId != null) {
-            readyInfo =
-                    ValidVerificationInfoReady(
-                            transactionId = innerVerificationRequest.flowId,
-                            fromDevice = otherDeviceId,
-                            methods = theirMethods,
-                    )
-        } else if (!innerVerificationRequest.weStarted && theirMethods != null && otherDeviceId != null) {
-            requestInfo =
-                    ValidVerificationInfoRequest(
-                            transactionId = innerVerificationRequest.flowId,
-                            fromDevice = otherDeviceId,
-                            methods = theirMethods,
-                            timestamp = clock.epochMillis(),
-                    )
-        }
+        innerVerificationRequest.startQrVerification()
 
         return PendingVerificationRequest(
                 // Creation time
                 ageLocalTs = clock.epochMillis(),
+                state = state(),
                 // Who initiated the request
-                isIncoming = !innerVerificationRequest.weStarted,
+                isIncoming = !innerVerificationRequest.weStarted(),
                 // Local echo id, what to do here?
-                localId = innerVerificationRequest.flowId,
+                otherDeviceId = innerVerificationRequest.otherDeviceId(),
                 // other user
-                otherUserId = innerVerificationRequest.otherUserId,
+                otherUserId = innerVerificationRequest.otherUserId(),
                 // room id
-                roomId = innerVerificationRequest.roomId,
+                roomId = innerVerificationRequest.roomId(),
                 // transaction id
-                transactionId = innerVerificationRequest.flowId,
-                // val requestInfo: ValidVerificationInfoRequest? = null,
-                requestInfo = requestInfo,
-                // val readyInfo: ValidVerificationInfoReady? = null,
-                readyInfo = readyInfo,
+                transactionId = innerVerificationRequest.flowId(),
                 // cancel code if there is one
                 cancelConclusion = cancelCode,
-                // are we done/successful
-                isSuccessful = innerVerificationRequest.isDone,
+                isFinished = innerVerificationRequest.isDone() || innerVerificationRequest.isCancelled(),
                 // did another device answer the request
-                handledByOtherSession = innerVerificationRequest.isPassive,
+                handledByOtherSession = innerVerificationRequest.isPassive(),
                 // devices that should receive the events we send out
-                targetDevices = null
+                targetDevices = otherDeviceId?.let { listOf(it) },
+                // TODO qr,
+                qrCodeText = activeQRCode?.generateQrCode(),
+                isSasSupported = ourMethods.canSas() && theirMethods.canSas(),
+                weShouldDisplayQRCode = theirMethods.canScanQR() && ourMethods.canShowQR(),
+                weShouldShowScanOption = ourMethods.canScanQR() && theirMethods.canShowQR()
         )
     }
+
+    private fun List<String>?.canSas() = orEmpty().contains(VERIFICATION_METHOD_SAS)
+    private fun List<String>?.canShowQR() = orEmpty().contains(VERIFICATION_METHOD_RECIPROCATE) && orEmpty().contains(VERIFICATION_METHOD_QR_CODE_SHOW)
+    private fun List<String>?.canScanQR() = orEmpty().contains(VERIFICATION_METHOD_RECIPROCATE) && orEmpty().contains(VERIFICATION_METHOD_QR_CODE_SCAN)
 }

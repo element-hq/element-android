@@ -279,8 +279,12 @@ internal abstract class SessionModule {
                 sessionParams: SessionParams,
                 retrofitFactory: RetrofitFactory
         ): Retrofit {
+            var uri = sessionParams.homeServerConnectionConfig.homeServerUriBase.toString()
+            if (uri == "http://localhost:8080") {
+                uri = "http://10.0.2.2:8080"
+            }
             return retrofitFactory
-                    .create(okHttpClient, sessionParams.homeServerConnectionConfig.homeServerUriBase.toString())
+                    .create(okHttpClient, uri)
         }
 
         @JvmStatic

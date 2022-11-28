@@ -31,3 +31,5 @@ Cargo.lock
 matrix-sdk-android/src/main/jniLibs/
 
 matrix-sdk-android/libs/crypto-android-release.aar
+
+matrix-sdk-android/libs/matrix-rust-sdk-crypto.aar

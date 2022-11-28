@@ -30,9 +30,12 @@ import org.matrix.android.sdk.internal.crypto.network.RequestSender
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
+import org.matrix.rustcomponents.sdk.crypto.EncryptionSettings
+import org.matrix.rustcomponents.sdk.crypto.EventEncryptionAlgorithm
+import org.matrix.rustcomponents.sdk.crypto.HistoryVisibility
+import org.matrix.rustcomponents.sdk.crypto.Request
+import org.matrix.rustcomponents.sdk.crypto.RequestType
 import timber.log.Timber
-import uniffi.olm.Request
-import uniffi.olm.RequestType
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 
@@ -83,9 +86,26 @@ internal class PrepareToEncryptUseCase @Inject constructor(
         claimMissingKeys(roomMembers)
         val keyShareLock = roomKeyShareLocks.getOrPut(roomId) { Mutex() }
         var sharedKey = false
+
+        cryptoStore.getBlockUnverifiedDevices(roomId)
+        cryptoStore.shouldShareHistory(roomId)
+        val settings = EncryptionSettings(
+                algorithm = EventEncryptionAlgorithm.MEGOLM_V1_AES_SHA2,
+                onlyAllowTrustedDevices = cryptoStore.getBlockUnverifiedDevices(roomId),
+                // TODO should take that from m.room.encryption event
+                rotationPeriod = (7 * 24 * 3600 * 1000).toULong(),
+                rotationPeriodMsgs = 100UL,
+                historyVisibility = if (cryptoStore.shouldShareHistory(roomId)) {
+                    HistoryVisibility.SHARED
+                } else if (cryptoStore.shouldEncryptForInvitedMembers(roomId)) {
+                    HistoryVisibility.INVITED
+                } else {
+                    HistoryVisibility.JOINED
+                }
+        )
         keyShareLock.withLock {
             coroutineScope {
-                olmMachine.shareRoomKey(roomId, roomMembers).map {
+                olmMachine.shareRoomKey(roomId, roomMembers, settings).map {
                     when (it) {
                         is Request.ToDevice -> {
                             sharedKey = true
@@ -93,7 +113,7 @@ internal class PrepareToEncryptUseCase @Inject constructor(
                                 sendToDevice(olmMachine, it)
                             }
                         }
-                        else                -> {
+                        else -> {
                             // This request can only be a to-device request but
                             // we need to handle all our cases and put this
                             // async block for our joinAll to work.

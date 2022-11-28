@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.crypto
 
 import androidx.lifecycle.LiveData
+import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
 import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustResult
@@ -24,6 +25,7 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.session.crypto.crosssigning.PrivateKeysInfo
 import org.matrix.android.sdk.api.session.crypto.crosssigning.UserTrustResult
 import org.matrix.android.sdk.api.session.crypto.crosssigning.isVerified
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.util.Optional
 import javax.inject.Inject
@@ -212,5 +214,23 @@ internal class RustCrossSigningService @Inject constructor(
     override suspend fun checkTrustAndAffectedRoomShields(userIds: List<String>) {
         // TODO
         // is this needed in rust?
+    }
+
+    override fun checkSelfTrust(myCrossSigningInfo: MXCrossSigningInfo?, myDevices: List<CryptoDeviceInfo>?): UserTrustResult {
+        // is this needed in rust? should be moved to internal API?
+        val verified = runBlocking {
+            val identity = olmMachine.getIdentity(olmMachine.userId()) as? OwnUserIdentity
+            identity?.verified()
+        }
+        return if (verified == null) {
+            UserTrustResult.CrossSigningNotConfigured(olmMachine.userId())
+        } else {
+            UserTrustResult.Success
+        }
+    }
+
+    override fun checkOtherMSKTrusted(myCrossSigningInfo: MXCrossSigningInfo?, otherInfo: MXCrossSigningInfo?): UserTrustResult {
+        // is this needed in rust? should be moved to internal API?
+        TODO()
     }
 }

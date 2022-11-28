@@ -26,9 +26,9 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.internal.crypto.network.RequestSender
 import org.matrix.android.sdk.internal.crypto.verification.VerificationRequest
 import org.matrix.android.sdk.internal.crypto.verification.prepareMethods
-import uniffi.olm.CryptoStoreException
-import uniffi.olm.OlmMachine
-import uniffi.olm.SignatureException
+import org.matrix.rustcomponents.sdk.crypto.CryptoStoreException
+import org.matrix.rustcomponents.sdk.crypto.OlmMachine
+import org.matrix.rustcomponents.sdk.crypto.SignatureException
 
 /**
  * A sealed class representing user identities.

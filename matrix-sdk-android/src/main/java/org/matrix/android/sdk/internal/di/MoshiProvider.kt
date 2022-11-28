@@ -32,6 +32,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationRequestContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
+import org.matrix.android.sdk.internal.network.parsing.CheckNumberType
 import org.matrix.android.sdk.internal.network.parsing.CipherSuiteMoshiAdapter
 import org.matrix.android.sdk.internal.network.parsing.ForceToBooleanJsonAdapter
 import org.matrix.android.sdk.internal.network.parsing.RuntimeJsonAdapterFactory
@@ -42,6 +43,9 @@ import org.matrix.android.sdk.internal.session.sync.parsing.DefaultLazyRoomSyncE
 internal object MoshiProvider {
 
     private val moshi: Moshi = Moshi.Builder()
+            // By default all numbers are transformed into floats by moshi
+            // this adapter tries to see first if it's a natural number before using float
+            .add(CheckNumberType.JSON_ADAPTER_FACTORY)
             .add(UriMoshiAdapter())
             .add(ForceToBooleanJsonAdapter())
             .add(CipherSuiteMoshiAdapter())

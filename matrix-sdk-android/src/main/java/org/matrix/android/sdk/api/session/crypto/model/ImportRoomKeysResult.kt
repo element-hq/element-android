@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.api.session.crypto.model
 
-import uniffi.olm.KeysImportResult
+import org.matrix.rustcomponents.sdk.crypto.KeysImportResult
 
 data class ImportRoomKeysResult(
         val totalNumberOfKeys: Int,

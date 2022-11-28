@@ -19,6 +19,8 @@ package org.matrix.android.sdk.internal.crypto
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
+import com.squareup.moshi.adapter
 import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
@@ -55,30 +57,32 @@ import org.matrix.android.sdk.internal.crypto.verification.VerificationRequest
 import org.matrix.android.sdk.internal.crypto.verification.VerificationsProvider
 import org.matrix.android.sdk.internal.crypto.verification.qrcode.QrCodeVerification
 import org.matrix.android.sdk.internal.di.DeviceId
+import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.di.SessionFilesDirectory
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.network.parsing.CheckNumberType
 import org.matrix.android.sdk.internal.session.SessionScope
+import org.matrix.rustcomponents.sdk.crypto.BackupKeys
+import org.matrix.rustcomponents.sdk.crypto.BackupRecoveryKey
+import org.matrix.rustcomponents.sdk.crypto.CrossSigningKeyExport
+import org.matrix.rustcomponents.sdk.crypto.CrossSigningStatus
+import org.matrix.rustcomponents.sdk.crypto.CryptoStoreException
+import org.matrix.rustcomponents.sdk.crypto.DecryptionException
+import org.matrix.rustcomponents.sdk.crypto.DeviceLists
+import org.matrix.rustcomponents.sdk.crypto.EncryptionSettings
+import org.matrix.rustcomponents.sdk.crypto.KeyRequestPair
+import org.matrix.rustcomponents.sdk.crypto.Logger
+import org.matrix.rustcomponents.sdk.crypto.MegolmV1BackupKey
+import org.matrix.rustcomponents.sdk.crypto.Request
+import org.matrix.rustcomponents.sdk.crypto.RequestType
+import org.matrix.rustcomponents.sdk.crypto.RoomKeyCounts
+import org.matrix.rustcomponents.sdk.crypto.setLogger
 import timber.log.Timber
-import uniffi.olm.BackupKeys
-import uniffi.olm.BackupRecoveryKey
-import uniffi.olm.CrossSigningKeyExport
-import uniffi.olm.CrossSigningStatus
-import uniffi.olm.CryptoStoreException
-import uniffi.olm.DecryptionException
-import uniffi.olm.DeviceLists
-import uniffi.olm.KeyRequestPair
-import uniffi.olm.Logger
-import uniffi.olm.MegolmV1BackupKey
-import uniffi.olm.Request
-import uniffi.olm.RequestType
-import uniffi.olm.RoomKeyCounts
-import uniffi.olm.setLogger
 import java.io.File
 import java.nio.charset.Charset
 import javax.inject.Inject
-import uniffi.olm.OlmMachine as InnerMachine
-import uniffi.olm.ProgressListener as RustProgressListener
+import org.matrix.rustcomponents.sdk.crypto.OlmMachine as InnerMachine
+import org.matrix.rustcomponents.sdk.crypto.ProgressListener as RustProgressListener
 
 class CryptoLogger : Logger {
     override fun log(logLine: String) {
@@ -256,19 +260,33 @@ internal class OlmMachine @Inject constructor(
 
             val devices =
                     DeviceLists(deviceChanges?.changed.orEmpty(), deviceChanges?.left.orEmpty())
-            val adapter =
-                    moshi.adapter(ToDeviceSyncResponse::class.java)
-            val events = adapter.toJson(toDevice ?: ToDeviceSyncResponse())!!
+
+            val adapter = MoshiProvider.providesMoshi().adapter(ToDeviceSyncResponse::class.java)
+            val events = adapter.toJson(toDevice ?: ToDeviceSyncResponse()).also {
+                Timber.w("## VALR events: $it")
+            }
 
             // TODO once our sync response type parses the unused fallback key
             // field pass in the list of unused fallback keys here
-            adapter.fromJson(inner.receiveSyncChanges(events, devices, counts, unusedFallbackKeys = null)) ?: ToDeviceSyncResponse()
+            val receiveSyncChanges = inner.receiveSyncChanges(events, devices, counts, unusedFallbackKeys = null).also {
+                Timber.w("## VALR $it")
+            }
+            val outAdapter = moshi.adapter<List<Event>>(
+                    Types.newParameterizedType(
+                            List::class.java,
+                            Event::class.java,
+                            String::class.java,
+                            Integer::class.java,
+                            Any::class.java,
+                    )
+            )
+            outAdapter.fromJson(receiveSyncChanges) ?: emptyList()
         }
 
         // We may get cross signing keys over a to-device event, update our listeners.
         updateLivePrivateKeys()
 
-        return response
+        return ToDeviceSyncResponse(events = response)
     }
 
     suspend fun receiveUnencryptedVerificationEvent(roomId: String, event: Event) = withContext(coroutineDispatchers.io) {
@@ -333,8 +351,10 @@ internal class OlmMachine @Inject constructor(
      * @return The list of [Request.ToDevice] that need to be sent out.
      */
     @Throws(CryptoStoreException::class)
-    suspend fun shareRoomKey(roomId: String, users: List<String>): List<Request> =
-            withContext(coroutineDispatchers.io) { inner.shareRoomKey(roomId, users) }
+    suspend fun shareRoomKey(roomId: String, users: List<String>, settings: EncryptionSettings): List<Request> =
+            withContext(coroutineDispatchers.io) {
+                inner.shareRoomKey(roomId, users, settings)
+            }
 
     /**
      * Encrypt the given event with the given type and content for the given room.
@@ -450,7 +470,9 @@ internal class OlmMachine @Inject constructor(
      */
     @Throws(CryptoStoreException::class)
     suspend fun exportKeys(passphrase: String, rounds: Int): ByteArray =
-            withContext(coroutineDispatchers.io) { inner.exportKeys(passphrase, rounds).toByteArray() }
+            withContext(coroutineDispatchers.io) {
+                inner.exportRoomKeys(passphrase, rounds).toByteArray()
+            }
 
     /**
      * Import room keys from the given serialized key export.
@@ -472,7 +494,7 @@ internal class OlmMachine @Inject constructor(
 
                 val rustListener = CryptoProgressListener(listener)
 
-                val result = inner.importKeys(decodedKeys, passphrase, rustListener)
+                val result = inner.importRoomKeys(decodedKeys, passphrase, rustListener)
 
                 ImportRoomKeysResult.fromOlm(result)
             }
@@ -501,7 +523,7 @@ internal class OlmMachine @Inject constructor(
                                 }
                             }
 
-                            inner.importDecryptedKeys(encodedKeys, rustListener).let {
+                            inner.importDecryptedRoomKeys(encodedKeys, rustListener).let {
                                 totalImported += it.imported
                                 accTotal += it.total
                                 details.putAll(it.keys)
@@ -812,7 +834,7 @@ internal class OlmMachine @Inject constructor(
                     .build()
                     .adapter(MegolmBackupAuthData::class.java)
             val serializedAuthData = adapter.toJson(authData)
-            inner.verifyBackup(serializedAuthData)
+            inner.verifyBackup(serializedAuthData).trusted
         }
     }
 }

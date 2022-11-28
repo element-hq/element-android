@@ -683,11 +683,11 @@ internal class RustCryptoService @Inject constructor(
     }
 
     override fun enableShareKeyOnInvite(enable: Boolean) {
-        TODO("Not yet implemented")
+        TODO("Enable share key on invite not implemented")
     }
 
     override fun isShareKeysOnInviteEnabled(): Boolean {
-        TODO("Not yet implemented")
+        return false
     }
 
     override fun setRoomUnBlockUnverifiedDevices(roomId: String) {
@@ -851,7 +851,7 @@ internal class RustCryptoService @Inject constructor(
     override suspend fun prepareToEncrypt(roomId: String) = prepareToEncrypt.invoke(roomId, ensureAllMembersAreLoaded = true)
 
     override suspend fun sendSharedHistoryKeys(roomId: String, userId: String, sessionInfoSet: Set<SessionInfo>?) {
-        TODO("Not yet implemented")
+        // TODO("Not yet implemented")
     }
 
     /* ==========================================================================================

@@ -74,6 +74,8 @@ internal class RustVerificationService @Inject constructor(
         private val olmMachine: OlmMachine,
         private val verificationListenersHolder: VerificationListenersHolder) : VerificationService {
 
+    override fun requestEventFlow() = verificationListenersHolder.eventFlow
+
     /**
      *
      * All verification related events should be forwarded through this method to
@@ -103,7 +105,7 @@ internal class RustVerificationService @Inject constructor(
         }
     }
 
-    private fun onRoomMessage(event: Event) {
+    private suspend fun onRoomMessage(event: Event) {
         val messageContent = event.getClearContent()?.toModel<MessageContent>() ?: return
         if (messageContent.msgType == MessageType.MSGTYPE_VERIFICATION_REQUEST) {
             onRequest(event, fromRoomMessage = true)
@@ -111,7 +113,7 @@ internal class RustVerificationService @Inject constructor(
     }
 
     /** Dispatch updates after a verification event has been received */
-    private fun onUpdate(event: Event) {
+    private suspend fun onUpdate(event: Event) {
         val sender = event.senderId ?: return
         val flowId = getFlowId(event) ?: return
 
@@ -150,7 +152,7 @@ internal class RustVerificationService @Inject constructor(
     }
 
     /** Check if the request event created a nev verification request object and dispatch that it dis so */
-    private fun onRequest(event: Event, fromRoomMessage: Boolean) {
+    private suspend fun onRequest(event: Event, fromRoomMessage: Boolean) {
         val flowId = if (fromRoomMessage) {
             event.eventId
         } else {
@@ -162,26 +164,26 @@ internal class RustVerificationService @Inject constructor(
         verificationListenersHolder.dispatchRequestAdded(request)
     }
 
-    override fun addListener(listener: VerificationService.Listener) {
-        verificationListenersHolder.addListener(listener)
-    }
-
-    override fun removeListener(listener: VerificationService.Listener) {
-        verificationListenersHolder.removeListener(listener)
-    }
+//    override fun addListener(listener: VerificationService.Listener) {
+//        verificationListenersHolder.addListener(listener)
+//    }
+//
+//    override fun removeListener(listener: VerificationService.Listener) {
+//        verificationListenersHolder.removeListener(listener)
+//    }
 
     override suspend fun markedLocallyAsManuallyVerified(userId: String, deviceID: String) {
         olmMachine.getDevice(userId, deviceID)?.markAsTrusted()
     }
 
-    override fun getExistingTransaction(
+    override suspend fun getExistingTransaction(
             otherUserId: String,
             tid: String,
     ): VerificationTransaction? {
         return olmMachine.getVerification(otherUserId, tid)
     }
 
-    override fun getExistingVerificationRequests(
+    override suspend fun getExistingVerificationRequests(
             otherUserId: String
     ): List<PendingVerificationRequest> {
         return olmMachine.getVerificationRequests(otherUserId).map {
@@ -189,7 +191,7 @@ internal class RustVerificationService @Inject constructor(
         }
     }
 
-    override fun getExistingVerificationRequest(
+    override suspend fun getExistingVerificationRequest(
             otherUserId: String,
             tid: String?
     ): PendingVerificationRequest? {
@@ -200,9 +202,9 @@ internal class RustVerificationService @Inject constructor(
         }
     }
 
-    override fun getExistingVerificationRequestInRoom(
+    override suspend fun getExistingVerificationRequestInRoom(
             roomId: String,
-            tid: String?
+            tid: String
     ): PendingVerificationRequest? {
         // This is only used in `RoomDetailViewModel` to resume the verification.
         //
@@ -251,13 +253,23 @@ internal class RustVerificationService @Inject constructor(
 
     override suspend fun requestDeviceVerification(methods: List<VerificationMethod>,
                                                    otherUserId: String,
-                                                   otherDeviceId: String?): PendingVerificationRequest? {
+                                                   otherDeviceId: String?): PendingVerificationRequest {
         // how do we send request to several devices in rust?
-        if (otherDeviceId == null) return null
         olmMachine.ensureUsersKeys(listOf(otherUserId))
-        val otherDevice = olmMachine.getDevice(otherUserId, otherDeviceId)
-        val verificationRequest = otherDevice?.requestVerification(methods)
-        return verificationRequest?.toPendingVerificationRequest()
+        val request = if (otherDeviceId == null) {
+            // Todo
+            when (val identity = olmMachine.getIdentity(otherUserId)) {
+                is OwnUserIdentity -> identity.requestVerification(methods)
+                is UserIdentity -> {
+                    throw IllegalArgumentException("to_device request only allowed for own user $otherUserId")
+                }
+                null -> throw IllegalArgumentException("Unknown identity")
+            }
+        } else {
+            val otherDevice = olmMachine.getDevice(otherUserId, otherDeviceId)
+            otherDevice?.requestVerification(methods) ?: throw IllegalArgumentException("Unknown device $otherDeviceId")
+        }
+        return request.toPendingVerificationRequest()
     }
 
     override suspend fun readyPendingVerification(
@@ -269,29 +281,15 @@ internal class RustVerificationService @Inject constructor(
         return if (request != null) {
             request.acceptWithMethods(methods)
 
-            if (request.isReady()) {
-                val qrcode = request.startQrVerification()
-
-                if (qrcode != null) {
-                    verificationListenersHolder.dispatchTxAdded(qrcode)
-                }
-
-                true
-            } else {
-                false
-            }
+            request.isReady()
         } else {
             false
         }
     }
 
-    override suspend fun beginKeyVerification(
-            method: VerificationMethod,
-            otherUserId: String,
-            transactionId: String
-    ): String? {
+    override suspend fun startKeyVerification(method: VerificationMethod, otherUserId: String, requestId: String): String? {
         return if (method == VerificationMethod.SAS) {
-            val request = olmMachine.getVerificationRequest(otherUserId, transactionId)
+            val request = olmMachine.getVerificationRequest(otherUserId, requestId)
 
             val sas = request?.startSasVerification()
 
@@ -306,7 +304,13 @@ internal class RustVerificationService @Inject constructor(
         }
     }
 
-    override fun onPotentiallyInterestingEventRoomFailToDecrypt(event: Event) {
+    override suspend fun reciprocateQRVerification(otherUserId: String, requestId: String, scannedData: String): String? {
+        val matchingRequest = olmMachine.getVerificationRequest(otherUserId, requestId)
+        matchingRequest?.scanQrCode(scannedData)
+        return matchingRequest?.startQrVerification()?.transactionId
+    }
+
+    override suspend fun onPotentiallyInterestingEventRoomFailToDecrypt(event: Event) {
         // not available in rust
     }
 
@@ -331,7 +335,6 @@ internal class RustVerificationService @Inject constructor(
 //    }
 
     override suspend fun cancelVerificationRequest(request: PendingVerificationRequest) {
-        request.transactionId ?: return
         cancelVerificationRequest(request.otherUserId, request.transactionId)
     }
 
