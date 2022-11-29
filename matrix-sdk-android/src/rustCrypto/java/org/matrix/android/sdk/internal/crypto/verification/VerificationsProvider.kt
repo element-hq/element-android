@@ -53,32 +53,9 @@ internal class VerificationsProvider @Inject constructor(
         return if (verification?.asSas() != null) {
             sasVerificationFactory.create(verification.asSas()!!)
         } else if (verification?.asQr() != null) {
-            // qrVerificationFactory.create(verification, verification.asQr()!!)
-            // TODO
-            null
+            qrVerificationFactory.create(verification.asQr()!!)
         } else {
             null
         }
-//        return when (val verification = innerMachine.getVerification(userId, flowId)) {
-//            is org.matrix.rustcomponents.sdk.crypto.Verification. -> {
-//                val request = getVerificationRequest(userId, flowId) ?: return null
-//                qrVerificationFactory.create(request, verification.qrcode)
-//            }
-//            is org.matrix.rustcomponents.sdk.crypto.Verification.SasV1    -> {
-//                sasVerificationFactory.create(verification.sas)
-//            }
-//            null                                -> {
-//                // This branch exists because scanning a QR code is tied to the QrCodeVerification,
-//                // i.e. instead of branching into a scanned QR code verification from the verification request,
-//                // like it's done for SAS verifications, the public API expects us to create an empty dummy
-//                // QrCodeVerification object that gets populated once a QR code is scanned.
-//                val request = getVerificationRequest(userId, flowId) ?: return null
-//                if (request.canScanQrCodes()) {
-//                    qrVerificationFactory.create(request, null)
-//                } else {
-//                    null
-//                }
-//            }
-//        }
     }
 }

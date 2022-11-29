@@ -236,8 +236,8 @@ internal class UserIdentity(
     ): VerificationRequest {
         val stringMethods = prepareMethods(methods)
         val content = innerMachine.verificationRequestContent(userId, stringMethods)!!
-        val eventID = requestSender.sendRoomMessage(EventType.MESSAGE, roomId, content, transactionId).eventId
-        val innerRequest = innerMachine.requestVerification(userId, roomId, eventID, stringMethods)!!
+        val eventId = requestSender.sendRoomMessage(EventType.MESSAGE, roomId, content, transactionId).eventId
+        val innerRequest = innerMachine.requestVerification(userId, roomId, eventId, stringMethods)!!
         return verificationRequestFactory.create(innerRequest)
     }
 

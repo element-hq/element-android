@@ -31,13 +31,12 @@ import org.matrix.android.sdk.api.util.fromBase64
 import org.matrix.android.sdk.internal.crypto.OlmMachine
 import org.matrix.android.sdk.internal.crypto.network.RequestSender
 import org.matrix.android.sdk.internal.crypto.verification.VerificationListenersHolder
-import org.matrix.android.sdk.internal.crypto.verification.VerificationRequest
 import org.matrix.rustcomponents.sdk.crypto.CryptoStoreException
 import org.matrix.rustcomponents.sdk.crypto.QrCode
+import timber.log.Timber
 
 /** Class representing a QR code based verification flow */
 internal class QrCodeVerification @AssistedInject constructor(
-        @Assisted private var request: VerificationRequest,
         @Assisted private var inner: QrCode,
         private val olmMachine: OlmMachine,
         private val sender: RequestSender,
@@ -47,7 +46,7 @@ internal class QrCodeVerification @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory {
-        fun create(request: VerificationRequest, inner: QrCode): QrCodeVerification
+        fun create(inner: QrCode): QrCodeVerification
     }
 
     override val method: VerificationMethod
@@ -98,53 +97,38 @@ internal class QrCodeVerification @AssistedInject constructor(
     }
 
     override fun state(): QRCodeVerificationState {
+        Timber.w("VALR state: weStarted ${inner.weStarted()}")
+        Timber.w("VALR state: reciprocated ${inner.reciprocated()}")
+        Timber.w("VALR state: isDone ${inner.isDone()}")
+        Timber.w("VALR state: hasBeenScanned ${inner.hasBeenScanned()}")
+
+        if (inner.hasBeenScanned()) {
+            return QRCodeVerificationState.WaitingForScanConfirmation
+        }
+        if (inner.isCancelled()) return QRCodeVerificationState.Cancelled
+        if (inner.isDone()) return QRCodeVerificationState.Done
+
         return QRCodeVerificationState.Reciprocated
     }
-//    override var state: VerificationTxState
-//        get() {
-//            refreshData()
-//            val inner = inner
-//            val cancelInfo = inner?.cancelInfo
-//
-//            return if (inner != null) {
-//                when {
-//                    cancelInfo != null     -> {
-//                        val cancelCode = safeValueOf(cancelInfo.cancelCode)
-//                        val byMe = cancelInfo.cancelledByUs
-//                        VerificationTxState.Cancelled(cancelCode, byMe)
-//                    }
-//                    inner.isDone           -> VerificationTxState.Verified
-//                    inner.reciprocated     -> VerificationTxState.Started
-//                    inner.hasBeenConfirmed -> VerificationTxState.WaitingOtherReciprocateConfirm
-//                    inner.otherSideScanned -> VerificationTxState.QrScannedByOther
-//                    else                   -> VerificationTxState.None
-//                }
-//            } else {
-//                VerificationTxState.None
-//            }
-//        }
-//        @Suppress("UNUSED_PARAMETER")
-//        set(value) {
-//        }
 
     /** Get the unique id of this verification */
     override val transactionId: String
-        get() = request.flowId()
+        get() = inner.flowId()
 
     /** Get the user id of the other user participating in this verification flow */
     override val otherUserId: String
-        get() = request.otherUser()
+        get() = inner.otherUserId()
 
     /** Get the device id of the other user's device participating in this verification flow */
     override var otherDeviceId: String?
-        get() = request.otherDeviceId()
+        get() = inner.otherDeviceId()
         @Suppress("UNUSED_PARAMETER")
         set(value) {
         }
 
     /** Did the other side initiate this verification flow */
     override val isIncoming: Boolean
-        get() = !request.weStarted()
+        get() = !inner.weStarted()
 
     /** Cancel the verification flow
      *
@@ -176,7 +160,7 @@ internal class QrCodeVerification @AssistedInject constructor(
 
     /** Is this verification happening over to-device messages */
     override fun isToDeviceTransport(): Boolean {
-        return request.roomId() == null
+        return inner.roomId() == null
     }
 
     /** Confirm the QR code verification
@@ -216,7 +200,7 @@ internal class QrCodeVerification @AssistedInject constructor(
 
     /** Fetch fresh data from the Rust side for our verification flow */
     private fun refreshData() {
-        innerMachine.getVerification(request.otherUser(), request.flowId())
+        innerMachine.getVerification(inner.otherUserId(), inner.flowId())
                 ?.asQr()?.let {
                     inner = it
                 }

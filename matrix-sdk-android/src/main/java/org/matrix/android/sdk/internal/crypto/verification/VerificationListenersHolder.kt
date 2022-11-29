@@ -44,7 +44,7 @@ internal class VerificationListenersHolder @Inject constructor(
     }
 
     fun dispatchTxUpdated(tx: VerificationTransaction) {
-        Timber.v("## SAS dispatchRequestAdded txId:${tx.transactionId} $tx")
+        Timber.v("## SAS dispatchTxUpdated txId:${tx.transactionId} $tx")
         scope.launch {
             eventFlow.emit(VerificationEvent.TransactionUpdated(tx))
         }

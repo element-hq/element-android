@@ -116,32 +116,45 @@ internal class RustVerificationService @Inject constructor(
         val sender = event.senderId ?: return
         val flowId = getFlowId(event) ?: return
 
-        olmMachine.getVerificationRequest(sender, flowId)?.dispatchRequestUpdated()
+        val verificationRequest = olmMachine.getVerificationRequest(sender, flowId)
+        if (event.getClearType() == EventType.KEY_VERIFICATION_READY) {
+            verificationRequest?.startQrCode()
+        }
+        verificationRequest?.dispatchRequestUpdated()
         val verification = getExistingTransaction(sender, flowId) ?: return
         verificationListenersHolder.dispatchTxUpdated(verification)
     }
 
     /** Check if the start event created new verification objects and dispatch updates */
     private suspend fun onStart(event: Event) {
+        if (event.unsignedData?.transactionId != null) return // remote echo
         Timber.w("VALR onStart $event")
         val sender = event.senderId ?: return
         val flowId = getFlowId(event) ?: return
 
-        val transaction = getExistingTransaction(sender, flowId) ?: return
+        // The events have already been processed by the sdk
+        // The transaction are already created, we are just reacting here
+        val transaction = getExistingTransaction(sender, flowId) ?: return Unit.also {
+            Timber.w("onStart for unknown flowId $flowId senderId $sender")
+        }
 
         val request = olmMachine.getVerificationRequest(sender, flowId)
+        Timber.d("## Verification: matching request $request")
 
-        if (request != null && request.isReady()) {
+        if (request != null) {
             // If this is a SAS verification originating from a `m.key.verification.request`
             // event, we auto-accept here considering that we either initiated the request or
             // accepted the request. If it's a QR code verification, just dispatch an update.
-            if (transaction is SasVerification) {
+            if (request.isReady() && transaction is SasVerification) {
                 // accept() will dispatch an update, no need to do it twice.
                 Timber.d("## Verification: Auto accepting SAS verification with $sender")
                 transaction.accept()
-            } else {
-                verificationListenersHolder.dispatchTxUpdated(transaction)
             }
+
+            Timber.d("## Verification: start for $sender")
+            // update the request as the start updates it's state
+            request.dispatchRequestUpdated()
+            verificationListenersHolder.dispatchTxUpdated(transaction)
         } else {
             // This didn't originate from a request, so tell our listeners that
             // this is a new verification.
@@ -249,7 +262,7 @@ internal class RustVerificationService @Inject constructor(
             null               -> throw IllegalArgumentException("The user that we wish to verify doesn't support cross signing")
         }
 
-        Timber.w("##VALR requestKeyVerificationInDMs $verification")
+        Timber.w("##VALR requestKeyVerificationInDMs ${verification.flowId()} > $verification")
         return verification.toPendingVerificationRequest()
     }
 
@@ -282,7 +295,7 @@ internal class RustVerificationService @Inject constructor(
         val request = olmMachine.getVerificationRequest(otherUserId, transactionId)
         return if (request != null) {
             request.acceptWithMethods(methods)
-
+            request.startQrCode()
             request.isReady()
         } else {
             false
@@ -308,8 +321,12 @@ internal class RustVerificationService @Inject constructor(
 
     override suspend fun reciprocateQRVerification(otherUserId: String, requestId: String, scannedData: String): String? {
         val matchingRequest = olmMachine.getVerificationRequest(otherUserId, requestId)
-        matchingRequest?.scanQrCode(scannedData)
-        return matchingRequest?.startQrVerification()?.transactionId
+                ?: return null
+        val qrVerification = matchingRequest.scanQrCode(scannedData)
+                ?: return null
+        verificationListenersHolder.dispatchRequestUpdated(matchingRequest.toPendingVerificationRequest())
+        verificationListenersHolder.dispatchTxAdded(qrVerification)
+        return qrVerification.transactionId
     }
 
     override suspend fun onPotentiallyInterestingEventRoomFailToDecrypt(event: Event) {
