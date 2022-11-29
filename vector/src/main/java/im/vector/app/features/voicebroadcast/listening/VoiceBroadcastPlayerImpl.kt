@@ -434,6 +434,8 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
             if (!isLiveListening && mostRecentVoiceBroadcastEvent?.content?.lastChunkSequence == playlist.currentSequence) {
                 // We'll not receive new chunks anymore so we can stop the live listening
                 stop()
+            } else {
+                playingState = State.BUFFERING
             }
         }
 
