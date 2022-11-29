@@ -213,7 +213,7 @@ class UnifiedPushHelper @Inject constructor(
                 .show()
     }
 
-    // TODO remove and replace by use case
+    // TODO remove
     suspend fun unregister(pushersManager: PushersManager? = null) {
         val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME
         vectorPreferences.setFdroidSyncBackgroundMode(mode)
