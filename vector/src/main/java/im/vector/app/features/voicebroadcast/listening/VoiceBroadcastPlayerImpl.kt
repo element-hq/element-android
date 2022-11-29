@@ -30,7 +30,7 @@ import im.vector.app.features.voicebroadcast.listening.VoiceBroadcastPlayer.Stat
 import im.vector.app.features.voicebroadcast.listening.usecase.GetLiveVoiceBroadcastChunksUseCase
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcast
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastEvent
-import im.vector.app.features.voicebroadcast.usecase.GetVoiceBroadcastEventUseCase
+import im.vector.app.features.voicebroadcast.usecase.GetMostRecentVoiceBroadcastStateEventUseCase
 import im.vector.lib.core.utils.timer.CountUpTimer
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
@@ -48,7 +48,7 @@ import javax.inject.Singleton
 class VoiceBroadcastPlayerImpl @Inject constructor(
         private val sessionHolder: ActiveSessionHolder,
         private val playbackTracker: AudioMessagePlaybackTracker,
-        private val getVoiceBroadcastEventUseCase: GetVoiceBroadcastEventUseCase,
+        private val getVoiceBroadcastEventUseCase: GetMostRecentVoiceBroadcastStateEventUseCase,
         private val getLiveVoiceBroadcastChunksUseCase: GetLiveVoiceBroadcastChunksUseCase
 ) : VoiceBroadcastPlayer {
 
@@ -66,7 +66,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
     private var nextMediaPlayer: MediaPlayer? = null
     private var isPreparingNextPlayer: Boolean = false
 
-    private var currentVoiceBroadcastEvent: VoiceBroadcastEvent? = null
+    private var mostRecentVoiceBroadcastEvent: VoiceBroadcastEvent? = null
 
     override var currentVoiceBroadcast: VoiceBroadcast? = null
     override var isLiveListening: Boolean = false
@@ -121,7 +121,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
         // Clear playlist
         playlist.reset()
 
-        currentVoiceBroadcastEvent = null
+        mostRecentVoiceBroadcastEvent = null
         currentVoiceBroadcast = null
     }
 
@@ -145,17 +145,23 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
 
         playingState = State.BUFFERING
 
-        observeVoiceBroadcastLiveState(voiceBroadcast)
+        observeVoiceBroadcastStateEvent(voiceBroadcast)
         fetchPlaylistAndStartPlayback(voiceBroadcast)
     }
 
-    private fun observeVoiceBroadcastLiveState(voiceBroadcast: VoiceBroadcast) {
+    private fun observeVoiceBroadcastStateEvent(voiceBroadcast: VoiceBroadcast) {
         voiceBroadcastStateObserver = getVoiceBroadcastEventUseCase.execute(voiceBroadcast)
-                .onEach {
-                    currentVoiceBroadcastEvent = it.getOrNull()
-                    updateLiveListeningMode()
-                }
+                .onEach { onVoiceBroadcastStateEventUpdated(it.getOrNull()) }
                 .launchIn(sessionScope)
+    }
+
+    private fun onVoiceBroadcastStateEventUpdated(event: VoiceBroadcastEvent?) {
+        if (event == null) {
+            stop()
+        } else {
+            mostRecentVoiceBroadcastEvent = event
+            updateLiveListeningMode()
+        }
     }
 
     private fun fetchPlaylistAndStartPlayback(voiceBroadcast: VoiceBroadcast) {
@@ -198,7 +204,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
 
         val playlistItem = when {
             position != null -> playlist.findByPosition(position)
-            currentVoiceBroadcastEvent?.isLive.orFalse() -> playlist.lastOrNull()
+            mostRecentVoiceBroadcastEvent?.isLive.orFalse() -> playlist.lastOrNull()
             else -> playlist.firstOrNull()
         }
         val content = playlistItem?.audioEvent?.content ?: run { Timber.w("## VoiceBroadcastPlayer: No content to play"); return }
@@ -340,7 +346,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
     private fun updateLiveListeningMode(seekPosition: Int? = null) {
         isLiveListening = when {
             // the current voice broadcast is not live (ended)
-            currentVoiceBroadcastEvent?.isLive?.not().orFalse() -> false
+            mostRecentVoiceBroadcastEvent?.isLive != true -> false
             // the player is stopped or paused
             playingState == State.IDLE || playingState == State.PAUSED -> false
             seekPosition != null -> {
@@ -406,13 +412,11 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
         override fun onCompletion(mp: MediaPlayer) {
             if (nextMediaPlayer != null) return
 
-            val content = currentVoiceBroadcastEvent?.content
-            val isLive = content?.isLive.orFalse()
-            if (!isLive && content?.lastChunkSequence == playlist.currentSequence) {
+            if (isLiveListening || mostRecentVoiceBroadcastEvent?.content?.lastChunkSequence == playlist.currentSequence) {
+                playingState = State.BUFFERING
+            } else {
                 // We'll not receive new chunks anymore so we can stop the live listening
                 stop()
-            } else {
-                playingState = State.BUFFERING
             }
         }
 
