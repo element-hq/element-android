@@ -21,6 +21,7 @@ import org.junit.Test
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.sync.model.ToDeviceSyncResponse
 import org.matrix.android.sdk.internal.di.MoshiProvider
+import org.matrix.android.sdk.internal.network.parsing.CheckNumberType
 
 class MoshiNumbersAsInt {
 
@@ -50,5 +51,27 @@ class MoshiNumbersAsInt {
         val jsonString = adapter.toJson(toDeviceSyncResponse)
 
         jsonString shouldNotContain "1.0"
+    }
+
+    @Test
+    fun testParseThenSerialize() {
+        val raw = """
+            {"events":[{"type":"m.room.encrypted","content":{"algorithm":"m.olm.v1.curve25519-aes-sha2","ciphertext":{"cfA3dINwtmMW0DbJmnT6NiGAbOSa299Hxs6KxHgbDBw":{"body":"Awogc5L3QuIyvkluB1O/UAJp0","type":1}},"sender_key":"fqhBEOHXSSQ7ZKt1xlBg+hSTY1NEM8hezMXZ5lyBR1M"},"sender":"@web:localhost:8481"}]}
+        """.trimIndent()
+
+        val moshi = MoshiProvider.providesMoshi()
+        val adapter = moshi.adapter(ToDeviceSyncResponse::class.java)
+
+        val content = adapter.fromJson(raw)
+
+        val serialized = MoshiProvider.providesMoshi()
+                .newBuilder()
+                .add(CheckNumberType.JSON_ADAPTER_FACTORY)
+                .build()
+                .adapter(ToDeviceSyncResponse::class.java).toJson(content)
+
+        serialized shouldNotContain "1.0"
+
+        println(serialized)
     }
 }

@@ -261,16 +261,17 @@ internal class OlmMachine @Inject constructor(
             val devices =
                     DeviceLists(deviceChanges?.changed.orEmpty(), deviceChanges?.left.orEmpty())
 
-            val adapter = MoshiProvider.providesMoshi().adapter(ToDeviceSyncResponse::class.java)
-            val events = adapter.toJson(toDevice ?: ToDeviceSyncResponse()).also {
-                Timber.w("## VALR events: $it")
-            }
+            val adapter = MoshiProvider.providesMoshi()
+                    .newBuilder()
+                    .add(CheckNumberType.JSON_ADAPTER_FACTORY)
+                    .build()
+                    .adapter(ToDeviceSyncResponse::class.java)
+            val events = adapter.toJson(toDevice ?: ToDeviceSyncResponse())
 
             // TODO once our sync response type parses the unused fallback key
             // field pass in the list of unused fallback keys here
-            val receiveSyncChanges = inner.receiveSyncChanges(events, devices, counts, unusedFallbackKeys = null).also {
-                Timber.w("## VALR $it")
-            }
+            val receiveSyncChanges = inner.receiveSyncChanges(events, devices, counts, unusedFallbackKeys = null)
+
             val outAdapter = moshi.adapter<List<Event>>(
                     Types.newParameterizedType(
                             List::class.java,

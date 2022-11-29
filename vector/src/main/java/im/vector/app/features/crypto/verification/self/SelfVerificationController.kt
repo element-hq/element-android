@@ -41,7 +41,6 @@ import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.EVerificationState
-import timber.log.Timber
 import javax.inject.Inject
 
 class SelfVerificationController @Inject constructor(
@@ -61,7 +60,7 @@ class SelfVerificationController @Inject constructor(
     var state: SelfVerificationViewState? = null
 
     fun update(state: SelfVerificationViewState) {
-        Timber.w("VALR controller updated $state")
+//        Timber.w("VALR controller updated $state")
         this.state = state
         requestModelBuild()
     }
