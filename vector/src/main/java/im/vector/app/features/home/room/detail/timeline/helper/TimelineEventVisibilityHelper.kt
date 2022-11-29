@@ -22,7 +22,6 @@ import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
 import im.vector.app.features.voicebroadcast.isVoiceBroadcast
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
-import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.RelationType
@@ -257,7 +256,7 @@ class TimelineEventVisibilityHelper @Inject constructor(
             return true
         }
 
-        if (root.asMessageAudioEvent()?.isVoiceBroadcast().orFalse()) {
+        if (root.asMessageAudioEvent().isVoiceBroadcast()) {
             return true
         }
 
