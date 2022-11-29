@@ -17,7 +17,6 @@
 package im.vector.app.core.pushers
 
 import im.vector.app.core.di.ActiveSessionHolder
-import timber.log.Timber
 import javax.inject.Inject
 
 class EnsureFcmTokenIsRetrievedUseCase @Inject constructor(
@@ -29,7 +28,6 @@ class EnsureFcmTokenIsRetrievedUseCase @Inject constructor(
     // TODO add unit tests
     fun execute(pushersManager: PushersManager, registerPusher: Boolean) {
         if (unifiedPushHelper.isEmbeddedDistributor()) {
-            Timber.d("ensureFcmTokenIsRetrieved")
             fcmHelper.ensureFcmTokenIsRetrieved(pushersManager, shouldAddHttpPusher(registerPusher))
         }
     }

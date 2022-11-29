@@ -131,11 +131,9 @@ class HomeActivityViewModel @AssistedInject constructor(
         viewModelScope.launch {
             when (val result = registerUnifiedPushUseCase.execute(distributor = distributor)) {
                 is RegisterUnifiedPushUseCase.RegisterUnifiedPushResult.NeedToAskUserForDistributor -> {
-                    Timber.d("registerUnifiedPush $distributor need to ask user")
                     _viewEvents.post(HomeActivityViewEvents.AskUserForPushDistributor(result.distributors))
                 }
                 RegisterUnifiedPushUseCase.RegisterUnifiedPushResult.Success -> {
-                    Timber.d("registerUnifiedPush $distributor success")
                     ensureFcmTokenIsRetrievedUseCase.execute(pushersManager, registerPusher = vectorPreferences.areNotificationEnabledForDevice())
                 }
             }
