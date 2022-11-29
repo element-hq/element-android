@@ -124,6 +124,7 @@ class VectorPreferences @Inject constructor(
         private const val SETTINGS_LABS_ENABLE_LATEX_MATHS = "SETTINGS_LABS_ENABLE_LATEX_MATHS"
         const val SETTINGS_PRESENCE_USER_ALWAYS_APPEARS_OFFLINE = "SETTINGS_PRESENCE_USER_ALWAYS_APPEARS_OFFLINE"
         const val SETTINGS_AUTOPLAY_ANIMATED_IMAGES = "SETTINGS_AUTOPLAY_ANIMATED_IMAGES"
+        private const val SETTINGS_ENABLE_DIRECT_SHARE = "SETTINGS_ENABLE_DIRECT_SHARE"
 
         // Room directory
         private const val SETTINGS_ROOM_DIRECTORY_SHOW_ALL_PUBLIC_ROOMS = "SETTINGS_ROOM_DIRECTORY_SHOW_ALL_PUBLIC_ROOMS"
@@ -1024,6 +1025,10 @@ class VectorPreferences @Inject constructor(
 
     fun chatEffectsEnabled(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_ENABLE_CHAT_EFFECTS, true)
+    }
+
+    fun directShareEnabled(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_ENABLE_DIRECT_SHARE, true)
     }
 
     /**

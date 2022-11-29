@@ -1032,6 +1032,8 @@
     <string name="settings_chat_effects_description">Use /confetti command or send a message containing ❄️ or 🎉</string>
     <string name="settings_autoplay_animated_images_title">Autoplay animated images</string>
     <string name="settings_autoplay_animated_images_summary">Play animated images in the timeline as soon as they are visible</string>
+    <string name="settings_enable_direct_share_title">Enable direct share</string>
+    <string name="settings_enable_direct_share_summary">Show recent chats in the system share menu</string>
     <string name="settings_show_join_leave_messages">Show join and leave events</string>
     <string name="settings_show_join_leave_messages_summary">Invites, removes, and bans are unaffected.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Show account events</string>
