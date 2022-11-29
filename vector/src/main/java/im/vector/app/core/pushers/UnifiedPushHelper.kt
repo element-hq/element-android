@@ -17,6 +17,7 @@
 package im.vector.app.core.pushers
 
 import android.content.Context
+import androidx.annotation.MainThread
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -28,7 +29,9 @@ import im.vector.app.core.utils.getApplicationLabel
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.settings.BackgroundSyncMode
 import im.vector.app.features.settings.VectorPreferences
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.cache.CacheStrategy
 import org.matrix.android.sdk.api.util.MatrixJsonParser
@@ -49,6 +52,7 @@ class UnifiedPushHelper @Inject constructor(
 
     // Called when the home activity starts
     // or when notifications are enabled
+    // TODO remove and replace by use case
     fun register(
             activity: FragmentActivity,
             onDoneRunnable: Runnable? = null,
@@ -66,10 +70,11 @@ class UnifiedPushHelper @Inject constructor(
     // The registration is forced in 2 cases :
     // * in the settings
     // * in the troubleshoot list (doFix)
+    // TODO remove and replace by use case
     fun forceRegister(
             activity: FragmentActivity,
             pushersManager: PushersManager,
-            onDoneRunnable: Runnable? = null
+            @MainThread onDoneRunnable: Runnable? = null
     ) {
         registerInternal(
                 activity,
@@ -79,17 +84,21 @@ class UnifiedPushHelper @Inject constructor(
         )
     }
 
+    // TODO remove
     private fun registerInternal(
             activity: FragmentActivity,
             force: Boolean = false,
             pushersManager: PushersManager? = null,
             onDoneRunnable: Runnable? = null
     ) {
-        activity.lifecycleScope.launch {
+        activity.lifecycleScope.launch(Dispatchers.IO) {
+            Timber.d("registerInternal force=$force, $activity on thread ${Thread.currentThread()}")
             if (!vectorFeatures.allowExternalUnifiedPushDistributors()) {
                 UnifiedPush.saveDistributor(context, context.packageName)
                 UnifiedPush.registerApp(context)
-                onDoneRunnable?.run()
+                withContext(Dispatchers.Main) {
+                    onDoneRunnable?.run()
+                }
                 return@launch
             }
             if (force) {
@@ -99,7 +108,9 @@ class UnifiedPushHelper @Inject constructor(
             // the !force should not be needed
             if (!force && UnifiedPush.getDistributor(context).isNotEmpty()) {
                 UnifiedPush.registerApp(context)
-                onDoneRunnable?.run()
+                withContext(Dispatchers.Main) {
+                    onDoneRunnable?.run()
+                }
                 return@launch
             }
 
@@ -108,7 +119,9 @@ class UnifiedPushHelper @Inject constructor(
             if (!force && distributors.size == 1) {
                 UnifiedPush.saveDistributor(context, distributors.first())
                 UnifiedPush.registerApp(context)
-                onDoneRunnable?.run()
+                withContext(Dispatchers.Main) {
+                    onDoneRunnable?.run()
+                }
             } else {
                 openDistributorDialogInternal(
                         activity = activity,
@@ -164,6 +177,43 @@ class UnifiedPushHelper @Inject constructor(
                 .show()
     }
 
+    @MainThread
+    fun showSelectDistributorDialog(
+            context: Context,
+            distributors: List<String>,
+            onDistributorSelected: (String) -> Unit,
+    ) {
+        val internalDistributorName = stringProvider.getString(
+                if (fcmHelper.isFirebaseAvailable()) {
+                    R.string.unifiedpush_distributor_fcm_fallback
+                } else {
+                    R.string.unifiedpush_distributor_background_sync
+                }
+        )
+
+        val distributorsName = distributors.map {
+            if (it == context.packageName) {
+                internalDistributorName
+            } else {
+                context.getApplicationLabel(it)
+            }
+        }
+
+        MaterialAlertDialogBuilder(context)
+                .setTitle(stringProvider.getString(R.string.unifiedpush_getdistributors_dialog_title))
+                .setItems(distributorsName.toTypedArray()) { _, which ->
+                    val distributor = distributors[which]
+                    onDistributorSelected(distributor)
+                }
+                .setOnCancelListener {
+                    // By default, use internal solution (fcm/background sync)
+                    onDistributorSelected(context.packageName)
+                }
+                .setCancelable(true)
+                .show()
+    }
+
+    // TODO remove and replace by use case
     suspend fun unregister(pushersManager: PushersManager? = null) {
         val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME
         vectorPreferences.setFdroidSyncBackgroundMode(mode)

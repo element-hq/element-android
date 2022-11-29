@@ -17,7 +17,6 @@
 
 package im.vector.app.push.fcm
 
-import android.app.Activity
 import android.content.Context
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.pushers.FcmHelper
@@ -44,7 +43,7 @@ class FdroidFcmHelper @Inject constructor(
         // No op
     }
 
-    override fun ensureFcmTokenIsRetrieved(activity: Activity, pushersManager: PushersManager, registerPusher: Boolean) {
+    override fun ensureFcmTokenIsRetrieved(pushersManager: PushersManager, registerPusher: Boolean) {
         // No op
     }
 

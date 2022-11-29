@@ -18,6 +18,7 @@ package im.vector.app.features.settings.notifications
 
 import androidx.fragment.app.FragmentActivity
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.pushers.EnsureFcmTokenIsRetrievedUseCase
 import im.vector.app.core.pushers.FcmHelper
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.pushers.UnifiedPushHelper
@@ -32,11 +33,12 @@ class EnableNotificationsForCurrentSessionUseCase @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
         private val unifiedPushHelper: UnifiedPushHelper,
         private val pushersManager: PushersManager,
-        private val fcmHelper: FcmHelper,
         private val checkIfCanTogglePushNotificationsViaPusherUseCase: CheckIfCanTogglePushNotificationsViaPusherUseCase,
         private val togglePushNotificationUseCase: TogglePushNotificationUseCase,
+        private val ensureFcmTokenIsRetrievedUseCase: EnsureFcmTokenIsRetrievedUseCase,
 ) {
 
+    // TODO update unit tests
     suspend fun execute(fragmentActivity: FragmentActivity) {
         val pusherForCurrentSession = pushersManager.getPusherForCurrentSession()
         if (pusherForCurrentSession == null) {
@@ -54,13 +56,7 @@ class EnableNotificationsForCurrentSessionUseCase @Inject constructor(
         suspendCoroutine { continuation ->
             try {
                 unifiedPushHelper.register(fragmentActivity) {
-                    if (unifiedPushHelper.isEmbeddedDistributor()) {
-                        fcmHelper.ensureFcmTokenIsRetrieved(
-                                fragmentActivity,
-                                pushersManager,
-                                registerPusher = true
-                        )
-                    }
+                    ensureFcmTokenIsRetrievedUseCase.execute(pushersManager, registerPusher = true)
                     continuation.resume(Unit)
                 }
             } catch (error: Exception) {

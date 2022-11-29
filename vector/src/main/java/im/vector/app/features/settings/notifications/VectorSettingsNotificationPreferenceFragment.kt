@@ -37,6 +37,7 @@ import im.vector.app.core.preference.VectorEditTextPreference
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorPreferenceCategory
 import im.vector.app.core.preference.VectorSwitchPreference
+import im.vector.app.core.pushers.EnsureFcmTokenIsRetrievedUseCase
 import im.vector.app.core.pushers.FcmHelper
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.pushers.UnifiedPushHelper
@@ -82,6 +83,7 @@ class VectorSettingsNotificationPreferenceFragment :
     @Inject lateinit var notificationPermissionManager: NotificationPermissionManager
     @Inject lateinit var disableNotificationsForCurrentSessionUseCase: DisableNotificationsForCurrentSessionUseCase
     @Inject lateinit var enableNotificationsForCurrentSessionUseCase: EnableNotificationsForCurrentSessionUseCase
+    @Inject lateinit var ensureFcmTokenIsRetrievedUseCase: EnsureFcmTokenIsRetrievedUseCase
 
     override var titleRes: Int = R.string.settings_notifications
     override val preferenceXmlRes = R.xml.vector_settings_notifications
@@ -183,13 +185,7 @@ class VectorSettingsNotificationPreferenceFragment :
                 it.summary = unifiedPushHelper.getCurrentDistributorName()
                 it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                     unifiedPushHelper.forceRegister(requireActivity(), pushersManager) {
-                        if (unifiedPushHelper.isEmbeddedDistributor()) {
-                            fcmHelper.ensureFcmTokenIsRetrieved(
-                                    requireActivity(),
-                                    pushersManager,
-                                    vectorPreferences.areNotificationEnabledForDevice()
-                            )
-                        }
+                        ensureFcmTokenIsRetrievedUseCase.execute(pushersManager, registerPusher = vectorPreferences.areNotificationEnabledForDevice())
                         it.summary = unifiedPushHelper.getCurrentDistributorName()
                         session.pushersService().refreshPushers()
                         refreshBackgroundSyncPrefs()
