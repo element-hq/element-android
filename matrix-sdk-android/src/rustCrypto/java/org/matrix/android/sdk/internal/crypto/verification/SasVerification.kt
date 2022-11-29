@@ -81,7 +81,7 @@ internal class SasVerification @AssistedInject constructor(
                 SasTransactionState.SasShortCodeReady
             }
             SasState.Confirmed -> SasTransactionState.SasMacSent
-            SasState.Done -> SasTransactionState.Done(false)
+            SasState.Done -> SasTransactionState.Done(true)
             is SasState.Cancelled -> SasTransactionState.Cancelled(safeValueOf(state.cancelInfo.cancelCode), state.cancelInfo.cancelledByUs)
         }
 //        refreshData()
@@ -220,6 +220,7 @@ internal class SasVerification @AssistedInject constructor(
         try {
             for (verificationRequest in result.requests) {
                 sender.sendVerificationRequest(verificationRequest)
+                verificationListenersHolder.dispatchTxUpdated(this)
             }
             val signatureRequest = result.signatureRequest
             if (signatureRequest != null) {
@@ -235,6 +236,7 @@ internal class SasVerification @AssistedInject constructor(
         tryOrNull("Fail to send cancel request") {
             sender.sendVerificationRequest(request, retryCount = Int.MAX_VALUE)
         }
+        verificationListenersHolder.dispatchTxUpdated(this@SasVerification)
     }
 
     /** Fetch fresh data from the Rust side for our verification flow */
@@ -252,7 +254,6 @@ internal class SasVerification @AssistedInject constructor(
 
     override fun onChange(state: SasState) {
         innerState = state
-        verificationListenersHolder.dispatchTxUpdated(this)
     }
 
     override fun toString(): String {

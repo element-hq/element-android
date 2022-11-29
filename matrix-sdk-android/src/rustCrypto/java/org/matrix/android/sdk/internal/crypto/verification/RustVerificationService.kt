@@ -24,9 +24,9 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationServic
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.getRelationContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageRelationContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.internal.crypto.OlmMachine
 import org.matrix.android.sdk.internal.crypto.OwnUserIdentity
@@ -49,8 +49,7 @@ internal data class ToDeviceVerificationEvent(
 /** Helper method to fetch the unique ID of the verification event */
 private fun getFlowId(event: Event): String? {
     return if (event.eventId != null) {
-        val relatesTo = event.content.toModel<MessageRelationContent>()?.relatesTo
-        relatesTo?.eventId
+        event.getRelationContent()?.eventId
     } else {
         val content = event.getClearContent().toModel<ToDeviceVerificationEvent>() ?: return null
         content.transactionId
@@ -124,30 +123,32 @@ internal class RustVerificationService @Inject constructor(
 
     /** Check if the start event created new verification objects and dispatch updates */
     private suspend fun onStart(event: Event) {
+        Timber.w("VALR onStart $event")
         val sender = event.senderId ?: return
         val flowId = getFlowId(event) ?: return
 
-        val verification = getExistingTransaction(sender, flowId) ?: return
+        val transaction = getExistingTransaction(sender, flowId) ?: return
+
         val request = olmMachine.getVerificationRequest(sender, flowId)
 
         if (request != null && request.isReady()) {
             // If this is a SAS verification originating from a `m.key.verification.request`
             // event, we auto-accept here considering that we either initiated the request or
             // accepted the request. If it's a QR code verification, just dispatch an update.
-            if (verification is SasVerification) {
+            if (transaction is SasVerification) {
                 // accept() will dispatch an update, no need to do it twice.
                 Timber.d("## Verification: Auto accepting SAS verification with $sender")
-                verification.accept()
+                transaction.accept()
             } else {
-                verificationListenersHolder.dispatchTxUpdated(verification)
+                verificationListenersHolder.dispatchTxUpdated(transaction)
             }
         } else {
             // This didn't originate from a request, so tell our listeners that
             // this is a new verification.
-            verificationListenersHolder.dispatchTxAdded(verification)
+            verificationListenersHolder.dispatchTxAdded(transaction)
             // The IncomingVerificationRequestHandler seems to only listen to updates
             // so let's trigger an update after the addition as well.
-            verificationListenersHolder.dispatchTxUpdated(verification)
+            verificationListenersHolder.dispatchTxUpdated(transaction)
         }
     }
 
@@ -248,6 +249,7 @@ internal class RustVerificationService @Inject constructor(
             null               -> throw IllegalArgumentException("The user that we wish to verify doesn't support cross signing")
         }
 
+        Timber.w("##VALR requestKeyVerificationInDMs $verification")
         return verification.toPendingVerificationRequest()
     }
 

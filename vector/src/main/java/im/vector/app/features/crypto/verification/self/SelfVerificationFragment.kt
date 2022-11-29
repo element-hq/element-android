@@ -68,7 +68,7 @@ class SelfVerificationFragment  : VectorBaseFragment<BottomSheetVerificationChil
     }
 
     override fun invalidate() = withState(viewModel) { state ->
-        Timber.w("VALR: invalidate with State: ${state.pendingRequest}")
+//        Timber.w("VALR: invalidate with State: ${state.pendingRequest}")
         controller.update(state)
     }
 

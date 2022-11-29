@@ -40,6 +40,19 @@ import org.matrix.android.sdk.internal.util.time.Clock
 import org.matrix.rustcomponents.sdk.crypto.QrCode
 import org.matrix.rustcomponents.sdk.crypto.VerificationRequest as InnerVerificationRequest
 
+fun InnerVerificationRequest.dbgString(): String {
+    val that = this
+    return buildString {
+        append("InnerVerificationRequest(")
+        append("isDone=${that.isDone()},")
+        append("isReady=${that.isReady()},")
+        append("isPassive=${that.isPassive()},")
+        append("weStarted=${that.weStarted()},")
+        append("isCancelled=${that.isCancelled()}")
+        append(")")
+    }
+}
+
 /** A verification request object
  *
  * This represents a verification flow that starts with a m.key.verification.request event
@@ -283,14 +296,36 @@ internal class VerificationRequest @AssistedInject constructor(
     }
 
     private fun state(): EVerificationState {
-        when {
-            innerVerificationRequest.weStarted() -> EVerificationState.WaitingForReady
-            innerVerificationRequest.isDone() -> EVerificationState.Done
-            innerVerificationRequest.isCancelled() -> EVerificationState.Cancelled
-            innerVerificationRequest.isReady() -> EVerificationState.Ready
-            innerVerificationRequest.isPassive() -> EVerificationState.HandledByOtherSession
+        if (innerVerificationRequest.isCancelled()) {
+            return EVerificationState.Cancelled
         }
-        return EVerificationState.Requested
+        if (innerVerificationRequest.isPassive()) {
+            return EVerificationState.HandledByOtherSession
+        }
+        if (innerVerificationRequest.isDone()) {
+            return EVerificationState.Done
+        }
+
+        val started = innerOlmMachine.getVerification(otherUser(), flowId())
+        if (started != null) {
+            val asSas = started.asSas()
+            if (asSas != null) {
+                return if (asSas.weStarted()) {
+                    EVerificationState.WeStarted
+                } else {
+                    EVerificationState.Started
+                }
+            }
+            // TODO QR??
+        }
+        if (innerVerificationRequest.isReady()) {
+            return EVerificationState.Ready
+        }
+        return if (weStarted()) {
+            EVerificationState.WaitingForReady
+        } else {
+            EVerificationState.Requested
+        }
     }
 
     /** Convert the VerificationRequest into a PendingVerificationRequest
@@ -382,6 +417,10 @@ internal class VerificationRequest @AssistedInject constructor(
                 weShouldDisplayQRCode = theirMethods.canScanQR() && ourMethods.canShowQR(),
                 weShouldShowScanOption = ourMethods.canScanQR() && theirMethods.canShowQR()
         )
+    }
+
+    override fun toString(): String {
+        return super.toString() + "\n${innerVerificationRequest.dbgString()}"
     }
 
     private fun List<String>?.canSas() = orEmpty().contains(VERIFICATION_METHOD_SAS)

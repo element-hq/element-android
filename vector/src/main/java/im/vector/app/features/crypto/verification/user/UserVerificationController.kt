@@ -39,7 +39,6 @@ import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.EVerificationState
 import org.matrix.android.sdk.api.session.crypto.verification.QRCodeVerificationState
 import org.matrix.android.sdk.api.util.MatrixItem
-import timber.log.Timber
 import javax.inject.Inject
 
 abstract class BaseEpoxyVerificationController(
@@ -78,7 +77,7 @@ class UserVerificationController @Inject constructor(
     var state: UserVerificationViewState? = null
 
     fun update(state: UserVerificationViewState) {
-        Timber.w("VALR controller updated $state")
+//        Timber.w("VALR controller updated $state")
         this.state = state
         requestModelBuild()
     }

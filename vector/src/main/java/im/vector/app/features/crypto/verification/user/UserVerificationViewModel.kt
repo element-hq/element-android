@@ -158,7 +158,7 @@ class UserVerificationViewModel @AssistedInject constructor(
                 .onEach {
                     Timber.w("VALR update event ${it.getRequest()} ")
                     it.getRequest()?.let {
-                        Timber.w("VALR state updated request to $it")
+//                        Timber.w("VALR state updated request to $it")
                         setState {
                             copy(
                                     pendingRequest = Success(it),
@@ -231,7 +231,7 @@ class UserVerificationViewModel @AssistedInject constructor(
                 }
             } else {
                 // This request is ok for us
-                Timber.w("VALR state updated request to $request")
+//                Timber.w("VALR state updated request to $request")
                 setState {
                     copy(
 
