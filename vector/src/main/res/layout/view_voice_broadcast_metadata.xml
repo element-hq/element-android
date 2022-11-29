@@ -18,7 +18,7 @@
         tools:src="@drawable/ic_voice_broadcast" />
 
     <TextView
-        android:id="@+id/metadata_value"
+        android:id="@+id/metadataText"
         style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

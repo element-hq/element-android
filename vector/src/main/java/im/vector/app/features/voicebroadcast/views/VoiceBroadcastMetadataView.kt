@@ -37,9 +37,9 @@ class VoiceBroadcastMetadataView @JvmOverloads constructor(
     )
 
     var value: String
-        get() = views.metadataValue.text.toString()
+        get() = views.metadataText.text.toString()
         set(newValue) {
-            views.metadataValue.text = newValue
+            views.metadataText.text = newValue
         }
 
     init {
@@ -61,6 +61,6 @@ class VoiceBroadcastMetadataView @JvmOverloads constructor(
 
     private fun setValue(typedArray: TypedArray) {
         val value = typedArray.getString(R.styleable.VoiceBroadcastMetadataView_metadataValue)
-        views.metadataValue.text = value
+        views.metadataText.text = value
     }
 }
