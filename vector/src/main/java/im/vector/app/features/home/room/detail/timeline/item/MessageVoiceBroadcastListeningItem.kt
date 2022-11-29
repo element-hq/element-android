@@ -141,14 +141,14 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
             renderBackwardForwardButtons(holder, playbackState)
             renderLiveIndicator(holder)
             if (!isUserSeeking) {
-                holder.seekBar.progress = playbackTracker.getPlaybackTime(voiceBroadcast.voiceBroadcastId)
+                holder.seekBar.progress = playbackTracker.getPlaybackTime(voiceBroadcast.voiceBroadcastId) ?: 0
             }
         }
     }
 
     private fun renderBackwardForwardButtons(holder: Holder, playbackState: State) {
         val isPlayingOrPaused = playbackState is State.Playing || playbackState is State.Paused
-        val playbackTime = playbackTracker.getPlaybackTime(voiceBroadcast.voiceBroadcastId)
+        val playbackTime = playbackTracker.getPlaybackTime(voiceBroadcast.voiceBroadcastId) ?: 0
         val canBackward = isPlayingOrPaused && playbackTime > 0
         val canForward = isPlayingOrPaused && playbackTime < duration
         holder.fastBackwardButton.isInvisible = !canBackward

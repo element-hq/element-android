@@ -149,7 +149,7 @@ class AudioMessageHelper @Inject constructor(
     }
 
     private fun startPlayback(id: String, file: File) {
-        val currentPlaybackTime = playbackTracker.getPlaybackTime(id)
+        val currentPlaybackTime = playbackTracker.getPlaybackTime(id) ?: 0
 
         try {
             FileInputStream(file).use { fis ->
