@@ -2723,7 +2723,7 @@
     <string name="device_manager_learn_more_sessions_unverified_title">Sessões não-verificadas</string>
     <string name="device_manager_learn_more_sessions_inactive">Sessões inativas são sessões que você não tem usado em algum tempo, mas elas continuam a receber chaves de encriptação.
 \n
-\nRemover sessões inativas melhora segurança e performance, e torna-o mais fácil para você identificar se uma nova sessão é suspeita.</string>
+\nRemover sessões inativas melhora segurança e performance, e torna mais fácil para você identificar se uma nova sessão é suspeita.</string>
     <string name="device_manager_learn_more_sessions_inactive_title">Sessões inativas</string>
     <string name="device_manager_session_rename_warning">Por favor esteja ciente que nomes de sessões também são visíveis a pessoas com quem você se comunica.</string>
     <string name="device_manager_session_rename_description">Nomes de sessões personalizadas podem ajudar você a reconhecer seus dispositivos mais facilmente.</string>
@@ -2844,9 +2844,9 @@
     <string name="error_voice_broadcast_unauthorized_title">Não dá pra começar um novo broadcast de voz</string>
     <string name="a11y_voice_broadcast_fast_forward">Avançar rápido 30 segundos</string>
     <string name="a11y_voice_broadcast_fast_backward">Retroceder 30 segundos</string>
-    <string name="device_manager_learn_more_sessions_verified_description">Sessões verificadas são onde quer que você está usando esta conta depois de entrar sua frasepasse ou confirmar sua identidade com uma outra sessão verificada.
+    <string name="device_manager_learn_more_sessions_verified_description">Sessões verificadas são onde quer que você esteja usando esta conta depois de entrar sua frasepasse ou confirmar sua identidade com uma outra sessão verificada.
 \n
-\nIsto significa que você tem todas as chaves necessitadas para destrancar suas mensagens encriptadas e confirmar a outras(os) usuárias(os) que você confia nesta sessão.</string>
+\nIsto significa que você tem todas as chaves necessárias para destrancar suas mensagens encriptadas e confirmar a outras(os) usuárias(os) que você confia nesta sessão.</string>
     <plurals name="device_manager_other_sessions_multi_signout_all">
         <item quantity="one">Fazer signout de %1$d sessão</item>
         <item quantity="other">Fazer signout de %1$d sessões</item>
