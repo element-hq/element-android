@@ -67,8 +67,8 @@ class AudioMessagePlaybackTracker @Inject constructor() {
     }
 
     fun startPlayback(id: String) {
-        val currentPlaybackTime = getPlaybackTime(id)
-        val currentPercentage = getPercentage(id)
+        val currentPlaybackTime = getPlaybackTime(id) ?: 0
+        val currentPercentage = getPercentage(id) ?: 0f
         val currentState = Listener.State.Playing(currentPlaybackTime, currentPercentage)
         setState(id, currentState)
         // Pause any active playback
@@ -85,9 +85,10 @@ class AudioMessagePlaybackTracker @Inject constructor() {
     }
 
     fun pausePlayback(id: String) {
-        if (getPlaybackState(id) is Listener.State.Playing) {
-            val currentPlaybackTime = getPlaybackTime(id)
-            val currentPercentage = getPercentage(id)
+        val state = getPlaybackState(id)
+        if (state is Listener.State.Playing) {
+            val currentPlaybackTime = state.playbackTime
+            val currentPercentage = state.percentage
             setState(id, Listener.State.Paused(currentPlaybackTime, currentPercentage))
         }
     }
@@ -110,21 +111,23 @@ class AudioMessagePlaybackTracker @Inject constructor() {
 
     fun getPlaybackState(id: String) = states[id]
 
-    fun getPlaybackTime(id: String): Int {
+    fun getPlaybackTime(id: String): Int? {
         return when (val state = states[id]) {
             is Listener.State.Playing -> state.playbackTime
             is Listener.State.Paused -> state.playbackTime
-            /* Listener.State.Idle, */
-            else -> 0
+            is Listener.State.Recording,
+            Listener.State.Idle,
+            null -> null
         }
     }
 
-    fun getPercentage(id: String): Float {
+    fun getPercentage(id: String): Float? {
         return when (val state = states[id]) {
             is Listener.State.Playing -> state.percentage
             is Listener.State.Paused -> state.percentage
-            /* Listener.State.Idle, */
-            else -> 0f
+            is Listener.State.Recording,
+            Listener.State.Idle,
+            null -> null
         }
     }
 

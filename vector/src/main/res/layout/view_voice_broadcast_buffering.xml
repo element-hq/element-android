@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -8,20 +7,19 @@
     android:orientation="horizontal"
     tools:parentTag="android.widget.LinearLayout">
 
-    <ImageView
-        android:id="@+id/metadataIcon"
+    <ProgressBar
+        android:id="@+id/bufferingIcon"
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:layout_marginEnd="4dp"
-        android:contentDescription="@null"
-        app:tint="?vctr_content_secondary"
+        android:indeterminate="true"
+        android:indeterminateTint="?vctr_content_secondary"
         tools:src="@drawable/ic_voice_broadcast" />
 
     <TextView
-        android:id="@+id/metadataText"
+        android:id="@+id/bufferingText"
         style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/no_value_placeholder"
-        tools:text="@string/attachment_type_voice_broadcast" />
+        android:text="@string/a11y_voice_broadcast_buffering" />
 </merge>
