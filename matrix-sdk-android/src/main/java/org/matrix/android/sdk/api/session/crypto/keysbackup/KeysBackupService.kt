@@ -114,7 +114,7 @@ interface KeysBackupService {
      * Delete a keys backup version. It will delete all backed up keys on the server, and the backup itself.
      * If we are backing up to this version. Backup will be stopped.
      *
-     * @param version  the backup version to delete.
+     * @param version the backup version to delete.
      */
     @Throws
     suspend fun deleteBackup(version: String)
