@@ -116,7 +116,7 @@ class HomeActivityViewModel @AssistedInject constructor(
     private fun initialize() {
         if (isInitialized) return
         isInitialized = true
-        registerUnifiedPush(distributor = "")
+        registerUnifiedPushIfNeeded()
         cleanupFiles()
         observeInitialSync()
         checkSessionPushIsOn()
@@ -125,6 +125,12 @@ class HomeActivityViewModel @AssistedInject constructor(
         observeReleaseNotes()
         initThreadsMigration()
         viewModelScope.launch { stopOngoingVoiceBroadcastUseCase.execute() }
+    }
+
+    private fun registerUnifiedPushIfNeeded() {
+        if(vectorPreferences.areNotificationEnabledForDevice()) {
+            registerUnifiedPush(distributor = "")
+        }
     }
 
     private fun registerUnifiedPush(distributor: String) {
