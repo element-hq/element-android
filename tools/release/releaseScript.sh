@@ -246,9 +246,26 @@ read -p "Create the release on gitHub from the tag https://github.com/vector-im/
 read -p "Add the 4 signed APKs to the GitHub release. Press enter when it's done."
 
 printf "\n================================================================================\n"
-printf "Ping the Android Internal room. Here is an example of message which can be sent:\n\n"
-printf "@room Element Android ${version} is ready to be tested. You can get if from https://github.com/vector-im/element-android/releases/tag/v${version}. Please report any feedback here. Thanks!\n\n"
-read -p "Press enter when it's done."
+printf "Message for the Android internal room:\n\n"
+message="@room Element Android ${version} is ready to be tested. You can get if from https://github.com/vector-im/element-android/releases/tag/v${version}. Please report any feedback here. Thanks!"
+printf "${message}\n\n"
+
+matrixOrgToken="${MATRIX_ORG_TOKEN}"
+if [[ -z "${matrixOrgToken}" ]]; then
+  read -p "MATRIX_ORG_TOKEN is not defined in the environment. Cannot send the message for you. Please send it manually, and press enter when it's done "
+else
+  read -p "Send this message to the room (yes/no) default to yes? " doSend
+  doSend=${doSend:-yes}
+  if [ ${doSend} == "yes" ]; then
+    printf "Sending message...\n"
+    transactionId=`openssl rand -hex 16`
+    # Element Android internal
+    matrixRoomId="!LiSLXinTDCsepePiYW:matrix.org"
+    curl -X PUT --data $"{\"msgtype\":\"m.text\",\"body\":\"${message}\"}" -H "Authorization: Bearer ${matrixOrgToken}" https://matrix-client.matrix.org/_matrix/client/r0/rooms/${matrixRoomId}/send/m.room.message/\$local.${transactionId}
+  else
+    printf "Message not sent, please send it manually!\n"
+  fi
+fi
 
 printf "\n================================================================================\n"
 printf "Congratulation! Kudos for using this script! Have a nice day!\n"
