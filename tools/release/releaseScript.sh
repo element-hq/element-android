@@ -235,8 +235,8 @@ ${releaseScriptFullPath} "v${version}" ${artifactUrl}
 cd -
 
 printf "\n================================================================================\n"
+read -p "Installing apk on a real device, press enter when a real device is connected. "
 apkPath="${releaseScriptLocation}/Element/v${version}/vector-gplay-arm64-v8a-release-signed.apk"
-printf "Installing apk on a real device...\n"
 adb -d install ${apkPath}
 
 read -p "Please run the APK on your phone to check that the upgrade went well (no init sync, etc.). Press enter when it's done."
