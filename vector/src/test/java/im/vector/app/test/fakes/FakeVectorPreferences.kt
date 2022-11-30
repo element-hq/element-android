@@ -69,4 +69,8 @@ class FakeVectorPreferences {
     fun verifySetFdroidSyncBackgroundMode(mode: BackgroundSyncMode) {
         verify { instance.setFdroidSyncBackgroundMode(mode) }
     }
+
+    fun givenAreNotificationsEnabledForDevice(notificationsEnabled: Boolean) {
+        every { instance.areNotificationEnabledForDevice() } returns notificationsEnabled
+    }
 }

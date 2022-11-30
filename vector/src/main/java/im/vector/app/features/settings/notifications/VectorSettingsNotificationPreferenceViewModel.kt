@@ -49,7 +49,6 @@ class VectorSettingsNotificationPreferenceViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<VectorSettingsNotificationPreferenceViewModel, VectorDummyViewState> by hiltMavericksViewModelFactory()
 
-    // TODO add unit tests
     override fun handle(action: VectorSettingsNotificationPreferenceViewAction) {
         when (action) {
             VectorSettingsNotificationPreferenceViewAction.DisableNotificationsForDevice -> handleDisableNotificationsForDevice()
