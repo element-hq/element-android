@@ -28,4 +28,5 @@ object UserAccountDataTypes {
     const val TYPE_IDENTITY_SERVER = "m.identity_server"
     const val TYPE_ACCEPTED_TERMS = "m.accepted_terms"
     const val TYPE_OVERRIDE_COLORS = "im.vector.setting.override_colors"
+    const val TYPE_LOCAL_NOTIFICATION_SETTINGS = "org.matrix.msc3890.local_notification_settings."
 }

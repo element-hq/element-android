@@ -23,6 +23,10 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import im.vector.app.GoogleFlavorLegals
 import im.vector.app.core.pushers.FcmHelper
+import im.vector.app.core.resources.AppNameProvider
+import im.vector.app.core.resources.DefaultAppNameProvider
+import im.vector.app.core.resources.DefaultLocaleProvider
+import im.vector.app.core.resources.LocaleProvider
 import im.vector.app.core.services.GuardServiceStarter
 import im.vector.app.features.home.NightlyProxy
 import im.vector.app.features.settings.legals.FlavorLegals
@@ -45,6 +49,12 @@ abstract class FlavorModule {
 
     @Binds
     abstract fun bindsFcmHelper(fcmHelper: GoogleFcmHelper): FcmHelper
+
+    @Binds
+    abstract fun bindsLocaleProvider(localeProvider: DefaultLocaleProvider): LocaleProvider
+
+    @Binds
+    abstract fun bindsAppNameProvider(appNameProvider: DefaultAppNameProvider): AppNameProvider
 
     @Binds
     abstract fun bindsFlavorLegals(legals: GoogleFlavorLegals): FlavorLegals

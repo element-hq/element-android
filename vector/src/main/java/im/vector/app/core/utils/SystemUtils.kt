@@ -34,6 +34,7 @@ import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
 import im.vector.app.R
 import im.vector.app.features.notifications.NotificationUtils
+import org.matrix.android.sdk.api.util.getApplicationInfoCompat
 
 /**
  * Tells if the application ignores battery optimizations.
@@ -63,7 +64,7 @@ fun Context.isAnimationEnabled(): Boolean {
  */
 fun Context.getApplicationLabel(packageName: String): String {
     return try {
-        val ai = packageManager.getApplicationInfo(packageName, 0)
+        val ai = packageManager.getApplicationInfoCompat(packageName, 0)
         packageManager.getApplicationLabel(ai).toString()
     } catch (e: PackageManager.NameNotFoundException) {
         packageName

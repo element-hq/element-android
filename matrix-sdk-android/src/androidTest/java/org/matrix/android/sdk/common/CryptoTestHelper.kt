@@ -147,7 +147,7 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
     }
 
     private suspend fun ensureMembersHaveJoined(session: Session, invitedUserSessions: List<Session>, roomId: String) {
-        testHelper.betterRetryPeriodically(
+        testHelper.retryWithBackoff(
                 onFail = {
                     fail("Members ${invitedUserSessions.map { it.myUserId.take(10) }} should have join from the pov of ${session.myUserId.take(10)}")
                 }
@@ -163,7 +163,7 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
     }
 
     private suspend fun waitForAndAcceptInviteInRoom(session: Session, roomId: String) {
-        testHelper.betterRetryPeriodically(
+        testHelper.retryWithBackoff(
                 onFail = {
                     fail("${session.myUserId} cannot see the invite from ${session.myUserId.take(10)}")
                 }
@@ -185,7 +185,7 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
         }
 
         Log.v("#E2E TEST", "${session.myUserId} waiting for join echo ...")
-        testHelper.betterRetryPeriodically(
+        testHelper.retryWithBackoff(
                 onFail = {
                     fail("${session.myUserId.take(10)} cannot see the join echo for ${roomId}")
                 }
@@ -373,7 +373,7 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
                 roomId = roomId
         ).transactionId
 
-        testHelper.betterRetryPeriodically(
+        testHelper.retryWithBackoff(
                 onFail = {
                     fail("Bob should see an incoming request from alice")
                 }
@@ -397,7 +397,7 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
         )
 
         // wait for it to be readied
-        testHelper.betterRetryPeriodically(
+        testHelper.retryWithBackoff(
                 onFail = {
                     fail("Alice should see the verification in ready state")
                 }
@@ -417,25 +417,25 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
         var alicePovTx: SasVerificationTransaction? = null
         var bobPovTx: SasVerificationTransaction? = null
 
-        testHelper.betterRetryPeriodically(
+        testHelper.retryWithBackoff(
                 onFail = {
                     fail("Alice should should see a verification code")
                 }
         ) {
             alicePovTx = aliceVerificationService.getExistingTransaction(bob.myUserId, requestID)
                     as? SasVerificationTransaction
-            Log.v("TEST", "== alicePovTx id:${requestID} is ${alicePovTx?.state}")
+            Log.v("TEST", "== alicePovTx id:${requestID} is ${alicePovTx?.state()}")
             alicePovTx?.getDecimalCodeRepresentation() != null
         }
         // wait for alice to get the ready
-        testHelper.betterRetryPeriodically(
+        testHelper.retryWithBackoff(
                 onFail = {
                     fail("Bob should should see a verification code")
                 }
         ) {
             bobPovTx = bobVerificationService.getExistingTransaction(alice.myUserId, requestID)
                     as? SasVerificationTransaction
-            Log.v("TEST", "== bobPovTx is ${bobPovTx?.state}")
+            Log.v("TEST", "== bobPovTx is ${bobPovTx?.state()}")
 //            bobPovTx?.state == VerificationTxState.ShortCodeReady
             bobPovTx?.getDecimalCodeRepresentation() != null
         }
@@ -445,11 +445,11 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
         bobPovTx!!.userHasVerifiedShortCode()
         alicePovTx!!.userHasVerifiedShortCode()
 
-        testHelper.betterRetryPeriodically {
+        testHelper.retryWithBackoff {
             alice.cryptoService().crossSigningService().isUserTrusted(bob.myUserId)
         }
 
-        testHelper.betterRetryPeriodically {
+        testHelper.retryWithBackoff {
             bob.cryptoService().crossSigningService().isUserTrusted(alice.myUserId)
         }
     }

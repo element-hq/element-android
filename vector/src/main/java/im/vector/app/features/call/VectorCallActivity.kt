@@ -69,6 +69,7 @@ import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.arguments.TimelineArgs
+import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 import io.github.hyuwah.draggableviewlib.DraggableView
 import io.github.hyuwah.draggableviewlib.setupDraggable
 import kotlinx.parcelize.Parcelize
@@ -178,7 +179,7 @@ class VectorCallActivity :
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         intent?.takeIf { it.hasExtra(Mavericks.KEY_ARG) }
-                ?.let { intent.getParcelableExtra<CallArgs>(Mavericks.KEY_ARG) }
+                ?.let { intent.getParcelableExtraCompat<CallArgs>(Mavericks.KEY_ARG) }
                 ?.let {
                     callViewModel.handle(VectorCallViewActions.SwitchCall(it))
                 }
@@ -193,6 +194,7 @@ class VectorCallActivity :
 
     override fun onBackPressed() {
         if (!enterPictureInPictureIfRequired()) {
+            @Suppress("DEPRECATION")
             super.onBackPressed()
         }
     }
@@ -230,6 +232,7 @@ class VectorCallActivity :
             }
             android.R.id.home -> {
                 // We check here as we want PiP in some cases
+                @Suppress("DEPRECATION")
                 onBackPressed()
                 true
             }

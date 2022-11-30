@@ -42,6 +42,7 @@ internal class DefaultPushersService @Inject constructor(
         private val getPusherTask: GetPushersTask,
         private val pushGatewayNotifyTask: PushGatewayNotifyTask,
         private val addPusherTask: AddPusherTask,
+        private val togglePusherTask: TogglePusherTask,
         private val removePusherTask: RemovePusherTask,
         private val taskExecutor: TaskExecutor
 ) : PushersService {
@@ -78,7 +79,9 @@ internal class DefaultPushersService @Inject constructor(
             appDisplayName = appDisplayName,
             deviceDisplayName = deviceDisplayName,
             data = JsonPusherData(url, EVENT_ID_ONLY.takeIf { withEventIdOnly }),
-            append = append
+            append = append,
+            enabled = enabled,
+            deviceId = deviceId,
     )
 
     override suspend fun addEmailPusher(
@@ -105,6 +108,24 @@ internal class DefaultPushersService @Inject constructor(
                 )
         )
     }
+
+    override suspend fun togglePusher(pusher: Pusher, enable: Boolean) {
+        togglePusherTask.execute(TogglePusherTask.Params(pusher.toJsonPusher(), enable))
+    }
+
+    private fun Pusher.toJsonPusher() = JsonPusher(
+            pushKey = pushKey,
+            kind = kind,
+            appId = appId,
+            appDisplayName = appDisplayName,
+            deviceDisplayName = deviceDisplayName,
+            profileTag = profileTag,
+            lang = lang,
+            data = JsonPusherData(data.url, data.format),
+            append = false,
+            enabled = enabled,
+            deviceId = deviceId,
+    )
 
     private fun enqueueAddPusher(pusher: JsonPusher): UUID {
         val params = AddPusherWorker.Params(sessionId, pusher)

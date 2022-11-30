@@ -79,7 +79,7 @@ class LiveLocationShareRedactionEventProcessorTest {
     @Test
     fun `given a redacted live location share event when processing it then related summaries are deleted from database`() = runTest {
         val event = Event(eventId = AN_EVENT_ID, redacts = A_REDACTED_EVENT_ID)
-        val redactedEventEntity = EventEntity(eventId = A_REDACTED_EVENT_ID, type = EventType.STATE_ROOM_BEACON_INFO.first())
+        val redactedEventEntity = EventEntity(eventId = A_REDACTED_EVENT_ID, type = EventType.STATE_ROOM_BEACON_INFO.stable)
         fakeRealm.givenWhere<EventEntity>()
                 .givenEqualTo(EventEntityFields.EVENT_ID, A_REDACTED_EVENT_ID)
                 .givenFindFirst(redactedEventEntity)

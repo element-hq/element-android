@@ -21,9 +21,14 @@ import im.vector.app.core.utils.getApplicationLabel
 import timber.log.Timber
 import javax.inject.Inject
 
-class AppNameProvider @Inject constructor(private val context: Context) {
+interface AppNameProvider {
 
-    fun getAppName(): String {
+    fun getAppName(): String
+}
+
+class DefaultAppNameProvider @Inject constructor(private val context: Context) : AppNameProvider {
+
+    override fun getAppName(): String {
         return try {
             val appPackageName = context.applicationContext.packageName
             var appName = context.getApplicationLabel(appPackageName)

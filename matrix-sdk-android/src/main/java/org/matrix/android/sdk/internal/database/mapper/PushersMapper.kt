@@ -33,7 +33,9 @@ internal object PushersMapper {
                 profileTag = pushEntity.profileTag,
                 lang = pushEntity.lang,
                 data = PusherData(pushEntity.data?.url, pushEntity.data?.format),
-                state = pushEntity.state
+                enabled = pushEntity.enabled,
+                deviceId = pushEntity.deviceId,
+                state = pushEntity.state,
         )
     }
 
@@ -46,7 +48,9 @@ internal object PushersMapper {
                 deviceDisplayName = pusher.deviceDisplayName,
                 profileTag = pusher.profileTag,
                 lang = pusher.lang,
-                data = PusherDataEntity(pusher.data?.url, pusher.data?.format)
+                data = PusherDataEntity(pusher.data?.url, pusher.data?.format),
+                enabled = pusher.enabled,
+                deviceId = pusher.deviceId,
         )
     }
 }

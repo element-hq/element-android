@@ -22,6 +22,7 @@ import com.squareup.moshi.JsonClass
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.kotlin.where
+import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
@@ -175,7 +176,9 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
                         ?.devices
 
                 val trustMap = devicesEntities?.associateWith { device ->
-                    crossSigningService.checkDeviceTrust(userId, device.deviceId ?: "", CryptoMapper.mapToModel(device).trustLevel?.locallyVerified)
+                    runBlocking {
+                        crossSigningService.checkDeviceTrust(userId, device.deviceId ?: "", CryptoMapper.mapToModel(device).trustLevel?.locallyVerified)
+                    }
                 }
 
                 // Update trust if needed

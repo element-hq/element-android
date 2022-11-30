@@ -34,7 +34,6 @@ import org.matrix.android.sdk.test.fakes.FakeSendStateTask
 private const val A_USER_ID = "user-id"
 private const val A_ROOM_ID = "room-id"
 private const val AN_EVENT_ID = "event-id"
-private const val A_DESCRIPTION = "description"
 private const val A_TIMEOUT = 15_000L
 private const val AN_EPOCH = 1655210176L
 
@@ -60,7 +59,6 @@ internal class DefaultStartLiveLocationShareTaskTest {
         val params = StartLiveLocationShareTask.Params(
                 roomId = A_ROOM_ID,
                 timeoutMillis = A_TIMEOUT,
-                description = A_DESCRIPTION
         )
         fakeClock.givenEpoch(AN_EPOCH)
         fakeSendStateTask.givenExecuteRetryReturns(AN_EVENT_ID)
@@ -69,7 +67,7 @@ internal class DefaultStartLiveLocationShareTaskTest {
 
         result shouldBeEqualTo UpdateLiveLocationShareResult.Success(AN_EVENT_ID)
         val expectedBeaconContent = MessageBeaconInfoContent(
-                body = A_DESCRIPTION,
+                body = "Live location",
                 timeout = params.timeoutMillis,
                 isLive = true,
                 unstableTimestampMillis = AN_EPOCH
@@ -77,7 +75,7 @@ internal class DefaultStartLiveLocationShareTaskTest {
         val expectedParams = SendStateTask.Params(
                 roomId = params.roomId,
                 stateKey = A_USER_ID,
-                eventType = EventType.STATE_ROOM_BEACON_INFO.first(),
+                eventType = EventType.STATE_ROOM_BEACON_INFO.stable,
                 body = expectedBeaconContent
         )
         fakeSendStateTask.verifyExecuteRetry(
@@ -91,7 +89,6 @@ internal class DefaultStartLiveLocationShareTaskTest {
         val params = StartLiveLocationShareTask.Params(
                 roomId = A_ROOM_ID,
                 timeoutMillis = A_TIMEOUT,
-                description = A_DESCRIPTION
         )
         fakeClock.givenEpoch(AN_EPOCH)
         fakeSendStateTask.givenExecuteRetryReturns("")
@@ -106,7 +103,6 @@ internal class DefaultStartLiveLocationShareTaskTest {
         val params = StartLiveLocationShareTask.Params(
                 roomId = A_ROOM_ID,
                 timeoutMillis = A_TIMEOUT,
-                description = A_DESCRIPTION
         )
         fakeClock.givenEpoch(AN_EPOCH)
         val error = Throwable()

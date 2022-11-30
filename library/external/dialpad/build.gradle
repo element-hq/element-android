@@ -2,6 +2,8 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
+    namespace "com.android.dialer.dialpadview"
+
     compileSdk versions.compileSdk
 
     defaultConfig {

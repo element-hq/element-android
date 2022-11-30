@@ -16,6 +16,7 @@
 
 package im.vector.app.features.settings.devices.v2
 
+import im.vector.app.features.settings.devices.v2.details.extended.DeviceExtendedInfo
 import im.vector.app.features.settings.devices.v2.list.DeviceType
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
@@ -61,8 +62,8 @@ private val A_USER_AGENT_LIST_FOR_DESKTOP = listOf(
         "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) ElementNightly/2022091301 Chrome/104.0.5112.102 Electron/20.1.1 Safari/537.36",
 )
 private val AN_EXPECTED_RESULT_LIST_FOR_DESKTOP = listOf(
-        DeviceExtendedInfo(DeviceType.DESKTOP, null, "Macintosh", "Electron", "20"),
-        DeviceExtendedInfo(DeviceType.DESKTOP, null, "Windows NT 10.0", "Electron", "20"),
+        DeviceExtendedInfo(DeviceType.DESKTOP, null, "macOS", "Electron", "20.1.1"),
+        DeviceExtendedInfo(DeviceType.DESKTOP, null, "Windows", "Electron", "20.1.1"),
 )
 
 private val A_USER_AGENT_LIST_FOR_WEB = listOf(
@@ -77,15 +78,15 @@ private val A_USER_AGENT_LIST_FOR_WEB = listOf(
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246",
         )
 private val AN_EXPECTED_RESULT_LIST_FOR_WEB = listOf(
-        DeviceExtendedInfo(DeviceType.WEB, null, "Macintosh", "Chrome", "104"),
-        DeviceExtendedInfo(DeviceType.WEB, null, "Windows NT 10.0", "Chrome", "104"),
-        DeviceExtendedInfo(DeviceType.WEB, null, "Macintosh", "Firefox", "39"),
-        DeviceExtendedInfo(DeviceType.WEB, null, "Macintosh", "Safari", "8"),
-        DeviceExtendedInfo(DeviceType.WEB, null, "Android 9", "Chrome", "69"),
-        DeviceExtendedInfo(DeviceType.WEB, null, "iPad", "Safari", "8"),
-        DeviceExtendedInfo(DeviceType.WEB, null, "iPhone", "Safari", "8"),
-        DeviceExtendedInfo(DeviceType.WEB, null, "Windows NT 6.0", "Firefox", "40"),
-        DeviceExtendedInfo(DeviceType.WEB, null, "Windows NT 10.0", "Edge", "12"),
+        DeviceExtendedInfo(DeviceType.WEB, null, "macOS", "Chrome", "104.0.5112.102"),
+        DeviceExtendedInfo(DeviceType.WEB, null, "Windows", "Chrome", "104.0.5112.102"),
+        DeviceExtendedInfo(DeviceType.WEB, null, "macOS", "Firefox", "39.0"),
+        DeviceExtendedInfo(DeviceType.WEB, null, "macOS", "Safari", "8.0.3"),
+        DeviceExtendedInfo(DeviceType.WEB, null, "Android", "Chrome", "69.0.3497.100"),
+        DeviceExtendedInfo(DeviceType.WEB, null, "iOS", "Safari", "8.0"),
+        DeviceExtendedInfo(DeviceType.WEB, null, "iOS", "Safari", "8.0"),
+        DeviceExtendedInfo(DeviceType.WEB, null, "Windows", "Firefox", "40.0"),
+        DeviceExtendedInfo(DeviceType.WEB, null, "Windows", "Edge", "12.246"),
 )
 
 private val AN_UNKNOWN_USER_AGENT_LIST = listOf(

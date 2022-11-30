@@ -5,6 +5,8 @@ plugins {
 }
 
 android {
+    namespace "im.vector.lib.strings"
+
     compileSdk versions.compileSdk
     defaultConfig {
         minSdk versions.minSdk

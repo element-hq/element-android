@@ -34,6 +34,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.util.getPackageInfoCompat
 import timber.log.Timber
 
 class VectorActivityLifecycleCallbacks constructor(private val popupAlertManager: PopupAlertManager) : Application.ActivityLifecycleCallbacks {
@@ -64,16 +65,16 @@ class VectorActivityLifecycleCallbacks constructor(private val popupAlertManager
             val packageManager: PackageManager = context.packageManager
 
             // Get all activities from element android
-            activitiesInfo = packageManager.getPackageInfo(context.packageName, PackageManager.GET_ACTIVITIES).activities
+            activitiesInfo = packageManager.getPackageInfoCompat(context.packageName, PackageManager.GET_ACTIVITIES).activities
 
             // Get all activities from PermissionController module
             // See https://source.android.com/docs/core/architecture/modular-system/permissioncontroller#package-format
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.S_V2) {
                 activitiesInfo += tryOrNull {
-                    packageManager.getPackageInfo("com.google.android.permissioncontroller", PackageManager.GET_ACTIVITIES).activities
+                    packageManager.getPackageInfoCompat("com.google.android.permissioncontroller", PackageManager.GET_ACTIVITIES).activities
                 } ?: tryOrNull {
                     packageManager.getModuleInfo("com.google.android.permission", 1).packageName?.let {
-                        packageManager.getPackageInfo(it, PackageManager.GET_ACTIVITIES or PackageManager.MATCH_APEX).activities
+                        packageManager.getPackageInfoCompat(it, PackageManager.GET_ACTIVITIES or PackageManager.MATCH_APEX).activities
                     }
                 }.orEmpty()
             }

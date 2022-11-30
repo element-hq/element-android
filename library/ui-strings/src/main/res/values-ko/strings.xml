@@ -47,7 +47,8 @@
     <string name="initial_sync_start_importing_account_rooms">초기 동기화:
 \n방 가져오는 중</string>
     <string name="initial_sync_start_importing_account_joined_rooms">초기 동기화:
-\n들어간 방 가져오는 중</string>
+\n대화 가져오는 중
+\n많은 방에 참여하신 경우, 오래 걸릴 수 있습니다</string>
     <string name="initial_sync_start_importing_account_invited_rooms">초기 동기화:
 \n초대받은 방 가져오는 중</string>
     <string name="initial_sync_start_importing_account_left_rooms">초기 동기화:
@@ -958,4 +959,39 @@
     <string name="notice_room_name_changed_by_you">방 이름을 바꾸었습니다: %1$s</string>
     <string name="notice_room_avatar_changed_by_you">방 사진을 바꾸었습니다</string>
     <string name="notice_room_avatar_changed">%1$s님이 방 사진을 바꾸었습니다</string>
+    <string name="initial_sync_request_title">초기 동기화 요청</string>
+    <string name="initial_sync_start_downloading">초기 동기화:
+\n데이터 내려받는 중…</string>
+    <string name="initial_sync_start_server_computing">초기 동기화:
+\n서버 응답을 기다리는 중…</string>
+    <string name="room_displayname_empty_room_was">빈 방 (기존 %s)</string>
+    <plurals name="room_displayname_four_and_more_members">
+        <item quantity="other">%1$s님, %2$s님, %3$s님과 %4$d님 등</item>
+    </plurals>
+    <string name="room_displayname_4_members">%1$s님, %2$s님, %3$s님과 %4$s님</string>
+    <string name="room_displayname_3_members">%1$s님, %2$s님과 %3$s님</string>
+    <string name="room_error_access_unauthorized">이 방에 참여할 수 없습니다</string>
+    <string name="explore_rooms">방 둘러보기</string>
+    <string name="create_room">방 만들기</string>
+    <string name="start_chat">채팅 시작</string>
+    <string name="all_chats">모든 채팅</string>
+    <string name="power_level_moderator">중재자</string>
+    <string name="power_level_admin">관리자</string>
+    <string name="notice_widget_modified_by_you">%1$s위젯을 수정했습니다</string>
+    <string name="notice_widget_modified">%1$s님이 %2$s위젯을 수정했습니다</string>
+    <string name="notice_widget_removed_by_you">%1$s위젯을 삭제했습니다</string>
+    <string name="notice_widget_removed">%1$s님이 %2$s위젯을 삭제했습니다</string>
+    <string name="notice_widget_added_by_you">%1$s위젯을 추가했습니다</string>
+    <string name="notice_widget_added">%1$s님이 %2$s위젯을 추가했습니다</string>
+    <string name="notice_room_third_party_registered_invite_by_you">%1$s님의 초대를 수락했습니다</string>
+    <string name="notice_direct_room_third_party_revoked_invite_by_you">%1$s님 초대를 취소했습니다</string>
+    <string name="notice_direct_room_third_party_revoked_invite">%1$s님이 %2$s님 초대를 취소했습니다</string>
+    <string name="notice_room_third_party_revoked_invite_by_you">%1$s님에게 방에 참가하라고 보낸 초대를 취소했습니다</string>
+    <string name="notice_direct_room_third_party_invite_by_you">%1$s님을 초대했습니다</string>
+    <string name="notice_direct_room_third_party_invite">%1$s님이 %2$s님을 초대했습니다</string>
+    <string name="notice_room_third_party_invite_by_you">%1$s님에게 방 초대를 보냈습니다</string>
+    <string name="notice_room_avatar_removed_by_you">방 아바타를 삭제했습니다</string>
+    <string name="notice_room_avatar_removed">%1$s님이 방 아바타를 삭제했습니다</string>
+    <string name="notice_room_topic_removed_by_you">방 주제를 삭제했습니다</string>
+    <string name="notice_room_name_removed_by_you">방 이름을 삭제했습니다</string>
 </resources>

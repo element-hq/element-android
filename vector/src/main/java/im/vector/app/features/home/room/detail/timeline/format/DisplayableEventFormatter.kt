@@ -19,6 +19,7 @@ package im.vector.app.features.home.room.detail.timeline.format
 import dagger.Lazy
 import im.vector.app.EmojiSpanify
 import im.vector.app.R
+import im.vector.app.core.extensions.getVectorLastMessageContent
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.html.EventHtmlRenderer
@@ -34,7 +35,6 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.relation.ReactionContent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
-import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.getTextDisplayableContent
 import javax.inject.Inject
 
@@ -60,7 +60,7 @@ class DisplayableEventFormatter @Inject constructor(
 
         return when (timelineEvent.root.getClearType()) {
             EventType.MESSAGE -> {
-                timelineEvent.getLastMessageContent()?.let { messageContent ->
+                timelineEvent.getVectorLastMessageContent()?.let { messageContent ->
                     when (messageContent.msgType) {
                         MessageType.MSGTYPE_TEXT -> {
                             val body = messageContent.getTextDisplayableContent()
@@ -122,17 +122,17 @@ class DisplayableEventFormatter @Inject constructor(
             EventType.CALL_CANDIDATES -> {
                 span { }
             }
-            in EventType.POLL_START -> {
+            in EventType.POLL_START.values -> {
                 timelineEvent.root.getClearContent().toModel<MessagePollContent>(catchError = true)?.getBestPollCreationInfo()?.question?.getBestQuestion()
                         ?: stringProvider.getString(R.string.sent_a_poll)
             }
-            in EventType.POLL_RESPONSE -> {
+            in EventType.POLL_RESPONSE.values -> {
                 stringProvider.getString(R.string.poll_response_room_list_preview)
             }
-            in EventType.POLL_END -> {
+            in EventType.POLL_END.values -> {
                 stringProvider.getString(R.string.poll_end_room_list_preview)
             }
-            in EventType.STATE_ROOM_BEACON_INFO -> {
+            in EventType.STATE_ROOM_BEACON_INFO.values -> {
                 simpleFormat(senderName, stringProvider.getString(R.string.sent_live_location), appendAuthor)
             }
             else -> {
@@ -220,17 +220,17 @@ class DisplayableEventFormatter @Inject constructor(
                     emojiSpanify.spanify(stringProvider.getString(R.string.sent_a_reaction, it.key))
                 } ?: span { }
             }
-            in EventType.POLL_START -> {
+            in EventType.POLL_START.values -> {
                 event.getClearContent().toModel<MessagePollContent>(catchError = true)?.pollCreationInfo?.question?.question
                         ?: stringProvider.getString(R.string.sent_a_poll)
             }
-            in EventType.POLL_RESPONSE -> {
+            in EventType.POLL_RESPONSE.values -> {
                 stringProvider.getString(R.string.poll_response_room_list_preview)
             }
-            in EventType.POLL_END -> {
+            in EventType.POLL_END.values -> {
                 stringProvider.getString(R.string.poll_end_room_list_preview)
             }
-            in EventType.STATE_ROOM_BEACON_INFO -> {
+            in EventType.STATE_ROOM_BEACON_INFO.values -> {
                 stringProvider.getString(R.string.sent_live_location)
             }
             else -> {

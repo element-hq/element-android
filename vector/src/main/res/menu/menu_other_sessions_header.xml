@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="AlwaysShowAction">
+
+    <item
+        android:id="@+id/otherSessionsHeaderToggleIpAddress"
+        android:title="@string/device_manager_other_sessions_show_ip_address"
+        app:showAsAction="withText|never" />
+
+    <item
+        android:id="@+id/otherSessionsHeaderMultiSignout"
+        android:title="@plurals/device_manager_other_sessions_multi_signout_all"
+        app:showAsAction="withText|never" />
+
+</menu>

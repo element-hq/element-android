@@ -20,12 +20,15 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
+import im.vector.app.features.settings.devices.v2.notification.NotificationsStatus
 
 data class SessionOverviewViewState(
         val deviceId: String,
         val isCurrentSessionTrusted: Boolean = false,
         val deviceInfo: Async<DeviceFullInfo> = Uninitialized,
         val isLoading: Boolean = false,
+        val notificationsStatus: NotificationsStatus = NotificationsStatus.NOT_SUPPORTED,
+        val isShowingIpAddress: Boolean = false,
 ) : MavericksState {
     constructor(args: SessionOverviewArgs) : this(
             deviceId = args.deviceId

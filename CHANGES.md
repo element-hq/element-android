@@ -1,3 +1,142 @@
+Changes in Element v1.5.8 (2022-11-17)
+======================================
+
+Features ✨
+----------
+ - [Session manager] Multi-session signout ([#7418](https://github.com/vector-im/element-android/issues/7418))
+ - Rich text editor: add full screen mode. ([#7436](https://github.com/vector-im/element-android/issues/7436))
+ - [Rich text editor] Add plain text mode ([#7452](https://github.com/vector-im/element-android/issues/7452))
+ - Move TypingView inside the timeline items. ([#7496](https://github.com/vector-im/element-android/issues/7496))
+ - Push notifications toggle: align implementation for current session ([#7512](https://github.com/vector-im/element-android/issues/7512))
+ - Voice messages - Persist the playback position across different screens ([#7582](https://github.com/vector-im/element-android/issues/7582))
+
+Bugfixes 🐛
+----------
+ - [Voice Broadcast] Do not display the recorder view for a live broadcast started from another session ([#7431](https://github.com/vector-im/element-android/issues/7431))
+ - [Session manager] Hide push notification toggle when there is no server support ([#7457](https://github.com/vector-im/element-android/issues/7457))
+ - Fix rich text editor textfield not growing to fill parent on full screen. ([#7491](https://github.com/vector-im/element-android/issues/7491))
+ - Fix duplicated mention pills in some cases ([#7501](https://github.com/vector-im/element-android/issues/7501))
+ - Voice Broadcast - Fix duplicated voice messages in the internal playlist ([#7502](https://github.com/vector-im/element-android/issues/7502))
+ - When joining a room, the message composer is displayed once the room is loaded. ([#7509](https://github.com/vector-im/element-android/issues/7509))
+ - Voice Broadcast - Fix error on voice messages in unencrypted rooms ([#7519](https://github.com/vector-im/element-android/issues/7519))
+ - Fix description of verified sessions ([#7533](https://github.com/vector-im/element-android/issues/7533))
+
+In development 🚧
+----------------
+ - [Voice Broadcast] Improve timeline items factory and handle bad recording state display ([#7448](https://github.com/vector-im/element-android/issues/7448))
+ - [Voice Broadcast] Stop recording when opening the room after an app restart ([#7450](https://github.com/vector-im/element-android/issues/7450))
+ - [Voice Broadcast] Improve playlist fetching and player codebase ([#7478](https://github.com/vector-im/element-android/issues/7478))
+ - [Voice Broadcast] Display an error dialog if the user fails to start a voice broadcast ([#7485](https://github.com/vector-im/element-android/issues/7485))
+ - [Voice Broadcast] Add seekbar in listening tile ([#7496](https://github.com/vector-im/element-android/issues/7496))
+ - [Voice Broadcast] Improve the live indicator icon rendering in the timeline ([#7579](https://github.com/vector-im/element-android/issues/7579))
+ - Voice Broadcast - Add maximum length ([#7588](https://github.com/vector-im/element-android/issues/7588))
+
+SDK API changes ⚠️
+------------------
+ - [Metrics] Add `SpannableMetricPlugin` to support spans within transactions. ([#7514](https://github.com/vector-im/element-android/issues/7514))
+ - Fix a bug that caused messages with no formatted text to be quoted as "null". ([#7530](https://github.com/vector-im/element-android/issues/7530))
+ - If message content has no `formattedBody`, default to `body` when editing. ([#7574](https://github.com/vector-im/element-android/issues/7574))
+
+
+Changes in Element v1.5.7 (2022-11-07)
+======================================
+
+Bugfixes 🐛
+----------
+- Fix regression when syncing with homeserver < 1.4. ([#7534](https://github.com/vector-im/element-android/issues/7534))
+
+Changes in Element v1.5.6 (2022-11-02)
+======================================
+
+Features ✨
+----------
+ - Add new UI for selecting an attachment ([#7429](https://github.com/vector-im/element-android/issues/7429))
+ - Multi selection in sessions list ([#7396](https://github.com/vector-im/element-android/issues/7396))
+
+Bugfixes 🐛
+----------
+ - New line and Enter hardware key presses deleting existing text in some keyboards. ([#7357](https://github.com/vector-im/element-android/issues/7357))
+ - Fix share actions using share dialog. ([#7400](https://github.com/vector-im/element-android/issues/7400))
+ - Fix crash by disabling Flipper on Android API 22 and below - only affects debug version of the application. ([#7428](https://github.com/vector-im/element-android/issues/7428))
+
+In development 🚧
+----------------
+ - [Voice Broadcast] Live listening support ([#7419](https://github.com/vector-im/element-android/issues/7419))
+ - [Voice Broadcast] Improve rendering in the timeline ([#7421](https://github.com/vector-im/element-android/issues/7421))
+ - Add logic for sign in with QR code ([#7369](https://github.com/vector-im/element-android/issues/7369))
+
+SDK API changes ⚠️
+------------------
+ - Add MetricPlugin interface to implement metrics in SDK clients. ([#7438](https://github.com/vector-im/element-android/issues/7438))
+
+Other changes
+-------------
+ - Upgrade Jitsi SDK to 6.2.2 and WebRtc to 1.106.1-jitsi-12039821. ([#6195](https://github.com/vector-im/element-android/issues/6195))
+ - Gets thread notifications from sync response ([#7424](https://github.com/vector-im/element-android/issues/7424))
+ - Replace org.apache.sanselan:sanselan by org.apache.commons:commons-imaging ([#7454](https://github.com/vector-im/element-android/issues/7454))
+
+
+Changes in Element v1.5.4 (2022-10-19)
+======================================
+
+Features ✨
+----------
+ - Add WYSIWYG editor, under a lab flag. ([#7288](https://github.com/vector-im/element-android/issues/7288))
+ - New Device management, can be enabled in the labs settings.
+ - Voice broadcast can be enabled in the labs settings (recording is possible only on Android 10 and up).
+
+Bugfixes 🐛
+----------
+ - Fix wrong mic button direction to cancel on RTL languages ([#5968](https://github.com/vector-im/element-android/issues/5968))
+ - Handle properly when getUser returns null - prefer using getUserOrDefault ([#7372](https://github.com/vector-im/element-android/issues/7372))
+ - [Device Management] Long session names not handled well ([#7310](https://github.com/vector-im/element-android/issues/7310))
+ - Fix editing formatted messages with plain text editor ([#7359](https://github.com/vector-im/element-android/issues/7359))
+
+In development 🚧
+----------------
+ - [Device Management] Save "matrix_client_information" events on login/registration ([#7257](https://github.com/vector-im/element-android/issues/7257))
+ - [Device management] Add lab flag for the feature ([#7336](https://github.com/vector-im/element-android/issues/7336))
+ - [Device management] Add lab flag for matrix client info account data event ([#7344](https://github.com/vector-im/element-android/issues/7344))
+ - [Device Management] Redirect to the new screen everywhere when lab flag is on ([#7374](https://github.com/vector-im/element-android/issues/7374))
+ - [Device Management] Show correct device type icons ([#7277](https://github.com/vector-im/element-android/issues/7277))
+ - [Device Management] Render extended device info ([#7294](https://github.com/vector-im/element-android/issues/7294))
+ - [Device management] Improve the parsing for OS of Desktop/Web sessions ([#7321](https://github.com/vector-im/element-android/issues/7321))
+ - [Device management] Hide the IP address and last activity date on current session ([#7324](https://github.com/vector-im/element-android/issues/7324))
+ - [Device management] Update the unknown verification status icon ([#7327](https://github.com/vector-im/element-android/issues/7327))
+ - [Voice Broadcast] Add the "io.element.voice_broadcast_info" state event with a minimalist timeline widget ([#7273](https://github.com/vector-im/element-android/issues/7273))
+ - [Voice Broadcast] Aggregate state events in the timeline ([#7283](https://github.com/vector-im/element-android/issues/7283))
+ - [Voice Broadcast] Record and send non aggregated voice messages to the room ([#7363](https://github.com/vector-im/element-android/issues/7363))
+ - [Voice Broadcast] Start listening to a voice broadcast ([#7387](https://github.com/vector-im/element-android/issues/7387))
+ - [Voice Broadcast] Enable the feature (behind a lab flag and only for Android 10 and up) ([#7393](https://github.com/vector-im/element-android/issues/7393))
+ - [Voice Broadcast] Add additional data in events ([#7397](https://github.com/vector-im/element-android/issues/7397))
+ - Implements MSC3881: Parses `enabled` and `device_id` fields from updated Pusher API ([#7217](https://github.com/vector-im/element-android/issues/7217))
+ - Adds pusher toggle setting to device manager v2 ([#7261](https://github.com/vector-im/element-android/issues/7261))
+ - Implement QR Code Login UI ([#7338](https://github.com/vector-im/element-android/issues/7338))
+ - Implements client-side of local notification settings event ([#7300](https://github.com/vector-im/element-android/issues/7300))
+ - Links "Enable Notifications for this session" setting to enabled value in pusher ([#7281](https://github.com/vector-im/element-android/issues/7281))
+
+SDK API changes ⚠️
+------------------
+ - Stop using `original_event` field from `/relations` endpoint ([#7282](https://github.com/vector-im/element-android/issues/7282))
+ - Add `formattedText` or similar optional parameters in several methods:
+  * RelationService:
+  	* editTextMessage
+  	* editReply
+  	* replyToMessage
+  * SendService:
+  	* sendQuotedTextMessage
+  This allows us to send any HTML formatted text message without needing to rely on automatic Markdown > HTML translation. All these new parameters have a `null` value by default, so previous calls to these API methods remain compatible. ([#7288](https://github.com/vector-im/element-android/issues/7288))
+ - Add support for `m.login.token` auth during QR code based sign in ([#7358](https://github.com/vector-im/element-android/issues/7358))
+ - Allow getting the formatted or plain text body of a message for the fun `TimelineEvent.getTextEditableContent()`. ([#7359](https://github.com/vector-im/element-android/issues/7359))
+
+Other changes
+-------------
+ - Refactor TimelineFragment, split it into MessageComposerFragment and VoiceRecorderFragment. ([#7285](https://github.com/vector-im/element-android/issues/7285))
+ - Dependency to arrow has been removed. Please use `org.matrix.android.sdk.api.util.Optional` instead. ([#7335](https://github.com/vector-im/element-android/issues/7335))
+ - Update WYSIWYG editor designs. ([#7354](https://github.com/vector-im/element-android/issues/7354))
+ - Update WYSIWYG library to v0.2.1. ([#7384](https://github.com/vector-im/element-android/issues/7384))
+
+
 Changes in Element v1.5.2 (2022-10-05)
 ======================================
 

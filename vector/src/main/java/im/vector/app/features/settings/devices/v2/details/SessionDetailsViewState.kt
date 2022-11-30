@@ -19,11 +19,11 @@ package im.vector.app.features.settings.devices.v2.details
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
-import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
+import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 
 data class SessionDetailsViewState(
         val deviceId: String,
-        val deviceInfo: Async<DeviceInfo> = Uninitialized,
+        val deviceFullInfo: Async<DeviceFullInfo> = Uninitialized,
 ) : MavericksState {
     constructor(args: SessionDetailsArgs) : this(
             deviceId = args.deviceId

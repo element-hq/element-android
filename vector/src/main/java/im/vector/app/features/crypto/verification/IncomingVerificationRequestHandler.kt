@@ -27,6 +27,7 @@ import im.vector.app.features.home.room.detail.arguments.TimelineArgs
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.popup.VerificationVectorAlert
 import im.vector.app.features.session.coroutineScope
+import im.vector.lib.core.utils.compat.getParcelableCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
@@ -175,7 +176,7 @@ class IncomingVerificationRequestHandler @Inject constructor(
                     R.drawable.ic_shield_black,
                     shouldBeDisplayedIn = { activity ->
                         if (activity is RoomDetailActivity) {
-                            activity.intent?.extras?.getParcelable<TimelineArgs>(RoomDetailActivity.EXTRA_ROOM_DETAIL_ARGS)?.let {
+                            activity.intent?.extras?.getParcelableCompat<TimelineArgs>(RoomDetailActivity.EXTRA_ROOM_DETAIL_ARGS)?.let {
                                 it.roomId != pr.roomId
                             } ?: true
                         } else true

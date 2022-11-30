@@ -25,6 +25,7 @@ import com.airbnb.mvrx.MavericksViewModelProvider
 
 inline fun <reified VM : MavericksViewModel<S>, reified S : MavericksState> ComponentActivity.lazyViewModel(): Lazy<VM> {
     return lazy(mode = LazyThreadSafetyMode.NONE) {
+        @Suppress("DEPRECATION")
         MavericksViewModelProvider.get(
                 viewModelClass = VM::class.java,
                 stateClass = S::class.java,

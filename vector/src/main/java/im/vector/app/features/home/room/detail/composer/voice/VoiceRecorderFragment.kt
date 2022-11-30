@@ -21,7 +21,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import com.airbnb.mvrx.activityViewModel
+import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
@@ -37,6 +37,9 @@ import im.vector.app.features.home.room.detail.TimelineViewModel
 import im.vector.app.features.home.room.detail.composer.MessageComposerAction
 import im.vector.app.features.home.room.detail.composer.MessageComposerViewEvents
 import im.vector.app.features.home.room.detail.composer.MessageComposerViewModel
+import im.vector.app.features.home.room.detail.composer.MessageComposerViewState
+import im.vector.app.features.home.room.detail.composer.SendMode
+import im.vector.app.features.home.room.detail.composer.boolean
 import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import javax.inject.Inject
 
@@ -46,8 +49,8 @@ class VoiceRecorderFragment : VectorBaseFragment<FragmentVoiceRecorderBinding>()
     @Inject lateinit var audioMessagePlaybackTracker: AudioMessagePlaybackTracker
     @Inject lateinit var clock: Clock
 
-    private val timelineViewModel: TimelineViewModel by activityViewModel()
-    private val messageComposerViewModel: MessageComposerViewModel by activityViewModel()
+    private val timelineViewModel: TimelineViewModel by parentFragmentViewModel()
+    private val messageComposerViewModel: MessageComposerViewModel by parentFragmentViewModel()
 
     private val permissionVoiceMessageLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
         if (allGranted) {
@@ -68,6 +71,15 @@ class VoiceRecorderFragment : VectorBaseFragment<FragmentVoiceRecorderBinding>()
             when (it) {
                 is MessageComposerViewEvents.AnimateSendButtonVisibility -> handleSendButtonVisibilityChanged(it.isVisible)
                 else -> Unit
+            }
+        }
+
+        messageComposerViewModel.onEach(MessageComposerViewState::sendMode, MessageComposerViewState::canSendMessage) { mode, canSend ->
+            if (!canSend.boolean()) {
+                return@onEach
+            }
+            if (mode is SendMode.Voice) {
+                views.voiceMessageRecorderView.isVisible = true
             }
         }
     }

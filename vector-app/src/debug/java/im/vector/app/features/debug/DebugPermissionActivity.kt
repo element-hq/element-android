@@ -22,6 +22,7 @@ import android.os.Build
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.checkPermissions
@@ -46,7 +47,15 @@ class DebugPermissionActivity : VectorBaseActivity<ActivityDebugPermissionBindin
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.READ_CONTACTS
-    )
+    ) + getAndroid13Permissions()
+
+    private fun getAndroid13Permissions(): List<String> {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            listOf(Manifest.permission.POST_NOTIFICATIONS)
+        } else {
+            emptyList()
+        }
+    }
 
     private var lastPermissions = emptyList<String>()
 
@@ -76,6 +85,14 @@ class DebugPermissionActivity : VectorBaseActivity<ActivityDebugPermissionBindin
         views.contact.setOnClickListener {
             lastPermissions = listOf(Manifest.permission.READ_CONTACTS)
             checkPerm()
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            views.notification.setOnClickListener {
+                lastPermissions = listOf(Manifest.permission.POST_NOTIFICATIONS)
+                checkPerm()
+            }
+        } else {
+            views.notification.isVisible = false
         }
     }
 

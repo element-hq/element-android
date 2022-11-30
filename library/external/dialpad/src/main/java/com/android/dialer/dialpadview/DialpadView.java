@@ -103,6 +103,7 @@ public class DialpadView extends LinearLayout {
 
   @Override
   protected void onFinishInflate() {
+    super.onFinishInflate();
     setupKeypad();
     mDigits = (EditText) findViewById(R.id.digits);
     mDelete = (ImageButton) findViewById(R.id.deleteButton);
@@ -199,14 +200,6 @@ public class DialpadView extends LinearLayout {
 
     final DialpadKeyButton zero = (DialpadKeyButton) findViewById(R.id.zero);
     zero.setLongHoverContentDescription(resources.getText(R.string.description_image_button_plus));
-  }
-
-  private Drawable getDrawableCompat(Context context, int id) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      return context.getDrawable(id);
-    } else {
-      return context.getResources().getDrawable(id);
-    }
   }
 
   public void setShowVoicemailButton(boolean show) {

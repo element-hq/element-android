@@ -27,7 +27,7 @@ import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
-import org.matrix.android.sdk.api.session.getUser
+import org.matrix.android.sdk.api.session.getUserOrDefault
 import org.matrix.android.sdk.api.util.toMatrixItem
 import timber.log.Timber
 import javax.inject.Inject
@@ -63,6 +63,7 @@ class NotificationDrawerManager @Inject constructor(
     private val notificationState by lazy { createInitialNotificationState() }
     private val avatarSize = context.resources.getDimensionPixelSize(R.dimen.profile_avatar_size)
     private var currentRoomId: String? = null
+    private var currentThreadId: String? = null
     private val firstThrottler = FirstThrottler(200)
 
     private var useCompleteNotificationFormat = vectorPreferences.useCompleteNotificationFormat()
@@ -123,6 +124,22 @@ class NotificationDrawerManager @Inject constructor(
         }
     }
 
+    /**
+     * Should be called when the application is currently opened and showing timeline for the given threadId.
+     * Used to ignore events related to that thread (no need to display notification) and clean any existing notification on this room.
+     */
+    fun setCurrentThread(threadId: String?) {
+        updateEvents {
+            val hasChanged = threadId != currentThreadId
+            currentThreadId = threadId
+            currentRoomId?.let { roomId ->
+                if (hasChanged && threadId != null) {
+                    it.clearMessagesForThread(roomId, threadId)
+                }
+            }
+        }
+    }
+
     fun notificationStyleChanged() {
         updateEvents {
             val newSettings = vectorPreferences.useCompleteNotificationFormat()
@@ -164,7 +181,7 @@ class NotificationDrawerManager @Inject constructor(
     private fun refreshNotificationDrawerBg() {
         Timber.v("refreshNotificationDrawerBg()")
         val eventsToRender = notificationState.updateQueuedEvents(this) { queuedEvents, renderedEvents ->
-            notifiableEventProcessor.process(queuedEvents.rawEvents(), currentRoomId, renderedEvents).also {
+            notifiableEventProcessor.process(queuedEvents.rawEvents(), currentRoomId, currentThreadId, renderedEvents).also {
                 queuedEvents.clearAndAdd(it.onlyKeptEvents())
             }
         }
@@ -186,11 +203,11 @@ class NotificationDrawerManager @Inject constructor(
     }
 
     private fun renderEvents(session: Session, eventsToRender: List<ProcessedEvent<NotifiableEvent>>) {
-        val user = session.getUser(session.myUserId)
+        val user = session.getUserOrDefault(session.myUserId)
         // myUserDisplayName cannot be empty else NotificationCompat.MessagingStyle() will crash
-        val myUserDisplayName = user?.toMatrixItem()?.getBestName() ?: session.myUserId
+        val myUserDisplayName = user.toMatrixItem().getBestName()
         val myUserAvatarUrl = session.contentUrlResolver().resolveThumbnail(
-                contentUrl = user?.avatarUrl,
+                contentUrl = user.avatarUrl,
                 width = avatarSize,
                 height = avatarSize,
                 method = ContentUrlResolver.ThumbnailMethod.SCALE
@@ -198,8 +215,8 @@ class NotificationDrawerManager @Inject constructor(
         notificationRenderer.render(session.myUserId, myUserDisplayName, myUserAvatarUrl, useCompleteNotificationFormat, eventsToRender)
     }
 
-    fun shouldIgnoreMessageEventInRoom(roomId: String?): Boolean {
-        return currentRoomId != null && roomId == currentRoomId
+    fun shouldIgnoreMessageEventInRoom(resolvedEvent: NotifiableMessageEvent): Boolean {
+        return resolvedEvent.shouldIgnoreMessageEventInRoom(currentRoomId, currentThreadId)
     }
 
     companion object {

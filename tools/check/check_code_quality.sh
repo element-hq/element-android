@@ -68,15 +68,14 @@ ${searchForbiddenStringsScript} ./tools/check/forbidden_strings_in_code.txt \
     ./matrix-sdk-android/src/main/java \
     ./matrix-sdk-android-flow/src/main/java \
     ./library/core-utils/src/main/java \
-    ./library/jsonviewer/src/main/java \
+    ./library/external/jsonviewer/src/main/java \
     ./library/ui-styles/src/main/java \
     ./vector/src/main/java \
-    ./vector/src/debug/java \
-    ./vector/src/release/java \
-    ./vector/src/fdroid/java \
-    ./vector/src/gplay/java \
+    ./vector-app/src/debug/java \
+    ./vector-app/src/fdroid/java \
     ./vector-app/src/gplay/java \
-    ./vector-app/src/main/java
+    ./vector-app/src/main/java \
+    ./vector-app/src/release/java
 
 resultForbiddenStringInCode=$?
 
@@ -93,13 +92,15 @@ echo
 echo "Search for forbidden patterns specific for App code..."
 
 ${searchForbiddenStringsScript} ./tools/check/forbidden_strings_in_code_app.txt \
+    ./library/core-utils/src/main/java \
+    ./library/external/jsonviewer/src/main/java \
+    ./library/ui-styles/src/main/java \
     ./vector/src/main/java \
-    ./vector/src/debug/java \
-    ./vector/src/release/java \
-    ./vector/src/fdroid/java \
-    ./vector/src/gplay/java \
+    ./vector-app/src/debug/java \
+    ./vector-app/src/fdroid/java \
     ./vector-app/src/gplay/java \
-    ./vector-app/src/main/java
+    ./vector-app/src/main/java \
+    ./vector-app/src/release/java
 
 resultForbiddenStringInCodeApp=$?
 
@@ -120,8 +121,7 @@ echo
 echo "Search for forbidden patterns in layouts..."
 
 ${searchForbiddenStringsScript} ./tools/check/forbidden_strings_in_layout.txt \
-    ./vector/src/main/res/layout \
-    ./vector-app/src/main/res/layout
+    ./vector/src/main/res/layout
 
 resultForbiddenStringInLayout=$?
 
@@ -154,17 +154,19 @@ echo "Search for kotlin files with more than ${maxLines} lines..."
 ${checkLongFilesScript} ${maxLines} \
     ./matrix-sdk-android/src/main/java \
     ./matrix-sdk-android-flow/src/main/java \
+    ./library/core-utils/src/main/java \
+    ./library/external/jsonviewer/src/main/java \
+    ./library/ui-styles/src/main/java \
     ./vector/src/androidTest/java \
-    ./vector/src/debug/java \
-    ./vector/src/fdroid/java \
-    ./vector/src/gplay/java \
     ./vector/src/main/java \
-    ./vector/src/release/java \
     ./vector/src/sharedTest/java \
     ./vector/src/test/java \
-    ./vector/src/androidTest/java \
-    ./vector/src/gplay/java \
-    ./vector/src/main/java
+    ./vector-app/src/androidTest/java \
+    ./vector-app/src/debug/java \
+    ./vector-app/src/fdroid/java \
+    ./vector-app/src/gplay/java \
+    ./vector-app/src/main/java \
+    ./vector-app/src/release/java
 
 
 resultLongFiles=$?
@@ -179,8 +181,11 @@ echo "Search for png files in /drawable..."
 ls -1U ./vector/src/main/res/drawable/*.png
 resultTmp=$?
 
+ls -1U ./vector-app/src/main/res/drawable/*.png
+resultTmp2=$?
+
 # Inverse the result, cause no file found is an error for ls but this is what we want!
-if [[ ${resultTmp} -eq 0 ]]; then
+if [[ ${resultTmp} -eq 0 ]] || [[ ${resultTmp2} -eq 0 ]]; then
    echo "ERROR, png files detected in /drawable"
    resultPngInDrawable=1
 else

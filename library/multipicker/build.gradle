@@ -19,6 +19,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
 
 android {
+    namespace "im.vector.lib.multipicker"
+
     compileSdk versions.compileSdk
 
     defaultConfig {
@@ -35,9 +37,19 @@ android {
         }
     }
 
+    compileOptions {
+        sourceCompatibility versions.sourceCompat
+        targetCompatibility versions.targetCompat
+    }
+
+    kotlinOptions {
+        jvmTarget = "11"
+    }
 }
 
 dependencies {
+    implementation project(":library:core-utils")
+
     api libs.androidx.activity
     implementation libs.androidx.exifinterface
     implementation libs.androidx.core

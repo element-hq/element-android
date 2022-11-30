@@ -26,6 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
+import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 
 @AndroidEntryPoint
 class OtherSessionsActivity : SimpleFragmentActivity() {
@@ -39,7 +40,7 @@ class OtherSessionsActivity : SimpleFragmentActivity() {
             addFragment(
                     container = views.container,
                     fragmentClass = OtherSessionsFragment::class.java,
-                    params = intent.getParcelableExtra(Mavericks.KEY_ARG)
+                    params = intent.getParcelableExtraCompat(Mavericks.KEY_ARG)
             )
         }
     }

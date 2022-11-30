@@ -43,7 +43,10 @@ internal object HomeServerCapabilitiesMapper {
                 defaultIdentityServerUrl = entity.defaultIdentityServerUrl,
                 roomVersions = mapRoomVersion(entity.roomVersionsJson),
                 canUseThreading = entity.canUseThreading,
-                canControlLogoutDevices = entity.canControlLogoutDevices
+                canControlLogoutDevices = entity.canControlLogoutDevices,
+                canLoginWithQrCode = entity.canLoginWithQrCode,
+                canUseThreadReadReceiptsAndNotifications = entity.canUseThreadReadReceiptsAndNotifications,
+                canRemotelyTogglePushNotificationsOfDevices = entity.canRemotelyTogglePushNotificationsOfDevices,
         )
     }
 

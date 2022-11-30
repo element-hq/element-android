@@ -35,11 +35,11 @@ import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.EVerificationState
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
+import org.matrix.android.sdk.api.session.crypto.verification.SasTransactionState
 import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
@@ -149,8 +149,9 @@ class SASTest : InstrumentedTest {
 
         val bobListener = object : VerificationService.Listener {
             override fun transactionUpdated(tx: VerificationTransaction) {
-                if (tx.transactionId == tid && tx.state is VerificationTxState.Cancelled) {
-                    cancelReason = (tx.state as VerificationTxState.Cancelled).cancelCode
+                tx as SasVerificationTransaction
+                if (tx.transactionId == tid && tx.state() is SasTransactionState.Cancelled) {
+                    cancelReason = (tx.state() as SasTransactionState.Cancelled).cancelCode
                     cancelLatch.countDown()
                 }
             }
@@ -174,7 +175,8 @@ class SASTest : InstrumentedTest {
 
         val aliceListener = object : VerificationService.Listener {
             override fun transactionUpdated(tx: VerificationTransaction) {
-                if (tx.state is VerificationTxState.SasStarted && tx is SasVerificationTransaction) {
+                tx as SasVerificationTransaction
+                if (tx.state() is SasTransactionState.SasStarted) {
                     runBlocking {
                         tx.acceptVerification()
                     }
@@ -316,7 +318,8 @@ class SASTest : InstrumentedTest {
             }
 
             override fun transactionUpdated(tx: VerificationTransaction) {
-                if (tx.state is VerificationTxState.Cancelled && !(tx.state as VerificationTxState.Cancelled).byMe) {
+                tx as SasVerificationTransaction
+                if (tx.state() is SasTransactionState.Cancelled && !(tx.state() as SasTransactionState.Cancelled).byMe) {
                     aliceCancelledLatch.countDown()
                 }
             }
@@ -353,7 +356,7 @@ class SASTest : InstrumentedTest {
 //        val aliceAcceptedLatch = CountDownLatch(1)
 //        val aliceListener = object : VerificationService.Listener {
 //            override fun transactionUpdated(tx: VerificationTransaction) {
-//                if (tx.state is VerificationTxState.OnAccepted) {
+//                if (tx.state() is VerificationTxState.OnAccepted) {
 //                    aliceAcceptedLatch.countDown()
 //                }
 //            }
@@ -362,7 +365,7 @@ class SASTest : InstrumentedTest {
 //
 //        val bobListener = object : VerificationService.Listener {
 //            override fun transactionUpdated(tx: VerificationTransaction) {
-//                if (tx.state is VerificationTxState.OnStarted && tx is SasVerificationTransaction) {
+//                if (tx.state() is VerificationTxState.OnStarted && tx is SasVerificationTransaction) {
 //                    bobVerificationService.removeListener(this)
 //                    runBlocking {
 //                        tx.acceptVerification()
@@ -407,14 +410,14 @@ class SASTest : InstrumentedTest {
 //        val latch = CountDownLatch(2)
 //        val aliceListener = object : VerificationService.Listener {
 //            override fun transactionUpdated(tx: VerificationTransaction) {
-//                Timber.v("Alice transactionUpdated: ${tx.state}")
+//                Timber.v("Alice transactionUpdated: ${tx.state()}")
 //                latch.countDown()
 //            }
 //        }
 //        aliceSession.cryptoService().verificationService().addListener(aliceListener)
 //        val bobListener = object : VerificationService.Listener {
 //            override fun transactionUpdated(tx: VerificationTransaction) {
-//                Timber.v("Bob transactionUpdated: ${tx.state}")
+//                Timber.v("Bob transactionUpdated: ${tx.state()}")
 //                latch.countDown()
 //            }
 //        }
@@ -459,10 +462,10 @@ class SASTest : InstrumentedTest {
             var matched = false
             var verified = false
             override fun transactionUpdated(tx: VerificationTransaction) {
-                Timber.v("Alice transactionUpdated: ${tx.state} on thread:${Thread.currentThread()}")
                 if (tx !is SasVerificationTransaction) return
-                when (tx.state) {
-                    VerificationTxState.SasShortCodeReady -> {
+                Timber.v("Alice transactionUpdated: ${tx.state()} on thread:${Thread.currentThread()}")
+                when (tx.state()) {
+                    SasTransactionState.SasShortCodeReady -> {
                         if (!matched) {
                             matched = true
                             runBlocking {
@@ -471,7 +474,7 @@ class SASTest : InstrumentedTest {
                             }
                         }
                     }
-                    VerificationTxState.Verified -> {
+                    is SasTransactionState.Done -> {
                         if (!verified) {
                             verified = true
                             verifiedLatch.countDown()
@@ -493,9 +496,9 @@ class SASTest : InstrumentedTest {
             }
 
             override fun transactionUpdated(tx: VerificationTransaction) {
-                Timber.v("Bob transactionUpdated: ${tx.state} on thread: ${Thread.currentThread()}")
                 if (tx !is SasVerificationTransaction) return
-                when (tx.state) {
+                Timber.v("Bob transactionUpdated: ${tx.state()} on thread: ${Thread.currentThread()}")
+                when (tx.state()) {
 //                    VerificationTxState.SasStarted ->  {
 //                        if (!accepted) {
 //                            accepted = true
@@ -504,7 +507,7 @@ class SASTest : InstrumentedTest {
 //                            }
 //                        }
 //                    }
-                    VerificationTxState.SasShortCodeReady -> {
+                    SasTransactionState.SasShortCodeReady -> {
                         if (!matched) {
                             matched = true
                             runBlocking {
@@ -513,7 +516,7 @@ class SASTest : InstrumentedTest {
                             }
                         }
                     }
-                    VerificationTxState.Verified -> {
+                    is SasTransactionState.Done -> {
                         if (!verified) {
                             verified = true
                             verifiedLatch.countDown()
@@ -602,13 +605,13 @@ class SASTest : InstrumentedTest {
         testHelper.retryPeriodically {
             alicePovTx = aliceVerificationService.getExistingTransaction(bobSession.myUserId, requestID) as? SasVerificationTransaction
             Log.v("TEST", "== alicePovTx is $alicePovTx")
-            alicePovTx?.state == VerificationTxState.SasShortCodeReady
+            alicePovTx?.state() == SasTransactionState.SasShortCodeReady
         }
         // wait for alice to get the ready
         testHelper.retryPeriodically {
             bobPovTx = bobVerificationService.getExistingTransaction(aliceSession.myUserId, requestID) as? SasVerificationTransaction
             Log.v("TEST", "== bobPovTx is $bobPovTx")
-            bobPovTx?.state == VerificationTxState.SasShortCodeReady
+            bobPovTx?.state() == SasTransactionState.SasShortCodeReady
         }
     }
 }

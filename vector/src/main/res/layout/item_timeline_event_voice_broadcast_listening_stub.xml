@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/messageRootLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_rect_shape_8"
+    android:backgroundTint="?vctr_content_quinary"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:padding="12dp">
+
+    <TextView
+        android:id="@+id/liveIndicator"
+        style="@style/VoiceBroadcastLiveIndicator"
+        android:background="@drawable/rounded_rect_shape_2"
+        android:text="@string/voice_broadcast_live"
+        app:drawableStartCompat="@drawable/ic_voice_broadcast"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/roomAvatarImageView"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:contentDescription="@string/avatar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@sample/room_round_avatars" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/avatarRightBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="right"
+        app:barrierMargin="6dp"
+        app:constraint_referenced_ids="roomAvatarImageView" />
+
+    <TextView
+        android:id="@+id/titleText"
+        style="@style/Widget.Vector.TextView.Body.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/avatar"
+        app:layout_constraintStart_toEndOf="@id/avatarRightBarrier"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@sample/rooms.json/data/name" />
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/metadataFlow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:orientation="vertical"
+        app:constraint_referenced_ids="broadcasterNameMetadata,bufferingMetadata,voiceBroadcastMetadata,listenersCountMetadata"
+        app:flow_horizontalAlign="start"
+        app:flow_verticalGap="4dp"
+        app:layout_constraintStart_toEndOf="@id/avatarRightBarrier"
+        app:layout_constraintTop_toBottomOf="@id/titleText" />
+
+    <im.vector.app.features.voicebroadcast.views.VoiceBroadcastMetadataView
+        android:id="@+id/broadcasterNameMetadata"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:metadataIcon="@drawable/ic_voice_broadcast_mic"
+        tools:metadataValue="@sample/users.json/data/displayName" />
+
+    <im.vector.app.features.voicebroadcast.views.VoiceBroadcastBufferingView
+        android:id="@+id/bufferingMetadata"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <im.vector.app.features.voicebroadcast.views.VoiceBroadcastMetadataView
+        android:id="@+id/voiceBroadcastMetadata"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:metadataIcon="@drawable/ic_voice_broadcast"
+        app:metadataValue="@string/attachment_type_voice_broadcast" />
+
+    <im.vector.app.features.voicebroadcast.views.VoiceBroadcastMetadataView
+        android:id="@+id/listenersCountMetadata"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:metadataIcon="@drawable/ic_member_small"
+        app:metadataValue="@string/no_value_placeholder"
+        tools:metadataValue="5 listeners" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/headerBottomBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:barrierMargin="10dp"
+        app:constraint_referenced_ids="roomAvatarImageView,titleText,metadataFlow" />
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/controllerButtonsFlow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:constraint_referenced_ids="fastBackwardButton,playPauseButton,fastForwardButton"
+        app:layout_constraintBottom_toTopOf="@id/seekBar"
+        app:layout_constraintTop_toBottomOf="@id/headerBottomBarrier" />
+
+    <ImageButton
+        android:id="@+id/fastBackwardButton"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@drawable/bg_rounded_button"
+        android:contentDescription="@string/a11y_voice_broadcast_fast_backward"
+        android:src="@drawable/ic_player_backward_30"
+        android:visibility="invisible"
+        app:tint="?vctr_content_secondary"
+        tools:visibility="visible" />
+
+    <ImageButton
+        android:id="@+id/playPauseButton"
+        android:layout_width="@dimen/voice_broadcast_player_button_size"
+        android:layout_height="@dimen/voice_broadcast_player_button_size"
+        android:background="@drawable/bg_rounded_button"
+        android:backgroundTint="?vctr_system"
+        android:contentDescription="@string/a11y_play_voice_broadcast"
+        android:src="@drawable/ic_play_pause_play"
+        app:tint="?vctr_content_secondary" />
+
+    <ImageButton
+        android:id="@+id/fastForwardButton"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@drawable/bg_rounded_button"
+        android:contentDescription="@string/a11y_voice_broadcast_fast_forward"
+        android:src="@drawable/ic_player_forward_30"
+        android:visibility="invisible"
+        app:tint="?vctr_content_secondary"
+        tools:visibility="visible" />
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="6dp"
+        android:paddingStart="0dp"
+        android:paddingEnd="0dp"
+        android:progressDrawable="@drawable/bg_seek_bar"
+        android:thumbTint="?vctr_content_secondary"
+        android:thumbOffset="3dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/playbackDuration"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/controllerButtonsFlow"
+        tools:progress="0" />
+
+    <TextView
+        android:id="@+id/playbackDuration"
+        style="@style/Widget.Vector.TextView.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="?vctr_content_tertiary"
+        app:layout_constraintBottom_toBottomOf="@id/seekBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/seekBar"
+        tools:text="0:23" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

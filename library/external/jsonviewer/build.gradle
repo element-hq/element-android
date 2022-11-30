@@ -18,6 +18,8 @@ buildscript {
 }
 
 android {
+    namespace "org.billcarsonfr.jsonviewer"
+
     compileSdk versions.compileSdk
 
     defaultConfig {

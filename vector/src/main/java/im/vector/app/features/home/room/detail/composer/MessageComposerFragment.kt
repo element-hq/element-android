@@ -24,7 +24,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.text.Spannable
-import android.text.format.DateUtils
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -32,16 +31,16 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
-import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
-import androidx.annotation.StringRes
-import androidx.core.content.ContextCompat
 import androidx.core.text.buildSpannedString
+import androidx.core.view.isGone
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import com.airbnb.mvrx.activityViewModel
+import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.vanniktech.emoji.EmojiPopup
@@ -55,13 +54,18 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.lifecycleAwareLazy
 import im.vector.app.core.platform.showOptimizedSnackbar
 import im.vector.app.core.resources.BuildMeta
-import im.vector.app.core.utils.DimensionConverter
+import im.vector.app.core.utils.ExpandingBottomSheetBehavior
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.onPermissionDeniedDialog
 import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.databinding.FragmentComposerBinding
 import im.vector.app.features.VectorFeatures
+import im.vector.app.features.attachments.AttachmentType
+import im.vector.app.features.attachments.AttachmentTypeSelectorBottomSheet
+import im.vector.app.features.attachments.AttachmentTypeSelectorSharedAction
+import im.vector.app.features.attachments.AttachmentTypeSelectorSharedActionViewModel
 import im.vector.app.features.attachments.AttachmentTypeSelectorView
+import im.vector.app.features.attachments.AttachmentTypeSelectorViewModel
 import im.vector.app.features.attachments.AttachmentsHelper
 import im.vector.app.features.attachments.ContactAttachment
 import im.vector.app.features.attachments.ShareIntentHandler
@@ -73,38 +77,26 @@ import im.vector.app.features.command.ParsedCommand
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.AutoCompleter
 import im.vector.app.features.home.room.detail.RoomDetailAction
+import im.vector.app.features.home.room.detail.RoomDetailAction.VoiceBroadcastAction
 import im.vector.app.features.home.room.detail.TimelineViewModel
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView
 import im.vector.app.features.home.room.detail.timeline.action.MessageSharedActionViewModel
-import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
-import im.vector.app.features.home.room.detail.timeline.image.buildImageContentRendererData
 import im.vector.app.features.home.room.detail.upgrade.MigrateRoomBottomSheet
-import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.PillImageSpan
-import im.vector.app.features.html.PillsPostProcessor
 import im.vector.app.features.location.LocationSharingMode
-import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.poll.PollMode
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.share.SharedData
 import im.vector.app.features.voice.VoiceFailure
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import org.commonmark.parser.Parser
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
-import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageFormat
-import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
-import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
-import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.util.MatrixItem
-import org.matrix.android.sdk.api.util.toMatrixItem
 import reactivecircus.flowbinding.android.view.focusChanges
 import reactivecircus.flowbinding.android.widget.textChanges
 import timber.log.Timber
@@ -119,12 +111,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
 
     @Inject lateinit var autoCompleterFactory: AutoCompleter.Factory
     @Inject lateinit var avatarRenderer: AvatarRenderer
-    @Inject lateinit var matrixItemColorProvider: MatrixItemColorProvider
-    @Inject lateinit var eventHtmlRenderer: EventHtmlRenderer
-    @Inject lateinit var dimensionConverter: DimensionConverter
-    @Inject lateinit var imageContentRenderer: ImageContentRenderer
     @Inject lateinit var shareIntentHandler: ShareIntentHandler
-    @Inject lateinit var pillsPostProcessorFactory: PillsPostProcessor.Factory
     @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var vectorFeatures: VectorFeatures
     @Inject lateinit var buildMeta: BuildMeta
@@ -134,10 +121,6 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
 
     private val autoCompleter: AutoCompleter by lazy {
         autoCompleterFactory.create(roomId, isThreadTimeLine())
-    }
-
-    private val pillsPostProcessor by lazy {
-        pillsPostProcessorFactory.create(roomId)
     }
 
     private val emojiPopup: EmojiPopup by lifecycleAwareLazy {
@@ -155,10 +138,21 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
 
     private lateinit var attachmentsHelper: AttachmentsHelper
     private lateinit var attachmentTypeSelector: AttachmentTypeSelectorView
+    private var bottomSheetBehavior: ExpandingBottomSheetBehavior<View>? = null
 
-    private val timelineViewModel: TimelineViewModel by activityViewModel()
-    private val messageComposerViewModel: MessageComposerViewModel by activityViewModel()
+    private val timelineViewModel: TimelineViewModel by parentFragmentViewModel()
+    private val messageComposerViewModel: MessageComposerViewModel by parentFragmentViewModel()
     private lateinit var sharedActionViewModel: MessageSharedActionViewModel
+    private val attachmentViewModel: AttachmentTypeSelectorViewModel by fragmentViewModel()
+    private val attachmentActionsViewModel: AttachmentTypeSelectorSharedActionViewModel by viewModels()
+
+    private val composer: MessageComposerView get() {
+        return if (vectorPreferences.isRichTextEditorEnabled()) {
+            views.richTextComposerLayout
+        } else {
+            views.composerLayout
+        }
+    }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentComposerBinding {
         return FragmentComposerBinding.inflate(inflater, container, false)
@@ -171,8 +165,12 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
 
         attachmentsHelper = AttachmentsHelper(requireContext(), this, buildMeta).register()
 
+        setupBottomSheet()
         setupComposer()
         setupEmojiButton()
+
+        views.composerLayout.isGone = vectorPreferences.isRichTextEditorEnabled()
+        views.richTextComposerLayout.isVisible = vectorPreferences.isRichTextEditorEnabled()
 
         messageComposerViewModel.observeViewEvents {
             when (it) {
@@ -199,14 +197,27 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
             }
             when (mode) {
                 is SendMode.Regular -> renderRegularMode(mode.text.toString())
-                is SendMode.Edit -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_edit, R.string.edit, mode.text.toString())
-                is SendMode.Quote -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_quote, R.string.action_quote, mode.text.toString())
-                is SendMode.Reply -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_reply, R.string.reply, mode.text.toString())
+                is SendMode.Edit -> renderSpecialMode(MessageComposerMode.Edit(mode.timelineEvent, mode.text.toString()))
+                is SendMode.Quote -> renderSpecialMode(MessageComposerMode.Quote(mode.timelineEvent, mode.text.toString()))
+                is SendMode.Reply -> renderSpecialMode(MessageComposerMode.Reply(mode.timelineEvent, mode.text.toString()))
                 is SendMode.Voice -> renderVoiceMessageMode(mode.text)
             }
         }
 
-        if (savedInstanceState != null) {
+        attachmentActionsViewModel.stream()
+                .filterIsInstance<AttachmentTypeSelectorSharedAction.SelectAttachmentTypeAction>()
+                .onEach { onTypeSelected(it.attachmentType) }
+                .launchIn(lifecycleScope)
+
+        messageComposerViewModel.stateFlow.map { it.isFullScreen }
+                .distinctUntilChanged()
+                .onEach { isFullScreen ->
+                    val state = if (isFullScreen) ExpandingBottomSheetBehavior.State.Expanded else ExpandingBottomSheetBehavior.State.Collapsed
+                    bottomSheetBehavior?.setState(state)
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
+
+        if (savedInstanceState == null) {
             handleShareData()
         }
     }
@@ -214,32 +225,82 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
     override fun onPause() {
         super.onPause()
 
-        if (withState(messageComposerViewModel) { it.isVoiceRecording } && requireActivity().isChangingConfigurations) {
-            // we're rotating, maintain any active recordings
-        } else {
-            messageComposerViewModel.handle(MessageComposerAction.OnEntersBackground(views.composerLayout.text.toString()))
+        withState(messageComposerViewModel) {
+            when {
+                it.isVoiceRecording && requireActivity().isChangingConfigurations -> {
+                    // we're rotating, maintain any active recordings
+                }
+                // TODO remove this when there will be a recording indicator outside of the timeline
+                // Pause voice broadcast if the timeline is not shown anymore
+                it.isRecordingVoiceBroadcast && !requireActivity().isChangingConfigurations -> timelineViewModel.handle(VoiceBroadcastAction.Recording.Pause)
+                else -> {
+                    timelineViewModel.handle(VoiceBroadcastAction.Listening.Pause)
+                    messageComposerViewModel.handle(MessageComposerAction.OnEntersBackground(composer.text.toString()))
+                }
+            }
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
 
-        autoCompleter.clear()
+        if (!vectorPreferences.isRichTextEditorEnabled()) {
+            autoCompleter.clear()
+        }
         messageComposerViewModel.endAllVoiceActions()
     }
 
-    override fun invalidate() = withState(timelineViewModel, messageComposerViewModel) { mainState, messageComposerState ->
+    override fun invalidate() = withState(
+            timelineViewModel, messageComposerViewModel, attachmentViewModel
+    ) { mainState, messageComposerState, attachmentState ->
         if (mainState.tombstoneEvent != null) return@withState
 
-        views.root.isInvisible = !messageComposerState.isComposerVisible
-        views.composerLayout.views.sendButton.isInvisible = !messageComposerState.isSendButtonVisible
+        (composer as? View)?.isInvisible = !messageComposerState.isComposerVisible
+        composer.sendButton.isInvisible = !messageComposerState.isSendButtonVisible
+        (composer as? RichTextComposerLayout)?.isTextFormattingEnabled = attachmentState.isTextFormattingEnabled
+    }
+
+    private fun setupBottomSheet() {
+        val parentView = view?.parent as? View ?: return
+        bottomSheetBehavior = ExpandingBottomSheetBehavior.from(parentView)?.apply {
+            applyInsetsToContentViewWhenCollapsed = true
+            topOffset = 22
+            useScrimView = true
+            scrimViewTranslationZ = 8
+            minCollapsedHeight = {
+                (composer as? RichTextComposerLayout)?.estimateCollapsedHeight() ?: -1
+            }
+            isDraggable = false
+            callback = object : ExpandingBottomSheetBehavior.Callback {
+                override fun onStateChanged(state: ExpandingBottomSheetBehavior.State) {
+                    // Dragging is disabled while the composer is collapsed
+                    bottomSheetBehavior?.isDraggable = state != ExpandingBottomSheetBehavior.State.Collapsed
+
+                    val setFullScreen = when (state) {
+                        ExpandingBottomSheetBehavior.State.Collapsed -> false
+                        ExpandingBottomSheetBehavior.State.Expanded -> true
+                        else -> return
+                    }
+
+                    (composer as? RichTextComposerLayout)?.setFullScreen(setFullScreen)
+
+                    messageComposerViewModel.handle(MessageComposerAction.SetFullScreen(setFullScreen))
+                }
+
+                override fun onSlidePositionChanged(view: View, yPosition: Float) {
+                    (composer as? RichTextComposerLayout)?.notifyIsBeingDragged(yPosition)
+                }
+            }
+        }
     }
 
     private fun setupComposer() {
-        val composerEditText = views.composerLayout.views.composerEditText
+        val composerEditText = composer.editText
         composerEditText.setHint(R.string.room_message_placeholder)
 
-        autoCompleter.setup(composerEditText)
+        if (!vectorPreferences.isRichTextEditorEnabled()) {
+            autoCompleter.setup(composerEditText)
+        }
 
         observerUserTyping()
 
@@ -256,44 +317,54 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
                     !keyEvent.isShiftPressed &&
                     keyEvent.keyCode == KeyEvent.KEYCODE_ENTER &&
                     resources.configuration.keyboard != Configuration.KEYBOARD_NOKEYS
-            if (isSendAction || externalKeyboardPressedEnter) {
+            val sendMessageWithEnter = externalKeyboardPressedEnter && vectorPreferences.sendMessageWithEnter()
+            val result = if (isSendAction || sendMessageWithEnter) {
                 sendTextMessage(v.text)
                 true
             } else false
+            result
         }
 
-        views.composerLayout.views.composerEmojiButton.isVisible = vectorPreferences.showEmojiKeyboard()
+        composer.emojiButton?.isVisible = vectorPreferences.showEmojiKeyboard()
 
         val showKeyboard = withState(timelineViewModel) { it.showKeyboardWhenPresented }
         if (isThreadTimeLine() && showKeyboard) {
             // Show keyboard when the user started a thread
-            views.composerLayout.views.composerEditText.showKeyboard(andRequestFocus = true)
+            composerEditText.showKeyboard(andRequestFocus = true)
         }
-        views.composerLayout.callback = object : MessageComposerView.Callback {
+        composer.callback = object : Callback {
             override fun onAddAttachment() {
-                if (!::attachmentTypeSelector.isInitialized) {
-                    attachmentTypeSelector = AttachmentTypeSelectorView(vectorBaseActivity, vectorBaseActivity.layoutInflater, this@MessageComposerFragment)
-                    attachmentTypeSelector.setAttachmentVisibility(
-                            AttachmentTypeSelectorView.Type.LOCATION,
-                            vectorFeatures.isLocationSharingEnabled(),
-                    )
-                    attachmentTypeSelector.setAttachmentVisibility(
-                            AttachmentTypeSelectorView.Type.POLL, !isThreadTimeLine()
-                    )
-                    attachmentTypeSelector.setAttachmentVisibility(
-                            AttachmentTypeSelectorView.Type.VOICE_BROADCAST,
-                            vectorFeatures.isVoiceBroadcastEnabled(), // TODO check user permission
-                    )
+                if (vectorPreferences.isRichTextEditorEnabled()) {
+                    AttachmentTypeSelectorBottomSheet.show(childFragmentManager)
+                } else {
+                    if (!::attachmentTypeSelector.isInitialized) {
+                        attachmentTypeSelector = AttachmentTypeSelectorView(vectorBaseActivity, vectorBaseActivity.layoutInflater, this@MessageComposerFragment)
+                        attachmentTypeSelector.setAttachmentVisibility(
+                                AttachmentType.LOCATION,
+                                vectorFeatures.isLocationSharingEnabled(),
+                        )
+                        attachmentTypeSelector.setAttachmentVisibility(
+                                AttachmentType.POLL, !isThreadTimeLine()
+                        )
+                        attachmentTypeSelector.setAttachmentVisibility(
+                                AttachmentType.VOICE_BROADCAST,
+                                vectorPreferences.isVoiceBroadcastEnabled(), // TODO check user permission
+                        )
+                    }
+                    attachmentTypeSelector.show(composer.attachmentButton)
                 }
-                attachmentTypeSelector.show(views.composerLayout.views.attachmentButton)
             }
 
             override fun onExpandOrCompactChange() {
-                views.composerLayout.views.composerEmojiButton.isVisible = isEmojiKeyboardVisible
+                composer.emojiButton?.isVisible = isEmojiKeyboardVisible
             }
 
-            override fun onSendMessage(text: CharSequence) {
-                sendTextMessage(text)
+            override fun onSendMessage(text: CharSequence) = withState(messageComposerViewModel) { state ->
+                sendTextMessage(text, composer.formattedText)
+
+                if (state.isFullScreen) {
+                    messageComposerViewModel.handle(MessageComposerAction.SetFullScreen(false))
+                }
             }
 
             override fun onCloseRelatedMessage() {
@@ -307,19 +378,26 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
             override fun onTextChanged(text: CharSequence) {
                 messageComposerViewModel.handle(MessageComposerAction.OnTextChanged(text))
             }
+
+            override fun onFullScreenModeChanged() = withState(messageComposerViewModel) { state ->
+                messageComposerViewModel.handle(MessageComposerAction.SetFullScreen(!state.isFullScreen))
+            }
         }
     }
 
-    private fun sendTextMessage(text: CharSequence) {
+    private fun sendTextMessage(text: CharSequence, formattedText: String? = null) {
         if (lockSendButton) {
             Timber.w("Send button is locked")
             return
         }
         if (text.isNotBlank()) {
-            // We collapse ASAP, if not there will be a slight annoying delay
-            views.composerLayout.collapse(true)
+            composer.renderComposerMode(MessageComposerMode.Normal(""))
             lockSendButton = true
-            messageComposerViewModel.handle(MessageComposerAction.SendMessage(text, vectorPreferences.isMarkdownEnabled()))
+            if (formattedText != null) {
+                messageComposerViewModel.handle(MessageComposerAction.SendMessage(text, formattedText, false))
+            } else {
+                messageComposerViewModel.handle(MessageComposerAction.SendMessage(text, null, vectorPreferences.isMarkdownEnabled()))
+            }
             emojiPopup.dismiss()
         }
     }
@@ -335,73 +413,19 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
         return isHandled
     }
 
-    private fun renderRegularMode(content: String) {
+    private fun renderRegularMode(content: CharSequence) {
         autoCompleter.exitSpecialMode()
-        views.composerLayout.collapse()
-        views.composerLayout.setTextIfDifferent(content)
-        views.composerLayout.views.sendButton.contentDescription = getString(R.string.action_send)
+        composer.renderComposerMode(MessageComposerMode.Normal(content))
     }
 
-    private fun renderSpecialMode(
-            event: TimelineEvent,
-            @DrawableRes iconRes: Int,
-            @StringRes descriptionRes: Int,
-            defaultContent: String
-    ) {
+    private fun renderSpecialMode(mode: MessageComposerMode.Special) {
         autoCompleter.enterSpecialMode()
-        // switch to expanded bar
-        views.composerLayout.views.composerRelatedMessageTitle.apply {
-            text = event.senderInfo.disambiguatedDisplayName
-            setTextColor(matrixItemColorProvider.getColor(MatrixItem.UserItem(event.root.senderId ?: "@")))
-        }
-
-        val messageContent: MessageContent? = event.getLastMessageContent()
-        val nonFormattedBody = when (messageContent) {
-            is MessageAudioContent -> getAudioContentBodyText(messageContent)
-            is MessagePollContent -> messageContent.getBestPollCreationInfo()?.question?.getBestQuestion()
-            is MessageBeaconInfoContent -> getString(R.string.live_location_description)
-            else -> messageContent?.body.orEmpty()
-        }
-        var formattedBody: CharSequence? = null
-        if (messageContent is MessageTextContent && messageContent.format == MessageFormat.FORMAT_MATRIX_HTML) {
-            val parser = Parser.builder().build()
-            val document = parser.parse(messageContent.formattedBody ?: messageContent.body)
-            formattedBody = eventHtmlRenderer.render(document, pillsPostProcessor)
-        }
-        views.composerLayout.views.composerRelatedMessageContent.text = (formattedBody ?: nonFormattedBody)
-
-        // Image Event
-        val data = event.buildImageContentRendererData(dimensionConverter.dpToPx(66))
-        val isImageVisible = if (data != null) {
-            imageContentRenderer.render(data, ImageContentRenderer.Mode.THUMBNAIL, views.composerLayout.views.composerRelatedMessageImage)
-            true
-        } else {
-            imageContentRenderer.clear(views.composerLayout.views.composerRelatedMessageImage)
-            false
-        }
-
-        views.composerLayout.views.composerRelatedMessageImage.isVisible = isImageVisible
-
-        views.composerLayout.setTextIfDifferent(defaultContent)
-
-        views.composerLayout.views.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), iconRes))
-        views.composerLayout.views.sendButton.contentDescription = getString(descriptionRes)
-
-        avatarRenderer.render(event.senderInfo.toMatrixItem(), views.composerLayout.views.composerRelatedMessageAvatar)
-
-        views.composerLayout.expand {
-            if (isAdded) {
-                // need to do it here also when not using quick reply
-                focusComposerAndShowKeyboard()
-                views.composerLayout.views.composerRelatedMessageImage.isVisible = isImageVisible
-            }
-        }
-        focusComposerAndShowKeyboard()
+        composer.renderComposerMode(mode)
     }
 
     private fun observerUserTyping() {
         if (isThreadTimeLine()) return
-        views.composerLayout.views.composerEditText.textChanges()
+        composer.editText.textChanges()
                 .skipInitialValue()
                 .debounce(300)
                 .map { it.isNotEmpty() }
@@ -411,7 +435,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
 
-        views.composerLayout.views.composerEditText.focusChanges()
+        composer.editText.focusChanges()
                 .onEach {
                     timelineViewModel.handle(RoomDetailAction.ComposerFocusChange(it))
                 }
@@ -419,18 +443,18 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
     }
 
     private fun focusComposerAndShowKeyboard() {
-        if (views.composerLayout.isVisible) {
-            views.composerLayout.views.composerEditText.showKeyboard(andRequestFocus = true)
+        if ((composer as? View)?.isVisible == true) {
+            composer.editText.showKeyboard(andRequestFocus = true)
         }
     }
 
     private fun handleSendButtonVisibilityChanged(event: MessageComposerViewEvents.AnimateSendButtonVisibility) {
         if (event.isVisible) {
-            views.root.views.sendButton.alpha = 0f
-            views.root.views.sendButton.isVisible = true
-            views.root.views.sendButton.animate().alpha(1f).setDuration(150).start()
+            composer.sendButton.alpha = 0f
+            composer.sendButton.isVisible = true
+            composer.sendButton.animate().alpha(1f).setDuration(150).start()
         } else {
-            views.root.views.sendButton.isInvisible = true
+            composer.sendButton.isInvisible = true
         }
     }
 
@@ -440,32 +464,23 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
         }
     }
 
-    private fun getAudioContentBodyText(messageContent: MessageAudioContent): String {
-        val formattedDuration = DateUtils.formatElapsedTime(((messageContent.audioInfo?.duration ?: 0) / 1000).toLong())
-        return if (messageContent.voiceMessageIndicator != null) {
-            getString(R.string.voice_message_reply_content, formattedDuration)
-        } else {
-            getString(R.string.audio_message_reply_content, messageContent.body, formattedDuration)
-        }
-    }
-
     private fun createEmojiPopup(): EmojiPopup {
         return EmojiPopup(
                 rootView = views.root,
                 keyboardAnimationStyle = R.style.emoji_fade_animation_style,
                 onEmojiPopupShownListener = {
-                    views.composerLayout.views.composerEmojiButton.apply {
+                    composer.emojiButton?.apply {
                         contentDescription = getString(R.string.a11y_close_emoji_picker)
                         setImageResource(R.drawable.ic_keyboard)
                     }
                 },
                 onEmojiPopupDismissListener = lifecycleAwareDismissAction {
-                    views.composerLayout.views.composerEmojiButton.apply {
+                    composer.emojiButton?.apply {
                         contentDescription = getString(R.string.a11y_open_emoji_picker)
                         setImageResource(R.drawable.ic_insert_emoji)
                     }
                 },
-                editText = views.composerLayout.views.composerEditText
+                editText = composer.editText
         )
     }
 
@@ -482,7 +497,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
     }
 
     private fun setupEmojiButton() {
-        views.composerLayout.views.composerEmojiButton.debouncedClicks {
+        composer.emojiButton?.debouncedClicks {
             emojiPopup.toggle()
         }
     }
@@ -493,7 +508,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
     }
 
     private fun handleJoinedToAnotherRoom(action: MessageComposerViewEvents.JoinRoomCommandSuccess) {
-        views.composerLayout.setTextIfDifferent("")
+        composer.setTextIfDifferent("")
         lockSendButton = false
         navigator.openRoom(vectorBaseActivity, action.roomId)
     }
@@ -548,7 +563,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
 
     private fun handleSlashCommandResultOk(parsedCommand: ParsedCommand) {
         dismissLoadingDialog()
-        views.composerLayout.setTextIfDifferent("")
+        composer.setTextIfDifferent("")
         when (parsedCommand) {
             is ParsedCommand.DevTools -> {
                 navigator.openDevTools(requireContext(), roomId)
@@ -607,7 +622,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
 
     override fun onContactAttachmentReady(contactAttachment: ContactAttachment) {
         val formattedContact = contactAttachment.toHumanReadable()
-        messageComposerViewModel.handle(MessageComposerAction.SendMessage(formattedContact, false))
+        messageComposerViewModel.handle(MessageComposerAction.SendMessage(formattedContact, null, false))
     }
 
     override fun onAttachmentError(throwable: Throwable) {
@@ -630,20 +645,20 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
         }
     }
 
-    private fun launchAttachmentProcess(type: AttachmentTypeSelectorView.Type) {
+    private fun launchAttachmentProcess(type: AttachmentType) {
         when (type) {
-            AttachmentTypeSelectorView.Type.CAMERA -> attachmentsHelper.openCamera(
+            AttachmentType.CAMERA -> attachmentsHelper.openCamera(
                     activity = requireActivity(),
                     vectorPreferences = vectorPreferences,
                     cameraActivityResultLauncher = attachmentCameraActivityResultLauncher,
                     cameraVideoActivityResultLauncher = attachmentCameraVideoActivityResultLauncher
             )
-            AttachmentTypeSelectorView.Type.FILE -> attachmentsHelper.selectFile(attachmentFileActivityResultLauncher)
-            AttachmentTypeSelectorView.Type.GALLERY -> attachmentsHelper.selectGallery(attachmentMediaActivityResultLauncher)
-            AttachmentTypeSelectorView.Type.CONTACT -> attachmentsHelper.selectContact(attachmentContactActivityResultLauncher)
-            AttachmentTypeSelectorView.Type.STICKER -> timelineViewModel.handle(RoomDetailAction.SelectStickerAttachment)
-            AttachmentTypeSelectorView.Type.POLL -> navigator.openCreatePoll(requireContext(), roomId, null, PollMode.CREATE)
-            AttachmentTypeSelectorView.Type.LOCATION -> {
+            AttachmentType.FILE -> attachmentsHelper.selectFile(attachmentFileActivityResultLauncher)
+            AttachmentType.GALLERY -> attachmentsHelper.selectGallery(attachmentMediaActivityResultLauncher)
+            AttachmentType.CONTACT -> attachmentsHelper.selectContact(attachmentContactActivityResultLauncher)
+            AttachmentType.STICKER -> timelineViewModel.handle(RoomDetailAction.SelectStickerAttachment)
+            AttachmentType.POLL -> navigator.openCreatePoll(requireContext(), roomId, null, PollMode.CREATE)
+            AttachmentType.LOCATION -> {
                 navigator
                         .openLocationSharing(
                                 context = requireContext(),
@@ -653,11 +668,11 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
                                 locationOwnerId = session.myUserId
                         )
             }
-            AttachmentTypeSelectorView.Type.VOICE_BROADCAST -> timelineViewModel.handle(RoomDetailAction.StartVoiceBroadcast)
+            AttachmentType.VOICE_BROADCAST -> timelineViewModel.handle(VoiceBroadcastAction.Recording.Start)
         }
     }
 
-    override fun onTypeSelected(type: AttachmentTypeSelectorView.Type) {
+    override fun onTypeSelected(type: AttachmentType) {
         if (checkPermissions(type.permissions, requireActivity(), typeSelectedActivityResultLauncher)) {
             launchAttachmentProcess(type)
         } else {
@@ -717,13 +732,13 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
 
     @SuppressLint("SetTextI18n")
     private fun insertUserDisplayNameInTextEditor(userId: String) {
-        val startToCompose = views.composerLayout.text.isNullOrBlank()
+        val startToCompose = composer.text.isNullOrBlank()
 
         if (startToCompose &&
                 userId == session.myUserId) {
             // Empty composer, current user: start an emote
-            views.composerLayout.views.composerEditText.setText("${Command.EMOTE.command} ")
-            views.composerLayout.views.composerEditText.setSelection(Command.EMOTE.command.length + 1)
+            composer.editText.setText("${Command.EMOTE.command} ")
+            composer.editText.setSelection(Command.EMOTE.command.length + 1)
         } else {
             val roomMember = timelineViewModel.getMember(userId)
             val displayName = sanitizeDisplayName(roomMember?.displayName ?: userId)
@@ -736,7 +751,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
                                 requireContext(),
                                 MatrixItem.UserItem(userId, displayName, roomMember?.avatarUrl)
                         )
-                                .also { it.bind(views.composerLayout.views.composerEditText) },
+                                .also { it.bind(composer.editText) },
                         0,
                         displayName.length,
                         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -746,11 +761,11 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
             if (startToCompose) {
                 if (displayName.startsWith("/")) {
                     // Ensure displayName will not be interpreted as a Slash command
-                    views.composerLayout.views.composerEditText.append("\\")
+                    composer.editText.append("\\")
                 }
-                views.composerLayout.views.composerEditText.append(pill)
+                composer.editText.append(pill)
             } else {
-                views.composerLayout.views.composerEditText.text?.insert(views.composerLayout.views.composerEditText.selectionStart, pill)
+                composer.editText.text?.insert(composer.editText.selectionStart, pill)
             }
         }
         focusComposerAndShowKeyboard()
@@ -769,11 +784,6 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
 
         return displayName
     }
-
-    /**
-     * Returns the root thread event if we are in a thread room, otherwise returns null.
-     */
-    fun getRootThreadEventId(): String? = withState(timelineViewModel) { it.rootThreadEventId }
 
     /**
      * Returns true if the current room is a Thread room, false otherwise.

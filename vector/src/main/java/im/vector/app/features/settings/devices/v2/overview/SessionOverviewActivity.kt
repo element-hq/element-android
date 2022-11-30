@@ -23,6 +23,7 @@ import com.airbnb.mvrx.Mavericks
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.SimpleFragmentActivity
+import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 
 /**
  * Display the overview info about a Session.
@@ -37,7 +38,7 @@ class SessionOverviewActivity : SimpleFragmentActivity() {
             addFragment(
                     container = views.container,
                     fragmentClass = SessionOverviewFragment::class.java,
-                    params = intent.getParcelableExtra(Mavericks.KEY_ARG)
+                    params = intent.getParcelableExtraCompat(Mavericks.KEY_ARG)
             )
         }
     }

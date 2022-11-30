@@ -19,7 +19,6 @@ package org.matrix.android.sdk.internal.database.helper
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.Sort
-import io.realm.kotlin.createObject
 import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
@@ -101,32 +100,6 @@ internal fun ThreadSummaryEntity.updateThreadSummaryLatestEvent(
     } else {
         true
     }
-}
-
-private fun EventEntity.toTimelineEventEntity(roomMemberContentsByUser: HashMap<String, RoomMemberContent?>): TimelineEventEntity {
-    val roomId = roomId
-    val eventId = eventId
-    val localId = TimelineEventEntity.nextId(realm)
-    val senderId = sender ?: ""
-
-    val timelineEventEntity = realm.createObject<TimelineEventEntity>().apply {
-        this.localId = localId
-        this.root = this@toTimelineEventEntity
-        this.eventId = eventId
-        this.roomId = roomId
-        this.annotations = EventAnnotationsSummaryEntity.where(realm, roomId, eventId).findFirst()
-                ?.also { it.cleanUp(sender) }
-        this.ownedByThreadChunk = true  // To skip it from the original event flow
-        val roomMemberContent = roomMemberContentsByUser[senderId]
-        this.senderAvatar = roomMemberContent?.avatarUrl
-        this.senderName = roomMemberContent?.displayName
-        isUniqueDisplayName = if (roomMemberContent?.displayName != null) {
-            computeIsUnique(realm, roomId, false, roomMemberContent, roomMemberContentsByUser)
-        } else {
-            true
-        }
-    }
-    return timelineEventEntity
 }
 
 internal fun ThreadSummaryEntity.Companion.createOrUpdate(

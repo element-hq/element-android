@@ -16,6 +16,8 @@
 
 package im.vector.app.features.settings.devices.v2
 
+import im.vector.app.core.session.clientinfo.MatrixClientInfoContent
+import im.vector.app.features.settings.devices.v2.details.extended.DeviceExtendedInfo
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
@@ -27,4 +29,6 @@ data class DeviceFullInfo(
         val isInactive: Boolean,
         val isCurrentDevice: Boolean,
         val deviceExtendedInfo: DeviceExtendedInfo,
+        val matrixClientInfo: MatrixClientInfoContent?,
+        val isSelected: Boolean = false,
 )

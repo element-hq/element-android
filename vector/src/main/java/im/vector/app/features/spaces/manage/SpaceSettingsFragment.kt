@@ -107,6 +107,7 @@ class SpaceSettingsFragment :
                 RoomSettingsViewEvents.Success -> showSuccess()
                 RoomSettingsViewEvents.GoBack -> {
                     ignoreChanges = true
+                    @Suppress("DEPRECATION")
                     vectorBaseActivity.onBackPressed()
                 }
             }

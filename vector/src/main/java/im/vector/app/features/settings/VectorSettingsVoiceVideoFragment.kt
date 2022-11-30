@@ -29,6 +29,7 @@ import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.utils.RingtoneUtils
 import im.vector.app.features.analytics.plan.MobileScreen
+import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -69,7 +70,7 @@ class VectorSettingsVoiceVideoFragment : VectorSettingsBaseFragment() {
 
     private val ringtoneStartForActivityResult = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
-            val callRingtoneUri: Uri? = activityResult.data?.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
+            val callRingtoneUri: Uri? = activityResult.data?.getParcelableExtraCompat(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
             if (callRingtoneUri != null) {
                 ringtoneUtils.setCallRingtoneUri(callRingtoneUri)
                 mCallRingtonePreference.summary = ringtoneUtils.getCallRingtoneName()

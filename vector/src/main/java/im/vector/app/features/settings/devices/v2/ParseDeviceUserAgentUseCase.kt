@@ -16,6 +16,7 @@
 
 package im.vector.app.features.settings.devices.v2
 
+import im.vector.app.features.settings.devices.v2.details.extended.DeviceExtendedInfo
 import im.vector.app.features.settings.devices.v2.list.DeviceType
 import org.matrix.android.sdk.api.extensions.orFalse
 import javax.inject.Inject
@@ -73,55 +74,77 @@ class ParseDeviceUserAgentUseCase @Inject constructor() {
     }
 
     private fun parseDesktopUserAgent(userAgent: String): DeviceExtendedInfo {
+        val browserInfo = parseBrowserInfoFromDesktopUserAgent(userAgent)
+        val operatingSystem = parseOperatingSystemFromDesktopUserAgent(userAgent)
+
+        return DeviceExtendedInfo(
+                deviceType = DeviceType.DESKTOP,
+                deviceModel = null,
+                deviceOperatingSystem = operatingSystem,
+                clientName = browserInfo.name,
+                clientVersion = browserInfo.version,
+        )
+    }
+
+    private data class BrowserInfo(val name: String? = null, val version: String? = null)
+
+    private fun parseBrowserInfoFromDesktopUserAgent(userAgent: String): BrowserInfo {
         val browserSegments = userAgent.split(" ")
-        val (browserName, browserVersion) = when {
+        return when {
             isFirefox(browserSegments) -> {
-                Pair("Firefox", getBrowserVersion(browserSegments, "Firefox"))
+                BrowserInfo(BROWSER_FIREFOX, getBrowserVersion(browserSegments, BROWSER_FIREFOX))
             }
             isEdge(browserSegments) -> {
-                Pair("Edge", getBrowserVersion(browserSegments, "Edge"))
+                BrowserInfo(BROWSER_EDGE, getBrowserVersion(browserSegments, BROWSER_EDGE))
             }
             isMobile(browserSegments) -> {
                 when (val name = getMobileBrowserName(browserSegments)) {
                     null -> {
-                        Pair(null, null)
+                        BrowserInfo()
                     }
-                    "Safari" -> {
-                        Pair(name, getBrowserVersion(browserSegments, "Version"))
+                    BROWSER_SAFARI -> {
+                        BrowserInfo(name, getBrowserVersion(browserSegments, "Version"))
                     }
                     else -> {
-                        Pair(name, getBrowserVersion(browserSegments, name))
+                        BrowserInfo(name, getBrowserVersion(browserSegments, name))
                     }
                 }
             }
             isSafari(browserSegments) -> {
-                Pair("Safari", getBrowserVersion(browserSegments, "Version"))
+                BrowserInfo(BROWSER_SAFARI, getBrowserVersion(browserSegments, "Version"))
             }
             else -> {
                 when (val name = getRegularBrowserName(browserSegments)) {
                     null -> {
-                        Pair(null, null)
+                        BrowserInfo()
                     }
                     else -> {
-                        Pair(name, getBrowserVersion(browserSegments, name))
+                        BrowserInfo(name, getBrowserVersion(browserSegments, name))
                     }
                 }
             }
         }
+    }
 
-        val deviceOperatingSystemSegments = userAgent.substringAfter("(").substringBefore(")").split("; ")
-        val deviceOperatingSystem = if (deviceOperatingSystemSegments.getOrNull(1)?.startsWith("Android").orFalse()) {
-            deviceOperatingSystemSegments.getOrNull(1)
-        } else {
-            deviceOperatingSystemSegments.getOrNull(0)
+    private fun parseOperatingSystemFromDesktopUserAgent(userAgent: String): String? {
+        val deviceOperatingSystemSegments = userAgent
+                .substringAfter("(")
+                .substringBefore(")")
+                .split("; ")
+        val firstSegment = deviceOperatingSystemSegments.getOrNull(0).orEmpty()
+        val secondSegment = deviceOperatingSystemSegments.getOrNull(1).orEmpty()
+
+        return when {
+            // e.g. (Macintosh; Intel Mac OS X 10_15_7) => macOS
+            firstSegment.startsWith(OPERATING_SYSTEM_MAC_KEYWORD) -> OPERATING_SYSTEM_MAC
+            // e.g. (Windows NT 10.0; Win64; x64) => Windows
+            firstSegment.startsWith(OPERATING_SYSTEM_WINDOWS_KEYWORD) -> OPERATING_SYSTEM_WINDOWS_KEYWORD
+            // e.g. (iPad; CPU OS 8_4_1 like Mac OS X) => iOS
+            firstSegment.startsWith(DEVICE_IPAD_KEYWORD) || firstSegment.startsWith(DEVICE_IPHONE_KEYWORD) -> OPERATING_SYSTEM_IOS
+            // e.g. (Linux; Android 9; SM-G973U Build/PPR1.180610.011) => Android
+            secondSegment.startsWith(OPERATING_SYSTEM_ANDROID_KEYWORD) -> OPERATING_SYSTEM_ANDROID_KEYWORD
+            else -> null
         }
-        return DeviceExtendedInfo(
-                deviceType = DeviceType.DESKTOP,
-                deviceModel = null,
-                deviceOperatingSystem = deviceOperatingSystem,
-                clientName = browserName,
-                clientVersion = browserVersion,
-        )
     }
 
     private fun parseWebUserAgent(userAgent: String): DeviceExtendedInfo {
@@ -135,25 +158,23 @@ class ParseDeviceUserAgentUseCase @Inject constructor() {
     }
 
     private fun isFirefox(browserSegments: List<String>): Boolean {
-        return browserSegments.lastOrNull()?.startsWith("Firefox").orFalse()
+        return browserSegments.lastOrNull()?.startsWith(BROWSER_FIREFOX).orFalse()
     }
 
     private fun getBrowserVersion(browserSegments: List<String>, browserName: String): String? {
-        // Chrome/104.0.3497.100 -> 104
+        // e.g Chrome/104.0.3497.100 -> 104.0.3497.100
         return browserSegments
                 .find { it.startsWith(browserName) }
                 ?.split("/")
                 ?.getOrNull(1)
-                ?.split(".")
-                ?.firstOrNull()
     }
 
     private fun isEdge(browserSegments: List<String>): Boolean {
-        return browserSegments.lastOrNull()?.startsWith("Edge").orFalse()
+        return browserSegments.lastOrNull()?.startsWith(BROWSER_EDGE).orFalse()
     }
 
     private fun isSafari(browserSegments: List<String>): Boolean {
-        return browserSegments.lastOrNull()?.startsWith("Safari").orFalse() &&
+        return browserSegments.lastOrNull()?.startsWith(BROWSER_SAFARI).orFalse() &&
                 browserSegments.getOrNull(browserSegments.size - 2)?.startsWith("Version").orFalse()
     }
 
@@ -164,7 +185,7 @@ class ParseDeviceUserAgentUseCase @Inject constructor() {
     private fun getMobileBrowserName(browserSegments: List<String>): String? {
         val possibleBrowserName = browserSegments.getOrNull(browserSegments.size - 3)?.split("/")?.firstOrNull()
         return if (possibleBrowserName == "Version") {
-            "Safari"
+            BROWSER_SAFARI
         } else {
             possibleBrowserName
         }
@@ -188,5 +209,17 @@ class ParseDeviceUserAgentUseCase @Inject constructor() {
 
         // Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36
         private const val WEB_KEYWORD = "Mozilla/"
+
+        private const val OPERATING_SYSTEM_MAC_KEYWORD = "Macintosh"
+        private const val OPERATING_SYSTEM_MAC = "macOS"
+        private const val OPERATING_SYSTEM_IOS = "iOS"
+        private const val OPERATING_SYSTEM_WINDOWS_KEYWORD = "Windows"
+        private const val OPERATING_SYSTEM_ANDROID_KEYWORD = "Android"
+        private const val DEVICE_IPAD_KEYWORD = "iPad"
+        private const val DEVICE_IPHONE_KEYWORD = "iPhone"
+
+        private const val BROWSER_FIREFOX = "Firefox"
+        private const val BROWSER_SAFARI = "Safari"
+        private const val BROWSER_EDGE = "Edge"
     }
 }

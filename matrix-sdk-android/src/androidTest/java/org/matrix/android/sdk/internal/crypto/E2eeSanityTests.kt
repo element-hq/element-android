@@ -96,7 +96,7 @@ class E2eeSanityTests : InstrumentedTest {
 
         // All should be able to decrypt
         otherAccounts.forEach { otherSession ->
-            testHelper.betterRetryPeriodically(
+            testHelper.retryWithBackoff(
                     onFail = {
                         fail("${otherSession.myUserId.take(10)} should be able to decrypt")
                     }) {
@@ -122,7 +122,7 @@ class E2eeSanityTests : InstrumentedTest {
 
         // check that messages are encrypted (uisi)
         newAccount.forEach { otherSession ->
-            testHelper.betterRetryPeriodically(
+            testHelper.retryWithBackoff(
                     onFail = {
                         fail("New Users shouldn't be able to decrypt history")
                     }
@@ -145,7 +145,7 @@ class E2eeSanityTests : InstrumentedTest {
         // new members should be able to decrypt it
         newAccount.forEach { otherSession ->
             // ("${otherSession.myUserId} should be able to decrypt")
-            testHelper.betterRetryPeriodically(
+            testHelper.retryWithBackoff(
                     onFail = {
                         fail("New user ${otherSession.myUserId.take(10)} should be able to decrypt the second message")
                     }
@@ -207,7 +207,7 @@ class E2eeSanityTests : InstrumentedTest {
                 sentEventIds.add(it)
             }
 
-            testHelper.betterRetryPeriodically(
+            testHelper.retryWithBackoff(
                     onFail = {
                         fail("Bob should be able to decrypt all messages")
                     }
@@ -225,7 +225,7 @@ class E2eeSanityTests : InstrumentedTest {
         // Let's wait a bit to be sure that bob has backed up the session
 
         Log.v("#E2E TEST", "Force key backup for Bob...")
-        testHelper.betterRetryPeriodically(
+        testHelper.retryWithBackoff(
                 onFail = {
                     fail("All keys should be backedup")
                 }
@@ -251,7 +251,7 @@ class E2eeSanityTests : InstrumentedTest {
         // check that bob can't currently decrypt
         Log.v("#E2E TEST", "check that bob can't currently decrypt")
         sentEventIds.forEach { sentEventId ->
-            testHelper.betterRetryPeriodically {
+            testHelper.retryWithBackoff {
                 val timelineEvent = newBobSession.getRoom(e2eRoomID)?.getTimelineEvent(sentEventId)?.also {
                     Log.v("#E2E TEST", "Event seen by new user ${it.root.getClearType()}|${it.root.mCryptoError}")
                 }
@@ -318,7 +318,7 @@ class E2eeSanityTests : InstrumentedTest {
                 sentEventIds.add(it)
             }
 
-            testHelper.betterRetryPeriodically(
+            testHelper.retryWithBackoff(
                     onFail = {
                         fail("${bobSession.myUserId.take(10)} should be able to decrypt message sent by alice}")
                     }
@@ -377,8 +377,8 @@ class E2eeSanityTests : InstrumentedTest {
 
         // Now mark new bob session as verified
 
-        bobSession.cryptoService().verificationService().markedLocallyAsManuallyVerified(newBobSession.myUserId, newBobSession.sessionParams.deviceId!!)
-        newBobSession.cryptoService().verificationService().markedLocallyAsManuallyVerified(bobSession.myUserId, bobSession.sessionParams.deviceId!!)
+        bobSession.cryptoService().verificationService().markedLocallyAsManuallyVerified(newBobSession.myUserId, newBobSession.sessionParams.deviceId)
+        newBobSession.cryptoService().verificationService().markedLocallyAsManuallyVerified(bobSession.myUserId, bobSession.sessionParams.deviceId)
 
         // now let new session re-request
         sentEventIds.forEach { sentEventId ->
@@ -413,7 +413,7 @@ class E2eeSanityTests : InstrumentedTest {
         firstMessage.let { text ->
             firstEventId = sendMessageInRoom(testHelper, aliceRoomPOV, text)!!
 
-            testHelper.betterRetryPeriodically {
+            testHelper.retryWithBackoff {
                 val timeLineEvent = bobSessionWithBetterKey.getRoom(e2eRoomID)?.getTimelineEvent(firstEventId)
                 timeLineEvent != null &&
                         timeLineEvent.isEncrypted() &&
@@ -439,7 +439,7 @@ class E2eeSanityTests : InstrumentedTest {
         secondMessage.let { text ->
             secondEventId = sendMessageInRoom(testHelper, aliceRoomPOV, text)!!
 
-            testHelper.betterRetryPeriodically {
+            testHelper.retryWithBackoff {
                 val timeLineEvent = newBobSession.getRoom(e2eRoomID)?.getTimelineEvent(secondEventId)
                 timeLineEvent != null &&
                         timeLineEvent.isEncrypted() &&
@@ -483,7 +483,7 @@ class E2eeSanityTests : InstrumentedTest {
 
         // old session should have shared the key at earliest known index now
         // we should be able to decrypt both
-        testHelper.betterRetryPeriodically {
+        testHelper.retryWithBackoff {
             val canDecryptFirst = try {
                 newBobSession.cryptoService().decryptEvent(firstEventNewBobPov.root, "")
                 true
@@ -506,7 +506,7 @@ class E2eeSanityTests : InstrumentedTest {
 
         val timeline = aliceRoomPOV.timelineService().createTimeline(null, TimelineSettings(60))
         timeline.start()
-        testHelper.betterRetryPeriodically {
+        testHelper.retryWithBackoff {
             val decryptedMsg = timeline.getSnapshot()
                     .filter { it.root.getClearType() == EventType.MESSAGE }
                     .also { list ->
@@ -639,11 +639,11 @@ class E2eeSanityTests : InstrumentedTest {
 
         // wait for it to be synced back the other side
         Timber.v("#TEST: Wait for message to be synced back")
-        testHelper.betterRetryPeriodically {
+        testHelper.retryWithBackoff {
             bobSession.roomService().getRoom(cryptoTestData.roomId)?.timelineService()?.getTimelineEvent(sentEvent) != null
         }
 
-        testHelper.betterRetryPeriodically {
+        testHelper.retryWithBackoff {
             secondBobSession.roomService().getRoom(cryptoTestData.roomId)?.timelineService()?.getTimelineEvent(sentEvent) != null
         }
 
@@ -660,11 +660,11 @@ class E2eeSanityTests : InstrumentedTest {
 
         val secondEvent = sendMessageInRoom(testHelper, roomFromAlicePOV, "World")!!
         Timber.v("#TEST: Wait for message to be synced back")
-        testHelper.betterRetryPeriodically {
+        testHelper.retryWithBackoff {
             bobSession.roomService().getRoom(cryptoTestData.roomId)?.timelineService()?.getTimelineEvent(secondEvent) != null
         }
 
-        testHelper.betterRetryPeriodically {
+        testHelper.retryWithBackoff {
             secondBobSession.roomService().getRoom(cryptoTestData.roomId)?.timelineService()?.getTimelineEvent(secondEvent) != null
         }
 

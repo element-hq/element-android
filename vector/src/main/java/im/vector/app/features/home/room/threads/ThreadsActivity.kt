@@ -34,13 +34,13 @@ import im.vector.app.features.home.room.detail.arguments.TimelineArgs
 import im.vector.app.features.home.room.threads.arguments.ThreadListArgs
 import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
 import im.vector.app.features.home.room.threads.list.views.ThreadListFragment
+import im.vector.lib.core.utils.compat.getParcelableCompat
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class ThreadsActivity : VectorBaseActivity<ActivityThreadsBinding>() {
 
-    @Inject
-    lateinit var avatarRenderer: AvatarRenderer
+    @Inject lateinit var avatarRenderer: AvatarRenderer
 
 //    private val roomThreadDetailFragment: RoomThreadDetailFragment?
 //        get() {
@@ -129,8 +129,8 @@ class ThreadsActivity : VectorBaseActivity<ActivityThreadsBinding>() {
         return DisplayFragment.ErrorFragment
     }
 
-    private fun getThreadTimelineArgs(): ThreadTimelineArgs? = intent?.extras?.getParcelable(THREAD_TIMELINE_ARGS)
-    private fun getThreadListArgs(): ThreadListArgs? = intent?.extras?.getParcelable(THREAD_LIST_ARGS)
+    private fun getThreadTimelineArgs(): ThreadTimelineArgs? = intent?.extras?.getParcelableCompat(THREAD_TIMELINE_ARGS)
+    private fun getThreadListArgs(): ThreadListArgs? = intent?.extras?.getParcelableCompat(THREAD_LIST_ARGS)
     private fun getEventIdToNavigate(): String? = intent?.extras?.getString(THREAD_EVENT_ID_TO_NAVIGATE)
 
     companion object {

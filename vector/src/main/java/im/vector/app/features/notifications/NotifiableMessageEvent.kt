@@ -31,6 +31,7 @@ data class NotifiableMessageEvent(
         // NotSerializableException when persisting this to storage
         val imageUriString: String?,
         val roomId: String,
+        val threadId: String?,
         val roomName: String?,
         val roomIsDirect: Boolean = false,
         val roomAvatarPath: String? = null,
@@ -50,4 +51,11 @@ data class NotifiableMessageEvent(
 
     val imageUri: Uri?
         get() = imageUriString?.let { Uri.parse(it) }
+}
+
+fun NotifiableMessageEvent.shouldIgnoreMessageEventInRoom(currentRoomId: String?, currentThreadId: String?): Boolean {
+    return when (currentRoomId) {
+        null -> false
+        else -> roomId == currentRoomId && threadId == currentThreadId
+    }
 }

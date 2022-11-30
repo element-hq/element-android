@@ -22,6 +22,7 @@ import org.matrix.android.sdk.internal.crypto.CryptoSessionInfoProvider
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
+import org.matrix.android.sdk.internal.session.room.timeline.TimelineEventDataSource
 import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
 
@@ -35,7 +36,8 @@ internal interface FetchEditHistoryTask : Task<FetchEditHistoryTask.Params, List
 internal class DefaultFetchEditHistoryTask @Inject constructor(
         private val roomAPI: RoomAPI,
         private val globalErrorReceiver: GlobalErrorReceiver,
-        private val cryptoSessionInfoProvider: CryptoSessionInfoProvider
+        private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
+        private val eventDataSource: TimelineEventDataSource,
 ) : FetchEditHistoryTask {
 
     override suspend fun execute(params: FetchEditHistoryTask.Params): List<Event> {
@@ -50,10 +52,14 @@ internal class DefaultFetchEditHistoryTask @Inject constructor(
         }
 
         // Filter out edition form other users, and redacted editions
-        val originalSenderId = response.originalEvent?.senderId
+        val originalEvent = eventDataSource.getTimelineEvent(
+                roomId = params.roomId,
+                eventId = params.eventId,
+        )
+        val originalSenderId = originalEvent?.senderInfo?.userId
         val events = response.chunks
                 .filter { it.senderId == originalSenderId }
                 .filter { !it.isRedacted() }
-        return events + listOfNotNull(response.originalEvent)
+        return events + listOfNotNull(originalEvent?.root)
     }
 }

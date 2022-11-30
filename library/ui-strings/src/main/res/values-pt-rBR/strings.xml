@@ -1007,10 +1007,10 @@
     <string name="settings_push_rules">Regras de Push</string>
     <string name="settings_push_rules_no_rules">Nenhuma regra de push definida</string>
     <string name="settings_push_gateway_no_pushers">Nenhum gateway de push registrado</string>
-    <string name="push_gateway_item_app_id">app_id:</string>
-    <string name="push_gateway_item_push_key">push_key:</string>
-    <string name="push_gateway_item_app_display_name">app_display_name:</string>
-    <string name="push_gateway_item_device_name">session_name:</string>
+    <string name="push_gateway_item_app_id">ID do App:</string>
+    <string name="push_gateway_item_push_key">Chave Push:</string>
+    <string name="push_gateway_item_app_display_name">Nome de Exibição do App:</string>
+    <string name="push_gateway_item_device_name">Nome de Exibição da Sessão:</string>
     <string name="push_gateway_item_url">Url:</string>
     <string name="push_gateway_item_format">Formato:</string>
     <string name="preference_voice_and_video">Voz &amp; Vídeo</string>
@@ -1053,12 +1053,12 @@
     <string name="settings_discovery_identity_server_info">Você está atualmente usando %1$s para descobrir e ser descobertável por contatos existentes que você conhece.</string>
     <string name="settings_discovery_identity_server_info_none">Você não está atualmente usando um servidor de identidade. Para descobrir e ser descobertável por contatos existentes que você conhece, configure um abaixo.</string>
     <string name="settings_discovery_emails_title">Endereços de email descobertáveis</string>
-    <string name="settings_discovery_no_mails">Opções de descoberta vão aparecer uma vez que você tenha adicionado um email.</string>
+    <string name="settings_discovery_no_mails">Opções de descoberta vão aparecer uma vez que você tenha adicionado um endereço de email.</string>
     <string name="settings_discovery_no_msisdn">Opções de descoberta vão aparecer uma vez que você tenha adicionado um número de telefone.</string>
     <string name="settings_discovery_disconnect_identity_server_info">Desconectar-se de seu servidor de identidade vai significar que você não vai ser descobertável por outras(os) usuárias(os) e você não vai ser capaz de convidar outras(os) por email ou telefone.</string>
     <string name="settings_discovery_msisdn_title">Números de telefone descobertáveis</string>
-    <string name="settings_discovery_confirm_mail">Nós enviamos a você um email de confirmar para %s, cheque seu email e clique no link de confirmação</string>
-    <string name="settings_discovery_confirm_mail_not_clicked">Nós enviamos a você um email de confirmar para %s, por favor primeiro cheque seu email e clique no link de confirmação</string>
+    <string name="settings_discovery_confirm_mail">Nós enviamos um email para %s, cheque seu email e clique no link de confirmação</string>
+    <string name="settings_discovery_confirm_mail_not_clicked">Nós enviamos um email para %s, por favor primeiro cheque seu email e clique no link de confirmação</string>
     <string name="settings_discovery_enter_identity_server">Entre um URL de servidor de identidade</string>
     <string name="settings_discovery_bad_identity_server">Não foi possível conectar-se a servidor de identidade</string>
     <string name="settings_discovery_please_enter_server">Por favor entre o url de servidor de identidade</string>
@@ -1171,7 +1171,7 @@
     <string name="login_registration_not_supported">O aplicativo não é capaz de criar uma conta neste servidorcasa.
 \n
 \nVocê quer fazer signup usando um cliente web\?</string>
-    <string name="login_login_with_email_error">Este email não está associado com nenhuma conta.</string>
+    <string name="login_login_with_email_error">Este endereço de email não está associado a nenhuma conta.</string>
     <string name="login_reset_password_on">Resettar senha em %1$s</string>
     <string name="login_reset_password_notice">Um email de verificação vai ser enviado para sua inbox para confirmar definição de sua nova senha.</string>
     <string name="login_reset_password_submit">Próximo</string>
@@ -1180,7 +1180,7 @@
     <string name="login_reset_password_warning_title">Aviso!</string>
     <string name="login_reset_password_warning_content">Mudar sua senha vai resettar quaisquer chaves de encriptação ponta-a-ponta em todas as suas sessões, fazendo histórico de chat encriptado ilegível. Configure Backup de Chave ou exporte suas chaves de sala de uma outra sessão antes de resettar sua senha.</string>
     <string name="login_reset_password_warning_submit">Continuar</string>
-    <string name="login_reset_password_error_not_found">Este email não está linkado a nenhuma conta</string>
+    <string name="login_reset_password_error_not_found">Este endereço de email não está linkado a nenhuma conta</string>
     <string name="login_reset_password_mail_confirmation_title">Cheque sua inbox</string>
     <string name="login_reset_password_mail_confirmation_notice">Um email de verificação foi enviado para %1$s.</string>
     <string name="login_reset_password_mail_confirmation_notice_2">Toque no link para confirmar sua nova senha. Uma vez que você tenha seguido o link que ele contém, clique abaixo.</string>
@@ -1194,7 +1194,7 @@
 \n
 \nPara o processo de mudança de senha\?</string>
     <string name="login_set_email_title">Definir endereço de email</string>
-    <string name="login_set_email_notice">Defina um email para recuperar sua conta. Mais tarde, você pode opcionalmente permitir pessoas que você conhece descobrirem você por seu email.</string>
+    <string name="login_set_email_notice">Defina um endereço de email para recuperar sua conta. Mais tarde, você pode opcionalmente permitir pessoas que você conhece descobrirem você por este endereço.</string>
     <string name="login_set_email_mandatory_hint">Email</string>
     <string name="login_set_email_optional_hint">Email (opcional)</string>
     <string name="login_set_email_submit">Próximo</string>
@@ -1560,7 +1560,7 @@
     <string name="identity_server_error_outdated_home_server">Esta operação não é possível. O servidorcasa está desatualizado.</string>
     <string name="identity_server_error_no_identity_server_configured">Por favor primeiro configure um servidor de identidade.</string>
     <string name="identity_server_error_terms_not_signed">Por favor primeiro aceite os termos do servidor de identidade nas configurações.</string>
-    <string name="identity_server_error_bulk_sha256_not_supported">Para sua privacidade, ${app_name} somente suporta enviar emails e números de telefone de usuária(o) hashados.</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">Para sua privacidade, ${app_name} somente suporta enviar endereços de email e números de telefone de usuária(o) hashados.</string>
     <string name="identity_server_error_binding_error">A associação tem falhado.</string>
     <string name="identity_server_error_no_current_binding_error">Não há nenhuma associação atual com este identificador.</string>
     <string name="identity_server_set_default_notice">Seu servidorcasa (%1$s) propõe usar %2$s para seu servidor de identidade</string>
@@ -1654,7 +1654,7 @@
     <string name="no_permissions_to_start_webrtc_call">Você não tem permissão para começar uma chamada nesta sala</string>
     <string name="settings_phone_number_empty">Nenhum número de telefone tem sido adicionado a sua conta</string>
     <string name="settings_emails">Endereços de email</string>
-    <string name="settings_emails_empty">Nenhum email tem sido adicionado a sua conta</string>
+    <string name="settings_emails_empty">Nenhum endereço de email tem sido adicionado a sua conta</string>
     <string name="settings_phone_numbers">Números de telefone</string>
     <string name="settings_remove_three_pid_confirmation_content">Remover %s\?</string>
     <string name="error_threepid_auth_failed">Assegure-se que você tem clicado no link no email que enviamos para você.</string>
@@ -1663,7 +1663,7 @@
         <item quantity="other">%d segundos</item>
     </plurals>
     <string name="settings_emails_and_phone_numbers_title">Emails e números de telefone</string>
-    <string name="settings_emails_and_phone_numbers_summary">Gerenciar emails e números de telefone linkados a sua conta Matrix</string>
+    <string name="settings_emails_and_phone_numbers_summary">Gerenciar endereços de email e números de telefone linkados a sua conta Matrix</string>
     <string name="settings_text_message_sent_hint">Código</string>
     <string name="login_msisdn_notice">Por favor use o formato internacional (número de telefone deve começar com \'+\')</string>
     <string name="confirm_your_identity_quad_s">Confirme sua identidade ao verificar este login, concedendo-lhe acesso a mensagens encriptadas.</string>
@@ -1778,7 +1778,7 @@
     <string name="attachment_viewer_item_x_of_y">%1$d de %2$d</string>
     <string name="settings_discovery_consent_action_give_consent">Dar consentimento</string>
     <string name="settings_discovery_consent_action_revoke">Revogar meu consentimento</string>
-    <string name="settings_discovery_consent_notice_on">Você tem dado seu consentimento para enviar emails e números de telefone para este servidor de identidade para descobrir outras(os) usuárias(os) de seus contatos.</string>
+    <string name="settings_discovery_consent_notice_on">Você tem dado seu consentimento para enviar endereços de email e números de telefone para este servidor de identidade para descobrir outras(os) usuárias(os) de seus contatos.</string>
     <string name="settings_discovery_consent_title">Enviar emails e números de telefone</string>
     <string name="direct_room_user_list_suggestions_title">Sugestões</string>
     <string name="direct_room_user_list_known_title">Usuárias(os) Conhecidas(os)</string>
@@ -2142,7 +2142,7 @@
     <string name="settings_notification_mentions_and_keywords">Menções e Palavrachaves</string>
     <string name="settings_notification_default">Notificações Default</string>
     <string name="link_this_email_with_your_account">%s em Configurações para receber convites diretamente em ${app_name}.</string>
-    <string name="link_this_email_settings_link">Linkar este email com sua conta</string>
+    <string name="link_this_email_settings_link">Linkar este endereço de email com sua conta</string>
     <string name="this_invite_to_this_space_was_sent">Este convite para este espaço foi enviado para %s que não está associado com sua conta</string>
     <string name="this_invite_to_this_room_was_sent">Este convite para esta sala foi enviado para %s que não está associado com sua conta</string>
     <string name="all_rooms_youre_in_will_be_shown_in_home">Todas as salas em que você está vão ser mostradas em Home.</string>
@@ -2211,7 +2211,7 @@
     <string name="room_settings_space_access_title">Acesso a espaço</string>
     <string name="room_settings_access_rules_pref_dialog_title">Quem pode acessar\?</string>
     <string name="settings_notification_emails_enable_for_email">Habilitar notificações de email para %s</string>
-    <string name="settings_notification_emails_no_emails">Para receber email com notificação, por favor associe um email a sua conta Matrix</string>
+    <string name="settings_notification_emails_no_emails">Para receber email com notificação, por favor associe um endereço de email a sua conta Matrix</string>
     <string name="settings_notification_emails_category">Notificação de email</string>
     <string name="room_permissions_upgrade_the_space">Fazer upgrade do espaço</string>
     <string name="room_permissions_change_space_name">Mudar nome de espaço</string>
@@ -2258,12 +2258,12 @@
     <string name="create_poll_question_title">Sondar pergunta ou tópico</string>
     <string name="create_poll_title">Criar Sondagem</string>
     <string name="attachment_type_poll">Sondagem</string>
-    <string name="identity_server_consent_dialog_title_2">Enviar emails e números de telefone para %s</string>
+    <string name="identity_server_consent_dialog_title_2">Enviar endereços de email e números de telefone para %s</string>
     <string name="settings_discovery_consent_notice_off_2">Seus contatos são privados. Para descobrir usuárias(os) de seus contatos, você precisa de permissão para enviar info de contato a seu servidor de identidade.</string>
     <string name="shortcut_disabled_reason_sign_out">O signout desta sessão tem sido feito!</string>
     <string name="shortcut_disabled_reason_room_left">Esta sala tem sido saída!</string>
     <string name="identity_server_consent_dialog_content_question">Você concorda em enviar esta info\?</string>
-    <string name="identity_server_consent_dialog_content_3">Para descobrir contatos existentes, você precisa enviar info de contato (emails e números de telefone) para seu servidor de identidade. Nós hashamos seus dados antes de enviar por privacidade.</string>
+    <string name="identity_server_consent_dialog_content_3">Para descobrir contatos existentes, você precisa enviar info de contato (endereços de email e números de telefone) para seu servidor de identidade. Nós hashamos seus dados antes de enviar por privacidade.</string>
     <string name="action_not_now">Não agora</string>
     <string name="delete_poll_dialog_content">Você tem certeza que você quer remover esta sondagem\? Você não vai ser capaz de recuperá-la uma vez removida.</string>
     <string name="delete_poll_dialog_title">Remover sondagem</string>
@@ -2600,7 +2600,6 @@
 \nEste servidor casa pode não estar configurado para exibir mapas.</string>
     <string name="a11y_open_settings">Abrir configurações</string>
     <string name="all_chats">Todos os Chats</string>
-    <string name="device_manager_settings_active_sessions_show_all">Mostrar Todas Sessões (V2, WIP)</string>
     <string name="device_manager_sessions_other_description">Para a melhor segurança, verifique suas sessões e faça signout de qualquer sessão que você não reconhece ou usa mais.</string>
     <string name="device_manager_sessions_other_title">Outras sessões</string>
     <string name="settings_sessions_list">Sessões</string>
@@ -2710,4 +2709,161 @@
     <string name="labs_enable_deferred_dm_title">Habilitar DMs diferidas</string>
     <string name="labs_enable_new_app_layout_summary">Um Element simplificado com abas opcionais</string>
     <string name="labs_enable_new_app_layout_title">Habilitar novo layout</string>
+    <string name="device_manager_learn_more_session_rename">Outras(os) usuárias(os) em mensagens diretas e salas a que você se junta são capazes de visualizar uma lista completa de suas sessões.
+\n
+\nIsto as/os provê com confiança que elas(es) são estão realmente falando com você, mas também significa que elas(es) veem o nome da sessão que você entrar aqui.</string>
+    <string name="device_manager_learn_more_session_rename_title">Renomeando sessões</string>
+    <string name="device_manager_learn_more_sessions_verified">Sessões verificadas têm feito login com suas credenciais e então têm sido verificadas, ou usando sua frasepasse segura ou por verificação cruzada.
+\n
+\nIsto significa que elas mantêm chaves de encriptação para suas mensagens anteriores, e confirmam a outras(os) usuárias(os) com quem você está comunicando que estas sessões são realmente você.</string>
+    <string name="device_manager_learn_more_sessions_verified_title">Sessões verificadas</string>
+    <string name="device_manager_learn_more_sessions_unverified">Sessões não-verificadas são sessões que você tem feito login com suas credenciais mas não têm sido verificadas cruzado.
+\n
+\nVocê devia especialmente se certificar que você reconhece estas sessões já que elas podiam representar um uso não-autorizado de sua conta.</string>
+    <string name="device_manager_learn_more_sessions_unverified_title">Sessões não-verificadas</string>
+    <string name="device_manager_learn_more_sessions_inactive">Sessões inativas são sessões que você não tem usado em algum tempo, mas elas continuam a receber chaves de encriptação.
+\n
+\nRemover sessões inativas melhora segurança e performance, e torna-o mais fácil para você identificar se uma nova sessão é suspeita.</string>
+    <string name="device_manager_learn_more_sessions_inactive_title">Sessões inativas</string>
+    <string name="device_manager_session_rename_warning">Por favor esteja ciente que nomes de sessões também são visíveis a pessoas com quem você se comunica.</string>
+    <string name="device_manager_session_rename_description">Nomes de sessões personalizadas podem ajudar você a reconhecer seus dispositivos mais facilmente.</string>
+    <string name="device_manager_session_rename_edit_hint">Nome da sessão</string>
+    <string name="device_manager_session_rename">Renomear sessão</string>
+    <string name="device_manager_session_overview_signout">Fazer signout desta sessão</string>
+    <string name="device_manager_other_sessions_description_unverified_current_session">Não-verificada · Sua sessão atual</string>
+    <string name="tooltip_attachment_voice_broadcast">Começar um broadcast de voz</string>
+    <string name="key_authenticity_not_guaranteed">A autenticidade desta mensagem encriptada não pode ser garantida neste dispositivo.</string>
+    <string name="settings_security_incognito_keyboard_summary">Requisitar que o teclado não devia atualizar quaisquer dados personalizados tais como histórico de digitação e dicionário baseado no que você tem digitado em conversas. Note que alguns teclados podem não respeitar esta configuração.</string>
+    <string name="settings_security_incognito_keyboard_title">Teclado incognito</string>
+    <string name="command_description_table_flip">Prepende (╯°□°）╯︵ ┻━┻ a uma mensagem de texto puro</string>
+    <string name="attachment_type_voice_broadcast">Broadcast de Voz</string>
+    <string name="command_description_devtools">Abrir tela de ferramentas de desenvolvedor(a)</string>
+    <string name="room_settings_global_block_unverified_info_text">🔒 Você tem habilitado encriptar para sessões verificadas somente para todas as salas em Configurações de Segurança.</string>
+    <string name="some_devices_will_not_be_able_to_decrypt">⚠ Existem dispositivos não-verificados nesta sala, eles não vão ser capazes de decriptar mensagens que você enviar.</string>
+    <string name="encryption_never_send_to_unverified_devices_in_room">Nunca enviar mensagens encriptadas a sessões não-verificadas nesta sala.</string>
+    <string name="action_got_it">Entendido</string>
+    <string name="rich_text_editor_format_strikethrough">Aplicar formato tachar</string>
+    <string name="rich_text_editor_format_underline">Aplicar formato sublinhar</string>
+    <string name="rich_text_editor_format_italic">Aplicar formato itálico</string>
+    <string name="rich_text_editor_format_bold">Aplicar formato negrito</string>
+    <string name="labs_enable_client_info_recording_summary">Gravar o nome de cliente, versão, e url para reconhecer sessões mais facilmente em gerenciador de sessão.</string>
+    <string name="labs_enable_client_info_recording_title">Habilitar gravação de info de cliente</string>
+    <string name="labs_enable_session_manager_summary">Tenha visibilidade e controle maiores sobre todas suas sessões.</string>
+    <string name="labs_enable_session_manager_title">Habilitar novo gerenciador de sessão</string>
+    <string name="device_manager_session_details_device_operating_system">Sistema operativo</string>
+    <string name="device_manager_session_details_device_model">Modelo</string>
+    <string name="device_manager_session_details_device_browser">Browser</string>
+    <string name="device_manager_session_details_application_url">URL</string>
+    <string name="device_manager_session_details_application_version">Versão</string>
+    <string name="device_manager_session_details_application_name">Nome</string>
+    <string name="device_manager_session_details_application">Aplicativo</string>
+    <string name="device_manager_push_notifications_description">Receber notificações push nesta sessão.</string>
+    <string name="device_manager_push_notifications_title">Notificações push</string>
+    <string name="device_manager_verification_status_detail_other_session_unknown">Verifique sua sessão atual para revelar o status de verificação desta sessão.</string>
+    <string name="device_manager_verification_status_unknown">Status de verificação desconhecido</string>
+    <string name="push_gateway_item_enabled">Habilitado:</string>
+    <string name="push_gateway_item_device_id">ID da Sessão:</string>
+    <string name="error_check_network">Algo deu errado. Por favor cheque sua conexão de rede e tente de novo.</string>
+    <string name="grant_permission">Conceder Permissão</string>
+    <string name="settings_troubleshoot_test_system_settings_permission_failed">${app_name} precisa de permissão para mostrar notificações.
+\nPor favor conceda a permissão.</string>
+    <string name="permissions_rationale_msg_notification">${app_name} precisa de permissão para exibir notificações. Notificações podem exibir suas mensagens, seus convites, etc.
+\n
+\nPor favor permita acesso nos próximos pop-ups para ser capaz de visualizar notificação.</string>
+    <string name="labs_enable_rich_text_editor_summary">Experimente o editor de texto rico (modo de texto puro vindo em breve)</string>
+    <string name="labs_enable_rich_text_editor_title">Habilitar editor de texto rico</string>
+    <string name="qr_code_login_confirm_security_code_description">Por favor assegure que você sabe a origem deste código. Ao linkar dispositivos, você vai prover alguém com acesso completo a sua conta.</string>
+    <string name="qr_code_login_confirm_security_code">Confirmar</string>
+    <string name="qr_code_login_try_again">Tentar de novo</string>
+    <string name="qr_code_login_status_no_match">Nenhuma correspondência\?</string>
+    <string name="qr_code_login_signing_in">Fazendo-lhe signin</string>
+    <string name="qr_code_login_connecting_to_device">Conectando a dispositivo</string>
+    <string name="qr_code_login_scan_qr_code_button">Scannar QR code</string>
+    <string name="qr_code_login_signing_in_a_mobile_device">Fazendo signin com um dispositivo móvel\?</string>
+    <string name="qr_code_login_show_qr_code_button">Mostrar QR code neste dispositivo</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_2">Selecione \'Scannar QR code\'</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_1">Comece na tela de signin</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">Selecione \'Fazer signin com QR code\'</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_1">Comece na tela de signin</string>
+    <string name="qr_code_login_new_device_instruction_3">Selecione \'Mostrar QR code\'</string>
+    <string name="qr_code_login_new_device_instruction_2">Vá para Configurações -&gt; Segurança &amp; Privacidade</string>
+    <string name="qr_code_login_new_device_instruction_1">Abra o app em seu outro dispositivo</string>
+    <string name="qr_code_login_header_failed_denied_description">A requisição foi negada no outro dispositivo.</string>
+    <string name="qr_code_login_header_failed_timeout_description">A linkagem não foi completada no tempo requerido.</string>
+    <string name="qr_code_login_header_failed_device_is_not_supported_description">Linkagem com este dispositivo não é suportado.</string>
+    <string name="qr_code_login_header_failed_title">Conexão malsucedida</string>
+    <string name="qr_code_login_header_connected_description">Cheque seu dispositivo feito signin, o código abaixo deveria ser exibido. Confirme que o código abaixo corresponde com esse dispositivo:</string>
+    <string name="qr_code_login_header_connected_title">Conexão segura estabelecida</string>
+    <string name="qr_code_login_header_show_qr_code_link_a_device_description">Scanne o QR code abaixo com seu dispositivo que está feito signout.</string>
+    <string name="qr_code_login_header_show_qr_code_new_device_description">Use seu dispositivo feito signin para scannar o QR code abaixo:</string>
+    <string name="qr_code_login_header_show_qr_code_title">Fazer signin com QR code</string>
+    <string name="qr_code_login_header_scan_qr_code_description">Use a câmera neste dispositivo para scannar o QR code mostrado em seu outro dispositivo:</string>
+    <string name="qr_code_login_header_scan_qr_code_title">Scannar QR code</string>
+    <string name="three">3</string>
+    <string name="two">2</string>
+    <string name="one">1</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_description">Você pode usar este dispositivo para fazer signin com um dispositivo móvel ou web com um QR code. Existem duas maneiras de fazer isto:</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_title">Fazer signin com QR Code</string>
+    <string name="login_scan_qr_code">Scannar QR code</string>
+    <string name="qr_code_login_header_failed_homeserver_is_not_supported_description">O servidorcasa não suporta sign in com QR code.</string>
+    <string name="qr_code_login_header_failed_user_cancelled_description">O sign in foi cancelado no outro dispositivo.</string>
+    <string name="qr_code_login_header_failed_invalid_qr_code_description">O QR code é inválido.</string>
+    <string name="qr_code_login_header_failed_other_device_not_signed_in_description">O outro dispositivo deve estar feito signin.</string>
+    <string name="qr_code_login_header_failed_other_device_already_signed_in_description">O outro dispositivo já está feito signin.</string>
+    <string name="qr_code_login_header_failed_e2ee_security_issue_description">Um problema de segurança foi encontrado ao configurar mensageria segura. Um dos seguintes pode ter sido comprometido: Seu servidorcasa; Sua(s) conexão(ões) de internet; Seu(s) dispositivo(s);</string>
+    <string name="qr_code_login_header_failed_other_description">A requisição falhou.</string>
+    <string name="labs_enable_voice_broadcast_summary">Seja capaz de gravar e enviar broadcast de voz em timeline de sala.</string>
+    <string name="labs_enable_voice_broadcast_title">Broadcast de voz (sob desenvolvimento ativo)</string>
+    <string name="a11y_voice_broadcast_buffering">Buffering</string>
+    <string name="a11y_pause_voice_broadcast">Pausar broadcast de voz</string>
+    <string name="a11y_play_voice_broadcast">Tocar ou retomar broadcast de voz</string>
+    <string name="a11y_stop_voice_broadcast_record">Parar gravação de broadcast de voz</string>
+    <string name="a11y_pause_voice_broadcast_record">Pausar gravação de broadcast de voz</string>
+    <string name="a11y_resume_voice_broadcast_record">Retomar gravação de broadcast de voz</string>
+    <string name="voice_broadcast_live">Ao vivo</string>
+    <string name="device_manager_other_sessions_select">Selecionar sessões</string>
+    <string name="attachment_type_selector_contact">Contato</string>
+    <string name="attachment_type_selector_camera">Câmera</string>
+    <string name="attachment_type_selector_location">Localização</string>
+    <string name="attachment_type_selector_poll">Sondagens</string>
+    <string name="attachment_type_selector_voice_broadcast">Broadcast de voz</string>
+    <string name="attachment_type_selector_file">Anexos</string>
+    <string name="attachment_type_selector_sticker">Stickers</string>
+    <string name="attachment_type_selector_gallery">Biblioteca de fotos</string>
+    <string name="action_deselect_all">Desselecionar todas(os)</string>
+    <string name="action_select_all">Selecionar todas(os)</string>
+    <plurals name="x_selected">
+        <item quantity="one">%1$d selecionada(o)</item>
+        <item quantity="other">%1$d selecionadas(os)</item>
+    </plurals>
+    <string name="error_voice_broadcast_blocked_by_someone_else_message">Alguma outra pessoa já está gravando um broadcast de voz. Espere que o broadcast de voz dela termine para começar um novo.</string>
+    <string name="rich_text_editor_full_screen_toggle">Alternar modo de tela cheia</string>
+    <string name="attachment_type_selector_text_formatting">Formatação de texto</string>
+    <string name="error_voice_broadcast_already_in_progress_message">Você já está gravando um broadcast de voz. Por favor termine seu broadcast de voz atual para começar um novo.</string>
+    <string name="error_voice_broadcast_permission_denied_message">Você não tem as permissões requeridas para começar um broadcast de voz nesta sala. Contacte um/uma administrador(a) para fazer upgrade de suas permissões.</string>
+    <string name="error_voice_broadcast_unauthorized_title">Não dá pra começar um novo broadcast de voz</string>
+    <string name="a11y_voice_broadcast_fast_forward">Avançar rápido 30 segundos</string>
+    <string name="a11y_voice_broadcast_fast_backward">Retroceder 30 segundos</string>
+    <string name="device_manager_learn_more_sessions_verified_description">Sessões verificadas são onde quer que você está usando esta conta depois de entrar sua frasepasse ou confirmar sua identidade com uma outra sessão verificada.
+\n
+\nIsto significa que você tem todas as chaves necessitadas para destrancar suas mensagens encriptadas e confirmar a outras(os) usuárias(os) que você confia nesta sessão.</string>
+    <plurals name="device_manager_other_sessions_multi_signout_all">
+        <item quantity="one">Fazer signout de %1$d sessão</item>
+        <item quantity="other">Fazer signout de %1$d sessões</item>
+    </plurals>
+    <string name="device_manager_other_sessions_multi_signout_selection">Fazer signout</string>
+    <string name="voice_broadcast_recording_time_left">%1$s restando</string>
+    <string name="message_reply_to_sender_created_poll">criou uma sondagem.</string>
+    <string name="message_reply_to_sender_sent_sticker">enviou um sticker.</string>
+    <string name="message_reply_to_sender_sent_video">enviou um vídeo.</string>
+    <string name="message_reply_to_sender_sent_image">enviou uma imagem.</string>
+    <string name="message_reply_to_sender_sent_voice_message">enviou uma mensagem de voz.</string>
+    <string name="message_reply_to_sender_sent_audio_file">enviou um arquivo de áudio.</string>
+    <string name="message_reply_to_sender_sent_file">enviou um arquivo.</string>
+    <string name="message_reply_to_prefix">Em resposta a</string>
+    <string name="device_manager_other_sessions_hide_ip_address">Esconder endereço de IP</string>
+    <string name="device_manager_other_sessions_show_ip_address">Mostrar endereço de IP</string>
+    <string name="quoting">Citando</string>
+    <string name="replying_to">Respondendo a %s</string>
+    <string name="editing">Editando</string>
 </resources>

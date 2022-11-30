@@ -37,12 +37,12 @@ import im.vector.app.core.utils.toast
 import im.vector.app.databinding.FragmentPublicRoomsBinding
 import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.permalink.NavigationInterceptor
+import im.vector.app.features.permalink.PermalinkFactory
 import im.vector.app.features.permalink.PermalinkHandler
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
 import reactivecircus.flowbinding.appcompat.queryTextChanges
 import timber.log.Timber
@@ -60,7 +60,7 @@ class PublicRoomsFragment :
 
     @Inject lateinit var publicRoomsController: PublicRoomsController
     @Inject lateinit var permalinkHandler: PermalinkHandler
-    @Inject lateinit var session: Session
+    @Inject lateinit var permalinkFactory: PermalinkFactory
 
     private val viewModel: RoomDirectoryViewModel by activityViewModel()
     private lateinit var sharedActionViewModel: RoomDirectorySharedActionViewModel
@@ -128,7 +128,7 @@ class PublicRoomsFragment :
 
     override fun onUnknownRoomClicked(roomIdOrAlias: String) {
         viewLifecycleOwner.lifecycleScope.launch {
-            val permalink = session.permalinkService().createPermalink(roomIdOrAlias)
+            val permalink = permalinkFactory.createPermalink(roomIdOrAlias)
             val isHandled = permalinkHandler
                     .launch(requireActivity(), permalink, object : NavigationInterceptor {
                         override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?, rootThreadEventId: String?): Boolean {

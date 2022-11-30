@@ -21,6 +21,7 @@ import android.os.Parcelable
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.app.core.platform.DefaultListUpdateCallback
 import im.vector.app.core.platform.Restorable
+import im.vector.lib.core.utils.compat.getParcelableCompat
 import java.util.concurrent.atomic.AtomicReference
 
 private const val LAYOUT_MANAGER_STATE = "LAYOUT_MANAGER_STATE"
@@ -44,7 +45,7 @@ class LayoutManagerStateRestorer(layoutManager: RecyclerView.LayoutManager) : Re
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
-        val parcelable = savedInstanceState?.getParcelable<Parcelable>(LAYOUT_MANAGER_STATE)
+        val parcelable = savedInstanceState?.getParcelableCompat<Parcelable>(LAYOUT_MANAGER_STATE)
         layoutManagerState.set(parcelable)
     }
 

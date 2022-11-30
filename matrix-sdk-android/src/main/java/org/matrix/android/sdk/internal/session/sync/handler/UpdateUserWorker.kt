@@ -71,10 +71,16 @@ internal class UpdateUserWorker(context: Context, params: WorkerParameters, sess
                 ?.saveLocally()
     }
 
-    private suspend fun fetchUsers(userIdsToFetch: Collection<String>) = userIdsToFetch.mapNotNull {
-        tryOrNull {
-            val profileJson = getProfileInfoTask.execute(GetProfileInfoTask.Params(it))
-            User.fromJson(it, profileJson)
+    private suspend fun fetchUsers(userIdsToFetch: Collection<String>): List<User> {
+        return userIdsToFetch.mapNotNull { userId ->
+            tryOrNull {
+                val profileJson = getProfileInfoTask.execute(GetProfileInfoTask.Params(
+                        userId = userId,
+                        // Bulk insert later, so tell the task not to store the User.
+                        storeInDatabase = false,
+                ))
+                User.fromJson(userId, profileJson)
+            }
         }
     }
 

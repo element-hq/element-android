@@ -18,6 +18,7 @@ package im.vector.app.test.fakes
 
 import im.vector.app.features.settings.VectorPreferences
 import io.mockk.every
+import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
 
@@ -35,5 +36,24 @@ class FakeVectorPreferences {
 
     fun verifySetSpaceBackstack(value: List<String?>, inverse: Boolean = false) {
         verify(inverse = inverse) { instance.setSpaceBackstack(value) }
+    }
+
+    fun givenIsClientInfoRecordingEnabled(isEnabled: Boolean) {
+        every { instance.isClientInfoRecordingEnabled() } returns isEnabled
+    }
+
+    fun givenTextFormatting(isEnabled: Boolean) =
+            every { instance.isTextFormattingEnabled() } returns isEnabled
+
+    fun givenSetNotificationEnabledForDevice() {
+        justRun { instance.setNotificationEnabledForDevice(any()) }
+    }
+
+    fun verifySetNotificationEnabledForDevice(enabled: Boolean, inverse: Boolean = false) {
+        verify(inverse = inverse) { instance.setNotificationEnabledForDevice(enabled) }
+    }
+
+    fun givenSessionManagerShowIpAddress(showIpAddress: Boolean) {
+        every { instance.showIpAddressInSessionManagerScreens() } returns showIpAddress
     }
 }

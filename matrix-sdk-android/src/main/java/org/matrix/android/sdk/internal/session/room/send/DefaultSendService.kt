@@ -27,6 +27,7 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixUrls.isMxcUrl
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
+import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
 import org.matrix.android.sdk.api.session.events.model.isTextMessage
@@ -39,6 +40,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachmentContent
 import org.matrix.android.sdk.api.session.room.model.message.PollType
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
+import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
 import org.matrix.android.sdk.api.session.room.send.SendService
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
@@ -87,51 +89,60 @@ internal class DefaultSendService @AssistedInject constructor(
                 .let { sendEvent(it) }
     }
 
-    override fun sendTextMessage(text: CharSequence, msgType: String, autoMarkdown: Boolean): Cancelable {
-        return localEchoEventFactory.createTextEvent(roomId, msgType, text, autoMarkdown)
+    override fun sendTextMessage(text: CharSequence, msgType: String, autoMarkdown: Boolean, additionalContent: Content?): Cancelable {
+        return localEchoEventFactory.createTextEvent(roomId, msgType, text, autoMarkdown, additionalContent)
                 .also { createLocalEcho(it) }
                 .let { sendEvent(it) }
     }
 
-    override fun sendFormattedTextMessage(text: String, formattedText: String, msgType: String): Cancelable {
-        return localEchoEventFactory.createFormattedTextEvent(roomId, TextContent(text, formattedText), msgType)
+    override fun sendFormattedTextMessage(text: String, formattedText: String, msgType: String, additionalContent: Content?): Cancelable {
+        return localEchoEventFactory.createFormattedTextEvent(roomId, TextContent(text, formattedText), msgType, additionalContent)
                 .also { createLocalEcho(it) }
                 .let { sendEvent(it) }
     }
 
-    override fun sendQuotedTextMessage(quotedEvent: TimelineEvent, text: String, autoMarkdown: Boolean, rootThreadEventId: String?): Cancelable {
+    override fun sendQuotedTextMessage(
+            quotedEvent: TimelineEvent,
+            text: String,
+            formattedText: String?,
+            autoMarkdown: Boolean,
+            rootThreadEventId: String?,
+            additionalContent: Content?,
+    ): Cancelable {
         return localEchoEventFactory.createQuotedTextEvent(
                 roomId = roomId,
                 quotedEvent = quotedEvent,
                 text = text,
+                formattedText = formattedText,
                 autoMarkdown = autoMarkdown,
-                rootThreadEventId = rootThreadEventId
+                rootThreadEventId = rootThreadEventId,
+                additionalContent = additionalContent,
         )
                 .also { createLocalEcho(it) }
                 .let { sendEvent(it) }
     }
 
-    override fun sendPoll(pollType: PollType, question: String, options: List<String>): Cancelable {
-        return localEchoEventFactory.createPollEvent(roomId, pollType, question, options)
+    override fun sendPoll(pollType: PollType, question: String, options: List<String>, additionalContent: Content?): Cancelable {
+        return localEchoEventFactory.createPollEvent(roomId, pollType, question, options, additionalContent)
                 .also { createLocalEcho(it) }
                 .let { sendEvent(it) }
     }
 
-    override fun voteToPoll(pollEventId: String, answerId: String): Cancelable {
-        return localEchoEventFactory.createPollReplyEvent(roomId, pollEventId, answerId)
+    override fun voteToPoll(pollEventId: String, answerId: String, additionalContent: Content?): Cancelable {
+        return localEchoEventFactory.createPollReplyEvent(roomId, pollEventId, answerId, additionalContent)
                 .also { createLocalEcho(it) }
                 .let { sendEvent(it) }
     }
 
-    override fun endPoll(pollEventId: String): Cancelable {
-        return localEchoEventFactory.createEndPollEvent(roomId, pollEventId)
+    override fun endPoll(pollEventId: String, additionalContent: Content?): Cancelable {
+        return localEchoEventFactory.createEndPollEvent(roomId, pollEventId, additionalContent)
                 .also { createLocalEcho(it) }
                 .let { sendEvent(it) }
     }
 
-    override fun redactEvent(event: Event, reason: String?): Cancelable {
+    override fun redactEvent(event: Event, reason: String?, additionalContent: Content?): Cancelable {
         // TODO manage media/attachements?
-        val redactionEcho = localEchoEventFactory.createRedactEvent(roomId, event.eventId!!, reason)
+        val redactionEcho = localEchoEventFactory.createRedactEvent(roomId, event.eventId!!, reason, additionalContent)
                 .also { createLocalEcho(it) }
         return eventSenderProcessor.postRedaction(redactionEcho, reason)
     }
@@ -257,7 +268,8 @@ internal class DefaultSendService @AssistedInject constructor(
             attachments: List<ContentAttachmentData>,
             compressBeforeSending: Boolean,
             roomIds: Set<String>,
-            rootThreadEventId: String?
+            rootThreadEventId: String?,
+            additionalContent: Content?,
     ): Cancelable {
         return attachments.mapTo(CancelableBag()) {
             sendMedia(
@@ -273,7 +285,9 @@ internal class DefaultSendService @AssistedInject constructor(
             attachment: ContentAttachmentData,
             compressBeforeSending: Boolean,
             roomIds: Set<String>,
-            rootThreadEventId: String?
+            rootThreadEventId: String?,
+            relatesTo: RelationDefaultContent?,
+            additionalContent: Content?,
     ): Cancelable {
         // Ensure that the event will not be send in a thread if we are a different flow.
         // Like sending files to multiple rooms
@@ -288,7 +302,9 @@ internal class DefaultSendService @AssistedInject constructor(
             localEchoEventFactory.createMediaEvent(
                     roomId = it,
                     attachment = attachment,
-                    rootThreadEventId = rootThreadId
+                    rootThreadEventId = rootThreadId,
+                    relatesTo,
+                    additionalContent,
             ).also { event ->
                 createLocalEcho(event)
             }

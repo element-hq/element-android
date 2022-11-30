@@ -17,6 +17,7 @@
 package im.vector.app.test.fakes
 
 import io.mockk.mockk
+import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.room.model.message.PollType
 import org.matrix.android.sdk.api.session.room.send.SendService
 import org.matrix.android.sdk.api.util.Cancelable
@@ -25,5 +26,5 @@ class FakeSendService : SendService by mockk() {
 
     private val cancelable = mockk<Cancelable>()
 
-    override fun sendPoll(pollType: PollType, question: String, options: List<String>): Cancelable = cancelable
+    override fun sendPoll(pollType: PollType, question: String, options: List<String>, additionalContent: Content?): Cancelable = cancelable
 }

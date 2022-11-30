@@ -25,6 +25,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
+import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 
 /**
  * Display the screen to rename a Session.
@@ -42,7 +43,7 @@ class RenameSessionActivity : VectorBaseActivity<ActivitySimpleBinding>() {
             addFragment(
                     container = views.simpleFragmentContainer,
                     fragmentClass = RenameSessionFragment::class.java,
-                    params = intent.getParcelableExtra(Mavericks.KEY_ARG)
+                    params = intent.getParcelableExtraCompat(Mavericks.KEY_ARG)
             )
         }
     }

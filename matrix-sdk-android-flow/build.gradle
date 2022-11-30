@@ -6,6 +6,8 @@ plugins {
 apply from: '../flavor.gradle'
 
 android {
+    namespace "org.matrix.android.sdk.flow"
+
     compileSdk versions.compileSdk
 
     defaultConfig {

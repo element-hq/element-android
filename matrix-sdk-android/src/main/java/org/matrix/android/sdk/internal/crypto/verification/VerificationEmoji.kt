@@ -100,7 +100,7 @@ internal fun getEmojiForCode(code: Int): EmojiRepresentation {
  * The three 4-digit numbers are displayed to the user either with dashes (or another appropriate separator) separating the three numbers,
  * or with the three numbers on separate lines.
  */
-fun ByteArray.getDecimalCodeRepresentation(): String {
+fun ByteArray.getDecimalCodeRepresentation(separator: String = " "): String {
     val b0 = this[0].toUnsignedInt() // need unsigned byte
     val b1 = this[1].toUnsignedInt() // need unsigned byte
     val b2 = this[2].toUnsignedInt() // need unsigned byte
@@ -112,7 +112,7 @@ fun ByteArray.getDecimalCodeRepresentation(): String {
     val second = ((b1 and 0x7).shl(10) or b2.shl(2) or b3.shr(6)) + 1000
     // ((B3 & 0x3f) << 7 | B4 >> 1) + 1000
     val third = ((b3 and 0x3f).shl(7) or b4.shr(1)) + 1000
-    return "$first $second $third"
+    return listOf(first, second, third).joinToString(separator)
 }
 
 /**

@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Cross feature -->
+    <plurals name="x_selected">
+        <item quantity="one">%1$d selected</item>
+        <item quantity="other">%1$d selected</item>
+    </plurals>
+
+    <!-- Notice -->
     <string name="notice_room_invite_no_invitee">%s\'s invitation</string>
     <string name="notice_room_invite_no_invitee_by_you">Your invitation</string>
     <string name="notice_room_created">%1$s created the room</string>
@@ -407,6 +414,8 @@
     <string name="action_learn_more">Learn more</string>
     <string name="action_next">Next</string>
     <string name="action_got_it">Got it</string>
+    <string name="action_select_all">Select all</string>
+    <string name="action_deselect_all">Deselect all</string>
 
     <string name="copied_to_clipboard">Copied to clipboard</string>
 
@@ -445,6 +454,9 @@
 
     <string name="labs_enable_deferred_dm_title">Enable deferred DMs</string>
     <string name="labs_enable_deferred_dm_summary">Create DM only on first message</string>
+
+    <string name="labs_enable_rich_text_editor_title">Enable rich text editor</string>
+    <string name="labs_enable_rich_text_editor_summary">Try out the rich text editor (plain text mode coming soon)</string>
 
     <!-- Home fragment -->
     <string name="invitations_header">Invites</string>
@@ -635,6 +647,8 @@
     <string name="permissions_rationale_msg_record_audio">${app_name} needs permission to access your microphone to perform audio calls.</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
     <string name="permissions_rationale_msg_camera_and_audio">${app_name} needs permission to access your camera and your microphone to perform video calls.\n\nPlease allow access on the next pop-ups to be able to make the call.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="permissions_rationale_msg_notification">${app_name} needs permission to display notifications. Notifications can display your messages, your invitations, etc.\n\nPlease allow access on the next pop-ups to be able to view notification.</string>
 
     <string name="permissions_denied_qr_code">To scan a QR code, you need to allow camera access.</string>
     <string name="permissions_denied_add_contact">Allow permission to access your contacts.</string>
@@ -854,7 +868,9 @@
     <string name="settings_troubleshoot_test_system_settings_title">System Settings.</string>
     <string name="settings_troubleshoot_test_system_settings_success">Notifications are enabled in the system settings.</string>
     <string name="settings_troubleshoot_test_system_settings_failed">Notifications are disabled in the system settings.\nPlease check system settings.</string>
+    <string name="settings_troubleshoot_test_system_settings_permission_failed">${app_name} needs the permission to show notifications.\nPlease grant the permission.</string>
     <string name="open_settings">Open Settings</string>
+    <string name="grant_permission">Grant Permission</string>
 
     <string name="settings_troubleshoot_test_account_settings_title">Account Settings.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Notifications are enabled for your account.</string>
@@ -1016,6 +1032,8 @@
     <string name="settings_chat_effects_description">Use /confetti command or send a message containing ❄️ or 🎉</string>
     <string name="settings_autoplay_animated_images_title">Autoplay animated images</string>
     <string name="settings_autoplay_animated_images_summary">Play animated images in the timeline as soon as they are visible</string>
+    <string name="settings_enable_direct_share_title">Enable direct share</string>
+    <string name="settings_enable_direct_share_summary">Show recent chats in the system share menu</string>
     <string name="settings_show_join_leave_messages">Show join and leave events</string>
     <string name="settings_show_join_leave_messages_summary">Invites, removes, and bans are unaffected.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Show account events</string>
@@ -1626,7 +1644,10 @@
     <string name="error_user_already_logged_in">It looks like you’re trying to connect to another homeserver. Do you want to sign out?</string>
 
     <string name="edit">Edit</string>
+    <string name="editing">Editing</string>
     <string name="reply">Reply</string>
+    <string name="replying_to">Replying to %s</string>
+    <string name="quoting">Quoting</string>
     <string name="reply_in_thread">Reply in thread</string>
     <string name="view_in_room">View In Room</string>
 
@@ -1663,6 +1684,8 @@
     <string name="create_new_room">Create New Room</string>
     <string name="create_new_space">Create New Space</string>
     <string name="error_no_network">No network. Please check your Internet connection.</string>
+    <!-- TODO delete -->
+    <string name="error_check_network" tools:ignore="UnusedResources">Something went wrong. Please check your network connection and try again.</string>
     <string name="change_room_directory_network">"Change network"</string>
     <string name="please_wait">"Please wait…"</string>
     <string name="updating_your_data">Updating your data…</string>
@@ -1702,13 +1725,15 @@
     <string name="settings_push_rules_no_rules">No push rules defined</string>
     <string name="settings_push_gateway_no_pushers">No registered push gateways</string>
 
-    <string name="push_gateway_item_app_id">app_id:</string>
-    <string name="push_gateway_item_push_key">push_key:</string>
-    <string name="push_gateway_item_app_display_name">app_display_name:</string>
-    <string name="push_gateway_item_device_name">session_name:</string>
+    <string name="push_gateway_item_app_id">App ID:</string>
+    <string name="push_gateway_item_push_key">Push Key:</string>
+    <string name="push_gateway_item_app_display_name">App Display Name:</string>
+    <string name="push_gateway_item_device_name">Session Display Name:</string>
+    <string name="push_gateway_item_device_id">Session ID:</string>
     <string name="push_gateway_item_url">Url:</string>
     <string name="push_gateway_item_format">Format:</string>
     <string name="push_gateway_item_profile_tag">Profile tag:</string>
+    <string name="push_gateway_item_enabled">Enabled:</string>
 
     <string name="preference_voice_and_video">Voice &amp; Video</string>
     <string name="preference_root_help_about">Help &amp; About</string>
@@ -2115,7 +2140,7 @@
     <string name="login_reset_password_cancel_confirmation_content">Your password is not yet changed.\n\nStop the password change process?</string>
 
     <string name="login_set_email_title">Set email address</string>
-    <string name="login_set_email_notice">Set an email address to recover your account. Later, you can optionally allow people you know to discover you by your this address.</string>
+    <string name="login_set_email_notice">Set an email address to recover your account. Later, you can optionally allow people you know to discover you by this address.</string>
     <string name="login_set_email_mandatory_hint">Email</string>
     <string name="login_set_email_optional_hint">Email (optional)</string>
     <string name="login_set_email_submit">Next</string>
@@ -2173,6 +2198,7 @@
     <string name="login_signin_matrix_id_password_notice">If you don’t know your password, go back to reset it.</string>
     <string name="login_signin_matrix_id_error_invalid_matrix_id">This is not a valid user identifier. Expected format: \'@user:homeserver.org\'</string>
     <string name="autodiscover_well_known_error">Unable to find a valid homeserver. Please check your identifier</string>
+    <string name="login_scan_qr_code">Scan QR code</string>
 
     <string name="seen_by">Seen by</string>
 
@@ -3071,6 +3097,23 @@
     <string name="audio_message_reply_content">%1$s (%2$s)</string>
     <string name="audio_message_file_size">(%1$s)</string>
 
+    <string name="voice_broadcast_live">Live</string>
+    <!-- TODO Rename id to voice_broadcast_buffering -->
+    <string name="a11y_voice_broadcast_buffering">Buffering…</string>
+    <string name="a11y_resume_voice_broadcast_record">Resume voice broadcast record</string>
+    <string name="a11y_pause_voice_broadcast_record">Pause voice broadcast record</string>
+    <string name="a11y_stop_voice_broadcast_record">Stop voice broadcast record</string>
+    <string name="a11y_play_voice_broadcast">Play or resume voice broadcast</string>
+    <string name="a11y_pause_voice_broadcast">Pause voice broadcast</string>
+    <string name="a11y_voice_broadcast_fast_backward">Fast backward 30 seconds</string>
+    <string name="a11y_voice_broadcast_fast_forward">Fast forward 30 seconds</string>
+    <string name="error_voice_broadcast_unauthorized_title">Can’t start a new voice broadcast</string>
+    <string name="error_voice_broadcast_permission_denied_message">You don’t have the required permissions to start a voice broadcast in this room. Contact a room administrator to upgrade your permissions.</string>
+    <string name="error_voice_broadcast_blocked_by_someone_else_message">Someone else is already recording a voice broadcast. Wait for their voice broadcast to end to start a new one.</string>
+    <string name="error_voice_broadcast_already_in_progress_message">You are already recording a voice broadcast. Please end your current voice broadcast to start a new one.</string>
+    <!-- Examples of usage: 6h 15min 30sec left / 15min 30sec left / 30sec left -->
+    <string name="voice_broadcast_recording_time_left">%1$s left</string>
+
     <string name="upgrade_room_for_restricted">Anyone in %s will be able to find and join this room - no need to manually invite everyone. You’ll be able to change this in room settings anytime.</string>
     <string name="upgrade_room_for_restricted_no_param">Anyone in a parent space will be able to find and join this room - no need to manually invite everyone. You’ll be able to change this in room settings anytime.</string>
 
@@ -3190,6 +3233,16 @@
     <string name="tooltip_attachment_location">Share location</string>
     <string name="tooltip_attachment_voice_broadcast">Start a voice broadcast</string>
 
+    <string name="attachment_type_selector_gallery">Photo library</string>
+    <string name="attachment_type_selector_sticker">Stickers</string>
+    <string name="attachment_type_selector_file">Attachments</string>
+    <string name="attachment_type_selector_voice_broadcast">Voice broadcast</string>
+    <string name="attachment_type_selector_poll">Polls</string>
+    <string name="attachment_type_selector_location">Location</string>
+    <string name="attachment_type_selector_camera">Camera</string>
+    <string name="attachment_type_selector_contact">Contact</string>
+    <string name="attachment_type_selector_text_formatting">Text formatting</string>
+
     <string name="message_reaction_show_less">Show less</string>
     <plurals name="message_reaction_show_more">
         <item quantity="one">"%1$d more"</item>
@@ -3238,7 +3291,6 @@
     <string name="labs_enable_element_call_permission_shortcuts_summary">Auto-approve Element Call widgets and grant camera / mic access</string>
 
     <!-- Device Manager -->
-    <string name="device_manager_settings_active_sessions_show_all">Show All Sessions (V2, WIP)</string>
     <string name="device_manager_sessions_other_title">Other sessions</string>
     <string name="device_manager_sessions_other_description">For best security, verify your sessions and sign out from any session that you don’t recognize or use anymore.</string>
     <string name="a11y_device_manager_device_type_mobile">Mobile</string>
@@ -3247,10 +3299,12 @@
     <string name="a11y_device_manager_device_type_unknown">Unknown device type</string>
     <string name="device_manager_verification_status_verified">Verified session</string>
     <string name="device_manager_verification_status_unverified">Unverified session</string>
+    <string name="device_manager_verification_status_unknown">Unknown verification status</string>
     <string name="device_manager_verification_status_detail_current_session_verified">Your current session is ready for secure messaging.</string>
     <string name="device_manager_verification_status_detail_other_session_verified">This session is ready for secure messaging.</string>
     <string name="device_manager_verification_status_detail_current_session_unverified">Verify your current session for enhanced secure messaging.</string>
     <string name="device_manager_verification_status_detail_other_session_unverified">Verify or sign out from this session for best security and reliability.</string>
+    <string name="device_manager_verification_status_detail_other_session_unknown">Verify your current session to reveal this session\'s verification status.</string>
     <string name="device_manager_verify_session">Verify Session</string>
     <string name="device_manager_view_details">View Details</string>
     <string name="device_manager_other_sessions_view_all">View All (%1$d)</string>
@@ -3303,25 +3357,53 @@
     <string name="device_manager_other_sessions_no_unverified_sessions_found">No unverified sessions found.</string>
     <string name="device_manager_other_sessions_no_inactive_sessions_found">No inactive sessions found.</string>
     <string name="device_manager_other_sessions_clear_filter">Clear Filter</string>
+    <string name="device_manager_other_sessions_select">Select sessions</string>
+    <string name="device_manager_other_sessions_multi_signout_selection">Sign out</string>
+    <plurals name="device_manager_other_sessions_multi_signout_all">
+        <item quantity="one">Sign out of %1$d session</item>
+        <item quantity="other">Sign out of %1$d sessions</item>
+    </plurals>
+    <string name="device_manager_other_sessions_show_ip_address">Show IP address</string>
+    <string name="device_manager_other_sessions_hide_ip_address">Hide IP address</string>
     <string name="device_manager_session_overview_signout">Sign out of this session</string>
     <string name="device_manager_session_details_title">Session details</string>
     <string name="device_manager_session_details_description">Application, device, and activity information.</string>
+    <string name="device_manager_push_notifications_title">Push notifications</string>
+    <string name="device_manager_push_notifications_description">Receive push notifications on this session.</string>
     <string name="device_manager_session_details_session_name">Session name</string>
     <string name="device_manager_session_details_session_id">Session ID</string>
     <string name="device_manager_session_details_session_last_activity">Last activity</string>
+    <string name="device_manager_session_details_application">Application</string>
+    <string name="device_manager_session_details_application_name">Name</string>
+    <string name="device_manager_session_details_application_version">Version</string>
+    <string name="device_manager_session_details_application_url">URL</string>
+    <string name="device_manager_session_details_device_browser">Browser</string>
+    <string name="device_manager_session_details_device_model">Model</string>
+    <string name="device_manager_session_details_device_operating_system">Operating system</string>
     <string name="device_manager_session_details_device_ip_address">IP address</string>
     <string name="device_manager_session_rename">Rename session</string>
     <string name="device_manager_session_rename_edit_hint">Session name</string>
     <string name="device_manager_session_rename_description">Custom session names can help you recognize your devices more easily.</string>
     <string name="device_manager_session_rename_warning">Please be aware that session names are also visible to people you communicate with.</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_title">Sign in with QR Code</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_description">You can use this device to sign in a mobile or web device with a QR code. There are two ways to do this:</string>
+
     <string name="device_manager_learn_more_sessions_inactive_title">Inactive sessions</string>
     <string name="device_manager_learn_more_sessions_inactive">Inactive sessions are sessions you have not used in some time, but they continue to receive encryption keys.\n\nRemoving inactive sessions improves security and performance, and makes it easier for you to identify if a new session is suspicious.</string>
     <string name="device_manager_learn_more_sessions_unverified_title">Unverified sessions</string>
     <string name="device_manager_learn_more_sessions_unverified">Unverified sessions are sessions that have logged in with your credentials but not been cross-verified.\n\nYou should make especially certain that you recognise these sessions as they could represent an unauthorised use of your account.</string>
     <string name="device_manager_learn_more_sessions_verified_title">Verified sessions</string>
-    <string name="device_manager_learn_more_sessions_verified">Verified sessions have logged in with your credentials and then been verified, either using your secure passphrase or by cross-verifying.\n\nThis means they hold encryption keys for your previous messages, and confirm to other users you are communicating with that these sessions are really you.</string>
+    <!-- TODO TO BE REMOVED -->
+    <string name="device_manager_learn_more_sessions_verified" tools:ignore="UnusedResources">Verified sessions have logged in with your credentials and then been verified, either using your secure passphrase or by cross-verifying.\n\nThis means they hold encryption keys for your previous messages, and confirm to other users you are communicating with that these sessions are really you.</string>
+    <string name="device_manager_learn_more_sessions_verified_description">Verified sessions are anywhere you are using this account after entering your passphrase or confirming your identity with another verified session.\n\nThis means that you have all the keys needed to unlock your encrypted messages and confirm to other users that you trust this session.</string>
     <string name="device_manager_learn_more_session_rename_title">Renaming sessions</string>
     <string name="device_manager_learn_more_session_rename">Other users in direct messages and rooms that you join are able to view a full list of your sessions.\n\nThis provides them with confidence that they are really speaking to you, but it also means they can see the session name you enter here.</string>
+    <string name="labs_enable_session_manager_title">Enable new session manager</string>
+    <string name="labs_enable_session_manager_summary">Have greater visibility and control over all your sessions.</string>
+    <string name="labs_enable_client_info_recording_title">Enable client info recording</string>
+    <string name="labs_enable_client_info_recording_summary">Record the client name, version, and url to recognise sessions more easily in session manager.</string>
+    <string name="labs_enable_voice_broadcast_title">Enable voice broadcast (under active development)</string>
+    <string name="labs_enable_voice_broadcast_summary">Be able to record and send voice broadcast in room timeline.</string>
 
     <!-- Note to translators: %s will be replaces with selected space name -->
     <string name="home_empty_space_no_rooms_title">%s\nis looking a little empty.</string>
@@ -3344,4 +3426,60 @@
     <string name="onboarding_new_app_layout_feedback_message">Tap top right to see the option to feedback.</string>
     <string name="onboarding_new_app_layout_button_try">Try it out</string>
 
+    <string name="one">1</string>
+    <string name="two">2</string>
+    <string name="three">3</string>
+
+    <!-- QR Code Login -->
+    <string name="qr_code_login_header_scan_qr_code_title">Scan QR code</string>
+    <string name="qr_code_login_header_scan_qr_code_description">Use the camera on this device to scan the QR code shown on your other device:</string>
+    <string name="qr_code_login_header_show_qr_code_title">Sign in with QR code</string>
+    <string name="qr_code_login_header_show_qr_code_new_device_description">Use your signed in device to scan the QR code below:</string>
+    <string name="qr_code_login_header_show_qr_code_link_a_device_description">Scan the QR code below with your device that’s signed out.</string>
+    <string name="qr_code_login_header_connected_title">Secure connection established</string>
+    <string name="qr_code_login_header_connected_description">Check your signed in device, the code below should be displayed. Confirm that the code below matches with that device:</string>
+    <string name="qr_code_login_header_failed_title">Unsuccessful connection</string>
+    <string name="qr_code_login_header_failed_device_is_not_supported_description">Linking with this device is not supported.</string>
+    <string name="qr_code_login_header_failed_timeout_description">The linking wasn’t completed in the required time.</string>
+    <string name="qr_code_login_header_failed_denied_description">The request was denied on the other device.</string>
+    <string name="qr_code_login_header_failed_other_description">The request failed.</string>
+    <string name="qr_code_login_header_failed_e2ee_security_issue_description">A security issue was encountered setting up secure messaging. One of the following may be compromised: Your homeserver; Your internet connection(s); Your device(s);</string>
+    <string name="qr_code_login_header_failed_other_device_already_signed_in_description">The other device is already signed in.</string>
+    <string name="qr_code_login_header_failed_other_device_not_signed_in_description">The other device must be signed in.</string>
+    <string name="qr_code_login_header_failed_invalid_qr_code_description">That QR code is invalid.</string>
+    <string name="qr_code_login_header_failed_user_cancelled_description">The sign in was cancelled on the other device.</string>
+    <string name="qr_code_login_header_failed_homeserver_is_not_supported_description">The homeserver doesn\'t support sign in with QR code.</string>
+    <string name="qr_code_login_new_device_instruction_1">Open the app on your other device</string>
+    <string name="qr_code_login_new_device_instruction_2">Go to Settings -> Security &amp; Privacy</string>
+    <string name="qr_code_login_new_device_instruction_3">Select \'Show QR code\'</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_1">Start at the sign in screen</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">Select \'Sign in with QR code\'</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_1">Start at the sign in screen</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_2">Select \'Scan QR code\'</string>
+    <string name="qr_code_login_show_qr_code_button">Show QR code in this device</string>
+    <string name="qr_code_login_signing_in_a_mobile_device">Signing in a mobile device?</string>
+    <string name="qr_code_login_scan_qr_code_button">Scan QR code</string>
+    <string name="qr_code_login_connecting_to_device">Connecting to device</string>
+    <string name="qr_code_login_signing_in">Signing you in</string>
+    <string name="qr_code_login_status_no_match">No match?</string>
+    <string name="qr_code_login_try_again">Try again</string>
+    <string name="qr_code_login_confirm_security_code">Confirm</string>
+    <string name="qr_code_login_confirm_security_code_description">Please ensure that you know the origin of this code. By linking devices, you will provide someone with full access to your account.</string>
+
+    <!-- WYSIWYG Composer -->
+    <string name="rich_text_editor_format_bold">Apply bold format</string>
+    <string name="rich_text_editor_format_italic">Apply italic format</string>
+    <string name="rich_text_editor_format_strikethrough">Apply strikethrough format</string>
+    <string name="rich_text_editor_format_underline">Apply underline format</string>
+    <string name="rich_text_editor_full_screen_toggle">Toggle full screen mode</string>
+
+    <!-- ReplyTo events -->
+    <string name="message_reply_to_prefix">In reply to</string>
+    <string name="message_reply_to_sender_sent_file">sent a file.</string>
+    <string name="message_reply_to_sender_sent_audio_file">sent an audio file.</string>
+    <string name="message_reply_to_sender_sent_voice_message">sent a voice message.</string>
+    <string name="message_reply_to_sender_sent_image">sent an image.</string>
+    <string name="message_reply_to_sender_sent_video">sent a video.</string>
+    <string name="message_reply_to_sender_sent_sticker">sent a sticker.</string>
+    <string name="message_reply_to_sender_created_poll">created a poll.</string>
 </resources>

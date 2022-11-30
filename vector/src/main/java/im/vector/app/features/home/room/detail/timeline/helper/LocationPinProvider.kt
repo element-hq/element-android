@@ -29,7 +29,7 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.home.AvatarRenderer
-import org.matrix.android.sdk.api.session.getUser
+import org.matrix.android.sdk.api.session.getUserOrDefault
 import org.matrix.android.sdk.api.util.toMatrixItem
 import timber.log.Timber
 import javax.inject.Inject
@@ -67,9 +67,9 @@ class LocationPinProvider @Inject constructor(
 
         activeSessionHolder
                 .getActiveSession()
-                .getUser(userId)
-                ?.toMatrixItem()
-                ?.let { userItem ->
+                .getUserOrDefault(userId)
+                .toMatrixItem()
+                .let { userItem ->
                     val size = dimensionConverter.dpToPx(44)
                     val bgTintColor = matrixItemColorProvider.getColor(userItem)
                     avatarRenderer.render(glideRequests, userItem, object : CustomTarget<Drawable>(size, size) {

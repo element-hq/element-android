@@ -22,6 +22,11 @@ import kotlin.properties.Delegates
 
 abstract class TroubleshootTest(@StringRes val titleResId: Int) {
 
+    data class TestParameters(
+            val activityResultLauncher: ActivityResultLauncher<Intent>,
+            val permissionResultLauncher: ActivityResultLauncher<Array<String>>
+    )
+
     enum class TestStatus {
         NOT_STARTED,
         RUNNING,
@@ -40,7 +45,7 @@ abstract class TroubleshootTest(@StringRes val titleResId: Int) {
 
     var manager: NotificationTroubleshootTestManager? = null
 
-    abstract fun perform(activityResultLauncher: ActivityResultLauncher<Intent>)
+    abstract fun perform(testParameters: TestParameters)
 
     fun isFinished(): Boolean = (status == TestStatus.FAILED || status == TestStatus.SUCCESS)
 

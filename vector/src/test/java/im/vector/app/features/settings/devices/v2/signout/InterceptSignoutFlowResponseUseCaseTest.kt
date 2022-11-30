@@ -24,8 +24,8 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.unmockkAll
+import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldBeEqualTo
-import org.amshove.kluent.shouldBeInstanceOf
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -63,7 +63,7 @@ class InterceptSignoutFlowResponseUseCaseTest {
     }
 
     @Test
-    fun `given no error and a stored password and a next stage as password when intercepting then promise is resumed and success is returned`() {
+    fun `given no error and a stored password and a next stage as password when intercepting then promise is resumed and null is returned`() {
         // Given
         val registrationFlowResponse = givenNextUncompletedStage(LoginFlowTypes.PASSWORD, A_SESSION_ID)
         fakeReAuthHelper.givenStoredPassword(A_PASSWORD)
@@ -84,7 +84,7 @@ class InterceptSignoutFlowResponseUseCaseTest {
         )
 
         // Then
-        result shouldBeInstanceOf (SignoutSessionResult.Completed::class)
+        result shouldBe null
         every {
             promise.resume(expectedAuth)
         }
@@ -97,7 +97,7 @@ class InterceptSignoutFlowResponseUseCaseTest {
         fakeReAuthHelper.givenStoredPassword(A_PASSWORD)
         val errorCode = AN_ERROR_CODE
         val promise = mockk<Continuation<UIABaseAuth>>()
-        val expectedResult = SignoutSessionResult.ReAuthNeeded(
+        val expectedResult = SignoutSessionsReAuthNeeded(
                 pendingAuth = DefaultBaseAuth(session = A_SESSION_ID),
                 uiaContinuation = promise,
                 flowResponse = registrationFlowResponse,
@@ -122,7 +122,7 @@ class InterceptSignoutFlowResponseUseCaseTest {
         fakeReAuthHelper.givenStoredPassword(A_PASSWORD)
         val errorCode: String? = null
         val promise = mockk<Continuation<UIABaseAuth>>()
-        val expectedResult = SignoutSessionResult.ReAuthNeeded(
+        val expectedResult = SignoutSessionsReAuthNeeded(
                 pendingAuth = DefaultBaseAuth(session = A_SESSION_ID),
                 uiaContinuation = promise,
                 flowResponse = registrationFlowResponse,
@@ -147,7 +147,7 @@ class InterceptSignoutFlowResponseUseCaseTest {
         fakeReAuthHelper.givenStoredPassword(null)
         val errorCode: String? = null
         val promise = mockk<Continuation<UIABaseAuth>>()
-        val expectedResult = SignoutSessionResult.ReAuthNeeded(
+        val expectedResult = SignoutSessionsReAuthNeeded(
                 pendingAuth = DefaultBaseAuth(session = A_SESSION_ID),
                 uiaContinuation = promise,
                 flowResponse = registrationFlowResponse,

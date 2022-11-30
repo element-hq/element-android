@@ -28,6 +28,7 @@ import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.MavericksView
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import im.vector.lib.core.utils.compat.getParcelableCompat
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -53,7 +54,7 @@ class JSonViewerFragment : Fragment(), MavericksView {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        val args: JSonViewerFragmentArgs? = arguments?.getParcelable(Mavericks.KEY_ARG)
+        val args: JSonViewerFragmentArgs? = arguments?.getParcelableCompat(Mavericks.KEY_ARG)
         val inflate =
                 if (args?.wrap == true) {
                     inflater.inflate(R.layout.fragment_jv_recycler_view_wrap, container, false)

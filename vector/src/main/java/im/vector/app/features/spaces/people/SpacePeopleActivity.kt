@@ -32,6 +32,7 @@ import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleLoadingBinding
 import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.spaces.share.ShareSpaceBottomSheet
+import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -63,7 +64,7 @@ class SpacePeopleActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val args = intent?.getParcelableExtra<GenericIdArgs>(Mavericks.KEY_ARG)
+        val args = intent?.getParcelableExtraCompat<GenericIdArgs>(Mavericks.KEY_ARG)
         if (isFirstCreation()) {
             replaceFragment(
                     views.simpleFragmentContainer,

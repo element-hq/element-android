@@ -59,7 +59,22 @@ data class HomeServerCapabilities(
         /**
          * True if the home server supports controlling the logout of all devices when changing password.
          */
-        val canControlLogoutDevices: Boolean = false
+        val canControlLogoutDevices: Boolean = false,
+
+        /**
+         * True if the home server supports login via qr code, false otherwise.
+         */
+        val canLoginWithQrCode: Boolean = false,
+
+        /**
+         * True if the home server supports threaded read receipts and unread notifications.
+         */
+        val canUseThreadReadReceiptsAndNotifications: Boolean = false,
+
+        /**
+         * True if the home server supports remote toggle of Pusher for a given device.
+         */
+        val canRemotelyTogglePushNotificationsOfDevices: Boolean = false,
 ) {
 
     enum class RoomCapabilitySupport {

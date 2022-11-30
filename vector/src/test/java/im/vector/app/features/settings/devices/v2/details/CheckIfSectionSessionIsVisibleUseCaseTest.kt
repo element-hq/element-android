@@ -18,7 +18,6 @@ package im.vector.app.features.settings.devices.v2.details
 
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
@@ -32,7 +31,7 @@ class CheckIfSectionSessionIsVisibleUseCaseTest {
     private val checkIfSectionSessionIsVisibleUseCase = CheckIfSectionSessionIsVisibleUseCase()
 
     @Test
-    fun `given device info with name, id or lastSeenTs when checking is session section is visible then it returns true`() = runTest {
+    fun `given device info with name, id or lastSeenTs when checking is session section is visible then it returns true`() {
         // Given
         val deviceInfoList = listOf(
                 givenADeviceInfo(
@@ -82,7 +81,7 @@ class CheckIfSectionSessionIsVisibleUseCaseTest {
     }
 
     @Test
-    fun `given device info with missing session info when checking is session section is visible then it returns true`() = runTest {
+    fun `given device info with missing session info when checking is session section is visible then it returns false`() {
         // Given
         val deviceInfoList = listOf(
                 givenADeviceInfo(

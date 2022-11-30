@@ -18,4 +18,6 @@ package org.matrix.android.sdk.internal.auth.data
 
 internal interface LoginParams {
     val type: String
+    val deviceDisplayName: String?
+    val deviceId: String?
 }

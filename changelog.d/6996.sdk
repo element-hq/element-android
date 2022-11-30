@@ -1,0 +1,1 @@
+Added support for read receipts in threads. Now user in a room can have multiple read receipts (one per thread + one in main thread + one without threadId)

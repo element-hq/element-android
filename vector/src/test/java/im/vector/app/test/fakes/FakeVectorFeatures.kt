@@ -42,4 +42,12 @@ class FakeVectorFeatures : VectorFeatures by spyk<DefaultVectorFeatures>() {
     fun givenCombinedLoginDisabled() {
         every { isOnboardingCombinedLoginEnabled() } returns false
     }
+
+    fun givenLocationSharing(isEnabled: Boolean) {
+        every { isLocationSharingEnabled() } returns isEnabled
+    }
+
+    fun givenVoiceBroadcast(isEnabled: Boolean) {
+        every { isVoiceBroadcastEnabled() } returns isEnabled
+    }
 }

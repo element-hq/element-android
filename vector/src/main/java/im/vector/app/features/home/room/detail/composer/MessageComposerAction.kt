@@ -23,7 +23,7 @@ import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 
 sealed class MessageComposerAction : VectorViewModelAction {
-    data class SendMessage(val text: CharSequence, val autoMarkdown: Boolean) : MessageComposerAction()
+    data class SendMessage(val text: CharSequence, val formattedText: String?, val autoMarkdown: Boolean) : MessageComposerAction()
     data class EnterEditMode(val eventId: String) : MessageComposerAction()
     data class EnterQuoteMode(val eventId: String) : MessageComposerAction()
     data class EnterReplyMode(val eventId: String) : MessageComposerAction()
@@ -33,6 +33,7 @@ sealed class MessageComposerAction : VectorViewModelAction {
     data class OnEntersBackground(val composerText: String) : MessageComposerAction()
     data class SlashCommandConfirmed(val parsedCommand: ParsedCommand) : MessageComposerAction()
     data class InsertUserDisplayName(val userId: String) : MessageComposerAction()
+    data class SetFullScreen(val isFullScreen: Boolean) : MessageComposerAction()
 
     // Voice Message
     data class InitializeVoiceRecorder(val attachmentData: ContentAttachmentData) : MessageComposerAction()

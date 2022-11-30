@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.api.session.crypto
 
 import android.content.Context
+import androidx.annotation.Size
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
@@ -56,6 +57,8 @@ interface CryptoService {
 
     suspend fun deleteDevice(deviceId: String, userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor)
 
+    suspend fun deleteDevices(@Size(min = 1) deviceIds: List<String>, userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor)
+
     fun getCryptoVersion(context: Context, longFormat: Boolean): String
 
     fun isCryptoEnabled(): Boolean
@@ -68,7 +71,7 @@ interface CryptoService {
 
     suspend fun getUserDevices(userId: String): List<CryptoDeviceInfo>
 
-    suspend fun getMyCryptoDevice(): CryptoDeviceInfo
+    fun getMyCryptoDevice(): CryptoDeviceInfo
 
     fun getGlobalBlacklistUnverifiedDevices(): Boolean
 
@@ -216,6 +219,7 @@ interface CryptoService {
 
     fun close()
     fun start()
+    suspend fun onSyncWillProcess(isInitialSync: Boolean)
     fun isStarted(): Boolean
     suspend fun receiveSyncChanges(toDevice: ToDeviceSyncResponse?, deviceChanges: DeviceListResponse?, keyCounts: DeviceOneTimeKeysCountSyncResponse?)
     fun onLiveEvent(roomId: String, event: Event, initialSync: Boolean)

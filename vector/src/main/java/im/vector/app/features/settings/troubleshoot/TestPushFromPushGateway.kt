@@ -15,8 +15,6 @@
  */
 package im.vector.app.features.settings.troubleshoot
 
-import android.content.Intent
-import androidx.activity.result.ActivityResultLauncher
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.error.ErrorFormatter
@@ -43,7 +41,7 @@ class TestPushFromPushGateway @Inject constructor(
     private var action: Job? = null
     private var pushReceived: Boolean = false
 
-    override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
+    override fun perform(testParameters: TestParameters) {
         pushReceived = false
         action = activeSessionHolder.getActiveSession().coroutineScope.launch {
             val result = runCatching { pushersManager.testPush() }

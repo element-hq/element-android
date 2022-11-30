@@ -1,0 +1,2 @@
+Die wichtigste Änderung in dieser Version: Neues App-Layout standardmäßig aktiviert!
+Vollständiges Änderungsprotokoll: https://github.com/vector-im/element-android/releases

@@ -24,8 +24,9 @@ data class Pusher(
         val profileTag: String? = null,
         val lang: String?,
         val data: PusherData,
-
-        val state: PusherState
+        val enabled: Boolean,
+        val deviceId: String?,
+        val state: PusherState,
 ) {
     companion object {
 

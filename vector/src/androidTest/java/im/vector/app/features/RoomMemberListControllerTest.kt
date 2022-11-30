@@ -25,6 +25,7 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
+import org.junit.Ignore
 import org.junit.Test
 import org.matrix.android.sdk.api.session.crypto.model.UserVerificationLevel
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -36,6 +37,7 @@ import kotlin.coroutines.suspendCoroutine
 class RoomMemberListControllerTest {
 
     @Test
+    @Ignore("Too flaky")
     fun testControllerUserVerificationLevel() = runTest {
         val roomListController = RoomMemberListController(
                 avatarRenderer = mockk {

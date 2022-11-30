@@ -78,7 +78,7 @@ class ThreadListFragment :
     override fun handlePostCreateMenu(menu: Menu) {
         // We use a custom layout for this menu item, so we need to set a ClickListener
         menu.findItem(R.id.menu_thread_list_filter)?.let { menuItem ->
-            menuItem.actionView.debouncedClicks {
+            menuItem.actionView?.debouncedClicks {
                 handleMenuItemSelected(menuItem)
             }
         }
@@ -96,7 +96,7 @@ class ThreadListFragment :
 
     override fun handlePrepareMenu(menu: Menu) {
         withState(threadListViewModel) { state ->
-            val filterIcon = menu.findItem(R.id.menu_thread_list_filter).actionView
+            val filterIcon = menu.findItem(R.id.menu_thread_list_filter).actionView ?: return@withState
             val filterBadge = filterIcon.findViewById<View>(R.id.threadListFilterBadge)
             filterBadge.isVisible = state.shouldFilterThreads
             when (threadListViewModel.canHomeserverUseThreading()) {

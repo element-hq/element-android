@@ -123,6 +123,7 @@ abstract class AbstractFtueAuthFragment<VB : ViewBinding> : VectorBaseFragment<V
                         .setMessage(R.string.login_signup_cancel_confirmation_content)
                         .setPositiveButton(R.string.yes) { _, _ ->
                             displayCancelDialog = false
+                            @Suppress("DEPRECATION")
                             vectorBaseActivity.onBackPressed()
                         }
                         .setNegativeButton(R.string.no, null)
@@ -137,6 +138,7 @@ abstract class AbstractFtueAuthFragment<VB : ViewBinding> : VectorBaseFragment<V
                         .setMessage(R.string.login_reset_password_cancel_confirmation_content)
                         .setPositiveButton(R.string.yes) { _, _ ->
                             displayCancelDialog = false
+                            @Suppress("DEPRECATION")
                             vectorBaseActivity.onBackPressed()
                         }
                         .setNegativeButton(R.string.no, null)

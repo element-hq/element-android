@@ -19,6 +19,7 @@ import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.DevicesListResponse
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.crypto.model.rest.DeleteDeviceParams
+import org.matrix.android.sdk.internal.crypto.model.rest.DeleteDevicesParams
 import org.matrix.android.sdk.internal.crypto.model.rest.KeyChangesResponse
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysClaimBody
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysClaimResponse
@@ -132,6 +133,17 @@ internal interface CryptoApi {
     suspend fun deleteDevice(
             @Path("device_id") deviceId: String,
             @Body params: DeleteDeviceParams
+    )
+
+    /**
+     * Deletes the given devices, and invalidates any access token associated with them.
+     * Doc: https://spec.matrix.org/v1.4/client-server-api/#post_matrixclientv3delete_devices
+     *
+     * @param params the deletion parameters
+     */
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_V3 + "delete_devices")
+    suspend fun deleteDevices(
+            @Body params: DeleteDevicesParams
     )
 
     /**

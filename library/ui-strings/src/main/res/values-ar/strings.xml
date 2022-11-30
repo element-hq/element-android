@@ -1167,4 +1167,12 @@
     <string name="login_reset_password_email_hint">البريد الإلكتروني</string>
     <string name="login_reset_password_password_hint">كلمة السر الجديدة</string>
     <string name="login_reset_password_submit">التالي</string>
+    <plurals name="x_selected">
+        <item quantity="zero">صفر</item>
+        <item quantity="one">واحد</item>
+        <item quantity="two">اثنان</item>
+        <item quantity="few">قليلة</item>
+        <item quantity="many">كثيرة</item>
+        <item quantity="other">اخرى</item>
+    </plurals>
 </resources>

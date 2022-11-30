@@ -26,20 +26,16 @@ import androidx.core.view.isVisible
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.animations.play
-import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.utils.isAnimationEnabled
 import im.vector.app.core.utils.styleMatchingText
 import im.vector.app.databinding.FragmentFtueAccountCreatedBinding
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewState
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class FtueAuthAccountCreatedFragment :
         AbstractFtueAuthFragment<FragmentFtueAccountCreatedBinding>() {
-
-    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
 
     private var hasPlayedConfetti = false
 
@@ -53,15 +49,15 @@ class FtueAuthAccountCreatedFragment :
     }
 
     private fun setupViews() {
-        val userId = activeSessionHolder.getActiveSession().myUserId
-        val subtitle = getString(R.string.ftue_account_created_subtitle, userId).toSpannable().styleMatchingText(userId, Typeface.BOLD)
-        views.accountCreatedSubtitle.text = subtitle
         views.accountCreatedPersonalize.debouncedClicks { viewModel.handle(OnboardingAction.PersonalizeProfile) }
         views.accountCreatedTakeMeHome.debouncedClicks { viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnTakeMeHome)) }
         views.accountCreatedTakeMeHomeCta.debouncedClicks { viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnTakeMeHome)) }
     }
 
     override fun updateWithState(state: OnboardingViewState) {
+        val userId = state.personalizationState.userId
+        val subtitle = getString(R.string.ftue_account_created_subtitle, userId).toSpannable().styleMatchingText(userId, Typeface.BOLD)
+        views.accountCreatedSubtitle.text = subtitle
         val canPersonalize = state.personalizationState.supportsPersonalization()
         views.personalizeButtonGroup.isVisible = canPersonalize
         views.takeMeHomeButtonGroup.isVisible = !canPersonalize

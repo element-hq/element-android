@@ -255,23 +255,23 @@ internal class DefaultVerificationService @Inject constructor(
 //        }
     }
 
-    override suspend fun sasCodeMatch(theyMatch: Boolean, transactionId: String) {
-        val deferred = CompletableDeferred<Unit>()
-        stateMachine.send(
-                if (theyMatch) {
-                    VerificationIntent.ActionSASCodeMatches(
-                            transactionId,
-                            deferred,
-                    )
-                } else {
-                    VerificationIntent.ActionSASCodeDoesNotMatch(
-                            transactionId,
-                            deferred,
-                    )
-                }
-        )
-        deferred.await()
-    }
+//    override suspend fun sasCodeMatch(theyMatch: Boolean, transactionId: String) {
+//        val deferred = CompletableDeferred<Unit>()
+//        stateMachine.send(
+//                if (theyMatch) {
+//                    VerificationIntent.ActionSASCodeMatches(
+//                            transactionId,
+//                            deferred,
+//                    )
+//                } else {
+//                    VerificationIntent.ActionSASCodeDoesNotMatch(
+//                            transactionId,
+//                            deferred,
+//                    )
+//                }
+//        )
+//        deferred.await()
+//    }
 
     suspend fun onRoomReadyFromOneOfMyOtherDevice(event: Event) {
         val requestInfo = event.content.toModel<MessageRelationContent>()
@@ -1212,8 +1212,7 @@ internal class DefaultVerificationService @Inject constructor(
 //    }
 
     override suspend fun startKeyVerification(method: VerificationMethod, otherUserId: String, requestId: String): String? {
-        if (method != VerificationMethod.SAS) throw IllegalArgumentException("Unknown verification method")
-
+        require(method == VerificationMethod.SAS) { "Unknown verification method" }
         val deferred = CompletableDeferred<VerificationTransaction>()
         stateMachine.send(
                 VerificationIntent.ActionStartSasVerification(

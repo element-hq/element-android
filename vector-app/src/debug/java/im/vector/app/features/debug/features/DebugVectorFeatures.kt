@@ -76,8 +76,14 @@ class DebugVectorFeatures(
     override fun isNewAppLayoutFeatureEnabled(): Boolean = read(DebugFeatureKeys.newAppLayoutEnabled)
             ?: vectorFeatures.isNewAppLayoutFeatureEnabled()
 
-    override fun isNewDeviceManagementEnabled(): Boolean = read(DebugFeatureKeys.newDeviceManagementEnabled)
-            ?: vectorFeatures.isNewDeviceManagementEnabled()
+    override fun isQrCodeLoginEnabled() = read(DebugFeatureKeys.qrCodeLoginEnabled)
+            ?: vectorFeatures.isQrCodeLoginEnabled()
+
+    override fun isQrCodeLoginForAllServers() = read(DebugFeatureKeys.qrCodeLoginForAllServers)
+            ?: vectorFeatures.isQrCodeLoginForAllServers()
+
+    override fun isReciprocateQrCodeLogin() = read(DebugFeatureKeys.reciprocateQrCodeLogin)
+            ?: vectorFeatures.isReciprocateQrCodeLogin()
 
     override fun isVoiceBroadcastEnabled(): Boolean = read(DebugFeatureKeys.voiceBroadcastEnabled)
             ?: vectorFeatures.isVoiceBroadcastEnabled()
@@ -140,8 +146,9 @@ object DebugFeatureKeys {
     val liveLocationSharing = booleanPreferencesKey("live-location-sharing")
     val screenSharing = booleanPreferencesKey("screen-sharing")
     val forceUsageOfOpusEncoder = booleanPreferencesKey("force-usage-of-opus-encoder")
-    val startDmOnFirstMsg = booleanPreferencesKey("start-dm-on-first-msg")
     val newAppLayoutEnabled = booleanPreferencesKey("new-app-layout-enabled")
-    val newDeviceManagementEnabled = booleanPreferencesKey("new-device-management-enabled")
+    val qrCodeLoginEnabled = booleanPreferencesKey("qr-code-login-enabled")
+    val qrCodeLoginForAllServers = booleanPreferencesKey("qr-code-login-for-all-servers")
+    val reciprocateQrCodeLogin = booleanPreferencesKey("reciprocate-qr-code-login")
     val voiceBroadcastEnabled = booleanPreferencesKey("voice-broadcast-enabled")
 }

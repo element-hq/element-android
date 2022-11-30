@@ -232,9 +232,13 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     override suspend fun deleteDevice(deviceId: String, userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor) {
+        deleteDevices(listOf(deviceId), userInteractiveAuthInterceptor)
+    }
+
+    override suspend fun deleteDevices(deviceIds: List<String>, userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor) {
         withContext(coroutineDispatchers.crypto) {
             deleteDeviceTask
-                    .execute(DeleteDeviceTask.Params(deviceId, userInteractiveAuthInterceptor, null))
+                    .execute(DeleteDeviceTask.Params(deviceIds, userInteractiveAuthInterceptor, null))
         }
     }
 
@@ -242,7 +246,7 @@ internal class DefaultCryptoService @Inject constructor(
         return if (longFormat) olmManager.getDetailedVersion(context) else olmManager.version
     }
 
-    override suspend fun getMyCryptoDevice(): CryptoDeviceInfo {
+    override fun getMyCryptoDevice(): CryptoDeviceInfo {
         return myDeviceInfoHolder.get().myDevice
     }
 
@@ -343,8 +347,8 @@ internal class DefaultCryptoService @Inject constructor(
         }
     }
 
-    fun onSyncWillProcess(isInitialSync: Boolean) {
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+    override suspend fun onSyncWillProcess(isInitialSync: Boolean) {
+        withContext(coroutineDispatchers.crypto) {
             if (isInitialSync) {
                 try {
                     // On initial sync, we start all our tracking from

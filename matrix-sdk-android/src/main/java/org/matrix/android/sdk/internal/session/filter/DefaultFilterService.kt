@@ -17,19 +17,27 @@
 package org.matrix.android.sdk.internal.session.filter
 
 import org.matrix.android.sdk.api.session.sync.FilterService
-import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.task.configureWith
+import org.matrix.android.sdk.api.session.sync.filter.SyncFilterBuilder
+import org.matrix.android.sdk.internal.session.homeserver.HomeServerCapabilitiesDataSource
 import javax.inject.Inject
 
 internal class DefaultFilterService @Inject constructor(
         private val saveFilterTask: SaveFilterTask,
-        private val taskExecutor: TaskExecutor
+        private val filterRepository: FilterRepository,
+        private val homeServerCapabilitiesDataSource: HomeServerCapabilitiesDataSource,
 ) : FilterService {
 
     // TODO Pass a list of support events instead
-    override fun setFilter(filterPreset: FilterService.FilterPreset) {
-        saveFilterTask
-                .configureWith(SaveFilterTask.Params(filterPreset))
-                .executeBy(taskExecutor)
+    override suspend fun setSyncFilter(filterBuilder: SyncFilterBuilder) {
+        filterRepository.storeFilterParams(filterBuilder.extractParams())
+
+        // don't upload/store filter until homeserver capabilities are fetched
+        homeServerCapabilitiesDataSource.getHomeServerCapabilities()?.let { homeServerCapabilities ->
+            saveFilterTask.execute(
+                    SaveFilterTask.Params(
+                            filter = filterBuilder.build(homeServerCapabilities)
+                    )
+            )
+        }
     }
 }
