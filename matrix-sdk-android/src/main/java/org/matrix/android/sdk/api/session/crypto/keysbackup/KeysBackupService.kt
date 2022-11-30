@@ -181,7 +181,6 @@ interface KeysBackupService {
      * @param roomId the id of the room to get backup data from.
      * @param sessionId the id of the session to restore.
      * @param stepProgressListener the step progress listener
-     * @param callback Callback. It provides the number of found keys and the number of successfully imported keys.
      */
     suspend fun restoreKeyBackupWithPassword(
             keysBackupVersion: KeysVersionResult,
