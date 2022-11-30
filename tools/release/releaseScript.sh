@@ -38,6 +38,17 @@ if [[ ! -f ${releaseScriptFullPath} ]]; then
   exit 1
 fi
 
+# Check if git flow is enabled
+git flow config >/dev/null 2>&1
+if [[ $? == 0 ]]
+then
+    printf "Git flow is initialized"
+else
+    printf "Git flow is not initialized. Initializing...\n"
+    # All default value, just set 'v' for tag prefix
+    git flow init -d -t 'v'
+fi
+
 # Guessing version to propose a default version
 versionMajorCandidate=`grep "ext.versionMajor" ./vector-app/build.gradle | cut  -d " " -f3`
 versionMinorCandidate=`grep "ext.versionMinor" ./vector-app/build.gradle | cut  -d " " -f3`
