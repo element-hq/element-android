@@ -223,7 +223,7 @@ class DevicesViewModel @AssistedInject constructor(
         viewModelScope.launch {
             val hasAccountCrossSigning = session.cryptoService().crossSigningService().isCrossSigningInitialized()
             val accountCrossSigningIsTrusted = session.cryptoService().crossSigningService().isCrossSigningVerified()
-            val myDeviceId = session.sessionParams.deviceId ?: ""
+            val myDeviceId = session.sessionParams.deviceId
             setState {
                 copy(
                         hasAccountCrossSigning = hasAccountCrossSigning,
@@ -279,8 +279,8 @@ class DevicesViewModel @AssistedInject constructor(
                             supportedVerificationMethodsProvider.provide(),
                             session.myUserId,
                             action.deviceId
-                    )?.transactionId
-                    ?.let {
+                    ).transactionId
+                    .let {
                         _viewEvents.post(
                                 DevicesViewEvents.ShowVerifyDevice(
                                         session.myUserId,

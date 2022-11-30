@@ -77,8 +77,7 @@ internal class VerificationTransportLayer @Inject constructor(
         }
     }
 
-    suspend fun sendInRoom(localId: String = LocalEcho.createLocalEchoId(),
-                           type: String,
+    suspend fun sendInRoom(type: String,
                            roomId: String,
                            content: Content): String {
         val event = createEventAndLocalEcho(

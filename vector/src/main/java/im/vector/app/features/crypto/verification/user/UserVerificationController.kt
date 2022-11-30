@@ -257,7 +257,7 @@ class UserVerificationController @Inject constructor(
 
     private fun renderQrTransaction(transaction: VerificationTransactionData.QrTransactionData, otherUserItem: MatrixItem) {
         val host = this
-        when (val txState = transaction.state) {
+        when (transaction.state) {
             QRCodeVerificationState.Reciprocated -> {
                 // we are waiting for confirmation from the other side
                 bottomSheetVerificationNoticeItem {

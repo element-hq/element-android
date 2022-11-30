@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.coroutines.builder
 
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.ProducerScope
 
 /**
@@ -34,6 +35,7 @@ import kotlinx.coroutines.channels.ProducerScope
  * }
  *
  */
+@OptIn(ExperimentalCoroutinesApi::class)
 internal fun <T> ProducerScope<T>.safeInvokeOnClose(handler: (cause: Throwable?) -> Unit): CompletableDeferred<Unit> {
     val onClose = CompletableDeferred<Unit>()
     invokeOnClose {

@@ -302,6 +302,7 @@ class SelfVerificationController @Inject constructor(
     private fun renderTransaction(state: SelfVerificationViewState, transaction: VerificationTransactionData) {
         when (transaction) {
             is VerificationTransactionData.QrTransactionData -> {
+                TODO("Render QR transaction $state")
                 // TODO
                 // renderQrTransaction(transaction, state.otherUserMxItem)
             }

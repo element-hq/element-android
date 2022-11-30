@@ -201,7 +201,7 @@ internal class DefaultCryptoService @Inject constructor(
         }
     }
 
-    override fun onLiveEvent(roomId: String, event: Event, isInitialSync: Boolean) {
+    override fun onLiveEvent(roomId: String, event: Event, initialSync: Boolean) {
         // handle state events
         if (event.isStateEvent()) {
             when (event.type) {
@@ -212,7 +212,7 @@ internal class DefaultCryptoService @Inject constructor(
         }
 
         // handle verification
-        if (!isInitialSync) {
+        if (!initialSync) {
             if (event.type != null && verificationMessageProcessor.shouldProcess(event.type)) {
                 cryptoCoroutineScope.launch(coroutineDispatchers.dmVerif) {
                     verificationMessageProcessor.process(roomId, event)

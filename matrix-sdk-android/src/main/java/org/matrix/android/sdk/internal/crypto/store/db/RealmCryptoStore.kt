@@ -522,9 +522,7 @@ internal class RealmCryptoStore @Inject constructor(
                         val key = it.keyBackupRecoveryKey
                         val version = it.keyBackupRecoveryKeyVersion
                         if (!key.isNullOrBlank() && !version.isNullOrBlank()) {
-                            BackupUtils.recoveryKeyFromBase58(key)?.let { key ->
-                                SavedKeyBackupKeyInfo(recoveryKey = key, version = version)
-                            }
+                            SavedKeyBackupKeyInfo(recoveryKey = BackupUtils.recoveryKeyFromBase58(key), version = version)
                         } else {
                             null
                         }

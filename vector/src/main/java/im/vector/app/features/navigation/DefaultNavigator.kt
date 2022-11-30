@@ -254,7 +254,8 @@ class DefaultNavigator @Inject constructor(
     override fun requestSessionVerification(context: Context, otherSessionId: String) {
         coroutineScope.launch {
             val session = sessionHolder.getSafeActiveSession() ?: return@launch
-            val pr = session.cryptoService().verificationService().requestSelfKeyVerification(
+//            val pr =
+            session.cryptoService().verificationService().requestSelfKeyVerification(
                     supportedVerificationMethodsProvider.provide()
             )
             if (context is AppCompatActivity) {
@@ -269,7 +270,8 @@ class DefaultNavigator @Inject constructor(
 
     override fun requestSelfSessionVerification(context: Context) {
         coroutineScope.launch {
-            val session = sessionHolder.getSafeActiveSession() ?: return@launch
+            // TODO
+            // val session = sessionHolder.getSafeActiveSession() ?: return@launch
 //            val otherSessions = session.cryptoService()
 //                    .getCryptoDeviceInfoList(session.myUserId)
 //                    .filter { it.deviceId != session.sessionParams.deviceId }

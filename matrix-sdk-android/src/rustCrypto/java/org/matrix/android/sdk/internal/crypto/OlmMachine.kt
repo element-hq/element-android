@@ -772,7 +772,7 @@ internal class OlmMachine @Inject constructor(
                 UserTrustResult.Success
             } catch (failure: Exception) {
                 // KeyImportError?
-                UserTrustResult.Failure(failure.localizedMessage)
+                UserTrustResult.Failure(failure.localizedMessage ?: "Unknown Error")
             }
         }
         withContext(coroutineDispatchers.main) {

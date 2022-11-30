@@ -112,7 +112,6 @@ android {
                 // Disabled for now, there are too many errors. Could be handled in another dedicated PR
                 // '-Xexplicit-api=strict', // or warning
                 "-opt-in=kotlin.RequiresOptIn",
-                "-opt-in=kotlin.OptIn",
                 // Opt in for kotlinx.coroutines.FlowPreview
                 "-opt-in=kotlinx.coroutines.FlowPreview",
         ]
