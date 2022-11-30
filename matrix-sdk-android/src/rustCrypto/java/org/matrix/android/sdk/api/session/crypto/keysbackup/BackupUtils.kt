@@ -17,5 +17,5 @@
 package org.matrix.android.sdk.api.session.crypto.keysbackup
 
 object BackupUtils {
-    fun recoveryKeyFromBase58(key: String): IBackupRecoveryKey = BackupRecoveryKey.fromBase58(key)
+    fun recoveryKeyFromBase58(key: String): IBackupRecoveryKey? = BackupRecoveryKey.fromBase58(key)
 }
