@@ -33,7 +33,8 @@ class FakeFcmHelper {
     fun verifyEnsureFcmTokenIsRetrieved(
             pushersManager: PushersManager,
             registerPusher: Boolean,
+            inverse: Boolean = false,
     ) {
-        verify { instance.ensureFcmTokenIsRetrieved(pushersManager, registerPusher) }
+        verify(inverse = inverse) { instance.ensureFcmTokenIsRetrieved(pushersManager, registerPusher) }
     }
 }

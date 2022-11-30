@@ -25,7 +25,6 @@ class EnsureFcmTokenIsRetrievedUseCase @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
 ) {
 
-    // TODO add unit tests
     fun execute(pushersManager: PushersManager, registerPusher: Boolean) {
         if (unifiedPushHelper.isEmbeddedDistributor()) {
             fcmHelper.ensureFcmTokenIsRetrieved(pushersManager, shouldAddHttpPusher(registerPusher))
