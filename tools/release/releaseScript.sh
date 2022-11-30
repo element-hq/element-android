@@ -225,12 +225,13 @@ else
 fi
 
 printf "\n================================================================================\n"
-read -p "Wait for the GitHub action https://github.com/vector-im/element-android/actions/workflows/build.yml?query=branch%3Amain to build the 'main' branch. Press enter when it's done."
+printf "Wait for the GitHub action https://github.com/vector-im/element-android/actions/workflows/build.yml?query=branch%3Amain to build the 'main' branch.\n"
+read -p "After GHA is finished, please enter the artifact URL (for 'vector-gplay-release-unsigned'): " artifactUrl
 
 printf "\n================================================================================\n"
 printf "Running the release script...\n"
 cd ${releaseScriptLocation}
-${releaseScriptFullPath} "v${version}"
+${releaseScriptFullPath} "v${version}" ${artifactUrl}
 cd -
 
 printf "\n================================================================================\n"
