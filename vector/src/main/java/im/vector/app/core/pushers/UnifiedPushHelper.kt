@@ -206,8 +206,11 @@ class UnifiedPushHelper @Inject constructor(
                     onDistributorSelected(distributor)
                 }
                 .setOnCancelListener {
-                    // By default, use internal solution (fcm/background sync)
-                    onDistributorSelected(context.packageName)
+                    // we do not want to change the distributor on behalf of the user
+                    if (UnifiedPush.getDistributor(context).isEmpty()) {
+                        // By default, use internal solution (fcm/background sync)
+                        onDistributorSelected(context.packageName)
+                    }
                 }
                 .setCancelable(true)
                 .show()
