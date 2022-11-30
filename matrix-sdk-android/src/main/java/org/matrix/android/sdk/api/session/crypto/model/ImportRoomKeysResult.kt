@@ -22,14 +22,3 @@ data class ImportRoomKeysResult(
         /**It's a map from room id to a map of the sender key to a list of session*/
         val importedSessionInfo: Map<String, Map<String, List<String>>>
 )
-// {
-//    companion object {
-//        fun fromOlm(result: KeysImportResult): ImportRoomKeysResult {
-//            return ImportRoomKeysResult(
-//                    result.total.toInt(),
-//                    result.imported.toInt(),
-//                    result.keys
-//            )
-//        }
-// }
-// }

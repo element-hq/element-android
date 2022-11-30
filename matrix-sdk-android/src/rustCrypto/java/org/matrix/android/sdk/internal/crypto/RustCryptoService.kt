@@ -167,9 +167,13 @@ internal class RustCryptoService @Inject constructor(
         }
     }
 
-    override suspend fun deleteDevice(deviceId: String, userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor) {
-        val params = DeleteDeviceTask.Params(deviceId, userInteractiveAuthInterceptor, null)
+    override suspend fun deleteDevices(deviceIds: List<String>, userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor) {
+        val params = DeleteDeviceTask.Params(deviceIds, userInteractiveAuthInterceptor, null)
         deleteDeviceTask.execute(params)
+    }
+
+    override suspend fun deleteDevice(deviceId: String, userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor) {
+        deleteDevices(listOf(deviceId), userInteractiveAuthInterceptor)
     }
 
     override fun getCryptoVersion(context: Context, longFormat: Boolean): String {
@@ -177,8 +181,8 @@ internal class RustCryptoService @Inject constructor(
         return if (longFormat) "Rust SDK 0.3" else "0.3"
     }
 
-    override suspend fun getMyCryptoDevice(): CryptoDeviceInfo {
-        return olmMachine.ownDevice()
+    override fun getMyCryptoDevice(): CryptoDeviceInfo {
+        return runBlocking { olmMachine.ownDevice() }
     }
 
     override suspend fun fetchDevicesList(): List<DeviceInfo> {
@@ -567,6 +571,10 @@ internal class RustCryptoService @Inject constructor(
             sessionId: String,
     ) {
         megolmSessionImportManager.dispatchNewSession(roomId, sessionId)
+    }
+
+    override suspend fun onSyncWillProcess(isInitialSync: Boolean) {
+        // nothing no rust
     }
 
     override suspend fun receiveSyncChanges(

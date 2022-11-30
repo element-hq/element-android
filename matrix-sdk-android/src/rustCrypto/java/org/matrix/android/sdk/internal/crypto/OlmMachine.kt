@@ -71,6 +71,7 @@ import org.matrix.rustcomponents.sdk.crypto.DecryptionException
 import org.matrix.rustcomponents.sdk.crypto.DeviceLists
 import org.matrix.rustcomponents.sdk.crypto.EncryptionSettings
 import org.matrix.rustcomponents.sdk.crypto.KeyRequestPair
+import org.matrix.rustcomponents.sdk.crypto.KeysImportResult
 import org.matrix.rustcomponents.sdk.crypto.Logger
 import org.matrix.rustcomponents.sdk.crypto.MegolmV1BackupKey
 import org.matrix.rustcomponents.sdk.crypto.Request
@@ -475,6 +476,14 @@ internal class OlmMachine @Inject constructor(
                 inner.exportRoomKeys(passphrase, rounds).toByteArray()
             }
 
+    private fun KeysImportResult.fromOlm(): ImportRoomKeysResult {
+        return ImportRoomKeysResult(
+                this.total.toInt(),
+                this.imported.toInt(),
+                this.keys
+        )
+    }
+
     /**
      * Import room keys from the given serialized key export.
      *
@@ -497,7 +506,7 @@ internal class OlmMachine @Inject constructor(
 
                 val result = inner.importRoomKeys(decodedKeys, passphrase, rustListener)
 
-                ImportRoomKeysResult.fromOlm(result)
+                result.fromOlm()
             }
 
     @Throws(CryptoStoreException::class)
