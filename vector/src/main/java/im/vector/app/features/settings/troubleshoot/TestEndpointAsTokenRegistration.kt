@@ -83,9 +83,9 @@ class TestEndpointAsTokenRegistration @Inject constructor(
             testParameters: TestParameters,
             pushKey: String,
     ) {
-        when (val result = registerUnifiedPushUseCase.execute(distributor)) {
+        when (registerUnifiedPushUseCase.execute(distributor)) {
             is RegisterUnifiedPushUseCase.RegisterUnifiedPushResult.NeedToAskUserForDistributor ->
-                askUserForDistributor(result.distributors, testParameters, pushKey)
+                askUserForDistributor(testParameters, pushKey)
             RegisterUnifiedPushUseCase.RegisterUnifiedPushResult.Success -> {
                 val workId = pushersManager.enqueueRegisterPusherWithFcmKey(pushKey)
                 WorkManager.getInstance(context).getWorkInfoByIdLiveData(workId).observe(context) { workInfo ->
@@ -102,11 +102,10 @@ class TestEndpointAsTokenRegistration @Inject constructor(
     }
 
     private fun askUserForDistributor(
-            distributors: List<String>,
             testParameters: TestParameters,
             pushKey: String,
     ) {
-        unifiedPushHelper.showSelectDistributorDialog(context, distributors) { selection ->
+        unifiedPushHelper.showSelectDistributorDialog(context) { selection ->
             registerUnifiedPush(distributor = selection, testParameters, pushKey)
         }
     }

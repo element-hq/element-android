@@ -52,7 +52,7 @@ class UnifiedPushHelper @Inject constructor(
 
     // Called when the home activity starts
     // or when notifications are enabled
-    // TODO remove and replace by use case
+    // TODO remove
     fun register(
             activity: FragmentActivity,
             onDoneRunnable: Runnable? = null,
@@ -70,7 +70,7 @@ class UnifiedPushHelper @Inject constructor(
     // The registration is forced in 2 cases :
     // * in the settings
     // * in the troubleshoot list (doFix)
-    // TODO remove and replace by use case
+    // TODO remove
     fun forceRegister(
             activity: FragmentActivity,
             pushersManager: PushersManager,
@@ -132,6 +132,7 @@ class UnifiedPushHelper @Inject constructor(
         }
     }
 
+    // TODO remove
     // There is no case where this function is called
     // with a saved distributor and/or a pusher
     private fun openDistributorDialogInternal(
@@ -180,7 +181,6 @@ class UnifiedPushHelper @Inject constructor(
     @MainThread
     fun showSelectDistributorDialog(
             context: Context,
-            distributors: List<String>,
             onDistributorSelected: (String) -> Unit,
     ) {
         val internalDistributorName = stringProvider.getString(
@@ -191,6 +191,7 @@ class UnifiedPushHelper @Inject constructor(
                 }
         )
 
+        val distributors = UnifiedPush.getDistributors(context)
         val distributorsName = distributors.map {
             if (it == context.packageName) {
                 internalDistributorName

@@ -29,12 +29,12 @@ class RegisterUnifiedPushUseCase @Inject constructor(
 
     sealed interface RegisterUnifiedPushResult {
         object Success : RegisterUnifiedPushResult
-        data class NeedToAskUserForDistributor(val distributors: List<String>) : RegisterUnifiedPushResult
+        object NeedToAskUserForDistributor : RegisterUnifiedPushResult
     }
 
     // TODO add unit tests
     fun execute(distributor: String = ""): RegisterUnifiedPushResult {
-        if(distributor.isNotEmpty()) {
+        if (distributor.isNotEmpty()) {
             saveAndRegisterApp(distributor)
             return RegisterUnifiedPushResult.Success
         }
@@ -55,7 +55,7 @@ class RegisterUnifiedPushUseCase @Inject constructor(
             saveAndRegisterApp(distributors.first())
             RegisterUnifiedPushResult.Success
         } else {
-            RegisterUnifiedPushResult.NeedToAskUserForDistributor(distributors)
+            RegisterUnifiedPushResult.NeedToAskUserForDistributor
         }
     }
 

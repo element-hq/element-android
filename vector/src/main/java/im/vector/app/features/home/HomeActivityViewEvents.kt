@@ -39,5 +39,5 @@ sealed interface HomeActivityViewEvents : VectorViewEvents {
     data class MigrateThreads(val checkSession: Boolean) : HomeActivityViewEvents
     object StartRecoverySetupFlow : HomeActivityViewEvents
     data class ForceVerification(val sendRequest: Boolean) : HomeActivityViewEvents
-    data class AskUserForPushDistributor(val distributors: List<String>) : HomeActivityViewEvents
+    object AskUserForPushDistributor : HomeActivityViewEvents
 }

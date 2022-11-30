@@ -34,16 +34,16 @@ class EnableNotificationsForCurrentSessionUseCase @Inject constructor(
     sealed interface EnableNotificationsResult {
         object Success : EnableNotificationsResult
         object Failure : EnableNotificationsResult
-        data class NeedToAskUserForDistributor(val distributors: List<String>) : EnableNotificationsResult
+        object NeedToAskUserForDistributor : EnableNotificationsResult
     }
 
     // TODO update unit tests
     suspend fun execute(distributor: String = ""): EnableNotificationsResult {
         val pusherForCurrentSession = pushersManager.getPusherForCurrentSession()
         if (pusherForCurrentSession == null) {
-            when (val result = registerUnifiedPushUseCase.execute(distributor)) {
+            when (registerUnifiedPushUseCase.execute(distributor)) {
                 is RegisterUnifiedPushUseCase.RegisterUnifiedPushResult.NeedToAskUserForDistributor -> {
-                    return EnableNotificationsResult.NeedToAskUserForDistributor(result.distributors)
+                    return EnableNotificationsResult.NeedToAskUserForDistributor
                 }
                 RegisterUnifiedPushUseCase.RegisterUnifiedPushResult.Success -> {
                     ensureFcmTokenIsRetrievedUseCase.execute(pushersManager, registerPusher = true)

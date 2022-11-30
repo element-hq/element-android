@@ -19,8 +19,9 @@ package im.vector.app.features.settings.notifications
 import im.vector.app.core.platform.VectorViewEvents
 
 sealed interface VectorSettingsNotificationPreferenceViewEvent : VectorViewEvents {
-    object NotificationForDeviceEnabled : VectorSettingsNotificationPreferenceViewEvent
+    object NotificationsForDeviceEnabled : VectorSettingsNotificationPreferenceViewEvent
     object EnableNotificationForDeviceFailure : VectorSettingsNotificationPreferenceViewEvent
-    object NotificationForDeviceDisabled : VectorSettingsNotificationPreferenceViewEvent
-    data class AskUserForPushDistributor(val distributors: List<String>) : VectorSettingsNotificationPreferenceViewEvent
+    object NotificationsForDeviceDisabled : VectorSettingsNotificationPreferenceViewEvent
+    object AskUserForPushDistributor : VectorSettingsNotificationPreferenceViewEvent
+    object NotificationMethodChanged : VectorSettingsNotificationPreferenceViewEvent
 }

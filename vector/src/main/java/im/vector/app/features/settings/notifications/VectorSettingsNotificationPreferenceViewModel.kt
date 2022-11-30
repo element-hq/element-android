@@ -24,12 +24,22 @@ import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorDummyViewState
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.core.pushers.EnsureFcmTokenIsRetrievedUseCase
+import im.vector.app.core.pushers.PushersManager
+import im.vector.app.core.pushers.RegisterUnifiedPushUseCase
+import im.vector.app.core.pushers.UnregisterUnifiedPushUseCase
+import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.launch
 
 class VectorSettingsNotificationPreferenceViewModel @AssistedInject constructor(
         @Assisted initialState: VectorDummyViewState,
+        private val pushersManager: PushersManager,
+        private val vectorPreferences: VectorPreferences,
         private val enableNotificationsForCurrentSessionUseCase: EnableNotificationsForCurrentSessionUseCase,
         private val disableNotificationsForCurrentSessionUseCase: DisableNotificationsForCurrentSessionUseCase,
+        private val unregisterUnifiedPushUseCase: UnregisterUnifiedPushUseCase,
+        private val registerUnifiedPushUseCase: RegisterUnifiedPushUseCase,
+        private val ensureFcmTokenIsRetrievedUseCase: EnsureFcmTokenIsRetrievedUseCase,
 ) : VectorViewModel<VectorDummyViewState, VectorSettingsNotificationPreferenceViewAction, VectorSettingsNotificationPreferenceViewEvent>(initialState) {
 
     @AssistedFactory
@@ -51,27 +61,38 @@ class VectorSettingsNotificationPreferenceViewModel @AssistedInject constructor(
     private fun handleDisableNotificationsForDevice() {
         viewModelScope.launch {
             disableNotificationsForCurrentSessionUseCase.execute()
-            _viewEvents.post(VectorSettingsNotificationPreferenceViewEvent.NotificationForDeviceDisabled)
+            _viewEvents.post(VectorSettingsNotificationPreferenceViewEvent.NotificationsForDeviceDisabled)
         }
     }
 
     private fun handleEnableNotificationsForDevice(distributor: String) {
         viewModelScope.launch {
-            when (val result = enableNotificationsForCurrentSessionUseCase.execute(distributor)) {
+            when (enableNotificationsForCurrentSessionUseCase.execute(distributor)) {
                 EnableNotificationsForCurrentSessionUseCase.EnableNotificationsResult.Failure -> {
                     _viewEvents.post(VectorSettingsNotificationPreferenceViewEvent.EnableNotificationForDeviceFailure)
                 }
                 is EnableNotificationsForCurrentSessionUseCase.EnableNotificationsResult.NeedToAskUserForDistributor -> {
-                    _viewEvents.post(VectorSettingsNotificationPreferenceViewEvent.AskUserForPushDistributor(result.distributors))
+                    _viewEvents.post(VectorSettingsNotificationPreferenceViewEvent.AskUserForPushDistributor)
                 }
                 EnableNotificationsForCurrentSessionUseCase.EnableNotificationsResult.Success -> {
-                    _viewEvents.post(VectorSettingsNotificationPreferenceViewEvent.NotificationForDeviceEnabled)
+                    _viewEvents.post(VectorSettingsNotificationPreferenceViewEvent.NotificationsForDeviceEnabled)
                 }
             }
         }
     }
 
     private fun handleRegisterPushDistributor(distributor: String) {
-        handleEnableNotificationsForDevice(distributor)
+        viewModelScope.launch {
+            unregisterUnifiedPushUseCase.execute(pushersManager)
+            when (registerUnifiedPushUseCase.execute(distributor)) {
+                RegisterUnifiedPushUseCase.RegisterUnifiedPushResult.NeedToAskUserForDistributor -> {
+                    _viewEvents.post(VectorSettingsNotificationPreferenceViewEvent.AskUserForPushDistributor)
+                }
+                RegisterUnifiedPushUseCase.RegisterUnifiedPushResult.Success -> {
+                    ensureFcmTokenIsRetrievedUseCase.execute(pushersManager, registerPusher = vectorPreferences.areNotificationEnabledForDevice())
+                    _viewEvents.post(VectorSettingsNotificationPreferenceViewEvent.NotificationMethodChanged)
+                }
+            }
+        }
     }
 }

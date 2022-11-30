@@ -266,7 +266,7 @@ class HomeActivity :
                 HomeActivityViewEvents.ShowReleaseNotes -> handleShowReleaseNotes()
                 HomeActivityViewEvents.NotifyUserForThreadsMigration -> handleNotifyUserForThreadsMigration()
                 is HomeActivityViewEvents.MigrateThreads -> migrateThreadsIfNeeded(it.checkSession)
-                is HomeActivityViewEvents.AskUserForPushDistributor -> askUserToSelectPushDistributor(it.distributors)
+                is HomeActivityViewEvents.AskUserForPushDistributor -> askUserToSelectPushDistributor()
             }
         }
         homeActivityViewModel.onEach { renderState(it) }
@@ -279,8 +279,8 @@ class HomeActivity :
         homeActivityViewModel.handle(HomeActivityViewActions.ViewStarted)
     }
 
-    private fun askUserToSelectPushDistributor(distributors: List<String>) {
-        unifiedPushHelper.showSelectDistributorDialog(this, distributors) { selection ->
+    private fun askUserToSelectPushDistributor() {
+        unifiedPushHelper.showSelectDistributorDialog(this) { selection ->
             homeActivityViewModel.handle(HomeActivityViewActions.RegisterPushDistributor(selection))
         }
     }

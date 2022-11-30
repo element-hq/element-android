@@ -116,10 +116,11 @@ class VectorSettingsNotificationPreferenceFragment :
     private fun observeViewEvents() {
         viewModel.observeViewEvents {
             when (it) {
-                VectorSettingsNotificationPreferenceViewEvent.NotificationForDeviceEnabled -> onNotificationsForDeviceEnabled()
-                VectorSettingsNotificationPreferenceViewEvent.NotificationForDeviceDisabled -> onNotificationsForDeviceDisabled()
-                is VectorSettingsNotificationPreferenceViewEvent.AskUserForPushDistributor -> askUserToSelectPushDistributor(it.distributors)
+                VectorSettingsNotificationPreferenceViewEvent.NotificationsForDeviceEnabled -> onNotificationsForDeviceEnabled()
+                VectorSettingsNotificationPreferenceViewEvent.NotificationsForDeviceDisabled -> onNotificationsForDeviceDisabled()
+                is VectorSettingsNotificationPreferenceViewEvent.AskUserForPushDistributor -> askUserToSelectPushDistributor()
                 VectorSettingsNotificationPreferenceViewEvent.EnableNotificationForDeviceFailure -> displayErrorDialog(throwable = null)
+                VectorSettingsNotificationPreferenceViewEvent.NotificationMethodChanged -> onNotificationMethodChanged()
             }
         }
     }
@@ -194,14 +195,7 @@ class VectorSettingsNotificationPreferenceFragment :
             if (vectorFeatures.allowExternalUnifiedPushDistributors()) {
                 it.summary = unifiedPushHelper.getCurrentDistributorName()
                 it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                    // TODO show dialog to pick a distributor
-                    // TODO call unregister then register only when a new distributor has been selected => use UnifiedPushHelper method
-                    unifiedPushHelper.forceRegister(requireActivity(), pushersManager) {
-                        ensureFcmTokenIsRetrievedUseCase.execute(pushersManager, registerPusher = vectorPreferences.areNotificationEnabledForDevice())
-                        it.summary = unifiedPushHelper.getCurrentDistributorName()
-                        session.pushersService().refreshPushers()
-                        refreshBackgroundSyncPrefs()
-                    }
+                    askUserToSelectPushDistributor(withUnregister = true)
                     true
                 }
             } else {
@@ -235,11 +229,20 @@ class VectorSettingsNotificationPreferenceFragment :
         notificationPermissionManager.eventuallyRevokePermission(requireActivity())
     }
 
-    // TODO add an argument to know if unregister should be called
-    private fun askUserToSelectPushDistributor(distributors: List<String>) {
-        unifiedPushHelper.showSelectDistributorDialog(requireContext(), distributors) { selection ->
-            viewModel.handle(VectorSettingsNotificationPreferenceViewAction.RegisterPushDistributor(selection))
+    private fun askUserToSelectPushDistributor(withUnregister: Boolean = false) {
+        unifiedPushHelper.showSelectDistributorDialog(requireContext()) { selection ->
+            if (withUnregister) {
+                viewModel.handle(VectorSettingsNotificationPreferenceViewAction.RegisterPushDistributor(selection))
+            } else {
+                viewModel.handle(VectorSettingsNotificationPreferenceViewAction.EnableNotificationsForDevice(selection))
+            }
         }
+    }
+
+    private fun onNotificationMethodChanged() {
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_NOTIFICATION_METHOD_KEY)?.summary = unifiedPushHelper.getCurrentDistributorName()
+        session.pushersService().refreshPushers()
+        refreshBackgroundSyncPrefs()
     }
 
     private fun bindEmailNotifications() {
