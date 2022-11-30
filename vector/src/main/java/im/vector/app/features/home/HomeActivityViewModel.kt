@@ -128,7 +128,7 @@ class HomeActivityViewModel @AssistedInject constructor(
     }
 
     private fun registerUnifiedPushIfNeeded() {
-        if(vectorPreferences.areNotificationEnabledForDevice()) {
+        if (vectorPreferences.areNotificationEnabledForDevice()) {
             registerUnifiedPush(distributor = "")
         }
     }

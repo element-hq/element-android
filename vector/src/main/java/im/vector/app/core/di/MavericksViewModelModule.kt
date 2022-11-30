@@ -688,5 +688,7 @@ interface MavericksViewModelModule {
     @Binds
     @IntoMap
     @MavericksViewModelKey(VectorSettingsNotificationPreferenceViewModel::class)
-    fun vectorSettingsNotificationPreferenceViewModelFactory(factory: VectorSettingsNotificationPreferenceViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+    fun vectorSettingsNotificationPreferenceViewModelFactory(
+            factory: VectorSettingsNotificationPreferenceViewModel.Factory
+    ): MavericksAssistedViewModelFactory<*, *>
 }

@@ -16,7 +16,6 @@
 
 package im.vector.app.core.pushers
 
-import android.app.Activity
 import im.vector.app.core.di.ActiveSessionHolder
 
 interface FcmHelper {
