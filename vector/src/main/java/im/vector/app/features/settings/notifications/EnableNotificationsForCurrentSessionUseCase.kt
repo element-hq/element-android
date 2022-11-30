@@ -16,52 +16,45 @@
 
 package im.vector.app.features.settings.notifications
 
-import androidx.fragment.app.FragmentActivity
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.pushers.EnsureFcmTokenIsRetrievedUseCase
-import im.vector.app.core.pushers.FcmHelper
 import im.vector.app.core.pushers.PushersManager
-import im.vector.app.core.pushers.UnifiedPushHelper
-import im.vector.app.features.settings.devices.v2.notification.CheckIfCanTogglePushNotificationsViaPusherUseCase
+import im.vector.app.core.pushers.RegisterUnifiedPushUseCase
 import im.vector.app.features.settings.devices.v2.notification.TogglePushNotificationUseCase
 import javax.inject.Inject
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 
 class EnableNotificationsForCurrentSessionUseCase @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
-        private val unifiedPushHelper: UnifiedPushHelper,
         private val pushersManager: PushersManager,
-        private val checkIfCanTogglePushNotificationsViaPusherUseCase: CheckIfCanTogglePushNotificationsViaPusherUseCase,
         private val togglePushNotificationUseCase: TogglePushNotificationUseCase,
+        private val registerUnifiedPushUseCase: RegisterUnifiedPushUseCase,
         private val ensureFcmTokenIsRetrievedUseCase: EnsureFcmTokenIsRetrievedUseCase,
 ) {
 
-    // TODO update unit tests
-    suspend fun execute(fragmentActivity: FragmentActivity) {
-        val pusherForCurrentSession = pushersManager.getPusherForCurrentSession()
-        if (pusherForCurrentSession == null) {
-            registerPusher(fragmentActivity)
-        }
-
-        val session = activeSessionHolder.getSafeActiveSession() ?: return
-        if (checkIfCanTogglePushNotificationsViaPusherUseCase.execute(session)) {
-            val deviceId = session.sessionParams.deviceId ?: return
-            togglePushNotificationUseCase.execute(deviceId, enabled = true)
-        }
+    sealed interface EnableNotificationsResult {
+        object Success : EnableNotificationsResult
+        object Failure : EnableNotificationsResult
+        data class NeedToAskUserForDistributor(val distributors: List<String>) : EnableNotificationsResult
     }
 
-    private suspend fun registerPusher(fragmentActivity: FragmentActivity) {
-        suspendCoroutine { continuation ->
-            try {
-                unifiedPushHelper.register(fragmentActivity) {
-                    ensureFcmTokenIsRetrievedUseCase.execute(pushersManager, registerPusher = true)
-                    continuation.resume(Unit)
+    // TODO update unit tests
+    suspend fun execute(distributor: String = ""): EnableNotificationsResult {
+        val pusherForCurrentSession = pushersManager.getPusherForCurrentSession()
+        if (pusherForCurrentSession == null) {
+            when (val result = registerUnifiedPushUseCase.execute(distributor)) {
+                is RegisterUnifiedPushUseCase.RegisterUnifiedPushResult.NeedToAskUserForDistributor -> {
+                    return EnableNotificationsResult.NeedToAskUserForDistributor(result.distributors)
                 }
-            } catch (error: Exception) {
-                continuation.resumeWithException(error)
+                RegisterUnifiedPushUseCase.RegisterUnifiedPushResult.Success -> {
+                    ensureFcmTokenIsRetrievedUseCase.execute(pushersManager, registerPusher = true)
+                }
             }
         }
+
+        val session = activeSessionHolder.getSafeActiveSession() ?: return EnableNotificationsResult.Failure
+        val deviceId = session.sessionParams.deviceId ?: return EnableNotificationsResult.Failure
+        togglePushNotificationUseCase.execute(deviceId, enabled = true)
+
+        return EnableNotificationsResult.Success
     }
 }
