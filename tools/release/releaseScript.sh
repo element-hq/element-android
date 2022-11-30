@@ -77,7 +77,7 @@ fi
 cp ./vector-app/build.gradle ./vector-app/build.gradle.bak
 sed "s/ext.versionMajor = .*/ext.versionMajor = ${versionMajor}/" ./vector-app/build.gradle.bak > ./vector-app/build.gradle
 sed "s/ext.versionMinor = .*/ext.versionMinor = ${versionMinor}/" ./vector-app/build.gradle     > ./vector-app/build.gradle.bak
-sed "s/ext.versionPatch = .*/ext.versionPatch = ${patchVersion}/" ./vector-app/build.gradle.bak > ./vector-app/build.gradle
+sed "s/ext.versionPatch = .*/ext.versionPatch = ${versionPatch}/" ./vector-app/build.gradle.bak > ./vector-app/build.gradle
 rm ./vector-app/build.gradle.bak
 cp ./matrix-sdk-android/build.gradle ./matrix-sdk-android/build.gradle.bak
 sed "s/\"SDK_VERSION\", .*$/\"SDK_VERSION\", \"\\\\\"${version}\\\\\"\"/" ./matrix-sdk-android/build.gradle.bak > ./matrix-sdk-android/build.gradle
@@ -184,7 +184,6 @@ git checkout develop
 # Set next version
 printf "\n================================================================================\n"
 printf "Setting next version on file './vector-app/build.gradle'...\n"
-nextPatchVersion=$((versionPatch + 2))
 cp ./vector-app/build.gradle ./vector-app/build.gradle.bak
 sed "s/ext.versionPatch = .*/ext.versionPatch = ${nextPatchVersion}/" ./vector-app/build.gradle.bak > ./vector-app/build.gradle
 rm ./vector-app/build.gradle.bak
