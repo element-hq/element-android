@@ -16,26 +16,28 @@
 
 package im.vector.app.test.fakes
 
-import im.vector.app.core.pushers.PushersManager
-import io.mockk.coJustRun
-import io.mockk.coVerify
-import io.mockk.every
+import im.vector.app.core.pushers.UnifiedPushStore
+import io.mockk.justRun
 import io.mockk.mockk
-import org.matrix.android.sdk.api.session.pushers.Pusher
+import io.mockk.verify
 
-class FakePushersManager {
+class FakeUnifiedPushStore {
 
-    val instance = mockk<PushersManager>()
+    val instance = mockk<UnifiedPushStore>()
 
-    fun givenGetPusherForCurrentSessionReturns(pusher: Pusher?) {
-        every { instance.getPusherForCurrentSession() } returns pusher
+    fun givenStoreUpEndpoint(endpoint: String?) {
+        justRun { instance.storeUpEndpoint(endpoint) }
     }
 
-    fun givenUnregisterPusher(pushKey: String) {
-        coJustRun { instance.unregisterPusher(pushKey) }
+    fun verifyStoreUpEndpoint(endpoint: String?) {
+        verify { instance.storeUpEndpoint(endpoint) }
     }
 
-    fun verifyUnregisterPusher(pushKey: String) {
-        coVerify { instance.unregisterPusher(pushKey) }
+    fun givenStorePushGateway(gateway: String?) {
+        justRun { instance.storePushGateway(gateway) }
+    }
+
+    fun verifyStorePushGateway(gateway: String?) {
+        verify { instance.storePushGateway(gateway) }
     }
 }

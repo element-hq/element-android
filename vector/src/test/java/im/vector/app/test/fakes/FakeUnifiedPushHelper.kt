@@ -27,4 +27,8 @@ class FakeUnifiedPushHelper {
     fun givenIsEmbeddedDistributorReturns(isEmbedded: Boolean) {
         every { instance.isEmbeddedDistributor() } returns isEmbedded
     }
+
+    fun givenGetEndpointOrTokenReturns(endpoint: String?) {
+        every { instance.getEndpointOrToken() } returns endpoint
+    }
 }

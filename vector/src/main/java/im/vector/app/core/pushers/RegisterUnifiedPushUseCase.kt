@@ -32,7 +32,6 @@ class RegisterUnifiedPushUseCase @Inject constructor(
         object NeedToAskUserForDistributor : RegisterUnifiedPushResult
     }
 
-    // TODO add unit tests
     fun execute(distributor: String = ""): RegisterUnifiedPushResult {
         if (distributor.isNotEmpty()) {
             saveAndRegisterApp(distributor)

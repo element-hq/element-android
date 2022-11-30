@@ -31,7 +31,6 @@ class UnregisterUnifiedPushUseCase @Inject constructor(
         private val unifiedPushHelper: UnifiedPushHelper,
 ) {
 
-    // TODO add unit tests
     suspend fun execute(pushersManager: PushersManager?) {
         val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME
         vectorPreferences.setFdroidSyncBackgroundMode(mode)

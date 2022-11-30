@@ -16,6 +16,7 @@
 
 package im.vector.app.test.fakes
 
+import im.vector.app.features.settings.BackgroundSyncMode
 import im.vector.app.features.settings.VectorPreferences
 import io.mockk.every
 import io.mockk.justRun
@@ -59,5 +60,13 @@ class FakeVectorPreferences {
 
     fun givenUnverifiedSessionsAlertLastShownMillis(lastShownMillis: Long) {
         every { instance.getUnverifiedSessionsAlertLastShownMillis(any()) } returns lastShownMillis
+    }
+
+    fun givenSetFdroidSyncBackgroundMode(mode: BackgroundSyncMode) {
+        justRun { instance.setFdroidSyncBackgroundMode(mode) }
+    }
+
+    fun verifySetFdroidSyncBackgroundMode(mode: BackgroundSyncMode) {
+        verify { instance.setFdroidSyncBackgroundMode(mode) }
     }
 }
