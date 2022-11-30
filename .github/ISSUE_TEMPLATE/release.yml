@@ -10,7 +10,6 @@ body:
     id: checklist
     attributes:
       label: Release checklist
-      description: For the template example, we are releasing the version 1.2.3. Replace 1.2.3 with the version in the issue body.
       placeholder: |
         If you are reading this, you have deleted the content of the release template: undo the deletion or start again.
       value: |

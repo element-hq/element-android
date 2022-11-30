@@ -38,6 +38,17 @@ if [[ ! -f ${releaseScriptFullPath} ]]; then
   exit 1
 fi
 
+# Check if git flow is enabled
+git flow config >/dev/null 2>&1
+if [[ $? == 0 ]]
+then
+    printf "Git flow is initialized"
+else
+    printf "Git flow is not initialized. Initializing...\n"
+    # All default value, just set 'v' for tag prefix
+    git flow init -d -t 'v'
+fi
+
 # Guessing version to propose a default version
 versionMajorCandidate=`grep "ext.versionMajor" ./vector-app/build.gradle | cut  -d " " -f3`
 versionMinorCandidate=`grep "ext.versionMinor" ./vector-app/build.gradle | cut  -d " " -f3`
@@ -77,7 +88,7 @@ fi
 cp ./vector-app/build.gradle ./vector-app/build.gradle.bak
 sed "s/ext.versionMajor = .*/ext.versionMajor = ${versionMajor}/" ./vector-app/build.gradle.bak > ./vector-app/build.gradle
 sed "s/ext.versionMinor = .*/ext.versionMinor = ${versionMinor}/" ./vector-app/build.gradle     > ./vector-app/build.gradle.bak
-sed "s/ext.versionPatch = .*/ext.versionPatch = ${patchVersion}/" ./vector-app/build.gradle.bak > ./vector-app/build.gradle
+sed "s/ext.versionPatch = .*/ext.versionPatch = ${versionPatch}/" ./vector-app/build.gradle.bak > ./vector-app/build.gradle
 rm ./vector-app/build.gradle.bak
 cp ./matrix-sdk-android/build.gradle ./matrix-sdk-android/build.gradle.bak
 sed "s/\"SDK_VERSION\", .*$/\"SDK_VERSION\", \"\\\\\"${version}\\\\\"\"/" ./matrix-sdk-android/build.gradle.bak > ./matrix-sdk-android/build.gradle
@@ -155,6 +166,7 @@ fastlanePathFile="./fastlane/metadata/android/en-US/changelogs/${fastlaneFile}"
 printf "Main changes in this version: TODO.\nFull changelog: https://github.com/vector-im/element-android/releases" > ${fastlanePathFile}
 
 read -p "I have created the file ${fastlanePathFile}, please edit it and press enter when it's done."
+git add ${fastlanePathFile}
 git commit -a -m "Adding fastlane file for version ${version}"
 
 printf "\n================================================================================\n"
@@ -184,7 +196,6 @@ git checkout develop
 # Set next version
 printf "\n================================================================================\n"
 printf "Setting next version on file './vector-app/build.gradle'...\n"
-nextPatchVersion=$((versionPatch + 2))
 cp ./vector-app/build.gradle ./vector-app/build.gradle.bak
 sed "s/ext.versionPatch = .*/ext.versionPatch = ${nextPatchVersion}/" ./vector-app/build.gradle.bak > ./vector-app/build.gradle
 rm ./vector-app/build.gradle.bak
