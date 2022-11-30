@@ -166,6 +166,7 @@ fastlanePathFile="./fastlane/metadata/android/en-US/changelogs/${fastlaneFile}"
 printf "Main changes in this version: TODO.\nFull changelog: https://github.com/vector-im/element-android/releases" > ${fastlanePathFile}
 
 read -p "I have created the file ${fastlanePathFile}, please edit it and press enter when it's done."
+git add ${fastlanePathFile}
 git commit -a -m "Adding fastlane file for version ${version}"
 
 printf "\n================================================================================\n"
