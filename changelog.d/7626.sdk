@@ -1,2 +1,0 @@
-Sync Filter now taking in account homeserver capabilities to not pass unsupported parameters.
-Sync Filter is now configured by providing SyncFilterBuilder class instance, instead of Filter to identify Filter changes related to homeserver capabilities
