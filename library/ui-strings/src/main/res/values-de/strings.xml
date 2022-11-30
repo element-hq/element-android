@@ -2232,13 +2232,13 @@
         <item quantity="other">%1$s weitere Optionen benötigt</item>
     </plurals>
     <string name="create_poll_empty_question_error">Frage darf nicht leer sein</string>
-    <string name="create_poll_button">ABSTIMMUNG ERSTELLEN</string>
+    <string name="create_poll_button">Umfrage erstellen</string>
     <string name="create_poll_add_option">NEUE OPTION</string>
     <string name="create_poll_options_hint">Option %1$d</string>
     <string name="create_poll_options_title">Optionen hinzufügen</string>
     <string name="create_poll_question_hint">Frage oder Thema</string>
     <string name="create_poll_question_title">Abstimmungsthema oder Frage</string>
-    <string name="create_poll_title">Abstimmung erstellen</string>
+    <string name="create_poll_title">Umfrage erstellen</string>
     <string name="attachment_type_poll">Umfrage</string>
     <string name="open_discovery_settings">Auffindungseinstellungen öffnen</string>
     <string name="shortcut_disabled_reason_sign_out">Sitzung abgemeldet!</string>
@@ -2306,21 +2306,21 @@
     <string name="legals_identity_server_title">Richtlinie deines Identitäts-Servers</string>
     <string name="legals_home_server_title">Richtlinie deines Heim-Servers</string>
     <string name="legals_application_title">Richtlinie von ${app_name}</string>
-    <string name="tooltip_attachment_poll">Abstimmung erstellen</string>
+    <string name="tooltip_attachment_poll">Umfrage erstellen</string>
     <string name="tooltip_attachment_contact">Kontakte öffnen</string>
     <string name="tooltip_attachment_sticker">Sticker verschicken</string>
     <string name="tooltip_attachment_file">Datei hochladen</string>
     <string name="tooltip_attachment_gallery">Verschicke Fotos und Videos</string>
     <string name="tooltip_attachment_photo">Kamera öffnen</string>
-    <string name="delete_poll_dialog_content">Willst du diese Abstimmung wirklich entfernen\? Du wirst sie nicht wiederherstellen können.</string>
-    <string name="delete_poll_dialog_title">Abstimmung entfernen</string>
-    <string name="poll_end_room_list_preview">Abstimmung beendet</string>
+    <string name="delete_poll_dialog_content">Willst du diese Umfrage wirklich entfernen\? Du wirst sie nicht wiederherstellen können.</string>
+    <string name="delete_poll_dialog_title">Umfrage entfernen</string>
+    <string name="poll_end_room_list_preview">Umfrage beendet</string>
     <string name="poll_response_room_list_preview">Stimme abgegeben</string>
-    <string name="end_poll_confirmation_approve_button">Abstimmung beenden</string>
+    <string name="end_poll_confirmation_approve_button">Umfrage beenden</string>
     <string name="end_poll_confirmation_description">Dies verhindert, dass andere Personen abstimmen können, und zeigt die Endergebnisse der Umfrage an.</string>
-    <string name="end_poll_confirmation_title">Diese Abstimmung beenden\?</string>
+    <string name="end_poll_confirmation_title">Diese Umfrage beenden\?</string>
     <string name="a11y_poll_winner_option">Gewinneroption</string>
-    <string name="poll_end_action">Abstimmung beenden</string>
+    <string name="poll_end_action">Umfrage beenden</string>
     <plurals name="poll_total_vote_count_after_ended">
         <item quantity="one">Endgültiges Ergebnis basiert auf %1$d Stimme</item>
         <item quantity="other">Endgültiges Ergebnis basiert auf %1$d Stimmen</item>
@@ -2333,11 +2333,11 @@
     <string name="location_not_available_dialog_title">${app_name} konnte nicht auf deinen Standort zugreifen</string>
     <string name="location_activity_title_preview">Standort</string>
     <string name="closed_poll_option_description">Die Ergebnisse werden erst sichtbar, sobald du die Umfrage beendest</string>
-    <string name="closed_poll_option_title">Abgeschlossene Abstimmung</string>
+    <string name="closed_poll_option_title">Versteckte Umfrage</string>
     <string name="open_poll_option_description">Abstimmende können die Ergebnisse nach Stimmabgabe sehen</string>
-    <string name="open_poll_option_title">Laufende Abstimmung</string>
-    <string name="poll_type_title">Abstimmungsart</string>
-    <string name="edit_poll_title">Abstimmung bearbeiten</string>
+    <string name="open_poll_option_title">Offene Umfrage</string>
+    <string name="poll_type_title">Umfragetyp</string>
+    <string name="edit_poll_title">Umfrage bearbeiten</string>
     <string name="poll_no_votes_cast">Keine Stimmen abgegeben</string>
     <string name="login_splash_create_account">Konto erstellen</string>
     <string name="ftue_auth_carousel_workplace_title">Kommunikation für dein Team.</string>
@@ -2527,7 +2527,7 @@
     <string name="ftue_auth_terms_title">Server-Richtlinien</string>
     <string name="ftue_auth_email_verification_subtitle">Folge den Anweisungen, die an %s gesendet wurden</string>
     <string name="ftue_auth_email_verification_title">E-Mail bestätigen</string>
-    <string name="poll_undisclosed_not_ended">Ergebnisse werden nach Abschluss der Abstimmung sichtbar sein</string>
+    <string name="poll_undisclosed_not_ended">Ergebnisse werden nach Abschluss der Umfrage sichtbar sein</string>
     <string name="ftue_auth_reset_password_breaker_title">Prüfe deine E-Mails.</string>
     <string name="ftue_auth_reset_password">Passwort zurücksetzen</string>
     <string name="ftue_auth_new_password_subtitle">Gib mindestens 8 Zeichen ein.</string>
@@ -2843,4 +2843,26 @@
     <string name="error_voice_broadcast_blocked_by_someone_else_message">Jemand anderes nimmt bereits eine Sprachübertragung auf. Warte auf das Ende der Übertragung, bevor du eine neue startest.</string>
     <string name="a11y_voice_broadcast_fast_forward">30 Sekunden vorspulen</string>
     <string name="a11y_voice_broadcast_fast_backward">30 Sekunden zurückspulen</string>
+    <string name="device_manager_learn_more_sessions_verified_description">Auf verifizierte Sitzungen kannst du überall mit deinem Konto zugreifen, wenn du deine Passphrase eingegeben oder Element mit einer anderen Sitzung verifiziert hast.
+\n
+\nDies bedeutet, dass du alle Schlüssel zum Entsperren deiner verschlüsselten Nachrichten hast und anderen bestätigst, dieser Sitzung zu vertrauen.</string>
+    <plurals name="device_manager_other_sessions_multi_signout_all">
+        <item quantity="one">Von %1$d Sitzung abmelden</item>
+        <item quantity="other">Von %1$d Sitzungen abmelden</item>
+    </plurals>
+    <string name="device_manager_other_sessions_multi_signout_selection">Abmelden</string>
+    <string name="voice_broadcast_recording_time_left">%1$s übrig</string>
+    <string name="quoting">Zitieren</string>
+    <string name="editing">Bearbeiten</string>
+    <string name="message_reply_to_sender_created_poll">erstellte eine Umfrage.</string>
+    <string name="message_reply_to_sender_sent_sticker">sandte einen Sticker.</string>
+    <string name="message_reply_to_sender_sent_video">sandte ein Video.</string>
+    <string name="message_reply_to_sender_sent_image">sandte ein Bild.</string>
+    <string name="message_reply_to_sender_sent_voice_message">sandte eine Sprachnachricht.</string>
+    <string name="message_reply_to_sender_sent_audio_file">sandte eine Audiodatei.</string>
+    <string name="message_reply_to_sender_sent_file">sandte eine Datei.</string>
+    <string name="message_reply_to_prefix">Als Antwort auf</string>
+    <string name="replying_to">%s antworten</string>
+    <string name="device_manager_other_sessions_hide_ip_address">IP-Adresse ausblenden</string>
+    <string name="device_manager_other_sessions_show_ip_address">IP-Adresse anzeigen</string>
 </resources>

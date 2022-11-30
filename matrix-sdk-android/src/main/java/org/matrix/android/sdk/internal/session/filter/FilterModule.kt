@@ -44,4 +44,7 @@ internal abstract class FilterModule {
 
     @Binds
     abstract fun bindSaveFilterTask(task: DefaultSaveFilterTask): SaveFilterTask
+
+    @Binds
+    abstract fun bindGetCurrentFilterTask(task: DefaultGetCurrentFilterTask): GetCurrentFilterTask
 }

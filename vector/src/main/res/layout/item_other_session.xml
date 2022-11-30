@@ -13,7 +13,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/bg_other_session"
-        app:layout_constraintBottom_toBottomOf="@id/otherSessionVerificationStatusImageView"
+        app:layout_constraintBottom_toBottomOf="@id/otherSessionSeparator"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -53,11 +53,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
         android:ellipsize="end"
         android:lines="1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/otherSessionDeviceTypeImageView"
-        app:layout_constraintTop_toTopOf="@id/otherSessionDeviceTypeImageView"
+        app:layout_constraintTop_toTopOf="@id/otherSessionItemBackground"
         tools:text="Element Mobile: Android" />
 
     <TextView
@@ -67,19 +68,31 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:drawablePadding="8dp"
-        app:layout_constraintBottom_toBottomOf="@id/otherSessionDeviceTypeImageView"
         app:layout_constraintEnd_toEndOf="@id/otherSessionNameTextView"
         app:layout_constraintStart_toStartOf="@id/otherSessionNameTextView"
         app:layout_constraintTop_toBottomOf="@id/otherSessionNameTextView"
         tools:text="@string/device_manager_verification_status_verified" />
 
+    <TextView
+        android:id="@+id/otherSessionIpAddressTextView"
+        style="@style/TextAppearance.Vector.Body.DevicesManagement"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:drawablePadding="8dp"
+        app:layout_constraintEnd_toEndOf="@id/otherSessionNameTextView"
+        app:layout_constraintStart_toStartOf="@id/otherSessionNameTextView"
+        app:layout_constraintTop_toBottomOf="@id/otherSessionDescriptionTextView"
+        tools:text="0.0.0.0" />
+
     <View
+        android:id="@+id/otherSessionSeparator"
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginTop="8dp"
         android:background="?vctr_content_quinary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/otherSessionNameTextView"
-        app:layout_constraintTop_toBottomOf="@id/otherSessionItemBackground" />
+        app:layout_constraintTop_toBottomOf="@id/otherSessionIpAddressTextView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

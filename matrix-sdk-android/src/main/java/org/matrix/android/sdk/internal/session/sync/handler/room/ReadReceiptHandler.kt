@@ -33,10 +33,11 @@ import javax.inject.Inject
 // value : dict key $UserId
 //              value dict key ts
 //                    dict value ts value
-internal typealias ReadReceiptContent = Map<String, Map<String, Map<String, Map<String, Double>>>>
+internal typealias ReadReceiptContent = Map<String, Map<String, Map<String, Map<String, Any>>>>
 
 private const val READ_KEY = "m.read"
 private const val TIMESTAMP_KEY = "ts"
+private const val THREAD_ID_KEY = "thread_id"
 
 internal class ReadReceiptHandler @Inject constructor(
         private val roomSyncEphemeralTemporaryStore: RoomSyncEphemeralTemporaryStore
@@ -47,14 +48,19 @@ internal class ReadReceiptHandler @Inject constructor(
         fun createContent(
                 userId: String,
                 eventId: String,
+                threadId: String?,
                 currentTimeMillis: Long
         ): ReadReceiptContent {
+            val userReadReceipt = mutableMapOf<String, Any>(
+                    TIMESTAMP_KEY to currentTimeMillis.toDouble(),
+            )
+            threadId?.let {
+                userReadReceipt.put(THREAD_ID_KEY, threadId)
+            }
             return mapOf(
                     eventId to mapOf(
                             READ_KEY to mapOf(
-                                    userId to mapOf(
-                                            TIMESTAMP_KEY to currentTimeMillis.toDouble()
-                                    )
+                                    userId to userReadReceipt
                             )
                     )
             )
@@ -98,8 +104,9 @@ internal class ReadReceiptHandler @Inject constructor(
             val readReceiptsSummary = ReadReceiptsSummaryEntity(eventId = eventId, roomId = roomId)
 
             for ((userId, paramsDict) in userIdsDict) {
-                val ts = paramsDict[TIMESTAMP_KEY] ?: 0.0
-                val receiptEntity = ReadReceiptEntity.createUnmanaged(roomId, eventId, userId, ts)
+                val ts = paramsDict[TIMESTAMP_KEY] as? Double ?: 0.0
+                val threadId = paramsDict[THREAD_ID_KEY] as String?
+                val receiptEntity = ReadReceiptEntity.createUnmanaged(roomId, eventId, userId, threadId, ts)
                 readReceiptsSummary.readReceipts.add(receiptEntity)
             }
             readReceiptSummaries.add(readReceiptsSummary)
@@ -115,7 +122,7 @@ internal class ReadReceiptHandler @Inject constructor(
     ) {
         // First check if we have data from init sync to handle
         getContentFromInitSync(roomId)?.let {
-            Timber.w("INIT_SYNC Insert during incremental sync RR for room $roomId")
+            Timber.d("INIT_SYNC Insert during incremental sync RR for room $roomId")
             doIncrementalSyncStrategy(realm, roomId, it)
             aggregator?.ephemeralFilesToDelete?.add(roomId)
         }
@@ -132,8 +139,9 @@ internal class ReadReceiptHandler @Inject constructor(
                     }
 
             for ((userId, paramsDict) in userIdsDict) {
-                val ts = paramsDict[TIMESTAMP_KEY] ?: 0.0
-                val receiptEntity = ReadReceiptEntity.getOrCreate(realm, roomId, userId)
+                val ts = paramsDict[TIMESTAMP_KEY] as? Double ?: 0.0
+                val threadId = paramsDict[THREAD_ID_KEY] as String?
+                val receiptEntity = ReadReceiptEntity.getOrCreate(realm, roomId, userId, threadId)
                 // ensure new ts is superior to the previous one
                 if (ts > receiptEntity.originServerTs) {
                     ReadReceiptsSummaryEntity.where(realm, receiptEntity.eventId).findFirst()?.also {

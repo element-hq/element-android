@@ -25,4 +25,5 @@ data class SessionInfoViewState(
         val isDetailsButtonVisible: Boolean = true,
         val isLearnMoreLinkVisible: Boolean = false,
         val isLastSeenDetailsVisible: Boolean = false,
+        val isShowingIpAddress: Boolean = false,
 )

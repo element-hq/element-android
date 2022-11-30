@@ -31,11 +31,13 @@ import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLay
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationState
+import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.getMsgType
 import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
 import org.matrix.android.sdk.api.session.events.model.isSticker
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.events.model.toValidDecryptedEvent
 import org.matrix.android.sdk.api.session.room.model.ReferencesAggregatedContent
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
@@ -72,8 +74,8 @@ class MessageInformationDataFactory @Inject constructor(
                 prevDisplayableEvent?.root?.localDateTime()?.toLocalDate() != date.toLocalDate()
 
         val time = dateFormatter.format(event.root.originServerTs, DateFormatKind.MESSAGE_SIMPLE)
-        val e2eDecoration = getE2EDecoration(roomSummary, event)
-
+        val e2eDecoration = getE2EDecoration(roomSummary, params.lastEdit ?: event.root)
+        val senderId = getSenderId(event)
         // SendState Decoration
         val sendStateDecoration = if (isSentByMe) {
             getSendStateDecoration(
@@ -89,7 +91,7 @@ class MessageInformationDataFactory @Inject constructor(
 
         return MessageInformationData(
                 eventId = eventId,
-                senderId = event.root.senderId ?: "",
+                senderId = senderId,
                 sendState = event.root.sendState,
                 time = time,
                 ageLocalTS = event.root.ageLocalTs,
@@ -131,6 +133,14 @@ class MessageInformationDataFactory @Inject constructor(
         )
     }
 
+    private fun getSenderId(event: TimelineEvent) = if (event.isEncrypted()) {
+        event.root.toValidDecryptedEvent()?.let {
+            session.cryptoService().deviceWithIdentityKey(it.cryptoSenderKey, it.algorithm)?.userId
+        } ?: event.root.senderId.orEmpty()
+    } else {
+        event.root.senderId.orEmpty()
+    }
+
     private fun getSendStateDecoration(
             event: TimelineEvent,
             lastSentEventWithoutReadReceipts: String?,
@@ -148,34 +158,34 @@ class MessageInformationDataFactory @Inject constructor(
         }
     }
 
-    private fun getE2EDecoration(roomSummary: RoomSummary?, event: TimelineEvent): E2EDecoration {
+    private fun getE2EDecoration(roomSummary: RoomSummary?, event: Event): E2EDecoration {
         if (roomSummary?.isEncrypted != true) {
             // No decoration for clear room
             // Questionable? what if the event is E2E?
             return E2EDecoration.NONE
         }
-        if (event.root.sendState != SendState.SYNCED) {
+        if (event.sendState != SendState.SYNCED) {
             // we don't display e2e decoration if event not synced back
             return E2EDecoration.NONE
         }
         val userCrossSigningInfo = session.cryptoService()
                 .crossSigningService()
-                .getUserCrossSigningKeys(event.root.senderId.orEmpty())
+                .getUserCrossSigningKeys(event.senderId.orEmpty())
 
         if (userCrossSigningInfo?.isTrusted() == true) {
             return if (event.isEncrypted()) {
                 // Do not decorate failed to decrypt, or redaction (we lost sender device info)
-                if (event.root.getClearType() == EventType.ENCRYPTED || event.root.isRedacted()) {
+                if (event.getClearType() == EventType.ENCRYPTED || event.isRedacted()) {
                     E2EDecoration.NONE
                 } else {
-                    val sendingDevice = event.root.getSenderKey()
+                    val sendingDevice = event.getSenderKey()
                             ?.let {
                                 session.cryptoService().deviceWithIdentityKey(
                                         it,
-                                        event.root.content?.get("algorithm") as? String ?: ""
+                                        event.content?.get("algorithm") as? String ?: ""
                                 )
                             }
-                    if (event.root.mxDecryptionResult?.isSafe == false) {
+                    if (event.mxDecryptionResult?.isSafe == false) {
                         E2EDecoration.WARN_UNSAFE_KEY
                     } else {
                         when {
@@ -202,8 +212,8 @@ class MessageInformationDataFactory @Inject constructor(
         } else {
             return if (!event.isEncrypted()) {
                 e2EDecorationForClearEventInE2ERoom(event, roomSummary)
-            } else if (event.root.mxDecryptionResult != null) {
-                if (event.root.mxDecryptionResult?.isSafe == true) {
+            } else if (event.mxDecryptionResult != null) {
+                if (event.mxDecryptionResult?.isSafe == true) {
                     E2EDecoration.NONE
                 } else {
                     E2EDecoration.WARN_UNSAFE_KEY
@@ -214,13 +224,13 @@ class MessageInformationDataFactory @Inject constructor(
         }
     }
 
-    private fun e2EDecorationForClearEventInE2ERoom(event: TimelineEvent, roomSummary: RoomSummary) =
-            if (event.root.isStateEvent()) {
+    private fun e2EDecorationForClearEventInE2ERoom(event: Event, roomSummary: RoomSummary) =
+            if (event.isStateEvent()) {
                 // Do not warn for state event, they are always in clear
                 E2EDecoration.NONE
             } else {
                 val ts = roomSummary.encryptionEventTs ?: 0
-                val eventTs = event.root.originServerTs ?: 0
+                val eventTs = event.originServerTs ?: 0
                 // If event is in clear after the room enabled encryption we should warn
                 if (eventTs > ts) E2EDecoration.WARN_IN_CLEAR else E2EDecoration.NONE
             }

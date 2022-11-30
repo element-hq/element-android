@@ -25,7 +25,7 @@ class VersionProvider @Inject constructor(
         private val buildMeta: BuildMeta,
 ) {
 
-    fun getVersion(longFormat: Boolean, useBuildNumber: Boolean): String {
+    fun getVersion(longFormat: Boolean): String {
         var result = "${buildMeta.versionName} [${versionCodeProvider.getVersionCode()}]"
 
         var flavor = buildMeta.flavorShortDescription
@@ -34,19 +34,10 @@ class VersionProvider @Inject constructor(
             flavor += "-"
         }
 
-        var gitVersion = buildMeta.gitRevision
+        val gitVersion = buildMeta.gitRevision
         val gitRevisionDate = buildMeta.gitRevisionDate
-        val buildNumber = buildMeta.buildNumber
 
-        var useLongFormat = longFormat
-
-        if (useBuildNumber && buildNumber != "0") {
-            // It's a build from CI
-            gitVersion = "b$buildNumber"
-            useLongFormat = false
-        }
-
-        result += if (useLongFormat) {
+        result += if (longFormat) {
             " ($flavor$gitVersion-$gitRevisionDate)"
         } else {
             " ($flavor$gitVersion)"

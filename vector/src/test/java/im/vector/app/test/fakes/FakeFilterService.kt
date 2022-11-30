@@ -16,20 +16,21 @@
 
 package im.vector.app.test.fakes
 
-import io.mockk.every
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
-import io.mockk.verify
 import org.matrix.android.sdk.api.session.sync.FilterService
+import org.matrix.android.sdk.api.session.sync.filter.SyncFilterBuilder
 
 class FakeFilterService : FilterService by mockk() {
 
     fun givenSetFilterSucceeds() {
-        every { setFilter(any()) } just runs
+        coEvery { setSyncFilter(any()) } just runs
     }
 
-    fun verifySetFilter(filterPreset: FilterService.FilterPreset) {
-        verify { setFilter(filterPreset) }
+    fun verifySetSyncFilter(filterBuilder: SyncFilterBuilder) {
+        coVerify { setSyncFilter(filterBuilder) }
     }
 }

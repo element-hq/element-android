@@ -40,7 +40,7 @@ internal class LiveLocationShareRedactionEventProcessor @Inject constructor() : 
         return eventType == EventType.REDACTION && insertType != EventInsertType.LOCAL_ECHO
     }
 
-    override suspend fun process(realm: Realm, event: Event) {
+    override fun process(realm: Realm, event: Event) {
         if (event.redacts.isNullOrBlank() || LocalEcho.isLocalEchoId(event.eventId.orEmpty())) {
             return
         }
@@ -48,7 +48,7 @@ internal class LiveLocationShareRedactionEventProcessor @Inject constructor() : 
         val redactedEvent = EventEntity.where(realm, eventId = event.redacts).findFirst()
                 ?: return
 
-        if (redactedEvent.type in EventType.STATE_ROOM_BEACON_INFO) {
+        if (redactedEvent.type in EventType.STATE_ROOM_BEACON_INFO.values) {
             val liveSummary = LiveLocationShareAggregatedSummaryEntity.get(realm, eventId = redactedEvent.eventId)
 
             if (liveSummary != null) {

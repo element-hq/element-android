@@ -109,7 +109,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
             val room = session.getRoom(roomId)
             if (room != null) {
                 session.coroutineScope.launch {
-                    tryOrNull { room.readService().markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT) }
+                    tryOrNull { room.readService().markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT, mainTimeLineOnly = false) }
                 }
             }
         }
@@ -148,6 +148,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                 body = message,
                 imageUriString = null,
                 roomId = room.roomId,
+                threadId = null, // needs to be changed: https://github.com/vector-im/element-android/issues/7475
                 roomName = room.roomSummary()?.displayName ?: room.roomId,
                 roomIsDirect = room.roomSummary()?.isDirect == true,
                 outGoingMessage = true,

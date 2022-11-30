@@ -26,6 +26,7 @@ internal open class ReadReceiptEntity(
         var eventId: String = "",
         var roomId: String = "",
         var userId: String = "",
+        var threadId: String? = null,
         var originServerTs: Double = 0.0
 ) : RealmObject() {
     companion object

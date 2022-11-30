@@ -2836,4 +2836,34 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
         <item quantity="one">%1$d kiválasztva</item>
         <item quantity="other">%1$d kiválasztva</item>
     </plurals>
+    <string name="rich_text_editor_full_screen_toggle">Teljes képernyő váltás</string>
+    <string name="device_manager_learn_more_sessions_verified_description">Mindenhol ellenőrzött munkamenetek vannak ahol ezt a fiókot használva megadtad a jelmondatodat vagy egy másik már hitelesített munkamenetből megerősítetted az identitásodat.
+\n
+\nEz azt jelenti, hogy a titkosított üzenetek visszafejtéséhez rendelkezel a kulcsokkal és megerősíted a többiek felé, hogy megbízol a munkamenetben.</string>
+    <plurals name="device_manager_other_sessions_multi_signout_all">
+        <item quantity="one">Kijelentkezés %1$d munkamenetből</item>
+        <item quantity="other">Kijelentkezés %1$d munkamenetből</item>
+    </plurals>
+    <string name="device_manager_other_sessions_multi_signout_selection">Kijelentkezés</string>
+    <string name="attachment_type_selector_text_formatting">Szöveg formázás</string>
+    <string name="error_voice_broadcast_already_in_progress_message">Egy hang közvetítés már folyamatban van. Először fejezze be a jelenlegi közvetítést egy új indításához.</string>
+    <string name="error_voice_broadcast_blocked_by_someone_else_message">Valaki már elindított egy hang közvetítést. Várd meg a közvetítés végét az új indításához.</string>
+    <string name="error_voice_broadcast_permission_denied_message">Nincs jogosultságod hang közvetítést indítani ebben a szobában. Vedd fel a kapcsolatot a szoba adminisztrátorával a szükséges jogosultság megszerzéséhez.</string>
+    <string name="error_voice_broadcast_unauthorized_title">Az új hang közvetítés nem indítható el</string>
+    <string name="a11y_voice_broadcast_fast_forward">30 másodperccel előre</string>
+    <string name="a11y_voice_broadcast_fast_backward">30 másodperccel vissza</string>
+    <string name="voice_broadcast_recording_time_left">visszavan: %1$s</string>
+    <string name="message_reply_to_sender_created_poll">szavazás elkészítve.</string>
+    <string name="message_reply_to_sender_sent_sticker">matrica elküldve.</string>
+    <string name="message_reply_to_sender_sent_video">videót küldött.</string>
+    <string name="message_reply_to_sender_sent_image">kép elküldve.</string>
+    <string name="message_reply_to_sender_sent_voice_message">hang üzenet elküldve.</string>
+    <string name="message_reply_to_sender_sent_audio_file">hangfájl elküldve.</string>
+    <string name="message_reply_to_sender_sent_file">fájl elküldve.</string>
+    <string name="message_reply_to_prefix">Válaszolva erre</string>
+    <string name="device_manager_other_sessions_hide_ip_address">IP címek elrejtése</string>
+    <string name="device_manager_other_sessions_show_ip_address">IP címek megjelenítése</string>
+    <string name="quoting">Idézet</string>
+    <string name="replying_to">Válasz erre: %s</string>
+    <string name="editing">Szerkesztés</string>
 </resources>

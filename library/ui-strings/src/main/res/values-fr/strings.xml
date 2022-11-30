@@ -2844,4 +2844,26 @@
     <string name="error_voice_broadcast_unauthorized_title">Impossible de commencer une nouvelle diffusion audio</string>
     <string name="a11y_voice_broadcast_fast_forward">Avance rapide de 30 secondes</string>
     <string name="a11y_voice_broadcast_fast_backward">Retour rapide de 30 secondes</string>
+    <string name="device_manager_learn_more_sessions_verified_description">Les sessions vérifiées sont toutes celles qui utilisent ce compte après avoir saisie la phrase de sécurité ou confirmé votre identité à l’aide d’une autre session vérifiée.
+\n
+\nCela veut dire qu’elles disposent de toutes les clés nécessaires pour lire les messages chiffrés, et confirment aux autres utilisateurs que vous faites confiance à cette session.</string>
+    <plurals name="device_manager_other_sessions_multi_signout_all">
+        <item quantity="one">Déconnecter %1$d session</item>
+        <item quantity="other">Déconnecter %1$d sessions</item>
+    </plurals>
+    <string name="device_manager_other_sessions_multi_signout_selection">Déconnecter</string>
+    <string name="voice_broadcast_recording_time_left">%1$s restant</string>
+    <string name="message_reply_to_sender_created_poll">a créé un sondage.</string>
+    <string name="message_reply_to_sender_sent_sticker">a envoyé un autocollant.</string>
+    <string name="message_reply_to_sender_sent_video">a envoyé une vidéo.</string>
+    <string name="message_reply_to_sender_sent_image">a envoyé une image.</string>
+    <string name="message_reply_to_sender_sent_voice_message">envoyer un message vocal.</string>
+    <string name="message_reply_to_sender_sent_audio_file">a envoyé un fichier audio.</string>
+    <string name="message_reply_to_sender_sent_file">a envoyé un fichier.</string>
+    <string name="message_reply_to_prefix">En réponse à</string>
+    <string name="device_manager_other_sessions_hide_ip_address">Masquer l’adresse IP</string>
+    <string name="device_manager_other_sessions_show_ip_address">Afficher l’adresse IP</string>
+    <string name="quoting">Citation de</string>
+    <string name="replying_to">Réponse à %s</string>
+    <string name="editing">Modification</string>
 </resources>

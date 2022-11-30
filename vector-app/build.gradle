@@ -37,7 +37,7 @@ ext.versionMinor = 5
 // Note: even values are reserved for regular release, odd values for hotfix release.
 // When creating a hotfix, you should decrease the value, since the current value
 // is the value for the next regular release.
-ext.versionPatch = 8
+ext.versionPatch = 10
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -76,15 +76,8 @@ static def gitRevisionDate() {
 }
 
 static def gitBranchName() {
-    def fromEnv = System.env.BUILDKITE_BRANCH as String ?: ""
-
-    if (!fromEnv.isEmpty()) {
-        return fromEnv
-    } else {
-        // Note: this command return "HEAD" on Buildkite, so use the system env 'BUILDKITE_BRANCH' content first
-        def cmd = "git rev-parse --abbrev-ref HEAD"
-        return cmd.execute().text.trim()
-    }
+    def cmd = "git rev-parse --abbrev-ref HEAD"
+    return cmd.execute().text.trim()
 }
 
 // For Google Play build, build on any other branch than main will have a "-dev" suffix
@@ -122,8 +115,6 @@ project.android.buildTypes.all { buildType ->
 // 64 bits have greater value than 32 bits
 ext.abiVersionCodes = ["armeabi-v7a": 1, "arm64-v8a": 2, "x86": 3, "x86_64": 4].withDefault { 0 }
 
-def buildNumber = System.env.BUILDKITE_BUILD_NUMBER as Integer ?: 0
-
 android {
     namespace "im.vector.application"
     // Due to a bug introduced in Android gradle plugin 3.6.0, we have to specify the ndk version to use
@@ -155,7 +146,6 @@ android {
         buildConfigField "String", "GIT_REVISION", "\"${gitRevision()}\""
         buildConfigField "String", "GIT_REVISION_DATE", "\"${gitRevisionDate()}\""
         buildConfigField "String", "GIT_BRANCH_NAME", "\"${gitBranchName()}\""
-        buildConfigField "String", "BUILD_NUMBER", "\"${buildNumber}\""
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 

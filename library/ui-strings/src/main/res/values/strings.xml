@@ -1032,6 +1032,8 @@
     <string name="settings_chat_effects_description">Use /confetti command or send a message containing ❄️ or 🎉</string>
     <string name="settings_autoplay_animated_images_title">Autoplay animated images</string>
     <string name="settings_autoplay_animated_images_summary">Play animated images in the timeline as soon as they are visible</string>
+    <string name="settings_enable_direct_share_title">Enable direct share</string>
+    <string name="settings_enable_direct_share_summary">Show recent chats in the system share menu</string>
     <string name="settings_show_join_leave_messages">Show join and leave events</string>
     <string name="settings_show_join_leave_messages_summary">Invites, removes, and bans are unaffected.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Show account events</string>
@@ -1642,7 +1644,10 @@
     <string name="error_user_already_logged_in">It looks like you’re trying to connect to another homeserver. Do you want to sign out?</string>
 
     <string name="edit">Edit</string>
+    <string name="editing">Editing</string>
     <string name="reply">Reply</string>
+    <string name="replying_to">Replying to %s</string>
+    <string name="quoting">Quoting</string>
     <string name="reply_in_thread">Reply in thread</string>
     <string name="view_in_room">View In Room</string>
 
@@ -3089,12 +3094,13 @@
     <string name="audio_message_file_size">(%1$s)</string>
 
     <string name="voice_broadcast_live">Live</string>
+    <!-- TODO Rename id to voice_broadcast_buffering -->
+    <string name="a11y_voice_broadcast_buffering">Buffering…</string>
     <string name="a11y_resume_voice_broadcast_record">Resume voice broadcast record</string>
     <string name="a11y_pause_voice_broadcast_record">Pause voice broadcast record</string>
     <string name="a11y_stop_voice_broadcast_record">Stop voice broadcast record</string>
     <string name="a11y_play_voice_broadcast">Play or resume voice broadcast</string>
     <string name="a11y_pause_voice_broadcast">Pause voice broadcast</string>
-    <string name="a11y_voice_broadcast_buffering">Buffering</string>
     <string name="a11y_voice_broadcast_fast_backward">Fast backward 30 seconds</string>
     <string name="a11y_voice_broadcast_fast_forward">Fast forward 30 seconds</string>
     <string name="error_voice_broadcast_unauthorized_title">Can’t start a new voice broadcast</string>
@@ -3353,6 +3359,8 @@
         <item quantity="one">Sign out of %1$d session</item>
         <item quantity="other">Sign out of %1$d sessions</item>
     </plurals>
+    <string name="device_manager_other_sessions_show_ip_address">Show IP address</string>
+    <string name="device_manager_other_sessions_hide_ip_address">Hide IP address</string>
     <string name="device_manager_session_overview_signout">Sign out of this session</string>
     <string name="device_manager_session_details_title">Session details</string>
     <string name="device_manager_session_details_description">Application, device, and activity information.</string>
@@ -3461,4 +3469,13 @@
     <string name="rich_text_editor_format_underline">Apply underline format</string>
     <string name="rich_text_editor_full_screen_toggle">Toggle full screen mode</string>
 
+    <!-- ReplyTo events -->
+    <string name="message_reply_to_prefix">In reply to</string>
+    <string name="message_reply_to_sender_sent_file">sent a file.</string>
+    <string name="message_reply_to_sender_sent_audio_file">sent an audio file.</string>
+    <string name="message_reply_to_sender_sent_voice_message">sent a voice message.</string>
+    <string name="message_reply_to_sender_sent_image">sent an image.</string>
+    <string name="message_reply_to_sender_sent_video">sent a video.</string>
+    <string name="message_reply_to_sender_sent_sticker">sent a sticker.</string>
+    <string name="message_reply_to_sender_created_poll">created a poll.</string>
 </resources>

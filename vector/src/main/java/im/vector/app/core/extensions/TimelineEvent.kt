@@ -27,7 +27,7 @@ import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 
 fun TimelineEvent.canReact(): Boolean {
     // Only event of type EventType.MESSAGE, EventType.STICKER and EventType.POLL_START are supported for the moment
-    return root.getClearType() in listOf(EventType.MESSAGE, EventType.STICKER) + EventType.POLL_START &&
+    return root.getClearType() in listOf(EventType.MESSAGE, EventType.STICKER) + EventType.POLL_START.values &&
             root.sendState == SendState.SYNCED &&
             !root.isRedacted()
 }
@@ -40,7 +40,8 @@ fun TimelineEvent.getVectorLastMessageContent(): MessageContent? {
     // Iterate on event types which are not part of the matrix sdk, otherwise fallback to the sdk method
     return when (root.getClearType()) {
         VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO -> {
-            (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel<MessageVoiceBroadcastInfoContent>()
+            (annotations?.editSummary?.latestEdit?.getClearContent()?.toModel<MessageVoiceBroadcastInfoContent>()
+                    ?: root.getClearContent().toModel<MessageVoiceBroadcastInfoContent>())
         }
         else -> getLastMessageContent()
     }

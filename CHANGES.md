@@ -1,3 +1,39 @@
+Changes in Element v1.5.10 (2022-11-30)
+=======================================
+
+Features ✨
+----------
+ - Add setting to allow disabling direct share ([#2725](https://github.com/vector-im/element-android/issues/2725))
+ - [Device Manager] Toggle IP address visibility ([#7546](https://github.com/vector-im/element-android/issues/7546))
+ - New implementation of the full screen mode for the Rich Text Editor. ([#7577](https://github.com/vector-im/element-android/issues/7577))
+
+Bugfixes 🐛
+----------
+ - Fix italic text is truncated when bubble mode and markdown is enabled ([#5679](https://github.com/vector-im/element-android/issues/5679))
+ - Missing translations on "replyTo" messages ([#7555](https://github.com/vector-im/element-android/issues/7555))
+ - ANR on session start when sending client info is enabled ([#7604](https://github.com/vector-im/element-android/issues/7604))
+ - Make the plain text mode layout of the RTE more compact. ([#7620](https://github.com/vector-im/element-android/issues/7620))
+ - Push notification for thread message is now shown correctly when user observes rooms main timeline ([#7634](https://github.com/vector-im/element-android/issues/7634))
+ - Voice Broadcast - Fix playback stuck in buffering mode ([#7646](https://github.com/vector-im/element-android/issues/7646))
+
+In development 🚧
+----------------
+ - Voice Broadcast - Handle redaction of the state events on the listener and recorder sides ([#7629](https://github.com/vector-im/element-android/issues/7629))
+ - Voice Broadcast - Update the buffering display in the timeline ([#7655](https://github.com/vector-im/element-android/issues/7655))
+ - Voice Broadcast - Remove voice messages related to a VB from the room attachments ([#7656](https://github.com/vector-im/element-android/issues/7656))
+
+SDK API changes ⚠️
+------------------
+ - Added support for read receipts in threads. Now user in a room can have multiple read receipts (one per thread + one in main thread + one without threadId) ([#6996](https://github.com/vector-im/element-android/issues/6996))
+ - Sync Filter now taking in account homeserver capabilities to not pass unsupported parameters.
+  Sync Filter is now configured by providing SyncFilterBuilder class instance, instead of Filter to identify Filter changes related to homeserver capabilities ([#7626](https://github.com/vector-im/element-android/issues/7626))
+
+Other changes
+-------------
+ - Remove usage of Buildkite. ([#7583](https://github.com/vector-im/element-android/issues/7583))
+ - Better validation of edits ([#7594](https://github.com/vector-im/element-android/issues/7594))
+
+
 Changes in Element v1.5.8 (2022-11-17)
 ======================================
 

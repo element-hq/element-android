@@ -54,9 +54,9 @@ object TimelineDisplayableEvents {
             EventType.KEY_VERIFICATION_CANCEL,
             VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO,
     ) +
-            EventType.POLL_START +
-            EventType.STATE_ROOM_BEACON_INFO +
-            EventType.BEACON_LOCATION_DATA
+            EventType.POLL_START.values +
+            EventType.STATE_ROOM_BEACON_INFO.values +
+            EventType.BEACON_LOCATION_DATA.values
 }
 
 fun TimelineEvent.isRoomConfiguration(roomCreatorUserId: String?): Boolean {

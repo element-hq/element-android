@@ -33,6 +33,7 @@ import org.matrix.android.sdk.internal.session.room.membership.RoomMembersRespon
 import org.matrix.android.sdk.internal.session.room.membership.admin.UserIdAndReason
 import org.matrix.android.sdk.internal.session.room.membership.joining.InviteBody
 import org.matrix.android.sdk.internal.session.room.membership.threepid.ThreePidInviteBody
+import org.matrix.android.sdk.internal.session.room.read.ReadBody
 import org.matrix.android.sdk.internal.session.room.relation.RelationsResponse
 import org.matrix.android.sdk.internal.session.room.reporting.ReportContentBody
 import org.matrix.android.sdk.internal.session.room.send.SendResponse
@@ -173,7 +174,7 @@ internal interface RoomAPI {
             @Path("roomId") roomId: String,
             @Path("receiptType") receiptType: String,
             @Path("eventId") eventId: String,
-            @Body body: JsonDict = emptyMap()
+            @Body body: ReadBody
     )
 
     /**

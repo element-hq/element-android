@@ -52,4 +52,8 @@ class FakeVectorPreferences {
     fun verifySetNotificationEnabledForDevice(enabled: Boolean, inverse: Boolean = false) {
         verify(inverse = inverse) { instance.setNotificationEnabledForDevice(enabled) }
     }
+
+    fun givenSessionManagerShowIpAddress(showIpAddress: Boolean) {
+        every { instance.showIpAddressInSessionManagerScreens() } returns showIpAddress
+    }
 }

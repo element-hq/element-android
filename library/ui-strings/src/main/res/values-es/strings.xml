@@ -2649,4 +2649,10 @@
     <string name="create_room">Crear sala</string>
     <string name="start_chat">Iniciar conversación</string>
     <string name="all_chats">Todas las conversaciones</string>
+    <string name="action_select_all">Seleccionar todo</string>
+    <string name="action_got_it">De acuerdo</string>
+    <plurals name="x_selected">
+        <item quantity="one">%1$d seleccionado</item>
+        <item quantity="other">%1$d seleccionados</item>
+    </plurals>
 </resources>

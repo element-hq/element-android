@@ -84,8 +84,7 @@ internal class CallSignalingHandler @Inject constructor(
             EventType.CALL_NEGOTIATE -> {
                 handleCallNegotiateEvent(event)
             }
-            EventType.CALL_ASSERTED_IDENTITY,
-            EventType.CALL_ASSERTED_IDENTITY_PREFIX -> {
+            in EventType.CALL_ASSERTED_IDENTITY.values -> {
                 handleCallAssertedIdentityEvent(event)
             }
         }

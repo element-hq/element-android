@@ -1,0 +1,160 @@
+/*
+ * Copyright (c) 2022 New Vector Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package im.vector.app.features.voicebroadcast.usecase
+
+import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
+import im.vector.app.features.voicebroadcast.model.VoiceBroadcast
+import im.vector.app.features.voicebroadcast.model.VoiceBroadcastEvent
+import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
+import im.vector.app.features.voicebroadcast.voiceBroadcastId
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.transformWhile
+import org.matrix.android.sdk.api.query.QueryStringValue
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.events.model.RelationType
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.room.Room
+import org.matrix.android.sdk.api.util.Optional
+import org.matrix.android.sdk.api.util.toOptional
+import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.mapOptional
+import timber.log.Timber
+import javax.inject.Inject
+
+class GetMostRecentVoiceBroadcastStateEventUseCase @Inject constructor(
+        private val session: Session,
+) {
+
+    fun execute(voiceBroadcast: VoiceBroadcast): Flow<Optional<VoiceBroadcastEvent>> {
+        val room = session.getRoom(voiceBroadcast.roomId) ?: error("Unknown roomId: ${voiceBroadcast.roomId}")
+        return getMostRecentVoiceBroadcastEventFlow(room, voiceBroadcast)
+                .onEach { event ->
+                    Timber.d(
+                            "## VoiceBroadcast | " +
+                                    "voiceBroadcastId=${event.getOrNull()?.voiceBroadcastId}, " +
+                                    "state=${event.getOrNull()?.content?.voiceBroadcastState}"
+                    )
+                }
+    }
+
+    /**
+     * Get a flow of the most recent event for the given voice broadcast.
+     */
+    private fun getMostRecentVoiceBroadcastEventFlow(room: Room, voiceBroadcast: VoiceBroadcast): Flow<Optional<VoiceBroadcastEvent>> {
+        val startedEventFlow = room.flow().liveTimelineEvent(voiceBroadcast.voiceBroadcastId)
+        // observe started event changes
+        return startedEventFlow
+                .mapOptional { it.root.asVoiceBroadcastEvent() }
+                .flatMapLatest { startedEvent ->
+                    if (startedEvent.hasValue().not() || startedEvent.get().root.isRedacted()) {
+                        // if started event is null or redacted, send null
+                        flowOf(Optional.empty())
+                    } else {
+                        // otherwise, observe most recent event changes
+                        getMostRecentRelatedEventFlow(room, voiceBroadcast)
+                                .transformWhile { mostRecentEvent ->
+                                    val hasValue = mostRecentEvent.hasValue()
+                                    if (hasValue) {
+                                        // keep the most recent event
+                                        emit(mostRecentEvent)
+                                    } else {
+                                        // no most recent event, fallback to started event
+                                        emit(startedEvent)
+                                    }
+                                    hasValue
+                                }
+                    }
+                }
+                .distinctUntilChangedBy { it.getOrNull()?.content?.voiceBroadcastState }
+    }
+
+    /**
+     * Get a flow of the most recent related event.
+     */
+    private fun getMostRecentRelatedEventFlow(room: Room, voiceBroadcast: VoiceBroadcast): Flow<Optional<VoiceBroadcastEvent>> {
+        val mostRecentEvent = getMostRecentRelatedEvent(room, voiceBroadcast).toOptional()
+        return if (mostRecentEvent.hasValue()) {
+            val stateKey = mostRecentEvent.get().root.stateKey.orEmpty()
+            // observe incoming voice broadcast state events
+            room.flow()
+                    .liveStateEvent(VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO, QueryStringValue.Equals(stateKey))
+                    .mapOptional { it.asVoiceBroadcastEvent() }
+                    // drop first event sent by the matrix-sdk, we compute manually this first event
+                    .drop(1)
+                    // start with the computed most recent event
+                    .onStart { emit(mostRecentEvent) }
+                    // handle event if null or related to the given voice broadcast
+                    .filter { it.hasValue().not() || it.get().voiceBroadcastId == voiceBroadcast.voiceBroadcastId }
+                    // observe changes while event is not null
+                    .transformWhile { event ->
+                        emit(event)
+                        event.hasValue()
+                    }
+                    .flatMapLatest { newMostRecentEvent ->
+                        if (newMostRecentEvent.hasValue()) {
+                            // observe most recent event changes
+                            newMostRecentEvent.get().flow()
+                                    .transformWhile { event ->
+                                        // observe changes until event is null or redacted
+                                        emit(event)
+                                        event.hasValue() && event.get().root.isRedacted().not()
+                                    }
+                                    .flatMapLatest { event ->
+                                        val isRedactedOrNull = !event.hasValue() || event.get().root.isRedacted()
+                                        if (isRedactedOrNull) {
+                                            // event is null or redacted, switch to the latest not redacted event
+                                            getMostRecentRelatedEventFlow(room, voiceBroadcast)
+                                        } else {
+                                            // event is not redacted, send the event
+                                            flowOf(event)
+                                        }
+                                    }
+                        } else {
+                            // there is no more most recent event, just send it
+                            flowOf(newMostRecentEvent)
+                        }
+                    }
+        } else {
+            // there is no more most recent event, just send it
+            flowOf(mostRecentEvent)
+        }
+    }
+
+    /**
+     * Get the most recent event related to the given voice broadcast.
+     */
+    private fun getMostRecentRelatedEvent(room: Room, voiceBroadcast: VoiceBroadcast): VoiceBroadcastEvent? {
+        return room.timelineService().getTimelineEventsRelatedTo(RelationType.REFERENCE, voiceBroadcast.voiceBroadcastId)
+                .mapNotNull { timelineEvent -> timelineEvent.root.asVoiceBroadcastEvent()?.takeUnless { it.root.isRedacted() } }
+                .maxByOrNull { it.root.originServerTs ?: 0 }
+    }
+
+    /**
+     * Get a flow of the given voice broadcast event changes.
+     */
+    private fun VoiceBroadcastEvent.flow(): Flow<Optional<VoiceBroadcastEvent>> {
+        val room = this.root.roomId?.let { session.getRoom(it) } ?: return flowOf(Optional.empty())
+        return room.flow().liveTimelineEvent(root.eventId!!).mapOptional { it.root.asVoiceBroadcastEvent() }
+    }
+}

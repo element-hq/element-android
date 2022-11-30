@@ -4,12 +4,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent">
 
     <im.vector.app.features.home.room.detail.composer.PlainTextComposerLayout
         android:id="@+id/composerLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="?android:colorBackground"
         android:minHeight="56dp"
         android:transitionName="composer"
@@ -20,7 +21,7 @@
         android:id="@+id/richTextComposerLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?android:colorBackground"
+        android:background="@drawable/bg_composer_rich_bottom_sheet"
         android:minHeight="56dp"
         android:transitionName="composer"
         android:visibility="gone"

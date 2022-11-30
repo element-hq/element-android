@@ -2825,4 +2825,23 @@
     <string name="a11y_voice_broadcast_fast_forward">۳۰ ثانیه پیش‌روی</string>
     <string name="a11y_voice_broadcast_fast_backward">۳۰ ثانیه پس‌روی</string>
     <string name="attachment_type_selector_text_formatting">قالب‌بندی متن</string>
+    <string name="device_manager_other_sessions_multi_signout_selection">خروج</string>
+    <plurals name="device_manager_other_sessions_multi_signout_all">
+        <item quantity="one">خروج از ۱ نشست</item>
+        <item quantity="other">خروج از %1$d نشست</item>
+    </plurals>
+    <string name="voice_broadcast_recording_time_left">%1$s مانده</string>
+    <string name="message_reply_to_sender_sent_voice_message">پیام صوتی‌ای فرستاد.</string>
+    <string name="message_reply_to_sender_sent_audio_file">پروندهٔ صوتی‌ای فرستاد.</string>
+    <string name="message_reply_to_sender_created_poll">نظرسنجی‌ای ایجاد کرد.</string>
+    <string name="message_reply_to_sender_sent_sticker">عکس‌برگردانی فرستاد.</string>
+    <string name="message_reply_to_sender_sent_video">ویدیویی فرستاد.</string>
+    <string name="message_reply_to_sender_sent_image">تصویری فرستاد.</string>
+    <string name="message_reply_to_sender_sent_file">پرونده‌ای فرستاد.</string>
+    <string name="message_reply_to_prefix">در پاسخ به</string>
+    <string name="device_manager_other_sessions_hide_ip_address">نهفتن نشانی آی‌پی</string>
+    <string name="device_manager_other_sessions_show_ip_address">نمایش نشانی آی‌پی</string>
+    <string name="quoting">نقل کردن</string>
+    <string name="replying_to">پاسخ دادن به %s</string>
+    <string name="editing">ویرایش کردن</string>
 </resources>

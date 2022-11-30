@@ -930,7 +930,7 @@
     <string name="settings_security_and_privacy">Безопасность</string>
     <string name="settings_push_rules">Правила push-уведомлений</string>
     <string name="push_gateway_item_app_id">ID приложения:</string>
-    <string name="push_gateway_item_push_key">push_key:</string>
+    <string name="push_gateway_item_push_key">Ключ Push:</string>
     <string name="push_gateway_item_app_display_name">Отображаемое название приложения:</string>
     <string name="push_gateway_item_device_name">Отображаемое название сессии:</string>
     <string name="push_gateway_item_url">Url:</string>
@@ -1000,10 +1000,10 @@
     <string name="settings_discovery_bad_identity_server">Не удалось подключиться к серверу обнаружения</string>
     <string name="settings_discovery_please_enter_server">Пожалуйста, введите URL сервера обнаружения</string>
     <string name="settings_discovery_no_terms_title">Сервер обнаружения не имеет условий использования</string>
-    <string name="settings_discovery_no_mails">Параметры обнаружения появятся после добавления электронной почты.</string>
+    <string name="settings_discovery_no_mails">Параметры обнаружения появятся после добавления адреса электронной почты.</string>
     <string name="settings_discovery_no_msisdn">Параметры поиска появятся после добавления номера телефона.</string>
     <string name="settings_discovery_disconnect_identity_server_info">Отключение от сервера обнаружения будет означать, что другие пользователи не смогут обнаружить вас, и вы не сможете приглашать других по электронной почте или по телефону.</string>
-    <string name="settings_discovery_confirm_mail">Мы отправили вам электронное письмо с подтверждением на %s, проверьте вашу электронную почту и нажмите на ссылку для подтверждения</string>
+    <string name="settings_discovery_confirm_mail">Мы отправили вам электронное письмо на %s, проверьте вашу электронную почту и нажмите на ссылку для подтверждения</string>
     <string name="settings_discovery_no_terms">Выбранный сервер обнаружения не имеет условий использования. Продолжайте, только если вы доверяете его владельцу</string>
     <string name="settings_text_message_sent">Текстовое сообщение отправлено %s. Введите код проверки, который он содержит.</string>
     <string name="settings_discovery_disconnect_with_bound_pid">В настоящее время вы делитесь адресами электронной почты или телефонными номерами на сервере обнаружения %1$s. Вам нужно повторно подключиться к %2$s, чтобы прекратить делиться ими.</string>
@@ -1102,7 +1102,7 @@
     <string name="login_reset_password_warning_title">Предупреждение!</string>
     <string name="login_reset_password_warning_content">Смена пароля приведёт к сбросу всех сквозных ключей шифрования во всех ваших сессиях, что сделает зашифрованную историю разговоров нечитаемой. Настройте резервное копирование ключей или экспортируйте ключи от комнаты из другой сессии, прежде чем сбрасывать пароль.</string>
     <string name="login_reset_password_warning_submit">Продолжить</string>
-    <string name="login_reset_password_error_not_found">Данный электронный ящик не связан ни с одним аккаунтом</string>
+    <string name="login_reset_password_error_not_found">Данный адрес электронной почты не связан ни с одним аккаунтом</string>
     <string name="login_reset_password_mail_confirmation_title">Проверьте свою почту</string>
     <string name="login_reset_password_mail_confirmation_notice">Письмо с подтверждением было отправлено на %1$s.</string>
     <string name="login_reset_password_mail_confirmation_notice_2">Нажмите на ссылку, чтобы подтвердить свой новый пароль. Как только вы перейдете по ссылке нажмите ниже.</string>
@@ -1241,7 +1241,7 @@
     <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
     <string name="settings_show_redacted">Удалённые сообщения</string>
     <string name="settings_show_redacted_summary">Показывать заглушку на месте удалённых сообщений</string>
-    <string name="settings_discovery_confirm_mail_not_clicked">Мы отправили письмо для подтверждения на %s, проверьте почту и нажмите на ссылку для подтверждения</string>
+    <string name="settings_discovery_confirm_mail_not_clicked">Мы отправили письмо на %s, пожалуйста проверьте почту и нажмите на ссылку для подтверждения</string>
     <string name="settings_text_message_sent_wrong_code">Код подтверждения неверный.</string>
     <string name="error_terms_not_accepted">Попробуйте снова после принятия условий обслуживания на вашем домашнем сервере.</string>
     <string name="error_network_timeout">Похоже, сервер долгое время не отвечает, что может быть вызвано плохим соединением или ошибкой на сервере. Попробуйте снова через некоторое время.</string>
@@ -1351,7 +1351,7 @@
     <string name="login_server_url_form_common_notice">Введите адрес сервера, который вы хотите использовать</string>
     <string name="login_reset_password_notice">На ваш почтовый ящик будет отправлено письмо для подтверждения установки нового пароля.</string>
     <string name="login_reset_password_mail_confirmation_submit">Я подтвердил свою электронную почту</string>
-    <string name="login_set_email_notice">Установите адрес электронной почты для восстановления вашей учетной записи. Позже вы можете дополнительно разрешить людям, которых вы знаете, обнаружить вас по электронной почте.</string>
+    <string name="login_set_email_notice">Укажите адрес электронной почты для восстановления вашей учетной записи. Потом вы сможете, при желании, разрешить людям, которых вы знаете, обнаружить вас по адресу электронной почты.</string>
     <string name="login_validation_code_is_not_correct">Введенный код неверен. Пожалуйста, проверьте.</string>
     <string name="login_connect_using_matrix_id_submit">Войти с Matrix ID</string>
     <string name="login_signin_matrix_id_title">Войти с Matrix ID</string>
@@ -1482,7 +1482,7 @@
     <string name="not_trusted">Незаверенная</string>
     <string name="verification_profile_device_verified_because">Эта сессия является доверенной для безопасного обмена сообщениями, так как %1$s (%2$s) проверил(а) его:</string>
     <string name="verification_profile_device_new_signing">%1$s (%2$s) вошел(ла), используя новую сессию:</string>
-    <string name="verification_profile_device_untrust_info">Пока этот пользователь не доверяет этой сессии, сообщения, отправленные в обе стороны, помечаются предупреждениями. Кроме того, вы можете подтвердить сессию вручную.</string>
+    <string name="verification_profile_device_untrust_info">Пока этот пользователь не доверяет этой сессии, сообщения, отправленные в обе стороны, помечаются предупреждениями. Вы также можете подтвердить эту сессию вручную.</string>
     <string name="initialize_cross_signing">Начать перекрестную подпись</string>
     <string name="reset_cross_signing">Сбросить ключи</string>
     <string name="qr_code_scanned_by_other_notice">Почти готово! Показывает ли %s галочку\?</string>
@@ -1606,7 +1606,7 @@
     <string name="identity_server_error_outdated_home_server">Эта операция невозможна. Домашний сервер устарел.</string>
     <string name="identity_server_error_no_identity_server_configured">Пожалуйста, настройте сначала сервер идентификации.</string>
     <string name="identity_server_error_terms_not_signed">Пожалуйста, примите сначала условия сервера идентификации в настройках.</string>
-    <string name="identity_server_error_bulk_sha256_not_supported">Для вашей приватности, ${app_name} поддерживает отправку адреса электронной почты и номера телефона только в хэшированном виде.</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">Для вашей приватности, ${app_name} поддерживает отправку адреса электронной почты и номеров телефонов только в хэшированном виде.</string>
     <string name="identity_server_error_binding_error">Привязка не удалась.</string>
     <string name="identity_server_error_no_current_binding_error">Текущая взаимосвязь с этим идентификатором отсутствует.</string>
     <string name="identity_server_set_default_notice">Ваш домашний сервер (%1$s) предлагает использовать %2$s для вашего сервера обнаружения</string>
@@ -1793,7 +1793,7 @@
     <string name="attachment_type_dialog_title">Добавить изображение из</string>
     <string name="create_room_topic_hint">Тема</string>
     <string name="create_room_name_section">Название комнаты</string>
-    <string name="settings_discovery_consent_notice_on">Вы дали свое согласие на отправку электронных писем и телефонных номеров на этот сервер обнаружения для обнаружения других пользователей из ваших контактов.</string>
+    <string name="settings_discovery_consent_notice_on">Вы дали свое согласие на отправку адресов электронных почт и телефонных номеров на этот сервер идентификации для обнаружения других пользователей из ваших контактов.</string>
     <string name="add_by_qr_code">Добавить по QR-коду</string>
     <string name="permissions_denied_add_contact">Разрешить доступ к вашим контактам.</string>
     <string name="permissions_denied_qr_code">Чтобы отсканировать QR-код, вам нужно разрешить доступ к камере.</string>
@@ -2396,7 +2396,7 @@
     <string name="attachment_type_location">Местоположение</string>
     <string name="identity_server_consent_dialog_content_question">Вы согласны отправить эту информацию\?</string>
     <string name="identity_server_consent_dialog_content_3">Чтобы обнаружить существующие контакты, необходимо отправить контактную информацию (электронную почту и номера телефонов) на сервер обнаружения. Мы хешируем ваши данные перед отправкой для обеспечения конфиденциальности.</string>
-    <string name="identity_server_consent_dialog_title_2">Отправить электронные адреса и номера телефонов %s</string>
+    <string name="identity_server_consent_dialog_title_2">Отправить адреса электронных почт и номера телефонов %s</string>
     <string name="settings_discovery_consent_notice_off_2">Ваши контакты приватны. Чтобы обнаружить пользователей из ваших контактов, нам необходимо ваше разрешение на отправку контактной информации на ваш сервер обнаружения.</string>
     <string name="preference_system_settings">Системные настройки</string>
     <string name="preference_versions">Версии</string>
@@ -2805,4 +2805,162 @@
     <string name="attachment_type_selector_location">Местоположение</string>
     <string name="attachment_type_selector_camera">Камера</string>
     <string name="attachment_type_selector_contact">Контакт</string>
+    <string name="settings_troubleshoot_test_system_settings_permission_failed">${app_name} нуждается в разрешении для отображения оповещений.
+\nПожалуйста, дайте разрешение.</string>
+    <plurals name="search_space_multiple_parents">
+        <item quantity="one">%1$s и %2$d другой</item>
+        <item quantity="few">%1$s и %2$d другие</item>
+        <item quantity="many">%1$s и %2$d других</item>
+        <item quantity="other">%1$s и %2$d других</item>
+    </plurals>
+    <string name="permissions_rationale_msg_notification">${app_name} нуждается в резрешении для отображения оповещений. Оповещения могут показывать ваши сообщения, приглашения и тому подобное.
+\n
+\nПожалуйста разрешите доступ при следующем всплывающем сообщении, чтобы иметь возможность видеть оповещения.</string>
+    <string name="invites_empty_message">Здесь будут появляться новые запросы и приглашения.</string>
+    <string name="invites_title">Приглашения</string>
+    <string name="labs_enable_rich_text_editor_summary">Попробуйте расширенный текстовый редактор (режим набора обычного текста скоро появится)</string>
+    <string name="labs_enable_deferred_dm_summary">Создавать личные сообщения только при отправке первого сообщения</string>
+    <string name="labs_enable_deferred_dm_title">Включить отложенные личные сообщения</string>
+    <string name="action_deselect_all">Отменить выбор всего</string>
+    <string name="action_select_all">Выбрать всё</string>
+    <string name="a11y_collapse_space_children">Свернуть дочерние элементы %s</string>
+    <string name="a11y_expand_space_children">Развернуть дочерние элементы %s</string>
+    <plurals name="x_selected">
+        <item quantity="one">Выбрано %1$d</item>
+        <item quantity="few">Выбрано %1$d</item>
+        <item quantity="many">Выбрано %1$d</item>
+        <item quantity="other">Выбрано %1$d</item>
+    </plurals>
+    <string name="rich_text_editor_full_screen_toggle">Войти в полноэкранный режим</string>
+    <string name="rich_text_editor_format_underline">Применить форматирование подчёркиванием</string>
+    <string name="rich_text_editor_format_strikethrough">Применить форматирование перечёркиванием</string>
+    <string name="rich_text_editor_format_italic">Применить форматирование курсивом</string>
+    <string name="rich_text_editor_format_bold">Применить форматирование жирным</string>
+    <string name="qr_code_login_confirm_security_code_description">Пожалуйста удостоверьтесь в том, что вы знаете откуда этот код. При соединении устройств, вы даёте кому-то полный доступ к вашей учётной записи.</string>
+    <string name="qr_code_login_confirm_security_code">Подтвердить</string>
+    <string name="qr_code_login_try_again">Попробовать снова</string>
+    <string name="qr_code_login_status_no_match">Не сходится\?</string>
+    <string name="qr_code_login_signing_in">Вход</string>
+    <string name="qr_code_login_connecting_to_device">Соединение с устройством</string>
+    <string name="qr_code_login_scan_qr_code_button">Сканировать QR-код</string>
+    <string name="qr_code_login_signing_in_a_mobile_device">Входите с мобильного устройства\?</string>
+    <string name="qr_code_login_show_qr_code_button">Показать QR-код на этом устройстве</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_2">Выберите «Сканировать QR-код»</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_1">Начните с экрана входа</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">Выберите «Войти при помощи QR-кода»</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_1">Начните с экрана входа</string>
+    <string name="qr_code_login_new_device_instruction_3">Выберите «Показать QR-код»</string>
+    <string name="qr_code_login_new_device_instruction_2">Зайдите в Настройки -&gt; Безопасность и Приватность</string>
+    <string name="qr_code_login_new_device_instruction_1">Откройте приложение с другого устройства</string>
+    <string name="qr_code_login_header_failed_homeserver_is_not_supported_description">Домашний сервер не поддерживает вход при помощи QR-кода.</string>
+    <string name="qr_code_login_header_failed_user_cancelled_description">Вход был отменён с другого устройства.</string>
+    <string name="qr_code_login_header_failed_invalid_qr_code_description">Этот QR-код не работает.</string>
+    <string name="qr_code_login_header_failed_other_device_not_signed_in_description">Другое устройство должно войти в учётную запись.</string>
+    <string name="qr_code_login_header_failed_other_device_already_signed_in_description">Другое устройство уже выполнило вход.</string>
+    <string name="qr_code_login_header_failed_e2ee_security_issue_description">Во время установки безопасной переписки возникла проблема с безопасностью. Одно из следующего является скомпроментированным: Ваш домашний сервер; Ваше интернет-соединение; Ваше устройство;</string>
+    <string name="qr_code_login_header_failed_other_description">Запрос не выполнен.</string>
+    <string name="qr_code_login_header_failed_denied_description">Запрос был отклонён на другом устройстве.</string>
+    <string name="qr_code_login_header_failed_timeout_description">Соединение не было выполнено за нужное время.</string>
+    <string name="qr_code_login_header_failed_device_is_not_supported_description">Соединение с этим устройством не поддерживается.</string>
+    <string name="qr_code_login_header_failed_title">Неудачное соединение</string>
+    <string name="qr_code_login_header_connected_description">Проверьте устройство, с которого вы вошли в учётную запись. На его экране должен появиться код снизу. Подтвердите, что код снизу такой же, как и на том устройстве:</string>
+    <string name="qr_code_login_header_connected_title">Безопасное соединение установлено</string>
+    <string name="qr_code_login_header_show_qr_code_link_a_device_description">Сканируйте QR-код снизу при помощи устройства, с которого вы вышли с учётной записи.</string>
+    <string name="qr_code_login_header_show_qr_code_new_device_description">Используйте устройство, с которого вы вошли в учётную запись, чтобы сканировать QR-код снизу:</string>
+    <string name="qr_code_login_header_show_qr_code_title">Войти при помощи QR-кода</string>
+    <string name="qr_code_login_header_scan_qr_code_description">Используйте камеру на этом устройстве, чтобы сканировать QR-код, отображённый на вашем другом устройстве:</string>
+    <string name="qr_code_login_header_scan_qr_code_title">Сканировать QR-код</string>
+    <string name="three">3</string>
+    <string name="two">2</string>
+    <string name="one">1</string>
+    <string name="onboarding_new_app_layout_feedback_message">Нажмите слева сверху, чтобы увидеть опцию отзыва.</string>
+    <string name="onboarding_new_app_layout_welcome_message">Чтобы упростить ${app_name}, вкладки теперь опциональные. Управляйте ими при помощи меню справа сверху.</string>
+    <string name="home_empty_no_rooms_message">Универсальное безопасное приложение для переписок с командами, друзьями и организациями. Создайте переписку или присоеденитесь к уже существующей, чтобы начать.</string>
+    <string name="home_empty_space_no_rooms_message">Пространства — новый способ групировать комнаты и людей. Добавьте существующую комнату или создайте новую, используя кнопку слева снизу.</string>
+    <string name="labs_enable_voice_broadcast_summary">Возможность записывать и отправлять голосовые трансляции в ленту комнаты.</string>
+    <string name="labs_enable_session_manager_summary">Получите лучший надзор и контроль над всеми вашими сессиями.</string>
+    <string name="device_manager_learn_more_sessions_verified_description">Подтверждённые сессии есть везде, где вы используете эту учётную запись, после введения вашего пароля или подтверждения вашей личности при помощи другой подтверждённой сессии.
+\n
+\nЭто значит, что у вас есть все нужные ключи, чтобы разблокировать зашифрованные сообщения и даёте другим пользователям знать, что вы доверяете этой сессии.</string>
+    <string name="device_manager_learn_more_sessions_verified" tools:ignore="UnusedResources">Подтверждённые сессии вошли при помощи ваших учётных данных и были подтверждены, либо при помощи вашего безопасного пароля, либо при помощи подтверждения с другого устройства.
+\n
+\nЭто значит, что на них находятся ключи шифрования для ваших предыдущих сообщений и дают другим пользователям знать, что эти сессии действительно принадлежат вам.</string>
+    <string name="device_manager_learn_more_sessions_unverified">Неподтверждённые сессии — это сессии, которые вошли при помощи ваших учётных данных, но не были подтверждены.
+\n
+\nВы должны удостовериться, что узнаёте эти сессии, так как они могут быть несанкционированным входом в вашу учётную запись.</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_description">Вы можете использовать это устройство для входа с телефона или веб-устройства при помощи QR-кода. Для этого есть два способа:</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_title">Войти при помощи QR-кода</string>
+    <string name="device_manager_session_rename_description">Собственные названия сессий помогут вам легче распознать свои девайсы.</string>
+    <plurals name="device_manager_other_sessions_multi_signout_all">
+        <item quantity="one">Выйти из %1$d сессии</item>
+        <item quantity="few">Выйти из %1$d сессий</item>
+        <item quantity="many">Выйти из %1$d сессий</item>
+        <item quantity="other">Выйти из %1$d сессий</item>
+    </plurals>
+    <string name="device_manager_other_sessions_multi_signout_selection">Выйти</string>
+    <string name="device_manager_other_sessions_select">Выбрать сессии</string>
+    <string name="a11y_device_manager_filter">Фильтр</string>
+    <plurals name="device_manager_other_sessions_description_inactive">
+        <item quantity="one">Неактивен %1$d+ день (%2$s)</item>
+        <item quantity="few">Неактивен %1$d+ дней (%2$s)</item>
+        <item quantity="many">Неактивен %1$d+ дня (%2$s)</item>
+        <item quantity="other">Неактивен %1$d+ дня (%2$s)</item>
+    </plurals>
+    <string name="device_manager_verification_status_detail_other_session_unknown">Подтвердите текущую сессию, чтобы посмотреть её состояние подтверждения.</string>
+    <string name="device_manager_verification_status_unknown">Неизвестное состояние проверки</string>
+    <string name="labs_enable_element_call_permission_shortcuts_summary">Автоматически принимать виджеты Element Call и давать доступ к микрофону/камере</string>
+    <string name="labs_enable_element_call_permission_shortcuts">Включить ярлыки разрешений Element Call</string>
+    <string name="attachment_type_selector_text_formatting">Форматирование текста</string>
+    <string name="tooltip_attachment_voice_broadcast">Начать новую голосовую трансляцию</string>
+    <string name="live_location_not_enough_permission_dialog_description">Вам необходимо иметь нужные разрешения, чтобы делиться местоположением в реальном времени в этой комнате.</string>
+    <string name="live_location_not_enough_permission_dialog_title">У вас нет разрешения делиться местоположением в реальном времени</string>
+    <string name="labs_enable_msc3061_share_history_desc">При приглашении кого-то в зашифрованную комнату, которая делится историей, зашифрованная история будет видимой.</string>
+    <string name="error_voice_broadcast_already_in_progress_message">Вы уже записываете голосовую трансляцию. Пожалуйста закончите текущую голосовую трансляцию, чтобы начать новую.</string>
+    <string name="error_voice_broadcast_blocked_by_someone_else_message">Кто-то другой уже записывает голосовую трансляцию. Подождите пока их голосовая трансляция закончится, чтобы начать новую.</string>
+    <string name="error_voice_broadcast_permission_denied_message">У вас нет необходимых разрешений для начала голосовой трансляции в этой комнате. Свяжитесь с администратором комнаты, чтобы получить разрешения.</string>
+    <string name="error_voice_broadcast_unauthorized_title">Не получилось начать новую голосовую трансляцию</string>
+    <string name="a11y_voice_broadcast_fast_forward">Перемотать вперёд на 30 секунд</string>
+    <string name="a11y_voice_broadcast_fast_backward">Перемотать назад на 30 секунд</string>
+    <string name="a11y_voice_broadcast_buffering">Буферизация</string>
+    <string name="a11y_pause_voice_broadcast">Приостановить голосовую трансляцию</string>
+    <string name="a11y_play_voice_broadcast">Проиграть или продолжить голосовую трансляцию</string>
+    <string name="a11y_stop_voice_broadcast_record">Остановить запись голосовой трансляции</string>
+    <string name="a11y_pause_voice_broadcast_record">Приостановить запись голосовой трансляции</string>
+    <string name="a11y_resume_voice_broadcast_record">Продолжить запись голосовой трансляции</string>
+    <string name="voice_broadcast_live">Прямая трансляция</string>
+    <string name="key_authenticity_not_guaranteed">Подлинность этого зашифрованного сообщения не может быть гарантирована на этом устройстве.</string>
+    <string name="login_scan_qr_code">Сканировать QR-код</string>
+    <string name="send_your_first_msg_to_invite">Отправьте ваше первое сообщение, чтобы пригласить %s в переписку</string>
+    <string name="verify_invalid_qr_notice">Этот QR-код выглядит неправильно. Пожалуйста, попробуйте подтвердить другим способом.</string>
+    <string name="crosssigning_cannot_verify_this_session_desc">Вы не сможете получить доступ к истории зашифрованных сообщений. Сбросьте вашу защищённую резевную копию и ключи подтверждения, чтобы начать заново.</string>
+    <string name="ftue_auth_password_reset_confirmation">Сброс пароля</string>
+    <string name="ftue_auth_new_password_title">Выберите новый пароль</string>
+    <string name="ftue_auth_reset_password_email_subtitle">%s пришлёт вам ссылку для подтверждения</string>
+    <string name="ftue_auth_phone_subtitle">%s нуждается в подтверждении вашей учётной записи</string>
+    <string name="ftue_auth_email_subtitle">%s нуждается в подтверждении вашей учётной записи</string>
+    <string name="ftue_auth_choose_server_ems_cta">Связаться</string>
+    <string name="ftue_auth_choose_server_ems_subtitle">Element Matrix Services (EMS) — надёжная хостинговая служба для быстрой и безопасной связи в режиме реального времени. Узнайте больше на &lt;a href=\"${ftue_ems_url}\"&gt;element.io/ems&lt;/a&gt;</string>
+    <string name="a11y_open_spaces">Открыть список пространств</string>
+    <string name="push_gateway_item_enabled">Включено:</string>
+    <string name="error_check_network" tools:ignore="UnusedResources">Что-то пошло не так. Пожалуйста, проверьте соединение и попробуйте ещё раз.</string>
+    <string name="command_description_devtools">Открыть экран инструментов для разработчика</string>
+    <string name="timeline_error_room_not_found">Простите, эта комната не была найдена.
+\nПожалуйста, попробуйте снова позже.%s</string>
+    <string name="some_devices_will_not_be_able_to_decrypt">⚠ В этой комнате есть неподтверждённые устройства, они не смогут расшифровывать сообщения, отправленные вами.</string>
+    <string name="grant_permission">Дать разрешение</string>
+    <string name="ftue_auth_create_account_username_entry_footer">Другие пользователи могут найти вас по %s</string>
+    <string name="voice_broadcast_recording_time_left">Осталось %1$s</string>
+    <string name="message_reply_to_sender_created_poll">создал опрос.</string>
+    <string name="message_reply_to_sender_sent_sticker">отправил наклейку.</string>
+    <string name="message_reply_to_sender_sent_video">отправил видео.</string>
+    <string name="message_reply_to_sender_sent_image">отправил изображение.</string>
+    <string name="message_reply_to_sender_sent_voice_message">отправил голосовое сообщение.</string>
+    <string name="message_reply_to_sender_sent_audio_file">отправил аудиофайл.</string>
+    <string name="message_reply_to_sender_sent_file">отправил файл.</string>
+    <string name="message_reply_to_prefix">В ответ на</string>
+    <string name="device_manager_other_sessions_hide_ip_address">Скрыть IP-адрес</string>
+    <string name="device_manager_other_sessions_show_ip_address">Показать IP-адрес</string>
+    <string name="quoting">Цитируя</string>
+    <string name="replying_to">В ответ на %s</string>
+    <string name="editing">Редактирование</string>
 </resources>

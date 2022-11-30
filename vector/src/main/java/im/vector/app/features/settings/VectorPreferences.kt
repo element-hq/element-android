@@ -124,6 +124,7 @@ class VectorPreferences @Inject constructor(
         private const val SETTINGS_LABS_ENABLE_LATEX_MATHS = "SETTINGS_LABS_ENABLE_LATEX_MATHS"
         const val SETTINGS_PRESENCE_USER_ALWAYS_APPEARS_OFFLINE = "SETTINGS_PRESENCE_USER_ALWAYS_APPEARS_OFFLINE"
         const val SETTINGS_AUTOPLAY_ANIMATED_IMAGES = "SETTINGS_AUTOPLAY_ANIMATED_IMAGES"
+        private const val SETTINGS_ENABLE_DIRECT_SHARE = "SETTINGS_ENABLE_DIRECT_SHARE"
 
         // Room directory
         private const val SETTINGS_ROOM_DIRECTORY_SHOW_ALL_PUBLIC_ROOMS = "SETTINGS_ROOM_DIRECTORY_SHOW_ALL_PUBLIC_ROOMS"
@@ -208,6 +209,9 @@ class VectorPreferences @Inject constructor(
         const val SETTINGS_SECURITY_USE_BIOMETRICS_FLAG = "SETTINGS_SECURITY_USE_BIOMETRICS_FLAG"
         private const val SETTINGS_SECURITY_USE_GRACE_PERIOD_FLAG = "SETTINGS_SECURITY_USE_GRACE_PERIOD_FLAG"
         const val SETTINGS_SECURITY_USE_COMPLETE_NOTIFICATIONS_FLAG = "SETTINGS_SECURITY_USE_COMPLETE_NOTIFICATIONS_FLAG"
+
+        // New Session Manager
+        const val SETTINGS_SESSION_MANAGER_SHOW_IP_ADDRESS = "SETTINGS_SESSION_MANAGER_SHOW_IP_ADDRESS"
 
         // other
         const val SETTINGS_MEDIA_SAVING_PERIOD_KEY = "SETTINGS_MEDIA_SAVING_PERIOD_KEY"
@@ -1023,6 +1027,10 @@ class VectorPreferences @Inject constructor(
         return defaultPrefs.getBoolean(SETTINGS_ENABLE_CHAT_EFFECTS, true)
     }
 
+    fun directShareEnabled(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_ENABLE_DIRECT_SHARE, true)
+    }
+
     /**
      * Return true if Pin code is disabled, or if user set the settings to see full notification content.
      */
@@ -1227,5 +1235,15 @@ class VectorPreferences @Inject constructor(
     fun isVoiceBroadcastEnabled(): Boolean {
         return vectorFeatures.isVoiceBroadcastEnabled() &&
                 defaultPrefs.getBoolean(SETTINGS_LABS_VOICE_BROADCAST_KEY, getDefault(R.bool.settings_labs_enable_voice_broadcast_default))
+    }
+
+    fun showIpAddressInSessionManagerScreens(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_SESSION_MANAGER_SHOW_IP_ADDRESS, getDefault(R.bool.settings_session_manager_show_ip_address))
+    }
+
+    fun setIpAddressVisibilityInDeviceManagerScreens(isVisible: Boolean) {
+        defaultPrefs.edit {
+            putBoolean(VectorPreferences.SETTINGS_SESSION_MANAGER_SHOW_IP_ADDRESS, isVisible)
+        }
     }
 }
