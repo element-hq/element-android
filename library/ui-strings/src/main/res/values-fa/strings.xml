@@ -943,7 +943,7 @@
 \n
 \nپیام‌هایتان با قفل‌هایی امن شده‌اند و فقط شما و گیرندگان دیگر، کلیدهای یکتا را برای قفل‌گشاییشان دارید.</string>
     <string name="room_profile_section_security">امنیت</string>
-    <string name="room_profile_section_security_learn_more">بثیش‌تر بدانید</string>
+    <string name="room_profile_section_security_learn_more">بیش‌تر بدانید</string>
     <string name="room_profile_section_more">بیش‌تر</string>
     <string name="room_profile_section_admin">کنش‌های مدیر</string>
     <string name="room_profile_section_more_settings">تنظمیات اتاق</string>
@@ -2783,7 +2783,7 @@
     <string name="attachment_type_selector_poll">نظرسنجی‌ها</string>
     <string name="attachment_type_selector_file">پیوست‌ها</string>
     <string name="attachment_type_selector_sticker">برچسب‌ها</string>
-    <string name="a11y_voice_broadcast_buffering">میانگیری</string>
+    <string name="a11y_voice_broadcast_buffering">میانگیری…</string>
     <string name="voice_broadcast_live">زنده</string>
     <string name="qr_code_login_confirm_security_code">تأیید</string>
     <string name="three">۳</string>
@@ -2844,4 +2844,9 @@
     <string name="quoting">نقل کردن</string>
     <string name="replying_to">پاسخ دادن به %s</string>
     <string name="editing">ویرایش کردن</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_description">می‌توانید با یک رمز QR از این افزاره برای ورود به افزاره‌ای همراه یا روی وب استفاده کنید. دو راه برای این کار وجود دارد:</string>
+    <string name="qr_code_login_header_failed_e2ee_security_issue_description">مشکلی امنیتی در برپایی پیام‌رسانی امن وجود داشت. ممکن است یکی از موارد زیر دستکاری شده باشند: کارساز خانیگیتان؛ اتّصال اینترنتیتان؛ افزاره(های)تان؛</string>
+    <string name="qr_code_login_confirm_security_code_description">لطفاً مطمئن شوید که مبدأ این کد را می‌دانید. با پیوند دادن افزاره‌ها، دسترسی کامل را به حسابتان می‌دهید.</string>
+    <string name="settings_enable_direct_share_summary">نمایش گپ‌های اخیر در فهرست هم رسانی سامانه</string>
+    <string name="settings_enable_direct_share_title">به کار انداختن هم‌رسانی مستقیم</string>
 </resources>
