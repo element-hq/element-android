@@ -37,7 +37,6 @@ class EnableNotificationsForCurrentSessionUseCase @Inject constructor(
         object NeedToAskUserForDistributor : EnableNotificationsResult
     }
 
-    // TODO update unit tests
     suspend fun execute(distributor: String = ""): EnableNotificationsResult {
         val pusherForCurrentSession = pushersManager.getPusherForCurrentSession()
         if (pusherForCurrentSession == null) {

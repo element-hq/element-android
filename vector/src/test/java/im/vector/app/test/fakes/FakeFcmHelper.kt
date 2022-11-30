@@ -16,7 +16,6 @@
 
 package im.vector.app.test.fakes
 
-import androidx.fragment.app.FragmentActivity
 import im.vector.app.core.pushers.FcmHelper
 import im.vector.app.core.pushers.PushersManager
 import io.mockk.justRun
@@ -27,18 +26,14 @@ class FakeFcmHelper {
 
     val instance = mockk<FcmHelper>()
 
-    fun givenEnsureFcmTokenIsRetrieved(
-            fragmentActivity: FragmentActivity,
-            pushersManager: PushersManager,
-    ) {
-        justRun { instance.ensureFcmTokenIsRetrieved(fragmentActivity, pushersManager, any()) }
+    fun givenEnsureFcmTokenIsRetrieved(pushersManager: PushersManager) {
+        justRun { instance.ensureFcmTokenIsRetrieved(pushersManager, any()) }
     }
 
     fun verifyEnsureFcmTokenIsRetrieved(
-            fragmentActivity: FragmentActivity,
             pushersManager: PushersManager,
             registerPusher: Boolean,
     ) {
-        verify { instance.ensureFcmTokenIsRetrieved(fragmentActivity, pushersManager, registerPusher) }
+        verify { instance.ensureFcmTokenIsRetrieved(pushersManager, registerPusher) }
     }
 }

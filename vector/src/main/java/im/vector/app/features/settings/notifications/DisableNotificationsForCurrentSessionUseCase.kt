@@ -31,7 +31,6 @@ class DisableNotificationsForCurrentSessionUseCase @Inject constructor(
         private val unregisterUnifiedPushUseCase: UnregisterUnifiedPushUseCase,
 ) {
 
-    // TODO update unit tests
     suspend fun execute() {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
         val deviceId = session.sessionParams.deviceId ?: return

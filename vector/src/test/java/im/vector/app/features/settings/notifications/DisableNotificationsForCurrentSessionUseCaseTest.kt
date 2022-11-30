@@ -16,11 +16,11 @@
 
 package im.vector.app.features.settings.notifications
 
+import im.vector.app.core.pushers.UnregisterUnifiedPushUseCase
 import im.vector.app.features.settings.devices.v2.notification.CheckIfCanTogglePushNotificationsViaPusherUseCase
 import im.vector.app.features.settings.devices.v2.notification.TogglePushNotificationUseCase
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakePushersManager
-import im.vector.app.test.fakes.FakeUnifiedPushHelper
 import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.every
@@ -33,17 +33,17 @@ private const val A_SESSION_ID = "session-id"
 class DisableNotificationsForCurrentSessionUseCaseTest {
 
     private val fakeActiveSessionHolder = FakeActiveSessionHolder()
-    private val fakeUnifiedPushHelper = FakeUnifiedPushHelper()
     private val fakePushersManager = FakePushersManager()
     private val fakeCheckIfCanTogglePushNotificationsViaPusherUseCase = mockk<CheckIfCanTogglePushNotificationsViaPusherUseCase>()
     private val fakeTogglePushNotificationUseCase = mockk<TogglePushNotificationUseCase>()
+    private val fakeUnregisterUnifiedPushUseCase = mockk<UnregisterUnifiedPushUseCase>()
 
     private val disableNotificationsForCurrentSessionUseCase = DisableNotificationsForCurrentSessionUseCase(
             activeSessionHolder = fakeActiveSessionHolder.instance,
-            unifiedPushHelper = fakeUnifiedPushHelper.instance,
             pushersManager = fakePushersManager.instance,
             checkIfCanTogglePushNotificationsViaPusherUseCase = fakeCheckIfCanTogglePushNotificationsViaPusherUseCase,
             togglePushNotificationUseCase = fakeTogglePushNotificationUseCase,
+            unregisterUnifiedPushUseCase = fakeUnregisterUnifiedPushUseCase,
     )
 
     @Test
@@ -67,12 +67,14 @@ class DisableNotificationsForCurrentSessionUseCaseTest {
         val fakeSession = fakeActiveSessionHolder.fakeSession
         fakeSession.givenSessionId(A_SESSION_ID)
         every { fakeCheckIfCanTogglePushNotificationsViaPusherUseCase.execute(fakeSession) } returns false
-        fakeUnifiedPushHelper.givenUnregister(fakePushersManager.instance)
+        coJustRun { fakeUnregisterUnifiedPushUseCase.execute(any()) }
 
         // When
         disableNotificationsForCurrentSessionUseCase.execute()
 
         // Then
-        fakeUnifiedPushHelper.verifyUnregister(fakePushersManager.instance)
+        coVerify {
+            fakeUnregisterUnifiedPushUseCase.execute(fakePushersManager.instance)
+        }
     }
 }
