@@ -24,7 +24,7 @@ import org.matrix.android.sdk.api.util.Optional
 
 interface CrossSigningService {
     /**
-     * Is our own device signed by our own cross signing identity
+     * Is our own device signed by our own cross signing identity.
      */
     suspend fun isCrossSigningVerified(): Boolean
 
@@ -62,7 +62,7 @@ interface CrossSigningService {
                                           sskPrivateKey: String?): UserTrustResult
 
     /**
-     * Get the public cross signing keys for the given user
+     * Get the public cross signing keys for the given user.
      *
      * @param otherUserId The ID of the user for which we would like to fetch the cross signing keys.
      */
@@ -70,10 +70,10 @@ interface CrossSigningService {
 
     fun getLiveCrossSigningKeys(userId: String): LiveData<Optional<MXCrossSigningInfo>>
 
-    /** Get our own public cross signing keys */
+    /** Get our own public cross signing keys. */
     suspend fun getMyCrossSigningKeys(): MXCrossSigningInfo?
 
-    /** Get our own private cross signing keys */
+    /** Get our own private cross signing keys. */
     suspend fun getCrossSigningPrivateKeys(): PrivateKeysInfo?
 
     fun getLiveCrossSigningPrivateKeys(): LiveData<Optional<PrivateKeysInfo>>
@@ -88,10 +88,10 @@ interface CrossSigningService {
     /** Do we have all our private cross signing keys in storage? */
     fun allPrivateKeysKnown(): Boolean
 
-    /** Mark a user identity as trusted and sign and upload signatures of our user-signing key to the server */
+    /** Mark a user identity as trusted and sign and upload signatures of our user-signing key to the server. */
     suspend fun trustUser(otherUserId: String)
 
-    /** Mark our own master key as trusted */
+    /** Mark our own master key as trusted. */
     suspend fun markMyMasterKeyAsTrusted()
 
     /**

@@ -109,12 +109,12 @@ internal class RustCrossSigningService @Inject constructor(
         return olmMachine.getLiveUserIdentity(userId)
     }
 
-    /** Get our own public cross signing keys */
+    /** Get our own public cross signing keys. */
     override suspend fun getMyCrossSigningKeys(): MXCrossSigningInfo? {
         return getUserCrossSigningKeys(olmMachine.userId())
     }
 
-    /** Get our own private cross signing keys */
+    /** Get our own private cross signing keys. */
     override suspend fun getCrossSigningPrivateKeys(): PrivateKeysInfo? {
         return olmMachine.exportCrossSigningKeys()
     }
@@ -140,7 +140,7 @@ internal class RustCrossSigningService @Inject constructor(
         return status.hasMaster && status.hasSelfSigning && status.hasUserSigning
     }
 
-    /** Mark a user identity as trusted and sign and upload signatures of our user-signing key to the server */
+    /** Mark a user identity as trusted and sign and upload signatures of our user-signing key to the server. */
     override suspend fun trustUser(otherUserId: String) {
         // This is only used in a test
         val userIdentity = olmMachine.getIdentity(otherUserId)
@@ -151,7 +151,7 @@ internal class RustCrossSigningService @Inject constructor(
         }
     }
 
-    /** Mark our own master key as trusted */
+    /** Mark our own master key as trusted. */
     override suspend fun markMyMasterKeyAsTrusted() {
         // This doesn't seem to be used?
         trustUser(olmMachine.userId())

@@ -19,6 +19,6 @@ package org.matrix.android.sdk.api.session.crypto.model
 data class ImportRoomKeysResult(
         val totalNumberOfKeys: Int,
         val successfullyNumberOfImportedKeys: Int,
-        /**It's a map from room id to a map of the sender key to a list of session*/
+        /* It's a map from room id to a map of the sender key to a list of session. */
         val importedSessionInfo: Map<String, Map<String, List<String>>>
 )

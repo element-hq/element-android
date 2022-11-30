@@ -197,7 +197,7 @@ internal class VerificationRequest @AssistedInject constructor(
                 requestSender.sendVerificationRequest(result.request)
                 sasVerificationFactory.create(result.sas)
             } catch (failure: Throwable) {
-                cancel(CancelCode.UserError)
+                cancel()
                 null
             }
         }
@@ -225,7 +225,7 @@ internal class VerificationRequest @AssistedInject constructor(
         try {
             requestSender.sendVerificationRequest(result.request)
         } catch (failure: Throwable) {
-            cancel(CancelCode.UserError)
+            cancel()
             return null
         }
         return qrCodeVerificationFactory.create(result.qr)
@@ -241,14 +241,9 @@ internal class VerificationRequest @AssistedInject constructor(
      *
      * The method turns into a noop, if the verification flow has already been cancelled.
      */
-    internal suspend fun cancel(cancelCode: CancelCode = CancelCode.User) = withContext(NonCancellable) {
+    internal suspend fun cancel() = withContext(NonCancellable) {
         // TODO damir how to add the code?
         val request = innerVerificationRequest.cancel() ?: return@withContext
-//        val request = innerOlmMachine.cancelVerification(
-//                innerVerificationRequest.otherUserId,
-//                innerVerificationRequest.flowId,
-//                cancelCode.value
-//        ) ?: return@withContext
         dispatchRequestUpdated()
         tryOrNull("Fail to send cancel request") {
             requestSender.sendVerificationRequest(request, retryCount = Int.MAX_VALUE)

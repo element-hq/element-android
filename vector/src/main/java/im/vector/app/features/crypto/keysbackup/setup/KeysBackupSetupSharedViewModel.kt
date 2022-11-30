@@ -168,6 +168,7 @@ class KeysBackupSetupSharedViewModel @Inject constructor(
                     navigateEvent.postValue(LiveEvent(NAVIGATE_PROMPT_REPLACE))
                 }
             } catch (failure: Throwable) {
+                Timber.w(failure, "Failed to createKeysBackup")
             }
         }
     }

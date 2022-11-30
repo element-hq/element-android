@@ -40,7 +40,7 @@ import javax.inject.Inject
 import kotlin.reflect.KClass
 
 /**
- * Specific to other users verification (not self verification)
+ * Specific to other users verification (not self verification).
  */
 @AndroidEntryPoint
 class UserVerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetVerificationBinding>() {

@@ -107,7 +107,6 @@ interface KeysBackupService {
      * @param password an optional passphrase string that can be entered by the user
      * when restoring the backup as an alternative to entering the recovery key.
      * @param progressListener a progress listener, as generating private key from password may take a while
-     * @param callback Asynchronous callback
      */
     suspend fun prepareKeysBackupVersion(password: String?, progressListener: ProgressListener?): MegolmBackupCreationInfo
 
@@ -165,7 +164,6 @@ interface KeysBackupService {
      * @param roomId the id of the room to get backup data from.
      * @param sessionId the id of the session to restore.
      * @param stepProgressListener the step progress listener
-     * @param callback Callback. It provides the number of found keys and the number of successfully imported keys.
      */
     suspend fun restoreKeysWithRecoveryKey(
             keysVersionResult: KeysVersionResult,

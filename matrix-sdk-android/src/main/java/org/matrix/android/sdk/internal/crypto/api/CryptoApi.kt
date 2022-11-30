@@ -56,7 +56,7 @@ internal interface CryptoApi {
     suspend fun getDeviceInfo(@Path("deviceId") deviceId: String): DeviceInfo
 
     /**
-     * Upload device and one-time keys
+     * Upload device and one-time keys.
      * @param body the keys to be sent.
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "keys/upload")
