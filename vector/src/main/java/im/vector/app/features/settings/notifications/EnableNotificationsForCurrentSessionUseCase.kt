@@ -16,17 +16,14 @@
 
 package im.vector.app.features.settings.notifications
 
-import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.pushers.EnsureFcmTokenIsRetrievedUseCase
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.pushers.RegisterUnifiedPushUseCase
-import im.vector.app.features.settings.devices.v2.notification.ToggleNotificationUseCase
 import javax.inject.Inject
 
 class EnableNotificationsForCurrentSessionUseCase @Inject constructor(
-        private val activeSessionHolder: ActiveSessionHolder,
         private val pushersManager: PushersManager,
-        private val toggleNotificationUseCase: ToggleNotificationUseCase,
+        private val toggleNotificationsForCurrentSessionUseCase: ToggleNotificationsForCurrentSessionUseCase,
         private val registerUnifiedPushUseCase: RegisterUnifiedPushUseCase,
         private val ensureFcmTokenIsRetrievedUseCase: EnsureFcmTokenIsRetrievedUseCase,
 ) {
@@ -37,6 +34,7 @@ class EnableNotificationsForCurrentSessionUseCase @Inject constructor(
         object NeedToAskUserForDistributor : EnableNotificationsResult
     }
 
+    // TODO update unit tests
     suspend fun execute(distributor: String = ""): EnableNotificationsResult {
         val pusherForCurrentSession = pushersManager.getPusherForCurrentSession()
         if (pusherForCurrentSession == null) {
@@ -50,9 +48,7 @@ class EnableNotificationsForCurrentSessionUseCase @Inject constructor(
             }
         }
 
-        val session = activeSessionHolder.getSafeActiveSession() ?: return EnableNotificationsResult.Failure
-        val deviceId = session.sessionParams.deviceId ?: return EnableNotificationsResult.Failure
-        toggleNotificationUseCase.execute(deviceId, enabled = true)
+        toggleNotificationsForCurrentSessionUseCase.execute(enabled = true)
 
         return EnableNotificationsResult.Success
     }

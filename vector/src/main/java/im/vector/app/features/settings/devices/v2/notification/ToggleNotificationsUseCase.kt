@@ -20,7 +20,7 @@ import im.vector.app.core.di.ActiveSessionHolder
 import org.matrix.android.sdk.api.account.LocalNotificationSettingsContent
 import javax.inject.Inject
 
-class ToggleNotificationUseCase @Inject constructor(
+class ToggleNotificationsUseCase @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
         private val checkIfCanToggleNotificationsViaPusherUseCase: CheckIfCanToggleNotificationsViaPusherUseCase,
         private val checkIfCanToggleNotificationsViaAccountDataUseCase: CheckIfCanToggleNotificationsViaAccountDataUseCase,

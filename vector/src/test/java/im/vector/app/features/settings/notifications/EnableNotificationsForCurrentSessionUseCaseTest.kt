@@ -18,7 +18,7 @@ package im.vector.app.features.settings.notifications
 
 import im.vector.app.core.pushers.EnsureFcmTokenIsRetrievedUseCase
 import im.vector.app.core.pushers.RegisterUnifiedPushUseCase
-import im.vector.app.features.settings.devices.v2.notification.ToggleNotificationUseCase
+import im.vector.app.features.settings.devices.v2.notification.ToggleNotificationsUseCase
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakePushersManager
 import io.mockk.coJustRun
@@ -36,14 +36,14 @@ class EnableNotificationsForCurrentSessionUseCaseTest {
 
     private val fakeActiveSessionHolder = FakeActiveSessionHolder()
     private val fakePushersManager = FakePushersManager()
-    private val fakeToggleNotificationUseCase = mockk<ToggleNotificationUseCase>()
+    private val fakeToggleNotificationsUseCase = mockk<ToggleNotificationsUseCase>()
     private val fakeRegisterUnifiedPushUseCase = mockk<RegisterUnifiedPushUseCase>()
     private val fakeEnsureFcmTokenIsRetrievedUseCase = mockk<EnsureFcmTokenIsRetrievedUseCase>()
 
     private val enableNotificationsForCurrentSessionUseCase = EnableNotificationsForCurrentSessionUseCase(
             activeSessionHolder = fakeActiveSessionHolder.instance,
             pushersManager = fakePushersManager.instance,
-            toggleNotificationUseCase = fakeToggleNotificationUseCase,
+            toggleNotificationUseCase = fakeToggleNotificationsUseCase,
             registerUnifiedPushUseCase = fakeRegisterUnifiedPushUseCase,
             ensureFcmTokenIsRetrievedUseCase = fakeEnsureFcmTokenIsRetrievedUseCase,
     )
@@ -57,7 +57,7 @@ class EnableNotificationsForCurrentSessionUseCaseTest {
         fakePushersManager.givenGetPusherForCurrentSessionReturns(null)
         every { fakeRegisterUnifiedPushUseCase.execute(any()) } returns RegisterUnifiedPushUseCase.RegisterUnifiedPushResult.Success
         justRun { fakeEnsureFcmTokenIsRetrievedUseCase.execute(any(), any()) }
-        coJustRun { fakeToggleNotificationUseCase.execute(A_SESSION_ID, any()) }
+        coJustRun { fakeToggleNotificationsUseCase.execute(A_SESSION_ID, any()) }
 
         // When
         val result = enableNotificationsForCurrentSessionUseCase.execute(aDistributor)

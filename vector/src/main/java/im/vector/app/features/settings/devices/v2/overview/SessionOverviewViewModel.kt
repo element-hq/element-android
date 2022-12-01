@@ -31,7 +31,7 @@ import im.vector.app.features.settings.devices.v2.RefreshDevicesUseCase
 import im.vector.app.features.settings.devices.v2.ToggleIpAddressVisibilityUseCase
 import im.vector.app.features.settings.devices.v2.VectorSessionsListViewModel
 import im.vector.app.features.settings.devices.v2.notification.GetNotificationsStatusUseCase
-import im.vector.app.features.settings.devices.v2.notification.ToggleNotificationUseCase
+import im.vector.app.features.settings.devices.v2.notification.ToggleNotificationsUseCase
 import im.vector.app.features.settings.devices.v2.signout.SignoutSessionsReAuthNeeded
 import im.vector.app.features.settings.devices.v2.signout.SignoutSessionsUseCase
 import im.vector.app.features.settings.devices.v2.verification.CheckIfCurrentSessionCanBeVerifiedUseCase
@@ -52,7 +52,7 @@ class SessionOverviewViewModel @AssistedInject constructor(
         private val signoutSessionsUseCase: SignoutSessionsUseCase,
         private val pendingAuthHandler: PendingAuthHandler,
         private val activeSessionHolder: ActiveSessionHolder,
-        private val toggleNotificationUseCase: ToggleNotificationUseCase,
+        private val toggleNotificationsUseCase: ToggleNotificationsUseCase,
         private val getNotificationsStatusUseCase: GetNotificationsStatusUseCase,
         refreshDevicesUseCase: RefreshDevicesUseCase,
         private val vectorPreferences: VectorPreferences,
@@ -226,7 +226,7 @@ class SessionOverviewViewModel @AssistedInject constructor(
 
     private fun handleTogglePusherAction(action: SessionOverviewAction.TogglePushNotifications) {
         viewModelScope.launch {
-            toggleNotificationUseCase.execute(action.deviceId, action.enabled)
+            toggleNotificationsUseCase.execute(action.deviceId, action.enabled)
         }
     }
 }

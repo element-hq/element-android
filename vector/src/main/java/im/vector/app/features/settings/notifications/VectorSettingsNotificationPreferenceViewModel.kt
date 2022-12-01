@@ -40,6 +40,7 @@ class VectorSettingsNotificationPreferenceViewModel @AssistedInject constructor(
         private val unregisterUnifiedPushUseCase: UnregisterUnifiedPushUseCase,
         private val registerUnifiedPushUseCase: RegisterUnifiedPushUseCase,
         private val ensureFcmTokenIsRetrievedUseCase: EnsureFcmTokenIsRetrievedUseCase,
+        private val toggleNotificationsForCurrentSessionUseCase: ToggleNotificationsForCurrentSessionUseCase,
 ) : VectorViewModel<VectorDummyViewState, VectorSettingsNotificationPreferenceViewAction, VectorSettingsNotificationPreferenceViewEvent>(initialState) {
 
     @AssistedFactory
@@ -80,6 +81,7 @@ class VectorSettingsNotificationPreferenceViewModel @AssistedInject constructor(
         }
     }
 
+    // TODO update unit tests
     private fun handleRegisterPushDistributor(distributor: String) {
         viewModelScope.launch {
             unregisterUnifiedPushUseCase.execute(pushersManager)
@@ -88,7 +90,9 @@ class VectorSettingsNotificationPreferenceViewModel @AssistedInject constructor(
                     _viewEvents.post(VectorSettingsNotificationPreferenceViewEvent.AskUserForPushDistributor)
                 }
                 RegisterUnifiedPushUseCase.RegisterUnifiedPushResult.Success -> {
-                    ensureFcmTokenIsRetrievedUseCase.execute(pushersManager, registerPusher = vectorPreferences.areNotificationEnabledForDevice())
+                    val areNotificationsEnabled = vectorPreferences.areNotificationEnabledForDevice()
+                    ensureFcmTokenIsRetrievedUseCase.execute(pushersManager, registerPusher = areNotificationsEnabled)
+                    toggleNotificationsForCurrentSessionUseCase.execute(enabled = areNotificationsEnabled)
                     _viewEvents.post(VectorSettingsNotificationPreferenceViewEvent.NotificationMethodChanged)
                 }
             }

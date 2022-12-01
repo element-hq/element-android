@@ -16,14 +16,14 @@
 
 package im.vector.app.test.fakes
 
-import im.vector.app.features.settings.devices.v2.notification.ToggleNotificationUseCase
+import im.vector.app.features.settings.devices.v2.notification.ToggleNotificationsUseCase
 import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.mockk
 
 class FakeToggleNotificationUseCase {
 
-    val instance = mockk<ToggleNotificationUseCase> {
+    val instance = mockk<ToggleNotificationsUseCase> {
         coJustRun { execute(any(), any()) }
     }
 
