@@ -1152,11 +1152,13 @@ class OnboardingViewModelTest {
             resultingState: SelectedHomeserverState,
             config: HomeServerConnectionConfig = A_HOMESERVER_CONFIG,
             fingerprint: Fingerprint? = null,
+            canLoginWithQrCode: Boolean = false,
     ) {
         fakeHomeServerConnectionConfigFactory.givenConfigFor(homeserverUrl, fingerprint, config)
         fakeStartAuthenticationFlowUseCase.givenResult(config, StartAuthenticationResult(isHomeserverOutdated = false, resultingState))
         givenRegistrationResultFor(RegisterAction.StartRegistration, RegistrationActionHandler.Result.StartRegistration)
         fakeHomeServerHistoryService.expectUrlToBeAdded(config.homeServerUri.toString())
+        fakeAuthenticationService.givenIsQrLoginSupported(config, canLoginWithQrCode)
     }
 
     private fun givenUpdatingHomeserverErrors(homeserverUrl: String, resultingState: SelectedHomeserverState, error: Throwable) {
@@ -1164,6 +1166,7 @@ class OnboardingViewModelTest {
         fakeStartAuthenticationFlowUseCase.givenResult(A_HOMESERVER_CONFIG, StartAuthenticationResult(isHomeserverOutdated = false, resultingState))
         givenRegistrationResultFor(RegisterAction.StartRegistration, RegistrationActionHandler.Result.Error(error))
         fakeHomeServerHistoryService.expectUrlToBeAdded(A_HOMESERVER_CONFIG.homeServerUri.toString())
+        fakeAuthenticationService.givenIsQrLoginSupported(A_HOMESERVER_CONFIG, false)
     }
 
     private fun givenUserNameIsAvailable(userName: String) {
