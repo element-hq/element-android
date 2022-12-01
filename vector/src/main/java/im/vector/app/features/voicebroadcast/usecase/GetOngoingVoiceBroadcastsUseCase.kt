@@ -18,8 +18,8 @@ package im.vector.app.features.voicebroadcast.usecase
 
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
+import im.vector.app.features.voicebroadcast.isLive
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastEvent
-import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.getRoom
@@ -44,6 +44,6 @@ class GetOngoingVoiceBroadcastsUseCase @Inject constructor(
                 QueryStringValue.IsNotEmpty
         )
                 .mapNotNull { it.asVoiceBroadcastEvent() }
-                .filter { it.content?.voiceBroadcastState != null && it.content?.voiceBroadcastState != VoiceBroadcastState.STOPPED }
+                .filter { it.isLive }
     }
 }

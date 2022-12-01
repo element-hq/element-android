@@ -48,6 +48,7 @@ import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.analytics.impl.DefaultVectorAnalytics
 import im.vector.app.features.analytics.metrics.VectorPlugins
+import im.vector.app.features.configuration.VectorCustomEventTypesProvider
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.invite.CompileTimeAutoAcceptInvites
 import im.vector.app.features.navigation.DefaultNavigator
@@ -141,6 +142,7 @@ import javax.inject.Singleton
             vectorRoomDisplayNameFallbackProvider: VectorRoomDisplayNameFallbackProvider,
             flipperProxy: FlipperProxy,
             vectorPlugins: VectorPlugins,
+            vectorCustomEventTypesProvider: VectorCustomEventTypesProvider,
     ): MatrixConfiguration {
         return MatrixConfiguration(
                 applicationFlavor = BuildConfig.FLAVOR_DESCRIPTION,
@@ -150,6 +152,7 @@ import javax.inject.Singleton
                         flipperProxy.networkInterceptor(),
                 ),
                 metricPlugins = vectorPlugins.plugins(),
+                customEventTypesProvider = vectorCustomEventTypesProvider,
         )
     }
 
