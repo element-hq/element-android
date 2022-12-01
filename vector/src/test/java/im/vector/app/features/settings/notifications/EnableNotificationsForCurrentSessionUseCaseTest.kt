@@ -18,10 +18,9 @@ package im.vector.app.features.settings.notifications
 
 import im.vector.app.core.pushers.EnsureFcmTokenIsRetrievedUseCase
 import im.vector.app.core.pushers.RegisterUnifiedPushUseCase
-import im.vector.app.features.settings.devices.v2.notification.ToggleNotificationsUseCase
-import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakePushersManager
 import io.mockk.coJustRun
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
@@ -30,20 +29,16 @@ import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBe
 import org.junit.Test
 
-private const val A_SESSION_ID = "session-id"
-
 class EnableNotificationsForCurrentSessionUseCaseTest {
 
-    private val fakeActiveSessionHolder = FakeActiveSessionHolder()
     private val fakePushersManager = FakePushersManager()
-    private val fakeToggleNotificationsUseCase = mockk<ToggleNotificationsUseCase>()
+    private val fakeToggleNotificationsForCurrentSessionUseCase = mockk<ToggleNotificationsForCurrentSessionUseCase>()
     private val fakeRegisterUnifiedPushUseCase = mockk<RegisterUnifiedPushUseCase>()
     private val fakeEnsureFcmTokenIsRetrievedUseCase = mockk<EnsureFcmTokenIsRetrievedUseCase>()
 
     private val enableNotificationsForCurrentSessionUseCase = EnableNotificationsForCurrentSessionUseCase(
-            activeSessionHolder = fakeActiveSessionHolder.instance,
             pushersManager = fakePushersManager.instance,
-            toggleNotificationUseCase = fakeToggleNotificationsUseCase,
+            toggleNotificationsForCurrentSessionUseCase = fakeToggleNotificationsForCurrentSessionUseCase,
             registerUnifiedPushUseCase = fakeRegisterUnifiedPushUseCase,
             ensureFcmTokenIsRetrievedUseCase = fakeEnsureFcmTokenIsRetrievedUseCase,
     )
@@ -52,12 +47,10 @@ class EnableNotificationsForCurrentSessionUseCaseTest {
     fun `given no existing pusher and a registered distributor when execute then a new pusher is registered and result is success`() = runTest {
         // Given
         val aDistributor = "distributor"
-        val fakeSession = fakeActiveSessionHolder.fakeSession
-        fakeSession.givenSessionId(A_SESSION_ID)
         fakePushersManager.givenGetPusherForCurrentSessionReturns(null)
         every { fakeRegisterUnifiedPushUseCase.execute(any()) } returns RegisterUnifiedPushUseCase.RegisterUnifiedPushResult.Success
         justRun { fakeEnsureFcmTokenIsRetrievedUseCase.execute(any(), any()) }
-        coJustRun { fakeToggleNotificationsUseCase.execute(A_SESSION_ID, any()) }
+        coJustRun { fakeToggleNotificationsForCurrentSessionUseCase.execute(any()) }
 
         // When
         val result = enableNotificationsForCurrentSessionUseCase.execute(aDistributor)
@@ -67,6 +60,9 @@ class EnableNotificationsForCurrentSessionUseCaseTest {
         verify {
             fakeRegisterUnifiedPushUseCase.execute(aDistributor)
             fakeEnsureFcmTokenIsRetrievedUseCase.execute(fakePushersManager.instance, registerPusher = true)
+        }
+        coVerify {
+            fakeToggleNotificationsForCurrentSessionUseCase.execute(enabled = true)
         }
     }
 
@@ -85,21 +81,5 @@ class EnableNotificationsForCurrentSessionUseCaseTest {
         verify {
             fakeRegisterUnifiedPushUseCase.execute(aDistributor)
         }
-    }
-
-    @Test
-    fun `given no deviceId for current session when execute then result is failure`() = runTest {
-        // Given
-        val aDistributor = "distributor"
-        val fakeSession = fakeActiveSessionHolder.fakeSession
-        fakeSession.givenSessionId(null)
-        fakePushersManager.givenGetPusherForCurrentSessionReturns(mockk())
-        every { fakeRegisterUnifiedPushUseCase.execute(any()) } returns RegisterUnifiedPushUseCase.RegisterUnifiedPushResult.NeedToAskUserForDistributor
-
-        // When
-        val result = enableNotificationsForCurrentSessionUseCase.execute(aDistributor)
-
-        // Then
-        result shouldBe EnableNotificationsForCurrentSessionUseCase.EnableNotificationsResult.Failure
     }
 }

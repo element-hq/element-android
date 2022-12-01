@@ -46,6 +46,7 @@ class VectorSettingsNotificationPreferenceViewModelTest {
     private val fakeUnregisterUnifiedPushUseCase = mockk<UnregisterUnifiedPushUseCase>()
     private val fakeRegisterUnifiedPushUseCase = mockk<RegisterUnifiedPushUseCase>()
     private val fakeEnsureFcmTokenIsRetrievedUseCase = mockk<EnsureFcmTokenIsRetrievedUseCase>()
+    private val fakeToggleNotificationsForCurrentSessionUseCase = mockk<ToggleNotificationsForCurrentSessionUseCase>()
 
     private fun createViewModel() = VectorSettingsNotificationPreferenceViewModel(
             initialState = VectorDummyViewState(),
@@ -56,6 +57,7 @@ class VectorSettingsNotificationPreferenceViewModelTest {
             unregisterUnifiedPushUseCase = fakeUnregisterUnifiedPushUseCase,
             registerUnifiedPushUseCase = fakeRegisterUnifiedPushUseCase,
             ensureFcmTokenIsRetrievedUseCase = fakeEnsureFcmTokenIsRetrievedUseCase,
+            toggleNotificationsForCurrentSessionUseCase = fakeToggleNotificationsForCurrentSessionUseCase,
     )
 
     @Test
@@ -126,29 +128,6 @@ class VectorSettingsNotificationPreferenceViewModelTest {
     }
 
     @Test
-    fun `given EnableNotificationsForDevice action and enable failure when handling action then enable use case is called`() {
-        // Given
-        val viewModel = createViewModel()
-        val aDistributor = "aDistributor"
-        val action = VectorSettingsNotificationPreferenceViewAction.EnableNotificationsForDevice(aDistributor)
-        coEvery { fakeEnableNotificationsForCurrentSessionUseCase.execute(any()) } returns
-                EnableNotificationsForCurrentSessionUseCase.EnableNotificationsResult.Failure
-        val expectedEvent = VectorSettingsNotificationPreferenceViewEvent.EnableNotificationForDeviceFailure
-
-        // When
-        val viewModelTest = viewModel.test()
-        viewModel.handle(action)
-
-        // Then
-        viewModelTest
-                .assertEvent { event -> event == expectedEvent }
-                .finish()
-        coVerify {
-            fakeEnableNotificationsForCurrentSessionUseCase.execute(aDistributor)
-        }
-    }
-
-    @Test
     fun `given RegisterPushDistributor action and register success when handling action then register use case is called`() {
         // Given
         val viewModel = createViewModel()
@@ -158,6 +137,7 @@ class VectorSettingsNotificationPreferenceViewModelTest {
         coJustRun { fakeUnregisterUnifiedPushUseCase.execute(any()) }
         val areNotificationsEnabled = true
         fakeVectorPreferences.givenAreNotificationsEnabledForDevice(areNotificationsEnabled)
+        coJustRun { fakeToggleNotificationsForCurrentSessionUseCase.execute(any()) }
         justRun { fakeEnsureFcmTokenIsRetrievedUseCase.execute(any(), any()) }
         val expectedEvent = VectorSettingsNotificationPreferenceViewEvent.NotificationMethodChanged
 
@@ -173,6 +153,7 @@ class VectorSettingsNotificationPreferenceViewModelTest {
             fakeUnregisterUnifiedPushUseCase.execute(fakePushersManager.instance)
             fakeRegisterUnifiedPushUseCase.execute(aDistributor)
             fakeEnsureFcmTokenIsRetrievedUseCase.execute(fakePushersManager.instance, registerPusher = areNotificationsEnabled)
+            fakeToggleNotificationsForCurrentSessionUseCase.execute(enabled = areNotificationsEnabled)
         }
     }
 

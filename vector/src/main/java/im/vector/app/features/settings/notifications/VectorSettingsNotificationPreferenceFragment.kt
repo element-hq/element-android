@@ -119,7 +119,6 @@ class VectorSettingsNotificationPreferenceFragment :
                 VectorSettingsNotificationPreferenceViewEvent.NotificationsForDeviceEnabled -> onNotificationsForDeviceEnabled()
                 VectorSettingsNotificationPreferenceViewEvent.NotificationsForDeviceDisabled -> onNotificationsForDeviceDisabled()
                 is VectorSettingsNotificationPreferenceViewEvent.AskUserForPushDistributor -> askUserToSelectPushDistributor()
-                VectorSettingsNotificationPreferenceViewEvent.EnableNotificationForDeviceFailure -> displayErrorDialog(throwable = null)
                 VectorSettingsNotificationPreferenceViewEvent.NotificationMethodChanged -> onNotificationMethodChanged()
             }
         }

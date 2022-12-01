@@ -18,7 +18,6 @@ package im.vector.app.features.settings.notifications
 
 import im.vector.app.core.pushers.UnregisterUnifiedPushUseCase
 import im.vector.app.features.settings.devices.v2.notification.CheckIfCanToggleNotificationsViaPusherUseCase
-import im.vector.app.features.settings.devices.v2.notification.ToggleNotificationsUseCase
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakePushersManager
 import io.mockk.coJustRun
@@ -28,21 +27,19 @@ import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-private const val A_SESSION_ID = "session-id"
-
 class DisableNotificationsForCurrentSessionUseCaseTest {
 
     private val fakeActiveSessionHolder = FakeActiveSessionHolder()
     private val fakePushersManager = FakePushersManager()
     private val fakeCheckIfCanToggleNotificationsViaPusherUseCase = mockk<CheckIfCanToggleNotificationsViaPusherUseCase>()
-    private val fakeToggleNotificationsUseCase = mockk<ToggleNotificationsUseCase>()
+    private val fakeToggleNotificationsForCurrentSessionUseCase = mockk<ToggleNotificationsForCurrentSessionUseCase>()
     private val fakeUnregisterUnifiedPushUseCase = mockk<UnregisterUnifiedPushUseCase>()
 
     private val disableNotificationsForCurrentSessionUseCase = DisableNotificationsForCurrentSessionUseCase(
             activeSessionHolder = fakeActiveSessionHolder.instance,
             pushersManager = fakePushersManager.instance,
             checkIfCanToggleNotificationsViaPusherUseCase = fakeCheckIfCanToggleNotificationsViaPusherUseCase,
-            toggleNotificationUseCase = fakeToggleNotificationsUseCase,
+            toggleNotificationsForCurrentSessionUseCase = fakeToggleNotificationsForCurrentSessionUseCase,
             unregisterUnifiedPushUseCase = fakeUnregisterUnifiedPushUseCase,
     )
 
@@ -50,24 +47,25 @@ class DisableNotificationsForCurrentSessionUseCaseTest {
     fun `given toggle via pusher is possible when execute then disable notification via toggle of existing pusher`() = runTest {
         // Given
         val fakeSession = fakeActiveSessionHolder.fakeSession
-        fakeSession.givenSessionId(A_SESSION_ID)
         every { fakeCheckIfCanToggleNotificationsViaPusherUseCase.execute(fakeSession) } returns true
-        coJustRun { fakeToggleNotificationsUseCase.execute(A_SESSION_ID, any()) }
+        coJustRun { fakeToggleNotificationsForCurrentSessionUseCase.execute(any()) }
 
         // When
         disableNotificationsForCurrentSessionUseCase.execute()
 
         // Then
-        coVerify { fakeToggleNotificationsUseCase.execute(A_SESSION_ID, false) }
+        coVerify { fakeToggleNotificationsForCurrentSessionUseCase.execute(false) }
+        coVerify(inverse = true) {
+            fakeUnregisterUnifiedPushUseCase.execute(any())
+        }
     }
 
     @Test
     fun `given toggle via pusher is NOT possible when execute then disable notification by unregistering the pusher`() = runTest {
         // Given
         val fakeSession = fakeActiveSessionHolder.fakeSession
-        fakeSession.givenSessionId(A_SESSION_ID)
         every { fakeCheckIfCanToggleNotificationsViaPusherUseCase.execute(fakeSession) } returns false
-        coJustRun { fakeToggleNotificationsUseCase.execute(A_SESSION_ID, any()) }
+        coJustRun { fakeToggleNotificationsForCurrentSessionUseCase.execute(any()) }
         coJustRun { fakeUnregisterUnifiedPushUseCase.execute(any()) }
 
         // When
@@ -75,7 +73,7 @@ class DisableNotificationsForCurrentSessionUseCaseTest {
 
         // Then
         coVerify {
-            fakeToggleNotificationsUseCase.execute(A_SESSION_ID, false)
+            fakeToggleNotificationsForCurrentSessionUseCase.execute(false)
             fakeUnregisterUnifiedPushUseCase.execute(fakePushersManager.instance)
         }
     }

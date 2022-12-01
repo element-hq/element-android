@@ -88,7 +88,7 @@ class SessionOverviewViewModelTest {
             pendingAuthHandler = fakePendingAuthHandler.instance,
             activeSessionHolder = fakeActiveSessionHolder.instance,
             refreshDevicesUseCase = refreshDevicesUseCase,
-            toggleNotificationUseCase = toggleNotificationUseCase.instance,
+            toggleNotificationsUseCase = toggleNotificationUseCase.instance,
             getNotificationsStatusUseCase = fakeGetNotificationsStatusUseCase.instance,
             vectorPreferences = fakeVectorPreferences.instance,
             toggleIpAddressVisibilityUseCase = toggleIpAddressVisibilityUseCase,

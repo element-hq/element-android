@@ -68,9 +68,6 @@ class VectorSettingsNotificationPreferenceViewModel @AssistedInject constructor(
     private fun handleEnableNotificationsForDevice(distributor: String) {
         viewModelScope.launch {
             when (enableNotificationsForCurrentSessionUseCase.execute(distributor)) {
-                EnableNotificationsForCurrentSessionUseCase.EnableNotificationsResult.Failure -> {
-                    _viewEvents.post(VectorSettingsNotificationPreferenceViewEvent.EnableNotificationForDeviceFailure)
-                }
                 is EnableNotificationsForCurrentSessionUseCase.EnableNotificationsResult.NeedToAskUserForDistributor -> {
                     _viewEvents.post(VectorSettingsNotificationPreferenceViewEvent.AskUserForPushDistributor)
                 }
@@ -81,7 +78,6 @@ class VectorSettingsNotificationPreferenceViewModel @AssistedInject constructor(
         }
     }
 
-    // TODO update unit tests
     private fun handleRegisterPushDistributor(distributor: String) {
         viewModelScope.launch {
             unregisterUnifiedPushUseCase.execute(pushersManager)
