@@ -42,7 +42,6 @@ import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import com.google.android.material.shape.MaterialShapeDrawable
 import im.vector.app.R
-import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.setTextIfDifferent
 import im.vector.app.core.extensions.showKeyboard
 import im.vector.app.core.utils.DimensionConverter
@@ -132,8 +131,6 @@ class RichTextComposerLayout @JvmOverloads constructor(
         views.bottomSheetHandle.isVisible = isFullScreen
         if (isFullScreen) {
             editText.showKeyboard(true)
-        } else {
-            editText.hideKeyboard()
         }
         this.isFullScreen = isFullScreen
     }
