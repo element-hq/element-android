@@ -292,7 +292,11 @@ internal class OlmMachine @Inject constructor(
     }
 
     suspend fun receiveUnencryptedVerificationEvent(roomId: String, event: Event) = withContext(coroutineDispatchers.io) {
-        val adapter = moshi.adapter(Event::class.java)
+        val adapter = moshi
+                .newBuilder()
+                .add(CheckNumberType.JSON_ADAPTER_FACTORY)
+                .build()
+                .adapter(Event::class.java)
         val serializedEvent = adapter.toJson(event)
         inner.receiveUnencryptedVerificationEvent(serializedEvent, roomId)
     }
