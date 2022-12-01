@@ -23,7 +23,6 @@ import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.extensions.tryOrNull
-import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.EVerificationState
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
@@ -168,7 +167,7 @@ internal class VerificationRequest @AssistedInject constructor(
 //                activeQRCode = innerVerificationRequest.startQrVerification()
 //            }
         } catch (failure: Throwable) {
-            cancel(CancelCode.UserError)
+            cancel()
         }
     }
 
