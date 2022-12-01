@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api
+package org.matrix.android.sdk.api.provider
 
 import org.matrix.android.sdk.api.util.MatrixItem
 

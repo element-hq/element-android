@@ -20,6 +20,8 @@ import okhttp3.ConnectionSpec
 import okhttp3.Interceptor
 import org.matrix.android.sdk.api.crypto.MXCryptoConfig
 import org.matrix.android.sdk.api.metrics.MetricPlugin
+import org.matrix.android.sdk.api.provider.MatrixItemDisplayNameFallbackProvider
+import org.matrix.android.sdk.api.provider.RoomDisplayNameFallbackProvider
 import java.net.Proxy
 
 data class MatrixConfiguration(

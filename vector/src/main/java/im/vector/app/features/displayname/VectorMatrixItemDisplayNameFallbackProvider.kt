@@ -16,7 +16,7 @@
 
 package im.vector.app.features.displayname
 
-import org.matrix.android.sdk.api.MatrixItemDisplayNameFallbackProvider
+import org.matrix.android.sdk.api.provider.MatrixItemDisplayNameFallbackProvider
 import org.matrix.android.sdk.api.util.MatrixItem
 
 // Used to provide the fallback to the MatrixSDK, in the MatrixConfiguration
