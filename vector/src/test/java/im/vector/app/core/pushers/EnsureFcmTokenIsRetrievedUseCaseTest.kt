@@ -21,7 +21,6 @@ import im.vector.app.test.fakes.FakeFcmHelper
 import im.vector.app.test.fakes.FakePushersManager
 import im.vector.app.test.fakes.FakeUnifiedPushHelper
 import im.vector.app.test.fixtures.PusherFixture
-import io.mockk.verify
 import org.junit.Test
 
 class EnsureFcmTokenIsRetrievedUseCaseTest {
