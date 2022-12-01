@@ -1,0 +1,3 @@
+Rich Text Editor: fix several issues related to insets:
+* Empty space displayed at the bottom when you don't have permissions to send messages into a room.
+* Wrong insets being kept when you exit the room screen and the keyboard is displayed, then come back to it.

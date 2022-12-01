@@ -608,26 +608,33 @@ class ExpandingBottomSheetBehavior<V : View> : CoordinatorLayout.Behavior<V> {
         initialPaddingBottom = view.paddingBottom
 
         // This should only be used to set initial insets and other edge cases where the insets can't be applied using an animation.
-        var applyInsetsFromAnimation = false
+        var isAnimating = false
 
-        // This will animated inset changes, making them look a lot better. However, it won't update initial insets.
+        // This will animate inset changes, making them look a lot better. However, it won't update initial insets.
         ViewCompat.setWindowInsetsAnimationCallback(view, object : WindowInsetsAnimationCompat.Callback(DISPATCH_MODE_STOP) {
+            override fun onPrepare(animation: WindowInsetsAnimationCompat) {
+                isAnimating = true
+            }
+
             override fun onProgress(insets: WindowInsetsCompat, runningAnimations: MutableList<WindowInsetsAnimationCompat>): WindowInsetsCompat {
-                return applyInsets(view, insets)
+                return if (isAnimating) {
+                    applyInsets(view, insets)
+                } else {
+                    insets
+                }
             }
 
             override fun onEnd(animation: WindowInsetsAnimationCompat) {
-                applyInsetsFromAnimation = false
+                isAnimating = false
                 view.requestApplyInsets()
             }
         })
 
         ViewCompat.setOnApplyWindowInsetsListener(view) { _: View, insets: WindowInsetsCompat ->
-            if (!applyInsetsFromAnimation) {
-                applyInsetsFromAnimation = true
-                applyInsets(view, insets)
-            } else {
+            if (isAnimating) {
                 insets
+            } else {
+                applyInsets(view, insets)
             }
         }
 
