@@ -16,8 +16,8 @@
 
 package im.vector.app.test.fakes
 
-import im.vector.app.features.settings.BackgroundSyncMode
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
+import im.vector.app.features.settings.BackgroundSyncMode
 import im.vector.app.features.settings.VectorPreferences
 import io.mockk.every
 import io.mockk.justRun

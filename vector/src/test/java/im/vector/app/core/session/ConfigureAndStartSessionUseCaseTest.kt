@@ -19,8 +19,8 @@ package im.vector.app.core.session
 import im.vector.app.core.extensions.startSyncing
 import im.vector.app.core.session.clientinfo.UpdateMatrixClientInfoUseCase
 import im.vector.app.features.session.coroutineScope
-import im.vector.app.features.sync.SyncUtils
 import im.vector.app.features.settings.devices.v2.notification.UpdateNotificationSettingsAccountDataUseCase
+import im.vector.app.features.sync.SyncUtils
 import im.vector.app.test.fakes.FakeContext
 import im.vector.app.test.fakes.FakeNotificationsSettingUpdater
 import im.vector.app.test.fakes.FakeSession
