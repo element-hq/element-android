@@ -2789,7 +2789,7 @@
     <string name="key_authenticity_not_guaranteed">Pravost této šifrované zprávy nelze v tomto zařízení zaručit.</string>
     <string name="settings_security_incognito_keyboard_summary">Požadujte, aby klávesnice neaktualizovala žádné personalizované údaje, jako je historie psaní a slovník, na základě toho, co jste napsali v konverzacích. Upozorňujeme, že některé klávesnice nemusí toto nastavení respektovat.</string>
     <string name="settings_security_incognito_keyboard_title">Inkognito klávesnice</string>
-    <string name="command_description_table_flip">Přidá znaky (╯°□°）╯︵ ┻━┻ před zprávy ve formátu obyčejného textu</string>
+    <string name="command_description_table_flip">Přidá znaky (╯°□°）╯︵ ┻━┻ před zprávy ve formátu prostého textu</string>
     <string name="attachment_type_voice_broadcast">Hlasové vysílání</string>
     <string name="command_description_devtools">Otevřít nástroje pro vývojáře</string>
     <string name="room_settings_global_block_unverified_info_text">🔒 V nastavení zabezpečení jste povolili šifrování pouze do ověřených relací pro všechny místnosti.</string>
@@ -2824,8 +2824,8 @@
     <string name="permissions_rationale_msg_notification">${app_name} potřebuje oprávnění k zobrazování oznámení. Oznámení mohou zobrazovat vaše zprávy, pozvánky atd.
 \n
 \nPro zobrazování oznámení povolte přístup na dalších vyskakovacích oknech.</string>
-    <string name="labs_enable_rich_text_editor_summary">Vyzkoušejte rozšířený textový editor (textový režim již brzy)</string>
-    <string name="labs_enable_rich_text_editor_title">Povolit rozšířený textový editor</string>
+    <string name="labs_enable_rich_text_editor_summary">Vyzkoušejte editor formátovaného textu (režim prostého textu již brzy)</string>
+    <string name="labs_enable_rich_text_editor_title">Povolit editor formátovaného textu</string>
     <string name="qr_code_login_confirm_security_code_description">Ujistěte se, že znáte původ tohoto kódu. Propojením zařízení poskytnete někomu plný přístup ke svému účtu.</string>
     <string name="qr_code_login_confirm_security_code">Potvrdit</string>
     <string name="qr_code_login_try_again">Zkuste to znovu</string>
@@ -2868,7 +2868,7 @@
     <string name="qr_code_login_header_failed_other_device_already_signed_in_description">Druhé zařízení je již přihlášeno.</string>
     <string name="qr_code_login_header_failed_e2ee_security_issue_description">Při nastavování zabezpečeného zasílání zpráv se vyskytl problém se zabezpečením. Může být napadena jedna z následujících věcí: váš domovský server; vaše internetové připojení; vaše zařízení;</string>
     <string name="qr_code_login_header_failed_other_description">Žádost se nezdařila.</string>
-    <string name="a11y_voice_broadcast_buffering">Ukládání do vyrovnávací paměti</string>
+    <string name="a11y_voice_broadcast_buffering">Ukládání do vyrovnávací paměti…</string>
     <string name="a11y_pause_voice_broadcast">Pozastavit hlasové vysílání</string>
     <string name="a11y_play_voice_broadcast">Přehrát nebo obnovit hlasové vysílání</string>
     <string name="a11y_stop_voice_broadcast_record">Ukončit záznam hlasového vysílání</string>
@@ -2922,4 +2922,6 @@
     <string name="quoting">Citace</string>
     <string name="replying_to">Odpovídám na %s</string>
     <string name="editing">Úpravy</string>
+    <string name="settings_enable_direct_share_summary">Zobrazit poslední chaty v nabídce sdílení systému</string>
+    <string name="settings_enable_direct_share_title">Povolit přímé sdílení</string>
 </resources>
