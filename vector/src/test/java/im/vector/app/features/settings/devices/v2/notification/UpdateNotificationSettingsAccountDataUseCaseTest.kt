@@ -52,7 +52,7 @@ class UpdateNotificationSettingsAccountDataUseCaseTest {
         aSession.givenSessionId(aDeviceId)
         coJustRun { fakeSetNotificationSettingsAccountDataUseCase.execute(any(), any(), any()) }
         val areNotificationsEnabled = true
-        fakeVectorPreferences.givenAreNotificationEnabled(areNotificationsEnabled)
+        fakeVectorPreferences.givenAreNotificationsEnabledForDevice(areNotificationsEnabled)
         fakeUnifiedPushHelper.givenIsBackgroundSyncReturns(true)
         every { fakeGetNotificationSettingsAccountDataUseCase.execute(any(), any()) } returns
                 LocalNotificationSettingsContent(
@@ -83,7 +83,7 @@ class UpdateNotificationSettingsAccountDataUseCaseTest {
         aSession.givenSessionId(aDeviceId)
         coJustRun { fakeSetNotificationSettingsAccountDataUseCase.execute(any(), any(), any()) }
         val areNotificationsEnabled = true
-        fakeVectorPreferences.givenAreNotificationEnabled(areNotificationsEnabled)
+        fakeVectorPreferences.givenAreNotificationsEnabledForDevice(areNotificationsEnabled)
         fakeUnifiedPushHelper.givenIsBackgroundSyncReturns(true)
         every { fakeGetNotificationSettingsAccountDataUseCase.execute(any(), any()) } returns
                 LocalNotificationSettingsContent(
