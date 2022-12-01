@@ -161,6 +161,28 @@ class OnboardingViewModelTest {
     }
 
     @Test
+    fun `given combined login enabled, when handling sign in splash action, then emits OpenCombinedLogin with default homeserver qrCode supported`() = runTest {
+        val test = viewModel.test()
+        fakeVectorFeatures.givenCombinedLoginEnabled()
+        givenCanSuccessfullyUpdateHomeserver(A_DEFAULT_HOMESERVER_URL, DEFAULT_SELECTED_HOMESERVER_STATE, canLoginWithQrCode = true)
+
+        viewModel.handle(OnboardingAction.SplashAction.OnIAlreadyHaveAnAccount(OnboardingFlow.SignIn))
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(onboardingFlow = OnboardingFlow.SignIn) },
+                        { copy(isLoading = true) },
+                        { copy(canLoginWithQrCode = true) },
+                        { copy(selectedHomeserver = DEFAULT_SELECTED_HOMESERVER_STATE) },
+                        { copy(signMode = SignMode.SignIn) },
+                        { copy(isLoading = false) }
+                )
+                .assertEvents(OnboardingViewEvents.OpenCombinedLogin)
+                .finish()
+    }
+
+    @Test
     fun `given can successfully login in with token, when logging in with token, then emits AccountSignedIn`() = runTest {
         val test = viewModel.test()
         fakeAuthenticationService.givenLoginWizard(fakeLoginWizard)
