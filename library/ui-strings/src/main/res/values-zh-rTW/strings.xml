@@ -2760,7 +2760,7 @@
     <string name="qr_code_login_header_failed_other_description">請求失敗。</string>
     <string name="labs_enable_voice_broadcast_summary">可以在聊天室時間軸中錄製並傳送語音廣播。</string>
     <string name="labs_enable_voice_broadcast_title">啟用語音廣播（正在積極開發中）</string>
-    <string name="a11y_voice_broadcast_buffering">正在緩衝</string>
+    <string name="a11y_voice_broadcast_buffering">正在緩衝……</string>
     <string name="a11y_pause_voice_broadcast">暫停語音廣播</string>
     <string name="a11y_play_voice_broadcast">播放或繼續語音廣播</string>
     <string name="a11y_stop_voice_broadcast_record">停止語音廣播錄製</string>
@@ -2810,4 +2810,6 @@
     <string name="quoting">引用</string>
     <string name="replying_to">回覆給 %s</string>
     <string name="editing">正在編輯</string>
+    <string name="settings_enable_direct_share_summary">在系統分享選單中顯示最近聊天</string>
+    <string name="settings_enable_direct_share_title">啟用直接分享</string>
 </resources>

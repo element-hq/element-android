@@ -2762,7 +2762,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="qr_code_login_header_failed_other_description">Permintaan gagal.</string>
     <string name="labs_enable_voice_broadcast_summary">Memungkinkan untuk merekam dan mengirim siaran suara dalam linimasa ruangan.</string>
     <string name="labs_enable_voice_broadcast_title">Aktifkan siaran suara (dalam pengembangan aktif)</string>
-    <string name="a11y_voice_broadcast_buffering">Memuat</string>
+    <string name="a11y_voice_broadcast_buffering">Memuat…</string>
     <string name="a11y_pause_voice_broadcast">Jeda siaran suara</string>
     <string name="a11y_play_voice_broadcast">Mainkan atau lanjutkan siaran suara</string>
     <string name="a11y_stop_voice_broadcast_record">Hentikan rekaman siaran suara</string>
@@ -2812,4 +2812,6 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="editing">Mengedit</string>
     <string name="device_manager_other_sessions_show_ip_address">Tampilkan alamat IP</string>
     <string name="replying_to">Membalas ke %s</string>
+    <string name="settings_enable_direct_share_summary">Tampilkan obrolan terkini dalam menu pembagian sistem</string>
+    <string name="settings_enable_direct_share_title">Aktifkan pembagian langsung</string>
 </resources>

@@ -2659,7 +2659,7 @@
 \nKy shërbyes Home mund të mos jetë formësuar të shfaqë harta.</string>
     <string name="poll_undisclosed_not_ended">Përfundimet do të jenë të dukshme pasi të ketë përfunduar pyetësori</string>
     <string name="labs_enable_msc3061_share_history_desc">Kur bëhet ftesë në një dhomë të fshehtëzuar që ka historik ndarjesh me të tjerët, historiku i fshehtëzuar do të jetë i dukshëm.</string>
-    <string name="a11y_voice_broadcast_buffering">Përdo</string>
+    <string name="a11y_voice_broadcast_buffering"></string>
     <string name="a11y_pause_voice_broadcast">Ndal transmetim zanor</string>
     <string name="a11y_play_voice_broadcast">Luani ose vazhdoni luajtje transmetimi zanor</string>
     <string name="a11y_stop_voice_broadcast_record">Ndal incizim transmetimi zanor</string>
@@ -2851,4 +2851,6 @@
     <string name="a11y_voice_broadcast_fast_backward">Kthim prapa 30 sekonda</string>
     <string name="replying_to">Si përgjigje për %s</string>
     <string name="labs_enable_deferred_dm_title">Aktivizo MD të lënë për më vonë</string>
+    <string name="a11y_collapse_space_children">Tkurr pjella të %s</string>
+    <string name="a11y_expand_space_children">Zgjero pjella të %s</string>
 </resources>
