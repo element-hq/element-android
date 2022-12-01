@@ -16,11 +16,7 @@
 
 package im.vector.app.core.notification
 
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import im.vector.app.features.session.coroutineScope
-import im.vector.app.features.settings.VectorPreferences
-import im.vector.app.features.settings.VectorPreferences.Companion.SETTINGS_FDROID_BACKGROUND_SYNC_MODE
-import im.vector.app.features.settings.devices.v2.notification.UpdateNotificationSettingsAccountDataUseCase
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
@@ -29,45 +25,22 @@ import javax.inject.Singleton
 
 /**
  * Listen changes in Pusher or Account Data to update the local setting for notification toggle.
- * Listen changes on background sync mode preference to update the corresponding Account Data event.
  */
 @Singleton
 class NotificationsSettingUpdater @Inject constructor(
         private val updateEnableNotificationsSettingOnChangeUseCase: UpdateEnableNotificationsSettingOnChangeUseCase,
-        private val vectorPreferences: VectorPreferences,
-        private val updateNotificationSettingsAccountDataUseCase: UpdateNotificationSettingsAccountDataUseCase,
 ) {
 
     private var job: Job? = null
-    private var prefChangeListener: OnSharedPreferenceChangeListener? = null
 
     fun onSessionStarted(session: Session) {
         updateEnableNotificationsSettingOnChange(session)
-        updateAccountDataOnBackgroundSyncChange(session)
     }
 
     private fun updateEnableNotificationsSettingOnChange(session: Session) {
         job?.cancel()
         job = session.coroutineScope.launch {
             updateEnableNotificationsSettingOnChangeUseCase.execute(session)
-        }
-    }
-
-    private fun updateAccountDataOnBackgroundSyncChange(session: Session) {
-        prefChangeListener?.let { vectorPreferences.unsubscribeToChanges(it) }
-        prefChangeListener = null
-        prefChangeListener = createPrefListener(session).also {
-            vectorPreferences.subscribeToChanges(it)
-        }
-    }
-
-    private fun createPrefListener(session: Session): OnSharedPreferenceChangeListener {
-        return OnSharedPreferenceChangeListener { _, key ->
-            session.coroutineScope.launch {
-                if (key == SETTINGS_FDROID_BACKGROUND_SYNC_MODE) {
-                    updateNotificationSettingsAccountDataUseCase.execute(session)
-                }
-            }
         }
     }
 }
