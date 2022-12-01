@@ -33,7 +33,6 @@ class ToggleNotificationsForCurrentSessionUseCase @Inject constructor(
         private val deleteNotificationSettingsAccountDataUseCase: DeleteNotificationSettingsAccountDataUseCase,
 ) {
 
-    // TODO add unit tests
     suspend fun execute(enabled: Boolean) {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
         val deviceId = session.sessionParams.deviceId ?: return
