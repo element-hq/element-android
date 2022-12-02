@@ -38,7 +38,7 @@ jobs:
           yes n | towncrier build --version nightly
       - name: Build and upload Gplay Nightly APK
         run: |
-          ./gradlew assembleGplayNightly appDistributionUploadGplayNightly $CI_GRADLE_ARG_PROPERTIES
+          ./gradlew assembleGplayKotlinCryptoNightly appDistributionUploadGplayKotlinCryptoNightly $CI_GRADLE_ARG_PROPERTIES
         env:
           ELEMENT_ANDROID_NIGHTLY_KEYID: ${{ secrets.ELEMENT_ANDROID_NIGHTLY_KEYID }}
           ELEMENT_ANDROID_NIGHTLY_KEYPASSWORD: ${{ secrets.ELEMENT_ANDROID_NIGHTLY_KEYPASSWORD }}
