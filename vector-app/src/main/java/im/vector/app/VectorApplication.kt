@@ -32,6 +32,7 @@ import androidx.core.provider.FontsContractCompat
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
+import androidx.lifecycle.coroutineScope
 import androidx.multidex.MultiDex
 import androidx.recyclerview.widget.SnapHelper
 import com.airbnb.epoxy.Carousel
@@ -68,6 +69,7 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.version.VersionProvider
 import im.vector.application.R
+import kotlinx.coroutines.launch
 import org.jitsi.meet.sdk.log.JitsiMeetDefaultLogHandler
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.auth.AuthenticationService
@@ -134,6 +136,13 @@ class VectorApplication :
         invitesAcceptor.initialize()
         autoRageShaker.initialize()
         vectorUncaughtExceptionHandler.activate()
+
+        if (BuildConfig.FLAVOR == "rustCrypto") {
+            ProcessLifecycleOwner.get().lifecycle.coroutineScope.launch {
+                vectorAnalytics.setUserConsent(true)
+            }
+            vectorPreferences.setLabsAutoReportUISI(true)
+        }
 
         // Remove Log handler statically added by Jitsi
         Timber.forest()

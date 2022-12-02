@@ -1092,6 +1092,12 @@ class VectorPreferences @Inject constructor(
         return defaultPrefs.getBoolean(SETTINGS_LABS_AUTO_REPORT_UISI, false)
     }
 
+    fun setLabsAutoReportUISI(enabled: Boolean) {
+        return defaultPrefs.edit {
+            putBoolean(SETTINGS_LABS_AUTO_REPORT_UISI, enabled)
+        }
+    }
+
     fun prefSpacesShowAllRoomInHome(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME, false)
     }
