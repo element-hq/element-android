@@ -25,9 +25,9 @@ import org.matrix.android.sdk.internal.crypto.network.RequestSender
 import org.matrix.android.sdk.internal.crypto.verification.VerificationRequest
 import org.matrix.rustcomponents.sdk.crypto.CryptoStoreException
 import timber.log.Timber
-import org.matrix.rustcomponents.sdk.crypto.UserIdentity as InnerUserIdentity
 import javax.inject.Inject
 import javax.inject.Provider
+import org.matrix.rustcomponents.sdk.crypto.UserIdentity as InnerUserIdentity
 
 internal class GetUserIdentityUseCase @Inject constructor(
         private val olmMachine: Provider<OlmMachine>,
