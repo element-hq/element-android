@@ -16,27 +16,18 @@
 
 package im.vector.app.features.settings.notifications
 
-import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.pushers.UnregisterUnifiedPushUseCase
-import im.vector.app.features.settings.devices.v2.notification.CheckIfCanToggleNotificationsViaPusherUseCase
 import javax.inject.Inject
 
 class DisableNotificationsForCurrentSessionUseCase @Inject constructor(
-        private val activeSessionHolder: ActiveSessionHolder,
         private val pushersManager: PushersManager,
-        private val checkIfCanToggleNotificationsViaPusherUseCase: CheckIfCanToggleNotificationsViaPusherUseCase,
         private val toggleNotificationsForCurrentSessionUseCase: ToggleNotificationsForCurrentSessionUseCase,
         private val unregisterUnifiedPushUseCase: UnregisterUnifiedPushUseCase,
 ) {
 
     suspend fun execute() {
-        val session = activeSessionHolder.getSafeActiveSession() ?: return
         toggleNotificationsForCurrentSessionUseCase.execute(enabled = false)
-
-        // handle case when server does not support toggle of pusher
-        if (!checkIfCanToggleNotificationsViaPusherUseCase.execute(session)) {
-            unregisterUnifiedPushUseCase.execute(pushersManager)
-        }
+        unregisterUnifiedPushUseCase.execute(pushersManager)
     }
 }
