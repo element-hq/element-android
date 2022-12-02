@@ -74,7 +74,10 @@ internal class SyncResponseHandler @Inject constructor(
 
             // Handle the to device events before the room ones
             // to ensure to decrypt them properly
-            handleToDevice(syncResponse)
+
+            relevantPlugins.measureSpan("task", "handle_to_device") {
+                handleToDevice(syncResponse)
+            }
 
             val aggregator = SyncResponsePostTreatmentAggregator()
 
@@ -113,7 +116,6 @@ internal class SyncResponseHandler @Inject constructor(
     }
 
     private suspend fun handleToDevice(syncResponse: SyncResponse) {
-        relevantPlugins.measureSpan("task", "handle_to_device") {
             measureTimeMillis {
                 Timber.v("Handle toDevice")
                 cryptoService.receiveSyncChanges(
@@ -124,7 +126,6 @@ internal class SyncResponseHandler @Inject constructor(
             }.also {
                 Timber.v("Finish handling toDevice in $it ms")
             }
-        }
     }
 
     private suspend fun startMonarchyTransaction(

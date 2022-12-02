@@ -34,6 +34,7 @@ import im.vector.app.features.crypto.verification.user.bottomDone
 import im.vector.app.features.crypto.verification.user.gotIt
 import im.vector.app.features.crypto.verification.user.renderAcceptDeclineRequest
 import im.vector.app.features.crypto.verification.user.renderCancel
+import im.vector.app.features.crypto.verification.user.renderQrTransaction
 import im.vector.app.features.crypto.verification.user.renderSasTransaction
 import im.vector.app.features.crypto.verification.user.renderStartTransactionOptions
 import im.vector.app.features.crypto.verification.user.verifiedSuccessTile
@@ -302,9 +303,7 @@ class SelfVerificationController @Inject constructor(
     private fun renderTransaction(state: SelfVerificationViewState, transaction: VerificationTransactionData) {
         when (transaction) {
             is VerificationTransactionData.QrTransactionData -> {
-                TODO("Render QR transaction $state")
-                // TODO
-                // renderQrTransaction(transaction, state.otherUserMxItem)
+                renderQrTransaction(transaction, null)
             }
             is VerificationTransactionData.SasTransactionData -> {
                 renderSasTransaction(transaction)

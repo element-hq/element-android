@@ -25,12 +25,15 @@ import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationE
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationNoticeItem
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationQrCodeItem
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationWaitingItem
+import im.vector.app.features.displayname.getBestName
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.EmojiRepresentation
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
+import org.matrix.android.sdk.api.session.crypto.verification.QRCodeVerificationState
 import org.matrix.android.sdk.api.session.crypto.verification.SasTransactionState
+import org.matrix.android.sdk.api.util.MatrixItem
 
 fun BaseEpoxyVerificationController.verifiedSuccessTile() {
     val host = this
@@ -283,6 +286,88 @@ fun BaseEpoxyVerificationController.renderSasTransaction(transaction: Verificati
                 id("waiting")
                 title(host.stringProvider.getString(R.string.please_wait))
             }
+        }
+    }
+}
+
+fun BaseEpoxyVerificationController.renderQrTransaction(transaction: VerificationTransactionData.QrTransactionData, otherUserItem: MatrixItem?) {
+    val host = this
+    when (transaction.state) {
+        QRCodeVerificationState.Reciprocated -> {
+            // we are waiting for confirmation from the other side
+            bottomSheetVerificationNoticeItem {
+                id("notice")
+                apply {
+                    notice(host.stringProvider.getString(R.string.qr_code_scanned_verif_waiting_notice).toEpoxyCharSequence())
+                }
+            }
+
+            bottomSheetVerificationBigImageItem {
+                id("image")
+                roomEncryptionTrustLevel(RoomEncryptionTrustLevel.Trusted)
+            }
+
+            bottomSheetVerificationWaitingItem {
+                id("waiting")
+                if (otherUserItem != null) {
+                    title(host.stringProvider.getString(R.string.qr_code_scanned_verif_waiting, otherUserItem.getBestName()))
+                } else {
+                    title(host.stringProvider.getString(R.string.qr_code_scanned_verif_waiting, transaction.otherDeviceId.orEmpty()))
+                }
+            }
+        }
+        QRCodeVerificationState.WaitingForScanConfirmation -> {
+            // we need to confirm that the other party actual scanned us
+            bottomSheetVerificationNoticeItem {
+                id("notice")
+                apply {
+                    if (otherUserItem != null) {
+                        val name = otherUserItem.getBestName()
+                        notice(host.stringProvider.getString(R.string.qr_code_scanned_by_other_notice, name).toEpoxyCharSequence())
+                    } else {
+                        notice(host.stringProvider.getString(R.string.qr_code_scanned_self_verif_notice).toEpoxyCharSequence())
+                    }
+                }
+            }
+
+            bottomSheetVerificationBigImageItem {
+                id("image")
+                roomEncryptionTrustLevel(RoomEncryptionTrustLevel.Trusted)
+            }
+
+            bottomSheetDividerItem {
+                id("sep0")
+            }
+
+            bottomSheetVerificationActionItem {
+                id("deny")
+                title(host.stringProvider.getString(R.string.qr_code_scanned_by_other_no))
+                titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
+                iconRes(R.drawable.ic_check_off)
+                iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
+                listener { host.listener?.onUserDeniesQrCodeScanned() }
+            }
+
+            bottomSheetDividerItem {
+                id("sep1")
+            }
+
+            bottomSheetVerificationActionItem {
+                id("confirm")
+                title(host.stringProvider.getString(R.string.qr_code_scanned_by_other_yes))
+                titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+                iconRes(R.drawable.ic_check_on)
+                iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+                listener { host.listener?.onUserConfirmsQrCodeScanned() }
+            }
+        }
+        QRCodeVerificationState.WaitingForOtherDone,
+        QRCodeVerificationState.Done -> {
+            // Done
+        }
+        QRCodeVerificationState.Cancelled -> {
+            // Done
+//                renderCancel(transaction.)
         }
     }
 }

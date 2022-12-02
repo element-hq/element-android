@@ -24,6 +24,8 @@ import org.matrix.android.sdk.internal.crypto.model.rest.RestKeyInfo
 import org.matrix.android.sdk.internal.crypto.network.RequestSender
 import org.matrix.android.sdk.internal.crypto.verification.VerificationRequest
 import org.matrix.rustcomponents.sdk.crypto.CryptoStoreException
+import timber.log.Timber
+import org.matrix.rustcomponents.sdk.crypto.UserIdentity as InnerUserIdentity
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -38,13 +40,18 @@ internal class GetUserIdentityUseCase @Inject constructor(
     @Throws(CryptoStoreException::class)
     suspend operator fun invoke(userId: String): UserIdentities? {
         val innerMachine = olmMachine.get().inner()
-        val identity = withContext(coroutineDispatchers.io) {
-            innerMachine.getIdentity(userId, 30u)
+        val identity = try {
+            withContext(coroutineDispatchers.io) {
+                innerMachine.getIdentity(userId, 30u)
+            }
+        } catch (error: CryptoStoreException) {
+            Timber.w(error, "Failed to get identity for user $userId")
+            return null
         }
         val adapter = moshi.adapter(RestKeyInfo::class.java)
 
         return when (identity) {
-            is org.matrix.rustcomponents.sdk.crypto.UserIdentity.Other -> {
+            is InnerUserIdentity.Other -> {
                 val verified = innerMachine.isIdentityVerified(userId)
                 val masterKey = adapter.fromJson(identity.masterKey)!!.toCryptoModel().apply {
                     trustLevel = DeviceTrustLevel(verified, verified)
@@ -62,7 +69,7 @@ internal class GetUserIdentityUseCase @Inject constructor(
                         verificationRequestFactory = verificationRequestFactory
                 )
             }
-            is org.matrix.rustcomponents.sdk.crypto.UserIdentity.Own   -> {
+            is InnerUserIdentity.Own -> {
                 val verified = innerMachine.isIdentityVerified(userId)
 
                 val masterKey = adapter.fromJson(identity.masterKey)!!.toCryptoModel().apply {

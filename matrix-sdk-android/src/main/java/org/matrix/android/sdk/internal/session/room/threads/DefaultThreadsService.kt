@@ -27,7 +27,6 @@ import org.matrix.android.sdk.api.session.room.threads.model.ThreadSummary
 import org.matrix.android.sdk.internal.database.helper.enhanceWithEditions
 import org.matrix.android.sdk.internal.database.helper.findAllThreadsForRoomId
 import org.matrix.android.sdk.internal.database.mapper.ThreadSummaryMapper
-import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.model.threads.ThreadSummaryEntity
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.UserId
@@ -40,7 +39,6 @@ internal class DefaultThreadsService @AssistedInject constructor(
         private val fetchThreadTimelineTask: FetchThreadTimelineTask,
         private val fetchThreadSummariesTask: FetchThreadSummariesTask,
         @SessionDatabase private val monarchy: Monarchy,
-        private val timelineEventMapper: TimelineEventMapper,
         private val threadSummaryMapper: ThreadSummaryMapper
 ) : ThreadsService {
 

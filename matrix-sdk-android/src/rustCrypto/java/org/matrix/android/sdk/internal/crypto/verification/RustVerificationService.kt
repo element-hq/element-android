@@ -88,20 +88,34 @@ internal class RustVerificationService @Inject constructor(
      */
     internal suspend fun onEvent(roomId: String?, event: Event) {
         if (roomId != null && !event.isEncrypted()) {
-            olmMachine.receiveUnencryptedVerificationEvent(roomId, event)
+            if (isVerificationEvent(event)) {
+                try {
+                    olmMachine.receiveUnencryptedVerificationEvent(roomId, event)
+                } catch (failure: Throwable) {
+                    Timber.w(failure, "Failed to receiveUnencryptedVerificationEvent")
+                }
+            }
         }
         when (event.getClearType()) {
             EventType.KEY_VERIFICATION_REQUEST -> onRequest(event, fromRoomMessage = false)
-            EventType.KEY_VERIFICATION_START   -> onStart(event)
+            EventType.KEY_VERIFICATION_START -> onStart(event)
             EventType.KEY_VERIFICATION_READY,
             EventType.KEY_VERIFICATION_ACCEPT,
             EventType.KEY_VERIFICATION_KEY,
             EventType.KEY_VERIFICATION_MAC,
             EventType.KEY_VERIFICATION_CANCEL,
-            EventType.KEY_VERIFICATION_DONE    -> onUpdate(event)
-            EventType.MESSAGE                  -> onRoomMessage(event)
-            else                               -> Unit
+            EventType.KEY_VERIFICATION_DONE -> onUpdate(event)
+            EventType.MESSAGE -> onRoomMessage(event)
+            else -> Unit
         }
+    }
+
+    private fun isVerificationEvent(event: Event): Boolean {
+        val eventType = event.type ?: return false
+        val eventContent = event.content ?: return false
+        return EventType.isVerificationEvent(eventType) ||
+                (eventType == EventType.MESSAGE &&
+                        eventContent[MessageContent.MSG_TYPE_JSON_KEY] == MessageType.MSGTYPE_VERIFICATION_REQUEST)
     }
 
     private suspend fun onRoomMessage(event: Event) {
