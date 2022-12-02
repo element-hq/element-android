@@ -51,7 +51,13 @@ class GetNotificationsStatusUseCase @Inject constructor(
                                     .livePushers()
                                     .map { it.filter { pusher -> pusher.deviceId == deviceId } }
                                     .map { it.takeIf { it.isNotEmpty() }?.any { pusher -> pusher.enabled } }
-                                    .map { if (it == true) NotificationsStatus.ENABLED else NotificationsStatus.DISABLED }
+                                    .map {
+                                        when (it) {
+                                            true -> NotificationsStatus.ENABLED
+                                            false -> NotificationsStatus.DISABLED
+                                            else -> NotificationsStatus.NOT_SUPPORTED
+                                        }
+                                    }
                                     .distinctUntilChanged()
                         } else {
                             flowOf(NotificationsStatus.NOT_SUPPORTED)

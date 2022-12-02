@@ -106,6 +106,20 @@ class GetNotificationsStatusUseCaseTest {
     }
 
     @Test
+    fun `given toggle via pusher is supported and no registered pusher when execute then resulting flow contains NOT_SUPPORTED value`() = runTest {
+        // Given
+        fakeSession.pushersService().givenPushersLive(emptyList())
+        every { fakeCheckIfCanToggleNotificationsViaAccountDataUseCase.execute(fakeSession, A_DEVICE_ID) } returns false
+        every { fakeCanToggleNotificationsViaPusherUseCase.execute(fakeSession) } returns flowOf(true)
+
+        // When
+        val result = getNotificationsStatusUseCase.execute(fakeSession, A_DEVICE_ID)
+
+        // Then
+        result.firstOrNull() shouldBeEqualTo NotificationsStatus.NOT_SUPPORTED
+    }
+
+    @Test
     fun `given current session and toggle via account data is supported when execute then resulting flow contains status based on settings value`() = runTest {
         // Given
         fakeSession
