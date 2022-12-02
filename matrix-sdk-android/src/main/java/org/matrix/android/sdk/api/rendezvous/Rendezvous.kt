@@ -35,7 +35,10 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_S
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.api.util.MatrixJsonParser
+import org.matrix.android.sdk.api.util.awaitCallback
 import timber.log.Timber
 
 /**
@@ -146,6 +149,9 @@ class Rendezvous(
         val deviceId = crypto.getMyDevice().deviceId
         val deviceKey = crypto.getMyDevice().fingerprint()
         send(Payload(PayloadType.PROGRESS, outcome = Outcome.SUCCESS, deviceId = deviceId, deviceKey = deviceKey))
+
+        // explicitly download keys for ourself rather than wait for initial sync to complete
+        awaitCallback<MXUsersDevicesMap<CryptoDeviceInfo>> { crypto.downloadKeys(listOf(userId), false, it) }
 
         // await confirmation of verification
         val verificationResponse = receive()
