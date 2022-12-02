@@ -16,24 +16,16 @@
 
 package im.vector.app.features.home
 
-import im.vector.app.config.Config
-import im.vector.app.core.time.Clock
-import im.vector.app.features.VectorFeatures
 import im.vector.app.features.settings.VectorPreferences
 import javax.inject.Inject
 
-class ShouldShowUnverifiedSessionsAlertUseCase @Inject constructor(
-        private val vectorFeatures: VectorFeatures,
+class SetNewLoginAlertShownUseCase @Inject constructor(
         private val vectorPreferences: VectorPreferences,
-        private val clock: Clock,
 ) {
 
-    fun execute(deviceId: String?): Boolean {
-        deviceId ?: return false
-
-        val isUnverifiedSessionsAlertEnabled = vectorFeatures.isUnverifiedSessionsAlertEnabled()
-        val unverifiedSessionsAlertLastShownMillis = vectorPreferences.getUnverifiedSessionsAlertLastShownMillis(deviceId)
-        return isUnverifiedSessionsAlertEnabled &&
-                clock.epochMillis() - unverifiedSessionsAlertLastShownMillis >= Config.SHOW_UNVERIFIED_SESSIONS_ALERT_AFTER_MILLIS
+    fun execute(deviceIds: List<String>) {
+        deviceIds.forEach {
+            vectorPreferences.setNewLoginAlertShownForDevice(it)
+        }
     }
 }

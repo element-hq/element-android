@@ -58,6 +58,6 @@ class FakeVectorPreferences {
     }
 
     fun givenUnverifiedSessionsAlertLastShownMillis(lastShownMillis: Long) {
-        every { instance.getUnverifiedSessionsAlertLastShownMillis() } returns lastShownMillis
+        every { instance.getUnverifiedSessionsAlertLastShownMillis(any()) } returns lastShownMillis
     }
 }

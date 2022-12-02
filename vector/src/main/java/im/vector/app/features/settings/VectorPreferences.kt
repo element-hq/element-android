@@ -227,8 +227,6 @@ class VectorPreferences @Inject constructor(
         private const val MEDIA_SAVING_1_MONTH = 2
         private const val MEDIA_SAVING_FOREVER = 3
 
-        private const val SETTINGS_UNKNOWN_DEVICE_DISMISSED_LIST = "SETTINGS_UNKNWON_DEVICE_DISMISSED_LIST"
-
         private const val TAKE_PHOTO_VIDEO_MODE = "TAKE_PHOTO_VIDEO_MODE"
 
         private const val SETTINGS_LABS_ENABLE_LIVE_LOCATION = "SETTINGS_LABS_ENABLE_LIVE_LOCATION"
@@ -245,7 +243,8 @@ class VectorPreferences @Inject constructor(
         // This key will be used to enable user for displaying live user info or not.
         const val SETTINGS_TIMELINE_SHOW_LIVE_SENDER_INFO = "SETTINGS_TIMELINE_SHOW_LIVE_SENDER_INFO"
 
-        const val SETTINGS_UNVERIFIED_SESSIONS_ALERT_LAST_SHOWN_MILLIS = "SETTINGS_UNVERIFIED_SESSIONS_ALERT_LAST_SHOWN_MILLIS"
+        const val SETTINGS_UNVERIFIED_SESSIONS_ALERT_LAST_SHOWN_MILLIS = "SETTINGS_UNVERIFIED_SESSIONS_ALERT_LAST_SHOWN_MILLIS_"
+        const val SETTINGS_NEW_LOGIN_ALERT_SHOWN_FOR_DEVICE = "SETTINGS_NEW_LOGIN_ALERT_SHOWN_FOR_DEVICE_"
 
         // Possible values for TAKE_PHOTO_VIDEO_MODE
         const val TAKE_PHOTO_VIDEO_MODE_ALWAYS_ASK = 0
@@ -520,18 +519,6 @@ class VectorPreferences @Inject constructor(
      */
     fun useShutterSound(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_PLAY_SHUTTER_SOUND_KEY, true)
-    }
-
-    fun storeUnknownDeviceDismissedList(deviceIds: List<String>) {
-        defaultPrefs.edit(true) {
-            putStringSet(SETTINGS_UNKNOWN_DEVICE_DISMISSED_LIST, deviceIds.toSet())
-        }
-    }
-
-    fun getUnknownDeviceDismissedList(): List<String> {
-        return tryOrNull {
-            defaultPrefs.getStringSet(SETTINGS_UNKNOWN_DEVICE_DISMISSED_LIST, null)?.toList()
-        }.orEmpty()
     }
 
     /**
@@ -1244,13 +1231,23 @@ class VectorPreferences @Inject constructor(
         }
     }
 
-    fun getUnverifiedSessionsAlertLastShownMillis(): Long {
-        return defaultPrefs.getLong(SETTINGS_UNVERIFIED_SESSIONS_ALERT_LAST_SHOWN_MILLIS, 0)
+    fun getUnverifiedSessionsAlertLastShownMillis(deviceId: String): Long {
+        return defaultPrefs.getLong(SETTINGS_UNVERIFIED_SESSIONS_ALERT_LAST_SHOWN_MILLIS + deviceId, 0)
     }
 
-    fun setUnverifiedSessionsAlertLastShownMillis(lastShownMillis: Long) {
+    fun setUnverifiedSessionsAlertLastShownMillis(deviceId: String, lastShownMillis: Long) {
         defaultPrefs.edit {
-            putLong(SETTINGS_UNVERIFIED_SESSIONS_ALERT_LAST_SHOWN_MILLIS, lastShownMillis)
+            putLong(SETTINGS_UNVERIFIED_SESSIONS_ALERT_LAST_SHOWN_MILLIS + deviceId, lastShownMillis)
+        }
+    }
+
+    fun isNewLoginAlertShownForDevice(deviceId: String): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_NEW_LOGIN_ALERT_SHOWN_FOR_DEVICE + deviceId, false)
+    }
+
+    fun setNewLoginAlertShownForDevice(deviceId: String) {
+        defaultPrefs.edit {
+            putBoolean(SETTINGS_NEW_LOGIN_ALERT_SHOWN_FOR_DEVICE + deviceId, true)
         }
     }
 }

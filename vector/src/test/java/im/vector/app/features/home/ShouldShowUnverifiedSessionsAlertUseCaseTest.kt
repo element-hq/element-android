@@ -23,7 +23,8 @@ import im.vector.app.test.fakes.FakeVectorPreferences
 import org.amshove.kluent.shouldBe
 import org.junit.Test
 
-private val AN_EPOCH = Config.SHOW_UNVERIFIED_SESSIONS_ALERT_AFTER_MILLIS
+private val AN_EPOCH = Config.SHOW_UNVERIFIED_SESSIONS_ALERT_AFTER_MILLIS.toLong()
+private const val A_DEVICE_ID = "A_DEVICE_ID"
 
 class ShouldShowUnverifiedSessionsAlertUseCaseTest {
 
@@ -42,7 +43,7 @@ class ShouldShowUnverifiedSessionsAlertUseCaseTest {
         fakeVectorFeatures.givenUnverifiedSessionsAlertEnabled(false)
         fakeVectorPreferences.givenUnverifiedSessionsAlertLastShownMillis(0L)
 
-        shouldShowUnverifiedSessionsAlertUseCase.execute() shouldBe false
+        shouldShowUnverifiedSessionsAlertUseCase.execute(A_DEVICE_ID) shouldBe false
     }
 
     @Test
@@ -51,7 +52,7 @@ class ShouldShowUnverifiedSessionsAlertUseCaseTest {
         fakeVectorPreferences.givenUnverifiedSessionsAlertLastShownMillis(0L)
         fakeClock.givenEpoch(AN_EPOCH + 1)
 
-        shouldShowUnverifiedSessionsAlertUseCase.execute() shouldBe true
+        shouldShowUnverifiedSessionsAlertUseCase.execute(A_DEVICE_ID) shouldBe true
     }
 
     @Test
@@ -60,7 +61,7 @@ class ShouldShowUnverifiedSessionsAlertUseCaseTest {
         fakeVectorPreferences.givenUnverifiedSessionsAlertLastShownMillis(AN_EPOCH)
         fakeClock.givenEpoch(AN_EPOCH * 2 + 1)
 
-        shouldShowUnverifiedSessionsAlertUseCase.execute() shouldBe true
+        shouldShowUnverifiedSessionsAlertUseCase.execute(A_DEVICE_ID) shouldBe true
     }
 
     @Test
@@ -69,6 +70,6 @@ class ShouldShowUnverifiedSessionsAlertUseCaseTest {
         fakeVectorPreferences.givenUnverifiedSessionsAlertLastShownMillis(AN_EPOCH)
         fakeClock.givenEpoch(AN_EPOCH + 1)
 
-        shouldShowUnverifiedSessionsAlertUseCase.execute() shouldBe false
+        shouldShowUnverifiedSessionsAlertUseCase.execute(A_DEVICE_ID) shouldBe false
     }
 }
