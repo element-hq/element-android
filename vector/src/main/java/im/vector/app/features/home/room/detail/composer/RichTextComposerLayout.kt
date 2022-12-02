@@ -66,6 +66,7 @@ internal class RichTextComposerLayout @JvmOverloads constructor(
     // There is no need to persist these values since they're always updated by the parent fragment
     private var isFullScreen = false
     private var hasRelatedMessage = false
+    private var composerMode: MessageComposerMode? = null
 
     var isTextFormattingEnabled = true
         set(value) {
@@ -114,9 +115,15 @@ internal class RichTextComposerLayout @JvmOverloads constructor(
 
     private val dimensionConverter = DimensionConverter(resources)
 
-    fun setFullScreen(isFullScreen: Boolean) {
+    fun setFullScreen(isFullScreen: Boolean, animated: Boolean) {
+        if (!animated && views.composerLayout.layoutParams != null) {
+            views.composerLayout.updateLayoutParams<ViewGroup.LayoutParams> {
+                height =
+                        if (isFullScreen) ViewGroup.LayoutParams.MATCH_PARENT else ViewGroup.LayoutParams.WRAP_CONTENT
+            }
+        }
         editText.updateLayoutParams<ViewGroup.LayoutParams> {
-            height = if (isFullScreen) 0 else ViewGroup.LayoutParams.WRAP_CONTENT
+            height = if (isFullScreen) ViewGroup.LayoutParams.MATCH_PARENT else ViewGroup.LayoutParams.WRAP_CONTENT
         }
 
         updateTextFieldBorder(isFullScreen)
@@ -369,6 +376,9 @@ internal class RichTextComposerLayout @JvmOverloads constructor(
     }
 
     override fun renderComposerMode(mode: MessageComposerMode) {
+        if (this.composerMode == mode) return
+        this.composerMode = mode
+
         if (mode is MessageComposerMode.Special) {
             views.composerModeGroup.isVisible = true
             replaceFormattedContent(mode.defaultContent)
