@@ -16,9 +16,10 @@
 
 package im.vector.app.features.analytics
 
+import im.vector.app.features.analytics.errors.ErrorTracker
 import kotlinx.coroutines.flow.Flow
 
-interface VectorAnalytics : AnalyticsTracker {
+interface VectorAnalytics : AnalyticsTracker, ErrorTracker {
     /**
      * Return a Flow of Boolean, true if the user has given their consent.
      */

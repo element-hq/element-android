@@ -22,6 +22,7 @@ import com.posthog.android.Properties
 import im.vector.app.core.di.NamedGlobalScope
 import im.vector.app.features.analytics.AnalyticsConfig
 import im.vector.app.features.analytics.VectorAnalytics
+import im.vector.app.features.analytics.errors.ErrorTracker
 import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
 import im.vector.app.features.analytics.log.analyticsTag
@@ -41,12 +42,12 @@ private val IGNORED_OPTIONS: Options? = null
 @Singleton
 class DefaultVectorAnalytics @Inject constructor(
         postHogFactory: PostHogFactory,
-        private val sentryFactory: SentryFactory,
+        private val sentryAnalytics: SentryAnalytics,
         analyticsConfig: AnalyticsConfig,
         private val analyticsStore: AnalyticsStore,
         private val lateInitUserPropertiesFactory: LateInitUserPropertiesFactory,
         @NamedGlobalScope private val globalScope: CoroutineScope
-) : VectorAnalytics {
+) : VectorAnalytics, ErrorTracker by sentryAnalytics {
 
     private val posthog: PostHog? = when {
         analyticsConfig.isEnabled -> postHogFactory.createPosthog()
@@ -97,7 +98,7 @@ class DefaultVectorAnalytics @Inject constructor(
         setAnalyticsId("")
 
         // Close Sentry SDK.
-        sentryFactory.stopSentry()
+        sentryAnalytics.stopSentry()
     }
 
     private fun observeAnalyticsId() {
@@ -135,8 +136,8 @@ class DefaultVectorAnalytics @Inject constructor(
     private fun initOrStopSentry() {
         userConsent?.let {
             when (it) {
-                true -> sentryFactory.initSentry()
-                false -> sentryFactory.stopSentry()
+                true -> sentryAnalytics.initSentry()
+                false -> sentryAnalytics.stopSentry()
             }
         }
     }
