@@ -53,6 +53,7 @@ import im.vector.app.features.settings.devices.v2.list.SecurityRecommendationVie
 import im.vector.app.features.settings.devices.v2.list.SessionInfoViewState
 import im.vector.app.features.settings.devices.v2.signout.BuildConfirmSignoutDialogUseCase
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import javax.inject.Inject
 
@@ -260,7 +261,7 @@ class VectorSettingsDevicesFragment :
             val otherDevices = devices?.filter { it.deviceInfo.deviceId != currentDeviceId }
 
             renderSecurityRecommendations(state.inactiveSessionsCount, state.unverifiedSessionsCount, isCurrentSessionVerified)
-            renderCurrentSessionView(currentDeviceInfo)
+            renderCurrentSessionView(currentDeviceInfo, hasOtherDevices = otherDevices?.isNotEmpty().orFalse())
             renderOtherSessionsView(otherDevices, state.isShowingIpAddress)
         } else {
             hideSecurityRecommendations()
@@ -348,12 +349,13 @@ class VectorSettingsDevicesFragment :
         views.deviceListOtherSessions.isVisible = false
     }
 
-    private fun renderCurrentSessionView(currentDeviceInfo: DeviceFullInfo?) {
+    private fun renderCurrentSessionView(currentDeviceInfo: DeviceFullInfo?, hasOtherDevices: Boolean) {
         currentDeviceInfo?.let {
             views.deviceListHeaderCurrentSession.isVisible = true
             val colorDestructive = colorProvider.getColorFromAttribute(R.attr.colorError)
             val signoutOtherSessionsItem = views.deviceListHeaderCurrentSession.menu.findItem(R.id.currentSessionHeaderSignoutOtherSessions)
             signoutOtherSessionsItem.setTextColor(colorDestructive)
+            signoutOtherSessionsItem.isVisible = hasOtherDevices
             views.deviceListCurrentSession.isVisible = true
             val viewState = SessionInfoViewState(
                     isCurrentSession = true,
