@@ -23,6 +23,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.internal.crypto.ComputeShieldForGroupUseCase
@@ -41,7 +42,8 @@ internal class OutgoingRequestsProcessor @Inject constructor(
         private val requestSender: RequestSender,
         private val coroutineScope: CoroutineScope,
         private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
-        private val computeShieldForGroup: ComputeShieldForGroupUseCase
+        private val computeShieldForGroup: ComputeShieldForGroupUseCase,
+        private val matrixConfiguration: MatrixConfiguration,
 ) {
 
     private val lock: Mutex = Mutex()
@@ -156,6 +158,7 @@ internal class OutgoingRequestsProcessor @Inject constructor(
             true
         } catch (throwable: Throwable) {
             Timber.tag(loggerTag.value).e(throwable, "## sendToDevice(): error")
+            matrixConfiguration.cryptoAnalyticsPlugin?.onFailToSendToDevice(throwable)
             false
         }
     }

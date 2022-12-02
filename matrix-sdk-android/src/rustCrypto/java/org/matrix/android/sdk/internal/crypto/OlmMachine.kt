@@ -26,6 +26,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
@@ -77,6 +78,7 @@ import org.matrix.rustcomponents.sdk.crypto.MegolmV1BackupKey
 import org.matrix.rustcomponents.sdk.crypto.Request
 import org.matrix.rustcomponents.sdk.crypto.RequestType
 import org.matrix.rustcomponents.sdk.crypto.RoomKeyCounts
+import org.matrix.rustcomponents.sdk.crypto.VerificationState
 import org.matrix.rustcomponents.sdk.crypto.setLogger
 import timber.log.Timber
 import java.io.File
@@ -121,16 +123,21 @@ internal class OlmMachine @Inject constructor(
         @SessionFilesDirectory path: File,
         private val requestSender: RequestSender,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val moshi: Moshi,
+        baseMoshi: Moshi,
         private val verificationsProvider: VerificationsProvider,
         private val deviceFactory: Device.Factory,
         private val getUserIdentity: GetUserIdentityUseCase,
         private val ensureUsersKeys: EnsureUsersKeysUseCase,
+        private val matrixConfiguration: MatrixConfiguration,
 ) {
 
     private val inner: InnerMachine = InnerMachine(userId, deviceId, path.toString(), null)
 
     private val flowCollectors = FlowCollectors()
+
+    private val moshi = baseMoshi.newBuilder()
+            .add(CheckNumberType.JSON_ADAPTER_FACTORY)
+            .build()
 
     /** Get our own user ID. */
     fun userId(): String {
@@ -431,18 +438,31 @@ internal class OlmMachine @Inject constructor(
                             senderCurve25519Key = decrypted.senderCurve25519Key,
                             claimedEd25519Key = decrypted.claimedEd25519Key,
                             forwardingCurve25519KeyChain = decrypted.forwardingCurve25519Chain,
-                            // TODO how to get key safety? need to add binding to
-                            // get_verification_state
-                            isSafe = true,
+                            isSafe = decrypted.verificationState == VerificationState.TRUSTED,
                     )
                 } catch (throwable: Throwable) {
-                    val reason =
-                            String.format(
+                    val reThrow = when (throwable) {
+                        is DecryptionException.Megolm -> {
+                            // TODO more bindings for missing room key
+                            MXCryptoError.Base(MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID, throwable.message.orEmpty())
+                        }
+                        is DecryptionException.Identifier -> {
+                            MXCryptoError.Base(MXCryptoError.ErrorType.BAD_EVENT_FORMAT, MXCryptoError.BAD_EVENT_FORMAT_TEXT_REASON)
+                        }
+                        else -> {
+                            val reason = String.format(
                                     MXCryptoError.UNABLE_TO_DECRYPT_REASON,
                                     throwable.message,
                                     "m.megolm.v1.aes-sha2"
                             )
-                    throw MXCryptoError.Base(MXCryptoError.ErrorType.UNABLE_TO_DECRYPT, reason)
+                            MXCryptoError.Base(MXCryptoError.ErrorType.UNABLE_TO_DECRYPT, reason)
+                        }
+                    }
+                    matrixConfiguration.cryptoAnalyticsPlugin?.onFailedToDecryptRoomMessage(
+                            reThrow,
+                            (event.content?.get("session_id") as? String) ?: ""
+                    )
+                    throw reThrow
                 }
             }
 

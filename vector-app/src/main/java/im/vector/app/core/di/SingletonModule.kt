@@ -151,6 +151,7 @@ import javax.inject.Singleton
                         flipperProxy.networkInterceptor(),
                 ),
                 metricPlugins = vectorPlugins.plugins(),
+                cryptoAnalyticsPlugin = vectorPlugins.cryptoMetricPlugin,
         )
     }
 

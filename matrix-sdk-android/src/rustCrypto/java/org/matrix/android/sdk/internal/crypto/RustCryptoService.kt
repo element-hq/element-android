@@ -28,6 +28,7 @@ import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
@@ -130,6 +131,7 @@ internal class RustCryptoService @Inject constructor(
         private val encryptEventContent: EncryptEventContentUseCase,
         private val getRoomUserIds: GetRoomUserIdsUseCase,
         private val outgoingRequestsProcessor: OutgoingRequestsProcessor,
+        private val matrixConfiguration: MatrixConfiguration,
 ) : CryptoService {
 
     private val isStarting = AtomicBoolean(false)
@@ -586,38 +588,44 @@ internal class RustCryptoService @Inject constructor(
         val toDeviceEvents = this.olmMachine.receiveSyncChanges(toDevice, deviceChanges, keyCounts)
 
         // Notify the our listeners about room keys so decryption is retried.
-        if (toDeviceEvents.events != null) {
-            toDeviceEvents.events.forEach { event ->
-                when (event.type) {
-                    EventType.ROOM_KEY -> {
-                        val content = event.getClearContent().toModel<RoomKeyContent>() ?: return@forEach
-                        content.sessionKey
-                        val roomId = content.sessionId ?: return@forEach
-                        val sessionId = content.sessionId
+        toDeviceEvents.events.orEmpty().forEach { event ->
+            if (event.getClearType() == EventType.ENCRYPTED) {
+                // rust failed to decrypt it
+                matrixConfiguration.cryptoAnalyticsPlugin?.onFailToDecryptToDevice(
+                        Throwable("receiveSyncChanges")
+                )
+            }
+            when (event.type) {
+                EventType.ROOM_KEY -> {
+                    val content = event.getClearContent().toModel<RoomKeyContent>() ?: return@forEach
+                    content.sessionKey
+                    val roomId = content.sessionId ?: return@forEach
+                    val sessionId = content.sessionId
 
-                        notifyRoomKeyReceived(roomId, sessionId)
-                    }
-                    EventType.FORWARDED_ROOM_KEY -> {
-                        val content = event.getClearContent().toModel<ForwardedRoomKeyContent>() ?: return@forEach
-
-                        val roomId = content.sessionId ?: return@forEach
-                        val sessionId = content.sessionId
-
-                        notifyRoomKeyReceived(roomId, sessionId)
-                    }
-                    EventType.SEND_SECRET -> {
-                        // The rust-sdk will clear this event if it's invalid, this will produce an invalid base64 error
-                        // when we try to construct the recovery key.
-                        val secretContent = event.getClearContent().toModel<SecretSendEventContent>() ?: return@forEach
-                        this.keysBackupService.onSecretKeyGossip(secretContent.secretValue)
-                    }
-                    else -> {
-                        this.verificationService.onEvent(null, event)
-                    }
+                    notifyRoomKeyReceived(roomId, sessionId)
+                    matrixConfiguration.cryptoAnalyticsPlugin?.onRoomKeyImported(sessionId, EventType.FORWARDED_ROOM_KEY)
                 }
+                EventType.FORWARDED_ROOM_KEY -> {
+                    val content = event.getClearContent().toModel<ForwardedRoomKeyContent>() ?: return@forEach
+
+                    val roomId = content.sessionId ?: return@forEach
+                    val sessionId = content.sessionId
+
+                    notifyRoomKeyReceived(roomId, sessionId)
+                    matrixConfiguration.cryptoAnalyticsPlugin?.onRoomKeyImported(sessionId, EventType.FORWARDED_ROOM_KEY)
+                }
+                EventType.SEND_SECRET -> {
+                    // The rust-sdk will clear this event if it's invalid, this will produce an invalid base64 error
+                    // when we try to construct the recovery key.
+                    val secretContent = event.getClearContent().toModel<SecretSendEventContent>() ?: return@forEach
+                    this.keysBackupService.onSecretKeyGossip(secretContent.secretValue)
+                }
+                else -> {
+                    this.verificationService.onEvent(null, event)
+                }
+            }
                 liveEventManager.get().dispatchOnLiveToDevice(event)
             }
-        }
     }
 
     /**
