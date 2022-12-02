@@ -21,7 +21,7 @@ jobs:
         target: [ Gplay, Fdroid ]
     # Allow all jobs on develop. Just one per PR.
     concurrency:
-      group: ${{ github.ref == 'refs/heads/develop' && format('integration-tests-develop-{0}-{1}', matrix.target, github.sha) || format('build-debug-{0}-{1}', matrix.target, github.ref)  }}
+      group: ${{ github.ref == 'refs/heads/develop' && format('elementr-{0}-{1}', matrix.target, github.sha) || format('build-debug-{0}-{1}', matrix.target, github.ref)  }}
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v3

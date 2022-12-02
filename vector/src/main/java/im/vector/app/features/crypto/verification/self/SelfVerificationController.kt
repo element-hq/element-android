@@ -290,7 +290,7 @@ class SelfVerificationController @Inject constructor(
             }
             is Success -> {
                 // Success => There is an active transaction
-                renderTransaction(state, transaction = transaction.invoke())
+                renderTransaction(transaction = transaction.invoke())
             }
             is Fail -> {
                 // todo
@@ -300,7 +300,7 @@ class SelfVerificationController @Inject constructor(
         }
     }
 
-    private fun renderTransaction(state: SelfVerificationViewState, transaction: VerificationTransactionData) {
+    private fun renderTransaction(transaction: VerificationTransactionData) {
         when (transaction) {
             is VerificationTransactionData.QrTransactionData -> {
                 renderQrTransaction(transaction, null)

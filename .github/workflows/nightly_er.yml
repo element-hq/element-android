@@ -36,7 +36,7 @@ jobs:
           sed 's/CHANGES\.md/CHANGES_NIGHTLY\.md/' towncrier.toml.bak > towncrier.toml
           rm towncrier.toml.bak
           yes n | towncrier build --version nightly
-      - name: Build and upload Gplay Nightly APK
+      - name: Build and upload Gplay Nightly ER APK
         run: |
           ./gradlew assembleGplayRustCryptoNightly appDistributionUploadGplayRustCryptoNightly $CI_GRADLE_ARG_PROPERTIES
         env:
