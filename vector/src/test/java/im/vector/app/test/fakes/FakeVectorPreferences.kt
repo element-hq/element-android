@@ -16,7 +16,6 @@
 
 package im.vector.app.test.fakes
 
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import im.vector.app.features.settings.BackgroundSyncMode
 import im.vector.app.features.settings.VectorPreferences
 import io.mockk.every
@@ -77,11 +76,5 @@ class FakeVectorPreferences {
 
     fun givenIsBackgroundSyncEnabled(isEnabled: Boolean) {
         every { instance.isBackgroundSyncEnabled() } returns isEnabled
-    }
-
-    fun givenChangeOnPreference(key: String) {
-        every { instance.subscribeToChanges(any()) } answers {
-            firstArg<OnSharedPreferenceChangeListener>().onSharedPreferenceChanged(mockk(), key)
-        }
     }
 }

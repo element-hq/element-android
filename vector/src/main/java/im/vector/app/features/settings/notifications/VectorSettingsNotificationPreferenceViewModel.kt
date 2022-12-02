@@ -16,6 +16,8 @@
 
 package im.vector.app.features.settings.notifications
 
+import android.content.SharedPreferences
+import androidx.annotation.VisibleForTesting
 import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -49,6 +51,31 @@ class VectorSettingsNotificationPreferenceViewModel @AssistedInject constructor(
     }
 
     companion object : MavericksViewModelFactory<VectorSettingsNotificationPreferenceViewModel, VectorDummyViewState> by hiltMavericksViewModelFactory()
+
+    @VisibleForTesting
+    val notificationsPreferenceListener: SharedPreferences.OnSharedPreferenceChangeListener =
+            SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+                if (key == VectorPreferences.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY) {
+                    if (vectorPreferences.areNotificationEnabledForDevice()) {
+                        _viewEvents.post(VectorSettingsNotificationPreferenceViewEvent.NotificationsForDeviceEnabled)
+                    } else {
+                        _viewEvents.post(VectorSettingsNotificationPreferenceViewEvent.NotificationsForDeviceDisabled)
+                    }
+                }
+            }
+
+    init {
+        observeNotificationsEnabledPreference()
+    }
+
+    private fun observeNotificationsEnabledPreference() {
+        vectorPreferences.subscribeToChanges(notificationsPreferenceListener)
+    }
+
+    override fun onCleared() {
+        vectorPreferences.unsubscribeToChanges(notificationsPreferenceListener)
+        super.onCleared()
+    }
 
     override fun handle(action: VectorSettingsNotificationPreferenceViewAction) {
         when (action) {

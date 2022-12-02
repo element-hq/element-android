@@ -21,6 +21,7 @@ import im.vector.app.core.platform.VectorDummyViewState
 import im.vector.app.core.pushers.EnsureFcmTokenIsRetrievedUseCase
 import im.vector.app.core.pushers.RegisterUnifiedPushUseCase
 import im.vector.app.core.pushers.UnregisterUnifiedPushUseCase
+import im.vector.app.features.settings.VectorPreferences.Companion.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY
 import im.vector.app.test.fakes.FakePushersManager
 import im.vector.app.test.fakes.FakeVectorPreferences
 import im.vector.app.test.test
@@ -59,6 +60,40 @@ class VectorSettingsNotificationPreferenceViewModelTest {
             ensureFcmTokenIsRetrievedUseCase = fakeEnsureFcmTokenIsRetrievedUseCase,
             toggleNotificationsForCurrentSessionUseCase = fakeToggleNotificationsForCurrentSessionUseCase,
     )
+
+    @Test
+    fun `given view model init when notifications are enabled in preferences then view event is posted`() {
+        // Given
+        fakeVectorPreferences.givenAreNotificationsEnabledForDevice(true)
+        val expectedEvent = VectorSettingsNotificationPreferenceViewEvent.NotificationsForDeviceEnabled
+        val viewModel = createViewModel()
+
+        // When
+        val viewModelTest = viewModel.test()
+        viewModel.notificationsPreferenceListener.onSharedPreferenceChanged(mockk(), SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY)
+
+        // Then
+        viewModelTest
+                .assertEvent { event -> event == expectedEvent }
+                .finish()
+    }
+
+    @Test
+    fun `given view model init when notifications are disabled in preferences then view event is posted`() {
+        // Given
+        fakeVectorPreferences.givenAreNotificationsEnabledForDevice(false)
+        val expectedEvent = VectorSettingsNotificationPreferenceViewEvent.NotificationsForDeviceDisabled
+        val viewModel = createViewModel()
+
+        // When
+        val viewModelTest = viewModel.test()
+        viewModel.notificationsPreferenceListener.onSharedPreferenceChanged(mockk(), SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY)
+
+        // Then
+        viewModelTest
+                .assertEvent { event -> event == expectedEvent }
+                .finish()
+    }
 
     @Test
     fun `given DisableNotificationsForDevice action when handling action then disable use case is called`() {
