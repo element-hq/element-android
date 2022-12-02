@@ -99,6 +99,7 @@ class VectorSettingsDevicesFragment :
         super.onViewCreated(view, savedInstanceState)
 
         initWaitingView()
+        initCurrentSessionHeaderView()
         initOtherSessionsHeaderView()
         initOtherSessionsView()
         initSecurityRecommendationsView()
@@ -137,6 +138,18 @@ class VectorSettingsDevicesFragment :
     private fun initWaitingView() {
         views.waitingView.waitingStatusText.setText(R.string.please_wait)
         views.waitingView.waitingStatusText.isVisible = true
+    }
+
+    private fun initCurrentSessionHeaderView() {
+        views.deviceListHeaderCurrentSession.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.currentSessionHeaderSignoutOtherSessions -> {
+                    confirmMultiSignoutOtherSessions()
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     private fun initOtherSessionsHeaderView() {
@@ -327,7 +340,7 @@ class VectorSettingsDevicesFragment :
             } else {
                 stringProvider.getString(R.string.device_manager_other_sessions_show_ip_address)
             }
-         }
+        }
     }
 
     private fun hideOtherSessionsView() {
