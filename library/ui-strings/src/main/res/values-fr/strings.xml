@@ -2814,7 +2814,7 @@
     <string name="device_manager_sessions_sign_in_with_qr_code_description">Vous pouvez utiliser cet appareil pour connecter un appareil mobile ou un client web avec un QR code. Il y a deux façons de le faire :</string>
     <string name="device_manager_sessions_sign_in_with_qr_code_title">Se connecter avec un QR code</string>
     <string name="login_scan_qr_code">Scanner le QR code</string>
-    <string name="a11y_voice_broadcast_buffering">Mise en mémoire tampon</string>
+    <string name="a11y_voice_broadcast_buffering">Mise en mémoire tampon…</string>
     <string name="a11y_pause_voice_broadcast">Mettre en pause la diffusion audio</string>
     <string name="a11y_play_voice_broadcast">Lire ou continuer la diffusion audio</string>
     <string name="a11y_stop_voice_broadcast_record">Arrêter l’enregistrement de la diffusion audio</string>
@@ -2866,4 +2866,6 @@
     <string name="quoting">Citation de</string>
     <string name="replying_to">Réponse à %s</string>
     <string name="editing">Modification</string>
+    <string name="settings_enable_direct_share_summary">Affiche les conversations récentes dans le menu de partage du système</string>
+    <string name="settings_enable_direct_share_title">Activer le partage direct</string>
 </resources>

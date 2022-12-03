@@ -1007,7 +1007,7 @@
     <string name="settings_discovery_disconnect_with_bound_pid">您当前在身份服务器 %1$s 上共享电子邮件地址或电话号码。您需要重新连接到 %2$s 才能停止共享它们。</string>
     <string name="settings_agree_to_terms">同意身份服务器 (%s) 服务条款使你可以通过电子邮件地址或电话号码被发现。</string>
     <string name="labs_allow_extended_logging">启用详细日志。</string>
-    <string name="labs_allow_extended_logging_summary">详细日志将通过在您发送 RageShake 时提供更多日志来帮助开发人员。即使启用，应用程序也不会记录消息内容或任何其他私人数据。</string>
+    <string name="labs_allow_extended_logging_summary">详细日志将通过在您发送愤怒摇动（RageShake）时提供更多日志来帮助开发人员。即使启用，应用程序也不会记录消息内容或任何其他私人数据。</string>
     <string name="error_terms_not_accepted">接收你的主服务器条款和条件后请重试。</string>
     <string name="error_network_timeout">服务器似乎响应时间太长，这可能是由于连接不良或服务器错误引起的。请稍后再试。</string>
     <string name="send_attachment">发送附件</string>
@@ -1205,7 +1205,7 @@
     <string name="settings_advanced_settings">高级设置</string>
     <string name="settings_developer_mode">开发者模式</string>
     <string name="settings_developer_mode_summary">开发者模式激活隐藏的功能，也可能使应用不稳定。仅供开发者使用！</string>
-    <string name="settings_rageshake">摇一摇</string>
+    <string name="settings_rageshake">愤怒摇动（Rageshake）</string>
     <string name="settings_rageshake_detection_threshold">检测阈值</string>
     <string name="settings_rageshake_detection_threshold_summary">摇动手机以测试检测阈值</string>
     <string name="rageshake_detected">检测到摇动！</string>
@@ -1213,7 +1213,7 @@
     <string name="devices_current_device">当前会话</string>
     <string name="devices_other_devices">其它会话</string>
     <string name="autocomplete_limited_results">仅显示第一个结果，请输入更多字符…</string>
-    <string name="settings_developer_mode_fail_fast_title">快速失败</string>
+    <string name="settings_developer_mode_fail_fast_title">快速失败（Fail-fast）</string>
     <string name="settings_developer_mode_fail_fast_summary">发生意外错误时，${app_name} 可能更经常崩溃</string>
     <string name="command_description_shrug">在明文消息前添加 ¯\\_(ツ)_/¯</string>
     <string name="create_room_encryption_title">启用加密</string>
@@ -2694,7 +2694,7 @@
     <string name="device_manager_verification_status_detail_other_session_unknown">验证您当前的会话以显示此会话的验证状态。</string>
     <string name="device_manager_verification_status_unknown">未知的验证状态</string>
     <string name="tooltip_attachment_voice_broadcast">开始语音广播</string>
-    <string name="a11y_voice_broadcast_buffering">缓冲</string>
+    <string name="a11y_voice_broadcast_buffering">正在缓冲……</string>
     <string name="a11y_pause_voice_broadcast">暂停语音广播</string>
     <string name="voice_broadcast_live">实时</string>
     <string name="action_got_it">知道了</string>
@@ -2789,4 +2789,19 @@
     <plurals name="x_selected">
         <item quantity="other">已选择 %1$d</item>
     </plurals>
+    <string name="message_reply_to_sender_created_poll">已创建投票。</string>
+    <string name="message_reply_to_sender_sent_sticker">已发送贴纸。</string>
+    <string name="message_reply_to_sender_sent_video">已发送视频。</string>
+    <string name="message_reply_to_sender_sent_image">已发送图片。</string>
+    <string name="message_reply_to_sender_sent_voice_message">已发送语音消息。</string>
+    <string name="message_reply_to_sender_sent_audio_file">已发送音频文件。</string>
+    <string name="message_reply_to_sender_sent_file">已发送文件。</string>
+    <string name="device_manager_learn_more_sessions_verified_description">已验证的会话是在输入你的口令词组或用另一个已验证的会话确认你的身份之后你使用此账户的任何地方。
+\n
+\n这意味着你拥有解锁你的已加密消息和向其他用户证明你信任此会话所需的全部密钥。</string>
+    <plurals name="device_manager_other_sessions_multi_signout_all">
+        <item quantity="other">登出%1$d个会话</item>
+    </plurals>
+    <string name="device_manager_other_sessions_multi_signout_selection">登出</string>
+    <string name="voice_broadcast_recording_time_left">剩余%1$s</string>
 </resources>
