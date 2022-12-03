@@ -42,7 +42,6 @@ import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import com.google.android.material.shape.MaterialShapeDrawable
 import im.vector.app.R
-import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.setTextIfDifferent
 import im.vector.app.core.extensions.showKeyboard
 import im.vector.app.core.utils.DimensionConverter
@@ -132,8 +131,6 @@ class RichTextComposerLayout @JvmOverloads constructor(
         views.bottomSheetHandle.isVisible = isFullScreen
         if (isFullScreen) {
             editText.showKeyboard(true)
-        } else {
-            editText.hideKeyboard()
         }
         this.isFullScreen = isFullScreen
     }
@@ -274,8 +271,8 @@ class RichTextComposerLayout @JvmOverloads constructor(
                 connect(R.id.composerEditTextOuterBorder, ConstraintSet.START, R.id.composerLayoutContent, ConstraintSet.START, dpToPx(12))
                 connect(R.id.composerEditTextOuterBorder, ConstraintSet.END, R.id.composerLayoutContent, ConstraintSet.END, dpToPx(12))
             } else {
-                connect(R.id.composerEditTextOuterBorder, ConstraintSet.TOP, R.id.composerLayoutContent, ConstraintSet.TOP, dpToPx(10))
-                connect(R.id.composerEditTextOuterBorder, ConstraintSet.BOTTOM, R.id.composerLayoutContent, ConstraintSet.BOTTOM, dpToPx(10))
+                connect(R.id.composerEditTextOuterBorder, ConstraintSet.TOP, R.id.composerLayoutContent, ConstraintSet.TOP, dpToPx(8))
+                connect(R.id.composerEditTextOuterBorder, ConstraintSet.BOTTOM, R.id.composerLayoutContent, ConstraintSet.BOTTOM, dpToPx(8))
                 connect(R.id.composerEditTextOuterBorder, ConstraintSet.START, R.id.attachmentButton, ConstraintSet.END, 0)
                 connect(R.id.composerEditTextOuterBorder, ConstraintSet.END, R.id.sendButton, ConstraintSet.START, 0)
             }

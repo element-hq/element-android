@@ -255,7 +255,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
     ) { mainState, messageComposerState, attachmentState ->
         if (mainState.tombstoneEvent != null) return@withState
 
-        (composer as? View)?.isInvisible = !messageComposerState.isComposerVisible
+        (composer as? View)?.isVisible = messageComposerState.isComposerVisible
         composer.sendButton.isInvisible = !messageComposerState.isSendButtonVisible
         (composer as? RichTextComposerLayout)?.isTextFormattingEnabled = attachmentState.isTextFormattingEnabled
     }

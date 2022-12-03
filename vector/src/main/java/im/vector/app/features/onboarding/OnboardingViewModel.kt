@@ -118,7 +118,7 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun checkQrCodeLoginCapability(homeServerUrl: String) {
+    private suspend fun checkQrCodeLoginCapability(config: HomeServerConnectionConfig) {
         if (!vectorFeatures.isQrCodeLoginEnabled()) {
             setState {
                 copy(
@@ -133,16 +133,12 @@ class OnboardingViewModel @AssistedInject constructor(
                 )
             }
         } else {
-            viewModelScope.launch {
-                // check if selected server supports MSC3882 first
-                homeServerConnectionConfigFactory.create(homeServerUrl)?.let {
-                    val canLoginWithQrCode = authenticationService.isQrLoginSupported(it)
-                    setState {
-                        copy(
-                                canLoginWithQrCode = canLoginWithQrCode
-                        )
-                    }
-                }
+            // check if selected server supports MSC3882 first
+            val canLoginWithQrCode = authenticationService.isQrLoginSupported(config)
+            setState {
+                copy(
+                        canLoginWithQrCode = canLoginWithQrCode
+                )
             }
         }
     }
@@ -710,7 +706,6 @@ class OnboardingViewModel @AssistedInject constructor(
             _viewEvents.post(OnboardingViewEvents.Failure(Throwable("Unable to create a HomeServerConnectionConfig")))
         } else {
             startAuthenticationFlow(action, homeServerConnectionConfig, serverTypeOverride, postAction)
-            checkQrCodeLoginCapability(homeServerConnectionConfig.homeServerUri.toString())
         }
     }
 
@@ -768,6 +763,8 @@ class OnboardingViewModel @AssistedInject constructor(
         if (authResult.isHomeserverOutdated) {
             _viewEvents.post(OnboardingViewEvents.OutdatedHomeserver)
         }
+
+        checkQrCodeLoginCapability(config)
 
         when (trigger) {
             is OnboardingAction.HomeServerChange.SelectHomeServer -> {

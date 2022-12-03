@@ -17,7 +17,7 @@ def markwon = "4.6.2"
 def moshi = "1.14.0"
 def lifecycle = "2.5.1"
 def flowBinding = "1.2.0"
-def flipper = "0.174.0"
+def flipper = "0.176.0"
 def epoxy = "5.0.0"
 def mavericks = "3.0.1"
 def glide = "4.14.2"
@@ -26,7 +26,7 @@ def jjwt = "0.11.5"
 // Temporary version to unblock #6929. Once 0.16.0 is released we should use it, and revert
 // the whole commit which set version 0.16.0-SNAPSHOT
 def vanniktechEmoji = "0.16.0-SNAPSHOT"
-def sentry = "6.7.0"
+def sentry = "6.9.0"
 def fragment = "1.5.4"
 // Testing
 def mockk = "1.12.3" // We need to use 1.12.3 to have mocking in androidTest until a new version is released: https://github.com/mockk/mockk/issues/819
