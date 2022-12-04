@@ -2921,7 +2921,7 @@
     <string name="error_voice_broadcast_unauthorized_title">Не получилось начать новую голосовую трансляцию</string>
     <string name="a11y_voice_broadcast_fast_forward">Перемотать вперёд на 30 секунд</string>
     <string name="a11y_voice_broadcast_fast_backward">Перемотать назад на 30 секунд</string>
-    <string name="a11y_voice_broadcast_buffering">Буферизация</string>
+    <string name="a11y_voice_broadcast_buffering">Буферизация…</string>
     <string name="a11y_pause_voice_broadcast">Приостановить голосовую трансляцию</string>
     <string name="a11y_play_voice_broadcast">Проиграть или продолжить голосовую трансляцию</string>
     <string name="a11y_stop_voice_broadcast_record">Остановить запись голосовой трансляции</string>
@@ -2963,4 +2963,6 @@
     <string name="quoting">Цитируя</string>
     <string name="replying_to">В ответ на %s</string>
     <string name="editing">Редактирование</string>
+    <string name="settings_enable_direct_share_summary">Показывать последние беседы в системном меню распостранения</string>
+    <string name="settings_enable_direct_share_title">Включить прямое распостранение</string>
 </resources>
