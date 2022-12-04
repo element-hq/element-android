@@ -50,4 +50,8 @@ class FakeVectorFeatures : VectorFeatures by spyk<DefaultVectorFeatures>() {
     fun givenVoiceBroadcast(isEnabled: Boolean) {
         every { isVoiceBroadcastEnabled() } returns isEnabled
     }
+
+    fun givenUnverifiedSessionsAlertEnabled(isEnabled: Boolean) {
+        every { isUnverifiedSessionsAlertEnabled() } returns isEnabled
+    }
 }

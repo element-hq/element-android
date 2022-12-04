@@ -16,6 +16,8 @@
 
 package im.vector.app.config
 
+import kotlin.time.Duration.Companion.days
+
 /**
  * Set of flags to configure the application.
  */
@@ -95,4 +97,6 @@ object Config {
     val NIGHTLY_ANALYTICS_CONFIG = RELEASE_ANALYTICS_CONFIG.copy(sentryEnvironment = "NIGHTLY")
     val ER_NIGHTLY_ANALYTICS_CONFIG = RELEASE_ANALYTICS_CONFIG.copy(sentryEnvironment = "element-r")
     val ER_DEBUG_ANALYTICS_CONFIG = DEBUG_ANALYTICS_CONFIG.copy(sentryEnvironment = "element-r")
+
+    val SHOW_UNVERIFIED_SESSIONS_ALERT_AFTER_MILLIS = 7.days.inWholeMilliseconds // 1 Week
 }
