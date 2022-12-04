@@ -8,7 +8,7 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:912726360885:android:94fb99347eaa36d100427c",
+        "mobilesdk_app_id": "1:912726360885:android:ee00f33109f786a800427c",
         "android_client_info": {
           "package_name": "im.vector.app.corroded.debug"
         }

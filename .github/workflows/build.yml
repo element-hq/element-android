@@ -81,7 +81,7 @@ jobs:
       - name: Execute exodus-standalone
         uses: docker://exodusprivacy/exodus-standalone:latest
         with:
-          args: /github/workspace/gplay/release/vector-gplay-universal-release-unsigned.apk -j -o /github/workspace/exodus.json
+          args: /github/workspace/gplayKotlinCrypto/release/vector-gplay-kotlinCrypto-universal-release-unsigned.apk -j -o /github/workspace/exodus.json
       - name: Upload exodus json report
         uses: actions/upload-artifact@v3
         with:
