@@ -32,10 +32,12 @@ import javax.inject.Inject
 
 class HomeFilteredRoomsController @Inject constructor(
         private val roomSummaryItemFactory: RoomSummaryItemFactory,
-        fontScalePreferences: FontScalePreferences
+        fontScalePreferences: FontScalePreferences,
+        roomSummaryRoomListDiffCallback: RoomSummaryRoomListDiffCallback,
 ) : PagedListEpoxyController<RoomSummary>(
         // Important it must match the PageList builder notify Looper
-        modelBuildingHandler = createUIHandler()
+        modelBuildingHandler = createUIHandler(),
+        itemDiffCallback = roomSummaryRoomListDiffCallback,
 ) {
 
     private var roomChangeMembershipStates: Map<String, ChangeMembershipState>? = null

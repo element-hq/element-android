@@ -64,6 +64,7 @@ import org.matrix.android.sdk.internal.session.room.accountdata.RoomAccountDataD
 import org.matrix.android.sdk.internal.session.room.membership.RoomDisplayNameResolver
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberHelper
 import org.matrix.android.sdk.internal.session.room.relationship.RoomChildRelationInfo
+import org.matrix.android.sdk.internal.session.room.timeline.RoomSummaryEventDecryptor
 import org.matrix.android.sdk.internal.session.sync.SyncResponsePostTreatmentAggregator
 import timber.log.Timber
 import javax.inject.Inject
@@ -73,10 +74,9 @@ internal class RoomSummaryUpdater @Inject constructor(
         @UserId private val userId: String,
         private val roomDisplayNameResolver: RoomDisplayNameResolver,
         private val roomAvatarResolver: RoomAvatarResolver,
-        private val eventDecryptor: EventDecryptor,
-//        private val crossSigningService: DefaultCrossSigningService,
         private val roomAccountDataDataSource: RoomAccountDataDataSource,
         private val homeServerCapabilitiesService: HomeServerCapabilitiesService,
+        private val roomSummaryEventDecryptor: RoomSummaryEventDecryptor
 ) {
 
     fun refreshLatestPreviewContent(realm: Realm, roomId: String) {
@@ -215,12 +215,7 @@ internal class RoomSummaryUpdater @Inject constructor(
                 Timber.v("Decryption skipped due to missing root event $eventId")
             }
             else -> {
-                if (root.type == EventType.ENCRYPTED && root.decryptionResultJson == null) {
-                    Timber.v("Should decrypt $eventId")
-                    tryOrNull {
-                        runBlocking { eventDecryptor.decryptEvent(root.asDomain(), "") }
-                    }?.let { root.setDecryptionResult(it) }
-                }
+                roomSummaryEventDecryptor.requestDecryption(root.asDomain())
             }
         }
     }
