@@ -22,6 +22,8 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.roomprofile.permissions.RoleFormatter
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
+import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
+import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.api.extensions.appendNl
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -91,6 +93,9 @@ class NoticeEventFormatter @Inject constructor(
             EventType.CALL_HANGUP,
             EventType.CALL_REJECT,
             EventType.CALL_ANSWER -> formatCallEvent(type, timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
+            VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO -> {
+                formatVoiceBroadcastEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
+            }
             EventType.CALL_NEGOTIATE,
             EventType.CALL_SELECT_ANSWER,
             EventType.CALL_REPLACES,
@@ -109,8 +114,7 @@ class NoticeEventFormatter @Inject constructor(
             EventType.STICKER,
             in EventType.POLL_RESPONSE.values,
             in EventType.POLL_END.values,
-            in EventType.BEACON_LOCATION_DATA.values,
-            VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO -> formatDebug(timelineEvent.root)
+            in EventType.BEACON_LOCATION_DATA.values -> formatDebug(timelineEvent.root)
             else -> {
                 Timber.v("Type $type not handled by this formatter")
                 null
@@ -191,6 +195,7 @@ class NoticeEventFormatter @Inject constructor(
             EventType.CALL_REJECT,
             EventType.CALL_ANSWER -> formatCallEvent(type, event, senderName)
             EventType.STATE_ROOM_TOMBSTONE -> formatRoomTombstoneEvent(event, senderName, isDm)
+            VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO -> formatVoiceBroadcastEvent(event, senderName)
             else -> {
                 Timber.v("Type $type not handled by this formatter")
                 null
@@ -893,5 +898,17 @@ class NoticeEventFormatter @Inject constructor(
                         }
                     }
                 }
+    }
+
+    private fun formatVoiceBroadcastEvent(event: Event, senderName: String?): CharSequence {
+        return if (event.asVoiceBroadcastEvent()?.content?.voiceBroadcastState == VoiceBroadcastState.STOPPED) {
+            if (event.isSentByCurrentUser()) {
+                sp.getString(R.string.notice_voice_broadcast_ended_by_you)
+            } else {
+                sp.getString(R.string.notice_voice_broadcast_ended, senderName)
+            }
+        } else {
+            formatDebug(event)
+        }
     }
 }

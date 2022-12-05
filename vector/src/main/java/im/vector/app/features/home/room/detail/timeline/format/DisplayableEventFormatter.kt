@@ -20,13 +20,13 @@ import dagger.Lazy
 import im.vector.app.EmojiSpanify
 import im.vector.app.R
 import im.vector.app.core.extensions.getVectorLastMessageContent
+import im.vector.app.core.extensions.orEmpty
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
 import im.vector.app.features.voicebroadcast.isLive
-import im.vector.app.features.voicebroadcast.model.VoiceBroadcastEvent
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import me.gujun.android.span.image
 import me.gujun.android.span.span
@@ -143,7 +143,7 @@ class DisplayableEventFormatter @Inject constructor(
                 simpleFormat(senderName, stringProvider.getString(R.string.sent_live_location), appendAuthor)
             }
             VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO -> {
-                formatVoiceBroadcastEvent(timelineEvent.root.asVoiceBroadcastEvent(), senderName)
+                formatVoiceBroadcastEvent(timelineEvent.root, isDm, senderName)
             }
             else -> {
                 span {
@@ -263,8 +263,8 @@ class DisplayableEventFormatter @Inject constructor(
         }
     }
 
-    private fun formatVoiceBroadcastEvent(voiceBroadcastEvent: VoiceBroadcastEvent?, senderName: String): CharSequence {
-        return if (voiceBroadcastEvent?.isLive == true) {
+    private fun formatVoiceBroadcastEvent(event: Event, isDm: Boolean, senderName: String): CharSequence {
+        return if (event.asVoiceBroadcastEvent()?.isLive == true) {
             span {
                 drawableProvider.getDrawable(R.drawable.ic_voice_broadcast, colorProvider.getColor(R.color.palette_vermilion))?.let {
                     image(it)
@@ -275,7 +275,7 @@ class DisplayableEventFormatter @Inject constructor(
                 }
             }
         } else {
-            stringProvider.getString(R.string.notice_voice_broadcast_ended, senderName)
+            noticeEventFormatter.format(event, senderName, isDm).orEmpty()
         }
     }
 }
