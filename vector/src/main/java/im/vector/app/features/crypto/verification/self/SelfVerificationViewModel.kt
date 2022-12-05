@@ -287,7 +287,9 @@ class SelfVerificationViewModel @AssistedInject constructor(
                 }
             }
             VerificationAction.SecuredStorageHasBeenReset -> TODO()
-            VerificationAction.SkipVerification -> TODO()
+            VerificationAction.SkipVerification -> {
+                _viewEvents.post(VerificationBottomSheetViewEvents.Dismiss)
+            }
             VerificationAction.StartSASVerification -> {
                 withState { state ->
                     val request = state.pendingRequest.invoke() ?: return@withState

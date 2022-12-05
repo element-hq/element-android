@@ -77,11 +77,11 @@ class SelfVerificationFragment  : VectorBaseFragment<BottomSheetVerificationChil
     }
 
     override fun onClickSkip() {
-        TODO("Not yet implemented")
+        viewModel.handle(VerificationAction.SkipVerification)
     }
 
     override fun onClickResetSecurity() {
-        TODO("Not yet implemented")
+
     }
 
     override fun onDoneFrom4S() {
