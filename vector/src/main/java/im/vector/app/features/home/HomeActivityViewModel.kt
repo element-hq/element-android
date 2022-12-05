@@ -29,6 +29,7 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.pushers.EnsureFcmTokenIsRetrievedUseCase
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.pushers.RegisterUnifiedPushUseCase
+import im.vector.app.core.pushers.UnregisterUnifiedPushUseCase
 import im.vector.app.features.analytics.AnalyticsConfig
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.extensions.toAnalyticsType
@@ -92,6 +93,7 @@ class HomeActivityViewModel @AssistedInject constructor(
         private val stopOngoingVoiceBroadcastUseCase: StopOngoingVoiceBroadcastUseCase,
         private val pushersManager: PushersManager,
         private val registerUnifiedPushUseCase: RegisterUnifiedPushUseCase,
+        private val unregisterUnifiedPushUseCase: UnregisterUnifiedPushUseCase,
         private val ensureFcmTokenIsRetrievedUseCase: EnsureFcmTokenIsRetrievedUseCase,
 ) : VectorViewModel<HomeActivityViewState, HomeActivityViewActions, HomeActivityViewEvents>(initialState) {
 
@@ -130,6 +132,8 @@ class HomeActivityViewModel @AssistedInject constructor(
     private fun registerUnifiedPushIfNeeded() {
         if (vectorPreferences.areNotificationEnabledForDevice()) {
             registerUnifiedPush(distributor = "")
+        } else {
+            unregisterUnifiedPush()
         }
     }
 
@@ -143,6 +147,12 @@ class HomeActivityViewModel @AssistedInject constructor(
                     ensureFcmTokenIsRetrievedUseCase.execute(pushersManager, registerPusher = vectorPreferences.areNotificationEnabledForDevice())
                 }
             }
+        }
+    }
+
+    private fun unregisterUnifiedPush() {
+        viewModelScope.launch {
+            unregisterUnifiedPushUseCase.execute(pushersManager)
         }
     }
 

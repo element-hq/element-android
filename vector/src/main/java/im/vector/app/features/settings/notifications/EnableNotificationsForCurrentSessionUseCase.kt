@@ -16,24 +16,20 @@
 
 package im.vector.app.features.settings.notifications
 
-import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.pushers.EnsureFcmTokenIsRetrievedUseCase
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.pushers.RegisterUnifiedPushUseCase
-import im.vector.app.features.settings.devices.v2.notification.TogglePushNotificationUseCase
 import javax.inject.Inject
 
 class EnableNotificationsForCurrentSessionUseCase @Inject constructor(
-        private val activeSessionHolder: ActiveSessionHolder,
         private val pushersManager: PushersManager,
-        private val togglePushNotificationUseCase: TogglePushNotificationUseCase,
+        private val toggleNotificationsForCurrentSessionUseCase: ToggleNotificationsForCurrentSessionUseCase,
         private val registerUnifiedPushUseCase: RegisterUnifiedPushUseCase,
         private val ensureFcmTokenIsRetrievedUseCase: EnsureFcmTokenIsRetrievedUseCase,
 ) {
 
     sealed interface EnableNotificationsResult {
         object Success : EnableNotificationsResult
-        object Failure : EnableNotificationsResult
         object NeedToAskUserForDistributor : EnableNotificationsResult
     }
 
@@ -50,9 +46,7 @@ class EnableNotificationsForCurrentSessionUseCase @Inject constructor(
             }
         }
 
-        val session = activeSessionHolder.getSafeActiveSession() ?: return EnableNotificationsResult.Failure
-        val deviceId = session.sessionParams.deviceId ?: return EnableNotificationsResult.Failure
-        togglePushNotificationUseCase.execute(deviceId, enabled = true)
+        toggleNotificationsForCurrentSessionUseCase.execute(enabled = true)
 
         return EnableNotificationsResult.Success
     }

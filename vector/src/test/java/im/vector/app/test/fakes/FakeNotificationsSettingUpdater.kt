@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.devices.v2.notification
+package im.vector.app.test.fakes
 
+import im.vector.app.core.notification.NotificationsSettingUpdater
+import io.mockk.justRun
+import io.mockk.mockk
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
-import javax.inject.Inject
 
-class CheckIfCanTogglePushNotificationsViaAccountDataUseCase @Inject constructor() {
+class FakeNotificationsSettingUpdater {
 
-    fun execute(session: Session, deviceId: String): Boolean {
-        return session
-                .accountDataService()
-                .getUserAccountDataEvent(UserAccountDataTypes.TYPE_LOCAL_NOTIFICATION_SETTINGS + deviceId) != null
+    val instance = mockk<NotificationsSettingUpdater>()
+
+    fun givenOnSessionsStarted(session: Session) {
+        justRun { instance.onSessionStarted(session) }
     }
 }

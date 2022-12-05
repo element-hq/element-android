@@ -40,6 +40,7 @@ class VectorSettingsNotificationPreferenceViewModel @AssistedInject constructor(
         private val unregisterUnifiedPushUseCase: UnregisterUnifiedPushUseCase,
         private val registerUnifiedPushUseCase: RegisterUnifiedPushUseCase,
         private val ensureFcmTokenIsRetrievedUseCase: EnsureFcmTokenIsRetrievedUseCase,
+        private val toggleNotificationsForCurrentSessionUseCase: ToggleNotificationsForCurrentSessionUseCase,
 ) : VectorViewModel<VectorDummyViewState, VectorSettingsNotificationPreferenceViewAction, VectorSettingsNotificationPreferenceViewEvent>(initialState) {
 
     @AssistedFactory
@@ -67,9 +68,6 @@ class VectorSettingsNotificationPreferenceViewModel @AssistedInject constructor(
     private fun handleEnableNotificationsForDevice(distributor: String) {
         viewModelScope.launch {
             when (enableNotificationsForCurrentSessionUseCase.execute(distributor)) {
-                EnableNotificationsForCurrentSessionUseCase.EnableNotificationsResult.Failure -> {
-                    _viewEvents.post(VectorSettingsNotificationPreferenceViewEvent.EnableNotificationForDeviceFailure)
-                }
                 is EnableNotificationsForCurrentSessionUseCase.EnableNotificationsResult.NeedToAskUserForDistributor -> {
                     _viewEvents.post(VectorSettingsNotificationPreferenceViewEvent.AskUserForPushDistributor)
                 }
@@ -88,7 +86,9 @@ class VectorSettingsNotificationPreferenceViewModel @AssistedInject constructor(
                     _viewEvents.post(VectorSettingsNotificationPreferenceViewEvent.AskUserForPushDistributor)
                 }
                 RegisterUnifiedPushUseCase.RegisterUnifiedPushResult.Success -> {
-                    ensureFcmTokenIsRetrievedUseCase.execute(pushersManager, registerPusher = vectorPreferences.areNotificationEnabledForDevice())
+                    val areNotificationsEnabled = vectorPreferences.areNotificationEnabledForDevice()
+                    ensureFcmTokenIsRetrievedUseCase.execute(pushersManager, registerPusher = areNotificationsEnabled)
+                    toggleNotificationsForCurrentSessionUseCase.execute(enabled = areNotificationsEnabled)
                     _viewEvents.post(VectorSettingsNotificationPreferenceViewEvent.NotificationMethodChanged)
                 }
             }
