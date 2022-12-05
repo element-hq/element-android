@@ -2868,7 +2868,7 @@
     <string name="qr_code_login_header_failed_other_description">Žiadosť zlyhala.</string>
     <string name="labs_enable_voice_broadcast_summary">Možnosť nahrávania a odosielania hlasového vysielania v časovej osi miestnosti.</string>
     <string name="labs_enable_voice_broadcast_title">Zapnúť hlasové vysielanie (v štádiu aktívneho vývoja)</string>
-    <string name="a11y_voice_broadcast_buffering">Načítavanie do vyrovnávacej pamäte</string>
+    <string name="a11y_voice_broadcast_buffering">Načítavanie do vyrovnávacej pamäte…</string>
     <string name="a11y_pause_voice_broadcast">Pozastaviť hlasové vysielanie</string>
     <string name="a11y_play_voice_broadcast">Prehrať alebo pokračovať v nahrávaní hlasového vysielania</string>
     <string name="a11y_stop_voice_broadcast_record">Zastaviť nahrávanie hlasového vysielania</string>
@@ -2922,4 +2922,6 @@
     <string name="device_manager_other_sessions_show_ip_address">Zobraziť IP adresu</string>
     <string name="replying_to">Odpoveď na %s</string>
     <string name="editing">Úprava</string>
+    <string name="settings_enable_direct_share_summary">Zobraziť posledné konverzácie v systémovej ponuke zdieľania</string>
+    <string name="settings_enable_direct_share_title">Povoliť priame zdieľanie</string>
 </resources>
