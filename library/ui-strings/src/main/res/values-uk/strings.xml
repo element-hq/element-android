@@ -2980,4 +2980,6 @@
     <string name="editing">Редагування</string>
     <string name="settings_enable_direct_share_summary">Показувати останні бесіди в системному меню загального доступу</string>
     <string name="settings_enable_direct_share_title">Увімкнути пряме поширення</string>
+    <string name="review_unverified_sessions_description">Перегляньте їх, щоб переконатися, що ваш обліковий запис у безпеці</string>
+    <string name="review_unverified_sessions_title">У вас є незвірені сеанси</string>
 </resources>
