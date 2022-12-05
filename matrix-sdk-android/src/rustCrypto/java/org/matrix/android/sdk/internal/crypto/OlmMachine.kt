@@ -52,6 +52,9 @@ import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.coroutines.builder.safeInvokeOnClose
+import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.CreateKeysBackupVersionBody
+import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.DefaultKeysAlgorithmAndData
+import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysAlgorithmAndData
 import org.matrix.android.sdk.internal.crypto.network.RequestSender
 import org.matrix.android.sdk.internal.crypto.verification.SasVerification
 import org.matrix.android.sdk.internal.crypto.verification.VerificationRequest
@@ -860,14 +863,19 @@ internal class OlmMachine @Inject constructor(
     }
 
     @Throws(CryptoStoreException::class)
-    suspend fun checkAuthDataSignature(authData: MegolmBackupAuthData): Boolean {
+    suspend fun checkAuthDataSignature(authData: KeysAlgorithmAndData): Boolean {
         return withContext(coroutineDispatchers.computation) {
             val adapter = moshi
                     .newBuilder()
-                    .add(CheckNumberType.JSON_ADAPTER_FACTORY)
                     .build()
-                    .adapter(MegolmBackupAuthData::class.java)
-            val serializedAuthData = adapter.toJson(authData)
+                    .adapter(DefaultKeysAlgorithmAndData::class.java)
+            val serializedAuthData = adapter.toJson(
+                    DefaultKeysAlgorithmAndData(
+                            algorithm = authData.algorithm,
+                            authData = authData.authData
+                    )
+            )
+
             inner.verifyBackup(serializedAuthData).trusted
         }
     }

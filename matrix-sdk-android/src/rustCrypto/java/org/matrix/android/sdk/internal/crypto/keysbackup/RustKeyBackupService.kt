@@ -54,6 +54,7 @@ import org.matrix.android.sdk.internal.crypto.OlmMachine
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.SignalableMegolmBackupAuthData
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.CreateKeysBackupVersionBody
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeyBackupData
+import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysAlgorithmAndData
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysBackupData
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.UpdateKeysBackupVersionBody
 import org.matrix.android.sdk.internal.crypto.network.RequestSender
@@ -259,19 +260,20 @@ internal class RustKeyBackupService @Inject constructor(
 //        TODO()
 //    }
 
-    private suspend fun checkBackupTrust(authData: MegolmBackupAuthData?): KeysBackupVersionTrust {
-        return if (authData == null || authData.publicKey.isEmpty() || authData.signatures.isNullOrEmpty()) {
-            Timber.v("getKeysBackupTrust: Key backup is absent or missing required data")
-            KeysBackupVersionTrust(usable = false)
-        } else {
-            KeysBackupVersionTrust(olmMachine.checkAuthDataSignature(authData))
+    private suspend fun checkBackupTrust(algAndData: KeysAlgorithmAndData?): KeysBackupVersionTrust {
+        if (algAndData == null) return KeysBackupVersionTrust(usable = false)
+        try {
+            val isTrusted = olmMachine.checkAuthDataSignature(algAndData)
+            return KeysBackupVersionTrust(isTrusted)
+        } catch (failure: Throwable) {
+            Timber.w(failure, "Failed to trust backup")
+            return KeysBackupVersionTrust(usable = false)
         }
     }
 
     override suspend fun getKeysBackupTrust(keysBackupVersion: KeysVersionResult): KeysBackupVersionTrust {
-        val authData = keysBackupVersion.getAuthDataAsMegolmBackupAuthData()
         return withContext(coroutineDispatchers.crypto) {
-            checkBackupTrust(authData)
+            checkBackupTrust(keysBackupVersion)
         }
     }
 
