@@ -101,6 +101,7 @@ class VectorSettingsDevicesFragment :
 
         initWaitingView()
         initCurrentSessionHeaderView()
+        initCurrentSessionListView()
         initOtherSessionsHeaderView()
         initOtherSessionsView()
         initSecurityRecommendationsView()
@@ -150,6 +151,12 @@ class VectorSettingsDevicesFragment :
                 }
                 else -> false
             }
+        }
+    }
+
+    private fun initCurrentSessionListView() {
+        views.deviceListCurrentSession.viewVerifyButton.debouncedClicks {
+            viewModel.handle(DevicesAction.VerifyCurrentSession)
         }
     }
 
@@ -351,28 +358,35 @@ class VectorSettingsDevicesFragment :
 
     private fun renderCurrentSessionView(currentDeviceInfo: DeviceFullInfo?, hasOtherDevices: Boolean) {
         currentDeviceInfo?.let {
-            views.deviceListHeaderCurrentSession.isVisible = true
-            val colorDestructive = colorProvider.getColorFromAttribute(R.attr.colorError)
-            val signoutOtherSessionsItem = views.deviceListHeaderCurrentSession.menu.findItem(R.id.currentSessionHeaderSignoutOtherSessions)
-            signoutOtherSessionsItem.setTextColor(colorDestructive)
-            signoutOtherSessionsItem.isVisible = hasOtherDevices
-            views.deviceListCurrentSession.isVisible = true
-            val viewState = SessionInfoViewState(
-                    isCurrentSession = true,
-                    deviceFullInfo = it
-            )
-            views.deviceListCurrentSession.render(viewState, dateFormatter, drawableProvider, colorProvider, stringProvider)
-            views.deviceListCurrentSession.debouncedClicks {
-                currentDeviceInfo.deviceInfo.deviceId?.let { deviceId -> navigateToSessionOverview(deviceId) }
-            }
-            views.deviceListCurrentSession.viewDetailsButton.debouncedClicks {
-                currentDeviceInfo.deviceInfo.deviceId?.let { deviceId -> navigateToSessionOverview(deviceId) }
-            }
-            views.deviceListCurrentSession.viewVerifyButton.debouncedClicks {
-                viewModel.handle(DevicesAction.VerifyCurrentSession)
-            }
+            renderCurrentSessionHeaderView(hasOtherDevices)
+            renderCurrentSessionListView(it)
         } ?: run {
             hideCurrentSessionView()
+        }
+    }
+
+    private fun renderCurrentSessionHeaderView(hasOtherDevices: Boolean) {
+        views.deviceListHeaderCurrentSession.isVisible = true
+        val colorDestructive = colorProvider.getColorFromAttribute(R.attr.colorError)
+        val signoutSessionItem = views.deviceListHeaderCurrentSession.menu.findItem(R.id.currentSessionHeaderSignout)
+        signoutSessionItem.setTextColor(colorDestructive)
+        val signoutOtherSessionsItem = views.deviceListHeaderCurrentSession.menu.findItem(R.id.currentSessionHeaderSignoutOtherSessions)
+        signoutOtherSessionsItem.setTextColor(colorDestructive)
+        signoutOtherSessionsItem.isVisible = hasOtherDevices
+    }
+
+    private fun renderCurrentSessionListView(currentDeviceInfo: DeviceFullInfo) {
+        views.deviceListCurrentSession.isVisible = true
+        val viewState = SessionInfoViewState(
+                isCurrentSession = true,
+                deviceFullInfo = currentDeviceInfo
+        )
+        views.deviceListCurrentSession.render(viewState, dateFormatter, drawableProvider, colorProvider, stringProvider)
+        views.deviceListCurrentSession.debouncedClicks {
+            currentDeviceInfo.deviceInfo.deviceId?.let { deviceId -> navigateToSessionOverview(deviceId) }
+        }
+        views.deviceListCurrentSession.viewDetailsButton.debouncedClicks {
+            currentDeviceInfo.deviceInfo.deviceId?.let { deviceId -> navigateToSessionOverview(deviceId) }
         }
     }
 
