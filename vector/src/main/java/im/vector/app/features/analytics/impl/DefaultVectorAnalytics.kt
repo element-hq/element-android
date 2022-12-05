@@ -47,7 +47,7 @@ class DefaultVectorAnalytics @Inject constructor(
         private val analyticsStore: AnalyticsStore,
         private val lateInitUserPropertiesFactory: LateInitUserPropertiesFactory,
         @NamedGlobalScope private val globalScope: CoroutineScope
-) : VectorAnalytics, ErrorTracker by sentryAnalytics {
+) : VectorAnalytics, ErrorTracker {
 
     private val posthog: PostHog? = when {
         analyticsConfig.isEnabled -> postHogFactory.createPosthog()
@@ -180,5 +180,11 @@ class DefaultVectorAnalytics @Inject constructor(
         return Properties().apply {
             putAll(this@toPostHogUserProperties.filter { it.value != null })
         }
+    }
+
+    override fun trackError(throwable: Throwable) {
+        sentryAnalytics
+                .takeIf { userConsent == true }
+                ?.trackError(throwable)
     }
 }

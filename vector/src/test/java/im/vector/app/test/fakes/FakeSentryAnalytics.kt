@@ -45,4 +45,9 @@ class FakeSentryAnalytics {
     fun verifySentryTrackError(error: Throwable) {
         verify { instance.trackError(error) }
     }
+
+    fun verifyNoErrorTracking() =
+        verify(inverse = true) {
+            instance.trackError(any())
+        }
 }

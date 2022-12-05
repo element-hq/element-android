@@ -151,11 +151,22 @@ class DefaultVectorAnalyticsTest {
     }
 
     @Test
-    fun `when tracking exception then submits to sentry`() = runTest {
+    fun `given user has consented, when tracking exception, then submits to sentry`() = runTest {
+        fakeAnalyticsStore.givenUserContent(consent = true)
         val exception = Exception("test")
+
         defaultVectorAnalytics.trackError(exception)
 
         fakeSentryAnalytics.verifySentryTrackError(exception)
+    }
+
+    @Test
+    fun `given user has not consented, when tracking exception, then does not track to sentry`() = runTest {
+        fakeAnalyticsStore.givenUserContent(consent = false)
+
+        defaultVectorAnalytics.trackError(Exception("test"))
+
+        fakeSentryAnalytics.verifyNoErrorTracking()
     }
 }
 
