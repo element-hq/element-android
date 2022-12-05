@@ -2867,4 +2867,6 @@
     <string name="device_manager_other_sessions_show_ip_address">IP-Adresse anzeigen</string>
     <string name="settings_enable_direct_share_summary">Kürzliche Unterhaltungen im Teilen-Menü des Systems anzeigen</string>
     <string name="settings_enable_direct_share_title">Direktes Teilen aktivieren</string>
+    <string name="review_unverified_sessions_description">Überprüfe sie, um ein sicheres Konto gewährleisten zu können</string>
+    <string name="review_unverified_sessions_title">Du hast nicht verifizierte Sitzungen</string>
 </resources>
