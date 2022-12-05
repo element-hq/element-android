@@ -345,7 +345,7 @@
     <string name="encryption_import_room_keys_summary">Importuj klucze z lokalnego pliku</string>
     <string name="encryption_import_import">Importuj</string>
     <string name="encryption_never_send_to_unverified_devices_title">Szyfruj wiadomości tylko do zaufanych sesji</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">Nigdy nie wysyłaj zaszyfrowanych wiadomości do niezweryfikowanych sesji w tym pokoju z tej sesji.</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Nigdy nie wysyłaj szyfrowanych wiadomości do sesji (np urządzeń innych użytkowników) które nie zostały zweryfikowane.</string>
     <string name="encryption_information_verify_device_warning">Aby sprawdzić czy ta sesja jest zaufana, skontaktuj się z jej właścicielem używając innych form (np. osobiście lub telefonicznie) i zapytaj czy klucz, który widzą w ustawieniach użytkownika dla tego urządzenia pasuje do klucza poniżej:</string>
     <string name="encryption_information_verify_device_warning2">Jeśli klucz pasuje, potwierdź to przyciskiem poniżej. Jeśli nie, to ktoś inny najprawdopodobniej przejmuje lub podszywa się pod tą sesję i powinieneś dodać tę sesję do czarnej listy. W przyszłości proces weryfikacji będzie bardziej skomplikowany.</string>
     <string name="title_activity_choose_sticker">Wyślij naklejkę</string>
@@ -622,7 +622,7 @@
     <string name="error_no_network">Brak sieci. Sprawdź swoje połączenie z Internetem.</string>
     <string name="please_wait">Proszę czekać…</string>
     <string name="room_preview_no_preview">Tego pokoju nie można podejrzeć</string>
-    <string name="settings_security_and_privacy">Bezpieczeństwo i Prywatność</string>
+    <string name="settings_security_and_privacy">Bezpieczeństwo i prywatność</string>
     <string name="settings_push_rules_no_rules">Brak reguł push</string>
     <string name="send_file_step_idle">Oczekiwanie…</string>
     <string name="send_file_step_sending_thumbnail">Wysyłanie miniatury (%1$s / %2$s)</string>
@@ -2398,7 +2398,7 @@
     <string name="ftue_auth_carousel_control_body">Wybierz, gdzie prowadzone są Twoje rozmowy, dając Ci kontrolę i niezależność. Połączenie przez sieć Matrix.</string>
     <string name="ftue_auth_carousel_secure_body">Bezpieczna i niezależna komunikacja, która zapewnia ten sam poziom prywatności, co rozmowa twarzą w twarz we własnym domu.</string>
     <string name="ftue_auth_carousel_workplace_title">Komunikacja dla Twojego zespołu.</string>
-    <string name="attachment_type_location">Położenie</string>
+    <string name="attachment_type_location">Lokalizacja</string>
     <string name="preference_root_legals">Zagadnienia prawne</string>
     <string name="navigate_to_thread_when_already_in_the_thread">Już przeglądasz ten wątek!</string>
     <string name="view_in_room">Wyświetl w pokoju</string>
@@ -2743,4 +2743,48 @@
     <string name="home_empty_space_no_rooms_title">%s
 \nwygląda nieco pusto.</string>
     <string name="space_list_empty_title">Brak przestrzeni.</string>
+    <string name="some_devices_will_not_be_able_to_decrypt">⚠ W tym pokoju znajdują się użytkownicy ze niezweryfikowanymi urządzeniami, nie będą one mogły odszyfrować wiadomości które wysyłasz.</string>
+    <string name="grant_permission">Udziel Uprawnień</string>
+    <string name="settings_troubleshoot_test_system_settings_permission_failed">${app_name} potrzebuje uprawnień aby wyświetlać powiadomienia.
+\nProszę udziel uprawnień.</string>
+    <string name="permissions_rationale_msg_notification">${app_name} potrzebuje uprawnień by wyświetlić powiadomienia. Będą one pokazywać twoje wiadomości, zaproszenia, itd.
+\n
+\nProszę zezwól na dostęp na następnym pop-upie aby móc zobaczyć powiadomienia.</string>
+    <string name="invites_empty_message">Tutaj będą twoje nowe zaproszenia.</string>
+    <string name="invites_empty_title">Brak zaproszeń.</string>
+    <string name="encryption_never_send_to_unverified_devices_in_room">Nigdy nie wysyłaj zaszyfrowanych wiadomości do niezweryfikowanych sesji w tym pokoju.</string>
+    <string name="device_manager_session_overview_signout">Wyloguj się z tej sesji</string>
+    <plurals name="device_manager_other_sessions_multi_signout_all">
+        <item quantity="one">Wyloguj się z %1$d sesji</item>
+        <item quantity="few">Wyloguj się z %1$d sesji</item>
+        <item quantity="many"></item>
+        <item quantity="other"></item>
+    </plurals>
+    <string name="device_manager_other_sessions_multi_signout_selection">Wyloguj się</string>
+    <string name="device_manager_other_sessions_select">Wybierz sesje</string>
+    <string name="device_manager_other_sessions_show_ip_address">Pokaż adres IP</string>
+    <string name="device_manager_learn_more_sessions_unverified_title">Niezweryfikowane sesje</string>
+    <string name="device_manager_other_sessions_no_unverified_sessions_found">Brak niezweryfikowanych sesji.</string>
+    <string name="device_manager_other_sessions_recommendation_description_unverified">Zweryfikuj swoje sesje dla zwiększenia bezpieczeństwa wiadomości lub wyloguj się z tych których nie rozpoznajesz lub już nie używasz.</string>
+    <string name="device_manager_other_sessions_recommendation_title_unverified">Niezweryfikowane</string>
+    <string name="device_manager_unverified_sessions_description">Zweryfikuj te sesje lub wyloguj się z nich.</string>
+    <string name="device_manager_unverified_sessions_title">Niezweryfikowane sesje</string>
+    <string name="device_manager_header_section_security_recommendations_description">Popraw swoje bezpieczeństwo stosując te zalecenia.</string>
+    <string name="device_manager_header_section_security_recommendations_title">Zalecenia bezpieczenstwa</string>
+    <string name="settings_enable_direct_share_summary">Pokaż ostatnie rozmowy w systemowym menu udostępniania</string>
+    <string name="settings_enable_direct_share_title">Bezpośrednie udostępnianie</string>
+    <string name="labs_enable_voice_broadcast_summary">Bądź w stanie nagrywać i wysyłać transmisje głosowe na osi czasu pokoju.</string>
+    <string name="labs_enable_voice_broadcast_title">Włącz transmicje głosowe (w trakcie aktywnego rozwoju)</string>
+    <string name="labs_enable_client_info_recording_summary">Zachowuj nazwę aplikacji, wersję oraz jej url aby łatwiej rozpoznawać je w menedzerze sesji.</string>
+    <string name="labs_enable_client_info_recording_title">Włącz rejestrowanie informacji o kliencie</string>
+    <string name="labs_enable_session_manager_summary">Miej lepszą kontrolę nad zalogowanymi sesjami.</string>
+    <string name="labs_enable_session_manager_title">Włącz nowy manager sesji</string>
+    <string name="labs_enable_rich_text_editor_summary">Wypróbuj zaawansowany edytor tekstu (tryb zwykłego tekstu dostępny wkrótce)</string>
+    <string name="labs_enable_rich_text_editor_title">Włącz zaawansowany edytor tekstu</string>
+    <string name="attachment_type_selector_text_formatting">Formatowanie tekstu</string>
+    <string name="attachment_type_selector_poll">Ankiety</string>
+    <string name="attachment_type_voice_broadcast">Transmisja Głosowa</string>
+    <string name="attachment_type_selector_file">Załączniki</string>
+    <string name="attachment_type_selector_sticker">Naklejki</string>
+    <string name="attachment_type_selector_gallery">Galeria</string>
 </resources>
