@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.home
+package im.vector.app.features.settings.notifications
 
 import im.vector.app.core.platform.VectorViewModelAction
 
-sealed interface HomeActivityViewActions : VectorViewModelAction {
-    object ViewStarted : HomeActivityViewActions
-    object PushPromptHasBeenReviewed : HomeActivityViewActions
-    data class RegisterPushDistributor(val distributor: String) : HomeActivityViewActions
+sealed interface VectorSettingsNotificationPreferenceViewAction : VectorViewModelAction {
+    data class EnableNotificationsForDevice(val pushDistributor: String) : VectorSettingsNotificationPreferenceViewAction
+    object DisableNotificationsForDevice : VectorSettingsNotificationPreferenceViewAction
+    data class RegisterPushDistributor(val pushDistributor: String) : VectorSettingsNotificationPreferenceViewAction
 }
