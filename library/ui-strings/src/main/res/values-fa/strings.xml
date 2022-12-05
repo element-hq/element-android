@@ -2849,4 +2849,8 @@
     <string name="qr_code_login_confirm_security_code_description">لطفاً مطمئن شوید که مبدأ این کد را می‌دانید. با پیوند دادن افزاره‌ها، دسترسی کامل را به حسابتان می‌دهید.</string>
     <string name="settings_enable_direct_share_summary">نمایش گپ‌های اخیر در فهرست هم رسانی سامانه</string>
     <string name="settings_enable_direct_share_title">به کار انداختن هم‌رسانی مستقیم</string>
+    <string name="settings_security_incognito_keyboard_summary">درخواست این که صفحه‌کلید نباید هیچ دادهٔ شخصی‌ شده‌ای را مانند نوشتن تاریخچه و واژه‌نامه برپایهٔ آن‌چه در گفت‌وگوها می‌نویسید به‌روز کند. توجّه داشته باشید که ممکن است برخی صفحه‌کلیدها به این تنظیمات احترام نگذارند.</string>
+    <string name="permissions_rationale_msg_notification">${app_name} برای نمایش آگاهی‌ها نیازمند اجازه است. آگاهی می‌تواندد پیام‌ها، دعوت‌ها و…تان را نشان دهند.
+\n
+\nلطفا در بیرون‌پریدنی بعدی اجازهٔ دسترسی بدهید تا بتوانید آگاهی‌ها را ببینید.</string>
 </resources>

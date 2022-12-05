@@ -2814,7 +2814,7 @@
     <string name="qr_code_login_header_failed_other_description">A requisição falhou.</string>
     <string name="labs_enable_voice_broadcast_summary">Seja capaz de gravar e enviar broadcast de voz em timeline de sala.</string>
     <string name="labs_enable_voice_broadcast_title">Broadcast de voz (sob desenvolvimento ativo)</string>
-    <string name="a11y_voice_broadcast_buffering">Buffering</string>
+    <string name="a11y_voice_broadcast_buffering">Buffering…</string>
     <string name="a11y_pause_voice_broadcast">Pausar broadcast de voz</string>
     <string name="a11y_play_voice_broadcast">Tocar ou retomar broadcast de voz</string>
     <string name="a11y_stop_voice_broadcast_record">Parar gravação de broadcast de voz</string>
@@ -2866,4 +2866,6 @@
     <string name="quoting">Citando</string>
     <string name="replying_to">Respondendo a %s</string>
     <string name="editing">Editando</string>
+    <string name="settings_enable_direct_share_summary">Mostrar chats recentes no menu de compartilhar do sistema</string>
+    <string name="settings_enable_direct_share_title">Habilitar compartilhar direto</string>
 </resources>
