@@ -29,10 +29,10 @@ import org.matrix.android.sdk.api.account.LocalNotificationSettingsContent
 
 class CanToggleNotificationsViaAccountDataUseCaseTest {
 
-    private val fakeGetNotificationSettingsAccountDataAsFlowUseCase = mockk<GetNotificationSettingsAccountDataAsFlowUseCase>()
+    private val fakeGetNotificationSettingsAccountDataUpdatesUseCase = mockk<GetNotificationSettingsAccountDataUpdatesUseCase>()
 
     private val canToggleNotificationsViaAccountDataUseCase = CanToggleNotificationsViaAccountDataUseCase(
-            getNotificationSettingsAccountDataAsFlowUseCase = fakeGetNotificationSettingsAccountDataAsFlowUseCase,
+            getNotificationSettingsAccountDataUpdatesUseCase = fakeGetNotificationSettingsAccountDataUpdatesUseCase,
     )
 
     @Test
@@ -43,14 +43,14 @@ class CanToggleNotificationsViaAccountDataUseCaseTest {
         val localNotificationSettingsContent = LocalNotificationSettingsContent(
                 isSilenced = true,
         )
-        every { fakeGetNotificationSettingsAccountDataAsFlowUseCase.execute(any(), any()) } returns flowOf(localNotificationSettingsContent)
+        every { fakeGetNotificationSettingsAccountDataUpdatesUseCase.execute(any(), any()) } returns flowOf(localNotificationSettingsContent)
 
         // When
         val result = canToggleNotificationsViaAccountDataUseCase.execute(aSession, aDeviceId).firstOrNull()
 
         // Then
         result shouldBe true
-        verify { fakeGetNotificationSettingsAccountDataAsFlowUseCase.execute(aSession, aDeviceId) }
+        verify { fakeGetNotificationSettingsAccountDataUpdatesUseCase.execute(aSession, aDeviceId) }
     }
 
     @Test
@@ -61,14 +61,14 @@ class CanToggleNotificationsViaAccountDataUseCaseTest {
         val localNotificationSettingsContent = LocalNotificationSettingsContent(
                 isSilenced = null,
         )
-        every { fakeGetNotificationSettingsAccountDataAsFlowUseCase.execute(any(), any()) } returns flowOf(localNotificationSettingsContent)
+        every { fakeGetNotificationSettingsAccountDataUpdatesUseCase.execute(any(), any()) } returns flowOf(localNotificationSettingsContent)
 
         // When
         val result = canToggleNotificationsViaAccountDataUseCase.execute(aSession, aDeviceId).firstOrNull()
 
         // Then
         result shouldBe false
-        verify { fakeGetNotificationSettingsAccountDataAsFlowUseCase.execute(aSession, aDeviceId) }
+        verify { fakeGetNotificationSettingsAccountDataUpdatesUseCase.execute(aSession, aDeviceId) }
     }
 
     @Test
@@ -76,13 +76,13 @@ class CanToggleNotificationsViaAccountDataUseCaseTest {
         // Given
         val aSession = FakeSession()
         val aDeviceId = "aDeviceId"
-        every { fakeGetNotificationSettingsAccountDataAsFlowUseCase.execute(any(), any()) } returns flowOf(null)
+        every { fakeGetNotificationSettingsAccountDataUpdatesUseCase.execute(any(), any()) } returns flowOf(null)
 
         // When
         val result = canToggleNotificationsViaAccountDataUseCase.execute(aSession, aDeviceId).firstOrNull()
 
         // Then
         result shouldBe false
-        verify { fakeGetNotificationSettingsAccountDataAsFlowUseCase.execute(aSession, aDeviceId) }
+        verify { fakeGetNotificationSettingsAccountDataUpdatesUseCase.execute(aSession, aDeviceId) }
     }
 }

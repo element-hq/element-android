@@ -25,7 +25,7 @@ import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.api.session.events.model.toModel
 import javax.inject.Inject
 
-class GetNotificationSettingsAccountDataAsFlowUseCase @Inject constructor() {
+class GetNotificationSettingsAccountDataUpdatesUseCase @Inject constructor() {
 
     fun execute(session: Session, deviceId: String): Flow<LocalNotificationSettingsContent?> {
         return session

@@ -30,10 +30,10 @@ import org.matrix.android.sdk.api.account.LocalNotificationSettingsContent
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.api.session.events.model.toContent
 
-class GetNotificationSettingsAccountDataAsFlowUseCaseTest {
+class GetNotificationSettingsAccountDataUpdatesUseCaseTest {
 
     private val fakeFlowLiveDataConversions = FakeFlowLiveDataConversions()
-    private val getNotificationSettingsAccountDataAsFlowUseCase = GetNotificationSettingsAccountDataAsFlowUseCase()
+    private val getNotificationSettingsAccountDataUpdatesUseCase = GetNotificationSettingsAccountDataUpdatesUseCase()
 
     @Before
     fun setUp() {
@@ -60,7 +60,7 @@ class GetNotificationSettingsAccountDataAsFlowUseCaseTest {
                 .givenAsFlow()
 
         // When
-        val result = getNotificationSettingsAccountDataAsFlowUseCase.execute(aSession, aDeviceId).firstOrNull()
+        val result = getNotificationSettingsAccountDataUpdatesUseCase.execute(aSession, aDeviceId).firstOrNull()
 
         // Then
         result shouldBeEqualTo expectedContent
@@ -80,7 +80,7 @@ class GetNotificationSettingsAccountDataAsFlowUseCaseTest {
                 .givenAsFlow()
 
         // When
-        val result = getNotificationSettingsAccountDataAsFlowUseCase.execute(aSession, aDeviceId).firstOrNull()
+        val result = getNotificationSettingsAccountDataUpdatesUseCase.execute(aSession, aDeviceId).firstOrNull()
 
         // Then
         result shouldBeEqualTo null
@@ -101,7 +101,7 @@ class GetNotificationSettingsAccountDataAsFlowUseCaseTest {
                 .givenAsFlow()
 
         // When
-        val result = getNotificationSettingsAccountDataAsFlowUseCase.execute(aSession, aDeviceId).firstOrNull()
+        val result = getNotificationSettingsAccountDataUpdatesUseCase.execute(aSession, aDeviceId).firstOrNull()
 
         // Then
         result shouldBeEqualTo expectedContent

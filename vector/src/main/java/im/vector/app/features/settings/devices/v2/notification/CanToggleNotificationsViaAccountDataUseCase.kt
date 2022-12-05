@@ -22,11 +22,11 @@ import org.matrix.android.sdk.api.session.Session
 import javax.inject.Inject
 
 class CanToggleNotificationsViaAccountDataUseCase @Inject constructor(
-        private val getNotificationSettingsAccountDataAsFlowUseCase: GetNotificationSettingsAccountDataAsFlowUseCase,
+        private val getNotificationSettingsAccountDataUpdatesUseCase: GetNotificationSettingsAccountDataUpdatesUseCase,
 ) {
 
     fun execute(session: Session, deviceId: String): Flow<Boolean> {
-        return getNotificationSettingsAccountDataAsFlowUseCase.execute(session, deviceId)
+        return getNotificationSettingsAccountDataUpdatesUseCase.execute(session, deviceId)
                 .map { it?.isSilenced != null }
     }
 }
