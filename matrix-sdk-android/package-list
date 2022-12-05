@@ -2,7 +2,7 @@ $dokka.format:html-v1
 $dokka.linkExtension:html
 $dokka.location:org.matrix.android.sdk.api.account////PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.account/index.html
 $dokka.location:org.matrix.android.sdk.api.account/LocalNotificationSettingsContent///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.account/-local-notification-settings-content/index.html
-$dokka.location:org.matrix.android.sdk.api.account/LocalNotificationSettingsContent/LocalNotificationSettingsContent/#kotlin.Boolean/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.account/-local-notification-settings-content/-local-notification-settings-content.html
+$dokka.location:org.matrix.android.sdk.api.account/LocalNotificationSettingsContent/LocalNotificationSettingsContent/#kotlin.Boolean?/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.account/-local-notification-settings-content/-local-notification-settings-content.html
 $dokka.location:org.matrix.android.sdk.api.account/LocalNotificationSettingsContent/isSilenced/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.account/-local-notification-settings-content/is-silenced.html
 $dokka.location:org.matrix.android.sdk.api.auth.data////PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.auth.data/index.html
 $dokka.location:org.matrix.android.sdk.api.auth.data/Credentials///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.auth.data/-credentials/index.html
