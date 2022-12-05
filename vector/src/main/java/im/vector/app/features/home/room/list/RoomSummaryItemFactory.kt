@@ -146,6 +146,8 @@ class RoomSummaryItemFactory @Inject constructor(
         }
 
         val typingMessage = typingHelper.getTypingMessage(roomSummary.typingUsers)
+                // Skip typing while there is a live voice broadcast
+                .takeUnless { latestEvent?.root?.asVoiceBroadcastEvent()?.isLive.orFalse() }.orEmpty()
 
         return if (subtitle.isBlank() && displayMode == RoomListDisplayMode.FILTERED) {
             createCenteredRoomSummaryItem(roomSummary, displayMode, showSelected, unreadCount, onClick, onLongClick)
