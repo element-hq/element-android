@@ -145,12 +145,26 @@ class VectorSettingsDevicesFragment :
     private fun initCurrentSessionHeaderView() {
         views.deviceListHeaderCurrentSession.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
+                R.id.currentSessionHeaderRename -> {
+                    navigateToRenameCurrentSession()
+                    true
+                }
                 R.id.currentSessionHeaderSignoutOtherSessions -> {
                     confirmMultiSignoutOtherSessions()
                     true
                 }
                 else -> false
             }
+        }
+    }
+
+    private fun navigateToRenameCurrentSession() = withState(viewModel) { state ->
+        val currentDeviceId = state.currentSessionCrossSigningInfo.deviceId
+        if (currentDeviceId.isNotEmpty()) {
+            viewNavigator.navigateToRenameSession(
+                    context = requireActivity(),
+                    deviceId = currentDeviceId,
+            )
         }
     }
 
