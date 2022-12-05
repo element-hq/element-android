@@ -32,4 +32,3 @@ fun createPaparazziRule() = Paparazzi(
         theme = "Theme.Vector.Light",
         maxPercentDifference = 0.0,
 )
-
