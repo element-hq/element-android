@@ -52,6 +52,7 @@ import im.vector.app.features.settings.devices.v2.list.SecurityRecommendationVie
 import im.vector.app.features.settings.devices.v2.list.SecurityRecommendationViewState
 import im.vector.app.features.settings.devices.v2.list.SessionInfoViewState
 import im.vector.app.features.settings.devices.v2.signout.BuildConfirmSignoutDialogUseCase
+import im.vector.app.features.workers.signout.SignOutUiWorker
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
@@ -149,6 +150,10 @@ class VectorSettingsDevicesFragment :
                     navigateToRenameCurrentSession()
                     true
                 }
+                R.id.currentSessionHeaderSignout -> {
+                    confirmSignoutCurrentSession()
+                    true
+                }
                 R.id.currentSessionHeaderSignoutOtherSessions -> {
                     confirmMultiSignoutOtherSessions()
                     true
@@ -166,6 +171,10 @@ class VectorSettingsDevicesFragment :
                     deviceId = currentDeviceId,
             )
         }
+    }
+
+    private fun confirmSignoutCurrentSession() {
+        activity?.let { SignOutUiWorker(it).perform() }
     }
 
     private fun initCurrentSessionListView() {
