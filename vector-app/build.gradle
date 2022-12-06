@@ -374,7 +374,7 @@ dependencies {
     // API-only library
     gplayImplementation libs.google.appdistributionApi
     // Full SDK implementation
-    gplayImplementation libs.google.appdistribution
+    nightlyImplementation libs.google.appdistribution
 
     // OSS License, gplay flavor only
     gplayImplementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
