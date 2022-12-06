@@ -72,7 +72,9 @@
     <application android:supportsRtl="true">
 
         <!-- Sentry auto-initialization disable -->
-        <meta-data android:name="io.sentry.auto-init" android:value="false" />
+        <meta-data
+            android:name="io.sentry.auto-init"
+            android:value="false" />
 
         <!-- No limit for screen ratio: avoid black strips -->
         <meta-data
@@ -330,6 +332,7 @@
 
         <service
             android:name=".core.services.CallAndroidService"
+            android:foregroundServiceType="phoneCall"
             android:exported="false">
             <!-- in order to get headset button events -->
             <intent-filter>
@@ -341,6 +344,7 @@
         <service
             android:name=".core.services.VectorSyncAndroidService"
             android:exported="false"
+            android:foregroundServiceType="dataSync"
             tools:ignore="Instantiatable" />
 
         <service

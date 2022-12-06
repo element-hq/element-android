@@ -22,6 +22,7 @@ import android.os.Parcelable
 import androidx.core.app.NotificationManagerCompat
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.extensions.startForegroundCompat
 import im.vector.app.core.services.VectorAndroidService
 import im.vector.app.features.location.LocationData
 import im.vector.app.features.location.LocationTracker
@@ -105,7 +106,7 @@ class LocationSharingAndroidService : VectorAndroidService(), LocationTracker.Ca
             if (foregroundModeStarted) {
                 NotificationManagerCompat.from(this).notify(FOREGROUND_SERVICE_NOTIFICATION_ID, notification)
             } else {
-                startForeground(FOREGROUND_SERVICE_NOTIFICATION_ID, notification)
+                startForegroundCompat(FOREGROUND_SERVICE_NOTIFICATION_ID, notification)
                 foregroundModeStarted = true
             }
 
