@@ -81,7 +81,7 @@ class SelfVerificationFragment  : VectorBaseFragment<BottomSheetVerificationChil
     }
 
     override fun onClickResetSecurity() {
-
+        viewModel.handle(VerificationAction.ForgotResetAll)
     }
 
     override fun onDoneFrom4S() {

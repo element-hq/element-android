@@ -254,8 +254,8 @@ class SelfVerificationController @Inject constructor(
                 }
             }
             is Success -> {
-                val invoke = action.invoke()
-                if (invoke) {
+                val value = action.invoke()
+                if (value) {
                     verifiedSuccessTile()
                     bottomDone { (host.listener as? InteractionListener)?.onDoneFrom4S() }
                 } else {

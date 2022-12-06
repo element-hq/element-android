@@ -90,6 +90,7 @@ class UserVerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSh
                             .setPositiveButton(R.string.ok, null)
                             .show()
                 }
+                VerificationBottomSheetViewEvents.ResetAll -> TODO()
             }
         }
     }

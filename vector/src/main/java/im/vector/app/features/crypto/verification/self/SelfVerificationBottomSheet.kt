@@ -34,6 +34,7 @@ import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetVerificationBinding
 import im.vector.app.features.crypto.quads.SharedSecureStorageActivity
+import im.vector.app.features.crypto.quads.SharedSecureStorageViewState
 import im.vector.app.features.crypto.verification.VerificationAction
 import im.vector.app.features.crypto.verification.VerificationBottomSheetViewEvents
 import kotlinx.parcelize.Parcelize
@@ -92,7 +93,18 @@ class SelfVerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSh
                                     requireContext(),
                                     null, // use default key
                                     listOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME, KEYBACKUP_SECRET_SSSS_NAME),
-                                    SharedSecureStorageActivity.DEFAULT_RESULT_KEYSTORE_ALIAS
+                                    SharedSecureStorageActivity.DEFAULT_RESULT_KEYSTORE_ALIAS,
+                            )
+                    )
+                }
+                VerificationBottomSheetViewEvents.ResetAll -> {
+                    secretStartForActivityResult.launch(
+                            SharedSecureStorageActivity.newReadIntent(
+                                    requireContext(),
+                                    null, // use default key
+                                    listOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME, KEYBACKUP_SECRET_SSSS_NAME),
+                                    SharedSecureStorageActivity.DEFAULT_RESULT_KEYSTORE_ALIAS,
+                                    SharedSecureStorageViewState.Step.ResetAll
                             )
                     )
                 }

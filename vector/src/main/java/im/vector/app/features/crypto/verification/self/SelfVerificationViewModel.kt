@@ -16,6 +16,7 @@
 
 package im.vector.app.features.crypto.verification.self
 
+import android.util.Log
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -286,9 +287,16 @@ class SelfVerificationViewModel @AssistedInject constructor(
                     }
                 }
             }
-            VerificationAction.SecuredStorageHasBeenReset -> TODO()
+            VerificationAction.SecuredStorageHasBeenReset -> {
+                if (session.cryptoService().crossSigningService().allPrivateKeysKnown()) {
+                    _viewEvents.post(VerificationBottomSheetViewEvents.Dismiss)
+                }
+            }
             VerificationAction.SkipVerification -> {
                 _viewEvents.post(VerificationBottomSheetViewEvents.Dismiss)
+            }
+            VerificationAction.ForgotResetAll -> {
+                _viewEvents.post(VerificationBottomSheetViewEvents.ResetAll)
             }
             VerificationAction.StartSASVerification -> {
                 withState { state ->

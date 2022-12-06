@@ -31,6 +31,7 @@ sealed class VerificationAction : VectorViewModelAction {
     data class GotItConclusion(val verified: Boolean) : VerificationAction()
     object FailedToGetKeysFrom4S : VerificationAction()
     object SkipVerification : VerificationAction()
+    object ForgotResetAll: VerificationAction()
     object VerifyFromPassphrase : VerificationAction()
     object ReadyPendingVerification : VerificationAction()
     object CancelPendingVerification : VerificationAction()

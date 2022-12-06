@@ -58,7 +58,7 @@ data class SharedSecureStorageViewState(
         val ready: Boolean = false,
         val hasPassphrase: Boolean = true,
         val checkingSSSSAction: Async<Unit> = Uninitialized,
-        val step: Step = Step.EnterPassphrase,
+        val step: Step = Step.ResetAll,
         val activeDeviceCount: Int = 0,
         val showResetAllAction: Boolean = false,
         val userId: String = "",
@@ -74,7 +74,8 @@ data class SharedSecureStorageViewState(
             } else {
                 RequestType.ReadSecrets(args.requestedSecrets)
             },
-            resultKeyStoreAlias = args.resultKeyStoreAlias
+            resultKeyStoreAlias = args.resultKeyStoreAlias,
+            step = args.currentStep,
     )
 
     enum class Step {
@@ -125,7 +126,8 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
                     copy(
                             hasPassphrase = true,
                             ready = true,
-                            step = SharedSecureStorageViewState.Step.EnterPassphrase
+                            step = if (initialState.step == SharedSecureStorageViewState.Step.ResetAll) SharedSecureStorageViewState.Step.ResetAll
+                            else SharedSecureStorageViewState.Step.EnterPassphrase
                     )
                 }
             } else {
@@ -133,7 +135,8 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
                     copy(
                             hasPassphrase = false,
                             ready = true,
-                            step = SharedSecureStorageViewState.Step.EnterKey
+                            step = if (initialState.step == SharedSecureStorageViewState.Step.ResetAll) SharedSecureStorageViewState.Step.ResetAll
+                            else SharedSecureStorageViewState.Step.EnterKey
                     )
                 }
             }
@@ -203,6 +206,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
                     _viewEvents.post(SharedSecureStorageViewEvent.Dismiss)
                 }
             }
+            /*
             SharedSecureStorageViewState.Step.ResetAll -> {
                 setState {
                     copy(
@@ -211,6 +215,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
                     )
                 }
             }
+            */
             else -> {
                 _viewEvents.post(SharedSecureStorageViewEvent.Dismiss)
             }
