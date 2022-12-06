@@ -41,16 +41,15 @@ import org.matrix.android.sdk.internal.crypto.model.rest.UpdateDeviceInfoBody
 import org.matrix.android.sdk.internal.crypto.model.rest.UploadSigningKeysBody
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultSendToDeviceTask
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
-import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 
 class DefaultSendToDeviceTaskTest {
 
-    val users = listOf(
+    private val users = listOf(
             "@alice:example.com" to listOf("D0", "D1"),
             "bob@example.com" to listOf("D2", "D3")
     )
 
-    val fakeEncryptedContent = mapOf(
+    private val fakeEncryptedContent = mapOf(
             "algorithm" to "m.olm.v1.curve25519-aes-sha2",
             "sender_key" to "gMObR+/4dqL5T4DisRRRYBJpn+OjzFnkyCFOktP6Eyw",
             "ciphertext" to mapOf(
@@ -67,14 +66,14 @@ class DefaultSendToDeviceTaskTest {
 
         val sendToDeviceTask = DefaultSendToDeviceTask(
                 cryptoApi = fakeCryptoAPi,
-                globalErrorReceiver = mockk<GlobalErrorReceiver>(relaxed = true)
+                globalErrorReceiver = mockk(relaxed = true)
         )
 
         val contentMap = MXUsersDevicesMap<Any>()
 
-        users.forEach {
-            val userId = it.first
-            it.second.forEach {
+        users.forEach { pairOfUserDevices ->
+            val userId = pairOfUserDevices.first
+            pairOfUserDevices.second.forEach {
                 contentMap.setObject(userId, it, fakeEncryptedContent)
             }
         }
@@ -89,10 +88,10 @@ class DefaultSendToDeviceTaskTest {
         }
 
         val generatedIds = mutableListOf<String>()
-        users.forEach {
-            val userId = it.first
-            it.second.forEach {
-                val modifiedContent = fakeCryptoAPi.body!!.messages!![userId]!![it] as Map<String, *>
+        users.forEach { pairOfUserDevices ->
+            val userId = pairOfUserDevices.first
+            pairOfUserDevices.second.forEach {
+                val modifiedContent = fakeCryptoAPi.body!!.messages!![userId]!![it] as Map<*, *>
                 Assert.assertNotNull("Tracing id should have been added", modifiedContent["org.matrix.msgid"])
                 generatedIds.add(modifiedContent["org.matrix.msgid"] as String)
 
