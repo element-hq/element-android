@@ -99,7 +99,7 @@ class CallAndroidService : VectorAndroidService() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Timber.tag(loggerTag.value).v("onStartCommand $intent")
+        Timber.tag(loggerTag.value).d("onStartCommand $intent")
         if (mediaSession == null) {
             mediaSession = MediaSessionCompat(applicationContext, CallAndroidService::class.java.name).apply {
                 setCallback(mediaSessionButtonCallback)
@@ -149,7 +149,7 @@ class CallAndroidService : VectorAndroidService() {
      *
      */
     private fun displayIncomingCallNotification(intent: Intent) {
-        Timber.tag(loggerTag.value).v("displayIncomingCallNotification $intent")
+        Timber.tag(loggerTag.value).d("displayIncomingCallNotification $intent")
         val callId = intent.getStringExtra(EXTRA_CALL_ID) ?: ""
         val call = callManager.getCallById(callId) ?: return Unit.also {
             handleUnexpectedState(callId)
@@ -157,7 +157,7 @@ class CallAndroidService : VectorAndroidService() {
         val callInformation = call.toCallInformation()
         val isVideoCall = call.mxCall.isVideoCall
         val fromBg = intent.getBooleanExtra(EXTRA_IS_IN_BG, false)
-        Timber.tag(loggerTag.value).v("displayIncomingCallNotification : display the dedicated notification")
+        Timber.tag(loggerTag.value).d("displayIncomingCallNotification : display the dedicated notification")
         val incomingCallAlert = IncomingCallAlert(callId,
                 shouldBeDisplayedIn = { activity ->
                     if (activity is VectorCallActivity) {
@@ -196,7 +196,7 @@ class CallAndroidService : VectorAndroidService() {
         alertManager.cancelAlert(callId)
         val terminatedCall = knownCalls.remove(callId)
         if (terminatedCall == null) {
-            Timber.tag(loggerTag.value).v("Call terminated for unknown call $callId")
+            Timber.tag(loggerTag.value).d("Call terminated for unknown call $callId")
             handleUnexpectedState(callId)
             return
         }
@@ -204,7 +204,7 @@ class CallAndroidService : VectorAndroidService() {
         val notificationId = callId.hashCode()
         startForegroundCompat(notificationId, notification)
         if (knownCalls.isEmpty()) {
-            Timber.tag(loggerTag.value).v("No more call, stop the service")
+            Timber.tag(loggerTag.value).d("No more call, stop the service")
             stopForegroundCompat()
             mediaSession?.isActive = false
             myStopSelf()
@@ -231,7 +231,7 @@ class CallAndroidService : VectorAndroidService() {
             handleUnexpectedState(callId)
         }
         val callInformation = call.toCallInformation()
-        Timber.tag(loggerTag.value).v("displayOutgoingCallNotification : display the dedicated notification")
+        Timber.tag(loggerTag.value).d("displayOutgoingCallNotification : display the dedicated notification")
         val notification = notificationUtils.buildOutgoingRingingCallNotification(
                 call = call,
                 title = callInformation.opponentMatrixItem?.getBestName() ?: callInformation.opponentUserId
@@ -248,7 +248,7 @@ class CallAndroidService : VectorAndroidService() {
      * Display a call in progress notification.
      */
     private fun displayCallInProgressNotification(intent: Intent) {
-        Timber.tag(loggerTag.value).v("displayCallInProgressNotification")
+        Timber.tag(loggerTag.value).d("displayCallInProgressNotification")
         val callId = intent.getStringExtra(EXTRA_CALL_ID) ?: ""
         connectedCallIds.add(callId)
         val call = callManager.getCallById(callId) ?: return Unit.also {
@@ -269,7 +269,7 @@ class CallAndroidService : VectorAndroidService() {
     }
 
     private fun handleUnexpectedState(callId: String?) {
-        Timber.tag(loggerTag.value).v("Fallback to clear everything")
+        Timber.tag(loggerTag.value).d("Fallback to clear everything")
         callRingPlayerIncoming?.stop()
         callRingPlayerOutgoing?.stop()
         val notification = notificationUtils.buildCallEndedNotification(false)
