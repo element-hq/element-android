@@ -90,7 +90,7 @@ class SessionInfoView @JvmOverloads constructor(
             hasLearnMoreLink: Boolean,
             isVerifyButtonVisible: Boolean,
     ) {
-        views.sessionInfoVerificationStatusImageView.render(encryptionTrustLevel)
+        views.sessionInfoVerificationStatusImageView.renderDeviceShield(encryptionTrustLevel)
         when {
             encryptionTrustLevel == RoomEncryptionTrustLevel.Trusted -> renderCrossSigningVerified(isCurrentSession)
             encryptionTrustLevel == RoomEncryptionTrustLevel.Default && !isCurrentSession -> renderCrossSigningUnknown()
