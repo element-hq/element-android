@@ -52,6 +52,8 @@ private val loggerTag = LoggerTag("CallService", LoggerTag.VOIP)
 
 /**
  * Foreground service to manage calls.
+ * To see a notification when Service cannot be started in foreground (from background):
+ * adb shell device_config put activity_manager default_fgs_starts_restriction_notification_enabled true
  */
 @AndroidEntryPoint
 class CallAndroidService : VectorAndroidService() {
