@@ -25,6 +25,7 @@ import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.DevicesListResponse
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.internal.crypto.api.CryptoApi
 import org.matrix.android.sdk.internal.crypto.model.rest.DeleteDeviceParams
 import org.matrix.android.sdk.internal.crypto.model.rest.DeleteDevicesParams
@@ -60,8 +61,28 @@ class DefaultSendToDeviceTaskTest {
             )
     )
 
+    private val fakeStartVerificationContent = mapOf(
+            "method" to "m.sas.v1",
+            "from_device" to "MNQHVEISFQ",
+            "key_agreement_protocols" to listOf(
+                    "curve25519-hkdf-sha256",
+                    "curve25519"
+            ),
+            "hashes" to listOf("sha256"),
+            "message_authentication_codes" to listOf(
+                    "org.matrix.msc3783.hkdf-hmac-sha256",
+                    "hkdf-hmac-sha256",
+                    "hmac-sha256"
+            ),
+            "short_authentication_string" to listOf(
+                    "decimal",
+                    "emoji"
+            ),
+            "transaction_id" to "4wNOpkHGwGZPXjkZToooCDWfb8hsf7vW"
+    )
+
     @Test
-    fun `tracing id should be added to all to_device contents`() {
+    fun `tracing id should be added to to_device contents`() {
         val fakeCryptoAPi = FakeCryptoApi()
 
         val sendToDeviceTask = DefaultSendToDeviceTask(
@@ -105,6 +126,80 @@ class DefaultSendToDeviceTaskTest {
 
         assertEquals("Id should be unique per content", generatedIds.size, generatedIds.toSet().size)
         println("modified content ${fakeCryptoAPi.body}")
+    }
+
+    @Test
+    fun `tracing id should not be added to verification start to_device contents`() {
+        val fakeCryptoAPi = FakeCryptoApi()
+
+        val sendToDeviceTask = DefaultSendToDeviceTask(
+                cryptoApi = fakeCryptoAPi,
+                globalErrorReceiver = mockk(relaxed = true)
+        )
+        val contentMap = MXUsersDevicesMap<Any>()
+        contentMap.setObject("@alice:example.com", "MNQHVEISFQ", fakeStartVerificationContent)
+
+        val params = SendToDeviceTask.Params(
+                eventType = EventType.KEY_VERIFICATION_START,
+                contentMap = contentMap
+        )
+
+        runBlocking {
+            sendToDeviceTask.execute(params)
+        }
+
+        val modifiedContent = fakeCryptoAPi.body!!.messages!!["@alice:example.com"]!!["MNQHVEISFQ"] as Map<*, *>
+        Assert.assertNull("Tracing id should not have been added", modifiedContent["org.matrix.msgid"])
+
+        // try to force
+        runBlocking {
+            sendToDeviceTask.execute(
+                    SendToDeviceTask.Params(
+                            eventType = EventType.KEY_VERIFICATION_START,
+                            contentMap = contentMap,
+                            addTracingIds = true
+                    )
+            )
+        }
+
+        val modifiedContentForced = fakeCryptoAPi.body!!.messages!!["@alice:example.com"]!!["MNQHVEISFQ"] as Map<*, *>
+        Assert.assertNotNull("Tracing id should have been added", modifiedContentForced["org.matrix.msgid"])
+    }
+
+    @Test
+    fun `tracing id should not be added to all verification to_device contents`() {
+        val fakeCryptoAPi = FakeCryptoApi()
+
+        val sendToDeviceTask = DefaultSendToDeviceTask(
+                cryptoApi = fakeCryptoAPi,
+                globalErrorReceiver = mockk(relaxed = true)
+        )
+        val contentMap = MXUsersDevicesMap<Any>()
+        contentMap.setObject("@alice:example.com", "MNQHVEISFQ", emptyMap<String, Any>())
+
+        val verificationEvents = listOf(
+                MessageType.MSGTYPE_VERIFICATION_REQUEST,
+                EventType.KEY_VERIFICATION_START,
+                EventType.KEY_VERIFICATION_ACCEPT,
+                EventType.KEY_VERIFICATION_KEY,
+                EventType.KEY_VERIFICATION_MAC,
+                EventType.KEY_VERIFICATION_CANCEL,
+                EventType.KEY_VERIFICATION_DONE,
+                EventType.KEY_VERIFICATION_READY
+        )
+
+        for (type in verificationEvents) {
+            val params = SendToDeviceTask.Params(
+                    eventType = type,
+                    contentMap = contentMap
+            )
+            runBlocking {
+                sendToDeviceTask.execute(params)
+            }
+
+            val modifiedContent = fakeCryptoAPi.body!!.messages!!["@alice:example.com"]!!["MNQHVEISFQ"] as Map<*, *>
+            Assert.assertNull("Tracing id should not have been added", modifiedContent["org.matrix.msgid"])
+        }
     }
 
     internal class FakeCryptoApi : CryptoApi {

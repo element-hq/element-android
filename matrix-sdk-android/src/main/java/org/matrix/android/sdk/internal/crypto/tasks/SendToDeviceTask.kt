@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.crypto.tasks
 
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.internal.crypto.api.CryptoApi
 import org.matrix.android.sdk.internal.crypto.model.rest.SendToDeviceBody
@@ -39,7 +40,9 @@ internal interface SendToDeviceTask : Task<SendToDeviceTask.Params, Unit> {
             // the content to send. Map from user_id to device_id to content dictionary.
             val contentMap: MXUsersDevicesMap<Any>,
             // the transactionId. If not provided, a transactionId will be created by the task
-            val transactionId: String? = null
+            val transactionId: String? = null,
+            // add tracing id, notice that to device events that do signature on content might be broken by it
+            val addTracingIds: Boolean = !EventType.isVerificationEvent(eventType),
     )
 }
 
@@ -55,7 +58,12 @@ internal class DefaultSendToDeviceTask @Inject constructor(
         val txnId = params.transactionId ?: createUniqueTxnId()
 
         // add id tracing to debug
-        val decorated = decorateWithToDeviceTracingIds(params)
+        val decorated = if (params.addTracingIds) {
+            decorateWithToDeviceTracingIds(params)
+        } else {
+            params.contentMap.map to emptyList()
+        }
+
         val sendToDeviceBody = SendToDeviceBody(
                 messages = decorated.first
         )
