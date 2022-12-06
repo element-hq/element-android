@@ -358,6 +358,8 @@ class NotificationUtils @Inject constructor(
             builder.priority = NotificationCompat.PRIORITY_HIGH
             builder.setFullScreenIntent(contentPendingIntent, true)
         }
+        // Tell the system not to defer this notification
+        builder.foregroundServiceBehavior = NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE
         return builder.build()
     }
 
