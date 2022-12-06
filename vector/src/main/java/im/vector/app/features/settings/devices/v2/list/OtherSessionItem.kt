@@ -97,7 +97,7 @@ abstract class OtherSessionItem : VectorEpoxyModel<OtherSessionItem.Holder>(R.la
         } else {
             setDeviceTypeIconUseCase.execute(deviceType, holder.otherSessionDeviceTypeImageView, stringProvider)
         }
-        holder.otherSessionVerificationStatusImageView.render(roomEncryptionTrustLevel)
+        holder.otherSessionVerificationStatusImageView.renderDeviceShield(roomEncryptionTrustLevel)
         holder.otherSessionNameTextView.text = sessionName
         holder.otherSessionDescriptionTextView.text = sessionDescription
         sessionDescriptionColor?.let {
