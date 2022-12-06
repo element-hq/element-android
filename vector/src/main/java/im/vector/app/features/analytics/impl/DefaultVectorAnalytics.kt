@@ -22,7 +22,6 @@ import com.posthog.android.Properties
 import im.vector.app.core.di.NamedGlobalScope
 import im.vector.app.features.analytics.AnalyticsConfig
 import im.vector.app.features.analytics.VectorAnalytics
-import im.vector.app.features.analytics.errors.ErrorTracker
 import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
 import im.vector.app.features.analytics.log.analyticsTag
@@ -47,7 +46,7 @@ class DefaultVectorAnalytics @Inject constructor(
         private val analyticsStore: AnalyticsStore,
         private val lateInitUserPropertiesFactory: LateInitUserPropertiesFactory,
         @NamedGlobalScope private val globalScope: CoroutineScope
-) : VectorAnalytics, ErrorTracker {
+) : VectorAnalytics {
 
     private val posthog: PostHog? = when {
         analyticsConfig.isEnabled -> postHogFactory.createPosthog()
