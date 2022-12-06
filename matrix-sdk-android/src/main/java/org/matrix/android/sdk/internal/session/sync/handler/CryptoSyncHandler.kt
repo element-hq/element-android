@@ -49,14 +49,14 @@ internal class CryptoSyncHandler @Inject constructor(
                 ?.forEachIndexed { index, event ->
                     progressReporter?.reportProgress(index * 100F / total)
                     // Decrypt event if necessary
-                    Timber.tag(loggerTag.value).d("To device event tracingId:${event.toDeviceTracingId()}")
+                    Timber.tag(loggerTag.value).d("To device event msgid:${event.toDeviceTracingId()}")
                     decryptToDeviceEvent(event, null)
 
                     if (event.getClearType() == EventType.MESSAGE &&
                             event.getClearContent()?.toModel<MessageContent>()?.msgType == "m.bad.encrypted") {
                         Timber.tag(loggerTag.value).e("handleToDeviceEvent() : Warning: Unable to decrypt to-device event : ${event.content}")
                     } else {
-                        Timber.tag(loggerTag.value).d("received to-device ${event.getClearType()} from:${event.senderId} id:${event.toDeviceTracingId()}")
+                        Timber.tag(loggerTag.value).d("received to-device ${event.getClearType()} from:${event.senderId} msgid:${event.toDeviceTracingId()}")
                         verificationService.onToDeviceEvent(event)
                         cryptoService.onToDeviceEvent(event)
                     }
