@@ -52,14 +52,14 @@ class StartVoiceBroadcastUseCaseTest {
     private val fakeRoom = FakeRoom()
     private val fakeSession = FakeSession(fakeRoomService = FakeRoomService(fakeRoom))
     private val fakeVoiceBroadcastRecorder = mockk<VoiceBroadcastRecorder>(relaxed = true)
-    private val fakeGetOngoingVoiceBroadcastsUseCase = mockk<GetOngoingVoiceBroadcastsUseCase>()
+    private val fakeGetRoomLiveVoiceBroadcastsUseCase = mockk<GetRoomLiveVoiceBroadcastsUseCase>()
     private val startVoiceBroadcastUseCase = spyk(
             StartVoiceBroadcastUseCase(
                     session = fakeSession,
                     voiceBroadcastRecorder = fakeVoiceBroadcastRecorder,
                     context = FakeContext().instance,
                     buildMeta = mockk(),
-                    getOngoingVoiceBroadcastsUseCase = fakeGetOngoingVoiceBroadcastsUseCase,
+                    getRoomLiveVoiceBroadcastsUseCase = fakeGetRoomLiveVoiceBroadcastsUseCase,
                     stopVoiceBroadcastUseCase = mockk()
             )
     )
@@ -140,7 +140,7 @@ class StartVoiceBroadcastUseCaseTest {
         }
                 .mapNotNull { it.asVoiceBroadcastEvent() }
                 .filter { it.content?.voiceBroadcastState != VoiceBroadcastState.STOPPED }
-        every { fakeGetOngoingVoiceBroadcastsUseCase.execute(any()) } returns events
+        every { fakeGetRoomLiveVoiceBroadcastsUseCase.execute(any()) } returns events
     }
 
     private data class VoiceBroadcast(val userId: String, val state: VoiceBroadcastState)

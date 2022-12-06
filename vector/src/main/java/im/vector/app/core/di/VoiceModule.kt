@@ -27,7 +27,7 @@ import im.vector.app.features.voicebroadcast.listening.VoiceBroadcastPlayer
 import im.vector.app.features.voicebroadcast.listening.VoiceBroadcastPlayerImpl
 import im.vector.app.features.voicebroadcast.recording.VoiceBroadcastRecorder
 import im.vector.app.features.voicebroadcast.recording.VoiceBroadcastRecorderQ
-import im.vector.app.features.voicebroadcast.usecase.GetMostRecentVoiceBroadcastStateEventUseCase
+import im.vector.app.features.voicebroadcast.usecase.GetVoiceBroadcastStateEventLiveUseCase
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -40,13 +40,13 @@ abstract class VoiceModule {
         fun providesVoiceBroadcastRecorder(
                 context: Context,
                 sessionHolder: ActiveSessionHolder,
-                getMostRecentVoiceBroadcastStateEventUseCase: GetMostRecentVoiceBroadcastStateEventUseCase,
+                getVoiceBroadcastStateEventLiveUseCase: GetVoiceBroadcastStateEventLiveUseCase,
         ): VoiceBroadcastRecorder? {
             return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 VoiceBroadcastRecorderQ(
                         context = context,
                         sessionHolder = sessionHolder,
-                        getVoiceBroadcastEventUseCase = getMostRecentVoiceBroadcastStateEventUseCase
+                        getVoiceBroadcastEventUseCase = getVoiceBroadcastStateEventLiveUseCase
                 )
             } else {
                 null

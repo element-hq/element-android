@@ -19,7 +19,7 @@ package im.vector.app.features.voicebroadcast.recording.usecase
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.features.voicebroadcast.VoiceBroadcastHelper
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
-import im.vector.app.features.voicebroadcast.usecase.GetOngoingVoiceBroadcastsUseCase
+import im.vector.app.features.voicebroadcast.usecase.GetRoomLiveVoiceBroadcastsUseCase
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -32,7 +32,7 @@ import javax.inject.Inject
  */
 class StopOngoingVoiceBroadcastUseCase @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
-        private val getOngoingVoiceBroadcastsUseCase: GetOngoingVoiceBroadcastsUseCase,
+        private val getRoomLiveVoiceBroadcastsUseCase: GetRoomLiveVoiceBroadcastsUseCase,
         private val voiceBroadcastHelper: VoiceBroadcastHelper,
 ) {
 
@@ -53,7 +53,7 @@ class StopOngoingVoiceBroadcastUseCase @Inject constructor(
 
         recentRooms
                 .forEach { room ->
-                    val ongoingVoiceBroadcasts = getOngoingVoiceBroadcastsUseCase.execute(room.roomId)
+                    val ongoingVoiceBroadcasts = getRoomLiveVoiceBroadcastsUseCase.execute(room.roomId)
                     val myOngoingVoiceBroadcastId = ongoingVoiceBroadcasts.find { it.root.stateKey == session.myUserId }?.reference?.eventId
                     val initialEvent = myOngoingVoiceBroadcastId?.let { room.timelineService().getTimelineEvent(it)?.root?.asVoiceBroadcastEvent() }
                     if (myOngoingVoiceBroadcastId != null && initialEvent?.content?.deviceId == session.sessionParams.deviceId) {

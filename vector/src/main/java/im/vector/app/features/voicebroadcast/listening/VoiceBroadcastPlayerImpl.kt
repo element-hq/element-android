@@ -31,7 +31,7 @@ import im.vector.app.features.voicebroadcast.listening.VoiceBroadcastPlayer.Stat
 import im.vector.app.features.voicebroadcast.listening.usecase.GetLiveVoiceBroadcastChunksUseCase
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcast
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastEvent
-import im.vector.app.features.voicebroadcast.usecase.GetMostRecentVoiceBroadcastStateEventUseCase
+import im.vector.app.features.voicebroadcast.usecase.GetVoiceBroadcastStateEventLiveUseCase
 import im.vector.lib.core.utils.timer.CountUpTimer
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
@@ -48,7 +48,7 @@ import javax.inject.Singleton
 class VoiceBroadcastPlayerImpl @Inject constructor(
         private val sessionHolder: ActiveSessionHolder,
         private val playbackTracker: AudioMessagePlaybackTracker,
-        private val getVoiceBroadcastEventUseCase: GetMostRecentVoiceBroadcastStateEventUseCase,
+        private val getVoiceBroadcastEventUseCase: GetVoiceBroadcastStateEventLiveUseCase,
         private val getLiveVoiceBroadcastChunksUseCase: GetLiveVoiceBroadcastChunksUseCase
 ) : VoiceBroadcastPlayer {
 

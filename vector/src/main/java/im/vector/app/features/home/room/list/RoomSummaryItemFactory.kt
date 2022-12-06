@@ -30,8 +30,10 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.detail.timeline.format.DisplayableEventFormatter
 import im.vector.app.features.home.room.typing.TypingHelper
+import im.vector.app.features.voicebroadcast.isLive
 import im.vector.app.features.voicebroadcast.isVoiceBroadcast
-import im.vector.app.features.voicebroadcast.usecase.GetOngoingVoiceBroadcastsUseCase
+import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
+import im.vector.app.features.voicebroadcast.usecase.GetRoomLiveVoiceBroadcastsUseCase
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.getRoom
@@ -53,7 +55,7 @@ class RoomSummaryItemFactory @Inject constructor(
         private val typingHelper: TypingHelper,
         private val avatarRenderer: AvatarRenderer,
         private val errorFormatter: ErrorFormatter,
-        private val getOngoingVoiceBroadcastsUseCase: GetOngoingVoiceBroadcastsUseCase,
+        private val getRoomLiveVoiceBroadcastsUseCase: GetRoomLiveVoiceBroadcastsUseCase,
 ) {
 
     fun create(
@@ -240,7 +242,7 @@ class RoomSummaryItemFactory @Inject constructor(
 
     private fun RoomSummary.getVectorLatestPreviewableEvent(): TimelineEvent? {
         val room = sessionHolder.getSafeActiveSession()?.getRoom(roomId) ?: return latestPreviewableEvent
-        val liveVoiceBroadcastTimelineEvent = getOngoingVoiceBroadcastsUseCase.execute(roomId).lastOrNull()
+        val liveVoiceBroadcastTimelineEvent = getRoomLiveVoiceBroadcastsUseCase.execute(roomId).lastOrNull()
                 ?.root?.eventId?.let { room.getTimelineEvent(it) }
         return liveVoiceBroadcastTimelineEvent
                 ?: latestPreviewableEvent
