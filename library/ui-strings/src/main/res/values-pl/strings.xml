@@ -834,8 +834,8 @@
     <string name="import_e2e_keys_from_file">Importowanie kluczy E2E z pliku \"%1$s\".</string>
     <string name="settings_other_third_party_notices">Informacje o stronach trzecich</string>
     <string name="navigate_to_room_when_already_in_the_room">Już wyświetlasz ten pokój!</string>
-    <string name="push_gateway_item_app_id">id_aplikacji:</string>
-    <string name="push_gateway_item_push_key">klucz_push:</string>
+    <string name="push_gateway_item_app_id">App ID:</string>
+    <string name="push_gateway_item_push_key">Push Key:</string>
     <string name="push_gateway_item_app_display_name">wyświetlana_nazwa_aplikacji:</string>
     <string name="push_gateway_item_device_name">nazwa_sesji:</string>
     <string name="push_gateway_item_url">Url:</string>
@@ -1370,7 +1370,7 @@
     <string name="settings_hs_admin_e2e_disabled">Twój administrator serwera zablokował domyślne szyfrowanie punkt-punkt (e2e) w pokojach prywatnych w Wiadomościach Bezpośrednich.</string>
     <string name="room_settings_enable_encryption_no_permission">Nie masz uprawnień żeby uaktywnić szyfrowanie w tym pokoju.</string>
     <string name="room_member_open_or_create_dm">Wiadomość bezpośrednia</string>
-    <string name="room_member_power_level_default_in">Domyślnie w %1$s</string>
+    <string name="room_member_power_level_default_in">Zwykły w %1$s</string>
     <string name="direct_room_profile_section_more_leave">Opuść</string>
     <string name="direct_room_profile_section_more_settings">Ustawienia</string>
     <string name="room_profile_section_admin">Operacje administratora</string>
@@ -2757,8 +2757,8 @@
     <plurals name="device_manager_other_sessions_multi_signout_all">
         <item quantity="one">Wyloguj się z %1$d sesji</item>
         <item quantity="few">Wyloguj się z %1$d sesji</item>
-        <item quantity="many"></item>
-        <item quantity="other"></item>
+        <item quantity="many"/>
+        <item quantity="other"/>
     </plurals>
     <string name="device_manager_other_sessions_multi_signout_selection">Wyloguj się</string>
     <string name="device_manager_other_sessions_select">Wybierz sesje</string>
@@ -2787,4 +2787,15 @@
     <string name="attachment_type_selector_file">Załączniki</string>
     <string name="attachment_type_selector_sticker">Naklejki</string>
     <string name="attachment_type_selector_gallery">Galeria</string>
+    <string name="error_check_network" tools:ignore="UnusedResources">Coś poszło nie tak. Sprawdź swoje połączenie i spróbuj ponownie.</string>
+    <string name="quoting">Cytowanie</string>
+    <string name="replying_to">Odpowiadanie %s</string>
+    <string name="editing">Edytowanie</string>
+    <string name="command_description_devtools">Otwórz ekran narzędzi programisty</string>
+    <string name="room_settings_global_block_unverified_info_text">🔒 Włączyłeś ograniczenie szyfrowania tylko dla zweryfikowanych sesji dla wszystkich pokojów w ustawieniach bezpieczeństwa.</string>
+    <string name="action_deselect_all">Odznacz wszystko</string>
+    <string name="action_select_all">Zaznacz wszystko</string>
+    <string name="action_got_it">Rozumiem</string>
+    <string name="a11y_collapse_space_children">Zwiń %s pokojów</string>
+    <string name="a11y_expand_space_children">Rozwiń %s pokojów</string>
 </resources>
