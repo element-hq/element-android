@@ -150,7 +150,7 @@ class Rendezvous(
         val deviceKey = crypto.getMyDevice().fingerprint()
         send(Payload(PayloadType.PROGRESS, outcome = Outcome.SUCCESS, deviceId = deviceId, deviceKey = deviceKey))
 
-        // explicitly download keys for ourself rather than wait for initial sync to complete
+        // explicitly download keys for ourself rather than racing with initial sync which might not complete in time
         awaitCallback<MXUsersDevicesMap<CryptoDeviceInfo>> { crypto.downloadKeys(listOf(userId), false, it) }
 
         // await confirmation of verification
