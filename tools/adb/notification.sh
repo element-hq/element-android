@@ -2,7 +2,7 @@
 
 ## From https://developer.android.com/develop/ui/views/notifications/notification-permission#test
 
-PACKAGE_NAME=im.vector.app.debug
+PACKAGE_NAME=com.bigstar.real.debug
 
 # App is newly installed on a device that runs Android 13 or higher:
 

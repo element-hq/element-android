@@ -124,7 +124,7 @@ android {
     compileSdk versions.compileSdk
 
     defaultConfig {
-        applicationId "im.vector.app"
+        applicationId "com.bigstar.real"
         // Set to API 21: see #405
         minSdk versions.minSdk
         targetSdk versions.targetSdk
@@ -205,10 +205,10 @@ android {
 
     signingConfigs {
         debug {
-            keyAlias 'androiddebugkey'
-            keyPassword 'android'
-            storeFile file('./signature/debug.keystore')
-            storePassword 'android'
+            keyAlias 'bigstar'
+            keyPassword '123456'
+            storeFile file('./signature/bigstar.jks')
+            storePassword '123456'
         }
         nightly {
             keyAlias System.env.ELEMENT_ANDROID_NIGHTLY_KEYID ?: project.property("signing.element.nightly.keyId")
@@ -226,10 +226,11 @@ android {
 
     buildTypes {
         debug {
-            applicationIdSuffix ".debug"
+            resValue "string", "app_name", "Big Star messenger"
+            resValue "color", "launcher_background", "#8b00ff"
+
+            debuggable false
             signingConfig signingConfigs.debug
-            resValue "string", "app_name", "Element dbg"
-            resValue "color", "launcher_background", "#0DBD8B"
 
             if (project.hasProperty("coverage")) {
                 testCoverageEnabled = coverage.enableTestCoverage
@@ -359,7 +360,7 @@ dependencies {
     debugImplementation(libs.flipper.flipperNetworkPlugin) {
         exclude group: 'com.facebook.fbjni', module: 'fbjni'
     }
-    debugImplementation 'com.facebook.soloader:soloader:0.10.4'
+    debugImplementation 'com.facebook.soloader:soloader:0.10.5'
     debugImplementation "com.kgurgul.flipper:flipper-realm-android:2.2.0"
 
     gplayImplementation "com.google.android.gms:play-services-location:21.0.1"
@@ -374,7 +375,7 @@ dependencies {
     // API-only library
     gplayImplementation libs.google.appdistributionApi
     // Full SDK implementation
-    gplayImplementation libs.google.appdistribution
+    nightlyImplementation libs.google.appdistribution
 
     // OSS License, gplay flavor only
     gplayImplementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'

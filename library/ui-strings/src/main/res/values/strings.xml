@@ -2487,6 +2487,9 @@
     <string name="settings_key_requests">Key Requests</string>
     <string name="settings_export_trail">Export Audit</string>
 
+    <string name="settings_nightly_build">Nightly build</string>
+    <string name="settings_nightly_build_update">Get the latest build (note: you may have trouble to sign in)</string>
+
     <string name="e2e_use_keybackup">Unlock encrypted messages history</string>
 
     <string name="refresh">Refresh</string>

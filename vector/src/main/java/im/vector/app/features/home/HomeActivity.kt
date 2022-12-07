@@ -580,7 +580,9 @@ class HomeActivity :
         serverBackupStatusViewModel.refreshRemoteStateIfNeeded()
 
         // Check nightly
-        nightlyProxy.onHomeResumed()
+        if (nightlyProxy.canDisplayPopup()) {
+            nightlyProxy.updateApplication()
+        }
 
         checkNewAppLayoutFlagChange()
     }

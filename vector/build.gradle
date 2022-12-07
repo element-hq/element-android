@@ -108,7 +108,7 @@ android {
 }
 dependencies {
 
-    implementation project(":vector-config")
+    implementation project(':vector-config')
     api project(":matrix-sdk-android")
     implementation project(":matrix-sdk-android-flow")
     implementation project(":library:external:jsonviewer")

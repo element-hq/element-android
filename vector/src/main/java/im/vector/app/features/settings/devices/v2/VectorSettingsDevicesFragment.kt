@@ -52,6 +52,7 @@ import im.vector.app.features.settings.devices.v2.list.SecurityRecommendationVie
 import im.vector.app.features.settings.devices.v2.list.SecurityRecommendationViewState
 import im.vector.app.features.settings.devices.v2.list.SessionInfoViewState
 import im.vector.app.features.settings.devices.v2.signout.BuildConfirmSignoutDialogUseCase
+import im.vector.app.features.workers.signout.SignOutUiWorker
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
@@ -101,6 +102,7 @@ class VectorSettingsDevicesFragment :
 
         initWaitingView()
         initCurrentSessionHeaderView()
+        initCurrentSessionView()
         initOtherSessionsHeaderView()
         initOtherSessionsView()
         initSecurityRecommendationsView()
@@ -144,12 +146,40 @@ class VectorSettingsDevicesFragment :
     private fun initCurrentSessionHeaderView() {
         views.deviceListHeaderCurrentSession.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
+                R.id.currentSessionHeaderRename -> {
+                    navigateToRenameCurrentSession()
+                    true
+                }
+                R.id.currentSessionHeaderSignout -> {
+                    confirmSignoutCurrentSession()
+                    true
+                }
                 R.id.currentSessionHeaderSignoutOtherSessions -> {
                     confirmMultiSignoutOtherSessions()
                     true
                 }
                 else -> false
             }
+        }
+    }
+
+    private fun navigateToRenameCurrentSession() = withState(viewModel) { state ->
+        val currentDeviceId = state.currentSessionCrossSigningInfo.deviceId
+        if (currentDeviceId.isNotEmpty()) {
+            viewNavigator.navigateToRenameSession(
+                    context = requireActivity(),
+                    deviceId = currentDeviceId,
+            )
+        }
+    }
+
+    private fun confirmSignoutCurrentSession() {
+        activity?.let { SignOutUiWorker(it).perform() }
+    }
+
+    private fun initCurrentSessionView() {
+        views.deviceListCurrentSession.viewVerifyButton.debouncedClicks {
+            viewModel.handle(DevicesAction.VerifyCurrentSession)
         }
     }
 
@@ -351,28 +381,35 @@ class VectorSettingsDevicesFragment :
 
     private fun renderCurrentSessionView(currentDeviceInfo: DeviceFullInfo?, hasOtherDevices: Boolean) {
         currentDeviceInfo?.let {
-            views.deviceListHeaderCurrentSession.isVisible = true
-            val colorDestructive = colorProvider.getColorFromAttribute(R.attr.colorError)
-            val signoutOtherSessionsItem = views.deviceListHeaderCurrentSession.menu.findItem(R.id.currentSessionHeaderSignoutOtherSessions)
-            signoutOtherSessionsItem.setTextColor(colorDestructive)
-            signoutOtherSessionsItem.isVisible = hasOtherDevices
-            views.deviceListCurrentSession.isVisible = true
-            val viewState = SessionInfoViewState(
-                    isCurrentSession = true,
-                    deviceFullInfo = it
-            )
-            views.deviceListCurrentSession.render(viewState, dateFormatter, drawableProvider, colorProvider, stringProvider)
-            views.deviceListCurrentSession.debouncedClicks {
-                currentDeviceInfo.deviceInfo.deviceId?.let { deviceId -> navigateToSessionOverview(deviceId) }
-            }
-            views.deviceListCurrentSession.viewDetailsButton.debouncedClicks {
-                currentDeviceInfo.deviceInfo.deviceId?.let { deviceId -> navigateToSessionOverview(deviceId) }
-            }
-            views.deviceListCurrentSession.viewVerifyButton.debouncedClicks {
-                viewModel.handle(DevicesAction.VerifyCurrentSession)
-            }
+            renderCurrentSessionHeaderView(hasOtherDevices)
+            renderCurrentSessionListView(it)
         } ?: run {
             hideCurrentSessionView()
+        }
+    }
+
+    private fun renderCurrentSessionHeaderView(hasOtherDevices: Boolean) {
+        views.deviceListHeaderCurrentSession.isVisible = true
+        val colorDestructive = colorProvider.getColorFromAttribute(R.attr.colorError)
+        val signoutSessionItem = views.deviceListHeaderCurrentSession.menu.findItem(R.id.currentSessionHeaderSignout)
+        signoutSessionItem.setTextColor(colorDestructive)
+        val signoutOtherSessionsItem = views.deviceListHeaderCurrentSession.menu.findItem(R.id.currentSessionHeaderSignoutOtherSessions)
+        signoutOtherSessionsItem.setTextColor(colorDestructive)
+        signoutOtherSessionsItem.isVisible = hasOtherDevices
+    }
+
+    private fun renderCurrentSessionListView(currentDeviceInfo: DeviceFullInfo) {
+        views.deviceListCurrentSession.isVisible = true
+        val viewState = SessionInfoViewState(
+                isCurrentSession = true,
+                deviceFullInfo = currentDeviceInfo
+        )
+        views.deviceListCurrentSession.render(viewState, dateFormatter, drawableProvider, colorProvider, stringProvider)
+        views.deviceListCurrentSession.debouncedClicks {
+            currentDeviceInfo.deviceInfo.deviceId?.let { deviceId -> navigateToSessionOverview(deviceId) }
+        }
+        views.deviceListCurrentSession.viewDetailsButton.debouncedClicks {
+            currentDeviceInfo.deviceInfo.deviceId?.let { deviceId -> navigateToSessionOverview(deviceId) }
         }
     }
 
