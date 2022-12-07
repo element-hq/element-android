@@ -205,9 +205,11 @@ abstract class VectorBaseBottomSheetDialogFragment<VB : ViewBinding> : BottomShe
     protected fun <T : VectorViewEvents> VectorViewModel<*, *, T>.observeViewEvents(
             observer: (T) -> Unit,
     ) {
+        val tag = this@VectorBaseBottomSheetDialogFragment::class.simpleName.toString()
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                viewEvents.stream()
+                viewEvents
+                        .stream(tag)
                         .collect {
                             observer(it)
                         }

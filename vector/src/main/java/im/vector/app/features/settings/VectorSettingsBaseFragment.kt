@@ -72,10 +72,11 @@ abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), Maverick
     protected fun <T : VectorViewEvents> VectorViewModel<*, *, T>.observeViewEvents(
             observer: (T) -> Unit,
     ) {
+        val tag = this@VectorSettingsBaseFragment::class.simpleName.toString()
         lifecycleScope.launch {
-            repeatOnLifecycle(state) {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                viewEvents.stream()
+                viewEvents
+                        .stream(tag)
                         .collect {
                             observer(it)
                         }

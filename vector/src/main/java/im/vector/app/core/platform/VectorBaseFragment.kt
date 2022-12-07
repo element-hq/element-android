@@ -277,9 +277,11 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
     protected fun <T : VectorViewEvents> VectorViewModel<*, *, T>.observeViewEvents(
             observer: (T) -> Unit,
     ) {
+        val tag = this@VectorBaseFragment::class.simpleName.toString()
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                viewEvents.stream()
+                viewEvents
+                        .stream(tag)
                         .collect {
                             dismissLoadingDialog()
                             observer(it)

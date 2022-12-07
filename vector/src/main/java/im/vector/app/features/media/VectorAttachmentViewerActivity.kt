@@ -239,11 +239,12 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
     }
 
     private fun observeViewEvents() {
+        val tag = this::class.simpleName.toString()
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 viewModel
                         .viewEvents
-                        .stream()
+                        .stream(tag)
                         .collect(::handleViewEvents)
             }
         }
