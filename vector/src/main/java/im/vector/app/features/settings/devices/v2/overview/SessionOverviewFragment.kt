@@ -294,7 +294,7 @@ class SessionOverviewFragment :
     }
 
     private fun showLearnMoreInfoVerificationStatus(roomEncryptionTrustLevel: RoomEncryptionTrustLevel?) {
-        val args = when(roomEncryptionTrustLevel) {
+        val args = when (roomEncryptionTrustLevel) {
             null -> {
                 // encryption not supported
                 SessionLearnMoreBottomSheet.Args(

@@ -26,7 +26,7 @@ class GetEncryptionTrustLevelForDeviceUseCase @Inject constructor(
 ) {
 
     fun execute(currentSessionCrossSigningInfo: CurrentSessionCrossSigningInfo, cryptoDeviceInfo: CryptoDeviceInfo?): RoomEncryptionTrustLevel? {
-        if(cryptoDeviceInfo == null) {
+        if (cryptoDeviceInfo == null) {
             return null
         }
 
