@@ -45,6 +45,7 @@ import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.model.UserAccountDataEntity
 import org.matrix.android.sdk.internal.database.model.UserAccountDataEntityFields
 import org.matrix.android.sdk.internal.database.model.deleteOnCascade
+import org.matrix.android.sdk.internal.database.query.delete
 import org.matrix.android.sdk.internal.database.query.findAllFrom
 import org.matrix.android.sdk.internal.database.query.getDirectRooms
 import org.matrix.android.sdk.internal.database.query.getOrCreate
@@ -81,20 +82,24 @@ internal class UserAccountDataSyncHandler @Inject constructor(
 
     fun handle(realm: Realm, accountData: UserAccountDataSync?) {
         accountData?.list?.forEach { event ->
-            // Generic handling, just save in base
-            handleGenericAccountData(realm, event.type, event.content)
-            when (event.type) {
-                UserAccountDataTypes.TYPE_DIRECT_MESSAGES -> handleDirectChatRooms(realm, event)
-                UserAccountDataTypes.TYPE_PUSH_RULES -> handlePushRules(realm, event)
-                UserAccountDataTypes.TYPE_IGNORED_USER_LIST -> handleIgnoredUsers(realm, event)
-                UserAccountDataTypes.TYPE_BREADCRUMBS -> handleBreadcrumbs(realm, event)
+            if (event.content.isEmpty()) {
+                UserAccountDataEntity.delete(realm, event.type)
+            } else {
+                // Generic handling, just save in base
+                handleGenericAccountData(realm, event.type, event.content)
+                when (event.type) {
+                    UserAccountDataTypes.TYPE_DIRECT_MESSAGES -> handleDirectChatRooms(realm, event)
+                    UserAccountDataTypes.TYPE_PUSH_RULES -> handlePushRules(realm, event)
+                    UserAccountDataTypes.TYPE_IGNORED_USER_LIST -> handleIgnoredUsers(realm, event)
+                    UserAccountDataTypes.TYPE_BREADCRUMBS -> handleBreadcrumbs(realm, event)
+                }
             }
         }
     }
 
     // If we get some direct chat invites, we synchronize the user account data including those.
     suspend fun synchronizeWithServerIfNeeded(invites: Map<String, InvitedRoomSync>) {
-        if (invites.isNullOrEmpty()) return
+        if (invites.isEmpty()) return
         val directChats = directChatsHelper.getLocalDirectMessages().toMutable()
         var hasUpdate = false
         monarchy.doWithRealm { realm ->

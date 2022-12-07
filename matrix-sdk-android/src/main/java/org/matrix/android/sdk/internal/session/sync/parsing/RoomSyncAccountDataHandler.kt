@@ -27,6 +27,7 @@ import org.matrix.android.sdk.internal.database.model.RoomAccountDataEntity
 import org.matrix.android.sdk.internal.database.model.RoomAccountDataEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomEntity
 import org.matrix.android.sdk.internal.database.query.getOrCreate
+import org.matrix.android.sdk.internal.database.query.removeAccountData
 import org.matrix.android.sdk.internal.session.room.read.FullyReadContent
 import org.matrix.android.sdk.internal.session.sync.handler.room.RoomFullyReadHandler
 import org.matrix.android.sdk.internal.session.sync.handler.room.RoomTagHandler
@@ -44,13 +45,17 @@ internal class RoomSyncAccountDataHandler @Inject constructor(
         val roomEntity = RoomEntity.getOrCreate(realm, roomId)
         for (event in accountData.events) {
             val eventType = event.getClearType()
-            handleGeneric(roomEntity, event.getClearContent(), eventType)
-            if (eventType == RoomAccountDataTypes.EVENT_TYPE_TAG) {
-                val content = event.getClearContent().toModel<RoomTagContent>()
-                roomTagHandler.handle(realm, roomId, content)
-            } else if (eventType == RoomAccountDataTypes.EVENT_TYPE_FULLY_READ) {
-                val content = event.getClearContent().toModel<FullyReadContent>()
-                roomFullyReadHandler.handle(realm, roomId, content)
+            if (event.getClearContent().isNullOrEmpty()) {
+                roomEntity.removeAccountData(eventType)
+            } else {
+                handleGeneric(roomEntity, event.getClearContent(), eventType)
+                if (eventType == RoomAccountDataTypes.EVENT_TYPE_TAG) {
+                    val content = event.getClearContent().toModel<RoomTagContent>()
+                    roomTagHandler.handle(realm, roomId, content)
+                } else if (eventType == RoomAccountDataTypes.EVENT_TYPE_FULLY_READ) {
+                    val content = event.getClearContent().toModel<FullyReadContent>()
+                    roomFullyReadHandler.handle(realm, roomId, content)
+                }
             }
         }
     }
