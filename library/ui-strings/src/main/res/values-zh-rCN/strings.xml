@@ -2812,4 +2812,6 @@
     <string name="message_reply_to_prefix">回复给</string>
     <string name="settings_enable_direct_share_title">启用直接分享</string>
     <string name="settings_enable_direct_share_summary">在系统分享菜单中显示最近聊天</string>
+    <string name="review_unverified_sessions_description">复查以确保你的账户是安全的</string>
+    <string name="review_unverified_sessions_title">你有未验证的会话</string>
 </resources>
