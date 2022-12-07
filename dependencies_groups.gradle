@@ -3,6 +3,7 @@ ext.groups = [
                 regex: [
                 ],
                 group: [
+                        'com.github.akshaaatt',
                         'com.github.Armen101',
                         'com.github.chrisbanes',
                         'com.github.hyuwah',
@@ -49,6 +50,7 @@ ext.groups = [
                 regex: [
                 ],
                 group: [
+                        'me.relex',
                         'app.cash.paparazzi',
                         'ch.qos.logback',
                         'com.adevinta.android',

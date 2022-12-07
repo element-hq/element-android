@@ -61,6 +61,7 @@ sealed interface OnboardingAction : VectorViewModelAction {
         data class RegisterWithMatrixId(val matrixId: String, val password: String, val initialDeviceName: String) : AuthenticateAction
         data class Login(val username: String, val password: String, val initialDeviceName: String) : AuthenticateAction
         data class LoginDirect(val matrixId: String, val password: String, val initialDeviceName: String) : AuthenticateAction
+        data class LoginPhoneNumber(val country: String, val number: String, val phone: String, val password: String, val initialDeviceName: String) : AuthenticateAction
     }
 
     object StopEmailValidationCheck : OnboardingAction

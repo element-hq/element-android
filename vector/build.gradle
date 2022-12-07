@@ -197,6 +197,8 @@ dependencies {
     implementation libs.androidx.autoFill
     implementation 'jp.wasabeef:glide-transformations:4.3.0'
     implementation 'com.github.hyuwah:DraggableView:1.0.0'
+    implementation 'com.github.akshaaatt:Sliding-Carousel:1.0.4'
+    implementation 'me.relex:circleindicator:2.1.6'
 
     // Custom Tab
     implementation 'androidx.browser:browser:1.4.0'

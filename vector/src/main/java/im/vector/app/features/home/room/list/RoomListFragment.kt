@@ -16,11 +16,21 @@
 
 package im.vector.app.features.home.room.list
 
+import android.content.Context
+import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
+import com.aemerse.slider.ImageCarousel
+import com.aemerse.slider.listener.CarouselListener
+import com.aemerse.slider.model.CarouselItem
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
@@ -34,6 +44,7 @@ import com.airbnb.epoxy.OnModelBuildFinishedListener
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.facebook.react.bridge.UiThreadUtil
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
@@ -42,10 +53,13 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.databinding.FragmentRoomListBinding
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.analytics.plan.ViewRoom
+import im.vector.app.features.discovery.DiscoverySettingsAction
+import im.vector.app.features.discovery.DiscoverySettingsViewModel
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.filtered.FilteredRoomFooterItem
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
@@ -59,11 +73,22 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.FormBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
+import org.json.JSONArray
 import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
+import timber.log.Timber
+import java.io.IOException
+import java.net.HttpURLConnection
+import java.net.URL
 import javax.inject.Inject
 
 @Parcelize
@@ -83,12 +108,15 @@ class RoomListFragment :
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
     @Inject lateinit var footerController: RoomListFooterController
     @Inject lateinit var userPreferencesProvider: UserPreferencesProvider
+    @Inject lateinit var stringProvider: StringProvider
 
     private var modelBuildListener: OnModelBuildFinishedListener? = null
     private lateinit var sharedActionViewModel: RoomListQuickActionsSharedActionViewModel
     private val roomListParams: RoomListParams by args()
     private val roomListViewModel: RoomListViewModel by fragmentViewModel()
+    private val discoveryViewModel by fragmentViewModel(DiscoverySettingsViewModel::class)
     private lateinit var stateRestorer: LayoutManagerStateRestorer
+    private var rootUrl: String = ""
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomListBinding {
         return FragmentRoomListBinding.inflate(inflater, container, false)
@@ -116,6 +144,122 @@ class RoomListFragment :
             RoomListDisplayMode.ROOMS -> MobileScreen.ScreenName.Rooms
             else -> null
         }
+
+        discoveryViewModel.handle(DiscoverySettingsAction.ChangeIdentityServer(stringProvider.getString(R.string.matrix_org_server_url)))
+        rootUrl = stringProvider.getString(R.string.backend_server_url)
+
+//        TODO: Forced logout
+//        if (!requireActivity().getSharedPreferences("bigstar", AppCompatActivity.MODE_PRIVATE).getBoolean(
+//                        "isLoggedIn",
+//                        false
+//                )) {
+//            SignOutUiWorker(requireActivity()).doSignOut()
+//        }
+    }
+
+//    TODO: Country activity
+//    private fun citiesSelection() {
+//        if (requireActivity().getSharedPreferences("bigstar", AppCompatActivity.MODE_PRIVATE).getString(
+//                        "city",
+//                        ""
+//                )!!.isEmpty()) {
+//            startActivity(Intent(activity, CountriesActivity::class.java))
+//        } else {
+//            setupAdBanners()
+//        }
+//    }
+
+    private fun setupAdBanners() {
+        val carousel: ImageCarousel = views.carousel
+        var ads = JSONArray();
+
+        carousel.registerLifecycle(lifecycle)
+        carousel.carouselListener = object : CarouselListener {
+            override fun onClick(position: Int, carouselItem: CarouselItem) {
+//                TODO: AdPopUp
+//                AdPopUp(
+//                        requireActivity(),
+//                        requireContext(),
+//                        ads.getJSONObject(position).getString("title"),
+//                        ads.getJSONObject(position).getString("description"),
+//                        "$rootUrl/files/" + ads.getJSONObject(position).getString("bannerUuid"),
+//                        ads.getJSONObject(position)
+//                ).show()
+
+                val okHttpClient = OkHttpClient()
+                val request = Request.Builder()
+                        .patch(FormBody.Builder().build())
+                        .url(rootUrl + "/ads/" + ads.getJSONObject(position).getString("uuid") + "/click")
+                        .build()
+                okHttpClient.newCall(request).enqueue(object : Callback {
+
+                    override fun onFailure(call: Call, e: IOException) {
+                        println(e)
+                    }
+
+                    override fun onResponse(call: Call, response: Response) {
+                    }
+                })
+            }
+        }
+
+        val list = mutableListOf<CarouselItem>()
+
+        Thread {
+
+            val url =
+                    URL(
+                            "$rootUrl/ads/client?cityUuid=" + requireActivity().getSharedPreferences("bigstar", AppCompatActivity.MODE_PRIVATE).getString(
+                                    "city",
+                                    ""
+                            )!!
+                    )
+            if (isOnline(requireContext())) {
+                with(url.openConnection() as HttpURLConnection) {
+                    inputStream.bufferedReader().use {
+                        it.readLines().forEach { line ->
+                            ads = JSONArray(line);
+                            for (i in 0 until ads.length()) {
+                                list.add(
+                                        CarouselItem(
+                                                imageUrl = "$rootUrl/files/" + ads.getJSONObject(i)
+                                                        .getString("thumbnailUuid")
+                                        )
+                                )
+                                ads.getJSONObject(i)
+                            }
+                        }
+                    }
+                    UiThreadUtil.runOnUiThread {
+                        carousel.setData(list)
+                    }
+                }
+            }
+        }.start()
+    }
+
+    fun isOnline(context: Context): Boolean {
+        val connectivityManager =
+                context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val capabilities =
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+                } else {
+                    TODO("VERSION.SDK_INT < M")
+                }
+        if (capabilities != null) {
+            if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                Timber.tag("Internet").i("NetworkCapabilities.TRANSPORT_CELLULAR")
+                return true
+            } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                Timber.tag("Internet").i("NetworkCapabilities.TRANSPORT_WIFI")
+                return true
+            } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                Timber.tag("Internet").i("NetworkCapabilities.TRANSPORT_ETHERNET")
+                return true
+            }
+        }
+        return false
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -254,6 +254,7 @@ class OnboardingViewModel @AssistedInject constructor(
             )
             is AuthenticateAction.Login -> handleLogin(action)
             is AuthenticateAction.LoginDirect -> handleDirectLogin(action, homeServerConnectionConfig = null)
+            is AuthenticateAction.LoginPhoneNumber -> handlePhoneNumberLogin(action)
         }
     }
 
@@ -604,6 +605,28 @@ class OnboardingViewModel @AssistedInject constructor(
                         }
                     }
             )
+        }
+    }
+
+    private fun handlePhoneNumberLogin(action: AuthenticateAction.LoginPhoneNumber) {
+        val safeLoginWizard = loginWizard
+        setState { copy(isLoading = true) }
+        currentJob = viewModelScope.launch {
+            try {
+                val result = safeLoginWizard.loginCustom(
+                        mapOf(
+                                "identifier" to mapOf("type" to "m.id.phone", "country" to action.country, "phone" to action.phone, "number" to action.number),
+                                "initial_device_display_name" to action.initialDeviceName,
+                                "password" to action.password,
+                                "type" to "m.login.password"
+                        )
+                )
+                reAuthHelper.data = action.password
+                onSessionCreated(result, authenticationDescription = AuthenticationDescription.Login)
+            } catch (failure: Throwable) {
+                setState { copy(isLoading = false) }
+                _viewEvents.post(OnboardingViewEvents.Failure(failure))
+            }
         }
     }
 

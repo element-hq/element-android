@@ -11,13 +11,27 @@
         android:layout_height="match_parent"
         android:background="?android:colorBackground">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/roomListView"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:overScrollMode="always"
-            tools:itemCount="5"
-            tools:listitem="@layout/item_room" />
+            android:orientation="vertical">
+
+            <com.aemerse.slider.ImageCarousel
+                android:id="@+id/carousel"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                app:autoPlay="true"
+                app:showNavigationButtons="false" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/roomListView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:overScrollMode="always"
+                tools:itemCount="5"
+                tools:listitem="@layout/item_room" />
+
+        </LinearLayout>
 
         <im.vector.app.features.home.room.list.widget.NotifsFabMenuView
             android:id="@+id/createChatFabMenu"

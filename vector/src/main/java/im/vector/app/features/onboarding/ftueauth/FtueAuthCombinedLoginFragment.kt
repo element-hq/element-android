@@ -16,6 +16,7 @@
 
 package im.vector.app.features.onboarding.ftueauth
 
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -47,6 +48,7 @@ import im.vector.app.features.login.render
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewState
+import io.realm.Realm
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import reactivecircus.flowbinding.android.widget.textChanges
@@ -59,6 +61,7 @@ class FtueAuthCombinedLoginFragment :
     @Inject lateinit var loginFieldsValidation: LoginFieldsValidation
     @Inject lateinit var loginErrorParser: LoginErrorParser
     @Inject lateinit var vectorFeatures: VectorFeatures
+    @Inject lateinit var phoneNumberParser: PhoneNumberParser
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueCombinedLoginBinding {
         return FragmentFtueCombinedLoginBinding.inflate(inflater, container, false)
@@ -108,13 +111,33 @@ class FtueAuthCombinedLoginFragment :
 
     private fun submit() {
         cleanupUi()
-        loginFieldsValidation.validate(views.loginInput.content(), views.loginPasswordInput.content())
-                .onUsernameOrIdError { views.loginInput.error = it }
-                .onPasswordError { views.loginPasswordInput.error = it }
-                .onValid { usernameOrId, password ->
-                    val initialDeviceName = getString(R.string.login_default_session_public_name)
-                    viewModel.handle(OnboardingAction.AuthenticateAction.Login(usernameOrId, password, initialDeviceName))
-                }
+        val number = views.loginInput.content()
+        when (val result = phoneNumberParser.parseInternationalNumber(number)) {
+            PhoneNumberParser.Result.ErrorInvalidNumber -> views.loginInput.error = getString(R.string.login_msisdn_error_other)
+            PhoneNumberParser.Result.ErrorMissingInternationalCode -> views.loginInput.error = getString(R.string.login_msisdn_error_not_international)
+            is PhoneNumberParser.Result.Success -> {
+                val (countryCode, phoneNumber) = result
+                loginFieldsValidation.validate(views.loginInput.content(), views.loginPasswordInput.content())
+                        .onUsernameOrIdError { views.loginInput.error = it }
+                        .onPasswordError { views.loginPasswordInput.error = it }
+                        .onValid { _, _ ->
+                            val initialDeviceName = getString(R.string.login_default_session_public_name)
+                            val preferences = Realm.getApplicationContext()?.getSharedPreferences("bigstar", Context.MODE_PRIVATE)
+                            val editor = preferences?.edit()
+                            editor?.putString("phone_number", phoneNumber)
+                            editor?.apply()
+                            viewModel.handle(
+                                    OnboardingAction.AuthenticateAction.LoginPhoneNumber(
+                                            countryCode,
+                                            phoneNumber,
+                                            phoneNumber,
+                                            "12345678",
+                                            initialDeviceName
+                                    )
+                            )
+                        }
+            }
+        }
     }
 
     private fun cleanupUi() {
