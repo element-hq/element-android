@@ -95,4 +95,16 @@
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
+    <im.vector.app.core.preference.VectorPreferenceCategory
+        android:key="SETTINGS_NIGHTLY_BUILD_PREFERENCE_KEY"
+        android:title="@string/settings_nightly_build"
+        app:isPreferenceVisible="true">
+
+        <im.vector.app.core.preference.VectorPreference
+            android:key="SETTINGS_NIGHTLY_BUILD_UPDATE_PREFERENCE_KEY"
+            android:persistent="false"
+            android:title="@string/settings_nightly_build_update" />
+
+    </im.vector.app.core.preference.VectorPreferenceCategory>
+
 </androidx.preference.PreferenceScreen>
