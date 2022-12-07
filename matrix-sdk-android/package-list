@@ -4947,6 +4947,9 @@ $dokka.location:org.matrix.android.sdk.internal.crypto.model/SessionInfo///Point
 $dokka.location:org.matrix.android.sdk.internal.crypto.model/SessionInfo/SessionInfo/#kotlin.String#kotlin.String/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.crypto.model/-session-info/-session-info.html
 $dokka.location:org.matrix.android.sdk.internal.crypto.model/SessionInfo/senderKey/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.crypto.model/-session-info/sender-key.html
 $dokka.location:org.matrix.android.sdk.internal.crypto.model/SessionInfo/sessionId/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.crypto.model/-session-info/session-id.html
+$dokka.location:org.matrix.android.sdk.internal.crypto.tasks////PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.crypto.tasks/index.html
+$dokka.location:org.matrix.android.sdk.internal.crypto.tasks//TO_DEVICE_TRACING_ID_KEY/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.crypto.tasks/-t-o_-d-e-v-i-c-e_-t-r-a-c-i-n-g_-i-d_-k-e-y.html
+$dokka.location:org.matrix.android.sdk.internal.crypto.tasks//toDeviceTracingId/org.matrix.android.sdk.api.session.events.model.Event#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.crypto.tasks/to-device-tracing-id.html
 $dokka.location:org.matrix.android.sdk.internal.database////PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.database/index.html
 $dokka.location:org.matrix.android.sdk.internal.database/RealmCompactOnLaunch///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.database/-realm-compact-on-launch/index.html
 $dokka.location:org.matrix.android.sdk.internal.database/RealmCompactOnLaunch/RealmCompactOnLaunch/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.database/-realm-compact-on-launch/-realm-compact-on-launch.html
@@ -5100,6 +5103,7 @@ org.matrix.android.sdk.api.session.widgets.model
 org.matrix.android.sdk.api.settings
 org.matrix.android.sdk.api.util
 org.matrix.android.sdk.internal.crypto.model
+org.matrix.android.sdk.internal.crypto.tasks
 org.matrix.android.sdk.internal.database
 org.matrix.android.sdk.internal.network
 org.matrix.android.sdk.internal.session.room.aggregation.poll
