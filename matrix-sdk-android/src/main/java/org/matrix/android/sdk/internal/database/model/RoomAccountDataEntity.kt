@@ -24,4 +24,7 @@ import io.realm.annotations.RealmClass
 internal open class RoomAccountDataEntity(
         @Index var type: String? = null,
         var contentStr: String? = null
-) : RealmObject()
+) : RealmObject() {
+
+    companion object
+}
