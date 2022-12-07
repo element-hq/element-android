@@ -176,7 +176,7 @@ class RoomListFragment :
         carousel.registerLifecycle(lifecycle)
         carousel.carouselListener = object : CarouselListener {
             override fun onClick(position: Int, carouselItem: CarouselItem) {
-//                TODO: AdPopUp
+//                TODO: AdPopUp modal
 //                AdPopUp(
 //                        requireActivity(),
 //                        requireContext(),
