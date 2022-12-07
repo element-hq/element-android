@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="notice_room_invite_no_invitee">دعوت %s</string>
     <string name="notice_room_invite">‫%1$s، %2$s را دعوت کرد</string>
     <string name="notice_room_invite_you">%1$s دعوتتان کرد</string>
@@ -2853,4 +2853,21 @@
     <string name="permissions_rationale_msg_notification">${app_name} برای نمایش آگاهی‌ها نیازمند اجازه است. آگاهی می‌تواندد پیام‌ها، دعوت‌ها و…تان را نشان دهند.
 \n
 \nلطفا در بیرون‌پریدنی بعدی اجازهٔ دسترسی بدهید تا بتوانید آگاهی‌ها را ببینید.</string>
+    <string name="device_manager_learn_more_session_rename">کاربران دیگر در پیام‌های مستقیم و اتاق‌هایی که می‌پیوندید قادر خواهند بود سیاهه‌ای کامل از نشست‌هایتان را ببینند.
+\n
+\nاین کار مطمئنشان می‌کند که دارند واقعاً با شما صحبت می‌کنند؛ ولی همچنین به این معنیست که می‌توانند نام نشست‌هایی که این‌جا وارد کرده‌اید را هم ببینند.</string>
+    <string name="device_manager_learn_more_sessions_verified_description">نشست‌های تأیید شده آن‌هاییند که پس از ورود عبارت عبورتان یا تأیید هویتتان با نشست تأیید شده‌ای دیگر، واردشان شده‌اید.
+\n
+\nیعنی تمامی کلیدهای لارم برای رمزگشایی پیام‌های رمزنگاشته‌تان را داشته و این تأیید را به دیگران می‌دهند که به این نشست اطمینان دارید.</string>
+    <string name="device_manager_learn_more_sessions_verified" tools:ignore="UnusedResources">نشست‌های تأیید شده به حسابتان وارد و با عبارت عبور امنتان یا تأیید متقابل تأیید شده‌اند.
+\n
+\nیعنی کلیدهای رمزنگاری پیام‌های پیشینتان را داشته و به دیگر کاربران این تأیید را می‌دهند که این نشست، خودتان هستید.</string>
+    <string name="device_manager_learn_more_sessions_unverified">نشست‌های تأیید نشده نشست‌هاییند که به آن‌ها وارد شده‌اید، ولی تأیید متقبالشان نکرده‌اید.
+\n
+\nباید به طور خاص مطمئن شوید که این نشست‌ها را می‌شناسید؛ چرا که می‌توانند نشان‌دهندهٔ استفادهٔ تأییدنشده از حسابتان باشند.</string>
+    <string name="device_manager_learn_more_sessions_inactive">نشست‌های غیرفعّال نشست‌هاییند که مدّتیست استفاده نکرده‌اید، ولی به دریافت کلیدهای رمزنگاری ادامه می‌دهند.
+\n
+\nبرداشتن نشست‌های غیرفعّال امنیت و کارایی را بهبود داده و تشخیص مشکوک بودن نشست‌های جدید را برایتان راحت‌تر می‌کند.</string>
+    <string name="review_unverified_sessions_description">بازبینی برای اطمینان از امن بودن حسابتان</string>
+    <string name="review_unverified_sessions_title">نسشت‌هایی تأیید نشده دارید</string>
 </resources>
