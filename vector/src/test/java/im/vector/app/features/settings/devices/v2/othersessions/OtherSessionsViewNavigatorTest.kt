@@ -23,7 +23,6 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.unmockkAll
-import io.mockk.verify
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -47,14 +46,15 @@ class OtherSessionsViewNavigatorTest {
 
     @Test
     fun `given a device id when navigating to overview then it starts the correct activity`() {
+        // Given
         val intent = givenIntentForDeviceOverview(A_DEVICE_ID)
         context.givenStartActivity(intent)
 
+        // When
         otherSessionsViewNavigator.navigateToSessionOverview(context.instance, A_DEVICE_ID)
 
-        verify {
-            context.instance.startActivity(intent)
-        }
+        // Then
+        context.verifyStartActivity(intent)
     }
 
     private fun givenIntentForDeviceOverview(deviceId: String): Intent {
