@@ -50,9 +50,9 @@ internal class RoomSummaryEventDecryptor @Inject constructor(
     }
 
     private val scope: CoroutineScope = CoroutineScope(
-            cryptoCoroutineScope.coroutineContext
-                    + SupervisorJob()
-                    + CoroutineName("RoomSummaryDecryptor")
+            cryptoCoroutineScope.coroutineContext +
+                    SupervisorJob() +
+                    CoroutineName("RoomSummaryDecryptor")
     )
 
     private val channel = Channel<Message>(capacity = 300)
@@ -116,8 +116,8 @@ internal class RoomSummaryEventDecryptor @Inject constructor(
                             }
                 }
 
-                if (failure.errorType == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID
-                        || failure.errorType == MXCryptoError.ErrorType.UNKNOWN_MESSAGE_INDEX) {
+                if (failure.errorType == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID ||
+                        failure.errorType == MXCryptoError.ErrorType.UNKNOWN_MESSAGE_INDEX) {
                     (event.content["session_id"] as? String)?.let { sessionId ->
                         unknownSessionsFailure.getOrPut(sessionId) { mutableSetOf() }
                                 .add(event)

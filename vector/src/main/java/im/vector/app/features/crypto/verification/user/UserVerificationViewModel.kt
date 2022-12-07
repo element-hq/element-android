@@ -385,6 +385,9 @@ class UserVerificationViewModel @AssistedInject constructor(
                 // Not applicable for user verification
             }
             VerificationAction.RequestSelfVerification -> TODO()
+            VerificationAction.ForgotResetAll -> {
+                // Not applicable for user verification
+            }
         }
     }
 

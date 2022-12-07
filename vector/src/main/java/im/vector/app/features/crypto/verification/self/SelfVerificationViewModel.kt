@@ -286,8 +286,17 @@ class SelfVerificationViewModel @AssistedInject constructor(
                     }
                 }
             }
-            VerificationAction.SecuredStorageHasBeenReset -> TODO()
-            VerificationAction.SkipVerification -> TODO()
+            VerificationAction.SecuredStorageHasBeenReset -> {
+                if (session.cryptoService().crossSigningService().allPrivateKeysKnown()) {
+                    _viewEvents.post(VerificationBottomSheetViewEvents.Dismiss)
+                }
+            }
+            VerificationAction.SkipVerification -> {
+                _viewEvents.post(VerificationBottomSheetViewEvents.Dismiss)
+            }
+            VerificationAction.ForgotResetAll -> {
+                _viewEvents.post(VerificationBottomSheetViewEvents.ResetAll)
+            }
             VerificationAction.StartSASVerification -> {
                 withState { state ->
                     val request = state.pendingRequest.invoke() ?: return@withState

@@ -16,8 +16,6 @@
 
 package org.matrix.android.sdk.api.session.crypto.keysbackup
 
-import org.matrix.android.sdk.api.session.securestorage.SsssPassphrase
-
 object BackupUtils {
     fun recoveryKeyFromBase58(key: String): IBackupRecoveryKey? = BackupRecoveryKey.fromBase58(key)
     fun recoveryKeyFromPassphrase(passphrase: String): IBackupRecoveryKey? = BackupRecoveryKey.newFromPassphrase(passphrase)

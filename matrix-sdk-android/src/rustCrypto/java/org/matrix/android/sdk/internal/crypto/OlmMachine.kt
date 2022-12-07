@@ -36,7 +36,6 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.session.crypto.crosssigning.PrivateKeysInfo
 import org.matrix.android.sdk.api.session.crypto.crosssigning.UserTrustResult
-import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupAuthData
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.api.session.crypto.model.MXEventDecryptionResult
@@ -52,7 +51,6 @@ import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.coroutines.builder.safeInvokeOnClose
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.CreateKeysBackupVersionBody
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.DefaultKeysAlgorithmAndData
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysAlgorithmAndData
 import org.matrix.android.sdk.internal.crypto.network.RequestSender

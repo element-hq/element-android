@@ -49,6 +49,7 @@ class SharedSecureStorageActivity :
             val requestedSecrets: List<String> = emptyList(),
             val resultKeyStoreAlias: String,
             val writeSecrets: List<Pair<String, String>> = emptyList(),
+            val currentStep: SharedSecureStorageViewState.Step = SharedSecureStorageViewState.Step.EnterPassphrase,
     ) : Parcelable
 
     private val viewModel: SharedSecureStorageViewModel by viewModel()
@@ -150,7 +151,8 @@ class SharedSecureStorageActivity :
                 context: Context,
                 keyId: String? = null,
                 requestedSecrets: List<String>,
-                resultKeyStoreAlias: String = DEFAULT_RESULT_KEYSTORE_ALIAS
+                resultKeyStoreAlias: String = DEFAULT_RESULT_KEYSTORE_ALIAS,
+                initialStep: SharedSecureStorageViewState.Step = SharedSecureStorageViewState.Step.EnterPassphrase
         ): Intent {
             require(requestedSecrets.isNotEmpty())
             return Intent(context, SharedSecureStorageActivity::class.java).also {
@@ -159,7 +161,8 @@ class SharedSecureStorageActivity :
                         Args(
                                 keyId = keyId,
                                 requestedSecrets = requestedSecrets,
-                                resultKeyStoreAlias = resultKeyStoreAlias
+                                resultKeyStoreAlias = resultKeyStoreAlias,
+                                currentStep = initialStep
                         )
                 )
             }
@@ -169,7 +172,8 @@ class SharedSecureStorageActivity :
                 context: Context,
                 keyId: String? = null,
                 writeSecrets: List<Pair<String, String>>,
-                resultKeyStoreAlias: String = DEFAULT_RESULT_KEYSTORE_ALIAS
+                resultKeyStoreAlias: String = DEFAULT_RESULT_KEYSTORE_ALIAS,
+                initialStep: SharedSecureStorageViewState.Step = SharedSecureStorageViewState.Step.EnterPassphrase
         ): Intent {
             require(writeSecrets.isNotEmpty())
             return Intent(context, SharedSecureStorageActivity::class.java).also {
@@ -178,7 +182,8 @@ class SharedSecureStorageActivity :
                         Args(
                                 keyId = keyId,
                                 writeSecrets = writeSecrets,
-                                resultKeyStoreAlias = resultKeyStoreAlias
+                                resultKeyStoreAlias = resultKeyStoreAlias,
+                                currentStep = initialStep,
                         )
                 )
             }
