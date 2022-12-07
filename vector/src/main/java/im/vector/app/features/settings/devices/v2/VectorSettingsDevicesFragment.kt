@@ -102,7 +102,7 @@ class VectorSettingsDevicesFragment :
 
         initWaitingView()
         initCurrentSessionHeaderView()
-        initCurrentSessionListView()
+        initCurrentSessionView()
         initOtherSessionsHeaderView()
         initOtherSessionsView()
         initSecurityRecommendationsView()
@@ -177,7 +177,7 @@ class VectorSettingsDevicesFragment :
         activity?.let { SignOutUiWorker(it).perform() }
     }
 
-    private fun initCurrentSessionListView() {
+    private fun initCurrentSessionView() {
         views.deviceListCurrentSession.viewVerifyButton.debouncedClicks {
             viewModel.handle(DevicesAction.VerifyCurrentSession)
         }
