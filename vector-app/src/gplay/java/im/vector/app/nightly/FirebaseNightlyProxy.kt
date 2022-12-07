@@ -34,8 +34,11 @@ class FirebaseNightlyProxy @Inject constructor(
         private val buildMeta: BuildMeta,
 ) : NightlyProxy {
 
-    override fun onHomeResumed() {
-        if (!canDisplayPopup()) return
+    override fun isNightlyBuild(): Boolean {
+        return buildMeta.applicationId in nightlyPackages
+    }
+
+    override fun updateApplication() {
         val firebaseAppDistribution = FirebaseAppDistribution.getInstance()
         firebaseAppDistribution.updateIfNewReleaseAvailable()
                 .addOnProgressListener { up ->
@@ -46,6 +49,7 @@ class FirebaseNightlyProxy @Inject constructor(
                         when (e.errorCode) {
                             FirebaseAppDistributionException.Status.NOT_IMPLEMENTED -> {
                                 // SDK did nothing. This is expected when building for Play.
+                                Timber.d("FirebaseAppDistribution NOT_IMPLEMENTED error")
                             }
                             else -> {
                                 // Handle other errors.
@@ -56,10 +60,14 @@ class FirebaseNightlyProxy @Inject constructor(
                         Timber.e(e, "FirebaseAppDistribution - other error")
                     }
                 }
+                .addOnSuccessListener {
+                    Timber.d("FirebaseAppDistribution Success!")
+                }
     }
 
-    private fun canDisplayPopup(): Boolean {
-        if (buildMeta.applicationId != "im.vector.app.nightly") return false
+    override fun canDisplayPopup(): Boolean {
+        if (!POPUP_IS_ENABLED) return false
+        if (!isNightlyBuild()) return false
         val today = clock.epochMillis() / A_DAY_IN_MILLIS
         val lastDisplayPopupDay = sharedPreferences.getLong(SHARED_PREF_KEY, 0)
         return (today > lastDisplayPopupDay)
@@ -73,7 +81,12 @@ class FirebaseNightlyProxy @Inject constructor(
     }
 
     companion object {
+        private const val POPUP_IS_ENABLED = false
         private const val A_DAY_IN_MILLIS = 8_600_000L
         private const val SHARED_PREF_KEY = "LAST_NIGHTLY_POPUP_DAY"
+
+        private val nightlyPackages = listOf(
+                "im.vector.app.nightly"
+        )
     }
 }
