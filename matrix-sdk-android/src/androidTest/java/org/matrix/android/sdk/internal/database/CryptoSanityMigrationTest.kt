@@ -48,7 +48,7 @@ class CryptoSanityMigrationTest {
         val realmName = "crypto_store_20.realm"
         val migration = RealmCryptoStoreMigration(object : Clock {
             override fun epochMillis(): Long {
-                return System.currentTimeMillis()
+                return 0L
             }
         })
         val realmConfiguration = configurationFactory.createConfiguration(
