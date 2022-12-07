@@ -114,32 +114,35 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
                 )
             }
         }
-        val keyResult = initialState.keyId?.let { session.sharedSecretStorageService().getKey(it) }
-                ?: session.sharedSecretStorageService().getDefaultKey()
 
-        if (!keyResult.isSuccess()) {
-            _viewEvents.post(SharedSecureStorageViewEvent.Dismiss)
-        } else {
-            val info = (keyResult as KeyInfoResult.Success).keyInfo
-            if (info.content.passphrase != null) {
-                setState {
-                    copy(
-                            hasPassphrase = true,
-                            ready = true,
-                            step = if (initialState.step == SharedSecureStorageViewState.Step.ResetAll) SharedSecureStorageViewState.Step.ResetAll
-                            else SharedSecureStorageViewState.Step.EnterPassphrase
-                    )
-                }
+        if (initialState.step != SharedSecureStorageViewState.Step.ResetAll) {
+            val keyResult = initialState.keyId?.let { session.sharedSecretStorageService().getKey(it) }
+                    ?: session.sharedSecretStorageService().getDefaultKey()
+
+            if (!keyResult.isSuccess()) {
+                _viewEvents.post(SharedSecureStorageViewEvent.Dismiss)
             } else {
-                setState {
-                    copy(
-                            hasPassphrase = false,
-                            ready = true,
-                            step = if (initialState.step == SharedSecureStorageViewState.Step.ResetAll) SharedSecureStorageViewState.Step.ResetAll
-                            else SharedSecureStorageViewState.Step.EnterKey
-                    )
+                val info = (keyResult as KeyInfoResult.Success).keyInfo
+                if (info.content.passphrase != null) {
+                    setState {
+                        copy(
+                                hasPassphrase = true,
+                                ready = true,
+                                step = SharedSecureStorageViewState.Step.EnterPassphrase
+                        )
+                    }
+                } else {
+                    setState {
+                        copy(
+                                hasPassphrase = false,
+                                ready = true,
+                                step = SharedSecureStorageViewState.Step.EnterKey
+                        )
+                    }
                 }
             }
+        } else {
+            setState { copy(ready = true) }
         }
 
         session.flow()
@@ -215,7 +218,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
                     )
                 }
             }
-            */
+             */
             else -> {
                 _viewEvents.post(SharedSecureStorageViewEvent.Dismiss)
             }

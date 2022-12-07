@@ -16,7 +16,6 @@
 
 package im.vector.app.features.crypto.verification.self
 
-import android.util.Log
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading

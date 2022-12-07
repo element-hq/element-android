@@ -37,7 +37,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            android:text="@string/secure_backup_reset_all_no_other_devices"
+            android:text="@string/secure_backup_reset_all_no_other_devices_long"
             android:textColor="?vctr_content_primary"
             app:layout_constraintBottom_toTopOf="@id/ssss_reset_other_devices"
             app:layout_constraintTop_toBottomOf="@id/reset_title" />
@@ -87,7 +87,7 @@
             style="@style/Widget.Vector.Button.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/action_reset"
+            android:text="@string/action_proceed_to_reset"
             tools:ignore="MissingConstraints" />
 
         <androidx.constraintlayout.helper.widget.Flow

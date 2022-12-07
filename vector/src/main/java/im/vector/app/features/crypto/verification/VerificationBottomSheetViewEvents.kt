@@ -24,7 +24,7 @@ import im.vector.app.core.platform.VectorViewEvents
 sealed class VerificationBottomSheetViewEvents : VectorViewEvents {
     object Dismiss : VerificationBottomSheetViewEvents()
     object AccessSecretStore : VerificationBottomSheetViewEvents()
-    object ResetAll: VerificationBottomSheetViewEvents()
+    object ResetAll : VerificationBottomSheetViewEvents()
     object GoToSettings : VerificationBottomSheetViewEvents()
     data class ModalError(val errorMessage: CharSequence) : VerificationBottomSheetViewEvents()
 }
