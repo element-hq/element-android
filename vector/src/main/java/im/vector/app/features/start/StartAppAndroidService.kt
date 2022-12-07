@@ -20,6 +20,7 @@ import android.content.Intent
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.NamedGlobalScope
+import im.vector.app.core.extensions.startForegroundCompat
 import im.vector.app.core.services.VectorAndroidService
 import im.vector.app.features.notifications.NotificationUtils
 import kotlinx.coroutines.CoroutineScope
@@ -58,6 +59,6 @@ class StartAppAndroidService : VectorAndroidService() {
     private fun showStickyNotification() {
         val notificationId = Random.nextInt()
         val notification = notificationUtils.buildStartAppNotification()
-        startForeground(notificationId, notification)
+        startForegroundCompat(notificationId, notification)
     }
 }

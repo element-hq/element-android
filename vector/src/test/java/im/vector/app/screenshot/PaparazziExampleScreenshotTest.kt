@@ -16,14 +16,9 @@
 
 package im.vector.app.screenshot
 
-import android.os.Build
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import app.cash.paparazzi.DeviceConfig.Companion.PIXEL_3
-import app.cash.paparazzi.Paparazzi
-import app.cash.paparazzi.androidHome
-import app.cash.paparazzi.detectEnvironment
 import im.vector.app.R
 import org.junit.Rule
 import org.junit.Test
@@ -31,16 +26,7 @@ import org.junit.Test
 class PaparazziExampleScreenshotTest {
 
     @get:Rule
-    val paparazzi = Paparazzi(
-            // Apply trick from https://github.com/cashapp/paparazzi/issues/489#issuecomment-1195674603
-            environment = detectEnvironment().copy(
-                    platformDir = "${androidHome()}/platforms/android-32",
-                    compileSdkVersion = Build.VERSION_CODES.S_V2 /* 32 */
-            ),
-            deviceConfig = PIXEL_3,
-            theme = "Theme.Vector.Light",
-            maxPercentDifference = 0.0,
-    )
+    val paparazzi = createPaparazziRule()
 
     @Test
     fun `example paparazzi test`() {

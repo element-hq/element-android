@@ -14,20 +14,16 @@
  * limitations under the License.
  */
 
-package im.vector.app.test.fakes
+package im.vector.app.features.settings.devices.v2.notification
 
-import im.vector.app.features.settings.devices.v2.notification.TogglePushNotificationUseCase
-import io.mockk.coJustRun
-import io.mockk.coVerify
-import io.mockk.mockk
+import org.matrix.android.sdk.api.session.Session
+import javax.inject.Inject
 
-class FakeTogglePushNotificationUseCase {
+class CheckIfCanToggleNotificationsViaAccountDataUseCase @Inject constructor(
+        private val getNotificationSettingsAccountDataUseCase: GetNotificationSettingsAccountDataUseCase,
+) {
 
-    val instance = mockk<TogglePushNotificationUseCase> {
-        coJustRun { execute(any(), any()) }
-    }
-
-    fun verifyExecute(deviceId: String, enabled: Boolean) {
-        coVerify { instance.execute(deviceId, enabled) }
+    fun execute(session: Session, deviceId: String): Boolean {
+        return getNotificationSettingsAccountDataUseCase.execute(session, deviceId)?.isSilenced != null
     }
 }

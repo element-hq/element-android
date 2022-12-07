@@ -48,7 +48,7 @@ plugins {
     id "com.google.devtools.ksp" version "1.7.21-1.0.8"
 
     // Dependency Analysis
-    id 'com.autonomousapps.dependency-analysis' version "1.16.0"
+    id 'com.autonomousapps.dependency-analysis' version "1.17.0"
     // Gradle doctor
     id "com.osacky.doctor" version "0.8.1"
 }

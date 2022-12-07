@@ -2805,7 +2805,7 @@
     <string name="qr_code_login_header_failed_other_device_already_signed_in_description">L\'altro dispositivo ha già fatto l\'accesso.</string>
     <string name="qr_code_login_header_failed_e2ee_security_issue_description">Si è verificato un problema di sicurezza configurando i messaggi sicuri. Una delle seguenti cose potrebbe essere compromessa: il tuo homeserver; la/e connessione/i internet; il/i dispositivo/i;</string>
     <string name="qr_code_login_header_failed_other_description">La richiesta è fallita.</string>
-    <string name="a11y_voice_broadcast_buffering">Buffering</string>
+    <string name="a11y_voice_broadcast_buffering">Buffer…</string>
     <string name="a11y_pause_voice_broadcast">Sospendi trasmissione vocale</string>
     <string name="a11y_play_voice_broadcast">Avvia o riprendi trasmissione vocale</string>
     <string name="a11y_stop_voice_broadcast_record">Ferma registrazione trasmissione vocale</string>
@@ -2857,4 +2857,6 @@
     <string name="quoting">Citazione</string>
     <string name="replying_to">Risposta a %s</string>
     <string name="editing">Modifica</string>
+    <string name="settings_enable_direct_share_summary">Mostra chat recenti nel menu di condivisione di sistema</string>
+    <string name="settings_enable_direct_share_title">Attiva condivisione diretta</string>
 </resources>

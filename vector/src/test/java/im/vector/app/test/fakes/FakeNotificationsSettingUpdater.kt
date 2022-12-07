@@ -14,26 +14,18 @@
  * limitations under the License.
  */
 
-package im.vector.app.core.notification
+package im.vector.app.test.fakes
 
-import im.vector.app.features.session.coroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import im.vector.app.core.notification.NotificationsSettingUpdater
+import io.mockk.justRun
+import io.mockk.mockk
 import org.matrix.android.sdk.api.session.Session
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class EnableNotificationsSettingUpdater @Inject constructor(
-        private val updateEnableNotificationsSettingOnChangeUseCase: UpdateEnableNotificationsSettingOnChangeUseCase,
-) {
+class FakeNotificationsSettingUpdater {
 
-    private var job: Job? = null
+    val instance = mockk<NotificationsSettingUpdater>()
 
-    fun onSessionsStarted(session: Session) {
-        job?.cancel()
-        job = session.coroutineScope.launch {
-            updateEnableNotificationsSettingOnChangeUseCase.execute(session)
-        }
+    fun givenOnSessionsStarted(session: Session) {
+        justRun { instance.onSessionStarted(session) }
     }
 }

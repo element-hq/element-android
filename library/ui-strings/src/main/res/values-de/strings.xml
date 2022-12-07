@@ -2815,7 +2815,7 @@
     <string name="qr_code_login_header_failed_other_description">Die Anfrage ist fehlgeschlagen.</string>
     <string name="a11y_play_voice_broadcast">Abspielen oder fortsetzen der Sprachübertragung</string>
     <string name="a11y_resume_voice_broadcast_record">Fortsetzen der Sprachübertragung</string>
-    <string name="a11y_voice_broadcast_buffering">Puffere</string>
+    <string name="a11y_voice_broadcast_buffering">Puffere …</string>
     <string name="a11y_pause_voice_broadcast">Pausiere Sprachübertragung</string>
     <string name="a11y_stop_voice_broadcast_record">Stoppe Aufzeichnung der Sprachübertragung</string>
     <string name="a11y_pause_voice_broadcast_record">Pausiere Aufzeichnung der Sprachübertragung</string>
@@ -2865,4 +2865,6 @@
     <string name="replying_to">%s antworten</string>
     <string name="device_manager_other_sessions_hide_ip_address">IP-Adresse ausblenden</string>
     <string name="device_manager_other_sessions_show_ip_address">IP-Adresse anzeigen</string>
+    <string name="settings_enable_direct_share_summary">Kürzliche Unterhaltungen im Teilen-Menü des Systems anzeigen</string>
+    <string name="settings_enable_direct_share_title">Direktes Teilen aktivieren</string>
 </resources>

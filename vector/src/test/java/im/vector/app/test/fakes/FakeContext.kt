@@ -81,4 +81,8 @@ class FakeContext(
         givenService(Context.CLIPBOARD_SERVICE, ClipboardManager::class.java, fakeClipboardManager.instance)
         return fakeClipboardManager
     }
+
+    fun givenPackageName(name: String) {
+        every { instance.packageName } returns name
+    }
 }

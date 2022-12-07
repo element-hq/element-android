@@ -18,32 +18,28 @@ package im.vector.app.features.settings.devices.v2.notification
 
 import im.vector.app.core.di.ActiveSessionHolder
 import org.matrix.android.sdk.api.account.LocalNotificationSettingsContent
-import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
-import org.matrix.android.sdk.api.session.events.model.toContent
 import javax.inject.Inject
 
-class TogglePushNotificationUseCase @Inject constructor(
+class ToggleNotificationsUseCase @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
-        private val checkIfCanTogglePushNotificationsViaPusherUseCase: CheckIfCanTogglePushNotificationsViaPusherUseCase,
-        private val checkIfCanTogglePushNotificationsViaAccountDataUseCase: CheckIfCanTogglePushNotificationsViaAccountDataUseCase,
+        private val checkIfCanToggleNotificationsViaPusherUseCase: CheckIfCanToggleNotificationsViaPusherUseCase,
+        private val checkIfCanToggleNotificationsViaAccountDataUseCase: CheckIfCanToggleNotificationsViaAccountDataUseCase,
+        private val setNotificationSettingsAccountDataUseCase: SetNotificationSettingsAccountDataUseCase,
 ) {
 
     suspend fun execute(deviceId: String, enabled: Boolean) {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
 
-        if (checkIfCanTogglePushNotificationsViaPusherUseCase.execute(session)) {
+        if (checkIfCanToggleNotificationsViaPusherUseCase.execute(session)) {
             val devicePusher = session.pushersService().getPushers().firstOrNull { it.deviceId == deviceId }
             devicePusher?.let { pusher ->
                 session.pushersService().togglePusher(pusher, enabled)
             }
         }
 
-        if (checkIfCanTogglePushNotificationsViaAccountDataUseCase.execute(session, deviceId)) {
+        if (checkIfCanToggleNotificationsViaAccountDataUseCase.execute(session, deviceId)) {
             val newNotificationSettingsContent = LocalNotificationSettingsContent(isSilenced = !enabled)
-            session.accountDataService().updateUserAccountData(
-                    UserAccountDataTypes.TYPE_LOCAL_NOTIFICATION_SETTINGS + deviceId,
-                    newNotificationSettingsContent.toContent(),
-            )
+            setNotificationSettingsAccountDataUseCase.execute(session, deviceId, newNotificationSettingsContent)
         }
     }
 }

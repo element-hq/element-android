@@ -24,13 +24,12 @@ import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.RefreshDevicesUseCase
 import im.vector.app.features.settings.devices.v2.ToggleIpAddressVisibilityUseCase
 import im.vector.app.features.settings.devices.v2.notification.NotificationsStatus
-import im.vector.app.features.settings.devices.v2.signout.InterceptSignoutFlowResponseUseCase
 import im.vector.app.features.settings.devices.v2.verification.CheckIfCurrentSessionCanBeVerifiedUseCase
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakeGetNotificationsStatusUseCase
 import im.vector.app.test.fakes.FakePendingAuthHandler
 import im.vector.app.test.fakes.FakeSignoutSessionsUseCase
-import im.vector.app.test.fakes.FakeTogglePushNotificationUseCase
+import im.vector.app.test.fakes.FakeToggleNotificationUseCase
 import im.vector.app.test.fakes.FakeVectorPreferences
 import im.vector.app.test.fakes.FakeVerificationService
 import im.vector.app.test.test
@@ -73,10 +72,9 @@ class SessionOverviewViewModelTest {
     private val fakeActiveSessionHolder = FakeActiveSessionHolder()
     private val checkIfCurrentSessionCanBeVerifiedUseCase = mockk<CheckIfCurrentSessionCanBeVerifiedUseCase>()
     private val fakeSignoutSessionsUseCase = FakeSignoutSessionsUseCase()
-    private val interceptSignoutFlowResponseUseCase = mockk<InterceptSignoutFlowResponseUseCase>()
     private val fakePendingAuthHandler = FakePendingAuthHandler()
     private val refreshDevicesUseCase = mockk<RefreshDevicesUseCase>(relaxed = true)
-    private val togglePushNotificationUseCase = FakeTogglePushNotificationUseCase()
+    private val toggleNotificationUseCase = FakeToggleNotificationUseCase()
     private val fakeGetNotificationsStatusUseCase = FakeGetNotificationsStatusUseCase()
     private val notificationsStatus = NotificationsStatus.ENABLED
     private val fakeVectorPreferences = FakeVectorPreferences()
@@ -87,11 +85,10 @@ class SessionOverviewViewModelTest {
             getDeviceFullInfoUseCase = getDeviceFullInfoUseCase,
             checkIfCurrentSessionCanBeVerifiedUseCase = checkIfCurrentSessionCanBeVerifiedUseCase,
             signoutSessionsUseCase = fakeSignoutSessionsUseCase.instance,
-            interceptSignoutFlowResponseUseCase = interceptSignoutFlowResponseUseCase,
             pendingAuthHandler = fakePendingAuthHandler.instance,
             activeSessionHolder = fakeActiveSessionHolder.instance,
             refreshDevicesUseCase = refreshDevicesUseCase,
-            togglePushNotificationUseCase = togglePushNotificationUseCase.instance,
+            toggleNotificationsUseCase = toggleNotificationUseCase.instance,
             getNotificationsStatusUseCase = fakeGetNotificationsStatusUseCase.instance,
             vectorPreferences = fakeVectorPreferences.instance,
             toggleIpAddressVisibilityUseCase = toggleIpAddressVisibilityUseCase,
@@ -436,7 +433,7 @@ class SessionOverviewViewModelTest {
 
         viewModel.handle(SessionOverviewAction.TogglePushNotifications(A_SESSION_ID_1, true))
 
-        togglePushNotificationUseCase.verifyExecute(A_SESSION_ID_1, true)
+        toggleNotificationUseCase.verifyExecute(A_SESSION_ID_1, true)
         viewModel.test().assertLatestState { state -> state.notificationsStatus == NotificationsStatus.ENABLED }.finish()
     }
 }

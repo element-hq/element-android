@@ -2852,4 +2852,18 @@
     <string name="error_voice_broadcast_unauthorized_title">Kan inte starta en ny röstsändning</string>
     <string name="a11y_voice_broadcast_fast_forward">Spola framåt 30 sekunder</string>
     <string name="a11y_voice_broadcast_fast_backward">Spola tillbaka 30 sekunder</string>
+    <string name="message_reply_to_sender_created_poll">skickade en omröstning.</string>
+    <string name="message_reply_to_sender_sent_sticker">skickade en dekal.</string>
+    <string name="message_reply_to_sender_sent_video">skickade en video.</string>
+    <string name="message_reply_to_sender_sent_image">skickade en bild.</string>
+    <string name="message_reply_to_sender_sent_voice_message">skickade ett röstmeddelande.</string>
+    <string name="message_reply_to_sender_sent_audio_file">skickade en ljudfil.</string>
+    <string name="message_reply_to_sender_sent_file">skickade en fil.</string>
+    <string name="message_reply_to_prefix">Svar på</string>
+    <string name="device_manager_other_sessions_hide_ip_address">Dölj IP-adress</string>
+    <string name="device_manager_other_sessions_show_ip_address">Visa IP-adress</string>
+    <string name="voice_broadcast_recording_time_left">%1$s kvar</string>
+    <string name="quoting">Citerar</string>
+    <string name="replying_to">Besvarar %s</string>
+    <string name="editing">Redigerar</string>
 </resources>

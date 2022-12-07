@@ -67,6 +67,7 @@
             app:layout_constraintTop_toBottomOf="@id/deviceListSecurityRecommendationsDivider"
             app:sessionsListHeaderDescription=""
             app:sessionsListHeaderHasLearnMoreLink="false"
+            app:sessionsListHeaderMenu="@menu/menu_current_session_header"
             app:sessionsListHeaderTitle="@string/device_manager_current_session_title" />
 
         <im.vector.app.features.settings.devices.v2.list.SessionInfoView

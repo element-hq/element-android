@@ -16,6 +16,8 @@
 
 package im.vector.app.test.fakes
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -25,11 +27,20 @@ import io.mockk.runs
 import org.matrix.android.sdk.api.session.accountdata.SessionAccountDataService
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
 import org.matrix.android.sdk.api.session.events.model.Content
+import org.matrix.android.sdk.api.util.Optional
+import org.matrix.android.sdk.api.util.toOptional
 
 class FakeSessionAccountDataService : SessionAccountDataService by mockk(relaxed = true) {
 
     fun givenGetUserAccountDataEventReturns(type: String, content: Content?) {
         every { getUserAccountDataEvent(type) } returns content?.let { UserAccountDataEvent(type, it) }
+    }
+
+    fun givenGetLiveUserAccountDataEventReturns(type: String, content: Content?): LiveData<Optional<UserAccountDataEvent>> {
+        return MutableLiveData(content?.let { UserAccountDataEvent(type, it) }.toOptional())
+                .also {
+                    every { getLiveUserAccountDataEvent(type) } returns it
+                }
     }
 
     fun givenUpdateUserAccountDataEventSucceeds() {
