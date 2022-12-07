@@ -1,34 +1,33 @@
 {
   "project_info": {
-    "project_number": "912726360885",
-    "firebase_url": "https://vector-alpha.firebaseio.com",
-    "project_id": "vector-alpha",
-    "storage_bucket": "vector-alpha.appspot.com"
+    "project_number": "1062819374286",
+    "project_id": "bigstarmatrix-f88ca",
+    "storage_bucket": "bigstarmatrix-f88ca.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:912726360885:android:4ef8f3a0021e774d",
+        "mobilesdk_app_id": "1:1062819374286:android:8816c55ac4a65487e71c9f",
         "android_client_info": {
-          "package_name": "im.vector.app.debug"
+          "package_name": "com.bigstar.real"
         }
       },
       "oauth_client": [
         {
-          "client_id": "912726360885-e87n3jva9uoj4vbidvijq78ebg02asv2.apps.googleusercontent.com",
+          "client_id": "1062819374286-ob1aonintdd3qm79f96sua0142ieom5t.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAFZX8IhIfgzdOZvxDP_ISO5WYoU7jmQ5c"
+          "current_key": "AIzaSyB_LLdSGN_L14j1mPi4LEsobV2xGYeJH6U"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "912726360885-rsae0i66rgqt6ivnudu1pv4tksg9i8b2.apps.googleusercontent.com",
+              "client_id": "1062819374286-ob1aonintdd3qm79f96sua0142ieom5t.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

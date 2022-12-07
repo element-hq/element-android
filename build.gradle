@@ -34,6 +34,8 @@ buildscript {
         classpath "org.jetbrains.kotlinx:kotlinx-knit:0.4.0"
         classpath 'com.jakewharton:butterknife-gradle-plugin:10.2.3'
         classpath libs.squareup.paparazziPlugin
+        //noinspection GradlePluginVersion
+        classpath 'com.android.tools.build:gradle:2.3.0'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -46,9 +48,9 @@ plugins {
     id "io.gitlab.arturbosch.detekt" version "1.22.0"
     // Ksp
     id "com.google.devtools.ksp" version "1.7.22-1.0.8"
+    id 'com.autonomousapps.dependency-analysis' version "1.17.0"
 
     // Dependency Analysis
-    id 'com.autonomousapps.dependency-analysis' version "1.17.0"
     // Gradle doctor
     id "com.osacky.doctor" version "0.8.1"
 }
@@ -208,10 +210,10 @@ apply plugin: 'org.sonarqube'
 
 sonarqube {
     properties {
-        property "sonar.projectName", "element-android"
-        property "sonar.projectKey", "vector-im_element-android"
+        property "sonar.projectName", "Big Star Messenger android"
+        property "sonar.projectKey", "bigstarmesssenger-android"
         property "sonar.host.url", "https://sonarcloud.io"
-        property "sonar.projectVersion", project(":vector").android.defaultConfig.versionName
+        property "sonar.projectVersion", project(":bigstar").android.defaultConfig.versionName
         property "sonar.sourceEncoding", "UTF-8"
         property "sonar.links.homepage", "https://github.com/vector-im/element-android/"
         property "sonar.links.ci", "https://github.com/vector-im/element-android/actions"
@@ -251,61 +253,61 @@ project(":library:external:diff-match-patch") {
 //    }
 //}
 
-dependencyAnalysis {
-    dependencies {
-        bundle("kotlin-stdlib") {
-            includeGroup("org.jetbrains.kotlin")
-        }
-        bundle("react") {
-            includeGroup("com.facebook.react")
-        }
-    }
-    issues {
-        all {
-            ignoreKtx(true)
-            onUsedTransitiveDependencies {
-                // Transitively used dependencies that should be declared directly
-                severity("ignore")
-            }
-            onUnusedDependencies {
-                severity("fail")
-            }
-            onUnusedAnnotationProcessors {
-                severity("fail")
-                exclude("com.airbnb.android:epoxy-processor", "com.google.dagger:hilt-compiler") // False positives
-            }
-        }
-        project(":library:jsonviewer") {
-            onUnusedDependencies {
-                exclude("org.json:json") // Used in unit tests, overwrites the one bundled into Android
-            }
-        }
-        project(":library:ui-styles")
-        project(":matrix-sdk-android") {
-            onUnusedDependencies {
-                exclude("io.reactivex.rxjava2:rxkotlin") // Transitively required for mocking realm as monarchy doesn't expose Rx
-            }
-        }
-        project(":matrix-sdk-android-flow") {
-            onUnusedDependencies {
-                exclude("androidx.paging:paging-runtime-ktx") // False positive
-            }
-        }
-        project(":vector") {
-            onUnusedDependencies {
-                // False positives
-                exclude(
-                        "androidx.fragment:fragment-testing",
-                        "com.facebook.soloader:soloader",
-                        "com.vanniktech:emoji-google",
-                        "com.vanniktech:emoji-material",
-                        "org.maplibre.gl:android-plugin-annotation-v9",
-                        "org.maplibre.gl:android-sdk",
-                )
-            }
-        }
-    }
-}
+//dependencyAnalysis {
+//    dependencies {
+//        bundle("kotlin-stdlib") {
+//            includeGroup("org.jetbrains.kotlin")
+//        }
+//        bundle("react") {
+//            includeGroup("com.facebook.react")
+//        }
+//    }
+//    issues {
+//        all {
+//            ignoreKtx(true)
+//            onUsedTransitiveDependencies {
+//                // Transitively used dependencies that should be declared directly
+//                severity("ignore")
+//            }
+//            onUnusedDependencies {
+//                severity("fail")
+//            }
+//            onUnusedAnnotationProcessors {
+//                severity("fail")
+//                exclude("com.airbnb.android:epoxy-processor", "com.google.dagger:hilt-compiler") // False positives
+//            }
+//        }
+//        project(":library:jsonviewer") {
+//            onUnusedDependencies {
+//                exclude("org.json:json") // Used in unit tests, overwrites the one bundled into Android
+//            }
+//        }
+//        project(":library:ui-styles")
+//        project(":matrix-sdk-android") {
+//            onUnusedDependencies {
+//                exclude("io.reactivex.rxjava2:rxkotlin") // Transitively required for mocking realm as monarchy doesn't expose Rx
+//            }
+//        }
+//        project(":matrix-sdk-android-flow") {
+//            onUnusedDependencies {
+//                exclude("androidx.paging:paging-runtime-ktx") // False positive
+//            }
+//        }
+//        project(":vector") {
+//            onUnusedDependencies {
+//                // False positives
+//                exclude(
+//                        "androidx.fragment:fragment-testing",
+//                        "com.facebook.soloader:soloader",
+//                        "com.vanniktech:emoji-google",
+//                        "com.vanniktech:emoji-material",
+//                        "org.maplibre.gl:android-plugin-annotation-v9",
+//                        "org.maplibre.gl:android-sdk",
+//                )
+//            }
+//        }
+//    }
+//}
 
 tasks.register("recordScreenshots", GradleBuild) {
     startParameter.projectProperties.screenshot = ""
