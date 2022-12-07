@@ -47,7 +47,8 @@ class StartAuthenticationFlowUseCase @Inject constructor(
             upstreamUrl = authFlow.homeServerUrl,
             preferredLoginMode = preferredLoginMode,
             supportedLoginTypes = authFlow.supportedLoginTypes,
-            isLogoutDevicesSupported = authFlow.isLogoutDevicesSupported
+            isLogoutDevicesSupported = authFlow.isLogoutDevicesSupported,
+            isLoginWithQrSupported = authFlow.isLoginWithQrSupported,
     )
 
     private fun LoginFlowResult.findPreferredLoginMode() = when {

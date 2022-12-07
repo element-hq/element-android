@@ -299,7 +299,8 @@ internal class DefaultAuthenticationService @Inject constructor(
                 isLoginAndRegistrationSupported = versions.isLoginAndRegistrationSupportedBySdk(),
                 homeServerUrl = homeServerUrl,
                 isOutdatedHomeserver = !versions.isSupportedBySdk(),
-                isLogoutDevicesSupported = versions.doesServerSupportLogoutDevices()
+                isLogoutDevicesSupported = versions.doesServerSupportLogoutDevices(),
+                isLoginWithQrSupported = versions.doesServerSupportQrCodeLogin(),
         )
     }
 
@@ -406,20 +407,6 @@ internal class DefaultAuthenticationService @Inject constructor(
                         deviceId = deviceId
                 )
         )
-    }
-
-    override suspend fun isQrLoginSupported(homeServerConnectionConfig: HomeServerConnectionConfig): Boolean {
-        val authAPI = buildAuthAPI(homeServerConnectionConfig)
-        val versions = runCatching {
-            executeRequest(null) {
-                authAPI.versions()
-            }
-        }
-        return if (versions.isSuccess) {
-            versions.getOrNull()?.doesServerSupportQrCodeLogin().orFalse()
-        } else {
-            false
-        }
     }
 
     override suspend fun loginUsingQrLoginToken(
