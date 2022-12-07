@@ -36,6 +36,7 @@ import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import im.vector.app.features.voicebroadcast.usecase.GetRoomLiveVoiceBroadcastsUseCase
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
@@ -244,7 +245,8 @@ class RoomSummaryItemFactory @Inject constructor(
         val room = sessionHolder.getSafeActiveSession()?.getRoom(roomId) ?: return latestPreviewableEvent
         val liveVoiceBroadcastTimelineEvent = getRoomLiveVoiceBroadcastsUseCase.execute(roomId).lastOrNull()
                 ?.root?.eventId?.let { room.getTimelineEvent(it) }
-        return liveVoiceBroadcastTimelineEvent
+        return latestPreviewableEvent?.takeIf { it.root.getClearType() == EventType.CALL_INVITE }
+                ?: liveVoiceBroadcastTimelineEvent
                 ?: latestPreviewableEvent
                         ?.takeUnless { it.root.asMessageAudioEvent()?.isVoiceBroadcast().orFalse() } // Skip voice messages related to voice broadcast
     }
