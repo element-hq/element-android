@@ -31,6 +31,9 @@ class MigrateEAtoEROperation {
             sessionFilesDir.mkdir()
             // perform a migration?
             val extractMigrationData = ExtractMigrationDataUseCase()
+            val hasExitingData = extractMigrationData.hasExistingData(cryptoRealm)
+            if (!hasExitingData) return sessionFilesDir
+
             try {
                 val progressListener = object : ProgressListener {
                     override fun onProgress(progress: Int, total: Int) {
