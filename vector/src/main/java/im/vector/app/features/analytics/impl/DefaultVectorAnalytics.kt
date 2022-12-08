@@ -41,7 +41,7 @@ private val IGNORED_OPTIONS: Options? = null
 @Singleton
 class DefaultVectorAnalytics @Inject constructor(
         postHogFactory: PostHogFactory,
-        private val sentryFactory: SentryFactory,
+        private val sentryAnalytics: SentryAnalytics,
         analyticsConfig: AnalyticsConfig,
         private val analyticsStore: AnalyticsStore,
         private val lateInitUserPropertiesFactory: LateInitUserPropertiesFactory,
@@ -97,7 +97,7 @@ class DefaultVectorAnalytics @Inject constructor(
         setAnalyticsId("")
 
         // Close Sentry SDK.
-        sentryFactory.stopSentry()
+        sentryAnalytics.stopSentry()
     }
 
     private fun observeAnalyticsId() {
@@ -135,8 +135,8 @@ class DefaultVectorAnalytics @Inject constructor(
     private fun initOrStopSentry() {
         userConsent?.let {
             when (it) {
-                true -> sentryFactory.initSentry()
-                false -> sentryFactory.stopSentry()
+                true -> sentryAnalytics.initSentry()
+                false -> sentryAnalytics.stopSentry()
             }
         }
     }
@@ -179,5 +179,11 @@ class DefaultVectorAnalytics @Inject constructor(
         return Properties().apply {
             putAll(this@toPostHogUserProperties.filter { it.value != null })
         }
+    }
+
+    override fun trackError(throwable: Throwable) {
+        sentryAnalytics
+                .takeIf { userConsent == true }
+                ?.trackError(throwable)
     }
 }

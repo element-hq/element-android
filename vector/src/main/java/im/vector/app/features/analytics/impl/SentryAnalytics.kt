@@ -18,6 +18,7 @@ package im.vector.app.features.analytics.impl
 
 import android.content.Context
 import im.vector.app.features.analytics.AnalyticsConfig
+import im.vector.app.features.analytics.errors.ErrorTracker
 import im.vector.app.features.analytics.log.analyticsTag
 import io.sentry.Sentry
 import io.sentry.SentryOptions
@@ -25,10 +26,10 @@ import io.sentry.android.core.SentryAndroid
 import timber.log.Timber
 import javax.inject.Inject
 
-class SentryFactory @Inject constructor(
+class SentryAnalytics @Inject constructor(
         private val context: Context,
         private val analyticsConfig: AnalyticsConfig,
-) {
+) : ErrorTracker {
 
     fun initSentry() {
         Timber.tag(analyticsTag.value).d("Initializing Sentry")
@@ -46,5 +47,9 @@ class SentryFactory @Inject constructor(
     fun stopSentry() {
         Timber.tag(analyticsTag.value).d("Stopping Sentry")
         Sentry.close()
+    }
+
+    override fun trackError(throwable: Throwable) {
+        Sentry.captureException(throwable)
     }
 }
