@@ -13,7 +13,7 @@ jobs:
       - name: Danger
         uses: danger/danger-js@11.2.0
         with:
-          args: "--dangerfile tools/danger/dangerfile.js"
+          args: "--dangerfile ./tools/danger/dangerfile.js"
         env:
           DANGER_GITHUB_API_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
           # Fallback for forks
