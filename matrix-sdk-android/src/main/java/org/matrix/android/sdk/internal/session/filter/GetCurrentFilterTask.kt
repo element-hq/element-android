@@ -42,7 +42,7 @@ internal class DefaultGetCurrentFilterTask @Inject constructor(
 
         return when (storedFilterBody) {
             currentFilterBody -> storedFilterId ?: storedFilterBody
-            else -> saveFilter(currentFilter)
+            else -> saveFilter(currentFilter) ?: currentFilterBody
         }
     }
 

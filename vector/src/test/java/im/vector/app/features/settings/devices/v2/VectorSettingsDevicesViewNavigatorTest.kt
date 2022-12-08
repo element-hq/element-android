@@ -20,12 +20,12 @@ import android.content.Intent
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
 import im.vector.app.features.settings.devices.v2.othersessions.OtherSessionsActivity
 import im.vector.app.features.settings.devices.v2.overview.SessionOverviewActivity
+import im.vector.app.features.settings.devices.v2.rename.RenameSessionActivity
 import im.vector.app.test.fakes.FakeContext
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.unmockkAll
-import io.mockk.verify
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -43,6 +43,7 @@ class VectorSettingsDevicesViewNavigatorTest {
     fun setUp() {
         mockkObject(SessionOverviewActivity.Companion)
         mockkObject(OtherSessionsActivity.Companion)
+        mockkObject(RenameSessionActivity.Companion)
     }
 
     @After
@@ -52,26 +53,41 @@ class VectorSettingsDevicesViewNavigatorTest {
 
     @Test
     fun `given a session id when navigating to overview then it starts the correct activity`() {
+        // Given
         val intent = givenIntentForSessionOverview(A_SESSION_ID)
         context.givenStartActivity(intent)
 
+        // When
         vectorSettingsDevicesViewNavigator.navigateToSessionOverview(context.instance, A_SESSION_ID)
 
-        verify {
-            context.instance.startActivity(intent)
-        }
+        // Then
+        context.verifyStartActivity(intent)
     }
 
     @Test
     fun `given an intent when navigating to other sessions list then it starts the correct activity`() {
+        // Given
         val intent = givenIntentForOtherSessions(A_TITLE_RESOURCE_ID, A_DEFAULT_FILTER, true)
         context.givenStartActivity(intent)
 
+        // When
         vectorSettingsDevicesViewNavigator.navigateToOtherSessions(context.instance, A_TITLE_RESOURCE_ID, A_DEFAULT_FILTER, true)
 
-        verify {
-            context.instance.startActivity(intent)
-        }
+        // Then
+        context.verifyStartActivity(intent)
+    }
+
+    @Test
+    fun `given an intent when navigating to rename session screen then it starts the correct activity`() {
+        // Given
+        val intent = givenIntentForRenameSession(A_SESSION_ID)
+        context.givenStartActivity(intent)
+
+        // When
+        vectorSettingsDevicesViewNavigator.navigateToRenameSession(context.instance, A_SESSION_ID)
+
+        // Then
+        context.verifyStartActivity(intent)
     }
 
     private fun givenIntentForSessionOverview(sessionId: String): Intent {
@@ -83,6 +99,12 @@ class VectorSettingsDevicesViewNavigatorTest {
     private fun givenIntentForOtherSessions(titleResourceId: Int, defaultFilter: DeviceManagerFilterType, excludeCurrentDevice: Boolean): Intent {
         val intent = mockk<Intent>()
         every { OtherSessionsActivity.newIntent(context.instance, titleResourceId, defaultFilter, excludeCurrentDevice) } returns intent
+        return intent
+    }
+
+    private fun givenIntentForRenameSession(sessionId: String): Intent {
+        val intent = mockk<Intent>()
+        every { RenameSessionActivity.newIntent(context.instance, sessionId) } returns intent
         return intent
     }
 }

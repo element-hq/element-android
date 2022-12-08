@@ -60,9 +60,7 @@ class SessionOverviewViewNavigatorTest {
         sessionOverviewViewNavigator.goToSessionDetails(context.instance, A_SESSION_ID)
 
         // Then
-        verify {
-            context.instance.startActivity(intent)
-        }
+        context.verifyStartActivity(intent)
     }
 
     @Test
@@ -75,9 +73,7 @@ class SessionOverviewViewNavigatorTest {
         sessionOverviewViewNavigator.goToRenameSession(context.instance, A_SESSION_ID)
 
         // Then
-        verify {
-            context.instance.startActivity(intent)
-        }
+        context.verifyStartActivity(intent)
     }
 
     @Test

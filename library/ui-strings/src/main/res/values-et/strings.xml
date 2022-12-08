@@ -2805,7 +2805,7 @@
     <string name="qr_code_login_header_failed_other_device_already_signed_in_description">Teine seade on juba võrku loginud.</string>
     <string name="qr_code_login_header_failed_e2ee_security_issue_description">Turvalise sõnumivahetuse ülesseadmisel tekkis turvaviga. Üks kolmest võib olla sattunud vale osapoole kontrolli alla: sinu koduserver, sinu internetiühendus või sinu seade;</string>
     <string name="qr_code_login_header_failed_other_description">Päring ei õnnestunud.</string>
-    <string name="a11y_voice_broadcast_buffering">Andmed on puhverdamisel</string>
+    <string name="a11y_voice_broadcast_buffering">Andmed on puhverdamisel…</string>
     <string name="a11y_play_voice_broadcast">Alusta või jätka ringhäälingukõne esitamist</string>
     <string name="a11y_stop_voice_broadcast_record">Lõpeta ringhäälingukõne salvestamine</string>
     <string name="a11y_pause_voice_broadcast_record">Peata ringhäälingukõne salvestamine</string>
@@ -2857,4 +2857,6 @@
     <string name="message_reply_to_sender_sent_video">saatis video.</string>
     <string name="message_reply_to_sender_sent_sticker">saatis kleepsu.</string>
     <string name="message_reply_to_sender_created_poll">koostas küsitluse.</string>
+    <string name="settings_enable_direct_share_title">Kasuta otsejagamist</string>
+    <string name="settings_enable_direct_share_summary">Näita viimaseid vestlusi süsteemses jagamisvaates</string>
 </resources>

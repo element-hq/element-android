@@ -23,5 +23,4 @@ import org.matrix.android.sdk.api.session.sync.SyncRequestState
 data class HomeActivityViewState(
         val syncRequestState: SyncRequestState = SyncRequestState.Idle,
         val authenticationDescription: AuthenticationDescription? = null,
-        val areNotificationsSilenced: Boolean = false,
 ) : MavericksState

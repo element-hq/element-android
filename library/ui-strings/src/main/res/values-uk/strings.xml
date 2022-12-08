@@ -2922,7 +2922,7 @@
     <string name="qr_code_login_header_failed_other_description">Запит не виконаний.</string>
     <string name="labs_enable_voice_broadcast_summary">Можливість записувати та надсилати голосові трансляції до стрічки кімнати.</string>
     <string name="labs_enable_voice_broadcast_title">Увімкнути голосові трансляції (в активній розробці)</string>
-    <string name="a11y_voice_broadcast_buffering">Буферизація</string>
+    <string name="a11y_voice_broadcast_buffering">Буферизація…</string>
     <string name="a11y_pause_voice_broadcast">Призупинити голосову трансляцію</string>
     <string name="a11y_play_voice_broadcast">Відтворити або поновити відтворення голосової трансляції</string>
     <string name="a11y_stop_voice_broadcast_record">Припинити запис голосової трансляції</string>
@@ -2966,16 +2966,18 @@
     <string name="device_manager_other_sessions_multi_signout_selection">Вийти</string>
     <string name="voice_broadcast_recording_time_left">Залишилося %1$s</string>
     <string name="message_reply_to_sender_sent_audio_file">надсилає аудіофайл.</string>
-    <string name="message_reply_to_sender_sent_file">відправив файл.</string>
+    <string name="message_reply_to_sender_sent_file">надсилає файл.</string>
     <string name="message_reply_to_prefix">У відповідь на</string>
     <string name="device_manager_other_sessions_hide_ip_address">Сховати IP-адресу</string>
-    <string name="message_reply_to_sender_created_poll">створив голосування.</string>
-    <string name="message_reply_to_sender_sent_sticker">відправив наліпку.</string>
-    <string name="message_reply_to_sender_sent_video">відправив відео.</string>
-    <string name="message_reply_to_sender_sent_image">відправив зображення.</string>
-    <string name="message_reply_to_sender_sent_voice_message">відправив голосове повідомлення.</string>
+    <string name="message_reply_to_sender_created_poll">створює опитування.</string>
+    <string name="message_reply_to_sender_sent_sticker">надсилає наліпку.</string>
+    <string name="message_reply_to_sender_sent_video">надсилає відео.</string>
+    <string name="message_reply_to_sender_sent_image">надсилає зображення.</string>
+    <string name="message_reply_to_sender_sent_voice_message">надсилає голосове повідомлення.</string>
     <string name="device_manager_other_sessions_show_ip_address">Показати IP-адресу</string>
     <string name="quoting">Цитуючи</string>
-    <string name="replying_to">У відповідь на %s</string>
+    <string name="replying_to">У відповідь %s</string>
     <string name="editing">Редагування</string>
+    <string name="settings_enable_direct_share_summary">Показувати останні бесіди в системному меню загального доступу</string>
+    <string name="settings_enable_direct_share_title">Увімкнути пряме поширення</string>
 </resources>

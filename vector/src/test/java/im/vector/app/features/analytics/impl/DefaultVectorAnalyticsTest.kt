@@ -23,7 +23,7 @@ import im.vector.app.test.fakes.FakeAnalyticsStore
 import im.vector.app.test.fakes.FakeLateInitUserPropertiesFactory
 import im.vector.app.test.fakes.FakePostHog
 import im.vector.app.test.fakes.FakePostHogFactory
-import im.vector.app.test.fakes.FakeSentryFactory
+import im.vector.app.test.fakes.FakeSentryAnalytics
 import im.vector.app.test.fixtures.AnalyticsConfigFixture.anAnalyticsConfig
 import im.vector.app.test.fixtures.aUserProperties
 import im.vector.app.test.fixtures.aVectorAnalyticsEvent
@@ -46,11 +46,11 @@ class DefaultVectorAnalyticsTest {
     private val fakePostHog = FakePostHog()
     private val fakeAnalyticsStore = FakeAnalyticsStore()
     private val fakeLateInitUserPropertiesFactory = FakeLateInitUserPropertiesFactory()
-    private val fakeSentryFactory = FakeSentryFactory()
+    private val fakeSentryAnalytics = FakeSentryAnalytics()
 
     private val defaultVectorAnalytics = DefaultVectorAnalytics(
             postHogFactory = FakePostHogFactory(fakePostHog.instance).instance,
-            sentryFactory = fakeSentryFactory.instance,
+            sentryAnalytics = fakeSentryAnalytics.instance,
             analyticsStore = fakeAnalyticsStore.instance,
             globalScope = CoroutineScope(Dispatchers.Unconfined),
             analyticsConfig = anAnalyticsConfig(isEnabled = true),
@@ -75,7 +75,7 @@ class DefaultVectorAnalyticsTest {
 
         fakePostHog.verifyOptOutStatus(optedOut = false)
 
-        fakeSentryFactory.verifySentryInit()
+        fakeSentryAnalytics.verifySentryInit()
     }
 
     @Test
@@ -84,7 +84,7 @@ class DefaultVectorAnalyticsTest {
 
         fakePostHog.verifyOptOutStatus(optedOut = true)
 
-        fakeSentryFactory.verifySentryClose()
+        fakeSentryAnalytics.verifySentryClose()
     }
 
     @Test
@@ -111,7 +111,7 @@ class DefaultVectorAnalyticsTest {
 
         fakePostHog.verifyReset()
 
-        fakeSentryFactory.verifySentryClose()
+        fakeSentryAnalytics.verifySentryClose()
     }
 
     @Test
@@ -148,6 +148,25 @@ class DefaultVectorAnalyticsTest {
         defaultVectorAnalytics.capture(AN_EVENT)
 
         fakePostHog.verifyNoEventTracking()
+    }
+
+    @Test
+    fun `given user has consented, when tracking exception, then submits to sentry`() = runTest {
+        fakeAnalyticsStore.givenUserContent(consent = true)
+        val exception = Exception("test")
+
+        defaultVectorAnalytics.trackError(exception)
+
+        fakeSentryAnalytics.verifySentryTrackError(exception)
+    }
+
+    @Test
+    fun `given user has not consented, when tracking exception, then does not track to sentry`() = runTest {
+        fakeAnalyticsStore.givenUserContent(consent = false)
+
+        defaultVectorAnalytics.trackError(Exception("test"))
+
+        fakeSentryAnalytics.verifyNoErrorTracking()
     }
 }
 

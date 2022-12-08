@@ -14,20 +14,8 @@
  * limitations under the License.
  */
 
-package im.vector.app.test.fakes
+package im.vector.app.features.analytics.errors
 
-import im.vector.app.features.settings.devices.v2.notification.TogglePushNotificationUseCase
-import io.mockk.coJustRun
-import io.mockk.coVerify
-import io.mockk.mockk
-
-class FakeTogglePushNotificationUseCase {
-
-    val instance = mockk<TogglePushNotificationUseCase> {
-        coJustRun { execute(any(), any()) }
-    }
-
-    fun verifyExecute(deviceId: String, enabled: Boolean) {
-        coVerify { instance.execute(deviceId, enabled) }
-    }
+interface ErrorTracker {
+    fun trackError(throwable: Throwable)
 }

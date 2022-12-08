@@ -17,5 +17,18 @@
 package im.vector.app.features.home
 
 interface NightlyProxy {
-    fun onHomeResumed()
+    /**
+     * Return true if this is a nightly build (checking the package of the app), and only once a day.
+     */
+    fun canDisplayPopup(): Boolean
+
+    /**
+     * Return true if this is a nightly build (checking the package of the app).
+     */
+    fun isNightlyBuild(): Boolean
+
+    /**
+     * Try to update the application, if update is available. Will also take care of the user sign in.
+     */
+    fun updateApplication()
 }

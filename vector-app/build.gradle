@@ -403,7 +403,7 @@ dependencies {
     debugImplementation(libs.flipper.flipperNetworkPlugin) {
         exclude group: 'com.facebook.fbjni', module: 'fbjni'
     }
-    debugImplementation 'com.facebook.soloader:soloader:0.10.4'
+    debugImplementation 'com.facebook.soloader:soloader:0.10.5'
     debugImplementation "com.kgurgul.flipper:flipper-realm-android:2.2.0"
 
     gplayImplementation "com.google.android.gms:play-services-location:21.0.1"
@@ -418,7 +418,7 @@ dependencies {
     // API-only library
     gplayImplementation libs.google.appdistributionApi
     // Full SDK implementation
-    gplayImplementation libs.google.appdistribution
+    nightlyImplementation libs.google.appdistribution
 
     // OSS License, gplay flavor only
     gplayImplementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
@@ -448,5 +448,5 @@ dependencies {
     androidTestImplementation libs.androidx.fragmentTesting
     androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:1.7.22"
     debugImplementation libs.androidx.fragmentTesting
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9.1'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.10'
 }

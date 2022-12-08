@@ -14,26 +14,16 @@
  * limitations under the License.
  */
 
-package im.vector.app.core.notification
+package im.vector.app.features.settings.devices.v2.notification
 
-import im.vector.app.features.session.coroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class EnableNotificationsSettingUpdater @Inject constructor(
-        private val updateEnableNotificationsSettingOnChangeUseCase: UpdateEnableNotificationsSettingOnChangeUseCase,
+class CheckIfCanToggleNotificationsViaAccountDataUseCase @Inject constructor(
+        private val getNotificationSettingsAccountDataUseCase: GetNotificationSettingsAccountDataUseCase,
 ) {
 
-    private var job: Job? = null
-
-    fun onSessionsStarted(session: Session) {
-        job?.cancel()
-        job = session.coroutineScope.launch {
-            updateEnableNotificationsSettingOnChangeUseCase.execute(session)
-        }
+    fun execute(session: Session, deviceId: String): Boolean {
+        return getNotificationSettingsAccountDataUseCase.execute(session, deviceId)?.isSilenced != null
     }
 }

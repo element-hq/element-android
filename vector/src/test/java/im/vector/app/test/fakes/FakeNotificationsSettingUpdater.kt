@@ -16,29 +16,16 @@
 
 package im.vector.app.test.fakes
 
-import im.vector.app.features.analytics.impl.SentryFactory
-import io.mockk.every
+import im.vector.app.core.notification.NotificationsSettingUpdater
+import io.mockk.justRun
 import io.mockk.mockk
-import io.mockk.verify
+import org.matrix.android.sdk.api.session.Session
 
-class FakeSentryFactory {
-    private var isSentryEnabled = false
+class FakeNotificationsSettingUpdater {
 
-    val instance = mockk<SentryFactory>().also {
-        every { it.initSentry() } answers  {
-            isSentryEnabled = true
-        }
+    val instance = mockk<NotificationsSettingUpdater>()
 
-        every { it.stopSentry() } answers {
-            isSentryEnabled = false
-        }
-    }
-
-    fun verifySentryInit() {
-        verify { instance.initSentry() }
-    }
-
-    fun verifySentryClose() {
-        verify { instance.stopSentry() }
+    fun givenOnSessionsStarted(session: Session) {
+        justRun { instance.onSessionStarted(session) }
     }
 }

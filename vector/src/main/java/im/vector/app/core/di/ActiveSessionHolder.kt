@@ -19,7 +19,7 @@ package im.vector.app.core.di
 import android.content.Context
 import im.vector.app.ActiveSessionDataSource
 import im.vector.app.core.extensions.startSyncing
-import im.vector.app.core.pushers.UnifiedPushHelper
+import im.vector.app.core.pushers.UnregisterUnifiedPushUseCase
 import im.vector.app.core.services.GuardServiceStarter
 import im.vector.app.core.session.ConfigureAndStartSessionUseCase
 import im.vector.app.features.call.webrtc.WebRtcCallManager
@@ -46,12 +46,12 @@ class ActiveSessionHolder @Inject constructor(
         private val pushRuleTriggerListener: PushRuleTriggerListener,
         private val sessionListener: SessionListener,
         private val imageManager: ImageManager,
-        private val unifiedPushHelper: UnifiedPushHelper,
         private val guardServiceStarter: GuardServiceStarter,
         private val sessionInitializer: SessionInitializer,
         private val applicationContext: Context,
         private val authenticationService: AuthenticationService,
         private val configureAndStartSessionUseCase: ConfigureAndStartSessionUseCase,
+        private val unregisterUnifiedPushUseCase: UnregisterUnifiedPushUseCase,
 ) {
 
     private var activeSessionReference: AtomicReference<Session?> = AtomicReference()
@@ -85,7 +85,7 @@ class ActiveSessionHolder @Inject constructor(
         incomingVerificationRequestHandler.stop()
         pushRuleTriggerListener.stop()
         // No need to unregister the pusher, the sign out will (should?) do it server side.
-        unifiedPushHelper.unregister(pushersManager = null)
+        unregisterUnifiedPushUseCase.execute(pushersManager = null)
         guardServiceStarter.stop()
     }
 

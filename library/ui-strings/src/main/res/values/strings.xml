@@ -2491,6 +2491,9 @@
     <string name="settings_key_requests">Key Requests</string>
     <string name="settings_export_trail">Export Audit</string>
 
+    <string name="settings_nightly_build">Nightly build</string>
+    <string name="settings_nightly_build_update">Get the latest build (note: you may have trouble to sign in)</string>
+
     <string name="e2e_use_keybackup">Unlock encrypted messages history</string>
 
     <string name="refresh">Refresh</string>
@@ -3370,6 +3373,7 @@
         <item quantity="one">Sign out of %1$d session</item>
         <item quantity="other">Sign out of %1$d sessions</item>
     </plurals>
+    <string name="device_manager_signout_all_other_sessions">Sign out of all other sessions</string>
     <string name="device_manager_other_sessions_show_ip_address">Show IP address</string>
     <string name="device_manager_other_sessions_hide_ip_address">Hide IP address</string>
     <string name="device_manager_session_overview_signout">Sign out of this session</string>

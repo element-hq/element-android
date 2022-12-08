@@ -1,3 +1,11 @@
+Changes in Element 1.5.11 (2022-12-07)
+======================================
+
+Bugfixes 🐛
+----------
+ - Fix crash when the network is not available. ([#7725](https://github.com/vector-im/element-android/issues/7725))
+
+
 Changes in Element v1.5.10 (2022-11-30)
 =======================================
 
