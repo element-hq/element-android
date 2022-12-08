@@ -6,6 +6,6 @@
     to the users.
      -->
 
-    <bool name="feature_threads_beta_feedback_enabled">true</bool>
+    <bool name="feature_threads_beta_feedback_enabled">false</bool>
 
 </resources>

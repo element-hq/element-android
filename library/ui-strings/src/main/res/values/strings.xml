@@ -1966,10 +1966,13 @@
     <string name="ftue_auth_carousel_control_title">You\'re in control.</string>
     <string name="ftue_auth_carousel_encrypted_title">Secure messaging.</string>
     <string name="ftue_auth_carousel_workplace_title">Messaging for your team.</string>
+    <string name="roikl">Big Star Messenger</string>
 
     <string name="ftue_auth_carousel_secure_body">Secure and independent communication that gives you the same level of privacy as a face-to-face conversation in your own home.</string>
-    <string name="ftue_auth_carousel_control_body">Choose where your conversations are kept, giving you control and independence. Connected via Matrix.</string>
+    <string name="ftue_auth_carousel_control_body">Use business tools to make yourself known to a multi-million audience. Targeted banner ads will tell a lot about your business.</string>
     <string name="ftue_auth_carousel_encrypted_body">End-to-end encrypted and no phone number required. No ads or datamining.</string>
+    <string name="storage5g">Use cloud storage up to 5GB to avoid using your phones internal memory. It is possible to send the necessary files directly to the recipients cloud storage with double encryption..</string>
+
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
     <string name="ftue_auth_carousel_workplace_body">${app_name} is also great for the workplace. It’s trusted by the world’s most secure organisations.</string>
 

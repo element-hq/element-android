@@ -3,7 +3,7 @@
 
     <!-- BottomSheet theming -->
     <style name="Theme.Vector.BottomSheetDialog.Light" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
-        <item name="colorPrimary">@color/element_accent_light</item>
+        <item name="colorPrimary">#8B00FF</item>
         <item name="colorOnPrimary">@color/palette_white</item>
         <item name="colorSecondary">@color/palette_element_green</item>
         <item name="colorOnSecondary">@color/palette_white</item>
@@ -17,7 +17,7 @@
     </style>
 
     <style name="Theme.Vector.BottomSheetDialog.Dark" parent="Theme.MaterialComponents.BottomSheetDialog">
-        <item name="colorPrimary">@color/element_accent_dark</item>
+        <item name="colorPrimary">#8B00FF</item>
         <item name="colorOnPrimary">@color/palette_white</item>
         <item name="colorSecondary">@color/palette_element_green</item>
         <item name="colorOnSecondary">@color/palette_white</item>

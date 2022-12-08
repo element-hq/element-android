@@ -2,6 +2,6 @@
 <resources>
     <!-- This file contains url values-->
 
-    <string name="threads_learn_more_url" translatable="false">https://element.io/help#threads</string>
-    <string name="ftue_ems_url">https://element.io/ems</string>
+    <string name="threads_learn_more_url" translatable="false">https://matrix.bigstarmessenger.com</string>
+    <string name="ftue_ems_url">https://matrix.bigstarmessenger.com</string>
 </resources>

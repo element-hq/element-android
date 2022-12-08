@@ -46,26 +46,26 @@ class SplashCarouselStateFactory @Inject constructor(
                         SplashCarouselState.Item(
                                 R.string.ftue_auth_carousel_secure_title.colorTerminatingFullStop(R.attr.colorAccent),
                                 R.string.ftue_auth_carousel_secure_body,
-                                hero(R.drawable.ic_splash_conversations, R.drawable.ic_splash_conversations_dark),
-                                background(R.drawable.bg_carousel_page_1)
+                                hero(R.drawable.goodteampana, R.drawable.goodteampana),
+                                background(R.drawable.bg_unread_highlight)
                         ),
                         SplashCarouselState.Item(
                                 R.string.ftue_auth_carousel_control_title.colorTerminatingFullStop(R.attr.colorAccent),
                                 R.string.ftue_auth_carousel_control_body,
-                                hero(R.drawable.ic_splash_control, R.drawable.ic_splash_control_dark),
-                                background(R.drawable.bg_carousel_page_2)
+                                hero(R.drawable.socialmediapana, R.drawable.socialmediapana),
+                                background(R.drawable.bg_unread_highlight)
                         ),
                         SplashCarouselState.Item(
                                 R.string.ftue_auth_carousel_encrypted_title.colorTerminatingFullStop(R.attr.colorAccent),
                                 R.string.ftue_auth_carousel_encrypted_body,
-                                hero(R.drawable.ic_splash_secure, R.drawable.ic_splash_secure_dark),
-                                background(R.drawable.bg_carousel_page_3)
+                                hero(R.drawable.topsecret, R.drawable.topsecret),
+                                background(R.drawable.bg_unread_highlight)
                         ),
                         SplashCarouselState.Item(
                                 collaborationTitle().colorTerminatingFullStop(R.attr.colorAccent),
-                                R.string.ftue_auth_carousel_workplace_body,
-                                hero(R.drawable.ic_splash_collaboration, R.drawable.ic_splash_collaboration_dark),
-                                background(R.drawable.bg_carousel_page_4)
+                                R.string.storage5g,
+                                hero(R.drawable.conversationrafiki, R.drawable.conversationrafiki),
+                                background(R.drawable.bg_unread_highlight)
                         )
                 )
         )

@@ -1,35 +1,50 @@
 {
   "project_info": {
-    "project_number": "912726360885",
-    "firebase_url": "https://vector-alpha.firebaseio.com",
-    "project_id": "vector-alpha",
-    "storage_bucket": "vector-alpha.appspot.com"
+    "project_number": "719999439459",
+    "firebase_url": "https://bigstarconnect-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "bigstarconnect",
+    "storage_bucket": "bigstarconnect.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:912726360885:android:4ef8f3a0021e774d",
+        "mobilesdk_app_id": "1:719999439459:android:e0c4d6eb94cdacac1a5e56",
         "android_client_info": {
-          "package_name": "im.vector.app"
+          "package_name": "com.bigstar.real"
         }
       },
       "oauth_client": [
         {
-          "client_id": "912726360885-e87n3jva9uoj4vbidvijq78ebg02asv2.apps.googleusercontent.com",
+          "client_id": "719999439459-41h7romrqnm6e70rabp1l3o1j53gb0og.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bigstar.real",
+            "certificate_hash": "8f4d4088884658201e195c42494b9722d5154e03"
+          }
+        },
+        {
+          "client_id": "719999439459-6tm8n7s7p4vuac8pj1ce11ih8f1b4oe1.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAFZX8IhIfgzdOZvxDP_ISO5WYoU7jmQ5c"
+          "current_key": "AIzaSyAITR3Qis94tzt-BNWjF4oS0bRpTNE9bkE"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "912726360885-rsae0i66rgqt6ivnudu1pv4tksg9i8b2.apps.googleusercontent.com",
+              "client_id": "719999439459-6tm8n7s7p4vuac8pj1ce11ih8f1b4oe1.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "719999439459-0r5cpka1k5qp40sdrsvc3qcp35b5d147.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "kz.bsmessenger.kz"
+              }
             }
           ]
         }

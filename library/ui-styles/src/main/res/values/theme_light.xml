@@ -56,7 +56,7 @@
         <item name="vctr_unread_background">?vctr_notice_secondary</item>
 
         <!-- Material color -->
-        <item name="colorPrimary">@color/element_accent_light</item>
+        <item name="colorPrimary">#8B00FF</item>
         <item name="colorPrimaryVariant">@color/element_accent_light</item>
         <item name="colorOnPrimary">@android:color/white</item>
         <item name="colorSecondary">@color/element_accent_light</item>
