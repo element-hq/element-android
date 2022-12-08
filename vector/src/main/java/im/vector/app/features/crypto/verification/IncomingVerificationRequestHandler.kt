@@ -128,12 +128,9 @@ class IncomingVerificationRequestHandler @Inject constructor(
         // For incoming request we should prompt (if not in activity where this request apply)
         if (pr.isIncoming) {
             // if it's a self verification for my devices, we can discard the review login alert
-            // if not this request will be underneath and not visible by the user...
+            // if not, this request will be underneath and not visible by the user...
             // it will re-appear later
-            if (pr.otherUserId == session?.myUserId) {
-                popupAlertManager.cancelAlert(PopupAlertManager.REVIEW_LOGIN_UID)
-                popupAlertManager.cancelAlert(PopupAlertManager.VERIFY_SESSION_UID)
-            }
+            cancelAnyVerifySessionAlerts(pr)
             val user = session.getUserOrDefault(pr.otherUserId).toMatrixItem()
             val name = user.getBestName()
             val description = if (name == pr.otherUserId) {
@@ -159,6 +156,7 @@ class IncomingVerificationRequestHandler @Inject constructor(
                     .apply {
                         viewBinder = VerificationVectorAlert.ViewBinder(user, avatarRenderer.get())
                         contentAction = Runnable {
+                            cancelAnyVerifySessionAlerts(pr)
                             (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let {
                                 val roomId = pr.roomId
                                 if (roomId.isNullOrBlank()) {
@@ -185,6 +183,13 @@ class IncomingVerificationRequestHandler @Inject constructor(
                         expirationTimestamp = clock.epochMillis() + (5 * 60 * 1000L)
                     }
             popupAlertManager.postVectorAlert(alert)
+        }
+    }
+
+    private fun cancelAnyVerifySessionAlerts(pr: PendingVerificationRequest) {
+        if (pr.otherUserId == session?.myUserId) {
+            popupAlertManager.cancelAlert(PopupAlertManager.REVIEW_LOGIN_UID)
+            popupAlertManager.cancelAlert(PopupAlertManager.VERIFY_SESSION_UID)
         }
     }
 
