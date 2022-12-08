@@ -25,12 +25,10 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
-import im.vector.app.features.home.AvatarRenderer
 
 @EpoxyModelClass
 abstract class InviteByEmailItem : VectorEpoxyModel<InviteByEmailItem.Holder>(R.layout.item_invite_by_mail) {
 
-    @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var foundItem: ThreePidUser
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var clickListener: ClickListener? = null
     @EpoxyAttribute var selected: Boolean = false
