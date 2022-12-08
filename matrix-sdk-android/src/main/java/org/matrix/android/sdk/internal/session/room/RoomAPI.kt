@@ -433,7 +433,7 @@ internal interface RoomAPI {
      * @param roomId the room id
      * @param type the type
      */
-    @DELETE(NetworkConstants.URI_API_PREFIX_PATH_MEDIA_PROXY_UNSTABLE + "org.matrix.msc3391/user/{userId}/rooms/{roomId}/account_data/{type}")
+    @DELETE(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "org.matrix.msc3391/user/{userId}/rooms/{roomId}/account_data/{type}")
     suspend fun deleteRoomAccountData(
             @Path("userId") userId: String,
             @Path("roomId") roomId: String,

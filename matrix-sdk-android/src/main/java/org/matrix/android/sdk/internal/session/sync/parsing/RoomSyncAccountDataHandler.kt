@@ -45,17 +45,13 @@ internal class RoomSyncAccountDataHandler @Inject constructor(
         val roomEntity = RoomEntity.getOrCreate(realm, roomId)
         for (event in accountData.events) {
             val eventType = event.getClearType()
-            if (event.getClearContent().isNullOrEmpty()) {
-                roomEntity.removeAccountData(eventType)
-            } else {
-                handleGeneric(roomEntity, event.getClearContent(), eventType)
-                if (eventType == RoomAccountDataTypes.EVENT_TYPE_TAG) {
-                    val content = event.getClearContent().toModel<RoomTagContent>()
-                    roomTagHandler.handle(realm, roomId, content)
-                } else if (eventType == RoomAccountDataTypes.EVENT_TYPE_FULLY_READ) {
-                    val content = event.getClearContent().toModel<FullyReadContent>()
-                    roomFullyReadHandler.handle(realm, roomId, content)
-                }
+            handleGeneric(roomEntity, event.getClearContent(), eventType)
+            if (eventType == RoomAccountDataTypes.EVENT_TYPE_TAG) {
+                val content = event.getClearContent().toModel<RoomTagContent>()
+                roomTagHandler.handle(realm, roomId, content)
+            } else if (eventType == RoomAccountDataTypes.EVENT_TYPE_FULLY_READ) {
+                val content = event.getClearContent().toModel<FullyReadContent>()
+                roomFullyReadHandler.handle(realm, roomId, content)
             }
         }
     }
@@ -63,7 +59,13 @@ internal class RoomSyncAccountDataHandler @Inject constructor(
     private fun handleGeneric(roomEntity: RoomEntity, content: JsonDict?, eventType: String) {
         val existing = roomEntity.accountData.where().equalTo(RoomAccountDataEntityFields.TYPE, eventType).findFirst()
         if (existing != null) {
-            existing.contentStr = ContentMapper.map(content)
+            if (content.isNullOrEmpty()) {
+                // This is a response for a deleted account data according to
+                // https://github.com/ShadowJonathan/matrix-doc/blob/account-data-delete/proposals/3391-account-data-delete.md#sync
+                roomEntity.removeAccountData(eventType)
+            } else {
+                existing.contentStr = ContentMapper.map(content)
+            }
         } else {
             val roomAccountData = RoomAccountDataEntity(
                     type = eventType,

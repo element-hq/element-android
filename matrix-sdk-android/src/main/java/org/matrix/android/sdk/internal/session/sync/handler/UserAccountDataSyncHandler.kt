@@ -82,17 +82,13 @@ internal class UserAccountDataSyncHandler @Inject constructor(
 
     fun handle(realm: Realm, accountData: UserAccountDataSync?) {
         accountData?.list?.forEach { event ->
-            if (event.content.isEmpty()) {
-                UserAccountDataEntity.delete(realm, event.type)
-            } else {
-                // Generic handling, just save in base
-                handleGenericAccountData(realm, event.type, event.content)
-                when (event.type) {
-                    UserAccountDataTypes.TYPE_DIRECT_MESSAGES -> handleDirectChatRooms(realm, event)
-                    UserAccountDataTypes.TYPE_PUSH_RULES -> handlePushRules(realm, event)
-                    UserAccountDataTypes.TYPE_IGNORED_USER_LIST -> handleIgnoredUsers(realm, event)
-                    UserAccountDataTypes.TYPE_BREADCRUMBS -> handleBreadcrumbs(realm, event)
-                }
+            // Generic handling, just save in base
+            handleGenericAccountData(realm, event.type, event.content)
+            when (event.type) {
+                UserAccountDataTypes.TYPE_DIRECT_MESSAGES -> handleDirectChatRooms(realm, event)
+                UserAccountDataTypes.TYPE_PUSH_RULES -> handlePushRules(realm, event)
+                UserAccountDataTypes.TYPE_IGNORED_USER_LIST -> handleIgnoredUsers(realm, event)
+                UserAccountDataTypes.TYPE_BREADCRUMBS -> handleBreadcrumbs(realm, event)
             }
         }
     }
@@ -261,8 +257,14 @@ internal class UserAccountDataSyncHandler @Inject constructor(
                 .equalTo(UserAccountDataEntityFields.TYPE, type)
                 .findFirst()
         if (existing != null) {
-            // Update current value
-            existing.contentStr = ContentMapper.map(content)
+            if (content.isNullOrEmpty()) {
+                // This is a response for a deleted account data according to
+                // https://github.com/ShadowJonathan/matrix-doc/blob/account-data-delete/proposals/3391-account-data-delete.md#sync
+                UserAccountDataEntity.delete(realm, type)
+            } else {
+                // Update current value
+                existing.contentStr = ContentMapper.map(content)
+            }
         } else {
             realm.createObject(UserAccountDataEntity::class.java).let { accountDataEntity ->
                 accountDataEntity.type = type

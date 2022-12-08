@@ -25,7 +25,7 @@ import retrofit2.http.Path
 internal interface AccountDataAPI {
 
     /**
-     * Set some account_data for the client.
+     * Set some account_data for the user.
      *
      * @param userId the user id
      * @param type the type
@@ -39,7 +39,7 @@ internal interface AccountDataAPI {
     )
 
     /**
-     * Remove an account_data for the client.
+     * Remove an account_data for the user.
      *
      * @param userId the user id
      * @param type the type
