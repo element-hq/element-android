@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.filter
 
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
@@ -24,8 +25,9 @@ import javax.inject.Inject
 
 /**
  * Save a filter, in db and if any changes, upload to the server.
+ * Return the filterId if uploading to the server is successful, else return null.
  */
-internal interface SaveFilterTask : Task<SaveFilterTask.Params, String> {
+internal interface SaveFilterTask : Task<SaveFilterTask.Params, String?> {
 
     data class Params(
             val filter: Filter
@@ -39,18 +41,20 @@ internal class DefaultSaveFilterTask @Inject constructor(
         private val globalErrorReceiver: GlobalErrorReceiver,
 ) : SaveFilterTask {
 
-    override suspend fun execute(params: SaveFilterTask.Params): String {
+    override suspend fun execute(params: SaveFilterTask.Params): String? {
         val filter = params.filter
-        val filterResponse = executeRequest(globalErrorReceiver) {
-            // TODO auto retry
-            filterAPI.uploadFilter(userId, filter)
+        val filterResponse = tryOrNull {
+            executeRequest(globalErrorReceiver) {
+                filterAPI.uploadFilter(userId, filter)
+            }
         }
 
+        val filterId = filterResponse?.filterId
         filterRepository.storeSyncFilter(
                 filter = filter,
-                filterId = filterResponse.filterId,
+                filterId = filterId.orEmpty(),
                 roomEventFilter = FilterFactory.createDefaultRoomFilter()
         )
-        return filterResponse.filterId
+        return filterId
     }
 }

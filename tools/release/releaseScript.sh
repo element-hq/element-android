@@ -345,7 +345,8 @@ ${buildToolsPath}/aapt dump badging ${targetPath}/vector-gplay-x86-release-signe
 printf "File vector-gplay-x86_64-release-signed.apk:\n"
 ${buildToolsPath}/aapt dump badging ${targetPath}/vector-gplay-x86_64-release-signed.apk | grep package
 
-read -p "\nDoes it look correct? Press enter when it's done."
+printf "\n"
+read -p "Does it look correct? Press enter when it's done."
 
 printf "\n================================================================================\n"
 read -p "Installing apk on a real device, press enter when a real device is connected. "
@@ -356,7 +357,7 @@ read -p "Please run the APK on your phone to check that the upgrade went well (n
 # TODO Get the block to copy from towncrier earlier (be may be edited by the release manager)?
 read -p "Create the release on gitHub from the tag https://github.com/vector-im/element-android/tags, copy paste the block from the file CHANGES.md. Press enter when it's done."
 
-read -p "Add the 4 signed APKs to the GitHub release. Press enter when it's done."
+read -p "Add the 4 signed APKs to the GitHub release. They are located at ${targetPath}. Press enter when it's done."
 
 printf "\n================================================================================\n"
 printf "Message for the Android internal room:\n\n"
