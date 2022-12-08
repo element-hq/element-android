@@ -100,7 +100,7 @@ internal class CryptoSessionInfoProvider @Inject constructor(
         return roomIds.orEmpty()
     }
 
-    fun updateShieldForRoom(roomId: String, shield: RoomEncryptionTrustLevel) {
+    fun updateShieldForRoom(roomId: String, shield: RoomEncryptionTrustLevel?) {
         monarchy.writeAsync { realm ->
             val summary = RoomSummaryEntity.where(realm, roomId = roomId).findFirst()
             summary?.roomEncryptionTrustLevel = shield
