@@ -23,7 +23,7 @@ import javax.inject.Inject
 
 class RoomSummaryRoomListDiffCallback @Inject constructor(
         vectorPreferences: VectorPreferences
-): DiffUtil.ItemCallback<RoomSummary>() {
+) : DiffUtil.ItemCallback<RoomSummary>() {
 
     override fun areItemsTheSame(oldItem: RoomSummary, newItem: RoomSummary): Boolean {
         return oldItem.roomId == newItem.roomId

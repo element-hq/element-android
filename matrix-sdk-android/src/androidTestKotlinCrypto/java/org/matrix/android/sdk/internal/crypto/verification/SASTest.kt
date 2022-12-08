@@ -54,6 +54,8 @@ import java.util.concurrent.CountDownLatch
 @Ignore
 class SASTest : InstrumentedTest {
 
+    /*
+
     @Test
     fun test_aliceStartThenAliceCancel() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         // TODO
@@ -614,4 +616,6 @@ class SASTest : InstrumentedTest {
             bobPovTx?.state() == SasTransactionState.SasShortCodeReady
         }
     }
+
+     */
 }

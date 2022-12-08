@@ -60,7 +60,7 @@ import org.matrix.android.sdk.internal.crypto.verification.VerificationsProvider
 import org.matrix.android.sdk.internal.crypto.verification.qrcode.QrCodeVerification
 import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.MoshiProvider
-import org.matrix.android.sdk.internal.di.SessionFilesDirectory
+import org.matrix.android.sdk.internal.di.SessionRustFilesDirectory
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.network.parsing.CheckNumberType
 import org.matrix.android.sdk.internal.session.SessionScope
@@ -121,7 +121,7 @@ fun setRustLogger() {
 internal class OlmMachine @Inject constructor(
         @UserId userId: String,
         @DeviceId deviceId: String,
-        @SessionFilesDirectory path: File,
+        @SessionRustFilesDirectory path: File,
         private val requestSender: RequestSender,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         baseMoshi: Moshi,

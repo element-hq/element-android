@@ -1,1 +1,2 @@
 **/snapshots/**/*.png filter=lfs diff=lfs merge=lfs -text
+*.realm filter=lfs diff=lfs merge=lfs -text

@@ -125,25 +125,6 @@ android {
             java.srcDirs += "src/sharedTest/java"
         }
     }
-//
-//    flavorDimensions "crypto"
-//
-//    productFlavors {
-//        kotlinCrypto {
-//            dimension "crypto"
-//            isDefault = true
-//            // versionName "${versionMajor}.${versionMinor}.${versionPatch}${getFdroidVersionSuffix()}"
-//            buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"JC\""
-//            buildConfigField "String", "FLAVOR_DESCRIPTION", "\"KotlinCrypto\""
-//        }
-//        rustCrypto {
-//            dimension "crypto"
-//            // versionName "${versionMajor}.${versionMinor}.${versionPatch}${getFdroidVersionSuffix()}"
-//            buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"RC\""
-//            buildConfigField "String", "FLAVOR_DESCRIPTION", "\"RustCrypto\""
-//        }
-//    }
-//    publishNonDefault true
 
 }
 
