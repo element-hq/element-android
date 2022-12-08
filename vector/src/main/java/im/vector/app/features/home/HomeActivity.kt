@@ -437,9 +437,10 @@ class HomeActivity :
     private fun handleAskPasswordToInitCrossSigning(events: HomeActivityViewEvents.AskPasswordToInitCrossSigning) {
         // We need to ask
         promptSecurityEvent(
-                events.userItem,
-                R.string.upgrade_security,
-                R.string.security_prompt_text
+                uid = PopupAlertManager.UPGRADE_SECURITY_UID,
+                userItem = events.userItem,
+                titleRes = R.string.upgrade_security,
+                descRes = R.string.security_prompt_text,
         ) {
             it.navigator.upgradeSessionSecurity(it, true)
         }
@@ -448,9 +449,10 @@ class HomeActivity :
     private fun handleCrossSigningInvalidated(event: HomeActivityViewEvents.OnCrossSignedInvalidated) {
         // We need to ask
         promptSecurityEvent(
-                event.userItem,
-                R.string.crosssigning_verify_this_session,
-                R.string.confirm_your_identity
+                uid = PopupAlertManager.VERIFY_SESSION_UID,
+                userItem = event.userItem,
+                titleRes = R.string.crosssigning_verify_this_session,
+                descRes = R.string.confirm_your_identity,
         ) {
             it.navigator.waitSessionVerification(it)
         }
@@ -459,9 +461,10 @@ class HomeActivity :
     private fun handleOnNewSession(event: HomeActivityViewEvents.CurrentSessionNotVerified) {
         // We need to ask
         promptSecurityEvent(
-                event.userItem,
-                R.string.crosssigning_verify_this_session,
-                R.string.confirm_your_identity
+                uid = PopupAlertManager.VERIFY_SESSION_UID,
+                userItem = event.userItem,
+                titleRes = R.string.crosssigning_verify_this_session,
+                descRes = R.string.confirm_your_identity,
         ) {
             if (event.waitForIncomingRequest) {
                 it.navigator.waitSessionVerification(it)
@@ -474,9 +477,10 @@ class HomeActivity :
     private fun handleCantVerify(event: HomeActivityViewEvents.CurrentSessionCannotBeVerified) {
         // We need to ask
         promptSecurityEvent(
-                event.userItem,
-                R.string.crosssigning_cannot_verify_this_session,
-                R.string.crosssigning_cannot_verify_this_session_desc
+                uid = PopupAlertManager.UPGRADE_SECURITY_UID,
+                userItem = event.userItem,
+                titleRes = R.string.crosssigning_cannot_verify_this_session,
+                descRes = R.string.crosssigning_cannot_verify_this_session_desc,
         ) {
             it.navigator.open4SSetup(it, SetupMode.PASSPHRASE_AND_NEEDED_SECRETS_RESET)
         }
@@ -485,7 +489,7 @@ class HomeActivity :
     private fun handlePromptToEnablePush() {
         popupAlertManager.postVectorAlert(
                 DefaultVectorAlert(
-                        uid = "enablePush",
+                        uid = PopupAlertManager.ENABLE_PUSH_UID,
                         title = getString(R.string.alert_push_are_disabled_title),
                         description = getString(R.string.alert_push_are_disabled_description),
                         iconId = R.drawable.ic_room_actions_notifications_mutes,
@@ -518,10 +522,16 @@ class HomeActivity :
         )
     }
 
-    private fun promptSecurityEvent(userItem: MatrixItem.UserItem, titleRes: Int, descRes: Int, action: ((VectorBaseActivity<*>) -> Unit)) {
+    private fun promptSecurityEvent(
+            uid: String,
+            userItem: MatrixItem.UserItem,
+            titleRes: Int,
+            descRes: Int,
+            action: ((VectorBaseActivity<*>) -> Unit),
+    ) {
         popupAlertManager.postVectorAlert(
                 VerificationVectorAlert(
-                        uid = "upgradeSecurity",
+                        uid = uid,
                         title = getString(titleRes),
                         description = getString(descRes),
                         iconId = R.drawable.ic_shield_warning
