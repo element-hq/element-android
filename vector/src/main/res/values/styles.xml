@@ -23,6 +23,18 @@
 <!--    </style>-->
 
 
+    <style name="Theme_Dialog" parent="android:Theme.Holo.Dialog">
+        <item name="android:windowMinWidthMajor">90%</item>
+        <item name="android:windowMinWidthMinor">90%</item>
+        <item name="android:windowAnimationStyle">@style/CustomDialogAnimation</item>
+    </style>
+
+    <style name="CustomDialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/push_up_in</item>
+        <item name="android:windowExitAnimation">@anim/push_down_out</item>
+    </style>
+
+
     <style name="CategoryButton">
         <item name="android:background">@drawable/round_shape_btn_inactive</item>
         <item name="android:paddingHorizontal">30dp</item>

@@ -45,6 +45,7 @@ import com.airbnb.epoxy.OnModelBuildFinishedListener
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.contusfly.views.AdPopUp
 import com.facebook.react.bridge.UiThreadUtil
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -63,6 +64,7 @@ import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.discovery.DiscoverySettingsAction
 import im.vector.app.features.discovery.DiscoverySettingsViewModel
 import im.vector.app.features.discovery.DiscoverySharedViewModelAction
+import im.vector.app.features.home.CountriesActivity
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.filtered.FilteredRoomFooterItem
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
@@ -111,7 +113,6 @@ class RoomListFragment :
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
     @Inject lateinit var footerController: RoomListFooterController
     @Inject lateinit var userPreferencesProvider: UserPreferencesProvider
-    @Inject lateinit var stringProvider: StringProvider
 
     private var modelBuildListener: OnModelBuildFinishedListener? = null
     private lateinit var sharedActionViewModel: RoomListQuickActionsSharedActionViewModel
@@ -149,8 +150,8 @@ class RoomListFragment :
             else -> null
         }
 
-        discoveryViewModel.handle(DiscoverySettingsAction.ChangeIdentityServer(stringProvider.getString(R.string.matrix_org_server_url)))
-        rootUrl = stringProvider.getString(R.string.backend_server_url)
+        discoveryViewModel.handle(DiscoverySettingsAction.ChangeIdentityServer(getString(R.string.matrix_org_server_url)))
+        rootUrl = getString(R.string.backend_server_url)
 
 //        TODO: Forced logout
 //        if (!requireActivity().getSharedPreferences("bigstar", AppCompatActivity.MODE_PRIVATE).getBoolean(
@@ -161,17 +162,16 @@ class RoomListFragment :
 //        }
     }
 
-//    TODO: Country activity
-//    private fun citiesSelection() {
-//        if (requireActivity().getSharedPreferences("bigstar", AppCompatActivity.MODE_PRIVATE).getString(
-//                        "city",
-//                        ""
-//                )!!.isEmpty()) {
-//            startActivity(Intent(activity, CountriesActivity::class.java))
-//        } else {
-//            setupAdBanners()
-//        }
-//    }
+    private fun citiesSelection() {
+        if (requireActivity().getSharedPreferences("bigstar", AppCompatActivity.MODE_PRIVATE).getString(
+                        "city",
+                        ""
+                )!!.isEmpty()) {
+            startActivity(Intent(activity, CountriesActivity::class.java))
+        } else {
+            setupAdBanners()
+        }
+    }
 
     private fun setupAdBanners() {
         val carousel: ImageCarousel = views.carousel
@@ -180,15 +180,15 @@ class RoomListFragment :
         carousel.registerLifecycle(lifecycle)
         carousel.carouselListener = object : CarouselListener {
             override fun onClick(position: Int, carouselItem: CarouselItem) {
-//                TODO: AdPopUp modal
-//                AdPopUp(
-//                        requireActivity(),
-//                        requireContext(),
-//                        ads.getJSONObject(position).getString("title"),
-//                        ads.getJSONObject(position).getString("description"),
-//                        "$rootUrl/files/" + ads.getJSONObject(position).getString("bannerUuid"),
-//                        ads.getJSONObject(position)
-//                ).show()
+                AdPopUp(
+                        requireActivity(),
+                        requireContext(),
+                        ads.getJSONObject(position).getString("title"),
+                        ads.getJSONObject(position).getString("description"),
+                        "$rootUrl/files/" + ads.getJSONObject(position).getString("bannerUuid"),
+                        ads.getJSONObject(position),
+                        rootUrl
+                ).show()
 
                 val okHttpClient = OkHttpClient()
                 val request = Request.Builder()
@@ -242,7 +242,7 @@ class RoomListFragment :
         }.start()
     }
 
-    fun isOnline(context: Context): Boolean {
+    private fun isOnline(context: Context): Boolean {
         val connectivityManager =
                 context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val capabilities =
@@ -297,6 +297,8 @@ class RoomListFragment :
                         (it.contentEpoxyController as? RoomSummaryPagedController)?.roomChangeMembershipStates = ms
                     }
         }
+
+        citiesSelection()
     }
 
     override fun onStart() {

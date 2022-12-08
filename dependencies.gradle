@@ -1,5 +1,5 @@
 ext.versions = [
-        'minSdk'            : 21,
+        'minSdk'            : 26,
         'compileSdk'        : 33,
         'targetSdk'         : 33,
         'sourceCompat'      : JavaVersion.VERSION_11,

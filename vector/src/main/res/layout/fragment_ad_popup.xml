@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:orientation="vertical"
+    android:padding="4dp">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="220dp"
+        android:background="@drawable/rounded_layout_bg_top">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv_ad_banner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitStart"
+            app:shapeAppearanceOverlay="@style/roundedImageAd" />
+
+        <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="6dp"
+            card_view:cardBackgroundColor="@color/white"
+            card_view:cardCornerRadius="4dp">
+
+            <View
+                android:layout_width="100dp"
+                android:layout_height="3dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="5dp"
+                android:background="@color/white" />
+        </androidx.cardview.widget.CardView>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/rounded_layout_bg"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp">
+
+            <TextView
+                android:id="@+id/tv_ad_title"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_weight="0"
+                android:textColor="#2D2D2D"
+                android:textSize="21sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_ad_description"
+                android:layout_width="match_parent"
+                android:layout_height="161dp"
+                android:layout_weight="0"
+                android:scrollbars="vertical"
+                android:textColor="#9C9C9C"
+                android:textSize="17sp"
+                app:fontWeight="600" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="95dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingBottom="40dp">
+
+            <ImageView
+                android:id="@+id/iv_ad_bigstar"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:clickable="true"
+                android:contentDescription="@string/image_description"
+                android:focusable="true"
+                android:src="@drawable/ic_bigstar" />
+
+            <ImageView
+                android:id="@+id/iv_ad_instagram"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="30dp"
+                android:clickable="true"
+                android:contentDescription="@string/image_description"
+                android:focusable="true"
+                android:src="@drawable/ic_instagram" />
+
+            <ImageView
+                android:id="@+id/iv_ad_youtube"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="30dp"
+                android:clickable="true"
+                android:contentDescription="@string/image_description"
+                android:focusable="true"
+                android:src="@drawable/ic_youtube" />
+
+            <ImageView
+                android:id="@+id/iv_ad_website"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="30dp"
+                android:clickable="true"
+                android:contentDescription="@string/image_description"
+                android:focusable="true"
+                android:src="@drawable/ic_website" />
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

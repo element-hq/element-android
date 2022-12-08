@@ -18,11 +18,6 @@ static def gitRevision() {
     return cmd.execute().text.trim()
 }
 
-repositories {
-    mavenCentral()
-    maven { url 'https://jitpack.io' }
-}
-
 project.android.buildTypes.all { buildType ->
     buildType.javaCompileOptions.annotationProcessorOptions.arguments =
             [
@@ -140,7 +135,6 @@ dependencies {
     api "com.gabrielittner.threetenbp:lazythreetenbp:0.12.0"
 
     implementation libs.squareup.moshi
-    implementation 'com.google.android.gms:play-services-cast-framework:21.2.0'
     kapt libs.squareup.moshiKotlin
 
     // Lifecycle
@@ -205,9 +199,7 @@ dependencies {
     implementation 'com.github.hyuwah:DraggableView:1.0.0'
     implementation 'com.github.akshaaatt:Sliding-Carousel:1.0.4'
     implementation 'me.relex:circleindicator:2.1.6'
-
-    // image picker
-
+    implementation 'com.github.Drjacky:ImagePicker:2.3.20'
 
     // Custom Tab
     implementation 'androidx.browser:browser:1.4.0'

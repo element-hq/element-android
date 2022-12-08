@@ -1,10 +1,7 @@
 package im.vector.app.core.extensions
 
-import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -27,16 +24,14 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.get
 import androidx.core.widget.addTextChangedListener
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.github.drjacky.imagepicker.ImagePicker
 import com.google.android.flexbox.FlexboxLayout
-import com.google.android.gms.cast.framework.media.ImagePicker
 import im.vector.app.R
-import im.vector.app.core.glide.GlideApp.get
+import im.vector.app.core.resources.StringProvider
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.FormBody
@@ -48,11 +43,6 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.Response
 import org.json.JSONArray
 import org.json.JSONObject
-import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.getUser
-import org.matrix.android.sdk.api.session.profile.ProfileService
-import org.matrix.android.sdk.api.session.user.model.User
-import org.matrix.android.sdk.api.util.JsonDict
 import java.io.File
 import java.io.IOException
 import java.math.BigInteger
@@ -61,6 +51,7 @@ import java.net.URL
 import java.security.MessageDigest
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import javax.inject.Inject
 
 fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
 
@@ -84,9 +75,10 @@ class CabinetActivity : AppCompatActivity() {
     private var mProgressBar: ProgressBar? = null
     private var btnCreateAd: Button? = null
     private var textDays: EditText? = null
+    private var rootUrl: String = ""
 
     private var selectedCities: ArrayList<String> = ArrayList()
-
+    
     private fun ImageView.setLocalImage(uri: Uri, applyCircle: Boolean = false) {
         val glide = Glide.with(this).load(uri).diskCacheStrategy(DiskCacheStrategy.NONE)
         if (applyCircle) {
@@ -168,6 +160,7 @@ class CabinetActivity : AppCompatActivity() {
         mProgressBar = findViewById(R.id.cabinetLoaderProgress)
         btnCreateAd = findViewById(R.id.btnCreateAd)
         textDays = findViewById(R.id.text_days)
+        rootUrl = getString(R.string.backend_server_url)
 
         setUpListeners()
         calculateDates()
@@ -226,23 +219,20 @@ class CabinetActivity : AppCompatActivity() {
         })
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    @SuppressLint("SetTextI18n")
     private fun calculateDates() {
         if (textDays?.text!!.isNotEmpty()) {
             findViewById<TextView>(R.id.tv_date_to).text =
                     LocalDate.now().plusDays(textDays?.text!!.toString().toLong() + 1)
                             .format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
-            btnCreateAd?.text = "Оплатить " + total + "₸"
+            btnCreateAd?.text = getString(R.string.pay) + " " + total + "₸"
         } else {
-            btnCreateAd?.text = "Оплатить"
-            findViewById<TextView>(R.id.tv_date_to).text = "дд.мм.гггг"
+            btnCreateAd?.text = getString(R.string.pay)
+            findViewById<TextView>(R.id.tv_date_to).text = getString(R.string.ddmmyyyy)
         }
         findViewById<TextView>(R.id.tv_date_from).text =
                 LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun validateInputs() {
         total = if (textDays?.text!!.isNotEmpty()) {
             (price * textDays?.text!!.toString().toInt() * (selectedCities.size))
@@ -267,11 +257,9 @@ class CabinetActivity : AppCompatActivity() {
     }
 
     private fun setUpAdvertiser() {
-        val url = "https://bigstar.xani.space/auth/me"
-
         val request = Request.Builder()
                 .addHeader("Authorization", "Bearer $accessToken")
-                .url(url)
+                .url("${rootUrl}/auth/me")
                 .build()
 
         val okHttpClient = OkHttpClient()
@@ -320,12 +308,10 @@ class CabinetActivity : AppCompatActivity() {
             formBody.add("countryUuids[$index]", uuid)
         }
 
-        val url = "https://bigstar.xani.space/ads"
-
         val okHttpClient = OkHttpClient()
         val request = Request.Builder()
                 .post(formBody.build())
-                .url(url)
+                .url("${rootUrl}/ads")
                 .build()
         okHttpClient.newCall(request).enqueue(object : Callback {
             var mainHandler: Handler = Handler(this@CabinetActivity.mainLooper)
@@ -338,13 +324,13 @@ class CabinetActivity : AppCompatActivity() {
                 when (response.code) {
                     201 -> {
                         val redirectUrl = JSONObject(response.body!!.string()).getString("redirectUrl")
-                        mainHandler.post(Runnable {
+                        mainHandler.post {
                             mProgressBar?.visibility = View.GONE;
                             window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
                             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(redirectUrl)))
                             finish()
-                        })
+                        }
                     }
                     else -> {
                         mainHandler.post(Runnable {
@@ -362,8 +348,6 @@ class CabinetActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setUpButtons() {
-        val rootUrl = "https://bigstar.xani.space"
-
         Thread {
             val url = URL("$rootUrl/countries")
 
@@ -384,10 +368,7 @@ class CabinetActivity : AppCompatActivity() {
         }.start()
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun drawButton(countryName: String, countryUuid: String) {
-        val rootUrl = "https://bigstar.xani.space"
-
         runOnUiThread {
             val toggleBtn = LayoutInflater.from(this@CabinetActivity)
                     .inflate(R.layout.fragment_cabinet_btn, null) as ToggleButton;
@@ -406,10 +387,9 @@ class CabinetActivity : AppCompatActivity() {
                 if (isChecked) {
                     Thread {
                         val url = URL("$rootUrl/countries/$countryUuid/cities")
-
                         with(url.openConnection() as HttpURLConnection) {
                             inputStream.bufferedReader().use {
-                                it.lines().forEach { line ->
+                                it.readLines().forEach { line ->
                                     val cities = JSONArray(line);
                                     for (i in 0 until cities.length()) {
                                         drawCities(buttonView, cities.getJSONObject(i).getString("name"), cities.getJSONObject(i).getString("uuid"))
@@ -431,7 +411,7 @@ class CabinetActivity : AppCompatActivity() {
 
                         with(url.openConnection() as HttpURLConnection) {
                             inputStream.bufferedReader().use {
-                                it.lines().forEach { line ->
+                                it.readLines().forEach { line ->
                                     val cities = JSONArray(line);
                                     for (i in 0 until cities.length()) {
                                         runOnUiThread {
@@ -457,7 +437,6 @@ class CabinetActivity : AppCompatActivity() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun drawCities(buttonView: Button, cityName: String, cityUuid: String) {
         runOnUiThread {
             val toggleBtn = LayoutInflater.from(this@CabinetActivity)
@@ -494,12 +473,11 @@ class CabinetActivity : AppCompatActivity() {
                 .add("password", md5Hash(getSharedPreferences("bigstar", MODE_PRIVATE).getString("username", "")!!))
                 .add("fingerprint", md5Hash(System.getProperty("http.agent")!!))
                 .build()
-        val url = "https://bigstar.xani.space/auth/login"
 
         val okHttpClient = OkHttpClient()
         val request = Request.Builder()
                 .post(formBody)
-                .url(url)
+                .url("${rootUrl}/auth/login")
                 .build()
         okHttpClient.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
@@ -522,7 +500,6 @@ class CabinetActivity : AppCompatActivity() {
     }
 
     private fun uploadBanner() {
-        val url = "https://bigstar.xani.space/files/upload"
         val requestBody = MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart(
@@ -534,7 +511,7 @@ class CabinetActivity : AppCompatActivity() {
         val okHttpClient = OkHttpClient()
         val request = Request.Builder()
                 .post(requestBody)
-                .url(url)
+                .url("${rootUrl}/files/upload")
                 .addHeader("Authorization", "Bearer $accessToken")
                 .build()
         okHttpClient.newCall(request).enqueue(object : Callback {
@@ -550,7 +527,6 @@ class CabinetActivity : AppCompatActivity() {
     }
 
     private fun uploadThumbnail() {
-        val url = "https://bigstar.xani.space/files/upload"
         val requestBody = MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart(
@@ -562,7 +538,7 @@ class CabinetActivity : AppCompatActivity() {
         val okHttpClient = OkHttpClient()
         val request = Request.Builder()
                 .post(requestBody)
-                .url(url)
+                .url("${rootUrl}/files/upload")
                 .addHeader("Authorization", "Bearer $accessToken")
                 .build()
         okHttpClient.newCall(request).enqueue(object : Callback {
@@ -582,12 +558,11 @@ class CabinetActivity : AppCompatActivity() {
                 .add("username", getSharedPreferences("bigstar", MODE_PRIVATE).getString("username", "")!!)
                 .add("password", md5Hash(getSharedPreferences("bigstar", MODE_PRIVATE).getString("username", "")!!))
                 .build()
-        val url = "https://bigstar.xani.space/advertisers"
 
         val okHttpClient = OkHttpClient()
         val request = Request.Builder()
                 .post(formBody)
-                .url(url)
+                .url("${rootUrl}/advertisers")
                 .build()
         okHttpClient.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {

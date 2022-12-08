@@ -115,13 +115,16 @@
         <activity
             android:name=".core.extensions.CabinetActivity"
             android:exported="true">
+        </activity>
 
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
+        <activity
+            android:name=".features.home.CountriesActivity"
+            android:exported="true">
+        </activity>
 
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
+        <activity
+            android:name=".features.home.CitiesActivity"
+            android:exported="true">
         </activity>
 
         <activity

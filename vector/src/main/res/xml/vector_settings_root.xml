@@ -33,6 +33,18 @@
         app:isPreferenceVisible="@bool/settings_root_security_privacy_visible" />
 
     <im.vector.app.core.preference.VectorPreference
+        android:icon="@drawable/ic_add_to_home_screen_24dp"
+        android:title="@string/change_city"
+        app:fragment="im.vector.app.features.home.CountriesActivity"
+        app:isPreferenceVisible="@bool/settings_root_choose_city" />
+
+<!--    <im.vector.app.core.preference.VectorPreference-->
+<!--        android:icon="@drawable/ic_image"-->
+<!--        android:title="@string/view_my_ads"-->
+<!--        app:fragment="im.vector.app.features.settings.VectorSettingsViewMyAdsFragment"-->
+<!--        app:isPreferenceVisible="@bool/settings_root_my_ads" />-->
+
+    <im.vector.app.core.preference.VectorPreference
         android:icon="@drawable/ic_settings_root_labs"
         android:title="@string/room_settings_labs_pref_title"
         app:fragment="im.vector.app.features.settings.labs.VectorSettingsLabsFragment"

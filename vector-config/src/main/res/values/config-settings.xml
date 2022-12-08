@@ -18,6 +18,8 @@
     <bool name="settings_root_advanced_visible">true</bool>
     <bool name="settings_root_help_about_visible">false</bool>
     <bool name="settings_root_legals_visible">false</bool>
+    <bool name="settings_root_choose_city">true</bool>
+    <bool name="settings_root_my_ads">true</bool>
 
     <!-- Level 1: General -->
 

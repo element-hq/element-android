@@ -32,7 +32,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingHorizontal="20dp">
 
@@ -45,7 +45,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Основное"
+                    android:text="@string/settings_general_title"
                     android:textColor="#2D2D2D"
                     android:textSize="24sp"
                     android:textStyle="bold"
@@ -58,7 +58,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:background="@color/white"
-                    android:hint="Заголовок"
+                    android:hint="@string/title"
                     android:inputType="text"
                     android:textSize="20sp"
                     tools:ignore="HardcodedText" />
@@ -71,7 +71,7 @@
                     android:height="80sp"
                     android:background="@color/white"
                     android:gravity="top|start"
-                    android:hint="Описание"
+                    android:hint="@string/description"
                     android:inputType="textMultiLine"
                     android:lines="4"
                     android:maxLines="4"
@@ -108,7 +108,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="18dp"
-                        android:contentDescription="@string/title_image"
+                        android:contentDescription="@string/image_description"
                         android:src="@drawable/ic_image_picker" />
 
                     <LinearLayout
@@ -155,7 +155,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="18dp"
-                        android:contentDescription="@string/title_image"
+                        android:contentDescription="@string/image_description"
                         android:src="@drawable/ic_image_picker" />
 
                     <LinearLayout
@@ -166,28 +166,27 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="В списке диалогов"
+                            android:text="@string/ad_when_dialogs"
                             android:textColor="#2D2D2D"
                             android:textSize="16sp"
                             android:textStyle="bold"
                             tools:ignore="HardcodedText" />
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Формат: png, jpg, jpeg\nВес: до 15 Мбайт"
-                            android:textColor="#C6C2C9"
-                            android:textSize="14sp"
-                            tools:ignore="HardcodedText" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Загрузить"
+                            android:text="@string/ad_formats_for_pictures"
+                            android:textColor="#C6C2C9"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/ad_upload"
                             android:textColor="#A763CF"
                             android:textSize="14sp"
-                            android:textStyle="bold"
-                            tools:ignore="HardcodedText" />
+                            android:textStyle="bold" />
 
                     </LinearLayout>
 
@@ -362,7 +361,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="24ч"
+                        android:text="@string/hours24"
                         android:textColor="#C6C2C9"
                         android:textSize="16sp"
                         android:textStyle="bold"
@@ -386,12 +385,10 @@
                         android:inputType="number"
                         android:textSize="20sp"
                         android:textStyle="bold" />
-
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="суток"
+                        android:text="@string/ad_days"
                         android:textColor="#2D2D2D"
                         android:textSize="20sp"
                         android:textStyle="bold"
@@ -416,7 +413,7 @@
                             android:id="@+id/tv_date_from"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="05.12.2022"
+                            android:text=""
                             android:textColor="#2D2D2D"
                             android:textSize="20sp"
                             android:textStyle="bold"
@@ -456,7 +453,7 @@
                             android:id="@+id/tv_date_to"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="дд.мм.гггг"
+                            android:text="@string/ddmmyyyy"
                             android:textColor="#D3D3D3"
                             android:textSize="20sp"
                             android:textStyle="bold"
@@ -485,7 +482,7 @@
                 android:background="@drawable/round_shape_btn_inactive"
                 android:elevation="10dp"
                 android:enabled="true"
-                android:text="Оплатить"
+                android:text="@string/pay"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="20sp"

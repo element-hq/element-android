@@ -3489,4 +3489,32 @@
     <string name="message_reply_to_sender_sent_video">sent a video.</string>
     <string name="message_reply_to_sender_sent_sticker">sent a sticker.</string>
     <string name="message_reply_to_sender_created_poll">created a poll.</string>
+
+    <!--    Ad cabinet-->
+    <string name="choose_country">Choose your country</string>
+    <string name="change_country_later">You can change your country\nat any time in the settings later</string>
+    <string name="choose_city">Choose your city</string>
+    <string name="change_city">Change city</string>
+    <string name="view_my_ads">My ads</string>
+    <string name="change_city_later">You can change your city\nat any time in the settings later</string>
+    <string name="pay">Pay</string>
+    <string name="add_ad">Advertise</string>
+    <string name="cities">Countries and cities</string>
+    <string name="ad_pictures">Images</string>
+    <string name="ad_when_open">When openning</string>
+    <string name="ad_when_dialogs">In dialog list</string>
+    <string name="ad_formats_for_pictures">Format: png, jpg, jpeg\nSize: less than 15 Mb</string>
+    <string name="ad_upload">Upload</string>
+    <string name="ad_links">Links</string>
+    <string name="youtube_com_example">youtube.com/example</string>
+    <string name="instagram_kz_example">instagram.kz/example</string>
+    <string name="website_kz_example">website.kz/example</string>
+    <string name="ad_time_for_ad">Display time</string>
+    <string name="ddmmyyyy">dd.mm.yyyy</string>
+    <string name="ad_value_of_days" />
+    <string name="ad_days">days</string>
+    <string name="ad_numberof">Enter number </string>
+    <string name="hours24">24h</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
 </resources>
