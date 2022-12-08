@@ -34,6 +34,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ConcatAdapter
@@ -55,11 +56,13 @@ import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.resources.UserPreferencesProvider
+import im.vector.app.core.utils.LiveEvent
 import im.vector.app.databinding.FragmentRoomListBinding
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.discovery.DiscoverySettingsAction
 import im.vector.app.features.discovery.DiscoverySettingsViewModel
+import im.vector.app.features.discovery.DiscoverySharedViewModelAction
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.filtered.FilteredRoomFooterItem
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
@@ -117,6 +120,7 @@ class RoomListFragment :
     private val discoveryViewModel by fragmentViewModel(DiscoverySettingsViewModel::class)
     private lateinit var stateRestorer: LayoutManagerStateRestorer
     private var rootUrl: String = ""
+    var navigateEvent = MutableLiveData<LiveEvent<DiscoverySharedViewModelAction>>()
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomListBinding {
         return FragmentRoomListBinding.inflate(inflater, container, false)

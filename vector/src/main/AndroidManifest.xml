@@ -81,9 +81,6 @@
             android:name="android.max_aspect"
             android:value="9.9" />
 
-        <meta-data
-            android:name="com.google.android.gms.car.application"
-            android:resource="@xml/automotive_app_desc" />
 
         <activity
             android:name=".features.MainActivity"
@@ -113,6 +110,19 @@
             android:name=".features.login.LoginActivity"
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize" />
+
+
+        <activity
+            android:name=".core.extensions.CabinetActivity"
+            android:exported="true">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
+        </activity>
 
         <activity
             android:name=".features.onboarding.OnboardingActivity"

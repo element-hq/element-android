@@ -73,9 +73,9 @@ class ContactsBookViewModel @AssistedInject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
             allContacts = contactsDataSource.getContacts(
-                    withEmails = true,
+                    withEmails = false,
                     // Do not handle phone numbers for the moment
-                    withMsisdn = false
+                    withMsisdn = true
             )
             mappedContacts = allContacts
 
@@ -97,7 +97,8 @@ class ContactsBookViewModel @AssistedInject constructor(
         viewModelScope.launch {
             val threePids = contacts.flatMap { contact ->
                 contact.emails.map { ThreePid.Email(it.email) } +
-                        contact.msisdns.map { ThreePid.Msisdn(it.phoneNumber) }
+                        contact.msisdns.map { ThreePid.Msisdn(it.phoneNumber.replace("+", "").replace(" ", "").replace("(", "").replace(")", "")) }
+
             }
 
             val data = try {
@@ -126,7 +127,7 @@ class ContactsBookViewModel @AssistedInject constructor(
                         msisdns = contactModel.msisdns.map { msisdn ->
                             msisdn.copy(
                                     matrixId = data
-                                            .firstOrNull { foundThreePid -> foundThreePid.threePid.value == msisdn.phoneNumber }
+                                            .firstOrNull { foundThreePid -> foundThreePid.threePid.value.replace("+", "").replace(" ", "").replace("(", "").replace(")", "") == msisdn.phoneNumber.replace("+", "").replace(" ", "").replace("(", "").replace(")", "") }
                                             ?.matrixId
                             )
                         }

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="VectorEmptyImageView">
+        <item name="android:visibility">visible</item>
+    </style>
+
+    <style name="roundedImageAd" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">28dp</item>
+        <item name="cornerSizeTopRight">28dp</item>
+    </style>
+
+<!--    <style name="Theme_Dialog" parent="android:Theme.Holo.Dialog">-->
+<!--        <item name="android:windowMinWidthMajor">90%</item>-->
+<!--        <item name="android:windowMinWidthMinor">90%</item>-->
+<!--        <item name="android:windowAnimationStyle">@style/CustomDialogAnimation</item>-->
+<!--    </style>-->
+
+<!--    <style name="CustomDialogAnimation">-->
+<!--        <item name="android:windowEnterAnimation">@anim/push_up_in</item>-->
+<!--        <item name="android:windowExitAnimation">@anim/push_down_out</item>-->
+<!--    </style>-->
+
+
+    <style name="CategoryButton">
+        <item name="android:background">@drawable/round_shape_btn_inactive</item>
+        <item name="android:paddingHorizontal">30dp</item>
+        <item name="android:paddingVertical">5dp</item>
+        <item name="android:textColor">#FFF</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+</resources>

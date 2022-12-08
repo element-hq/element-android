@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +26,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
+import im.vector.app.core.extensions.CabinetActivity
 import im.vector.app.core.extensions.observeK
 import im.vector.app.core.extensions.replaceChildFragment
 import im.vector.app.core.platform.VectorBaseFragment
@@ -89,6 +91,11 @@ class HomeDrawerFragment :
             sharedActionViewModel.post(HomeActivitySharedAction.CloseDrawer)
             SignOutUiWorker(requireActivity()).perform()
         }
+
+        views.layoutCabinet.setOnClickListener {
+            startActivity(Intent(context, CabinetActivity::class.java))
+        }
+
 
         views.homeDrawerQRCodeButton.debouncedClicks {
             UserCodeActivity.newIntent(requireContext(), sharedActionViewModel.session.myUserId).let {

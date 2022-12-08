@@ -15,6 +15,12 @@ if (project.hasProperty("coverage")) {
     apply plugin: 'jacoco'
 }
 
+repositories {
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+}
+
+
 kapt {
     correctErrorTypes = true
 }
@@ -352,6 +358,8 @@ dependencies {
     implementation libs.dagger.hilt
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation "androidx.sharetarget:sharetarget:1.2.0"
+    implementation 'com.github.Drjacky:ImagePicker:2.3.20'
+
 
     // Flipper, debug builds only
     debugImplementation(libs.flipper.flipper) {

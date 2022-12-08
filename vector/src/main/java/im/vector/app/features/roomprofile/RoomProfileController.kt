@@ -176,7 +176,7 @@ class RoomProfileController @Inject constructor(
                 }
             }
         }
-        buildEncryptionAction(data.actionPermissions, roomSummary)
+//        buildEncryptionAction(data.actionPermissions, roomSummary)
 
         if (roomSummary.isEncrypted && !encryptionMisconfigured) {
             data.globalCryptoConfig.invoke()?.let { globalConfig ->
@@ -343,26 +343,26 @@ class RoomProfileController @Inject constructor(
         }
     }
 
-    private fun buildEncryptionAction(actionPermissions: RoomProfileViewState.ActionPermissions, roomSummary: RoomSummary) {
-        if (!roomSummary.isEncrypted) {
-            if (actionPermissions.canEnableEncryption) {
-                buildProfileAction(
-                        id = "enableEncryption",
-                        title = stringProvider.getString(R.string.room_settings_enable_encryption),
-                        icon = R.drawable.ic_shield_black,
-                        divider = false,
-                        editable = false,
-                        action = { callback?.onEnableEncryptionClicked() }
-                )
-            } else {
-                buildProfileAction(
-                        id = "enableEncryption",
-                        title = stringProvider.getString(R.string.room_settings_enable_encryption_no_permission),
-                        icon = R.drawable.ic_shield_black,
-                        divider = false,
-                        editable = false
-                )
-            }
-        }
-    }
+//    private fun buildEncryptionAction(actionPermissions: RoomProfileViewState.ActionPermissions, roomSummary: RoomSummary) {
+//        if (!roomSummary.isEncrypted) {
+//            if (actionPermissions.canEnableEncryption) {
+//                buildProfileAction(
+//                        id = "enableEncryption",
+//                        title = stringProvider.getString(R.string.room_settings_enable_encryption),
+//                        icon = R.drawable.ic_shield_black,
+//                        divider = false,
+//                        editable = false,
+//                        action = { callback?.onEnableEncryptionClicked() }
+//                )
+//            } else {
+//                buildProfileAction(
+//                        id = "enableEncryption",
+//                        title = stringProvider.getString(R.string.room_settings_enable_encryption_no_permission),
+//                        icon = R.drawable.ic_shield_black,
+//                        divider = false,
+//                        editable = false
+//                )
+//            }
+//        }
+//    }
 }

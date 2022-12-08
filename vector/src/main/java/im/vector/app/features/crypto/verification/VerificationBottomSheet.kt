@@ -161,9 +161,9 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
             } else {
                 views.otherUserShield.render(RoomEncryptionTrustLevel.Warning)
             }
-            views.otherUserNameText.text = getString(
-                    if (state.selfVerificationMode) R.string.crosssigning_verify_this_session else R.string.crosssigning_verify_session
-            )
+//            views.otherUserNameText.text = getString(
+//                    if (state.selfVerificationMode) R.string.crosssigning_verify_this_session else R.string.crosssigning_verify_session
+//            )
         } else {
             if (state.sasTransactionState == VerificationTxState.Verified || state.qrTransactionState == VerificationTxState.Verified) {
                 views.otherUserNameText.text = getString(R.string.verification_verified_user, state.otherUserMxItem.getBestName())

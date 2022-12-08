@@ -53,7 +53,7 @@ fun Context.showIdentityServerConsentDialog(
     val content = span {
         +getString(R.string.identity_server_consent_dialog_content_3)
         +"\n\n"
-        if (identityServerWithTerms?.policies?.isNullOrEmpty() == false) {
+        if (identityServerWithTerms?.policies?.isNullOrEmpty() == true) {
             span {
                 textStyle = "bold"
                 text = getString(R.string.settings_privacy_policy)

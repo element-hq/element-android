@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+
+    <color name="toggle_button_checked">#A763CF</color>
+    <color name="toggle_button_unchecked">#C6C2C9</color>
+
     <!-- Error colors -->
     <color name="vector_warning_color_2">@color/palette_melon</color>
     <color name="vector_info_color">#2f9edb</color>

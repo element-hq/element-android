@@ -345,7 +345,7 @@ class BugReporter @Inject constructor(
                     builder.addFormDataPart("label", buildMeta.gitBranchName)
 
                     // Special for Element
-                    builder.addFormDataPart("label", "[Element]")
+                    builder.addFormDataPart("label", "[Big Star Messenger]")
 
                     // Possible values for BuildConfig.BUILD_TYPE: "debug", "nightly", "release".
                     builder.addFormDataPart("label", BuildConfig.BUILD_TYPE)

@@ -1399,7 +1399,7 @@
     <string name="verification_verify_user">Подтверждено %s</string>
     <string name="verification_verified_user">Подтверждённых %s</string>
     <string name="verification_request_waiting_for">Ожидаем %s…</string>
-    <string name="room_profile_not_encrypted_subtitle">Сообщения в этой комнате не защищены сквозным шифрованием.</string>
+    <string name="room_profile_not_encrypted_subtitle">Сообщения в этой комнате защищены сквозным шифрованием.</string>
     <string name="room_profile_encrypted_subtitle">Сообщения в этой комнате защищены сквозным шифрованием.
 \n
 \nВаши сообщения защищены замками и только вы и получатель имеете уникальные ключи для их разблокировки.</string>
@@ -1420,7 +1420,7 @@
     <string name="command_description_rainbow">Посылает сообщение, окрашенное в цвет радуги</string>
     <string name="command_description_rainbow_emote">Посылает данную эмоцию, окрашенную в цвет радуги</string>
     <string name="settings_category_composer">Редактор сообщений</string>
-    <string name="room_settings_enable_encryption">Включаем сквозное шифрование…</string>
+    <string name="room_settings_enable_encryption">Включено сквозное шифрование…</string>
     <string name="room_settings_enable_encryption_dialog_title">Включить шифрование\?</string>
     <string name="room_settings_enable_encryption_dialog_content">После включения шифрование для комнаты нельзя отключить. Сообщения отправленные в зашифрованной комнате не будут видны серверу, только участникам комнаты. Включение шифрования может помешать правильной работе многих ботов и мостов.</string>
     <string name="room_settings_enable_encryption_dialog_submit">Включить шифрование</string>
@@ -1751,7 +1751,7 @@
     <string name="direct_room_profile_encrypted_subtitle">Сообщения здесь защищены сквозным шифрованием.
 \n
 \nВаши сообщения защищены замками, и только у вас и получателя есть уникальные ключи для их разблокировки.</string>
-    <string name="direct_room_profile_not_encrypted_subtitle">Сообщения здесь не прошли сквозного шифрования.</string>
+    <string name="direct_room_profile_not_encrypted_subtitle">Сообщения здесь прошли сквозное шифрования.</string>
     <string name="login_error_outdated_homeserver_warning_content">На этом домашнем сервере работает старая версия. Попросите администратора вашего домашнего сервера выполнить обновление. Вы можете продолжить, но некоторые функции могут работать некорректно.</string>
     <string name="direct_room_join_rules_invite_by_you">Вы сделали доступ только по приглашению.</string>
     <string name="direct_room_join_rules_invite">%1$s сделал(а) доступ только по приглашению.</string>
@@ -2143,13 +2143,13 @@
     <string name="space_settings_alias_subtitle">Просмотреть и управлять адресами этого пространства.</string>
     <string name="room_settings_guest_access_title">Разрешить гостям присоединяться</string>
     <plurals name="missed_video_call">
-        <item quantity="one">Пропущенный видеозвонок</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">Пропущенный видеозвонок</item>
         <item quantity="few">%d пропущенных видеозвонка</item>
         <item quantity="many">%d пропущенных видеозвонков</item>
         <item quantity="other">%d пропущенных видеозвонков</item>
     </plurals>
     <plurals name="missed_audio_call">
-        <item quantity="one">Пропущенный аудиовызов</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">Пропущенный аудиовызов</item>
         <item quantity="few">%d пропущенных аудиовызова</item>
         <item quantity="many">%d пропущенных аудиовызовов</item>
         <item quantity="other">%d пропущенных аудиовызовов</item>

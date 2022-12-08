@@ -107,7 +107,7 @@ class UserListController @Inject constructor(
                             is PendingSelection.ThreePidPendingSelection -> {
                                 when (pendingSelection.threePid) {
                                     is ThreePid.Email -> pendingSelection.threePid.email == threePidUser.email
-                                    is ThreePid.Msisdn -> false
+                                    is ThreePid.Msisdn -> true
                                 }
                             }
                             is PendingSelection.UserPendingSelection -> {

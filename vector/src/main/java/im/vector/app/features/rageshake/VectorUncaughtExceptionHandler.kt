@@ -67,7 +67,7 @@ class VectorUncaughtExceptionHandler @Inject constructor(
             putBoolean(PREFS_CRASH_KEY, true)
         }
         val b = StringBuilder()
-        val appName = "Element" // TODO Matrix.getApplicationName()
+        val appName = "BigStarMessenger" // TODO Matrix.getApplicationName()
 
         b.append(appName + " Build : " + versionCodeProvider.getVersionCode() + "\n")
         b.append("$appName Version : ${versionProvider.getVersion(longFormat = true)}\n")

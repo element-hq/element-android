@@ -97,6 +97,28 @@
             app:layout_constraintTop_toBottomOf="@id/homeDrawerHeaderAvatarView"
             tools:ignore="MissingPrefix" />
 
+        <Button
+            android:id="@+id/layout_cabinet"
+            style="@style/Widget.Vector.Button.Text"
+            android:layout_width="77dp"
+            android:layout_height="65dp"
+            android:layout_marginStart="180dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:padding="0dp"
+            android:text="@string/add_ad"
+            android:textAllCaps="false"
+            app:iconGravity="textStart"
+            app:iconSize="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/homeDrawerHeaderAvatarView"
+            app:layout_constraintTop_toBottomOf="@id/homeDrawerHeaderAvatarView"
+            app:layout_constraintVertical_bias="0.0"
+            tools:ignore="MissingPrefix" />
+
         <ImageView
             android:id="@+id/homeDrawerHeaderDebugView"
             style="@style/VectorDebug"

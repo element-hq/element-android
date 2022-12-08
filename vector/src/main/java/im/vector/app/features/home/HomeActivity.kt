@@ -249,7 +249,7 @@ class HomeActivity :
         homeActivityViewModel.observeViewEvents {
             when (it) {
                 is HomeActivityViewEvents.AskPasswordToInitCrossSigning -> handleAskPasswordToInitCrossSigning(it)
-                is HomeActivityViewEvents.CurrentSessionNotVerified -> handleOnNewSession(it)
+//                is HomeActivityViewEvents.CurrentSessionNotVerified -> handleOnNewSession(it)
                 is HomeActivityViewEvents.CurrentSessionCannotBeVerified -> handleCantVerify(it)
                 HomeActivityViewEvents.PromptToEnableSessionPush -> handlePromptToEnablePush()
                 HomeActivityViewEvents.StartRecoverySetupFlow -> handleStartRecoverySetup()
@@ -260,13 +260,14 @@ class HomeActivity :
                         navigator.waitSessionVerification(this)
                     }
                 }
-                is HomeActivityViewEvents.OnCrossSignedInvalidated -> handleCrossSigningInvalidated(it)
-                HomeActivityViewEvents.ShowAnalyticsOptIn -> handleShowAnalyticsOptIn()
+//                is HomeActivityViewEvents.OnCrossSignedInvalidated -> handleCrossSigningInvalidated(it)
+//                HomeActivityViewEvents.ShowAnalyticsOptIn -> handleShowAnalyticsOptIn()
                 HomeActivityViewEvents.ShowNotificationDialog -> handleShowNotificationDialog()
                 HomeActivityViewEvents.ShowReleaseNotes -> handleShowReleaseNotes()
                 HomeActivityViewEvents.NotifyUserForThreadsMigration -> handleNotifyUserForThreadsMigration()
                 is HomeActivityViewEvents.MigrateThreads -> migrateThreadsIfNeeded(it.checkSession)
                 is HomeActivityViewEvents.AskUserForPushDistributor -> askUserToSelectPushDistributor()
+                else -> {}
             }
         }
         homeActivityViewModel.onEach { renderState(it) }
@@ -445,31 +446,31 @@ class HomeActivity :
         }
     }
 
-    private fun handleCrossSigningInvalidated(event: HomeActivityViewEvents.OnCrossSignedInvalidated) {
-        // We need to ask
-        promptSecurityEvent(
-                event.userItem,
-                R.string.crosssigning_verify_this_session,
-                R.string.confirm_your_identity
-        ) {
-            it.navigator.waitSessionVerification(it)
-        }
-    }
+//    private fun handleCrossSigningInvalidated(event: HomeActivityViewEvents.OnCrossSignedInvalidated) {
+//        // We need to ask
+//        promptSecurityEvent(
+//                event.userItem,
+//                R.string.crosssigning_verify_this_session,
+//                R.string.confirm_your_identity
+//        ) {
+//            it.navigator.waitSessionVerification(it)
+//        }
+//    }
 
-    private fun handleOnNewSession(event: HomeActivityViewEvents.CurrentSessionNotVerified) {
-        // We need to ask
-        promptSecurityEvent(
-                event.userItem,
-                R.string.crosssigning_verify_this_session,
-                R.string.confirm_your_identity
-        ) {
-            if (event.waitForIncomingRequest) {
-                it.navigator.waitSessionVerification(it)
-            } else {
-                it.navigator.requestSelfSessionVerification(it)
-            }
-        }
-    }
+//    private fun handleOnNewSession(event: HomeActivityViewEvents.CurrentSessionNotVerified) {
+//        // We need to ask
+//        promptSecurityEvent(
+//                event.userItem,
+//                R.string.crosssigning_verify_this_session,
+//                R.string.confirm_your_identity
+//        ) {
+//            if (event.waitForIncomingRequest) {
+//                it.navigator.waitSessionVerification(it)
+//            } else {
+//                it.navigator.requestSelfSessionVerification(it)
+//            }
+//        }
+//    }
 
     private fun handleCantVerify(event: HomeActivityViewEvents.CurrentSessionCannotBeVerified) {
         // We need to ask

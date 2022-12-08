@@ -71,7 +71,7 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
             // Cross Signing is enabled
             handleE2EWithCrossSigning(data, cryptoDeviceInfo, shield)
         } else {
-            handleE2EInLegacy(data, cryptoDeviceInfo, shield)
+//            handleE2EInLegacy(data, cryptoDeviceInfo, shield)
         }
 
         // COMMON ACTIONS (Rename / signout)
@@ -199,56 +199,56 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
         }
     }
 
-    private fun handleE2EInLegacy(data: DeviceVerificationInfoBottomSheetViewState, cryptoDeviceInfo: CryptoDeviceInfo, shield: Int) {
-        val host = this
-        // ==== Legacy
-        val isMine = data.isMine
-
-        // TRUST INFO SECTION
-        if (cryptoDeviceInfo.trustLevel?.isLocallyVerified() == true) {
-            genericItem {
-                id("trust${cryptoDeviceInfo.deviceId}")
-                style(ItemStyle.BIG_TEXT)
-                titleIconResourceId(shield)
-                title(host.stringProvider.getString(R.string.encryption_information_verified).toEpoxyCharSequence())
-                description(host.stringProvider.getString(R.string.settings_active_sessions_verified_device_desc).toEpoxyCharSequence())
-            }
-        } else {
-            genericItem {
-                id("trust${cryptoDeviceInfo.deviceId}")
-                titleIconResourceId(shield)
-                style(ItemStyle.BIG_TEXT)
-                title(host.stringProvider.getString(R.string.encryption_information_not_verified).toEpoxyCharSequence())
-                description(host.stringProvider.getString(R.string.settings_active_sessions_unverified_device_desc).toEpoxyCharSequence())
-            }
-        }
-
-        // DEVICE INFO SECTION
-        genericItem {
-            id("info${cryptoDeviceInfo.deviceId}")
-            title(cryptoDeviceInfo.displayName().orEmpty().toEpoxyCharSequence())
-            description("(${cryptoDeviceInfo.deviceId})".toEpoxyCharSequence())
-        }
-
-        // ACTIONS
-
-        if (!isMine) {
-            // if it's not the current device you can trigger a verification
-            bottomSheetDividerItem {
-                id("d1")
-            }
-            bottomSheetVerificationActionItem {
-                id("verify${cryptoDeviceInfo.deviceId}")
-                title(host.stringProvider.getString(R.string.verification_verify_device))
-                titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
-                iconRes(R.drawable.ic_arrow_right)
-                iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
-                listener {
-                    host.callback?.onAction(DevicesAction.VerifyMyDevice(cryptoDeviceInfo.deviceId))
-                }
-            }
-        }
-    }
+//    private fun handleE2EInLegacy(data: DeviceVerificationInfoBottomSheetViewState, cryptoDeviceInfo: CryptoDeviceInfo, shield: Int) {
+//        val host = this
+//        // ==== Legacy
+////        val isMine = data.isMine
+//
+//        // TRUST INFO SECTION
+//        if (cryptoDeviceInfo.trustLevel?.isLocallyVerified() == true) {
+//            genericItem {
+//                id("trust${cryptoDeviceInfo.deviceId}")
+//                style(ItemStyle.BIG_TEXT)
+//                titleIconResourceId(shield)
+//                title(host.stringProvider.getString(R.string.encryption_information_verified).toEpoxyCharSequence())
+//                description(host.stringProvider.getString(R.string.settings_active_sessions_verified_device_desc).toEpoxyCharSequence())
+//            }
+//        } else {
+//            genericItem {
+//                id("trust${cryptoDeviceInfo.deviceId}")
+//                titleIconResourceId(shield)
+//                style(ItemStyle.BIG_TEXT)
+//                title(host.stringProvider.getString(R.string.encryption_information_not_verified).toEpoxyCharSequence())
+//                description(host.stringProvider.getString(R.string.settings_active_sessions_unverified_device_desc).toEpoxyCharSequence())
+//            }
+//        }
+//
+//        // DEVICE INFO SECTION
+//        genericItem {
+//            id("info${cryptoDeviceInfo.deviceId}")
+//            title(cryptoDeviceInfo.displayName().orEmpty().toEpoxyCharSequence())
+//            description("(${cryptoDeviceInfo.deviceId})".toEpoxyCharSequence())
+//        }
+//
+//        // ACTIONS
+//
+////        if (!isMine) {
+////            // if it's not the current device you can trigger a verification
+////            bottomSheetDividerItem {
+////                id("d1")
+////            }
+////            bottomSheetVerificationActionItem {
+////                id("verify${cryptoDeviceInfo.deviceId}")
+////                title(host.stringProvider.getString(R.string.verification_verify_device))
+////                titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+////                iconRes(R.drawable.ic_arrow_right)
+////                iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+////                listener {
+////                    host.callback?.onAction(DevicesAction.VerifyMyDevice(cryptoDeviceInfo.deviceId))
+////                }
+////            }
+////        }
+//    }
 
     private fun addVerifyActions(cryptoDeviceInfo: CryptoDeviceInfo) {
         val host = this
