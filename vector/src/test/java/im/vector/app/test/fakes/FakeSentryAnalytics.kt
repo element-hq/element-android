@@ -16,15 +16,15 @@
 
 package im.vector.app.test.fakes
 
-import im.vector.app.features.analytics.impl.SentryFactory
+import im.vector.app.features.analytics.impl.SentryAnalytics
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 
-class FakeSentryFactory {
+class FakeSentryAnalytics {
     private var isSentryEnabled = false
 
-    val instance = mockk<SentryFactory>().also {
+    val instance = mockk<SentryAnalytics>(relaxUnitFun = true).also {
         every { it.initSentry() } answers  {
             isSentryEnabled = true
         }
@@ -41,4 +41,13 @@ class FakeSentryFactory {
     fun verifySentryClose() {
         verify { instance.stopSentry() }
     }
+
+    fun verifySentryTrackError(error: Throwable) {
+        verify { instance.trackError(error) }
+    }
+
+    fun verifyNoErrorTracking() =
+        verify(inverse = true) {
+            instance.trackError(any())
+        }
 }

@@ -46,6 +46,7 @@ import im.vector.app.core.utils.AndroidSystemSettingsProvider
 import im.vector.app.core.utils.SystemSettingsProvider
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.VectorAnalytics
+import im.vector.app.features.analytics.errors.ErrorTracker
 import im.vector.app.features.analytics.impl.DefaultVectorAnalytics
 import im.vector.app.features.analytics.metrics.VectorPlugins
 import im.vector.app.features.invite.AutoAcceptInvites
@@ -83,6 +84,9 @@ import javax.inject.Singleton
 
     @Binds
     abstract fun bindVectorAnalytics(analytics: DefaultVectorAnalytics): VectorAnalytics
+
+    @Binds
+    abstract fun bindErrorTracker(analytics: DefaultVectorAnalytics): ErrorTracker
 
     @Binds
     abstract fun bindAnalyticsTracker(analytics: DefaultVectorAnalytics): AnalyticsTracker
