@@ -51,7 +51,6 @@ class DevicesViewModel @AssistedInject constructor(
         refreshDevicesUseCase: RefreshDevicesUseCase,
         private val vectorPreferences: VectorPreferences,
         private val toggleIpAddressVisibilityUseCase: ToggleIpAddressVisibilityUseCase,
-        private val deleteUnusedClientInformationUseCase: DeleteUnusedClientInformationUseCase,
 ) : VectorSessionsListViewModel<DevicesViewState,
         DevicesAction,
         DevicesViewEvent>(initialState, activeSessionHolder, refreshDevicesUseCase),
@@ -114,8 +113,6 @@ class DevicesViewModel @AssistedInject constructor(
                         val unverifiedSessionsCount = deviceFullInfoList.count { !it.cryptoDeviceInfo?.trustLevel?.isCrossSigningVerified().orFalse() }
                         val inactiveSessionsCount = deviceFullInfoList.count { it.isInactive }
 
-                        deleteUnusedClientInformation(deviceFullInfoList)
-
                         copy(
                                 devices = async,
                                 unverifiedSessionsCount = unverifiedSessionsCount,
@@ -127,12 +124,6 @@ class DevicesViewModel @AssistedInject constructor(
                         )
                     }
                 }
-    }
-
-    private fun deleteUnusedClientInformation(deviceFullInfoList: List<DeviceFullInfo>) {
-        viewModelScope.launch {
-            deleteUnusedClientInformationUseCase.execute(deviceFullInfoList)
-        }
     }
 
     private fun refreshDevicesOnCryptoDevicesChange() {

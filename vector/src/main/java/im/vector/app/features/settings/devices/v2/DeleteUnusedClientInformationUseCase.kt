@@ -18,14 +18,15 @@ package im.vector.app.features.settings.devices.v2
 
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.session.clientinfo.MATRIX_CLIENT_INFO_KEY_PREFIX
+import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import javax.inject.Inject
 
 class DeleteUnusedClientInformationUseCase @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
 ) {
 
-    suspend fun execute(deviceFullInfoList: List<DeviceFullInfo>) {
-        val expectedClientInfoKeyList = deviceFullInfoList.map { MATRIX_CLIENT_INFO_KEY_PREFIX + it.deviceInfo.deviceId }
+    suspend fun execute(deviceInfoList: List<DeviceInfo>) {
+        val expectedClientInfoKeyList = deviceInfoList.map { MATRIX_CLIENT_INFO_KEY_PREFIX + it.deviceId }
         activeSessionHolder
                 .getSafeActiveSession()
                 ?.accountDataService()
