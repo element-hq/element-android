@@ -765,8 +765,6 @@ class OnboardingViewModel @AssistedInject constructor(
             _viewEvents.post(OnboardingViewEvents.OutdatedHomeserver)
         }
 
-        checkQrCodeLoginCapability(config)
-
         when (trigger) {
             is OnboardingAction.HomeServerChange.SelectHomeServer -> {
                 onHomeServerSelected(config, serverTypeOverride, authResult)
