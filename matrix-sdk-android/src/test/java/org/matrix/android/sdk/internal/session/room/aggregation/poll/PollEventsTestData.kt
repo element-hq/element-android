@@ -87,7 +87,7 @@ object PollEventsTestData {
     )
 
     internal val A_POLL_START_EVENT = Event(
-            type = EventType.POLL_START.stable,
+            type = EventType.POLL_START.unstable,
             eventId = AN_EVENT_ID,
             originServerTs = 1652435922563,
             senderId = A_USER_ID_1,
@@ -96,7 +96,7 @@ object PollEventsTestData {
     )
 
     internal val A_POLL_RESPONSE_EVENT = Event(
-            type = EventType.POLL_RESPONSE.stable,
+            type = EventType.POLL_RESPONSE.unstable,
             eventId = AN_EVENT_ID,
             originServerTs = 1652435922563,
             senderId = A_USER_ID_1,
@@ -105,7 +105,7 @@ object PollEventsTestData {
     )
 
     internal val A_POLL_END_EVENT = Event(
-            type = EventType.POLL_END.stable,
+            type = EventType.POLL_END.unstable,
             eventId = AN_EVENT_ID,
             originServerTs = 1652435922563,
             senderId = A_USER_ID_1,
