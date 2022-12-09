@@ -138,7 +138,7 @@ android {
         versionCode project.getVersionCode()
 
         // Required for sonar analysis
-        versionName "${versionMajor}.${versionMinor}.${versionPatch}-sonar"
+        versionName "1.2.1"
 
         // Generate a random app task affinity
         manifestPlaceholders = [appTaskAffinitySuffix: "H_${gitRevision()}"]
@@ -247,7 +247,7 @@ android {
                 optimizeCode true
                 proguardFiles 'proguard-rules.pro'
             }
-            // signingConfig signingConfigs.release
+             signingConfig signingConfigs.release
         }
 
         nightly {

@@ -135,6 +135,8 @@ dependencies {
     api "com.gabrielittner.threetenbp:lazythreetenbp:0.12.0"
 
     implementation libs.squareup.moshi
+    implementation 'com.google.android.gms:play-services-basement:18.1.0'
+    implementation 'com.google.firebase:firebase-auth-ktx:21.1.0'
     kapt libs.squareup.moshiKotlin
 
     // Lifecycle

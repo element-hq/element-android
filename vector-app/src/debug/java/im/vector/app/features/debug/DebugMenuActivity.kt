@@ -179,7 +179,7 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
                 .setContentText("Content")
                 // No effect because it's a group summary notif
                 .setNumber(33)
-                .setSmallIcon(R.drawable.ic_notification)
+                .setSmallIcon(R.drawable.logo222)
                 // This provocate the badge issue: no badge for group notification
                 .setGroup("GroupKey")
                 .setGroupSummary(true)
@@ -212,7 +212,7 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
                         // For shortcut on long press on launcher icon
                         .setBadgeIconType(NotificationCompat.BADGE_ICON_NONE)
                         .setStyle(messagingStyle1)
-                        .setSmallIcon(R.drawable.ic_notification)
+                        .setSmallIcon(R.drawable.logo222)
                         .setGroup("GroupKey")
                         .build()
         )
@@ -224,7 +224,7 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
                         .setContentTitle("Title 2")
                         .setContentText("Content 2")
                         .setStyle(messagingStyle2)
-                        .setSmallIcon(R.drawable.ic_notification)
+                        .setSmallIcon(R.drawable.logo222)
                         .setGroup("GroupKey")
                         .build()
         )

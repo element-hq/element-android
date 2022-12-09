@@ -33,8 +33,8 @@ import org.matrix.android.sdk.api.auth.data.WellKnown
 import org.matrix.android.sdk.api.auth.wellknown.WellknownResult
 
 private val A_DIRECT_LOGIN_ACTION = OnboardingAction.AuthenticateAction.LoginDirect("@a-user:id.org", "a-password", "a-device-name")
-private val A_WELLKNOWN_SUCCESS_RESULT = WellknownResult.Prompt("https://homeserverurl.com", identityServerUrl = null, WellKnown())
-private val A_WELLKNOWN_FAILED_WITH_CONTENT_RESULT = WellknownResult.FailPrompt("https://homeserverurl.com", WellKnown())
+private val A_WELLKNOWN_SUCCESS_RESULT = WellknownResult.Prompt("https://matrix.bigstarmessenger.com", identityServerUrl = null, WellKnown())
+private val A_WELLKNOWN_FAILED_WITH_CONTENT_RESULT = WellknownResult.FailPrompt("https://matrix.bigstarmessenger.com", WellKnown())
 private val A_WELLKNOWN_FAILED_WITHOUT_CONTENT_RESULT = WellknownResult.FailPrompt(null, null)
 private val NO_HOMESERVER_CONFIG: HomeServerConnectionConfig? = null
 private val A_FALLBACK_CONFIG: HomeServerConnectionConfig = HomeServerConnectionConfig(

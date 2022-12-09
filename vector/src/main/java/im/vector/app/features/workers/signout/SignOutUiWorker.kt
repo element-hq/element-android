@@ -16,6 +16,7 @@
 
 package im.vector.app.features.workers.signout
 
+import android.content.Context
 import androidx.fragment.app.FragmentActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
@@ -23,6 +24,7 @@ import im.vector.app.core.extensions.cannotLogoutSafely
 import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
+import io.realm.Realm
 
 class SignOutUiWorker(private val activity: FragmentActivity) {
 
@@ -48,7 +50,11 @@ class SignOutUiWorker(private val activity: FragmentActivity) {
         }
     }
 
-    private fun doSignOut() {
+    fun doSignOut() {
+        val preferences = Realm.getApplicationContext()?.getSharedPreferences("bigstar", Context.MODE_PRIVATE)
+        val editor = preferences?.edit()
+        editor?.putBoolean("isLoggedIn", false)
+        editor?.apply()
         MainActivity.restartApp(activity, MainActivityArgs(clearCredentials = true))
     }
 }

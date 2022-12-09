@@ -20,6 +20,13 @@
         android:title="@string/action_invite"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/block_user"
+        android:title="@string/block_user1"
+        app:showAsAction="never"
+        android:visible="true"
+        />
+
     <!-- We always want to show this item as an icon -->
     <item
         android:id="@+id/video_call"

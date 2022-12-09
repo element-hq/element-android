@@ -20,6 +20,7 @@
     <string name="backup">Reservekopy meitsje</string>
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">Jo sille de tagong ta jo fersifere berjochten ferlieze, útsein as jo earst in reservekopy fan jo kaaien meitsje eardat jo ôfmelde.</string>
     <string name="loading">Lade…</string>
+
     <string name="ok">OK</string>
     <string name="action_cancel">Annulearje</string>
     <string name="action_save">Bewarje</string>

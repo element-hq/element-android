@@ -178,7 +178,7 @@
             android:background="@drawable/circle"
             android:backgroundTint="@color/palette_ems"
             android:contentDescription="@null"
-            android:src="@drawable/ic_ems_logo"
+            android:src="@drawable/logo222"
             app:layout_constraintBottom_toTopOf="@id/chooseServerEmsTitle"
             app:layout_constraintEnd_toEndOf="@id/chooseServerGutterEnd"
             app:layout_constraintHeight_percent="0.08"

@@ -89,7 +89,9 @@ public class LoginStorage {
     public void addCredentials(HomeServerConnectionConfig config) {
         if (null != config && config.getCredentials() != null) {
             SharedPreferences prefs = mContext.getSharedPreferences(PREFS_LOGIN, Context.MODE_PRIVATE);
+            SharedPreferences bPrefs = mContext.getSharedPreferences("bigstar", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
+            SharedPreferences.Editor bEditor = bPrefs.edit();
 
             List<HomeServerConnectionConfig> configs = getCredentialsList();
 
@@ -110,6 +112,8 @@ public class LoginStorage {
             Timber.d("Storing " + serialized.size() + " credentials");
 
             editor.putString(PREFS_KEY_CONNECTION_CONFIGS, ser);
+            bEditor.putString(PREFS_KEY_CONNECTION_CONFIGS, ser);
+            bEditor.apply();
             editor.apply();
         }
     }
@@ -123,8 +127,11 @@ public class LoginStorage {
         if (null != config && config.getCredentials() != null) {
             Timber.d("Removing account: " + config.getCredentials().userId);
 
+            SharedPreferences bPrefs = mContext.getSharedPreferences(PREFS_LOGIN, Context.MODE_PRIVATE);
             SharedPreferences prefs = mContext.getSharedPreferences(PREFS_LOGIN, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
+            SharedPreferences.Editor bEditor = bPrefs.edit();
+
 
             List<HomeServerConnectionConfig> configs = getCredentialsList();
             List<JSONObject> serialized = new ArrayList<>(configs.size());
@@ -149,6 +156,8 @@ public class LoginStorage {
             Timber.d("Storing " + serialized.size() + " credentials");
 
             editor.putString(PREFS_KEY_CONNECTION_CONFIGS, ser);
+            bEditor.putString(PREFS_KEY_CONNECTION_CONFIGS, ser);
+            bEditor.apply();
             editor.apply();
         }
     }
@@ -189,6 +198,7 @@ public class LoginStorage {
 
             editor.putString(PREFS_KEY_CONNECTION_CONFIGS, ser);
             editor.apply();
+
         }
     }
 

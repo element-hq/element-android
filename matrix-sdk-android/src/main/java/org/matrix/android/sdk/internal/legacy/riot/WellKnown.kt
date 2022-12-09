@@ -91,6 +91,6 @@ class WellKnown {
     }
 
     @JvmField
-    @Json(name = "im.vector.riot.jitsi")
+    @Json(name = "jitsi.bigstarmessenger.com")
     var jitsiServer: WellKnownPreferredConfig? = null
 }

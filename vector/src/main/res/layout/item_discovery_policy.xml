@@ -39,7 +39,7 @@
         android:paddingStart="0dp"
         android:paddingEnd="8dp"
         android:textColor="?android:textColorLink"
-        tools:text="https://element.io/copyright" />
+        tools:text="https://kz.com.bigstarpolitics.kz" />
 
     <!-- Do not use drawableEnd on the TextView because of RTL support -->
     <ImageView

@@ -17,6 +17,8 @@
 package im.vector.app.features.onboarding.ftueauth
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -64,6 +66,7 @@ class FtueAuthSplashCarouselFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupViews()
+        policy()
     }
 
     override fun onDestroyView() {
@@ -71,6 +74,12 @@ class FtueAuthSplashCarouselFragment :
         tabLayoutMediator = null
         views.splashCarousel.adapter = null
         super.onDestroyView()
+    }
+
+    private fun policy() {
+        views.politicOfBigstar.setOnClickListener{
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.linkOn))))
+        }
     }
 
     private fun setupViews() {

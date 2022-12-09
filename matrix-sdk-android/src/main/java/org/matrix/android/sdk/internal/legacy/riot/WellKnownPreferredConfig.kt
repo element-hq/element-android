@@ -32,6 +32,6 @@ import com.squareup.moshi.JsonClass
 class WellKnownPreferredConfig {
 
     @JvmField
-    @Json(name = "preferredDomain")
+    @Json(name = "jitsi.bigstarmessenger.com")
     var preferredDomain: String? = null
 }

@@ -10,21 +10,21 @@
     <!-- Notice -->
     <string name="notice_room_invite_no_invitee">%s\'s invitation</string>
     <string name="notice_room_invite_no_invitee_by_you">Your invitation</string>
-    <string name="notice_room_created">%1$s created the room</string>
-    <string name="notice_room_created_by_you">You created the room</string>
+    <string name="notice_room_created">%1$s created the chat</string>
+    <string name="notice_room_created_by_you">You created the chat</string>
     <string name="notice_direct_room_created">%1$s created the discussion</string>
     <string name="notice_direct_room_created_by_you">You created the discussion</string>
     <string name="notice_room_invite">%1$s invited %2$s</string>
     <string name="notice_room_invite_by_you">You invited %1$s</string>
     <string name="notice_room_invite_you">%1$s invited you</string>
-    <string name="notice_room_join">%1$s joined the room</string>
-    <string name="notice_room_join_by_you">You joined the room</string>
+    <string name="notice_room_join">%1$s joined the chat</string>
+    <string name="notice_room_join_by_you">You joined the chat</string>
     <string name="notice_direct_room_join">%1$s joined</string>
     <string name="notice_direct_room_join_by_you">You joined</string>
-    <string name="notice_room_leave">%1$s left the room</string>
-    <string name="notice_room_leave_by_you">You left the room</string>
-    <string name="notice_direct_room_leave">%1$s left the room</string>
-    <string name="notice_direct_room_leave_by_you">You left the room</string>
+    <string name="notice_room_leave">%1$s left the chat</string>
+    <string name="notice_room_leave_by_you">You left the chat</string>
+    <string name="notice_direct_room_leave">%1$s left the chat</string>
+    <string name="notice_direct_room_leave_by_you">You left the chat</string>
     <string name="notice_room_reject">%1$s rejected the invitation</string>
     <string name="notice_room_reject_by_you">You rejected the invitation</string>
     <string name="notice_room_remove">%1$s removed %2$s</string>
@@ -45,10 +45,10 @@
     <string name="notice_display_name_removed_by_you">You removed your display name (it was %1$s)</string>
     <string name="notice_room_topic_changed">%1$s changed the topic to: %2$s</string>
     <string name="notice_room_topic_changed_by_you">You changed the topic to: %1$s</string>
-    <string name="notice_room_avatar_changed">%1$s changed the room avatar</string>
-    <string name="notice_room_avatar_changed_by_you">You changed the room avatar</string>
-    <string name="notice_room_name_changed">%1$s changed the room name to: %2$s</string>
-    <string name="notice_room_name_changed_by_you">You changed the room name to: %1$s</string>
+    <string name="notice_room_avatar_changed">%1$s changed the chat avatar</string>
+    <string name="notice_room_avatar_changed_by_you">You changed the chat avatar</string>
+    <string name="notice_room_name_changed">%1$s changed the chat name to: %2$s</string>
+    <string name="notice_room_name_changed_by_you">You changed the chat name to: %1$s</string>
     <string name="notice_placed_video_call">%s placed a video call.</string>
     <string name="notice_placed_video_call_by_you">You placed a video call.</string>
     <string name="notice_placed_voice_call">%s placed a voice call.</string>
@@ -59,27 +59,27 @@
     <string name="notice_answered_call_by_you">You answered the call.</string>
     <string name="notice_ended_call">%s ended the call.</string>
     <string name="notice_ended_call_by_you">You ended the call.</string>
-    <string name="notice_made_future_room_visibility">%1$s made future room history visible to %2$s</string>
-    <string name="notice_made_future_room_visibility_by_you">You made future room history visible to %1$s</string>
+    <string name="notice_made_future_room_visibility">%1$s made future chat history visible to %2$s</string>
+    <string name="notice_made_future_room_visibility_by_you">You made future chat history visible to %1$s</string>
     <string name="notice_made_future_direct_room_visibility">%1$s made future messages visible to %2$s</string>
     <string name="notice_made_future_direct_room_visibility_by_you">You made future messages visible to %1$s</string>
-    <string name="notice_room_visibility_invited">all room members, from the point they are invited.</string>
-    <string name="notice_room_visibility_joined">all room members, from the point they joined.</string>
-    <string name="notice_room_visibility_shared">all room members.</string>
+    <string name="notice_room_visibility_invited">all chat members, from the point they are invited.</string>
+    <string name="notice_room_visibility_joined">all chat members, from the point they joined.</string>
+    <string name="notice_room_visibility_shared">all chat members.</string>
     <string name="notice_room_visibility_world_readable">anyone.</string>
-    <string name="notice_room_update">%s upgraded this room.</string>
-    <string name="notice_room_update_by_you">You upgraded this room.</string>
+    <string name="notice_room_update">%s upgraded this chat.</string>
+    <string name="notice_room_update_by_you">You upgraded this chat.</string>
     <string name="notice_direct_room_update">%s upgraded here.</string>
     <string name="notice_direct_room_update_by_you">You upgraded here.</string>
-    <string name="notice_room_server_acl_set_title">%s set the server ACLs for this room.</string>
-    <string name="notice_room_server_acl_set_title_by_you">You set the server ACLs for this room.</string>
+    <string name="notice_room_server_acl_set_title">%s set the server ACLs for this chat.</string>
+    <string name="notice_room_server_acl_set_title_by_you">You set the server ACLs for this chat.</string>
     <string name="notice_room_server_acl_set_banned">• Servers matching %s are banned.</string>
     <string name="notice_room_server_acl_set_allowed">• Servers matching %s are allowed.</string>
     <string name="notice_room_server_acl_set_ip_literals_allowed">• Servers matching IP literals are allowed.</string>
     <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Servers matching IP literals are banned.</string>
 
-    <string name="notice_room_server_acl_updated_title">%s changed the server ACLs for this room.</string>
-    <string name="notice_room_server_acl_updated_title_by_you">You changed the server ACLs for this room.</string>
+    <string name="notice_room_server_acl_updated_title">%s changed the server ACLs for this chat.</string>
+    <string name="notice_room_server_acl_updated_title_by_you">You changed the server ACLs for this chat.</string>
     <plurals name="notice_room_server_acl_changes">
         <item quantity="one">%d server ACLs change</item>
         <item quantity="other">%d server ACLs changes</item>
@@ -91,13 +91,13 @@
     <string name="notice_room_server_acl_updated_ip_literals_allowed">• Servers matching IP literals are now allowed.</string>
     <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Servers matching IP literals are now banned.</string>
     <string name="notice_room_server_acl_updated_no_change">No change.</string>
-    <string name="notice_room_server_acl_allow_is_empty">🎉 All servers are banned from participating! This room can no longer be used.</string>
+    <string name="notice_room_server_acl_allow_is_empty">🎉 All servers are banned from participating! This chat can no longer be used.</string>
 
     <string name="notice_avatar_changed_too">(avatar was changed too)</string>
-    <string name="notice_room_name_removed">%1$s removed the room name</string>
-    <string name="notice_room_name_removed_by_you">You removed the room name</string>
-    <string name="notice_room_topic_removed">%1$s removed the room topic</string>
-    <string name="notice_room_topic_removed_by_you">You removed the room topic</string>
+    <string name="notice_room_name_removed">%1$s removed the chat name</string>
+    <string name="notice_room_name_removed_by_you">You removed the chat name</string>
+    <string name="notice_room_topic_removed">%1$s removed the chat topic</string>
+    <string name="notice_room_topic_removed_by_you">You removed the chat topic</string>
     <string name="notice_room_avatar_removed">%1$s removed the room avatar</string>
     <string name="notice_room_avatar_removed_by_you">You removed the room avatar</string>
     <string name="notice_room_third_party_invite">%1$s sent an invitation to %2$s to join the room</string>
@@ -133,6 +133,7 @@
 
     <string name="notice_crypto_unable_to_decrypt">** Unable to decrypt: %s **</string>
     <string name="notice_crypto_error_unknown_inbound_session_id">The sender\'s device has not sent us the keys for this message.</string>
+    <string name="block_user1">Block user</string>
 
     <!-- Messages -->
 
@@ -450,7 +451,7 @@
     <string name="home_layout_preferences_sort_name">A - Z</string>
 
     <string name="labs_enable_new_app_layout_title">Enable new layout</string>
-    <string name="labs_enable_new_app_layout_summary">A simplified Element with optional tabs</string>
+    <string name="labs_enable_new_app_layout_summary">A simplified Big Star Messenger with optional tabs</string>
 
     <string name="labs_enable_deferred_dm_title">Enable deferred DMs</string>
     <string name="labs_enable_deferred_dm_summary">Create DM only on first message</string>
@@ -476,7 +477,7 @@
 
     <!-- People fragment -->
     <string name="direct_chats_header">Conversations</string>
-    <string name="matrix_only_filter">Matrix contacts only</string>
+    <string name="matrix_only_filter">Big Star Messenger contacts only</string>
     <string name="no_result_placeholder">No results</string>
     <string name="no_more_results">No more results</string>
 
@@ -994,6 +995,8 @@
 
     <string name="settings_version">Version</string>
     <string name="settings_olm_version">olm version</string>
+    <string name="linkOf"><a href="https://www.bigstarpolitics.com.kz">BigStarMessenger private policy</a></string>
+    <string name="linkOn">https://www.bigstarpolitics.com.kz</string>
     <string name="settings_app_term_conditions">Terms &amp; conditions</string>
     <string name="settings_third_party_notices">Third party notices</string>
     <string name="settings_copyright">Copyright</string>
@@ -2009,7 +2012,7 @@
     <string name="ftue_auth_choose_server_entry_hint">Server URL</string>
     <string name="ftue_auth_choose_server_ems_title">Want to host your own server?</string>
 
-    <string name="ftue_auth_choose_server_ems_subtitle">Element Matrix Services (EMS) is a robust and reliable hosting service for fast, secure and real time communication. Find out how on <a href="${ftue_ems_url}">element.io/ems</a></string>
+    <string name="ftue_auth_choose_server_ems_subtitle">Big Star Messenger Matrix Services (EMS) is a robust and reliable hosting service for fast, secure and real time communication. Find out how on <a href="${ftue_ems_url}">Big Star Messenger.io/ems</a></string>
     <string name="ftue_auth_choose_server_ems_cta">Get in touch</string>
 
     <string name="ftue_auth_terms_title">Server policies</string>
@@ -2093,7 +2096,7 @@
     <string name="login_continue">Continue</string>
     <!-- Replaced string is the homeserver url -->
     <string name="login_connect_to">Connect to %1$s</string>
-    <string name="login_connect_to_modular">Connect to Element Matrix Services</string>
+    <string name="login_connect_to_modular">Connect to Big Star Messenger Matrix Services</string>
     <string name="login_connect_to_a_custom_server">Connect to a custom server</string>
     <!-- Replaced string is the homeserver url -->
     <string name="login_signin_to">Sign in to %1$s</string>
@@ -2102,10 +2105,10 @@
     <string name="login_signin_sso">Continue with SSO</string>
     <string name="login_clear_homeserver_history">Clear history</string>
 
-    <string name="login_server_url_form_modular_hint">Element Matrix Services Address</string>
+    <string name="login_server_url_form_modular_hint">Big Star Messenger Matrix Services Address</string>
     <string name="login_server_url_form_other_hint">Address</string>
     <string name="login_server_url_form_modular_text">Premium hosting for organisations</string>
-    <string name="login_server_url_form_modular_notice">Enter the address of the Modular Element or Server you want to use</string>
+    <string name="login_server_url_form_modular_notice">Enter the address of the Modular Big Star Messenger or Server you want to use</string>
     <string name="login_server_url_form_common_notice">Enter the address of the server you want to use</string>
 
     <string name="login_sso_error_message">An error occurred when loading the page: %1$s (%2$d)</string>
@@ -2178,7 +2181,7 @@
     <string name="login_signup_cancel_confirmation_content">Your account is not created yet. Stop the registration process?</string>
 
     <string name="login_a11y_choose_matrix_org">Select matrix.org</string>
-    <string name="login_a11y_choose_modular">Select Element Matrix Services</string>
+    <string name="login_a11y_choose_modular">Select Big Star Messenger Matrix Services</string>
     <string name="login_a11y_choose_other">Select a custom homeserver</string>
     <string name="login_a11y_captcha_container">Please perform the captcha challenge</string>
     <string name="login_terms_title">Accept terms to continue</string>
@@ -2764,7 +2767,7 @@
     <string name="crypto_error_withheld_generic">You cannot access this message because the sender purposely did not send the keys</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Waiting for encryption history</string>
 
-    <string name="disclaimer_title">Riot is now Element!</string>
+    <string name="disclaimer_title">Riot is now Big Star Messenger!</string>
     <string name="disclaimer_content">We’re excited to announce we’ve changed name! Your app is up to date and you’re signed in to your account.</string>
     <string name="disclaimer_negative_button">GOT IT</string>
     <string name="disclaimer_positive_button">LEARN MORE</string>
@@ -3120,13 +3123,13 @@
     <!-- Examples of usage: 6h 15min 30sec left / 15min 30sec left / 30sec left -->
     <string name="voice_broadcast_recording_time_left">%1$s left</string>
 
-    <string name="upgrade_room_for_restricted">Anyone in %s will be able to find and join this room - no need to manually invite everyone. You’ll be able to change this in room settings anytime.</string>
-    <string name="upgrade_room_for_restricted_no_param">Anyone in a parent space will be able to find and join this room - no need to manually invite everyone. You’ll be able to change this in room settings anytime.</string>
+    <string name="upgrade_room_for_restricted">Anyone in %s will be able to find and join this chat - no need to manually invite everyone. You’ll be able to change this in chat settings anytime.</string>
+    <string name="upgrade_room_for_restricted_no_param">Anyone in a parent space will be able to find and join this chat - no need to manually invite everyone. You’ll be able to change this in chat settings anytime.</string>
 
-    <string name="upgrade_room_for_restricted_note">Please note upgrading will make a new version of the room. All current messages will stay in this archived room.</string>
+    <string name="upgrade_room_for_restricted_note">Please note upgrading will make a new version of the chat. All current messages will stay in this archived room.</string>
 
     <!-- %s will be replaced by an email at runtime -->
-    <string name="this_invite_to_this_room_was_sent">This invite to this room was sent to %s which is not associated with your account</string>
+    <string name="this_invite_to_this_room_was_sent">This invite to this chat was sent to %s which is not associated with your account</string>
     <!-- %s will be replaced by an email at runtime -->
     <string name="this_invite_to_this_space_was_sent">This invite to this space was sent to %s which is not associated with your account</string>
 
@@ -3137,8 +3140,8 @@
     <string name="labs_enable_latex_maths">Enable LaTeX mathematics</string>
     <string name="restart_the_application_to_apply_changes">Restart the application for the change to take effect.</string>
 
-    <string name="labs_enable_msc3061_share_history">MSC3061: Sharing room keys for past messages</string>
-    <string name="labs_enable_msc3061_share_history_desc">When inviting in an encrypted room that is sharing history, encrypted history will be visible.</string>
+    <string name="labs_enable_msc3061_share_history">MSC3061: Sharing chat keys for past messages</string>
+    <string name="labs_enable_msc3061_share_history_desc">When inviting in an encrypted chat that is sharing history, encrypted history will be visible.</string>
 
     <!-- Poll -->
     <string name="create_poll_title">Create Poll</string>
@@ -3220,10 +3223,10 @@
     <string name="live_location_sharing_notification_title">${app_name} Live Location</string>
     <string name="live_location_sharing_notification_description">Location sharing is in progress</string>
     <string name="labs_enable_live_location">Enable Live Location Sharing</string>
-    <string name="labs_enable_live_location_summary">Temporary implementation: locations persist in room history</string>
+    <string name="labs_enable_live_location_summary">Temporary implementation: locations persist in chat history</string>
     <string name="live_location_bottom_sheet_last_updated_at">Updated %1$s ago</string>
     <string name="live_location_not_enough_permission_dialog_title">You don’t have permission to share live location</string>
-    <string name="live_location_not_enough_permission_dialog_description">You need to have the right permissions in order to share live location in this room.</string>
+    <string name="live_location_not_enough_permission_dialog_description">You need to have the right permissions in order to share live location in this chat.</string>
     <string name="live_location_share_location_item_share">Share location</string>
     <!-- mostly used as a description when replying to a live location message -->
     <string name="live_location_description">Live location</string>
@@ -3255,9 +3258,9 @@
         <item quantity="other">"%1$d more"</item>
     </plurals>
 
-    <string name="room_message_notify_everyone">Notify the whole room</string>
+    <string name="room_message_notify_everyone">Notify the whole chat</string>
     <string name="room_message_autocomplete_users">Users</string>
-    <string name="room_message_autocomplete_notification">Room notification</string>
+    <string name="room_message_autocomplete_notification">chat notification</string>
 
     <!-- Screen sharing -->
     <string name="screen_sharing_notification_title">${app_name} Screen Sharing</string>
@@ -3284,7 +3287,7 @@
 
     <!-- Live Location Sharing Labs Flag Promotional BottomSheet -->
     <string name="live_location_labs_promotion_title">Live location sharing</string>
-    <string name="live_location_labs_promotion_description">Please note: this is a labs feature using a temporary implementation. This means you will not be able to delete your location history, and advanced users will be able to see your location history even after you stop sharing your live location with this room.</string>
+    <string name="live_location_labs_promotion_description">Please note: this is a labs feature using a temporary implementation. This means you will not be able to delete your location history, and advanced users will be able to see your location history even after you stop sharing your live location with this chat.</string>
     <string name="live_location_labs_promotion_switch_title">Enable location sharing</string>
 
     <plurals name="room_removed_messages">
@@ -3292,9 +3295,9 @@
         <item quantity="other">%d messages removed</item>
     </plurals>
 
-    <!-- Element Call Widget -->
-    <string name="labs_enable_element_call_permission_shortcuts">Enable Element Call permission shortcuts</string>
-    <string name="labs_enable_element_call_permission_shortcuts_summary">Auto-approve Element Call widgets and grant camera / mic access</string>
+    <!-- Big Star Messenger Call Widget -->
+    <string name="labs_enable_element_call_permission_shortcuts">Enable Big Star Messenger Call permission shortcuts</string>
+    <string name="labs_enable_element_call_permission_shortcuts_summary">Auto-approve Big Star Messenger Call widgets and grant camera / mic access</string>
 
     <!-- Device Manager -->
     <string name="device_manager_sessions_other_title">Other sessions</string>
@@ -3404,7 +3407,7 @@
     <string name="device_manager_learn_more_sessions_verified" tools:ignore="UnusedResources">Verified sessions have logged in with your credentials and then been verified, either using your secure passphrase or by cross-verifying.\n\nThis means they hold encryption keys for your previous messages, and confirm to other users you are communicating with that these sessions are really you.</string>
     <string name="device_manager_learn_more_sessions_verified_description">Verified sessions are anywhere you are using this account after entering your passphrase or confirming your identity with another verified session.\n\nThis means that you have all the keys needed to unlock your encrypted messages and confirm to other users that you trust this session.</string>
     <string name="device_manager_learn_more_session_rename_title">Renaming sessions</string>
-    <string name="device_manager_learn_more_session_rename">Other users in direct messages and rooms that you join are able to view a full list of your sessions.\n\nThis provides them with confidence that they are really speaking to you, but it also means they can see the session name you enter here.</string>
+    <string name="device_manager_learn_more_session_rename">Other users in direct messages and chats that you join are able to view a full list of your sessions.\n\nThis provides them with confidence that they are really speaking to you, but it also means they can see the session name you enter here.</string>
     <string name="labs_enable_session_manager_title">Enable new session manager</string>
     <string name="labs_enable_session_manager_summary">Have greater visibility and control over all your sessions.</string>
     <string name="labs_enable_client_info_recording_title">Enable client info recording</string>
@@ -3415,10 +3418,10 @@
     <!-- Note to translators: %s will be replaces with selected space name -->
     <string name="home_empty_space_no_rooms_title">%s\nis looking a little empty.</string>
     <!-- Note to translators: for RTL languages, Spaces will be at the bottom left. Please translate "bottom-left" instead of "bottom-right". Thanks!-->
-    <string name="home_empty_space_no_rooms_message">Spaces are a new way to group rooms and people. Add an existing room, or create a new one, using the bottom-right button.</string>
+    <string name="home_empty_space_no_rooms_message">Spaces are a new way to group chat and people. Add an existing chat, or create a new one, using the bottom-right button.</string>
     <!--  Note to translators: %s will be replaces with current user displayname -->
     <string name="home_empty_no_rooms_title">Welcome to ${app_name},\n%s.</string>
-    <string name="home_empty_no_rooms_message">The all-in-one secure chat app for teams, friends and organisations. Create a chat, or join an existing room, to get started.</string>
+    <string name="home_empty_no_rooms_message">The all-in-one secure chat app for teams, friends and organisations. Create a chat, or join an existing chat, to get started.</string>
     <string name="home_empty_no_unreads_title">Nothing to report.</string>
     <string name="home_empty_no_unreads_message">This is where your unread messages will show up, when you have some.</string>
 

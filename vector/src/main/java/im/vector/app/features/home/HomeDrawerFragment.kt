@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -60,6 +61,7 @@ class HomeDrawerFragment :
         return FragmentHomeDrawerBinding.inflate(inflater, container, false)
     }
 
+    @SuppressLint("StringFormatInvalid")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -110,18 +112,17 @@ class HomeDrawerFragment :
         }
 
         views.homeDrawerInviteFriendButton.debouncedClicks {
-            permalinkFactory.createPermalinkOfCurrentUser()?.let { permalink ->
-                analyticsTracker.screen(MobileScreen(screenName = MobileScreen.ScreenName.InviteFriends))
-                val text = getString(R.string.invite_friends_text, permalink)
+            analyticsTracker.screen(MobileScreen(screenName = MobileScreen.ScreenName.InviteFriends))
+            // TODO: Change to PlayMarket URL
+            val text = getString(R.string.invite_friends_text, "https://https://bigstar.netlify.app")
 
-                startSharePlainTextIntent(
-                        context = requireContext(),
-                        activityResultLauncher = null,
-                        chooserTitle = getString(R.string.invite_friends),
-                        text = text,
-                        extraTitle = getString(R.string.invite_friends_rich_title)
-                )
-            }
+            startSharePlainTextIntent(
+                    context = requireContext(),
+                    activityResultLauncher = null,
+                    chooserTitle = getString(R.string.invite_friends),
+                    text = text,
+                    extraTitle = getString(R.string.invite_friends_rich_title)
+            )
         }
 
         // Debug menu

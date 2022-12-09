@@ -197,6 +197,7 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
@@ -859,6 +860,16 @@ class TimelineFragment :
         return when (item.itemId) {
             R.id.invite -> {
                 navigator.openInviteUsersToRoom(requireActivity(), timelineArgs.roomId)
+                true
+            }
+            R.id.block_user -> {
+                timelineViewModel.viewModelScope.launch {
+                    session.userService().unIgnoreUserIds(listOf(timelineArgs.roomId))
+                    session.userService().ignoreUserIds(listOf(session.roomService().getRoom(timelineArgs.roomId)?.membershipService()?.getRoomMembers(
+                            roomMemberQueryParams {
+                        memberships = listOf(Membership.JOIN)
+                    })?.get(0)?.userId!!))
+                }
                 true
             }
             R.id.timeline_setting -> {

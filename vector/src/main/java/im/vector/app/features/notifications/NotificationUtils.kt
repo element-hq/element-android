@@ -582,7 +582,7 @@ class NotificationUtils @Inject constructor(
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
         // Build the pending intent for when the notification is clicked
         val openRoomIntent = buildOpenRoomIntent(roomInfo.roomId)
-        val smallIcon = R.drawable.ic_notification
+        val smallIcon = R.drawable.logo222
 
         val channelID = if (roomInfo.shouldBing) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID
         return NotificationCompat.Builder(context, channelID)
@@ -695,7 +695,7 @@ class NotificationUtils @Inject constructor(
     ): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
         // Build the pending intent for when the notification is clicked
-        val smallIcon = R.drawable.ic_notification
+        val smallIcon = R.drawable.logo222
 
         val channelID = if (inviteNotifiableEvent.noisy) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID
 
@@ -775,7 +775,7 @@ class NotificationUtils @Inject constructor(
     ): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
         // Build the pending intent for when the notification is clicked
-        val smallIcon = R.drawable.ic_notification
+        val smallIcon = R.drawable.logo222
 
         val channelID = if (simpleNotifiableEvent.noisy) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID
 
@@ -890,7 +890,7 @@ class NotificationUtils @Inject constructor(
             lastMessageTimestamp: Long
     ): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
-        val smallIcon = R.drawable.ic_notification
+        val smallIcon = R.drawable.logo222
 
         return NotificationCompat.Builder(context, if (noisy) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID)
                 .setOnlyAlertOnce(true)

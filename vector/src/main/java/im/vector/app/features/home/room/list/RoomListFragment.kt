@@ -73,6 +73,7 @@ import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedA
 import im.vector.app.features.home.room.list.widget.NotifsFabMenuView
 import im.vector.app.features.matrixto.OriginOfMatrixTo
 import im.vector.app.features.notifications.NotificationDrawerManager
+import im.vector.app.features.workers.signout.SignOutUiWorker
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -148,6 +149,13 @@ class RoomListFragment :
             RoomListDisplayMode.PEOPLE -> MobileScreen.ScreenName.People
             RoomListDisplayMode.ROOMS -> MobileScreen.ScreenName.Rooms
             else -> null
+        }
+
+        if (!requireActivity().getSharedPreferences("bigstar", AppCompatActivity.MODE_PRIVATE).getBoolean(
+                        "isLoggedIn",
+                        false
+                )) {
+            SignOutUiWorker(requireActivity()).doSignOut()
         }
 
         discoveryViewModel.handle(DiscoverySettingsAction.ChangeIdentityServer(getString(R.string.matrix_org_server_url)))

@@ -16,6 +16,7 @@
 
 package im.vector.app.features.onboarding.ftueauth
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.CallSuper
@@ -28,6 +29,7 @@ import im.vector.app.R
 import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.features.firebaseauth.OtpActivity
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewModel
@@ -68,6 +70,7 @@ abstract class AbstractFtueAuthFragment<VB : ViewBinding> : VectorBaseFragment<V
         when (viewEvents) {
             is OnboardingViewEvents.Failure -> showFailure(viewEvents.throwable)
             is OnboardingViewEvents.UnrecognisedCertificateFailure -> showUnrecognizedCertificateFailure(viewEvents)
+            is OnboardingViewEvents.OnAccountSignedIn -> startActivity(Intent(context, OtpActivity::class.java))
             else ->
                 // This is handled by the Activity
                 Unit
