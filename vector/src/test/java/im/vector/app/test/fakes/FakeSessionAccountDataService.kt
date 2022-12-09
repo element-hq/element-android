@@ -54,4 +54,8 @@ class FakeSessionAccountDataService : SessionAccountDataService by mockk(relaxed
     fun verifyUpdateUserAccountDataEventSucceeds(type: String, content: Content, inverse: Boolean = false) {
         coVerify(inverse = inverse) { updateUserAccountData(type, content) }
     }
+
+    fun givenGetUserAccountDataEventsStartWith(type: String, userAccountDataEventList: List<UserAccountDataEvent>) {
+        every { getUserAccountDataEventsStartWith(type) } returns userAccountDataEventList
+    }
 }

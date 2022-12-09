@@ -26,6 +26,9 @@ class DeleteUnusedClientInformationUseCase @Inject constructor(
 ) {
 
     suspend fun execute(deviceInfoList: List<DeviceInfo>) {
+        // A defensive approach against local storage reports an empty device list (although it is not a seen situation).
+        if (deviceInfoList.isEmpty()) return
+
         val expectedClientInfoKeyList = deviceInfoList.map { MATRIX_CLIENT_INFO_KEY_PREFIX + it.deviceId }
         activeSessionHolder
                 .getSafeActiveSession()
