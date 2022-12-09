@@ -85,13 +85,14 @@ class SessionInfoView @JvmOverloads constructor(
     }
 
     private fun renderVerificationStatus(
-            encryptionTrustLevel: RoomEncryptionTrustLevel,
+            encryptionTrustLevel: RoomEncryptionTrustLevel?,
             isCurrentSession: Boolean,
             hasLearnMoreLink: Boolean,
             isVerifyButtonVisible: Boolean,
     ) {
         views.sessionInfoVerificationStatusImageView.renderDeviceShield(encryptionTrustLevel)
         when {
+            encryptionTrustLevel == null -> renderCrossSigningEncryptionNotSupported()
             encryptionTrustLevel == RoomEncryptionTrustLevel.Trusted -> renderCrossSigningVerified(isCurrentSession)
             encryptionTrustLevel == RoomEncryptionTrustLevel.Default && !isCurrentSession -> renderCrossSigningUnknown()
             else -> renderCrossSigningUnverified(isCurrentSession, isVerifyButtonVisible)
@@ -146,6 +147,14 @@ class SessionInfoView @JvmOverloads constructor(
     private fun renderCrossSigningUnknown() {
         views.sessionInfoVerificationStatusTextView.text = context.getString(R.string.device_manager_verification_status_unknown)
         views.sessionInfoVerificationStatusDetailTextView.text = context.getString(R.string.device_manager_verification_status_detail_other_session_unknown)
+        views.sessionInfoVerifySessionButton.isVisible = false
+    }
+
+    private fun renderCrossSigningEncryptionNotSupported() {
+        views.sessionInfoVerificationStatusTextView.text = context.getString(R.string.device_manager_verification_status_unverified)
+        views.sessionInfoVerificationStatusTextView.setTextColor(ThemeUtils.getColor(context, R.attr.colorError))
+        views.sessionInfoVerificationStatusDetailTextView.text =
+                context.getString(R.string.device_manager_verification_status_detail_session_encryption_not_supported)
         views.sessionInfoVerifySessionButton.isVisible = false
     }
 
