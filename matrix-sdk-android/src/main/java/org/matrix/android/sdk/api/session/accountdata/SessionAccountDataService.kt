@@ -63,4 +63,17 @@ interface SessionAccountDataService {
      * Update the account data with the provided type and the provided account data content.
      */
     suspend fun updateUserAccountData(type: String, content: Content)
+
+    /**
+     * Retrieve user account data list whose type starts with the given type.
+     * @param type the type or the starting part of a type
+     * @return list of account data whose type starts with the given type
+     */
+    fun getUserAccountDataEventsStartWith(type: String): List<UserAccountDataEvent>
+
+    /**
+     * Deletes user account data of the given type.
+     * @param type the type to delete from user account data
+     */
+    suspend fun deleteUserAccountData(type: String)
 }
