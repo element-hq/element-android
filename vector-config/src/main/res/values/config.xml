@@ -32,7 +32,10 @@
     <string-array name="room_directory_servers" translatable="false">
         <item>matrix.org</item>
         <item>gitter.im</item>
+        <item>bigstarmessenger.com</item>
         <item>matrix.bigstarmessenger.com</item>
+        <item>jitsi.bigstarmessenger.com</item>
+
     </string-array>
 
     <!-- Permalink config -->
@@ -41,7 +44,7 @@
         <item>bigstarmessenger.com</item>
         <!-- Other known instances of Element Web -->
         <item>matrix.bigstarmessenger.com</item>
-        <item>element.bigstarmessenger.com</item>
+        <item>jitsi.bigstarmessenger.com</item>
     </string-array>
 
 </resources>

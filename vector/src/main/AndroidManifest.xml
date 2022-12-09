@@ -199,11 +199,12 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="https" />
-                <data android:host="riot.im" />
-                <data android:host="app.element.io" />
-                <data android:host="mobile.element.io" />
-                <data android:host="develop.element.io" />
-                <data android:host="staging.element.io" />
+                <data android:host="matrix.bigstarmessenger.com" />
+
+<!--                <data android:host="app.element.io" />-->
+<!--                <data android:host="mobile.element.io" />-->
+<!--                <data android:host="develop.element.io" />-->
+<!--                <data android:host="staging.element.io" />-->
             </intent-filter>
         </activity>
 

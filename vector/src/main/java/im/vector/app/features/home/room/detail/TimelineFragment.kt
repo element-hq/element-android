@@ -876,10 +876,10 @@ class TimelineFragment :
                 navigator.openRoomProfile(requireActivity(), timelineArgs.roomId)
                 true
             }
-            R.id.open_matrix_apps -> {
-                timelineViewModel.handle(RoomDetailAction.ManageIntegrations)
-                true
-            }
+//            R.id.open_matrix_apps -> {
+//                timelineViewModel.handle(RoomDetailAction.ManageIntegrations)
+//                true
+//            }
             R.id.voice_call -> {
                 callActionsHandler.onVoiceCallClicked()
                 true

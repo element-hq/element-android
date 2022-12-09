@@ -47,25 +47,25 @@ class SplashCarouselStateFactory @Inject constructor(
                                 R.string.ftue_auth_carousel_secure_title.colorTerminatingFullStop(R.attr.colorAccent),
                                 R.string.ftue_auth_carousel_secure_body,
                                 hero(R.drawable.goodteampana, R.drawable.goodteampana),
-                                background(R.drawable.bg_unread_highlight)
+                                background(R.drawable.bg_carousel_page_1)
                         ),
                         SplashCarouselState.Item(
                                 R.string.ftue_auth_carousel_control_title.colorTerminatingFullStop(R.attr.colorAccent),
                                 R.string.ftue_auth_carousel_control_body,
                                 hero(R.drawable.socialmediapana, R.drawable.socialmediapana),
-                                background(R.drawable.bg_unread_highlight)
+                                background(R.drawable.bg_carousel_page_2)
                         ),
                         SplashCarouselState.Item(
                                 R.string.ftue_auth_carousel_encrypted_title.colorTerminatingFullStop(R.attr.colorAccent),
                                 R.string.ftue_auth_carousel_encrypted_body,
                                 hero(R.drawable.topsecret, R.drawable.topsecret),
-                                background(R.drawable.bg_unread_highlight)
+                                background(R.drawable.bg_carousel_page_3)
                         ),
                         SplashCarouselState.Item(
                                 collaborationTitle().colorTerminatingFullStop(R.attr.colorAccent),
                                 R.string.storage5g,
                                 hero(R.drawable.conversationrafiki, R.drawable.conversationrafiki),
-                                background(R.drawable.bg_unread_highlight)
+                                background(R.drawable.bg_carousel_page_4)
                         )
                 )
         )

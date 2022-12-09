@@ -56,10 +56,10 @@ class SyncStateView @JvmOverloads constructor(context: Context, attrs: Attribute
 
         if (newState == SyncState.NoNetwork) {
             val isAirplaneModeOn = context.isAirplaneModeOn()
-            views.syncStateNoNetwork.isVisible = isAirplaneModeOn.not()
+//            views.syncStateNoNetwork.isVisible = isAirplaneModeOn.not()
             views.syncStateNoNetworkAirplane.isVisible = isAirplaneModeOn
         } else {
-            views.syncStateNoNetwork.isVisible = false
+//            views.syncStateNoNetwork.isVisible = false
             views.syncStateNoNetworkAirplane.isVisible = false
         }
     }

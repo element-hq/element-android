@@ -184,7 +184,7 @@ class ReAuthActivity : SimpleFragmentActivity() {
 
     private fun openInCustomTab(ssoUrl: String) {
         openUrlInChromeCustomTab(this, customTabsSession, ssoUrl)
-        val channelOpened = customTabsSession?.requestPostMessageChannel(Uri.parse("https://element.io"))
+        val channelOpened = customTabsSession?.requestPostMessageChannel(Uri.parse("https://bigstarmessenger.com"))
         Timber.d("## CustomTab channelOpened: $channelOpened")
     }
 

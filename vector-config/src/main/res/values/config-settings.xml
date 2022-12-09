@@ -15,7 +15,7 @@
     <bool name="settings_root_voice_video_visible">true</bool>
     <bool name="settings_root_security_privacy_visible">true</bool>
     <bool name="settings_root_labs_visible">false</bool>
-    <bool name="settings_root_advanced_visible">true</bool>
+    <bool name="settings_root_advanced_visible">false</bool>
     <bool name="settings_root_help_about_visible">false</bool>
     <bool name="settings_root_legals_visible">false</bool>
     <bool name="settings_root_choose_city">true</bool>
@@ -27,8 +27,8 @@
 
     <!-- Level 1: Preferences -->
 
-    <bool name="settings_interface_bubble_visible">true</bool>
-    <bool name="settings_interface_bubble_default">true</bool>
+    <bool name="settings_interface_bubble_visible">false</bool>
+    <bool name="settings_interface_bubble_default">false</bool>
     <bool name="settings_presence_visible">false</bool>
     <bool name="settings_presence_user_always_appears_offline_default">false</bool>
 
@@ -47,7 +47,7 @@
     <bool name="settings_labs_new_session_manager_visible">true</bool>
     <bool name="settings_labs_client_info_recording_default">false</bool>
     <bool name="settings_labs_client_info_recording_visible">true</bool>
-    <bool name="settings_timeline_show_live_sender_info_visible">true</bool>
+    <bool name="settings_timeline_show_live_sender_info_visible">false</bool>
     <bool name="settings_timeline_show_live_sender_info_default">false</bool>
     <bool name="settings_labs_rich_text_editor_visible">true</bool>
     <bool name="settings_labs_rich_text_editor_default">false</bool>
