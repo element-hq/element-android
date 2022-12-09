@@ -33,6 +33,7 @@ ext.groups = [
                         'com\\.google\\.android\\..*',
                 ],
                 group: [
+                        'com.google.gms',
                         'com.android',
                         'com.android.ndk.thirdparty',
                         'com.android.tools',
@@ -51,6 +52,7 @@ ext.groups = [
                 regex: [
                 ],
                 group: [
+                        'com.google.gms',
                         'com.github.Drjacky',
                         'me.relex',
                         'app.cash.paparazzi',

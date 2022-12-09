@@ -30,6 +30,7 @@ import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityVectorSettingsBinding
 import im.vector.app.features.discovery.DiscoverySettingsFragment
+import im.vector.app.features.home.CitiesActivity
 import im.vector.app.features.navigation.SettingsActivityPayload
 import im.vector.app.features.settings.devices.VectorSettingsDevicesFragment
 import im.vector.app.features.settings.notifications.VectorSettingsNotificationPreferenceFragment
@@ -117,6 +118,12 @@ class VectorSettingsActivity : VectorBaseActivity<ActivityVectorSettingsBinding>
     }
 
     override fun onPreferenceStartFragment(caller: PreferenceFragmentCompat, pref: Preference): Boolean {
+        if (pref.title == getString(R.string.change_city)) {
+            startActivity(Intent(applicationContext, CitiesActivity::class.java))
+            finish()
+        } else if (pref.title == getString(R.string.view_my_ads)) {
+            finish()
+        }
         val oFragment = try {
             pref.fragment?.let {
                 supportFragmentManager.fragmentFactory.instantiate(classLoader, it)

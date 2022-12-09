@@ -39,7 +39,7 @@
             android:layout_height="76dp"
             android:adjustViewBounds="true"
             android:background="@drawable/circle"
-            android:backgroundTint="@color/launcher_background"
+            android:backgroundTint="@color/number_color"
             android:contentDescription="@null"
             android:src="@drawable/ic_ftue_phone"
             app:layout_constraintBottom_toTopOf="@id/phoneConfirmationHeaderTitle"

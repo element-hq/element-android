@@ -113,8 +113,7 @@ class HomeDrawerFragment :
 
         views.homeDrawerInviteFriendButton.debouncedClicks {
             analyticsTracker.screen(MobileScreen(screenName = MobileScreen.ScreenName.InviteFriends))
-            // TODO: Change to PlayMarket URL
-            val text = getString(R.string.invite_friends_text, "https://https://bigstar.netlify.app")
+            val text = getString(R.string.invite_friends_text, "https://bigstar.netlify.app")
 
             startSharePlainTextIntent(
                     context = requireContext(),

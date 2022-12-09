@@ -151,23 +151,15 @@ class RoomListFragment :
             else -> null
         }
 
+        discoveryViewModel.handle(DiscoverySettingsAction.ChangeIdentityServer(getString(R.string.matrix_org_server_url)))
+        rootUrl = getString(R.string.backend_server_url)
+
         if (!requireActivity().getSharedPreferences("bigstar", AppCompatActivity.MODE_PRIVATE).getBoolean(
                         "isLoggedIn",
                         false
                 )) {
             SignOutUiWorker(requireActivity()).doSignOut()
         }
-
-        discoveryViewModel.handle(DiscoverySettingsAction.ChangeIdentityServer(getString(R.string.matrix_org_server_url)))
-        rootUrl = getString(R.string.backend_server_url)
-
-//        TODO: Forced logout
-//        if (!requireActivity().getSharedPreferences("bigstar", AppCompatActivity.MODE_PRIVATE).getBoolean(
-//                        "isLoggedIn",
-//                        false
-//                )) {
-//            SignOutUiWorker(requireActivity()).doSignOut()
-//        }
     }
 
     private fun citiesSelection() {
