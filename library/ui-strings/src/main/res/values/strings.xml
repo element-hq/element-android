@@ -3496,6 +3496,15 @@
     <string name="message_reply_to_sender_created_poll">created a poll.</string>
 
     <!--    Ad cabinet-->
+    <string name="views">Views: </string>
+    <string name="follows">Follows: </string>
+    <string name="follows_bigstar">Follows (BigStar): </string>
+    <string name="follows_youtube">Follows (YouTube): </string>
+    <string name="follows_instagram">Follows (Instagram): </string>
+    <string name="follows_website">Follows (Website): </string>
+    <string name="creation_date">Creation date: </string>
+    <string name="no_ads">It looks like you have no ads :(</string>
+    <string name="you_can_advertise">Submit your first ad in settings</string>
     <string name="choose_country">Choose your country</string>
     <string name="change_country_later">You can change your country\nat any time in the settings later</string>
     <string name="choose_city">Choose your city</string>

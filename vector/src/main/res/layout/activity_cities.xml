@@ -50,10 +50,10 @@
 
         <Button
             android:id="@+id/btn_categories_done"
+            android:backgroundTint="@color/toggle_button_unchecked"
             android:layout_width="200dp"
             android:layout_height="50dp"
             android:layout_marginTop="40dp"
-            android:background="@drawable/round_shape_btn_inactive"
             android:elevation="10dp"
             android:text="@string/done"
             android:textAppearance="?android:textAppearanceLarge"

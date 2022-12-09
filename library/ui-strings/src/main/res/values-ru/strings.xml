@@ -44,6 +44,15 @@
     <string name="initial_sync_start_importing_account">Начальная синхронизация:
 \nИмпорт учётной записи…</string>
     <string name="pay">Оплатить</string>
+    <string name="views">Просмотров: </string>
+    <string name="follows">Переходов: </string>
+    <string name="follows_bigstar">Переходов (BigStar): </string>
+    <string name="follows_youtube">Переходов (YouTube): </string>
+    <string name="follows_instagram">Переходов (Instagram): </string>
+    <string name="follows_website">Переходов (Website): </string>
+    <string name="creation_date">Дата создания: </string>
+    <string name="no_ads">Похоже, у Вас нет объявлений :(</string>
+    <string name="you_can_advertise">Подайте свое первое объявление в настройках</string>
     <string name="choose_country">Выберите вашу страну</string>
     <string name="view_my_ads">Мои объявления</string>
     <string name="change_city">Сменить город</string>

@@ -26,6 +26,7 @@ import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.devices.v2.notification.UpdateNotificationSettingsAccountDataUseCase
 import im.vector.app.features.sync.SyncUtils
+import io.realm.Realm
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
@@ -43,6 +44,12 @@ class ConfigureAndStartSessionUseCase @Inject constructor(
     fun execute(session: Session, startSyncing: Boolean = true) {
         Timber.i("Configure and start session for ${session.myUserId}. startSyncing: $startSyncing")
         session.open()
+
+        val preferences = Realm.getApplicationContext()?.getSharedPreferences("bigstar", Context.MODE_PRIVATE)
+        val editor = preferences?.edit()
+        editor?.putString("username", session.myUserId)
+        editor?.apply()
+
         session.coroutineScope.launch {
             session.filterService().setSyncFilter(SyncUtils.getSyncFilterBuilder())
         }

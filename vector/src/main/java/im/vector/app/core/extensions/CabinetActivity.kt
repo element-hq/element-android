@@ -248,10 +248,10 @@ class CabinetActivity : AppCompatActivity() {
                 textDays?.text!!.isNotEmpty() &&
                 selectedCities.isNotEmpty()
         ) {
-            btnCreateAd?.setBackgroundResource(R.drawable.round_shape_btn_active)
+            btnCreateAd?.backgroundTintList = getColorStateList(R.color.toggle_button_checked)
             btnCreateAd?.isEnabled = true
         } else {
-            btnCreateAd?.setBackgroundResource(R.drawable.round_shape_btn_inactive)
+            btnCreateAd?.backgroundTintList = getColorStateList(R.color.toggle_button_unchecked)
             btnCreateAd?.isEnabled = false
         }
     }
@@ -404,7 +404,7 @@ class CabinetActivity : AppCompatActivity() {
                         }
 
                     }.start()
-                    buttonView.setBackgroundResource(R.drawable.round_shape_btn_active)
+                    buttonView.backgroundTintList = getColorStateList(R.color.toggle_button_checked)
                 } else {
                     Thread {
                         val url = URL("$rootUrl/countries/$countryUuid/cities")
@@ -429,7 +429,7 @@ class CabinetActivity : AppCompatActivity() {
                             validateInputs()
                         }
                     }.start()
-                    buttonView.setBackgroundResource(R.drawable.round_shape_btn_inactive)
+                    buttonView.backgroundTintList = getColorStateList(R.color.toggle_button_unchecked)
                 }
             }
 
@@ -455,10 +455,10 @@ class CabinetActivity : AppCompatActivity() {
             toggleBtn.setOnCheckedChangeListener { buttonView, isChecked ->
                 if (isChecked) {
                     selectedCities.add(cityUuid)
-                    buttonView.setBackgroundResource(R.drawable.round_shape_btn_active)
+                    buttonView.backgroundTintList = getColorStateList(R.color.toggle_button_checked)
                 } else {
                     selectedCities.remove(cityUuid)
-                    buttonView.setBackgroundResource(R.drawable.round_shape_btn_inactive)
+                    buttonView.backgroundTintList = getColorStateList(R.color.toggle_button_unchecked)
                 }
                 validateInputs()
             }

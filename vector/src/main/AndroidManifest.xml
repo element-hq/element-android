@@ -128,6 +128,11 @@
         </activity>
 
         <activity
+            android:name=".features.home.MyAdsActivity"
+            android:exported="true">
+        </activity>
+
+        <activity
             android:name="im.vector.app.features.firebaseauth.OtpActivity"
             android:exported="true">
         </activity>

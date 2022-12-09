@@ -60,7 +60,7 @@ class CountriesActivity : AppCompatActivity() {
                     selectedCountryUuid = categoryUuid
 
                     btnDone.isActivated = true
-                    btnDone.setBackgroundResource(R.drawable.round_shape_btn_active)
+                    btnDone.backgroundTintList = getColorStateList(R.color.toggle_button_checked)
                 }
             }
 
