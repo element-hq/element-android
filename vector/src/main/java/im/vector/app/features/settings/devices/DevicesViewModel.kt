@@ -88,7 +88,7 @@ data class DevicesViewState(
 data class DeviceFullInfo(
         val deviceInfo: DeviceInfo,
         val cryptoDeviceInfo: CryptoDeviceInfo?,
-        val trustLevelForShield: RoomEncryptionTrustLevel,
+        val trustLevelForShield: RoomEncryptionTrustLevel?,
         val isInactive: Boolean,
 )
 
