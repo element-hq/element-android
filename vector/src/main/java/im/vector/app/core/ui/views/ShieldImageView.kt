@@ -40,20 +40,26 @@ class ShieldImageView @JvmOverloads constructor(
 
     /**
      * Renders device shield with the support of unknown shields instead of black shields which is used for rooms.
-     * @param roomEncryptionTrustLevel trust level that is usally calculated with [im.vector.app.features.settings.devices.TrustUtils.shieldForTrust]
+     * @param roomEncryptionTrustLevel trust level that is usually calculated with [im.vector.app.features.settings.devices.TrustUtils.shieldForTrust]
      * @param borderLess if true then the shield icon with border around is used
      */
     fun renderDeviceShield(roomEncryptionTrustLevel: RoomEncryptionTrustLevel?, borderLess: Boolean = false) {
-        isVisible = roomEncryptionTrustLevel != null
-
-        if (roomEncryptionTrustLevel == RoomEncryptionTrustLevel.Default) {
-            contentDescription = context.getString(R.string.a11y_trust_level_default)
-            setImageResource(
-                    if (borderLess) R.drawable.ic_shield_unknown_no_border
-                    else R.drawable.ic_shield_unknown
-            )
-        } else {
-            render(roomEncryptionTrustLevel, borderLess)
+        when (roomEncryptionTrustLevel) {
+            null -> {
+                contentDescription = context.getString(R.string.a11y_trust_level_warning)
+                setImageResource(
+                        if (borderLess) R.drawable.ic_shield_warning_no_border
+                        else R.drawable.ic_shield_warning
+                )
+            }
+            RoomEncryptionTrustLevel.Default -> {
+                contentDescription = context.getString(R.string.a11y_trust_level_default)
+                setImageResource(
+                        if (borderLess) R.drawable.ic_shield_unknown_no_border
+                        else R.drawable.ic_shield_unknown
+                )
+            }
+            else -> render(roomEncryptionTrustLevel, borderLess)
         }
     }
 

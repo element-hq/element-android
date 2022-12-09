@@ -229,7 +229,7 @@ class SessionOverviewFragment :
             )
             views.sessionOverviewInfo.render(infoViewState, dateFormatter, drawableProvider, colorProvider, stringProvider)
             views.sessionOverviewInfo.onLearnMoreClickListener = {
-                showLearnMoreInfoVerificationStatus(deviceInfo.roomEncryptionTrustLevel == RoomEncryptionTrustLevel.Trusted)
+                showLearnMoreInfoVerificationStatus(deviceInfo.roomEncryptionTrustLevel)
             }
         } else {
             views.sessionOverviewInfo.isVisible = false
@@ -293,21 +293,28 @@ class SessionOverviewFragment :
         }
     }
 
-    private fun showLearnMoreInfoVerificationStatus(isVerified: Boolean) {
-        val titleResId = if (isVerified) {
-            R.string.device_manager_verification_status_verified
-        } else {
-            R.string.device_manager_verification_status_unverified
+    private fun showLearnMoreInfoVerificationStatus(roomEncryptionTrustLevel: RoomEncryptionTrustLevel?) {
+        val args = when (roomEncryptionTrustLevel) {
+            null -> {
+                // encryption not supported
+                SessionLearnMoreBottomSheet.Args(
+                        title = getString(R.string.device_manager_verification_status_unverified),
+                        description = getString(R.string.device_manager_learn_more_sessions_encryption_not_supported),
+                )
+            }
+            RoomEncryptionTrustLevel.Trusted -> {
+                SessionLearnMoreBottomSheet.Args(
+                        title = getString(R.string.device_manager_verification_status_verified),
+                        description = getString(R.string.device_manager_learn_more_sessions_verified_description),
+                )
+            }
+            else -> {
+                SessionLearnMoreBottomSheet.Args(
+                        title = getString(R.string.device_manager_verification_status_unverified),
+                        description = getString(R.string.device_manager_learn_more_sessions_unverified),
+                )
+            }
         }
-        val descriptionResId = if (isVerified) {
-            R.string.device_manager_learn_more_sessions_verified_description
-        } else {
-            R.string.device_manager_learn_more_sessions_unverified
-        }
-        val args = SessionLearnMoreBottomSheet.Args(
-                title = getString(titleResId),
-                description = getString(descriptionResId),
-        )
         SessionLearnMoreBottomSheet.show(childFragmentManager, args)
     }
 }

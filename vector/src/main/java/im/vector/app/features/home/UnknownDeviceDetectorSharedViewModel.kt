@@ -104,7 +104,7 @@ class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(
 //                    Timber.v("## Detector trigger canCrossSign ${pInfo.get().selfSigned != null}")
             infoList
                     .filter { info ->
-                        // filter verified session, by checking the crypto device info
+                        // filter out verified sessions or those which do not support encryption (i.e. without crypto info)
                         cryptoList.firstOrNull { info.deviceId == it.deviceId }?.isVerified?.not().orFalse()
                     }
                     // filter out ignored devices
