@@ -156,7 +156,7 @@ class DefaultPollAggregationProcessor @Inject constructor() : PollAggregationPro
     override fun handlePollEndEvent(session: Session, powerLevelsHelper: PowerLevelsHelper, realm: Realm, event: Event): Boolean {
         val content = event.getClearContent()?.toModel<MessageEndPollContent>() ?: return false
         val roomId = event.roomId ?: return false
-        val pollEventId = content.relatesTo?.eventId ?: return false
+        val pollEventId = (event.getRelationContent() ?: content.relatesTo)?.eventId ?: return false
         val pollOwnerId = getPollEvent(session, roomId, pollEventId)?.root?.senderId
         val isPollOwner = pollOwnerId == event.senderId
 
