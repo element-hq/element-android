@@ -2859,4 +2859,6 @@
     <string name="editing">Modifica</string>
     <string name="settings_enable_direct_share_summary">Mostra chat recenti nel menu di condivisione di sistema</string>
     <string name="settings_enable_direct_share_title">Attiva condivisione diretta</string>
+    <string name="review_unverified_sessions_description">Controlla per assicurarti che l\'account sia sicuro</string>
+    <string name="review_unverified_sessions_title">Hai sessioni non verificate</string>
 </resources>
