@@ -47,7 +47,7 @@ internal class DefaultGetProfileInfoTask @Inject constructor(
         }.also { user ->
             if (params.storeInDatabase) {
                 // Insert into DB
-                monarchy.awaitTransaction {
+                monarchy.runTransactionSync {
                     it.insertOrUpdate(UserEntityFactory.create(User.fromJson(params.userId, user)))
                 }
             }
