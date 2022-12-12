@@ -285,7 +285,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
                         else -> return
                     }
 
-                    (composer as? RichTextComposerLayout)?.setFullScreen(setFullScreen)
+                    (composer as? RichTextComposerLayout)?.setFullScreen(setFullScreen, true)
 
                     messageComposerViewModel.handle(MessageComposerAction.SetFullScreen(setFullScreen))
                 }

@@ -75,7 +75,7 @@ internal class DefaultStartLiveLocationShareTaskTest {
         val expectedParams = SendStateTask.Params(
                 roomId = params.roomId,
                 stateKey = A_USER_ID,
-                eventType = EventType.STATE_ROOM_BEACON_INFO.stable,
+                eventType = EventType.STATE_ROOM_BEACON_INFO.unstable,
                 body = expectedBeaconContent
         )
         fakeSendStateTask.verifyExecuteRetry(

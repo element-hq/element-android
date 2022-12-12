@@ -30,6 +30,7 @@ class VerificationVectorAlert(
         title: String,
         override val description: String,
         @DrawableRes override val iconId: Int?,
+        override val priority: Int = PopupAlertManager.DEFAULT_PRIORITY,
         /**
          * Alert are displayed by default, but let this lambda return false to prevent displaying.
          */
