@@ -164,7 +164,7 @@ class OnboardingViewModelTest {
     fun `given combined login enabled, when handling sign in splash action, then emits OpenCombinedLogin with default homeserver qrCode supported`() = runTest {
         val test = viewModel.test()
         fakeVectorFeatures.givenCombinedLoginEnabled()
-        givenCanSuccessfullyUpdateHomeserver(A_DEFAULT_HOMESERVER_URL, DEFAULT_SELECTED_HOMESERVER_STATE, canLoginWithQrCode = true)
+        givenCanSuccessfullyUpdateHomeserver(A_DEFAULT_HOMESERVER_URL, DEFAULT_SELECTED_HOMESERVER_STATE)
 
         viewModel.handle(OnboardingAction.SplashAction.OnIAlreadyHaveAnAccount(OnboardingFlow.SignIn))
 
@@ -1174,7 +1174,6 @@ class OnboardingViewModelTest {
             resultingState: SelectedHomeserverState,
             config: HomeServerConnectionConfig = A_HOMESERVER_CONFIG,
             fingerprint: Fingerprint? = null,
-            canLoginWithQrCode: Boolean = false,
     ) {
         fakeHomeServerConnectionConfigFactory.givenConfigFor(homeserverUrl, fingerprint, config)
         fakeStartAuthenticationFlowUseCase.givenResult(config, StartAuthenticationResult(isHomeserverOutdated = false, resultingState))
