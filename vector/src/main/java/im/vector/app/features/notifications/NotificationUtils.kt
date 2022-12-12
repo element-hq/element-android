@@ -65,6 +65,7 @@ import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.troubleshoot.TestNotificationReceiver
 import im.vector.app.features.themes.ThemeUtils
+import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -585,7 +586,7 @@ class NotificationUtils @Inject constructor(
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
         // Build the pending intent for when the notification is clicked
         val openIntent = when {
-            threadId != null -> buildOpenThreadIntent(roomInfo, threadId)
+            threadId != null && vectorPreferences.areThreadMessagesEnabled() -> buildOpenThreadIntent(roomInfo, threadId)
             else -> buildOpenRoomIntent(roomInfo.roomId)
         }
 
@@ -847,10 +848,11 @@ class NotificationUtils @Inject constructor(
                 context = context,
                 threadTimelineArgs = threadTimelineArgs,
                 threadListArgs = null,
+                firstStartMainActivity = true,
         )
         threadIntentTap.action = actionIds.tapToView
         // pending intent get reused by system, this will mess up the extra params, so put unique info to avoid that
-        threadIntentTap.data = createIgnoredUri("optenThread?$threadId")
+        threadIntentTap.data = createIgnoredUri("openThread?$threadId")
 
         val roomIntent = RoomDetailActivity.newIntent(
                 context = context,
@@ -858,7 +860,7 @@ class NotificationUtils @Inject constructor(
                         roomId = roomInfo.roomId,
                         switchToParentSpace = true
                 ),
-                firstStartMainActivity = true
+                firstStartMainActivity = false
         )
         // Recreate the back stack
         return TaskStackBuilder.create(context)
