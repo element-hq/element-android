@@ -65,7 +65,6 @@ import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.troubleshoot.TestNotificationReceiver
 import im.vector.app.features.themes.ThemeUtils
-import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
