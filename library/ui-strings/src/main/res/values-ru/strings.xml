@@ -2847,12 +2847,12 @@
     <string name="qr_code_login_show_qr_code_button">Показать QR-код на этом устройстве</string>
     <string name="qr_code_login_link_a_device_show_qr_code_instruction_2">Выберите «Сканировать QR-код»</string>
     <string name="qr_code_login_link_a_device_show_qr_code_instruction_1">Начните с экрана входа</string>
-    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">Выберите «Войти при помощи QR-кода»</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">Выберите «Войти по QR-коду»</string>
     <string name="qr_code_login_link_a_device_scan_qr_code_instruction_1">Начните с экрана входа</string>
     <string name="qr_code_login_new_device_instruction_3">Выберите «Показать QR-код»</string>
     <string name="qr_code_login_new_device_instruction_2">Зайдите в Настройки -&gt; Безопасность и Приватность</string>
     <string name="qr_code_login_new_device_instruction_1">Откройте приложение с другого устройства</string>
-    <string name="qr_code_login_header_failed_homeserver_is_not_supported_description">Домашний сервер не поддерживает вход при помощи QR-кода.</string>
+    <string name="qr_code_login_header_failed_homeserver_is_not_supported_description">Домашний сервер не поддерживает вход по QR-коду.</string>
     <string name="qr_code_login_header_failed_user_cancelled_description">Вход был отменён с другого устройства.</string>
     <string name="qr_code_login_header_failed_invalid_qr_code_description">Этот QR-код не работает.</string>
     <string name="qr_code_login_header_failed_other_device_not_signed_in_description">Другое устройство должно войти в учётную запись.</string>
@@ -2867,7 +2867,7 @@
     <string name="qr_code_login_header_connected_title">Безопасное соединение установлено</string>
     <string name="qr_code_login_header_show_qr_code_link_a_device_description">Сканируйте QR-код снизу при помощи устройства, с которого вы вышли с учётной записи.</string>
     <string name="qr_code_login_header_show_qr_code_new_device_description">Используйте устройство, с которого вы вошли в учётную запись, чтобы сканировать QR-код снизу:</string>
-    <string name="qr_code_login_header_show_qr_code_title">Войти при помощи QR-кода</string>
+    <string name="qr_code_login_header_show_qr_code_title">Войти по QR-коду</string>
     <string name="qr_code_login_header_scan_qr_code_description">Используйте камеру на этом устройстве, чтобы сканировать QR-код, отображённый на вашем другом устройстве:</string>
     <string name="qr_code_login_header_scan_qr_code_title">Сканировать QR-код</string>
     <string name="three">3</string>
@@ -2889,7 +2889,7 @@
 \n
 \nВы должны удостовериться, что узнаёте эти сессии, так как они могут быть несанкционированным входом в вашу учётную запись.</string>
     <string name="device_manager_sessions_sign_in_with_qr_code_description">Вы можете использовать это устройство для входа с телефона или веб-устройства при помощи QR-кода. Для этого есть два способа:</string>
-    <string name="device_manager_sessions_sign_in_with_qr_code_title">Войти при помощи QR-кода</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_title">Войти по QR-коду</string>
     <string name="device_manager_session_rename_description">Собственные названия сессий помогут вам легче распознать свои девайсы.</string>
     <plurals name="device_manager_other_sessions_multi_signout_all">
         <item quantity="one">Выйти из %1$d сессии</item>
