@@ -2804,7 +2804,7 @@
     <string name="qr_code_login_header_show_qr_code_new_device_description">Använd din inloggade enhet för att skanna QR-koden nedan:</string>
     <string name="qr_code_login_header_show_qr_code_title">Logga in med QR-kod</string>
     <string name="qr_code_login_header_scan_qr_code_description">Använd den här enhetens kamera för att skanna QR-koden på din andra enhet:</string>
-    <string name="a11y_voice_broadcast_buffering">Buffrar</string>
+    <string name="a11y_voice_broadcast_buffering">Buffrar…</string>
     <string name="a11y_pause_voice_broadcast">Pausa röstsändning</string>
     <string name="a11y_play_voice_broadcast">Spela eller återuppta röstsändning</string>
     <string name="a11y_stop_voice_broadcast_record">Avsluta inspelning av röstsändning</string>
@@ -2866,4 +2866,8 @@
     <string name="quoting">Citerar</string>
     <string name="replying_to">Besvarar %s</string>
     <string name="editing">Redigerar</string>
+    <string name="review_unverified_sessions_description">Granska för att försäkra att ditt konto är säkert</string>
+    <string name="review_unverified_sessions_title">Du har overifierade sessioner</string>
+    <string name="settings_enable_direct_share_summary">Visa nyliga chattar i systemets delningsmeny</string>
+    <string name="settings_enable_direct_share_title">Aktivera direktdelning</string>
 </resources>
