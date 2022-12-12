@@ -66,6 +66,7 @@ internal class RichTextComposerLayout @JvmOverloads constructor(
     // There is no need to persist these values since they're always updated by the parent fragment
     private var isFullScreen = false
     private var hasRelatedMessage = false
+    private var composerMode: MessageComposerMode? = null
 
     var isTextFormattingEnabled = true
         set(value) {
@@ -114,9 +115,15 @@ internal class RichTextComposerLayout @JvmOverloads constructor(
 
     private val dimensionConverter = DimensionConverter(resources)
 
-    fun setFullScreen(isFullScreen: Boolean) {
+    fun setFullScreen(isFullScreen: Boolean, animated: Boolean) {
+        if (!animated && views.composerLayout.layoutParams != null) {
+            views.composerLayout.updateLayoutParams<ViewGroup.LayoutParams> {
+                height =
+                        if (isFullScreen) ViewGroup.LayoutParams.MATCH_PARENT else ViewGroup.LayoutParams.WRAP_CONTENT
+            }
+        }
         editText.updateLayoutParams<ViewGroup.LayoutParams> {
-            height = if (isFullScreen) 0 else ViewGroup.LayoutParams.WRAP_CONTENT
+            height = if (isFullScreen) ViewGroup.LayoutParams.MATCH_PARENT else ViewGroup.LayoutParams.WRAP_CONTENT
         }
 
         updateTextFieldBorder(isFullScreen)
@@ -371,7 +378,11 @@ internal class RichTextComposerLayout @JvmOverloads constructor(
     override fun renderComposerMode(mode: MessageComposerMode) {
         if (mode is MessageComposerMode.Special) {
             views.composerModeGroup.isVisible = true
-            replaceFormattedContent(mode.defaultContent)
+            if (isTextFormattingEnabled) {
+                replaceFormattedContent(mode.defaultContent)
+            } else {
+                views.plainTextComposerEditText.setText(mode.defaultContent)
+            }
             hasRelatedMessage = true
             editText.showKeyboard(andRequestFocus = true)
         } else {
@@ -383,9 +394,13 @@ internal class RichTextComposerLayout @JvmOverloads constructor(
                     views.plainTextComposerEditText.setText(text)
                 }
             }
-            views.sendButton.contentDescription = resources.getString(R.string.action_send)
             hasRelatedMessage = false
         }
+
+        updateTextFieldBorder(isFullScreen)
+
+        if (this.composerMode == mode) return
+        this.composerMode = mode
 
         views.sendButton.apply {
             if (mode is MessageComposerMode.Edit) {
@@ -396,8 +411,6 @@ internal class RichTextComposerLayout @JvmOverloads constructor(
                 setImageResource(R.drawable.ic_rich_composer_send)
             }
         }
-
-        updateTextFieldBorder(isFullScreen)
 
         when (mode) {
             is MessageComposerMode.Edit -> {
