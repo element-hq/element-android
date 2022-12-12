@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.devices.v2
+package im.vector.app.core.session.clientinfo
 
-import im.vector.app.core.session.clientinfo.MATRIX_CLIENT_INFO_KEY_PREFIX
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import io.mockk.coVerify
 import kotlinx.coroutines.test.runTest

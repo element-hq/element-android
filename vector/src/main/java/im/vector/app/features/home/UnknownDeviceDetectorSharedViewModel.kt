@@ -31,8 +31,8 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.VectorViewModelAction
+import im.vector.app.core.session.clientinfo.DeleteUnusedClientInformationUseCase
 import im.vector.app.core.time.Clock
-import im.vector.app.features.settings.devices.v2.DeleteUnusedClientInformationUseCase
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn

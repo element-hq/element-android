@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.devices.v2
+package im.vector.app.core.session.clientinfo
 
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.session.clientinfo.MATRIX_CLIENT_INFO_KEY_PREFIX
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import javax.inject.Inject
 
@@ -25,9 +24,9 @@ class DeleteUnusedClientInformationUseCase @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
 ) {
 
-    suspend fun execute(deviceInfoList: List<DeviceInfo>) {
+    suspend fun execute(deviceInfoList: List<DeviceInfo>): Result<Unit> = runCatching {
         // A defensive approach against local storage reports an empty device list (although it is not a seen situation).
-        if (deviceInfoList.isEmpty()) return
+        if (deviceInfoList.isEmpty()) return Result.success(Unit)
 
         val expectedClientInfoKeyList = deviceInfoList.map { MATRIX_CLIENT_INFO_KEY_PREFIX + it.deviceId }
         activeSessionHolder

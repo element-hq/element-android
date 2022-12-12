@@ -64,7 +64,7 @@ internal class UserAccountDataDataSource @Inject constructor(
         return realmSessionProvider.withRealm { realm ->
             realm
                     .where(UserAccountDataEntity::class.java)
-                    .contains(UserAccountDataEntityFields.TYPE, type)
+                    .beginsWith(UserAccountDataEntityFields.TYPE, type)
                     .findAll()
                     .map(accountDataMapper::map)
         }
