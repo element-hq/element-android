@@ -49,10 +49,11 @@ import im.vector.app.databinding.ComposerRichTextLayoutBinding
 import im.vector.app.databinding.ViewRichTextMenuButtonBinding
 import io.element.android.wysiwyg.EditorEditText
 import io.element.android.wysiwyg.inputhandlers.models.InlineFormat
+import io.element.android.wysiwyg.utils.RustErrorCollector
 import uniffi.wysiwyg_composer.ActionState
 import uniffi.wysiwyg_composer.ComposerAction
 
-class RichTextComposerLayout @JvmOverloads constructor(
+internal class RichTextComposerLayout @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
@@ -248,8 +249,13 @@ class RichTextComposerLayout @JvmOverloads constructor(
                 updateMenuStateFor(action, state)
             }
         }
-
         updateEditTextVisibility()
+    }
+
+    fun setOnErrorListener(onError: (e: RichTextEditorException) -> Unit) {
+        views.richTextComposerEditText.rustErrorCollector = RustErrorCollector {
+            onError(RichTextEditorException(it))
+        }
     }
 
     private fun updateEditTextVisibility() {

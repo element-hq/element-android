@@ -20,6 +20,7 @@ import android.os.Handler
 import android.os.Looper
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
+import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
@@ -27,6 +28,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -51,6 +53,7 @@ import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.internal.crypto.MegolmSessionData
 import org.matrix.android.sdk.internal.crypto.MegolmSessionImportManager
 import org.matrix.android.sdk.internal.crypto.OlmMachine
+import org.matrix.android.sdk.internal.crypto.PerSessionBackupQueryRateLimiter
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.SignalableMegolmBackupAuthData
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.CreateKeysBackupVersionBody
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeyBackupData
@@ -80,6 +83,8 @@ internal class RustKeyBackupService @Inject constructor(
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val megolmSessionImportManager: MegolmSessionImportManager,
         private val cryptoCoroutineScope: CoroutineScope,
+        private val matrixConfiguration: MatrixConfiguration,
+        private val backupQueryRateLimiter: dagger.Lazy<PerSessionBackupQueryRateLimiter>,
 ) : KeysBackupService {
     companion object {
         // Maximum delay in ms in {@link maybeBackupKeys}
@@ -94,9 +99,7 @@ internal class RustKeyBackupService @Inject constructor(
     override var keysBackupVersion: KeysVersionResult? = null
         private set
 
-//    private var backupAllGroupSessionsCallback: MatrixCallback<Unit>? = null
-
-    private val importScope = CoroutineScope(SupervisorJob() + coroutineDispatchers.main)
+    private val importScope = CoroutineScope(cryptoCoroutineScope.coroutineContext + SupervisorJob() + CoroutineName("backupImport"))
 
     private var keysBackupStateListener: KeysBackupStateListener? = null
 
@@ -381,20 +384,22 @@ internal class RustKeyBackupService @Inject constructor(
                 if (version != null) {
                     val key = BackupRecoveryKey.fromBase64(secret)
                     if (isValidRecoveryKey(key, version)) {
-                        trustKeysBackupVersion(version, true)
-                        // we don't want to wait for that
-                        importScope.launch {
-                            try {
-                                val importResult = restoreBackup(version, key, null, null, null)
-                                val recoveredKeys = importResult.successfullyNumberOfImportedKeys
-                                Timber.i("onSecretKeyGossip: Recovered keys $recoveredKeys out of ${importResult.totalNumberOfKeys}")
-                            } catch (failure: Throwable) {
-                                // fail silently..
-                                Timber.e(failure, "onSecretKeyGossip: Failed to import keys from backup")
-                            }
-                        }
                         // we can save, it's valid
                         saveBackupRecoveryKey(key, version.version)
+                        importScope.launch {
+                            backupQueryRateLimiter.get().refreshBackupInfoIfNeeded(true)
+                        }
+                        // we don't want to wait for that
+//                        importScope.launch {
+//                            try {
+//                                val importResult = restoreBackup(version, key, null, null, null)
+//                                val recoveredKeys = importResult.successfullyNumberOfImportedKeys
+//                                Timber.i("onSecretKeyGossip: Recovered keys $recoveredKeys out of ${importResult.totalNumberOfKeys}")
+//                            } catch (failure: Throwable) {
+//                                // fail silently..
+//                                Timber.e(failure, "onSecretKeyGossip: Failed to import keys from backup")
+//                            }
+//                        }
                     } else {
                         Timber.d("Invalid recovery key")
                     }
@@ -549,6 +554,10 @@ internal class RustKeyBackupService @Inject constructor(
             }
 
             val result = olmMachine.importDecryptedKeys(sessionsData, progressListener).also {
+                sessionsData.onEach { sessionData ->
+                    matrixConfiguration.cryptoAnalyticsPlugin
+                            ?.onRoomKeyImported(sessionData.sessionId.orEmpty(), keysVersionResult.algorithm)
+                }
                 megolmSessionImportManager.dispatchKeyImportResults(it)
             }
 

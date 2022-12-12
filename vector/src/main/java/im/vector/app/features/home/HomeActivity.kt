@@ -44,8 +44,6 @@ import im.vector.app.core.extensions.restart
 import im.vector.app.core.extensions.validateBackPressed
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorMenuProvider
-import im.vector.app.core.pushers.FcmHelper
-import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.pushers.UnifiedPushHelper
 import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.core.utils.startSharePlainTextIntent
@@ -131,7 +129,6 @@ class HomeActivity :
     private val serverBackupStatusViewModel: ServerBackupStatusViewModel by viewModel()
 
     @Inject lateinit var vectorUncaughtExceptionHandler: VectorUncaughtExceptionHandler
-    @Inject lateinit var pushersManager: PushersManager
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
     @Inject lateinit var popupAlertManager: PopupAlertManager
     @Inject lateinit var shortcutsHandler: ShortcutsHandler
@@ -140,7 +137,6 @@ class HomeActivity :
     @Inject lateinit var initSyncStepFormatter: InitSyncStepFormatter
     @Inject lateinit var spaceStateHandler: SpaceStateHandler
     @Inject lateinit var unifiedPushHelper: UnifiedPushHelper
-    @Inject lateinit var fcmHelper: FcmHelper
     @Inject lateinit var nightlyProxy: NightlyProxy
     @Inject lateinit var disclaimerDialog: DisclaimerDialog
     @Inject lateinit var notificationPermissionManager: NotificationPermissionManager
@@ -212,16 +208,6 @@ class HomeActivity :
         isNewAppLayoutEnabled = vectorPreferences.isNewAppLayoutEnabled()
         analyticsScreenName = MobileScreen.ScreenName.Home
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentLifecycleCallbacks, false)
-        unifiedPushHelper.register(this) {
-            if (unifiedPushHelper.isEmbeddedDistributor()) {
-                fcmHelper.ensureFcmTokenIsRetrieved(
-                        this,
-                        pushersManager,
-                        homeActivityViewModel.shouldAddHttpPusher()
-                )
-            }
-        }
-
         sharedActionViewModel = viewModelProvider[HomeSharedActionViewModel::class.java]
         roomListSharedActionViewModel = viewModelProvider[RoomListSharedActionViewModel::class.java]
         views.drawerLayout.addDrawerListener(drawerListener)
@@ -284,6 +270,7 @@ class HomeActivity :
                 HomeActivityViewEvents.ShowReleaseNotes -> handleShowReleaseNotes()
                 HomeActivityViewEvents.NotifyUserForThreadsMigration -> handleNotifyUserForThreadsMigration()
                 is HomeActivityViewEvents.MigrateThreads -> migrateThreadsIfNeeded(it.checkSession)
+                is HomeActivityViewEvents.AskUserForPushDistributor -> askUserToSelectPushDistributor()
             }
         }
         homeActivityViewModel.onEach { renderState(it) }
@@ -294,6 +281,12 @@ class HomeActivity :
             handleIntent(intent)
         }
         homeActivityViewModel.handle(HomeActivityViewActions.ViewStarted)
+    }
+
+    private fun askUserToSelectPushDistributor() {
+        unifiedPushHelper.showSelectDistributorDialog(this) { selection ->
+            homeActivityViewModel.handle(HomeActivityViewActions.RegisterPushDistributor(selection))
+        }
     }
 
     private fun handleShowNotificationDialog() {
@@ -419,14 +412,6 @@ class HomeActivity :
     }
 
     private fun renderState(state: HomeActivityViewState) {
-        lifecycleScope.launch {
-            if (state.areNotificationsSilenced) {
-                unifiedPushHelper.unregister(pushersManager)
-            } else {
-                unifiedPushHelper.register(this@HomeActivity)
-            }
-        }
-
         when (val status = state.syncRequestState) {
             is SyncRequestState.InitialSyncProgressing -> {
                 val initSyncStepStr = initSyncStepFormatter.format(status.initialSyncStep)
@@ -609,7 +594,9 @@ class HomeActivity :
         serverBackupStatusViewModel.refreshRemoteStateIfNeeded()
 
         // Check nightly
-        nightlyProxy.onHomeResumed()
+        if (nightlyProxy.canDisplayPopup()) {
+            nightlyProxy.updateApplication()
+        }
 
         checkNewAppLayoutFlagChange()
     }

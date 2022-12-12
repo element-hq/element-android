@@ -85,9 +85,9 @@ abstract class DeviceItem : VectorEpoxyModel<DeviceItem.Holder>(R.layout.item_de
                     trusted
             )
 
-            holder.trustIcon.render(shield)
+            holder.trustIcon.renderDeviceShield(shield)
         } else {
-            holder.trustIcon.render(null)
+            holder.trustIcon.renderDeviceShield(null)
         }
 
         val detailedModeLabels = listOf(

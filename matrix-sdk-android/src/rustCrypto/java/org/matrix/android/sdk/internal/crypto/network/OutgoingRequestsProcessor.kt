@@ -145,9 +145,13 @@ internal class OutgoingRequestsProcessor @Inject constructor(
 
     private fun CoroutineScope.updateShields(olmMachine: OlmMachine, userIds: List<String>) = launch {
         cryptoSessionInfoProvider.getRoomsWhereUsersAreParticipating(userIds).forEach { roomId ->
-            val userGroup = cryptoSessionInfoProvider.getUserListForShieldComputation(roomId)
-            val shield = computeShieldForGroup(olmMachine, userGroup)
-            cryptoSessionInfoProvider.updateShieldForRoom(roomId, shield)
+            if (cryptoSessionInfoProvider.isRoomEncrypted(roomId)) {
+                val userGroup = cryptoSessionInfoProvider.getUserListForShieldComputation(roomId)
+                val shield = computeShieldForGroup(olmMachine, userGroup)
+                cryptoSessionInfoProvider.updateShieldForRoom(roomId, shield)
+            } else {
+                cryptoSessionInfoProvider.updateShieldForRoom(roomId, null)
+            }
         }
     }
 

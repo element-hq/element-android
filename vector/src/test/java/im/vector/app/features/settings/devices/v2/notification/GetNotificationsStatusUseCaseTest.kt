@@ -22,6 +22,7 @@ import im.vector.app.test.fixtures.PusherFixture
 import im.vector.app.test.testDispatcher
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import io.mockk.verifyOrder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.firstOrNull
@@ -46,15 +47,15 @@ class GetNotificationsStatusUseCaseTest {
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private val fakeSession = FakeSession()
-    private val fakeCheckIfCanTogglePushNotificationsViaAccountDataUseCase =
-            mockk<CheckIfCanTogglePushNotificationsViaAccountDataUseCase>()
-    private val fakeCanTogglePushNotificationsViaPusherUseCase =
-            mockk<CanTogglePushNotificationsViaPusherUseCase>()
+    private val fakeCanToggleNotificationsViaAccountDataUseCase =
+            mockk<CanToggleNotificationsViaAccountDataUseCase>()
+    private val fakeCanToggleNotificationsViaPusherUseCase =
+            mockk<CanToggleNotificationsViaPusherUseCase>()
 
     private val getNotificationsStatusUseCase =
             GetNotificationsStatusUseCase(
-                    checkIfCanTogglePushNotificationsViaAccountDataUseCase = fakeCheckIfCanTogglePushNotificationsViaAccountDataUseCase,
-                    canTogglePushNotificationsViaPusherUseCase = fakeCanTogglePushNotificationsViaPusherUseCase,
+                    canToggleNotificationsViaAccountDataUseCase = fakeCanToggleNotificationsViaAccountDataUseCase,
+                    canToggleNotificationsViaPusherUseCase = fakeCanToggleNotificationsViaPusherUseCase,
             )
 
     @Before
@@ -70,8 +71,8 @@ class GetNotificationsStatusUseCaseTest {
     @Test
     fun `given current session and toggle is not supported when execute then resulting flow contains NOT_SUPPORTED value`() = runTest {
         // Given
-        every { fakeCheckIfCanTogglePushNotificationsViaAccountDataUseCase.execute(fakeSession, A_DEVICE_ID) } returns false
-        every { fakeCanTogglePushNotificationsViaPusherUseCase.execute(fakeSession) } returns flowOf(false)
+        every { fakeCanToggleNotificationsViaAccountDataUseCase.execute(fakeSession, A_DEVICE_ID) } returns flowOf(false)
+        every { fakeCanToggleNotificationsViaPusherUseCase.execute(fakeSession) } returns flowOf(false)
 
         // When
         val result = getNotificationsStatusUseCase.execute(fakeSession, A_DEVICE_ID)
@@ -80,8 +81,8 @@ class GetNotificationsStatusUseCaseTest {
         result.firstOrNull() shouldBeEqualTo NotificationsStatus.NOT_SUPPORTED
         verifyOrder {
             // we should first check account data
-            fakeCheckIfCanTogglePushNotificationsViaAccountDataUseCase.execute(fakeSession, A_DEVICE_ID)
-            fakeCanTogglePushNotificationsViaPusherUseCase.execute(fakeSession)
+            fakeCanToggleNotificationsViaAccountDataUseCase.execute(fakeSession, A_DEVICE_ID)
+            fakeCanToggleNotificationsViaPusherUseCase.execute(fakeSession)
         }
     }
 
@@ -95,8 +96,8 @@ class GetNotificationsStatusUseCaseTest {
                 )
         )
         fakeSession.pushersService().givenPushersLive(pushers)
-        every { fakeCheckIfCanTogglePushNotificationsViaAccountDataUseCase.execute(fakeSession, A_DEVICE_ID) } returns false
-        every { fakeCanTogglePushNotificationsViaPusherUseCase.execute(fakeSession) } returns flowOf(true)
+        every { fakeCanToggleNotificationsViaAccountDataUseCase.execute(fakeSession, A_DEVICE_ID) } returns flowOf(false)
+        every { fakeCanToggleNotificationsViaPusherUseCase.execute(fakeSession) } returns flowOf(true)
 
         // When
         val result = getNotificationsStatusUseCase.execute(fakeSession, A_DEVICE_ID)
@@ -106,7 +107,21 @@ class GetNotificationsStatusUseCaseTest {
     }
 
     @Test
-    fun `given current session and toggle via account data is supported when execute then resulting flow contains status based on settings value`() = runTest {
+    fun `given toggle via pusher is supported and no registered pusher when execute then resulting flow contains NOT_SUPPORTED value`() = runTest {
+        // Given
+        fakeSession.pushersService().givenPushersLive(emptyList())
+        every { fakeCanToggleNotificationsViaAccountDataUseCase.execute(fakeSession, A_DEVICE_ID) } returns flowOf(false)
+        every { fakeCanToggleNotificationsViaPusherUseCase.execute(fakeSession) } returns flowOf(true)
+
+        // When
+        val result = getNotificationsStatusUseCase.execute(fakeSession, A_DEVICE_ID)
+
+        // Then
+        result.firstOrNull() shouldBeEqualTo NotificationsStatus.NOT_SUPPORTED
+    }
+
+    @Test
+    fun `given current session and toggle via account data is supported when execute then resulting flow contains status based on account data`() = runTest {
         // Given
         fakeSession
                 .accountDataService()
@@ -116,13 +131,19 @@ class GetNotificationsStatusUseCaseTest {
                                 isSilenced = false
                         ).toContent(),
                 )
-        every { fakeCheckIfCanTogglePushNotificationsViaAccountDataUseCase.execute(fakeSession, A_DEVICE_ID) } returns true
-        every { fakeCanTogglePushNotificationsViaPusherUseCase.execute(fakeSession) } returns flowOf(false)
+        every { fakeCanToggleNotificationsViaAccountDataUseCase.execute(fakeSession, A_DEVICE_ID) } returns flowOf(true)
+        every { fakeCanToggleNotificationsViaPusherUseCase.execute(fakeSession) } returns flowOf(false)
 
         // When
         val result = getNotificationsStatusUseCase.execute(fakeSession, A_DEVICE_ID)
 
         // Then
         result.firstOrNull() shouldBeEqualTo NotificationsStatus.ENABLED
+        verify {
+            fakeCanToggleNotificationsViaAccountDataUseCase.execute(fakeSession, A_DEVICE_ID)
+        }
+        verify(inverse = true) {
+            fakeCanToggleNotificationsViaPusherUseCase.execute(fakeSession)
+        }
     }
 }

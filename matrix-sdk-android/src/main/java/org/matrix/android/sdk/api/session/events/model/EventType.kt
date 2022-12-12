@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.api.session.events.model
 
+import org.matrix.android.sdk.api.session.room.model.message.MessageType.MSGTYPE_VERIFICATION_REQUEST
+
 /**
  * Constants defining known event types from Matrix specifications.
  */
@@ -127,6 +129,7 @@ object EventType {
 
     fun isVerificationEvent(type: String): Boolean {
         return when (type) {
+            MSGTYPE_VERIFICATION_REQUEST,
             KEY_VERIFICATION_START,
             KEY_VERIFICATION_ACCEPT,
             KEY_VERIFICATION_KEY,

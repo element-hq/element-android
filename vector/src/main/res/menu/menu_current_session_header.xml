@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="AlwaysShowAction">
+
+    <item
+        android:id="@+id/currentSessionHeaderRename"
+        android:title="@string/device_manager_session_rename"
+        app:showAsAction="withText|never" />
+
+    <item
+        android:id="@+id/currentSessionHeaderSignout"
+        android:title="@string/logout"
+        app:showAsAction="withText|never" />
+
+    <item
+        android:id="@+id/currentSessionHeaderSignoutOtherSessions"
+        android:title="@string/device_manager_signout_all_other_sessions"
+        app:showAsAction="withText|never" />
+
+</menu>

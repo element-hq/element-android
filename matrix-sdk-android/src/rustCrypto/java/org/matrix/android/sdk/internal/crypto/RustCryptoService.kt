@@ -603,7 +603,7 @@ internal class RustCryptoService @Inject constructor(
                     val sessionId = content.sessionId
 
                     notifyRoomKeyReceived(roomId, sessionId)
-                    matrixConfiguration.cryptoAnalyticsPlugin?.onRoomKeyImported(sessionId, EventType.FORWARDED_ROOM_KEY)
+                    matrixConfiguration.cryptoAnalyticsPlugin?.onRoomKeyImported(sessionId, EventType.ROOM_KEY)
                 }
                 EventType.FORWARDED_ROOM_KEY -> {
                     val content = event.getClearContent().toModel<ForwardedRoomKeyContent>() ?: return@forEach

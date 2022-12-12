@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.api.util
 
 import android.util.Base64
+import timber.log.Timber
 
 fun ByteArray.toBase64NoPadding(): String {
     return Base64.encodeToString(this, Base64.NO_PADDING or Base64.NO_WRAP)
@@ -24,4 +25,16 @@ fun ByteArray.toBase64NoPadding(): String {
 
 fun String.fromBase64(): ByteArray {
     return Base64.decode(this, Base64.DEFAULT)
+}
+
+/**
+ * Decode the base 64. Return null in case of bad format. Should be used when parsing received data from external source
+ */
+internal fun String.fromBase64Safe(): ByteArray? {
+    return try {
+        Base64.decode(this, Base64.DEFAULT)
+    } catch (throwable: Throwable) {
+        Timber.e(throwable, "Unable to decode base64 string")
+        null
+    }
 }

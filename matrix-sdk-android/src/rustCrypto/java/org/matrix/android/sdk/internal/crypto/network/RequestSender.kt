@@ -19,17 +19,24 @@ package org.matrix.android.sdk.internal.crypto.network
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import dagger.Lazy
+import kotlinx.coroutines.CoroutineName
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupLastVersionResult
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersion
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersionResult
+import org.matrix.android.sdk.api.session.crypto.model.GossipingToDeviceObject
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.uia.UiaResult
 import org.matrix.android.sdk.internal.auth.registration.handleUIA
+import org.matrix.android.sdk.internal.crypto.PerSessionBackupQueryRateLimiter
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.BackupKeysResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.CreateKeysBackupVersionBody
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysBackupData
@@ -87,7 +94,13 @@ internal class RequestSender @Inject constructor(
         private val getRoomSessionsDataTask: GetRoomSessionsDataTask,
         private val getRoomSessionDataTask: GetRoomSessionDataTask,
         private val moshi: Moshi,
+        private val cryptoCoroutineScope: CoroutineScope,
+        private val rateLimiter: PerSessionBackupQueryRateLimiter,
 ) {
+
+    private val scope = CoroutineScope(
+            cryptoCoroutineScope.coroutineContext + SupervisorJob() + CoroutineName("backupRequest")
+    )
 
     suspend fun claimKeys(request: Request.KeysClaim): String {
         val claimParams = ClaimOneTimeKeysForUsersDeviceTask.Params(request.oneTimeKeys)
@@ -211,8 +224,36 @@ internal class RequestSender @Inject constructor(
                 .newBuilder()
                 .add(CheckNumberType.JSON_ADAPTER_FACTORY)
                 .build()
-                .adapter<Map<String, HashMap<String, Any>>>(Map::class.java)
+                .adapter<Map<String, Map<String, Any>>>(Map::class.java)
         val jsonBody = adapter.fromJson(body)!!
+
+        if (eventType == EventType.ROOM_KEY_REQUEST) {
+            scope.launch {
+                Timber.v("Intercepting key request, try backup")
+                /**
+                 * It's a bit hacky, check how this can be better integrated with rust?
+                 */
+                try {
+                    jsonBody.forEach { (_, deviceToContent) ->
+                        deviceToContent.forEach { (_, content) ->
+                            val hashMap = content as? Map<*, *>
+                            val action = hashMap?.get("action")?.toString()
+                            if (GossipingToDeviceObject.ACTION_SHARE_REQUEST == action) {
+                                val body = hashMap.get("body") as? Map<*, *>
+                                val roomId = body?.get("room_id") as? String
+                                val sessionId = body?.get("session_id") as? String
+                                if (roomId != null && sessionId != null) {
+                                    rateLimiter.tryFromBackupIfPossible(sessionId, roomId)
+                                }
+                            }
+                        }
+                    }
+                    Timber.v("Intercepting key request, try backup")
+                } catch (failure: Throwable) {
+                    Timber.v(failure, "Failed to use backup")
+                }
+            }
+        }
 
         val userMap = MXUsersDevicesMap<Any>()
         userMap.join(jsonBody)

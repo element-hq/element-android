@@ -23,7 +23,6 @@ import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupService
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersionResult
 import org.matrix.android.sdk.api.session.crypto.keysbackup.SavedKeyBackupKeyInfo
-import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 import javax.inject.Inject
@@ -39,7 +38,6 @@ private val loggerTag = LoggerTag("OutgoingGossipingRequestManager", LoggerTag.C
 internal class PerSessionBackupQueryRateLimiter @Inject constructor(
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val keysBackupService: Lazy<KeysBackupService>,
-        private val cryptoStore: IMXCryptoStore,
         private val clock: Clock,
 ) {
 
@@ -68,11 +66,11 @@ internal class PerSessionBackupQueryRateLimiter @Inject constructor(
     var backupWasCheckedFromServer: Boolean = false
     val now = clock.epochMillis()
 
-    fun refreshBackupInfoIfNeeded(force: Boolean = false) {
+    suspend fun refreshBackupInfoIfNeeded(force: Boolean = false) {
         if (backupWasCheckedFromServer && !force) return
         Timber.tag(loggerTag.value).v("Checking if can access a backup")
         backupWasCheckedFromServer = true
-        val knownBackupSecret = cryptoStore.getKeyBackupRecoveryKeyInfo()
+        val knownBackupSecret = keysBackupService.get().getKeyBackupRecoveryKeyInfo()
                 ?: return Unit.also {
                     Timber.tag(loggerTag.value).v("We don't have the backup secret!")
                 }

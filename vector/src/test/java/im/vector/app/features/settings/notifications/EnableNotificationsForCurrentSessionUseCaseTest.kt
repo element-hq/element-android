@@ -16,72 +16,70 @@
 
 package im.vector.app.features.settings.notifications
 
-import androidx.fragment.app.FragmentActivity
-import im.vector.app.features.settings.devices.v2.notification.CheckIfCanTogglePushNotificationsViaPusherUseCase
-import im.vector.app.features.settings.devices.v2.notification.TogglePushNotificationUseCase
-import im.vector.app.test.fakes.FakeActiveSessionHolder
-import im.vector.app.test.fakes.FakeFcmHelper
+import im.vector.app.core.pushers.EnsureFcmTokenIsRetrievedUseCase
+import im.vector.app.core.pushers.RegisterUnifiedPushUseCase
 import im.vector.app.test.fakes.FakePushersManager
-import im.vector.app.test.fakes.FakeUnifiedPushHelper
 import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.justRun
 import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.test.runTest
+import org.amshove.kluent.shouldBe
 import org.junit.Test
-
-private const val A_SESSION_ID = "session-id"
 
 class EnableNotificationsForCurrentSessionUseCaseTest {
 
-    private val fakeActiveSessionHolder = FakeActiveSessionHolder()
-    private val fakeUnifiedPushHelper = FakeUnifiedPushHelper()
     private val fakePushersManager = FakePushersManager()
-    private val fakeFcmHelper = FakeFcmHelper()
-    private val fakeCheckIfCanTogglePushNotificationsViaPusherUseCase = mockk<CheckIfCanTogglePushNotificationsViaPusherUseCase>()
-    private val fakeTogglePushNotificationUseCase = mockk<TogglePushNotificationUseCase>()
+    private val fakeToggleNotificationsForCurrentSessionUseCase = mockk<ToggleNotificationsForCurrentSessionUseCase>()
+    private val fakeRegisterUnifiedPushUseCase = mockk<RegisterUnifiedPushUseCase>()
+    private val fakeEnsureFcmTokenIsRetrievedUseCase = mockk<EnsureFcmTokenIsRetrievedUseCase>()
 
     private val enableNotificationsForCurrentSessionUseCase = EnableNotificationsForCurrentSessionUseCase(
-            activeSessionHolder = fakeActiveSessionHolder.instance,
-            unifiedPushHelper = fakeUnifiedPushHelper.instance,
             pushersManager = fakePushersManager.instance,
-            fcmHelper = fakeFcmHelper.instance,
-            checkIfCanTogglePushNotificationsViaPusherUseCase = fakeCheckIfCanTogglePushNotificationsViaPusherUseCase,
-            togglePushNotificationUseCase = fakeTogglePushNotificationUseCase,
+            toggleNotificationsForCurrentSessionUseCase = fakeToggleNotificationsForCurrentSessionUseCase,
+            registerUnifiedPushUseCase = fakeRegisterUnifiedPushUseCase,
+            ensureFcmTokenIsRetrievedUseCase = fakeEnsureFcmTokenIsRetrievedUseCase,
     )
 
     @Test
-    fun `given no existing pusher for current session when execute then a new pusher is registered`() = runTest {
+    fun `given no existing pusher and a registered distributor when execute then a new pusher is registered and result is success`() = runTest {
         // Given
-        val fragmentActivity = mockk<FragmentActivity>()
+        val aDistributor = "distributor"
         fakePushersManager.givenGetPusherForCurrentSessionReturns(null)
-        fakeUnifiedPushHelper.givenRegister(fragmentActivity)
-        fakeUnifiedPushHelper.givenIsEmbeddedDistributorReturns(true)
-        fakeFcmHelper.givenEnsureFcmTokenIsRetrieved(fragmentActivity, fakePushersManager.instance)
-        every { fakeCheckIfCanTogglePushNotificationsViaPusherUseCase.execute(fakeActiveSessionHolder.fakeSession) } returns false
+        every { fakeRegisterUnifiedPushUseCase.execute(any()) } returns RegisterUnifiedPushUseCase.RegisterUnifiedPushResult.Success
+        justRun { fakeEnsureFcmTokenIsRetrievedUseCase.execute(any(), any()) }
+        coJustRun { fakeToggleNotificationsForCurrentSessionUseCase.execute(any()) }
 
         // When
-        enableNotificationsForCurrentSessionUseCase.execute(fragmentActivity)
+        val result = enableNotificationsForCurrentSessionUseCase.execute(aDistributor)
 
         // Then
-        fakeUnifiedPushHelper.verifyRegister(fragmentActivity)
-        fakeFcmHelper.verifyEnsureFcmTokenIsRetrieved(fragmentActivity, fakePushersManager.instance, registerPusher = true)
+        result shouldBe EnableNotificationsForCurrentSessionUseCase.EnableNotificationsResult.Success
+        verify {
+            fakeRegisterUnifiedPushUseCase.execute(aDistributor)
+            fakeEnsureFcmTokenIsRetrievedUseCase.execute(fakePushersManager.instance, registerPusher = true)
+        }
+        coVerify {
+            fakeToggleNotificationsForCurrentSessionUseCase.execute(enabled = true)
+        }
     }
 
     @Test
-    fun `given toggle via Pusher is possible when execute then current pusher is toggled to true`() = runTest {
+    fun `given no existing pusher and a no registered distributor when execute then result is need to ask user for distributor`() = runTest {
         // Given
-        val fragmentActivity = mockk<FragmentActivity>()
-        fakePushersManager.givenGetPusherForCurrentSessionReturns(mockk())
-        val fakeSession = fakeActiveSessionHolder.fakeSession
-        fakeSession.givenSessionId(A_SESSION_ID)
-        every { fakeCheckIfCanTogglePushNotificationsViaPusherUseCase.execute(fakeActiveSessionHolder.fakeSession) } returns true
-        coJustRun { fakeTogglePushNotificationUseCase.execute(A_SESSION_ID, any()) }
+        val aDistributor = "distributor"
+        fakePushersManager.givenGetPusherForCurrentSessionReturns(null)
+        every { fakeRegisterUnifiedPushUseCase.execute(any()) } returns RegisterUnifiedPushUseCase.RegisterUnifiedPushResult.NeedToAskUserForDistributor
 
         // When
-        enableNotificationsForCurrentSessionUseCase.execute(fragmentActivity)
+        val result = enableNotificationsForCurrentSessionUseCase.execute(aDistributor)
 
         // Then
-        coVerify { fakeTogglePushNotificationUseCase.execute(A_SESSION_ID, true) }
+        result shouldBe EnableNotificationsForCurrentSessionUseCase.EnableNotificationsResult.NeedToAskUserForDistributor
+        verify {
+            fakeRegisterUnifiedPushUseCase.execute(aDistributor)
+        }
     }
 }

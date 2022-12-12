@@ -25,8 +25,10 @@ import kotlinx.coroutines.SupervisorJob
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.internal.crypto.api.CryptoApi
+import org.matrix.android.sdk.internal.crypto.keysbackup.RustKeyBackupService
 import org.matrix.android.sdk.internal.crypto.keysbackup.api.RoomKeysApi
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.CreateKeysBackupVersionTask
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.DefaultCreateKeysBackupVersionTask
@@ -248,4 +250,7 @@ internal abstract class CryptoModule {
 
     @Binds
     abstract fun bindSendEventTask(task: DefaultSendEventTask): SendEventTask
+
+    @Binds
+    abstract fun bindKeysBackupService(service: RustKeyBackupService): KeysBackupService
 }

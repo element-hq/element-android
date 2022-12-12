@@ -54,4 +54,8 @@ class FakeVectorFeatures : VectorFeatures by spyk<DefaultVectorFeatures>() {
     fun givenUnverifiedSessionsAlertEnabled(isEnabled: Boolean) {
         every { isUnverifiedSessionsAlertEnabled() } returns isEnabled
     }
+
+    fun givenExternalDistributorsAreAllowed(allowed: Boolean) {
+        every { allowExternalUnifiedPushDistributors() } returns allowed
+    }
 }
