@@ -60,6 +60,8 @@ import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.arguments.TimelineArgs
+import im.vector.app.features.home.room.threads.ThreadsActivity
+import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.troubleshoot.TestNotificationReceiver
 import im.vector.app.features.themes.ThemeUtils
@@ -574,6 +576,7 @@ class NotificationUtils @Inject constructor(
     fun buildMessagesListNotification(
             messageStyle: NotificationCompat.MessagingStyle,
             roomInfo: RoomEventGroupInfo,
+            threadId: String?,
             largeIcon: Bitmap?,
             lastMessageTimestamp: Long,
             senderDisplayNameForReplyCompat: String?,
@@ -581,7 +584,11 @@ class NotificationUtils @Inject constructor(
     ): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
         // Build the pending intent for when the notification is clicked
-        val openRoomIntent = buildOpenRoomIntent(roomInfo.roomId)
+        val openIntent = when {
+            threadId != null && vectorPreferences.areThreadMessagesEnabled() -> buildOpenThreadIntent(roomInfo, threadId)
+            else -> buildOpenRoomIntent(roomInfo.roomId)
+        }
+
         val smallIcon = R.drawable.ic_notification
 
         val channelID = if (roomInfo.shouldBing) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID
@@ -666,8 +673,8 @@ class NotificationUtils @Inject constructor(
                         }
                     }
 
-                    if (openRoomIntent != null) {
-                        setContentIntent(openRoomIntent)
+                    if (openIntent != null) {
+                        setContentIntent(openIntent)
                     }
 
                     if (largeIcon != null) {
@@ -820,6 +827,45 @@ class NotificationUtils @Inject constructor(
         return TaskStackBuilder.create(context)
                 .addNextIntentWithParentStack(HomeActivity.newIntent(context, firstStartMainActivity = false))
                 .addNextIntent(roomIntentTap)
+                .getPendingIntent(
+                        clock.epochMillis().toInt(),
+                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
+                )
+    }
+
+    private fun buildOpenThreadIntent(roomInfo: RoomEventGroupInfo, threadId: String?): PendingIntent? {
+        val threadTimelineArgs = ThreadTimelineArgs(
+                startsThread = false,
+                roomId = roomInfo.roomId,
+                rootThreadEventId = threadId,
+                showKeyboard = false,
+                displayName = roomInfo.roomDisplayName,
+                avatarUrl = null,
+                roomEncryptionTrustLevel = null,
+        )
+        val threadIntentTap = ThreadsActivity.newIntent(
+                context = context,
+                threadTimelineArgs = threadTimelineArgs,
+                threadListArgs = null,
+                firstStartMainActivity = true,
+        )
+        threadIntentTap.action = actionIds.tapToView
+        // pending intent get reused by system, this will mess up the extra params, so put unique info to avoid that
+        threadIntentTap.data = createIgnoredUri("openThread?$threadId")
+
+        val roomIntent = RoomDetailActivity.newIntent(
+                context = context,
+                timelineArgs = TimelineArgs(
+                        roomId = roomInfo.roomId,
+                        switchToParentSpace = true
+                ),
+                firstStartMainActivity = false
+        )
+        // Recreate the back stack
+        return TaskStackBuilder.create(context)
+                .addNextIntentWithParentStack(HomeActivity.newIntent(context, firstStartMainActivity = false))
+                .addNextIntentWithParentStack(roomIntent)
+                .addNextIntent(threadIntentTap)
                 .getPendingIntent(
                         clock.epochMillis().toInt(),
                         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
