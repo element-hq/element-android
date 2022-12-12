@@ -204,8 +204,18 @@ class SelfVerificationViewModel @AssistedInject constructor(
                 }
             }
             is VerificationAction.GotItConclusion -> {
-                // just dismiss
-                _viewEvents.post(VerificationBottomSheetViewEvents.Dismiss)
+                withState { state ->
+                    if (state.isVerificationRequired && !action.verified) {
+                        // we should go back to first screen
+                        setState {
+                            copy(
+                                    pendingRequest = Uninitialized,
+                            )
+                        }
+                    } else {
+                        _viewEvents.post(VerificationBottomSheetViewEvents.Dismiss)
+                    }
+                }
             }
             is VerificationAction.GotResultFromSsss -> handleSecretBackFromSSSS(action)
             VerificationAction.OtherUserDidNotScanned -> {

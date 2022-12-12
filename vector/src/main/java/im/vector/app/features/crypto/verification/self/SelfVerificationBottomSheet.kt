@@ -173,6 +173,9 @@ class SelfVerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSh
             views.otherUserNameText.text = getString(R.string.crosssigning_verify_this_session)
         }
 
+        // Don't allow the bottom sheet to be dismissed if verification is required.
+        isCancelable = !state.isVerificationRequired
+
         super.invalidate()
     }
 
