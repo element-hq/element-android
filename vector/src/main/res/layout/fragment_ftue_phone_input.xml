@@ -97,6 +97,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:text="+"
                 android:imeOptions="actionDone"
                 android:inputType="phone"
                 android:maxLines="1" />

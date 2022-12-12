@@ -28,7 +28,7 @@
     <!-- Level 1: Preferences -->
 
     <bool name="settings_interface_bubble_visible">false</bool>
-    <bool name="settings_interface_bubble_default">false</bool>
+    <bool name="settings_interface_bubble_default">true</bool>
     <bool name="settings_presence_visible">false</bool>
     <bool name="settings_presence_user_always_appears_offline_default">false</bool>
 
@@ -40,7 +40,7 @@
 
     <!-- Level 1: Labs -->
     <bool name="settings_labs_deferred_dm_visible">true</bool>
-    <bool name="settings_labs_deferred_dm_default">true</bool>
+    <bool name="settings_labs_deferred_dm_default">false</bool>
     <bool name="settings_labs_thread_messages_default">false</bool>
     <bool name="settings_labs_new_app_layout_default">false</bool>
     <bool name="settings_labs_new_session_manager_default">false</bool>

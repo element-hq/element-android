@@ -18,6 +18,7 @@
 
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY"
+            app:isPreferenceVisible="false"
             android:summary="@string/change_password_summary"
             android:title="@string/settings_password" />
 
@@ -29,6 +30,7 @@
 
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_DISCOVERY_PREFERENCE_KEY"
+            app:isPreferenceVisible="false"
             android:persistent="false"
             android:summary="@string/settings_discovery_manage"
             android:title="@string/settings_discovery_category" />
@@ -75,18 +77,21 @@
 
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_LOGGED_IN_PREFERENCE_KEY"
+            app:isPreferenceVisible="false"
             android:title="@string/settings_logged_in"
             tools:summary="\@user:matrix.org" />
 
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_HOME_SERVER_PREFERENCE_KEY"
             android:title="@string/settings_home_server"
+            app:isPreferenceVisible="false"
             app:fragment="im.vector.app.features.settings.homeserver.HomeserverSettingsFragment"
             tools:summary="https://homeserver.org" />
 
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY"
             android:title="@string/settings_identity_server"
+            app:isPreferenceVisible="false"
             tools:summary="https://identity.server.url" />
 
         <im.vector.app.core.preference.VectorPreference

@@ -46,18 +46,21 @@
 
         <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="false"
+            app:isPreferenceVisible="false"
             android:key="SETTINGS_ENABLE_MARKDOWN_KEY"
             android:summary="@string/settings_send_markdown_summary"
             android:title="@string/settings_send_markdown" />
 
         <im.vector.app.core.preference.VectorSwitchPreference
-            android:defaultValue="true"
+            android:defaultValue="false"
+            app:isPreferenceVisible="false"
             android:key="SETTINGS_SEND_TYPING_NOTIF_KEY"
             android:summary="@string/settings_send_typing_notifs_summary"
             android:title="@string/settings_send_typing_notifs" />
 
         <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="false"
+            app:isPreferenceVisible="false"
             android:key="SETTINGS_SEND_MESSAGE_WITH_ENTER"
             android:summary="@string/settings_send_message_with_enter_summary"
             android:title="@string/settings_send_message_with_enter" />
@@ -100,6 +103,7 @@
 
         <im.vector.app.core.preference.VectorSwitchPreference
             android:key="SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY"
+            app:isPreferenceVisible="false"
             android:title="@string/settings_always_show_timestamps" />
 
         <im.vector.app.core.preference.VectorSwitchPreference
@@ -115,7 +119,8 @@
             android:title="@string/settings_show_read_receipts" />
 
         <im.vector.app.core.preference.VectorSwitchPreference
-            android:defaultValue="true"
+            android:defaultValue="false"
+            app:isPreferenceVisible="false"
             android:key="SETTINGS_SHOW_REDACTED_KEY"
             android:summary="@string/settings_show_redacted_summary"
             android:title="@string/settings_show_redacted" />
@@ -142,6 +147,7 @@
 
         <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="false"
+            app:isPreferenceVisible="false"
             android:key="SETTINGS_AUTOPLAY_ANIMATED_IMAGES"
             android:summary="@string/settings_autoplay_animated_images_summary"
             android:title="@string/settings_autoplay_animated_images_title" />

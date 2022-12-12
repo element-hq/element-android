@@ -546,7 +546,7 @@ class TimelineViewModel @AssistedInject constructor(
 
     private fun handleJoinJitsiCall() = withState { state ->
         val jitsiWidget = state.activeRoomWidgets()?.firstOrNull { it.widgetId == state.jitsiState.widgetId } ?: return@withState
-        val action = RoomDetailAction.EnsureNativeWidgetAllowed(jitsiWidget, false, RoomDetailViewEvents.JoinJitsiConference(jitsiWidget, true))
+        val action = RoomDetailAction.EnsureNativeWidgetAllowed(jitsiWidget, true, RoomDetailViewEvents.JoinJitsiConference(jitsiWidget, true))
         handleCheckWidgetAllowed(action)
     }
 

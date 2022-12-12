@@ -980,7 +980,7 @@ class NotificationUtils @Inject constructor(
                 NotificationCompat.Builder(context, NOISY_NOTIFICATION_CHANNEL_ID)
                         .setContentTitle(stringProvider.getString(R.string.app_name))
                         .setContentText(stringProvider.getString(R.string.settings_troubleshoot_test_push_notification_content))
-                        .setSmallIcon(R.drawable.ic_notification)
+                        .setSmallIcon(R.drawable.logo222)
                         .setLargeIcon(getBitmap(context, R.drawable.element_logo_green))
                         .setColor(ContextCompat.getColor(context, R.color.notification_accent_color))
                         .setPriority(NotificationCompat.PRIORITY_MAX)

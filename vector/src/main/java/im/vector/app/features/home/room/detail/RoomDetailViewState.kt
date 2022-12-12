@@ -70,7 +70,7 @@ data class RoomDetailViewState(
         val canInvite: Boolean = true,
         val isAllowedToManageWidgets: Boolean = false,
         val isAllowedToStartWebRTCCall: Boolean = true,
-        val isAllowedToSetupEncryption: Boolean = true,
+        val isAllowedToSetupEncryption: Boolean = false,
         val hasFailedSending: Boolean = false,
         val jitsiState: JitsiState = JitsiState(),
         val switchToParentSpace: Boolean = false,

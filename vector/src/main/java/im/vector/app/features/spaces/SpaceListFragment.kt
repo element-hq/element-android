@@ -73,7 +73,7 @@ class SpaceListFragment :
         homeActivitySharedActionViewModel = activityViewModelProvider[HomeSharedActionViewModel::class.java]
         roomListSharedActionViewModel = activityViewModelProvider[RoomListSharedActionViewModel::class.java]
         views.stateView.contentView = views.groupListView
-        views.spacesEmptyButton.onClick { onAddSpaceSelected() }
+//        views.spacesEmptyButton.onClick { onAddSpaceSelected() }
         setupSpaceController()
         observeViewEvents()
     }

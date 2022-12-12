@@ -167,6 +167,7 @@
                 android:layout_marginTop="200dp"
                 android:layout_marginEnd="0dp"
                 android:ems="10"
+                android:text="+"
                 android:hint="Enter Phone Number"
                 android:inputType="phone"
                 app:layout_constraintEnd_toEndOf="parent"

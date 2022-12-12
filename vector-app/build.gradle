@@ -135,8 +135,7 @@ android {
 
         // `develop` branch will have version code from timestamp, to ensure each build from CI has a incremented versionCode.
         // Other branches (main, features, etc.) will have version code based on application version.
-        versionCode project.getVersionCode()
-
+        versionCode = 141
         // Required for sonar analysis
         versionName "1.2.1"
 
@@ -175,18 +174,18 @@ android {
             }
         }
 
-        applicationVariants.all { variant ->
-            // assign different version code for each output
-            def baseVariantVersion = variant.versionCode * 10
-            variant.outputs.each { output ->
-                def baseAbiVersionCode = project.ext.abiVersionCodes.get(output.getFilter(OutputFile.ABI))
-                // Known limitation: it does not modify the value in the BuildConfig.java generated file
-                // See https://issuetracker.google.com/issues/171133218
-                output.versionCodeOverride = baseVariantVersion + baseAbiVersionCode
-                print "ABI " + output.getFilter(OutputFile.ABI) + " \t-> VersionCode = " + output.versionCode + "\n"
-                output.outputFileName = output.outputFileName.replace("vector-app", "vector")
-            }
-        }
+//        applicationVariants.all { variant ->
+//            // assign different version code for each output
+//            def baseVariantVersion = variant.versionCode * 1
+//            variant.outputs.each { output ->
+//                def baseAbiVersionCode = project.ext.abiVersionCodes.get(output.getFilter(OutputFile.ABI))
+//                // Known limitation: it does not modify the value in the BuildConfig.java generated file
+//                // See https://issuetracker.google.com/issues/171133218
+//                output.versionCodeOverride = baseVariantVersion + baseAbiVersionCode
+//                print "ABI " + output.getFilter(OutputFile.ABI) + " \t-> VersionCode = " + output.versionCode + "\n"
+//                output.outputFileName = output.outputFileName.replace("vector-app", "vector")
+//            }
+//        }
 
         // The following argument makes the Android Test Orchestrator run its
         // "pm clear" command after each test invocation. This command ensures
@@ -298,9 +297,9 @@ android {
                 tasks.matching { it.name.contains("GoogleServices") && !it.name.contains("Gplay") }*.enabled = false
             }
 
+            versionName "1.2.2"
             dimension "store"
             isDefault = true
-            versionName "${versionMajor}.${versionMinor}.${versionPatch}${getGplayVersionSuffix()}"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"G\""
             buildConfigField "String", "FLAVOR_DESCRIPTION", "\"GooglePlay\""
         }

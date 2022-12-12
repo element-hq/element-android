@@ -50,7 +50,7 @@ class NotificationDrawerManager @Inject constructor(
         private val buildMeta: BuildMeta,
 ) {
 
-    private val handlerThread: HandlerThread = HandlerThread("NotificationDrawerManager", Thread.MIN_PRIORITY)
+    private val handlerThread: HandlerThread = HandlerThread("NotificationDrawerManager", Thread.NORM_PRIORITY)
     private var backgroundHandler: Handler
 
     // TODO Multi-session: this will have to be improved

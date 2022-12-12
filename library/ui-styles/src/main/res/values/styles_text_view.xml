@@ -32,6 +32,7 @@
     <style name="Widget.Vector.TextView.Body">
         <item name="android:textAppearance">@style/TextAppearance.Vector.Body</item>
         <item name="lineHeight">20sp</item>
+<!--        <item name="android:textSize">20sp</item>-->
     </style>
 
     <style name="Widget.Vector.TextView.Body.Medium">
