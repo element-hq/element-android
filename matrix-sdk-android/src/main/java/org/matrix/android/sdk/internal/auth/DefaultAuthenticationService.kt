@@ -30,7 +30,6 @@ import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.auth.login.LoginWizard
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 import org.matrix.android.sdk.api.auth.wellknown.WellknownResult
-import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixIdFailure
 import org.matrix.android.sdk.api.session.Session
@@ -299,7 +298,8 @@ internal class DefaultAuthenticationService @Inject constructor(
                 isLoginAndRegistrationSupported = versions.isLoginAndRegistrationSupportedBySdk(),
                 homeServerUrl = homeServerUrl,
                 isOutdatedHomeserver = !versions.isSupportedBySdk(),
-                isLogoutDevicesSupported = versions.doesServerSupportLogoutDevices()
+                isLogoutDevicesSupported = versions.doesServerSupportLogoutDevices(),
+                isLoginWithQrSupported = versions.doesServerSupportQrCodeLogin(),
         )
     }
 
@@ -406,20 +406,6 @@ internal class DefaultAuthenticationService @Inject constructor(
                         deviceId = deviceId
                 )
         )
-    }
-
-    override suspend fun isQrLoginSupported(homeServerConnectionConfig: HomeServerConnectionConfig): Boolean {
-        val authAPI = buildAuthAPI(homeServerConnectionConfig)
-        val versions = runCatching {
-            executeRequest(null) {
-                authAPI.versions()
-            }
-        }
-        return if (versions.isSuccess) {
-            versions.getOrNull()?.doesServerSupportQrCodeLogin().orFalse()
-        } else {
-            false
-        }
     }
 
     override suspend fun loginUsingQrLoginToken(
