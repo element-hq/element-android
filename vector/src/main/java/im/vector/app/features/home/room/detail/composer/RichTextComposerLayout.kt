@@ -376,12 +376,13 @@ internal class RichTextComposerLayout @JvmOverloads constructor(
     }
 
     override fun renderComposerMode(mode: MessageComposerMode) {
-        if (this.composerMode == mode) return
-        this.composerMode = mode
-
         if (mode is MessageComposerMode.Special) {
             views.composerModeGroup.isVisible = true
-            replaceFormattedContent(mode.defaultContent)
+            if (isTextFormattingEnabled) {
+                replaceFormattedContent(mode.defaultContent)
+            } else {
+                views.plainTextComposerEditText.setText(mode.defaultContent)
+            }
             hasRelatedMessage = true
             editText.showKeyboard(andRequestFocus = true)
         } else {
@@ -393,9 +394,13 @@ internal class RichTextComposerLayout @JvmOverloads constructor(
                     views.plainTextComposerEditText.setText(text)
                 }
             }
-            views.sendButton.contentDescription = resources.getString(R.string.action_send)
             hasRelatedMessage = false
         }
+
+        updateTextFieldBorder(isFullScreen)
+
+        if (this.composerMode == mode) return
+        this.composerMode = mode
 
         views.sendButton.apply {
             if (mode is MessageComposerMode.Edit) {
@@ -406,8 +411,6 @@ internal class RichTextComposerLayout @JvmOverloads constructor(
                 setImageResource(R.drawable.ic_rich_composer_send)
             }
         }
-
-        updateTextFieldBorder(isFullScreen)
 
         when (mode) {
             is MessageComposerMode.Edit -> {
