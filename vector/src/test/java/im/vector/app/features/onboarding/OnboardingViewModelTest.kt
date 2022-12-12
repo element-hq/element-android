@@ -83,6 +83,7 @@ private val A_HOMESERVER_CONFIG = HomeServerConnectionConfig(FakeUri().instance)
 private val SELECTED_HOMESERVER_STATE = SelectedHomeserverState(preferredLoginMode = LoginMode.Password, userFacingUrl = A_HOMESERVER_URL)
 private val SELECTED_HOMESERVER_STATE_SUPPORTED_LOGOUT_DEVICES = SelectedHomeserverState(isLogoutDevicesSupported = true)
 private val DEFAULT_SELECTED_HOMESERVER_STATE = SELECTED_HOMESERVER_STATE.copy(userFacingUrl = A_DEFAULT_HOMESERVER_URL)
+private val DEFAULT_SELECTED_HOMESERVER_STATE_WITH_QR_SUPPORTED = DEFAULT_SELECTED_HOMESERVER_STATE.copy(isLoginWithQrSupported = true)
 private const val AN_EMAIL = "hello@example.com"
 private const val A_PASSWORD = "a-password"
 private const val A_USERNAME = "hello-world"
@@ -164,7 +165,7 @@ class OnboardingViewModelTest {
     fun `given combined login enabled, when handling sign in splash action, then emits OpenCombinedLogin with default homeserver qrCode supported`() = runTest {
         val test = viewModel.test()
         fakeVectorFeatures.givenCombinedLoginEnabled()
-        givenCanSuccessfullyUpdateHomeserver(A_DEFAULT_HOMESERVER_URL, DEFAULT_SELECTED_HOMESERVER_STATE)
+        givenCanSuccessfullyUpdateHomeserver(A_DEFAULT_HOMESERVER_URL, DEFAULT_SELECTED_HOMESERVER_STATE_WITH_QR_SUPPORTED)
 
         viewModel.handle(OnboardingAction.SplashAction.OnIAlreadyHaveAnAccount(OnboardingFlow.SignIn))
 
@@ -173,9 +174,9 @@ class OnboardingViewModelTest {
                         initialState,
                         { copy(onboardingFlow = OnboardingFlow.SignIn) },
                         { copy(isLoading = true) },
-                        { copy(canLoginWithQrCode = true) },
-                        { copy(selectedHomeserver = DEFAULT_SELECTED_HOMESERVER_STATE) },
+                        { copy(selectedHomeserver = DEFAULT_SELECTED_HOMESERVER_STATE_WITH_QR_SUPPORTED) },
                         { copy(signMode = SignMode.SignIn) },
+                        { copy(canLoginWithQrCode = true) },
                         { copy(isLoading = false) }
                 )
                 .assertEvents(OnboardingViewEvents.OpenCombinedLogin)
