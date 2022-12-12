@@ -55,10 +55,10 @@ internal class DefaultGetPagedThreadListTask(
 
     private val defaultPagedListConfig
         get() = PagedList.Config.Builder()
-                .setPageSize(10)
-                .setInitialLoadSizeHint(10)
+                .setPageSize(20)
+                .setInitialLoadSizeHint(40)
                 .setEnablePlaceholders(false)
-                .setPrefetchDistance(5)
+                .setPrefetchDistance(10)
                 .build()
 
     override suspend fun execute(params: GetPagedThreadListTask.Params): LiveData<PagedList<ThreadSummary>> {
