@@ -253,18 +253,20 @@ internal class UserAccountDataSyncHandler @Inject constructor(
     }
 
     fun handleGenericAccountData(realm: Realm, type: String, content: Content?) {
+        if (content.isNullOrEmpty()) {
+            // This is a response for a deleted account data according to
+            // https://github.com/ShadowJonathan/matrix-doc/blob/account-data-delete/proposals/3391-account-data-delete.md#sync
+            UserAccountDataEntity.delete(realm, type)
+            return
+        }
+
         val existing = realm.where<UserAccountDataEntity>()
                 .equalTo(UserAccountDataEntityFields.TYPE, type)
                 .findFirst()
+
         if (existing != null) {
-            if (content.isNullOrEmpty()) {
-                // This is a response for a deleted account data according to
-                // https://github.com/ShadowJonathan/matrix-doc/blob/account-data-delete/proposals/3391-account-data-delete.md#sync
-                UserAccountDataEntity.delete(realm, type)
-            } else {
-                // Update current value
-                existing.contentStr = ContentMapper.map(content)
-            }
+            // Update current value
+            existing.contentStr = ContentMapper.map(content)
         } else {
             realm.createObject(UserAccountDataEntity::class.java).let { accountDataEntity ->
                 accountDataEntity.type = type

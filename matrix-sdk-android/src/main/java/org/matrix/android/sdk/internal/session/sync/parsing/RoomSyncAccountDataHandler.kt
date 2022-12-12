@@ -57,15 +57,16 @@ internal class RoomSyncAccountDataHandler @Inject constructor(
     }
 
     private fun handleGeneric(roomEntity: RoomEntity, content: JsonDict?, eventType: String) {
+        if (content.isNullOrEmpty()) {
+            // This is a response for a deleted account data according to
+            // https://github.com/ShadowJonathan/matrix-doc/blob/account-data-delete/proposals/3391-account-data-delete.md#sync
+            roomEntity.removeAccountData(eventType)
+            return
+        }
+
         val existing = roomEntity.accountData.where().equalTo(RoomAccountDataEntityFields.TYPE, eventType).findFirst()
         if (existing != null) {
-            if (content.isNullOrEmpty()) {
-                // This is a response for a deleted account data according to
-                // https://github.com/ShadowJonathan/matrix-doc/blob/account-data-delete/proposals/3391-account-data-delete.md#sync
-                roomEntity.removeAccountData(eventType)
-            } else {
-                existing.contentStr = ContentMapper.map(content)
-            }
+            existing.contentStr = ContentMapper.map(content)
         } else {
             val roomAccountData = RoomAccountDataEntity(
                     type = eventType,
