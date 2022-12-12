@@ -207,9 +207,9 @@ internal class KotlinSasTransaction(
 
     override fun state() = this.state
 
-    override fun supportsEmoji(): Boolean {
-        return accepted?.shortAuthenticationStrings?.contains(SasMode.EMOJI) == true
-    }
+//    override fun supportsEmoji(): Boolean {
+//        return accepted?.shortAuthenticationStrings?.contains(SasMode.EMOJI) == true
+//    }
 
     override fun getEmojiCodeRepresentation(): List<EmojiRepresentation> {
         return shortCodeBytes?.getEmojiCodeRepresentation().orEmpty()

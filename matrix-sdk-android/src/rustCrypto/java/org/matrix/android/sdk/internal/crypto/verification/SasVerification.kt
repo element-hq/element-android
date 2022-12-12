@@ -151,10 +151,10 @@ internal class SasVerification @AssistedInject constructor(
     /** Is this verification happening over to-device messages */
     override fun isToDeviceTransport(): Boolean = inner.roomId() == null
 
-    /** Does the verification flow support showing emojis as the short auth string */
-    override fun supportsEmoji(): Boolean {
-        return inner.supportsEmoji()
-    }
+//    /** Does the verification flow support showing emojis as the short auth string */
+//    override fun supportsEmoji(): Boolean {
+//        return inner.supportsEmoji()
+//    }
 
     /** Confirm that the short authentication code matches on both sides
      *

@@ -44,7 +44,7 @@ interface SasVerificationTransaction : VerificationTransaction {
 
     override fun isSuccessful() = state() is SasTransactionState.Done
 
-    fun supportsEmoji(): Boolean
+//    fun supportsEmoji(): Boolean
 
     fun getEmojiCodeRepresentation(): List<EmojiRepresentation>
 
