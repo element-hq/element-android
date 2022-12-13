@@ -214,7 +214,7 @@ internal class VerificationActorHelper {
                     }
                 }
             }
-            coEvery { sendInRoom(any(), any(), any(), any()) } answers {
+            coEvery { sendInRoom(any(), any(), any()) } answers {
                 val type = secondArg<String>()
                 val roomId = thirdArg<String>()
                 val content = arg<Content>(3)
