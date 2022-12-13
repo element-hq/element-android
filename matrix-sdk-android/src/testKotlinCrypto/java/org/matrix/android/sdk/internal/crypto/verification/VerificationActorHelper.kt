@@ -22,7 +22,6 @@ import io.mockk.mockk
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.crypto.verification.ValidVerificationInfoReady
@@ -32,9 +31,6 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationReadyContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationRequestContent
 import org.matrix.android.sdk.api.session.room.model.message.ValidVerificationDone
-import org.matrix.android.sdk.internal.crypto.SecretShareManager
-import org.matrix.android.sdk.internal.util.time.Clock
-import org.matrix.olm.OlmSAS
 import java.util.UUID
 
 internal class VerificationActorHelper {
@@ -46,12 +42,12 @@ internal class VerificationActorHelper {
             val bobStore: FakeCryptoStoreForVerification,
     )
 
-    val actorAScope = CoroutineScope(SupervisorJob())
-    val actorBScope = CoroutineScope(SupervisorJob())
-    val transportScope = CoroutineScope(SupervisorJob())
+    private val actorAScope = CoroutineScope(SupervisorJob())
+    private val actorBScope = CoroutineScope(SupervisorJob())
+    private val transportScope = CoroutineScope(SupervisorJob())
 
-    var bobChannel: SendChannel<VerificationIntent>? = null
-    var aliceChannel: SendChannel<VerificationIntent>? = null
+    private var bobChannel: SendChannel<VerificationIntent>? = null
+    private var aliceChannel: SendChannel<VerificationIntent>? = null
 
     fun setUpActors(): TestData {
         val aliceTransportLayer = mockTransportTo(FakeCryptoStoreForVerification.aliceMxId) { listOf(bobChannel) }
@@ -83,54 +79,54 @@ internal class VerificationActorHelper {
         )
     }
 
-    fun setupMultipleSessions() {
-        val aliceTargetChannels = mutableListOf<Channel<VerificationIntent>>()
-        val aliceTransportLayer = mockTransportTo(FakeCryptoStoreForVerification.aliceMxId) { aliceTargetChannels }
-        val bobTargetChannels = mutableListOf<Channel<VerificationIntent>>()
-        val bobTransportLayer = mockTransportTo(FakeCryptoStoreForVerification.bobMxId) { bobTargetChannels }
-        val bob2TargetChannels = mutableListOf<Channel<VerificationIntent>>()
-        val bob2TransportLayer = mockTransportTo(FakeCryptoStoreForVerification.bobMxId) { bob2TargetChannels }
-
-        val fakeAliceStore = FakeCryptoStoreForVerification(StoreMode.Alice)
-        val aliceActor = fakeActor(
-                actorAScope,
-                FakeCryptoStoreForVerification.aliceMxId,
-                fakeAliceStore.instance,
-                aliceTransportLayer,
-        )
-
-        val fakeBobStore1 = FakeCryptoStoreForVerification(StoreMode.Bob)
-        val bobActor = fakeActor(
-                actorBScope,
-                FakeCryptoStoreForVerification.bobMxId,
-                fakeBobStore1.instance,
-                bobTransportLayer
-        )
-
-        val actorCScope = CoroutineScope(SupervisorJob())
-        val fakeBobStore2 = FakeCryptoStoreForVerification(StoreMode.Bob)
-        every { fakeBobStore2.instance.getMyDeviceId() } returns FakeCryptoStoreForVerification.bobDeviceId2
-        every { fakeBobStore2.instance.getMyDevice() } returns FakeCryptoStoreForVerification.aBobDevice2
-
-        val bobActor2 = fakeActor(
-                actorCScope,
-                FakeCryptoStoreForVerification.bobMxId,
-                fakeBobStore2.instance,
-                bobTransportLayer
-        )
-
-        aliceTargetChannels.add(bobActor.channel)
-        aliceTargetChannels.add(bobActor2.channel)
-
-        bobTargetChannels.add(aliceActor.channel)
-        bobTargetChannels.add(bobActor2.channel)
-
-        bob2TargetChannels.add(aliceActor.channel)
-        bob2TargetChannels.add(bobActor.channel)
-    }
+//    fun setupMultipleSessions() {
+//        val aliceTargetChannels = mutableListOf<Channel<VerificationIntent>>()
+//        val aliceTransportLayer = mockTransportTo(FakeCryptoStoreForVerification.aliceMxId) { aliceTargetChannels }
+//        val bobTargetChannels = mutableListOf<Channel<VerificationIntent>>()
+//        val bobTransportLayer = mockTransportTo(FakeCryptoStoreForVerification.bobMxId) { bobTargetChannels }
+//        val bob2TargetChannels = mutableListOf<Channel<VerificationIntent>>()
+//        val bob2TransportLayer = mockTransportTo(FakeCryptoStoreForVerification.bobMxId) { bob2TargetChannels }
+//
+//        val fakeAliceStore = FakeCryptoStoreForVerification(StoreMode.Alice)
+//        val aliceActor = fakeActor(
+//                actorAScope,
+//                FakeCryptoStoreForVerification.aliceMxId,
+//                fakeAliceStore.instance,
+//                aliceTransportLayer,
+//        )
+//
+//        val fakeBobStore1 = FakeCryptoStoreForVerification(StoreMode.Bob)
+//        val bobActor = fakeActor(
+//                actorBScope,
+//                FakeCryptoStoreForVerification.bobMxId,
+//                fakeBobStore1.instance,
+//                bobTransportLayer
+//        )
+//
+//        val actorCScope = CoroutineScope(SupervisorJob())
+//        val fakeBobStore2 = FakeCryptoStoreForVerification(StoreMode.Bob)
+//        every { fakeBobStore2.instance.getMyDeviceId() } returns FakeCryptoStoreForVerification.bobDeviceId2
+//        every { fakeBobStore2.instance.getMyDevice() } returns FakeCryptoStoreForVerification.aBobDevice2
+//
+//        val bobActor2 = fakeActor(
+//                actorCScope,
+//                FakeCryptoStoreForVerification.bobMxId,
+//                fakeBobStore2.instance,
+//                bobTransportLayer
+//        )
+//
+//        aliceTargetChannels.add(bobActor.channel)
+//        aliceTargetChannels.add(bobActor2.channel)
+//
+//        bobTargetChannels.add(aliceActor.channel)
+//        bobTargetChannels.add(bobActor2.channel)
+//
+//        bob2TargetChannels.add(aliceActor.channel)
+//        bob2TargetChannels.add(bobActor.channel)
+//    }
 
     private fun mockTransportTo(fromUser: String, otherChannel: (() -> List<SendChannel<VerificationIntent>?>)): VerificationTransportLayer {
-        return mockk<VerificationTransportLayer> {
+        return mockk {
             coEvery { sendToOther(any(), any(), any()) } answers {
                 val request = firstArg<KotlinVerificationRequest>()
                 val type = secondArg<String>()
@@ -266,17 +262,16 @@ internal class VerificationActorHelper {
     ): VerificationActor {
         return VerificationActor(
                 scope,
-//                channel = channel,
-                clock = mockk<Clock> {
+                clock = mockk {
                     every { epochMillis() } returns System.currentTimeMillis()
                 },
                 myUserId = userId,
                 verificationTrustBackend = cryptoStore,
-                secretShareManager = mockk<SecretShareManager> {},
+                secretShareManager = mockk {},
                 transportLayer = transportLayer,
                 verificationRequestsStore = VerificationRequestsStore(),
-                olmPrimitiveProvider = mockk<VerificationCryptoPrimitiveProvider> {
-                    every { provideOlmSas() } returns mockk<OlmSAS> {
+                olmPrimitiveProvider = mockk {
+                    every { provideOlmSas() } returns mockk {
                         every { publicKey } returns "Tm9JRGVhRmFrZQo="
                         every { setTheirPublicKey(any()) } returns Unit
                         every { generateShortCode(any(), any()) } returns byteArrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
