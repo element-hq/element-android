@@ -20,7 +20,7 @@ import android.app.Activity
 import android.view.View
 import androidx.annotation.DrawableRes
 import im.vector.app.R
-import im.vector.app.core.glide.GlideApp
+//import im.vector.app.core.glide.GlideApp
 import im.vector.app.databinding.AlerterVerificationLayoutBinding
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -30,6 +30,7 @@ class VerificationVectorAlert(
         title: String,
         override val description: String,
         @DrawableRes override val iconId: Int?,
+        override val priority: Int = PopupAlertManager.DEFAULT_PRIORITY,
         /**
          * Alert are displayed by default, but let this lambda return false to prevent displaying.
          */
@@ -42,9 +43,12 @@ class VerificationVectorAlert(
             private val avatarRenderer: AvatarRenderer
     ) : VectorAlert.ViewBinder {
 
+        //        override fun bind(view: View) {
+//            val views = AlerterVerificationLayoutBinding.bind(view)
+//            avatarRenderer.render(matrixItem, views.ivUserAvatar, GlideApp.with(view.context.applicationContext))
+//        }
         override fun bind(view: View) {
-            val views = AlerterVerificationLayoutBinding.bind(view)
-            avatarRenderer.render(matrixItem, views.ivUserAvatar, GlideApp.with(view.context.applicationContext))
+            TODO("Not yet implemented")
         }
     }
 }

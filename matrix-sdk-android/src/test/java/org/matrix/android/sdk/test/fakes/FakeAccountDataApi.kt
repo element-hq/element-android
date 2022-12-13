@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,19 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.auth.data
+package org.matrix.android.sdk.test.fakes
 
-data class LoginFlowResult(
-        val supportedLoginTypes: List<String>,
-        val ssoIdentityProviders: List<SsoIdentityProvider>?,
-        val isLoginAndRegistrationSupported: Boolean,
-        val homeServerUrl: String,
-        val isOutdatedHomeserver: Boolean,
-        val isLogoutDevicesSupported: Boolean,
-        val isLoginWithQrSupported: Boolean,
-)
+import io.mockk.coEvery
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.runs
+import org.matrix.android.sdk.internal.session.user.accountdata.AccountDataAPI
+
+internal class FakeAccountDataApi {
+
+    val instance: AccountDataAPI = mockk()
+
+    fun givenParamsToDeleteAccountData(userId: String, type: String) {
+        coEvery { instance.deleteAccountData(userId, type) } just runs
+    }
+}

@@ -98,13 +98,13 @@ allprojects {
         }
         // Jitsi repo
         maven {
-            url "https://github.com/vector-im/jitsi_libre_maven/raw/main/android-sdk-6.2.2"
+            url "https://github.com/jitsi/jitsi-maven-repository/raw/master/releases"
             // Note: to test Jitsi release you can use a local file like this:
             // url "file:///Users/bmarty/workspaces/jitsi_libre_maven/android-sdk-6.2.2"
-            content {
-                groups.jitsi.regex.each { includeGroupByRegex it }
-                groups.jitsi.group.each { includeGroup it }
-            }
+//            content {
+//                groups.jitsi.regex.each { includeGroupByRegex it }
+//                groups.jitsi.group.each { includeGroup it }
+//            }
         }
         // Do not use `google()`, it prevents Dependabot from working properly
         maven {

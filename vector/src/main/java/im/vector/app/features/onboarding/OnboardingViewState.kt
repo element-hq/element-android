@@ -76,6 +76,7 @@ data class SelectedHomeserverState(
         val preferredLoginMode: LoginMode = LoginMode.Unknown,
         val supportedLoginTypes: List<String> = emptyList(),
         val isLogoutDevicesSupported: Boolean = false,
+        val isLoginWithQrSupported: Boolean = false,
 ) : Parcelable
 
 @Parcelize

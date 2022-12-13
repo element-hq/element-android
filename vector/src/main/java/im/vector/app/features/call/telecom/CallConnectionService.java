@@ -17,7 +17,6 @@
 package im.vector.app.features.call.telecom;
 
 import android.os.Build;
-
 import androidx.annotation.RequiresApi;
 
 import org.jitsi.meet.sdk.ConnectionService;

@@ -134,6 +134,11 @@ dependencies {
     api "org.threeten:threetenbp:1.4.0:no-tzdb"
     api "com.gabrielittner.threetenbp:lazythreetenbp:0.12.0"
 
+    //noinspection GradleDynamicVersion
+    implementation 'com.amplitude:android-sdk:3.35.1'
+    implementation 'com.giphy.sdk:ui:2.3.0'
+    implementation 'org.brotli:dec:0.1.2'
+
     implementation libs.squareup.moshi
     implementation 'com.google.android.gms:play-services-basement:18.1.0'
     implementation 'com.google.firebase:firebase-auth-ktx:21.1.0'
@@ -251,10 +256,11 @@ dependencies {
     // WebRTC
     // org.webrtc:google-webrtc is for development purposes only
     // implementation 'org.webrtc:google-webrtc:1.0.+'
-    implementation('com.facebook.react:react-native-webrtc:1.106.1-jitsi-12039821@aar')
+    implementation('com.facebook.react:react-native-webrtc:1.106.1-jitsi-12421094@aar')
+    implementation('com.facebook.react:react-native-amplitude:2.7.0-jitsi-12421094')
     // Jitsi
     // Note: version is 6.2.0, but built from the tag `android-sdk-6.2.2`.
-    api('org.jitsi.react:jitsi-meet-sdk:6.2.0') {
+    api('org.jitsi.react:jitsi-meet-sdk:7.0.1') {
         exclude group: 'com.google.firebase'
         exclude group: 'com.google.android.gms'
         exclude group: 'com.android.installreferrer'

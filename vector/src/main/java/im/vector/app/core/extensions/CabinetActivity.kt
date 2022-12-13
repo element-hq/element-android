@@ -55,7 +55,8 @@ import javax.inject.Inject
 
 fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
 
-class CabinetActivity : AppCompatActivity() {
+class
+CabinetActivity : AppCompatActivity() {
 
     private val price = 4990
     private var total = 0
@@ -305,7 +306,7 @@ class CabinetActivity : AppCompatActivity() {
             formBody.add("websiteUrl", findViewById<EditText>(R.id.text_website_url).text.toString())
 
         selectedCities.forEachIndexed { index, uuid ->
-            formBody.add("countryUuids[$index]", uuid)
+            formBody.add("cityUuids[$index]", uuid)
         }
 
         val okHttpClient = OkHttpClient()

@@ -61,4 +61,6 @@ dependencies {
     implementation libs.androidx.preferenceKtx
     // dialpad dimen
     implementation project(":library:external:dialpad")
+    //noinspection GradleDynamicVersion
+
 }
