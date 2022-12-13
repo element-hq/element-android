@@ -17,11 +17,10 @@
 package im.vector.app.features.settings.devices.v2
 
 import im.vector.app.test.fakes.FakeActiveSessionHolder
+import io.mockk.coEvery
 import io.mockk.every
-import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
-import io.mockk.runs
 import io.mockk.unmockkAll
 import io.mockk.verify
 import kotlinx.coroutines.flow.flowOf
@@ -60,7 +59,7 @@ class RefreshDevicesOnCryptoDevicesChangeUseCaseTest {
         val flowSession = mockk<FlowSession>()
         every { fakeSession.flow() } returns flowSession
         every { flowSession.liveUserCryptoDevices(any()) } returns flowOf(devices)
-        every { fakeSession.cryptoService().fetchDevicesList(any()) } just runs
+        coEvery { fakeSession.cryptoService().fetchDevicesList() }
 
         // When
         refreshDevicesOnCryptoDevicesChangeUseCase.execute()

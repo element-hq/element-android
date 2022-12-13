@@ -323,7 +323,7 @@ tasks.register("recordScreenshots", GradleBuild) {
 
 tasks.register("verifyScreenshots", GradleBuild) {
     startParameter.projectProperties.screenshot = ""
-    tasks = [':vector:verifyPaparazziDebug']
+    tasks = [':vector:verifyPaparazziKotlinCryptoDebug']
 }
 
 ext.initScreenshotTests = { project ->
