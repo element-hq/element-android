@@ -37,6 +37,12 @@ import com.adevinta.android.barista.internal.viewaction.SleepViewAction
 import im.vector.app.core.utils.getMatrixInstance
 import im.vector.app.features.MainActivity
 import im.vector.app.features.home.HomeActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.hamcrest.CoreMatchers.not
 import org.junit.Before
 import org.junit.Ignore
@@ -48,11 +54,10 @@ import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.crypto.verification.SasTransactionState
 import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
+import org.matrix.android.sdk.api.session.crypto.verification.getTransaction
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 import kotlin.random.Random
@@ -72,7 +77,7 @@ class VerifySessionInteractiveTest : VerificationTestBase() {
         val matrix = getMatrixInstance()
         val userName = "foobar_${Random.nextLong()}"
         existingSession = createAccountAndSync(matrix, userName, password, true)
-        doSync<Unit> {
+        runBlockingTest {
             existingSession!!.cryptoService().crossSigningService()
                     .initializeCrossSigning(
                             object : UserInteractiveAuthInterceptor {
@@ -85,7 +90,7 @@ class VerifySessionInteractiveTest : VerificationTestBase() {
                                             )
                                     )
                                 }
-                            }, it
+                            }
                     )
         }
     }
@@ -139,15 +144,15 @@ class VerifySessionInteractiveTest : VerificationTestBase() {
         onView(withId(R.id.bottomSheetFragmentContainer))
                 .check(matches(not(hasDescendant(withText(R.string.verification_cannot_access_other_session)))))
 
-        val request = existingSession!!.cryptoService().verificationService().requestKeyVerification(
-                listOf(VerificationMethod.SAS, VerificationMethod.QR_CODE_SCAN, VerificationMethod.QR_CODE_SHOW),
-                existingSession!!.myUserId,
-                listOf(uiSession.sessionParams.deviceId!!)
-        )
+        val request = runBlockingTest {
+            existingSession!!.cryptoService().verificationService().requestSelfKeyVerification(
+                    listOf(VerificationMethod.SAS, VerificationMethod.QR_CODE_SCAN, VerificationMethod.QR_CODE_SHOW),
+            )
+        }
 
-        val transactionId = request.transactionId!!
-        val sasReadyIdle = verificationStateIdleResource(transactionId, VerificationTxState.ShortCodeReady, uiSession)
-        val otherSessionSasReadyIdle = verificationStateIdleResource(transactionId, VerificationTxState.ShortCodeReady, existingSession!!)
+        val transactionId = request.transactionId
+        val sasReadyIdle = verificationStateIdleResource(transactionId, SasTransactionState.SasShortCodeReady, uiSession)
+        val otherSessionSasReadyIdle = verificationStateIdleResource(transactionId, SasTransactionState.SasShortCodeReady, existingSession!!)
 
         onView(isRoot()).perform(SleepViewAction.sleep(1000))
 
@@ -166,10 +171,12 @@ class VerifySessionInteractiveTest : VerificationTestBase() {
                         )
                 )
 
-        val firstSessionTr = existingSession!!.cryptoService().verificationService().getExistingTransaction(
-                existingSession!!.myUserId,
-                transactionId
-        ) as SasVerificationTransaction
+        val firstSessionTr = runBlockingTest {
+            existingSession!!.cryptoService().verificationService().getExistingTransaction(
+                    existingSession!!.myUserId,
+                    transactionId
+            ) as SasVerificationTransaction
+        }
 
         IdlingRegistry.getInstance().register(sasReadyIdle)
         IdlingRegistry.getInstance().register(otherSessionSasReadyIdle)
@@ -188,7 +195,7 @@ class VerifySessionInteractiveTest : VerificationTestBase() {
         IdlingRegistry.getInstance().unregister(otherSessionSasReadyIdle)
 
         val verificationSuccessIdle =
-                verificationStateIdleResource(transactionId, VerificationTxState.Verified, uiSession)
+                verificationStateIdleResource(transactionId, SasTransactionState.Done(true), uiSession)
 
         // CLICK ON THEY MATCH
 
@@ -200,7 +207,9 @@ class VerifySessionInteractiveTest : VerificationTestBase() {
                         )
                 )
 
-        firstSessionTr.userHasVerifiedShortCode()
+        runBlockingTest {
+            firstSessionTr.userHasVerifiedShortCode()
+        }
 
         onView(isRoot()).perform(SleepViewAction.sleep(1000))
 
@@ -241,11 +250,13 @@ class VerifySessionInteractiveTest : VerificationTestBase() {
                 .perform(click())
     }
 
-    fun verificationStateIdleResource(transactionId: String, checkForState: VerificationTxState, session: Session): IdlingResource {
-        val idle = object : IdlingResource, VerificationService.Listener {
+    fun verificationStateIdleResource(transactionId: String, checkForState: SasTransactionState, session: Session): IdlingResource {
+        val scope = CoroutineScope(SupervisorJob())
+
+        val idle = object : IdlingResource {
             private var callback: IdlingResource.ResourceCallback? = null
 
-            private var currentState: VerificationTxState? = null
+            private var currentState: SasTransactionState? = null
 
             override fun getName() = "verificationSuccessIdle"
 
@@ -257,32 +268,25 @@ class VerifySessionInteractiveTest : VerificationTestBase() {
                 this.callback = callback
             }
 
-            fun update(state: VerificationTxState) {
+            fun update(state: SasTransactionState) {
                 currentState = state
                 if (state == checkForState) {
-                    session.cryptoService().verificationService().removeListener(this)
                     callback?.onTransitionToIdle()
+                    scope.cancel()
                 }
-            }
-
-            /**
-             * Called when a transaction is created, either by the user or initiated by the other user.
-             */
-            override fun transactionCreated(tx: VerificationTransaction) {
-                if (tx.transactionId == transactionId) update(tx.state)
-            }
-
-            /**
-             * Called when a transaction is updated. You may be interested to track the state of the VerificationTransaction.
-             */
-            override fun transactionUpdated(tx: VerificationTransaction) {
-                if (tx.transactionId == transactionId) update(tx.state)
             }
         }
 
-        session.cryptoService().verificationService().addListener(idle)
+        session.cryptoService().verificationService()
+                .requestEventFlow()
+                .filter {
+                    it.transactionId == transactionId
+                }
+                .onEach {
+                    (it.getTransaction() as? SasVerificationTransaction)?.state()?.let {
+                        idle.update(it)
+                    }
+                }.launchIn(scope)
         return idle
     }
-
-    object UITestVerificationUtils
 }
