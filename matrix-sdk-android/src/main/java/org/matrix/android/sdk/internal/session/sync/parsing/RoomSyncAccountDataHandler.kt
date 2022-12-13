@@ -27,6 +27,7 @@ import org.matrix.android.sdk.internal.database.model.RoomAccountDataEntity
 import org.matrix.android.sdk.internal.database.model.RoomAccountDataEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomEntity
 import org.matrix.android.sdk.internal.database.query.getOrCreate
+import org.matrix.android.sdk.internal.database.query.removeAccountData
 import org.matrix.android.sdk.internal.session.room.read.FullyReadContent
 import org.matrix.android.sdk.internal.session.sync.handler.room.RoomFullyReadHandler
 import org.matrix.android.sdk.internal.session.sync.handler.room.RoomTagHandler
@@ -56,6 +57,13 @@ internal class RoomSyncAccountDataHandler @Inject constructor(
     }
 
     private fun handleGeneric(roomEntity: RoomEntity, content: JsonDict?, eventType: String) {
+        if (content.isNullOrEmpty()) {
+            // This is a response for a deleted account data according to
+            // https://github.com/ShadowJonathan/matrix-doc/blob/account-data-delete/proposals/3391-account-data-delete.md#sync
+            roomEntity.removeAccountData(eventType)
+            return
+        }
+
         val existing = roomEntity.accountData.where().equalTo(RoomAccountDataEntityFields.TYPE, eventType).findFirst()
         if (existing != null) {
             existing.contentStr = ContentMapper.map(content)

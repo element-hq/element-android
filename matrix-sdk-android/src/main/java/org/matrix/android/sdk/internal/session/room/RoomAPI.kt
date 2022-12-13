@@ -428,6 +428,19 @@ internal interface RoomAPI {
     )
 
     /**
+     * Remove an account_data event from the room.
+     * @param userId the user id
+     * @param roomId the room id
+     * @param type the type
+     */
+    @DELETE(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "org.matrix.msc3391/user/{userId}/rooms/{roomId}/account_data/{type}")
+    suspend fun deleteRoomAccountData(
+            @Path("userId") userId: String,
+            @Path("roomId") roomId: String,
+            @Path("type") type: String
+    )
+
+    /**
      * Upgrades the given room to a particular room version.
      * Errors:
      * 400, The request was invalid. One way this can happen is if the room version requested is not supported by the homeserver

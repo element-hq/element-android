@@ -60,6 +60,16 @@ internal class UserAccountDataDataSource @Inject constructor(
         )
     }
 
+    fun getAccountDataEventsStartWith(type: String): List<UserAccountDataEvent> {
+        return realmSessionProvider.withRealm { realm ->
+            realm
+                    .where(UserAccountDataEntity::class.java)
+                    .beginsWith(UserAccountDataEntityFields.TYPE, type)
+                    .findAll()
+                    .map(accountDataMapper::map)
+        }
+    }
+
     private fun accountDataEventsQuery(realm: Realm, types: Set<String>): RealmQuery<UserAccountDataEntity> {
         val query = realm.where(UserAccountDataEntity::class.java)
         if (types.isNotEmpty()) {
