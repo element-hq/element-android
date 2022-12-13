@@ -2532,6 +2532,7 @@
     <string name="threads_beta_enable_notice_title">Бета-версия Обсуждений</string>
     <string name="threads_notice_migration_title">Обсуждения почти в бете 🎉</string>
     <string name="call_stop_screen_sharing">Остановить демонстрацию экрана</string>
+    <string name="call_started">Звонок начался</string>
     <string name="call_start_screen_sharing">Демонстрировать экран</string>
     <string name="action_learn_more">Узнать больше</string>
     <string name="action_try_it_out">Попробуйте</string>

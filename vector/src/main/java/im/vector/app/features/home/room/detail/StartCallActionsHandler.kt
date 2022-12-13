@@ -52,6 +52,8 @@ class StartCallActionsHandler(
             return@withState
         }
 
+        timelineViewModel.handleCallCreation(fragment.getString(R.string.call_started))
+
         val roomSummary = state.asyncRoomSummary.invoke() ?: return@withState
         when (roomSummary.joinedMembersCount) {
             1 -> {

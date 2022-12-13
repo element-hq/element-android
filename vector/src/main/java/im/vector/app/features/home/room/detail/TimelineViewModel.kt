@@ -896,6 +896,11 @@ class TimelineViewModel @AssistedInject constructor(
         )
     }
 
+    public fun handleCallCreation(message: String) {
+        if (room == null) return
+        room.sendService().sendTextMessage(message)
+    }
+
     private fun handleEventVisible(action: RoomDetailAction.TimelineEventTurnsVisible) {
         if (room == null) return
         viewModelScope.launch(Dispatchers.Default) {

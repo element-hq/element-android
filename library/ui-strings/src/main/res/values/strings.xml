@@ -538,6 +538,7 @@
     <string name="call_format_turn_hd_on">Turn HD on</string>
     <string name="call_start_screen_sharing">Share screen</string>
     <string name="call_stop_screen_sharing">Stop screen sharing</string>
+    <string name="call_started">Call started</string>
 
     <string name="option_send_files">Send files</string>
     <string name="option_send_sticker">Send sticker</string>
