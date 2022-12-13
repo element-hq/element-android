@@ -107,8 +107,8 @@
     <string name="light_theme">Tema Terang</string>
     <string name="dark_theme">Tema Gelap</string>
     <string name="black_theme">Tema Hitam</string>
-    <string name="notification_noisy_notifications">Pemberitahuan Berisik</string>
-    <string name="notification_silent_notifications">Pemberitahuan Tenteram</string>
+    <string name="notification_noisy_notifications">Pemberitahuan berisik</string>
+    <string name="notification_silent_notifications">Pemberitahuan diam</string>
     <string name="title_activity_bug_report">Laporan Gangguan</string>
     <string name="title_activity_choose_sticker">Kirimkan Sticker</string>
     <string name="loading">Memuat…</string>
@@ -384,17 +384,17 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Satu atau beberapa ujian gagal, coba saran yang kami tawarkan.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Satu atau beberapa ujian gagal, mohon kirim laporan kutu untuk kami selidiki.</string>
     <string name="settings_troubleshoot_test_system_settings_title">Pengaturan Sistem.</string>
-    <string name="settings_troubleshoot_test_system_settings_success">Pemberitahuan diperbolehkan dalam pengaturan sistem.</string>
+    <string name="settings_troubleshoot_test_system_settings_success">Pemberitahuan diaktifkan dalam pengaturan sistem.</string>
     <string name="settings_troubleshoot_test_system_settings_failed">Notifikasi dinonaktifkan dalam pengaturan sistem.
 \nMohon periksa pengaturan sistem anda.</string>
     <string name="open_settings">Buka Pengaturan</string>
     <string name="settings_troubleshoot_test_account_settings_title">Pengaturan Akun.</string>
-    <string name="settings_troubleshoot_test_account_settings_success">Pemberitahuan diperbolehkan dalam pengaturan akun Anda.</string>
+    <string name="settings_troubleshoot_test_account_settings_success">Pemberitahuan diaktifkan dalam pengaturan akun Anda.</string>
     <string name="settings_troubleshoot_test_account_settings_failed">Notifikasi dinonaktifkan dalam pengaturan akun anda.
 \nMohon periksa pengaturan akun anda.</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">Perbolehkan</string>
     <string name="settings_troubleshoot_test_device_settings_title">Pengaturan Perangkat.</string>
-    <string name="settings_troubleshoot_test_device_settings_success">Pemberitahuan diperbolehkan untuk sesi ini.</string>
+    <string name="settings_troubleshoot_test_device_settings_success">Pemberitahuan diaktifkan untuk sesi ini.</string>
     <string name="settings_troubleshoot_test_device_settings_failed">Notifikasi tidak diaktifkan pada sesi ini.
 \nMohon periksa pengaturan ${app_name}.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Perbolehkan</string>
@@ -439,9 +439,9 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="done">Selesai</string>
     <string name="action_sign_out_confirmation_simple">Anda yakin ingin keluar\?</string>
     <string name="settings_notification_advanced">Pengaturan Pemberitahuan Lanjutan</string>
-    <string name="settings_notification_by_event">Urgensi pemberitahuan lewat kejadian</string>
+    <string name="settings_notification_by_event">Kepentingan pemberitahuan berdasarkan peristiwa</string>
     <string name="settings_troubleshoot_test_bing_settings_title">Pengaturan Sesukanya.</string>
-    <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Perhatikan bahwa sebagian jenis pesan tersetel diam (mengeluarkan pemberitahuan tanpa suara).</string>
+    <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Perhatikan bahwa sebagian jenis pesan disetel diam (mengeluarkan pemberitahuan tanpa suara).</string>
     <string name="settings_troubleshoot_test_bing_settings_failed">Sebagian pemberitahuan dimatikan dalam pengaturan Anda.</string>
     <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
 \nError ini di luar kendali ${app_name} dan menurut Google, error ini muncul ketika terlalu banyak aplikasi terdaftar dengan FCM pada perangkat tersebut. Error ini tidak seharusnya mempengaruhi pengguna biasa.</string>
@@ -1202,7 +1202,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="qr_code">Kode QR</string>
     <string name="add_by_qr_code">Tambah dengan kode QR</string>
     <string name="link_copied_to_clipboard">Tautan disalin ke klipboard</string>
-    <string name="labs_swipe_to_reply_in_timeline">Aktifkan geser untuk balas di linimasa</string>
+    <string name="labs_swipe_to_reply_in_timeline">Aktifkan geser untuk balas di lini masa</string>
     <string name="search_hint_room_name">Cari Nama</string>
     <string name="room_directory_search_hint">Nama atau ID (#contoh:matrix.org)</string>
     <string name="room_filtering_footer_open_room_directory">Tampilkan direktori ruangan</string>
@@ -1218,7 +1218,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="send_file_step_compressing_image">Mengompresi gambar…</string>
     <string name="send_file_step_sending_file">Mengirim file (%1$s / %2$s)</string>
     <string name="send_file_step_encrypting_file">Mengenkripsi file…</string>
-    <string name="settings_labs_show_hidden_events_in_timeline">Tampilkan peristiwa tersembunyi di linimasa</string>
+    <string name="settings_labs_show_hidden_events_in_timeline">Tampilkan peristiwa tersembunyi di lini masa</string>
     <string name="send_file_step_encrypting_thumbnail">Mengenkripsi gambar mini…</string>
     <string name="send_file_step_idle">Menunggu…</string>
     <string name="bottom_action_people_x">Pesan Langsung</string>
@@ -1457,7 +1457,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="room_settings_enable_encryption_no_permission">Anda tidak memiliki izin untuk mengaktifkan enkripsi ujung ke ujung di ruangan ini.</string>
     <string name="room_settings_enable_encryption">Aktifkan enkripsi ujung ke ujung…</string>
     <string name="settings_category_composer">Editor pesan</string>
-    <string name="settings_category_timeline">Linimasa</string>
+    <string name="settings_category_timeline">Lini Masa</string>
     <string name="command_description_rainbow_emote">Mengirim emote yang dicantum berwarna pelangi</string>
     <string name="command_description_rainbow">Mengirim pesan yang dicantum berwarna pelangi</string>
     <string name="verify_cannot_cross_sign">Sesi ini tidak dapat berbagi verifikasi ini dengan sesi Anda yang lain.
@@ -2442,7 +2442,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="space_leave_radio_button_none">Jangan tinggalkan apa pun</string>
     <string name="space_leave_radio_button_all">Tinggalkan semuanya</string>
     <string name="space_leave_radio_buttons_title">Hal-hal di space ini</string>
-    <string name="settings_autoplay_animated_images_summary">Mainkan gambar beranimasi di linimasa ketika muncul</string>
+    <string name="settings_autoplay_animated_images_summary">Mainkan gambar beranimasi di lini masa ketika muncul</string>
     <string name="settings_autoplay_animated_images_title">Mainkan gambar beranimasi secara otomatis</string>
     <string name="time_unit_second_short">dtk</string>
     <string name="time_unit_minute_short">mnt</string>
@@ -2760,7 +2760,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="qr_code_login_header_failed_other_device_already_signed_in_description">Perangkat yang lain sudah masuk.</string>
     <string name="qr_code_login_header_failed_homeserver_is_not_supported_description">Homeserver tidak mendukung masuk dengan kode QR.</string>
     <string name="qr_code_login_header_failed_other_description">Permintaan gagal.</string>
-    <string name="labs_enable_voice_broadcast_summary">Memungkinkan untuk merekam dan mengirim siaran suara dalam linimasa ruangan.</string>
+    <string name="labs_enable_voice_broadcast_summary">Memungkinkan untuk merekam dan mengirim siaran suara dalam lini masa ruangan.</string>
     <string name="labs_enable_voice_broadcast_title">Aktifkan siaran suara (dalam pengembangan aktif)</string>
     <string name="a11y_voice_broadcast_buffering">Memuat…</string>
     <string name="a11y_pause_voice_broadcast">Jeda siaran suara</string>
@@ -2814,4 +2814,6 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="replying_to">Membalas ke %s</string>
     <string name="settings_enable_direct_share_summary">Tampilkan obrolan terkini dalam menu pembagian sistem</string>
     <string name="settings_enable_direct_share_title">Aktifkan pembagian langsung</string>
+    <string name="review_unverified_sessions_description">Periksa untuk memastikan akun Anda aman</string>
+    <string name="review_unverified_sessions_title">Anda memilki sesi yang belum diverifikasi</string>
 </resources>
