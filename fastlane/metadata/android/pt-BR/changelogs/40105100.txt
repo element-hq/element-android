@@ -1,0 +1,2 @@
+Principais mudanças nesta versão: Nova implementação do modo de tela cheia para o Editor de Texto Rico e consertos de bugs.
+Changelog completo: https://github.com/vector-im/element-android/releases

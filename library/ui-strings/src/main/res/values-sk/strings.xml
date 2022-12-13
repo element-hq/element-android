@@ -2924,4 +2924,6 @@
     <string name="editing">Úprava</string>
     <string name="settings_enable_direct_share_summary">Zobraziť posledné konverzácie v systémovej ponuke zdieľania</string>
     <string name="settings_enable_direct_share_title">Povoliť priame zdieľanie</string>
+    <string name="review_unverified_sessions_description">Skontrolujte, či je vaše konto bezpečné</string>
+    <string name="review_unverified_sessions_title">Máte neoverené relácie</string>
 </resources>

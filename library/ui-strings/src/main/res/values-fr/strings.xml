@@ -2868,4 +2868,6 @@
     <string name="editing">Modification</string>
     <string name="settings_enable_direct_share_summary">Affiche les conversations récentes dans le menu de partage du système</string>
     <string name="settings_enable_direct_share_title">Activer le partage direct</string>
+    <string name="review_unverified_sessions_description">Vérifiez pour assurer la sécurité de votre compte</string>
+    <string name="review_unverified_sessions_title">Vous avez des sessions non vérifiées</string>
 </resources>

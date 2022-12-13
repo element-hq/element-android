@@ -2812,4 +2812,6 @@
     <string name="editing">正在編輯</string>
     <string name="settings_enable_direct_share_summary">在系統分享選單中顯示最近聊天</string>
     <string name="settings_enable_direct_share_title">啟用直接分享</string>
+    <string name="review_unverified_sessions_description">檢查以確保您的帳號安全</string>
+    <string name="review_unverified_sessions_title">您有未驗證的工作階段</string>
 </resources>

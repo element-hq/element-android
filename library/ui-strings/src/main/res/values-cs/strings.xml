@@ -2924,4 +2924,6 @@
     <string name="editing">Úpravy</string>
     <string name="settings_enable_direct_share_summary">Zobrazit poslední chaty v nabídce sdílení systému</string>
     <string name="settings_enable_direct_share_title">Povolit přímé sdílení</string>
+    <string name="review_unverified_sessions_description">Zkontrolujte, zda je váš účet v bezpečí</string>
+    <string name="review_unverified_sessions_title">Máte neověřené relace</string>
 </resources>
