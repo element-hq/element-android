@@ -83,7 +83,7 @@ class XSigningTest : InstrumentedTest {
     }
 
     @Test
-    fun test_CrossSigningCheckBobSeesTheKeys() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    fun test_CrossSigningCheckBobSeesTheKeys() = runCryptoTest(context()) { cryptoTestHelper, _ ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val aliceSession = cryptoTestData.firstSession

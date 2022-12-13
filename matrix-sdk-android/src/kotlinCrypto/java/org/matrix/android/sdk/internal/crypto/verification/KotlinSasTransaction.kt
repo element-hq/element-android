@@ -21,7 +21,6 @@ import kotlinx.coroutines.channels.Channel
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.EmojiRepresentation
-import org.matrix.android.sdk.api.session.crypto.verification.SasMode
 import org.matrix.android.sdk.api.session.crypto.verification.SasTransactionState
 import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction.Companion.KEY_AGREEMENT_V1

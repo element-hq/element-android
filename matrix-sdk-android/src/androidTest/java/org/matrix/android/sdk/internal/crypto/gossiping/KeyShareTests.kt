@@ -169,13 +169,13 @@ class KeyShareTests : InstrumentedTest {
 
         aliceSession.cryptoService().setDeviceVerification(
                 DeviceTrustLevel(crossSigningVerified = false, locallyVerified = true), aliceSession.myUserId,
-                aliceSession2.sessionParams.deviceId ?: ""
+                aliceSession2.sessionParams.deviceId
         )
 
         // We only accept forwards from trusted session, so we need to trust on other side to
         aliceSession2.cryptoService().setDeviceVerification(
                 DeviceTrustLevel(crossSigningVerified = false, locallyVerified = true), aliceSession.myUserId,
-                aliceSession.sessionParams.deviceId ?: ""
+                aliceSession.sessionParams.deviceId
         )
 
         aliceSession.cryptoService().deviceWithIdentityKey(
@@ -335,10 +335,10 @@ class KeyShareTests : InstrumentedTest {
         // Mark the new session as verified
         aliceSession.cryptoService()
                 .verificationService()
-                .markedLocallyAsManuallyVerified(aliceNewSession.myUserId, aliceNewSession.sessionParams.deviceId!!)
+                .markedLocallyAsManuallyVerified(aliceNewSession.myUserId, aliceNewSession.sessionParams.deviceId)
         aliceNewSession.cryptoService()
                 .verificationService()
-                .markedLocallyAsManuallyVerified(aliceSession.myUserId, aliceSession.sessionParams.deviceId!!)
+                .markedLocallyAsManuallyVerified(aliceSession.myUserId, aliceSession.sessionParams.deviceId)
 
         // Let's now try to request
         aliceNewSession.cryptoService().reRequestRoomKeyForEvent(sentEvents.first().root)
@@ -420,10 +420,10 @@ class KeyShareTests : InstrumentedTest {
         // Mark the new session as verified
         aliceSession.cryptoService()
                 .verificationService()
-                .markedLocallyAsManuallyVerified(aliceNewSession.myUserId, aliceNewSession.sessionParams.deviceId!!)
+                .markedLocallyAsManuallyVerified(aliceNewSession.myUserId, aliceNewSession.sessionParams.deviceId)
         aliceNewSession.cryptoService()
                 .verificationService()
-                .markedLocallyAsManuallyVerified(aliceSession.myUserId, aliceSession.sessionParams.deviceId!!)
+                .markedLocallyAsManuallyVerified(aliceSession.myUserId, aliceSession.sessionParams.deviceId)
 
         // /!\ Stop initial alice session syncing so that it can't reply
         aliceSession.cryptoService().enableKeyGossiping(false)

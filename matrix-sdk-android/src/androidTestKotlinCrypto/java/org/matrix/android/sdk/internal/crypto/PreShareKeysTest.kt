@@ -63,7 +63,7 @@ class PreShareKeysTest : InstrumentedTest {
         val aliceOutboundSessionInRoom = aliceCryptoStore.getCurrentOutboundGroupSessionForRoom(e2eRoomID)!!.outboundGroupSession.sessionIdentifier()
 
         val bobCryptoStore = (bobSession.cryptoService() as DefaultCryptoService).cryptoStoreForTesting
-        val aliceDeviceBobPov = bobCryptoStore.getUserDevice(aliceSession.myUserId, aliceSession.sessionParams.deviceId!!)!!
+        val aliceDeviceBobPov = bobCryptoStore.getUserDevice(aliceSession.myUserId, aliceSession.sessionParams.deviceId)!!
         val bobInboundForAlice = bobCryptoStore.getInboundGroupSession(aliceOutboundSessionInRoom, aliceDeviceBobPov.identityKey()!!)
         assertNotNull("Bob should have received and decrypted a room key event from alice", bobInboundForAlice)
         assertEquals("Wrong room", e2eRoomID, bobInboundForAlice!!.roomId)

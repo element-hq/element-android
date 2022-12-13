@@ -17,11 +17,13 @@
 package org.matrix.android.sdk.internal.session
 
 import io.realm.RealmConfiguration
+import timber.log.Timber
 import java.io.File
 
 class MigrateEAtoEROperation {
 
     fun execute(cryptoRealm: RealmConfiguration, sessionFilesDir: File): File {
+        Timber.v("Not used in kotlin crypto $cryptoRealm")
         // no op in kotlinCrypto
         return sessionFilesDir
     }

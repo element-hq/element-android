@@ -157,8 +157,7 @@ internal class RealmCryptoStore @Inject constructor(
                 // Check credentials
                 // The device id may not have been provided in credentials.
                 // Check it only if provided, else trust the stored one.
-                if (currentMetadata.userId != userId ||
-                        (deviceId != null && deviceId != currentMetadata.deviceId)) {
+                if (currentMetadata.userId != userId || deviceId != currentMetadata.deviceId) {
                     Timber.w("## open() : Credentials do not match, close this store and delete data")
                     deleteAll = true
                     currentMetadata = null

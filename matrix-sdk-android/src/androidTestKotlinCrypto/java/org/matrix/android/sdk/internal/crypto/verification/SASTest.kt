@@ -16,38 +16,12 @@
 
 package org.matrix.android.sdk.internal.crypto.verification
 
-import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
-import org.junit.Assert.fail
 import org.junit.FixMethodOrder
 import org.junit.Ignore
-import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
-import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
-import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
-import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
-import org.matrix.android.sdk.api.session.crypto.verification.EVerificationState
-import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
-import org.matrix.android.sdk.api.session.crypto.verification.SasTransactionState
-import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
-import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
-import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationCancel
-import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationStart
-import org.matrix.android.sdk.internal.crypto.model.rest.toValue
-import timber.log.Timber
-import java.util.concurrent.CountDownLatch
 
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)

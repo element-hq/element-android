@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.crypto.verification
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import kotlinx.coroutines.runBlocking
 import org.amshove.kluent.shouldBe
 import org.junit.FixMethodOrder
 import org.junit.Test
@@ -25,12 +24,8 @@ import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.session.crypto.verification.EVerificationState
-import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
-import timber.log.Timber
-import java.util.concurrent.CountDownLatch
 
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
@@ -159,58 +154,41 @@ class VerificationTest : InstrumentedTest {
         val aliceVerificationService = aliceSession.cryptoService().verificationService()
         val bobVerificationService = bobSession.cryptoService().verificationService()
 
-        var aliceReadyPendingVerificationRequest: PendingVerificationRequest? = null
-        var bobReadyPendingVerificationRequest: PendingVerificationRequest? = null
+        val transactionId = aliceVerificationService.requestKeyVerificationInDMs(
+                aliceSupportedMethods, bobSession.myUserId, cryptoTestData.roomId
+        )
+                .transactionId
 
-        val latch = CountDownLatch(2)
-        val aliceListener = object : VerificationService.Listener {
-            override fun verificationRequestUpdated(pr: PendingVerificationRequest) {
-                // Step 4: Alice receive the ready request
-                Timber.v("Alice is ready: ${pr.state}")
-                if (pr.state == EVerificationState.Ready) {
-                    aliceReadyPendingVerificationRequest = pr
-                    latch.countDown()
-                }
+        testHelper.retryPeriodically {
+            val incomingRequest = bobVerificationService.getExistingVerificationRequest(aliceSession.myUserId, transactionId)
+            if (incomingRequest != null) {
+                bobVerificationService.readyPendingVerification(
+                        bobSupportedMethods,
+                        aliceSession.myUserId,
+                        incomingRequest.transactionId
+                )
+                true
+            } else {
+                false
             }
         }
-//        aliceVerificationService.addListener(aliceListener)
 
-        val bobListener = object : VerificationService.Listener {
-            override fun verificationRequestCreated(pr: PendingVerificationRequest) {
-                // Step 2: Bob accepts the verification request
-                Timber.v("Bob accepts the verification request")
-                runBlocking {
-                    bobVerificationService.readyPendingVerification(
-                            bobSupportedMethods,
-                            aliceSession.myUserId,
-                            pr.transactionId
-                    )
-                }
-            }
-
-            override fun verificationRequestUpdated(pr: PendingVerificationRequest) {
-                // Step 3: Bob is ready
-                Timber.v("Bob is ready: ${pr.state}")
-                if (pr.state == EVerificationState.Ready) {
-                    bobReadyPendingVerificationRequest = pr
-                    latch.countDown()
-                }
-            }
+        // wait for alice to see the ready
+        testHelper.retryPeriodically {
+            val pendingRequest = aliceVerificationService.getExistingVerificationRequest(bobSession.myUserId, transactionId)
+            pendingRequest?.state == EVerificationState.Ready
         }
-//        bobVerificationService.addListener(bobListener)
 
-        val bobUserId = bobSession.myUserId
-        // Step 1: Alice starts a verification request
-        aliceVerificationService.requestKeyVerificationInDMs(aliceSupportedMethods, bobUserId, cryptoTestData.roomId)
-        testHelper.await(latch)
+        val aliceReadyPendingVerificationRequest = aliceVerificationService.getExistingVerificationRequest(bobSession.myUserId, transactionId)!!
+        val bobReadyPendingVerificationRequest = bobVerificationService.getExistingVerificationRequest(aliceSession.myUserId, transactionId)!!
 
-        aliceReadyPendingVerificationRequest!!.let { pr ->
+        aliceReadyPendingVerificationRequest.let { pr ->
             pr.isSasSupported shouldBe expectedResultForAlice.sasIsSupported
             pr.weShouldShowScanOption shouldBe expectedResultForAlice.otherCanShowQrCode
             pr.weShouldDisplayQRCode shouldBe expectedResultForAlice.otherCanScanQrCode
         }
 
-        bobReadyPendingVerificationRequest!!.let { pr ->
+        bobReadyPendingVerificationRequest.let { pr ->
             pr.isSasSupported shouldBe expectedResultForBob.sasIsSupported
             pr.weShouldShowScanOption shouldBe expectedResultForBob.otherCanShowQrCode
             pr.weShouldDisplayQRCode shouldBe expectedResultForBob.otherCanScanQrCode
