@@ -66,7 +66,7 @@ data class MatrixConfiguration(
         /**
          * Thread messages default enable/disabled value.
          */
-        val threadMessagesEnabledDefault: Boolean = false,
+        val threadMessagesEnabledDefault: Boolean = true,
         /**
          * List of network interceptors, they will be added when building an OkHttp client.
          */
