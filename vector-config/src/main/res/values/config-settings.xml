@@ -28,7 +28,7 @@
     <!-- Level 1: Preferences -->
 
     <bool name="settings_interface_bubble_visible">false</bool>
-    <bool name="settings_interface_bubble_default">true</bool>
+    <bool name="settings_interface_bubble_default">false</bool>
     <bool name="settings_presence_visible">false</bool>
     <bool name="settings_presence_user_always_appears_offline_default">false</bool>
 

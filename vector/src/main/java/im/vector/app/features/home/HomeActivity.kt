@@ -473,7 +473,6 @@ class HomeActivity :
 //            }
 //        }
 //    }
-=======
     private fun handleCrossSigningInvalidated(event: HomeActivityViewEvents.OnCrossSignedInvalidated) {
         // We need to ask
         promptSecurityEvent(
@@ -501,7 +500,6 @@ class HomeActivity :
             }
         }
     }
->>>>>>> 250bd9c62055f64bcfe633f6d176e55f37b8f0ce
 
     private fun handleCantVerify(event: HomeActivityViewEvents.CurrentSessionCannotBeVerified) {
         // We need to ask

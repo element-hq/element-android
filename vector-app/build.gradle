@@ -135,9 +135,9 @@ android {
 
         // `develop` branch will have version code from timestamp, to ensure each build from CI has a incremented versionCode.
         // Other branches (main, features, etc.) will have version code based on application version.
-        versionCode = 141
+        versionCode = 145
         // Required for sonar analysis
-        versionName "1.2.1"
+        versionName "1.2.3"
 
         // Generate a random app task affinity
         manifestPlaceholders = [appTaskAffinitySuffix: "H_${gitRevision()}"]
@@ -297,7 +297,7 @@ android {
                 tasks.matching { it.name.contains("GoogleServices") && !it.name.contains("Gplay") }*.enabled = false
             }
 
-            versionName "1.2.2"
+            versionName "1.2.3"
             dimension "store"
             isDefault = true
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"G\""
@@ -350,6 +350,10 @@ dependencies {
     implementation libs.dagger.hilt
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation "androidx.sharetarget:sharetarget:1.2.0"
+    //noinspection GradleDynamicVersion
+    implementation 'com.amplitude:android-sdk:3.35.1'
+    implementation 'com.giphy.sdk:ui:2.3.0'
+    implementation 'org.brotli:dec:0.1.2'
 
     // Flipper, debug builds only
     debugImplementation(libs.flipper.flipper) {

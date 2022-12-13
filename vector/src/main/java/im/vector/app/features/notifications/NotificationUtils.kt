@@ -584,7 +584,7 @@ class NotificationUtils @Inject constructor(
     ): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
         // Build the pending intent for when the notification is clicked
-        val openRoomIntent = buildOpenRoomIntent(roomInfo.roomId)
+        buildOpenRoomIntent(roomInfo.roomId)
         val smallIcon = R.drawable.logo222
         val openIntent = when {
             threadId != null && vectorPreferences.areThreadMessagesEnabled() -> buildOpenThreadIntent(roomInfo, threadId)

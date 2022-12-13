@@ -206,11 +206,11 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
                     }
                 }
                 // https://github.com/jitsi/jitsi-meet/blob/master/react/features/base/flags/constants.js
-                .setFeatureFlag("chat.enabled", false)
-                .setFeatureFlag("invite.enabled", false)
-                .setFeatureFlag("add-people.enabled", false)
-                .setFeatureFlag("video-share.enabled", false)
-                .setFeatureFlag("call-integration.enabled", false)
+                .setFeatureFlag("chat.enabled", true)
+                .setFeatureFlag("invite.enabled", true)
+                .setFeatureFlag("add-people.enabled", true)
+                .setFeatureFlag("video-share.enabled", true)
+                .setFeatureFlag("call-integration.enabled", true)
                 .setRoom(joinConference.confId)
                 .setSubject(joinConference.subject)
                 .build()
