@@ -152,7 +152,7 @@ class Rendezvous(
 
         try {
             // explicitly download keys for ourself rather than racing with initial sync which might not complete in time
-            awaitCallback<MXUsersDevicesMap<CryptoDeviceInfo>> { crypto.downloadKeys(listOf(userId), false, it) }
+            crypto.downloadKeysIfNeeded(listOf(userId), false)
         } catch (e: Throwable) {
             // log as warning and continue as initial sync might still complete
             Timber.tag(TAG).w(e, "Failed to download keys for self")

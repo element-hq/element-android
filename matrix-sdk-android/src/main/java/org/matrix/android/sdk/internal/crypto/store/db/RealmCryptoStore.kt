@@ -146,38 +146,37 @@ internal class RealmCryptoStore @Inject constructor(
             .setWriteAsyncExecutor(monarchyWriteAsyncExecutor)
             .build()
 
-//    init {
-//        // Ensure CryptoMetadataEntity is inserted in DB
-//        doRealmTransaction(realmConfiguration) { realm ->
-//            var currentMetadata = realm.where<CryptoMetadataEntity>().findFirst()
-//
-//            var deleteAll = false
-//
-//            if (currentMetadata != null) {
-//                // Check credentials
-//                // The device id may not have been provided in credentials.
-//                // Check it only if provided, else trust the stored one.
-//                if (currentMetadata.userId != userId ||
-//                        (deviceId != currentMetadata.deviceId)) {
-//                    Timber.w("## open() : Credentials do not match, close this store and delete data")
-//                    deleteAll = true
-//                    currentMetadata = null
-//                }
-//            }
-//
-//            if (currentMetadata == null) {
-//                if (deleteAll) {
-//                    realm.deleteAll()
-//                }
-//
-//                // Metadata not found, or database cleaned, create it
-//                realm.createObject(CryptoMetadataEntity::class.java, userId).apply {
-//                    deviceId = this@RealmCryptoStore.deviceId
-//                }
-//            }
-//        }
-//    }
+    init {
+        // Ensure CryptoMetadataEntity is inserted in DB
+        doRealmTransaction(realmConfiguration) { realm ->
+            var currentMetadata = realm.where<CryptoMetadataEntity>().findFirst()
 
+            var deleteAll = false
+
+            if (currentMetadata != null) {
+                // Check credentials
+                // The device id may not have been provided in credentials.
+                // Check it only if provided, else trust the stored one.
+                if (currentMetadata.userId != userId ||
+                        (deviceId != null && deviceId != currentMetadata.deviceId)) {
+                    Timber.w("## open() : Credentials do not match, close this store and delete data")
+                    deleteAll = true
+                    currentMetadata = null
+                }
+            }
+
+            if (currentMetadata == null) {
+                if (deleteAll) {
+                    realm.deleteAll()
+                }
+
+                // Metadata not found, or database cleaned, create it
+                realm.createObject(CryptoMetadataEntity::class.java, userId).apply {
+                    deviceId = this@RealmCryptoStore.deviceId
+                }
+            }
+        }
+    }
     /* ==========================================================================================
      * Other data
      * ========================================================================================== */
