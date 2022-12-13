@@ -35,7 +35,8 @@ data class ToggleState(
 data class ActionPermissions(
         val canSendMessage: Boolean = false,
         val canReact: Boolean = false,
-        val canRedact: Boolean = false
+        val canRedact: Boolean = false,
+        val canPinMessage: Boolean = false
 )
 
 data class MessageActionState(
@@ -50,14 +51,16 @@ data class MessageActionState(
         val actions: List<EventSharedAction> = emptyList(),
         val expendedReportContentMenu: Boolean = false,
         val actionPermissions: ActionPermissions = ActionPermissions(),
-        val isFromThreadTimeline: Boolean = false
+        val isFromThreadTimeline: Boolean = false,
+        val isFromPinnedMessagesTimeline: Boolean = false
 ) : MavericksState {
 
     constructor(args: TimelineEventFragmentArgs) : this(
             roomId = args.roomId,
             eventId = args.eventId,
             informationData = args.informationData,
-            isFromThreadTimeline = args.isFromThreadTimeline
+            isFromThreadTimeline = args.isFromThreadTimeline,
+            isFromPinnedMessagesTimeline = args.isFromPinnedMessagesTimeline
     )
 
     fun senderName(): String = informationData.memberName?.toString() ?: ""

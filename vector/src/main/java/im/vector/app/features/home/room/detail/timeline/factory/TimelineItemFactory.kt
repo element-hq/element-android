@@ -71,6 +71,7 @@ class TimelineItemFactory @Inject constructor(
                     EventType.STATE_ROOM_TOPIC,
                     EventType.STATE_ROOM_AVATAR,
                     EventType.STATE_ROOM_MEMBER,
+                    EventType.STATE_ROOM_PINNED_EVENT,
                     EventType.STATE_ROOM_THIRD_PARTY_INVITE,
                     EventType.STATE_ROOM_CANONICAL_ALIAS,
                     EventType.STATE_ROOM_JOIN_RULES,

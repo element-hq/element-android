@@ -67,6 +67,11 @@ interface StateService {
     suspend fun deleteAvatar()
 
     /**
+     * Pin a message of the room.
+     */
+    suspend fun pinMessage(eventIds: MutableList<String>)
+
+    /**
      * Send a state event to the room.
      * @param eventType The type of event to send.
      * @param stateKey The state_key for the state to send. Can be an empty string.
@@ -102,6 +107,16 @@ interface StateService {
      * @param stateKey the query which will be done on the stateKey
      */
     fun getStateEventsLive(eventTypes: Set<String>, stateKey: QueryStateEventValue): LiveData<List<Event>>
+
+    /**
+     * Get state event containing the IDs of pinned events of the room
+     */
+    fun getPinnedEventsState(): Event?
+
+    /**
+     * Tells if an event is a pinned message
+     */
+    fun isPinned(eventId: String): Boolean?
 
     suspend fun setJoinRulePublic()
     suspend fun setJoinRuleInviteOnly()

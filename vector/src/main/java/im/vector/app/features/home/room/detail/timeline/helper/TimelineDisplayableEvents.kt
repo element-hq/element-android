@@ -38,6 +38,7 @@ object TimelineDisplayableEvents {
             EventType.STATE_ROOM_HISTORY_VISIBILITY,
             EventType.STATE_ROOM_SERVER_ACL,
             EventType.STATE_ROOM_POWER_LEVELS,
+            EventType.STATE_ROOM_PINNED_EVENT,
             EventType.CALL_INVITE,
             EventType.CALL_HANGUP,
             EventType.CALL_ANSWER,
