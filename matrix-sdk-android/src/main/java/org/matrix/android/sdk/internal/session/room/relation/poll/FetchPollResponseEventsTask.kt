@@ -17,8 +17,6 @@
 package org.matrix.android.sdk.internal.session.room.relation.poll
 
 import com.zhuinden.monarchy.Monarchy
-import org.matrix.android.sdk.api.extensions.tryOrNull
-import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.isPollResponse
@@ -107,20 +105,8 @@ internal class DefaultFetchPollResponseEventsTask @Inject constructor(
     }
 
     private suspend fun decryptEventIfNeeded(event: Event): Event {
-        // TODO move into a reusable task
         if (event.isEncrypted()) {
-            tryOrNull(message = "Unable to decrypt the event") {
-                eventDecryptor.decryptEvent(event, "")
-            }
-                    ?.let { result ->
-                        event.mxDecryptionResult = OlmDecryptionResult(
-                                payload = result.clearEvent,
-                                senderKey = result.senderCurve25519Key,
-                                keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },
-                                forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain,
-                                isSafe = result.isSafe
-                        )
-                    }
+            eventDecryptor.decryptEventAndSaveResult(event, timeline = "")
         }
 
         event.ageLocalTs = clock.epochMillis() - (event.unsignedData?.age ?: 0)
