@@ -46,6 +46,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.DialogBaseEditTextBinding
+import im.vector.app.databinding.DialogReportContentBinding
 import im.vector.app.databinding.DialogShareQrCodeBinding
 import im.vector.app.databinding.FragmentMatrixProfileBinding
 import im.vector.app.databinding.ViewStubRoomMemberProfileHeaderBinding
@@ -53,6 +54,7 @@ import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.RoomDetailPendingAction
 import im.vector.app.features.home.room.detail.RoomDetailPendingActionStore
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
@@ -299,6 +301,22 @@ class RoomMemberProfileFragment :
                 ) {
                     viewModel.handle(RoomMemberProfileAction.IgnoreUser)
                 }
+    }
+
+    override fun onReportClicked(): Unit = withState(viewModel) {
+        val inflater = requireActivity().layoutInflater
+        val layout = inflater.inflate(R.layout.dialog_report_content, null)
+        val views = DialogReportContentBinding.bind(layout)
+
+        MaterialAlertDialogBuilder(requireActivity())
+                .setTitle(R.string.report_content_custom_title)
+                .setView(layout)
+                .setPositiveButton(R.string.report_content_custom_submit) { _, _ ->
+                    val reason = views.dialogReportContentInput.text.toString()
+                    viewModel.handle(RoomMemberProfileAction.ReportUser(reason))
+                }
+                .setNegativeButton(R.string.action_cancel, null)
+                .show()
     }
 
     override fun onTapVerify() {

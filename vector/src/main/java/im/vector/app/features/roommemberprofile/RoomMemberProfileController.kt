@@ -46,6 +46,7 @@ class RoomMemberProfileController @Inject constructor(
         fun onOverrideColorClicked()
         fun onJumpToReadReceiptClicked()
         fun onMentionClicked()
+        fun onReportClicked()
         fun onEditPowerLevel(currentRole: Role)
         fun onKickClicked(isSpace: Boolean)
         fun onBanClicked(isSpace: Boolean, isUserBanned: Boolean)
@@ -75,6 +76,14 @@ class RoomMemberProfileController @Inject constructor(
                 editable = false,
                 divider = false,
                 action = { callback?.onIgnoreClicked() }
+        )
+        buildProfileAction(
+                id = "report",
+                title = stringProvider.getString(R.string.report_content),
+                destructive = true,
+                editable = false,
+                divider = false,
+                action = { callback?.onReportClicked() }
         )
         if (!state.isMine) {
             buildProfileAction(
@@ -222,6 +231,14 @@ class RoomMemberProfileController @Inject constructor(
                         action = { callback?.onMentionClicked() }
                 )
             }
+            buildProfileAction(
+                    id = "report",
+                    title = stringProvider.getString(R.string.report_content),
+                    destructive = true,
+                    editable = false,
+                    divider = false,
+                    action = { callback?.onReportClicked() }
+            )
 
             val canInvite = state.actionPermissions.canInvite
 

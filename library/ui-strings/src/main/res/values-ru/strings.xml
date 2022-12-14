@@ -282,7 +282,7 @@
     <string name="view_decrypted_source">Просмотр расшифрованного исходного кода</string>
     <string name="action_delete">Удалить</string>
     <string name="action_rename">Переименовать</string>
-    <string name="report_content">Пожаловаться на содержимое</string>
+    <string name="report_content">Пожаловаться</string>
     <string name="or">или</string>
     <string name="action_invite">Приглашение</string>
     <string name="action_sign_out">Выйти из учётной записи</string>

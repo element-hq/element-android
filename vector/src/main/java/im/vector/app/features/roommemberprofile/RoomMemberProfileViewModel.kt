@@ -22,6 +22,7 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -31,8 +32,10 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.databinding.DialogReportContentBinding
 import im.vector.app.features.createdirect.DirectRoomHelper
 import im.vector.app.features.displayname.getBestName
+import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import kotlinx.coroutines.Dispatchers
@@ -161,6 +164,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
         when (action) {
             is RoomMemberProfileAction.RetryFetchingInfo -> handleRetryFetchProfileInfo()
             is RoomMemberProfileAction.IgnoreUser -> handleIgnoreAction()
+            is RoomMemberProfileAction.ReportUser -> handleReportAction()
             is RoomMemberProfileAction.VerifyUser -> prepareVerification()
             is RoomMemberProfileAction.ShareRoomMemberProfile -> handleShareRoomMemberProfile()
             is RoomMemberProfileAction.SetPowerLevel -> handleSetPowerLevel(action)
@@ -388,6 +392,24 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
     }
 
     private fun handleIgnoreAction() = withState { state ->
+        val isIgnored = state.isIgnored() ?: return@withState
+        _viewEvents.post(RoomMemberProfileViewEvents.Loading())
+        viewModelScope.launch {
+            val event = try {
+                if (isIgnored) {
+                    session.userService().unIgnoreUserIds(listOf(state.userId))
+                } else {
+                    session.userService().ignoreUserIds(listOf(state.userId))
+                }
+                RoomMemberProfileViewEvents.OnIgnoreActionSuccess
+            } catch (failure: Throwable) {
+                RoomMemberProfileViewEvents.Failure(failure)
+            }
+            _viewEvents.post(event)
+        }
+    }
+
+    private fun handleReportAction() = withState { state ->
         val isIgnored = state.isIgnored() ?: return@withState
         _viewEvents.post(RoomMemberProfileViewEvents.Loading())
         viewModelScope.launch {
