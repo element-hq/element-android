@@ -94,7 +94,7 @@ internal class DefaultFetchPollResponseEventsTask @Inject constructor(
     private suspend fun addMissingEventsInDB(roomId: String, events: List<Event>) {
         monarchy.awaitTransaction { realm ->
             val eventIdsToCheck = events.mapNotNull { it.eventId }.filter { it.isNotEmpty() }
-            if(eventIdsToCheck.isNotEmpty()) {
+            if (eventIdsToCheck.isNotEmpty()) {
                 val existingIds = EventEntity.where(realm, eventIdsToCheck).findAll().toList().map { it.eventId }
 
                 events.filterNot { it.eventId in existingIds }
