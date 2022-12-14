@@ -16,11 +16,10 @@
 
 package im.vector.app.features.home.room.threads.list.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
+import androidx.lifecycle.asFlow
 import androidx.paging.PagedList
 import com.airbnb.mvrx.FragmentViewModelContext
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
@@ -33,14 +32,18 @@ import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.extensions.toAnalyticsInteraction
 import im.vector.app.features.analytics.plan.Interaction
 import im.vector.app.features.home.room.threads.list.views.ThreadListFragment
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoom
-import org.matrix.android.sdk.api.session.room.threads.model.ThreadSummary
 import org.matrix.android.sdk.api.session.threads.ThreadTimelineEvent
 import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadsResult
+import org.matrix.android.sdk.internal.session.room.relation.threads.ThreadFilter
 
 class ThreadListViewModel @AssistedInject constructor(
         @Assisted val initialState: ThreadListViewState,
@@ -50,15 +53,17 @@ class ThreadListViewModel @AssistedInject constructor(
 
     private val room = session.getRoom(initialState.roomId)
 
-    private var livePagedList: LiveData<PagedList<ThreadSummary>>? = null
+    private val defaultPagedListConfig = PagedList.Config.Builder()
+            .setPageSize(5)
+            .setInitialLoadSizeHint(5)
+            .setEnablePlaceholders(false)
+            .setPrefetchDistance(1)
+            .build()
 
-    private val _threadsLivePagedList = MutableLiveData<PagedList<ThreadSummary>>()
-    val threadsLivePagedList: LiveData<PagedList<ThreadSummary>> = _threadsLivePagedList
-
-    private val internalPagedListObserver = Observer<PagedList<ThreadSummary>> {
-        _threadsLivePagedList.postValue(it)
-        setLoading(false)
-    }
+    private var nextBatchId: String? = null
+    private var hasReachedEnd: Boolean = false
+    private var boundariesJob: Job? = null
+    private var pageListJob: Job? = null
 
     @AssistedFactory
     interface Factory {
@@ -98,12 +103,34 @@ class ThreadListViewModel @AssistedInject constructor(
      */
     private fun observeThreadSummaries() = withState { state ->
         viewModelScope.launch {
-            livePagedList?.removeObserver(internalPagedListObserver)
+            setLoading(true)
+            nextBatchId = null
+            hasReachedEnd = false
+            boundariesJob?.cancel()
+            pageListJob?.cancel()
 
-            livePagedList = room?.threadsService()
-                    ?.getPagedThreadsList(viewModelScope, state.shouldFilterThreads)
+            room?.threadsService()
+                    ?.getPagedThreadsList(state.shouldFilterThreads, defaultPagedListConfig)?.let { (pagedList, boundaries) ->
+                        pageListJob = pagedList
+                                .asFlow()
+                                .execute {
+                                    setLoading(it is Loading)
+                                    copy(asyncPagedThreadSummaryList = it)
+                                }
 
-            livePagedList?.observeForever(internalPagedListObserver)
+                        boundariesJob = boundaries
+                                .asFlow()
+                                .onEach {
+                                    if (it.endLoaded) {
+                                        if (!hasReachedEnd) {
+                                            fetchNextPage()
+                                        }
+                                    }
+                                }
+                                .launchIn(viewModelScope)
+                    }
+
+            fetchNextPage()
         }
     }
 
@@ -141,5 +168,28 @@ class ThreadListViewModel @AssistedInject constructor(
         }
 
         fetchAndObserveThreads()
+    }
+
+    private suspend fun fetchNextPage() {
+        val filter = when (awaitState().shouldFilterThreads) {
+            true -> ThreadFilter.PARTICIPATED
+            false -> ThreadFilter.ALL
+        }
+        room?.threadsService()?.fetchThreadList(
+                nextBatchId = nextBatchId,
+                limit = defaultPagedListConfig.pageSize,
+                filter = filter,
+        ).let { result ->
+            when (result) {
+                is FetchThreadsResult.ReachedEnd -> {
+                    hasReachedEnd = true
+                }
+                is FetchThreadsResult.ShouldFetchMore -> {
+                    nextBatchId = result.nextBatch
+                }
+                else -> {
+                }
+            }
+        }
     }
 }

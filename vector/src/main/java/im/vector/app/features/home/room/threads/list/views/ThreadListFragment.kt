@@ -118,8 +118,9 @@ class ThreadListFragment :
         if (threadListViewModel.canHomeserverUseThreading()) {
             views.threadListRecyclerView.configureWith(threadListController, TimelineItemAnimator(), hasFixedSize = false)
             threadListController.listener = this
-            threadListViewModel.threadsLivePagedList.observe(viewLifecycleOwner) { threadsList ->
-                threadListController.submitList(threadsList)
+
+            threadListViewModel.onEach(ThreadListViewState::asyncPagedThreadSummaryList) {
+                threadListController.submitList(it.invoke())
             }
         } else {
             views.threadListRecyclerView.configureWith(legacyThreadListController, TimelineItemAnimator(), hasFixedSize = false)
@@ -199,7 +200,7 @@ class ThreadListFragment :
 
     private fun renderEmptyStateIfNeeded(state: ThreadListViewState) {
         when (threadListViewModel.canHomeserverUseThreading()) {
-            true -> views.threadListEmptyConstraintLayout.isVisible = state.pagedThreadSummaryList?.value?.isEmpty() ?: !state.isLoading
+            true -> views.threadListEmptyConstraintLayout.isVisible = false
             false -> views.threadListEmptyConstraintLayout.isVisible = state.rootThreadEventList.invoke().isNullOrEmpty()
         }
     }

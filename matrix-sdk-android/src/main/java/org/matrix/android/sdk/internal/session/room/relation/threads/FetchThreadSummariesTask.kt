@@ -40,19 +40,13 @@ import javax.inject.Inject
  * This class is responsible to Fetch all the thread in the current room,
  * To fetch all threads in a room, the /messages API is used with newly added filtering options.
  */
-internal interface FetchThreadSummariesTask : Task<FetchThreadSummariesTask.Params, FetchThreadSummariesTask.FetchThreadsResult> {
+internal interface FetchThreadSummariesTask : Task<FetchThreadSummariesTask.Params, FetchThreadsResult> {
     data class Params(
             val roomId: String,
             val from: String? = null,
             val limit: Int = 5,
-            val isUserParticipating: Boolean = false
+            val filter: ThreadFilter? = null,
     )
-
-    sealed class FetchThreadsResult {
-        data class ShouldFetchMore(val nextBatch: String) : FetchThreadsResult()
-        object ReachedEnd : FetchThreadsResult()
-        object Failed : FetchThreadsResult()
-    }
 }
 
 internal class DefaultFetchThreadSummariesTask @Inject constructor(
@@ -64,15 +58,11 @@ internal class DefaultFetchThreadSummariesTask @Inject constructor(
         private val clock: Clock,
 ) : FetchThreadSummariesTask {
 
-    override suspend fun execute(params: FetchThreadSummariesTask.Params): FetchThreadSummariesTask.FetchThreadsResult {
+    override suspend fun execute(params: FetchThreadSummariesTask.Params): FetchThreadsResult {
         val response = executeRequest(globalErrorReceiver) {
-            val threadFilter = when {
-                params.isUserParticipating -> ThreadFilter.PARTICIPATED
-                else -> ThreadFilter.ALL
-            }
             roomAPI.getThreadsList(
                     roomId = params.roomId,
-                    include = threadFilter.toString().lowercase(),
+                    include = params.filter?.toString()?.lowercase(),
                     from = params.from,
                     limit = params.limit
             )
@@ -81,8 +71,8 @@ internal class DefaultFetchThreadSummariesTask @Inject constructor(
         handleResponse(response, params)
 
         return when {
-            response.nextBatch != null -> FetchThreadSummariesTask.FetchThreadsResult.ShouldFetchMore(response.nextBatch)
-            else -> FetchThreadSummariesTask.FetchThreadsResult.ReachedEnd
+            response.nextBatch != null -> FetchThreadsResult.ShouldFetchMore(response.nextBatch)
+            else -> FetchThreadsResult.ReachedEnd
         }
     }
 
@@ -127,4 +117,10 @@ internal class DefaultFetchThreadSummariesTask @Inject constructor(
             }
         }
     }
+}
+
+sealed class FetchThreadsResult {
+    data class ShouldFetchMore(val nextBatch: String) : FetchThreadsResult()
+    object ReachedEnd : FetchThreadsResult()
+    object Failed : FetchThreadsResult()
 }

@@ -111,8 +111,6 @@ import org.matrix.android.sdk.internal.session.room.tags.AddTagToRoomTask
 import org.matrix.android.sdk.internal.session.room.tags.DefaultAddTagToRoomTask
 import org.matrix.android.sdk.internal.session.room.tags.DefaultDeleteTagFromRoomTask
 import org.matrix.android.sdk.internal.session.room.tags.DeleteTagFromRoomTask
-import org.matrix.android.sdk.internal.session.room.threads.DefaultGetPagedThreadListTask
-import org.matrix.android.sdk.internal.session.room.threads.GetPagedThreadListTask
 import org.matrix.android.sdk.internal.session.room.timeline.DefaultFetchTokenAndPaginateTask
 import org.matrix.android.sdk.internal.session.room.timeline.DefaultGetContextOfEventTask
 import org.matrix.android.sdk.internal.session.room.timeline.DefaultGetEventTask
@@ -356,7 +354,4 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindRedactLiveLocationShareTask(task: DefaultRedactLiveLocationShareTask): RedactLiveLocationShareTask
-
-    @Binds
-    abstract fun bindGetPagedThreadListTask(task: DefaultGetPagedThreadListTask): GetPagedThreadListTask
 }

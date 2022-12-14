@@ -27,6 +27,7 @@ import org.matrix.android.sdk.api.session.threads.ThreadTimelineEvent
 
 data class ThreadListViewState(
         val pagedThreadSummaryList: LiveData<PagedList<ThreadSummary>>? = null,
+        val asyncPagedThreadSummaryList: Async<PagedList<ThreadSummary>> = Uninitialized,
         val rootThreadEventList: Async<List<ThreadTimelineEvent>> = Uninitialized,
         val shouldFilterThreads: Boolean = false,
         val isLoading: Boolean = false,
