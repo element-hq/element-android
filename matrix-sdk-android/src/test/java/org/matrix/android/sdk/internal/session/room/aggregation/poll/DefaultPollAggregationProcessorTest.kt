@@ -16,9 +16,13 @@
 
 package org.matrix.android.sdk.internal.session.room.aggregation.poll
 
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.realm.RealmList
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeFalse
 import org.amshove.kluent.shouldBeTrue
 import org.junit.Before
@@ -34,6 +38,7 @@ import org.matrix.android.sdk.internal.database.model.PollResponseAggregatedSumm
 import org.matrix.android.sdk.internal.session.room.aggregation.poll.PollEventsTestData.AN_EVENT_ID
 import org.matrix.android.sdk.internal.session.room.aggregation.poll.PollEventsTestData.AN_INVALID_POLL_RESPONSE_EVENT
 import org.matrix.android.sdk.internal.session.room.aggregation.poll.PollEventsTestData.A_BROKEN_POLL_REPLACE_EVENT
+import org.matrix.android.sdk.internal.session.room.aggregation.poll.PollEventsTestData.A_POLL_END_CONTENT
 import org.matrix.android.sdk.internal.session.room.aggregation.poll.PollEventsTestData.A_POLL_END_EVENT
 import org.matrix.android.sdk.internal.session.room.aggregation.poll.PollEventsTestData.A_POLL_REFERENCE_EVENT
 import org.matrix.android.sdk.internal.session.room.aggregation.poll.PollEventsTestData.A_POLL_REPLACE_EVENT
@@ -43,13 +48,22 @@ import org.matrix.android.sdk.internal.session.room.aggregation.poll.PollEventsT
 import org.matrix.android.sdk.internal.session.room.aggregation.poll.PollEventsTestData.A_ROOM_ID
 import org.matrix.android.sdk.internal.session.room.aggregation.poll.PollEventsTestData.A_TIMELINE_EVENT
 import org.matrix.android.sdk.internal.session.room.aggregation.poll.PollEventsTestData.A_USER_ID_1
+import org.matrix.android.sdk.internal.session.room.relation.poll.FetchPollResponseEventsTask
+import org.matrix.android.sdk.test.fakes.FakeFetchPollResponseEventsTask
 import org.matrix.android.sdk.test.fakes.FakeRealm
+import org.matrix.android.sdk.test.fakes.FakeTaskExecutor
 import org.matrix.android.sdk.test.fakes.givenEqualTo
 import org.matrix.android.sdk.test.fakes.givenFindFirst
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class DefaultPollAggregationProcessorTest {
 
-    private val pollAggregationProcessor: PollAggregationProcessor = DefaultPollAggregationProcessor()
+    private val fakeTaskExecutor = FakeTaskExecutor()
+    private val fakeFetchPollResponseEventsTask = FakeFetchPollResponseEventsTask()
+    private val pollAggregationProcessor: PollAggregationProcessor = DefaultPollAggregationProcessor(
+            taskExecutor = fakeTaskExecutor.instance,
+            fetchPollResponseEventsTask = fakeFetchPollResponseEventsTask
+    )
     private val realm = FakeRealm()
     private val session = mockk<Session>()
 
@@ -133,6 +147,28 @@ class DefaultPollAggregationProcessorTest {
         val powerLevelsHelper = mockRedactionPowerLevels("another-sender-id", false)
         val event = A_POLL_END_EVENT.copy(senderId = "another-sender-id")
         pollAggregationProcessor.handlePollEndEvent(session, powerLevelsHelper, realm.instance, event).shouldBeFalse()
+    }
+
+    @Test
+    fun `given a non local echo poll end event, when is processed, then ensure to aggregate all poll responses`() = runTest {
+        // Given
+        every { realm.instance.createObject(PollResponseAggregatedSummaryEntity::class.java) } returns PollResponseAggregatedSummaryEntity()
+        val powerLevelsHelper = mockRedactionPowerLevels("another-sender-id", true)
+        val event = A_POLL_END_EVENT.copy(senderId = "another-sender-id")
+        every { fakeTaskExecutor.instance.executorScope } returns this
+        val expectedParams = FetchPollResponseEventsTask.Params(
+            roomId = A_POLL_END_EVENT.roomId.orEmpty(),
+            startPollEventId = A_POLL_END_CONTENT.relatesTo?.eventId.orEmpty(),
+        )
+
+        // When
+        pollAggregationProcessor.handlePollEndEvent(session, powerLevelsHelper, realm.instance, event)
+        advanceUntilIdle()
+
+        // Then
+        coVerify {
+            fakeFetchPollResponseEventsTask.execute(expectedParams)
+        }
     }
 
     private fun mockEventAnnotationsSummaryEntity() {

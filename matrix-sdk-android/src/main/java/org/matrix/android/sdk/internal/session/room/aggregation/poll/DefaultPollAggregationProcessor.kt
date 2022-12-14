@@ -211,7 +211,6 @@ internal class DefaultPollAggregationProcessor @Inject constructor(
                 }
     }
 
-    // TODO add unit tests
     /**
      * Check that all related votes to a given poll are all retrieved and aggregated.
      */
