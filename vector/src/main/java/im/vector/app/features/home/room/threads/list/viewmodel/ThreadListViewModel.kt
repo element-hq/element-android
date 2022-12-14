@@ -57,10 +57,10 @@ class ThreadListViewModel @AssistedInject constructor(
     private val room = session.getRoom(initialState.roomId)
 
     private val defaultPagedListConfig = PagedList.Config.Builder()
-            .setPageSize(5)
-            .setInitialLoadSizeHint(5)
+            .setPageSize(20)
+            .setInitialLoadSizeHint(40)
             .setEnablePlaceholders(false)
-            .setPrefetchDistance(1)
+            .setPrefetchDistance(10)
             .build()
 
     private var nextBatchId: String? = null
