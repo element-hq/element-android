@@ -195,7 +195,7 @@
 
     <string name="initial_sync_request_title">Initial sync request</string>
     <string name="initial_sync_request_content">${app_name} needs to perform a clear cache to be up to date, for the following reason:\n%s\n\nNote that this action will restart the app and it may take some time.</string>
-    <string name="initial_sync_request_reason_unignored_users">- Some users have been unignored</string>
+    <string name="initial_sync_request_reason_unignored_users">- Some users have been unblocked</string>
 
     <string name="event_status_sent_message">Message sent</string>
     <string name="event_status_sending_message">Sending message…</string>
@@ -395,7 +395,7 @@
     <string name="action_reject">Reject</string>
     <string name="action_accept">Accept</string>
     <string name="action_skip">Skip</string>
-    <string name="action_ignore">Ignore</string>
+    <string name="action_ignore">Block</string>
     <string name="action_decline">Decline</string>
     <string name="action_invite">Invite</string>
     <string name="action_cancel">Cancel</string>
@@ -694,9 +694,9 @@
     <string name="room_participants_action_ignore_prompt_msg">Ignoring this user will remove their messages from rooms you share.\n\nYou can reverse this action at any time in the general settings.</string>
     <string name="room_participants_action_ignore">Ignore</string>
 
-    <string name="room_participants_action_unignore_title">Unignore user</string>
-    <string name="room_participants_action_unignore_prompt_msg">Unignoring this user will show all messages from them again.</string>
-    <string name="room_participants_action_unignore">Unignore</string>
+    <string name="room_participants_action_unignore_title">Unblock user</string>
+    <string name="room_participants_action_unignore_prompt_msg">Unblocking this user will show all messages from them again.</string>
+    <string name="room_participants_action_unignore">Unblock</string>
 
     <string name="room_participants_action_cancel_invite_title">Cancel invite</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Are you sure you want to cancel the invite for this user?</string>
@@ -730,7 +730,7 @@
     <string name="ssl_trust">Trust</string>
     <string name="ssl_do_not_trust">Do not trust</string>
     <string name="ssl_logout_account">Logout</string>
-    <string name="ssl_remain_offline">Ignore</string>
+    <string name="ssl_remain_offline">Block</string>
     <string name="ssl_fingerprint_hash">Fingerprint (%s):</string>
     <string name="ssl_could_not_verify">Could not verify identity of remote server.</string>
     <string name="ssl_cert_not_trust">This could mean that someone is maliciously intercepting your traffic, or that your phone does not trust the certificate provided by the remote server.</string>
@@ -1008,7 +1008,7 @@
 
     <string name="settings_user_settings">User settings</string>
     <string name="settings_notifications">Notifications</string>
-    <string name="settings_ignored_users">Ignored users</string>
+    <string name="settings_ignored_users">Blocked users</string>
     <string name="settings_other">Other</string>
     <string name="settings_advanced">Advanced</string>
     <string name="settings_integrations">Integrations</string>
@@ -1383,7 +1383,7 @@
     <string name="widget_integration_missing_user_id">Missing user_id in request.</string>
     <string name="widget_integration_room_not_visible">Room %s is not visible.</string>
     <string name="widget_integration_missing_parameter">A required parameter is missing.</string>
-    <string name="room_add_matrix_apps">Add Matrix apps</string>
+    <string name="room_add_matrix_apps">Add Big Star apps</string>
     <string name="room_manage_integrations">Manage Integrations</string>
     <string name="room_no_active_widgets">No active widgets</string>
     <string name="settings_labs_native_camera">Use native camera</string>
@@ -1404,7 +1404,7 @@
     <string name="share_without_verifying_short_label">Share</string>
     <string name="key_share_request">Key Share Request</string>
     <!-- Keep the label as small as possible-->
-    <string name="ignore_request_short_label">Ignore</string>
+    <string name="ignore_request_short_label">Block</string>
 
     <!-- slash commands -->
     <string name="command_error">Command error</string>
@@ -1414,8 +1414,8 @@
     <string name="command_description_emote">Displays action</string>
     <string name="command_description_ban_user">Bans user with given id</string>
     <string name="command_description_unban_user">Unbans user with given id</string>
-    <string name="command_description_ignore_user">Ignores a user, hiding their messages from you</string>
-    <string name="command_description_unignore_user">Stops ignoring a user, showing their messages going forward</string>
+    <string name="command_description_ignore_user">Blocking a user, hiding their messages from you</string>
+    <string name="command_description_unignore_user">Stops blocking a user, showing their messages going forward</string>
     <string name="command_description_op_user">Define the power level of a user</string>
     <string name="command_description_deop_user">Deops user with given id</string>
     <string name="command_description_room_name">Sets the room name</string>
@@ -1923,16 +1923,16 @@
     <string name="report_content_custom_title">"Report this content"</string>
     <string name="report_content_custom_hint">"Reason for reporting this content"</string>
     <string name="report_content_custom_submit">"REPORT"</string>
-    <string name="block_user">"IGNORE USER"</string>
+    <string name="block_user">"BLOCK USER"</string>
 
     <string name="content_reported_title">"Content reported"</string>
-    <string name="content_reported_content">"This content was reported.\n\nIf you don't want to see any more content from this user, you can ignore them to hide their messages."</string>
+    <string name="content_reported_content">"This content was reported.\n\nIf you don't want to see any more content from this user, you can block them to hide their messages."</string>
     <string name="content_reported_as_spam_title">"Reported as spam"</string>
-    <string name="content_reported_as_spam_content">"This content was reported as spam.\n\nIf you don't want to see any more content from this user, you can ignore them to hide their messages."</string>
+    <string name="content_reported_as_spam_content">"This content was reported as spam.\n\nIf you don't want to see any more content from this user, you can block them to hide their messages."</string>
     <string name="content_reported_as_inappropriate_title">"Reported as inappropriate"</string>
     <string name="content_reported_as_inappropriate_content">"This content was reported as inappropriate.\n\nIf you don't want to see any more content from this user, you can ignore them to hide their messages."</string>
 
-    <string name="message_ignore_user">Ignore user</string>
+    <string name="message_ignore_user">Block user</string>
 
     <string name="room_list_quick_actions_notifications_all_noisy">"All messages (noisy)"</string>
     <string name="room_list_quick_actions_notifications_all">"All messages"</string>
@@ -1952,7 +1952,7 @@
     <string name="spoiler">Spoiler</string>
     <string name="reaction_search_type_hint">Type keywords to find a reaction.</string>
 
-    <string name="no_ignored_users">You are not ignoring any users</string>
+    <string name="no_ignored_users">You are not blocking any users</string>
 
     <string name="help_long_click_on_room_for_more_options">Long click on a room to see more options</string>
 
@@ -2364,7 +2364,7 @@
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
     <string name="rendering_event_error_exception">${app_name} encountered an issue when rendering content of event with id \'%1$s\'</string>
 
-    <string name="unignore">Unignore</string>
+    <string name="unignore">Unblock</string>
 
     <string name="verify_cannot_cross_sign">This session is unable to share this verification with your other sessions.\nThe verification will be saved locally and shared in a future version of the app.</string>
 

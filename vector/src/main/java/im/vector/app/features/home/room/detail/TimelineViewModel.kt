@@ -831,7 +831,7 @@ class TimelineViewModel @AssistedInject constructor(
                 when (itemId) {
                     R.id.timeline_setting -> true
                     R.id.invite -> state.canInvite
-                    R.id.open_matrix_apps -> true
+                    R.id.open_matrix_apps -> false
                     R.id.block_user -> state.isDm()
                     R.id.voice_call -> state.isCallOptionAvailable() || state.hasActiveElementCallWidget()
                     R.id.video_call -> state.isCallOptionAvailable() || state.jitsiState.confId == null || state.jitsiState.hasJoined

@@ -135,11 +135,11 @@ android {
 
         // `develop` branch will have version code from timestamp, to ensure each build from CI has a incremented versionCode.
         // Other branches (main, features, etc.) will have version code based on application version.
-        versionCode = 145
+        versionCode = 146
         // Required for sonar analysis
         versionName "1.2.3"
 
-        // Generate a random app task affinity
+        // Generate a random app task affinity3
         manifestPlaceholders = [appTaskAffinitySuffix: "H_${gitRevision()}"]
 
         buildConfigField "String", "GIT_REVISION", "\"${gitRevision()}\""

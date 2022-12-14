@@ -796,11 +796,11 @@ class TimelineFragment :
             if (menu is MenuBuilder) menu.setOptionalIconsVisible(true)
         }
         // We use a custom layout for this menu item, so we need to set a ClickListener
-        menu.findItem(R.id.open_matrix_apps)?.let { menuItem ->
-            menuItem.actionView?.debouncedClicks {
-                handleMenuItemSelected(menuItem)
-            }
-        }
+//        menu.findItem(R.id.open_matrix_apps)?.let { menuItem ->
+//            menuItem.actionView?.debouncedClicks {
+//                handleMenuItemSelected(menuItem)
+//            }
+//        }
         val joinConfItem = menu.findItem(R.id.join_conference)
         (joinConfItem.actionView as? JoinConferenceView)?.onJoinClicked = {
             timelineViewModel.handle(RoomDetailAction.JoinJitsiCall)
