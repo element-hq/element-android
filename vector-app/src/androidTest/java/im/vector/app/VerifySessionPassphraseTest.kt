@@ -74,7 +74,7 @@ class VerifySessionPassphraseTest : VerificationTestBase() {
         val matrix = getMatrixInstance()
         val userName = "foobar_${Random.nextLong()}"
         existingSession = createAccountAndSync(matrix, userName, password, true)
-        doSync<Unit> {
+        runBlockingTest {
             existingSession!!.cryptoService().crossSigningService()
                     .initializeCrossSigning(
                             object : UserInteractiveAuthInterceptor {
@@ -87,7 +87,7 @@ class VerifySessionPassphraseTest : VerificationTestBase() {
                                             )
                                     )
                                 }
-                            }, it
+                            }
                     )
         }
 
