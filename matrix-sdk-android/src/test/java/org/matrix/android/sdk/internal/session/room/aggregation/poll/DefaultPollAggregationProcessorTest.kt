@@ -47,7 +47,7 @@ import org.matrix.android.sdk.test.fakes.FakeRealm
 import org.matrix.android.sdk.test.fakes.givenEqualTo
 import org.matrix.android.sdk.test.fakes.givenFindFirst
 
-class PollAggregationProcessorTest {
+class DefaultPollAggregationProcessorTest {
 
     private val pollAggregationProcessor: PollAggregationProcessor = DefaultPollAggregationProcessor()
     private val realm = FakeRealm()

@@ -58,10 +58,6 @@ class FakeAuthenticationService : AuthenticationService by mockk() {
         coEvery { getWellKnownData(matrixId, config) } returns result
     }
 
-    fun givenIsQrLoginSupported(config: HomeServerConnectionConfig, result: Boolean) {
-        coEvery { isQrLoginSupported(config) } returns result
-    }
-
     fun givenWellKnownThrows(matrixId: String, config: HomeServerConnectionConfig?, cause: Throwable) {
         coEvery { getWellKnownData(matrixId, config) } throws cause
     }

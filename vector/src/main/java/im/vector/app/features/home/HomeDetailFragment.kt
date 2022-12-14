@@ -156,7 +156,7 @@ class HomeDetailFragment :
         unknownDeviceDetectorSharedViewModel.onEach { state ->
             state.unknownSessions.invoke()?.let { unknownDevices ->
                 if (unknownDevices.firstOrNull()?.currentSessionTrust == true) {
-                    val uid = "review_login"
+                    val uid = PopupAlertManager.REVIEW_LOGIN_UID
                     alertManager.cancelAlert(uid)
                     val olderUnverified = unknownDevices.filter { !it.isNew }
                     val newest = unknownDevices.firstOrNull { it.isNew }?.deviceInfo
