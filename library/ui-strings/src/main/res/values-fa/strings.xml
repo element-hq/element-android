@@ -2870,4 +2870,13 @@
 \nبرداشتن نشست‌های غیرفعّال امنیت و کارایی را بهبود داده و تشخیص مشکوک بودن نشست‌های جدید را برایتان راحت‌تر می‌کند.</string>
     <string name="review_unverified_sessions_description">بازبینی برای اطمینان از امن بودن حسابتان</string>
     <string name="review_unverified_sessions_title">نسشت‌هایی تأیید نشده دارید</string>
+    <string name="device_manager_learn_more_sessions_encryption_not_supported">این نشست از رمزنگاری پشتیبانی نمی‌کند؛ پس نمی‌تواند تأیید شود.
+\n
+\nهنگام استفاده از اسن نشست نخواهید توانست در اتاق‌هایی که رمزنگاریشان به کار افتاده شرکت کنید.
+\n
+\nبرای بهترین امنیت و محرمانگی، پیشنهاد می‌شود از کارخواه‌های ماتریکس دارای رمزنگاری استفاده کنید.</string>
+    <string name="device_manager_signout_all_other_sessions">خروج از تمامی نشست‌های دیگر</string>
+    <string name="device_manager_verification_status_detail_session_encryption_not_supported">این نشست از رمزنگاری پشتیبانی نکرده و بنابراین نمی‌تواند تأیید شود.</string>
+    <string name="settings_nightly_build_update">رفتن به جدیدترین ساخت (نکته: ممکن است برای ورود به مشکل بخورید)</string>
+    <string name="settings_nightly_build">ساخت شبانه</string>
 </resources>
