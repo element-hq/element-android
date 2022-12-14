@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
-    <title>getAllThreadSummariesLive</title>
+    <title>fetchThreadList</title>
     <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">
     <script>var pathToRoot = "../../../";</script>
     <script>const storage = localStorage.getItem("dokka-dark-mode")
@@ -51,12 +51,12 @@
         <div id="sideMenu"></div>
     </div>
     <div id="main">
-<div class="main-content" id="content" pageIds="matrix-sdk-android::org.matrix.android.sdk.api.session.room.threads/ThreadsService/getAllThreadSummariesLive/#/PointingToDeclaration//468305090">
-  <div class="breadcrumbs"><a href="../../../index.html">matrix-sdk-android</a><span class="delimiter">/</span><a href="../index.html">org.matrix.android.sdk.api.session.room.threads</a><span class="delimiter">/</span><a href="index.html">ThreadsService</a><span class="delimiter">/</span><span class="current">getAllThreadSummariesLive</span></div>
+<div class="main-content" id="content" pageIds="matrix-sdk-android::org.matrix.android.sdk.api.session.room.threads/ThreadsService/fetchThreadList/#kotlin.String?#kotlin.Int#org.matrix.android.sdk.api.session.room.threads.ThreadFilter/PointingToDeclaration//468305090">
+  <div class="breadcrumbs"><a href="../../../index.html">matrix-sdk-android</a><span class="delimiter">/</span><a href="../index.html">org.matrix.android.sdk.api.session.room.threads</a><span class="delimiter">/</span><a href="index.html">ThreadsService</a><span class="delimiter">/</span><span class="current">fetchThreadList</span></div>
   <div class="cover ">
-    <h1 class="cover"><span>get</span><wbr></wbr><span>All</span><wbr></wbr><span>Thread</span><wbr></wbr><span>Summaries</span><wbr></wbr><span><span>Live</span></span></h1>
+    <h1 class="cover"><span>fetch</span><wbr></wbr><span>Thread</span><wbr></wbr><span><span>List</span></span></h1>
   </div>
-  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="get-all-thread-summaries-live.html"><span class="token function">getAllThreadSummariesLive</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/lifecycle/LiveData.html">LiveData</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../org.matrix.android.sdk.api.session.room.threads.model/-thread-summary/index.html">ThreadSummary</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div><p class="paragraph">Returns a <a href="https://developer.android.com/reference/kotlin/androidx/lifecycle/LiveData.html">LiveData</a> list of all the <a href="../../org.matrix.android.sdk.api.session.room.threads.model/-thread-summary/index.html">ThreadSummary</a> that exists at the room level.</p></div></div>
+  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">suspend </span><span class="token keyword">fun </span><a href="fetch-thread-list.html"><span class="token function">fetchThreadList</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">nextBatchId<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">limit<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">filter<span class="token operator">: </span><a href="../-thread-filter/index.html">ThreadFilter</a><span class="token operator"> = </span>ThreadFilter.ALL</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-fetch-threads-result/index.html">FetchThreadsResult</a></div></div></div>
 </div>
       <div class="footer">
         <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2022 Copyright</span><span
