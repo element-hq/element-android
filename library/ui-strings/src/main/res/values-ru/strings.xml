@@ -2965,4 +2965,7 @@
     <string name="editing">Редактирование</string>
     <string name="settings_enable_direct_share_summary">Показывать последние беседы в системном меню распостранения</string>
     <string name="settings_enable_direct_share_title">Включить прямое распостранение</string>
+    <string name="device_manager_signout_all_other_sessions">Выйти из всех других сеансов</string>
+    <string name="review_unverified_sessions_title">У вас есть незаверенные сеансы</string>
+    <string name="settings_nightly_build">Ночная сборка</string>
 </resources>
