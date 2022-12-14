@@ -18,32 +18,26 @@ package im.vector.app.features.voicebroadcast.usecase
 
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
+import im.vector.app.features.voicebroadcast.isLive
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastEvent
-import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.getRoom
-import timber.log.Timber
 import javax.inject.Inject
 
-class GetOngoingVoiceBroadcastsUseCase @Inject constructor(
+class GetRoomLiveVoiceBroadcastsUseCase @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
 ) {
 
     fun execute(roomId: String): List<VoiceBroadcastEvent> {
-        val session = activeSessionHolder.getSafeActiveSession() ?: run {
-            Timber.d("## GetOngoingVoiceBroadcastsUseCase: no active session")
-            return emptyList()
-        }
+        val session = activeSessionHolder.getSafeActiveSession() ?: return emptyList()
         val room = session.getRoom(roomId) ?: error("Unknown roomId: $roomId")
-
-        Timber.d("## GetLastVoiceBroadcastUseCase: get last voice broadcast in $roomId")
 
         return room.stateService().getStateEvents(
                 setOf(VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO),
                 QueryStringValue.IsNotEmpty
         )
                 .mapNotNull { it.asVoiceBroadcastEvent() }
-                .filter { it.content?.voiceBroadcastState != null && it.content?.voiceBroadcastState != VoiceBroadcastState.STOPPED }
+                .filter { it.isLive }
     }
 }

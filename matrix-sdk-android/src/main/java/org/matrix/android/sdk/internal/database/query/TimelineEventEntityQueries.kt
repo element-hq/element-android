@@ -22,6 +22,7 @@ import io.realm.RealmQuery
 import io.realm.RealmResults
 import io.realm.Sort
 import io.realm.kotlin.where
+import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEventFilters
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
@@ -94,14 +95,27 @@ internal fun RealmQuery<TimelineEventEntity>.filterEvents(filters: TimelineEvent
     if (filters.filterTypes && filters.allowedTypes.isNotEmpty()) {
         beginGroup()
         filters.allowedTypes.forEachIndexed { index, filter ->
-            if (filter.stateKey == null) {
-                equalTo(TimelineEventEntityFields.ROOT.TYPE, filter.eventType)
+            if (filter.eventType == EventType.ENCRYPTED) {
+                val otherTypes = filters.allowedTypes.minus(filter).map { it.eventType }
+                if (filter.stateKey == null) {
+                    filterEncryptedTypes(otherTypes)
+                } else {
+                    beginGroup()
+                    filterEncryptedTypes(otherTypes)
+                    and()
+                    equalTo(TimelineEventEntityFields.ROOT.STATE_KEY, filter.stateKey)
+                    endGroup()
+                }
             } else {
-                beginGroup()
-                equalTo(TimelineEventEntityFields.ROOT.TYPE, filter.eventType)
-                and()
-                equalTo(TimelineEventEntityFields.ROOT.STATE_KEY, filter.stateKey)
-                endGroup()
+                if (filter.stateKey == null) {
+                    equalTo(TimelineEventEntityFields.ROOT.TYPE, filter.eventType)
+                } else {
+                    beginGroup()
+                    equalTo(TimelineEventEntityFields.ROOT.TYPE, filter.eventType)
+                    and()
+                    equalTo(TimelineEventEntityFields.ROOT.STATE_KEY, filter.stateKey)
+                    endGroup()
+                }
             }
             if (index != filters.allowedTypes.size - 1) {
                 or()
@@ -115,12 +129,26 @@ internal fun RealmQuery<TimelineEventEntity>.filterEvents(filters: TimelineEvent
     if (filters.filterEdits) {
         not().like(TimelineEventEntityFields.ROOT.CONTENT, TimelineEventFilter.Content.EDIT)
         not().like(TimelineEventEntityFields.ROOT.CONTENT, TimelineEventFilter.Content.RESPONSE)
-        not().like(TimelineEventEntityFields.ROOT.CONTENT, TimelineEventFilter.Content.REFERENCE)
     }
     if (filters.filterRedacted) {
         not().like(TimelineEventEntityFields.ROOT.UNSIGNED_DATA, TimelineEventFilter.Unsigned.REDACTED)
     }
 
+    return this
+}
+
+internal fun RealmQuery<TimelineEventEntity>.filterEncryptedTypes(allowedTypes: List<String>): RealmQuery<TimelineEventEntity> {
+    beginGroup()
+    equalTo(TimelineEventEntityFields.ROOT.TYPE, EventType.ENCRYPTED)
+    and()
+    beginGroup()
+    isNull(TimelineEventEntityFields.ROOT.DECRYPTION_RESULT_JSON)
+    allowedTypes.forEach { eventType ->
+        or()
+        like(TimelineEventEntityFields.ROOT.DECRYPTION_RESULT_JSON, TimelineEventFilter.DecryptedContent.type(eventType))
+    }
+    endGroup()
+    endGroup()
     return this
 }
 

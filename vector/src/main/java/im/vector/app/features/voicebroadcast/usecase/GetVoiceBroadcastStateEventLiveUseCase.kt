@@ -42,7 +42,7 @@ import org.matrix.android.sdk.flow.mapOptional
 import timber.log.Timber
 import javax.inject.Inject
 
-class GetMostRecentVoiceBroadcastStateEventUseCase @Inject constructor(
+class GetVoiceBroadcastStateEventLiveUseCase @Inject constructor(
         private val session: Session,
 ) {
 

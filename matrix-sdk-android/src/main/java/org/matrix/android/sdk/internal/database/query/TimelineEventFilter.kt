@@ -34,6 +34,7 @@ internal object TimelineEventFilter {
      */
     internal object DecryptedContent {
         internal const val URL = """{*"file":*"url":*}"""
+        fun type(type: String) = """{*"type":*"$type"*}"""
     }
 
     /**
