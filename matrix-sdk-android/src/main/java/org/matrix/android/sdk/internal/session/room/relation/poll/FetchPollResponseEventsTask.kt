@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.room.relation.poll
 
+import androidx.annotation.VisibleForTesting
 import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.RelationType
@@ -37,7 +38,8 @@ import org.matrix.android.sdk.internal.util.awaitTransaction
 import org.matrix.android.sdk.internal.util.time.Clock
 import javax.inject.Inject
 
-private const val FETCH_RELATED_EVENTS_LIMIT = 50
+@VisibleForTesting
+const val FETCH_RELATED_EVENTS_LIMIT = 50
 
 /**
  * Task to fetch all the vote events to ensure full aggregation for a given poll.
@@ -49,7 +51,6 @@ internal interface FetchPollResponseEventsTask : Task<FetchPollResponseEventsTas
     )
 }
 
-// TODO add unit tests
 internal class DefaultFetchPollResponseEventsTask @Inject constructor(
         private val roomAPI: RoomAPI,
         private val globalErrorReceiver: GlobalErrorReceiver,
@@ -93,14 +94,13 @@ internal class DefaultFetchPollResponseEventsTask @Inject constructor(
     private suspend fun addMissingEventsInDB(roomId: String, events: List<Event>) {
         monarchy.awaitTransaction { realm ->
             val eventIdsToCheck = events.mapNotNull { it.eventId }.filter { it.isNotEmpty() }
-            val existingIds = EventEntity.where(realm, eventIdsToCheck).findAll().toList().map { it.eventId }
+            if(eventIdsToCheck.isNotEmpty()) {
+                val existingIds = EventEntity.where(realm, eventIdsToCheck).findAll().toList().map { it.eventId }
 
-            events.filterNot { it.eventId in existingIds }
-                    .map {
-                        val ageLocalTs = clock.epochMillis() - (it.unsignedData?.age ?: 0)
-                        it.toEntity(roomId = roomId, sendState = SendState.SYNCED, ageLocalTs = ageLocalTs)
-                    }
-                    .forEach { it.copyToRealmOrIgnore(realm, EventInsertType.PAGINATION) }
+                events.filterNot { it.eventId in existingIds }
+                        .map { it.toEntity(roomId = roomId, sendState = SendState.SYNCED, ageLocalTs = computeLocalTs(it)) }
+                        .forEach { it.copyToRealmOrIgnore(realm, EventInsertType.PAGINATION) }
+            }
         }
     }
 
@@ -109,8 +109,10 @@ internal class DefaultFetchPollResponseEventsTask @Inject constructor(
             eventDecryptor.decryptEventAndSaveResult(event, timeline = "")
         }
 
-        event.ageLocalTs = clock.epochMillis() - (event.unsignedData?.age ?: 0)
+        event.ageLocalTs = computeLocalTs(event)
 
         return event
     }
+
+    private fun computeLocalTs(event: Event) = clock.epochMillis() - (event.unsignedData?.age ?: 0)
 }
