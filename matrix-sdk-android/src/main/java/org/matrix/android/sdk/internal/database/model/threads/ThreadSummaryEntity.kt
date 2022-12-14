@@ -40,5 +40,8 @@ internal open class ThreadSummaryEntity(
     @LinkingObjects("threadSummaries")
     val room: RealmResults<RoomEntity>? = null
 
+    @LinkingObjects("threadSummaries")
+    val page: RealmResults<ThreadListPageEntity>? = null
+
     companion object
 }

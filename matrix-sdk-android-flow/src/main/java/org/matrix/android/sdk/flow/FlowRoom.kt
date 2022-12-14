@@ -31,7 +31,6 @@ import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 import org.matrix.android.sdk.api.session.room.send.UserDraft
-import org.matrix.android.sdk.api.session.room.threads.model.ThreadSummary
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
@@ -117,13 +116,6 @@ class FlowRoom(private val room: Room) {
 
     fun liveNotificationState(): Flow<RoomNotificationState> {
         return room.roomPushRuleService().getLiveRoomNotificationState().asFlow()
-    }
-
-    fun liveThreadSummaries(): Flow<List<ThreadSummary>> {
-        return room.threadsService().getAllThreadSummariesLive().asFlow()
-                .startWith(room.coroutineDispatchers.io) {
-                    room.threadsService().getAllThreadSummaries()
-                }
     }
 
     fun liveThreadList(): Flow<List<ThreadRootEvent>> {
