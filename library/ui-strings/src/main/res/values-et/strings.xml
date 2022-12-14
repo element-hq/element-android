@@ -2861,4 +2861,13 @@
     <string name="settings_enable_direct_share_summary">Näita viimaseid vestlusi süsteemses jagamisvaates</string>
     <string name="review_unverified_sessions_description">Tagamaks, et su konto on sinu kontrolli all, vaata andmed üle</string>
     <string name="review_unverified_sessions_title">Sul on verifitseerimata sessioone</string>
+    <string name="settings_nightly_build">Igaöine arendusversioon</string>
+    <string name="settings_nightly_build_update">Kasuta viimast arendusversiooni (aga võib tekkida erinevaid vigu, sealhulgas sisselogimisega)</string>
+    <string name="device_manager_verification_status_detail_session_encryption_not_supported">Seda sessiooni ei saa verifitseerida, sest seal puudub krüptimise tugi.</string>
+    <string name="device_manager_signout_all_other_sessions">Logi välja kõikidest oma muudest sessioonidest</string>
+    <string name="device_manager_learn_more_sessions_encryption_not_supported">Seda sessiooni ei saa verifitseerida, sest seal puudub krüptimise tugi.
+\n
+\nSelle sessiooniga ei saa sa osaleda krüptitud jututubades.
+\n
+\nParima turvalisuse ja privaatsuse nimel palun kasuta selliseid Matrix\'i kliente, mis toetavad krüptimist.</string>
 </resources>
