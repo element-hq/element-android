@@ -119,8 +119,8 @@ class ThreadListFragment :
             views.threadListRecyclerView.configureWith(threadListController, TimelineItemAnimator(), hasFixedSize = false)
             threadListController.listener = this
 
-            threadListViewModel.onEach(ThreadListViewState::asyncPagedThreadSummaryList) {
-                threadListController.submitList(it.invoke())
+            threadListViewModel.threadsLivePagedList.observe(viewLifecycleOwner) { threadsList ->
+                threadListController.submitList(threadsList)
             }
         } else {
             views.threadListRecyclerView.configureWith(legacyThreadListController, TimelineItemAnimator(), hasFixedSize = false)

@@ -27,6 +27,8 @@ import io.realm.Realm
 import io.realm.Sort
 import io.realm.kotlin.where
 import org.matrix.android.sdk.api.session.room.ResultBoundaries
+import org.matrix.android.sdk.api.session.room.threads.FetchThreadsResult
+import org.matrix.android.sdk.api.session.room.threads.ThreadFilter
 import org.matrix.android.sdk.api.session.room.threads.ThreadLivePageResult
 import org.matrix.android.sdk.api.session.room.threads.ThreadsService
 import org.matrix.android.sdk.api.session.room.threads.model.ThreadSummary
@@ -39,8 +41,6 @@ import org.matrix.android.sdk.internal.database.model.threads.ThreadSummaryEntit
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadSummariesTask
 import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadTimelineTask
-import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadsResult
-import org.matrix.android.sdk.internal.session.room.relation.threads.ThreadFilter
 import org.matrix.android.sdk.internal.util.awaitTransaction
 
 internal class DefaultThreadsService @AssistedInject constructor(
@@ -87,7 +87,6 @@ internal class DefaultThreadsService @AssistedInject constructor(
                     boundaries.postValue(boundaries.value?.copy(zeroItemLoaded = true))
                 }
             })
-
         }
 
         val livePagedList = monarchy.findAllPagedWithChanges(

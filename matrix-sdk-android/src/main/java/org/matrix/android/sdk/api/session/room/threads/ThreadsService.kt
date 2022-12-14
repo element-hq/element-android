@@ -16,13 +16,8 @@
 
 package org.matrix.android.sdk.api.session.room.threads
 
-import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
-import kotlinx.coroutines.CoroutineScope
-import org.matrix.android.sdk.api.session.room.ResultBoundaries
 import org.matrix.android.sdk.api.session.room.threads.model.ThreadSummary
-import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadsResult
-import org.matrix.android.sdk.internal.session.room.relation.threads.ThreadFilter
 
 /**
  * This interface defines methods to interact with thread related features.

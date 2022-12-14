@@ -16,10 +16,12 @@
 
 package im.vector.app.features.home.room.threads.list.viewmodel
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.asFlow
 import androidx.paging.PagedList
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
@@ -40,10 +42,11 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.room.threads.FetchThreadsResult
+import org.matrix.android.sdk.api.session.room.threads.ThreadFilter
+import org.matrix.android.sdk.api.session.room.threads.model.ThreadSummary
 import org.matrix.android.sdk.api.session.threads.ThreadTimelineEvent
 import org.matrix.android.sdk.flow.flow
-import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadsResult
-import org.matrix.android.sdk.internal.session.room.relation.threads.ThreadFilter
 
 class ThreadListViewModel @AssistedInject constructor(
         @Assisted val initialState: ThreadListViewState,
@@ -63,7 +66,14 @@ class ThreadListViewModel @AssistedInject constructor(
     private var nextBatchId: String? = null
     private var hasReachedEnd: Boolean = false
     private var boundariesJob: Job? = null
-    private var pageListJob: Job? = null
+
+    private var livePagedList: LiveData<PagedList<ThreadSummary>>? = null
+    private val _threadsLivePagedList = MutableLiveData<PagedList<ThreadSummary>>()
+    val threadsLivePagedList: LiveData<PagedList<ThreadSummary>> = _threadsLivePagedList
+    private val internalPagedListObserver = Observer<PagedList<ThreadSummary>> {
+        _threadsLivePagedList.postValue(it)
+        setLoading(false)
+    }
 
     @AssistedFactory
     interface Factory {
@@ -103,23 +113,18 @@ class ThreadListViewModel @AssistedInject constructor(
      */
     private fun observeThreadSummaries() = withState { state ->
         viewModelScope.launch {
-            setLoading(true)
             nextBatchId = null
             hasReachedEnd = false
-            boundariesJob?.cancel()
-            pageListJob?.cancel()
+
+            livePagedList?.removeObserver(internalPagedListObserver)
 
             room?.threadsService()
-                    ?.getPagedThreadsList(state.shouldFilterThreads, defaultPagedListConfig)?.let { (pagedList, boundaries) ->
-                        pageListJob = pagedList
-                                .asFlow()
-                                .execute {
-                                    setLoading(it is Loading)
-                                    copy(asyncPagedThreadSummaryList = it)
-                                }
+                    ?.getPagedThreadsList(state.shouldFilterThreads, defaultPagedListConfig)?.let { result ->
+                        livePagedList = result.livePagedList
 
-                        boundariesJob = boundaries
-                                .asFlow()
+                        livePagedList?.observeForever(internalPagedListObserver)
+
+                        boundariesJob = result.liveBoundaries.asFlow()
                                 .onEach {
                                     if (it.endLoaded) {
                                         if (!hasReachedEnd) {
@@ -130,6 +135,7 @@ class ThreadListViewModel @AssistedInject constructor(
                                 .launchIn(viewModelScope)
                     }
 
+            setLoading(true)
             fetchNextPage()
         }
     }

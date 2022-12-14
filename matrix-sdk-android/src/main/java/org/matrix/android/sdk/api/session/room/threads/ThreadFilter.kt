@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.room.relation.threads
+package org.matrix.android.sdk.api.session.room.threads
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass

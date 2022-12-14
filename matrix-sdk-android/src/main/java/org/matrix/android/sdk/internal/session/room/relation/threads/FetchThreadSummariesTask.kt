@@ -18,6 +18,8 @@ package org.matrix.android.sdk.internal.session.room.relation.threads
 import com.zhuinden.monarchy.Monarchy
 import io.realm.RealmList
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
+import org.matrix.android.sdk.api.session.room.threads.FetchThreadsResult
+import org.matrix.android.sdk.api.session.room.threads.ThreadFilter
 import org.matrix.android.sdk.api.session.room.threads.model.ThreadSummaryUpdateType
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
 import org.matrix.android.sdk.internal.database.helper.createOrUpdate
@@ -117,10 +119,4 @@ internal class DefaultFetchThreadSummariesTask @Inject constructor(
             }
         }
     }
-}
-
-sealed class FetchThreadsResult {
-    data class ShouldFetchMore(val nextBatch: String) : FetchThreadsResult()
-    object ReachedEnd : FetchThreadsResult()
-    object Failed : FetchThreadsResult()
 }
