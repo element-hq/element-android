@@ -16,11 +16,13 @@
 
 package org.matrix.android.sdk.internal.crypto.algorithms.megolm
 
+import timber.log.Timber
 import javax.inject.Inject
 
 // empty in rust
 class UnRequestedForwardManager @Inject constructor() {
 
-    fun onInviteReceived(roomId: String, orEmpty: String, epochMillis: Long) {
+    fun onInviteReceived(roomId: String, inviterId: String, epochMillis: Long) {
+        Timber.e("UnRequestedForwardManager not yet implemented $roomId, $inviterId, $epochMillis")
     }
 }

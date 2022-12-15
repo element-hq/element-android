@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.crypto.verification
 
+import org.amshove.kluent.fail
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.verification.EVerificationState
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
@@ -37,7 +38,11 @@ class SasVerificationTestHelper(private val testHelper: CommonTestHelper) {
         )
                 .transactionId
 
-        testHelper.retryPeriodically {
+        testHelper.retryWithBackoff(
+                onFail = {
+                    fail("bob should see an incoming verification request with id $transactionId")
+                }
+        ) {
             val incomingRequest = bobVerificationService.getExistingVerificationRequest(aliceSession.myUserId, transactionId)
             if (incomingRequest != null) {
                 bobVerificationService.readyPendingVerification(
@@ -52,7 +57,11 @@ class SasVerificationTestHelper(private val testHelper: CommonTestHelper) {
         }
 
         // wait for alice to see the ready
-        testHelper.retryPeriodically {
+        testHelper.retryWithBackoff(
+                onFail = {
+                    fail("Alice request whould be ready $transactionId")
+                }
+        ) {
             val pendingRequest = aliceVerificationService.getExistingVerificationRequest(bobUserId, transactionId)
             pendingRequest?.state == EVerificationState.Ready
         }
@@ -67,7 +76,7 @@ class SasVerificationTestHelper(private val testHelper: CommonTestHelper) {
         val requestID = session1VerificationService.requestSelfKeyVerification(supportedMethods).transactionId
 
         val myUserId = session1.myUserId
-        testHelper.retryPeriodically {
+        testHelper.retryWithBackoff {
             val incomingRequest = session2VerificationService.getExistingVerificationRequest(myUserId, requestID)
             if (incomingRequest != null) {
                 session2VerificationService.readyPendingVerification(

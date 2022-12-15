@@ -101,7 +101,7 @@ class E2eeSanityTests : InstrumentedTest {
                         fail("${otherSession.myUserId.take(10)} should be able to decrypt")
                     }) {
                 val timeLineEvent = otherSession.getRoom(e2eRoomID)?.getTimelineEvent(sentEventId!!).also {
-                    Log.v("#E2E TEST", "Event seen by new user ${it?.root?.getClearType()}|${it?.root?.mCryptoError}")
+                    Log.v("#E2E TEST", "Event seen by new user ${it?.root?.getClearType()}|${it?.root?.mCryptoError}|${it?.root?.mxDecryptionResult?.isSafe}")
                 }
                 timeLineEvent != null &&
                         timeLineEvent.isEncrypted() &&

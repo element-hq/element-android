@@ -16,11 +16,15 @@
 
 package org.matrix.android.sdk.internal.crypto
 
+import org.matrix.android.sdk.BuildConfig
+import timber.log.Timber
 import javax.inject.Inject
 
 internal class SecretShareManager @Inject constructor() {
 
     suspend fun requestSecretTo(deviceId: String, secretName: String) {
         // nop in rust?
+        if (BuildConfig.DEBUG) TODO("requestSecretTo Not implemented in Rust")
+        Timber.e("SecretShareManager Not supported in rust $deviceId, $secretName")
     }
 }

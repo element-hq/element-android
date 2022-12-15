@@ -239,9 +239,9 @@ internal class RequestSender @Inject constructor(
                             val hashMap = content as? Map<*, *>
                             val action = hashMap?.get("action")?.toString()
                             if (GossipingToDeviceObject.ACTION_SHARE_REQUEST == action) {
-                                val body = hashMap.get("body") as? Map<*, *>
-                                val roomId = body?.get("room_id") as? String
-                                val sessionId = body?.get("session_id") as? String
+                                val requestBody = hashMap["body"] as? Map<*, *>
+                                val roomId = requestBody?.get("room_id") as? String
+                                val sessionId = requestBody?.get("session_id") as? String
                                 if (roomId != null && sessionId != null) {
                                     rateLimiter.tryFromBackupIfPossible(sessionId, roomId)
                                 }

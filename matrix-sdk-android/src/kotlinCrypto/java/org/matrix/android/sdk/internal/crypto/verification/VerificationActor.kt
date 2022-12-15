@@ -263,6 +263,8 @@ internal class VerificationActor @AssistedInject constructor(
             }
             is VerificationIntent.GetExistingRequestsForUser -> {
                 verificationRequestsStore.getExistingRequestsForUser(msg.userId).let { requests ->
+                    Timber.tag(loggerTag.value)
+                            .v("[${myUserId.take(8)}]: Found $requests")
                     msg.deferred.complete(requests.map { it.toPendingVerificationRequest() })
                 }
             }
@@ -306,6 +308,8 @@ internal class VerificationActor @AssistedInject constructor(
     private fun dispatchUpdate(update: VerificationEvent) {
         // We don't want to block on emit.
         // If no subscriber there is a small buffer
+        Timber.tag(loggerTag.value)
+                .v("[${myUserId.take(8)}] Dispatch Request update ${update.transactionId}")
         scope.launch {
             eventFlow.emit(update)
         }
@@ -565,21 +569,29 @@ internal class VerificationActor @AssistedInject constructor(
     private suspend fun handleSasStart(msg: VerificationIntent.ActionStartSasVerification) {
         val matchingRequest = verificationRequestsStore.getExistingRequestWithRequestId(msg.requestId)
                 ?: return Unit.also {
+                    Timber.tag(loggerTag.value)
+                            .v("[${myUserId.take(8)}]: Can't start unknown request ${msg.requestId}")
                     msg.deferred.completeExceptionally(java.lang.IllegalArgumentException("Unknown request"))
                 }
 
         if (matchingRequest.state != EVerificationState.Ready) {
+            Timber.tag(loggerTag.value)
+                    .v("[${myUserId.take(8)}]: Can't start a non ready request ${msg.requestId}")
             msg.deferred.completeExceptionally(java.lang.IllegalStateException("Can't start a non ready request"))
             return
         }
 
         val otherDeviceId = matchingRequest.otherDeviceId() ?: return Unit.also {
+            Timber.tag(loggerTag.value)
+                    .v("[${myUserId.take(8)}]: Can't start null other device id ${msg.requestId}")
             msg.deferred.completeExceptionally(java.lang.IllegalArgumentException("Failed to find other device Id"))
         }
 
         val existingTransaction = getExistingTransaction<VerificationTransaction>(msg.otherUserId, msg.requestId)
         if (existingTransaction is SasVerificationTransaction) {
             // there is already an existing transaction??
+            Timber.tag(loggerTag.value)
+                    .v("[${myUserId.take(8)}]: Can't start, already started ${msg.requestId}")
             msg.deferred.completeExceptionally(IllegalStateException("Already started"))
             return
         }
@@ -589,11 +601,16 @@ internal class VerificationActor @AssistedInject constructor(
                 requestId = msg.requestId
         )
 
+        Timber.tag(loggerTag.value)
+                .v("[${myUserId.take(8)}]:sending start to other ${msg.requestId} in room ${matchingRequest.roomId}")
         transportLayer.sendToOther(
                 matchingRequest,
                 EventType.KEY_VERIFICATION_START,
                 startMessage,
         )
+
+        Timber.tag(loggerTag.value)
+                .v("[${myUserId.take(8)}]: start sent to other ${msg.requestId}")
 
         // should check if already one (and cancel it)
         val tx = KotlinSasTransaction(
@@ -1262,6 +1279,9 @@ internal class VerificationActor @AssistedInject constructor(
             null
         }
 
+        Timber.tag(loggerTag.value)
+                .v("[${myUserId.take(8)}] Request ${msg.transactionId} code is $qrCodeData")
+
         val readyInfo = ValidVerificationInfoReady(
                 msg.transactionId,
                 verificationTrustBackend.getMyDeviceId(),
@@ -1274,9 +1294,14 @@ internal class VerificationActor @AssistedInject constructor(
                 methods = commonMethods,
                 fromDevice = verificationTrustBackend.getMyDeviceId()
         )
+
+        Timber.tag(loggerTag.value)
+                .v("[${myUserId.take(8)}] Request ${msg.transactionId} sending ready")
         try {
             transportLayer.sendToOther(existing, EventType.KEY_VERIFICATION_READY, message)
         } catch (failure: Throwable) {
+            Timber.tag(loggerTag.value)
+                    .v("[${myUserId.take(8)}] Request ${msg.transactionId} failed to send ready")
             msg.deferred.completeExceptionally(failure)
             return
         }
