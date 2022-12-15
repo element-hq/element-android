@@ -341,6 +341,8 @@ class OtherSessionsFragment :
     override fun onOtherSessionLongClicked(deviceId: String) = withState(viewModel) { state ->
         if (!state.isSelectModeEnabled) {
             enableSelectMode(true, deviceId)
+        } else {
+            viewModel.handle(OtherSessionsAction.ToggleSelectionForDevice(deviceId))
         }
     }
 
