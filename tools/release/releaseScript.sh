@@ -19,43 +19,81 @@
 # Ignore any error to not stop the script
 set +e
 
-printf "\n"
-printf "================================================================================\n"
+printf "\n================================================================================\n"
 printf "|                    Welcome to the release script!                            |\n"
 printf "================================================================================\n"
 
-releaseScriptLocation="${RELEASE_SCRIPT_PATH}"
+printf "Checking environment...\n"
+envError=0
 
-if [[ -z "${releaseScriptLocation}" ]]; then
-    printf "Fatal: RELEASE_SCRIPT_PATH is not defined in the environment. Please set to the path of your local file 'releaseElement2.sh'.\n"
-    exit 1
+# Path of the key store (it's a file)
+keyStorePath="${ELEMENT_KEYSTORE_PATH}"
+if [[ -z "${keyStorePath}" ]]; then
+    printf "Fatal: ELEMENT_KEYSTORE_PATH is not defined in the environment.\n"
+    envError=1
+fi
+# Keystore password
+keyStorePassword="${ELEMENT_KEYSTORE_PASSWORD}"
+if [[ -z "${keyStorePassword}" ]]; then
+    printf "Fatal: ELEMENT_KEYSTORE_PASSWORD is not defined in the environment.\n"
+    envError=1
+fi
+# Key password
+keyPassword="${ELEMENT_KEY_PASSWORD}"
+if [[ -z "${keyPassword}" ]]; then
+    printf "Fatal: ELEMENT_KEY_PASSWORD is not defined in the environment.\n"
+    envError=1
+fi
+# GitHub token
+gitHubToken="${ELEMENT_GITHUB_TOKEN}"
+if [[ -z "${gitHubToken}" ]]; then
+    printf "Fatal: ELEMENT_GITHUB_TOKEN is not defined in the environment.\n"
+    envError=1
+fi
+# Android home
+androidHome="${ANDROID_HOME}"
+if [[ -z "${androidHome}" ]]; then
+    printf "Fatal: ANDROID_HOME is not defined in the environment.\n"
+    envError=1
+fi
+# @elementbot:matrix.org matrix token / Not mandatory
+elementBotToken="${ELEMENT_BOT_MATRIX_TOKEN}"
+if [[ -z "${elementBotToken}" ]]; then
+    printf "Warning: ELEMENT_BOT_MATRIX_TOKEN is not defined in the environment.\n"
 fi
 
-releaseScriptFullPath="${releaseScriptLocation}/releaseElement2.sh"
-
-if [[ ! -f ${releaseScriptFullPath} ]]; then
-  printf "Fatal: release script not found at ${releaseScriptFullPath}.\n"
+if [ ${envError} == 1 ]; then
   exit 1
+fi
+
+buildToolsVersion="30.0.2"
+buildToolsPath="${androidHome}/build-tools/${buildToolsVersion}"
+
+if [[ ! -d ${buildToolsPath} ]]; then
+    printf "Fatal: ${buildToolsPath} folder not found, ensure that you have installed the SDK version ${buildToolsVersion}.\n"
+    exit 1
 fi
 
 # Check if git flow is enabled
 git flow config >/dev/null 2>&1
 if [[ $? == 0 ]]
 then
-    printf "Git flow is initialized"
+    printf "Git flow is initialized\n"
 else
     printf "Git flow is not initialized. Initializing...\n"
     # All default value, just set 'v' for tag prefix
     git flow init -d -t 'v'
 fi
 
+printf "OK\n"
+
+printf "\n================================================================================\n"
 # Guessing version to propose a default version
 versionMajorCandidate=`grep "ext.versionMajor" ./vector-app/build.gradle | cut  -d " " -f3`
 versionMinorCandidate=`grep "ext.versionMinor" ./vector-app/build.gradle | cut  -d " " -f3`
 versionPatchCandidate=`grep "ext.versionPatch" ./vector-app/build.gradle | cut  -d " " -f3`
 versionCandidate="${versionMajorCandidate}.${versionMinorCandidate}.${versionPatchCandidate}"
 
-printf "\n"
 read -p "Please enter the release version (example: ${versionCandidate}). Just press enter if ${versionCandidate} is correct. " version
 version=${version:-${versionCandidate}}
 
@@ -225,29 +263,122 @@ else
 fi
 
 printf "\n================================================================================\n"
-read -p "Wait for the GitHub action https://github.com/vector-im/element-android/actions/workflows/build.yml?query=branch%3Amain to build the 'main' branch. Press enter when it's done."
+printf "Wait for the GitHub action https://github.com/vector-im/element-android/actions/workflows/build.yml?query=branch%3Amain to build the 'main' branch.\n"
+read -p "After GHA is finished, please enter the artifact URL (for 'vector-gplay-release-unsigned'): " artifactUrl
 
 printf "\n================================================================================\n"
-printf "Running the release script...\n"
-cd ${releaseScriptLocation}
-${releaseScriptFullPath} "v${version}"
-cd -
+printf "Downloading the artifact...\n"
+
+# Download files
+targetPath="./tmp/Element/${version}"
+
+# Ignore error
+set +e
+
+python3 ./tools/release/download_github_artifacts.py \
+    --token ${gitHubToken} \
+    --artifactUrl ${artifactUrl} \
+    --directory ${targetPath} \
+    --ignoreErrors
+
+# Do not ignore error
+set -e
 
 printf "\n================================================================================\n"
-apkPath="${releaseScriptLocation}/Element/v${version}/vector-gplay-arm64-v8a-release-signed.apk"
-printf "Installing apk on a real device...\n"
+printf "Unzipping the artifact...\n"
+
+unzip ${targetPath}/vector-gplay-release-unsigned.zip -d ${targetPath}
+
+# Flatten folder hierarchy
+mv ${targetPath}/gplay/release/* ${targetPath}
+rm -rf ${targetPath}/gplay
+
+printf "\n================================================================================\n"
+printf "Signing the APKs...\n"
+
+cp ${targetPath}/vector-gplay-arm64-v8a-release-unsigned.apk \
+   ${targetPath}/vector-gplay-arm64-v8a-release-signed.apk
+./tools/release/sign_apk_unsafe.sh \
+    ${keyStorePath} \
+    ${targetPath}/vector-gplay-arm64-v8a-release-signed.apk \
+    ${keyStorePassword} \
+    ${keyPassword}
+
+cp ${targetPath}/vector-gplay-armeabi-v7a-release-unsigned.apk \
+   ${targetPath}/vector-gplay-armeabi-v7a-release-signed.apk
+./tools/release/sign_apk_unsafe.sh \
+    ${keyStorePath} \
+    ${targetPath}/vector-gplay-armeabi-v7a-release-signed.apk \
+    ${keyStorePassword} \
+    ${keyPassword}
+
+cp ${targetPath}/vector-gplay-x86-release-unsigned.apk \
+   ${targetPath}/vector-gplay-x86-release-signed.apk
+./tools/release/sign_apk_unsafe.sh \
+    ${keyStorePath} \
+    ${targetPath}/vector-gplay-x86-release-signed.apk \
+    ${keyStorePassword} \
+    ${keyPassword}
+
+cp ${targetPath}/vector-gplay-x86_64-release-unsigned.apk \
+   ${targetPath}/vector-gplay-x86_64-release-signed.apk
+./tools/release/sign_apk_unsafe.sh \
+    ${keyStorePath} \
+    ${targetPath}/vector-gplay-x86_64-release-signed.apk \
+    ${keyStorePassword} \
+    ${keyPassword}
+
+# Ref: https://docs.fastlane.tools/getting-started/android/beta-deployment/#uploading-your-app
+# set SUPPLY_APK_PATHS="${targetPath}/vector-gplay-arm64-v8a-release-unsigned.apk,${targetPath}/vector-gplay-armeabi-v7a-release-unsigned.apk,${targetPath}/vector-gplay-x86-release-unsigned.apk,${targetPath}/vector-gplay-x86_64-release-unsigned.apk"
+#
+# ./fastlane beta
+
+printf "\n================================================================================\n"
+printf "Please check the information below:\n"
+
+printf "File vector-gplay-arm64-v8a-release-signed.apk:\n"
+${buildToolsPath}/aapt dump badging ${targetPath}/vector-gplay-arm64-v8a-release-signed.apk | grep package
+printf "File vector-gplay-armeabi-v7a-release-signed.apk:\n"
+${buildToolsPath}/aapt dump badging ${targetPath}/vector-gplay-armeabi-v7a-release-signed.apk | grep package
+printf "File vector-gplay-x86-release-signed.apk:\n"
+${buildToolsPath}/aapt dump badging ${targetPath}/vector-gplay-x86-release-signed.apk | grep package
+printf "File vector-gplay-x86_64-release-signed.apk:\n"
+${buildToolsPath}/aapt dump badging ${targetPath}/vector-gplay-x86_64-release-signed.apk | grep package
+
+printf "\n"
+read -p "Does it look correct? Press enter when it's done."
+
+printf "\n================================================================================\n"
+read -p "Installing apk on a real device, press enter when a real device is connected. "
+apkPath="${targetPath}/vector-gplay-arm64-v8a-release-signed.apk"
 adb -d install ${apkPath}
 
 read -p "Please run the APK on your phone to check that the upgrade went well (no init sync, etc.). Press enter when it's done."
 # TODO Get the block to copy from towncrier earlier (be may be edited by the release manager)?
 read -p "Create the release on gitHub from the tag https://github.com/vector-im/element-android/tags, copy paste the block from the file CHANGES.md. Press enter when it's done."
 
-read -p "Add the 4 signed APKs to the GitHub release. Press enter when it's done."
+read -p "Add the 4 signed APKs to the GitHub release. They are located at ${targetPath}. Press enter when it's done."
 
 printf "\n================================================================================\n"
-printf "Ping the Android Internal room. Here is an example of message which can be sent:\n\n"
-printf "@room Element Android ${version} is ready to be tested. You can get if from https://github.com/vector-im/element-android/releases/tag/v${version}. Please report any feedback here. Thanks!\n\n"
-read -p "Press enter when it's done."
+printf "Message for the Android internal room:\n\n"
+message="@room Element Android ${version} is ready to be tested. You can get if from https://github.com/vector-im/element-android/releases/tag/v${version}. Please report any feedback here. Thanks!"
+printf "${message}\n\n"
+
+if [[ -z "${elementBotToken}" ]]; then
+  read -p "ELEMENT_BOT_MATRIX_TOKEN is not defined in the environment. Cannot send the message for you. Please send it manually, and press enter when it's done "
+else
+  read -p "Send this message to the room (yes/no) default to yes? " doSend
+  doSend=${doSend:-yes}
+  if [ ${doSend} == "yes" ]; then
+    printf "Sending message...\n"
+    transactionId=`openssl rand -hex 16`
+    # Element Android internal
+    matrixRoomId="!LiSLXinTDCsepePiYW:matrix.org"
+    curl -X PUT --data $"{\"msgtype\":\"m.text\",\"body\":\"${message}\"}" -H "Authorization: Bearer ${elementBotToken}" https://matrix-client.matrix.org/_matrix/client/r0/rooms/${matrixRoomId}/send/m.room.message/\$local.${transactionId}
+  else
+    printf "Message not sent, please send it manually!\n"
+  fi
+fi
 
 printf "\n================================================================================\n"
 printf "Congratulation! Kudos for using this script! Have a nice day!\n"

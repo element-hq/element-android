@@ -25,7 +25,7 @@ import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 data class DeviceFullInfo(
         val deviceInfo: DeviceInfo,
         val cryptoDeviceInfo: CryptoDeviceInfo?,
-        val roomEncryptionTrustLevel: RoomEncryptionTrustLevel,
+        val roomEncryptionTrustLevel: RoomEncryptionTrustLevel?,
         val isInactive: Boolean,
         val isCurrentDevice: Boolean,
         val deviceExtendedInfo: DeviceExtendedInfo,

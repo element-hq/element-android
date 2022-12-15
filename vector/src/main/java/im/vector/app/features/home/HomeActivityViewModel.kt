@@ -16,7 +16,6 @@
 
 package im.vector.app.features.home
 
-import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
@@ -27,7 +26,10 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.VectorFeatures
+import im.vector.app.core.pushers.EnsureFcmTokenIsRetrievedUseCase
+import im.vector.app.core.pushers.PushersManager
+import im.vector.app.core.pushers.RegisterUnifiedPushUseCase
+import im.vector.app.core.pushers.UnregisterUnifiedPushUseCase
 import im.vector.app.features.analytics.AnalyticsConfig
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.extensions.toAnalyticsType
@@ -48,12 +50,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.account.LocalNotificationSettingsContent
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.UserPasswordAuth
@@ -62,11 +62,9 @@ import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.raw.RawService
-import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
-import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getUserOrDefault
 import org.matrix.android.sdk.api.session.pushrules.RuleIds
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -92,8 +90,11 @@ class HomeActivityViewModel @AssistedInject constructor(
         private val analyticsTracker: AnalyticsTracker,
         private val analyticsConfig: AnalyticsConfig,
         private val releaseNotesPreferencesStore: ReleaseNotesPreferencesStore,
-        private val vectorFeatures: VectorFeatures,
         private val stopOngoingVoiceBroadcastUseCase: StopOngoingVoiceBroadcastUseCase,
+        private val pushersManager: PushersManager,
+        private val registerUnifiedPushUseCase: RegisterUnifiedPushUseCase,
+        private val unregisterUnifiedPushUseCase: UnregisterUnifiedPushUseCase,
+        private val ensureFcmTokenIsRetrievedUseCase: EnsureFcmTokenIsRetrievedUseCase,
 ) : VectorViewModel<HomeActivityViewState, HomeActivityViewActions, HomeActivityViewEvents>(initialState) {
 
     @AssistedFactory
@@ -117,15 +118,42 @@ class HomeActivityViewModel @AssistedInject constructor(
     private fun initialize() {
         if (isInitialized) return
         isInitialized = true
+        registerUnifiedPushIfNeeded()
         cleanupFiles()
         observeInitialSync()
         checkSessionPushIsOn()
         observeCrossSigningReset()
         observeAnalytics()
         observeReleaseNotes()
-        observeLocalNotificationsSilenced()
         initThreadsMigration()
         viewModelScope.launch { stopOngoingVoiceBroadcastUseCase.execute() }
+    }
+
+    private fun registerUnifiedPushIfNeeded() {
+        if (vectorPreferences.areNotificationEnabledForDevice()) {
+            registerUnifiedPush(distributor = "")
+        } else {
+            unregisterUnifiedPush()
+        }
+    }
+
+    private fun registerUnifiedPush(distributor: String) {
+        viewModelScope.launch {
+            when (registerUnifiedPushUseCase.execute(distributor = distributor)) {
+                is RegisterUnifiedPushUseCase.RegisterUnifiedPushResult.NeedToAskUserForDistributor -> {
+                    _viewEvents.post(HomeActivityViewEvents.AskUserForPushDistributor)
+                }
+                RegisterUnifiedPushUseCase.RegisterUnifiedPushResult.Success -> {
+                    ensureFcmTokenIsRetrievedUseCase.execute(pushersManager, registerPusher = vectorPreferences.areNotificationEnabledForDevice())
+                }
+            }
+        }
+    }
+
+    private fun unregisterUnifiedPush() {
+        viewModelScope.launch {
+            unregisterUnifiedPushUseCase.execute(pushersManager)
+        }
     }
 
     private fun observeReleaseNotes() = withState { state ->
@@ -143,26 +171,6 @@ class HomeActivityViewModel @AssistedInject constructor(
                     releaseNotesPreferencesStore.setAppLayoutOnboardingShown(true)
                 }
             }
-        }
-    }
-
-    fun shouldAddHttpPusher() = if (vectorPreferences.areNotificationEnabledForDevice()) {
-        val currentSession = activeSessionHolder.getActiveSession()
-        val currentPushers = currentSession.pushersService().getPushers()
-        currentPushers.none { it.deviceId == currentSession.sessionParams.deviceId }
-    } else {
-        false
-    }
-
-    fun observeLocalNotificationsSilenced() {
-        val currentSession = activeSessionHolder.getActiveSession()
-        val deviceId = currentSession.cryptoService().getMyDevice().deviceId
-        viewModelScope.launch {
-            currentSession.accountDataService()
-                    .getLiveUserAccountDataEvent(UserAccountDataTypes.TYPE_LOCAL_NOTIFICATION_SETTINGS + deviceId)
-                    .asFlow()
-                    .map { it.getOrNull()?.content?.toModel<LocalNotificationSettingsContent>()?.isSilenced ?: false }
-                    .onEach { setState { copy(areNotificationsSilenced = it) } }
         }
     }
 
@@ -246,6 +254,12 @@ class HomeActivityViewModel @AssistedInject constructor(
 //        }
 
         when {
+            !vectorPreferences.areThreadMessagesEnabled() && !vectorPreferences.wasThreadFlagChangedManually() -> {
+                vectorPreferences.setThreadMessagesEnabled()
+                lightweightSettingsStorage.setThreadMessagesEnabled(vectorPreferences.areThreadMessagesEnabled())
+                // Clear Cache
+                _viewEvents.post(HomeActivityViewEvents.MigrateThreads(checkSession = false))
+            }
             // Notify users
             vectorPreferences.shouldNotifyUserAboutThreads() && vectorPreferences.areThreadMessagesEnabled() -> {
                 Timber.i("----> Notify users about threads")
@@ -500,6 +514,9 @@ class HomeActivityViewModel @AssistedInject constructor(
             }
             HomeActivityViewActions.ViewStarted -> {
                 initialize()
+            }
+            is HomeActivityViewActions.RegisterPushDistributor -> {
+                registerUnifiedPush(distributor = action.distributor)
             }
         }
     }

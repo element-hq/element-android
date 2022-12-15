@@ -228,8 +228,6 @@ class VectorPreferences @Inject constructor(
         private const val MEDIA_SAVING_1_MONTH = 2
         private const val MEDIA_SAVING_FOREVER = 3
 
-        private const val SETTINGS_UNKNOWN_DEVICE_DISMISSED_LIST = "SETTINGS_UNKNWON_DEVICE_DISMISSED_LIST"
-
         private const val TAKE_PHOTO_VIDEO_MODE = "TAKE_PHOTO_VIDEO_MODE"
 
         private const val SETTINGS_LABS_ENABLE_LIVE_LOCATION = "SETTINGS_LABS_ENABLE_LIVE_LOCATION"
@@ -241,10 +239,14 @@ class VectorPreferences @Inject constructor(
 
         // This key will be used to identify clients with the new thread support enabled m.thread
         const val SETTINGS_LABS_ENABLE_THREAD_MESSAGES = "SETTINGS_LABS_ENABLE_THREAD_MESSAGES_FINAL"
+        const val SETTINGS_LABS_THREAD_MESSAGES_CHANGED_BY_USER = "SETTINGS_LABS_THREAD_MESSAGES_CHANGED_BY_USER"
         const val SETTINGS_THREAD_MESSAGES_SYNCED = "SETTINGS_THREAD_MESSAGES_SYNCED"
 
         // This key will be used to enable user for displaying live user info or not.
         const val SETTINGS_TIMELINE_SHOW_LIVE_SENDER_INFO = "SETTINGS_TIMELINE_SHOW_LIVE_SENDER_INFO"
+
+        const val SETTINGS_UNVERIFIED_SESSIONS_ALERT_LAST_SHOWN_MILLIS = "SETTINGS_UNVERIFIED_SESSIONS_ALERT_LAST_SHOWN_MILLIS_"
+        const val SETTINGS_NEW_LOGIN_ALERT_SHOWN_FOR_DEVICE = "SETTINGS_NEW_LOGIN_ALERT_SHOWN_FOR_DEVICE_"
 
         // Possible values for TAKE_PHOTO_VIDEO_MODE
         const val TAKE_PHOTO_VIDEO_MODE_ALWAYS_ASK = 0
@@ -519,18 +521,6 @@ class VectorPreferences @Inject constructor(
      */
     fun useShutterSound(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_PLAY_SHUTTER_SOUND_KEY, true)
-    }
-
-    fun storeUnknownDeviceDismissedList(deviceIds: List<String>) {
-        defaultPrefs.edit(true) {
-            putStringSet(SETTINGS_UNKNOWN_DEVICE_DISMISSED_LIST, deviceIds.toSet())
-        }
-    }
-
-    fun getUnknownDeviceDismissedList(): List<String> {
-        return tryOrNull {
-            defaultPrefs.getStringSet(SETTINGS_UNKNOWN_DEVICE_DISMISSED_LIST, null)?.toList()
-        }.orEmpty()
     }
 
     /**
@@ -1141,6 +1131,24 @@ class VectorPreferences @Inject constructor(
     }
 
     /**
+     * Indicates whether or not user changed threads flag manually. We need this to not force flag to be enabled on app start.
+     * Should be removed when Threads flag will be removed
+     */
+    fun wasThreadFlagChangedManually(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_LABS_THREAD_MESSAGES_CHANGED_BY_USER, false)
+    }
+
+    /**
+     * Sets the flag to indicate that user changed threads flag (e.g. disabled them).
+     */
+    fun setThreadFlagChangedManually() {
+        defaultPrefs
+                .edit()
+                .putBoolean(SETTINGS_LABS_THREAD_MESSAGES_CHANGED_BY_USER, true)
+                .apply()
+    }
+
+    /**
      * Indicates whether or not the user will be notified about the new thread support.
      * We should notify the user only if he had old thread support enabled.
      */
@@ -1243,7 +1251,27 @@ class VectorPreferences @Inject constructor(
 
     fun setIpAddressVisibilityInDeviceManagerScreens(isVisible: Boolean) {
         defaultPrefs.edit {
-            putBoolean(VectorPreferences.SETTINGS_SESSION_MANAGER_SHOW_IP_ADDRESS, isVisible)
+            putBoolean(SETTINGS_SESSION_MANAGER_SHOW_IP_ADDRESS, isVisible)
+        }
+    }
+
+    fun getUnverifiedSessionsAlertLastShownMillis(deviceId: String): Long {
+        return defaultPrefs.getLong(SETTINGS_UNVERIFIED_SESSIONS_ALERT_LAST_SHOWN_MILLIS + deviceId, 0)
+    }
+
+    fun setUnverifiedSessionsAlertLastShownMillis(deviceId: String, lastShownMillis: Long) {
+        defaultPrefs.edit {
+            putLong(SETTINGS_UNVERIFIED_SESSIONS_ALERT_LAST_SHOWN_MILLIS + deviceId, lastShownMillis)
+        }
+    }
+
+    fun isNewLoginAlertShownForDevice(deviceId: String): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_NEW_LOGIN_ALERT_SHOWN_FOR_DEVICE + deviceId, false)
+    }
+
+    fun setNewLoginAlertShownForDevice(deviceId: String) {
+        defaultPrefs.edit {
+            putBoolean(SETTINGS_NEW_LOGIN_ALERT_SHOWN_FOR_DEVICE + deviceId, true)
         }
     }
 }

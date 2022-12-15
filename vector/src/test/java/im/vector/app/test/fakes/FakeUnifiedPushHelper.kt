@@ -16,38 +16,23 @@
 
 package im.vector.app.test.fakes
 
-import androidx.fragment.app.FragmentActivity
-import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.pushers.UnifiedPushHelper
-import io.mockk.coJustRun
-import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verify
 
 class FakeUnifiedPushHelper {
 
     val instance = mockk<UnifiedPushHelper>()
 
-    fun givenRegister(fragmentActivity: FragmentActivity) {
-        every { instance.register(fragmentActivity, any()) } answers {
-            secondArg<Runnable>().run()
-        }
-    }
-
-    fun verifyRegister(fragmentActivity: FragmentActivity) {
-        verify { instance.register(fragmentActivity, any()) }
-    }
-
-    fun givenUnregister(pushersManager: PushersManager) {
-        coJustRun { instance.unregister(pushersManager) }
-    }
-
-    fun verifyUnregister(pushersManager: PushersManager) {
-        coVerify { instance.unregister(pushersManager) }
-    }
-
     fun givenIsEmbeddedDistributorReturns(isEmbedded: Boolean) {
         every { instance.isEmbeddedDistributor() } returns isEmbedded
+    }
+
+    fun givenGetEndpointOrTokenReturns(endpoint: String?) {
+        every { instance.getEndpointOrToken() } returns endpoint
+    }
+
+    fun givenIsBackgroundSyncReturns(enabled: Boolean) {
+        every { instance.isBackgroundSync() } returns enabled
     }
 }

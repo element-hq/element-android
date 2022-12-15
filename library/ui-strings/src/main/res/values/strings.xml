@@ -134,6 +134,9 @@
     <string name="notice_crypto_unable_to_decrypt">** Unable to decrypt: %s **</string>
     <string name="notice_crypto_error_unknown_inbound_session_id">The sender\'s device has not sent us the keys for this message.</string>
 
+    <string name="notice_voice_broadcast_ended">%1$s ended a voice broadcast.</string>
+    <string name="notice_voice_broadcast_ended_by_you">You ended a voice broadcast.</string>
+
     <!-- Messages -->
 
     <!-- Room Screen -->
@@ -2487,6 +2490,9 @@
     <string name="settings_key_requests">Key Requests</string>
     <string name="settings_export_trail">Export Audit</string>
 
+    <string name="settings_nightly_build">Nightly build</string>
+    <string name="settings_nightly_build_update">Get the latest build (note: you may have trouble to sign in)</string>
+
     <string name="e2e_use_keybackup">Unlock encrypted messages history</string>
 
     <string name="refresh">Refresh</string>
@@ -2649,8 +2655,12 @@
     <string name="unencrypted">Unencrypted</string>
     <string name="encrypted_unverified">Encrypted by an unverified device</string>
     <string name="key_authenticity_not_guaranteed">The authenticity of this encrypted message can\'t be guaranteed on this device.</string>
-    <string name="review_logins">Review where you’re logged in</string>
-    <string name="verify_other_sessions">Verify all your sessions to ensure your account &amp; messages are safe</string>
+    <!-- TODO TO BE REMOVED -->
+    <string name="review_logins" tools:ignore="UnusedResources">Review where you’re logged in</string>
+    <!-- TODO TO BE REMOVED -->
+    <string name="verify_other_sessions" tools:ignore="UnusedResources">Verify all your sessions to ensure your account &amp; messages are safe</string>
+    <string name="review_unverified_sessions_title">You have unverified sessions</string>
+    <string name="review_unverified_sessions_description">Review to ensure your account is safe</string>
     <!-- Argument will be replaced by the other session name (e.g, Desktop, mobile) -->
     <string name="verify_this_session">Verify the new login accessing your account: %1$s</string>
 
@@ -3025,7 +3035,7 @@
 
     <string name="labs_auto_report_uisi">Auto Report Decryption Errors.</string>
     <string name="labs_auto_report_uisi_desc">Your system will automatically send logs when an unable to decrypt error occurs</string>
-    <string name="labs_enable_thread_messages">Enable Thread Messages</string>
+    <string name="labs_enable_thread_messages">Enable threaded messages</string>
     <string name="labs_enable_thread_messages_desc">Note: app will be restarted</string>
     <string name="settings_show_latest_profile">Show latest user info</string>
     <string name="settings_show_latest_profile_description">Show the latest profile info (avatar and display name) for all the messages.</string>
@@ -3094,6 +3104,7 @@
     <string name="audio_message_file_size">(%1$s)</string>
 
     <string name="voice_broadcast_live">Live</string>
+    <string name="voice_broadcast_live_broadcast">Live broadcast</string>
     <!-- TODO Rename id to voice_broadcast_buffering -->
     <string name="a11y_voice_broadcast_buffering">Buffering…</string>
     <string name="a11y_resume_voice_broadcast_record">Resume voice broadcast record</string>
@@ -3301,6 +3312,7 @@
     <string name="device_manager_verification_status_detail_current_session_unverified">Verify your current session for enhanced secure messaging.</string>
     <string name="device_manager_verification_status_detail_other_session_unverified">Verify or sign out from this session for best security and reliability.</string>
     <string name="device_manager_verification_status_detail_other_session_unknown">Verify your current session to reveal this session\'s verification status.</string>
+    <string name="device_manager_verification_status_detail_session_encryption_not_supported">This session doesn\'t support encryption and thus can\'t be verified.</string>
     <string name="device_manager_verify_session">Verify Session</string>
     <string name="device_manager_view_details">View Details</string>
     <string name="device_manager_other_sessions_view_all">View All (%1$d)</string>
@@ -3359,6 +3371,7 @@
         <item quantity="one">Sign out of %1$d session</item>
         <item quantity="other">Sign out of %1$d sessions</item>
     </plurals>
+    <string name="device_manager_signout_all_other_sessions">Sign out of all other sessions</string>
     <string name="device_manager_other_sessions_show_ip_address">Show IP address</string>
     <string name="device_manager_other_sessions_hide_ip_address">Hide IP address</string>
     <string name="device_manager_session_overview_signout">Sign out of this session</string>
@@ -3392,6 +3405,7 @@
     <!-- TODO TO BE REMOVED -->
     <string name="device_manager_learn_more_sessions_verified" tools:ignore="UnusedResources">Verified sessions have logged in with your credentials and then been verified, either using your secure passphrase or by cross-verifying.\n\nThis means they hold encryption keys for your previous messages, and confirm to other users you are communicating with that these sessions are really you.</string>
     <string name="device_manager_learn_more_sessions_verified_description">Verified sessions are anywhere you are using this account after entering your passphrase or confirming your identity with another verified session.\n\nThis means that you have all the keys needed to unlock your encrypted messages and confirm to other users that you trust this session.</string>
+    <string name="device_manager_learn_more_sessions_encryption_not_supported">This session doesn\'t support encryption, so it can\'t be verified.\n\nYou won\'t be able to participate in rooms where encryption is enabled when using this session.\n\nFor best security and privacy, it is recommended to use Matrix clients that support encryption.</string>
     <string name="device_manager_learn_more_session_rename_title">Renaming sessions</string>
     <string name="device_manager_learn_more_session_rename">Other users in direct messages and rooms that you join are able to view a full list of your sessions.\n\nThis provides them with confidence that they are really speaking to you, but it also means they can see the session name you enter here.</string>
     <string name="labs_enable_session_manager_title">Enable new session manager</string>

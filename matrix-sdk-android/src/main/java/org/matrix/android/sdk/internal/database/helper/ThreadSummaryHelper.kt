@@ -37,9 +37,11 @@ import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.EventInsertType
 import org.matrix.android.sdk.internal.database.model.RoomEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
+import org.matrix.android.sdk.internal.database.model.threads.ThreadListPageEntity
 import org.matrix.android.sdk.internal.database.model.threads.ThreadSummaryEntity
 import org.matrix.android.sdk.internal.database.model.threads.ThreadSummaryEntityFields
 import org.matrix.android.sdk.internal.database.query.copyToRealmOrIgnore
+import org.matrix.android.sdk.internal.database.query.get
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.getOrNull
 import org.matrix.android.sdk.internal.database.query.where
@@ -113,16 +115,16 @@ internal fun ThreadSummaryEntity.Companion.createOrUpdate(
         userId: String,
         cryptoService: CryptoService? = null,
         currentTimeMillis: Long,
-) {
+): ThreadSummaryEntity? {
     when (threadSummaryType) {
         ThreadSummaryUpdateType.REPLACE -> {
-            rootThreadEvent?.eventId ?: return
-            rootThreadEvent.senderId ?: return
+            rootThreadEvent?.eventId ?: return null
+            rootThreadEvent.senderId ?: return null
 
-            val numberOfThreads = rootThreadEvent.unsignedData?.relations?.latestThread?.count ?: return
+            val numberOfThreads = rootThreadEvent.unsignedData?.relations?.latestThread?.count ?: return null
 
             // Something is wrong with the server return
-            if (numberOfThreads <= 0) return
+            if (numberOfThreads <= 0) return null
 
             val threadSummary = ThreadSummaryEntity.getOrCreate(realm, roomId, rootThreadEvent.eventId).also {
                 Timber.i("###THREADS ThreadSummaryHelper REPLACE eventId:${it.rootThreadEventId} ")
@@ -153,12 +155,13 @@ internal fun ThreadSummaryEntity.Companion.createOrUpdate(
             )
 
             roomEntity.addIfNecessary(threadSummary)
+            return threadSummary
         }
         ThreadSummaryUpdateType.ADD -> {
-            val rootThreadEventId = threadEventEntity?.rootThreadEventId ?: return
+            val rootThreadEventId = threadEventEntity?.rootThreadEventId ?: return null
             Timber.i("###THREADS ThreadSummaryHelper ADD for root eventId:$rootThreadEventId")
 
-            val threadSummary = ThreadSummaryEntity.getOrNull(realm, roomId, rootThreadEventId)
+            var threadSummary = ThreadSummaryEntity.getOrNull(realm, roomId, rootThreadEventId)
             if (threadSummary != null) {
                 // ThreadSummary exists so lets add the latest event
                 Timber.i("###THREADS ThreadSummaryHelper ADD root eventId:$rootThreadEventId exists, lets update latest thread event.")
@@ -172,7 +175,7 @@ internal fun ThreadSummaryEntity.Companion.createOrUpdate(
                 Timber.i("###THREADS ThreadSummaryHelper ADD root eventId:$rootThreadEventId do not exists, lets try to create one")
                 threadEventEntity.findRootThreadEvent()?.let { rootThreadEventEntity ->
                     // Root thread event entity exists so lets create a new record
-                    ThreadSummaryEntity.getOrCreate(realm, roomId, rootThreadEventEntity.eventId).let {
+                    threadSummary = ThreadSummaryEntity.getOrCreate(realm, roomId, rootThreadEventEntity.eventId).also {
                         it.updateThreadSummary(
                                 rootThreadEventEntity = rootThreadEventEntity,
                                 numberOfThreads = 1,
@@ -183,7 +186,12 @@ internal fun ThreadSummaryEntity.Companion.createOrUpdate(
                         roomEntity.addIfNecessary(it)
                     }
                 }
+
+                threadSummary?.let {
+                    ThreadListPageEntity.get(realm, roomId)?.threadSummaries?.add(it)
+                }
             }
+            return threadSummary
         }
     }
 }

@@ -156,7 +156,7 @@ class HomeDetailFragment :
         unknownDeviceDetectorSharedViewModel.onEach { state ->
             state.unknownSessions.invoke()?.let { unknownDevices ->
                 if (unknownDevices.firstOrNull()?.currentSessionTrust == true) {
-                    val uid = "review_login"
+                    val uid = PopupAlertManager.REVIEW_LOGIN_UID
                     alertManager.cancelAlert(uid)
                     val olderUnverified = unknownDevices.filter { !it.isNew }
                     val newest = unknownDevices.firstOrNull { it.isNew }?.deviceInfo
@@ -239,12 +239,12 @@ class HomeDetailFragment :
                                     .requestSessionVerification(vectorBaseActivity, newest.deviceId ?: "")
                         }
                         unknownDeviceDetectorSharedViewModel.handle(
-                                UnknownDeviceDetectorSharedViewModel.Action.IgnoreDevice(newest.deviceId?.let { listOf(it) }.orEmpty())
+                                UnknownDeviceDetectorSharedViewModel.Action.IgnoreNewLogin(newest.deviceId?.let { listOf(it) }.orEmpty())
                         )
                     }
                     dismissedAction = Runnable {
                         unknownDeviceDetectorSharedViewModel.handle(
-                                UnknownDeviceDetectorSharedViewModel.Action.IgnoreDevice(newest.deviceId?.let { listOf(it) }.orEmpty())
+                                UnknownDeviceDetectorSharedViewModel.Action.IgnoreNewLogin(newest.deviceId?.let { listOf(it) }.orEmpty())
                         )
                     }
                 }
@@ -256,8 +256,8 @@ class HomeDetailFragment :
         alertManager.postVectorAlert(
                 VerificationVectorAlert(
                         uid = uid,
-                        title = getString(R.string.review_logins),
-                        description = getString(R.string.verify_other_sessions),
+                        title = getString(R.string.review_unverified_sessions_title),
+                        description = getString(R.string.review_unverified_sessions_description),
                         iconId = R.drawable.ic_shield_warning
                 ).apply {
                     viewBinder = VerificationVectorAlert.ViewBinder(user, avatarRenderer)

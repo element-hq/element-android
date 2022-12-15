@@ -46,9 +46,9 @@ abstract class FlavorModule {
 
         @Provides
         fun provideNightlyProxy() = object : NightlyProxy {
-            override fun onHomeResumed() {
-                // no op
-            }
+            override fun canDisplayPopup() = false
+            override fun isNightlyBuild() = false
+            override fun updateApplication() = Unit
         }
 
         @Provides

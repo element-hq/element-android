@@ -28,7 +28,7 @@ import im.vector.app.features.voicebroadcast.model.VoiceBroadcast
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastChunk
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.recording.VoiceBroadcastRecorder
-import im.vector.app.features.voicebroadcast.usecase.GetOngoingVoiceBroadcastsUseCase
+import im.vector.app.features.voicebroadcast.usecase.GetRoomLiveVoiceBroadcastsUseCase
 import im.vector.lib.multipicker.utils.toMultiPickerAudioType
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -56,7 +56,7 @@ class StartVoiceBroadcastUseCase @Inject constructor(
         private val voiceBroadcastRecorder: VoiceBroadcastRecorder?,
         private val context: Context,
         private val buildMeta: BuildMeta,
-        private val getOngoingVoiceBroadcastsUseCase: GetOngoingVoiceBroadcastsUseCase,
+        private val getRoomLiveVoiceBroadcastsUseCase: GetRoomLiveVoiceBroadcastsUseCase,
         private val stopVoiceBroadcastUseCase: StopVoiceBroadcastUseCase,
 ) {
 
@@ -152,7 +152,7 @@ class StartVoiceBroadcastUseCase @Inject constructor(
                 Timber.d("## StartVoiceBroadcastUseCase: Cannot start voice broadcast: another voice broadcast")
                 throw VoiceBroadcastFailure.RecordingError.UserAlreadyBroadcasting
             }
-            getOngoingVoiceBroadcastsUseCase.execute(room.roomId).isNotEmpty() -> {
+            getRoomLiveVoiceBroadcastsUseCase.execute(room.roomId).isNotEmpty() -> {
                 Timber.d("## StartVoiceBroadcastUseCase: Cannot start voice broadcast: user already broadcasting")
                 throw VoiceBroadcastFailure.RecordingError.BlockedBySomeoneElse
             }

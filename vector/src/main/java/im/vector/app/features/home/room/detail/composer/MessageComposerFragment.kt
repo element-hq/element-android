@@ -60,6 +60,7 @@ import im.vector.app.core.utils.onPermissionDeniedDialog
 import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.databinding.FragmentComposerBinding
 import im.vector.app.features.VectorFeatures
+import im.vector.app.features.analytics.errors.ErrorTracker
 import im.vector.app.features.attachments.AttachmentType
 import im.vector.app.features.attachments.AttachmentTypeSelectorBottomSheet
 import im.vector.app.features.attachments.AttachmentTypeSelectorSharedAction
@@ -116,6 +117,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
     @Inject lateinit var vectorFeatures: VectorFeatures
     @Inject lateinit var buildMeta: BuildMeta
     @Inject lateinit var session: Session
+    @Inject lateinit var errorTracker: ErrorTracker
 
     private val roomId: String get() = withState(timelineViewModel) { it.roomId }
 
@@ -171,6 +173,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
 
         views.composerLayout.isGone = vectorPreferences.isRichTextEditorEnabled()
         views.richTextComposerLayout.isVisible = vectorPreferences.isRichTextEditorEnabled()
+        views.richTextComposerLayout.setOnErrorListener(errorTracker::trackError)
 
         messageComposerViewModel.observeViewEvents {
             when (it) {
@@ -255,7 +258,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
     ) { mainState, messageComposerState, attachmentState ->
         if (mainState.tombstoneEvent != null) return@withState
 
-        (composer as? View)?.isInvisible = !messageComposerState.isComposerVisible
+        (composer as? View)?.isVisible = messageComposerState.isComposerVisible
         composer.sendButton.isInvisible = !messageComposerState.isSendButtonVisible
         (composer as? RichTextComposerLayout)?.isTextFormattingEnabled = attachmentState.isTextFormattingEnabled
     }
@@ -282,7 +285,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
                         else -> return
                     }
 
-                    (composer as? RichTextComposerLayout)?.setFullScreen(setFullScreen)
+                    (composer as? RichTextComposerLayout)?.setFullScreen(setFullScreen, true)
 
                     messageComposerViewModel.handle(MessageComposerAction.SetFullScreen(setFullScreen))
                 }

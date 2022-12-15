@@ -53,7 +53,7 @@
         <item name="vctr_list_separator">?vctr_content_quinary</item>
         <item name="vctr_list_separator_system">?vctr_system</item>
         <item name="vctr_list_separator_on_surface">?vctr_system</item>
-        <item name="vctr_unread_background">?vctr_content_tertiary</item>
+        <item name="vctr_unread_background">?vctr_notice_secondary</item>
 
         <!-- Material color -->
         <item name="colorPrimary">@color/element_accent_dark</item>

@@ -88,6 +88,9 @@ class DebugVectorFeatures(
     override fun isVoiceBroadcastEnabled(): Boolean = read(DebugFeatureKeys.voiceBroadcastEnabled)
             ?: vectorFeatures.isVoiceBroadcastEnabled()
 
+    override fun isUnverifiedSessionsAlertEnabled(): Boolean = read(DebugFeatureKeys.unverifiedSessionsAlertEnabled)
+            ?: vectorFeatures.isUnverifiedSessionsAlertEnabled()
+
     fun <T> override(value: T?, key: Preferences.Key<T>) = updatePreferences {
         if (value == null) {
             it.remove(key)
@@ -151,4 +154,5 @@ object DebugFeatureKeys {
     val qrCodeLoginForAllServers = booleanPreferencesKey("qr-code-login-for-all-servers")
     val reciprocateQrCodeLogin = booleanPreferencesKey("reciprocate-qr-code-login")
     val voiceBroadcastEnabled = booleanPreferencesKey("voice-broadcast-enabled")
+    val unverifiedSessionsAlertEnabled = booleanPreferencesKey("unverified-sessions-alert-enabled")
 }

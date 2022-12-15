@@ -32,6 +32,7 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
+import im.vector.app.core.extensions.startForegroundCompat
 import im.vector.app.core.platform.PendingIntentCompat
 import im.vector.app.core.time.Clock
 import im.vector.app.core.time.DefaultClock
@@ -98,7 +99,7 @@ class VectorSyncAndroidService : SyncAndroidService() {
             R.string.notification_listening_for_notifications
         }
         val notification = notificationUtils.buildForegroundServiceNotification(notificationSubtitleRes, false)
-        startForeground(NotificationUtils.NOTIFICATION_ID_FOREGROUND_SERVICE, notification)
+        startForegroundCompat(NotificationUtils.NOTIFICATION_ID_FOREGROUND_SERVICE, notification)
     }
 
     override fun onRescheduleAsked(

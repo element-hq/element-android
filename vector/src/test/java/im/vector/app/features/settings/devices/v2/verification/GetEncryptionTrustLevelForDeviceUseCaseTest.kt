@@ -19,6 +19,7 @@ package im.vector.app.features.settings.devices.v2.verification
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
 import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
@@ -87,6 +88,20 @@ class GetEncryptionTrustLevelForDeviceUseCaseTest {
                     deviceTrustLevel = cryptoDeviceInfo.trustLevel
             )
         }
+    }
+
+    @Test
+    fun `given no crypto device info when computing trust level then result is null`() {
+        val currentSessionCrossSigningInfo = givenCurrentSessionCrossSigningInfo(
+                deviceId = A_DEVICE_ID,
+                isCrossSigningInitialized = true,
+                isCrossSigningVerified = false
+        )
+        val cryptoDeviceInfo = null
+
+        val result = getEncryptionTrustLevelForDeviceUseCase.execute(currentSessionCrossSigningInfo, cryptoDeviceInfo)
+
+        result shouldBe null
     }
 
     private fun givenCurrentSessionCrossSigningInfo(

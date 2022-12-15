@@ -28,7 +28,6 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.features.auth.PendingAuthHandler
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
-import im.vector.app.features.settings.devices.v2.signout.InterceptSignoutFlowResponseUseCase
 import im.vector.app.features.settings.devices.v2.signout.SignoutSessionsReAuthNeeded
 import im.vector.app.features.settings.devices.v2.signout.SignoutSessionsUseCase
 import im.vector.app.features.settings.devices.v2.verification.CheckIfCurrentSessionCanBeVerifiedUseCase
@@ -48,7 +47,6 @@ class DevicesViewModel @AssistedInject constructor(
         private val refreshDevicesOnCryptoDevicesChangeUseCase: RefreshDevicesOnCryptoDevicesChangeUseCase,
         private val checkIfCurrentSessionCanBeVerifiedUseCase: CheckIfCurrentSessionCanBeVerifiedUseCase,
         private val signoutSessionsUseCase: SignoutSessionsUseCase,
-        private val interceptSignoutFlowResponseUseCase: InterceptSignoutFlowResponseUseCase,
         private val pendingAuthHandler: PendingAuthHandler,
         refreshDevicesUseCase: RefreshDevicesUseCase,
         private val vectorPreferences: VectorPreferences,
@@ -114,6 +112,7 @@ class DevicesViewModel @AssistedInject constructor(
                         val deviceFullInfoList = async.invoke()
                         val unverifiedSessionsCount = deviceFullInfoList.count { !it.cryptoDeviceInfo?.trustLevel?.isCrossSigningVerified().orFalse() }
                         val inactiveSessionsCount = deviceFullInfoList.count { it.isInactive }
+
                         copy(
                                 devices = async,
                                 unverifiedSessionsCount = unverifiedSessionsCount,

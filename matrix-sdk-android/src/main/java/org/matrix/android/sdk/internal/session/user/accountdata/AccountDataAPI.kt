@@ -18,13 +18,14 @@ package org.matrix.android.sdk.internal.session.user.accountdata
 
 import org.matrix.android.sdk.internal.network.NetworkConstants
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
 internal interface AccountDataAPI {
 
     /**
-     * Set some account_data for the client.
+     * Set some account_data for the user.
      *
      * @param userId the user id
      * @param type the type
@@ -35,5 +36,17 @@ internal interface AccountDataAPI {
             @Path("userId") userId: String,
             @Path("type") type: String,
             @Body params: Any
+    )
+
+    /**
+     * Remove an account_data for the user.
+     *
+     * @param userId the user id
+     * @param type the type
+     */
+    @DELETE(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "org.matrix.msc3391/user/{userId}/account_data/{type}")
+    suspend fun deleteAccountData(
+            @Path("userId") userId: String,
+            @Path("type") type: String
     )
 }

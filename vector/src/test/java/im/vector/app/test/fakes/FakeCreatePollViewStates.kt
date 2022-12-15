@@ -63,7 +63,7 @@ object FakeCreatePollViewStates {
     )
 
     private val A_POLL_START_EVENT = Event(
-            type = EventType.POLL_START.stable,
+            type = EventType.POLL_START.unstable,
             eventId = A_FAKE_EVENT_ID,
             originServerTs = 1652435922563,
             senderId = A_FAKE_USER_ID,

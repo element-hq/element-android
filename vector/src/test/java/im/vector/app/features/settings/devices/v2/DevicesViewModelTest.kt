@@ -22,7 +22,6 @@ import com.airbnb.mvrx.test.MavericksTestRule
 import im.vector.app.core.session.clientinfo.MatrixClientInfoContent
 import im.vector.app.features.settings.devices.v2.details.extended.DeviceExtendedInfo
 import im.vector.app.features.settings.devices.v2.list.DeviceType
-import im.vector.app.features.settings.devices.v2.signout.InterceptSignoutFlowResponseUseCase
 import im.vector.app.features.settings.devices.v2.verification.CheckIfCurrentSessionCanBeVerifiedUseCase
 import im.vector.app.features.settings.devices.v2.verification.CurrentSessionCrossSigningInfo
 import im.vector.app.features.settings.devices.v2.verification.GetCurrentSessionCrossSigningInfoUseCase
@@ -72,7 +71,6 @@ class DevicesViewModelTest {
     private val refreshDevicesOnCryptoDevicesChangeUseCase = mockk<RefreshDevicesOnCryptoDevicesChangeUseCase>(relaxed = true)
     private val checkIfCurrentSessionCanBeVerifiedUseCase = mockk<CheckIfCurrentSessionCanBeVerifiedUseCase>()
     private val fakeSignoutSessionsUseCase = FakeSignoutSessionsUseCase()
-    private val fakeInterceptSignoutFlowResponseUseCase = mockk<InterceptSignoutFlowResponseUseCase>()
     private val fakePendingAuthHandler = FakePendingAuthHandler()
     private val fakeRefreshDevicesUseCase = mockk<RefreshDevicesUseCase>(relaxUnitFun = true)
     private val fakeVectorPreferences = FakeVectorPreferences()
@@ -87,7 +85,6 @@ class DevicesViewModelTest {
                 refreshDevicesOnCryptoDevicesChangeUseCase = refreshDevicesOnCryptoDevicesChangeUseCase,
                 checkIfCurrentSessionCanBeVerifiedUseCase = checkIfCurrentSessionCanBeVerifiedUseCase,
                 signoutSessionsUseCase = fakeSignoutSessionsUseCase.instance,
-                interceptSignoutFlowResponseUseCase = fakeInterceptSignoutFlowResponseUseCase,
                 pendingAuthHandler = fakePendingAuthHandler.instance,
                 refreshDevicesUseCase = fakeRefreshDevicesUseCase,
                 vectorPreferences = fakeVectorPreferences.instance,
