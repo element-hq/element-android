@@ -1328,7 +1328,7 @@
     <string name="verification_profile_device_untrust_info">在此用户信任此会话之前，发送到该会话和从该会话发送的消息均标有警告。或者，你可以手动进行验证。</string>
     <string name="initialize_cross_signing">初始化交叉签名</string>
     <string name="reset_cross_signing">重置密钥</string>
-    <string name="a11y_qr_code_for_verification">二维码</string>
+    <string name="a11y_qr_code_for_verification">QR码</string>
     <string name="qr_code_scanned_by_other_notice">快要完成了！%s 显示对勾了吗？</string>
     <string name="qr_code_scanned_by_other_yes">是</string>
     <string name="qr_code_scanned_by_other_no">否</string>
@@ -1656,7 +1656,7 @@
     <string name="no_permissions_to_start_conf_call_in_direct_room">你没有权限发起会议通话</string>
     <string name="action_reset">重置</string>
     <string name="permissions_denied_add_contact">允许访问你的联系人。</string>
-    <string name="permissions_denied_qr_code">如需扫描二维码，你须允许相机访问权限。</string>
+    <string name="permissions_denied_qr_code">如需扫描QR码，你须允许相机访问权限。</string>
     <string name="no_more_results">没有更多结果</string>
     <string name="start_chatting">开始聊天</string>
     <string name="room_alias_delete_confirmation">删除地址 \"%1$s\"？</string>
@@ -1713,8 +1713,8 @@
     <string name="settings_discovery_consent_title">发送电子邮件和电话号码</string>
     <string name="direct_room_user_list_suggestions_title">建议</string>
     <string name="direct_room_user_list_known_title">已知用户</string>
-    <string name="qr_code">二维码</string>
-    <string name="add_by_qr_code">通过二维码添加</string>
+    <string name="qr_code">QR码</string>
+    <string name="add_by_qr_code">通过QR码添加</string>
     <string name="create_room_settings_section">房间设置</string>
     <string name="create_room_topic_hint">话题</string>
     <string name="create_room_topic_section">房间话题（可选）</string>
@@ -1804,7 +1804,7 @@
     <plurals name="entries">
         <item quantity="other">%d 个条目</item>
     </plurals>
-    <string name="not_a_valid_qr_code">这不是有效的 Matrix 二维码</string>
+    <string name="not_a_valid_qr_code">这不是有效的 Matrix QR码</string>
     <string name="user_code_scan">扫描二维码</string>
     <string name="add_people">添加人员</string>
     <string name="invite_friends">邀请朋友</string>
@@ -1943,8 +1943,8 @@
     <string name="call_tile_other_declined">%1$s 拒绝了此通话</string>
     <string name="warning_unsaved_change">有未保存的更改。要放弃更改吗？</string>
     <string name="warning_room_not_created_yet">房间尚未创建。取消创建房间？</string>
-    <string name="qr_code_not_scanned">未扫描二维码！</string>
-    <string name="invalid_qr_code_uri">无效的二维码（无效的标识）！</string>
+    <string name="qr_code_not_scanned">未扫描QR码！</string>
+    <string name="invalid_qr_code_uri">无效的QR码（无效的标识）！</string>
     <string name="cannot_dm_self">无法向你自己发送私聊消息！</string>
     <string name="share_by_text">通过文字共享</string>
     <string name="settings_security_pin_code_change_pin_summary">更改你当前的 PIN</string>
@@ -2539,7 +2539,7 @@
     <string name="labs_enable_element_call_permission_shortcuts_summary">自动允许 Element 通话小部件并授予相机/麦克风访问权限</string>
     <string name="labs_enable_element_call_permission_shortcuts">启用 Element 通话权限快捷方式</string>
     <string name="live_location_description">实时位置</string>
-    <string name="verify_invalid_qr_notice">此二维码看起来格式不正确。请尝试使用其它方法进行验证。</string>
+    <string name="verify_invalid_qr_notice">此QR码看起来格式不正确。请尝试使用其它方法进行验证。</string>
     <string name="crosssigning_cannot_verify_this_session_desc">你无法访问加密消息历史。重置你的安全消息备份和验证密钥以重新开始。</string>
     <string name="crosssigning_cannot_verify_this_session">无法验证此设备</string>
     <string name="ftue_auth_choose_server_sign_in_subtitle">你的服务器地址是什么？</string>
@@ -2655,8 +2655,8 @@
 \n
 \n删除闲置会话可以提高安全性和性能，并使你更容易识别新会话是否可疑。</string>
     <string name="device_manager_learn_more_sessions_inactive_title">闲置会话</string>
-    <string name="device_manager_sessions_sign_in_with_qr_code_description">你可以使用此设备通过二维码登录移动设备或网络设备。 有两种方法可以做到这一点：</string>
-    <string name="device_manager_sessions_sign_in_with_qr_code_title">使用二维码登录</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_description">你可以使用此设备通过QR码登录移动设备或网络设备。 有两种方法可以做到这一点：</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_title">使用QR码登录</string>
     <string name="device_manager_session_rename_warning">请注意，与你交流的人也可以看到会话名称。</string>
     <string name="device_manager_session_rename_description">自定义会话名称可以帮助你更轻松地识别你的设备。</string>
     <string name="device_manager_session_rename">重命名会话</string>
@@ -2708,19 +2708,19 @@
     <string name="qr_code_login_status_no_match">不匹配？</string>
     <string name="qr_code_login_signing_in">登录</string>
     <string name="qr_code_login_connecting_to_device">连接到设备</string>
-    <string name="qr_code_login_scan_qr_code_button">扫描二维码</string>
+    <string name="qr_code_login_scan_qr_code_button">扫描QR码</string>
     <string name="qr_code_login_signing_in_a_mobile_device">登录移动设备？</string>
-    <string name="qr_code_login_show_qr_code_button">在此设备中显示二维码</string>
-    <string name="qr_code_login_link_a_device_show_qr_code_instruction_2">选择“扫描二维码”</string>
+    <string name="qr_code_login_show_qr_code_button">在此设备中显示QR码</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_2">选择“扫描QR码”</string>
     <string name="qr_code_login_link_a_device_show_qr_code_instruction_1">从登录屏幕开始</string>
-    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">选择“使用二维码登录”</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">选择“使用QR码登录”</string>
     <string name="qr_code_login_link_a_device_scan_qr_code_instruction_1">从登录屏幕开始</string>
-    <string name="qr_code_login_new_device_instruction_3">选择“显示二维码”</string>
+    <string name="qr_code_login_new_device_instruction_3">选择“显示QR码”</string>
     <string name="qr_code_login_new_device_instruction_2">转到设置 -&gt; 安全和隐私</string>
     <string name="qr_code_login_new_device_instruction_1">在你的其它设备上打开应用程序</string>
-    <string name="qr_code_login_header_failed_homeserver_is_not_supported_description">主服务器不支持二维码登录。</string>
+    <string name="qr_code_login_header_failed_homeserver_is_not_supported_description">主服务器不支持QR码登录。</string>
     <string name="qr_code_login_header_failed_user_cancelled_description">登录已在另一台设备上取消。</string>
-    <string name="qr_code_login_header_failed_invalid_qr_code_description">该二维码无效。</string>
+    <string name="qr_code_login_header_failed_invalid_qr_code_description">该QR码无效。</string>
     <string name="qr_code_login_header_failed_other_device_not_signed_in_description">另一台设备必须登录。</string>
     <string name="qr_code_login_header_failed_other_device_already_signed_in_description">另一台设备已登录。</string>
     <string name="qr_code_login_header_failed_timeout_description">链接未在规定时间内完成。</string>
@@ -2731,11 +2731,11 @@
     <string name="qr_code_login_header_failed_title">连接不成功</string>
     <string name="qr_code_login_header_connected_description">检查你已登录的设备，应显示以下代码。 确认以下代码与该设备匹配：</string>
     <string name="qr_code_login_header_connected_title">已建立安全连接</string>
-    <string name="qr_code_login_header_show_qr_code_link_a_device_description">使用已退出登录的设备扫描下方二维码。</string>
-    <string name="qr_code_login_header_show_qr_code_new_device_description">使用你已登录的设备扫描下方二维码：</string>
-    <string name="qr_code_login_header_show_qr_code_title">使用二维码登录</string>
-    <string name="qr_code_login_header_scan_qr_code_description">使用此设备上的相机扫描其它设备上显示的二维码：</string>
-    <string name="qr_code_login_header_scan_qr_code_title">扫描二维码</string>
+    <string name="qr_code_login_header_show_qr_code_link_a_device_description">使用已退出登录的设备扫描下方QR码。</string>
+    <string name="qr_code_login_header_show_qr_code_new_device_description">使用你已登录的设备扫描下方QR码：</string>
+    <string name="qr_code_login_header_show_qr_code_title">使用QR码登录</string>
+    <string name="qr_code_login_header_scan_qr_code_description">使用此设备上的相机扫描其它设备上显示的QR码：</string>
+    <string name="qr_code_login_header_scan_qr_code_title">扫描QR码</string>
     <string name="three">3</string>
     <string name="two">2</string>
     <string name="one">1</string>
@@ -2762,7 +2762,7 @@
     <string name="a11y_stop_voice_broadcast_record">停止语音广播录制</string>
     <string name="a11y_pause_voice_broadcast_record">暂停语音广播录制</string>
     <string name="a11y_resume_voice_broadcast_record">继续语音广播录制</string>
-    <string name="login_scan_qr_code">扫描二维码</string>
+    <string name="login_scan_qr_code">扫描QR码</string>
     <string name="attachment_type_voice_broadcast">语音广播</string>
     <string name="push_gateway_item_enabled">已启用：</string>
     <string name="push_gateway_item_device_id">会话ID：</string>
@@ -2814,4 +2814,7 @@
     <string name="settings_enable_direct_share_summary">在系统分享菜单中显示最近聊天</string>
     <string name="review_unverified_sessions_description">复查以确保你的账户是安全的</string>
     <string name="review_unverified_sessions_title">你有未验证的会话</string>
+    <string name="device_manager_signout_all_other_sessions">登出全部其他会话</string>
+    <string name="device_manager_verification_status_detail_session_encryption_not_supported">这个会话不支持加密，因此不能被验证。</string>
+    <string name="settings_nightly_build_update">获取最新构建（注意：你可能在登录时遇到麻烦）</string>
 </resources>
