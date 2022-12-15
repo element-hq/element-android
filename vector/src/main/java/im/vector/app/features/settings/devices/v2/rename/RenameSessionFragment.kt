@@ -62,9 +62,17 @@ class RenameSessionFragment :
     }
 
     private fun initEditText() {
-        views.renameSessionEditText.showKeyboard(andRequestFocus = true)
+        showKeyboard()
         views.renameSessionEditText.doOnTextChanged { text, _, _, _ ->
             viewModel.handle(RenameSessionAction.EditLocally(text.toString()))
+        }
+    }
+
+    private fun showKeyboard() {
+        views.renameSessionEditText.viewTreeObserver.addOnWindowFocusChangeListener { hasFocus ->
+            if (hasFocus) {
+                views.renameSessionEditText.showKeyboard(andRequestFocus = true)
+            }
         }
     }
 
@@ -89,7 +97,13 @@ class RenameSessionFragment :
                 title = getString(R.string.device_manager_learn_more_session_rename_title),
                 description = getString(R.string.device_manager_learn_more_session_rename),
         )
-        SessionLearnMoreBottomSheet.show(childFragmentManager, args)
+        SessionLearnMoreBottomSheet
+                .show(childFragmentManager, args)
+                .apply {
+                    onDismiss = {
+                        showKeyboard()
+                    }
+                }
     }
 
     private fun observeViewEvents() {
