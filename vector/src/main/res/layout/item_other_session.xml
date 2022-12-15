@@ -89,7 +89,7 @@
         android:id="@+id/otherSessionSeparator"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:background="?vctr_content_quinary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/otherSessionNameTextView"

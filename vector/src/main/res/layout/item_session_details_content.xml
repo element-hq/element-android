@@ -22,7 +22,7 @@
         style="@style/TextAppearance.Vector.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="12dp"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:gravity="end"
         app:layout_constraintBottom_toTopOf="@id/sessionDetailsContentDivider"
