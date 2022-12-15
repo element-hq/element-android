@@ -225,6 +225,7 @@ class OtherSessionsFragment :
 
     override fun invalidate() = withState(viewModel) { state ->
         updateLoading(state.isLoading)
+        updateFilterView(state.isSelectModeEnabled)
         if (state.devices is Success) {
             val devices = state.devices.invoke()
             renderDevices(devices, state.currentFilter, state.isShowingIpAddress)
@@ -238,6 +239,10 @@ class OtherSessionsFragment :
         } else {
             dismissLoadingDialog()
         }
+    }
+
+    private fun updateFilterView(isSelectModeEnabled: Boolean) {
+        views.otherSessionsFilterFrameLayout.isVisible = isSelectModeEnabled.not()
     }
 
     private fun updateToolbar(devices: List<DeviceFullInfo>, isSelectModeEnabled: Boolean) {
