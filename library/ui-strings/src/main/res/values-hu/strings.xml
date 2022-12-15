@@ -2870,4 +2870,13 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="review_unverified_sessions_title">Ellenőrizetlen bejelentkezéseid vannak</string>
     <string name="settings_enable_direct_share_summary">Friss beszélgetések megjelenítése a rendszer megosztó menüjében</string>
     <string name="settings_enable_direct_share_title">Közvetlen megosztás engedélyezése</string>
+    <string name="settings_nightly_build_update">Szerezd be a napi összeállítást (megjegyzés: lehet, hogy problémáid lesznek a bejelentkezéssel)</string>
+    <string name="settings_nightly_build">Napi összeállítás</string>
+    <string name="device_manager_learn_more_sessions_encryption_not_supported">Ez a munkamenet nem támogatja a titkosítást, így nem lehet ellenőrizni sem.
+\n
+\nEzzel a munkamenettel nem tudsz részt venni olyan szobákban ahol a titkosítás be van kapcsolva.
+\n
+\nA biztonság és a adatbiztonsági okokból javasolt olyan Matrix kliens használata ami támogatja a titkosítást.</string>
+    <string name="device_manager_signout_all_other_sessions">Kijelentkezés minden más munkamenetből</string>
+    <string name="device_manager_verification_status_detail_session_encryption_not_supported">Ez a munkamenet nem támogatja a titkosítást, így nem lehet ellenőrizni sem.</string>
 </resources>
