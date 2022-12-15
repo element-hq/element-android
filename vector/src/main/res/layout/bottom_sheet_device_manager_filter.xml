@@ -20,73 +20,79 @@
         android:layout_marginTop="12dp"
         android:text="@string/device_manager_filter_bottom_sheet_title" />
 
-    <RadioGroup
-        android:id="@+id/filterOptionsRadioGroup"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layoutDirection="rtl"
-        android:showDividers="none">
+        android:layout_height="match_parent">
 
-        <RadioButton
-            android:id="@+id/filterOptionAllSessionsRadioButton"
-            style="@style/TextAppearance.Vector.Subtitle.Medium.DevicesManagement"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:minHeight="0dp"
-            android:text="@string/device_manager_filter_option_all_sessions" />
-
-        <RadioButton
-            android:id="@+id/filterOptionVerifiedRadioButton"
-            style="@style/TextAppearance.Vector.Subtitle.Medium.DevicesManagement"
+        <RadioGroup
+            android:id="@+id/filterOptionsRadioGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:minHeight="0dp"
-            android:text="@string/device_manager_filter_option_verified" />
+            android:layoutDirection="rtl"
+            android:showDividers="none">
 
-        <TextView
-            android:id="@+id/filterOptionVerifiedTextView"
-            style="@style/TextAppearance.Vector.Body.DevicesManagement"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:text="@string/device_manager_filter_option_verified_description" />
+            <RadioButton
+                android:id="@+id/filterOptionAllSessionsRadioButton"
+                style="@style/TextAppearance.Vector.Subtitle.Medium.DevicesManagement"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:minHeight="0dp"
+                android:text="@string/device_manager_filter_option_all_sessions" />
 
-        <RadioButton
-            android:id="@+id/filterOptionUnverifiedRadioButton"
-            style="@style/TextAppearance.Vector.Subtitle.Medium.DevicesManagement"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:minHeight="0dp"
-            android:text="@string/device_manager_filter_option_unverified" />
+            <RadioButton
+                android:id="@+id/filterOptionVerifiedRadioButton"
+                style="@style/TextAppearance.Vector.Subtitle.Medium.DevicesManagement"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:minHeight="0dp"
+                android:text="@string/device_manager_filter_option_verified" />
 
-        <TextView
-            android:id="@+id/filterOptionUnverifiedTextView"
-            style="@style/TextAppearance.Vector.Body.DevicesManagement"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:text="@string/device_manager_filter_option_unverified_description" />
+            <TextView
+                android:id="@+id/filterOptionVerifiedTextView"
+                style="@style/TextAppearance.Vector.Body.DevicesManagement"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="@string/device_manager_filter_option_verified_description" />
 
-        <RadioButton
-            android:id="@+id/filterOptionInactiveRadioButton"
-            style="@style/TextAppearance.Vector.Subtitle.Medium.DevicesManagement"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:minHeight="0dp"
-            android:text="@string/device_manager_filter_option_inactive" />
+            <RadioButton
+                android:id="@+id/filterOptionUnverifiedRadioButton"
+                style="@style/TextAppearance.Vector.Subtitle.Medium.DevicesManagement"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:minHeight="0dp"
+                android:text="@string/device_manager_filter_option_unverified" />
 
-        <TextView
-            android:id="@+id/filterOptionInactiveTextView"
-            style="@style/TextAppearance.Vector.Body.DevicesManagement"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end" />
+            <TextView
+                android:id="@+id/filterOptionUnverifiedTextView"
+                style="@style/TextAppearance.Vector.Body.DevicesManagement"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="@string/device_manager_filter_option_unverified_description" />
 
-    </RadioGroup>
+            <RadioButton
+                android:id="@+id/filterOptionInactiveRadioButton"
+                style="@style/TextAppearance.Vector.Subtitle.Medium.DevicesManagement"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:minHeight="0dp"
+                android:text="@string/device_manager_filter_option_inactive" />
+
+            <TextView
+                android:id="@+id/filterOptionInactiveTextView"
+                style="@style/TextAppearance.Vector.Body.DevicesManagement"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end" />
+
+        </RadioGroup>
+
+    </ScrollView>
 
 </LinearLayout>
