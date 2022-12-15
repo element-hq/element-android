@@ -128,16 +128,28 @@ class DefaultPollAggregationProcessorTest {
     }
 
     @Test
-    fun `given a poll end event, when processing, then is processed and return true`() {
+    fun `given a poll end event, when processing, then is processed and return true`() = runTest {
+        // Given
         every { realm.instance.createObject(PollResponseAggregatedSummaryEntity::class.java) } returns PollResponseAggregatedSummaryEntity()
+        every { fakeTaskExecutor.instance.executorScope } returns this
+
+        // When
         val powerLevelsHelper = mockRedactionPowerLevels(A_USER_ID_1, true)
+
+        // Then
         pollAggregationProcessor.handlePollEndEvent(session, powerLevelsHelper, realm.instance, A_POLL_END_EVENT).shouldBeTrue()
     }
 
     @Test
-    fun `given a poll end event for my own poll without enough redaction power level, when processing, then is processed and returns true`() {
+    fun `given a poll end event for my own poll without enough redaction power level, when processing, then is processed and returns true`() = runTest {
+        // Given
         every { realm.instance.createObject(PollResponseAggregatedSummaryEntity::class.java) } returns PollResponseAggregatedSummaryEntity()
+        every { fakeTaskExecutor.instance.executorScope } returns this
+
+        // When
         val powerLevelsHelper = mockRedactionPowerLevels(A_USER_ID_1, false)
+
+        // Then
         pollAggregationProcessor.handlePollEndEvent(session, powerLevelsHelper, realm.instance, A_POLL_END_EVENT).shouldBeTrue()
     }
 
@@ -157,8 +169,8 @@ class DefaultPollAggregationProcessorTest {
         val event = A_POLL_END_EVENT.copy(senderId = "another-sender-id")
         every { fakeTaskExecutor.instance.executorScope } returns this
         val expectedParams = FetchPollResponseEventsTask.Params(
-            roomId = A_POLL_END_EVENT.roomId.orEmpty(),
-            startPollEventId = A_POLL_END_CONTENT.relatesTo?.eventId.orEmpty(),
+                roomId = A_POLL_END_EVENT.roomId.orEmpty(),
+                startPollEventId = A_POLL_END_CONTENT.relatesTo?.eventId.orEmpty(),
         )
 
         // When
