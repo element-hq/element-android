@@ -1,1 +1,0 @@
-[Threads] - added API to fetch threads list from the server instead of building it locally from events
