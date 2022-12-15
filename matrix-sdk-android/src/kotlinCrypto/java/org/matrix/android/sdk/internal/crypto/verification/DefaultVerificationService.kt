@@ -337,7 +337,6 @@ internal class DefaultVerificationService @Inject constructor(
             return
         }
 
-        val deferred = CompletableDeferred<PendingVerificationRequest>()
         stateMachine.send(
                 VerificationIntent.OnVerificationRequestReceived(
                         senderId = senderId,
@@ -346,7 +345,6 @@ internal class DefaultVerificationService @Inject constructor(
                         validRequestInfo = validRequestInfo,
                 )
         )
-        deferred.await()
 
         // force download keys to ensure we are up to date
         checkKeysAreDownloaded(senderId)
