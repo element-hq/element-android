@@ -2119,7 +2119,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="call_transfer_failure">Sebuah kesalahan terjadi ketika memindahkan panggilan</string>
     <string name="call_transfer_title">Pindahkan</string>
     <string name="call_transfer_connect_action">Sambungkan</string>
-    <string name="call_transfer_consult_first">Konsultasikan dulu</string>
+    <string name="call_transfer_consult_first">Konsultasi dahulu</string>
     <string name="call_tap_to_return">%1$s Ketuk untuk kembali</string>
     <string name="call_one_active">Panggilan aktif (%1$s) ·</string>
     <plurals name="call_active_status">
@@ -2816,4 +2816,13 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="settings_enable_direct_share_title">Aktifkan pembagian langsung</string>
     <string name="review_unverified_sessions_description">Periksa untuk memastikan akun Anda aman</string>
     <string name="review_unverified_sessions_title">Anda memilki sesi yang belum diverifikasi</string>
+    <string name="device_manager_learn_more_sessions_encryption_not_supported">Sesi ini tidak mendukung enkripsi, jadi ini tidak dapat diverifikasi.
+\n
+\nAnda tidak akan dapat berpartisipasi dalam ruangan di mana enkripsi diaktifkan ketika menggunakan sesi ini.
+\n
+\nUntuk keamanan dan privasi yang terbaik, kami menyarankan untuk menggunakan klien Matrix yang mendukung enkripsi.</string>
+    <string name="device_manager_signout_all_other_sessions">Keluarkan semua sesi lain</string>
+    <string name="device_manager_verification_status_detail_session_encryption_not_supported">Sesi ini tidak mendukung enkripsi dan tidak dapat diverifikasi.</string>
+    <string name="settings_nightly_build_update">Dapatkan bangunan terkini (catatan: Anda mungkin memiliki masalah saat masuk)</string>
+    <string name="settings_nightly_build">Bangunan nightly</string>
 </resources>
