@@ -2924,4 +2924,15 @@
     <string name="editing">Úprava</string>
     <string name="settings_enable_direct_share_summary">Zobraziť posledné konverzácie v systémovej ponuke zdieľania</string>
     <string name="settings_enable_direct_share_title">Povoliť priame zdieľanie</string>
+    <string name="review_unverified_sessions_description">Skontrolujte, či je vaše konto bezpečné</string>
+    <string name="review_unverified_sessions_title">Máte neoverené relácie</string>
+    <string name="device_manager_learn_more_sessions_encryption_not_supported">Táto relácia nepodporuje šifrovanie, takže ju nemožno overiť.
+\n
+\nPri používaní tejto relácie sa nebudete môcť zúčastňovať konverzácií v miestnostiach, kde je zapnuté šifrovanie.
+\n
+\nNa dosiahnutie čo najlepšieho zabezpečenia a súkromia sa odporúča používať Matrix klientov, ktoré podporujú šifrovanie.</string>
+    <string name="device_manager_signout_all_other_sessions">Odhlásiť zo všetkých ostatných relácií</string>
+    <string name="device_manager_verification_status_detail_session_encryption_not_supported">Táto relácia nepodporuje šifrovanie, a preto ju nemožno overiť.</string>
+    <string name="settings_nightly_build_update">Získajte najnovšiu zostavu (poznámka: môžete mať problémy s prihlásením)</string>
+    <string name="settings_nightly_build">Nočná zostava</string>
 </resources>

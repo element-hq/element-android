@@ -2814,7 +2814,7 @@
     <string name="qr_code_login_header_failed_other_description">A requisição falhou.</string>
     <string name="labs_enable_voice_broadcast_summary">Seja capaz de gravar e enviar broadcast de voz em timeline de sala.</string>
     <string name="labs_enable_voice_broadcast_title">Broadcast de voz (sob desenvolvimento ativo)</string>
-    <string name="a11y_voice_broadcast_buffering">Buffering</string>
+    <string name="a11y_voice_broadcast_buffering">Buffering…</string>
     <string name="a11y_pause_voice_broadcast">Pausar broadcast de voz</string>
     <string name="a11y_play_voice_broadcast">Tocar ou retomar broadcast de voz</string>
     <string name="a11y_stop_voice_broadcast_record">Parar gravação de broadcast de voz</string>
@@ -2866,4 +2866,17 @@
     <string name="quoting">Citando</string>
     <string name="replying_to">Respondendo a %s</string>
     <string name="editing">Editando</string>
+    <string name="settings_enable_direct_share_summary">Mostrar chats recentes no menu de compartilhar do sistema</string>
+    <string name="settings_enable_direct_share_title">Habilitar compartilhar direto</string>
+    <string name="device_manager_learn_more_sessions_encryption_not_supported">Esta sessão não suporta encriptação, então ela não pode ser verificada.
+\n
+\nVocê não vai ser capaz de participar em salas onde encriptação está habilitada quando usando esta sessão.
+\n
+\nPara a melhor segurança e privacidade, é recomendado usar cliente Matrix que suportam encriptação.</string>
+    <string name="device_manager_signout_all_other_sessions">Fazer signout de todas as outras sessões</string>
+    <string name="device_manager_verification_status_detail_session_encryption_not_supported">Esta sessão não suporta encriptação e assim não pode ser verificada.</string>
+    <string name="review_unverified_sessions_description">Revise para assegurar que sua conta está segura</string>
+    <string name="review_unverified_sessions_title">Você tem sessões não-verificadas</string>
+    <string name="settings_nightly_build_update">Obtenha a build mais recente (note: você pode ter problema para fazer signin)</string>
+    <string name="settings_nightly_build">Build nightly</string>
 </resources>

@@ -136,4 +136,13 @@
     <string name="notice_room_server_acl_set_allowed">• %s ilə uyğunlaşan serverlərə icazə verildi.</string>
     <string name="notice_room_third_party_revoked_invite_by_you">Siz %1$s üçün otağa qoşulmaq dəvətin ləğv etdiniz</string>
     <string name="notice_direct_room_third_party_invite_by_you">%1$s-ı dəvət etdiniz</string>
+    <string name="rich_text_editor_full_screen_toggle">Tam ekran rejimini dəyiş</string>
+    <string name="message_reply_to_prefix">buna cavab olaraq</string>
+    <string name="message_reply_to_sender_sent_file">fayl göndərdi.</string>
+    <string name="message_reply_to_sender_sent_audio_file">səs faylı göndərdi.</string>
+    <string name="message_reply_to_sender_sent_voice_message">səsli mesaj göndərdi.</string>
+    <string name="message_reply_to_sender_sent_image">şəkil göndərdi.</string>
+    <string name="message_reply_to_sender_sent_video">video göndərdi.</string>
+    <string name="message_reply_to_sender_sent_sticker">stiker göndərdi.</string>
+    <string name="message_reply_to_sender_created_poll">sorğu yaratdı.</string>
 </resources>
