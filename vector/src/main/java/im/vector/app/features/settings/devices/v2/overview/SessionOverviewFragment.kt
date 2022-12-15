@@ -224,7 +224,7 @@ class SessionOverviewFragment :
                     isVerifyButtonVisible = isCurrentSession || viewState.isCurrentSessionTrusted,
                     isDetailsButtonVisible = false,
                     isLearnMoreLinkVisible = deviceInfo.roomEncryptionTrustLevel != RoomEncryptionTrustLevel.Default,
-                    isLastSeenDetailsVisible = !isCurrentSession,
+                    isLastActivityVisible = !isCurrentSession,
                     isShowingIpAddress = viewState.isShowingIpAddress,
             )
             views.sessionOverviewInfo.render(infoViewState, dateFormatter, drawableProvider, colorProvider, stringProvider)
