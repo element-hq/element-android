@@ -75,7 +75,7 @@ class SessionInfoView @JvmOverloads constructor(
         renderDeviceLastSeenDetails(
                 sessionInfoViewState.deviceFullInfo.isInactive,
                 sessionInfoViewState.deviceFullInfo.deviceInfo,
-                sessionInfoViewState.isLastActivityVisible,
+                sessionInfoViewState.isLastSeenDetailsVisible,
                 sessionInfoViewState.isShowingIpAddress,
                 dateFormatter,
                 drawableProvider,
@@ -197,7 +197,7 @@ class SessionInfoView @JvmOverloads constructor(
         } else {
             views.sessionInfoLastActivityTextView.isGone = true
         }
-        views.sessionInfoLastIPAddressTextView.setTextOrHide(deviceInfo.lastSeenIp?.takeIf { isShowingIpAddress })
+        views.sessionInfoLastIPAddressTextView.setTextOrHide(deviceInfo.lastSeenIp?.takeIf { isLastSeenDetailsVisible && isShowingIpAddress })
     }
 
     private fun renderDetailsButton(isDetailsButtonVisible: Boolean) {
