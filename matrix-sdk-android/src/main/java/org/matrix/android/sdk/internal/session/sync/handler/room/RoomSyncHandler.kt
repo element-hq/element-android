@@ -19,10 +19,7 @@ package org.matrix.android.sdk.internal.session.sync.handler.room
 import dagger.Lazy
 import io.realm.Realm
 import io.realm.kotlin.createObject
-import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
-import org.matrix.android.sdk.api.session.crypto.CryptoService
-import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -92,7 +89,6 @@ internal class RoomSyncHandler @Inject constructor(
         private val readReceiptHandler: ReadReceiptHandler,
         private val roomSummaryUpdater: RoomSummaryUpdater,
         private val roomAccountDataHandler: RoomSyncAccountDataHandler,
-        private val cryptoService: CryptoService,
         private val roomMemberEventHandler: RoomMemberEventHandler,
         private val roomTypingUsersHandler: RoomTypingUsersHandler,
         private val threadsAwarenessHandler: ThreadsAwarenessHandler,
@@ -258,7 +254,6 @@ internal class RoomSyncHandler @Inject constructor(
                     root = eventEntity
                 }
                 // Give info to crypto module
-                cryptoService.onStateEvent(roomId, event)
                 roomMemberEventHandler.handle(realm, roomId, event, isInitialSync, aggregator)
             }
         }
@@ -423,15 +418,9 @@ internal class RoomSyncHandler @Inject constructor(
             val isInitialSync = insertType == EventInsertType.INITIAL_SYNC
 
             eventIds.add(event.eventId)
+
             liveEventService.get().dispatchLiveEventReceived(event, roomId, isInitialSync)
 
-            if (event.isEncrypted() && !isInitialSync) {
-                try {
-                    decryptIfNeeded(event, roomId)
-                } catch (e: InterruptedException) {
-                    Timber.i("Decryption got interrupted")
-                }
-            }
             var contentToInject: String? = null
             if (!isInitialSync) {
                 contentToInject = threadsAwarenessHandler.makeEventThreadAware(realm, roomId, event)
@@ -486,7 +475,9 @@ internal class RoomSyncHandler @Inject constructor(
                 }
             }
             // Give info to crypto module
-            cryptoService.onLiveEvent(roomEntity.roomId, event, isInitialSync)
+//            runBlocking {
+//                cryptoService.onLiveEvent(roomEntity.roomId, event, isInitialSync)
+//            }
 
             // Try to remove local echo
             event.unsignedData?.transactionId?.also { txId ->
@@ -565,31 +556,6 @@ internal class RoomSyncHandler @Inject constructor(
             threadChunk.timelineEvents.add(0, timelineEventEntity)
             roomEntity.addIfNecessary(threadChunk)
         }
-    }
-
-    private fun decryptIfNeeded(event: Event, roomId: String) {
-        try {
-            val timelineId = generateTimelineId(roomId)
-            // Event from sync does not have roomId, so add it to the event first
-            // note: runBlocking should be used here while we are in realm single thread executor, to avoid thread switching
-            val result = runBlocking { cryptoService.decryptEvent(event.copy(roomId = roomId), timelineId) }
-            event.mxDecryptionResult = OlmDecryptionResult(
-                    payload = result.clearEvent,
-                    senderKey = result.senderCurve25519Key,
-                    keysClaimed = result.claimedEd25519Key?.let { k -> mapOf("ed25519" to k) },
-                    forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain,
-                    isSafe = result.isSafe
-            )
-        } catch (e: MXCryptoError) {
-            if (e is MXCryptoError.Base) {
-                event.mCryptoError = e.errorType
-                event.mCryptoErrorReason = e.technicalMessage.takeIf { it.isNotEmpty() } ?: e.detailedErrorDescription
-            }
-        }
-    }
-
-    private fun generateTimelineId(roomId: String): String {
-        return "RoomSyncHandler$roomId"
     }
 
     data class EphemeralResult(

@@ -23,6 +23,9 @@ import org.matrix.android.sdk.api.extensions.measureMetric
 import org.matrix.android.sdk.api.extensions.measureSpan
 import org.matrix.android.sdk.api.metrics.SyncDurationMetricPlugin
 import org.matrix.android.sdk.api.session.crypto.CryptoService
+import org.matrix.android.sdk.api.session.crypto.MXCryptoError
+import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
+import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.pushrules.PushRuleService
 import org.matrix.android.sdk.api.session.pushrules.RuleScope
 import org.matrix.android.sdk.api.session.sync.InitialSyncStep
@@ -39,6 +42,7 @@ import org.matrix.android.sdk.internal.session.sync.handler.SyncResponsePostTrea
 import org.matrix.android.sdk.internal.session.sync.handler.UserAccountDataSyncHandler
 import org.matrix.android.sdk.internal.session.sync.handler.room.RoomSyncHandler
 import org.matrix.android.sdk.internal.util.awaitTransaction
+import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.system.measureTimeMillis
@@ -56,6 +60,7 @@ internal class SyncResponseHandler @Inject constructor(
         private val processEventForPushTask: ProcessEventForPushTask,
         private val pushRuleService: PushRuleService,
         private val presenceSyncHandler: PresenceSyncHandler,
+        private val clock: Clock,
         matrixConfiguration: MatrixConfiguration,
 ) {
 
@@ -67,7 +72,6 @@ internal class SyncResponseHandler @Inject constructor(
             reporter: ProgressReporter?
     ) {
         val isInitialSync = fromToken == null
-        Timber.v("Start handling sync, is InitialSync: $isInitialSync")
 
         relevantPlugins.measureMetric {
             startCryptoService(isInitialSync)
@@ -77,6 +81,25 @@ internal class SyncResponseHandler @Inject constructor(
 
             relevantPlugins.measureSpan("task", "handle_to_device") {
                 handleToDevice(syncResponse)
+            }
+            val syncLocalTimestampMillis = clock.epochMillis()
+
+            // pass live state/crypto related event to crypto
+            syncResponse.rooms?.join?.entries?.map { (roomId, roomSync) ->
+                roomSync.state
+                        ?.events
+                        ?.filter { it.isStateEvent() }
+                        ?.forEach {
+                            cryptoService.onStateEvent(roomId, it)
+                        }
+
+                roomSync.timeline?.events?.forEach {
+                    if (it.isEncrypted() && !isInitialSync) {
+                        decryptIfNeeded(it, roomId)
+                    }
+                    it.ageLocalTs = syncLocalTimestampMillis - (it.unsignedData?.age ?: 0)
+                    cryptoService.onLiveEvent(roomId, it, isInitialSync)
+                }
             }
 
             val aggregator = SyncResponsePostTreatmentAggregator()
@@ -99,6 +122,32 @@ internal class SyncResponseHandler @Inject constructor(
 
             Timber.v("On sync completed")
         }
+    }
+
+    private suspend fun decryptIfNeeded(event: Event, roomId: String) {
+        try {
+            val timelineId = generateTimelineId(roomId)
+            // Event from sync does not have roomId, so add it to the event first
+            // note: runBlocking should be used here while we are in realm single thread executor, to avoid thread switching
+            val result = cryptoService.decryptEvent(event.copy(roomId = roomId), timelineId)
+            event.mxDecryptionResult = OlmDecryptionResult(
+                    payload = result.clearEvent,
+                    senderKey = result.senderCurve25519Key,
+                    keysClaimed = result.claimedEd25519Key?.let { k -> mapOf("ed25519" to k) },
+                    forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain,
+                    isSafe = result.isSafe
+            )
+        } catch (e: MXCryptoError) {
+            Timber.v(e, "Failed to decrypt $roomId")
+            if (e is MXCryptoError.Base) {
+                event.mCryptoError = e.errorType
+                event.mCryptoErrorReason = e.technicalMessage.takeIf { it.isNotEmpty() } ?: e.detailedErrorDescription
+            }
+        }
+    }
+
+    private fun generateTimelineId(roomId: String): String {
+        return "RoomSyncHandler$roomId"
     }
 
     private suspend fun startCryptoService(isInitialSync: Boolean) {

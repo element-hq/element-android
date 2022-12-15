@@ -222,8 +222,8 @@ interface CryptoService {
     suspend fun onSyncWillProcess(isInitialSync: Boolean)
     fun isStarted(): Boolean
     suspend fun receiveSyncChanges(toDevice: ToDeviceSyncResponse?, deviceChanges: DeviceListResponse?, keyCounts: DeviceOneTimeKeysCountSyncResponse?)
-    fun onLiveEvent(roomId: String, event: Event, initialSync: Boolean)
-    fun onStateEvent(roomId: String, event: Event) {}
+    suspend fun onLiveEvent(roomId: String, event: Event, initialSync: Boolean)
+    suspend fun onStateEvent(roomId: String, event: Event) {}
     suspend fun onSyncCompleted(syncResponse: SyncResponse)
     fun logDbUsageInfo()
     suspend fun setRoomUnBlacklistUnverifiedDevices(roomId: String)

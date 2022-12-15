@@ -137,7 +137,7 @@ internal class RustCryptoService @Inject constructor(
     private val isStarting = AtomicBoolean(false)
     private val isStarted = AtomicBoolean(false)
 
-    override fun onStateEvent(roomId: String, event: Event) {
+    override suspend fun onStateEvent(roomId: String, event: Event) {
         when (event.type) {
             EventType.STATE_ROOM_ENCRYPTION -> onRoomEncryptionEvent(roomId, event)
             EventType.STATE_ROOM_MEMBER -> onRoomMembershipEvent(roomId, event)
@@ -145,7 +145,7 @@ internal class RustCryptoService @Inject constructor(
         }
     }
 
-    override fun onLiveEvent(roomId: String, event: Event, initialSync: Boolean) {
+    override suspend fun onLiveEvent(roomId: String, event: Event, initialSync: Boolean) {
         if (event.isStateEvent()) {
             when (event.getClearType()) {
                 EventType.STATE_ROOM_ENCRYPTION -> onRoomEncryptionEvent(roomId, event)
@@ -153,9 +153,7 @@ internal class RustCryptoService @Inject constructor(
                 EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
             }
         } else {
-            cryptoCoroutineScope.launch {
-                verificationService.onEvent(roomId, event)
-            }
+            verificationService.onEvent(roomId, event)
         }
     }
 
@@ -487,7 +485,7 @@ internal class RustCryptoService @Inject constructor(
      *
      * @param event the encryption event.
      */
-    private fun onRoomEncryptionEvent(roomId: String, event: Event) {
+    private suspend fun onRoomEncryptionEvent(roomId: String, event: Event) {
         if (!event.isStateEvent()) {
             // Ignore
             Timber.tag(loggerTag.value).w("Invalid encryption event")
@@ -495,7 +493,7 @@ internal class RustCryptoService @Inject constructor(
         }
 
         // Do not load members here, would defeat lazy loading
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+//        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
 //            val params = LoadRoomMembersTask.Params(roomId)
 //            try {
 //                loadRoomMembersTask.execute(params)
@@ -505,7 +503,7 @@ internal class RustCryptoService @Inject constructor(
             val userIds = getRoomUserIds(roomId)
             setEncryptionInRoom(roomId, event.content?.get("algorithm")?.toString(), userIds)
 //            }
-        }
+//        }
     }
 
     override fun onE2ERoomMemberLoadedFromServer(roomId: String) {
@@ -530,7 +528,7 @@ internal class RustCryptoService @Inject constructor(
      *
      * @param event the membership event causing the change
      */
-    private fun onRoomMembershipEvent(roomId: String, event: Event) {
+    private suspend fun onRoomMembershipEvent(roomId: String, event: Event) {
         // We only care about the memberships if this room is encrypted
         if (!isRoomEncrypted(roomId)) {
             return
@@ -551,9 +549,7 @@ internal class RustCryptoService @Inject constructor(
                 // know what other servers are in the room at the time they've been invited.
                 // They therefore will not send device updates if a user logs in whilst
                 // their state is invite.
-                cryptoCoroutineScope.launch {
                     olmMachine.updateTrackedUsers(listOf(userId))
-                }
             } else {
                 // nop
             }
@@ -699,7 +695,9 @@ internal class RustCryptoService @Inject constructor(
     }
 
     override fun enableShareKeyOnInvite(enable: Boolean) {
-        TODO("Enable share key on invite not implemented")
+        if (enable) {
+            TODO("Enable share key on invite not implemented")
+        }
     }
 
     override fun isShareKeysOnInviteEnabled(): Boolean {

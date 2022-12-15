@@ -193,7 +193,7 @@ internal class DefaultCryptoService @Inject constructor(
     private val isStarting = AtomicBoolean(false)
     private val isStarted = AtomicBoolean(false)
 
-    override fun onStateEvent(roomId: String, event: Event) {
+    override suspend fun onStateEvent(roomId: String, event: Event) {
         when (event.type) {
             EventType.STATE_ROOM_ENCRYPTION -> onRoomEncryptionEvent(roomId, event)
             EventType.STATE_ROOM_MEMBER -> onRoomMembershipEvent(roomId, event)
@@ -201,7 +201,7 @@ internal class DefaultCryptoService @Inject constructor(
         }
     }
 
-    override fun onLiveEvent(roomId: String, event: Event, initialSync: Boolean) {
+    override suspend fun onLiveEvent(roomId: String, event: Event, initialSync: Boolean) {
         // handle state events
         if (event.isStateEvent()) {
             when (event.type) {
@@ -214,7 +214,7 @@ internal class DefaultCryptoService @Inject constructor(
         // handle verification
         if (!initialSync) {
             if (event.type != null && verificationMessageProcessor.shouldProcess(event.type)) {
-                cryptoCoroutineScope.launch(coroutineDispatchers.dmVerif) {
+                withContext(coroutineDispatchers.dmVerif) {
                     verificationMessageProcessor.process(roomId, event)
                 }
             }
@@ -788,7 +788,7 @@ internal class DefaultCryptoService @Inject constructor(
      */
     @Throws(MXCryptoError::class)
     private suspend fun internalDecryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
-        return eventDecryptor.decryptEvent(event, timeline)
+        return withContext(coroutineDispatchers.crypto) { eventDecryptor.decryptEvent(event, timeline) }
     }
 
     /**
@@ -937,13 +937,13 @@ internal class DefaultCryptoService @Inject constructor(
      * @param roomId the room Id
      * @param event the encryption event.
      */
-    private fun onRoomEncryptionEvent(roomId: String, event: Event) {
+    private suspend fun onRoomEncryptionEvent(roomId: String, event: Event) {
         if (!event.isStateEvent()) {
             // Ignore
             Timber.tag(loggerTag.value).w("Invalid encryption event")
             return
         }
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+        withContext(coroutineDispatchers.io) {
             val userIds = getRoomUserIds(roomId)
             setEncryptionInRoom(roomId, event.content?.get("algorithm")?.toString(), true, userIds)
         }
@@ -961,7 +961,7 @@ internal class DefaultCryptoService @Inject constructor(
      * @param roomId the room Id
      * @param event the membership event causing the change
      */
-    private fun onRoomMembershipEvent(roomId: String, event: Event) {
+    private suspend fun onRoomMembershipEvent(roomId: String, event: Event) {
         // because the encryption event can be after the join/invite in the same batch
         event.stateKey?.let { _ ->
             val roomMember: RoomMemberContent? = event.content.toModel()
@@ -970,37 +970,39 @@ internal class DefaultCryptoService @Inject constructor(
                 unrequestedForwardManager.onInviteReceived(roomId, event.senderId.orEmpty(), clock.epochMillis())
             }
         }
-
         roomEncryptorsStore.get(roomId) ?: /* No encrypting in this room */ return
-
-        event.stateKey?.let { userId ->
-            val roomMember: RoomMemberContent? = event.content.toModel()
-            val membership = roomMember?.membership
-            if (membership == Membership.JOIN) {
-                // make sure we are tracking the deviceList for this user.
-                deviceListManager.startTrackingDeviceList(listOf(userId))
-            } else if (membership == Membership.INVITE &&
-                    shouldEncryptForInvitedMembers(roomId) &&
-                    isEncryptionEnabledForInvitedUser()) {
-                // track the deviceList for this invited user.
-                // Caution: there's a big edge case here in that federated servers do not
-                // know what other servers are in the room at the time they've been invited.
-                // They therefore will not send device updates if a user logs in whilst
-                // their state is invite.
-                deviceListManager.startTrackingDeviceList(listOf(userId))
+        withContext(coroutineDispatchers.io) {
+            event.stateKey?.let { userId ->
+                val roomMember: RoomMemberContent? = event.content.toModel()
+                val membership = roomMember?.membership
+                if (membership == Membership.JOIN) {
+                    // make sure we are tracking the deviceList for this user.
+                    deviceListManager.startTrackingDeviceList(listOf(userId))
+                } else if (membership == Membership.INVITE &&
+                        shouldEncryptForInvitedMembers(roomId) &&
+                        isEncryptionEnabledForInvitedUser()) {
+                    // track the deviceList for this invited user.
+                    // Caution: there's a big edge case here in that federated servers do not
+                    // know what other servers are in the room at the time they've been invited.
+                    // They therefore will not send device updates if a user logs in whilst
+                    // their state is invite.
+                    deviceListManager.startTrackingDeviceList(listOf(userId))
+                }
             }
         }
     }
 
-    private fun onRoomHistoryVisibilityEvent(roomId: String, event: Event) {
+    private suspend fun onRoomHistoryVisibilityEvent(roomId: String, event: Event) {
         if (!event.isStateEvent()) return
         val eventContent = event.content.toModel<RoomHistoryVisibilityContent>()
         val historyVisibility = eventContent?.historyVisibility
-        if (historyVisibility == null) {
-            cryptoStore.setShouldShareHistory(roomId, false)
-        } else {
-            cryptoStore.setShouldEncryptForInvitedMembers(roomId, historyVisibility != RoomHistoryVisibility.JOINED)
-            cryptoStore.setShouldShareHistory(roomId, historyVisibility.shouldShareHistory())
+        withContext(coroutineDispatchers.io) {
+            if (historyVisibility == null) {
+                cryptoStore.setShouldShareHistory(roomId, false)
+            } else {
+                cryptoStore.setShouldEncryptForInvitedMembers(roomId, historyVisibility != RoomHistoryVisibility.JOINED)
+                cryptoStore.setShouldShareHistory(roomId, historyVisibility.shouldShareHistory())
+            }
         }
     }
 
