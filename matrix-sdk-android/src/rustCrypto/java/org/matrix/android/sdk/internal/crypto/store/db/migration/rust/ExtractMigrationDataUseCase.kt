@@ -51,6 +51,7 @@ internal class ExtractMigrationDataUseCase {
             !realm.isEmpty &&
                     // Check if there is a MetaData object
                     realm.where<CryptoMetadataEntity>().count() > 0
+                    && realm.where<CryptoMetadataEntity>().findFirst()?.olmAccountData != null
         }
     }
 
