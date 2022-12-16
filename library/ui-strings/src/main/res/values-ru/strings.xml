@@ -407,7 +407,7 @@
     <string name="settings_set_sync_timeout">Таймаут синхронизации</string>
     <string name="settings_set_sync_delay">Задержка между каждой синхронизацией</string>
     <string name="settings_version">Версия</string>
-    <string name="linkOf">Политика конфедициальности <a href="https://www.bigstarpolitics.com.kz">Big Star Messenger</a></string>
+    <string name="chat">Политика конфедициальности <a href="https://www.bigstarpolitics.com.kz">Big Star Messenger</a></string>
     <string name="settings_olm_version">Версия OLM</string>
     <string name="settings_app_term_conditions">Правила и условия</string>
     <string name="settings_third_party_notices">Прочие уведомления</string>

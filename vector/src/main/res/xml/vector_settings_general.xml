@@ -30,7 +30,7 @@
 
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_DISCOVERY_PREFERENCE_KEY"
-            app:isPreferenceVisible="false"
+            app:isPreferenceVisible="true"
             android:persistent="false"
             android:summary="@string/settings_discovery_manage"
             android:title="@string/settings_discovery_category" />
