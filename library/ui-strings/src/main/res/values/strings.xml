@@ -3335,7 +3335,7 @@
         <item quantity="one">Consider signing out from old sessions (%1$d day or more) that you don’t use anymore.</item>
         <item quantity="other">Consider signing out from old sessions (%1$d days or more) that you don’t use anymore.</item>
     </plurals>
-    <string name="device_manager_current_session_title">Current Session</string>
+    <string name="device_manager_current_session_title">Current session</string>
     <string name="device_manager_session_title">Session</string>
     <string name="device_manager_device_title">Device</string>
     <!--  Examples: Last activity Yesterday at 6PM, Last activity Aug 31 at 5:47PM -->
