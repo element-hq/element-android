@@ -40,6 +40,7 @@ import im.vector.app.features.home.room.threads.ThreadsActivity
 import im.vector.app.features.home.room.threads.arguments.ThreadListArgs
 import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
 import im.vector.app.features.home.room.threads.list.viewmodel.ThreadListController
+import im.vector.app.features.home.room.threads.list.viewmodel.ThreadListPagedController
 import im.vector.app.features.home.room.threads.list.viewmodel.ThreadListViewModel
 import im.vector.app.features.home.room.threads.list.viewmodel.ThreadListViewState
 import im.vector.app.features.rageshake.BugReporter
@@ -52,12 +53,14 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class ThreadListFragment :
         VectorBaseFragment<FragmentThreadListBinding>(),
+        ThreadListPagedController.Listener,
         ThreadListController.Listener,
         VectorMenuProvider {
 
     @Inject lateinit var avatarRenderer: AvatarRenderer
     @Inject lateinit var bugReporter: BugReporter
-    @Inject lateinit var threadListController: ThreadListController
+    @Inject lateinit var threadListController: ThreadListPagedController
+    @Inject lateinit var legacyThreadListController: ThreadListController
     @Inject lateinit var threadListViewModelFactory: ThreadListViewModel.Factory
 
     private val threadListViewModel: ThreadListViewModel by fragmentViewModel()
@@ -100,7 +103,7 @@ class ThreadListFragment :
             val filterBadge = filterIcon.findViewById<View>(R.id.threadListFilterBadge)
             filterBadge.isVisible = state.shouldFilterThreads
             when (threadListViewModel.canHomeserverUseThreading()) {
-                true -> menu.findItem(R.id.menu_thread_list_filter).isVisible = !state.threadSummaryList.invoke().isNullOrEmpty()
+                true -> menu.findItem(R.id.menu_thread_list_filter).isVisible = true
                 false -> menu.findItem(R.id.menu_thread_list_filter).isVisible = !state.rootThreadEventList.invoke().isNullOrEmpty()
             }
         }
@@ -111,8 +114,18 @@ class ThreadListFragment :
         initToolbar()
         initTextConstants()
         initBetaFeedback()
-        views.threadListRecyclerView.configureWith(threadListController, TimelineItemAnimator(), hasFixedSize = false)
-        threadListController.listener = this
+
+        if (threadListViewModel.canHomeserverUseThreading()) {
+            views.threadListRecyclerView.configureWith(threadListController, TimelineItemAnimator(), hasFixedSize = false)
+            threadListController.listener = this
+
+            threadListViewModel.threadsLivePagedList.observe(viewLifecycleOwner) { threadsList ->
+                threadListController.submitList(threadsList)
+            }
+        } else {
+            views.threadListRecyclerView.configureWith(legacyThreadListController, TimelineItemAnimator(), hasFixedSize = false)
+            legacyThreadListController.listener = this
+        }
     }
 
     override fun onDestroyView() {
@@ -144,7 +157,9 @@ class ThreadListFragment :
     override fun invalidate() = withState(threadListViewModel) { state ->
         invalidateOptionsMenu()
         renderEmptyStateIfNeeded(state)
-        threadListController.update(state)
+        if (!threadListViewModel.canHomeserverUseThreading()) {
+            legacyThreadListController.update(state)
+        }
         renderLoaderIfNeeded(state)
     }
 
@@ -185,7 +200,7 @@ class ThreadListFragment :
 
     private fun renderEmptyStateIfNeeded(state: ThreadListViewState) {
         when (threadListViewModel.canHomeserverUseThreading()) {
-            true -> views.threadListEmptyConstraintLayout.isVisible = state.threadSummaryList.invoke().isNullOrEmpty()
+            true -> views.threadListEmptyConstraintLayout.isVisible = false
             false -> views.threadListEmptyConstraintLayout.isVisible = state.rootThreadEventList.invoke().isNullOrEmpty()
         }
     }

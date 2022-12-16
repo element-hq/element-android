@@ -29,7 +29,6 @@ import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.model.PollSummaryContent
 import org.matrix.android.sdk.api.session.room.model.VoteInfo
 import org.matrix.android.sdk.api.session.room.model.VoteSummary
-import org.matrix.android.sdk.api.session.room.model.message.MessageEndPollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollResponseContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
@@ -78,7 +77,7 @@ class DefaultPollAggregationProcessor @Inject constructor() : PollAggregationPro
         val content = event.getClearContent()?.toModel<MessagePollResponseContent>() ?: return false
         val roomId = event.roomId ?: return false
         val senderId = event.senderId ?: return false
-        val targetEventId = (event.getRelationContent() ?: content.relatesTo)?.eventId ?: return false
+        val targetEventId = event.getRelationContent()?.eventId ?: return false
         val targetPollContent = getPollContent(session, roomId, targetEventId) ?: return false
 
         val annotationsSummaryEntity = getAnnotationsSummaryEntity(realm, roomId, targetEventId)
@@ -154,9 +153,8 @@ class DefaultPollAggregationProcessor @Inject constructor() : PollAggregationPro
     }
 
     override fun handlePollEndEvent(session: Session, powerLevelsHelper: PowerLevelsHelper, realm: Realm, event: Event): Boolean {
-        val content = event.getClearContent()?.toModel<MessageEndPollContent>() ?: return false
         val roomId = event.roomId ?: return false
-        val pollEventId = content.relatesTo?.eventId ?: return false
+        val pollEventId = event.getRelationContent()?.eventId ?: return false
         val pollOwnerId = getPollEvent(session, roomId, pollEventId)?.root?.senderId
         val isPollOwner = pollOwnerId == event.senderId
 

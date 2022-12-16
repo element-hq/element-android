@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 The Matrix.org Foundation C.I.C.
+ * Copyright 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,15 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api
+package org.matrix.android.sdk.internal.database.model.threads
 
-import org.matrix.android.sdk.api.util.MatrixItem
+import io.realm.RealmList
+import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
 
-interface MatrixItemDisplayNameFallbackProvider {
-    fun getDefaultName(matrixItem: MatrixItem): String
+internal open class ThreadListPageEntity(
+        @PrimaryKey var roomId: String = "",
+        var threadSummaries: RealmList<ThreadSummaryEntity> = RealmList()
+) : RealmObject() {
+    companion object
 }

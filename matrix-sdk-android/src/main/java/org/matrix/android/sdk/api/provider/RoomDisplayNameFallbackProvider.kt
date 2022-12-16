@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api
+package org.matrix.android.sdk.api.provider
 
 /**
  * This interface exists to let the implementation provide localized room display name fallback.

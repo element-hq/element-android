@@ -134,6 +134,9 @@
     <string name="notice_crypto_unable_to_decrypt">** Unable to decrypt: %s **</string>
     <string name="notice_crypto_error_unknown_inbound_session_id">The sender\'s device has not sent us the keys for this message.</string>
 
+    <string name="notice_voice_broadcast_ended">%1$s ended a voice broadcast.</string>
+    <string name="notice_voice_broadcast_ended_by_you">You ended a voice broadcast.</string>
+
     <!-- Messages -->
 
     <!-- Room Screen -->
@@ -3039,7 +3042,7 @@
 
     <string name="labs_auto_report_uisi">Auto Report Decryption Errors.</string>
     <string name="labs_auto_report_uisi_desc">Your system will automatically send logs when an unable to decrypt error occurs</string>
-    <string name="labs_enable_thread_messages">Enable Thread Messages</string>
+    <string name="labs_enable_thread_messages">Enable threaded messages</string>
     <string name="labs_enable_thread_messages_desc">Note: app will be restarted</string>
     <string name="settings_show_latest_profile">Show latest user info</string>
     <string name="settings_show_latest_profile_description">Show the latest profile info (avatar and display name) for all the messages.</string>
@@ -3108,6 +3111,7 @@
     <string name="audio_message_file_size">(%1$s)</string>
 
     <string name="voice_broadcast_live">Live</string>
+    <string name="voice_broadcast_live_broadcast">Live broadcast</string>
     <!-- TODO Rename id to voice_broadcast_buffering -->
     <string name="a11y_voice_broadcast_buffering">Buffering…</string>
     <string name="a11y_resume_voice_broadcast_record">Resume voice broadcast record</string>

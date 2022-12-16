@@ -251,6 +251,12 @@ class HomeActivityViewModel @AssistedInject constructor(
 //        }
 
         when {
+            !vectorPreferences.areThreadMessagesEnabled() && !vectorPreferences.wasThreadFlagChangedManually() -> {
+                vectorPreferences.setThreadMessagesEnabled()
+                lightweightSettingsStorage.setThreadMessagesEnabled(vectorPreferences.areThreadMessagesEnabled())
+                // Clear Cache
+                _viewEvents.post(HomeActivityViewEvents.MigrateThreads(checkSession = false))
+            }
             // Notify users
             vectorPreferences.shouldNotifyUserAboutThreads() && vectorPreferences.areThreadMessagesEnabled() -> {
                 Timber.i("----> Notify users about threads")

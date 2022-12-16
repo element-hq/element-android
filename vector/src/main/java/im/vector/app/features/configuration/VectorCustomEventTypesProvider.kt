@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.displayname
+package im.vector.app.features.configuration
 
-import org.matrix.android.sdk.api.provider.MatrixItemDisplayNameFallbackProvider
-import org.matrix.android.sdk.api.util.MatrixItem
+import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
+import org.matrix.android.sdk.api.provider.CustomEventTypesProvider
+import javax.inject.Inject
 
-// Used to provide the fallback to the MatrixSDK, in the MatrixConfiguration
-object VectorMatrixItemDisplayNameFallbackProvider : MatrixItemDisplayNameFallbackProvider {
-    override fun getDefaultName(matrixItem: MatrixItem): String {
-        // Can customize something from the id if necessary here
-        return matrixItem.id
-    }
+class VectorCustomEventTypesProvider @Inject constructor() : CustomEventTypesProvider {
+
+    override val customPreviewableEventTypes = listOf(
+            VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO
+    )
 }

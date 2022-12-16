@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.displayname
+package org.matrix.android.sdk.api.provider
 
-import org.matrix.android.sdk.api.provider.MatrixItemDisplayNameFallbackProvider
-import org.matrix.android.sdk.api.util.MatrixItem
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
-// Used to provide the fallback to the MatrixSDK, in the MatrixConfiguration
-object VectorMatrixItemDisplayNameFallbackProvider : MatrixItemDisplayNameFallbackProvider {
-    override fun getDefaultName(matrixItem: MatrixItem): String {
-        // Can customize something from the id if necessary here
-        return matrixItem.id
-    }
+/**
+ * Provide custom event types which should be processed with the internal event types.
+ */
+interface CustomEventTypesProvider {
+
+    /**
+     * Custom event types to include when computing [RoomSummary.latestPreviewableEvent].
+     */
+    val customPreviewableEventTypes: List<String>
 }

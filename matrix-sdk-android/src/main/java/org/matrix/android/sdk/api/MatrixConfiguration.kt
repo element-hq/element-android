@@ -21,6 +21,9 @@ import okhttp3.Interceptor
 import org.matrix.android.sdk.api.crypto.MXCryptoConfig
 import org.matrix.android.sdk.api.metrics.CryptoMetricPlugin
 import org.matrix.android.sdk.api.metrics.MetricPlugin
+import org.matrix.android.sdk.api.provider.CustomEventTypesProvider
+import org.matrix.android.sdk.api.provider.MatrixItemDisplayNameFallbackProvider
+import org.matrix.android.sdk.api.provider.RoomDisplayNameFallbackProvider
 import java.net.Proxy
 
 data class MatrixConfiguration(
@@ -68,7 +71,7 @@ data class MatrixConfiguration(
         /**
          * Thread messages default enable/disabled value.
          */
-        val threadMessagesEnabledDefault: Boolean = false,
+        val threadMessagesEnabledDefault: Boolean = true,
         /**
          * List of network interceptors, they will be added when building an OkHttp client.
          */
@@ -77,11 +80,14 @@ data class MatrixConfiguration(
          * Sync configuration.
          */
         val syncConfig: SyncConfig = SyncConfig(),
-
         /**
          * Metrics plugin that can be used to capture metrics from matrix-sdk-android.
          */
         val metricPlugins: List<MetricPlugin> = emptyList(),
 
-        val cryptoAnalyticsPlugin: CryptoMetricPlugin? = null
+        val cryptoAnalyticsPlugin: CryptoMetricPlugin? = null,
+        /**
+         * CustomEventTypesProvider to provide custom event types to the sdk which should be processed with internal events.
+         */
+        val customEventTypesProvider: CustomEventTypesProvider? = null,
 )
