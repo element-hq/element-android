@@ -2823,4 +2823,7 @@
     <string name="device_manager_verification_status_detail_session_encryption_not_supported">此工作階段不支援加密，因此無法驗證。</string>
     <string name="settings_nightly_build_update">取得最新版本（注意：您可能會無法登入）</string>
     <string name="settings_nightly_build">Nightly 版本</string>
+    <string name="voice_broadcast_live_broadcast">即時廣播</string>
+    <string name="notice_voice_broadcast_ended_by_you">您結束了語音廣播。</string>
+    <string name="notice_voice_broadcast_ended">%1$s 結束了語音廣播。</string>
 </resources>
