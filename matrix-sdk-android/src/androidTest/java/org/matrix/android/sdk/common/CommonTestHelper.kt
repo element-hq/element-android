@@ -450,13 +450,13 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
         var backoffTry = 0
         val now = System.currentTimeMillis()
         while (!predicate()) {
-            Timber.w("## VALR Trial nb $backoffTry")
+            Timber.v("## retryWithBackoff Trial nb $backoffTry")
             withContext(Dispatchers.IO) {
                 delay(backoff[backoffTry.coerceAtMost(backoff.size - 1)])
             }
             backoffTry++
             if (System.currentTimeMillis() - now > timeout) {
-                Timber.w("## VALR Trial fail")
+                Timber.v("## retryWithBackoff Trial fail")
                 onFail?.invoke()
                 return
             }
