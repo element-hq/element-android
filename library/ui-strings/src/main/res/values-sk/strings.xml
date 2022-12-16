@@ -2935,4 +2935,7 @@
     <string name="device_manager_verification_status_detail_session_encryption_not_supported">Táto relácia nepodporuje šifrovanie, a preto ju nemožno overiť.</string>
     <string name="settings_nightly_build_update">Získajte najnovšiu zostavu (poznámka: môžete mať problémy s prihlásením)</string>
     <string name="settings_nightly_build">Nočná zostava</string>
+    <string name="voice_broadcast_live_broadcast">Živé vysielanie</string>
+    <string name="notice_voice_broadcast_ended_by_you">Ukončili ste hlasové vysielanie.</string>
+    <string name="notice_voice_broadcast_ended">%1$s ukončil/a hlasové vysielanie.</string>
 </resources>
