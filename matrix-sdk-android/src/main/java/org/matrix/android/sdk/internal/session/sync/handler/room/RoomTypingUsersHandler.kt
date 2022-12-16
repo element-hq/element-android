@@ -31,10 +31,15 @@ internal class RoomTypingUsersHandler @Inject constructor(
 
     // TODO This could be handled outside of the Realm transaction. Use the new aggregator?
     fun handle(realm: Realm, roomId: String, ephemeralResult: RoomSyncHandler.EphemeralResult?) {
+        val typingUserIds = ephemeralResult?.typingUserIds
+        if (typingUserIds.isNullOrEmpty()) {
+            typingUsersTracker.setTypingUsersFromRoom(roomId, emptyList())
+            return
+        }
         // Filter ignored users and current user
         val filteredUserIds = realm.where(IgnoredUserEntity::class.java).findAll().map { it.userId } + userId
         val roomMemberHelper = RoomMemberHelper(realm, roomId)
-        val typingIds = ephemeralResult?.typingUserIds?.filter { it !in filteredUserIds }.orEmpty()
+        val typingIds = typingUserIds.filter { it !in filteredUserIds }
         val senderInfo = typingIds.map { userId ->
             val roomMemberSummaryEntity = roomMemberHelper.getLastRoomMember(userId)
             SenderInfo(
