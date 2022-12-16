@@ -182,7 +182,9 @@ class OtherSessionsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupToolbar(views.otherSessionsToolbar).setTitle(args.titleResourceId).allowBack()
+        setupToolbar(views.otherSessionsToolbar)
+                .setTitle(R.string.device_manager_sessions_other_title)
+                .allowBack()
         observeViewEvents()
         initFilterView()
     }
@@ -246,7 +248,7 @@ class OtherSessionsFragment :
             val selection = devices.count { it.isSelected }
             stringProvider.getQuantityString(R.plurals.x_selected, selection, selection)
         } else {
-            getString(args.titleResourceId)
+            getString(R.string.device_manager_sessions_other_title)
         }
         toolbar?.title = title
     }
