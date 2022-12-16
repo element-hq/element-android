@@ -2991,4 +2991,7 @@
     <string name="device_manager_verification_status_detail_session_encryption_not_supported">Цей сеанс не підтримує шифрування і тому не може бути звірений.</string>
     <string name="settings_nightly_build_update">Отримати найновішу збірку (примітка: у вас можуть виникнути проблеми з входом в систему)</string>
     <string name="settings_nightly_build">Збірка Nightly</string>
+    <string name="voice_broadcast_live_broadcast">Трансляція наживо</string>
+    <string name="notice_voice_broadcast_ended_by_you">Ви завершили голосову трансляцію.</string>
+    <string name="notice_voice_broadcast_ended">%1$s завершує голосову трансляцію.</string>
 </resources>
