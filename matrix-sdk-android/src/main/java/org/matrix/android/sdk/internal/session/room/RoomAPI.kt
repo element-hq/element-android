@@ -33,7 +33,6 @@ import org.matrix.android.sdk.internal.session.room.membership.RoomMembersRespon
 import org.matrix.android.sdk.internal.session.room.membership.admin.UserIdAndReason
 import org.matrix.android.sdk.internal.session.room.membership.joining.InviteBody
 import org.matrix.android.sdk.internal.session.room.membership.threepid.ThreePidInviteBody
-import org.matrix.android.sdk.internal.session.room.pinnedmessages.PinnedEventsStateResponse
 import org.matrix.android.sdk.internal.session.room.read.ReadBody
 import org.matrix.android.sdk.internal.session.room.relation.RelationsResponse
 import org.matrix.android.sdk.internal.session.room.reporting.ReportContentBody
@@ -249,7 +248,7 @@ internal interface RoomAPI {
                 @Path("roomId") roomId: String,
                 @Path("eventType") eventType: String,
                 @Path("state_key") stateKey: String
-    ): PinnedEventsStateResponse
+    ): Content
 
     /**
      * Paginate relations for event based in normal topological order.

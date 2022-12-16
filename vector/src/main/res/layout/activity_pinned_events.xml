@@ -11,7 +11,7 @@
         android:layout_height="match_parent">
 
         <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/pinnedMessagesActivityFragmentContainer"
+            android:id="@+id/pinnedEventsActivityFragmentContainer"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"

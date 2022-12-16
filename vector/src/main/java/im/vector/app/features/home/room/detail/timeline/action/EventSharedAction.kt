@@ -53,13 +53,13 @@ sealed class EventSharedAction(
     data class ReplyInThread(val eventId: String, val startsThread: Boolean) :
             EventSharedAction(R.string.reply_in_thread, R.drawable.ic_reply_in_thread)
 
-    data class PinMessage(val eventId: String) :
-            EventSharedAction(R.string.pinning_message, R.drawable.ic_pin_message)
+    data class PinEvent(val eventId: String) :
+            EventSharedAction(R.string.pinning_event, R.drawable.ic_pin_event)
 
-    data class UnpinMessage(val eventId: String) :
-            EventSharedAction(R.string.unpinning_message, R.drawable.ic_unpin_message)
+    data class UnpinEvent(val eventId: String) :
+            EventSharedAction(R.string.unpinning_event, R.drawable.ic_unpin_event)
 
-    data class ViewPinnedMessageInRoom(val eventId: String) :
+    data class ViewPinnedEventInRoom(val eventId: String) :
             EventSharedAction(R.string.view_in_room, R.drawable.ic_threads_view_in_room_24)
 
     object ViewInRoom :

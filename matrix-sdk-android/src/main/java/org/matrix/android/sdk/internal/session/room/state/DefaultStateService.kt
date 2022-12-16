@@ -173,21 +173,30 @@ internal class DefaultStateService @AssistedInject constructor(
         )
     }
 
-    override suspend fun pinMessage(eventIds: MutableList<String>) {
+    override suspend fun pinEvent(eventId: String) {
+        val pinnedEvents = getStateEvent(EventType.STATE_ROOM_PINNED_EVENT, QueryStringValue.Equals(""))
+                ?.getIdsOfPinnedEvents()
+                ?.toMutableList()
+        pinnedEvents?.add(eventId)
+        val newListOfPinnedEvents = pinnedEvents?.toList() ?: return
+        setPinnedEvents(newListOfPinnedEvents)
+    }
+
+    override suspend fun unpinEvent(eventId: String) {
+        val pinnedEvents = getStateEvent(EventType.STATE_ROOM_PINNED_EVENT, QueryStringValue.Equals(""))
+                ?.getIdsOfPinnedEvents()
+                ?.toMutableList()
+        pinnedEvents?.remove(eventId)
+        val newListOfPinnedEvents = pinnedEvents?.toList() ?: return
+        setPinnedEvents(newListOfPinnedEvents)
+    }
+
+    private suspend fun setPinnedEvents(eventIds: List<String>) {
         sendStateEvent(
                 eventType = EventType.STATE_ROOM_PINNED_EVENT,
                 body = PinnedEventsStateContent(eventIds).toContent(),
                 stateKey = ""
         )
-    }
-
-    override fun getPinnedEventsState(): Event? {
-        return getStateEvent(EventType.STATE_ROOM_PINNED_EVENT, QueryStringValue.Equals(""))
-    }
-
-    override fun isPinned(eventId: String): Boolean? {
-        val idsOfPinnedEvents: MutableList<String> = getPinnedEventsState()?.getIdsOfPinnedEvents() ?: return null
-        return idsOfPinnedEvents.contains(eventId)
     }
 
     override suspend fun setJoinRulePublic() {

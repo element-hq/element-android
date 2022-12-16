@@ -42,9 +42,9 @@
 
     <!-- We always want to show this item as an icon -->
     <item
-        android:id="@+id/open_pinned_messages"
-        android:icon="@drawable/ic_open_pinned_messages"
-        android:title="@string/action_open_pinned_messages"
+        android:id="@+id/open_pinned_events"
+        android:icon="@drawable/ic_open_pinned_events"
+        android:title="@string/action_open_pinned_events"
         android:visible="true"
         app:iconTint="?colorPrimary"
         app:showAsAction="always"

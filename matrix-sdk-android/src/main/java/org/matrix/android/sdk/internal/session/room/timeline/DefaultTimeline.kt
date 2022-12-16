@@ -99,8 +99,7 @@ internal class DefaultTimeline(
     private var isFromThreadTimeline = false
     private var rootThreadEventId: String? = null
 
-    private var isFromPinnedMessagesTimeline = false
-    private var rootPinnedMessageEventId: String? = null
+    private var isFromPinnedEventsTimeline = false
 
     private val strategyDependencies = LoadTimelineStrategy.Dependencies(
             timelineSettings = settings,
@@ -132,7 +131,7 @@ internal class DefaultTimeline(
     override fun addListener(listener: Timeline.Listener): Boolean {
         listeners.add(listener)
         timelineScope.launch {
-            val snapshot = if (isFromPinnedMessagesTimeline) {
+            val snapshot = if (isFromPinnedEventsTimeline) {
                 getPinnedEvents()
             } else {
                 strategy.buildSnapshot()
@@ -152,7 +151,7 @@ internal class DefaultTimeline(
         listeners.clear()
     }
 
-    override fun start(rootThreadEventId: String?, rootPinnedMessageEventId: String?) {
+    override fun start(rootThreadEventId: String?, isFromPinnedEventsTimeline: Boolean) {
         timelineScope.launch {
             loadRoomMembersIfNeeded()
         }
@@ -161,8 +160,7 @@ internal class DefaultTimeline(
                 if (isStarted.compareAndSet(false, true)) {
                     isFromThreadTimeline = rootThreadEventId != null
                     this@DefaultTimeline.rootThreadEventId = rootThreadEventId
-                    isFromPinnedMessagesTimeline = rootPinnedMessageEventId != null
-                    this@DefaultTimeline.rootPinnedMessageEventId = rootPinnedMessageEventId
+                    this@DefaultTimeline.isFromPinnedEventsTimeline = isFromPinnedEventsTimeline
                     // /
                     val realm = Realm.getInstance(realmConfiguration)
                     ensureReadReceiptAreLoaded(realm)
@@ -267,8 +265,8 @@ internal class DefaultTimeline(
             }
         }
         Timber.v("$baseLogMessage: result $loadMoreResult")
-        val hasMoreToLoad = if (isFromPinnedMessagesTimeline) {
-            !areAllPinnedMessagesLoaded()
+        val hasMoreToLoad = if (isFromPinnedEventsTimeline) {
+            !areAllPinnedEventsLoaded()
         } else {
             loadMoreResult != LoadMoreResult.REACHED_END
         }
@@ -352,7 +350,7 @@ internal class DefaultTimeline(
     }
 
     private suspend fun postSnapshot() {
-        val snapshot = if (isFromPinnedMessagesTimeline) {
+        val snapshot = if (isFromPinnedEventsTimeline) {
             getPinnedEvents()
         } else {
             strategy.buildSnapshot()
@@ -371,25 +369,22 @@ internal class DefaultTimeline(
         }
     }
 
-    private fun getIdsOfPinnedEvents(): MutableList<String> {
+    private fun getIdsOfPinnedEvents(): List<String> {
         return stateEventDataSource
                 .getStateEvent(roomId, EventType.STATE_ROOM_PINNED_EVENT, QueryStringValue.Equals(""))
-                ?.getIdsOfPinnedEvents() ?: mutableListOf("")
+                ?.getIdsOfPinnedEvents()
+                .orEmpty()
     }
 
     private fun getPinnedEvents(): List<TimelineEvent> {
-        val idsOfPinnedEvents = getIdsOfPinnedEvents()
-        val pinnedEvents = ArrayList<TimelineEvent>()
-        for (id in idsOfPinnedEvents) {
-            val timelineEvent = timelineEventDataSource.getTimelineEvent(roomId, id)
-            if (timelineEvent != null) {
-                pinnedEvents.add(timelineEvent)
-            }
-        }
-        return pinnedEvents.reversed()
+        return getIdsOfPinnedEvents()
+                .mapNotNull { id ->
+                    timelineEventDataSource.getTimelineEvent(roomId, id)
+                }
+                .reversed()
     }
 
-    private fun areAllPinnedMessagesLoaded(): Boolean {
+    private fun areAllPinnedEventsLoaded(): Boolean {
         return getIdsOfPinnedEvents().size == getPinnedEvents().size
     }
 

@@ -24,5 +24,5 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class PinnedEventsStateContent(
-        @Json(name = "pinned") val eventIds: MutableList<String>
+        @Json(name = "pinned") val eventIds: List<String>
 )

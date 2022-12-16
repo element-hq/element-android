@@ -122,16 +122,24 @@ class NoticeEventFormatter @Inject constructor(
     }
 
     private fun formatPinnedEvent(event: Event, disambiguatedDisplayName: String): CharSequence? {
-        val idsOfPinnedEvents: MutableList<String> = event.getIdsOfPinnedEvents() ?: return null
-        val previousIdsOfPinnedEvents: MutableList<String>? = event.getPreviousIdsOfPinnedEvents()
-        // A message was pinned
-        val pinnedMessageString = if (event.resolvedPrevContent() == null || previousIdsOfPinnedEvents != null && previousIdsOfPinnedEvents.size < idsOfPinnedEvents.size) {
-            sp.getString(R.string.user_pinned_message, disambiguatedDisplayName)
-        // A message was unpinned
+        val idsOfPinnedEvents: List<String> = event.getIdsOfPinnedEvents() ?: return null
+        val previousIdsOfPinnedEvents: List<String>? = event.getPreviousIdsOfPinnedEvents()
+        // An event was pinned
+        val pinnedEventString = if (event.resolvedPrevContent() == null || previousIdsOfPinnedEvents != null && previousIdsOfPinnedEvents.size < idsOfPinnedEvents.size) {
+            if (event.isSentByCurrentUser()) {
+                sp.getString(R.string.notice_user_pinned_event_by_you, disambiguatedDisplayName)
+            } else {
+                sp.getString(R.string.notice_user_pinned_event, disambiguatedDisplayName)
+            }
+        // An event was unpinned
         } else {
-            sp.getString(R.string.user_unpinned_message, disambiguatedDisplayName)
+            if (event.isSentByCurrentUser()) {
+                sp.getString(R.string.notice_user_unpinned_event_by_you, disambiguatedDisplayName)
+            } else {
+                sp.getString(R.string.notice_user_unpinned_event, disambiguatedDisplayName)
+            }
         }
-        return pinnedMessageString
+        return pinnedEventString
     }
 
     private fun formatRoomPowerLevels(event: Event, disambiguatedDisplayName: String): CharSequence? {
@@ -194,7 +202,6 @@ class NoticeEventFormatter @Inject constructor(
     }
 
     fun format(event: Event, senderName: String?, isDm: Boolean): CharSequence? {
-        Timber.v("°°°°°°°°°°°°°°°°°°°format(event: Event, senderName: String?, isDm: Boolean)")
         return when (val type = event.getClearType()) {
             EventType.STATE_ROOM_JOIN_RULES -> formatJoinRulesEvent(event, senderName, isDm)
             EventType.STATE_ROOM_NAME -> formatRoomNameEvent(event, senderName)
@@ -889,7 +896,6 @@ class NoticeEventFormatter @Inject constructor(
     }
 
     fun formatRedactedEvent(event: Event): String {
-        Timber.v("°°°°°°°formatRedactedEvent°°°°°°")
         return (event
                 .unsignedData
                 ?.redactedEvent

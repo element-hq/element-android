@@ -159,7 +159,7 @@ import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.detail.upgrade.MigrateRoomBottomSheet
 import im.vector.app.features.home.room.detail.views.RoomDetailLazyLoadedViews
 import im.vector.app.features.home.room.detail.widget.RoomWidgetsBottomSheet
-import im.vector.app.features.home.room.pinnedmessages.arguments.PinnedMessagesTimelineArgs
+import im.vector.app.features.home.room.pinnedmessages.arguments.PinnedEventsTimelineArgs
 import im.vector.app.features.home.room.threads.ThreadsManager
 import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
 import im.vector.app.features.html.EventHtmlRenderer
@@ -379,9 +379,8 @@ class TimelineFragment :
             )
         }
 
-        if (isPinnedMessagesTimeline()) {
-            views.composerContainer.isVisible = false
-            views.voiceMessageRecorderContainer.isVisible = false
+        if (isPinnedEventsTimeline()) {
+            views.hideComposerViews()
         }
 
         timelineViewModel.observeViewEvents {
@@ -883,8 +882,8 @@ class TimelineFragment :
                 callActionsHandler.onVideoCallClicked()
                 true
             }
-            R.id.open_pinned_messages -> {
-                navigateToPinnedMessages()
+            R.id.open_pinned_events -> {
+                navigateToPinnedEvents()
                 true
             }
             R.id.menu_timeline_thread_list -> {
@@ -1116,7 +1115,7 @@ class TimelineFragment :
     }
 
     private fun updateJumpToReadMarkerViewVisibility() {
-        if (isThreadTimeLine() || isPinnedMessagesTimeline()) return
+        if (isThreadTimeLine() || isPinnedEventsTimeline()) return
         viewLifecycleOwner.lifecycleScope.launchWhenResumed {
             val state = timelineViewModel.awaitState()
             val showJumpToUnreadBanner = when (state.unreadState) {
@@ -1197,6 +1196,9 @@ class TimelineFragment :
             vectorBaseActivity.finish()
         }
         updateLiveLocationIndicator(mainState.isSharingLiveLocation)
+        if (isPinnedEventsTimeline()) {
+            views.hideComposerViews()
+        }
     }
 
     private fun handleRoomSummaryFailure(asyncRoomSummary: Fail<RoomSummary>) {
@@ -1245,16 +1247,18 @@ class TimelineFragment :
                 }
                 views.includeThreadToolbar.roomToolbarThreadTitleTextView.text = resources.getText(R.string.thread_timeline_title)
             }
-            isPinnedMessagesTimeline() -> {
+            isPinnedEventsTimeline() -> {
+                withState(timelineViewModel) { state ->
+                    timelineArgs.let {
+                        val matrixItem = MatrixItem.RoomItem(it.roomId, state.asyncRoomSummary()?.displayName, state.asyncRoomSummary()?.avatarUrl)
+                        avatarRenderer.render(matrixItem, views.includeThreadToolbar.roomToolbarThreadImageView)
+                        views.includeThreadToolbar.roomToolbarThreadShieldImageView.render(state.asyncRoomSummary()?.roomEncryptionTrustLevel)
+                        views.includeThreadToolbar.roomToolbarThreadSubtitleTextView.text = state.asyncRoomSummary()?.displayName
+                    }
+                }
                 views.includeRoomToolbar.roomToolbarContentView.isVisible = false
                 views.includeThreadToolbar.roomToolbarThreadConstraintLayout.isVisible = true
-                timelineArgs.pinnedMessagesTimelineArgs?.let {
-                    val matrixItem = MatrixItem.RoomItem(it.roomId, it.displayName, it.avatarUrl)
-                    avatarRenderer.render(matrixItem, views.includeThreadToolbar.roomToolbarThreadImageView)
-                    views.includeThreadToolbar.roomToolbarThreadShieldImageView.render(it.roomEncryptionTrustLevel)
-                    views.includeThreadToolbar.roomToolbarThreadSubtitleTextView.text = it.displayName
-                }
-                views.includeThreadToolbar.roomToolbarThreadTitleTextView.text = resources.getText(R.string.pinned_messages_timeline_title)
+                views.includeThreadToolbar.roomToolbarThreadTitleTextView.text = resources.getText(R.string.pinned_events_timeline_title)
             }
             else -> {
                 views.includeRoomToolbar.roomToolbarContentView.isVisible = true
@@ -1564,7 +1568,7 @@ class TimelineFragment :
         this.view?.hideKeyboard()
 
         MessageActionsBottomSheet
-                .newInstance(roomId, informationData, isThreadTimeLine(), isPinnedMessagesTimeline())
+                .newInstance(roomId, informationData, isThreadTimeLine(), isPinnedEventsTimeline())
                 .show(requireActivity().supportFragmentManager, "MESSAGE_CONTEXTUAL_ACTIONS")
 
         return true
@@ -1816,13 +1820,13 @@ class TimelineFragment :
                     requireActivity().toast(R.string.error_voice_message_cannot_reply_or_edit)
                 }
             }
-            is EventSharedAction.PinMessage -> {
-                timelineViewModel.handle(RoomDetailAction.PinMessage(action.eventId))
+            is EventSharedAction.PinEvent -> {
+                timelineViewModel.handle(RoomDetailAction.PinEvent(action.eventId))
             }
-            is EventSharedAction.UnpinMessage -> {
-                timelineViewModel.handle(RoomDetailAction.UnpinMessage(action.eventId))
+            is EventSharedAction.UnpinEvent -> {
+                timelineViewModel.handle(RoomDetailAction.UnpinEvent(action.eventId))
             }
-            is EventSharedAction.ViewPinnedMessageInRoom -> {
+            is EventSharedAction.ViewPinnedEventInRoom -> {
                 handleViewInRoomAction(action.eventId)
             }
             is EventSharedAction.ReplyInThread -> {
@@ -2005,24 +2009,19 @@ class TimelineFragment :
     }
 
     /**
-     * Navigate to pinned messages for the current room using the PinnedMessagesActivity.
+     * Navigate to pinned events for the current room using the PinnedEventsActivity.
      */
-    private fun navigateToPinnedMessages() = withState(timelineViewModel) { state ->
-        val pinnedEventId = timelineViewModel.getIdOfLastPinnedEvent()
+    private fun navigateToPinnedEvents() {
         context?.let {
-            val pinnedMessagesTimelineArgs = PinnedMessagesTimelineArgs(
+            val pinnedEventsTimelineArgs = PinnedEventsTimelineArgs(
                     roomId = timelineArgs.roomId,
-                    displayName = state.asyncRoomSummary()?.displayName,
-                    roomEncryptionTrustLevel = state.asyncRoomSummary()?.roomEncryptionTrustLevel,
-                    avatarUrl = state.asyncRoomSummary()?.avatarUrl,
-                    rootPinnedMessageEventId = pinnedEventId
             )
-            navigator.openPinnedMessages(it, pinnedMessagesTimelineArgs)
+            navigator.openPinnedEvents(it, pinnedEventsTimelineArgs)
         }
     }
 
     private fun handleViewInRoomAction(eventId: String) {
-        val newRoom = timelineArgs.copy(threadTimelineArgs = null, pinnedMessagesTimelineArgs = null, eventId = eventId)
+        val newRoom = timelineArgs.copy(threadTimelineArgs = null, pinnedEventsTimelineArgs = null, eventId = eventId)
         context?.let { con ->
             val intent = RoomDetailActivity.newIntent(con, newRoom, false)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
@@ -2086,7 +2085,7 @@ class TimelineFragment :
     /**
      * Returns true if the current room is a Pinned Messages room, false otherwise.
      */
-    private fun isPinnedMessagesTimeline(): Boolean = withState(timelineViewModel) { it.isPinnedMessagesTimeline() }
+    private fun isPinnedEventsTimeline(): Boolean = withState(timelineViewModel) { it.isPinnedEventsTimeline() }
 
     /**
      * Returns true if the current room is a local room, false otherwise.

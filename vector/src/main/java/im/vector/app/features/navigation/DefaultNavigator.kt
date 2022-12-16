@@ -58,8 +58,8 @@ import im.vector.app.features.home.room.detail.arguments.TimelineArgs
 import im.vector.app.features.home.room.detail.search.SearchActivity
 import im.vector.app.features.home.room.detail.search.SearchArgs
 import im.vector.app.features.home.room.filtered.FilteredRoomsActivity
-import im.vector.app.features.home.room.pinnedmessages.arguments.PinnedMessagesTimelineArgs
-import im.vector.app.features.home.room.pinnedmessages.PinnedMessagesActivity
+import im.vector.app.features.home.room.pinnedmessages.arguments.PinnedEventsTimelineArgs
+import im.vector.app.features.home.room.pinnedmessages.PinnedEventsActivity
 import im.vector.app.features.home.room.threads.ThreadsActivity
 import im.vector.app.features.home.room.threads.arguments.ThreadListArgs
 import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
@@ -601,11 +601,11 @@ class DefaultNavigator @Inject constructor(
         )
     }
 
-    override fun openPinnedMessages(context: Context, pinnedMessagesTimelineArgs: PinnedMessagesTimelineArgs) {
+    override fun openPinnedEvents(context: Context, pinnedEventsTimelineArgs: PinnedEventsTimelineArgs) {
         context.startActivity(
-                PinnedMessagesActivity.newIntent(
+                PinnedEventsActivity.newIntent(
                         context = context,
-                        pinnedMessagesTimelineArgs = pinnedMessagesTimelineArgs
+                        pinnedEventsTimelineArgs = pinnedEventsTimelineArgs
                 )
         )
     }

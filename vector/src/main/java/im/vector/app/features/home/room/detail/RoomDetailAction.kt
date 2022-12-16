@@ -30,8 +30,8 @@ import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.api.util.MatrixItem
 
 sealed class RoomDetailAction : VectorViewModelAction {
-    data class PinMessage(val eventId: String) : RoomDetailAction()
-    data class UnpinMessage(val eventId: String) : RoomDetailAction()
+    data class PinEvent(val eventId: String) : RoomDetailAction()
+    data class UnpinEvent(val eventId: String) : RoomDetailAction()
     data class SendSticker(val stickerContent: MessageStickerContent) : RoomDetailAction()
     data class SendMedia(val attachments: List<ContentAttachmentData>, val compressBeforeSending: Boolean) : RoomDetailAction()
     data class TimelineEventTurnsVisible(val event: TimelineEvent) : RoomDetailAction()

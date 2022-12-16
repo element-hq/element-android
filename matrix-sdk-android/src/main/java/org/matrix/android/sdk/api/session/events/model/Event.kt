@@ -449,10 +449,10 @@ fun Event.supportsNotification() =
 fun Event.isContentReportable() =
         this.getClearType() in EventType.MESSAGE + EventType.STATE_ROOM_BEACON_INFO.values
 
-fun Event.getIdsOfPinnedEvents(): MutableList<String>? {
+fun Event.getIdsOfPinnedEvents(): List<String>? {
     return getClearContent()?.toModel<PinnedEventsStateContent>()?.eventIds
 }
 
-fun Event.getPreviousIdsOfPinnedEvents(): MutableList<String>? {
+fun Event.getPreviousIdsOfPinnedEvents(): List<String>? {
     return resolvedPrevContent()?.toModel<PinnedEventsStateContent>()?.eventIds
 }

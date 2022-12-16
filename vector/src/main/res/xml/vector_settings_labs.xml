@@ -60,9 +60,9 @@
     <!--</im.vector.app.core.preference.VectorPreferenceCategory>-->
 
     <im.vector.app.core.preference.VectorSwitchPreference
-        android:defaultValue="@bool/settings_labs_pinned_messages_default"
-        android:key="SETTINGS_LABS_ENABLE_PINNED_MESSAGES"
-        android:title="@string/labs_enable_pinned_messages" />
+        android:defaultValue="@bool/settings_labs_pinned_events_default"
+        android:key="SETTINGS_LABS_ENABLE_PINNED_EVENTS"
+        android:title="@string/labs_enable_pinned_events" />
 
     <im.vector.app.core.preference.VectorSwitchPreference
         android:defaultValue="@bool/settings_labs_thread_messages_default"

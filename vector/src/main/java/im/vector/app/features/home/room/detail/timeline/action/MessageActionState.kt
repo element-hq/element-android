@@ -36,7 +36,7 @@ data class ActionPermissions(
         val canSendMessage: Boolean = false,
         val canReact: Boolean = false,
         val canRedact: Boolean = false,
-        val canPinMessage: Boolean = false
+        val canPinEvent: Boolean = false
 )
 
 data class MessageActionState(
@@ -52,7 +52,7 @@ data class MessageActionState(
         val expendedReportContentMenu: Boolean = false,
         val actionPermissions: ActionPermissions = ActionPermissions(),
         val isFromThreadTimeline: Boolean = false,
-        val isFromPinnedMessagesTimeline: Boolean = false
+        val isFromPinnedEventsTimeline: Boolean = false
 ) : MavericksState {
 
     constructor(args: TimelineEventFragmentArgs) : this(
@@ -60,7 +60,7 @@ data class MessageActionState(
             eventId = args.eventId,
             informationData = args.informationData,
             isFromThreadTimeline = args.isFromThreadTimeline,
-            isFromPinnedMessagesTimeline = args.isFromPinnedMessagesTimeline
+            isFromPinnedEventsTimeline = args.isFromPinnedEventsTimeline
     )
 
     fun senderName(): String = informationData.memberName?.toString() ?: ""

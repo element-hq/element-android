@@ -149,7 +149,7 @@
         <activity android:name=".features.roomdirectory.roompreview.RoomPreviewActivity" />
         <activity android:name=".features.home.room.filtered.FilteredRoomsActivity" />
         <activity android:name=".features.home.room.threads.ThreadsActivity" />
-        <activity android:name=".features.home.room.pinnedmessages.PinnedMessagesActivity" />
+        <activity android:name=".features.home.room.pinnedmessages.PinnedEventsActivity" />
 
         <activity
             android:name=".features.home.room.detail.RoomDetailActivity"

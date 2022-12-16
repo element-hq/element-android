@@ -71,7 +71,6 @@ data class RoomDetailViewState(
         val isAllowedToManageWidgets: Boolean = false,
         val isAllowedToStartWebRTCCall: Boolean = true,
         val isAllowedToSetupEncryption: Boolean = true,
-        val rootPinnedMessageEventId: String?,
         val hasFailedSending: Boolean = false,
         val jitsiState: JitsiState = JitsiState(),
         val switchToParentSpace: Boolean = false,
@@ -81,6 +80,7 @@ data class RoomDetailViewState(
         val isSharingLiveLocation: Boolean = false,
         val showKeyboardWhenPresented: Boolean = false,
         val sharedData: SharedData? = null,
+        val isFromPinnedEventsTimeline: Boolean = false,
 ) : MavericksState {
 
     constructor(args: TimelineArgs) : this(
@@ -93,7 +93,7 @@ data class RoomDetailViewState(
             rootThreadEventId = args.threadTimelineArgs?.rootThreadEventId,
             showKeyboardWhenPresented = args.threadTimelineArgs?.showKeyboard.orFalse(),
             sharedData = args.sharedData,
-            rootPinnedMessageEventId = args.pinnedMessagesTimelineArgs?.rootPinnedMessageEventId,
+            isFromPinnedEventsTimeline = args.pinnedEventsTimelineArgs != null,
     )
 
     fun isCallOptionAvailable(): Boolean {
@@ -115,7 +115,7 @@ data class RoomDetailViewState(
 
     fun isThreadTimeline() = rootThreadEventId != null
 
-    fun isPinnedMessagesTimeline() = rootPinnedMessageEventId != null
+    fun isPinnedEventsTimeline() = isFromPinnedEventsTimeline
 
     fun isLocalRoom() = RoomLocalEcho.isLocalEchoId(roomId)
 }

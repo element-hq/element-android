@@ -39,7 +39,7 @@
     <!-- Level 1: Labs -->
     <bool name="settings_labs_deferred_dm_visible">true</bool>
     <bool name="settings_labs_deferred_dm_default">true</bool>
-    <bool name="settings_labs_pinned_messages_default">false</bool>
+    <bool name="settings_labs_pinned_events_default">false</bool>
     <bool name="settings_labs_thread_messages_default">false</bool>
     <bool name="settings_labs_new_app_layout_default">true</bool>
     <bool name="settings_labs_new_session_manager_default">false</bool>

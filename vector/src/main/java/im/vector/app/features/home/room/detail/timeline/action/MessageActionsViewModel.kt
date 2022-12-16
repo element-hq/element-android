@@ -42,9 +42,11 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.getIdsOfPinnedEvents
 import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
 import org.matrix.android.sdk.api.session.events.model.isContentReportable
 import org.matrix.android.sdk.api.session.events.model.isTextMessage
@@ -131,8 +133,8 @@ class MessageActionsViewModel @AssistedInject constructor(
                     val canReact = powerLevelsHelper.isUserAllowedToSend(session.myUserId, false, EventType.REACTION)
                     val canRedact = powerLevelsHelper.isUserAbleToRedact(session.myUserId)
                     val canSendMessage = powerLevelsHelper.isUserAllowedToSend(session.myUserId, false, EventType.MESSAGE)
-                    val canPinMessage = powerLevelsHelper.isUserAllowedToSend(session.myUserId, false, EventType.STATE_ROOM_PINNED_EVENT)
-                    val permissions = ActionPermissions(canSendMessage = canSendMessage, canRedact = canRedact, canReact = canReact, canPinMessage = canPinMessage)
+                    val canPinEvent = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_PINNED_EVENT)
+                    val permissions = ActionPermissions(canSendMessage = canSendMessage, canRedact = canRedact, canReact = canReact, canPinEvent = canPinEvent)
                     setState {
                         copy(actionPermissions = permissions)
                     }
@@ -334,91 +336,95 @@ class MessageActionsViewModel @AssistedInject constructor(
     ) {
         val eventId = timelineEvent.eventId
         if (!timelineEvent.root.isRedacted()) {
-            if (initialState.isFromPinnedMessagesTimeline) {
-                if (actionPermissions.canPinMessage && vectorPreferences.arePinnedMessagesEnabled()) {
-                    add(EventSharedAction.UnpinMessage(eventId))
-                    add(EventSharedAction.ViewPinnedMessageInRoom(eventId))
+            if (initialState.isFromPinnedEventsTimeline && vectorPreferences.arePinnedEventsEnabled()) {
+                add(EventSharedAction.ViewPinnedEventInRoom(eventId))
+                if (actionPermissions.canPinEvent) {
+                    add(EventSharedAction.UnpinEvent(eventId))
                 }
-                return
-            }
-            if (canReply(timelineEvent, messageContent, actionPermissions)) {
-                add(EventSharedAction.Reply(eventId))
-            }
-
-            if (canReplyInThread(timelineEvent, messageContent, actionPermissions)) {
-                add(EventSharedAction.ReplyInThread(eventId, !timelineEvent.isRootThread()))
-            }
-
-            if (canViewInRoom(timelineEvent, messageContent, actionPermissions)) {
-                add(EventSharedAction.ViewInRoom)
-            }
-
-            if (canEndPoll(timelineEvent, actionPermissions)) {
-                add(EventSharedAction.EndPoll(timelineEvent.eventId))
-            }
-
-            if (canEdit(timelineEvent, session.myUserId, actionPermissions)) {
-                add(EventSharedAction.Edit(eventId, timelineEvent.root.getClearType()))
-            }
-
-            if (canCopy(msgType)) {
-                // TODO copy images? html? see ClipBoard
-                add(EventSharedAction.Copy(messageContent!!.body))
-            }
-
-            if (timelineEvent.canReact() && actionPermissions.canReact) {
-                add(EventSharedAction.AddReaction(eventId))
-            }
-
-            if (actionPermissions.canPinMessage && vectorPreferences.arePinnedMessagesEnabled()) {
-                val id: String = timelineEvent.root.eventId ?: return
-                val isPinned: Boolean = room?.stateService()?.isPinned(id) ?: return
-                if (isPinned) {
-                    add(EventSharedAction.UnpinMessage(eventId))
-                } else {
-                    add(EventSharedAction.PinMessage(eventId))
+            } else {
+                if (canReply(timelineEvent, messageContent, actionPermissions)) {
+                    add(EventSharedAction.Reply(eventId))
                 }
-            }
 
-            if (canViewReactions(timelineEvent)) {
-                add(EventSharedAction.ViewReactions(informationData))
-            }
+                if (canReplyInThread(timelineEvent, messageContent, actionPermissions)) {
+                    add(EventSharedAction.ReplyInThread(eventId, !timelineEvent.isRootThread()))
+                }
 
-            if (canQuote(timelineEvent, messageContent, actionPermissions)) {
-                add(EventSharedAction.Quote(eventId))
-            }
+                if (canViewInRoom(timelineEvent, messageContent, actionPermissions)) {
+                    add(EventSharedAction.ViewInRoom)
+                }
 
-            if (timelineEvent.hasBeenEdited()) {
-                add(EventSharedAction.ViewEditHistory(informationData))
-            }
+                if (canEndPoll(timelineEvent, actionPermissions)) {
+                    add(EventSharedAction.EndPoll(timelineEvent.eventId))
+                }
 
-            if (canSave(msgType) && messageContent is MessageWithAttachmentContent) {
-                add(EventSharedAction.Save(timelineEvent.eventId, messageContent))
-            }
+                if (canEdit(timelineEvent, session.myUserId, actionPermissions)) {
+                    add(EventSharedAction.Edit(eventId, timelineEvent.root.getClearType()))
+                }
 
-            if (canShare(msgType)) {
-                add(EventSharedAction.Share(timelineEvent.eventId, messageContent!!))
-            }
+                if (canCopy(msgType)) {
+                    // TODO copy images? html? see ClipBoard
+                    add(EventSharedAction.Copy(messageContent!!.body))
+                }
 
-            if (canRedact(timelineEvent, actionPermissions)) {
-                if (timelineEvent.root.getClearType() in EventType.POLL_START.values) {
-                    add(
-                            EventSharedAction.Redact(
-                                    eventId,
-                                    askForReason = informationData.senderId != session.myUserId,
-                                    dialogTitleRes = R.string.delete_poll_dialog_title,
-                                    dialogDescriptionRes = R.string.delete_poll_dialog_content
-                            )
-                    )
-                } else {
-                    add(
-                            EventSharedAction.Redact(
-                                    eventId,
-                                    askForReason = informationData.senderId != session.myUserId,
-                                    dialogTitleRes = R.string.delete_event_dialog_title,
-                                    dialogDescriptionRes = R.string.delete_event_dialog_content
-                            )
-                    )
+                if (timelineEvent.canReact() && actionPermissions.canReact) {
+                    add(EventSharedAction.AddReaction(eventId))
+                }
+
+                if (actionPermissions.canPinEvent && vectorPreferences.arePinnedEventsEnabled()) {
+                    val isPinned = room
+                            ?.stateService()
+                            ?.getStateEvent(EventType.STATE_ROOM_PINNED_EVENT, QueryStringValue.Equals(""))
+                            ?.getIdsOfPinnedEvents()
+                            ?.contains(eventId)
+                            .orFalse()
+                    if (isPinned) {
+                        add(EventSharedAction.UnpinEvent(eventId))
+                    } else {
+                        add(EventSharedAction.PinEvent(eventId))
+                    }
+                }
+
+                if (canViewReactions(timelineEvent)) {
+                    add(EventSharedAction.ViewReactions(informationData))
+                }
+
+                if (canQuote(timelineEvent, messageContent, actionPermissions)) {
+                    add(EventSharedAction.Quote(eventId))
+                }
+
+                if (timelineEvent.hasBeenEdited()) {
+                    add(EventSharedAction.ViewEditHistory(informationData))
+                }
+
+                if (canSave(msgType) && messageContent is MessageWithAttachmentContent) {
+                    add(EventSharedAction.Save(timelineEvent.eventId, messageContent))
+                }
+
+                if (canShare(msgType)) {
+                    add(EventSharedAction.Share(timelineEvent.eventId, messageContent!!))
+                }
+
+                if (canRedact(timelineEvent, actionPermissions)) {
+                    if (timelineEvent.root.getClearType() in EventType.POLL_START.values) {
+                        add(
+                                EventSharedAction.Redact(
+                                        eventId,
+                                        askForReason = informationData.senderId != session.myUserId,
+                                        dialogTitleRes = R.string.delete_poll_dialog_title,
+                                        dialogDescriptionRes = R.string.delete_poll_dialog_content
+                                )
+                        )
+                    } else {
+                        add(
+                                EventSharedAction.Redact(
+                                        eventId,
+                                        askForReason = informationData.senderId != session.myUserId,
+                                        dialogTitleRes = R.string.delete_event_dialog_title,
+                                        dialogDescriptionRes = R.string.delete_event_dialog_content
+                                )
+                        )
+                    }
                 }
             }
         }

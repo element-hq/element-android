@@ -26,5 +26,5 @@ data class TimelineEventFragmentArgs(
         val roomId: String,
         val informationData: MessageInformationData,
         val isFromThreadTimeline: Boolean = false,
-        val isFromPinnedMessagesTimeline: Boolean = false
+        val isFromPinnedEventsTimeline: Boolean = false
 ) : Parcelable
