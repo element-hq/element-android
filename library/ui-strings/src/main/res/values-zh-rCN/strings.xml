@@ -2817,4 +2817,8 @@
     <string name="device_manager_signout_all_other_sessions">登出全部其他会话</string>
     <string name="device_manager_verification_status_detail_session_encryption_not_supported">这个会话不支持加密，因此不能被验证。</string>
     <string name="settings_nightly_build_update">获取最新构建（注意：你可能在登录时遇到麻烦）</string>
+    <string name="voice_broadcast_live_broadcast">实时广播</string>
+    <string name="settings_nightly_build">Nightly构建</string>
+    <string name="notice_voice_broadcast_ended_by_you">你结束了一个语音广播。</string>
+    <string name="notice_voice_broadcast_ended">%1$s结束了一个语音广播。</string>
 </resources>
