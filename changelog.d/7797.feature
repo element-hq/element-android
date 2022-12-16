@@ -1,1 +1,1 @@
-[Session manager] Other sessions list: Security recommendation header should not be sticky
+[Session manager] Other sessions list: header should not be sticky
