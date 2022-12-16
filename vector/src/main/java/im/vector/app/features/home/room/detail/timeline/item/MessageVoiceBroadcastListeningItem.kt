@@ -93,7 +93,7 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
     override fun renderLiveIndicator(holder: Holder) {
         when {
             voiceBroadcastState == null || voiceBroadcastState == VoiceBroadcastState.STOPPED -> renderNoLiveIndicator(holder)
-            voiceBroadcastState == VoiceBroadcastState.PAUSED || !player.isLiveListening -> renderPausedLiveIndicator(holder)
+            voiceBroadcastState == VoiceBroadcastState.PAUSED -> renderPausedLiveIndicator(holder)
             else -> renderPlayingLiveIndicator(holder)
         }
     }
