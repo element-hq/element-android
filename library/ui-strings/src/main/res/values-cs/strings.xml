@@ -2935,4 +2935,7 @@
     <string name="device_manager_verification_status_detail_session_encryption_not_supported">Tato relace nepodporuje šifrování, a proto ji nelze ověřit.</string>
     <string name="settings_nightly_build_update">Získejte nejnovější sestavení (poznámka: můžete mít potíže s přihlášením)</string>
     <string name="settings_nightly_build">Noční sestavení</string>
+    <string name="voice_broadcast_live_broadcast">Živé vysílání</string>
+    <string name="notice_voice_broadcast_ended_by_you">Ukončili jste hlasové vysílání.</string>
+    <string name="notice_voice_broadcast_ended">%1$s ukončil(a) hlasové vysílání.</string>
 </resources>
