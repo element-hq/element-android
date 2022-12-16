@@ -2879,4 +2879,7 @@
     <string name="device_manager_verification_status_detail_session_encryption_not_supported">این نشست از رمزنگاری پشتیبانی نکرده و بنابراین نمی‌تواند تأیید شود.</string>
     <string name="settings_nightly_build_update">رفتن به جدیدترین ساخت (نکته: ممکن است برای ورود به مشکل بخورید)</string>
     <string name="settings_nightly_build">ساخت شبانه</string>
+    <string name="voice_broadcast_live_broadcast">پخش زنده</string>
+    <string name="notice_voice_broadcast_ended_by_you">به پخش صوتی پایان دادید.</string>
+    <string name="notice_voice_broadcast_ended">%1$s به پخش صوتی پایان داد.</string>
 </resources>
