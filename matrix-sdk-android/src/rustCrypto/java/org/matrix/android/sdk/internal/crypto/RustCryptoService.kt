@@ -153,7 +153,9 @@ internal class RustCryptoService @Inject constructor(
                 EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
             }
         } else {
-            verificationService.onEvent(roomId, event)
+            if (!initialSync) {
+                verificationService.onEvent(roomId, event)
+            }
         }
     }
 
