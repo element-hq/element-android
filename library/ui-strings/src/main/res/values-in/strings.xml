@@ -2314,7 +2314,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="location_timeline_failed_to_load_map">Gagal untuk memuat peta</string>
     <string name="a11y_static_map_image">Peta</string>
     <string name="labs_enable_thread_messages_desc">Catatan: aplikasi akan dimulai ulang</string>
-    <string name="labs_enable_thread_messages">Aktifkan Pesan Utasan</string>
+    <string name="labs_enable_thread_messages">Aktifkan pesan utasan</string>
     <string name="ftue_auth_use_case_connect_to_server">Hubungkan ke server</string>
     <string name="ftue_auth_use_case_join_existing_server">Ingin bergabung ke server yang sudah ada\?</string>
     <string name="ftue_auth_use_case_skip_partial">Lewati pertanyaan ini</string>
@@ -2825,4 +2825,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="device_manager_verification_status_detail_session_encryption_not_supported">Sesi ini tidak mendukung enkripsi dan tidak dapat diverifikasi.</string>
     <string name="settings_nightly_build_update">Dapatkan bangunan terkini (catatan: Anda mungkin memiliki masalah saat masuk)</string>
     <string name="settings_nightly_build">Bangunan nightly</string>
+    <string name="voice_broadcast_live_broadcast">Siaran langsung</string>
+    <string name="notice_voice_broadcast_ended_by_you">Anda mengakhiri sebuah siaran suara.</string>
+    <string name="notice_voice_broadcast_ended">%1$s mengakhiri sebuah siaran suara.</string>
 </resources>
