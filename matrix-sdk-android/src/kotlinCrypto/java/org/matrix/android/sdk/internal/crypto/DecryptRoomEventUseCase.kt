@@ -17,8 +17,10 @@
 package org.matrix.android.sdk.internal.crypto
 
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.model.MXEventDecryptionResult
+import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -129,7 +131,7 @@ internal class DecryptRoomEventUseCase @Inject constructor(
 
     suspend fun decryptAndSaveResult(event: Event) {
         tryOrNull(message = "Unable to decrypt the event") {
-            invoke(true)
+            invoke(event)
         }
                 ?.let { result ->
                     event.mxDecryptionResult = OlmDecryptionResult(
