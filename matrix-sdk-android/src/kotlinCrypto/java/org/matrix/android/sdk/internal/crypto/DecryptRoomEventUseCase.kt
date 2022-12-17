@@ -126,4 +126,19 @@ internal class DecryptRoomEventUseCase @Inject constructor(
     private fun requestKeysForEvent(event: Event) {
         outgoingKeyRequestManager.requestKeyForEvent(event, false)
     }
+
+    suspend fun decryptAndSaveResult(event: Event) {
+        tryOrNull(message = "Unable to decrypt the event") {
+            invoke(true)
+        }
+                ?.let { result ->
+                    event.mxDecryptionResult = OlmDecryptionResult(
+                            payload = result.clearEvent,
+                            senderKey = result.senderCurve25519Key,
+                            keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },
+                            forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain,
+                            isSafe = result.isSafe
+                    )
+                }
+    }
 }

@@ -388,7 +388,13 @@ fun Event.isLocationMessage(): Boolean {
     }
 }
 
-fun Event.isPoll(): Boolean = getClearType() in EventType.POLL_START.values || getClearType() in EventType.POLL_END.values
+fun Event.isPoll(): Boolean = isPollStart() || isPollEnd()
+
+fun Event.isPollStart(): Boolean = getClearType() in EventType.POLL_START.values
+
+fun Event.isPollResponse(): Boolean = getClearType() in EventType.POLL_RESPONSE.values
+
+fun Event.isPollEnd(): Boolean = getClearType() in EventType.POLL_END.values
 
 fun Event.isSticker(): Boolean = getClearType() == EventType.STICKER
 

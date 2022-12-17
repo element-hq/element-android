@@ -16,7 +16,9 @@
 
 package org.matrix.android.sdk.internal.crypto
 
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.crypto.model.MXEventDecryptionResult
+import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.Event
 import javax.inject.Inject
 
@@ -24,5 +26,20 @@ internal class DecryptRoomEventUseCase @Inject constructor(private val olmMachin
 
     suspend operator fun invoke(event: Event): MXEventDecryptionResult {
         return olmMachine.decryptRoomEvent(event)
+    }
+
+    suspend fun decryptAndSaveResult(event: Event) {
+        tryOrNull(message = "Unable to decrypt the event") {
+            olmMachine.decryptRoomEvent(event)
+        }
+                ?.let { result ->
+                    event.mxDecryptionResult = OlmDecryptionResult(
+                            payload = result.clearEvent,
+                            senderKey = result.senderCurve25519Key,
+                            keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },
+                            forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain,
+                            isSafe = result.isSafe
+                    )
+                }
     }
 }

@@ -24,6 +24,7 @@ import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.internal.database.RealmSessionProvider
@@ -103,11 +104,12 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
 
     override suspend fun execute(params: FetchThreadTimelineTask.Params): Result {
         val response = executeRequest(globalErrorReceiver) {
-            roomAPI.getThreadsRelations(
+            roomAPI.getRelations(
                     roomId = params.roomId,
                     eventId = params.rootThreadEventId,
+                    relationType = RelationType.THREAD,
                     from = params.from,
-                    limit = params.limit
+                    limit = params.limit,
             )
         }
 

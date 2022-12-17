@@ -130,7 +130,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
             listeners[voiceBroadcast.voiceBroadcastId] = CopyOnWriteArrayList<Listener>().apply { add(listener) }
         }
         listener.onPlayingStateChanged(if (voiceBroadcast == currentVoiceBroadcast) playingState else State.IDLE)
-        listener.onLiveModeChanged(voiceBroadcast == currentVoiceBroadcast && isLiveListening)
+        listener.onLiveModeChanged(voiceBroadcast == currentVoiceBroadcast)
     }
 
     override fun removeListener(voiceBroadcast: VoiceBroadcast, listener: Listener) {
@@ -373,11 +373,6 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
     }
 
     private fun onLiveListeningChanged(isLiveListening: Boolean) {
-        currentVoiceBroadcast?.voiceBroadcastId?.let { voiceBroadcastId ->
-            // Notify live mode change to all the listeners attached to the current voice broadcast id
-            listeners[voiceBroadcastId]?.forEach { listener -> listener.onLiveModeChanged(isLiveListening) }
-        }
-
         // Live has ended and last chunk has been reached, we can stop the playback
         if (!isLiveListening && playingState == State.BUFFERING && playlist.currentSequence == mostRecentVoiceBroadcastEvent?.content?.lastChunkSequence) {
             stop()
