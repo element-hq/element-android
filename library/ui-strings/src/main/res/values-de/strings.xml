@@ -2878,4 +2878,7 @@
 \nAus Sicherheits- und Datenschutzgründen, wird die Nutzung von verschlüsselungsfähigen Matrix-Anwendungen empfohlen.</string>
     <string name="device_manager_signout_all_other_sessions">Von allen anderen Sitzungen abmelden</string>
     <string name="device_manager_verification_status_detail_session_encryption_not_supported">Diese Sitzung unterstützt keine Verschlüsselung und kann deshalb nicht verifiziert werden.</string>
+    <string name="voice_broadcast_live_broadcast">Echtzeit-Übertragung</string>
+    <string name="notice_voice_broadcast_ended_by_you">Du hast eine Sprachübertragung beendet.</string>
+    <string name="notice_voice_broadcast_ended">%1$s beendete eine Sprachübertragung.</string>
 </resources>
