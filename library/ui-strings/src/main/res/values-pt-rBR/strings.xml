@@ -2879,4 +2879,7 @@
     <string name="review_unverified_sessions_title">Você tem sessões não-verificadas</string>
     <string name="settings_nightly_build_update">Obtenha a build mais recente (note: você pode ter problema para fazer signin)</string>
     <string name="settings_nightly_build">Build nightly</string>
+    <string name="voice_broadcast_live_broadcast">Transmissão ao vivo</string>
+    <string name="notice_voice_broadcast_ended_by_you">Você terminou uma transmissão de voz.</string>
+    <string name="notice_voice_broadcast_ended">%1$s terminou uma transmissão de voz.</string>
 </resources>
