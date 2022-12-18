@@ -2879,4 +2879,7 @@
     <string name="device_manager_verification_status_detail_session_encryption_not_supported">Den här sessioner stöder inte kryptering och kan därför inte verifieras.</string>
     <string name="settings_nightly_build_update">Hämta det senaste bygget (obs: du kan ha problem med att logga in)</string>
     <string name="settings_nightly_build">Nightly-bygge</string>
+    <string name="voice_broadcast_live_broadcast">Direktsändning</string>
+    <string name="notice_voice_broadcast_ended_by_you">Du avslutade en röstsändning.</string>
+    <string name="notice_voice_broadcast_ended">%1$s avslutade en röstsändning.</string>
 </resources>
