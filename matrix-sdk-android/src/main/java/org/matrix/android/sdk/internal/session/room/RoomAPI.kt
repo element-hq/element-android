@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.session.room
 
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomStrippedState
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsParams
@@ -251,7 +250,7 @@ internal interface RoomAPI {
      * @param limit max number of Event to retrieve
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "rooms/{roomId}/relations/{eventId}/{relationType}/{eventType}")
-    suspend fun getRelations(
+    suspend fun getRelationsWithEventType(
             @Path("roomId") roomId: String,
             @Path("eventId") eventId: String,
             @Path("relationType") relationType: String,
@@ -262,7 +261,7 @@ internal interface RoomAPI {
     ): RelationsResponse
 
     /**
-     * Paginate relations for thread events based in normal topological order.
+     * Paginate relations for events based in normal topological order.
      *
      * @param roomId the room Id
      * @param eventId the event Id
@@ -272,10 +271,10 @@ internal interface RoomAPI {
      * @param limit max number of Event to retrieve
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "rooms/{roomId}/relations/{eventId}/{relationType}")
-    suspend fun getThreadsRelations(
+    suspend fun getRelations(
             @Path("roomId") roomId: String,
             @Path("eventId") eventId: String,
-            @Path("relationType") relationType: String = RelationType.THREAD,
+            @Path("relationType") relationType: String,
             @Query("from") from: String? = null,
             @Query("to") to: String? = null,
             @Query("limit") limit: Int? = null

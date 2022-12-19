@@ -24,10 +24,12 @@ import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_OLM
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.model.MXEventDecryptionResult
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
+import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.content.OlmEventContent
@@ -83,6 +85,27 @@ internal class EventDecryptor @Inject constructor(
     @Throws(MXCryptoError::class)
     suspend fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
         return internalDecryptEvent(event, timeline)
+    }
+
+    /**
+     * Decrypt an event and save the result in the given event.
+     *
+     * @param event the raw event.
+     * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
+     */
+    suspend fun decryptEventAndSaveResult(event: Event, timeline: String) {
+        tryOrNull(message = "Unable to decrypt the event") {
+            decryptEvent(event, timeline)
+        }
+                ?.let { result ->
+                    event.mxDecryptionResult = OlmDecryptionResult(
+                            payload = result.clearEvent,
+                            senderKey = result.senderCurve25519Key,
+                            keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },
+                            forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain,
+                            isSafe = result.isSafe
+                    )
+                }
     }
 
     /**

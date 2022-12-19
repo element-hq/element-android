@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.session.room.aggregation.poll
 
 import io.realm.Realm
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -40,9 +41,14 @@ import org.matrix.android.sdk.internal.database.model.PollResponseAggregatedSumm
 import org.matrix.android.sdk.internal.database.query.create
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.where
+import org.matrix.android.sdk.internal.session.room.relation.poll.FetchPollResponseEventsTask
+import org.matrix.android.sdk.internal.task.TaskExecutor
 import javax.inject.Inject
 
-class DefaultPollAggregationProcessor @Inject constructor() : PollAggregationProcessor {
+internal class DefaultPollAggregationProcessor @Inject constructor(
+        private val taskExecutor: TaskExecutor,
+        private val fetchPollResponseEventsTask: FetchPollResponseEventsTask,
+) : PollAggregationProcessor {
 
     override fun handlePollStartEvent(realm: Realm, event: Event): Boolean {
         val content = event.getClearContent()?.toModel<MessagePollContent>()
@@ -174,6 +180,10 @@ class DefaultPollAggregationProcessor @Inject constructor() : PollAggregationPro
             aggregatedPollSummaryEntity.sourceEvents.add(event.eventId)
         }
 
+        if (!isLocalEcho) {
+            ensurePollIsFullyAggregated(roomId, pollEventId)
+        }
+
         return true
     }
 
@@ -199,5 +209,21 @@ class DefaultPollAggregationProcessor @Inject constructor() : PollAggregationPro
                 ?: realm.createObject(PollResponseAggregatedSummaryEntity::class.java).also {
                     eventAnnotationsSummaryEntity.pollResponseSummary = it
                 }
+    }
+
+    /**
+     * Check that all related votes to a given poll are all retrieved and aggregated.
+     */
+    private fun ensurePollIsFullyAggregated(
+            roomId: String,
+            pollEventId: String
+    ) {
+        taskExecutor.executorScope.launch {
+            val params = FetchPollResponseEventsTask.Params(
+                    roomId = roomId,
+                    startPollEventId = pollEventId,
+            )
+            fetchPollResponseEventsTask.execute(params)
+        }
     }
 }

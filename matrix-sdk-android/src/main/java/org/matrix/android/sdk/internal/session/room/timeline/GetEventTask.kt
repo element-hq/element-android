@@ -16,8 +16,6 @@
 
 package org.matrix.android.sdk.internal.session.room.timeline
 
-import org.matrix.android.sdk.api.extensions.tryOrNull
-import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.internal.crypto.EventDecryptor
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
@@ -48,18 +46,7 @@ internal class DefaultGetEventTask @Inject constructor(
 
         // Try to decrypt the Event
         if (event.isEncrypted()) {
-            tryOrNull(message = "Unable to decrypt the event") {
-                eventDecryptor.decryptEvent(event, "")
-            }
-                    ?.let { result ->
-                        event.mxDecryptionResult = OlmDecryptionResult(
-                                payload = result.clearEvent,
-                                senderKey = result.senderCurve25519Key,
-                                keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },
-                                forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain,
-                                isSafe = result.isSafe
-                        )
-                    }
+            eventDecryptor.decryptEventAndSaveResult(event, timeline = "")
         }
 
         event.ageLocalTs = clock.epochMillis() - (event.unsignedData?.age ?: 0)
