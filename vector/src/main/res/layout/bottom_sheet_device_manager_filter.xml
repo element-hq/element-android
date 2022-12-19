@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingHorizontal="24dp"
-    android:paddingBottom="32dp">
+    android:orientation="vertical">
 
     <View
         android:layout_width="36dp"
@@ -19,14 +16,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
+        android:paddingHorizontal="24dp"
         android:text="@string/device_manager_filter_bottom_sheet_title" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingEnd="5dp"
-        android:scrollbarStyle="outsideOverlay"
-        tools:ignore="RtlSymmetry">
+        android:clipToPadding="false"
+        android:paddingHorizontal="24dp"
+        android:paddingBottom="32dp"
+        android:scrollbarStyle="outsideOverlay">
 
         <RadioGroup
             android:id="@+id/filterOptionsRadioGroup"
