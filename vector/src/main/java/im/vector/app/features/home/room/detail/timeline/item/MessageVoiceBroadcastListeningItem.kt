@@ -122,10 +122,17 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
 
     private fun bindSeekBar(holder: Holder) {
         with(holder) {
-            durationView.text = formatPlaybackTime(duration)
+            var remainingTimeText = formatPlaybackTime(duration)
+            remainingTimeView.text = if (duration < 1000) remainingTimeText else String.format("-%s", remainingTimeText)
+            elapsedTimeView.text = formatPlaybackTime(0)
             seekBar.max = duration
             seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) = Unit
+                override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                    val remainingTime = duration - progress
+                    remainingTimeText = formatPlaybackTime(duration - progress)
+                    remainingTimeView.text = if (remainingTime < 1000) remainingTimeText else String.format("-%s", remainingTimeText)
+                    elapsedTimeView.text = formatPlaybackTime(progress)
+                }
 
                 override fun onStartTrackingTouch(seekBar: SeekBar) {
                     isUserSeeking = true
@@ -177,7 +184,8 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
         val fastBackwardButton by bind<ImageButton>(R.id.fastBackwardButton)
         val fastForwardButton by bind<ImageButton>(R.id.fastForwardButton)
         val seekBar by bind<SeekBar>(R.id.seekBar)
-        val durationView by bind<TextView>(R.id.playbackDuration)
+        val remainingTimeView by bind<TextView>(R.id.remainingTime)
+        val elapsedTimeView by bind<TextView>(R.id.elapsedTime)
         val broadcasterNameMetadata by bind<VoiceBroadcastMetadataView>(R.id.broadcasterNameMetadata)
         val voiceBroadcastMetadata by bind<VoiceBroadcastMetadataView>(R.id.voiceBroadcastMetadata)
         val listenersCountMetadata by bind<VoiceBroadcastMetadataView>(R.id.listenersCountMetadata)
