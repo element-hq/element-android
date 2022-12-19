@@ -127,6 +127,7 @@ sealed class RoomDetailAction : VectorViewModelAction {
             object Pause : Recording()
             object Resume : Recording()
             object Stop : Recording()
+            object StopConfirmed : Recording()
         }
 
         sealed class Listening : VoiceBroadcastAction() {
