@@ -3013,7 +3013,11 @@
                 "begging",
                 "mercy",
                 "puppy eyes",
-                "face"
+                "face",
+                "cry",
+                "tears",
+                "sad",
+                "grievance"
             ]
         },
         "face-holding-back-tears": {
@@ -3060,9 +3064,7 @@
                 "fearful",
                 "scared",
                 "terrified",
-                "nervous",
-                "oops",
-                "huh"
+                "nervous"
             ]
         },
         "anxious-face-with-sweat": {
