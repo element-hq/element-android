@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -22,14 +23,16 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingEnd="5dp"
+        android:scrollbarStyle="outsideOverlay"
+        tools:ignore="RtlSymmetry">
 
         <RadioGroup
             android:id="@+id/filterOptionsRadioGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:layoutDirection="rtl"
+            android:paddingTop="24dp"
             android:showDividers="none">
 
             <RadioButton
@@ -37,25 +40,34 @@
                 style="@style/TextAppearance.Vector.Subtitle.Medium.DevicesManagement"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:background="?android:selectableItemBackground"
+                android:button="@null"
                 android:checked="true"
+                android:drawableEnd="?android:attr/listChoiceIndicatorSingle"
                 android:minHeight="0dp"
-                android:text="@string/device_manager_filter_option_all_sessions" />
+                android:text="@string/device_manager_filter_option_all_sessions"
+                android:textAlignment="textStart" />
 
             <RadioButton
                 android:id="@+id/filterOptionVerifiedRadioButton"
                 style="@style/TextAppearance.Vector.Subtitle.Medium.DevicesManagement"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="start"
                 android:layout_marginTop="24dp"
+                android:background="?android:selectableItemBackground"
+                android:button="@null"
+                android:drawableEnd="?android:attr/listChoiceIndicatorSingle"
                 android:minHeight="0dp"
-                android:text="@string/device_manager_filter_option_verified" />
+                android:text="@string/device_manager_filter_option_verified"
+                android:textAlignment="textStart" />
 
             <TextView
                 android:id="@+id/filterOptionVerifiedTextView"
                 style="@style/TextAppearance.Vector.Body.DevicesManagement"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
                 android:text="@string/device_manager_filter_option_verified_description" />
 
             <RadioButton
@@ -63,16 +75,20 @@
                 style="@style/TextAppearance.Vector.Subtitle.Medium.DevicesManagement"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="start"
                 android:layout_marginTop="16dp"
+                android:background="?android:selectableItemBackground"
+                android:button="@null"
+                android:drawableEnd="?android:attr/listChoiceIndicatorSingle"
                 android:minHeight="0dp"
-                android:text="@string/device_manager_filter_option_unverified" />
+                android:text="@string/device_manager_filter_option_unverified"
+                android:textAlignment="textStart" />
 
             <TextView
                 android:id="@+id/filterOptionUnverifiedTextView"
                 style="@style/TextAppearance.Vector.Body.DevicesManagement"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
                 android:text="@string/device_manager_filter_option_unverified_description" />
 
             <RadioButton
@@ -80,16 +96,20 @@
                 style="@style/TextAppearance.Vector.Subtitle.Medium.DevicesManagement"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="start"
                 android:layout_marginTop="16dp"
+                android:background="?android:selectableItemBackground"
+                android:button="@null"
+                android:drawableEnd="?android:attr/listChoiceIndicatorSingle"
                 android:minHeight="0dp"
-                android:text="@string/device_manager_filter_option_inactive" />
+                android:text="@string/device_manager_filter_option_inactive"
+                android:textAlignment="textStart" />
 
             <TextView
                 android:id="@+id/filterOptionInactiveTextView"
                 style="@style/TextAppearance.Vector.Body.DevicesManagement"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end" />
+                android:layout_height="wrap_content" />
 
         </RadioGroup>
 
