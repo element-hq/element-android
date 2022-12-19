@@ -2870,4 +2870,7 @@
 \nSelle sessiooniga ei saa sa osaleda krüptitud jututubades.
 \n
 \nParima turvalisuse ja privaatsuse nimel palun kasuta selliseid Matrix\'i kliente, mis toetavad krüptimist.</string>
+    <string name="voice_broadcast_live_broadcast">Ringhäälingukõne on eetris</string>
+    <string name="notice_voice_broadcast_ended_by_you">Sa lõpetasid ringhäälingukõne.</string>
+    <string name="notice_voice_broadcast_ended">%1$s lõpetas ringhäälingukõne.</string>
 </resources>
