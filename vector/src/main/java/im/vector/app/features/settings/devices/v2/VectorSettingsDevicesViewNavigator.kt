@@ -31,12 +31,11 @@ class VectorSettingsDevicesViewNavigator @Inject constructor() {
 
     fun navigateToOtherSessions(
             context: Context,
-            titleResourceId: Int,
             defaultFilter: DeviceManagerFilterType,
             excludeCurrentDevice: Boolean,
     ) {
         context.startActivity(
-                OtherSessionsActivity.newIntent(context, titleResourceId, defaultFilter, excludeCurrentDevice)
+                OtherSessionsActivity.newIntent(context, defaultFilter, excludeCurrentDevice)
         )
     }
 

@@ -47,7 +47,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
 
-private const val A_TITLE_RES_ID = 1
 private const val A_DEVICE_ID_1 = "device-id-1"
 private const val A_DEVICE_ID_2 = "device-id-2"
 private const val A_PASSWORD = "password"
@@ -58,7 +57,6 @@ class OtherSessionsViewModelTest {
     val mavericksTestRule = MavericksTestRule(testDispatcher = testDispatcher)
 
     private val defaultArgs = OtherSessionsArgs(
-            titleResourceId = A_TITLE_RES_ID,
             defaultFilter = DeviceManagerFilterType.ALL_SESSIONS,
             excludeCurrentDevice = false,
     )
