@@ -118,7 +118,7 @@ class VectorPushHandler @Inject constructor(
                 Timber.tag(loggerTag.value).d("## handleInternal()")
             }
 
-            val session = activeSessionHolder.getOrInitializeSession(startSync = false)
+            val session = activeSessionHolder.getOrInitializeSession()
 
             if (session == null) {
                 Timber.tag(loggerTag.value).w("## Can't sync from push, no current session")
