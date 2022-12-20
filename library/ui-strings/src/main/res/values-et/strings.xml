@@ -1078,7 +1078,7 @@
     <string name="unexpected_error">Ootamatu viga</string>
     <string name="keys_backup_setup_skip_title">Kas sa oled kindel\?</string>
     <string name="keys_backup_setup_skip_msg">Kui sa logid välja või kaotad seadme, siis sa ei saa enam lugeda oma krüptitud sõnumeid.</string>
-    <string name="keys_backup_restore_is_getting_backup_version">Laen varukoopia versiooni…</string>
+    <string name="keys_backup_restore_is_getting_backup_version">Laadin varukoopia versiooni…</string>
     <string name="keys_backup_restore_with_passphrase">Selleks, et krüptitud sõnumite ajalugu lukust lahti võtta, kasuta oma taastamiseks mõeldud paroolifraasi</string>
     <string name="keys_backup_restore_use_recovery_key">kasuta oma taastevõtit</string>
     <string name="keys_backup_restore_with_passphrase_helper_with_link">Kas sa ei tea oma taastamiseks mõeldud paroolifraasi\? Siis sa võid %s.</string>
@@ -1379,7 +1379,7 @@
     <string name="disclaimer_negative_button">Selge lugu</string>
     <string name="disclaimer_positive_button">Vaata lisateavet</string>
     <string name="save_recovery_key_chooser_hint">Salvesta taastevõti järgnevalt</string>
-    <string name="loading_contact_book">Laen sinu kontaktide loendit…</string>
+    <string name="loading_contact_book">Laadin sinu kontaktide loendit…</string>
     <string name="empty_contact_book">Sinu kontaktide loend on tühi</string>
     <string name="contacts_book_title">Sinu kontaktide loend</string>
     <string name="three_pid_revoke_invite_dialog_title">Tühista kutse</string>
@@ -2859,4 +2859,18 @@
     <string name="message_reply_to_sender_created_poll">koostas küsitluse.</string>
     <string name="settings_enable_direct_share_title">Kasuta otsejagamist</string>
     <string name="settings_enable_direct_share_summary">Näita viimaseid vestlusi süsteemses jagamisvaates</string>
+    <string name="review_unverified_sessions_description">Tagamaks, et su konto on sinu kontrolli all, vaata andmed üle</string>
+    <string name="review_unverified_sessions_title">Sul on verifitseerimata sessioone</string>
+    <string name="settings_nightly_build">Igaöine arendusversioon</string>
+    <string name="settings_nightly_build_update">Kasuta viimast arendusversiooni (aga võib tekkida erinevaid vigu, sealhulgas sisselogimisega)</string>
+    <string name="device_manager_verification_status_detail_session_encryption_not_supported">Seda sessiooni ei saa verifitseerida, sest seal puudub krüptimise tugi.</string>
+    <string name="device_manager_signout_all_other_sessions">Logi välja kõikidest oma muudest sessioonidest</string>
+    <string name="device_manager_learn_more_sessions_encryption_not_supported">Seda sessiooni ei saa verifitseerida, sest seal puudub krüptimise tugi.
+\n
+\nSelle sessiooniga ei saa sa osaleda krüptitud jututubades.
+\n
+\nParima turvalisuse ja privaatsuse nimel palun kasuta selliseid Matrix\'i kliente, mis toetavad krüptimist.</string>
+    <string name="voice_broadcast_live_broadcast">Ringhäälingukõne on eetris</string>
+    <string name="notice_voice_broadcast_ended_by_you">Sa lõpetasid ringhäälingukõne.</string>
+    <string name="notice_voice_broadcast_ended">%1$s lõpetas ringhäälingukõne.</string>
 </resources>

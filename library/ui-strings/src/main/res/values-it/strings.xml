@@ -2859,4 +2859,18 @@
     <string name="editing">Modifica</string>
     <string name="settings_enable_direct_share_summary">Mostra chat recenti nel menu di condivisione di sistema</string>
     <string name="settings_enable_direct_share_title">Attiva condivisione diretta</string>
+    <string name="review_unverified_sessions_description">Controlla per assicurarti che l\'account sia sicuro</string>
+    <string name="review_unverified_sessions_title">Hai sessioni non verificate</string>
+    <string name="device_manager_learn_more_sessions_encryption_not_supported">Questa sessione non supporta la crittografia, perciò non può essere verificata.
+\n
+\nNon potrai partecipare in stanze dove la crittografia è attiva mentre usi questa sessione.
+\n
+\nPer maggiore sicurezza e privacy, è consigliabile usare i client di Matrix che supportano la crittografia.</string>
+    <string name="device_manager_signout_all_other_sessions">Disconnetti da tutte le altre sessioni</string>
+    <string name="device_manager_verification_status_detail_session_encryption_not_supported">Questa sessione non supporta la crittografia, perciò non può essere verificata.</string>
+    <string name="voice_broadcast_live_broadcast">Trasmissione in diretta</string>
+    <string name="settings_nightly_build_update">Ottieni la build più recente (nota: potresti avere problemi nell\'accesso)</string>
+    <string name="settings_nightly_build">Nightly build</string>
+    <string name="notice_voice_broadcast_ended_by_you">Hai terminato una trasmissione vocale.</string>
+    <string name="notice_voice_broadcast_ended">%1$s ha terminato una trasmissione vocale.</string>
 </resources>

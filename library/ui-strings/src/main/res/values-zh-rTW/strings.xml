@@ -2812,4 +2812,18 @@
     <string name="editing">正在編輯</string>
     <string name="settings_enable_direct_share_summary">在系統分享選單中顯示最近聊天</string>
     <string name="settings_enable_direct_share_title">啟用直接分享</string>
+    <string name="review_unverified_sessions_description">檢查以確保您的帳號安全</string>
+    <string name="review_unverified_sessions_title">您有未驗證的工作階段</string>
+    <string name="device_manager_learn_more_sessions_encryption_not_supported">此工作階段不支援加密，因此無法驗證。
+\n
+\n使用此工作階段時，您將無法參與啟用了加密的聊天室。
+\n
+\n為了取得最佳的安全性與隱私，建議使用支援加密的 Matrix 客戶端。</string>
+    <string name="device_manager_signout_all_other_sessions">登出其他所有工作階段</string>
+    <string name="device_manager_verification_status_detail_session_encryption_not_supported">此工作階段不支援加密，因此無法驗證。</string>
+    <string name="settings_nightly_build_update">取得最新版本（注意：您可能會無法登入）</string>
+    <string name="settings_nightly_build">Nightly 版本</string>
+    <string name="voice_broadcast_live_broadcast">即時廣播</string>
+    <string name="notice_voice_broadcast_ended_by_you">您結束了語音廣播。</string>
+    <string name="notice_voice_broadcast_ended">%1$s 結束了語音廣播。</string>
 </resources>
