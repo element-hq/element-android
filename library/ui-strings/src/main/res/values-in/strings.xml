@@ -2648,7 +2648,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="device_manager_session_last_activity">Aktivitas terakhir %1$s</string>
     <string name="device_manager_device_title">Perangkat</string>
     <string name="device_manager_session_title">Sesi</string>
-    <string name="device_manager_current_session_title">Sesi Saat Ini</string>
+    <string name="device_manager_current_session_title">Sesi saat ini</string>
     <string name="device_manager_verification_status_detail_other_session_unverified">Verifikasi atau keluarkan sesi ini untuk keamanan dan keandalan yang terbaik.</string>
     <string name="device_manager_verification_status_detail_current_session_unverified">Verifikasi sesi Anda saat ini untuk perpesanan aman yang baik.</string>
     <string name="device_manager_verification_status_detail_other_session_verified">Sesi ini siap untuk perpesanan aman.</string>
@@ -2828,4 +2828,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="voice_broadcast_live_broadcast">Siaran langsung</string>
     <string name="notice_voice_broadcast_ended_by_you">Anda mengakhiri sebuah siaran suara.</string>
     <string name="notice_voice_broadcast_ended">%1$s mengakhiri sebuah siaran suara.</string>
+    <string name="stop_voice_broadcast_content">Apakah Anda ingin menghentikan siaran langsung Anda\? Ini akan mengakhiri siaran dan rekaman lengkap akan tersedia dalam ruangan.</string>
+    <string name="stop_voice_broadcast_dialog_title">Hentikan siaran langsung\?</string>
+    <string name="action_stop">Ya, Hentikan</string>
 </resources>
