@@ -2881,4 +2881,7 @@
     <string name="voice_broadcast_live_broadcast">Echtzeit-Übertragung</string>
     <string name="notice_voice_broadcast_ended_by_you">Du hast eine Sprachübertragung beendet.</string>
     <string name="notice_voice_broadcast_ended">%1$s beendete eine Sprachübertragung.</string>
+    <string name="stop_voice_broadcast_content">Möchtest du die Übertragung wirklich beenden\? Dies wird die Übertragung beenden und die vollständige Aufnahme im Raum bereitstellen.</string>
+    <string name="stop_voice_broadcast_dialog_title">Live-Übertragung beenden\?</string>
+    <string name="action_stop">Ja, beende</string>
 </resources>
