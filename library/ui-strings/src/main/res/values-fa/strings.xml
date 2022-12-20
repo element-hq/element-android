@@ -2882,4 +2882,7 @@
     <string name="voice_broadcast_live_broadcast">پخش زنده</string>
     <string name="notice_voice_broadcast_ended_by_you">به پخش صوتی پایان دادید.</string>
     <string name="notice_voice_broadcast_ended">%1$s به پخش صوتی پایان داد.</string>
+    <string name="stop_voice_broadcast_content">مطمئنید که می‌خواهید پخش زنده‌تان را قطع کنید؟ این کار پخش را پایان داده و ضبط کامل در اتاق موجود خواهد شد.</string>
+    <string name="stop_voice_broadcast_dialog_title">قطع پخش زنده؟</string>
+    <string name="action_stop">بله، متوقّف شود</string>
 </resources>
