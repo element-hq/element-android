@@ -2994,4 +2994,7 @@
     <string name="voice_broadcast_live_broadcast">Трансляція наживо</string>
     <string name="notice_voice_broadcast_ended_by_you">Ви завершили голосову трансляцію.</string>
     <string name="notice_voice_broadcast_ended">%1$s завершує голосову трансляцію.</string>
+    <string name="stop_voice_broadcast_content">Ви впевнені, що хочете припинити голосову трансляцію\? На цьому трансляція завершиться, і повний запис буде доступний у кімнаті.</string>
+    <string name="stop_voice_broadcast_dialog_title">Припинити голосову трансляцію\?</string>
+    <string name="action_stop">Так, припинити</string>
 </resources>
