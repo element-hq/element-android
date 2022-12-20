@@ -24,6 +24,8 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.bottomSheetDividerItem
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.ui.list.genericFooterItem
+import im.vector.app.core.ui.list.ItemStyle
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetSelfWaitItem
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationNoticeItem
@@ -39,6 +41,7 @@ import im.vector.app.features.crypto.verification.user.renderSasTransaction
 import im.vector.app.features.crypto.verification.user.renderStartTransactionOptions
 import im.vector.app.features.crypto.verification.user.verifiedSuccessTile
 import im.vector.app.features.html.EventHtmlRenderer
+import im.vector.app.features.spaces.create.SpaceType
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.EVerificationState
@@ -124,6 +127,16 @@ class SelfVerificationController @Inject constructor(
                 val pendingRequest = state.pendingRequest.invoke()
                 when (pendingRequest.state) {
                     EVerificationState.WaitingForReady -> {
+
+                        genericFooterItem {
+                            id("open_other")
+                            style(ItemStyle.NORMAL_TEXT)
+                            text(
+                                    host.stringProvider.getString(R.string.verification_request_was_sent).toEpoxyCharSequence()
+                            )
+                            textColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
+                        }
+
                         bottomSheetSelfWaitItem {
                             id("waiting")
                         }

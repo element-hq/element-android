@@ -2503,6 +2503,7 @@
 
     <string name="new_session">New login. Was this you?</string>
     <string name="verify_new_session_notice">Use this session to verify your new one, granting it access to encrypted messages.</string>
+    <string name="verification_request_was_sent">A verification request has been sent. Open one of your other sessions to accept and start the verification.</string>
     <string name="verify_new_session_was_not_me">This wasn’t me</string>
     <string name="verify_new_session_compromized">Your account may be compromised</string>
 
