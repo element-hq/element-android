@@ -155,6 +155,8 @@ internal class DefaultPollAggregationProcessor @Inject constructor(
         )
         aggregatedPollSummaryEntity.aggregatedContent = ContentMapper.map(newSumModel.toContent())
 
+        // TODO check also if eventId is part of UTD list of eventIds, if so remove it
+
         return true
     }
 
@@ -183,6 +185,8 @@ internal class DefaultPollAggregationProcessor @Inject constructor(
         if (!isLocalEcho) {
             ensurePollIsFullyAggregated(roomId, pollEventId)
         }
+
+        // TODO check also if eventId is part of UTD list of eventIds, if so remove it
 
         return true
     }

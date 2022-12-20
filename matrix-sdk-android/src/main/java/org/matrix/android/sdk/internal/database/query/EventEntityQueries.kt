@@ -25,6 +25,7 @@ import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.EventEntityFields
 import org.matrix.android.sdk.internal.database.model.EventInsertEntity
 import org.matrix.android.sdk.internal.database.model.EventInsertType
+import org.matrix.android.sdk.internal.database.model.UnableToDecryptEventEntity
 
 internal fun EventEntity.copyToRealmOrIgnore(realm: Realm, insertType: EventInsertType): EventEntity {
     val eventEntity = realm.where<EventEntity>()
@@ -32,11 +33,17 @@ internal fun EventEntity.copyToRealmOrIgnore(realm: Realm, insertType: EventInse
             .equalTo(EventEntityFields.ROOM_ID, roomId)
             .findFirst()
     return if (eventEntity == null) {
-        val canBeProcessed = type != EventType.ENCRYPTED || decryptionResultJson != null
+        val isEncrypted = type == EventType.ENCRYPTED && decryptionResultJson == null
+        val canBeProcessed = isEncrypted.not()
         val insertEntity = EventInsertEntity(eventId = eventId, eventType = type, canBeProcessed = canBeProcessed).apply {
             this.insertType = insertType
         }
         realm.insert(insertEntity)
+        // TODO check with others if it is the right spot to detect UTD events
+        if (isEncrypted) {
+            val utdEventEntity = UnableToDecryptEventEntity(eventId = eventId)
+            realm.insert(utdEventEntity)
+        }
         // copy this event entity and return it
         realm.copyToRealm(this)
     } else {
