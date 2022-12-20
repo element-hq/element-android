@@ -2938,4 +2938,7 @@
     <string name="voice_broadcast_live_broadcast">Živé vysílání</string>
     <string name="notice_voice_broadcast_ended_by_you">Ukončili jste hlasové vysílání.</string>
     <string name="notice_voice_broadcast_ended">%1$s ukončil(a) hlasové vysílání.</string>
+    <string name="stop_voice_broadcast_content">Jste si jisti, že chcete ukončit živé vysílání\? Tím se vysílání ukončí a v místnosti bude k dispozici celý záznam.</string>
+    <string name="stop_voice_broadcast_dialog_title">Zastavit živé vysílání\?</string>
+    <string name="action_stop">Ano, zastavit</string>
 </resources>
