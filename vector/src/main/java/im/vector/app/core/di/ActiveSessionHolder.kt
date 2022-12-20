@@ -18,7 +18,6 @@ package im.vector.app.core.di
 
 import android.content.Context
 import im.vector.app.ActiveSessionDataSource
-import im.vector.app.core.extensions.startSyncing
 import im.vector.app.core.pushers.UnregisterUnifiedPushUseCase
 import im.vector.app.core.services.GuardServiceStarter
 import im.vector.app.core.session.ConfigureAndStartSessionUseCase
@@ -72,7 +71,7 @@ class ActiveSessionHolder @Inject constructor(
 
     suspend fun clearActiveSession() {
         // Do some cleanup first
-        getSafeActiveSession(startSync = false)?.let {
+        getSafeActiveSession()?.let {
             Timber.w("clearActiveSession of ${it.myUserId}")
             it.callSignalingService().removeCallListener(callManager)
             it.removeListener(sessionListener)
@@ -93,8 +92,8 @@ class ActiveSessionHolder @Inject constructor(
         return activeSessionReference.get() != null || authenticationService.hasAuthenticatedSessions()
     }
 
-    fun getSafeActiveSession(startSync: Boolean = true): Session? {
-        return runBlocking { getOrInitializeSession(startSync = startSync) }
+    fun getSafeActiveSession(): Session? {
+        return runBlocking { getOrInitializeSession() }
     }
 
     fun getActiveSession(): Session {
@@ -102,16 +101,11 @@ class ActiveSessionHolder @Inject constructor(
                 ?: throw IllegalStateException("You should authenticate before using this")
     }
 
-    suspend fun getOrInitializeSession(startSync: Boolean): Session? {
+    suspend fun getOrInitializeSession(): Session? {
         return activeSessionReference.get()
-                ?.also {
-                    if (startSync && !it.syncService().isSyncThreadAlive()) {
-                        it.startSyncing(applicationContext)
-                    }
-                }
                 ?: sessionInitializer.tryInitialize(readCurrentSession = { activeSessionReference.get() }) { session ->
                     setActiveSession(session)
-                    configureAndStartSessionUseCase.execute(session, startSyncing = startSync)
+                    configureAndStartSessionUseCase.execute(session, startSyncing = false)
                 }
     }
 
