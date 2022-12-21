@@ -3479,12 +3479,18 @@
     <string name="qr_code_login_confirm_security_code">Confirm</string>
     <string name="qr_code_login_confirm_security_code_description">Please ensure that you know the origin of this code. By linking devices, you will provide someone with full access to your account.</string>
 
-    <!-- WYSIWYG Composer -->
+    <!-- Rich text editor -->
     <string name="rich_text_editor_format_bold">Apply bold format</string>
     <string name="rich_text_editor_format_italic">Apply italic format</string>
     <string name="rich_text_editor_format_strikethrough">Apply strikethrough format</string>
     <string name="rich_text_editor_format_underline">Apply underline format</string>
+    <string name="rich_text_editor_link">Set link</string>
     <string name="rich_text_editor_full_screen_toggle">Toggle full screen mode</string>
+
+    <string name="set_link_text">Text</string>
+    <string name="set_link_link">Link</string>
+    <string name="set_link_create">Create a link</string>
+    <string name="set_link_edit">Edit link</string>
 
     <!-- ReplyTo events -->
     <string name="message_reply_to_prefix">In reply to</string>

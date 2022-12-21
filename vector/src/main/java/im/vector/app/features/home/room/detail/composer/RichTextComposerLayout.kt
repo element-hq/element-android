@@ -49,6 +49,7 @@ import im.vector.app.databinding.ComposerRichTextLayoutBinding
 import im.vector.app.databinding.ViewRichTextMenuButtonBinding
 import io.element.android.wysiwyg.EditorEditText
 import io.element.android.wysiwyg.inputhandlers.models.InlineFormat
+import io.element.android.wysiwyg.inputhandlers.models.LinkAction
 import io.element.android.wysiwyg.utils.RustErrorCollector
 import uniffi.wysiwyg_composer.ActionState
 import uniffi.wysiwyg_composer.ComposerAction
@@ -231,7 +232,24 @@ internal class RichTextComposerLayout @JvmOverloads constructor(
         addRichTextMenuItem(R.drawable.ic_composer_strikethrough, R.string.rich_text_editor_format_strikethrough, ComposerAction.STRIKE_THROUGH) {
             views.richTextComposerEditText.toggleInlineFormat(InlineFormat.StrikeThrough)
         }
+        addRichTextMenuItem(R.drawable.ic_composer_link, R.string.rich_text_editor_link, ComposerAction.LINK) {
+            views.richTextComposerEditText.getLinkAction()?.let {
+                when (it) {
+                    LinkAction.InsertLink -> callback?.onSetLink(isTextSupported = true, initialLink = null)
+                    is LinkAction.SetLink -> callback?.onSetLink(isTextSupported = false, initialLink = it.currentLink)
+                }
+            }
+        }
     }
+
+    fun setLink(link: String?) =
+            views.richTextComposerEditText.setLink(link)
+
+    fun insertLink(link: String, text: String) =
+            views.richTextComposerEditText.insertLink(link, text)
+
+    fun removeLink() =
+            views.richTextComposerEditText.removeLink()
 
     @SuppressLint("ClickableViewAccessibility")
     private fun disallowParentInterceptTouchEvent(view: View) {
