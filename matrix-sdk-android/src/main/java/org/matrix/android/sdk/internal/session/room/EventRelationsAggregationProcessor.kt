@@ -23,7 +23,6 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.LocalEcho
 import org.matrix.android.sdk.api.session.events.model.RelationType
-import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.getRelationContent
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -61,7 +60,6 @@ import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.EventInsertLiveProcessor
 import org.matrix.android.sdk.internal.session.room.aggregation.livelocation.LiveLocationAggregationProcessor
 import org.matrix.android.sdk.internal.session.room.aggregation.poll.PollAggregationProcessor
-import org.matrix.android.sdk.internal.session.room.aggregation.utd.EncryptedReferenceAggregationProcessor
 import org.matrix.android.sdk.internal.session.room.state.StateEventDataSource
 import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
@@ -74,7 +72,6 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
         private val sessionManager: SessionManager,
         private val liveLocationAggregationProcessor: LiveLocationAggregationProcessor,
         private val pollAggregationProcessor: PollAggregationProcessor,
-        private val encryptedReferenceAggregationProcessor: EncryptedReferenceAggregationProcessor,
         private val editValidator: EventEditValidator,
         private val clock: Clock,
 ) : EventInsertLiveProcessor {
@@ -169,34 +166,6 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                     event.content.toModel<MessageRelationContent>()?.relatesTo?.let {
                         if (it.type == RelationType.REFERENCE && it.eventId != null) {
                             handleVerification(realm, event, roomId, isLocalEcho, it.eventId)
-                        }
-                    }
-                }
-                // TODO remove this once other implementation is validated
-                // As for now Live event processors are not receiving UTD events.
-                // They will get an update if the event is decrypted later
-                EventType.ENCRYPTED -> {
-                    // Relation type is in clear, it might be possible to do some things?
-                    // Notice that if the event is decrypted later, process will be called again
-                    val encryptedEventContent = event.content.toModel<EncryptedEventContent>()
-                    when (encryptedEventContent?.relatesTo?.type) {
-                        RelationType.REPLACE -> {
-                            Timber.v("###REPLACE in room $roomId for event ${event.eventId}")
-                            // A replace!
-                            handleReplace(realm, event, roomId, isLocalEcho, encryptedEventContent.relatesTo.eventId)
-                        }
-                        RelationType.RESPONSE -> {
-                            // can we / should we do we something for UTD response??
-                            Timber.w("## UTD response in room $roomId related to ${encryptedEventContent.relatesTo.eventId}")
-                        }
-                        RelationType.REFERENCE -> {
-                            // can we / should we do we something for UTD reference??
-                            Timber.w("## UTD reference in room $roomId related to ${encryptedEventContent.relatesTo.eventId}")
-                            encryptedReferenceAggregationProcessor.handle(realm, event, roomId, isLocalEcho, encryptedEventContent.relatesTo.eventId)
-                        }
-                        RelationType.ANNOTATION -> {
-                            // can we / should we do we something for UTD annotation??
-                            Timber.w("## UTD annotation in room $roomId related to ${encryptedEventContent.relatesTo.eventId}")
                         }
                     }
                 }
