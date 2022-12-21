@@ -2826,4 +2826,7 @@
     <string name="voice_broadcast_live_broadcast">即時廣播</string>
     <string name="notice_voice_broadcast_ended_by_you">您結束了語音廣播。</string>
     <string name="notice_voice_broadcast_ended">%1$s 結束了語音廣播。</string>
+    <string name="stop_voice_broadcast_content">您真的想要停止您的即時廣播嗎？這將會結束廣播，完整的錄音會在聊天室中提供。</string>
+    <string name="stop_voice_broadcast_dialog_title">停止即時廣播？</string>
+    <string name="action_stop">是的，停止</string>
 </resources>
