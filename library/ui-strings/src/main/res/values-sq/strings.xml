@@ -2573,7 +2573,7 @@
     <string name="device_manager_filter_bottom_sheet_title">Filtroji</string>
     <string name="device_manager_device_title">Pajisje</string>
     <string name="device_manager_session_title">Sesion</string>
-    <string name="device_manager_current_session_title">Sesioni i Tanishëm</string>
+    <string name="device_manager_current_session_title">Sesioni i tanishëm</string>
     <plurals name="device_manager_inactive_sessions_description">
         <item quantity="one">Shihni mundësinë e daljes nga sesione të vjetër (%1$d ditë ose më tepër) të cilët s’i përdorni më.</item>
         <item quantity="other">Shihni mundësinë e daljes nga sesione të vjetër (%1$d ditë ose më tepër) të cilët s’i përdorni më.</item>
@@ -2867,4 +2867,7 @@
     <string name="settings_nightly_build">Montim i përnatshëm</string>
     <string name="notice_voice_broadcast_ended_by_you">Përfunduat një transmetim zanor.</string>
     <string name="notice_voice_broadcast_ended">%1$s përfundoi një transmetim zanor.</string>
+    <string name="stop_voice_broadcast_content">Jeni i sigurt se doni të ndalet transmetimi juaj i drejtpërdrejtë\? Kjo do të përfundojë transmetimin dhe regjistrimi i plotë do të jetë i passhëm te dhoma.</string>
+    <string name="stop_voice_broadcast_dialog_title">Të ndalet transmetimi i drejtpërdrejtë\?</string>
+    <string name="action_stop">Po, Ndale</string>
 </resources>
