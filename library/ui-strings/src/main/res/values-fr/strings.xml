@@ -2882,4 +2882,7 @@
     <string name="settings_nightly_build">Version Nightly</string>
     <string name="notice_voice_broadcast_ended_by_you">Vous avez terminé une diffusion audio.</string>
     <string name="notice_voice_broadcast_ended">%1$s a terminé une diffusion audio.</string>
+    <string name="stop_voice_broadcast_content">Êtes-vous sûr de vouloir arrêter votre diffusion en direct \? Cela terminera la diffusion et l’enregistrement complet sera disponible dans le salon.</string>
+    <string name="stop_voice_broadcast_dialog_title">Arrêter la diffusion en direct \?</string>
+    <string name="action_stop">Oui, arrêter</string>
 </resources>
