@@ -31,11 +31,11 @@ class PollItemViewStateFactory @Inject constructor(
         private val stringProvider: StringProvider,
 ) {
 
+    // TODO update unit tests
     fun create(
             pollContent: MessagePollContent,
             informationData: MessageInformationData,
     ): PollViewState {
-        // TODO add new field in ViewState to reflect decryption error of related events
         val pollCreationInfo = pollContent.getBestPollCreationInfo()
 
         val question = pollCreationInfo?.question?.getBestQuestion().orEmpty()
@@ -84,9 +84,14 @@ class PollItemViewStateFactory @Inject constructor(
             totalVotes: Int,
             winnerVoteCount: Int?,
     ): PollViewState {
+        val totalVotesText = if (pollResponseSummary?.hasDecryptionError.orFalse()) {
+            stringProvider.getString(R.string.unable_to_decrypt_some_events_in_poll)
+        } else {
+            stringProvider.getQuantityString(R.plurals.poll_total_vote_count_after_ended, totalVotes, totalVotes)
+        }
         return PollViewState(
                 question = question,
-                votesStatus = stringProvider.getQuantityString(R.plurals.poll_total_vote_count_after_ended, totalVotes, totalVotes),
+                votesStatus = totalVotesText,
                 canVote = false,
                 optionViewStates = pollCreationInfo?.answers?.map { answer ->
                     val voteSummary = pollResponseSummary?.getVoteSummaryOfAnOption(answer.id ?: "")
@@ -127,9 +132,14 @@ class PollItemViewStateFactory @Inject constructor(
             pollResponseSummary: PollResponseData?,
             totalVotes: Int
     ): PollViewState {
+        val totalVotesText = if (pollResponseSummary?.hasDecryptionError.orFalse()) {
+            stringProvider.getString(R.string.unable_to_decrypt_some_events_in_poll)
+        } else {
+            stringProvider.getQuantityString(R.plurals.poll_total_vote_count_before_ended_and_voted, totalVotes, totalVotes)
+        }
         return PollViewState(
                 question = question,
-                votesStatus = stringProvider.getQuantityString(R.plurals.poll_total_vote_count_before_ended_and_voted, totalVotes, totalVotes),
+                votesStatus = totalVotesText,
                 canVote = true,
                 optionViewStates = pollCreationInfo?.answers?.map { answer ->
                     val isMyVote = pollResponseSummary?.myVote == answer.id
@@ -145,7 +155,11 @@ class PollItemViewStateFactory @Inject constructor(
         )
     }
 
-    private fun createReadyPollViewState(question: String, pollCreationInfo: PollCreationInfo?, totalVotes: Int): PollViewState {
+    private fun createReadyPollViewState(
+            question: String,
+            pollCreationInfo: PollCreationInfo?,
+            totalVotes: Int
+    ): PollViewState {
         val totalVotesText = if (totalVotes == 0) {
             stringProvider.getString(R.string.poll_no_votes_cast)
         } else {

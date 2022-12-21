@@ -75,7 +75,12 @@ internal class EncryptedEventRelationsAggregationProcessor @Inject constructor(
             RelationType.REFERENCE -> {
                 // can we / should we do we something for UTD reference??
                 Timber.w("## UTD reference in room $roomId related to ${encryptedEventContent.relatesTo.eventId}")
-                encryptedReferenceAggregationProcessor.handle(realm, event, isLocalEcho, encryptedEventContent.relatesTo.eventId)
+                encryptedReferenceAggregationProcessor.handle(
+                        realm = realm,
+                        event = event,
+                        isLocalEcho = isLocalEcho,
+                        relatedEventId = encryptedEventContent.relatesTo.eventId
+                )
             }
             RelationType.ANNOTATION -> {
                 // can we / should we do we something for UTD annotation??
