@@ -471,7 +471,7 @@
     <string name="widget_integration_room_not_visible">Raum %s ist nicht sichtbar.</string>
     <string name="room_add_matrix_apps">Integrationen hinzufügen</string>
     <string name="settings_notification_ringtone">Benachrichtigungston</string>
-    <string name="widget_integration_failed_to_send_request">Anfrage konnte nicht gesendet werden.</string>
+    <string name="widget_integration_failed_to_send_request">Übertragung der Anfrage fehlgeschlagen.</string>
     <string name="widget_integration_missing_user_id">user_id fehlt in der Anfrage.</string>
     <string name="light_theme">Helles Design</string>
     <string name="dark_theme">Dunkles Design</string>
