@@ -122,15 +122,12 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
 
     private fun bindSeekBar(holder: Holder) {
         with(holder) {
-            var remainingTimeText = formatPlaybackTime(duration)
-            remainingTimeView.text = if (duration < 1000) remainingTimeText else String.format("-%s", remainingTimeText)
+            remainingTimeView.text = formatRemainingTime(duration)
             elapsedTimeView.text = formatPlaybackTime(0)
             seekBar.max = duration
             seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                    val remainingTime = duration - progress
-                    remainingTimeText = formatPlaybackTime(duration - progress)
-                    remainingTimeView.text = if (remainingTime < 1000) remainingTimeText else String.format("-%s", remainingTimeText)
+                    remainingTimeView.text = formatRemainingTime(duration - progress)
                     elapsedTimeView.text = formatPlaybackTime(progress)
                 }
 
@@ -163,6 +160,7 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
     }
 
     private fun formatPlaybackTime(time: Int) = DateUtils.formatElapsedTime((time / 1000).toLong())
+    private fun formatRemainingTime(time: Int) = if (time < 1000) formatPlaybackTime(time) else String.format("-%s", formatPlaybackTime(time))
 
     override fun unbind(holder: Holder) {
         super.unbind(holder)
