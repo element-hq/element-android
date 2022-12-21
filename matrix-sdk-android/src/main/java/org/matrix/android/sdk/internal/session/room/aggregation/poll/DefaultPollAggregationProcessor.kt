@@ -45,6 +45,7 @@ import org.matrix.android.sdk.internal.session.room.relation.poll.FetchPollRespo
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import javax.inject.Inject
 
+// TODO update unit tests
 internal class DefaultPollAggregationProcessor @Inject constructor(
         private val taskExecutor: TaskExecutor,
         private val fetchPollResponseEventsTask: FetchPollResponseEventsTask,
@@ -155,7 +156,7 @@ internal class DefaultPollAggregationProcessor @Inject constructor(
         )
         aggregatedPollSummaryEntity.aggregatedContent = ContentMapper.map(newSumModel.toContent())
 
-        // TODO check also if eventId is part of UTD list of eventIds, if so remove it
+        event.eventId?.let { removeEncryptedRelatedEventIdIfNeeded(aggregatedPollSummaryEntity, it) }
 
         return true
     }
@@ -182,11 +183,11 @@ internal class DefaultPollAggregationProcessor @Inject constructor(
             aggregatedPollSummaryEntity.sourceEvents.add(event.eventId)
         }
 
+        event.eventId?.let { removeEncryptedRelatedEventIdIfNeeded(aggregatedPollSummaryEntity, it) }
+
         if (!isLocalEcho) {
             ensurePollIsFullyAggregated(roomId, pollEventId)
         }
-
-        // TODO check also if eventId is part of UTD list of eventIds, if so remove it
 
         return true
     }
@@ -228,6 +229,12 @@ internal class DefaultPollAggregationProcessor @Inject constructor(
                     startPollEventId = pollEventId,
             )
             fetchPollResponseEventsTask.execute(params)
+        }
+    }
+
+    private fun removeEncryptedRelatedEventIdIfNeeded(aggregatedPollSummaryEntity: PollResponseAggregatedSummaryEntity, eventId: String) {
+        if(aggregatedPollSummaryEntity.encryptedRelatedEventIds.contains(eventId)) {
+            aggregatedPollSummaryEntity.encryptedRelatedEventIds.remove(eventId)
         }
     }
 }
