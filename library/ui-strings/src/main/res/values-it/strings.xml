@@ -2873,4 +2873,7 @@
     <string name="settings_nightly_build">Nightly build</string>
     <string name="notice_voice_broadcast_ended_by_you">Hai terminato una trasmissione vocale.</string>
     <string name="notice_voice_broadcast_ended">%1$s ha terminato una trasmissione vocale.</string>
+    <string name="stop_voice_broadcast_content">Vuoi davvero fermare la tua trasmissione in diretta\? Verrà terminata la trasmissione e la registrazione completa sarà disponibile nella stanza.</string>
+    <string name="stop_voice_broadcast_dialog_title">Fermare la trasmissione in diretta\?</string>
+    <string name="action_stop">Sì, ferma</string>
 </resources>
