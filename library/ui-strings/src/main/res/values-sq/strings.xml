@@ -2343,7 +2343,7 @@
     <string name="location_timeline_failed_to_load_map">S’u arrit të ngarkohej hartë</string>
     <string name="a11y_static_map_image">Hartë</string>
     <string name="labs_enable_thread_messages_desc">Shënim: aplikacioni do të riniset</string>
-    <string name="labs_enable_thread_messages">Aktivizoni Rrjedha Mesazhesh</string>
+    <string name="labs_enable_thread_messages">Aktivizoni rrjedha mesazhesh</string>
     <string name="ftue_auth_use_case_connect_to_server">Lidhu te shërbyesi</string>
     <string name="ftue_auth_use_case_join_existing_server">Po shihni për të marrë pjesë në një shërbyes ekzistues\?</string>
     <string name="ftue_auth_use_case_skip_partial">anashkalojeni këtë pyetje</string>
@@ -2659,7 +2659,7 @@
 \nKy shërbyes Home mund të mos jetë formësuar të shfaqë harta.</string>
     <string name="poll_undisclosed_not_ended">Përfundimet do të jenë të dukshme pasi të ketë përfunduar pyetësori</string>
     <string name="labs_enable_msc3061_share_history_desc">Kur bëhet ftesë në një dhomë të fshehtëzuar që ka historik ndarjesh me të tjerët, historiku i fshehtëzuar do të jetë i dukshëm.</string>
-    <string name="a11y_voice_broadcast_buffering"></string>
+    <string name="a11y_voice_broadcast_buffering"/>
     <string name="a11y_pause_voice_broadcast">Ndal transmetim zanor</string>
     <string name="a11y_play_voice_broadcast">Luani ose vazhdoni luajtje transmetimi zanor</string>
     <string name="a11y_stop_voice_broadcast_record">Ndal incizim transmetimi zanor</string>
@@ -2853,4 +2853,18 @@
     <string name="labs_enable_deferred_dm_title">Aktivizo MD të lënë për më vonë</string>
     <string name="a11y_collapse_space_children">Tkurr pjella të %s</string>
     <string name="a11y_expand_space_children">Zgjero pjella të %s</string>
+    <string name="review_unverified_sessions_description">Shqyrtojini, për të garantuar se llogaria juaj është e parrezik</string>
+    <string name="review_unverified_sessions_title">Keni sesione të paverifikuar</string>
+    <string name="device_manager_learn_more_sessions_encryption_not_supported">Ky sesion nuk mbulon fshehtëzim, ndaj s’mund të verifikohet.
+\n
+\nS’do të jeni në gjendje të merrni pjesë në dhoma ku është i aktivizuar fshehtëzimi, kur përdorni këtë sesion.
+\n
+\nPër sigurinë dhe privatësinë më të mirë, rekomandohet të përdorni klientë Matrix që mbulojnë fshehtëzimin.</string>
+    <string name="device_manager_signout_all_other_sessions">Dilni nga krejt sesionet e tjerë</string>
+    <string name="device_manager_verification_status_detail_session_encryption_not_supported">Ky sesion nuk mbulon fshehtëzim dhe ndaj s’mund të verifikohet.</string>
+    <string name="voice_broadcast_live_broadcast">Transmetim i drejtpërdrejtë</string>
+    <string name="settings_nightly_build_update">Merrni montimin më të ri (shënim: mund të keni probleme të bëni hyrjen)</string>
+    <string name="settings_nightly_build">Montim i përnatshëm</string>
+    <string name="notice_voice_broadcast_ended_by_you">Përfunduat një transmetim zanor.</string>
+    <string name="notice_voice_broadcast_ended">%1$s përfundoi një transmetim zanor.</string>
 </resources>
