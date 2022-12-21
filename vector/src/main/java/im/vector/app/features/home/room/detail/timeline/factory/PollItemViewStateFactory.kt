@@ -35,7 +35,7 @@ class PollItemViewStateFactory @Inject constructor(
             pollContent: MessagePollContent,
             informationData: MessageInformationData,
     ): PollViewState {
-        // TODO check for decryption failure error in informationData
+        // TODO add new field in ViewState to reflect decryption error of related events
         val pollCreationInfo = pollContent.getBestPollCreationInfo()
 
         val question = pollCreationInfo?.question?.getBestQuestion().orEmpty()

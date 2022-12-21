@@ -40,9 +40,6 @@ internal class EventInsertLiveObserver @Inject constructor(
 
     private val lock = Mutex()
 
-    // TODO should we create a dedicated UnableToDecryptEntity or EncryptedEventEntity?
-    //  and process them into a dedicated observer?
-    //  Create also a new LiveProcessor interface for the new entity?
     override val query = Monarchy.Query {
         it.where(EventInsertEntity::class.java).equalTo(EventInsertEntityFields.CAN_BE_PROCESSED, true)
     }

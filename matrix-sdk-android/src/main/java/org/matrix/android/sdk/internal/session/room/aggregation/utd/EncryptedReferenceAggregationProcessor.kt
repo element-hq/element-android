@@ -18,6 +18,8 @@ package org.matrix.android.sdk.internal.session.room.aggregation.utd
 
 import io.realm.Realm
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.internal.database.model.PollResponseAggregatedSummaryEntity
+import org.matrix.android.sdk.internal.database.model.PollResponseAggregatedSummaryEntityFields
 import javax.inject.Inject
 
 class EncryptedReferenceAggregationProcessor @Inject constructor() {
@@ -26,23 +28,28 @@ class EncryptedReferenceAggregationProcessor @Inject constructor() {
     fun handle(
             realm: Realm,
             event: Event,
-            roomId: String,
             isLocalEcho: Boolean,
             relatedEventId: String?
     ) {
-        if(isLocalEcho || relatedEventId.isNullOrEmpty()) return
+        if (isLocalEcho || relatedEventId.isNullOrEmpty()) return
 
-        handlePollReference(realm = realm, event = event, roomId = roomId, relatedEventId = relatedEventId)
+        handlePollReference(realm = realm, event = event, relatedEventId = relatedEventId)
     }
 
-    // TODO how to check this is working?
     private fun handlePollReference(
             realm: Realm,
             event: Event,
-            roomId: String,
             relatedEventId: String
     ) {
-        // TODO check if relatedEventId is referencing any existing poll event in DB
-        // TODO if related to a poll, then add the event id into the list of encryptedRelatedEvents in the summary
+        event.eventId?.let { eventId ->
+            val existingRelatedPoll = getPollSummaryWithEventId(realm, relatedEventId)
+            existingRelatedPoll?.encryptedRelatedEventIds?.add(eventId)
+        }
+    }
+
+    private fun getPollSummaryWithEventId(realm: Realm, eventId: String): PollResponseAggregatedSummaryEntity? {
+        return realm.where(PollResponseAggregatedSummaryEntity::class.java)
+                .containsValue(PollResponseAggregatedSummaryEntityFields.SOURCE_EVENTS.`$`, eventId)
+                .findFirst()
     }
 }

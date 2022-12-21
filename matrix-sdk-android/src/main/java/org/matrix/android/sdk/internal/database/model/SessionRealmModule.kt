@@ -72,7 +72,8 @@ import org.matrix.android.sdk.internal.database.model.threads.ThreadSummaryEntit
             SpaceParentSummaryEntity::class,
             UserPresenceEntity::class,
             ThreadSummaryEntity::class,
-            ThreadListPageEntity::class
+            ThreadListPageEntity::class,
+            UnableToDecryptEventEntity::class,
         ]
 )
 internal class SessionRealmModule
