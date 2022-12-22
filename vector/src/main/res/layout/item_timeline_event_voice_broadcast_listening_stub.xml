@@ -140,27 +140,40 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:layout_marginEnd="6dp"
         android:paddingStart="0dp"
         android:paddingEnd="0dp"
         android:progressDrawable="@drawable/bg_seek_bar"
-        android:thumbTint="?vctr_content_secondary"
         android:thumbOffset="3dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/playbackDuration"
+        android:thumbTint="?vctr_content_secondary"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/controllerButtonsFlow"
-        tools:progress="0" />
+        tools:progress="50" />
 
     <TextView
-        android:id="@+id/playbackDuration"
+        android:id="@+id/elapsedTime"
         style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="-3dp"
         android:textColor="?vctr_content_tertiary"
-        app:layout_constraintBottom_toBottomOf="@id/seekBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/seekBar"
+        tools:ignore="NegativeMargin"
+        tools:text="0:11" />
+
+    <TextView
+        android:id="@+id/remainingTime"
+        style="@style/Widget.Vector.TextView.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-3dp"
+        android:layout_marginEnd="4dp"
+        android:textColor="?vctr_content_tertiary"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/seekBar"
-        tools:text="0:23" />
+        app:layout_constraintTop_toBottomOf="@id/seekBar"
+        tools:ignore="NegativeMargin"
+        tools:text="-0:12" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
