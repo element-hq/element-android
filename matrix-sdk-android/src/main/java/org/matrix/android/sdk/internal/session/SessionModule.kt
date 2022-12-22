@@ -40,6 +40,7 @@ import org.matrix.android.sdk.api.session.accountdata.SessionAccountDataService
 import org.matrix.android.sdk.api.session.events.EventService
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
 import org.matrix.android.sdk.api.session.openid.OpenIdService
+import org.matrix.android.sdk.api.session.permalinks.DeferredPermalinkService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
 import org.matrix.android.sdk.api.session.typing.TypingUsersTracker
@@ -83,6 +84,7 @@ import org.matrix.android.sdk.internal.session.homeserver.DefaultHomeServerCapab
 import org.matrix.android.sdk.internal.session.identity.DefaultIdentityService
 import org.matrix.android.sdk.internal.session.integrationmanager.IntegrationManager
 import org.matrix.android.sdk.internal.session.openid.DefaultOpenIdService
+import org.matrix.android.sdk.internal.session.permalinks.DefaultDeferredPermalinkService
 import org.matrix.android.sdk.internal.session.permalinks.DefaultPermalinkService
 import org.matrix.android.sdk.internal.session.room.EventRelationsAggregationProcessor
 import org.matrix.android.sdk.internal.session.room.aggregation.poll.DefaultPollAggregationProcessor
@@ -405,4 +407,7 @@ internal abstract class SessionModule {
 
     @Binds
     abstract fun bindPollAggregationProcessor(processor: DefaultPollAggregationProcessor): PollAggregationProcessor
+
+    @Binds
+    abstract fun bindDeferredPermalinkService(service: DefaultDeferredPermalinkService): DeferredPermalinkService
 }

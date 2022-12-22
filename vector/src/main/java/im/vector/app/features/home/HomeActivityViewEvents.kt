@@ -40,4 +40,5 @@ sealed interface HomeActivityViewEvents : VectorViewEvents {
     object StartRecoverySetupFlow : HomeActivityViewEvents
     data class ForceVerification(val sendRequest: Boolean) : HomeActivityViewEvents
     object AskUserForPushDistributor : HomeActivityViewEvents
+    data class NavigatePermalink(val permalink: String) : HomeActivityViewEvents
 }
