@@ -31,7 +31,6 @@ class PollItemViewStateFactory @Inject constructor(
         private val stringProvider: StringProvider,
 ) {
 
-    // TODO update unit tests
     fun create(
             pollContent: MessagePollContent,
             informationData: MessageInformationData,
