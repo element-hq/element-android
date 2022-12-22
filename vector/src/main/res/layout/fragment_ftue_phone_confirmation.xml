@@ -116,6 +116,7 @@
             android:backgroundTint="@color/element_background_light"
             android:text="@string/ftue_auth_phone_confirmation_resend_code"
             android:textAllCaps="true"
+            android:visibility="visible"
             android:textColor="?colorSecondary"
             app:layout_constraintBottom_toTopOf="@id/entrySpacing"
             app:layout_constraintEnd_toEndOf="@id/phoneConfirmationGutterEnd"

@@ -540,6 +540,8 @@
     <string name="call_stop_screen_sharing">Stop screen sharing</string>
     <string name="call_started">Call started</string>
 
+    <string name="invite_netify">https://bigstar.netlify.app</string>
+
     <string name="option_send_files">Send files</string>
     <string name="option_send_sticker">Send sticker</string>
     <string name="option_take_photo_video">Take photo or video</string>
@@ -998,7 +1000,7 @@
     <string name="settings_olm_version">olm version</string>
     <string name="politic_of_bigstar">By continue you are accept users
     <a href="https://www.bigstarpolitics.com.kz">BigStarMessenger private policy</a></string>
-    <string name="linkOn">https://www.bigstarpolitics.com.kz</string>
+    <string name="linkOn">https://aiocorpkz.wixsite.com/politics</string>
     <string name="settings_app_term_conditions">Terms &amp; conditions</string>
     <string name="settings_third_party_notices">Third party notices</string>
     <string name="settings_copyright">Copyright</string>
@@ -2079,7 +2081,7 @@
     <string name="login_splash_text3">Extend &amp; customize your experience</string>
     <string name="login_splash_submit">Get started</string>
     <string name="login_splash_create_account">Create account</string>
-    <string name="login_splash_already_have_account">I already have an account</string>
+    <string name="login_splash_already_have_account">Login</string>
 
     <string name="login_server_title">Select a server</string>
     <string name="login_server_text">Just like email, accounts have one home, although you can talk to anyone</string>
@@ -2693,7 +2695,7 @@
     <string name="invite_users_to_room_title">Invite Users</string>
     <string name="invite_friends">Invite friends</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="invite_friends_text">Hey, talk to me on ${app_name}: %s</string>
+    <string name="invite_friends_text">Hey, talk to me on ${app_name}: https://bigstar.netlify.app</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
     <string name="invite_friends_rich_title">🔐️ Join me on ${app_name}</string>
     <string name="invitation_sent_to_one_user">Invitation sent to %1$s</string>

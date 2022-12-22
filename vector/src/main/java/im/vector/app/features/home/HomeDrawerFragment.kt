@@ -113,7 +113,7 @@ class HomeDrawerFragment :
 
         views.homeDrawerInviteFriendButton.debouncedClicks {
             analyticsTracker.screen(MobileScreen(screenName = MobileScreen.ScreenName.InviteFriends))
-            val text = getString(R.string.invite_friends_text, "https://bigstar.netlify.app")
+            val text = getString(R.string.invite_friends_text)
 
             startSharePlainTextIntent(
                     context = requireContext(),

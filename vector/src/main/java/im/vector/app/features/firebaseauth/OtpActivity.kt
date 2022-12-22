@@ -81,7 +81,7 @@ class OtpActivity : AppCompatActivity() {
     private fun sendVerificationCode(number: String) {
         val options = PhoneAuthOptions.newBuilder(auth)
                 .setPhoneNumber(number)
-                .setTimeout(60L, TimeUnit.SECONDS)
+                .setTimeout(10L, TimeUnit.SECONDS)
                 .setActivity(this)
                 .setCallbacks(callbacks)
                 .build()
