@@ -54,16 +54,6 @@ internal class SyncFilterBuilder {
                 }
             }
 
-    internal fun extractParams(): SyncFilterParams {
-        return SyncFilterParams(
-                useThreadNotifications = useThreadNotifications,
-                lazyLoadMembersForMessageEvents = lazyLoadMembersForMessageEvents,
-                lazyLoadMembersForStateEvents = lazyLoadMembersForStateEvents,
-                listOfSupportedEventTypes = listOfSupportedEventTypes,
-                listOfSupportedStateEventTypes = listOfSupportedStateEventTypes,
-        )
-    }
-
     internal fun build(homeServerCapabilities: HomeServerCapabilities): Filter {
         return Filter(
                 room = buildRoomFilter(homeServerCapabilities)
