@@ -17,8 +17,10 @@
 package im.vector.app.ui.robot
 
 import android.view.View
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
@@ -92,6 +94,18 @@ class ElementRobot(
         block(SettingsRobot())
         if (shouldGoBack) pressBack()
         waitUntilViewVisible(withId(R.id.roomListContainer))
+    }
+
+    fun layoutPreferences(block: LayoutPreferencesRobot.() -> Unit) {
+        openActionBarOverflowOrOptionsMenu(
+                ApplicationProvider.getApplicationContext()
+        )
+        clickOn(R.string.home_layout_preferences)
+        waitUntilDialogVisible(withId(R.id.home_layout_settings_recents))
+
+        block(LayoutPreferencesRobot())
+
+        pressBack()
     }
 
     fun newDirectMessage(block: NewDirectMessageRobot.() -> Unit) {

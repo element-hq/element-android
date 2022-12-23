@@ -69,14 +69,9 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
             val sharedTransitionName: String?
     ) : Parcelable
 
-    @Inject
-    lateinit var sessionHolder: ActiveSessionHolder
-
-    @Inject
-    lateinit var dataSourceFactory: AttachmentProviderFactory
-
-    @Inject
-    lateinit var imageContentRenderer: ImageContentRenderer
+    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
+    @Inject lateinit var dataSourceFactory: AttachmentProviderFactory
+    @Inject lateinit var imageContentRenderer: ImageContentRenderer
 
     private val viewModel: VectorAttachmentViewerViewModel by viewModel()
     private val errorFormatter by lazy(LazyThreadSafetyMode.NONE) { singletonEntryPoint().errorFormatter() }
@@ -128,7 +123,7 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
             }
         }
 
-        val session = sessionHolder.getSafeActiveSession() ?: return Unit.also { finish() }
+        val session = activeSessionHolder.getSafeActiveSession() ?: return Unit.also { finish() }
 
         val room = args.roomId?.let { session.getRoom(it) }
 

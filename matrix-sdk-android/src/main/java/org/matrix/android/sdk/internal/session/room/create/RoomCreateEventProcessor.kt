@@ -30,7 +30,7 @@ import javax.inject.Inject
 
 internal class RoomCreateEventProcessor @Inject constructor() : EventInsertLiveProcessor {
 
-    override suspend fun process(realm: Realm, event: Event) {
+    override fun process(realm: Realm, event: Event) {
         val createRoomContent = event.getClearContent().toModel<RoomCreateContent>()
         val predecessorRoomId = createRoomContent?.predecessor?.roomId ?: return
 

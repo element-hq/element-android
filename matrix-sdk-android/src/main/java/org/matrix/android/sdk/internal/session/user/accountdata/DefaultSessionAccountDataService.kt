@@ -34,10 +34,11 @@ import javax.inject.Inject
 internal class DefaultSessionAccountDataService @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
         private val updateUserAccountDataTask: UpdateUserAccountDataTask,
+        private val deleteUserAccountDataTask: DeleteUserAccountDataTask,
         private val userAccountDataSyncHandler: UserAccountDataSyncHandler,
         private val userAccountDataDataSource: UserAccountDataDataSource,
         private val roomAccountDataDataSource: RoomAccountDataDataSource,
-        private val taskExecutor: TaskExecutor
+        private val taskExecutor: TaskExecutor,
 ) : SessionAccountDataService {
 
     override fun getUserAccountDataEvent(type: String): UserAccountDataEvent? {
@@ -77,5 +78,13 @@ internal class DefaultSessionAccountDataService @Inject constructor(
         monarchy.runTransactionSync { realm ->
             userAccountDataSyncHandler.handleGenericAccountData(realm, type, content)
         }
+    }
+
+    override fun getUserAccountDataEventsStartWith(type: String): List<UserAccountDataEvent> {
+        return userAccountDataDataSource.getAccountDataEventsStartWith(type)
+    }
+
+    override suspend fun deleteUserAccountData(type: String) {
+        deleteUserAccountDataTask.execute(DeleteUserAccountDataTask.Params(type))
     }
 }

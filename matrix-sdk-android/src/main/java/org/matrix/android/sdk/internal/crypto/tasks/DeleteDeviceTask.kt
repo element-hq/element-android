@@ -16,12 +16,14 @@
 
 package org.matrix.android.sdk.internal.crypto.tasks
 
+import androidx.annotation.Size
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.session.uia.UiaResult
 import org.matrix.android.sdk.internal.auth.registration.handleUIA
 import org.matrix.android.sdk.internal.crypto.api.CryptoApi
 import org.matrix.android.sdk.internal.crypto.model.rest.DeleteDeviceParams
+import org.matrix.android.sdk.internal.crypto.model.rest.DeleteDevicesParams
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
@@ -30,7 +32,7 @@ import javax.inject.Inject
 
 internal interface DeleteDeviceTask : Task<DeleteDeviceTask.Params, Unit> {
     data class Params(
-            val deviceId: String,
+            @Size(min = 1) val deviceIds: List<String>,
             val userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor?,
             val userAuthParam: UIABaseAuth?
     )
@@ -42,9 +44,24 @@ internal class DefaultDeleteDeviceTask @Inject constructor(
 ) : DeleteDeviceTask {
 
     override suspend fun execute(params: DeleteDeviceTask.Params) {
+        require(params.deviceIds.isNotEmpty())
+
         try {
             executeRequest(globalErrorReceiver) {
-                cryptoApi.deleteDevice(params.deviceId, DeleteDeviceParams(params.userAuthParam?.asMap()))
+                val userAuthParam = params.userAuthParam?.asMap()
+                if (params.deviceIds.size == 1) {
+                    cryptoApi.deleteDevice(
+                            deviceId = params.deviceIds.first(),
+                            DeleteDeviceParams(auth = userAuthParam)
+                    )
+                } else {
+                    cryptoApi.deleteDevices(
+                            DeleteDevicesParams(
+                                    auth = userAuthParam,
+                                    deviceIds = params.deviceIds
+                            )
+                    )
+                }
             }
         } catch (throwable: Throwable) {
             if (params.userInteractiveAuthInterceptor == null ||

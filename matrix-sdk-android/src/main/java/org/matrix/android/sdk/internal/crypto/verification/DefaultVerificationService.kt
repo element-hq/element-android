@@ -1140,28 +1140,25 @@ internal class DefaultVerificationService @Inject constructor(
     override fun beginKeyVerification(method: VerificationMethod, otherUserId: String, otherDeviceId: String, transactionId: String?): String? {
         val txID = transactionId?.takeIf { it.isNotEmpty() } ?: createUniqueIDForTransaction(otherUserId, otherDeviceId)
         // should check if already one (and cancel it)
-        if (method == VerificationMethod.SAS) {
-            val tx = DefaultOutgoingSASDefaultVerificationTransaction(
-                    setDeviceVerificationAction,
-                    userId,
-                    deviceId,
-                    cryptoStore,
-                    crossSigningService,
-                    outgoingKeyRequestManager,
-                    secretShareManager,
-                    myDeviceInfoHolder.get().myDevice.fingerprint()!!,
-                    txID,
-                    otherUserId,
-                    otherDeviceId
-            )
-            tx.transport = verificationTransportToDeviceFactory.createTransport(tx)
-            addTransaction(tx)
+        require(method == VerificationMethod.SAS) { "Unknown verification method" }
+        val tx = DefaultOutgoingSASDefaultVerificationTransaction(
+                setDeviceVerificationAction,
+                userId,
+                deviceId,
+                cryptoStore,
+                crossSigningService,
+                outgoingKeyRequestManager,
+                secretShareManager,
+                myDeviceInfoHolder.get().myDevice.fingerprint()!!,
+                txID,
+                otherUserId,
+                otherDeviceId
+        )
+        tx.transport = verificationTransportToDeviceFactory.createTransport(tx)
+        addTransaction(tx)
 
-            tx.start()
-            return txID
-        } else {
-            throw IllegalArgumentException("Unknown verification method")
-        }
+        tx.start()
+        return txID
     }
 
     override fun requestKeyVerificationInDMs(
@@ -1343,28 +1340,25 @@ internal class DefaultVerificationService @Inject constructor(
             otherUserId: String,
             otherDeviceId: String
     ): String {
-        if (method == VerificationMethod.SAS) {
-            val tx = DefaultOutgoingSASDefaultVerificationTransaction(
-                    setDeviceVerificationAction,
-                    userId,
-                    deviceId,
-                    cryptoStore,
-                    crossSigningService,
-                    outgoingKeyRequestManager,
-                    secretShareManager,
-                    myDeviceInfoHolder.get().myDevice.fingerprint()!!,
-                    transactionId,
-                    otherUserId,
-                    otherDeviceId
-            )
-            tx.transport = verificationTransportRoomMessageFactory.createTransport(roomId, tx)
-            addTransaction(tx)
+        require(method == VerificationMethod.SAS) { "Unknown verification method" }
+        val tx = DefaultOutgoingSASDefaultVerificationTransaction(
+                setDeviceVerificationAction,
+                userId,
+                deviceId,
+                cryptoStore,
+                crossSigningService,
+                outgoingKeyRequestManager,
+                secretShareManager,
+                myDeviceInfoHolder.get().myDevice.fingerprint()!!,
+                transactionId,
+                otherUserId,
+                otherDeviceId
+        )
+        tx.transport = verificationTransportRoomMessageFactory.createTransport(roomId, tx)
+        addTransaction(tx)
 
-            tx.start()
-            return transactionId
-        } else {
-            throw IllegalArgumentException("Unknown verification method")
-        }
+        tx.start()
+        return transactionId
     }
 
     override fun readyPendingVerificationInDMs(

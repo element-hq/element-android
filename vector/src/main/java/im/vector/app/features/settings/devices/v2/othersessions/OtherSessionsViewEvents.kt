@@ -17,8 +17,14 @@
 package im.vector.app.features.settings.devices.v2.othersessions
 
 import im.vector.app.core.platform.VectorViewEvents
+import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 
 sealed class OtherSessionsViewEvents : VectorViewEvents {
-    data class Loading(val message: CharSequence? = null) : OtherSessionsViewEvents()
-    data class Failure(val throwable: Throwable) : OtherSessionsViewEvents()
+    data class RequestReAuth(
+            val registrationFlowResponse: RegistrationFlowResponse,
+            val lastErrorCode: String?
+    ) : OtherSessionsViewEvents()
+
+    object SignoutSuccess : OtherSessionsViewEvents()
+    data class SignoutError(val error: Throwable) : OtherSessionsViewEvents()
 }

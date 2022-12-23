@@ -15,10 +15,10 @@
  */
 package org.matrix.android.sdk.api.session.room.model
 
-import org.matrix.android.sdk.api.session.events.model.Content
+import org.matrix.android.sdk.api.session.events.model.Event
 
 data class EditAggregatedSummary(
-        val latestContent: Content? = null,
+        val latestEdit: Event? = null,
         // The list of the eventIDs used to build the summary (might be out of sync if chunked received from message chunk)
         val sourceEvents: List<String>,
         val localEchos: List<String>,

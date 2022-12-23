@@ -61,7 +61,6 @@ import im.vector.app.features.workers.signout.ServerBackupStatusAction
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
@@ -80,7 +79,6 @@ class NewHomeDetailFragment :
     @Inject lateinit var callManager: WebRtcCallManager
     @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var spaceStateHandler: SpaceStateHandler
-    @Inject lateinit var session: Session
     @Inject lateinit var buildMeta: BuildMeta
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
@@ -162,7 +160,7 @@ class NewHomeDetailFragment :
         unknownDeviceDetectorSharedViewModel.onEach { state ->
             state.unknownSessions.invoke()?.let { unknownDevices ->
                 if (unknownDevices.firstOrNull()?.currentSessionTrust == true) {
-                    val uid = "review_login"
+                    val uid = PopupAlertManager.REVIEW_LOGIN_UID
                     alertManager.cancelAlert(uid)
                     val olderUnverified = unknownDevices.filter { !it.isNew }
                     val newest = unknownDevices.firstOrNull { it.isNew }?.deviceInfo
@@ -255,12 +253,12 @@ class NewHomeDetailFragment :
                                     .requestSessionVerification(vectorBaseActivity, newest.deviceId ?: "")
                         }
                         unknownDeviceDetectorSharedViewModel.handle(
-                                UnknownDeviceDetectorSharedViewModel.Action.IgnoreDevice(newest.deviceId?.let { listOf(it) }.orEmpty())
+                                UnknownDeviceDetectorSharedViewModel.Action.IgnoreNewLogin(newest.deviceId?.let { listOf(it) }.orEmpty())
                         )
                     }
                     dismissedAction = Runnable {
                         unknownDeviceDetectorSharedViewModel.handle(
-                                UnknownDeviceDetectorSharedViewModel.Action.IgnoreDevice(newest.deviceId?.let { listOf(it) }.orEmpty())
+                                UnknownDeviceDetectorSharedViewModel.Action.IgnoreNewLogin(newest.deviceId?.let { listOf(it) }.orEmpty())
                         )
                     }
                 }
@@ -272,8 +270,8 @@ class NewHomeDetailFragment :
         alertManager.postVectorAlert(
                 VerificationVectorAlert(
                         uid = uid,
-                        title = getString(R.string.review_logins),
-                        description = getString(R.string.verify_other_sessions),
+                        title = getString(R.string.review_unverified_sessions_title),
+                        description = getString(R.string.review_unverified_sessions_description),
                         iconId = R.drawable.ic_shield_warning
                 ).apply {
                     viewBinder = VerificationVectorAlert.ViewBinder(user, avatarRenderer)

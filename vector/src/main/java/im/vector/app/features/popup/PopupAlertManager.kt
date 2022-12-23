@@ -50,6 +50,12 @@ class PopupAlertManager @Inject constructor(
 
     companion object {
         const val INCOMING_CALL_PRIORITY = Int.MAX_VALUE
+        const val INCOMING_VERIFICATION_REQUEST_PRIORITY = 1
+        const val DEFAULT_PRIORITY = 0
+        const val REVIEW_LOGIN_UID = "review_login"
+        const val UPGRADE_SECURITY_UID = "upgrade_security"
+        const val VERIFY_SESSION_UID = "verify_session"
+        const val ENABLE_PUSH_UID = "enable_push"
     }
 
     private var weakCurrentActivity: WeakReference<Activity>? = null
@@ -145,7 +151,7 @@ class PopupAlertManager @Inject constructor(
 
     private fun displayNextIfPossible() {
         val currentActivity = weakCurrentActivity?.get()
-        if (Alerter.isShowing || currentActivity == null || currentActivity.isDestroyed) {
+        if (currentActivity == null || currentActivity.isDestroyed) {
             // will retry later
             return
         }

@@ -34,12 +34,8 @@ class EventTextRenderer @AssistedInject constructor(
         @Assisted private val roomId: String?,
         private val context: Context,
         private val avatarRenderer: AvatarRenderer,
-        private val sessionHolder: ActiveSessionHolder
+        private val activeSessionHolder: ActiveSessionHolder,
 ) {
-
-    /* ==========================================================================================
-     * Public api
-     * ========================================================================================== */
 
     @AssistedFactory
     interface Factory {
@@ -47,9 +43,13 @@ class EventTextRenderer @AssistedInject constructor(
     }
 
     /**
-     * @param text the text you want to render
+     * @param text the text to be rendered
      */
     fun render(text: CharSequence): CharSequence {
+        return renderNotifyEveryone(text)
+    }
+
+    private fun renderNotifyEveryone(text: CharSequence): CharSequence {
         return if (roomId != null && text.contains(MatrixItem.NOTIFY_EVERYONE)) {
             SpannableStringBuilder(text).apply {
                 addNotifyEveryoneSpans(this, roomId)
@@ -59,12 +59,8 @@ class EventTextRenderer @AssistedInject constructor(
         }
     }
 
-    /* ==========================================================================================
-     * Helper methods
-     * ========================================================================================== */
-
     private fun addNotifyEveryoneSpans(text: Spannable, roomId: String) {
-        val room: RoomSummary? = sessionHolder.getSafeActiveSession()?.roomService()?.getRoomSummary(roomId)
+        val room: RoomSummary? = activeSessionHolder.getSafeActiveSession()?.roomService()?.getRoomSummary(roomId)
         val matrixItem = MatrixItem.EveryoneInRoomItem(
                 id = roomId,
                 avatarUrl = room?.avatarUrl,

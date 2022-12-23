@@ -861,9 +861,7 @@
     <string name="login_a11y_choose_other">בחר שרת בית מותאם אישית</string>
     <string name="login_a11y_choose_modular">בחר שירותי מטריקס אלמנט</string>
     <string name="login_a11y_choose_matrix_org">בחר matrix.org</string>
-    <string name="login_signup_cancel_confirmation_content">חשבונך טרם נוצר.
-\n
-\nלהפסיק את תהליך ההרשמה\?</string>
+    <string name="login_signup_cancel_confirmation_content">חשבונך טרם נוצר. להפסיק את תהליך ההרשמה\?</string>
     <string name="login_signup_cancel_confirmation_title">אזהרה</string>
     <string name="login_signup_error_user_in_use">שם המשתמש הזה תפוס</string>
     <string name="login_signup_submit">הבא</string>
@@ -2304,7 +2302,7 @@
     <string name="ftue_auth_use_case_option_three">קהילות</string>
     <string name="ftue_auth_use_case_option_two">צוותים</string>
     <string name="ftue_auth_use_case_option_one">חברים ומשפחה</string>
-    <string name="ftue_auth_use_case_subtitle">נעזור לך להתחבר.</string>
+    <string name="ftue_auth_use_case_subtitle">נעזור לך להתחבר</string>
     <string name="ftue_auth_use_case_title">עם מי תדברו הכי הרבה\?</string>
     <string name="ftue_auth_carousel_encrypted_body">מוצפן מקצה לקצה ואין צורך במספר טלפון. ללא פרסומות או עיבוד נתונים.</string>
     <string name="ftue_auth_carousel_control_body">בחר היכן השיחות שלך נשמרות, נותן לך שליטה ועצמאות. מחובר דרך Matrix.</string>

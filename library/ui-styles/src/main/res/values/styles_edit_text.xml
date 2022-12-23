@@ -4,7 +4,7 @@
     <style name="Widget.Vector.EditText.Composer" parent="Widget.AppCompat.EditText">
         <item name="android:background">@android:color/transparent</item>
         <item name="android:inputType">textCapSentences|textMultiLine</item>
-        <item name="android:maxLines">12</item>
+        <item name="android:maxLines">10</item>
         <item name="android:minHeight">48dp</item>
         <item name="android:padding">8dp</item>
         <item name="android:textSize">15sp</item>
@@ -14,9 +14,12 @@
     <style name="Widget.Vector.EditText.RichTextComposer" parent="Widget.AppCompat.EditText">
         <item name="android:background">@android:color/transparent</item>
         <item name="android:inputType">textCapSentences|textMultiLine</item>
-        <item name="android:maxLines">12</item>
-        <item name="android:minHeight">20dp</item>
-        <item name="android:padding">0dp</item>
+        <item name="android:maxLines">10</item>
+        <item name="android:minHeight">40dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="paddingStart">12dp</item>
+        <item name="android:clipToPadding">false</item>
         <item name="android:textSize">15sp</item>
         <item name="android:textColor">?vctr_message_text_color</item>
     </style>

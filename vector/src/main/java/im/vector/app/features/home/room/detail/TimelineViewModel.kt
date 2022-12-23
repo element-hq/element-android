@@ -18,6 +18,7 @@ package im.vector.app.features.home.room.detail
 
 import android.net.Uri
 import androidx.annotation.IdRes
+import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -49,6 +50,7 @@ import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.createdirect.DirectRoomHelper
 import im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy
 import im.vector.app.features.crypto.verification.SupportedVerificationMethodsProvider
+import im.vector.app.features.home.room.detail.RoomDetailAction.VoiceBroadcastAction
 import im.vector.app.features.home.room.detail.error.RoomNotFound
 import im.vector.app.features.home.room.detail.location.RedactLiveLocationShareEventUseCase
 import im.vector.app.features.home.room.detail.sticker.StickerPickerActionHandler
@@ -215,7 +217,7 @@ class TimelineViewModel @AssistedInject constructor(
         observePowerLevel()
         setupPreviewUrlObservers()
         viewModelScope.launch(Dispatchers.IO) {
-            tryOrNull { room.readService().markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT) }
+            tryOrNull { room.readService().markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT, mainTimeLineOnly = true) }
         }
         // Inform the SDK that the room is displayed
         viewModelScope.launch(Dispatchers.IO) {
@@ -408,21 +410,40 @@ class TimelineViewModel @AssistedInject constructor(
      */
     private fun observeLocalThreadNotifications() {
         if (room == null) return
-        room.flow()
-                .liveLocalUnreadThreadList()
-                .execute {
-                    val threadList = it.invoke()
-                    val isUserMentioned = threadList?.firstOrNull { threadRootEvent ->
-                        threadRootEvent.root.threadDetails?.threadNotificationState == ThreadNotificationState.NEW_HIGHLIGHTED_MESSAGE
-                    }?.let { true } ?: false
-                    val numberOfLocalUnreadThreads = threadList?.size ?: 0
-                    copy(
-                            threadNotificationBadgeState = ThreadNotificationBadgeState(
-                                    numberOfLocalUnreadThreads = numberOfLocalUnreadThreads,
-                                    isUserMentioned = isUserMentioned
-                            )
-                    )
-                }
+        val threadNotificationsSupported = session.homeServerCapabilitiesService().getHomeServerCapabilities().canUseThreadReadReceiptsAndNotifications
+        if (threadNotificationsSupported) {
+            room.getRoomSummaryLive()
+                    .asFlow()
+                    .onEach {
+                        it.getOrNull()?.let {
+                            setState {
+                                copy(
+                                        threadNotificationBadgeState = ThreadNotificationBadgeState(
+                                                numberOfLocalUnreadThreads = it.threadNotificationCount + it.threadHighlightCount,
+                                                isUserMentioned = it.threadHighlightCount > 0,
+                                        )
+                                )
+                            }
+                        }
+                    }
+                    .launchIn(viewModelScope)
+        } else {
+            room.flow()
+                    .liveLocalUnreadThreadList()
+                    .execute {
+                        val threadList = it.invoke()
+                        val isUserMentioned = threadList?.firstOrNull { threadRootEvent ->
+                            threadRootEvent.root.threadDetails?.threadNotificationState == ThreadNotificationState.NEW_HIGHLIGHTED_MESSAGE
+                        } != null
+                        val numberOfLocalUnreadThreads = threadList?.size ?: 0
+                        copy(
+                                threadNotificationBadgeState = ThreadNotificationBadgeState(
+                                        numberOfLocalUnreadThreads = numberOfLocalUnreadThreads,
+                                        isUserMentioned = isUserMentioned
+                                )
+                        )
+                    }
+        }
     }
 
     override fun handle(action: RoomDetailAction) {
@@ -458,7 +479,7 @@ class TimelineViewModel @AssistedInject constructor(
             is RoomDetailAction.ReRequestKeys -> handleReRequestKeys(action)
             is RoomDetailAction.TapOnFailedToDecrypt -> handleTapOnFailedToDecrypt(action)
             is RoomDetailAction.SelectStickerAttachment -> handleSelectStickerAttachment()
-            is RoomDetailAction.VoiceBroadcastAction -> handleVoiceBroadcastAction(action)
+            is VoiceBroadcastAction -> handleVoiceBroadcastAction(action)
             is RoomDetailAction.OpenIntegrationManager -> handleOpenIntegrationManager()
             is RoomDetailAction.StartCall -> handleStartCall(action)
             is RoomDetailAction.AcceptCall -> handleAcceptCall(action)
@@ -600,14 +621,24 @@ class TimelineViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleVoiceBroadcastAction(action: RoomDetailAction.VoiceBroadcastAction) {
+    private fun handleVoiceBroadcastAction(action: VoiceBroadcastAction) {
         if (room == null) return
         viewModelScope.launch {
             when (action) {
-                RoomDetailAction.VoiceBroadcastAction.Start -> voiceBroadcastHelper.startVoiceBroadcast(room.roomId)
-                RoomDetailAction.VoiceBroadcastAction.Pause -> voiceBroadcastHelper.pauseVoiceBroadcast(room.roomId)
-                RoomDetailAction.VoiceBroadcastAction.Resume -> voiceBroadcastHelper.resumeVoiceBroadcast(room.roomId)
-                RoomDetailAction.VoiceBroadcastAction.Stop -> voiceBroadcastHelper.stopVoiceBroadcast(room.roomId)
+                VoiceBroadcastAction.Recording.Start -> {
+                    voiceBroadcastHelper.startVoiceBroadcast(room.roomId).fold(
+                            { _viewEvents.post(RoomDetailViewEvents.ActionSuccess(action)) },
+                            { _viewEvents.post(RoomDetailViewEvents.ActionFailure(action, it)) },
+                    )
+                }
+                VoiceBroadcastAction.Recording.Pause -> voiceBroadcastHelper.pauseVoiceBroadcast(room.roomId)
+                VoiceBroadcastAction.Recording.Resume -> voiceBroadcastHelper.resumeVoiceBroadcast(room.roomId)
+                VoiceBroadcastAction.Recording.Stop -> _viewEvents.post(RoomDetailViewEvents.DisplayPromptToStopVoiceBroadcast)
+                VoiceBroadcastAction.Recording.StopConfirmed -> voiceBroadcastHelper.stopVoiceBroadcast(room.roomId)
+                is VoiceBroadcastAction.Listening.PlayOrResume -> voiceBroadcastHelper.playOrResumePlayback(action.voiceBroadcast)
+                VoiceBroadcastAction.Listening.Pause -> voiceBroadcastHelper.pausePlayback()
+                VoiceBroadcastAction.Listening.Stop -> voiceBroadcastHelper.stopPlayback()
+                is VoiceBroadcastAction.Listening.SeekTo -> voiceBroadcastHelper.seekTo(action.voiceBroadcast, action.positionMillis, action.duration)
             }
         }
     }
@@ -1073,7 +1104,8 @@ class TimelineViewModel @AssistedInject constructor(
                     }
                     bufferedMostRecentDisplayedEvent.root.eventId?.let { eventId ->
                         session.coroutineScope.launch {
-                            tryOrNull { room.readService().setReadReceipt(eventId) }
+                            val threadId = initialState.rootThreadEventId ?: ReadService.THREAD_ID_MAIN
+                            tryOrNull { room.readService().setReadReceipt(eventId, threadId = threadId) }
                         }
                     }
                 }
@@ -1091,7 +1123,7 @@ class TimelineViewModel @AssistedInject constructor(
         if (room == null) return
         setState { copy(unreadState = UnreadState.HasNoUnread) }
         viewModelScope.launch {
-            tryOrNull { room.readService().markAsRead(ReadService.MarkAsReadParams.BOTH) }
+            tryOrNull { room.readService().markAsRead(ReadService.MarkAsReadParams.BOTH, mainTimeLineOnly = true) }
         }
     }
 

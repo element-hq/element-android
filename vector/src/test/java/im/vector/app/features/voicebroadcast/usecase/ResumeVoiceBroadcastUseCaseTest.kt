@@ -16,9 +16,10 @@
 
 package im.vector.app.features.voicebroadcast.usecase
 
-import im.vector.app.features.voicebroadcast.STATE_ROOM_VOICE_BROADCAST_INFO
+import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
 import im.vector.app.features.voicebroadcast.model.MessageVoiceBroadcastInfoContent
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
+import im.vector.app.features.voicebroadcast.recording.usecase.ResumeVoiceBroadcastUseCase
 import im.vector.app.test.fakes.FakeRoom
 import im.vector.app.test.fakes.FakeRoomService
 import im.vector.app.test.fakes.FakeSession
@@ -80,7 +81,7 @@ class ResumeVoiceBroadcastUseCaseTest {
         // Then
         coVerify {
             fakeRoom.stateService().sendStateEvent(
-                    eventType = STATE_ROOM_VOICE_BROADCAST_INFO,
+                    eventType = VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO,
                     stateKey = fakeSession.myUserId,
                     body = any(),
             )
@@ -114,7 +115,7 @@ class ResumeVoiceBroadcastUseCaseTest {
         val event = state?.let {
             Event(
                     eventId = if (state == VoiceBroadcastState.STARTED) A_STARTED_VOICE_BROADCAST_EVENT_ID else AN_EVENT_ID,
-                    type = STATE_ROOM_VOICE_BROADCAST_INFO,
+                    type = VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO,
                     stateKey = fakeSession.myUserId,
                     content = MessageVoiceBroadcastInfoContent(
                             voiceBroadcastStateStr = state.value,

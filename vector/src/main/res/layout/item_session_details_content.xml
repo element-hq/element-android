@@ -9,7 +9,7 @@
         android:id="@+id/sessionDetailsContentTitle"
         style="@style/TextAppearance.Vector.Body.DevicesManagement"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
         app:layout_constraintBottom_toTopOf="@id/sessionDetailsContentDivider"
         app:layout_constraintEnd_toStartOf="@id/sessionDetailsContentDescription"
@@ -22,14 +22,14 @@
         style="@style/TextAppearance.Vector.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="12dp"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:gravity="end"
         app:layout_constraintBottom_toTopOf="@id/sessionDetailsContentDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/sessionDetailsContentTitle"
         app:layout_constraintTop_toTopOf="@id/sessionDetailsContentTop"
-        tools:text="Element Web: Firefox" />
+        tools:text="app.element.io: Firefox on macOS" />
 
     <View
         android:id="@+id/sessionDetailsContentDivider"

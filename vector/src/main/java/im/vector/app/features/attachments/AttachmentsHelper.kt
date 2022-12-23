@@ -54,7 +54,7 @@ class AttachmentsHelper(
     private var captureUri: Uri? = null
 
     // The pending type is set if we have to handle permission request. It must be restored if the activity gets killed.
-    var pendingType: AttachmentTypeSelectorView.Type? = null
+    var pendingType: AttachmentType? = null
 
     // Restorable
 

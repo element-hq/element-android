@@ -27,4 +27,5 @@ data class DevicesViewState(
         val unverifiedSessionsCount: Int = 0,
         val inactiveSessionsCount: Int = 0,
         val isLoading: Boolean = false,
+        val isShowingIpAddress: Boolean = false,
 ) : MavericksState

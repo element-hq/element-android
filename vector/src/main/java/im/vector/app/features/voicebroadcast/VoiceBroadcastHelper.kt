@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,12 @@
 
 package im.vector.app.features.voicebroadcast
 
-import im.vector.app.features.voicebroadcast.usecase.PauseVoiceBroadcastUseCase
-import im.vector.app.features.voicebroadcast.usecase.ResumeVoiceBroadcastUseCase
-import im.vector.app.features.voicebroadcast.usecase.StartVoiceBroadcastUseCase
-import im.vector.app.features.voicebroadcast.usecase.StopVoiceBroadcastUseCase
+import im.vector.app.features.voicebroadcast.listening.VoiceBroadcastPlayer
+import im.vector.app.features.voicebroadcast.model.VoiceBroadcast
+import im.vector.app.features.voicebroadcast.recording.usecase.PauseVoiceBroadcastUseCase
+import im.vector.app.features.voicebroadcast.recording.usecase.ResumeVoiceBroadcastUseCase
+import im.vector.app.features.voicebroadcast.recording.usecase.StartVoiceBroadcastUseCase
+import im.vector.app.features.voicebroadcast.recording.usecase.StopVoiceBroadcastUseCase
 import javax.inject.Inject
 
 /**
@@ -30,6 +32,7 @@ class VoiceBroadcastHelper @Inject constructor(
         private val pauseVoiceBroadcastUseCase: PauseVoiceBroadcastUseCase,
         private val resumeVoiceBroadcastUseCase: ResumeVoiceBroadcastUseCase,
         private val stopVoiceBroadcastUseCase: StopVoiceBroadcastUseCase,
+        private val voiceBroadcastPlayer: VoiceBroadcastPlayer,
 ) {
     suspend fun startVoiceBroadcast(roomId: String) = startVoiceBroadcastUseCase.execute(roomId)
 
@@ -38,4 +41,14 @@ class VoiceBroadcastHelper @Inject constructor(
     suspend fun resumeVoiceBroadcast(roomId: String) = resumeVoiceBroadcastUseCase.execute(roomId)
 
     suspend fun stopVoiceBroadcast(roomId: String) = stopVoiceBroadcastUseCase.execute(roomId)
+
+    fun playOrResumePlayback(voiceBroadcast: VoiceBroadcast) = voiceBroadcastPlayer.playOrResume(voiceBroadcast)
+
+    fun pausePlayback() = voiceBroadcastPlayer.pause()
+
+    fun stopPlayback() = voiceBroadcastPlayer.stop()
+
+    fun seekTo(voiceBroadcast: VoiceBroadcast, positionMillis: Int, duration: Int) {
+        voiceBroadcastPlayer.seekTo(voiceBroadcast, positionMillis, duration)
+    }
 }

@@ -44,6 +44,7 @@ interface VectorFeatures {
     fun isQrCodeLoginForAllServers(): Boolean
     fun isReciprocateQrCodeLogin(): Boolean
     fun isVoiceBroadcastEnabled(): Boolean
+    fun isUnverifiedSessionsAlertEnabled(): Boolean
 }
 
 class DefaultVectorFeatures : VectorFeatures {
@@ -62,5 +63,6 @@ class DefaultVectorFeatures : VectorFeatures {
     override fun isQrCodeLoginEnabled(): Boolean = true
     override fun isQrCodeLoginForAllServers(): Boolean = false
     override fun isReciprocateQrCodeLogin(): Boolean = false
-    override fun isVoiceBroadcastEnabled(): Boolean = false
+    override fun isVoiceBroadcastEnabled(): Boolean = true
+    override fun isUnverifiedSessionsAlertEnabled(): Boolean = true
 }

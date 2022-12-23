@@ -1,1 +1,0 @@
-Allow getting the formatted or plain text body of a message for the fun `TimelineEvent.getTextEditableContent()`.

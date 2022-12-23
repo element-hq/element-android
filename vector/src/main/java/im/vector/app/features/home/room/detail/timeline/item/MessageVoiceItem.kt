@@ -122,16 +122,14 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
             true
         }
 
-        audioMessagePlaybackTracker.track(attributes.informationData.eventId, object : AudioMessagePlaybackTracker.Listener {
-            override fun onUpdate(state: AudioMessagePlaybackTracker.Listener.State) {
-                when (state) {
-                    is AudioMessagePlaybackTracker.Listener.State.Idle -> renderIdleState(holder, waveformColorIdle, waveformColorPlayed)
-                    is AudioMessagePlaybackTracker.Listener.State.Playing -> renderPlayingState(holder, state, waveformColorIdle, waveformColorPlayed)
-                    is AudioMessagePlaybackTracker.Listener.State.Paused -> renderPausedState(holder, state, waveformColorIdle, waveformColorPlayed)
-                    is AudioMessagePlaybackTracker.Listener.State.Recording -> Unit
-                }
+        audioMessagePlaybackTracker.track(attributes.informationData.eventId) { state ->
+            when (state) {
+                is AudioMessagePlaybackTracker.Listener.State.Idle -> renderIdleState(holder, waveformColorIdle, waveformColorPlayed)
+                is AudioMessagePlaybackTracker.Listener.State.Playing -> renderPlayingState(holder, state, waveformColorIdle, waveformColorPlayed)
+                is AudioMessagePlaybackTracker.Listener.State.Paused -> renderPausedState(holder, state, waveformColorIdle, waveformColorPlayed)
+                is AudioMessagePlaybackTracker.Listener.State.Recording -> Unit
             }
-        })
+        }
     }
 
     private fun getTouchedPositionPercentage(motionEvent: MotionEvent, view: View) = (motionEvent.x / view.width).coerceIn(0f, 1f)

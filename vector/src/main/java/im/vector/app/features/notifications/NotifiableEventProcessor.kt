@@ -30,13 +30,13 @@ class NotifiableEventProcessor @Inject constructor(
         private val autoAcceptInvites: AutoAcceptInvites
 ) {
 
-    fun process(queuedEvents: List<NotifiableEvent>, currentRoomId: String?, renderedEvents: ProcessedEvents): ProcessedEvents {
+    fun process(queuedEvents: List<NotifiableEvent>, currentRoomId: String?, currentThreadId: String?, renderedEvents: ProcessedEvents): ProcessedEvents {
         val processedEvents = queuedEvents.map {
             val type = when (it) {
                 is InviteNotifiableEvent -> if (autoAcceptInvites.hideInvites) REMOVE else KEEP
                 is NotifiableMessageEvent -> when {
-                    shouldIgnoreMessageEventInRoom(currentRoomId, it.roomId) -> REMOVE
-                            .also { Timber.d("notification message removed due to currently viewing the same room") }
+                    it.shouldIgnoreMessageEventInRoom(currentRoomId, currentThreadId) -> REMOVE
+                            .also { Timber.d("notification message removed due to currently viewing the same room or thread") }
                     outdatedDetector.isMessageOutdated(it) -> REMOVE
                             .also { Timber.d("notification message removed due to being read") }
                     else -> KEEP
@@ -54,9 +54,5 @@ class NotifiableEventProcessor @Inject constructor(
         }.map { ProcessedEvent(REMOVE, it.event) }
 
         return removedEventsDiff + processedEvents
-    }
-
-    private fun shouldIgnoreMessageEventInRoom(currentRoomId: String?, roomId: String?): Boolean {
-        return currentRoomId != null && roomId == currentRoomId
     }
 }

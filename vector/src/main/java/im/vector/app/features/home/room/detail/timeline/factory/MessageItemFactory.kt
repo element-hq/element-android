@@ -43,10 +43,9 @@ import im.vector.app.features.home.room.detail.timeline.helper.ContentUploadStat
 import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
 import im.vector.app.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.app.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
-import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventsGroup
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
-import im.vector.app.features.home.room.detail.timeline.helper.VoiceBroadcastEventsGroup
 import im.vector.app.features.home.room.detail.timeline.item.AbsMessageItem
+import im.vector.app.features.home.room.detail.timeline.item.BaseEventItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageAudioItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageAudioItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageFileItem
@@ -58,8 +57,6 @@ import im.vector.app.features.home.room.detail.timeline.item.MessageLocationItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageLocationItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageTextItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageTextItem_
-import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceBroadcastItem
-import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceBroadcastItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceItem_
 import im.vector.app.features.home.room.detail.timeline.item.PollItem
@@ -69,6 +66,7 @@ import im.vector.app.features.home.room.detail.timeline.item.RedactedMessageItem
 import im.vector.app.features.home.room.detail.timeline.item.VerificationRequestItem
 import im.vector.app.features.home.room.detail.timeline.item.VerificationRequestItem_
 import im.vector.app.features.home.room.detail.timeline.render.EventTextRenderer
+import im.vector.app.features.home.room.detail.timeline.render.ProcessBodyOfReplyToEventUseCase
 import im.vector.app.features.home.room.detail.timeline.tools.createLinkMovementMethod
 import im.vector.app.features.home.room.detail.timeline.tools.linkify
 import im.vector.app.features.html.EventHtmlRenderer
@@ -82,8 +80,8 @@ import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.voice.AudioWaveformView
+import im.vector.app.features.voicebroadcast.isVoiceBroadcast
 import im.vector.app.features.voicebroadcast.model.MessageVoiceBroadcastInfoContent
-import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.MatrixUrls.isMxcUrl
@@ -107,8 +105,10 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationRequestContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
+import org.matrix.android.sdk.api.session.room.model.message.asMessageAudioEvent
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
 import org.matrix.android.sdk.api.session.room.model.message.getThumbnailUrl
+import org.matrix.android.sdk.api.session.room.model.relation.ReplyToContent
 import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import org.matrix.android.sdk.api.util.MimeTypes
 import javax.inject.Inject
@@ -141,6 +141,8 @@ class MessageItemFactory @Inject constructor(
         private val urlMapProvider: UrlMapProvider,
         private val liveLocationShareMessageItemFactory: LiveLocationShareMessageItemFactory,
         private val pollItemViewStateFactory: PollItemViewStateFactory,
+        private val voiceBroadcastItemFactory: VoiceBroadcastItemFactory,
+        private val processBodyOfReplyToEventUseCase: ProcessBodyOfReplyToEventUseCase,
 ) {
 
     // TODO inject this properly?
@@ -202,8 +204,8 @@ class MessageItemFactory @Inject constructor(
             is MessageVerificationRequestContent -> buildVerificationRequestMessageItem(messageContent, informationData, highlight, callback, attributes)
             is MessagePollContent -> buildPollItem(messageContent, informationData, highlight, callback, attributes)
             is MessageLocationContent -> buildLocationItem(messageContent, informationData, highlight, attributes)
-            is MessageBeaconInfoContent -> liveLocationShareMessageItemFactory.create(params.event, highlight, attributes)
-            is MessageVoiceBroadcastInfoContent -> buildVoiceBroadcastItem(messageContent, params.eventsGroup, highlight, callback, attributes)
+            is MessageBeaconInfoContent -> liveLocationShareMessageItemFactory.create(event, highlight, attributes)
+            is MessageVoiceBroadcastInfoContent -> voiceBroadcastItemFactory.create(params, messageContent, highlight, attributes)
             else -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
         }
         return messageItem?.apply {
@@ -323,7 +325,12 @@ class MessageItemFactory @Inject constructor(
             informationData: MessageInformationData,
             highlight: Boolean,
             attributes: AbsMessageItem.Attributes
-    ): MessageVoiceItem {
+    ): BaseEventItem<*>? {
+        // Do not display voice broadcast messages
+        if (params.event.root.asMessageAudioEvent().isVoiceBroadcast()) {
+            return noticeItemFactory.create(params)
+        }
+
         val fileUrl = getAudioFileUrl(messageContent, informationData)
         val playbackControlButtonClickListener = createOnPlaybackButtonClickListener(messageContent, informationData, params)
 
@@ -436,7 +443,14 @@ class MessageItemFactory @Inject constructor(
             attributes: AbsMessageItem.Attributes
     ): MessageTextItem? {
         // For compatibility reason we should display the body
-        return buildMessageTextItem(messageContent.body, false, informationData, highlight, callback, attributes)
+        return buildMessageTextItem(
+                messageContent.body,
+                false,
+                informationData,
+                highlight,
+                callback,
+                attributes,
+        )
     }
 
     private fun buildImageMessageItem(
@@ -539,7 +553,8 @@ class MessageItemFactory @Inject constructor(
     ): VectorEpoxyModel<*>? {
         val matrixFormattedBody = messageContent.matrixFormattedBody
         return if (matrixFormattedBody != null) {
-            buildFormattedTextItem(matrixFormattedBody, informationData, highlight, callback, attributes)
+            val replyToContent = messageContent.relatesTo?.inReplyTo
+            buildFormattedTextItem(matrixFormattedBody, informationData, highlight, callback, attributes, replyToContent)
         } else {
             buildMessageTextItem(messageContent.body, false, informationData, highlight, callback, attributes)
         }
@@ -551,10 +566,21 @@ class MessageItemFactory @Inject constructor(
             highlight: Boolean,
             callback: TimelineEventController.Callback?,
             attributes: AbsMessageItem.Attributes,
+            replyToContent: ReplyToContent?,
     ): MessageTextItem? {
-        val compressed = htmlCompressor.compress(matrixFormattedBody)
+        val processedBody = replyToContent
+                ?.let { processBodyOfReplyToEventUseCase.execute(roomId, matrixFormattedBody, it) }
+                ?: matrixFormattedBody
+        val compressed = htmlCompressor.compress(processedBody)
         val renderedFormattedBody = htmlRenderer.get().render(compressed, pillsPostProcessor) as Spanned
-        return buildMessageTextItem(renderedFormattedBody, true, informationData, highlight, callback, attributes)
+        return buildMessageTextItem(
+                renderedFormattedBody,
+                true,
+                informationData,
+                highlight,
+                callback,
+                attributes,
+        )
     }
 
     private fun buildMessageTextItem(
@@ -711,25 +737,6 @@ class MessageItemFactory @Inject constructor(
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .attributes(attributes)
                 .highlighted(highlight)
-    }
-
-    private fun buildVoiceBroadcastItem(
-            messageContent: MessageVoiceBroadcastInfoContent,
-            eventsGroup: TimelineEventsGroup?,
-            highlight: Boolean,
-            callback: TimelineEventController.Callback?,
-            attributes: AbsMessageItem.Attributes,
-    ): MessageVoiceBroadcastItem? {
-        if (messageContent.voiceBroadcastState != VoiceBroadcastState.STARTED) return null
-        val voiceBroadcastEventsGroup = eventsGroup?.let { VoiceBroadcastEventsGroup(it) } ?: return null
-        val mostRecentEvent = voiceBroadcastEventsGroup.getLastEvent()
-        val mostRecentMessageContent = (mostRecentEvent.getVectorLastMessageContent() as? MessageVoiceBroadcastInfoContent) ?: return null
-        return MessageVoiceBroadcastItem_()
-                .attributes(attributes)
-                .highlighted(highlight)
-                .voiceBroadcastState(mostRecentMessageContent.voiceBroadcastState)
-                .leftGuideline(avatarSizeProvider.leftGuideline)
-                .callback(callback)
     }
 
     private fun List<Int?>?.toFft(): List<Int>? {

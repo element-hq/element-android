@@ -25,6 +25,8 @@ import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.RelationType
+import org.matrix.android.sdk.api.session.events.model.getRelationContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -49,6 +51,7 @@ import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.mapper.toEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
+import org.matrix.android.sdk.internal.database.model.EventAnnotationsSummaryEntity
 import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.EventInsertType
 import org.matrix.android.sdk.internal.database.model.RoomEntity
@@ -287,6 +290,7 @@ internal class RoomSyncHandler @Inject constructor(
                 Membership.JOIN,
                 roomSync.summary,
                 roomSync.unreadNotifications,
+                roomSync.unreadThreadNotifications,
                 updateMembers = hasRoomMember,
                 aggregator = aggregator
         )
@@ -372,7 +376,8 @@ internal class RoomSyncHandler @Inject constructor(
         roomEntity.chunks.clearWith { it.deleteOnCascade(deleteStateEvents = true, canDeleteRoot = true) }
         roomTypingUsersHandler.handle(realm, roomId, null)
         roomChangeMembershipStateDataSource.setMembershipFromSync(roomId, Membership.LEAVE)
-        roomSummaryUpdater.update(realm, roomId, membership, roomSync.summary, roomSync.unreadNotifications, aggregator = aggregator)
+        roomSummaryUpdater.update(realm, roomId, membership, roomSync.summary,
+                roomSync.unreadNotifications, roomSync.unreadThreadNotifications, aggregator = aggregator)
         return roomEntity
     }
 
@@ -484,23 +489,41 @@ internal class RoomSyncHandler @Inject constructor(
             cryptoService.onLiveEvent(roomEntity.roomId, event, isInitialSync)
 
             // Try to remove local echo
-            event.unsignedData?.transactionId?.also {
-                val sendingEventEntity = roomEntity.sendingTimelineEvents.find(it)
+            event.unsignedData?.transactionId?.also { txId ->
+                val sendingEventEntity = roomEntity.sendingTimelineEvents.find(txId)
                 if (sendingEventEntity != null) {
-                    Timber.v("Remove local echo for tx:$it")
+                    Timber.v("Remove local echo for tx:$txId")
                     roomEntity.sendingTimelineEvents.remove(sendingEventEntity)
                     if (event.isEncrypted() && event.content?.get("algorithm") as? String == MXCRYPTO_ALGORITHM_MEGOLM) {
-                        // updated with echo decryption, to avoid seeing it decrypt again
+                        // updated with echo decryption, to avoid seeing txId decrypt again
                         val adapter = MoshiProvider.providesMoshi().adapter<OlmDecryptionResult>(OlmDecryptionResult::class.java)
                         sendingEventEntity.root?.decryptionResultJson?.let { json ->
                             eventEntity.decryptionResultJson = json
                             event.mxDecryptionResult = adapter.fromJson(json)
                         }
                     }
+                    // also update potential edit that could refer to that event?
+                    // If not display will flicker :/
+                    val relationContent = event.getRelationContent()
+                    if (relationContent?.type == RelationType.REPLACE) {
+                        relationContent.eventId?.let { targetId ->
+                            EventAnnotationsSummaryEntity.where(realm, roomId, targetId)
+                                    .findFirst()
+                                    ?.editSummary
+                                    ?.editions
+                                    ?.forEach {
+                                        if (it.eventId == txId) {
+                                            // just do that, the aggregation processor will to the rest
+                                            it.event = eventEntity
+                                        }
+                                    }
+                        }
+                    }
+
                     // Finally delete the local echo
                     sendingEventEntity.deleteOnCascade(true)
                 } else {
-                    Timber.v("Can't find corresponding local echo for tx:$it")
+                    Timber.v("Can't find corresponding local echo for tx:$txId")
                 }
             }
         }

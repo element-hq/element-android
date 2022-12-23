@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?colorSurface">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <im.vector.app.core.ui.views.BottomSheetActionButton
+            android:id="@+id/gallery"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:actionTitle="@string/attachment_type_selector_gallery"
+            app:leftIcon="@drawable/ic_attachment_gallery"
+            app:tint="?colorPrimary"
+            app:titleTextColor="?vctr_content_primary" />
+
+        <im.vector.app.core.ui.views.BottomSheetActionButton
+            android:id="@+id/stickers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:actionTitle="@string/attachment_type_selector_sticker"
+            app:leftIcon="@drawable/ic_attachment_sticker"
+            app:tint="?colorPrimary"
+            app:titleTextColor="?vctr_content_primary" />
+
+        <im.vector.app.core.ui.views.BottomSheetActionButton
+            android:id="@+id/file"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:actionTitle="@string/attachment_type_selector_file"
+            app:leftIcon="@drawable/ic_attachment_file"
+            app:tint="?colorPrimary"
+            app:titleTextColor="?vctr_content_primary" />
+
+        <im.vector.app.core.ui.views.BottomSheetActionButton
+            android:id="@+id/voiceBroadcast"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:actionTitle="@string/attachment_type_selector_voice_broadcast"
+            app:leftIcon="@drawable/ic_attachment_voice_broadcast"
+            app:tint="?colorPrimary"
+            app:titleTextColor="?vctr_content_primary" />
+
+        <im.vector.app.core.ui.views.BottomSheetActionButton
+            android:id="@+id/poll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:actionTitle="@string/attachment_type_selector_poll"
+            app:leftIcon="@drawable/ic_attachment_poll"
+            app:tint="?colorPrimary"
+            app:titleTextColor="?vctr_content_primary" />
+
+        <im.vector.app.core.ui.views.BottomSheetActionButton
+            android:id="@+id/location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:actionTitle="@string/attachment_type_selector_location"
+            app:leftIcon="@drawable/ic_attachment_location"
+            app:tint="?colorPrimary"
+            app:titleTextColor="?vctr_content_primary" />
+
+        <im.vector.app.core.ui.views.BottomSheetActionButton
+            android:id="@+id/camera"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:actionTitle="@string/attachment_type_selector_camera"
+            app:leftIcon="@drawable/ic_attachment_camera"
+            app:tint="?colorPrimary"
+            app:titleTextColor="?vctr_content_primary" />
+
+        <im.vector.app.core.ui.views.BottomSheetActionButton
+            android:id="@+id/contact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:actionTitle="@string/attachment_type_selector_contact"
+            app:leftIcon="@drawable/ic_attachment_contact_white_24dp"
+            app:tint="?colorPrimary"
+            app:titleTextColor="?vctr_content_primary" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?vctr_list_separator" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/textFormatting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_text_formatting"
+            android:drawablePadding="20dp"
+            android:padding="20dp"
+            android:paddingStart="28dp"
+            android:text="@string/attachment_type_selector_text_formatting"
+            android:textAppearance="@style/TextAppearance.Vector.Subtitle"
+            android:textColor="?vctr_content_primary"
+            app:drawableTint="?colorPrimary"
+            tools:ignore="RtlSymmetry" />
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

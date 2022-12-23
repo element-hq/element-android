@@ -943,7 +943,7 @@
 \n
 \nپیام‌هایتان با قفل‌هایی امن شده‌اند و فقط شما و گیرندگان دیگر، کلیدهای یکتا را برای قفل‌گشاییشان دارید.</string>
     <string name="room_profile_section_security">امنیت</string>
-    <string name="room_profile_section_security_learn_more">بثیش‌تر بدانید</string>
+    <string name="room_profile_section_security_learn_more">بیش‌تر بدانید</string>
     <string name="room_profile_section_more">بیش‌تر</string>
     <string name="room_profile_section_admin">کنش‌های مدیر</string>
     <string name="room_profile_section_more_settings">تنظمیات اتاق</string>
@@ -1492,10 +1492,10 @@
     <string name="settings_troubleshoot_test_token_registration_quick_fix">ثبت ژتون</string>
     <string name="push_gateway_item_format">فرمت:</string>
     <string name="push_gateway_item_url">آدرس:</string>
-    <string name="push_gateway_item_device_name">نام نشست:</string>
-    <string name="push_gateway_item_app_display_name">نام برنامه:</string>
-    <string name="push_gateway_item_push_key">کلید push:</string>
-    <string name="push_gateway_item_app_id">شناسه برنامه:</string>
+    <string name="push_gateway_item_device_name">نام نمایشی نشست:</string>
+    <string name="push_gateway_item_app_display_name">نام نمایشی کاره:</string>
+    <string name="push_gateway_item_push_key">کلید ارسال:</string>
+    <string name="push_gateway_item_app_id">شناسهٔ کاره:</string>
     <string name="settings_push_gateway_no_pushers">هیچ push gateway‌ای ثبت نشده است</string>
     <string name="settings_push_rules_no_rules">هیچ قانونی برای push تعریف نشده است</string>
     <string name="navigate_to_room_when_already_in_the_room">شما در حال مشاهده این اتاق هستید!</string>
@@ -2720,4 +2720,133 @@
     <string name="command_description_devtools">گشودن صفحهٔ ابزارهای توسعه‌دهنده</string>
     <string name="labs_enable_deferred_dm_title">به کار انداختن پیام‌های مستقیم تعویقی</string>
     <string name="action_got_it">گرفتم</string>
+    <string name="tooltip_attachment_voice_broadcast">آغاز یک پخش همگانی صوتی</string>
+    <string name="command_description_table_flip">(╯°□°）╯︵ ┻━┻ را به ابتدای پیام متنی خام می‌افزاید</string>
+    <string name="attachment_type_voice_broadcast">پخش همگانی صدا</string>
+    <string name="grant_permission">اعطای دسترسی</string>
+    <string name="labs_enable_rich_text_editor_summary">ویرایشگر متن غنی را بیازمایید (حالت متن خام به زودی)</string>
+    <string name="labs_enable_rich_text_editor_title">به کار انداختن ویرایشگر متن غنی</string>
+    <string name="device_manager_verification_status_detail_other_session_unknown">برای آشکارسازی وضعیت تأیید نشست کنونیتان، تأییدش کنید.</string>
+    <string name="qr_code_login_header_failed_homeserver_is_not_supported_description">کارساز خانگی از ورود با کد QR پشتیبانی نمی‌کند.</string>
+    <string name="qr_code_login_header_failed_user_cancelled_description">ورود روی افزارهٔ دیگر لغو شد.</string>
+    <string name="labs_enable_session_manager_summary">دید و واپایش بیش‌تری روی نشست‌هایتان داشته باشید.</string>
+    <string name="qr_code_login_header_failed_denied_description">درخواست روی افزارهٔ دیگر رد شد.</string>
+    <string name="qr_code_login_header_failed_timeout_description">پیوند در مدّت مقرّر کامل نشد‌.</string>
+    <string name="qr_code_login_header_failed_other_device_not_signed_in_description">افزارهٔ دیگر باید وارد شده باشد.</string>
+    <string name="qr_code_login_header_failed_other_device_already_signed_in_description">افزارهٔ دیگر از پیش وارد شده.</string>
+    <string name="qr_code_login_new_device_instruction_2">به تنظیمات -&gt; امنیت و محرمانگی بروید</string>
+    <string name="qr_code_login_new_device_instruction_1">کاره را روی افزارهٔ دیگرتان بگشایید</string>
+    <string name="qr_code_login_header_failed_device_is_not_supported_description">پیوند دادن با این افزاره پشتیبانی نمی‌شود.</string>
+    <string name="labs_enable_voice_broadcast_title">به کار انداختن پخش صدا (زیر توسعهٔ فعّال)</string>
+    <string name="qr_code_login_show_qr_code_button">نمایش کد QR روی این افزاره</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_1">آغاز در صفحهٔ ورود</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">گزینش‌«ورود با کد QR»</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_1">آغاز در صفحهٔ ورود</string>
+    <string name="device_manager_push_notifications_description">گرفتن آگاهی‌های ارسالی روی این نشست.</string>
+    <string name="a11y_play_voice_broadcast">پخش یا مکث پخش صدا</string>
+    <string name="qr_code_login_header_failed_invalid_qr_code_description">کد QR نامعتبر است.</string>
+    <string name="qr_code_login_signing_in_a_mobile_device">وارد شدن در افزاره‌ای همراه؟</string>
+    <string name="qr_code_login_header_show_qr_code_title">ورود با کد QR</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_title">ورود با کد QR</string>
+    <string name="a11y_stop_voice_broadcast_record">توقّف ضبط پخش صدا</string>
+    <string name="a11y_pause_voice_broadcast_record">مکث ضبط پخش صدا</string>
+    <string name="a11y_resume_voice_broadcast_record">از سر گیری ضبط پخش صدا</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_2">گزینش «نمایش کد QR»</string>
+    <string name="qr_code_login_new_device_instruction_3">گزینش «نمایش کد QR»</string>
+    <string name="labs_enable_client_info_recording_title">به کار انداختن ضبط اطّلاعات کارخواه</string>
+    <string name="labs_enable_session_manager_title">به کار انداختن مدیر نشست جدید</string>
+    <string name="a11y_pause_voice_broadcast">مکث پخش صدا</string>
+    <string name="qr_code_login_header_failed_other_description">درخواست شکست خورد.</string>
+    <string name="qr_code_login_signing_in">وارد کردنتان</string>
+    <string name="qr_code_login_connecting_to_device">وصل شدن به افزاره</string>
+    <string name="qr_code_login_scan_qr_code_button">پویش کد QR</string>
+    <string name="qr_code_login_header_connected_title">اتّصال امن برقرار شده</string>
+    <string name="qr_code_login_header_scan_qr_code_title">پویش کد QR</string>
+    <string name="login_scan_qr_code">پویش کد QR</string>
+    <string name="rich_text_editor_format_underline">اعمال قالب زیرخط‌دار</string>
+    <string name="rich_text_editor_format_strikethrough">اعمال قالب خط‌خورده</string>
+    <string name="rich_text_editor_format_italic">اعمال قالب کج</string>
+    <string name="rich_text_editor_format_bold">اعمال قالب توپر</string>
+    <string name="device_manager_verification_status_unknown">وضعیت تأیید نامعلوم</string>
+    <string name="device_manager_other_sessions_select">گزینش نشست‌ها</string>
+    <string name="attachment_type_selector_voice_broadcast">پخش صدا</string>
+    <string name="attachment_type_selector_gallery">کتابخانهٔ عکس</string>
+    <string name="qr_code_login_try_again">دوباره تلاش کنید</string>
+    <string name="qr_code_login_status_no_match">مطابق نیستند؟</string>
+    <string name="qr_code_login_header_failed_title">اتّصال ناموفّق</string>
+    <string name="device_manager_session_details_device_operating_system">سیستم‌عامل</string>
+    <string name="device_manager_push_notifications_title">آگاهی‌های ارسالی</string>
+    <string name="push_gateway_item_device_id">شناسهٔ نشست:</string>
+    <string name="attachment_type_selector_contact">آشنا</string>
+    <string name="attachment_type_selector_camera">دوربین</string>
+    <string name="attachment_type_selector_location">مکان</string>
+    <string name="attachment_type_selector_poll">نظرسنجی‌ها</string>
+    <string name="attachment_type_selector_file">پیوست‌ها</string>
+    <string name="attachment_type_selector_sticker">برچسب‌ها</string>
+    <string name="a11y_voice_broadcast_buffering">میانگیری…</string>
+    <string name="voice_broadcast_live">زنده</string>
+    <string name="qr_code_login_confirm_security_code">تأیید</string>
+    <string name="three">۳</string>
+    <string name="two">۲</string>
+    <string name="one">۱</string>
+    <string name="device_manager_session_details_device_model">مدل</string>
+    <string name="device_manager_session_details_device_browser">مرورگر</string>
+    <string name="device_manager_session_details_application_url">نشانی</string>
+    <string name="device_manager_session_details_application_version">نگارش</string>
+    <string name="device_manager_session_details_application_name">نام</string>
+    <string name="device_manager_session_details_application">برنامه</string>
+    <string name="push_gateway_item_enabled">به کار افتاده:</string>
+    <string name="action_deselect_all">ناگزینش همه</string>
+    <string name="action_select_all">گزینش همه</string>
+    <plurals name="x_selected">
+        <item quantity="one">۱ گزیده</item>
+        <item quantity="other">%1$d گزیده</item>
+    </plurals>
+    <string name="error_voice_broadcast_permission_denied_message">اجازه‌های لازم برای آغاز پخش صوتی در این اتاق را ندارید. برای ارتقای اجازه‌هایتان با یک مدیر اتاق تماس بگیرید.</string>
+    <string name="error_voice_broadcast_blocked_by_someone_else_message">فرد دیگری در حال ضبط یک پخش صوتی است. برای آغاز یک پخش جدید، منتظر پایان پخشش بمانید.</string>
+    <string name="qr_code_login_header_connected_description">با بررسی افزاره‌های وارد شده‌تان باید کد زیر را ببینید. تأیید کنید که این کد با آن افزاره مطابق است:</string>
+    <string name="error_voice_broadcast_already_in_progress_message">دارید یک پخش صوتی ضبط می‌کنید. لطفاً برای آغاز یک پخش جدید، به پخش کنونی پایان دهید.</string>
+    <string name="some_devices_will_not_be_able_to_decrypt">⚠ افزاره‌های تأییدنشده‌ای در این اتاق وجود دارند. آن‌ها قادر به رمزگشایی پیام‌هایی که فرستاده‌اید نیستند.</string>
+    <string name="qr_code_login_header_scan_qr_code_description">استفاده از دوربین روی این افزاره برای پویش کد QR نشان داده شده روی افزارهٔ دیگرتان:</string>
+    <string name="labs_enable_client_info_recording_summary">ضبط نام کارخواه، نگارش و نشانی برای بازشناسی آسان‌تر نشست‌ها در مدیر نشست.</string>
+    <string name="room_settings_global_block_unverified_info_text">🔒 رمزگذاری به نشست‌های تأیید شده را فقط برای تمامی اتاق‌ها در تنظیمات امنیت به کار انداخته‌اید.</string>
+    <plurals name="device_manager_other_sessions_recommendation_description_inactive">
+        <item quantity="one">خارج شدن از نشست‌های قدیمی (۱ روز یا بیش‌تر) که دیگر استفاده نمی‌کنید را در نظر داشته باشید.</item>
+        <item quantity="other">خارج شدن از نشست‌های قدیمی (%1$d روز یا بیش‌تر) که دیگر استفاده نمی‌کنید را در نظر داشته باشید.</item>
+    </plurals>
+    <string name="labs_enable_voice_broadcast_summary">توانایی ضبط و فرستادن پخش صدا در خط زمانی اتاق.</string>
+    <string name="qr_code_login_header_show_qr_code_link_a_device_description">پویش کد QR زیر با افزاره‌ای که خارج شده.</string>
+    <string name="qr_code_login_header_show_qr_code_new_device_description">استفاده از افزارهٔ وارد شده‌تان برای پویش کد QR زیر:</string>
+    <string name="error_check_network">چیزی اشتباه پیش رفت. لطفاً اتّصال شبکه‌تان را بررسی و دوباره تلاش کنید.</string>
+    <string name="settings_troubleshoot_test_system_settings_permission_failed">${app_name} برای نمایش آگاهی‌ها نیازمند اجازه است.
+\nلطفاً اجازه را اعطا کنید.</string>
+    <string name="error_voice_broadcast_unauthorized_title">نمی‌توان پخش صدایی جدید را آغاز کرد</string>
+    <string name="rich_text_editor_full_screen_toggle">تغییر حالت تمام‌صفحه</string>
+    <string name="a11y_voice_broadcast_fast_forward">۳۰ ثانیه پیش‌روی</string>
+    <string name="a11y_voice_broadcast_fast_backward">۳۰ ثانیه پس‌روی</string>
+    <string name="attachment_type_selector_text_formatting">قالب‌بندی متن</string>
+    <string name="device_manager_other_sessions_multi_signout_selection">خروج</string>
+    <plurals name="device_manager_other_sessions_multi_signout_all">
+        <item quantity="one">خروج از ۱ نشست</item>
+        <item quantity="other">خروج از %1$d نشست</item>
+    </plurals>
+    <string name="voice_broadcast_recording_time_left">%1$s مانده</string>
+    <string name="message_reply_to_sender_sent_voice_message">پیام صوتی‌ای فرستاد.</string>
+    <string name="message_reply_to_sender_sent_audio_file">پروندهٔ صوتی‌ای فرستاد.</string>
+    <string name="message_reply_to_sender_created_poll">نظرسنجی‌ای ایجاد کرد.</string>
+    <string name="message_reply_to_sender_sent_sticker">عکس‌برگردانی فرستاد.</string>
+    <string name="message_reply_to_sender_sent_video">ویدیویی فرستاد.</string>
+    <string name="message_reply_to_sender_sent_image">تصویری فرستاد.</string>
+    <string name="message_reply_to_sender_sent_file">پرونده‌ای فرستاد.</string>
+    <string name="message_reply_to_prefix">در پاسخ به</string>
+    <string name="device_manager_other_sessions_hide_ip_address">نهفتن نشانی آی‌پی</string>
+    <string name="device_manager_other_sessions_show_ip_address">نمایش نشانی آی‌پی</string>
+    <string name="quoting">نقل کردن</string>
+    <string name="replying_to">پاسخ دادن به %s</string>
+    <string name="editing">ویرایش کردن</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_description">می‌توانید با یک رمز QR از این افزاره برای ورود به افزاره‌ای همراه یا روی وب استفاده کنید. دو راه برای این کار وجود دارد:</string>
+    <string name="qr_code_login_header_failed_e2ee_security_issue_description">مشکلی امنیتی در برپایی پیام‌رسانی امن وجود داشت. ممکن است یکی از موارد زیر دستکاری شده باشند: کارساز خانیگیتان؛ اتّصال اینترنتیتان؛ افزاره(های)تان؛</string>
+    <string name="qr_code_login_confirm_security_code_description">لطفاً مطمئن شوید که مبدأ این کد را می‌دانید. با پیوند دادن افزاره‌ها، دسترسی کامل را به حسابتان می‌دهید.</string>
+    <string name="settings_enable_direct_share_summary">نمایش گپ‌های اخیر در فهرست هم رسانی سامانه</string>
+    <string name="settings_enable_direct_share_title">به کار انداختن هم‌رسانی مستقیم</string>
 </resources>

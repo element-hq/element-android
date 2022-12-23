@@ -37,9 +37,7 @@ class VectorViewModelFactory @Inject constructor(
                 }
             }
         }
-        if (creator == null) {
-            throw IllegalArgumentException("Unknown model class: $modelClass")
-        }
+        require(creator != null) { "Unknown model class: $modelClass" }
         try {
             @Suppress("UNCHECKED_CAST")
             return creator.get() as T

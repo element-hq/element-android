@@ -19,10 +19,12 @@ package im.vector.app.features.home.room.detail.composer
 import android.text.Editable
 import android.widget.EditText
 import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
 
 interface MessageComposerView {
+
+    companion object {
+        const val MAX_LINES_WHEN_COLLAPSED = 10
+    }
 
     val text: Editable?
     val formattedText: String?
@@ -30,20 +32,18 @@ interface MessageComposerView {
     val emojiButton: ImageButton?
     val sendButton: ImageButton
     val attachmentButton: ImageButton
-    val composerRelatedMessageTitle: TextView
-    val composerRelatedMessageContent: TextView
-    val composerRelatedMessageImage: ImageView
-    val composerRelatedMessageActionIcon: ImageView
-    val composerRelatedMessageAvatar: ImageView
 
-    var callback: PlainTextComposerLayout.Callback?
+    var callback: Callback?
 
-    var isVisible: Boolean
-
-    fun collapse(animate: Boolean = true, transitionComplete: (() -> Unit)? = null)
-    fun expand(animate: Boolean = true, transitionComplete: (() -> Unit)? = null)
     fun setTextIfDifferent(text: CharSequence?): Boolean
-    fun replaceFormattedContent(text: CharSequence)
+    fun renderComposerMode(mode: MessageComposerMode)
+}
 
-    fun setInvisible(isInvisible: Boolean)
+interface Callback : ComposerEditText.Callback {
+    fun onCloseRelatedMessage()
+    fun onSendMessage(text: CharSequence)
+    fun onAddAttachment()
+    fun onExpandOrCompactChange()
+    fun onFullScreenModeChanged()
+    fun onSetLink(isTextSupported: Boolean, initialLink: String?)
 }

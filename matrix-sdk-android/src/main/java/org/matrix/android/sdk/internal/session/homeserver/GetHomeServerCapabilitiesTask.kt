@@ -25,6 +25,8 @@ import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 import org.matrix.android.sdk.internal.auth.version.Versions
 import org.matrix.android.sdk.internal.auth.version.doesServerSupportLogoutDevices
 import org.matrix.android.sdk.internal.auth.version.doesServerSupportQrCodeLogin
+import org.matrix.android.sdk.internal.auth.version.doesServerSupportRemoteToggleOfPushNotifications
+import org.matrix.android.sdk.internal.auth.version.doesServerSupportThreadUnreadNotifications
 import org.matrix.android.sdk.internal.auth.version.doesServerSupportThreads
 import org.matrix.android.sdk.internal.auth.version.isLoginAndRegistrationSupportedBySdk
 import org.matrix.android.sdk.internal.database.model.HomeServerCapabilitiesEntity
@@ -140,11 +142,18 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
             }
 
             if (getVersionResult != null) {
-                homeServerCapabilitiesEntity.lastVersionIdentityServerSupported = getVersionResult.isLoginAndRegistrationSupportedBySdk()
-                homeServerCapabilitiesEntity.canControlLogoutDevices = getVersionResult.doesServerSupportLogoutDevices()
+                homeServerCapabilitiesEntity.lastVersionIdentityServerSupported =
+                        getVersionResult.isLoginAndRegistrationSupportedBySdk()
+                homeServerCapabilitiesEntity.canControlLogoutDevices =
+                        getVersionResult.doesServerSupportLogoutDevices()
                 homeServerCapabilitiesEntity.canUseThreading = /* capabilities?.threads?.enabled.orFalse() || */
                         getVersionResult.doesServerSupportThreads()
-                homeServerCapabilitiesEntity.canLoginWithQrCode = getVersionResult.doesServerSupportQrCodeLogin()
+                homeServerCapabilitiesEntity.canUseThreadReadReceiptsAndNotifications =
+                        getVersionResult.doesServerSupportThreadUnreadNotifications()
+                homeServerCapabilitiesEntity.canLoginWithQrCode =
+                        getVersionResult.doesServerSupportQrCodeLogin()
+                homeServerCapabilitiesEntity.canRemotelyTogglePushNotificationsOfDevices =
+                        getVersionResult.doesServerSupportRemoteToggleOfPushNotifications()
             }
 
             if (getWellknownResult != null && getWellknownResult is WellknownResult.Prompt) {

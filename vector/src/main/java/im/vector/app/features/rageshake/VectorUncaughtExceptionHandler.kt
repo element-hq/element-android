@@ -70,7 +70,7 @@ class VectorUncaughtExceptionHandler @Inject constructor(
         val appName = "Element" // TODO Matrix.getApplicationName()
 
         b.append(appName + " Build : " + versionCodeProvider.getVersionCode() + "\n")
-        b.append("$appName Version : ${versionProvider.getVersion(longFormat = true, useBuildNumber = true)}\n")
+        b.append("$appName Version : ${versionProvider.getVersion(longFormat = true)}\n")
         b.append("SDK Version : ${Matrix.getSdkVersion()}\n")
         b.append("Phone : " + Build.MODEL.trim() + " (" + Build.VERSION.INCREMENTAL + " " + Build.VERSION.RELEASE + " " + Build.VERSION.CODENAME + ")\n")
 

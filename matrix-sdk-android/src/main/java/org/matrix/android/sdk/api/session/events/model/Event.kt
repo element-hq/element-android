@@ -26,12 +26,12 @@ import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageStickerContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
+import org.matrix.android.sdk.api.session.room.model.message.asMessageAudioEvent
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
+import org.matrix.android.sdk.api.session.room.model.relation.isReply
 import org.matrix.android.sdk.api.session.room.model.relation.shouldRenderInThread
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.threads.ThreadDetails
@@ -52,7 +52,7 @@ inline fun <reified T> Content?.toModel(catchError: Boolean = true): T? {
     val moshiAdapter = moshi.adapter(T::class.java)
     return try {
         moshiAdapter.fromJsonValue(this)
-    } catch (e: Exception) {
+    } catch (e: Throwable) {
         if (catchError) {
             Timber.e(e, "To model failed : $e")
             null
@@ -227,11 +227,14 @@ data class Event(
         return when {
             isReplyRenderedInThread() || isQuote() -> ContentUtils.extractUsefulTextFromReply(text)
             isFileMessage() -> "sent a file."
+            isVoiceMessage() -> "sent a voice message."
             isAudioMessage() -> "sent an audio file."
             isImageMessage() -> "sent an image."
             isVideoMessage() -> "sent a video."
-            isSticker() -> "sent a sticker"
+            isSticker() -> "sent a sticker."
             isPoll() -> getPollQuestion() ?: "created a poll."
+            isLiveLocation() -> "Live location."
+            isLocationMessage() -> "has shared their location."
             else -> text
         }
     }
@@ -357,6 +360,10 @@ fun Event.isAudioMessage(): Boolean {
     }
 }
 
+fun Event.isVoiceMessage(): Boolean {
+    return this.asMessageAudioEvent()?.content?.voiceMessageIndicator != null
+}
+
 fun Event.isFileMessage(): Boolean {
     return when (getMsgType()) {
         MessageType.MSGTYPE_FILE -> true
@@ -381,24 +388,24 @@ fun Event.isLocationMessage(): Boolean {
     }
 }
 
-fun Event.isPoll(): Boolean = getClearType() in EventType.POLL_START || getClearType() in EventType.POLL_END
+fun Event.isPoll(): Boolean = isPollStart() || isPollEnd()
+
+fun Event.isPollStart(): Boolean = getClearType() in EventType.POLL_START.values
+
+fun Event.isPollResponse(): Boolean = getClearType() in EventType.POLL_RESPONSE.values
+
+fun Event.isPollEnd(): Boolean = getClearType() in EventType.POLL_END.values
 
 fun Event.isSticker(): Boolean = getClearType() == EventType.STICKER
 
-fun Event.isLiveLocation(): Boolean = getClearType() in EventType.STATE_ROOM_BEACON_INFO
+fun Event.isLiveLocation(): Boolean = getClearType() in EventType.STATE_ROOM_BEACON_INFO.values
 
 fun Event.getRelationContent(): RelationDefaultContent? {
     return if (isEncrypted()) {
         content.toModel<EncryptedEventContent>()?.relatesTo
     } else {
-        content.toModel<MessageContent>()?.relatesTo ?: run {
-            // Special cases when there is only a local msgtype for some event types
-            when (getClearType()) {
-                EventType.STICKER -> getClearContent().toModel<MessageStickerContent>()?.relatesTo
-                in EventType.BEACON_LOCATION_DATA -> getClearContent().toModel<MessageBeaconLocationDataContent>()?.relatesTo
-                else -> null
-            }
-        }
+        content.toModel<MessageContent>()?.relatesTo
+                ?: getClearContent()?.get("m.relates_to")?.toContent().toModel() // Special cases when there is only a local msgtype for some event types
     }
 }
 
@@ -415,7 +422,7 @@ fun Event.getRelationContentForType(type: String): RelationDefaultContent? =
         getRelationContent()?.takeIf { it.type == type }
 
 fun Event.isReply(): Boolean {
-    return getRelationContent()?.inReplyTo?.eventId != null
+    return getRelationContent().isReply()
 }
 
 fun Event.isReplyRenderedInThread(): Boolean {
@@ -438,11 +445,11 @@ fun Event.isInvitation(): Boolean = type == EventType.STATE_ROOM_MEMBER &&
         content?.toModel<RoomMemberContent>()?.membership == Membership.INVITE
 
 fun Event.getPollContent(): MessagePollContent? {
-    return content.toModel<MessagePollContent>()
+    return getClearContent().toModel<MessagePollContent>()
 }
 
 fun Event.supportsNotification() =
-        this.getClearType() in EventType.MESSAGE + EventType.POLL_START + EventType.STATE_ROOM_BEACON_INFO
+        this.getClearType() in EventType.MESSAGE + EventType.POLL_START.values + EventType.STATE_ROOM_BEACON_INFO.values
 
 fun Event.isContentReportable() =
-        this.getClearType() in EventType.MESSAGE + EventType.STATE_ROOM_BEACON_INFO
+        this.getClearType() in EventType.MESSAGE + EventType.STATE_ROOM_BEACON_INFO.values

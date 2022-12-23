@@ -20,9 +20,15 @@ import dagger.Lazy
 import im.vector.app.EmojiSpanify
 import im.vector.app.R
 import im.vector.app.core.extensions.getVectorLastMessageContent
+import im.vector.app.core.extensions.orEmpty
 import im.vector.app.core.resources.ColorProvider
+import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.html.EventHtmlRenderer
+import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
+import im.vector.app.features.voicebroadcast.isLive
+import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
+import me.gujun.android.span.image
 import me.gujun.android.span.span
 import org.commonmark.node.Document
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -41,6 +47,7 @@ import javax.inject.Inject
 class DisplayableEventFormatter @Inject constructor(
         private val stringProvider: StringProvider,
         private val colorProvider: ColorProvider,
+        private val drawableProvider: DrawableProvider,
         private val emojiSpanify: EmojiSpanify,
         private val noticeEventFormatter: NoticeEventFormatter,
         private val htmlRenderer: Lazy<EventHtmlRenderer>
@@ -122,18 +129,21 @@ class DisplayableEventFormatter @Inject constructor(
             EventType.CALL_CANDIDATES -> {
                 span { }
             }
-            in EventType.POLL_START -> {
+            in EventType.POLL_START.values -> {
                 timelineEvent.root.getClearContent().toModel<MessagePollContent>(catchError = true)?.getBestPollCreationInfo()?.question?.getBestQuestion()
                         ?: stringProvider.getString(R.string.sent_a_poll)
             }
-            in EventType.POLL_RESPONSE -> {
+            in EventType.POLL_RESPONSE.values -> {
                 stringProvider.getString(R.string.poll_response_room_list_preview)
             }
-            in EventType.POLL_END -> {
+            in EventType.POLL_END.values -> {
                 stringProvider.getString(R.string.poll_end_room_list_preview)
             }
-            in EventType.STATE_ROOM_BEACON_INFO -> {
+            in EventType.STATE_ROOM_BEACON_INFO.values -> {
                 simpleFormat(senderName, stringProvider.getString(R.string.sent_live_location), appendAuthor)
+            }
+            VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO -> {
+                formatVoiceBroadcastEvent(timelineEvent.root, isDm, senderName)
             }
             else -> {
                 span {
@@ -220,17 +230,17 @@ class DisplayableEventFormatter @Inject constructor(
                     emojiSpanify.spanify(stringProvider.getString(R.string.sent_a_reaction, it.key))
                 } ?: span { }
             }
-            in EventType.POLL_START -> {
+            in EventType.POLL_START.values -> {
                 event.getClearContent().toModel<MessagePollContent>(catchError = true)?.pollCreationInfo?.question?.question
                         ?: stringProvider.getString(R.string.sent_a_poll)
             }
-            in EventType.POLL_RESPONSE -> {
+            in EventType.POLL_RESPONSE.values -> {
                 stringProvider.getString(R.string.poll_response_room_list_preview)
             }
-            in EventType.POLL_END -> {
+            in EventType.POLL_END.values -> {
                 stringProvider.getString(R.string.poll_end_room_list_preview)
             }
-            in EventType.STATE_ROOM_BEACON_INFO -> {
+            in EventType.STATE_ROOM_BEACON_INFO.values -> {
                 stringProvider.getString(R.string.sent_live_location)
             }
             else -> {
@@ -250,6 +260,22 @@ class DisplayableEventFormatter @Inject constructor(
                     .append(body)
         } else {
             body
+        }
+    }
+
+    private fun formatVoiceBroadcastEvent(event: Event, isDm: Boolean, senderName: String): CharSequence {
+        return if (event.asVoiceBroadcastEvent()?.isLive == true) {
+            span {
+                drawableProvider.getDrawable(R.drawable.ic_voice_broadcast, colorProvider.getColor(R.color.palette_vermilion))?.let {
+                    image(it)
+                    +" "
+                }
+                span(stringProvider.getString(R.string.voice_broadcast_live_broadcast)) {
+                    textColor = colorProvider.getColor(R.color.palette_vermilion)
+                }
+            }
+        } else {
+            noticeEventFormatter.format(event, senderName, isDm).orEmpty()
         }
     }
 }

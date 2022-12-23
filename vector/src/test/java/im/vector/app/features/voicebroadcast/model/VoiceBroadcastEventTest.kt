@@ -16,7 +16,7 @@
 
 package im.vector.app.features.voicebroadcast.model
 
-import im.vector.app.features.voicebroadcast.STATE_ROOM_VOICE_BROADCAST_INFO
+import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeNull
 import org.amshove.kluent.shouldNotBeNull
@@ -34,7 +34,7 @@ import org.matrix.android.sdk.api.session.room.model.relation.ReplyToContent
 
 private const val AN_EVENT_ID = "event_id"
 private const val A_REFERENCED_EVENT_ID = "event_id_ref"
-private const val A_CHUNK_LENGTH = 3_600L
+private const val A_CHUNK_LENGTH = 30
 
 class VoiceBroadcastEventTest {
 
@@ -48,7 +48,7 @@ class VoiceBroadcastEventTest {
         )
         val event = Event(
                 eventId = AN_EVENT_ID,
-                type = STATE_ROOM_VOICE_BROADCAST_INFO,
+                type = VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO,
                 content = content.toContent(),
         )
         val expectedReference = RelationDefaultContent(RelationType.REFERENCE, event.eventId)
@@ -71,7 +71,7 @@ class VoiceBroadcastEventTest {
                 relatesTo = RelationDefaultContent(RelationType.REFERENCE, A_REFERENCED_EVENT_ID),
         )
         val event = Event(
-                type = STATE_ROOM_VOICE_BROADCAST_INFO,
+                type = VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO,
                 content = content.toContent(),
         )
         val expectedReference = content.relatesTo

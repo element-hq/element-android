@@ -615,7 +615,7 @@
     <string name="login_reset_password_mail_confirmation_submit">Jag har verifierat min e-postadress</string>
     <string name="login_reset_password_success_notice_2">Du har blivit utloggad ur alla sessioner och kommer inte längre motta pushnotiser. För att återaktivera pushnotiser, logga in igen på varje enhet.</string>
     <string name="login_set_email_title">Sätt e-postadress</string>
-    <string name="login_set_email_notice">Sätt en e-postadress för att kunna återförva ditt konto. Senare kan du valfritt låta personer du känner upptäcka dig med din e-postadress.</string>
+    <string name="login_set_email_notice">Sätt en e-postadress för att kunna återförvärva ditt konto. Senare kan du valfritt låta personer du känner upptäcka dig med den här e-postadressen.</string>
     <string name="login_set_email_mandatory_hint">E-post</string>
     <string name="login_set_email_optional_hint">E-post (valfritt)</string>
     <string name="login_set_msisdn_notice">Sätt ett telefonnummer som valfritt kan användas för att vara upptäckbar av folk som känner dig.</string>
@@ -1312,10 +1312,10 @@
     <string name="keys_backup_unable_to_get_keys_backup_data">Ett fel inträffade vid hämtning av nyckelsäkerhetskopia</string>
     <string name="navigate_to_room_when_already_in_the_room">Du tittar redan på det här rummet!</string>
     <string name="settings_push_gateway_no_pushers">Inga registrerade pushgateways</string>
-    <string name="push_gateway_item_app_id">app_id:</string>
-    <string name="push_gateway_item_push_key">push_key:</string>
-    <string name="push_gateway_item_app_display_name">app_display_name:</string>
-    <string name="push_gateway_item_device_name">session_name:</string>
+    <string name="push_gateway_item_app_id">App-ID:</string>
+    <string name="push_gateway_item_push_key">Pushnyckel:</string>
+    <string name="push_gateway_item_app_display_name">Appens visningsnamn:</string>
+    <string name="push_gateway_item_device_name">Sessionens visningsnamn:</string>
     <string name="push_gateway_item_url">Url:</string>
     <string name="push_gateway_item_format">Format:</string>
     <string name="settings_troubleshoot_test_token_registration_quick_fix">Registrera token</string>
@@ -2544,7 +2544,7 @@
     <string name="ftue_auth_email_resend_email">Skicka e-brev igen</string>
     <string name="ftue_auth_email_verification_footer">Fick du inget e-brev\?</string>
     <string name="ftue_auth_email_verification_subtitle">För att bekräfta din e-post, tryck på knappen i e-brevet vi just skickade till %s</string>
-    <string name="ftue_auth_email_verification_title">Kolla din e-post för att verifiera.</string>
+    <string name="ftue_auth_email_verification_title">Verifiera din e-post</string>
     <string name="ftue_auth_phone_confirmation_resend_code">Skicka kod igen</string>
     <string name="ftue_auth_phone_confirmation_subtitle">En kod skickades till %s</string>
     <string name="ftue_auth_phone_confirmation_title">Bekräfta ditt telefonnummer</string>
@@ -2651,4 +2651,219 @@
     <string name="room_list_filter_favourites">Favoriter</string>
     <string name="room_list_filter_unreads">Olästa</string>
     <string name="room_list_filter_all">Alla</string>
+    <string name="device_manager_push_notifications_title">Pushnotiser</string>
+    <string name="device_manager_session_details_description">Applikations-, enhets- och aktivitetsinformation.</string>
+    <string name="device_manager_session_details_title">Sessionsdetaljer</string>
+    <string name="device_manager_session_overview_signout">Logga ut ur den här sessionen</string>
+    <string name="device_manager_other_sessions_clear_filter">Rensa filter</string>
+    <string name="device_manager_other_sessions_no_inactive_sessions_found">Inga inaktiva sessioner hittade.</string>
+    <string name="device_manager_other_sessions_no_unverified_sessions_found">Inga overifierade sessioner hittade.</string>
+    <string name="device_manager_other_sessions_no_verified_sessions_found">Inga verifierade sessioner hittade.</string>
+    <plurals name="device_manager_other_sessions_recommendation_description_inactive">
+        <item quantity="one">Överväg att logga ut ur gamla sessioner (%1$d dag eller längre) du inte använder längre.</item>
+        <item quantity="other">Överväg att logga ut ur gamla sessioner (%1$d dagar eller längre) du inte använder längre.</item>
+    </plurals>
+    <string name="device_manager_other_sessions_recommendation_title_inactive">Inaktiv</string>
+    <string name="device_manager_other_sessions_recommendation_description_unverified">Verifiera dina sessioner för förbättrad säker meddelandehantering eller logga ut ur de du inte känner igen eller använder längre.</string>
+    <string name="device_manager_other_sessions_recommendation_title_unverified">Overifierad</string>
+    <string name="device_manager_other_sessions_recommendation_description_verified">För bäst säkerhet, logga ut från sessioner du inte känner igen eller använder längre.</string>
+    <string name="device_manager_other_sessions_recommendation_title_verified">Verifierad</string>
+    <string name="a11y_device_manager_filter">Filter</string>
+    <plurals name="device_manager_inactive_sessions_description">
+        <item quantity="one">Överväg att logga ut ur gamla sessioner (%1$d dag eller längre) som du inte använder längre.</item>
+        <item quantity="other">Överväg att logga ut ur gamla sessioner (%1$d dagar eller längre) som du inte använder längre.</item>
+    </plurals>
+    <plurals name="device_manager_filter_option_inactive_description">
+        <item quantity="one">Inaktiv %1$d dag eller längre</item>
+        <item quantity="other">Inaktiv %1$d dagar eller längre</item>
+    </plurals>
+    <string name="device_manager_filter_option_inactive">Inaktiv</string>
+    <string name="device_manager_filter_option_unverified_description">Inte redo för säkra meddelanden</string>
+    <string name="device_manager_filter_option_unverified">Overifierad</string>
+    <string name="device_manager_filter_option_verified_description">Redo för säkra meddelanden</string>
+    <string name="device_manager_filter_option_verified">Verifierade</string>
+    <string name="device_manager_filter_option_all_sessions">Alla sessioner</string>
+    <string name="device_manager_filter_bottom_sheet_title">Filter</string>
+    <string name="device_manager_session_last_activity">Senast aktiv %1$s</string>
+    <string name="device_manager_device_title">Enhet</string>
+    <string name="device_manager_session_title">Session</string>
+    <string name="device_manager_current_session_title">Nuvarande session</string>
+    <string name="device_manager_inactive_sessions_title">Inaktiva sessioner</string>
+    <string name="device_manager_unverified_sessions_description">Verifiera eller logga ut ur overifierade sessioner.</string>
+    <string name="device_manager_unverified_sessions_title">Overifierade sessioner</string>
+    <string name="device_manager_header_section_security_recommendations_description">Förbättra din kontosäkerhet genom att följa dessa rekommendationer.</string>
+    <string name="device_manager_header_section_security_recommendations_title">Säkerhetsrekommendationer</string>
+    <plurals name="device_manager_other_sessions_description_inactive">
+        <item quantity="one">Inaktiv %1$d+ dag (%2$s)</item>
+        <item quantity="other">Inaktiv %1$d+ dagar (%2$s)</item>
+    </plurals>
+    <string name="device_manager_other_sessions_description_unverified_current_session">Overifierad · Din nuvarande session</string>
+    <string name="device_manager_other_sessions_description_unverified">Overifierad · Senast aktiv %1$s</string>
+    <string name="device_manager_other_sessions_description_verified">Verifierad · Senast aktiv %1$s</string>
+    <string name="device_manager_other_sessions_view_all">Visa alla (%1$d)</string>
+    <string name="device_manager_view_details">Visa detaljer</string>
+    <string name="device_manager_verify_session">Verifiera session</string>
+    <string name="device_manager_verification_status_detail_other_session_unknown">Verifiera din nuvarande session för att visa den här sessionens verifieringsstatus.</string>
+    <string name="device_manager_verification_status_detail_other_session_unverified">Verifiera eller logga ut från den här sessionen för bäst säkerhet och pålitlighet.</string>
+    <string name="device_manager_verification_status_detail_current_session_unverified">Verifiera din nuvarande session för förbättrad säker meddelandehantering.</string>
+    <string name="device_manager_verification_status_unknown">Okänd verifieringsstatus</string>
+    <string name="push_gateway_item_enabled">Aktiverad:</string>
+    <string name="push_gateway_item_device_id">Sessions-ID:</string>
+    <string name="error_check_network">Nåt gick fel. Kolla din nätverksanslutning och pröva igen.</string>
+    <string name="grant_permission">Ge åtkomst</string>
+    <string name="settings_troubleshoot_test_system_settings_permission_failed">${app_name} behöver behörighet att visa aviseringar.
+\nVänligen ge åtkomst.</string>
+    <string name="permissions_rationale_msg_notification">${app_name} behöver behörighet att visa aviseringar. Aviseringar kan visa dina meddelanden, dina inbjudningar, o.s.v.
+\n
+\nVänligen ge åtkomst på nästa pop-uper för att kunna se aviseringar.</string>
+    <string name="labs_enable_rich_text_editor_title">Aktivera rik-text-redigerare</string>
+    <string name="labs_enable_rich_text_editor_summary">Testa den nya rik-text-redigeraren</string>
+    <string name="onboarding_new_app_layout_welcome_title">Välkommen till en ny vy!</string>
+    <string name="home_empty_no_unreads_message">Det här är vart dina olästa meddelanden hamnar, när du har några.</string>
+    <string name="home_empty_no_unreads_title">Inget att rapportera.</string>
+    <string name="home_empty_no_rooms_message">Den säkra allt-i-ett-chattappen för teams, vänner och organisationer. Skapa en chatt eller gå med i ett existerande rum för att komma igång.</string>
+    <string name="home_empty_no_rooms_title">Välkommen till ${app_name},
+\n%s.</string>
+    <string name="home_empty_space_no_rooms_message">Utrymmen är ett nytt sätt att gruppera rum och personer. Lägg till ett existerande rum, eller skapa ett nytt, med knappen nere till höger.</string>
+    <string name="home_empty_space_no_rooms_title">%s
+\nser lite tom ut.</string>
+    <string name="labs_enable_voice_broadcast_summary">Möjliggör att spela in och skicka röstsändning i rummets tidslinje.</string>
+    <string name="labs_enable_voice_broadcast_title">Aktivera röstsändning (under aktiv utveckling)</string>
+    <string name="labs_enable_client_info_recording_summary">Spara klientnamnet, versionen, och URL:en för att enklare känna igen sessioner i sessionehanteraren.</string>
+    <string name="labs_enable_client_info_recording_title">Aktivera klientinforapportering</string>
+    <string name="labs_enable_session_manager_summary">Ha bättre insyn i och kontroll över alla dina sessioner.</string>
+    <string name="labs_enable_session_manager_title">Aktivera den nya sessionshanteraren</string>
+    <string name="device_manager_learn_more_session_rename">Andra användare i direktmeddelanden och rum du går med in kan se en full lista över dina sessioner.
+\n
+\nDet försäkrar dem om att de verkligen pratar med dig, men det betyder också att de kan se sessionsnamnet du anger här.</string>
+    <string name="device_manager_learn_more_session_rename_title">Döper om sessioner</string>
+    <string name="device_manager_learn_more_sessions_verified">Verifierade sessioner har loggat in med dina uppgifter och har sedan verifierats, antingen med din säkra lösenfras eller genom att kors-verifiera.
+\n
+\nDet betyder att det har krypteringsnycklar för dina tidigare meddelanden, bekräftar för andra användare du kommunicerar med att dessa sessioner verkligen är du.</string>
+    <string name="device_manager_learn_more_sessions_verified_title">Verifierade sessioner</string>
+    <string name="device_manager_learn_more_sessions_unverified">Overifierade sessioner är sessioner som har loggat in med dina uppgifter men som inte har kors-verifierats.
+\n
+\nDu bör speciellt försäkra dig om att du känner igen dessa sessioner eftersom att de kan utgöra otillåten användning av ditt konto.</string>
+    <string name="device_manager_learn_more_sessions_unverified_title">Overifierade sessioner</string>
+    <string name="device_manager_learn_more_sessions_inactive">Inaktiva sessioner är sessioner du inte har använt på länge, men de tar fortfarande emot krypteringsnycklar.
+\n
+\nBorttagning av inaktiva sessioner förbättrar säkerhet och prestanda, och gör det lättare för dig att se om en ny session ser misstänkt ut.</string>
+    <string name="device_manager_learn_more_sessions_inactive_title">Inaktiva sessioner</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_description">Du kan använda den här enheten för att logga in på en mobil- eller webbenhet med en QR-kod. Det finns två sätt att göra detta:</string>
+    <string name="device_manager_sessions_sign_in_with_qr_code_title">Logga in med QR-kod</string>
+    <string name="device_manager_session_rename_warning">Observera att sessionsnamnen också kan ses av folk du kommunicerar med.</string>
+    <string name="device_manager_session_rename_description">Anpassade namn kan hjälpa dig att känna igen dina enheter lättare.</string>
+    <string name="device_manager_session_rename_edit_hint">Sessionsnamn</string>
+    <string name="device_manager_session_rename">Döp om session</string>
+    <string name="device_manager_session_details_device_ip_address">IP-adress</string>
+    <string name="device_manager_session_details_device_operating_system">Operativsystem</string>
+    <string name="device_manager_session_details_device_model">Modell</string>
+    <string name="device_manager_session_details_device_browser">Webbläsare</string>
+    <string name="device_manager_session_details_application_url">URL</string>
+    <string name="device_manager_session_details_application_version">Version</string>
+    <string name="device_manager_session_details_application_name">Namn</string>
+    <string name="device_manager_session_details_application">Applikation</string>
+    <string name="device_manager_session_details_session_last_activity">Senaste aktiviteten</string>
+    <string name="device_manager_session_details_session_name">Sessionsnamn</string>
+    <string name="device_manager_push_notifications_description">Ta emot pushnotiser i den här sessionen.</string>
+    <string name="login_scan_qr_code">Skanna QR-kod</string>
+    <string name="rich_text_editor_format_underline">Använd understrykning</string>
+    <string name="rich_text_editor_format_strikethrough">Använd överstrykning</string>
+    <string name="rich_text_editor_format_italic">Använd kursiv stil</string>
+    <string name="rich_text_editor_format_bold">Använd fetstil</string>
+    <string name="qr_code_login_confirm_security_code_description">Se till att du känner till ursprunget till denna kod. Genom att länka enheter ger du någon full åtkomst till ditt konto.</string>
+    <string name="qr_code_login_confirm_security_code">Bekräfta</string>
+    <string name="qr_code_login_try_again">Pröva igen</string>
+    <string name="qr_code_login_status_no_match">Ingen match\?</string>
+    <string name="qr_code_login_signing_in">Loggar in dig</string>
+    <string name="qr_code_login_connecting_to_device">Ansluter till enhet</string>
+    <string name="qr_code_login_scan_qr_code_button">Skanna QR-kod</string>
+    <string name="qr_code_login_signing_in_a_mobile_device">Loggar du in en mobil\?</string>
+    <string name="qr_code_login_show_qr_code_button">Visa QR-kod på den här enheten</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_2">Välj \'Skanna QR-kod\'</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_1">Börja på inloggningsskärmen</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">Välj \'Logga in med QR-kod\'</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_1">Börja på inloggningsskärmen</string>
+    <string name="qr_code_login_new_device_instruction_3">Välj \'Visa QR-kod\'</string>
+    <string name="qr_code_login_new_device_instruction_2">Gå till Inställningar -&gt; Säkerhet och sekretess</string>
+    <string name="qr_code_login_new_device_instruction_1">Öppna appen på din andra enhet</string>
+    <string name="qr_code_login_header_failed_homeserver_is_not_supported_description">Hemservern stöder inte inloggning med QR-kod.</string>
+    <string name="qr_code_login_header_failed_user_cancelled_description">Inloggningen avbröts på den andra enheten.</string>
+    <string name="qr_code_login_header_failed_invalid_qr_code_description">Den QR-koden är ogiltig.</string>
+    <string name="qr_code_login_header_failed_other_device_not_signed_in_description">Den andra enheten måste vara inloggad.</string>
+    <string name="qr_code_login_header_failed_other_device_already_signed_in_description">Den andra enheten är redan inloggad.</string>
+    <string name="qr_code_login_header_failed_e2ee_security_issue_description">Ett säkerhetsproblem påträffades vid konfigurering av säker meddelandehantering. En av följande kan vara äventyrad: Din hemserver; Din internetuppkoppling Din enhet;</string>
+    <string name="qr_code_login_header_failed_other_description">Begäran misslyckades.</string>
+    <string name="qr_code_login_header_failed_denied_description">Begäran nekades på den andra enheten.</string>
+    <string name="qr_code_login_header_failed_timeout_description">Länkningen slutfördes inte inom den krävda tiden.</string>
+    <string name="qr_code_login_header_failed_device_is_not_supported_description">Länkning med den här enheten stöds inte.</string>
+    <string name="qr_code_login_header_failed_title">Misslyckad anslutning</string>
+    <string name="qr_code_login_header_connected_description">Kolla din inloggade enhet, koden nedan borde visas. Bekräfta att koden nedan matchar den enheten:</string>
+    <string name="qr_code_login_header_connected_title">Säker anslutning etablerad</string>
+    <string name="qr_code_login_header_show_qr_code_link_a_device_description">Skanna QR-koden nedan med din utloggade enhet.</string>
+    <string name="qr_code_login_header_show_qr_code_new_device_description">Använd din inloggade enhet för att skanna QR-koden nedan:</string>
+    <string name="qr_code_login_header_show_qr_code_title">Logga in med QR-kod</string>
+    <string name="qr_code_login_header_scan_qr_code_description">Använd den här enhetens kamera för att skanna QR-koden på din andra enhet:</string>
+    <string name="a11y_voice_broadcast_buffering">Buffrar</string>
+    <string name="a11y_pause_voice_broadcast">Pausa röstsändning</string>
+    <string name="a11y_play_voice_broadcast">Spela eller återuppta röstsändning</string>
+    <string name="a11y_stop_voice_broadcast_record">Avsluta inspelning av röstsändning</string>
+    <string name="a11y_pause_voice_broadcast_record">Pausa inspelning av röstsändning</string>
+    <string name="a11y_resume_voice_broadcast_record">Återuppta inspelning av röstsändning</string>
+    <string name="voice_broadcast_live">Live</string>
+    <string name="qr_code_login_header_scan_qr_code_title">Skanna QR-kod</string>
+    <string name="three">3</string>
+    <string name="two">2</string>
+    <string name="one">1</string>
+    <string name="onboarding_new_app_layout_button_try">Pröva</string>
+    <string name="onboarding_new_app_layout_feedback_message">Tryck uppe till höger för att se alternativet att ge återkoppling.</string>
+    <string name="onboarding_new_app_layout_feedback_title">Ge återkoppling</string>
+    <string name="onboarding_new_app_layout_spaces_message">Kom åt dina utrymmen (nere till höger) snabbare och enklare än någonsin förut.</string>
+    <string name="onboarding_new_app_layout_spaces_title">Kom åt utrymmen</string>
+    <string name="onboarding_new_app_layout_welcome_message">För att förenkla din ${app_name} så är flikar nu valfria. Hantera dem i menyn uppe till höger.</string>
+    <string name="device_manager_other_sessions_select">Välj sessioner</string>
+    <string name="attachment_type_selector_contact">Kontakt</string>
+    <string name="attachment_type_selector_camera">Kamera</string>
+    <string name="attachment_type_selector_location">Plats</string>
+    <string name="attachment_type_selector_poll">Omröstningar</string>
+    <string name="attachment_type_selector_voice_broadcast">Röstsändning</string>
+    <string name="attachment_type_selector_file">Bilagor</string>
+    <string name="attachment_type_selector_sticker">Dekaler</string>
+    <string name="attachment_type_selector_gallery">Fotobibliotek</string>
+    <string name="action_deselect_all">Avmarkera alla</string>
+    <string name="action_select_all">Välj alla</string>
+    <plurals name="x_selected">
+        <item quantity="one">%1$d vald</item>
+        <item quantity="other">%1$d valda</item>
+    </plurals>
+    <string name="rich_text_editor_full_screen_toggle">Växla fullskärmsläge</string>
+    <string name="device_manager_learn_more_sessions_verified_description">Verifierade sessioner är alla ställen där du använder det här kontot efter att ha angett din lösenfras eller bekräftat din identitet med en annan verifierad session.
+\n
+\nDetta betyder att du har alla nycklar som krävs för att låsa upp dina krypterade meddelanden att bekräfta för andra användare att du litar på den här sessionen.</string>
+    <plurals name="device_manager_other_sessions_multi_signout_all">
+        <item quantity="one">Logga ut ur %1$d session</item>
+        <item quantity="other">Logga ut ur %1$d sessioner</item>
+    </plurals>
+    <string name="device_manager_other_sessions_multi_signout_selection">Logga ut</string>
+    <string name="attachment_type_selector_text_formatting">Textformatering</string>
+    <string name="error_voice_broadcast_already_in_progress_message">Du spelar redan in en röstsändning. Avsluta din nuvarande röstsändning för att starta en ny.</string>
+    <string name="error_voice_broadcast_blocked_by_someone_else_message">Någon annan spelar redan in en röstsändning. Vänta på att deras röstsändning avslutas för att starta en ny.</string>
+    <string name="error_voice_broadcast_permission_denied_message">Du är inte behörig att starta en ny röstsändning i det här rummet. Kontakta en rumsadministratör för att uppgradera dina behörigheter.</string>
+    <string name="error_voice_broadcast_unauthorized_title">Kan inte starta en ny röstsändning</string>
+    <string name="a11y_voice_broadcast_fast_forward">Spola framåt 30 sekunder</string>
+    <string name="a11y_voice_broadcast_fast_backward">Spola tillbaka 30 sekunder</string>
+    <string name="message_reply_to_sender_created_poll">skickade en omröstning.</string>
+    <string name="message_reply_to_sender_sent_sticker">skickade en dekal.</string>
+    <string name="message_reply_to_sender_sent_video">skickade en video.</string>
+    <string name="message_reply_to_sender_sent_image">skickade en bild.</string>
+    <string name="message_reply_to_sender_sent_voice_message">skickade ett röstmeddelande.</string>
+    <string name="message_reply_to_sender_sent_audio_file">skickade en ljudfil.</string>
+    <string name="message_reply_to_sender_sent_file">skickade en fil.</string>
+    <string name="message_reply_to_prefix">Svar på</string>
+    <string name="device_manager_other_sessions_hide_ip_address">Dölj IP-adress</string>
+    <string name="device_manager_other_sessions_show_ip_address">Visa IP-adress</string>
+    <string name="voice_broadcast_recording_time_left">%1$s kvar</string>
+    <string name="quoting">Citerar</string>
+    <string name="replying_to">Besvarar %s</string>
+    <string name="editing">Redigerar</string>
 </resources>

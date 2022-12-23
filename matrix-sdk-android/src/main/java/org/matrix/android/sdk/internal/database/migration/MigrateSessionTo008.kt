@@ -25,11 +25,11 @@ internal class MigrateSessionTo008(realm: DynamicRealm) : RealmMigrator(realm, 8
 
     override fun doMigrate(realm: DynamicRealm) {
         val editionOfEventSchema = realm.schema.create("EditionOfEvent")
-                .addField(EditionOfEventFields.CONTENT, String::class.java)
+                .addField("content", String::class.java)
                 .addField(EditionOfEventFields.EVENT_ID, String::class.java)
                 .setRequired(EditionOfEventFields.EVENT_ID, true)
-                .addField(EditionOfEventFields.SENDER_ID, String::class.java)
-                .setRequired(EditionOfEventFields.SENDER_ID, true)
+                .addField("senderId", String::class.java)
+                .setRequired("senderId", true)
                 .addField(EditionOfEventFields.TIMESTAMP, Long::class.java)
                 .addField(EditionOfEventFields.IS_LOCAL_ECHO, Boolean::class.java)
 

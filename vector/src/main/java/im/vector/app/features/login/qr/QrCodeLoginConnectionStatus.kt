@@ -16,9 +16,11 @@
 
 package im.vector.app.features.login.qr
 
+import org.matrix.android.sdk.api.rendezvous.RendezvousFailureReason
+
 sealed class QrCodeLoginConnectionStatus {
     object ConnectingToDevice : QrCodeLoginConnectionStatus()
     data class Connected(val securityCode: String, val canConfirmSecurityCode: Boolean) : QrCodeLoginConnectionStatus()
     object SigningIn : QrCodeLoginConnectionStatus()
-    data class Failed(val errorType: QrCodeLoginErrorType, val canTryAgain: Boolean) : QrCodeLoginConnectionStatus()
+    data class Failed(val errorType: RendezvousFailureReason, val canTryAgain: Boolean) : QrCodeLoginConnectionStatus()
 }

@@ -46,7 +46,10 @@ import im.vector.app.core.utils.AndroidSystemSettingsProvider
 import im.vector.app.core.utils.SystemSettingsProvider
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.VectorAnalytics
+import im.vector.app.features.analytics.errors.ErrorTracker
 import im.vector.app.features.analytics.impl.DefaultVectorAnalytics
+import im.vector.app.features.analytics.metrics.VectorPlugins
+import im.vector.app.features.configuration.VectorCustomEventTypesProvider
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.invite.CompileTimeAutoAcceptInvites
 import im.vector.app.features.navigation.DefaultNavigator
@@ -75,15 +78,16 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import javax.inject.Singleton
 
-@InstallIn(SingletonComponent::class)
-@Module
-abstract class VectorBindModule {
+@InstallIn(SingletonComponent::class) @Module abstract class VectorBindModule {
 
     @Binds
     abstract fun bindNavigator(navigator: DefaultNavigator): Navigator
 
     @Binds
     abstract fun bindVectorAnalytics(analytics: DefaultVectorAnalytics): VectorAnalytics
+
+    @Binds
+    abstract fun bindErrorTracker(analytics: DefaultVectorAnalytics): ErrorTracker
 
     @Binds
     abstract fun bindAnalyticsTracker(analytics: DefaultVectorAnalytics): AnalyticsTracker
@@ -119,9 +123,7 @@ abstract class VectorBindModule {
     abstract fun bindGetDeviceInfoUseCase(getDeviceInfoUseCase: DefaultGetDeviceInfoUseCase): GetDeviceInfoUseCase
 }
 
-@InstallIn(SingletonComponent::class)
-@Module
-object VectorStaticModule {
+@InstallIn(SingletonComponent::class) @Module object VectorStaticModule {
 
     @Provides
     fun providesContext(application: Application): Context {
@@ -143,6 +145,8 @@ object VectorStaticModule {
             vectorPreferences: VectorPreferences,
             vectorRoomDisplayNameFallbackProvider: VectorRoomDisplayNameFallbackProvider,
             flipperProxy: FlipperProxy,
+            vectorPlugins: VectorPlugins,
+            vectorCustomEventTypesProvider: VectorCustomEventTypesProvider,
     ): MatrixConfiguration {
         return MatrixConfiguration(
                 applicationFlavor = BuildConfig.FLAVOR_DESCRIPTION,
@@ -150,7 +154,9 @@ object VectorStaticModule {
                 threadMessagesEnabledDefault = vectorPreferences.areThreadMessagesEnabled(),
                 networkInterceptors = listOfNotNull(
                         flipperProxy.networkInterceptor(),
-                )
+                ),
+                metricPlugins = vectorPlugins.plugins(),
+                customEventTypesProvider = vectorCustomEventTypesProvider,
         )
     }
 
@@ -222,7 +228,6 @@ object VectorStaticModule {
             gitRevision = BuildConfig.GIT_REVISION,
             gitRevisionDate = BuildConfig.GIT_REVISION_DATE,
             gitBranchName = BuildConfig.GIT_BRANCH_NAME,
-            buildNumber = BuildConfig.BUILD_NUMBER,
             flavorDescription = BuildConfig.FLAVOR_DESCRIPTION,
             flavorShortDescription = BuildConfig.SHORT_FLAVOR_DESCRIPTION,
     )

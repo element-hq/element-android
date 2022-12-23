@@ -21,5 +21,6 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class LocalNotificationSettingsContent(
-        @Json(name = "is_silenced") val isSilenced: Boolean = false
+        @Json(name = "is_silenced")
+        val isSilenced: Boolean?
 )

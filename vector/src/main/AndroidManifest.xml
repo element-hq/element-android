@@ -42,7 +42,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <!-- Jitsi SDK is now API23+ -->
-    <uses-sdk tools:overrideLibrary="org.jitsi.meet.sdk,com.oney.WebRTCModule,com.learnium.RNDeviceInfo,com.reactnativecommunity.asyncstorage,com.ocetnik.timer,com.calendarevents,com.reactnativecommunity.netinfo,com.kevinresol.react_native_default_preference,com.rnimmersive,com.corbt.keepawake,com.BV.LinearGradient,com.horcrux.svg,com.oblador.performance,com.reactnativecommunity.slider,com.brentvatne.react,com.reactnativecommunity.clipboard,com.swmansion.gesturehandler.react,org.linusu,org.reactnative.maskedview,com.reactnativepagerview,com.swmansion.reanimated,com.th3rdwave.safeareacontext,com.swmansion.rnscreens,org.devio.rn.splashscreen,com.reactnativecommunity.webview" />
+    <uses-sdk tools:overrideLibrary="org.jitsi.meet.sdk,com.oney.WebRTCModule,com.learnium.RNDeviceInfo,com.reactnativecommunity.asyncstorage,com.ocetnik.timer,com.calendarevents,com.reactnativecommunity.netinfo,com.kevinresol.react_native_default_preference,com.rnimmersive,com.corbt.keepawake,com.BV.LinearGradient,com.horcrux.svg,com.oblador.performance,com.reactnativecommunity.slider,com.brentvatne.react,com.reactnativecommunity.clipboard,com.swmansion.gesturehandler.react,org.linusu,org.reactnative.maskedview,com.reactnativepagerview,com.swmansion.reanimated,com.th3rdwave.safeareacontext,com.swmansion.rnscreens,org.devio.rn.splashscreen,com.reactnativecommunity.webview,org.wonday.orientation" />
 
     <!-- Adding CAMERA permission prevents Chromebooks to see the application on the PlayStore -->
     <!-- Tell that the Camera is not mandatory to install the application -->
@@ -72,7 +72,9 @@
     <application android:supportsRtl="true">
 
         <!-- Sentry auto-initialization disable -->
-        <meta-data android:name="io.sentry.auto-init" android:value="false" />
+        <meta-data
+            android:name="io.sentry.auto-init"
+            android:value="false" />
 
         <!-- No limit for screen ratio: avoid black strips -->
         <meta-data
@@ -117,7 +119,7 @@
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize" />
 
-        <!-- Add tools:ignore="Instantiatable" for the error reported only by Buildkite :/ -->
+        <!-- Add tools:ignore="Instantiatable" for the error reported only by CI :/ -->
         <activity
             android:name=".features.media.VectorAttachmentViewerActivity"
             android:theme="@style/Theme.Vector.Black.Transparent"
@@ -150,7 +152,8 @@
 
         <activity
             android:name=".features.home.room.detail.RoomDetailActivity"
-            android:parentActivityName=".features.home.HomeActivity">
+            android:parentActivityName=".features.home.HomeActivity"
+            android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".features.home.HomeActivity" />
@@ -329,6 +332,7 @@
 
         <service
             android:name=".core.services.CallAndroidService"
+            android:foregroundServiceType="phoneCall"
             android:exported="false">
             <!-- in order to get headset button events -->
             <intent-filter>
@@ -336,10 +340,11 @@
             </intent-filter>
         </service>
 
-        <!-- Add tools:ignore="Instantiatable" for the error reported only by Buildkite and for lintGplayRelease check :/ -->
+        <!-- Add tools:ignore="Instantiatable" for the error reported only by CI and for lintGplayRelease check :/ -->
         <service
             android:name=".core.services.VectorSyncAndroidService"
             android:exported="false"
+            android:foregroundServiceType="dataSync"
             tools:ignore="Instantiatable" />
 
         <service

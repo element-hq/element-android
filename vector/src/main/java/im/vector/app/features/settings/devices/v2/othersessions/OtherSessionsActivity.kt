@@ -20,7 +20,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.annotation.StringRes
 import com.airbnb.mvrx.Mavericks
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
@@ -48,13 +47,11 @@ class OtherSessionsActivity : SimpleFragmentActivity() {
     companion object {
         fun newIntent(
                 context: Context,
-                @StringRes
-                titleResourceId: Int,
                 defaultFilter: DeviceManagerFilterType,
                 excludeCurrentDevice: Boolean,
         ): Intent {
             return Intent(context, OtherSessionsActivity::class.java).apply {
-                putExtra(Mavericks.KEY_ARG, OtherSessionsArgs(titleResourceId, defaultFilter, excludeCurrentDevice))
+                putExtra(Mavericks.KEY_ARG, OtherSessionsArgs(defaultFilter, excludeCurrentDevice))
             }
         }
     }

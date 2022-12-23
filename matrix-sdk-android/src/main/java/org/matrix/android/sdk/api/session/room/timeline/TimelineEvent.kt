@@ -18,6 +18,7 @@ package org.matrix.android.sdk.api.session.room.timeline
 
 import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.RelationType
@@ -142,11 +143,19 @@ fun TimelineEvent.getEditedEventId(): String? {
 fun TimelineEvent.getLastMessageContent(): MessageContent? {
     return when (root.getClearType()) {
         EventType.STICKER -> root.getClearContent().toModel<MessageStickerContent>()
-        in EventType.POLL_START -> (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel<MessagePollContent>()
-        in EventType.STATE_ROOM_BEACON_INFO -> (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel<MessageBeaconInfoContent>()
-        in EventType.BEACON_LOCATION_DATA -> (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel<MessageBeaconLocationDataContent>()
-        else -> (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel()
+        // XXX
+        // Polls/Beacon are not message contents like others as there is no msgtype subtype to discriminate moshi parsing
+        // so toModel<MessageContent> won't parse them correctly
+        // It's discriminated on event type instead. Maybe it shouldn't be MessageContent at all to avoid confusion?
+        in EventType.POLL_START.values -> (getLastEditNewContent() ?: root.getClearContent()).toModel<MessagePollContent>()
+        in EventType.STATE_ROOM_BEACON_INFO.values -> (getLastEditNewContent() ?: root.getClearContent()).toModel<MessageBeaconInfoContent>()
+        in EventType.BEACON_LOCATION_DATA.values -> (getLastEditNewContent() ?: root.getClearContent()).toModel<MessageBeaconLocationDataContent>()
+        else -> (getLastEditNewContent() ?: root.getClearContent()).toModel()
     }
+}
+
+fun TimelineEvent.getLastEditNewContent(): Content? {
+    return annotations?.editSummary?.latestEdit?.getClearContent()?.toModel<MessageContent>()?.newContent
 }
 
 /**
@@ -180,11 +189,13 @@ fun TimelineEvent.isRootThread(): Boolean {
 
 /**
  * Get the latest message body, after a possible edition, stripping the reply prefix if necessary.
+ * @param formatted Indicates whether the formatted HTML body of the message should be retrieved of the plain text one.
+ * @return If [formatted] is `true`, the HTML body of the message will be retrieved if available. Otherwise, the plain text/markdown version will be returned.
  */
 fun TimelineEvent.getTextEditableContent(formatted: Boolean): String {
     val lastMessageContent = getLastMessageContent()
     val lastContentBody = if (formatted && lastMessageContent is MessageContentWithFormattedBody) {
-        lastMessageContent.formattedBody
+        lastMessageContent.formattedBody ?: lastMessageContent.body
     } else {
         lastMessageContent?.body
     } ?: return ""

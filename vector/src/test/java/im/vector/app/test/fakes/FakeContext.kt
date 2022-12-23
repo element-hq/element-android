@@ -24,9 +24,9 @@ import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.ParcelFileDescriptor
 import io.mockk.every
-import io.mockk.just
+import io.mockk.justRun
 import io.mockk.mockk
-import io.mockk.runs
+import io.mockk.verify
 import java.io.OutputStream
 
 class FakeContext(
@@ -73,12 +73,20 @@ class FakeContext(
     }
 
     fun givenStartActivity(intent: Intent) {
-        every { instance.startActivity(intent) } just runs
+        justRun { instance.startActivity(intent) }
+    }
+
+    fun verifyStartActivity(intent: Intent) {
+        verify { instance.startActivity(intent) }
     }
 
     fun givenClipboardManager(): FakeClipboardManager {
         val fakeClipboardManager = FakeClipboardManager()
         givenService(Context.CLIPBOARD_SERVICE, ClipboardManager::class.java, fakeClipboardManager.instance)
         return fakeClipboardManager
+    }
+
+    fun givenPackageName(name: String) {
+        every { instance.packageName } returns name
     }
 }

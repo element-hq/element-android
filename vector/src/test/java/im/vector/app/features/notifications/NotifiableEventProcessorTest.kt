@@ -27,6 +27,7 @@ import org.junit.Test
 import org.matrix.android.sdk.api.session.events.model.EventType
 
 private val NOT_VIEWING_A_ROOM: String? = null
+private val NOT_VIEWING_A_THREAD: String? = null
 
 class NotifiableEventProcessorTest {
 
@@ -42,7 +43,7 @@ class NotifiableEventProcessorTest {
                 aSimpleNotifiableEvent(eventId = "event-2")
         )
 
-        val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM, renderedEvents = emptyList())
+        val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM, currentThreadId = NOT_VIEWING_A_THREAD, renderedEvents = emptyList())
 
         result shouldBeEqualTo listOfProcessedEvents(
                 Type.KEEP to events[0],
@@ -54,7 +55,7 @@ class NotifiableEventProcessorTest {
     fun `given redacted simple event when processing then remove redaction event`() {
         val events = listOf(aSimpleNotifiableEvent(eventId = "event-1", type = EventType.REDACTION))
 
-        val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM, renderedEvents = emptyList())
+        val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM, currentThreadId = NOT_VIEWING_A_THREAD, renderedEvents = emptyList())
 
         result shouldBeEqualTo listOfProcessedEvents(
                 Type.REMOVE to events[0]
@@ -69,7 +70,7 @@ class NotifiableEventProcessorTest {
                 anInviteNotifiableEvent(roomId = "room-2")
         )
 
-        val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM, renderedEvents = emptyList())
+        val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM, currentThreadId = NOT_VIEWING_A_THREAD, renderedEvents = emptyList())
 
         result shouldBeEqualTo listOfProcessedEvents(
                 Type.REMOVE to events[0],
@@ -85,7 +86,7 @@ class NotifiableEventProcessorTest {
                 anInviteNotifiableEvent(roomId = "room-2")
         )
 
-        val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM, renderedEvents = emptyList())
+        val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM, currentThreadId = NOT_VIEWING_A_THREAD, renderedEvents = emptyList())
 
         result shouldBeEqualTo listOfProcessedEvents(
                 Type.KEEP to events[0],
@@ -98,7 +99,7 @@ class NotifiableEventProcessorTest {
         val events = listOf(aNotifiableMessageEvent(eventId = "event-1", roomId = "room-1"))
         outdatedDetector.givenEventIsOutOfDate(events[0])
 
-        val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM, renderedEvents = emptyList())
+        val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM, currentThreadId = NOT_VIEWING_A_THREAD, renderedEvents = emptyList())
 
         result shouldBeEqualTo listOfProcessedEvents(
                 Type.REMOVE to events[0],
@@ -110,7 +111,7 @@ class NotifiableEventProcessorTest {
         val events = listOf(aNotifiableMessageEvent(eventId = "event-1", roomId = "room-1"))
         outdatedDetector.givenEventIsInDate(events[0])
 
-        val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM, renderedEvents = emptyList())
+        val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM, currentThreadId = NOT_VIEWING_A_THREAD, renderedEvents = emptyList())
 
         result shouldBeEqualTo listOfProcessedEvents(
                 Type.KEEP to events[0],
@@ -118,13 +119,48 @@ class NotifiableEventProcessorTest {
     }
 
     @Test
-    fun `given viewing the same room as message event when processing then removes message`() {
-        val events = listOf(aNotifiableMessageEvent(eventId = "event-1", roomId = "room-1"))
+    fun `given viewing the same room main timeline when processing main timeline message event then removes message`() {
+        val events = listOf(aNotifiableMessageEvent(eventId = "event-1", roomId = "room-1", threadId = null))
 
-        val result = eventProcessor.process(events, currentRoomId = "room-1", renderedEvents = emptyList())
+        val result = eventProcessor.process(events, currentRoomId = "room-1", currentThreadId = null, renderedEvents = emptyList())
 
         result shouldBeEqualTo listOfProcessedEvents(
                 Type.REMOVE to events[0],
+        )
+    }
+
+    @Test
+    fun `given viewing the same thread timeline when processing thread message event then removes message`() {
+        val events = listOf(aNotifiableMessageEvent(eventId = "event-1", roomId = "room-1", threadId = "thread-1"))
+
+        val result = eventProcessor.process(events, currentRoomId = "room-1", currentThreadId = "thread-1", renderedEvents = emptyList())
+
+        result shouldBeEqualTo listOfProcessedEvents(
+                Type.REMOVE to events[0],
+        )
+    }
+
+    @Test
+    fun `given viewing main timeline of the same room when processing thread timeline message event then keep message`() {
+        val events = listOf(aNotifiableMessageEvent(eventId = "event-1", roomId = "room-1", threadId = "thread-1"))
+        outdatedDetector.givenEventIsInDate(events[0])
+
+        val result = eventProcessor.process(events, currentRoomId = "room-1", currentThreadId = null, renderedEvents = emptyList())
+
+        result shouldBeEqualTo listOfProcessedEvents(
+                Type.KEEP to events[0],
+        )
+    }
+
+    @Test
+    fun `given viewing thread timeline of the same room when processing main timeline message event then keep message`() {
+        val events = listOf(aNotifiableMessageEvent(eventId = "event-1", roomId = "room-1"))
+        outdatedDetector.givenEventIsInDate(events[0])
+
+        val result = eventProcessor.process(events, currentRoomId = "room-1", currentThreadId = "thread-1", renderedEvents = emptyList())
+
+        result shouldBeEqualTo listOfProcessedEvents(
+                Type.KEEP to events[0],
         )
     }
 
@@ -136,7 +172,7 @@ class NotifiableEventProcessorTest {
                 ProcessedEvent(Type.KEEP, anInviteNotifiableEvent(roomId = "event-2"))
         )
 
-        val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM, renderedEvents = renderedEvents)
+        val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM, currentThreadId = NOT_VIEWING_A_THREAD, renderedEvents = renderedEvents)
 
         result shouldBeEqualTo listOfProcessedEvents(
                 Type.REMOVE to renderedEvents[1].event,
