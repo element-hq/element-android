@@ -18,10 +18,10 @@ package org.matrix.android.sdk.internal.session.permalinks
 
 import android.content.ClipboardManager
 import android.content.Context
+import androidx.core.content.getSystemService
 import org.matrix.android.sdk.api.session.permalinks.DeferredPermalinkService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
-import androidx.core.content.getSystemService
 import javax.inject.Inject
 
 class DefaultDeferredPermalinkService @Inject constructor(

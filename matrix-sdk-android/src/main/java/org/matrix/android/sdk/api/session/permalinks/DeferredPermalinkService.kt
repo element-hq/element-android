@@ -17,12 +17,12 @@
 package org.matrix.android.sdk.api.session.permalinks
 
 /**
- * Service to handle deferred links, e.g. when user open link to the room but the app is not installed yet
+ * Service to handle deferred links, e.g. when user open link to the room but the app is not installed yet.
  */
 interface DeferredPermalinkService {
 
     /**
-     * Checks system clipboard for matrix.to links and returns first room link if any found
+     * Checks system clipboard for matrix.to links and returns first room link if any found.
      * @return first room link in clipboard or null if none is found
      */
     fun getLinkFromClipBoard(): String?
