@@ -21,9 +21,7 @@ import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
-import org.matrix.android.sdk.api.session.sync.filter.SyncFilterBuilder
 import org.matrix.android.sdk.internal.session.filter.DefaultGetCurrentFilterTask
-import org.matrix.android.sdk.internal.sync.filter.SyncFilterParams
 import org.matrix.android.sdk.test.fakes.FakeFilterRepository
 import org.matrix.android.sdk.test.fakes.FakeHomeServerCapabilitiesDataSource
 import org.matrix.android.sdk.test.fakes.FakeSaveFilterTask

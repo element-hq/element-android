@@ -20,7 +20,6 @@ import im.vector.app.core.extensions.startSyncing
 import im.vector.app.core.session.clientinfo.UpdateMatrixClientInfoUseCase
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.devices.v2.notification.UpdateNotificationSettingsAccountDataUseCase
-import im.vector.app.features.sync.SyncUtils
 import im.vector.app.test.fakes.FakeContext
 import im.vector.app.test.fakes.FakeNotificationsSettingUpdater
 import im.vector.app.test.fakes.FakeSession
@@ -87,7 +86,6 @@ class ConfigureAndStartSessionUseCaseTest {
 
         // Then
         verify { aSession.startSyncing(fakeContext.instance) }
-        aSession.fakeFilterService.verifySetSyncFilter(SyncUtils.getSyncFilterBuilder())
         aSession.fakePushersService.verifyRefreshPushers()
         fakeWebRtcCallManager.verifyCheckForProtocolsSupportIfNeeded()
         coVerify {
@@ -112,7 +110,6 @@ class ConfigureAndStartSessionUseCaseTest {
 
         // Then
         verify { aSession.startSyncing(fakeContext.instance) }
-        aSession.fakeFilterService.verifySetSyncFilter(SyncUtils.getSyncFilterBuilder())
         aSession.fakePushersService.verifyRefreshPushers()
         fakeWebRtcCallManager.verifyCheckForProtocolsSupportIfNeeded()
         coVerify(inverse = true) {
@@ -140,7 +137,6 @@ class ConfigureAndStartSessionUseCaseTest {
 
         // Then
         verify(inverse = true) { aSession.startSyncing(fakeContext.instance) }
-        aSession.fakeFilterService.verifySetSyncFilter(SyncUtils.getSyncFilterBuilder())
         aSession.fakePushersService.verifyRefreshPushers()
         fakeWebRtcCallManager.verifyCheckForProtocolsSupportIfNeeded()
         coVerify {
@@ -152,7 +148,6 @@ class ConfigureAndStartSessionUseCaseTest {
     private fun givenASession(): FakeSession {
         val fakeSession = FakeSession()
         every { fakeSession.open() } just runs
-        fakeSession.fakeFilterService.givenSetFilterSucceeds()
         every { fakeSession.startSyncing(any()) } just runs
         fakeSession.fakePushersService.givenRefreshPushersSucceeds()
         return fakeSession

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.sync
+package org.matrix.android.sdk.api.session.sync.filter
 
-import org.matrix.android.sdk.api.session.sync.filter.SyncFilterBuilder
-
-interface FilterService {
-
-    /**
-     * Configure the filter for the sync.
-     */
-    suspend fun setSyncFilter(filterBuilder: SyncFilterBuilder)
-}
+data class SyncFilterParams(
+        val lazyLoadMembersForStateEvents: Boolean? = null,
+        val lazyLoadMembersForMessageEvents: Boolean? = null,
+        val useThreadNotifications: Boolean? = null,
+        val listOfSupportedEventTypes: List<String>? = null,
+        val listOfSupportedStateEventTypes: List<String>? = null,
+)

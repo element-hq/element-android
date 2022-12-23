@@ -19,7 +19,6 @@ package org.matrix.android.sdk.test.fakes
 import io.mockk.coEvery
 import io.mockk.mockk
 import org.matrix.android.sdk.internal.session.filter.FilterRepository
-import org.matrix.android.sdk.internal.sync.filter.SyncFilterParams
 
 internal class FakeFilterRepository : FilterRepository by mockk() {
 
