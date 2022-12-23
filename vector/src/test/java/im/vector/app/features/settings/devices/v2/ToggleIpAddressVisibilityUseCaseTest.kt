@@ -41,7 +41,7 @@ class ToggleIpAddressVisibilityUseCaseTest {
 
     @Test
     fun `given ip addresses are currently not visible then then visibility is set as true`() {
-// Given
+        // Given
         fakeVectorPreferences.givenShowIpAddressInSessionManagerScreens(false)
 
         // When
