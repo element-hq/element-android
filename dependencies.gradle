@@ -83,7 +83,7 @@ ext.libs = [
                 'appdistributionApi'      : "com.google.firebase:firebase-appdistribution-api-ktx:$appDistribution",
                 'appdistribution'         : "com.google.firebase:firebase-appdistribution:$appDistribution",
                 // Phone number https://github.com/google/libphonenumber
-                'phonenumber'             : "com.googlecode.libphonenumber:libphonenumber:8.13.1"
+                'phonenumber'             : "com.googlecode.libphonenumber:libphonenumber:8.13.3"
         ],
         dagger      : [
                 'dagger'                  : "com.google.dagger:dagger:$dagger",
@@ -129,7 +129,7 @@ ext.libs = [
                 'mavericksTesting'       : "com.airbnb.android:mavericks-testing:$mavericks"
         ],
         maplibre    : [
-                'androidSdk'             : "org.maplibre.gl:android-sdk:9.5.2",
+                'androidSdk'             : "org.maplibre.gl:android-sdk:9.6.0",
                 'pluginAnnotation'       : "org.maplibre.gl:android-plugin-annotation-v9:1.0.0"
         ],
         mockk      : [
