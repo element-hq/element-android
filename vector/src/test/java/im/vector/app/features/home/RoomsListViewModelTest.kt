@@ -18,7 +18,6 @@ package im.vector.app.features.home
 
 import android.widget.ImageView
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import arrow.core.Option
 import com.airbnb.mvrx.test.MavericksTestRule
 import im.vector.app.R
 import im.vector.app.core.platform.StateView
@@ -45,6 +44,7 @@ import org.junit.Test
 import org.matrix.android.sdk.api.query.SpaceFilter
 import org.matrix.android.sdk.api.session.getUserOrDefault
 import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.flow.FlowSession
 
@@ -72,7 +72,7 @@ class RoomsListViewModelTest {
         mockkStatic("org.matrix.android.sdk.flow.FlowSessionKt")
         fakeFLowSession = fakeSession.givenFlowSession()
 
-        every { fakeSpaceStateHandler.getSelectedSpaceFlow() } returns flowOf(Option.empty())
+        every { fakeSpaceStateHandler.getSelectedSpaceFlow() } returns flowOf(Optional.empty())
         every { fakeSpaceStateHandler.getCurrentSpace() } returns null
         every { fakeFLowSession.liveRoomSummaries(any(), any()) } returns flowOf(emptyList())
 
