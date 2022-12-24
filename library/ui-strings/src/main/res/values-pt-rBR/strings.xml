@@ -480,7 +480,7 @@
     <string name="settings_notification_ringtone">Som de notificação</string>
     <string name="settings_containing_my_display_name">Mnsgns contendo meu nome de exibição</string>
     <string name="settings_containing_my_user_name">Mnsgns contendo meu nome de usuária(o)</string>
-    <string name="settings_inline_url_preview">Previsualização de URL emlinha</string>
+    <string name="settings_inline_url_preview">Previsualização de URL inline</string>
     <string name="settings_12_24_timestamps">Mostrar timestamps em formato de 12 horas</string>
     <string name="settings_vibrate_on_mention">Vibrar ao mencionar um/uma usuário(a)</string>
     <string name="settings_analytics">Analítica</string>
@@ -2356,7 +2356,7 @@
     <string name="location_timeline_failed_to_load_map">Falha para carregar mapa</string>
     <string name="a11y_static_map_image">Mapa</string>
     <string name="labs_enable_thread_messages_desc">Nota: app vai ser recomeçado</string>
-    <string name="labs_enable_thread_messages">Habilitar Mensagens de Thread</string>
+    <string name="labs_enable_thread_messages">Habilitar mensagens com threads</string>
     <string name="ftue_auth_use_case_connect_to_server">Conectar a servidor</string>
     <string name="ftue_auth_use_case_join_existing_server">Procurando se juntar a um servidor existente\?</string>
     <string name="ftue_auth_use_case_skip_partial">Pular esta pergunta</string>
@@ -2700,7 +2700,7 @@
     <string name="device_manager_session_last_activity">Última atividade %1$s</string>
     <string name="device_manager_device_title">Dispositivo</string>
     <string name="device_manager_session_title">Sessão</string>
-    <string name="device_manager_current_session_title">Sessão Atual</string>
+    <string name="device_manager_current_session_title">Sessão atual</string>
     <string name="device_manager_verification_status_detail_other_session_unverified">Verifique ou faça signout desta sessão para melhor segurança e fiabilidade.</string>
     <string name="device_manager_verification_status_detail_current_session_unverified">Verifique sua sessão atual para mensageria segura melhorada.</string>
     <string name="device_manager_verification_status_detail_other_session_verified">Esta sessão está pronta para mensageria segura.</string>
@@ -2879,7 +2879,15 @@
     <string name="review_unverified_sessions_title">Você tem sessões não-verificadas</string>
     <string name="settings_nightly_build_update">Obtenha a build mais recente (note: você pode ter problema para fazer signin)</string>
     <string name="settings_nightly_build">Build nightly</string>
-    <string name="voice_broadcast_live_broadcast">Transmissão ao vivo</string>
-    <string name="notice_voice_broadcast_ended_by_you">Você terminou uma transmissão de voz.</string>
-    <string name="notice_voice_broadcast_ended">%1$s terminou uma transmissão de voz.</string>
+    <string name="voice_broadcast_live_broadcast">Broadcast ao vivo</string>
+    <string name="notice_voice_broadcast_ended_by_you">Você terminou um broadcast de voz.</string>
+    <string name="notice_voice_broadcast_ended">%1$s terminou um broadcast de voz.</string>
+    <string name="set_link_edit">Editar link</string>
+    <string name="set_link_create">Criar um link</string>
+    <string name="set_link_link">Link</string>
+    <string name="set_link_text">Texto</string>
+    <string name="rich_text_editor_link">Definir link</string>
+    <string name="stop_voice_broadcast_content">Tem certeza que você quer parar seu broadcast ao vivo\? Isto vai terminar o broadcast e a gravação completa vai estar disponível na sala.</string>
+    <string name="stop_voice_broadcast_dialog_title">Parar de fazer broadcasting ao vivo\?</string>
+    <string name="action_stop">Sim, Parar</string>
 </resources>
