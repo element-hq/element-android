@@ -2884,4 +2884,9 @@
     <string name="stop_voice_broadcast_content">Möchtest du die Übertragung wirklich beenden\? Dies wird die Übertragung beenden und die vollständige Aufnahme im Raum bereitstellen.</string>
     <string name="stop_voice_broadcast_dialog_title">Live-Übertragung beenden\?</string>
     <string name="action_stop">Ja, beende</string>
+    <string name="rich_text_editor_link">Link setzen</string>
+    <string name="set_link_edit">Link bearbeiten</string>
+    <string name="set_link_create">Link erstellen</string>
+    <string name="set_link_link">Link</string>
+    <string name="set_link_text">Text</string>
 </resources>
