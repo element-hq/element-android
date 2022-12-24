@@ -2885,4 +2885,9 @@
     <string name="stop_voice_broadcast_content">مطمئنید که می‌خواهید پخش زنده‌تان را قطع کنید؟ این کار پخش را پایان داده و ضبط کامل در اتاق موجود خواهد شد.</string>
     <string name="stop_voice_broadcast_dialog_title">قطع پخش زنده؟</string>
     <string name="action_stop">بله، متوقّف شود</string>
+    <string name="set_link_edit">ویرایش پیوند</string>
+    <string name="set_link_create">ایجاد پیوند</string>
+    <string name="set_link_link">پیوند</string>
+    <string name="set_link_text">متن</string>
+    <string name="rich_text_editor_link">تنظیم پیوند</string>
 </resources>
