@@ -2941,4 +2941,9 @@
     <string name="stop_voice_broadcast_content">Jste si jisti, že chcete ukončit živé vysílání\? Tím se vysílání ukončí a v místnosti bude k dispozici celý záznam.</string>
     <string name="stop_voice_broadcast_dialog_title">Zastavit živé vysílání\?</string>
     <string name="action_stop">Ano, zastavit</string>
+    <string name="set_link_edit">Upravit odkaz</string>
+    <string name="set_link_create">Vytvořit odkaz</string>
+    <string name="set_link_link">Odkaz</string>
+    <string name="set_link_text">Text</string>
+    <string name="rich_text_editor_link">Nastavit odkaz</string>
 </resources>
