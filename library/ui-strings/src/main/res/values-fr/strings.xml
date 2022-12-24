@@ -2868,4 +2868,21 @@
     <string name="editing">Modification</string>
     <string name="settings_enable_direct_share_summary">Affiche les conversations récentes dans le menu de partage du système</string>
     <string name="settings_enable_direct_share_title">Activer le partage direct</string>
+    <string name="review_unverified_sessions_description">Vérifiez pour assurer la sécurité de votre compte</string>
+    <string name="review_unverified_sessions_title">Vous avez des sessions non vérifiées</string>
+    <string name="device_manager_learn_more_sessions_encryption_not_supported">Cette session ne prend pas en charge le chiffrement, elle ne peut donc pas être vérifiée.
+\n
+\nVous ne pourrez pas participer dans les salons où le chiffrement est activé en utilisant cette session.
+\n
+\nPour de meilleures sécurité et confidentialité, il est recommandé d’utiliser des clients Matrix qui prennent en charge le chiffrement.</string>
+    <string name="device_manager_signout_all_other_sessions">Déconnecter toutes les autres sessions</string>
+    <string name="device_manager_verification_status_detail_session_encryption_not_supported">Cette session ne prend pas en charge le chiffrement, elle ne peut donc pas être vérifiée.</string>
+    <string name="voice_broadcast_live_broadcast">Diffusion en direct</string>
+    <string name="settings_nightly_build_update">Obtenir la toute dernière version (note : vous pourriez avoir des problèmes pour vous connecter)</string>
+    <string name="settings_nightly_build">Version Nightly</string>
+    <string name="notice_voice_broadcast_ended_by_you">Vous avez terminé une diffusion audio.</string>
+    <string name="notice_voice_broadcast_ended">%1$s a terminé une diffusion audio.</string>
+    <string name="stop_voice_broadcast_content">Êtes-vous sûr de vouloir arrêter votre diffusion en direct \? Cela terminera la diffusion et l’enregistrement complet sera disponible dans le salon.</string>
+    <string name="stop_voice_broadcast_dialog_title">Arrêter la diffusion en direct \?</string>
+    <string name="action_stop">Oui, arrêter</string>
 </resources>
