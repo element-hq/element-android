@@ -633,7 +633,8 @@ class TimelineViewModel @AssistedInject constructor(
                 }
                 VoiceBroadcastAction.Recording.Pause -> voiceBroadcastHelper.pauseVoiceBroadcast(room.roomId)
                 VoiceBroadcastAction.Recording.Resume -> voiceBroadcastHelper.resumeVoiceBroadcast(room.roomId)
-                VoiceBroadcastAction.Recording.Stop -> voiceBroadcastHelper.stopVoiceBroadcast(room.roomId)
+                VoiceBroadcastAction.Recording.Stop -> _viewEvents.post(RoomDetailViewEvents.DisplayPromptToStopVoiceBroadcast)
+                VoiceBroadcastAction.Recording.StopConfirmed -> voiceBroadcastHelper.stopVoiceBroadcast(room.roomId)
                 is VoiceBroadcastAction.Listening.PlayOrResume -> voiceBroadcastHelper.playOrResumePlayback(action.voiceBroadcast)
                 VoiceBroadcastAction.Listening.Pause -> voiceBroadcastHelper.pausePlayback()
                 VoiceBroadcastAction.Listening.Stop -> voiceBroadcastHelper.stopPlayback()

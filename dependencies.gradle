@@ -26,7 +26,7 @@ def jjwt = "0.11.5"
 // Temporary version to unblock #6929. Once 0.16.0 is released we should use it, and revert
 // the whole commit which set version 0.16.0-SNAPSHOT
 def vanniktechEmoji = "0.16.0-SNAPSHOT"
-def sentry = "6.9.0"
+def sentry = "6.9.2"
 def fragment = "1.5.5"
 // Testing
 def mockk = "1.12.3" // We need to use 1.12.3 to have mocking in androidTest until a new version is released: https://github.com/mockk/mockk/issues/819
@@ -83,7 +83,7 @@ ext.libs = [
                 'appdistributionApi'      : "com.google.firebase:firebase-appdistribution-api-ktx:$appDistribution",
                 'appdistribution'         : "com.google.firebase:firebase-appdistribution:$appDistribution",
                 // Phone number https://github.com/google/libphonenumber
-                'phonenumber'             : "com.googlecode.libphonenumber:libphonenumber:8.13.1"
+                'phonenumber'             : "com.googlecode.libphonenumber:libphonenumber:8.13.3"
         ],
         dagger      : [
                 'dagger'                  : "com.google.dagger:dagger:$dagger",
@@ -98,7 +98,7 @@ ext.libs = [
         ],
         element     : [
                 'opusencoder'             : "io.element.android:opusencoder:1.1.0",
-                'wysiwyg'                 : "io.element.android:wysiwyg:0.9.0"
+                'wysiwyg'                 : "io.element.android:wysiwyg:0.10.0"
         ],
         squareup    : [
                 'moshi'                  : "com.squareup.moshi:moshi:$moshi",
@@ -129,7 +129,7 @@ ext.libs = [
                 'mavericksTesting'       : "com.airbnb.android:mavericks-testing:$mavericks"
         ],
         maplibre    : [
-                'androidSdk'             : "org.maplibre.gl:android-sdk:9.5.2",
+                'androidSdk'             : "org.maplibre.gl:android-sdk:9.6.0",
                 'pluginAnnotation'       : "org.maplibre.gl:android-plugin-annotation-v9:1.0.0"
         ],
         mockk      : [

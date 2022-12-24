@@ -31,7 +31,7 @@ import im.vector.app.features.voicebroadcast.listening.VoiceBroadcastPlayer.Stat
 import im.vector.app.features.voicebroadcast.listening.usecase.GetLiveVoiceBroadcastChunksUseCase
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcast
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastEvent
-import im.vector.app.features.voicebroadcast.usecase.GetMostRecentVoiceBroadcastStateEventUseCase
+import im.vector.app.features.voicebroadcast.usecase.GetVoiceBroadcastStateEventLiveUseCase
 import im.vector.lib.core.utils.timer.CountUpTimer
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
@@ -48,7 +48,7 @@ import javax.inject.Singleton
 class VoiceBroadcastPlayerImpl @Inject constructor(
         private val sessionHolder: ActiveSessionHolder,
         private val playbackTracker: AudioMessagePlaybackTracker,
-        private val getVoiceBroadcastEventUseCase: GetMostRecentVoiceBroadcastStateEventUseCase,
+        private val getVoiceBroadcastEventUseCase: GetVoiceBroadcastStateEventLiveUseCase,
         private val getLiveVoiceBroadcastChunksUseCase: GetLiveVoiceBroadcastChunksUseCase
 ) : VoiceBroadcastPlayer {
 
@@ -130,7 +130,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
             listeners[voiceBroadcast.voiceBroadcastId] = CopyOnWriteArrayList<Listener>().apply { add(listener) }
         }
         listener.onPlayingStateChanged(if (voiceBroadcast == currentVoiceBroadcast) playingState else State.IDLE)
-        listener.onLiveModeChanged(voiceBroadcast == currentVoiceBroadcast && isLiveListening)
+        listener.onLiveModeChanged(voiceBroadcast == currentVoiceBroadcast)
     }
 
     override fun removeListener(voiceBroadcast: VoiceBroadcast, listener: Listener) {
@@ -373,11 +373,6 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
     }
 
     private fun onLiveListeningChanged(isLiveListening: Boolean) {
-        currentVoiceBroadcast?.voiceBroadcastId?.let { voiceBroadcastId ->
-            // Notify live mode change to all the listeners attached to the current voice broadcast id
-            listeners[voiceBroadcastId]?.forEach { listener -> listener.onLiveModeChanged(isLiveListening) }
-        }
-
         // Live has ended and last chunk has been reached, we can stop the playback
         if (!isLiveListening && playingState == State.BUFFERING && playlist.currentSequence == mostRecentVoiceBroadcastEvent?.content?.lastChunkSequence) {
             stop()

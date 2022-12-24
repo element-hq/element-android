@@ -1,1 +1,0 @@
-Handle account data removal

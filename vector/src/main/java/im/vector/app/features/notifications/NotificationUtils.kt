@@ -658,7 +658,7 @@ class NotificationUtils @Inject constructor(
 
                     // Quick reply
                     if (!roomInfo.hasSmartReplyError) {
-                        buildQuickReplyIntent(roomInfo.roomId, senderDisplayNameForReplyCompat)?.let { replyPendingIntent ->
+                        buildQuickReplyIntent(roomInfo.roomId, threadId, senderDisplayNameForReplyCompat)?.let { replyPendingIntent ->
                             val remoteInput = RemoteInput.Builder(NotificationBroadcastReceiver.KEY_TEXT_REPLY)
                                     .setLabel(stringProvider.getString(R.string.action_quick_reply))
                                     .build()
@@ -893,13 +893,17 @@ class NotificationUtils @Inject constructor(
         However, for Android devices running Marshmallow and below (API level 23 and below),
         it will be more appropriate to use an activity. Since you have to provide your own UI.
      */
-    private fun buildQuickReplyIntent(roomId: String, senderName: String?): PendingIntent? {
+    private fun buildQuickReplyIntent(roomId: String, threadId: String?, senderName: String?): PendingIntent? {
         val intent: Intent
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             intent = Intent(context, NotificationBroadcastReceiver::class.java)
             intent.action = actionIds.smartReply
             intent.data = createIgnoredUri(roomId)
             intent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomId)
+            threadId?.let {
+                intent.putExtra(NotificationBroadcastReceiver.KEY_THREAD_ID, it)
+            }
+
             return PendingIntent.getBroadcast(
                     context,
                     clock.epochMillis().toInt(),

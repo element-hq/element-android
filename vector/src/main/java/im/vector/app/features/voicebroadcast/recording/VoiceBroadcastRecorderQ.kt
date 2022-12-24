@@ -26,7 +26,7 @@ import im.vector.app.features.voice.AbstractVoiceRecorderQ
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcast
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastEvent
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
-import im.vector.app.features.voicebroadcast.usecase.GetMostRecentVoiceBroadcastStateEventUseCase
+import im.vector.app.features.voicebroadcast.usecase.GetVoiceBroadcastStateEventLiveUseCase
 import im.vector.lib.core.utils.timer.CountUpTimer
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
@@ -40,7 +40,7 @@ import java.util.concurrent.TimeUnit
 class VoiceBroadcastRecorderQ(
         context: Context,
         private val sessionHolder: ActiveSessionHolder,
-        private val getVoiceBroadcastEventUseCase: GetMostRecentVoiceBroadcastStateEventUseCase
+        private val getVoiceBroadcastEventUseCase: GetVoiceBroadcastStateEventLiveUseCase
 ) : AbstractVoiceRecorderQ(context), VoiceBroadcastRecorder {
 
     private val session get() = sessionHolder.getActiveSession()

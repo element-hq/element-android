@@ -109,6 +109,14 @@ inline fun <reified T : RealmModel> RealmQuery<T>.givenLessThan(
     return this
 }
 
+inline fun <reified T : RealmModel> RealmQuery<T>.givenIn(
+        fieldName: String,
+        values: List<String>,
+): RealmQuery<T> {
+    every { `in`(fieldName, values.toTypedArray()) } returns this
+    return this
+}
+
 /**
  * Should be called on a mocked RealmObject and not on a real RealmObject so that the underlying final method is mocked.
  */

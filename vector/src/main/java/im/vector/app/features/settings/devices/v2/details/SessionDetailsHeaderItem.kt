@@ -27,7 +27,7 @@ import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.utils.DimensionConverter
 
-private const val EXTRA_TOP_MARGIN_DP = 48
+private const val EXTRA_TOP_MARGIN_DP = 32
 
 @EpoxyModelClass
 abstract class SessionDetailsHeaderItem : VectorEpoxyModel<SessionDetailsHeaderItem.Holder>(R.layout.item_session_details_header) {

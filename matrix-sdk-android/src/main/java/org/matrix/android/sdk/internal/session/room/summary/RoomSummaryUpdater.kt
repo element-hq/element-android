@@ -78,12 +78,13 @@ internal class RoomSummaryUpdater @Inject constructor(
         private val crossSigningService: DefaultCrossSigningService,
         private val roomAccountDataDataSource: RoomAccountDataDataSource,
         private val homeServerCapabilitiesService: HomeServerCapabilitiesService,
+        private val roomSummaryEventsHelper: RoomSummaryEventsHelper,
 ) {
 
     fun refreshLatestPreviewContent(realm: Realm, roomId: String) {
         val roomSummaryEntity = RoomSummaryEntity.getOrNull(realm, roomId)
         if (roomSummaryEntity != null) {
-            val latestPreviewableEvent = RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
+            val latestPreviewableEvent = roomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
             latestPreviewableEvent?.attemptToDecrypt()
         }
     }
@@ -145,7 +146,7 @@ internal class RoomSummaryUpdater @Inject constructor(
         val encryptionEvent = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_ENCRYPTION, stateKey = "")?.root
         Timber.d("## CRYPTO: currentEncryptionEvent is $encryptionEvent")
 
-        val latestPreviewableEvent = RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
+        val latestPreviewableEvent = roomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
 
         val lastActivityFromEvent = latestPreviewableEvent?.root?.originServerTs
         if (lastActivityFromEvent != null) {
@@ -231,7 +232,7 @@ internal class RoomSummaryUpdater @Inject constructor(
     fun updateSendingInformation(realm: Realm, roomId: String) {
         val roomSummaryEntity = RoomSummaryEntity.getOrCreate(realm, roomId)
         roomSummaryEntity.updateHasFailedSending()
-        roomSummaryEntity.latestPreviewableEvent = RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
+        roomSummaryEntity.latestPreviewableEvent = roomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
     }
 
     /**

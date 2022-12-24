@@ -16,6 +16,7 @@
 
 package im.vector.app.features.settings.devices.v2.more
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
@@ -42,6 +43,8 @@ class SessionLearnMoreBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSh
 
     override val showExpanded = true
 
+    var onDismiss: (() -> Unit)? = null
+
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetSessionLearnMoreBinding {
         return BottomSheetSessionLearnMoreBinding.inflate(inflater, container, false)
     }
@@ -57,6 +60,11 @@ class SessionLearnMoreBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSh
         }
     }
 
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        onDismiss?.invoke()
+    }
+
     override fun invalidate() = withState(viewModel) { viewState ->
         super.invalidate()
         views.bottomSheetSessionLearnMoreTitle.text = viewState.title
@@ -65,11 +73,12 @@ class SessionLearnMoreBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSh
 
     companion object {
 
-        fun show(fragmentManager: FragmentManager, args: Args) {
+        fun show(fragmentManager: FragmentManager, args: Args): SessionLearnMoreBottomSheet {
             val bottomSheet = SessionLearnMoreBottomSheet()
             bottomSheet.isCancelable = true
             bottomSheet.setArguments(args)
             bottomSheet.show(fragmentManager, "SessionLearnMoreBottomSheet")
+            return bottomSheet
         }
     }
 }

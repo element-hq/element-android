@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.session.room.aggregation.poll
 
 import io.realm.Realm
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -29,7 +30,6 @@ import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.model.PollSummaryContent
 import org.matrix.android.sdk.api.session.room.model.VoteInfo
 import org.matrix.android.sdk.api.session.room.model.VoteSummary
-import org.matrix.android.sdk.api.session.room.model.message.MessageEndPollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollResponseContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
@@ -41,9 +41,14 @@ import org.matrix.android.sdk.internal.database.model.PollResponseAggregatedSumm
 import org.matrix.android.sdk.internal.database.query.create
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.where
+import org.matrix.android.sdk.internal.session.room.relation.poll.FetchPollResponseEventsTask
+import org.matrix.android.sdk.internal.task.TaskExecutor
 import javax.inject.Inject
 
-class DefaultPollAggregationProcessor @Inject constructor() : PollAggregationProcessor {
+internal class DefaultPollAggregationProcessor @Inject constructor(
+        private val taskExecutor: TaskExecutor,
+        private val fetchPollResponseEventsTask: FetchPollResponseEventsTask,
+) : PollAggregationProcessor {
 
     override fun handlePollStartEvent(realm: Realm, event: Event): Boolean {
         val content = event.getClearContent()?.toModel<MessagePollContent>()
@@ -78,7 +83,7 @@ class DefaultPollAggregationProcessor @Inject constructor() : PollAggregationPro
         val content = event.getClearContent()?.toModel<MessagePollResponseContent>() ?: return false
         val roomId = event.roomId ?: return false
         val senderId = event.senderId ?: return false
-        val targetEventId = (event.getRelationContent() ?: content.relatesTo)?.eventId ?: return false
+        val targetEventId = event.getRelationContent()?.eventId ?: return false
         val targetPollContent = getPollContent(session, roomId, targetEventId) ?: return false
 
         val annotationsSummaryEntity = getAnnotationsSummaryEntity(realm, roomId, targetEventId)
@@ -154,9 +159,8 @@ class DefaultPollAggregationProcessor @Inject constructor() : PollAggregationPro
     }
 
     override fun handlePollEndEvent(session: Session, powerLevelsHelper: PowerLevelsHelper, realm: Realm, event: Event): Boolean {
-        val content = event.getClearContent()?.toModel<MessageEndPollContent>() ?: return false
         val roomId = event.roomId ?: return false
-        val pollEventId = content.relatesTo?.eventId ?: return false
+        val pollEventId = event.getRelationContent()?.eventId ?: return false
         val pollOwnerId = getPollEvent(session, roomId, pollEventId)?.root?.senderId
         val isPollOwner = pollOwnerId == event.senderId
 
@@ -174,6 +178,10 @@ class DefaultPollAggregationProcessor @Inject constructor() : PollAggregationPro
         if (!isLocalEcho && aggregatedPollSummaryEntity.sourceLocalEchoEvents.contains(txId)) {
             aggregatedPollSummaryEntity.sourceLocalEchoEvents.remove(txId)
             aggregatedPollSummaryEntity.sourceEvents.add(event.eventId)
+        }
+
+        if (!isLocalEcho) {
+            ensurePollIsFullyAggregated(roomId, pollEventId)
         }
 
         return true
@@ -201,5 +209,21 @@ class DefaultPollAggregationProcessor @Inject constructor() : PollAggregationPro
                 ?: realm.createObject(PollResponseAggregatedSummaryEntity::class.java).also {
                     eventAnnotationsSummaryEntity.pollResponseSummary = it
                 }
+    }
+
+    /**
+     * Check that all related votes to a given poll are all retrieved and aggregated.
+     */
+    private fun ensurePollIsFullyAggregated(
+            roomId: String,
+            pollEventId: String
+    ) {
+        taskExecutor.executorScope.launch {
+            val params = FetchPollResponseEventsTask.Params(
+                    roomId = roomId,
+                    startPollEventId = pollEventId,
+            )
+            fetchPollResponseEventsTask.execute(params)
+        }
     }
 }

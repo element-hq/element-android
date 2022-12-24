@@ -71,6 +71,8 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
 
     object DisplayEnableIntegrationsWarning : RoomDetailViewEvents()
 
+    object DisplayPromptToStopVoiceBroadcast : RoomDetailViewEvents()
+
     data class OpenStickerPicker(val widget: Widget) : RoomDetailViewEvents()
 
     object OpenIntegrationManager : RoomDetailViewEvents()

@@ -239,6 +239,7 @@ class VectorPreferences @Inject constructor(
 
         // This key will be used to identify clients with the new thread support enabled m.thread
         const val SETTINGS_LABS_ENABLE_THREAD_MESSAGES = "SETTINGS_LABS_ENABLE_THREAD_MESSAGES_FINAL"
+        const val SETTINGS_LABS_THREAD_MESSAGES_CHANGED_BY_USER = "SETTINGS_LABS_THREAD_MESSAGES_CHANGED_BY_USER"
         const val SETTINGS_THREAD_MESSAGES_SYNCED = "SETTINGS_THREAD_MESSAGES_SYNCED"
 
         // This key will be used to enable user for displaying live user info or not.
@@ -1126,6 +1127,24 @@ class VectorPreferences @Inject constructor(
         defaultPrefs
                 .edit()
                 .putBoolean(SETTINGS_LABS_ENABLE_THREAD_MESSAGES, true)
+                .apply()
+    }
+
+    /**
+     * Indicates whether or not user changed threads flag manually. We need this to not force flag to be enabled on app start.
+     * Should be removed when Threads flag will be removed
+     */
+    fun wasThreadFlagChangedManually(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_LABS_THREAD_MESSAGES_CHANGED_BY_USER, false)
+    }
+
+    /**
+     * Sets the flag to indicate that user changed threads flag (e.g. disabled them).
+     */
+    fun setThreadFlagChangedManually() {
+        defaultPrefs
+                .edit()
+                .putBoolean(SETTINGS_LABS_THREAD_MESSAGES_CHANGED_BY_USER, true)
                 .apply()
     }
 

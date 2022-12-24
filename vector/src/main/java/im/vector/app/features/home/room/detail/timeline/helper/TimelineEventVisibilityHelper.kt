@@ -252,7 +252,7 @@ class TimelineEventVisibilityHelper @Inject constructor(
         }
 
         if (root.getClearType() == VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO &&
-                root.asVoiceBroadcastEvent()?.content?.voiceBroadcastState != VoiceBroadcastState.STARTED) {
+                root.asVoiceBroadcastEvent()?.content?.voiceBroadcastState !in arrayOf(VoiceBroadcastState.STARTED, VoiceBroadcastState.STOPPED)) {
             return true
         }
 

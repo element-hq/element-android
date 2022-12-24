@@ -20,7 +20,6 @@ buildscript {
         classpath "io.realm:realm-gradle-plugin:10.11.1"
         //noinspection GradlePluginVersion
         classpath 'com.android.tools.build:gradle:2.3.0'
-
     }
 }
 
@@ -186,7 +185,6 @@ dependencies {
 
     // Work
     implementation libs.androidx.work
-
 
     // olm lib is now hosted in MavenCentral
     implementation 'org.matrix.android:olm-sdk:3.2.12'
