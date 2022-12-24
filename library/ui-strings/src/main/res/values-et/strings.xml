@@ -2876,4 +2876,9 @@
     <string name="stop_voice_broadcast_content">Kas sa oled kindel, et soovid otseeetri lõpetada\? Sellega ringhäälingukõne salvestamine lõppeb ja salvestis on kättesaadav kõigile jututoas.</string>
     <string name="stop_voice_broadcast_dialog_title">Kas lõpetame otseeetri\?</string>
     <string name="action_stop">Jah, lõpetame</string>
+    <string name="rich_text_editor_link">Seadista linki</string>
+    <string name="set_link_text">Tekst</string>
+    <string name="set_link_link">Link</string>
+    <string name="set_link_create">Loo link</string>
+    <string name="set_link_edit">Muuda linki</string>
 </resources>
