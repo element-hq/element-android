@@ -2997,4 +2997,9 @@
     <string name="stop_voice_broadcast_content">Ви впевнені, що хочете припинити голосову трансляцію\? На цьому трансляція завершиться, і повний запис буде доступний у кімнаті.</string>
     <string name="stop_voice_broadcast_dialog_title">Припинити голосову трансляцію\?</string>
     <string name="action_stop">Так, припинити</string>
+    <string name="set_link_edit">Змінити посилання</string>
+    <string name="set_link_create">Створити посилання</string>
+    <string name="set_link_link">Посилання</string>
+    <string name="set_link_text">Текст</string>
+    <string name="rich_text_editor_link">Налаштувати посилання</string>
 </resources>
