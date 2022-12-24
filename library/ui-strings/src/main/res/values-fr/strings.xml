@@ -2885,4 +2885,9 @@
     <string name="stop_voice_broadcast_content">Êtes-vous sûr de vouloir arrêter votre diffusion en direct \? Cela terminera la diffusion et l’enregistrement complet sera disponible dans le salon.</string>
     <string name="stop_voice_broadcast_dialog_title">Arrêter la diffusion en direct \?</string>
     <string name="action_stop">Oui, arrêter</string>
+    <string name="set_link_edit">Éditer le lien</string>
+    <string name="set_link_create">Crée un lien</string>
+    <string name="set_link_link">Lien</string>
+    <string name="set_link_text">Texte</string>
+    <string name="rich_text_editor_link">Définir un lien</string>
 </resources>
