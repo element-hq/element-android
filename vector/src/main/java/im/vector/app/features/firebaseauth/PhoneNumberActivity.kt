@@ -57,6 +57,8 @@ class PhoneNumberActivity: AppCompatActivity() {
 //                Log.d("GFG" , "onVerificationCompleted Success")
             }
 
+
+
             // Called when verification is failed add log statement to see the exception
             override fun onVerificationFailed(e: FirebaseException) {
 //                Log.d("GFG" , "onVerificationFailed $e")
@@ -71,7 +73,9 @@ class PhoneNumberActivity: AppCompatActivity() {
 //                Log.d("GFG","onCodeSent: $verificationId")
                 storedVerificationId = verificationId
                 resendToken = token
+
             }
+
         }
     }
 
@@ -90,9 +94,10 @@ class PhoneNumberActivity: AppCompatActivity() {
     // and starts the callback of verification
     // which is implemented above in onCreate
     private fun sendVerificationCode(number: String) {
+        println("xuizalupa2")
         val options = PhoneAuthOptions.newBuilder(auth)
                 .setPhoneNumber(number) // Phone number to verify
-                .setTimeout(10L, TimeUnit.SECONDS) // Timeout and unit
+                .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
                 .setActivity(this) // Activity (for callback binding)
                 .setCallbacks(callbacks) // OnVerificationStateChangedCallbacks
                 .build()

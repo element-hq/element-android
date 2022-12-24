@@ -16,15 +16,29 @@
 
 package im.vector.app.features.contactsbook
 
+import android.Manifest
+import android.app.AlertDialog.Builder
+import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
+import com.giphy.sdk.core.models.enums.MediaType
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.hideKeyboard
@@ -36,14 +50,19 @@ import im.vector.app.features.userdirectory.UserListAction
 import im.vector.app.features.userdirectory.UserListSharedAction
 import im.vector.app.features.userdirectory.UserListSharedActionViewModel
 import im.vector.app.features.userdirectory.UserListViewModel
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.user.model.User
+import org.webrtc.StatsReport.Value
 import reactivecircus.flowbinding.android.widget.checkedChanges
 import reactivecircus.flowbinding.android.widget.textChanges
+import reactivecircus.flowbinding.common.InitialValueFlow
 import javax.inject.Inject
+import kotlin.reflect.jvm.internal.ReflectProperties.Val
 
 @AndroidEntryPoint
 class ContactsBookFragment :
@@ -135,9 +154,23 @@ class ContactsBookFragment :
         sharedActionViewModel.post(UserListSharedAction.GoBack)
     }
 
-    override fun onThreePidClick(threePid: ThreePid) {
-        view?.hideKeyboard()
-        viewModel.handle(UserListAction.AddPendingSelection(PendingSelection.ThreePidPendingSelection(threePid)))
-        sharedActionViewModel.post(UserListSharedAction.GoBack)
+     private fun onAlertDialog(view: View) {
+        //Instantiate builder variable
+        val builder = AlertDialog.Builder(view.context)
+
+        // set title
+        builder.setTitle(R.string.title_noninmessenger)
+
+        //set content area
+        builder.setMessage(R.string.text_noninmessenger)
+
+        //set negative button
+        builder.setPositiveButton("ok") {dialog,_ -> dialog.dismiss()}
+
+        builder.show()
+    }
+
+     override fun onThreePidClick(threePid: ThreePid) {
+        onAlertDialog(view = View(context))
     }
 }

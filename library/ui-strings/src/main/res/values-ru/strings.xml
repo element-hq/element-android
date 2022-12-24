@@ -303,6 +303,8 @@
     <string name="low_priority_header">Маловажные</string>
     <string name="direct_chats_header">Беседы</string>
     <string name="matrix_only_filter">Только BigStarMesssenger контакты</string>
+    <string name="title_noninmessenger" tools:ignore="ExtraTranslation">Дорогой пользователь</string>
+    <string name="text_noninmessenger" tools:ignore="ExtraTranslation">Пользователь котрому вы пытаетесь написать не пользуется приложением Big Star, или не привязал свой номер к синхронизации контактов</string>
     <string name="no_result_placeholder">Нет результатов</string>
     <string name="rooms_header">Группы</string>
     <string name="send_bug_report_include_logs">Отправить логи</string>

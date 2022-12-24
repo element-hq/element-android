@@ -46,7 +46,6 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="@dimen/layout_horizontal_margin"
                 android:text="@string/matrix_only_filter"
-                android:visibility="gone"
                 tools:visibility="visible" />
 
             <Button

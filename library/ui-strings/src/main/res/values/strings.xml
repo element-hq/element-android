@@ -480,6 +480,8 @@
     <string name="matrix_only_filter">Big Star Messenger contacts only</string>
     <string name="no_result_placeholder">No results</string>
     <string name="no_more_results">No more results</string>
+    <string name="title_noninmessenger" tools:ignore="ExtraTranslation">Dear user</string>
+    <string name="text_noninmessenger" tools:ignore="MissingTranslation">The user to whom you are trying to write does not use the Big Star application, or has not linked his number to contact synchronization</string>
 
     <!-- Rooms fragment -->
     <string name="rooms_header">Rooms</string>
