@@ -138,6 +138,9 @@
     <string name="notice_voice_broadcast_ended">%1$s ended a voice broadcast.</string>
     <string name="notice_voice_broadcast_ended_by_you">You ended a voice broadcast.</string>
 
+    <string name="notice_voice_broadcast_ended">%1$s ended a voice broadcast.</string>
+    <string name="notice_voice_broadcast_ended_by_you">You ended a voice broadcast.</string>
+
     <!-- Messages -->
 
     <!-- Room Screen -->
