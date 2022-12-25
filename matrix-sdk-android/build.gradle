@@ -18,6 +18,7 @@ buildscript {
     }
     dependencies {
         classpath "io.realm:realm-gradle-plugin:10.11.1"
+
         //noinspection GradlePluginVersion
         classpath 'com.android.tools.build:gradle:2.3.0'
     }
