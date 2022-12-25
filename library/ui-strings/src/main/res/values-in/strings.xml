@@ -344,7 +344,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="devices_details_device_name">Nama Perangkat</string>
     <string name="devices_details_last_seen_title">Terakhir terlihat</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_delete_dialog_title">Otentikasi</string>
+    <string name="devices_delete_dialog_title">Autentikasi</string>
     <string name="settings_logged_in">Masuk sebagai</string>
     <string name="settings_home_server">Homeserver</string>
     <string name="settings_identity_server">Server identitas</string>
@@ -610,7 +610,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     </plurals>
     <string name="settings_call_show_confirmation_dialog_summary">Meminta untuk konfirmasi sebelum memulai panggilan</string>
     <string name="settings_call_show_confirmation_dialog_title">Cegah panggilan tidak disengaja</string>
-    <string name="error_unauthorized">Tidak sah, tidak ada kredensial otentikasi yang absah</string>
+    <string name="error_unauthorized">Tidak sah, tidak ada kredensial autentikasi yang absah</string>
     <string name="login_error_ssl_other">Kesalahan SSL.</string>
     <string name="login_error_ssl_peer_unverified">Kesalahan SSL: identitas peer belum diverifikasi.</string>
     <string name="login_error_homeserver_not_found">Tidak dapat mencapai homeserver pada URL ini, silakan periksa</string>
@@ -2108,9 +2108,9 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="a11y_import_key_from_file">Impor kunci dari file</string>
     <string name="a11y_open_widget">Buka widget</string>
     <string name="a11y_screenshot">Tangkap layar</string>
-    <string name="authentication_error">Gagal mengotentikasi</string>
+    <string name="authentication_error">Gagal mengautentikasi</string>
     <string name="re_authentication_default_confirm_text">${app_name} meminta Anda untuk memasukkan kredensial untuk melakukan tindakan ini.</string>
-    <string name="re_authentication_activity_title">Otentikasi Ulang Dibutuhkan</string>
+    <string name="re_authentication_activity_title">Autentikasi Ulang Dibutuhkan</string>
     <string name="call_slide_to_end_conference">Geser untuk mengakhirkan panggilan</string>
     <string name="call_transfer_unknown_person">Orang tak dikenal</string>
     <string name="call_transfer_transfer_to_title">Pindah ke %1$s</string>
@@ -2467,8 +2467,8 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="unifiedpush_distributor_background_sync">Sinkronisasi latar belakang</string>
     <string name="unifiedpush_distributor_fcm_fallback">Layanan Google</string>
     <string name="unifiedpush_getdistributors_dialog_title">Pilih cara untuk menerima notifikasi</string>
-    <string name="settings_security_pin_code_use_biometrics_error">Tidak dapat mengaktifkan otentikasi biometrik.</string>
-    <string name="auth_biometric_key_invalidated_message">Otentikasi biometrik dinonaktifkan karena sebuah otentikasi biometrik telah ditambahkan baru-baru ini. Anda dapat mengaktifkan ulang di Pengaturan.</string>
+    <string name="settings_security_pin_code_use_biometrics_error">Tidak dapat mengaktifkan autentikasi biometrik.</string>
+    <string name="auth_biometric_key_invalidated_message">Autentikasi biometrik dinonaktifkan karena sebuah autentikasi biometrik telah ditambahkan baru-baru ini. Anda dapat mengaktifkan ulang di Pengaturan.</string>
     <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">Atur ulang metode notifikasi</string>
     <string name="push_gateway_item_profile_tag">Tag profil:</string>
     <string name="settings_troubleshoot_test_endpoint_registration_failed">Gagal mendaftarkan token endpoint ke homeserver:
@@ -2831,4 +2831,9 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="stop_voice_broadcast_content">Apakah Anda ingin menghentikan siaran langsung Anda\? Ini akan mengakhiri siaran dan rekaman lengkap akan tersedia dalam ruangan.</string>
     <string name="stop_voice_broadcast_dialog_title">Hentikan siaran langsung\?</string>
     <string name="action_stop">Ya, Hentikan</string>
+    <string name="set_link_edit">Sunting tautan</string>
+    <string name="set_link_create">Buat sebuah tautan</string>
+    <string name="set_link_link">Tautan</string>
+    <string name="set_link_text">Teks</string>
+    <string name="rich_text_editor_link">Atur tautan</string>
 </resources>
