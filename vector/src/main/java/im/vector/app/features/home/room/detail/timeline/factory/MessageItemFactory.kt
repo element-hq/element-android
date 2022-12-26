@@ -91,11 +91,13 @@ import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.isThread
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContentWithFormattedBody
 import org.matrix.android.sdk.api.session.room.model.message.MessageEmoteContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageEndPollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageFileContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageInfoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageLocationContent
@@ -203,6 +205,7 @@ class MessageItemFactory @Inject constructor(
             is MessageAudioContent -> buildAudioContent(params, messageContent, informationData, highlight, attributes)
             is MessageVerificationRequestContent -> buildVerificationRequestMessageItem(messageContent, informationData, highlight, callback, attributes)
             is MessagePollContent -> buildPollItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageEndPollContent -> buildEndedPollItem(messageContent, informationData, highlight, callback, attributes)
             is MessageLocationContent -> buildLocationItem(messageContent, informationData, highlight, attributes)
             is MessageBeaconInfoContent -> liveLocationShareMessageItemFactory.create(event, highlight, attributes)
             is MessageVoiceBroadcastInfoContent -> voiceBroadcastItemFactory.create(params, messageContent, highlight, attributes)
@@ -259,6 +262,32 @@ class MessageItemFactory @Inject constructor(
                 .highlighted(highlight)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .callback(callback)
+    }
+
+
+
+    private fun buildEndedPollItem(
+            endedPollContent: MessageEndPollContent,
+            informationData: MessageInformationData,
+            highlight: Boolean,
+            callback: TimelineEventController.Callback?,
+            attributes: AbsMessageItem.Attributes,
+    ): PollItem? {
+        val pollStartEventId = endedPollContent.relatesTo?.eventId ?: return null
+        val pollStartEvent = session.roomService().getRoom(roomId)?.getTimelineEvent(pollStartEventId)
+        val pollContent = pollStartEvent?.root?.getClearContent()?.toModel<MessagePollContent>() ?: return null
+
+        val aggregatedInformationData = informationData.copy(
+                pollResponseAggregatedSummary = messageInformationDataFactory.mapPollResponseSummary(pollStartEvent.annotations?.pollResponseSummary)
+        )
+
+        return buildPollItem(
+                pollContent,
+                aggregatedInformationData,
+                highlight,
+                callback,
+                attributes
+        )
     }
 
     private fun createPollQuestion(

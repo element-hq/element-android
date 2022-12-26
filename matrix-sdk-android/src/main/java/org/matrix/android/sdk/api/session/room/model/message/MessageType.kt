@@ -36,6 +36,7 @@ object MessageType {
     // Because poll events are not message events and they don't have msgtype field
     const val MSGTYPE_POLL_START = "org.matrix.android.sdk.poll.start"
     const val MSGTYPE_POLL_RESPONSE = "org.matrix.android.sdk.poll.response"
+    const val MSGTYPE_POLL_END = "org.matrix.android.sdk.poll.end"
 
     const val MSGTYPE_CONFETTI = "nic.custom.confetti"
     const val MSGTYPE_SNOWFALL = "io.element.effect.snowfall"

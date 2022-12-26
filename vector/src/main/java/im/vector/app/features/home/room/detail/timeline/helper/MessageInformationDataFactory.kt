@@ -38,6 +38,7 @@ import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
 import org.matrix.android.sdk.api.session.events.model.isSticker
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.events.model.toValidDecryptedEvent
+import org.matrix.android.sdk.api.session.room.model.PollResponseAggregatedSummary
 import org.matrix.android.sdk.api.session.room.model.ReferencesAggregatedContent
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
@@ -99,20 +100,7 @@ class MessageInformationDataFactory @Inject constructor(
                 memberName = event.senderInfo.disambiguatedDisplayName,
                 messageLayout = messageLayout,
                 reactionsSummary = reactionsSummaryFactory.create(event),
-                pollResponseAggregatedSummary = event.annotations?.pollResponseSummary?.let {
-                    PollResponseData(
-                            myVote = it.aggregatedContent?.myVote,
-                            isClosed = it.closedTime != null,
-                            votes = it.aggregatedContent?.votesSummary?.mapValues { votesSummary ->
-                                PollVoteSummaryData(
-                                        total = votesSummary.value.total,
-                                        percentage = votesSummary.value.percentage
-                                )
-                            },
-                            winnerVoteCount = it.aggregatedContent?.winnerVoteCount ?: 0,
-                            totalVotes = it.aggregatedContent?.totalVotes ?: 0
-                    )
-                },
+                pollResponseAggregatedSummary = mapPollResponseSummary(event.annotations?.pollResponseSummary),
                 hasBeenEdited = event.hasBeenEdited(),
                 hasPendingEdits = event.annotations?.editSummary?.localEchos?.any() ?: false,
                 referencesInfoData = event.annotations?.referencesAggregatedSummary?.let { referencesAggregatedSummary ->
@@ -131,6 +119,23 @@ class MessageInformationDataFactory @Inject constructor(
                     event.root.getMsgType()
                 }
         )
+    }
+
+    fun mapPollResponseSummary(pollResponseSummary: PollResponseAggregatedSummary?): PollResponseData? {
+        return pollResponseSummary?.let {
+            PollResponseData(
+                    myVote = it.aggregatedContent?.myVote,
+                    isClosed = it.closedTime != null,
+                    votes = it.aggregatedContent?.votesSummary?.mapValues { votesSummary ->
+                        PollVoteSummaryData(
+                                total = votesSummary.value.total,
+                                percentage = votesSummary.value.percentage
+                        )
+                    },
+                    winnerVoteCount = it.aggregatedContent?.winnerVoteCount ?: 0,
+                    totalVotes = it.aggregatedContent?.totalVotes ?: 0
+            )
+        }
     }
 
     private fun getSenderId(event: TimelineEvent) = if (event.isEncrypted()) {

@@ -18,6 +18,7 @@ package org.matrix.android.sdk.api.session.room.model.message
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
 
 /**
@@ -25,5 +26,12 @@ import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultCon
  */
 @JsonClass(generateAdapter = true)
 data class MessageEndPollContent(
-        @Json(name = "m.relates_to") val relatesTo: RelationDefaultContent? = null
-)
+        /**
+         * Local message type, not from server.
+         */
+        @Transient
+        override val msgType: String = MessageType.MSGTYPE_POLL_END,
+        @Json(name = "body") override val body: String = "",
+        @Json(name = "m.new_content") override val newContent: Content? = null,
+        @Json(name = "m.relates_to") override val relatesTo: RelationDefaultContent? = null
+) : MessageContent
