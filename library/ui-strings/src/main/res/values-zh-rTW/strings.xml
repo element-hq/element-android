@@ -2829,4 +2829,9 @@
     <string name="stop_voice_broadcast_content">您真的想要停止您的即時廣播嗎？這將會結束廣播，完整的錄音會在聊天室中提供。</string>
     <string name="stop_voice_broadcast_dialog_title">停止即時廣播？</string>
     <string name="action_stop">是的，停止</string>
+    <string name="set_link_edit">編輯連結</string>
+    <string name="set_link_create">建立連結</string>
+    <string name="set_link_link">連結</string>
+    <string name="set_link_text">文字</string>
+    <string name="rich_text_editor_link">設定連結</string>
 </resources>
