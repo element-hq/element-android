@@ -118,6 +118,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
     private fun handleSmartReply(intent: Intent, context: Context) {
         val message = getReplyMessage(intent)
         val roomId = intent.getStringExtra(KEY_ROOM_ID)
+        val threadId = intent.getStringExtra(KEY_THREAD_ID)
 
         if (message.isNullOrBlank() || roomId.isNullOrBlank()) {
             // ignore this event
@@ -126,13 +127,20 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
         }
         activeSessionHolder.getActiveSession().let { session ->
             session.getRoom(roomId)?.let { room ->
-                sendMatrixEvent(message, session, room, context)
+                sendMatrixEvent(message, threadId, session, room, context)
             }
         }
     }
 
-    private fun sendMatrixEvent(message: String, session: Session, room: Room, context: Context?) {
-        room.sendService().sendTextMessage(message)
+    private fun sendMatrixEvent(message: String, threadId: String?, session: Session, room: Room, context: Context?) {
+        if (threadId != null) {
+            room.relationService().replyInThread(
+                    rootThreadEventId = threadId,
+                    replyInThreadText = message,
+            )
+        } else {
+            room.sendService().sendTextMessage(message)
+        }
 
         // Create a new event to be displayed in the notification drawer, right now
 
@@ -148,7 +156,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                 body = message,
                 imageUriString = null,
                 roomId = room.roomId,
-                threadId = null, // needs to be changed: https://github.com/vector-im/element-android/issues/7475
+                threadId = threadId,
                 roomName = room.roomSummary()?.displayName ?: room.roomId,
                 roomIsDirect = room.roomSummary()?.isDirect == true,
                 outGoingMessage = true,
@@ -223,6 +231,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
 
     companion object {
         const val KEY_ROOM_ID = "roomID"
+        const val KEY_THREAD_ID = "threadID"
         const val KEY_TEXT_REPLY = "key_text_reply"
     }
 }

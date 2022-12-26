@@ -413,6 +413,7 @@ class TimelineFragment :
                 is RoomDetailViewEvents.DisplayAndAcceptCall -> acceptIncomingCall(it)
                 RoomDetailViewEvents.RoomReplacementStarted -> handleRoomReplacement()
                 RoomDetailViewEvents.OpenElementCallWidget -> handleOpenElementCallWidget()
+                RoomDetailViewEvents.DisplayPromptToStopVoiceBroadcast -> displayPromptToStopVoiceBroadcast()
             }
         }
 
@@ -2002,6 +2003,20 @@ class TimelineFragment :
                 ?.find { it.type == WidgetType.ElementCall }
                 ?.also { widget ->
                     navigator.openRoomWidget(requireContext(), state.roomId, widget)
+                }
+    }
+
+    private fun displayPromptToStopVoiceBroadcast() {
+        ConfirmationDialogBuilder
+                .show(
+                        activity = requireActivity(),
+                        askForReason = false,
+                        confirmationRes = R.string.stop_voice_broadcast_content,
+                        positiveRes = R.string.action_stop,
+                        reasonHintRes = 0,
+                        titleRes = R.string.stop_voice_broadcast_dialog_title
+                ) {
+                    timelineViewModel.handle(RoomDetailAction.VoiceBroadcastAction.Recording.StopConfirmed)
                 }
     }
 

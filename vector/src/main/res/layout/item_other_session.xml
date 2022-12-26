@@ -5,8 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:foreground="?selectableItemBackground"
-    android:paddingHorizontal="8dp"
     android:paddingTop="8dp">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/startGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="8dp" />
 
     <View
         android:id="@+id/otherSessionItemBackground"
@@ -29,7 +35,7 @@
         android:contentDescription="@string/a11y_device_manager_device_type_mobile"
         android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="@id/otherSessionItemBackground"
-        app:layout_constraintStart_toStartOf="@id/otherSessionItemBackground"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
         app:layout_constraintTop_toTopOf="@id/otherSessionItemBackground"
         tools:src="@drawable/ic_device_type_mobile" />
 
@@ -52,8 +58,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:lines="1"
         app:layout_constraintEnd_toEndOf="parent"
@@ -89,7 +95,7 @@
         android:id="@+id/otherSessionSeparator"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:background="?vctr_content_quinary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/otherSessionNameTextView"

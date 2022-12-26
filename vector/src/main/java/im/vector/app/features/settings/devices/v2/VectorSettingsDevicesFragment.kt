@@ -223,7 +223,6 @@ class VectorSettingsDevicesFragment :
             override fun onViewAllClicked() {
                 viewNavigator.navigateToOtherSessions(
                         requireActivity(),
-                        R.string.device_manager_header_section_security_recommendations_title,
                         DeviceManagerFilterType.UNVERIFIED,
                         excludeCurrentDevice = true
                 )
@@ -233,7 +232,6 @@ class VectorSettingsDevicesFragment :
             override fun onViewAllClicked() {
                 viewNavigator.navigateToOtherSessions(
                         requireActivity(),
-                        R.string.device_manager_header_section_security_recommendations_title,
                         DeviceManagerFilterType.INACTIVE,
                         excludeCurrentDevice = true
                 )
@@ -447,7 +445,6 @@ class VectorSettingsDevicesFragment :
     override fun onViewAllOtherSessionsClicked() {
         viewNavigator.navigateToOtherSessions(
                 context = requireActivity(),
-                titleResourceId = R.string.device_manager_sessions_other_title,
                 defaultFilter = DeviceManagerFilterType.ALL_SESSIONS,
                 excludeCurrentDevice = true
         )

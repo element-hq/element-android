@@ -53,6 +53,9 @@ class SecurityRecommendationView @JvmOverloads constructor(
             setImage(it)
         }
 
+        setOnClickListener {
+            callback?.onViewAllClicked()
+        }
         views.recommendationViewAllButton.setOnClickListener {
             callback?.onViewAllClicked()
         }

@@ -80,6 +80,9 @@ import im.vector.app.features.home.room.detail.AutoCompleter
 import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.RoomDetailAction.VoiceBroadcastAction
 import im.vector.app.features.home.room.detail.TimelineViewModel
+import im.vector.app.features.home.room.detail.composer.link.SetLinkFragment
+import im.vector.app.features.home.room.detail.composer.link.SetLinkSharedAction
+import im.vector.app.features.home.room.detail.composer.link.SetLinkSharedActionViewModel
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView
 import im.vector.app.features.home.room.detail.timeline.action.MessageSharedActionViewModel
 import im.vector.app.features.home.room.detail.upgrade.MigrateRoomBottomSheet
@@ -147,6 +150,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
     private lateinit var sharedActionViewModel: MessageSharedActionViewModel
     private val attachmentViewModel: AttachmentTypeSelectorViewModel by fragmentViewModel()
     private val attachmentActionsViewModel: AttachmentTypeSelectorSharedActionViewModel by viewModels()
+    private val setLinkActionsViewModel: SetLinkSharedActionViewModel by viewModels()
 
     private val composer: MessageComposerView get() {
         return if (vectorPreferences.isRichTextEditorEnabled()) {
@@ -210,6 +214,14 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
         attachmentActionsViewModel.stream()
                 .filterIsInstance<AttachmentTypeSelectorSharedAction.SelectAttachmentTypeAction>()
                 .onEach { onTypeSelected(it.attachmentType) }
+                .launchIn(lifecycleScope)
+
+        setLinkActionsViewModel.stream()
+                .onEach { when (it) {
+                    is SetLinkSharedAction.Insert -> views.richTextComposerLayout.insertLink(it.link, it.text)
+                    is SetLinkSharedAction.Set -> views.richTextComposerLayout.setLink(it.link)
+                    SetLinkSharedAction.Remove -> views.richTextComposerLayout.removeLink()
+                } }
                 .launchIn(lifecycleScope)
 
         messageComposerViewModel.stateFlow.map { it.isFullScreen }
@@ -384,6 +396,10 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
 
             override fun onFullScreenModeChanged() = withState(messageComposerViewModel) { state ->
                 messageComposerViewModel.handle(MessageComposerAction.SetFullScreen(!state.isFullScreen))
+            }
+
+            override fun onSetLink(isTextSupported: Boolean, initialLink: String?) {
+                SetLinkFragment.show(isTextSupported, initialLink, childFragmentManager)
             }
         }
     }

@@ -1,3 +1,19 @@
+Changes in Element v1.5.14 (2022-12-20)
+=======================================
+
+Bugfixes 🐛
+----------
+- ActiveSessionHolder is not supposed to start syncing. Instead, the MainActivity does it, if necessary. Fixes a race condition when clearing cache.
+
+
+Changes in Element v1.5.13 (2022-12-19)
+=======================================
+
+Bugfixes 🐛
+----------
+- Add `largeHeap=true` in the manifest since we are seeing more crashes (OOM) when handling sync response.
+
+
 Changes in Element v1.5.12 (2022-12-15)
 =======================================
 

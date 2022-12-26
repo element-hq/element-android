@@ -63,6 +63,11 @@ class DeleteMatrixClientInfoUseCaseTest {
         // Given
         val error = Exception()
         givenSetMatrixClientInfoFails(error)
+        val expectedClientInfoToBeSet = MatrixClientInfoContent(
+                name = "",
+                version = "",
+                url = "",
+        )
 
         // When
         val result = deleteMatrixClientInfoUseCase.execute()
@@ -70,6 +75,12 @@ class DeleteMatrixClientInfoUseCaseTest {
         // Then
         result.isFailure shouldBe true
         result.exceptionOrNull() shouldBeEqualTo error
+        coVerify {
+            fakeSetMatrixClientInfoUseCase.execute(
+                    fakeActiveSessionHolder.fakeSession,
+                    expectedClientInfoToBeSet
+            )
+        }
     }
 
     private fun givenSetMatrixClientInfoSucceeds() {
