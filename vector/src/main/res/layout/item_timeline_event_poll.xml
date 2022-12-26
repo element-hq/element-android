@@ -13,7 +13,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:textColor="?vctr_content_primary"
-        android:textStyle="bold"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
