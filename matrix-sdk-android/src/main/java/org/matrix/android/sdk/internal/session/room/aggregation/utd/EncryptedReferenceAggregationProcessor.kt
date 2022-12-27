@@ -43,7 +43,9 @@ class EncryptedReferenceAggregationProcessor @Inject constructor() {
     ) {
         event.eventId?.let { eventId ->
             val existingRelatedPoll = getPollSummaryWithEventId(realm, relatedEventId)
-            existingRelatedPoll?.encryptedRelatedEventIds?.add(eventId)
+            if (eventId !in existingRelatedPoll?.encryptedRelatedEventIds.orEmpty()) {
+                existingRelatedPoll?.encryptedRelatedEventIds?.add(eventId)
+            }
         }
     }
 
