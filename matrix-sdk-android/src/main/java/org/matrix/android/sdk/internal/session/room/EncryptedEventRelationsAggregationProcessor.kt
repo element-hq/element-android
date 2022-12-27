@@ -32,28 +32,27 @@ internal class EncryptedEventRelationsAggregationProcessor @Inject constructor(
         private val encryptedReferenceAggregationProcessor: EncryptedReferenceAggregationProcessor,
 ) : UnableToDecryptEventLiveProcessor {
 
-    // TODO add unit tests
-    override fun process(realm: Realm, event: Event) {
+    override fun process(realm: Realm, event: Event): Boolean {
         val roomId = event.roomId
-        if (roomId == null) {
+        return if (roomId == null) {
             Timber.w("Event has no room id ${event.eventId}")
-            return
-        }
+            false
+        } else {
+            val isLocalEcho = LocalEcho.isLocalEchoId(event.eventId ?: "")
 
-        val isLocalEcho = LocalEcho.isLocalEchoId(event.eventId ?: "")
-
-        when (event.getClearType()) {
-            EventType.ENCRYPTED -> {
-                val encryptedEventContent = event.content.toModel<EncryptedEventContent>()
-                processEncryptedContent(
-                        encryptedEventContent = encryptedEventContent,
-                        realm = realm,
-                        event = event,
-                        roomId = roomId,
-                        isLocalEcho = isLocalEcho,
-                )
+            return when (event.getClearType()) {
+                EventType.ENCRYPTED -> {
+                    val encryptedEventContent = event.content.toModel<EncryptedEventContent>()
+                    processEncryptedContent(
+                            encryptedEventContent = encryptedEventContent,
+                            realm = realm,
+                            event = event,
+                            roomId = roomId,
+                            isLocalEcho = isLocalEcho,
+                    )
+                }
+                else -> false
             }
-            else -> Unit
         }
     }
 
@@ -63,30 +62,34 @@ internal class EncryptedEventRelationsAggregationProcessor @Inject constructor(
             event: Event,
             roomId: String,
             isLocalEcho: Boolean,
-    ) {
-        when (encryptedEventContent?.relatesTo?.type) {
+    ): Boolean {
+        return when (encryptedEventContent?.relatesTo?.type) {
             RelationType.REPLACE -> {
                 Timber.w("## UTD replace in room $roomId for event ${event.eventId}")
+                false
             }
             RelationType.RESPONSE -> {
                 // can we / should we do we something for UTD response??
                 Timber.w("## UTD response in room $roomId related to ${encryptedEventContent.relatesTo.eventId}")
+                false
             }
             RelationType.REFERENCE -> {
                 // can we / should we do we something for UTD reference??
                 Timber.w("## UTD reference in room $roomId related to ${encryptedEventContent.relatesTo.eventId}")
-                encryptedReferenceAggregationProcessor.handle(
+                val result = encryptedReferenceAggregationProcessor.handle(
                         realm = realm,
                         event = event,
                         isLocalEcho = isLocalEcho,
-                        relatedEventId = encryptedEventContent.relatesTo.eventId
+                        relatedEventId = encryptedEventContent.relatesTo.eventId,
                 )
+                result
             }
             RelationType.ANNOTATION -> {
                 // can we / should we do we something for UTD annotation??
                 Timber.w("## UTD annotation in room $roomId related to ${encryptedEventContent.relatesTo.eventId}")
+                false
             }
-            else -> Unit
+            else -> false
         }
     }
 }

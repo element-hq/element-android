@@ -21,7 +21,13 @@ import org.matrix.android.sdk.api.session.events.model.Event
 
 internal interface UnableToDecryptEventLiveProcessor {
 
-    fun process(realm: Realm, event: Event)
+    /**
+     * Process the given event.
+     * @param realm a realm instance
+     * @param event the event to be processed
+     * @return true if it has been processed, false if it was ignored.
+     */
+    fun process(realm: Realm, event: Event): Boolean
 
     /**
      * Called after transaction.
