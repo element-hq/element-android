@@ -32,7 +32,6 @@ internal interface CreateUnableToDecryptEventEntityTask : Task<CreateUnableToDec
     )
 }
 
-// TODO add unit tests
 internal class DefaultCreateUnableToDecryptEventEntityTask @Inject constructor(
         @SessionDatabase val realmConfiguration: RealmConfiguration,
 ) : CreateUnableToDecryptEventEntityTask {
