@@ -232,7 +232,7 @@ internal class DefaultPollAggregationProcessor @Inject constructor(
     }
 
     private fun removeEncryptedRelatedEventIdIfNeeded(aggregatedPollSummaryEntity: PollResponseAggregatedSummaryEntity, eventId: String) {
-        if(aggregatedPollSummaryEntity.encryptedRelatedEventIds.contains(eventId)) {
+        if (aggregatedPollSummaryEntity.encryptedRelatedEventIds.contains(eventId)) {
             aggregatedPollSummaryEntity.encryptedRelatedEventIds.remove(eventId)
         }
     }
