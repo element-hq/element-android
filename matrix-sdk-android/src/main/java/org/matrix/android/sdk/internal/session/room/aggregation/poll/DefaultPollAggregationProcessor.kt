@@ -45,7 +45,6 @@ import org.matrix.android.sdk.internal.session.room.relation.poll.FetchPollRespo
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import javax.inject.Inject
 
-// TODO update unit tests
 internal class DefaultPollAggregationProcessor @Inject constructor(
         private val taskExecutor: TaskExecutor,
         private val fetchPollResponseEventsTask: FetchPollResponseEventsTask,
