@@ -27,12 +27,14 @@ import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.VectorViewModelAction
 import im.vector.app.features.VectorFeatures
+import im.vector.app.features.location.UrlMapProvider
 import im.vector.app.features.settings.VectorPreferences
 
 class AttachmentTypeSelectorViewModel @AssistedInject constructor(
         @Assisted initialState: AttachmentTypeSelectorViewState,
         private val vectorFeatures: VectorFeatures,
         private val vectorPreferences: VectorPreferences,
+        private val urlMapProvider: UrlMapProvider
 ) : VectorViewModel<AttachmentTypeSelectorViewState, AttachmentTypeSelectorAction, EmptyViewEvents>(initialState) {
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<AttachmentTypeSelectorViewModel, AttachmentTypeSelectorViewState> {
@@ -48,7 +50,7 @@ class AttachmentTypeSelectorViewModel @AssistedInject constructor(
     init {
         setState {
             copy(
-                    isLocationVisible = vectorFeatures.isLocationSharingEnabled(),
+                    isLocationVisible = vectorFeatures.isLocationSharingEnabled() && urlMapProvider.isMapConfigurationAvailable(),
                     isVoiceBroadcastVisible = vectorFeatures.isVoiceBroadcastEnabled(),
                     isTextFormattingEnabled = vectorPreferences.isTextFormattingEnabled(),
             )

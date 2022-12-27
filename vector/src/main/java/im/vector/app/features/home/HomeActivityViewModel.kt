@@ -36,6 +36,7 @@ import im.vector.app.features.analytics.extensions.toAnalyticsType
 import im.vector.app.features.analytics.plan.Signup
 import im.vector.app.features.analytics.store.AnalyticsStore
 import im.vector.app.features.home.room.list.home.release.ReleaseNotesPreferencesStore
+import im.vector.app.features.location.UrlMapProvider
 import im.vector.app.features.login.ReAuthHelper
 import im.vector.app.features.onboarding.AuthenticationDescription
 import im.vector.app.features.raw.wellknown.ElementWellKnown
@@ -95,6 +96,7 @@ class HomeActivityViewModel @AssistedInject constructor(
         private val registerUnifiedPushUseCase: RegisterUnifiedPushUseCase,
         private val unregisterUnifiedPushUseCase: UnregisterUnifiedPushUseCase,
         private val ensureFcmTokenIsRetrievedUseCase: EnsureFcmTokenIsRetrievedUseCase,
+        private val mapUrlProvider: UrlMapProvider,
 ) : VectorViewModel<HomeActivityViewState, HomeActivityViewActions, HomeActivityViewEvents>(initialState) {
 
     @AssistedFactory
@@ -383,6 +385,9 @@ class HomeActivityViewModel @AssistedInject constructor(
             }
 
             val elementWellKnown = rawService.getElementWellknown(session.sessionParams)
+
+            mapUrlProvider.initWithWellknown(elementWellKnown)
+
             val isSecureBackupRequired = elementWellKnown?.isSecureBackupRequired() ?: false
 
             // In case of account creation, it is already done before

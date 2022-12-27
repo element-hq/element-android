@@ -23,7 +23,7 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
-import com.bumptech.glide.request.RequestOptions
+import com.mapbox.mapboxsdk.maps.MapView
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
@@ -36,6 +36,7 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.action.LocationUiData
 import im.vector.app.features.home.room.detail.timeline.item.BindingOptions
 import im.vector.app.features.home.room.detail.timeline.tools.findPillsAndProcess
+import im.vector.app.features.location.zoomToLocation
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -98,10 +99,13 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
         holder.body.isVisible = locationUiData == null
         holder.mapViewContainer.isVisible = locationUiData != null
         locationUiData?.let { safeLocationUiData ->
-            GlideApp.with(holder.staticMapImageView)
-                    .load(safeLocationUiData.locationUrl)
-                    .apply(RequestOptions.centerCropTransform())
-                    .into(holder.staticMapImageView)
+            holder.staticMapView.getMapAsync { mapbox ->
+                mapbox.setStyle(safeLocationUiData.locationUrl)
+                safeLocationUiData.locationData?.let {
+                    mapbox.zoomToLocation(it, animate = false)
+                }
+                mapbox.uiSettings.setAllGesturesEnabled(false)
+            }
 
             safeLocationUiData.locationPinProvider.create(safeLocationUiData.locationOwnerId) { pinDrawable ->
                 GlideApp.with(holder.staticMapPinImageView)
@@ -124,7 +128,7 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
         val timestamp by bind<TextView>(R.id.bottom_sheet_message_preview_timestamp)
         val imagePreview by bind<ImageView>(R.id.bottom_sheet_message_preview_image)
         val mapViewContainer by bind<FrameLayout>(R.id.mapViewContainer)
-        val staticMapImageView by bind<ImageView>(R.id.staticMapImageView)
+        val staticMapView by bind<MapView>(R.id.staticMapView)
         val staticMapPinImageView by bind<ImageView>(R.id.staticMapPinImageView)
     }
 }

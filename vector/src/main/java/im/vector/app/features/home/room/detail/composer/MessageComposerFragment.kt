@@ -88,6 +88,7 @@ import im.vector.app.features.home.room.detail.timeline.action.MessageSharedActi
 import im.vector.app.features.home.room.detail.upgrade.MigrateRoomBottomSheet
 import im.vector.app.features.html.PillImageSpan
 import im.vector.app.features.location.LocationSharingMode
+import im.vector.app.features.location.UrlMapProvider
 import im.vector.app.features.poll.PollMode
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.share.SharedData
@@ -121,6 +122,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
     @Inject lateinit var buildMeta: BuildMeta
     @Inject lateinit var session: Session
     @Inject lateinit var errorTracker: ErrorTracker
+    @Inject lateinit var urlMapProvider: UrlMapProvider
 
     private val roomId: String get() = withState(timelineViewModel) { it.roomId }
 
@@ -356,7 +358,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
                         attachmentTypeSelector = AttachmentTypeSelectorView(vectorBaseActivity, vectorBaseActivity.layoutInflater, this@MessageComposerFragment)
                         attachmentTypeSelector.setAttachmentVisibility(
                                 AttachmentType.LOCATION,
-                                vectorFeatures.isLocationSharingEnabled(),
+                                vectorFeatures.isLocationSharingEnabled() && urlMapProvider.isMapConfigurationAvailable(),
                         )
                         attachmentTypeSelector.setAttachmentVisibility(
                                 AttachmentType.POLL, !isThreadTimeLine()

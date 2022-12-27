@@ -17,11 +17,13 @@
 package im.vector.app.features.home.room.detail.timeline.action
 
 import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
+import im.vector.app.features.location.LocationData
 
 /**
  * Data used to display Location data in the message bottom sheet.
  */
 data class LocationUiData(
+        val locationData: LocationData?,
         val locationUrl: String,
         val locationOwnerId: String?,
         val locationPinProvider: LocationPinProvider,

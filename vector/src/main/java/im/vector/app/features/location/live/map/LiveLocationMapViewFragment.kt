@@ -129,7 +129,7 @@ class LiveLocationMapViewFragment :
                 listenMapLoadingError(it)
             }
             lifecycleScope.launch {
-                mapboxMap.setStyle(urlMapProvider.getMapUrl()) { style ->
+                mapboxMap.setStyle(urlMapProvider.getMapStyleUrl()) { style ->
                     mapStyle = style
                     this@LiveLocationMapViewFragment.mapboxMap = WeakReference(mapboxMap)
                     symbolManager = SymbolManager(mapFragment.view as MapView, mapboxMap, style).apply {

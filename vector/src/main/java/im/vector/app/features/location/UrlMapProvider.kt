@@ -16,52 +16,22 @@
 
 package im.vector.app.features.location
 
-import im.vector.app.features.raw.wellknown.getElementWellknown
-import org.matrix.android.sdk.api.extensions.tryOrNull
-import org.matrix.android.sdk.api.raw.RawService
-import org.matrix.android.sdk.api.session.Session
+import im.vector.app.features.raw.wellknown.ElementWellKnown
 import javax.inject.Inject
+import javax.inject.Singleton
 
-class UrlMapProvider @Inject constructor(
-        private val session: Session,
-        private val rawService: RawService,
-        locationSharingConfig: LocationSharingConfig,
-) {
-    private val keyParam = "?key=${locationSharingConfig.mapTilerKey}"
+@Singleton
+class UrlMapProvider @Inject constructor() {
 
-    private val fallbackMapUrl = buildString {
-        append(MAP_BASE_URL)
-        append(keyParam)
+    private var styleUrl : String = ""
+
+    fun initWithWellknown(data: ElementWellKnown?) {
+        styleUrl = data?.getBestMapTileServerConfig()?.mapStyleUrl ?: ""
     }
 
-    suspend fun getMapUrl(): String {
-        val upstreamMapUrl = tryOrNull { rawService.getElementWellknown(session.sessionParams) }
-                ?.getBestMapTileServerConfig()
-                ?.mapStyleUrl
-        return upstreamMapUrl ?: fallbackMapUrl
-    }
+    fun isMapConfigurationAvailable() = styleUrl.isNotEmpty()
 
-    fun buildStaticMapUrl(
-            locationData: LocationData,
-            zoom: Double,
-            width: Int,
-            height: Int
-    ): String {
-        return buildString {
-            append(STATIC_MAP_BASE_URL)
-            append(locationData.longitude)
-            append(",")
-            append(locationData.latitude)
-            append(",")
-            append(zoom)
-            append("/")
-            append(width)
-            append("x")
-            append(height)
-            append(".png")
-            append(keyParam)
-            // Since the default copyright font is too small we put a custom one on map
-            append("&attribution=false")
-        }
+    fun getMapStyleUrl(): String {
+        return styleUrl
     }
 }
