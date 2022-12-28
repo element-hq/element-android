@@ -16,9 +16,10 @@
 
 package org.matrix.android.sdk.internal.session.filter
 
+import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
-import org.matrix.android.sdk.api.session.sync.filter.SyncFilterBuilder
 import org.matrix.android.sdk.internal.session.homeserver.HomeServerCapabilitiesDataSource
+import org.matrix.android.sdk.internal.sync.filter.SyncFilterBuilder
 import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
 
@@ -27,7 +28,8 @@ internal interface GetCurrentFilterTask : Task<Unit, String>
 internal class DefaultGetCurrentFilterTask @Inject constructor(
         private val filterRepository: FilterRepository,
         private val homeServerCapabilitiesDataSource: HomeServerCapabilitiesDataSource,
-        private val saveFilterTask: SaveFilterTask
+        private val saveFilterTask: SaveFilterTask,
+        private val matrixConfiguration: MatrixConfiguration
 ) : GetCurrentFilterTask {
 
     override suspend fun execute(params: Unit): String {
@@ -35,7 +37,7 @@ internal class DefaultGetCurrentFilterTask @Inject constructor(
         val storedFilterBody = filterRepository.getStoredSyncFilterBody()
         val homeServerCapabilities = homeServerCapabilitiesDataSource.getHomeServerCapabilities() ?: HomeServerCapabilities()
         val currentFilter = SyncFilterBuilder()
-                .with(filterRepository.getStoredFilterParams())
+                .with(matrixConfiguration.syncConfig.syncFilterParams)
                 .build(homeServerCapabilities)
 
         val currentFilterBody = currentFilter.toJSONString()

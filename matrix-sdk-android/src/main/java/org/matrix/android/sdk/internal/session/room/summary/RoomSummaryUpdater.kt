@@ -196,6 +196,11 @@ internal class RoomSummaryUpdater @Inject constructor(
 
             roomSummaryEntity.otherMemberIds.clear()
             roomSummaryEntity.otherMemberIds.addAll(otherRoomMembers)
+            if (roomSummary?.joinedMembersCount == null) {
+                // in case m.joined_member_count from sync summary was null?
+                // better to use what we know
+                roomSummaryEntity.joinedMembersCount = otherRoomMembers.size + 1
+            }
             if (roomSummaryEntity.isEncrypted && otherRoomMembers.isNotEmpty()) {
                 if (aggregator == null) {
                     // Do it now
