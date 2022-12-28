@@ -36,6 +36,7 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.action.LocationUiData
 import im.vector.app.features.home.room.detail.timeline.item.BindingOptions
 import im.vector.app.features.home.room.detail.timeline.tools.findPillsAndProcess
+import im.vector.app.features.location.INITIAL_MAP_ZOOM_IN_TIMELINE
 import im.vector.app.features.location.zoomToLocation
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
@@ -102,7 +103,7 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
             holder.staticMapView.getMapAsync { mapbox ->
                 mapbox.setStyle(safeLocationUiData.locationUrl)
                 safeLocationUiData.locationData?.let {
-                    mapbox.zoomToLocation(it, animate = false)
+                    mapbox.zoomToLocation(it, false, INITIAL_MAP_ZOOM_IN_TIMELINE)
                 }
                 mapbox.uiSettings.setAllGesturesEnabled(false)
             }

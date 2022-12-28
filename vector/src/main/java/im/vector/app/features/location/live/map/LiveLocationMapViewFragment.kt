@@ -157,7 +157,7 @@ class LiveLocationMapViewFragment :
         symbol?.let {
             mapboxMap
                     ?.get()
-                    ?.zoomToLocation(LocationData(it.latLng.latitude, it.latLng.longitude, null), preserveCurrentZoomLevel = false)
+                    ?.zoomToLocation(LocationData(it.latLng.latitude, it.latLng.longitude, null))
 
             LiveLocationMapMarkerOptionsDialog(requireContext())
                     .apply {
@@ -332,7 +332,7 @@ class LiveLocationMapViewFragment :
                 .find { it.matrixItem.id == userId }
                 ?.locationData
                 ?.let { locationData ->
-                    mapboxMap?.get()?.zoomToLocation(locationData, preserveCurrentZoomLevel = false)
+                    mapboxMap?.get()?.zoomToLocation(locationData, true)
                 }
     }
 

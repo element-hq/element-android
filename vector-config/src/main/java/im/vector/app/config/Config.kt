@@ -41,6 +41,7 @@ object Config {
 
     const val ENABLE_LOCATION_SHARING = true
     const val LOCATION_MAP_TILER_KEY = "fU3vlMsMn4Jb6dnEIFsx"
+    const val ENABLE_LOCATION_SHARING_MAPSERVER_FALLBACK = true
 
     /**
      * The maximum length of voice messages in milliseconds.

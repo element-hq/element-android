@@ -16,22 +16,25 @@
 
 package im.vector.app.features.location
 
-import im.vector.app.features.raw.wellknown.ElementWellKnown
+import androidx.annotation.VisibleForTesting
+import im.vector.app.features.raw.wellknown.WellknownService
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class UrlMapProvider @Inject constructor() {
+class UrlMapProvider @Inject constructor(
+        private val wellknownService: WellknownService,
+        private val locationSharingConfig: LocationSharingConfig,
+) {
+    private val keyParam = "?key=${locationSharingConfig.mapTilerKey}"
 
-    private var styleUrl : String = ""
-
-    fun initWithWellknown(data: ElementWellKnown?) {
-        styleUrl = data?.getBestMapTileServerConfig()?.mapStyleUrl ?: ""
+    @VisibleForTesting
+    val fallbackMapUrl = buildString {
+        append(MAP_BASE_URL)
+        append(keyParam)
     }
 
-    fun isMapConfigurationAvailable() = styleUrl.isNotEmpty()
-
-    fun getMapStyleUrl(): String {
-        return styleUrl
+    fun getMapStyleUrl() : String {
+        return wellknownService.getMapStyleUrl() ?: if (locationSharingConfig.isMapTilerFallbackEnabled) fallbackMapUrl else ""
     }
 }

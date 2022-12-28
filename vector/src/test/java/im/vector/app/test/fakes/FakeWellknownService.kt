@@ -16,18 +16,20 @@
 
 package im.vector.app.test.fakes
 
-import im.vector.app.features.location.UrlMapProvider
+import im.vector.app.features.raw.wellknown.WellknownService
 import io.mockk.every
 import io.mockk.mockk
 
-class FakeUrlMapProvider {
-    val instance = mockk<UrlMapProvider>()
+class FakeWellknownService {
+    val A_MAPSTYLE_URL = "https://example.com/style.json"
 
-    fun givenAvailableConfiguration() {
-        every { instance.isMapConfigurationAvailable() } returns true
+    val instance = mockk<WellknownService>()
+
+    fun givenMissingMapConfiguration() {
+        every { instance.getMapStyleUrl() } returns null
     }
 
-    fun givenNotAvailableConfiguration() {
-        every { instance.isMapConfigurationAvailable() } returns false
+    fun givenValidMapConfiguration() {
+        every { instance.getMapStyleUrl() } returns A_MAPSTYLE_URL
     }
 }

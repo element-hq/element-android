@@ -18,4 +18,5 @@ package im.vector.app.features.location
 
 data class LocationSharingConfig(
         val mapTilerKey: String,
+        val isMapTilerFallbackEnabled: Boolean
 )

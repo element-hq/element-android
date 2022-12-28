@@ -25,11 +25,11 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.mapbox.mapboxsdk.maps.MapView
 import im.vector.app.R
-import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
 import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayout
 import im.vector.app.features.home.room.detail.timeline.style.granularRoundedCorners
+import im.vector.app.features.location.INITIAL_MAP_ZOOM_IN_TIMELINE
 import im.vector.app.features.location.LocationData
 import im.vector.app.features.location.MapLoadingErrorView
 import im.vector.app.features.location.MapLoadingErrorViewState
@@ -63,6 +63,29 @@ abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder>(
         bindMap(holder)
     }
 
+    var failedLoadingMapListener : MapView.OnDidFailLoadingMapListener? = null
+    var finishedLoadingMapListener : MapView.OnDidFinishLoadingMapListener? = null
+
+    override fun unbind(holder: H) {
+        super.unbind(holder)
+        failedLoadingMapListener?.let {
+            holder.staticMapView.removeOnDidFailLoadingMapListener(it)
+        }
+        finishedLoadingMapListener?.let {
+            holder.staticMapView.removeOnDidFinishLoadingMapListener(it)
+        }
+    }
+
+    override fun onViewAttachedToWindow(holder: H) {
+        super.onViewAttachedToWindow(holder)
+        holder.staticMapView.onStart()
+    }
+
+    override fun onViewDetachedFromWindow(holder: H) {
+        super.onViewDetachedFromWindow(holder)
+        holder.staticMapView.onStop()
+    }
+
     private fun bindMap(holder: Holder) {
         val messageLayout = attributes.informationData.messageLayout
         val imageCornerTransformation = if (messageLayout is TimelineMessageLayout.Bubble) {
@@ -71,38 +94,46 @@ abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder>(
             val dimensionConverter = DimensionConverter(holder.view.resources)
             RoundedCorners(dimensionConverter.dpToPx(8))
         }
-        holder.staticMapView.updateLayoutParams {
-            width = mapWidth
-            height = mapHeight
-        }
 
-        holder.staticMapView.addOnDidFailLoadingMapListener {
+        failedLoadingMapListener = MapView.OnDidFailLoadingMapListener {
             holder.staticMapLoadingErrorView.isVisible = true
             val mapErrorViewState = MapLoadingErrorViewState(imageCornerTransformation)
             holder.staticMapLoadingErrorView.render(mapErrorViewState)
         }
 
-        holder.staticMapView.addOnDidFinishLoadingMapListener {
+        finishedLoadingMapListener = MapView.OnDidFinishLoadingMapListener {
             locationPinProvider?.create(locationUserId) { pinDrawable ->
                 holder.staticMapPinImageView.setImageDrawable(pinDrawable)
             }
             holder.staticMapLoadingErrorView.isVisible = false
         }
 
-        holder.staticMapView.clipToOutline = true
-        holder.staticMapView.getMapAsync { mapbox ->
-            mapbox.setStyle(mapStyleUrl)
-            locationData?.let {
-                mapbox.zoomToLocation(it, animate = false)
+        holder.staticMapView.apply {
+            updateLayoutParams {
+                width = mapWidth
+                height = mapHeight
             }
-            mapbox.uiSettings.setAllGesturesEnabled(false)
-            mapbox.addOnMapClickListener {
-                attributes.itemClickListener?.invoke(holder.staticMapView)
-                true
+            failedLoadingMapListener?.let {
+                addOnDidFailLoadingMapListener(it)
             }
-            mapbox.addOnMapLongClickListener {
-                attributes.itemLongClickListener?.onLongClick(holder.staticMapView)
-                true
+            finishedLoadingMapListener?.let {
+                addOnDidFinishLoadingMapListener(it)
+            }
+            clipToOutline = true
+            getMapAsync { mapbox ->
+                mapbox.setStyle(mapStyleUrl)
+                locationData?.let {
+                    mapbox.zoomToLocation(it, false, INITIAL_MAP_ZOOM_IN_TIMELINE)
+                }
+                mapbox.uiSettings.setAllGesturesEnabled(false)
+                mapbox.addOnMapClickListener {
+                    attributes.itemClickListener?.invoke(holder.staticMapView)
+                    true
+                }
+                mapbox.addOnMapLongClickListener {
+                    attributes.itemLongClickListener?.onLongClick(holder.staticMapView)
+                    true
+                }
             }
         }
     }
