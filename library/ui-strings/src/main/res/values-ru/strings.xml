@@ -440,7 +440,8 @@
     <string name="settings_identity_server">Сервер обнаружения</string>
     <string name="account_email_validation_message">Проверьте электронную почту и перейдите по высланной ссылке. Затем нажмите продолжить.</string>
     <string name="account_email_already_used_error">Этот адрес электронной почты уже занят.</string>
-    <string name="account_phone_number_already_used_error">Этот номер телефона уже используется.</string>
+    <string name="account_phone_number_already_used_error" tools:ignore="ExtraTranslation">Этот номер телефона уже используется.</string>
+    <string name="account_phone_number_already_used_err" tools:ignore="ExtraTranslation">Этот номер телефона уже используется.</string>
     <string name="settings_change_password">Смена пароля</string>
     <string name="settings_old_password">Текущий пароль</string>
     <string name="settings_new_password">Новый пароль</string>
@@ -2689,11 +2690,14 @@
     <string name="ftue_auth_phone_title">Введите номер телефона</string>
     <string name="ftue_auth_email_entry_title">Электронная почта</string>
     <string name="ftue_auth_email_title">Введите адрес электронной почты</string>
+    <string name="ftue_auth_phone_subtitle">Пожалуйста введите в номер в международном формате например: +77077777777</string>
+    <string name="invalid_phone" tools:ignore="ExtraTranslation">Номер телефона ещетне зарегестрирован</string>
     <string name="ftue_auth_terms_title">Правила сервера</string>
     <string name="ftue_auth_choose_server_entry_hint">URL-адрес сервера</string>
     <string name="ftue_auth_welcome_back_title">С возвращением!</string>
     <string name="ftue_auth_create_account_sso_section_header">Или</string>
-    <string name="ftue_auth_create_account_title">Создать учётную запись</string>
+    <string name="ftue_auth_create_account_title">Создать аккаунт</string>
+    <string name="ftue_auth_create_account_title1">Введите Login на латинском. Например: Bek76</string>
     <string name="search_space_two_parents">%1$s и %2$s</string>
     <string name="add_ad">Подать рекламу</string>
     <string name="cities">Страны и города</string>
@@ -2702,6 +2706,7 @@
     <string name="ad_formats_for_pictures">Формат: png, jpg, jpeg\nВес: до 15 Мбайт</string>
     <string name="ad_upload">Загрузить</string>
     <string name="ad_links">Ссылки</string>
+
     <string name="ad_time_for_ad">Время показа</string>
     <string name="ad_value_of_days" />
     <string name="ad_numberof">Введите количество </string>

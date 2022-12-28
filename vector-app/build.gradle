@@ -135,7 +135,7 @@ android {
 
         // `develop` branch will have version code from timestamp, to ensure each build from CI has a incremented versionCode.
         // Other branches (main, features, etc.) will have version code based on application version.
-        versionCode = 153
+        versionCode = 155
         // Required for sonar analysis
         versionName "1.2.3"
 
@@ -297,7 +297,7 @@ android {
                 tasks.matching { it.name.contains("GoogleServices") && !it.name.contains("Gplay") }*.enabled = false
             }
 
-            versionName "1.2.4"
+            versionName "1.2.6"
             dimension "store"
             isDefault = true
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"G\""

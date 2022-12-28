@@ -43,7 +43,6 @@
             android:layout_height="0dp"
             android:adjustViewBounds="true"
             android:background="@drawable/circle"
-            android:backgroundTint="@color/launcher_background"
             android:contentDescription="@null"
             android:src="@drawable/ic_user_fg"
             app:layout_constraintBottom_toTopOf="@id/createAccountHeaderTitle"
@@ -52,6 +51,7 @@
             app:layout_constraintStart_toStartOf="@id/createAccountGutterStart"
             app:layout_constraintTop_toBottomOf="@id/headerSpacing"
             app:tint="@color/palette_white" />
+
 
         <TextView
             android:id="@+id/createAccountHeaderTitle"
@@ -66,6 +66,23 @@
             app:layout_constraintEnd_toEndOf="@id/createAccountGutterEnd"
             app:layout_constraintStart_toStartOf="@id/createAccountGutterStart"
             app:layout_constraintTop_toBottomOf="@id/createAccountHeaderIcon" />
+
+        <TextView
+            style="@style/Widget.Vector.TextView.Body.Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:text="@string/ftue_auth_create_account_title1"
+            android:textColor="?vctr_content_primary"
+            app:layout_constraintBottom_toTopOf="@id/createAccountInput"
+            app:layout_constraintEnd_toEndOf="@id/createAccountGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/createAccountGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/createAccountHeaderTitle" />
+
+
+
 
         <Space
             android:id="@+id/titleContentSpacing"
@@ -153,9 +170,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:imeOptions="actionNext"
-                android:nextFocusForward="@id/createAccountPasswordInput"
                 android:inputType="textNoSuggestions"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:nextFocusForward="@id/createAccountPasswordInput"
+                tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

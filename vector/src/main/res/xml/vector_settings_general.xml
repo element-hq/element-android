@@ -100,6 +100,7 @@
 
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_CLEAR_CACHE_PREFERENCE_KEY"
+            app:isPreferenceVisible="false"
             android:title="@string/settings_clear_cache" />
 
     </im.vector.app.core.preference.VectorPreferenceCategory>

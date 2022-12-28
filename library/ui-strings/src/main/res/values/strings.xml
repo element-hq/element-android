@@ -135,8 +135,6 @@
     <string name="notice_crypto_error_unknown_inbound_session_id">The sender\'s device has not sent us the keys for this message.</string>
     <string name="block_user1">Block user</string>
 
-    <string name="notice_voice_broadcast_ended">%1$s ended a voice broadcast.</string>
-    <string name="notice_voice_broadcast_ended_by_you">You ended a voice broadcast.</string>
 
     <string name="notice_voice_broadcast_ended">%1$s ended a voice broadcast.</string>
     <string name="notice_voice_broadcast_ended_by_you">You ended a voice broadcast.</string>
@@ -1116,7 +1114,9 @@
 
     <string name="account_email_validation_message">Please check your email and click on the link it contains. Once this is done, click continue.</string>
     <string name="account_email_already_used_error">This email address is already in use.</string>
-    <string name="account_phone_number_already_used_error">This phone number is already in use.</string>
+    <string name="account_phone_number_already_used_error" tools:ignore="ExtraTranslation">This phone number is already in use.</string>
+    <string name="account_phone_number_already_used_err" tools:ignore="ExtraTranslation">This phone number is already in use.</string>
+
 
     <string name="settings_password">Password</string>
     <string name="settings_change_password">Change password</string>
@@ -2009,7 +2009,9 @@
     <string name="ftue_account_created_congratulations_title">Congratulations!</string>
     <string name="ftue_account_created_subtitle">Your account %s has been created</string>
 
-    <string name="ftue_auth_create_account_title">Create your account</string>
+    <string name="ftue_auth_create_account_title">Create account</string>
+    <string name="ftue_auth_create_account_title1">Put login in English. Example: Bek76</string>
+
     <!-- Note for translators, %s is the full matrix of the account being created, eg @hello:matrix.org -->
     <string name="ftue_auth_create_account_username_entry_footer">Others can discover you %s</string>
     <string name="ftue_auth_create_account_password_entry_footer">Must be 8 characters or more</string>
@@ -2034,12 +2036,13 @@
     <string name="ftue_auth_terms_subtitle">Please read through %s\'s terms and policies</string>
 
     <string name="ftue_auth_email_title">Enter your email</string>
+    <string name="invalid_phone">Phone number isnt registered</string>
     <!-- Note for translators, %s is the homeserver name, eg matrix.org -->
     <string name="ftue_auth_email_subtitle">%s needs to verify your account</string>
     <string name="ftue_auth_email_entry_title">Email</string>
     <string name="ftue_auth_phone_title">Enter your phone number</string>
     <!-- Note for translators, %s is the homeserver name, eg matrix.org -->
-    <string name="ftue_auth_phone_subtitle">%s needs to verify your account</string>
+    <string name="ftue_auth_phone_subtitle">Please enter your number in iternational format like +77077777777</string>
     <string name="ftue_auth_phone_entry_title">Phone Number</string>
     <string name="ftue_auth_phone_confirmation_entry_title">Confirmation code</string>
 
