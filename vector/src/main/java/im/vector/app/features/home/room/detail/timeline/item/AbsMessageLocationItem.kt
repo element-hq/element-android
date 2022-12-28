@@ -63,19 +63,6 @@ abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder>(
         bindMap(holder)
     }
 
-    var failedLoadingMapListener : MapView.OnDidFailLoadingMapListener? = null
-    var finishedLoadingMapListener : MapView.OnDidFinishLoadingMapListener? = null
-
-    override fun unbind(holder: H) {
-        super.unbind(holder)
-        failedLoadingMapListener?.let {
-            holder.staticMapView.removeOnDidFailLoadingMapListener(it)
-        }
-        finishedLoadingMapListener?.let {
-            holder.staticMapView.removeOnDidFinishLoadingMapListener(it)
-        }
-    }
-
     override fun onViewAttachedToWindow(holder: H) {
         super.onViewAttachedToWindow(holder)
         holder.staticMapView.onStart()
@@ -95,30 +82,24 @@ abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder>(
             RoundedCorners(dimensionConverter.dpToPx(8))
         }
 
-        failedLoadingMapListener = MapView.OnDidFailLoadingMapListener {
-            holder.staticMapLoadingErrorView.isVisible = true
-            val mapErrorViewState = MapLoadingErrorViewState(imageCornerTransformation)
-            holder.staticMapLoadingErrorView.render(mapErrorViewState)
-        }
-
-        finishedLoadingMapListener = MapView.OnDidFinishLoadingMapListener {
-            locationPinProvider?.create(locationUserId) { pinDrawable ->
-                holder.staticMapPinImageView.setImageDrawable(pinDrawable)
-            }
-            holder.staticMapLoadingErrorView.isVisible = false
-        }
-
         holder.staticMapView.apply {
             updateLayoutParams {
                 width = mapWidth
                 height = mapHeight
             }
-            failedLoadingMapListener?.let {
-                addOnDidFailLoadingMapListener(it)
+            addOnDidFailLoadingMapListener {
+                holder.staticMapLoadingErrorView.isVisible = true
+                val mapErrorViewState = MapLoadingErrorViewState(imageCornerTransformation)
+                holder.staticMapLoadingErrorView.render(mapErrorViewState)
             }
-            finishedLoadingMapListener?.let {
-                addOnDidFinishLoadingMapListener(it)
+
+            addOnDidFinishLoadingMapListener {
+                locationPinProvider?.create(locationUserId) { pinDrawable ->
+                    holder.staticMapPinImageView.setImageDrawable(pinDrawable)
+                }
+                holder.staticMapLoadingErrorView.isVisible = false
             }
+
             clipToOutline = true
             getMapAsync { mapbox ->
                 mapbox.setStyle(mapStyleUrl)
