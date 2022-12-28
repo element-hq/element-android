@@ -17,9 +17,13 @@
 package im.vector.app.features.attachments
 
 import com.airbnb.mvrx.test.MavericksTestRule
+import im.vector.app.features.location.UrlMapProvider
+import im.vector.app.test.fakes.FakeUrlMapProvider
 import im.vector.app.test.fakes.FakeVectorFeatures
 import im.vector.app.test.fakes.FakeVectorPreferences
 import im.vector.app.test.test
+import io.mockk.every
+import io.mockk.mockk
 import io.mockk.verifyOrder
 import org.junit.Before
 import org.junit.Rule
@@ -33,6 +37,7 @@ internal class AttachmentTypeSelectorViewModelTest {
     private val fakeVectorFeatures = FakeVectorFeatures()
     private val fakeVectorPreferences = FakeVectorPreferences()
     private val initialState = AttachmentTypeSelectorViewState()
+    private val fakeUrlMapProvider = FakeUrlMapProvider()
 
     @Before
     fun setUp() {
@@ -57,13 +62,29 @@ internal class AttachmentTypeSelectorViewModelTest {
     @Test
     fun `given location sharing is enabled, then location sharing option is visible`() {
         fakeVectorFeatures.givenLocationSharing(isEnabled = true)
-
+        fakeUrlMapProvider.givenAvailableConfiguration()
         createViewModel()
                 .test()
                 .assertStates(
                         listOf(
                                 initialState.copy(
                                         isLocationVisible = true
+                                ),
+                        )
+                )
+                .finish()
+    }
+
+    @Test
+    fun `given location sharing is enabled, but no mapserver configuration available, then location sharing option is not visible`() {
+        fakeVectorFeatures.givenLocationSharing(isEnabled = true)
+        fakeUrlMapProvider.givenNotAvailableConfiguration()
+        createViewModel()
+                .test()
+                .assertStates(
+                        listOf(
+                                initialState.copy(
+                                        isLocationVisible = false
                                 ),
                         )
                 )
@@ -137,6 +158,7 @@ internal class AttachmentTypeSelectorViewModelTest {
                 initialState,
                 vectorFeatures = fakeVectorFeatures,
                 vectorPreferences = fakeVectorPreferences.instance,
+                urlMapProvider = fakeUrlMapProvider.instance
         )
     }
 }
