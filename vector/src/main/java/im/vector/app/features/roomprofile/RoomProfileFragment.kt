@@ -270,7 +270,7 @@ class RoomProfileFragment :
     }
 
     override fun onPollHistoryClicked() {
-        // TODO navigate to new screen
+        roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomPolls)
     }
 
     override fun onUploadsClicked() {
