@@ -256,7 +256,7 @@
     <string name="action_rename">Переименовать</string>
     <string name="report_content">Пожаловаться на содержимое</string>
     <string name="or">или</string>
-    <string name="action_invite">Приглашение</string>
+    <string name="action_invite">Пригласить</string>
     <string name="action_sign_out">Выйти из учётной записи</string>
     <string name="action_voice_call">Голосовой вызов</string>
     <string name="action_video_call">Видео вызов</string>
@@ -2714,7 +2714,7 @@
     <string name="labs_enable_new_app_layout_title">Новый вид</string>
     <string name="home_empty_no_unreads_title">Нечего отображать.</string>
     <string name="home_empty_no_unreads_message">Здесь будут отображаться непрочитанные сообщения, когда таковые будут.</string>
-    <string name="font_size_use_system">Присущий системе</string>
+    <string name="font_size_use_system">Как в системе</string>
     <string name="change_space">Смена пространства</string>
     <string name="labs_enable_new_app_layout_summary">Упрощённый Element с дополнительными вкладками</string>
     <string name="onboarding_new_app_layout_welcome_title">Добро пожаловать в новый вид!</string>
