@@ -1,3 +1,34 @@
+Changes in Element v.5.16 (2022-12-29)
+======================================
+
+Features ✨
+----------
+ - [Rich text editor] Add support for links ([#7746](https://github.com/vector-im/element-android/issues/7746))
+ - [Poll] When a poll is ended, use /relations API to ensure poll results are correct ([#7767](https://github.com/vector-im/element-android/issues/7767))
+ - [Session manager] Security recommendations cards: whole view should be tappable ([#7795](https://github.com/vector-im/element-android/issues/7795))
+ - [Session manager] Other sessions list: header should not be sticky ([#7797](https://github.com/vector-im/element-android/issues/7797))
+
+Bugfixes 🐛
+----------
+ - Do not show typing notification of ignored users. ([#2965](https://github.com/vector-im/element-android/issues/2965))
+ - [Push Notifications, Threads] - quick reply to threaded notification now sent to thread except main timeline ([#7475](https://github.com/vector-im/element-android/issues/7475))
+ - [Session manager] Other sessions list: filter option is displayed when selection mode is enabled ([#7784](https://github.com/vector-im/element-android/issues/7784))
+ - [Session manager] Other sessions: Filter bottom sheet cut in landscape mode ([#7786](https://github.com/vector-im/element-android/issues/7786))
+ - Automatically show keyboard after learn more bottom sheet is dismissed ([#7790](https://github.com/vector-im/element-android/issues/7790))
+ - [Session Manager] Other sessions list: cannot select/deselect session by a long press when in select mode ([#7792](https://github.com/vector-im/element-android/issues/7792))
+ - Fix current session ip address visibility ([#7794](https://github.com/vector-im/element-android/issues/7794))
+ - Device Manager UI review fixes ([#7798](https://github.com/vector-im/element-android/issues/7798))
+
+SDK API changes ⚠️
+------------------
+ - [Sync] Sync Filter params are moved to MatrixConfiguration and will not be stored in session realm to avoid bug when session cache is cleared ([#7843](https://github.com/vector-im/element-android/issues/7843))
+
+Other changes
+-------------
+ - [Voice Broadcast] Replace the player timeline ([#7821](https://github.com/vector-im/element-android/issues/7821))
+ - Increase session manager test coverage ([#7836](https://github.com/vector-im/element-android/issues/7836))
+
+
 Changes in Element v1.5.14 (2022-12-20)
 =======================================
 
