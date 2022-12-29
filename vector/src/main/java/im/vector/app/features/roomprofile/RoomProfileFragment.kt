@@ -269,6 +269,10 @@ class RoomProfileFragment :
         roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomNotificationSettings)
     }
 
+    override fun onPollHistoryClicked() {
+        // TODO navigate to new screen
+    }
+
     override fun onUploadsClicked() {
         roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomUploads)
     }

@@ -56,6 +56,7 @@ class RoomProfileController @Inject constructor(
         fun onMemberListClicked()
         fun onBannedMemberListClicked()
         fun onNotificationsClicked()
+        fun onPollHistoryClicked()
         fun onUploadsClicked()
         fun createShortcut()
         fun onSettingsClicked()
@@ -263,6 +264,12 @@ class RoomProfileController @Inject constructor(
                     action = { callback?.onBannedMemberListClicked() }
             )
         }
+        buildProfileAction(
+                id = "poll_history",
+                title = stringProvider.getString(R.string.room_profile_section_more_polls),
+                icon = R.drawable.ic_attachment_poll,
+                action = { callback?.onPollHistoryClicked() }
+        )
         buildProfileAction(
                 id = "uploads",
                 title = stringProvider.getString(R.string.room_profile_section_more_uploads),
