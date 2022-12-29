@@ -21,8 +21,14 @@ import com.bumptech.glide.Priority
 import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import dagger.hilt.android.EntryPointAccessors
 import im.vector.app.R
+import im.vector.app.core.di.ActivityEntryPoint
+import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.glide.GlideApp
+import im.vector.app.features.home.room.detail.timeline.action.EventSharedAction
+import im.vector.app.features.home.room.detail.timeline.action.MessageSharedActionViewModel
+import im.vector.app.features.navigation.Navigator
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.FormBody
@@ -47,6 +53,7 @@ class AdPopUp(
     var bannerSrc: String
     var ad: JSONObject
     private var rootUrl: String
+    protected var navigator: Navigator
 
     init {
         this.activity = activity
@@ -55,6 +62,9 @@ class AdPopUp(
         this.bannerSrc = bannerSrc
         this.ad = ad
         this.rootUrl = rootUrl
+
+        val singletonEntryPoint = context.singletonEntryPoint()
+        navigator = singletonEntryPoint.navigator()
 
         this.setCancelable(true);
         this.setCanceledOnTouchOutside(true);
@@ -118,7 +128,7 @@ class AdPopUp(
                     }
                 })
 
-                this.dismiss()
+                navigator.openRoomMemberProfile(userId = bigstarUrl, roomId = null, context = context)
             }
         }
 

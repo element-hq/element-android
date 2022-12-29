@@ -16,7 +16,7 @@
             android:id="@+id/iv_ad_banner"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="fitStart"
+            android:scaleType="fitCenter"
             app:shapeAppearanceOverlay="@style/roundedImageAd" />
 
         <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
