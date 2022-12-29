@@ -129,11 +129,12 @@ class UiAllScreensSanityTest {
                 addSpace().also { openMenu(publicSpaceName) }
 
                 leaveSpace()
-                // Some instability with the bottomsheet
-                // not sure what's the source, maybe the expanded state?
-                Thread.sleep(10_000)
             }
         }
+
+        // Some instability with the bottomsheet
+        // not sure what's the source, maybe the expanded state?
+        Thread.sleep(10_000)
 
         elementRobot.space { selectSpace(spaceName) }
 
@@ -177,7 +178,6 @@ class UiAllScreensSanityTest {
      * Testing multiple threads screens
      */
     private fun testThreadScreens() {
-//        elementRobot.toggleLabFeature(LabFeature.THREAD_MESSAGES)
         elementRobot.newRoom {
             createNewRoom {
                 crawl()
@@ -191,6 +191,5 @@ class UiAllScreensSanityTest {
                 }
             }
         }
-//        elementRobot.toggleLabFeature(LabFeature.THREAD_MESSAGES)
     }
 }
