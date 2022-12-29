@@ -182,7 +182,9 @@ class OtherSessionsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupToolbar(views.otherSessionsToolbar).setTitle(args.titleResourceId).allowBack()
+        setupToolbar(views.otherSessionsToolbar)
+                .setTitle(R.string.device_manager_sessions_other_title)
+                .allowBack()
         observeViewEvents()
         initFilterView()
     }
@@ -225,6 +227,7 @@ class OtherSessionsFragment :
 
     override fun invalidate() = withState(viewModel) { state ->
         updateLoading(state.isLoading)
+        updateFilterView(state.isSelectModeEnabled)
         if (state.devices is Success) {
             val devices = state.devices.invoke()
             renderDevices(devices, state.currentFilter, state.isShowingIpAddress)
@@ -240,13 +243,17 @@ class OtherSessionsFragment :
         }
     }
 
+    private fun updateFilterView(isSelectModeEnabled: Boolean) {
+        views.otherSessionsFilterFrameLayout.isVisible = isSelectModeEnabled.not()
+    }
+
     private fun updateToolbar(devices: List<DeviceFullInfo>, isSelectModeEnabled: Boolean) {
         invalidateOptionsMenu()
         val title = if (isSelectModeEnabled) {
             val selection = devices.count { it.isSelected }
             stringProvider.getQuantityString(R.plurals.x_selected, selection, selection)
         } else {
-            getString(args.titleResourceId)
+            getString(R.string.device_manager_sessions_other_title)
         }
         toolbar?.title = title
     }
@@ -341,6 +348,8 @@ class OtherSessionsFragment :
     override fun onOtherSessionLongClicked(deviceId: String) = withState(viewModel) { state ->
         if (!state.isSelectModeEnabled) {
             enableSelectMode(true, deviceId)
+        } else {
+            viewModel.handle(OtherSessionsAction.ToggleSelectionForDevice(deviceId))
         }
     }
 

@@ -46,6 +46,7 @@ import im.vector.app.features.home.UserColorAccountDataViewModel
 import im.vector.app.features.home.room.breadcrumbs.BreadcrumbsViewModel
 import im.vector.app.features.home.room.detail.TimelineViewModel
 import im.vector.app.features.home.room.detail.composer.MessageComposerViewModel
+import im.vector.app.features.home.room.detail.composer.link.SetLinkViewModel
 import im.vector.app.features.home.room.detail.search.SearchViewModel
 import im.vector.app.features.home.room.detail.timeline.action.MessageActionsViewModel
 import im.vector.app.features.home.room.detail.timeline.edithistory.ViewEditHistoryViewModel
@@ -691,4 +692,9 @@ interface MavericksViewModelModule {
     fun vectorSettingsNotificationPreferenceViewModelFactory(
             factory: VectorSettingsNotificationPreferenceViewModel.Factory
     ): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(SetLinkViewModel::class)
+    fun setLinkViewModelFactory(factory: SetLinkViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 }

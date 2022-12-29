@@ -93,7 +93,7 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
     override fun renderLiveIndicator(holder: Holder) {
         when {
             voiceBroadcastState == null || voiceBroadcastState == VoiceBroadcastState.STOPPED -> renderNoLiveIndicator(holder)
-            voiceBroadcastState == VoiceBroadcastState.PAUSED || !player.isLiveListening -> renderPausedLiveIndicator(holder)
+            voiceBroadcastState == VoiceBroadcastState.PAUSED -> renderPausedLiveIndicator(holder)
             else -> renderPlayingLiveIndicator(holder)
         }
     }
@@ -122,10 +122,14 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
 
     private fun bindSeekBar(holder: Holder) {
         with(holder) {
-            durationView.text = formatPlaybackTime(duration)
+            remainingTimeView.text = formatRemainingTime(duration)
+            elapsedTimeView.text = formatPlaybackTime(0)
             seekBar.max = duration
             seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) = Unit
+                override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                    remainingTimeView.text = formatRemainingTime(duration - progress)
+                    elapsedTimeView.text = formatPlaybackTime(progress)
+                }
 
                 override fun onStartTrackingTouch(seekBar: SeekBar) {
                     isUserSeeking = true
@@ -156,6 +160,7 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
     }
 
     private fun formatPlaybackTime(time: Int) = DateUtils.formatElapsedTime((time / 1000).toLong())
+    private fun formatRemainingTime(time: Int) = if (time < 1000) formatPlaybackTime(time) else String.format("-%s", formatPlaybackTime(time))
 
     override fun unbind(holder: Holder) {
         super.unbind(holder)
@@ -177,7 +182,8 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
         val fastBackwardButton by bind<ImageButton>(R.id.fastBackwardButton)
         val fastForwardButton by bind<ImageButton>(R.id.fastForwardButton)
         val seekBar by bind<SeekBar>(R.id.seekBar)
-        val durationView by bind<TextView>(R.id.playbackDuration)
+        val remainingTimeView by bind<TextView>(R.id.remainingTime)
+        val elapsedTimeView by bind<TextView>(R.id.elapsedTime)
         val broadcasterNameMetadata by bind<VoiceBroadcastMetadataView>(R.id.broadcasterNameMetadata)
         val voiceBroadcastMetadata by bind<VoiceBroadcastMetadataView>(R.id.voiceBroadcastMetadata)
         val listenersCountMetadata by bind<VoiceBroadcastMetadataView>(R.id.listenersCountMetadata)

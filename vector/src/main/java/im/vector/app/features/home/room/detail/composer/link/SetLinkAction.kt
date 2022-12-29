@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,17 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.sync.filter
+package im.vector.app.features.home.room.detail.composer.link
 
-internal data class SyncFilterParams(
-        val lazyLoadMembersForStateEvents: Boolean? = null,
-        val lazyLoadMembersForMessageEvents: Boolean? = null,
-        val useThreadNotifications: Boolean? = null,
-        val listOfSupportedEventTypes: List<String>? = null,
-        val listOfSupportedStateEventTypes: List<String>? = null,
-)
+import im.vector.app.core.platform.VectorViewModelAction
+
+sealed class SetLinkAction : VectorViewModelAction {
+    data class LinkChanged(
+            val newLink: String
+    ) : SetLinkAction()
+
+    data class Save(
+            val link: String,
+            val text: String,
+    ) : SetLinkAction()
+}

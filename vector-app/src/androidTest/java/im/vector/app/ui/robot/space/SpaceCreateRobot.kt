@@ -28,7 +28,6 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import im.vector.app.R
 import im.vector.app.espresso.tools.waitUntilActivityVisible
-import im.vector.app.espresso.tools.waitUntilDialogVisible
 import im.vector.app.espresso.tools.waitUntilViewVisible
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.home.room.detail.RoomDetailActivity
@@ -86,14 +85,17 @@ class SpaceCreateRobot {
         clickOn(R.id.nextButton)
         waitUntilViewVisible(withId(R.id.recyclerView))
         clickOn(R.id.nextButton)
+//        waitUntilActivityVisible<RoomDetailActivity> {
+//            waitUntilDialogVisible(withId(R.id.inviteByMxidButton))
+//        }
+//        // close invite dialog
+//        pressBack()
         waitUntilActivityVisible<RoomDetailActivity> {
-            waitUntilDialogVisible(withId(R.id.inviteByMxidButton))
+            pressBack()
         }
-        // close invite dialog
-        pressBack()
-        waitUntilViewVisible(withId(R.id.timelineRecyclerView))
+//        waitUntilViewVisible(withId(R.id.timelineRecyclerView))
         // close room
-        pressBack()
+//        pressBack()
         waitUntilViewVisible(withId(R.id.roomListContainer))
     }
 }

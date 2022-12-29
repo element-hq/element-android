@@ -419,6 +419,7 @@
     <string name="action_got_it">Got it</string>
     <string name="action_select_all">Select all</string>
     <string name="action_deselect_all">Deselect all</string>
+    <string name="action_stop">Yes, Stop</string>
 
     <string name="copied_to_clipboard">Copied to clipboard</string>
 
@@ -3120,6 +3121,8 @@
     <string name="error_voice_broadcast_already_in_progress_message">You are already recording a voice broadcast. Please end your current voice broadcast to start a new one.</string>
     <!-- Examples of usage: 6h 15min 30sec left / 15min 30sec left / 30sec left -->
     <string name="voice_broadcast_recording_time_left">%1$s left</string>
+    <string name="stop_voice_broadcast_dialog_title">Stop live broadcasting?</string>
+    <string name="stop_voice_broadcast_content">Are you sure you want to stop your live broadcast? This will end the broadcast and the full recording will be available in the room.</string>
 
     <string name="upgrade_room_for_restricted">Anyone in %s will be able to find and join this room - no need to manually invite everyone. You’ll be able to change this in room settings anytime.</string>
     <string name="upgrade_room_for_restricted_no_param">Anyone in a parent space will be able to find and join this room - no need to manually invite everyone. You’ll be able to change this in room settings anytime.</string>
@@ -3335,7 +3338,7 @@
         <item quantity="one">Consider signing out from old sessions (%1$d day or more) that you don’t use anymore.</item>
         <item quantity="other">Consider signing out from old sessions (%1$d days or more) that you don’t use anymore.</item>
     </plurals>
-    <string name="device_manager_current_session_title">Current Session</string>
+    <string name="device_manager_current_session_title">Current session</string>
     <string name="device_manager_session_title">Session</string>
     <string name="device_manager_device_title">Device</string>
     <!--  Examples: Last activity Yesterday at 6PM, Last activity Aug 31 at 5:47PM -->
@@ -3476,12 +3479,18 @@
     <string name="qr_code_login_confirm_security_code">Confirm</string>
     <string name="qr_code_login_confirm_security_code_description">Please ensure that you know the origin of this code. By linking devices, you will provide someone with full access to your account.</string>
 
-    <!-- WYSIWYG Composer -->
+    <!-- Rich text editor -->
     <string name="rich_text_editor_format_bold">Apply bold format</string>
     <string name="rich_text_editor_format_italic">Apply italic format</string>
     <string name="rich_text_editor_format_strikethrough">Apply strikethrough format</string>
     <string name="rich_text_editor_format_underline">Apply underline format</string>
+    <string name="rich_text_editor_link">Set link</string>
     <string name="rich_text_editor_full_screen_toggle">Toggle full screen mode</string>
+
+    <string name="set_link_text">Text</string>
+    <string name="set_link_link">Link</string>
+    <string name="set_link_create">Create a link</string>
+    <string name="set_link_edit">Edit link</string>
 
     <!-- ReplyTo events -->
     <string name="message_reply_to_prefix">In reply to</string>

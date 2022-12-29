@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.sync.filter
+package org.matrix.android.sdk.internal.sync.filter
 
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
+import org.matrix.android.sdk.api.session.sync.filter.SyncFilterParams
 import org.matrix.android.sdk.internal.session.filter.Filter
 import org.matrix.android.sdk.internal.session.filter.RoomEventFilter
 import org.matrix.android.sdk.internal.session.filter.RoomFilter
-import org.matrix.android.sdk.internal.sync.filter.SyncFilterParams
 
-class SyncFilterBuilder {
+internal class SyncFilterBuilder {
     private var lazyLoadMembersForStateEvents: Boolean? = null
     private var lazyLoadMembersForMessageEvents: Boolean? = null
     private var useThreadNotifications: Boolean? = null
@@ -53,16 +53,6 @@ class SyncFilterBuilder {
                     listOfSupportedStateEventTypes = currentFilterParams.listOfSupportedStateEventTypes?.toList()
                 }
             }
-
-    internal fun extractParams(): SyncFilterParams {
-        return SyncFilterParams(
-                useThreadNotifications = useThreadNotifications,
-                lazyLoadMembersForMessageEvents = lazyLoadMembersForMessageEvents,
-                lazyLoadMembersForStateEvents = lazyLoadMembersForStateEvents,
-                listOfSupportedEventTypes = listOfSupportedEventTypes,
-                listOfSupportedStateEventTypes = listOfSupportedStateEventTypes,
-        )
-    }
 
     internal fun build(homeServerCapabilities: HomeServerCapabilities): Filter {
         return Filter(
