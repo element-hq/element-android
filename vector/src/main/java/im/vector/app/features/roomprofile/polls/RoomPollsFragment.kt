@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
-import com.airbnb.mvrx.withState
+import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentRoomPollsBinding
 import im.vector.app.features.roomprofile.RoomProfileArgs
@@ -34,6 +35,8 @@ class RoomPollsFragment : VectorBaseFragment<FragmentRoomPollsBinding>() {
     private val roomProfileArgs: RoomProfileArgs by args()
 
     private val viewModel: RoomPollsViewModel by fragmentViewModel()
+
+    private var tabLayoutMediator: TabLayoutMediator? = null
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomPollsBinding {
         return FragmentRoomPollsBinding.inflate(inflater, container, false)
@@ -46,16 +49,25 @@ class RoomPollsFragment : VectorBaseFragment<FragmentRoomPollsBinding>() {
         setupTabs()
     }
 
+    override fun onDestroyView() {
+        views.roomPollsViewPager.adapter = null
+        tabLayoutMediator?.detach()
+        tabLayoutMediator = null
+        super.onDestroyView()
+    }
+
     private fun setupToolbar() {
         setupToolbar(views.roomPollsToolbar)
                 .allowBack()
     }
 
     private fun setupTabs() {
-        // TODO
-    }
+        views.roomPollsViewPager.adapter = RoomPollsPagerAdapter(this)
 
-    override fun invalidate() = withState(viewModel) {
-        // TODO
+        tabLayoutMediator = TabLayoutMediator(views.roomPollsTabs, views.roomPollsViewPager) { tab, position ->
+            when (position) {
+                0 -> tab.text = getString(R.string.active_polls)
+            }
+        }.also { it.attach() }
     }
 }
