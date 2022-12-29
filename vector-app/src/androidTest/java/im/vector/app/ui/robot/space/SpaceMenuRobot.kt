@@ -89,9 +89,8 @@ class SpaceMenuRobot {
         clickOnSheet(R.id.leaveSpace)
         waitUntilActivityVisible<SpaceLeaveAdvancedActivity> {
             waitUntilViewVisible(ViewMatchers.withId(R.id.roomList))
+            clickOn(R.id.spaceLeaveSelectAll)
+            clickOn(R.id.spaceLeaveButton)
         }
-        clickOn(R.id.spaceLeaveSelectAll)
-        clickOn(R.id.spaceLeaveButton)
-        waitUntilViewVisible(ViewMatchers.withId(R.id.groupListView))
     }
 }
