@@ -14,18 +14,21 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.roomprofile.polls
+package im.vector.app.features.roomprofile.polls.ended
 
-sealed interface PollSummary {
-    data class ActivePoll(
-            val id: String,
-            val creationTimestamp: Long,
-            val title: String,
-    ) : PollSummary
+import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.R
+import im.vector.app.features.roomprofile.polls.RoomPollsFilter
+import im.vector.app.features.roomprofile.polls.list.RoomPollsListFragment
 
-    data class EndedPoll(
-            val id: String,
-            val creationTimestamp: Long,
-            val title: String,
-    ) : PollSummary
+@AndroidEntryPoint
+class RoomEndedPollsFragment : RoomPollsListFragment() {
+
+    override fun getEmptyListTitle(): String {
+        return getString(R.string.room_polls_ended_no_item)
+    }
+
+    override fun getRoomPollsFilter(): RoomPollsFilter {
+        return RoomPollsFilter.ENDED
+    }
 }

@@ -16,7 +16,6 @@
 
 package im.vector.app.features.roomprofile.polls
 
-import androidx.annotation.VisibleForTesting
 import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -24,7 +23,6 @@ import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -40,24 +38,17 @@ class RoomPollsViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<RoomPollsViewModel, RoomPollsViewState> by hiltMavericksViewModelFactory()
 
-    @VisibleForTesting
-    var pollsCollectionJob: Job? = null
-
-    override fun handle(action: RoomPollsAction) {
-        when (action) {
-            is RoomPollsAction.SetFilter -> handleSetFilter(action.filter)
-        }
+    init {
+        observePolls()
     }
 
-    override fun onCleared() {
-        pollsCollectionJob = null
-        super.onCleared()
-    }
-
-    private fun handleSetFilter(filter: RoomPollsFilterType) {
-        pollsCollectionJob?.cancel()
-        pollsCollectionJob = getPollsUseCase.execute(filter)
+    private fun observePolls() {
+        getPollsUseCase.execute()
                 .onEach { setState { copy(polls = it) } }
                 .launchIn(viewModelScope)
+    }
+
+    override fun handle(action: RoomPollsAction) {
+        // do nothing for now
     }
 }

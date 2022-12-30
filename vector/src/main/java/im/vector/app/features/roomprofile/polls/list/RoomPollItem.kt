@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.roomprofile.polls.active
+package im.vector.app.features.roomprofile.polls.list
 
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
@@ -26,7 +26,7 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
 
 @EpoxyModelClass
-abstract class ActivePollItem : VectorEpoxyModel<ActivePollItem.Holder>(R.layout.item_poll) {
+abstract class RoomPollItem : VectorEpoxyModel<RoomPollItem.Holder>(R.layout.item_poll) {
 
     @EpoxyAttribute
     lateinit var formattedDate: String

@@ -18,6 +18,4 @@ package im.vector.app.features.roomprofile.polls
 
 import im.vector.app.core.platform.VectorViewModelAction
 
-sealed interface RoomPollsAction : VectorViewModelAction {
-    data class SetFilter(val filter: RoomPollsFilterType) : RoomPollsAction
-}
+sealed interface RoomPollsAction : VectorViewModelAction

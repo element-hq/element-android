@@ -19,15 +19,19 @@ package im.vector.app.features.roomprofile.polls
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import im.vector.app.features.roomprofile.polls.active.RoomActivePollsFragment
+import im.vector.app.features.roomprofile.polls.ended.RoomEndedPollsFragment
 
 class RoomPollsPagerAdapter(
         private val fragment: Fragment
 ) : FragmentStateAdapter(fragment) {
 
-    override fun getItemCount() = 1
+    override fun getItemCount() = 2
 
     override fun createFragment(position: Int): Fragment {
-        return instantiateFragment(RoomActivePollsFragment::class.java.name)
+        return when (position) {
+            0 -> instantiateFragment(RoomActivePollsFragment::class.java.name)
+            else -> instantiateFragment(RoomEndedPollsFragment::class.java.name)
+        }
     }
 
     private fun instantiateFragment(fragmentName: String): Fragment {

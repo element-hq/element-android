@@ -17,19 +17,16 @@
 package im.vector.app.features.roomprofile.polls
 
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class GetPollsUseCase @Inject constructor() {
 
-    fun execute(filter: RoomPollsFilterType): Flow<List<PollSummary>> {
+    fun execute(): Flow<List<PollSummary>> {
         // TODO unmock and add unit tests
-        return when (filter) {
-            RoomPollsFilterType.ACTIVE -> getActivePolls()
-            RoomPollsFilterType.ENDED -> emptyFlow()
-        }.map { it.sortedByDescending { poll -> poll.creationTimestamp } }
+        return getActivePolls()
+                .map { it.sortedByDescending { poll -> poll.creationTimestamp } }
     }
 
     private fun getActivePolls(): Flow<List<PollSummary.ActivePoll>> {
