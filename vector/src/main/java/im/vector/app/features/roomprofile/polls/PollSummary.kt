@@ -16,13 +16,10 @@
 
 package im.vector.app.features.roomprofile.polls
 
-import com.airbnb.mvrx.MavericksState
-import im.vector.app.features.roomprofile.RoomProfileArgs
-
-data class RoomPollsViewState(
-        val roomId: String,
-        val polls: List<PollSummary> = emptyList(),
-) : MavericksState {
-
-    constructor(roomProfileArgs: RoomProfileArgs) : this(roomId = roomProfileArgs.roomId)
+sealed interface PollSummary {
+    data class ActivePoll(
+            val id: String,
+            val creationTimestamp: Long,
+            val title: String,
+    ) : PollSummary
 }
