@@ -16,6 +16,7 @@
 
 package im.vector.app.features.roomprofile.polls
 
+import androidx.annotation.VisibleForTesting
 import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -39,9 +40,9 @@ class RoomPollsViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<RoomPollsViewModel, RoomPollsViewState> by hiltMavericksViewModelFactory()
 
-    private var pollsCollectionJob: Job? = null
+    @VisibleForTesting
+    var pollsCollectionJob: Job? = null
 
-    // TODO add unit tests
     override fun handle(action: RoomPollsAction) {
         when (action) {
             is RoomPollsAction.SetFilter -> handleSetFilter(action.filter)
