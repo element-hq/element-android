@@ -24,9 +24,12 @@ import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.cleanup
+import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentRoomPollsListBinding
 import im.vector.app.features.roomprofile.polls.PollSummary
+import im.vector.app.features.roomprofile.polls.RoomPollsAction
+import im.vector.app.features.roomprofile.polls.RoomPollsFilter
 import im.vector.app.features.roomprofile.polls.RoomPollsViewModel
 import javax.inject.Inject
 
@@ -51,7 +54,7 @@ class RoomActivePollsFragment :
 
     private fun setupList() {
         roomActivePollsController.listener = this
-        views.activePollsList.adapter = roomActivePollsController.adapter
+        views.activePollsList.configureWith(roomActivePollsController)
     }
 
     override fun onDestroyView() {
@@ -62,6 +65,11 @@ class RoomActivePollsFragment :
     private fun cleanUpList() {
         views.activePollsList.cleanup()
         roomActivePollsController.listener = null
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.handle(RoomPollsAction.SetFilter(RoomPollsFilter.ACTIVE))
     }
 
     override fun invalidate() = withState(viewModel) { viewState ->

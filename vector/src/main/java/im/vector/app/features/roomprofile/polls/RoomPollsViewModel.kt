@@ -23,9 +23,13 @@ import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 class RoomPollsViewModel @AssistedInject constructor(
         @Assisted initialState: RoomPollsViewState,
+        private val getPollsUseCase: GetPollsUseCase,
 ) : VectorViewModel<RoomPollsViewState, RoomPollsAction, RoomPollsViewEvent>(initialState) {
 
     @AssistedFactory
@@ -35,7 +39,24 @@ class RoomPollsViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<RoomPollsViewModel, RoomPollsViewState> by hiltMavericksViewModelFactory()
 
+    private var pollsCollectionJob: Job? = null
+
+    // TODO add unit tests
     override fun handle(action: RoomPollsAction) {
-        // do nothing for now
+        when (action) {
+            is RoomPollsAction.SetFilter -> handleSetFilter(action.filter)
+        }
+    }
+
+    override fun onCleared() {
+        pollsCollectionJob = null
+        super.onCleared()
+    }
+
+    private fun handleSetFilter(filter: RoomPollsFilter) {
+        pollsCollectionJob?.cancel()
+        pollsCollectionJob = getPollsUseCase.execute(filter)
+                .onEach { setState { copy(polls = it) } }
+                .launchIn(viewModelScope)
     }
 }
