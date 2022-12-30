@@ -3191,7 +3191,8 @@
     <string name="open_poll_option_description">Voters see results as soon as they have voted</string>
     <string name="closed_poll_option_title">Closed poll</string>
     <string name="closed_poll_option_description">Results are only revealed when you end the poll</string>
-    <string name="active_polls">Active polls</string>
+    <string name="room_polls_active">Active polls</string>
+    <string name="room_polls_active_no_item">There are no active polls in this room</string>
 
     <!-- Location -->
     <string name="location_activity_title_static_sharing">Share location</string>

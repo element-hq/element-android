@@ -20,9 +20,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
@@ -55,7 +57,8 @@ class RoomActivePollsFragment :
 
     private fun setupList() {
         roomActivePollsController.listener = this
-        views.activePollsList.configureWith(roomActivePollsController)
+        views.roomPollsList.configureWith(roomActivePollsController)
+        views.roomPollsEmptyTitle.text = getString(R.string.room_polls_active_no_item)
     }
 
     override fun onDestroyView() {
@@ -64,7 +67,7 @@ class RoomActivePollsFragment :
     }
 
     private fun cleanUpList() {
-        views.activePollsList.cleanup()
+        views.roomPollsList.cleanup()
         roomActivePollsController.listener = null
     }
 
@@ -79,6 +82,7 @@ class RoomActivePollsFragment :
 
     private fun renderList(polls: List<PollSummary.ActivePoll>) {
         roomActivePollsController.setData(polls)
+        views.roomPollsEmptyTitle.isVisible = polls.isEmpty()
     }
 
     override fun onPollClicked(pollId: String) {
