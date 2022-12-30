@@ -25,7 +25,8 @@
         android:src="@drawable/ic_attachment_poll"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/pollActiveDate"
-        app:tint="?vctr_content_secondary" />
+        app:tint="?vctr_content_secondary"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/pollActiveTitle"

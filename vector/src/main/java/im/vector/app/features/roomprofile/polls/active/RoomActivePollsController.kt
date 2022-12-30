@@ -33,7 +33,9 @@ class RoomActivePollsController @Inject constructor(
     var listener: Listener? = null
 
     override fun buildModels(data: List<PollSummary.ActivePoll>?) {
-        if (data == null) return
+        if (data.isNullOrEmpty()) {
+            return
+        }
 
         val host = this
         data.forEach { poll ->
