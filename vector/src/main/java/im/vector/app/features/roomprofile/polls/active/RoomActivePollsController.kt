@@ -39,7 +39,7 @@ class RoomActivePollsController @Inject constructor(
         data.forEach { poll ->
             activePollItem {
                 id(poll.id)
-                formattedDate(host.dateFormatter.format(poll.creationTimestamp, DateFormatKind.EDIT_HISTORY_HEADER))
+                formattedDate(host.dateFormatter.format(poll.creationTimestamp, DateFormatKind.TIMELINE_DAY_DIVIDER))
                 title(poll.title)
                 clickListener {
                     host.listener?.onPollClicked(poll.id)
