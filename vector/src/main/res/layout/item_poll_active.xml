@@ -10,6 +10,7 @@
         android:id="@+id/pollActiveDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:textAppearance="@style/TextAppearance.Vector.Caption"
         android:textColor="?vctr_content_tertiary"
         app:layout_constraintStart_toStartOf="parent"
