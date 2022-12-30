@@ -26,7 +26,7 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
 
 @EpoxyModelClass
-abstract class ActivePollItem : VectorEpoxyModel<ActivePollItem.Holder>(R.layout.item_poll_active) {
+abstract class ActivePollItem : VectorEpoxyModel<ActivePollItem.Holder>(R.layout.item_poll) {
 
     @EpoxyAttribute
     lateinit var formattedDate: String
