@@ -38,6 +38,7 @@ class RoomActivePollsController @Inject constructor(
         val host = this
         data.forEach { poll ->
             activePollItem {
+                id(poll.id)
                 formattedDate(host.dateFormatter.format(poll.creationTimestamp, DateFormatKind.EDIT_HISTORY_HEADER))
                 title(poll.title)
                 clickListener {
