@@ -23,7 +23,6 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.flowOf
-import org.amshove.kluent.shouldNotBeNull
 import org.junit.Rule
 import org.junit.Test
 
@@ -45,28 +44,22 @@ class RoomPollsViewModelTest {
     }
 
     @Test
-    fun `given SetFilter action when handle then useCase is called with given filter and viewState is updated`() {
+    fun `given viewModel when created then polls list is observed and viewState is updated`() {
         // Given
-        val filter = RoomPollsFilterType.ACTIVE
-        val action = RoomPollsAction.SetFilter(filter = filter)
         val polls = listOf(givenAPollSummary())
-        every { fakeGetPollsUseCase.execute(any()) } returns flowOf(polls)
-        val viewModel = createViewModel()
+        every { fakeGetPollsUseCase.execute() } returns flowOf(polls)
         val expectedViewState = initialState.copy(polls = polls)
 
         // When
+        val viewModel = createViewModel()
         val viewModelTest = viewModel.test()
-        viewModel.pollsCollectionJob = null
-        viewModel.handle(action)
 
         // Then
         viewModelTest
                 .assertLatestState(expectedViewState)
                 .finish()
-        viewModel.pollsCollectionJob.shouldNotBeNull()
         verify {
-            viewModel.pollsCollectionJob?.cancel()
-            fakeGetPollsUseCase.execute(filter)
+            fakeGetPollsUseCase.execute()
         }
     }
 
