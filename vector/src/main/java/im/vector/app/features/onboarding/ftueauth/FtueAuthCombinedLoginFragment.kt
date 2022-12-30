@@ -16,15 +16,23 @@
 
 package im.vector.app.features.onboarding.ftueauth
 
+import android.app.Activity
 import android.content.Context
-import android.os.Build
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.autofill.HintConstants
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import com.google.firebase.FirebaseException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.auth.PhoneAuthOptions
+import com.google.firebase.auth.PhoneAuthProvider
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.clearErrorOnChange
@@ -52,6 +60,7 @@ import io.realm.Realm
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import reactivecircus.flowbinding.android.widget.textChanges
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -62,6 +71,28 @@ class FtueAuthCombinedLoginFragment :
     @Inject lateinit var loginErrorParser: LoginErrorParser
     @Inject lateinit var vectorFeatures: VectorFeatures
     @Inject lateinit var phoneNumberParser: PhoneNumberParser
+
+    private lateinit var callbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
+    private lateinit var countryCode: String
+    private lateinit var phoneNumber: String
+    private lateinit var initialDeviceName: String
+    private var tempPassword = "12345678"
+
+    private lateinit var auth: FirebaseAuth
+
+    private val intentLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            viewModel.handle(
+                    OnboardingAction.AuthenticateAction.LoginPhoneNumber(
+                            countryCode,
+                            phoneNumber,
+                            phoneNumber,
+                            tempPassword,
+                            initialDeviceName
+                    )
+            )
+        }
+    }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueCombinedLoginBinding {
         return FragmentFtueCombinedLoginBinding.inflate(inflater, container, false)
@@ -80,6 +111,40 @@ class FtueAuthCombinedLoginFragment :
 
         viewModel.onEach(OnboardingViewState::canLoginWithQrCode) {
             configureQrCodeLoginButtonVisibility(it)
+        }
+
+        auth = FirebaseAuth.getInstance()
+
+        callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+            override fun onVerificationCompleted(credential: PhoneAuthCredential) {
+                viewModel.handle(
+                        OnboardingAction.AuthenticateAction.LoginPhoneNumber(
+                                countryCode,
+                                phoneNumber,
+                                phoneNumber,
+                                tempPassword,
+                                initialDeviceName
+                        )
+                )
+            }
+
+            override fun onVerificationFailed(e: FirebaseException) {
+                println(e.message)
+                Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onCodeSent(
+                    verificationId: String,
+                    token: PhoneAuthProvider.ForceResendingToken
+            ) {
+                val intent = Intent(context, OtpActivity::class.java)
+                intent.putExtra("storedVerificationId", verificationId)
+                intent.putExtra("resendToken", token)
+                intent.putExtra("phoneNumber", phoneNumber)
+                intent.putExtra("initialDeviceName", initialDeviceName)
+                intent.putExtra("countryCode", countryCode)
+                intentLauncher.launch(intent)
+            }
         }
     }
 
@@ -121,20 +186,21 @@ class FtueAuthCombinedLoginFragment :
                         .onUsernameOrIdError { views.loginInput.error = it }
                         .onPasswordError { views.loginPasswordInput.error = it }
                         .onValid { _, _ ->
-                            val initialDeviceName = getString(R.string.login_default_session_public_name)
-                            val preferences = Realm.getApplicationContext()?.getSharedPreferences("bigstar", Context.MODE_PRIVATE)
-                            val editor = preferences?.edit()
+                            initialDeviceName = getString(R.string.login_default_session_public_name)
+                            this.countryCode = countryCode
+                            this.phoneNumber = phoneNumber
+                            val editor = Realm.getApplicationContext()?.getSharedPreferences("bigstar", Context.MODE_PRIVATE)?.edit()
                             editor?.putString("phone_number", phoneNumber)
                             editor?.apply()
-                            viewModel.handle(
-                                    OnboardingAction.AuthenticateAction.LoginPhoneNumber(
-                                            countryCode,
-                                            phoneNumber,
-                                            phoneNumber,
-                                            "12345678",
-                                            initialDeviceName
-                                    )
-                            )
+
+                            val options = PhoneAuthOptions.newBuilder(auth)
+                                    .setPhoneNumber(phoneNumber)       // Phone number to verify
+                                    .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+                                    .setActivity(requireActivity())                 // Activity (for callback binding)
+                                    .setCallbacks(callbacks)          // OnVerificationStateChangedCallbacks
+                                    .build()
+                            PhoneAuthProvider.verifyPhoneNumber(options)
+
                         }
             }
         }
@@ -216,9 +282,7 @@ class FtueAuthCombinedLoginFragment :
     private fun isUsernameAndPasswordVisible() = views.loginEntryGroup.isVisible
 
     private fun setupAutoFill() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            views.loginInput.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_USERNAME)
-            views.loginPasswordInput.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_PASSWORD)
-        }
+        views.loginInput.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_USERNAME)
+        views.loginPasswordInput.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_PASSWORD)
     }
 }

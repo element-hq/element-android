@@ -133,7 +133,7 @@
         </activity>
 
         <activity
-            android:name="im.vector.app.features.firebaseauth.OtpActivity"
+            android:name="im.vector.app.features.onboarding.ftueauth.OtpActivity"
             android:exported="true">
         </activity>
 

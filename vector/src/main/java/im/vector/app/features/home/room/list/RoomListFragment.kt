@@ -20,16 +20,11 @@ import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
-import com.aemerse.slider.ImageCarousel
-import com.aemerse.slider.listener.CarouselListener
-import com.aemerse.slider.model.CarouselItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -40,6 +35,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.aemerse.slider.ImageCarousel
+import com.aemerse.slider.listener.CarouselListener
+import com.aemerse.slider.model.CarouselItem
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.OnModelBuildFinishedListener
 import com.airbnb.mvrx.args
@@ -55,7 +53,6 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.core.utils.LiveEvent
 import im.vector.app.databinding.FragmentRoomListBinding
@@ -73,7 +70,6 @@ import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedA
 import im.vector.app.features.home.room.list.widget.NotifsFabMenuView
 import im.vector.app.features.matrixto.OriginOfMatrixTo
 import im.vector.app.features.notifications.NotificationDrawerManager
-import im.vector.app.features.workers.signout.SignOutUiWorker
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -153,13 +149,11 @@ class RoomListFragment :
 
         discoveryViewModel.handle(DiscoverySettingsAction.ChangeIdentityServer(getString(R.string.matrix_org_server_url)))
         rootUrl = getString(R.string.backend_server_url)
+    }
 
-        if (!requireActivity().getSharedPreferences("bigstar", AppCompatActivity.MODE_PRIVATE).getBoolean(
-                        "isLoggedIn",
-                        false
-                )) {
-            SignOutUiWorker(requireActivity()).doSignOut()
-        }
+    override fun onResume() {
+        super.onResume()
+        setupAdBanners()
     }
 
     private fun citiesSelection() {
@@ -175,7 +169,7 @@ class RoomListFragment :
 
     private fun setupAdBanners() {
         val carousel: ImageCarousel = views.carousel
-        var ads = JSONArray();
+        var ads = JSONArray()
 
         carousel.registerLifecycle(lifecycle)
         carousel.carouselListener = object : CarouselListener {
@@ -222,7 +216,7 @@ class RoomListFragment :
                 with(url.openConnection() as HttpURLConnection) {
                     inputStream.bufferedReader().use {
                         it.readLines().forEach { line ->
-                            ads = JSONArray(line);
+                            ads = JSONArray(line)
                             for (i in 0 until ads.length()) {
                                 list.add(
                                         CarouselItem(
@@ -246,11 +240,7 @@ class RoomListFragment :
         val connectivityManager =
                 context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val capabilities =
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
-                } else {
-                    TODO("VERSION.SDK_INT < M")
-                }
+                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
         if (capabilities != null) {
             if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
                 Timber.tag("Internet").i("NetworkCapabilities.TRANSPORT_CELLULAR")

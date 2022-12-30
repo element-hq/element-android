@@ -9,7 +9,6 @@
     android:paddingTop="0dp"
     android:paddingBottom="0dp">
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         tools:context=".features.firebaseauth.PhoneNumberActivity"

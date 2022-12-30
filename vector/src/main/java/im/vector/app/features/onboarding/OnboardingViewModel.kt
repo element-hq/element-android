@@ -48,7 +48,6 @@ import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
 import im.vector.app.features.onboarding.OnboardingAction.AuthenticateAction
 import im.vector.app.features.onboarding.StartAuthenticationFlowUseCase.StartAuthenticationResult
-import io.realm.Realm
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
@@ -360,10 +359,6 @@ class OnboardingViewModel @AssistedInject constructor(
                             overrideNextStage?.invoke() ?: _viewEvents.post(OnboardingViewEvents.DisplayRegistrationStage(it.stage))
                         }
                         is RegistrationActionHandler.Result.RegistrationComplete -> {
-                            val preferences = Realm.getApplicationContext()?.getSharedPreferences("bigstar", Context.MODE_PRIVATE)
-                            val editor = preferences?.edit()
-                            editor?.putBoolean("isLoggedIn", true)
-                            editor?.apply()
                             onSessionCreated(
                                     it.session,
                                     authenticationDescription = awaitState().selectedAuthenticationState.description
