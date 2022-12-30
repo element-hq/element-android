@@ -28,6 +28,9 @@ import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.viewModel
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.FirebaseApp
+import com.google.firebase.appcheck.FirebaseAppCheck
+import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.startSyncing
@@ -118,6 +121,8 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
         }
     }
 
+
+
     private val startAppViewModel: StartAppViewModel by viewModel()
 
     override fun getBinding() = ActivityMainBinding.inflate(layoutInflater)
@@ -147,6 +152,11 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                 .launchIn(lifecycleScope)
 
         startAppViewModel.handle(StartAppAction.StartApp)
+        FirebaseApp.initializeApp(/*context=*/this)
+        val firebaseAppCheck = FirebaseAppCheck.getInstance()
+        firebaseAppCheck.installAppCheckProviderFactory(
+                PlayIntegrityAppCheckProviderFactory.getInstance()
+        )
     }
 
     private fun renderState(state: StartAppViewState) {

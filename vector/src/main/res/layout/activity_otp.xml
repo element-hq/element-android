@@ -86,7 +86,6 @@
         app:layout_constraintTop_toBottomOf="@id/phoneConfirmationHeaderSubtitle" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:visibility="invisible"
         android:id="@+id/phoneConfirmationInput"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
