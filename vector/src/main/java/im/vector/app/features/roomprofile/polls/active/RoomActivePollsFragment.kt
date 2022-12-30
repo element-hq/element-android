@@ -31,6 +31,7 @@ import im.vector.app.features.roomprofile.polls.PollSummary
 import im.vector.app.features.roomprofile.polls.RoomPollsAction
 import im.vector.app.features.roomprofile.polls.RoomPollsFilter
 import im.vector.app.features.roomprofile.polls.RoomPollsViewModel
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -82,5 +83,6 @@ class RoomActivePollsFragment :
 
     override fun onPollClicked(pollId: String) {
         // TODO navigate to details
+        Timber.d("poll with id $pollId clicked")
     }
 }
