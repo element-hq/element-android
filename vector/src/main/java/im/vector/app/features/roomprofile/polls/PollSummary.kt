@@ -17,15 +17,19 @@
 package im.vector.app.features.roomprofile.polls
 
 sealed interface PollSummary {
+    val id: String
+    val creationTimestamp: Long
+    val title: String
+
     data class ActivePoll(
-            val id: String,
-            val creationTimestamp: Long,
-            val title: String,
+            override val id: String,
+            override val creationTimestamp: Long,
+            override val title: String,
     ) : PollSummary
 
     data class EndedPoll(
-            val id: String,
-            val creationTimestamp: Long,
-            val title: String,
+            override val id: String,
+            override val creationTimestamp: Long,
+            override val title: String,
     ) : PollSummary
 }

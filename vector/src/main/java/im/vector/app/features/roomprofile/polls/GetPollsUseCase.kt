@@ -25,38 +25,59 @@ class GetPollsUseCase @Inject constructor() {
 
     fun execute(): Flow<List<PollSummary>> {
         // TODO unmock and add unit tests
-        return getActivePolls()
+        return flowOf(getActivePolls() + getEndedPolls())
                 .map { it.sortedByDescending { poll -> poll.creationTimestamp } }
     }
 
-    private fun getActivePolls(): Flow<List<PollSummary.ActivePoll>> {
-        return flowOf(
-                listOf(
-                        PollSummary.ActivePoll(
-                                id = "id1",
-                                // 2022/06/28 UTC+1
-                                creationTimestamp = 1656367200000,
-                                title = "Which charity would you like to support?"
-                        ),
-                        PollSummary.ActivePoll(
-                                id = "id2",
-                                // 2022/06/26 UTC+1
-                                creationTimestamp = 1656194400000,
-                                title = "Which sport should the pupils do this year?"
-                        ),
-                        PollSummary.ActivePoll(
-                                id = "id3",
-                                // 2022/06/24 UTC+1
-                                creationTimestamp = 1656021600000,
-                                title = "What type of food should we have at the party?"
-                        ),
-                        PollSummary.ActivePoll(
-                                id = "id4",
-                                // 2022/06/22 UTC+1
-                                creationTimestamp = 1655848800000,
-                                title = "What film should we show at the end of the year party?"
-                        ),
-                )
+    private fun getActivePolls(): List<PollSummary.ActivePoll> {
+        return listOf(
+                PollSummary.ActivePoll(
+                        id = "id1",
+                        // 2022/06/28 UTC+1
+                        creationTimestamp = 1656367200000,
+                        title = "Which charity would you like to support?"
+                ),
+                PollSummary.ActivePoll(
+                        id = "id2",
+                        // 2022/06/26 UTC+1
+                        creationTimestamp = 1656194400000,
+                        title = "Which sport should the pupils do this year?"
+                ),
+                PollSummary.ActivePoll(
+                        id = "id3",
+                        // 2022/06/24 UTC+1
+                        creationTimestamp = 1656021600000,
+                        title = "What type of food should we have at the party?"
+                ),
+                PollSummary.ActivePoll(
+                        id = "id4",
+                        // 2022/06/22 UTC+1
+                        creationTimestamp = 1655848800000,
+                        title = "What film should we show at the end of the year party?"
+                ),
+        )
+    }
+
+    private fun getEndedPolls(): List<PollSummary.EndedPoll> {
+        return listOf(
+                PollSummary.EndedPoll(
+                        id = "id1-ended",
+                        // 2022/06/28 UTC+1
+                        creationTimestamp = 1656367200000,
+                        title = "Which charity would you like to support?"
+                ),
+                PollSummary.EndedPoll(
+                        id = "id2-ended",
+                        // 2022/06/26 UTC+1
+                        creationTimestamp = 1656194400000,
+                        title = "Where should we do the offsite?"
+                ),
+                PollSummary.EndedPoll(
+                        id = "id3-ended",
+                        // 2022/06/24 UTC+1
+                        creationTimestamp = 1656021600000,
+                        title = "What type of food should we have at the party?"
+                ),
         )
     }
 }
