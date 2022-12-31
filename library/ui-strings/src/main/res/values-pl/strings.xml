@@ -39,7 +39,7 @@
     <string name="notice_room_third_party_invite">%1$s wysłał(a) zaproszenie do %2$s aby dołączył(a) do tego pokoju</string>
     <string name="notice_room_third_party_registered_invite">%1$s zaakceptował(a) zaproszenie dla %2$s</string>
     <string name="notice_crypto_error_unknown_inbound_session_id">Urządzenie nadawcy nie wysłało nam kluczy do tej wiadomości.</string>
-    <string name="notice_room_update">%s zakutalizował(a) ten pokój.</string>
+    <string name="notice_room_update">%s zaktualizował(a) ten pokój.</string>
     <string name="initial_sync_start_importing_account">Wstępna synchronizacja:
 \nImportowanie konta…</string>
     <string name="initial_sync_start_importing_account_crypto">Wstępna synchronizacja:
