@@ -136,10 +136,13 @@ dependencies {
 
     //noinspection GradleDynamicVersion
     implementation 'com.amplitude:android-sdk:3.35.1'
+    implementation 'com.google.firebase:firebase-core:21.1.1'
     implementation 'com.giphy.sdk:ui:2.3.0'
     implementation 'org.brotli:dec:0.1.2'
     implementation platform('com.google.firebase:firebase-bom:31.1.1')
     implementation 'com.google.firebase:firebase-appcheck-playintegrity'
+    implementation 'com.google.android.gms:play-services-safetynet:18.0.1'
+    implementation 'com.google.firebase:firebase-appcheck-safetynet:16.1.0'
 
     implementation libs.squareup.moshi
     implementation 'com.google.android.gms:play-services-basement:18.1.0'
