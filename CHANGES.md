@@ -1,4 +1,4 @@
-Changes in Element v.5.16 (2022-12-29)
+Changes in Element v1.5.16 (2022-12-29)
 ======================================
 
 Features ✨
