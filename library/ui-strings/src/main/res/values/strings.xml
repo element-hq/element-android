@@ -3501,4 +3501,7 @@
     <string name="message_reply_to_sender_sent_video">sent a video.</string>
     <string name="message_reply_to_sender_sent_sticker">sent a sticker.</string>
     <string name="message_reply_to_sender_created_poll">created a poll.</string>
+
+    <string name="settings_access_token">Access Token</string>
+    <string name="settings_access_token_summary">Your access token gives full access to your account. Do not share it with anyone.</string>
 </resources>
