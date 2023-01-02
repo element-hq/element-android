@@ -3,7 +3,7 @@
     <string name="notice_room_invite_no_invitee">Convite de %s</string>
     <string name="notice_room_invite">%1$s convidou %2$s</string>
     <string name="notice_room_invite_you">%1$s convidou você</string>
-    <string name="notice_room_join">%1$s juntou-se à sala</string>
+    <string name="notice_room_join">%1$s entrou na sala</string>
     <string name="notice_room_leave">%1$s saiu da sala</string>
     <string name="notice_room_reject">%1$s rejeitou o convite</string>
     <string name="notice_room_remove">%1$s removeu %2$s</string>
@@ -43,7 +43,7 @@
     <string name="notice_room_created">%1$s criou a sala</string>
     <string name="notice_room_created_by_you">Você criou a sala</string>
     <string name="notice_room_invite_by_you">Você convidou %1$s</string>
-    <string name="notice_room_join_by_you">Você juntou-se à sala</string>
+    <string name="notice_room_join_by_you">Você entrou na sala</string>
     <string name="notice_room_leave_by_you">Você saiu da sala</string>
     <string name="notice_room_reject_by_you">Você rejeitou o convite</string>
     <string name="notice_room_remove_by_you">Você removeu %1$s</string>
@@ -89,31 +89,31 @@
     <string name="notice_power_level_changed_by_you">Você mudou o nível de poder de %1$s.</string>
     <string name="notice_power_level_changed">%1$s mudou o nível de poder de %2$s.</string>
     <string name="notice_power_level_diff">%1$s de %2$s para %3$s</string>
-    <string name="initial_sync_start_importing_account">Sinc inicial:
+    <string name="initial_sync_start_importing_account">Sincronização inicial:
 \nImportando conta…</string>
-    <string name="initial_sync_start_importing_account_crypto">Sinc inicial:
-\nImportando crypto</string>
-    <string name="initial_sync_start_importing_account_rooms">Sinc inicial:
+    <string name="initial_sync_start_importing_account_crypto">Sincronização inicial:
+\nImportando criptografia</string>
+    <string name="initial_sync_start_importing_account_rooms">Sincronização inicial:
 \nImportando salas</string>
-    <string name="initial_sync_start_importing_account_joined_rooms">Sinc inicial:
+    <string name="initial_sync_start_importing_account_joined_rooms">Sincronização inicial:
 \nCarregando suas conversas
-\nSe você tem se juntado a muitas salas, isto podia levar um tempo</string>
-    <string name="initial_sync_start_importing_account_invited_rooms">Sinc inicial:
-\nImportando salas convidadas</string>
-    <string name="initial_sync_start_importing_account_left_rooms">Sinc inicial:
-\nImportando salas saídas</string>
-    <string name="initial_sync_start_importing_account_data">Sinc inicial:
+\nSe você entrou em muitas salas, isso pode demorar</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Sincronização inicial:
+\nImportando salas para as quais foi convidado</string>
+    <string name="initial_sync_start_importing_account_left_rooms">Sincronização inicial:
+\nImportando salas das quais saiu</string>
+    <string name="initial_sync_start_importing_account_data">Sincronização inicial:
 \nImportando dados de conta</string>
     <string name="event_status_sending_message">Enviando mensagem…</string>
-    <string name="notice_room_invite_no_invitee_with_reason">Convite de %1$s. Razão: %2$s</string>
-    <string name="notice_room_invite_no_invitee_with_reason_by_you">Seu convite. Razão: %1$s</string>
-    <string name="notice_room_invite_with_reason">%1$s convidou %2$s. Razão: %3$s</string>
-    <string name="notice_room_invite_with_reason_by_you">Você convidou %1$s. Razão: %2$s</string>
-    <string name="notice_room_invite_you_with_reason">%1$s convidou você. Razão: %2$s</string>
-    <string name="notice_room_join_with_reason">%1$s juntou-se à sala. Razão: %2$s</string>
-    <string name="notice_room_join_with_reason_by_you">Você juntou-se à sala. Razão: %1$s</string>
-    <string name="notice_room_leave_with_reason">%1$s saiu da sala. Razão: %2$s</string>
-    <string name="notice_room_leave_with_reason_by_you">Você saiu da sala. Razão: %1$s</string>
+    <string name="notice_room_invite_no_invitee_with_reason">Convite de %1$s. Motivo: %2$s</string>
+    <string name="notice_room_invite_no_invitee_with_reason_by_you">Seu convite. Motivo: %1$s</string>
+    <string name="notice_room_invite_with_reason">%1$s convidou %2$s. Motivo: %3$s</string>
+    <string name="notice_room_invite_with_reason_by_you">Você convidou %1$s. Motivo: %2$s</string>
+    <string name="notice_room_invite_you_with_reason">%1$s convidou você. Motivo: %2$s</string>
+    <string name="notice_room_join_with_reason">%1$s entrou na sala. Motivo: %2$s</string>
+    <string name="notice_room_join_with_reason_by_you">Você entrou na sala. Motivo: %1$s</string>
+    <string name="notice_room_leave_with_reason">%1$s saiu da sala. Motivo: %2$s</string>
+    <string name="notice_room_leave_with_reason_by_you">Você saiu da sala. Motivo: %1$s</string>
     <string name="notice_room_reject_with_reason">%1$s rejeitou o convite. Razão: %2$s</string>
     <string name="notice_room_reject_with_reason_by_you">Você rejeitou o convite. Razão: %1$s</string>
     <string name="notice_room_remove_with_reason">%1$s expulsou %2$s. Razão: %3$s</string>
@@ -160,10 +160,10 @@
     <string name="notice_direct_room_guest_access_forbidden">%1$s tem prevenido visitantes de se juntarem à sala.</string>
     <string name="notice_direct_room_guest_access_can_join_by_you">Você tem permitido visitantes se juntarem aqui.</string>
     <string name="notice_direct_room_guest_access_can_join">%1$s tem permitido visitantes se juntarem aqui.</string>
-    <string name="notice_direct_room_leave_with_reason_by_you">Você saiu. Razão: %1$s</string>
-    <string name="notice_direct_room_leave_with_reason">%1$s saiu. Razão: %2$s</string>
-    <string name="notice_direct_room_join_with_reason_by_you">Você juntou-se. Razão: %1$s</string>
-    <string name="notice_direct_room_join_with_reason">%1$s juntou-se. Razão: %2$s</string>
+    <string name="notice_direct_room_leave_with_reason_by_you">Você saiu. Motivo: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason">%1$s saiu. Motivo: %2$s</string>
+    <string name="notice_direct_room_join_with_reason_by_you">Você entrou. Motivo: %1$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$s entrou. Motivo: %2$s</string>
     <string name="notice_direct_room_third_party_revoked_invite_by_you">Você revogou o convite para %1$s</string>
     <string name="notice_direct_room_third_party_revoked_invite">%1$s revogou o convite para %2$s</string>
     <string name="notice_direct_room_third_party_invite_by_you">Você convidou %1$s</string>
@@ -174,8 +174,8 @@
     <string name="notice_made_future_direct_room_visibility">%1$s fez mensagens futuras visíveis para %2$s</string>
     <string name="notice_direct_room_leave_by_you">Você saiu da sala</string>
     <string name="notice_direct_room_leave">%1$s saiu da sala</string>
-    <string name="notice_direct_room_join_by_you">Você juntou-se</string>
-    <string name="notice_direct_room_join">%1$s juntou-se</string>
+    <string name="notice_direct_room_join_by_you">Você entrou</string>
+    <string name="notice_direct_room_join">%1$s entrou</string>
     <string name="notice_direct_room_created_by_you">Você criou a discussão</string>
     <string name="notice_direct_room_created">%1$s criou a discussão</string>
     <string name="room_displayname_empty_room_was">Sala vazia (era %s)</string>
@@ -1698,7 +1698,7 @@
     <string name="secure_backup_reset_all_no_other_devices">Somente faça isto se você não tem nenhum outro dispositivo com o qual você pode verificar este dispositivo.</string>
     <string name="secure_backup_reset_all">Resettar tudo</string>
     <string name="bad_passphrase_key_reset_all_action">Esqueceu ou perdeu todas as opções de recuperação\? Resette tudo</string>
-    <string name="direct_room_created_summary_item_by_you">Você juntou-se.</string>
+    <string name="direct_room_created_summary_item_by_you">Você entrou.</string>
     <string name="direct_room_encryption_enabled_tile_description">Mensagens neste chat são encriptadas ponta-a-ponta.</string>
     <string name="direct_room_profile_section_more_leave">Sair</string>
     <string name="direct_room_profile_section_more_settings">Configurações</string>
@@ -1722,7 +1722,7 @@
     <string name="action_reset">Resettar</string>
     <string name="direct_room_join_rules_invite">%1$s fez isto somente convite.</string>
     <string name="direct_room_join_rules_invite_by_you">Você fez isto somente convite.</string>
-    <string name="direct_room_created_summary_item">%s juntou-se.</string>
+    <string name="direct_room_created_summary_item">%s entrou.</string>
     <string name="search_banned_user_hint">Filtrar usuárias(os) banidas(os)</string>
     <string name="settings_troubleshoot_test_push_loop_title">Testar Push</string>
     <plurals name="notification_invitations">
@@ -1898,10 +1898,10 @@
     <string name="settings_category_room_directory">Diretório de salas</string>
     <string name="dialog_edit_hint">Novo valor</string>
     <string name="action_switch">Alterar</string>
-    <string name="initial_sync_start_downloading">Sinc inicial:
+    <string name="initial_sync_start_downloading">Sincronização inicial:
 \nFazendo download de dados…</string>
-    <string name="initial_sync_start_server_computing">Sinc inicial:
-\nEsperando por resposta de servidor…</string>
+    <string name="initial_sync_start_server_computing">Sincronização inicial:
+\nEsperando pela resposta do servidor…</string>
     <string name="a11y_trust_level_trusted">Nível de confiança confiado</string>
     <string name="a11y_trust_level_warning">Nível de confiança alerta</string>
     <string name="event_status_delete_all_failed_dialog_message">Você tem certeza que você quer deletar todas as mensagens não-enviadas nesta sala\?</string>
@@ -2470,7 +2470,7 @@
 \n%s
 \n
 \nNote que esta ação vai recomeçar o app e pode levar algum tempo.</string>
-    <string name="initial_sync_request_title">Requisição de sinc inicial</string>
+    <string name="initial_sync_request_title">Requisição de sincronização inicial</string>
     <string name="settings_show_latest_profile_description">Mostrar a info de perfil mais recente (avatar e nome de exibição) para todas as mensagens.</string>
     <string name="settings_show_latest_profile">Mostrar info de usuária(o) mais recente</string>
     <string name="a11y_presence_busy">Ocupada(o)</string>
