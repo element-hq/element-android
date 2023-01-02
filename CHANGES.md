@@ -1,4 +1,16 @@
-Changes in Element v.5.16 (2022-12-29)
+Changes in Element v1.5.18 (2023-01-02)
+=======================================
+
+This release fixes a bunch of recent regressions. Most of them were not pushed to production hopefully. Current production version is 1.5.11.
+Threads are now enabled by default, and this may let the application perform an initial sync.
+Testers on the PlayStore may have experimented some issues like empty room list, or incomplete room state (room name missing, etc.), or even crashing due to initial sync not using lazy loading of room members. All those issues have been fixed, but to fix your current state, please clear cache once you get the release 1.5.18.
+
+Bugfixes 🐛
+----------
+ - Start DM will create a deadlock if user profile was never loaded ([#7870](https://github.com/vector-im/element-android/issues/7870))
+ 
+
+Changes in Element v1.5.16 (2022-12-29)
 ======================================
 
 Features ✨
