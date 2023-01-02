@@ -78,6 +78,7 @@ class CheckIfCanReplyEventUseCaseTest {
                 MessageType.MSGTYPE_AUDIO,
                 MessageType.MSGTYPE_FILE,
                 MessageType.MSGTYPE_POLL_START,
+                MessageType.MSGTYPE_POLL_END,
                 MessageType.MSGTYPE_BEACON_INFO,
                 MessageType.MSGTYPE_LOCATION
         )

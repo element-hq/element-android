@@ -19,6 +19,7 @@ package im.vector.app.features.home.room.detail.timeline.render
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.StringProvider
+import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.getPollQuestion
 import org.matrix.android.sdk.api.session.events.model.isAudioMessage
 import org.matrix.android.sdk.api.session.events.model.isFileMessage
@@ -93,10 +94,13 @@ class ProcessBodyOfReplyToEventUseCase @Inject constructor(
                     )
                 }
                 repliedToEvent.isPoll() -> {
+                    val fallbackText = if (repliedToEvent.type in EventType.POLL_START.values)
+                        stringProvider.getString(R.string.message_reply_to_sender_created_poll)
+                    else stringProvider.getString(R.string.message_reply_to_sender_ended_poll)
                     matrixFormattedBody.replaceRange(
                             afterBreakingLineIndex,
                             endOfBlockQuoteIndex,
-                            repliedToEvent.getPollQuestion() ?: stringProvider.getString(R.string.message_reply_to_sender_created_poll)
+                            repliedToEvent.getPollQuestion() ?: fallbackText
                     )
                 }
                 repliedToEvent.isLiveLocation() -> {
