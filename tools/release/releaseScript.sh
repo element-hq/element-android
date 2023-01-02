@@ -88,6 +88,14 @@ fi
 printf "OK\n"
 
 printf "\n================================================================================\n"
+printf "Ensuring main and develop branches are up to date...\n"
+
+git checkout main
+git pull
+git checkout develop
+git pull
+
+printf "\n================================================================================\n"
 # Guessing version to propose a default version
 versionMajorCandidate=`grep "ext.versionMajor" ./vector-app/build.gradle | cut  -d " " -f3`
 versionMinorCandidate=`grep "ext.versionMinor" ./vector-app/build.gradle | cut  -d " " -f3`
@@ -102,14 +110,6 @@ versionMajor=`echo ${version} | cut  -d "." -f1`
 versionMinor=`echo ${version} | cut  -d "." -f2`
 versionPatch=`echo ${version} | cut  -d "." -f3`
 nextPatchVersion=$((versionPatch + 2))
-
-printf "\n================================================================================\n"
-printf "Ensuring main and develop branches are up to date...\n"
-
-git checkout main
-git pull
-git checkout develop
-git pull
 
 printf "\n================================================================================\n"
 printf "Starting the release ${version}\n"
