@@ -3502,4 +3502,5 @@
     <string name="message_reply_to_sender_sent_sticker">sent a sticker.</string>
     <string name="message_reply_to_sender_created_poll">created a poll.</string>
     <string name="message_reply_to_sender_ended_poll">ended a poll.</string>
+    <string name="message_reply_to_ended_poll_preview">Ended poll</string>
 </resources>

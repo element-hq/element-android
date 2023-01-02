@@ -26,6 +26,8 @@ import org.matrix.android.sdk.api.session.events.model.isFileMessage
 import org.matrix.android.sdk.api.session.events.model.isImageMessage
 import org.matrix.android.sdk.api.session.events.model.isLiveLocation
 import org.matrix.android.sdk.api.session.events.model.isPoll
+import org.matrix.android.sdk.api.session.events.model.isPollEnd
+import org.matrix.android.sdk.api.session.events.model.isPollStart
 import org.matrix.android.sdk.api.session.events.model.isSticker
 import org.matrix.android.sdk.api.session.events.model.isVideoMessage
 import org.matrix.android.sdk.api.session.events.model.isVoiceMessage
@@ -94,9 +96,11 @@ class ProcessBodyOfReplyToEventUseCase @Inject constructor(
                     )
                 }
                 repliedToEvent.isPoll() -> {
-                    val fallbackText = if (repliedToEvent.type in EventType.POLL_START.values)
-                        stringProvider.getString(R.string.message_reply_to_sender_created_poll)
-                    else stringProvider.getString(R.string.message_reply_to_sender_ended_poll)
+                    val fallbackText = when {
+                        repliedToEvent.isPollStart() -> stringProvider.getString(R.string.message_reply_to_sender_created_poll)
+                        repliedToEvent.isPollEnd() -> stringProvider.getString(R.string.message_reply_to_sender_ended_poll)
+                        else -> ""
+                    }
                     matrixFormattedBody.replaceRange(
                             afterBreakingLineIndex,
                             endOfBlockQuoteIndex,
