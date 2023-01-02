@@ -2870,4 +2870,8 @@
     <string name="stop_voice_broadcast_content">Jeni i sigurt se doni të ndalet transmetimi juaj i drejtpërdrejtë\? Kjo do të përfundojë transmetimin dhe regjistrimi i plotë do të jetë i passhëm te dhoma.</string>
     <string name="stop_voice_broadcast_dialog_title">Të ndalet transmetimi i drejtpërdrejtë\?</string>
     <string name="action_stop">Po, Ndale</string>
+    <string name="set_link_edit">Përpunoni lidhje</string>
+    <string name="set_link_create">Krijoni një lidhje</string>
+    <string name="set_link_link">Lidhje</string>
+    <string name="set_link_text">Tekst</string>
 </resources>
