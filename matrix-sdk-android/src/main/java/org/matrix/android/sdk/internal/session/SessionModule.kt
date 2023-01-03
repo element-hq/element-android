@@ -296,6 +296,8 @@ internal abstract class SessionModule {
             var uri = sessionParams.homeServerConnectionConfig.homeServerUriBase.toString()
             if (uri == "http://localhost:8080") {
                 uri = "http://10.0.2.2:8080"
+            } else if (uri == "http://localhost:8081") {
+                uri = "http://10.0.2.2:8081"
             }
             return retrofitFactory
                     .create(okHttpClient, uri)

@@ -194,7 +194,7 @@ class E2eeSanityTests : InstrumentedTest {
         val megolmBackupCreationInfo = bobKeysBackupService.prepareKeysBackupVersion(keyBackupPassword, null)
         val version = bobKeysBackupService.createKeysBackupVersion(megolmBackupCreationInfo)
 
-        Log.v("#E2E TEST", "... Key backup started and enabled for bob")
+        Log.v("#E2E TEST", "... Key backup started and enabled for bob: version:$version")
         // Bob session should now have
 
         val aliceRoomPOV = aliceSession.getRoom(e2eRoomID)!!
@@ -230,6 +230,7 @@ class E2eeSanityTests : InstrumentedTest {
                     fail("All keys should be backedup")
                 }
         ) {
+            Log.v("#E2E TEST", "backedUp=${ bobKeysBackupService.getTotalNumbersOfBackedUpKeys()}, known=${bobKeysBackupService.getTotalNumbersOfKeys()}")
             bobKeysBackupService.getTotalNumbersOfBackedUpKeys() == bobKeysBackupService.getTotalNumbersOfKeys()
         }
         Log.v("#E2E TEST", "... Key backup done for Bob")
@@ -268,7 +269,7 @@ class E2eeSanityTests : InstrumentedTest {
         ) // MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID)
 
         // Let's now import keys from backup
-
+        Log.v("#E2E TEST", "Restore backup for the new session")
         newBobSession.cryptoService().keysBackupService().let { kbs ->
             val keyVersionResult = kbs.getVersion(version.version)
 
@@ -284,9 +285,12 @@ class E2eeSanityTests : InstrumentedTest {
         }
 
         // ensure bob can now decrypt
+
+        Log.v("#E2E TEST", "Check that bob can decrypt now")
         cryptoTestHelper.ensureCanDecrypt(sentEventIds, newBobSession, e2eRoomID, messagesText)
 
         // Check key trust
+        Log.v("#E2E TEST", "Check key safety")
         sentEventIds.forEach { sentEventId ->
             val timelineEvent = newBobSession.getRoom(e2eRoomID)?.getTimelineEvent(sentEventId)!!
             val result = newBobSession.cryptoService().decryptEvent(timelineEvent.root, "")

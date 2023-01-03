@@ -18,6 +18,7 @@ package im.vector.app
 
 import android.net.Uri
 import androidx.lifecycle.Observer
+import im.vector.app.ui.robot.ElementRobot
 import im.vector.app.ui.robot.OnboardingRobot
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -41,6 +42,7 @@ abstract class VerificationTestBase {
     val homeServerUrl: String = "http://10.0.2.2:8080"
 
     protected val uiTestBase = OnboardingRobot()
+    protected val elementRobot = ElementRobot()
 
     fun createAccountAndSync(
             matrix: Matrix,
@@ -114,9 +116,10 @@ abstract class VerificationTestBase {
     private fun syncSession(session: Session) {
         val lock = CountDownLatch(1)
 
-        GlobalScope.launch(Dispatchers.Main) { session.open() }
-
-        session.syncService().startSync(true)
+        GlobalScope.launch(Dispatchers.Main) {
+            session.open()
+            session.syncService().startSync(true)
+        }
 
         val syncLiveData = runBlocking(Dispatchers.Main) {
             session.syncService().getSyncStateLive()
