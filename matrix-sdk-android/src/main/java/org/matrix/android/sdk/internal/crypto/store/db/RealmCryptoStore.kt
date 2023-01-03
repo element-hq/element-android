@@ -55,6 +55,7 @@ import org.matrix.android.sdk.internal.crypto.model.MXInboundMegolmSessionWrappe
 import org.matrix.android.sdk.internal.crypto.model.OlmSessionWrapper
 import org.matrix.android.sdk.internal.crypto.model.OutboundGroupSessionWrapper
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
+import org.matrix.android.sdk.internal.crypto.store.UserDataToStore
 import org.matrix.android.sdk.internal.crypto.store.db.mapper.CrossSigningKeysMapper
 import org.matrix.android.sdk.internal.crypto.store.db.mapper.MyDeviceLastSeenInfoEntityMapper
 import org.matrix.android.sdk.internal.crypto.store.db.model.AuditTrailEntity
@@ -289,37 +290,41 @@ internal class RealmCryptoStore @Inject constructor(
 
     override fun storeUserDevices(userId: String, devices: Map<String, CryptoDeviceInfo>?) {
         doRealmTransaction("storeUserDevices", realmConfiguration) { realm ->
-            if (devices == null) {
-                Timber.d("Remove user $userId")
-                // Remove the user
-                UserEntity.delete(realm, userId)
-            } else {
-                val userEntity = UserEntity.getOrCreate(realm, userId)
-                // First delete the removed devices
-                val deviceIds = devices.keys
-                userEntity.devices.toTypedArray().iterator().let {
-                    while (it.hasNext()) {
-                        val deviceInfoEntity = it.next()
-                        if (deviceInfoEntity.deviceId !in deviceIds) {
-                            Timber.d("Remove device ${deviceInfoEntity.deviceId} of user $userId")
-                            deviceInfoEntity.deleteOnCascade()
-                        }
+            storeUserDevices(realm, userId, devices)
+        }
+    }
+
+    private fun storeUserDevices(realm: Realm, userId: String, devices: Map<String, CryptoDeviceInfo>?) {
+        if (devices == null) {
+            Timber.d("Remove user $userId")
+            // Remove the user
+            UserEntity.delete(realm, userId)
+        } else {
+            val userEntity = UserEntity.getOrCreate(realm, userId)
+            // First delete the removed devices
+            val deviceIds = devices.keys
+            userEntity.devices.toTypedArray().iterator().let {
+                while (it.hasNext()) {
+                    val deviceInfoEntity = it.next()
+                    if (deviceInfoEntity.deviceId !in deviceIds) {
+                        Timber.d("Remove device ${deviceInfoEntity.deviceId} of user $userId")
+                        deviceInfoEntity.deleteOnCascade()
                     }
                 }
-                // Then update existing devices or add new one
-                devices.values.forEach { cryptoDeviceInfo ->
-                    val existingDeviceInfoEntity = userEntity.devices.firstOrNull { it.deviceId == cryptoDeviceInfo.deviceId }
-                    if (existingDeviceInfoEntity == null) {
-                        // Add the device
-                        Timber.d("Add device ${cryptoDeviceInfo.deviceId} of user $userId")
-                        val newEntity = CryptoMapper.mapToEntity(cryptoDeviceInfo)
-                        newEntity.firstTimeSeenLocalTs = clock.epochMillis()
-                        userEntity.devices.add(newEntity)
-                    } else {
-                        // Update the device
-                        Timber.d("Update device ${cryptoDeviceInfo.deviceId} of user $userId")
-                        CryptoMapper.updateDeviceInfoEntity(existingDeviceInfoEntity, cryptoDeviceInfo)
-                    }
+            }
+            // Then update existing devices or add new one
+            devices.values.forEach { cryptoDeviceInfo ->
+                val existingDeviceInfoEntity = userEntity.devices.firstOrNull { it.deviceId == cryptoDeviceInfo.deviceId }
+                if (existingDeviceInfoEntity == null) {
+                    // Add the device
+                    Timber.d("Add device ${cryptoDeviceInfo.deviceId} of user $userId")
+                    val newEntity = CryptoMapper.mapToEntity(cryptoDeviceInfo)
+                    newEntity.firstTimeSeenLocalTs = clock.epochMillis()
+                    userEntity.devices.add(newEntity)
+                } else {
+                    // Update the device
+                    Timber.d("Update device ${cryptoDeviceInfo.deviceId} of user $userId")
+                    CryptoMapper.updateDeviceInfoEntity(existingDeviceInfoEntity, cryptoDeviceInfo)
                 }
             }
         }
@@ -332,85 +337,95 @@ internal class RealmCryptoStore @Inject constructor(
             userSigningKey: CryptoCrossSigningKey?
     ) {
         doRealmTransaction("storeUserCrossSigningKeys", realmConfiguration) { realm ->
-            UserEntity.getOrCreate(realm, userId)
-                    .let { userEntity ->
-                        if (masterKey == null || selfSigningKey == null) {
-                            // The user has disabled cross signing?
-                            userEntity.crossSigningInfoEntity?.deleteOnCascade()
-                            userEntity.crossSigningInfoEntity = null
-                        } else {
-                            var shouldResetMyDevicesLocalTrust = false
-                            CrossSigningInfoEntity.getOrCreate(realm, userId).let { signingInfo ->
-                                // What should we do if we detect a change of the keys?
-                                val existingMaster = signingInfo.getMasterKey()
-                                if (existingMaster != null && existingMaster.publicKeyBase64 == masterKey.unpaddedBase64PublicKey) {
-                                    crossSigningKeysMapper.update(existingMaster, masterKey)
-                                } else {
-                                    Timber.d("## CrossSigning  MSK change for $userId")
-                                    val keyEntity = crossSigningKeysMapper.map(masterKey)
-                                    signingInfo.setMasterKey(keyEntity)
-                                    if (userId == this.userId) {
-                                        shouldResetMyDevicesLocalTrust = true
-                                        // my msk has changed! clear my private key
-                                        // Could we have some race here? e.g I am the one that did change the keys
-                                        // could i get this update to early and clear the private keys?
-                                        // -> initializeCrossSigning is guarding for that by storing all at once
-                                        realm.where<CryptoMetadataEntity>().findFirst()?.apply {
-                                            xSignMasterPrivateKey = null
-                                        }
+            storeUserCrossSigningKeys(realm, userId, masterKey, selfSigningKey, userSigningKey)
+        }
+    }
+
+    private fun storeUserCrossSigningKeys(
+            realm: Realm,
+            userId: String,
+            masterKey: CryptoCrossSigningKey?,
+            selfSigningKey: CryptoCrossSigningKey?,
+            userSigningKey: CryptoCrossSigningKey?
+    ) {
+        UserEntity.getOrCreate(realm, userId)
+                .let { userEntity ->
+                    if (masterKey == null || selfSigningKey == null) {
+                        // The user has disabled cross signing?
+                        userEntity.crossSigningInfoEntity?.deleteOnCascade()
+                        userEntity.crossSigningInfoEntity = null
+                    } else {
+                        var shouldResetMyDevicesLocalTrust = false
+                        CrossSigningInfoEntity.getOrCreate(realm, userId).let { signingInfo ->
+                            // What should we do if we detect a change of the keys?
+                            val existingMaster = signingInfo.getMasterKey()
+                            if (existingMaster != null && existingMaster.publicKeyBase64 == masterKey.unpaddedBase64PublicKey) {
+                                crossSigningKeysMapper.update(existingMaster, masterKey)
+                            } else {
+                                Timber.d("## CrossSigning  MSK change for $userId")
+                                val keyEntity = crossSigningKeysMapper.map(masterKey)
+                                signingInfo.setMasterKey(keyEntity)
+                                if (userId == this.userId) {
+                                    shouldResetMyDevicesLocalTrust = true
+                                    // my msk has changed! clear my private key
+                                    // Could we have some race here? e.g I am the one that did change the keys
+                                    // could i get this update to early and clear the private keys?
+                                    // -> initializeCrossSigning is guarding for that by storing all at once
+                                    realm.where<CryptoMetadataEntity>().findFirst()?.apply {
+                                        xSignMasterPrivateKey = null
                                     }
                                 }
-
-                                val existingSelfSigned = signingInfo.getSelfSignedKey()
-                                if (existingSelfSigned != null && existingSelfSigned.publicKeyBase64 == selfSigningKey.unpaddedBase64PublicKey) {
-                                    crossSigningKeysMapper.update(existingSelfSigned, selfSigningKey)
-                                } else {
-                                    Timber.d("## CrossSigning  SSK change for $userId")
-                                    val keyEntity = crossSigningKeysMapper.map(selfSigningKey)
-                                    signingInfo.setSelfSignedKey(keyEntity)
-                                    if (userId == this.userId) {
-                                        shouldResetMyDevicesLocalTrust = true
-                                        // my ssk has changed! clear my private key
-                                        realm.where<CryptoMetadataEntity>().findFirst()?.apply {
-                                            xSignSelfSignedPrivateKey = null
-                                        }
-                                    }
-                                }
-
-                                // Only for me
-                                if (userSigningKey != null) {
-                                    val existingUSK = signingInfo.getUserSigningKey()
-                                    if (existingUSK != null && existingUSK.publicKeyBase64 == userSigningKey.unpaddedBase64PublicKey) {
-                                        crossSigningKeysMapper.update(existingUSK, userSigningKey)
-                                    } else {
-                                        Timber.d("## CrossSigning  USK change for $userId")
-                                        val keyEntity = crossSigningKeysMapper.map(userSigningKey)
-                                        signingInfo.setUserSignedKey(keyEntity)
-                                        if (userId == this.userId) {
-                                            shouldResetMyDevicesLocalTrust = true
-                                            // my usk has changed! clear my private key
-                                            realm.where<CryptoMetadataEntity>().findFirst()?.apply {
-                                                xSignUserPrivateKey = null
-                                            }
-                                        }
-                                    }
-                                }
-
-                                // When my cross signing keys are reset, we consider clearing all existing device trust
-                                if (shouldResetMyDevicesLocalTrust) {
-                                    realm.where<UserEntity>()
-                                            .equalTo(UserEntityFields.USER_ID, this.userId)
-                                            .findFirst()
-                                            ?.devices?.forEach {
-                                                it?.trustLevelEntity?.crossSignedVerified = false
-                                                it?.trustLevelEntity?.locallyVerified = it.deviceId == deviceId
-                                            }
-                                }
-                                userEntity.crossSigningInfoEntity = signingInfo
                             }
+
+                            val existingSelfSigned = signingInfo.getSelfSignedKey()
+                            if (existingSelfSigned != null && existingSelfSigned.publicKeyBase64 == selfSigningKey.unpaddedBase64PublicKey) {
+                                crossSigningKeysMapper.update(existingSelfSigned, selfSigningKey)
+                            } else {
+                                Timber.d("## CrossSigning  SSK change for $userId")
+                                val keyEntity = crossSigningKeysMapper.map(selfSigningKey)
+                                signingInfo.setSelfSignedKey(keyEntity)
+                                if (userId == this.userId) {
+                                    shouldResetMyDevicesLocalTrust = true
+                                    // my ssk has changed! clear my private key
+                                    realm.where<CryptoMetadataEntity>().findFirst()?.apply {
+                                        xSignSelfSignedPrivateKey = null
+                                    }
+                                }
+                            }
+
+                            // Only for me
+                            if (userSigningKey != null) {
+                                val existingUSK = signingInfo.getUserSigningKey()
+                                if (existingUSK != null && existingUSK.publicKeyBase64 == userSigningKey.unpaddedBase64PublicKey) {
+                                    crossSigningKeysMapper.update(existingUSK, userSigningKey)
+                                } else {
+                                    Timber.d("## CrossSigning  USK change for $userId")
+                                    val keyEntity = crossSigningKeysMapper.map(userSigningKey)
+                                    signingInfo.setUserSignedKey(keyEntity)
+                                    if (userId == this.userId) {
+                                        shouldResetMyDevicesLocalTrust = true
+                                        // my usk has changed! clear my private key
+                                        realm.where<CryptoMetadataEntity>().findFirst()?.apply {
+                                            xSignUserPrivateKey = null
+                                        }
+                                    }
+                                }
+                            }
+
+                            // When my cross signing keys are reset, we consider clearing all existing device trust
+                            if (shouldResetMyDevicesLocalTrust) {
+                                realm.where<UserEntity>()
+                                        .equalTo(UserEntityFields.USER_ID, this.userId)
+                                        .findFirst()
+                                        ?.devices?.forEach {
+                                            it?.trustLevelEntity?.crossSignedVerified = false
+                                            it?.trustLevelEntity?.locallyVerified = it.deviceId == deviceId
+                                        }
+                            }
+                            userEntity.crossSigningInfoEntity = signingInfo
                         }
                     }
-        }
+                }
     }
 
     override fun getCrossSigningPrivateKeys(): PrivateKeysInfo? {
@@ -1831,12 +1846,23 @@ internal class RealmCryptoStore @Inject constructor(
         }
         doRealmTransaction("onSyncCompleted", realmConfiguration) { realm ->
             // setShouldShareHistory
-            aggregator.setShouldShareHistoryData.map {
+            aggregator.setShouldShareHistoryData.forEach {
                 CryptoRoomEntity.getOrCreate(realm, it.key).shouldShareHistory = it.value
             }
             // setShouldEncryptForInvitedMembers
-            aggregator.setShouldEncryptForInvitedMembersData.map {
+            aggregator.setShouldEncryptForInvitedMembersData.forEach {
                 CryptoRoomEntity.getOrCreate(realm, it.key).shouldEncryptForInvitedMembers = it.value
+            }
+        }
+    }
+
+    override fun storeUserDataToStore(userDataToStore: UserDataToStore) {
+        doRealmTransaction("storeUserDataToStore", realmConfiguration) { realm ->
+            userDataToStore.userDevices.forEach {
+                storeUserDevices(realm, it.key, it.value)
+            }
+            userDataToStore.userCrossSigningKeys.forEach {
+                storeUserCrossSigningKeys(realm, it.key, it.value.first, it.value.second, it.value.third)
             }
         }
     }

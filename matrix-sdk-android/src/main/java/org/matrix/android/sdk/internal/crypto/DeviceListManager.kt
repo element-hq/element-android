@@ -30,6 +30,7 @@ import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.crypto.model.CryptoInfoMapper
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysQueryResponse
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
+import org.matrix.android.sdk.internal.crypto.store.UserDataToStore
 import org.matrix.android.sdk.internal.crypto.tasks.DownloadKeysForUsersTask
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.sync.SyncTokenStore
@@ -371,6 +372,8 @@ internal class DeviceListManager @Inject constructor(
             Timber.v("## CRYPTO | doKeyDownloadForUsers() : Got keys for " + filteredUsers.size + " users")
         }
 
+        val userDataToStore = UserDataToStore()
+
         for (userId in filteredUsers) {
             // al devices =
             val models = response.deviceKeys?.get(userId)?.mapValues { entry -> CryptoInfoMapper.map(entry.value) }
@@ -404,7 +407,7 @@ internal class DeviceListManager @Inject constructor(
                 }
                 // Update the store
                 // Note that devices which aren't in the response will be removed from the stores
-                cryptoStore.storeUserDevices(userId, workingCopy)
+                userDataToStore.userDevices[userId] = workingCopy
             }
 
             val masterKey = response.masterKeys?.get(userId)?.toCryptoModel().also {
@@ -416,13 +419,10 @@ internal class DeviceListManager @Inject constructor(
             val userSigningKey = response.userSigningKeys?.get(userId)?.toCryptoModel()?.also {
                 Timber.v("## CRYPTO | CrossSigning : Got keys for $userId : USK ${it.unpaddedBase64PublicKey}")
             }
-            cryptoStore.storeUserCrossSigningKeys(
-                    userId,
-                    masterKey,
-                    selfSigningKey,
-                    userSigningKey
-            )
+            userDataToStore.userCrossSigningKeys[userId] = Triple(masterKey, selfSigningKey, userSigningKey)
         }
+
+        cryptoStore.storeUserDataToStore(userDataToStore)
 
         // Update devices trust for these users
         // dispatchDeviceChange(downloadUsers)
