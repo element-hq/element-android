@@ -17,7 +17,6 @@
         android:supportsRtl="true"
         android:taskAffinity="${applicationId}.${appTaskAffinitySuffix}"
         android:theme="@style/Theme.Vector.Light"
-        android:largeHeap="true"
         tools:ignore="UnusedAttribute"
         tools:replace="android:allowBackup">
 
