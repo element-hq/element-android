@@ -1824,7 +1824,11 @@ internal class RealmCryptoStore @Inject constructor(
         val aggregator = cryptoStoreAggregator ?: return Unit.also {
             Timber.e("cryptoStoreAggregator is null...")
         }
+        cryptoStoreAggregator = null
 
+        if (aggregator.isEmpty()) {
+            return
+        }
         doRealmTransaction("onSyncCompleted", realmConfiguration) { realm ->
             // setShouldShareHistory
             aggregator.setShouldShareHistoryData.map {
@@ -1835,6 +1839,5 @@ internal class RealmCryptoStore @Inject constructor(
                 CryptoRoomEntity.getOrCreate(realm, it.key).shouldEncryptForInvitedMembers = it.value
             }
         }
-        cryptoStoreAggregator = null
     }
 }
