@@ -16,6 +16,7 @@
 
 package im.vector.app.features.roomprofile.polls
 
+import im.vector.app.features.home.room.detail.timeline.item.PollOptionViewState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -64,19 +65,49 @@ class GetPollsUseCase @Inject constructor() {
                         id = "id1-ended",
                         // 2022/06/28 UTC+1
                         creationTimestamp = 1656367200000,
-                        title = "Which charity would you like to support?"
+                        title = "Which charity would you like to support?",
+                        totalVotes = 22,
+                        winnerOptions = listOf(
+                                PollOptionViewState.PollEnded(
+                                        optionId = "id1",
+                                        optionAnswer = "Cancer research",
+                                        voteCount = 13,
+                                        votePercentage = 13 / 22.0,
+                                        isWinner = true,
+                                )
+                        ),
                 ),
                 PollSummary.EndedPoll(
                         id = "id2-ended",
                         // 2022/06/26 UTC+1
                         creationTimestamp = 1656194400000,
-                        title = "Where should we do the offsite?"
+                        title = "Where should we do the offsite?",
+                        totalVotes = 92,
+                        winnerOptions = listOf(
+                                PollOptionViewState.PollEnded(
+                                        optionId = "id1",
+                                        optionAnswer = "Hawaii",
+                                        voteCount = 43,
+                                        votePercentage = 43 / 92.0,
+                                        isWinner = true,
+                                )
+                        ),
                 ),
                 PollSummary.EndedPoll(
                         id = "id3-ended",
                         // 2022/06/24 UTC+1
                         creationTimestamp = 1656021600000,
-                        title = "What type of food should we have at the party?"
+                        title = "What type of food should we have at the party?",
+                        totalVotes = 22,
+                        winnerOptions = listOf(
+                                PollOptionViewState.PollEnded(
+                                        optionId = "id1",
+                                        optionAnswer = "Brazilian",
+                                        voteCount = 13,
+                                        votePercentage = 13 / 22.0,
+                                        isWinner = true,
+                                )
+                        ),
                 ),
         )
     }
