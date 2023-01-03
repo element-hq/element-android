@@ -376,8 +376,15 @@ internal class RoomSyncHandler @Inject constructor(
         roomEntity.chunks.clearWith { it.deleteOnCascade(deleteStateEvents = true, canDeleteRoot = true) }
         roomTypingUsersHandler.handle(realm, roomId, null)
         roomChangeMembershipStateDataSource.setMembershipFromSync(roomId, Membership.LEAVE)
-        roomSummaryUpdater.update(realm, roomId, membership, roomSync.summary,
-                roomSync.unreadNotifications, roomSync.unreadThreadNotifications, aggregator = aggregator)
+        roomSummaryUpdater.update(
+                realm,
+                roomId,
+                membership,
+                roomSync.summary,
+                roomSync.unreadNotifications,
+                roomSync.unreadThreadNotifications,
+                aggregator = aggregator,
+        )
         return roomEntity
     }
 
