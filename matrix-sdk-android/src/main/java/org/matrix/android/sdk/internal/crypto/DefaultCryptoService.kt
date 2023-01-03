@@ -384,6 +384,7 @@ internal class DefaultCryptoService @Inject constructor(
                 }
             }
         }
+        cryptoStore.onSyncWillProcess()
     }
 
     private fun internalStart() {
@@ -432,6 +433,7 @@ internal class DefaultCryptoService @Inject constructor(
      * @param syncResponse the syncResponse
      */
     fun onSyncCompleted(syncResponse: SyncResponse) {
+        cryptoStore.onSyncCompleted()
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             runCatching {
                 if (syncResponse.deviceLists != null) {

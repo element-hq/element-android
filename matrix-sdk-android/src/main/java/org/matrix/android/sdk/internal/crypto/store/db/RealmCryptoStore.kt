@@ -716,9 +716,7 @@ internal class RealmCryptoStore @Inject constructor(
     override fun setShouldShareHistory(roomId: String, shouldShareHistory: Boolean) {
         Timber.tag(loggerTag.value)
                 .v("setShouldShareHistory for room $roomId is $shouldShareHistory")
-        doRealmTransaction(realmConfiguration) {
-            CryptoRoomEntity.getOrCreate(it, roomId).shouldShareHistory = shouldShareHistory
-        }
+        cryptoStoreAggregator?.setShouldShareHistoryData?.put(roomId, shouldShareHistory)
     }
 
     override fun storeSession(olmSessionWrapper: OlmSessionWrapper, deviceKey: String) {
@@ -1814,5 +1812,27 @@ internal class RealmCryptoStore @Inject constructor(
 
             // Can we do something for WithHeldSessionEntity?
         }
+    }
+
+    private var cryptoStoreAggregator: CryptoStoreAggregator? = null
+    override fun onSyncWillProcess() {
+        if (cryptoStoreAggregator != null) {
+            Timber.e("cryptoStoreAggregator is not null...")
+        }
+        cryptoStoreAggregator = CryptoStoreAggregator()
+    }
+
+    override fun onSyncCompleted() {
+        val aggregator = cryptoStoreAggregator ?: return Unit.also {
+            Timber.e("cryptoStoreAggregator is null...")
+        }
+
+        doRealmTransaction("onSyncCompleted", realmConfiguration) { realm ->
+            // setShouldShareHistory
+            aggregator.setShouldShareHistoryData.map {
+                CryptoRoomEntity.getOrCreate(realm, it.key).shouldShareHistory = it.value
+            }
+        }
+        cryptoStoreAggregator = null
     }
 }

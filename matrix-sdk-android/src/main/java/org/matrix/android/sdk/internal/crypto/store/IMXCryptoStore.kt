@@ -48,6 +48,9 @@ import org.matrix.olm.OlmOutboundGroupSession
  */
 internal interface IMXCryptoStore {
 
+    fun onSyncWillProcess()
+    fun onSyncCompleted()
+
     /**
      * @return the device id
      */
