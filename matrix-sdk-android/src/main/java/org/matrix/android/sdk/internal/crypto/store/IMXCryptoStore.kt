@@ -22,7 +22,6 @@ import org.matrix.android.sdk.api.session.crypto.GlobalCryptoConfig
 import org.matrix.android.sdk.api.session.crypto.NewSessionListener
 import org.matrix.android.sdk.api.session.crypto.OutgoingKeyRequest
 import org.matrix.android.sdk.api.session.crypto.OutgoingRoomKeyRequestState
-import org.matrix.android.sdk.api.session.crypto.crosssigning.CryptoCrossSigningKey
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CryptoCrossSigningKeys
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.session.crypto.crosssigning.PrivateKeysInfo
