@@ -16,14 +16,17 @@
 
 package org.matrix.android.sdk.internal.sync
 
+import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
+import org.matrix.android.sdk.api.MatrixConfiguration
+import org.matrix.android.sdk.api.SyncConfig
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
-import org.matrix.android.sdk.api.session.sync.filter.SyncFilterBuilder
+import org.matrix.android.sdk.api.session.sync.filter.SyncFilterParams
 import org.matrix.android.sdk.internal.session.filter.DefaultGetCurrentFilterTask
-import org.matrix.android.sdk.internal.sync.filter.SyncFilterParams
+import org.matrix.android.sdk.internal.sync.filter.SyncFilterBuilder
 import org.matrix.android.sdk.test.fakes.FakeFilterRepository
 import org.matrix.android.sdk.test.fakes.FakeHomeServerCapabilitiesDataSource
 import org.matrix.android.sdk.test.fakes.FakeSaveFilterTask
@@ -31,7 +34,6 @@ import org.matrix.android.sdk.test.fakes.FakeSaveFilterTask
 private const val A_FILTER_ID = "filter-id"
 private val A_HOMESERVER_CAPABILITIES = HomeServerCapabilities()
 private val A_SYNC_FILTER_PARAMS = SyncFilterParams(
-        lazyLoadMembersForMessageEvents = true,
         lazyLoadMembersForStateEvents = true,
         useThreadNotifications = true
 )
@@ -46,13 +48,16 @@ class DefaultGetCurrentFilterTaskTest {
     private val getCurrentFilterTask = DefaultGetCurrentFilterTask(
             filterRepository = filterRepository,
             homeServerCapabilitiesDataSource = homeServerCapabilitiesDataSource.instance,
-            saveFilterTask = saveFilterTask
+            saveFilterTask = saveFilterTask,
+            matrixConfiguration = MatrixConfiguration(
+                    applicationFlavor = "TestFlavor",
+                    roomDisplayNameFallbackProvider = mockk(),
+                    syncConfig = SyncConfig(syncFilterParams = SyncFilterParams(lazyLoadMembersForStateEvents = true, useThreadNotifications = true)),
+            )
     )
 
     @Test
     fun `given no filter is stored, when execute, then executes task to save new filter`() = runTest {
-        filterRepository.givenFilterParamsAreStored(A_SYNC_FILTER_PARAMS)
-
         homeServerCapabilitiesDataSource.givenHomeServerCapabilities(A_HOMESERVER_CAPABILITIES)
 
         filterRepository.givenFilterStored(null, null)
@@ -68,8 +73,6 @@ class DefaultGetCurrentFilterTaskTest {
 
     @Test
     fun `given filter is stored and didn't change, when execute, then returns stored filter id`() = runTest {
-        filterRepository.givenFilterParamsAreStored(A_SYNC_FILTER_PARAMS)
-
         homeServerCapabilitiesDataSource.givenHomeServerCapabilities(A_HOMESERVER_CAPABILITIES)
 
         val filter = SyncFilterBuilder().with(A_SYNC_FILTER_PARAMS).build(A_HOMESERVER_CAPABILITIES)
@@ -82,8 +85,6 @@ class DefaultGetCurrentFilterTaskTest {
 
     @Test
     fun `given filter is set and home server capabilities has changed, when execute, then executes task to save new filter`() = runTest {
-        filterRepository.givenFilterParamsAreStored(A_SYNC_FILTER_PARAMS)
-
         homeServerCapabilitiesDataSource.givenHomeServerCapabilities(A_HOMESERVER_CAPABILITIES)
 
         val filter = SyncFilterBuilder().with(A_SYNC_FILTER_PARAMS).build(A_HOMESERVER_CAPABILITIES)
