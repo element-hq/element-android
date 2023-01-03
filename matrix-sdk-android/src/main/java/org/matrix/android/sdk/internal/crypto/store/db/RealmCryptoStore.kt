@@ -33,7 +33,7 @@ import org.matrix.android.sdk.api.session.crypto.GlobalCryptoConfig
 import org.matrix.android.sdk.api.session.crypto.NewSessionListener
 import org.matrix.android.sdk.api.session.crypto.OutgoingKeyRequest
 import org.matrix.android.sdk.api.session.crypto.OutgoingRoomKeyRequestState
-import org.matrix.android.sdk.api.session.crypto.crosssigning.CryptoCrossSigningKey
+import org.matrix.android.sdk.api.session.crypto.crosssigning.CryptoCrossSigningKeys
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.session.crypto.crosssigning.PrivateKeysInfo
 import org.matrix.android.sdk.api.session.crypto.keysbackup.SavedKeyBackupKeyInfo
@@ -332,25 +332,21 @@ internal class RealmCryptoStore @Inject constructor(
 
     override fun storeUserCrossSigningKeys(
             userId: String,
-            masterKey: CryptoCrossSigningKey?,
-            selfSigningKey: CryptoCrossSigningKey?,
-            userSigningKey: CryptoCrossSigningKey?
+            cryptoCrossSigningKeys: CryptoCrossSigningKeys,
     ) {
         doRealmTransaction("storeUserCrossSigningKeys", realmConfiguration) { realm ->
-            storeUserCrossSigningKeys(realm, userId, masterKey, selfSigningKey, userSigningKey)
+            storeUserCrossSigningKeys(realm, userId, cryptoCrossSigningKeys)
         }
     }
 
     private fun storeUserCrossSigningKeys(
             realm: Realm,
             userId: String,
-            masterKey: CryptoCrossSigningKey?,
-            selfSigningKey: CryptoCrossSigningKey?,
-            userSigningKey: CryptoCrossSigningKey?
+            keys: CryptoCrossSigningKeys,
     ) {
         UserEntity.getOrCreate(realm, userId)
                 .let { userEntity ->
-                    if (masterKey == null || selfSigningKey == null) {
+                    if (keys.masterKey == null || keys.selfSigningKey == null) {
                         // The user has disabled cross signing?
                         userEntity.crossSigningInfoEntity?.deleteOnCascade()
                         userEntity.crossSigningInfoEntity = null
@@ -359,11 +355,11 @@ internal class RealmCryptoStore @Inject constructor(
                         CrossSigningInfoEntity.getOrCreate(realm, userId).let { signingInfo ->
                             // What should we do if we detect a change of the keys?
                             val existingMaster = signingInfo.getMasterKey()
-                            if (existingMaster != null && existingMaster.publicKeyBase64 == masterKey.unpaddedBase64PublicKey) {
-                                crossSigningKeysMapper.update(existingMaster, masterKey)
+                            if (existingMaster != null && existingMaster.publicKeyBase64 == keys.masterKey.unpaddedBase64PublicKey) {
+                                crossSigningKeysMapper.update(existingMaster, keys.masterKey)
                             } else {
                                 Timber.d("## CrossSigning  MSK change for $userId")
-                                val keyEntity = crossSigningKeysMapper.map(masterKey)
+                                val keyEntity = crossSigningKeysMapper.map(keys.masterKey)
                                 signingInfo.setMasterKey(keyEntity)
                                 if (userId == this.userId) {
                                     shouldResetMyDevicesLocalTrust = true
@@ -378,11 +374,11 @@ internal class RealmCryptoStore @Inject constructor(
                             }
 
                             val existingSelfSigned = signingInfo.getSelfSignedKey()
-                            if (existingSelfSigned != null && existingSelfSigned.publicKeyBase64 == selfSigningKey.unpaddedBase64PublicKey) {
-                                crossSigningKeysMapper.update(existingSelfSigned, selfSigningKey)
+                            if (existingSelfSigned != null && existingSelfSigned.publicKeyBase64 == keys.selfSigningKey.unpaddedBase64PublicKey) {
+                                crossSigningKeysMapper.update(existingSelfSigned, keys.selfSigningKey)
                             } else {
                                 Timber.d("## CrossSigning  SSK change for $userId")
-                                val keyEntity = crossSigningKeysMapper.map(selfSigningKey)
+                                val keyEntity = crossSigningKeysMapper.map(keys.selfSigningKey)
                                 signingInfo.setSelfSignedKey(keyEntity)
                                 if (userId == this.userId) {
                                     shouldResetMyDevicesLocalTrust = true
@@ -394,13 +390,13 @@ internal class RealmCryptoStore @Inject constructor(
                             }
 
                             // Only for me
-                            if (userSigningKey != null) {
+                            if (keys.userSigningKey != null) {
                                 val existingUSK = signingInfo.getUserSigningKey()
-                                if (existingUSK != null && existingUSK.publicKeyBase64 == userSigningKey.unpaddedBase64PublicKey) {
-                                    crossSigningKeysMapper.update(existingUSK, userSigningKey)
+                                if (existingUSK != null && existingUSK.publicKeyBase64 == keys.userSigningKey.unpaddedBase64PublicKey) {
+                                    crossSigningKeysMapper.update(existingUSK, keys.userSigningKey)
                                 } else {
                                     Timber.d("## CrossSigning  USK change for $userId")
-                                    val keyEntity = crossSigningKeysMapper.map(userSigningKey)
+                                    val keyEntity = crossSigningKeysMapper.map(keys.userSigningKey)
                                     signingInfo.setUserSignedKey(keyEntity)
                                     if (userId == this.userId) {
                                         shouldResetMyDevicesLocalTrust = true
@@ -1862,7 +1858,7 @@ internal class RealmCryptoStore @Inject constructor(
                 storeUserDevices(realm, it.key, it.value)
             }
             userDataToStore.userCrossSigningKeys.forEach {
-                storeUserCrossSigningKeys(realm, it.key, it.value.first, it.value.second, it.value.third)
+                storeUserCrossSigningKeys(realm, it.key, it.value)
             }
         }
     }

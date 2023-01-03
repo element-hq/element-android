@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 The Matrix.org Foundation C.I.C.
+ * Copyright 2023 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.crypto.store
+package org.matrix.android.sdk.api.session.crypto.crosssigning
 
-import org.matrix.android.sdk.api.session.crypto.crosssigning.CryptoCrossSigningKeys
-import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
-
-internal data class UserDataToStore(
-        val userDevices: MutableMap<String, Map<String, CryptoDeviceInfo>> = mutableMapOf(),
-        val userCrossSigningKeys: MutableMap<String, CryptoCrossSigningKeys> = mutableMapOf(),
+/**
+ * Container for the three cross signing keys: master, self signing and user signing.
+ */
+data class CryptoCrossSigningKeys(
+        val masterKey: CryptoCrossSigningKey?,
+        val selfSigningKey: CryptoCrossSigningKey?,
+        val userSigningKey: CryptoCrossSigningKey?,
 )

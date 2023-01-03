@@ -24,6 +24,7 @@ import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.extensions.measureMetric
 import org.matrix.android.sdk.api.metrics.DownloadDeviceKeysMetricsPlugin
+import org.matrix.android.sdk.api.session.crypto.crosssigning.CryptoCrossSigningKeys
 import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
@@ -419,7 +420,11 @@ internal class DeviceListManager @Inject constructor(
             val userSigningKey = response.userSigningKeys?.get(userId)?.toCryptoModel()?.also {
                 Timber.v("## CRYPTO | CrossSigning : Got keys for $userId : USK ${it.unpaddedBase64PublicKey}")
             }
-            userDataToStore.userCrossSigningKeys[userId] = Triple(masterKey, selfSigningKey, userSigningKey)
+            userDataToStore.userCrossSigningKeys[userId] = CryptoCrossSigningKeys(
+                    masterKey = masterKey,
+                    selfSigningKey = selfSigningKey,
+                    userSigningKey = userSigningKey
+            )
         }
 
         cryptoStore.storeUserDataToStore(userDataToStore)
