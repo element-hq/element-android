@@ -708,9 +708,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun setShouldEncryptForInvitedMembers(roomId: String, shouldEncryptForInvitedMembers: Boolean) {
-        doRealmTransaction(realmConfiguration) {
-            CryptoRoomEntity.getOrCreate(it, roomId).shouldEncryptForInvitedMembers = shouldEncryptForInvitedMembers
-        }
+        cryptoStoreAggregator?.setShouldEncryptForInvitedMembersData?.put(roomId, shouldEncryptForInvitedMembers)
     }
 
     override fun setShouldShareHistory(roomId: String, shouldShareHistory: Boolean) {
@@ -1831,6 +1829,10 @@ internal class RealmCryptoStore @Inject constructor(
             // setShouldShareHistory
             aggregator.setShouldShareHistoryData.map {
                 CryptoRoomEntity.getOrCreate(realm, it.key).shouldShareHistory = it.value
+            }
+            // setShouldEncryptForInvitedMembers
+            aggregator.setShouldEncryptForInvitedMembersData.map {
+                CryptoRoomEntity.getOrCreate(realm, it.key).shouldEncryptForInvitedMembers = it.value
             }
         }
         cryptoStoreAggregator = null

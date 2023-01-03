@@ -17,5 +17,6 @@
 package org.matrix.android.sdk.internal.crypto.store.db
 
 data class CryptoStoreAggregator(
-        val setShouldShareHistoryData: MutableMap<String, Boolean> = mutableMapOf()
+        val setShouldShareHistoryData: MutableMap<String, Boolean> = mutableMapOf(),
+        val setShouldEncryptForInvitedMembersData: MutableMap<String, Boolean> = mutableMapOf(),
 )
