@@ -80,6 +80,7 @@ import org.matrix.android.sdk.internal.crypto.tasks.DeleteDeviceTask
 import org.matrix.android.sdk.internal.crypto.tasks.GetDeviceInfoTask
 import org.matrix.android.sdk.internal.crypto.tasks.GetDevicesTask
 import org.matrix.android.sdk.internal.crypto.tasks.SetDeviceNameTask
+import org.matrix.android.sdk.internal.crypto.tasks.toDeviceTracingId
 import org.matrix.android.sdk.internal.crypto.verification.RustVerificationService
 import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.UserId
@@ -587,6 +588,8 @@ internal class RustCryptoService @Inject constructor(
 
         // Notify the our listeners about room keys so decryption is retried.
         toDeviceEvents.events.orEmpty().forEach { event ->
+            Timber.tag(loggerTag.value).d("Processed ToDevice event msgid:${event.toDeviceTracingId()}")
+
             if (event.getClearType() == EventType.ENCRYPTED) {
                 // rust failed to decrypt it
                 matrixConfiguration.cryptoAnalyticsPlugin?.onFailToDecryptToDevice(

@@ -24,7 +24,13 @@ import javax.inject.Inject
 internal class EventDecryptor @Inject constructor(val decryptRoomEventUseCase: DecryptRoomEventUseCase) {
 
     @Throws(MXCryptoError::class)
+    @Suppress("UNUSED_PARAMETER")
     suspend fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
         return decryptRoomEventUseCase.invoke(event)
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    suspend fun decryptEventAndSaveResult(event: Event, timeline: String) {
+        return decryptRoomEventUseCase.decryptAndSaveResult(event)
     }
 }
