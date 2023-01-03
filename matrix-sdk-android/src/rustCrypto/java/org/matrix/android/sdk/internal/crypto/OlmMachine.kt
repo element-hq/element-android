@@ -73,13 +73,13 @@ import org.matrix.rustcomponents.sdk.crypto.DecryptionException
 import org.matrix.rustcomponents.sdk.crypto.DeviceLists
 import org.matrix.rustcomponents.sdk.crypto.EncryptionSettings
 import org.matrix.rustcomponents.sdk.crypto.KeyRequestPair
+import org.matrix.rustcomponents.sdk.crypto.KeySafety
 import org.matrix.rustcomponents.sdk.crypto.KeysImportResult
 import org.matrix.rustcomponents.sdk.crypto.Logger
 import org.matrix.rustcomponents.sdk.crypto.MegolmV1BackupKey
 import org.matrix.rustcomponents.sdk.crypto.Request
 import org.matrix.rustcomponents.sdk.crypto.RequestType
 import org.matrix.rustcomponents.sdk.crypto.RoomKeyCounts
-import org.matrix.rustcomponents.sdk.crypto.VerificationState
 import org.matrix.rustcomponents.sdk.crypto.setLogger
 import timber.log.Timber
 import java.io.File
@@ -439,7 +439,7 @@ internal class OlmMachine @Inject constructor(
                             senderCurve25519Key = decrypted.senderCurve25519Key,
                             claimedEd25519Key = decrypted.claimedEd25519Key,
                             forwardingCurve25519KeyChain = decrypted.forwardingCurve25519Chain,
-                            isSafe = decrypted.verificationState == VerificationState.TRUSTED,
+                            isSafe = decrypted.keySafety == KeySafety.SAFE,
                     )
                 } catch (throwable: Throwable) {
                     val reThrow = when (throwable) {
