@@ -423,7 +423,9 @@ internal class RoomSyncHandler @Inject constructor(
             val isInitialSync = insertType == EventInsertType.INITIAL_SYNC
 
             eventIds.add(event.eventId)
-            liveEventService.get().dispatchLiveEventReceived(event, roomId, isInitialSync)
+            if (!isInitialSync) {
+                liveEventService.get().dispatchLiveEventReceived(event, roomId)
+            }
 
             if (event.isEncrypted() && !isInitialSync) {
                 try {
