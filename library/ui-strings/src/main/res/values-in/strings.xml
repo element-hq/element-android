@@ -2761,7 +2761,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="qr_code_login_header_failed_homeserver_is_not_supported_description">Homeserver tidak mendukung masuk dengan kode QR.</string>
     <string name="qr_code_login_header_failed_other_description">Permintaan gagal.</string>
     <string name="labs_enable_voice_broadcast_summary">Memungkinkan untuk merekam dan mengirim siaran suara dalam lini masa ruangan.</string>
-    <string name="labs_enable_voice_broadcast_title">Aktifkan siaran suara (dalam pengembangan aktif)</string>
+    <string name="labs_enable_voice_broadcast_title">Aktifkan siaran suara</string>
     <string name="a11y_voice_broadcast_buffering">Memuat…</string>
     <string name="a11y_pause_voice_broadcast">Jeda siaran suara</string>
     <string name="a11y_play_voice_broadcast">Mainkan atau lanjutkan siaran suara</string>
