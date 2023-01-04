@@ -2504,7 +2504,7 @@
     <string name="home_empty_space_no_rooms_title">%s
 \nduket paksa si i zbrazët.</string>
     <string name="labs_enable_voice_broadcast_summary">Jini në gjendje të incizoni dhe dërgoni transmetim zanor në rrjedhën kohore të dhomës.</string>
-    <string name="labs_enable_voice_broadcast_title">Aktivizoni transmetim zanor</string>
+    <string name="labs_enable_voice_broadcast_title">Aktivizoni transmetim zanor (nën zhvillim aktiv)</string>
     <string name="labs_enable_client_info_recording_title">Aktivizo regjistrim hollësish klienti</string>
     <string name="labs_enable_session_manager_summary">Shihini më qartë dhe kontrolloni më mirë krejt sesionet tuaj.</string>
     <string name="labs_enable_session_manager_title">Aktivizo përgjegjës të ri sesionesh</string>
