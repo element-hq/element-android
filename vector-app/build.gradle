@@ -364,7 +364,7 @@ dependencies {
 
     gplayImplementation "com.google.android.gms:play-services-location:21.0.1"
     // UnifiedPush gplay flavor only
-    gplayImplementation('com.google.firebase:firebase-messaging:23.1.0') {
+    gplayImplementation('com.google.firebase:firebase-messaging:23.1.1') {
         exclude group: 'com.google.firebase', module: 'firebase-core'
         exclude group: 'com.google.firebase', module: 'firebase-analytics'
         exclude group: 'com.google.firebase', module: 'firebase-measurement-connector'
