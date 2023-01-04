@@ -48,7 +48,19 @@ import org.matrix.olm.OlmOutboundGroupSession
  */
 internal interface IMXCryptoStore {
 
+    /**
+     * Notify the store that a sync response treatment is starting.
+     * Impacted methods:
+     * - [setShouldShareHistory]
+     * - [setShouldEncryptForInvitedMembers]
+     * @See [onSyncCompleted] to notify that the treatment is over.
+     */
     fun onSyncWillProcess()
+
+    /**
+     * Notify the store that the sync treatment response is finished.
+     * The store will save all aggregated data.
+     */
     fun onSyncCompleted()
 
     /**
@@ -291,6 +303,9 @@ internal interface IMXCryptoStore {
 
     fun shouldEncryptForInvitedMembers(roomId: String): Boolean
 
+    /**
+     * The data is not stored immediately, this MUST be call during a sync response treatment.
+     */
     fun setShouldEncryptForInvitedMembers(roomId: String, shouldEncryptForInvitedMembers: Boolean)
 
     fun shouldShareHistory(roomId: String): Boolean
@@ -298,6 +313,7 @@ internal interface IMXCryptoStore {
     /**
      * Sets a boolean flag that will determine whether or not room history (existing inbound sessions)
      * will be shared to new user invites.
+     * The data is not stored immediately, this MUST be call during a sync response treatment.
      *
      * @param roomId the room id
      * @param shouldShareHistory The boolean flag
@@ -582,5 +598,8 @@ internal interface IMXCryptoStore {
     fun tidyUpDataBase()
     fun getOutgoingRoomKeyRequests(inStates: Set<OutgoingRoomKeyRequestState>): List<OutgoingKeyRequest>
 
+    /**
+     * Store a bunch of data related to the users. @See [UserDataToStore].
+     */
     fun storeUserDataToStore(userDataToStore: UserDataToStore)
 }
