@@ -42,4 +42,16 @@
         app:layout_constraintTop_toBottomOf="@id/pollDate"
         tools:text="Which sport should the pupils do this year?" />
 
+    <LinearLayout
+        android:id="@+id/pollWinnerOptionsContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:divider="@drawable/divider_poll_options"
+        android:orientation="vertical"
+        android:showDividers="middle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pollTitle" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

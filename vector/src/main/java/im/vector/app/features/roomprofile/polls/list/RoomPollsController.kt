@@ -63,6 +63,7 @@ class RoomPollsController @Inject constructor(
             id(poll.id)
             formattedDate(host.dateFormatter.format(poll.creationTimestamp, DateFormatKind.TIMELINE_DAY_DIVIDER))
             title(poll.title)
+            winnerOptions(poll.winnerOptions)
             clickListener {
                 host.listener?.onPollClicked(poll.id)
             }

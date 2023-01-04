@@ -16,6 +16,7 @@
 
 package im.vector.app.features.roomprofile.polls.list
 
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
@@ -24,6 +25,8 @@ import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
+import im.vector.app.features.home.room.detail.timeline.item.PollOptionView
+import im.vector.app.features.home.room.detail.timeline.item.PollOptionViewState
 
 @EpoxyModelClass
 abstract class RoomPollItem : VectorEpoxyModel<RoomPollItem.Holder>(R.layout.item_poll) {
@@ -34,6 +37,9 @@ abstract class RoomPollItem : VectorEpoxyModel<RoomPollItem.Holder>(R.layout.ite
     @EpoxyAttribute
     lateinit var title: String
 
+    @EpoxyAttribute
+    var winnerOptions: List<PollOptionViewState.PollEnded> = emptyList()
+
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var clickListener: ClickListener? = null
 
@@ -42,10 +48,17 @@ abstract class RoomPollItem : VectorEpoxyModel<RoomPollItem.Holder>(R.layout.ite
         holder.view.onClick(clickListener)
         holder.date.text = formattedDate
         holder.title.text = title
+        holder.winnerOptions.removeAllViews()
+        for (winnerOption in winnerOptions) {
+            val optionView = PollOptionView(holder.view.context)
+            holder.winnerOptions.addView(optionView)
+            optionView.render(winnerOption)
+        }
     }
 
     class Holder : VectorEpoxyHolder() {
         val date by bind<TextView>(R.id.pollDate)
         val title by bind<TextView>(R.id.pollTitle)
+        val winnerOptions by bind<LinearLayout>(R.id.pollWinnerOptionsContainer)
     }
 }
