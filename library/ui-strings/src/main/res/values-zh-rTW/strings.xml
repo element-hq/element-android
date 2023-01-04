@@ -2759,7 +2759,7 @@
     <string name="qr_code_login_header_failed_e2ee_security_issue_description">設定安全訊息傳遞時遇到安全問題。以下其中一項可能已被駭入：您的家伺服器、您的網際網路連線、您的裝置；</string>
     <string name="qr_code_login_header_failed_other_description">請求失敗。</string>
     <string name="labs_enable_voice_broadcast_summary">可以在聊天室時間軸中錄製並傳送語音廣播。</string>
-    <string name="labs_enable_voice_broadcast_title">啟用語音廣播（正在積極開發中）</string>
+    <string name="labs_enable_voice_broadcast_title">啟用語音廣播</string>
     <string name="a11y_voice_broadcast_buffering">正在緩衝……</string>
     <string name="a11y_pause_voice_broadcast">暫停語音廣播</string>
     <string name="a11y_play_voice_broadcast">播放或繼續語音廣播</string>
