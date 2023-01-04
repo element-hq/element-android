@@ -54,4 +54,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/pollTitle" />
 
+    <TextView
+        android:id="@+id/pollTotalVotes"
+        style="@style/Widget.Vector.TextView.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pollWinnerOptionsContainer"
+        tools:text="@sample/poll.json/totalVotes" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
