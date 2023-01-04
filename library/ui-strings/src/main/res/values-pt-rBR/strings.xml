@@ -2813,7 +2813,7 @@
     <string name="qr_code_login_header_failed_e2ee_security_issue_description">Um problema de segurança foi encontrado ao configurar mensageria segura. Um dos seguintes pode ter sido comprometido: Seu servidorcasa; Sua(s) conexão(ões) de internet; Seu(s) dispositivo(s);</string>
     <string name="qr_code_login_header_failed_other_description">A requisição falhou.</string>
     <string name="labs_enable_voice_broadcast_summary">Seja capaz de gravar e enviar broadcast de voz em timeline de sala.</string>
-    <string name="labs_enable_voice_broadcast_title">Broadcast de voz (sob desenvolvimento ativo)</string>
+    <string name="labs_enable_voice_broadcast_title">Broadcast de voz</string>
     <string name="a11y_voice_broadcast_buffering">Buffering…</string>
     <string name="a11y_pause_voice_broadcast">Pausar broadcast de voz</string>
     <string name="a11y_play_voice_broadcast">Tocar ou retomar broadcast de voz</string>
