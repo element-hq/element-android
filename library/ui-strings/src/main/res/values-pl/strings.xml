@@ -2774,7 +2774,7 @@
     <string name="settings_enable_direct_share_summary">Pokaż ostatnie rozmowy w systemowym menu udostępniania</string>
     <string name="settings_enable_direct_share_title">Bezpośrednie udostępnianie</string>
     <string name="labs_enable_voice_broadcast_summary">Bądź w stanie nagrywać i wysyłać transmisje głosowe na osi czasu pokoju.</string>
-    <string name="labs_enable_voice_broadcast_title">Włącz transmicje głosowe (w trakcie aktywnego rozwoju)</string>
+    <string name="labs_enable_voice_broadcast_title">Włącz transmicje głosowe</string>
     <string name="labs_enable_client_info_recording_summary">Zachowuj nazwę aplikacji, wersję oraz jej url aby łatwiej rozpoznawać je w menedzerze sesji.</string>
     <string name="labs_enable_client_info_recording_title">Włącz rejestrowanie informacji o kliencie</string>
     <string name="labs_enable_session_manager_summary">Miej lepszą kontrolę nad zalogowanymi sesjami.</string>
