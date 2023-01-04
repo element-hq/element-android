@@ -2797,7 +2797,7 @@
 \n
 \nJärgmistes vaadetes palun anna sellele rakendusele teavituste kuvamiseks vajalikud õigused.</string>
     <string name="labs_enable_voice_broadcast_summary">Võimalus salvestada ja postitada ringhäälingukõnesid jututoa ajajoonele.</string>
-    <string name="labs_enable_voice_broadcast_title">Võta kasutusele ringhäälingukõned (aktiivses arenduses)</string>
+    <string name="labs_enable_voice_broadcast_title">Võta kasutusele ringhäälingukõned</string>
     <string name="qr_code_login_header_failed_homeserver_is_not_supported_description">Koduserver ei toeta muude seadmete võrku logimise võimalust.</string>
     <string name="qr_code_login_header_failed_user_cancelled_description">Sisselogimine katkestati teises seadmes.</string>
     <string name="qr_code_login_header_failed_invalid_qr_code_description">See QR-kood on vigane.</string>
