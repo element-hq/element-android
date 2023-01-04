@@ -2778,7 +2778,7 @@
     <string name="two">2</string>
     <string name="one">1</string>
     <string name="labs_enable_voice_broadcast_summary">In staat zijn om spraakuitzendingen op te nemen en te verzenden in de tijdlijn van de kamer.</string>
-    <string name="labs_enable_voice_broadcast_title">Spraakuitzending inschakelen (in actieve ontwikkeling)</string>
+    <string name="labs_enable_voice_broadcast_title">Spraakuitzending inschakelen</string>
     <string name="labs_enable_client_info_recording_summary">Noteer de naam, versie en url van de applicatie om sessies gemakkelijker te herkennen in sessiebeheer.</string>
     <string name="labs_enable_client_info_recording_title">Opname van applicatie informatie inschakelen</string>
     <string name="labs_enable_session_manager_summary">Meer zichtbaarheid en controle over al je sessies.</string>
