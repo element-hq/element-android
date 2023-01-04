@@ -2737,7 +2737,7 @@
     <string name="qr_code_login_new_device_instruction_2">به تنظیمات -&gt; امنیت و محرمانگی بروید</string>
     <string name="qr_code_login_new_device_instruction_1">کاره را روی افزارهٔ دیگرتان بگشایید</string>
     <string name="qr_code_login_header_failed_device_is_not_supported_description">پیوند دادن با این افزاره پشتیبانی نمی‌شود.</string>
-    <string name="labs_enable_voice_broadcast_title">به کار انداختن پخش صدا (زیر توسعهٔ فعّال)</string>
+    <string name="labs_enable_voice_broadcast_title">به کار انداختن پخش صدا</string>
     <string name="qr_code_login_show_qr_code_button">نمایش کد QR روی این افزاره</string>
     <string name="qr_code_login_link_a_device_show_qr_code_instruction_1">آغاز در صفحهٔ ورود</string>
     <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">گزینش‌«ورود با کد QR»</string>
