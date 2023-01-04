@@ -45,7 +45,7 @@ abstract class RoomPollItem : VectorEpoxyModel<RoomPollItem.Holder>(R.layout.ite
     }
 
     class Holder : VectorEpoxyHolder() {
-        val date by bind<TextView>(R.id.pollActiveDate)
-        val title by bind<TextView>(R.id.pollActiveTitle)
+        val date by bind<TextView>(R.id.pollDate)
+        val title by bind<TextView>(R.id.pollTitle)
     }
 }
