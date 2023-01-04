@@ -2794,7 +2794,7 @@
         <item quantity="other">Рассмотрите возможность выхода из старых сеансов (%1$d дней или дольше), которые вы более не используете.</item>
     </plurals>
     <string name="attachment_type_voice_broadcast">Голосовая трансляция</string>
-    <string name="labs_enable_voice_broadcast_title">Голосовые трансляции (в активной разработке)</string>
+    <string name="labs_enable_voice_broadcast_title">Голосовые трансляции</string>
     <string name="labs_enable_client_info_recording_summary">Записывает название клиента, версию и URL-адрес для более лёгкого распознавания сеансов в менеджере сеансов.</string>
     <string name="labs_enable_client_info_recording_title">Записывать информацию о клиенте</string>
     <string name="attachment_type_selector_gallery">Галерея</string>
