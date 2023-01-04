@@ -2728,7 +2728,7 @@
     <string name="home_empty_space_no_rooms_title">%s
 \nser lite tom ut.</string>
     <string name="labs_enable_voice_broadcast_summary">Möjliggör att spela in och skicka röstsändning i rummets tidslinje.</string>
-    <string name="labs_enable_voice_broadcast_title">Aktivera röstsändning (under aktiv utveckling)</string>
+    <string name="labs_enable_voice_broadcast_title">Aktivera röstsändning</string>
     <string name="labs_enable_client_info_recording_summary">Spara klientnamnet, versionen, och URL:en för att enklare känna igen sessioner i sessionehanteraren.</string>
     <string name="labs_enable_client_info_recording_title">Aktivera klientinforapportering</string>
     <string name="labs_enable_session_manager_summary">Ha bättre insyn i och kontroll över alla dina sessioner.</string>
