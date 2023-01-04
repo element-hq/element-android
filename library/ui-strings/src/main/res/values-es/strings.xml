@@ -2632,8 +2632,8 @@
         <item quantity="other">%1$s y %2$d otros</item>
     </plurals>
     <string name="search_space_two_parents">%1$s y %2$s</string>
-    <string name="auth_reset_password_error_unverified">Email no verificado, comprueba tu bandeja de entrada</string>
-    <string name="invites_empty_message">Aquí es donde tus nuevas solicitudes y invitaciones estarán.</string>
+    <string name="auth_reset_password_error_unverified">Correo electrónico no verificado, comprueba tu bandeja de entrada</string>
+    <string name="invites_empty_message">Aquí es donde se encontrarán tus nuevas solicitudes e invitaciones.</string>
     <string name="invites_empty_title">Nada nuevo.</string>
     <string name="invites_title">Invitaciones</string>
     <string name="space_list_empty_message">Los espacios son una nueva forma de agrupar salas y personas. Crea un espacio para empezar.</string>
@@ -2655,4 +2655,22 @@
         <item quantity="one">%1$d seleccionado</item>
         <item quantity="other">%1$d seleccionados</item>
     </plurals>
+    <string name="settings_enable_direct_share_title">Habilitar compartición directa</string>
+    <string name="grant_permission">Otorgar permiso</string>
+    <string name="settings_troubleshoot_test_system_settings_permission_failed">${app_name} necesita permiso para mostrar notificaciones.
+\nPor favor, otórgalo.</string>
+    <string name="permissions_rationale_msg_notification">${app_name} necesita permisos para mostrar notificaciones. Las notificaciones pueden mostrar tus mensajes, invitaciones, etc.
+\n
+\nPor favor, permite el acceso en las siguientes ventanas emergentes para poder visualizar notificaciones.</string>
+    <string name="labs_enable_rich_text_editor_summary">Prueba el editor de texto enriquecido (pronto llegará la opción de texto sin formato plain text)</string>
+    <string name="labs_enable_rich_text_editor_title">Habilitar editor de texto enriquecido (rich text)</string>
+    <string name="labs_enable_deferred_dm_summary">Crear MD únicamente al primer mensaje</string>
+    <string name="labs_enable_new_app_layout_summary">Una versión simplificada de Element con pestañas opcionales</string>
+    <string name="labs_enable_new_app_layout_title">Habilitar nueva disposición</string>
+    <string name="action_stop">Sí, Parar</string>
+    <string name="action_deselect_all">Deseleccionar todo</string>
+    <string name="a11y_collapse_space_children">Ocultar los hijos de %s</string>
+    <string name="a11y_expand_space_children">Mostrar los hijos de %s</string>
+    <string name="notice_voice_broadcast_ended_by_you">Has finalizado una transmisión de voz.</string>
+    <string name="notice_voice_broadcast_ended">%1$s ha finalizado una transmisión de voz.</string>
 </resources>

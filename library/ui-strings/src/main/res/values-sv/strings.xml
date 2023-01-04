@@ -2728,7 +2728,7 @@
     <string name="home_empty_space_no_rooms_title">%s
 \nser lite tom ut.</string>
     <string name="labs_enable_voice_broadcast_summary">Möjliggör att spela in och skicka röstsändning i rummets tidslinje.</string>
-    <string name="labs_enable_voice_broadcast_title">Aktivera röstsändning (under aktiv utveckling)</string>
+    <string name="labs_enable_voice_broadcast_title">Aktivera röstsändning</string>
     <string name="labs_enable_client_info_recording_summary">Spara klientnamnet, versionen, och URL:en för att enklare känna igen sessioner i sessionehanteraren.</string>
     <string name="labs_enable_client_info_recording_title">Aktivera klientinforapportering</string>
     <string name="labs_enable_session_manager_summary">Ha bättre insyn i och kontroll över alla dina sessioner.</string>
@@ -2804,7 +2804,7 @@
     <string name="qr_code_login_header_show_qr_code_new_device_description">Använd din inloggade enhet för att skanna QR-koden nedan:</string>
     <string name="qr_code_login_header_show_qr_code_title">Logga in med QR-kod</string>
     <string name="qr_code_login_header_scan_qr_code_description">Använd den här enhetens kamera för att skanna QR-koden på din andra enhet:</string>
-    <string name="a11y_voice_broadcast_buffering">Buffrar</string>
+    <string name="a11y_voice_broadcast_buffering">Buffrar…</string>
     <string name="a11y_pause_voice_broadcast">Pausa röstsändning</string>
     <string name="a11y_play_voice_broadcast">Spela eller återuppta röstsändning</string>
     <string name="a11y_stop_voice_broadcast_record">Avsluta inspelning av röstsändning</string>
@@ -2866,4 +2866,20 @@
     <string name="quoting">Citerar</string>
     <string name="replying_to">Besvarar %s</string>
     <string name="editing">Redigerar</string>
+    <string name="review_unverified_sessions_description">Granska för att försäkra att ditt konto är säkert</string>
+    <string name="review_unverified_sessions_title">Du har overifierade sessioner</string>
+    <string name="settings_enable_direct_share_summary">Visa nyliga chattar i systemets delningsmeny</string>
+    <string name="settings_enable_direct_share_title">Aktivera direktdelning</string>
+    <string name="device_manager_learn_more_sessions_encryption_not_supported">Den här sessioner stöder inte kryptering, så den kan inte verifieras.
+\n
+\nDu kommer inte kunna delta i rum där kryptering är aktiverat när du använder den här sessionen.
+\n
+\nFör bäst säkerhet och sekretess så rekommenderas det att använda Matrix-klienter som stöder kryptering.</string>
+    <string name="device_manager_signout_all_other_sessions">Logga ut alla andra sessioner</string>
+    <string name="device_manager_verification_status_detail_session_encryption_not_supported">Den här sessioner stöder inte kryptering och kan därför inte verifieras.</string>
+    <string name="settings_nightly_build_update">Hämta det senaste bygget (obs: du kan ha problem med att logga in)</string>
+    <string name="settings_nightly_build">Nightly-bygge</string>
+    <string name="voice_broadcast_live_broadcast">Direktsändning</string>
+    <string name="notice_voice_broadcast_ended_by_you">Du avslutade en röstsändning.</string>
+    <string name="notice_voice_broadcast_ended">%1$s avslutade en röstsändning.</string>
 </resources>
