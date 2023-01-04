@@ -2805,7 +2805,7 @@
     <string name="device_manager_sessions_sign_in_with_qr_code_title">Mit QR-Code anmelden</string>
     <string name="login_scan_qr_code">QR-Code einlesen</string>
     <string name="labs_enable_voice_broadcast_summary">Zeichne Sprachnachrichten auf, während du sie in Echtzeit in den Raumverlauf sendest.</string>
-    <string name="labs_enable_voice_broadcast_title">Sprachübertragung aktivieren (in aktiver Entwicklung)</string>
+    <string name="labs_enable_voice_broadcast_title">Sprachübertragung aktivieren</string>
     <string name="qr_code_login_header_failed_homeserver_is_not_supported_description">Der Heim-Server unterstützt Anmelden per QR-Code nicht.</string>
     <string name="qr_code_login_header_failed_user_cancelled_description">Die Anmeldung wurde vom anderen Gerät abgebrochen.</string>
     <string name="qr_code_login_header_failed_invalid_qr_code_description">Der QR-Code ist ungültig.</string>
