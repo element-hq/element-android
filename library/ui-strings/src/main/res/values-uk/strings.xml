@@ -2921,7 +2921,7 @@
     <string name="qr_code_login_header_failed_e2ee_security_issue_description">Під час налаштування захищеного обміну повідомленнями виникла проблема з безпекою. Можливо, порушено одне з таких налаштувань: Ваш домашній сервер; Ваше інтернет-з\'єднання; Ваш пристрій;</string>
     <string name="qr_code_login_header_failed_other_description">Запит не виконаний.</string>
     <string name="labs_enable_voice_broadcast_summary">Можливість записувати та надсилати голосові трансляції до стрічки кімнати.</string>
-    <string name="labs_enable_voice_broadcast_title">Увімкнути голосові трансляції (в активній розробці)</string>
+    <string name="labs_enable_voice_broadcast_title">Увімкнути голосові трансляції</string>
     <string name="a11y_voice_broadcast_buffering">Буферизація…</string>
     <string name="a11y_pause_voice_broadcast">Призупинити голосову трансляцію</string>
     <string name="a11y_play_voice_broadcast">Відтворити або поновити відтворення голосової трансляції</string>
