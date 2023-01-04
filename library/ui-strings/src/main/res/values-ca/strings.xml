@@ -2790,7 +2790,7 @@
     <string name="two">2</string>
     <string name="one">1</string>
     <string name="labs_enable_voice_broadcast_summary">Permet enregistrar i enviar emissions de veu dins una sala.</string>
-    <string name="labs_enable_voice_broadcast_title">Activa l\'emissió de veu (en desenvolupament)</string>
+    <string name="labs_enable_voice_broadcast_title">Activa l\'emissió de veu</string>
     <string name="labs_enable_client_info_recording_title">Activa la gravació d\'informació de client</string>
     <string name="labs_enable_client_info_recording_summary">Desa el nom de client, la versió i l\'URL per reconèixer les sessions més fàcilment dins el gestor de sessions.</string>
     <string name="labs_enable_session_manager_summary">Obté un millor control i visibilitat de totes les teves sessions.</string>
