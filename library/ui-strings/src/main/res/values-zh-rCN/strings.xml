@@ -2640,7 +2640,7 @@
     <string name="home_empty_space_no_rooms_title">%s
 \n看起来有点空荡荡的。</string>
     <string name="labs_enable_voice_broadcast_summary">能够在房间时间线中录制和发送语音广播。</string>
-    <string name="labs_enable_voice_broadcast_title">启用语音广播（正在积极开发中）</string>
+    <string name="labs_enable_voice_broadcast_title">启用语音广播</string>
     <string name="labs_enable_client_info_recording_summary">记录客户端名称、版本和网址，以便在会话管理器中更轻松地识别会话。</string>
     <string name="labs_enable_client_info_recording_title">启用客户端信息记录</string>
     <string name="labs_enable_session_manager_summary">对所有会话有更好的可见性和控制。</string>
