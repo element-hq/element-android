@@ -38,7 +38,7 @@ class RoomActivePollsController @Inject constructor(
         }
 
         val host = this
-        data.forEach { poll ->
+        for (poll in data) {
             activePollItem {
                 id(poll.id)
                 formattedDate(host.dateFormatter.format(poll.creationTimestamp, DateFormatKind.TIMELINE_DAY_DIVIDER))
