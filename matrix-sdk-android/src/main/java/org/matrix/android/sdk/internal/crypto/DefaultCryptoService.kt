@@ -431,6 +431,7 @@ internal class DefaultCryptoService @Inject constructor(
      * A sync response has been received.
      *
      * @param syncResponse the syncResponse
+     * @param cryptoStoreAggregator data aggregated during the sync response treatment to store
      */
     fun onSyncCompleted(syncResponse: SyncResponse, cryptoStoreAggregator: CryptoStoreAggregator) {
         cryptoStore.storeData(cryptoStoreAggregator)
