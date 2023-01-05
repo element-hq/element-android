@@ -54,7 +54,7 @@ class RoomPollsViewModel @AssistedInject constructor(
         super.onCleared()
     }
 
-    private fun handleSetFilter(filter: RoomPollsFilter) {
+    private fun handleSetFilter(filter: RoomPollsFilterType) {
         pollsCollectionJob?.cancel()
         pollsCollectionJob = getPollsUseCase.execute(filter)
                 .onEach { setState { copy(polls = it) } }

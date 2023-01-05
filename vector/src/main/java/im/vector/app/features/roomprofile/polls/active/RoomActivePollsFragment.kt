@@ -31,7 +31,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentRoomPollsListBinding
 import im.vector.app.features.roomprofile.polls.PollSummary
 import im.vector.app.features.roomprofile.polls.RoomPollsAction
-import im.vector.app.features.roomprofile.polls.RoomPollsFilter
+import im.vector.app.features.roomprofile.polls.RoomPollsFilterType
 import im.vector.app.features.roomprofile.polls.RoomPollsViewModel
 import timber.log.Timber
 import javax.inject.Inject
@@ -73,7 +73,7 @@ class RoomActivePollsFragment :
 
     override fun onResume() {
         super.onResume()
-        viewModel.handle(RoomPollsAction.SetFilter(RoomPollsFilter.ACTIVE))
+        viewModel.handle(RoomPollsAction.SetFilter(RoomPollsFilterType.ACTIVE))
     }
 
     override fun invalidate() = withState(viewModel) { viewState ->

@@ -47,7 +47,7 @@ class RoomPollsViewModelTest {
     @Test
     fun `given SetFilter action when handle then useCase is called with given filter and viewState is updated`() {
         // Given
-        val filter = RoomPollsFilter.ACTIVE
+        val filter = RoomPollsFilterType.ACTIVE
         val action = RoomPollsAction.SetFilter(filter = filter)
         val polls = listOf(givenAPollSummary())
         every { fakeGetPollsUseCase.execute(any()) } returns flowOf(polls)

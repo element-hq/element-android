@@ -16,7 +16,7 @@
 
 package im.vector.app.features.roomprofile.polls
 
-enum class RoomPollsFilter {
+enum class RoomPollsFilterType {
     ACTIVE,
     ENDED,
 }

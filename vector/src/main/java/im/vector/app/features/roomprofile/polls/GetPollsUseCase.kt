@@ -24,11 +24,11 @@ import javax.inject.Inject
 
 class GetPollsUseCase @Inject constructor() {
 
-    fun execute(filter: RoomPollsFilter): Flow<List<PollSummary>> {
+    fun execute(filter: RoomPollsFilterType): Flow<List<PollSummary>> {
         // TODO unmock and add unit tests
         return when (filter) {
-            RoomPollsFilter.ACTIVE -> getActivePolls()
-            RoomPollsFilter.ENDED -> emptyFlow()
+            RoomPollsFilterType.ACTIVE -> getActivePolls()
+            RoomPollsFilterType.ENDED -> emptyFlow()
         }.map { it.sortedByDescending { poll -> poll.creationTimestamp } }
     }
 
