@@ -1852,7 +1852,7 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun storeUserDataToStore(userDataToStore: UserDataToStore) {
+    override fun storeData(userDataToStore: UserDataToStore) {
         doRealmTransaction("storeUserDataToStore", realmConfiguration) { realm ->
             userDataToStore.userDevices.forEach {
                 storeUserDevices(realm, it.key, it.value)

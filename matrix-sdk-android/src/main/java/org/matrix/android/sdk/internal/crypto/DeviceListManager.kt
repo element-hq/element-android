@@ -427,7 +427,7 @@ internal class DeviceListManager @Inject constructor(
             )
         }
 
-        cryptoStore.storeUserDataToStore(userDataToStore)
+        cryptoStore.storeData(userDataToStore)
 
         // Update devices trust for these users
         // dispatchDeviceChange(downloadUsers)

@@ -601,5 +601,5 @@ internal interface IMXCryptoStore {
     /**
      * Store a bunch of data related to the users. @See [UserDataToStore].
      */
-    fun storeUserDataToStore(userDataToStore: UserDataToStore)
+    fun storeData(userDataToStore: UserDataToStore)
 }
