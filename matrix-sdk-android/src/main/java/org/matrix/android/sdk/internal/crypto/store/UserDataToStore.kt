@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.internal.crypto.store
 
-import org.matrix.android.sdk.api.session.crypto.crosssigning.CryptoCrossSigningKeys
+import org.matrix.android.sdk.api.session.crypto.crosssigning.UserIdentity
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 
 internal data class UserDataToStore(
@@ -25,7 +25,7 @@ internal data class UserDataToStore(
          */
         val userDevices: MutableMap<String, Map<String, CryptoDeviceInfo>> = mutableMapOf(),
         /**
-         * Map of userId -> [CryptoCrossSigningKeys].
+         * Map of userId -> [UserIdentity].
          */
-        val userCrossSigningKeys: MutableMap<String, CryptoCrossSigningKeys> = mutableMapOf(),
+        val userIdentities: MutableMap<String, UserIdentity> = mutableMapOf(),
 )

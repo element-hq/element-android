@@ -22,9 +22,9 @@ import org.matrix.android.sdk.api.session.crypto.GlobalCryptoConfig
 import org.matrix.android.sdk.api.session.crypto.NewSessionListener
 import org.matrix.android.sdk.api.session.crypto.OutgoingKeyRequest
 import org.matrix.android.sdk.api.session.crypto.OutgoingRoomKeyRequestState
-import org.matrix.android.sdk.api.session.crypto.crosssigning.CryptoCrossSigningKeys
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.session.crypto.crosssigning.PrivateKeysInfo
+import org.matrix.android.sdk.api.session.crypto.crosssigning.UserIdentity
 import org.matrix.android.sdk.api.session.crypto.keysbackup.SavedKeyBackupKeyInfo
 import org.matrix.android.sdk.api.session.crypto.model.AuditTrail
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
@@ -245,9 +245,12 @@ internal interface IMXCryptoStore {
      */
     fun storeUserDevices(userId: String, devices: Map<String, CryptoDeviceInfo>?)
 
-    fun storeUserCrossSigningKeys(
+    /**
+     * Store the cross signing keys for the user userId.
+     */
+    fun storeUserIdentity(
             userId: String,
-            cryptoCrossSigningKeys: CryptoCrossSigningKeys
+            userIdentity: UserIdentity
     )
 
     /**

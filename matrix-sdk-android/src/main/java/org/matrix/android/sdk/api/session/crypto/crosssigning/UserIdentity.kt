@@ -19,7 +19,7 @@ package org.matrix.android.sdk.api.session.crypto.crosssigning
 /**
  * Container for the three cross signing keys: master, self signing and user signing.
  */
-data class CryptoCrossSigningKeys(
+data class UserIdentity(
         val masterKey: CryptoCrossSigningKey?,
         val selfSigningKey: CryptoCrossSigningKey?,
         val userSigningKey: CryptoCrossSigningKey?,
