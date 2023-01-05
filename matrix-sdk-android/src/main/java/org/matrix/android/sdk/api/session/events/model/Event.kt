@@ -219,7 +219,7 @@ data class Event(
         if (isRedacted()) return "Message removed"
         val text = getDecryptedValue() ?: run {
             if (isPoll()) {
-                return getPollQuestion() ?: "created a poll."
+                return getPollQuestion() ?: if (isPollStart()) "created a poll." else if (isPollEnd()) "ended a poll." else null
             }
             return null
         }
@@ -232,7 +232,7 @@ data class Event(
             isImageMessage() -> "sent an image."
             isVideoMessage() -> "sent a video."
             isSticker() -> "sent a sticker."
-            isPoll() -> getPollQuestion() ?: "created a poll."
+            isPoll() -> getPollQuestion() ?: if (isPollStart()) "created a poll." else if (isPollEnd()) "ended a poll." else null
             isLiveLocation() -> "Live location."
             isLocationMessage() -> "has shared their location."
             else -> text
