@@ -75,7 +75,7 @@ class GetDeviceFullInfoListUseCase @Inject constructor(
                 .map { deviceInfo ->
                     val cryptoDeviceInfo = cryptoList.firstOrNull { it.deviceId == deviceInfo.deviceId }
                     val roomEncryptionTrustLevel = getEncryptionTrustLevelForDeviceUseCase.execute(currentSessionCrossSigningInfo, cryptoDeviceInfo)
-                    val isInactive = checkIfSessionIsInactiveUseCase.execute(deviceInfo.lastSeenTs ?: 0)
+                    val isInactive = checkIfSessionIsInactiveUseCase.execute(deviceInfo.lastSeenTs)
                     val isCurrentDevice = currentSessionCrossSigningInfo.deviceId == cryptoDeviceInfo?.deviceId
                     val deviceExtendedInfo = parseDeviceUserAgentUseCase.execute(deviceInfo.getBestLastSeenUserAgent())
                     val matrixClientInfo = deviceInfo.deviceId

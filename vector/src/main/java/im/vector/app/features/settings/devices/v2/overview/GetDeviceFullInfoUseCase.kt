@@ -49,10 +49,10 @@ class GetDeviceFullInfoUseCase @Inject constructor(
             ) { currentSessionCrossSigningInfo, deviceInfo, cryptoDeviceInfo ->
                 val info = deviceInfo.getOrNull()
                 val cryptoInfo = cryptoDeviceInfo.getOrNull()
-                val fullInfo = if (info != null && cryptoInfo != null) {
+                val fullInfo = if (info != null) {
                     val roomEncryptionTrustLevel = getEncryptionTrustLevelForDeviceUseCase.execute(currentSessionCrossSigningInfo, cryptoInfo)
-                    val isInactive = checkIfSessionIsInactiveUseCase.execute(info.lastSeenTs ?: 0)
-                    val isCurrentDevice = currentSessionCrossSigningInfo.deviceId == cryptoInfo.deviceId
+                    val isInactive = checkIfSessionIsInactiveUseCase.execute(info.lastSeenTs)
+                    val isCurrentDevice = currentSessionCrossSigningInfo.deviceId == info.deviceId
                     val deviceUserAgent = parseDeviceUserAgentUseCase.execute(info.getBestLastSeenUserAgent())
                     val matrixClientInfo = info.deviceId
                             ?.takeIf { it.isNotEmpty() }
