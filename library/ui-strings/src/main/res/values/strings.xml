@@ -3415,7 +3415,7 @@
     <string name="labs_enable_session_manager_summary">Have greater visibility and control over all your sessions.</string>
     <string name="labs_enable_client_info_recording_title">Enable client info recording</string>
     <string name="labs_enable_client_info_recording_summary">Record the client name, version, and url to recognise sessions more easily in session manager.</string>
-    <string name="labs_enable_voice_broadcast_title">Enable voice broadcast (under active development)</string>
+    <string name="labs_enable_voice_broadcast_title">Enable voice broadcast</string>
     <string name="labs_enable_voice_broadcast_summary">Be able to record and send voice broadcast in room timeline.</string>
 
     <!-- Note to translators: %s will be replaces with selected space name -->
