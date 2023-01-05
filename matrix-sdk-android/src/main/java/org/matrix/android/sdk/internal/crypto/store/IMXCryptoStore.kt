@@ -39,6 +39,7 @@ import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.crypto.model.MXInboundMegolmSessionWrapper
 import org.matrix.android.sdk.internal.crypto.model.OlmSessionWrapper
 import org.matrix.android.sdk.internal.crypto.model.OutboundGroupSessionWrapper
+import org.matrix.android.sdk.internal.crypto.store.db.CryptoStoreAggregator
 import org.matrix.android.sdk.internal.crypto.store.db.model.KeysBackupDataEntity
 import org.matrix.olm.OlmAccount
 import org.matrix.olm.OlmOutboundGroupSession
@@ -47,21 +48,6 @@ import org.matrix.olm.OlmOutboundGroupSession
  * The crypto data store.
  */
 internal interface IMXCryptoStore {
-
-    /**
-     * Notify the store that a sync response treatment is starting.
-     * Impacted methods:
-     * - [setShouldShareHistory]
-     * - [setShouldEncryptForInvitedMembers]
-     * @See [onSyncCompleted] to notify that the treatment is over.
-     */
-    fun onSyncWillProcess()
-
-    /**
-     * Notify the store that the sync treatment response is finished.
-     * The store will save all aggregated data.
-     */
-    fun onSyncCompleted()
 
     /**
      * @return the device id
@@ -307,7 +293,11 @@ internal interface IMXCryptoStore {
     fun shouldEncryptForInvitedMembers(roomId: String): Boolean
 
     /**
-     * The data is not stored immediately, this MUST be call during a sync response treatment.
+     * Sets a boolean flag that will determine whether or not this device should encrypt Events for
+     * invited members.
+     *
+     * @param roomId the room id
+     * @param shouldEncryptForInvitedMembers The boolean flag
      */
     fun setShouldEncryptForInvitedMembers(roomId: String, shouldEncryptForInvitedMembers: Boolean)
 
@@ -316,7 +306,6 @@ internal interface IMXCryptoStore {
     /**
      * Sets a boolean flag that will determine whether or not room history (existing inbound sessions)
      * will be shared to new user invites.
-     * The data is not stored immediately, this MUST be call during a sync response treatment.
      *
      * @param roomId the room id
      * @param shouldShareHistory The boolean flag
@@ -600,6 +589,11 @@ internal interface IMXCryptoStore {
     fun areDeviceKeysUploaded(): Boolean
     fun tidyUpDataBase()
     fun getOutgoingRoomKeyRequests(inStates: Set<OutgoingRoomKeyRequestState>): List<OutgoingKeyRequest>
+
+    /**
+     * Store a bunch of data collected during a sync response treatment. @See [CryptoStoreAggregator].
+     */
+    fun storeData(cryptoStoreAggregator: CryptoStoreAggregator)
 
     /**
      * Store a bunch of data related to the users. @See [UserDataToStore].

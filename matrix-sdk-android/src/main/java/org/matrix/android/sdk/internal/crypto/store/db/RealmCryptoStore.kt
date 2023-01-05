@@ -719,13 +719,17 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun setShouldEncryptForInvitedMembers(roomId: String, shouldEncryptForInvitedMembers: Boolean) {
-        cryptoStoreAggregator?.setShouldEncryptForInvitedMembersData?.put(roomId, shouldEncryptForInvitedMembers)
+        doRealmTransaction("setShouldEncryptForInvitedMembers", realmConfiguration) {
+            CryptoRoomEntity.getOrCreate(it, roomId).shouldEncryptForInvitedMembers = shouldEncryptForInvitedMembers
+        }
     }
 
     override fun setShouldShareHistory(roomId: String, shouldShareHistory: Boolean) {
         Timber.tag(loggerTag.value)
                 .v("setShouldShareHistory for room $roomId is $shouldShareHistory")
-        cryptoStoreAggregator?.setShouldShareHistoryData?.put(roomId, shouldShareHistory)
+        doRealmTransaction("setShouldShareHistory", realmConfiguration) {
+            CryptoRoomEntity.getOrCreate(it, roomId).shouldShareHistory = shouldShareHistory
+        }
     }
 
     override fun storeSession(olmSessionWrapper: OlmSessionWrapper, deviceKey: String) {
@@ -1823,37 +1827,24 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    private var cryptoStoreAggregator: CryptoStoreAggregator? = null
-    override fun onSyncWillProcess() {
-        if (cryptoStoreAggregator != null) {
-            Timber.e("cryptoStoreAggregator is not null...")
-        }
-        cryptoStoreAggregator = CryptoStoreAggregator()
-    }
-
-    override fun onSyncCompleted() {
-        val aggregator = cryptoStoreAggregator ?: return Unit.also {
-            Timber.e("cryptoStoreAggregator is null...")
-        }
-        cryptoStoreAggregator = null
-
-        if (aggregator.isEmpty()) {
+    override fun storeData(cryptoStoreAggregator: CryptoStoreAggregator) {
+        if (cryptoStoreAggregator.isEmpty()) {
             return
         }
-        doRealmTransaction("onSyncCompleted", realmConfiguration) { realm ->
+        doRealmTransaction("storeData - CryptoStoreAggregator", realmConfiguration) { realm ->
             // setShouldShareHistory
-            aggregator.setShouldShareHistoryData.forEach {
+            cryptoStoreAggregator.setShouldShareHistoryData.forEach {
                 CryptoRoomEntity.getOrCreate(realm, it.key).shouldShareHistory = it.value
             }
             // setShouldEncryptForInvitedMembers
-            aggregator.setShouldEncryptForInvitedMembersData.forEach {
+            cryptoStoreAggregator.setShouldEncryptForInvitedMembersData.forEach {
                 CryptoRoomEntity.getOrCreate(realm, it.key).shouldEncryptForInvitedMembers = it.value
             }
         }
     }
 
     override fun storeData(userDataToStore: UserDataToStore) {
-        doRealmTransaction("storeUserDataToStore", realmConfiguration) { realm ->
+        doRealmTransaction("storeData - UserDataToStore", realmConfiguration) { realm ->
             userDataToStore.userDevices.forEach {
                 storeUserDevices(realm, it.key, it.value)
             }

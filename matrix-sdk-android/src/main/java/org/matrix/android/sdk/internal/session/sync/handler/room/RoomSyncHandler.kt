@@ -258,7 +258,7 @@ internal class RoomSyncHandler @Inject constructor(
                     root = eventEntity
                 }
                 // Give info to crypto module
-                cryptoService.onStateEvent(roomId, event)
+                cryptoService.onStateEvent(roomId, event, aggregator.cryptoStoreAggregator)
                 roomMemberEventHandler.handle(realm, roomId, event, isInitialSync, aggregator)
             }
         }
@@ -495,7 +495,7 @@ internal class RoomSyncHandler @Inject constructor(
                 }
             }
             // Give info to crypto module
-            cryptoService.onLiveEvent(roomEntity.roomId, event, isInitialSync)
+            cryptoService.onLiveEvent(roomEntity.roomId, event, isInitialSync, aggregator.cryptoStoreAggregator)
 
             // Try to remove local echo
             event.unsignedData?.transactionId?.also { txId ->

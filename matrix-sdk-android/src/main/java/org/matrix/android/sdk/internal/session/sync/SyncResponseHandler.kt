@@ -29,6 +29,7 @@ import org.matrix.android.sdk.api.session.sync.model.RoomsSyncResponse
 import org.matrix.android.sdk.api.session.sync.model.SyncResponse
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
+import org.matrix.android.sdk.internal.crypto.store.db.CryptoStoreAggregator
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.session.SessionListeners
@@ -92,7 +93,7 @@ internal class SyncResponseHandler @Inject constructor(
 
             postTreatmentSyncResponse(syncResponse, isInitialSync)
 
-            markCryptoSyncCompleted(syncResponse)
+            markCryptoSyncCompleted(syncResponse, aggregator.cryptoStoreAggregator)
 
             handlePostSync()
 
@@ -218,10 +219,10 @@ internal class SyncResponseHandler @Inject constructor(
         }
     }
 
-    private fun markCryptoSyncCompleted(syncResponse: SyncResponse) {
+    private fun markCryptoSyncCompleted(syncResponse: SyncResponse, cryptoStoreAggregator: CryptoStoreAggregator) {
         relevantPlugins.measureSpan("task", "crypto_sync_handler_onSyncCompleted") {
             measureTimeMillis {
-                cryptoSyncHandler.onSyncCompleted(syncResponse)
+                cryptoSyncHandler.onSyncCompleted(syncResponse, cryptoStoreAggregator)
             }.also {
                 Timber.v("cryptoSyncHandler.onSyncCompleted took $it ms")
             }
