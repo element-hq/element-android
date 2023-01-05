@@ -1,4 +1,4 @@
-Element on turvallinen pikaviesti- ja tiimityösovellus joka sopii mainiosti ryhmäkeskusteluihin etätöissä. Sovellus käyttää päästä päähän -salausta ja tarjoaa videoneuvottelun, tiedostojen jakamisen ja äänipuhelut.
+Element on turvallinen pikaviesti- ja tiimityösovellus, joka sopii mainiosti ryhmäkeskusteluihin etätöissä. Sovellus käyttää läpisalausta ja tarjoaa videoneuvottelun, tiedostojen jakamisen ja äänipuhelut.
 
 <b>Elementin ominaisuuksia:</b>
 - Edistyneet viestintätyökalut
@@ -35,5 +35,8 @@ Real end-to-end encryption (only those in the conversation can decrypt messages)
 <b>Kattavaa viestintää ja integraatioita</b>
 Viestit, ääni- ja videopuhelut, tiedostojen jakaminen, näytön jakaminen ja koko joukko integraatioita, botteja ja sovelmia. Luo huoneita ja yhteisöjä, pidä yhteyttä ja hoida asiasi.
 
-<b>Jatka siitä mihin jäit</b>
-Stay in touch wherever you are with fully synchronised message history across all your devices and on the web at https://app.element.io
+<b>Jatka siitä, mihin jäit</b>
+Täysin synkronoitu viestihistoria kaikkien laitteidesi välillä ja verkkoselaimessa: https://app.element.io
+
+<b>Avointa lähdekoodia</b>
+Element Android on avoimen lähdekoodin projekti GitHubissa. Ilmoita virheistä ja osallistu kehittämiseen osoitteessa https://github.com/vector-im/element-android
