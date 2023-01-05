@@ -1,0 +1,1 @@
+"[Rich text editor] Add list formatting buttons to the rich text editor"

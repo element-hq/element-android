@@ -240,6 +240,12 @@ internal class RichTextComposerLayout @JvmOverloads constructor(
                 }
             }
         }
+        addRichTextMenuItem(R.drawable.ic_composer_bullet_list, R.string.rich_text_editor_bullet_list, ComposerAction.UNORDERED_LIST) {
+            views.richTextComposerEditText.toggleList(ordered = false)
+        }
+        addRichTextMenuItem(R.drawable.ic_composer_numbered_list, R.string.rich_text_editor_numbered_list, ComposerAction.ORDERED_LIST) {
+            views.richTextComposerEditText.toggleList(ordered = true)
+        }
     }
 
     fun setLink(link: String?) =
