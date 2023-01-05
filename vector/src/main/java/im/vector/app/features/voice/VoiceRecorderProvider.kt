@@ -17,20 +17,41 @@
 package im.vector.app.features.voice
 
 import android.content.Context
+import android.media.MediaCodecList
+import android.media.MediaFormat
 import android.os.Build
+import androidx.annotation.ChecksSdkIntAtLeast
+import androidx.annotation.VisibleForTesting
 import im.vector.app.features.VectorFeatures
+import io.element.android.opusencoder.OggOpusEncoder
 import kotlinx.coroutines.Dispatchers
+import org.matrix.android.sdk.api.util.BuildVersionSdkIntProvider
 import javax.inject.Inject
 
 class VoiceRecorderProvider @Inject constructor(
         private val context: Context,
         private val vectorFeatures: VectorFeatures,
+        private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
 ) {
     fun provideVoiceRecorder(): VoiceRecorder {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && vectorFeatures.forceUsageOfOpusEncoder().not()) {
+        return if (useNativeRecorder()) {
             VoiceRecorderQ(context)
         } else {
-            VoiceRecorderL(context, Dispatchers.IO)
+            VoiceRecorderL(context, Dispatchers.IO, OggOpusEncoder.create())
         }
+    }
+
+    @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.Q)
+    private fun useNativeRecorder(): Boolean {
+        return buildVersionSdkIntProvider.get() >= Build.VERSION_CODES.Q &&
+                hasOpusEncoder() &&
+                !vectorFeatures.forceUsageOfOpusEncoder()
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    internal fun hasOpusEncoder(): Boolean {
+        val codecList = MediaCodecList(MediaCodecList.ALL_CODECS)
+        val format = MediaFormat.createAudioFormat(MediaFormat.MIMETYPE_AUDIO_OPUS, 48000, 1)
+        return codecList.findEncoderForFormat(format) != null
     }
 }

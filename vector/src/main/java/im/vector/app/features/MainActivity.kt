@@ -30,23 +30,21 @@ import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.startSyncing
 import im.vector.app.core.extensions.vectorStore
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.deleteAllFiles
 import im.vector.app.databinding.ActivityMainBinding
 import im.vector.app.features.analytics.VectorAnalytics
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.home.ShortcutsHandler
 import im.vector.app.features.notifications.NotificationDrawerManager
-import im.vector.app.features.pin.PinCodeStore
-import im.vector.app.features.pin.PinLocker
 import im.vector.app.features.pin.UnlockedActivity
+import im.vector.app.features.pin.lockscreen.crypto.LockScreenKeyRepository
+import im.vector.app.features.pin.lockscreen.pincode.PinCodeHelper
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.session.VectorSessionStore
-import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.signout.hard.SignedOutActivity
 import im.vector.app.features.start.StartAppAction
 import im.vector.app.features.start.StartAppAndroidService
@@ -55,6 +53,7 @@ import im.vector.app.features.start.StartAppViewModel
 import im.vector.app.features.start.StartAppViewState
 import im.vector.app.features.themes.ActivityOtherThemes
 import im.vector.app.features.ui.UiStateRepository
+import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -128,15 +127,12 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
     private lateinit var args: MainActivityArgs
 
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
-    @Inject lateinit var sessionHolder: ActiveSessionHolder
-    @Inject lateinit var errorFormatter: ErrorFormatter
-    @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var uiStateRepository: UiStateRepository
     @Inject lateinit var shortcutsHandler: ShortcutsHandler
-    @Inject lateinit var pinCodeStore: PinCodeStore
-    @Inject lateinit var pinLocker: PinLocker
+    @Inject lateinit var pinCodeHelper: PinCodeHelper
     @Inject lateinit var popupAlertManager: PopupAlertManager
     @Inject lateinit var vectorAnalytics: VectorAnalytics
+    @Inject lateinit var lockScreenKeyRepository: LockScreenKeyRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -178,16 +174,18 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
     private fun handleAppStarted() {
         if (intent.hasExtra(EXTRA_NEXT_INTENT)) {
             // Start the next Activity
-            val nextIntent = intent.getParcelableExtra<Intent>(EXTRA_NEXT_INTENT)
+            startSyncing()
+            val nextIntent = intent.getParcelableExtraCompat<Intent>(EXTRA_NEXT_INTENT)
             startIntentAndFinish(nextIntent)
         } else if (intent.hasExtra(EXTRA_INIT_SESSION)) {
+            startSyncing()
             setResult(RESULT_OK)
             finish()
         } else if (intent.action == ACTION_ROOM_DETAILS_FROM_SHORTCUT) {
+            startSyncing()
             val roomId = intent.getStringExtra(EXTRA_ROOM_ID)
             if (roomId?.isNotEmpty() == true) {
-                // TODO Add a trigger Shortcut to the analytics.
-                navigator.openRoom(this, roomId)
+                navigator.openRoom(this, roomId, trigger = ViewRoom.Trigger.Shortcut)
             }
             finish()
         } else {
@@ -199,9 +197,14 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
             if (args.clearCache || args.clearCredentials) {
                 doCleanUp()
             } else {
+                startSyncing()
                 startNextActivityAndFinish()
             }
         }
+    }
+
+    private fun startSyncing() {
+        activeSessionHolder.getSafeActiveSession()?.startSyncing(this)
     }
 
     private fun clearNotifications() {
@@ -216,7 +219,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
     }
 
     private fun parseArgs(): MainActivityArgs {
-        val argsFromIntent: MainActivityArgs? = intent.getParcelableExtra(EXTRA_ARGS)
+        val argsFromIntent: MainActivityArgs? = intent.getParcelableExtraCompat(EXTRA_ARGS)
         Timber.w("Starting MainActivity with $argsFromIntent")
 
         return MainActivityArgs(
@@ -229,7 +232,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
     }
 
     private fun doCleanUp() {
-        val session = sessionHolder.getSafeActiveSession()
+        val session = activeSessionHolder.getSafeActiveSession()
         if (session == null) {
             startNextActivityAndFinish()
             return
@@ -241,7 +244,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                 lifecycleScope.launch {
                     // Just do the local cleanup
                     Timber.w("Account deactivated, start app")
-                    sessionHolder.clearActiveSession()
+                    activeSessionHolder.clearActiveSession()
                     doLocalCleanup(clearPreferences = true, onboardingStore)
                     startNextActivityAndFinish()
                 }
@@ -255,7 +258,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                         return@launch
                     }
                     Timber.w("SIGN_OUT: success, start app")
-                    sessionHolder.clearActiveSession()
+                    activeSessionHolder.clearActiveSession()
                     doLocalCleanup(clearPreferences = true, onboardingStore)
                     startNextActivityAndFinish()
                 }
@@ -284,9 +287,10 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
             vectorPreferences.clearPreferences()
             uiStateRepository.reset()
             pinLocker.unlock()
-            pinCodeStore.deletePinCode()
+            pinCodeHelper.deletePinCode()
             vectorAnalytics.onSignOut()
             vectorSessionStore.clear()
+            lockScreenKeyRepository.deleteSystemKey()
         }
         withContext(Dispatchers.IO) {
             // On BG thread
@@ -326,10 +330,10 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
             args.isUserLoggedOut ->
                 // the homeserver has invalidated the token (password changed, device deleted, other security reasons)
                 SignedOutActivity.newIntent(this)
-            sessionHolder.hasActiveSession() ->
+            activeSessionHolder.hasActiveSession() ->
                 // We have a session.
                 // Check it can be opened
-                if (sessionHolder.getActiveSession().isOpenable) {
+                if (activeSessionHolder.getActiveSession().isOpenable) {
                     HomeActivity.newIntent(this, firstStartMainActivity = false, existingSession = true)
                 } else {
                     // The token is still invalid

@@ -17,28 +17,36 @@
 package org.matrix.android.sdk.internal.crypto.algorithms.megolm
 
 import dagger.Lazy
-import org.matrix.android.sdk.api.MatrixConfiguration
+import org.matrix.android.sdk.api.crypto.MXCryptoConfig
 import org.matrix.android.sdk.internal.crypto.MXOlmDevice
 import org.matrix.android.sdk.internal.crypto.OutgoingKeyRequestManager
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
+import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.StreamEventsManager
+import org.matrix.android.sdk.internal.util.time.Clock
 import javax.inject.Inject
 
 internal class MXMegolmDecryptionFactory @Inject constructor(
         private val olmDevice: MXOlmDevice,
+        @UserId private val myUserId: String,
         private val outgoingKeyRequestManager: OutgoingKeyRequestManager,
         private val cryptoStore: IMXCryptoStore,
-        private val matrixConfiguration: MatrixConfiguration,
-        private val eventsManager: Lazy<StreamEventsManager>
+        private val eventsManager: Lazy<StreamEventsManager>,
+        private val unrequestedForwardManager: UnRequestedForwardManager,
+        private val mxCryptoConfig: MXCryptoConfig,
+        private val clock: Clock,
 ) {
 
     fun create(): MXMegolmDecryption {
         return MXMegolmDecryption(
-                olmDevice,
-                outgoingKeyRequestManager,
-                cryptoStore,
-                matrixConfiguration,
-                eventsManager
+                olmDevice = olmDevice,
+                myUserId = myUserId,
+                outgoingKeyRequestManager = outgoingKeyRequestManager,
+                cryptoStore = cryptoStore,
+                liveEventManager = eventsManager,
+                unrequestedForwardManager = unrequestedForwardManager,
+                cryptoConfig = mxCryptoConfig,
+                clock = clock,
         )
     }
 }

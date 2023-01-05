@@ -23,6 +23,7 @@ import android.view.ViewGroup
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -39,11 +40,12 @@ import im.vector.app.features.qrcode.QrCodeScannerActivity
 import timber.log.Timber
 import javax.inject.Inject
 
-class VerificationChooseMethodFragment @Inject constructor(
-        val controller: VerificationChooseMethodController
-) : VectorBaseFragment<BottomSheetVerificationChildFragmentBinding>(),
+@AndroidEntryPoint
+class VerificationChooseMethodFragment :
+        VectorBaseFragment<BottomSheetVerificationChildFragmentBinding>(),
         VerificationChooseMethodController.Listener {
 
+    @Inject lateinit var controller: VerificationChooseMethodController
     private val viewModel by fragmentViewModel(VerificationChooseMethodViewModel::class)
 
     private val sharedViewModel by parentFragmentViewModel(VerificationBottomSheetViewModel::class)
@@ -76,7 +78,7 @@ class VerificationChooseMethodFragment @Inject constructor(
     override fun doVerifyBySas() = withState(sharedViewModel) { state ->
         sharedViewModel.handle(
                 VerificationAction.StartSASVerification(
-                        state.otherUserMxItem?.id ?: "",
+                        state.otherUserId,
                         state.pendingRequest.invoke()?.transactionId ?: ""
                 )
         )
@@ -128,7 +130,7 @@ class VerificationChooseMethodFragment @Inject constructor(
     private fun onRemoteQrCodeScanned(remoteQrCode: String) = withState(sharedViewModel) { state ->
         sharedViewModel.handle(
                 VerificationAction.RemoteQrCodeScanned(
-                        state.otherUserMxItem?.id ?: "",
+                        state.otherUserId,
                         state.pendingRequest.invoke()?.transactionId ?: "",
                         remoteQrCode
                 )

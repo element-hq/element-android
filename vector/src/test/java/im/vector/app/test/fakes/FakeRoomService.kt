@@ -16,12 +16,18 @@
 
 package im.vector.app.test.fakes
 
+import io.mockk.every
 import io.mockk.mockk
 import org.matrix.android.sdk.api.session.room.RoomService
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
 class FakeRoomService(
         private val fakeRoom: FakeRoom = FakeRoom()
 ) : RoomService by mockk() {
 
     override fun getRoom(roomId: String) = fakeRoom
+
+    fun getRoomSummaryReturns(roomSummary: RoomSummary?) {
+        every { getRoomSummary(any()) } returns roomSummary
+    }
 }

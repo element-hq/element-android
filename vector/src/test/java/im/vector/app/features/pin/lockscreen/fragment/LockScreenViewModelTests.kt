@@ -21,7 +21,7 @@ import android.os.Build
 import android.security.keystore.KeyPermanentlyInvalidatedException
 import androidx.biometric.BiometricPrompt
 import androidx.fragment.app.FragmentActivity
-import com.airbnb.mvrx.test.MvRxTestRule
+import com.airbnb.mvrx.test.MavericksTestRule
 import com.airbnb.mvrx.withState
 import im.vector.app.features.pin.lockscreen.biometrics.BiometricAuthError
 import im.vector.app.features.pin.lockscreen.biometrics.BiometricHelper
@@ -54,7 +54,7 @@ import org.junit.Test
 class LockScreenViewModelTests {
 
     @get:Rule
-    val mvrxTestRule = MvRxTestRule()
+    val mavericksTestRule = MavericksTestRule()
 
     private val pinCodeHelper = mockk<PinCodeHelper>(relaxed = true)
     private val biometricHelper = mockk<BiometricHelper>(relaxed = true)
@@ -295,7 +295,7 @@ class LockScreenViewModelTests {
         test.assertEvents(LockScreenViewEvent.ShowBiometricKeyInvalidatedMessage)
     }
 
-        private fun createViewState(
+    private fun createViewState(
             lockScreenConfiguration: LockScreenConfiguration = createDefaultConfiguration(),
             canUseBiometricAuth: Boolean = false,
             showBiometricPromptAutomatically: Boolean = false,

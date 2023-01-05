@@ -23,7 +23,7 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineService
 
 class FakeTimelineService : TimelineService by mockk() {
 
-    fun givenTimelineEvent(event: TimelineEvent) {
+    fun givenTimelineEvent(event: TimelineEvent?) {
         every { getTimelineEvent(any()) } returns event
     }
 }

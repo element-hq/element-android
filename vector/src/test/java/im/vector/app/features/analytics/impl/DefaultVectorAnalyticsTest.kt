@@ -23,6 +23,7 @@ import im.vector.app.test.fakes.FakeAnalyticsStore
 import im.vector.app.test.fakes.FakeLateInitUserPropertiesFactory
 import im.vector.app.test.fakes.FakePostHog
 import im.vector.app.test.fakes.FakePostHogFactory
+import im.vector.app.test.fakes.FakeSentryAnalytics
 import im.vector.app.test.fixtures.AnalyticsConfigFixture.anAnalyticsConfig
 import im.vector.app.test.fixtures.aUserProperties
 import im.vector.app.test.fixtures.aVectorAnalyticsEvent
@@ -45,9 +46,11 @@ class DefaultVectorAnalyticsTest {
     private val fakePostHog = FakePostHog()
     private val fakeAnalyticsStore = FakeAnalyticsStore()
     private val fakeLateInitUserPropertiesFactory = FakeLateInitUserPropertiesFactory()
+    private val fakeSentryAnalytics = FakeSentryAnalytics()
 
     private val defaultVectorAnalytics = DefaultVectorAnalytics(
             postHogFactory = FakePostHogFactory(fakePostHog.instance).instance,
+            sentryAnalytics = fakeSentryAnalytics.instance,
             analyticsStore = fakeAnalyticsStore.instance,
             globalScope = CoroutineScope(Dispatchers.Unconfined),
             analyticsConfig = anAnalyticsConfig(isEnabled = true),
@@ -67,17 +70,21 @@ class DefaultVectorAnalyticsTest {
     }
 
     @Test
-    fun `when consenting to analytics then updates posthog opt out to false`() = runTest {
+    fun `when consenting to analytics then updates posthog opt out to false and initialize Sentry`() = runTest {
         fakeAnalyticsStore.givenUserContent(consent = true)
 
         fakePostHog.verifyOptOutStatus(optedOut = false)
+
+        fakeSentryAnalytics.verifySentryInit()
     }
 
     @Test
-    fun `when revoking consent to analytics then updates posthog opt out to true`() = runTest {
+    fun `when revoking consent to analytics then updates posthog opt out to true and closes Sentry`() = runTest {
         fakeAnalyticsStore.givenUserContent(consent = false)
 
         fakePostHog.verifyOptOutStatus(optedOut = true)
+
+        fakeSentryAnalytics.verifySentryClose()
     }
 
     @Test
@@ -97,12 +104,14 @@ class DefaultVectorAnalyticsTest {
     }
 
     @Test
-    fun `when signing out then resets posthog`() = runTest {
+    fun `when signing out then resets posthog and closes Sentry`() = runTest {
         fakeAnalyticsStore.allowSettingAnalyticsIdToCallBackingFlow()
 
         defaultVectorAnalytics.onSignOut()
 
         fakePostHog.verifyReset()
+
+        fakeSentryAnalytics.verifySentryClose()
     }
 
     @Test
@@ -139,6 +148,25 @@ class DefaultVectorAnalyticsTest {
         defaultVectorAnalytics.capture(AN_EVENT)
 
         fakePostHog.verifyNoEventTracking()
+    }
+
+    @Test
+    fun `given user has consented, when tracking exception, then submits to sentry`() = runTest {
+        fakeAnalyticsStore.givenUserContent(consent = true)
+        val exception = Exception("test")
+
+        defaultVectorAnalytics.trackError(exception)
+
+        fakeSentryAnalytics.verifySentryTrackError(exception)
+    }
+
+    @Test
+    fun `given user has not consented, when tracking exception, then does not track to sentry`() = runTest {
+        fakeAnalyticsStore.givenUserContent(consent = false)
+
+        defaultVectorAnalytics.trackError(Exception("test"))
+
+        fakeSentryAnalytics.verifyNoErrorTracking()
     }
 }
 

@@ -19,6 +19,7 @@ package im.vector.app.features.permalink
 import android.content.Context
 import android.net.Uri
 import androidx.core.net.toUri
+import androidx.fragment.app.FragmentActivity
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.isIgnored
@@ -52,17 +53,17 @@ class PermalinkHandler @Inject constructor(
 ) {
 
     suspend fun launch(
-            context: Context,
+            fragmentActivity: FragmentActivity,
             deepLink: String?,
             navigationInterceptor: NavigationInterceptor? = null,
             buildTask: Boolean = false
     ): Boolean {
         val uri = deepLink?.let { Uri.parse(it) }
-        return launch(context, uri, navigationInterceptor, buildTask)
+        return launch(fragmentActivity, uri, navigationInterceptor, buildTask)
     }
 
     suspend fun launch(
-            context: Context,
+            fragmentActivity: FragmentActivity,
             deepLink: Uri?,
             navigationInterceptor: NavigationInterceptor? = null,
             buildTask: Boolean = false
@@ -70,12 +71,12 @@ class PermalinkHandler @Inject constructor(
         return when {
             deepLink == null -> false
             deepLink.isIgnored() -> true
-            !isPermalinkSupported(context, deepLink.toString()) -> false
+            !isPermalinkSupported(fragmentActivity, deepLink.toString()) -> false
             else -> {
                 tryOrNull {
                     withContext(Dispatchers.Default) {
                         val permalinkData = PermalinkParser.parse(deepLink)
-                        handlePermalink(permalinkData, deepLink, context, navigationInterceptor, buildTask)
+                        handlePermalink(permalinkData, deepLink, fragmentActivity, navigationInterceptor, buildTask)
                     }
                 } ?: false
             }
@@ -85,22 +86,22 @@ class PermalinkHandler @Inject constructor(
     private suspend fun handlePermalink(
             permalinkData: PermalinkData,
             rawLink: Uri,
-            context: Context,
+            fragmentActivity: FragmentActivity,
             navigationInterceptor: NavigationInterceptor?,
             buildTask: Boolean
     ): Boolean {
         return when (permalinkData) {
-            is PermalinkData.RoomLink -> handleRoomLink(permalinkData, rawLink, context, navigationInterceptor, buildTask)
-            is PermalinkData.UserLink -> handleUserLink(permalinkData, rawLink, context, navigationInterceptor, buildTask)
-            is PermalinkData.FallbackLink -> handleFallbackLink(permalinkData, context)
-            is PermalinkData.RoomEmailInviteLink -> handleRoomInviteLink(permalinkData, context)
+            is PermalinkData.RoomLink -> handleRoomLink(permalinkData, rawLink, fragmentActivity, navigationInterceptor, buildTask)
+            is PermalinkData.UserLink -> handleUserLink(permalinkData, rawLink, fragmentActivity, navigationInterceptor, buildTask)
+            is PermalinkData.FallbackLink -> handleFallbackLink(permalinkData, fragmentActivity)
+            is PermalinkData.RoomEmailInviteLink -> handleRoomInviteLink(permalinkData, fragmentActivity)
         }
     }
 
     private suspend fun handleRoomLink(
             permalinkData: PermalinkData.RoomLink,
             rawLink: Uri,
-            context: Context,
+            fragmentActivity: FragmentActivity,
             navigationInterceptor: NavigationInterceptor?,
             buildTask: Boolean
     ): Boolean {
@@ -119,7 +120,7 @@ class PermalinkHandler @Inject constructor(
         }
         openRoom(
                 navigationInterceptor,
-                context = context,
+                fragmentActivity = fragmentActivity,
                 roomId = roomId,
                 permalinkData = permalinkData,
                 rawLink = rawLink,
@@ -200,7 +201,7 @@ class PermalinkHandler @Inject constructor(
      */
     private fun openRoom(
             navigationInterceptor: NavigationInterceptor?,
-            context: Context,
+            fragmentActivity: FragmentActivity,
             roomId: String?,
             permalinkData: PermalinkData.RoomLink,
             rawLink: Uri,
@@ -209,7 +210,7 @@ class PermalinkHandler @Inject constructor(
     ) {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
         if (roomId == null) {
-            context.toast(R.string.room_error_not_found)
+            fragmentActivity.toast(R.string.room_error_not_found)
             return
         }
         val roomSummary = session.getRoomSummary(roomId)
@@ -218,19 +219,19 @@ class PermalinkHandler @Inject constructor(
 //        val roomAlias = permalinkData.getRoomAliasOrNull()
         val isSpace = roomSummary?.roomType == RoomType.SPACE
         return when {
-            membership == Membership.BAN -> context.toast(R.string.error_opening_banned_room)
+            membership == Membership.BAN -> fragmentActivity.toast(R.string.error_opening_banned_room)
             membership?.isActive().orFalse() -> {
                 if (!isSpace && membership == Membership.JOIN) {
                     // If it's a room you're in, let's just open it, you can tap back if needed
-                    navigationInterceptor.openJoinedRoomScreen(buildTask, roomId, eventId, rawLink, context, rootThreadEventId, roomSummary)
+                    navigationInterceptor.openJoinedRoomScreen(buildTask, roomId, eventId, rawLink, fragmentActivity, rootThreadEventId, roomSummary)
                 } else {
-                    // maybe open space preview navigator.openSpacePreview(context, roomId)? if already joined?
-                    navigator.openMatrixToBottomSheet(context, rawLink.toString(), OriginOfMatrixTo.LINK)
+                    // maybe open space preview navigator.openSpacePreview(fragmentActivity, roomId)? if already joined?
+                    navigator.openMatrixToBottomSheet(fragmentActivity, rawLink.toString(), OriginOfMatrixTo.LINK)
                 }
             }
             else -> {
                 // XXX this could trigger another server load
-                navigator.openMatrixToBottomSheet(context, rawLink.toString(), OriginOfMatrixTo.LINK)
+                navigator.openMatrixToBottomSheet(fragmentActivity, rawLink.toString(), OriginOfMatrixTo.LINK)
             }
         }
     }

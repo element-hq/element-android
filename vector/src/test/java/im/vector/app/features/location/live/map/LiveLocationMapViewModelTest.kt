@@ -16,7 +16,7 @@
 
 package im.vector.app.features.location.live.map
 
-import com.airbnb.mvrx.test.MvRxTestRule
+import com.airbnb.mvrx.test.MavericksTestRule
 import im.vector.app.features.location.LocationData
 import im.vector.app.features.location.live.StopLiveLocationShareUseCase
 import im.vector.app.test.fakes.FakeLocationSharingServiceConnection
@@ -37,7 +37,7 @@ private const val A_ROOM_ID = "room_id"
 class LiveLocationMapViewModelTest {
 
     @get:Rule
-    val mvRxTestRule = MvRxTestRule(testDispatcher = UnconfinedTestDispatcher())
+    val mavericksTestRule = MavericksTestRule(testDispatcher = UnconfinedTestDispatcher())
 
     private val args = LiveLocationMapViewArgs(roomId = A_ROOM_ID)
 

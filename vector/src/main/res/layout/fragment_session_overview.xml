@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <im.vector.app.features.settings.devices.v2.list.SessionInfoView
+            android:id="@+id/sessionOverviewInfo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="24dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
+
+        <im.vector.app.features.settings.devices.v2.overview.SessionOverviewEntryView
+            android:id="@+id/sessionOverviewEntryDetails"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sessionOverviewInfo"
+            app:sessionOverviewEntryDescription="@string/device_manager_session_details_description"
+            app:sessionOverviewEntryTitle="@string/device_manager_session_details_title" />
+
+        <im.vector.app.features.settings.devices.v2.overview.SessionOverviewEntrySwitchView
+            android:id="@+id/sessionOverviewPushNotifications"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sessionOverviewEntryDetails"
+            app:sessionOverviewEntrySwitchDescription="@string/device_manager_push_notifications_description"
+            app:sessionOverviewEntrySwitchTitle="@string/device_manager_push_notifications_title" />
+
+        <Button
+            android:id="@+id/sessionOverviewSignout"
+            style="@style/Widget.Vector.Button.Text.Destructive"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginTop="4dp"
+            android:text="@string/device_manager_session_overview_signout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sessionOverviewPushNotifications"
+            app:layout_constraintWidth="wrap_content" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

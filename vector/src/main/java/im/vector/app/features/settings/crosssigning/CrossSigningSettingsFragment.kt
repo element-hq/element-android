@@ -25,6 +25,7 @@ import androidx.core.view.isVisible
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -39,10 +40,12 @@ import javax.inject.Inject
 /**
  * This Fragment is only used when user activates developer mode from the settings.
  */
-class CrossSigningSettingsFragment @Inject constructor(
-        private val controller: CrossSigningSettingsController,
-) : VectorBaseFragment<FragmentGenericRecyclerBinding>(),
+@AndroidEntryPoint
+class CrossSigningSettingsFragment :
+        VectorBaseFragment<FragmentGenericRecyclerBinding>(),
         CrossSigningSettingsController.InteractionListener {
+
+    @Inject lateinit var controller: CrossSigningSettingsController
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGenericRecyclerBinding {
         return FragmentGenericRecyclerBinding.inflate(inflater, container, false)

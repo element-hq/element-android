@@ -106,6 +106,8 @@ interface Timeline {
 
         /**
          * Called when new events come through the sync.
+         * Note that the corresponding events may not be available yet in the database.
+         * [onTimelineUpdated] will be called with the event content.
          */
         fun onNewTimelineEvents(eventIds: List<String>) = Unit
 

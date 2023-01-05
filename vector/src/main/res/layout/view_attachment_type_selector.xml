@@ -64,6 +64,16 @@
                 app:tint="?colorPrimary" />
 
             <ImageButton
+                android:id="@+id/attachmentVoiceBroadcast"
+                android:layout_width="@dimen/layout_touch_size"
+                android:layout_height="@dimen/layout_touch_size"
+                android:layout_marginStart="2dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:contentDescription="@string/attachment_type_voice_broadcast"
+                android:src="@drawable/ic_attachment_voice_broadcast"
+                app:tint="?colorPrimary" />
+
+            <ImageButton
                 android:id="@+id/attachmentPollButton"
                 android:layout_width="@dimen/layout_touch_size"
                 android:layout_height="@dimen/layout_touch_size"

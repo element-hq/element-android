@@ -30,16 +30,16 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
+import im.vector.app.core.dialogs.GalleryOrCameraDialogHelperFactory
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.intent.getFilenameFromUri
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.VectorMenuProvider
-import im.vector.app.core.resources.ColorProvider
-import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.FragmentRoomSettingGenericBinding
 import im.vector.app.features.home.AvatarRenderer
@@ -59,29 +59,35 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import java.util.UUID
 import javax.inject.Inject
 
-class SpaceSettingsFragment @Inject constructor(
-        private val epoxyController: SpaceSettingsController,
-        colorProvider: ColorProvider,
-        clock: Clock,
-        private val avatarRenderer: AvatarRenderer,
-) : VectorBaseFragment<FragmentRoomSettingGenericBinding>(),
+@AndroidEntryPoint
+class SpaceSettingsFragment :
+        VectorBaseFragment<FragmentRoomSettingGenericBinding>(),
         SpaceSettingsController.Callback,
         GalleryOrCameraDialogHelper.Listener,
         OnBackPressed,
         VectorMenuProvider {
+
+    @Inject lateinit var epoxyController: SpaceSettingsController
+    @Inject lateinit var galleryOrCameraDialogHelperFactory: GalleryOrCameraDialogHelperFactory
+    @Inject lateinit var avatarRenderer: AvatarRenderer
 
     private val viewModel: RoomSettingsViewModel by fragmentViewModel()
     private val sharedViewModel: SpaceManageSharedViewModel by activityViewModel()
 
     private lateinit var roomJoinRuleSharedActionViewModel: RoomJoinRuleSharedActionViewModel
 
-    private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider, clock)
+    private lateinit var galleryOrCameraDialogHelper: GalleryOrCameraDialogHelper
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentRoomSettingGenericBinding.inflate(inflater)
 
     private val roomProfileArgs: RoomProfileArgs by args()
 
     override fun getMenuRes() = R.menu.vector_room_settings
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        galleryOrCameraDialogHelper = galleryOrCameraDialogHelperFactory.create(this)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -101,6 +107,7 @@ class SpaceSettingsFragment @Inject constructor(
                 RoomSettingsViewEvents.Success -> showSuccess()
                 RoomSettingsViewEvents.GoBack -> {
                     ignoreChanges = true
+                    @Suppress("DEPRECATION")
                     vectorBaseActivity.onBackPressed()
                 }
             }

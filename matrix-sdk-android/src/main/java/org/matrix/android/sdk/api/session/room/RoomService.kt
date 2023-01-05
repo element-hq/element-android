@@ -22,6 +22,7 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.identity.model.SignInvitationResult
 import org.matrix.android.sdk.api.session.room.alias.RoomAliasDescription
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
+import org.matrix.android.sdk.api.session.room.model.LocalRoomSummary
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -116,6 +117,12 @@ interface RoomService {
      * You can observe this summary to get dynamic data from this room, even if the room is not joined yet
      */
     fun getRoomSummaryLive(roomId: String): LiveData<Optional<RoomSummary>>
+
+    /**
+     * A live [LocalRoomSummary] associated with the room with id [roomId].
+     * You can observe this summary to get dynamic data from this room, even if the room is not joined yet
+     */
+    fun getLocalRoomSummaryLive(roomId: String): LiveData<Optional<LocalRoomSummary>>
 
     /**
      * Get a snapshot list of room summaries.

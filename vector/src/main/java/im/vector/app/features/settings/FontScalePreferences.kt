@@ -57,6 +57,16 @@ interface FontScalePreferences {
      * @return list of values
      */
     fun getAvailableScales(): List<FontScaleValue>
+
+    companion object {
+        const val SCALE_TINY = 0.70f
+        const val SCALE_SMALL = 0.85f
+        const val SCALE_NORMAL = 1.00f
+        const val SCALE_LARGE = 1.15f
+        const val SCALE_LARGER = 1.30f
+        const val SCALE_LARGEST = 1.45f
+        const val SCALE_HUGE = 1.60f
+    }
 }
 
 /**
@@ -73,13 +83,13 @@ class FontScalePreferencesImpl @Inject constructor(
     }
 
     private val fontScaleValues = listOf(
-            FontScaleValue(0, "FONT_SCALE_TINY", 0.70f, R.string.tiny),
-            FontScaleValue(1, "FONT_SCALE_SMALL", 0.85f, R.string.small),
-            FontScaleValue(2, "FONT_SCALE_NORMAL", 1.00f, R.string.normal),
-            FontScaleValue(3, "FONT_SCALE_LARGE", 1.15f, R.string.large),
-            FontScaleValue(4, "FONT_SCALE_LARGER", 1.30f, R.string.larger),
-            FontScaleValue(5, "FONT_SCALE_LARGEST", 1.45f, R.string.largest),
-            FontScaleValue(6, "FONT_SCALE_HUGE", 1.60f, R.string.huge)
+            FontScaleValue(0, "FONT_SCALE_TINY", FontScalePreferences.SCALE_TINY, R.string.tiny),
+            FontScaleValue(1, "FONT_SCALE_SMALL", FontScalePreferences.SCALE_SMALL, R.string.small),
+            FontScaleValue(2, "FONT_SCALE_NORMAL", FontScalePreferences.SCALE_NORMAL, R.string.normal),
+            FontScaleValue(3, "FONT_SCALE_LARGE", FontScalePreferences.SCALE_LARGE, R.string.large),
+            FontScaleValue(4, "FONT_SCALE_LARGER", FontScalePreferences.SCALE_LARGER, R.string.larger),
+            FontScaleValue(5, "FONT_SCALE_LARGEST", FontScalePreferences.SCALE_LARGEST, R.string.largest),
+            FontScaleValue(6, "FONT_SCALE_HUGE", FontScalePreferences.SCALE_HUGE, R.string.huge)
     )
 
     private val normalFontScaleValue = fontScaleValues[2]

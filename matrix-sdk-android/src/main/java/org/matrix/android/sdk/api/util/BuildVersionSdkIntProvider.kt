@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.api.util
 
+import androidx.annotation.ChecksSdkIntAtLeast
+
 interface BuildVersionSdkIntProvider {
     /**
      * Return the current version of the Android SDK.
@@ -26,9 +28,13 @@ interface BuildVersionSdkIntProvider {
      * Checks the if the current OS version is equal or greater than [version].
      * @return A `non-null` result if true, `null` otherwise.
      */
+    @ChecksSdkIntAtLeast(parameter = 0, lambda = 1)
     fun <T> whenAtLeast(version: Int, result: () -> T): T? {
         return if (get() >= version) {
             result()
         } else null
     }
+
+    @ChecksSdkIntAtLeast(parameter = 0)
+    fun isAtLeast(version: Int) = get() >= version
 }

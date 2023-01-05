@@ -29,6 +29,7 @@ import io.mockk.verify
 import io.noties.markwon.core.spans.EmphasisSpan
 import io.noties.markwon.core.spans.OrderedListItemSpan
 import io.noties.markwon.core.spans.StrongEmphasisSpan
+import me.gujun.android.span.style.CustomTypefaceSpan
 
 fun Spannable.toTestSpan(): String {
     var output = toString()
@@ -54,7 +55,7 @@ private fun Any.readTags(): SpanTags {
         OrderedListItemSpan::class -> SpanTags("[list item]", "[/list item]")
         HtmlCodeSpan::class -> SpanTags("[code]", "[/code]")
         StrongEmphasisSpan::class -> SpanTags("[bold]", "[/bold]")
-        EmphasisSpan::class -> SpanTags("[italic]", "[/italic]")
+        EmphasisSpan::class, CustomTypefaceSpan::class -> SpanTags("[italic]", "[/italic]")
         else -> throw IllegalArgumentException("Unknown ${this::class}")
     }
 }

@@ -31,6 +31,7 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mapbox.mapboxsdk.maps.MapView
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.core.platform.VectorBaseFragment
@@ -53,14 +54,16 @@ import javax.inject.Inject
 /**
  * We should consider using SupportMapFragment for a out of the box lifecycle handling.
  */
-class LocationSharingFragment @Inject constructor(
-        private val urlMapProvider: UrlMapProvider,
-        private val avatarRenderer: AvatarRenderer,
-        private val matrixItemColorProvider: MatrixItemColorProvider,
-        private val vectorPreferences: VectorPreferences,
-) : VectorBaseFragment<FragmentLocationSharingBinding>(),
+@AndroidEntryPoint
+class LocationSharingFragment :
+        VectorBaseFragment<FragmentLocationSharingBinding>(),
         LocationTargetChangeListener,
         VectorBaseBottomSheetDialogFragment.ResultListener {
+
+    @Inject lateinit var urlMapProvider: UrlMapProvider
+    @Inject lateinit var avatarRenderer: AvatarRenderer
+    @Inject lateinit var matrixItemColorProvider: MatrixItemColorProvider
+    @Inject lateinit var vectorPreferences: VectorPreferences
 
     private val viewModel: LocationSharingViewModel by fragmentViewModel()
 

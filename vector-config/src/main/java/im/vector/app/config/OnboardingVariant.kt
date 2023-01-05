@@ -18,6 +18,5 @@ package im.vector.app.config
 
 enum class OnboardingVariant {
     LEGACY,
-    LOGIN_2,
     FTUE_AUTH
 }

@@ -34,7 +34,7 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoomSummary
-import org.matrix.android.sdk.api.session.getUser
+import org.matrix.android.sdk.api.session.getUserOrDefault
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.peeking.PeekResult
@@ -49,7 +49,7 @@ class SpaceInviteBottomSheetViewModel @AssistedInject constructor(
         session.getRoomSummary(initialState.spaceId)?.let { roomSummary ->
             val knownMembers = roomSummary.otherMemberIds.filter {
                 session.roomService().getExistingDirectRoomWithUser(it) != null
-            }.mapNotNull { session.getUser(it) }
+            }.map { session.getUserOrDefault(it) }
             // put one with avatar first, and take 5
             val peopleYouKnow = (knownMembers.filter { it.avatarUrl != null } + knownMembers.filter { it.avatarUrl == null })
                     .take(5)
@@ -57,7 +57,7 @@ class SpaceInviteBottomSheetViewModel @AssistedInject constructor(
             setState {
                 copy(
                         summary = Success(roomSummary),
-                        inviterUser = roomSummary.inviterId?.let { session.getUser(it) }?.let { Success(it) } ?: Uninitialized,
+                        inviterUser = roomSummary.inviterId?.let { session.getUserOrDefault(it) }?.let { Success(it) } ?: Uninitialized,
                         peopleYouKnow = Success(peopleYouKnow)
                 )
             }

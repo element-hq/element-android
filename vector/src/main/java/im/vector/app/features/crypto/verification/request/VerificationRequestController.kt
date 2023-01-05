@@ -52,7 +52,6 @@ class VerificationRequestController @Inject constructor(
 
     override fun buildModels() {
         val state = viewState ?: return
-        val matrixItem = viewState?.otherUserMxItem ?: return
         val host = this
 
         if (state.selfVerificationMode) {
@@ -107,11 +106,9 @@ class VerificationRequestController @Inject constructor(
                     if (state.isMe) {
                         stringProvider.getString(R.string.verify_new_session_notice)
                     } else {
-                        matrixItem.let {
-                            stringProvider.getString(R.string.verification_request_notice, it.id)
-                                    .toSpannable()
-                                    .colorizeMatchingText(it.id, colorProvider.getColorFromAttribute(R.attr.vctr_notice_text_color))
-                        }
+                        stringProvider.getString(R.string.verification_request_notice, state.otherUserId)
+                                .toSpannable()
+                                .colorizeMatchingText(state.otherUserId, colorProvider.getColorFromAttribute(R.attr.vctr_notice_text_color))
                     }
 
             bottomSheetVerificationNoticeItem {
@@ -138,7 +135,7 @@ class VerificationRequestController @Inject constructor(
                 is Loading -> {
                     bottomSheetVerificationWaitingItem {
                         id("waiting")
-                        title(host.stringProvider.getString(R.string.verification_request_waiting_for, matrixItem.getBestName()))
+                        title(host.stringProvider.getString(R.string.verification_request_waiting_for, state.otherUserMxItem.getBestName()))
                     }
                 }
                 is Success -> {
@@ -151,7 +148,7 @@ class VerificationRequestController @Inject constructor(
                         } else {
                             bottomSheetVerificationWaitingItem {
                                 id("waiting")
-                                title(host.stringProvider.getString(R.string.verification_request_waiting_for, matrixItem.getBestName()))
+                                title(host.stringProvider.getString(R.string.verification_request_waiting_for, state.otherUserMxItem.getBestName()))
                             }
                         }
                     }

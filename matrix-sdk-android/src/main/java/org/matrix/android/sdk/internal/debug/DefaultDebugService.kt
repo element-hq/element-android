@@ -36,9 +36,9 @@ internal class DefaultDebugService @Inject constructor(
                 realmConfigurationGlobal
     }
 
-    override fun logDbUsageInfo() {
-        RealmDebugTools(realmConfigurationAuth).logInfo("Auth")
-        RealmDebugTools(realmConfigurationGlobal).logInfo("Global")
-        sessionManager.getLastSession()?.logDbUsageInfo()
+    override fun getDbUsageInfo() = buildString {
+        append(RealmDebugTools(realmConfigurationAuth).getInfo("Auth"))
+        append(RealmDebugTools(realmConfigurationGlobal).getInfo("Global"))
+        append(sessionManager.getLastSession()?.getDbUsageInfo())
     }
 }

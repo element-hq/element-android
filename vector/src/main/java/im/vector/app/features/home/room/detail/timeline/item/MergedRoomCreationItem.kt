@@ -271,7 +271,7 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
     }
 
     companion object {
-        private const val STUB_ID = R.id.messageContentMergedCreationStub
+        private val STUB_ID = R.id.messageContentMergedCreationStub
     }
 
     data class Attributes(

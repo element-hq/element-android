@@ -55,14 +55,16 @@ internal abstract class SessionSafeCoroutineWorker<PARAM : SessionWorkerParams>(
 
             // Make sure to inject before handling error as you may need some dependencies to process them.
             injectWith(sessionComponent)
-            if (params.lastFailureMessage != null) {
-                // Forward error to the next workers
-                doOnError(params)
-            } else {
-                doSafeWork(params)
+
+            when (val lastFailureMessage = params.lastFailureMessage) {
+                null -> doSafeWork(params)
+                else -> {
+                    // Forward error to the next workers
+                    doOnError(params, lastFailureMessage)
+                }
             }
         } catch (throwable: Throwable) {
-            buildErrorResult(params, throwable.localizedMessage ?: "error")
+            buildErrorResult(params, "${throwable::class.java.name}: ${throwable.localizedMessage ?: "N/A error message"}")
         }
     }
 
@@ -89,10 +91,10 @@ internal abstract class SessionSafeCoroutineWorker<PARAM : SessionWorkerParams>(
      * This is called when the input parameters are correct, but contain an error from the previous worker.
      */
     @CallSuper
-    open fun doOnError(params: PARAM): Result {
+    open fun doOnError(params: PARAM, failureMessage: String): Result {
         // Forward the error
         return Result.success(inputData)
-                .also { Timber.e("Work cancelled due to input error from parent") }
+                .also { Timber.e("Work cancelled due to input error from parent: $failureMessage") }
     }
 
     companion object {

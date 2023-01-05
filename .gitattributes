@@ -1,0 +1,2 @@
+**/snapshots/**/*.png filter=lfs diff=lfs merge=lfs -text
+**/src/androidTest/assets/*.realm filter=lfs diff=lfs merge=lfs -text

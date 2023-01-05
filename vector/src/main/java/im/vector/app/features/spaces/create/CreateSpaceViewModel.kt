@@ -32,6 +32,8 @@ import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.plan.Interaction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixPatterns
@@ -46,7 +48,8 @@ class CreateSpaceViewModel @AssistedInject constructor(
         private val session: Session,
         private val stringProvider: StringProvider,
         private val createSpaceViewModelTask: CreateSpaceViewModelTask,
-        private val errorFormatter: ErrorFormatter
+        private val errorFormatter: ErrorFormatter,
+        private val analyticsTracker: AnalyticsTracker,
 ) : VectorViewModel<CreateSpaceState, CreateSpaceAction, CreateSpaceEvents>(initialState) {
 
     private val identityService = session.identityService()
@@ -350,6 +353,13 @@ class CreateSpaceViewModel @AssistedInject constructor(
         }
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                analyticsTracker.capture(
+                        Interaction(
+                                index = null,
+                                interactionType = null,
+                                name = Interaction.Name.MobileSpaceCreationValidated
+                        )
+                )
                 val alias = if (state.spaceType == SpaceType.Public) {
                     state.aliasLocalPart
                 } else null

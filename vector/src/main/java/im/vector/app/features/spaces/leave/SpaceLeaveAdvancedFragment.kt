@@ -28,6 +28,7 @@ import androidx.core.view.isVisible
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -38,11 +39,13 @@ import im.vector.app.databinding.FragmentSpaceLeaveAdvancedBinding
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 
-class SpaceLeaveAdvancedFragment @Inject constructor(
-        val controller: SelectChildrenController
-) : VectorBaseFragment<FragmentSpaceLeaveAdvancedBinding>(),
+@AndroidEntryPoint
+class SpaceLeaveAdvancedFragment :
+        VectorBaseFragment<FragmentSpaceLeaveAdvancedBinding>(),
         SelectChildrenController.Listener,
         VectorMenuProvider {
+
+    @Inject lateinit var controller: SelectChildrenController
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?) =
             FragmentSpaceLeaveAdvancedBinding.inflate(layoutInflater, container, false)
@@ -147,12 +150,12 @@ class SpaceLeaveAdvancedFragment @Inject constructor(
             onTextChanged: (String) -> Unit
     ) {
         setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
-            override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+            override fun onMenuItemActionExpand(item: MenuItem): Boolean {
                 onExpanded()
                 return true
             }
 
-            override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+            override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
                 onCollapsed()
                 return true
             }

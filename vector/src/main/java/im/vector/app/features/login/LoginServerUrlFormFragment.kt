@@ -27,6 +27,7 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputLayout
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.resources.BuildMeta
@@ -43,9 +44,11 @@ import javax.inject.Inject
 /**
  * In this screen, the user is prompted to enter a homeserver url.
  */
-class LoginServerUrlFormFragment @Inject constructor(
-        private val buildMeta: BuildMeta,
-) : AbstractLoginFragment<FragmentLoginServerUrlFormBinding>() {
+@AndroidEntryPoint
+class LoginServerUrlFormFragment :
+        AbstractLoginFragment<FragmentLoginServerUrlFormBinding>() {
+
+    @Inject lateinit var buildMeta: BuildMeta
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginServerUrlFormBinding {
         return FragmentLoginServerUrlFormBinding.inflate(inflater, container, false)

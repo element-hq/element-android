@@ -26,7 +26,6 @@ fun aBuildMeta() = BuildMeta(
         gitRevision = "abcdef",
         gitRevisionDate = "01-01-01",
         gitBranchName = "a-branch-name",
-        buildNumber = "100",
         flavorDescription = "Gplay",
         flavorShortDescription = "",
 )

@@ -29,6 +29,7 @@ import im.vector.app.features.login.hasSso
 import im.vector.app.features.login.ssoIdentityProviders
 import im.vector.app.features.onboarding.OnboardingFlow
 import org.matrix.android.sdk.api.auth.SSOAction
+import im.vector.app.features.login.ssoState
 
 abstract class AbstractSSOFtueAuthFragment<VB : ViewBinding> : AbstractFtueAuthFragment<VB>() {
 
@@ -90,7 +91,7 @@ abstract class AbstractSSOFtueAuthFragment<VB : ViewBinding> : AbstractFtueAuthF
 
     private fun prefetchIfNeeded() {
         withState(viewModel) { state ->
-            if (state.selectedHomeserver.preferredLoginMode.hasSso() && state.selectedHomeserver.preferredLoginMode.ssoIdentityProviders().isNullOrEmpty()) {
+            if (state.selectedHomeserver.preferredLoginMode.hasSso() && state.selectedHomeserver.preferredLoginMode.ssoState().isFallback()) {
                 // in this case we can prefetch (not other cases for privacy concerns)
                 viewModel.fetchSsoUrl(
                         redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,

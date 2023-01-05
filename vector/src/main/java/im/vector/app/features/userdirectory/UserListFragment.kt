@@ -30,6 +30,7 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.chip.Chip
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -51,12 +52,14 @@ import org.matrix.android.sdk.api.session.user.model.User
 import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
-class UserListFragment @Inject constructor(
-        private val userListController: UserListController,
-        private val dimensionConverter: DimensionConverter,
-) : VectorBaseFragment<FragmentUserListBinding>(),
+@AndroidEntryPoint
+class UserListFragment :
+        VectorBaseFragment<FragmentUserListBinding>(),
         UserListController.Callback,
         VectorMenuProvider {
+
+    @Inject lateinit var userListController: UserListController
+    @Inject lateinit var dimensionConverter: DimensionConverter
 
     private val args: UserListFragmentArgs by args()
     private val viewModel: UserListViewModel by activityViewModel()

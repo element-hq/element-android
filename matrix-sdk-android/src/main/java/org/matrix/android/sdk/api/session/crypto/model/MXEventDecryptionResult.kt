@@ -43,5 +43,7 @@ data class MXEventDecryptionResult(
          * List of curve25519 keys involved in telling us about the senderCurve25519Key and
          * claimedEd25519Key. See MXEvent.forwardingCurve25519KeyChain.
          */
-        val forwardingCurve25519KeyChain: List<String> = emptyList()
+        val forwardingCurve25519KeyChain: List<String> = emptyList(),
+
+        val isSafe: Boolean = false
 )

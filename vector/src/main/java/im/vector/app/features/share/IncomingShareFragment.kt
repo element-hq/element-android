@@ -29,6 +29,7 @@ import androidx.core.view.isVisible
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -46,12 +47,13 @@ import javax.inject.Inject
  * Display the list of rooms.
  * The user can select multiple rooms to send the data to.
  */
-class IncomingShareFragment @Inject constructor(
-        private val incomingShareController: IncomingShareController,
-        private val shareIntentHandler: ShareIntentHandler,
-) :
+@AndroidEntryPoint
+class IncomingShareFragment :
         VectorBaseFragment<FragmentIncomingShareBinding>(),
         IncomingShareController.Callback {
+
+    @Inject lateinit var incomingShareController: IncomingShareController
+    @Inject lateinit var shareIntentHandler: ShareIntentHandler
 
     private val viewModel: IncomingShareViewModel by fragmentViewModel()
 

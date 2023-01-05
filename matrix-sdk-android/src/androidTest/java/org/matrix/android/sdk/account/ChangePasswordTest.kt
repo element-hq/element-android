@@ -43,9 +43,7 @@ class ChangePasswordTest : InstrumentedTest {
         val session = commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = false))
 
         // Change password
-        commonTestHelper.runBlockingTest {
-            session.accountService().changePassword(TestConstants.PASSWORD, NEW_PASSWORD)
-        }
+        session.accountService().changePassword(TestConstants.PASSWORD, NEW_PASSWORD)
 
         // Try to login with the previous password, it will fail
         val throwable = commonTestHelper.logAccountWithError(session.myUserId, TestConstants.PASSWORD)

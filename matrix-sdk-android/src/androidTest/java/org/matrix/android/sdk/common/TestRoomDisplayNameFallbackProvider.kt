@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.common
 
-import org.matrix.android.sdk.api.RoomDisplayNameFallbackProvider
+import org.matrix.android.sdk.api.provider.RoomDisplayNameFallbackProvider
 
 class TestRoomDisplayNameFallbackProvider : RoomDisplayNameFallbackProvider {
 

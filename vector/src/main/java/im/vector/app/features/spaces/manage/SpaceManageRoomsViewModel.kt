@@ -189,7 +189,7 @@ class SpaceManageRoomsViewModel @AssistedInject constructor(
                 val apiResult = session.spaceService().querySpaceChildren(
                         spaceId = initialState.spaceId,
                         from = nextToken,
-                        knownStateList = knownResults.childrenState.orEmpty(),
+                        knownStateList = knownResults.childrenState,
                         limit = paginationLimit
                 )
                 val newKnown = apiResult.children.mapNotNull { session.getRoomSummary(it.childRoomId) }

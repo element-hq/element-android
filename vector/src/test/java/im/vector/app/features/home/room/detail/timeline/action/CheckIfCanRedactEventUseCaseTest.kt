@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail.timeline.action
 
+import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import io.mockk.mockk
 import org.amshove.kluent.shouldBe
@@ -34,8 +35,13 @@ class CheckIfCanRedactEventUseCaseTest {
 
     @Test
     fun `given an event which can be redacted and owned by user when use case executes then the result is true`() {
-        val canRedactEventTypes = listOf(EventType.MESSAGE, EventType.STICKER) +
-                EventType.POLL_START + EventType.STATE_ROOM_BEACON_INFO
+        val canRedactEventTypes = listOf(
+                EventType.MESSAGE,
+                EventType.STICKER,
+                VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO
+        ) +
+                EventType.POLL_START.values +
+                EventType.STATE_ROOM_BEACON_INFO.values
 
         canRedactEventTypes.forEach { eventType ->
             val event = givenAnEvent(

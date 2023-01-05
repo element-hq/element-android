@@ -21,6 +21,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -29,9 +30,12 @@ import im.vector.app.core.utils.LiveEvent
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import javax.inject.Inject
 
-class EmojiSearchResultFragment @Inject constructor(
-        private val epoxyController: EmojiSearchResultController
-) : VectorBaseFragment<FragmentGenericRecyclerBinding>(), ReactionClickListener {
+@AndroidEntryPoint
+class EmojiSearchResultFragment :
+        VectorBaseFragment<FragmentGenericRecyclerBinding>(),
+        ReactionClickListener {
+
+    @Inject lateinit var epoxyController: EmojiSearchResultController
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGenericRecyclerBinding {
         return FragmentGenericRecyclerBinding.inflate(inflater, container, false)

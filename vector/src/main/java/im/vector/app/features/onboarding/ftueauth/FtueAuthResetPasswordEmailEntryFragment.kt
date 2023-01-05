@@ -33,7 +33,8 @@ import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewState
 
 @AndroidEntryPoint
-class FtueAuthResetPasswordEmailEntryFragment : AbstractFtueAuthFragment<FragmentFtueResetPasswordEmailInputBinding>() {
+class FtueAuthResetPasswordEmailEntryFragment :
+        AbstractFtueAuthFragment<FragmentFtueResetPasswordEmailInputBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueResetPasswordEmailInputBinding {
         return FragmentFtueResetPasswordEmailInputBinding.inflate(inflater, container, false)

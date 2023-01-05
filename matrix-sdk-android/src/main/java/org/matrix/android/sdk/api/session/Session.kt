@@ -50,7 +50,6 @@ import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageServi
 import org.matrix.android.sdk.api.session.signout.SignOutService
 import org.matrix.android.sdk.api.session.space.SpaceService
 import org.matrix.android.sdk.api.session.statistics.StatisticsListener
-import org.matrix.android.sdk.api.session.sync.FilterService
 import org.matrix.android.sdk.api.session.sync.SyncService
 import org.matrix.android.sdk.api.session.terms.TermsService
 import org.matrix.android.sdk.api.session.thirdparty.ThirdPartyService
@@ -162,11 +161,6 @@ interface Session {
      * Returns the SignOutService associated with the session.
      */
     fun signOutService(): SignOutService
-
-    /**
-     * Returns the FilterService associated with the session.
-     */
-    fun filterService(): FilterService
 
     /**
      * Returns the PushRuleService associated with the session.
@@ -323,9 +317,9 @@ interface Session {
     fun getUiaSsoFallbackUrl(authenticationSessionId: String): String
 
     /**
-     * Debug API, will print out info on DB size to logcat.
+     * Debug API, will return info about the DB.
      */
-    fun logDbUsageInfo()
+    fun getDbUsageInfo(): String
 
     /**
      * Debug API, return the list of all RealmConfiguration used by this session.

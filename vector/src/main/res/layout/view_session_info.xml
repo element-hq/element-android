@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_current_session"
+    android:paddingHorizontal="24dp"
+    android:paddingBottom="8dp">
+
+    <ImageView
+        android:id="@+id/sessionInfoDeviceTypeImageView"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_device_type"
+        android:contentDescription="@string/a11y_device_manager_device_type_mobile"
+        android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/ic_device_type_mobile" />
+
+    <TextView
+        android:id="@+id/sessionInfoNameTextView"
+        style="@style/TextAppearance.Vector.Subtitle.Medium.DevicesManagement"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sessionInfoDeviceTypeImageView"
+        tools:text="Element Mobile: Android" />
+
+    <LinearLayout
+        android:id="@+id/sessionInfoVerificationStatusContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sessionInfoNameTextView">
+
+        <im.vector.app.core.ui.views.ShieldImageView
+            android:id="@+id/sessionInfoVerificationStatusImageView"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:importantForAccessibility="no"
+            tools:src="@drawable/ic_shield_trusted" />
+
+        <TextView
+            android:id="@+id/sessionInfoVerificationStatusTextView"
+            style="@style/TextAppearance.Vector.Body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            tools:text="@string/device_manager_verification_status_verified"
+            tools:textColor="?colorPrimary" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/sessionInfoVerificationStatusDetailTextView"
+        style="@style/TextAppearance.Vector.Body.DevicesManagement"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sessionInfoVerificationStatusContainer"
+        tools:text="@string/device_manager_verification_status_detail_current_session_verified" />
+
+    <TextView
+        android:id="@+id/sessionInfoLastActivityTextView"
+        style="@style/TextAppearance.Vector.Body.DevicesManagement"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sessionInfoVerificationStatusDetailTextView"
+        app:layout_constraintWidth="wrap_content_constrained"
+        tools:text="Last activity Fri 14:59"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/sessionInfoLastIPAddressTextView"
+        style="@style/TextAppearance.Vector.Body.DevicesManagement"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sessionInfoLastActivityTextView"
+        tools:text="81.235.41.100 (United Kingdom)"
+        tools:visibility="visible" />
+
+    <Button
+        android:id="@+id/sessionInfoVerifySessionButton"
+        android:layout_width="0dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/device_manager_verify_session"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sessionInfoLastIPAddressTextView" />
+
+    <Button
+        android:id="@+id/sessionInfoViewDetailsButton"
+        style="@style/Widget.Vector.Button.Text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/device_manager_view_details"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sessionInfoVerifySessionButton" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

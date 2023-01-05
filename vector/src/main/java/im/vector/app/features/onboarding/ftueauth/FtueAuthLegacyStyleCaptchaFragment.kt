@@ -20,6 +20,7 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.airbnb.mvrx.args
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.databinding.FragmentLoginCaptchaBinding
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewState
@@ -35,9 +36,11 @@ data class FtueAuthLegacyStyleCaptchaFragmentArgument(
 /**
  * In this screen, the user is asked to confirm they are not a robot.
  */
-class FtueAuthLegacyStyleCaptchaFragment @Inject constructor(
-        private val captchaWebview: CaptchaWebview
-) : AbstractFtueAuthFragment<FragmentLoginCaptchaBinding>() {
+@AndroidEntryPoint
+class FtueAuthLegacyStyleCaptchaFragment :
+        AbstractFtueAuthFragment<FragmentLoginCaptchaBinding>() {
+
+    @Inject lateinit var captchaWebview: CaptchaWebview
 
     private val params: FtueAuthLegacyStyleCaptchaFragmentArgument by args()
     private var isWebViewLoaded = false

@@ -28,8 +28,8 @@ def initializeReport(report, projects, classExcludes) {
 
     report.executionData {
         fileTree(rootProject.rootDir.absolutePath).include(
-            "**/build/**/*.exec",
-            "**/build/outputs/code_coverage/**/coverage.ec",
+                "**/build/**/*.exec",
+                "**/build/outputs/code_coverage/**/coverage.ec",
         )
     }
     report.reports {
@@ -74,18 +74,18 @@ def collectProjects(predicate) {
 task generateCoverageReport(type: JacocoReport) {
     outputs.upToDateWhen { false }
     rootProject.apply plugin: 'jacoco'
-    def projects = collectProjects { ['vector', 'matrix-sdk-android'].contains(it.name) }
+    def projects = collectProjects { ['vector-app', 'vector', 'matrix-sdk-android'].contains(it.name) }
     initializeReport(it, projects, excludes)
 }
 
 task unitTestsWithCoverage(type: GradleBuild) {
     // the 7.1.3 android gradle plugin has a bug where enableTestCoverage generates invalid coverage
-    startParameter.projectProperties.coverage = [enableTestCoverage:  false]
-    tasks = [':vector:testGplayDebugUnitTest', ':matrix-sdk-android:testDebugUnitTest']
+    startParameter.projectProperties.coverage = [enableTestCoverage: false]
+    tasks = ['testDebugUnitTest']
 }
 
 task instrumentationTestsWithCoverage(type: GradleBuild) {
-    startParameter.projectProperties.coverage = [enableTestCoverage:  true]
+    startParameter.projectProperties.coverage = [enableTestCoverage: true]
     startParameter.projectProperties['android.testInstrumentationRunnerArguments.notPackage'] = 'im.vector.app.ui'
-    tasks = [':vector:connectedGplayDebugAndroidTest', 'matrix-sdk-android:connectedDebugAndroidTest']
+    tasks = [':vector-app:connectedGplayDebugAndroidTest', ':vector:connectedDebugAndroidTest', 'matrix-sdk-android:connectedDebugAndroidTest']
 }

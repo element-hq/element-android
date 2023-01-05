@@ -22,6 +22,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
@@ -29,10 +30,12 @@ import im.vector.app.databinding.BottomSheetVerificationChildFragmentBinding
 import im.vector.app.features.crypto.verification.VerificationBottomSheetViewModel
 import javax.inject.Inject
 
-class VerificationNotMeFragment @Inject constructor(
-        val controller: VerificationNotMeController
-) : VectorBaseFragment<BottomSheetVerificationChildFragmentBinding>(),
+@AndroidEntryPoint
+class VerificationNotMeFragment :
+        VectorBaseFragment<BottomSheetVerificationChildFragmentBinding>(),
         VerificationNotMeController.Listener {
+
+    @Inject lateinit var controller: VerificationNotMeController
 
     private val viewModel by parentFragmentViewModel(VerificationBottomSheetViewModel::class)
 

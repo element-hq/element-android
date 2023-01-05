@@ -39,6 +39,7 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.yalantis.ucrop.UCrop
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.insertBeforeLast
@@ -63,14 +64,16 @@ data class AttachmentsPreviewArgs(
         val attachments: List<ContentAttachmentData>
 ) : Parcelable
 
-class AttachmentsPreviewFragment @Inject constructor(
-        private val attachmentMiniaturePreviewController: AttachmentMiniaturePreviewController,
-        private val attachmentBigPreviewController: AttachmentBigPreviewController,
-        private val colorProvider: ColorProvider,
-        private val clock: Clock,
-) : VectorBaseFragment<FragmentAttachmentsPreviewBinding>(),
+@AndroidEntryPoint
+class AttachmentsPreviewFragment :
+        VectorBaseFragment<FragmentAttachmentsPreviewBinding>(),
         AttachmentMiniaturePreviewController.Callback,
         VectorMenuProvider {
+
+    @Inject lateinit var attachmentMiniaturePreviewController: AttachmentMiniaturePreviewController
+    @Inject lateinit var attachmentBigPreviewController: AttachmentBigPreviewController
+    @Inject lateinit var colorProvider: ColorProvider
+    @Inject lateinit var clock: Clock
 
     private val fragmentArgs: AttachmentsPreviewArgs by args()
     private val viewModel: AttachmentsPreviewViewModel by fragmentViewModel()
@@ -166,11 +169,11 @@ class AttachmentsPreviewFragment @Inject constructor(
         )
     }
 
-    @Suppress("DEPRECATION")
     private fun applyInsets() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             activity?.window?.setDecorFitsSystemWindows(false)
         } else {
+            @Suppress("DEPRECATION")
             view?.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
         }
         ViewCompat.setOnApplyWindowInsetsListener(views.attachmentPreviewerBottomContainer) { v, insets ->
@@ -204,13 +207,13 @@ class AttachmentsPreviewFragment @Inject constructor(
         attachmentMiniaturePreviewController.callback = this
 
         views.attachmentPreviewerMiniatureList.let {
-            it.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            it.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             it.setHasFixedSize(true)
             it.adapter = attachmentMiniaturePreviewController.adapter
         }
 
         views.attachmentPreviewerBigList.let {
-            it.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            it.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             it.attachSnapHelperWithListener(
                     PagerSnapHelper(),
                     SnapOnScrollListener.Behavior.NOTIFY_ON_SCROLL_STATE_IDLE,

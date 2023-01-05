@@ -29,10 +29,13 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.TransitionManager
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.utils.registerForPermissionsResult
+import im.vector.app.core.utils.startNotificationSettingsIntent
 import im.vector.app.databinding.FragmentSettingsNotificationsTroubleshootBinding
 import im.vector.app.features.notifications.NotificationActionIds
 import im.vector.app.features.push.NotificationTroubleshootTestManagerFactory
@@ -44,11 +47,13 @@ import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import javax.inject.Inject
 
-class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
-        private val bugReporter: BugReporter,
-        private val testManagerFactory: NotificationTroubleshootTestManagerFactory,
-        private val actionIds: NotificationActionIds,
-) : VectorBaseFragment<FragmentSettingsNotificationsTroubleshootBinding>() {
+@AndroidEntryPoint
+class VectorSettingsNotificationsTroubleshootFragment :
+        VectorBaseFragment<FragmentSettingsNotificationsTroubleshootBinding>() {
+
+    @Inject lateinit var bugReporter: BugReporter
+    @Inject lateinit var testManagerFactory: NotificationTroubleshootTestManagerFactory
+    @Inject lateinit var actionIds: NotificationActionIds
 
     private var testManager: NotificationTroubleshootTestManager? = null
     // members
@@ -62,7 +67,7 @@ class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val layoutManager = LinearLayoutManager(context)
+        val layoutManager = LinearLayoutManager(requireContext())
         views.troubleshootTestRecyclerView.layoutManager = layoutManager
 
         val dividerItemDecoration = DividerItemDecoration(view.context, layoutManager.orientation)
@@ -73,7 +78,7 @@ class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
         }
 
         views.troubleshootRunButton.debouncedClicks {
-            testManager?.retry(testStartForActivityResult)
+            testManager?.retry(TroubleshootTest.TestParameters(testStartForActivityResult, testStartForPermissionResult))
         }
         startUI()
     }
@@ -122,7 +127,7 @@ class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
             }
         }
         views.troubleshootTestRecyclerView.adapter = testManager?.adapter
-        testManager?.runDiagnostic(testStartForActivityResult)
+        testManager?.runDiagnostic(TroubleshootTest.TestParameters(testStartForActivityResult, testStartForPermissionResult))
     }
 
     override fun onDestroyView() {
@@ -136,8 +141,17 @@ class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
         }
     }
 
+    private val testStartForPermissionResult = registerForPermissionsResult { allGranted, deniedPermanently ->
+        if (allGranted) {
+            retry()
+        } else if (deniedPermanently) {
+            // Open System setting
+            startNotificationSettingsIntent(requireContext(), testStartForActivityResult)
+        }
+    }
+
     private fun retry() {
-        testManager?.retry(testStartForActivityResult)
+        testManager?.retry(TroubleshootTest.TestParameters(testStartForActivityResult, testStartForPermissionResult))
     }
 
     override fun onDetach() {

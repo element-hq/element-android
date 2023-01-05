@@ -1,0 +1,2 @@
+Põhilised muutused selles versioonis: senisest parem liitumise ja sisselogimise töövoog.
+Kogu ingliskeelne muudatuste logi: https://github.com/vector-im/element-android/releases

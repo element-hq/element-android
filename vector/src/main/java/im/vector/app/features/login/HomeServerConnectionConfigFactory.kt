@@ -17,12 +17,13 @@
 package im.vector.app.features.login
 
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
+import org.matrix.android.sdk.api.network.ssl.Fingerprint
 import timber.log.Timber
 import javax.inject.Inject
 
 class HomeServerConnectionConfigFactory @Inject constructor() {
 
-    fun create(url: String?): HomeServerConnectionConfig? {
+    fun create(url: String?, fingerprint: Fingerprint? = null): HomeServerConnectionConfig? {
         if (url == null) {
             return null
         }
@@ -30,6 +31,13 @@ class HomeServerConnectionConfigFactory @Inject constructor() {
         return try {
             HomeServerConnectionConfig.Builder()
                     .withHomeServerUri(url)
+                    .run {
+                        if (fingerprint == null) {
+                            this
+                        } else {
+                            withAllowedFingerPrints(listOf(fingerprint))
+                        }
+                    }
                     .build()
         } catch (t: Throwable) {
             Timber.e(t)

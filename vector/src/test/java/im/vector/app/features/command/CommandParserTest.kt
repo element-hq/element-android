@@ -19,6 +19,8 @@ package im.vector.app.features.command
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
 
+private const val A_SPACE_ID = "!my-space-id"
+
 class CommandParserTest {
     @Test
     fun parseSlashCommandEmpty() {
@@ -29,6 +31,15 @@ class CommandParserTest {
     fun parseSlashCommandUnknown() {
         test("/unknown", ParsedCommand.ErrorUnknownSlashCommand("/unknown"))
         test("/unknown with param", ParsedCommand.ErrorUnknownSlashCommand("/unknown"))
+    }
+
+    @Test
+    fun parseSlashAddToSpaceCommand() {
+        test("/addToSpace $A_SPACE_ID", ParsedCommand.AddToSpace(A_SPACE_ID))
+    }
+    @Test
+    fun parseSlashJoinSpaceCommand() {
+        test("/joinSpace $A_SPACE_ID", ParsedCommand.JoinSpace(A_SPACE_ID))
     }
 
     @Test
@@ -60,7 +71,7 @@ class CommandParserTest {
 
     private fun test(message: String, expectedResult: ParsedCommand) {
         val commandParser = CommandParser()
-        val result = commandParser.parseSlashCommand(message, false)
+        val result = commandParser.parseSlashCommand(message, null, false)
         result shouldBeEqualTo expectedResult
     }
 }

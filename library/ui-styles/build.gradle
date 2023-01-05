@@ -21,6 +21,8 @@ plugins {
 
 android {
 
+    namespace "im.vector.lib.ui.styles"
+
     compileSdk versions.compileSdk
     defaultConfig {
         minSdk versions.minSdk
@@ -58,5 +60,5 @@ dependencies {
     // Pref theme
     implementation libs.androidx.preferenceKtx
     // dialpad dimen
-    implementation 'im.dlg:android-dialer:1.2.5'
+    implementation project(":library:external:dialpad")
 }

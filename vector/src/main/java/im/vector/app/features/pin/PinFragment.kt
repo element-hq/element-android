@@ -26,6 +26,7 @@ import android.widget.Toast
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.asMavericksArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseFragment
@@ -49,11 +50,13 @@ data class PinArgs(
         val pinMode: PinMode
 ) : Parcelable
 
-class PinFragment @Inject constructor(
-        private val pinCodeStore: PinCodeStore,
-        private val vectorPreferences: VectorPreferences,
-        private val defaultConfiguration: LockScreenConfiguration,
-) : VectorBaseFragment<FragmentPinBinding>() {
+@AndroidEntryPoint
+class PinFragment :
+        VectorBaseFragment<FragmentPinBinding>() {
+
+    @Inject lateinit var pinCodeStore: PinCodeStore
+    @Inject lateinit var vectorPreferences: VectorPreferences
+    @Inject lateinit var defaultConfiguration: LockScreenConfiguration
 
     private val fragmentArgs: PinArgs by args()
 

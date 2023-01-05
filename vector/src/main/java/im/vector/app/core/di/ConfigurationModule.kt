@@ -44,12 +44,14 @@ object ConfigurationModule {
             else -> throw IllegalStateException("Unhandled build type: ${BuildConfig.BUILD_TYPE}")
         }
         return when (config) {
-            Analytics.Disabled -> AnalyticsConfig(isEnabled = false, "", "", "")
-            is Analytics.PostHog -> AnalyticsConfig(
+            Analytics.Disabled -> AnalyticsConfig(isEnabled = false, "", "", "", "", "")
+            is Analytics.Enabled -> AnalyticsConfig(
                     isEnabled = true,
                     postHogHost = config.postHogHost,
                     postHogApiKey = config.postHogApiKey,
-                    policyLink = config.policyLink
+                    policyLink = config.policyLink,
+                    sentryDSN = config.sentryDSN,
+                    sentryEnvironment = config.sentryEnvironment
             )
         }
     }

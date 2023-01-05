@@ -106,7 +106,9 @@ enum class E2EDecoration {
     NONE,
     WARN_IN_CLEAR,
     WARN_SENT_BY_UNVERIFIED,
-    WARN_SENT_BY_UNKNOWN
+    WARN_SENT_BY_UNKNOWN,
+    WARN_SENT_BY_DELETED_SESSION,
+    WARN_UNSAFE_KEY
 }
 
 enum class SendStateDecoration {

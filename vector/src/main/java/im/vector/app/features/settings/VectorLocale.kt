@@ -17,29 +17,39 @@
 package im.vector.app.features.settings
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.content.res.Configuration
 import androidx.core.content.edit
 import im.vector.app.R
-import im.vector.app.core.di.DefaultSharedPreferences
+import im.vector.app.core.di.DefaultPreferences
 import im.vector.app.core.resources.BuildMeta
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.IllformedLocaleException
 import java.util.Locale
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Object to manage the Locale choice of the user.
  */
-object VectorLocale {
-    private const val APPLICATION_LOCALE_COUNTRY_KEY = "APPLICATION_LOCALE_COUNTRY_KEY"
-    private const val APPLICATION_LOCALE_VARIANT_KEY = "APPLICATION_LOCALE_VARIANT_KEY"
-    private const val APPLICATION_LOCALE_LANGUAGE_KEY = "APPLICATION_LOCALE_LANGUAGE_KEY"
-    private const val APPLICATION_LOCALE_SCRIPT_KEY = "APPLICATION_LOCALE_SCRIPT_KEY"
+@Singleton
+class VectorLocale @Inject constructor(
+        private val context: Context,
+        private val buildMeta: BuildMeta,
+        @DefaultPreferences
+        private val preferences: SharedPreferences,
+) {
+    companion object {
+        const val APPLICATION_LOCALE_COUNTRY_KEY = "APPLICATION_LOCALE_COUNTRY_KEY"
+        const val APPLICATION_LOCALE_VARIANT_KEY = "APPLICATION_LOCALE_VARIANT_KEY"
+        const val APPLICATION_LOCALE_LANGUAGE_KEY = "APPLICATION_LOCALE_LANGUAGE_KEY"
+        private const val APPLICATION_LOCALE_SCRIPT_KEY = "APPLICATION_LOCALE_SCRIPT_KEY"
+        private const val ISO_15924_LATN = "Latn"
+    }
 
     private val defaultLocale = Locale("en", "US")
-
-    private const val ISO_15924_LATN = "Latn"
 
     /**
      * The cache of supported application languages.
@@ -52,17 +62,10 @@ object VectorLocale {
     var applicationLocale = defaultLocale
         private set
 
-    private lateinit var context: Context
-    private lateinit var buildMeta: BuildMeta
-
     /**
-     * Init this object.
+     * Init this singleton.
      */
-    fun init(context: Context, buildMeta: BuildMeta) {
-        this.context = context
-        this.buildMeta = buildMeta
-        val preferences = DefaultSharedPreferences.getInstance(context)
-
+    fun init() {
         if (preferences.contains(APPLICATION_LOCALE_LANGUAGE_KEY)) {
             applicationLocale = Locale(
                     preferences.getString(APPLICATION_LOCALE_LANGUAGE_KEY, "")!!,
@@ -88,7 +91,7 @@ object VectorLocale {
     fun saveApplicationLocale(locale: Locale) {
         applicationLocale = locale
 
-        DefaultSharedPreferences.getInstance(context).edit {
+        preferences.edit {
             val language = locale.language
             if (language.isEmpty()) {
                 remove(APPLICATION_LOCALE_LANGUAGE_KEY)

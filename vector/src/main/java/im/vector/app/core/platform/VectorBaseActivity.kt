@@ -16,12 +16,10 @@
 
 package im.vector.app.core.platform
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -39,8 +37,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.util.Consumer
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
@@ -60,6 +56,7 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ActivityEntryPoint
 import im.vector.app.core.dialogs.DialogLocker
 import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
+import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.error.fatalError
 import im.vector.app.core.extensions.observeEvent
 import im.vector.app.core.extensions.observeNotNull
@@ -67,7 +64,6 @@ import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.restart
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.extensions.singletonEntryPoint
-import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.utils.AndroidSystemSettingsProvider
 import im.vector.app.core.utils.ToolbarConfig
@@ -89,6 +85,7 @@ import im.vector.app.features.rageshake.RageShake
 import im.vector.app.features.session.SessionListener
 import im.vector.app.features.settings.FontScalePreferences
 import im.vector.app.features.settings.FontScalePreferencesImpl
+import im.vector.app.features.settings.VectorLocaleProvider
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.themes.ActivityOtherThemes
 import im.vector.app.features.themes.ThemeUtils
@@ -109,7 +106,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
 
     protected var analyticsScreenName: MobileScreen.ScreenName? = null
 
-    protected lateinit var analyticsTracker: AnalyticsTracker
+    @Inject lateinit var analyticsTracker: AnalyticsTracker
 
     /* ==========================================================================================
      * View
@@ -153,26 +150,22 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
      * ========================================================================================== */
 
     private lateinit var configurationViewModel: ConfigurationViewModel
-    private lateinit var sessionListener: SessionListener
-    protected lateinit var bugReporter: BugReporter
-    private lateinit var pinLocker: PinLocker
 
+    @Inject lateinit var sessionListener: SessionListener
+    @Inject lateinit var bugReporter: BugReporter
+    @Inject lateinit var pinLocker: PinLocker
     @Inject lateinit var rageShake: RageShake
     @Inject lateinit var buildMeta: BuildMeta
     @Inject lateinit var fontScalePreferences: FontScalePreferences
+    @Inject lateinit var vectorLocale: VectorLocaleProvider
+    @Inject lateinit var vectorFeatures: VectorFeatures
+    @Inject lateinit var navigator: Navigator
+    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
+    @Inject lateinit var vectorPreferences: VectorPreferences
+    @Inject lateinit var errorFormatter: ErrorFormatter
 
     // For debug only
     @Inject lateinit var debugReceiver: DebugReceiver
-
-    @Inject
-    lateinit var vectorFeatures: VectorFeatures
-
-    lateinit var navigator: Navigator
-        private set
-    private lateinit var fragmentFactory: FragmentFactory
-
-    private lateinit var activeSessionHolder: ActiveSessionHolder
-    private lateinit var vectorPreferences: VectorPreferences
 
     // Filter for multiple invalid token error
     private var mainActivityStarted = false
@@ -182,8 +175,10 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     private val restorables = ArrayList<Restorable>()
 
     override fun attachBaseContext(base: Context) {
-        val fontScalePreferences = FontScalePreferencesImpl(PreferenceManager.getDefaultSharedPreferences(base), AndroidSystemSettingsProvider(base))
-        val vectorConfiguration = VectorConfiguration(this, fontScalePreferences)
+        val preferences = PreferenceManager.getDefaultSharedPreferences(base)
+        val fontScalePreferences = FontScalePreferencesImpl(preferences, AndroidSystemSettingsProvider(base))
+        val vectorLocaleProvider = VectorLocaleProvider(preferences)
+        val vectorConfiguration = VectorConfiguration(this, fontScalePreferences, vectorLocaleProvider)
         super.attachBaseContext(vectorConfiguration.getLocalisedContext(base))
     }
 
@@ -207,22 +202,13 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.i("onCreate Activity ${javaClass.simpleName}")
-        val singletonEntryPoint = singletonEntryPoint()
         val activityEntryPoint = EntryPointAccessors.fromActivity(this, ActivityEntryPoint::class.java)
         ThemeUtils.setActivityTheme(this, getOtherThemes())
-        fragmentFactory = activityEntryPoint.fragmentFactory()
-        supportFragmentManager.fragmentFactory = fragmentFactory
         viewModelFactory = activityEntryPoint.viewModelFactory()
         super.onCreate(savedInstanceState)
         addOnMultiWindowModeChangedListener(onMultiWindowModeChangedListener)
         setupMenu()
         configurationViewModel = viewModelProvider.get(ConfigurationViewModel::class.java)
-        bugReporter = singletonEntryPoint.bugReporter()
-        pinLocker = singletonEntryPoint.pinLocker()
-        analyticsTracker = singletonEntryPoint.analyticsTracker()
-        navigator = singletonEntryPoint.navigator()
-        activeSessionHolder = singletonEntryPoint.activeSessionHolder()
-        vectorPreferences = singletonEntryPoint.vectorPreferences()
         configurationViewModel.activityRestarter.observe(this) {
             if (!it.hasBeenHandled) {
                 // Recreate the Activity because configuration has changed
@@ -234,7 +220,6 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
                 navigator.openPinCode(this, pinStartForActivityResult, PinMode.AUTH)
             }
         }
-        sessionListener = singletonEntryPoint.sessionListener()
         sessionListener.globalErrorLiveData.observeEvent(this) {
             handleGlobalError(it)
         }
@@ -256,7 +241,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
 
         initUiAndData()
 
-        if (vectorFeatures.isNewAppLayoutEnabled()) {
+        if (vectorPreferences.isNewAppLayoutEnabled()) {
             tryOrNull { // Add to XML theme when feature flag is removed
                 val toolbarBackground = MaterialColors.getColor(views.root, R.attr.vctr_toolbar_background)
                 window.statusBarColor = toolbarBackground
@@ -464,12 +449,6 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
         bugReporter.inMultiWindowMode = it.isInMultiWindowMode
     }
 
-    protected fun createFragment(fragmentClass: Class<out Fragment>, argsParcelable: Parcelable? = null): Fragment {
-        return fragmentFactory.instantiate(classLoader, fragmentClass.name).apply {
-            arguments = argsParcelable?.toMvRxBundle()
-        }
-    }
-
     /* ==========================================================================================
      * PRIVATE METHODS
      * ========================================================================================== */
@@ -477,23 +456,18 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     /**
      * Force to render the activity in fullscreen.
      */
-    @Suppress("DEPRECATION")
     private fun setFullScreen() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             // New API instead of SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN and SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
             window.setDecorFitsSystemWindows(false)
             // New API instead of SYSTEM_UI_FLAG_IMMERSIVE
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                window.decorView.windowInsetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-            } else {
-                @SuppressLint("WrongConstant")
-                window.decorView.windowInsetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_BARS_BY_SWIPE
-            }
+            window.decorView.windowInsetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
             // New API instead of FLAG_TRANSLUCENT_STATUS
             window.statusBarColor = ContextCompat.getColor(this, im.vector.lib.attachmentviewer.R.color.half_transparent_status_bar)
             // New API instead of FLAG_TRANSLUCENT_NAVIGATION
             window.navigationBarColor = ContextCompat.getColor(this, im.vector.lib.attachmentviewer.R.color.half_transparent_status_bar)
         } else {
+            @Suppress("DEPRECATION")
             window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                     or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                     or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
@@ -520,6 +494,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     private fun onBackPressed(fromToolbar: Boolean) {
         val handled = recursivelyDispatchOnBackPressed(supportFragmentManager, fromToolbar)
         if (!handled) {
+            @Suppress("DEPRECATION")
             super.onBackPressed()
         }
     }

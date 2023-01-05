@@ -86,6 +86,7 @@ data class MXInboundMegolmSessionWrapper(
                     keysClaimed = megolmSessionData.senderClaimedKeys,
                     forwardingCurve25519KeyChain = megolmSessionData.forwardingCurve25519KeyChain,
                     sharedHistory = megolmSessionData.sharedHistory,
+                    trusted = false
             )
 
             return MXInboundMegolmSessionWrapper(

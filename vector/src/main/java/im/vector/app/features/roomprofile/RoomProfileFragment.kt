@@ -31,6 +31,7 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.animations.AppBarStateChangeListener
 import im.vector.app.core.animations.MatrixItemAppBarStateChangeListener
@@ -52,6 +53,7 @@ import im.vector.app.features.home.room.detail.RoomDetailPendingActionStore
 import im.vector.app.features.home.room.detail.upgrade.MigrateRoomBottomSheet
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
+import im.vector.app.features.navigation.SettingsActivityPayload
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
@@ -65,14 +67,15 @@ data class RoomProfileArgs(
         val roomId: String
 ) : Parcelable
 
-class RoomProfileFragment @Inject constructor(
-        private val roomProfileController: RoomProfileController,
-        private val avatarRenderer: AvatarRenderer,
-        private val roomDetailPendingActionStore: RoomDetailPendingActionStore,
-) :
+@AndroidEntryPoint
+class RoomProfileFragment :
         VectorBaseFragment<FragmentMatrixProfileBinding>(),
         RoomProfileController.Callback,
         VectorMenuProvider {
+
+    @Inject lateinit var roomProfileController: RoomProfileController
+    @Inject lateinit var avatarRenderer: AvatarRenderer
+    @Inject lateinit var roomDetailPendingActionStore: RoomDetailPendingActionStore
 
     private lateinit var headerViews: ViewStubRoomProfileHeaderBinding
 
@@ -342,6 +345,14 @@ class RoomProfileFragment @Inject constructor(
                 chooserTitle = null,
                 text = permalink
         )
+    }
+
+    override fun setEncryptedToVerifiedDevicesOnly(enabled: Boolean) {
+        roomProfileViewModel.handle(RoomProfileAction.SetEncryptToVerifiedDeviceOnly(enabled))
+    }
+
+    override fun openGlobalBlockSettings() {
+        navigator.openSettings(requireContext(), SettingsActivityPayload.SecurityPrivacy)
     }
 
     private fun onAvatarClicked(view: View) = withState(roomProfileViewModel) { state ->

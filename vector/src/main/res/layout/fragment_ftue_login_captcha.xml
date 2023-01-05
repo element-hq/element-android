@@ -64,15 +64,27 @@
         android:id="@+id/titleContentSpacing"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/loginCaptchaWevView"
+        app:layout_constraintBottom_toTopOf="@id/loginWebViewBarrier"
         app:layout_constraintHeight_percent="0.03"
         app:layout_constraintTop_toBottomOf="@id/captchaHeaderTitle" />
 
-    <WebView
-        android:id="@+id/loginCaptchaWevView"
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/loginWebViewBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="loginCaptchaWebViewStub,loginCaptchaWebView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/captchaGutterEnd"
+        app:layout_constraintStart_toStartOf="@id/captchaGutterStart"
+        app:layout_constraintTop_toBottomOf="@id/titleContentSpacing"/>
+
+    <ViewStub
+        android:id="@+id/loginCaptchaWebViewStub"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:contentDescription="@string/login_a11y_captcha_container"
+        android:layout="@layout/view_stub_webview"
+        android:inflatedId="@+id/loginCaptchaWebView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/captchaGutterEnd"
         app:layout_constraintStart_toStartOf="@id/captchaGutterStart"

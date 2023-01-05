@@ -16,6 +16,7 @@
 
 package im.vector.app.core.files
 
+import android.annotation.SuppressLint
 import android.app.DownloadManager
 import android.content.ContentValues
 import android.content.Context
@@ -24,7 +25,6 @@ import android.os.Build
 import android.provider.MediaStore
 import androidx.annotation.WorkerThread
 import androidx.core.content.getSystemService
-import arrow.core.Try
 import okio.buffer
 import okio.sink
 import okio.source
@@ -35,11 +35,10 @@ import java.io.File
  * Save a string to a file with Okio.
  */
 @WorkerThread
-fun writeToFile(str: String, file: File): Try<Unit> {
-    return Try<Unit> {
-        file.sink().buffer().use {
-            it.writeString(str, Charsets.UTF_8)
-        }
+@Throws
+fun writeToFile(str: String, file: File) {
+    file.sink().buffer().use {
+        it.writeString(str, Charsets.UTF_8)
     }
 }
 
@@ -47,14 +46,14 @@ fun writeToFile(str: String, file: File): Try<Unit> {
  * Save a byte array to a file with Okio.
  */
 @WorkerThread
-fun writeToFile(data: ByteArray, file: File): Try<Unit> {
-    return Try<Unit> {
-        file.sink().buffer().use {
-            it.write(data)
-        }
+@Throws
+fun writeToFile(data: ByteArray, file: File) {
+    file.sink().buffer().use {
+        it.write(data)
     }
 }
 
+@SuppressLint("Recycle")
 fun addEntryToDownloadManager(
         context: Context,
         file: File,

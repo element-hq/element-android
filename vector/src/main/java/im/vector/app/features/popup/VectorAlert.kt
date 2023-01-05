@@ -98,7 +98,7 @@ open class DefaultVectorAlert(
 
     override val dismissOnClick: Boolean = true
 
-    override val priority: Int = 0
+    override val priority: Int = PopupAlertManager.DEFAULT_PRIORITY
 
     override val isLight: Boolean = false
 

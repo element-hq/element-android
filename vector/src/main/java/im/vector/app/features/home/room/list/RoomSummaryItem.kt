@@ -76,8 +76,8 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>(R.layo
     @EpoxyAttribute
     var showPresence: Boolean = false
 
-    @EpoxyAttribute @JvmField
-    var isPublic: Boolean = false
+    @EpoxyAttribute
+    var izPublic: Boolean = false
 
     @EpoxyAttribute
     var unreadNotificationCount: Int = 0
@@ -103,6 +103,9 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>(R.layo
     @EpoxyAttribute
     var showSelected: Boolean = false
 
+    @EpoxyAttribute
+    var useSingleLineForLastEvent: Boolean = false
+
     override fun bind(holder: Holder) {
         super.bind(holder)
 
@@ -113,15 +116,19 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>(R.layo
             itemLongClickListener?.onLongClick(it) ?: false
         }
         holder.titleView.text = matrixItem.getBestName()
-        holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted))
+        holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State.Count(unreadNotificationCount, showHighlighted))
         holder.unreadIndentIndicator.isVisible = hasUnreadMessage
         holder.draftView.isVisible = hasDraft
         avatarRenderer.render(matrixItem, holder.avatarImageView)
         holder.roomAvatarDecorationImageView.render(encryptionTrustLevel)
-        holder.roomAvatarPublicDecorationImageView.isVisible = isPublic
+        holder.roomAvatarPublicDecorationImageView.isVisible = izPublic
         holder.roomAvatarFailSendingImageView.isVisible = hasFailedSending
         renderSelection(holder, showSelected)
         holder.roomAvatarPresenceImageView.render(showPresence, userPresence)
+
+        if (useSingleLineForLastEvent) {
+            holder.subtitleView.setLines(1)
+        }
     }
 
     private fun renderDisplayMode(holder: Holder) = when (displayMode) {

@@ -28,6 +28,7 @@ import androidx.media.session.MediaButtonReceiver
 import com.airbnb.mvrx.Mavericks
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.singletonEntryPoint
+import im.vector.app.core.extensions.startForegroundCompat
 import im.vector.app.features.call.CallArgs
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.telecom.CallConnection
@@ -39,6 +40,8 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.popup.IncomingCallAlert
 import im.vector.app.features.popup.PopupAlertManager
+import im.vector.lib.core.utils.compat.getParcelableExtraCompat
+import im.vector.lib.core.utils.compat.getSerializableExtraCompat
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.room.model.call.EndCallReason
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -71,7 +74,7 @@ class CallAndroidService : VectorAndroidService() {
     private var mediaSession: MediaSessionCompat? = null
     private val mediaSessionButtonCallback = object : MediaSessionCompat.Callback() {
         override fun onMediaButtonEvent(mediaButtonEvent: Intent?): Boolean {
-            val keyEvent = mediaButtonEvent?.getParcelableExtra<KeyEvent>(Intent.EXTRA_KEY_EVENT) ?: return false
+            val keyEvent = mediaButtonEvent?.getParcelableExtraCompat<KeyEvent>(Intent.EXTRA_KEY_EVENT) ?: return false
             if (keyEvent.keyCode == KeyEvent.KEYCODE_HEADSETHOOK) {
                 callManager.headSetButtonTapped()
                 return true
@@ -158,7 +161,7 @@ class CallAndroidService : VectorAndroidService() {
         val incomingCallAlert = IncomingCallAlert(callId,
                 shouldBeDisplayedIn = { activity ->
                     if (activity is VectorCallActivity) {
-                        activity.intent.getParcelableExtra<CallArgs>(Mavericks.KEY_ARG)?.callId != call.callId
+                        activity.intent.getParcelableExtraCompat<CallArgs>(Mavericks.KEY_ARG)?.callId != call.callId
                     } else true
                 }
         ).apply {
@@ -179,7 +182,7 @@ class CallAndroidService : VectorAndroidService() {
                 fromBg = fromBg
         )
         if (knownCalls.isEmpty()) {
-            startForeground(callId.hashCode(), notification)
+            startForegroundCompat(callId.hashCode(), notification)
         } else {
             notificationManager.notify(callId.hashCode(), notification)
         }
@@ -188,7 +191,7 @@ class CallAndroidService : VectorAndroidService() {
 
     private fun handleCallTerminated(intent: Intent) {
         val callId = intent.getStringExtra(EXTRA_CALL_ID) ?: ""
-        val endCallReason = intent.getSerializableExtra(EXTRA_END_CALL_REASON) as EndCallReason
+        val endCallReason = intent.getSerializableExtraCompat<EndCallReason>(EXTRA_END_CALL_REASON)
         val rejected = intent.getBooleanExtra(EXTRA_END_CALL_REJECTED, false)
         alertManager.cancelAlert(callId)
         val terminatedCall = knownCalls.remove(callId)
@@ -199,10 +202,10 @@ class CallAndroidService : VectorAndroidService() {
         }
         val notification = notificationUtils.buildCallEndedNotification(false)
         val notificationId = callId.hashCode()
-        startForeground(notificationId, notification)
+        startForegroundCompat(notificationId, notification)
         if (knownCalls.isEmpty()) {
             Timber.tag(loggerTag.value).v("No more call, stop the service")
-            stopForeground(true)
+            stopForegroundCompat()
             mediaSession?.isActive = false
             myStopSelf()
         }
@@ -234,7 +237,7 @@ class CallAndroidService : VectorAndroidService() {
                 title = callInformation.opponentMatrixItem?.getBestName() ?: callInformation.opponentUserId
         )
         if (knownCalls.isEmpty()) {
-            startForeground(callId.hashCode(), notification)
+            startForegroundCompat(callId.hashCode(), notification)
         } else {
             notificationManager.notify(callId.hashCode(), notification)
         }
@@ -258,7 +261,7 @@ class CallAndroidService : VectorAndroidService() {
                 title = callInformation.opponentMatrixItem?.getBestName() ?: callInformation.opponentUserId
         )
         if (knownCalls.isEmpty()) {
-            startForeground(callId.hashCode(), notification)
+            startForegroundCompat(callId.hashCode(), notification)
         } else {
             notificationManager.notify(callId.hashCode(), notification)
         }
@@ -271,9 +274,9 @@ class CallAndroidService : VectorAndroidService() {
         callRingPlayerOutgoing?.stop()
         val notification = notificationUtils.buildCallEndedNotification(false)
         if (callId != null) {
-            startForeground(callId.hashCode(), notification)
+            startForegroundCompat(callId.hashCode(), notification)
         } else {
-            startForeground(DEFAULT_NOTIFICATION_ID, notification)
+            startForegroundCompat(DEFAULT_NOTIFICATION_ID, notification)
         }
         if (knownCalls.isEmpty()) {
             mediaSession?.isActive = false

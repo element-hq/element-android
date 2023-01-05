@@ -38,6 +38,7 @@ import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.OnBackPressed
@@ -51,6 +52,7 @@ import im.vector.app.features.webview.WebEventListener
 import im.vector.app.features.widgets.webview.WebviewPermissionUtils
 import im.vector.app.features.widgets.webview.clearAfterWidget
 import im.vector.app.features.widgets.webview.setupForWidget
+import im.vector.lib.core.utils.compat.resolveActivityCompat
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.terms.TermsService
 import timber.log.Timber
@@ -66,15 +68,16 @@ data class WidgetArgs(
         val urlParams: Map<String, String> = emptyMap()
 ) : Parcelable
 
-class WidgetFragment @Inject constructor(
-        private val permissionUtils: WebviewPermissionUtils,
-        private val checkWebViewPermissionsUseCase: CheckWebViewPermissionsUseCase,
-        private val vectorPreferences: VectorPreferences,
-) :
+@AndroidEntryPoint
+class WidgetFragment :
         VectorBaseFragment<FragmentRoomWidgetBinding>(),
         WebEventListener,
         OnBackPressed,
         VectorMenuProvider {
+
+    @Inject lateinit var permissionUtils: WebviewPermissionUtils
+    @Inject lateinit var checkWebViewPermissionsUseCase: CheckWebViewPermissionsUseCase
+    @Inject lateinit var vectorPreferences: VectorPreferences
 
     private val fragmentArgs: WidgetArgs by args()
     private val viewModel: WidgetViewModel by activityViewModel()
@@ -262,7 +265,7 @@ class WidgetFragment @Inject constructor(
                 val intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME)
                 if (intent != null) {
                     val packageManager: PackageManager = context.packageManager
-                    val info = packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY)
+                    val info = packageManager.resolveActivityCompat(intent, PackageManager.MATCH_DEFAULT_ONLY)
                     if (info != null) {
                         context.startActivity(intent)
                     } else {

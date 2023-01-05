@@ -18,7 +18,9 @@ package im.vector.app.features.home.room.list.home
 
 import com.airbnb.mvrx.MavericksState
 import im.vector.app.core.platform.StateView
+import im.vector.app.features.home.room.list.home.header.RoomsHeadersData
 
 data class HomeRoomListViewState(
-        val state: StateView.State = StateView.State.Loading
+        val emptyState: StateView.State.Empty? = null,
+        val headersData: RoomsHeadersData = RoomsHeadersData(),
 ) : MavericksState

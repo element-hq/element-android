@@ -47,6 +47,6 @@ abstract class MessageLiveLocationStartItem :
     }
 
     companion object {
-        private const val STUB_ID = R.id.messageContentLiveLocationStartStub
+        private val STUB_ID = R.id.messageContentLiveLocationStartStub
     }
 }

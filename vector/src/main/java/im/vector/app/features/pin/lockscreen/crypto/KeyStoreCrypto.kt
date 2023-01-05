@@ -16,7 +16,6 @@
 
 package im.vector.app.features.pin.lockscreen.crypto
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.security.keystore.KeyPermanentlyInvalidatedException
@@ -55,7 +54,6 @@ class KeyStoreCrypto @AssistedInject constructor(
      * Ensures a [Key] for the [alias] exists and validates it.
      * @throws KeyPermanentlyInvalidatedException if key is not valid.
      */
-    @SuppressLint("NewApi")
     @Throws(KeyPermanentlyInvalidatedException::class)
     fun ensureKey() = secretStoringUtils.ensureKey(alias).also {
         // Check validity of Key by initializing an encryption Cipher
@@ -109,10 +107,9 @@ class KeyStoreCrypto @AssistedInject constructor(
     /**
      * Check if the key associated with the [alias] is valid.
      */
-    @SuppressLint("NewApi")
     fun hasValidKey(): Boolean {
         val keyExists = hasKey()
-        return if (buildVersionSdkIntProvider.get() >= Build.VERSION_CODES.M && keyExists) {
+        return if (buildVersionSdkIntProvider.isAtLeast(Build.VERSION_CODES.M) && keyExists) {
             val initializedKey = tryOrNull("Error validating lockscreen system key.") { ensureKey() }
             initializedKey != null
         } else {

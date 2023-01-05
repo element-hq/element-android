@@ -34,6 +34,7 @@ import im.vector.app.features.navigation.SettingsActivityPayload
 import im.vector.app.features.settings.devices.VectorSettingsDevicesFragment
 import im.vector.app.features.settings.notifications.VectorSettingsNotificationPreferenceFragment
 import im.vector.app.features.settings.threepids.ThreePidsSettingsFragment
+import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 import org.matrix.android.sdk.api.failure.GlobalError
 import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
@@ -76,13 +77,19 @@ class VectorSettingsActivity : VectorBaseActivity<ActivityVectorSettingsBinding>
                     replaceFragment(views.vectorSettingsPage, VectorSettingsAdvancedSettingsFragment::class.java, null, FRAGMENT_TAG)
                 SettingsActivityPayload.SecurityPrivacy ->
                     replaceFragment(views.vectorSettingsPage, VectorSettingsSecurityPrivacyFragment::class.java, null, FRAGMENT_TAG)
-                SettingsActivityPayload.SecurityPrivacyManageSessions ->
+                SettingsActivityPayload.SecurityPrivacyManageSessions -> {
+                    val fragmentClass = if (vectorPreferences.isNewSessionManagerEnabled()) {
+                        im.vector.app.features.settings.devices.v2.VectorSettingsDevicesFragment::class.java
+                    } else {
+                        VectorSettingsDevicesFragment::class.java
+                    }
                     replaceFragment(
                             views.vectorSettingsPage,
-                            VectorSettingsDevicesFragment::class.java,
+                            fragmentClass,
                             null,
                             FRAGMENT_TAG
                     )
+                }
                 SettingsActivityPayload.Notifications -> {
                     requestHighlightPreferenceKeyOnResume(VectorPreferences.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY)
                     replaceFragment(views.vectorSettingsPage, VectorSettingsNotificationPreferenceFragment::class.java, null, FRAGMENT_TAG)
@@ -194,8 +201,8 @@ class VectorSettingsActivity : VectorBaseActivity<ActivityVectorSettingsBinding>
     }
 }
 
-private fun <T : Parcelable> Activity.readPayload(default: T): T {
-    return intent.getParcelableExtra(KEY_ACTIVITY_PAYLOAD) ?: default
+private inline fun <reified T : Parcelable> Activity.readPayload(default: T): T {
+    return intent.getParcelableExtraCompat<T>(KEY_ACTIVITY_PAYLOAD) ?: default
 }
 
 private fun <T : Parcelable> Intent.applyPayload(payload: T): Intent {

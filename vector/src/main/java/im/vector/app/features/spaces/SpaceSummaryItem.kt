@@ -48,7 +48,7 @@ abstract class SpaceSummaryItem : VectorEpoxyModel<SpaceSummaryItem.Holder>(R.la
     @EpoxyAttribute var expanded: Boolean = false
     @EpoxyAttribute var hasChildren: Boolean = false
     @EpoxyAttribute var indent: Int = 0
-    @EpoxyAttribute var countState: UnreadCounterBadgeView.State = UnreadCounterBadgeView.State(0, false)
+    @EpoxyAttribute var countState: UnreadCounterBadgeView.State = UnreadCounterBadgeView.State.Count(0, false)
     @EpoxyAttribute var description: String? = null
     @EpoxyAttribute var showSeparator: Boolean = false
     @EpoxyAttribute var canDrag: Boolean = true

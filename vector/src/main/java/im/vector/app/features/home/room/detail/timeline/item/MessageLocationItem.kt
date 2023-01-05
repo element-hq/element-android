@@ -27,6 +27,6 @@ abstract class MessageLocationItem : AbsMessageLocationItem<MessageLocationItem.
     class Holder : AbsMessageLocationItem.Holder(STUB_ID)
 
     companion object {
-        private const val STUB_ID = R.id.messageContentLocationStub
+        private val STUB_ID = R.id.messageContentLocationStub
     }
 }

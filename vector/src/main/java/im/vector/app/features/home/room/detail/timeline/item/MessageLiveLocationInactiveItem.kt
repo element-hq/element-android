@@ -47,6 +47,6 @@ abstract class MessageLiveLocationInactiveItem :
     }
 
     companion object {
-        private const val STUB_ID = R.id.messageContentLiveLocationInactiveStub
+        private val STUB_ID = R.id.messageContentLiveLocationInactiveStub
     }
 }

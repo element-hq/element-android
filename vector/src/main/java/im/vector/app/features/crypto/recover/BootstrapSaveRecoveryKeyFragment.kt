@@ -27,21 +27,20 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.safeOpenOutputStream
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.FragmentBootstrapSaveKeyBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-class BootstrapSaveRecoveryKeyFragment @Inject constructor(
-        private val colorProvider: ColorProvider
-) : VectorBaseFragment<FragmentBootstrapSaveKeyBinding>() {
+@AndroidEntryPoint
+class BootstrapSaveRecoveryKeyFragment :
+        VectorBaseFragment<FragmentBootstrapSaveKeyBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentBootstrapSaveKeyBinding {
         return FragmentBootstrapSaveKeyBinding.inflate(inflater, container, false)

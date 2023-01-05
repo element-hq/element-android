@@ -20,21 +20,17 @@ import android.content.Intent
 import android.os.Bundle
 import com.airbnb.mvrx.viewModel
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.start.StartAppViewModel
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class IncomingShareActivity : VectorBaseActivity<ActivitySimpleBinding>() {
 
     private val startAppViewModel: StartAppViewModel by viewModel()
-
-    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
 
     private val launcher = registerStartForActivityResult {
         if (it.resultCode == RESULT_OK) {

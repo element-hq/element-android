@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="bottom">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/splashCarouselGutterStart"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="@dimen/ftue_auth_gutter_start_percent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/splashCarouselGutterEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="@dimen/ftue_auth_gutter_end_percent" />
+
+    <ImageView
+        android:id="@+id/carousel_item_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:scaleType="centerInside"
+        android:layout_marginBottom="@dimen/release_notes_vertical_margin_large"
+        android:contentDescription="@null"
+        app:layout_constraintStart_toStartOf="@id/splashCarouselGutterStart"
+        app:layout_constraintEnd_toEndOf="@id/splashCarouselGutterStart"
+        app:layout_constraintBottom_toTopOf="@id/carousel_item_title"
+        tools:src="@drawable/ill_app_layout_onboarding_rooms"/>
+
+    <TextView
+        android:id="@+id/carousel_item_title"
+        style="@style/Widget.Vector.TextView.Title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:textColor="?vctr_content_primary"
+        android:maxLines="2"
+        app:layout_constraintBottom_toTopOf="@id/carousel_item_body"
+        app:layout_constraintEnd_toEndOf="@id/splashCarouselGutterEnd"
+        app:layout_constraintStart_toStartOf="@id/splashCarouselGutterStart"
+        tools:text="@string/onboarding_new_app_layout_welcome_title" />
+
+    <TextView
+        android:id="@+id/carousel_item_body"
+        style="@style/Widget.Vector.TextView.Subtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="?vctr_content_secondary"
+        android:maxLines="3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/splashCarouselGutterEnd"
+        app:layout_constraintStart_toStartOf="@id/splashCarouselGutterStart"
+        tools:text="@string/onboarding_new_app_layout_welcome_message" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

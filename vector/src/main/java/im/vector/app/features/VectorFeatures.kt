@@ -18,6 +18,7 @@ package im.vector.app.features
 
 import im.vector.app.config.Config
 import im.vector.app.config.OnboardingVariant
+import im.vector.app.features.settings.VectorPreferences
 
 interface VectorFeatures {
 
@@ -32,9 +33,18 @@ interface VectorFeatures {
     fun isScreenSharingEnabled(): Boolean
     fun isLocationSharingEnabled(): Boolean
     fun forceUsageOfOpusEncoder(): Boolean
-    fun shouldStartDmOnFirstMessage(): Boolean
-    fun isNewAppLayoutEnabled(): Boolean
-    fun isNewDeviceManagementEnabled(): Boolean
+
+    /**
+     * This is only to enable if the labs flag should be visible and effective.
+     * If on the client-side you want functionality that should be enabled with the new layout,
+     * use [VectorPreferences.isNewAppLayoutEnabled] instead.
+     */
+    fun isNewAppLayoutFeatureEnabled(): Boolean
+    fun isQrCodeLoginEnabled(): Boolean
+    fun isQrCodeLoginForAllServers(): Boolean
+    fun isReciprocateQrCodeLogin(): Boolean
+    fun isVoiceBroadcastEnabled(): Boolean
+    fun isUnverifiedSessionsAlertEnabled(): Boolean
 }
 
 class DefaultVectorFeatures : VectorFeatures {
@@ -49,7 +59,10 @@ class DefaultVectorFeatures : VectorFeatures {
     override fun isScreenSharingEnabled(): Boolean = true
     override fun isLocationSharingEnabled() = Config.ENABLE_LOCATION_SHARING
     override fun forceUsageOfOpusEncoder(): Boolean = false
-    override fun shouldStartDmOnFirstMessage(): Boolean = false
-    override fun isNewAppLayoutEnabled(): Boolean = false
-    override fun isNewDeviceManagementEnabled(): Boolean = false
+    override fun isNewAppLayoutFeatureEnabled(): Boolean = true
+    override fun isQrCodeLoginEnabled(): Boolean = true
+    override fun isQrCodeLoginForAllServers(): Boolean = false
+    override fun isReciprocateQrCodeLogin(): Boolean = false
+    override fun isVoiceBroadcastEnabled(): Boolean = true
+    override fun isUnverifiedSessionsAlertEnabled(): Boolean = true
 }

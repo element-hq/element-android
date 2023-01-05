@@ -25,6 +25,8 @@ import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.RelationType
+import org.matrix.android.sdk.api.session.events.model.getRelationContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -40,6 +42,7 @@ import org.matrix.android.sdk.api.session.sync.model.RoomSync
 import org.matrix.android.sdk.api.session.sync.model.RoomsSyncResponse
 import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
+import org.matrix.android.sdk.internal.crypto.algorithms.megolm.UnRequestedForwardManager
 import org.matrix.android.sdk.internal.database.helper.addIfNecessary
 import org.matrix.android.sdk.internal.database.helper.addTimelineEvent
 import org.matrix.android.sdk.internal.database.helper.createOrUpdate
@@ -48,6 +51,7 @@ import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.mapper.toEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
+import org.matrix.android.sdk.internal.database.model.EventAnnotationsSummaryEntity
 import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.EventInsertType
 import org.matrix.android.sdk.internal.database.model.RoomEntity
@@ -99,6 +103,7 @@ internal class RoomSyncHandler @Inject constructor(
         private val timelineInput: TimelineInput,
         private val liveEventService: Lazy<StreamEventsManager>,
         private val clock: Clock,
+        private val unRequestedForwardManager: UnRequestedForwardManager,
 ) {
 
     sealed class HandlingStrategy {
@@ -154,12 +159,12 @@ internal class RoomSyncHandler @Inject constructor(
             }
             is HandlingStrategy.INVITED ->
                 handlingStrategy.data.mapWithProgress(reporter, InitialSyncStep.ImportingAccountInvitedRooms, 0.1f) {
-                    handleInvitedRoom(realm, it.key, it.value, insertType, syncLocalTimeStampMillis)
+                    handleInvitedRoom(realm, it.key, it.value, insertType, syncLocalTimeStampMillis, aggregator)
                 }
 
             is HandlingStrategy.LEFT -> {
                 handlingStrategy.data.mapWithProgress(reporter, InitialSyncStep.ImportingAccountLeftRooms, 0.3f) {
-                    handleLeftRoom(realm, it.key, it.value, insertType, syncLocalTimeStampMillis)
+                    handleLeftRoom(realm, it.key, it.value, insertType, syncLocalTimeStampMillis, aggregator)
                 }
             }
         }
@@ -285,7 +290,9 @@ internal class RoomSyncHandler @Inject constructor(
                 Membership.JOIN,
                 roomSync.summary,
                 roomSync.unreadNotifications,
-                updateMembers = hasRoomMember
+                roomSync.unreadThreadNotifications,
+                updateMembers = hasRoomMember,
+                aggregator = aggregator
         )
         return roomEntity
     }
@@ -295,7 +302,8 @@ internal class RoomSyncHandler @Inject constructor(
             roomId: String,
             roomSync: InvitedRoomSync,
             insertType: EventInsertType,
-            syncLocalTimestampMillis: Long
+            syncLocalTimestampMillis: Long,
+            aggregator: SyncResponsePostTreatmentAggregator
     ): RoomEntity {
         Timber.v("Handle invited sync for room $roomId")
         val isInitialSync = insertType == EventInsertType.INITIAL_SYNC
@@ -319,7 +327,8 @@ internal class RoomSyncHandler @Inject constructor(
             it.type == EventType.STATE_ROOM_MEMBER
         }
         roomChangeMembershipStateDataSource.setMembershipFromSync(roomId, Membership.INVITE)
-        roomSummaryUpdater.update(realm, roomId, Membership.INVITE, updateMembers = true, inviterId = inviterEvent?.senderId)
+        roomSummaryUpdater.update(realm, roomId, Membership.INVITE, updateMembers = true, inviterId = inviterEvent?.senderId, aggregator = aggregator)
+        unRequestedForwardManager.onInviteReceived(roomId, inviterEvent?.senderId.orEmpty(), clock.epochMillis())
         return roomEntity
     }
 
@@ -328,7 +337,8 @@ internal class RoomSyncHandler @Inject constructor(
             roomId: String,
             roomSync: RoomSync,
             insertType: EventInsertType,
-            syncLocalTimestampMillis: Long
+            syncLocalTimestampMillis: Long,
+            aggregator: SyncResponsePostTreatmentAggregator
     ): RoomEntity {
         val isInitialSync = insertType == EventInsertType.INITIAL_SYNC
         val roomEntity = RoomEntity.getOrCreate(realm, roomId)
@@ -366,7 +376,8 @@ internal class RoomSyncHandler @Inject constructor(
         roomEntity.chunks.clearWith { it.deleteOnCascade(deleteStateEvents = true, canDeleteRoot = true) }
         roomTypingUsersHandler.handle(realm, roomId, null)
         roomChangeMembershipStateDataSource.setMembershipFromSync(roomId, Membership.LEAVE)
-        roomSummaryUpdater.update(realm, roomId, membership, roomSync.summary, roomSync.unreadNotifications)
+        roomSummaryUpdater.update(realm, roomId, membership, roomSync.summary,
+                roomSync.unreadNotifications, roomSync.unreadThreadNotifications, aggregator = aggregator)
         return roomEntity
     }
 
@@ -478,23 +489,41 @@ internal class RoomSyncHandler @Inject constructor(
             cryptoService.onLiveEvent(roomEntity.roomId, event, isInitialSync)
 
             // Try to remove local echo
-            event.unsignedData?.transactionId?.also {
-                val sendingEventEntity = roomEntity.sendingTimelineEvents.find(it)
+            event.unsignedData?.transactionId?.also { txId ->
+                val sendingEventEntity = roomEntity.sendingTimelineEvents.find(txId)
                 if (sendingEventEntity != null) {
-                    Timber.v("Remove local echo for tx:$it")
+                    Timber.v("Remove local echo for tx:$txId")
                     roomEntity.sendingTimelineEvents.remove(sendingEventEntity)
                     if (event.isEncrypted() && event.content?.get("algorithm") as? String == MXCRYPTO_ALGORITHM_MEGOLM) {
-                        // updated with echo decryption, to avoid seeing it decrypt again
+                        // updated with echo decryption, to avoid seeing txId decrypt again
                         val adapter = MoshiProvider.providesMoshi().adapter<OlmDecryptionResult>(OlmDecryptionResult::class.java)
                         sendingEventEntity.root?.decryptionResultJson?.let { json ->
                             eventEntity.decryptionResultJson = json
                             event.mxDecryptionResult = adapter.fromJson(json)
                         }
                     }
+                    // also update potential edit that could refer to that event?
+                    // If not display will flicker :/
+                    val relationContent = event.getRelationContent()
+                    if (relationContent?.type == RelationType.REPLACE) {
+                        relationContent.eventId?.let { targetId ->
+                            EventAnnotationsSummaryEntity.where(realm, roomId, targetId)
+                                    .findFirst()
+                                    ?.editSummary
+                                    ?.editions
+                                    ?.forEach {
+                                        if (it.eventId == txId) {
+                                            // just do that, the aggregation processor will to the rest
+                                            it.event = eventEntity
+                                        }
+                                    }
+                        }
+                    }
+
                     // Finally delete the local echo
                     sendingEventEntity.deleteOnCascade(true)
                 } else {
-                    Timber.v("Can't find corresponding local echo for tx:$it")
+                    Timber.v("Can't find corresponding local echo for tx:$txId")
                 }
             }
         }
@@ -548,7 +577,8 @@ internal class RoomSyncHandler @Inject constructor(
                     payload = result.clearEvent,
                     senderKey = result.senderCurve25519Key,
                     keysClaimed = result.claimedEd25519Key?.let { k -> mapOf("ed25519" to k) },
-                    forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
+                    forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain,
+                    isSafe = result.isSafe
             )
         } catch (e: MXCryptoError) {
             if (e is MXCryptoError.Base) {

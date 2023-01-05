@@ -31,6 +31,8 @@ import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.content.RoomKeyWithHeldContent
 import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
+import org.matrix.android.sdk.api.session.room.model.message.MessageContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.internal.crypto.DeviceListManager
 import org.matrix.android.sdk.internal.crypto.InboundGroupSessionHolder
 import org.matrix.android.sdk.internal.crypto.MXOlmDevice
@@ -92,7 +94,18 @@ internal class MXMegolmEncryption(
     ): Content {
         val ts = clock.epochMillis()
         Timber.tag(loggerTag.value).v("encryptEventContent : getDevicesInRoom")
-        val devices = getDevicesInRoom(userIds)
+
+        /**
+         * When using in-room messages and the room has encryption enabled,
+         * clients should ensure that encryption does not hinder the verification.
+         * For example, if the verification messages are encrypted, clients must ensure that all the recipient’s
+         * unverified devices receive the keys necessary to decrypt the messages,
+         * even if they would normally not be given the keys to decrypt messages in the room.
+         */
+        val shouldSendToUnverified = isVerificationEvent(eventType, eventContent)
+
+        val devices = getDevicesInRoom(userIds, forceDistributeToUnverified = shouldSendToUnverified)
+
         Timber.tag(loggerTag.value).d("encrypt event in room=$roomId - devices count in room ${devices.allowedDevices.toDebugCount()}")
         Timber.tag(loggerTag.value).v("encryptEventContent ${clock.epochMillis() - ts}: getDevicesInRoom ${devices.allowedDevices.toDebugString()}")
         val outboundSession = ensureOutboundSession(devices.allowedDevices)
@@ -106,6 +119,11 @@ internal class MXMegolmEncryption(
                     Timber.tag(loggerTag.value).d("encrypt event in room=$roomId Finished in ${clock.epochMillis() - ts} millis")
                 }
     }
+
+    private fun isVerificationEvent(eventType: String, eventContent: Content) =
+            EventType.isVerificationEvent(eventType) ||
+                    (eventType == EventType.MESSAGE &&
+                            eventContent.get(MessageContent.MSG_TYPE_JSON_KEY) == MessageType.MSGTYPE_VERIFICATION_REQUEST)
 
     private fun notifyWithheldForSession(devices: MXUsersDevicesMap<WithHeldCode>, outboundSession: MXOutboundSessionInfo) {
         // offload to computation thread
@@ -162,7 +180,8 @@ internal class MXMegolmEncryption(
                 forwardingCurve25519KeyChain = emptyList(),
                 keysClaimed = keysClaimedMap,
                 exportFormat = false,
-                sharedHistory = sharedHistory
+                sharedHistory = sharedHistory,
+                trusted = true
         )
 
         defaultKeysBackupService.maybeBackupKeys()
@@ -415,15 +434,17 @@ internal class MXMegolmEncryption(
      * This method must be called in getDecryptingThreadHandler() thread.
      *
      * @param userIds the user ids whose devices must be checked.
+     * @param forceDistributeToUnverified If true the unverified devices will be included in valid recipients even if
+     * such devices are blocked in crypto settings
      */
-    private suspend fun getDevicesInRoom(userIds: List<String>): DeviceInRoomInfo {
+    private suspend fun getDevicesInRoom(userIds: List<String>, forceDistributeToUnverified: Boolean = false): DeviceInRoomInfo {
         // We are happy to use a cached version here: we assume that if we already
         // have a list of the user's devices, then we already share an e2e room
         // with them, which means that they will have announced any new devices via
         // an m.new_device.
         val keys = deviceListManager.downloadKeys(userIds, false)
         val encryptToVerifiedDevicesOnly = cryptoStore.getGlobalBlacklistUnverifiedDevices() ||
-                cryptoStore.getRoomsListBlacklistUnverifiedDevices().contains(roomId)
+                cryptoStore.getBlockUnverifiedDevices(roomId)
 
         val devicesInRoom = DeviceInRoomInfo()
         val unknownDevices = MXUsersDevicesMap<CryptoDeviceInfo>()
@@ -443,7 +464,7 @@ internal class MXMegolmEncryption(
                     continue
                 }
 
-                if (!deviceInfo.isVerified && encryptToVerifiedDevicesOnly) {
+                if (!deviceInfo.isVerified && encryptToVerifiedDevicesOnly && !forceDistributeToUnverified) {
                     devicesInRoom.withHeldDevices.setObject(userId, deviceId, WithHeldCode.UNVERIFIED)
                     continue
                 }

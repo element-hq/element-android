@@ -23,7 +23,7 @@ import com.airbnb.mvrx.Uninitialized
 import im.vector.app.R
 import im.vector.app.core.platform.GenericIdArgs
 import im.vector.app.features.roomprofile.RoomProfileArgs
-import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
+import org.matrix.android.sdk.api.session.crypto.model.UserVerificationLevel
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -36,7 +36,7 @@ data class RoomMemberListViewState(
         val ignoredUserIds: List<String> = emptyList(),
         val filter: String = "",
         val threePidInvites: Async<List<Event>> = Uninitialized,
-        val trustLevelMap: Async<Map<String, RoomEncryptionTrustLevel?>> = Uninitialized,
+        val trustLevelMap: Async<Map<String, UserVerificationLevel>> = Uninitialized,
         val actionsPermissions: ActionPermissions = ActionPermissions()
 ) : MavericksState {
 

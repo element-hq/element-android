@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:foreground="?selectableItemBackground"
+    android:paddingTop="8dp">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/startGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="8dp" />
+
+    <View
+        android:id="@+id/otherSessionItemBackground"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/bg_other_session"
+        app:layout_constraintBottom_toBottomOf="@id/otherSessionSeparator"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/otherSessionDeviceTypeImageView"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="11dp"
+        android:background="@drawable/bg_device_type"
+        android:contentDescription="@string/a11y_device_manager_device_type_mobile"
+        android:padding="8dp"
+        app:layout_constraintBottom_toBottomOf="@id/otherSessionItemBackground"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toTopOf="@id/otherSessionItemBackground"
+        tools:src="@drawable/ic_device_type_mobile" />
+
+    <im.vector.app.core.ui.views.ShieldImageView
+        android:id="@+id/otherSessionVerificationStatusImageView"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="26dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/circle_with_border"
+        android:importantForAccessibility="no"
+        android:padding="6dp"
+        app:layout_constraintStart_toStartOf="@id/otherSessionDeviceTypeImageView"
+        app:layout_constraintTop_toTopOf="@id/otherSessionDeviceTypeImageView"
+        tools:src="@drawable/ic_shield_trusted" />
+
+    <TextView
+        android:id="@+id/otherSessionNameTextView"
+        style="@style/TextAppearance.Vector.Subtitle.Medium.DevicesManagement"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:ellipsize="end"
+        android:lines="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/otherSessionDeviceTypeImageView"
+        app:layout_constraintTop_toTopOf="@id/otherSessionItemBackground"
+        tools:text="Element Mobile: Android" />
+
+    <TextView
+        android:id="@+id/otherSessionDescriptionTextView"
+        style="@style/TextAppearance.Vector.Body.DevicesManagement"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:drawablePadding="8dp"
+        app:layout_constraintEnd_toEndOf="@id/otherSessionNameTextView"
+        app:layout_constraintStart_toStartOf="@id/otherSessionNameTextView"
+        app:layout_constraintTop_toBottomOf="@id/otherSessionNameTextView"
+        tools:text="@string/device_manager_verification_status_verified" />
+
+    <TextView
+        android:id="@+id/otherSessionIpAddressTextView"
+        style="@style/TextAppearance.Vector.Body.DevicesManagement"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:drawablePadding="8dp"
+        app:layout_constraintEnd_toEndOf="@id/otherSessionNameTextView"
+        app:layout_constraintStart_toStartOf="@id/otherSessionNameTextView"
+        app:layout_constraintTop_toBottomOf="@id/otherSessionDescriptionTextView"
+        tools:text="0.0.0.0" />
+
+    <View
+        android:id="@+id/otherSessionSeparator"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:background="?vctr_content_quinary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/otherSessionNameTextView"
+        app:layout_constraintTop_toBottomOf="@id/otherSessionIpAddressTextView" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

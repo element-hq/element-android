@@ -20,11 +20,12 @@ import im.vector.app.features.login.HomeServerConnectionConfigFactory
 import io.mockk.every
 import io.mockk.mockk
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
+import org.matrix.android.sdk.api.network.ssl.Fingerprint
 
 class FakeHomeServerConnectionConfigFactory {
     val instance: HomeServerConnectionConfigFactory = mockk()
 
-    fun givenConfigFor(url: String, config: HomeServerConnectionConfig) {
-        every { instance.create(url) } returns config
+    fun givenConfigFor(url: String, fingerprint: Fingerprint? = null, config: HomeServerConnectionConfig) {
+        every { instance.create(url, fingerprint) } returns config
     }
 }

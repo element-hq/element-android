@@ -109,15 +109,15 @@ class RoomDevToolActivity :
                 }
                 RoomDevToolViewState.Mode.StateEventList,
                 RoomDevToolViewState.Mode.StateEventListByType -> {
-                    val frag = createFragment(RoomDevToolStateEventListFragment::class.java)
+                    val frag = RoomDevToolStateEventListFragment()
                     navigateTo(frag)
                 }
                 RoomDevToolViewState.Mode.EditEventContent -> {
-                    val frag = createFragment(RoomDevToolEditFragment::class.java)
+                    val frag = RoomDevToolEditFragment()
                     navigateTo(frag)
                 }
                 is RoomDevToolViewState.Mode.SendEventForm -> {
-                    val frag = createFragment(RoomDevToolSendFormFragment::class.java)
+                    val frag = RoomDevToolSendFormFragment()
                     navigateTo(frag)
                 }
             }

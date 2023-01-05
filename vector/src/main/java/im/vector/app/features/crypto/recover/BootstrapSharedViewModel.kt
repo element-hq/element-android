@@ -32,14 +32,13 @@ import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.WaitingViewData
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.features.auth.ReAuthActivity
+import im.vector.app.features.auth.PendingAuthHandler
 import im.vector.app.features.raw.wellknown.SecureBackupMethod
 import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.raw.wellknown.isSecureBackupRequired
 import im.vector.app.features.raw.wellknown.secureBackupMethod
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.UserPasswordAuth
@@ -57,10 +56,8 @@ import org.matrix.android.sdk.api.session.crypto.keysbackup.toKeysVersionResult
 import org.matrix.android.sdk.api.session.securestorage.RawBytesKeySpec
 import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
 import org.matrix.android.sdk.api.util.awaitCallback
-import org.matrix.android.sdk.api.util.fromBase64
 import java.io.OutputStream
 import kotlin.coroutines.Continuation
-import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
 class BootstrapSharedViewModel @AssistedInject constructor(
@@ -71,7 +68,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
         private val rawService: RawService,
         private val bootstrapTask: BootstrapCrossSigningTask,
         private val migrationTask: BackupToQuadSMigrationTask,
-        private val matrix: Matrix,
+        private val pendingAuthHandler: PendingAuthHandler,
 ) : VectorViewModel<BootstrapViewState, BootstrapActions, BootstrapViewEvents>(initialState) {
 
     private var doesKeyBackupExist: Boolean = false
@@ -84,11 +81,6 @@ class BootstrapSharedViewModel @AssistedInject constructor(
     }
 
     companion object : MavericksViewModelFactory<BootstrapSharedViewModel, BootstrapViewState> by hiltMavericksViewModelFactory()
-
-//    private var _pendingSession: String? = null
-
-    var uiaContinuation: Continuation<UIABaseAuth>? = null
-    var pendingAuth: UIABaseAuth? = null
 
     init {
 
@@ -272,21 +264,10 @@ class BootstrapSharedViewModel @AssistedInject constructor(
             is BootstrapActions.DoMigrateWithRecoveryKey -> {
                 startMigrationFlow(state.step, null, action.recoveryKey)
             }
-            BootstrapActions.SsoAuthDone -> {
-                uiaContinuation?.resume(DefaultBaseAuth(session = pendingAuth?.session ?: ""))
-            }
-            is BootstrapActions.PasswordAuthDone -> {
-                val decryptedPass = matrix.secureStorageService()
-                        .loadSecureSecret<String>(action.password.fromBase64().inputStream(), ReAuthActivity.DEFAULT_RESULT_KEYSTORE_ALIAS)
-                uiaContinuation?.resume(
-                        UserPasswordAuth(
-                                session = pendingAuth?.session,
-                                password = decryptedPass,
-                                user = session.myUserId
-                        )
-                )
-            }
+            BootstrapActions.SsoAuthDone -> pendingAuthHandler.ssoAuthDone()
+            is BootstrapActions.PasswordAuthDone -> pendingAuthHandler.passwordAuthDone(action.password)
             BootstrapActions.ReAuthCancelled -> {
+                pendingAuthHandler.reAuthCancelled()
                 setState {
                     copy(step = BootstrapStep.AccountReAuth(stringProvider.getString(R.string.authentication_error)))
                 }
@@ -402,13 +383,13 @@ class BootstrapSharedViewModel @AssistedInject constructor(
             override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
                 when (flowResponse.nextUncompletedStage()) {
                     LoginFlowTypes.PASSWORD -> {
-                        pendingAuth = UserPasswordAuth(
+                        pendingAuthHandler.pendingAuth = UserPasswordAuth(
                                 // Note that _pendingSession may or may not be null, this is OK, it will be managed by the task
                                 session = flowResponse.session,
                                 user = session.myUserId,
                                 password = null
                         )
-                        uiaContinuation = promise
+                        pendingAuthHandler.uiaContinuation = promise
                         setState {
                             copy(
                                     step = BootstrapStep.AccountReAuth()
@@ -417,8 +398,8 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                         _viewEvents.post(BootstrapViewEvents.RequestReAuth(flowResponse, errCode))
                     }
                     LoginFlowTypes.SSO -> {
-                        pendingAuth = DefaultBaseAuth(flowResponse.session)
-                        uiaContinuation = promise
+                        pendingAuthHandler.pendingAuth = DefaultBaseAuth(flowResponse.session)
+                        pendingAuthHandler.uiaContinuation = promise
                         setState {
                             copy(
                                     step = BootstrapStep.AccountReAuth()

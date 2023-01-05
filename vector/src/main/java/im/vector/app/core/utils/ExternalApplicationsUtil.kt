@@ -16,6 +16,7 @@
 
 package im.vector.app.core.utils
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DownloadManager
 import android.content.ActivityNotFoundException
@@ -256,6 +257,7 @@ private fun appendTimeToFilename(name: String): String {
     return """${filename}_$dateExtension.$fileExtension"""
 }
 
+@SuppressLint("Recycle")
 suspend fun saveMedia(
         context: Context,
         file: File,
@@ -309,7 +311,6 @@ suspend fun saveMedia(
     }
 }
 
-@Suppress("DEPRECATION")
 private fun saveMediaLegacy(
         context: Context,
         mediaMimeType: String?,
@@ -340,6 +341,7 @@ private fun saveMediaLegacy(
         val savedFile = saveFileIntoLegacy(file, downloadDir, outputFilename, currentTimeMillis)
         if (savedFile != null) {
             val downloadManager = context.getSystemService<DownloadManager>()
+            @Suppress("DEPRECATION")
             downloadManager?.addCompletedDownload(
                     savedFile.name,
                     title,
@@ -430,7 +432,6 @@ fun selectTxtFileToWrite(
  * @param currentTimeMillis the current time in milliseconds
  * @return               the created file
  */
-@Suppress("DEPRECATION")
 fun saveFileIntoLegacy(sourceFile: File, dstDirPath: File, outputFilename: String?, currentTimeMillis: Long): File? {
     // defines another name for the external media
     var dstFileName: String

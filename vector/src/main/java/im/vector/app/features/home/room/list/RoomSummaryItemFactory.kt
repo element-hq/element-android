@@ -22,6 +22,7 @@ import com.airbnb.mvrx.Loading
 import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
+import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.StringProvider
@@ -29,21 +30,33 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.detail.timeline.format.DisplayableEventFormatter
 import im.vector.app.features.home.room.typing.TypingHelper
+import im.vector.app.features.voicebroadcast.isLive
+import im.vector.app.features.voicebroadcast.isVoiceBroadcast
+import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
+import im.vector.app.features.voicebroadcast.usecase.GetRoomLiveVoiceBroadcastsUseCase
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
+import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
+import org.matrix.android.sdk.api.session.room.model.message.asMessageAudioEvent
+import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class RoomSummaryItemFactory @Inject constructor(
+        private val sessionHolder: ActiveSessionHolder,
         private val displayableEventFormatter: DisplayableEventFormatter,
         private val dateFormatter: VectorDateFormatter,
         private val stringProvider: StringProvider,
         private val typingHelper: TypingHelper,
         private val avatarRenderer: AvatarRenderer,
-        private val errorFormatter: ErrorFormatter
+        private val errorFormatter: ErrorFormatter,
+        private val getRoomLiveVoiceBroadcastsUseCase: GetRoomLiveVoiceBroadcastsUseCase,
 ) {
 
     fun create(
@@ -51,7 +64,8 @@ class RoomSummaryItemFactory @Inject constructor(
             roomChangeMembershipStates: Map<String, ChangeMembershipState>,
             selectedRoomIds: Set<String>,
             displayMode: RoomListDisplayMode,
-            listener: RoomListListener?
+            listener: RoomListListener?,
+            singleLineLastEvent: Boolean = false
     ): VectorEpoxyModel<*> {
         return when (roomSummary.membership) {
             Membership.INVITE -> {
@@ -59,7 +73,7 @@ class RoomSummaryItemFactory @Inject constructor(
                 createInvitationItem(roomSummary, changeMembershipState, listener)
             }
             else -> createRoomItem(
-                    roomSummary, selectedRoomIds, displayMode, listener?.let { it::onRoomClicked }, listener?.let { it::onRoomLongClicked }
+                    roomSummary, selectedRoomIds, displayMode, singleLineLastEvent, listener?.let { it::onRoomClicked }, listener?.let { it::onRoomLongClicked }
             )
         }
     }
@@ -118,8 +132,9 @@ class RoomSummaryItemFactory @Inject constructor(
             roomSummary: RoomSummary,
             selectedRoomIds: Set<String>,
             displayMode: RoomListDisplayMode,
+            singleLineLastEvent: Boolean,
             onClick: ((RoomSummary) -> Unit)?,
-            onLongClick: ((RoomSummary) -> Boolean)?
+            onLongClick: ((RoomSummary) -> Boolean)?,
     ): VectorEpoxyModel<*> {
         val subtitle = getSearchResultSubtitle(roomSummary)
         val unreadCount = roomSummary.notificationCount
@@ -127,20 +142,22 @@ class RoomSummaryItemFactory @Inject constructor(
         val showSelected = selectedRoomIds.contains(roomSummary.roomId)
         var latestFormattedEvent: CharSequence = ""
         var latestEventTime = ""
-        val latestEvent = roomSummary.latestPreviewableEvent
+        val latestEvent = roomSummary.getVectorLatestPreviewableEvent()
         if (latestEvent != null) {
             latestFormattedEvent = displayableEventFormatter.format(latestEvent, roomSummary.isDirect, roomSummary.isDirect.not())
             latestEventTime = dateFormatter.format(latestEvent.root.originServerTs, DateFormatKind.ROOM_LIST)
         }
 
         val typingMessage = typingHelper.getTypingMessage(roomSummary.typingUsers)
+                // Skip typing while there is a live voice broadcast
+                .takeUnless { latestEvent?.root?.asVoiceBroadcastEvent()?.isLive.orFalse() }.orEmpty()
 
         return if (subtitle.isBlank() && displayMode == RoomListDisplayMode.FILTERED) {
             createCenteredRoomSummaryItem(roomSummary, displayMode, showSelected, unreadCount, onClick, onLongClick)
         } else {
             createRoomSummaryItem(
                     roomSummary, displayMode, subtitle, latestEventTime, typingMessage,
-                    latestFormattedEvent, showHighlighted, showSelected, unreadCount, onClick, onLongClick
+                    latestFormattedEvent, showHighlighted, showSelected, unreadCount, singleLineLastEvent, onClick, onLongClick
             )
         }
     }
@@ -155,6 +172,7 @@ class RoomSummaryItemFactory @Inject constructor(
             showHighlighted: Boolean,
             showSelected: Boolean,
             unreadCount: Int,
+            singleLineLastEvent: Boolean,
             onClick: ((RoomSummary) -> Unit)?,
             onLongClick: ((RoomSummary) -> Boolean)?
     ) = RoomSummaryItem_()
@@ -164,7 +182,7 @@ class RoomSummaryItemFactory @Inject constructor(
             // .encryptionTrustLevel(roomSummary.roomEncryptionTrustLevel)
             .displayMode(displayMode)
             .subtitle(subtitle)
-            .isPublic(roomSummary.isPublic)
+            .izPublic(roomSummary.isPublic)
             .showPresence(roomSummary.isDirect)
             .userPresence(roomSummary.directUserPresence)
             .matrixItem(roomSummary.toMatrixItem())
@@ -177,6 +195,7 @@ class RoomSummaryItemFactory @Inject constructor(
             .unreadNotificationCount(unreadCount)
             .hasUnreadMessage(roomSummary.hasUnreadMessages)
             .hasDraft(roomSummary.userDrafts.isNotEmpty())
+            .useSingleLineForLastEvent(singleLineLastEvent)
             .itemLongClickListener { _ -> onLongClick?.invoke(roomSummary) ?: false }
             .itemClickListener { onClick?.invoke(roomSummary) }
 
@@ -187,13 +206,13 @@ class RoomSummaryItemFactory @Inject constructor(
             unreadCount: Int,
             onClick: ((RoomSummary) -> Unit)?,
             onLongClick: ((RoomSummary) -> Boolean)?
-    ) = RoomSummaryItemCentered_()
+    ) = RoomSummaryCenteredItem_()
             .id(roomSummary.roomId)
             .avatarRenderer(avatarRenderer)
             // We do not display shield in the room list anymore
             // .encryptionTrustLevel(roomSummary.roomEncryptionTrustLevel)
             .displayMode(displayMode)
-            .isPublic(roomSummary.isPublic)
+            .izPublic(roomSummary.isPublic)
             .showPresence(roomSummary.isDirect)
             .userPresence(roomSummary.directUserPresence)
             .matrixItem(roomSummary.toMatrixItem())
@@ -220,5 +239,15 @@ class RoomSummaryItemFactory @Inject constructor(
             2 -> stringProvider.getString(R.string.search_space_two_parents, directParentNames[0], directParentNames[1])
             else -> stringProvider.getQuantityString(R.plurals.search_space_multiple_parents, size - 1, directParentNames[0], size - 1)
         }
+    }
+
+    private fun RoomSummary.getVectorLatestPreviewableEvent(): TimelineEvent? {
+        val room = sessionHolder.getSafeActiveSession()?.getRoom(roomId) ?: return latestPreviewableEvent
+        val liveVoiceBroadcastTimelineEvent = getRoomLiveVoiceBroadcastsUseCase.execute(roomId).lastOrNull()
+                ?.root?.eventId?.let { room.getTimelineEvent(it) }
+        return latestPreviewableEvent?.takeIf { it.root.getClearType() == EventType.CALL_INVITE }
+                ?: liveVoiceBroadcastTimelineEvent
+                ?: latestPreviewableEvent
+                        ?.takeUnless { it.root.asMessageAudioEvent()?.isVoiceBroadcast().orFalse() } // Skip voice messages related to voice broadcast
     }
 }

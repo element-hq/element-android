@@ -189,11 +189,9 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         val startMs = ((clock.epochMillis() - startAt)).coerceAtLeast(0)
         recordingTicker?.stop()
         recordingTicker = CountUpTimer().apply {
-            tickListener = object : CountUpTimer.TickListener {
-                override fun onTick(milliseconds: Long) {
-                    val isLocked = startFromLocked || lastKnownState is RecordingUiState.Locked
-                    onRecordingTick(isLocked, milliseconds + startMs)
-                }
+            tickListener = CountUpTimer.TickListener { milliseconds ->
+                val isLocked = startFromLocked || lastKnownState is RecordingUiState.Locked
+                onRecordingTick(isLocked, milliseconds + startMs)
             }
             resume()
         }

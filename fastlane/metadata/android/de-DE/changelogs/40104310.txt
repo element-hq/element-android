@@ -1,0 +1,2 @@
+Die wichtigsten Änderungen in dieser Version: Verbessertes Anmelde- und Registrierungserlebnis.
+Vollständiges Änderungsprotokoll: https://github.com/vector-im/element-android/releases

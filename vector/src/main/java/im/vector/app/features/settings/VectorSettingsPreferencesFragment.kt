@@ -22,6 +22,7 @@ import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.dialogs.PhotoOrVideoDialog
 import im.vector.app.core.extensions.restart
@@ -30,6 +31,7 @@ import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorSwitchPreference
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.settings.font.FontScaleSettingActivity
 import im.vector.app.features.themes.ThemeUtils
@@ -37,10 +39,14 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.presence.model.PresenceEnum
 import javax.inject.Inject
 
-class VectorSettingsPreferencesFragment @Inject constructor(
-        private val vectorPreferences: VectorPreferences,
-        private val fontScalePreferences: FontScalePreferences,
-) : VectorSettingsBaseFragment() {
+@AndroidEntryPoint
+class VectorSettingsPreferencesFragment :
+        VectorSettingsBaseFragment() {
+
+    @Inject lateinit var vectorPreferences: VectorPreferences
+    @Inject lateinit var fontScalePreferences: FontScalePreferences
+    @Inject lateinit var vectorFeatures: VectorFeatures
+    @Inject lateinit var vectorLocale: VectorLocale
 
     override var titleRes = R.string.settings_preferences
     override val preferenceXmlRes = R.xml.vector_settings_preferences
@@ -94,6 +100,11 @@ class VectorSettingsPreferencesFragment @Inject constructor(
                 MainActivity.restartApp(requireActivity(), MainActivityArgs(clearCache = false))
                 true
             }
+        }
+
+        findPreference<Preference>(VectorPreferences.SETTINGS_PREF_SPACE_CATEGORY)!!.let { pref ->
+            pref.isVisible = !vectorFeatures.isNewAppLayoutFeatureEnabled()
+            pref.isEnabled = !vectorPreferences.isNewAppLayoutEnabled()
         }
 
         // Url preview
@@ -188,7 +199,7 @@ class VectorSettingsPreferencesFragment @Inject constructor(
 
     private fun setUserInterfacePreferences() {
         // Selected language
-        selectedLanguagePreference.summary = VectorLocale.localeToLocalisedString(VectorLocale.applicationLocale)
+        selectedLanguagePreference.summary = vectorLocale.localeToLocalisedString(vectorLocale.applicationLocale)
 
         // Text size
         textSizePreference.summary = getString(fontScalePreferences.getResolvedFontScaleValue().nameResId)

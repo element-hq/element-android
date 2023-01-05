@@ -19,7 +19,7 @@ package im.vector.app.features.location.live.map
 import im.vector.app.features.location.LocationData
 import im.vector.app.test.fakes.FakeFlowLiveDataConversions
 import im.vector.app.test.fakes.FakeSession
-import im.vector.app.test.fakes.givenAsFlowReturns
+import im.vector.app.test.fakes.givenAsFlow
 import io.mockk.coEvery
 import io.mockk.mockk
 import io.mockk.unmockkAll
@@ -81,7 +81,7 @@ class GetListOfUserLiveLocationUseCaseTest {
                 .getRoom(A_ROOM_ID)
                 .locationSharingService()
                 .givenRunningLiveLocationShareSummariesReturns(summaries)
-                .givenAsFlowReturns(summaries)
+                .givenAsFlow()
 
         val viewState1 = UserLiveLocationViewState(
                 matrixItem = MatrixItem.UserItem(id = "@userId1:matrix.org", displayName = "User 1", avatarUrl = ""),

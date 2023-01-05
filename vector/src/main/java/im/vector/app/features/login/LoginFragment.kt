@@ -28,6 +28,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
@@ -43,7 +44,6 @@ import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.failure.isInvalidPassword
 import reactivecircus.flowbinding.android.widget.textChanges
-import javax.inject.Inject
 
 /**
  * In this screen:
@@ -53,7 +53,9 @@ import javax.inject.Inject
  * In signup mode:
  * - the user is asked for login and password
  */
-class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLoginBinding>() {
+@AndroidEntryPoint
+class LoginFragment :
+        AbstractSSOLoginFragment<FragmentLoginBinding>() {
 
     private var isSignupMode = false
 
@@ -101,13 +103,11 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
         }
     }
 
-    private fun setupSocialLoginButtons(state: LoginViewState) {
-        views.loginSocialLoginButtons.mode = when (state.signMode) {
-            SignMode.Unknown -> error("developer error")
-            SignMode.SignUp -> SocialLoginButtonsView.Mode.MODE_SIGN_UP
-            SignMode.SignIn,
-            SignMode.SignInWithMatrixId -> SocialLoginButtonsView.Mode.MODE_SIGN_IN
-        }
+    private fun ssoMode(state: LoginViewState) = when (state.signMode) {
+        SignMode.Unknown -> error("developer error")
+        SignMode.SignUp -> SocialLoginButtonsView.Mode.MODE_SIGN_UP
+        SignMode.SignIn,
+        SignMode.SignInWithMatrixId -> SocialLoginButtonsView.Mode.MODE_SIGN_IN
     }
 
     private fun submit() {
@@ -202,17 +202,14 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
 
             if (state.loginMode is LoginMode.SsoAndPassword) {
                 views.loginSocialLoginContainer.isVisible = true
-                views.loginSocialLoginButtons.ssoIdentityProviders = state.loginMode.ssoIdentityProviders?.sorted()
-                views.loginSocialLoginButtons.listener = object : SocialLoginButtonsView.InteractionListener {
-                    override fun onProviderSelected(provider: SsoIdentityProvider?) {
-                        loginViewModel.getSsoUrl(
-                                redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
-                                deviceId = state.deviceId,
-                                providerId = provider?.id,
-                                action = if (state.signMode == SignMode.SignUp) SSOAction.REGISTER else SSOAction.LOGIN
-                        )
-                                ?.let { openInCustomTab(it) }
-                    }
+                views.loginSocialLoginButtons.render(state.loginMode.ssoState, ssoMode(state)) { provider ->
+                    loginViewModel.getSsoUrl(
+                            redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
+                            deviceId = state.deviceId,
+                            providerId = provider?.id
+                            action = if (state.signMode == SignMode.SignUp) SSOAction.REGISTER else SSOAction.LOGIN
+                    )
+                            ?.let { openInCustomTab(it) }
                 }
             } else {
                 views.loginSocialLoginContainer.isVisible = false
@@ -274,7 +271,6 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
 
         setupUi(state)
         setupAutoFill(state)
-        setupSocialLoginButtons(state)
         setupButtons(state)
 
         when (state.asyncLoginAction) {

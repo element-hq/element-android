@@ -40,9 +40,11 @@ import org.matrix.android.sdk.internal.auth.data.WebClientConfig
 import org.matrix.android.sdk.internal.auth.db.PendingSessionData
 import org.matrix.android.sdk.internal.auth.login.DefaultLoginWizard
 import org.matrix.android.sdk.internal.auth.login.DirectLoginTask
+import org.matrix.android.sdk.internal.auth.login.QrLoginTokenTask
 import org.matrix.android.sdk.internal.auth.registration.DefaultRegistrationWizard
 import org.matrix.android.sdk.internal.auth.version.Versions
 import org.matrix.android.sdk.internal.auth.version.doesServerSupportLogoutDevices
+import org.matrix.android.sdk.internal.auth.version.doesServerSupportQrCodeLogin
 import org.matrix.android.sdk.internal.auth.version.isLoginAndRegistrationSupportedBySdk
 import org.matrix.android.sdk.internal.auth.version.isSupportedBySdk
 import org.matrix.android.sdk.internal.di.Unauthenticated
@@ -63,7 +65,8 @@ internal class DefaultAuthenticationService @Inject constructor(
         private val sessionCreator: SessionCreator,
         private val pendingSessionStore: PendingSessionStore,
         private val getWellknownTask: GetWellknownTask,
-        private val directLoginTask: DirectLoginTask
+        private val directLoginTask: DirectLoginTask,
+        private val qrLoginTokenTask: QrLoginTokenTask
 ) : AuthenticationService {
 
     private var pendingSessionData: PendingSessionData? = pendingSessionStore.getPendingSessionData()
@@ -305,7 +308,8 @@ internal class DefaultAuthenticationService @Inject constructor(
                 homeServerUrl = homeServerUrl,
                 isOutdatedHomeserver = !versions.isSupportedBySdk(),
                 hasOidcCompatibilityFlow = oidcCompatibilityFlow != null,
-                isLogoutDevicesSupported = versions.doesServerSupportLogoutDevices()
+                isLogoutDevicesSupported = versions.doesServerSupportLogoutDevices(),
+                isLoginWithQrSupported = versions.doesServerSupportQrCodeLogin(),
         )
     }
 
@@ -408,6 +412,22 @@ internal class DefaultAuthenticationService @Inject constructor(
                         homeServerConnectionConfig = homeServerConnectionConfig,
                         userId = matrixId,
                         password = password,
+                        deviceName = initialDeviceName,
+                        deviceId = deviceId
+                )
+        )
+    }
+
+    override suspend fun loginUsingQrLoginToken(
+            homeServerConnectionConfig: HomeServerConnectionConfig,
+            loginToken: String,
+            initialDeviceName: String?,
+            deviceId: String?,
+    ): Session {
+        return qrLoginTokenTask.execute(
+                QrLoginTokenTask.Params(
+                        homeServerConnectionConfig = homeServerConnectionConfig,
+                        loginToken = loginToken,
                         deviceName = initialDeviceName,
                         deviceId = deviceId
                 )

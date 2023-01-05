@@ -18,8 +18,9 @@ package im.vector.app.features.onboarding
 
 import android.net.Uri
 import android.os.Build
-import com.airbnb.mvrx.test.MvRxTestRule
+import com.airbnb.mvrx.test.MavericksTestRule
 import im.vector.app.R
+import im.vector.app.core.session.ConfigureAndStartSessionUseCase
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.ReAuthHelper
@@ -48,7 +49,9 @@ import im.vector.app.test.fakes.FakeVectorOverrides
 import im.vector.app.test.fakes.toTestString
 import im.vector.app.test.fixtures.a401ServerError
 import im.vector.app.test.fixtures.aHomeServerCapabilities
+import im.vector.app.test.fixtures.anUnrecognisedCertificateError
 import im.vector.app.test.test
+import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Before
@@ -59,6 +62,7 @@ import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 import org.matrix.android.sdk.api.auth.registration.Stage
 import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.network.ssl.Fingerprint
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 
@@ -66,10 +70,12 @@ private const val A_DISPLAY_NAME = "a display name"
 private const val A_PICTURE_FILENAME = "a-picture.png"
 private val A_SERVER_ERROR = a401ServerError()
 private val AN_ERROR = RuntimeException("an error!")
+private val AN_UNRECOGNISED_CERTIFICATE_ERROR = anUnrecognisedCertificateError()
 private val A_LOADABLE_REGISTER_ACTION = RegisterAction.StartRegistration
 private val A_NON_LOADABLE_REGISTER_ACTION = RegisterAction.CheckIfEmailHasBeenValidated(delayMillis = -1L)
 private val A_RESULT_IGNORED_REGISTER_ACTION = RegisterAction.SendAgainThreePid
 private val A_HOMESERVER_CAPABILITIES = aHomeServerCapabilities(canChangeDisplayName = true, canChangeAvatar = true)
+private val A_FINGERPRINT = Fingerprint(ByteArray(1), Fingerprint.HashType.SHA1)
 private val ANY_CONTINUING_REGISTRATION_RESULT = RegistrationActionHandler.Result.NextStage(Stage.Dummy(mandatory = true))
 private val A_DIRECT_LOGIN = OnboardingAction.AuthenticateAction.LoginDirect("@a-user:id.org", "a-password", "a-device-name")
 private const val A_HOMESERVER_URL = "https://edited-homeserver.org"
@@ -78,6 +84,7 @@ private val A_HOMESERVER_CONFIG = HomeServerConnectionConfig(FakeUri().instance)
 private val SELECTED_HOMESERVER_STATE = SelectedHomeserverState(preferredLoginMode = LoginMode.Password, userFacingUrl = A_HOMESERVER_URL)
 private val SELECTED_HOMESERVER_STATE_SUPPORTED_LOGOUT_DEVICES = SelectedHomeserverState(isLogoutDevicesSupported = true)
 private val DEFAULT_SELECTED_HOMESERVER_STATE = SELECTED_HOMESERVER_STATE.copy(userFacingUrl = A_DEFAULT_HOMESERVER_URL)
+private val DEFAULT_SELECTED_HOMESERVER_STATE_WITH_QR_SUPPORTED = DEFAULT_SELECTED_HOMESERVER_STATE.copy(isLoginWithQrSupported = true)
 private const val AN_EMAIL = "hello@example.com"
 private const val A_PASSWORD = "a-password"
 private const val A_USERNAME = "hello-world"
@@ -93,7 +100,7 @@ private val SSO_REGISTRATION_DESCRIPTION = AuthenticationDescription.Register(Au
 class OnboardingViewModelTest {
 
     @get:Rule
-    val mvrxTestRule = MvRxTestRule()
+    val mavericksTestRule = MavericksTestRule()
 
     private val fakeUri = FakeUri()
     private val fakeContext = FakeContext()
@@ -108,6 +115,7 @@ class OnboardingViewModelTest {
     private val fakeStartAuthenticationFlowUseCase = FakeStartAuthenticationFlowUseCase()
     private val fakeHomeServerHistoryService = FakeHomeServerHistoryService()
     private val fakeLoginWizard = FakeLoginWizard()
+    private val fakeConfigureAndStartSessionUseCase = mockk<ConfigureAndStartSessionUseCase>()
 
     private var initialState = OnboardingViewState()
     private lateinit var viewModel: OnboardingViewModel
@@ -155,6 +163,28 @@ class OnboardingViewModelTest {
     }
 
     @Test
+    fun `given combined login enabled, when handling sign in splash action, then emits OpenCombinedLogin with default homeserver qrCode supported`() = runTest {
+        val test = viewModel.test()
+        fakeVectorFeatures.givenCombinedLoginEnabled()
+        givenCanSuccessfullyUpdateHomeserver(A_DEFAULT_HOMESERVER_URL, DEFAULT_SELECTED_HOMESERVER_STATE_WITH_QR_SUPPORTED)
+
+        viewModel.handle(OnboardingAction.SplashAction.OnIAlreadyHaveAnAccount(OnboardingFlow.SignIn))
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(onboardingFlow = OnboardingFlow.SignIn) },
+                        { copy(isLoading = true) },
+                        { copy(selectedHomeserver = DEFAULT_SELECTED_HOMESERVER_STATE_WITH_QR_SUPPORTED) },
+                        { copy(signMode = SignMode.SignIn) },
+                        { copy(canLoginWithQrCode = true) },
+                        { copy(isLoading = false) }
+                )
+                .assertEvents(OnboardingViewEvents.OpenCombinedLogin)
+                .finish()
+    }
+
+    @Test
     fun `given can successfully login in with token, when logging in with token, then emits AccountSignedIn`() = runTest {
         val test = viewModel.test()
         fakeAuthenticationService.givenLoginWizard(fakeLoginWizard)
@@ -167,7 +197,7 @@ class OnboardingViewModelTest {
                 .assertStatesChanges(
                         initialState,
                         { copy(isLoading = true) },
-                        { copy(isLoading = false) }
+                        { copy(isLoading = false, selectedAuthenticationState = SelectedAuthenticationState(description = AuthenticationDescription.Login)) }
                 )
                 .assertEvents(OnboardingViewEvents.OnAccountSignedIn)
                 .finish()
@@ -186,24 +216,9 @@ class OnboardingViewModelTest {
                 .assertStatesChanges(
                         initialState,
                         { copy(isLoading = true) },
-                        { copy(isLoading = false) }
+                        { copy(isLoading = false, selectedAuthenticationState = SelectedAuthenticationState(description = AuthenticationDescription.Login)) }
                 )
                 .assertEvents(OnboardingViewEvents.OnAccountSignedIn)
-                .finish()
-    }
-
-    @Test
-    fun `given registration started with currentThreePid, when handling InitWith, then emits restored session OnSendEmailSuccess`() = runTest {
-        val test = viewModel.test()
-        fakeAuthenticationService.givenRegistrationWizard(FakeRegistrationWizard().also {
-            it.givenRegistrationStarted(hasStarted = true)
-            it.givenCurrentThreePid(AN_EMAIL)
-        })
-
-        viewModel.handle(OnboardingAction.InitWith(LoginConfig(A_HOMESERVER_URL, identityServerUrl = null)))
-
-        test
-                .assertEvents(OnboardingViewEvents.OnSendEmailSuccess(AN_EMAIL, isRestoredSession = true))
                 .finish()
     }
 
@@ -296,7 +311,7 @@ class OnboardingViewModelTest {
                 .assertStatesChanges(
                         initialState,
                         { copy(isLoading = true) },
-                        { copy(isLoading = false) }
+                        { copy(isLoading = false, selectedAuthenticationState = SelectedAuthenticationState(description = AuthenticationDescription.Login)) }
                 )
                 .assertEvents(OnboardingViewEvents.OnAccountSignedIn)
                 .finish()
@@ -318,6 +333,25 @@ class OnboardingViewModelTest {
                         { copy(isLoading = false) }
                 )
                 .assertEvents(OnboardingViewEvents.Failure(AN_ERROR))
+                .finish()
+    }
+
+    @Test
+    fun `given has sign in with matrix id sign mode, when handling login or register action fails with certificate error, then emits error`() = runTest {
+        viewModelWith(initialState.copy(signMode = SignMode.SignInWithMatrixId))
+        fakeDirectLoginUseCase.givenFailureResult(A_DIRECT_LOGIN, config = null, cause = AN_UNRECOGNISED_CERTIFICATE_ERROR)
+        givenInitialisesSession(fakeSession)
+        val test = viewModel.test()
+
+        viewModel.handle(A_DIRECT_LOGIN)
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false) }
+                )
+                .assertEvents(OnboardingViewEvents.UnrecognisedCertificateFailure(A_DIRECT_LOGIN, AN_UNRECOGNISED_CERTIFICATE_ERROR))
                 .finish()
     }
 
@@ -405,23 +439,59 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `given unavailable deeplink, when selecting homeserver, then emits failure with default homeserver as retry action`() = runTest {
-        fakeContext.givenHasConnection()
-        fakeHomeServerConnectionConfigFactory.givenConfigFor(A_HOMESERVER_URL, A_HOMESERVER_CONFIG)
-        fakeStartAuthenticationFlowUseCase.givenHomeserverUnavailable(A_HOMESERVER_CONFIG)
+    fun `given in sign in flow, when selecting homeserver fails with network error, then emits Failure`() = runTest {
+        viewModelWith(initialState.copy(onboardingFlow = OnboardingFlow.SignIn))
+        fakeVectorFeatures.givenCombinedLoginEnabled()
+        givenHomeserverSelectionFailsWith(AN_ERROR)
         val test = viewModel.test()
 
-        viewModel.handle(OnboardingAction.InitWith(LoginConfig(A_HOMESERVER_URL, null)))
         viewModel.handle(OnboardingAction.HomeServerChange.SelectHomeServer(A_HOMESERVER_URL))
 
-        val expectedRetryAction = OnboardingAction.HomeServerChange.SelectHomeServer("${R.string.matrix_org_server_url.toTestString()}/")
         test
                 .assertStatesChanges(
                         initialState,
                         { copy(isLoading = true) },
                         { copy(isLoading = false) }
                 )
-                .assertEvents(OnboardingViewEvents.DeeplinkAuthenticationFailure(expectedRetryAction))
+                .assertEvents(OnboardingViewEvents.Failure(AN_ERROR))
+                .finish()
+    }
+
+    @Test
+    fun `given in sign in flow, when selecting homeserver fails with network error, then emits EditServerSelection`() = runTest {
+        viewModelWith(initialState.copy(onboardingFlow = OnboardingFlow.SignIn))
+        fakeVectorFeatures.givenCombinedLoginEnabled()
+        givenHomeserverSelectionFailsWithNetworkError()
+        val test = viewModel.test()
+
+        viewModel.handle(OnboardingAction.HomeServerChange.SelectHomeServer(A_HOMESERVER_URL))
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false) }
+                )
+                .assertEvents(OnboardingViewEvents.EditServerSelection)
+                .finish()
+    }
+
+    @Test
+    fun `given in sign up flow, when selecting homeserver fails with network error, then emits EditServerSelection`() = runTest {
+        viewModelWith(initialState.copy(onboardingFlow = OnboardingFlow.SignUp))
+        fakeVectorFeatures.givenCombinedRegisterEnabled()
+        givenHomeserverSelectionFailsWithNetworkError()
+        val test = viewModel.test()
+
+        viewModel.handle(OnboardingAction.HomeServerChange.SelectHomeServer(A_HOMESERVER_URL))
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false) }
+                )
+                .assertEvents(OnboardingViewEvents.EditServerSelection)
                 .finish()
     }
 
@@ -550,6 +620,44 @@ class OnboardingViewModelTest {
     }
 
     @Test
+    fun `when editing homeserver errors with certificate error, then emits error`() = runTest {
+        fakeHomeServerConnectionConfigFactory.givenConfigFor(A_HOMESERVER_URL, fingerprint = null, A_HOMESERVER_CONFIG)
+        fakeStartAuthenticationFlowUseCase.givenErrors(A_HOMESERVER_CONFIG, AN_UNRECOGNISED_CERTIFICATE_ERROR)
+        val editAction = OnboardingAction.HomeServerChange.EditHomeServer(A_HOMESERVER_URL)
+        val test = viewModel.test()
+
+        viewModel.handle(editAction)
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false) }
+                )
+                .assertEvents(OnboardingViewEvents.UnrecognisedCertificateFailure(editAction, AN_UNRECOGNISED_CERTIFICATE_ERROR))
+                .finish()
+    }
+
+    @Test
+    fun `when selecting homeserver errors with certificate error, then emits error`() = runTest {
+        fakeHomeServerConnectionConfigFactory.givenConfigFor(A_HOMESERVER_URL, fingerprint = null, A_HOMESERVER_CONFIG)
+        fakeStartAuthenticationFlowUseCase.givenErrors(A_HOMESERVER_CONFIG, AN_UNRECOGNISED_CERTIFICATE_ERROR)
+        val selectAction = OnboardingAction.HomeServerChange.SelectHomeServer(A_HOMESERVER_URL)
+        val test = viewModel.test()
+
+        viewModel.handle(selectAction)
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false) }
+                )
+                .assertEvents(OnboardingViewEvents.UnrecognisedCertificateFailure(selectAction, AN_UNRECOGNISED_CERTIFICATE_ERROR))
+                .finish()
+    }
+
+    @Test
     fun `given unavailable full matrix id, when a register username is entered, then emits availability error`() = runTest {
         viewModelWith(initialRegistrationState("ignored-url"))
         givenCanSuccessfullyUpdateHomeserver(A_HOMESERVER_URL, SELECTED_HOMESERVER_STATE)
@@ -603,7 +711,7 @@ class OnboardingViewModelTest {
                 .assertStatesChanges(
                         initialState,
                         { copy(isLoading = true) },
-                        { copy(isLoading = false, personalizationState = A_HOMESERVER_CAPABILITIES.toPersonalisationState(A_USERNAME)) }
+                        { copy(isLoading = false, personalizationState = A_HOMESERVER_CAPABILITIES.toPersonalisationState("@fake:server.fake", A_USERNAME)) }
                 )
                 .assertEvents(OnboardingViewEvents.OnAccountCreated)
                 .finish()
@@ -722,6 +830,76 @@ class OnboardingViewModelTest {
         test
                 .assertStates(initialState)
                 .assertEvents(OnboardingViewEvents.OnPersonalizationComplete)
+                .finish()
+    }
+
+    @Test
+    fun `given in sign in mode, when accepting user certificate with SelectHomeserver retry action, then emits OnHomeserverEdited`() = runTest {
+        viewModelWith(initialState.copy(onboardingFlow = OnboardingFlow.SignIn))
+        val test = viewModel.test()
+        fakeVectorFeatures.givenCombinedLoginEnabled()
+        givenCanSuccessfullyUpdateHomeserver(
+                A_HOMESERVER_URL,
+                SELECTED_HOMESERVER_STATE,
+                config = A_HOMESERVER_CONFIG.copy(allowedFingerprints = listOf(A_FINGERPRINT)),
+                fingerprint = A_FINGERPRINT,
+        )
+
+        viewModel.handle(OnboardingAction.UserAcceptCertificate(A_FINGERPRINT, OnboardingAction.HomeServerChange.SelectHomeServer(A_HOMESERVER_URL)))
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(isLoading = true) },
+                        { copy(selectedHomeserver = SELECTED_HOMESERVER_STATE) },
+                        { copy(signMode = SignMode.SignIn) },
+                        { copy(isLoading = false) }
+                )
+                .assertEvents(OnboardingViewEvents.OpenCombinedLogin)
+                .finish()
+    }
+
+    @Test
+    fun `given in sign up mode, when accepting user certificate with EditHomeserver retry action, then emits OnHomeserverEdited`() = runTest {
+        viewModelWith(initialState.copy(onboardingFlow = OnboardingFlow.SignUp))
+        givenCanSuccessfullyUpdateHomeserver(
+                A_HOMESERVER_URL,
+                SELECTED_HOMESERVER_STATE,
+                config = A_HOMESERVER_CONFIG.copy(allowedFingerprints = listOf(A_FINGERPRINT)),
+                fingerprint = A_FINGERPRINT,
+        )
+        val test = viewModel.test()
+
+        viewModel.handle(OnboardingAction.UserAcceptCertificate(A_FINGERPRINT, OnboardingAction.HomeServerChange.EditHomeServer(A_HOMESERVER_URL)))
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(isLoading = true) },
+                        { copy(selectedHomeserver = SELECTED_HOMESERVER_STATE) },
+                        { copy(isLoading = false) }
+
+                )
+                .assertEvents(OnboardingViewEvents.OnHomeserverEdited)
+                .finish()
+    }
+
+    @Test
+    fun `given DirectLogin retry action, when accepting user certificate, then logs in directly`() = runTest {
+        fakeHomeServerConnectionConfigFactory.givenConfigFor("https://dummy.org", A_FINGERPRINT, A_HOMESERVER_CONFIG)
+        fakeDirectLoginUseCase.givenSuccessResult(A_DIRECT_LOGIN, config = A_HOMESERVER_CONFIG, result = fakeSession)
+        givenInitialisesSession(fakeSession)
+        val test = viewModel.test()
+
+        viewModel.handle(OnboardingAction.UserAcceptCertificate(A_FINGERPRINT, A_DIRECT_LOGIN))
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false, selectedAuthenticationState = SelectedAuthenticationState(description = AuthenticationDescription.Login)) }
+                )
+                .assertEvents(OnboardingViewEvents.OnAccountSignedIn)
                 .finish()
     }
 
@@ -942,6 +1120,7 @@ class OnboardingViewModelTest {
                 FakeVectorOverrides(),
                 fakeRegistrationActionHandler.instance,
                 TestBuildVersionSdkIntProvider().also { it.value = Build.VERSION_CODES.O },
+                fakeConfigureAndStartSessionUseCase,
         ).also {
             viewModel = it
             initialState = state
@@ -981,7 +1160,7 @@ class OnboardingViewModelTest {
     private fun givenInitialisesSession(session: Session) {
         fakeActiveSessionHolder.expectSetsActiveSession(session)
         fakeAuthenticationService.expectReset()
-        fakeSession.expectStartsSyncing()
+        fakeSession.expectStartsSyncing(fakeConfigureAndStartSessionUseCase)
     }
 
     private fun givenRegistrationResultFor(action: RegisterAction, result: RegistrationActionHandler.Result) {
@@ -992,15 +1171,20 @@ class OnboardingViewModelTest {
         fakeRegistrationActionHandler.givenResultsFor(results)
     }
 
-    private fun givenCanSuccessfullyUpdateHomeserver(homeserverUrl: String, resultingState: SelectedHomeserverState) {
-        fakeHomeServerConnectionConfigFactory.givenConfigFor(homeserverUrl, A_HOMESERVER_CONFIG)
-        fakeStartAuthenticationFlowUseCase.givenResult(A_HOMESERVER_CONFIG, StartAuthenticationResult(isHomeserverOutdated = false, resultingState))
+    private fun givenCanSuccessfullyUpdateHomeserver(
+            homeserverUrl: String,
+            resultingState: SelectedHomeserverState,
+            config: HomeServerConnectionConfig = A_HOMESERVER_CONFIG,
+            fingerprint: Fingerprint? = null,
+    ) {
+        fakeHomeServerConnectionConfigFactory.givenConfigFor(homeserverUrl, fingerprint, config)
+        fakeStartAuthenticationFlowUseCase.givenResult(config, StartAuthenticationResult(isHomeserverOutdated = false, resultingState))
         givenRegistrationResultFor(RegisterAction.StartRegistration, RegistrationActionHandler.Result.StartRegistration)
-        fakeHomeServerHistoryService.expectUrlToBeAdded(A_HOMESERVER_CONFIG.homeServerUri.toString())
+        fakeHomeServerHistoryService.expectUrlToBeAdded(config.homeServerUri.toString())
     }
 
     private fun givenUpdatingHomeserverErrors(homeserverUrl: String, resultingState: SelectedHomeserverState, error: Throwable) {
-        fakeHomeServerConnectionConfigFactory.givenConfigFor(homeserverUrl, A_HOMESERVER_CONFIG)
+        fakeHomeServerConnectionConfigFactory.givenConfigFor(homeserverUrl, fingerprint = null, A_HOMESERVER_CONFIG)
         fakeStartAuthenticationFlowUseCase.givenResult(A_HOMESERVER_CONFIG, StartAuthenticationResult(isHomeserverOutdated = false, resultingState))
         givenRegistrationResultFor(RegisterAction.StartRegistration, RegistrationActionHandler.Result.Error(error))
         fakeHomeServerHistoryService.expectUrlToBeAdded(A_HOMESERVER_CONFIG.homeServerUri.toString())
@@ -1022,9 +1206,22 @@ class OnboardingViewModelTest {
     private fun initialRegistrationState(homeServerUrl: String) = initialState.copy(
             onboardingFlow = OnboardingFlow.SignUp, selectedHomeserver = SelectedHomeserverState(userFacingUrl = homeServerUrl)
     )
+
+    private fun givenHomeserverSelectionFailsWithNetworkError() {
+        fakeContext.givenHasConnection()
+        fakeHomeServerConnectionConfigFactory.givenConfigFor(A_HOMESERVER_URL, fingerprint = null, A_HOMESERVER_CONFIG)
+        fakeStartAuthenticationFlowUseCase.givenHomeserverUnavailable(A_HOMESERVER_CONFIG)
+    }
+
+    private fun givenHomeserverSelectionFailsWith(cause: Throwable) {
+        fakeContext.givenHasConnection()
+        fakeHomeServerConnectionConfigFactory.givenConfigFor(A_HOMESERVER_URL, fingerprint = null, A_HOMESERVER_CONFIG)
+        fakeStartAuthenticationFlowUseCase.givenErrors(A_HOMESERVER_CONFIG, cause)
+    }
 }
 
-private fun HomeServerCapabilities.toPersonalisationState(displayName: String? = null) = PersonalizationState(
+private fun HomeServerCapabilities.toPersonalisationState(userId: String, displayName: String? = null) = PersonalizationState(
+        userId = userId,
         supportsChangingDisplayName = canChangeDisplayName,
         supportsChangingProfilePicture = canChangeAvatar,
         displayName = displayName,

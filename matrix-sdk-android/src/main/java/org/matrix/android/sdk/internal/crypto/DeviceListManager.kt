@@ -18,13 +18,17 @@ package org.matrix.android.sdk.internal.crypto
 
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.auth.data.Credentials
+import org.matrix.android.sdk.api.extensions.measureMetric
+import org.matrix.android.sdk.api.metrics.DownloadDeviceKeysMetricsPlugin
 import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.crypto.model.CryptoInfoMapper
+import org.matrix.android.sdk.internal.crypto.model.rest.KeysQueryResponse
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.DownloadKeysForUsersTask
 import org.matrix.android.sdk.internal.session.SessionScope
@@ -47,7 +51,10 @@ internal class DeviceListManager @Inject constructor(
         coroutineDispatchers: MatrixCoroutineDispatchers,
         private val taskExecutor: TaskExecutor,
         private val clock: Clock,
+        matrixConfiguration: MatrixConfiguration
 ) {
+
+    private val metricPlugins = matrixConfiguration.metricPlugins
 
     interface UserDevicesUpdateListener {
         fun onUsersDeviceUpdate(userIds: List<String>)
@@ -345,19 +352,25 @@ internal class DeviceListManager @Inject constructor(
             return MXUsersDevicesMap()
         }
         val params = DownloadKeysForUsersTask.Params(filteredUsers, syncTokenStore.getLastToken())
-        val response = try {
-            downloadKeysForUsersTask.execute(params)
-        } catch (throwable: Throwable) {
-            Timber.e(throwable, "## CRYPTO | doKeyDownloadForUsers(): error")
-            if (throwable is CancellationException) {
-                // the crypto module is getting closed, so we cannot access the DB anymore
-                Timber.w("The crypto module is closed, ignoring this error")
-            } else {
-                onKeysDownloadFailed(filteredUsers)
+        val relevantPlugins = metricPlugins.filterIsInstance<DownloadDeviceKeysMetricsPlugin>()
+
+        val response: KeysQueryResponse
+        relevantPlugins.measureMetric {
+            response = try {
+                downloadKeysForUsersTask.execute(params)
+            } catch (throwable: Throwable) {
+                Timber.e(throwable, "## CRYPTO | doKeyDownloadForUsers(): error")
+                if (throwable is CancellationException) {
+                    // the crypto module is getting closed, so we cannot access the DB anymore
+                    Timber.w("The crypto module is closed, ignoring this error")
+                } else {
+                    onKeysDownloadFailed(filteredUsers)
+                }
+                throw throwable
             }
-            throw throwable
+            Timber.v("## CRYPTO | doKeyDownloadForUsers() : Got keys for " + filteredUsers.size + " users")
         }
-        Timber.v("## CRYPTO | doKeyDownloadForUsers() : Got keys for " + filteredUsers.size + " users")
+
         for (userId in filteredUsers) {
             // al devices =
             val models = response.deviceKeys?.get(userId)?.mapValues { entry -> CryptoInfoMapper.map(entry.value) }

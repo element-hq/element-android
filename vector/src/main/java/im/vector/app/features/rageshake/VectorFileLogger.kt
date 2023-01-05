@@ -74,7 +74,7 @@ class VectorFileLogger @Inject constructor(
         }
 
         for (i in 0..15) {
-            val file = File(cacheDirectory, "elementLogs.$i.txt")
+            val file = File(cacheDirectory, "elementLogs.${i}.txt")
             tryOrNull { file.delete() }
         }
 
@@ -121,7 +121,7 @@ class VectorFileLogger @Inject constructor(
                     ?.flush()
                     ?.let { 0 until logRotationCount }
                     ?.mapNotNull { index ->
-                        File(cacheDirectory, "$fileNamePrefix.$index.txt")
+                        File(cacheDirectory, "$fileNamePrefix.${index}.txt")
                                 .takeIf { it.exists() }
                     }
         }

@@ -38,6 +38,7 @@ internal class QueryStringValueProcessor @Inject constructor(
             is ContentQueryStringValue -> when (queryStringValue) {
                 is QueryStringValue.Equals -> equalTo(field, queryStringValue.toRealmValue(), queryStringValue.case.toRealmCase())
                 is QueryStringValue.Contains -> contains(field, queryStringValue.toRealmValue(), queryStringValue.case.toRealmCase())
+                is QueryStringValue.NotContains -> not().process(field, QueryStringValue.Contains(queryStringValue.string, queryStringValue.case))
             }
         }
     }

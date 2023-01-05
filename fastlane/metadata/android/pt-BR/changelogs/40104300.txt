@@ -1,0 +1,2 @@
+Principais mudanças nesta versão: Habilita as jornadas melhoradas de sign in e sign up.
+Changelog completo: https://github.com/vector-im/element-android/releases

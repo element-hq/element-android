@@ -28,6 +28,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -43,10 +44,13 @@ import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import reactivecircus.flowbinding.appcompat.queryTextChanges
 import javax.inject.Inject
 
-class SpacePeopleFragment @Inject constructor(
-        private val epoxyController: SpacePeopleListController
-) : VectorBaseFragment<FragmentRecyclerviewWithSearchBinding>(),
-        OnBackPressed, SpacePeopleListController.InteractionListener {
+@AndroidEntryPoint
+class SpacePeopleFragment :
+        VectorBaseFragment<FragmentRecyclerviewWithSearchBinding>(),
+        OnBackPressed,
+        SpacePeopleListController.InteractionListener {
+
+    @Inject lateinit var epoxyController: SpacePeopleListController
 
     private val viewModel by fragmentViewModel(SpacePeopleViewModel::class)
     private val membersViewModel by fragmentViewModel(RoomMemberListViewModel::class)

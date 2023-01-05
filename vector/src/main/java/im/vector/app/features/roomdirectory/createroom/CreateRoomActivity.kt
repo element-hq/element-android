@@ -29,6 +29,7 @@ import im.vector.app.databinding.ActivitySimpleBinding
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.roomdirectory.RoomDirectorySharedAction
 import im.vector.app.features.roomdirectory.RoomDirectorySharedActionViewModel
+import im.vector.lib.core.utils.compat.getParcelableCompat
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -46,7 +47,7 @@ class CreateRoomActivity : VectorBaseActivity<ActivitySimpleBinding>() {
 
     override fun initUiAndData() {
         if (isFirstCreation()) {
-            val fragmentArgs: CreateRoomArgs = intent?.extras?.getParcelable(Mavericks.KEY_ARG) ?: return
+            val fragmentArgs: CreateRoomArgs = intent?.extras?.getParcelableCompat(Mavericks.KEY_ARG) ?: return
             addFragment(
                     views.simpleFragmentContainer,
                     CreateRoomFragment::class.java,

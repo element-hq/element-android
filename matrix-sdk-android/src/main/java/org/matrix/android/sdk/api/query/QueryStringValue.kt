@@ -69,6 +69,11 @@ sealed interface QueryStringValue {
     data class Contains(override val string: String, override val case: Case = Case.SENSITIVE) : ContentQueryStringValue
 
     /**
+     * The tested field must not contain the [string].
+     */
+    data class NotContains(override val string: String, override val case: Case = Case.SENSITIVE) : ContentQueryStringValue
+
+    /**
      * Case enum for [ContentQueryStringValue].
      */
     enum class Case {

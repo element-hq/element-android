@@ -17,7 +17,6 @@
 
 package im.vector.lib.attachmentviewer
 
-import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -136,7 +135,6 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
         }
     }
 
-    @Suppress("DEPRECATION")
     private fun setDecorViewFullScreen() {
         // This is important for the dispatchTouchEvent, if not we must correct
         // the touch coordinates
@@ -144,22 +142,20 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
             // New API instead of SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN and SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
             window.setDecorFitsSystemWindows(false)
             // New API instead of SYSTEM_UI_FLAG_IMMERSIVE
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                window.decorView.windowInsetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-            } else {
-                @SuppressLint("WrongConstant")
-                window.decorView.windowInsetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_BARS_BY_SWIPE
-            }
+            window.decorView.windowInsetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
             // New API instead of FLAG_TRANSLUCENT_STATUS
             window.statusBarColor = ContextCompat.getColor(this, R.color.half_transparent_status_bar)
             // new API instead of FLAG_TRANSLUCENT_NAVIGATION
             window.navigationBarColor = ContextCompat.getColor(this, R.color.half_transparent_status_bar)
         } else {
+            @Suppress("DEPRECATION")
             window.decorView.systemUiVisibility = (
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                             or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                             or View.SYSTEM_UI_FLAG_IMMERSIVE)
+            @Suppress("DEPRECATION")
             window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            @Suppress("DEPRECATION")
             window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
         }
     }
@@ -320,10 +316,6 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
                     }
                     return false
                 }
-
-                override fun onDoubleTap(e: MotionEvent?): Boolean {
-                    return super.onDoubleTap(e)
-                }
             })
 
     override fun onEvent(event: AttachmentEvents) {
@@ -344,7 +336,6 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
                 ?.handleCommand(commands)
     }
 
-    @Suppress("DEPRECATION")
     private fun hideSystemUI() {
         systemUiVisibility = false
         // Enables regular immersive mode.
@@ -356,17 +347,13 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
             // new API instead of SYSTEM_UI_FLAG_HIDE_NAVIGATION
             window.decorView.windowInsetsController?.hide(WindowInsets.Type.navigationBars())
             // New API instead of SYSTEM_UI_FLAG_IMMERSIVE
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                window.decorView.windowInsetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-            } else {
-                @SuppressLint("WrongConstant")
-                window.decorView.windowInsetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_BARS_BY_SWIPE
-            }
+            window.decorView.windowInsetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
             // New API instead of FLAG_TRANSLUCENT_STATUS
             window.statusBarColor = ContextCompat.getColor(this, R.color.half_transparent_status_bar)
             // New API instead of FLAG_TRANSLUCENT_NAVIGATION
             window.navigationBarColor = ContextCompat.getColor(this, R.color.half_transparent_status_bar)
         } else {
+            @Suppress("DEPRECATION")
             window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE
                     // Set the content to appear under the system bars so that the
                     // content doesn't resize when the system bars hide and show.
@@ -381,13 +368,13 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
 
     // Shows the system bars by removing all the flags
 // except for the ones that make the content appear under the system bars.
-    @Suppress("DEPRECATION")
     private fun showSystemUI() {
         systemUiVisibility = true
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             // New API instead of SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN and SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
             window.setDecorFitsSystemWindows(false)
         } else {
+            @Suppress("DEPRECATION")
             window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                     or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                     or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)

@@ -27,7 +27,6 @@ import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.platform.SimpleFragmentActivity
@@ -47,7 +46,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.failure.Failure
 import java.net.HttpURLConnection
-import javax.inject.Inject
 
 @Parcelize
 data class InviteUsersToRoomArgs(val roomId: String) : Parcelable
@@ -57,7 +55,6 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity() {
 
     private val viewModel: InviteUsersToRoomViewModel by viewModel()
     private lateinit var sharedActionViewModel: UserListSharedActionViewModel
-    @Inject lateinit var errorFormatter: ErrorFormatter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,6 +65,7 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity() {
         sharedActionViewModel
                 .stream()
                 .onEach { sharedAction ->
+                    @Suppress("DEPRECATION")
                     when (sharedAction) {
                         UserListSharedAction.Close -> finish()
                         UserListSharedAction.GoBack -> onBackPressed()

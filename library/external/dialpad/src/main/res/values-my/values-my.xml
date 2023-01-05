@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string msgid="8431313818404527096" name="description_delete_button">"နောက်ပြန်ဖျက်ခလုတ်"</string>
+    <string msgid="6226488105558971135" name="description_dialpad_back">"အနောက်သို့ ပြန်သွားပါ"</string>
+    <string msgid="5984341386518189787" name="description_dialpad_overflow">"ပိုမိုရွေးချယ်စရာများ"</string>
+    <string msgid="8936338119824589388" name="description_image_button_plus">"အပေါင်း လက္ခဏာ"</string>
+    <string msgid="4187006295368768215" name="description_voicemail_button">"အသံမေးလ်"</string>
+</resources>

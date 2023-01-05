@@ -66,6 +66,8 @@ internal class UserDataSource @Inject constructor(
         }
     }
 
+    fun getUserOrDefault(userId: String): User = getUser(userId) ?: User(userId)
+
     fun getUserLive(userId: String): LiveData<Optional<User>> {
         val liveData = monarchy.findAllMappedWithChanges(
                 { UserEntity.where(it, userId) },

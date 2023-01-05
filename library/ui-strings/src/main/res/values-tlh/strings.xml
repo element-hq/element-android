@@ -1,0 +1,96 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <string name="light_theme">tu\'qom wov</string>
+    <string name="dark_theme">tu\'qom Hurgh</string>
+    <string name="black_theme">tu\'qom qIj</string>
+
+    <string name="notification_listening_for_events">wanI\' vInejtaH</string>
+    <string name="notification_noisy_notifications">vep chuS</string>
+    <string name="notification_silent_notifications">vep tam</string>
+
+    <string name="title_activity_choose_sticker">ngamwI\' ngeH</string>
+
+    <string name="title_activity_settings">DuHmey\'</string>
+    <string name="loading">vIcha\'rupbeHmoHltaH…</string>
+
+    <string name="ok">luq</string>
+    <string name="action_cancel">qIl</string>
+    <string name="action_save">choq</string>
+    <string name="action_leave">mej</string>
+    <string name="action_send">ngeH</string>
+    <string name="action_quote">jatlhqa\'</string>
+    <string name="action_download">lI\'</string>
+    <string name="action_share">bon</string>
+    <string name="later">SIbI\'Ha\'</string>
+    <string name="view_source">Hal legh</string>
+    <string name="view_decrypted_source">So\'be\'lu\'bogh Hal legh</string>
+    <string name="action_delete">Qaw\'</string>
+    <string name="action_rename">pongqa\'</string>
+    <string name="or">ghap</string>
+    <string name="action_invite">ruSvep ngeH</string>
+    <string name="title_activity_bug_report">Qagh ja\'</string>
+
+    <string name="action_quick_reply">nom jang</string>
+    <string name="action_open">poSmoH</string>
+    <string name="action_close">SoQmoH</string>
+    <string name="copied_to_clipboard">velqa\' vIvevta\'</string>
+    <string name="dialog_title_confirmation">woq</string>
+    <string name="dialog_title_warning">yIghuH!</string>
+
+    <string name="permalink">ratlhqu\'bogh rarwI\'</string>
+
+
+    <string name="bottom_action_people">nuvpu\'</string>
+    <string name="bottom_action_rooms">pa\'mey</string>
+
+    <string name="home_filter_placeholder_home">pa\' nej</string>
+
+    <string name="invitations_header">ruSvepmey</string>
+    <string name="low_priority_header">patlh \'eS</string>
+    <string name="system_alerts_header">pat ghuH</string>
+
+    <string name="no_result_placeholder">gher\'ID tu\'lu\'be\'</string>
+
+    <string name="rooms_header">pa\'mey</string>
+    <string name="send_bug_report_include_logs">QonoS ngeH</string>
+    <string name="send_bug_report_include_crash_logs">vonlu\' QonoS ngeH</string>
+    <string name="send_bug_report_include_screenshot">jIH mIllogh ngeH</string>
+    <string name="send_bug_report_description_in_english">qItchugh, DI\'vI\' Hol yIlo\'!</string>
+    <string name="send_bug_report_placeholder">naDev qay\'wI\' yIDel!</string>
+    <string name="send_bug_report_progress">Ser (%s%%)</string>
+
+
+    <string name="join_room">pa\' muv</string>
+    <string name="username">lo\'wI\' pong</string>
+    <string name="hs_url">juH turwI\' URL</string>
+    <string name="search">nej</string>
+
+    <string name="option_send_voice">ghogh ngeH</string>
+
+    <string name="option_send_sticker">ngamwI\' ngeH</string>
+    <string name="auth_submit">ngeH</string>
+    <string name="auth_invalid_login_param">lughbe\' lo\'wI\' pong, chaw\' ngoq joq</string>
+    <string name="auth_forgot_password">chaw\' ngoqlIj DalIj\'a\'?</string>
+    <string name="auth_recaptcha_message">qoq SoHbe\' \'e\' \'ol neH juH turwI\'vam</string>
+    <string name="login_error_invalid_home_server">URL mub yIghItlh!</string>
+
+    <string name="direct_chats_header">ja\'chuq</string>
+    <string name="room_tombstone_continuation_link">naDev ja\'chuqqa\'</string>
+    <string name="room_tombstone_continuation_description">pa\'vamDaq ja\'chuqqa\'</string>
+    <string name="send_bug_report">Qagh ja\'</string>
+    <string name="send_bug_report_description">Qagh yIDel! nuq DanID? nuq DapIH? qaS nuq?</string>
+    <string name="send_bug_report_logs_description">Qagh tu\'meH, janvamvo\' Qagh De\' ghajboghQonoSmey ngeHlu\'. Qaghvam De\', QonoS, jIH mIllogh je leghlaHbe\' vay\'. Dung ngutlhmey neH ngeH DaneHchugh, \'aplo\'vam yISIj:</string>
+    <string name="send_bug_report_alert_message">bImoghtaHvIS janlIj Datevlaw\'. Qagh ja\' DaneH\'a\'?</string>
+    <string name="send_bug_report_rage_shake">Qagh ja\'meH bImoghtaHvIS tav</string>
+
+    <string name="send_bug_report_sent">Qagh ja\'lu\'chu\'!</string>
+    <string name="send_bug_report_failed">Qagh ja\'lu\'be\' (%s)</string>
+    <string name="option_send_files">De\'\'ay\' ngeH</string>
+    <string name="no_sticker_application_dialog_content">DaH ngamwI\' vey Dalo\'taHbe\'.
+
+\'op chal.</string>
+
+    <string name="bottom_action_favourites">parHa\'qu\'bogh</string>
+    <string name="unknown_error">qaSpu\' Qagh</string>
+
+</resources>

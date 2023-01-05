@@ -19,6 +19,7 @@ package im.vector.app.features.settings
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import androidx.preference.SwitchPreference
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.preference.VectorPreference
@@ -36,18 +37,22 @@ import org.matrix.android.sdk.api.extensions.orFalse
 import timber.log.Timber
 import javax.inject.Inject
 
-class VectorSettingsPinFragment @Inject constructor(
-        private val pinCodeStore: PinCodeStore,
-        private val navigator: Navigator,
-        private val notificationDrawerManager: NotificationDrawerManager,
-        biometricHelperFactory: BiometricHelper.BiometricHelperFactory,
-        defaultLockScreenConfiguration: LockScreenConfiguration,
-) : VectorSettingsBaseFragment() {
+@AndroidEntryPoint
+class VectorSettingsPinFragment :
+        VectorSettingsBaseFragment() {
+
+    @Inject lateinit var pinCodeStore: PinCodeStore
+    @Inject lateinit var navigator: Navigator
+    @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
+    @Inject lateinit var biometricHelperFactory: BiometricHelper.BiometricHelperFactory
+    @Inject lateinit var defaultLockScreenConfiguration: LockScreenConfiguration
 
     override var titleRes = R.string.settings_security_application_protection_screen_title
     override val preferenceXmlRes = R.xml.vector_settings_pin
 
-    private val biometricHelper = biometricHelperFactory.create(defaultLockScreenConfiguration.copy(mode = LockScreenMode.CREATE))
+    private val biometricHelper by lazy {
+        biometricHelperFactory.create(defaultLockScreenConfiguration.copy(mode = LockScreenMode.CREATE))
+    }
 
     private val usePinCodePref by lazy {
         findPreference<SwitchPreference>(VectorPreferences.SETTINGS_SECURITY_USE_PIN_CODE_FLAG)!!

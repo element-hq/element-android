@@ -19,19 +19,19 @@ package im.vector.app.core.animations
 import android.animation.Animator
 
 open class SimpleAnimatorListener : Animator.AnimatorListener {
-    override fun onAnimationRepeat(animation: Animator?) {
+    override fun onAnimationRepeat(animation: Animator) {
         // No op
     }
 
-    override fun onAnimationEnd(animation: Animator?) {
+    override fun onAnimationEnd(animation: Animator) {
         // No op
     }
 
-    override fun onAnimationCancel(animation: Animator?) {
+    override fun onAnimationCancel(animation: Animator) {
         // No op
     }
 
-    override fun onAnimationStart(animation: Animator?) {
+    override fun onAnimationStart(animation: Animator) {
         // No op
     }
 }

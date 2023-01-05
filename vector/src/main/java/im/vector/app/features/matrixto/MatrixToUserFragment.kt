@@ -28,15 +28,18 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentMatrixToUserCardBinding
 import im.vector.app.features.home.AvatarRenderer
 import javax.inject.Inject
 
-class MatrixToUserFragment @Inject constructor(
-        private val avatarRenderer: AvatarRenderer
-) : VectorBaseFragment<FragmentMatrixToUserCardBinding>() {
+@AndroidEntryPoint
+class MatrixToUserFragment :
+        VectorBaseFragment<FragmentMatrixToUserCardBinding>() {
+
+    @Inject lateinit var avatarRenderer: AvatarRenderer
 
     private val sharedViewModel: MatrixToBottomSheetViewModel by parentFragmentViewModel()
 

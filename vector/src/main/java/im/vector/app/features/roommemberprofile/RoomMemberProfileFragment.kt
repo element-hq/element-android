@@ -32,6 +32,7 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.animations.AppBarStateChangeListener
 import im.vector.app.core.animations.MatrixItemAppBarStateChangeListener
@@ -58,7 +59,7 @@ import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorPr
 import im.vector.app.features.roommemberprofile.devices.DeviceListBottomSheet
 import im.vector.app.features.roommemberprofile.powerlevel.EditPowerLevelDialogs
 import kotlinx.parcelize.Parcelize
-import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
+import org.matrix.android.sdk.api.session.crypto.model.UserVerificationLevel
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
@@ -69,14 +70,16 @@ data class RoomMemberProfileArgs(
         val roomId: String? = null
 ) : Parcelable
 
-class RoomMemberProfileFragment @Inject constructor(
-        private val roomMemberProfileController: RoomMemberProfileController,
-        private val avatarRenderer: AvatarRenderer,
-        private val roomDetailPendingActionStore: RoomDetailPendingActionStore,
-        private val matrixItemColorProvider: MatrixItemColorProvider
-) : VectorBaseFragment<FragmentMatrixProfileBinding>(),
+@AndroidEntryPoint
+class RoomMemberProfileFragment :
+        VectorBaseFragment<FragmentMatrixProfileBinding>(),
         RoomMemberProfileController.Callback,
         VectorMenuProvider {
+
+    @Inject lateinit var roomMemberProfileController: RoomMemberProfileController
+    @Inject lateinit var avatarRenderer: AvatarRenderer
+    @Inject lateinit var roomDetailPendingActionStore: RoomDetailPendingActionStore
+    @Inject lateinit var matrixItemColorProvider: MatrixItemColorProvider
 
     private lateinit var headerViews: ViewStubRoomMemberProfileHeaderBinding
 
@@ -232,23 +235,27 @@ class RoomMemberProfileFragment @Inject constructor(
                         if (state.userMXCrossSigningInfo.isTrusted()) {
                             // User is trusted
                             if (state.allDevicesAreCrossSignedTrusted) {
-                                RoomEncryptionTrustLevel.Trusted
+                                UserVerificationLevel.VERIFIED_ALL_DEVICES_TRUSTED
                             } else {
-                                RoomEncryptionTrustLevel.Warning
+                                UserVerificationLevel.VERIFIED_WITH_DEVICES_UNTRUSTED
                             }
                         } else {
-                            RoomEncryptionTrustLevel.Default
+                            if (state.userMXCrossSigningInfo.wasTrustedOnce) {
+                                UserVerificationLevel.UNVERIFIED_BUT_WAS_PREVIOUSLY
+                            } else {
+                                UserVerificationLevel.WAS_NEVER_VERIFIED
+                            }
                         }
                     } else {
                         // Legacy
                         if (state.allDevicesAreTrusted) {
-                            RoomEncryptionTrustLevel.Trusted
+                            UserVerificationLevel.VERIFIED_ALL_DEVICES_TRUSTED
                         } else {
-                            RoomEncryptionTrustLevel.Warning
+                            UserVerificationLevel.VERIFIED_WITH_DEVICES_UNTRUSTED
                         }
                     }
-                    headerViews.memberProfileDecorationImageView.render(trustLevel)
-                    views.matrixProfileDecorationToolbarAvatarImageView.render(trustLevel)
+                    headerViews.memberProfileDecorationImageView.renderUser(trustLevel)
+                    views.matrixProfileDecorationToolbarAvatarImageView.renderUser(trustLevel)
                 } else {
                     headerViews.memberProfileDecorationImageView.isVisible = false
                 }

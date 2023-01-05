@@ -145,7 +145,12 @@ class AutocompleteMemberPresenter @AssistedInject constructor(
     private fun createEveryoneItem(query: CharSequence?) =
             room.roomSummary()
                     ?.takeIf { canNotifyEveryone() }
-                    ?.takeIf { query.isNullOrBlank() || MatrixItem.NOTIFY_EVERYONE.startsWith("@$query") }
+                    ?.takeIf {
+                        query.isNullOrBlank() ||
+                                SUGGEST_ROOM_KEYWORDS.any {
+                                    it.startsWith("@$query")
+                                }
+                    }
                     ?.let {
                         AutocompleteMemberItem.Everyone(it)
                     }
@@ -165,6 +170,7 @@ class AutocompleteMemberPresenter @AssistedInject constructor(
     companion object {
         private const val ID_HEADER_MEMBERS = "ID_HEADER_MEMBERS"
         private const val ID_HEADER_EVERYONE = "ID_HEADER_EVERYONE"
+        private val SUGGEST_ROOM_KEYWORDS = setOf(MatrixItem.NOTIFY_EVERYONE, "@channel", "@everyone", "@here")
     }
 }
 

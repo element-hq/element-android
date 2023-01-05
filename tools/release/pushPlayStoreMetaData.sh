@@ -28,7 +28,6 @@ mv ./fastlane/metadata/android/fy  ./fastlane_tmp
 mv ./fastlane/metadata/android/ga  ./fastlane_tmp
 mv ./fastlane/metadata/android/kab ./fastlane_tmp
 mv ./fastlane/metadata/android/nb  ./fastlane_tmp
-mv ./fastlane/metadata/android/gl  ./fastlane_tmp
 
 # Fastlane / PlayStore require longDescription and shortDescription file to be set, so copy the default
 # one for languages where they are missing

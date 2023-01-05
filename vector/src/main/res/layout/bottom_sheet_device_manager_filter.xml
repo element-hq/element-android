@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="36dp"
+        android:layout_height="6dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/ic_bottom_sheet_handle" />
+
+    <TextView
+        style="@style/TextAppearance.Vector.Subtitle.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:paddingHorizontal="24dp"
+        android:text="@string/device_manager_filter_bottom_sheet_title" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingHorizontal="24dp"
+        android:paddingBottom="32dp"
+        android:scrollbarStyle="outsideOverlay">
+
+        <RadioGroup
+            android:id="@+id/filterOptionsRadioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="24dp"
+            android:showDividers="none">
+
+            <RadioButton
+                android:id="@+id/filterOptionAllSessionsRadioButton"
+                style="@style/TextAppearance.Vector.Subtitle.Medium.DevicesManagement"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:background="?android:selectableItemBackground"
+                android:button="@null"
+                android:checked="true"
+                android:drawableEnd="?android:attr/listChoiceIndicatorSingle"
+                android:minHeight="0dp"
+                android:text="@string/device_manager_filter_option_all_sessions"
+                android:textAlignment="textStart" />
+
+            <RadioButton
+                android:id="@+id/filterOptionVerifiedRadioButton"
+                style="@style/TextAppearance.Vector.Subtitle.Medium.DevicesManagement"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginTop="24dp"
+                android:background="?android:selectableItemBackground"
+                android:button="@null"
+                android:drawableEnd="?android:attr/listChoiceIndicatorSingle"
+                android:minHeight="0dp"
+                android:text="@string/device_manager_filter_option_verified"
+                android:textAlignment="textStart" />
+
+            <TextView
+                android:id="@+id/filterOptionVerifiedTextView"
+                style="@style/TextAppearance.Vector.Body.DevicesManagement"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/device_manager_filter_option_verified_description" />
+
+            <RadioButton
+                android:id="@+id/filterOptionUnverifiedRadioButton"
+                style="@style/TextAppearance.Vector.Subtitle.Medium.DevicesManagement"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginTop="16dp"
+                android:background="?android:selectableItemBackground"
+                android:button="@null"
+                android:drawableEnd="?android:attr/listChoiceIndicatorSingle"
+                android:minHeight="0dp"
+                android:text="@string/device_manager_filter_option_unverified"
+                android:textAlignment="textStart" />
+
+            <TextView
+                android:id="@+id/filterOptionUnverifiedTextView"
+                style="@style/TextAppearance.Vector.Body.DevicesManagement"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/device_manager_filter_option_unverified_description" />
+
+            <RadioButton
+                android:id="@+id/filterOptionInactiveRadioButton"
+                style="@style/TextAppearance.Vector.Subtitle.Medium.DevicesManagement"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginTop="16dp"
+                android:background="?android:selectableItemBackground"
+                android:button="@null"
+                android:drawableEnd="?android:attr/listChoiceIndicatorSingle"
+                android:minHeight="0dp"
+                android:text="@string/device_manager_filter_option_inactive"
+                android:textAlignment="textStart" />
+
+            <TextView
+                android:id="@+id/filterOptionInactiveTextView"
+                style="@style/TextAppearance.Vector.Body.DevicesManagement"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </RadioGroup>
+
+    </ScrollView>
+
+</LinearLayout>

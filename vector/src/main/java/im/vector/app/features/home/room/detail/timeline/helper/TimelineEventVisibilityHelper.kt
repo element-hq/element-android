@@ -18,6 +18,10 @@ package im.vector.app.features.home.room.detail.timeline.helper
 
 import im.vector.app.core.extensions.localDateTime
 import im.vector.app.core.resources.UserPreferencesProvider
+import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
+import im.vector.app.features.voicebroadcast.isVoiceBroadcast
+import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
+import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.RelationType
@@ -28,6 +32,7 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.model.localecho.RoomLocalEcho
+import org.matrix.android.sdk.api.session.room.model.message.asMessageAudioEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import javax.inject.Inject
 
@@ -229,8 +234,9 @@ class TimelineEventVisibilityHelper @Inject constructor(
 
         // Hide fake events for local rooms
         if (RoomLocalEcho.isLocalEchoId(roomId) &&
-                root.getClearType() == EventType.STATE_ROOM_MEMBER ||
-                root.getClearType() == EventType.STATE_ROOM_HISTORY_VISIBILITY) {
+                (root.getClearType() == EventType.STATE_ROOM_MEMBER ||
+                        root.getClearType() == EventType.STATE_ROOM_HISTORY_VISIBILITY ||
+                        root.getClearType() == EventType.STATE_ROOM_THIRD_PARTY_INVITE)) {
             return true
         }
 
@@ -241,8 +247,17 @@ class TimelineEventVisibilityHelper @Inject constructor(
             } else root.eventId != rootThreadEventId
         }
 
-        if (root.getClearType() in EventType.BEACON_LOCATION_DATA) {
+        if (root.getClearType() in EventType.BEACON_LOCATION_DATA.values) {
             return !root.isRedacted()
+        }
+
+        if (root.getClearType() == VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO &&
+                root.asVoiceBroadcastEvent()?.content?.voiceBroadcastState !in arrayOf(VoiceBroadcastState.STARTED, VoiceBroadcastState.STOPPED)) {
+            return true
+        }
+
+        if (root.asMessageAudioEvent().isVoiceBroadcast()) {
+            return true
         }
 
         return false

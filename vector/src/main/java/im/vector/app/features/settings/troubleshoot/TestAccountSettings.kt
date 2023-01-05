@@ -15,8 +15,6 @@
  */
 package im.vector.app.features.settings.troubleshoot
 
-import android.content.Intent
-import androidx.activity.result.ActivityResultLauncher
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.StringProvider
@@ -38,7 +36,7 @@ class TestAccountSettings @Inject constructor(
 ) :
         TroubleshootTest(R.string.settings_troubleshoot_test_account_settings_title) {
 
-    override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
+    override fun perform(testParameters: TestParameters) {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
         val defaultRule = session.pushRuleService().getPushRules().getAllRules()
                 .find { it.ruleId == RuleIds.RULE_ID_DISABLE_ALL }
@@ -59,7 +57,7 @@ class TestAccountSettings @Inject constructor(
                                 session.pushRuleService().updatePushRuleEnableStatus(RuleKind.OVERRIDE, defaultRule, !defaultRule.enabled)
                             }
                             withContext(Dispatchers.Main) {
-                                manager?.retry(activityResultLauncher)
+                                manager?.retry(testParameters)
                             }
                         }
                     }

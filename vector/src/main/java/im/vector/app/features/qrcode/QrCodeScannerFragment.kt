@@ -30,6 +30,7 @@ import com.airbnb.mvrx.args
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.Result
 import com.google.zxing.ResultMetadataType
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.registerStartForActivityResult
@@ -45,7 +46,6 @@ import im.vector.lib.multipicker.utils.ImageUtils
 import kotlinx.parcelize.Parcelize
 import me.dm7.barcodescanner.zxing.ZXingScannerView
 import org.matrix.android.sdk.api.extensions.tryOrNull
-import javax.inject.Inject
 
 @Parcelize
 data class QrScannerArgs(
@@ -53,7 +53,10 @@ data class QrScannerArgs(
         @StringRes val titleRes: Int
 ) : Parcelable
 
-class QrCodeScannerFragment @Inject constructor() : VectorBaseFragment<FragmentQrCodeScannerBinding>(), ZXingScannerView.ResultHandler {
+@AndroidEntryPoint
+class QrCodeScannerFragment :
+        VectorBaseFragment<FragmentQrCodeScannerBinding>(),
+        ZXingScannerView.ResultHandler {
 
     private val qrViewModel: QrCodeScannerViewModel by activityViewModel()
     private val scannerArgs: QrScannerArgs by args()

@@ -30,7 +30,7 @@ import javax.inject.Inject
 
 internal class RoomTombstoneEventProcessor @Inject constructor() : EventInsertLiveProcessor {
 
-    override suspend fun process(realm: Realm, event: Event) {
+    override fun process(realm: Realm, event: Event) {
         if (event.roomId == null) return
         val createRoomContent = event.getClearContent().toModel<RoomTombstoneContent>()
         if (createRoomContent?.replacementRoomId == null) return

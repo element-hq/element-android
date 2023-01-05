@@ -23,6 +23,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isInvisible
 import com.airbnb.mvrx.args
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.utils.colorTerminatingFullStop
 import im.vector.app.databinding.FragmentFtueWaitForEmailVerificationBinding
@@ -42,9 +43,11 @@ data class FtueAuthWaitForEmailFragmentArgument(
 /**
  * In this screen, the user is asked to check their emails.
  */
-class FtueAuthWaitForEmailFragment @Inject constructor(
-        private val themeProvider: ThemeProvider
-) : AbstractFtueAuthFragment<FragmentFtueWaitForEmailVerificationBinding>() {
+@AndroidEntryPoint
+class FtueAuthWaitForEmailFragment :
+        AbstractFtueAuthFragment<FragmentFtueWaitForEmailVerificationBinding>() {
+
+    @Inject lateinit var themeProvider: ThemeProvider
 
     private val params: FtueAuthWaitForEmailFragmentArgument by args()
     private var inferHasLeftAndReturnedToScreen = false

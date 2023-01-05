@@ -16,7 +16,7 @@
 
 package im.vector.app.features.settings.font
 
-import com.airbnb.mvrx.test.MvRxTestRule
+import com.airbnb.mvrx.test.MavericksTestRule
 import im.vector.app.features.settings.FontScaleValue
 import im.vector.app.test.fakes.FakeConfiguration
 import im.vector.app.test.fakes.FakeFontScalePreferences
@@ -38,7 +38,7 @@ private fun aFontScaleValue(index: Int) = FontScaleValue(index, "foo", -1f, 0)
 class FontScaleSettingViewModelTest {
 
     @get:Rule
-    val mvrxTestRule = MvRxTestRule()
+    val mavericksTestRule = MavericksTestRule()
 
     private val fakeConfiguration = FakeConfiguration()
     private val fakeFontScalePreferences = FakeFontScalePreferences()

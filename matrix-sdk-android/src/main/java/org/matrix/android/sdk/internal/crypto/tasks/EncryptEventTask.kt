@@ -47,9 +47,8 @@ internal class DefaultEncryptEventTask @Inject constructor(
         // don't want to wait for any query
         // if (!params.crypto.isRoomEncrypted(params.roomId)) return params.event
         val localEvent = params.event
-        if (localEvent.eventId == null || localEvent.type == null) {
-            throw IllegalArgumentException()
-        }
+        require(localEvent.eventId != null)
+        require(localEvent.type != null)
 
         localEchoRepository.updateSendState(localEvent.eventId, localEvent.roomId, SendState.ENCRYPTING)
 
@@ -82,7 +81,8 @@ internal class DefaultEncryptEventTask @Inject constructor(
                         ).toContent(),
                         forwardingCurve25519KeyChain = emptyList(),
                         senderCurve25519Key = result.eventContent["sender_key"] as? String,
-                        claimedEd25519Key = cryptoService.get().getMyDevice().fingerprint()
+                        claimedEd25519Key = cryptoService.get().getMyDevice().fingerprint(),
+                        isSafe = true
                 )
             } else {
                 null

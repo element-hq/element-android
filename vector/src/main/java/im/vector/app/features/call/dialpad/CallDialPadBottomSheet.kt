@@ -20,12 +20,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.addChildFragment
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetCallDialPadBinding
-import im.vector.app.features.settings.VectorLocale
+import im.vector.app.features.settings.VectorLocaleProvider
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class CallDialPadBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetCallDialPadBinding>() {
 
     companion object {
@@ -40,6 +43,8 @@ class CallDialPadBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetCa
             }
         }
     }
+
+    @Inject lateinit var vectorLocale: VectorLocaleProvider
 
     override val showExpanded = true
 
@@ -62,7 +67,7 @@ class CallDialPadBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetCa
                     putBoolean(DialPadFragment.EXTRA_ENABLE_DELETE, showActions)
                     putBoolean(DialPadFragment.EXTRA_ENABLE_OK, showActions)
                     putBoolean(DialPadFragment.EXTRA_CURSOR_VISIBLE, false)
-                    putString(DialPadFragment.EXTRA_REGION_CODE, VectorLocale.applicationLocale.country)
+                    putString(DialPadFragment.EXTRA_REGION_CODE, vectorLocale.applicationLocale.country)
                 }
                 callback = DialPadFragmentCallbackWrapper(this@CallDialPadBottomSheet.callback)
             }.also {

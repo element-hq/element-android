@@ -39,6 +39,7 @@ sealed interface ParsedCommand {
     // Valid commands:
 
     data class SendPlainText(val message: CharSequence) : ParsedCommand
+    data class SendFormattedText(val message: CharSequence, val formattedMessage: String) : ParsedCommand
     data class SendEmote(val message: CharSequence) : ParsedCommand
     data class SendRainbow(val message: CharSequence) : ParsedCommand
     data class SendRainbowEmote(val message: CharSequence) : ParsedCommand
@@ -60,8 +61,10 @@ sealed interface ParsedCommand {
     data class ChangeAvatarForRoom(val url: String) : ParsedCommand
     data class SetMarkdown(val enable: Boolean) : ParsedCommand
     object ClearScalarToken : ParsedCommand
+    object DevTools : ParsedCommand
     data class SendSpoiler(val message: String) : ParsedCommand
     data class SendShrug(val message: CharSequence) : ParsedCommand
+    data class SendTableFlip(val message: CharSequence) : ParsedCommand
     data class SendLenny(val message: CharSequence) : ParsedCommand
     object DiscardSession : ParsedCommand
     data class ShowUser(val userId: String) : ParsedCommand

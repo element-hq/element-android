@@ -21,6 +21,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.associateContentStateWith
 import im.vector.app.core.extensions.autofillPhoneNumber
@@ -38,9 +39,11 @@ import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
-class FtueAuthPhoneEntryFragment @Inject constructor(
-        private val phoneNumberParser: PhoneNumberParser
-) : AbstractFtueAuthFragment<FragmentFtuePhoneInputBinding>() {
+@AndroidEntryPoint
+class FtueAuthPhoneEntryFragment :
+        AbstractFtueAuthFragment<FragmentFtuePhoneInputBinding>() {
+
+    @Inject lateinit var phoneNumberParser: PhoneNumberParser
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtuePhoneInputBinding {
         return FragmentFtuePhoneInputBinding.inflate(inflater, container, false)

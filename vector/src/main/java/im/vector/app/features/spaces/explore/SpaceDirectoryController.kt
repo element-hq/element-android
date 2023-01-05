@@ -34,7 +34,7 @@ import im.vector.app.core.ui.list.genericEmptyWithActionItem
 import im.vector.app.core.ui.list.genericPillItem
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.list.spaceChildInfoItem
-import im.vector.app.features.home.room.list.spaceDirectoryFilterNoResults
+import im.vector.app.features.home.room.list.spaceDirectoryFilterNoResultsItem
 import im.vector.app.features.spaces.manage.SpaceChildInfoMatchFilter
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.span
@@ -141,7 +141,7 @@ class SpaceDirectoryController @Inject constructor(
                 val filteredChildInfo = flattenChildInfo.filter { matchFilter.test(it) }
 
                 if (filteredChildInfo.isEmpty()) {
-                    spaceDirectoryFilterNoResults {
+                    spaceDirectoryFilterNoResultsItem {
                         id("no_results")
                     }
                 } else {

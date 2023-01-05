@@ -23,6 +23,7 @@ import android.view.ViewGroup
 import androidx.annotation.DrawableRes
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentLoginSignupSigninSelectionBinding
@@ -30,8 +31,8 @@ import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.SSORedirectRouterActivity
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
-import im.vector.app.features.login.SocialLoginButtonsView
-import im.vector.app.features.login.ssoIdentityProviders
+import im.vector.app.features.login.SocialLoginButtonsView.Mode
+import im.vector.app.features.login.render
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingFlow
 import im.vector.app.features.onboarding.OnboardingViewState
@@ -42,7 +43,9 @@ import javax.inject.Inject
 /**
  * In this screen, the user is asked to sign up or to sign in to the homeserver.
  */
-class FtueAuthSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOFtueAuthFragment<FragmentLoginSignupSigninSelectionBinding>() {
+@AndroidEntryPoint
+class FtueAuthSignUpSignInSelectionFragment :
+        AbstractSSOFtueAuthFragment<FragmentLoginSignupSigninSelectionBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginSignupSigninSelectionBinding {
         return FragmentLoginSignupSigninSelectionBinding.inflate(inflater, container, false)
@@ -82,17 +85,14 @@ class FtueAuthSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOF
         when (state.selectedHomeserver.preferredLoginMode) {
             is LoginMode.SsoAndPassword -> {
                 views.loginSignupSigninSignInSocialLoginContainer.isVisible = true
-                views.loginSignupSigninSocialLoginButtons.ssoIdentityProviders = state.selectedHomeserver.preferredLoginMode.ssoIdentityProviders()?.sorted()
-                views.loginSignupSigninSocialLoginButtons.listener = object : SocialLoginButtonsView.InteractionListener {
-                    override fun onProviderSelected(provider: SsoIdentityProvider?) {
-                        viewModel.fetchSsoUrl(
-                                redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
-                                deviceId = state.deviceId,
-                                provider = provider,
-                                action = if (state.signMode == SignMode.SignUp) SSOAction.REGISTER else SSOAction.LOGIN
-                        )
-                                ?.let { openInCustomTab(it) }
-                    }
+                views.loginSignupSigninSocialLoginButtons.render(state.selectedHomeserver.preferredLoginMode.ssoState, Mode.MODE_CONTINUE) { provider ->
+                    viewModel.fetchSsoUrl(
+                            redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
+                            deviceId = state.deviceId,
+                            provider = provider
+                            action = if (state.signMode == SignMode.SignUp) SSOAction.REGISTER else SSOAction.LOGIN
+                    )
+                            ?.let { openInCustomTab(it) }
                 }
             }
             else -> {

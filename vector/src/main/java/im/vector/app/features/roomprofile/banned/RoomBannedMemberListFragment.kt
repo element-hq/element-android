@@ -26,6 +26,7 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -38,11 +39,13 @@ import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
-class RoomBannedMemberListFragment @Inject constructor(
-        private val roomMemberListController: RoomBannedMemberListController,
-        private val avatarRenderer: AvatarRenderer
-) : VectorBaseFragment<FragmentRoomSettingGenericBinding>(),
+@AndroidEntryPoint
+class RoomBannedMemberListFragment :
+        VectorBaseFragment<FragmentRoomSettingGenericBinding>(),
         RoomBannedMemberListController.Callback {
+
+    @Inject lateinit var roomMemberListController: RoomBannedMemberListController
+    @Inject lateinit var avatarRenderer: AvatarRenderer
 
     private val viewModel: RoomBannedMemberListViewModel by fragmentViewModel()
     private val roomProfileArgs: RoomProfileArgs by args()

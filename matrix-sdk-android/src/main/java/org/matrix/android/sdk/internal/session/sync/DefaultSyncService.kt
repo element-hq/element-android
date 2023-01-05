@@ -73,6 +73,8 @@ internal class DefaultSyncService @Inject constructor(
 
     override fun getSyncState() = getSyncThread().currentState()
 
+    override fun isSyncThreadAlive() = getSyncThread().isAlive
+
     override fun getSyncRequestStateFlow() = syncRequestStateTracker.syncRequestState
 
     override fun hasAlreadySynced(): Boolean {

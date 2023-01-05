@@ -19,7 +19,6 @@ package org.matrix.android.sdk.internal.database.helper
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.Sort
-import io.realm.kotlin.createObject
 import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
@@ -38,9 +37,11 @@ import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.EventInsertType
 import org.matrix.android.sdk.internal.database.model.RoomEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
+import org.matrix.android.sdk.internal.database.model.threads.ThreadListPageEntity
 import org.matrix.android.sdk.internal.database.model.threads.ThreadSummaryEntity
 import org.matrix.android.sdk.internal.database.model.threads.ThreadSummaryEntityFields
 import org.matrix.android.sdk.internal.database.query.copyToRealmOrIgnore
+import org.matrix.android.sdk.internal.database.query.get
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.getOrNull
 import org.matrix.android.sdk.internal.database.query.where
@@ -103,32 +104,6 @@ internal fun ThreadSummaryEntity.updateThreadSummaryLatestEvent(
     }
 }
 
-private fun EventEntity.toTimelineEventEntity(roomMemberContentsByUser: HashMap<String, RoomMemberContent?>): TimelineEventEntity {
-    val roomId = roomId
-    val eventId = eventId
-    val localId = TimelineEventEntity.nextId(realm)
-    val senderId = sender ?: ""
-
-    val timelineEventEntity = realm.createObject<TimelineEventEntity>().apply {
-        this.localId = localId
-        this.root = this@toTimelineEventEntity
-        this.eventId = eventId
-        this.roomId = roomId
-        this.annotations = EventAnnotationsSummaryEntity.where(realm, roomId, eventId).findFirst()
-                ?.also { it.cleanUp(sender) }
-        this.ownedByThreadChunk = true  // To skip it from the original event flow
-        val roomMemberContent = roomMemberContentsByUser[senderId]
-        this.senderAvatar = roomMemberContent?.avatarUrl
-        this.senderName = roomMemberContent?.displayName
-        isUniqueDisplayName = if (roomMemberContent?.displayName != null) {
-            computeIsUnique(realm, roomId, false, roomMemberContent, roomMemberContentsByUser)
-        } else {
-            true
-        }
-    }
-    return timelineEventEntity
-}
-
 internal fun ThreadSummaryEntity.Companion.createOrUpdate(
         threadSummaryType: ThreadSummaryUpdateType,
         realm: Realm,
@@ -140,16 +115,16 @@ internal fun ThreadSummaryEntity.Companion.createOrUpdate(
         userId: String,
         cryptoService: CryptoService? = null,
         currentTimeMillis: Long,
-) {
+): ThreadSummaryEntity? {
     when (threadSummaryType) {
         ThreadSummaryUpdateType.REPLACE -> {
-            rootThreadEvent?.eventId ?: return
-            rootThreadEvent.senderId ?: return
+            rootThreadEvent?.eventId ?: return null
+            rootThreadEvent.senderId ?: return null
 
-            val numberOfThreads = rootThreadEvent.unsignedData?.relations?.latestThread?.count ?: return
+            val numberOfThreads = rootThreadEvent.unsignedData?.relations?.latestThread?.count ?: return null
 
             // Something is wrong with the server return
-            if (numberOfThreads <= 0) return
+            if (numberOfThreads <= 0) return null
 
             val threadSummary = ThreadSummaryEntity.getOrCreate(realm, roomId, rootThreadEvent.eventId).also {
                 Timber.i("###THREADS ThreadSummaryHelper REPLACE eventId:${it.rootThreadEventId} ")
@@ -180,12 +155,13 @@ internal fun ThreadSummaryEntity.Companion.createOrUpdate(
             )
 
             roomEntity.addIfNecessary(threadSummary)
+            return threadSummary
         }
         ThreadSummaryUpdateType.ADD -> {
-            val rootThreadEventId = threadEventEntity?.rootThreadEventId ?: return
+            val rootThreadEventId = threadEventEntity?.rootThreadEventId ?: return null
             Timber.i("###THREADS ThreadSummaryHelper ADD for root eventId:$rootThreadEventId")
 
-            val threadSummary = ThreadSummaryEntity.getOrNull(realm, roomId, rootThreadEventId)
+            var threadSummary = ThreadSummaryEntity.getOrNull(realm, roomId, rootThreadEventId)
             if (threadSummary != null) {
                 // ThreadSummary exists so lets add the latest event
                 Timber.i("###THREADS ThreadSummaryHelper ADD root eventId:$rootThreadEventId exists, lets update latest thread event.")
@@ -199,7 +175,7 @@ internal fun ThreadSummaryEntity.Companion.createOrUpdate(
                 Timber.i("###THREADS ThreadSummaryHelper ADD root eventId:$rootThreadEventId do not exists, lets try to create one")
                 threadEventEntity.findRootThreadEvent()?.let { rootThreadEventEntity ->
                     // Root thread event entity exists so lets create a new record
-                    ThreadSummaryEntity.getOrCreate(realm, roomId, rootThreadEventEntity.eventId).let {
+                    threadSummary = ThreadSummaryEntity.getOrCreate(realm, roomId, rootThreadEventEntity.eventId).also {
                         it.updateThreadSummary(
                                 rootThreadEventEntity = rootThreadEventEntity,
                                 numberOfThreads = 1,
@@ -210,7 +186,12 @@ internal fun ThreadSummaryEntity.Companion.createOrUpdate(
                         roomEntity.addIfNecessary(it)
                     }
                 }
+
+                threadSummary?.let {
+                    ThreadListPageEntity.get(realm, roomId)?.threadSummaries?.add(it)
+                }
             }
+            return threadSummary
         }
     }
 }
@@ -228,7 +209,8 @@ private fun decryptIfNeeded(cryptoService: CryptoService?, eventEntity: EventEnt
                     payload = result.clearEvent,
                     senderKey = result.senderCurve25519Key,
                     keysClaimed = result.claimedEd25519Key?.let { k -> mapOf("ed25519" to k) },
-                    forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
+                    forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain,
+                    isSafe = result.isSafe
             )
             // Save decryption result, to not decrypt every time we enter the thread list
             eventEntity.setDecryptionResult(result)

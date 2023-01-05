@@ -21,11 +21,13 @@ import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakeAnalyticsTracker
 import im.vector.app.test.fakes.FakeSession
 import im.vector.app.test.fakes.FakeUiStateRepository
+import im.vector.app.test.fakes.FakeVectorPreferences
 import im.vector.app.test.fixtures.RoomSummaryFixture.aRoomSummary
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldBeEqualTo
+import org.junit.Before
 import org.junit.Test
 
 internal class SpaceStateHandlerImplTest {
@@ -38,13 +40,20 @@ internal class SpaceStateHandlerImplTest {
     private val uiStateRepository = FakeUiStateRepository()
     private val activeSessionHolder = FakeActiveSessionHolder(session)
     private val analyticsTracker = FakeAnalyticsTracker()
+    private val vectorPreferences = FakeVectorPreferences()
 
     private val spaceStateHandler = SpaceStateHandlerImpl(
             sessionDataSource.instance,
             uiStateRepository,
             activeSessionHolder.instance,
             analyticsTracker,
+            vectorPreferences.instance,
     )
+
+    @Before
+    fun setup() {
+        vectorPreferences.givenSpaceBackstack(emptyList())
+    }
 
     @Test
     fun `given selected space doesn't exist, when getCurrentSpace, then return null`() {
@@ -77,33 +86,33 @@ internal class SpaceStateHandlerImplTest {
     }
 
     @Test
-    fun `given is forward navigation and no current space, when setCurrentSpace, then null added to backstack`() {
+    fun `given not in space and is forward navigation, when setCurrentSpace, then null added to backstack`() {
         spaceStateHandler.setCurrentSpace(spaceId, session, isForwardNavigation = true)
 
-        val backstack = spaceStateHandler.getSpaceBackstack()
-
-        backstack.size shouldBe 1
-        backstack.first() shouldBe null
+        vectorPreferences.verifySetSpaceBackstack(listOf(null))
     }
 
     @Test
-    fun `given is forward navigation and is in space, when setCurrentSpace, then previous space added to backstack`() {
+    fun `given in space and is forward navigation, when setCurrentSpace, then previous space added to backstack`() {
         spaceStateHandler.setCurrentSpace(spaceId, session, isForwardNavigation = true)
         spaceStateHandler.setCurrentSpace("secondSpaceId", session, isForwardNavigation = true)
 
-        val backstack = spaceStateHandler.getSpaceBackstack()
-
-        backstack.size shouldBe 2
-        backstack shouldBeEqualTo listOf(null, spaceId)
+        vectorPreferences.verifySetSpaceBackstack(listOf(spaceId))
     }
 
     @Test
     fun `given is not forward navigation, when setCurrentSpace, then previous space not added to backstack`() {
         spaceStateHandler.setCurrentSpace(spaceId, session, isForwardNavigation = false)
 
-        val backstack = spaceStateHandler.getSpaceBackstack()
+        vectorPreferences.verifySetSpaceBackstack(listOf(spaceId), inverse = true)
+    }
 
-        backstack.size shouldBe 0
+    @Test
+    fun `given navigating to all chats, when setCurrentSpace, then backstack cleared`() {
+        spaceStateHandler.setCurrentSpace(spaceId, session)
+        spaceStateHandler.setCurrentSpace(null, session)
+
+        vectorPreferences.verifySetSpaceBackstack(emptyList())
     }
 
     @Test

@@ -31,7 +31,7 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.getAllChildFragments
 import im.vector.app.core.extensions.toOnOff
 import im.vector.app.core.resources.BuildMeta
-import im.vector.app.features.settings.VectorLocale
+import im.vector.app.features.settings.VectorLocaleProvider
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.devtools.GossipingEventsSerializer
 import im.vector.app.features.settings.locale.SystemLocaleProvider
@@ -78,7 +78,9 @@ class BugReporter @Inject constructor(
         private val systemLocaleProvider: SystemLocaleProvider,
         private val matrix: Matrix,
         private val buildMeta: BuildMeta,
+        private val processInfo: ProcessInfo,
         private val sdkIntProvider: BuildVersionSdkIntProvider,
+        private val vectorLocale: VectorLocaleProvider,
 ) {
     var inMultiWindowMode = false
 
@@ -281,7 +283,7 @@ class BugReporter @Inject constructor(
                             .addFormDataPart("user_id", userId)
                             .addFormDataPart("can_contact", canContact.toString())
                             .addFormDataPart("device_id", deviceId)
-                            .addFormDataPart("version", versionProvider.getVersion(longFormat = true, useBuildNumber = false))
+                            .addFormDataPart("version", versionProvider.getVersion(longFormat = true))
                             .addFormDataPart("branch_name", buildMeta.gitBranchName)
                             .addFormDataPart("matrix_sdk_version", Matrix.getSdkVersion())
                             .addFormDataPart("olm_version", olmVersion)
@@ -293,7 +295,7 @@ class BugReporter @Inject constructor(
                                     Build.VERSION.INCREMENTAL + "-" + Build.VERSION.CODENAME
                             )
                             .addFormDataPart("locale", Locale.getDefault().toString())
-                            .addFormDataPart("app_language", VectorLocale.applicationLocale.toString())
+                            .addFormDataPart("app_language", vectorLocale.applicationLocale.toString())
                             .addFormDataPart("default_app_language", systemLocaleProvider.getSystemLocale().toString())
                             .addFormDataPart("theme", ThemeUtils.getApplicationTheme(context))
                             .addFormDataPart("server_version", serverVersion)
@@ -302,11 +304,6 @@ class BugReporter @Inject constructor(
                                     addFormDataPart(name, value)
                                 }
                             }
-
-                    val buildNumber = buildMeta.buildNumber
-                    if (buildNumber.isNotEmpty() && buildNumber != "0") {
-                        builder.addFormDataPart("build_number", buildNumber)
-                    }
 
                     // add the gzipped files
                     for (file in gzippedFiles) {
@@ -499,8 +496,24 @@ class BugReporter @Inject constructor(
      */
     fun openBugReportScreen(activity: FragmentActivity, reportType: ReportType = ReportType.BUG_REPORT) {
         screenshot = takeScreenshot(activity)
-        matrix.debugService().logDbUsageInfo()
+        logDbInfo()
+        logProcessInfo()
+        logOtherInfo()
         activity.startActivity(BugReportActivity.intent(activity, reportType))
+    }
+
+    private fun logOtherInfo() {
+        Timber.i("SyncThread state: " + activeSessionHolder.getSafeActiveSession()?.syncService()?.getSyncState())
+    }
+
+    private fun logDbInfo() {
+        val dbInfo = matrix.debugService().getDbUsageInfo()
+        Timber.i(dbInfo)
+    }
+
+    private fun logProcessInfo() {
+        val pInfo = processInfo.getInfo()
+        Timber.i(pInfo)
     }
 
     private fun rageShakeAppNameForReport(reportType: ReportType): String {

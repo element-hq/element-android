@@ -45,7 +45,7 @@ data class RoomSettingsViewState(
         val showSaveAction: Boolean = false,
         val actionPermissions: ActionPermissions = ActionPermissions(),
         val supportsRestricted: Boolean = false,
-        val canUpgradeToRestricted: Boolean = false
+        val canUpgradeToRestricted: Boolean = false,
 ) : MavericksState {
 
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)

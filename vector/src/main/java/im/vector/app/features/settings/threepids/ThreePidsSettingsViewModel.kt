@@ -28,33 +28,26 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.ReadOnceTrue
-import im.vector.app.features.auth.ReAuthActivity
+import im.vector.app.features.auth.PendingAuthHandler
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
-import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
-import org.matrix.android.sdk.api.util.fromBase64
 import org.matrix.android.sdk.flow.flow
-import timber.log.Timber
 import kotlin.coroutines.Continuation
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 
 class ThreePidsSettingsViewModel @AssistedInject constructor(
         @Assisted initialState: ThreePidsSettingsViewState,
         private val session: Session,
         private val stringProvider: StringProvider,
-        private val matrix: Matrix,
+        private val pendingAuthHandler: PendingAuthHandler,
 ) : VectorViewModel<ThreePidsSettingsViewState, ThreePidsSettingsAction, ThreePidsSettingsViewEvents>(initialState) {
 
     // UIA session
     private var pendingThreePid: ThreePid? = null
-//    private var pendingSession: String? = null
 
     private suspend fun loadingSuspendable(block: suspend () -> Unit) {
         runCatching { block() }
@@ -126,42 +119,17 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
             is ThreePidsSettingsAction.CancelThreePid -> handleCancelThreePid(action)
             is ThreePidsSettingsAction.DeleteThreePid -> handleDeleteThreePid(action)
             is ThreePidsSettingsAction.ChangeUiState -> handleChangeUiState(action)
-            ThreePidsSettingsAction.SsoAuthDone -> {
-                Timber.d("## UIA - FallBack success")
-                if (pendingAuth != null) {
-                    uiaContinuation?.resume(pendingAuth!!)
-                } else {
-                    uiaContinuation?.resumeWithException(IllegalArgumentException())
-                }
-            }
-            is ThreePidsSettingsAction.PasswordAuthDone -> {
-                val decryptedPass = matrix.secureStorageService()
-                        .loadSecureSecret<String>(action.password.fromBase64().inputStream(), ReAuthActivity.DEFAULT_RESULT_KEYSTORE_ALIAS)
-                uiaContinuation?.resume(
-                        UserPasswordAuth(
-                                session = pendingAuth?.session,
-                                password = decryptedPass,
-                                user = session.myUserId
-                        )
-                )
-            }
-            ThreePidsSettingsAction.ReAuthCancelled -> {
-                Timber.d("## UIA - Reauth cancelled")
-                uiaContinuation?.resumeWithException(Exception())
-                uiaContinuation = null
-                pendingAuth = null
-            }
+            ThreePidsSettingsAction.SsoAuthDone -> pendingAuthHandler.ssoAuthDone()
+            is ThreePidsSettingsAction.PasswordAuthDone -> pendingAuthHandler.passwordAuthDone(action.password)
+            ThreePidsSettingsAction.ReAuthCancelled -> pendingAuthHandler.reAuthCancelled()
         }
     }
-
-    var uiaContinuation: Continuation<UIABaseAuth>? = null
-    var pendingAuth: UIABaseAuth? = null
 
     private val uiaInterceptor = object : UserInteractiveAuthInterceptor {
         override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
             _viewEvents.post(ThreePidsSettingsViewEvents.RequestReAuth(flowResponse, errCode))
-            pendingAuth = DefaultBaseAuth(session = flowResponse.session)
-            uiaContinuation = promise
+            pendingAuthHandler.pendingAuth = DefaultBaseAuth(session = flowResponse.session)
+            pendingAuthHandler.uiaContinuation = promise
         }
     }
 

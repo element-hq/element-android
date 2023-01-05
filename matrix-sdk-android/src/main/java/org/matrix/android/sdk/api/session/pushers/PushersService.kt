@@ -68,6 +68,14 @@ interface PushersService {
     )
 
     /**
+     * Enables or disables a registered pusher.
+     *
+     * @param pusher The pusher being toggled
+     * @param enable Whether the pusher should be enabled or disabled
+     */
+    suspend fun togglePusher(pusher: Pusher, enable: Boolean)
+
+    /**
      * Directly ask the push gateway to send a push to this device.
      * If successful, the push gateway has accepted the request. In this case, the app should receive a Push with the provided eventId.
      * In case of error, PusherRejected will be thrown. In this case it means that the pushkey is not valid.

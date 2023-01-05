@@ -111,6 +111,11 @@ data class ViewRoom(
         MobileSearchContactDetail,
 
         /**
+         * Room accessed via space bottom sheet list.
+         */
+        MobileSpaceBottomSheet,
+
+        /**
          * Room accessed via interacting with direct chat item in the space
          * contact detail screen.
          */
@@ -151,6 +156,11 @@ data class ViewRoom(
          * Room accessed via the room list.
          */
         RoomList,
+
+        /**
+         * Room accessed via a shortcut.
+         */
+        Shortcut,
 
         /**
          * Room accessed via a slash command in Element Web/Desktop like /goto.

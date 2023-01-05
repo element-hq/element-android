@@ -25,7 +25,7 @@ import im.vector.app.core.utils.toBase32String
 import im.vector.app.features.call.conference.jwt.JitsiJWTFactory
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.raw.wellknown.getElementWellknown
-import im.vector.app.features.settings.VectorLocale
+import im.vector.app.features.settings.VectorLocaleProvider
 import im.vector.app.features.themes.ThemeProvider
 import okhttp3.Request
 import org.jitsi.meet.sdk.JitsiMeetUserInfo
@@ -49,6 +49,7 @@ class JitsiService @Inject constructor(
         private val themeProvider: ThemeProvider,
         private val jitsiJWTFactory: JitsiJWTFactory,
         private val clock: Clock,
+        private val vectorLocale: VectorLocaleProvider,
 ) {
 
     companion object {
@@ -163,7 +164,7 @@ class JitsiService @Inject constructor(
             if (widgetSessionId.length > 8) {
                 widgetSessionId = widgetSessionId.substring(0, 7)
             }
-            roomId.substring(1, roomId.indexOf(":") - 1) + widgetSessionId.lowercase(VectorLocale.applicationLocale)
+            roomId.substring(1, roomId.indexOf(":") - 1) + widgetSessionId.lowercase(vectorLocale.applicationLocale)
         }
     }
 

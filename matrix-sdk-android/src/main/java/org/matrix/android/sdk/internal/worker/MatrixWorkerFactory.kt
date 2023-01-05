@@ -30,6 +30,7 @@ import org.matrix.android.sdk.internal.session.room.aggregation.livelocation.Dea
 import org.matrix.android.sdk.internal.session.room.send.MultipleEventSendingDispatcherWorker
 import org.matrix.android.sdk.internal.session.room.send.RedactEventWorker
 import org.matrix.android.sdk.internal.session.room.send.SendEventWorker
+import org.matrix.android.sdk.internal.session.sync.handler.UpdateUserWorker
 import org.matrix.android.sdk.internal.session.sync.job.SyncWorker
 import timber.log.Timber
 import javax.inject.Inject
@@ -62,6 +63,8 @@ internal class MatrixWorkerFactory @Inject constructor(private val sessionManage
                 SyncWorker(appContext, workerParameters, sessionManager)
             UpdateTrustWorker::class.java.name ->
                 UpdateTrustWorker(appContext, workerParameters, sessionManager)
+            UpdateUserWorker::class.java.name ->
+                UpdateUserWorker(appContext, workerParameters, sessionManager)
             UploadContentWorker::class.java.name ->
                 UploadContentWorker(appContext, workerParameters, sessionManager)
             DeactivateLiveLocationShareWorker::class.java.name ->

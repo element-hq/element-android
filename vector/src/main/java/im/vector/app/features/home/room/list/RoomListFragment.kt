@@ -35,6 +35,7 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.epoxy.LayoutManagerStateRestorer
 import im.vector.app.core.extensions.cleanup
@@ -70,16 +71,18 @@ data class RoomListParams(
         val displayMode: RoomListDisplayMode
 ) : Parcelable
 
-class RoomListFragment @Inject constructor(
-        private val pagedControllerFactory: RoomSummaryPagedControllerFactory,
-        private val notificationDrawerManager: NotificationDrawerManager,
-        private val footerController: RoomListFooterController,
-        private val userPreferencesProvider: UserPreferencesProvider
-) : VectorBaseFragment<FragmentRoomListBinding>(),
+@AndroidEntryPoint
+class RoomListFragment :
+        VectorBaseFragment<FragmentRoomListBinding>(),
         RoomListListener,
         OnBackPressed,
         FilteredRoomFooterItem.Listener,
         NotifsFabMenuView.Listener {
+
+    @Inject lateinit var pagedControllerFactory: RoomSummaryPagedControllerFactory
+    @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
+    @Inject lateinit var footerController: RoomListFooterController
+    @Inject lateinit var userPreferencesProvider: UserPreferencesProvider
 
     private var modelBuildListener: OnModelBuildFinishedListener? = null
     private lateinit var sharedActionViewModel: RoomListQuickActionsSharedActionViewModel
@@ -146,10 +149,13 @@ class RoomListFragment @Inject constructor(
                         (it.contentEpoxyController as? RoomSummaryPagedController)?.roomChangeMembershipStates = ms
                     }
         }
-        roomListViewModel.onEach(RoomListViewState::localRoomIds) {
-            // Local rooms should not exist anymore when the room list is shown
-            roomListViewModel.deleteLocalRooms(it)
-        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        // Local rooms should not exist anymore when the room list is shown
+        roomListViewModel.handle(RoomListAction.DeleteAllLocalRoom)
     }
 
     private fun refreshCollapseStates() {
@@ -185,7 +191,7 @@ class RoomListFragment @Inject constructor(
     }
 
     private fun handleShowMxToLink(link: String) {
-        navigator.openMatrixToBottomSheet(requireContext(), link, OriginOfMatrixTo.ROOM_LIST)
+        navigator.openMatrixToBottomSheet(requireActivity(), link, OriginOfMatrixTo.ROOM_LIST)
     }
 
     override fun onDestroyView() {
@@ -279,7 +285,7 @@ class RoomListFragment @Inject constructor(
     }
 
     private fun setupRecyclerView() {
-        val layoutManager = LinearLayoutManager(context)
+        val layoutManager = LinearLayoutManager(requireContext())
         stateRestorer = LayoutManagerStateRestorer(layoutManager).register()
         views.roomListView.layoutManager = layoutManager
         views.roomListView.itemAnimator = RoomListAnimator()

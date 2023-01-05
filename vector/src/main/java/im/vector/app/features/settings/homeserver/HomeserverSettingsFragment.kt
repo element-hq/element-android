@@ -23,6 +23,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -33,10 +34,12 @@ import javax.inject.Inject
 /**
  * Display some information about the homeserver.
  */
-class HomeserverSettingsFragment @Inject constructor(
-        private val homeserverSettingsController: HomeserverSettingsController
-) : VectorBaseFragment<FragmentGenericRecyclerBinding>(),
+@AndroidEntryPoint
+class HomeserverSettingsFragment :
+        VectorBaseFragment<FragmentGenericRecyclerBinding>(),
         HomeserverSettingsController.Callback {
+
+    @Inject lateinit var homeserverSettingsController: HomeserverSettingsController
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGenericRecyclerBinding {
         return FragmentGenericRecyclerBinding.inflate(inflater, container, false)

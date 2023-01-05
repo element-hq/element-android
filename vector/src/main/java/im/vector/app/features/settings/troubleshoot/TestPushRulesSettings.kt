@@ -15,8 +15,6 @@
  */
 package im.vector.app.features.settings.troubleshoot
 
-import android.content.Intent
-import androidx.activity.result.ActivityResultLauncher
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.StringProvider
@@ -39,7 +37,7 @@ class TestPushRulesSettings @Inject constructor(
                     RuleIds.RULE_ID_ALL_OTHER_MESSAGES_ROOMS
             )
 
-    override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
+    override fun perform(testParameters: TestParameters) {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
         val pushRules = session.pushRuleService().getPushRules().getAllRules()
         var oneOrMoreRuleIsOff = false

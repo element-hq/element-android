@@ -20,13 +20,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.LiveEvent
 import im.vector.app.databinding.FragmentKeysBackupRestoreSuccessBinding
-import javax.inject.Inject
 
-class KeysBackupRestoreSuccessFragment @Inject constructor() : VectorBaseFragment<FragmentKeysBackupRestoreSuccessBinding>() {
+@AndroidEntryPoint
+class KeysBackupRestoreSuccessFragment :
+        VectorBaseFragment<FragmentKeysBackupRestoreSuccessBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentKeysBackupRestoreSuccessBinding {
         return FragmentKeysBackupRestoreSuccessBinding.inflate(inflater, container, false)

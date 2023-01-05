@@ -19,7 +19,6 @@
 package im.vector.app.features.notifications
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -34,6 +33,7 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import androidx.annotation.AttrRes
+import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
@@ -60,6 +60,8 @@ import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.arguments.TimelineArgs
+import im.vector.app.features.home.room.threads.ThreadsActivity
+import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.troubleshoot.TestNotificationReceiver
 import im.vector.app.features.themes.ThemeUtils
@@ -102,6 +104,7 @@ class NotificationUtils @Inject constructor(
         const val SILENT_NOTIFICATION_CHANNEL_ID = "DEFAULT_SILENT_NOTIFICATION_CHANNEL_ID_V2"
         private const val CALL_NOTIFICATION_CHANNEL_ID = "CALL_NOTIFICATION_CHANNEL_ID_V2"
 
+        @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.O)
         fun supportNotificationChannels() = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 
         fun openSystemSettingsForSilentCategory(fragment: Fragment) {
@@ -126,7 +129,6 @@ class NotificationUtils @Inject constructor(
     /**
      * Create notification channels.
      */
-    @TargetApi(Build.VERSION_CODES.O)
     fun createNotificationChannels() {
         if (!supportNotificationChannels()) {
             return
@@ -218,7 +220,6 @@ class NotificationUtils @Inject constructor(
      * @param withProgress true to show indeterminate progress on the notification
      * @return the polling thread listener notification
      */
-    @SuppressLint("NewApi")
     fun buildForegroundServiceNotification(@StringRes subTitleResId: Int, withProgress: Boolean = true): Notification {
         // build the pending intent go to the home screen if this is clicked.
         val i = HomeActivity.newIntent(context, firstStartMainActivity = false)
@@ -287,7 +288,6 @@ class NotificationUtils @Inject constructor(
      * @param fromBg true if the app is in background when posting the notification
      * @return the call notification.
      */
-    @SuppressLint("NewApi")
     fun buildIncomingCallNotification(
             call: WebRtcCall,
             title: String,
@@ -420,7 +420,6 @@ class NotificationUtils @Inject constructor(
      * @param title title of the notification
      * @return the call notification.
      */
-    @SuppressLint("NewApi")
     fun buildPendingCallNotification(
             call: WebRtcCall,
             title: String
@@ -577,6 +576,7 @@ class NotificationUtils @Inject constructor(
     fun buildMessagesListNotification(
             messageStyle: NotificationCompat.MessagingStyle,
             roomInfo: RoomEventGroupInfo,
+            threadId: String?,
             largeIcon: Bitmap?,
             lastMessageTimestamp: Long,
             senderDisplayNameForReplyCompat: String?,
@@ -584,8 +584,12 @@ class NotificationUtils @Inject constructor(
     ): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
         // Build the pending intent for when the notification is clicked
-        val openRoomIntent = buildOpenRoomIntent(roomInfo.roomId)
-        val smallIcon = R.drawable.ic_status_bar
+        val openIntent = when {
+            threadId != null && vectorPreferences.areThreadMessagesEnabled() -> buildOpenThreadIntent(roomInfo, threadId)
+            else -> buildOpenRoomIntent(roomInfo.roomId)
+        }
+
+        val smallIcon = R.drawable.ic_notification
 
         val channelID = if (roomInfo.shouldBing) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID
         return NotificationCompat.Builder(context, channelID)
@@ -653,7 +657,7 @@ class NotificationUtils @Inject constructor(
 
                     // Quick reply
                     if (!roomInfo.hasSmartReplyError) {
-                        buildQuickReplyIntent(roomInfo.roomId, senderDisplayNameForReplyCompat)?.let { replyPendingIntent ->
+                        buildQuickReplyIntent(roomInfo.roomId, threadId, senderDisplayNameForReplyCompat)?.let { replyPendingIntent ->
                             val remoteInput = RemoteInput.Builder(NotificationBroadcastReceiver.KEY_TEXT_REPLY)
                                     .setLabel(stringProvider.getString(R.string.action_quick_reply))
                                     .build()
@@ -669,8 +673,8 @@ class NotificationUtils @Inject constructor(
                         }
                     }
 
-                    if (openRoomIntent != null) {
-                        setContentIntent(openRoomIntent)
+                    if (openIntent != null) {
+                        setContentIntent(openIntent)
                     }
 
                     if (largeIcon != null) {
@@ -698,7 +702,7 @@ class NotificationUtils @Inject constructor(
     ): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
         // Build the pending intent for when the notification is clicked
-        val smallIcon = R.drawable.ic_status_bar
+        val smallIcon = R.drawable.ic_notification
 
         val channelID = if (inviteNotifiableEvent.noisy) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID
 
@@ -778,7 +782,7 @@ class NotificationUtils @Inject constructor(
     ): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
         // Build the pending intent for when the notification is clicked
-        val smallIcon = R.drawable.ic_status_bar
+        val smallIcon = R.drawable.ic_notification
 
         val channelID = if (simpleNotifiableEvent.noisy) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID
 
@@ -829,6 +833,45 @@ class NotificationUtils @Inject constructor(
                 )
     }
 
+    private fun buildOpenThreadIntent(roomInfo: RoomEventGroupInfo, threadId: String?): PendingIntent? {
+        val threadTimelineArgs = ThreadTimelineArgs(
+                startsThread = false,
+                roomId = roomInfo.roomId,
+                rootThreadEventId = threadId,
+                showKeyboard = false,
+                displayName = roomInfo.roomDisplayName,
+                avatarUrl = null,
+                roomEncryptionTrustLevel = null,
+        )
+        val threadIntentTap = ThreadsActivity.newIntent(
+                context = context,
+                threadTimelineArgs = threadTimelineArgs,
+                threadListArgs = null,
+                firstStartMainActivity = true,
+        )
+        threadIntentTap.action = actionIds.tapToView
+        // pending intent get reused by system, this will mess up the extra params, so put unique info to avoid that
+        threadIntentTap.data = createIgnoredUri("openThread?$threadId")
+
+        val roomIntent = RoomDetailActivity.newIntent(
+                context = context,
+                timelineArgs = TimelineArgs(
+                        roomId = roomInfo.roomId,
+                        switchToParentSpace = true
+                ),
+                firstStartMainActivity = false
+        )
+        // Recreate the back stack
+        return TaskStackBuilder.create(context)
+                .addNextIntentWithParentStack(HomeActivity.newIntent(context, firstStartMainActivity = false))
+                .addNextIntentWithParentStack(roomIntent)
+                .addNextIntent(threadIntentTap)
+                .getPendingIntent(
+                        clock.epochMillis().toInt(),
+                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
+                )
+    }
+
     private fun buildOpenHomePendingIntentForSummary(): PendingIntent {
         val intent = HomeActivity.newIntent(context, firstStartMainActivity = false, clearNotification = true)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
@@ -849,13 +892,17 @@ class NotificationUtils @Inject constructor(
         However, for Android devices running Marshmallow and below (API level 23 and below),
         it will be more appropriate to use an activity. Since you have to provide your own UI.
      */
-    private fun buildQuickReplyIntent(roomId: String, senderName: String?): PendingIntent? {
+    private fun buildQuickReplyIntent(roomId: String, threadId: String?, senderName: String?): PendingIntent? {
         val intent: Intent
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             intent = Intent(context, NotificationBroadcastReceiver::class.java)
             intent.action = actionIds.smartReply
             intent.data = createIgnoredUri(roomId)
             intent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomId)
+            threadId?.let {
+                intent.putExtra(NotificationBroadcastReceiver.KEY_THREAD_ID, it)
+            }
+
             return PendingIntent.getBroadcast(
                     context,
                     clock.epochMillis().toInt(),
@@ -893,7 +940,7 @@ class NotificationUtils @Inject constructor(
             lastMessageTimestamp: Long
     ): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
-        val smallIcon = R.drawable.ic_status_bar
+        val smallIcon = R.drawable.ic_notification
 
         return NotificationCompat.Builder(context, if (noisy) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID)
                 .setOnlyAlertOnce(true)
@@ -966,6 +1013,7 @@ class NotificationUtils @Inject constructor(
         }
     }
 
+    @SuppressLint("LaunchActivityFromNotification")
     fun displayDiagnosticNotification() {
         val testActionIntent = Intent(context, TestNotificationReceiver::class.java)
         testActionIntent.action = actionIds.diagnostic
@@ -982,7 +1030,7 @@ class NotificationUtils @Inject constructor(
                 NotificationCompat.Builder(context, NOISY_NOTIFICATION_CHANNEL_ID)
                         .setContentTitle(stringProvider.getString(R.string.app_name))
                         .setContentText(stringProvider.getString(R.string.settings_troubleshoot_test_push_notification_content))
-                        .setSmallIcon(R.drawable.ic_status_bar)
+                        .setSmallIcon(R.drawable.ic_notification)
                         .setLargeIcon(getBitmap(context, R.drawable.element_logo_green))
                         .setColor(ContextCompat.getColor(context, R.color.notification_accent_color))
                         .setPriority(NotificationCompat.PRIORITY_MAX)

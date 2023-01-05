@@ -21,14 +21,15 @@ import android.os.IBinder
 import android.os.Parcelable
 import androidx.core.app.NotificationManagerCompat
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.extensions.startForegroundCompat
 import im.vector.app.core.services.VectorAndroidService
 import im.vector.app.features.location.LocationData
 import im.vector.app.features.location.LocationTracker
 import im.vector.app.features.location.live.GetLiveLocationShareSummaryUseCase
 import im.vector.app.features.redaction.CheckIfEventIsRedactedUseCase
 import im.vector.app.features.session.coroutineScope
+import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -95,7 +96,7 @@ class LocationSharingAndroidService : VectorAndroidService(), LocationTracker.Ca
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         startInProgress = true
 
-        val roomArgs = intent?.getParcelableExtra(EXTRA_ROOM_ARGS) as? RoomArgs
+        val roomArgs = intent?.getParcelableExtraCompat(EXTRA_ROOM_ARGS) as? RoomArgs
 
         Timber.i("onStartCommand. sessionId - roomId ${roomArgs?.sessionId} - ${roomArgs?.roomId}")
 
@@ -105,7 +106,7 @@ class LocationSharingAndroidService : VectorAndroidService(), LocationTracker.Ca
             if (foregroundModeStarted) {
                 NotificationManagerCompat.from(this).notify(FOREGROUND_SERVICE_NOTIFICATION_ID, notification)
             } else {
-                startForeground(FOREGROUND_SERVICE_NOTIFICATION_ID, notification)
+                startForegroundCompat(FOREGROUND_SERVICE_NOTIFICATION_ID, notification)
                 foregroundModeStarted = true
             }
 
@@ -124,10 +125,7 @@ class LocationSharingAndroidService : VectorAndroidService(), LocationTracker.Ca
         val updateLiveResult = session
                 .getRoom(roomArgs.roomId)
                 ?.locationSharingService()
-                ?.startLiveLocationShare(
-                        timeoutMillis = roomArgs.durationMillis,
-                        description = getString(R.string.live_location_description)
-                )
+                ?.startLiveLocationShare(roomArgs.durationMillis)
 
         updateLiveResult
                 ?.let { result ->
@@ -191,7 +189,7 @@ class LocationSharingAndroidService : VectorAndroidService(), LocationTracker.Ca
     }
 
     override fun onNoLocationProviderAvailable() {
-        stopForeground(true)
+        stopForegroundCompat()
         stopSelf()
     }
 

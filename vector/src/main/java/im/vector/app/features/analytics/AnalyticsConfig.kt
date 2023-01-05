@@ -21,4 +21,6 @@ data class AnalyticsConfig(
         val postHogHost: String,
         val postHogApiKey: String,
         val policyLink: String,
+        val sentryDSN: String,
+        val sentryEnvironment: String
 )

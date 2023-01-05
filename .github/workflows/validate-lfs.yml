@@ -1,0 +1,15 @@
+name: Validate Git LFS
+
+on: [pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Validate
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          lfs: 'true'
+
+      - run: |
+          ./tools/validate_lfs.sh

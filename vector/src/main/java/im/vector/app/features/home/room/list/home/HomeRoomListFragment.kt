@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.list.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -23,29 +24,27 @@ import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.airbnb.epoxy.EpoxyControllerAdapter
 import com.airbnb.epoxy.OnModelBuildFinishedListener
 import com.airbnb.mvrx.fragmentViewModel
-import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.epoxy.LayoutManagerStateRestorer
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.UserPreferencesProvider
+import im.vector.app.core.utils.FirstItemUpdatedObserver
 import im.vector.app.databinding.FragmentRoomListBinding
 import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.home.room.list.RoomListAnimator
 import im.vector.app.features.home.room.list.RoomListListener
-import im.vector.app.features.home.room.list.RoomSummaryItemFactory
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
-import im.vector.app.features.home.room.list.home.filter.HomeFilteredRoomsController
-import im.vector.app.features.home.room.list.home.filter.HomeRoomFilter
-import im.vector.app.features.home.room.list.home.recent.RecentRoomCarouselController
+import im.vector.app.features.home.room.list.home.header.HomeRoomFilter
+import im.vector.app.features.home.room.list.home.header.HomeRoomsHeadersController
+import im.vector.app.features.home.room.list.home.invites.InvitesActivity
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -54,16 +53,19 @@ import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 import javax.inject.Inject
 
-class HomeRoomListFragment @Inject constructor(
-        private val roomSummaryItemFactory: RoomSummaryItemFactory,
-        private val userPreferencesProvider: UserPreferencesProvider,
-        private val recentRoomCarouselController: RecentRoomCarouselController
-) : VectorBaseFragment<FragmentRoomListBinding>(),
+@AndroidEntryPoint
+class HomeRoomListFragment :
+        VectorBaseFragment<FragmentRoomListBinding>(),
         RoomListListener {
 
+    @Inject lateinit var userPreferencesProvider: UserPreferencesProvider
+    @Inject lateinit var headersController: HomeRoomsHeadersController
+    @Inject lateinit var roomsController: HomeFilteredRoomsController
+
     private val roomListViewModel: HomeRoomListViewModel by fragmentViewModel()
-    private lateinit var sharedActionViewModel: RoomListQuickActionsSharedActionViewModel
+    private lateinit var sharedQuickActionsViewModel: RoomListQuickActionsSharedActionViewModel
     private var concatAdapter = ConcatAdapter()
+    private lateinit var firstItemObserver: FirstItemUpdatedObserver
     private var modelBuildListener: OnModelBuildFinishedListener? = null
 
     private lateinit var stateRestorer: LayoutManagerStateRestorer
@@ -74,15 +76,25 @@ class HomeRoomListFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        sharedActionViewModel = activityViewModelProvider[RoomListQuickActionsSharedActionViewModel::class.java]
-        sharedActionViewModel
-                .stream()
-                .onEach { handleQuickActions(it) }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
-
         views.stateView.contentView = views.roomListView
         views.stateView.state = StateView.State.Loading
+        setupObservers()
+        setupRecyclerView()
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        // Local rooms should not exist anymore when the room list is shown
+        roomListViewModel.handle(HomeRoomListAction.DeleteAllLocalRoom)
+    }
+
+    private fun setupObservers() {
+        sharedQuickActionsViewModel = activityViewModelProvider[RoomListQuickActionsSharedActionViewModel::class.java]
+        sharedQuickActionsViewModel
+                .stream()
+                .onEach(::handleQuickActions)
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         roomListViewModel.observeViewEvents {
             when (it) {
@@ -91,70 +103,6 @@ class HomeRoomListFragment @Inject constructor(
                 is HomeRoomListViewEvents.SelectRoom -> handleSelectRoom(it, it.isInviteAlreadyAccepted)
                 is HomeRoomListViewEvents.Done -> Unit
             }
-        }
-
-        setupRecyclerView()
-        setupFabs()
-    }
-
-    private fun setupRecyclerView() {
-        val layoutManager = LinearLayoutManager(context)
-        stateRestorer = LayoutManagerStateRestorer(layoutManager).register()
-        views.roomListView.layoutManager = layoutManager
-        views.roomListView.itemAnimator = RoomListAnimator()
-        layoutManager.recycleChildrenOnDetach = true
-
-        modelBuildListener = OnModelBuildFinishedListener { it.dispatchTo(stateRestorer) }
-
-        roomListViewModel.sections.onEach { sections ->
-            setUpAdapters(sections)
-        }.launchIn(lifecycleScope)
-
-        views.roomListView.adapter = concatAdapter
-    }
-
-    private fun setupFabs() {
-        showFABs()
-
-        views.newLayoutCreateChatButton.setOnClickListener {
-            // Click action for create chat modal goes here (Issue #6717)
-        }
-
-        views.newLayoutOpenSpacesButton.setOnClickListener {
-            // Click action for open spaces modal goes here (Issue #6499)
-        }
-
-        // Hide FABs when list is scrolling
-        views.roomListView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                views.createChatFabMenu.handler.removeCallbacksAndMessages(null)
-
-                when (newState) {
-                    RecyclerView.SCROLL_STATE_IDLE -> views.createChatFabMenu.postDelayed(::showFABs, 250)
-                    RecyclerView.SCROLL_STATE_DRAGGING,
-                    RecyclerView.SCROLL_STATE_SETTLING -> hideFABs()
-                }
-            }
-        })
-    }
-
-    private fun showFABs() {
-        views.newLayoutCreateChatButton.show()
-        views.newLayoutOpenSpacesButton.show()
-    }
-
-    private fun hideFABs() {
-        views.newLayoutCreateChatButton.hide()
-        views.newLayoutOpenSpacesButton.hide()
-    }
-
-    override fun invalidate() = withState(roomListViewModel) { state ->
-        views.stateView.state = state.state
-    }
-
-    private fun setUpAdapters(sections: Set<HomeRoomSection>) {
-        sections.forEach {
-            concatAdapter.addAdapter(getAdapterForData(it))
         }
     }
 
@@ -182,10 +130,57 @@ class HomeRoomListFragment @Inject constructor(
                 roomListViewModel.handle(HomeRoomListAction.ToggleTag(quickAction.roomId, RoomTag.ROOM_TAG_LOW_PRIORITY))
             }
             is RoomListQuickActionsSharedAction.Leave -> {
-                roomListViewModel.handle(HomeRoomListAction.LeaveRoom(quickAction.roomId))
                 promptLeaveRoom(quickAction.roomId)
             }
         }
+    }
+
+    private fun setupRecyclerView() {
+        views.stateView.state = StateView.State.Content
+        val layoutManager = LinearLayoutManager(requireContext())
+        firstItemObserver = FirstItemUpdatedObserver(layoutManager) {
+            layoutManager.scrollToPosition(0)
+        }
+        stateRestorer = LayoutManagerStateRestorer(layoutManager).register()
+        views.roomListView.layoutManager = layoutManager
+        views.roomListView.itemAnimator = RoomListAnimator()
+        layoutManager.recycleChildrenOnDetach = true
+
+        modelBuildListener = OnModelBuildFinishedListener { it.dispatchTo(stateRestorer) }
+
+        roomListViewModel.onEach(HomeRoomListViewState::headersData) {
+            headersController.submitData(it)
+        }
+        roomListViewModel.roomsLivePagedList.observe(viewLifecycleOwner) { roomsList ->
+            roomsController.submitRoomsList(roomsList)
+        }
+        roomListViewModel.onEach(HomeRoomListViewState::emptyState) { emptyState ->
+            roomsController.submitEmptyStateData(emptyState)
+        }
+
+        setUpAdapters()
+
+        views.roomListView.adapter = concatAdapter
+
+        concatAdapter.registerAdapterDataObserver(firstItemObserver)
+    }
+
+    override fun invalidate() = Unit
+
+    private fun setUpAdapters() {
+        val headersAdapter = headersController.also { controller ->
+            controller.invitesClickListener = ::onInvitesCounterClicked
+            controller.onFilterChangedListener = ::onRoomFilterChanged
+            controller.recentsRoomListener = this
+        }.adapter
+
+        val roomsAdapter = roomsController
+                .also { controller ->
+                    controller.listener = this
+                }.adapter
+
+        concatAdapter.addAdapter(headersAdapter)
+        concatAdapter.addAdapter(roomsAdapter)
     }
 
     private fun promptLeaveRoom(roomId: String) {
@@ -207,30 +202,8 @@ class HomeRoomListFragment @Inject constructor(
                 .show()
     }
 
-    private fun getAdapterForData(section: HomeRoomSection): EpoxyControllerAdapter {
-        return when (section) {
-            is HomeRoomSection.RoomSummaryData -> {
-                HomeFilteredRoomsController(
-                        roomSummaryItemFactory,
-                        showFilters = section.showFilters,
-                ).also { controller ->
-                    controller.listener = this
-                    controller.onFilterChanged = ::onRoomFilterChanged
-                    section.filtersData.onEach {
-                        controller.submitFiltersData(it)
-                    }.launchIn(lifecycleScope)
-                    section.list.observe(viewLifecycleOwner) { list ->
-                        controller.submitList(list)
-                    }
-                }.adapter
-            }
-            is HomeRoomSection.RecentRoomsData -> recentRoomCarouselController.also { controller ->
-                controller.listener = this
-                section.list.observe(viewLifecycleOwner) { list ->
-                    controller.submitList(list)
-                }
-            }.adapter
-        }
+    private fun onInvitesCounterClicked() {
+        startActivity(Intent(activity, InvitesActivity::class.java))
     }
 
     private fun onRoomFilterChanged(filter: HomeRoomFilter) {
@@ -248,7 +221,15 @@ class HomeRoomListFragment @Inject constructor(
 
     override fun onDestroyView() {
         views.roomListView.cleanup()
-        recentRoomCarouselController.listener = null
+
+        headersController.recentsRoomListener = null
+        headersController.invitesClickListener = null
+        headersController.onFilterChangedListener = null
+
+        roomsController.listener = null
+
+        concatAdapter.unregisterAdapterDataObserver(firstItemObserver)
+
         super.onDestroyView()
     }
 
@@ -266,21 +247,13 @@ class HomeRoomListFragment @Inject constructor(
         return true
     }
 
-    override fun onRejectRoomInvitation(room: RoomSummary) {
-        TODO("Not yet implemented")
-    }
+    override fun onRejectRoomInvitation(room: RoomSummary) = Unit
 
-    override fun onAcceptRoomInvitation(room: RoomSummary) {
-        TODO("Not yet implemented")
-    }
+    override fun onAcceptRoomInvitation(room: RoomSummary) = Unit
 
-    override fun onJoinSuggestedRoom(room: SpaceChildInfo) {
-        TODO("Not yet implemented")
-    }
+    override fun onJoinSuggestedRoom(room: SpaceChildInfo) = Unit
 
-    override fun onSuggestedRoomClicked(room: SpaceChildInfo) {
-        TODO("Not yet implemented")
-    }
+    override fun onSuggestedRoomClicked(room: SpaceChildInfo) = Unit
 
     // endregion
 }
