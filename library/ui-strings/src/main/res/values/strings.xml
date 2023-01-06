@@ -3177,7 +3177,7 @@
     </plurals>
     <string name="poll_end_action">End poll</string>
     <!-- TODO TO BE REMOVED -->
-    <string name="a11y_poll_winner_option">winner option</string>
+    <string name="a11y_poll_winner_option" tools:ignore="UnusedResources">winner option</string>
     <string name="end_poll_confirmation_title">End this poll?</string>
     <string name="end_poll_confirmation_description">This will stop people from being able to vote and will display the final results of the poll.</string>
     <string name="end_poll_confirmation_approve_button">End poll</string>
