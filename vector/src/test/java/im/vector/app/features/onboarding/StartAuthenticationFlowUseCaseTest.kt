@@ -70,7 +70,7 @@ class StartAuthenticationFlowUseCaseTest {
 
         result shouldBeEqualTo expectedResult(
                 supportedLoginTypes = SSO_AND_PASSWORD_LOGIN_TYPES,
-                preferredLoginMode = LoginMode.SsoAndPassword(SsoState.Fallback),
+                preferredLoginMode = LoginMode.SsoAndPassword(SsoState.Fallback, false),
         )
         verifyClearsAndThenStartsLogin(A_HOMESERVER_CONFIG)
     }
@@ -84,7 +84,7 @@ class StartAuthenticationFlowUseCaseTest {
 
         result shouldBeEqualTo expectedResult(
                 supportedLoginTypes = SSO_AND_PASSWORD_LOGIN_TYPES,
-                preferredLoginMode = LoginMode.SsoAndPassword(SsoState.IdentityProviders(SSO_IDENTITY_PROVIDERS)),
+                preferredLoginMode = LoginMode.SsoAndPassword(SsoState.IdentityProviders(SSO_IDENTITY_PROVIDERS), false),
         )
         verifyClearsAndThenStartsLogin(A_HOMESERVER_CONFIG)
     }
@@ -133,16 +133,17 @@ class StartAuthenticationFlowUseCaseTest {
 
     private fun aLoginResult(
             supportedLoginTypes: List<String>,
-            ssoProviders: List<SsoIdentityProvider> = FALLBACK_SSO_IDENTITY_PROVIDERS
+            ssoProviders: List<SsoIdentityProvider> = FALLBACK_SSO_IDENTITY_PROVIDERS,
+            hasOidcCompatibilityFlow: Boolean = false
     ) = LoginFlowResult(
             supportedLoginTypes = supportedLoginTypes,
             ssoIdentityProviders = ssoProviders,
             isLoginAndRegistrationSupported = true,
             homeServerUrl = A_DECLARED_HOMESERVER_URL,
             isOutdatedHomeserver = false,
-            hasOidcCompatibilityFlow = false,
+            hasOidcCompatibilityFlow = hasOidcCompatibilityFlow,
             isLogoutDevicesSupported = false,
-            isLoginWithQrSupported = false
+            isLoginWithQrSupported = false,
     )
 
     private fun expectedResult(
