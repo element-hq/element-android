@@ -718,8 +718,8 @@
     <string name="settings_discovery_please_enter_server">Bonvolu enigi la URL-on de identiga servilo</string>
     <string name="settings_discovery_bad_identity_server">Ne povis konektiĝi al identiga servilo</string>
     <string name="settings_discovery_enter_identity_server">Enigu URL-on de identiga servilo</string>
-    <string name="settings_discovery_confirm_mail_not_clicked">Ni sendis al vi konfirman retleteron al %s, bonvolu unue kontroli vian retpoŝton kaj klaki la konfirman ligilon</string>
-    <string name="settings_discovery_confirm_mail">Ni sendis al vi konfirman retleteron al %s; kontrolu vian retpoŝton kaj klaku la konfirman ligilon</string>
+    <string name="settings_discovery_confirm_mail_not_clicked">Ni sendis retleteron al %s, bonvolu unue kontroli vian retpoŝton kaj klaki la konfirman ligilon</string>
+    <string name="settings_discovery_confirm_mail">Ni sendis retleteron al %s; kontrolu vian retpoŝton kaj klaku la konfirman ligilon</string>
     <string name="settings_discovery_msisdn_title">Troveblaj telefonnumeroj</string>
     <string name="settings_discovery_disconnect_identity_server_info">Malkonekto de via identiga servilo signifas, ke vi ne estos trovebla de aliaj uzantoj kaj ne povos inviti aliulojn per retpoŝtadreso aŭ telefono.</string>
     <string name="settings_discovery_no_msisdn">Elektebloj pri trovado aperos post aldono de telefonnumero.</string>
