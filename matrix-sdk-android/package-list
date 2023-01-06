@@ -1129,6 +1129,11 @@ $dokka.location:org.matrix.android.sdk.api.session.crypto.crosssigning/PrivateKe
 $dokka.location:org.matrix.android.sdk.api.session.crypto.crosssigning/PrivateKeysInfo/master/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto.crosssigning/-private-keys-info/master.html
 $dokka.location:org.matrix.android.sdk.api.session.crypto.crosssigning/PrivateKeysInfo/selfSigned/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto.crosssigning/-private-keys-info/self-signed.html
 $dokka.location:org.matrix.android.sdk.api.session.crypto.crosssigning/PrivateKeysInfo/user/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto.crosssigning/-private-keys-info/user.html
+$dokka.location:org.matrix.android.sdk.api.session.crypto.crosssigning/UserIdentity///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto.crosssigning/-user-identity/index.html
+$dokka.location:org.matrix.android.sdk.api.session.crypto.crosssigning/UserIdentity/UserIdentity/#org.matrix.android.sdk.api.session.crypto.crosssigning.CryptoCrossSigningKey?#org.matrix.android.sdk.api.session.crypto.crosssigning.CryptoCrossSigningKey?#org.matrix.android.sdk.api.session.crypto.crosssigning.CryptoCrossSigningKey?/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto.crosssigning/-user-identity/-user-identity.html
+$dokka.location:org.matrix.android.sdk.api.session.crypto.crosssigning/UserIdentity/masterKey/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto.crosssigning/-user-identity/master-key.html
+$dokka.location:org.matrix.android.sdk.api.session.crypto.crosssigning/UserIdentity/selfSigningKey/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto.crosssigning/-user-identity/self-signing-key.html
+$dokka.location:org.matrix.android.sdk.api.session.crypto.crosssigning/UserIdentity/userSigningKey/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto.crosssigning/-user-identity/user-signing-key.html
 $dokka.location:org.matrix.android.sdk.api.session.crypto.crosssigning/UserTrustResult.CrossSigningNotConfigured///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto.crosssigning/-user-trust-result/-cross-signing-not-configured/index.html
 $dokka.location:org.matrix.android.sdk.api.session.crypto.crosssigning/UserTrustResult.CrossSigningNotConfigured/CrossSigningNotConfigured/#kotlin.String/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto.crosssigning/-user-trust-result/-cross-signing-not-configured/-cross-signing-not-configured.html
 $dokka.location:org.matrix.android.sdk.api.session.crypto.crosssigning/UserTrustResult.CrossSigningNotConfigured/userID/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto.crosssigning/-user-trust-result/-cross-signing-not-configured/user-i-d.html
@@ -4967,6 +4972,12 @@ $dokka.location:org.matrix.android.sdk.internal.crypto.model/SessionInfo///Point
 $dokka.location:org.matrix.android.sdk.internal.crypto.model/SessionInfo/SessionInfo/#kotlin.String#kotlin.String/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.crypto.model/-session-info/-session-info.html
 $dokka.location:org.matrix.android.sdk.internal.crypto.model/SessionInfo/senderKey/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.crypto.model/-session-info/sender-key.html
 $dokka.location:org.matrix.android.sdk.internal.crypto.model/SessionInfo/sessionId/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.crypto.model/-session-info/session-id.html
+$dokka.location:org.matrix.android.sdk.internal.crypto.store.db////PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.crypto.store.db/index.html
+$dokka.location:org.matrix.android.sdk.internal.crypto.store.db/CryptoStoreAggregator///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.crypto.store.db/-crypto-store-aggregator/index.html
+$dokka.location:org.matrix.android.sdk.internal.crypto.store.db/CryptoStoreAggregator/CryptoStoreAggregator/#kotlin.collections.MutableMap[kotlin.String,kotlin.Boolean]#kotlin.collections.MutableMap[kotlin.String,kotlin.Boolean]/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.crypto.store.db/-crypto-store-aggregator/-crypto-store-aggregator.html
+$dokka.location:org.matrix.android.sdk.internal.crypto.store.db/CryptoStoreAggregator/isEmpty/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.crypto.store.db/-crypto-store-aggregator/is-empty.html
+$dokka.location:org.matrix.android.sdk.internal.crypto.store.db/CryptoStoreAggregator/setShouldEncryptForInvitedMembersData/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.crypto.store.db/-crypto-store-aggregator/set-should-encrypt-for-invited-members-data.html
+$dokka.location:org.matrix.android.sdk.internal.crypto.store.db/CryptoStoreAggregator/setShouldShareHistoryData/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.crypto.store.db/-crypto-store-aggregator/set-should-share-history-data.html
 $dokka.location:org.matrix.android.sdk.internal.crypto.tasks////PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.crypto.tasks/index.html
 $dokka.location:org.matrix.android.sdk.internal.crypto.tasks//TO_DEVICE_TRACING_ID_KEY/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.crypto.tasks/-t-o_-d-e-v-i-c-e_-t-r-a-c-i-n-g_-i-d_-k-e-y.html
 $dokka.location:org.matrix.android.sdk.internal.crypto.tasks//toDeviceTracingId/org.matrix.android.sdk.api.session.events.model.Event#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.crypto.tasks/to-device-tracing-id.html
@@ -5121,6 +5132,7 @@ org.matrix.android.sdk.api.session.widgets.model
 org.matrix.android.sdk.api.settings
 org.matrix.android.sdk.api.util
 org.matrix.android.sdk.internal.crypto.model
+org.matrix.android.sdk.internal.crypto.store.db
 org.matrix.android.sdk.internal.crypto.tasks
 org.matrix.android.sdk.internal.database
 org.matrix.android.sdk.internal.network
