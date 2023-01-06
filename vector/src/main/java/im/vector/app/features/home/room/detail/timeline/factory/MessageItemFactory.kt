@@ -266,8 +266,6 @@ class MessageItemFactory @Inject constructor(
                 .callback(callback)
     }
 
-
-
     private fun buildEndedPollItem(
             endedPollContent: MessageEndPollContent,
             informationData: MessageInformationData,
