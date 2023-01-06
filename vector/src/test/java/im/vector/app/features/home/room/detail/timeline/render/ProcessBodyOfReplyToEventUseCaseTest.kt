@@ -159,7 +159,7 @@ class ProcessBodyOfReplyToEventUseCaseTest {
         // Given
         givenTypeOfRepliedEvent(isPollMessage = true)
         givenNewContentForId(R.string.message_reply_to_sender_created_poll)
-        every { fakeRepliedEvent.type } returns EventType.POLL_START.unstable
+        every { fakeRepliedEvent.getClearType() } returns EventType.POLL_START.unstable
         every { fakeRepliedEvent.getPollQuestion() } returns null
 
         executeAndAssertResult()
@@ -170,7 +170,7 @@ class ProcessBodyOfReplyToEventUseCaseTest {
         // Given
         givenTypeOfRepliedEvent(isPollMessage = true)
         givenNewContentForId(R.string.message_reply_to_sender_created_poll)
-        every { fakeRepliedEvent.type } returns EventType.POLL_START.unstable
+        every { fakeRepliedEvent.getClearType() } returns EventType.POLL_START.unstable
         every { fakeRepliedEvent.getPollQuestion() } returns A_NEW_CONTENT
 
         executeAndAssertResult()
