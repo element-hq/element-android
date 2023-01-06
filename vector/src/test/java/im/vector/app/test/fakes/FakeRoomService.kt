@@ -22,7 +22,7 @@ import org.matrix.android.sdk.api.session.room.RoomService
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
 class FakeRoomService(
-        private val fakeRoom: FakeRoom = FakeRoom()
+        val fakeRoom: FakeRoom = FakeRoom()
 ) : RoomService by mockk() {
 
     override fun getRoom(roomId: String) = fakeRoom
