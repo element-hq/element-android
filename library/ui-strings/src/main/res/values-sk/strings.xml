@@ -2946,4 +2946,13 @@
     <string name="set_link_link">Odkaz</string>
     <string name="set_link_text">Text</string>
     <string name="rich_text_editor_link">Nastaviť odkaz</string>
+    <string name="settings_access_token_summary">Váš prístupový token poskytuje úplný prístup k vášmu účtu. S nikým ho nezdieľajte.</string>
+    <string name="settings_access_token">Prístupový token</string>
+    <string name="rich_text_editor_numbered_list">Prepnúť na číslovaný zoznam</string>
+    <string name="rich_text_editor_bullet_list">Prepnúť zoznam s odrážkami</string>
+    <string name="room_polls_ended_no_item">V tejto miestnosti nie sú žiadne predchádzajúce ankety</string>
+    <string name="room_polls_ended">Predchádzajúce ankety</string>
+    <string name="room_polls_active_no_item">V tejto miestnosti nie sú žiadne aktívne ankety</string>
+    <string name="room_polls_active">Aktívne ankety</string>
+    <string name="room_profile_section_more_polls">História ankety</string>
 </resources>
