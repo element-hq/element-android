@@ -21,7 +21,6 @@ import android.app.Activity
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.activity.result.ActivityResultLauncher
-import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import im.vector.app.R
@@ -35,17 +34,12 @@ class NotificationPermissionManager @Inject constructor(
         private val vectorPreferences: VectorPreferences,
 ) {
 
-    @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.TIRAMISU)
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     fun isPermissionGranted(activity: Activity): Boolean {
-        return if (sdkIntProvider.isAtLeast(Build.VERSION_CODES.TIRAMISU)) {
-            ContextCompat.checkSelfPermission(
-                    activity,
-                    Manifest.permission.POST_NOTIFICATIONS
-            ) == PackageManager.PERMISSION_GRANTED
-        } else {
-            // No notification permission management before API 33.
-            true
-        }
+        return ContextCompat.checkSelfPermission(
+                activity,
+                Manifest.permission.POST_NOTIFICATIONS
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     fun eventuallyRequestPermission(

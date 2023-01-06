@@ -1,0 +1,2 @@
+Legnagyobb változtatás ebben a verzióban: Threadek már alapból engedélyezve vannak.
+Teljes változási napló: https://github.com/vector-im/element-android/releases

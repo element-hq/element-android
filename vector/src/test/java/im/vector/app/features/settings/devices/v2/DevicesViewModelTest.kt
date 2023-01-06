@@ -21,6 +21,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.test.MavericksTestRule
 import im.vector.app.core.session.clientinfo.MatrixClientInfoContent
 import im.vector.app.features.settings.devices.v2.details.extended.DeviceExtendedInfo
+import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
 import im.vector.app.features.settings.devices.v2.list.DeviceType
 import im.vector.app.features.settings.devices.v2.verification.CheckIfCurrentSessionCanBeVerifiedUseCase
 import im.vector.app.features.settings.devices.v2.verification.CurrentSessionCrossSigningInfo
@@ -53,6 +54,8 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
 
 private const val A_CURRENT_DEVICE_ID = "current-device-id"
@@ -75,6 +78,10 @@ class DevicesViewModelTest {
     private val fakeRefreshDevicesUseCase = mockk<RefreshDevicesUseCase>(relaxUnitFun = true)
     private val fakeVectorPreferences = FakeVectorPreferences()
     private val toggleIpAddressVisibilityUseCase = mockk<ToggleIpAddressVisibilityUseCase>()
+
+    private val verifiedTransaction = mockk<VerificationTransaction>().apply {
+        every { state } returns VerificationTxState.Verified
+    }
 
     private fun createViewModel(): DevicesViewModel {
         return DevicesViewModel(
@@ -170,10 +177,7 @@ class DevicesViewModelTest {
         val viewModelTest = createViewModel().test()
 
         // Then
-        viewModelTest.assertLatestState {
-            it.devices is Success && it.devices.invoke() == deviceFullInfoList &&
-                    it.inactiveSessionsCount == 1 && it.unverifiedSessionsCount == 1
-        }
+        viewModelTest.assertLatestState { it.devices is Success && it.devices.invoke() == deviceFullInfoList }
         viewModelTest.finish()
     }
 
@@ -375,6 +379,18 @@ class DevicesViewModelTest {
         viewModelTest.finish()
     }
 
+    @Test
+    fun `given the view model when a verified transaction is updated then device list is refreshed`() {
+        // Given
+        val viewModel = createViewModel()
+
+        // When
+        viewModel.transactionUpdated(verifiedTransaction)
+
+        // Then
+        verify { viewModel.refreshDeviceList() }
+    }
+
     private fun givenCurrentSessionCrossSigningInfo(): CurrentSessionCrossSigningInfo {
         val currentSessionCrossSigningInfo = mockk<CurrentSessionCrossSigningInfo>()
         every { currentSessionCrossSigningInfo.deviceId } returns A_CURRENT_DEVICE_ID
@@ -385,7 +401,7 @@ class DevicesViewModelTest {
     /**
      * Generate mocked deviceFullInfo list with 1 unverified and inactive + 1 verified and active.
      */
-    private fun givenDeviceFullInfoList(deviceId1: String, deviceId2: String): List<DeviceFullInfo> {
+    private fun givenDeviceFullInfoList(deviceId1: String, deviceId2: String): DeviceFullInfoList {
         val verifiedCryptoDeviceInfo = mockk<CryptoDeviceInfo>()
         every { verifiedCryptoDeviceInfo.trustLevel } returns DeviceTrustLevel(crossSigningVerified = true, locallyVerified = true)
         val unverifiedCryptoDeviceInfo = mockk<CryptoDeviceInfo>()
@@ -414,10 +430,15 @@ class DevicesViewModelTest {
                 deviceExtendedInfo = DeviceExtendedInfo(DeviceType.MOBILE),
                 matrixClientInfo = MatrixClientInfoContent(),
         )
-        val deviceFullInfoList = listOf(deviceFullInfo1, deviceFullInfo2)
-        val deviceFullInfoListFlow = flowOf(deviceFullInfoList)
-        every { getDeviceFullInfoListUseCase.execute(any(), any()) } returns deviceFullInfoListFlow
-        return deviceFullInfoList
+        val devices = listOf(deviceFullInfo1, deviceFullInfo2)
+        every { getDeviceFullInfoListUseCase.execute(DeviceManagerFilterType.ALL_SESSIONS, any()) } returns flowOf(devices)
+        every { getDeviceFullInfoListUseCase.execute(DeviceManagerFilterType.UNVERIFIED, any()) } returns flowOf(listOf(deviceFullInfo2))
+        every { getDeviceFullInfoListUseCase.execute(DeviceManagerFilterType.INACTIVE, any()) } returns flowOf(listOf(deviceFullInfo1))
+        return DeviceFullInfoList(
+                allSessions = devices,
+                unverifiedSessionsCount = 1,
+                inactiveSessionsCount = 1,
+        )
     }
 
     private fun givenInitialViewState(deviceId1: String, deviceId2: String): DevicesViewState {
@@ -426,8 +447,6 @@ class DevicesViewModelTest {
         return DevicesViewState(
                 currentSessionCrossSigningInfo = currentSessionCrossSigningInfo,
                 devices = Success(deviceFullInfoList),
-                unverifiedSessionsCount = 1,
-                inactiveSessionsCount = 1,
                 isLoading = false,
         )
     }

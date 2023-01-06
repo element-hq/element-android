@@ -16,8 +16,6 @@
 
 package org.matrix.android.sdk.internal.session.filter
 
-import org.matrix.android.sdk.internal.sync.filter.SyncFilterParams
-
 /**
  * Repository for request filters.
  */
@@ -44,14 +42,4 @@ internal interface FilterRepository {
      * Return the room filter.
      */
     suspend fun getRoomFilterBody(): String
-
-    /**
-     * Returns filter params stored in local storage if it exists.
-     */
-    suspend fun getStoredFilterParams(): SyncFilterParams?
-
-    /**
-     * Stores filter params to local storage.
-     */
-    suspend fun storeFilterParams(params: SyncFilterParams)
 }

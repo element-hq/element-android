@@ -25,7 +25,6 @@ import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.devices.v2.notification.UpdateNotificationSettingsAccountDataUseCase
-import im.vector.app.features.sync.SyncUtils
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
@@ -43,9 +42,6 @@ class ConfigureAndStartSessionUseCase @Inject constructor(
     fun execute(session: Session, startSyncing: Boolean = true) {
         Timber.i("Configure and start session for ${session.myUserId}. startSyncing: $startSyncing")
         session.open()
-        session.coroutineScope.launch {
-            session.filterService().setSyncFilter(SyncUtils.getSyncFilterBuilder())
-        }
         if (startSyncing) {
             session.startSyncing(context)
         }

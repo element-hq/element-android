@@ -14362,7 +14362,11 @@
                 "plant",
                 "nature",
                 "branch",
-                "summer"
+                "summer",
+                "bamboo",
+                "wish",
+                "star_festival",
+                "tanzaku"
             ]
         },
         "pine-decoration": {
@@ -14373,10 +14377,12 @@
                 "celebration",
                 "Japanese",
                 "pine",
+                "japanese",
                 "plant",
                 "nature",
                 "vegetable",
-                "panda"
+                "panda",
+                "new_years"
             ]
         },
         "japanese-dolls": {

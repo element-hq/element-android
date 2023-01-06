@@ -142,7 +142,7 @@ class DevicesViewModel @AssistedInject constructor(
                     .map { deviceInfo ->
                         val cryptoDeviceInfo = cryptoList.firstOrNull { it.deviceId == deviceInfo.deviceId }
                         val trustLevelForShield = getEncryptionTrustLevelForDeviceUseCase.execute(currentSessionCrossSigningInfo, cryptoDeviceInfo)
-                        val isInactive = checkIfSessionIsInactiveUseCase.execute(deviceInfo.lastSeenTs ?: 0)
+                        val isInactive = checkIfSessionIsInactiveUseCase.execute(deviceInfo.lastSeenTs)
                         DeviceFullInfo(deviceInfo, cryptoDeviceInfo, trustLevelForShield, isInactive)
                     }
         }

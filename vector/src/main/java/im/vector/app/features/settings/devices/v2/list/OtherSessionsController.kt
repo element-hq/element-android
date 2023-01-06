@@ -63,12 +63,13 @@ class OtherSessionsController @Inject constructor(
                 }
                 val drawableColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
                 val descriptionDrawable = if (device.isInactive) host.drawableProvider.getDrawable(R.drawable.ic_inactive_sessions, drawableColor) else null
+                val sessionName = device.deviceInfo.displayName ?: device.deviceInfo.deviceId
 
                 otherSessionItem {
                     id(device.deviceInfo.deviceId)
                     deviceType(device.deviceExtendedInfo.deviceType)
                     roomEncryptionTrustLevel(device.roomEncryptionTrustLevel)
-                    sessionName(device.deviceInfo.displayName)
+                    sessionName(sessionName)
                     sessionDescription(description)
                     sessionDescriptionDrawable(descriptionDrawable)
                     sessionDescriptionColor(descriptionColor)
