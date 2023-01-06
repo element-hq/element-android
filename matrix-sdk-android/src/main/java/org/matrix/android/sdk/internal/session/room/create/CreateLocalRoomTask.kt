@@ -176,7 +176,7 @@ internal class DefaultCreateLocalRoomTask @Inject constructor(
                 }
 
                 // Give info to crypto module
-                cryptoService.onStateEvent(roomId, event)
+                cryptoService.onStateEvent(roomId, event, null)
             }
 
             roomMemberContentsByUser.getOrPut(event.senderId) {

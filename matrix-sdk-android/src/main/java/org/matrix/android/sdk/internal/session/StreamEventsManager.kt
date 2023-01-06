@@ -42,14 +42,12 @@ internal class StreamEventsManager @Inject constructor() {
         listeners.remove(listener)
     }
 
-    fun dispatchLiveEventReceived(event: Event, roomId: String, initialSync: Boolean) {
+    fun dispatchLiveEventReceived(event: Event, roomId: String) {
         Timber.v("## dispatchLiveEventReceived ${event.eventId}")
         coroutineScope.launch {
-            if (!initialSync) {
-                listeners.forEach {
-                    tryOrNull {
-                        it.onLiveEvent(roomId, event)
-                    }
+            listeners.forEach {
+                tryOrNull {
+                    it.onLiveEvent(roomId, event)
                 }
             }
         }

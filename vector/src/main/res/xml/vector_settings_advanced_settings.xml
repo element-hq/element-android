@@ -93,6 +93,12 @@
             android:title="@string/settings_key_requests"
             app:fragment="im.vector.app.features.settings.devtools.KeyRequestsFragment" />
 
+        <im.vector.app.core.preference.VectorPreference
+            android:key="SETTINGS_ACCESS_TOKEN"
+            android:persistent="false"
+            android:summary="@string/settings_access_token_summary"
+            android:title="@string/settings_access_token" />
+
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
     <im.vector.app.core.preference.VectorPreferenceCategory

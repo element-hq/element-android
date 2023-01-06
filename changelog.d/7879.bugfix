@@ -1,0 +1,1 @@
+Reduce number of crypto database transactions when handling the sync response

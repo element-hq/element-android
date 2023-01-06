@@ -419,7 +419,9 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
             // Next media player is already attached to this player and will start playing automatically
             if (nextMediaPlayer != null) return
 
-            val hasEnded = !isLiveListening && mostRecentVoiceBroadcastEvent?.content?.lastChunkSequence == playlist.currentSequence
+            val currentSequence = playlist.currentSequence ?: 0
+            val lastChunkSequence = mostRecentVoiceBroadcastEvent?.content?.lastChunkSequence ?: 0
+            val hasEnded = !isLiveListening && currentSequence >= lastChunkSequence
             if (hasEnded) {
                 // We'll not receive new chunks anymore so we can stop the live listening
                 stop()
