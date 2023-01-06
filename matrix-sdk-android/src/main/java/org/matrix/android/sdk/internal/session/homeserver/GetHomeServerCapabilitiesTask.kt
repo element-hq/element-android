@@ -164,6 +164,7 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
                     Timber.v("Extracted integration config : $config")
                     realm.insertOrUpdate(config)
                 }
+                homeServerCapabilitiesEntity.externalAccountManagementUrl = getWellknownResult.wellKnown.unstableDelegatedAuthConfig?.accountManagementUrl
             }
             homeServerCapabilitiesEntity.lastUpdatedTimestamp = Date().time
         }

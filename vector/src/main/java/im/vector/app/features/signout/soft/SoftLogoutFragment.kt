@@ -66,7 +66,8 @@ class SoftLogoutFragment :
                             LoginAction.SetupSsoForSessionRecovery(
                                     softLogoutViewState.homeServerUrl,
                                     softLogoutViewState.deviceId,
-                                    mode.ssoState.providersOrNull()
+                                    mode.ssoState.providersOrNull(),
+                                    mode.hasOidcCompatibilityFlow
                             )
                     )
                 }
@@ -75,7 +76,8 @@ class SoftLogoutFragment :
                             LoginAction.SetupSsoForSessionRecovery(
                                     softLogoutViewState.homeServerUrl,
                                     softLogoutViewState.deviceId,
-                                    mode.ssoState.providersOrNull()
+                                    mode.ssoState.providersOrNull(),
+                                    mode.hasOidcCompatibilityFlow
                             )
                     )
                 }
@@ -85,7 +87,8 @@ class SoftLogoutFragment :
                             LoginAction.SetupSsoForSessionRecovery(
                                     softLogoutViewState.homeServerUrl,
                                     softLogoutViewState.deviceId,
-                                    null
+                                    null,
+                                    false
                             )
                     )
                 }

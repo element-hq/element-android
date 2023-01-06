@@ -1062,6 +1062,9 @@
     <string name="settings_discovery_category">Discovery</string>
     <string name="settings_discovery_manage">Manage your discovery settings.</string>
 
+    <string name="settings_external_account_management_title">Account</string>
+    <string name="settings_external_account_management">Manage your account at %1$s.</string>
+
     <!-- analytics -->
     <string name="settings_analytics">Analytics</string>
     <string name="settings_opt_in_of_analytics">Send analytics data</string>

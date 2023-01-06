@@ -98,7 +98,7 @@ class StartAuthenticationFlowUseCaseTest {
 
         result shouldBeEqualTo expectedResult(
                 supportedLoginTypes = SSO_LOGIN_TYPE,
-                preferredLoginMode = LoginMode.Sso(SsoState.Fallback),
+                preferredLoginMode = LoginMode.Sso(SsoState.Fallback, false),
         )
         verifyClearsAndThenStartsLogin(A_HOMESERVER_CONFIG)
     }
@@ -112,7 +112,7 @@ class StartAuthenticationFlowUseCaseTest {
 
         result shouldBeEqualTo expectedResult(
                 supportedLoginTypes = SSO_LOGIN_TYPE,
-                preferredLoginMode = LoginMode.Sso(SsoState.IdentityProviders(SSO_IDENTITY_PROVIDERS)),
+                preferredLoginMode = LoginMode.Sso(SsoState.IdentityProviders(SSO_IDENTITY_PROVIDERS), false),
         )
         verifyClearsAndThenStartsLogin(A_HOMESERVER_CONFIG)
     }

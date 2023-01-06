@@ -48,6 +48,7 @@ import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorSwitchPreference
 import im.vector.app.core.utils.TextUtils
 import im.vector.app.core.utils.getSizeOfFiles
+import im.vector.app.core.utils.openUrlInExternalBrowser
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.DialogChangePasswordBinding
 import im.vector.app.features.MainActivity
@@ -71,6 +72,7 @@ import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerS
 import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
 import java.io.File
+import java.net.URL
 import java.util.UUID
 import javax.inject.Inject
 
@@ -100,6 +102,9 @@ class VectorSettingsGeneralFragment :
     }
     private val mIdentityServerPreference by lazy {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY)!!
+    }
+    private val mExternalAccountManagementPreference by lazy {
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_EXTERNAL_ACCOUNT_MANAGEMENT_KEY)!!
     }
 
     // Local contacts
@@ -203,6 +208,24 @@ class VectorSettingsGeneralFragment :
         discoveryPreference.onPreferenceClickListener = openDiscoveryScreenPreferenceClickListener
 
         mIdentityServerPreference.onPreferenceClickListener = openDiscoveryScreenPreferenceClickListener
+
+        // External account management URL for delegated OIDC auth
+        // Hide the preference if no URL is given by server
+        if (homeServerCapabilities.externalAccountManagementUrl != null) {
+            mExternalAccountManagementPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                openUrlInExternalBrowser(it.context, homeServerCapabilities.externalAccountManagementUrl)
+                true
+            }
+
+            val hostname = URL(homeServerCapabilities.externalAccountManagementUrl).host
+
+            mExternalAccountManagementPreference.summary = requireContext().getString(
+                    R.string.settings_external_account_management,
+                    hostname
+            )
+        } else {
+            mExternalAccountManagementPreference.isVisible = false
+        }
 
         // Advanced settings
 

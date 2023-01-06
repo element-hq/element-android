@@ -75,6 +75,10 @@ data class HomeServerCapabilities(
          * True if the home server supports remote toggle of Pusher for a given device.
          */
         val canRemotelyTogglePushNotificationsOfDevices: Boolean = false,
+        /**
+         * External account management url for use with MSC3824 delegated OIDC, provided in Wellknown.
+         */
+        val externalAccountManagementUrl: String? = null,
 ) {
 
     enum class RoomCapabilitySupport {

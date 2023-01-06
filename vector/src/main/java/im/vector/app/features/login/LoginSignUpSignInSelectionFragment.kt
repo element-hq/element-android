@@ -26,10 +26,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentLoginSignupSigninSelectionBinding
-import org.matrix.android.sdk.api.auth.SSOAction
-import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
-import javax.inject.Inject
 import im.vector.app.features.login.SocialLoginButtonsView.Mode
+import org.matrix.android.sdk.api.auth.SSOAction
 
 /**
  * In this screen, the user is asked to sign up or to sign in to the homeserver.
@@ -78,11 +76,11 @@ class LoginSignUpSignInSelectionFragment :
         when (state.loginMode) {
             is LoginMode.SsoAndPassword -> {
                 views.loginSignupSigninSignInSocialLoginContainer.isVisible = true
-                views.loginSignupSigninSocialLoginButtons.render(state.loginMode.ssoState(), Mode.MODE_CONTINUE) { provider ->
+                views.loginSignupSigninSocialLoginButtons.render(state.loginMode, Mode.MODE_CONTINUE) { provider ->
                     loginViewModel.getSsoUrl(
                             redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                             deviceId = state.deviceId,
-                            providerId = provider?.id
+                            providerId = provider?.id,
                             action = if (state.signMode == SignMode.SignUp) SSOAction.REGISTER else SSOAction.LOGIN
                     )
                             ?.let { openInCustomTab(it) }
