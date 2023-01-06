@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.network.interceptors
 
+import androidx.annotation.NonNull
 import okhttp3.logging.HttpLoggingInterceptor
 import org.json.JSONArray
 import org.json.JSONException
@@ -37,7 +38,7 @@ internal class FormattedJsonHttpLogger(
      * @param message
      */
     @Synchronized
-    override fun log(message: String) {
+    override fun log(@NonNull message: String) {
         Timber.v(message)
 
         // Try to log formatted Json only if there is a chance that [message] contains Json.

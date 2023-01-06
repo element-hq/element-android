@@ -29,9 +29,7 @@ import androidx.core.transition.addListener
 import androidx.core.view.ViewCompat
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.transition.Transition
 import com.airbnb.mvrx.viewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -52,6 +50,8 @@ import im.vector.lib.attachmentviewer.AttachmentViewerActivity
 import im.vector.lib.core.utils.compat.getParcelableArrayListExtraCompat
 import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
@@ -239,15 +239,10 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
     }
 
     private fun observeViewEvents() {
-        val tag = this::class.simpleName.toString()
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                viewModel
-                        .viewEvents
-                        .stream(tag)
-                        .collect(::handleViewEvents)
-            }
-        }
+        viewModel.viewEvents
+                .stream()
+                .onEach(::handleViewEvents)
+                .launchIn(lifecycleScope)
     }
 
     private fun handleViewEvents(event: VectorAttachmentViewerViewEvents) {

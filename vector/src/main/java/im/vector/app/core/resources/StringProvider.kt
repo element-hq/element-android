@@ -17,6 +17,7 @@
 package im.vector.app.core.resources
 
 import android.content.res.Resources
+import androidx.annotation.NonNull
 import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
 import javax.inject.Inject
@@ -31,6 +32,7 @@ class StringProvider @Inject constructor(private val resources: Resources) {
      * @return The string data associated with the resource, stripped of styled
      * text information.
      */
+    @NonNull
     fun getString(@StringRes resId: Int): String {
         return resources.getString(resId)
     }
@@ -46,10 +48,12 @@ class StringProvider @Inject constructor(private val resources: Resources) {
      * @return The string data associated with the resource, formatted and
      * stripped of styled text information.
      */
+    @NonNull
     fun getString(@StringRes resId: Int, vararg formatArgs: Any?): String {
         return resources.getString(resId, *formatArgs)
     }
 
+    @NonNull
     fun getQuantityString(@PluralsRes resId: Int, quantity: Int, vararg formatArgs: Any?): String {
         return resources.getQuantityString(resId, quantity, *formatArgs)
     }

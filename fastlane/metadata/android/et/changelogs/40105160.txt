@@ -1,2 +1,0 @@
-Põhilised muutused selles versioonis: jutulõngad on vaikimisi kasutusel.
-Kogu ingliskeelne muudatuste logi: https://github.com/vector-im/element-android/releases

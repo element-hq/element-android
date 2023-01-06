@@ -59,7 +59,7 @@ class SharedSecureStorageActivity :
 
         views.toolbar.visibility = View.GONE
 
-        viewModel.observeViewEvents { onViewEvents(it) }
+        viewModel.observeViewEvents { observeViewEvents(it) }
 
         viewModel.onEach { renderState(it) }
     }
@@ -85,7 +85,7 @@ class SharedSecureStorageActivity :
         showFragment(fragment)
     }
 
-    private fun onViewEvents(it: SharedSecureStorageViewEvent) {
+    private fun observeViewEvents(it: SharedSecureStorageViewEvent?) {
         when (it) {
             is SharedSecureStorageViewEvent.Dismiss -> {
                 finish()

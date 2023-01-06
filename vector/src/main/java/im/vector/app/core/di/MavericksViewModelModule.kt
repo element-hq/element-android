@@ -84,7 +84,6 @@ import im.vector.app.features.roomprofile.banned.RoomBannedMemberListViewModel
 import im.vector.app.features.roomprofile.members.RoomMemberListViewModel
 import im.vector.app.features.roomprofile.notifications.RoomNotificationSettingsViewModel
 import im.vector.app.features.roomprofile.permissions.RoomPermissionsViewModel
-import im.vector.app.features.roomprofile.polls.RoomPollsViewModel
 import im.vector.app.features.roomprofile.settings.RoomSettingsViewModel
 import im.vector.app.features.roomprofile.settings.joinrule.advanced.RoomJoinRuleChooseRestrictedViewModel
 import im.vector.app.features.roomprofile.uploads.RoomUploadsViewModel
@@ -698,9 +697,4 @@ interface MavericksViewModelModule {
     @IntoMap
     @MavericksViewModelKey(SetLinkViewModel::class)
     fun setLinkViewModelFactory(factory: SetLinkViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
-
-    @Binds
-    @IntoMap
-    @MavericksViewModelKey(RoomPollsViewModel::class)
-    fun roomPollsViewModelFactory(factory: RoomPollsViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 }

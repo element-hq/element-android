@@ -258,7 +258,7 @@ internal class RoomSyncHandler @Inject constructor(
                     root = eventEntity
                 }
                 // Give info to crypto module
-                cryptoService.onStateEvent(roomId, event, aggregator.cryptoStoreAggregator)
+                cryptoService.onStateEvent(roomId, event)
                 roomMemberEventHandler.handle(realm, roomId, event, isInitialSync, aggregator)
             }
         }
@@ -376,15 +376,8 @@ internal class RoomSyncHandler @Inject constructor(
         roomEntity.chunks.clearWith { it.deleteOnCascade(deleteStateEvents = true, canDeleteRoot = true) }
         roomTypingUsersHandler.handle(realm, roomId, null)
         roomChangeMembershipStateDataSource.setMembershipFromSync(roomId, Membership.LEAVE)
-        roomSummaryUpdater.update(
-                realm,
-                roomId,
-                membership,
-                roomSync.summary,
-                roomSync.unreadNotifications,
-                roomSync.unreadThreadNotifications,
-                aggregator = aggregator,
-        )
+        roomSummaryUpdater.update(realm, roomId, membership, roomSync.summary,
+                roomSync.unreadNotifications, roomSync.unreadThreadNotifications, aggregator = aggregator)
         return roomEntity
     }
 
@@ -430,9 +423,7 @@ internal class RoomSyncHandler @Inject constructor(
             val isInitialSync = insertType == EventInsertType.INITIAL_SYNC
 
             eventIds.add(event.eventId)
-            if (!isInitialSync) {
-                liveEventService.get().dispatchLiveEventReceived(event, roomId)
-            }
+            liveEventService.get().dispatchLiveEventReceived(event, roomId, isInitialSync)
 
             if (event.isEncrypted() && !isInitialSync) {
                 try {
@@ -495,7 +486,7 @@ internal class RoomSyncHandler @Inject constructor(
                 }
             }
             // Give info to crypto module
-            cryptoService.onLiveEvent(roomEntity.roomId, event, isInitialSync, aggregator.cryptoStoreAggregator)
+            cryptoService.onLiveEvent(roomEntity.roomId, event, isInitialSync)
 
             // Try to remove local echo
             event.unsignedData?.transactionId?.also { txId ->

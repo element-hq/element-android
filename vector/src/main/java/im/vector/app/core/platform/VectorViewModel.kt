@@ -18,16 +18,15 @@ package im.vector.app.core.platform
 
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MavericksViewModel
-import im.vector.app.core.utils.EventQueue
-import im.vector.app.core.utils.SharedEvents
+import im.vector.app.core.utils.DataSource
+import im.vector.app.core.utils.PublishDataSource
 
 abstract class VectorViewModel<S : MavericksState, VA : VectorViewModelAction, VE : VectorViewEvents>(initialState: S) :
         MavericksViewModel<S>(initialState) {
 
     // Used to post transient events to the View
-    protected val _viewEvents = EventQueue<VE>(capacity = 64)
-    val viewEvents: SharedEvents<VE>
-        get() = _viewEvents
+    protected val _viewEvents = PublishDataSource<VE>()
+    val viewEvents: DataSource<VE> = _viewEvents
 
     abstract fun handle(action: VA)
 }

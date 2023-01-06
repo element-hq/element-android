@@ -89,7 +89,6 @@ import org.matrix.android.sdk.internal.crypto.model.SessionInfo
 import org.matrix.android.sdk.internal.crypto.model.toRest
 import org.matrix.android.sdk.internal.crypto.repository.WarnOnUnknownDeviceRepository
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
-import org.matrix.android.sdk.internal.crypto.store.db.CryptoStoreAggregator
 import org.matrix.android.sdk.internal.crypto.tasks.DeleteDeviceTask
 import org.matrix.android.sdk.internal.crypto.tasks.GetDeviceInfoTask
 import org.matrix.android.sdk.internal.crypto.tasks.GetDevicesTask
@@ -193,21 +192,21 @@ internal class DefaultCryptoService @Inject constructor(
     private val isStarting = AtomicBoolean(false)
     private val isStarted = AtomicBoolean(false)
 
-    fun onStateEvent(roomId: String, event: Event, cryptoStoreAggregator: CryptoStoreAggregator?) {
+    fun onStateEvent(roomId: String, event: Event) {
         when (event.type) {
             EventType.STATE_ROOM_ENCRYPTION -> onRoomEncryptionEvent(roomId, event)
             EventType.STATE_ROOM_MEMBER -> onRoomMembershipEvent(roomId, event)
-            EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event, cryptoStoreAggregator)
+            EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
         }
     }
 
-    fun onLiveEvent(roomId: String, event: Event, isInitialSync: Boolean, cryptoStoreAggregator: CryptoStoreAggregator?) {
+    fun onLiveEvent(roomId: String, event: Event, isInitialSync: Boolean) {
         // handle state events
         if (event.isStateEvent()) {
             when (event.type) {
                 EventType.STATE_ROOM_ENCRYPTION -> onRoomEncryptionEvent(roomId, event)
                 EventType.STATE_ROOM_MEMBER -> onRoomMembershipEvent(roomId, event)
-                EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event, cryptoStoreAggregator)
+                EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
             }
         }
 
@@ -431,10 +430,8 @@ internal class DefaultCryptoService @Inject constructor(
      * A sync response has been received.
      *
      * @param syncResponse the syncResponse
-     * @param cryptoStoreAggregator data aggregated during the sync response treatment to store
      */
-    fun onSyncCompleted(syncResponse: SyncResponse, cryptoStoreAggregator: CryptoStoreAggregator) {
-        cryptoStore.storeData(cryptoStoreAggregator)
+    fun onSyncCompleted(syncResponse: SyncResponse) {
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             runCatching {
                 if (syncResponse.deviceLists != null) {
@@ -1001,26 +998,15 @@ internal class DefaultCryptoService @Inject constructor(
         }
     }
 
-    private fun onRoomHistoryVisibilityEvent(roomId: String, event: Event, cryptoStoreAggregator: CryptoStoreAggregator?) {
+    private fun onRoomHistoryVisibilityEvent(roomId: String, event: Event) {
         if (!event.isStateEvent()) return
         val eventContent = event.content.toModel<RoomHistoryVisibilityContent>()
         val historyVisibility = eventContent?.historyVisibility
         if (historyVisibility == null) {
-            if (cryptoStoreAggregator != null) {
-                cryptoStoreAggregator.setShouldShareHistoryData[roomId] = false
-            } else {
-                // Store immediately
-                cryptoStore.setShouldShareHistory(roomId, false)
-            }
+            cryptoStore.setShouldShareHistory(roomId, false)
         } else {
-            if (cryptoStoreAggregator != null) {
-                cryptoStoreAggregator.setShouldEncryptForInvitedMembersData[roomId] = historyVisibility != RoomHistoryVisibility.JOINED
-                cryptoStoreAggregator.setShouldShareHistoryData[roomId] = historyVisibility.shouldShareHistory()
-            } else {
-                // Store immediately
-                cryptoStore.setShouldEncryptForInvitedMembers(roomId, historyVisibility != RoomHistoryVisibility.JOINED)
-                cryptoStore.setShouldShareHistory(roomId, historyVisibility.shouldShareHistory())
-            }
+            cryptoStore.setShouldEncryptForInvitedMembers(roomId, historyVisibility != RoomHistoryVisibility.JOINED)
+            cryptoStore.setShouldShareHistory(roomId, historyVisibility.shouldShareHistory())
         }
     }
 
