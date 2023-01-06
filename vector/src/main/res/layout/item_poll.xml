@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:foreground="?selectableItemBackground">
+
+    <TextView
+        android:id="@+id/pollDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:textAppearance="@style/TextAppearance.Vector.Caption"
+        android:textColor="?vctr_content_tertiary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="28/06/22" />
+
+    <ImageView
+        android:id="@+id/pollIcon"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginTop="12dp"
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_attachment_poll"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pollDate"
+        app:tint="?vctr_content_secondary"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/pollTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="9dp"
+        android:textAppearance="@style/TextAppearance.Vector.Subtitle"
+        android:textColor="?vctr_content_primary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/pollIcon"
+        app:layout_constraintTop_toBottomOf="@id/pollDate"
+        tools:text="Which sport should the pupils do this year?" />
+
+    <LinearLayout
+        android:id="@+id/pollWinnerOptionsContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:divider="@drawable/divider_poll_options"
+        android:orientation="vertical"
+        android:showDividers="middle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pollTitle" />
+
+    <TextView
+        android:id="@+id/pollTotalVotes"
+        style="@style/Widget.Vector.TextView.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pollWinnerOptionsContainer"
+        tools:text="@sample/poll.json/totalVotes" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -2338,6 +2338,7 @@
         <item quantity="one">"One person"</item>
         <item quantity="other">"%1$d people"</item>
     </plurals>
+    <string name="room_profile_section_more_polls">Poll history</string>
     <string name="room_profile_section_more_uploads">Uploads</string>
     <string name="room_profile_section_more_leave">Leave Room</string>
     <string name="direct_room_profile_section_more_leave">Leave</string>
@@ -3193,6 +3194,10 @@
     <string name="open_poll_option_description">Voters see results as soon as they have voted</string>
     <string name="closed_poll_option_title">Closed poll</string>
     <string name="closed_poll_option_description">Results are only revealed when you end the poll</string>
+    <string name="room_polls_active">Active polls</string>
+    <string name="room_polls_active_no_item">There are no active polls in this room</string>
+    <string name="room_polls_ended">Past polls</string>
+    <string name="room_polls_ended_no_item">There are no past polls in this room</string>
 
     <!-- Location -->
     <string name="location_activity_title_static_sharing">Share location</string>
@@ -3506,4 +3511,7 @@
     <string name="message_reply_to_sender_sent_video">sent a video.</string>
     <string name="message_reply_to_sender_sent_sticker">sent a sticker.</string>
     <string name="message_reply_to_sender_created_poll">created a poll.</string>
+
+    <string name="settings_access_token">Access Token</string>
+    <string name="settings_access_token_summary">Your access token gives full access to your account. Do not share it with anyone.</string>
 </resources>

@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.internal.network.parsing
 
-import androidx.annotation.Nullable
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.JsonReader
 import com.squareup.moshi.JsonWriter
@@ -32,14 +31,12 @@ internal interface CheckNumberType {
 
     companion object {
         val JSON_ADAPTER_FACTORY = object : JsonAdapter.Factory {
-            @Nullable
             override fun create(type: Type, annotations: Set<Annotation>, moshi: Moshi): JsonAdapter<*>? {
                 if (type !== Any::class.java) {
                     return null
                 }
                 val delegate: JsonAdapter<Any> = moshi.nextAdapter(this, Any::class.java, emptySet())
                 return object : JsonAdapter<Any?>() {
-                    @Nullable
                     @Throws(IOException::class)
                     override fun fromJson(reader: JsonReader): Any? {
                         return if (reader.peek() !== JsonReader.Token.NUMBER) {

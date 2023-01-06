@@ -25,6 +25,7 @@ import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorPreferenceCategory
 import im.vector.app.core.preference.VectorSwitchPreference
+import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.home.NightlyProxy
 import im.vector.app.features.rageshake.RageShake
@@ -64,6 +65,14 @@ class VectorSettingsAdvancedSettingsFragment :
     override fun bindPref() {
         setupRageShakeSection()
         setupNightlySection()
+        setupDevToolsSection()
+    }
+
+    private fun setupDevToolsSection() {
+        findPreference<VectorPreference>("SETTINGS_ACCESS_TOKEN")?.setOnPreferenceClickListener {
+            copyToClipboard(requireActivity(), session.sessionParams.credentials.accessToken)
+            true
+        }
     }
 
     private fun setupRageShakeSection() {
