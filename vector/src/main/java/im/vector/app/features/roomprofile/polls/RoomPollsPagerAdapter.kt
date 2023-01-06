@@ -25,12 +25,13 @@ class RoomPollsPagerAdapter(
         private val fragment: Fragment
 ) : FragmentStateAdapter(fragment) {
 
-    override fun getItemCount() = 2
+    override fun getItemCount() = RoomPollsType.values().size
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            0 -> instantiateFragment(RoomActivePollsFragment::class.java.name)
-            else -> instantiateFragment(RoomEndedPollsFragment::class.java.name)
+            RoomPollsType.ACTIVE.ordinal -> instantiateFragment(RoomActivePollsFragment::class.java.name)
+            RoomPollsType.ENDED.ordinal -> instantiateFragment(RoomEndedPollsFragment::class.java.name)
+            else -> throw IllegalArgumentException("position should be between 0 and ${itemCount - 1}, while it was $position")
         }
     }
 

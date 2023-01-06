@@ -18,7 +18,7 @@ package im.vector.app.features.roomprofile.polls.active
 
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.features.roomprofile.polls.RoomPollsFilterType
+import im.vector.app.features.roomprofile.polls.RoomPollsType
 import im.vector.app.features.roomprofile.polls.list.RoomPollsListFragment
 
 @AndroidEntryPoint
@@ -28,7 +28,7 @@ class RoomActivePollsFragment : RoomPollsListFragment() {
         return getString(R.string.room_polls_active_no_item)
     }
 
-    override fun getRoomPollsFilter(): RoomPollsFilterType {
-        return RoomPollsFilterType.ACTIVE
+    override fun getRoomPollsType(): RoomPollsType {
+        return RoomPollsType.ACTIVE
     }
 }

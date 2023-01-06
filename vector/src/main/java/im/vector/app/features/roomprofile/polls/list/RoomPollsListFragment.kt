@@ -28,7 +28,7 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentRoomPollsListBinding
 import im.vector.app.features.roomprofile.polls.PollSummary
-import im.vector.app.features.roomprofile.polls.RoomPollsFilterType
+import im.vector.app.features.roomprofile.polls.RoomPollsType
 import im.vector.app.features.roomprofile.polls.RoomPollsViewModel
 import timber.log.Timber
 import javax.inject.Inject
@@ -53,7 +53,7 @@ abstract class RoomPollsListFragment :
 
     abstract fun getEmptyListTitle(): String
 
-    abstract fun getRoomPollsFilter(): RoomPollsFilterType
+    abstract fun getRoomPollsType(): RoomPollsType
 
     private fun setupList() {
         roomPollsController.listener = this
@@ -72,9 +72,9 @@ abstract class RoomPollsListFragment :
     }
 
     override fun invalidate() = withState(viewModel) { viewState ->
-        when (getRoomPollsFilter()) {
-            RoomPollsFilterType.ACTIVE -> renderList(viewState.polls.filterIsInstance(PollSummary.ActivePoll::class.java))
-            RoomPollsFilterType.ENDED -> renderList(viewState.polls.filterIsInstance(PollSummary.EndedPoll::class.java))
+        when (getRoomPollsType()) {
+            RoomPollsType.ACTIVE -> renderList(viewState.polls.filterIsInstance(PollSummary.ActivePoll::class.java))
+            RoomPollsType.ENDED -> renderList(viewState.polls.filterIsInstance(PollSummary.EndedPoll::class.java))
         }
     }
 

@@ -66,8 +66,8 @@ class RoomPollsFragment : VectorBaseFragment<FragmentRoomPollsBinding>() {
 
         tabLayoutMediator = TabLayoutMediator(views.roomPollsTabs, views.roomPollsViewPager) { tab, position ->
             when (position) {
-                0 -> tab.text = getString(R.string.room_polls_active)
-                1 -> tab.text = getString(R.string.room_polls_ended)
+                RoomPollsType.ACTIVE.ordinal -> tab.text = getString(R.string.room_polls_active)
+                RoomPollsType.ENDED.ordinal -> tab.text = getString(R.string.room_polls_ended)
             }
         }.also { it.attach() }
     }

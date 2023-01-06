@@ -18,7 +18,7 @@ package im.vector.app.features.roomprofile.polls.ended
 
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.features.roomprofile.polls.RoomPollsFilterType
+import im.vector.app.features.roomprofile.polls.RoomPollsType
 import im.vector.app.features.roomprofile.polls.list.RoomPollsListFragment
 
 @AndroidEntryPoint
@@ -28,7 +28,7 @@ class RoomEndedPollsFragment : RoomPollsListFragment() {
         return getString(R.string.room_polls_ended_no_item)
     }
 
-    override fun getRoomPollsFilter(): RoomPollsFilterType {
-        return RoomPollsFilterType.ENDED
+    override fun getRoomPollsType(): RoomPollsType {
+        return RoomPollsType.ENDED
     }
 }
