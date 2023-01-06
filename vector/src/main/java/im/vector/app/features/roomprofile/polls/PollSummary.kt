@@ -16,10 +16,24 @@
 
 package im.vector.app.features.roomprofile.polls
 
+import im.vector.app.features.home.room.detail.timeline.item.PollOptionViewState
+
 sealed interface PollSummary {
+    val id: String
+    val creationTimestamp: Long
+    val title: String
+
     data class ActivePoll(
-            val id: String,
-            val creationTimestamp: Long,
-            val title: String,
+            override val id: String,
+            override val creationTimestamp: Long,
+            override val title: String,
+    ) : PollSummary
+
+    data class EndedPoll(
+            override val id: String,
+            override val creationTimestamp: Long,
+            override val title: String,
+            val totalVotes: Int,
+            val winnerOptions: List<PollOptionViewState.PollEnded>,
     ) : PollSummary
 }

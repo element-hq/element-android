@@ -3193,6 +3193,8 @@
     <string name="closed_poll_option_description">Results are only revealed when you end the poll</string>
     <string name="room_polls_active">Active polls</string>
     <string name="room_polls_active_no_item">There are no active polls in this room</string>
+    <string name="room_polls_ended">Past polls</string>
+    <string name="room_polls_ended_no_item">There are no past polls in this room</string>
 
     <!-- Location -->
     <string name="location_activity_title_static_sharing">Share location</string>

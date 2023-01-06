@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.roomprofile.polls.active
+package im.vector.app.features.roomprofile.polls.ended
 
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
@@ -22,13 +22,13 @@ import im.vector.app.features.roomprofile.polls.RoomPollsType
 import im.vector.app.features.roomprofile.polls.list.RoomPollsListFragment
 
 @AndroidEntryPoint
-class RoomActivePollsFragment : RoomPollsListFragment() {
+class RoomEndedPollsFragment : RoomPollsListFragment() {
 
     override fun getEmptyListTitle(): String {
-        return getString(R.string.room_polls_active_no_item)
+        return getString(R.string.room_polls_ended_no_item)
     }
 
     override fun getRoomPollsType(): RoomPollsType {
-        return RoomPollsType.ACTIVE
+        return RoomPollsType.ENDED
     }
 }
