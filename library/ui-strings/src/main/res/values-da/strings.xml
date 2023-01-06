@@ -39,7 +39,6 @@
     <string name="medium_phone_number">Telefonnummer</string>
     <string name="room_displayname_room_invite">Invitation til rum</string>
     <string name="room_displayname_two_members">%1$s og %2$s</string>
-
     <string name="room_displayname_empty_room">Tomt rum</string>
     <string name="light_theme">Lyst Tema</string>
     <string name="dark_theme">Mørkt Tema</string>
@@ -82,7 +81,6 @@
     <string name="matrix_only_filter">Kun Matrix kontakter</string>
     <string name="no_result_placeholder">Ingen resultater</string>
     <string name="rooms_header">Rum</string>
-
     <string name="send_bug_report_include_logs">Send logfiler</string>
     <string name="send_bug_report_include_crash_logs">Send crashlogfiler</string>
     <string name="send_bug_report_include_screenshot">Send screenshot</string>
@@ -110,10 +108,8 @@
     <string name="auth_invalid_email">Dette ligner ikke en gyldig emailadresse</string>
     <string name="auth_email_already_defined">Den emailadresse er allerede i brug.</string>
     <string name="auth_forgot_password">Glemt adgangskode?</string>
-
     <string name="auth_recaptcha_message">Denne Home Server vil gerne være sikker på du ikke er en robot</string>
     <string name="auth_reset_password_error_unauthorized">Kunne ikke verificere emailadresse: vær sikker på du klikkede på linket i emailen</string>
-
     <string name="login_error_invalid_home_server">Skriv gyldig URL</string>
     <string name="login_error_bad_json">Fejlformet JSON</string>
     <string name="login_error_not_json">Indeholdt ikke gyldig JSON</string>
@@ -134,15 +130,10 @@
     <string name="call_in_progress">Opkald I Gang</string>
     <string name="call_error_user_not_responding">Den anden side tog den ikke.</string>
     <string name="permissions_rationale_popup_title">Information</string>
-
-
     <string name="permissions_rationale_msg_record_audio">${app_name} skal bruge tilladelse til at bruge din mikrofon for at lave lydopkald.</string>
-
     <string name="permissions_rationale_msg_camera_and_audio">${app_name} skal bruge tilladelse til at bruge dit kamera og din mikrofon for at lave videoopkald.
 
 Giv venligst tilladelse ved næste pop-up for at lave opkaldet.</string>
-
-
     <string name="yes">JA</string>
     <string name="no">NEJ</string>
     <string name="_continue">Fortsæt</string>
@@ -150,7 +141,6 @@ Giv venligst tilladelse ved næste pop-up for at lave opkaldet.</string>
     <string name="action_join">Forbind</string>
     <string name="action_reject">Afvis</string>
     <string name="room_jump_to_first_unread">Spring til første ulæste besked.</string>
-
     <string name="room_participants_leave_prompt_title">Forlad rum</string>
     <string name="room_participants_leave_prompt_msg">Er du sikker på at du vil forlade rummet?</string>
     <string name="room_participants_header_direct_chats">DIREKTE CHATS</string>
@@ -163,7 +153,7 @@ Giv venligst tilladelse ved næste pop-up for at lave opkaldet.</string>
     <string name="room_participants_power_level_prompt">Du vil ikke kunne omgøre denne ændring da du forfremmer brugeren til at have samme magt niveau som dig selv.
 Er du sikker?</string>
     <string name="room_one_user_is_typing">%s skriver…</string>
-    <string name="room_two_users_are_typing">"%1$s &amp; %2$s  skriver…"</string>
+    <string name="room_two_users_are_typing">%1$s &amp; %2$s skriver…</string>
     <string name="room_many_users_are_typing">%1$s, %2$s og andre skriver…</string>
     <string name="room_do_not_have_permission_to_post">Du har ikke tilladelse til at skrive i dette rum</string>
     <string name="ssl_trust">Stol på</string>
@@ -186,7 +176,6 @@ Er du sikker?</string>
         <item quantity="other">%d medlemsændringer</item>
     </plurals>
     <string name="list_members">Medlemsoversigt</string>
-
     <plurals name="room_title_members">
         <item quantity="one">1 medlem</item>
         <item quantity="other">%d medlemmer</item>
@@ -199,8 +188,6 @@ Er du sikker?</string>
     <string name="search_hint">Søg</string>
     <string name="search_members_hint">Filtrer medlemmer i rum</string>
     <string name="search_no_results">Ingen resultater</string>
-
-
     <string name="room_settings_all_messages">Alle meddelelser</string>
     <string name="room_settings_add_homescreen_shortcut">Opret genvej på startskærm</string>
     <string name="settings_profile_picture">Profilbillede</string>
