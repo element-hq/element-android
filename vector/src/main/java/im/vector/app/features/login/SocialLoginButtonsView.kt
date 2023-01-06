@@ -78,7 +78,8 @@ class SocialLoginButtonsView @JvmOverloads constructor(context: Context, attrs: 
                 transformationMethod = null
                 textAlignment = View.TEXT_ALIGNMENT_CENTER
             }.let {
-                it.text = if (hasOidcCompatibilityFlow) context.getString(R.string.login_continue) else getButtonTitle(context.getString(R.string.login_social_sso))
+                it.text = if (hasOidcCompatibilityFlow) context.getString(R.string.login_continue)
+                    else getButtonTitle(context.getString(R.string.login_social_sso))
                 it.textAlignment = View.TEXT_ALIGNMENT_CENTER
                 it.setOnClickListener {
                     listener?.onProviderSelected(null)
@@ -175,6 +176,7 @@ fun SocialLoginButtonsView.render(loginMode: LoginMode, mode: SocialLoginButtons
         SsoState.Fallback -> null
         is SsoState.IdentityProviders -> state.providers.sorted()
     }
-    this.hasOidcCompatibilityFlow = (loginMode is LoginMode.Sso && loginMode.hasOidcCompatibilityFlow) || (loginMode is LoginMode.SsoAndPassword && loginMode.hasOidcCompatibilityFlow)
+    this.hasOidcCompatibilityFlow = (loginMode is LoginMode.Sso && loginMode.hasOidcCompatibilityFlow)
+            || (loginMode is LoginMode.SsoAndPassword && loginMode.hasOidcCompatibilityFlow)
     this.listener = SocialLoginButtonsView.InteractionListener { listener(it) }
 }

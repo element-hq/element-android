@@ -53,7 +53,10 @@ class StartAuthenticationFlowUseCase @Inject constructor(
     )
 
     private fun LoginFlowResult.findPreferredLoginMode() = when {
-        supportedLoginTypes.containsAllItems(LoginFlowTypes.SSO, LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(ssoIdentityProviders.toSsoState(), hasOidcCompatibilityFlow)
+        supportedLoginTypes.containsAllItems(LoginFlowTypes.SSO, LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(
+                ssoIdentityProviders.toSsoState(),
+                hasOidcCompatibilityFlow
+        )
         supportedLoginTypes.contains(LoginFlowTypes.SSO) -> LoginMode.Sso(ssoIdentityProviders.toSsoState(), hasOidcCompatibilityFlow)
         supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.Password
         else -> LoginMode.Unsupported

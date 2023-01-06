@@ -57,7 +57,7 @@ data class WellKnown(
         val integrations: JsonDict? = null,
 
         /**
-         * For delegation of auth via OIDC as per [MSC2965](https://github.com/matrix-org/matrix-spec-proposals/pull/2965)
+         * For delegation of auth via OIDC as per [MSC2965](https://github.com/matrix-org/matrix-spec-proposals/pull/2965).
          */
         @Json(name = "org.matrix.msc2965.authentication")
         val unstableDelegatedAuthConfig: DelegatedAuthConfig? = null,
