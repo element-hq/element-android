@@ -88,6 +88,14 @@ fi
 printf "OK\n"
 
 printf "\n================================================================================\n"
+printf "Ensuring main and develop branches are up to date...\n"
+
+git checkout main
+git pull
+git checkout develop
+git pull
+
+printf "\n================================================================================\n"
 # Guessing version to propose a default version
 versionMajorCandidate=`grep "ext.versionMajor" ./vector-app/build.gradle | cut  -d " " -f3`
 versionMinorCandidate=`grep "ext.versionMinor" ./vector-app/build.gradle | cut  -d " " -f3`
@@ -102,14 +110,6 @@ versionMajor=`echo ${version} | cut  -d "." -f1`
 versionMinor=`echo ${version} | cut  -d "." -f2`
 versionPatch=`echo ${version} | cut  -d "." -f3`
 nextPatchVersion=$((versionPatch + 2))
-
-printf "\n================================================================================\n"
-printf "Ensuring main and develop branches are up to date...\n"
-
-git checkout main
-git pull
-git checkout develop
-git pull
 
 printf "\n================================================================================\n"
 printf "Starting the release ${version}\n"
@@ -190,6 +190,9 @@ yes | towncrier build --version "v${version}"
 printf "\n================================================================================\n"
 read -p "Check the file CHANGES.md consistency. It's possible to reorder items (most important changes first) or change their section if relevant. Also an opportunity to fix some typo, or rewrite things. Do not commit your change. Press enter when it's done."
 
+# Get the changes to use it to create the GitHub release
+changelogUrlEncoded=`git diff CHANGES.md | grep ^+ | tail -n +2 | cut -c2- | jq -sRr @uri | sed s/\(/%28/g | sed s/\)/%29/g`
+
 printf "\n================================================================================\n"
 printf "Committing...\n"
 git commit -a -m "Changelog for version ${version}"
@@ -263,7 +266,7 @@ else
 fi
 
 printf "\n================================================================================\n"
-printf "Wait for the GitHub action https://github.com/vector-im/element-android/actions/workflows/build.yml?query=branch%3Amain to build the 'main' branch.\n"
+printf "Wait for the GitHub action https://github.com/vector-im/element-android/actions/workflows/build.yml?query=branch%%3Amain to build the 'main' branch.\n"
 read -p "After GHA is finished, please enter the artifact URL (for 'vector-gplay-release-unsigned'): " artifactUrl
 
 printf "\n================================================================================\n"
@@ -354,10 +357,15 @@ apkPath="${targetPath}/vector-gplay-arm64-v8a-release-signed.apk"
 adb -d install ${apkPath}
 
 read -p "Please run the APK on your phone to check that the upgrade went well (no init sync, etc.). Press enter when it's done."
-# TODO Get the block to copy from towncrier earlier (be may be edited by the release manager)?
-read -p "Create the release on gitHub from the tag https://github.com/vector-im/element-android/tags, copy paste the block from the file CHANGES.md. Press enter when it's done."
 
-read -p "Add the 4 signed APKs to the GitHub release. They are located at ${targetPath}. Press enter when it's done."
+printf "\n================================================================================\n"
+githubCreateReleaseLink="https://github.com/vector-im/element-android/releases/new?tag=v${version}&title=Element%%20Android%%20v${version}&body=${changelogUrlEncoded}"
+printf "Creating the release on gitHub.\n"
+printf "Open this link: ${githubCreateReleaseLink}\n"
+printf "Then\n"
+printf " - click on the 'Generate releases notes' button\n"
+printf " - Add the 4 signed APKs to the GitHub release. They are located at ${targetPath}\n"
+read -p ". Press enter when it's done. "
 
 printf "\n================================================================================\n"
 printf "Message for the Android internal room:\n\n"
