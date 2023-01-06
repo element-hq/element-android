@@ -22,6 +22,7 @@ import io.realm.RealmResults
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.EventInsertEntity
@@ -34,7 +35,7 @@ import javax.inject.Inject
 
 internal class EventInsertLiveObserver @Inject constructor(
         @SessionDatabase realmConfiguration: RealmConfiguration,
-        private val processors: Set<@JvmSuppressWildcards EventInsertLiveProcessor>
+        private val processors: Set<@JvmSuppressWildcards EventInsertLiveProcessor>,
 ) :
         RealmLiveEntityObserver<EventInsertEntity>(realmConfiguration) {
 
@@ -51,6 +52,7 @@ internal class EventInsertLiveObserver @Inject constructor(
                     return@withLock
                 }
                 val idsToDeleteAfterProcess = ArrayList<String>()
+                val idsOfEncryptedEvents = ArrayList<String>()
                 val filteredEvents = ArrayList<EventInsertEntity>(results.size)
                 Timber.v("EventInsertEntity updated with ${results.size} results in db")
                 results.forEach {
@@ -64,7 +66,11 @@ internal class EventInsertLiveObserver @Inject constructor(
                         }
                         filteredEvents.add(copiedEvent)
                     }
-                    idsToDeleteAfterProcess.add(it.eventId)
+                    if (it.eventType == EventType.ENCRYPTED) {
+                        idsOfEncryptedEvents.add(it.eventId)
+                    } else {
+                        idsToDeleteAfterProcess.add(it.eventId)
+                    }
                 }
                 awaitTransaction(realmConfiguration) { realm ->
                     Timber.v("##Transaction: There are ${filteredEvents.size} events to process ")
@@ -86,6 +92,12 @@ internal class EventInsertLiveObserver @Inject constructor(
                             .`in`(EventInsertEntityFields.EVENT_ID, idsToDeleteAfterProcess.toTypedArray())
                             .findAll()
                             .deleteAllFromRealm()
+
+                    // make the encrypted events not processable: they will be processed again after decryption
+                    realm.where(EventInsertEntity::class.java)
+                            .`in`(EventInsertEntityFields.EVENT_ID, idsOfEncryptedEvents.toTypedArray())
+                            .findAll()
+                            .forEach { it.canBeProcessed = false }
                 }
                 processors.forEach { it.onPostProcess() }
             }

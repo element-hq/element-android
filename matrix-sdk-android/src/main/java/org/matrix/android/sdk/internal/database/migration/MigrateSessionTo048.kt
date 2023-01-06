@@ -18,21 +18,15 @@ package org.matrix.android.sdk.internal.database.migration
 
 import io.realm.DynamicRealm
 import org.matrix.android.sdk.internal.database.model.PollResponseAggregatedSummaryEntityFields
-import org.matrix.android.sdk.internal.database.model.UnableToDecryptEventEntityFields
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
 /**
  * Adding a new field in poll summary to keep track of non decrypted related events.
- * Adding a new entity UnableToDecryptEventEntity.
  */
-internal class MigrateSessionTo048(realm: DynamicRealm) : RealmMigrator(realm, 47) {
+internal class MigrateSessionTo048(realm: DynamicRealm) : RealmMigrator(realm, 48) {
 
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.get("PollResponseAggregatedSummaryEntity")
                 ?.addRealmListField(PollResponseAggregatedSummaryEntityFields.ENCRYPTED_RELATED_EVENT_IDS.`$`, String::class.java)
-
-        realm.schema.create("UnableToDecryptEventEntity")
-                ?.addField(UnableToDecryptEventEntityFields.EVENT_ID, String::class.java)
-                ?.setRequired(UnableToDecryptEventEntityFields.EVENT_ID, true)
     }
 }

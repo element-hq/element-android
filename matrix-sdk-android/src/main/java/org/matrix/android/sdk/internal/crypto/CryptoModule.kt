@@ -62,9 +62,7 @@ import org.matrix.android.sdk.internal.crypto.store.db.RealmCryptoStore
 import org.matrix.android.sdk.internal.crypto.store.db.RealmCryptoStoreMigration
 import org.matrix.android.sdk.internal.crypto.store.db.RealmCryptoStoreModule
 import org.matrix.android.sdk.internal.crypto.tasks.ClaimOneTimeKeysForUsersDeviceTask
-import org.matrix.android.sdk.internal.crypto.tasks.CreateUnableToDecryptEventEntityTask
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultClaimOneTimeKeysForUsersDevice
-import org.matrix.android.sdk.internal.crypto.tasks.DefaultCreateUnableToDecryptEventEntityTask
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultDeleteDeviceTask
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultDownloadKeysForUsers
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultEncryptEventTask
@@ -255,7 +253,4 @@ internal abstract class CryptoModule {
 
     @Binds
     abstract fun bindSendEventTask(task: DefaultSendEventTask): SendEventTask
-
-    @Binds
-    abstract fun bindCreateUnableToDecryptEventEntityTask(task: DefaultCreateUnableToDecryptEventEntityTask): CreateUnableToDecryptEventEntityTask
 }

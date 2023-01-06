@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.test.fakes
 
 import io.mockk.coEvery
-import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.realm.Realm
@@ -36,10 +35,5 @@ internal class FakeRealmConfiguration {
         coEvery { awaitTransaction(instance, any<(Realm) -> T>()) } answers {
             secondArg<(Realm) -> T>().invoke(realm)
         }
-    }
-
-    fun givenGetRealmInstance(realm: Realm) {
-        mockkStatic(Realm::class)
-        every { Realm.getInstance(instance) } returns realm
     }
 }

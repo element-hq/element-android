@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2023 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.database.model
+package org.matrix.android.sdk.test.fakes.internal
 
-import io.realm.RealmObject
+import io.mockk.mockk
+import org.matrix.android.sdk.internal.session.room.EventEditValidator
 
-/**
- * This class is used to get notification on new UTD events. Since these events cannot be processed
- * in EventInsertEntity, we should introduce a dedicated entity for that.
- */
-internal open class UnableToDecryptEventEntity(
-        var eventId: String = "",
-) : RealmObject()
+internal class FakeEventEditValidator {
+
+    val instance: EventEditValidator = mockk()
+}

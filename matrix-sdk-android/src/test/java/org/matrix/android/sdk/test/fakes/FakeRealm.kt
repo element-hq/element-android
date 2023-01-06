@@ -23,7 +23,6 @@ import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
 import io.realm.Realm
-import io.realm.Realm.Transaction
 import io.realm.RealmModel
 import io.realm.RealmObject
 import io.realm.RealmQuery
@@ -42,13 +41,6 @@ internal class FakeRealm {
 
     inline fun <reified T : RealmModel> verifyInsertOrUpdate(crossinline verification: MockKVerificationScope.() -> T) {
         verify { instance.insertOrUpdate(verification()) }
-    }
-
-    fun givenExecuteTransactionAsync() {
-        every { instance.executeTransactionAsync(any()) } answers {
-            firstArg<Transaction>().execute(instance)
-            mockk()
-        }
     }
 }
 

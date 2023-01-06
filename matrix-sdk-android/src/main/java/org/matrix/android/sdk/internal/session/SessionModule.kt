@@ -50,7 +50,6 @@ import org.matrix.android.sdk.internal.crypto.tasks.RedactEventTask
 import org.matrix.android.sdk.internal.database.EventInsertLiveObserver
 import org.matrix.android.sdk.internal.database.RealmSessionProvider
 import org.matrix.android.sdk.internal.database.SessionRealmConfigurationFactory
-import org.matrix.android.sdk.internal.database.UnableToDecryptEventLiveObserver
 import org.matrix.android.sdk.internal.di.Authenticated
 import org.matrix.android.sdk.internal.di.CacheDirectory
 import org.matrix.android.sdk.internal.di.DeviceId
@@ -85,7 +84,6 @@ import org.matrix.android.sdk.internal.session.identity.DefaultIdentityService
 import org.matrix.android.sdk.internal.session.integrationmanager.IntegrationManager
 import org.matrix.android.sdk.internal.session.openid.DefaultOpenIdService
 import org.matrix.android.sdk.internal.session.permalinks.DefaultPermalinkService
-import org.matrix.android.sdk.internal.session.room.EncryptedEventRelationsAggregationProcessor
 import org.matrix.android.sdk.internal.session.room.EventRelationsAggregationProcessor
 import org.matrix.android.sdk.internal.session.room.aggregation.poll.DefaultPollAggregationProcessor
 import org.matrix.android.sdk.internal.session.room.aggregation.poll.PollAggregationProcessor
@@ -350,10 +348,6 @@ internal abstract class SessionModule {
 
     @Binds
     @IntoSet
-    abstract fun bindUnableToDecryptEventObserver(observer: UnableToDecryptEventLiveObserver): SessionLifecycleObserver
-
-    @Binds
-    @IntoSet
     abstract fun bindIntegrationManager(manager: IntegrationManager): SessionLifecycleObserver
 
     @Binds
@@ -411,8 +405,4 @@ internal abstract class SessionModule {
 
     @Binds
     abstract fun bindPollAggregationProcessor(processor: DefaultPollAggregationProcessor): PollAggregationProcessor
-
-    @Binds
-    @IntoSet
-    abstract fun bindEncryptedEventRelationsAggregationProcessor(processor: EncryptedEventRelationsAggregationProcessor): UnableToDecryptEventLiveProcessor
 }

@@ -38,7 +38,6 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.internal.crypto.actions.EnsureOlmSessionsForDevicesAction
 import org.matrix.android.sdk.internal.crypto.actions.MessageEncrypter
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
-import org.matrix.android.sdk.internal.crypto.tasks.CreateUnableToDecryptEventEntityTask
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
 import org.matrix.android.sdk.internal.extensions.foldToCallback
 import org.matrix.android.sdk.internal.session.SessionScope
@@ -61,7 +60,6 @@ internal class EventDecryptor @Inject constructor(
         private val deviceListManager: DeviceListManager,
         private val ensureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction,
         private val cryptoStore: IMXCryptoStore,
-        private val createUnableToDecryptEventEntityTask: CreateUnableToDecryptEventEntityTask,
 ) {
 
     /**
@@ -138,7 +136,6 @@ internal class EventDecryptor @Inject constructor(
         val eventContent = event.content
         if (eventContent == null) {
             Timber.tag(loggerTag.value).e("decryptEvent : empty event content")
-            createUnableToDecryptEventEntity(event.eventId)
             throw MXCryptoError.Base(MXCryptoError.ErrorType.BAD_ENCRYPTED_MESSAGE, MXCryptoError.BAD_ENCRYPTED_MESSAGE_REASON)
         } else if (event.isRedacted()) {
             // we shouldn't attempt to decrypt a redacted event because the content is cleared and decryption will fail because of null algorithm
@@ -156,7 +153,6 @@ internal class EventDecryptor @Inject constructor(
             if (alg == null) {
                 val reason = String.format(MXCryptoError.UNABLE_TO_DECRYPT_REASON, event.eventId, algorithm)
                 Timber.tag(loggerTag.value).e("decryptEvent() : $reason")
-                createUnableToDecryptEventEntity(event.eventId)
                 throw MXCryptoError.Base(MXCryptoError.ErrorType.UNABLE_TO_DECRYPT, reason)
             } else {
                 try {
@@ -175,17 +171,9 @@ internal class EventDecryptor @Inject constructor(
                             }
                         }
                     }
-                    createUnableToDecryptEventEntity(event.eventId)
                     throw mxCryptoError
                 }
             }
-        }
-    }
-
-    private suspend fun createUnableToDecryptEventEntity(eventId: String?) {
-        eventId?.let {
-            val params = CreateUnableToDecryptEventEntityTask.Params(eventId = it)
-            createUnableToDecryptEventEntityTask.execute(params)
         }
     }
 
