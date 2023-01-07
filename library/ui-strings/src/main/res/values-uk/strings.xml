@@ -3002,4 +3002,13 @@
     <string name="set_link_link">Посилання</string>
     <string name="set_link_text">Текст</string>
     <string name="rich_text_editor_link">Налаштувати посилання</string>
+    <string name="settings_access_token_summary">Ваш токен доступу надає повний доступ до вашого облікового запису. Не передавайте його нікому.</string>
+    <string name="settings_access_token">Токен доступу</string>
+    <string name="rich_text_editor_bullet_list">Перемкнути на маркований список</string>
+    <string name="rich_text_editor_numbered_list">Перемкнути на нумерований список</string>
+    <string name="room_polls_ended_no_item">У цій кімнаті ще не проводилися опитування</string>
+    <string name="room_polls_ended">Минулі опитування</string>
+    <string name="room_polls_active_no_item">У цій кімнаті немає активних опитувань</string>
+    <string name="room_polls_active">Активні опитування</string>
+    <string name="room_profile_section_more_polls">Історія опитувань</string>
 </resources>

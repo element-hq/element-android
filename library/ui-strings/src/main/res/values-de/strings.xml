@@ -2889,4 +2889,13 @@
     <string name="set_link_create">Link erstellen</string>
     <string name="set_link_link">Link</string>
     <string name="set_link_text">Text</string>
+    <string name="settings_access_token_summary">Dein Zugriffstoken gewährt vollen Zugriff auf dein Konto. Teile ihn mit niemandem.</string>
+    <string name="settings_access_token">Zugriffstoken</string>
+    <string name="rich_text_editor_bullet_list">Unsortierte Liste umschalten</string>
+    <string name="rich_text_editor_numbered_list">Nummerierte Liste umschalten</string>
+    <string name="room_polls_ended_no_item">In diesem Raum gibt es noch keine abgeschlossenen Umfragen</string>
+    <string name="room_polls_ended">Vergangene Umfragen</string>
+    <string name="room_polls_active_no_item">In diesem Raum gibt es keine aktiven Umfragen</string>
+    <string name="room_polls_active">Aktive Umfragen</string>
+    <string name="room_profile_section_more_polls">Umfrageverlauf</string>
 </resources>
