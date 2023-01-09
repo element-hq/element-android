@@ -176,7 +176,7 @@ fun SocialLoginButtonsView.render(loginMode: LoginMode, mode: SocialLoginButtons
         SsoState.Fallback -> null
         is SsoState.IdentityProviders -> state.providers.sorted()
     }
-    this.hasOidcCompatibilityFlow = (loginMode is LoginMode.Sso && loginMode.hasOidcCompatibilityFlow)
-            || (loginMode is LoginMode.SsoAndPassword && loginMode.hasOidcCompatibilityFlow)
+    this.hasOidcCompatibilityFlow = (loginMode is LoginMode.Sso && loginMode.hasOidcCompatibilityFlow) ||
+            (loginMode is LoginMode.SsoAndPassword && loginMode.hasOidcCompatibilityFlow)
     this.listener = SocialLoginButtonsView.InteractionListener { listener(it) }
 }
