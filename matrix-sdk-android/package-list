@@ -311,6 +311,7 @@ $dokka.location:org.matrix.android.sdk.api.extensions//sortByLastSeen/kotlin.col
 $dokka.location:org.matrix.android.sdk.api.extensions//tryOrNull/#kotlin.String?#kotlin.Function0[TypeParam(bounds=[kotlin.Any?])]/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.extensions/try-or-null.html
 $dokka.location:org.matrix.android.sdk.api.failure////PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.failure/index.html
 $dokka.location:org.matrix.android.sdk.api.failure//getRetryDelay/kotlin.Throwable#kotlin.Long/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.failure/get-retry-delay.html
+$dokka.location:org.matrix.android.sdk.api.failure//is400/kotlin.Throwable#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.failure/is400.html
 $dokka.location:org.matrix.android.sdk.api.failure//is401/kotlin.Throwable#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.failure/is401.html
 $dokka.location:org.matrix.android.sdk.api.failure//is404/kotlin.Throwable#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.failure/is404.html
 $dokka.location:org.matrix.android.sdk.api.failure//isHomeserverConnectionError/kotlin.Throwable#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.failure/is-homeserver-connection-error.html
@@ -3842,7 +3843,6 @@ $dokka.location:org.matrix.android.sdk.api.session.room.threads.model/ThreadSumm
 $dokka.location:org.matrix.android.sdk.api.session.room.threads.model/ThreadSummaryUpdateType/valueOf/#kotlin.String/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.threads.model/-thread-summary-update-type/value-of.html
 $dokka.location:org.matrix.android.sdk.api.session.room.threads.model/ThreadSummaryUpdateType/values/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.threads.model/-thread-summary-update-type/values.html
 $dokka.location:org.matrix.android.sdk.api.session.room.threads////PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.threads/index.html
-$dokka.location:org.matrix.android.sdk.api.session.room.threads/FetchThreadsResult.Failed///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.threads/-fetch-threads-result/-failed/index.html
 $dokka.location:org.matrix.android.sdk.api.session.room.threads/FetchThreadsResult.ReachedEnd///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.threads/-fetch-threads-result/-reached-end/index.html
 $dokka.location:org.matrix.android.sdk.api.session.room.threads/FetchThreadsResult.ShouldFetchMore///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.threads/-fetch-threads-result/-should-fetch-more/index.html
 $dokka.location:org.matrix.android.sdk.api.session.room.threads/FetchThreadsResult.ShouldFetchMore/ShouldFetchMore/#kotlin.String/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.threads/-fetch-threads-result/-should-fetch-more/-should-fetch-more.html
