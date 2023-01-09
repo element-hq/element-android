@@ -1,0 +1,1 @@
+[Voice Broadcast] Stop listening if we reach the last received chunk and there is no last sequence number

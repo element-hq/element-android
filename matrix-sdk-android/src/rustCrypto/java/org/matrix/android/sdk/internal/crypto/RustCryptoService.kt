@@ -65,6 +65,7 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibilityContent
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
+import org.matrix.android.sdk.api.session.room.model.shouldShareHistory
 import org.matrix.android.sdk.api.session.sync.model.DeviceListResponse
 import org.matrix.android.sdk.api.session.sync.model.DeviceOneTimeKeysCountSyncResponse
 import org.matrix.android.sdk.api.session.sync.model.SyncResponse
@@ -76,6 +77,7 @@ import org.matrix.android.sdk.internal.crypto.model.SessionInfo
 import org.matrix.android.sdk.internal.crypto.network.OutgoingRequestsProcessor
 import org.matrix.android.sdk.internal.crypto.repository.WarnOnUnknownDeviceRepository
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
+import org.matrix.android.sdk.internal.crypto.store.db.CryptoStoreAggregator
 import org.matrix.android.sdk.internal.crypto.tasks.DeleteDeviceTask
 import org.matrix.android.sdk.internal.crypto.tasks.GetDeviceInfoTask
 import org.matrix.android.sdk.internal.crypto.tasks.GetDevicesTask
@@ -138,23 +140,23 @@ internal class RustCryptoService @Inject constructor(
     private val isStarting = AtomicBoolean(false)
     private val isStarted = AtomicBoolean(false)
 
-    override suspend fun onStateEvent(roomId: String, event: Event) {
+    override suspend fun onStateEvent(roomId: String, event: Event, cryptoStoreAggregator: CryptoStoreAggregator?) {
         when (event.type) {
             EventType.STATE_ROOM_ENCRYPTION -> onRoomEncryptionEvent(roomId, event)
             EventType.STATE_ROOM_MEMBER -> onRoomMembershipEvent(roomId, event)
-            EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
+            EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event, cryptoStoreAggregator)
         }
     }
 
-    override suspend fun onLiveEvent(roomId: String, event: Event, initialSync: Boolean) {
+    override suspend fun onLiveEvent(roomId: String, event: Event, isInitialSync: Boolean, cryptoStoreAggregator: CryptoStoreAggregator?) {
         if (event.isStateEvent()) {
             when (event.getClearType()) {
                 EventType.STATE_ROOM_ENCRYPTION -> onRoomEncryptionEvent(roomId, event)
                 EventType.STATE_ROOM_MEMBER -> onRoomMembershipEvent(roomId, event)
-                EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
+                EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event, cryptoStoreAggregator)
             }
         } else {
-            if (!initialSync) {
+            if (!isInitialSync) {
                 verificationService.onEvent(roomId, event)
             }
         }
@@ -302,8 +304,10 @@ internal class RustCryptoService @Inject constructor(
     /**
      * A sync response has been received
      */
-    override suspend fun onSyncCompleted(syncResponse: SyncResponse) {
+    override suspend fun onSyncCompleted(syncResponse: SyncResponse, cryptoStoreAggregator: CryptoStoreAggregator) {
         if (isStarted()) {
+            cryptoStore.storeData(cryptoStoreAggregator)
+
             outgoingRequestsProcessor.processOutgoingRequests(olmMachine)
             // This isn't a copy paste error. Sending the outgoing requests may
             // claim one-time keys and establish 1-to-1 Olm sessions with devices, while some
@@ -559,11 +563,26 @@ internal class RustCryptoService @Inject constructor(
         }
     }
 
-    private fun onRoomHistoryVisibilityEvent(roomId: String, event: Event) {
+    private fun onRoomHistoryVisibilityEvent(roomId: String, event: Event, cryptoStoreAggregator: CryptoStoreAggregator?) {
         if (!event.isStateEvent()) return
         val eventContent = event.content.toModel<RoomHistoryVisibilityContent>()
-        eventContent?.historyVisibility?.let {
-            cryptoStore.setShouldEncryptForInvitedMembers(roomId, it != RoomHistoryVisibility.JOINED)
+        val historyVisibility = eventContent?.historyVisibility
+        if (historyVisibility == null) {
+            if (cryptoStoreAggregator != null) {
+                cryptoStoreAggregator.setShouldShareHistoryData[roomId] = false
+            } else {
+                cryptoStore.setShouldShareHistory(roomId, false)
+            }
+        } else {
+            if (cryptoStoreAggregator != null) {
+                // encryption for the invited members will be blocked if the history visibility is "joined"
+                cryptoStoreAggregator.setShouldEncryptForInvitedMembersData[roomId] = historyVisibility != RoomHistoryVisibility.JOINED
+                cryptoStoreAggregator.setShouldShareHistoryData[roomId] = historyVisibility.shouldShareHistory()
+            } else {
+                // encryption for the invited members will be blocked if the history visibility is "joined"
+                cryptoStore.setShouldEncryptForInvitedMembers(roomId, historyVisibility != RoomHistoryVisibility.JOINED)
+                cryptoStore.setShouldShareHistory(roomId, historyVisibility.shouldShareHistory())
+            }
         }
     }
 
@@ -641,7 +660,7 @@ internal class RustCryptoService @Inject constructor(
     }
 
     override fun setRoomBlockUnverifiedDevices(roomId: String, block: Boolean) {
-        TODO("Not yet implemented")
+        cryptoStore.blockUnverifiedDevicesInRoom(roomId, block)
     }
 
     /**
@@ -710,12 +729,12 @@ internal class RustCryptoService @Inject constructor(
     }
 
     override fun setRoomUnBlockUnverifiedDevices(roomId: String) {
-        TODO("Not yet implemented")
+        cryptoStore.blockUnverifiedDevicesInRoom(roomId, false)
     }
 
-    override fun getDeviceTrackingStatus(userId: String): Int {
-        TODO("Not yet implemented")
-    }
+//    override fun getDeviceTrackingStatus(userId: String): Int {
+//        olmMachine.isUserTracked(userId)
+//    }
 
     /**
      * Tells whether the client should ever send encrypted messages to unverified devices.
@@ -738,7 +757,7 @@ internal class RustCryptoService @Inject constructor(
      */
 // TODO add this info in CryptoRoomEntity?
     override fun isRoomBlacklistUnverifiedDevices(roomId: String?): Boolean {
-        return roomId?.let { cryptoStore.getRoomsListBlacklistUnverifiedDevices().contains(it) }
+        return roomId?.let { cryptoStore.getBlockUnverifiedDevices(roomId) }
                 ?: false
     }
 
@@ -765,15 +784,6 @@ internal class RustCryptoService @Inject constructor(
 //
 //        cryptoStore.setRoomsListBlacklistUnverifiedDevices(roomIds)
 //    }
-
-    /**
-     * Remove this room to the ones which don't encrypt messages to unverified devices.
-     *
-     * @param roomId   the room id
-     */
-    override suspend fun setRoomUnBlacklistUnverifiedDevices(roomId: String) {
-        TODO("Not implemented in rust")
-    }
 
     /**
      * Re request the encryption keys required to decrypt an event.

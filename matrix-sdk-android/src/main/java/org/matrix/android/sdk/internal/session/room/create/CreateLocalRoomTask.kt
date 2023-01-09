@@ -178,7 +178,7 @@ internal class DefaultCreateLocalRoomTask @Inject constructor(
 
                 // Give info to crypto module
                 runBlocking {
-                    cryptoService.onStateEvent(roomId, event)
+                    cryptoService.onStateEvent(roomId, event, null)
                 }
             }
 

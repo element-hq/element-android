@@ -2702,7 +2702,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="device_manager_session_title">Munkamenet</string>
     <string name="device_manager_current_session_title">Jelenlegi munkamenet</string>
     <string name="device_manager_verification_status_detail_other_session_unverified">A jobb biztonság vagy megbízhatóság érdekében ellenőrizze vagy jelentkezzen ki ebből a munkamenetből.</string>
-    <string name="device_manager_verification_status_detail_current_session_unverified">Az aktuális munkamenet készen áll a biztonságos üzenetküldésre.</string>
+    <string name="device_manager_verification_status_detail_current_session_unverified">Ellenőrizd az aktuális munkamenetet a biztonságos üzenetküldéshez.</string>
     <string name="device_manager_verification_status_detail_other_session_verified">Ez a munkamenet beállítva a biztonságos üzenetküldéshez.</string>
     <string name="device_manager_verification_status_detail_current_session_verified">Az aktuális munkamenet készen áll a biztonságos üzenetküldésre.</string>
     <string name="labs_enable_deferred_dm_summary">Közvetlen beszélgetés indítása csak az első üzenettel</string>
@@ -2813,8 +2813,8 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="qr_code_login_header_failed_e2ee_security_issue_description">Biztonsági probléma lépett fel a biztonságos üzenetküldés beállításánál. Valamihez illetéktelenül fértek hozzá: Matrix szervered, Internet kapcsolatod, Eszközöd,</string>
     <string name="qr_code_login_header_failed_other_description">A kérés sikertelen.</string>
     <string name="labs_enable_voice_broadcast_summary">Hang közvetítés felvételéhez és a szoba idővonalára küldéséhez.</string>
-    <string name="labs_enable_voice_broadcast_title">Hang közvetítés engedélyezése (aktív fejlesztés alatt)</string>
-    <string name="a11y_voice_broadcast_buffering">Pufferelés</string>
+    <string name="labs_enable_voice_broadcast_title">Hang közvetítés engedélyezése</string>
+    <string name="a11y_voice_broadcast_buffering">Pufferelés…</string>
     <string name="a11y_pause_voice_broadcast">Hang közvetítés szüneteltetése</string>
     <string name="a11y_play_voice_broadcast">Hang közvetítés lejátszása vagy lejátszás folytatása</string>
     <string name="a11y_stop_voice_broadcast_record">Hang közvetítés felvétel leállítása</string>
@@ -2866,4 +2866,28 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="quoting">Idézet</string>
     <string name="replying_to">Válasz erre: %s</string>
     <string name="editing">Szerkesztés</string>
+    <string name="review_unverified_sessions_description">Tekintsd át, hogy meggyőződj arról, hogy a fiókod biztonságban van</string>
+    <string name="review_unverified_sessions_title">Ellenőrizetlen bejelentkezéseid vannak</string>
+    <string name="settings_enable_direct_share_summary">Friss beszélgetések megjelenítése a rendszer megosztó menüjében</string>
+    <string name="settings_enable_direct_share_title">Közvetlen megosztás engedélyezése</string>
+    <string name="settings_nightly_build_update">Szerezd be a napi összeállítást (megjegyzés: lehet, hogy problémáid lesznek a bejelentkezéssel)</string>
+    <string name="settings_nightly_build">Napi összeállítás</string>
+    <string name="device_manager_learn_more_sessions_encryption_not_supported">Ez a munkamenet nem támogatja a titkosítást, így nem lehet ellenőrizni sem.
+\n
+\nEzzel a munkamenettel nem tudsz részt venni olyan szobákban ahol a titkosítás be van kapcsolva.
+\n
+\nA biztonság és a adatbiztonsági okokból javasolt olyan Matrix kliens használata ami támogatja a titkosítást.</string>
+    <string name="device_manager_signout_all_other_sessions">Kijelentkezés minden más munkamenetből</string>
+    <string name="device_manager_verification_status_detail_session_encryption_not_supported">Ez a munkamenet nem támogatja a titkosítást, így nem lehet ellenőrizni sem.</string>
+    <string name="voice_broadcast_live_broadcast">Élő közvetítés</string>
+    <string name="notice_voice_broadcast_ended_by_you">A hang közvetítést befejezted.</string>
+    <string name="notice_voice_broadcast_ended">%1$s befejezte a hang közvetítést.</string>
+    <string name="stop_voice_broadcast_content">Biztos, hogy befejezed az élő közvetítést\? Ez befejezi a közvetítést és a felvétel az egész szoba számára elérhető lesz.</string>
+    <string name="stop_voice_broadcast_dialog_title">Megszakítod az élő közvetítést\?</string>
+    <string name="action_stop">Igen, befejez</string>
+    <string name="set_link_edit">Hivatkozás szerkesztése</string>
+    <string name="set_link_create">Hivatkozás készítése</string>
+    <string name="set_link_link">Hivatkozás</string>
+    <string name="set_link_text">Szöveg</string>
+    <string name="rich_text_editor_link">Hivatkozás beállítása</string>
 </resources>

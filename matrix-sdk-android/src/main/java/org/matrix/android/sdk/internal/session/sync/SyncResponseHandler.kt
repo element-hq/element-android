@@ -32,6 +32,7 @@ import org.matrix.android.sdk.api.session.sync.InitialSyncStep
 import org.matrix.android.sdk.api.session.sync.model.RoomsSyncResponse
 import org.matrix.android.sdk.api.session.sync.model.SyncResponse
 import org.matrix.android.sdk.internal.SessionManager
+import org.matrix.android.sdk.internal.crypto.store.db.CryptoStoreAggregator
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.session.SessionListeners
@@ -73,6 +74,8 @@ internal class SyncResponseHandler @Inject constructor(
     ) {
         val isInitialSync = fromToken == null
 
+        val aggregator = SyncResponsePostTreatmentAggregator()
+
         relevantPlugins.measureMetric {
             startCryptoService(isInitialSync)
 
@@ -85,12 +88,22 @@ internal class SyncResponseHandler @Inject constructor(
             val syncLocalTimestampMillis = clock.epochMillis()
 
             // pass live state/crypto related event to crypto
+
+            syncResponse.rooms?.invite?.entries?.map { (roomId, roomSync) ->
+                roomSync.inviteState
+                        ?.events
+                        ?.filter { it.isStateEvent() }
+                        ?.forEach {
+                            cryptoService.onStateEvent(roomId, it, aggregator.cryptoStoreAggregator)
+                        }
+            }
+
             syncResponse.rooms?.join?.entries?.map { (roomId, roomSync) ->
                 roomSync.state
                         ?.events
                         ?.filter { it.isStateEvent() }
                         ?.forEach {
-                            cryptoService.onStateEvent(roomId, it)
+                            cryptoService.onStateEvent(roomId, it, aggregator.cryptoStoreAggregator)
                         }
 
                 roomSync.timeline?.events?.forEach {
@@ -98,11 +111,9 @@ internal class SyncResponseHandler @Inject constructor(
                         decryptIfNeeded(it, roomId)
                     }
                     it.ageLocalTs = syncLocalTimestampMillis - (it.unsignedData?.age ?: 0)
-                    cryptoService.onLiveEvent(roomId, it, isInitialSync)
+                    cryptoService.onLiveEvent(roomId, it, isInitialSync, aggregator.cryptoStoreAggregator)
                 }
             }
-
-            val aggregator = SyncResponsePostTreatmentAggregator()
 
             // Prerequisite for thread events handling in RoomSyncHandler
             // Disabled due to the new fallback
@@ -116,7 +127,7 @@ internal class SyncResponseHandler @Inject constructor(
 
             postTreatmentSyncResponse(syncResponse, isInitialSync)
 
-            markCryptoSyncCompleted(syncResponse)
+            markCryptoSyncCompleted(syncResponse, aggregator.cryptoStoreAggregator)
 
             handlePostSync()
 
@@ -266,10 +277,10 @@ internal class SyncResponseHandler @Inject constructor(
         }
     }
 
-    private suspend fun markCryptoSyncCompleted(syncResponse: SyncResponse) {
+    private suspend fun markCryptoSyncCompleted(syncResponse: SyncResponse, cryptoStoreAggregator: CryptoStoreAggregator) {
         relevantPlugins.measureSpan("task", "crypto_sync_handler_onSyncCompleted") {
             measureTimeMillis {
-                cryptoService.onSyncCompleted(syncResponse)
+                cryptoService.onSyncCompleted(syncResponse, cryptoStoreAggregator)
             }.also {
                 Timber.v("cryptoSyncHandler.onSyncCompleted took $it ms")
             }

@@ -478,9 +478,9 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
 
     suspend fun ensureCanDecrypt(sentEventIds: List<String>, session: Session, e2eRoomID: String, messagesText: List<String>) {
         sentEventIds.forEachIndexed { index, sentEventId ->
-            testHelper.retryPeriodically {
+            testHelper.retryWithBackoff {
                 val event = session.getRoom(e2eRoomID)?.timelineService()?.getTimelineEvent(sentEventId)?.root
-                        ?: return@retryPeriodically false
+                        ?: return@retryWithBackoff false
                 try {
                     session.cryptoService().decryptEvent(event, "").let { result ->
                         event.mxDecryptionResult = OlmDecryptionResult(

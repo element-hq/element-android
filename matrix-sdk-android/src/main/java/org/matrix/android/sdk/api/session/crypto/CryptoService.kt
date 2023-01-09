@@ -44,6 +44,7 @@ import org.matrix.android.sdk.api.session.sync.model.SyncResponse
 import org.matrix.android.sdk.api.session.sync.model.ToDeviceSyncResponse
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.crypto.model.SessionInfo
+import org.matrix.android.sdk.internal.crypto.store.db.CryptoStoreAggregator
 
 interface CryptoService {
 
@@ -104,7 +105,7 @@ interface CryptoService {
 
     fun setRoomUnBlockUnverifiedDevices(roomId: String)
 
-    fun getDeviceTrackingStatus(userId: String): Int
+//    fun getDeviceTrackingStatus(userId: String): Int
 
     suspend fun importRoomKeys(
             roomKeysAsArray: ByteArray,
@@ -222,9 +223,8 @@ interface CryptoService {
     suspend fun onSyncWillProcess(isInitialSync: Boolean)
     fun isStarted(): Boolean
     suspend fun receiveSyncChanges(toDevice: ToDeviceSyncResponse?, deviceChanges: DeviceListResponse?, keyCounts: DeviceOneTimeKeysCountSyncResponse?)
-    suspend fun onLiveEvent(roomId: String, event: Event, initialSync: Boolean)
-    suspend fun onStateEvent(roomId: String, event: Event) {}
-    suspend fun onSyncCompleted(syncResponse: SyncResponse)
+    suspend fun onLiveEvent(roomId: String, event: Event, isInitialSync: Boolean, cryptoStoreAggregator: CryptoStoreAggregator?)
+    suspend fun onStateEvent(roomId: String, event: Event, cryptoStoreAggregator: CryptoStoreAggregator?) {}
+    suspend fun onSyncCompleted(syncResponse: SyncResponse, cryptoStoreAggregator: CryptoStoreAggregator)
     fun logDbUsageInfo()
-    suspend fun setRoomUnBlacklistUnverifiedDevices(roomId: String)
 }

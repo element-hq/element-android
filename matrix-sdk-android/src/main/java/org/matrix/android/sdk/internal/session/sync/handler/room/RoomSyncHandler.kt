@@ -253,7 +253,6 @@ internal class RoomSyncHandler @Inject constructor(
                     eventId = event.eventId
                     root = eventEntity
                 }
-                // Give info to crypto module
                 roomMemberEventHandler.handle(realm, roomId, event, isInitialSync, aggregator)
             }
         }
@@ -371,8 +370,15 @@ internal class RoomSyncHandler @Inject constructor(
         roomEntity.chunks.clearWith { it.deleteOnCascade(deleteStateEvents = true, canDeleteRoot = true) }
         roomTypingUsersHandler.handle(realm, roomId, null)
         roomChangeMembershipStateDataSource.setMembershipFromSync(roomId, Membership.LEAVE)
-        roomSummaryUpdater.update(realm, roomId, membership, roomSync.summary,
-                roomSync.unreadNotifications, roomSync.unreadThreadNotifications, aggregator = aggregator)
+        roomSummaryUpdater.update(
+                realm,
+                roomId,
+                membership,
+                roomSync.summary,
+                roomSync.unreadNotifications,
+                roomSync.unreadThreadNotifications,
+                aggregator = aggregator,
+        )
         return roomEntity
     }
 
@@ -418,8 +424,9 @@ internal class RoomSyncHandler @Inject constructor(
             val isInitialSync = insertType == EventInsertType.INITIAL_SYNC
 
             eventIds.add(event.eventId)
-
-            liveEventService.get().dispatchLiveEventReceived(event, roomId, isInitialSync)
+            if (!isInitialSync) {
+                liveEventService.get().dispatchLiveEventReceived(event, roomId)
+            }
 
             var contentToInject: String? = null
             if (!isInitialSync) {

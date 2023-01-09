@@ -348,6 +348,8 @@ class E2eeSanityTests : InstrumentedTest {
         cryptoTestHelper.ensureCannotDecrypt(sentEventIds, newBobSession, e2eRoomID, null)
 
         // Try to request
+
+        Log.v("#E2E TEST", "Let bob re-request")
         sentEventIds.forEach { sentEventId ->
             val event = newBobSession.getRoom(e2eRoomID)!!.getTimelineEvent(sentEventId)!!.root
             newBobSession.cryptoService().reRequestRoomKeyForEvent(event)
@@ -377,19 +379,24 @@ class E2eeSanityTests : InstrumentedTest {
 
 //         */
 
+        Log.v("#E2E TEST", "Should not be able to decrypt as not verified")
         cryptoTestHelper.ensureCannotDecrypt(sentEventIds, newBobSession, e2eRoomID, null)
 
         // Now mark new bob session as verified
 
+        Log.v("#E2E TEST", "Mark all as verified")
         bobSession.cryptoService().verificationService().markedLocallyAsManuallyVerified(newBobSession.myUserId, newBobSession.sessionParams.deviceId)
         newBobSession.cryptoService().verificationService().markedLocallyAsManuallyVerified(bobSession.myUserId, bobSession.sessionParams.deviceId)
 
         // now let new session re-request
+
+        Log.v("#E2E TEST", "Re-request")
         sentEventIds.forEach { sentEventId ->
             val event = newBobSession.getRoom(e2eRoomID)!!.getTimelineEvent(sentEventId)!!.root
             newBobSession.cryptoService().reRequestRoomKeyForEvent(event)
         }
 
+        Log.v("#E2E TEST", "Now should be able to decrypt")
         cryptoTestHelper.ensureCanDecrypt(sentEventIds, newBobSession, e2eRoomID, messagesText)
     }
 

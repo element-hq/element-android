@@ -118,6 +118,45 @@ class GetDeviceFullInfoUseCaseTest {
     }
 
     @Test
+    fun `given current session and no crypto info for device when getting device info then the result is correct`() = runTest {
+        // Given
+        val currentSessionCrossSigningInfo = givenCurrentSessionCrossSigningInfo()
+        val deviceInfo = givenADeviceInfo()
+        val cryptoDeviceInfo = null
+        val trustLevel = givenTrustLevel(currentSessionCrossSigningInfo, cryptoDeviceInfo)
+        val isInactive = false
+        val isCurrentDevice = true
+        every { checkIfSessionIsInactiveUseCase.execute(any()) } returns isInactive
+        every { parseDeviceUserAgentUseCase.execute(any()) } returns DeviceExtendedInfo(DeviceType.MOBILE)
+        val matrixClientInfo = givenAMatrixClientInfo()
+        fakeActiveSessionHolder.fakeSession.fakeCryptoService.cryptoDeviceInfoWithIdLiveData = MutableLiveData(Optional(null))
+        fakeActiveSessionHolder.fakeSession.fakeCryptoService.cryptoDeviceInfoWithIdLiveData.givenAsFlow()
+
+        // When
+        val deviceFullInfo = getDeviceFullInfoUseCase.execute(A_DEVICE_ID).firstOrNull()
+
+        // Then
+        deviceFullInfo shouldBeEqualTo DeviceFullInfo(
+                deviceInfo = deviceInfo,
+                cryptoDeviceInfo = cryptoDeviceInfo,
+                roomEncryptionTrustLevel = trustLevel,
+                isInactive = isInactive,
+                isCurrentDevice = isCurrentDevice,
+                deviceExtendedInfo = DeviceExtendedInfo(DeviceType.MOBILE),
+                matrixClientInfo = matrixClientInfo,
+        )
+        verify {
+            fakeActiveSessionHolder.instance.getSafeActiveSession()
+            getCurrentSessionCrossSigningInfoUseCase.execute()
+            getEncryptionTrustLevelForDeviceUseCase.execute(currentSessionCrossSigningInfo, cryptoDeviceInfo)
+            fakeActiveSessionHolder.fakeSession.fakeCryptoService.getMyDevicesInfoLive(A_DEVICE_ID).asFlow()
+            fakeActiveSessionHolder.fakeSession.fakeCryptoService.getLiveCryptoDeviceInfoWithId(A_DEVICE_ID).asFlow()
+            checkIfSessionIsInactiveUseCase.execute(A_TIMESTAMP)
+            getMatrixClientInfoUseCase.execute(fakeActiveSessionHolder.fakeSession, A_DEVICE_ID)
+        }
+    }
+
+    @Test
     fun `given current session and no info for device when getting device info then the result is empty`() = runTest {
         // Given
         givenCurrentSessionCrossSigningInfo()
@@ -131,9 +170,11 @@ class GetDeviceFullInfoUseCaseTest {
 
         // Then
         deviceFullInfo.shouldBeNull()
-        verify { fakeActiveSessionHolder.instance.getSafeActiveSession() }
-        verify { fakeActiveSessionHolder.fakeSession.fakeCryptoService.getMyDevicesInfoLive(A_DEVICE_ID).asFlow() }
-        verify { fakeActiveSessionHolder.fakeSession.fakeCryptoService.getLiveCryptoDeviceInfoWithId(A_DEVICE_ID).asFlow() }
+        verify {
+            fakeActiveSessionHolder.instance.getSafeActiveSession()
+            fakeActiveSessionHolder.fakeSession.fakeCryptoService.getMyDevicesInfoLive(A_DEVICE_ID).asFlow()
+            fakeActiveSessionHolder.fakeSession.fakeCryptoService.getLiveCryptoDeviceInfoWithId(A_DEVICE_ID).asFlow()
+        }
     }
 
     @Test

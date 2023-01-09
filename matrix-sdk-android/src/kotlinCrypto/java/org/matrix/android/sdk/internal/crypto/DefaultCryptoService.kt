@@ -92,6 +92,7 @@ import org.matrix.android.sdk.internal.crypto.model.rest.KeysUploadBody
 import org.matrix.android.sdk.internal.crypto.model.toRest
 import org.matrix.android.sdk.internal.crypto.repository.WarnOnUnknownDeviceRepository
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
+import org.matrix.android.sdk.internal.crypto.store.db.CryptoStoreAggregator
 import org.matrix.android.sdk.internal.crypto.tasks.DeleteDeviceTask
 import org.matrix.android.sdk.internal.crypto.tasks.GetDeviceInfoTask
 import org.matrix.android.sdk.internal.crypto.tasks.GetDevicesTask
@@ -193,26 +194,26 @@ internal class DefaultCryptoService @Inject constructor(
     private val isStarting = AtomicBoolean(false)
     private val isStarted = AtomicBoolean(false)
 
-    override suspend fun onStateEvent(roomId: String, event: Event) {
+    override suspend fun onStateEvent(roomId: String, event: Event, cryptoStoreAggregator: CryptoStoreAggregator?) {
         when (event.type) {
             EventType.STATE_ROOM_ENCRYPTION -> onRoomEncryptionEvent(roomId, event)
             EventType.STATE_ROOM_MEMBER -> onRoomMembershipEvent(roomId, event)
-            EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
+            EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event, cryptoStoreAggregator)
         }
     }
 
-    override suspend fun onLiveEvent(roomId: String, event: Event, initialSync: Boolean) {
+    override suspend fun onLiveEvent(roomId: String, event: Event, isInitialSync: Boolean, cryptoStoreAggregator: CryptoStoreAggregator?) {
         // handle state events
         if (event.isStateEvent()) {
             when (event.type) {
                 EventType.STATE_ROOM_ENCRYPTION -> onRoomEncryptionEvent(roomId, event)
                 EventType.STATE_ROOM_MEMBER -> onRoomMembershipEvent(roomId, event)
-                EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
+                EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event, cryptoStoreAggregator)
             }
         }
 
         // handle verification
-        if (!initialSync) {
+        if (!isInitialSync) {
             if (event.type != null && verificationMessageProcessor.shouldProcess(event.type)) {
                 withContext(coroutineDispatchers.dmVerif) {
                     verificationMessageProcessor.process(roomId, event)
@@ -277,16 +278,6 @@ internal class DefaultCryptoService @Inject constructor(
         return withContext(coroutineDispatchers.io) {
             cryptoStore.inboundGroupSessionsCount(onlyBackedUp)
         }
-    }
-
-    /**
-     * Provides the tracking status.
-     *
-     * @param userId the user id
-     * @return the tracking status
-     */
-    override fun getDeviceTrackingStatus(userId: String): Int {
-        return cryptoStore.getDeviceTrackingStatus(userId, DeviceListManager.TRACKING_STATUS_NOT_TRACKED)
     }
 
     /**
@@ -411,8 +402,9 @@ internal class DefaultCryptoService @Inject constructor(
      * A sync response has been received.
      *
      * @param syncResponse the syncResponse
+     * @param cryptoStoreAggregator data aggregated during the sync response treatment to store
      */
-    override suspend fun onSyncCompleted(syncResponse: SyncResponse) {
+    override suspend fun onSyncCompleted(syncResponse: SyncResponse, cryptoStoreAggregator: CryptoStoreAggregator) {
 //                if (syncResponse.deviceLists != null) {
 //                    deviceListManager.handleDeviceListsChanges(syncResponse.deviceLists.changed, syncResponse.deviceLists.left)
 //                }
@@ -420,7 +412,7 @@ internal class DefaultCryptoService @Inject constructor(
 //                    val currentCount = syncResponse.deviceOneTimeKeysCount.signedCurve25519 ?: 0
 //                    oneTimeKeysUploader.updateOneTimeKeyCount(currentCount)
 //                }
-
+        cryptoStore.storeData(cryptoStoreAggregator)
         // unwedge if needed
         try {
             eventDecryptor.unwedgeDevicesIfNeeded()
@@ -484,10 +476,6 @@ internal class DefaultCryptoService @Inject constructor(
 
     override fun logDbUsageInfo() {
         //
-    }
-
-    override suspend fun setRoomUnBlacklistUnverifiedDevices(roomId: String) {
-        cryptoStore.blockUnverifiedDevicesInRoom(roomId, false)
     }
 
     /**
@@ -992,16 +980,25 @@ internal class DefaultCryptoService @Inject constructor(
         }
     }
 
-    private suspend fun onRoomHistoryVisibilityEvent(roomId: String, event: Event) {
+    private suspend fun onRoomHistoryVisibilityEvent(roomId: String, event: Event, cryptoStoreAggregator: CryptoStoreAggregator?) {
         if (!event.isStateEvent()) return
         val eventContent = event.content.toModel<RoomHistoryVisibilityContent>()
         val historyVisibility = eventContent?.historyVisibility
         withContext(coroutineDispatchers.io) {
             if (historyVisibility == null) {
-                cryptoStore.setShouldShareHistory(roomId, false)
+                if (cryptoStoreAggregator != null) {
+                    cryptoStoreAggregator.setShouldShareHistoryData[roomId] = false
+                } else {
+                    cryptoStore.setShouldShareHistory(roomId, false)
+                }
             } else {
-                cryptoStore.setShouldEncryptForInvitedMembers(roomId, historyVisibility != RoomHistoryVisibility.JOINED)
-                cryptoStore.setShouldShareHistory(roomId, historyVisibility.shouldShareHistory())
+                if (cryptoStoreAggregator != null) {
+                    cryptoStoreAggregator.setShouldEncryptForInvitedMembersData[roomId] = historyVisibility != RoomHistoryVisibility.JOINED
+                    cryptoStoreAggregator.setShouldShareHistoryData[roomId] = historyVisibility.shouldShareHistory()
+                } else {
+                    cryptoStore.setShouldEncryptForInvitedMembers(roomId, historyVisibility != RoomHistoryVisibility.JOINED)
+                    cryptoStore.setShouldShareHistory(roomId, historyVisibility.shouldShareHistory())
+                }
             }
         }
     }

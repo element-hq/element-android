@@ -434,7 +434,7 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
         }
     }
 
-    private val backoff = listOf(500L, 1_000L, 1_000L, 3_000L, 3_000L, 5_000L)
+    private val backoff = listOf(60L, 75L, 100L, 300L, 300L, 500L, 1_000L, 1_000L, 1_500L, 1_500L, 3_000L)
     suspend fun retryWithBackoff(
             timeout: Long = TestConstants.timeOutMillis,
             // we use on fail to let caller report a proper error that will show nicely in junit test result with correct line
@@ -447,9 +447,10 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
         while (!predicate()) {
             Timber.v("## retryWithBackoff Trial nb $backoffTry")
             withContext(Dispatchers.IO) {
-                delay(backoff[backoffTry.coerceAtMost(backoff.size - 1)])
+                delay(backoff[backoffTry])
             }
             backoffTry++
+            if (backoffTry >= backoff.size) backoffTry = 0
             if (System.currentTimeMillis() - now > timeout) {
                 Timber.v("## retryWithBackoff Trial fail")
                 onFail?.invoke()
