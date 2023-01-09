@@ -25,6 +25,7 @@ import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeNull
 import org.amshove.kluent.shouldNotBeNull
 import org.junit.Test
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 
 private const val A_ROOM_ID = "A_ROOM_ID"
@@ -35,13 +36,11 @@ internal class GetVoiceBroadcastStateEventUseCaseTest {
     private val fakeSession = FakeSession()
     private val getVoiceBroadcastStateEventUseCase = GetVoiceBroadcastStateEventUseCase(fakeSession)
 
-    private val fakeRoom get() = fakeSession.fakeRoomService.fakeRoom
-
     @Test
     fun `given there is no event related to the given vb, when execute, then return null`() {
         // Given
         val aVoiceBroadcast = VoiceBroadcast(A_VOICE_BROADCAST_ID, A_ROOM_ID)
-        every { fakeRoom.fakeTimelineService.getTimelineEventsRelatedTo(any(), any()) } returns emptyList()
+        every { fakeSession.getRoom(A_ROOM_ID)?.timelineService()?.getTimelineEventsRelatedTo(any(), any()) } returns emptyList()
 
         // When
         val result = getVoiceBroadcastStateEventUseCase.execute(aVoiceBroadcast)
@@ -74,7 +73,7 @@ internal class GetVoiceBroadcastStateEventUseCaseTest {
                     every { root.originServerTs } returns 2L
                 },
         )
-        every { fakeRoom.fakeTimelineService.getTimelineEventsRelatedTo(any(), any()) } returns aListOfTimelineEvents
+        every { fakeSession.getRoom(A_ROOM_ID)?.timelineService()?.getTimelineEventsRelatedTo(any(), any()) } returns aListOfTimelineEvents
 
         // When
         val result = getVoiceBroadcastStateEventUseCase.execute(aVoiceBroadcast)
@@ -102,7 +101,7 @@ internal class GetVoiceBroadcastStateEventUseCaseTest {
                     every { root.originServerTs } returns 2L
                 },
         )
-        every { fakeRoom.fakeTimelineService.getTimelineEventsRelatedTo(any(), any()) } returns aListOfTimelineEvents
+        every { fakeSession.getRoom(A_ROOM_ID)?.timelineService()?.getTimelineEventsRelatedTo(any(), any()) } returns aListOfTimelineEvents
 
         // When
         val result = getVoiceBroadcastStateEventUseCase.execute(aVoiceBroadcast)
