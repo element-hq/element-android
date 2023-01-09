@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.room.threads
+package im.vector.app.features.home.room.threads.list.viewmodel
 
-sealed class FetchThreadsResult {
-    data class ShouldFetchMore(val nextBatch: String) : FetchThreadsResult()
-    object ReachedEnd : FetchThreadsResult()
+import im.vector.app.core.platform.VectorViewModelAction
+
+sealed interface ThreadListViewActions : VectorViewModelAction {
+    object TryAgain : ThreadListViewActions
 }
