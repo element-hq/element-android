@@ -2504,7 +2504,7 @@
     <string name="home_empty_space_no_rooms_title">%s
 \nduket paksa si i zbrazët.</string>
     <string name="labs_enable_voice_broadcast_summary">Jini në gjendje të incizoni dhe dërgoni transmetim zanor në rrjedhën kohore të dhomës.</string>
-    <string name="labs_enable_voice_broadcast_title">Aktivizoni transmetim zanor (nën zhvillim aktiv)</string>
+    <string name="labs_enable_voice_broadcast_title">Aktivizoni transmetim zanor</string>
     <string name="labs_enable_client_info_recording_title">Aktivizo regjistrim hollësish klienti</string>
     <string name="labs_enable_session_manager_summary">Shihini më qartë dhe kontrolloni më mirë krejt sesionet tuaj.</string>
     <string name="labs_enable_session_manager_title">Aktivizo përgjegjës të ri sesionesh</string>
@@ -2874,4 +2874,12 @@
     <string name="set_link_create">Krijoni një lidhje</string>
     <string name="set_link_link">Lidhje</string>
     <string name="set_link_text">Tekst</string>
+    <string name="settings_access_token_summary">Tokeni juaj i hyrjeve jep hyrje të plotë në llogarinë tuaj. Mos ia jepni kujt.</string>
+    <string name="settings_access_token">Token Hyrjesh</string>
+    <string name="room_polls_ended_no_item">S’ka pyetësorë të kaluar në këtë dhomë</string>
+    <string name="room_polls_ended">Pyetësorë të kaluar</string>
+    <string name="room_polls_active_no_item">S’ka pyetësorë aktivë në këtë dhomë</string>
+    <string name="room_polls_active">Pyetësorë aktivë</string>
+    <string name="a11y_poll_winner_option">mundësia fituese</string>
+    <string name="room_profile_section_more_polls">Historik pyetësorësh</string>
 </resources>
