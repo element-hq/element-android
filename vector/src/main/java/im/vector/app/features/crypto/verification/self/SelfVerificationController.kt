@@ -58,7 +58,18 @@ class SelfVerificationController @Inject constructor(
         fun onClickResetSecurity()
         fun onDoneFrom4S()
         fun keysNotIn4S()
+        fun confirmCancelRequest(confirm: Boolean)
+
+        /**
+         * An incoming request, when I am the verified request
+         */
+        fun wasNotMe()
     }
+
+    private val selfVerificationListener: InteractionListener?
+        get() {
+            return listener as? InteractionListener
+        }
 
     var state: SelfVerificationViewState? = null
 
@@ -70,12 +81,68 @@ class SelfVerificationController @Inject constructor(
 
     override fun buildModels() {
         val state = this.state ?: return
+
+        // actions have priority
+        if (state.activeAction !is UserAction.None) {
+            when (state.activeAction) {
+                UserAction.ConfirmCancel -> {
+                    renderConfirmCancel(state)
+                }
+                UserAction.None -> {}
+            }
+            return
+        }
+
         when (state.pendingRequest) {
             Uninitialized -> {
                 renderBaseNoActiveRequest(state)
             }
             else -> {
                 renderRequest(state)
+            }
+        }
+    }
+
+    private fun renderConfirmCancel(state: SelfVerificationViewState) {
+        val host = this
+        if (state.currentDeviceCanCrossSign) {
+            bottomSheetVerificationNoticeItem {
+                id("notice")
+                notice(host.stringProvider.getString(R.string.verify_cancel_self_verification_from_trusted).toEpoxyCharSequence())
+            }
+        } else {
+            bottomSheetVerificationNoticeItem {
+                id("notice")
+                notice(host.stringProvider.getString(R.string.verify_cancel_self_verification_from_untrusted).toEpoxyCharSequence())
+            }
+        }
+        bottomSheetDividerItem {
+            id("sep0")
+        }
+
+        bottomSheetVerificationActionItem {
+            id("cancel")
+            title(host.stringProvider.getString(R.string.action_skip))
+            titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
+            iconRes(R.drawable.ic_arrow_right)
+            iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
+            listener {
+//                host.listener?.confirmCancelRequest(true)
+            }
+        }
+
+        bottomSheetDividerItem {
+            id("sep1")
+        }
+
+        bottomSheetVerificationActionItem {
+            id("continue")
+            title(host.stringProvider.getString(R.string._continue))
+            titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+            iconRes(R.drawable.ic_arrow_right)
+            iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+            listener {
+//                host.listener?.confirmCancelRequest(false)
             }
         }
     }
@@ -142,15 +209,16 @@ class SelfVerificationController @Inject constructor(
                     EVerificationState.Requested -> {
                         // add accept buttons?
                         renderAcceptDeclineRequest()
-                        bottomSheetVerificationActionItem {
-                            id("not me")
-                            title(host.stringProvider.getString(R.string.verify_new_session_was_not_me))
-                            titleColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
-                            iconRes(R.drawable.ic_arrow_right)
-                            iconColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
-                            listener {
-                                TODO()
-//                                host.listener?.wasNotMe()
+                        if (state.isThisSessionVerified) {
+                            bottomSheetVerificationActionItem {
+                                id("not me")
+                                title(host.stringProvider.getString(R.string.verify_new_session_was_not_me))
+                                titleColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
+                                iconRes(R.drawable.ic_arrow_right)
+                                iconColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
+                                listener {
+                                    host.selfVerificationListener?.wasNotMe()
+                                }
                             }
                         }
                     }
@@ -172,14 +240,27 @@ class SelfVerificationController @Inject constructor(
                     }
                     EVerificationState.Cancelled -> {
                         renderCancel(pendingRequest.cancelConclusion ?: CancelCode.User)
+                        gotIt {
+                            listener?.onDone(false)
+                        }
                     }
                     EVerificationState.HandledByOtherSession -> {
                         // we should dismiss
+                        renderCancel(pendingRequest.cancelConclusion ?: CancelCode.User)
+                        gotIt {
+                            listener?.onDone(false)
+                        }
                     }
                 }
             }
             is Fail -> {
-                // TODO
+                bottomSheetVerificationNoticeItem {
+                    id("request_fail")
+                    notice(host.stringProvider.getString(R.string.verification_not_found).toEpoxyCharSequence())
+                }
+                gotIt {
+                    listener?.onDone(false)
+                }
             }
         }
     }
@@ -202,7 +283,7 @@ class SelfVerificationController @Inject constructor(
                 //                    subTitle(host.stringProvider.getString(R.string.verification_request_start_notice))
                 iconRes(R.drawable.ic_arrow_right)
                 iconColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
-                listener { (host.listener as? InteractionListener)?.onClickOnVerificationStart() }
+                listener { host.selfVerificationListener?.onClickOnVerificationStart() }
             }
 
             bottomSheetDividerItem {
@@ -218,7 +299,7 @@ class SelfVerificationController @Inject constructor(
                 subTitle(host.stringProvider.getString(R.string.verification_use_passphrase))
                 iconRes(R.drawable.ic_arrow_right)
                 iconColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
-                listener { (host.listener as? InteractionListener)?.onClickRecoverFromPassphrase() }
+                listener { host.selfVerificationListener?.onClickRecoverFromPassphrase() }
             }
 
             bottomSheetDividerItem {
@@ -234,7 +315,7 @@ class SelfVerificationController @Inject constructor(
             subTitle(host.stringProvider.getString(R.string.secure_backup_reset_all_no_other_devices))
             iconRes(R.drawable.ic_arrow_right)
             iconColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
-            listener { (host.listener as? InteractionListener)?.onClickResetSecurity() }
+            listener { host.selfVerificationListener?.onClickResetSecurity() }
         }
 
         if (!state.isVerificationRequired) {
@@ -248,7 +329,7 @@ class SelfVerificationController @Inject constructor(
                 titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
                 iconRes(R.drawable.ic_arrow_right)
                 iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
-                listener { (host.listener as? InteractionListener)?.onClickSkip() }
+                listener { host.selfVerificationListener?.onClickSkip() }
             }
         }
     }
@@ -268,7 +349,7 @@ class SelfVerificationController @Inject constructor(
                 val value = action.invoke()
                 if (value) {
                     verifiedSuccessTile()
-                    bottomDone { (host.listener as? InteractionListener)?.onDoneFrom4S() }
+                    bottomDone { host.selfVerificationListener?.onDoneFrom4S() }
                 } else {
                     bottomSheetVerificationNoticeItem {
                         id("notice_4s_failed'")
@@ -279,7 +360,7 @@ class SelfVerificationController @Inject constructor(
                                         .toEpoxyCharSequence()
                         )
                     }
-                    gotIt { (host.listener as? InteractionListener)?.keysNotIn4S() }
+                    gotIt { host.selfVerificationListener?.keysNotIn4S() }
                 }
             }
             else -> {

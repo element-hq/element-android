@@ -92,6 +92,14 @@ class SelfVerificationFragment  : VectorBaseFragment<BottomSheetVerificationChil
         viewModel.handle(VerificationAction.FailedToGetKeysFrom4S)
     }
 
+    override fun confirmCancelRequest(confirm: Boolean) {
+    }
+
+    override fun wasNotMe() {
+        // we just want to cancel and open device settings
+        viewModel.handle(VerificationAction.SelfVerificationWasNotMe)
+    }
+
     override fun onClickOnVerificationStart() {
         viewModel.handle(VerificationAction.RequestSelfVerification)
     }

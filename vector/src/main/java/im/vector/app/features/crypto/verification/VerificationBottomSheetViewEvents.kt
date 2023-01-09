@@ -23,8 +23,10 @@ import im.vector.app.core.platform.VectorViewEvents
  */
 sealed class VerificationBottomSheetViewEvents : VectorViewEvents {
     object Dismiss : VerificationBottomSheetViewEvents()
+    object DismissAndOpenDeviceSettings : VerificationBottomSheetViewEvents()
     object AccessSecretStore : VerificationBottomSheetViewEvents()
     object ResetAll : VerificationBottomSheetViewEvents()
     object GoToSettings : VerificationBottomSheetViewEvents()
     data class ModalError(val errorMessage: CharSequence) : VerificationBottomSheetViewEvents()
+    data class RequestNotFound(val transactionId: String) : VerificationBottomSheetViewEvents()
 }

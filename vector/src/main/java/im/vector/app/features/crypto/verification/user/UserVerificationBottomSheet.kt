@@ -90,7 +90,11 @@ class UserVerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSh
                             .setPositiveButton(R.string.ok, null)
                             .show()
                 }
-                VerificationBottomSheetViewEvents.ResetAll -> {
+                VerificationBottomSheetViewEvents.ResetAll,
+                VerificationBottomSheetViewEvents.DismissAndOpenDeviceSettings -> {
+                    // no-op for user verification
+                }
+                is VerificationBottomSheetViewEvents.RequestNotFound -> {
                     // no-op for user verification
                 }
             }

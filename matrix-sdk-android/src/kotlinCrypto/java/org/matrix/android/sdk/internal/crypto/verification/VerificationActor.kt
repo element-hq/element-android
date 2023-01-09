@@ -1663,16 +1663,22 @@ internal class VerificationActor @AssistedInject constructor(
             dispatchUpdate(VerificationEvent.TransactionUpdated(it))
         }
 
-        cancelRequest(request.requestId, request.roomId, request.otherUserId, request.otherDeviceId(), code)
+        cancelRequest(
+                request.requestId,
+                request.roomId,
+                request.otherUserId,
+                request.otherDeviceId()?.let { listOf(it) } ?: request.targetDevices ?: emptyList(),
+                code
+        )
     }
 
-    private suspend fun cancelRequest(transactionId: String, roomId: String?, otherUserId: String?, otherDeviceId: String?, code: CancelCode) {
+    private suspend fun cancelRequest(transactionId: String, roomId: String?, otherUserId: String?, otherDeviceIds: List<String>, code: CancelCode) {
         try {
             if (roomId == null) {
                 cancelTransactionToDevice(
                         transactionId,
                         otherUserId.orEmpty(),
-                        otherDeviceId.orEmpty(),
+                        otherDeviceIds,
                         code
                 )
             } else {
@@ -1688,7 +1694,7 @@ internal class VerificationActor @AssistedInject constructor(
         }
     }
 
-    private suspend fun cancelTransactionToDevice(transactionId: String, otherUserId: String, otherUserDeviceId: String?, code: CancelCode) {
+    private suspend fun cancelTransactionToDevice(transactionId: String, otherUserId: String, otherUserDeviceIds: List<String>, code: CancelCode) {
         Timber.d("## SAS canceling transaction $transactionId for reason $code")
         val cancelMessage = KeyVerificationCancel.create(transactionId, code)
 //        val contentMap = MXUsersDevicesMap<Any>()
@@ -1697,7 +1703,7 @@ internal class VerificationActor @AssistedInject constructor(
                 messageType = EventType.KEY_VERIFICATION_CANCEL,
                 toSendToDeviceObject = cancelMessage,
                 otherUserId = otherUserId,
-                targetDevices = otherUserDeviceId?.let { listOf(it) } ?: emptyList()
+                targetDevices = otherUserDeviceIds
         )
 //        sendToDeviceTask
 //                .execute(SendToDeviceTask.Params(EventType.KEY_VERIFICATION_CANCEL, contentMap))

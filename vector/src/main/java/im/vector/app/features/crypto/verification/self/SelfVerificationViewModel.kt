@@ -16,6 +16,7 @@
 
 package im.vector.app.features.crypto.verification.self
 
+import android.content.res.Resources.NotFoundException
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -46,6 +47,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
@@ -56,6 +58,7 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.isVerified
 import org.matrix.android.sdk.api.session.crypto.keysbackup.BackupUtils
 import org.matrix.android.sdk.api.session.crypto.keysbackup.computeRecoveryKey
 import org.matrix.android.sdk.api.session.crypto.keysbackup.toKeysVersionResult
+import org.matrix.android.sdk.api.session.crypto.verification.EVerificationState
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
 import org.matrix.android.sdk.api.session.crypto.verification.QrCodeVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction
@@ -65,7 +68,13 @@ import org.matrix.android.sdk.api.session.crypto.verification.getTransaction
 import org.matrix.android.sdk.api.util.fromBase64
 import timber.log.Timber
 
+sealed class UserAction {
+    object ConfirmCancel : UserAction()
+    object None : UserAction()
+}
+
 data class SelfVerificationViewState(
+        val activeAction: UserAction = UserAction.None,
         val pendingRequest: Async<PendingVerificationRequest> = Uninitialized,
         // need something immutable for state to work properly, VerificationTransaction is not
         val startedTransaction: Async<VerificationTransactionData> = Uninitialized,
@@ -110,9 +119,19 @@ class SelfVerificationViewModel @AssistedInject constructor(
                 copy(pendingRequest = Loading())
             }
             viewModelScope.launch {
-                session.cryptoService().verificationService().getExistingVerificationRequest(session.myUserId, initialState.transactionId)?.let {
+                val matchingRequest = session.cryptoService().verificationService().getExistingVerificationRequest(session.myUserId, initialState.transactionId)
+                if (matchingRequest == null) {
+                    // it's unexpected for now dismiss.
+                    // Could happen when you click on the popup for an incoming request
+                    // that has been deleted by the time you clicked on it
+                    // maybe give some feedback?
                     setState {
-                        copy(pendingRequest = Success(it))
+                        copy(pendingRequest = Fail(NotFoundException()))
+                    }
+                    _viewEvents.post(VerificationBottomSheetViewEvents.RequestNotFound(initialState.transactionId))
+                } else {
+                    setState {
+                        copy(pendingRequest = Success(matchingRequest))
                     }
                 }
             }
@@ -204,8 +223,13 @@ class SelfVerificationViewModel @AssistedInject constructor(
                 }
             }
             is VerificationAction.GotItConclusion -> {
-                // just dismiss
-                _viewEvents.post(VerificationBottomSheetViewEvents.Dismiss)
+                withState { state ->
+                    if (action.verified || state.isThisSessionVerified) {
+                        _viewEvents.post(VerificationBottomSheetViewEvents.Dismiss)
+                    } else {
+                        queryCancel()
+                    }
+                }
             }
             is VerificationAction.GotResultFromSsss -> handleSecretBackFromSSSS(action)
             VerificationAction.OtherUserDidNotScanned -> {
@@ -292,7 +316,7 @@ class SelfVerificationViewModel @AssistedInject constructor(
                 }
             }
             VerificationAction.SkipVerification -> {
-                _viewEvents.post(VerificationBottomSheetViewEvents.Dismiss)
+                queryCancel()
             }
             VerificationAction.ForgotResetAll -> {
                 _viewEvents.post(VerificationBottomSheetViewEvents.ResetAll)
@@ -323,6 +347,87 @@ class SelfVerificationViewModel @AssistedInject constructor(
             }
             VerificationAction.RequestVerificationByDM -> {
                 // not applicable in self verification
+            }
+            VerificationAction.SelfVerificationWasNotMe -> {
+                // cancel transaction then open settings
+                withState { state ->
+                    val request = state.pendingRequest.invoke() ?: return@withState
+                    session.coroutineScope.launch {
+                        tryOrNull {
+                            session.cryptoService().verificationService().cancelVerificationRequest(request)
+                        }
+                    }
+                    _viewEvents.post(VerificationBottomSheetViewEvents.DismissAndOpenDeviceSettings)
+                }
+            }
+        }
+    }
+
+    fun queryCancel() = withState { state ->
+        when (state.pendingRequest) {
+            is Uninitialized -> {
+                // No active request currently
+                if (state.isVerificationRequired) {
+                    // we can't let you dismiss :)
+                } else {
+                    // verification is not required so just dismiss
+                    _viewEvents.post(VerificationBottomSheetViewEvents.Dismiss)
+                }
+            }
+            is Success -> {
+                val activeRequest = state.pendingRequest.invoke()
+                // there is an active request or transaction, we need confirmation to cancel it
+                if (activeRequest.state == EVerificationState.Cancelled) {
+                    // equivalent of got it?
+                    if (state.isThisSessionVerified) {
+                        // we can always dismiss??
+                        _viewEvents.post(VerificationBottomSheetViewEvents.Dismiss)
+                    } else {
+                        // go back to main verification screen
+                        setState {
+                            copy(pendingRequest = Uninitialized)
+                        }
+                    }
+                    return@withState
+                } else if (activeRequest.state == EVerificationState.Done) {
+                    _viewEvents.post(VerificationBottomSheetViewEvents.Dismiss)
+                } else {
+                    if (state.isThisSessionVerified) {
+                        // we are the verified session, so just dismiss?
+                        // do we want to prompt confirm??
+                    } else {
+                        // cancel the active request and go back?
+                        setState {
+                            copy(
+                                    transactionId = null,
+                                    pendingRequest = Uninitialized,
+                            )
+                        }
+                        viewModelScope.launch(Dispatchers.IO) {
+                            session.cryptoService().verificationService().cancelVerificationRequest(
+                                    activeRequest
+                            )
+                            setState {
+                                copy(
+                                        transactionId = null,
+                                        pendingRequest = Uninitialized
+                                )
+                            }
+                        }
+                    }
+                }
+//                if (state.isThisSessionVerified) {
+//                    // we can always dismiss??
+//                    _viewEvents.post(VerificationBottomSheetViewEvents.Dismiss)
+//                }
+//                setState {
+//                    copy(
+//                            activeAction = UserAction.ConfirmCancel
+//                    )
+//                }
+            }
+            else -> {
+                // just ignore?
             }
         }
     }

@@ -224,6 +224,7 @@ class IncomingVerificationRequestHandler @Inject constructor(
     override fun verificationRequestUpdated(pr: PendingVerificationRequest) {
         // If an incoming request is readied (by another device?) we should discard the alert
         if (pr.isIncoming && (pr.state == EVerificationState.HandledByOtherSession ||
+                        pr.state == EVerificationState.Cancelled ||
                         pr.state == EVerificationState.Started ||
                         pr.state == EVerificationState.WeStarted)) {
             popupAlertManager.cancelAlert(uniqueIdForVerificationRequest(pr))

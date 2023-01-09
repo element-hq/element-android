@@ -381,10 +381,9 @@ class UserVerificationViewModel @AssistedInject constructor(
             VerificationAction.SkipVerification,
             VerificationAction.VerifyFromPassphrase,
             VerificationAction.SecuredStorageHasBeenReset,
-            VerificationAction.FailedToGetKeysFrom4S -> {
-                // Not applicable for user verification
-            }
-            VerificationAction.RequestSelfVerification -> TODO()
+            VerificationAction.FailedToGetKeysFrom4S,
+            VerificationAction.RequestSelfVerification,
+            VerificationAction.SelfVerificationWasNotMe,
             VerificationAction.ForgotResetAll -> {
                 // Not applicable for user verification
             }

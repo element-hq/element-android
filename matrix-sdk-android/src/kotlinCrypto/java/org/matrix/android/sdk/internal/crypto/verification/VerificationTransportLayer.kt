@@ -93,7 +93,7 @@ internal class VerificationTransportLayer @Inject constructor(
     }
 
     suspend fun sendToDeviceEvent(messageType: String, toSendToDeviceObject: SendToDeviceObject, otherUserId: String, targetDevices: List<String>) {
-        // TODO currently to device verification messages are sent unencrypted
+        // currently to device verification messages are sent unencrypted
         // as per spec not recommended
         // > verification messages may be sent unencrypted, though this is not encouraged.
 

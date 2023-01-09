@@ -17,8 +17,10 @@
 package im.vector.app.features.crypto.verification.self
 
 import android.app.Activity
+import android.app.Dialog
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,6 +32,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.registerStartForActivityResult
+import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetVerificationBinding
@@ -37,6 +40,7 @@ import im.vector.app.features.crypto.quads.SharedSecureStorageActivity
 import im.vector.app.features.crypto.quads.SharedSecureStorageViewState
 import im.vector.app.features.crypto.verification.VerificationAction
 import im.vector.app.features.crypto.verification.VerificationBottomSheetViewEvents
+import im.vector.app.features.settings.VectorSettingsActivity
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
@@ -57,6 +61,11 @@ class SelfVerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSh
     ) : Parcelable
 
     private val viewModel by fragmentViewModel(SelfVerificationViewModel::class)
+
+    init {
+        // we manage dismiss/back manually as verification could be required
+        isCancelable = false
+    }
 
     override fun getBinding(
             inflater: LayoutInflater,
@@ -85,6 +94,23 @@ class SelfVerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSh
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        observeViewModelEvents()
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return super.onCreateDialog(savedInstanceState).apply {
+            setOnKeyListener { _, keyCode, keyEvent ->
+                if (keyCode == KeyEvent.KEYCODE_BACK && keyEvent.action == KeyEvent.ACTION_UP) {
+                    viewModel.queryCancel()
+                    true
+                } else {
+                    false
+                }
+            }
+        }
+    }
+
+    private fun observeViewModelEvents() {
         viewModel.observeViewEvents { event ->
             when (event) {
                 VerificationBottomSheetViewEvents.AccessSecretStore -> {
@@ -121,6 +147,16 @@ class SelfVerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSh
                             .setCancelable(false)
                             .setPositiveButton(R.string.ok, null)
                             .show()
+                }
+                VerificationBottomSheetViewEvents.DismissAndOpenDeviceSettings -> {
+                    dismiss()
+                    requireActivity().singletonEntryPoint().navigator().openSettings(
+                            requireActivity(),
+                            VectorSettingsActivity.EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY_MANAGE_SESSIONS
+                    )
+                }
+                is VerificationBottomSheetViewEvents.RequestNotFound -> {
+                   dismiss()
                 }
             }
         }

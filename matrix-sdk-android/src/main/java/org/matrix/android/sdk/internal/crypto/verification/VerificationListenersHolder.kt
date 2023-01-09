@@ -44,15 +44,15 @@ internal class VerificationListenersHolder @Inject constructor(
     }
 
     fun dispatchTxUpdated(tx: VerificationTransaction) {
-        Timber.v("## SAS dispatchTxUpdated txId:${tx.transactionId} $tx")
         scope.launch {
+            Timber.v("## SAS dispatchTxUpdated txId:${tx.transactionId} $tx")
             eventFlow.emit(VerificationEvent.TransactionUpdated(tx))
         }
     }
 
     fun dispatchRequestAdded(verificationRequest: PendingVerificationRequest) {
-        Timber.v("## SAS dispatchRequestAdded txId:${verificationRequest.transactionId} $verificationRequest")
         scope.launch {
+            Timber.v("## SAS dispatchRequestAdded txId:${verificationRequest.transactionId} $verificationRequest")
             eventFlow.emit(VerificationEvent.RequestAdded(verificationRequest))
         }
     }

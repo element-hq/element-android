@@ -588,7 +588,7 @@ internal class RustCryptoService @Inject constructor(
 
         // Notify the our listeners about room keys so decryption is retried.
         toDeviceEvents.events.orEmpty().forEach { event ->
-            Timber.tag(loggerTag.value).d("Processed ToDevice event msgid:${event.toDeviceTracingId()}")
+            Timber.tag(loggerTag.value).d("Processed ToDevice event msgid:${event.toDeviceTracingId()} id:${event.eventId} type:${event.type}")
 
             if (event.getClearType() == EventType.ENCRYPTED) {
                 // rust failed to decrypt it

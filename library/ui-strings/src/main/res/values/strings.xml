@@ -2517,6 +2517,7 @@
     </string>
 
     <string name="verify_cancelled_notice">Verification has been canceled. You can start verification again.</string>
+    <string name="verification_not_found">The verification request was not found. It may have been cancelled, or handled by another session.</string>
     <string name="verify_invalid_qr_notice">This QR code looks malformed. Please try to verify with another method.</string>
     <string name="verification_cancelled">Verification Canceled</string>
 

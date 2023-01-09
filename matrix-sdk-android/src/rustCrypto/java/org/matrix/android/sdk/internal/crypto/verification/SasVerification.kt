@@ -29,7 +29,6 @@ import org.matrix.android.sdk.api.session.crypto.verification.SasTransactionStat
 import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.crypto.verification.safeValueOf
-import org.matrix.android.sdk.internal.crypto.OlmMachine
 import org.matrix.android.sdk.internal.crypto.network.RequestSender
 import org.matrix.rustcomponents.sdk.crypto.CryptoStoreException
 import org.matrix.rustcomponents.sdk.crypto.Sas
@@ -39,7 +38,7 @@ import org.matrix.rustcomponents.sdk.crypto.SasState
 /** Class representing a short auth string verification flow */
 internal class SasVerification @AssistedInject constructor(
         @Assisted private var inner: Sas,
-        private val olmMachine: OlmMachine,
+//        private val olmMachine: OlmMachine,
         private val sender: RequestSender,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val verificationListenersHolder: VerificationListenersHolder,
@@ -254,6 +253,7 @@ internal class SasVerification @AssistedInject constructor(
 
     override fun onChange(state: SasState) {
         innerState = state
+        verificationListenersHolder.dispatchTxUpdated(this)
     }
 
     override fun toString(): String {
