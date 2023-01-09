@@ -111,8 +111,10 @@ import org.matrix.android.sdk.api.session.room.model.message.asMessageAudioEvent
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
 import org.matrix.android.sdk.api.session.room.model.message.getThumbnailUrl
 import org.matrix.android.sdk.api.session.room.model.relation.ReplyToContent
+import org.matrix.android.sdk.api.session.room.timeline.getRelationContent
 import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import org.matrix.android.sdk.api.util.MimeTypes
+import timber.log.Timber
 import javax.inject.Inject
 
 class MessageItemFactory @Inject constructor(
@@ -205,7 +207,7 @@ class MessageItemFactory @Inject constructor(
             is MessageAudioContent -> buildAudioContent(params, messageContent, informationData, highlight, attributes)
             is MessageVerificationRequestContent -> buildVerificationRequestMessageItem(messageContent, informationData, highlight, callback, attributes)
             is MessagePollContent -> buildPollItem(messageContent, informationData, highlight, callback, attributes, isEnded = false)
-            is MessageEndPollContent -> buildEndedPollItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageEndPollContent -> buildEndedPollItem(event.getRelationContent()?.eventId, informationData, highlight, callback, attributes)
             is MessageLocationContent -> buildLocationItem(messageContent, informationData, highlight, attributes)
             is MessageBeaconInfoContent -> liveLocationShareMessageItemFactory.create(event, highlight, attributes)
             is MessageVoiceBroadcastInfoContent -> voiceBroadcastItemFactory.create(params, messageContent, highlight, attributes)
@@ -267,13 +269,15 @@ class MessageItemFactory @Inject constructor(
     }
 
     private fun buildEndedPollItem(
-            endedPollContent: MessageEndPollContent,
+            pollStartEventId: String?,
             informationData: MessageInformationData,
             highlight: Boolean,
             callback: TimelineEventController.Callback?,
             attributes: AbsMessageItem.Attributes,
     ): PollItem? {
-        val pollStartEventId = endedPollContent.relatesTo?.eventId ?: return null
+        pollStartEventId ?: return null.also {
+            Timber.e("### buildEndedPollItem. Cannot render poll end event because poll start event id is null")
+        }
         val pollStartEvent = session.roomService().getRoom(roomId)?.getTimelineEvent(pollStartEventId)
         val pollContent = pollStartEvent?.root?.getClearContent()?.toModel<MessagePollContent>() ?: return null
 
