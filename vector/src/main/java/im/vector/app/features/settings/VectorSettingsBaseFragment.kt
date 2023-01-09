@@ -20,7 +20,9 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.CallSuper
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.preference.PreferenceFragmentCompat
 import com.airbnb.mvrx.MavericksView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -35,6 +37,7 @@ import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.plan.MobileScreen
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import reactivecircus.flowbinding.android.view.clicks
 import timber.log.Timber
@@ -66,13 +69,19 @@ abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), Maverick
      * ViewEvents
      * ========================================================================================== */
 
-    protected fun <T : VectorViewEvents> VectorViewModel<*, *, T>.observeViewEvents(observer: (T) -> Unit) {
-        viewEvents
-                .stream()
-                .onEach {
-                    observer(it)
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+    protected fun <T : VectorViewEvents> VectorViewModel<*, *, T>.observeViewEvents(
+            observer: (T) -> Unit,
+    ) {
+        val tag = this@VectorSettingsBaseFragment::class.simpleName.toString()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewEvents
+                        .stream(tag)
+                        .collect {
+                            observer(it)
+                        }
+            }
+        }
     }
 
     /* ==========================================================================================

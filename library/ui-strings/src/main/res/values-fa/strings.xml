@@ -2890,4 +2890,13 @@
     <string name="set_link_link">پیوند</string>
     <string name="set_link_text">متن</string>
     <string name="rich_text_editor_link">تنظیم پیوند</string>
+    <string name="settings_access_token_summary">ژتون دسترسیتان، دسترسی کامل به حسابتان را می‌دهد. با هیچ‌کس هم‌رسانیش نکنید.</string>
+    <string name="settings_access_token">ژتون دسترسی</string>
+    <string name="rich_text_editor_bullet_list">تغییر وضعیت سیاههٔ گلوله‌ای</string>
+    <string name="rich_text_editor_numbered_list">تغییر وضعیت سیاههٔ شماره‌دار</string>
+    <string name="room_polls_ended_no_item">هیچ‌ نظرسنجی قدیمی‌ای در این اتاق وجود ندارد</string>
+    <string name="room_polls_ended">نظرسنجی‌های گذشته</string>
+    <string name="room_polls_active_no_item">هیچ نظرسنجی فعّالی در این اتاق وجود ندارد</string>
+    <string name="room_polls_active">نظرسنجی‌های فعّال</string>
+    <string name="room_profile_section_more_polls">تاریخچهٔ نظرسنجی‌ها</string>
 </resources>

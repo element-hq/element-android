@@ -2890,4 +2890,13 @@
     <string name="set_link_link">Lien</string>
     <string name="set_link_text">Texte</string>
     <string name="rich_text_editor_link">Définir un lien</string>
+    <string name="settings_access_token_summary">Votre jeton d’accès donne un accès intégral à votre compte. Ne le partagez avec personne.</string>
+    <string name="settings_access_token">Jeton d’accès</string>
+    <string name="rich_text_editor_bullet_list">(Dés)activer la liste à puce</string>
+    <string name="rich_text_editor_numbered_list">(Dés)activer la liste numérotée</string>
+    <string name="room_polls_ended_no_item">Il n’y a aucun ancien sondage dans ce salon</string>
+    <string name="room_polls_ended">Anciens sondages</string>
+    <string name="room_polls_active_no_item">Il n’y a aucun sondage en cours dans ce salon</string>
+    <string name="room_polls_active">Sondages actifs</string>
+    <string name="room_profile_section_more_polls">Historique des sondages</string>
 </resources>

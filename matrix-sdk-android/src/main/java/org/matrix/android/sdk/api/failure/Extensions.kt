@@ -25,6 +25,9 @@ import java.io.IOException
 import java.net.UnknownHostException
 import javax.net.ssl.HttpsURLConnection
 
+fun Throwable.is400() = this is Failure.ServerError &&
+        httpCode == HttpsURLConnection.HTTP_BAD_REQUEST
+
 fun Throwable.is401() = this is Failure.ServerError &&
         httpCode == HttpsURLConnection.HTTP_UNAUTHORIZED && /* 401 */
         error.code == MatrixError.M_UNAUTHORIZED

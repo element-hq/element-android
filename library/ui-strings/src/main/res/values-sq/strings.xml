@@ -2874,4 +2874,12 @@
     <string name="set_link_create">Krijoni një lidhje</string>
     <string name="set_link_link">Lidhje</string>
     <string name="set_link_text">Tekst</string>
+    <string name="settings_access_token_summary">Tokeni juaj i hyrjeve jep hyrje të plotë në llogarinë tuaj. Mos ia jepni kujt.</string>
+    <string name="settings_access_token">Token Hyrjesh</string>
+    <string name="room_polls_ended_no_item">S’ka pyetësorë të kaluar në këtë dhomë</string>
+    <string name="room_polls_ended">Pyetësorë të kaluar</string>
+    <string name="room_polls_active_no_item">S’ka pyetësorë aktivë në këtë dhomë</string>
+    <string name="room_polls_active">Pyetësorë aktivë</string>
+    <string name="a11y_poll_winner_option">mundësia fituese</string>
+    <string name="room_profile_section_more_polls">Historik pyetësorësh</string>
 </resources>
