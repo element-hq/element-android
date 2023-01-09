@@ -794,6 +794,7 @@
     <string name="thread_list_modal_my_threads_subtitle">Shows all threads you’ve participated in</string>
     <string name="thread_list_empty_title">Keep discussions organized with threads</string>
     <string name="thread_list_empty_subtitle">Threads help keep your conversations on-topic and easy to track.</string>
+    <string name="thread_list_not_available">You\'re homeserver does not support listing threads yet.</string>
     <!-- Parameter %s will be replaced by the value of string reply_in_thread -->
     <string name="thread_list_empty_notice">Tip: Long tap a message and use “%s”.</string>
     <string name="search_thread_from_a_thread">From a Thread</string>
