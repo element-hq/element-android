@@ -53,25 +53,10 @@ internal class GetVoiceBroadcastStateEventUseCaseTest {
     fun `given there are several related events related to the given vb, when execute, then return the most recent one`() {
         // Given
         val aVoiceBroadcast = VoiceBroadcast(A_VOICE_BROADCAST_ID, A_ROOM_ID)
-        val aListOfTimelineEvents = listOf<TimelineEvent>(
-                mockk(relaxed = true) {
-                    every { root.eventId } returns "event_id_1"
-                    every { root.type } returns VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO
-                    every { root.isRedacted() } returns false
-                    every { root.originServerTs } returns 1L
-                },
-                mockk(relaxed = true) {
-                    every { root.eventId } returns "event_id_3"
-                    every { root.type } returns VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO
-                    every { root.isRedacted() } returns false
-                    every { root.originServerTs } returns 3L
-                },
-                mockk(relaxed = true) {
-                    every { root.eventId } returns "event_id_2"
-                    every { root.type } returns VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO
-                    every { root.isRedacted() } returns false
-                    every { root.originServerTs } returns 2L
-                },
+        val aListOfTimelineEvents = listOf(
+                givenAVoiceBroadcastEvent(eventId = "event_id_1", isRedacted = false, timestamp = 1L),
+                givenAVoiceBroadcastEvent(eventId = "event_id_3", isRedacted = false, timestamp = 3L),
+                givenAVoiceBroadcastEvent(eventId = "event_id_2", isRedacted = false, timestamp = 2L),
         )
         every { fakeSession.getRoom(A_ROOM_ID)?.timelineService()?.getTimelineEventsRelatedTo(any(), any()) } returns aListOfTimelineEvents
 
@@ -87,19 +72,9 @@ internal class GetVoiceBroadcastStateEventUseCaseTest {
     fun `given there are several related events related to the given vb, when execute, then return the most recent one which is not redacted`() {
         // Given
         val aVoiceBroadcast = VoiceBroadcast(A_VOICE_BROADCAST_ID, A_ROOM_ID)
-        val aListOfTimelineEvents = listOf<TimelineEvent>(
-                mockk(relaxed = true) {
-                    every { root.eventId } returns "event_id_1"
-                    every { root.type } returns VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO
-                    every { root.isRedacted() } returns false
-                    every { root.originServerTs } returns 1L
-                },
-                mockk(relaxed = true) {
-                    every { root.eventId } returns "event_id_2"
-                    every { root.type } returns VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO
-                    every { root.isRedacted() } returns true
-                    every { root.originServerTs } returns 2L
-                },
+        val aListOfTimelineEvents = listOf(
+                givenAVoiceBroadcastEvent(eventId = "event_id_1", isRedacted = false, timestamp = 1L),
+                givenAVoiceBroadcastEvent(eventId = "event_id_2", isRedacted = true, timestamp = 2L),
         )
         every { fakeSession.getRoom(A_ROOM_ID)?.timelineService()?.getTimelineEventsRelatedTo(any(), any()) } returns aListOfTimelineEvents
 
@@ -109,5 +84,16 @@ internal class GetVoiceBroadcastStateEventUseCaseTest {
         // Then
         result.shouldNotBeNull()
         result.root.eventId shouldBeEqualTo "event_id_1"
+    }
+
+    private fun givenAVoiceBroadcastEvent(
+            eventId: String,
+            isRedacted: Boolean,
+            timestamp: Long,
+    ) = mockk<TimelineEvent>(relaxed = true) {
+        every { root.eventId } returns eventId
+        every { root.type } returns VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO
+        every { root.isRedacted() } returns isRedacted
+        every { root.originServerTs } returns timestamp
     }
 }
