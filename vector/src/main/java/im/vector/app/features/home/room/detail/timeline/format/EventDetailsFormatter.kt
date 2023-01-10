@@ -24,6 +24,7 @@ import org.matrix.android.sdk.api.session.events.model.isAudioMessage
 import org.matrix.android.sdk.api.session.events.model.isFileMessage
 import org.matrix.android.sdk.api.session.events.model.isImageMessage
 import org.matrix.android.sdk.api.session.events.model.isPollEnd
+import org.matrix.android.sdk.api.session.events.model.isPollStart
 import org.matrix.android.sdk.api.session.events.model.isVideoMessage
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
@@ -53,10 +54,13 @@ class EventDetailsFormatter @Inject constructor(
             event.isVideoMessage() -> formatForVideoMessage(event)
             event.isAudioMessage() -> formatForAudioMessage(event)
             event.isFileMessage() -> formatForFileMessage(event)
+            event.isPollStart() -> formatPollMessage()
             event.isPollEnd() -> formatPollEndMessage()
             else -> null
         }
     }
+
+    private fun formatPollMessage() = context.getString(R.string.message_reply_to_poll_preview)
 
     private fun formatPollEndMessage() = context.getString(R.string.message_reply_to_ended_poll_preview)
 

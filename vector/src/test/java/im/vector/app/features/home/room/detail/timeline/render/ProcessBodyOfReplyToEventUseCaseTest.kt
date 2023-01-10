@@ -177,6 +177,17 @@ class ProcessBodyOfReplyToEventUseCaseTest {
     }
 
     @Test
+    fun `given a replied event of type poll end message when process the formatted body then content is replaced by correct string`() {
+        // Given
+        givenTypeOfRepliedEvent(isPollMessage = true)
+        givenNewContentForId(R.string.message_reply_to_sender_ended_poll)
+        every { fakeRepliedEvent.getClearType() } returns EventType.POLL_END.unstable
+        every { fakeRepliedEvent.getPollQuestion() } returns null
+
+        executeAndAssertResult()
+    }
+
+    @Test
     fun `given a replied event of type live location message when process the formatted body then content is replaced by correct string`() {
         // Given
         givenTypeOfRepliedEvent(isLiveLocationMessage = true)

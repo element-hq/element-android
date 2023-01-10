@@ -281,13 +281,9 @@ class MessageItemFactory @Inject constructor(
         val pollStartEvent = session.roomService().getRoom(roomId)?.getTimelineEvent(pollStartEventId)
         val pollContent = pollStartEvent?.root?.getClearContent()?.toModel<MessagePollContent>() ?: return null
 
-        val aggregatedInformationData = informationData.copy(
-                pollResponseAggregatedSummary = messageInformationDataFactory.mapPollResponseSummary(pollStartEvent.annotations?.pollResponseSummary)
-        )
-
         return buildPollItem(
                 pollContent,
-                aggregatedInformationData,
+                informationData,
                 highlight,
                 callback,
                 attributes,
