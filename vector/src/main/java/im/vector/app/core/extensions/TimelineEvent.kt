@@ -27,7 +27,7 @@ import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 
 fun TimelineEvent.canReact(): Boolean {
     // Only event of type EventType.MESSAGE, EventType.STICKER and EventType.POLL_START are supported for the moment
-    return root.getClearType() in listOf(EventType.MESSAGE, EventType.STICKER) + EventType.POLL_START.values &&
+    return root.getClearType() in listOf(EventType.MESSAGE, EventType.STICKER) + EventType.POLL_START.values + EventType.POLL_END.values &&
             root.sendState == SendState.SYNCED &&
             !root.isRedacted()
 }

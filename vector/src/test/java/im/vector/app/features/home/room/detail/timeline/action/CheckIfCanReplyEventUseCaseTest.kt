@@ -43,7 +43,7 @@ class CheckIfCanReplyEventUseCaseTest {
 
     @Test
     fun `given reply is allowed for the event type when use case is executed then result is true`() {
-        val eventTypes = EventType.STATE_ROOM_BEACON_INFO.values + EventType.POLL_START.values + EventType.MESSAGE
+        val eventTypes = EventType.STATE_ROOM_BEACON_INFO.values + EventType.POLL_START.values + EventType.POLL_END.values + EventType.MESSAGE
 
         eventTypes.forEach { eventType ->
             val event = givenAnEvent(eventType)
@@ -78,6 +78,7 @@ class CheckIfCanReplyEventUseCaseTest {
                 MessageType.MSGTYPE_AUDIO,
                 MessageType.MSGTYPE_FILE,
                 MessageType.MSGTYPE_POLL_START,
+                MessageType.MSGTYPE_POLL_END,
                 MessageType.MSGTYPE_BEACON_INFO,
                 MessageType.MSGTYPE_LOCATION
         )

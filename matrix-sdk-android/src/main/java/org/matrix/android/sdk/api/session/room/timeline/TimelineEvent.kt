@@ -35,6 +35,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoCo
 import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContentWithFormattedBody
+import org.matrix.android.sdk.api.session.room.model.message.MessageEndPollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageStickerContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
@@ -148,6 +149,7 @@ fun TimelineEvent.getLastMessageContent(): MessageContent? {
         // so toModel<MessageContent> won't parse them correctly
         // It's discriminated on event type instead. Maybe it shouldn't be MessageContent at all to avoid confusion?
         in EventType.POLL_START.values -> (getLastEditNewContent() ?: root.getClearContent()).toModel<MessagePollContent>()
+        in EventType.POLL_END.values -> (getLastEditNewContent() ?: root.getClearContent()).toModel<MessageEndPollContent>()
         in EventType.STATE_ROOM_BEACON_INFO.values -> (getLastEditNewContent() ?: root.getClearContent()).toModel<MessageBeaconInfoContent>()
         in EventType.BEACON_LOCATION_DATA.values -> (getLastEditNewContent() ?: root.getClearContent()).toModel<MessageBeaconLocationDataContent>()
         else -> (getLastEditNewContent() ?: root.getClearContent()).toModel()
