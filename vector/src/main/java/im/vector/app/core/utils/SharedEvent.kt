@@ -19,6 +19,7 @@ package im.vector.app.core.utils
 import im.vector.app.core.platform.VectorViewEvents
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.transform
 import java.util.concurrent.CopyOnWriteArraySet
 
@@ -34,7 +35,12 @@ class EventQueue<T : VectorViewEvents>(capacity: Int) : SharedEvents<T> {
         innerQueue.tryEmit(OneTimeEvent(event))
     }
 
-    override fun stream(consumerId: String): Flow<T> = innerQueue.filterNotHandledBy(consumerId)
+    override fun stream(consumerId: String): Flow<T> = innerQueue
+            .onEach {
+                // Ensure that buffered Events will not be sent again to new subscribers.
+                innerQueue.resetReplayCache()
+            }
+            .filterNotHandledBy(consumerId)
 }
 
 /**
