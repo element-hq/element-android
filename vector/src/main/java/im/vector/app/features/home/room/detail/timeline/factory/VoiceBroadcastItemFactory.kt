@@ -18,7 +18,6 @@ package im.vector.app.features.home.room.detail.timeline.factory
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.DrawableProvider
-import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.app.features.home.room.detail.timeline.helper.VoiceBroadcastEventsGroup
@@ -37,7 +36,6 @@ import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import im.vector.app.features.voicebroadcast.recording.VoiceBroadcastRecorder
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoom
-import org.matrix.android.sdk.api.session.getUserOrDefault
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
@@ -77,7 +75,7 @@ class VoiceBroadcastItemFactory @Inject constructor(
                 voiceBroadcast = voiceBroadcast,
                 voiceBroadcastState = voiceBroadcastContent.voiceBroadcastState,
                 duration = voiceBroadcastEventsGroup.getDuration(),
-                recorderName = params.event.root.stateKey?.let { session.getUserOrDefault(it) }?.toMatrixItem()?.getBestName().orEmpty(),
+                recorderName = params.event.senderInfo.disambiguatedDisplayName,
                 recorder = voiceBroadcastRecorder,
                 player = voiceBroadcastPlayer,
                 playbackTracker = playbackTracker,
