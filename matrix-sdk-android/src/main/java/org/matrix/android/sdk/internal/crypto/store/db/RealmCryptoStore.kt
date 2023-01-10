@@ -40,6 +40,7 @@ import org.matrix.android.sdk.api.session.crypto.keysbackup.BackupUtils
 import org.matrix.android.sdk.api.session.crypto.keysbackup.SavedKeyBackupKeyInfo
 import org.matrix.android.sdk.api.session.crypto.model.AuditTrail
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.CryptoRoomInfo
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.ForwardInfo
 import org.matrix.android.sdk.api.session.crypto.model.IncomingKeyRequestInfo
@@ -48,6 +49,7 @@ import org.matrix.android.sdk.api.session.crypto.model.RoomKeyRequestBody
 import org.matrix.android.sdk.api.session.crypto.model.TrailType
 import org.matrix.android.sdk.api.session.crypto.model.WithheldInfo
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.events.model.content.EncryptionEventContent
 import org.matrix.android.sdk.api.session.events.model.content.RoomKeyWithHeldContent
 import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
 import org.matrix.android.sdk.api.util.Optional
@@ -58,6 +60,7 @@ import org.matrix.android.sdk.internal.crypto.model.OutboundGroupSessionWrapper
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.store.UserDataToStore
 import org.matrix.android.sdk.internal.crypto.store.db.mapper.CrossSigningKeysMapper
+import org.matrix.android.sdk.internal.crypto.store.db.mapper.CryptoRoomInfoMapper
 import org.matrix.android.sdk.internal.crypto.store.db.mapper.MyDeviceLastSeenInfoEntityMapper
 import org.matrix.android.sdk.internal.crypto.store.db.model.AuditTrailEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.AuditTrailEntityFields
@@ -711,6 +714,30 @@ internal class RealmCryptoStore @Inject constructor(
     override fun getRoomAlgorithm(roomId: String): String? {
         return doWithRealm(realmConfiguration) {
             CryptoRoomEntity.getById(it, roomId)?.algorithm
+        }
+    }
+
+    override fun getRoomCryptoInfo(roomId: String): CryptoRoomInfo? {
+        return doWithRealm(realmConfiguration) { realm ->
+            CryptoRoomEntity.getById(realm, roomId)?.let {
+                CryptoRoomInfoMapper.map(it)
+            }
+        }
+    }
+
+    override fun setAlgorithmInfo(roomId: String, encryption: EncryptionEventContent?) {
+        doRealmTransaction("setAlgorithmInfo", realmConfiguration) {
+            CryptoRoomEntity.getOrCreate(it, roomId).let { entity ->
+                entity.algorithm = encryption?.algorithm
+                // store anyway the new algorithm, but mark the room
+                // as having been encrypted once whatever, this can never
+                // go back to false
+                if (encryption?.algorithm == MXCRYPTO_ALGORITHM_MEGOLM) {
+                    entity.wasEncryptedOnce = true
+                    entity.rotationPeriodMs = encryption.rotationPeriodMs
+                    entity.rotationPeriodMsgs = encryption.rotationPeriodMsgs
+                }
+            }
         }
     }
 

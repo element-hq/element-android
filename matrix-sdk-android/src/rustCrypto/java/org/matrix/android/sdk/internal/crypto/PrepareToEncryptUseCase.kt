@@ -23,6 +23,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.internal.crypto.keysbackup.RustKeyBackupService
@@ -49,7 +50,8 @@ internal class PrepareToEncryptUseCase @Inject constructor(
         private val getRoomUserIds: GetRoomUserIdsUseCase,
         private val requestSender: RequestSender,
         private val loadRoomMembersTask: LoadRoomMembersTask,
-        private val keysBackupService: RustKeyBackupService
+        private val keysBackupService: RustKeyBackupService,
+        private val shouldEncryptForInvitedMembers: ShouldEncryptForInvitedMembersUseCase,
 ) {
 
     private val keyClaimLock: Mutex = Mutex()
@@ -87,17 +89,20 @@ internal class PrepareToEncryptUseCase @Inject constructor(
         val keyShareLock = roomKeyShareLocks.getOrPut(roomId) { Mutex() }
         var sharedKey = false
 
-        cryptoStore.getBlockUnverifiedDevices(roomId)
-        cryptoStore.shouldShareHistory(roomId)
+        val info = cryptoStore.getRoomCryptoInfo(roomId)
+                ?: throw java.lang.IllegalArgumentException("Encryption not configured in this room")
+        // how to react if this is null??
+        if (info.algorithm != MXCRYPTO_ALGORITHM_MEGOLM) {
+            throw java.lang.IllegalArgumentException("Unsupported algorithm ${info.algorithm}")
+        }
         val settings = EncryptionSettings(
                 algorithm = EventEncryptionAlgorithm.MEGOLM_V1_AES_SHA2,
-                onlyAllowTrustedDevices = cryptoStore.getBlockUnverifiedDevices(roomId),
-                // TODO should take that from m.room.encryption event
-                rotationPeriod = (7 * 24 * 3600 * 1000).toULong(),
-                rotationPeriodMsgs = 100UL,
-                historyVisibility = if (cryptoStore.shouldShareHistory(roomId)) {
+                onlyAllowTrustedDevices = info.blacklistUnverifiedDevices,
+                rotationPeriod = info.rotationPeriodMs.toULong(),
+                rotationPeriodMsgs = info.rotationPeriodMsgs.toULong(),
+                historyVisibility = if (info.shouldShareHistory) {
                     HistoryVisibility.SHARED
-                } else if (cryptoStore.shouldEncryptForInvitedMembers(roomId)) {
+                } else if (shouldEncryptForInvitedMembers.invoke(roomId)) {
                     HistoryVisibility.INVITED
                 } else {
                     HistoryVisibility.JOINED

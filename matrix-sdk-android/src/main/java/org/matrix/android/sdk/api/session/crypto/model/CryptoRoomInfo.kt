@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright 2023 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,32 +14,20 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.crypto.store.db.model
+package org.matrix.android.sdk.api.session.crypto.model
 
-import io.realm.RealmObject
-import io.realm.annotations.PrimaryKey
-
-internal open class CryptoRoomEntity(
-        @PrimaryKey var roomId: String? = null,
-        var algorithm: String? = null,
-        var shouldEncryptForInvitedMembers: Boolean? = null,
-        var blacklistUnverifiedDevices: Boolean = false,
+data class CryptoRoomInfo(
+        val algorithm: String,
+        val shouldEncryptForInvitedMembers: Boolean,
+        val blacklistUnverifiedDevices: Boolean,
         // Determines whether or not room history should be shared on new member invites
-        var shouldShareHistory: Boolean = false,
-        // Store the current outbound session for this room,
-        // to avoid re-create and re-share at each startup (if rotation not needed..)
+        val shouldShareHistory: Boolean,
         // This is specific to megolm but not sure how to model it better
-        var outboundSessionInfo: OutboundGroupSessionInfoEntity? = null,
         // a security to ensure that a room will never revert to not encrypted
         // even if a new state event with empty encryption, or state is reset somehow
-        var wasEncryptedOnce: Boolean? = false,
-
+        val wasEncryptedOnce: Boolean,
         // How long the session should be used before changing it. 604800000 (a week) is the recommended default.
-        var rotationPeriodMs: Long? = null,
+        val rotationPeriodMs: Long,
         // How many messages should be sent before changing the session. 100 is the recommended default.
-        var rotationPeriodMsgs: Long? = null,
-) :
-        RealmObject() {
-
-    companion object
-}
+        val rotationPeriodMsgs: Long,
+)

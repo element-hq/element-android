@@ -57,6 +57,7 @@ import org.matrix.android.sdk.api.session.crypto.model.TrailType
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.content.EncryptionEventContent
 import org.matrix.android.sdk.api.session.events.model.content.RoomKeyContent
 import org.matrix.android.sdk.api.session.events.model.content.RoomKeyWithHeldContent
 import org.matrix.android.sdk.api.session.events.model.content.SecretSendEventContent
@@ -384,12 +385,13 @@ internal class RustCryptoService @Inject constructor(
      */
     private suspend fun setEncryptionInRoom(
             roomId: String,
-            algorithm: String?,
+            info: EncryptionEventContent?,
             membersId: List<String>
     ): Boolean {
         // If we already have encryption in this room, we should ignore this event
         // (for now at least. Maybe we should alert the user somehow?)
         val existingAlgorithm = cryptoStore.getRoomAlgorithm(roomId)
+        val algorithm = info?.algorithm
 
         if (!existingAlgorithm.isNullOrEmpty() && existingAlgorithm != algorithm) {
             Timber.tag(loggerTag.value).e("setEncryptionInRoom() : Ignoring m.room.encryption event which requests a change of config in $roomId")
@@ -397,7 +399,7 @@ internal class RustCryptoService @Inject constructor(
         }
 
         // TODO CHECK WITH VALERE
-        cryptoStore.storeRoomAlgorithm(roomId, algorithm)
+        cryptoStore.setAlgorithmInfo(roomId, info)
 
         if (algorithm != MXCRYPTO_ALGORITHM_MEGOLM) {
             Timber.tag(loggerTag.value).e("## CRYPTO | setEncryptionInRoom() : Unable to encrypt room $roomId with $algorithm")
@@ -508,7 +510,7 @@ internal class RustCryptoService @Inject constructor(
 //                Timber.e(throwable, "## CRYPTO | onRoomEncryptionEvent ERROR FAILED TO SETUP CRYPTO ")
 //            } finally {
             val userIds = getRoomUserIds(roomId)
-            setEncryptionInRoom(roomId, event.content?.get("algorithm")?.toString(), userIds)
+            setEncryptionInRoom(roomId, event.content?.toModel<EncryptionEventContent>(), userIds)
 //            }
 //        }
     }
