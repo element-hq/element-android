@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.internal.session.sync
 
+import org.matrix.android.sdk.internal.crypto.store.db.CryptoStoreAggregator
+
 internal class SyncResponsePostTreatmentAggregator {
     // List of RoomId
     val ephemeralFilesToDelete = mutableListOf<String>()
@@ -28,4 +30,7 @@ internal class SyncResponsePostTreatmentAggregator {
 
     // Set of users to call `crossSigningService.checkTrustAndAffectedRoomShields` once per sync
     val userIdsForCheckingTrustAndAffectedRoomShields = mutableSetOf<String>()
+
+    // For the crypto store
+    val cryptoStoreAggregator = CryptoStoreAggregator()
 }

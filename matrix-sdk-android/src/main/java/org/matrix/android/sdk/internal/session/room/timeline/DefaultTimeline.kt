@@ -42,6 +42,7 @@ import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
 import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadTimelineTask
+import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
 import org.matrix.android.sdk.internal.session.room.state.StateEventDataSource
 import org.matrix.android.sdk.internal.session.sync.handler.room.ReadReceiptHandler
 import org.matrix.android.sdk.internal.session.sync.handler.room.ThreadsAwarenessHandler
@@ -63,6 +64,7 @@ internal class DefaultTimeline(
         private val settings: TimelineSettings,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val clock: Clock,
+        localEchoEventFactory: LocalEchoEventFactory,
         stateEventDataSource: StateEventDataSource,
         paginationTask: PaginationTask,
         getEventTask: GetContextOfEventTask,
@@ -114,6 +116,7 @@ internal class DefaultTimeline(
             onNewTimelineEvents = this::onNewTimelineEvents,
             stateEventDataSource = stateEventDataSource,
             matrixCoroutineDispatchers = coroutineDispatchers,
+            localEchoEventFactory = localEchoEventFactory
     )
 
     private var strategy: LoadTimelineStrategy = buildStrategy(LoadTimelineStrategy.Mode.Live)

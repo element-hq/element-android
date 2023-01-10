@@ -597,26 +597,22 @@ internal class LocalEchoEventFactory @Inject constructor(
         return clock.epochMillis()
     }
 
-    /**
-     * Creates a reply to a regular timeline Event or a thread Event if needed.
-     */
-    fun createReplyTextEvent(
-            roomId: String,
+    fun createReplyTextContent(
             eventReplied: TimelineEvent,
             replyText: CharSequence,
             replyTextFormatted: CharSequence?,
             autoMarkdown: Boolean,
             rootThreadEventId: String? = null,
             showInThread: Boolean,
-            additionalContent: Content? = null
-    ): Event? {
+            isRedactedEvent: Boolean = false
+    ): MessageContent? {
         // Fallbacks and event representation
         // TODO Add error/warning logs when any of this is null
         val permalink = permalinkFactory.createPermalink(eventReplied.root, false) ?: return null
         val userId = eventReplied.root.senderId ?: return null
         val userLink = permalinkFactory.createPermalink(userId, false) ?: return null
 
-        val body = bodyForReply(eventReplied.getLastMessageContent(), eventReplied.isReply())
+        val body = bodyForReply(eventReplied.getLastMessageContent(), eventReplied.isReply(), isRedactedEvent)
 
         // As we always supply formatted body for replies we should force the MarkdownParser to produce html.
         val finalReplyTextFormatted = replyTextFormatted?.toString() ?: markdownParser.parse(replyText, force = true, advanced = autoMarkdown).takeFormatted()
@@ -635,7 +631,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         val replyFallback = buildReplyFallback(body, userId, replyText.toString())
 
         val eventId = eventReplied.root.eventId ?: return null
-        val content = MessageTextContent(
+        return MessageTextContent(
                 msgType = MessageType.MSGTYPE_TEXT,
                 format = MessageFormat.FORMAT_MATRIX_HTML,
                 body = replyFallback,
@@ -646,7 +642,25 @@ internal class LocalEchoEventFactory @Inject constructor(
                         showInThread = showInThread
                 )
         )
-        return createMessageEvent(roomId, content, additionalContent)
+    }
+
+    /**
+     * Creates a reply to a regular timeline Event or a thread Event if needed.
+     */
+    fun createReplyTextEvent(
+            roomId: String,
+            eventReplied: TimelineEvent,
+            replyText: CharSequence,
+            replyTextFormatted: CharSequence?,
+            autoMarkdown: Boolean,
+            rootThreadEventId: String? = null,
+            showInThread: Boolean,
+            additionalContent: Content? = null,
+    ): Event? {
+        val content = createReplyTextContent(eventReplied, replyText, replyTextFormatted, autoMarkdown, rootThreadEventId, showInThread)
+        return content?.let {
+            createMessageEvent(roomId, it, additionalContent)
+        }
     }
 
     private fun generateThreadRelationContent(rootThreadEventId: String) =
@@ -715,7 +729,7 @@ internal class LocalEchoEventFactory @Inject constructor(
      * In case of an edit of a reply the last content is not
      * himself a reply, but it will contain the fallbacks, so we have to trim them.
      */
-    private fun bodyForReply(content: MessageContent?, isReply: Boolean): TextContent {
+    fun bodyForReply(content: MessageContent?, isReply: Boolean, isRedactedEvent: Boolean = false): TextContent {
         when (content?.msgType) {
             MessageType.MSGTYPE_EMOTE,
             MessageType.MSGTYPE_TEXT,
@@ -724,7 +738,9 @@ internal class LocalEchoEventFactory @Inject constructor(
                 if (content is MessageContentWithFormattedBody) {
                     formattedText = content.matrixFormattedBody
                 }
-                return if (isReply) {
+                return if (isRedactedEvent) {
+                    TextContent("message removed.")
+                } else if (isReply) {
                     TextContent(content.body, formattedText).removeInReplyFallbacks()
                 } else {
                     TextContent(content.body, formattedText)
@@ -738,7 +754,11 @@ internal class LocalEchoEventFactory @Inject constructor(
             MessageType.MSGTYPE_POLL_START -> {
                 return TextContent((content as? MessagePollContent)?.getBestPollCreationInfo()?.question?.getBestQuestion() ?: "")
             }
-            else -> return TextContent(content?.body ?: "")
+            else -> {
+                return if (isRedactedEvent) {
+                    TextContent("message removed.")
+                } else TextContent(content?.body ?: "")
+            }
         }
     }
 

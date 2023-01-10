@@ -269,6 +269,10 @@ class RoomProfileFragment :
         roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomNotificationSettings)
     }
 
+    override fun onPollHistoryClicked() {
+        roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomPolls)
+    }
+
     override fun onUploadsClicked() {
         roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomUploads)
     }

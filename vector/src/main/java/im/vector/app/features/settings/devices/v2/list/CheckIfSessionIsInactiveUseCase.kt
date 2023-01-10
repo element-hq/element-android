@@ -24,11 +24,13 @@ class CheckIfSessionIsInactiveUseCase @Inject constructor(
         private val clock: Clock,
 ) {
 
-    fun execute(lastSeenTs: Long): Boolean {
-        // In case of the server doesn't send the last seen date.
-        if (lastSeenTs == 0L) return true
-
-        val diffMilliseconds = clock.epochMillis() - lastSeenTs
-        return diffMilliseconds >= TimeUnit.DAYS.toMillis(SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS.toLong())
+    fun execute(lastSeenTsMillis: Long?): Boolean {
+        return if (lastSeenTsMillis == null || lastSeenTsMillis <= 0) {
+            // in these situations we cannot say anything about the inactivity of the session
+            false
+        } else {
+            val diffMilliseconds = clock.epochMillis() - lastSeenTsMillis
+            diffMilliseconds >= TimeUnit.DAYS.toMillis(SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS.toLong())
+        }
     }
 }

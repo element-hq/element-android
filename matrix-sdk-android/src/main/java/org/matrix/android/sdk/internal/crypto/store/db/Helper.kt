@@ -20,10 +20,12 @@ import android.util.Base64
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.RealmObject
+import timber.log.Timber
 import java.io.ByteArrayOutputStream
 import java.io.ObjectOutputStream
 import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
+import kotlin.system.measureTimeMillis
 
 /**
  * Get realm, invoke the action, close realm, and return the result of the action.
@@ -55,10 +57,12 @@ internal fun <T : RealmObject> doRealmQueryAndCopyList(realmConfiguration: Realm
 /**
  * Get realm instance, invoke the action in a transaction and close realm.
  */
-internal fun doRealmTransaction(realmConfiguration: RealmConfiguration, action: (Realm) -> Unit) {
-    Realm.getInstance(realmConfiguration).use { realm ->
-        realm.executeTransaction { action.invoke(it) }
-    }
+internal fun doRealmTransaction(tag: String, realmConfiguration: RealmConfiguration, action: (Realm) -> Unit) {
+    measureTimeMillis {
+        Realm.getInstance(realmConfiguration).use { realm ->
+            realm.executeTransaction { action.invoke(it) }
+        }
+    }.also { Timber.w("doRealmTransaction for $tag took $it millis") }
 }
 
 internal fun doRealmTransactionAsync(realmConfiguration: RealmConfiguration, action: (Realm) -> Unit) {

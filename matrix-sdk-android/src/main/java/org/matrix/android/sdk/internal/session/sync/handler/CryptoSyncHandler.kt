@@ -29,6 +29,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.sync.model.SyncResponse
 import org.matrix.android.sdk.api.session.sync.model.ToDeviceSyncResponse
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
+import org.matrix.android.sdk.internal.crypto.store.db.CryptoStoreAggregator
 import org.matrix.android.sdk.internal.crypto.tasks.toDeviceTracingId
 import org.matrix.android.sdk.internal.crypto.verification.DefaultVerificationService
 import org.matrix.android.sdk.internal.session.sync.ProgressReporter
@@ -85,8 +86,8 @@ internal class CryptoSyncHandler @Inject constructor(
         }
     }
 
-    fun onSyncCompleted(syncResponse: SyncResponse) {
-        cryptoService.onSyncCompleted(syncResponse)
+    fun onSyncCompleted(syncResponse: SyncResponse, cryptoStoreAggregator: CryptoStoreAggregator) {
+        cryptoService.onSyncCompleted(syncResponse, cryptoStoreAggregator)
     }
 
     /**

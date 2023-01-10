@@ -34,6 +34,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewbinding.ViewBinding
 import com.airbnb.mvrx.MavericksView
 import com.bumptech.glide.util.Util.assertMainThread
@@ -53,6 +54,7 @@ import im.vector.app.features.navigation.Navigator
 import im.vector.lib.ui.styles.dialogs.MaterialProgressDialog
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import reactivecircus.flowbinding.android.view.clicks
 import timber.log.Timber
 
@@ -272,14 +274,20 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
      * ViewEvents
      * ========================================================================================== */
 
-    protected fun <T : VectorViewEvents> VectorViewModel<*, *, T>.observeViewEvents(observer: (T) -> Unit) {
-        viewEvents
-                .stream()
-                .onEach {
-                    dismissLoadingDialog()
-                    observer(it)
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+    protected fun <T : VectorViewEvents> VectorViewModel<*, *, T>.observeViewEvents(
+            observer: (T) -> Unit,
+    ) {
+        val tag = this@VectorBaseFragment::class.simpleName.toString()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewEvents
+                        .stream(tag)
+                        .collect {
+                            dismissLoadingDialog()
+                            observer(it)
+                        }
+            }
+        }
     }
 
     /* ==========================================================================================
