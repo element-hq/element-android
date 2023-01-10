@@ -63,10 +63,10 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
             playPauseButton.setOnClickListener {
                 if (player.currentVoiceBroadcast == voiceBroadcast) {
                     when (player.playingState) {
-                        VoiceBroadcastPlayer.State.PLAYING,
-                        VoiceBroadcastPlayer.State.BUFFERING -> callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.Pause)
-                        VoiceBroadcastPlayer.State.PAUSED,
-                        VoiceBroadcastPlayer.State.IDLE -> callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.PlayOrResume(voiceBroadcast))
+                        VoiceBroadcastPlayer.State.Playing,
+                        VoiceBroadcastPlayer.State.Buffering -> callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.Pause)
+                        VoiceBroadcastPlayer.State.Paused,
+                        VoiceBroadcastPlayer.State.Idle -> callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.PlayOrResume(voiceBroadcast))
                     }
                 } else {
                     callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.PlayOrResume(voiceBroadcast))
@@ -100,17 +100,17 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
 
     private fun renderPlayingState(holder: Holder, state: VoiceBroadcastPlayer.State) {
         with(holder) {
-            bufferingView.isVisible = state == VoiceBroadcastPlayer.State.BUFFERING
-            voiceBroadcastMetadata.isVisible = state != VoiceBroadcastPlayer.State.BUFFERING
+            bufferingView.isVisible = state == VoiceBroadcastPlayer.State.Buffering
+            voiceBroadcastMetadata.isVisible = state != VoiceBroadcastPlayer.State.Buffering
 
             when (state) {
-                VoiceBroadcastPlayer.State.PLAYING,
-                VoiceBroadcastPlayer.State.BUFFERING -> {
+                VoiceBroadcastPlayer.State.Playing,
+                VoiceBroadcastPlayer.State.Buffering -> {
                     playPauseButton.setImageResource(R.drawable.ic_play_pause_pause)
                     playPauseButton.contentDescription = view.resources.getString(R.string.a11y_pause_voice_broadcast)
                 }
-                VoiceBroadcastPlayer.State.IDLE,
-                VoiceBroadcastPlayer.State.PAUSED -> {
+                VoiceBroadcastPlayer.State.Idle,
+                VoiceBroadcastPlayer.State.Paused -> {
                     playPauseButton.setImageResource(R.drawable.ic_play_pause_play)
                     playPauseButton.contentDescription = view.resources.getString(R.string.a11y_play_voice_broadcast)
                 }
