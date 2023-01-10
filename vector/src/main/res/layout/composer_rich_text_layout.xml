@@ -124,6 +124,8 @@
             app:layout_constraintEnd_toStartOf="@id/composerFullScreenButton"
             app:layout_constraintStart_toStartOf="@id/composerEditTextOuterBorder"
             app:layout_constraintTop_toBottomOf="@id/composerModeBarrier"
+            app:bulletRadius="4sp"
+            app:bulletGap="8sp"
             tools:text="@tools:sample/lorem/random" />
 
         <com.google.android.material.textfield.TextInputEditText
