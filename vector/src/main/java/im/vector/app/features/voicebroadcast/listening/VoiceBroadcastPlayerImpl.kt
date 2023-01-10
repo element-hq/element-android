@@ -206,15 +206,19 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
         val sequence = playlistItem.sequence ?: run { Timber.w("## Voice Broadcast | Playlist item has no sequence"); return }
         val sequencePosition = position - playlistItem.startTime
         sessionScope.launch {
-            prepareMediaPlayer(content) { mp ->
-                currentMediaPlayer = mp
-                playlist.currentSequence = sequence
-                mp.start()
-                if (sequencePosition > 0) {
-                    mp.seekTo(sequencePosition)
+            try {
+                prepareMediaPlayer(content) { mp ->
+                    currentMediaPlayer = mp
+                    playlist.currentSequence = sequence
+                    mp.start()
+                    if (sequencePosition > 0) {
+                        mp.seekTo(sequencePosition)
+                    }
+                    playingState = State.Playing
+                    prepareNextMediaPlayer()
                 }
-                playingState = State.Playing
-                prepareNextMediaPlayer()
+            } catch (failure: VoiceBroadcastFailure.ListeningError.DownloadError) {
+                playingState = State.Error(failure)
             }
         }
     }
@@ -259,20 +263,27 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
         if (nextItem != null) {
             isPreparingNextPlayer = true
             sessionScope.launch {
-                prepareMediaPlayer(nextItem.audioEvent.content) { mp ->
+                try {
+                    prepareMediaPlayer(nextItem.audioEvent.content) { mp ->
+                        isPreparingNextPlayer = false
+                        nextMediaPlayer = mp
+                        when (playingState) {
+                            State.Playing,
+                            State.Paused -> {
+                                currentMediaPlayer?.setNextMediaPlayer(mp)
+                            }
+                            State.Buffering -> {
+                                mp.start()
+                                onNextMediaPlayerStarted(mp)
+                            }
+                            is State.Error,
+                            State.Idle -> stopPlayer()
+                        }
+                    }
+                } catch (failure: VoiceBroadcastFailure.ListeningError.DownloadError) {
                     isPreparingNextPlayer = false
-                    nextMediaPlayer = mp
-                    when (playingState) {
-                        State.Playing,
-                        State.Paused -> {
-                            currentMediaPlayer?.setNextMediaPlayer(mp)
-                        }
-                        State.Buffering -> {
-                            mp.start()
-                            onNextMediaPlayerStarted(mp)
-                        }
-                        is State.Error,
-                        State.Idle -> stopPlayer()
+                    if (playingState == State.Buffering || tryOrNull { currentMediaPlayer?.isPlaying } != true) {
+                        playingState = State.Error(failure)
                     }
                 }
             }
