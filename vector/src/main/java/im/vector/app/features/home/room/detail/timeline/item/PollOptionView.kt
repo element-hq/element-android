@@ -25,6 +25,7 @@ import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.extensions.setAttributeTintedImageResource
 import im.vector.app.databinding.ItemPollOptionBinding
+import im.vector.app.features.themes.ThemeUtils
 
 class PollOptionView @JvmOverloads constructor(
         context: Context,
@@ -62,6 +63,10 @@ class PollOptionView @JvmOverloads constructor(
         views.optionCheckImageView.isVisible = false
         val drawableStart = if (state.isWinner) R.drawable.ic_poll_winner else 0
         views.optionVoteCountTextView.setCompoundDrawablesRelativeWithIntrinsicBounds(drawableStart, 0, 0, 0)
+        views.optionVoteCountTextView.setTextColor(
+                if (state.isWinner) ThemeUtils.getColor(context, R.attr.colorPrimary)
+                else ThemeUtils.getColor(context, R.attr.vctr_content_secondary)
+        )
         showVotes(state.voteCount, state.votePercentage)
         renderVoteSelection(state.isWinner)
     }
