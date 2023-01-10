@@ -471,7 +471,7 @@
     <string name="widget_integration_room_not_visible">Raum %s ist nicht sichtbar.</string>
     <string name="room_add_matrix_apps">Integrationen hinzufügen</string>
     <string name="settings_notification_ringtone">Benachrichtigungston</string>
-    <string name="widget_integration_failed_to_send_request">Anfrage konnte nicht gesendet werden.</string>
+    <string name="widget_integration_failed_to_send_request">Übertragung der Anfrage fehlgeschlagen.</string>
     <string name="widget_integration_missing_user_id">user_id fehlt in der Anfrage.</string>
     <string name="light_theme">Helles Design</string>
     <string name="dark_theme">Dunkles Design</string>
@@ -2805,7 +2805,7 @@
     <string name="device_manager_sessions_sign_in_with_qr_code_title">Mit QR-Code anmelden</string>
     <string name="login_scan_qr_code">QR-Code einlesen</string>
     <string name="labs_enable_voice_broadcast_summary">Zeichne Sprachnachrichten auf, während du sie in Echtzeit in den Raumverlauf sendest.</string>
-    <string name="labs_enable_voice_broadcast_title">Sprachübertragung aktivieren (in aktiver Entwicklung)</string>
+    <string name="labs_enable_voice_broadcast_title">Sprachübertragung aktivieren</string>
     <string name="qr_code_login_header_failed_homeserver_is_not_supported_description">Der Heim-Server unterstützt Anmelden per QR-Code nicht.</string>
     <string name="qr_code_login_header_failed_user_cancelled_description">Die Anmeldung wurde vom anderen Gerät abgebrochen.</string>
     <string name="qr_code_login_header_failed_invalid_qr_code_description">Der QR-Code ist ungültig.</string>
@@ -2867,4 +2867,35 @@
     <string name="device_manager_other_sessions_show_ip_address">IP-Adresse anzeigen</string>
     <string name="settings_enable_direct_share_summary">Kürzliche Unterhaltungen im Teilen-Menü des Systems anzeigen</string>
     <string name="settings_enable_direct_share_title">Direktes Teilen aktivieren</string>
+    <string name="review_unverified_sessions_description">Überprüfe sie, um ein sicheres Konto gewährleisten zu können</string>
+    <string name="review_unverified_sessions_title">Du hast nicht verifizierte Sitzungen</string>
+    <string name="settings_nightly_build_update">Hol dir den neuesten Build (Achtung: Du kannst dich eventuell nicht anmelden)</string>
+    <string name="settings_nightly_build">Nightly-Build</string>
+    <string name="device_manager_learn_more_sessions_encryption_not_supported">Diese Sitzung unterstützt keine Verschlüsselung, weshalb sie nicht verifiziert werden kann.
+\n
+\nDu wirst dich mit dieser Sitzung nicht an Unterhaltungen in Räumen mit aktivierter Verschlüsselung beteiligen können.
+\n
+\nAus Sicherheits- und Datenschutzgründen, wird die Nutzung von verschlüsselungsfähigen Matrix-Anwendungen empfohlen.</string>
+    <string name="device_manager_signout_all_other_sessions">Von allen anderen Sitzungen abmelden</string>
+    <string name="device_manager_verification_status_detail_session_encryption_not_supported">Diese Sitzung unterstützt keine Verschlüsselung und kann deshalb nicht verifiziert werden.</string>
+    <string name="voice_broadcast_live_broadcast">Echtzeit-Übertragung</string>
+    <string name="notice_voice_broadcast_ended_by_you">Du hast eine Sprachübertragung beendet.</string>
+    <string name="notice_voice_broadcast_ended">%1$s beendete eine Sprachübertragung.</string>
+    <string name="stop_voice_broadcast_content">Möchtest du die Übertragung wirklich beenden\? Dies wird die Übertragung beenden und die vollständige Aufnahme im Raum bereitstellen.</string>
+    <string name="stop_voice_broadcast_dialog_title">Live-Übertragung beenden\?</string>
+    <string name="action_stop">Ja, beende</string>
+    <string name="rich_text_editor_link">Link setzen</string>
+    <string name="set_link_edit">Link bearbeiten</string>
+    <string name="set_link_create">Link erstellen</string>
+    <string name="set_link_link">Link</string>
+    <string name="set_link_text">Text</string>
+    <string name="settings_access_token_summary">Dein Zugriffstoken gewährt vollen Zugriff auf dein Konto. Teile ihn mit niemandem.</string>
+    <string name="settings_access_token">Zugriffstoken</string>
+    <string name="rich_text_editor_bullet_list">Unsortierte Liste umschalten</string>
+    <string name="rich_text_editor_numbered_list">Nummerierte Liste umschalten</string>
+    <string name="room_polls_ended_no_item">In diesem Raum gibt es noch keine abgeschlossenen Umfragen</string>
+    <string name="room_polls_ended">Vergangene Umfragen</string>
+    <string name="room_polls_active_no_item">In diesem Raum gibt es keine aktiven Umfragen</string>
+    <string name="room_polls_active">Aktive Umfragen</string>
+    <string name="room_profile_section_more_polls">Umfrageverlauf</string>
 </resources>

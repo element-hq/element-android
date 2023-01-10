@@ -27,9 +27,9 @@ buildscript {
         classpath 'com.google.firebase:firebase-appdistribution-gradle:3.1.1'
         classpath 'com.google.gms:google-services:4.3.14'
         classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.5.0.2730'
-        classpath 'com.google.android.gms:oss-licenses-plugin:0.10.5'
+        classpath 'com.google.android.gms:oss-licenses-plugin:0.10.6'
         classpath "com.likethesalad.android:stem-plugin:2.2.3"
-        classpath 'org.owasp:dependency-check-gradle:7.4.1'
+        classpath 'org.owasp:dependency-check-gradle:7.4.4'
         classpath "org.jetbrains.dokka:dokka-gradle-plugin:1.7.20"
         classpath "org.jetbrains.kotlinx:kotlinx-knit:0.4.0"
         classpath 'com.jakewharton:butterknife-gradle-plugin:10.2.3'

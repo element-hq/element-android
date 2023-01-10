@@ -441,7 +441,7 @@
     <string name="none">Žádný</string>
     <string name="action_revoke">Zrušit</string>
     <string name="auth_login_sso">Přihlásit se se single sign-on</string>
-    <string name="login_error_no_homeserver_found">To není platná adresa Matrix serveru</string>
+    <string name="login_error_no_homeserver_found">Toto není platná adresa Matrix serveru</string>
     <string name="login_error_homeserver_not_found">Domovský server není dostupný na této adrese, zkontrolujte ji prosím</string>
     <string name="settings_notification_troubleshoot">Odstraňování problémů s oznámeními</string>
     <string name="settings_troubleshoot_diagnostic">Řešit diagnostiku</string>
@@ -2924,4 +2924,26 @@
     <string name="editing">Úpravy</string>
     <string name="settings_enable_direct_share_summary">Zobrazit poslední chaty v nabídce sdílení systému</string>
     <string name="settings_enable_direct_share_title">Povolit přímé sdílení</string>
+    <string name="review_unverified_sessions_description">Zkontrolujte, zda je váš účet v bezpečí</string>
+    <string name="review_unverified_sessions_title">Máte neověřené relace</string>
+    <string name="device_manager_learn_more_sessions_encryption_not_supported">Tato relace nepodporuje šifrování, takže ji nelze ověřit.
+\n
+\nPři použití této relace se nebudete moci účastnit místností, kde je šifrování povoleno.
+\n
+\nPro dosažení nejlepšího zabezpečení a soukromí se doporučuje používat klienty Matrix, které šifrování podporují.</string>
+    <string name="device_manager_signout_all_other_sessions">Odhlásit se ze všech ostatních relací</string>
+    <string name="device_manager_verification_status_detail_session_encryption_not_supported">Tato relace nepodporuje šifrování, a proto ji nelze ověřit.</string>
+    <string name="settings_nightly_build_update">Získejte nejnovější sestavení (poznámka: můžete mít potíže s přihlášením)</string>
+    <string name="settings_nightly_build">Noční sestavení</string>
+    <string name="voice_broadcast_live_broadcast">Živé vysílání</string>
+    <string name="notice_voice_broadcast_ended_by_you">Ukončili jste hlasové vysílání.</string>
+    <string name="notice_voice_broadcast_ended">%1$s ukončil(a) hlasové vysílání.</string>
+    <string name="stop_voice_broadcast_content">Jste si jisti, že chcete ukončit živé vysílání\? Tím se vysílání ukončí a v místnosti bude k dispozici celý záznam.</string>
+    <string name="stop_voice_broadcast_dialog_title">Zastavit živé vysílání\?</string>
+    <string name="action_stop">Ano, zastavit</string>
+    <string name="set_link_edit">Upravit odkaz</string>
+    <string name="set_link_create">Vytvořit odkaz</string>
+    <string name="set_link_link">Odkaz</string>
+    <string name="set_link_text">Text</string>
+    <string name="rich_text_editor_link">Nastavit odkaz</string>
 </resources>

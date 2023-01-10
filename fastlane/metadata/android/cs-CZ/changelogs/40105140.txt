@@ -1,0 +1,2 @@
+Hlavní změny v této verzi: Vlákna jsou nyní povolena ve výchozím nastavení.
+Úplný seznam změn: https://github.com/vector-im/element-android/releases

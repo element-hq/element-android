@@ -18,7 +18,6 @@ package im.vector.app.features.settings.devices.v2
 
 import android.content.SharedPreferences
 import com.airbnb.mvrx.MavericksViewModelFactory
-import com.airbnb.mvrx.Success
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -32,10 +31,10 @@ import im.vector.app.features.settings.devices.v2.signout.SignoutSessionsReAuthN
 import im.vector.app.features.settings.devices.v2.signout.SignoutSessionsUseCase
 import im.vector.app.features.settings.devices.v2.verification.CheckIfCurrentSessionCanBeVerifiedUseCase
 import im.vector.app.features.settings.devices.v2.verification.GetCurrentSessionCrossSigningInfoUseCase
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
 import timber.log.Timber
 
@@ -103,27 +102,27 @@ class DevicesViewModel @AssistedInject constructor(
     }
 
     private fun observeDevices() {
-        getDeviceFullInfoListUseCase.execute(
+        val allSessionsFlow = getDeviceFullInfoListUseCase.execute(
                 filterType = DeviceManagerFilterType.ALL_SESSIONS,
-                excludeCurrentDevice = false
+                excludeCurrentDevice = false,
         )
-                .execute { async ->
-                    if (async is Success) {
-                        val deviceFullInfoList = async.invoke()
-                        val unverifiedSessionsCount = deviceFullInfoList.count { !it.cryptoDeviceInfo?.trustLevel?.isCrossSigningVerified().orFalse() }
-                        val inactiveSessionsCount = deviceFullInfoList.count { it.isInactive }
+        val unverifiedSessionsFlow = getDeviceFullInfoListUseCase.execute(
+                filterType = DeviceManagerFilterType.UNVERIFIED,
+                excludeCurrentDevice = true,
+        )
+        val inactiveSessionsFlow = getDeviceFullInfoListUseCase.execute(
+                filterType = DeviceManagerFilterType.INACTIVE,
+                excludeCurrentDevice = true,
+        )
 
-                        copy(
-                                devices = async,
-                                unverifiedSessionsCount = unverifiedSessionsCount,
-                                inactiveSessionsCount = inactiveSessionsCount,
-                        )
-                    } else {
-                        copy(
-                                devices = async
-                        )
-                    }
-                }
+        combine(allSessionsFlow, unverifiedSessionsFlow, inactiveSessionsFlow) { allSessions, unverifiedSessions, inactiveSessions ->
+            DeviceFullInfoList(
+                    allSessions = allSessions,
+                    unverifiedSessionsCount = unverifiedSessions.size,
+                    inactiveSessionsCount = inactiveSessions.size,
+            )
+        }
+                .execute { async -> copy(devices = async) }
     }
 
     private fun refreshDevicesOnCryptoDevicesChange() {
@@ -185,6 +184,7 @@ class DevicesViewModel @AssistedInject constructor(
     private fun getDeviceIdsOfOtherSessions(state: DevicesViewState): List<String> {
         val currentDeviceId = state.currentSessionCrossSigningInfo.deviceId
         return state.devices()
+                ?.allSessions
                 ?.mapNotNull { fullInfo -> fullInfo.deviceInfo.deviceId.takeUnless { it == currentDeviceId } }
                 .orEmpty()
     }

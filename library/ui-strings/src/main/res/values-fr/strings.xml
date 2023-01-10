@@ -2810,7 +2810,7 @@
     <string name="two">2</string>
     <string name="one">1</string>
     <string name="labs_enable_voice_broadcast_summary">Pouvoir enregistrer et envoyer une diffusion audio dans l’historique du salon.</string>
-    <string name="labs_enable_voice_broadcast_title">Activer la diffusion audio (en cours de développement)</string>
+    <string name="labs_enable_voice_broadcast_title">Activer la diffusion audio</string>
     <string name="device_manager_sessions_sign_in_with_qr_code_description">Vous pouvez utiliser cet appareil pour connecter un appareil mobile ou un client web avec un QR code. Il y a deux façons de le faire :</string>
     <string name="device_manager_sessions_sign_in_with_qr_code_title">Se connecter avec un QR code</string>
     <string name="login_scan_qr_code">Scanner le QR code</string>
@@ -2868,4 +2868,35 @@
     <string name="editing">Modification</string>
     <string name="settings_enable_direct_share_summary">Affiche les conversations récentes dans le menu de partage du système</string>
     <string name="settings_enable_direct_share_title">Activer le partage direct</string>
+    <string name="review_unverified_sessions_description">Vérifiez pour assurer la sécurité de votre compte</string>
+    <string name="review_unverified_sessions_title">Vous avez des sessions non vérifiées</string>
+    <string name="device_manager_learn_more_sessions_encryption_not_supported">Cette session ne prend pas en charge le chiffrement, elle ne peut donc pas être vérifiée.
+\n
+\nVous ne pourrez pas participer dans les salons où le chiffrement est activé en utilisant cette session.
+\n
+\nPour de meilleures sécurité et confidentialité, il est recommandé d’utiliser des clients Matrix qui prennent en charge le chiffrement.</string>
+    <string name="device_manager_signout_all_other_sessions">Déconnecter toutes les autres sessions</string>
+    <string name="device_manager_verification_status_detail_session_encryption_not_supported">Cette session ne prend pas en charge le chiffrement, elle ne peut donc pas être vérifiée.</string>
+    <string name="voice_broadcast_live_broadcast">Diffusion en direct</string>
+    <string name="settings_nightly_build_update">Obtenir la toute dernière version (note : vous pourriez avoir des problèmes pour vous connecter)</string>
+    <string name="settings_nightly_build">Version Nightly</string>
+    <string name="notice_voice_broadcast_ended_by_you">Vous avez terminé une diffusion audio.</string>
+    <string name="notice_voice_broadcast_ended">%1$s a terminé une diffusion audio.</string>
+    <string name="stop_voice_broadcast_content">Êtes-vous sûr de vouloir arrêter votre diffusion en direct \? Cela terminera la diffusion et l’enregistrement complet sera disponible dans le salon.</string>
+    <string name="stop_voice_broadcast_dialog_title">Arrêter la diffusion en direct \?</string>
+    <string name="action_stop">Oui, arrêter</string>
+    <string name="set_link_edit">Éditer le lien</string>
+    <string name="set_link_create">Crée un lien</string>
+    <string name="set_link_link">Lien</string>
+    <string name="set_link_text">Texte</string>
+    <string name="rich_text_editor_link">Définir un lien</string>
+    <string name="settings_access_token_summary">Votre jeton d’accès donne un accès intégral à votre compte. Ne le partagez avec personne.</string>
+    <string name="settings_access_token">Jeton d’accès</string>
+    <string name="rich_text_editor_bullet_list">(Dés)activer la liste à puce</string>
+    <string name="rich_text_editor_numbered_list">(Dés)activer la liste numérotée</string>
+    <string name="room_polls_ended_no_item">Il n’y a aucun ancien sondage dans ce salon</string>
+    <string name="room_polls_ended">Anciens sondages</string>
+    <string name="room_polls_active_no_item">Il n’y a aucun sondage en cours dans ce salon</string>
+    <string name="room_polls_active">Sondages actifs</string>
+    <string name="room_profile_section_more_polls">Historique des sondages</string>
 </resources>
