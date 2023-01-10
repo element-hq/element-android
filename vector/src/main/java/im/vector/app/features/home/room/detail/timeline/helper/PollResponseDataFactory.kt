@@ -50,18 +50,22 @@ class PollResponseDataFactory @Inject constructor(
     }
 
     private fun getPollResponseSummary(event: TimelineEvent): PollResponseAggregatedSummary? {
-        if (event.root.isPollEnd()) {
-            val pollStartEventId = event.root.getRelationContent()?.eventId ?: return null.also {
+        return if (event.root.isPollEnd()) {
+            val pollStartEventId = event.root.getRelationContent()?.eventId
+            if (pollStartEventId.isNullOrEmpty()) {
                 Timber.e("### Cannot render poll end event because poll start event id is null")
+                null
+            } else {
+                activeSessionHolder
+                        .getSafeActiveSession()
+                        ?.roomService()
+                        ?.getRoom(event.roomId)
+                        ?.getTimelineEvent(pollStartEventId)
+                        ?.annotations
+                        ?.pollResponseSummary
             }
-            return activeSessionHolder
-                    .getSafeActiveSession()
-                    ?.roomService()
-                    ?.getRoom(event.roomId)
-                    ?.getTimelineEvent(pollStartEventId)
-                    ?.annotations
-                    ?.pollResponseSummary
+        } else {
+            event.annotations?.pollResponseSummary
         }
-        return event.annotations?.pollResponseSummary
     }
 }
