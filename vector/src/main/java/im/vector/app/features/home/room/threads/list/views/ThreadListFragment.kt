@@ -26,6 +26,7 @@ import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
@@ -41,10 +42,14 @@ import im.vector.app.features.home.room.threads.arguments.ThreadListArgs
 import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
 import im.vector.app.features.home.room.threads.list.viewmodel.ThreadListController
 import im.vector.app.features.home.room.threads.list.viewmodel.ThreadListPagedController
+import im.vector.app.features.home.room.threads.list.viewmodel.ThreadListViewActions
+import im.vector.app.features.home.room.threads.list.viewmodel.ThreadListViewEvents
 import im.vector.app.features.home.room.threads.list.viewmodel.ThreadListViewModel
 import im.vector.app.features.home.room.threads.list.viewmodel.ThreadListViewState
 import im.vector.app.features.rageshake.BugReporter
 import im.vector.app.features.rageshake.ReportType
+import org.matrix.android.sdk.api.failure.is400
+import org.matrix.android.sdk.api.failure.is404
 import org.matrix.android.sdk.api.session.room.threads.model.ThreadSummary
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -126,11 +131,45 @@ class ThreadListFragment :
             views.threadListRecyclerView.configureWith(legacyThreadListController, TimelineItemAnimator(), hasFixedSize = false)
             legacyThreadListController.listener = this
         }
+        observeViewEvents()
+    }
+
+    private fun observeViewEvents() {
+        threadListViewModel.observeViewEvents {
+            when (it) {
+                is ThreadListViewEvents.ShowError -> handleShowError(it)
+            }
+        }
+    }
+
+    private fun handleShowError(event: ThreadListViewEvents.ShowError) {
+        val error = event.throwable
+        MaterialAlertDialogBuilder(requireActivity())
+                .setTitle(R.string.dialog_title_error)
+                .also {
+                    if (error.is400() || error.is404()) {
+                        // Outdated Homeserver
+                        it.setMessage(R.string.thread_list_not_available)
+                        it.setPositiveButton(R.string.ok) { _, _ ->
+                            requireActivity().finish()
+                        }
+                    } else {
+                        // Other error, can retry
+                        // (Can happen on first request or on pagination request)
+                        it.setMessage(errorFormatter.toHumanReadable(error))
+                        it.setPositiveButton(R.string.ok, null)
+                        it.setNegativeButton(R.string.global_retry) { _, _ ->
+                            threadListViewModel.handle(ThreadListViewActions.TryAgain)
+                        }
+                    }
+                }
+                .show()
     }
 
     override fun onDestroyView() {
         views.threadListRecyclerView.cleanup()
         threadListController.listener = null
+        legacyThreadListController.listener = null
         super.onDestroyView()
     }
 

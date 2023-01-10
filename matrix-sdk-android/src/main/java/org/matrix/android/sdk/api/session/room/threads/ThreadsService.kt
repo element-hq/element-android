@@ -23,7 +23,7 @@ import org.matrix.android.sdk.api.session.room.threads.model.ThreadSummary
  * This interface defines methods to interact with thread related features.
  * It's the dynamic threads implementation and the homeserver must return
  * a capability entry for threads. If the server do not support m.thread
- * then [ThreadsLocalService] should be used instead
+ * then [org.matrix.android.sdk.api.session.room.threads.local.ThreadsLocalService] should be used instead
  */
 interface ThreadsService {
 

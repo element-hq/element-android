@@ -27,8 +27,6 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.core.platform.EmptyAction
-import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.extensions.toAnalyticsInteraction
@@ -52,7 +50,7 @@ class ThreadListViewModel @AssistedInject constructor(
         @Assisted val initialState: ThreadListViewState,
         private val analyticsTracker: AnalyticsTracker,
         private val session: Session,
-) : VectorViewModel<ThreadListViewState, EmptyAction, EmptyViewEvents>(initialState) {
+) : VectorViewModel<ThreadListViewState, ThreadListViewActions, ThreadListViewEvents>(initialState) {
 
     private val room = session.getRoom(initialState.roomId)
 
@@ -93,7 +91,17 @@ class ThreadListViewModel @AssistedInject constructor(
         fetchAndObserveThreads()
     }
 
-    override fun handle(action: EmptyAction) {}
+    override fun handle(action: ThreadListViewActions) {
+        when (action) {
+            ThreadListViewActions.TryAgain -> handleTryAgain()
+        }
+    }
+
+    private fun handleTryAgain() {
+        viewModelScope.launch {
+            fetchNextPage()
+        }
+    }
 
     /**
      * Observing thread list with respect to homeserver capabilities.
@@ -181,21 +189,23 @@ class ThreadListViewModel @AssistedInject constructor(
             true -> ThreadFilter.PARTICIPATED
             false -> ThreadFilter.ALL
         }
-        room?.threadsService()?.fetchThreadList(
-                nextBatchId = nextBatchId,
-                limit = defaultPagedListConfig.pageSize,
-                filter = filter,
-        ).let { result ->
-            when (result) {
-                is FetchThreadsResult.ReachedEnd -> {
-                    hasReachedEnd = true
-                }
-                is FetchThreadsResult.ShouldFetchMore -> {
-                    nextBatchId = result.nextBatch
-                }
-                else -> {
+        try {
+            room?.threadsService()?.fetchThreadList(
+                    nextBatchId = nextBatchId,
+                    limit = defaultPagedListConfig.pageSize,
+                    filter = filter,
+            )?.let { result ->
+                when (result) {
+                    is FetchThreadsResult.ReachedEnd -> {
+                        hasReachedEnd = true
+                    }
+                    is FetchThreadsResult.ShouldFetchMore -> {
+                        nextBatchId = result.nextBatch
+                    }
                 }
             }
+        } catch (throwable: Throwable) {
+            _viewEvents.post(ThreadListViewEvents.ShowError(throwable))
         }
     }
 }
