@@ -24,7 +24,7 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.onFirst
 import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import im.vector.app.features.session.coroutineScope
-import im.vector.app.features.voice.VoiceFailure
+import im.vector.app.features.voicebroadcast.VoiceBroadcastFailure
 import im.vector.app.features.voicebroadcast.isLive
 import im.vector.app.features.voicebroadcast.listening.VoiceBroadcastPlayer.Listener
 import im.vector.app.features.voicebroadcast.listening.VoiceBroadcastPlayer.State
@@ -193,6 +193,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
                     startPlayback(nextItem.startTime)
                 }
             }
+            is State.Error -> Unit
             State.Idle -> Unit // Should not happen
         }
     }
@@ -205,20 +206,15 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
         val sequence = playlistItem.sequence ?: run { Timber.w("## Voice Broadcast | Playlist item has no sequence"); return }
         val sequencePosition = position - playlistItem.startTime
         sessionScope.launch {
-            try {
-                prepareMediaPlayer(content) { mp ->
-                    currentMediaPlayer = mp
-                    playlist.currentSequence = sequence
-                    mp.start()
-                    if (sequencePosition > 0) {
-                        mp.seekTo(sequencePosition)
-                    }
-                    playingState = State.Playing
-                    prepareNextMediaPlayer()
+            prepareMediaPlayer(content) { mp ->
+                currentMediaPlayer = mp
+                playlist.currentSequence = sequence
+                mp.start()
+                if (sequencePosition > 0) {
+                    mp.seekTo(sequencePosition)
                 }
-            } catch (failure: Throwable) {
-                Timber.e(failure, "## Voice Broadcast | Unable to start playback: $failure")
-                throw VoiceFailure.UnableToPlay(failure)
+                playingState = State.Playing
+                prepareNextMediaPlayer()
             }
         }
     }
@@ -275,6 +271,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
                             mp.start()
                             onNextMediaPlayerStarted(mp)
                         }
+                        is State.Error,
                         State.Idle -> stopPlayer()
                     }
                 }
@@ -288,11 +285,12 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
             session.fileService().downloadFile(messageAudioContent)
         } catch (failure: Throwable) {
             Timber.e(failure, "Voice Broadcast | Download has failed: $failure")
-            throw VoiceFailure.UnableToPlay(failure)
+            throw VoiceBroadcastFailure.ListeningError.DownloadError(failure)
         }
 
         return audioFile.inputStream().use { fis ->
             MediaPlayer().apply {
+                setOnErrorListener(mediaPlayerListener)
                 setAudioAttributes(
                         AudioAttributes.Builder()
                                 // Do not use CONTENT_TYPE_SPEECH / USAGE_VOICE_COMMUNICATION because we want to play loud here
@@ -302,10 +300,9 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
                 )
                 setDataSource(fis.fd)
                 setOnInfoListener(mediaPlayerListener)
-                setOnErrorListener(mediaPlayerListener)
                 setOnPreparedListener(onPreparedListener)
                 setOnCompletionListener(mediaPlayerListener)
-                prepare()
+                prepareAsync()
             }
         }
     }
@@ -330,8 +327,15 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
                 State.Playing -> playbackTicker.startPlaybackTicker(voiceBroadcastId)
                 State.Paused,
                 State.Buffering,
+                is State.Error,
                 State.Idle -> playbackTicker.stopPlaybackTicker(voiceBroadcastId)
             }
+
+            // Notify playback tracker about error
+            if (playingState is State.Error) {
+                playbackTracker.onError(voiceBroadcastId, playingState.failure)
+            }
+
             // Notify state change to all the listeners attached to the current voice broadcast id
             listeners[voiceBroadcastId]?.forEach { listener -> listener.onPlayingStateChanged(playingState) }
         }
@@ -374,7 +378,8 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
 
     private fun onLiveListeningChanged(isLiveListening: Boolean) {
         // Live has ended and last chunk has been reached, we can stop the playback
-        if (!isLiveListening && playingState == State.Buffering && playlist.currentSequence == mostRecentVoiceBroadcastEvent?.content?.lastChunkSequence) {
+        val hasReachedLastChunk = playlist.currentSequence == mostRecentVoiceBroadcastEvent?.content?.lastChunkSequence
+        if (!isLiveListening && playingState == State.Buffering && hasReachedLastChunk) {
             stop()
         }
     }
@@ -389,16 +394,16 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
 
     private fun getCurrentPlaybackPosition(): Int? {
         val voiceBroadcastId = currentVoiceBroadcast?.voiceBroadcastId ?: return null
-        val computedPosition = currentMediaPlayer?.currentPosition?.let { playlist.currentItem?.startTime?.plus(it) }
+        val computedPosition = tryOrNull { currentMediaPlayer?.currentPosition }?.let { playlist.currentItem?.startTime?.plus(it) }
         val savedPosition = playbackTracker.getPlaybackTime(voiceBroadcastId)
         return computedPosition ?: savedPosition
     }
 
     private fun getCurrentPlaybackPercentage(): Float? {
         val playlistPosition = playlist.currentItem?.startTime
-        val computedPosition = currentMediaPlayer?.currentPosition?.let { playlistPosition?.plus(it) } ?: playlistPosition
-        val duration = playlist.duration.takeIf { it > 0 }
-        val computedPercentage = if (computedPosition != null && duration != null) computedPosition.toFloat() / duration else null
+        val computedPosition = tryOrNull { currentMediaPlayer?.currentPosition }?.let { playlistPosition?.plus(it) } ?: playlistPosition
+        val duration = playlist.duration
+        val computedPercentage = if (computedPosition != null && duration > 0) computedPosition.toFloat() / duration else null
         val savedPercentage = currentVoiceBroadcast?.voiceBroadcastId?.let { playbackTracker.getPercentage(it) }
         return computedPercentage ?: savedPercentage
     }
@@ -416,6 +421,10 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
         }
 
         override fun onCompletion(mp: MediaPlayer) {
+            // Release media player as soon as it completed
+            mp.release()
+            currentMediaPlayer = null
+
             // Next media player is already attached to this player and will start playing automatically
             if (nextMediaPlayer != null) return
 
@@ -426,15 +435,16 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
                 // We'll not receive new chunks anymore so we can stop the live listening
                 stop()
             } else {
-                // Enter in buffering mode and release current media player
                 playingState = State.Buffering
-                currentMediaPlayer?.release()
-                currentMediaPlayer = null
+                prepareNextMediaPlayer()
             }
         }
 
         override fun onError(mp: MediaPlayer, what: Int, extra: Int): Boolean {
-            stop()
+            Timber.d("## Voice Broadcast | onError: what=$what, extra=$extra")
+            if (playingState == State.Buffering || tryOrNull { currentMediaPlayer?.isPlaying } != true) {
+                playingState = State.Error(VoiceBroadcastFailure.ListeningError.UnableToPlay(what, extra))
+            }
             return true
         }
     }
@@ -480,6 +490,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
                         playbackTracker.updatePausedAtPlaybackTime(id, playbackTime, percentage)
                     }
                 }
+                is State.Error -> Unit
             }
         }
     }

@@ -124,6 +124,7 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
 
         audioMessagePlaybackTracker.track(attributes.informationData.eventId) { state ->
             when (state) {
+                is AudioMessagePlaybackTracker.Listener.State.Error,
                 is AudioMessagePlaybackTracker.Listener.State.Idle -> renderIdleState(holder, waveformColorIdle, waveformColorPlayed)
                 is AudioMessagePlaybackTracker.Listener.State.Playing -> renderPlayingState(holder, state, waveformColorIdle, waveformColorPlayed)
                 is AudioMessagePlaybackTracker.Listener.State.Paused -> renderPausedState(holder, state, waveformColorIdle, waveformColorPlayed)

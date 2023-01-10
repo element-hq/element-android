@@ -50,8 +50,11 @@ class AudioMessagePlaybackTracker @Inject constructor() {
         listeners.remove(id)
     }
 
-    fun pauseAllPlaybacks() {
-        listeners.keys.forEach(::pausePlayback)
+    fun unregisterListeners() {
+        listeners.forEach {
+            it.value.onUpdate(Listener.State.Idle)
+        }
+        listeners.clear()
     }
 
     /**
@@ -84,6 +87,10 @@ class AudioMessagePlaybackTracker @Inject constructor() {
                 }
     }
 
+    fun pauseAllPlaybacks() {
+        listeners.keys.forEach(::pausePlayback)
+    }
+
     fun pausePlayback(id: String) {
         val state = getPlaybackState(id)
         if (state is Listener.State.Playing) {
@@ -94,7 +101,14 @@ class AudioMessagePlaybackTracker @Inject constructor() {
     }
 
     fun stopPlayback(id: String) {
-        setState(id, Listener.State.Idle)
+        val state = getPlaybackState(id)
+        if (state !is Listener.State.Error) {
+            setState(id, Listener.State.Idle)
+        }
+    }
+
+    fun onError(id: String, error: Throwable) {
+        setState(id, Listener.State.Error(error))
     }
 
     fun updatePlayingAtPlaybackTime(id: String, time: Int, percentage: Float) {
@@ -116,6 +130,7 @@ class AudioMessagePlaybackTracker @Inject constructor() {
             is Listener.State.Playing -> state.playbackTime
             is Listener.State.Paused -> state.playbackTime
             is Listener.State.Recording,
+            is Listener.State.Error,
             Listener.State.Idle,
             null -> null
         }
@@ -126,16 +141,10 @@ class AudioMessagePlaybackTracker @Inject constructor() {
             is Listener.State.Playing -> state.percentage
             is Listener.State.Paused -> state.percentage
             is Listener.State.Recording,
+            is Listener.State.Error,
             Listener.State.Idle,
             null -> null
         }
-    }
-
-    fun unregisterListeners() {
-        listeners.forEach {
-            it.value.onUpdate(Listener.State.Idle)
-        }
-        listeners.clear()
     }
 
     companion object {
@@ -148,6 +157,7 @@ class AudioMessagePlaybackTracker @Inject constructor() {
 
         sealed class State {
             object Idle : State()
+            data class Error(val failure: Throwable) : State()
             data class Playing(val playbackTime: Int, val percentage: Float) : State()
             data class Paused(val playbackTime: Int, val percentage: Float) : State()
             data class Recording(val amplitudeList: List<Int>) : State()

@@ -229,6 +229,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
                 voiceMessageViews.renderPlaying(state)
             }
             is AudioMessagePlaybackTracker.Listener.State.Paused,
+            is AudioMessagePlaybackTracker.Listener.State.Error,
             is AudioMessagePlaybackTracker.Listener.State.Idle -> {
                 voiceMessageViews.renderIdle()
             }

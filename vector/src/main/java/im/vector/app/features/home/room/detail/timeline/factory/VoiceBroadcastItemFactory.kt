@@ -15,6 +15,7 @@
  */
 package im.vector.app.features.home.room.detail.timeline.factory
 
+import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.features.displayname.getBestName
@@ -45,6 +46,7 @@ class VoiceBroadcastItemFactory @Inject constructor(
         private val avatarSizeProvider: AvatarSizeProvider,
         private val colorProvider: ColorProvider,
         private val drawableProvider: DrawableProvider,
+        private val errorFormatter: ErrorFormatter,
         private val voiceBroadcastRecorder: VoiceBroadcastRecorder?,
         private val voiceBroadcastPlayer: VoiceBroadcastPlayer,
         private val playbackTracker: AudioMessagePlaybackTracker,
@@ -82,6 +84,7 @@ class VoiceBroadcastItemFactory @Inject constructor(
                 roomItem = session.getRoom(params.event.roomId)?.roomSummary()?.toMatrixItem(),
                 colorProvider = colorProvider,
                 drawableProvider = drawableProvider,
+                errorFormatter = errorFormatter,
         )
 
         return if (isRecording) {

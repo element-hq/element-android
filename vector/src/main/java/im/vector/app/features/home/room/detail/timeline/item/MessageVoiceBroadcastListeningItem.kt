@@ -20,11 +20,13 @@ import android.text.format.DateUtils
 import android.widget.ImageButton
 import android.widget.SeekBar
 import android.widget.TextView
+import androidx.constraintlayout.widget.Group
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.onClick
+import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.features.home.room.detail.RoomDetailAction.VoiceBroadcastAction
 import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker.Listener.State
 import im.vector.app.features.voicebroadcast.listening.VoiceBroadcastPlayer
@@ -54,6 +56,16 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
             }
         }
         player.addListener(voiceBroadcast, playerListener)
+
+        playbackTracker.track(voiceBroadcast.voiceBroadcastId) { playbackState ->
+            renderBackwardForwardButtons(holder, playbackState)
+            renderPlaybackError(holder, playbackState)
+            renderLiveIndicator(holder)
+            if (!isUserSeeking) {
+                holder.seekBar.progress = playbackTracker.getPlaybackTime(voiceBroadcast.voiceBroadcastId) ?: 0
+            }
+        }
+
         bindSeekBar(holder)
         bindButtons(holder)
     }
@@ -66,6 +78,7 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
                         VoiceBroadcastPlayer.State.Playing,
                         VoiceBroadcastPlayer.State.Buffering -> callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.Pause)
                         VoiceBroadcastPlayer.State.Paused,
+                        is VoiceBroadcastPlayer.State.Error,
                         VoiceBroadcastPlayer.State.Idle -> callback?.onTimelineItemAction(VoiceBroadcastAction.Listening.PlayOrResume(voiceBroadcast))
                     }
                 } else {
@@ -109,6 +122,7 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
                     playPauseButton.setImageResource(R.drawable.ic_play_pause_pause)
                     playPauseButton.contentDescription = view.resources.getString(R.string.a11y_pause_voice_broadcast)
                 }
+                is VoiceBroadcastPlayer.State.Error,
                 VoiceBroadcastPlayer.State.Idle,
                 VoiceBroadcastPlayer.State.Paused -> {
                     playPauseButton.setImageResource(R.drawable.ic_play_pause_play)
@@ -117,6 +131,18 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
             }
 
             renderLiveIndicator(holder)
+        }
+    }
+
+    private fun renderPlaybackError(holder: Holder, playbackState: State) {
+        with(holder) {
+            if (playbackState is State.Error) {
+                controlsGroup.isVisible = false
+                errorView.setTextOrHide(errorFormatter.toHumanReadable(playbackState.failure))
+            } else {
+                errorView.isVisible = false
+                controlsGroup.isVisible = true
+            }
         }
     }
 
@@ -140,13 +166,6 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
                     isUserSeeking = false
                 }
             })
-        }
-        playbackTracker.track(voiceBroadcast.voiceBroadcastId) { playbackState ->
-            renderBackwardForwardButtons(holder, playbackState)
-            renderLiveIndicator(holder)
-            if (!isUserSeeking) {
-                holder.seekBar.progress = playbackTracker.getPlaybackTime(voiceBroadcast.voiceBroadcastId) ?: 0
-            }
         }
     }
 
@@ -187,6 +206,8 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
         val broadcasterNameMetadata by bind<VoiceBroadcastMetadataView>(R.id.broadcasterNameMetadata)
         val voiceBroadcastMetadata by bind<VoiceBroadcastMetadataView>(R.id.voiceBroadcastMetadata)
         val listenersCountMetadata by bind<VoiceBroadcastMetadataView>(R.id.listenersCountMetadata)
+        val errorView by bind<TextView>(R.id.errorView)
+        val controlsGroup by bind<Group>(R.id.controlsGroup)
     }
 
     companion object {

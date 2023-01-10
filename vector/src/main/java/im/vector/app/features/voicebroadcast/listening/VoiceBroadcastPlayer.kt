@@ -16,6 +16,7 @@
 
 package im.vector.app.features.voicebroadcast.listening
 
+import im.vector.app.features.voicebroadcast.VoiceBroadcastFailure
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcast
 
 interface VoiceBroadcastPlayer {
@@ -72,6 +73,7 @@ interface VoiceBroadcastPlayer {
         object Playing : State
         object Paused : State
         object Buffering : State
+        data class Error(val failure: VoiceBroadcastFailure.ListeningError) : State
         object Idle : State
     }
 
