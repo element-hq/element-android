@@ -20,10 +20,12 @@ import im.vector.app.features.voicebroadcast.model.VoiceBroadcast
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastEvent
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import im.vector.app.features.voicebroadcast.voiceBroadcastId
+import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.Room
+import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -47,8 +49,14 @@ class GetVoiceBroadcastStateEventUseCase @Inject constructor(
      * Get the most recent event related to the given voice broadcast.
      */
     private fun getMostRecentRelatedEvent(room: Room, voiceBroadcast: VoiceBroadcast): VoiceBroadcastEvent? {
-        return room.timelineService().getTimelineEventsRelatedTo(RelationType.REFERENCE, voiceBroadcast.voiceBroadcastId)
-                .mapNotNull { timelineEvent -> timelineEvent.root.asVoiceBroadcastEvent()?.takeUnless { it.root.isRedacted() } }
-                .maxByOrNull { it.root.originServerTs ?: 0 }
+        val startedEvent = room.getTimelineEvent(voiceBroadcast.voiceBroadcastId)
+        return if (startedEvent?.root?.isRedacted().orTrue()) {
+            null
+        } else {
+            room.timelineService().getTimelineEventsRelatedTo(RelationType.REFERENCE, voiceBroadcast.voiceBroadcastId)
+                    .mapNotNull { timelineEvent -> timelineEvent.root.asVoiceBroadcastEvent() }
+                    .filterNot { it.root.isRedacted() }
+                    .maxByOrNull { it.root.originServerTs ?: 0 }
+        }
     }
 }

@@ -18,6 +18,7 @@ package im.vector.app.features.voicebroadcast.usecase
 
 import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcast
+import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.test.fakes.FakeSession
 import io.mockk.every
 import io.mockk.mockk
@@ -40,6 +41,7 @@ internal class GetVoiceBroadcastStateEventUseCaseTest {
     fun `given there is no event related to the given vb, when execute, then return null`() {
         // Given
         val aVoiceBroadcast = VoiceBroadcast(A_VOICE_BROADCAST_ID, A_ROOM_ID)
+        every { fakeSession.getRoom(A_ROOM_ID)?.timelineService()?.getTimelineEvent(A_VOICE_BROADCAST_ID) } returns null
         every { fakeSession.getRoom(A_ROOM_ID)?.timelineService()?.getTimelineEventsRelatedTo(any(), any()) } returns emptyList()
 
         // When
@@ -54,9 +56,9 @@ internal class GetVoiceBroadcastStateEventUseCaseTest {
         // Given
         val aVoiceBroadcast = VoiceBroadcast(A_VOICE_BROADCAST_ID, A_ROOM_ID)
         val aListOfTimelineEvents = listOf(
-                givenAVoiceBroadcastEvent(eventId = "event_id_1", isRedacted = false, timestamp = 1L),
-                givenAVoiceBroadcastEvent(eventId = "event_id_3", isRedacted = false, timestamp = 3L),
-                givenAVoiceBroadcastEvent(eventId = "event_id_2", isRedacted = false, timestamp = 2L),
+                givenAVoiceBroadcastEvent(eventId = A_VOICE_BROADCAST_ID, state = VoiceBroadcastState.STARTED, isRedacted = false, timestamp = 1L),
+                givenAVoiceBroadcastEvent(eventId = "event_id_3", state = VoiceBroadcastState.STOPPED, isRedacted = false, timestamp = 3L),
+                givenAVoiceBroadcastEvent(eventId = "event_id_2", state = VoiceBroadcastState.PAUSED, isRedacted = false, timestamp = 2L),
         )
         every { fakeSession.getRoom(A_ROOM_ID)?.timelineService()?.getTimelineEventsRelatedTo(any(), any()) } returns aListOfTimelineEvents
 
@@ -73,8 +75,8 @@ internal class GetVoiceBroadcastStateEventUseCaseTest {
         // Given
         val aVoiceBroadcast = VoiceBroadcast(A_VOICE_BROADCAST_ID, A_ROOM_ID)
         val aListOfTimelineEvents = listOf(
-                givenAVoiceBroadcastEvent(eventId = "event_id_1", isRedacted = false, timestamp = 1L),
-                givenAVoiceBroadcastEvent(eventId = "event_id_2", isRedacted = true, timestamp = 2L),
+                givenAVoiceBroadcastEvent(eventId = A_VOICE_BROADCAST_ID, state = VoiceBroadcastState.STARTED, isRedacted = false, timestamp = 1L),
+                givenAVoiceBroadcastEvent(eventId = "event_id_2", state = VoiceBroadcastState.STOPPED, isRedacted = true, timestamp = 2L),
         )
         every { fakeSession.getRoom(A_ROOM_ID)?.timelineService()?.getTimelineEventsRelatedTo(any(), any()) } returns aListOfTimelineEvents
 
@@ -83,17 +85,41 @@ internal class GetVoiceBroadcastStateEventUseCaseTest {
 
         // Then
         result.shouldNotBeNull()
-        result.root.eventId shouldBeEqualTo "event_id_1"
+        result.root.eventId shouldBeEqualTo A_VOICE_BROADCAST_ID
+    }
+
+    @Test
+    fun `given a not ended voice broadcast with a redacted start event, when execute, then return null`() {
+        // Given
+        val aVoiceBroadcast = VoiceBroadcast(A_VOICE_BROADCAST_ID, A_ROOM_ID)
+        val aListOfTimelineEvents = listOf(
+                givenAVoiceBroadcastEvent(eventId = A_VOICE_BROADCAST_ID, state = VoiceBroadcastState.STARTED, isRedacted = true, timestamp = 1L),
+                givenAVoiceBroadcastEvent(eventId = "event_id_2", state = VoiceBroadcastState.PAUSED, isRedacted = false, timestamp = 2L),
+                givenAVoiceBroadcastEvent(eventId = "event_id_3", state = VoiceBroadcastState.RESUMED, isRedacted = false, timestamp = 3L),
+        )
+        every { fakeSession.getRoom(A_ROOM_ID)?.timelineService()?.getTimelineEventsRelatedTo(any(), any()) } returns aListOfTimelineEvents
+
+        // When
+        val result = getVoiceBroadcastStateEventUseCase.execute(aVoiceBroadcast)
+
+        // Then
+        result.shouldBeNull()
     }
 
     private fun givenAVoiceBroadcastEvent(
             eventId: String,
+            state: VoiceBroadcastState,
             isRedacted: Boolean,
             timestamp: Long,
-    ) = mockk<TimelineEvent>(relaxed = true) {
-        every { root.eventId } returns eventId
-        every { root.type } returns VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO
-        every { root.isRedacted() } returns isRedacted
-        every { root.originServerTs } returns timestamp
+    ): TimelineEvent {
+        val timelineEvent = mockk<TimelineEvent> {
+            every { root.eventId } returns eventId
+            every { root.type } returns VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO
+            every { root.content } returns mapOf("state" to state.value)
+            every { root.isRedacted() } returns isRedacted
+            every { root.originServerTs } returns timestamp
+        }
+        every { fakeSession.getRoom(A_ROOM_ID)?.timelineService()?.getTimelineEvent(eventId) } returns timelineEvent
+        return timelineEvent
     }
 }
