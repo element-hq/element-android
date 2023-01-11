@@ -33,6 +33,8 @@ import im.vector.app.features.roomprofile.polls.RoomPollsViewModel
 import timber.log.Timber
 import javax.inject.Inject
 
+// TODO add and render blocking loader view
+// TODO add and render missing empty view when load more is possible
 abstract class RoomPollsListFragment :
         VectorBaseFragment<FragmentRoomPollsListBinding>(),
         RoomPollsController.Listener {
@@ -86,5 +88,9 @@ abstract class RoomPollsListFragment :
     override fun onPollClicked(pollId: String) {
         // TODO navigate to details
         Timber.d("poll with id $pollId clicked")
+    }
+
+    override fun onLoadMoreClicked() {
+        // TODO call viewAction
     }
 }

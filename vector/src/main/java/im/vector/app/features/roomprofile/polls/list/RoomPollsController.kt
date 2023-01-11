@@ -31,6 +31,7 @@ class RoomPollsController @Inject constructor(
 
     interface Listener {
         fun onPollClicked(pollId: String)
+        fun onLoadMoreClicked()
     }
 
     var listener: Listener? = null
@@ -46,6 +47,8 @@ class RoomPollsController @Inject constructor(
                 is PollSummary.EndedPoll -> buildEndedPollItem(poll)
             }
         }
+
+        buildLoadMoreItem()
     }
 
     private fun buildActivePollItem(poll: PollSummary.ActivePoll) {
@@ -71,6 +74,14 @@ class RoomPollsController @Inject constructor(
             clickListener {
                 host.listener?.onPollClicked(poll.id)
             }
+        }
+    }
+
+    private fun buildLoadMoreItem() {
+        val host = this
+        roomPollLoadMoreItem {
+            id("roomPollLoadMore")
+            host.listener?.onLoadMoreClicked()
         }
     }
 }

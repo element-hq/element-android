@@ -3201,6 +3201,7 @@
     <string name="room_polls_active_no_item">There are no active polls in this room</string>
     <string name="room_polls_ended">Past polls</string>
     <string name="room_polls_ended_no_item">There are no past polls in this room</string>
+    <string name="room_polls_load_more">Load more polls</string>
 
     <!-- Location -->
     <string name="location_activity_title_static_sharing">Share location</string>
