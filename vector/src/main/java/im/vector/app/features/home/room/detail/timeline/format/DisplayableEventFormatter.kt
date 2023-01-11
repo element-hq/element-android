@@ -130,7 +130,7 @@ class DisplayableEventFormatter @Inject constructor(
                 span { }
             }
             in EventType.POLL_START.values -> {
-                timelineEvent.root.getClearContent().toModel<MessagePollContent>(catchError = true)?.getBestPollCreationInfo()?.question?.getBestQuestion()
+                (timelineEvent.getVectorLastMessageContent() as? MessagePollContent)?.getBestPollCreationInfo()?.question?.getBestQuestion()
                         ?: stringProvider.getString(R.string.sent_a_poll)
             }
             in EventType.POLL_RESPONSE.values -> {
