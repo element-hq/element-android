@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,20 +18,15 @@ package im.vector.app.test.fakes
 
 import io.mockk.every
 import io.mockk.mockk
-import org.matrix.android.sdk.api.session.room.RoomService
-import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import io.mockk.slot
+import org.matrix.android.sdk.api.session.user.UserService
+import org.matrix.android.sdk.api.session.user.model.User
 
-class FakeRoomService(
-        private val fakeRoom: FakeRoom = FakeRoom()
-) : RoomService by mockk() {
+class FakeUserService : UserService by mockk() {
 
-    override fun getRoom(roomId: String) = fakeRoom
+    private val userIdSlot = slot<String>()
 
-    fun getRoomSummaryReturns(roomSummary: RoomSummary?) {
-        every { getRoomSummary(any()) } returns roomSummary
-    }
-
-    fun set(roomSummary: RoomSummary?) {
-        every { getRoomSummary(any()) } returns roomSummary
+    init {
+        every { getUser(capture(userIdSlot)) } answers { User(userId = userIdSlot.captured) }
     }
 }
