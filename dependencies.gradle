@@ -28,7 +28,8 @@ def jjwt = "0.11.5"
 // the whole commit which set version 0.16.0-SNAPSHOT
 def vanniktechEmoji = "0.16.0-SNAPSHOT"
 def sentry = "6.11.0"
-def fragment = "1.5.5"
+// Use 1.6.0 alpha to fix issue with test
+def fragment = "1.6.0-alpha04"
 // Testing
 def mockk = "1.12.3" // We need to use 1.12.3 to have mocking in androidTest until a new version is released: https://github.com/mockk/mockk/issues/819
 def espresso = "3.5.1"
@@ -56,6 +57,7 @@ ext.libs = [
                 'exifinterface'           : "androidx.exifinterface:exifinterface:1.3.5",
                 'fragmentKtx'             : "androidx.fragment:fragment-ktx:$fragment",
                 'fragmentTesting'         : "androidx.fragment:fragment-testing:$fragment",
+                'fragmentTestingManifest' : "androidx.fragment:fragment-testing-manifest:$fragment",
                 'constraintLayout'        : "androidx.constraintlayout:constraintlayout:2.1.4",
                 'work'                    : "androidx.work:work-runtime-ktx:2.7.1",
                 'autoFill'                : "androidx.autofill:autofill:1.1.0",

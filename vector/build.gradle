@@ -330,6 +330,7 @@ dependencies {
     }
     androidTestImplementation libs.mockk.mockkAndroid
     androidTestUtil libs.androidx.orchestrator
-    debugImplementation libs.androidx.fragmentTesting
+    debugImplementation libs.androidx.fragmentTestingManifest
+    androidTestImplementation libs.androidx.fragmentTesting
     androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:1.8.0"
 }
