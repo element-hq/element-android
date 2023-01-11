@@ -19,5 +19,4 @@ package org.matrix.android.sdk.api.session.room.threads
 sealed class FetchThreadsResult {
     data class ShouldFetchMore(val nextBatch: String) : FetchThreadsResult()
     object ReachedEnd : FetchThreadsResult()
-    object Failed : FetchThreadsResult()
 }

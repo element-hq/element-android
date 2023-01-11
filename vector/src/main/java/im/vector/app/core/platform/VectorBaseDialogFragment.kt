@@ -23,8 +23,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewbinding.ViewBinding
 import com.airbnb.mvrx.MavericksView
 import dagger.hilt.android.EntryPointAccessors
@@ -37,6 +39,7 @@ import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.themes.ThemeUtils
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import reactivecircus.flowbinding.android.view.clicks
 import timber.log.Timber
 
@@ -145,11 +148,15 @@ abstract class VectorBaseDialogFragment<VB : ViewBinding> : DialogFragment(), Ma
      * ========================================================================================== */
 
     protected fun <T : VectorViewEvents> VectorViewModel<*, *, T>.observeViewEvents(observer: (T) -> Unit) {
-        viewEvents
-                .stream()
-                .onEach {
-                    observer(it)
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+        val tag = this@VectorBaseDialogFragment::class.simpleName.toString()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewEvents
+                        .stream(tag)
+                        .collect {
+                            observer(it)
+                        }
+            }
+        }
     }
 }

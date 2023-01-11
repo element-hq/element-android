@@ -2836,4 +2836,13 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="set_link_link">Tautan</string>
     <string name="set_link_text">Teks</string>
     <string name="rich_text_editor_link">Atur tautan</string>
+    <string name="settings_access_token_summary">Token akses Anda memberikan akses penuh ke akun Anda. Jangan bagikan dengan siapa pun.</string>
+    <string name="settings_access_token">Token Akses</string>
+    <string name="rich_text_editor_bullet_list">Saklar daftar bulat</string>
+    <string name="rich_text_editor_numbered_list">Saklar daftar bernomor</string>
+    <string name="room_polls_ended_no_item">Tidak ada pemungutan suara sebelumnya di ruangan ini</string>
+    <string name="room_polls_ended">Pemungutan suara sebelumnya</string>
+    <string name="room_polls_active_no_item">Tidak ada pemungutan suara yang aktif di ruangan ini</string>
+    <string name="room_polls_active">Pemungutan suara aktif</string>
+    <string name="room_profile_section_more_polls">Riwayat pemungutan suara</string>
 </resources>

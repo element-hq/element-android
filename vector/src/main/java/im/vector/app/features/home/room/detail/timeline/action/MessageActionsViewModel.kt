@@ -498,6 +498,7 @@ class MessageActionsViewModel @AssistedInject constructor(
             MessageType.MSGTYPE_AUDIO,
             MessageType.MSGTYPE_FILE,
             MessageType.MSGTYPE_POLL_START,
+            MessageType.MSGTYPE_POLL_END,
             MessageType.MSGTYPE_STICKER_LOCAL -> event.root.threadDetails?.isRootThread ?: false
             else -> false
         }
@@ -529,8 +530,8 @@ class MessageActionsViewModel @AssistedInject constructor(
     }
 
     private fun canViewReactions(event: TimelineEvent): Boolean {
-        // Only event of type EventType.MESSAGE, EventType.STICKER and EventType.POLL_START are supported for the moment
-        if (event.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER) + EventType.POLL_START.values) return false
+        // Only event of type EventType.MESSAGE, EventType.STICKER, EventType.POLL_START, EventType.POLL_END are supported for the moment
+        if (event.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER) + EventType.POLL_START.values + EventType.POLL_END.values) return false
         return event.annotations?.reactionsSummary?.isNotEmpty() ?: false
     }
 

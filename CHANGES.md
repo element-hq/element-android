@@ -1,3 +1,30 @@
+Changes in Element v1.5.20 (2023-01-10)
+=======================================
+
+Features ✨
+----------
+ - "[Rich text editor] Add list formatting buttons to the rich text editor" ([#7887](https://github.com/vector-im/element-android/issues/7887))
+
+Bugfixes 🐛
+----------
+ - ReplyTo are not updated if the original message is edited or deleted. ([#5546](https://github.com/vector-im/element-android/issues/5546))
+ - Observe ViewEvents only when resumed and ensure ViewEvents are not lost. ([#7724](https://github.com/vector-im/element-android/issues/7724))
+ - [Session manager] Missing info when a session does not support encryption ([#7853](https://github.com/vector-im/element-android/issues/7853))
+ - Reduce number of crypto database transactions when handling the sync response ([#7879](https://github.com/vector-im/element-android/issues/7879))
+ - [Voice Broadcast] Stop listening if we reach the last received chunk and there is no last sequence number ([#7899](https://github.com/vector-im/element-android/issues/7899))
+ - Handle network error on API `rooms/{roomId}/threads` ([#7913](https://github.com/vector-im/element-android/issues/7913))
+
+In development 🚧
+----------------
+ - [Poll] Render active polls list of a room
+ - [Poll] Render past polls list of a room ([#7864](https://github.com/vector-im/element-android/issues/7864))
+
+Other changes
+-------------
+ - fix: increase font size for messages ([#5717](https://github.com/vector-im/element-android/issues/5717))
+ - Add trim to username input on the app side and SDK side when sign-in ([#7111](https://github.com/vector-im/element-android/issues/7111))
+
+
 Changes in Element v1.5.18 (2023-01-02)
 =======================================
 

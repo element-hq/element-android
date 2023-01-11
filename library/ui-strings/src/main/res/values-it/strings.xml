@@ -2881,4 +2881,13 @@
     <string name="set_link_link">Collegamento</string>
     <string name="set_link_text">Testo</string>
     <string name="rich_text_editor_link">Imposta collegamento</string>
+    <string name="settings_access_token_summary">Il tuo token di accesso ti dà l\'accesso al tuo account. Non condividerlo con nessuno.</string>
+    <string name="settings_access_token">Token di accesso</string>
+    <string name="rich_text_editor_numbered_list">Attiva/disattiva elenco numerato</string>
+    <string name="rich_text_editor_bullet_list">Attiva/disattiva elenco puntato</string>
+    <string name="room_polls_ended_no_item">In questa stanza non ci sono sondaggi passati</string>
+    <string name="room_polls_ended">Sondaggi passati</string>
+    <string name="room_polls_active_no_item">In questa stanza non ci sono sondaggi attivi</string>
+    <string name="room_polls_active">Sondaggi attivi</string>
+    <string name="room_profile_section_more_polls">Cronologia sondaggi</string>
 </resources>

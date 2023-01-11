@@ -2881,4 +2881,13 @@
     <string name="set_link_link">Link</string>
     <string name="set_link_create">Loo link</string>
     <string name="set_link_edit">Muuda linki</string>
+    <string name="room_profile_section_more_polls">Küsitluste ajalugu</string>
+    <string name="room_polls_active">Käimasolevad küsitlused</string>
+    <string name="room_polls_active_no_item">Selles jututoas pole käimasolevaid küsitlusi</string>
+    <string name="room_polls_ended">Varasemad küsitlused</string>
+    <string name="room_polls_ended_no_item">Selles jututoas pole varasemaid küsitlusi</string>
+    <string name="rich_text_editor_numbered_list">Lülita nummerdatud loend sisse/välja</string>
+    <string name="rich_text_editor_bullet_list">Lülita täpploend sisse/välja</string>
+    <string name="settings_access_token">Pääsuluba</string>
+    <string name="settings_access_token_summary">Sinu pääsuluba annab täismahulise ligipääsu sinu kasutajakontole. Palun ära jaga seda teistega.</string>
 </resources>

@@ -2834,4 +2834,13 @@
     <string name="set_link_link">連結</string>
     <string name="set_link_text">文字</string>
     <string name="rich_text_editor_link">設定連結</string>
+    <string name="settings_access_token_summary">您的存取權杖可以完整存取您的帳號。不要將其與其他人分享。</string>
+    <string name="settings_access_token">存取權杖</string>
+    <string name="rich_text_editor_bullet_list">切換項目符號清單</string>
+    <string name="rich_text_editor_numbered_list">切換編號清單</string>
+    <string name="room_polls_ended_no_item">此聊天室沒有過去的投票</string>
+    <string name="room_polls_ended">過去的投票</string>
+    <string name="room_polls_active_no_item">此聊天室沒有正在進行的投票</string>
+    <string name="room_polls_active">進行中的投票</string>
+    <string name="room_profile_section_more_polls">投票歷史紀錄</string>
 </resources>
