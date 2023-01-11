@@ -80,12 +80,12 @@ task generateCoverageReport(type: JacocoReport) {
 
 task unitTestsWithCoverage(type: GradleBuild) {
     // the 7.1.3 android gradle plugin has a bug where enableTestCoverage generates invalid coverage
-    startParameter.projectProperties.coverage = [enableTestCoverage: false]
+    startParameter.projectProperties.coverage = "false"
     tasks = ['testDebugUnitTest']
 }
 
 task instrumentationTestsWithCoverage(type: GradleBuild) {
-    startParameter.projectProperties.coverage = [enableTestCoverage: true]
+    startParameter.projectProperties.coverage = "true"
     startParameter.projectProperties['android.testInstrumentationRunnerArguments.notPackage'] = 'im.vector.app.ui'
     tasks = [':vector-app:connectedGplayDebugAndroidTest', ':vector:connectedDebugAndroidTest', 'matrix-sdk-android:connectedDebugAndroidTest']
 }
