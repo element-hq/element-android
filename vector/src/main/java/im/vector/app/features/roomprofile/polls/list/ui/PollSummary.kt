@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.roomprofile.polls.list
+package im.vector.app.features.roomprofile.polls.list.ui
 
 import im.vector.app.features.home.room.detail.timeline.item.PollOptionViewState
 

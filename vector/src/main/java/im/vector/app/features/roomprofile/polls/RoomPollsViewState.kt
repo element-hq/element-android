@@ -18,7 +18,7 @@ package im.vector.app.features.roomprofile.polls
 
 import com.airbnb.mvrx.MavericksState
 import im.vector.app.features.roomprofile.RoomProfileArgs
-import im.vector.app.features.roomprofile.polls.list.PollSummary
+import im.vector.app.features.roomprofile.polls.list.ui.PollSummary
 
 // TODO parameter to know whether load more is possible
 // TODO parameter to know whether initial loading is in progress

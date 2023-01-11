@@ -17,7 +17,7 @@
 package im.vector.app.features.roomprofile.polls.list.domain
 
 import im.vector.app.features.home.room.detail.timeline.item.PollOptionViewState
-import im.vector.app.features.roomprofile.polls.list.PollSummary
+import im.vector.app.features.roomprofile.polls.list.ui.PollSummary
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map

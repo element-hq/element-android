@@ -17,7 +17,7 @@
 package im.vector.app.features.roomprofile.polls
 
 import com.airbnb.mvrx.test.MavericksTestRule
-import im.vector.app.features.roomprofile.polls.list.PollSummary
+import im.vector.app.features.roomprofile.polls.list.ui.PollSummary
 import im.vector.app.features.roomprofile.polls.list.domain.GetPollsUseCase
 import im.vector.app.test.test
 import im.vector.app.test.testDispatcher

@@ -19,7 +19,7 @@ package im.vector.app.features.roomprofile.polls.active
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.features.roomprofile.polls.RoomPollsType
-import im.vector.app.features.roomprofile.polls.list.RoomPollsListFragment
+import im.vector.app.features.roomprofile.polls.list.ui.RoomPollsListFragment
 
 @AndroidEntryPoint
 class RoomActivePollsFragment : RoomPollsListFragment() {
