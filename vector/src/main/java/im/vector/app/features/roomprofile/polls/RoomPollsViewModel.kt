@@ -23,12 +23,16 @@ import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.roomprofile.polls.list.domain.GetPollsUseCase
+import im.vector.app.features.roomprofile.polls.list.domain.LoadMorePollsUseCase
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 class RoomPollsViewModel @AssistedInject constructor(
         @Assisted initialState: RoomPollsViewState,
         private val getPollsUseCase: GetPollsUseCase,
+        private val loadMorePollsUseCase: LoadMorePollsUseCase,
 ) : VectorViewModel<RoomPollsViewState, RoomPollsAction, RoomPollsViewEvent>(initialState) {
 
     @AssistedFactory
@@ -42,13 +46,24 @@ class RoomPollsViewModel @AssistedInject constructor(
         observePolls()
     }
 
-    private fun observePolls() {
-        getPollsUseCase.execute()
+    private fun observePolls() = withState { viewState ->
+        getPollsUseCase.execute(viewState.roomId)
                 .onEach { setState { copy(polls = it) } }
                 .launchIn(viewModelScope)
     }
 
+    // TODO add unit tests
     override fun handle(action: RoomPollsAction) {
-        // do nothing for now
+        when (action) {
+            RoomPollsAction.LoadMorePolls -> handleLoadMore()
+        }
+    }
+
+    private fun handleLoadMore() = withState { viewState ->
+        viewModelScope.launch {
+            setState { copy(isLoadingMore = true) }
+            loadMorePollsUseCase.execute(viewState.roomId)
+            setState { copy(isLoadingMore = false) }
+        }
     }
 }

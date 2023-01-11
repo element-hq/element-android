@@ -21,13 +21,14 @@ import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.features.roomprofile.polls.PollSummary
+import im.vector.app.features.roomprofile.polls.RoomPollsViewState
+import java.util.UUID
 import javax.inject.Inject
 
 class RoomPollsController @Inject constructor(
         val dateFormatter: VectorDateFormatter,
         val stringProvider: StringProvider,
-) : TypedEpoxyController<List<PollSummary>>() {
+) : TypedEpoxyController<RoomPollsViewState>() {
 
     interface Listener {
         fun onPollClicked(pollId: String)
@@ -36,19 +37,20 @@ class RoomPollsController @Inject constructor(
 
     var listener: Listener? = null
 
-    override fun buildModels(data: List<PollSummary>?) {
-        if (data.isNullOrEmpty()) {
+    override fun buildModels(viewState: RoomPollsViewState?) {
+        val polls = viewState?.polls
+        if (polls.isNullOrEmpty()) {
             return
         }
 
-        for (poll in data) {
+        for (poll in polls) {
             when (poll) {
                 is PollSummary.ActivePoll -> buildActivePollItem(poll)
                 is PollSummary.EndedPoll -> buildEndedPollItem(poll)
             }
         }
 
-        buildLoadMoreItem()
+        buildLoadMoreItem(viewState.isLoadingMore)
     }
 
     private fun buildActivePollItem(poll: PollSummary.ActivePoll) {
@@ -77,11 +79,14 @@ class RoomPollsController @Inject constructor(
         }
     }
 
-    private fun buildLoadMoreItem() {
+    private fun buildLoadMoreItem(isLoadingMore: Boolean) {
         val host = this
         roomPollLoadMoreItem {
-            id("roomPollLoadMore")
-            host.listener?.onLoadMoreClicked()
+            id(UUID.randomUUID().toString())
+            loadingMore(isLoadingMore)
+            clickListener {
+                host.listener?.onLoadMoreClicked()
+            }
         }
     }
 }

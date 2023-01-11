@@ -18,10 +18,14 @@ package im.vector.app.features.roomprofile.polls
 
 import com.airbnb.mvrx.MavericksState
 import im.vector.app.features.roomprofile.RoomProfileArgs
+import im.vector.app.features.roomprofile.polls.list.PollSummary
 
+// TODO parameter to know whether load more is possible
+// TODO parameter to know whether initial loading is in progress
 data class RoomPollsViewState(
         val roomId: String,
         val polls: List<PollSummary> = emptyList(),
+        val isLoadingMore: Boolean = false,
 ) : MavericksState {
 
     constructor(roomProfileArgs: RoomProfileArgs) : this(roomId = roomProfileArgs.roomId)

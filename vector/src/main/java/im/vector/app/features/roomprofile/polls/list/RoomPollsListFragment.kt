@@ -27,9 +27,10 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentRoomPollsListBinding
-import im.vector.app.features.roomprofile.polls.PollSummary
+import im.vector.app.features.roomprofile.polls.RoomPollsAction
 import im.vector.app.features.roomprofile.polls.RoomPollsType
 import im.vector.app.features.roomprofile.polls.RoomPollsViewModel
+import im.vector.app.features.roomprofile.polls.RoomPollsViewState
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -74,15 +75,16 @@ abstract class RoomPollsListFragment :
     }
 
     override fun invalidate() = withState(viewModel) { viewState ->
-        when (getRoomPollsType()) {
-            RoomPollsType.ACTIVE -> renderList(viewState.polls.filterIsInstance(PollSummary.ActivePoll::class.java))
-            RoomPollsType.ENDED -> renderList(viewState.polls.filterIsInstance(PollSummary.EndedPoll::class.java))
+        val filteredPolls = when (getRoomPollsType()) {
+            RoomPollsType.ACTIVE -> viewState.polls.filterIsInstance(PollSummary.ActivePoll::class.java)
+            RoomPollsType.ENDED -> viewState.polls.filterIsInstance(PollSummary.EndedPoll::class.java)
         }
+        renderList(viewState.copy(polls = filteredPolls))
     }
 
-    private fun renderList(polls: List<PollSummary>) {
-        roomPollsController.setData(polls)
-        views.roomPollsEmptyTitle.isVisible = polls.isEmpty()
+    private fun renderList(viewState: RoomPollsViewState) {
+        roomPollsController.setData(viewState)
+        views.roomPollsEmptyTitle.isVisible = viewState.polls.isEmpty()
     }
 
     override fun onPollClicked(pollId: String) {
@@ -91,6 +93,6 @@ abstract class RoomPollsListFragment :
     }
 
     override fun onLoadMoreClicked() {
-        // TODO call viewAction
+        viewModel.handle(RoomPollsAction.LoadMorePolls)
     }
 }

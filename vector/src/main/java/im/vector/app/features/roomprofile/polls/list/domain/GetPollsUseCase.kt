@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,23 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.roomprofile.polls
+package im.vector.app.features.roomprofile.polls.list.domain
 
 import im.vector.app.features.home.room.detail.timeline.item.PollOptionViewState
+import im.vector.app.features.roomprofile.polls.list.PollSummary
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import timber.log.Timber
 import javax.inject.Inject
 
+// TODO add unit tests
 class GetPollsUseCase @Inject constructor() {
 
-    fun execute(): Flow<List<PollSummary>> {
-        // TODO unmock and add unit tests
+    // TODO create a repo + datasources (local + remote) with mocked data by passing a room Id
+    fun execute(roomId: String): Flow<List<PollSummary>> {
+        // TODO call repository to get flow on polls
+        Timber.d("roomId=$roomId")
         return flowOf(getActivePolls() + getEndedPolls())
                 .map { it.sortedByDescending { poll -> poll.creationTimestamp } }
     }
