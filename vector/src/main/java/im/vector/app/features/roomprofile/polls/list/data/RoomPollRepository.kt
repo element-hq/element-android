@@ -14,21 +14,23 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.roomprofile.polls.list.domain
+package im.vector.app.features.roomprofile.polls.list.data
 
-import im.vector.app.features.roomprofile.polls.list.data.RoomPollRepository
 import im.vector.app.features.roomprofile.polls.list.ui.PollSummary
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 // TODO add unit tests
-class GetPollsUseCase @Inject constructor(
-        private val roomPollRepository: RoomPollRepository,
+class RoomPollRepository @Inject constructor(
+        private val roomPollDataSource: RoomPollDataSource,
 ) {
 
-    fun execute(roomId: String): Flow<List<PollSummary>> {
-        return roomPollRepository.getPolls(roomId)
-                .map { it.sortedByDescending { poll -> poll.creationTimestamp } }
+    // TODO after unmock, expose domain layer model (entity) and do the mapping to PollSummary in the UI layer
+    fun getPolls(roomId: String): Flow<List<PollSummary>> {
+        return roomPollDataSource.getPolls(roomId)
+    }
+
+    suspend fun loadMorePolls(roomId: String): LoadMorePollsResult {
+        return roomPollDataSource.loadMorePolls(roomId)
     }
 }

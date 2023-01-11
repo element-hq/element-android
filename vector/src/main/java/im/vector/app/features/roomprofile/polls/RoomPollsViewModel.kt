@@ -43,6 +43,7 @@ class RoomPollsViewModel @AssistedInject constructor(
     companion object : MavericksViewModelFactory<RoomPollsViewModel, RoomPollsViewState> by hiltMavericksViewModelFactory()
 
     init {
+        // TODO update canLoadMore in viewState
         observePolls()
     }
 
@@ -62,8 +63,8 @@ class RoomPollsViewModel @AssistedInject constructor(
     private fun handleLoadMore() = withState { viewState ->
         viewModelScope.launch {
             setState { copy(isLoadingMore = true) }
-            loadMorePollsUseCase.execute(viewState.roomId)
-            setState { copy(isLoadingMore = false) }
+            val result = loadMorePollsUseCase.execute(viewState.roomId)
+            setState { copy(isLoadingMore = false, canLoadMore = result.canLoadMore) }
         }
     }
 }

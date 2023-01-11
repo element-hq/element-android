@@ -14,18 +14,8 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.roomprofile.polls.list.domain
+package im.vector.app.features.roomprofile.polls.list.data
 
-import im.vector.app.features.roomprofile.polls.list.data.LoadMorePollsResult
-import im.vector.app.features.roomprofile.polls.list.data.RoomPollRepository
-import javax.inject.Inject
-
-// TODO add unit tests
-class LoadMorePollsUseCase @Inject constructor(
-        private val roomPollRepository: RoomPollRepository,
-) {
-
-    suspend fun execute(roomId: String): LoadMorePollsResult {
-        return roomPollRepository.loadMorePolls(roomId)
-    }
-}
+data class LoadMorePollsResult(
+        val canLoadMore: Boolean,
+)

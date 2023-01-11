@@ -50,7 +50,9 @@ class RoomPollsController @Inject constructor(
             }
         }
 
-        buildLoadMoreItem(viewState.isLoadingMore)
+        if (viewState.canLoadMore) {
+            buildLoadMoreItem(viewState.isLoadingMore)
+        }
     }
 
     private fun buildActivePollItem(poll: PollSummary.ActivePoll) {
