@@ -23,9 +23,11 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.resources.StringProvider
 import im.vector.app.databinding.FragmentRoomPollsListBinding
 import im.vector.app.features.roomprofile.polls.RoomPollsAction
 import im.vector.app.features.roomprofile.polls.RoomPollsType
@@ -35,13 +37,15 @@ import timber.log.Timber
 import javax.inject.Inject
 
 // TODO add and render blocking loader view
-// TODO add and render missing empty view when load more is possible
 abstract class RoomPollsListFragment :
         VectorBaseFragment<FragmentRoomPollsListBinding>(),
         RoomPollsController.Listener {
 
     @Inject
     lateinit var roomPollsController: RoomPollsController
+
+    @Inject
+    lateinit var stringProvider: StringProvider
 
     private val viewModel: RoomPollsViewModel by parentFragmentViewModel(RoomPollsViewModel::class)
 
@@ -52,16 +56,26 @@ abstract class RoomPollsListFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupList()
+        setupLoadMoreButton()
     }
 
-    abstract fun getEmptyListTitle(): String
+    abstract fun getEmptyListTitle(canLoadMore: Boolean, nbLoadedDays: Int): String
 
     abstract fun getRoomPollsType(): RoomPollsType
 
-    private fun setupList() {
+    private fun setupList() = withState(viewModel) { viewState ->
         roomPollsController.listener = this
         views.roomPollsList.configureWith(roomPollsController)
-        views.roomPollsEmptyTitle.text = getEmptyListTitle()
+        views.roomPollsEmptyTitle.text = getEmptyListTitle(
+                canLoadMore = viewState.canLoadMore,
+                nbLoadedDays = viewState.nbLoadedDays,
+        )
+    }
+
+    private fun setupLoadMoreButton() {
+        views.roomPollsLoadMoreWhenEmpty.onClick {
+            onLoadMoreClicked()
+        }
     }
 
     override fun onDestroyView() {
@@ -84,7 +98,14 @@ abstract class RoomPollsListFragment :
 
     private fun renderList(viewState: RoomPollsViewState) {
         roomPollsController.setData(viewState)
+        views.roomPollsEmptyTitle.text = getEmptyListTitle(
+                canLoadMore = viewState.canLoadMore,
+                nbLoadedDays = viewState.nbLoadedDays,
+        )
         views.roomPollsEmptyTitle.isVisible = viewState.polls.isEmpty()
+        views.roomPollsLoadMoreWhenEmpty.isVisible = viewState.polls.isEmpty()
+        views.roomPollsLoadMoreWhenEmptyProgress.isVisible = viewState.polls.isEmpty() && viewState.isLoadingMore
+        views.roomPollsLoadMoreWhenEmptyProgress.isEnabled = !viewState.isLoadingMore
     }
 
     override fun onPollClicked(pollId: String) {

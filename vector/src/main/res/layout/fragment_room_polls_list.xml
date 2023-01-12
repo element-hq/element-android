@@ -26,11 +26,39 @@
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.Vector.Body"
         android:textColor="?vctr_content_secondary"
+        android:textSize="17sp"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/roomPollsEmptyGuideline"
-        tools:text="@string/room_polls_active_no_item" />
+        tools:text="@string/room_polls_active_no_item"
+        tools:visibility="visible" />
+
+    <Button
+        android:id="@+id/roomPollsLoadMoreWhenEmpty"
+        style="@style/Widget.Vector.Button.Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/layout_horizontal_margin"
+        android:layout_marginTop="8dp"
+        android:text="@string/room_polls_load_more"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/roomPollsEmptyTitle"
+        tools:visibility="visible" />
+
+    <ProgressBar
+        android:id="@+id/roomPollsLoadMoreWhenEmptyProgress"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="9dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/roomPollsLoadMoreWhenEmpty"
+        app:layout_constraintStart_toEndOf="@id/roomPollsLoadMoreWhenEmpty"
+        app:layout_constraintTop_toTopOf="@id/roomPollsLoadMoreWhenEmpty"
+        tools:visibility="visible" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/roomPollsEmptyGuideline"

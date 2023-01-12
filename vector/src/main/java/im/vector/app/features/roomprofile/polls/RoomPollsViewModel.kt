@@ -23,6 +23,7 @@ import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.roomprofile.polls.list.domain.GetLoadedPollsStatusUseCase
 import im.vector.app.features.roomprofile.polls.list.domain.GetPollsUseCase
 import im.vector.app.features.roomprofile.polls.list.domain.LoadMorePollsUseCase
 import kotlinx.coroutines.flow.launchIn
@@ -32,6 +33,7 @@ import kotlinx.coroutines.launch
 class RoomPollsViewModel @AssistedInject constructor(
         @Assisted initialState: RoomPollsViewState,
         private val getPollsUseCase: GetPollsUseCase,
+        private val getLoadedPollsStatusUseCase: GetLoadedPollsStatusUseCase,
         private val loadMorePollsUseCase: LoadMorePollsUseCase,
 ) : VectorViewModel<RoomPollsViewState, RoomPollsAction, RoomPollsViewEvent>(initialState) {
 
@@ -43,8 +45,20 @@ class RoomPollsViewModel @AssistedInject constructor(
     companion object : MavericksViewModelFactory<RoomPollsViewModel, RoomPollsViewState> by hiltMavericksViewModelFactory()
 
     init {
-        // TODO update canLoadMore in viewState
+        updateLoadedPollStatus(initialState.roomId)
         observePolls()
+        // TODO
+        //  call use case to sync polls until now = initial loading
+    }
+
+    private fun updateLoadedPollStatus(roomId: String) {
+        val loadedPollsStatus = getLoadedPollsStatusUseCase.execute(roomId)
+        setState {
+            copy(
+                    canLoadMore = loadedPollsStatus.canLoadMore,
+                    nbLoadedDays = loadedPollsStatus.nbLoadedDays
+            )
+        }
     }
 
     private fun observePolls() = withState { viewState ->
@@ -64,7 +78,13 @@ class RoomPollsViewModel @AssistedInject constructor(
         viewModelScope.launch {
             setState { copy(isLoadingMore = true) }
             val result = loadMorePollsUseCase.execute(viewState.roomId)
-            setState { copy(isLoadingMore = false, canLoadMore = result.canLoadMore) }
+            setState {
+                copy(
+                        isLoadingMore = false,
+                        canLoadMore = result.canLoadMore,
+                        nbLoadedDays = result.nbLoadedDays,
+                )
+            }
         }
     }
 }

@@ -26,6 +26,7 @@ data class RoomPollsViewState(
         val polls: List<PollSummary> = emptyList(),
         val isLoadingMore: Boolean = false,
         val canLoadMore: Boolean = true,
+        val nbLoadedDays: Int = 0,
 ) : MavericksState {
 
     constructor(roomProfileArgs: RoomProfileArgs) : this(roomId = roomProfileArgs.roomId)

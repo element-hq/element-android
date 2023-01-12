@@ -41,6 +41,32 @@ class RoomPollDataSource @Inject constructor() {
         return pollsFlow.asSharedFlow()
     }
 
+    fun getLoadedPollsStatus(roomId: String): LoadedPollsStatus {
+        Timber.d("roomId=$roomId")
+        return LoadedPollsStatus(
+                canLoadMore = canLoadMore(),
+                nbLoadedDays = fakeLoadCounter * 30,
+        )
+    }
+
+    private fun canLoadMore(): Boolean {
+        return fakeLoadCounter < 2
+    }
+
+    suspend fun loadMorePolls(roomId: String): LoadedPollsStatus {
+        // TODO
+        //  unmock using SDK service + add unit tests
+        delay(3000)
+        fakeLoadCounter++
+        when (fakeLoadCounter) {
+            1 -> polls.addAll(getActivePollsPart1() + getEndedPollsPart1())
+            2 -> polls.addAll(getActivePollsPart2() + getEndedPollsPart2())
+            else -> Unit
+        }
+        pollsFlow.emit(polls)
+        return getLoadedPollsStatus(roomId)
+    }
+
     private fun getActivePollsPart1(): List<PollSummary.ActivePoll> {
         return listOf(
                 PollSummary.ActivePoll(
@@ -131,20 +157,5 @@ class RoomPollDataSource @Inject constructor() {
                         ),
                 ),
         )
-    }
-
-    suspend fun loadMorePolls(roomId: String): LoadMorePollsResult {
-        Timber.d("roomId=$roomId")
-        // TODO
-        //  unmock using SDK service + add unit tests
-        delay(3000)
-        fakeLoadCounter++
-        when (fakeLoadCounter) {
-            1 -> polls.addAll(getActivePollsPart1() + getEndedPollsPart1())
-            2 -> polls.addAll(getActivePollsPart2() + getEndedPollsPart2())
-            else -> Unit
-        }
-        pollsFlow.emit(polls)
-        return LoadMorePollsResult(canLoadMore = fakeLoadCounter < 2)
     }
 }
