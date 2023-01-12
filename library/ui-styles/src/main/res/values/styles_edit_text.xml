@@ -22,6 +22,7 @@
         <item name="android:clipToPadding">false</item>
         <item name="android:textSize">15sp</item>
         <item name="android:textColor">?vctr_message_text_color</item>
+        <item name="lineHeight">20sp</item>
     </style>
 
 </resources>

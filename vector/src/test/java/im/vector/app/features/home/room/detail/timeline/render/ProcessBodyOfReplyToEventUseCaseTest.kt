@@ -29,6 +29,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.getPollQuestion
 import org.matrix.android.sdk.api.session.events.model.isAudioMessage
 import org.matrix.android.sdk.api.session.events.model.isFileMessage
@@ -158,6 +159,7 @@ class ProcessBodyOfReplyToEventUseCaseTest {
         // Given
         givenTypeOfRepliedEvent(isPollMessage = true)
         givenNewContentForId(R.string.message_reply_to_sender_created_poll)
+        every { fakeRepliedEvent.getClearType() } returns EventType.POLL_START.unstable
         every { fakeRepliedEvent.getPollQuestion() } returns null
 
         executeAndAssertResult()
@@ -168,7 +170,19 @@ class ProcessBodyOfReplyToEventUseCaseTest {
         // Given
         givenTypeOfRepliedEvent(isPollMessage = true)
         givenNewContentForId(R.string.message_reply_to_sender_created_poll)
+        every { fakeRepliedEvent.getClearType() } returns EventType.POLL_START.unstable
         every { fakeRepliedEvent.getPollQuestion() } returns A_NEW_CONTENT
+
+        executeAndAssertResult()
+    }
+
+    @Test
+    fun `given a replied event of type poll end message when process the formatted body then content is replaced by correct string`() {
+        // Given
+        givenTypeOfRepliedEvent(isPollMessage = true)
+        givenNewContentForId(R.string.message_reply_to_sender_ended_poll)
+        every { fakeRepliedEvent.getClearType() } returns EventType.POLL_END.unstable
+        every { fakeRepliedEvent.getPollQuestion() } returns null
 
         executeAndAssertResult()
     }

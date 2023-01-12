@@ -42,7 +42,6 @@ internal class DefaultSavePushRulesTask @Inject constructor(@SessionDatabase pri
                     .findAll()
                     .forEach { it.deleteOnCascade() }
 
-            // Save only global rules for the moment
             val globalRules = params.pushRules.global
 
             val content = PushRulesEntity(RuleScope.GLOBAL).apply { kind = RuleSetKey.CONTENT }

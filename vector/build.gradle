@@ -69,7 +69,7 @@ android {
     buildTypes {
         debug {
             if (project.hasProperty("coverage")) {
-                testCoverageEnabled = coverage.enableTestCoverage
+                testCoverageEnabled = coverage == "true"
             }
         }
     }
@@ -135,7 +135,7 @@ dependencies {
     implementation libs.androidx.biometric
 
     api "org.threeten:threetenbp:1.4.0:no-tzdb"
-    api "com.gabrielittner.threetenbp:lazythreetenbp:0.12.0"
+    api "com.gabrielittner.threetenbp:lazythreetenbp:0.13.0"
 
     implementation libs.squareup.moshi
     kapt libs.squareup.moshiKotlin
@@ -333,6 +333,7 @@ dependencies {
     }
     androidTestImplementation libs.mockk.mockkAndroid
     androidTestUtil libs.androidx.orchestrator
-    debugImplementation libs.androidx.fragmentTesting
-    androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:1.7.22"
+    debugImplementation libs.androidx.fragmentTestingManifest
+    androidTestImplementation libs.androidx.fragmentTesting
+    androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:1.8.0"
 }
