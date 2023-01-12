@@ -91,7 +91,7 @@ data class PollResponseData(
         val totalVotes: Int = 0,
         val winnerVoteCount: Int = 0,
         val isClosed: Boolean = false,
-        val hasDecryptionError: Boolean = false,
+        val hasEncryptedRelatedEvents: Boolean = false,
 ) : Parcelable {
 
     fun getVoteSummaryOfAnOption(optionId: String) = votes?.get(optionId)

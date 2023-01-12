@@ -83,7 +83,7 @@ class PollItemViewStateFactory @Inject constructor(
             totalVotes: Int,
             winnerVoteCount: Int?,
     ): PollViewState {
-        val totalVotesText = if (pollResponseSummary?.hasDecryptionError.orFalse()) {
+        val totalVotesText = if (pollResponseSummary?.hasEncryptedRelatedEvents.orFalse()) {
             stringProvider.getString(R.string.unable_to_decrypt_some_events_in_poll)
         } else {
             stringProvider.getQuantityString(R.plurals.poll_total_vote_count_after_ended, totalVotes, totalVotes)
@@ -131,7 +131,7 @@ class PollItemViewStateFactory @Inject constructor(
             pollResponseSummary: PollResponseData?,
             totalVotes: Int
     ): PollViewState {
-        val totalVotesText = if (pollResponseSummary?.hasDecryptionError.orFalse()) {
+        val totalVotesText = if (pollResponseSummary?.hasEncryptedRelatedEvents.orFalse()) {
             stringProvider.getString(R.string.unable_to_decrypt_some_events_in_poll)
         } else {
             stringProvider.getQuantityString(R.plurals.poll_total_vote_count_before_ended_and_voted, totalVotes, totalVotes)

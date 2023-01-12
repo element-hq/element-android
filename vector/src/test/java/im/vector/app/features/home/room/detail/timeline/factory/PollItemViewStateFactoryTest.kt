@@ -136,7 +136,7 @@ class PollItemViewStateFactoryTest {
         // Given
         val stringProvider = FakeStringProvider()
         val pollItemViewStateFactory = PollItemViewStateFactory(stringProvider.instance)
-        val closedPollSummary = A_POLL_RESPONSE_DATA.copy(isClosed = true, hasDecryptionError = true)
+        val closedPollSummary = A_POLL_RESPONSE_DATA.copy(isClosed = true, hasEncryptedRelatedEvents = true)
         val closedPollInformationData = A_MESSAGE_INFORMATION_DATA.copy(pollResponseAggregatedSummary = closedPollSummary)
 
         // When
@@ -220,7 +220,7 @@ class PollItemViewStateFactoryTest {
                 totalVotes = 1,
                 myVote = A_POLL_OPTION_IDS[0],
                 votes = mapOf(A_POLL_OPTION_IDS[0] to PollVoteSummaryData(total = 1, percentage = 1.0)),
-                hasDecryptionError = true,
+                hasEncryptedRelatedEvents = true,
         )
         val disclosedPollContent = A_POLL_CONTENT.copy(
                 unstablePollCreationInfo = A_POLL_CONTENT.getBestPollCreationInfo()?.copy(
