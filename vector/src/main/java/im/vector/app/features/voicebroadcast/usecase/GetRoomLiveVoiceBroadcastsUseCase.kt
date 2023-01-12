@@ -19,14 +19,20 @@ package im.vector.app.features.voicebroadcast.usecase
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
 import im.vector.app.features.voicebroadcast.isLive
+import im.vector.app.features.voicebroadcast.model.VoiceBroadcast
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastEvent
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
+import im.vector.app.features.voicebroadcast.voiceBroadcastId
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.getRoom
 import javax.inject.Inject
 
+/**
+ * Get the list of live (not ended) voice broadcast events in the given room.
+ */
 class GetRoomLiveVoiceBroadcastsUseCase @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
+        private val getVoiceBroadcastStateEventUseCase: GetVoiceBroadcastStateEventUseCase,
 ) {
 
     fun execute(roomId: String): List<VoiceBroadcastEvent> {
@@ -37,7 +43,8 @@ class GetRoomLiveVoiceBroadcastsUseCase @Inject constructor(
                 setOf(VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO),
                 QueryStringValue.IsNotEmpty
         )
-                .mapNotNull { it.asVoiceBroadcastEvent() }
+                .mapNotNull { stateEvent -> stateEvent.asVoiceBroadcastEvent()?.voiceBroadcastId }
+                .mapNotNull { voiceBroadcastId -> getVoiceBroadcastStateEventUseCase.execute(VoiceBroadcast(voiceBroadcastId, roomId)) }
                 .filter { it.isLive }
     }
 }
