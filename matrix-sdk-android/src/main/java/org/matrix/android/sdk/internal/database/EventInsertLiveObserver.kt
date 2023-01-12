@@ -17,12 +17,16 @@
 package org.matrix.android.sdk.internal.database
 
 import com.zhuinden.monarchy.Monarchy
+import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.RealmResults
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
+import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.EventInsertEntity
@@ -76,16 +80,16 @@ internal class EventInsertLiveObserver @Inject constructor(
                     Timber.v("##Transaction: There are ${filteredEvents.size} events to process ")
                     filteredEvents.forEach { eventInsert ->
                         val eventId = eventInsert.eventId
-                        val event = EventEntity.where(realm, eventId).findFirst()
-                        if (event == null) {
-                            Timber.v("Event $eventId not found")
+                        val event = getEvent(realm, eventId)
+                        if (event != null && canProcessEvent(event)) {
+                            processors.filter {
+                                it.shouldProcess(eventId, event.getClearType(), eventInsert.insertType)
+                            }.forEach {
+                                it.process(realm, event)
+                            }
+                        } else {
+                            Timber.v("Cannot process event with id $eventId")
                             return@forEach
-                        }
-                        val domainEvent = event.asDomain()
-                        processors.filter {
-                            it.shouldProcess(eventId, domainEvent.getClearType(), eventInsert.insertType)
-                        }.forEach {
-                            it.process(realm, domainEvent)
                         }
                     }
                     realm.where(EventInsertEntity::class.java)
@@ -102,6 +106,20 @@ internal class EventInsertLiveObserver @Inject constructor(
                 processors.forEach { it.onPostProcess() }
             }
         }
+    }
+
+    private fun getEvent(realm: Realm, eventId: String): Event? {
+        val event = EventEntity.where(realm, eventId).findFirst()
+        if (event == null) {
+            Timber.v("Event $eventId not found")
+        }
+        return event?.asDomain()
+    }
+
+    private fun canProcessEvent(event: Event): Boolean {
+        // event should be either not encrypted or if encrypted it should contain relatesTo content
+        return event.getClearType() != EventType.ENCRYPTED ||
+                event.content.toModel<EncryptedEventContent>()?.relatesTo != null
     }
 
     private fun shouldProcess(eventInsertEntity: EventInsertEntity): Boolean {
