@@ -44,7 +44,8 @@ class PollResponseDataFactory @Inject constructor(
                         )
                     },
                     winnerVoteCount = it.aggregatedContent?.winnerVoteCount ?: 0,
-                    totalVotes = it.aggregatedContent?.totalVotes ?: 0
+                    totalVotes = it.aggregatedContent?.totalVotes ?: 0,
+                    hasDecryptionError = it.encryptedRelatedEventIds.isNotEmpty(),
             )
         }
     }
