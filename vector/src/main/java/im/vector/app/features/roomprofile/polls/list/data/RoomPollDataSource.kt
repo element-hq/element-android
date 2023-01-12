@@ -20,7 +20,8 @@ import im.vector.app.features.home.room.detail.timeline.item.PollOptionViewState
 import im.vector.app.features.roomprofile.polls.list.ui.PollSummary
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -28,15 +29,19 @@ import javax.inject.Singleton
 @Singleton
 class RoomPollDataSource @Inject constructor() {
 
+    private val pollsFlow = MutableSharedFlow<List<PollSummary>>(replay = 1)
+    private val polls = mutableListOf<PollSummary>()
+    private var fakeLoadCounter = 0
+
     // TODO
     //  unmock using SDK service + add unit tests
     //  after unmock, expose domain layer model (entity) and do the mapping to PollSummary in the UI layer
     fun getPolls(roomId: String): Flow<List<PollSummary>> {
         Timber.d("roomId=$roomId")
-        return flowOf(getActivePolls() + getEndedPolls())
+        return pollsFlow.asSharedFlow()
     }
 
-    private fun getActivePolls(): List<PollSummary.ActivePoll> {
+    private fun getActivePollsPart1(): List<PollSummary.ActivePoll> {
         return listOf(
                 PollSummary.ActivePoll(
                         id = "id1",
@@ -50,6 +55,11 @@ class RoomPollDataSource @Inject constructor() {
                         creationTimestamp = 1656194400000,
                         title = "Which sport should the pupils do this year?"
                 ),
+        )
+    }
+
+    private fun getActivePollsPart2(): List<PollSummary.ActivePoll> {
+        return listOf(
                 PollSummary.ActivePoll(
                         id = "id3",
                         // 2022/06/24 UTC+1
@@ -65,7 +75,7 @@ class RoomPollDataSource @Inject constructor() {
         )
     }
 
-    private fun getEndedPolls(): List<PollSummary.EndedPoll> {
+    private fun getEndedPollsPart1(): List<PollSummary.EndedPoll> {
         return listOf(
                 PollSummary.EndedPoll(
                         id = "id1-ended",
@@ -83,6 +93,11 @@ class RoomPollDataSource @Inject constructor() {
                                 )
                         ),
                 ),
+        )
+    }
+
+    private fun getEndedPollsPart2(): List<PollSummary.EndedPoll> {
+        return listOf(
                 PollSummary.EndedPoll(
                         id = "id2-ended",
                         // 2022/06/26 UTC+1
@@ -121,9 +136,15 @@ class RoomPollDataSource @Inject constructor() {
     suspend fun loadMorePolls(roomId: String): LoadMorePollsResult {
         Timber.d("roomId=$roomId")
         // TODO
-        //  mock getting more polls + update the given flow
         //  unmock using SDK service + add unit tests
-        delay(5000)
-        return LoadMorePollsResult(canLoadMore = false)
+        delay(3000)
+        fakeLoadCounter++
+        when (fakeLoadCounter) {
+            1 -> polls.addAll(getActivePollsPart1() + getEndedPollsPart1())
+            2 -> polls.addAll(getActivePollsPart2() + getEndedPollsPart2())
+            else -> Unit
+        }
+        pollsFlow.emit(polls)
+        return LoadMorePollsResult(canLoadMore = fakeLoadCounter < 2)
     }
 }
