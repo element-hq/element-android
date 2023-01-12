@@ -246,6 +246,33 @@ internal class RichTextComposerLayout @JvmOverloads constructor(
         addRichTextMenuItem(R.drawable.ic_composer_numbered_list, R.string.rich_text_editor_numbered_list, ComposerAction.ORDERED_LIST) {
             views.richTextComposerEditText.toggleList(ordered = true)
         }
+        // TODO: the following duplicate items have been added for demo purposes and should be removed
+        addRichTextMenuItem(R.drawable.ic_composer_bold, R.string.rich_text_editor_format_bold, ComposerAction.BOLD) {
+            views.richTextComposerEditText.toggleInlineFormat(InlineFormat.Bold)
+        }
+        addRichTextMenuItem(R.drawable.ic_composer_italic, R.string.rich_text_editor_format_italic, ComposerAction.ITALIC) {
+            views.richTextComposerEditText.toggleInlineFormat(InlineFormat.Italic)
+        }
+        addRichTextMenuItem(R.drawable.ic_composer_underlined, R.string.rich_text_editor_format_underline, ComposerAction.UNDERLINE) {
+            views.richTextComposerEditText.toggleInlineFormat(InlineFormat.Underline)
+        }
+        addRichTextMenuItem(R.drawable.ic_composer_strikethrough, R.string.rich_text_editor_format_strikethrough, ComposerAction.STRIKE_THROUGH) {
+            views.richTextComposerEditText.toggleInlineFormat(InlineFormat.StrikeThrough)
+        }
+        addRichTextMenuItem(R.drawable.ic_composer_link, R.string.rich_text_editor_link, ComposerAction.LINK) {
+            views.richTextComposerEditText.getLinkAction()?.let {
+                when (it) {
+                    LinkAction.InsertLink -> callback?.onSetLink(isTextSupported = true, initialLink = null)
+                    is LinkAction.SetLink -> callback?.onSetLink(isTextSupported = false, initialLink = it.currentLink)
+                }
+            }
+        }
+        addRichTextMenuItem(R.drawable.ic_composer_bullet_list, R.string.rich_text_editor_bullet_list, ComposerAction.UNORDERED_LIST) {
+            views.richTextComposerEditText.toggleList(ordered = false)
+        }
+        addRichTextMenuItem(R.drawable.ic_composer_numbered_list, R.string.rich_text_editor_numbered_list, ComposerAction.ORDERED_LIST) {
+            views.richTextComposerEditText.toggleList(ordered = true)
+        }
     }
 
     fun setLink(link: String?) =
