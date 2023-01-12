@@ -184,7 +184,6 @@
             android:minHeight="52dp"
             android:requiresFadingEdge="horizontal"
             android:fadingEdgeLength="78dp"
-            android:fadeScrollbars="false"
             app:layout_constraintTop_toBottomOf="@id/composerEditTextOuterBorder"
             app:layout_constraintStart_toEndOf="@id/attachmentButton"
             app:layout_constraintEnd_toStartOf="@id/sendButton"
