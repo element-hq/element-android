@@ -158,4 +158,11 @@ class RoomPollDataSource @Inject constructor() {
                 ),
         )
     }
+
+    suspend fun syncPolls(roomId: String) {
+        Timber.d("roomId=$roomId")
+        // TODO
+        //  unmock using SDK service + add unit tests
+        delay(3000)
+    }
 }

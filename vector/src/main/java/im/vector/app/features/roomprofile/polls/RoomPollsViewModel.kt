@@ -26,6 +26,7 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.roomprofile.polls.list.domain.GetLoadedPollsStatusUseCase
 import im.vector.app.features.roomprofile.polls.list.domain.GetPollsUseCase
 import im.vector.app.features.roomprofile.polls.list.domain.LoadMorePollsUseCase
+import im.vector.app.features.roomprofile.polls.list.domain.SyncPollsUseCase
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -35,6 +36,7 @@ class RoomPollsViewModel @AssistedInject constructor(
         private val getPollsUseCase: GetPollsUseCase,
         private val getLoadedPollsStatusUseCase: GetLoadedPollsStatusUseCase,
         private val loadMorePollsUseCase: LoadMorePollsUseCase,
+        private val syncPollsUseCase: SyncPollsUseCase,
 ) : VectorViewModel<RoomPollsViewState, RoomPollsAction, RoomPollsViewEvent>(initialState) {
 
     @AssistedFactory
@@ -46,9 +48,8 @@ class RoomPollsViewModel @AssistedInject constructor(
 
     init {
         updateLoadedPollStatus(initialState.roomId)
+        syncPolls(initialState.roomId)
         observePolls()
-        // TODO
-        //  call use case to sync polls until now = initial loading
     }
 
     private fun updateLoadedPollStatus(roomId: String) {
@@ -58,6 +59,14 @@ class RoomPollsViewModel @AssistedInject constructor(
                     canLoadMore = loadedPollsStatus.canLoadMore,
                     nbLoadedDays = loadedPollsStatus.nbLoadedDays
             )
+        }
+    }
+
+    private fun syncPolls(roomId: String) {
+        viewModelScope.launch {
+            setState { copy(isSyncing = true) }
+            syncPollsUseCase.execute(roomId)
+            setState { copy(isSyncing = false) }
         }
     }
 

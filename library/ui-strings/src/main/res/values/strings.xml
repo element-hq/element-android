@@ -3209,6 +3209,7 @@
         <item quantity="one">"There are no past polls for the past day.\nLoad more polls to view polls for previous days."</item>
         <item quantity="other">"There are no past polls for the past %1$d days.\nLoad more polls to view polls for previous days."</item>
     </plurals>
+    <string name="room_polls_wait_for_display">Displaying polls</string>
     <string name="room_polls_load_more">Load more polls</string>
 
     <!-- Location -->

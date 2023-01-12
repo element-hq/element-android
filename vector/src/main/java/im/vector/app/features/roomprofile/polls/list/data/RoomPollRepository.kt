@@ -37,4 +37,8 @@ class RoomPollRepository @Inject constructor(
     suspend fun loadMorePolls(roomId: String): LoadedPollsStatus {
         return roomPollDataSource.loadMorePolls(roomId)
     }
+
+    suspend fun syncPolls(roomId: String) {
+        return roomPollDataSource.syncPolls(roomId)
+    }
 }

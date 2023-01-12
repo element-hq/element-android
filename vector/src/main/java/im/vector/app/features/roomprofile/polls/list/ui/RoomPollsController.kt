@@ -39,7 +39,7 @@ class RoomPollsController @Inject constructor(
 
     override fun buildModels(viewState: RoomPollsViewState?) {
         val polls = viewState?.polls
-        if (polls.isNullOrEmpty()) {
+        if (polls.isNullOrEmpty() || viewState.isSyncing) {
             return
         }
 

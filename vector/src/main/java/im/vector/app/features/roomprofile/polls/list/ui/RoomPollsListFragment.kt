@@ -36,7 +36,7 @@ import im.vector.app.features.roomprofile.polls.RoomPollsViewState
 import timber.log.Timber
 import javax.inject.Inject
 
-// TODO add and render blocking loader view
+// TODO handle errors during load more or sync
 abstract class RoomPollsListFragment :
         VectorBaseFragment<FragmentRoomPollsListBinding>(),
         RoomPollsController.Listener {
@@ -93,7 +93,14 @@ abstract class RoomPollsListFragment :
             RoomPollsType.ACTIVE -> viewState.polls.filterIsInstance(PollSummary.ActivePoll::class.java)
             RoomPollsType.ENDED -> viewState.polls.filterIsInstance(PollSummary.EndedPoll::class.java)
         }
-        renderList(viewState.copy(polls = filteredPolls))
+        val updatedViewState = viewState.copy(polls = filteredPolls)
+        renderList(updatedViewState)
+        renderSyncingView(updatedViewState)
+    }
+
+    private fun renderSyncingView(viewState: RoomPollsViewState) {
+        views.roomPollsSyncingTitle.isVisible = viewState.isSyncing
+        views.roomPollsSyncingProgress.isVisible = viewState.isSyncing
     }
 
     private fun renderList(viewState: RoomPollsViewState) {
@@ -102,9 +109,10 @@ abstract class RoomPollsListFragment :
                 canLoadMore = viewState.canLoadMore,
                 nbLoadedDays = viewState.nbLoadedDays,
         )
-        views.roomPollsEmptyTitle.isVisible = viewState.polls.isEmpty()
-        views.roomPollsLoadMoreWhenEmpty.isVisible = viewState.polls.isEmpty()
-        views.roomPollsLoadMoreWhenEmptyProgress.isVisible = viewState.polls.isEmpty() && viewState.isLoadingMore
+        views.roomPollsEmptyTitle.isVisible = viewState.polls.isEmpty() && !viewState.isSyncing
+        views.roomPollsLoadMoreWhenEmpty.isVisible = viewState.polls.isEmpty() && viewState.canLoadMore && !viewState.isSyncing
+        views.roomPollsLoadMoreWhenEmptyProgress.isVisible = viewState.polls.isEmpty() && viewState.canLoadMore &&
+                viewState.isLoadingMore && !viewState.isSyncing
         views.roomPollsLoadMoreWhenEmptyProgress.isEnabled = !viewState.isLoadingMore
     }
 
