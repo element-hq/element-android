@@ -16,15 +16,31 @@
 
 package im.vector.app.features.roomprofile.polls.list.domain
 
-import im.vector.app.features.roomprofile.polls.list.data.LoadedPollsStatus
 import im.vector.app.features.roomprofile.polls.list.data.RoomPollRepository
-import javax.inject.Inject
+import io.mockk.coJustRun
+import io.mockk.coVerify
+import io.mockk.mockk
+import kotlinx.coroutines.test.runTest
+import org.junit.Test
 
-class GetLoadedPollsStatusUseCase @Inject constructor(
-        private val roomPollRepository: RoomPollRepository,
-) {
+class SyncPollsUseCaseTest {
 
-    fun execute(roomId: String): LoadedPollsStatus {
-        return roomPollRepository.getLoadedPollsStatus(roomId)
+    private val fakeRoomPollRepository = mockk<RoomPollRepository>()
+
+    private val syncPollsUseCase = SyncPollsUseCase(
+            roomPollRepository = fakeRoomPollRepository,
+    )
+
+    @Test
+    fun `given repo when execute then correct method of repo is called`() = runTest {
+        // Given
+        val aRoomId = "roomId"
+        coJustRun { fakeRoomPollRepository.syncPolls(aRoomId) }
+
+        // When
+        syncPollsUseCase.execute(aRoomId)
+
+        // Then
+        coVerify { fakeRoomPollRepository.syncPolls(aRoomId) }
     }
 }

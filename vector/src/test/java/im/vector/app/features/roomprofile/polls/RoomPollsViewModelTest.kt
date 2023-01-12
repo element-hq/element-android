@@ -17,8 +17,11 @@
 package im.vector.app.features.roomprofile.polls
 
 import com.airbnb.mvrx.test.MavericksTestRule
+import im.vector.app.features.roomprofile.polls.list.domain.GetLoadedPollsStatusUseCase
 import im.vector.app.features.roomprofile.polls.list.ui.PollSummary
 import im.vector.app.features.roomprofile.polls.list.domain.GetPollsUseCase
+import im.vector.app.features.roomprofile.polls.list.domain.LoadMorePollsUseCase
+import im.vector.app.features.roomprofile.polls.list.domain.SyncPollsUseCase
 import im.vector.app.test.test
 import im.vector.app.test.testDispatcher
 import io.mockk.every
@@ -36,12 +39,18 @@ class RoomPollsViewModelTest {
     val mavericksTestRule = MavericksTestRule(testDispatcher = testDispatcher)
 
     private val fakeGetPollsUseCase = mockk<GetPollsUseCase>()
+    private val fakeGetLoadedPollsStatusUseCase = mockk<GetLoadedPollsStatusUseCase>()
+    private val fakeLoadMorePollsUseCase = mockk<LoadMorePollsUseCase>()
+    private val fakeSyncPollsUseCase = mockk<SyncPollsUseCase>()
     private val initialState = RoomPollsViewState(ROOM_ID)
 
     private fun createViewModel(): RoomPollsViewModel {
         return RoomPollsViewModel(
                 initialState = initialState,
                 getPollsUseCase = fakeGetPollsUseCase,
+                getLoadedPollsStatusUseCase = fakeGetLoadedPollsStatusUseCase,
+                loadMorePollsUseCase = fakeLoadMorePollsUseCase,
+                syncPollsUseCase = fakeSyncPollsUseCase,
         )
     }
 
@@ -49,7 +58,7 @@ class RoomPollsViewModelTest {
     fun `given viewModel when created then polls list is observed and viewState is updated`() {
         // Given
         val polls = listOf(givenAPollSummary())
-        every { fakeGetPollsUseCase.execute() } returns flowOf(polls)
+        every { fakeGetPollsUseCase.execute(ROOM_ID) } returns flowOf(polls)
         val expectedViewState = initialState.copy(polls = polls)
 
         // When
@@ -61,7 +70,7 @@ class RoomPollsViewModelTest {
                 .assertLatestState(expectedViewState)
                 .finish()
         verify {
-            fakeGetPollsUseCase.execute()
+            fakeGetPollsUseCase.execute(ROOM_ID)
         }
     }
 

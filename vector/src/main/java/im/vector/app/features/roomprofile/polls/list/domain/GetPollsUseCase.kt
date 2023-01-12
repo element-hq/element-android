@@ -22,7 +22,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-// TODO add unit tests
 class GetPollsUseCase @Inject constructor(
         private val roomPollRepository: RoomPollRepository,
 ) {
