@@ -66,8 +66,10 @@ import org.matrix.android.sdk.internal.crypto.tasks.UploadKeysTask
 import org.matrix.android.sdk.internal.crypto.tasks.UploadSignaturesTask
 import org.matrix.android.sdk.internal.crypto.tasks.UploadSigningKeysTask
 import org.matrix.android.sdk.internal.di.MoshiProvider
+import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.network.DEFAULT_REQUEST_RETRY_COUNT
 import org.matrix.android.sdk.internal.network.parsing.CheckNumberType
+import org.matrix.android.sdk.internal.session.room.send.LocalEchoRepository
 import org.matrix.android.sdk.internal.session.room.send.SendResponse
 import org.matrix.rustcomponents.sdk.crypto.OutgoingVerificationRequest
 import org.matrix.rustcomponents.sdk.crypto.Request
@@ -77,6 +79,8 @@ import timber.log.Timber
 import javax.inject.Inject
 
 internal class RequestSender @Inject constructor(
+        @UserId
+        private val myUserId: String,
         private val sendToDeviceTask: SendToDeviceTask,
         private val oneTimeKeysForUsersDeviceTask: ClaimOneTimeKeysForUsersDeviceTask,
         private val uploadKeysTask: UploadKeysTask,
@@ -94,8 +98,9 @@ internal class RequestSender @Inject constructor(
         private val getRoomSessionsDataTask: GetRoomSessionsDataTask,
         private val getRoomSessionDataTask: GetRoomSessionDataTask,
         private val moshi: Moshi,
-        private val cryptoCoroutineScope: CoroutineScope,
+        cryptoCoroutineScope: CoroutineScope,
         private val rateLimiter: PerSessionBackupQueryRateLimiter,
+        private val localEchoRepository: LocalEchoRepository
 ) {
 
     private val scope = CoroutineScope(
@@ -136,7 +141,13 @@ internal class RequestSender @Inject constructor(
     }
 
     private suspend fun sendRoomMessage(request: OutgoingVerificationRequest.InRoom, retryCount: Int): SendResponse {
-        return sendRoomMessage(request.eventType, request.roomId, request.content, request.requestId, retryCount)
+        return sendRoomMessage(
+                eventType = request.eventType,
+                roomId = request.roomId,
+                content = request.content,
+                transactionId = request.requestId,
+                retryCount = retryCount
+        )
     }
 
     suspend fun sendRoomMessage(request: Request.RoomMessage, retryCount: Int = DEFAULT_REQUEST_RETRY_COUNT): String {
@@ -153,7 +164,13 @@ internal class RequestSender @Inject constructor(
     ): SendResponse {
         val paramsAdapter = moshi.adapter<Content>(Map::class.java)
         val jsonContent = paramsAdapter.fromJson(content)
-        val event = Event(eventType, transactionId, jsonContent, roomId = roomId)
+        val event = Event(
+                senderId = myUserId,
+                type = eventType,
+                eventId = transactionId,
+                content = jsonContent,
+                roomId = roomId)
+        localEchoRepository.createLocalEcho(event)
         val params = SendVerificationMessageTask.Params(event, retryCount)
         return sendVerificationMessageTask.get().execute(params)
     }

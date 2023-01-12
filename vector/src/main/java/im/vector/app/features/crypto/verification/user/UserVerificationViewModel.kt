@@ -331,22 +331,28 @@ class UserVerificationViewModel @AssistedInject constructor(
                     val roomId = session.roomService().getExistingDirectRoomWithUser(initialState.otherUserId)
                             ?: session.roomService().createDirectRoom(initialState.otherUserId)
 
-                    val request = session.cryptoService().verificationService()
-                            .requestKeyVerificationInDMs(
-                                    supportedVerificationMethodsProvider.provide(),
-                                    initialState.otherUserId,
-                                    roomId,
+                    try {
+                        val request = session.cryptoService().verificationService()
+                                .requestKeyVerificationInDMs(
+                                        methods = supportedVerificationMethodsProvider.provide(),
+                                        otherUserId = initialState.otherUserId,
+                                        roomId = roomId,
+                                )
+
+                        currentTransactionId = request.transactionId
+
+                        setState {
+                            copy(
+                                    pendingRequest = Success(request),
+                                    transactionId = request.transactionId
                             )
-
-                    currentTransactionId = request.transactionId
-
-                    Timber.w("VALR started request is $request")
-
-                    setState {
-                        copy(
-                                pendingRequest = Success(request),
-                                transactionId = request.transactionId
-                        )
+                        }
+                    } catch (failure: Throwable) {
+                        setState {
+                            copy(
+                                    pendingRequest = Fail(failure),
+                            )
+                        }
                     }
                 }
             }

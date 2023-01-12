@@ -80,19 +80,25 @@ internal class RustVerificationService @Inject constructor(
      * All verification related events should be forwarded through this method to
      * the verification service.
      *
-     * If the verification event is not encrypted it should be provided to the olmMachine.
-     * Otherwise events are at this point already handled by the rust-sdk through the receival
-     * of the to-device events and the decryption of room events. In this case this method mainly just
-     * fetches the appropriate rust object that will be created or updated by the event and
+     * This method mainly just fetches the appropriate rust object that will be created or updated by the event and
      * dispatches updates to our listeners.
      */
     internal suspend fun onEvent(roomId: String?, event: Event) {
-        if (roomId != null && !event.isEncrypted()) {
+        if (roomId != null && event.unsignedData?.transactionId == null) {
             if (isVerificationEvent(event)) {
                 try {
-                    olmMachine.receiveUnencryptedVerificationEvent(roomId, event)
+                    val clearEvent = if (event.isEncrypted()) {
+                        event.copy(
+                                content = event.getDecryptedContent(),
+                                type = event.getDecryptedType(),
+                                roomId = roomId
+                        )
+                    } else {
+                        event
+                    }
+                    olmMachine.receiveVerificationEvent(roomId, clearEvent)
                 } catch (failure: Throwable) {
-                    Timber.w(failure, "Failed to receiveUnencryptedVerificationEvent")
+                    Timber.w(failure, "Failed to receiveUnencryptedVerificationEvent ${failure.message}")
                 }
             }
         }
@@ -111,8 +117,8 @@ internal class RustVerificationService @Inject constructor(
     }
 
     private fun isVerificationEvent(event: Event): Boolean {
-        val eventType = event.type ?: return false
-        val eventContent = event.content ?: return false
+        val eventType = event.getClearType()
+        val eventContent = event.getClearContent() ?: return false
         return EventType.isVerificationEvent(eventType) ||
                 (eventType == EventType.MESSAGE &&
                         eventContent[MessageContent.MSG_TYPE_JSON_KEY] == MessageType.MSGTYPE_VERIFICATION_REQUEST)
@@ -127,22 +133,23 @@ internal class RustVerificationService @Inject constructor(
 
     /** Dispatch updates after a verification event has been received */
     private suspend fun onUpdate(event: Event) {
+        Timber.v("[${olmMachine.userId().take(6)}] Verification on event ${event.getClearType()}")
         val sender = event.senderId ?: return
-        val flowId = getFlowId(event) ?: return
+        val flowId = getFlowId(event) ?: return Unit.also {
+            Timber.w("onUpdate for unknown flowId senderId ${event.getClearType()}")
+        }
 
         val verificationRequest = olmMachine.getVerificationRequest(sender, flowId)
         if (event.getClearType() == EventType.KEY_VERIFICATION_READY) {
+            // we start the qr here in order to display the code
             verificationRequest?.startQrCode()
         }
-        verificationRequest?.dispatchRequestUpdated()
-        val verification = getExistingTransaction(sender, flowId) ?: return
-        verificationListenersHolder.dispatchTxUpdated(verification)
     }
 
     /** Check if the start event created new verification objects and dispatch updates */
     private suspend fun onStart(event: Event) {
         if (event.unsignedData?.transactionId != null) return // remote echo
-        Timber.w("VALR onStart $event")
+        Timber.w("VALR onStart ${event.eventId}")
         val sender = event.senderId ?: return
         val flowId = getFlowId(event) ?: return
 
@@ -167,7 +174,6 @@ internal class RustVerificationService @Inject constructor(
 
             Timber.d("## Verification: start for $sender")
             // update the request as the start updates it's state
-            request.dispatchRequestUpdated()
             verificationListenersHolder.dispatchTxUpdated(transaction)
         } else {
             // This didn't originate from a request, so tell our listeners that
@@ -187,18 +193,10 @@ internal class RustVerificationService @Inject constructor(
             event.getClearContent().toModel<ToDeviceVerificationEvent>()?.transactionId
         } ?: return
         val sender = event.senderId ?: return
-        val request = getExistingVerificationRequest(sender, flowId) ?: return
+        val request = olmMachine.getVerificationRequest(sender, flowId) ?: return
 
         verificationListenersHolder.dispatchRequestAdded(request)
     }
-
-//    override fun addListener(listener: VerificationService.Listener) {
-//        verificationListenersHolder.addListener(listener)
-//    }
-//
-//    override fun removeListener(listener: VerificationService.Listener) {
-//        verificationListenersHolder.removeListener(listener)
-//    }
 
     override suspend fun markedLocallyAsManuallyVerified(userId: String, deviceID: String) {
         olmMachine.getDevice(userId, deviceID)?.markAsTrusted()
@@ -269,14 +267,14 @@ internal class RustVerificationService @Inject constructor(
             roomId: String,
             localId: String?
     ): PendingVerificationRequest {
-        olmMachine.ensureUsersKeys(listOf(otherUserId))
+        Timber.w("verification: requestKeyVerificationInDMs in room $roomId with $otherUserId")
+        olmMachine.ensureUsersKeys(listOf(otherUserId), true)
         val verification = when (val identity = olmMachine.getIdentity(otherUserId)) {
             is UserIdentity    -> identity.requestVerification(methods, roomId, localId!!)
             is OwnUserIdentity -> throw IllegalArgumentException("This method doesn't support verification of our own user")
             null               -> throw IllegalArgumentException("The user that we wish to verify doesn't support cross signing")
         }
 
-        Timber.w("##VALR requestKeyVerificationInDMs ${verification.flowId()} > $verification")
         return verification.toPendingVerificationRequest()
     }
 
@@ -319,13 +317,15 @@ internal class RustVerificationService @Inject constructor(
     override suspend fun startKeyVerification(method: VerificationMethod, otherUserId: String, requestId: String): String? {
         return if (method == VerificationMethod.SAS) {
             val request = olmMachine.getVerificationRequest(otherUserId, requestId)
+                    ?: throw IllegalArgumentException("Unknown request with id: $requestId")
 
-            val sas = request?.startSasVerification()
+            val sas = request.startSasVerification()
 
             if (sas != null) {
                 verificationListenersHolder.dispatchTxAdded(sas)
                 sas.transactionId
             } else {
+                Timber.w("Failed to start verification with method $method")
                 null
             }
         } else {
@@ -338,7 +338,6 @@ internal class RustVerificationService @Inject constructor(
                 ?: return null
         val qrVerification = matchingRequest.scanQrCode(scannedData)
                 ?: return null
-        verificationListenersHolder.dispatchRequestUpdated(matchingRequest.toPendingVerificationRequest())
         verificationListenersHolder.dispatchTxAdded(qrVerification)
         return qrVerification.transactionId
     }

@@ -298,15 +298,19 @@ internal class OlmMachine @Inject constructor(
 
         return ToDeviceSyncResponse(events = response)
     }
+//
+//    suspend fun receiveUnencryptedVerificationEvent(roomId: String, event: Event) = withContext(coroutineDispatchers.io) {
+//        val adapter = moshi
+//                .adapter(Event::class.java)
+//        val serializedEvent = adapter.toJson(event)
+//        inner.receiveUnencryptedVerificationEvent(serializedEvent, roomId)
+//    }
 
-    suspend fun receiveUnencryptedVerificationEvent(roomId: String, event: Event) = withContext(coroutineDispatchers.io) {
+    suspend fun receiveVerificationEvent(roomId: String, event: Event) = withContext(coroutineDispatchers.io) {
         val adapter = moshi
-                .newBuilder()
-                .add(CheckNumberType.JSON_ADAPTER_FACTORY)
-                .build()
                 .adapter(Event::class.java)
         val serializedEvent = adapter.toJson(event)
-        inner.receiveUnencryptedVerificationEvent(serializedEvent, roomId)
+        inner.receiveVerificationEvent(serializedEvent, roomId)
     }
 
     /**

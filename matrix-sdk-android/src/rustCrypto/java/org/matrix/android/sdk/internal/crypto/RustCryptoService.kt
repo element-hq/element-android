@@ -109,7 +109,7 @@ private val loggerTag = LoggerTag("RustCryptoService", LoggerTag.CRYPTO)
 
 @SessionScope
 internal class RustCryptoService @Inject constructor(
-        @UserId private val userId: String,
+        @UserId private val myUserId: String,
         @DeviceId private val deviceId: String,
         // the crypto store
         private val cryptoStore: IMXCryptoStore,
@@ -167,7 +167,7 @@ internal class RustCryptoService @Inject constructor(
         val params = SetDeviceNameTask.Params(deviceId, deviceName)
         setDeviceNameTask.execute(params)
         try {
-            downloadKeysIfNeeded(listOf(userId), true)
+            downloadKeysIfNeeded(listOf(myUserId), true)
         } catch (failure: Throwable) {
             Timber.tag(loggerTag.value).w(failure, "setDeviceName: Failed to refresh of crypto device")
         }
@@ -257,7 +257,7 @@ internal class RustCryptoService @Inject constructor(
             setRustLogger()
             Timber.tag(loggerTag.value).v(
                     "## CRYPTO | Successfully started up an Olm machine for " +
-                            "$userId, $deviceId, identity keys: ${this.olmMachine.identityKeys()}"
+                            "$myUserId, $deviceId, identity keys: ${this.olmMachine.identityKeys()}"
             )
         } catch (throwable: Throwable) {
             Timber.tag(loggerTag.value).v("Failed create an Olm machine: $throwable")
@@ -342,7 +342,7 @@ internal class RustCryptoService @Inject constructor(
     }
 
     override fun getLiveCryptoDeviceInfo(): LiveData<List<CryptoDeviceInfo>> {
-        return getLiveCryptoDeviceInfo(listOf(userId))
+        return getLiveCryptoDeviceInfo(listOf(myUserId))
     }
 
     override fun getLiveCryptoDeviceInfo(userId: String): LiveData<List<CryptoDeviceInfo>> {
@@ -350,8 +350,8 @@ internal class RustCryptoService @Inject constructor(
     }
 
     override fun getLiveCryptoDeviceInfo(userIds: List<String>): LiveData<List<CryptoDeviceInfo>> {
-        return olmMachine.getLiveDevices(listOf(userId)).map {
-            it.filter { it.userId == userId }
+        return olmMachine.getLiveDevices(listOf(myUserId)).map {
+            it.filter { it.userId == myUserId }
         }
     }
 
@@ -609,7 +609,7 @@ internal class RustCryptoService @Inject constructor(
 
         // Notify the our listeners about room keys so decryption is retried.
         toDeviceEvents.events.orEmpty().forEach { event ->
-            Timber.tag(loggerTag.value).d("Processed ToDevice event msgid:${event.toDeviceTracingId()} id:${event.eventId} type:${event.type}")
+            Timber.tag(loggerTag.value).d("[${myUserId.take(7)}|${deviceId}] Processed ToDevice event msgid:${event.toDeviceTracingId()} id:${event.eventId} type:${event.type}")
 
             if (event.getClearType() == EventType.ENCRYPTED) {
                 // rust failed to decrypt it
@@ -832,7 +832,7 @@ internal class RustCryptoService @Inject constructor(
  * ========================================================================================== */
 
     override fun toString(): String {
-        return "DefaultCryptoService of $userId ($deviceId)"
+        return "DefaultCryptoService of $myUserId ($deviceId)"
     }
 
     override fun getOutgoingRoomKeyRequests(): List<OutgoingKeyRequest> {

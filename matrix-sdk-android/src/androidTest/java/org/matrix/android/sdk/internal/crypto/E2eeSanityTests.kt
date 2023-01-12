@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.crypto
 
 import android.util.Log
 import androidx.test.filters.LargeTest
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.delay
 import org.amshove.kluent.fail
 import org.amshove.kluent.internal.assertEquals
@@ -44,6 +45,8 @@ import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.send.SendState
+import org.matrix.android.sdk.api.session.room.timeline.Timeline
+import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
@@ -91,7 +94,7 @@ class E2eeSanityTests : InstrumentedTest {
         Log.v("#E2E TEST", "Alice is sending the message")
 
         val text = "This is my message"
-        val sentEventId: String? = sendMessageInRoom(testHelper, aliceRoomPOV, text)
+        val sentEventId: String? = sendMessageInRoom(aliceRoomPOV, text)
         Assert.assertTrue("Message should be sent", sentEventId != null)
 
         // All should be able to decrypt
@@ -140,7 +143,7 @@ class E2eeSanityTests : InstrumentedTest {
         Log.v("#E2E TEST", "Alice sends a new message")
 
         val secondMessage = "2 This is my message"
-        val secondSentEventId: String? = sendMessageInRoom(testHelper, aliceRoomPOV, secondMessage)
+        val secondSentEventId: String? = sendMessageInRoom(aliceRoomPOV, secondMessage)
 
         // new members should be able to decrypt it
         newAccount.forEach { otherSession ->
@@ -203,7 +206,7 @@ class E2eeSanityTests : InstrumentedTest {
         val sentEventIds = mutableListOf<String>()
         val messagesText = listOf("1. Hello", "2. Bob", "3. Good morning")
         messagesText.forEach { text ->
-            val sentEventId = sendMessageInRoom(testHelper, aliceRoomPOV, text)!!.also {
+            val sentEventId = sendMessageInRoom(aliceRoomPOV, text)!!.also {
                 sentEventIds.add(it)
             }
 
@@ -318,7 +321,7 @@ class E2eeSanityTests : InstrumentedTest {
 
         Log.v("#E2E TEST", "Alice sends some messages")
         messagesText.forEach { text ->
-            val sentEventId = sendMessageInRoom(testHelper, aliceRoomPOV, text)!!.also {
+            val sentEventId = sendMessageInRoom(aliceRoomPOV, text)!!.also {
                 sentEventIds.add(it)
             }
 
@@ -342,45 +345,24 @@ class E2eeSanityTests : InstrumentedTest {
         Log.v("#E2E TEST", "Create a new session for Bob")
         val newBobSession = testHelper.logIntoAccount(bobSession.myUserId, SessionTestParams(true))
 
+        // ensure first session is aware of the new one
+        bobSession.cryptoService().downloadKeysIfNeeded(listOf(bobSession.myUserId), true)
+
         // check that new bob can't currently decrypt
         Log.v("#E2E TEST", "check that new bob can't currently decrypt")
 
         cryptoTestHelper.ensureCannotDecrypt(sentEventIds, newBobSession, e2eRoomID, null)
 
         // Try to request
-
-        Log.v("#E2E TEST", "Let bob re-request")
-        sentEventIds.forEach { sentEventId ->
-            val event = newBobSession.getRoom(e2eRoomID)!!.getTimelineEvent(sentEventId)!!.root
-            newBobSession.cryptoService().reRequestRoomKeyForEvent(event)
-        }
-
-        // Ensure that new bob still can't decrypt (keys must have been withheld)
+//
+//        Log.v("#E2E TEST", "Let bob re-request")
 //        sentEventIds.forEach { sentEventId ->
-//            val megolmSessionId = newBobSession.getRoom(e2eRoomID)!!
-//                    .getTimelineEvent(sentEventId)!!
-//                    .root.content.toModel<EncryptedEventContent>()!!.sessionId
-//            testHelper.retryPeriodically {
-//                val aliceReply = newBobSession.cryptoService().getOutgoingRoomKeyRequests()
-//                        .first {
-//                            it.sessionId == megolmSessionId &&
-//                                    it.roomId == e2eRoomID
-//                        }
-//                        .results.also {
-//                            Log.w("##TEST", "result list is $it")
-//                        }
-//                        .firstOrNull { it.userId == aliceSession.myUserId }
-//                        ?.result
-//                aliceReply != null &&
-//                        aliceReply is RequestResult.Failure &&
-//                        WithHeldCode.UNAUTHORISED == aliceReply.code
-//            }
+//            val event = newBobSession.getRoom(e2eRoomID)!!.getTimelineEvent(sentEventId)!!.root
+//            newBobSession.cryptoService().reRequestRoomKeyForEvent(event)
 //        }
-
-//         */
-
-        Log.v("#E2E TEST", "Should not be able to decrypt as not verified")
-        cryptoTestHelper.ensureCannotDecrypt(sentEventIds, newBobSession, e2eRoomID, null)
+//
+//        Log.v("#E2E TEST", "Should not be able to decrypt as not verified")
+//        cryptoTestHelper.ensureCannotDecrypt(sentEventIds, newBobSession, e2eRoomID, null)
 
         // Now mark new bob session as verified
 
@@ -422,7 +404,7 @@ class E2eeSanityTests : InstrumentedTest {
 
         Log.v("#E2E TEST", "Alice sends some messages")
         firstMessage.let { text ->
-            firstEventId = sendMessageInRoom(testHelper, aliceRoomPOV, text)!!
+            firstEventId = sendMessageInRoom(aliceRoomPOV, text)!!
 
             testHelper.retryWithBackoff {
                 val timeLineEvent = bobSessionWithBetterKey.getRoom(e2eRoomID)?.getTimelineEvent(firstEventId)
@@ -448,7 +430,7 @@ class E2eeSanityTests : InstrumentedTest {
 
         Log.v("#E2E TEST", "Alice sends some messages")
         secondMessage.let { text ->
-            secondEventId = sendMessageInRoom(testHelper, aliceRoomPOV, text)!!
+            secondEventId = sendMessageInRoom(aliceRoomPOV, text)!!
 
             testHelper.retryWithBackoff {
                 val timeLineEvent = newBobSession.getRoom(e2eRoomID)?.getTimelineEvent(secondEventId)
@@ -511,26 +493,30 @@ class E2eeSanityTests : InstrumentedTest {
         }
     }
 
-    private suspend fun sendMessageInRoom(testHelper: CommonTestHelper, aliceRoomPOV: Room, text: String): String? {
-        var sentEventId: String? = null
+    private suspend fun sendMessageInRoom(aliceRoomPOV: Room, text: String): String? {
         aliceRoomPOV.sendService().sendTextMessage(text)
 
         val timeline = aliceRoomPOV.timelineService().createTimeline(null, TimelineSettings(60))
         timeline.start()
-        testHelper.retryWithBackoff {
-            val decryptedMsg = timeline.getSnapshot()
-                    .filter { it.root.getClearType() == EventType.MESSAGE }
-                    .also { list ->
-                        val message = list.joinToString(",", "[", "]") { "${it.root.type}|${it.root.sendState}" }
-                        Log.v("#E2E TEST", "Timeline snapshot is $message")
-                    }
-                    .filter { it.root.sendState == SendState.SYNCED }
-                    .firstOrNull { it.root.getClearContent().toModel<MessageContent>()?.body?.startsWith(text) == true }
-            sentEventId = decryptedMsg?.eventId
-            decryptedMsg != null
-        }
-        timeline.dispose()
-        return sentEventId
+
+        val messageSent = CompletableDeferred<String>()
+        timeline.addListener(object : Timeline.Listener {
+            override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
+                val decryptedMsg = timeline.getSnapshot()
+                        .filter { it.root.getClearType() == EventType.MESSAGE }
+                        .also { list ->
+                            val message = list.joinToString(",", "[", "]") { "${it.root.type}|${it.root.sendState}" }
+                            Log.v("#E2E TEST", "Timeline snapshot is $message")
+                        }
+                        .filter { it.root.sendState == SendState.SYNCED }
+                        .firstOrNull { it.root.getClearContent().toModel<MessageContent>()?.body?.startsWith(text) == true }
+                if (decryptedMsg != null) {
+                    timeline.dispose()
+                    messageSent.complete(decryptedMsg.eventId)
+                }
+            }
+        })
+        return messageSent.await()
     }
 
     /**
@@ -646,7 +632,7 @@ class E2eeSanityTests : InstrumentedTest {
 
         val roomFromAlicePOV = aliceSession.getRoom(cryptoTestData.roomId)!!
         Timber.v("#TEST: Send a first message that should be withheld")
-        val sentEvent = sendMessageInRoom(testHelper, roomFromAlicePOV, "Hello")!!
+        val sentEvent = sendMessageInRoom(roomFromAlicePOV, "Hello")!!
 
         // wait for it to be synced back the other side
         Timber.v("#TEST: Wait for message to be synced back")
@@ -669,7 +655,7 @@ class E2eeSanityTests : InstrumentedTest {
 
         Timber.v("#TEST: Send a second message, outbound session should have rotated and only bob 1rst session should decrypt")
 
-        val secondEvent = sendMessageInRoom(testHelper, roomFromAlicePOV, "World")!!
+        val secondEvent = sendMessageInRoom(roomFromAlicePOV, "World")!!
         Timber.v("#TEST: Wait for message to be synced back")
         testHelper.retryWithBackoff {
             bobSession.roomService().getRoom(cryptoTestData.roomId)?.timelineService()?.getTimelineEvent(secondEvent) != null

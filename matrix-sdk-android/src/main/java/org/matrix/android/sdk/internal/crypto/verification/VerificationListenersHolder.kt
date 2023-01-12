@@ -22,45 +22,50 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
-import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationEvent
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
+import org.matrix.android.sdk.api.session.crypto.verification.dbgState
+import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.SessionScope
 import timber.log.Timber
 import javax.inject.Inject
 
 @SessionScope
 internal class VerificationListenersHolder @Inject constructor(
-        private val coroutineDispatchers: MatrixCoroutineDispatchers
+        coroutineDispatchers: MatrixCoroutineDispatchers,
+        @UserId myUserId: String,
 ) {
+
+    val myUserId = myUserId.take(5)
 
     val scope = CoroutineScope(SupervisorJob() + coroutineDispatchers.dmVerif)
     val eventFlow = MutableSharedFlow<VerificationEvent>(extraBufferCapacity = 20, onBufferOverflow = BufferOverflow.SUSPEND)
 
     fun dispatchTxAdded(tx: VerificationTransaction) {
         scope.launch {
+            Timber.v("## SAS [$myUserId] dispatchTxAdded txId:${tx.transactionId} | ${tx.dbgState()}")
             eventFlow.emit(VerificationEvent.TransactionAdded(tx))
         }
     }
 
     fun dispatchTxUpdated(tx: VerificationTransaction) {
         scope.launch {
-            Timber.v("## SAS dispatchTxUpdated txId:${tx.transactionId} $tx")
+            Timber.v("## SAS [$myUserId] dispatchTxUpdated txId:${tx.transactionId} | ${tx.dbgState()}")
             eventFlow.emit(VerificationEvent.TransactionUpdated(tx))
         }
     }
 
-    fun dispatchRequestAdded(verificationRequest: PendingVerificationRequest) {
+    fun dispatchRequestAdded(verificationRequest: VerificationRequest) {
         scope.launch {
-            Timber.v("## SAS dispatchRequestAdded txId:${verificationRequest.transactionId} $verificationRequest")
-            eventFlow.emit(VerificationEvent.RequestAdded(verificationRequest))
+            Timber.v("## SAS [$myUserId] dispatchRequestAdded txId:${verificationRequest.flowId()} state:${verificationRequest.innerState()}")
+            eventFlow.emit(VerificationEvent.RequestAdded(verificationRequest.toPendingVerificationRequest()))
         }
     }
 
-    fun dispatchRequestUpdated(verificationRequest: PendingVerificationRequest) {
-        Timber.v("## SAS dispatchRequestUpdated txId:${verificationRequest.transactionId} $verificationRequest")
+    fun dispatchRequestUpdated(verificationRequest: VerificationRequest) {
         scope.launch {
-            eventFlow.emit(VerificationEvent.RequestUpdated(verificationRequest))
+            Timber.v("## SAS [$myUserId] dispatchRequestUpdated txId:${verificationRequest.flowId()} state:${verificationRequest.innerState()}")
+            eventFlow.emit(VerificationEvent.RequestUpdated(verificationRequest.toPendingVerificationRequest()))
         }
     }
 }

@@ -83,20 +83,6 @@ internal class SasVerification @AssistedInject constructor(
             SasState.Done -> SasTransactionState.Done(true)
             is SasState.Cancelled -> SasTransactionState.Cancelled(safeValueOf(state.cancelInfo.cancelCode), state.cancelInfo.cancelledByUs)
         }
-//        refreshData()
-//        val cancelInfo = inner.cancelInfo
-//
-//        return when {
-//            cancelInfo != null -> {
-//                val cancelCode = safeValueOf(cancelInfo.cancelCode)
-//                SasTransactionState.Cancelled(cancelCode, cancelInfo.cancelledByUs)
-//            }
-//            inner.isDone -> SasTransactionState.Done(true)
-//            inner.haveWeConfirmed -> SasTransactionState.SasAccepted
-//            inner.canBePresented -> SasTransactionState.SasShortCodeReady
-//            inner.hasBeenAccepted -> SasTransactionState.SasAccepted
-//            else -> SasTransactionState.SasStarted
-//        }
     }
 
     /** Get the unique id of this verification */

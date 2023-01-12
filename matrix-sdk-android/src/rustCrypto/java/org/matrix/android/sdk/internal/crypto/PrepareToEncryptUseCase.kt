@@ -57,7 +57,7 @@ internal class PrepareToEncryptUseCase @Inject constructor(
     private val keyClaimLock: Mutex = Mutex()
     private val roomKeyShareLocks: ConcurrentHashMap<String, Mutex> = ConcurrentHashMap()
 
-    suspend operator fun invoke(roomId: String, ensureAllMembersAreLoaded: Boolean) {
+    suspend operator fun invoke(roomId: String, ensureAllMembersAreLoaded: Boolean, forceDistributeToUnverified: Boolean = false) {
         withContext(coroutineDispatchers.crypto) {
             Timber.tag(loggerTag.value).d("prepareToEncrypt() roomId:$roomId Check room members up to date")
             // Ensure to load all room members
@@ -76,7 +76,7 @@ internal class PrepareToEncryptUseCase @Inject constructor(
                 Timber.tag(loggerTag.value).e("prepareToEncrypt() : $reason")
                 throw IllegalArgumentException("Missing algorithm")
             }
-            preshareRoomKey(roomId, userIds)
+            preshareRoomKey(roomId, userIds, forceDistributeToUnverified)
         }
     }
 
@@ -84,7 +84,7 @@ internal class PrepareToEncryptUseCase @Inject constructor(
         return cryptoStore.getRoomAlgorithm(roomId)
     }
 
-    private suspend fun preshareRoomKey(roomId: String, roomMembers: List<String>) {
+    private suspend fun preshareRoomKey(roomId: String, roomMembers: List<String>, forceDistributeToUnverified: Boolean) {
         claimMissingKeys(roomMembers)
         val keyShareLock = roomKeyShareLocks.getOrPut(roomId) { Mutex() }
         var sharedKey = false
@@ -97,7 +97,12 @@ internal class PrepareToEncryptUseCase @Inject constructor(
         }
         val settings = EncryptionSettings(
                 algorithm = EventEncryptionAlgorithm.MEGOLM_V1_AES_SHA2,
-                onlyAllowTrustedDevices = info.blacklistUnverifiedDevices,
+                onlyAllowTrustedDevices = if (forceDistributeToUnverified) {
+                    false
+                } else {
+                    cryptoStore.getGlobalBlacklistUnverifiedDevices() ||
+                            info.blacklistUnverifiedDevices
+                },
                 rotationPeriod = info.rotationPeriodMs.toULong(),
                 rotationPeriodMsgs = info.rotationPeriodMsgs.toULong(),
                 historyVisibility = if (info.shouldShareHistory) {

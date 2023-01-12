@@ -38,17 +38,17 @@ import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_SAS
 import org.matrix.android.sdk.internal.crypto.network.RequestSender
 import org.matrix.android.sdk.internal.crypto.verification.qrcode.QrCodeVerification
 import org.matrix.android.sdk.internal.util.time.Clock
+import org.matrix.rustcomponents.sdk.crypto.VerificationRequestListener
+import org.matrix.rustcomponents.sdk.crypto.VerificationRequestState
+import timber.log.Timber
 import org.matrix.rustcomponents.sdk.crypto.VerificationRequest as InnerVerificationRequest
 
 fun InnerVerificationRequest.dbgString(): String {
     val that = this
     return buildString {
-        append("InnerVerificationRequest(")
-        append("isDone=${that.isDone()},")
-        append("isReady=${that.isReady()},")
-        append("isPassive=${that.isPassive()},")
-        append("weStarted=${that.weStarted()},")
-        append("isCancelled=${that.isCancelled()}")
+        append("(")
+        append("flowId=${that.flowId()}")
+        append("state=${that.state()},")
         append(")")
     }
 }
@@ -69,7 +69,7 @@ internal class VerificationRequest @AssistedInject constructor(
         private val sasVerificationFactory: SasVerification.Factory,
         private val qrCodeVerificationFactory: QrCodeVerification.Factory,
         private val clock: Clock,
-) {
+) : VerificationRequestListener {
 
     private val innerOlmMachine = olmMachine.inner()
 
@@ -78,14 +78,18 @@ internal class VerificationRequest @AssistedInject constructor(
         fun create(innerVerificationRequest: InnerVerificationRequest): VerificationRequest
     }
 
+    init {
+        innerVerificationRequest.setChangesListener(this)
+    }
+
     fun startQrCode() {
         innerVerificationRequest.startQrVerification()
     }
 
-    internal fun dispatchRequestUpdated() {
-        val tx = toPendingVerificationRequest()
-        verificationListenersHolder.dispatchRequestUpdated(tx)
-    }
+//    internal fun dispatchRequestUpdated() {
+//        val tx = toPendingVerificationRequest()
+//        verificationListenersHolder.dispatchRequestUpdated(tx)
+//    }
 
     /** Get the flow ID of this verification request
      *
@@ -96,6 +100,8 @@ internal class VerificationRequest @AssistedInject constructor(
     internal fun flowId(): String {
         return innerVerificationRequest.flowId()
     }
+
+    fun innerState() = innerVerificationRequest.state()
 
     /** The user ID of the other user that is participating in this verification flow */
     internal fun otherUser(): String {
@@ -108,7 +114,6 @@ internal class VerificationRequest @AssistedInject constructor(
      * didn't yet accept the verification flow.
      * */
     internal fun otherDeviceId(): String? {
-        refreshData()
         return innerVerificationRequest.otherDeviceId()
     }
 
@@ -132,13 +137,11 @@ internal class VerificationRequest @AssistedInject constructor(
      * verification.
      */
     internal fun isReady(): Boolean {
-        refreshData()
         return innerVerificationRequest.isReady()
     }
 
     /** Did we advertise that we're able to scan QR codes */
     internal fun canScanQrCodes(): Boolean {
-        refreshData()
         return innerVerificationRequest.ourSupportedMethods()?.contains(VERIFICATION_METHOD_QR_CODE_SCAN) ?: false
     }
 
@@ -161,12 +164,7 @@ internal class VerificationRequest @AssistedInject constructor(
         val request = innerVerificationRequest.accept(stringMethods)
                 ?: return // should throw here?
         try {
-            dispatchRequestUpdated()
             requestSender.sendVerificationRequest(request)
-
-//            if (innerVerificationRequest.isReady()) {
-//                activeQRCode = innerVerificationRequest.startQrVerification()
-//            }
         } catch (failure: Throwable) {
             cancel()
         }
@@ -190,9 +188,9 @@ internal class VerificationRequest @AssistedInject constructor(
     internal suspend fun startSasVerification(): SasVerification? {
         return withContext(coroutineDispatchers.io) {
             val result = innerVerificationRequest.startSasVerification()
-                    ?: return@withContext null
-//            sasStartResult.request
-//            val result = innerOlmMachine.startSasVerification(innerVerificationRequest.otherUserId, innerVerificationRequest.flowId) ?: return@withContext null
+                    ?: return@withContext null.also {
+                        Timber.w("Failed to start verification")
+                    }
             try {
                 requestSender.sendVerificationRequest(result.request)
                 sasVerificationFactory.create(result.sas)
@@ -242,69 +240,92 @@ internal class VerificationRequest @AssistedInject constructor(
      * The method turns into a noop, if the verification flow has already been cancelled.
      */
     internal suspend fun cancel() = withContext(NonCancellable) {
-        // TODO damir how to add the code?
         val request = innerVerificationRequest.cancel() ?: return@withContext
-        dispatchRequestUpdated()
         tryOrNull("Fail to send cancel request") {
             requestSender.sendVerificationRequest(request, retryCount = Int.MAX_VALUE)
         }
     }
 
-    /** Fetch fresh data from the Rust side for our verification flow */
-    private fun refreshData() {
-        val request = innerOlmMachine.getVerificationRequest(innerVerificationRequest.otherUserId(), innerVerificationRequest.flowId())
-
-        if (request != null) {
-            innerVerificationRequest = request
-        }
-    }
-
     private fun state(): EVerificationState {
-        if (innerVerificationRequest.isCancelled()) {
-            return if (innerVerificationRequest.cancelInfo()?.cancelCode == CancelCode.AcceptedByAnotherDevice.value) {
-                EVerificationState.HandledByOtherSession
-            } else {
-                EVerificationState.Cancelled
-            }
-        }
-        if (innerVerificationRequest.isPassive()) {
-            return EVerificationState.HandledByOtherSession
-        }
-        if (innerVerificationRequest.isDone()) {
-            return EVerificationState.Done
-        }
-
-        val started = innerOlmMachine.getVerification(otherUser(), flowId())
-        if (started != null) {
-            val asSas = started.asSas()
-            if (asSas != null) {
-                return if (asSas.weStarted()) {
-                    EVerificationState.WeStarted
+        Timber.v("Verification state() ${innerVerificationRequest.state()}")
+        when (innerVerificationRequest.state()) {
+            VerificationRequestState.Requested -> {
+                return if (weStarted()) {
+                    EVerificationState.WaitingForReady
                 } else {
-                    EVerificationState.Started
+                    EVerificationState.Requested
                 }
             }
-            val asQR = started.asQr()
-            if (asQR != null) {
-//                Timber.w("VALR: weStarted ${asQR.weStarted()}")
-//                Timber.w("VALR: reciprocated ${asQR.reciprocated()}")
-//                Timber.w("VALR: isDone ${asQR.isDone()}")
-//                Timber.w("VALR: hasBeenScanned ${asQR.hasBeenScanned()}")
-                if (asQR.reciprocated() || asQR.hasBeenScanned()) {
-                    return if (weStarted()) {
-                        EVerificationState.WeStarted
-                    } else EVerificationState.Started
+            is VerificationRequestState.Ready -> {
+                val started = innerOlmMachine.getVerification(otherUser(), flowId())
+                if (started != null) {
+                    val asSas = started.asSas()
+                    if (asSas != null) {
+                        return if (asSas.weStarted()) {
+                            EVerificationState.WeStarted
+                        } else {
+                            EVerificationState.Started
+                        }
+                    }
+                    val asQR = started.asQr()
+                    if (asQR != null) {
+                        if (asQR.reciprocated() || asQR.hasBeenScanned()) {
+                            return if (weStarted()) {
+                                EVerificationState.WeStarted
+                            } else EVerificationState.Started
+                        }
+                    }
+                }
+                return EVerificationState.Ready
+            }
+            VerificationRequestState.Done -> {
+                return EVerificationState.Done
+            }
+            is VerificationRequestState.Cancelled -> {
+                return if (innerVerificationRequest.cancelInfo()?.cancelCode == CancelCode.AcceptedByAnotherDevice.value) {
+                    EVerificationState.HandledByOtherSession
+                } else {
+                    EVerificationState.Cancelled
                 }
             }
         }
-        if (innerVerificationRequest.isReady()) {
-            return EVerificationState.Ready
-        }
-        return if (weStarted()) {
-            EVerificationState.WaitingForReady
-        } else {
-            EVerificationState.Requested
-        }
+//
+//        if (innerVerificationRequest.isCancelled()) {
+//            return if (innerVerificationRequest.cancelInfo()?.cancelCode == CancelCode.AcceptedByAnotherDevice.value) {
+//                EVerificationState.HandledByOtherSession
+//            } else {
+//                EVerificationState.Cancelled
+//            }
+//        }
+//        if (innerVerificationRequest.isPassive()) {
+//            return EVerificationState.HandledByOtherSession
+//        }
+//        if (innerVerificationRequest.isDone()) {
+//            return EVerificationState.Done
+//        }
+//
+//        val started = innerOlmMachine.getVerification(otherUser(), flowId())
+//        if (started != null) {
+//            val asSas = started.asSas()
+//            if (asSas != null) {
+//                return if (asSas.weStarted()) {
+//                    EVerificationState.WeStarted
+//                } else {
+//                    EVerificationState.Started
+//                }
+//            }
+//            val asQR = started.asQr()
+//            if (asQR != null) {
+//                if (asQR.reciprocated() || asQR.hasBeenScanned()) {
+//                    return if (weStarted()) {
+//                        EVerificationState.WeStarted
+//                    } else EVerificationState.Started
+//                }
+//            }
+//        }
+//        if (innerVerificationRequest.isReady()) {
+//            return EVerificationState.Ready
+//        }
     }
 
     /** Convert the VerificationRequest into a PendingVerificationRequest
@@ -317,7 +338,6 @@ internal class VerificationRequest @AssistedInject constructor(
      * @return The PendingVerificationRequest that matches data from this VerificationRequest.
      */
     internal fun toPendingVerificationRequest(): PendingVerificationRequest {
-        refreshData()
         val cancelInfo = innerVerificationRequest.cancelInfo()
         val cancelCode =
                 if (cancelInfo != null) {
@@ -362,6 +382,10 @@ internal class VerificationRequest @AssistedInject constructor(
         return innerOlmMachine.getVerification(otherUser(), flowId())?.asQr()?.generateQrCode()?.fromBase64()?.let {
             String(it, Charsets.ISO_8859_1)
         }
+    }
+
+    override fun onChange(state: VerificationRequestState) {
+        verificationListenersHolder.dispatchRequestUpdated(this)
     }
 
     override fun toString(): String {

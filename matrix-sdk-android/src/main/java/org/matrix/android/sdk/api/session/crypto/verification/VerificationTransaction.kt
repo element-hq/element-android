@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.api.session.crypto.verification
 
+import org.matrix.android.sdk.internal.crypto.verification.qrcode.QrCodeVerification
+
 interface VerificationTransaction {
 
     val method: VerificationMethod
@@ -37,4 +39,12 @@ interface VerificationTransaction {
     fun isToDeviceTransport(): Boolean
 
     fun isSuccessful(): Boolean
+}
+
+internal fun VerificationTransaction.dbgState(): String? {
+    return when (this) {
+        is SasVerificationTransaction -> "${this.state()}"
+        is QrCodeVerification -> "${this.state()}"
+        else -> "??"
+    }
 }

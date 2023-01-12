@@ -17,6 +17,14 @@
 package org.matrix.android.sdk.common
 
 import android.util.Log
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.cancellable
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import org.amshove.kluent.fail
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -38,8 +46,13 @@ import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupAuthData
 import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreationInfo
 import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.crypto.verification.EVerificationState
+import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
+import org.matrix.android.sdk.api.session.crypto.verification.SasTransactionState
 import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
+import org.matrix.android.sdk.api.session.crypto.verification.dbgState
+import org.matrix.android.sdk.api.session.crypto.verification.getRequest
+import org.matrix.android.sdk.api.session.crypto.verification.getTransaction
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
@@ -359,99 +372,153 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
     }
 
     suspend fun verifySASCrossSign(alice: Session, bob: Session, roomId: String) {
+        val scope = CoroutineScope(SupervisorJob())
+
         assertTrue(alice.cryptoService().crossSigningService().canCrossSign())
         assertTrue(bob.cryptoService().crossSigningService().canCrossSign())
 
         val aliceVerificationService = alice.cryptoService().verificationService()
         val bobVerificationService = bob.cryptoService().verificationService()
 
-        val localId = UUID.randomUUID().toString()
+        val bobSeesVerification = CompletableDeferred<PendingVerificationRequest>()
+        scope.launch(Dispatchers.IO) {
+            bobVerificationService.requestEventFlow()
+                    .cancellable()
+                    .collect {
+                        val request = it.getRequest()
+                        if (request != null) {
+                            bobSeesVerification.complete(request)
+                            return@collect cancel()
+                        }
+                    }
+        }
+
+        val aliceReady = CompletableDeferred<PendingVerificationRequest>()
+        scope.launch(Dispatchers.IO) {
+            aliceVerificationService.requestEventFlow()
+                    .cancellable()
+                    .collect {
+                        val request = it.getRequest()
+                        if (request?.state == EVerificationState.Ready) {
+                            aliceReady.complete(request)
+                            return@collect cancel()
+                        }
+                    }
+        }
+        val bobReady = CompletableDeferred<PendingVerificationRequest>()
+        scope.launch(Dispatchers.IO) {
+            bobVerificationService.requestEventFlow()
+                    .cancellable()
+                    .collect {
+                        val request = it.getRequest()
+                        if (request?.state == EVerificationState.Ready) {
+                            bobReady.complete(request)
+                            return@collect cancel()
+                        }
+                    }
+        }
+
         val requestID = aliceVerificationService.requestKeyVerificationInDMs(
-                localId = localId,
                 methods = listOf(VerificationMethod.SAS, VerificationMethod.QR_CODE_SCAN, VerificationMethod.QR_CODE_SHOW),
                 otherUserId = bob.myUserId,
                 roomId = roomId
         ).transactionId
 
-        testHelper.retryWithBackoff(
-                onFail = {
-                    fail("Bob should see an incoming request from alice")
-                }
-        ) {
-            bobVerificationService.getExistingVerificationRequests(alice.myUserId).firstOrNull {
-                it.otherDeviceId == alice.sessionParams.deviceId
-            } != null
-        }
-
-        val incomingRequest = bobVerificationService.getExistingVerificationRequests(alice.myUserId).first {
-            it.otherDeviceId == alice.sessionParams.deviceId
-        }
-
-        Timber.v("#TEST Incoming request is $incomingRequest")
-
-        Timber.v("#TEST let bob ready the verification with SAS method")
+        bobSeesVerification.await()
         bobVerificationService.readyPendingVerification(
                 listOf(VerificationMethod.SAS),
                 alice.myUserId,
-                incomingRequest.transactionId
+                requestID
         )
+        aliceReady.await()
+        bobReady.await()
 
-        // wait for it to be readied
-        testHelper.retryWithBackoff(
-                onFail = {
-                    fail("Alice should see the verification in ready state")
-                }
-        ) {
-            val outgoingRequest = aliceVerificationService.getExistingVerificationRequest(bob.myUserId, requestID)
-            outgoingRequest?.state == EVerificationState.Ready
+        val bobCode = CompletableDeferred<SasVerificationTransaction>()
+
+        scope.launch(Dispatchers.IO) {
+            bobVerificationService.requestEventFlow()
+                    .cancellable()
+                    .collect {
+                        val transaction = it.getTransaction()
+                        Timber.d("#TEST flow ${bob.myUserId.take(5)} ${transaction?.transactionId}|${transaction?.dbgState()}")
+                        val tx = transaction as? SasVerificationTransaction
+                        if (tx?.state() == SasTransactionState.SasShortCodeReady) {
+                            bobCode.complete(tx)
+                            return@collect cancel()
+                        }
+                        if (it.getRequest()?.state == EVerificationState.Cancelled) {
+                            bobCode.completeExceptionally(AssertionError("Request as been cancelled"))
+                            return@collect cancel()
+                        }
+                    }
+        }
+
+        val aliceCode = CompletableDeferred<SasVerificationTransaction>()
+
+        scope.launch(Dispatchers.IO) {
+            aliceVerificationService.requestEventFlow()
+                    .cancellable()
+                    .collect {
+                        val transaction = it.getTransaction()
+                        Timber.d("#TEST flow ${alice.myUserId.take(5)}  ${transaction?.transactionId}|${transaction?.dbgState()}")
+                        val tx = transaction as? SasVerificationTransaction
+                        if (tx?.state() == SasTransactionState.SasShortCodeReady) {
+                            aliceCode.complete(tx)
+                            return@collect cancel()
+                        }
+                        if (it.getRequest()?.state == EVerificationState.Cancelled) {
+                            aliceCode.completeExceptionally(AssertionError("Request as been cancelled"))
+                            return@collect cancel()
+                        }
+                    }
         }
 
         Timber.v("#TEST let alice start the verification")
-        aliceVerificationService.startKeyVerification(
+        val id = aliceVerificationService.startKeyVerification(
                 VerificationMethod.SAS,
                 bob.myUserId,
                 requestID,
         )
+        Timber.v("#TEST alice started: $id")
 
-        // we should reach SHOW SAS on both
-        var alicePovTx: SasVerificationTransaction? = null
-        var bobPovTx: SasVerificationTransaction? = null
+        val bobTx = bobCode.await()
+        val aliceTx = aliceCode.await()
+        assertEquals("SAS code do not match", aliceTx.getDecimalCodeRepresentation()!!, bobTx.getDecimalCodeRepresentation())
 
-        testHelper.retryWithBackoff(
-                onFail = {
-                    fail("Alice should should see a verification code")
-                }
-        ) {
-            alicePovTx = aliceVerificationService.getExistingTransaction(bob.myUserId, requestID)
-                    as? SasVerificationTransaction
-            Log.v("TEST", "== alicePovTx id:${requestID} is ${alicePovTx?.state()}")
-            alicePovTx?.getDecimalCodeRepresentation() != null
+        val aliceDone = CompletableDeferred<Unit>()
+        scope.launch(Dispatchers.IO) {
+            aliceVerificationService.requestEventFlow()
+                    .cancellable()
+                    .collect {
+                        val request = it.getRequest()
+                        if (request?.state == EVerificationState.Done) {
+                            aliceDone.complete(Unit)
+                            return@collect cancel()
+                        }
+                    }
         }
-        // wait for alice to get the ready
-        testHelper.retryWithBackoff(
-                onFail = {
-                    fail("Bob should should see a verification code")
-                }
-        ) {
-            bobPovTx = bobVerificationService.getExistingTransaction(alice.myUserId, requestID)
-                    as? SasVerificationTransaction
-            Log.v("TEST", "== bobPovTx is ${bobPovTx?.state()}")
-//            bobPovTx?.state == VerificationTxState.ShortCodeReady
-            bobPovTx?.getDecimalCodeRepresentation() != null
+        val bobDone = CompletableDeferred<Unit>()
+        scope.launch(Dispatchers.IO) {
+            bobVerificationService.requestEventFlow()
+                    .cancellable()
+                    .collect {
+                        val request = it.getRequest()
+                        if (request?.state == EVerificationState.Done) {
+                            bobDone.complete(Unit)
+                            return@collect cancel()
+                        }
+                    }
         }
+        bobTx.userHasVerifiedShortCode()
+        aliceTx.userHasVerifiedShortCode()
 
-        assertEquals("SAS code do not match", alicePovTx!!.getDecimalCodeRepresentation(), bobPovTx!!.getDecimalCodeRepresentation())
+        bobDone.await()
+        aliceDone.await()
 
-        bobPovTx!!.userHasVerifiedShortCode()
-        alicePovTx!!.userHasVerifiedShortCode()
+        alice.cryptoService().crossSigningService().isUserTrusted(bob.myUserId)
+        bob.cryptoService().crossSigningService().isUserTrusted(alice.myUserId)
 
-        testHelper.retryWithBackoff {
-            alice.cryptoService().crossSigningService().isUserTrusted(bob.myUserId)
-        }
-
-        testHelper.retryWithBackoff {
-            bob.cryptoService().crossSigningService().isUserTrusted(alice.myUserId)
-        }
+        scope.cancel()
     }
 
     suspend fun doE2ETestWithManyMembers(numberOfMembers: Int): CryptoTestData {
