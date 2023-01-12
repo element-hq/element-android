@@ -30,7 +30,9 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.databinding.FragmentRoomPollsListBinding
 import im.vector.app.features.roomprofile.polls.RoomPollsAction
+import im.vector.app.features.roomprofile.polls.RoomPollsLoadingError
 import im.vector.app.features.roomprofile.polls.RoomPollsType
+import im.vector.app.features.roomprofile.polls.RoomPollsViewEvent
 import im.vector.app.features.roomprofile.polls.RoomPollsViewModel
 import im.vector.app.features.roomprofile.polls.RoomPollsViewState
 import timber.log.Timber
@@ -55,8 +57,17 @@ abstract class RoomPollsListFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        observeViewEvents()
         setupList()
         setupLoadMoreButton()
+    }
+
+    private fun observeViewEvents() {
+        viewModel.observeViewEvents { viewEvent ->
+            when (viewEvent) {
+                RoomPollsViewEvent.LoadingError -> showErrorInSnackbar(RoomPollsLoadingError())
+            }
+        }
     }
 
     abstract fun getEmptyListTitle(canLoadMore: Boolean, nbLoadedDays: Int): String

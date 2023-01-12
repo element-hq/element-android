@@ -47,9 +47,10 @@ class RoomPollsViewModel @AssistedInject constructor(
     companion object : MavericksViewModelFactory<RoomPollsViewModel, RoomPollsViewState> by hiltMavericksViewModelFactory()
 
     init {
-        updateLoadedPollStatus(initialState.roomId)
-        syncPolls(initialState.roomId)
-        observePolls()
+        val roomId = initialState.roomId
+        updateLoadedPollStatus(roomId)
+        syncPolls(roomId)
+        observePolls(roomId)
     }
 
     private fun updateLoadedPollStatus(roomId: String) {
@@ -65,13 +66,18 @@ class RoomPollsViewModel @AssistedInject constructor(
     private fun syncPolls(roomId: String) {
         viewModelScope.launch {
             setState { copy(isSyncing = true) }
-            syncPollsUseCase.execute(roomId)
+            val result = runCatching {
+                syncPollsUseCase.execute(roomId)
+            }
+            if (result.isFailure) {
+                _viewEvents.post(RoomPollsViewEvent.LoadingError)
+            }
             setState { copy(isSyncing = false) }
         }
     }
 
-    private fun observePolls() = withState { viewState ->
-        getPollsUseCase.execute(viewState.roomId)
+    private fun observePolls(roomId: String) {
+        getPollsUseCase.execute(roomId)
                 .onEach { setState { copy(polls = it) } }
                 .launchIn(viewModelScope)
     }
@@ -86,14 +92,19 @@ class RoomPollsViewModel @AssistedInject constructor(
     private fun handleLoadMore() = withState { viewState ->
         viewModelScope.launch {
             setState { copy(isLoadingMore = true) }
-            val result = loadMorePollsUseCase.execute(viewState.roomId)
-            setState {
-                copy(
-                        isLoadingMore = false,
-                        canLoadMore = result.canLoadMore,
-                        nbLoadedDays = result.nbLoadedDays,
-                )
+            val result = runCatching {
+                val status = loadMorePollsUseCase.execute(viewState.roomId)
+                setState {
+                    copy(
+                            canLoadMore = status.canLoadMore,
+                            nbLoadedDays = status.nbLoadedDays,
+                    )
+                }
             }
+            if (result.isFailure) {
+                _viewEvents.post(RoomPollsViewEvent.LoadingError)
+            }
+            setState { copy(isLoadingMore = false) }
         }
     }
 }

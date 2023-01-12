@@ -76,6 +76,8 @@ class RoomProfileActivity :
         return ActivitySimpleBinding.inflate(layoutInflater)
     }
 
+    override fun getCoordinatorLayout() = views.coordinatorLayout
+
     override fun initUiAndData() {
         sharedActionViewModel = viewModelProvider.get(RoomProfileSharedActionViewModel::class.java)
         roomProfileArgs = intent?.extras?.getParcelableCompat(Mavericks.KEY_ARG) ?: return

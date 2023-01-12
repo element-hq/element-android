@@ -3211,6 +3211,7 @@
     </plurals>
     <string name="room_polls_wait_for_display">Displaying polls</string>
     <string name="room_polls_load_more">Load more polls</string>
+    <string name="room_polls_loading_error">Error fetching polls.</string>
 
     <!-- Location -->
     <string name="location_activity_title_static_sharing">Share location</string>
