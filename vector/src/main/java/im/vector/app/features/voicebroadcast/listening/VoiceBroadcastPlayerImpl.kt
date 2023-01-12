@@ -282,6 +282,8 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
                     }
                 } catch (failure: VoiceBroadcastFailure.ListeningError.DownloadError) {
                     isPreparingNextPlayer = false
+                    // Do not change the playingState if the current player is still valid,
+                    // the error will be thrown again when switching to the next player
                     if (playingState == State.Buffering || tryOrNull { currentMediaPlayer?.isPlaying } != true) {
                         playingState = State.Error(failure)
                     }
@@ -453,6 +455,8 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
 
         override fun onError(mp: MediaPlayer, what: Int, extra: Int): Boolean {
             Timber.d("## Voice Broadcast | onError: what=$what, extra=$extra")
+            // Do not change the playingState if the current player is still valid,
+            // the error will be thrown again when switching to the next player
             if (playingState == State.Buffering || tryOrNull { currentMediaPlayer?.isPlaying } != true) {
                 playingState = State.Error(VoiceBroadcastFailure.ListeningError.UnableToPlay(what, extra))
             }
