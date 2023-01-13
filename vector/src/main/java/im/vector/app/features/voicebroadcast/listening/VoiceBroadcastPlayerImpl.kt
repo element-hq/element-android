@@ -436,7 +436,11 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
         override fun onCompletion(mp: MediaPlayer) {
             // Release media player as soon as it completed
             mp.release()
-            currentMediaPlayer = null
+            if (currentMediaPlayer == mp) {
+                currentMediaPlayer = null
+            } else {
+                error("The media player which has completed mismatches the current media player instance.")
+            }
 
             // Next media player is already attached to this player and will start playing automatically
             if (nextMediaPlayer != null) return
