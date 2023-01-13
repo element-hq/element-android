@@ -38,7 +38,6 @@ import im.vector.app.features.roomprofile.polls.RoomPollsViewState
 import timber.log.Timber
 import javax.inject.Inject
 
-// TODO handle errors during load more or sync
 abstract class RoomPollsListFragment :
         VectorBaseFragment<FragmentRoomPollsListBinding>(),
         RoomPollsController.Listener {
