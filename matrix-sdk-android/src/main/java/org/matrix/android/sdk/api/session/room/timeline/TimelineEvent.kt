@@ -148,8 +148,8 @@ fun TimelineEvent.getLastMessageContent(): MessageContent? {
         // Polls/Beacon are not message contents like others as there is no msgtype subtype to discriminate moshi parsing
         // so toModel<MessageContent> won't parse them correctly
         // It's discriminated on event type instead. Maybe it shouldn't be MessageContent at all to avoid confusion?
-        in EventType.POLL_START.values -> (getLastEditNewContent() ?: root.getClearContent()).toModel<MessagePollContent>()
-        in EventType.POLL_END.values -> (getLastEditNewContent() ?: root.getClearContent()).toModel<MessageEndPollContent>()
+        in EventType.POLL_START.values -> (getLastPollEditNewContent() ?: root.getClearContent()).toModel<MessagePollContent>()
+        in EventType.POLL_END.values -> (getLastPollEditNewContent() ?: root.getClearContent()).toModel<MessageEndPollContent>()
         in EventType.STATE_ROOM_BEACON_INFO.values -> (getLastEditNewContent() ?: root.getClearContent()).toModel<MessageBeaconInfoContent>()
         in EventType.BEACON_LOCATION_DATA.values -> (getLastEditNewContent() ?: root.getClearContent()).toModel<MessageBeaconLocationDataContent>()
         else -> (getLastEditNewContent() ?: root.getClearContent()).toModel()
@@ -158,6 +158,10 @@ fun TimelineEvent.getLastMessageContent(): MessageContent? {
 
 fun TimelineEvent.getLastEditNewContent(): Content? {
     return annotations?.editSummary?.latestEdit?.getClearContent()?.toModel<MessageContent>()?.newContent
+}
+
+private fun TimelineEvent.getLastPollEditNewContent(): Content? {
+    return annotations?.editSummary?.latestEdit?.getClearContent()?.toModel<MessagePollContent>()?.newContent
 }
 
 /**

@@ -16,13 +16,16 @@
 
 package org.matrix.android.sdk.internal.session.room
 
+import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.LocalEcho
 import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.getRelationContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.events.model.toValidDecryptedEvent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
+import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import timber.log.Timber
 import javax.inject.Inject
@@ -101,7 +104,7 @@ internal class EventEditValidator @Inject constructor(val cryptoStore: IMXCrypto
             if (originalDecrypted.type != replaceDecrypted.type) {
                 return EditValidity.Invalid("replacement and original events must have the same type")
             }
-            if (replaceDecrypted.clearContent.toModel<MessageContent>()?.newContent == null) {
+            if (!hasNewContent(replaceDecrypted.type, replaceDecrypted.clearContent)) {
                 return EditValidity.Invalid("replacement event must have an m.new_content property")
             }
         } else {
@@ -116,11 +119,18 @@ internal class EventEditValidator @Inject constructor(val cryptoStore: IMXCrypto
             if (originalEvent.type != replaceEvent.type) {
                 return EditValidity.Invalid("replacement and original events must have the same type")
             }
-            if (replaceEvent.content.toModel<MessageContent>()?.newContent == null) {
+            if (!hasNewContent(replaceEvent.type, replaceEvent.content)) {
                 return EditValidity.Invalid("replacement event must have an m.new_content property")
             }
         }
 
         return EditValidity.Valid
+    }
+
+    private fun hasNewContent(eventType: String?, content: Content?): Boolean {
+        return when (eventType) {
+            in EventType.POLL_START.values -> content.toModel<MessagePollContent>()?.newContent != null
+            else -> content.toModel<MessageContent>()?.newContent != null
+        }
     }
 }
