@@ -16,18 +16,26 @@
 
 package im.vector.app.features.html
 
+import im.vector.app.features.settings.VectorPreferences
+import io.element.android.wysiwyg.spans.InlineCodeSpan
 import io.noties.markwon.MarkwonVisitor
 import io.noties.markwon.SpannableBuilder
 import io.noties.markwon.html.HtmlTag
 import io.noties.markwon.html.MarkwonHtmlRenderer
 import io.noties.markwon.html.TagHandler
 
-class CodeTagHandler : TagHandler() {
+class CodeTagHandler(
+        private val vectorPreferences: VectorPreferences
+) : TagHandler() {
 
     override fun handle(visitor: MarkwonVisitor, renderer: MarkwonHtmlRenderer, tag: HtmlTag) {
         SpannableBuilder.setSpans(
                 visitor.builder(),
-                HtmlCodeSpan(visitor.configuration().theme(), false),
+                if (vectorPreferences.isRichTextEditorEnabled()) {
+                    InlineCodeSpan() // To be removed if this is a code block
+                } else {
+                    HtmlCodeSpan(visitor.configuration().theme(), false)
+                },
                 tag.start(),
                 tag.end()
         )
@@ -42,15 +50,33 @@ class CodeTagHandler : TagHandler() {
  * Pre tag are already handled by HtmlPlugin to keep the formatting.
  * We are only using it to check for <pre><code>*</code></pre> tags.
  */
-class CodePreTagHandler : TagHandler() {
+class CodePreTagHandler(
+        private val vectorPreferences: VectorPreferences
+) : TagHandler() {
     override fun handle(visitor: MarkwonVisitor, renderer: MarkwonHtmlRenderer, tag: HtmlTag) {
-        val htmlCodeSpan = visitor.builder()
-                .getSpans(tag.start(), tag.end())
-                .firstOrNull {
-                    it.what is HtmlCodeSpan
-                }
-        if (htmlCodeSpan != null) {
-            (htmlCodeSpan.what as HtmlCodeSpan).isBlock = true
+        if (vectorPreferences.isRichTextEditorEnabled()) {
+            val inlineCodeSpan = visitor.builder()
+                    .getSpans(tag.start(), tag.end())
+                    .firstOrNull {
+                        it.what is InlineCodeSpan
+                    }
+            if (inlineCodeSpan != null) {
+                SpannableBuilder.setSpans(
+                        visitor.builder(),
+                        HtmlCodeSpan(visitor.configuration().theme(), true),
+                        tag.start(),
+                        tag.end()
+                )
+            }
+        } else {
+            val htmlCodeSpan = visitor.builder()
+                    .getSpans(tag.start(), tag.end())
+                    .firstOrNull {
+                        it.what is HtmlCodeSpan
+                    }
+            if (htmlCodeSpan != null) {
+                (htmlCodeSpan.what as HtmlCodeSpan).isBlock = true
+            }
         }
     }
 

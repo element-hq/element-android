@@ -34,6 +34,7 @@ import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlUiState
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlView
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
+import io.element.android.wysiwyg.EditorStyledTextView
 import io.noties.markwon.MarkwonPlugin
 import org.matrix.android.sdk.api.extensions.orFalse
 
@@ -125,7 +126,7 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
     override fun getViewStubId() = STUB_ID
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {
-        val messageView by bind<AppCompatTextView>(R.id.messageTextView)
+        val messageView by bind<EditorStyledTextView>(R.id.messageTextView)
         val previewUrlView by bind<PreviewUrlView>(R.id.messageUrlPreview)
     }
 

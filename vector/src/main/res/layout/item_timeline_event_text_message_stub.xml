@@ -7,7 +7,7 @@
     android:orientation="vertical"
     tools:viewBindingIgnore="true">
 
-    <TextView
+    <io.element.android.wysiwyg.EditorStyledTextView
         android:id="@+id/messageTextView"
         style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"

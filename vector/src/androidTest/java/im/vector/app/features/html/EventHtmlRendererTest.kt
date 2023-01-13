@@ -36,11 +36,12 @@ class EventHtmlRendererTest {
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
     private val fakeVectorPreferences = mockk<VectorPreferences>().also {
         every { it.latexMathsIsEnabled() } returns false
+        every { it.isRichTextEditorEnabled() } returns false
     }
     private val fakeSessionHolder = mockk<ActiveSessionHolder>()
 
     private val renderer = EventHtmlRenderer(
-            MatrixHtmlPluginConfigure(ColorProvider(context), context.resources),
+            MatrixHtmlPluginConfigure(ColorProvider(context), context.resources, fakeVectorPreferences),
             context,
             fakeVectorPreferences,
             fakeSessionHolder,
@@ -72,6 +73,14 @@ class EventHtmlRendererTest {
         val result = """<code><i>italic</i> <b>bold</b></code>""".renderAsTestSpan()
 
         result shouldBeEqualTo "[code][italic]italic[/italic] [bold]bold[/bold][/code]"
+    }
+
+    @Test
+    fun processesHtmlWithinCodeBlocks_givenRichTextEditorEnabled() {
+        every { fakeVectorPreferences.isRichTextEditorEnabled() } returns true
+        val result = """<code><i>italic</i> <b>bold</b></code>""".renderAsTestSpan()
+
+        result shouldBeEqualTo "[inline code][italic]italic[/italic] [bold]bold[/bold][/inline code]"
     }
 
     @Test

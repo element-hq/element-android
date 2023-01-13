@@ -22,6 +22,7 @@ import android.text.Layout
 import android.text.Spannable
 import androidx.core.text.getSpans
 import im.vector.app.features.html.HtmlCodeSpan
+import io.element.android.wysiwyg.spans.InlineCodeSpan
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.slot
@@ -56,6 +57,7 @@ private fun Any.readTags(): SpanTags {
         HtmlCodeSpan::class -> SpanTags("[code]", "[/code]")
         StrongEmphasisSpan::class -> SpanTags("[bold]", "[/bold]")
         EmphasisSpan::class, CustomTypefaceSpan::class -> SpanTags("[italic]", "[/italic]")
+        InlineCodeSpan::class -> SpanTags("[inline code]", "[/inline code]")
         else -> throw IllegalArgumentException("Unknown ${this::class}")
     }
 }
