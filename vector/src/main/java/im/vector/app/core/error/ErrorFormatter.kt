@@ -157,6 +157,8 @@ class DefaultErrorFormatter @Inject constructor(
             RecordingError.BlockedBySomeoneElse -> stringProvider.getString(R.string.error_voice_broadcast_blocked_by_someone_else_message)
             RecordingError.NoPermission -> stringProvider.getString(R.string.error_voice_broadcast_permission_denied_message)
             RecordingError.UserAlreadyBroadcasting -> stringProvider.getString(R.string.error_voice_broadcast_already_in_progress_message)
+            is VoiceBroadcastFailure.ListeningError.UnableToPlay,
+            is VoiceBroadcastFailure.ListeningError.DownloadError -> stringProvider.getString(R.string.error_voice_broadcast_unable_to_play)
         }
     }
 
