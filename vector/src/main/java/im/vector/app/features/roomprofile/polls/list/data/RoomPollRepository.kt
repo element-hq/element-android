@@ -20,7 +20,6 @@ import im.vector.app.features.roomprofile.polls.list.ui.PollSummary
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-// TODO add unit tests
 class RoomPollRepository @Inject constructor(
         private val roomPollDataSource: RoomPollDataSource,
 ) {
