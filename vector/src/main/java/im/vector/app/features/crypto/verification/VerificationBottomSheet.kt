@@ -85,10 +85,6 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
         return BottomSheetVerificationBinding.inflate(inflater, container, false)
     }
 
-    init {
-        isCancelable = true
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -210,6 +206,8 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
             )
             return@withState
         }
+
+        isCancelable = state.isVerificationRequired.not()
 
         // Did the request result in a SAS transaction?
         if (state.sasTransactionState != null) {
