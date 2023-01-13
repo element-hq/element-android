@@ -17,6 +17,7 @@ package im.vector.app.features.crypto.verification
 
 import android.app.Activity
 import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.KeyEvent
@@ -85,7 +86,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
     }
 
     init {
-        isCancelable = false
+        isCancelable = true
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -395,6 +396,11 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
         }
 
         const val WAITING_SELF_VERIF_TAG: String = "WAITING_SELF_VERIF_TAG"
+    }
+
+    override fun onCancel(dialog: DialogInterface) {
+        super.onCancel(dialog)
+        viewModel.confirmCancel()
     }
 }
 
