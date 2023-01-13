@@ -55,32 +55,46 @@ internal class EventInsertLiveObserver @Inject constructor(
                 if (!results.isLoaded || results.isEmpty()) {
                     return@withLock
                 }
-                val idsToDeleteAfterProcess = ArrayList<String>()
-                val idsOfEncryptedEvents = ArrayList<String>()
-                val filteredEvents = ArrayList<EventInsertEntity>(results.size)
+                val eventsToProcess = ArrayList<EventInsertEntity>(results.size)
+                val eventsToIgnore = ArrayList<EventInsertEntity>(results.size)
+
                 Timber.v("EventInsertEntity updated with ${results.size} results in db")
                 results.forEach {
-                    if (shouldProcess(it)) {
-                        // don't use copy from realm over there
-                        val copiedEvent = EventInsertEntity(
-                                eventId = it.eventId,
-                                eventType = it.eventType
-                        ).apply {
-                            insertType = it.insertType
-                        }
-                        filteredEvents.add(copiedEvent)
+                    // don't use copy from realm over there
+                    val copiedEvent = EventInsertEntity(
+                            eventId = it.eventId,
+                            eventType = it.eventType
+                    ).apply {
+                        insertType = it.insertType
                     }
-                    if (it.eventType == EventType.ENCRYPTED) {
-                        idsOfEncryptedEvents.add(it.eventId)
+
+                    if (shouldProcess(it)) {
+                        eventsToProcess.add(copiedEvent)
                     } else {
-                        idsToDeleteAfterProcess.add(it.eventId)
+                        eventsToIgnore.add(copiedEvent)
                     }
                 }
+
                 awaitTransaction(realmConfiguration) { realm ->
-                    Timber.v("##Transaction: There are ${filteredEvents.size} events to process ")
-                    filteredEvents.forEach { eventInsert ->
+                    Timber.v("##Transaction: There are ${eventsToProcess.size} events to process")
+
+                    val idsToDeleteAfterProcess = ArrayList<String>()
+                    val idsOfEncryptedEvents = ArrayList<String>()
+                    val getAndTriageEvent: (EventInsertEntity) -> Event? = { eventInsert ->
                         val eventId = eventInsert.eventId
                         val event = getEvent(realm, eventId)
+                        if (event?.getClearType() == EventType.ENCRYPTED) {
+                            idsOfEncryptedEvents.add(eventId)
+                        } else {
+                            idsToDeleteAfterProcess.add(eventId)
+                        }
+                        event
+                    }
+
+                    eventsToProcess.forEach { eventInsert ->
+                        val eventId = eventInsert.eventId
+                        val event = getAndTriageEvent(eventInsert)
+
                         if (event != null && canProcessEvent(event)) {
                             processors.filter {
                                 it.shouldProcess(eventId, event.getClearType(), eventInsert.insertType)
@@ -92,6 +106,9 @@ internal class EventInsertLiveObserver @Inject constructor(
                             return@forEach
                         }
                     }
+
+                    eventsToIgnore.forEach { getAndTriageEvent(it) }
+
                     realm.where(EventInsertEntity::class.java)
                             .`in`(EventInsertEntityFields.EVENT_ID, idsToDeleteAfterProcess.toTypedArray())
                             .findAll()
