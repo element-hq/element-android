@@ -163,6 +163,12 @@ class RoomPollDataSource @Inject constructor() {
         Timber.d("roomId=$roomId")
         // TODO
         //  unmock using SDK service + add unit tests
-        delay(3000)
+        if (fakeLoadCounter == 0) {
+            // fake first load
+            loadMorePolls(roomId)
+        } else {
+            // fake sync
+            delay(3000)
+        }
     }
 }
