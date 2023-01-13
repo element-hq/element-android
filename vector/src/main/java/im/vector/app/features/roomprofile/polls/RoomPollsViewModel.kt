@@ -82,7 +82,6 @@ class RoomPollsViewModel @AssistedInject constructor(
                 .launchIn(viewModelScope)
     }
 
-    // TODO add unit tests
     override fun handle(action: RoomPollsAction) {
         when (action) {
             RoomPollsAction.LoadMorePolls -> handleLoadMore()
