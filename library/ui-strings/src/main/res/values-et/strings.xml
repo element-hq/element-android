@@ -2895,4 +2895,6 @@
     <string name="message_reply_to_sender_ended_poll">lõpetas küsitluse.</string>
     <string name="message_reply_to_poll_preview">Küsitlus</string>
     <string name="thread_list_not_available">Sinu koduserver veel ei toeta jutulõngade loendit.</string>
+    <string name="started_a_voice_broadcast">Alustasime ringhäälingukõnega</string>
+    <string name="error_voice_broadcast_unable_to_play">Selle ringhäälingukõne esitamine ei õnnestu.</string>
 </resources>
