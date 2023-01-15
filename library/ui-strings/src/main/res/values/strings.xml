@@ -2296,6 +2296,7 @@
     <string name="sent_verification_conclusion">Verification Conclusion</string>
     <string name="sent_location">Shared their location</string>
     <string name="sent_live_location">Shared their live location</string>
+    <string name="started_a_voice_broadcast">Started a voice broadcast</string>
 
     <string name="verification_request_waiting">Waiting…</string>
     <string name="verification_request_other_cancelled">%s canceled</string>
@@ -3132,6 +3133,7 @@
     <string name="error_voice_broadcast_permission_denied_message">You don’t have the required permissions to start a voice broadcast in this room. Contact a room administrator to upgrade your permissions.</string>
     <string name="error_voice_broadcast_blocked_by_someone_else_message">Someone else is already recording a voice broadcast. Wait for their voice broadcast to end to start a new one.</string>
     <string name="error_voice_broadcast_already_in_progress_message">You are already recording a voice broadcast. Please end your current voice broadcast to start a new one.</string>
+    <string name="error_voice_broadcast_unable_to_play">Unable to play this voice broadcast.</string>
     <!-- Examples of usage: 6h 15min 30sec left / 15min 30sec left / 30sec left -->
     <string name="voice_broadcast_recording_time_left">%1$s left</string>
     <string name="stop_voice_broadcast_dialog_title">Stop live broadcasting?</string>

@@ -2890,4 +2890,13 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="set_link_link">Hivatkozás</string>
     <string name="set_link_text">Szöveg</string>
     <string name="rich_text_editor_link">Hivatkozás beállítása</string>
+    <string name="settings_access_token_summary">A hozzáférési kulcs teljes elérést biztosít a fiókhoz. Soha ne ossza meg mással.</string>
+    <string name="settings_access_token">Elérési kulcs</string>
+    <string name="rich_text_editor_bullet_list">Lista ki-,bekapcsolása</string>
+    <string name="rich_text_editor_numbered_list">Számozott lista ki-,bekapcsolása</string>
+    <string name="room_polls_ended_no_item">Nincsenek régi szavazások ebben a szobában</string>
+    <string name="room_polls_ended">Régi szavazások</string>
+    <string name="room_polls_active_no_item">Nincsenek aktív szavazások ebben a szobában</string>
+    <string name="room_polls_active">Aktív szavazások</string>
+    <string name="room_profile_section_more_polls">Szavazás alakulása</string>
 </resources>

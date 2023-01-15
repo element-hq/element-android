@@ -50,7 +50,7 @@ ext.libs = [
         ],
         androidx    : [
                 'activity'                : "androidx.activity:activity-ktx:1.6.1",
-                'appCompat'               : "androidx.appcompat:appcompat:1.5.1",
+                'appCompat'               : "androidx.appcompat:appcompat:1.6.0",
                 'biometric'               : "androidx.biometric:biometric:1.1.0",
                 'core'                    : "androidx.core:core-ktx:1.9.0",
                 'recyclerview'            : "androidx.recyclerview:recyclerview:1.2.1",
@@ -103,7 +103,7 @@ ext.libs = [
         ],
         element     : [
                 'opusencoder'             : "io.element.android:opusencoder:1.1.0",
-                'wysiwyg'                 : "io.element.android:wysiwyg:0.15.0"
+                'wysiwyg'                 : "io.element.android:wysiwyg:0.17.0"
         ],
         squareup    : [
                 'moshi'                  : "com.squareup.moshi:moshi:$moshi",
