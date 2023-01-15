@@ -2898,4 +2898,9 @@
     <string name="room_polls_active_no_item">In diesem Raum gibt es keine aktiven Umfragen</string>
     <string name="room_polls_active">Aktive Umfragen</string>
     <string name="room_profile_section_more_polls">Umfrageverlauf</string>
+    <string name="message_reply_to_ended_poll_preview">Beendete Umfrage</string>
+    <string name="message_reply_to_poll_preview">Umfrage</string>
+    <string name="message_reply_to_sender_ended_poll">beendete eine Umfrage.</string>
+    <string name="ended_poll_indicator">Umfrage beendet.</string>
+    <string name="thread_list_not_available">Dein Heim-Server unterstützt noch nicht das Auflisten von Threads.</string>
 </resources>

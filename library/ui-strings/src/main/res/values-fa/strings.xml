@@ -2899,4 +2899,9 @@
     <string name="room_polls_active_no_item">هیچ نظرسنجی فعّالی در این اتاق وجود ندارد</string>
     <string name="room_polls_active">نظرسنجی‌های فعّال</string>
     <string name="room_profile_section_more_polls">تاریخچهٔ نظرسنجی‌ها</string>
+    <string name="message_reply_to_ended_poll_preview">نظرسنجی پایان یافته</string>
+    <string name="message_reply_to_poll_preview">نظرسنجی</string>
+    <string name="message_reply_to_sender_ended_poll">به نظرسنجی‌ای پایان داد.</string>
+    <string name="ended_poll_indicator">به نظرسنجی پایان داد.</string>
+    <string name="thread_list_not_available">کارساز خانگیتان هنوز از سیاهه کردن رشته‌ها پشتیبانی نمی‌کند.</string>
 </resources>

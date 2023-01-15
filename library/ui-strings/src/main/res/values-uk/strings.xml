@@ -3011,4 +3011,9 @@
     <string name="room_polls_active_no_item">У цій кімнаті немає активних опитувань</string>
     <string name="room_polls_active">Активні опитування</string>
     <string name="room_profile_section_more_polls">Історія опитувань</string>
+    <string name="message_reply_to_ended_poll_preview">Завершене опитування</string>
+    <string name="message_reply_to_poll_preview">Опитування</string>
+    <string name="message_reply_to_sender_ended_poll">завершує опитування.</string>
+    <string name="ended_poll_indicator">Опитування завершено.</string>
+    <string name="thread_list_not_available">Ваш домашній сервер поки що не підтримує створення списків гілок.</string>
 </resources>
