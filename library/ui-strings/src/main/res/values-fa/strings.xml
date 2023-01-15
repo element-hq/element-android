@@ -2904,4 +2904,6 @@
     <string name="message_reply_to_sender_ended_poll">به نظرسنجی‌ای پایان داد.</string>
     <string name="ended_poll_indicator">به نظرسنجی پایان داد.</string>
     <string name="thread_list_not_available">کارساز خانگیتان هنوز از سیاهه کردن رشته‌ها پشتیبانی نمی‌کند.</string>
+    <string name="error_voice_broadcast_unable_to_play">ناتوان در پخش این صدا.</string>
+    <string name="started_a_voice_broadcast">پخش صوتی را آغاز کرد</string>
 </resources>
