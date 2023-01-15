@@ -16,11 +16,14 @@
 
 package im.vector.app.features.crypto.verification.user
 
+import android.app.Dialog
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.text.toSpannable
 import androidx.fragment.app.Fragment
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -30,10 +33,13 @@ import im.vector.app.R
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
+import im.vector.app.core.utils.colorizeMatchingText
 import im.vector.app.databinding.BottomSheetVerificationBinding
+import im.vector.app.features.crypto.verification.VerificationAction
 import im.vector.app.features.crypto.verification.VerificationBottomSheetViewEvents
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.themes.ThemeUtils
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import javax.inject.Inject
@@ -58,6 +64,11 @@ class UserVerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSh
     lateinit var avatarRenderer: AvatarRenderer
 
     private val viewModel by fragmentViewModel(UserVerificationViewModel::class)
+
+    init {
+        // we manage dismiss/back manually to confirm cancel on verification
+        isCancelable = false
+    }
 
     override fun getBinding(
             inflater: LayoutInflater,
@@ -96,6 +107,34 @@ class UserVerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSh
                 }
                 is VerificationBottomSheetViewEvents.RequestNotFound -> {
                     // no-op for user verification
+                }
+                is VerificationBottomSheetViewEvents.ConfirmCancel -> {
+                    MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.dialog_title_confirmation))
+                            .setMessage(
+                                    getString(R.string.verify_cancel_other, event.otherUserId, event.deviceId ?: "*")
+                                            .toSpannable()
+                                            .colorizeMatchingText(event.otherUserId, ThemeUtils.getColor(requireContext(), R.attr.vctr_notice_text_color))
+                            )
+                            .setCancelable(false)
+                            .setPositiveButton(R.string._resume, null)
+                            .setNegativeButton(R.string.action_cancel) { _, _ ->
+                                viewModel.handle(VerificationAction.CancelPendingVerification)
+                            }
+                            .show()
+                }
+            }
+        }
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return super.onCreateDialog(savedInstanceState).apply {
+            setOnKeyListener { _, keyCode, keyEvent ->
+                if (keyCode == KeyEvent.KEYCODE_BACK && keyEvent.action == KeyEvent.ACTION_UP) {
+                    viewModel.queryCancel()
+                    true
+                } else {
+                    false
                 }
             }
         }

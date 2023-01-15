@@ -42,6 +42,7 @@ import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.crypto.verification.EVerificationState
 import org.matrix.android.sdk.api.session.crypto.verification.EmojiRepresentation
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
 import org.matrix.android.sdk.api.session.crypto.verification.QRCodeVerificationState
@@ -239,6 +240,29 @@ class UserVerificationViewModel @AssistedInject constructor(
                             transactionId = request.transactionId
                     )
                 }
+            }
+        }
+    }
+
+    fun queryCancel() = withState { state ->
+        // check if there is an existing request
+        val request = state.pendingRequest.invoke()
+        when (request?.state) {
+            EVerificationState.WaitingForReady,
+            EVerificationState.Requested,
+            EVerificationState.Ready,
+            EVerificationState.Started,
+            EVerificationState.WeStarted,
+            EVerificationState.WaitingForDone -> {
+                // query confirmation
+                _viewEvents.post(VerificationBottomSheetViewEvents.ConfirmCancel(request.otherUserId, request.otherDeviceId))
+            }
+//            EVerificationState.Done,
+//            EVerificationState.Cancelled,
+//            EVerificationState.HandledByOtherSession,
+            else -> {
+                // we can just dismiss?
+                _viewEvents.post(VerificationBottomSheetViewEvents.Dismiss)
             }
         }
     }

@@ -158,6 +158,9 @@ class SelfVerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSh
                 is VerificationBottomSheetViewEvents.RequestNotFound -> {
                    dismiss()
                 }
+                is VerificationBottomSheetViewEvents.ConfirmCancel -> {
+                    // TODO? applies to self?
+                }
             }
         }
     }

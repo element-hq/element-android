@@ -73,7 +73,6 @@ class UserVerificationController @Inject constructor(
     var state: UserVerificationViewState? = null
 
     fun update(state: UserVerificationViewState) {
-//        Timber.w("VALR controller updated $state")
         this.state = state
         requestModelBuild()
     }
@@ -145,6 +144,9 @@ class UserVerificationController @Inject constructor(
                     }
                     EVerificationState.Cancelled -> {
                         renderCancel(pendingRequest.cancelConclusion ?: CancelCode.User)
+                        gotIt {
+                            listener?.onDone(false)
+                        }
                     }
                     EVerificationState.HandledByOtherSession -> {
                         // we should dismiss
