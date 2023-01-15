@@ -2850,4 +2850,6 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="message_reply_to_sender_ended_poll">mengakhiri pemungutan suara.</string>
     <string name="ended_poll_indicator">Mengakhiri pemungutan suara.</string>
     <string name="thread_list_not_available">Homeserver Anda belum mendukung pendaftaran utasan.</string>
+    <string name="error_voice_broadcast_unable_to_play">Tidak dapat memutar siaran suara ini.</string>
+    <string name="started_a_voice_broadcast">Memulai sebuah siaran suara</string>
 </resources>
