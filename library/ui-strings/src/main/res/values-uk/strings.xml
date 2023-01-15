@@ -3016,4 +3016,6 @@
     <string name="message_reply_to_sender_ended_poll">завершує опитування.</string>
     <string name="ended_poll_indicator">Опитування завершено.</string>
     <string name="thread_list_not_available">Ваш домашній сервер поки що не підтримує створення списків гілок.</string>
+    <string name="error_voice_broadcast_unable_to_play">Неможливо відтворити цю голосову трансляцію.</string>
+    <string name="started_a_voice_broadcast">Розпочато голосову трансляцію</string>
 </resources>
