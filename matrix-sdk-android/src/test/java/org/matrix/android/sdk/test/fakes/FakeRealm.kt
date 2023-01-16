@@ -117,6 +117,14 @@ inline fun <reified T : RealmModel> RealmQuery<T>.givenIn(
     return this
 }
 
+inline fun <reified T : RealmModel> RealmQuery<T>.givenContainsValue(
+        fieldName: String,
+        value: String,
+): RealmQuery<T> {
+    every { containsValue(fieldName, value) } returns this
+    return this
+}
+
 /**
  * Should be called on a mocked RealmObject and not on a real RealmObject so that the underlying final method is mocked.
  */

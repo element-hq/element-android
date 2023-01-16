@@ -3196,6 +3196,7 @@
     <string name="closed_poll_option_title">Closed poll</string>
     <string name="closed_poll_option_description">Results are only revealed when you end the poll</string>
     <string name="ended_poll_indicator">Ended the poll.</string>
+    <string name="unable_to_decrypt_some_events_in_poll">Due to decryption errors, some votes may not be counted</string>
     <string name="room_polls_active">Active polls</string>
     <string name="room_polls_active_no_item">There are no active polls in this room</string>
     <string name="room_polls_ended">Past polls</string>

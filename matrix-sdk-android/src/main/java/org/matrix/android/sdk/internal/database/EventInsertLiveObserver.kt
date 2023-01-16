@@ -17,11 +17,16 @@
 package org.matrix.android.sdk.internal.database
 
 import com.zhuinden.monarchy.Monarchy
+import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.RealmResults
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
+import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.EventInsertEntity
@@ -34,7 +39,7 @@ import javax.inject.Inject
 
 internal class EventInsertLiveObserver @Inject constructor(
         @SessionDatabase realmConfiguration: RealmConfiguration,
-        private val processors: Set<@JvmSuppressWildcards EventInsertLiveProcessor>
+        private val processors: Set<@JvmSuppressWildcards EventInsertLiveProcessor>,
 ) :
         RealmLiveEntityObserver<EventInsertEntity>(realmConfiguration) {
 
@@ -50,46 +55,88 @@ internal class EventInsertLiveObserver @Inject constructor(
                 if (!results.isLoaded || results.isEmpty()) {
                     return@withLock
                 }
-                val idsToDeleteAfterProcess = ArrayList<String>()
-                val filteredEvents = ArrayList<EventInsertEntity>(results.size)
+                val eventsToProcess = ArrayList<EventInsertEntity>(results.size)
+                val eventsToIgnore = ArrayList<EventInsertEntity>(results.size)
+
                 Timber.v("EventInsertEntity updated with ${results.size} results in db")
                 results.forEach {
-                    if (shouldProcess(it)) {
-                        // don't use copy from realm over there
-                        val copiedEvent = EventInsertEntity(
-                                eventId = it.eventId,
-                                eventType = it.eventType
-                        ).apply {
-                            insertType = it.insertType
-                        }
-                        filteredEvents.add(copiedEvent)
+                    // don't use copy from realm over there
+                    val copiedEvent = EventInsertEntity(
+                            eventId = it.eventId,
+                            eventType = it.eventType
+                    ).apply {
+                        insertType = it.insertType
                     }
-                    idsToDeleteAfterProcess.add(it.eventId)
+
+                    if (shouldProcess(it)) {
+                        eventsToProcess.add(copiedEvent)
+                    } else {
+                        eventsToIgnore.add(copiedEvent)
+                    }
                 }
+
                 awaitTransaction(realmConfiguration) { realm ->
-                    Timber.v("##Transaction: There are ${filteredEvents.size} events to process ")
-                    filteredEvents.forEach { eventInsert ->
+                    Timber.v("##Transaction: There are ${eventsToProcess.size} events to process")
+
+                    val idsToDeleteAfterProcess = ArrayList<String>()
+                    val idsOfEncryptedEvents = ArrayList<String>()
+                    val getAndTriageEvent: (EventInsertEntity) -> Event? = { eventInsert ->
                         val eventId = eventInsert.eventId
-                        val event = EventEntity.where(realm, eventId).findFirst()
-                        if (event == null) {
-                            Timber.v("Event $eventId not found")
+                        val event = getEvent(realm, eventId)
+                        if (event?.getClearType() == EventType.ENCRYPTED) {
+                            idsOfEncryptedEvents.add(eventId)
+                        } else {
+                            idsToDeleteAfterProcess.add(eventId)
+                        }
+                        event
+                    }
+
+                    eventsToProcess.forEach { eventInsert ->
+                        val eventId = eventInsert.eventId
+                        val event = getAndTriageEvent(eventInsert)
+
+                        if (event != null && canProcessEvent(event)) {
+                            processors.filter {
+                                it.shouldProcess(eventId, event.getClearType(), eventInsert.insertType)
+                            }.forEach {
+                                it.process(realm, event)
+                            }
+                        } else {
+                            Timber.v("Cannot process event with id $eventId")
                             return@forEach
                         }
-                        val domainEvent = event.asDomain()
-                        processors.filter {
-                            it.shouldProcess(eventId, domainEvent.getClearType(), eventInsert.insertType)
-                        }.forEach {
-                            it.process(realm, domainEvent)
-                        }
                     }
+
+                    eventsToIgnore.forEach { getAndTriageEvent(it) }
+
                     realm.where(EventInsertEntity::class.java)
                             .`in`(EventInsertEntityFields.EVENT_ID, idsToDeleteAfterProcess.toTypedArray())
                             .findAll()
                             .deleteAllFromRealm()
+
+                    // make the encrypted events not processable: they will be processed again after decryption
+                    realm.where(EventInsertEntity::class.java)
+                            .`in`(EventInsertEntityFields.EVENT_ID, idsOfEncryptedEvents.toTypedArray())
+                            .findAll()
+                            .forEach { it.canBeProcessed = false }
                 }
                 processors.forEach { it.onPostProcess() }
             }
         }
+    }
+
+    private fun getEvent(realm: Realm, eventId: String): Event? {
+        val event = EventEntity.where(realm, eventId).findFirst()
+        if (event == null) {
+            Timber.v("Event $eventId not found")
+        }
+        return event?.asDomain()
+    }
+
+    private fun canProcessEvent(event: Event): Boolean {
+        // event should be either not encrypted or if encrypted it should contain relatesTo content
+        return event.getClearType() != EventType.ENCRYPTED ||
+                event.content.toModel<EncryptedEventContent>()?.relatesTo != null
     }
 
     private fun shouldProcess(eventInsertEntity: EventInsertEntity): Boolean {
