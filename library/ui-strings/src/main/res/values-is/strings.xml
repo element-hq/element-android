@@ -1672,10 +1672,10 @@
     <string name="send_suggestion">Settu inn tillögu</string>
     <string name="preference_help_summary">Fáðu aðstoð við að nota ${app_name}</string>
     <string name="preference_root_legals">Lagaleg atriði</string>
-    <string name="push_gateway_item_device_name">session_name:</string>
-    <string name="push_gateway_item_app_display_name">app_display_name:</string>
-    <string name="push_gateway_item_push_key">push_key:</string>
-    <string name="push_gateway_item_app_id">app_id:</string>
+    <string name="push_gateway_item_device_name">Birtingarnafn setu:</string>
+    <string name="push_gateway_item_app_display_name">Birtingarnafn forrits:</string>
+    <string name="push_gateway_item_push_key">Push-lykill:</string>
+    <string name="push_gateway_item_app_id">Auðkenni forrits:</string>
     <string name="navigate_to_thread_when_already_in_the_thread">Þú ert nú þegar að skoða þennan spjallþráð!</string>
     <string name="navigate_to_room_when_already_in_the_room">Þú ert nú þegar að skoða þessa spjallrás!</string>
     <string name="settings_sdk_version">Útgáfa Matrix SDK</string>
@@ -2263,4 +2263,8 @@
     <string name="ftue_auth_terms_subtitle">Endilega lestu í gegnum stefnur og skilmála fyrir %s</string>
     <string name="ftue_auth_terms_title">Stefnur netþjónsins</string>
     <string name="ftue_auth_choose_server_ems_subtitle">Element Matrix Services (EMS) er afkastamikil og áreiðanleg hýsingarþjónusta fyrir hraðvirk og örugg samskipti í rauntíma. Skoðaðu hvernig við förum að því á <a href="${ftue_ems_url}">element.io/ems</a></string>
+    <plurals name="x_selected">
+        <item quantity="one">%1$d valið</item>
+        <item quantity="other">%1$d valið</item>
+    </plurals>
 </resources>
