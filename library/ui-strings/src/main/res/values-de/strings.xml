@@ -2905,4 +2905,5 @@
     <string name="thread_list_not_available">Dein Heim-Server unterstützt noch nicht das Auflisten von Threads.</string>
     <string name="started_a_voice_broadcast">Eine Sprachübertragung wurde begonnen</string>
     <string name="error_voice_broadcast_unable_to_play">Wiedergabe der Sprachübertragung nicht möglich.</string>
+    <string name="unable_to_decrypt_some_events_in_poll">Evtl. werden infolge von Entschlüsselungsfehlern einige Stimmen nicht gezählt</string>
 </resources>
