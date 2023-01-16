@@ -89,6 +89,8 @@ import org.matrix.android.sdk.internal.session.room.peeking.DefaultPeekRoomTask
 import org.matrix.android.sdk.internal.session.room.peeking.DefaultResolveRoomStateTask
 import org.matrix.android.sdk.internal.session.room.peeking.PeekRoomTask
 import org.matrix.android.sdk.internal.session.room.peeking.ResolveRoomStateTask
+import org.matrix.android.sdk.internal.session.room.poll.DefaultLoadMorePollsTask
+import org.matrix.android.sdk.internal.session.room.poll.LoadMorePollsTask
 import org.matrix.android.sdk.internal.session.room.read.DefaultMarkAllRoomsReadTask
 import org.matrix.android.sdk.internal.session.room.read.DefaultSetReadMarkersTask
 import org.matrix.android.sdk.internal.session.room.read.MarkAllRoomsReadTask
@@ -359,4 +361,7 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindFetchPollResponseEventsTask(task: DefaultFetchPollResponseEventsTask): FetchPollResponseEventsTask
+
+    @Binds
+    abstract fun bindLoadMorePollsTask(task: DefaultLoadMorePollsTask): LoadMorePollsTask
 }

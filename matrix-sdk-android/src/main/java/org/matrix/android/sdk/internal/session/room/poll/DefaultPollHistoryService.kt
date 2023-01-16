@@ -23,13 +23,17 @@ import dagger.assisted.AssistedInject
 import org.matrix.android.sdk.api.session.room.model.PollResponseAggregatedSummary
 import org.matrix.android.sdk.api.session.room.poll.LoadedPollsStatus
 import org.matrix.android.sdk.api.session.room.poll.PollHistoryService
+import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 
 private const val LOADING_PERIOD_IN_DAYS = 30
+private const val EVENTS_PAGE_SIZE = 200
 
 // TODO add unit tests
 internal class DefaultPollHistoryService @AssistedInject constructor(
         @Assisted private val roomId: String,
+        private val clock: Clock,
+        private val loadMorePollsTask: LoadMorePollsTask,
 ) : PollHistoryService {
 
     @AssistedFactory
@@ -45,7 +49,14 @@ internal class DefaultPollHistoryService @AssistedInject constructor(
         get() = LOADING_PERIOD_IN_DAYS
 
     override suspend fun loadMore(): LoadedPollsStatus {
-        TODO("Not yet implemented")
+        // TODO when to set currentTimestampMs and who is responsible for it?
+        val params = LoadMorePollsTask.Params(
+                roomId = roomId,
+                currentTimestampMs = clock.epochMillis(),
+                loadingPeriodInDays = loadingPeriodInDays,
+                eventsPageSize = EVENTS_PAGE_SIZE,
+        )
+        return loadMorePollsTask.execute(params)
     }
 
     override fun canLoadMore(): Boolean {
