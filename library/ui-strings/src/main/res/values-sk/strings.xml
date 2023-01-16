@@ -2962,4 +2962,5 @@
     <string name="thread_list_not_available">Váš domovský server zatiaľ nepodporuje zobrazovanie vlákien.</string>
     <string name="error_voice_broadcast_unable_to_play">Toto hlasové vysielanie nie je možné prehrať.</string>
     <string name="started_a_voice_broadcast">Spustil/a hlasové vysielanie</string>
+    <string name="unable_to_decrypt_some_events_in_poll">Z dôvodu chýb v dešifrovaní sa niektoré hlasy nemusia započítať</string>
 </resources>
