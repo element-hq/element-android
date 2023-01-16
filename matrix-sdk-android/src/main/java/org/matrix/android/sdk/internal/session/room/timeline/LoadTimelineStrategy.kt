@@ -360,7 +360,6 @@ internal class LoadTimelineStrategy constructor(
                     initialEventId = mode.originEventId(),
                     onBuiltEvents = dependencies.onEventsUpdated,
                     onEventsDeleted = dependencies.onEventsDeleted,
-                    realm = dependencies.realm,
                     localEchoEventFactory = dependencies.localEchoEventFactory,
                     decorator = createTimelineEventDecorator()
             )
