@@ -2960,4 +2960,6 @@
     <string name="message_reply_to_sender_ended_poll">ukončil(a) hlasování.</string>
     <string name="ended_poll_indicator">Hlasování bylo ukončeno.</string>
     <string name="thread_list_not_available">Váš domovský server zatím nepodporuje zobrazení seznamu vláken.</string>
+    <string name="error_voice_broadcast_unable_to_play">Nelze přehrát toto hlasové vysílání.</string>
+    <string name="started_a_voice_broadcast">Hlasové vysílání bylo zahájeno</string>
 </resources>
