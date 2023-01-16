@@ -105,7 +105,8 @@ internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
                 .enqueue()
     }
 
-    private fun handleUserIdsForCheckingTrustAndAffectedRoomShields(userIdsWithDeviceUpdate: Iterable<String>) {
+    private fun handleUserIdsForCheckingTrustAndAffectedRoomShields(userIdsWithDeviceUpdate: Collection<String>) {
+        if (userIdsWithDeviceUpdate.isEmpty()) return
         crossSigningService.checkTrustAndAffectedRoomShields(userIdsWithDeviceUpdate.toList())
     }
 }
