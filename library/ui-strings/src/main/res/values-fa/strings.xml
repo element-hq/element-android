@@ -2906,4 +2906,5 @@
     <string name="thread_list_not_available">کارساز خانگیتان هنوز از سیاهه کردن رشته‌ها پشتیبانی نمی‌کند.</string>
     <string name="error_voice_broadcast_unable_to_play">ناتوان در پخش این صدا.</string>
     <string name="started_a_voice_broadcast">پخش صوتی را آغاز کرد</string>
+    <string name="unable_to_decrypt_some_events_in_poll">به خاطر خطاهای رمزگشایی، ممکن است برخی رأی‌ها شمرده نشوند</string>
 </resources>
