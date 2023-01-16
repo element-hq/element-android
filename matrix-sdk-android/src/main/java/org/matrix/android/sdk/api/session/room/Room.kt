@@ -28,6 +28,7 @@ import org.matrix.android.sdk.api.session.room.model.LocalRoomSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.relation.RelationService
 import org.matrix.android.sdk.api.session.room.notification.RoomPushRuleService
+import org.matrix.android.sdk.api.session.room.poll.PollHistoryService
 import org.matrix.android.sdk.api.session.room.read.ReadService
 import org.matrix.android.sdk.api.session.room.reporting.ReportingService
 import org.matrix.android.sdk.api.session.room.send.DraftService
@@ -181,4 +182,9 @@ interface Room {
      * Get the LocationSharingService associated to this Room.
      */
     fun locationSharingService(): LocationSharingService
+
+    /**
+     * Get the PollHistoryService associated to this Room.
+     */
+    fun pollHistoryService(): PollHistoryService
 }
