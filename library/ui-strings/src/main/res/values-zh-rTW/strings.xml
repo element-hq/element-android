@@ -2848,4 +2848,6 @@
     <string name="message_reply_to_sender_ended_poll">已結束投票。</string>
     <string name="ended_poll_indicator">已結束投票。</string>
     <string name="thread_list_not_available">您的家伺服器還不支援列出討論串。</string>
+    <string name="error_voice_broadcast_unable_to_play">無法播放此語音廣播。</string>
+    <string name="started_a_voice_broadcast">已開始語音廣播</string>
 </resources>
