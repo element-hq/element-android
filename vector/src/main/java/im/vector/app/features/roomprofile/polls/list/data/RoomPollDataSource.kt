@@ -16,22 +16,34 @@
 
 package im.vector.app.features.roomprofile.polls.list.data
 
+import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.features.home.room.detail.timeline.item.PollOptionViewState
 import im.vector.app.features.roomprofile.polls.list.ui.PollSummary
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.room.poll.PollHistoryService
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class RoomPollDataSource @Inject constructor() {
+class RoomPollDataSource @Inject constructor(
+        private val activeSessionHolder: ActiveSessionHolder,
+) {
 
     private val pollsFlow = MutableSharedFlow<List<PollSummary>>(replay = 1)
     private val polls = mutableListOf<PollSummary>()
     private var fakeLoadCounter = 0
+
+    private fun getPollHistoryService(roomId: String): PollHistoryService? {
+        return activeSessionHolder
+                .getSafeActiveSession()
+                ?.getRoom(roomId)
+                ?.pollHistoryService()
+    }
 
     // TODO
     //  unmock using SDK service + add unit tests
@@ -54,8 +66,10 @@ class RoomPollDataSource @Inject constructor() {
     }
 
     suspend fun loadMorePolls(roomId: String): LoadedPollsStatus {
+        getPollHistoryService(roomId)?.loadMore()
+
         // TODO
-        //  unmock using SDK service + add unit tests
+        //  remove mocked data + add unit tests
         delay(3000)
         fakeLoadCounter++
         when (fakeLoadCounter) {
