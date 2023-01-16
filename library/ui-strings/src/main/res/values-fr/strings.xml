@@ -2904,4 +2904,6 @@
     <string name="message_reply_to_sender_ended_poll">a terminé un sondage.</string>
     <string name="ended_poll_indicator">A terminé le sondage.</string>
     <string name="thread_list_not_available">Votre serveur d’accueil ne prend pas encore en charge l’affichage de la liste des fils de discussion.</string>
+    <string name="error_voice_broadcast_unable_to_play">Impossible de lire cette diffusion audio.</string>
+    <string name="started_a_voice_broadcast">A démarré une diffusion audio</string>
 </resources>
