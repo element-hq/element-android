@@ -3018,4 +3018,5 @@
     <string name="thread_list_not_available">Ваш домашній сервер поки що не підтримує створення списків гілок.</string>
     <string name="error_voice_broadcast_unable_to_play">Неможливо відтворити цю голосову трансляцію.</string>
     <string name="started_a_voice_broadcast">Розпочато голосову трансляцію</string>
+    <string name="unable_to_decrypt_some_events_in_poll">Через помилки розшифрування деякі голоси можуть бути не враховані</string>
 </resources>
