@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.session.room.timeline
 
 import io.realm.OrderedCollectionChangeSet
 import io.realm.OrderedRealmCollectionChangeListener
-import io.realm.RealmConfiguration
 import io.realm.RealmObjectChangeListener
 import io.realm.RealmQuery
 import io.realm.RealmResults
@@ -61,7 +60,6 @@ internal class TimelineChunk(
         private val fetchThreadTimelineTask: FetchThreadTimelineTask,
         private val eventDecryptor: TimelineEventDecryptor,
         private val paginationTask: PaginationTask,
-        private val realmConfiguration: RealmConfiguration,
         private val fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
         private val timelineEventMapper: TimelineEventMapper,
         private val uiEchoManager: UIEchoManager?,
@@ -602,7 +600,6 @@ internal class TimelineChunk(
                 timelineId = timelineId,
                 eventDecryptor = eventDecryptor,
                 paginationTask = paginationTask,
-                realmConfiguration = realmConfiguration,
                 fetchThreadTimelineTask = fetchThreadTimelineTask,
                 fetchTokenAndPaginateTask = fetchTokenAndPaginateTask,
                 timelineEventMapper = timelineEventMapper,
