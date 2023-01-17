@@ -30,4 +30,7 @@ data class RoomPollsViewState(
 ) : MavericksState {
 
     constructor(roomProfileArgs: RoomProfileArgs) : this(roomId = roomProfileArgs.roomId)
+
+    fun hasNoPolls() = polls.isEmpty()
+    fun hasNoPollsAndCanLoadMore() = !isSyncing && hasNoPolls() && canLoadMore
 }

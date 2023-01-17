@@ -119,11 +119,10 @@ abstract class RoomPollsListFragment :
                 canLoadMore = viewState.canLoadMore,
                 nbLoadedDays = viewState.nbLoadedDays,
         )
-        views.roomPollsEmptyTitle.isVisible = viewState.polls.isEmpty() && !viewState.isSyncing
-        views.roomPollsLoadMoreWhenEmpty.isVisible = viewState.polls.isEmpty() && viewState.canLoadMore && !viewState.isSyncing
-        views.roomPollsLoadMoreWhenEmptyProgress.isVisible = viewState.polls.isEmpty() && viewState.canLoadMore &&
-                viewState.isLoadingMore && !viewState.isSyncing
-        views.roomPollsLoadMoreWhenEmptyProgress.isEnabled = !viewState.isLoadingMore
+        views.roomPollsEmptyTitle.isVisible = !viewState.isSyncing && viewState.hasNoPolls()
+        views.roomPollsLoadMoreWhenEmpty.isVisible = viewState.hasNoPollsAndCanLoadMore()
+        views.roomPollsLoadMoreWhenEmpty.isEnabled = !viewState.isLoadingMore
+        views.roomPollsLoadMoreWhenEmptyProgress.isVisible = viewState.hasNoPollsAndCanLoadMore() && viewState.isLoadingMore
     }
 
     override fun onPollClicked(pollId: String) {
