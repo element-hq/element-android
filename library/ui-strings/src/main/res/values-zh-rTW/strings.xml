@@ -2850,4 +2850,5 @@
     <string name="thread_list_not_available">您的家伺服器還不支援列出討論串。</string>
     <string name="error_voice_broadcast_unable_to_play">無法播放此語音廣播。</string>
     <string name="started_a_voice_broadcast">已開始語音廣播</string>
+    <string name="unable_to_decrypt_some_events_in_poll">因為解密錯誤，部份投票可能並未計算</string>
 </resources>
