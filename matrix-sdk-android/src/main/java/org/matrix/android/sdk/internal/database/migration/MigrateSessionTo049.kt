@@ -34,9 +34,7 @@ internal class MigrateSessionTo049(realm: DynamicRealm) : RealmMigrator(realm, 4
                 .setNullable(PollHistoryStatusEntityFields.CURRENT_TIMESTAMP_TARGET_BACKWARD_MS, true)
                 .addField(PollHistoryStatusEntityFields.LAST_TIMESTAMP_TARGET_BACKWARD_MS, Long::class.java)
                 .setNullable(PollHistoryStatusEntityFields.LAST_TIMESTAMP_TARGET_BACKWARD_MS, true)
-                .addField(PollHistoryStatusEntityFields.CURRENT_TIMESTAMP_TARGET_BACKWARD_REACHED, Boolean::class.java)
                 .addField(PollHistoryStatusEntityFields.IS_END_OF_POLLS_BACKWARD, Boolean::class.java)
-                .addField(PollHistoryStatusEntityFields.HAS_COMPLETED_A_SYNC_BACKWARD, Boolean::class.java)
                 .addField(PollHistoryStatusEntityFields.TOKEN_END_BACKWARD, String::class.java)
                 .addField(PollHistoryStatusEntityFields.TOKEN_START_FORWARD, String::class.java)
     }

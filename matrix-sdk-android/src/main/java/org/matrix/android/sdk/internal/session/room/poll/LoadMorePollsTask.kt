@@ -43,6 +43,10 @@ internal class DefaultLoadMorePollsTask @Inject constructor(
     override suspend fun execute(params: LoadMorePollsTask.Params): LoadedPollsStatus {
         updatePollHistoryStatus(params)
 
+        // TODO fetch events in a loop using current poll history status
+        //   decrypt events and filter in only polls to store them in local
+        //   parse the response to update poll history status
+        //   unmock and check how it behaves when cancelling the process: it should resume where it was stopped
         return LoadedPollsStatus(
                 canLoadMore = true,
                 nbLoadedDays = 10,
@@ -52,15 +56,15 @@ internal class DefaultLoadMorePollsTask @Inject constructor(
     private suspend fun updatePollHistoryStatus(params: LoadMorePollsTask.Params) {
         monarchy.awaitTransaction { realm ->
             val status = PollHistoryStatusEntity.getOrCreate(realm, params.roomId)
-            val currentTargetTimestamp = status.currentTimestampTargetBackwardMs
-            val loadingPeriodMs = MILLISECONDS_PER_DAY * params.loadingPeriodInDays
-            if (currentTargetTimestamp == null) {
+            val currentTargetTimestampMs = status.currentTimestampTargetBackwardMs
+            val lastTargetTimestampMs = status.lastTimestampTargetBackwardMs
+            val loadingPeriodMs: Long = MILLISECONDS_PER_DAY * params.loadingPeriodInDays.toLong()
+            if (currentTargetTimestampMs == null) {
                 // first load, compute the target timestamp
                 status.currentTimestampTargetBackwardMs = params.currentTimestampMs - loadingPeriodMs
-            } else if (status.currentTimestampTargetBackwardReached) {
+            } else if (lastTargetTimestampMs != null && status.currentTimestampTargetBackwardReached) {
                 // previous load has finished, update the target timestamp
-                status.currentTimestampTargetBackwardMs = currentTargetTimestamp - loadingPeriodMs
-                status.currentTimestampTargetBackwardReached = false
+                status.currentTimestampTargetBackwardMs = lastTargetTimestampMs - loadingPeriodMs
             }
         }
     }
