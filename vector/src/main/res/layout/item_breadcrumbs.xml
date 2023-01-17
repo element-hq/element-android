@@ -85,6 +85,7 @@
         app:layout_constraintCircle="@id/breadcrumbsImageView"
         app:layout_constraintCircleAngle="225"
         app:layout_constraintCircleRadius="28dp"
+        app:tint="?vctr_content_primary"
         tools:ignore="MissingConstraints"
         tools:visibility="visible" />
 
