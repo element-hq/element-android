@@ -72,7 +72,8 @@ internal class RealmSendingEventsDataSource(
         if (frozenSendingTimelineEvents?.isValid == true) {
             frozenSendingTimelineEvents?.realm?.close()
         }
-        frozenSendingTimelineEvents = sendingEvents?.freeze()
+        // Do not freeze empty list
+        frozenSendingTimelineEvents = sendingEvents?.takeIf { it.isNotEmpty() }?.freeze()
     }
 
     override fun buildSendingEvents(): List<TimelineEvent> {
