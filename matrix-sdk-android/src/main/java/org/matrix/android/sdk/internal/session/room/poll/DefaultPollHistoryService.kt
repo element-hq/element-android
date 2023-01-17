@@ -27,7 +27,7 @@ import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 
 private const val LOADING_PERIOD_IN_DAYS = 30
-private const val EVENTS_PAGE_SIZE = 200
+private const val EVENTS_PAGE_SIZE = 250
 
 // TODO add unit tests
 internal class DefaultPollHistoryService @AssistedInject constructor(
