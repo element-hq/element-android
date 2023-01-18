@@ -20,6 +20,7 @@ import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.StringProvider
 import org.matrix.android.sdk.api.session.events.model.getPollQuestion
+import org.matrix.android.sdk.api.session.events.model.getRelationContent
 import org.matrix.android.sdk.api.session.events.model.isAudioMessage
 import org.matrix.android.sdk.api.session.events.model.isFileMessage
 import org.matrix.android.sdk.api.session.events.model.isImageMessage
@@ -32,7 +33,9 @@ import org.matrix.android.sdk.api.session.events.model.isVideoMessage
 import org.matrix.android.sdk.api.session.events.model.isVoiceMessage
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.getTimelineEvent
+import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.relation.ReplyToContent
+import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import javax.inject.Inject
 
 private const val IN_REPLY_TO = "In reply to"
@@ -100,10 +103,23 @@ class ProcessBodyOfReplyToEventUseCase @Inject constructor(
                         repliedToEvent.isPollEnd() -> stringProvider.getString(R.string.message_reply_to_sender_ended_poll)
                         else -> ""
                     }
+                    val repliedText = when {
+                        repliedToEvent.isPollEnd() -> {
+                            val eventId = repliedToEvent.getRelationContent()?.eventId
+                            val relatedPollContent = activeSessionHolder
+                                    .getSafeActiveSession()
+                                    ?.getRoom(repliedToEvent.roomId.orEmpty())
+                                    ?.getTimelineEvent(eventId.orEmpty())
+                                    ?.getLastMessageContent() as? MessagePollContent
+
+                            relatedPollContent?.getBestPollCreationInfo()?.question?.getBestQuestion()
+                        }
+                        else -> repliedToEvent.getPollQuestion()
+                    }
                     matrixFormattedBody.replaceRange(
                             afterBreakingLineIndex,
                             endOfBlockQuoteIndex,
-                            repliedToEvent.getPollQuestion() ?: fallbackText
+                            repliedText ?: fallbackText
                     )
                 }
                 repliedToEvent.isLiveLocation() -> {

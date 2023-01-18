@@ -612,7 +612,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         val userId = eventReplied.root.senderId ?: return null
         val userLink = permalinkFactory.createPermalink(userId, false) ?: return null
 
-        val body = bodyForReply(eventReplied.getLastMessageContent(), eventReplied.isReply(), isRedactedEvent)
+        val body = bodyForReply(eventReplied, isRedactedEvent)
 
         // As we always supply formatted body for replies we should force the MarkdownParser to produce html.
         val finalReplyTextFormatted = replyTextFormatted?.toString() ?: markdownParser.parse(replyText, force = true, advanced = autoMarkdown).takeFormatted()
@@ -724,6 +724,18 @@ internal class LocalEchoEventFactory @Inject constructor(
         }
     }
 
+    private fun bodyForReply(timelineEvent: TimelineEvent, isRedactedEvent: Boolean = false): TextContent {
+        val content = when (timelineEvent.root.getClearType()) {
+            in EventType.POLL_END.values -> {
+                localEchoRepository
+                        .getRelatedPollEvent(timelineEvent)
+                        ?.getLastMessageContent()
+            }
+            else -> timelineEvent.getLastMessageContent()
+        }
+        return bodyForReply(content, timelineEvent.isReply(), isRedactedEvent)
+    }
+
     /**
      * Returns a TextContent used for the fallback event representation in a reply message.
      * In case of an edit of a reply the last content is not
@@ -754,6 +766,7 @@ internal class LocalEchoEventFactory @Inject constructor(
             MessageType.MSGTYPE_POLL_START -> {
                 return TextContent((content as? MessagePollContent)?.getBestPollCreationInfo()?.question?.getBestQuestion() ?: "")
             }
+            MessageType.MSGTYPE_POLL_END -> return TextContent("Ended poll")
             else -> {
                 return if (isRedactedEvent) {
                     TextContent("message removed.")
