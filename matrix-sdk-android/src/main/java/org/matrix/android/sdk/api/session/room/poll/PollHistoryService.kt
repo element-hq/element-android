@@ -35,7 +35,7 @@ interface PollHistoryService {
     /**
      * Get the current status of the loaded polls.
      */
-    fun getLoadedPollsStatus(): LoadedPollsStatus
+    suspend fun getLoadedPollsStatus(): LoadedPollsStatus
 
     /**
      * Sync polls from last loaded polls until now.

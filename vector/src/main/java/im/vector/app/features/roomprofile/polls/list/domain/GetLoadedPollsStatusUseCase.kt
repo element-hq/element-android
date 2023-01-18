@@ -24,7 +24,7 @@ class GetLoadedPollsStatusUseCase @Inject constructor(
         private val roomPollRepository: RoomPollRepository,
 ) {
 
-    fun execute(roomId: String): LoadedPollsStatus {
+    suspend fun execute(roomId: String): LoadedPollsStatus {
         return roomPollRepository.getLoadedPollsStatus(roomId)
     }
 }

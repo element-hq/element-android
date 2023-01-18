@@ -48,26 +48,21 @@ class RoomPollsViewModel @AssistedInject constructor(
 
     init {
         val roomId = initialState.roomId
-        updateLoadedPollStatus(roomId)
         syncPolls(roomId)
         observePolls(roomId)
-    }
-
-    private fun updateLoadedPollStatus(roomId: String) {
-        val loadedPollsStatus = getLoadedPollsStatusUseCase.execute(roomId)
-        setState {
-            copy(
-                    canLoadMore = loadedPollsStatus.canLoadMore,
-                    nbSyncedDays = loadedPollsStatus.nbSyncedDays,
-            )
-        }
     }
 
     private fun syncPolls(roomId: String) {
         viewModelScope.launch {
             setState { copy(isSyncing = true) }
             val result = runCatching {
-                syncPollsUseCase.execute(roomId)
+                val loadedPollsStatus = syncPollsUseCase.execute(roomId)
+                setState {
+                    copy(
+                            canLoadMore = loadedPollsStatus.canLoadMore,
+                            nbSyncedDays = loadedPollsStatus.nbSyncedDays,
+                    )
+                }
             }
             if (result.isFailure) {
                 _viewEvents.post(RoomPollsViewEvent.LoadingError)

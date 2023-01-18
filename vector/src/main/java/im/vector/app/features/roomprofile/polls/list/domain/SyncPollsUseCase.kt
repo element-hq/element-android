@@ -17,6 +17,7 @@
 package im.vector.app.features.roomprofile.polls.list.domain
 
 import im.vector.app.features.roomprofile.polls.list.data.RoomPollRepository
+import org.matrix.android.sdk.api.session.room.poll.LoadedPollsStatus
 import javax.inject.Inject
 
 /**
@@ -24,9 +25,11 @@ import javax.inject.Inject
  */
 class SyncPollsUseCase @Inject constructor(
         private val roomPollRepository: RoomPollRepository,
+        private val getLoadedPollsStatusUseCase: GetLoadedPollsStatusUseCase,
 ) {
 
-    suspend fun execute(roomId: String) {
+    suspend fun execute(roomId: String): LoadedPollsStatus {
         roomPollRepository.syncPolls(roomId)
+        return getLoadedPollsStatusUseCase.execute(roomId)
     }
 }
