@@ -18,7 +18,7 @@ def markwon = "4.6.2"
 def moshi = "1.14.0"
 def lifecycle = "2.5.1"
 def flowBinding = "1.2.0"
-def flipper = "0.176.1"
+def flipper = "0.177.0"
 def epoxy = "5.0.0"
 def mavericks = "3.0.1"
 def glide = "4.14.2"
@@ -103,7 +103,7 @@ ext.libs = [
         ],
         element     : [
                 'opusencoder'             : "io.element.android:opusencoder:1.1.0",
-                'wysiwyg'                 : "io.element.android:wysiwyg:0.17.0"
+                'wysiwyg'                 : "io.element.android:wysiwyg:0.18.0"
         ],
         squareup    : [
                 'moshi'                  : "com.squareup.moshi:moshi:$moshi",

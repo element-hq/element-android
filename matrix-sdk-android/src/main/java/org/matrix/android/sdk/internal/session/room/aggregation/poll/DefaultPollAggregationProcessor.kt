@@ -155,6 +155,8 @@ internal class DefaultPollAggregationProcessor @Inject constructor(
         )
         aggregatedPollSummaryEntity.aggregatedContent = ContentMapper.map(newSumModel.toContent())
 
+        event.eventId?.let { removeEncryptedRelatedEventIdIfNeeded(aggregatedPollSummaryEntity, it) }
+
         return true
     }
 
@@ -179,6 +181,8 @@ internal class DefaultPollAggregationProcessor @Inject constructor(
             aggregatedPollSummaryEntity.sourceLocalEchoEvents.remove(txId)
             aggregatedPollSummaryEntity.sourceEvents.add(event.eventId)
         }
+
+        event.eventId?.let { removeEncryptedRelatedEventIdIfNeeded(aggregatedPollSummaryEntity, it) }
 
         if (!isLocalEcho) {
             ensurePollIsFullyAggregated(roomId, pollEventId)
@@ -224,6 +228,12 @@ internal class DefaultPollAggregationProcessor @Inject constructor(
                     startPollEventId = pollEventId,
             )
             fetchPollResponseEventsTask.execute(params)
+        }
+    }
+
+    private fun removeEncryptedRelatedEventIdIfNeeded(aggregatedPollSummaryEntity: PollResponseAggregatedSummaryEntity, eventId: String) {
+        if (aggregatedPollSummaryEntity.encryptedRelatedEventIds.contains(eventId)) {
+            aggregatedPollSummaryEntity.encryptedRelatedEventIds.remove(eventId)
         }
     }
 }
