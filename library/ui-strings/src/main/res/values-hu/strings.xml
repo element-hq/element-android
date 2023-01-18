@@ -2899,4 +2899,12 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="room_polls_active_no_item">Nincsenek aktív szavazások ebben a szobában</string>
     <string name="room_polls_active">Aktív szavazások</string>
     <string name="room_profile_section_more_polls">Szavazás alakulása</string>
+    <string name="message_reply_to_ended_poll_preview">Lezárt szavazások</string>
+    <string name="message_reply_to_poll_preview">Szavazás</string>
+    <string name="message_reply_to_sender_ended_poll">befejezte a szavazást.</string>
+    <string name="ended_poll_indicator">Szavazás vége.</string>
+    <string name="thread_list_not_available">A matrix szerver nem támogatja az üzenetszálak listázását.</string>
+    <string name="error_voice_broadcast_unable_to_play">A hang közvetítés nem játszható le.</string>
+    <string name="started_a_voice_broadcast">Hang közvetítés indítva</string>
+    <string name="unable_to_decrypt_some_events_in_poll">Visszafejtési hibák miatt néhány szavazat nem kerül beszámításra</string>
 </resources>
