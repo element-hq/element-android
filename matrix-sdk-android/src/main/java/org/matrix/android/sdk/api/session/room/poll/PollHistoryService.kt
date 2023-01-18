@@ -33,12 +33,6 @@ interface PollHistoryService {
     suspend fun loadMore(): LoadedPollsStatus
 
     /**
-     * Indicate whether loading more polls is possible. If not possible,
-     * it indicates the end of the room has been reached in the past.
-     */
-    fun canLoadMore(): Boolean
-
-    /**
      * Get the current status of the loaded polls.
      */
     fun getLoadedPollsStatus(): LoadedPollsStatus

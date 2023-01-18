@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.database.model
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
+import org.matrix.android.sdk.internal.session.room.poll.PollConstants
 
 /**
  * Keeps track of the loading process of the poll history.
@@ -35,9 +36,9 @@ internal open class PollHistoryStatusEntity(
         var currentTimestampTargetBackwardMs: Long? = null,
 
         /**
-         * Timestamp of the last completed poll sync target in backward direction in milliseconds.
+         * Timestamp of the oldest event synced in milliseconds.
          */
-        var lastTimestampTargetBackwardMs: Long? = null,
+        var oldestTimestampReachedMs: Long? = null,
 
         /**
          * Indicate whether all polls in a room have been synced in backward direction.
@@ -58,10 +59,24 @@ internal open class PollHistoryStatusEntity(
     companion object
 
     /**
+     * Create a new instance of the entity with the same content.
+     */
+    fun copy(): PollHistoryStatusEntity {
+        return PollHistoryStatusEntity(
+                roomId = roomId,
+                currentTimestampTargetBackwardMs = currentTimestampTargetBackwardMs,
+                oldestTimestampReachedMs = oldestTimestampReachedMs,
+                isEndOfPollsBackward = isEndOfPollsBackward,
+                tokenEndBackward = tokenEndBackward,
+                tokenStartForward = tokenStartForward,
+        )
+    }
+
+    /**
      * Indicate whether at least one poll sync has been fully completed backward for the given room.
      */
     val hasCompletedASyncBackward: Boolean
-        get() = lastTimestampTargetBackwardMs != null
+        get() = oldestTimestampReachedMs != null
 
     /**
      * Indicate whether all polls in a room have been synced for the current timestamp target in backward direction.
@@ -71,8 +86,20 @@ internal open class PollHistoryStatusEntity(
 
     private fun checkIfCurrentTimestampTargetBackwardIsReached(): Boolean {
         val currentTarget = currentTimestampTargetBackwardMs
-        val lastTarget = lastTimestampTargetBackwardMs
+        val lastTarget = oldestTimestampReachedMs
         // last timestamp target should be older or equal to the current target
         return currentTarget != null && lastTarget != null && lastTarget <= currentTarget
+    }
+
+    /**
+     * Compute the number of days of history currently synced.
+     */
+    fun getNbSyncedDays(currentMs: Long): Int {
+        val oldestTimestamp = oldestTimestampReachedMs
+        return if (oldestTimestamp == null) {
+            0
+        } else {
+            ((currentMs - oldestTimestamp).coerceAtLeast(0) / PollConstants.MILLISECONDS_PER_DAY).toInt()
+        }
     }
 }

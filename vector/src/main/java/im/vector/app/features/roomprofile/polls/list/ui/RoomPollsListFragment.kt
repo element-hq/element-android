@@ -78,7 +78,7 @@ abstract class RoomPollsListFragment :
         views.roomPollsList.configureWith(roomPollsController)
         views.roomPollsEmptyTitle.text = getEmptyListTitle(
                 canLoadMore = viewState.canLoadMore,
-                nbLoadedDays = viewState.nbLoadedDays,
+                nbLoadedDays = viewState.nbSyncedDays,
         )
     }
 
@@ -117,7 +117,7 @@ abstract class RoomPollsListFragment :
         roomPollsController.setData(viewState)
         views.roomPollsEmptyTitle.text = getEmptyListTitle(
                 canLoadMore = viewState.canLoadMore,
-                nbLoadedDays = viewState.nbLoadedDays,
+                nbLoadedDays = viewState.nbSyncedDays,
         )
         views.roomPollsEmptyTitle.isVisible = !viewState.isSyncing && viewState.hasNoPolls()
         views.roomPollsLoadMoreWhenEmpty.isVisible = viewState.hasNoPollsAndCanLoadMore()

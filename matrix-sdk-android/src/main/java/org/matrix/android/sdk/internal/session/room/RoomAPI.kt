@@ -89,7 +89,7 @@ internal interface RoomAPI {
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/messages")
     suspend fun getRoomMessagesFrom(
             @Path("roomId") roomId: String,
-            @Query("from") from: String,
+            @Query("from") from: String?,
             @Query("dir") dir: String,
             @Query("limit") limit: Int?,
             @Query("filter") filter: String?,
