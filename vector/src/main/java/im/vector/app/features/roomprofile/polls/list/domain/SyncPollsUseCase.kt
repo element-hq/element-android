@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,19 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.roomprofile.polls
+package im.vector.app.features.roomprofile.polls.list.domain
 
-import im.vector.app.core.platform.VectorViewModelAction
+import im.vector.app.features.roomprofile.polls.list.data.RoomPollRepository
+import javax.inject.Inject
 
-sealed interface RoomPollsAction : VectorViewModelAction {
-    object LoadMorePolls : RoomPollsAction
+/**
+ * Sync the polls of a given room from last manual loading (see LoadMorePollsUseCase) until now.
+ */
+class SyncPollsUseCase @Inject constructor(
+        private val roomPollRepository: RoomPollRepository,
+) {
+
+    suspend fun execute(roomId: String) {
+        roomPollRepository.syncPolls(roomId)
+    }
 }
