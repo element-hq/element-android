@@ -32,7 +32,6 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.transformWhile
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.util.Optional
@@ -44,6 +43,7 @@ import javax.inject.Inject
 
 class GetVoiceBroadcastStateEventLiveUseCase @Inject constructor(
         private val session: Session,
+        private val getVoiceBroadcastStateEventUseCase: GetVoiceBroadcastStateEventUseCase,
 ) {
 
     fun execute(voiceBroadcast: VoiceBroadcast): Flow<Optional<VoiceBroadcastEvent>> {
@@ -93,7 +93,7 @@ class GetVoiceBroadcastStateEventLiveUseCase @Inject constructor(
      * Get a flow of the most recent related event.
      */
     private fun getMostRecentRelatedEventFlow(room: Room, voiceBroadcast: VoiceBroadcast): Flow<Optional<VoiceBroadcastEvent>> {
-        val mostRecentEvent = getMostRecentRelatedEvent(room, voiceBroadcast).toOptional()
+        val mostRecentEvent = getVoiceBroadcastStateEventUseCase.execute(voiceBroadcast).toOptional()
         return if (mostRecentEvent.hasValue()) {
             val stateKey = mostRecentEvent.get().root.stateKey.orEmpty()
             // observe incoming voice broadcast state events
@@ -139,15 +139,6 @@ class GetVoiceBroadcastStateEventLiveUseCase @Inject constructor(
             // there is no more most recent event, just send it
             flowOf(mostRecentEvent)
         }
-    }
-
-    /**
-     * Get the most recent event related to the given voice broadcast.
-     */
-    private fun getMostRecentRelatedEvent(room: Room, voiceBroadcast: VoiceBroadcast): VoiceBroadcastEvent? {
-        return room.timelineService().getTimelineEventsRelatedTo(RelationType.REFERENCE, voiceBroadcast.voiceBroadcastId)
-                .mapNotNull { timelineEvent -> timelineEvent.root.asVoiceBroadcastEvent()?.takeUnless { it.root.isRedacted() } }
-                .maxByOrNull { it.root.originServerTs ?: 0 }
     }
 
     /**

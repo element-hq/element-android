@@ -23,12 +23,20 @@ import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.roomprofile.polls.list.domain.GetLoadedPollsStatusUseCase
+import im.vector.app.features.roomprofile.polls.list.domain.GetPollsUseCase
+import im.vector.app.features.roomprofile.polls.list.domain.LoadMorePollsUseCase
+import im.vector.app.features.roomprofile.polls.list.domain.SyncPollsUseCase
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 class RoomPollsViewModel @AssistedInject constructor(
         @Assisted initialState: RoomPollsViewState,
         private val getPollsUseCase: GetPollsUseCase,
+        private val getLoadedPollsStatusUseCase: GetLoadedPollsStatusUseCase,
+        private val loadMorePollsUseCase: LoadMorePollsUseCase,
+        private val syncPollsUseCase: SyncPollsUseCase,
 ) : VectorViewModel<RoomPollsViewState, RoomPollsAction, RoomPollsViewEvent>(initialState) {
 
     @AssistedFactory
@@ -39,16 +47,63 @@ class RoomPollsViewModel @AssistedInject constructor(
     companion object : MavericksViewModelFactory<RoomPollsViewModel, RoomPollsViewState> by hiltMavericksViewModelFactory()
 
     init {
-        observePolls()
+        val roomId = initialState.roomId
+        updateLoadedPollStatus(roomId)
+        syncPolls(roomId)
+        observePolls(roomId)
     }
 
-    private fun observePolls() {
-        getPollsUseCase.execute()
+    private fun updateLoadedPollStatus(roomId: String) {
+        val loadedPollsStatus = getLoadedPollsStatusUseCase.execute(roomId)
+        setState {
+            copy(
+                    canLoadMore = loadedPollsStatus.canLoadMore,
+                    nbLoadedDays = loadedPollsStatus.nbLoadedDays
+            )
+        }
+    }
+
+    private fun syncPolls(roomId: String) {
+        viewModelScope.launch {
+            setState { copy(isSyncing = true) }
+            val result = runCatching {
+                syncPollsUseCase.execute(roomId)
+            }
+            if (result.isFailure) {
+                _viewEvents.post(RoomPollsViewEvent.LoadingError)
+            }
+            setState { copy(isSyncing = false) }
+        }
+    }
+
+    private fun observePolls(roomId: String) {
+        getPollsUseCase.execute(roomId)
                 .onEach { setState { copy(polls = it) } }
                 .launchIn(viewModelScope)
     }
 
     override fun handle(action: RoomPollsAction) {
-        // do nothing for now
+        when (action) {
+            RoomPollsAction.LoadMorePolls -> handleLoadMore()
+        }
+    }
+
+    private fun handleLoadMore() = withState { viewState ->
+        viewModelScope.launch {
+            setState { copy(isLoadingMore = true) }
+            val result = runCatching {
+                val status = loadMorePollsUseCase.execute(viewState.roomId)
+                setState {
+                    copy(
+                            canLoadMore = status.canLoadMore,
+                            nbLoadedDays = status.nbLoadedDays,
+                    )
+                }
+            }
+            if (result.isFailure) {
+                _viewEvents.post(RoomPollsViewEvent.LoadingError)
+            }
+            setState { copy(isLoadingMore = false) }
+        }
     }
 }

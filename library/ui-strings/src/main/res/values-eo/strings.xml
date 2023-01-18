@@ -1123,9 +1123,7 @@
     <string name="settings_select_country">Elektu landon</string>
     <string name="settings_emails_and_phone_numbers_summary">Administri retpoŝtadresojn kaj telefonnumerojn ligitajn al via konto de Matrix</string>
     <string name="settings_emails_and_phone_numbers_title">Retpoŝtadresoj kaj telefonnumeroj</string>
-    <string name="settings_unignore_user">Ĉu montri ĉiujn mesaĝojn de %s\?
-\n
-\nSciu ke tiu ĉi ago reekigos la aplikaĵon, kaj tio povas daŭri iom da tempo.</string>
+    <string name="settings_unignore_user">Ĉu montri ĉiujn mesaĝojn de %s\?</string>
     <string name="settings_password_updated">Via pasvorto ĝisdatiĝis</string>
     <string name="settings_fail_to_update_password_invalid_current_password">La pasvorto ne validas</string>
     <string name="settings_fail_to_update_password">Malsukcesis ĝisdatigi pasvorton</string>
@@ -2201,4 +2199,5 @@
     <string name="call_ringing">Sonorante…</string>
     <string name="spaces">Aroj</string>
     <string name="initial_sync_request_reason_unignored_users">- Iom uzantoj reatentita</string>
+    <string name="settings_mentions_at_room">\@room</string>
 </resources>

@@ -22,6 +22,7 @@ import androidx.annotation.IdRes
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import im.vector.app.R
+import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.tintBackground
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.DrawableProvider
@@ -48,6 +49,7 @@ abstract class AbsMessageVoiceBroadcastItem<H : AbsMessageVoiceBroadcastItem.Hol
     protected val colorProvider get() = voiceBroadcastAttributes.colorProvider
     protected val drawableProvider get() = voiceBroadcastAttributes.drawableProvider
     protected val avatarRenderer get() = attributes.avatarRenderer
+    protected val errorFormatter get() = voiceBroadcastAttributes.errorFormatter
     protected val callback get() = attributes.callback
 
     override fun isCacheable(): Boolean = false
@@ -107,5 +109,6 @@ abstract class AbsMessageVoiceBroadcastItem<H : AbsMessageVoiceBroadcastItem.Hol
             val roomItem: MatrixItem?,
             val colorProvider: ColorProvider,
             val drawableProvider: DrawableProvider,
+            val errorFormatter: ErrorFormatter,
     )
 }

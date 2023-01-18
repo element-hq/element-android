@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2023 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,15 +17,16 @@
 package org.matrix.android.sdk.internal.database.migration
 
 import io.realm.DynamicRealm
-import org.matrix.android.sdk.internal.database.model.HomeServerCapabilitiesEntityFields
-import org.matrix.android.sdk.internal.extensions.forceRefreshOfHomeServerCapabilities
+import org.matrix.android.sdk.internal.database.model.PollResponseAggregatedSummaryEntityFields
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
+/**
+ * Adding a new field in poll summary to keep track of non decrypted related events.
+ */
 internal class MigrateSessionTo048(realm: DynamicRealm) : RealmMigrator(realm, 48) {
 
     override fun doMigrate(realm: DynamicRealm) {
-        realm.schema.get("HomeServerCapabilitiesEntity")
-                ?.addField(HomeServerCapabilitiesEntityFields.EXTERNAL_ACCOUNT_MANAGEMENT_URL, String::class.java)
-                ?.forceRefreshOfHomeServerCapabilities()
+        realm.schema.get("PollResponseAggregatedSummaryEntity")
+                ?.addRealmListField(PollResponseAggregatedSummaryEntityFields.ENCRYPTED_RELATED_EVENT_IDS.`$`, String::class.java)
     }
 }

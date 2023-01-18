@@ -176,4 +176,27 @@
         tools:ignore="NegativeMargin"
         tools:text="-0:12" />
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/controlsGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="controllerButtonsFlow,seekBar,elapsedTime,remainingTime" />
+
+    <TextView
+        android:id="@+id/errorView"
+        style="@style/Widget.Vector.TextView.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:drawablePadding="4dp"
+        android:text="@string/error_voice_broadcast_unable_to_play"
+        android:textColor="?colorError"
+        android:visibility="gone"
+        app:drawableStartCompat="@drawable/ic_voice_broadcast_error"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headerBottomBarrier"
+        tools:visibility="visible" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

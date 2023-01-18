@@ -23,5 +23,7 @@ data class PollResponseAggregatedSummary(
         val nbOptions: Int = 0,
         // The list of the eventIDs used to build the summary (might be out of sync if chunked received from message chunk)
         val sourceEvents: List<String>,
-        val localEchos: List<String>
+        val localEchos: List<String>,
+        // list of related event ids which are encrypted due to decryption failure
+        val encryptedRelatedEventIds: List<String>,
 )

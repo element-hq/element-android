@@ -18,4 +18,6 @@ package im.vector.app.features.roomprofile.polls
 
 import im.vector.app.core.platform.VectorViewEvents
 
-sealed class RoomPollsViewEvent : VectorViewEvents
+sealed class RoomPollsViewEvent : VectorViewEvents {
+    object LoadingError : RoomPollsViewEvent()
+}
