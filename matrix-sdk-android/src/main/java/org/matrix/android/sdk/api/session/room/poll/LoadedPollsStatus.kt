@@ -17,9 +17,9 @@
 package org.matrix.android.sdk.api.session.room.poll
 
 /**
- * Status to indicate loading of polls for a room.
+ * Represent the status of the loaded polls for a room.
  */
 data class LoadedPollsStatus(
         val canLoadMore: Boolean,
-        val nbLoadedDays: Int,
+        val nbSyncedDays: Int,
 )

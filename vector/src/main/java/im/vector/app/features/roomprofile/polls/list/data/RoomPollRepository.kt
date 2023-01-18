@@ -18,6 +18,7 @@ package im.vector.app.features.roomprofile.polls.list.data
 
 import im.vector.app.features.roomprofile.polls.list.ui.PollSummary
 import kotlinx.coroutines.flow.Flow
+import org.matrix.android.sdk.api.session.room.poll.LoadedPollsStatus
 import javax.inject.Inject
 
 class RoomPollRepository @Inject constructor(

@@ -49,7 +49,6 @@ internal class DefaultPollHistoryService @AssistedInject constructor(
         get() = LOADING_PERIOD_IN_DAYS
 
     override suspend fun loadMore(): LoadedPollsStatus {
-        // TODO when to set currentTimestampMs and who is responsible for it?
         val params = LoadMorePollsTask.Params(
                 roomId = roomId,
                 currentTimestampMs = clock.epochMillis(),
@@ -57,10 +56,6 @@ internal class DefaultPollHistoryService @AssistedInject constructor(
                 eventsPageSize = EVENTS_PAGE_SIZE,
         )
         return loadMorePollsTask.execute(params)
-    }
-
-    override fun canLoadMore(): Boolean {
-        TODO("Not yet implemented")
     }
 
     override fun getLoadedPollsStatus(): LoadedPollsStatus {
