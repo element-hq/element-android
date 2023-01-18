@@ -17,5 +17,5 @@
 package im.vector.app.features.roomprofile.polls.list.data
 
 sealed class PollHistoryError : Exception() {
-    object LoadingError : PollHistoryError()
+    object UnknownRoomError : PollHistoryError()
 }

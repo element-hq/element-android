@@ -34,13 +34,13 @@ class RoomPollDataSource @Inject constructor(
 ) {
 
     private val pollsFlow = MutableSharedFlow<List<PollSummary>>(replay = 1)
-    private var fakeLoadCounter = 0
 
-    private fun getPollHistoryService(roomId: String): PollHistoryService? {
+    private fun getPollHistoryService(roomId: String): PollHistoryService {
         return activeSessionHolder
                 .getSafeActiveSession()
                 ?.getRoom(roomId)
                 ?.pollHistoryService()
+                ?: throw PollHistoryError.UnknownRoomError
     }
 
     // TODO
@@ -51,21 +51,12 @@ class RoomPollDataSource @Inject constructor(
         return pollsFlow.asSharedFlow()
     }
 
-    fun getLoadedPollsStatus(roomId: String): LoadedPollsStatus {
-        Timber.d("roomId=$roomId")
-        // TODO unmock using SDK
-        return LoadedPollsStatus(
-                canLoadMore = canLoadMore(),
-                nbSyncedDays = fakeLoadCounter * 30,
-        )
-    }
-
-    private fun canLoadMore(): Boolean {
-        return fakeLoadCounter < 2
+    suspend fun getLoadedPollsStatus(roomId: String): LoadedPollsStatus {
+        return getPollHistoryService(roomId).getLoadedPollsStatus()
     }
 
     suspend fun loadMorePolls(roomId: String): LoadedPollsStatus {
-        return getPollHistoryService(roomId)?.loadMore() ?: throw PollHistoryError.LoadingError
+        return getPollHistoryService(roomId).loadMore()
     }
 
     suspend fun syncPolls(roomId: String) {

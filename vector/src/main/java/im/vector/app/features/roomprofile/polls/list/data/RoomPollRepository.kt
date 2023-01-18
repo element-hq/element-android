@@ -30,7 +30,7 @@ class RoomPollRepository @Inject constructor(
         return roomPollDataSource.getPolls(roomId)
     }
 
-    fun getLoadedPollsStatus(roomId: String): LoadedPollsStatus {
+    suspend fun getLoadedPollsStatus(roomId: String): LoadedPollsStatus {
         return roomPollDataSource.getLoadedPollsStatus(roomId)
     }
 

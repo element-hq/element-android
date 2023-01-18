@@ -34,6 +34,7 @@ internal class DefaultPollHistoryService @AssistedInject constructor(
         @Assisted private val roomId: String,
         private val clock: Clock,
         private val loadMorePollsTask: LoadMorePollsTask,
+        private val getLoadedPollsStatusTask: GetLoadedPollsStatusTask,
 ) : PollHistoryService {
 
     @AssistedFactory
@@ -58,8 +59,12 @@ internal class DefaultPollHistoryService @AssistedInject constructor(
         return loadMorePollsTask.execute(params)
     }
 
-    override fun getLoadedPollsStatus(): LoadedPollsStatus {
-        TODO("Not yet implemented")
+    override suspend fun getLoadedPollsStatus(): LoadedPollsStatus {
+        val params = GetLoadedPollsStatusTask.Params(
+                roomId = roomId,
+                currentTimestampMs = clock.epochMillis(),
+        )
+        return getLoadedPollsStatusTask.execute(params)
     }
 
     override suspend fun syncPolls() {

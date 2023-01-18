@@ -17,7 +17,6 @@
 package im.vector.app.features.roomprofile.polls
 
 import com.airbnb.mvrx.test.MavericksTestRule
-import im.vector.app.features.roomprofile.polls.list.data.LoadedPollsStatus
 import im.vector.app.features.roomprofile.polls.list.domain.GetLoadedPollsStatusUseCase
 import im.vector.app.features.roomprofile.polls.list.domain.GetPollsUseCase
 import im.vector.app.features.roomprofile.polls.list.domain.LoadMorePollsUseCase
@@ -34,6 +33,7 @@ import io.mockk.verify
 import kotlinx.coroutines.flow.flowOf
 import org.junit.Rule
 import org.junit.Test
+import org.matrix.android.sdk.api.session.room.poll.LoadedPollsStatus
 
 private const val A_ROOM_ID = "room-id"
 
@@ -68,7 +68,7 @@ class RoomPollsViewModelTest {
         val expectedViewState = initialState.copy(
                 polls = polls,
                 canLoadMore = loadedPollsStatus.canLoadMore,
-                nbSyncedDays = loadedPollsStatus.nbLoadedDays,
+                nbSyncedDays = loadedPollsStatus.nbSyncedDays,
         )
 
         // When
@@ -116,7 +116,7 @@ class RoomPollsViewModelTest {
         val stateAfterInit = initialState.copy(
                 polls = polls,
                 canLoadMore = loadedPollsStatus.canLoadMore,
-                nbSyncedDays = loadedPollsStatus.nbLoadedDays,
+                nbSyncedDays = loadedPollsStatus.nbSyncedDays,
         )
 
         // When
@@ -128,7 +128,7 @@ class RoomPollsViewModelTest {
                 .assertStatesChanges(
                         stateAfterInit,
                         { copy(isLoadingMore = true) },
-                        { copy(canLoadMore = newLoadedPollsStatus.canLoadMore, nbSyncedDays = newLoadedPollsStatus.nbLoadedDays) },
+                        { copy(canLoadMore = newLoadedPollsStatus.canLoadMore, nbSyncedDays = newLoadedPollsStatus.nbSyncedDays) },
                         { copy(isLoadingMore = false) },
                 )
                 .finish()
@@ -148,20 +148,20 @@ class RoomPollsViewModelTest {
     }
 
     private fun givenLoadMoreWithSuccess(): LoadedPollsStatus {
-        val loadedPollsStatus = givenALoadedPollsStatus(canLoadMore = false, nbLoadedDays = 20)
+        val loadedPollsStatus = givenALoadedPollsStatus(canLoadMore = false, nbSyncedDays = 20)
         coEvery { fakeLoadMorePollsUseCase.execute(A_ROOM_ID) } returns loadedPollsStatus
         return loadedPollsStatus
     }
 
     private fun givenGetLoadedPollsStatusSuccess(): LoadedPollsStatus {
         val loadedPollsStatus = givenALoadedPollsStatus()
-        every { fakeGetLoadedPollsStatusUseCase.execute(A_ROOM_ID) } returns loadedPollsStatus
+        coEvery { fakeGetLoadedPollsStatusUseCase.execute(A_ROOM_ID) } returns loadedPollsStatus
         return loadedPollsStatus
     }
 
-    private fun givenALoadedPollsStatus(canLoadMore: Boolean = true, nbLoadedDays: Int = 10) =
+    private fun givenALoadedPollsStatus(canLoadMore: Boolean = true, nbSyncedDays: Int = 10) =
             LoadedPollsStatus(
                     canLoadMore = canLoadMore,
-                    nbLoadedDays = nbLoadedDays,
+                    nbSyncedDays = nbSyncedDays,
             )
 }
