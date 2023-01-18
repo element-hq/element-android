@@ -18,7 +18,6 @@ package im.vector.app.features.roomprofile.polls.list.data
 
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.features.roomprofile.polls.list.ui.PollSummary
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -60,9 +59,6 @@ class RoomPollDataSource @Inject constructor(
     }
 
     suspend fun syncPolls(roomId: String) {
-        Timber.d("roomId=$roomId")
-        // TODO unmock using SDK service
-        // fake sync
-        delay(1000)
+        getPollHistoryService(roomId).syncPolls()
     }
 }

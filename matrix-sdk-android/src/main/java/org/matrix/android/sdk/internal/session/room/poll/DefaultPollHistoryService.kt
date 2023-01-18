@@ -20,11 +20,11 @@ import androidx.lifecycle.LiveData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.delay
 import org.matrix.android.sdk.api.session.room.model.PollResponseAggregatedSummary
 import org.matrix.android.sdk.api.session.room.poll.LoadedPollsStatus
 import org.matrix.android.sdk.api.session.room.poll.PollHistoryService
 import org.matrix.android.sdk.internal.util.time.Clock
-import timber.log.Timber
 
 private const val LOADING_PERIOD_IN_DAYS = 30
 private const val EVENTS_PAGE_SIZE = 250
@@ -40,10 +40,6 @@ internal class DefaultPollHistoryService @AssistedInject constructor(
     @AssistedFactory
     interface Factory {
         fun create(roomId: String): DefaultPollHistoryService
-    }
-
-    init {
-        Timber.d("init with roomId: $roomId")
     }
 
     override val loadingPeriodInDays: Int
@@ -68,10 +64,11 @@ internal class DefaultPollHistoryService @AssistedInject constructor(
     }
 
     override suspend fun syncPolls() {
-        TODO("Not yet implemented")
+        // TODO unmock
+        delay(1000)
     }
 
     override fun getPolls(): LiveData<List<PollResponseAggregatedSummary>> {
-        TODO("Not yet implemented")
+        TODO("listen database and update query depending on latest PollHistoryStatusEntity.oldestTimestampReachedMs")
     }
 }
