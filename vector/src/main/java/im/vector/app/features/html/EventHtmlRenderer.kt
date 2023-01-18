@@ -30,7 +30,6 @@ import android.content.res.Resources
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.text.Spannable
-import android.widget.TextView
 import androidx.core.text.toSpannable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
@@ -39,7 +38,6 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.settings.VectorPreferences
-import io.element.android.wysiwyg.spans.InlineCodeSpan
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
 import io.noties.markwon.MarkwonPlugin
@@ -76,6 +74,7 @@ class EventHtmlRenderer @Inject constructor(
     }
 
     private val builder = Markwon.builder(context)
+            .usePlugin(HtmlRootTagPlugin())
             .usePlugin(HtmlPlugin.create(htmlConfigure))
             .usePlugin(GlideImagesPlugin.create(object : GlideImagesPlugin.GlideStore {
                 override fun load(drawable: AsyncDrawable): RequestBuilder<Drawable> {
@@ -142,22 +141,6 @@ class EventHtmlRenderer @Inject constructor(
                     builder.enabledBlockTypes(kotlin.collections.emptySet())
                 }
             })
-            .usePlugin(object : AbstractMarkwonPlugin() {
-                override fun afterSetText(textView: TextView) {
-                    super.afterSetText(textView)
-
-                    // Remove any InlineCodeSpans that are inside code blocks
-                    val text = textView.text as Spannable
-                    val htmlCode = text.getSpans(0, text.length, HtmlCodeSpan::class.java)
-                    htmlCode.filter { it.isBlock }.forEach { span ->
-                        val start = text.getSpanStart(span)
-                        val end = text.getSpanEnd(span)
-                        text.getSpans(start, end, InlineCodeSpan::class.java).forEach {
-                            text.removeSpan(it)
-                        }
-                    }
-                }
-            })
             .textSetter(PrecomputedFutureTextSetterCompat.create())
             .build()
 
@@ -207,7 +190,7 @@ class MatrixHtmlPluginConfigure @Inject constructor(
         private val colorProvider: ColorProvider,
         private val resources: Resources,
         private val vectorPreferences: VectorPreferences,
-        ) : HtmlPlugin.HtmlConfigure {
+) : HtmlPlugin.HtmlConfigure {
 
     override fun configureHtml(plugin: HtmlPlugin) {
         plugin
@@ -215,8 +198,9 @@ class MatrixHtmlPluginConfigure @Inject constructor(
                 .addHandler(FontTagHandler())
                 .addHandler(ParagraphHandler(DimensionConverter(resources)))
                 .addHandler(MxReplyTagHandler())
-                .addHandler(CodePreTagHandler(vectorPreferences))
-                .addHandler(CodeTagHandler(vectorPreferences))
+                .addHandler(CodeTagHandler())
+                .addHandler(CodePreTagHandler())
+                .addHandler(CodePostProcessorTagHandler(vectorPreferences))
                 .addHandler(SpanHandler(colorProvider))
     }
 }
