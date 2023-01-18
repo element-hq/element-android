@@ -17,6 +17,8 @@
 package org.matrix.android.sdk.internal.session.room.poll
 
 import com.zhuinden.monarchy.Monarchy
+import org.matrix.android.sdk.api.session.events.model.isPoll
+import org.matrix.android.sdk.api.session.events.model.isPollResponse
 import org.matrix.android.sdk.api.session.room.poll.LoadedPollsStatus
 import org.matrix.android.sdk.internal.database.model.PollHistoryStatusEntity
 import org.matrix.android.sdk.internal.database.query.getOrCreate
@@ -24,6 +26,7 @@ import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
+import org.matrix.android.sdk.internal.session.room.event.FilterAndStoreEventsTask
 import org.matrix.android.sdk.internal.session.room.poll.PollConstants.MILLISECONDS_PER_DAY
 import org.matrix.android.sdk.internal.session.room.timeline.PaginationDirection
 import org.matrix.android.sdk.internal.session.room.timeline.PaginationResponse
@@ -44,6 +47,7 @@ internal class DefaultLoadMorePollsTask @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
         private val roomAPI: RoomAPI,
         private val globalErrorReceiver: GlobalErrorReceiver,
+        private val filterAndStoreEventsTask: FilterAndStoreEventsTask,
 ) : LoadMorePollsTask {
 
     override suspend fun execute(params: LoadMorePollsTask.Params): LoadedPollsStatus {
@@ -53,9 +57,10 @@ internal class DefaultLoadMorePollsTask @Inject constructor(
             currentPollHistoryStatus = fetchMorePollEventsBackward(params, currentPollHistoryStatus)
         }
         // TODO
-        //   unmock and check how it behaves when cancelling the process: it should resume where it was stopped
+        //   check how it behaves when cancelling the process: it should resume where it was stopped
         //   check the network calls done using Flipper
         //   check forward of error in case of call api failure
+        //   test on large room
 
         return LoadedPollsStatus(
                 canLoadMore = currentPollHistoryStatus.isEndOfPollsBackward.not(),
@@ -89,7 +94,7 @@ internal class DefaultLoadMorePollsTask @Inject constructor(
             params: LoadMorePollsTask.Params,
             status: PollHistoryStatusEntity
     ): PollHistoryStatusEntity {
-        val chunk = executeRequest(globalErrorReceiver) {
+        val response = executeRequest(globalErrorReceiver) {
             roomAPI.getRoomMessagesFrom(
                     roomId = params.roomId,
                     from = status.tokenEndBackward,
@@ -99,9 +104,18 @@ internal class DefaultLoadMorePollsTask @Inject constructor(
             )
         }
 
-        // TODO decrypt events and filter in only polls to store them in local: see to mutualize with FetchPollResponseEventsTask
+        filterAndStorePollEvents(roomId = params.roomId, paginationResponse = response)
 
-        return updatePollHistoryStatus(roomId = params.roomId, paginationResponse = chunk)
+        return updatePollHistoryStatus(roomId = params.roomId, paginationResponse = response)
+    }
+
+    private suspend fun filterAndStorePollEvents(roomId: String, paginationResponse: PaginationResponse) {
+        val filterTaskParams = FilterAndStoreEventsTask.Params(
+                roomId = roomId,
+                events = paginationResponse.events,
+                filterPredicate = { it.isPoll() || it.isPollResponse() }
+        )
+        filterAndStoreEventsTask.execute(filterTaskParams)
     }
 
     private suspend fun updatePollHistoryStatus(roomId: String, paginationResponse: PaginationResponse): PollHistoryStatusEntity {
@@ -124,7 +138,7 @@ internal class DefaultLoadMorePollsTask @Inject constructor(
                 // start of the timeline is reached, there are no more events
                 status.isEndOfPollsBackward = true
                 status.oldestTimestampReachedMs = oldestEventTimestamp
-            } else if(oldestEventTimestamp != null && currentTargetTimestamp != null && oldestEventTimestamp <= currentTargetTimestamp) {
+            } else if (oldestEventTimestamp != null && currentTargetTimestamp != null && oldestEventTimestamp <= currentTargetTimestamp) {
                 // target has been reached
                 status.oldestTimestampReachedMs = oldestEventTimestamp
                 status.tokenEndBackward = paginationResponse.end

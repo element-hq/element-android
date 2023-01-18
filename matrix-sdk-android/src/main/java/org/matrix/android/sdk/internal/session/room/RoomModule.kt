@@ -59,6 +59,8 @@ import org.matrix.android.sdk.internal.session.room.directory.DefaultSetRoomDire
 import org.matrix.android.sdk.internal.session.room.directory.GetPublicRoomTask
 import org.matrix.android.sdk.internal.session.room.directory.GetRoomDirectoryVisibilityTask
 import org.matrix.android.sdk.internal.session.room.directory.SetRoomDirectoryVisibilityTask
+import org.matrix.android.sdk.internal.session.room.event.DefaultFilterAndStoreEventsTask
+import org.matrix.android.sdk.internal.session.room.event.FilterAndStoreEventsTask
 import org.matrix.android.sdk.internal.session.room.location.CheckIfExistingActiveLiveTask
 import org.matrix.android.sdk.internal.session.room.location.DefaultCheckIfExistingActiveLiveTask
 import org.matrix.android.sdk.internal.session.room.location.DefaultGetActiveBeaconInfoForUserTask
@@ -369,4 +371,7 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindGetLoadedPollsStatusTask(task: DefaultGetLoadedPollsStatusTask): GetLoadedPollsStatusTask
+
+    @Binds
+    abstract fun bindFilterAndStoreEventsTask(task: DefaultFilterAndStoreEventsTask): FilterAndStoreEventsTask
 }
