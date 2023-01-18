@@ -3181,7 +3181,8 @@
         <item quantity="other">Final result based on %1$d votes</item>
     </plurals>
     <string name="poll_end_action">End poll</string>
-    <string name="a11y_poll_winner_option">winner option</string>
+    <!-- TODO TO BE REMOVED -->
+    <string name="a11y_poll_winner_option" tools:ignore="UnusedResources">winner option</string>
     <string name="end_poll_confirmation_title">End this poll?</string>
     <string name="end_poll_confirmation_description">This will stop people from being able to vote and will display the final results of the poll.</string>
     <string name="end_poll_confirmation_approve_button">End poll</string>
@@ -3195,6 +3196,7 @@
     <string name="open_poll_option_description">Voters see results as soon as they have voted</string>
     <string name="closed_poll_option_title">Closed poll</string>
     <string name="closed_poll_option_description">Results are only revealed when you end the poll</string>
+    <string name="ended_poll_indicator">Ended the poll.</string>
     <string name="room_polls_active">Active polls</string>
     <string name="room_polls_active_no_item">There are no active polls in this room</string>
     <string name="room_polls_ended">Past polls</string>
@@ -3512,6 +3514,9 @@
     <string name="message_reply_to_sender_sent_video">sent a video.</string>
     <string name="message_reply_to_sender_sent_sticker">sent a sticker.</string>
     <string name="message_reply_to_sender_created_poll">created a poll.</string>
+    <string name="message_reply_to_sender_ended_poll">ended a poll.</string>
+    <string name="message_reply_to_poll_preview">Poll</string>
+    <string name="message_reply_to_ended_poll_preview">Ended poll</string>
 
     <string name="settings_access_token">Access Token</string>
     <string name="settings_access_token_summary">Your access token gives full access to your account. Do not share it with anyone.</string>

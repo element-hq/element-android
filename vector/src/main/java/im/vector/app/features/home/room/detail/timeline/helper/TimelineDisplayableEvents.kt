@@ -55,6 +55,7 @@ object TimelineDisplayableEvents {
             VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO,
     ) +
             EventType.POLL_START.values +
+            EventType.POLL_END.values +
             EventType.STATE_ROOM_BEACON_INFO.values +
             EventType.BEACON_LOCATION_DATA.values
 }

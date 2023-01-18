@@ -1,0 +1,1 @@
+Render ended polls

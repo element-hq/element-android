@@ -23,8 +23,6 @@ import im.vector.app.core.extensions.localDateTime
 import im.vector.app.features.home.room.detail.timeline.factory.TimelineItemFactoryParams
 import im.vector.app.features.home.room.detail.timeline.item.E2EDecoration
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
-import im.vector.app.features.home.room.detail.timeline.item.PollResponseData
-import im.vector.app.features.home.room.detail.timeline.item.PollVoteSummaryData
 import im.vector.app.features.home.room.detail.timeline.item.ReferencesInfoData
 import im.vector.app.features.home.room.detail.timeline.item.SendStateDecoration
 import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayoutFactory
@@ -54,7 +52,8 @@ class MessageInformationDataFactory @Inject constructor(
         private val session: Session,
         private val dateFormatter: VectorDateFormatter,
         private val messageLayoutFactory: TimelineMessageLayoutFactory,
-        private val reactionsSummaryFactory: ReactionsSummaryFactory
+        private val reactionsSummaryFactory: ReactionsSummaryFactory,
+        private val pollResponseDataFactory: PollResponseDataFactory,
 ) {
 
     fun create(params: TimelineItemFactoryParams): MessageInformationData {
@@ -99,20 +98,7 @@ class MessageInformationDataFactory @Inject constructor(
                 memberName = event.senderInfo.disambiguatedDisplayName,
                 messageLayout = messageLayout,
                 reactionsSummary = reactionsSummaryFactory.create(event),
-                pollResponseAggregatedSummary = event.annotations?.pollResponseSummary?.let {
-                    PollResponseData(
-                            myVote = it.aggregatedContent?.myVote,
-                            isClosed = it.closedTime != null,
-                            votes = it.aggregatedContent?.votesSummary?.mapValues { votesSummary ->
-                                PollVoteSummaryData(
-                                        total = votesSummary.value.total,
-                                        percentage = votesSummary.value.percentage
-                                )
-                            },
-                            winnerVoteCount = it.aggregatedContent?.winnerVoteCount ?: 0,
-                            totalVotes = it.aggregatedContent?.totalVotes ?: 0
-                    )
-                },
+                pollResponseAggregatedSummary = pollResponseDataFactory.create(event),
                 hasBeenEdited = event.hasBeenEdited(),
                 hasPendingEdits = event.annotations?.editSummary?.localEchos?.any() ?: false,
                 referencesInfoData = event.annotations?.referencesAggregatedSummary?.let { referencesAggregatedSummary ->

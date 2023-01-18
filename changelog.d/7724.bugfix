@@ -1,1 +1,0 @@
- Observe ViewEvents only when resumed and ensure ViewEvents are not lost.
