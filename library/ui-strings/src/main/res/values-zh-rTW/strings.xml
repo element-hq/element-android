@@ -2851,4 +2851,15 @@
     <string name="error_voice_broadcast_unable_to_play">無法播放此語音廣播。</string>
     <string name="started_a_voice_broadcast">已開始語音廣播</string>
     <string name="unable_to_decrypt_some_events_in_poll">因為解密錯誤，部份投票可能並未計算</string>
+    <string name="room_polls_loading_error">擷取投票時發生錯誤。</string>
+    <string name="room_polls_load_more">載入更多投票</string>
+    <string name="room_polls_wait_for_display">顯示投票</string>
+    <plurals name="room_polls_ended_no_item_for_loaded_period">
+        <item quantity="other">過去 %1$d 天沒有投票。
+\n載入更多投票以檢視過去幾天的投票。</item>
+    </plurals>
+    <plurals name="room_polls_active_no_item_for_loaded_period">
+        <item quantity="other">過去 %1$d 天沒有活躍的投票。
+\n載入更多投票以檢視過去幾天的投票。</item>
+    </plurals>
 </resources>
