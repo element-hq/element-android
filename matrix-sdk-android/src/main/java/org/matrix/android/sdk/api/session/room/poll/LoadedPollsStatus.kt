@@ -22,4 +22,5 @@ package org.matrix.android.sdk.api.session.room.poll
 data class LoadedPollsStatus(
         val canLoadMore: Boolean,
         val nbSyncedDays: Int,
+        val hasCompletedASyncBackward: Boolean,
 )
