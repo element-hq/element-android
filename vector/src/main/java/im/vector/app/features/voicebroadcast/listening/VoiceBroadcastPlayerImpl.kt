@@ -18,7 +18,6 @@ package im.vector.app.features.voicebroadcast.listening
 
 import android.media.AudioAttributes
 import android.media.MediaPlayer
-import android.media.MediaPlayer.OnPreparedListener
 import androidx.annotation.MainThread
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.onFirst
@@ -33,10 +32,13 @@ import im.vector.app.features.voicebroadcast.model.VoiceBroadcast
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastEvent
 import im.vector.app.features.voicebroadcast.usecase.GetVoiceBroadcastStateEventLiveUseCase
 import im.vector.lib.core.utils.timer.CountUpTimer
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 import timber.log.Timber
@@ -63,8 +65,29 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
     private var voiceBroadcastStateObserver: Job? = null
 
     private var currentMediaPlayer: MediaPlayer? = null
+        private set(value) {
+            Timber.d("## Voice Broadcast | currentMediaPlayer changed: old=${field.hashCode()}, new=${value.hashCode()}")
+            field = value
+        }
     private var nextMediaPlayer: MediaPlayer? = null
-    private var isPreparingNextPlayer: Boolean = false
+        private set(value) {
+            Timber.d("## Voice Broadcast | nextMediaPlayer changed:    old=${field.hashCode()}, new=${value.hashCode()}")
+            field = value
+        }
+
+    private var prepareCurrentPlayerJob: Job? = null
+        set(value) {
+            if (field?.isActive.orFalse()) field?.cancel()
+            field = value
+        }
+    private var prepareNextPlayerJob: Job? = null
+        set(value) {
+            if (field?.isActive.orFalse()) field?.cancel()
+            field = value
+        }
+
+    private val isPreparingCurrentPlayer: Boolean get() = prepareCurrentPlayerJob?.isActive.orFalse()
+    private val isPreparingNextPlayer: Boolean get() = prepareNextPlayerJob?.isActive.orFalse()
 
     private var mostRecentVoiceBroadcastEvent: VoiceBroadcastEvent? = null
 
@@ -83,7 +106,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
         @MainThread
         set(value) {
             if (field != value) {
-                Timber.d("## Voice Broadcast | playingState: $field -> $value")
+                Timber.d("## Voice Broadcast | playingState: ${field::class.java.simpleName} -> ${value::class.java.simpleName}")
                 field = value
                 onPlayingStateChanged(value)
             }
@@ -174,10 +197,11 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
     }
 
     private fun onPlaylistUpdated() {
+        if (isPreparingCurrentPlayer || isPreparingNextPlayer) return
         when (playingState) {
             State.Playing,
             State.Paused -> {
-                if (nextMediaPlayer == null && !isPreparingNextPlayer) {
+                if (nextMediaPlayer == null) {
                     prepareNextMediaPlayer()
                 }
             }
@@ -206,19 +230,16 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
         val content = playlistItem?.audioEvent?.content ?: run { Timber.w("## Voice Broadcast | No content to play at position $position"); return }
         val sequence = playlistItem.sequence ?: run { Timber.w("## Voice Broadcast | Playlist item has no sequence"); return }
         val sequencePosition = position - playlistItem.startTime
-        sessionScope.launch {
+        prepareCurrentPlayerJob = sessionScope.launch {
             try {
-                prepareMediaPlayer(content) { mp ->
-                    currentMediaPlayer = mp
-                    playlist.currentSequence = sequence
-                    mp.start()
-                    if (sequencePosition > 0) {
-                        mp.seekTo(sequencePosition)
-                    }
-                    playingState = State.Playing
-                    prepareNextMediaPlayer()
+                val mp = prepareMediaPlayer(content)
+                playlist.currentSequence = sequence - 1 // will be incremented in onNextMediaPlayerStarted
+                mp.start()
+                if (sequencePosition > 0) {
+                    mp.seekTo(sequencePosition)
                 }
-            } catch (failure: VoiceBroadcastFailure.ListeningError.DownloadError) {
+                onNextMediaPlayerStarted(mp)
+            } catch (failure: VoiceBroadcastFailure.ListeningError) {
                 playingState = State.Error(failure)
             }
         }
@@ -261,28 +282,24 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
 
     private fun prepareNextMediaPlayer() {
         val nextItem = playlist.getNextItem()
-        if (nextItem != null) {
-            isPreparingNextPlayer = true
-            sessionScope.launch {
+        if (!isPreparingNextPlayer && nextMediaPlayer == null && nextItem != null) {
+            prepareNextPlayerJob = sessionScope.launch {
                 try {
-                    prepareMediaPlayer(nextItem.audioEvent.content) { mp ->
-                        isPreparingNextPlayer = false
-                        nextMediaPlayer = mp
-                        when (playingState) {
-                            State.Playing,
-                            State.Paused -> {
-                                currentMediaPlayer?.setNextMediaPlayer(mp)
-                            }
-                            State.Buffering -> {
-                                mp.start()
-                                onNextMediaPlayerStarted(mp)
-                            }
-                            is State.Error,
-                            State.Idle -> stopPlayer()
+                    val mp = prepareMediaPlayer(nextItem.audioEvent.content)
+                    nextMediaPlayer = mp
+                    when (playingState) {
+                        State.Playing,
+                        State.Paused -> {
+                            currentMediaPlayer?.setNextMediaPlayer(mp)
                         }
+                        State.Buffering -> {
+                            mp.start()
+                            onNextMediaPlayerStarted(mp)
+                        }
+                        is State.Error,
+                        State.Idle -> stopPlayer()
                     }
-                } catch (failure: VoiceBroadcastFailure.ListeningError.DownloadError) {
-                    isPreparingNextPlayer = false
+                } catch (failure: VoiceBroadcastFailure.ListeningError) {
                     // Do not change the playingState if the current player is still valid,
                     // the error will be thrown again when switching to the next player
                     if (playingState == State.Buffering || tryOrNull { currentMediaPlayer?.isPlaying } != true) {
@@ -293,18 +310,30 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
         }
     }
 
-    private suspend fun prepareMediaPlayer(messageAudioContent: MessageAudioContent, onPreparedListener: OnPreparedListener): MediaPlayer {
+    /**
+     * Create and prepare a [MediaPlayer] instance for the given [messageAudioContent].
+     * This methods takes care of downloading the audio file and returns the player when it is ready to use.
+     *
+     * Do not forget to release the resulting player when you don't need it anymore, in case you cancel the job related to this method, the player will be
+     * automatically released.
+     */
+    private suspend fun prepareMediaPlayer(messageAudioContent: MessageAudioContent): MediaPlayer {
         // Download can fail
         val audioFile = try {
             session.fileService().downloadFile(messageAudioContent)
         } catch (failure: Throwable) {
             Timber.e(failure, "Voice Broadcast | Download has failed: $failure")
-            throw VoiceBroadcastFailure.ListeningError.DownloadError(failure)
+            throw VoiceBroadcastFailure.ListeningError.PrepareMediaPlayerError(failure)
         }
 
-        return audioFile.inputStream().use { fis ->
-            MediaPlayer().apply {
-                setOnErrorListener(mediaPlayerListener)
+        val latch = CompletableDeferred<MediaPlayer>()
+        val mp = MediaPlayer()
+        return try {
+            mp.apply {
+                setOnErrorListener { mp, what, extra ->
+                    mediaPlayerListener.onError(mp, what, extra)
+                    latch.completeExceptionally(VoiceBroadcastFailure.ListeningError.PrepareMediaPlayerError())
+                }
                 setAudioAttributes(
                         AudioAttributes.Builder()
                                 // Do not use CONTENT_TYPE_SPEECH / USAGE_VOICE_COMMUNICATION because we want to play loud here
@@ -312,12 +341,16 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
                                 .setUsage(AudioAttributes.USAGE_MEDIA)
                                 .build()
                 )
-                setDataSource(fis.fd)
+                audioFile.inputStream().use { fis -> setDataSource(fis.fd) }
                 setOnInfoListener(mediaPlayerListener)
-                setOnPreparedListener(onPreparedListener)
+                setOnPreparedListener(latch::complete)
                 setOnCompletionListener(mediaPlayerListener)
                 prepareAsync()
             }
+            latch.await()
+        } catch (e: CancellationException) {
+            mp.release()
+            throw e
         }
     }
 
@@ -328,7 +361,9 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
 
         nextMediaPlayer?.release()
         nextMediaPlayer = null
-        isPreparingNextPlayer = false
+
+        prepareCurrentPlayerJob = null
+        prepareNextPlayerJob = null
     }
 
     private fun onPlayingStateChanged(playingState: State) {
@@ -440,7 +475,10 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
             if (currentMediaPlayer == mp) {
                 currentMediaPlayer = null
             } else {
-                error("The media player which has completed mismatches the current media player instance.")
+                Timber.w(
+                        "## Voice Broadcast | onCompletion: The media player which has completed mismatches the current media player instance.\n" +
+                                "currentMediaPlayer=${currentMediaPlayer.hashCode()}, mp=${mp.hashCode()}"
+                )
             }
 
             // Next media player is already attached to this player and will start playing automatically
@@ -459,7 +497,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
         }
 
         override fun onError(mp: MediaPlayer, what: Int, extra: Int): Boolean {
-            Timber.d("## Voice Broadcast | onError: what=$what, extra=$extra")
+            Timber.w("## Voice Broadcast | onError: what=$what, extra=$extra")
             // Do not change the playingState if the current player is still valid,
             // the error will be thrown again when switching to the next player
             if (playingState == State.Buffering || tryOrNull { currentMediaPlayer?.isPlaying } != true) {
