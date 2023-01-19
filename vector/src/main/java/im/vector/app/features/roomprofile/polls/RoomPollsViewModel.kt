@@ -23,20 +23,21 @@ import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.roomprofile.polls.list.domain.GetLoadedPollsStatusUseCase
 import im.vector.app.features.roomprofile.polls.list.domain.GetPollsUseCase
 import im.vector.app.features.roomprofile.polls.list.domain.LoadMorePollsUseCase
 import im.vector.app.features.roomprofile.polls.list.domain.SyncPollsUseCase
+import im.vector.app.features.roomprofile.polls.list.ui.PollSummaryMapper
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class RoomPollsViewModel @AssistedInject constructor(
         @Assisted initialState: RoomPollsViewState,
         private val getPollsUseCase: GetPollsUseCase,
-        private val getLoadedPollsStatusUseCase: GetLoadedPollsStatusUseCase,
         private val loadMorePollsUseCase: LoadMorePollsUseCase,
         private val syncPollsUseCase: SyncPollsUseCase,
+        private val pollSummaryMapper: PollSummaryMapper,
 ) : VectorViewModel<RoomPollsViewState, RoomPollsAction, RoomPollsViewEvent>(initialState) {
 
     @AssistedFactory
@@ -73,6 +74,7 @@ class RoomPollsViewModel @AssistedInject constructor(
 
     private fun observePolls(roomId: String) {
         getPollsUseCase.execute(roomId)
+                .map { it.map { event -> pollSummaryMapper.map(event) } }
                 .onEach { setState { copy(polls = it) } }
                 .launchIn(viewModelScope)
     }

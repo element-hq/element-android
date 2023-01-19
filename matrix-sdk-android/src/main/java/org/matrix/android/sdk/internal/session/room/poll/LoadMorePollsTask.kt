@@ -137,7 +137,9 @@ internal class DefaultLoadMorePollsTask @Inject constructor(
             if (paginationResponse.end == null) {
                 // start of the timeline is reached, there are no more events
                 status.isEndOfPollsBackward = true
-                status.oldestTimestampReachedMs = oldestEventTimestamp
+                if(oldestEventTimestamp != null && oldestEventTimestamp > 0) {
+                    status.oldestTimestampReachedMs = oldestEventTimestamp
+                }
             } else if (oldestEventTimestamp != null && currentTargetTimestamp != null && oldestEventTimestamp <= currentTargetTimestamp) {
                 // target has been reached
                 status.oldestTimestampReachedMs = oldestEventTimestamp

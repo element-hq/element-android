@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.api.session.room.poll
 
 import androidx.lifecycle.LiveData
-import org.matrix.android.sdk.api.session.room.model.PollResponseAggregatedSummary
+import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 
 /**
  * Expose methods to get history of polls in rooms.
@@ -43,7 +43,7 @@ interface PollHistoryService {
     suspend fun syncPolls()
 
     /**
-     * Get currently loaded list of polls. See [loadMore].
+     * Get currently loaded list of poll events. See [loadMore].
      */
-    fun getPolls(): LiveData<List<PollResponseAggregatedSummary>>
+    fun getPollEvents(): LiveData<List<TimelineEvent>>
 }

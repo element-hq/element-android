@@ -16,23 +16,19 @@
 
 package im.vector.app.features.roomprofile.polls.list.data
 
+import androidx.lifecycle.asFlow
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.features.roomprofile.polls.list.ui.PollSummary
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.poll.LoadedPollsStatus
 import org.matrix.android.sdk.api.session.room.poll.PollHistoryService
-import timber.log.Timber
+import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import javax.inject.Inject
 
 // TODO add unit tests
 class RoomPollDataSource @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
 ) {
-
-    private val pollsFlow = MutableSharedFlow<List<PollSummary>>(replay = 1)
 
     private fun getPollHistoryService(roomId: String): PollHistoryService {
         return activeSessionHolder
@@ -42,12 +38,8 @@ class RoomPollDataSource @Inject constructor(
                 ?: throw PollHistoryError.UnknownRoomError
     }
 
-    // TODO
-    //  unmock using SDK service
-    //  after unmock, expose domain layer model (entity) and do the mapping to PollSummary in the UI layer
-    fun getPolls(roomId: String): Flow<List<PollSummary>> {
-        Timber.d("roomId=$roomId")
-        return pollsFlow.asSharedFlow()
+    fun getPolls(roomId: String): Flow<List<TimelineEvent>> {
+        return getPollHistoryService(roomId).getPollEvents().asFlow()
     }
 
     suspend fun getLoadedPollsStatus(roomId: String): LoadedPollsStatus {
