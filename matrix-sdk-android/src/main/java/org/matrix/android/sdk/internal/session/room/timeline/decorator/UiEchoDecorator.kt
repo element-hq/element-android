@@ -19,9 +19,9 @@ package org.matrix.android.sdk.internal.session.room.timeline.decorator
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.internal.session.room.timeline.UIEchoManager
 
-internal class UiEchoDecorator(private val uiEchoManager: UIEchoManager?) : TimelineEventDecorator {
+internal class UiEchoDecorator(private val uiEchoManager: UIEchoManager) : TimelineEventDecorator {
 
     override fun decorate(timelineEvent: TimelineEvent): TimelineEvent {
-        return uiEchoManager?.decorateEventWithReactionUiEcho(timelineEvent) ?: timelineEvent
+        return uiEchoManager.decorateEventWithReactionUiEcho(timelineEvent)
     }
 }

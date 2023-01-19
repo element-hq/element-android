@@ -18,8 +18,6 @@ package org.matrix.android.sdk.internal.session.room.timeline
 
 import io.realm.OrderedCollectionChangeSet
 import io.realm.OrderedRealmCollectionChangeListener
-import io.realm.Realm
-import io.realm.RealmConfiguration
 import io.realm.RealmObjectChangeListener
 import io.realm.RealmQuery
 import io.realm.RealmResults
@@ -48,7 +46,6 @@ import org.matrix.android.sdk.internal.session.sync.handler.room.ThreadsAwarenes
 import timber.log.Timber
 import java.util.Collections
 import java.util.concurrent.atomic.AtomicBoolean
-import java.util.concurrent.atomic.AtomicReference
 
 /**
  * This is a wrapper around a ChunkEntity in the database.
@@ -63,7 +60,6 @@ internal class TimelineChunk(
         private val fetchThreadTimelineTask: FetchThreadTimelineTask,
         private val eventDecryptor: TimelineEventDecryptor,
         private val paginationTask: PaginationTask,
-        private val realmConfiguration: RealmConfiguration,
         private val fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
         private val timelineEventMapper: TimelineEventMapper,
         private val uiEchoManager: UIEchoManager?,
@@ -72,7 +68,6 @@ internal class TimelineChunk(
         private val initialEventId: String?,
         private val onBuiltEvents: (Boolean) -> Unit,
         private val onEventsDeleted: () -> Unit,
-        private val realm: AtomicReference<Realm>,
         private val decorator: TimelineEventDecorator,
         val localEchoEventFactory: LocalEchoEventFactory,
 ) {
@@ -605,7 +600,6 @@ internal class TimelineChunk(
                 timelineId = timelineId,
                 eventDecryptor = eventDecryptor,
                 paginationTask = paginationTask,
-                realmConfiguration = realmConfiguration,
                 fetchThreadTimelineTask = fetchThreadTimelineTask,
                 fetchTokenAndPaginateTask = fetchTokenAndPaginateTask,
                 timelineEventMapper = timelineEventMapper,
@@ -616,7 +610,6 @@ internal class TimelineChunk(
                 onBuiltEvents = this.onBuiltEvents,
                 onEventsDeleted = this.onEventsDeleted,
                 decorator = this.decorator,
-                realm = realm,
                 localEchoEventFactory = localEchoEventFactory
         )
     }
