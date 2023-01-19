@@ -92,6 +92,7 @@ class PollItemViewStateFactory @Inject constructor(
                 question = question,
                 votesStatus = totalVotesText,
                 canVote = false,
+                // TODO extract into helper method or mapper
                 optionViewStates = pollCreationInfo?.answers?.map { answer ->
                     val voteSummary = pollResponseSummary?.getVoteSummaryOfAnOption(answer.id ?: "")
                     PollOptionViewState.PollEnded(

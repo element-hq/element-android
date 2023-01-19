@@ -17,14 +17,28 @@
 package org.matrix.android.sdk.internal.session.room.poll
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
+import com.zhuinden.monarchy.Monarchy
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import io.realm.kotlin.where
 import kotlinx.coroutines.delay
+import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.model.PollResponseAggregatedSummary
 import org.matrix.android.sdk.api.session.room.poll.LoadedPollsStatus
 import org.matrix.android.sdk.api.session.room.poll.PollHistoryService
+import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.internal.database.mapper.PollResponseAggregatedSummaryEntityMapper
+import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
+import org.matrix.android.sdk.internal.database.model.PollHistoryStatusEntity
+import org.matrix.android.sdk.internal.database.model.PollHistoryStatusEntityFields
+import org.matrix.android.sdk.internal.database.model.PollResponseAggregatedSummaryEntity
+import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
+import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
+import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.util.time.Clock
+import timber.log.Timber
 
 private const val LOADING_PERIOD_IN_DAYS = 30
 private const val EVENTS_PAGE_SIZE = 250
@@ -32,9 +46,11 @@ private const val EVENTS_PAGE_SIZE = 250
 // TODO add unit tests
 internal class DefaultPollHistoryService @AssistedInject constructor(
         @Assisted private val roomId: String,
+        @SessionDatabase private val monarchy: Monarchy,
         private val clock: Clock,
         private val loadMorePollsTask: LoadMorePollsTask,
         private val getLoadedPollsStatusTask: GetLoadedPollsStatusTask,
+        private val timelineEventMapper: TimelineEventMapper,
 ) : PollHistoryService {
 
     @AssistedFactory
@@ -68,7 +84,38 @@ internal class DefaultPollHistoryService @AssistedInject constructor(
         delay(1000)
     }
 
-    override fun getPolls(): LiveData<List<PollResponseAggregatedSummary>> {
-        TODO("listen database and update query depending on latest PollHistoryStatusEntity.oldestTimestampReachedMs")
+    override fun getPollEvents(): LiveData<List<TimelineEvent>> {
+        val pollHistoryStatusLiveData = getPollHistoryStatus()
+
+        return Transformations.switchMap(pollHistoryStatusLiveData) { results ->
+            val oldestTimestamp = results.firstOrNull()?.oldestTimestampReachedMs ?: clock.epochMillis()
+            Timber.d("oldestTimestamp=$oldestTimestamp")
+
+            monarchy.findAllMappedWithChanges(
+                    { realm ->
+                        val pollTypes = EventType.POLL_START.values.toTypedArray()
+                        realm.where<TimelineEventEntity>()
+                                .equalTo(TimelineEventEntityFields.ROOM_ID, roomId)
+                                .`in`(TimelineEventEntityFields.ROOT.TYPE, pollTypes)
+                                .greaterThan(TimelineEventEntityFields.ROOT.ORIGIN_SERVER_TS, oldestTimestamp)
+                    },
+                    { result ->
+                        timelineEventMapper.map(result, buildReadReceipts = false)
+                    }
+            )
+        }
+    }
+
+    private fun getPollHistoryStatus(): LiveData<List<PollHistoryStatusEntity>> {
+        return monarchy.findAllMappedWithChanges(
+                { realm ->
+                    realm.where<PollHistoryStatusEntity>()
+                            .equalTo(PollHistoryStatusEntityFields.ROOM_ID, roomId)
+                },
+                { result ->
+                    // make a copy of the Realm object since it will be used in another transformations
+                    result.copy()
+                }
+        )
     }
 }
