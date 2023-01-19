@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.room.event
 
 import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.internal.crypto.EventDecryptor
 import org.matrix.android.sdk.internal.database.mapper.toEntity
@@ -48,7 +49,9 @@ internal class DefaultFilterAndStoreEventsTask @Inject constructor(
     override suspend fun execute(params: FilterAndStoreEventsTask.Params) {
         val filteredEvents = params.events
                 .map { decryptEventIfNeeded(it) }
-                .filter { params.filterPredicate(it) }
+                // we also filter in the encrypted events since it means there was decryption error for them
+                // and they may be decrypted later
+                .filter { params.filterPredicate(it) || it.getClearType() == EventType.ENCRYPTED }
 
         addMissingEventsInDB(params.roomId, filteredEvents)
     }
