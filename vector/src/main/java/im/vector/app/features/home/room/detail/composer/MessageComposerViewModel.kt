@@ -19,6 +19,7 @@ package im.vector.app.features.home.room.detail.composer
 import android.text.SpannableString
 import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.MavericksViewModelFactory
+import com.airbnb.mvrx.withState
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -42,6 +43,7 @@ import im.vector.app.features.home.room.detail.toMessageType
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.voice.VoiceFailure
 import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
 import im.vector.app.features.voicebroadcast.VoiceBroadcastHelper
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
@@ -916,10 +918,15 @@ class MessageComposerViewModel @AssistedInject constructor(
     }
 
     private fun handleStartRecordingVoiceMessage(room: Room) {
-        try {
-            audioMessageHelper.startRecording(room.roomId)
-        } catch (failure: Throwable) {
-            _viewEvents.post(MessageComposerViewEvents.VoicePlaybackOrRecordingFailure(failure))
+        val isRecordingVoiceBroadcast = withState(this) { it.isRecordingVoiceBroadcast }
+        if (isRecordingVoiceBroadcast) {
+            _viewEvents.post(MessageComposerViewEvents.VoicePlaybackOrRecordingFailure(VoiceFailure.VoiceBroadcastInProgress))
+        } else {
+            try {
+                audioMessageHelper.startRecording(room.roomId)
+            } catch (failure: Throwable) {
+                _viewEvents.post(MessageComposerViewEvents.VoicePlaybackOrRecordingFailure(failure))
+            }
         }
     }
 

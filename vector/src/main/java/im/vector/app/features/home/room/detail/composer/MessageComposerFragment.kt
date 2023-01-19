@@ -191,6 +191,8 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
                 is MessageComposerViewEvents.VoicePlaybackOrRecordingFailure -> {
                     if (it.throwable is VoiceFailure.UnableToRecord) {
                         onCannotRecord()
+                    } else if (it.throwable is VoiceFailure.VoiceBroadcastInProgress) {
+                        displayErrorVoiceBroadcastInProgress()
                     }
                     showErrorInSnackbar(it.throwable)
                 }
@@ -524,6 +526,14 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
     private fun onCannotRecord() {
         // Update the UI, cancel the animation
         messageComposerViewModel.handle(MessageComposerAction.OnVoiceRecordingUiStateChanged(VoiceMessageRecorderView.RecordingUiState.Idle))
+    }
+
+    private fun displayErrorVoiceBroadcastInProgress() {
+        MaterialAlertDialogBuilder(requireActivity())
+                .setTitle(R.string.error_voice_message_broadcast_in_progress)
+                .setMessage(getString(R.string.error_voice_message_broadcast_in_progress_message))
+                .setPositiveButton(android.R.string.ok, null)
+                .show()
     }
 
     private fun handleJoinedToAnotherRoom(action: MessageComposerViewEvents.JoinRoomCommandSuccess) {
