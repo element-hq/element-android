@@ -17,8 +17,8 @@
 package im.vector.app.features.roomprofile.polls.list.ui
 
 import im.vector.app.core.extensions.getVectorLastMessageContent
+import im.vector.app.features.home.room.detail.timeline.factory.PollOptionViewStateFactory
 import im.vector.app.features.home.room.detail.timeline.helper.PollResponseDataFactory
-import im.vector.app.features.home.room.detail.timeline.item.PollOptionViewState
 import im.vector.app.features.home.room.detail.timeline.item.PollResponseData
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
@@ -27,6 +27,7 @@ import javax.inject.Inject
 // TODO add unit tests
 class PollSummaryMapper @Inject constructor(
         private val pollResponseDataFactory: PollResponseDataFactory,
+        private val pollOptionViewStateFactory: PollOptionViewStateFactory,
 ) {
 
     fun map(timelineEvent: TimelineEvent): PollSummary {
@@ -42,7 +43,7 @@ class PollSummaryMapper @Inject constructor(
                     pollResponseData = pollResponseData
             )
         } else {
-            throw IllegalStateException("expected MessagePollContent")
+            throw IllegalStateException("missing mandatory info about poll event with id=$eventId")
         }
     }
 
@@ -55,23 +56,12 @@ class PollSummaryMapper @Inject constructor(
         val pollCreationInfo = messagePollContent.getBestPollCreationInfo()
         val pollTitle = pollCreationInfo?.question?.getBestQuestion().orEmpty()
         return if (pollResponseData.isClosed) {
-            val winnerVoteCount = pollResponseData.winnerVoteCount
             PollSummary.EndedPoll(
                     id = eventId,
                     creationTimestamp = creationTimestamp,
                     title = pollTitle,
                     totalVotes = pollResponseData.totalVotes,
-                    // TODO mutualise this with PollItemViewStateFactory
-                    winnerOptions = pollCreationInfo?.answers?.map { answer ->
-                        val voteSummary = pollResponseData.getVoteSummaryOfAnOption(answer.id ?: "")
-                        PollOptionViewState.PollEnded(
-                                optionId = answer.id ?: "",
-                                optionAnswer = answer.getBestAnswer() ?: "",
-                                voteCount = voteSummary?.total ?: 0,
-                                votePercentage = voteSummary?.percentage ?: 0.0,
-                                isWinner = winnerVoteCount != 0 && voteSummary?.total == winnerVoteCount
-                        )
-                    } ?: emptyList()
+                    winnerOptions = pollOptionViewStateFactory.createPollEndedOptions(pollCreationInfo, pollResponseData)
             )
         } else {
             PollSummary.ActivePoll(
