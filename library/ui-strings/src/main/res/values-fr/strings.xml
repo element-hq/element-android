@@ -2907,4 +2907,19 @@
     <string name="error_voice_broadcast_unable_to_play">Impossible de lire cette diffusion audio.</string>
     <string name="started_a_voice_broadcast">A démarré une diffusion audio</string>
     <string name="unable_to_decrypt_some_events_in_poll">À cause d’erreurs de déchiffrement, certains votes pourraient ne pas avoir été pris en compte</string>
+    <string name="room_polls_loading_error">Erreur lors de la récupération des sondages.</string>
+    <string name="room_polls_load_more">Charger plus de sondages</string>
+    <string name="room_polls_wait_for_display">Affichage des sondages</string>
+    <plurals name="room_polls_ended_no_item_for_loaded_period">
+        <item quantity="one">Il n’y a aucun sondage terminé depuis hier.
+\nChargez plus de sondages pour voir les sondages des jours précédents.</item>
+        <item quantity="other">Il n’y a aucun sondage terminé depuis %1$d jours.
+\nChargez plus de sondages pour voir les sondages des jours précédents.</item>
+    </plurals>
+    <plurals name="room_polls_active_no_item_for_loaded_period">
+        <item quantity="one">Il n’y a aucun sondage actif depuis hier.
+\nChargez plus de sondages pour voir les sondages des jours précédents.</item>
+        <item quantity="other">Il n’y a aucun sondage actif depuis %1$d jours.
+\nChargez plus de sondages pour voir les sondages des jours précédents.</item>
+    </plurals>
 </resources>
