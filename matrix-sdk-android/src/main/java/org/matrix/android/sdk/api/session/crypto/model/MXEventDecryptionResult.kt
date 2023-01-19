@@ -18,6 +18,16 @@ package org.matrix.android.sdk.api.session.crypto.model
 
 import org.matrix.android.sdk.api.util.JsonDict
 
+enum class MessageVerificationState {
+    VERIFIED,
+    SIGNED_DEVICE_OF_UNVERIFIED_USER,
+    UN_SIGNED_DEVICE_OF_VERIFIED_USER,
+    UN_SIGNED_DEVICE,
+    UNKNOWN_DEVICE,
+    UNSAFE_SOURCE,
+    MISMATCH,
+}
+
 /**
  * The result of a (successful) call to decryptEvent.
  */
@@ -45,5 +55,5 @@ data class MXEventDecryptionResult(
          */
         val forwardingCurve25519KeyChain: List<String> = emptyList(),
 
-        val isSafe: Boolean = false
+        val messageVerificationState: MessageVerificationState? = null,
 )

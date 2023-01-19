@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.crypto.algorithms.megolm
 
 import dagger.Lazy
 import org.matrix.android.sdk.api.crypto.MXCryptoConfig
-import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.NewSessionListener
@@ -100,7 +99,7 @@ internal class MXMegolmDecryption(
                                         claimedEd25519Key = olmDecryptionResult.keysClaimed?.get("ed25519"),
                                         forwardingCurve25519KeyChain = olmDecryptionResult.forwardingCurve25519KeyChain
                                                 .orEmpty(),
-                                        isSafe = olmDecryptionResult.isSafe.orFalse()
+                                        messageVerificationState = olmDecryptionResult.verificationState,
                                 ).also {
                                     liveEventManager.get().dispatchLiveEventDecrypted(event, it)
                                 }

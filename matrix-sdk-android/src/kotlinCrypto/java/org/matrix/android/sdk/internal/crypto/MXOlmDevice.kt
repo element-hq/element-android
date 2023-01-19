@@ -23,11 +23,15 @@ import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.MessageVerificationState
 import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.util.JSON_DICT_PARAMETERIZED_TYPE
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.crypto.algorithms.megolm.MXOutboundSessionInfo
 import org.matrix.android.sdk.internal.crypto.algorithms.megolm.SharedWithHelper
+import org.matrix.android.sdk.internal.crypto.crosssigning.CrossSigningOlm
+import org.matrix.android.sdk.internal.crypto.crosssigning.canonicalSignable
 import org.matrix.android.sdk.internal.crypto.model.InboundGroupSessionData
 import org.matrix.android.sdk.internal.crypto.model.MXInboundMegolmSessionWrapper
 import org.matrix.android.sdk.internal.crypto.model.OlmSessionWrapper
@@ -59,6 +63,7 @@ internal class MXOlmDevice @Inject constructor(
         private val store: IMXCryptoStore,
         private val olmSessionStore: OlmSessionStore,
         private val inboundGroupSessionStore: InboundGroupSessionStore,
+        private val crossSigningOlm: CrossSigningOlm,
         private val clock: Clock,
 ) {
 
@@ -851,13 +856,58 @@ internal class MXOlmDevice @Inject constructor(
             throw MXCryptoError.Base(MXCryptoError.ErrorType.BAD_DECRYPTED_FORMAT, MXCryptoError.BAD_DECRYPTED_FORMAT_TEXT_REASON)
         }
 
+        val verificationState = if (sessionHolder.wrapper.sessionData.trusted.orFalse()) {
+            // let's get info on the device
+            val sendingDevice = store.deviceWithIdentityKey(senderKey)
+            if (sendingDevice == null) {
+                MessageVerificationState.UNKNOWN_DEVICE
+            } else {
+                val isDeviceOwnerOfSession = sessionHolder.wrapper.sessionData.keysClaimed?.get("ed25519") == sendingDevice.fingerprint()
+                if (!isDeviceOwnerOfSession) {
+                    MessageVerificationState.MISMATCH
+                } else if (sendingDevice.isVerified) {
+                    MessageVerificationState.VERIFIED
+                } else {
+                    val isDeviceOwnerVerified = store.getCrossSigningInfo(sendingDevice.userId)?.isTrusted() ?: false
+                    val isDeviceSignedByItsOwner = isDeviceSignByItsOwner(sendingDevice)
+                    if (isDeviceSignedByItsOwner) {
+                        if (isDeviceOwnerVerified) MessageVerificationState.VERIFIED
+                        else MessageVerificationState.SIGNED_DEVICE_OF_UNVERIFIED_USER
+                    } else {
+                        if (isDeviceOwnerVerified) MessageVerificationState.UN_SIGNED_DEVICE_OF_VERIFIED_USER
+                        else MessageVerificationState.UN_SIGNED_DEVICE
+                    }
+                }
+            }
+        } else {
+            MessageVerificationState.UNSAFE_SOURCE
+        }
         return OlmDecryptionResult(
                 payload,
                 wrapper.sessionData.keysClaimed,
                 senderKey,
                 wrapper.sessionData.forwardingCurve25519KeyChain,
-                isSafe = sessionHolder.wrapper.sessionData.trusted.orFalse()
+                isSafe = sessionHolder.wrapper.sessionData.trusted.orFalse(),
+                verificationState = verificationState,
         )
+    }
+
+    private fun isDeviceSignByItsOwner(device: CryptoDeviceInfo): Boolean {
+        val otherKeys = store.getCrossSigningInfo(device.userId) ?: return false
+        val otherSSKSignature = device.signatures?.get(device.userId)?.get("ed25519:${otherKeys.selfSigningKey()?.unpaddedBase64PublicKey}")
+                ?: return false
+
+        // Check  bob's device is signed by bob's SSK
+        try {
+            crossSigningOlm.olmUtility.verifyEd25519Signature(
+                    otherSSKSignature,
+                    otherKeys.selfSigningKey()?.unpaddedBase64PublicKey,
+                    device.canonicalSignable()
+            )
+            return true
+        } catch (e: Throwable) {
+            return false
+        }
     }
 
     /**

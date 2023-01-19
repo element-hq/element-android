@@ -29,6 +29,7 @@ import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLay
 import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.crypto.model.MessageVerificationState
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationState
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -74,9 +75,10 @@ class MessageInformationDataFactory @Inject constructor(
                 prevDisplayableEvent?.root?.localDateTime()?.toLocalDate() != date.toLocalDate()
 
         val time = dateFormatter.format(event.root.originServerTs, DateFormatKind.MESSAGE_SIMPLE)
-        val e2eDecoration = runBlocking {
-            getE2EDecoration(roomSummary, params.lastEdit ?: event.root)
-        }
+//        val e2eDecoration = runBlocking {
+//            getE2EDecoration(roomSummary, params.lastEdit ?: event.root)
+//        }
+        val e2eDecoration = getE2EDecorationV2(roomSummary, params.lastEdit ?: event.root)
         val senderId = runBlocking { getSenderId(event) }
         // SendState Decoration
         val sendStateDecoration = if (isSentByMe) {
@@ -144,6 +146,47 @@ class MessageInformationDataFactory @Inject constructor(
             SendStateDecoration.SENT
         } else {
             SendStateDecoration.NONE
+        }
+    }
+
+    private fun getE2EDecorationV2(roomSummary: RoomSummary?, event: Event): E2EDecoration {
+        if (roomSummary?.isEncrypted != true) {
+            // No decoration for clear room
+            // Questionable? what if the event is E2E?
+            return E2EDecoration.NONE
+        }
+        if (event.sendState != SendState.SYNCED) {
+            // we don't display e2e decoration if event not synced back
+            return E2EDecoration.NONE
+        }
+
+        return when (event.mxDecryptionResult?.verificationState) {
+            MessageVerificationState.VERIFIED -> E2EDecoration.NONE
+            MessageVerificationState.SIGNED_DEVICE_OF_UNVERIFIED_USER -> E2EDecoration.NONE
+            MessageVerificationState.UN_SIGNED_DEVICE_OF_VERIFIED_USER -> E2EDecoration.WARN_SENT_BY_UNVERIFIED
+            // We neither verified this user so not interesting in that warning?
+            MessageVerificationState.UN_SIGNED_DEVICE ->  E2EDecoration.NONE
+            MessageVerificationState.UNKNOWN_DEVICE -> E2EDecoration.WARN_SENT_BY_DELETED_SESSION
+            MessageVerificationState.UNSAFE_SOURCE -> E2EDecoration.WARN_UNSAFE_KEY
+            MessageVerificationState.MISMATCH -> E2EDecoration.WARN_UNSAFE_KEY
+            null -> {
+                // No verification state.
+                // So could be a clear event, or a legacy decryption, or an UTD event
+                if (!event.isEncrypted()) {
+                    e2EDecorationForClearEventInE2ERoom(event, roomSummary)
+                } else if (event.mxDecryptionResult != null) {
+                    // No verification state, so could be a migrated old decryption?
+                    if (event.mxDecryptionResult?.isSafe == true) {
+                        // for past legacy decryption let's not decorate
+                        E2EDecoration.NONE
+                    } else {
+                        E2EDecoration.WARN_UNSAFE_KEY
+                    }
+                } else {
+                    // Undecrypted event
+                    E2EDecoration.NONE
+                }
+            }
         }
     }
 

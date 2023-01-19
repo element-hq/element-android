@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.internal.crypto
 
-import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.model.MXEventDecryptionResult
@@ -63,7 +62,7 @@ internal class DecryptRoomEventUseCase @Inject constructor(
                         claimedEd25519Key = olmDecryptionResult.keysClaimed?.get("ed25519"),
                         forwardingCurve25519KeyChain = olmDecryptionResult.forwardingCurve25519KeyChain
                                 .orEmpty(),
-                        isSafe = olmDecryptionResult.isSafe.orFalse()
+                        messageVerificationState = olmDecryptionResult.verificationState
                 )
             } else {
                 throw MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS, MXCryptoError.MISSING_FIELDS_REASON)
@@ -139,7 +138,7 @@ internal class DecryptRoomEventUseCase @Inject constructor(
                             senderKey = result.senderCurve25519Key,
                             keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },
                             forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain,
-                            isSafe = result.isSafe
+                            verificationState = result.messageVerificationState
                     )
                 }
     }

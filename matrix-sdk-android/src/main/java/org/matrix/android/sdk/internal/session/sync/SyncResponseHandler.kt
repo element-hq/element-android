@@ -139,14 +139,13 @@ internal class SyncResponseHandler @Inject constructor(
         try {
             val timelineId = generateTimelineId(roomId)
             // Event from sync does not have roomId, so add it to the event first
-            // note: runBlocking should be used here while we are in realm single thread executor, to avoid thread switching
             val result = cryptoService.decryptEvent(event.copy(roomId = roomId), timelineId)
             event.mxDecryptionResult = OlmDecryptionResult(
                     payload = result.clearEvent,
                     senderKey = result.senderCurve25519Key,
                     keysClaimed = result.claimedEd25519Key?.let { k -> mapOf("ed25519" to k) },
                     forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain,
-                    isSafe = result.isSafe
+                    verificationState = result.messageVerificationState
             )
         } catch (e: MXCryptoError) {
             Timber.v(e, "Failed to decrypt $roomId")

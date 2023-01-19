@@ -73,7 +73,6 @@ import org.matrix.rustcomponents.sdk.crypto.DecryptionException
 import org.matrix.rustcomponents.sdk.crypto.DeviceLists
 import org.matrix.rustcomponents.sdk.crypto.EncryptionSettings
 import org.matrix.rustcomponents.sdk.crypto.KeyRequestPair
-import org.matrix.rustcomponents.sdk.crypto.KeySafety
 import org.matrix.rustcomponents.sdk.crypto.KeysImportResult
 import org.matrix.rustcomponents.sdk.crypto.Logger
 import org.matrix.rustcomponents.sdk.crypto.MegolmV1BackupKey
@@ -431,7 +430,7 @@ internal class OlmMachine @Inject constructor(
                         throw MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS, MXCryptoError.MISSING_FIELDS_REASON)
                     }
                     val serializedEvent = adapter.toJson(event)
-                    val decrypted = inner.decryptRoomEvent(serializedEvent, event.roomId)
+                    val decrypted = inner.decryptRoomEvent(serializedEvent, event.roomId, false)
 
                     val deserializationAdapter =
                             moshi.adapter<JsonDict>(Map::class.java)
@@ -443,7 +442,7 @@ internal class OlmMachine @Inject constructor(
                             senderCurve25519Key = decrypted.senderCurve25519Key,
                             claimedEd25519Key = decrypted.claimedEd25519Key,
                             forwardingCurve25519KeyChain = decrypted.forwardingCurve25519Chain,
-                            isSafe = decrypted.keySafety == KeySafety.SAFE,
+                            messageVerificationState = decrypted.verificationState.fromInner(),
                     )
                 } catch (throwable: Throwable) {
                     val reThrow = when (throwable) {

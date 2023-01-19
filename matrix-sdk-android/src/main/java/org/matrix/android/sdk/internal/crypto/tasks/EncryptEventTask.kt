@@ -19,6 +19,7 @@ import dagger.Lazy
 import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.crypto.model.MXEventDecryptionResult
+import org.matrix.android.sdk.api.session.crypto.model.MessageVerificationState
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
@@ -78,7 +79,7 @@ internal class DefaultEncryptEventTask @Inject constructor(
                     forwardingCurve25519KeyChain = emptyList(),
                     senderCurve25519Key = result.eventContent["sender_key"] as? String,
                     claimedEd25519Key = cryptoService.get().getMyCryptoDevice().fingerprint(),
-                    isSafe = true
+                    messageVerificationState = MessageVerificationState.VERIFIED
             )
         } else {
             null
