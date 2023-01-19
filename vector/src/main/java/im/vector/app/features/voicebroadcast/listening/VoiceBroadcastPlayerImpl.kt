@@ -270,7 +270,6 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
                 playbackTracker.updatePausedAtPlaybackTime(voiceBroadcast.voiceBroadcastId, positionMillis, positionMillis.toFloat() / duration)
             }
             playingState == State.Playing || playingState == State.Buffering -> {
-                updateLiveListeningMode(positionMillis)
                 startPlayback(positionMillis)
             }
             playingState == State.Idle || playingState == State.Paused -> {
@@ -394,35 +393,11 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
      * Update the live listening state according to:
      * - the voice broadcast state (started/paused/resumed/stopped),
      * - the playing state (IDLE, PLAYING, PAUSED, BUFFERING),
-     * - the potential seek position (backward/forward).
      */
-    private fun updateLiveListeningMode(seekPosition: Int? = null) {
-        isLiveListening = when {
-            // the current voice broadcast is not live (ended)
-            mostRecentVoiceBroadcastEvent?.isLive != true -> false
-            // the player is stopped or paused
-            playingState == State.Idle || playingState == State.Paused -> false
-            seekPosition != null -> {
-                val seekDirection = seekPosition.compareTo(getCurrentPlaybackPosition() ?: 0)
-                val newSequence = playlist.findByPosition(seekPosition)?.sequence
-                // the user has sought forward
-                if (seekDirection >= 0) {
-                    // stay in live or latest sequence reached
-                    isLiveListening || newSequence == playlist.lastOrNull()?.sequence
-                }
-                // the user has sought backward
-                else {
-                    // was in live and stay in the same sequence
-                    isLiveListening && newSequence == playlist.currentSequence
-                }
-            }
-            // if there is no saved position, go in live
-            getCurrentPlaybackPosition() == null -> true
-            // if we reached the latest sequence, go in live
-            playlist.currentSequence == playlist.lastOrNull()?.sequence -> true
-            // otherwise, do not change
-            else -> isLiveListening
-        }
+    private fun updateLiveListeningMode() {
+        val isLiveVoiceBroadcast = mostRecentVoiceBroadcastEvent?.isLive.orFalse()
+        val isPlaying = playingState == State.Playing || playingState == State.Buffering
+        isLiveListening = isLiveVoiceBroadcast && isPlaying
     }
 
     private fun onLiveListeningChanged(isLiveListening: Boolean) {
