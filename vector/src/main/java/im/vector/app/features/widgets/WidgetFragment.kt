@@ -126,6 +126,7 @@ class WidgetFragment :
         if (fragmentArgs.kind == WidgetKind.ELEMENT_CALL) {
             if (checkPermissions(PERMISSIONS_FOR_BLUETOOTH, requireActivity(), scanBluetoothResultLauncher)) {
                 startBluetoothScanning()
+                startBluetoothService()
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 configureAudioDevice()
@@ -449,6 +450,12 @@ class WidgetFragment :
     private fun onBluetoothDeviceSelected(deviceAddress: String) {
         viewModel.handle(WidgetAction.ConnectToBluetoothDevice(deviceAddress))
 
+        Intent(requireContext(), BluetoothLowEnergyService::class.java).also {
+            ContextCompat.startForegroundService(requireContext(), it)
+        }
+    }
+
+    private fun startBluetoothService() {
         Intent(requireContext(), BluetoothLowEnergyService::class.java).also {
             ContextCompat.startForegroundService(requireContext(), it)
         }
