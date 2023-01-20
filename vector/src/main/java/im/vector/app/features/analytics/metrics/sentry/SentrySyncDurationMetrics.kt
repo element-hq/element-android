@@ -69,6 +69,7 @@ class SentrySyncDurationMetrics @Inject constructor() : SyncDurationMetricPlugin
 
     override fun finishTransaction() {
         transaction?.finish()
+        transaction = null
         logTransaction("Sentry transaction finished")
     }
 
