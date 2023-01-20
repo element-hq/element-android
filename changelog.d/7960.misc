@@ -1,0 +1,1 @@
+Sentry: Report sync duration and metrics for initial sync and for sync after pause. Not for regular sync.
