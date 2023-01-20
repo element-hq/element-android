@@ -25,15 +25,12 @@ import dagger.assisted.AssistedInject
 import io.realm.kotlin.where
 import kotlinx.coroutines.delay
 import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.room.model.PollResponseAggregatedSummary
 import org.matrix.android.sdk.api.session.room.poll.LoadedPollsStatus
 import org.matrix.android.sdk.api.session.room.poll.PollHistoryService
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
-import org.matrix.android.sdk.internal.database.mapper.PollResponseAggregatedSummaryEntityMapper
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.model.PollHistoryStatusEntity
 import org.matrix.android.sdk.internal.database.model.PollHistoryStatusEntityFields
-import org.matrix.android.sdk.internal.database.model.PollResponseAggregatedSummaryEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
 import org.matrix.android.sdk.internal.di.SessionDatabase
@@ -90,19 +87,26 @@ internal class DefaultPollHistoryService @AssistedInject constructor(
         return Transformations.switchMap(pollHistoryStatusLiveData) { results ->
             val oldestTimestamp = results.firstOrNull()?.oldestTimestampReachedMs ?: clock.epochMillis()
             Timber.d("oldestTimestamp=$oldestTimestamp")
+            getPollStartEventsAfter(oldestTimestamp)
+        }
+    }
 
-            monarchy.findAllMappedWithChanges(
-                    { realm ->
-                        val pollTypes = EventType.POLL_START.values.toTypedArray()
-                        realm.where<TimelineEventEntity>()
-                                .equalTo(TimelineEventEntityFields.ROOM_ID, roomId)
-                                .`in`(TimelineEventEntityFields.ROOT.TYPE, pollTypes)
-                                .greaterThan(TimelineEventEntityFields.ROOT.ORIGIN_SERVER_TS, oldestTimestamp)
-                    },
-                    { result ->
-                        timelineEventMapper.map(result, buildReadReceipts = false)
-                    }
-            )
+    private fun getPollStartEventsAfter(timestampMs: Long): LiveData<List<TimelineEvent>> {
+        val eventsLiveData = monarchy.findAllMappedWithChanges(
+                { realm ->
+                    val pollTypes = (EventType.POLL_START.values + EventType.ENCRYPTED).toTypedArray()
+                    realm.where<TimelineEventEntity>()
+                            .equalTo(TimelineEventEntityFields.ROOM_ID, roomId)
+                            .`in`(TimelineEventEntityFields.ROOT.TYPE, pollTypes)
+                            .greaterThan(TimelineEventEntityFields.ROOT.ORIGIN_SERVER_TS, timestampMs)
+                },
+                { result ->
+                    timelineEventMapper.map(result, buildReadReceipts = false)
+                }
+        )
+
+        return Transformations.map(eventsLiveData) { events ->
+            events.filter { it.root.getClearType() in EventType.POLL_START.values }
         }
     }
 
