@@ -36,24 +36,24 @@ internal open class PollHistoryStatusEntity(
         var currentTimestampTargetBackwardMs: Long? = null,
 
         /**
-         * Timestamp of the oldest event synced in milliseconds.
+         * Timestamp of the oldest event synced once target has been reached in milliseconds.
          */
-        var oldestTimestampReachedMs: Long? = null,
+        var oldestTimestampTargetReachedMs: Long? = null,
+
+        /**
+         * Id of the oldest event synced.
+         */
+        var oldestEventIdReached: String? = null,
+
+        /**
+         * Id of the most recent event synced.
+         */
+        var mostRecentEventIdReached: String? = null,
 
         /**
          * Indicate whether all polls in a room have been synced in backward direction.
          */
         var isEndOfPollsBackward: Boolean = false,
-
-        /**
-         * Token of the end of the last synced chunk in backward direction.
-         */
-        var tokenEndBackward: String? = null,
-
-        /**
-         * Token of the start of the last synced chunk in forward direction.
-         */
-        var tokenStartForward: String? = null,
 ) : RealmObject() {
 
     companion object
@@ -65,10 +65,10 @@ internal open class PollHistoryStatusEntity(
         return PollHistoryStatusEntity(
                 roomId = roomId,
                 currentTimestampTargetBackwardMs = currentTimestampTargetBackwardMs,
-                oldestTimestampReachedMs = oldestTimestampReachedMs,
+                oldestTimestampTargetReachedMs = oldestTimestampTargetReachedMs,
+                oldestEventIdReached = oldestEventIdReached,
+                mostRecentEventIdReached = mostRecentEventIdReached,
                 isEndOfPollsBackward = isEndOfPollsBackward,
-                tokenEndBackward = tokenEndBackward,
-                tokenStartForward = tokenStartForward,
         )
     }
 
@@ -76,7 +76,7 @@ internal open class PollHistoryStatusEntity(
      * Indicate whether at least one poll sync has been fully completed backward for the given room.
      */
     val hasCompletedASyncBackward: Boolean
-        get() = oldestTimestampReachedMs != null
+        get() = oldestTimestampTargetReachedMs != null
 
     /**
      * Indicate whether all polls in a room have been synced for the current timestamp target in backward direction.
@@ -86,7 +86,7 @@ internal open class PollHistoryStatusEntity(
 
     private fun checkIfCurrentTimestampTargetBackwardIsReached(): Boolean {
         val currentTarget = currentTimestampTargetBackwardMs
-        val lastTarget = oldestTimestampReachedMs
+        val lastTarget = oldestTimestampTargetReachedMs
         // last timestamp target should be older or equal to the current target
         return currentTarget != null && lastTarget != null && lastTarget <= currentTarget
     }
@@ -95,7 +95,7 @@ internal open class PollHistoryStatusEntity(
      * Compute the number of days of history currently synced.
      */
     fun getNbSyncedDays(currentMs: Long): Int {
-        val oldestTimestamp = oldestTimestampReachedMs
+        val oldestTimestamp = oldestTimestampTargetReachedMs
         return if (oldestTimestamp == null) {
             0
         } else {

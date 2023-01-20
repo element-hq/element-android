@@ -17,25 +17,20 @@
 package org.matrix.android.sdk.internal.session.room.poll
 
 import com.zhuinden.monarchy.Monarchy
-import org.matrix.android.sdk.api.session.events.model.isPoll
-import org.matrix.android.sdk.api.session.events.model.isPollResponse
 import org.matrix.android.sdk.api.session.room.poll.LoadedPollsStatus
+import org.matrix.android.sdk.api.session.room.timeline.Timeline
+import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.internal.database.model.PollHistoryStatusEntity
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.di.SessionDatabase
-import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
-import org.matrix.android.sdk.internal.network.executeRequest
-import org.matrix.android.sdk.internal.session.room.RoomAPI
-import org.matrix.android.sdk.internal.session.room.event.FilterAndStoreEventsTask
 import org.matrix.android.sdk.internal.session.room.poll.PollConstants.MILLISECONDS_PER_DAY
-import org.matrix.android.sdk.internal.session.room.timeline.PaginationDirection
-import org.matrix.android.sdk.internal.session.room.timeline.PaginationResponse
 import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.awaitTransaction
 import javax.inject.Inject
 
 internal interface LoadMorePollsTask : Task<LoadMorePollsTask.Params, LoadedPollsStatus> {
     data class Params(
+            val timeline: Timeline,
             val roomId: String,
             val currentTimestampMs: Long,
             val loadingPeriodInDays: Int,
@@ -45,16 +40,15 @@ internal interface LoadMorePollsTask : Task<LoadMorePollsTask.Params, LoadedPoll
 
 internal class DefaultLoadMorePollsTask @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
-        private val roomAPI: RoomAPI,
-        private val globalErrorReceiver: GlobalErrorReceiver,
-        private val filterAndStoreEventsTask: FilterAndStoreEventsTask,
 ) : LoadMorePollsTask {
 
     override suspend fun execute(params: LoadMorePollsTask.Params): LoadedPollsStatus {
         var currentPollHistoryStatus = updatePollHistoryStatus(params)
 
+        params.timeline.restartWithEventId(eventId = currentPollHistoryStatus.oldestEventIdReached)
+
         while (shouldFetchMoreEventsBackward(currentPollHistoryStatus)) {
-            currentPollHistoryStatus = fetchMorePollEventsBackward(params, currentPollHistoryStatus)
+            currentPollHistoryStatus = fetchMorePollEventsBackward(params)
         }
         // TODO
         //   check how it behaves when cancelling the process: it should resume where it was stopped
@@ -77,7 +71,7 @@ internal class DefaultLoadMorePollsTask @Inject constructor(
         return monarchy.awaitTransaction { realm ->
             val status = PollHistoryStatusEntity.getOrCreate(realm, params.roomId)
             val currentTargetTimestampMs = status.currentTimestampTargetBackwardMs
-            val lastTargetTimestampMs = status.oldestTimestampReachedMs
+            val lastTargetTimestampMs = status.oldestTimestampTargetReachedMs
             val loadingPeriodMs: Long = MILLISECONDS_PER_DAY * params.loadingPeriodInDays.toLong()
             if (currentTargetTimestampMs == null) {
                 // first load, compute the target timestamp
@@ -91,62 +85,61 @@ internal class DefaultLoadMorePollsTask @Inject constructor(
         }
     }
 
-    private suspend fun fetchMorePollEventsBackward(
-            params: LoadMorePollsTask.Params,
-            status: PollHistoryStatusEntity
-    ): PollHistoryStatusEntity {
-        val response = executeRequest(globalErrorReceiver) {
-            roomAPI.getRoomMessagesFrom(
-                    roomId = params.roomId,
-                    from = status.tokenEndBackward,
-                    dir = PaginationDirection.BACKWARDS.value,
-                    limit = params.eventsPageSize,
-                    filter = null
-            )
-        }
-
-        filterAndStorePollEvents(roomId = params.roomId, paginationResponse = response)
-
-        return updatePollHistoryStatus(roomId = params.roomId, paginationResponse = response)
-    }
-
-    private suspend fun filterAndStorePollEvents(roomId: String, paginationResponse: PaginationResponse) {
-        val filterTaskParams = FilterAndStoreEventsTask.Params(
-                roomId = roomId,
-                events = paginationResponse.events,
-                filterPredicate = { it.isPoll() || it.isPollResponse() }
+    private suspend fun fetchMorePollEventsBackward(params: LoadMorePollsTask.Params): PollHistoryStatusEntity {
+        val events = params.timeline.awaitPaginate(
+                direction = Timeline.Direction.BACKWARDS,
+                count = params.eventsPageSize,
         )
-        filterAndStoreEventsTask.execute(filterTaskParams)
+
+        val paginationState = params.timeline.getPaginationState(direction = Timeline.Direction.BACKWARDS)
+
+        return updatePollHistoryStatus(
+                roomId = params.roomId,
+                events = events,
+                paginationState = paginationState,
+        )
     }
 
-    private suspend fun updatePollHistoryStatus(roomId: String, paginationResponse: PaginationResponse): PollHistoryStatusEntity {
+    private suspend fun updatePollHistoryStatus(
+            roomId: String,
+            events: List<TimelineEvent>,
+            paginationState: Timeline.PaginationState,
+    ): PollHistoryStatusEntity {
         return monarchy.awaitTransaction { realm ->
             val status = PollHistoryStatusEntity.getOrCreate(realm, roomId)
-            val tokenStartForward = status.tokenStartForward
+            val mostRecentEventIdReached = status.mostRecentEventIdReached
 
-            if (tokenStartForward == null) {
-                // save the start token for next forward call
-                status.tokenEndBackward = paginationResponse.start
+            if (mostRecentEventIdReached == null) {
+                // save it for next forward pagination
+                val mostRecentEvent = events
+                        .maxByOrNull { it.root.originServerTs ?: Long.MIN_VALUE }
+                        ?.root
+                status.mostRecentEventIdReached = mostRecentEvent?.eventId
             }
 
-            val oldestEventTimestamp = paginationResponse.events
-                    .minByOrNull { it.originServerTs ?: Long.MAX_VALUE }
-                    ?.originServerTs
+            val oldestEvent = events
+                    .minByOrNull { it.root.originServerTs ?: Long.MAX_VALUE }
+                    ?.root
+            val oldestEventTimestamp = oldestEvent?.originServerTs
+            val oldestEventId = oldestEvent?.eventId
 
             val currentTargetTimestamp = status.currentTimestampTargetBackwardMs
 
-            if (paginationResponse.end == null) {
+            if (paginationState.hasMoreToLoad.not()) {
                 // start of the timeline is reached, there are no more events
                 status.isEndOfPollsBackward = true
-                if(oldestEventTimestamp != null && oldestEventTimestamp > 0) {
-                    status.oldestTimestampReachedMs = oldestEventTimestamp
+
+                if (oldestEventTimestamp != null && oldestEventTimestamp > 0) {
+                    status.oldestTimestampTargetReachedMs = oldestEventTimestamp
                 }
             } else if (oldestEventTimestamp != null && currentTargetTimestamp != null && oldestEventTimestamp <= currentTargetTimestamp) {
                 // target has been reached
-                status.oldestTimestampReachedMs = oldestEventTimestamp
-                status.tokenEndBackward = paginationResponse.end
-            } else {
-                status.tokenEndBackward = paginationResponse.end
+                status.oldestTimestampTargetReachedMs = oldestEventTimestamp
+            }
+
+            if(oldestEventId != null) {
+                // save it for next backward pagination
+                status.oldestEventIdReached = oldestEventId
             }
 
             // return a copy of the Realm object

@@ -77,11 +77,12 @@ internal class DefaultRoomFactory @Inject constructor(
 ) : RoomFactory {
 
     override fun create(roomId: String): Room {
+        val timelineService = timelineServiceFactory.create(roomId)
         return DefaultRoom(
                 roomId = roomId,
                 roomSummaryDataSource = roomSummaryDataSource,
                 roomCryptoService = roomCryptoServiceFactory.create(roomId),
-                timelineService = timelineServiceFactory.create(roomId),
+                timelineService = timelineService,
                 threadsService = threadsServiceFactory.create(roomId),
                 threadsLocalService = threadsLocalServiceFactory.create(roomId),
                 sendService = sendServiceFactory.create(roomId),
@@ -101,7 +102,7 @@ internal class DefaultRoomFactory @Inject constructor(
                 roomVersionService = roomVersionServiceFactory.create(roomId),
                 viaParameterFinder = viaParameterFinder,
                 locationSharingService = locationSharingServiceFactory.create(roomId),
-                pollHistoryService = pollHistoryServiceFactory.create(roomId),
+                pollHistoryService = pollHistoryServiceFactory.create(roomId, timelineService),
                 coroutineDispatchers = coroutineDispatchers
         )
     }

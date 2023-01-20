@@ -25,6 +25,10 @@ class RoomPollRepository @Inject constructor(
         private val roomPollDataSource: RoomPollDataSource,
 ) {
 
+    fun dispose(roomId: String) {
+        roomPollDataSource.dispose(roomId)
+    }
+
     fun getPolls(roomId: String): Flow<List<TimelineEvent>> {
         return roomPollDataSource.getPolls(roomId)
     }
