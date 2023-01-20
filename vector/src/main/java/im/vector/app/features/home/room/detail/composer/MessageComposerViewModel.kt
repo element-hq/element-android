@@ -29,6 +29,7 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.getVectorLastMessageContent
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.time.Clock
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.extensions.toAnalyticsComposer
 import im.vector.app.features.analytics.extensions.toAnalyticsJoinedRoom
@@ -46,10 +47,16 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.voice.VoiceFailure
 import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
 import im.vector.app.features.voicebroadcast.VoiceBroadcastHelper
+import im.vector.app.features.voicebroadcast.model.VoiceBroadcast
+import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
+import im.vector.app.features.voicebroadcast.usecase.GetVoiceBroadcastStateEventLiveUseCase
+import im.vector.app.features.voicebroadcast.voiceBroadcastId
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
@@ -76,6 +83,7 @@ import org.matrix.android.sdk.api.session.room.send.UserDraft
 import org.matrix.android.sdk.api.session.room.timeline.getRelationContent
 import org.matrix.android.sdk.api.session.room.timeline.getTextEditableContent
 import org.matrix.android.sdk.api.session.space.CreateSpaceParams
+import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
 import timber.log.Timber
@@ -90,6 +98,8 @@ class MessageComposerViewModel @AssistedInject constructor(
         private val audioMessageHelper: AudioMessageHelper,
         private val analyticsTracker: AnalyticsTracker,
         private val voiceBroadcastHelper: VoiceBroadcastHelper,
+        private val clock: Clock,
+        private val getVoiceBroadcastStateEventLiveUseCase: GetVoiceBroadcastStateEventLiveUseCase,
 ) : VectorViewModel<MessageComposerViewState, MessageComposerAction, MessageComposerViewEvents>(initialState) {
 
     private val room = session.getRoom(initialState.roomId)
@@ -205,8 +215,11 @@ class MessageComposerViewModel @AssistedInject constructor(
     private fun observeVoiceBroadcast(room: Room) {
         room.stateService().getStateEventLive(VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO, QueryStringValue.Equals(session.myUserId))
                 .asFlow()
-                .unwrap()
-                .mapNotNull { it.asVoiceBroadcastEvent()?.content?.voiceBroadcastState }
+                .map { it.getOrNull()?.asVoiceBroadcastEvent()?.voiceBroadcastId }
+                .flatMapLatest { voiceBroadcastId ->
+                    voiceBroadcastId?.let { getVoiceBroadcastStateEventLiveUseCase.execute(VoiceBroadcast(it, room.roomId)) } ?: flowOf(Optional.empty())
+                }
+                .map { it.getOrNull()?.content?.voiceBroadcastState }
                 .setOnEach {
                     copy(voiceBroadcastState = it)
                 }
@@ -918,12 +931,13 @@ class MessageComposerViewModel @AssistedInject constructor(
     }
 
     private fun handleStartRecordingVoiceMessage(room: Room) {
-        val isRecordingVoiceBroadcast = withState(this) { it.isRecordingVoiceBroadcast }
-        if (isRecordingVoiceBroadcast) {
+        val voiceBroadcastState = withState(this) { it.voiceBroadcastState }
+        if (voiceBroadcastState != null && voiceBroadcastState != VoiceBroadcastState.STOPPED) {
             _viewEvents.post(MessageComposerViewEvents.VoicePlaybackOrRecordingFailure(VoiceFailure.VoiceBroadcastInProgress))
         } else {
             try {
                 audioMessageHelper.startRecording(room.roomId)
+                setState { copy(voiceRecordingUiState = VoiceMessageRecorderView.RecordingUiState.Recording(clock.epochMillis())) }
             } catch (failure: Throwable) {
                 _viewEvents.post(MessageComposerViewEvents.VoicePlaybackOrRecordingFailure(failure))
             }
