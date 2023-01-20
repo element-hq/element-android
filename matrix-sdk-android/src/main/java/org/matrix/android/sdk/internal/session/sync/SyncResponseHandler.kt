@@ -68,12 +68,13 @@ internal class SyncResponseHandler @Inject constructor(
     suspend fun handleResponse(
             syncResponse: SyncResponse,
             fromToken: String?,
+            afterPause: Boolean,
             reporter: ProgressReporter?
     ) {
         val isInitialSync = fromToken == null
         Timber.v("Start handling sync, is InitialSync: $isInitialSync")
 
-        relevantPlugins.measureSpannableMetric {
+        relevantPlugins.filter { it.shouldReport(isInitialSync, afterPause) }.measureSpannableMetric {
             startCryptoService(isInitialSync)
 
             // Handle the to device events before the room ones
