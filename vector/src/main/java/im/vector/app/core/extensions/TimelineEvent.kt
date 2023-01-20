@@ -30,7 +30,6 @@ import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 fun TimelineEvent.canReact(): Boolean {
     // Only event of type EventType.MESSAGE, EventType.STICKER and EventType.POLL_START, and started voice broadcast are supported for the moment
     return (root.getClearType() in listOf(EventType.MESSAGE, EventType.STICKER) + EventType.POLL_START.values + EventType.POLL_END.values ||
-            root.getClearType() == VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO &&
             root.asVoiceBroadcastEvent()?.content?.voiceBroadcastState == VoiceBroadcastState.STARTED) &&
             root.sendState == SendState.SYNCED &&
             !root.isRedacted()
