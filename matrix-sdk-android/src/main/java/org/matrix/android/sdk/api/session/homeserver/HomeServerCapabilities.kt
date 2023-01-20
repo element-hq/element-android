@@ -75,6 +75,11 @@ data class HomeServerCapabilities(
          * True if the home server supports remote toggle of Pusher for a given device.
          */
         val canRemotelyTogglePushNotificationsOfDevices: Boolean = false,
+
+        /**
+         * True if the home server supports event redaction with relations.
+         */
+        var canRedactEventWithRelations: Boolean = false,
 ) {
 
     enum class RoomCapabilitySupport {

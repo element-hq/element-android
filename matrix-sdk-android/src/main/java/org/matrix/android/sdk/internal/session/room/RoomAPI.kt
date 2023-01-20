@@ -350,14 +350,14 @@ internal interface RoomAPI {
      * @param txId the transaction Id
      * @param roomId the room id
      * @param eventId the event to delete
-     * @param reason json containing reason key {"reason": "Indecent material"}
+     * @param body body containing reason key {"reason": "Indecent material"} and with_relations
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/redact/{eventId}/{txnId}")
     suspend fun redactEvent(
             @Path("txnId") txId: String,
             @Path("roomId") roomId: String,
             @Path("eventId") eventId: String,
-            @Body reason: Map<String, String>
+            @Body body: EventRedactBody
     ): SendResponse
 
     /**
