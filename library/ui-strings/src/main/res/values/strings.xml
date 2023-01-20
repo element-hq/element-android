@@ -1724,6 +1724,7 @@
 
     <!-- Settings -->
     <string name="settings_general_title">General</string>
+    <string name="settings_appearance_title">Appearance</string>
     <string name="settings_preferences">Preferences</string>
     <string name="settings_security_and_privacy">Security &amp; Privacy</string>
     <string name="settings_push_rules">Push Rules</string>

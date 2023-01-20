@@ -4,33 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <im.vector.app.core.preference.VectorPreferenceCategory
-        android:key="SETTINGS_USER_INTERFACE_KEY"
-        android:title="@string/settings_user_interface">
-
-        <im.vector.app.core.preference.VectorPreference
-            android:key="SETTINGS_INTERFACE_LANGUAGE_PREFERENCE_KEY"
-            android:persistent="false"
-            android:title="@string/settings_interface_language"
-            app:fragment="im.vector.app.features.settings.locale.LocalePickerFragment" />
-
-        <im.vector.app.core.preference.VectorListPreference
-            android:defaultValue="system"
-            android:entries="@array/theme_entries"
-            android:entryValues="@array/theme_values"
-            android:key="APPLICATION_THEME_KEY"
-            android:summary="%s"
-            android:title="@string/settings_theme"
-            app:iconSpaceReserved="false" />
-
-        <im.vector.app.core.preference.VectorPreference
-            android:dialogTitle="@string/font_size"
-            android:key="SETTINGS_INTERFACE_TEXT_SIZE_KEY"
-            android:persistent="false"
-            android:title="@string/font_size" />
-
-    </im.vector.app.core.preference.VectorPreferenceCategory>
-
-    <im.vector.app.core.preference.VectorPreferenceCategory
         android:title="@string/spaces"
         android:key="SETTINGS_PREF_SPACE_CATEGORY">
 
@@ -77,12 +50,6 @@
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
     <im.vector.app.core.preference.VectorPreferenceCategory android:title="@string/settings_category_timeline">
-
-        <im.vector.app.core.preference.VectorSwitchPreference
-            android:defaultValue="@bool/settings_interface_bubble_default"
-            android:key="SETTINGS_INTERFACE_BUBBLE_KEY"
-            android:title="@string/message_bubbles"
-            app:isPreferenceVisible="@bool/settings_interface_bubble_visible" />
 
         <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="@bool/settings_timeline_show_live_sender_info_default"

@@ -85,6 +85,7 @@ class VectorSettingsGeneralFragment :
     override val preferenceXmlRes = R.xml.vector_settings_general
 
     private lateinit var galleryOrCameraDialogHelper: GalleryOrCameraDialogHelper
+    @Inject lateinit var vectorLocale: VectorLocale
 
     private val mUserSettingsCategory by lazy {
         findPreference<PreferenceCategory>(VectorPreferences.SETTINGS_USER_SETTINGS_PREFERENCE_KEY)!!
@@ -97,6 +98,9 @@ class VectorSettingsGeneralFragment :
     }
     private val mPasswordPreference by lazy {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY)!!
+    }
+    private val selectedLanguagePreference by lazy {
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_INTERFACE_LANGUAGE_PREFERENCE_KEY)!!
     }
     private val mIdentityServerPreference by lazy {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY)!!
@@ -161,6 +165,9 @@ class VectorSettingsGeneralFragment :
     }
 
     override fun bindPref() {
+        // user interface preferences
+        setUserInterfacePreferences()
+
         // Avatar
         mUserAvatarPreference.let {
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
@@ -497,5 +504,10 @@ class VectorSettingsGeneralFragment :
                 )
             }
         }
+    }
+
+    private fun setUserInterfacePreferences() {
+        // Selected language
+        selectedLanguagePreference.summary = vectorLocale.localeToLocalisedString(vectorLocale.applicationLocale)
     }
 }

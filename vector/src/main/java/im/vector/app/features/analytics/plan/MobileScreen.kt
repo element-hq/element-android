@@ -206,6 +206,11 @@ data class MobileScreen(
         Settings,
 
         /**
+         * The appearance settings screen.
+         */
+        SettingsAppearance,
+
+        /**
          * The advanced settings screen (developer mode, rageshake, push
          * notification rules).
          */

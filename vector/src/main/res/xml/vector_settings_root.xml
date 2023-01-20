@@ -9,6 +9,12 @@
         app:isPreferenceVisible="@bool/settings_root_general_visible" />
 
     <im.vector.app.core.preference.VectorPreference
+        android:icon="@drawable/ic_settings_root_appearance"
+        android:title="@string/settings_appearance_title"
+        app:fragment="im.vector.app.features.settings.VectorSettingsAppearanceFragment"
+        app:isPreferenceVisible="@bool/settings_root_appearance_visible" />
+
+    <im.vector.app.core.preference.VectorPreference
         android:icon="@drawable/ic_settings_root_notification"
         android:title="@string/settings_notifications"
         app:fragment="im.vector.app.features.settings.notifications.VectorSettingsNotificationPreferenceFragment"

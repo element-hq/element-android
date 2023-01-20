@@ -10,6 +10,7 @@
     <!-- Level 0: Root -->
 
     <bool name="settings_root_general_visible">true</bool>
+    <bool name="settings_root_appearance_visible">true</bool>
     <bool name="settings_root_notification_visible">true</bool>
     <bool name="settings_root_preferences_visible">true</bool>
     <bool name="settings_root_voice_video_visible">true</bool>
