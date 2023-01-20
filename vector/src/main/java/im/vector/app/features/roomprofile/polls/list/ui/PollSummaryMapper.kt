@@ -22,6 +22,7 @@ import im.vector.app.features.home.room.detail.timeline.helper.PollResponseDataF
 import im.vector.app.features.home.room.detail.timeline.item.PollResponseData
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
+import timber.log.Timber
 import javax.inject.Inject
 
 // TODO add unit tests
@@ -30,20 +31,21 @@ class PollSummaryMapper @Inject constructor(
         private val pollOptionViewStateFactory: PollOptionViewStateFactory,
 ) {
 
-    fun map(timelineEvent: TimelineEvent): PollSummary {
+    fun map(timelineEvent: TimelineEvent): PollSummary? {
         val content = timelineEvent.getVectorLastMessageContent()
         val pollResponseData = pollResponseDataFactory.create(timelineEvent)
         val eventId = timelineEvent.root.eventId.orEmpty()
         val creationTimestamp = timelineEvent.root.originServerTs ?: 0
-        if (eventId.isNotEmpty() && creationTimestamp > 0 && content is MessagePollContent && pollResponseData != null) {
-            return convertToPollSummary(
+        return if (eventId.isNotEmpty() && creationTimestamp > 0 && content is MessagePollContent) {
+            convertToPollSummary(
                     eventId = eventId,
                     creationTimestamp = creationTimestamp,
                     messagePollContent = content,
                     pollResponseData = pollResponseData
             )
         } else {
-            throw IllegalStateException("missing mandatory info about poll event with id=$eventId")
+            Timber.w("missing mandatory info about poll event with id=$eventId")
+            null
         }
     }
 
@@ -51,11 +53,11 @@ class PollSummaryMapper @Inject constructor(
             eventId: String,
             creationTimestamp: Long,
             messagePollContent: MessagePollContent,
-            pollResponseData: PollResponseData
+            pollResponseData: PollResponseData?
     ): PollSummary {
         val pollCreationInfo = messagePollContent.getBestPollCreationInfo()
         val pollTitle = pollCreationInfo?.question?.getBestQuestion().orEmpty()
-        return if (pollResponseData.isClosed) {
+        return if (pollResponseData?.isClosed == true) {
             PollSummary.EndedPoll(
                     id = eventId,
                     creationTimestamp = creationTimestamp,

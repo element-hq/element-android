@@ -29,6 +29,7 @@ import im.vector.app.features.roomprofile.polls.list.domain.SyncPollsUseCase
 import im.vector.app.features.roomprofile.polls.list.ui.PollSummaryMapper
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
@@ -74,7 +75,7 @@ class RoomPollsViewModel @AssistedInject constructor(
 
     private fun observePolls(roomId: String) {
         getPollsUseCase.execute(roomId)
-                .map { it.map { event -> pollSummaryMapper.map(event) } }
+                .map { it.mapNotNull { event -> pollSummaryMapper.map(event) } }
                 .onEach { setState { copy(polls = it) } }
                 .launchIn(viewModelScope)
     }
