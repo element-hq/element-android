@@ -28,6 +28,8 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.poll.LoadedPollsStatus
 import org.matrix.android.sdk.api.session.room.poll.PollHistoryService
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.api.session.room.timeline.TimelineService
+import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.model.PollHistoryStatusEntity
 import org.matrix.android.sdk.internal.database.model.PollHistoryStatusEntityFields
@@ -43,6 +45,7 @@ private const val EVENTS_PAGE_SIZE = 250
 // TODO add unit tests
 internal class DefaultPollHistoryService @AssistedInject constructor(
         @Assisted private val roomId: String,
+        @Assisted private val timelineService: TimelineService,
         @SessionDatabase private val monarchy: Monarchy,
         private val clock: Clock,
         private val loadMorePollsTask: LoadMorePollsTask,
@@ -52,14 +55,30 @@ internal class DefaultPollHistoryService @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory {
-        fun create(roomId: String): DefaultPollHistoryService
+        fun create(roomId: String, timelineService: TimelineService): DefaultPollHistoryService
     }
 
     override val loadingPeriodInDays: Int
         get() = LOADING_PERIOD_IN_DAYS
 
+    private val timeline by lazy {
+        // TODO check if we need to add a way to avoid using the current filter in rooms
+        val settings = TimelineSettings(
+                initialSize = EVENTS_PAGE_SIZE,
+                buildReadReceipts = false,
+                rootThreadEventId = null,
+                useLiveSenderInfo = false,
+        )
+        timelineService.createTimeline(eventId = null, settings = settings).also { it.start() }
+    }
+
+    override fun dispose() {
+        timeline.dispose()
+    }
+
     override suspend fun loadMore(): LoadedPollsStatus {
         val params = LoadMorePollsTask.Params(
+                timeline = timeline,
                 roomId = roomId,
                 currentTimestampMs = clock.epochMillis(),
                 loadingPeriodInDays = loadingPeriodInDays,
@@ -78,6 +97,8 @@ internal class DefaultPollHistoryService @AssistedInject constructor(
 
     override suspend fun syncPolls() {
         // TODO unmock
+        // TODO when sync forward, jump to most recent event Id + paginate forward + jump to oldest eventId after
+        // TODO avoid possibility to call sync and loadMore at the same time from the service API, how?
         delay(1000)
     }
 
@@ -85,7 +106,7 @@ internal class DefaultPollHistoryService @AssistedInject constructor(
         val pollHistoryStatusLiveData = getPollHistoryStatus()
 
         return Transformations.switchMap(pollHistoryStatusLiveData) { results ->
-            val oldestTimestamp = results.firstOrNull()?.oldestTimestampReachedMs ?: clock.epochMillis()
+            val oldestTimestamp = results.firstOrNull()?.oldestTimestampTargetReachedMs ?: clock.epochMillis()
             Timber.d("oldestTimestamp=$oldestTimestamp")
             getPollStartEventsAfter(oldestTimestamp)
         }

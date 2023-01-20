@@ -23,13 +23,13 @@ import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.roomprofile.polls.list.domain.DisposePollHistoryUseCase
 import im.vector.app.features.roomprofile.polls.list.domain.GetPollsUseCase
 import im.vector.app.features.roomprofile.polls.list.domain.LoadMorePollsUseCase
 import im.vector.app.features.roomprofile.polls.list.domain.SyncPollsUseCase
 import im.vector.app.features.roomprofile.polls.list.ui.PollSummaryMapper
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
@@ -38,6 +38,7 @@ class RoomPollsViewModel @AssistedInject constructor(
         private val getPollsUseCase: GetPollsUseCase,
         private val loadMorePollsUseCase: LoadMorePollsUseCase,
         private val syncPollsUseCase: SyncPollsUseCase,
+        private val disposePollHistoryUseCase: DisposePollHistoryUseCase,
         private val pollSummaryMapper: PollSummaryMapper,
 ) : VectorViewModel<RoomPollsViewState, RoomPollsAction, RoomPollsViewEvent>(initialState) {
 
@@ -52,6 +53,11 @@ class RoomPollsViewModel @AssistedInject constructor(
         val roomId = initialState.roomId
         syncPolls(roomId)
         observePolls(roomId)
+    }
+
+    override fun onCleared() {
+        withState { disposePollHistoryUseCase.execute(it.roomId) }
+        super.onCleared()
     }
 
     private fun syncPolls(roomId: String) {

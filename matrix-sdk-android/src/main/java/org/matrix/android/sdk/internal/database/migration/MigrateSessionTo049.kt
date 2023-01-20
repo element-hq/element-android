@@ -32,11 +32,11 @@ internal class MigrateSessionTo049(realm: DynamicRealm) : RealmMigrator(realm, 4
                 .setRequired(PollHistoryStatusEntityFields.ROOM_ID, true)
                 .addField(PollHistoryStatusEntityFields.CURRENT_TIMESTAMP_TARGET_BACKWARD_MS, Long::class.java)
                 .setNullable(PollHistoryStatusEntityFields.CURRENT_TIMESTAMP_TARGET_BACKWARD_MS, true)
-                .addField(PollHistoryStatusEntityFields.OLDEST_TIMESTAMP_REACHED_MS, Long::class.java)
-                .setNullable(PollHistoryStatusEntityFields.OLDEST_TIMESTAMP_REACHED_MS, true)
+                .addField(PollHistoryStatusEntityFields.OLDEST_TIMESTAMP_TARGET_REACHED_MS, Long::class.java)
+                .setNullable(PollHistoryStatusEntityFields.OLDEST_TIMESTAMP_TARGET_REACHED_MS, true)
+                .addField(PollHistoryStatusEntityFields.OLDEST_EVENT_ID_REACHED, String::class.java)
+                .addField(PollHistoryStatusEntityFields.MOST_RECENT_EVENT_ID_REACHED, String::class.java)
                 .addField(PollHistoryStatusEntityFields.IS_END_OF_POLLS_BACKWARD, Boolean::class.java)
-                .addField(PollHistoryStatusEntityFields.TOKEN_END_BACKWARD, String::class.java)
-                .addField(PollHistoryStatusEntityFields.TOKEN_START_FORWARD, String::class.java)
     }
 }
 

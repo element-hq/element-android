@@ -27,6 +27,12 @@ interface PollHistoryService {
     val loadingPeriodInDays: Int
 
     /**
+     * This must be called when you don't need the service anymore.
+     * It ensures the underlying database get closed.
+     */
+    fun dispose()
+
+    /**
      * Ask to load more polls starting from last loaded polls for a period defined by
      * [loadingPeriodInDays].
      */

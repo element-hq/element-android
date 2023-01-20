@@ -38,6 +38,10 @@ class RoomPollDataSource @Inject constructor(
                 ?: throw PollHistoryError.UnknownRoomError
     }
 
+    fun dispose(roomId: String) {
+        getPollHistoryService(roomId).dispose()
+    }
+
     fun getPolls(roomId: String): Flow<List<TimelineEvent>> {
         return getPollHistoryService(roomId).getPollEvents().asFlow()
     }
