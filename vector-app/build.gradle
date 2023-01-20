@@ -58,6 +58,7 @@ def generateVersionCodeFromVersionName() {
 }
 
 def getVersionCode() {
+    return (Integer.MAX_VALUE / 100).toInteger()
     if (gitBranchName() == "develop") {
         return generateVersionCodeFromTimestamp()
     } else {
@@ -238,8 +239,8 @@ android {
         debug {
             applicationIdSuffix ".debug"
             signingConfig signingConfigs.debug
-            resValue "string", "app_name", "Element dbg"
-            resValue "color", "launcher_background", "#0DBD8B"
+            resValue "string", "app_name", "PTT Element" // TODO: Revert before merging to develop
+            resValue "color", "launcher_background", "#BD0D8B" // TODO: Revert before merging to develop
 
             if (project.hasProperty("coverage")) {
                 testCoverageEnabled = coverage.enableTestCoverage
