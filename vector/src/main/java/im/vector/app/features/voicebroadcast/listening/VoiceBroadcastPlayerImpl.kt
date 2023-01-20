@@ -392,7 +392,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
     /**
      * Update the live listening state according to:
      * - the voice broadcast state (started/paused/resumed/stopped),
-     * - the playing state (IDLE, PLAYING, PAUSED, BUFFERING),
+     * - the playing state (IDLE, PLAYING, PAUSED, BUFFERING).
      */
     private fun updateLiveListeningMode() {
         val isLiveVoiceBroadcast = mostRecentVoiceBroadcastEvent?.isLive.orFalse()
