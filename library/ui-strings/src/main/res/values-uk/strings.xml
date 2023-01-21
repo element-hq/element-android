@@ -3011,4 +3011,35 @@
     <string name="room_polls_active_no_item">У цій кімнаті немає активних опитувань</string>
     <string name="room_polls_active">Активні опитування</string>
     <string name="room_profile_section_more_polls">Історія опитувань</string>
+    <string name="message_reply_to_ended_poll_preview">Завершене опитування</string>
+    <string name="message_reply_to_poll_preview">Опитування</string>
+    <string name="message_reply_to_sender_ended_poll">завершує опитування.</string>
+    <string name="ended_poll_indicator">Опитування завершено.</string>
+    <string name="thread_list_not_available">Ваш домашній сервер поки що не підтримує створення списків гілок.</string>
+    <string name="error_voice_broadcast_unable_to_play">Неможливо відтворити цю голосову трансляцію.</string>
+    <string name="started_a_voice_broadcast">Розпочато голосову трансляцію</string>
+    <string name="unable_to_decrypt_some_events_in_poll">Через помилки розшифрування деякі голоси можуть бути не враховані</string>
+    <plurals name="room_polls_ended_no_item_for_loaded_period">
+        <item quantity="one">За %1$d минулий день немає минулих опитувань.
+\nЗавантажте більше опитувань, щоб переглянути опитування за попередні дні.</item>
+        <item quantity="few">За минулі %1$d дні немає минулих опитувань.
+\nЗавантажте більше опитувань, щоб переглянути опитування за попередні дні.</item>
+        <item quantity="many">За минулі %1$d днів немає минулих опитувань.
+\nЗавантажте більше опитувань, щоб переглянути опитування за попередні дні.</item>
+        <item quantity="other">За минулі %1$d днів немає минулих опитувань.
+\nЗавантажте більше опитувань, щоб переглянути опитування за попередні дні.</item>
+    </plurals>
+    <plurals name="room_polls_active_no_item_for_loaded_period">
+        <item quantity="one">За %1$d останній день немає активних опитувань.
+\nЗавантажте більше опитувань, щоб переглянути опитування за попередні дні.</item>
+        <item quantity="few">За останні %1$d дні немає активних опитувань.
+\nЗавантажте більше опитувань, щоб переглянути опитування за попередні дні.</item>
+        <item quantity="many">За останні %1$d днів немає активних опитувань.
+\nЗавантажте більше опитувань, щоб переглянути опитування за попередні дні.</item>
+        <item quantity="other">За останні %1$d днів немає активних опитувань.
+\nЗавантажте більше опитувань, щоб переглянути опитування за попередні дні.</item>
+    </plurals>
+    <string name="room_polls_loading_error">Помилка отримання опитувань.</string>
+    <string name="room_polls_load_more">Завантажити більше опитувань</string>
+    <string name="room_polls_wait_for_display">Показ опитувань</string>
 </resources>

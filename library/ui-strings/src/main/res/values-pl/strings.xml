@@ -665,7 +665,7 @@
     <string name="room_list_quick_actions_notifications_mute">Wycisz</string>
     <string name="room_list_quick_actions_settings">Ustawienia</string>
     <string name="no_ignored_users">Nie ignorujesz żadnych użytkowników</string>
-    <string name="seen_by">Widziany przez</string>
+    <string name="seen_by">Wyświetlono przez</string>
     <string name="settings_advanced_settings">Zaawansowane ustawienia</string>
     <string name="settings_developer_mode">Tryb programisty</string>
     <string name="settings">Ustawienia</string>

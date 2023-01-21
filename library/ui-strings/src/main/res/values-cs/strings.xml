@@ -2955,4 +2955,31 @@
     <string name="room_polls_active_no_item">V této místnosti nejsou žádné aktivní hlasování</string>
     <string name="room_polls_active">Aktivní hlasování</string>
     <string name="room_profile_section_more_polls">Historie hlasování</string>
+    <string name="message_reply_to_ended_poll_preview">Ukončené hlasování</string>
+    <string name="message_reply_to_poll_preview">Hlasování</string>
+    <string name="message_reply_to_sender_ended_poll">ukončil(a) hlasování.</string>
+    <string name="ended_poll_indicator">Hlasování bylo ukončeno.</string>
+    <string name="thread_list_not_available">Váš domovský server zatím nepodporuje zobrazení seznamu vláken.</string>
+    <string name="error_voice_broadcast_unable_to_play">Nelze přehrát toto hlasové vysílání.</string>
+    <string name="started_a_voice_broadcast">Hlasové vysílání bylo zahájeno</string>
+    <string name="unable_to_decrypt_some_events_in_poll">Kvůli chybám při dešifrování nemusí být některé hlasy započítány</string>
+    <string name="room_polls_loading_error">Chyba při načítání hlasování.</string>
+    <string name="room_polls_load_more">Načíst další hlasování</string>
+    <string name="room_polls_wait_for_display">Zobrazení hlasování</string>
+    <plurals name="room_polls_ended_no_item_for_loaded_period">
+        <item quantity="one">Za uplynulý den nejsou k dispozici žádná hlasování.
+\nPro zobrazení hlasování z předchozích dnů načtěte další hlasování.</item>
+        <item quantity="few">Za poslední %1$d dny nejsou k dispozici žádná hlasování.
+\nPro zobrazení hlasování z předchozích dnů načtěte další hlasování.</item>
+        <item quantity="other">Za posledních %1$d dní nejsou k dispozici žádná hlasování.
+\nPro zobrazení hlasování z předchozích dnů načtěte další hlasování.</item>
+    </plurals>
+    <plurals name="room_polls_active_no_item_for_loaded_period">
+        <item quantity="one">Za uplynulý den nejsou žádná aktivní hlasování.
+\nPro zobrazení hlasování z předchozích dnů načtěte další ankety.</item>
+        <item quantity="few">Za poslední %1$d dny nejsou žádná aktivní hlasování.
+\nPro zobrazení hlasování z předchozích dnů načtěte další ankety.</item>
+        <item quantity="other">Za posledních %1$d dní nejsou žádná aktivní hlasování.
+\nPro zobrazení hlasování z předchozích dnů načtěte další ankety.</item>
+    </plurals>
 </resources>

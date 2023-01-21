@@ -2955,4 +2955,31 @@
     <string name="room_polls_active_no_item">V tejto miestnosti nie sú žiadne aktívne ankety</string>
     <string name="room_polls_active">Aktívne ankety</string>
     <string name="room_profile_section_more_polls">História ankety</string>
+    <string name="message_reply_to_ended_poll_preview">Ukončená anketa</string>
+    <string name="message_reply_to_poll_preview">Anketa</string>
+    <string name="message_reply_to_sender_ended_poll">ukončil/a anketu.</string>
+    <string name="ended_poll_indicator">Ukončil/a anketu.</string>
+    <string name="thread_list_not_available">Váš domovský server zatiaľ nepodporuje zobrazovanie vlákien.</string>
+    <string name="error_voice_broadcast_unable_to_play">Toto hlasové vysielanie nie je možné prehrať.</string>
+    <string name="started_a_voice_broadcast">Spustil/a hlasové vysielanie</string>
+    <string name="unable_to_decrypt_some_events_in_poll">Z dôvodu chýb v dešifrovaní sa niektoré hlasy nemusia započítať</string>
+    <string name="room_polls_loading_error">Chyba pri načítavaní ankiet.</string>
+    <string name="room_polls_load_more">Načítať ďalšie ankety</string>
+    <string name="room_polls_wait_for_display">Zobrazenie ankiet</string>
+    <plurals name="room_polls_ended_no_item_for_loaded_period">
+        <item quantity="one">Za uplynulý deň nie sú k dispozícii žiadne ankety.
+\nNačítaním ďalších ankiet zobrazíte ankety za predchádzajúce dni.</item>
+        <item quantity="few">Za posledné %1$d dni nie sú aktívne žiadne ankety.
+\nNačítaním ďalších ankiet zobrazíte ankety za predchádzajúce dni.</item>
+        <item quantity="other">Za posledných %1$d dní nie sú aktívne žiadne ankety.
+\nNačítaním ďalších ankiet zobrazíte ankety za predchádzajúce dni.</item>
+    </plurals>
+    <plurals name="room_polls_active_no_item_for_loaded_period">
+        <item quantity="one">Za posledný deň nie sú aktívne žiadne ankety.
+\nNačítaním ďalších ankiet zobrazíte ankety za predchádzajúce dni.</item>
+        <item quantity="few">Za posledných %1$d dni nie sú aktívne žiadne ankety.
+\nNačítaním ďalších ankiet zobrazíte ankety za predchádzajúce dni.</item>
+        <item quantity="other">Za posledných %1$d dní nie sú aktívne žiadne ankety.
+\nNačítaním ďalších ankiet zobrazíte ankety za predchádzajúce dni.</item>
+    </plurals>
 </resources>
