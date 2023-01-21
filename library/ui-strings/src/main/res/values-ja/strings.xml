@@ -526,7 +526,7 @@
     <string name="create_room_encryption_title">暗号化を有効にする</string>
     <string name="create_room_encryption_description">いったん有効にすると、暗号化を無効にすることはできません。</string>
     <string name="room_profile_section_security">セキュリティー</string>
-    <string name="room_profile_section_security_learn_more">詳しく知る</string>
+    <string name="room_profile_section_security_learn_more">詳細を表示</string>
     <string name="room_profile_section_more">その他の設定</string>
     <string name="room_profile_section_admin">管理者としての操作</string>
     <string name="room_profile_section_more_settings">ルームの設定</string>
@@ -1252,7 +1252,7 @@
     <string name="login_connect_to_modular">Element Matrix Servicesに接続</string>
     <string name="login_signin_matrix_id_title">Matrix IDでサインイン</string>
     <string name="login_connect_using_matrix_id_submit">Matrix IDでサインイン</string>
-    <string name="login_server_modular_learn_more">詳しく知る</string>
+    <string name="login_server_modular_learn_more">詳細を表示</string>
     <string name="login_server_other_title">その他</string>
     <string name="login_server_other_text">カスタムと高度な設定</string>
     <string name="login_server_url_form_modular_text">組織向けのプレミアムホスティング</string>
@@ -1845,8 +1845,8 @@
         <item quantity="other">%1$d個の投票があります。結果を見るには投票してください</item>
     </plurals>
     <string name="encrypted_unverified">未認証の端末で暗号化</string>
-    <string name="command_confetti">メッセージを紙吹雪と共に送る</string>
-    <string name="command_snow">メッセージを降雪と共に送る</string>
+    <string name="command_confetti">メッセージを紙吹雪と共に送信</string>
+    <string name="command_snow">メッセージを降雪と共に送信</string>
     <string name="default_message_emote_confetti">紙吹雪🎉を送る</string>
     <string name="default_message_emote_snow">降雪❄️を送る</string>
     <string name="ftue_auth_carousel_workplace_title">あなたのチームのメッセージングに。</string>
@@ -2443,7 +2443,7 @@
     <string name="home_layout_preferences">レイアウトの設定</string>
     <string name="action_got_it">了解</string>
     <string name="action_next">次へ</string>
-    <string name="action_learn_more">詳しく知る</string>
+    <string name="action_learn_more">詳細を表示</string>
     <string name="time_unit_second_short">秒</string>
     <string name="time_unit_minute_short">分</string>
     <string name="time_unit_hour_short">時</string>
@@ -2474,4 +2474,20 @@
     <string name="qr_code_login_header_scan_qr_code_title">QRコードをスキャン</string>
     <string name="qr_code_login_header_failed_invalid_qr_code_description">QRコードが不正です。</string>
     <string name="space_list_empty_message">スペースは、ルームと人々をひとまとめにする新しいやり方です。はじめに、スペースを作成しましょう。</string>
+    <string name="home_layout_preferences_recents">最近の履歴を表示</string>
+    <string name="key_authenticity_not_guaranteed">この暗号化されたメッセージの信頼性はこの端末では保証できません。</string>
+    <string name="review_unverified_sessions_description">アカウントが安全かどうか確認してください</string>
+    <string name="review_unverified_sessions_title">未認証のセッションがあります</string>
+    <string name="room_list_filter_people">連絡先</string>
+    <string name="room_list_filter_favourites">お気に入り</string>
+    <string name="room_list_filter_unreads">未読あり</string>
+    <string name="room_list_filter_all">全て</string>
+    <string name="action_stop">はい、停止</string>
+    <string name="action_deselect_all">全ての選択を解除</string>
+    <string name="action_select_all">全て選択</string>
+    <string name="notice_voice_broadcast_ended_by_you">音声配信を終了しました。</string>
+    <string name="notice_voice_broadcast_ended">%1$sが音声配信を終了しました。</string>
+    <plurals name="x_selected">
+        <item quantity="other">%1$dを選択しました</item>
+    </plurals>
 </resources>
