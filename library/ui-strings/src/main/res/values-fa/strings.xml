@@ -2922,4 +2922,6 @@
         <item quantity="other">نظرسنجی فعّالی برای %1$d روز گذشته وجود ندارد.
 \nبرای دیدن نظرسنجی‌های روزهای پیش، نظرسنجی‌های بیش‌تری بار کنید.</item>
     </plurals>
+    <string name="error_voice_message_broadcast_in_progress_message">از آن‌جا که در حال ضبط پخشی زنده‌اید، نمی‌توانید پیامی صوتی را آغاز کنید. لطفاً برای آغاز ضبط یک پیام صوتی، پخش زنده‌تان را پایان دهید</string>
+    <string name="error_voice_message_broadcast_in_progress">نمی‌توان پخش صوتی را آغاز کرد</string>
 </resources>
