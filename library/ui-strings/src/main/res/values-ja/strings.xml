@@ -2473,7 +2473,7 @@
     <string name="login_scan_qr_code">QRコードをスキャン</string>
     <string name="qr_code_login_header_scan_qr_code_title">QRコードをスキャン</string>
     <string name="qr_code_login_header_failed_invalid_qr_code_description">QRコードが不正です。</string>
-    <string name="space_list_empty_message">スペースは、ルームと人々をひとまとめにする新しいやり方です。はじめに、スペースを作成しましょう。</string>
+    <string name="space_list_empty_message">スペースは、ルームと連絡先をまとめる新しい方法です。はじめに、スペースを作成しましょう。</string>
     <string name="home_layout_preferences_recents">最近の履歴を表示</string>
     <string name="key_authenticity_not_guaranteed">この暗号化されたメッセージの信頼性はこの端末では保証できません。</string>
     <string name="review_unverified_sessions_description">アカウントが安全かどうか確認してください</string>
