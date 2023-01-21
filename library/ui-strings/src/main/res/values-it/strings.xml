@@ -2898,4 +2898,19 @@
     <string name="unable_to_decrypt_some_events_in_poll">A causa di errori di decifrazione, alcuni voti potrebbero non venire contati</string>
     <string name="error_voice_broadcast_unable_to_play">Impossibile avviare questa trasmissione vocale.</string>
     <string name="started_a_voice_broadcast">Iniziata una trasmissione vocale</string>
+    <string name="room_polls_loading_error">Errore di recupero dei sondaggi.</string>
+    <string name="room_polls_load_more">Carica più sondaggi</string>
+    <string name="room_polls_wait_for_display">Visualizzazione sondaggi</string>
+    <plurals name="room_polls_ended_no_item_for_loaded_period">
+        <item quantity="one">Non ci sono sondaggi passati nell\'ultimo giorno.
+\nCarica più sondaggi per vedere quelli dei giorni precedenti.</item>
+        <item quantity="other">Non ci sono sondaggi passati negli ultimi %1$d giorni.
+\nCarica più sondaggi per vedere quelli dei giorni precedenti.</item>
+    </plurals>
+    <plurals name="room_polls_active_no_item_for_loaded_period">
+        <item quantity="one">Non ci sono sondaggi attivi nell\'ultimo giorno.
+\nCarica più sondaggi per vedere quelli dei giorni precedenti.</item>
+        <item quantity="other">Non ci sono sondaggi attivi negli ultimi %1$d giorni.
+\nCarica più sondaggi per vedere quelli dei giorni precedenti.</item>
+    </plurals>
 </resources>
