@@ -2473,4 +2473,5 @@
     <string name="login_scan_qr_code">QRコードをスキャン</string>
     <string name="qr_code_login_header_scan_qr_code_title">QRコードをスキャン</string>
     <string name="qr_code_login_header_failed_invalid_qr_code_description">QRコードが不正です。</string>
+    <string name="space_list_empty_message">スペースは、ルームと人々をひとまとめにする新しいやり方です。はじめに、スペースを作成しましょう。</string>
 </resources>
