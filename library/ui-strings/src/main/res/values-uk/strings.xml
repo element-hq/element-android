@@ -3042,4 +3042,6 @@
     <string name="room_polls_loading_error">Помилка отримання опитувань.</string>
     <string name="room_polls_load_more">Завантажити більше опитувань</string>
     <string name="room_polls_wait_for_display">Показ опитувань</string>
+    <string name="error_voice_message_broadcast_in_progress_message">Ви не можете розпочати запис голосового повідомлення, оскільки ви записуєте трансляцію наживо. Будь ласка, заверште її, щоб розпочати запис голосового повідомлення</string>
+    <string name="error_voice_message_broadcast_in_progress">Не вдалося розпочати запис голосового повідомлення</string>
 </resources>
