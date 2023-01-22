@@ -2922,4 +2922,6 @@
         <item quantity="other">Il n’y a aucun sondage actif depuis %1$d jours.
 \nChargez plus de sondages pour voir les sondages des jours précédents.</item>
     </plurals>
+    <string name="error_voice_message_broadcast_in_progress_message">Vous ne pouvez pas commencer un message vocal car vous êtes en train d’enregistrer une diffusion en direct. Veuillez terminer cette diffusion pour commencer un message vocal</string>
+    <string name="error_voice_message_broadcast_in_progress">Impossible de démarrer un message vocal</string>
 </resources>
