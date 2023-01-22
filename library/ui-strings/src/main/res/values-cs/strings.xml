@@ -2982,4 +2982,6 @@
         <item quantity="other">Za posledních %1$d dní nejsou žádná aktivní hlasování.
 \nPro zobrazení hlasování z předchozích dnů načtěte další ankety.</item>
     </plurals>
+    <string name="error_voice_message_broadcast_in_progress_message">Hlasovou zprávu nelze spustit, protože právě nahráváte živé vysílání. Ukončete prosím živé vysílání, abyste mohli začít nahrávat hlasovou zprávu</string>
+    <string name="error_voice_message_broadcast_in_progress">Nelze spustit hlasovou zprávu</string>
 </resources>
