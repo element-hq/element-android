@@ -107,4 +107,27 @@
         android:contentDescription="@string/a11y_stop_voice_broadcast_record"
         android:src="@drawable/ic_stop" />
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/controlsGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="controllerButtonsFlow,recordButton,stopRecordButton" />
+
+    <TextView
+        android:id="@+id/errorView"
+        style="@style/Widget.Vector.TextView.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="4dp"
+        android:gravity="center"
+        android:text="@string/error_voice_broadcast_no_connection_recording"
+        android:textColor="?colorError"
+        android:visibility="gone"
+        app:drawableStartCompat="@drawable/ic_voice_broadcast_error"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headerBottomBarrier"
+        tools:visibility="visible" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
