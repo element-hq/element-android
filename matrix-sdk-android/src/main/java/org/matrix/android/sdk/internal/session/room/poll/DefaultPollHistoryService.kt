@@ -23,7 +23,8 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.realm.kotlin.where
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.poll.LoadedPollsStatus
 import org.matrix.android.sdk.api.session.room.poll.PollHistoryService
@@ -50,6 +51,7 @@ internal class DefaultPollHistoryService @AssistedInject constructor(
         private val clock: Clock,
         private val loadMorePollsTask: LoadMorePollsTask,
         private val getLoadedPollsStatusTask: GetLoadedPollsStatusTask,
+        private val syncPollsTask: SyncPollsTask,
         private val timelineEventMapper: TimelineEventMapper,
 ) : PollHistoryService {
 
@@ -71,20 +73,23 @@ internal class DefaultPollHistoryService @AssistedInject constructor(
         )
         timelineService.createTimeline(eventId = null, settings = settings).also { it.start() }
     }
+    private val timelineMutex = Mutex()
 
     override fun dispose() {
         timeline.dispose()
     }
 
     override suspend fun loadMore(): LoadedPollsStatus {
-        val params = LoadMorePollsTask.Params(
-                timeline = timeline,
-                roomId = roomId,
-                currentTimestampMs = clock.epochMillis(),
-                loadingPeriodInDays = loadingPeriodInDays,
-                eventsPageSize = EVENTS_PAGE_SIZE,
-        )
-        return loadMorePollsTask.execute(params)
+        return timelineMutex.withLock {
+            val params = LoadMorePollsTask.Params(
+                    timeline = timeline,
+                    roomId = roomId,
+                    currentTimestampMs = clock.epochMillis(),
+                    loadingPeriodInDays = loadingPeriodInDays,
+                    eventsPageSize = EVENTS_PAGE_SIZE,
+            )
+            loadMorePollsTask.execute(params)
+        }
     }
 
     override suspend fun getLoadedPollsStatus(): LoadedPollsStatus {
@@ -96,10 +101,15 @@ internal class DefaultPollHistoryService @AssistedInject constructor(
     }
 
     override suspend fun syncPolls() {
-        // TODO unmock
-        // TODO when sync forward, jump to most recent event Id + paginate forward + jump to oldest eventId after
-        // TODO avoid possibility to call sync and loadMore at the same time from the service API, how?
-        delay(1000)
+        timelineMutex.withLock {
+            val params = SyncPollsTask.Params(
+                    timeline = timeline,
+                    roomId = roomId,
+                    currentTimestampMs = clock.epochMillis(),
+                    eventsPageSize = EVENTS_PAGE_SIZE,
+            )
+            syncPollsTask.execute(params)
+        }
     }
 
     override fun getPollEvents(): LiveData<List<TimelineEvent>> {

@@ -93,8 +93,10 @@ import org.matrix.android.sdk.internal.session.room.peeking.PeekRoomTask
 import org.matrix.android.sdk.internal.session.room.peeking.ResolveRoomStateTask
 import org.matrix.android.sdk.internal.session.room.poll.DefaultGetLoadedPollsStatusTask
 import org.matrix.android.sdk.internal.session.room.poll.DefaultLoadMorePollsTask
+import org.matrix.android.sdk.internal.session.room.poll.DefaultSyncPollsTask
 import org.matrix.android.sdk.internal.session.room.poll.GetLoadedPollsStatusTask
 import org.matrix.android.sdk.internal.session.room.poll.LoadMorePollsTask
+import org.matrix.android.sdk.internal.session.room.poll.SyncPollsTask
 import org.matrix.android.sdk.internal.session.room.read.DefaultMarkAllRoomsReadTask
 import org.matrix.android.sdk.internal.session.room.read.DefaultSetReadMarkersTask
 import org.matrix.android.sdk.internal.session.room.read.MarkAllRoomsReadTask
@@ -374,4 +376,7 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindFilterAndStoreEventsTask(task: DefaultFilterAndStoreEventsTask): FilterAndStoreEventsTask
+
+    @Binds
+    abstract fun bindSyncPollsTask(task: DefaultSyncPollsTask): SyncPollsTask
 }
