@@ -32,21 +32,28 @@ class PollSummaryMapper @Inject constructor(
 ) {
 
     fun map(timelineEvent: TimelineEvent): PollSummary? {
-        val content = timelineEvent.getVectorLastMessageContent()
-        val pollResponseData = pollResponseDataFactory.create(timelineEvent)
         val eventId = timelineEvent.root.eventId.orEmpty()
-        val creationTimestamp = timelineEvent.root.originServerTs ?: 0
-        return if (eventId.isNotEmpty() && creationTimestamp > 0 && content is MessagePollContent) {
-            convertToPollSummary(
-                    eventId = eventId,
-                    creationTimestamp = creationTimestamp,
-                    messagePollContent = content,
-                    pollResponseData = pollResponseData
-            )
-        } else {
-            Timber.w("missing mandatory info about poll event with id=$eventId")
-            null
+        val result = runCatching {
+            val content = timelineEvent.getVectorLastMessageContent()
+            val pollResponseData = pollResponseDataFactory.create(timelineEvent)
+            val creationTimestamp = timelineEvent.root.originServerTs ?: 0
+            return if (eventId.isNotEmpty() && creationTimestamp > 0 && content is MessagePollContent) {
+                convertToPollSummary(
+                        eventId = eventId,
+                        creationTimestamp = creationTimestamp,
+                        messagePollContent = content,
+                        pollResponseData = pollResponseData
+                )
+            } else {
+                Timber.w("missing mandatory info about poll event with id=$eventId")
+                null
+            }
         }
+
+        if (result.isFailure) {
+            Timber.w("failed to map event with id $eventId")
+        }
+        return result.getOrNull()
     }
 
     private fun convertToPollSummary(
