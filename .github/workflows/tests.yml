@@ -139,14 +139,10 @@ jobs:
 #        with:
 #          distribution: 'adopt'
 #          java-version: 11
-#      - uses: actions/cache@v3
+#      - name: Configure gradle
+#        uses: gradle/gradle-build-action@v2
 #        with:
-#          path: |
-#            ~/.gradle/caches
-#            ~/.gradle/wrapper
-#          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-#          restore-keys: |
-#            ${{ runner.os }}-gradle-
+#          cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
 #      - name: Build Android Tests
 #        run: ./gradlew clean assembleAndroidTest $CI_GRADLE_ARG_PROPERTIES
 

@@ -151,6 +151,7 @@ class DefaultErrorFormatter @Inject constructor(
         return when (throwable) {
             is VoiceFailure.UnableToPlay -> stringProvider.getString(R.string.error_voice_message_unable_to_play)
             is VoiceFailure.UnableToRecord -> stringProvider.getString(R.string.error_voice_message_unable_to_record)
+            is VoiceFailure.VoiceBroadcastInProgress -> stringProvider.getString(R.string.error_voice_message_broadcast_in_progress)
         }
     }
 
