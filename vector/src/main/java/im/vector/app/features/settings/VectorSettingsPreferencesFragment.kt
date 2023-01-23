@@ -103,8 +103,8 @@ class VectorSettingsPreferencesFragment :
         }
 
         findPreference<Preference>(VectorPreferences.SETTINGS_PREF_SPACE_CATEGORY)!!.let { pref ->
-            pref.isVisible = !vectorFeatures.isNewAppLayoutFeatureEnabled()
-            pref.isEnabled = !vectorPreferences.isNewAppLayoutEnabled()
+            pref.isVisible = vectorFeatures.isNewAppLayoutFeatureEnabled()
+            pref.isEnabled = vectorFeatures.isNewAppLayoutFeatureEnabled()
         }
 
         // Url preview
