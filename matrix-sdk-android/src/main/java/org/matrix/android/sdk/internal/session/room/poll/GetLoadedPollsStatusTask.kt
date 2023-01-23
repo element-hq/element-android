@@ -38,7 +38,9 @@ internal class DefaultGetLoadedPollsStatusTask @Inject constructor(
 
     override suspend fun execute(params: GetLoadedPollsStatusTask.Params): LoadedPollsStatus {
         return monarchy.awaitTransaction { realm ->
-            val status = PollHistoryStatusEntity.getOrCreate(realm, params.roomId)
+            val status = PollHistoryStatusEntity
+                    .getOrCreate(realm, params.roomId)
+                    .copy()
             LoadedPollsStatus(
                     canLoadMore = status.isEndOfPollsBackward.not(),
                     nbSyncedDays = status.getNbSyncedDays(params.currentTimestampMs),
