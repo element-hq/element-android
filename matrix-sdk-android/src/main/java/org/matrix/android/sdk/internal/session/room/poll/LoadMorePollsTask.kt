@@ -50,11 +50,6 @@ internal class DefaultLoadMorePollsTask @Inject constructor(
         while (shouldFetchMoreEventsBackward(currentPollHistoryStatus)) {
             currentPollHistoryStatus = fetchMorePollEventsBackward(params)
         }
-        // TODO
-        //   check how it behaves when cancelling the process: it should resume where it was stopped
-        //   check the network calls done using Flipper
-        //   check forward of error in case of call api failure
-        //   test on large room
 
         return LoadedPollsStatus(
                 canLoadMore = currentPollHistoryStatus.isEndOfPollsBackward.not(),
