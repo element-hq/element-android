@@ -179,6 +179,11 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
         return PictureInPictureParams.Builder()
                 .setAspectRatio(aspectRatio)
                 .setActions(actions)
+                .apply {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        setAutoEnterEnabled(true)
+                    }
+                }
                 .build()
     }
 

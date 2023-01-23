@@ -474,6 +474,8 @@ class WidgetFragment :
             } else if (event.data contentEquals byteArrayOf(0x01)) {
                 views.widgetWebView.postWebMessage(WebMessage("pttp"), widgetUri)
             }
+        } ?: run {
+            Timber.d("### WidgetFragment.handleBluetoothDeviceData: Cannot handle since activity is destroyed")
         }
     }
 }

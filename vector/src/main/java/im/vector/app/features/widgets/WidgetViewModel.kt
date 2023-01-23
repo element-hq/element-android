@@ -329,6 +329,7 @@ class WidgetViewModel @AssistedInject constructor(
     }
 
     override fun onCharacteristicRead(data: ByteArray) {
+        Timber.d("### Posting onCharacteristicRead: " + String(data))
         _viewEvents.post(WidgetViewEvents.OnBluetoothDeviceData(data))
     }
 
