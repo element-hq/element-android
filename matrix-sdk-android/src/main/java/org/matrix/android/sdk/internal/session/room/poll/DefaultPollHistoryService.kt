@@ -128,6 +128,7 @@ internal class DefaultPollHistoryService @AssistedInject constructor(
 
         return Transformations.map(eventsLiveData) { events ->
             events.filter { it.root.getClearType() in EventType.POLL_START.values }
+                    .distinctBy { it.eventId }
         }
     }
 
