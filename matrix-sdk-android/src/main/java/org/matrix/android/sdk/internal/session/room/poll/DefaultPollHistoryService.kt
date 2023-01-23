@@ -64,7 +64,6 @@ internal class DefaultPollHistoryService @AssistedInject constructor(
         get() = LOADING_PERIOD_IN_DAYS
 
     private val timeline by lazy {
-        // TODO check if we need to add a way to avoid using the current filter in rooms
         val settings = TimelineSettings(
                 initialSize = EVENTS_PAGE_SIZE,
                 buildReadReceipts = false,
