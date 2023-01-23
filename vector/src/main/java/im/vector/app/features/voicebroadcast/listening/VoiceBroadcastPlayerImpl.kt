@@ -182,15 +182,16 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
                 }
             }
             State.Buffering -> {
-                val nextItem = if (isLiveListening && playlist.currentSequence == null) {
-                    // live listening, jump to the last item if playback has not started
-                    playlist.lastOrNull()
-                } else {
-                    // not live or playback already started, request next item
-                    playlist.getNextItem()
-                }
-                if (nextItem != null) {
-                    startPlayback(nextItem.startTime)
+                val savedPosition = currentVoiceBroadcast?.voiceBroadcastId?.let { playbackTracker.getPlaybackTime(it) }
+                when {
+                    // resume playback from the next sequence item
+                    playlist.currentSequence != null -> playlist.getNextItem()?.let { startPlayback(it.startTime) }
+                    // resume playback from the saved position, if any
+                    savedPosition != null -> startPlayback(savedPosition)
+                    // live listening, jump to the last item
+                    isLiveListening -> playlist.lastOrNull()?.let { startPlayback(it.startTime) }
+                    // start playback from the beginning
+                    else -> startPlayback(0)
                 }
             }
             is State.Error -> Unit
