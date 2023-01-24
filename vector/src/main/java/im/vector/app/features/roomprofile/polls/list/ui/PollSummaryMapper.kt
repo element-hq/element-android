@@ -25,7 +25,6 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import timber.log.Timber
 import javax.inject.Inject
 
-// TODO add unit tests
 class PollSummaryMapper @Inject constructor(
         private val pollResponseDataFactory: PollResponseDataFactory,
         private val pollOptionViewStateFactory: PollOptionViewStateFactory,

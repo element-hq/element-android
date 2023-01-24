@@ -43,7 +43,6 @@ import timber.log.Timber
 private const val LOADING_PERIOD_IN_DAYS = 30
 private const val EVENTS_PAGE_SIZE = 250
 
-// TODO add unit tests
 internal class DefaultPollHistoryService @AssistedInject constructor(
         @Assisted private val roomId: String,
         @Assisted private val timelineService: TimelineService,
