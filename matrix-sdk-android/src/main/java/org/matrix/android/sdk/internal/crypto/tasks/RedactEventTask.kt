@@ -29,7 +29,7 @@ internal interface RedactEventTask : Task<RedactEventTask.Params, String> {
             val roomId: String,
             val eventId: String,
             val reason: String?,
-            val withRelations: List<String>?
+            val withRelations: List<String>?,
     )
 }
 
