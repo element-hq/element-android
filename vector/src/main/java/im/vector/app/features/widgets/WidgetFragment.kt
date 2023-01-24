@@ -39,6 +39,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
@@ -73,6 +74,8 @@ import im.vector.app.features.widgets.webview.WebviewPermissionUtils
 import im.vector.app.features.widgets.webview.clearAfterWidget
 import im.vector.app.features.widgets.webview.setupForWidget
 import im.vector.lib.core.utils.compat.resolveActivityCompat
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.terms.TermsService
 import timber.log.Timber
@@ -102,6 +105,7 @@ class WidgetFragment :
 
     private val fragmentArgs: WidgetArgs by args()
     private val viewModel: WidgetViewModel by activityViewModel()
+    private var viewEventsListener: Job? = null
 
     private val scanBluetoothResultLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
         if (allGranted) {
@@ -139,16 +143,21 @@ class WidgetFragment :
             }
         }
 
-        viewModel.observeViewEvents {
-            Timber.v("Observed view events: $it")
-            when (it) {
-                is WidgetViewEvents.DisplayTerms -> displayTerms(it)
-                is WidgetViewEvents.OnURLFormatted -> loadFormattedUrl(it)
-                is WidgetViewEvents.DisplayIntegrationManager -> displayIntegrationManager(it)
-                is WidgetViewEvents.Failure -> displayErrorDialog(it.throwable)
-                is WidgetViewEvents.Close -> Unit
-                is WidgetViewEvents.OnBluetoothDeviceData -> handleBluetoothDeviceData(it)
-            }
+        viewEventsListener = lifecycleScope.launch {
+            viewModel.viewEvents
+                    .stream(consumerId = this::class.simpleName.toString())
+                    .collect {
+                        dismissLoadingDialog()
+                        Timber.v("Observed view events: $it")
+                        when (it) {
+                            is WidgetViewEvents.DisplayTerms -> displayTerms(it)
+                            is WidgetViewEvents.OnURLFormatted -> loadFormattedUrl(it)
+                            is WidgetViewEvents.DisplayIntegrationManager -> displayIntegrationManager(it)
+                            is WidgetViewEvents.Failure -> displayErrorDialog(it.throwable)
+                            is WidgetViewEvents.Close -> Unit
+                            is WidgetViewEvents.OnBluetoothDeviceData -> handleBluetoothDeviceData(it)
+                        }
+                    }
         }
         viewModel.handle(WidgetAction.LoadFormattedUrl)
     }
@@ -184,6 +193,8 @@ class WidgetFragment :
         if (fragmentArgs.kind.isAdmin()) {
             viewModel.getPostAPIMediator().clearWebView()
         }
+        viewEventsListener?.cancel()
+        viewEventsListener = null
         views.widgetWebView.clearAfterWidget()
         views.widgetBluetoothListRecyclerView.cleanup()
         super.onDestroyView()
