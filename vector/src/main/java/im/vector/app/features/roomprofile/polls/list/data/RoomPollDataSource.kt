@@ -25,7 +25,6 @@ import org.matrix.android.sdk.api.session.room.poll.PollHistoryService
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import javax.inject.Inject
 
-// TODO add unit tests
 class RoomPollDataSource @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
 ) {
