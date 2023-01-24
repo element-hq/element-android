@@ -17,22 +17,11 @@
 package org.matrix.android.sdk.internal.session.room.poll
 
 import com.zhuinden.monarchy.Monarchy
-import kotlinx.coroutines.delay
-import org.matrix.android.sdk.api.session.events.model.isPoll
-import org.matrix.android.sdk.api.session.events.model.isPollResponse
-import org.matrix.android.sdk.api.session.room.poll.LoadedPollsStatus
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.internal.database.model.PollHistoryStatusEntity
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.di.SessionDatabase
-import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
-import org.matrix.android.sdk.internal.network.executeRequest
-import org.matrix.android.sdk.internal.session.room.RoomAPI
-import org.matrix.android.sdk.internal.session.room.event.FilterAndStoreEventsTask
-import org.matrix.android.sdk.internal.session.room.poll.PollConstants.MILLISECONDS_PER_DAY
-import org.matrix.android.sdk.internal.session.room.timeline.PaginationDirection
-import org.matrix.android.sdk.internal.session.room.timeline.PaginationResponse
 import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.awaitTransaction
 import javax.inject.Inject
@@ -56,7 +45,7 @@ internal class DefaultSyncPollsTask @Inject constructor(
         params.timeline.restartWithEventId(currentPollHistoryStatus.mostRecentEventIdReached)
 
         var loadStatus = LoadStatus(shouldLoadMore = true)
-        while (loadStatus.shouldLoadMore){
+        while (loadStatus.shouldLoadMore) {
             loadStatus = fetchMorePollEventsForward(params)
         }
 
