@@ -2908,7 +2908,7 @@
     <string name="unable_to_decrypt_some_events_in_poll">Evtl. werden infolge von Entschlüsselungsfehlern einige Stimmen nicht gezählt</string>
     <string name="room_polls_loading_error">Fehler beim Laden der Umfragen.</string>
     <string name="room_polls_load_more">Weitere Umfragen laden</string>
-    <string name="room_polls_wait_for_display">Stelle Umfragen dar</string>
+    <string name="room_polls_wait_for_display">Zeige Umfragen an</string>
     <plurals name="room_polls_active_no_item_for_loaded_period">
         <item quantity="one">Für den vergangenen Tag sind keine aktiven Umfragen verfügbar.
 \nLade weitere Umfragen, um die der vorherigen Tage zu sehen.</item>
@@ -2921,4 +2921,6 @@
         <item quantity="other">Für die vergangenen %1$d Tage sind keine beendeten Umfragen verfügbar.
 \nLade weitere Umfragen, um die der vorherigen Tage zu sehen.</item>
     </plurals>
+    <string name="error_voice_message_broadcast_in_progress_message">Du kannst keine Sprachnachricht beginnen, da du im Moment eine Echtzeitübertragung aufzeichnest. Bitte beende deine Sprachübertragung, um ein Gespräch zu beginnen</string>
+    <string name="error_voice_message_broadcast_in_progress">Kann Sprachnachricht nicht beginnen</string>
 </resources>
