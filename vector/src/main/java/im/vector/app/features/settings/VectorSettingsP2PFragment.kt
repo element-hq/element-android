@@ -49,6 +49,9 @@ class VectorSettingsP2PFragment :
     private val mStaticPeerURI by lazy {
         findPreference<VectorEditTextPreference>(VectorPreferences.SETTINGS_P2P_STATIC_URI)!!
     }
+    private val mSelfRelayURI by lazy {
+        findPreference<VectorEditTextPreference>(VectorPreferences.SETTINGS_P2P_SELF_RELAY_URI)!!
+    }
     private val mBLECodedPhy by lazy {
         findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_P2P_BLE_CODED_PHY)!!
     }
@@ -60,6 +63,7 @@ class VectorSettingsP2PFragment :
         mBluetoothPeersEnabled.isChecked = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && vectorPreferences.p2pEnableBluetooth()
         mStaticPeerEnabled.isChecked = vectorPreferences.p2pEnableStatic()
         mStaticPeerURI.summary = vectorPreferences.p2pStaticURI().ifEmpty { "No static peer is configured" }
+        mSelfRelayURI.summary = vectorPreferences.p2pSelfRelayURI().ifEmpty { "No relay server is configured" }
         mBLECodedPhy.isChecked = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && vectorPreferences.p2pBLECodedPhy()
 
         mBluetoothPeersEnabled.isEnabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
@@ -75,6 +79,13 @@ class VectorSettingsP2PFragment :
         mStaticPeerURI.let {
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 mStaticPeerURI.summary = newValue.toString().ifEmpty { "No static peer is configured" }
+                true
+            }
+        }
+
+        mSelfRelayURI.let {
+            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+                mSelfRelayURI.summary = newValue.toString().ifEmpty { "No relay server is configured" }
                 true
             }
         }

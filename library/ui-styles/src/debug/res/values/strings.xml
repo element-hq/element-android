@@ -5,9 +5,11 @@
     <string name="settings_p2p_title">Peer-to-Peer</string>
     <string name="settings_p2p_connect_multicast">Discover LAN peers</string>
     <string name="settings_p2p_connect_bluetooth">Discover Bluetooth peers</string>
-    <string name="settings_p2p_connect_static">Connect to static peer</string>
-    <string name="settings_p2p_static_peer_uri">Static peer</string>
-    <string name="change_p2p_static_peer_summary">Peer to connect to over Wi-Fi or mobile data</string>
+    <string name="settings_p2p_connect_static">Connect to static peer/s</string>
+    <string name="settings_p2p_static_peer_uri">Static Peer/s</string>
+    <string name="change_p2p_static_peer_summary">Peer/s to connect to over Wi-Fi or mobile data</string>
+    <string name="settings_p2p_self_relay_uri">Relay Server/s</string>
+    <string name="change_p2p_self_relay_summary">Server/s that will relay messages to you</string>
     <string name="settings_p2p_ble_coded_phy">Use Bluetooth Coded PHY</string>
     <string name="permissions_rationale_msg_p2p">Bluetooth on Android requires background location permissions in order to function. This location data will never be sent from the device.</string>
 </resources>

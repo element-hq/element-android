@@ -555,6 +555,11 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
                 }
             }
 
+            VectorPreferences.SETTINGS_P2P_SELF_RELAY_URI -> {
+                val uri = vectorPreferences.p2pSelfRelayURI()
+                m.setRelayServer(m.publicKey(), uri)
+            }
+
             VectorPreferences.SETTINGS_P2P_BLE_CODED_PHY -> {
                 val enabled = vectorPreferences.p2pEnableBluetooth()
                 if (enabled) {
