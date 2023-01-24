@@ -70,6 +70,7 @@ import org.matrix.android.sdk.api.util.TextContent
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.content.ThumbnailExtractor
 import org.matrix.android.sdk.internal.session.permalinks.PermalinkFactory
+import org.matrix.android.sdk.internal.session.room.EventRedactBody
 import org.matrix.android.sdk.internal.session.room.send.pills.TextPillsUtils
 import org.matrix.android.sdk.internal.util.time.Clock
 import java.util.UUID
@@ -795,8 +796,13 @@ internal class LocalEchoEventFactory @Inject constructor(
         }
     }
      */
-    fun createRedactEvent(roomId: String, eventId: String, reason: String?, additionalContent: Content? = null): Event {
+    fun createRedactEvent(roomId: String, eventId: String, reason: String?, withRelations: List<String>? = null, additionalContent: Content? = null): Event {
         val localId = LocalEcho.createLocalEchoId()
+        val content = if (reason != null || withRelations != null) {
+            EventRedactBody(reason, withRelations, withRelations).toContent().plus(additionalContent.orEmpty())
+        } else {
+            additionalContent
+        }
         return Event(
                 roomId = roomId,
                 originServerTs = dummyOriginServerTs(),
@@ -804,7 +810,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                 eventId = localId,
                 type = EventType.REDACTION,
                 redacts = eventId,
-                content = reason?.let { mapOf("reason" to it).toContent().plus(additionalContent.orEmpty()) } ?: additionalContent,
+                content = content,
                 unsignedData = UnsignedData(age = null, transactionId = localId)
         )
     }
@@ -830,10 +836,10 @@ internal class LocalEchoEventFactory @Inject constructor(
             createMessageEvent(
                     roomId,
                     textContent.toThreadTextContent(
-                                    rootThreadEventId = rootThreadEventId,
-                                    latestThreadEventId = localEchoRepository.getLatestThreadEvent(rootThreadEventId),
-                                    msgType = MessageType.MSGTYPE_TEXT
-                            ),
+                            rootThreadEventId = rootThreadEventId,
+                            latestThreadEventId = localEchoRepository.getLatestThreadEvent(rootThreadEventId),
+                            msgType = MessageType.MSGTYPE_TEXT
+                    ),
                     additionalContent,
             )
         } else {

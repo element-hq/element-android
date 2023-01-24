@@ -25,5 +25,8 @@ internal data class EventRedactBody(
         val reason: String? = null,
 
         @Json(name = "with_relations")
-        val withRelations: List<String>? = null
+        val withRelations: List<String>? = null,
+
+        @Json(name = "org.matrix.msc3912.with_relations")
+        val withRelationsUnstable: List<String>? = null,
 )

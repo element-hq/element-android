@@ -19,10 +19,12 @@ import android.content.Context
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.SessionComponent
+import org.matrix.android.sdk.internal.session.room.EventRedactBody
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.worker.SessionSafeCoroutineWorker
 import org.matrix.android.sdk.internal.worker.SessionWorkerParams
@@ -43,11 +45,13 @@ internal class RedactEventWorker(context: Context, params: WorkerParameters, ses
             val roomId: String,
             val eventId: String,
             val reason: String?,
+            val withRelations: List<String>? = null,
             override val lastFailureMessage: String? = null
     ) : SessionWorkerParams
 
     @Inject lateinit var roomAPI: RoomAPI
     @Inject lateinit var globalErrorReceiver: GlobalErrorReceiver
+    @Inject lateinit var homeServerCapabilitiesService: HomeServerCapabilitiesService
 
     override fun injectWith(injector: SessionComponent) {
         injector.inject(this)
@@ -55,13 +59,20 @@ internal class RedactEventWorker(context: Context, params: WorkerParameters, ses
 
     override suspend fun doSafeWork(params: Params): Result {
         val eventId = params.eventId
+        val withRelations = if (homeServerCapabilitiesService.getHomeServerCapabilities().canRedactEventWithRelations &&
+                !params.withRelations.isNullOrEmpty()) {
+            params.withRelations
+        } else {
+            null
+        }
+
         return runCatching {
             executeRequest(globalErrorReceiver) {
                 roomAPI.redactEvent(
                         params.txID,
                         params.roomId,
                         eventId,
-                        if (params.reason == null) emptyMap() else mapOf("reason" to params.reason)
+                        EventRedactBody(params.reason, withRelations, withRelations)
                 )
             }
         }.fold(
