@@ -2910,4 +2910,18 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="room_polls_loading_error">Szavazás betöltési hiba.</string>
     <string name="room_polls_load_more">Még több szavazás betöltése</string>
     <string name="room_polls_wait_for_display">Szavazások megjelenítése</string>
+    <plurals name="room_polls_ended_no_item_for_loaded_period">
+        <item quantity="one">Egy napja nincs aktív szavazás.
+\nTovábbi szavazások betöltése a régi szavazások megjelenítéséhez.</item>
+        <item quantity="other">%1$d napja nincs aktív szavazás.
+\nTovábbi szavazások betöltése a régi szavazások megjelenítéséhez.</item>
+    </plurals>
+    <plurals name="room_polls_active_no_item_for_loaded_period">
+        <item quantity="one">Egy napja nincs aktív szavazás.
+\nTovábbi szavazások betöltése a régi szavazások megjelenítéséhez.</item>
+        <item quantity="other">%1$d napja nincs aktív szavazás.
+\nTovábbi szavazások betöltése a régi szavazások megjelenítéséhez.</item>
+    </plurals>
+    <string name="error_voice_message_broadcast_in_progress_message">Nem lehet hang üzenetet indítani élő közvetítés felvétele közben. Az élő közvetítés bejezése szükséges a hang üzenet indításához</string>
+    <string name="error_voice_message_broadcast_in_progress">Hang üzenetet nem lehet elindítani</string>
 </resources>
