@@ -19,8 +19,9 @@ package org.matrix.android.sdk.internal.session.sync
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
 import org.matrix.android.sdk.api.MatrixConfiguration
-import org.matrix.android.sdk.api.extensions.measureMetric
 import org.matrix.android.sdk.api.extensions.measureSpan
+import org.matrix.android.sdk.api.extensions.measureSpannableMetric
+import org.matrix.android.sdk.api.metrics.SpannableMetricPlugin
 import org.matrix.android.sdk.api.metrics.SyncDurationMetricPlugin
 import org.matrix.android.sdk.api.session.pushrules.PushRuleService
 import org.matrix.android.sdk.api.session.pushrules.RuleScope
@@ -67,12 +68,13 @@ internal class SyncResponseHandler @Inject constructor(
     suspend fun handleResponse(
             syncResponse: SyncResponse,
             fromToken: String?,
+            afterPause: Boolean,
             reporter: ProgressReporter?
     ) {
         val isInitialSync = fromToken == null
         Timber.v("Start handling sync, is InitialSync: $isInitialSync")
 
-        relevantPlugins.measureMetric {
+        relevantPlugins.filter { it.shouldReport(isInitialSync, afterPause) }.measureSpannableMetric {
             startCryptoService(isInitialSync)
 
             // Handle the to device events before the room ones
@@ -101,8 +103,8 @@ internal class SyncResponseHandler @Inject constructor(
         }
     }
 
-    private fun startCryptoService(isInitialSync: Boolean) {
-        relevantPlugins.measureSpan("task", "start_crypto_service") {
+    private fun List<SpannableMetricPlugin>.startCryptoService(isInitialSync: Boolean) {
+        measureSpan("task", "start_crypto_service") {
             measureTimeMillis {
                 if (!cryptoService.isStarted()) {
                     Timber.v("Should start cryptoService")
@@ -115,8 +117,8 @@ internal class SyncResponseHandler @Inject constructor(
         }
     }
 
-    private suspend fun handleToDevice(syncResponse: SyncResponse, reporter: ProgressReporter?) {
-        relevantPlugins.measureSpan("task", "handle_to_device") {
+    private suspend fun List<SpannableMetricPlugin>.handleToDevice(syncResponse: SyncResponse, reporter: ProgressReporter?) {
+        measureSpan("task", "handle_to_device") {
             measureTimeMillis {
                 Timber.v("Handle toDevice")
                 reportSubtask(reporter, InitialSyncStep.ImportingAccountCrypto, 100, 0.1f) {
@@ -130,14 +132,14 @@ internal class SyncResponseHandler @Inject constructor(
         }
     }
 
-    private suspend fun startMonarchyTransaction(
+    private suspend fun List<SpannableMetricPlugin>.startMonarchyTransaction(
             syncResponse: SyncResponse,
             isInitialSync: Boolean,
             reporter: ProgressReporter?,
             aggregator: SyncResponsePostTreatmentAggregator
     ) {
         // Start one big transaction
-        relevantPlugins.measureSpan("task", "monarchy_transaction") {
+        measureSpan("task", "monarchy_transaction") {
             monarchy.awaitTransaction { realm ->
                 // IMPORTANT nothing should be suspend here as we are accessing the realm instance (thread local)
                 handleRooms(reporter, syncResponse, realm, isInitialSync, aggregator)
@@ -149,14 +151,14 @@ internal class SyncResponseHandler @Inject constructor(
         }
     }
 
-    private fun handleRooms(
+    private fun List<SpannableMetricPlugin>.handleRooms(
             reporter: ProgressReporter?,
             syncResponse: SyncResponse,
             realm: Realm,
             isInitialSync: Boolean,
             aggregator: SyncResponsePostTreatmentAggregator
     ) {
-        relevantPlugins.measureSpan("task", "handle_rooms") {
+        measureSpan("task", "handle_rooms") {
             measureTimeMillis {
                 Timber.v("Handle rooms")
                 reportSubtask(reporter, InitialSyncStep.ImportingAccountRoom, 1, 0.8f) {
@@ -170,8 +172,8 @@ internal class SyncResponseHandler @Inject constructor(
         }
     }
 
-    private fun handleAccountData(reporter: ProgressReporter?, realm: Realm, syncResponse: SyncResponse) {
-        relevantPlugins.measureSpan("task", "handle_account_data") {
+    private fun List<SpannableMetricPlugin>.handleAccountData(reporter: ProgressReporter?, realm: Realm, syncResponse: SyncResponse) {
+        measureSpan("task", "handle_account_data") {
             measureTimeMillis {
                 reportSubtask(reporter, InitialSyncStep.ImportingAccountData, 1, 0.1f) {
                     Timber.v("Handle accountData")
@@ -183,8 +185,8 @@ internal class SyncResponseHandler @Inject constructor(
         }
     }
 
-    private fun handlePresence(realm: Realm, syncResponse: SyncResponse) {
-        relevantPlugins.measureSpan("task", "handle_presence") {
+    private fun List<SpannableMetricPlugin>.handlePresence(realm: Realm, syncResponse: SyncResponse) {
+        measureSpan("task", "handle_presence") {
             measureTimeMillis {
                 Timber.v("Handle Presence")
                 presenceSyncHandler.handle(realm, syncResponse.presence)
@@ -194,8 +196,8 @@ internal class SyncResponseHandler @Inject constructor(
         }
     }
 
-    private suspend fun aggregateSyncResponse(aggregator: SyncResponsePostTreatmentAggregator) {
-        relevantPlugins.measureSpan("task", "aggregator_management") {
+    private suspend fun List<SpannableMetricPlugin>.aggregateSyncResponse(aggregator: SyncResponsePostTreatmentAggregator) {
+        measureSpan("task", "aggregator_management") {
             // Everything else we need to do outside the transaction
             measureTimeMillis {
                 aggregatorHandler.handle(aggregator)
@@ -205,8 +207,8 @@ internal class SyncResponseHandler @Inject constructor(
         }
     }
 
-    private suspend fun postTreatmentSyncResponse(syncResponse: SyncResponse, isInitialSync: Boolean) {
-        relevantPlugins.measureSpan("task", "sync_response_post_treatment") {
+    private suspend fun List<SpannableMetricPlugin>.postTreatmentSyncResponse(syncResponse: SyncResponse, isInitialSync: Boolean) {
+        measureSpan("task", "sync_response_post_treatment") {
             measureTimeMillis {
                 syncResponse.rooms?.let {
                     checkPushRules(it, isInitialSync)
@@ -219,8 +221,8 @@ internal class SyncResponseHandler @Inject constructor(
         }
     }
 
-    private fun markCryptoSyncCompleted(syncResponse: SyncResponse, cryptoStoreAggregator: CryptoStoreAggregator) {
-        relevantPlugins.measureSpan("task", "crypto_sync_handler_onSyncCompleted") {
+    private fun List<SpannableMetricPlugin>.markCryptoSyncCompleted(syncResponse: SyncResponse, cryptoStoreAggregator: CryptoStoreAggregator) {
+        measureSpan("task", "crypto_sync_handler_onSyncCompleted") {
             measureTimeMillis {
                 cryptoSyncHandler.onSyncCompleted(syncResponse, cryptoStoreAggregator)
             }.also {

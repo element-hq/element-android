@@ -29,4 +29,6 @@ interface SyncDurationMetricPlugin : SpannableMetricPlugin {
     override fun logTransaction(message: String?) {
         Timber.tag(loggerTag.value).v("## syncResponseHandler() : $message")
     }
+
+    fun shouldReport(isInitialSync: Boolean, isAfterPause: Boolean): Boolean = true
 }
