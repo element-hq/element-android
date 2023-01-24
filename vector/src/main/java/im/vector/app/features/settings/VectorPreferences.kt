@@ -375,6 +375,12 @@ class VectorPreferences @Inject constructor(
         return defaultPrefs.getString(SETTINGS_P2P_SELF_RELAY_URI, "") ?: ""
     }
 
+    fun p2pSetSelfRelayURI(uri: String) {
+        defaultPrefs.edit {
+            putString(SETTINGS_P2P_SELF_RELAY_URI, uri)
+        }
+    }
+
     fun areNotificationEnabledForDevice(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY, true)
     }

@@ -473,6 +473,9 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
             monolith!!.setStaticPeer(vectorPreferences.p2pStaticURI())
         }
 
+        val selfRelayURI = monolith!!.getRelayServers(monolith?.publicKey())
+        vectorPreferences.p2pSetSelfRelayURI(selfRelayURI)
+
         monolith?.registerNetworkCallback(networkCallback)
 
         val wifi = applicationContext.getSystemService(WIFI_SERVICE) as WifiManager
