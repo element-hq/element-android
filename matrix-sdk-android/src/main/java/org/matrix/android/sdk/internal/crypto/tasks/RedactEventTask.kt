@@ -15,9 +15,10 @@
  */
 package org.matrix.android.sdk.internal.crypto.tasks
 
-import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
+import org.matrix.android.sdk.internal.session.homeserver.HomeServerCapabilitiesDataSource
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.session.room.send.model.EventRedactBody
 import org.matrix.android.sdk.internal.task.Task
@@ -36,11 +37,11 @@ internal interface RedactEventTask : Task<RedactEventTask.Params, String> {
 internal class DefaultRedactEventTask @Inject constructor(
         private val roomAPI: RoomAPI,
         private val globalErrorReceiver: GlobalErrorReceiver,
-        private val homeServerCapabilitiesService: HomeServerCapabilitiesService,
+        private val homeServerCapabilitiesDataSource: HomeServerCapabilitiesDataSource,
 ) : RedactEventTask {
 
     override suspend fun execute(params: RedactEventTask.Params): String {
-        val withRelations = if (homeServerCapabilitiesService.getHomeServerCapabilities().canRedactEventWithRelations &&
+        val withRelations = if (homeServerCapabilitiesDataSource.getHomeServerCapabilities()?.canRedactEventWithRelations.orFalse() &&
                 !params.withRelations.isNullOrEmpty()) {
             params.withRelations
         } else {
