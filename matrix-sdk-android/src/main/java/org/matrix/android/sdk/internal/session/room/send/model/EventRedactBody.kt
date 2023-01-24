@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,6 @@ internal data class EventRedactBody(
         @Json(name = "reason")
         val reason: String? = null,
 
-        @Json(name = "with_relations")
-        val withRelations: List<String>? = null,
-
         @Json(name = "org.matrix.msc3912.with_relations")
-        val withRelationsUnstable: List<String>? = null,
+        val withRelations: List<String>? = null,
 )

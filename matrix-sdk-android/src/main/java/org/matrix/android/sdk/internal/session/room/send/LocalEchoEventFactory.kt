@@ -802,7 +802,6 @@ internal class LocalEchoEventFactory @Inject constructor(
             EventRedactBody(
                     reason = reason,
                     withRelations = withRelations,
-                    withRelationsUnstable = withRelations,
             ).toContent().plus(additionalContent.orEmpty())
         } else {
             additionalContent
