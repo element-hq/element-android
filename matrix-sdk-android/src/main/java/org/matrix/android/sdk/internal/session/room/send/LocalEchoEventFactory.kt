@@ -799,7 +799,11 @@ internal class LocalEchoEventFactory @Inject constructor(
     fun createRedactEvent(roomId: String, eventId: String, reason: String?, withRelations: List<String>? = null, additionalContent: Content? = null): Event {
         val localId = LocalEcho.createLocalEchoId()
         val content = if (reason != null || withRelations != null) {
-            EventRedactBody(reason, withRelations, withRelations).toContent().plus(additionalContent.orEmpty())
+            EventRedactBody(
+                    reason = reason,
+                    withRelations = withRelations,
+                    withRelationsUnstable = withRelations,
+            ).toContent().plus(additionalContent.orEmpty())
         } else {
             additionalContent
         }

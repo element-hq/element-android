@@ -52,7 +52,11 @@ internal class DefaultRedactEventTask @Inject constructor(
                     txId = params.txID,
                     roomId = params.roomId,
                     eventId = params.eventId,
-                    body = EventRedactBody(params.reason, withRelations, withRelations)
+                    body = EventRedactBody(
+                            reason = params.reason,
+                            withRelations = withRelations,
+                            withRelationsUnstable = withRelations,
+                    )
             )
         }
         return response.eventId

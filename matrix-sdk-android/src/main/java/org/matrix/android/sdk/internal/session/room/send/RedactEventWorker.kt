@@ -69,10 +69,14 @@ internal class RedactEventWorker(context: Context, params: WorkerParameters, ses
         return runCatching {
             executeRequest(globalErrorReceiver) {
                 roomAPI.redactEvent(
-                        params.txID,
-                        params.roomId,
-                        eventId,
-                        EventRedactBody(params.reason, withRelations, withRelations)
+                        txId = params.txID,
+                        roomId = params.roomId,
+                        eventId = eventId,
+                        body = EventRedactBody(
+                                reason = params.reason,
+                                withRelations = withRelations,
+                                withRelationsUnstable = withRelations,
+                        )
                 )
             }
         }.fold(
