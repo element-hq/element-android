@@ -61,6 +61,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?vctr_system"
+        android:clickable="true"
+        android:focusable="true"
         android:orientation="vertical"
         android:visibility="gone"
         app:behavior_hideable="true"
