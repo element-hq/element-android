@@ -25,7 +25,6 @@ class RoomPollRepository @Inject constructor(
         private val roomPollDataSource: RoomPollDataSource,
 ) {
 
-    // TODO add unit tests
     fun dispose(roomId: String) {
         roomPollDataSource.dispose(roomId)
     }

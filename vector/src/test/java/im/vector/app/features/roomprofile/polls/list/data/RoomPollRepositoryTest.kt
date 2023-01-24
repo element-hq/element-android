@@ -20,6 +20,7 @@ import io.mockk.coEvery
 import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.firstOrNull
@@ -39,6 +40,18 @@ class RoomPollRepositoryTest {
     private val roomPollRepository = RoomPollRepository(
             roomPollDataSource = fakeRoomPollDataSource,
     )
+
+    @Test
+    fun `given data source when dispose then correct method of data source is called`() {
+        // Given
+        justRun { fakeRoomPollDataSource.dispose(A_ROOM_ID) }
+
+        // When
+        roomPollRepository.dispose(A_ROOM_ID)
+
+        // Then
+        verify { fakeRoomPollDataSource.dispose(A_ROOM_ID) }
+    }
 
     @Test
     fun `given data source when getting polls then correct method of data source is called`() = runTest {

@@ -17,13 +17,29 @@
 package im.vector.app.features.roomprofile.polls.list.domain
 
 import im.vector.app.features.roomprofile.polls.list.data.RoomPollRepository
-import javax.inject.Inject
+import io.mockk.coVerify
+import io.mockk.justRun
+import io.mockk.mockk
+import org.junit.Test
 
-class DisposePollHistoryUseCase @Inject constructor(
-        private val roomPollRepository: RoomPollRepository,
-) {
+internal class DisposePollHistoryUseCaseTest {
 
-    fun execute(roomId: String) {
-        roomPollRepository.dispose(roomId)
+    private val fakeRoomPollRepository = mockk<RoomPollRepository>()
+
+    private val disposePollHistoryUseCase = DisposePollHistoryUseCase(
+            roomPollRepository = fakeRoomPollRepository,
+    )
+
+    @Test
+    fun `given repo when execute then correct method of repo is called`() {
+        // Given
+        val aRoomId = "roomId"
+        justRun { fakeRoomPollRepository.dispose(aRoomId) }
+
+        // When
+        disposePollHistoryUseCase.execute(aRoomId)
+
+        // Then
+        coVerify { fakeRoomPollRepository.dispose(aRoomId) }
     }
 }
