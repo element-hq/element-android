@@ -27,7 +27,7 @@ import androidx.core.content.getSystemService
 import androidx.core.os.HandlerCompat.postDelayed
 import javax.inject.Inject
 
-val PTT_KODIAK_REGEX = Regex(".*kodiak.*", RegexOption.IGNORE_CASE)
+val PTT_REGEX = Regex(".*ptt.*", RegexOption.IGNORE_CASE)
 
 class BluetoothLowEnergyDeviceScanner @Inject constructor(
         context: Context
@@ -54,7 +54,7 @@ class BluetoothLowEnergyDeviceScanner @Inject constructor(
         bluetoothManager
                 ?.adapter
                 ?.bondedDevices
-                ?.firstOrNull { it.name == "PTT-Z" || it.name.matches(PTT_KODIAK_REGEX) }
+                ?.firstOrNull { it.name.matches(PTT_REGEX) }
                 ?.let { bluetoothDevice ->
                     callback?.onPairedDeviceFound(bluetoothDevice)
                 }
