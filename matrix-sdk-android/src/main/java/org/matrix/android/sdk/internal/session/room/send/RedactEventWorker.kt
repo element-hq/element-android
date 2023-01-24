@@ -19,13 +19,11 @@ import android.content.Context
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.failure.Failure
-import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
 import org.matrix.android.sdk.internal.SessionManager
+import org.matrix.android.sdk.internal.crypto.tasks.RedactEventTask
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
-import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.SessionComponent
 import org.matrix.android.sdk.internal.session.room.RoomAPI
-import org.matrix.android.sdk.internal.session.room.send.model.EventRedactBody
 import org.matrix.android.sdk.internal.worker.SessionSafeCoroutineWorker
 import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
@@ -51,34 +49,23 @@ internal class RedactEventWorker(context: Context, params: WorkerParameters, ses
 
     @Inject lateinit var roomAPI: RoomAPI
     @Inject lateinit var globalErrorReceiver: GlobalErrorReceiver
-    @Inject lateinit var homeServerCapabilitiesService: HomeServerCapabilitiesService
+    @Inject lateinit var redactEventTask: RedactEventTask
 
     override fun injectWith(injector: SessionComponent) {
         injector.inject(this)
     }
 
     override suspend fun doSafeWork(params: Params): Result {
-        val eventId = params.eventId
-        val withRelations = if (homeServerCapabilitiesService.getHomeServerCapabilities().canRedactEventWithRelations &&
-                !params.withRelations.isNullOrEmpty()) {
-            params.withRelations
-        } else {
-            null
-        }
-
         return runCatching {
-            executeRequest(globalErrorReceiver) {
-                roomAPI.redactEvent(
-                        txId = params.txID,
-                        roomId = params.roomId,
-                        eventId = eventId,
-                        body = EventRedactBody(
-                                reason = params.reason,
-                                withRelations = withRelations,
-                                withRelationsUnstable = withRelations,
-                        )
-                )
-            }
+            redactEventTask.execute(
+                    RedactEventTask.Params(
+                            txID = params.txID,
+                            roomId = params.roomId,
+                            eventId = params.eventId,
+                            reason = params.reason,
+                            withRelations = params.withRelations,
+                    )
+            )
         }.fold(
                 {
                     Result.success()
