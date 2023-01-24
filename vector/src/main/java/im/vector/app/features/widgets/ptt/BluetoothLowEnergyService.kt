@@ -137,6 +137,7 @@ class BluetoothLowEnergyService : VectorAndroidService() {
 
     fun connect(address: String) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            bluetoothGatt?.disconnect()
             bluetoothGatt = bluetoothAdapter
                     ?.getRemoteDevice(address)
                     ?.connectGatt(applicationContext, true, gattCallback, BluetoothDevice.TRANSPORT_LE)
