@@ -16,7 +16,7 @@
 
 package im.vector.app.features.home.room.detail.timeline.render
 
-import android.annotation.StringRes
+import androidx.annotation.StringRes
 import im.vector.app.R
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakeStringProvider
