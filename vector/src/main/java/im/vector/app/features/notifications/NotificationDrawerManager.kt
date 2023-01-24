@@ -47,6 +47,7 @@ class NotificationDrawerManager @Inject constructor(
         private val notifiableEventProcessor: NotifiableEventProcessor,
         private val notificationRenderer: NotificationRenderer,
         private val notificationEventPersistence: NotificationEventPersistence,
+        private val filteredEventDetector: FilteredEventDetector,
         private val buildMeta: BuildMeta,
 ) {
 
@@ -63,6 +64,7 @@ class NotificationDrawerManager @Inject constructor(
     private val notificationState by lazy { createInitialNotificationState() }
     private val avatarSize = context.resources.getDimensionPixelSize(R.dimen.profile_avatar_size)
     private var currentRoomId: String? = null
+    private var currentThreadId: String? = null
     private val firstThrottler = FirstThrottler(200)
 
     private var useCompleteNotificationFormat = vectorPreferences.useCompleteNotificationFormat()
@@ -99,6 +101,11 @@ class NotificationDrawerManager @Inject constructor(
             Timber.d("onNotifiableEventReceived(): is push: ${notifiableEvent.canBeReplaced}")
         }
 
+        if (filteredEventDetector.shouldBeIgnored(notifiableEvent)) {
+            Timber.d("onNotifiableEventReceived(): ignore the event")
+            return
+        }
+
         add(notifiableEvent)
     }
 
@@ -119,6 +126,22 @@ class NotificationDrawerManager @Inject constructor(
             currentRoomId = roomId
             if (hasChanged && roomId != null) {
                 it.clearMessagesForRoom(roomId)
+            }
+        }
+    }
+
+    /**
+     * Should be called when the application is currently opened and showing timeline for the given threadId.
+     * Used to ignore events related to that thread (no need to display notification) and clean any existing notification on this room.
+     */
+    fun setCurrentThread(threadId: String?) {
+        updateEvents {
+            val hasChanged = threadId != currentThreadId
+            currentThreadId = threadId
+            currentRoomId?.let { roomId ->
+                if (hasChanged && threadId != null) {
+                    it.clearMessagesForThread(roomId, threadId)
+                }
             }
         }
     }
@@ -164,7 +187,7 @@ class NotificationDrawerManager @Inject constructor(
     private fun refreshNotificationDrawerBg() {
         Timber.v("refreshNotificationDrawerBg()")
         val eventsToRender = notificationState.updateQueuedEvents(this) { queuedEvents, renderedEvents ->
-            notifiableEventProcessor.process(queuedEvents.rawEvents(), currentRoomId, renderedEvents).also {
+            notifiableEventProcessor.process(queuedEvents.rawEvents(), currentRoomId, currentThreadId, renderedEvents).also {
                 queuedEvents.clearAndAdd(it.onlyKeptEvents())
             }
         }
@@ -198,8 +221,8 @@ class NotificationDrawerManager @Inject constructor(
         notificationRenderer.render(session.myUserId, myUserDisplayName, myUserAvatarUrl, useCompleteNotificationFormat, eventsToRender)
     }
 
-    fun shouldIgnoreMessageEventInRoom(roomId: String?): Boolean {
-        return currentRoomId != null && roomId == currentRoomId
+    fun shouldIgnoreMessageEventInRoom(resolvedEvent: NotifiableMessageEvent): Boolean {
+        return resolvedEvent.shouldIgnoreMessageEventInRoom(currentRoomId, currentThreadId)
     }
 
     companion object {

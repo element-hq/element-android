@@ -16,9 +16,13 @@
 
 package org.matrix.android.sdk.api
 
+import org.matrix.android.sdk.api.session.sync.filter.SyncFilterParams
+
 data class SyncConfig(
         /**
          * Time to keep sync connection alive for before making another request in milliseconds.
          */
         val longPollTimeout: Long = 30_000L,
+
+        val syncFilterParams: SyncFilterParams = SyncFilterParams()
 )

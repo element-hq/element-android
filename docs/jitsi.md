@@ -93,4 +93,4 @@ url "https://github.com/vector-im/jitsi_libre_maven/raw/master/android-sdk-3.10.
 
 - Build the project and perform the sanity tests again.
 
-- Update the file `/CHANGES.md` to notify about the library upgrade, and create a regular PR for project Element Android.
+- Create a PR for project Element Android and add a changelog file `<PR_NUMBER>.misc` to notify about the library upgrade.

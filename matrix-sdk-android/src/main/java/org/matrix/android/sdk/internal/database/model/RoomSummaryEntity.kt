@@ -115,6 +115,16 @@ internal open class RoomSummaryEntity(
             if (value != field) field = value
         }
 
+    var threadNotificationCount: Int = 0
+        set(value) {
+            if (value != field) field = value
+        }
+
+    var threadHighlightCount: Int = 0
+        set(value) {
+            if (value != field) field = value
+        }
+
     var readMarkerId: String? = null
         set(value) {
             if (value != field) field = value

@@ -46,7 +46,7 @@ internal class RedactionEventProcessor @Inject constructor() : EventInsertLivePr
         return eventType == EventType.REDACTION
     }
 
-    override suspend fun process(realm: Realm, event: Event) {
+    override fun process(realm: Realm, event: Event) {
         pruneEvent(realm, event)
     }
 
@@ -61,45 +61,36 @@ internal class RedactionEventProcessor @Inject constructor() : EventInsertLivePr
         val isLocalEcho = LocalEcho.isLocalEchoId(redactionEvent.eventId ?: "")
         Timber.v("Redact event for ${redactionEvent.redacts} localEcho=$isLocalEcho")
 
-        val eventToPrune = EventEntity.where(realm, eventId = redactionEvent.redacts).findFirst()
-                ?: return
+        val eventToPrune = EventEntity.where(realm, eventId = redactionEvent.redacts).findFirst() ?: return
 
         val typeToPrune = eventToPrune.type
         val stateKey = eventToPrune.stateKey
         val allowedKeys = computeAllowedKeys(typeToPrune)
-        if (allowedKeys.isNotEmpty()) {
-            val prunedContent = ContentMapper.map(eventToPrune.content)?.filterKeys { key -> allowedKeys.contains(key) }
-            eventToPrune.content = ContentMapper.map(prunedContent)
-        } else {
-            when (typeToPrune) {
-                EventType.ENCRYPTED,
-                EventType.MESSAGE,
-                in EventType.STATE_ROOM_BEACON_INFO,
-                in EventType.BEACON_LOCATION_DATA,
-                in EventType.POLL_START -> {
-                    Timber.d("REDACTION for message ${eventToPrune.eventId}")
-                    val unsignedData = EventMapper.map(eventToPrune).unsignedData
-                            ?: UnsignedData(null, null)
+        when {
+            allowedKeys.isNotEmpty() -> {
+                val prunedContent = ContentMapper.map(eventToPrune.content)?.filterKeys { key -> allowedKeys.contains(key) }
+                eventToPrune.content = ContentMapper.map(prunedContent)
+            }
+            canPruneEventType(typeToPrune) -> {
+                Timber.d("REDACTION for message ${eventToPrune.eventId}")
+                val unsignedData = EventMapper.map(eventToPrune).unsignedData ?: UnsignedData(null, null)
 
-                    // was this event a m.replace
+                // was this event a m.replace
 //                    val contentModel = ContentMapper.map(eventToPrune.content)?.toModel<MessageContent>()
 //                    if (RelationType.REPLACE == contentModel?.relatesTo?.type && contentModel.relatesTo?.eventId != null) {
 //                        eventRelationsAggregationUpdater.handleRedactionOfReplace(eventToPrune, contentModel.relatesTo!!.eventId!!, realm)
 //                    }
 
-                    val modified = unsignedData.copy(redactedEvent = redactionEvent)
-                    // Deleting the content of a thread message will result to delete the thread relation, however threads are now dynamic
-                    // so there is not much of a problem
-                    eventToPrune.content = ContentMapper.map(emptyMap())
-                    eventToPrune.unsignedData = MoshiProvider.providesMoshi().adapter(UnsignedData::class.java).toJson(modified)
-                    eventToPrune.decryptionResultJson = null
-                    eventToPrune.decryptionErrorCode = null
+                val modified = unsignedData.copy(redactedEvent = redactionEvent)
+                eventToPrune.content = ContentMapper.map(emptyMap())
+                eventToPrune.unsignedData = MoshiProvider.providesMoshi().adapter(UnsignedData::class.java).toJson(modified)
+                eventToPrune.decryptionResultJson = null
+                eventToPrune.decryptionErrorCode = null
 
-                    handleTimelineThreadSummaryIfNeeded(realm, eventToPrune, isLocalEcho)
-                }
-//                EventType.REACTION -> {
-//                    eventRelationsAggregationUpdater.handleReactionRedact(eventToPrune, realm, userId)
-//                }
+                handleTimelineThreadSummaryIfNeeded(realm, eventToPrune, isLocalEcho)
+            }
+            else -> {
+                Timber.w("Not pruning event (type $typeToPrune)")
             }
         }
         if (typeToPrune == EventType.STATE_ROOM_MEMBER && stateKey != null) {
@@ -165,6 +156,30 @@ internal class RedactionEventProcessor @Inject constructor() : EventInsertLivePr
             EventType.STATE_ROOM_CANONICAL_ALIAS -> listOf("alias")
             EventType.FEEDBACK -> listOf("type", "target_event_id")
             else -> emptyList()
+        }
+    }
+
+    private fun canPruneEventType(eventType: String): Boolean {
+        return when {
+            EventType.isCallEvent(eventType) -> false
+            EventType.isVerificationEvent(eventType) -> false
+            eventType == EventType.STATE_ROOM_WIDGET_LEGACY ||
+                    eventType == EventType.STATE_ROOM_WIDGET ||
+                    eventType == EventType.STATE_ROOM_NAME ||
+                    eventType == EventType.STATE_ROOM_TOPIC ||
+                    eventType == EventType.STATE_ROOM_AVATAR ||
+                    eventType == EventType.STATE_ROOM_THIRD_PARTY_INVITE ||
+                    eventType == EventType.STATE_ROOM_GUEST_ACCESS ||
+                    eventType == EventType.STATE_SPACE_CHILD ||
+                    eventType == EventType.STATE_SPACE_PARENT ||
+                    eventType == EventType.STATE_ROOM_TOMBSTONE ||
+                    eventType == EventType.STATE_ROOM_HISTORY_VISIBILITY ||
+                    eventType == EventType.STATE_ROOM_RELATED_GROUPS ||
+                    eventType == EventType.STATE_ROOM_PINNED_EVENT ||
+                    eventType == EventType.STATE_ROOM_ENCRYPTION ||
+                    eventType == EventType.STATE_ROOM_SERVER_ACL ||
+                    eventType == EventType.REACTION -> false
+            else -> true
         }
     }
 }

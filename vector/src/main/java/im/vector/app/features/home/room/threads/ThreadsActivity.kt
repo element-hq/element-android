@@ -26,6 +26,7 @@ import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityThreadsBinding
+import im.vector.app.features.MainActivity
 import im.vector.app.features.analytics.extensions.toAnalyticsInteraction
 import im.vector.app.features.analytics.plan.Interaction
 import im.vector.app.features.home.AvatarRenderer
@@ -143,12 +144,19 @@ class ThreadsActivity : VectorBaseActivity<ActivityThreadsBinding>() {
                 context: Context,
                 threadTimelineArgs: ThreadTimelineArgs?,
                 threadListArgs: ThreadListArgs?,
-                eventIdToNavigate: String? = null
+                eventIdToNavigate: String? = null,
+                firstStartMainActivity: Boolean = false
         ): Intent {
-            return Intent(context, ThreadsActivity::class.java).apply {
+            val intent = Intent(context, ThreadsActivity::class.java).apply {
                 putExtra(THREAD_TIMELINE_ARGS, threadTimelineArgs)
                 putExtra(THREAD_EVENT_ID_TO_NAVIGATE, eventIdToNavigate)
                 putExtra(THREAD_LIST_ARGS, threadListArgs)
+            }
+
+            return if (firstStartMainActivity) {
+                MainActivity.getIntentWithNextIntent(context, intent)
+            } else {
+                intent
             }
         }
     }

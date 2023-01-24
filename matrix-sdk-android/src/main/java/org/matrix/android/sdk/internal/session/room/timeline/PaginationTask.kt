@@ -41,7 +41,7 @@ internal class DefaultPaginationTask @Inject constructor(
 ) : PaginationTask {
 
     override suspend fun execute(params: PaginationTask.Params): TokenChunkEventPersistor.Result {
-        val filter = filterRepository.getRoomFilter()
+        val filter = filterRepository.getRoomFilterBody()
         val chunk = executeRequest(
                 globalErrorReceiver,
                 canRetry = true

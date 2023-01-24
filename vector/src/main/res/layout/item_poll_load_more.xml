@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <Button
+        android:id="@+id/roomPollsLoadMore"
+        style="@style/Widget.Vector.Button.Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="38dp"
+        android:layout_marginBottom="46dp"
+        android:padding="0dp"
+        android:text="@string/room_polls_load_more"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/roomPollsLoadMoreProgress"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="9dp"
+        app:layout_constraintBottom_toBottomOf="@id/roomPollsLoadMore"
+        app:layout_constraintStart_toEndOf="@id/roomPollsLoadMore"
+        app:layout_constraintTop_toTopOf="@id/roomPollsLoadMore" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

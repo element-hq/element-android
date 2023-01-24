@@ -28,3 +28,5 @@ data class RelationDefaultContent(
 ) : RelationContent
 
 fun RelationDefaultContent.shouldRenderInThread(): Boolean = isFallingBack == false
+
+fun RelationDefaultContent?.isReply(): Boolean = this?.inReplyTo?.eventId != null

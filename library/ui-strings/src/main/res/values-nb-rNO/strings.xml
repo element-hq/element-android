@@ -36,7 +36,7 @@
     <string name="copied_to_clipboard">Kopiert til utklippstavle</string>
     <string name="dialog_title_warning">Advarsel</string>
     <string name="dialog_title_error">Feil</string>
-    <string name="bottom_action_people">Folk</string>
+    <string name="bottom_action_people">Personer</string>
     <string name="bottom_action_rooms">Rom</string>
     <string name="invitations_header">Invitasjoner</string>
     <string name="low_priority_header">Lavprioritet</string>
@@ -65,10 +65,6 @@
     <string name="action_remove">Fjern</string>
     <string name="action_join">Bli med</string>
     <string name="action_reject">Avvis</string>
-
-
-
-
     <string name="room_participants_action_invite">Inviter</string>
     <string name="room_participants_action_ban">Utesteng</string>
     <string name="room_participants_action_unban">Opphev utestengelse</string>
@@ -265,7 +261,6 @@
     <string name="room_one_user_is_typing">%s skriver …</string>
     <string name="search_hint">Søk</string>
     <string name="search_members_hint">Filtrer rommets medlemmer</string>
-
     <string name="room_settings_all_messages">Alle meldinger</string>
     <string name="settings_olm_version">olm-versjon</string>
     <string name="settings_deactivate_account_section">Deaktiver kontoen</string>
@@ -314,8 +309,6 @@
     <string name="notification_noisy">Bråkete</string>
     <string name="encrypted_message">Kryptert melding</string>
     <string name="rooms">Rom</string>
-
-
     <string name="reason_colon">Årsak: %1$s</string>
     <string name="x_plus">%d+</string>
     <string name="keys_backup_setup">Begynn å bruke Nøkkelsikkerhetskopiering</string>
@@ -379,7 +372,6 @@
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">Du kommer til å miste tilgang til dine enkrypterte meldinger med mindre du sikkerhetskopierer nøklene dine før du logger av.</string>
     <string name="view_decrypted_source">Se dekryptert kilde</string>
     <string name="report_content">Rapporter innhold</string>
-
     <string name="action_sign_out_confirmation_simple">Er du sikker på at vil logge ut\?</string>
     <string name="action_voice_call">Telefonsamtale</string>
     <string name="action_video_call">Videosamtale</string>
@@ -393,7 +385,6 @@
     <string name="system_alerts_header">Systemadvarsler</string>
     <string name="direct_chats_header">Samtaler</string>
     <string name="matrix_only_filter">Bare matrix-kontakter</string>
-
     <string name="send_bug_report_include_crash_logs">Send kjæsjlogg</string>
     <string name="send_bug_report_include_screenshot">Send skjermbilde</string>
     <string name="send_bug_report_description">Vennligst forklar feilen. Hva gjorde du\? Hva forventet du at skulle skje\? Hva skjedde i stedet\?</string>
@@ -446,7 +437,6 @@
     <string name="auth_invalid_email">Dette ser ikke ut som en gyldig E-postadresse</string>
     <string name="login_error_ssl_other">SSL-feil.</string>
     <string name="login_error_limit_exceeded">For mange forespørsler har blitt sendt</string>
-
     <string name="room_participants_leave_prompt_title">Forlat rommet</string>
     <string name="room_participants_header_direct_chats">Direktemeldinger</string>
     <string name="room_participants_action_ignore_title">Ignorer bruker</string>
@@ -600,13 +590,10 @@
     <string name="no_permissions_to_start_conf_call_in_direct_room">Du har ikke tillatelse til å starte en konferansesamtale</string>
     <string name="action_reset">Tilbakestill</string>
     <string name="auth_accept_policies">Vennligst gjennomgå og godta retningslinjene til denne hjemmeserveren:</string>
-
     <string name="auth_reset_password_error_unauthorized">Klarte ikke verifisere e-postadressen: Pass på at du har klikket på lenken i e-posten</string>
     <string name="auth_recaptcha_message">Denne hjemmetjeneren vil vite om du er en robot</string>
-
     <string name="call_failed_no_connection_description">Klarte ikke å starte en sanntidskopling.
 \nVennligst be hjemmetjeneradministratoren din om å sette opp en TURN server så samtaler blir mer stabile.</string>
-
     <string name="login_error_not_json">Inneholdt ikke gyldig JSON</string>
     <string name="login_error_bad_json">Ugyldig JSON</string>
     <string name="set_a_security_phrase_hint">Sikkerhetsfrase</string>
@@ -702,7 +689,6 @@
     <string name="settings_app_info_link_title">App info</string>
     <string name="settings_phone_number_empty">Ingen telefonnummer er lagt til kontoen din</string>
     <string name="room_settings_add_homescreen_shortcut">Legg til på startskjerm</string>
-
     <string name="ssl_only_accept">Godta bare sertifikatet hvis serveradministratoren har publisert et fingeravtrykk som samsvarer med det over.</string>
     <string name="ssl_expected_existing_expl">Sertifikatet er endret fra en tidligere klarert til en som ikke er klarert. Serveren kan ha fornyet sertifikatet. Kontakt serveradministratoren for forventet fingeravtrykk.</string>
     <string name="ssl_unexpected_existing_expl">Sertifikatet har endret seg fra et som telefonen din klarerte. Dette er veldig uvanlig. Det anbefales at du IKKE godtar dette nye sertifikatet.</string>
@@ -734,19 +720,14 @@
     <string name="room_participants_action_mention">Nevne</string>
     <string name="room_participants_action_cancel_invite">Avbryt invitasjonen</string>
     <string name="room_participants_leave_prompt_msg">Er du sikker på at du vil forlate rommet\?</string>
-
     <string name="room_jump_to_first_unread">Gå til første uleste melding.</string>
     <string name="list_members">Liste medlemmer</string>
     <string name="permissions_denied_add_contact">Tillat tillatelse til å få tilgang til kontaktene dine.</string>
     <string name="permissions_denied_qr_code">For å skanne en QR-kode, må du gi tilgang til kameraet.</string>
-
     <string name="permissions_rationale_msg_camera_and_audio">${app_name} trenger tillatelse for å få tilgang til kameraet og mikrofonen for å utføre videosamtaler.
 \n
 \nTillat tilgang til de neste popup-vinduene for å kunne ringe.</string>
-
     <string name="permissions_rationale_msg_record_audio">${app_name} trenger tillatelse for å få tilgang til mikrofonen din for å utføre lydanrop.</string>
-
-
     <string name="incoming_voice_call">Innkommende taleanrop</string>
     <string name="incoming_video_call">Innkommende videosamtale</string>
     <string name="call_ended">Anrop avsluttet</string>
@@ -770,7 +751,6 @@
     <string name="start_chatting">Begynn å chatte</string>
     <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
 \nDenne feilen er utenfor kontroll av ${app_name}, og ifølge Google indikerer denne feilen at enheten har for mange apper registrert hos FCM. Feilen oppstår bare i tilfeller der det er ekstremt mange apper, så det bør ikke påvirke gjennomsnittsbrukeren.</string>
-
     <string name="call_error_user_not_responding">Ekstern vert kunne ikke plukke opp.</string>
     <string name="video_call_in_progress">Pågående videosamtale…</string>
     <string name="call_in_progress">Pågående samtale…</string>
@@ -1137,7 +1117,6 @@
     <string name="settings_integrations_summary">Bruk en integrasjonshåndterer til å administrere botter, broer, widgets og klistremerkepakker.
 \nIntegrasjonshåndterere mottar konfigurasjonsdata, og kan endre moduler, sende rominvitasjoner og angi maktnivåer på dine vegne.</string>
     <string name="settings_set_sync_delay">Forsinkelse mellom hver synkronisering</string>
-
     <string name="settings_set_sync_timeout">Tidsavbrudd for synkroniseringsforespørsel</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">Du vil ikke bli varslet om innkommende meldinger når appen er i bakgrunnen.</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} vil synkroniseres i bakgrunnen med jevne mellomrom på presis tid (konfigurerbar).
@@ -1251,7 +1230,6 @@
     <string name="spaces_no_server_support_description">Ta kontakt med din hjemmetjener -administrator for mer informasjon</string>
     <string name="this_space_has_no_rooms_not_admin">Noen rom kan være skjult fordi de er private, og du trenger en invitasjon.
 \nDu har ikke tillatelse til å legge til rom.</string>
-
     <string name="upgrade_required">Oppgradering kreves</string>
     <string name="upgrade_public_room">Oppgrader offentlig rom</string>
     <string name="upgrade_private_room">Oppgrader privat rom</string>

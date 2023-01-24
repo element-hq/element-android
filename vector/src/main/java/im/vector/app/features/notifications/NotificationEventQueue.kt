@@ -122,13 +122,18 @@ data class NotificationEventQueue(
     }
 
     fun clearMemberShipNotificationForRoom(roomId: String) {
-        Timber.v("clearMemberShipOfRoom $roomId")
+        Timber.d("clearMemberShipOfRoom $roomId")
         queue.removeAll { it is InviteNotifiableEvent && it.roomId == roomId }
     }
 
     fun clearMessagesForRoom(roomId: String) {
-        Timber.v("clearMessageEventOfRoom $roomId")
+        Timber.d("clearMessageEventOfRoom $roomId")
         queue.removeAll { it is NotifiableMessageEvent && it.roomId == roomId }
+    }
+
+    fun clearMessagesForThread(roomId: String, threadId: String) {
+        Timber.d("clearMessageEventOfThread $roomId, $threadId")
+        queue.removeAll { it is NotifiableMessageEvent && it.roomId == roomId && it.threadId == threadId }
     }
 
     fun rawEvents(): List<NotifiableEvent> = queue

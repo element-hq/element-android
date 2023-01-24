@@ -19,16 +19,17 @@ package im.vector.app.features.settings.devices.v2.overview
 import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.date.VectorDateFormatter
@@ -43,6 +44,8 @@ import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.settings.devices.v2.list.SessionInfoViewState
 import im.vector.app.features.settings.devices.v2.more.SessionLearnMoreBottomSheet
+import im.vector.app.features.settings.devices.v2.notification.NotificationsStatus
+import im.vector.app.features.settings.devices.v2.signout.BuildConfirmSignoutDialogUseCase
 import im.vector.app.features.workers.signout.SignOutUiWorker
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -66,6 +69,8 @@ class SessionOverviewFragment :
     @Inject lateinit var colorProvider: ColorProvider
 
     @Inject lateinit var stringProvider: StringProvider
+
+    @Inject lateinit var buildConfirmSignoutDialogUseCase: BuildConfirmSignoutDialogUseCase
 
     private val viewModel: SessionOverviewViewModel by fragmentViewModel()
 
@@ -132,13 +137,7 @@ class SessionOverviewFragment :
 
     private fun confirmSignoutOtherSession() {
         activity?.let {
-            MaterialAlertDialogBuilder(it)
-                    .setTitle(R.string.action_sign_out)
-                    .setMessage(R.string.action_sign_out_confirmation_simple)
-                    .setPositiveButton(R.string.action_sign_out) { _, _ ->
-                        signoutSession()
-                    }
-                    .setNegativeButton(R.string.action_cancel, null)
+            buildConfirmSignoutDialogUseCase.execute(it, this::signoutSession)
                     .show()
         }
     }
@@ -158,14 +157,32 @@ class SessionOverviewFragment :
 
     override fun getMenuRes() = R.menu.menu_session_overview
 
+    override fun handlePrepareMenu(menu: Menu) {
+        withState(viewModel) { state ->
+            menu.findItem(R.id.sessionOverviewToggleIpAddress).title = if (state.isShowingIpAddress) {
+                getString(R.string.device_manager_other_sessions_hide_ip_address)
+            } else {
+                getString(R.string.device_manager_other_sessions_show_ip_address)
+            }
+        }
+    }
+
     override fun handleMenuItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.sessionOverviewRename -> {
                 goToRenameSession()
                 true
             }
+            R.id.sessionOverviewToggleIpAddress -> {
+                toggleIpAddressVisibility()
+                true
+            }
             else -> false
         }
+    }
+
+    private fun toggleIpAddressVisibility() {
+        viewModel.handle(SessionOverviewAction.ToggleIpAddressVisibility)
     }
 
     private fun goToRenameSession() = withState(viewModel) { state ->
@@ -177,7 +194,7 @@ class SessionOverviewFragment :
         updateEntryDetails(state.deviceId)
         updateSessionInfo(state)
         updateLoading(state.isLoading)
-        updatePushNotificationToggle(state.deviceId, state.notificationsEnabled)
+        updatePushNotificationToggle(state.deviceId, state.notificationsStatus)
     }
 
     private fun updateToolbar(viewState: SessionOverviewViewState) {
@@ -207,26 +224,31 @@ class SessionOverviewFragment :
                     isVerifyButtonVisible = isCurrentSession || viewState.isCurrentSessionTrusted,
                     isDetailsButtonVisible = false,
                     isLearnMoreLinkVisible = deviceInfo.roomEncryptionTrustLevel != RoomEncryptionTrustLevel.Default,
-                    isLastSeenDetailsVisible = !isCurrentSession,
+                    isLastActivityVisible = !isCurrentSession,
+                    isShowingIpAddress = viewState.isShowingIpAddress,
             )
             views.sessionOverviewInfo.render(infoViewState, dateFormatter, drawableProvider, colorProvider, stringProvider)
             views.sessionOverviewInfo.onLearnMoreClickListener = {
-                showLearnMoreInfoVerificationStatus(deviceInfo.roomEncryptionTrustLevel == RoomEncryptionTrustLevel.Trusted)
+                showLearnMoreInfoVerificationStatus(deviceInfo.roomEncryptionTrustLevel)
             }
         } else {
             views.sessionOverviewInfo.isVisible = false
         }
     }
 
-    private fun updatePushNotificationToggle(deviceId: String, enabled: Boolean) {
-        views.sessionOverviewPushNotifications.apply {
-            setOnCheckedChangeListener(null)
-            setChecked(enabled)
-            post {
-                setOnCheckedChangeListener { _, isChecked ->
-                    viewModel.handle(SessionOverviewAction.TogglePushNotifications(deviceId, isChecked))
+    private fun updatePushNotificationToggle(deviceId: String, notificationsStatus: NotificationsStatus) {
+        views.sessionOverviewPushNotifications.isGone = notificationsStatus == NotificationsStatus.NOT_SUPPORTED
+        when (notificationsStatus) {
+            NotificationsStatus.ENABLED, NotificationsStatus.DISABLED -> {
+                views.sessionOverviewPushNotifications.setOnCheckedChangeListener(null)
+                views.sessionOverviewPushNotifications.setChecked(notificationsStatus == NotificationsStatus.ENABLED)
+                views.sessionOverviewPushNotifications.post {
+                    views.sessionOverviewPushNotifications.setOnCheckedChangeListener { _, isChecked ->
+                        viewModel.handle(SessionOverviewAction.TogglePushNotifications(deviceId, isChecked))
+                    }
                 }
             }
+            else -> Unit
         }
     }
 
@@ -271,21 +293,28 @@ class SessionOverviewFragment :
         }
     }
 
-    private fun showLearnMoreInfoVerificationStatus(isVerified: Boolean) {
-        val titleResId = if (isVerified) {
-            R.string.device_manager_verification_status_verified
-        } else {
-            R.string.device_manager_verification_status_unverified
+    private fun showLearnMoreInfoVerificationStatus(roomEncryptionTrustLevel: RoomEncryptionTrustLevel?) {
+        val args = when (roomEncryptionTrustLevel) {
+            null -> {
+                // encryption not supported
+                SessionLearnMoreBottomSheet.Args(
+                        title = getString(R.string.device_manager_verification_status_unverified),
+                        description = getString(R.string.device_manager_learn_more_sessions_encryption_not_supported),
+                )
+            }
+            RoomEncryptionTrustLevel.Trusted -> {
+                SessionLearnMoreBottomSheet.Args(
+                        title = getString(R.string.device_manager_verification_status_verified),
+                        description = getString(R.string.device_manager_learn_more_sessions_verified_description),
+                )
+            }
+            else -> {
+                SessionLearnMoreBottomSheet.Args(
+                        title = getString(R.string.device_manager_verification_status_unverified),
+                        description = getString(R.string.device_manager_learn_more_sessions_unverified),
+                )
+            }
         }
-        val descriptionResId = if (isVerified) {
-            R.string.device_manager_learn_more_sessions_verified
-        } else {
-            R.string.device_manager_learn_more_sessions_unverified
-        }
-        val args = SessionLearnMoreBottomSheet.Args(
-                title = getString(titleResId),
-                description = getString(descriptionResId),
-        )
         SessionLearnMoreBottomSheet.show(childFragmentManager, args)
     }
 }

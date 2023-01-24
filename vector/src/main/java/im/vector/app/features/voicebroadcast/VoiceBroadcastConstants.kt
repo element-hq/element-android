@@ -28,4 +28,7 @@ object VoiceBroadcastConstants {
 
     /** Default voice broadcast chunk duration, in seconds. */
     const val DEFAULT_CHUNK_LENGTH_IN_SECONDS = 120
+
+    /** Maximum length of the voice broadcast in seconds. */
+    const val MAX_VOICE_BROADCAST_LENGTH_IN_SECONDS = 14_400 // 4 hours
 }

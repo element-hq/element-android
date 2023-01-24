@@ -2702,7 +2702,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="device_manager_session_title">Munkamenet</string>
     <string name="device_manager_current_session_title">Jelenlegi munkamenet</string>
     <string name="device_manager_verification_status_detail_other_session_unverified">A jobb biztonság vagy megbízhatóság érdekében ellenőrizze vagy jelentkezzen ki ebből a munkamenetből.</string>
-    <string name="device_manager_verification_status_detail_current_session_unverified">Az aktuális munkamenet készen áll a biztonságos üzenetküldésre.</string>
+    <string name="device_manager_verification_status_detail_current_session_unverified">Ellenőrizd az aktuális munkamenetet a biztonságos üzenetküldéshez.</string>
     <string name="device_manager_verification_status_detail_other_session_verified">Ez a munkamenet beállítva a biztonságos üzenetküldéshez.</string>
     <string name="device_manager_verification_status_detail_current_session_verified">Az aktuális munkamenet készen áll a biztonságos üzenetküldésre.</string>
     <string name="labs_enable_deferred_dm_summary">Közvetlen beszélgetés indítása csak az első üzenettel</string>
@@ -2788,9 +2788,9 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="qr_code_login_show_qr_code_button">QR kód megjelenítése ezen az eszközön</string>
     <string name="qr_code_login_link_a_device_show_qr_code_instruction_2">Válaszd ezt: „QR kód beolvasása”</string>
     <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">Válaszd ezt: „Belépés QR kóddal”</string>
-    <string name="qr_code_login_new_device_instruction_3">Válaszd ezt: „QR kód megjelenítése ezen az eszközön”</string>
-    <string name="qr_code_login_new_device_instruction_2">Menj a Beállítások -&gt; Biztonság és Adatvédelem -&gt; Minden munkamenet megjelenítése menübe</string>
-    <string name="qr_code_login_new_device_instruction_1">Nyisd meg a(z) ${app_name} alkalmazást a másik eszközön</string>
+    <string name="qr_code_login_new_device_instruction_3">Válaszd ezt: „QR kód megjelenítése”</string>
+    <string name="qr_code_login_new_device_instruction_2">Menj a Beállítások -&gt; Biztonság és Adatvédelem</string>
+    <string name="qr_code_login_new_device_instruction_1">Nyisd meg az alkalmazást a másik eszközön</string>
     <string name="qr_code_login_header_failed_denied_description">A kérést elutasították a másik eszközön.</string>
     <string name="qr_code_login_header_failed_timeout_description">Az összekötés az elvárt időn belül nem fejeződött be.</string>
     <string name="qr_code_login_header_failed_device_is_not_supported_description">Összekötés ezzel az eszközzel nem támogatott.</string>
@@ -2805,4 +2805,98 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="one">1</string>
     <string name="device_manager_sessions_sign_in_with_qr_code_title">Belépés QR kóddal</string>
     <string name="login_scan_qr_code">QR kód beolvasása</string>
+    <string name="qr_code_login_header_failed_homeserver_is_not_supported_description">A matrix szerver nem támogatja más eszköz bejelentkeztetését.</string>
+    <string name="qr_code_login_header_failed_user_cancelled_description">A bejelentkezés a másik eszköz által meg lett szakítva.</string>
+    <string name="qr_code_login_header_failed_invalid_qr_code_description">QR kód érvénytelen.</string>
+    <string name="qr_code_login_header_failed_other_device_not_signed_in_description">A másik eszköznek már bejelentkezve kell lennie.</string>
+    <string name="qr_code_login_header_failed_other_device_already_signed_in_description">A másik eszköz már bejelentkezett.</string>
+    <string name="qr_code_login_header_failed_e2ee_security_issue_description">Biztonsági probléma lépett fel a biztonságos üzenetküldés beállításánál. Valamihez illetéktelenül fértek hozzá: Matrix szervered, Internet kapcsolatod, Eszközöd,</string>
+    <string name="qr_code_login_header_failed_other_description">A kérés sikertelen.</string>
+    <string name="labs_enable_voice_broadcast_summary">Hang közvetítés felvételéhez és a szoba idővonalára küldéséhez.</string>
+    <string name="labs_enable_voice_broadcast_title">Hang közvetítés engedélyezése</string>
+    <string name="a11y_voice_broadcast_buffering">Pufferelés…</string>
+    <string name="a11y_pause_voice_broadcast">Hang közvetítés szüneteltetése</string>
+    <string name="a11y_play_voice_broadcast">Hang közvetítés lejátszása vagy lejátszás folytatása</string>
+    <string name="a11y_stop_voice_broadcast_record">Hang közvetítés felvétel leállítása</string>
+    <string name="a11y_pause_voice_broadcast_record">Hang közvetítés felvétel megállítása</string>
+    <string name="a11y_resume_voice_broadcast_record">Hang közvetítés felvétel újraindítása</string>
+    <string name="voice_broadcast_live">Élő</string>
+    <string name="device_manager_other_sessions_select">Munkamenetek kiválasztása</string>
+    <string name="attachment_type_selector_contact">Névjegy</string>
+    <string name="attachment_type_selector_camera">Kamera</string>
+    <string name="attachment_type_selector_location">Földrajzi helyzet</string>
+    <string name="attachment_type_selector_poll">Szavazások</string>
+    <string name="attachment_type_selector_voice_broadcast">Hang közvetítés</string>
+    <string name="attachment_type_selector_file">Mellékletek</string>
+    <string name="attachment_type_selector_sticker">Matricák</string>
+    <string name="attachment_type_selector_gallery">Fénykép könyvtár</string>
+    <string name="action_deselect_all">Semmit nem jelöl ki</string>
+    <string name="action_select_all">Mindet kijelöli</string>
+    <plurals name="x_selected">
+        <item quantity="one">%1$d kiválasztva</item>
+        <item quantity="other">%1$d kiválasztva</item>
+    </plurals>
+    <string name="rich_text_editor_full_screen_toggle">Teljes képernyő váltás</string>
+    <string name="device_manager_learn_more_sessions_verified_description">Mindenhol ellenőrzött munkamenetek vannak ahol ezt a fiókot használva megadtad a jelmondatodat vagy egy másik már hitelesített munkamenetből megerősítetted az identitásodat.
+\n
+\nEz azt jelenti, hogy a titkosított üzenetek visszafejtéséhez rendelkezel a kulcsokkal és megerősíted a többiek felé, hogy megbízol a munkamenetben.</string>
+    <plurals name="device_manager_other_sessions_multi_signout_all">
+        <item quantity="one">Kijelentkezés %1$d munkamenetből</item>
+        <item quantity="other">Kijelentkezés %1$d munkamenetből</item>
+    </plurals>
+    <string name="device_manager_other_sessions_multi_signout_selection">Kijelentkezés</string>
+    <string name="attachment_type_selector_text_formatting">Szöveg formázás</string>
+    <string name="error_voice_broadcast_already_in_progress_message">Egy hang közvetítés már folyamatban van. Először fejezze be a jelenlegi közvetítést egy új indításához.</string>
+    <string name="error_voice_broadcast_blocked_by_someone_else_message">Valaki már elindított egy hang közvetítést. Várd meg a közvetítés végét az új indításához.</string>
+    <string name="error_voice_broadcast_permission_denied_message">Nincs jogosultságod hang közvetítést indítani ebben a szobában. Vedd fel a kapcsolatot a szoba adminisztrátorával a szükséges jogosultság megszerzéséhez.</string>
+    <string name="error_voice_broadcast_unauthorized_title">Az új hang közvetítés nem indítható el</string>
+    <string name="a11y_voice_broadcast_fast_forward">30 másodperccel előre</string>
+    <string name="a11y_voice_broadcast_fast_backward">30 másodperccel vissza</string>
+    <string name="voice_broadcast_recording_time_left">visszavan: %1$s</string>
+    <string name="message_reply_to_sender_created_poll">szavazás elkészítve.</string>
+    <string name="message_reply_to_sender_sent_sticker">matrica elküldve.</string>
+    <string name="message_reply_to_sender_sent_video">videót küldött.</string>
+    <string name="message_reply_to_sender_sent_image">kép elküldve.</string>
+    <string name="message_reply_to_sender_sent_voice_message">hang üzenet elküldve.</string>
+    <string name="message_reply_to_sender_sent_audio_file">hangfájl elküldve.</string>
+    <string name="message_reply_to_sender_sent_file">fájl elküldve.</string>
+    <string name="message_reply_to_prefix">Válaszolva erre</string>
+    <string name="device_manager_other_sessions_hide_ip_address">IP címek elrejtése</string>
+    <string name="device_manager_other_sessions_show_ip_address">IP címek megjelenítése</string>
+    <string name="quoting">Idézet</string>
+    <string name="replying_to">Válasz erre: %s</string>
+    <string name="editing">Szerkesztés</string>
+    <string name="review_unverified_sessions_description">Tekintsd át, hogy meggyőződj arról, hogy a fiókod biztonságban van</string>
+    <string name="review_unverified_sessions_title">Ellenőrizetlen bejelentkezéseid vannak</string>
+    <string name="settings_enable_direct_share_summary">Friss beszélgetések megjelenítése a rendszer megosztó menüjében</string>
+    <string name="settings_enable_direct_share_title">Közvetlen megosztás engedélyezése</string>
+    <string name="settings_nightly_build_update">Szerezd be a napi összeállítást (megjegyzés: lehet, hogy problémáid lesznek a bejelentkezéssel)</string>
+    <string name="settings_nightly_build">Napi összeállítás</string>
+    <string name="device_manager_learn_more_sessions_encryption_not_supported">Ez a munkamenet nem támogatja a titkosítást, így nem lehet ellenőrizni sem.
+\n
+\nEzzel a munkamenettel nem tudsz részt venni olyan szobákban ahol a titkosítás be van kapcsolva.
+\n
+\nA biztonság és a adatbiztonsági okokból javasolt olyan Matrix kliens használata ami támogatja a titkosítást.</string>
+    <string name="device_manager_signout_all_other_sessions">Kijelentkezés minden más munkamenetből</string>
+    <string name="device_manager_verification_status_detail_session_encryption_not_supported">Ez a munkamenet nem támogatja a titkosítást, így nem lehet ellenőrizni sem.</string>
+    <string name="voice_broadcast_live_broadcast">Élő közvetítés</string>
+    <string name="notice_voice_broadcast_ended_by_you">A hang közvetítést befejezted.</string>
+    <string name="notice_voice_broadcast_ended">%1$s befejezte a hang közvetítést.</string>
+    <string name="stop_voice_broadcast_content">Biztos, hogy befejezed az élő közvetítést\? Ez befejezi a közvetítést és a felvétel az egész szoba számára elérhető lesz.</string>
+    <string name="stop_voice_broadcast_dialog_title">Megszakítod az élő közvetítést\?</string>
+    <string name="action_stop">Igen, befejez</string>
+    <string name="set_link_edit">Hivatkozás szerkesztése</string>
+    <string name="set_link_create">Hivatkozás készítése</string>
+    <string name="set_link_link">Hivatkozás</string>
+    <string name="set_link_text">Szöveg</string>
+    <string name="rich_text_editor_link">Hivatkozás beállítása</string>
+    <string name="settings_access_token_summary">A hozzáférési kulcs teljes elérést biztosít a fiókhoz. Soha ne ossza meg mással.</string>
+    <string name="settings_access_token">Elérési kulcs</string>
+    <string name="rich_text_editor_bullet_list">Lista ki-,bekapcsolása</string>
+    <string name="rich_text_editor_numbered_list">Számozott lista ki-,bekapcsolása</string>
+    <string name="room_polls_ended_no_item">Nincsenek régi szavazások ebben a szobában</string>
+    <string name="room_polls_ended">Régi szavazások</string>
+    <string name="room_polls_active_no_item">Nincsenek aktív szavazások ebben a szobában</string>
+    <string name="room_polls_active">Aktív szavazások</string>
+    <string name="room_profile_section_more_polls">Szavazás alakulása</string>
 </resources>

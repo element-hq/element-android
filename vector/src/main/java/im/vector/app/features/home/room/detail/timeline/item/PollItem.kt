@@ -19,6 +19,7 @@ package im.vector.app.features.home.room.detail.timeline.item
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.view.children
+import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
@@ -50,6 +51,9 @@ abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
     @EpoxyAttribute
     lateinit var optionViewStates: List<PollOptionViewState>
 
+    @EpoxyAttribute
+    var ended: Boolean = false
+
     override fun getViewStubId() = STUB_ID
 
     override fun bind(holder: Holder) {
@@ -75,6 +79,8 @@ abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
                 it.setOnClickListener { onPollItemClick(optionViewState) }
             }
         }
+
+        holder.endedPollTextView.isVisible = ended
     }
 
     private fun onPollItemClick(optionViewState: PollOptionViewState) {
@@ -89,6 +95,7 @@ abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
         val questionTextView by bind<TextView>(R.id.questionTextView)
         val optionsContainer by bind<LinearLayout>(R.id.optionsContainer)
         val votesStatusTextView by bind<TextView>(R.id.optionsVotesStatusTextView)
+        val endedPollTextView by bind<TextView>(R.id.endedPollTextView)
     }
 
     companion object {

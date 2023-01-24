@@ -22,6 +22,7 @@ import dagger.hilt.InstallIn
 import dagger.multibindings.IntoMap
 import im.vector.app.features.analytics.accountdata.AnalyticsAccountDataViewModel
 import im.vector.app.features.analytics.ui.consent.AnalyticsConsentViewModel
+import im.vector.app.features.attachments.AttachmentTypeSelectorViewModel
 import im.vector.app.features.auth.ReAuthViewModel
 import im.vector.app.features.call.VectorCallViewModel
 import im.vector.app.features.call.conference.JitsiCallViewModel
@@ -45,6 +46,7 @@ import im.vector.app.features.home.UserColorAccountDataViewModel
 import im.vector.app.features.home.room.breadcrumbs.BreadcrumbsViewModel
 import im.vector.app.features.home.room.detail.TimelineViewModel
 import im.vector.app.features.home.room.detail.composer.MessageComposerViewModel
+import im.vector.app.features.home.room.detail.composer.link.SetLinkViewModel
 import im.vector.app.features.home.room.detail.search.SearchViewModel
 import im.vector.app.features.home.room.detail.timeline.action.MessageActionsViewModel
 import im.vector.app.features.home.room.detail.timeline.edithistory.ViewEditHistoryViewModel
@@ -82,6 +84,7 @@ import im.vector.app.features.roomprofile.banned.RoomBannedMemberListViewModel
 import im.vector.app.features.roomprofile.members.RoomMemberListViewModel
 import im.vector.app.features.roomprofile.notifications.RoomNotificationSettingsViewModel
 import im.vector.app.features.roomprofile.permissions.RoomPermissionsViewModel
+import im.vector.app.features.roomprofile.polls.RoomPollsViewModel
 import im.vector.app.features.roomprofile.settings.RoomSettingsViewModel
 import im.vector.app.features.roomprofile.settings.joinrule.advanced.RoomJoinRuleChooseRestrictedViewModel
 import im.vector.app.features.roomprofile.uploads.RoomUploadsViewModel
@@ -104,6 +107,7 @@ import im.vector.app.features.settings.ignored.IgnoredUsersViewModel
 import im.vector.app.features.settings.labs.VectorSettingsLabsViewModel
 import im.vector.app.features.settings.legals.LegalsViewModel
 import im.vector.app.features.settings.locale.LocalePickerViewModel
+import im.vector.app.features.settings.notifications.VectorSettingsNotificationPreferenceViewModel
 import im.vector.app.features.settings.push.PushGatewaysViewModel
 import im.vector.app.features.settings.threepids.ThreePidsSettingsViewModel
 import im.vector.app.features.share.IncomingShareViewModel
@@ -677,4 +681,26 @@ interface MavericksViewModelModule {
     @IntoMap
     @MavericksViewModelKey(VectorSettingsLabsViewModel::class)
     fun vectorSettingsLabsViewModelFactory(factory: VectorSettingsLabsViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(AttachmentTypeSelectorViewModel::class)
+    fun attachmentTypeSelectorViewModelFactory(factory: AttachmentTypeSelectorViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(VectorSettingsNotificationPreferenceViewModel::class)
+    fun vectorSettingsNotificationPreferenceViewModelFactory(
+            factory: VectorSettingsNotificationPreferenceViewModel.Factory
+    ): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(SetLinkViewModel::class)
+    fun setLinkViewModelFactory(factory: SetLinkViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(RoomPollsViewModel::class)
+    fun roomPollsViewModelFactory(factory: RoomPollsViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 }

@@ -45,6 +45,7 @@ import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.model.UserAccountDataEntity
 import org.matrix.android.sdk.internal.database.model.UserAccountDataEntityFields
 import org.matrix.android.sdk.internal.database.model.deleteOnCascade
+import org.matrix.android.sdk.internal.database.query.delete
 import org.matrix.android.sdk.internal.database.query.findAllFrom
 import org.matrix.android.sdk.internal.database.query.getDirectRooms
 import org.matrix.android.sdk.internal.database.query.getOrCreate
@@ -94,7 +95,7 @@ internal class UserAccountDataSyncHandler @Inject constructor(
 
     // If we get some direct chat invites, we synchronize the user account data including those.
     suspend fun synchronizeWithServerIfNeeded(invites: Map<String, InvitedRoomSync>) {
-        if (invites.isNullOrEmpty()) return
+        if (invites.isEmpty()) return
         val directChats = directChatsHelper.getLocalDirectMessages().toMutable()
         var hasUpdate = false
         monarchy.doWithRealm { realm ->
@@ -252,9 +253,17 @@ internal class UserAccountDataSyncHandler @Inject constructor(
     }
 
     fun handleGenericAccountData(realm: Realm, type: String, content: Content?) {
+        if (content.isNullOrEmpty()) {
+            // This is a response for a deleted account data according to
+            // https://github.com/ShadowJonathan/matrix-doc/blob/account-data-delete/proposals/3391-account-data-delete.md#sync
+            UserAccountDataEntity.delete(realm, type)
+            return
+        }
+
         val existing = realm.where<UserAccountDataEntity>()
                 .equalTo(UserAccountDataEntityFields.TYPE, type)
                 .findFirst()
+
         if (existing != null) {
             // Update current value
             existing.contentStr = ContentMapper.map(content)

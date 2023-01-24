@@ -62,6 +62,7 @@ fun CanSendStatus.boolean(): Boolean {
 
 data class MessageComposerViewState(
         val roomId: String,
+        val isRoomError: Boolean = false,
         val canSendMessage: CanSendStatus = CanSendStatus.Allowed,
         val isSendButtonVisible: Boolean = false,
         val rootThreadEventId: String? = null,
@@ -70,6 +71,7 @@ data class MessageComposerViewState(
         val voiceRecordingUiState: VoiceMessageRecorderView.RecordingUiState = VoiceMessageRecorderView.RecordingUiState.Idle,
         val voiceBroadcastState: VoiceBroadcastState? = null,
         val text: CharSequence? = null,
+        val isFullScreen: Boolean = false,
 ) : MavericksState {
 
     val isVoiceRecording = when (voiceRecordingUiState) {
@@ -79,17 +81,16 @@ data class MessageComposerViewState(
         is VoiceMessageRecorderView.RecordingUiState.Recording -> true
     }
 
-    val isVoiceBroadcasting = when (voiceBroadcastState) {
+    val isRecordingVoiceBroadcast = when (voiceBroadcastState) {
         VoiceBroadcastState.STARTED,
-        VoiceBroadcastState.PAUSED,
         VoiceBroadcastState.RESUMED -> true
         else -> false
     }
 
     val isVoiceMessageIdle = !isVoiceRecording
 
-    val isComposerVisible = canSendMessage.boolean() && !isVoiceRecording
-    val isVoiceMessageRecorderVisible = canSendMessage.boolean() && !isSendButtonVisible
+    val isComposerVisible = canSendMessage.boolean() && !isVoiceRecording && !isRoomError
+    val isVoiceMessageRecorderVisible = canSendMessage.boolean() && !isSendButtonVisible && !isRoomError
 
     constructor(args: TimelineArgs) : this(
             roomId = args.roomId,

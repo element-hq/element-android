@@ -28,8 +28,12 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.detail.timeline.format.DisplayableEventFormatter
+import im.vector.app.features.home.room.list.usecase.GetLatestPreviewableEventUseCase
 import im.vector.app.features.home.room.typing.TypingHelper
+import im.vector.app.features.voicebroadcast.isLive
+import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -43,7 +47,8 @@ class RoomSummaryItemFactory @Inject constructor(
         private val stringProvider: StringProvider,
         private val typingHelper: TypingHelper,
         private val avatarRenderer: AvatarRenderer,
-        private val errorFormatter: ErrorFormatter
+        private val errorFormatter: ErrorFormatter,
+        private val getLatestPreviewableEventUseCase: GetLatestPreviewableEventUseCase,
 ) {
 
     fun create(
@@ -129,13 +134,16 @@ class RoomSummaryItemFactory @Inject constructor(
         val showSelected = selectedRoomIds.contains(roomSummary.roomId)
         var latestFormattedEvent: CharSequence = ""
         var latestEventTime = ""
-        val latestEvent = roomSummary.latestPreviewableEvent
+        val latestEvent = getLatestPreviewableEventUseCase.execute(roomSummary.roomId)
         if (latestEvent != null) {
             latestFormattedEvent = displayableEventFormatter.format(latestEvent, roomSummary.isDirect, roomSummary.isDirect.not())
             latestEventTime = dateFormatter.format(latestEvent.root.originServerTs, DateFormatKind.ROOM_LIST)
         }
 
         val typingMessage = typingHelper.getTypingMessage(roomSummary.typingUsers)
+                // Skip typing while there is a live voice broadcast
+                .takeUnless { latestEvent?.root?.asVoiceBroadcastEvent()?.isLive.orFalse() }
+                .orEmpty()
 
         return if (subtitle.isBlank() && displayMode == RoomListDisplayMode.FILTERED) {
             createCenteredRoomSummaryItem(roomSummary, displayMode, showSelected, unreadCount, onClick, onLongClick)

@@ -79,10 +79,8 @@ abstract class LiveLocationUserItem : VectorEpoxyModel<LiveLocationUserItem.Hold
             }
         }
 
-        holder.timer.tickListener = object : CountUpTimer.TickListener {
-            override fun onTick(milliseconds: Long) {
-                holder.itemLastUpdatedAtTextView.text = getFormattedLastUpdatedAt(locationUpdateTimeMillis)
-            }
+        holder.timer.tickListener = CountUpTimer.TickListener {
+            holder.itemLastUpdatedAtTextView.text = getFormattedLastUpdatedAt(locationUpdateTimeMillis)
         }
         holder.timer.resume()
 

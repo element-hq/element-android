@@ -17,7 +17,8 @@ jobs:
       contains(github.event.issue.labels.*.name, 'Z-IA') ||
       contains(github.event.issue.labels.*.name, 'A-Themes-Custom') ||
       contains(github.event.issue.labels.*.name, 'A-E2EE-Dehydration') ||
-      contains(github.event.issue.labels.*.name, 'A-Tags')
+      contains(github.event.issue.labels.*.name, 'A-Tags') ||
+      contains(github.event.issue.labels.*.name, 'A-Rich-Text-Editor')
     steps:
       - uses: actions/github-script@v5
         with:
@@ -27,6 +28,23 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               labels: ['Z-Labs']
+            })
+
+  apply_Help-Wanted_label:
+    name: Add "Help Wanted" label to all "good first issue" and Hacktoberfest
+    runs-on: ubuntu-latest
+    if: >
+      contains(github.event.issue.labels.*.name, 'good first issue') ||
+      contains(github.event.issue.labels.*.name, 'Hacktoberfest')
+    steps:
+      - uses: actions/github-script@v5
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['Help Wanted']
             })
 
   move_needs_info_issues:
@@ -62,8 +80,8 @@ jobs:
           headers: '{"GraphQL-Features": "projects_next_graphql"}'
           query: |
             mutation add_to_project($projectid:ID!,$contentid:ID!) {
-              addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
-                projectNextItem {
+              addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
+                item {
                   id
                 }
               }
@@ -71,7 +89,7 @@ jobs:
           projectid: ${{ env.PROJECT_ID }}
           contentid: ${{ github.event.issue.node_id }}
         env:
-          PROJECT_ID: "PN_kwDOAM0swc0sUA"
+          PROJECT_ID: "PVT_kwDOAM0swc0sUA"
           GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
   add_product_issues:
@@ -86,8 +104,8 @@ jobs:
           headers: '{"GraphQL-Features": "projects_next_graphql"}'
           query: |
             mutation add_to_project($projectid:ID!,$contentid:ID!) {
-              addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
-                projectNextItem {
+              addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
+                item {
                   id
                 }
               }
@@ -95,7 +113,7 @@ jobs:
           projectid: ${{ env.PROJECT_ID }}
           contentid: ${{ github.event.issue.node_id }}
         env:
-          PROJECT_ID: "PN_kwDOAM0swc4AAg6N"
+          PROJECT_ID: "PVT_kwDOAM0swc4AAg6N"
           GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
   delight_issues_to_board:
@@ -112,8 +130,8 @@ jobs:
           headers: '{"GraphQL-Features": "projects_next_graphql"}'
           query: |
             mutation add_to_project($projectid:ID!,$contentid:ID!) {
-              addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
-                projectNextItem {
+              addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
+                item {
                   id
                 }
               }
@@ -121,7 +139,7 @@ jobs:
           projectid: ${{ env.PROJECT_ID }}
           contentid: ${{ github.event.issue.node_id }}
         env:
-          PROJECT_ID: "PN_kwDOAM0swc1HvQ"
+          PROJECT_ID: "PVT_kwDOAM0swc1HvQ"
           GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
   move_voice-message_issues:
@@ -137,8 +155,8 @@ jobs:
           headers: '{"GraphQL-Features": "projects_next_graphql"}'
           query: |
             mutation add_to_project($projectid:ID!,$contentid:ID!) {
-              addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
-                projectNextItem {
+              addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
+                item {
                   id
                 }
               }
@@ -146,7 +164,7 @@ jobs:
           projectid: ${{ env.PROJECT_ID }}
           contentid: ${{ github.event.issue.node_id }}
         env:
-          PROJECT_ID: "PN_kwDOAM0swc2KCw"
+          PROJECT_ID: "PVT_kwDOAM0swc2KCw"
           GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
   move_message_bubbles_issues:
     name: A-Message-Bubbles to Message bubbles board
@@ -161,8 +179,8 @@ jobs:
           headers: '{"GraphQL-Features": "projects_next_graphql"}'
           query: |
             mutation add_to_project($projectid:ID!,$contentid:ID!) {
-              addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
-                projectNextItem {
+              addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
+                item {
                   id
                 }
               }
@@ -170,7 +188,7 @@ jobs:
           projectid: ${{ env.PROJECT_ID }}
           contentid: ${{ github.event.issue.node_id }}
         env:
-          PROJECT_ID: "PN_kwDOAM0swc3m-g"
+          PROJECT_ID: "PVT_kwDOAM0swc3m-g"
           GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
   move_ftue_issues:
@@ -186,8 +204,8 @@ jobs:
           headers: '{"GraphQL-Features": "projects_next_graphql"}'
           query: |
             mutation add_to_project($projectid:ID!,$contentid:ID!) {
-              addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
-                projectNextItem {
+              addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
+                item {
                   id
                 }
               }
@@ -195,7 +213,7 @@ jobs:
           projectid: ${{ env.PROJECT_ID }}
           contentid: ${{ github.event.issue.node_id }}
         env:
-          PROJECT_ID: "PN_kwDOAM0swc4AAqVx"
+          PROJECT_ID: "PVT_kwDOAM0swc4AAqVx"
           GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
   move_WTF_issues:
@@ -211,8 +229,8 @@ jobs:
           headers: '{"GraphQL-Features": "projects_next_graphql"}'
           query: |
             mutation add_to_project($projectid:ID!,$contentid:ID!) {
-              addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
-                projectNextItem {
+              addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
+                item {
                   id
                 }
               }
@@ -220,7 +238,7 @@ jobs:
           projectid: ${{ env.PROJECT_ID }}
           contentid: ${{ github.event.issue.node_id }}
         env:
-          PROJECT_ID: "PN_kwDOAM0swc4AArk0"
+          PROJECT_ID: "PVT_kwDOAM0swc4AArk0"
           GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
   move_element_x_issues:
@@ -241,8 +259,8 @@ jobs:
           headers: '{"GraphQL-Features": "projects_next_graphql"}'
           query: |
             mutation add_to_project($projectid:ID!,$contentid:ID!) {
-              addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
-                projectNextItem {
+              addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
+                item {
                   id
                 }
               }
@@ -250,5 +268,107 @@ jobs:
           projectid: ${{ env.PROJECT_ID }}
           contentid: ${{ github.event.issue.node_id }}
         env:
-          PROJECT_ID: "PN_kwDOAM0swc4ABTXY"
+          PROJECT_ID: "PVT_kwDOAM0swc4ABTXY"
+          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+  ps_features1:
+    name: Add labelled issues to PS features team 1
+    runs-on: ubuntu-latest
+    if: >
+      contains(github.event.issue.labels.*.name, 'A-Polls') ||
+      contains(github.event.issue.labels.*.name, 'A-Location-Sharing') ||
+      (contains(github.event.issue.labels.*.name, 'A-Voice-Messages') &&
+        !contains(github.event.issue.labels.*.name, 'A-Broadcast')) ||
+      (contains(github.event.issue.labels.*.name, 'A-Session-Mgmt') &&
+        contains(github.event.issue.labels.*.name, 'A-User-Settings'))
+    steps:
+      - uses: octokit/graphql-action@v2.x
+        id: add_to_project
+        with:
+          headers: '{"GraphQL-Features": "projects_next_graphql"}'
+          query: |
+              mutation add_to_project($projectid:ID!,$contentid:ID!) {
+                addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
+                item {
+                  id
+                  }
+                }
+              }
+          projectid: ${{ env.PROJECT_ID }}
+          contentid: ${{ github.event.issue.node_id }}
+        env:
+          PROJECT_ID: "PVT_kwDOAM0swc4AHJKF"
+          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+  ps_features2:
+    name: Add labelled issues to PS features team 2
+    runs-on: ubuntu-latest
+    if: >
+      contains(github.event.issue.labels.*.name, 'A-DM-Start') ||
+      contains(github.event.issue.labels.*.name, 'A-Broadcast')
+    steps:
+      - uses: octokit/graphql-action@v2.x
+        id: add_to_project
+        with:
+          headers: '{"GraphQL-Features": "projects_next_graphql"}'
+          query: |
+              mutation add_to_project($projectid:ID!,$contentid:ID!) {
+                addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
+                item {
+                  id
+                  }
+                }
+              }
+          projectid: ${{ env.PROJECT_ID }}
+          contentid: ${{ github.event.issue.node_id }}
+        env:
+          PROJECT_ID: "PVT_kwDOAM0swc4AHJKd"
+          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+  ps_features3:
+    name: Add labelled issues to PS features team 3
+    runs-on: ubuntu-latest
+    if: >
+      contains(github.event.issue.labels.*.name, 'A-Rich-Text-Editor')
+    steps:
+      - uses: octokit/graphql-action@v2.x
+        id: add_to_project
+        with:
+          headers: '{"GraphQL-Features": "projects_next_graphql"}'
+          query: |
+              mutation add_to_project($projectid:ID!,$contentid:ID!) {
+                addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
+                item {
+                  id
+                  }
+                }
+              }
+          projectid: ${{ env.PROJECT_ID }}
+          contentid: ${{ github.event.issue.node_id }}
+        env:
+          PROJECT_ID: "PVT_kwDOAM0swc4AHJKW"
+          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+  voip:
+    name: Add labelled issues to VoIP project board
+    runs-on: ubuntu-latest
+    if: >
+      contains(github.event.issue.labels.*.name, 'Team: VoIP')
+    steps:
+      - uses: octokit/graphql-action@v2.x
+        id: add_to_project
+        with:
+          headers: '{"GraphQL-Features": "projects_next_graphql"}'
+          query: |
+              mutation add_to_project($projectid:ID!,$contentid:ID!) {
+                addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
+                item {
+                  id
+                  }
+                }
+              }
+          projectid: ${{ env.PROJECT_ID }}
+          contentid: ${{ github.event.issue.node_id }}
+        env:
+          PROJECT_ID: "PVT_kwDOAM0swc4ABMIk"
           GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}

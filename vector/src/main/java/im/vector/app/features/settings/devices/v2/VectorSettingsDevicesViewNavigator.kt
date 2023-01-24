@@ -20,6 +20,7 @@ import android.content.Context
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
 import im.vector.app.features.settings.devices.v2.othersessions.OtherSessionsActivity
 import im.vector.app.features.settings.devices.v2.overview.SessionOverviewActivity
+import im.vector.app.features.settings.devices.v2.rename.RenameSessionActivity
 import javax.inject.Inject
 
 class VectorSettingsDevicesViewNavigator @Inject constructor() {
@@ -30,12 +31,15 @@ class VectorSettingsDevicesViewNavigator @Inject constructor() {
 
     fun navigateToOtherSessions(
             context: Context,
-            titleResourceId: Int,
             defaultFilter: DeviceManagerFilterType,
             excludeCurrentDevice: Boolean,
     ) {
         context.startActivity(
-                OtherSessionsActivity.newIntent(context, titleResourceId, defaultFilter, excludeCurrentDevice)
+                OtherSessionsActivity.newIntent(context, defaultFilter, excludeCurrentDevice)
         )
+    }
+
+    fun navigateToRenameSession(context: Context, deviceId: String) {
+        context.startActivity(RenameSessionActivity.newIntent(context, deviceId))
     }
 }

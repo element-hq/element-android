@@ -27,6 +27,7 @@ package im.vector.app.features.html
 
 import android.content.Context
 import android.content.res.Resources
+import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.text.Spannable
 import androidx.core.text.toSpannable
@@ -40,6 +41,7 @@ import im.vector.app.features.settings.VectorPreferences
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
 import io.noties.markwon.MarkwonPlugin
+import io.noties.markwon.MarkwonSpansFactory
 import io.noties.markwon.PrecomputedFutureTextSetterCompat
 import io.noties.markwon.ext.latex.JLatexMathPlugin
 import io.noties.markwon.ext.latex.JLatexMathTheme
@@ -50,6 +52,8 @@ import io.noties.markwon.inlineparser.EntityInlineProcessor
 import io.noties.markwon.inlineparser.HtmlInlineProcessor
 import io.noties.markwon.inlineparser.MarkwonInlineParser
 import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin
+import me.gujun.android.span.style.CustomTypefaceSpan
+import org.commonmark.node.Emphasis
 import org.commonmark.node.Node
 import org.commonmark.parser.Parser
 import org.matrix.android.sdk.api.MatrixUrls.isMxcUrl
@@ -123,6 +127,12 @@ class EventHtmlRenderer @Inject constructor(
                     )
             )
             .usePlugin(object : AbstractMarkwonPlugin() {
+                override fun configureSpansFactory(builder: MarkwonSpansFactory.Builder) {
+                    builder.setFactory(
+                            Emphasis::class.java
+                    ) { _, _ -> CustomTypefaceSpan(Typeface.create(Typeface.DEFAULT, Typeface.ITALIC)) }
+                }
+
                 override fun configureParser(builder: Parser.Builder) {
                     /* Configuring the Markwon block formatting processor.
                      * Default settings are all Markdown blocks. Turn those off.

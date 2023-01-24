@@ -55,7 +55,7 @@ complexity:
     active: false
   LongParameterList:
     active: false
-  ComplexMethod:
+  CyclomaticComplexMethod:
     active: false
   NestedBlockDepth:
     active: false

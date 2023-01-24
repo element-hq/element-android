@@ -55,8 +55,6 @@ import im.vector.app.features.themes.ActivityOtherThemes
 import im.vector.app.features.ui.UiStateRepository
 import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
@@ -142,9 +140,9 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
         startAppViewModel.onEach {
             renderState(it)
         }
-        startAppViewModel.viewEvents.stream()
-                .onEach(::handleViewEvents)
-                .launchIn(lifecycleScope)
+        startAppViewModel.observeViewEvents {
+            handleViewEvents(it)
+        }
 
         startAppViewModel.handle(StartAppAction.StartApp)
     }
@@ -174,12 +172,15 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
     private fun handleAppStarted() {
         if (intent.hasExtra(EXTRA_NEXT_INTENT)) {
             // Start the next Activity
+            startSyncing()
             val nextIntent = intent.getParcelableExtraCompat<Intent>(EXTRA_NEXT_INTENT)
             startIntentAndFinish(nextIntent)
         } else if (intent.hasExtra(EXTRA_INIT_SESSION)) {
+            startSyncing()
             setResult(RESULT_OK)
             finish()
         } else if (intent.action == ACTION_ROOM_DETAILS_FROM_SHORTCUT) {
+            startSyncing()
             val roomId = intent.getStringExtra(EXTRA_ROOM_ID)
             if (roomId?.isNotEmpty() == true) {
                 navigator.openRoom(this, roomId, trigger = ViewRoom.Trigger.Shortcut)
@@ -194,9 +195,14 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
             if (args.clearCache || args.clearCredentials) {
                 doCleanUp()
             } else {
+                startSyncing()
                 startNextActivityAndFinish()
             }
         }
+    }
+
+    private fun startSyncing() {
+        activeSessionHolder.getSafeActiveSession()?.startSyncing(this)
     }
 
     private fun clearNotifications() {

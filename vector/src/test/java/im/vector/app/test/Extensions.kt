@@ -28,7 +28,7 @@ fun String.trimIndentOneLine() = trimIndent().replace("\n", "")
 fun <S : MavericksState, VA : VectorViewModelAction, VE : VectorViewEvents> VectorViewModel<S, VA, VE>.test(): ViewModelTest<S, VE> {
     val testResultCollectingScope = CoroutineScope(Dispatchers.Unconfined)
     val state = stateFlow.test(testResultCollectingScope)
-    val viewEvents = viewEvents.stream().test(testResultCollectingScope)
+    val viewEvents = viewEvents.stream("test").test(testResultCollectingScope)
     return ViewModelTest(state, viewEvents)
 }
 

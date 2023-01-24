@@ -83,9 +83,7 @@ internal class CrossSigningOlm @Inject constructor(
         val signaturesMadeByMyKey = signatures[myUserID] // Signatures made by me
                 ?.get("ed25519:$pubKey")
 
-        if (signaturesMadeByMyKey.isNullOrBlank()) {
-            throw IllegalArgumentException("Not signed with my key $type")
-        }
+        require(signaturesMadeByMyKey.orEmpty().isNotBlank()) { "Not signed with my key $type" }
 
         // Check that Alice USK signature of Bob MSK is valid
         olmUtility.verifyEd25519Signature(signaturesMadeByMyKey, pubKey, JsonCanonicalizer.getCanonicalJson(Map::class.java, signable))

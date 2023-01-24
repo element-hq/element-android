@@ -30,7 +30,8 @@ internal object PollResponseAggregatedSummaryEntityMapper {
                 closedTime = entity.closedTime,
                 localEchos = entity.sourceLocalEchoEvents.toList(),
                 sourceEvents = entity.sourceEvents.toList(),
-                nbOptions = entity.nbOptions
+                nbOptions = entity.nbOptions,
+                encryptedRelatedEventIds = entity.encryptedRelatedEventIds.toList(),
         )
     }
 
@@ -40,7 +41,8 @@ internal object PollResponseAggregatedSummaryEntityMapper {
                 nbOptions = model.nbOptions,
                 closedTime = model.closedTime,
                 sourceEvents = RealmList<String>().apply { addAll(model.sourceEvents) },
-                sourceLocalEchoEvents = RealmList<String>().apply { addAll(model.localEchos) }
+                sourceLocalEchoEvents = RealmList<String>().apply { addAll(model.localEchos) },
+                encryptedRelatedEventIds = RealmList<String>().apply { addAll(model.encryptedRelatedEventIds) },
         )
     }
 }

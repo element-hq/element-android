@@ -69,7 +69,7 @@ internal class DefaultLoginWizard(
             )
         } else {
             PasswordLoginParams.userIdentifier(
-                    user = login,
+                    user = login.trim(),
                     password = password,
                     deviceDisplayName = initialDeviceName,
                     deviceId = deviceId

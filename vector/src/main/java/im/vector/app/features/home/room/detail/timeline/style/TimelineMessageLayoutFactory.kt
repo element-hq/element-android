@@ -47,8 +47,11 @@ class TimelineMessageLayoutFactory @Inject constructor(
         private val EVENT_TYPES_WITH_BUBBLE_LAYOUT = setOf(
                 EventType.MESSAGE,
                 EventType.ENCRYPTED,
-                EventType.STICKER
-        ) + EventType.POLL_START + EventType.STATE_ROOM_BEACON_INFO
+                EventType.STICKER,
+        ) +
+                EventType.POLL_START.values +
+                EventType.POLL_END.values +
+                EventType.STATE_ROOM_BEACON_INFO.values
 
         // Can't be rendered in bubbles, so get back to default layout
         private val MSG_TYPES_WITHOUT_BUBBLE_LAYOUT = setOf(

@@ -39,7 +39,7 @@ internal class DefaultGetContextOfEventTask @Inject constructor(
 ) : GetContextOfEventTask {
 
     override suspend fun execute(params: GetContextOfEventTask.Params): TokenChunkEventPersistor.Result {
-        val filter = filterRepository.getRoomFilter()
+        val filter = filterRepository.getRoomFilterBody()
         val response = executeRequest(globalErrorReceiver) {
             // We are limiting the response to the event with eventId to be sure we don't have any issue with potential merging process.
             roomAPI.getContextOfEvent(params.roomId, params.eventId, 0, filter)

@@ -37,7 +37,7 @@ ext.versionMinor = 5
 // Note: even values are reserved for regular release, odd values for hotfix release.
 // When creating a hotfix, you should decrease the value, since the current value
 // is the value for the next regular release.
-ext.versionPatch = 6
+ext.versionPatch = 22
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -77,15 +77,8 @@ static def gitRevisionDate() {
 }
 
 static def gitBranchName() {
-    def fromEnv = System.env.BUILDKITE_BRANCH as String ?: ""
-
-    if (!fromEnv.isEmpty()) {
-        return fromEnv
-    } else {
-        // Note: this command return "HEAD" on Buildkite, so use the system env 'BUILDKITE_BRANCH' content first
-        def cmd = "git rev-parse --abbrev-ref HEAD"
-        return cmd.execute().text.trim()
-    }
+    def cmd = "git rev-parse --abbrev-ref HEAD"
+    return cmd.execute().text.trim()
 }
 
 // For Google Play build, build on any other branch than main will have a "-dev" suffix
@@ -123,8 +116,6 @@ project.android.buildTypes.all { buildType ->
 // 64 bits have greater value than 32 bits
 ext.abiVersionCodes = ["armeabi-v7a": 1, "arm64-v8a": 2, "x86": 3, "x86_64": 4].withDefault { 0 }
 
-def buildNumber = System.env.BUILDKITE_BUILD_NUMBER as Integer ?: 0
-
 android {
     namespace "im.vector.application"
     // Due to a bug introduced in Android gradle plugin 3.6.0, we have to specify the ndk version to use
@@ -156,7 +147,6 @@ android {
         buildConfigField "String", "GIT_REVISION", "\"${gitRevision()}\""
         buildConfigField "String", "GIT_REVISION_DATE", "\"${gitRevisionDate()}\""
         buildConfigField "String", "GIT_BRANCH_NAME", "\"${gitBranchName()}\""
-        buildConfigField "String", "BUILD_NUMBER", "\"${buildNumber}\""
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -243,7 +233,7 @@ android {
             resValue "color", "launcher_background", "#BD0D8B" // TODO: Revert before merging to develop
 
             if (project.hasProperty("coverage")) {
-                testCoverageEnabled = coverage.enableTestCoverage
+                testCoverageEnabled = coverage == "true"
             }
         }
 
@@ -370,12 +360,13 @@ dependencies {
     debugImplementation(libs.flipper.flipperNetworkPlugin) {
         exclude group: 'com.facebook.fbjni', module: 'fbjni'
     }
-    debugImplementation 'com.facebook.soloader:soloader:0.10.4'
+    debugImplementation 'com.facebook.soloader:soloader:0.10.5'
     debugImplementation "com.kgurgul.flipper:flipper-realm-android:2.2.0"
 
-    gplayImplementation "com.google.android.gms:play-services-location:20.0.0"
+    gplayImplementation "com.google.android.gms:play-services-location:21.0.1"
     // UnifiedPush gplay flavor only
-    gplayImplementation('com.google.firebase:firebase-messaging:23.1.0') {
+    gplayImplementation platform(libs.google.firebaseBom)
+    gplayImplementation(libs.google.messaging) {
         exclude group: 'com.google.firebase', module: 'firebase-core'
         exclude group: 'com.google.firebase', module: 'firebase-analytics'
         exclude group: 'com.google.firebase', module: 'firebase-measurement-connector'
@@ -385,7 +376,7 @@ dependencies {
     // API-only library
     gplayImplementation libs.google.appdistributionApi
     // Full SDK implementation
-    gplayImplementation libs.google.appdistribution
+    nightlyImplementation libs.google.appdistribution
 
     // OSS License, gplay flavor only
     gplayImplementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
@@ -407,14 +398,14 @@ dependencies {
     // Plant Timber tree for test
     androidTestImplementation libs.tests.timberJunitRule
     // "The one who serves a great Espresso"
-    androidTestImplementation('com.adevinta.android:barista:4.2.0') {
+    androidTestImplementation('com.adevinta.android:barista:4.3.0') {
         exclude group: 'org.jetbrains.kotlin'
     }
     androidTestImplementation libs.mockk.mockkAndroid
     androidTestUtil libs.androidx.orchestrator
     androidTestImplementation libs.androidx.fragmentTesting
-    androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:1.7.20"
-    debugImplementation libs.androidx.fragmentTesting
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9.1'
+    androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:1.8.0"
+    debugImplementation libs.androidx.fragmentTestingManifest
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.10'
 }
 

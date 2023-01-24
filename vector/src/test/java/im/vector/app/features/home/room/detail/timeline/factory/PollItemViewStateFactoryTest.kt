@@ -132,6 +132,24 @@ class PollItemViewStateFactoryTest {
     }
 
     @Test
+    fun `given a sent poll state with some decryption error when poll is closed then warning message is displayed`() {
+        // Given
+        val stringProvider = FakeStringProvider()
+        val pollItemViewStateFactory = PollItemViewStateFactory(stringProvider.instance)
+        val closedPollSummary = A_POLL_RESPONSE_DATA.copy(isClosed = true, hasEncryptedRelatedEvents = true)
+        val closedPollInformationData = A_MESSAGE_INFORMATION_DATA.copy(pollResponseAggregatedSummary = closedPollSummary)
+
+        // When
+        val pollViewState = pollItemViewStateFactory.create(
+                pollContent = A_POLL_CONTENT,
+                informationData = closedPollInformationData,
+        )
+
+        // Then
+        pollViewState.votesStatus shouldBeEqualTo stringProvider.instance.getString(R.string.unable_to_decrypt_some_events_in_poll)
+    }
+
+    @Test
     fun `given a sent poll when undisclosed poll type is selected then poll is votable and option states are PollUndisclosed`() {
         val stringProvider = FakeStringProvider()
         val pollItemViewStateFactory = PollItemViewStateFactory(stringProvider.instance)
@@ -191,6 +209,34 @@ class PollItemViewStateFactoryTest {
                     )
                 },
         )
+    }
+
+    @Test
+    fun `given a sent poll with decryption failure when my vote exists then a warning message is displayed`() {
+        // Given
+        val stringProvider = FakeStringProvider()
+        val pollItemViewStateFactory = PollItemViewStateFactory(stringProvider.instance)
+        val votedPollData = A_POLL_RESPONSE_DATA.copy(
+                totalVotes = 1,
+                myVote = A_POLL_OPTION_IDS[0],
+                votes = mapOf(A_POLL_OPTION_IDS[0] to PollVoteSummaryData(total = 1, percentage = 1.0)),
+                hasEncryptedRelatedEvents = true,
+        )
+        val disclosedPollContent = A_POLL_CONTENT.copy(
+                unstablePollCreationInfo = A_POLL_CONTENT.getBestPollCreationInfo()?.copy(
+                        kind = PollType.DISCLOSED_UNSTABLE
+                ),
+        )
+        val votedInformationData = A_MESSAGE_INFORMATION_DATA.copy(pollResponseAggregatedSummary = votedPollData)
+
+        // When
+        val pollViewState = pollItemViewStateFactory.create(
+                pollContent = disclosedPollContent,
+                informationData = votedInformationData,
+        )
+
+        // Then
+        pollViewState.votesStatus shouldBeEqualTo stringProvider.instance.getString(R.string.unable_to_decrypt_some_events_in_poll)
     }
 
     @Test

@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import androidx.core.widget.doOnTextChanged
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -62,10 +63,22 @@ class RenameSessionFragment :
     }
 
     private fun initEditText() {
-        views.renameSessionEditText.showKeyboard(andRequestFocus = true)
+        showKeyboard()
         views.renameSessionEditText.doOnTextChanged { text, _, _, _ ->
             viewModel.handle(RenameSessionAction.EditLocally(text.toString()))
         }
+    }
+
+    private fun showKeyboard() {
+        val focusChangeListener = object : ViewTreeObserver.OnWindowFocusChangeListener {
+            override fun onWindowFocusChanged(hasFocus: Boolean) {
+                if (hasFocus) {
+                    views.renameSessionEditText.showKeyboard(andRequestFocus = true)
+                }
+                views.renameSessionEditText.viewTreeObserver.removeOnWindowFocusChangeListener(this)
+            }
+        }
+        views.renameSessionEditText.viewTreeObserver.addOnWindowFocusChangeListener(focusChangeListener)
     }
 
     private fun initSaveButton() {
@@ -89,7 +102,9 @@ class RenameSessionFragment :
                 title = getString(R.string.device_manager_learn_more_session_rename_title),
                 description = getString(R.string.device_manager_learn_more_session_rename),
         )
-        SessionLearnMoreBottomSheet.show(childFragmentManager, args)
+        SessionLearnMoreBottomSheet
+                .show(childFragmentManager, args)
+                .onDismiss = { showKeyboard() }
     }
 
     private fun observeViewEvents() {

@@ -21,4 +21,5 @@ import im.vector.app.core.platform.VectorViewModelAction
 sealed interface HomeActivityViewActions : VectorViewModelAction {
     object ViewStarted : HomeActivityViewActions
     object PushPromptHasBeenReviewed : HomeActivityViewActions
+    data class RegisterPushDistributor(val distributor: String) : HomeActivityViewActions
 }

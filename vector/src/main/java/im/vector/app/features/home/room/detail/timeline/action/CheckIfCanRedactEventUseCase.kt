@@ -33,8 +33,8 @@ class CheckIfCanRedactEventUseCase @Inject constructor(
                 EventType.STICKER,
                 VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO,
         ) +
-                EventType.POLL_START +
-                EventType.STATE_ROOM_BEACON_INFO
+                EventType.POLL_START.values +
+                EventType.STATE_ROOM_BEACON_INFO.values
 
         return event.root.getClearType() in canRedactEventTypes &&
                 // Message sent by the current user can always be redacted, else check permission for messages sent by other users

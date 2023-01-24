@@ -69,7 +69,7 @@ android {
     buildTypes {
         debug {
             if (project.hasProperty("coverage")) {
-                testCoverageEnabled = coverage.enableTestCoverage
+                testCoverageEnabled = coverage == "true"
             }
         }
     }
@@ -132,7 +132,7 @@ dependencies {
     implementation libs.androidx.biometric
 
     api "org.threeten:threetenbp:1.4.0:no-tzdb"
-    api "com.gabrielittner.threetenbp:lazythreetenbp:0.11.0"
+    api "com.gabrielittner.threetenbp:lazythreetenbp:0.13.0"
 
     implementation libs.squareup.moshi
     kapt libs.squareup.moshiKotlin
@@ -233,23 +233,23 @@ dependencies {
     kapt libs.dagger.hiltCompiler
 
     // Analytics
-    implementation('com.posthog.android:posthog:1.1.2') {
+    implementation('com.posthog.android:posthog:2.0.0') {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
     implementation libs.sentry.sentryAndroid
 
     // UnifiedPush
-    implementation 'com.github.UnifiedPush:android-connector:2.1.0'
+    implementation 'com.github.UnifiedPush:android-connector:2.1.1'
 
     implementation "androidx.emoji2:emoji2:1.2.0"
 
     // WebRTC
     // org.webrtc:google-webrtc is for development purposes only
     // implementation 'org.webrtc:google-webrtc:1.0.+'
-    implementation('com.facebook.react:react-native-webrtc:1.94.2-jitsi-10227332@aar')
-
+    implementation('com.facebook.react:react-native-webrtc:1.106.1-jitsi-12039821@aar')
     // Jitsi
-    api('org.jitsi.react:jitsi-meet-sdk:5.0.2') {
+    // Note: version is 6.2.0, but built from the tag `android-sdk-6.2.2`.
+    api('org.jitsi.react:jitsi-meet-sdk:6.2.0') {
         exclude group: 'com.google.firebase'
         exclude group: 'com.google.android.gms'
         exclude group: 'com.android.installreferrer'
@@ -305,6 +305,11 @@ dependencies {
         exclude group: "org.jetbrains.kotlinx", module: "kotlinx-coroutines-debug"
     }
 
+    // Fix issue with Jitsi. Inspired from https://github.com/android/android-test/issues/861#issuecomment-872067868
+    // Error was lots of `Duplicate class org.checkerframework.common.reflection.qual.MethodVal found in modules jetified-checker-3.1 (org.checkerframework:checker:3.1.1) and jetified-checker-qual-3.12.0 (org.checkerframework:checker-qual:3.12.0)
+    //noinspection GradleDependency Cannot use latest 3.15.0 since it required min API 26.
+    implementation "org.checkerframework:checker:3.29.0"
+
     androidTestImplementation libs.androidx.testCore
     androidTestImplementation libs.androidx.testRunner
     androidTestImplementation libs.androidx.testRules
@@ -320,11 +325,12 @@ dependencies {
     // Plant Timber tree for test
     androidTestImplementation libs.tests.timberJunitRule
     // "The one who serves a great Espresso"
-    androidTestImplementation('com.adevinta.android:barista:4.2.0') {
+    androidTestImplementation('com.adevinta.android:barista:4.3.0') {
         exclude group: 'org.jetbrains.kotlin'
     }
     androidTestImplementation libs.mockk.mockkAndroid
     androidTestUtil libs.androidx.orchestrator
-    debugImplementation libs.androidx.fragmentTesting
-    androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:1.7.20"
+    debugImplementation libs.androidx.fragmentTestingManifest
+    androidTestImplementation libs.androidx.fragmentTesting
+    androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:1.8.0"
 }

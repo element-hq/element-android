@@ -19,11 +19,14 @@ package im.vector.app.core.session
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
 import im.vector.app.core.extensions.startSyncing
+import im.vector.app.core.notification.NotificationsSettingUpdater
 import im.vector.app.core.session.clientinfo.UpdateMatrixClientInfoUseCase
 import im.vector.app.features.call.webrtc.WebRtcCallManager
+import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.settings.devices.v2.notification.UpdateNotificationSettingsAccountDataUseCase
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.sync.FilterService
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -32,19 +35,34 @@ class ConfigureAndStartSessionUseCase @Inject constructor(
         private val webRtcCallManager: WebRtcCallManager,
         private val updateMatrixClientInfoUseCase: UpdateMatrixClientInfoUseCase,
         private val vectorPreferences: VectorPreferences,
+        private val notificationsSettingUpdater: NotificationsSettingUpdater,
+        private val updateNotificationSettingsAccountDataUseCase: UpdateNotificationSettingsAccountDataUseCase,
 ) {
 
-    suspend fun execute(session: Session, startSyncing: Boolean = true) {
+    fun execute(session: Session, startSyncing: Boolean = true) {
         Timber.i("Configure and start session for ${session.myUserId}. startSyncing: $startSyncing")
         session.open()
-        session.filterService().setFilter(FilterService.FilterPreset.ElementFilter)
         if (startSyncing) {
             session.startSyncing(context)
         }
         session.pushersService().refreshPushers()
         webRtcCallManager.checkForProtocolsSupportIfNeeded()
-        if (vectorPreferences.isClientInfoRecordingEnabled()) {
-            updateMatrixClientInfoUseCase.execute(session)
+        updateMatrixClientInfoIfNeeded(session)
+        createNotificationSettingsAccountDataIfNeeded(session)
+        notificationsSettingUpdater.onSessionStarted(session)
+    }
+
+    private fun updateMatrixClientInfoIfNeeded(session: Session) {
+        session.coroutineScope.launch {
+            if (vectorPreferences.isClientInfoRecordingEnabled()) {
+                updateMatrixClientInfoUseCase.execute(session)
+            }
+        }
+    }
+
+    private fun createNotificationSettingsAccountDataIfNeeded(session: Session) {
+        session.coroutineScope.launch {
+            updateNotificationSettingsAccountDataUseCase.execute(session)
         }
     }
 }

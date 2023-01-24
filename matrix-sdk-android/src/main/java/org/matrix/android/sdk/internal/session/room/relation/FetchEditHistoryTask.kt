@@ -43,7 +43,7 @@ internal class DefaultFetchEditHistoryTask @Inject constructor(
     override suspend fun execute(params: FetchEditHistoryTask.Params): List<Event> {
         val isRoomEncrypted = cryptoSessionInfoProvider.isRoomEncrypted(params.roomId)
         val response = executeRequest(globalErrorReceiver) {
-            roomAPI.getRelations(
+            roomAPI.getRelationsWithEventType(
                     roomId = params.roomId,
                     eventId = params.eventId,
                     relationType = RelationType.REPLACE,

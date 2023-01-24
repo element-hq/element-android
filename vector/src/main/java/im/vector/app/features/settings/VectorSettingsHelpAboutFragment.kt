@@ -69,10 +69,12 @@ class VectorSettingsHelpAboutFragment :
         // application version
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_VERSION_PREFERENCE_KEY)!!.let {
             it.summary = buildString {
-                append(versionProvider.getVersion(longFormat = false, useBuildNumber = true))
+                append(versionProvider.getVersion(longFormat = false))
                 if (buildMeta.isDebug) {
                     append(" ")
                     append(buildMeta.gitBranchName)
+                    append(" ")
+                    append(buildMeta.gitRevision)
                 }
             }
 

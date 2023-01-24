@@ -215,9 +215,9 @@ class MessageActionsViewModel @AssistedInject constructor(
                     EventType.CALL_ANSWER -> {
                         noticeEventFormatter.format(timelineEvent, room?.roomSummary()?.isDirect.orFalse())
                     }
-                    in EventType.POLL_START -> {
-                        timelineEvent.root.getClearContent().toModel<MessagePollContent>(catchError = true)
-                                ?.getBestPollCreationInfo()?.question?.getBestQuestion() ?: ""
+                    in EventType.POLL_START.values -> {
+                        (timelineEvent.getVectorLastMessageContent() as? MessagePollContent)?.getBestPollCreationInfo()?.question?.getBestQuestion()
+                                ?: stringProvider.getString(R.string.message_reply_to_poll_preview)
                     }
                     else -> null
                 }
@@ -383,7 +383,7 @@ class MessageActionsViewModel @AssistedInject constructor(
             }
 
             if (canRedact(timelineEvent, actionPermissions)) {
-                if (timelineEvent.root.getClearType() in EventType.POLL_START) {
+                if (timelineEvent.root.getClearType() in EventType.POLL_START.values) {
                     add(
                             EventSharedAction.Redact(
                                     eventId,
@@ -498,6 +498,7 @@ class MessageActionsViewModel @AssistedInject constructor(
             MessageType.MSGTYPE_AUDIO,
             MessageType.MSGTYPE_FILE,
             MessageType.MSGTYPE_POLL_START,
+            MessageType.MSGTYPE_POLL_END,
             MessageType.MSGTYPE_STICKER_LOCAL -> event.root.threadDetails?.isRootThread ?: false
             else -> false
         }
@@ -529,14 +530,14 @@ class MessageActionsViewModel @AssistedInject constructor(
     }
 
     private fun canViewReactions(event: TimelineEvent): Boolean {
-        // Only event of type EventType.MESSAGE, EventType.STICKER and EventType.POLL_START are supported for the moment
-        if (event.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER) + EventType.POLL_START) return false
+        // Only event of type EventType.MESSAGE, EventType.STICKER, EventType.POLL_START, EventType.POLL_END are supported for the moment
+        if (event.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER) + EventType.POLL_START.values + EventType.POLL_END.values) return false
         return event.annotations?.reactionsSummary?.isNotEmpty() ?: false
     }
 
     private fun canEdit(event: TimelineEvent, myUserId: String, actionPermissions: ActionPermissions): Boolean {
         // Only event of type EventType.MESSAGE and EventType.POLL_START are supported for the moment
-        if (event.root.getClearType() !in listOf(EventType.MESSAGE) + EventType.POLL_START) return false
+        if (event.root.getClearType() !in listOf(EventType.MESSAGE) + EventType.POLL_START.values) return false
         if (!actionPermissions.canSendMessage) return false
         // TODO if user is admin or moderator
         val messageContent = event.root.getClearContent().toModel<MessageContent>()
@@ -582,14 +583,14 @@ class MessageActionsViewModel @AssistedInject constructor(
     }
 
     private fun canEndPoll(event: TimelineEvent, actionPermissions: ActionPermissions): Boolean {
-        return event.root.getClearType() in EventType.POLL_START &&
+        return event.root.getClearType() in EventType.POLL_START.values &&
                 canRedact(event, actionPermissions) &&
                 event.annotations?.pollResponseSummary?.closedTime == null
     }
 
     private fun canEditPoll(event: TimelineEvent): Boolean {
-        return event.root.getClearType() in EventType.POLL_START &&
+        return event.root.getClearType() in EventType.POLL_START.values &&
                 event.annotations?.pollResponseSummary?.closedTime == null &&
-                event.annotations?.pollResponseSummary?.aggregatedContent?.totalVotes ?: 0 == 0
+                (event.annotations?.pollResponseSummary?.aggregatedContent?.totalVotes ?: 0) == 0
     }
 }

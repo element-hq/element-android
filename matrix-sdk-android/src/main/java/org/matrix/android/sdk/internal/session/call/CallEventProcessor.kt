@@ -41,9 +41,8 @@ internal class CallEventProcessor @Inject constructor(private val callSignalingH
             EventType.CALL_INVITE,
             EventType.CALL_HANGUP,
             EventType.ENCRYPTED,
-            EventType.CALL_ASSERTED_IDENTITY,
-            EventType.CALL_ASSERTED_IDENTITY_PREFIX
-    )
+    ) +
+            EventType.CALL_ASSERTED_IDENTITY.values
 
     private val eventsToPostProcess = mutableListOf<Event>()
 
@@ -54,7 +53,7 @@ internal class CallEventProcessor @Inject constructor(private val callSignalingH
         return allowedTypes.contains(eventType)
     }
 
-    override suspend fun process(realm: Realm, event: Event) {
+    override fun process(realm: Realm, event: Event) {
         eventsToPostProcess.add(event)
     }
 

@@ -63,7 +63,7 @@ class StartAppViewModel @AssistedInject constructor(
     }
 
     private suspend fun eagerlyInitializeSession() {
-        sessionHolder.getOrInitializeSession(startSync = true)
+        sessionHolder.getOrInitializeSession()
     }
 
     private fun handleLongProcessing() {
