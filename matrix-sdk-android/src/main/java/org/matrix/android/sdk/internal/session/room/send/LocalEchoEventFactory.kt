@@ -70,7 +70,7 @@ import org.matrix.android.sdk.api.util.TextContent
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.content.ThumbnailExtractor
 import org.matrix.android.sdk.internal.session.permalinks.PermalinkFactory
-import org.matrix.android.sdk.internal.session.room.EventRedactBody
+import org.matrix.android.sdk.internal.session.room.send.model.EventRedactBody
 import org.matrix.android.sdk.internal.session.room.send.pills.TextPillsUtils
 import org.matrix.android.sdk.internal.util.time.Clock
 import java.util.UUID

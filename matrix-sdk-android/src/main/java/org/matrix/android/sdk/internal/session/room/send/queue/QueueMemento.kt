@@ -22,8 +22,8 @@ import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.internal.di.SessionId
-import org.matrix.android.sdk.internal.session.room.EventRedactBody
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoRepository
+import org.matrix.android.sdk.internal.session.room.send.model.EventRedactBody
 import timber.log.Timber
 import javax.inject.Inject
 

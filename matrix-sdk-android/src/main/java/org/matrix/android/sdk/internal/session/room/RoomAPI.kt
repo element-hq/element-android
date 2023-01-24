@@ -37,6 +37,7 @@ import org.matrix.android.sdk.internal.session.room.relation.RelationsResponse
 import org.matrix.android.sdk.internal.session.room.relation.threads.ThreadSummariesResponse
 import org.matrix.android.sdk.internal.session.room.reporting.ReportContentBody
 import org.matrix.android.sdk.internal.session.room.send.SendResponse
+import org.matrix.android.sdk.internal.session.room.send.model.EventRedactBody
 import org.matrix.android.sdk.internal.session.room.tags.TagBody
 import org.matrix.android.sdk.internal.session.room.timeline.EventContextResponse
 import org.matrix.android.sdk.internal.session.room.timeline.PaginationResponse
