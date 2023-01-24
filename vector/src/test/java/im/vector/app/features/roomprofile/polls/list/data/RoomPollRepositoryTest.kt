@@ -16,7 +16,7 @@
 
 package im.vector.app.features.roomprofile.polls.list.data
 
-import im.vector.app.features.roomprofile.polls.list.ui.PollSummary
+import io.mockk.coEvery
 import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.every
@@ -27,6 +27,8 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
+import org.matrix.android.sdk.api.session.room.poll.LoadedPollsStatus
+import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 
 private const val A_ROOM_ID = "room-id"
 
@@ -41,7 +43,7 @@ class RoomPollRepositoryTest {
     @Test
     fun `given data source when getting polls then correct method of data source is called`() = runTest {
         // Given
-        val expectedPolls = listOf<PollSummary>()
+        val expectedPolls = listOf<TimelineEvent>()
         every { fakeRoomPollDataSource.getPolls(A_ROOM_ID) } returns flowOf(expectedPolls)
 
         // When
@@ -53,20 +55,21 @@ class RoomPollRepositoryTest {
     }
 
     @Test
-    fun `given data source when getting loaded polls status then correct method of data source is called`() {
+    fun `given data source when getting loaded polls status then correct method of data source is called`() = runTest {
         // Given
         val expectedStatus = LoadedPollsStatus(
                 canLoadMore = true,
-                nbLoadedDays = 10,
+                nbSyncedDays = 10,
+                hasCompletedASyncBackward = false,
         )
-        every { fakeRoomPollDataSource.getLoadedPollsStatus(A_ROOM_ID) } returns expectedStatus
+        coEvery { fakeRoomPollDataSource.getLoadedPollsStatus(A_ROOM_ID) } returns expectedStatus
 
         // When
         val result = roomPollRepository.getLoadedPollsStatus(A_ROOM_ID)
 
         // Then
         result shouldBeEqualTo expectedStatus
-        verify { fakeRoomPollDataSource.getLoadedPollsStatus(A_ROOM_ID) }
+        coVerify { fakeRoomPollDataSource.getLoadedPollsStatus(A_ROOM_ID) }
     }
 
     @Test

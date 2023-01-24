@@ -58,6 +58,7 @@ internal class DefaultFilterAndStoreEventsTask @Inject constructor(
 
     private suspend fun addMissingEventsInDB(roomId: String, events: List<Event>) {
         monarchy.awaitTransaction { realm ->
+            // TODO we should insert TimelineEventEntity as well, how to do that????
             val eventIdsToCheck = events.mapNotNull { it.eventId }.filter { it.isNotEmpty() }
             if (eventIdsToCheck.isNotEmpty()) {
                 val existingIds = EventEntity.where(realm, eventIdsToCheck).findAll().toList().map { it.eventId }

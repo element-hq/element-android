@@ -40,6 +40,7 @@ class LoadMorePollsUseCaseTest {
         val loadedPollsStatus = LoadedPollsStatus(
                 canLoadMore = true,
                 nbSyncedDays = 10,
+                hasCompletedASyncBackward = true,
         )
         coEvery { fakeRoomPollRepository.loadMorePolls(aRoomId) } returns loadedPollsStatus
 

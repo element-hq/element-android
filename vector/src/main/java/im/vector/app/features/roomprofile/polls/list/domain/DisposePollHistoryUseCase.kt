@@ -26,6 +26,7 @@ class DisposePollHistoryUseCase @Inject constructor(
         private val roomPollRepository: RoomPollRepository,
 ) {
 
+    // TODO add unit tests
     fun execute(roomId: String) {
         roomPollRepository.dispose(roomId)
     }
