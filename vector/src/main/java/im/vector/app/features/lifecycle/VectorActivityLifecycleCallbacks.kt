@@ -80,8 +80,8 @@ class VectorActivityLifecycleCallbacks constructor(private val popupAlertManager
 
             if (isTaskCorrupted) {
                 Timber.e("Application is potentially corrupted by an unknown activity")
-                MainActivity.restartApp(activity, MainActivityArgs())
-                return@launch
+                //MainActivity.restartApp(activity, MainActivityArgs())
+                //return@launch
             }
         }
     }
