@@ -7,7 +7,6 @@
     <string name="notice_direct_room_join_by_you">Ulijiunga</string>
     <string name="notice_direct_room_join">%1$s alijiunga</string>
     <string name="notice_room_invite_you">%1$s Amekualika</string>
-    <string name="notice_room_invite_no_invitee">Mwaliko</string>
     <plurals name="x_selected">
         <item quantity="one">%1$d Iliyochaguliwa</item>
         <item quantity="other">%1$d Ziliyochaguliwa</item>

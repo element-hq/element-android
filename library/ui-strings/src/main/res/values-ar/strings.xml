@@ -1187,7 +1187,6 @@
     <string name="start_chat">ابدأ محادثة</string>
     <string name="all_chats">كل المحادثات</string>
     <string name="notice_voice_broadcast_ended_by_you">أنت الذي انهيت البث الصوتي.</string>
-    <string name="notice_voice_broadcast_ended">لقد انتهى البث الصوتي.</string>
     <plurals name="notice_room_server_acl_changes">
         <item quantity="zero">صفر</item>
         <item quantity="one">واحد</item>
