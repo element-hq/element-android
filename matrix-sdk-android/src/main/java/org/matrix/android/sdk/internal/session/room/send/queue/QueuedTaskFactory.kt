@@ -43,12 +43,13 @@ internal class QueuedTaskFactory @Inject constructor(
         )
     }
 
-    fun createRedactTask(redactionLocalEcho: String, eventId: String, roomId: String, reason: String?): QueuedTask {
+    fun createRedactTask(redactionLocalEcho: String, eventId: String, roomId: String, reason: String?, withRelations: List<String>? = null): QueuedTask {
         return RedactQueuedTask(
                 redactionLocalEchoId = redactionLocalEcho,
                 toRedactEventId = eventId,
                 roomId = roomId,
                 reason = reason,
+                withRelations = withRelations,
                 redactEventTask = redactEventTask,
                 localEchoRepository = localEchoRepository,
                 cancelSendTracker = cancelSendTracker

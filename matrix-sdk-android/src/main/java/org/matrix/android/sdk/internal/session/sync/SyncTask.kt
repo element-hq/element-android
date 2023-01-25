@@ -151,7 +151,7 @@ internal class DefaultSyncTask @Inject constructor(
                     syncStatisticsData.requestInitSyncTime = SystemClock.elapsedRealtime()
                     syncStatisticsData.downloadInitSyncTime = syncStatisticsData.requestInitSyncTime
                     logDuration("INIT_SYNC Database insertion", loggerTag, clock) {
-                        syncResponseHandler.handleResponse(syncResponse, token, syncRequestStateTracker)
+                        syncResponseHandler.handleResponse(syncResponse, null, afterPause = true, syncRequestStateTracker)
                     }
                     syncResponseToReturn = syncResponse
                 }
@@ -184,7 +184,7 @@ internal class DefaultSyncTask @Inject constructor(
                             toDevice = nbToDevice,
                     )
             )
-            syncResponseHandler.handleResponse(syncResponse, token, null)
+            syncResponseHandler.handleResponse(syncResponse, token, afterPause = params.afterPause, null)
             syncResponseToReturn = syncResponse
             Timber.tag(loggerTag.value).d("Incremental sync done")
             syncRequestStateTracker.setSyncRequestState(SyncRequestState.IncrementalSyncDone)
@@ -264,7 +264,7 @@ internal class DefaultSyncTask @Inject constructor(
             Timber.tag(loggerTag.value).d("INIT_SYNC $nbOfJoinedRooms rooms, $nbOfJoinedRoomsInFile ephemeral stored into files")
 
             logDuration("INIT_SYNC Database insertion", loggerTag, clock) {
-                syncResponseHandler.handleResponse(syncResponse, null, syncRequestStateTracker)
+                syncResponseHandler.handleResponse(syncResponse, null, afterPause = true, syncRequestStateTracker)
             }
             initialSyncStatusRepository.setStep(InitialSyncStatus.STEP_SUCCESS)
             syncResponse

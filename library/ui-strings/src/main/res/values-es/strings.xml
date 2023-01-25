@@ -1592,8 +1592,6 @@
     <string name="failed_to_access_secure_storage">No se pudo acceder al almacenamiento seguro</string>
     <string name="unencrypted">Sin cifrar</string>
     <string name="encrypted_unverified">Cifrado por un dispositivo no verificado</string>
-    <string name="review_logins">Revise dónde inició sesión</string>
-    <string name="verify_other_sessions">Verifique todas sus sesiones para asegurarse de que su cuenta y sus mensajes estén seguros</string>
     <string name="verify_this_session">Verifique el nuevo inicio de sesión accediendo a su cuenta: %1$s</string>
     <string name="cross_signing_verify_by_text">Verificar manualmente por texto</string>
     <string name="cross_signing_verify_by_emoji">Verificación interactiva por emoji</string>
@@ -2386,7 +2384,6 @@
     <string name="end_poll_confirmation_approve_button">Finalizar encuesta</string>
     <string name="end_poll_confirmation_description">Esto evitará que las personas puedan votar y mostrará los resultados finales de la encuesta.</string>
     <string name="end_poll_confirmation_title">¿Finalizar encuesta\?</string>
-    <string name="a11y_poll_winner_option">opción ganadora</string>
     <string name="poll_end_action">Finalizar encuesta</string>
     <plurals name="poll_total_vote_count_after_ended">
         <item quantity="one">Resultado final basado en %1$d voto</item>

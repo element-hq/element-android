@@ -58,6 +58,7 @@ class StartVoiceBroadcastUseCase @Inject constructor(
         private val buildMeta: BuildMeta,
         private val getRoomLiveVoiceBroadcastsUseCase: GetRoomLiveVoiceBroadcastsUseCase,
         private val stopVoiceBroadcastUseCase: StopVoiceBroadcastUseCase,
+        private val pauseVoiceBroadcastUseCase: PauseVoiceBroadcastUseCase,
 ) {
 
     suspend fun execute(roomId: String): Result<Unit> = runCatching {
@@ -101,6 +102,14 @@ class StartVoiceBroadcastUseCase @Inject constructor(
             override fun onRemainingTimeUpdated(remainingTime: Long?) {
                 if (remainingTime != null && remainingTime <= 0) {
                     session.coroutineScope.launch { stopVoiceBroadcastUseCase.execute(room.roomId) }
+                }
+            }
+
+            override fun onStateUpdated(state: VoiceBroadcastRecorder.State) {
+                if (state == VoiceBroadcastRecorder.State.Error) {
+                    session.coroutineScope.launch {
+                        pauseVoiceBroadcastUseCase.execute(room.roomId)
+                    }
                 }
             }
         })

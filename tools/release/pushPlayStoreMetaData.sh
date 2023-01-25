@@ -77,6 +77,15 @@ else
   removeFullDes_th=1
 fi
 
+if [[ -f "./fastlane/metadata/android/az-AZ/full_description.txt" ]]; then
+  echo "It appears that file ./fastlane/metadata/android/az-AZ/full_description.txt now exists. This can be removed."
+  removeFullDes_az=0
+else
+  echo "Copy default full description to ./fastlane/metadata/android/az-AZ"
+  cp ./fastlane/metadata/android/en-US/full_description.txt ./fastlane/metadata/android/az-AZ
+  removeFullDes_az=1
+fi
+
 # Run fastlane
 echo "Run fastlane to push to the PlaysStore"
 fastlane deployMeta
@@ -105,6 +114,10 @@ fi
 
 if [[ ${removeFullDes_th} -eq 1 ]]; then
   rm ./fastlane/metadata/android/th/full_description.txt
+fi
+
+if [[ ${removeFullDes_az} -eq 1 ]]; then
+  rm ./fastlane/metadata/android/az-AZ/full_description.txt
 fi
 
 echo "Success!"

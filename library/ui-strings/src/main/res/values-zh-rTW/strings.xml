@@ -1412,8 +1412,6 @@
     <string name="create_room_dm_failure">我們無法建立您的直接訊息。請檢查您想要邀請的使用者，然後再試一次。</string>
     <string name="unencrypted">未加密</string>
     <string name="encrypted_unverified">由未驗證的裝置加密</string>
-    <string name="review_logins">審閱您從何處登入</string>
-    <string name="verify_other_sessions">驗證您所有的工作階段以確保您的帳號與訊息都安全</string>
     <string name="verify_this_session">驗證正在存取您帳號的新登入：%1$s</string>
     <string name="notification_ticker_text_dm">%1$s：%2$s</string>
     <string name="notification_ticker_text_group">%1$s：%2$s %3$s</string>
@@ -2231,7 +2229,6 @@
     <string name="end_poll_confirmation_approve_button">結束投票</string>
     <string name="end_poll_confirmation_description">這將阻止人們投票並顯示投票的最終結果。</string>
     <string name="end_poll_confirmation_title">結束此投票？</string>
-    <string name="a11y_poll_winner_option">獲勝選項</string>
     <string name="poll_end_action">結束投票</string>
     <plurals name="poll_total_vote_count_after_ended">
         <item quantity="other">以 %1$d 票為基礎的最終結果</item>
@@ -2659,9 +2656,6 @@
 \n
 \n這讓他們確信他們真的在與您交談，但這也意味著他們可以看到您在此處輸入的工作階段名稱。</string>
     <string name="device_manager_learn_more_session_rename_title">正在重新命名工作階段</string>
-    <string name="device_manager_learn_more_sessions_verified">已驗證的工作階段代表使用您的憑證登入，然後使用您的安全通關密語或透過交叉驗證進行驗證。
-\n
-\n這代表了它們持有您先前訊息的加密金鑰，並向您正在與之通訊的其他使用者確認這些工作階段確實是您。</string>
     <string name="device_manager_learn_more_sessions_verified_title">已驗證的工作階段</string>
     <string name="device_manager_learn_more_sessions_unverified">未驗證的工作階段是使用您的憑證登入但未交叉驗證的工作階段。
 \n
@@ -2760,7 +2754,7 @@
     <string name="qr_code_login_header_failed_other_description">請求失敗。</string>
     <string name="labs_enable_voice_broadcast_summary">可以在聊天室時間軸中錄製並傳送語音廣播。</string>
     <string name="labs_enable_voice_broadcast_title">啟用語音廣播</string>
-    <string name="a11y_voice_broadcast_buffering">正在緩衝……</string>
+    <string name="voice_broadcast_buffering">正在緩衝……</string>
     <string name="a11y_pause_voice_broadcast">暫停語音廣播</string>
     <string name="a11y_play_voice_broadcast">播放或繼續語音廣播</string>
     <string name="a11y_stop_voice_broadcast_record">停止語音廣播錄製</string>
@@ -2843,4 +2837,23 @@
     <string name="room_polls_active_no_item">此聊天室沒有正在進行的投票</string>
     <string name="room_polls_active">進行中的投票</string>
     <string name="room_profile_section_more_polls">投票歷史紀錄</string>
+    <string name="message_reply_to_ended_poll_preview">已結束投票</string>
+    <string name="message_reply_to_poll_preview">投票</string>
+    <string name="message_reply_to_sender_ended_poll">已結束投票。</string>
+    <string name="ended_poll_indicator">已結束投票。</string>
+    <string name="thread_list_not_available">您的家伺服器還不支援列出討論串。</string>
+    <string name="error_voice_broadcast_unable_to_play">無法播放此語音廣播。</string>
+    <string name="started_a_voice_broadcast">已開始語音廣播</string>
+    <string name="unable_to_decrypt_some_events_in_poll">因為解密錯誤，部份投票可能並未計算</string>
+    <string name="room_polls_loading_error">擷取投票時發生錯誤。</string>
+    <string name="room_polls_load_more">載入更多投票</string>
+    <string name="room_polls_wait_for_display">顯示投票</string>
+    <plurals name="room_polls_ended_no_item_for_loaded_period">
+        <item quantity="other">過去 %1$d 天沒有投票。
+\n載入更多投票以檢視過去幾天的投票。</item>
+    </plurals>
+    <plurals name="room_polls_active_no_item_for_loaded_period">
+        <item quantity="other">過去 %1$d 天沒有活躍的投票。
+\n載入更多投票以檢視過去幾天的投票。</item>
+    </plurals>
 </resources>

@@ -463,8 +463,6 @@
     <string name="security_prompt_text">Senqed iman-ik•im d wiyaḍ akken ad qqimen yidiwenniyen-ik•im d iɣellsanen</string>
     <string name="use_recovery_key">Seqdec tasarut n uɛeddi</string>
     <string name="unencrypted">Ur yettwawgelhen ara</string>
-    <string name="review_logins">Senqed ansi i d-tkecmeḍ</string>
-    <string name="verify_other_sessions">Senqed akk tiqimiyin-ik·im i wakken ad tḍemneḍ amiḍan-ik·m &amp; yiznan d iɣelsanen</string>
     <string name="cross_signing_verify_by_text">Senqed s ufus s ttawil n uḍris</string>
     <string name="identity_server_set_alternative_submit">Azen</string>
     <string name="bottom_sheet_setup_secure_backup_submit">Sbadu</string>

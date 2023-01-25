@@ -32,6 +32,7 @@ import im.vector.app.R
 import im.vector.app.SpaceStateHandler
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
+import im.vector.app.core.extensions.isVoiceBroadcast
 import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.BuildMeta
@@ -860,12 +861,18 @@ class TimelineViewModel @AssistedInject constructor(
 
     private fun handleRedactEvent(action: RoomDetailAction.RedactAction) {
         val event = room?.getTimelineEvent(action.targetEventId) ?: return
-        if (event.isLiveLocation()) {
-            viewModelScope.launch {
-                redactLiveLocationShareEventUseCase.execute(event.root, room, action.reason)
+        when {
+            event.isLiveLocation() -> {
+                viewModelScope.launch {
+                    redactLiveLocationShareEventUseCase.execute(event.root, room, action.reason)
+                }
             }
-        } else {
-            room.sendService().redactEvent(event.root, action.reason)
+            event.isVoiceBroadcast() -> {
+                room.sendService().redactEvent(event.root, action.reason, listOf(RelationType.REFERENCE))
+            }
+            else -> {
+                room.sendService().redactEvent(event.root, action.reason)
+            }
         }
     }
 

@@ -559,8 +559,6 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="invite_users_to_room_title">Uzaicināt lietotājus</string>
     <string name="confirm_your_identity">Apstipriniet savu identitāti, verificējot šo pierakstīšanos no kādas citas savas sesijas, tādējādi ļaujot piekļūt šifrētajām ziņām.</string>
     <string name="cross_signing_verify_by_text">Manuāli verificēt ar tekstu</string>
-    <string name="verify_other_sessions">Verificējiet visas savas sesijas, lai nodrošinātos, ka jūsu konts un ziņas ir drošībā</string>
-    <string name="review_logins">Pārskatiet savas pierakstīšanās</string>
     <string name="unencrypted">Nešifrēts</string>
     <string name="or_other_mx_capable_client">vai kādu citu Matrix lietotni ar cross-signing atbalstu</string>
     <string name="auth_invalid_login_deactivated_account">Šis konts ir deaktivizēts.</string>

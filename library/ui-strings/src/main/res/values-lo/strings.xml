@@ -1634,8 +1634,6 @@
     <string name="crosssigning_verify_session">ຢືນຢັນການເຂົ້າສູ່ລະບົບ</string>
     <string name="cross_signing_verify_by_text">ຢືນຢັນຂໍ້ຄວາມດ້ວຍຕົນເອງ</string>
     <string name="verify_this_session">ຢືນຢັນການເຂົ້າສູ່ລະບົບໃໝ່ທີ່ເຂົ້າເຖິງບັນຊີຂອງທ່ານ: %1$s</string>
-    <string name="verify_other_sessions">ຢັ້ງຢືນທຸກລະບົບຂອງທ່ານເພື່ອໃຫ້ແນ່ໃຈວ່າບັນຊີ ແລະ ຂໍ້ຄວາມຂອງທ່ານປອດໄພ</string>
-    <string name="review_logins">ກວດເບິ່ງບ່ອນທີ່ທ່ານເຂົ້າສູ່ລະບົບ</string>
     <string name="encrypted_unverified">ເຂົ້າລະຫັດໂດຍອຸປະກອນທີ່ບໍ່ໄດ້ຮັບການຢືນຢັນ</string>
     <string name="unencrypted">ບໍ່ໄດ້ເຂົ້າລະຫັດ</string>
     <string name="default_message_emote_snow">ສົ່ງຫິມະຕົກ ❄️</string>
@@ -2371,7 +2369,6 @@
     <string name="end_poll_confirmation_approve_button">ສິ້ນສຸດແບບສຳຫຼວດ</string>
     <string name="end_poll_confirmation_description">ອັນນີ້ຈະຢຸດບໍ່ໃຫ້ຜູ້ຄົນສາມາດລົງຄະແນນສຽງໄດ້ ແລະຈະສະແດງຜົນສຸດທ້າຍຂອງການສຳຫຼວດຄວາມຄິດເຫັນ.</string>
     <string name="end_poll_confirmation_title">ສິ້ນສຸດແບບສຳຫຼວດນີ້ບໍ\?</string>
-    <string name="a11y_poll_winner_option">ເລືອກຜູ້ຊະນະ</string>
     <string name="poll_end_action">ສິ້ນສຸດແບບສຳຫຼວດ</string>
     <plurals name="poll_total_vote_count_after_ended">
         <item quantity="other">ຜົນສຸດທ້າຍໂດຍອີງໃສ່ %1$d ຄະແນນສຽງ</item>

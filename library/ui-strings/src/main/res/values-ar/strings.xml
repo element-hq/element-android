@@ -16,7 +16,7 @@
     <string name="notice_room_name_changed">غيّر %1$s اسم الغُرفة إلى: %2$s</string>
     <string name="notice_answered_call">أجابَ %s على المُكالمة.</string>
     <string name="notice_ended_call">أنهى %s المُكالمة.</string>
-    <string name="notice_made_future_room_visibility">جعلَ %1$s التأريخ المُستقبلي للغُرفة مرئيًا لـ %2$s</string>
+    <string name="notice_made_future_room_visibility">جعلَ %1$s عند انشاء الغرف لاحقاً تكون مرئية ل%2$s</string>
     <string name="notice_room_visibility_invited">جميع أعضاء الغُرفة، مِنَ اللَّحظة التي تمَّت دعوتهم.</string>
     <string name="notice_room_visibility_joined">جميع أعضاء الغُرفة، مِن لحظة إنضمامهم.</string>
     <string name="notice_room_visibility_shared">جميع أعضاء الغُرفة.</string>
@@ -63,7 +63,7 @@
     <string name="notice_call_candidates_by_you">أرسلتَ بيانات لإعداد مُكالمة.</string>
     <string name="notice_answered_call_by_you">أجبتَ على المُكالمة.</string>
     <string name="notice_ended_call_by_you">أنهيتَ المُكالمة.</string>
-    <string name="notice_made_future_room_visibility_by_you">جعلتَ التأريخ المُستقبلي للغُرفة مرئيًا لـ %1$s</string>
+    <string name="notice_made_future_room_visibility_by_you">لقدت جعلت الغرفة التي سيتم انشائها مرئيًا لـ %1$s</string>
     <string name="notice_room_update">رقّى %s هذه الغرفة.</string>
     <string name="notice_room_update_by_you">رقَّيتَ هذه الغرفة.</string>
     <string name="notice_room_name_removed_by_you">أزلتَ اسم الغُرفة</string>
@@ -93,9 +93,9 @@
     <string name="notice_room_server_acl_updated_no_change">لا تغيير.</string>
     <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• خوادِم مُطابقة IP الحرفية محظورة الآن.</string>
     <string name="notice_room_server_acl_updated_was_allowed">• الخوادِم المُطابقة لـ %s أُزيلت مِن قائمة السماح.</string>
-    <string name="notice_room_server_acl_updated_allowed">• الخوادِم المُطابقة لـ %s مسموحة الآن.</string>
+    <string name="notice_room_server_acl_updated_allowed">• الخوادِم المُطابقة لـ %s اصبحت مسموحة الآن.</string>
     <string name="notice_room_server_acl_updated_was_banned">• الخوادِم المُطابقة لـ %s أُزيلت مِن قائمة الحظر.</string>
-    <string name="notice_room_server_acl_updated_banned">• الخوادِم المُطابقة لـ %s محظورة الآن.</string>
+    <string name="notice_room_server_acl_updated_banned">• الخوادِم مُتطابقة لـ %s واصبحت محظورة الآن.</string>
     <string name="notice_room_server_acl_updated_ip_literals_allowed">• خوادِم مُطابقة IP الحرفية مسموحة الآن.</string>
     <string name="notice_room_server_acl_updated_title_by_you">لقد غَيَّرت قائمة الوصول لهذه الغُرفة.</string>
     <string name="notice_room_server_acl_updated_title">غَيَّرَ %s قائمة التحكم بالوصول (ACL) لهذه الغُرفة.</string>
@@ -234,7 +234,7 @@
     <string name="call_ended">انتهت المكالمة</string>
     <string name="incoming_video_call">مكالمة صورية واردة</string>
     <string name="incoming_voice_call">مكالمة صوتية واردة</string>
-    <string name="call_in_progress">المكالمة جارية</string>
+    <string name="call_in_progress">المكالمة جارية…</string>
     <string name="permissions_rationale_popup_title">معلومات</string>
     <string name="yes">نعم</string>
     <string name="no">لا</string>
@@ -291,9 +291,7 @@
     <string name="settings_new_password">كلمة السر الجديدة</string>
     <string name="settings_fail_to_update_password">فشل تحديث كلمة السر</string>
     <string name="settings_password_updated">حُدّثت كلمة السر</string>
-    <string name="settings_unignore_user">أأعرض كل رسائل ⁨%s⁩؟
-
-سيُعيد هذا الإجراء تشغيل التطبيق وقد يأخذ بعض الوقت.</string>
+    <string name="settings_unignore_user">أأعرض كل الرسائل من ⁨%s⁩؟ سيُعيد هذا الإجراء تشغيل التطبيق وقد يأخذ بعض الوقت.</string>
     <string name="settings_select_country">اختر دولة</string>
     <string name="media_saving_period_3_days">٣ أيام</string>
     <string name="media_saving_period_1_week">أسبوع واحد</string>
@@ -471,7 +469,7 @@
     <string name="account_phone_number_already_used_error">رقم الهاتف مستخدم بالفعل</string>
     <string name="notification_off">معطّل</string>
     <string name="notification_noisy">مزعج</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">لا ترسل من هذا الجهاز الرسائل المعمّاة إلى الأجهزة غير المؤكّدة</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">لا ترسل من هذا الجهاز الرسائل المشفرة إلى الأجهزة غير الموثقة.</string>
     <string name="encryption_never_send_to_unverified_devices_title">عمِّ إلى الأجهزة المؤكّدة فقط</string>
     <string name="encryption_information_not_verified">&lt;b&gt;غير&lt;b/&gt; مؤكّدة</string>
     <string name="encryption_information_verified">مؤكّدة</string>
@@ -482,7 +480,7 @@
     <string name="ssl_cert_new_account_expl">إن قال مدير الخادوم بأن هذا متوقع، فتأكد من أن البصمة أدناه تطابق البصمة التي وفّرها.</string>
     <string name="ssl_expected_existing_expl">تغيّرت الشهادة من شهادة كنت تثق بها إلى شهادة لا تثق بها. لربما جدّد الخادوم شهادته. راسل إدارة الخادوم واسألهم عن البصمة المتوقعة.</string>
     <string name="room_settings_add_homescreen_shortcut">أضِف اختصارا إلى الشاشة الرئيسية</string>
-    <string name="settings_app_info_link_summary">شاشة معلومات التطبيق في النظام</string>
+    <string name="settings_app_info_link_summary">أظهر معلومات التطبيق في إعدادات النظام.</string>
     <string name="settings_call_invitations">دعوات المكالمات</string>
     <string name="settings_start_on_boot">ابدأ عن الإقلاع</string>
     <string name="encryption_export_e2e_room_keys">صدّر مفاتيح تعمية الطرفين لغرفة</string>
@@ -566,11 +564,7 @@
     <string name="resource_limit_soft_mau"> وصل هذا الخادم الحدّ الأقصى للمستخدمين النشطين شهريًا بذلك <b>لن يستطيع بعض المستخدمين الولوج لحساباتهم</b>.</string>
     <string name="resource_limit_hard_mau">وصل خادوم المنزل هذا حدّ المستخدمين النشطين شهريًا.</string>
     <string name="call_connecting">يجري وصل الاتصال…</string>
-    <string name="deactivate_account_content">سيجعل هذا حسابك محال الاستخدام للأبد. لن تقدر على الولوج ولن يقدر أحد على إعادة التسجيل بنفس معرّف المستخدم. سيتسبب هذا بأن يترك حسابك كل الغرف التي تشارك فيها، وستُزال تفاصيل الحساب من خادوم التعريف. <b>هذا إجراء لا عودة فيه</b>.
-
-حذفك لحسابك <b>لا يتسبب بأن ننسى رسائلك التي أرسلتها (مبدئيًا)</b>. إن أردت ذلك فرجاءً أشّر على المربّع أدناه.
-
-ظهور الرسائل في «ماترِكس» شبيه كثيرًا بالبريد الإلكتروني. نسياننا لرسائلك يعني أن الرسائل التي أرسلتها لن تُشارك مع أي مستخدم جديد أو غير مسجّل، إلا أن المستخدمين المسجّلين الذي يقدرون على الوصول إليها سيمتلكون نسخة عنها.</string>
+    <string name="deactivate_account_content">سيجعل هذا حسابك محال الاستخدام للأبد. لن تقدر على تسجيل دخولك ولن يقدر أحد على إعادة التسجيل بنفس معرّف المستخدم. سيتسبب هذا بأن يترك حسابك كل الغرف التي تشارك فيها، وستُزال تفاصيل الحساب من خادم التعريف. <b>هذا إجراء لا مجال الرجوع فيه</b>. حذفك لحسابك <b>لا يتسبب بأن ننسى رسائلك التي أرسلتها (مبدئيًا)</b>. إن أردت ذلك فرجاءً ضع علامة على المربّع أدناه. ظهور الرسائل في «ماترِكس» يشبه كثيرًا بالبريد الإلكتروني. نسياننا لرسائلك يعني أن الرسائل التي أرسلتها لن تُشارك مع أي مستخدم جديد أو غير مسجّل، إلا أن المستخدمين المسجّلين الذي يقدرون على الوصول إليها سيمتلكون نسخة عنها.</string>
     <string name="title_activity_keys_backup_restore">الرسائل الآمنة</string>
     <string name="action_skip">تخطي</string>
     <string name="done">تم</string>
@@ -580,7 +574,7 @@
     <string name="settings_notification_advanced">الإعدادات المتقدمة للإشعارات</string>
     <string name="sign_out_bottom_sheet_warning_no_backup">عند تسجيل الخروج الآن ستخسر مفاتيحك</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">النسخ الاحتياطي المفاتيح ما زال جاريا. في حال خروجك الآن لن تتمكن لاحقا من قراءة الرسائل المعماة.</string>
-    <string name="sign_out_bottom_sheet_warning_backup_not_active">تأكد من تفعيل النسخ الاحتياطي للمفاتيح على كل أجهزتك كي لا تخسر رسائلك المعماة</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">تأكد من تفعيل النسخ الاحتياطي للمفاتيح على كل أجهزتك كي لا تخسر رسائلك المشفرة.</string>
     <string name="sign_out_bottom_sheet_backing_up_keys">ينسخ احتياطيا المفاتيح…</string>
     <string name="no_permissions_to_start_conf_call_in_direct_room">ليس لديك تصريح لبدء إجتماع</string>
     <string name="no_permissions_to_start_conf_call">ليس لديك تصريح لبدء إجتماع في هذه الغرفة</string>
@@ -913,7 +907,7 @@
     <string name="login_splash_title">تحكم في محادثاتك.</string>
     <string name="ftue_personalize_skip_this_step">تخط هذه الخطوة</string>
     <string name="ftue_personalize_submit">احفظ وتابع</string>
-    <string name="ftue_personalize_complete_subtitle">حُفظت تفضيلاتك.</string>
+    <string name="ftue_personalize_complete_subtitle">اذهب الى الاعدادات في اي وقت لتغير او تعديل ملفك الشخصي للتطبيق.</string>
     <string name="ftue_personalize_complete_title">كل شيئ جاهز!</string>
     <string name="ftue_personalize_lets_go">لننطلق</string>
     <string name="ftue_profile_picture_subtitle">يمكنك تغييرها في أي وقت.</string>
@@ -997,7 +991,7 @@
     <string name="navigate_to_thread_when_already_in_the_thread">أنت تستعرض هذا النقاش سلفًا!</string>
     <string name="navigate_to_room_when_already_in_the_room">أنت تستعرض هذه الغرفة سلفًا!</string>
     <string name="error_no_network">منفصل عن الشبكة. تحقق من اتصالك.</string>
-    <string name="event_redacted_by_admin_reason">حدث عالجه مدير الغرفة.</string>
+    <string name="event_redacted_by_admin_reason">حدث تم تغيره من مدير الغرفة.</string>
     <string name="room_list_rooms_empty_body">ستعرض غرفك هنا. لانضمام لغرفة أو لإنشاء واحدة اضغط زر +.</string>
     <string name="room_list_people_empty_body">ستعرض رسائلك المباشرة هنا. لبدأ محادثات جديدة اضغط زر +.</string>
     <string name="room_list_people_empty_title">المحادثات</string>
@@ -1174,5 +1168,31 @@
         <item quantity="few">قليلة</item>
         <item quantity="many">كثيرة</item>
         <item quantity="other">اخرى</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_removed">
+        <item quantity="zero">صفر</item>
+        <item quantity="one">واحد</item>
+        <item quantity="two">اثنان</item>
+        <item quantity="few">القليل</item>
+        <item quantity="many">العديد</item>
+        <item quantity="other">أخرى</item>
+    </plurals>
+    <string name="initial_sync_request_content">${app_name} يحتاج إلى حذف ذاكرة التخزين المؤقت حتى تكون مستحدثة، من أجل هذه الأسباب:
+\n%s
+\n
+\nملاحظة: هذا الإجراء سيؤدي إلى إعادة تشغيل التطبيق ومن الممكن أن يستغرق بعضاً من الوقت.</string>
+    <string name="explore_rooms">استكشف غُرف</string>
+    <string name="change_space">تغيير التجمع</string>
+    <string name="create_room">انشئ غرفة</string>
+    <string name="start_chat">ابدأ محادثة</string>
+    <string name="all_chats">كل المحادثات</string>
+    <string name="notice_voice_broadcast_ended_by_you">أنت الذي انهيت البث الصوتي.</string>
+    <plurals name="notice_room_server_acl_changes">
+        <item quantity="zero">صفر</item>
+        <item quantity="one">واحد</item>
+        <item quantity="two">اثنان</item>
+        <item quantity="few">القليل</item>
+        <item quantity="many">العديد</item>
+        <item quantity="other">أخرى</item>
     </plurals>
 </resources>
