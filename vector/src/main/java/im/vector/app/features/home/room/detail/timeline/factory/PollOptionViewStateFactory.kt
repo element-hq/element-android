@@ -21,12 +21,10 @@ import im.vector.app.features.home.room.detail.timeline.item.PollResponseData
 import org.matrix.android.sdk.api.session.room.model.message.PollCreationInfo
 import javax.inject.Inject
 
-// TODO add unit tests
 class PollOptionViewStateFactory @Inject constructor() {
 
     fun createPollEndedOptions(pollCreationInfo: PollCreationInfo?, pollResponseData: PollResponseData?): List<PollOptionViewState.PollEnded> {
         val winnerVoteCount = pollResponseData?.winnerVoteCount
-
         return pollCreationInfo?.answers?.map { answer ->
             val voteSummary = pollResponseData?.getVoteSummaryOfAnOption(answer.id ?: "")
             PollOptionViewState.PollEnded(
