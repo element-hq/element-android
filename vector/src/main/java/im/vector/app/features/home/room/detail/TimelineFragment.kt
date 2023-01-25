@@ -797,7 +797,7 @@ class TimelineFragment :
         }
         // We use a custom layout for this menu item, so we need to set a ClickListener
         menu.findItem(R.id.open_matrix_apps)?.let { menuItem ->
-            menuItem.actionView?.debouncedClicks {
+            menuItem.actionView?.setOnClickListener {
                 handleMenuItemSelected(menuItem)
             }
         }
@@ -808,7 +808,7 @@ class TimelineFragment :
 
         // Custom thread notification menu item
         menu.findItem(R.id.menu_timeline_thread_list)?.let { menuItem ->
-            menuItem.actionView?.debouncedClicks {
+            menuItem.actionView?.setOnClickListener {
                 handleMenuItemSelected(menuItem)
             }
         }

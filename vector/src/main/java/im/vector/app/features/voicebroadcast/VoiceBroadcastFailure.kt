@@ -31,6 +31,6 @@ sealed class VoiceBroadcastFailure : Throwable() {
          * @property extra an extra code, specific to the error, see [MediaPlayer.OnErrorListener.onError].
          */
         data class UnableToPlay(val what: Int, val extra: Int) : ListeningError()
-        data class DownloadError(override val cause: Throwable?) : ListeningError()
+        data class PrepareMediaPlayerError(override val cause: Throwable? = null) : ListeningError()
     }
 }

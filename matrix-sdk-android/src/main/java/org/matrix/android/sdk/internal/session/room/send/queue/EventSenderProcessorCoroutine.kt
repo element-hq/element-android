@@ -101,12 +101,18 @@ internal class EventSenderProcessorCoroutine @Inject constructor(
         return postTask(task)
     }
 
-    override fun postRedaction(redactionLocalEcho: Event, reason: String?): Cancelable {
-        return postRedaction(redactionLocalEcho.eventId!!, redactionLocalEcho.redacts!!, redactionLocalEcho.roomId!!, reason)
+    override fun postRedaction(redactionLocalEcho: Event, reason: String?, withRelations: List<String>?): Cancelable {
+        return postRedaction(redactionLocalEcho.eventId!!, redactionLocalEcho.redacts!!, redactionLocalEcho.roomId!!, reason, withRelations)
     }
 
-    override fun postRedaction(redactionLocalEchoId: String, eventToRedactId: String, roomId: String, reason: String?): Cancelable {
-        val task = queuedTaskFactory.createRedactTask(redactionLocalEchoId, eventToRedactId, roomId, reason)
+    override fun postRedaction(
+            redactionLocalEchoId: String,
+            eventToRedactId: String,
+            roomId: String,
+            reason: String?,
+            withRelations: List<String>?
+    ): Cancelable {
+        val task = queuedTaskFactory.createRedactTask(redactionLocalEchoId, eventToRedactId, roomId, reason, withRelations)
         return postTask(task)
     }
 

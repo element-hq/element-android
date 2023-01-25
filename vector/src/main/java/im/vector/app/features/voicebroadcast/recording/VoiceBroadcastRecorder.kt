@@ -33,6 +33,8 @@ interface VoiceBroadcastRecorder : VoiceRecorder {
     val currentRemainingTime: Long?
 
     fun startRecordVoiceBroadcast(voiceBroadcast: VoiceBroadcast, chunkLength: Int, maxLength: Int)
+
+    fun pauseOnError()
     fun addListener(listener: Listener)
     fun removeListener(listener: Listener)
 
@@ -46,5 +48,6 @@ interface VoiceBroadcastRecorder : VoiceRecorder {
         Recording,
         Paused,
         Idle,
+        Error,
     }
 }

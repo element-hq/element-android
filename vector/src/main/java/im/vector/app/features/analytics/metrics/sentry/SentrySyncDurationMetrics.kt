@@ -34,6 +34,11 @@ class SentrySyncDurationMetrics @Inject constructor() : SyncDurationMetricPlugin
     // Stacks to keep spans in LIFO order.
     private var spans: Stack<ISpan> = Stack()
 
+    override fun shouldReport(isInitialSync: Boolean, isAfterPause: Boolean): Boolean {
+        // Report only for initial sync and for sync after pause
+        return isInitialSync || isAfterPause
+    }
+
     /**
      * Starts the span for a sub-task.
      *
@@ -69,6 +74,7 @@ class SentrySyncDurationMetrics @Inject constructor() : SyncDurationMetricPlugin
 
     override fun finishTransaction() {
         transaction?.finish()
+        transaction = null
         logTransaction("Sentry transaction finished")
     }
 

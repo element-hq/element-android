@@ -21,5 +21,5 @@
         style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/a11y_voice_broadcast_buffering" />
+        android:text="@string/voice_broadcast_buffering" />
 </merge>

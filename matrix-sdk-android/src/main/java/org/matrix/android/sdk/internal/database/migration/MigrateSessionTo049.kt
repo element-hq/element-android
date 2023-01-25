@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2023 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,10 @@ internal class MigrateSessionTo049(realm: DynamicRealm) : RealmMigrator(realm, 4
 
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.get("HomeServerCapabilitiesEntity")
-                ?.addField(HomeServerCapabilitiesEntityFields.EXTERNAL_ACCOUNT_MANAGEMENT_URL, String::class.java)
+                ?.addField(HomeServerCapabilitiesEntityFields.CAN_REDACT_EVENT_WITH_RELATIONS, Boolean::class.java)
+                ?.transform { obj ->
+                    obj.set(HomeServerCapabilitiesEntityFields.CAN_REDACT_EVENT_WITH_RELATIONS, false)
+                }
                 ?.forceRefreshOfHomeServerCapabilities()
     }
 }

@@ -1459,8 +1459,6 @@
     <string name="failed_to_access_secure_storage">访问安全存储失败</string>
     <string name="unencrypted">未加密</string>
     <string name="encrypted_unverified">由未验证设备加密</string>
-    <string name="review_logins">查看你的登录位置</string>
-    <string name="verify_other_sessions">验证你的全部会话确保你的账户和消息安全</string>
     <string name="verify_this_session">验证访问你的账户的新登录：%1$s</string>
     <string name="cross_signing_verify_by_text">使用文本手动验证</string>
     <string name="crosssigning_verify_session">验证登录</string>
@@ -1692,8 +1690,8 @@
     <string name="create_room_alias_invalid">一些字符不被允许</string>
     <string name="create_room_alias_empty">请提供一个房间地址</string>
     <string name="create_room_alias_already_in_use">此地址已被使用</string>
-    <string name="create_room_disable_federation_description">你可以启用此选项如果此房间将仅用于你的主服务器上的内部团队协作。此选项之后无法更改。</string>
-    <string name="create_room_disable_federation_title">屏蔽不是 %s 一部分的任何人加入此房间</string>
+    <string name="create_room_disable_federation_description">若房间仅用于与你的主服务器上的内部团队协作，则你可以启用此选项。此选项之后无法更改。</string>
+    <string name="create_room_disable_federation_title">阻止任何不属于%s的人加入此房间</string>
     <string name="hide_advanced">隐藏高级</string>
     <string name="show_advanced">显示高级</string>
     <string name="login_clear_homeserver_history">清除历史记录</string>
@@ -2231,7 +2229,6 @@
     <string name="end_poll_confirmation_approve_button">结束投票</string>
     <string name="end_poll_confirmation_description">这将使人们无法再投票，并将显示投票的最终结果。</string>
     <string name="end_poll_confirmation_title">结束此投票？</string>
-    <string name="a11y_poll_winner_option">赢家选项</string>
     <string name="poll_end_action">结束投票</string>
     <plurals name="poll_total_vote_count_after_ended">
         <item quantity="other">基于 %1$d 票的最终结果</item>
@@ -2648,9 +2645,6 @@
 \n
 \n这让他们确信他们真的在与你交谈，但这也意味着他们可以看到你在此处输入的会话名称。</string>
     <string name="device_manager_learn_more_session_rename_title">重命名会话</string>
-    <string name="device_manager_learn_more_sessions_verified">已验证会话已使用你的凭据登录，然后使用你的安全密码或通过交叉验证进行验证。
-\n
-\n这意味着他们持有你之前消息的加密密钥，并向你正在与之通信的其他用户确认这些会话确实是你。</string>
     <string name="device_manager_learn_more_sessions_inactive">闲置会话是你一段时间未使用的会话，但它们会继续接收加密密钥。
 \n
 \n删除闲置会话可以提高安全性和性能，并使你更容易识别新会话是否可疑。</string>
@@ -2694,7 +2688,7 @@
     <string name="device_manager_verification_status_detail_other_session_unknown">验证你当前的会话以显示此会话的验证状态。</string>
     <string name="device_manager_verification_status_unknown">未知的验证状态</string>
     <string name="tooltip_attachment_voice_broadcast">开始语音广播</string>
-    <string name="a11y_voice_broadcast_buffering">正在缓冲……</string>
+    <string name="voice_broadcast_buffering">正在缓冲……</string>
     <string name="a11y_pause_voice_broadcast">暂停语音广播</string>
     <string name="voice_broadcast_live">实时</string>
     <string name="action_got_it">知道了</string>
@@ -2821,4 +2815,8 @@
     <string name="settings_nightly_build">Nightly构建</string>
     <string name="notice_voice_broadcast_ended_by_you">你结束了一个语音广播。</string>
     <string name="notice_voice_broadcast_ended">%1$s结束了一个语音广播。</string>
+    <string name="stop_voice_broadcast_dialog_title">停止实时广播？</string>
+    <string name="error_voice_broadcast_unable_to_play">无法播放此语音广播。</string>
+    <string name="error_voice_message_broadcast_in_progress_message">你无法启动语音消息因为你正在录制实时广播。请终止实时广播以开始录制语音消息</string>
+    <string name="error_voice_message_broadcast_in_progress">无法启动语音消息</string>
 </resources>

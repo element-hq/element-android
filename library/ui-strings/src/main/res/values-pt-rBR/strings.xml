@@ -1526,8 +1526,6 @@
     <string name="failed_to_access_secure_storage">Falha para acessar armazenamento seguro</string>
     <string name="unencrypted">Não-encripada</string>
     <string name="encrypted_unverified">Encriptada por um dispositivo não-verificado</string>
-    <string name="review_logins">Revisar onde você está com login feito</string>
-    <string name="verify_other_sessions">Verifique todas as suas sessões para assegurar que sua conta &amp; mensagens estão seguras</string>
     <string name="verify_this_session">Verifique o novo login acessando sua conta: %1$s</string>
     <string name="cross_signing_verify_by_text">Verificar Manualmente por Texto</string>
     <string name="crosssigning_verify_session">Verificar login</string>
@@ -2272,7 +2270,6 @@
     <string name="end_poll_confirmation_approve_button">Terminar sondagem</string>
     <string name="end_poll_confirmation_description">Isto vai parar pessoas de serem capazes de votar e vai exibir os resultados finais da sondagem.</string>
     <string name="end_poll_confirmation_title">Terminar esta sondagem\?</string>
-    <string name="a11y_poll_winner_option">opção vencedora</string>
     <string name="poll_end_action">Terminar sondagem</string>
     <plurals name="poll_total_vote_count_after_ended">
         <item quantity="one">Resultado final baseado em %1$d voto</item>
@@ -2713,9 +2710,6 @@
 \n
 \nIsto as/os provê com confiança que elas(es) são estão realmente falando com você, mas também significa que elas(es) veem o nome da sessão que você entrar aqui.</string>
     <string name="device_manager_learn_more_session_rename_title">Renomeando sessões</string>
-    <string name="device_manager_learn_more_sessions_verified">Sessões verificadas têm feito login com suas credenciais e então têm sido verificadas, ou usando sua frasepasse segura ou por verificação cruzada.
-\n
-\nIsto significa que elas mantêm chaves de encriptação para suas mensagens anteriores, e confirmam a outras(os) usuárias(os) com quem você está comunicando que estas sessões são realmente você.</string>
     <string name="device_manager_learn_more_sessions_verified_title">Sessões verificadas</string>
     <string name="device_manager_learn_more_sessions_unverified">Sessões não-verificadas são sessões que você tem feito login com suas credenciais mas não têm sido verificadas cruzado.
 \n
@@ -2814,7 +2808,7 @@
     <string name="qr_code_login_header_failed_other_description">A requisição falhou.</string>
     <string name="labs_enable_voice_broadcast_summary">Seja capaz de gravar e enviar broadcast de voz em timeline de sala.</string>
     <string name="labs_enable_voice_broadcast_title">Broadcast de voz</string>
-    <string name="a11y_voice_broadcast_buffering">Buffering…</string>
+    <string name="voice_broadcast_buffering">Buffering…</string>
     <string name="a11y_pause_voice_broadcast">Pausar broadcast de voz</string>
     <string name="a11y_play_voice_broadcast">Tocar ou retomar broadcast de voz</string>
     <string name="a11y_stop_voice_broadcast_record">Parar gravação de broadcast de voz</string>

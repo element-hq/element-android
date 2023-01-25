@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notice_room_remove_by_you">umeondoa %1$s</string>
+    <string name="notice_room_remove">%1$s kuondolewa %2$s</string>
+    <string name="notice_room_reject_by_you">Ulikataa mwaliko</string>
+    <string name="notice_room_reject">%1$s alikataa mwaliko</string>
+    <string name="notice_direct_room_join_by_you">Ulijiunga</string>
+    <string name="notice_direct_room_join">%1$s alijiunga</string>
+    <string name="notice_room_invite_you">%1$s Amekualika</string>
+    <plurals name="x_selected">
+        <item quantity="one">%1$d Iliyochaguliwa</item>
+        <item quantity="other">%1$d Ziliyochaguliwa</item>
+    </plurals>
+</resources>

@@ -25,6 +25,7 @@ import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 import org.matrix.android.sdk.internal.auth.version.Versions
 import org.matrix.android.sdk.internal.auth.version.doesServerSupportLogoutDevices
 import org.matrix.android.sdk.internal.auth.version.doesServerSupportQrCodeLogin
+import org.matrix.android.sdk.internal.auth.version.doesServerSupportRedactEventWithRelations
 import org.matrix.android.sdk.internal.auth.version.doesServerSupportRemoteToggleOfPushNotifications
 import org.matrix.android.sdk.internal.auth.version.doesServerSupportThreadUnreadNotifications
 import org.matrix.android.sdk.internal.auth.version.doesServerSupportThreads
@@ -154,6 +155,8 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
                         getVersionResult.doesServerSupportQrCodeLogin()
                 homeServerCapabilitiesEntity.canRemotelyTogglePushNotificationsOfDevices =
                         getVersionResult.doesServerSupportRemoteToggleOfPushNotifications()
+                homeServerCapabilitiesEntity.canRedactEventWithRelations =
+                        getVersionResult.doesServerSupportRedactEventWithRelations()
             }
 
             if (getWellknownResult != null && getWellknownResult is WellknownResult.Prompt) {
