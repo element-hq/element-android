@@ -794,7 +794,7 @@
     <string name="thread_list_modal_my_threads_subtitle">Shows all threads you’ve participated in</string>
     <string name="thread_list_empty_title">Keep discussions organized with threads</string>
     <string name="thread_list_empty_subtitle">Threads help keep your conversations on-topic and easy to track.</string>
-    <string name="thread_list_not_available">You\'re homeserver does not support listing threads yet.</string>
+    <string name="thread_list_not_available">Your homeserver does not support listing threads yet.</string>
     <!-- Parameter %s will be replaced by the value of string reply_in_thread -->
     <string name="thread_list_empty_notice">Tip: Long tap a message and use “%s”.</string>
     <string name="search_thread_from_a_thread">From a Thread</string>
@@ -1689,7 +1689,6 @@
     <string name="create_new_room">Create New Room</string>
     <string name="create_new_space">Create New Space</string>
     <string name="error_no_network">No network. Please check your Internet connection.</string>
-    <!-- TODO delete -->
     <string name="error_check_network" tools:ignore="UnusedResources">Something went wrong. Please check your network connection and try again.</string>
     <string name="change_room_directory_network">"Change network"</string>
     <string name="please_wait">"Please wait…"</string>
@@ -2295,6 +2294,7 @@
     <string name="sent_verification_conclusion">Verification Conclusion</string>
     <string name="sent_location">Shared their location</string>
     <string name="sent_live_location">Shared their live location</string>
+    <string name="started_a_voice_broadcast">Started a voice broadcast</string>
 
     <string name="verification_request_waiting">Waiting…</string>
     <string name="verification_request_other_cancelled">%s canceled</string>
@@ -2658,10 +2658,6 @@
     <string name="unencrypted">Unencrypted</string>
     <string name="encrypted_unverified">Encrypted by an unverified device</string>
     <string name="key_authenticity_not_guaranteed">The authenticity of this encrypted message can\'t be guaranteed on this device.</string>
-    <!-- TODO TO BE REMOVED -->
-    <string name="review_logins" tools:ignore="UnusedResources">Review where you’re logged in</string>
-    <!-- TODO TO BE REMOVED -->
-    <string name="verify_other_sessions" tools:ignore="UnusedResources">Verify all your sessions to ensure your account &amp; messages are safe</string>
     <string name="review_unverified_sessions_title">You have unverified sessions</string>
     <string name="review_unverified_sessions_description">Review to ensure your account is safe</string>
     <!-- Argument will be replaced by the other session name (e.g, Desktop, mobile) -->
@@ -3096,6 +3092,8 @@
     <string name="error_voice_message_unable_to_play">Cannot play this voice message</string>
     <string name="error_voice_message_unable_to_record">Cannot record a voice message</string>
     <string name="error_voice_message_cannot_reply_or_edit">Cannot reply or edit while voice message is active</string>
+    <string name="error_voice_message_broadcast_in_progress">Cannot start voice message</string>
+    <string name="error_voice_message_broadcast_in_progress_message">You can’t start a voice message as you are currently recording a live broadcast. Please end your live broadcast in order to start recording a voice message</string>
     <string name="voice_message_reply_content">Voice Message (%1$s)</string>
 
     <string name="a11y_audio_message_item">%1$s, %2$s, %3$s</string> <!-- filename, duration, file size -->
@@ -3108,8 +3106,7 @@
 
     <string name="voice_broadcast_live">Live</string>
     <string name="voice_broadcast_live_broadcast">Live broadcast</string>
-    <!-- TODO Rename id to voice_broadcast_buffering -->
-    <string name="a11y_voice_broadcast_buffering">Buffering…</string>
+    <string name="voice_broadcast_buffering">Buffering…</string>
     <string name="a11y_resume_voice_broadcast_record">Resume voice broadcast record</string>
     <string name="a11y_pause_voice_broadcast_record">Pause voice broadcast record</string>
     <string name="a11y_stop_voice_broadcast_record">Stop voice broadcast record</string>
@@ -3121,6 +3118,8 @@
     <string name="error_voice_broadcast_permission_denied_message">You don’t have the required permissions to start a voice broadcast in this room. Contact a room administrator to upgrade your permissions.</string>
     <string name="error_voice_broadcast_blocked_by_someone_else_message">Someone else is already recording a voice broadcast. Wait for their voice broadcast to end to start a new one.</string>
     <string name="error_voice_broadcast_already_in_progress_message">You are already recording a voice broadcast. Please end your current voice broadcast to start a new one.</string>
+    <string name="error_voice_broadcast_unable_to_play">Unable to play this voice broadcast.</string>
+    <string name="error_voice_broadcast_no_connection_recording">Connection error - Recording paused</string>
     <!-- Examples of usage: 6h 15min 30sec left / 15min 30sec left / 30sec left -->
     <string name="voice_broadcast_recording_time_left">%1$s left</string>
     <string name="stop_voice_broadcast_dialog_title">Stop live broadcasting?</string>
@@ -3178,7 +3177,6 @@
         <item quantity="other">Final result based on %1$d votes</item>
     </plurals>
     <string name="poll_end_action">End poll</string>
-    <string name="a11y_poll_winner_option">winner option</string>
     <string name="end_poll_confirmation_title">End this poll?</string>
     <string name="end_poll_confirmation_description">This will stop people from being able to vote and will display the final results of the poll.</string>
     <string name="end_poll_confirmation_approve_button">End poll</string>
@@ -3192,10 +3190,23 @@
     <string name="open_poll_option_description">Voters see results as soon as they have voted</string>
     <string name="closed_poll_option_title">Closed poll</string>
     <string name="closed_poll_option_description">Results are only revealed when you end the poll</string>
+    <string name="ended_poll_indicator">Ended the poll.</string>
+    <string name="unable_to_decrypt_some_events_in_poll">Due to decryption errors, some votes may not be counted</string>
     <string name="room_polls_active">Active polls</string>
     <string name="room_polls_active_no_item">There are no active polls in this room</string>
+    <plurals name="room_polls_active_no_item_for_loaded_period">
+        <item quantity="one">"There are no active polls for the past day.\nLoad more polls to view polls for previous days."</item>
+        <item quantity="other">"There are no active polls for the past %1$d days.\nLoad more polls to view polls for previous days."</item>
+    </plurals>
     <string name="room_polls_ended">Past polls</string>
     <string name="room_polls_ended_no_item">There are no past polls in this room</string>
+    <plurals name="room_polls_ended_no_item_for_loaded_period">
+        <item quantity="one">"There are no past polls for the past day.\nLoad more polls to view polls for previous days."</item>
+        <item quantity="other">"There are no past polls for the past %1$d days.\nLoad more polls to view polls for previous days."</item>
+    </plurals>
+    <string name="room_polls_wait_for_display">Displaying polls</string>
+    <string name="room_polls_load_more">Load more polls</string>
+    <string name="room_polls_loading_error">Error fetching polls.</string>
 
     <!-- Location -->
     <string name="location_activity_title_static_sharing">Share location</string>
@@ -3411,8 +3422,6 @@
     <string name="device_manager_learn_more_sessions_unverified_title">Unverified sessions</string>
     <string name="device_manager_learn_more_sessions_unverified">Unverified sessions are sessions that have logged in with your credentials but not been cross-verified.\n\nYou should make especially certain that you recognise these sessions as they could represent an unauthorised use of your account.</string>
     <string name="device_manager_learn_more_sessions_verified_title">Verified sessions</string>
-    <!-- TODO TO BE REMOVED -->
-    <string name="device_manager_learn_more_sessions_verified" tools:ignore="UnusedResources">Verified sessions have logged in with your credentials and then been verified, either using your secure passphrase or by cross-verifying.\n\nThis means they hold encryption keys for your previous messages, and confirm to other users you are communicating with that these sessions are really you.</string>
     <string name="device_manager_learn_more_sessions_verified_description">Verified sessions are anywhere you are using this account after entering your passphrase or confirming your identity with another verified session.\n\nThis means that you have all the keys needed to unlock your encrypted messages and confirm to other users that you trust this session.</string>
     <string name="device_manager_learn_more_sessions_encryption_not_supported">This session doesn\'t support encryption, so it can\'t be verified.\n\nYou won\'t be able to participate in rooms where encryption is enabled when using this session.\n\nFor best security and privacy, it is recommended to use Matrix clients that support encryption.</string>
     <string name="device_manager_learn_more_session_rename_title">Renaming sessions</string>
@@ -3509,6 +3518,9 @@
     <string name="message_reply_to_sender_sent_video">sent a video.</string>
     <string name="message_reply_to_sender_sent_sticker">sent a sticker.</string>
     <string name="message_reply_to_sender_created_poll">created a poll.</string>
+    <string name="message_reply_to_sender_ended_poll">ended a poll.</string>
+    <string name="message_reply_to_poll_preview">Poll</string>
+    <string name="message_reply_to_ended_poll_preview">Ended poll</string>
 
     <string name="settings_access_token">Access Token</string>
     <string name="settings_access_token_summary">Your access token gives full access to your account. Do not share it with anyone.</string>

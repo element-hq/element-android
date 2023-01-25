@@ -49,7 +49,9 @@ value class VoiceBroadcastEvent(val root: Event) {
         get() = root.content.toModel()
 }
 
+fun Event.isVoiceBroadcast() = type == VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO
+
 /**
  * Map a [VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO] state event to a [VoiceBroadcastEvent].
  */
-fun Event.asVoiceBroadcastEvent() = if (type == VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO) VoiceBroadcastEvent(this) else null
+fun Event.asVoiceBroadcastEvent() = if (isVoiceBroadcast()) VoiceBroadcastEvent(this) else null

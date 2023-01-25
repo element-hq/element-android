@@ -37,7 +37,7 @@ ext.versionMinor = 5
 // Note: even values are reserved for regular release, odd values for hotfix release.
 // When creating a hotfix, you should decrease the value, since the current value
 // is the value for the next regular release.
-ext.versionPatch = 20
+ext.versionPatch = 22
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -232,7 +232,7 @@ android {
             resValue "color", "launcher_background", "#0DBD8B"
 
             if (project.hasProperty("coverage")) {
-                testCoverageEnabled = coverage.enableTestCoverage
+                testCoverageEnabled = coverage == "true"
             }
         }
 
@@ -403,8 +403,8 @@ dependencies {
     androidTestImplementation libs.mockk.mockkAndroid
     androidTestUtil libs.androidx.orchestrator
     androidTestImplementation libs.androidx.fragmentTesting
-    androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:1.7.22"
-    debugImplementation libs.androidx.fragmentTesting
+    androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:1.8.0"
+    debugImplementation libs.androidx.fragmentTestingManifest
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.10'
 }
 

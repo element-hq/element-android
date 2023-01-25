@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,37 +14,44 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.roomprofile.polls.list
+package im.vector.app.features.roomprofile.polls.list.ui
 
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.features.roomprofile.polls.PollSummary
+import im.vector.app.features.roomprofile.polls.RoomPollsViewState
+import java.util.UUID
 import javax.inject.Inject
 
 class RoomPollsController @Inject constructor(
         val dateFormatter: VectorDateFormatter,
         val stringProvider: StringProvider,
-) : TypedEpoxyController<List<PollSummary>>() {
+) : TypedEpoxyController<RoomPollsViewState>() {
 
     interface Listener {
         fun onPollClicked(pollId: String)
+        fun onLoadMoreClicked()
     }
 
     var listener: Listener? = null
 
-    override fun buildModels(data: List<PollSummary>?) {
-        if (data.isNullOrEmpty()) {
+    override fun buildModels(viewState: RoomPollsViewState?) {
+        val polls = viewState?.polls
+        if (polls.isNullOrEmpty() || viewState.isSyncing) {
             return
         }
 
-        for (poll in data) {
+        for (poll in polls) {
             when (poll) {
                 is PollSummary.ActivePoll -> buildActivePollItem(poll)
                 is PollSummary.EndedPoll -> buildEndedPollItem(poll)
             }
+        }
+
+        if (viewState.canLoadMore) {
+            buildLoadMoreItem(viewState.isLoadingMore)
         }
     }
 
@@ -70,6 +77,17 @@ class RoomPollsController @Inject constructor(
             totalVotesStatus(host.stringProvider.getQuantityString(R.plurals.poll_total_vote_count_after_ended, poll.totalVotes, poll.totalVotes))
             clickListener {
                 host.listener?.onPollClicked(poll.id)
+            }
+        }
+    }
+
+    private fun buildLoadMoreItem(isLoadingMore: Boolean) {
+        val host = this
+        roomPollLoadMoreItem {
+            id(UUID.randomUUID().toString())
+            loadingMore(isLoadingMore)
+            clickListener {
+                host.listener?.onLoadMoreClicked()
             }
         }
     }

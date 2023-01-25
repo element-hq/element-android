@@ -1785,8 +1785,6 @@ Errore hau ${app_name}-en kontroletik kanpo dago. Ez dago Google konturik gailua
 
     <string name="unencrypted">Zifratu gabe</string>
     <string name="encrypted_unverified">Egiaztatu gabeko gailu batek zifratua</string>
-    <string name="review_logins">Berrikusi non hasi duzun saioa</string>
-    <string name="verify_other_sessions">Egiaztatu zure saio guztiak kontua eta mezuak seguru daudela bermatzeko</string>
     <string name="verify_this_session">Egiaztatu zure kontuan hasitako saio berria: %1$s</string>
 
     <string name="cross_signing_verify_by_text">Egiaztatu eskuz testu bidez</string>

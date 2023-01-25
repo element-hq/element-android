@@ -30,4 +30,8 @@ class FakeRoomService(
     fun getRoomSummaryReturns(roomSummary: RoomSummary?) {
         every { getRoomSummary(any()) } returns roomSummary
     }
+
+    fun set(roomSummary: RoomSummary?) {
+        every { getRoomSummary(any()) } returns roomSummary
+    }
 }

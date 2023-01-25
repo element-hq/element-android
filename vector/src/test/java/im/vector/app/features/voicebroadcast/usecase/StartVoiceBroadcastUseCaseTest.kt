@@ -60,7 +60,8 @@ class StartVoiceBroadcastUseCaseTest {
                     context = FakeContext().instance,
                     buildMeta = mockk(),
                     getRoomLiveVoiceBroadcastsUseCase = fakeGetRoomLiveVoiceBroadcastsUseCase,
-                    stopVoiceBroadcastUseCase = mockk()
+                    stopVoiceBroadcastUseCase = mockk(),
+                    pauseVoiceBroadcastUseCase = mockk(),
             )
     )
 

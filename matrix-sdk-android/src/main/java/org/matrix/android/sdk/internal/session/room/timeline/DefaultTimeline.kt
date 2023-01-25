@@ -102,7 +102,6 @@ internal class DefaultTimeline(
             realm = backgroundRealm,
             eventDecryptor = eventDecryptor,
             paginationTask = paginationTask,
-            realmConfiguration = realmConfiguration,
             fetchTokenAndPaginateTask = fetchTokenAndPaginateTask,
             fetchThreadTimelineTask = fetchThreadTimelineTask,
             getContextOfEventTask = getEventTask,

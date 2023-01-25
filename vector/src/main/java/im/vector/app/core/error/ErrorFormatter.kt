@@ -20,6 +20,7 @@ import android.content.ActivityNotFoundException
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.call.dialpad.DialPadLookup
+import im.vector.app.features.roomprofile.polls.RoomPollsLoadingError
 import im.vector.app.features.voice.VoiceFailure
 import im.vector.app.features.voicebroadcast.VoiceBroadcastFailure
 import im.vector.app.features.voicebroadcast.VoiceBroadcastFailure.RecordingError
@@ -138,6 +139,7 @@ class DefaultErrorFormatter @Inject constructor(
                 stringProvider.getString(R.string.login_signin_matrix_id_error_invalid_matrix_id)
             is VoiceFailure -> voiceMessageError(throwable)
             is VoiceBroadcastFailure -> voiceBroadcastMessageError(throwable)
+            is RoomPollsLoadingError -> stringProvider.getString(R.string.room_polls_loading_error)
             is ActivityNotFoundException ->
                 stringProvider.getString(R.string.error_no_external_application_found)
             else -> throwable.localizedMessage
@@ -149,6 +151,7 @@ class DefaultErrorFormatter @Inject constructor(
         return when (throwable) {
             is VoiceFailure.UnableToPlay -> stringProvider.getString(R.string.error_voice_message_unable_to_play)
             is VoiceFailure.UnableToRecord -> stringProvider.getString(R.string.error_voice_message_unable_to_record)
+            is VoiceFailure.VoiceBroadcastInProgress -> stringProvider.getString(R.string.error_voice_message_broadcast_in_progress)
         }
     }
 
@@ -157,6 +160,7 @@ class DefaultErrorFormatter @Inject constructor(
             RecordingError.BlockedBySomeoneElse -> stringProvider.getString(R.string.error_voice_broadcast_blocked_by_someone_else_message)
             RecordingError.NoPermission -> stringProvider.getString(R.string.error_voice_broadcast_permission_denied_message)
             RecordingError.UserAlreadyBroadcasting -> stringProvider.getString(R.string.error_voice_broadcast_already_in_progress_message)
+            is VoiceBroadcastFailure.ListeningError -> stringProvider.getString(R.string.error_voice_broadcast_unable_to_play)
         }
     }
 

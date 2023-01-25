@@ -25,14 +25,10 @@ jobs:
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/cache@v3
+      - name: Configure gradle
+        uses: gradle/gradle-build-action@v2
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+          cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
       - name: Assemble ${{ matrix.target }} debug apk
         run: ./gradlew assemble${{ matrix.target }}Debug $CI_GRADLE_ARG_PROPERTIES
       - name: Upload ${{ matrix.target }} debug APKs
@@ -50,14 +46,10 @@ jobs:
       cancel-in-progress: ${{ github.ref != 'refs/head/main' }}
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/cache@v3
+      - name: Configure gradle
+        uses: gradle/gradle-build-action@v2
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+          cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
       - name: Assemble GPlay unsigned apk
         run: ./gradlew clean assembleGplayRelease $CI_GRADLE_ARG_PROPERTIES
       - name: Upload Gplay unsigned APKs

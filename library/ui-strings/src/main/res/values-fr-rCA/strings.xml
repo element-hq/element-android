@@ -640,8 +640,6 @@
     <string name="crosssigning_verify_session">Vérifier la connexion</string>
     <string name="cross_signing_verify_by_text">Vérifier manuellement avec un texte</string>
     <string name="verify_this_session">Vérifiez la nouvelle connexion accédant à votre compte : %1$s</string>
-    <string name="verify_other_sessions">Vérifiez toutes les sessions pour vous assurer que votre compte et vos messages sont en sécurité</string>
-    <string name="review_logins">Vérifiez où vous vous êtes connecté</string>
     <string name="encrypted_unverified">Chiffré par un appareil non vérifié</string>
     <string name="unencrypted">Non chiffré</string>
     <string name="default_message_emote_snow">envoie de la neige ❄️</string>

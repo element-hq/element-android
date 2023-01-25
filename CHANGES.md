@@ -1,3 +1,43 @@
+Changes in Element v1.5.22 (2023-01-25)
+=======================================
+
+Features ✨
+----------
+ - [Poll] Warning message on decryption failure of some events ([#7824](https://github.com/vector-im/element-android/issues/7824))
+ - [Poll] Render ended polls ([#7900](https://github.com/vector-im/element-android/issues/7900))
+ - [Rich text editor] Update list item bullet appearance ([#7930](https://github.com/vector-im/element-android/issues/7930))
+ - [Voice Broadcast] Handle connection errors while recording ([#7890](https://github.com/vector-im/element-android/issues/7890))
+ - [Voice Broadcast] Use MSC3912 to delete server side all the related events ([#7967](https://github.com/vector-im/element-android/issues/7967))
+
+Bugfixes 🐛
+----------
+- Fix OOM crashes. ([#7962](https://github.com/vector-im/element-android/issues/7962))
+- Fix can't get out of a verification dialog ([#4025](https://github.com/vector-im/element-android/issues/4025))
+- Fix rendering of edited polls ([#7938](https://github.com/vector-im/element-android/issues/7938))
+- [Voice Broadcast] Fix unexpected "live broadcast" in the room list ([#7832](https://github.com/vector-im/element-android/issues/7832))
+- Send voice message should not be allowed during a voice broadcast recording ([#7895](https://github.com/vector-im/element-android/issues/7895))
+- Voice Broadcast - Fix playback scrubbing not working if the playback is in a stopped state ([#7961](https://github.com/vector-im/element-android/issues/7961))
+- Handle exceptions when listening a voice broadcast ([#7829](https://github.com/vector-im/element-android/issues/7829))
+
+In development 🚧
+----------------
+ - [Voice Broadcast] Only display a notification on the first voice chunk ([#7845](https://github.com/vector-im/element-android/issues/7845))
+ - [Poll] History list: Load more UI mechanism ([#7864](https://github.com/vector-im/element-android/issues/7864))
+
+SDK API changes ⚠️
+------------------
+ - Implement [MSC3912](https://github.com/matrix-org/matrix-spec-proposals/pull/3912): Relation-based redactions ([#7988](https://github.com/vector-im/element-android/issues/7988))
+
+Other changes
+-------------
+ - Upgrade to Kotlin 1.8 ([#7936](https://github.com/vector-im/element-android/issues/7936))
+ - Sentry: Report sync duration and metrics for initial sync and for sync after pause. Not for regular sync. ([#7960](https://github.com/vector-im/element-android/issues/7960))
+ - [Voice Broadcast] Rework internal media players coordination ([#7979](https://github.com/vector-im/element-android/issues/7979))
+ - Support reactions on Voice Broadcast ([#7807](https://github.com/vector-im/element-android/issues/7807))
+ - Pause voice broadcast listening on new VB recording ([#7830](https://github.com/vector-im/element-android/issues/7830))
+ - Tapping slightly left or right of the 30s buttons highlights the whole cell instead of registering as button presses ([#7929](https://github.com/vector-im/element-android/issues/7929))
+
+
 Changes in Element v1.5.20 (2023-01-10)
 =======================================
 

@@ -19,7 +19,6 @@ package org.matrix.android.sdk.internal.session.room.timeline
 import io.realm.OrderedCollectionChangeSet
 import io.realm.OrderedRealmCollectionChangeListener
 import io.realm.Realm
-import io.realm.RealmConfiguration
 import io.realm.RealmResults
 import io.realm.kotlin.createObject
 import io.realm.kotlin.executeTransactionAwait
@@ -97,7 +96,6 @@ internal class LoadTimelineStrategy constructor(
             val realm: AtomicReference<Realm>,
             val eventDecryptor: TimelineEventDecryptor,
             val paginationTask: PaginationTask,
-            val realmConfiguration: RealmConfiguration,
             val fetchThreadTimelineTask: FetchThreadTimelineTask,
             val fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
             val getContextOfEventTask: GetContextOfEventTask,
@@ -351,7 +349,6 @@ internal class LoadTimelineStrategy constructor(
                     fetchThreadTimelineTask = dependencies.fetchThreadTimelineTask,
                     eventDecryptor = dependencies.eventDecryptor,
                     paginationTask = dependencies.paginationTask,
-                    realmConfiguration = dependencies.realmConfiguration,
                     fetchTokenAndPaginateTask = dependencies.fetchTokenAndPaginateTask,
                     timelineEventMapper = dependencies.timelineEventMapper,
                     uiEchoManager = uiEchoManager,
@@ -360,7 +357,6 @@ internal class LoadTimelineStrategy constructor(
                     initialEventId = mode.originEventId(),
                     onBuiltEvents = dependencies.onEventsUpdated,
                     onEventsDeleted = dependencies.onEventsDeleted,
-                    realm = dependencies.realm,
                     localEchoEventFactory = dependencies.localEchoEventFactory,
                     decorator = createTimelineEventDecorator()
             )

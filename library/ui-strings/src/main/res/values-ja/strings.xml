@@ -139,8 +139,8 @@
     <string name="settings_add_email_address">メールアドレスを追加</string>
     <string name="settings_add_phone_number">電話番号を追加</string>
     <string name="settings_notification_ringtone">通知音</string>
-    <string name="settings_enable_all_notif">このアカウントでは通知を有効にする</string>
-    <string name="settings_enable_this_device">このセッションでは通知を有効にする</string>
+    <string name="settings_enable_all_notif">このアカウントで通知を有効にする</string>
+    <string name="settings_enable_this_device">このセッションで通知を有効にする</string>
     <string name="settings_messages_in_one_to_one">1対1のチャットでのメッセージ</string>
     <string name="settings_messages_in_group_chat">グループチャットでのメッセージ</string>
     <string name="settings_invited_to_room">ルームへ招待されたとき</string>
@@ -526,7 +526,7 @@
     <string name="create_room_encryption_title">暗号化を有効にする</string>
     <string name="create_room_encryption_description">いったん有効にすると、暗号化を無効にすることはできません。</string>
     <string name="room_profile_section_security">セキュリティー</string>
-    <string name="room_profile_section_security_learn_more">詳しく知る</string>
+    <string name="room_profile_section_security_learn_more">詳細を表示</string>
     <string name="room_profile_section_more">その他の設定</string>
     <string name="room_profile_section_admin">管理者としての操作</string>
     <string name="room_profile_section_more_settings">ルームの設定</string>
@@ -1252,7 +1252,7 @@
     <string name="login_connect_to_modular">Element Matrix Servicesに接続</string>
     <string name="login_signin_matrix_id_title">Matrix IDでサインイン</string>
     <string name="login_connect_using_matrix_id_submit">Matrix IDでサインイン</string>
-    <string name="login_server_modular_learn_more">詳しく知る</string>
+    <string name="login_server_modular_learn_more">詳細を表示</string>
     <string name="login_server_other_title">その他</string>
     <string name="login_server_other_text">カスタムと高度な設定</string>
     <string name="login_server_url_form_modular_text">組織向けのプレミアムホスティング</string>
@@ -1845,8 +1845,8 @@
         <item quantity="other">%1$d個の投票があります。結果を見るには投票してください</item>
     </plurals>
     <string name="encrypted_unverified">未認証の端末で暗号化</string>
-    <string name="command_confetti">メッセージを紙吹雪と共に送る</string>
-    <string name="command_snow">メッセージを降雪と共に送る</string>
+    <string name="command_confetti">メッセージを紙吹雪と共に送信</string>
+    <string name="command_snow">メッセージを降雪と共に送信</string>
     <string name="default_message_emote_confetti">紙吹雪🎉を送る</string>
     <string name="default_message_emote_snow">降雪❄️を送る</string>
     <string name="ftue_auth_carousel_workplace_title">あなたのチームのメッセージングに。</string>
@@ -1930,7 +1930,6 @@
     <string name="this_space_has_no_rooms_not_admin">非公開で招待が必要なルームは表示されていません。
 \nルームを追加する権限はありません。</string>
     <string name="this_space_has_no_rooms_admin">非公開で招待が必要なルームは表示されていません。</string>
-    <string name="a11y_poll_winner_option">勝者</string>
     <string name="login_set_msisdn_notice">知人に見つけてもらえるように電話番号を設定できます。任意です。</string>
     <string name="message_key">メッセージキー</string>
     <string name="recovery_passphrase">復旧用のパスフレーズ</string>
@@ -2223,8 +2222,6 @@
     <string name="settings_security_pin_code_use_biometrics_summary_on">指紋や顔画像など、端末に固有の生体認証を有効にする。</string>
     <string name="cross_signing_verify_by_emoji">絵文字で認証</string>
     <string name="cross_signing_verify_by_text">テキストで認証</string>
-    <string name="verify_other_sessions">すべてのセッションを認証し、アカウントとメッセージが安全であることを確認してください</string>
-    <string name="review_logins">ログインしている場所を確認</string>
     <string name="bad_passphrase_key_reset_all_action">復旧用の手段を全て無くしてしまいましたか？全てリセットする</string>
     <string name="or_other_mx_capable_client">クロス署名に対応した他のMatrixのクライアントでも使用できます。</string>
     <string name="create_spaces_room_public_header">どのような議論を%sで行いたいですか？</string>
@@ -2443,7 +2440,7 @@
     <string name="home_layout_preferences">レイアウトの設定</string>
     <string name="action_got_it">了解</string>
     <string name="action_next">次へ</string>
-    <string name="action_learn_more">詳しく知る</string>
+    <string name="action_learn_more">詳細を表示</string>
     <string name="time_unit_second_short">秒</string>
     <string name="time_unit_minute_short">分</string>
     <string name="time_unit_hour_short">時</string>
@@ -2473,4 +2470,21 @@
     <string name="login_scan_qr_code">QRコードをスキャン</string>
     <string name="qr_code_login_header_scan_qr_code_title">QRコードをスキャン</string>
     <string name="qr_code_login_header_failed_invalid_qr_code_description">QRコードが不正です。</string>
+    <string name="space_list_empty_message">スペースは、ルームと連絡先をまとめる新しい方法です。はじめに、スペースを作成しましょう。</string>
+    <string name="home_layout_preferences_recents">最近の履歴を表示</string>
+    <string name="key_authenticity_not_guaranteed">この暗号化されたメッセージの信頼性はこの端末では保証できません。</string>
+    <string name="review_unverified_sessions_description">アカウントが安全かどうか確認してください</string>
+    <string name="review_unverified_sessions_title">未認証のセッションがあります</string>
+    <string name="room_list_filter_people">連絡先</string>
+    <string name="room_list_filter_favourites">お気に入り</string>
+    <string name="room_list_filter_unreads">未読あり</string>
+    <string name="room_list_filter_all">全て</string>
+    <string name="action_stop">はい、停止</string>
+    <string name="action_deselect_all">全ての選択を解除</string>
+    <string name="action_select_all">全て選択</string>
+    <string name="notice_voice_broadcast_ended_by_you">音声配信を終了しました。</string>
+    <string name="notice_voice_broadcast_ended">%1$sが音声配信を終了しました。</string>
+    <plurals name="x_selected">
+        <item quantity="other">%1$dを選択しました</item>
+    </plurals>
 </resources>

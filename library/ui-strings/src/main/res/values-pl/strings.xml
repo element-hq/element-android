@@ -665,7 +665,7 @@
     <string name="room_list_quick_actions_notifications_mute">Wycisz</string>
     <string name="room_list_quick_actions_settings">Ustawienia</string>
     <string name="no_ignored_users">Nie ignorujesz żadnych użytkowników</string>
-    <string name="seen_by">Widziany przez</string>
+    <string name="seen_by">Wyświetlono przez</string>
     <string name="settings_advanced_settings">Zaawansowane ustawienia</string>
     <string name="settings_developer_mode">Tryb programisty</string>
     <string name="settings">Ustawienia</string>
@@ -1553,8 +1553,6 @@
     <string name="cross_signing_verify_by_emoji">Interaktywna weryfikacja z wykorzystaniem emotikon</string>
     <string name="crosssigning_verify_session">Zweryfikuj logowanie</string>
     <string name="verify_this_session">Zweryfikuj nowe logowanie do swojego konta: %1$s</string>
-    <string name="verify_other_sessions">Sprawdź wszystkie swoje sesje żeby upewnić się, że Twoje konto oraz wiadomości są bezpieczne</string>
-    <string name="review_logins">Sprawdź gdzie jesteś zalogowany(-na)</string>
     <string name="encrypted_unverified">Zaszyfrowane przez niezweryfikowane urządzenie</string>
     <string name="unencrypted">Niezaszyfrowane</string>
     <plurals name="secure_backup_reset_devices_you_can_verify">
@@ -2514,7 +2512,6 @@
     <string name="open_poll_option_title">Otwarta ankieta</string>
     <string name="poll_type_title">Rodzaj ankiety</string>
     <string name="edit_poll_title">Modyfikacja ankiety</string>
-    <string name="a11y_poll_winner_option">opcja zwyciężająca</string>
     <string name="poll_no_votes_cast">Brak głosów</string>
     <string name="this_invite_to_this_space_was_sent">Zaproszenie do tej przestrzeni zostało wysłane do %s, które nie jest powiązane z Twoim kontem</string>
     <string name="this_invite_to_this_room_was_sent">Zaproszenie do tego pokoju zostało wysłane do %s, które nie jest powiązane z Twoim kontem</string>

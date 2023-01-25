@@ -58,6 +58,8 @@ private const val FEATURE_QR_CODE_LOGIN = "org.matrix.msc3882"
 private const val FEATURE_THREADS_MSC3771 = "org.matrix.msc3771"
 private const val FEATURE_THREADS_MSC3773 = "org.matrix.msc3773"
 private const val FEATURE_REMOTE_TOGGLE_PUSH_NOTIFICATIONS_MSC3881 = "org.matrix.msc3881"
+private const val FEATURE_EVENT_REDACTION_WITH_RELATIONS = "org.matrix.msc3912"
+private const val FEATURE_EVENT_REDACTION_WITH_RELATIONS_STABLE = "org.matrix.msc3912.stable"
 
 /**
  * Return true if the SDK supports this homeserver version.
@@ -152,4 +154,14 @@ private fun Versions.getMaxVersion(): HomeServerVersion {
  */
 internal fun Versions.doesServerSupportRemoteToggleOfPushNotifications(): Boolean {
     return unstableFeatures?.get(FEATURE_REMOTE_TOGGLE_PUSH_NOTIFICATIONS_MSC3881).orFalse()
+}
+
+/**
+ * Indicate if the server supports MSC3912: https://github.com/matrix-org/matrix-spec-proposals/pull/3912.
+ *
+ * @return true if event redaction with relations is supported
+ */
+internal fun Versions.doesServerSupportRedactEventWithRelations(): Boolean {
+    return unstableFeatures?.get(FEATURE_EVENT_REDACTION_WITH_RELATIONS).orFalse() ||
+            unstableFeatures?.get(FEATURE_EVENT_REDACTION_WITH_RELATIONS_STABLE).orFalse()
 }

@@ -167,7 +167,7 @@ printf "Building the app...\n"
 ./gradlew assembleGplayDebug
 
 printf "\n================================================================================\n"
-printf "Uninstalling previous test app if any...\n"
+printf "Uninstalling previous debug app if any...\n"
 adb -e uninstall im.vector.app.debug
 
 printf "\n================================================================================\n"
@@ -359,9 +359,9 @@ adb -d install ${apkPath}
 read -p "Please run the APK on your phone to check that the upgrade went well (no init sync, etc.). Press enter when it's done."
 
 printf "\n================================================================================\n"
-githubCreateReleaseLink="https://github.com/vector-im/element-android/releases/new?tag=v${version}&title=Element%%20Android%%20v${version}&body=${changelogUrlEncoded}"
+githubCreateReleaseLink="https://github.com/vector-im/element-android/releases/new?tag=v${version}&title=Element%20Android%20v${version}&body=${changelogUrlEncoded}"
 printf "Creating the release on gitHub.\n"
-printf "Open this link: ${githubCreateReleaseLink}\n"
+printf -- "Open this link: %s\n" ${githubCreateReleaseLink}
 printf "Then\n"
 printf " - click on the 'Generate releases notes' button\n"
 printf " - Add the 4 signed APKs to the GitHub release. They are located at ${targetPath}\n"
@@ -369,7 +369,7 @@ read -p ". Press enter when it's done. "
 
 printf "\n================================================================================\n"
 printf "Message for the Android internal room:\n\n"
-message="@room Element Android ${version} is ready to be tested. You can get if from https://github.com/vector-im/element-android/releases/tag/v${version}. Please report any feedback here. Thanks!"
+message="@room Element Android ${version} is ready to be tested. You can get it from https://github.com/vector-im/element-android/releases/tag/v${version}. Please report any feedback here. Thanks!"
 printf "${message}\n\n"
 
 if [[ -z "${elementBotToken}" ]]; then

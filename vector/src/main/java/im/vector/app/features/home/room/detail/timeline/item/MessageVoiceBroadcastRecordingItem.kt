@@ -17,6 +17,8 @@
 package im.vector.app.features.home.room.detail.timeline.item
 
 import android.widget.ImageButton
+import android.widget.TextView
+import androidx.constraintlayout.widget.Group
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
@@ -55,11 +57,11 @@ abstract class MessageVoiceBroadcastRecordingItem : AbsMessageVoiceBroadcastItem
     }
 
     override fun renderLiveIndicator(holder: Holder) {
-        when (voiceBroadcastState) {
-            VoiceBroadcastState.STARTED,
-            VoiceBroadcastState.RESUMED -> renderPlayingLiveIndicator(holder)
-            VoiceBroadcastState.PAUSED -> renderPausedLiveIndicator(holder)
-            VoiceBroadcastState.STOPPED, null -> renderNoLiveIndicator(holder)
+        when (recorder?.recordingState) {
+            VoiceBroadcastRecorder.State.Recording -> renderPlayingLiveIndicator(holder)
+            VoiceBroadcastRecorder.State.Error,
+            VoiceBroadcastRecorder.State.Paused -> renderPausedLiveIndicator(holder)
+            VoiceBroadcastRecorder.State.Idle, null -> renderNoLiveIndicator(holder)
         }
     }
 
@@ -85,7 +87,9 @@ abstract class MessageVoiceBroadcastRecordingItem : AbsMessageVoiceBroadcastItem
             VoiceBroadcastRecorder.State.Recording -> renderRecordingState(holder)
             VoiceBroadcastRecorder.State.Paused -> renderPausedState(holder)
             VoiceBroadcastRecorder.State.Idle -> renderStoppedState(holder)
+            VoiceBroadcastRecorder.State.Error -> renderErrorState(holder, true)
         }
+        renderLiveIndicator(holder)
     }
 
     private fun renderVoiceBroadcastState(holder: Holder) {
@@ -101,6 +105,7 @@ abstract class MessageVoiceBroadcastRecordingItem : AbsMessageVoiceBroadcastItem
     private fun renderRecordingState(holder: Holder) = with(holder) {
         stopRecordButton.isEnabled = true
         recordButton.isEnabled = true
+        renderErrorState(holder, false)
 
         val drawableColor = colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
         val drawable = drawableProvider.getDrawable(R.drawable.ic_play_pause_pause, drawableColor)
@@ -113,6 +118,7 @@ abstract class MessageVoiceBroadcastRecordingItem : AbsMessageVoiceBroadcastItem
     private fun renderPausedState(holder: Holder) = with(holder) {
         stopRecordButton.isEnabled = true
         recordButton.isEnabled = true
+        renderErrorState(holder, false)
 
         recordButton.setImageResource(R.drawable.ic_recording_dot)
         recordButton.contentDescription = holder.view.resources.getString(R.string.a11y_resume_voice_broadcast_record)
@@ -123,6 +129,12 @@ abstract class MessageVoiceBroadcastRecordingItem : AbsMessageVoiceBroadcastItem
     private fun renderStoppedState(holder: Holder) = with(holder) {
         recordButton.isEnabled = false
         stopRecordButton.isEnabled = false
+        renderErrorState(holder, false)
+    }
+
+    private fun renderErrorState(holder: Holder, isOnError: Boolean) = with(holder) {
+        controlsGroup.isVisible = !isOnError
+        errorView.isVisible = isOnError
     }
 
     override fun unbind(holder: Holder) {
@@ -142,6 +154,8 @@ abstract class MessageVoiceBroadcastRecordingItem : AbsMessageVoiceBroadcastItem
         val remainingTimeMetadata by bind<VoiceBroadcastMetadataView>(R.id.remainingTimeMetadata)
         val recordButton by bind<ImageButton>(R.id.recordButton)
         val stopRecordButton by bind<ImageButton>(R.id.stopRecordButton)
+        val errorView by bind<TextView>(R.id.errorView)
+        val controlsGroup by bind<Group>(R.id.controlsGroup)
     }
 
     companion object {

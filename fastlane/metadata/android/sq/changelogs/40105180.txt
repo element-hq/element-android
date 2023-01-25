@@ -1,0 +1,2 @@
+Ndryshimet kryesore në këtë version: Tanimë rrjedhat janë të aktivizuara si parazgjedhje.
+Regjistër i plotë ndryshimesh: https://github.com/vector-im/element-android/releases
