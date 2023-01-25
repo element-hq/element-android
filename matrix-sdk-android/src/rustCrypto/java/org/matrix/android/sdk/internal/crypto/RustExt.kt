@@ -24,9 +24,8 @@ fun InnerVerificationState.fromInner(): MessageVerificationState {
         InnerVerificationState.VERIFIED -> MessageVerificationState.VERIFIED
         InnerVerificationState.SIGNED_DEVICE_OF_UNVERIFIED_USER -> MessageVerificationState.SIGNED_DEVICE_OF_UNVERIFIED_USER
         InnerVerificationState.UN_SIGNED_DEVICE_OF_VERIFIED_USER -> MessageVerificationState.UN_SIGNED_DEVICE_OF_VERIFIED_USER
-        InnerVerificationState.UN_SIGNED_DEVICE -> MessageVerificationState.UN_SIGNED_DEVICE
+        InnerVerificationState.UN_SIGNED_DEVICE_OF_UNVERIFIED_USER -> MessageVerificationState.UN_SIGNED_DEVICE
         InnerVerificationState.UNKNOWN_DEVICE -> MessageVerificationState.UNKNOWN_DEVICE
         InnerVerificationState.UNSAFE_SOURCE -> MessageVerificationState.UNSAFE_SOURCE
-        InnerVerificationState.MISMATCH -> MessageVerificationState.MISMATCH
     }
 }

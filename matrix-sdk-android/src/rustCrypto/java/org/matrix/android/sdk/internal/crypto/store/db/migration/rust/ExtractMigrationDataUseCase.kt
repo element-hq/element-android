@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.crypto.store.db.migration.rust
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.kotlin.where
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.internal.crypto.store.db.deserializeFromRealm
 import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoMetadataEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.OlmInboundGroupSessionEntity
@@ -33,14 +34,15 @@ import org.matrix.rustcomponents.sdk.crypto.PickledInboundGroupSession
 import org.matrix.rustcomponents.sdk.crypto.PickledSession
 import timber.log.Timber
 import java.nio.charset.Charset
+import kotlin.system.measureTimeMillis
 
 private val charset = Charset.forName("UTF-8")
 
 internal class ExtractMigrationDataUseCase {
 
-    fun extractData(realm: Realm): MigrationData {
+    fun extractData(realm: Realm, importPartial: ((MigrationData) -> Unit)): MigrationData {
         return try {
-            extract(realm) ?: throw ExtractMigrationDataFailure
+            extract(realm, importPartial) ?: throw ExtractMigrationDataFailure
         } catch (failure: Throwable) {
             throw ExtractMigrationDataFailure
         }
@@ -55,17 +57,12 @@ internal class ExtractMigrationDataUseCase {
         }
     }
 
-    private fun extract(realm: Realm): MigrationData? {
+    private fun extract(realm: Realm, importPartial: ((MigrationData) -> Unit)): MigrationData? {
         val metadataEntity = realm.where<CryptoMetadataEntity>().findFirst() ?: return null.also {
             Timber.w("Rust db migration: No existing metadataEntity")
         }
 
         val pickleKey = OlmUtility.getRandomKey()
-        val olmSessionEntities = realm.where<OlmSessionEntity>().findAll()
-        val pickledSessions = olmSessionEntities.map { it.toPickledSession(pickleKey) }
-
-        val inboundGroupSessionEntities = realm.where<OlmInboundGroupSessionEntity>().findAll()
-        val pickledInboundGroupSessions = inboundGroupSessionEntities.mapNotNull { it.toPickledInboundGroupSession(pickleKey) }
 
         val masterKey = metadataEntity.xSignMasterPrivateKey
         val userKey = metadataEntity.xSignUserPrivateKey
@@ -76,14 +73,11 @@ internal class ExtractMigrationDataUseCase {
         val backupVersion = metadataEntity.backupVersion
         val backupRecoveryKey = metadataEntity.keyBackupRecoveryKey
 
-        val trackedUserEntities = realm.where<UserEntity>().findAll()
-        val trackedUserIds = trackedUserEntities.mapNotNull {
-            it.userId
-        }
         val isOlmAccountShared = metadataEntity.deviceKeysSentToServer
 
         val olmAccount = metadataEntity.getOlmAccount() ?: return null
         val pickledOlmAccount = olmAccount.pickle(pickleKey, StringBuffer()).asString()
+        olmAccount.oneTimeKeys()
         val pickledAccount = PickledAccount(
                 userId = userId,
                 deviceId = deviceId,
@@ -91,20 +85,90 @@ internal class ExtractMigrationDataUseCase {
                 shared = isOlmAccountShared,
                 uploadedSignedKeyCount = 50
         )
-        return MigrationData(
+
+        val baseExtract = MigrationData(
                 account = pickledAccount,
-                sessions = pickledSessions,
-                inboundGroupSessions = pickledInboundGroupSessions,
                 pickleKey = pickleKey.map { it.toUByte() },
-                backupVersion = backupVersion,
-                backupRecoveryKey = backupRecoveryKey,
                 crossSigning = CrossSigningKeyExport(
                         masterKey = masterKey,
                         selfSigningKey = selfSignedKey,
                         userSigningKey = userKey
                 ),
-                trackedUsers = trackedUserIds
+                sessions = emptyList(),
+                backupRecoveryKey = backupRecoveryKey,
+                trackedUsers = emptyList(),
+                inboundGroupSessions = emptyList(),
+                backupVersion = backupVersion,
         )
+        // import the account asap
+        importPartial(baseExtract)
+
+        val chunkSize = 500
+        realm.where<UserEntity>()
+                .findAll()
+                .chunked(chunkSize) { chunk ->
+                    val trackedUserIds = chunk.mapNotNull { it.userId }
+                    importPartial(
+                            baseExtract.copy(trackedUsers = trackedUserIds)
+                    )
+                }
+
+        var migratedOlmSessionCount = 0
+        var readTime = 0L
+        var writeTime = 0L
+        measureTimeMillis {
+            realm.where<OlmSessionEntity>().findAll()
+                    .chunked(chunkSize) { chunk ->
+                        migratedOlmSessionCount += chunk.size
+                        val export: List<PickledSession>
+                        measureTimeMillis {
+                            export = chunk.map { it.toPickledSession(pickleKey) }
+                        }.also {
+                            readTime += it
+                        }
+                        measureTimeMillis {
+                            importPartial(
+                                    baseExtract.copy(sessions = export)
+                            )
+                        }.also { writeTime += it }
+                    }
+        }.also {
+            Timber.i("Migration: took $it ms to migrate $migratedOlmSessionCount olm sessions")
+            Timber.i("Migration: extract time $readTime")
+            Timber.i("Migration: rust import time $writeTime")
+        }
+
+        // We don't migrate outbound session directly after migration
+        // We are going to do it lazyly when decryption fails
+//        var migratedInboundGroupSessionCount = 0
+//        readTime = 0
+//        writeTime = 0
+//        measureTimeMillis {
+//        realm.where<OlmInboundGroupSessionEntity>()
+//                .findAll()
+//                .chunked(chunkSize) { chunk ->
+//                    val export: List<PickledInboundGroupSession>
+//                    measureTimeMillis {
+//                        export = chunk.mapNotNull { it.toPickledInboundGroupSession(pickleKey) }
+//                    }.also {
+//                        readTime += it
+//                    }
+//                    migratedInboundGroupSessionCount+=export.size
+//                    measureTimeMillis {
+//                        importPartial(
+//                                baseExtract.copy(inboundGroupSessions = export)
+//                        )
+//                    }.also {
+//                        writeTime += it
+//                    }
+//                }
+//        }.also {
+//            Timber.i("Migration: took $it ms to migrate $migratedInboundGroupSessionCount group sessions")
+//            Timber.i("Migration: extract time $readTime")
+//            Timber.i("Migration: rust import time $writeTime")
+//        }
+
+        return baseExtract
     }
 
     private fun OlmInboundGroupSessionEntity.toPickledInboundGroupSession(pickleKey: ByteArray): PickledInboundGroupSession? {
@@ -126,7 +190,7 @@ internal class ExtractMigrationDataUseCase {
                 signingKey = data.keysClaimed.orEmpty(),
                 roomId = roomId,
                 forwardingChains = data.forwardingCurve25519KeyChain.orEmpty(),
-                imported = true,
+                imported = data.trusted.orFalse().not(),
                 backedUp = backedUp
         )
     }

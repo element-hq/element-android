@@ -36,6 +36,8 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.uia.UiaResult
 import org.matrix.android.sdk.internal.auth.registration.handleUIA
+import org.matrix.android.sdk.internal.crypto.InboundGroupSessionStore
+import org.matrix.android.sdk.internal.crypto.OlmMachine
 import org.matrix.android.sdk.internal.crypto.PerSessionBackupQueryRateLimiter
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.BackupKeysResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.CreateKeysBackupVersionBody
@@ -100,7 +102,9 @@ internal class RequestSender @Inject constructor(
         private val moshi: Moshi,
         cryptoCoroutineScope: CoroutineScope,
         private val rateLimiter: PerSessionBackupQueryRateLimiter,
-        private val localEchoRepository: LocalEchoRepository
+        private val inboundGroupSessionStore: InboundGroupSessionStore,
+        private val localEchoRepository: LocalEchoRepository,
+        private val olmMachine: Lazy<OlmMachine>,
 ) {
 
     private val scope = CoroutineScope(
@@ -259,8 +263,13 @@ internal class RequestSender @Inject constructor(
                                 val requestBody = hashMap["body"] as? Map<*, *>
                                 val roomId = requestBody?.get("room_id") as? String
                                 val sessionId = requestBody?.get("session_id") as? String
+                                val senderKey = requestBody?.get("sender_key") as? String
                                 if (roomId != null && sessionId != null) {
-                                    rateLimiter.tryFromBackupIfPossible(sessionId, roomId)
+                                    // try to perform a lazy migration from legacy store
+                                    val legacy = inboundGroupSessionStore.getInboundGroupSession(sessionId, senderKey.orEmpty())
+                                    if (legacy == null || olmMachine.get().importRoomKey(legacy).isFailure) {
+                                        rateLimiter.tryFromBackupIfPossible(sessionId, roomId)
+                                    }
                                 }
                             }
                         }

@@ -99,9 +99,11 @@ import org.matrix.android.sdk.internal.session.typing.DefaultTypingUsersTracker
 import org.matrix.android.sdk.internal.session.user.accountdata.DefaultSessionAccountDataService
 import org.matrix.android.sdk.internal.session.widgets.DefaultWidgetURLFormatter
 import retrofit2.Retrofit
+import timber.log.Timber
 import java.io.File
 import javax.inject.Provider
 import javax.inject.Qualifier
+import kotlin.system.measureTimeMillis
 
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
@@ -189,7 +191,13 @@ internal abstract class SessionModule {
                 @CryptoDatabase realmConfiguration: RealmConfiguration,
         ): File {
             val target = File(parent, "rustFlavor")
-            return MigrateEAtoEROperation().execute(realmConfiguration, target)
+            val file: File
+            measureTimeMillis {
+                file = MigrateEAtoEROperation().execute(realmConfiguration, target)
+            }.let { duration ->
+                Timber.v("Migrating to ER in $duration ms")
+            }
+            return file
         }
 
         @JvmStatic

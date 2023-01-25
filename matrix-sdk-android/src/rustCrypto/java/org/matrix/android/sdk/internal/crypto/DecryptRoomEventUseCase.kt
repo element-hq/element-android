@@ -30,7 +30,7 @@ internal class DecryptRoomEventUseCase @Inject constructor(private val olmMachin
 
     suspend fun decryptAndSaveResult(event: Event) {
         tryOrNull(message = "Unable to decrypt the event") {
-            olmMachine.decryptRoomEvent(event)
+            invoke(event)
         }
                 ?.let { result ->
                     event.mxDecryptionResult = OlmDecryptionResult(

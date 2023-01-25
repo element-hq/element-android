@@ -25,14 +25,14 @@ import java.io.File
 
 class MigrateEAtoEROperation {
 
-    fun execute(cryptoRealm: RealmConfiguration, sessionFilesDir: File): File {
+    fun execute(cryptoRealm: RealmConfiguration, rustFilesDir: File): File {
         // Temporary code for migration
-        if (!sessionFilesDir.exists()) {
-            sessionFilesDir.mkdir()
+        if (!rustFilesDir.exists()) {
+            rustFilesDir.mkdir()
             // perform a migration?
             val extractMigrationData = ExtractMigrationDataUseCase()
             val hasExitingData = extractMigrationData.hasExistingData(cryptoRealm)
-            if (!hasExitingData) return sessionFilesDir
+            if (!hasExitingData) return rustFilesDir
 
             try {
                 val progressListener = object : ProgressListener {
@@ -42,14 +42,15 @@ class MigrateEAtoEROperation {
                 }
 
                 Realm.getInstance(cryptoRealm).use { realm ->
-                    val migrationData = extractMigrationData.extractData(realm)
-                    org.matrix.rustcomponents.sdk.crypto.migrate(migrationData, sessionFilesDir.path, null, progressListener)
+                    extractMigrationData.extractData(realm) {
+                        org.matrix.rustcomponents.sdk.crypto.migrate(it, rustFilesDir.path, null, progressListener)
+                    }
                 }
             } catch (failure: Throwable) {
                 Timber.e(failure, "Failure while calling rust migration method")
                 throw failure
             }
         }
-        return sessionFilesDir
+        return rustFilesDir
     }
 }

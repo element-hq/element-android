@@ -25,7 +25,6 @@ enum class MessageVerificationState {
     UN_SIGNED_DEVICE,
     UNKNOWN_DEVICE,
     UNSAFE_SOURCE,
-    MISMATCH,
 }
 
 /**

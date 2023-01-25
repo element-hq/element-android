@@ -864,7 +864,8 @@ internal class MXOlmDevice @Inject constructor(
             } else {
                 val isDeviceOwnerOfSession = sessionHolder.wrapper.sessionData.keysClaimed?.get("ed25519") == sendingDevice.fingerprint()
                 if (!isDeviceOwnerOfSession) {
-                    MessageVerificationState.MISMATCH
+                    // should it fail to decrypt here?
+                    MessageVerificationState.UNSAFE_SOURCE
                 } else if (sendingDevice.isVerified) {
                     MessageVerificationState.VERIFIED
                 } else {

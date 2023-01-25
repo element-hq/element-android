@@ -129,9 +129,14 @@ internal class OlmMachine @Inject constructor(
         private val getUserIdentity: GetUserIdentityUseCase,
         private val ensureUsersKeys: EnsureUsersKeysUseCase,
         private val matrixConfiguration: MatrixConfiguration,
+        private val megolmSessionImportManager: MegolmSessionImportManager,
 ) {
 
-    private val inner: InnerMachine = InnerMachine(userId, deviceId, path.toString(), null)
+    private val inner: InnerMachine
+
+    init {
+        inner = InnerMachine(userId, deviceId, path.toString(), null)
+    }
 
     private val flowCollectors = FlowCollectors()
 
@@ -310,6 +315,22 @@ internal class OlmMachine @Inject constructor(
                 .adapter(Event::class.java)
         val serializedEvent = adapter.toJson(event)
         inner.receiveVerificationEvent(serializedEvent, roomId)
+    }
+
+    /**
+     * Used for lazy migration of inboundGroupSession from EA to ER
+     */
+    suspend fun importRoomKey(inbound: InboundGroupSessionHolder): Result<Unit> {
+        Timber.v("Migration:: Tentative lazy migration")
+        return withContext(coroutineDispatchers.io) {
+            val export = inbound.wrapper.exportKeys()
+                    ?: return@withContext Result.failure(Exception("Failed to export key"))
+            val result = importDecryptedKeys(listOf(export), null).also {
+                Timber.v("Migration:: Tentative lazy migration result: ${it.totalNumberOfKeys}")
+            }
+            if (result.totalNumberOfKeys == 1) return@withContext Result.success(Unit)
+            return@withContext Result.failure(Exception("Import failed"))
+        }
     }
 
     /**
@@ -567,7 +588,9 @@ internal class OlmMachine @Inject constructor(
                                 details.putAll(it.keys)
                             }
                         }
-                ImportRoomKeysResult(totalImported.toInt(), accTotal.toInt(), details)
+                ImportRoomKeysResult(totalImported.toInt(), accTotal.toInt(), details).also {
+                    megolmSessionImportManager.dispatchKeyImportResults(it)
+                }
             }
 
     @Throws(CryptoStoreException::class)

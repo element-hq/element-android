@@ -26,7 +26,6 @@ import im.vector.app.features.home.room.detail.timeline.item.MessageInformationD
 import im.vector.app.features.home.room.detail.timeline.item.ReferencesInfoData
 import im.vector.app.features.home.room.detail.timeline.item.SendStateDecoration
 import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayoutFactory
-import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.model.MessageVerificationState
@@ -75,11 +74,9 @@ class MessageInformationDataFactory @Inject constructor(
                 prevDisplayableEvent?.root?.localDateTime()?.toLocalDate() != date.toLocalDate()
 
         val time = dateFormatter.format(event.root.originServerTs, DateFormatKind.MESSAGE_SIMPLE)
-//        val e2eDecoration = runBlocking {
-//            getE2EDecoration(roomSummary, params.lastEdit ?: event.root)
-//        }
         val e2eDecoration = getE2EDecorationV2(roomSummary, params.lastEdit ?: event.root)
-        val senderId = runBlocking { getSenderId(event) }
+        // this is claimed data or not depending on the e2e decoration
+        val senderId = event.senderInfo.userId
         // SendState Decoration
         val sendStateDecoration = if (isSentByMe) {
             getSendStateDecoration(
@@ -168,7 +165,6 @@ class MessageInformationDataFactory @Inject constructor(
             MessageVerificationState.UN_SIGNED_DEVICE ->  E2EDecoration.NONE
             MessageVerificationState.UNKNOWN_DEVICE -> E2EDecoration.WARN_SENT_BY_DELETED_SESSION
             MessageVerificationState.UNSAFE_SOURCE -> E2EDecoration.WARN_UNSAFE_KEY
-            MessageVerificationState.MISMATCH -> E2EDecoration.WARN_UNSAFE_KEY
             null -> {
                 // No verification state.
                 // So could be a clear event, or a legacy decryption, or an UTD event
