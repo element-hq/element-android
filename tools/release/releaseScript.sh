@@ -167,7 +167,7 @@ printf "Building the app...\n"
 ./gradlew assembleGplayDebug
 
 printf "\n================================================================================\n"
-printf "Uninstalling previous test app if any...\n"
+printf "Uninstalling previous debug app if any...\n"
 adb -e uninstall im.vector.app.debug
 
 printf "\n================================================================================\n"
