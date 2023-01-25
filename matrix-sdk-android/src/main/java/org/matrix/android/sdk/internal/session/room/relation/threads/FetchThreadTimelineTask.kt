@@ -17,7 +17,6 @@ package org.matrix.android.sdk.internal.session.room.relation.threads
 
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
-import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
@@ -136,9 +135,7 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
             if (!isRootThreadTimelineEventEntityKnown) {
                 // Fetch the root event from the server
                 threadRootEvent = tryOrNull {
-                    runBlocking {
                         getEventTask.execute(GetEventTask.Params(roomId = params.roomId, eventId = params.rootThreadEventId))
-                    }
                 }
             }
         }
