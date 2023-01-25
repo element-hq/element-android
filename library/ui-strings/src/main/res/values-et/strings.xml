@@ -2909,4 +2909,5 @@
     <string name="room_polls_loading_error">Viga küsitluste laadimisel.</string>
     <string name="error_voice_message_broadcast_in_progress">Häälsõnumi esitamine ei õnnestu</string>
     <string name="error_voice_message_broadcast_in_progress_message">Kuna sa hetkel salvestad ringhäälingukõnet, siis häälsõnumi salvestamine või esitamine ei õnnestu. Selleks palun lõpeta ringhäälingukõne</string>
+    <string name="error_voice_broadcast_no_connection_recording">Viga võrguühenduses - salvestamine on peatatud</string>
 </resources>
