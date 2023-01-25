@@ -18,6 +18,7 @@ package im.vector.app.core.di
 
 import android.content.Context
 import im.vector.app.ActiveSessionDataSource
+import im.vector.app.core.dispatchers.CoroutineDispatchers
 import im.vector.app.core.pushers.UnregisterUnifiedPushUseCase
 import im.vector.app.core.services.GuardServiceStarter
 import im.vector.app.core.session.ConfigureAndStartSessionUseCase
@@ -26,7 +27,10 @@ import im.vector.app.features.crypto.keysrequest.KeyRequestHandler
 import im.vector.app.features.crypto.verification.IncomingVerificationRequestHandler
 import im.vector.app.features.notifications.PushRuleTriggerListener
 import im.vector.app.features.session.SessionListener
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.util.Optional
@@ -51,6 +55,8 @@ class ActiveSessionHolder @Inject constructor(
         private val authenticationService: AuthenticationService,
         private val configureAndStartSessionUseCase: ConfigureAndStartSessionUseCase,
         private val unregisterUnifiedPushUseCase: UnregisterUnifiedPushUseCase,
+        private val applicationCoroutineScope: CoroutineScope,
+        private val coroutineDispatchers: CoroutineDispatchers,
 ) {
 
     private var activeSessionReference: AtomicReference<Session?> = AtomicReference()
@@ -94,6 +100,13 @@ class ActiveSessionHolder @Inject constructor(
 
     fun getSafeActiveSession(): Session? {
         return runBlocking { getOrInitializeSession() }
+    }
+
+    fun getSafeActiveSessionAsync(withSession: ((Session?) -> Unit)) {
+        applicationCoroutineScope.launch(coroutineDispatchers.io) {
+            val session = getOrInitializeSession()
+            withSession(session)
+        }
     }
 
     fun getActiveSession(): Session {

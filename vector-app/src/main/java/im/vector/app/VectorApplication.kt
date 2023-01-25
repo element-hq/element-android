@@ -190,9 +190,12 @@ class VectorApplication :
             override fun onResume(owner: LifecycleOwner) {
                 Timber.i("App entered foreground")
                 fcmHelper.onEnterForeground(activeSessionHolder)
-                activeSessionHolder.getSafeActiveSession()?.also {
-                    it.syncService().stopAnyBackgroundSync()
+                activeSessionHolder.getSafeActiveSessionAsync {
+                    it?.syncService()?.stopAnyBackgroundSync()
                 }
+//                activeSessionHolder.getSafeActiveSession()?.also {
+//                    it.syncService().stopAnyBackgroundSync()
+//                }
             }
 
             override fun onPause(owner: LifecycleOwner) {
