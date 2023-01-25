@@ -560,7 +560,7 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
 
             VectorPreferences.SETTINGS_P2P_SELF_RELAY_URI -> {
                 val uri = vectorPreferences.p2pSelfRelayURI()
-                m.setRelayServer(m.publicKey(), uri)
+                m.setRelayServers(m.publicKey(), uri)
             }
 
             VectorPreferences.SETTINGS_P2P_BLE_CODED_PHY -> {
@@ -580,6 +580,14 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
 
     fun registerDevice(userID: String): String {
         return monolith?.registerDevice(userID, "P2P") ?: ""
+    }
+
+    fun assignRelayServers(userID: String, relayServers: String) {
+        monolith?.setRelayServers(userID, relayServers)
+    }
+
+    fun getRelayServers(userID: String): String {
+        return monolith?.getRelayServers(userID) ?: ""
     }
 
     private fun serviceNotification(): Notification {

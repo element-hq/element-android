@@ -17,6 +17,12 @@
 
 package im.vector.app.features.roommemberprofile
 
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
+import android.os.IBinder
+import android.widget.Toast
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
@@ -31,6 +37,7 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.services.DendriteService
 import im.vector.app.features.createdirect.DirectRoomHelper
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
@@ -42,6 +49,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
@@ -61,9 +69,11 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
+import timber.log.Timber
 
 class RoomMemberProfileViewModel @AssistedInject constructor(
         @Assisted private val initialState: RoomMemberProfileViewState,
+        private val applicationContext: Context,
         private val stringProvider: StringProvider,
         private val matrixItemColorProvider: MatrixItemColorProvider,
         private val directRoomHelper: DirectRoomHelper,
@@ -128,6 +138,22 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
                 .execute {
                     copy(userMXCrossSigningInfo = it.invoke()?.getOrNull())
                 }
+
+        val dendriteConnection = object : ServiceConnection {
+            override fun onServiceConnected(className: ComponentName, service: IBinder) {
+                val binder = service as DendriteService.DendriteLocalBinder
+                val dendrite = binder.getService()
+                val relayServers = dendrite.getRelayServers(initialState.userId)
+                setState { copy(userRelayServers = relayServers) }
+            }
+
+            override fun onServiceDisconnected(className: ComponentName) {
+            }
+        }
+
+        Intent(applicationContext, DendriteService::class.java).also { intent ->
+            applicationContext.bindService(intent, dendriteConnection, Context.BIND_AUTO_CREATE)
+        }
     }
 
     private fun observeAccountData() {
@@ -168,6 +194,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
             is RoomMemberProfileAction.KickUser -> handleKickAction(action)
             RoomMemberProfileAction.InviteUser -> handleInviteAction()
             is RoomMemberProfileAction.SetUserColorOverride -> handleSetUserColorOverride(action)
+            is RoomMemberProfileAction.SetUserRelayServers -> handleSetUserRelayServers(action)
             is RoomMemberProfileAction.OpenOrCreateDm -> handleOpenOrCreateDm(action)
         }
     }
@@ -211,6 +238,26 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
             } catch (failure: Throwable) {
                 _viewEvents.post(RoomMemberProfileViewEvents.Failure(failure))
             }
+        }
+    }
+
+    private fun handleSetUserRelayServers(action: RoomMemberProfileAction.SetUserRelayServers) {
+        Timber.i("New relay servers for ${initialState.userId}: ${action.newRelayServers}")
+        val dendriteConnection = object : ServiceConnection {
+            override fun onServiceConnected(className: ComponentName, service: IBinder) {
+                val binder = service as DendriteService.DendriteLocalBinder
+                val dendrite = binder.getService()
+                dendrite.assignRelayServers(initialState.userId, action.newRelayServers)
+                val actualRelays = dendrite.getRelayServers(initialState.userId)
+                setState { copy(userRelayServers = actualRelays) }
+            }
+
+            override fun onServiceDisconnected(className: ComponentName) {
+            }
+        }
+
+        Intent(applicationContext, DendriteService::class.java).also { intent ->
+            applicationContext.bindService(intent, dendriteConnection, Context.BIND_AUTO_CREATE)
         }
     }
 

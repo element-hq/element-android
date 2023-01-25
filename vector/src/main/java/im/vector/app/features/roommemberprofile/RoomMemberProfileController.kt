@@ -44,6 +44,7 @@ class RoomMemberProfileController @Inject constructor(
         fun onShowDeviceListNoCrossSigning()
         fun onOpenDmClicked()
         fun onOverrideColorClicked()
+        fun onAssignRelayServersClicked()
         fun onJumpToReadReceiptClicked()
         fun onMentionClicked()
         fun onEditPowerLevel(currentRole: Role)
@@ -198,6 +199,14 @@ class RoomMemberProfileController @Inject constructor(
                 subtitle = state.userColorOverride,
                 divider = !state.isMine,
                 action = { callback?.onOverrideColorClicked() }
+        )
+
+        buildProfileAction(
+                id = "relayServers",
+                editable = false,
+                title = stringProvider.getString(R.string.assign_p2p_relay_servers),
+                divider = !state.isMine,
+                action = { callback?.onAssignRelayServersClicked() }
         )
 
         if (!state.isMine) {

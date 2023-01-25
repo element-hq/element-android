@@ -369,6 +369,26 @@ class RoomMemberProfileFragment :
                 .show()
     }
 
+    override fun onAssignRelayServersClicked(): Unit = withState(viewModel) { state ->
+        val inflater = requireActivity().layoutInflater
+        val layout = inflater.inflate(R.layout.dialog_base_edit_text, null)
+        val views = DialogBaseEditTextBinding.bind(layout)
+        views.editText.setText(state.userRelayServers)
+        views.editText.hint = "ed25519 keys / userIDs"
+
+        MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.assign_p2p_relay_servers)
+                .setView(layout)
+                .setPositiveButton(R.string.ok) { _, _ ->
+                    val newRelayServers = views.editText.text.toString()
+                    if (newRelayServers != state.userRelayServers) {
+                        viewModel.handle(RoomMemberProfileAction.SetUserRelayServers(newRelayServers))
+                    }
+                }
+                .setNegativeButton(R.string.action_cancel, null)
+                .show()
+    }
+
     override fun onEditPowerLevel(currentRole: Role) {
         EditPowerLevelDialogs.showChoice(requireActivity(), R.string.power_level_edit_title, currentRole) { newPowerLevel ->
             viewModel.handle(RoomMemberProfileAction.SetPowerLevel(currentRole.value, newPowerLevel, true))
