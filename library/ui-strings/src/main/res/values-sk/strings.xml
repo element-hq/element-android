@@ -2001,8 +2001,6 @@
     <string name="cross_signing_verify_by_emoji">Interaktívne overte pomocou emotikonov</string>
     <string name="cross_signing_verify_by_text">Manuálne overte pomocou textu</string>
     <string name="verify_this_session">Overte nové prihlásenie s prístupom k vášmu účtu: %1$s</string>
-    <string name="verify_other_sessions">Overte všetky vaše relácie, aby ste si boli istý, že sú vaše správy a účet bezpečné</string>
-    <string name="review_logins">Skontrolujte, kde ste prihlásení</string>
     <string name="encrypted_unverified">Šifrované neovereným zariadením</string>
     <string name="default_message_emote_snow">pošle sneženie ❄️</string>
     <string name="default_message_emote_confetti">pošle konfety 🎉</string>
@@ -2421,7 +2419,6 @@
     <string name="login_signin_sso">Pokračovať pomocou jednotného prihlásenia SSO</string>
     <string name="login_social_sso">jednotné prihlásenie SSO</string>
     <string name="a11y_close_keys_backup_banner">Zatvoriť výzvu na zálohovanie kľúčov</string>
-    <string name="a11y_poll_winner_option">Výťazná odpoveď</string>
     <string name="a11y_unchecked">Nezaškrtnuté</string>
     <string name="a11y_checked">Zaškrtnuté</string>
     <string name="a11y_unsent_draft">Rozpísaná správa</string>
@@ -2767,9 +2764,6 @@
 \n
 \nTo im poskytuje istotu, že sa komunikujú naozaj s vami, ale zároveň to znamená, že vidia názov relácie, ktorý sem zadáte.</string>
     <string name="device_manager_learn_more_session_rename_title">Premenovanie relácií</string>
-    <string name="device_manager_learn_more_sessions_verified">Overené relácie, do ktorých ste sa prihlásili pomocou svojich prihlasovacích údajov a ktoré boli následne overené buď pomocou vašej bezpečnostnej prístupovej frázy, alebo krížovým overením.
-\n
-\nTo znamená, že majú šifrovacie kľúče pre vaše predchádzajúce správy a potvrdzujú ostatným používateľom, s ktorými komunikujete, že tieto relácie ste skutočne vy.</string>
     <string name="device_manager_learn_more_sessions_verified_title">Overené relácie</string>
     <string name="device_manager_learn_more_sessions_unverified">Neoverené relácie sú relácie, do ktorých ste sa prihlásili pomocou svojich prístupových údajov, ale ktoré neboli krížovo overené.
 \n
@@ -2868,7 +2862,7 @@
     <string name="qr_code_login_header_failed_other_description">Žiadosť zlyhala.</string>
     <string name="labs_enable_voice_broadcast_summary">Možnosť nahrávania a odosielania hlasového vysielania v časovej osi miestnosti.</string>
     <string name="labs_enable_voice_broadcast_title">Zapnúť hlasové vysielanie</string>
-    <string name="a11y_voice_broadcast_buffering">Načítavanie do vyrovnávacej pamäte…</string>
+    <string name="voice_broadcast_buffering">Načítavanie do vyrovnávacej pamäte…</string>
     <string name="a11y_pause_voice_broadcast">Pozastaviť hlasové vysielanie</string>
     <string name="a11y_play_voice_broadcast">Prehrať alebo pokračovať v nahrávaní hlasového vysielania</string>
     <string name="a11y_stop_voice_broadcast_record">Zastaviť nahrávanie hlasového vysielania</string>

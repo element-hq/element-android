@@ -1717,8 +1717,6 @@
     <string name="error_empty_field_choose_user_name">Valitse käyttäjänimi.</string>
     <string name="cross_signing_verify_by_emoji">Vahvista vuorovaikutteisesti emojilla</string>
     <string name="crosssigning_verify_session">Vahvista kirjautuminen</string>
-    <string name="verify_other_sessions">Vahvista kaikki istuntosi varmistaaksesi, että tilisi ja viestisi ovat turvassa</string>
-    <string name="review_logins">Katselmoi missä olet sisäänkirjautuneena</string>
     <string name="encrypted_unverified">Salattu vahvistamattomalla laitteella</string>
     <string name="unencrypted">Salaamaton</string>
     <string name="use_recovery_key">Käytä palautusavainta</string>

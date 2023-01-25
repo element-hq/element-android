@@ -1930,7 +1930,6 @@
     <string name="this_space_has_no_rooms_not_admin">非公開で招待が必要なルームは表示されていません。
 \nルームを追加する権限はありません。</string>
     <string name="this_space_has_no_rooms_admin">非公開で招待が必要なルームは表示されていません。</string>
-    <string name="a11y_poll_winner_option">勝者</string>
     <string name="login_set_msisdn_notice">知人に見つけてもらえるように電話番号を設定できます。任意です。</string>
     <string name="message_key">メッセージキー</string>
     <string name="recovery_passphrase">復旧用のパスフレーズ</string>
@@ -2223,8 +2222,6 @@
     <string name="settings_security_pin_code_use_biometrics_summary_on">指紋や顔画像など、端末に固有の生体認証を有効にする。</string>
     <string name="cross_signing_verify_by_emoji">絵文字で認証</string>
     <string name="cross_signing_verify_by_text">テキストで認証</string>
-    <string name="verify_other_sessions">すべてのセッションを認証し、アカウントとメッセージが安全であることを確認してください</string>
-    <string name="review_logins">ログインしている場所を確認</string>
     <string name="bad_passphrase_key_reset_all_action">復旧用の手段を全て無くしてしまいましたか？全てリセットする</string>
     <string name="or_other_mx_capable_client">クロス署名に対応した他のMatrixのクライアントでも使用できます。</string>
     <string name="create_spaces_room_public_header">どのような議論を%sで行いたいですか？</string>

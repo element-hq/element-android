@@ -1957,8 +1957,6 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="cross_signing_verify_by_text">Verifikasi secara Manual oleh Teks</string>
     <string name="crosssigning_verify_session">Verifikasi login</string>
     <string name="verify_this_session">Verifikasi login baru yang mengakses akun Anda: %1$s</string>
-    <string name="verify_other_sessions">Verifikasi semua sesi Anda untuk memastikan akun &amp; pesan Anda aman</string>
-    <string name="review_logins">Lihat mana Anda masuk</string>
     <string name="encrypted_unverified">Dienkripsi oleh perangkat yang tidak diverifikasi</string>
     <string name="unencrypted">Tidak Dienkripsi</string>
     <string name="default_message_emote_snow">mengirim salju ❄️</string>
@@ -2233,7 +2231,6 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="end_poll_confirmation_approve_button">Akhiri poll</string>
     <string name="end_poll_confirmation_description">Ini akan menghentikan orang-orang untuk dapat memberikan suara dan akan menampilkan hasil akhir poll.</string>
     <string name="end_poll_confirmation_title">Akhiri poll ini\?</string>
-    <string name="a11y_poll_winner_option">opsi pemenang</string>
     <string name="poll_end_action">Akhiri poll</string>
     <plurals name="poll_total_vote_count_after_ended">
         <item quantity="other">Hasil akhir berdasarkan oleh %1$d suara</item>
@@ -2661,9 +2658,6 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
 \n
 \nIni memberikan mereka kepastian bahwa mereka berbicara dengan Anda, tetapi ini juga berarti bahwa mereka dapat melihat nama sesi yang Anda masukkan di sini.</string>
     <string name="device_manager_learn_more_session_rename_title">Mengubah nama sesi</string>
-    <string name="device_manager_learn_more_sessions_verified">Sesi yang terverifikasi telah masuk dengan kredensial Anda dan juga telah diverifikasi, menggunakan frasa sandi atau memverifikasi secara silang.
-\n
-\nIni berarti mereka memegang kunci enkripsi ke pesan Anda sebelumnya, dan mengonfirmasi pengguna lain yang Anda berkomunikasi bahwa sesi ini memang Anda.</string>
     <string name="device_manager_learn_more_sessions_inactive_title">Sesi tidak aktif</string>
     <string name="device_manager_learn_more_sessions_unverified_title">Sesi belum diverifikasi</string>
     <string name="device_manager_learn_more_sessions_verified_title">Sesi terverifikasi</string>
@@ -2762,7 +2756,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="qr_code_login_header_failed_other_description">Permintaan gagal.</string>
     <string name="labs_enable_voice_broadcast_summary">Memungkinkan untuk merekam dan mengirim siaran suara dalam lini masa ruangan.</string>
     <string name="labs_enable_voice_broadcast_title">Aktifkan siaran suara</string>
-    <string name="a11y_voice_broadcast_buffering">Memuat…</string>
+    <string name="voice_broadcast_buffering">Memuat…</string>
     <string name="a11y_pause_voice_broadcast">Jeda siaran suara</string>
     <string name="a11y_play_voice_broadcast">Mainkan atau lanjutkan siaran suara</string>
     <string name="a11y_stop_voice_broadcast_record">Hentikan rekaman siaran suara</string>

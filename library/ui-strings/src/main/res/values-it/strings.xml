@@ -1418,8 +1418,6 @@
     <string name="failed_to_access_secure_storage">Accesso all\'archivio sicuro fallito</string>
     <string name="unencrypted">Non criptato</string>
     <string name="encrypted_unverified">Criptato da un dispositivo non verificato</string>
-    <string name="review_logins">Controlla dove hai fatto l\'accesso</string>
-    <string name="verify_other_sessions">Verifica tutte le tue sessioni per assicurarti che il tuo account e i messaggi siano protetti</string>
     <string name="verify_this_session">Verifica il nuovo accesso entrando nel tuo account: %1$s</string>
     <string name="cross_signing_verify_by_text">Verifica manualmente con testo</string>
     <string name="crosssigning_verify_session">Verifica accesso</string>
@@ -2263,7 +2261,6 @@
     <string name="end_poll_confirmation_approve_button">Termina sondaggio</string>
     <string name="end_poll_confirmation_description">Ciò impedirà alle persone di poter votare e mostrerà i risultati finali del sondaggio.</string>
     <string name="end_poll_confirmation_title">Terminare questo sondaggio\?</string>
-    <string name="a11y_poll_winner_option">opzione vincente</string>
     <string name="poll_end_action">Termina sondaggio</string>
     <plurals name="poll_total_vote_count_after_ended">
         <item quantity="one">Risultato finale basato su %1$d voto</item>
@@ -2704,9 +2701,6 @@
 \n
 \nIn questo modo hanno la certezza che stanno parlando davvero con te, ma significa anche che possono vedere il nome della sessione che inserisci qui.</string>
     <string name="device_manager_learn_more_session_rename_title">Rinominare le sessioni</string>
-    <string name="device_manager_learn_more_sessions_verified">Le sessioni verificate hanno effettuato l\'accesso con le tue credenziali e sono state verificate, usando la frase di sicurezza o la verifica incrociata.
-\n
-\nCiò significa che hanno le tue chiavi di crittografia per i messaggi passati, e confermano agli altri utenti con cui comunichi che queste sessioni sono usate da te.</string>
     <string name="device_manager_learn_more_sessions_verified_title">Sessioni verificate</string>
     <string name="device_manager_learn_more_sessions_unverified">Le sessioni non verificate sono quelle in cui è stato fatto l\'accesso con le tue credenziali, ma che non sono state verificate.
 \n
@@ -2805,7 +2799,7 @@
     <string name="qr_code_login_header_failed_other_device_already_signed_in_description">L\'altro dispositivo ha già fatto l\'accesso.</string>
     <string name="qr_code_login_header_failed_e2ee_security_issue_description">Si è verificato un problema di sicurezza configurando i messaggi sicuri. Una delle seguenti cose potrebbe essere compromessa: il tuo homeserver; la/e connessione/i internet; il/i dispositivo/i;</string>
     <string name="qr_code_login_header_failed_other_description">La richiesta è fallita.</string>
-    <string name="a11y_voice_broadcast_buffering">Buffer…</string>
+    <string name="voice_broadcast_buffering">Buffer…</string>
     <string name="a11y_pause_voice_broadcast">Sospendi trasmissione vocale</string>
     <string name="a11y_play_voice_broadcast">Avvia o riprendi trasmissione vocale</string>
     <string name="a11y_stop_voice_broadcast_record">Ferma registrazione trasmissione vocale</string>

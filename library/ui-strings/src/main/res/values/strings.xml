@@ -1689,7 +1689,6 @@
     <string name="create_new_room">Create New Room</string>
     <string name="create_new_space">Create New Space</string>
     <string name="error_no_network">No network. Please check your Internet connection.</string>
-    <!-- TODO delete -->
     <string name="error_check_network" tools:ignore="UnusedResources">Something went wrong. Please check your network connection and try again.</string>
     <string name="change_room_directory_network">"Change network"</string>
     <string name="please_wait">"Please wait…"</string>
@@ -2659,10 +2658,6 @@
     <string name="unencrypted">Unencrypted</string>
     <string name="encrypted_unverified">Encrypted by an unverified device</string>
     <string name="key_authenticity_not_guaranteed">The authenticity of this encrypted message can\'t be guaranteed on this device.</string>
-    <!-- TODO TO BE REMOVED -->
-    <string name="review_logins" tools:ignore="UnusedResources">Review where you’re logged in</string>
-    <!-- TODO TO BE REMOVED -->
-    <string name="verify_other_sessions" tools:ignore="UnusedResources">Verify all your sessions to ensure your account &amp; messages are safe</string>
     <string name="review_unverified_sessions_title">You have unverified sessions</string>
     <string name="review_unverified_sessions_description">Review to ensure your account is safe</string>
     <!-- Argument will be replaced by the other session name (e.g, Desktop, mobile) -->
@@ -3111,8 +3106,7 @@
 
     <string name="voice_broadcast_live">Live</string>
     <string name="voice_broadcast_live_broadcast">Live broadcast</string>
-    <!-- TODO Rename id to voice_broadcast_buffering -->
-    <string name="a11y_voice_broadcast_buffering">Buffering…</string>
+    <string name="voice_broadcast_buffering">Buffering…</string>
     <string name="a11y_resume_voice_broadcast_record">Resume voice broadcast record</string>
     <string name="a11y_pause_voice_broadcast_record">Pause voice broadcast record</string>
     <string name="a11y_stop_voice_broadcast_record">Stop voice broadcast record</string>
@@ -3183,8 +3177,6 @@
         <item quantity="other">Final result based on %1$d votes</item>
     </plurals>
     <string name="poll_end_action">End poll</string>
-    <!-- TODO TO BE REMOVED -->
-    <string name="a11y_poll_winner_option" tools:ignore="UnusedResources">winner option</string>
     <string name="end_poll_confirmation_title">End this poll?</string>
     <string name="end_poll_confirmation_description">This will stop people from being able to vote and will display the final results of the poll.</string>
     <string name="end_poll_confirmation_approve_button">End poll</string>
@@ -3430,8 +3422,6 @@
     <string name="device_manager_learn_more_sessions_unverified_title">Unverified sessions</string>
     <string name="device_manager_learn_more_sessions_unverified">Unverified sessions are sessions that have logged in with your credentials but not been cross-verified.\n\nYou should make especially certain that you recognise these sessions as they could represent an unauthorised use of your account.</string>
     <string name="device_manager_learn_more_sessions_verified_title">Verified sessions</string>
-    <!-- TODO TO BE REMOVED -->
-    <string name="device_manager_learn_more_sessions_verified" tools:ignore="UnusedResources">Verified sessions have logged in with your credentials and then been verified, either using your secure passphrase or by cross-verifying.\n\nThis means they hold encryption keys for your previous messages, and confirm to other users you are communicating with that these sessions are really you.</string>
     <string name="device_manager_learn_more_sessions_verified_description">Verified sessions are anywhere you are using this account after entering your passphrase or confirming your identity with another verified session.\n\nThis means that you have all the keys needed to unlock your encrypted messages and confirm to other users that you trust this session.</string>
     <string name="device_manager_learn_more_sessions_encryption_not_supported">This session doesn\'t support encryption, so it can\'t be verified.\n\nYou won\'t be able to participate in rooms where encryption is enabled when using this session.\n\nFor best security and privacy, it is recommended to use Matrix clients that support encryption.</string>
     <string name="device_manager_learn_more_session_rename_title">Renaming sessions</string>

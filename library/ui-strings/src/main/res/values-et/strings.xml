@@ -1304,8 +1304,6 @@
     <string name="failed_to_access_secure_storage">Turvahoidla kasutamine ei õnnestu</string>
     <string name="unencrypted">Krüptimata</string>
     <string name="encrypted_unverified">Krüptitud verifitseerimata seadme poolt</string>
-    <string name="review_logins">Vaata üle, kust sa oled Matrix\'i võrku loginud</string>
-    <string name="verify_other_sessions">Selleks et sinu konto ja sõnumid oleks turvatud, verifitseeri kõik oma sessioonid</string>
     <string name="verify_this_session">Verifitseeri uus kasutajasessioon, mis pruugib sinu kontot: %1$s</string>
     <string name="cross_signing_verify_by_text">Verifitseeri käsitsi etteantud teksti abil</string>
     <string name="crosssigning_verify_session">Verifitseeri sisselogimissessioon</string>
@@ -2318,7 +2316,6 @@
     <string name="tooltip_attachment_file">Laadi fail üles</string>
     <string name="tooltip_attachment_gallery">Saada pilte ja videosid</string>
     <string name="tooltip_attachment_photo">Ava kaamera</string>
-    <string name="a11y_poll_winner_option">populaarsem valik</string>
     <string name="labs_auto_report_uisi_desc">Kui sõnumite dekrüptimisel tekib viga, siis rakendus saadab selle kohta automaatse teate arendajatele</string>
     <string name="labs_auto_report_uisi">Automaatselt teata dekrüptimise vigadest.</string>
     <string name="room_member_override_nick_color">Asenda kuvatava nime värvid</string>
@@ -2706,9 +2703,6 @@
 \n
 \nSee tähendab, et nad võivad uskuda, et tegemist on tõesti sinuga. Samal ajal näevad ka siin sisestatud sessiooninime.</string>
     <string name="device_manager_learn_more_session_rename_title">Sessioonide nimede muutmine</string>
-    <string name="device_manager_learn_more_sessions_verified">Verifitseeritud sessioonid on sellised, kuhu sa oled oma kasutajanime ja salasõnaga sisse loginud ning mille puhul oled risttunnustamise läbi teinud või paroolifraasi abil ta turvaliseks märkinud.
-\n
-\nSee tähendab, et nendes sessioonides on olemas sinu varasemate sõnumite krüptovõtmed ja teistele osapooltele on nad tuvastatavad nii, et tegemist on tõesti sinuga.</string>
     <string name="device_manager_learn_more_sessions_verified_title">Verifitseeritud sessioonid</string>
     <string name="device_manager_learn_more_sessions_unverified">Verifitseerimata sessioonid on sellised, kuhu sa oled oma kasutajanime ja salasõnaga sisse loginud, kuid mille puhul on risttunnustamine tegemata.
 \n
@@ -2805,7 +2799,7 @@
     <string name="qr_code_login_header_failed_other_device_already_signed_in_description">Teine seade on juba võrku loginud.</string>
     <string name="qr_code_login_header_failed_e2ee_security_issue_description">Turvalise sõnumivahetuse ülesseadmisel tekkis turvaviga. Üks kolmest võib olla sattunud vale osapoole kontrolli alla: sinu koduserver, sinu internetiühendus või sinu seade;</string>
     <string name="qr_code_login_header_failed_other_description">Päring ei õnnestunud.</string>
-    <string name="a11y_voice_broadcast_buffering">Andmed on puhverdamisel…</string>
+    <string name="voice_broadcast_buffering">Andmed on puhverdamisel…</string>
     <string name="a11y_play_voice_broadcast">Alusta või jätka ringhäälingukõne esitamist</string>
     <string name="a11y_stop_voice_broadcast_record">Lõpeta ringhäälingukõne salvestamine</string>
     <string name="a11y_pause_voice_broadcast_record">Peata ringhäälingukõne salvestamine</string>

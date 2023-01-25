@@ -1193,7 +1193,6 @@
     <string name="end_poll_confirmation_approve_button">Kết thúc cuộc thăm dò ý kiến</string>
     <string name="end_poll_confirmation_description">Điều này sẽ ngăn mọi người có thể bỏ phiếu và sẽ hiển thị kết quả cuối cùng của cuộc thăm dò.</string>
     <string name="end_poll_confirmation_title">Kết thúc cuộc thăm dò này\?</string>
-    <string name="a11y_poll_winner_option">tùy chọn người chiến thắng</string>
     <string name="poll_end_action">Kết thúc cuộc thăm dò ý kiến</string>
     <string name="create_poll_empty_question_error">Câu hỏi không thể trống</string>
     <string name="create_poll_button">TẠO CUỘC THĂM DÒ Ý KIẾN</string>
@@ -1472,8 +1471,6 @@
     <string name="crosssigning_verify_session">Xác minh đăng nhập</string>
     <string name="cross_signing_verify_by_text">Xác minh thủ công bằng Văn bản</string>
     <string name="verify_this_session">Xác minh thông tin đăng nhập mới truy cập vào tài khoản của bạn: %1$s</string>
-    <string name="verify_other_sessions">Xác minh tất cả các phiên của bạn để đảm bảo tài khoản và tin nhắn của bạn được an toàn</string>
-    <string name="review_logins">Xem lại nơi bạn đăng nhập</string>
     <string name="encrypted_unverified">Được mã hóa bởi một thiết bị chưa được xác minh</string>
     <string name="unencrypted">Không được mã hóa</string>
     <string name="default_message_emote_snow">gửi tuyết rơi ❄️</string>

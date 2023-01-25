@@ -851,7 +851,6 @@
         <item quantity="other">%1$d atkvæði greidd. Greiddu atkvæði til að sjá útkomuna</item>
     </plurals>
     <string name="login_error_homeserver_not_found">Næ ekki að tengjast heimaþjóni á þessari slóð, athugaðu slóðina</string>
-    <string name="a11y_poll_winner_option">réttur valkostur</string>
     <string name="create_poll_question_hint">Spurning eða viðfangsefni</string>
     <string name="restart_the_application_to_apply_changes">Endurræstu forritið til að breytingin taki gildi.</string>
     <string name="labs_enable_latex_maths">Virkja LaTeX-stærðfræði</string>
@@ -1775,7 +1774,6 @@
     <string name="create_space_identity_server_info_none">Þú ert núna ekki að nota neinn auðkennisþjón. Til að uppgötva og vera finnanleg/ur fyrir félaga þína í teyminu, skaltu bæta við auðkennisþjóni hér fyrir neðan.</string>
     <string name="re_authentication_default_confirm_text">${app_name} krefst þess að þú setjir inn auðkennin þín til að framkvæma þessa aðgerð.</string>
     <string name="re_authentication_activity_title">Endurauðkenning er nauðsynleg</string>
-    <string name="review_logins">Yfirfarðu hvar þú sért skráð/ur inn</string>
     <string name="use_recovery_key">Nota endurheimtulykil</string>
     <string name="bootstrap_progress_checking_backup">Athuga öryggisafritunarlykil</string>
     <string name="bootstrap_invalid_recovery_key">Þetta er ekki gildur endurheimtulykill</string>
@@ -2353,7 +2351,7 @@
     <string name="voice_broadcast_recording_time_left">%1$s eftir</string>
     <string name="a11y_voice_broadcast_fast_forward">Fara áfram um 30 sekúndur</string>
     <string name="a11y_voice_broadcast_fast_backward">Fara afturábak um 30 sekúndur</string>
-    <string name="a11y_voice_broadcast_buffering">Hleð í biðminni…</string>
+    <string name="voice_broadcast_buffering">Hleð í biðminni…</string>
     <string name="voice_broadcast_live_broadcast">Bein útsending</string>
     <string name="voice_broadcast_live">Beint</string>
     <string name="settings_show_latest_profile">Birta upplýsingar um síðasta notanda</string>

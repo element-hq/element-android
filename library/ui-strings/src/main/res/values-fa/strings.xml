@@ -1106,8 +1106,6 @@
     <string name="or_other_mx_capable_client">یا دیگر کاره‌های ماتریکس دادای قابلیت ورود چندگانه</string>
     <string name="cross_signing_verify_by_text">تأیید دستی با متن</string>
     <string name="verify_this_session">تأیید ورود جدیدی که به حسابتان دسترسی دارد: %1$s</string>
-    <string name="verify_other_sessions">تأیید همهٔ نشست‌هایتان برای اطمینان از این که حساب و پیام‌هایتان امنند</string>
-    <string name="review_logins">بازبینی جاهایی که وارد شده‌اید</string>
     <string name="cross_signing_verify_by_emoji">تأیید برهم‌کنشی با اموجی</string>
     <string name="crosssigning_verify_session">تأیید ورود</string>
     <string name="unencrypted">رمزنشده</string>
@@ -2275,7 +2273,6 @@
     <string name="end_poll_confirmation_approve_button">پایان نظرسنجی</string>
     <string name="end_poll_confirmation_description">این کار اجازهٔ رأی دادن افراد را پایان داده و نتیجهٔ نهایی نظرسنجی را نمایش خواهد داد.</string>
     <string name="end_poll_confirmation_title">پایان این نظرسنجی؟</string>
-    <string name="a11y_poll_winner_option">گزینهٔ غالب</string>
     <string name="poll_end_action">پایان نظرسنجی</string>
     <plurals name="poll_total_vote_count_after_ended">
         <item quantity="one">نتیجهٔ نهایی بر مبنای %1$d رأی</item>
@@ -2783,7 +2780,7 @@
     <string name="attachment_type_selector_poll">نظرسنجی‌ها</string>
     <string name="attachment_type_selector_file">پیوست‌ها</string>
     <string name="attachment_type_selector_sticker">برچسب‌ها</string>
-    <string name="a11y_voice_broadcast_buffering">میانگیری…</string>
+    <string name="voice_broadcast_buffering">میانگیری…</string>
     <string name="voice_broadcast_live">زنده</string>
     <string name="qr_code_login_confirm_security_code">تأیید</string>
     <string name="three">۳</string>
@@ -2859,9 +2856,6 @@
     <string name="device_manager_learn_more_sessions_verified_description">نشست‌های تأیید شده آن‌هاییند که پس از ورود عبارت عبورتان یا تأیید هویتتان با نشست تأیید شده‌ای دیگر، واردشان شده‌اید.
 \n
 \nیعنی تمامی کلیدهای لارم برای رمزگشایی پیام‌های رمزنگاشته‌تان را داشته و این تأیید را به دیگران می‌دهند که به این نشست اطمینان دارید.</string>
-    <string name="device_manager_learn_more_sessions_verified" tools:ignore="UnusedResources">نشست‌های تأیید شده به حسابتان وارد و با عبارت عبور امنتان یا تأیید متقابل تأیید شده‌اند.
-\n
-\nیعنی کلیدهای رمزنگاری پیام‌های پیشینتان را داشته و به دیگر کاربران این تأیید را می‌دهند که این نشست، خودتان هستید.</string>
     <string name="device_manager_learn_more_sessions_unverified">نشست‌های تأیید نشده نشست‌هاییند که به آن‌ها وارد شده‌اید، ولی تأیید متقبالشان نکرده‌اید.
 \n
 \nباید به طور خاص مطمئن شوید که این نشست‌ها را می‌شناسید؛ چرا که می‌توانند نشان‌دهندهٔ استفادهٔ تأییدنشده از حسابتان باشند.</string>

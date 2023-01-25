@@ -1361,8 +1361,6 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="failed_to_access_secure_storage">A biztonsági tárolóhoz nem sikerült hozzáférni</string>
     <string name="unencrypted">Titkosítatlan</string>
     <string name="encrypted_unverified">Ellenőrizetlen eszközzel titkosította</string>
-    <string name="review_logins">Tekintsd át hol vagy bejelentkezve</string>
-    <string name="verify_other_sessions">Ellenőrizd minden munkamenetedet, hogy a fiókod és az üzeneteid biztonságban legyenek</string>
     <string name="verify_this_session">Ellenőrizd ezt az új bejelentkezést ami hozzáfér a fiókodhoz: %1$s</string>
     <string name="cross_signing_verify_by_text">Manuális szöveges ellenőrzés</string>
     <string name="crosssigning_verify_session">Belépés ellenőrzése</string>
@@ -2308,7 +2306,6 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 \n
 \nElolvashatod a feltételeinket %s.</string>
     <string name="analytics_opt_in_title">Segíts az ${app_name}-et jobbá tenni</string>
-    <string name="a11y_poll_winner_option">nyerő válasz</string>
     <string name="preference_root_legals">Jogi dolgok</string>
     <string name="restart_the_application_to_apply_changes">A változások életbelépéséhez indítsd újra az alkalmazást.</string>
     <string name="labs_enable_latex_maths">LaTeX matematikai szintaxis engedélyezése</string>
@@ -2712,9 +2709,6 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="device_manager_learn_more_session_rename">Más felhasználók akikkel közvetlenül vagy szobában beszélgetsz látják a teljes listát a munkameneteidről.
 \n
 \nEzzel ők biztosak lehetnek abban, hogy ténylegesen veled beszélgetnek. Ez azt is jelenti, hogy látják a munkamenet nevét amit itt megadsz.</string>
-    <string name="device_manager_learn_more_sessions_verified">Ellenőrzött munkamenetbe a neveddel és jelszavaddal léptek be és ellenőrizve lett vagy a biztonsági jelmondattal vagy másik munkamenetből.
-\n
-\nEz azt jelenti, hogy tartalmazzák a titkosítási kulcsokat az régi üzenetekhez, és biztosítja a többieket a kommunikációban, hogy ezt a munkamenetet tényleg te használod.</string>
     <string name="rich_text_editor_format_underline">Aláhúzott</string>
     <string name="rich_text_editor_format_strikethrough">Áthúzott</string>
     <string name="rich_text_editor_format_italic">Dőlt</string>
@@ -2814,7 +2808,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="qr_code_login_header_failed_other_description">A kérés sikertelen.</string>
     <string name="labs_enable_voice_broadcast_summary">Hang közvetítés felvételéhez és a szoba idővonalára küldéséhez.</string>
     <string name="labs_enable_voice_broadcast_title">Hang közvetítés engedélyezése</string>
-    <string name="a11y_voice_broadcast_buffering">Pufferelés…</string>
+    <string name="voice_broadcast_buffering">Pufferelés…</string>
     <string name="a11y_pause_voice_broadcast">Hang közvetítés szüneteltetése</string>
     <string name="a11y_play_voice_broadcast">Hang közvetítés lejátszása vagy lejátszás folytatása</string>
     <string name="a11y_stop_voice_broadcast_record">Hang közvetítés felvétel leállítása</string>

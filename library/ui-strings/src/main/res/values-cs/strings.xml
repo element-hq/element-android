@@ -1469,8 +1469,6 @@
     <string name="failed_to_access_secure_storage">Přístup k zabezpečenému úložišti selhal</string>
     <string name="unencrypted">Nezašifrováno</string>
     <string name="encrypted_unverified">Zašifrováno neověřeným zařízením</string>
-    <string name="review_logins">Přezkoumejte, kde jste se přihlásili</string>
-    <string name="verify_other_sessions">Ověřte všechny své relace za účelem bezpečí Vašeho účtu a zpráv</string>
     <string name="verify_this_session">Ověřte nové přihlášení s přístupem na Váš účet: %1$s</string>
     <string name="cross_signing_verify_by_text">Manuálně ověřit textem</string>
     <string name="crosssigning_verify_session">Ověřit přihlášení</string>
@@ -2313,7 +2311,6 @@
     <string name="end_poll_confirmation_approve_button">Ukončit hlasování</string>
     <string name="end_poll_confirmation_description">Toto zastaví možnost hlasování a zobrazí se konečné výsledky.</string>
     <string name="end_poll_confirmation_title">Ukončit toto hlasování\?</string>
-    <string name="a11y_poll_winner_option">vítězná volba</string>
     <string name="poll_end_action">Ukončit hlasování</string>
     <plurals name="poll_total_vote_count_after_ended">
         <item quantity="one">Konečný výsledek na základě %1$d hlasu</item>
@@ -2767,9 +2764,6 @@
 \n
 \nTo jim poskytuje jistotu, že s vámi skutečně mluví, ale také to znamená, že mohou vidět název relace, který zde zadáte.</string>
     <string name="device_manager_learn_more_session_rename_title">Přejmenování relací</string>
-    <string name="device_manager_learn_more_sessions_verified">Ověřené relace se přihlásily pomocí vašich přihlašovacích údajů a poté byly ověřeny buď pomocí vaší zabezpečené přístupové fráze, nebo křížovým ověřením.
-\n
-\nTo znamená, že uchovávají šifrovací klíče pro vaše předchozí zprávy a potvrzují ostatním uživatelům, se kterými komunikujete, že tyto relace jste skutečně vy.</string>
     <string name="device_manager_learn_more_sessions_verified_title">Ověřené relace</string>
     <string name="device_manager_learn_more_sessions_unverified">Neověřené relace jsou relace, které se přihlásily pomocí vašich přihlašovacích údajů, ale nebyly křížově ověřeny.
 \n
@@ -2868,7 +2862,7 @@
     <string name="qr_code_login_header_failed_other_device_already_signed_in_description">Druhé zařízení je již přihlášeno.</string>
     <string name="qr_code_login_header_failed_e2ee_security_issue_description">Při nastavování zabezpečeného zasílání zpráv se vyskytl problém se zabezpečením. Může být napadena jedna z následujících věcí: váš domovský server; vaše internetové připojení; vaše zařízení;</string>
     <string name="qr_code_login_header_failed_other_description">Žádost se nezdařila.</string>
-    <string name="a11y_voice_broadcast_buffering">Ukládání do vyrovnávací paměti…</string>
+    <string name="voice_broadcast_buffering">Ukládání do vyrovnávací paměti…</string>
     <string name="a11y_pause_voice_broadcast">Pozastavit hlasové vysílání</string>
     <string name="a11y_play_voice_broadcast">Přehrát nebo obnovit hlasové vysílání</string>
     <string name="a11y_stop_voice_broadcast_record">Ukončit záznam hlasového vysílání</string>

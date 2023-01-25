@@ -1577,8 +1577,6 @@
     <string name="failed_to_access_secure_storage">Не удалось получить доступ к защищенному хранилищу данных</string>
     <string name="unencrypted">Не зашифровано</string>
     <string name="encrypted_unverified">Зашифровано неподтверждённой сессией</string>
-    <string name="review_logins">Посмотрите, где вы вошли</string>
-    <string name="verify_other_sessions">Подтвердите все свои сессии, чтобы убедиться в безопасности вашей учетной записи и сообщений</string>
     <string name="cross_signing_verify_by_text">Ручная проверка с помощью текста</string>
     <string name="external_link_confirmation_title">Перепроверьте эту ссылку</string>
     <string name="external_link_confirmation_message">Ссылка %1$s перенаправит вас на другой сайт: %2$s.
@@ -2332,7 +2330,6 @@
     <string name="end_poll_confirmation_approve_button">Завершить опрос</string>
     <string name="end_poll_confirmation_description">Это лишит людей возможности голосовать и отобразит окончательные результаты опроса.</string>
     <string name="end_poll_confirmation_title">Завершить этот опрос\?</string>
-    <string name="a11y_poll_winner_option">вариант-победитель</string>
     <string name="poll_end_action">Завершить опрос</string>
     <plurals name="poll_total_vote_count_after_ended">
         <item quantity="one">Окончательный результат на основании %1$d голоса</item>
@@ -2882,9 +2879,6 @@
     <string name="device_manager_learn_more_sessions_verified_description">Заверенные сеансы есть везде, где вы используете эту учётную запись после ввода своей мнемонической фразы или подтверждения своей личности с помощью другого заверенного сеанса.
 \n
 \nЭто означает, что у вас есть все ключи, необходимые для разблокировки ваших зашифрованных сообщений и подтверждения другим пользователям, что вы доверяете этому сеансу.</string>
-    <string name="device_manager_learn_more_sessions_verified" tools:ignore="UnusedResources">Заверенные сеансы — сеансы, которые вошли в систему с вашими учётными данными, а затем были заверены либо мнемонической фразой (бумажным ключом), либо путём перекрёстной сверки.
-\n
-\nЭто означает, что они хранят ключи шифрования от ваших предыдущих сообщений и подтверждают другим пользователям, с которыми вы общаетесь, что эти сеансы — действительно ваши.</string>
     <string name="device_manager_learn_more_sessions_unverified">Незаверенные сеансы — это сеансы, которые вошли в систему с вашими учётными данными, но не были перекрёстно заверены.
 \n
 \nВы должны быть особенно уверены, что признаёте эти сеансы, поскольку они могут представлять собой несанкционированное использование вашей учётной записи.</string>
@@ -2921,7 +2915,7 @@
     <string name="error_voice_broadcast_unauthorized_title">Не получилось начать новую голосовую трансляцию</string>
     <string name="a11y_voice_broadcast_fast_forward">Перемотать вперёд на 30 секунд</string>
     <string name="a11y_voice_broadcast_fast_backward">Перемотать назад на 30 секунд</string>
-    <string name="a11y_voice_broadcast_buffering">Буферизация…</string>
+    <string name="voice_broadcast_buffering">Буферизация…</string>
     <string name="a11y_pause_voice_broadcast">Приостановить голосовую трансляцию</string>
     <string name="a11y_play_voice_broadcast">Проиграть или продолжить голосовую трансляцию</string>
     <string name="a11y_stop_voice_broadcast_record">Остановить запись голосовой трансляции</string>
