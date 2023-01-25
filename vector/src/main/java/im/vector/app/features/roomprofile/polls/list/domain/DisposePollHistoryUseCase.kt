@@ -14,9 +14,19 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.roomprofile.polls.list.data
+package im.vector.app.features.roomprofile.polls.list.domain
 
-data class LoadedPollsStatus(
-        val canLoadMore: Boolean,
-        val nbLoadedDays: Int,
-)
+import im.vector.app.features.roomprofile.polls.list.data.RoomPollRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
+import javax.inject.Inject
+
+class DisposePollHistoryUseCase @Inject constructor(
+        private val roomPollRepository: RoomPollRepository,
+) {
+
+    fun execute(roomId: String) {
+        roomPollRepository.dispose(roomId)
+    }
+}

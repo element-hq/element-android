@@ -14,17 +14,13 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.roomprofile.polls.list.domain
+package org.matrix.android.sdk.api.session.room.poll
 
-import im.vector.app.features.roomprofile.polls.list.data.RoomPollRepository
-import org.matrix.android.sdk.api.session.room.poll.LoadedPollsStatus
-import javax.inject.Inject
-
-class GetLoadedPollsStatusUseCase @Inject constructor(
-        private val roomPollRepository: RoomPollRepository,
-) {
-
-    suspend fun execute(roomId: String): LoadedPollsStatus {
-        return roomPollRepository.getLoadedPollsStatus(roomId)
-    }
-}
+/**
+ * Represent the status of the loaded polls for a room.
+ */
+data class LoadedPollsStatus(
+        val canLoadMore: Boolean,
+        val nbSyncedDays: Int,
+        val hasCompletedASyncBackward: Boolean,
+)

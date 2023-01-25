@@ -16,13 +16,13 @@
 
 package im.vector.app.features.roomprofile.polls.list.domain
 
-import im.vector.app.features.roomprofile.polls.list.data.LoadedPollsStatus
 import im.vector.app.features.roomprofile.polls.list.data.RoomPollRepository
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
+import org.matrix.android.sdk.api.session.room.poll.LoadedPollsStatus
 
 class GetLoadedPollsStatusUseCaseTest {
 
@@ -38,7 +38,7 @@ class GetLoadedPollsStatusUseCaseTest {
         val aRoomId = "roomId"
         val expectedStatus = LoadedPollsStatus(
                 canLoadMore = true,
-                nbLoadedDays = 10,
+                nbSyncedDays = 10,
         )
         every { fakeRoomPollRepository.getLoadedPollsStatus(aRoomId) } returns expectedStatus
 
