@@ -2899,4 +2899,29 @@
     <string name="room_polls_active_no_item">Il n’y a aucun sondage en cours dans ce salon</string>
     <string name="room_polls_active">Sondages actifs</string>
     <string name="room_profile_section_more_polls">Historique des sondages</string>
+    <string name="message_reply_to_ended_poll_preview">Sondage terminé</string>
+    <string name="message_reply_to_poll_preview">Sondage</string>
+    <string name="message_reply_to_sender_ended_poll">a terminé un sondage.</string>
+    <string name="ended_poll_indicator">A terminé le sondage.</string>
+    <string name="thread_list_not_available">Votre serveur d’accueil ne prend pas encore en charge l’affichage de la liste des fils de discussion.</string>
+    <string name="error_voice_broadcast_unable_to_play">Impossible de lire cette diffusion audio.</string>
+    <string name="started_a_voice_broadcast">A démarré une diffusion audio</string>
+    <string name="unable_to_decrypt_some_events_in_poll">À cause d’erreurs de déchiffrement, certains votes pourraient ne pas avoir été pris en compte</string>
+    <string name="room_polls_loading_error">Erreur lors de la récupération des sondages.</string>
+    <string name="room_polls_load_more">Charger plus de sondages</string>
+    <string name="room_polls_wait_for_display">Affichage des sondages</string>
+    <plurals name="room_polls_ended_no_item_for_loaded_period">
+        <item quantity="one">Il n’y a aucun sondage terminé depuis hier.
+\nChargez plus de sondages pour voir les sondages des jours précédents.</item>
+        <item quantity="other">Il n’y a aucun sondage terminé depuis %1$d jours.
+\nChargez plus de sondages pour voir les sondages des jours précédents.</item>
+    </plurals>
+    <plurals name="room_polls_active_no_item_for_loaded_period">
+        <item quantity="one">Il n’y a aucun sondage actif depuis hier.
+\nChargez plus de sondages pour voir les sondages des jours précédents.</item>
+        <item quantity="other">Il n’y a aucun sondage actif depuis %1$d jours.
+\nChargez plus de sondages pour voir les sondages des jours précédents.</item>
+    </plurals>
+    <string name="error_voice_message_broadcast_in_progress_message">Vous ne pouvez pas commencer un message vocal car vous êtes en train d’enregistrer une diffusion en direct. Veuillez terminer cette diffusion pour commencer un message vocal</string>
+    <string name="error_voice_message_broadcast_in_progress">Impossible de démarrer un message vocal</string>
 </resources>

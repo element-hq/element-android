@@ -2882,4 +2882,26 @@
     <string name="voice_broadcast_live_broadcast">Direktsändning</string>
     <string name="notice_voice_broadcast_ended_by_you">Du avslutade en röstsändning.</string>
     <string name="notice_voice_broadcast_ended">%1$s avslutade en röstsändning.</string>
+    <string name="settings_access_token_summary">Din åtkomsttoken ger full åtkomst till ditt konto. Dela den inte med någon.</string>
+    <string name="settings_access_token">Åtkomsttoken</string>
+    <string name="message_reply_to_ended_poll_preview">Avslutade omröstning</string>
+    <string name="message_reply_to_poll_preview">Omröstning</string>
+    <string name="message_reply_to_sender_ended_poll">avslutade en omröstning.</string>
+    <string name="set_link_edit">Redigera länk</string>
+    <string name="set_link_create">Skapa en länk</string>
+    <string name="set_link_link">Länk</string>
+    <string name="set_link_text">Text</string>
+    <string name="rich_text_editor_bullet_list">Växla punktlista</string>
+    <string name="rich_text_editor_numbered_list">Växla numrerad lista</string>
+    <string name="rich_text_editor_link">Sätt länk</string>
+    <string name="room_polls_ended_no_item">Det finns inga tidigare omröstningar i det här rummet</string>
+    <string name="room_polls_ended">Tidigare omröstningar</string>
+    <string name="room_polls_active_no_item">Det finns inga aktiva omröstningar i det här rummet</string>
+    <string name="room_polls_active">Aktiva omröstningar</string>
+    <string name="ended_poll_indicator">Avslutade omröstningen.</string>
+    <string name="stop_voice_broadcast_content">Är du säker på att du vill avsluta din direktsändning\? Detta kommer att avsluta sändningen och den fulla inspelningen kommer att bli tillgänglig i rummet.</string>
+    <string name="stop_voice_broadcast_dialog_title">Avsluta röstsändning\?</string>
+    <string name="room_profile_section_more_polls">Omröstningshistorik</string>
+    <string name="thread_list_not_available">Din hemserver har inte stöd för att lista trådar än.</string>
+    <string name="action_stop">Ja, sluta</string>
 </resources>

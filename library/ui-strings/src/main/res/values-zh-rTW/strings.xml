@@ -2843,4 +2843,23 @@
     <string name="room_polls_active_no_item">此聊天室沒有正在進行的投票</string>
     <string name="room_polls_active">進行中的投票</string>
     <string name="room_profile_section_more_polls">投票歷史紀錄</string>
+    <string name="message_reply_to_ended_poll_preview">已結束投票</string>
+    <string name="message_reply_to_poll_preview">投票</string>
+    <string name="message_reply_to_sender_ended_poll">已結束投票。</string>
+    <string name="ended_poll_indicator">已結束投票。</string>
+    <string name="thread_list_not_available">您的家伺服器還不支援列出討論串。</string>
+    <string name="error_voice_broadcast_unable_to_play">無法播放此語音廣播。</string>
+    <string name="started_a_voice_broadcast">已開始語音廣播</string>
+    <string name="unable_to_decrypt_some_events_in_poll">因為解密錯誤，部份投票可能並未計算</string>
+    <string name="room_polls_loading_error">擷取投票時發生錯誤。</string>
+    <string name="room_polls_load_more">載入更多投票</string>
+    <string name="room_polls_wait_for_display">顯示投票</string>
+    <plurals name="room_polls_ended_no_item_for_loaded_period">
+        <item quantity="other">過去 %1$d 天沒有投票。
+\n載入更多投票以檢視過去幾天的投票。</item>
+    </plurals>
+    <plurals name="room_polls_active_no_item_for_loaded_period">
+        <item quantity="other">過去 %1$d 天沒有活躍的投票。
+\n載入更多投票以檢視過去幾天的投票。</item>
+    </plurals>
 </resources>

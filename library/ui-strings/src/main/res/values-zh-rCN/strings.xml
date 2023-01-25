@@ -1692,8 +1692,8 @@
     <string name="create_room_alias_invalid">一些字符不被允许</string>
     <string name="create_room_alias_empty">请提供一个房间地址</string>
     <string name="create_room_alias_already_in_use">此地址已被使用</string>
-    <string name="create_room_disable_federation_description">你可以启用此选项如果此房间将仅用于你的主服务器上的内部团队协作。此选项之后无法更改。</string>
-    <string name="create_room_disable_federation_title">屏蔽不是 %s 一部分的任何人加入此房间</string>
+    <string name="create_room_disable_federation_description">若房间仅用于与你的主服务器上的内部团队协作，则你可以启用此选项。此选项之后无法更改。</string>
+    <string name="create_room_disable_federation_title">阻止任何不属于%s的人加入此房间</string>
     <string name="hide_advanced">隐藏高级</string>
     <string name="show_advanced">显示高级</string>
     <string name="login_clear_homeserver_history">清除历史记录</string>
@@ -2821,4 +2821,8 @@
     <string name="settings_nightly_build">Nightly构建</string>
     <string name="notice_voice_broadcast_ended_by_you">你结束了一个语音广播。</string>
     <string name="notice_voice_broadcast_ended">%1$s结束了一个语音广播。</string>
+    <string name="stop_voice_broadcast_dialog_title">停止实时广播？</string>
+    <string name="error_voice_broadcast_unable_to_play">无法播放此语音广播。</string>
+    <string name="error_voice_message_broadcast_in_progress_message">你无法启动语音消息因为你正在录制实时广播。请终止实时广播以开始录制语音消息</string>
+    <string name="error_voice_message_broadcast_in_progress">无法启动语音消息</string>
 </resources>
