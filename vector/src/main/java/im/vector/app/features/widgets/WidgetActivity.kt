@@ -63,6 +63,7 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
         fun newIntent(context: Context, args: WidgetArgs): Intent {
             return Intent(context, WidgetActivity::class.java).apply {
                 putExtra(Mavericks.KEY_ARG, args)
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
         }
 
