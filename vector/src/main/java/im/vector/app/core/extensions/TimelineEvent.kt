@@ -20,6 +20,7 @@ import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
 import im.vector.app.features.voicebroadcast.model.MessageVoiceBroadcastInfoContent
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
+import im.vector.app.features.voicebroadcast.model.isVoiceBroadcast
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
@@ -48,4 +49,8 @@ fun TimelineEvent.getVectorLastMessageContent(): MessageContent? {
         }
         else -> getLastMessageContent()
     }
+}
+
+fun TimelineEvent.isVoiceBroadcast(): Boolean {
+    return root.isVoiceBroadcast()
 }
