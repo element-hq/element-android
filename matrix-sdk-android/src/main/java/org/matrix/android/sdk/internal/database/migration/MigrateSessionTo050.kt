@@ -39,5 +39,3 @@ internal class MigrateSessionTo050(realm: DynamicRealm) : RealmMigrator(realm, 5
                 .addField(PollHistoryStatusEntityFields.IS_END_OF_POLLS_BACKWARD, Boolean::class.java)
     }
 }
-
-

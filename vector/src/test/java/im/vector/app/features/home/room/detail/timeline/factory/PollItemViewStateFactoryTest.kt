@@ -17,12 +17,8 @@
 package im.vector.app.features.home.room.detail.timeline.factory
 
 import im.vector.app.R
-import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.app.features.home.room.detail.timeline.item.PollOptionViewState
-import im.vector.app.features.home.room.detail.timeline.item.PollResponseData
 import im.vector.app.features.home.room.detail.timeline.item.PollVoteSummaryData
-import im.vector.app.features.home.room.detail.timeline.item.ReactionsSummaryData
-import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayout
 import im.vector.app.features.poll.PollViewState
 import im.vector.app.test.fakes.FakeStringProvider
 import im.vector.app.test.fixtures.PollFixture.A_MESSAGE_INFORMATION_DATA
@@ -34,10 +30,6 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
-import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
-import org.matrix.android.sdk.api.session.room.model.message.PollAnswer
-import org.matrix.android.sdk.api.session.room.model.message.PollCreationInfo
-import org.matrix.android.sdk.api.session.room.model.message.PollQuestion
 import org.matrix.android.sdk.api.session.room.model.message.PollType
 import org.matrix.android.sdk.api.session.room.send.SendState
 

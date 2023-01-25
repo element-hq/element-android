@@ -132,7 +132,7 @@ internal class DefaultLoadMorePollsTask @Inject constructor(
                 status.oldestTimestampTargetReachedMs = oldestEventTimestamp
             }
 
-            if(oldestEventId != null) {
+            if (oldestEventId != null) {
                 // save it for next backward pagination
                 status.oldestEventIdReached = oldestEventId
             }
