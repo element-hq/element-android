@@ -284,6 +284,7 @@
         <activity android:name=".features.terms.ReviewTermsActivity" />
         <activity
             android:name=".features.widgets.WidgetActivity"
+            android:taskAffinity=".features.widgets.WidgetActivity.${appTaskAffinitySuffix}"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:supportsPictureInPicture="true" />
 
