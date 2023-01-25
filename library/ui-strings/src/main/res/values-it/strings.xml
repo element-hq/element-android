@@ -2913,4 +2913,6 @@
         <item quantity="other">Non ci sono sondaggi attivi negli ultimi %1$d giorni.
 \nCarica più sondaggi per vedere quelli dei giorni precedenti.</item>
     </plurals>
+    <string name="error_voice_message_broadcast_in_progress_message">Non puoi iniziare un messaggio vocale perché stai registrando una trasmissione in diretta. Termina la trasmissione per potere iniziare un messaggio vocale</string>
+    <string name="error_voice_message_broadcast_in_progress">Impossibile iniziare il messaggio vocale</string>
 </resources>
