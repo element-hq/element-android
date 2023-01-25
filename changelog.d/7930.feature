@@ -1,1 +1,0 @@
-"[Rich text editor] Update list item bullet appearance"
