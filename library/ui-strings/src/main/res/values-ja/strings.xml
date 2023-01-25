@@ -139,8 +139,8 @@
     <string name="settings_add_email_address">メールアドレスを追加</string>
     <string name="settings_add_phone_number">電話番号を追加</string>
     <string name="settings_notification_ringtone">通知音</string>
-    <string name="settings_enable_all_notif">このアカウントでは通知を有効にする</string>
-    <string name="settings_enable_this_device">このセッションでは通知を有効にする</string>
+    <string name="settings_enable_all_notif">このアカウントで通知を有効にする</string>
+    <string name="settings_enable_this_device">このセッションで通知を有効にする</string>
     <string name="settings_messages_in_one_to_one">1対1のチャットでのメッセージ</string>
     <string name="settings_messages_in_group_chat">グループチャットでのメッセージ</string>
     <string name="settings_invited_to_room">ルームへ招待されたとき</string>
