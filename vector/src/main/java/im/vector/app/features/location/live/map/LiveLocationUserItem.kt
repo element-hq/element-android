@@ -105,7 +105,7 @@ abstract class LiveLocationUserItem : VectorEpoxyModel<LiveLocationUserItem.Hold
     }
 
     class Holder : VectorEpoxyHolder() {
-        val timer: CountUpTimer = CountUpTimer(1000)
+        val timer: CountUpTimer = CountUpTimer(intervalInMs = 1000)
         val itemUserAvatarImageView by bind<ImageView>(R.id.itemUserAvatarImageView)
         val itemUserDisplayNameTextView by bind<TextView>(R.id.itemUserDisplayNameTextView)
         val itemRemainingTimeTextView by bind<TextView>(R.id.itemRemainingTimeTextView)

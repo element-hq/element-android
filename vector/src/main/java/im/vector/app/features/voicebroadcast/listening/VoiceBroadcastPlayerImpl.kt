@@ -488,7 +488,10 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
 
         fun startPlaybackTicker(id: String) {
             playbackTicker?.stop()
-            playbackTicker = CountUpTimer(50L).apply {
+            playbackTicker = CountUpTimer(
+                    initialTime = playbackTracker.getPlaybackTime(id)?.toLong() ?: 0L,
+                    intervalInMs = 50L
+            ).apply {
                 tickListener = CountUpTimer.TickListener { onPlaybackTick(id) }
                 resume()
             }

@@ -28,10 +28,10 @@ import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicLong
 
 @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
-class CountUpTimer(private val intervalInMs: Long = 1_000) {
+class CountUpTimer(private val initialTime: Long = 0L, private val intervalInMs: Long = 1_000) {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
-    private val elapsedTime: AtomicLong = AtomicLong()
+    private val elapsedTime: AtomicLong = AtomicLong(initialTime)
     private val resumed: AtomicBoolean = AtomicBoolean(false)
 
     init {
@@ -39,13 +39,13 @@ class CountUpTimer(private val intervalInMs: Long = 1_000) {
     }
 
     private fun startCounter() {
-        tickerFlow(coroutineScope, intervalInMs / 10)
+        val internalDelay = if (intervalInMs > 100) intervalInMs / 10 else intervalInMs
+        tickerFlow(coroutineScope, internalDelay)
                 .filter { resumed.get() }
-                .map { elapsedTime.addAndGet(intervalInMs / 10) }
-                .filter { it % intervalInMs == 0L }
-                .onEach {
-                    tickListener?.onTick(it)
-                }.launchIn(coroutineScope)
+                .map { elapsedTime.addAndGet(internalDelay) }
+                .filter { (it - initialTime) % intervalInMs == 0L }
+                .onEach { tickListener?.onTick(it) }
+                .launchIn(coroutineScope)
     }
 
     var tickListener: TickListener? = null
@@ -55,6 +55,7 @@ class CountUpTimer(private val intervalInMs: Long = 1_000) {
     }
 
     fun pause() {
+        tickListener?.onTick(elapsedTime())
         resumed.set(false)
     }
 
@@ -63,6 +64,7 @@ class CountUpTimer(private val intervalInMs: Long = 1_000) {
     }
 
     fun stop() {
+        tickListener?.onTick(elapsedTime())
         coroutineScope.cancel()
     }
 

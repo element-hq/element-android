@@ -166,7 +166,7 @@ class WebRtcCall(
     private var videoSender: RtpSender? = null
     private var screenSender: RtpSender? = null
 
-    private val timer = CountUpTimer(1000L).apply {
+    private val timer = CountUpTimer(intervalInMs = 1000L).apply {
         tickListener = CountUpTimer.TickListener { milliseconds ->
             val formattedDuration = formatDuration(Duration.ofMillis(milliseconds))
             listeners.forEach {
