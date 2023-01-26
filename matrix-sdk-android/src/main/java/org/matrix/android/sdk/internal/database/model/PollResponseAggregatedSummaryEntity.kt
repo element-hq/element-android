@@ -36,7 +36,4 @@ internal open class PollResponseAggregatedSummaryEntity(
         var sourceLocalEchoEvents: RealmList<String> = RealmList(),
         // list of related event ids which are encrypted due to decryption failure
         var encryptedRelatedEventIds: RealmList<String> = RealmList(),
-) : RealmObject() {
-
-    companion object
-}
+) : RealmObject()

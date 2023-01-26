@@ -17,11 +17,13 @@
 package im.vector.app.features.roomprofile.polls.list.domain
 
 import im.vector.app.features.roomprofile.polls.list.data.RoomPollRepository
-import io.mockk.coJustRun
+import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
+import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
+import org.matrix.android.sdk.api.session.room.poll.LoadedPollsStatus
 
 class LoadMorePollsUseCaseTest {
 
@@ -35,12 +37,18 @@ class LoadMorePollsUseCaseTest {
     fun `given repo when execute then correct method of repo is called`() = runTest {
         // Given
         val aRoomId = "roomId"
-        coJustRun { fakeRoomPollRepository.loadMorePolls(aRoomId) }
+        val loadedPollsStatus = LoadedPollsStatus(
+                canLoadMore = true,
+                daysSynced = 10,
+                hasCompletedASyncBackward = true,
+        )
+        coEvery { fakeRoomPollRepository.loadMorePolls(aRoomId) } returns loadedPollsStatus
 
         // When
-        loadMorePollsUseCase.execute(aRoomId)
+        val result = loadMorePollsUseCase.execute(aRoomId)
 
         // Then
+        result shouldBeEqualTo loadedPollsStatus
         coVerify { fakeRoomPollRepository.loadMorePolls(aRoomId) }
     }
 }

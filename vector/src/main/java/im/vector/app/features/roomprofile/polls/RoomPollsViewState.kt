@@ -25,7 +25,7 @@ data class RoomPollsViewState(
         val polls: List<PollSummary> = emptyList(),
         val isLoadingMore: Boolean = false,
         val canLoadMore: Boolean = true,
-        val nbLoadedDays: Int = 0,
+        val nbSyncedDays: Int = 0,
         val isSyncing: Boolean = false,
 ) : MavericksState {
 
