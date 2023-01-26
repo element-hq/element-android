@@ -38,7 +38,6 @@ import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.util.time.Clock
-import timber.log.Timber
 
 private const val LOADING_PERIOD_IN_DAYS = 30
 private const val EVENTS_PAGE_SIZE = 250
@@ -115,7 +114,6 @@ internal class DefaultPollHistoryService @AssistedInject constructor(
 
         return Transformations.switchMap(pollHistoryStatusLiveData) { results ->
             val oldestTimestamp = results.firstOrNull()?.oldestTimestampTargetReachedMs ?: clock.epochMillis()
-            Timber.d("oldestTimestamp=$oldestTimestamp")
             getPollStartEventsAfter(oldestTimestamp)
         }
     }
