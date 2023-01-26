@@ -124,7 +124,7 @@ internal class RoomPollDataSourceTest {
 
     private fun givenALoadedPollsStatus() = LoadedPollsStatus(
             canLoadMore = true,
-            nbSyncedDays = 10,
+            daysSynced = 10,
             hasCompletedASyncBackward = true,
     )
 }

@@ -68,7 +68,7 @@ class RoomPollsViewModel @AssistedInject constructor(
                 setState {
                     copy(
                             canLoadMore = loadedPollsStatus.canLoadMore,
-                            nbSyncedDays = loadedPollsStatus.nbSyncedDays,
+                            nbSyncedDays = loadedPollsStatus.daysSynced,
                     )
                 }
             }
@@ -100,7 +100,7 @@ class RoomPollsViewModel @AssistedInject constructor(
                 setState {
                     copy(
                             canLoadMore = status.canLoadMore,
-                            nbSyncedDays = status.nbSyncedDays,
+                            nbSyncedDays = status.daysSynced,
                     )
                 }
             }

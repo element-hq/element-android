@@ -75,7 +75,7 @@ class RoomPollsViewModelTest {
         val expectedViewState = initialState.copy(
                 polls = listOf(aPollSummary),
                 canLoadMore = loadedPollsStatus.canLoadMore,
-                nbSyncedDays = loadedPollsStatus.nbSyncedDays,
+                nbSyncedDays = loadedPollsStatus.daysSynced,
         )
 
         // When
@@ -135,7 +135,7 @@ class RoomPollsViewModelTest {
         val stateAfterInit = initialState.copy(
                 polls = emptyList(),
                 canLoadMore = loadedPollsStatus.canLoadMore,
-                nbSyncedDays = loadedPollsStatus.nbSyncedDays,
+                nbSyncedDays = loadedPollsStatus.daysSynced,
         )
 
         // When
@@ -147,7 +147,7 @@ class RoomPollsViewModelTest {
                 .assertStatesChanges(
                         stateAfterInit,
                         { copy(isLoadingMore = true) },
-                        { copy(canLoadMore = newLoadedPollsStatus.canLoadMore, nbSyncedDays = newLoadedPollsStatus.nbSyncedDays) },
+                        { copy(canLoadMore = newLoadedPollsStatus.canLoadMore, nbSyncedDays = newLoadedPollsStatus.daysSynced) },
                         { copy(isLoadingMore = false) },
                 )
                 .finish()
@@ -181,7 +181,7 @@ class RoomPollsViewModelTest {
     private fun givenALoadedPollsStatus(canLoadMore: Boolean = true, nbSyncedDays: Int = 10) =
             LoadedPollsStatus(
                     canLoadMore = canLoadMore,
-                    nbSyncedDays = nbSyncedDays,
+                    daysSynced = nbSyncedDays,
                     hasCompletedASyncBackward = false,
             )
 }

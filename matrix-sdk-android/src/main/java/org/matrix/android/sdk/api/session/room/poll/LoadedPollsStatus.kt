@@ -20,7 +20,20 @@ package org.matrix.android.sdk.api.session.room.poll
  * Represent the status of the loaded polls for a room.
  */
 data class LoadedPollsStatus(
+        /**
+         * Indicate whether more polls can be loaded from timeline.
+         * A false value would mean the start of the timeline has been reached.
+         */
         val canLoadMore: Boolean,
-        val nbSyncedDays: Int,
+
+        /**
+         * Number of days of timeline events currently synced (fetched and stored in local).
+         */
+        val daysSynced: Int,
+
+        /**
+         * Indicate whether a sync of timeline events has been completely done in backward. It would
+         * mean timeline events have been synced for at least a number of days defined by [PollHistoryService.loadingPeriodInDays].
+         */
         val hasCompletedASyncBackward: Boolean,
 )

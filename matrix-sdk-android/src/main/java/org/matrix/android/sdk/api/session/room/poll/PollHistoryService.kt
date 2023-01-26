@@ -24,6 +24,9 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
  */
 interface PollHistoryService {
 
+    /**
+     * The number of days covered when requesting to load more polls.
+     */
     val loadingPeriodInDays: Int
 
     /**

@@ -53,7 +53,7 @@ internal class DefaultLoadMorePollsTask @Inject constructor(
 
         return LoadedPollsStatus(
                 canLoadMore = currentPollHistoryStatus.isEndOfPollsBackward.not(),
-                nbSyncedDays = currentPollHistoryStatus.getNbSyncedDays(params.currentTimestampMs),
+                daysSynced = currentPollHistoryStatus.getNbSyncedDays(params.currentTimestampMs),
                 hasCompletedASyncBackward = currentPollHistoryStatus.hasCompletedASyncBackward,
         )
     }

@@ -72,7 +72,7 @@ class RoomPollRepositoryTest {
         // Given
         val expectedStatus = LoadedPollsStatus(
                 canLoadMore = true,
-                nbSyncedDays = 10,
+                daysSynced = 10,
                 hasCompletedASyncBackward = false,
         )
         coEvery { fakeRoomPollDataSource.getLoadedPollsStatus(A_ROOM_ID) } returns expectedStatus

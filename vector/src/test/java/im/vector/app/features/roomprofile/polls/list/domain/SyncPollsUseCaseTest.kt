@@ -45,7 +45,7 @@ class SyncPollsUseCaseTest {
         val aRoomId = "roomId"
         val aLoadedStatus = LoadedPollsStatus(
                 canLoadMore = true,
-                nbSyncedDays = 10,
+                daysSynced = 10,
                 hasCompletedASyncBackward = true,
         )
         coJustRun { fakeRoomPollRepository.syncPolls(aRoomId) }
@@ -71,12 +71,12 @@ class SyncPollsUseCaseTest {
         val aRoomId = "roomId"
         val aLoadedStatus = LoadedPollsStatus(
                 canLoadMore = true,
-                nbSyncedDays = 10,
+                daysSynced = 10,
                 hasCompletedASyncBackward = false,
         )
         val anUpdatedLoadedStatus = LoadedPollsStatus(
                 canLoadMore = true,
-                nbSyncedDays = 10,
+                daysSynced = 10,
                 hasCompletedASyncBackward = true,
         )
         coJustRun { fakeRoomPollRepository.syncPolls(aRoomId) }

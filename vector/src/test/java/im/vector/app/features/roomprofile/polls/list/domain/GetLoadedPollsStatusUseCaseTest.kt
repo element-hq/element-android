@@ -39,7 +39,7 @@ class GetLoadedPollsStatusUseCaseTest {
         val aRoomId = "roomId"
         val expectedStatus = LoadedPollsStatus(
                 canLoadMore = true,
-                nbSyncedDays = 10,
+                daysSynced = 10,
                 hasCompletedASyncBackward = true,
         )
         coEvery { fakeRoomPollRepository.getLoadedPollsStatus(aRoomId) } returns expectedStatus
