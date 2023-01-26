@@ -45,6 +45,7 @@ sealed class BootstrapActions : VectorViewModelAction {
     object SaveReqFailed : BootstrapActions()
 
     object HandleForgotBackupPassphrase : BootstrapActions()
+    object MigrationHandleKeyLost : BootstrapActions()
     data class DoMigrateWithPassphrase(val passphrase: String) : BootstrapActions()
     data class DoMigrateWithRecoveryKey(val recoveryKey: String) : BootstrapActions()
 

@@ -97,4 +97,10 @@ object Config {
     val NIGHTLY_ANALYTICS_CONFIG = RELEASE_ANALYTICS_CONFIG.copy(sentryEnvironment = "NIGHTLY")
 
     val SHOW_UNVERIFIED_SESSIONS_ALERT_AFTER_MILLIS = 7.days.inWholeMilliseconds // 1 Week
+
+    /**
+     * When migrating for 4S and if there is an existing backup, we let the option
+     * to enter the existing backup key or we ignore and create a new one
+     */
+    const val IGNORE_EXISTING_BACKUP_ON_MIGRATION_TO_4S = false
 }

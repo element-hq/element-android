@@ -26,6 +26,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.R
+import im.vector.app.config.Config
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.error.ErrorFormatter
@@ -37,6 +38,7 @@ import im.vector.app.features.raw.wellknown.SecureBackupMethod
 import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.raw.wellknown.isSecureBackupRequired
 import im.vector.app.features.raw.wellknown.secureBackupMethod
+import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.auth.UIABaseAuth
@@ -46,10 +48,10 @@ import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupLastVersionResult
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersionResult
 import org.matrix.android.sdk.api.session.crypto.keysbackup.extractCurveKeyFromRecoveryKey
 import org.matrix.android.sdk.api.session.crypto.keysbackup.toKeysVersionResult
@@ -59,6 +61,11 @@ import org.matrix.android.sdk.api.util.awaitCallback
 import java.io.OutputStream
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resumeWithException
+
+enum class BackupMigrationStrategy {
+    IgnoreExistingBackup,
+    ProposeToConvertTo4S
+}
 
 class BootstrapSharedViewModel @AssistedInject constructor(
         @Assisted initialState: BootstrapViewState,
@@ -75,6 +82,12 @@ class BootstrapSharedViewModel @AssistedInject constructor(
     private var isBackupCreatedFromPassphrase: Boolean = false
     private val zxcvbn = Zxcvbn()
 
+    private val backupMigrationStrategy = if (Config.IGNORE_EXISTING_BACKUP_ON_MIGRATION_TO_4S) {
+        BackupMigrationStrategy.IgnoreExistingBackup
+    } else {
+        BackupMigrationStrategy.ProposeToConvertTo4S
+    }
+
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<BootstrapSharedViewModel, BootstrapViewState> {
         override fun create(initialState: BootstrapViewState): BootstrapSharedViewModel
@@ -85,7 +98,10 @@ class BootstrapSharedViewModel @AssistedInject constructor(
     init {
 
         setState {
-            copy(step = BootstrapStep.CheckingMigration, isRecoverySetup = session.sharedSecretStorageService().isRecoverySetup())
+            copy(
+                    step = BootstrapStep.CheckingMigration,
+                    isRecoverySetup = session.sharedSecretStorageService().isRecoverySetup()
+            )
         }
 
         // Refresh the well-known configuration
@@ -127,28 +143,36 @@ class BootstrapSharedViewModel @AssistedInject constructor(
 
                 // We need to check if there is an existing backup
                 viewModelScope.launch(Dispatchers.IO) {
-                    val version = awaitCallback<KeysBackupLastVersionResult> {
+                    val version = awaitCallback {
                         session.cryptoService().keysBackupService().getCurrentVersion(it)
                     }.toKeysVersionResult()
                     if (version == null) {
                         // we just resume plain bootstrap
                         doesKeyBackupExist = false
                         setState {
-                            copy(step = BootstrapStep.FirstForm(keyBackUpExist = doesKeyBackupExist, methods = this.secureBackupMethod))
+                            copy(step = BootstrapStep.FirstForm(keyBackUpExist = false, methods = this.secureBackupMethod))
                         }
                     } else {
-                        // we need to get existing backup passphrase/key and convert to SSSS
-                        val keyVersion = awaitCallback<KeysVersionResult?> {
-                            session.cryptoService().keysBackupService().getVersion(version.version, it)
-                        }
-                        if (keyVersion == null) {
-                            // strange case... just finish?
-                            _viewEvents.post(BootstrapViewEvents.Dismiss(false))
-                        } else {
-                            doesKeyBackupExist = true
-                            isBackupCreatedFromPassphrase = keyVersion.getAuthDataAsMegolmBackupAuthData()?.privateKeySalt != null
+                        if (backupMigrationStrategy == BackupMigrationStrategy.IgnoreExistingBackup) {
+                            clearAllExistingBackups()
+                            doesKeyBackupExist = false
                             setState {
-                                copy(step = BootstrapStep.FirstForm(keyBackUpExist = doesKeyBackupExist, methods = this.secureBackupMethod))
+                                copy(step = BootstrapStep.FirstForm(keyBackUpExist = false, methods = this.secureBackupMethod))
+                            }
+                        } else {
+                            // we need to get existing backup passphrase/key and convert to SSSS
+                            val keyVersion = awaitCallback<KeysVersionResult?> {
+                                session.cryptoService().keysBackupService().getVersion(version.version, it)
+                            }
+                            if (keyVersion == null) {
+                                // strange case... just finish?
+                                _viewEvents.post(BootstrapViewEvents.Dismiss(false))
+                            } else {
+                                doesKeyBackupExist = true
+                                isBackupCreatedFromPassphrase = keyVersion.getAuthDataAsMegolmBackupAuthData()?.privateKeySalt != null
+                                setState {
+                                    copy(step = BootstrapStep.FirstForm(keyBackUpExist = doesKeyBackupExist, methods = this.secureBackupMethod))
+                                }
                             }
                         }
                     }
@@ -255,9 +279,23 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                     }
                 } else return@withState
             }
-//            is BootstrapActions.ReAuth                           -> {
-//                startInitializeFlow(action.pass)
-//            }
+            BootstrapActions.MigrationHandleKeyLost -> {
+                // delete the backups as key is lost
+                session.coroutineScope.launch {
+                    clearAllExistingBackups()
+                }
+                doesKeyBackupExist = false
+                setState {
+                    copy(
+                            step = BootstrapStep.FirstForm(keyBackUpExist = false, methods = this.secureBackupMethod),
+                            // Also reset the passphrase
+                            passphrase = null,
+                            passphraseRepeat = null,
+                            // Also reset the key
+                            migrationRecoveryKey = null
+                    )
+                }
+            }
             is BootstrapActions.DoMigrateWithPassphrase -> {
                 startMigrationFlow(state.step, action.passphrase, null)
             }
@@ -271,6 +309,22 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                 setState {
                     copy(step = BootstrapStep.AccountReAuth(stringProvider.getString(R.string.authentication_error)))
                 }
+            }
+        }
+    }
+
+    private suspend fun clearAllExistingBackups() {
+        tryOrNull {
+            var serverVersion = awaitCallback {
+                session.cryptoService().keysBackupService().getCurrentVersion(it)
+            }.toKeysVersionResult()
+            while (serverVersion != null) {
+                awaitCallback<Unit> {
+                    session.cryptoService().keysBackupService().deleteBackup(serverVersion!!.version, it)
+                }
+                serverVersion = awaitCallback {
+                    session.cryptoService().keysBackupService().getCurrentVersion(it)
+                }.toKeysVersionResult()
             }
         }
     }

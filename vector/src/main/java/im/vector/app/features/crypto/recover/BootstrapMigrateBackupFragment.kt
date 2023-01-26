@@ -88,6 +88,9 @@ class BootstrapMigrateBackupFragment :
         views.bootstrapMigrateContinueButton.debouncedClicks { submit() }
         views.bootstrapMigrateForgotPassphrase.debouncedClicks { sharedViewModel.handle(BootstrapActions.HandleForgotBackupPassphrase) }
         views.bootstrapMigrateUseFile.debouncedClicks { startImportTextFromFileIntent(requireContext(), importFileStartForActivityResult) }
+        views.bootstrapMigrateForgot.debouncedClicks {
+            sharedViewModel.handle(BootstrapActions.MigrationHandleKeyLost)
+        }
     }
 
     private fun submit() = withState(sharedViewModel) { state ->
