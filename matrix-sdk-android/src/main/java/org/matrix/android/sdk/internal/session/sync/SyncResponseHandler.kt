@@ -89,7 +89,7 @@ internal class SyncResponseHandler @Inject constructor(
 
             // pass live state/crypto related event to crypto
 
-            relevantPlugins.measureSpan("task", "crypto_session_event_handling") {
+            measureSpan("task", "crypto_session_event_handling") {
                 syncResponse.rooms?.invite?.entries?.map { (roomId, roomSync) ->
                     roomSync.inviteState
                             ?.events
