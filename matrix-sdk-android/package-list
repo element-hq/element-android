@@ -3663,6 +3663,19 @@ $dokka.location:org.matrix.android.sdk.api.session.room.peeking/PeekResult.Succe
 $dokka.location:org.matrix.android.sdk.api.session.room.peeking/PeekResult.UnknownAlias///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.peeking/-peek-result/-unknown-alias/index.html
 $dokka.location:org.matrix.android.sdk.api.session.room.peeking/PeekResult///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.peeking/-peek-result/index.html
 $dokka.location:org.matrix.android.sdk.api.session.room.peeking/PeekResult/isSuccess/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.peeking/-peek-result/is-success.html
+$dokka.location:org.matrix.android.sdk.api.session.room.poll////PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.poll/index.html
+$dokka.location:org.matrix.android.sdk.api.session.room.poll/LoadedPollsStatus///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.poll/-loaded-polls-status/index.html
+$dokka.location:org.matrix.android.sdk.api.session.room.poll/LoadedPollsStatus/LoadedPollsStatus/#kotlin.Boolean#kotlin.Int#kotlin.Boolean/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.poll/-loaded-polls-status/-loaded-polls-status.html
+$dokka.location:org.matrix.android.sdk.api.session.room.poll/LoadedPollsStatus/canLoadMore/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.poll/-loaded-polls-status/can-load-more.html
+$dokka.location:org.matrix.android.sdk.api.session.room.poll/LoadedPollsStatus/daysSynced/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.poll/-loaded-polls-status/days-synced.html
+$dokka.location:org.matrix.android.sdk.api.session.room.poll/LoadedPollsStatus/hasCompletedASyncBackward/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.poll/-loaded-polls-status/has-completed-a-sync-backward.html
+$dokka.location:org.matrix.android.sdk.api.session.room.poll/PollHistoryService///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.poll/-poll-history-service/index.html
+$dokka.location:org.matrix.android.sdk.api.session.room.poll/PollHistoryService/dispose/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.poll/-poll-history-service/dispose.html
+$dokka.location:org.matrix.android.sdk.api.session.room.poll/PollHistoryService/getLoadedPollsStatus/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.poll/-poll-history-service/get-loaded-polls-status.html
+$dokka.location:org.matrix.android.sdk.api.session.room.poll/PollHistoryService/getPollEvents/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.poll/-poll-history-service/get-poll-events.html
+$dokka.location:org.matrix.android.sdk.api.session.room.poll/PollHistoryService/loadMore/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.poll/-poll-history-service/load-more.html
+$dokka.location:org.matrix.android.sdk.api.session.room.poll/PollHistoryService/loadingPeriodInDays/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.poll/-poll-history-service/loading-period-in-days.html
+$dokka.location:org.matrix.android.sdk.api.session.room.poll/PollHistoryService/syncPolls/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.poll/-poll-history-service/sync-polls.html
 $dokka.location:org.matrix.android.sdk.api.session.room.powerlevels////PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.powerlevels/index.html
 $dokka.location:org.matrix.android.sdk.api.session.room.powerlevels/PowerLevelsHelper///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.powerlevels/-power-levels-helper/index.html
 $dokka.location:org.matrix.android.sdk.api.session.room.powerlevels/PowerLevelsHelper/PowerLevelsHelper/#org.matrix.android.sdk.api.session.room.model.PowerLevelsContent/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room.powerlevels/-power-levels-helper/-power-levels-helper.html
@@ -4005,6 +4018,7 @@ $dokka.location:org.matrix.android.sdk.api.session.room/Room/getRoomSummaryLive/
 $dokka.location:org.matrix.android.sdk.api.session.room/Room/localRoomSummary/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room/-room/local-room-summary.html
 $dokka.location:org.matrix.android.sdk.api.session.room/Room/locationSharingService/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room/-room/location-sharing-service.html
 $dokka.location:org.matrix.android.sdk.api.session.room/Room/membershipService/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room/-room/membership-service.html
+$dokka.location:org.matrix.android.sdk.api.session.room/Room/pollHistoryService/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room/-room/poll-history-service.html
 $dokka.location:org.matrix.android.sdk.api.session.room/Room/readService/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room/-room/read-service.html
 $dokka.location:org.matrix.android.sdk.api.session.room/Room/relationService/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room/-room/relation-service.html
 $dokka.location:org.matrix.android.sdk.api.session.room/Room/reportingService/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.room/-room/reporting-service.html
@@ -5000,6 +5014,9 @@ $dokka.location:org.matrix.android.sdk.internal.network/ComputeUserAgentUseCase.
 $dokka.location:org.matrix.android.sdk.internal.network/ComputeUserAgentUseCase///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.network/-compute-user-agent-use-case/index.html
 $dokka.location:org.matrix.android.sdk.internal.network/ComputeUserAgentUseCase/ComputeUserAgentUseCase/#android.content.Context/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.network/-compute-user-agent-use-case/-compute-user-agent-use-case.html
 $dokka.location:org.matrix.android.sdk.internal.network/ComputeUserAgentUseCase/execute/#kotlin.String/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.network/-compute-user-agent-use-case/execute.html
+$dokka.location:org.matrix.android.sdk.internal.session.room.poll////PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.session.room.poll/index.html
+$dokka.location:org.matrix.android.sdk.internal.session.room.poll/PollConstants///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.session.room.poll/-poll-constants/index.html
+$dokka.location:org.matrix.android.sdk.internal.session.room.poll/PollConstants/MILLISECONDS_PER_DAY/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.session.room.poll/-poll-constants/-m-i-l-l-i-s-e-c-o-n-d-s_-p-e-r_-d-a-y.html
 $dokka.location:org.matrix.android.sdk.internal.session.room.relation.poll////PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.session.room.relation.poll/index.html
 $dokka.location:org.matrix.android.sdk.internal.session.room.relation.poll//FETCH_RELATED_EVENTS_LIMIT/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.internal.session.room.relation.poll/-f-e-t-c-h_-r-e-l-a-t-e-d_-e-v-e-n-t-s_-l-i-m-i-t.html
 $dokka.location:org.matrix.android.sdk.userstories////PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.userstories/index.html
@@ -5094,6 +5111,7 @@ org.matrix.android.sdk.api.session.room.model.thirdparty
 org.matrix.android.sdk.api.session.room.model.tombstone
 org.matrix.android.sdk.api.session.room.notification
 org.matrix.android.sdk.api.session.room.peeking
+org.matrix.android.sdk.api.session.room.poll
 org.matrix.android.sdk.api.session.room.powerlevels
 org.matrix.android.sdk.api.session.room.read
 org.matrix.android.sdk.api.session.room.reporting
@@ -5139,6 +5157,7 @@ org.matrix.android.sdk.internal.crypto.store.db
 org.matrix.android.sdk.internal.crypto.tasks
 org.matrix.android.sdk.internal.database
 org.matrix.android.sdk.internal.network
+org.matrix.android.sdk.internal.session.room.poll
 org.matrix.android.sdk.internal.session.room.relation.poll
 org.matrix.android.sdk.userstories
 
