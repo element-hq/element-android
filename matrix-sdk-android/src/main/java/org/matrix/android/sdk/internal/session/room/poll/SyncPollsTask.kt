@@ -84,18 +84,17 @@ internal class DefaultSyncPollsTask @Inject constructor(
     ): LoadStatus {
         return monarchy.awaitTransaction { realm ->
             val status = PollHistoryStatusEntity.getOrCreate(realm, roomId)
-            val mostRecentEventIdReached = status.mostRecentEventIdReached
-
             val mostRecentEvent = events
                     .maxByOrNull { it.root.originServerTs ?: Long.MIN_VALUE }
                     ?.root
+            val mostRecentEventIdReached = mostRecentEvent?.eventId
 
-            if (mostRecentEventIdReached == null) {
+            if (mostRecentEventIdReached != null) {
                 // save it for next forward pagination
-                status.mostRecentEventIdReached = mostRecentEvent?.eventId
+                status.mostRecentEventIdReached = mostRecentEventIdReached
             }
 
-            val mostRecentTimestamp = mostRecentEvent?.ageLocalTs
+            val mostRecentTimestamp = mostRecentEvent?.originServerTs
 
             val shouldLoadMore = paginationState.hasMoreToLoad &&
                     (mostRecentTimestamp == null || mostRecentTimestamp < currentTimestampMs)
