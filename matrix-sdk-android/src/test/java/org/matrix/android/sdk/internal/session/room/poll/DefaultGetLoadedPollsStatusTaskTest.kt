@@ -30,10 +30,16 @@ import org.matrix.android.sdk.test.fakes.givenEqualTo
 import org.matrix.android.sdk.test.fakes.givenFindFirst
 
 private const val A_ROOM_ID = "room-id"
+
 /**
- * 2023/01/26
+ * Timestamp in milliseconds corresponding to 2023/01/26.
  */
-private const val A_TIMESTAMP = 1674737619290L
+private const val A_CURRENT_TIMESTAMP = 1674737619290L
+
+/**
+ * Timestamp in milliseconds corresponding to 2023/01/20.
+ */
+private const val AN_EVENT_TIMESTAMP = 1674169200000L
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class DefaultGetLoadedPollsStatusTaskTest {
@@ -53,11 +59,9 @@ internal class DefaultGetLoadedPollsStatusTaskTest {
     fun `given poll history status exists in db with an oldestTimestamp reached when execute then the computed status is returned`() = runTest {
         // Given
         val params = givenTaskParams()
-        // 2023/01/20
-        val oldestTimestampReached = 1674169200000
         val pollHistoryStatus = aPollHistoryStatusEntity(
                 isEndOfPollsBackward = false,
-                oldestTimestampReached = oldestTimestampReached,
+                oldestTimestampReached = AN_EVENT_TIMESTAMP,
         )
         fakeMonarchy.fakeRealm
                 .givenWhere<PollHistoryStatusEntity>()
@@ -104,7 +108,7 @@ internal class DefaultGetLoadedPollsStatusTaskTest {
     private fun givenTaskParams(): GetLoadedPollsStatusTask.Params {
         return GetLoadedPollsStatusTask.Params(
                 roomId = A_ROOM_ID,
-                currentTimestampMs = A_TIMESTAMP,
+                currentTimestampMs = A_CURRENT_TIMESTAMP,
         )
     }
 

@@ -28,17 +28,12 @@ import org.junit.Before
 import org.junit.Test
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.events.model.RelationType
-import org.matrix.android.sdk.api.session.events.model.isPollResponse
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.internal.database.mapper.toEntity
 import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.EventEntityFields
 import org.matrix.android.sdk.internal.database.model.EventInsertType
 import org.matrix.android.sdk.internal.database.query.copyToRealmOrIgnore
-import org.matrix.android.sdk.internal.session.room.relation.RelationsResponse
-import org.matrix.android.sdk.internal.session.room.relation.poll.FETCH_RELATED_EVENTS_LIMIT
-import org.matrix.android.sdk.internal.session.room.relation.poll.FetchPollResponseEventsTask
 import org.matrix.android.sdk.test.fakes.FakeClock
 import org.matrix.android.sdk.test.fakes.FakeEventDecryptor
 import org.matrix.android.sdk.test.fakes.FakeMonarchy
