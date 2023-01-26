@@ -19,8 +19,8 @@ package im.vector.app.features.html
 import io.noties.markwon.AbstractMarkwonPlugin
 
 /**
- * A root node enables post-processing of optionally nested tags
- * see: [im.vector.app.features.html.CodePostProcessorTagHandler]
+ * A root node enables post-processing of optionally nested tags.
+ * See: [im.vector.app.features.html.CodePostProcessorTagHandler]
  */
 internal class HtmlRootTagPlugin : AbstractMarkwonPlugin() {
     companion object {
