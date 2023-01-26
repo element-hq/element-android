@@ -99,8 +99,9 @@ object Config {
     val SHOW_UNVERIFIED_SESSIONS_ALERT_AFTER_MILLIS = 7.days.inWholeMilliseconds // 1 Week
 
     /**
+     * Define the strategy when migrating existing backup to full 4S.
      * When migrating for 4S and if there is an existing backup, we let the option
-     * to enter the existing backup key or we ignore and create a new one
+     * to enter the existing backup key or we ignore and create a new one.
      */
-    const val IGNORE_EXISTING_BACKUP_ON_MIGRATION_TO_4S = false
+    const val IGNORE_EXISTING_BACKUP_ON_MIGRATION_TO_4S = true
 }
