@@ -30,7 +30,7 @@ import android.content.res.Resources
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.text.Spannable
-import android.text.Spanned
+import android.text.SpannableStringBuilder
 import android.widget.TextView
 import androidx.core.text.toSpannable
 import com.bumptech.glide.Glide
@@ -151,9 +151,35 @@ class EventHtmlRenderer @Inject constructor(
         }
     }
 
+    /**
+     * Workaround for https://github.com/noties/Markwon/issues/423
+     */
+    private val removeLeadingNewlineForInlineCode = object : AbstractMarkwonPlugin() {
+        override fun afterSetText(textView: TextView) {
+            super.afterSetText(textView)
+
+            val text = SpannableStringBuilder(textView.text.toSpannable())
+            val inlineCodeSpans = text.getSpans(0, textView.length(), InlineCodeSpan::class.java).toList()
+            val legacyInlineCodeSpans = text.getSpans(0, textView.length(), HtmlCodeSpan::class.java).filter { !it.isBlock }
+            val spans = inlineCodeSpans + legacyInlineCodeSpans
+
+            if (spans.isEmpty()) return
+
+            spans.forEach { span ->
+                val start = text.getSpanStart(span)
+                if (text[start] == '\n') {
+                    text.replace(start, start + 1, "")
+                }
+            }
+
+            textView.text = text
+        }
+    }
+
     private val markwon = Markwon.builder(context)
             .usePlugin(HtmlRootTagPlugin())
             .usePlugin(HtmlPlugin.create(htmlConfigure))
+            .usePlugin(removeLeadingNewlineForInlineCode)
             .usePlugin(glidePlugin)
             .apply {
                 if (vectorPreferences.latexMathsIsEnabled()) {
