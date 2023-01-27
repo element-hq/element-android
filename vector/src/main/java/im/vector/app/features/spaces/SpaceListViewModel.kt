@@ -93,7 +93,7 @@ class SpaceListViewModel @AssistedInject constructor(
                 }
 
         // XXX there should be a way to refactor this and share it
-        session.roomService().getPagedRoomSummariesLive(
+        session.roomService().roomSummariesChangesLive(
                 roomSummaryQueryParams {
                     this.memberships = listOf(Membership.JOIN)
                     this.spaceFilter = roomsInSpaceFilter()
@@ -268,9 +268,7 @@ class SpaceListViewModel @AssistedInject constructor(
 
         combine(
                 session.flow().liveSpaceSummaries(params),
-                session.accountDataService()
-                        .getLiveRoomAccountDataEvents(setOf(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER))
-                        .asFlow()
+                session.flow().liveRoomAccountData(setOf(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER))
         ) { spaces, _ ->
             spaces
         }.execute { asyncSpaces ->

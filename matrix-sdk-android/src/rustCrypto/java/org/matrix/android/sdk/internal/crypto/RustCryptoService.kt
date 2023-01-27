@@ -192,10 +192,13 @@ internal class RustCryptoService @Inject constructor(
     }
 
     override suspend fun fetchDevicesList(): List<DeviceInfo> {
-        val devicesList = tryOrNull {
-            getDevicesTask.execute(Unit).devices
-        }.orEmpty()
-        cryptoStore.saveMyDevicesInfo(devicesList)
+        val devicesList: List<DeviceInfo>
+        withContext(coroutineDispatchers.io) {
+            devicesList = tryOrNull {
+                getDevicesTask.execute(Unit).devices
+            }.orEmpty()
+            cryptoStore.saveMyDevicesInfo(devicesList)
+        }
         return devicesList
     }
 
@@ -239,7 +242,7 @@ internal class RustCryptoService @Inject constructor(
      */
     override fun start() {
         internalStart()
-        cryptoCoroutineScope.launch {
+        cryptoCoroutineScope.launch(coroutineDispatchers.io) {
             cryptoStore.open()
             // Just update
             fetchDevicesList()

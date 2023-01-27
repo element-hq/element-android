@@ -25,6 +25,7 @@ import dagger.assisted.AssistedInject
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
+import im.vector.app.core.dispatchers.CoroutineDispatchers
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.pushers.EnsureFcmTokenIsRetrievedUseCase
 import im.vector.app.core.pushers.PushersManager
@@ -92,6 +93,7 @@ class HomeActivityViewModel @AssistedInject constructor(
         private val registerUnifiedPushUseCase: RegisterUnifiedPushUseCase,
         private val unregisterUnifiedPushUseCase: UnregisterUnifiedPushUseCase,
         private val ensureFcmTokenIsRetrievedUseCase: EnsureFcmTokenIsRetrievedUseCase,
+        private val coroutineDispatchers: CoroutineDispatchers
 ) : VectorViewModel<HomeActivityViewState, HomeActivityViewActions, HomeActivityViewEvents>(initialState) {
 
     @AssistedFactory
@@ -116,7 +118,9 @@ class HomeActivityViewModel @AssistedInject constructor(
         if (isInitialized) return
         isInitialized = true
         registerUnifiedPushIfNeeded()
-        cleanupFiles()
+        viewModelScope.launch(coroutineDispatchers.io) {
+            cleanupFiles()
+        }
         observeInitialSync()
         checkSessionPushIsOn()
         observeCrossSigningReset()

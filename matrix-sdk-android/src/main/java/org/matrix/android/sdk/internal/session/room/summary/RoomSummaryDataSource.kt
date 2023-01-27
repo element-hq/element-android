@@ -130,6 +130,18 @@ internal class RoomSummaryDataSource @Inject constructor(
         )
     }
 
+    fun getRoomSummariesChangesLive(
+            queryParams: RoomSummaryQueryParams,
+            sortOrder: RoomSortOrder = RoomSortOrder.NONE
+    ): LiveData<List<Unit>> {
+        return monarchy.findAllMappedWithChanges(
+                {
+                    roomSummariesQuery(it, queryParams).process(sortOrder)
+                },
+                { emptyList<Unit>() }
+        )
+    }
+
     fun getSpaceSummariesLive(
             queryParams: SpaceSummaryQueryParams,
             sortOrder: RoomSortOrder = RoomSortOrder.NONE
