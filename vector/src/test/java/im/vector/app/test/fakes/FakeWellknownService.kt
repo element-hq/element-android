@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2022 BWI GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,22 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.home.room.detail.timeline.action
+package im.vector.app.test.fakes
 
-import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
-import im.vector.app.features.location.LocationData
+import im.vector.app.features.raw.wellknown.WellknownService
+import io.mockk.every
+import io.mockk.mockk
 
-/**
- * Data used to display Location data in the message bottom sheet.
- */
-data class LocationUiData(
-        val locationData: LocationData?,
-        val locationUrl: String,
-        val locationOwnerId: String?,
-        val locationPinProvider: LocationPinProvider,
-)
+class FakeWellknownService {
+    val A_MAPSTYLE_URL = "https://example.com/style.json"
+
+    val instance = mockk<WellknownService>()
+
+    fun givenMissingMapConfiguration() {
+        every { instance.getMapStyleUrl() } returns null
+    }
+
+    fun givenValidMapConfiguration() {
+        every { instance.getMapStyleUrl() } returns A_MAPSTYLE_URL
+    }
+}

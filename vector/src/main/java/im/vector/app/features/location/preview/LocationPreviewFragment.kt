@@ -75,7 +75,7 @@ class LocationPreviewFragment :
         views.mapView.onCreate(savedInstanceState)
 
         lifecycleScope.launchWhenCreated {
-            views.mapView.initialize(urlMapProvider.getMapUrl())
+            views.mapView.initialize(urlMapProvider.getMapStyleUrl())
             loadPinDrawable()
         }
     }

@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2022 BWI GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,52 +17,25 @@
 
 package im.vector.app.features.location
 
-import im.vector.app.features.raw.wellknown.getElementWellknown
-import org.matrix.android.sdk.api.extensions.tryOrNull
-import org.matrix.android.sdk.api.raw.RawService
-import org.matrix.android.sdk.api.session.Session
+import androidx.annotation.VisibleForTesting
+import im.vector.app.features.raw.wellknown.WellknownService
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class UrlMapProvider @Inject constructor(
-        private val session: Session,
-        private val rawService: RawService,
-        locationSharingConfig: LocationSharingConfig,
+        private val wellknownService: WellknownService,
+        private val locationSharingConfig: LocationSharingConfig,
 ) {
     private val keyParam = "?key=${locationSharingConfig.mapTilerKey}"
 
-    private val fallbackMapUrl = buildString {
+    @VisibleForTesting
+    val fallbackMapUrl = buildString {
         append(MAP_BASE_URL)
         append(keyParam)
     }
 
-    suspend fun getMapUrl(): String {
-        val upstreamMapUrl = tryOrNull { rawService.getElementWellknown(session.sessionParams) }
-                ?.getBestMapTileServerConfig()
-                ?.mapStyleUrl
-        return upstreamMapUrl ?: fallbackMapUrl
-    }
-
-    fun buildStaticMapUrl(
-            locationData: LocationData,
-            zoom: Double,
-            width: Int,
-            height: Int
-    ): String {
-        return buildString {
-            append(STATIC_MAP_BASE_URL)
-            append(locationData.longitude)
-            append(",")
-            append(locationData.latitude)
-            append(",")
-            append(zoom)
-            append("/")
-            append(width)
-            append("x")
-            append(height)
-            append(".png")
-            append(keyParam)
-            // Since the default copyright font is too small we put a custom one on map
-            append("&attribution=false")
-        }
+    fun getMapStyleUrl() : String {
+        return wellknownService.getMapStyleUrl() ?: if (locationSharingConfig.isMapTilerFallbackEnabled) fallbackMapUrl else ""
     }
 }

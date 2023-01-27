@@ -10,6 +10,4 @@
     <!-- onboarding english only word play -->
     <string name="cut_the_slack_from_teams" translatable="false">Cut the slack from teams.</string>
 
-    <!--  WIP -->
-    <string name="location_map_view_copyright" translatable="false">© MapTiler © OpenStreetMap contributors</string>
 </resources>

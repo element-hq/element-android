@@ -57,7 +57,6 @@ internal class AttachmentTypeSelectorViewModelTest {
     @Test
     fun `given location sharing is enabled, then location sharing option is visible`() {
         fakeVectorFeatures.givenLocationSharing(isEnabled = true)
-
         createViewModel()
                 .test()
                 .assertStates(
@@ -136,7 +135,7 @@ internal class AttachmentTypeSelectorViewModelTest {
         return AttachmentTypeSelectorViewModel(
                 initialState,
                 vectorFeatures = fakeVectorFeatures,
-                vectorPreferences = fakeVectorPreferences.instance,
+                vectorPreferences = fakeVectorPreferences.instance
         )
     }
 }

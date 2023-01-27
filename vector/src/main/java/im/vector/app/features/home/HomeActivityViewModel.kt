@@ -36,9 +36,11 @@ import im.vector.app.features.analytics.extensions.toAnalyticsType
 import im.vector.app.features.analytics.plan.Signup
 import im.vector.app.features.analytics.store.AnalyticsStore
 import im.vector.app.features.home.room.list.home.release.ReleaseNotesPreferencesStore
+import im.vector.app.features.location.UrlMapProvider
 import im.vector.app.features.login.ReAuthHelper
 import im.vector.app.features.onboarding.AuthenticationDescription
 import im.vector.app.features.raw.wellknown.ElementWellKnown
+import im.vector.app.features.raw.wellknown.WellknownService
 import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.raw.wellknown.isSecureBackupRequired
 import im.vector.app.features.raw.wellknown.withElementWellKnown
@@ -54,6 +56,7 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.MatrixPatterns.getServerName
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.UserPasswordAuth
@@ -82,7 +85,7 @@ import kotlin.coroutines.resumeWithException
 class HomeActivityViewModel @AssistedInject constructor(
         @Assisted private val initialState: HomeActivityViewState,
         private val activeSessionHolder: ActiveSessionHolder,
-        private val rawService: RawService,
+        private val wellknownService: WellknownService,
         private val reAuthHelper: ReAuthHelper,
         private val analyticsStore: AnalyticsStore,
         private val lightweightSettingsStorage: LightweightSettingsStorage,
@@ -231,7 +234,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                 .onEach { info ->
                     val isVerified = info.getOrNull()?.isTrusted() ?: false
                     if (!isVerified && onceTrusted) {
-                        rawService.withElementWellKnown(viewModelScope, safeActiveSession.sessionParams) {
+                        wellknownService.getElementWellknown(safeActiveSession.sessionParams.userId.getServerName())?.let {
                             sessionHasBeenUnverified(it)
                         }
                     }
@@ -382,7 +385,8 @@ class HomeActivityViewModel @AssistedInject constructor(
                 Timber.w("## No session to init cross signing or bootstrap")
             }
 
-            val elementWellKnown = rawService.getElementWellknown(session.sessionParams)
+            val elementWellKnown = wellknownService.getElementWellknown(session.sessionParams.userId.getServerName())
+
             val isSecureBackupRequired = elementWellKnown?.isSecureBackupRequired() ?: false
 
             // In case of account creation, it is already done before

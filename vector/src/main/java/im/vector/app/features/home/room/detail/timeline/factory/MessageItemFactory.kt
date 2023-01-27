@@ -73,7 +73,6 @@ import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.PillsPostProcessor
 import im.vector.app.features.html.SpanUtils
 import im.vector.app.features.html.VectorHtmlCompressor
-import im.vector.app.features.location.INITIAL_MAP_ZOOM_IN_TIMELINE
 import im.vector.app.features.location.UrlMapProvider
 import im.vector.app.features.location.toLocationData
 import im.vector.app.features.media.ImageContentRenderer
@@ -227,15 +226,12 @@ class MessageItemFactory @Inject constructor(
         val width = timelineMediaSizeProvider.getMaxSize().first
         val height = dimensionConverter.dpToPx(MESSAGE_LOCATION_ITEM_HEIGHT_IN_DP)
 
-        val locationUrl = locationContent.toLocationData()?.let {
-            urlMapProvider.buildStaticMapUrl(it, INITIAL_MAP_ZOOM_IN_TIMELINE, width, height)
-        }
-
         val locationUserId = if (locationContent.isSelfLocation()) informationData.senderId else null
 
         return MessageLocationItem_()
                 .attributes(attributes)
-                .locationUrl(locationUrl)
+                .locationData(locationContent.toLocationData())
+                .mapStyleUrl(urlMapProvider.getMapStyleUrl())
                 .mapWidth(width)
                 .mapHeight(height)
                 .locationUserId(locationUserId)

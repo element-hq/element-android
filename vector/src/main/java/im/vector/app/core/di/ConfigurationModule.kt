@@ -73,6 +73,7 @@ object ConfigurationModule {
     @Provides
     fun providesLocationSharingConfig() = LocationSharingConfig(
             mapTilerKey = Config.LOCATION_MAP_TILER_KEY,
+            isMapTilerFallbackEnabled = Config.ENABLE_LOCATION_SHARING_MAPSERVER_FALLBACK
     )
 
     @Provides

@@ -30,7 +30,6 @@ import im.vector.app.features.home.room.detail.timeline.item.MessageLiveLocation
 import im.vector.app.features.home.room.detail.timeline.item.MessageLiveLocationItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageLiveLocationStartItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageLiveLocationStartItem_
-import im.vector.app.features.location.INITIAL_MAP_ZOOM_IN_TIMELINE
 import im.vector.app.features.location.UrlMapProvider
 import im.vector.app.features.location.toLocationData
 import org.matrix.android.sdk.api.session.Session
@@ -105,13 +104,12 @@ class LiveLocationShareMessageItemFactory @Inject constructor(
         val width = timelineMediaSizeProvider.getMaxSize().first
         val height = dimensionConverter.dpToPx(MessageItemFactory.MESSAGE_LOCATION_ITEM_HEIGHT_IN_DP)
 
-        val locationUrl = runningState.lastGeoUri.toLocationData()?.let {
-            urlMapProvider.buildStaticMapUrl(it, INITIAL_MAP_ZOOM_IN_TIMELINE, width, height)
-        }
+        val lastLocationData = runningState.lastGeoUri.toLocationData()
 
         return MessageLiveLocationItem_()
                 .attributes(attributes)
-                .locationUrl(locationUrl)
+                .locationData(lastLocationData)
+                .mapStyleUrl(urlMapProvider.getMapStyleUrl())
                 .mapWidth(width)
                 .mapHeight(height)
                 .locationUserId(attributes.informationData.senderId)

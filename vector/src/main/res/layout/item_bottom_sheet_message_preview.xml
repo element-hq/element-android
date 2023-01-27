@@ -120,9 +120,10 @@
         tools:alpha="0.3"
         tools:visibility="visible">
 
-        <ImageView
-            android:id="@+id/staticMapImageView"
+        <com.mapbox.mapboxsdk.maps.MapView
+            android:id="@+id/staticMapView"
             android:layout_width="match_parent"
+            android:background="@drawable/rounded_rect_shape_8"
             android:layout_height="200dp"
             android:contentDescription="@string/a11y_static_map_image" />
 

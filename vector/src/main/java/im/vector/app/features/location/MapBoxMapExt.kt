@@ -22,17 +22,24 @@ import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.geometry.LatLngBounds
 import com.mapbox.mapboxsdk.maps.MapboxMap
 
-fun MapboxMap?.zoomToLocation(locationData: LocationData, preserveCurrentZoomLevel: Boolean = false) {
-    val zoomLevel = if (preserveCurrentZoomLevel && this?.cameraPosition != null) {
-        cameraPosition.zoom
+fun MapboxMap?.zoomToLocation(
+        locationData: LocationData,
+        animate: Boolean = true,
+        zoomLevel: Double = INITIAL_MAP_ZOOM_IN_PREVIEW) {
+
+    val cameraPosition = CameraPosition.Builder()
+            .target(LatLng(locationData.latitude, locationData.longitude))
+            .zoom(zoomLevel)
+            .build()
+
+    if(animate) {
+        this?.easeCamera {
+            cameraPosition
+        }
     } else {
-        INITIAL_MAP_ZOOM_IN_PREVIEW
-    }
-    this?.easeCamera {
-        CameraPosition.Builder()
-                .target(LatLng(locationData.latitude, locationData.longitude))
-                .zoom(zoomLevel)
-                .build()
+        this?.moveCamera {
+            cameraPosition
+        }
     }
 }
 
