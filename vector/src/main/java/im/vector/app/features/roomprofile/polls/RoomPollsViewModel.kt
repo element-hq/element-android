@@ -89,7 +89,13 @@ class RoomPollsViewModel @AssistedInject constructor(
     override fun handle(action: RoomPollsAction) {
         when (action) {
             RoomPollsAction.LoadMorePolls -> handleLoadMore()
+            is RoomPollsAction.OnPollSelected -> handleOnPollSelected(action)
         }
+    }
+
+    private fun handleOnPollSelected(action: RoomPollsAction.OnPollSelected) {
+        setState { copy(selectedPollId = action.selectedPollId) }
+        _viewEvents.post(RoomPollsViewEvent.NavigateToPollDetail)
     }
 
     private fun handleLoadMore() = withState { viewState ->
