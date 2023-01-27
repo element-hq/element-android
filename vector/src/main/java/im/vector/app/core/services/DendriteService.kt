@@ -317,16 +317,23 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
                 writer()
             }
 
-            // TODO
-            //updateNotification()
+            updateNotification()
         }
 
         public fun close() {
             val device = socket.remoteDevice.address.toString()
             Timber.i("BLE: Closing connection to $device")
 
-            conduit.close()
-            socket.close()
+            try {
+                conduit.close()
+            } catch (e: Exception) {
+                Timber.e(e)
+            }
+            try {
+                socket.close()
+            } catch (e: Exception) {
+                Timber.e(e)
+            }
 
             val conduit = conduits[device]
             if (conduit != null) {
@@ -344,8 +351,7 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
             connections.remove(device)
             conduits.remove(device)
 
-            // TODO
-            //updateNotification()
+            updateNotification()
         }
 
         private fun reader() {
