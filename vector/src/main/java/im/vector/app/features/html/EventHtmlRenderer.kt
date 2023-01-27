@@ -143,9 +143,9 @@ class EventHtmlRenderer @Inject constructor(
             super.afterSetText(textView)
 
             // Remove any intermediate spans
-            val text = textView.text as Spannable
+            val text = textView.text.toSpannable()
             text.getSpans(0, text.length, IntermediateCodeSpan::class.java)
-                    .filter { it.isBlock }.forEach { span ->
+                    .forEach { span ->
                         text.removeSpan(span)
                     }
         }
