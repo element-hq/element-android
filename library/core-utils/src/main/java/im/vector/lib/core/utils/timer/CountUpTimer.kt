@@ -28,22 +28,23 @@ import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicLong
 
 @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
-class CountUpTimer(private val initialTime: Long = 0L, private val intervalInMs: Long = 1_000) {
+class CountUpTimer(initialTime: Long = 0L, private val intervalInMs: Long = 1_000) {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
-    private val elapsedTime: AtomicLong = AtomicLong(initialTime)
     private val resumed: AtomicBoolean = AtomicBoolean(false)
+
+    private val clock: Clock = DefaultClock()
+    private var lastTime: AtomicLong = AtomicLong()
+    private val elapsedTime: AtomicLong = AtomicLong(initialTime)
 
     init {
         startCounter()
     }
 
     private fun startCounter() {
-        val internalDelay = if (intervalInMs > 100) intervalInMs / 10 else intervalInMs
-        tickerFlow(coroutineScope, internalDelay)
+        tickerFlow(coroutineScope, intervalInMs)
                 .filter { resumed.get() }
-                .map { elapsedTime.addAndGet(internalDelay) }
-                .filter { (it - initialTime) % intervalInMs == 0L }
+                .map { addAndGetElapsedTime() }
                 .onEach { tickListener?.onTick(it) }
                 .launchIn(coroutineScope)
     }
@@ -55,17 +56,23 @@ class CountUpTimer(private val initialTime: Long = 0L, private val intervalInMs:
     }
 
     fun pause() {
-        tickListener?.onTick(elapsedTime())
+        tickListener?.onTick(addAndGetElapsedTime())
         resumed.set(false)
     }
 
     fun resume() {
+        lastTime.set(clock.epochMillis())
         resumed.set(true)
     }
 
     fun stop() {
-        tickListener?.onTick(elapsedTime())
+        tickListener?.onTick(addAndGetElapsedTime())
         coroutineScope.cancel()
+    }
+
+    private fun addAndGetElapsedTime(): Long {
+        val now = clock.epochMillis()
+        return elapsedTime.addAndGet(now - lastTime.getAndSet(now))
     }
 
     fun interface TickListener {
