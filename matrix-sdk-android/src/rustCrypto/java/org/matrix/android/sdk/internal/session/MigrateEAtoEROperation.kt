@@ -25,7 +25,7 @@ import java.io.File
 
 class MigrateEAtoEROperation {
 
-    fun execute(cryptoRealm: RealmConfiguration, rustFilesDir: File): File {
+    fun execute(cryptoRealm: RealmConfiguration, rustFilesDir: File, passphrase: String?): File {
         // Temporary code for migration
         if (!rustFilesDir.exists()) {
             rustFilesDir.mkdir()
@@ -43,7 +43,7 @@ class MigrateEAtoEROperation {
 
                 Realm.getInstance(cryptoRealm).use { realm ->
                     extractMigrationData.extractData(realm) {
-                        org.matrix.rustcomponents.sdk.crypto.migrate(it, rustFilesDir.path, null, progressListener)
+                        org.matrix.rustcomponents.sdk.crypto.migrate(it, rustFilesDir.path, passphrase, progressListener)
                     }
                 }
             } catch (failure: Throwable) {

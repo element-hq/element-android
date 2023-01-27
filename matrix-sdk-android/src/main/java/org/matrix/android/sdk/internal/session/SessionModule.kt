@@ -44,6 +44,7 @@ import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
 import org.matrix.android.sdk.api.session.typing.TypingUsersTracker
 import org.matrix.android.sdk.api.util.md5
+import org.matrix.android.sdk.internal.crypto.RustEncryptionConfiguration
 import org.matrix.android.sdk.internal.crypto.secrets.DefaultSharedSecretStorageService
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultRedactEventTask
 import org.matrix.android.sdk.internal.crypto.tasks.RedactEventTask
@@ -189,11 +190,12 @@ internal abstract class SessionModule {
         fun providesRustCryptoFilesDir(
                 @SessionFilesDirectory parent: File,
                 @CryptoDatabase realmConfiguration: RealmConfiguration,
+                rustEncryptionConfiguration: RustEncryptionConfiguration,
         ): File {
             val target = File(parent, "rustFlavor")
             val file: File
             measureTimeMillis {
-                file = MigrateEAtoEROperation().execute(realmConfiguration, target)
+                file = MigrateEAtoEROperation().execute(realmConfiguration, target, rustEncryptionConfiguration.getDatabasePassphrase())
             }.let { duration ->
                 Timber.v("Migrating to ER in $duration ms")
             }

@@ -130,12 +130,13 @@ internal class OlmMachine @Inject constructor(
         private val ensureUsersKeys: EnsureUsersKeysUseCase,
         private val matrixConfiguration: MatrixConfiguration,
         private val megolmSessionImportManager: MegolmSessionImportManager,
+        private val rustEncryptionConfiguration: RustEncryptionConfiguration,
 ) {
 
     private val inner: InnerMachine
 
     init {
-        inner = InnerMachine(userId, deviceId, path.toString(), null)
+        inner = InnerMachine(userId, deviceId, path.toString(), rustEncryptionConfiguration.getDatabasePassphrase())
     }
 
     private val flowCollectors = FlowCollectors()
