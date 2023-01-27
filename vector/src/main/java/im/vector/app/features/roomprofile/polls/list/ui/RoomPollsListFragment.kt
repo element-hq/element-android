@@ -29,13 +29,14 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.databinding.FragmentRoomPollsListBinding
+import im.vector.app.features.roomprofile.RoomProfileSharedAction
+import im.vector.app.features.roomprofile.RoomProfileSharedActionViewModel
 import im.vector.app.features.roomprofile.polls.RoomPollsAction
 import im.vector.app.features.roomprofile.polls.RoomPollsLoadingError
 import im.vector.app.features.roomprofile.polls.RoomPollsType
 import im.vector.app.features.roomprofile.polls.RoomPollsViewEvent
 import im.vector.app.features.roomprofile.polls.RoomPollsViewModel
 import im.vector.app.features.roomprofile.polls.RoomPollsViewState
-import timber.log.Timber
 import javax.inject.Inject
 
 abstract class RoomPollsListFragment :
@@ -49,6 +50,7 @@ abstract class RoomPollsListFragment :
     lateinit var stringProvider: StringProvider
 
     private val viewModel: RoomPollsViewModel by parentFragmentViewModel(RoomPollsViewModel::class)
+    private lateinit var sharedActionViewModel: RoomProfileSharedActionViewModel
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomPollsListBinding {
         return FragmentRoomPollsListBinding.inflate(inflater, container, false)
@@ -56,6 +58,7 @@ abstract class RoomPollsListFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        sharedActionViewModel = activityViewModelProvider[RoomProfileSharedActionViewModel::class.java]
         observeViewEvents()
         setupList()
         setupLoadMoreButton()
@@ -65,6 +68,7 @@ abstract class RoomPollsListFragment :
         viewModel.observeViewEvents { viewEvent ->
             when (viewEvent) {
                 RoomPollsViewEvent.LoadingError -> showErrorInSnackbar(RoomPollsLoadingError())
+                RoomPollsViewEvent.NavigateToPollDetail -> sharedActionViewModel.post(RoomProfileSharedAction.OpenPollDetails)
             }
         }
     }
@@ -126,8 +130,7 @@ abstract class RoomPollsListFragment :
     }
 
     override fun onPollClicked(pollId: String) {
-        // TODO navigate to details
-        Timber.d("poll with id $pollId clicked")
+        viewModel.handle(RoomPollsAction.OnPollSelected(pollId))
     }
 
     override fun onLoadMoreClicked() {
