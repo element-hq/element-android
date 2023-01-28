@@ -6,7 +6,7 @@
     <string name="notice_room_join">%1$s вошёл(шла) в комнату</string>
     <string name="notice_room_leave">%1$s покинул(а) комнату</string>
     <string name="notice_room_reject">%1$s отклонил(а) приглашение</string>
-    <string name="notice_room_remove">%1$s выгнан %2$s</string>
+    <string name="notice_room_remove">%1$s выгнал %2$s</string>
     <string name="notice_room_unban">%1$s разблокировал(а) %2$s</string>
     <string name="notice_room_ban">%1$s заблокировал(а) %2$s</string>
     <string name="notice_room_withdraw">%1$s отозвал(а) приглашение %2$s</string>
