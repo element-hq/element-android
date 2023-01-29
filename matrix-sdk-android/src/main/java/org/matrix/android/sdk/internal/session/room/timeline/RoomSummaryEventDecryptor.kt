@@ -40,7 +40,7 @@ import javax.inject.Inject
 internal class RoomSummaryEventDecryptor @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val cryptoCoroutineScope: CoroutineScope,
+        cryptoCoroutineScope: CoroutineScope,
         private val cryptoService: dagger.Lazy<CryptoService>
 ) {
 

@@ -29,6 +29,7 @@ import org.matrix.olm.OlmSession
 import org.matrix.olm.OlmUtility
 import org.matrix.rustcomponents.sdk.crypto.CrossSigningKeyExport
 import org.matrix.rustcomponents.sdk.crypto.MigrationData
+import org.matrix.rustcomponents.sdk.crypto.MigrationException
 import org.matrix.rustcomponents.sdk.crypto.PickledAccount
 import org.matrix.rustcomponents.sdk.crypto.PickledInboundGroupSession
 import org.matrix.rustcomponents.sdk.crypto.PickledSession
@@ -40,9 +41,9 @@ private val charset = Charset.forName("UTF-8")
 
 internal class ExtractMigrationDataUseCase {
 
-    fun extractData(realm: Realm, importPartial: ((MigrationData) -> Unit)): MigrationData {
+    fun extractData(realm: Realm, importPartial: ((MigrationData) -> Unit)) {
         return try {
-            extract(realm, importPartial) ?: throw ExtractMigrationDataFailure
+            extract(realm, importPartial)
         } catch (failure: Throwable) {
             throw ExtractMigrationDataFailure
         }
@@ -57,10 +58,9 @@ internal class ExtractMigrationDataUseCase {
         }
     }
 
-    private fun extract(realm: Realm, importPartial: ((MigrationData) -> Unit)): MigrationData? {
-        val metadataEntity = realm.where<CryptoMetadataEntity>().findFirst() ?: return null.also {
-            Timber.w("Rust db migration: No existing metadataEntity")
-        }
+    private fun extract(realm: Realm, importPartial: ((MigrationData) -> Unit)) {
+        val metadataEntity = realm.where<CryptoMetadataEntity>().findFirst()
+                ?: throw java.lang.IllegalArgumentException("Rust db migration: No existing metadataEntity")
 
         val pickleKey = OlmUtility.getRandomKey()
 
@@ -68,14 +68,18 @@ internal class ExtractMigrationDataUseCase {
         val userKey = metadataEntity.xSignUserPrivateKey
         val selfSignedKey = metadataEntity.xSignSelfSignedPrivateKey
 
-        val userId = metadataEntity.userId ?: return null
-        val deviceId = metadataEntity.deviceId ?: return null
+        val userId = metadataEntity.userId
+                ?: throw java.lang.IllegalArgumentException("Rust db migration: userId is null")
+        val deviceId = metadataEntity.deviceId
+                ?: throw java.lang.IllegalArgumentException("Rust db migration: deviceID is null")
+
         val backupVersion = metadataEntity.backupVersion
         val backupRecoveryKey = metadataEntity.keyBackupRecoveryKey
 
         val isOlmAccountShared = metadataEntity.deviceKeysSentToServer
 
-        val olmAccount = metadataEntity.getOlmAccount() ?: return null
+        val olmAccount = metadataEntity.getOlmAccount()
+                ?: throw java.lang.IllegalArgumentException("Rust db migration: No existing account")
         val pickledOlmAccount = olmAccount.pickle(pickleKey, StringBuffer()).asString()
         olmAccount.oneTimeKeys()
         val pickledAccount = PickledAccount(
@@ -168,7 +172,7 @@ internal class ExtractMigrationDataUseCase {
 //            Timber.i("Migration: rust import time $writeTime")
 //        }
 
-        return baseExtract
+//        return baseExtract
     }
 
     private fun OlmInboundGroupSessionEntity.toPickledInboundGroupSession(pickleKey: ByteArray): PickledInboundGroupSession? {

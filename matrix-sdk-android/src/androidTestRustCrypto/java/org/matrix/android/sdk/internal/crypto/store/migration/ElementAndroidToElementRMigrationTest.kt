@@ -90,7 +90,7 @@ class ElementAndroidToElementRMigrationTest : InstrumentedTest {
 
         val targetFile = File(configurationFactory.root, "rust-sdk")
 
-        extractor.execute(realmConfiguration, targetFile)
+        extractor.execute(realmConfiguration, targetFile, null)
 
         val machine = OlmMachine(userId, deviceId, targetFile.path, null)
 
