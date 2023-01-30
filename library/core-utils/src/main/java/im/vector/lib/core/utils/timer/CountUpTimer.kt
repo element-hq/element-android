@@ -44,7 +44,7 @@ class CountUpTimer(initialTime: Long = 0L, private val intervalInMs: Long = 1_00
     private fun startCounter() {
         tickerFlow(coroutineScope, intervalInMs)
                 .filter { resumed.get() }
-                .map { addAndGetElapsedTime() }
+                .map { elapsedTime() }
                 .onEach { tickListener?.onTick(it) }
                 .launchIn(coroutineScope)
     }
@@ -52,11 +52,16 @@ class CountUpTimer(initialTime: Long = 0L, private val intervalInMs: Long = 1_00
     var tickListener: TickListener? = null
 
     fun elapsedTime(): Long {
-        return elapsedTime.get()
+        return if (resumed.get()) {
+            val now = clock.epochMillis()
+            elapsedTime.addAndGet(now - lastTime.getAndSet(now))
+        } else {
+            elapsedTime.get()
+        }
     }
 
     fun pause() {
-        tickListener?.onTick(addAndGetElapsedTime())
+        tickListener?.onTick(elapsedTime())
         resumed.set(false)
     }
 
@@ -66,13 +71,8 @@ class CountUpTimer(initialTime: Long = 0L, private val intervalInMs: Long = 1_00
     }
 
     fun stop() {
-        tickListener?.onTick(addAndGetElapsedTime())
+        tickListener?.onTick(elapsedTime())
         coroutineScope.cancel()
-    }
-
-    private fun addAndGetElapsedTime(): Long {
-        val now = clock.epochMillis()
-        return elapsedTime.addAndGet(now - lastTime.getAndSet(now))
     }
 
     fun interface TickListener {
