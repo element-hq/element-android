@@ -34,7 +34,7 @@ class CountUpTimer(initialTime: Long = 0L, private val intervalInMs: Long = 1_00
     private val resumed: AtomicBoolean = AtomicBoolean(false)
 
     private val clock: Clock = DefaultClock()
-    private var lastTime: AtomicLong = AtomicLong()
+    private val lastTime: AtomicLong = AtomicLong()
     private val elapsedTime: AtomicLong = AtomicLong(initialTime)
 
     init {
