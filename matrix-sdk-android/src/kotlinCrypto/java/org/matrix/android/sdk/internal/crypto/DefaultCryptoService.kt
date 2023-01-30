@@ -1033,7 +1033,8 @@ internal class DefaultCryptoService @Inject constructor(
     override suspend fun receiveSyncChanges(
             toDevice: ToDeviceSyncResponse?,
             deviceChanges: DeviceListResponse?,
-            keyCounts: DeviceOneTimeKeysCountSyncResponse?
+            keyCounts: DeviceOneTimeKeysCountSyncResponse?,
+            deviceUnusedFallbackKeyTypes: List<String>?
     ) {
         withContext(coroutineDispatchers.crypto) {
             deviceListManager.handleDeviceListsChanges(deviceChanges?.changed.orEmpty(), deviceChanges?.left.orEmpty())

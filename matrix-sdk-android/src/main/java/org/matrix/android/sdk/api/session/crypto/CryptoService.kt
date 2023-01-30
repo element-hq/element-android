@@ -222,7 +222,13 @@ interface CryptoService {
     fun start()
     suspend fun onSyncWillProcess(isInitialSync: Boolean)
     fun isStarted(): Boolean
-    suspend fun receiveSyncChanges(toDevice: ToDeviceSyncResponse?, deviceChanges: DeviceListResponse?, keyCounts: DeviceOneTimeKeysCountSyncResponse?)
+
+    suspend fun receiveSyncChanges(
+            toDevice: ToDeviceSyncResponse?,
+            deviceChanges: DeviceListResponse?,
+            keyCounts: DeviceOneTimeKeysCountSyncResponse?,
+            deviceUnusedFallbackKeyTypes: List<String>?)
+
     suspend fun onLiveEvent(roomId: String, event: Event, isInitialSync: Boolean, cryptoStoreAggregator: CryptoStoreAggregator?)
     suspend fun onStateEvent(roomId: String, event: Event, cryptoStoreAggregator: CryptoStoreAggregator?) {}
     suspend fun onSyncCompleted(syncResponse: SyncResponse, cryptoStoreAggregator: CryptoStoreAggregator)

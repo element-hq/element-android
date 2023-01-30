@@ -263,7 +263,8 @@ internal class OlmMachine @Inject constructor(
     suspend fun receiveSyncChanges(
             toDevice: ToDeviceSyncResponse?,
             deviceChanges: DeviceListResponse?,
-            keyCounts: DeviceOneTimeKeysCountSyncResponse?
+            keyCounts: DeviceOneTimeKeysCountSyncResponse?,
+            deviceUnusedFallbackKeyTypes: List<String>?,
     ): ToDeviceSyncResponse {
         val response = withContext(coroutineDispatchers.io) {
             val counts: MutableMap<String, Int> = mutableMapOf()
@@ -282,9 +283,8 @@ internal class OlmMachine @Inject constructor(
                     .adapter(ToDeviceSyncResponse::class.java)
             val events = adapter.toJson(toDevice ?: ToDeviceSyncResponse())
 
-            // TODO once our sync response type parses the unused fallback key
             // field pass in the list of unused fallback keys here
-            val receiveSyncChanges = inner.receiveSyncChanges(events, devices, counts, unusedFallbackKeys = null)
+            val receiveSyncChanges = inner.receiveSyncChanges(events, devices, counts, deviceUnusedFallbackKeyTypes)
 
             val outAdapter = moshi.adapter<List<Event>>(
                     Types.newParameterizedType(

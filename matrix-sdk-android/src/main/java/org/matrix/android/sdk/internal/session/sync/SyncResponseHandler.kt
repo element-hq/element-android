@@ -183,7 +183,8 @@ internal class SyncResponseHandler @Inject constructor(
                 cryptoService.receiveSyncChanges(
                         syncResponse.toDevice,
                         syncResponse.deviceLists,
-                        syncResponse.deviceOneTimeKeysCount
+                        syncResponse.deviceOneTimeKeysCount,
+                        syncResponse.deviceUnusedFallbackKeyTypes
                 )
             }.also {
                 Timber.v("Finish handling toDevice in $it ms")

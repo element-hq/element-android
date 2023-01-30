@@ -605,10 +605,11 @@ internal class RustCryptoService @Inject constructor(
     override suspend fun receiveSyncChanges(
             toDevice: ToDeviceSyncResponse?,
             deviceChanges: DeviceListResponse?,
-            keyCounts: DeviceOneTimeKeysCountSyncResponse?
+            keyCounts: DeviceOneTimeKeysCountSyncResponse?,
+            deviceUnusedFallbackKeyTypes: List<String>?,
     ) {
         // Decrypt and handle our to-device events
-        val toDeviceEvents = this.olmMachine.receiveSyncChanges(toDevice, deviceChanges, keyCounts)
+        val toDeviceEvents = this.olmMachine.receiveSyncChanges(toDevice, deviceChanges, keyCounts, deviceUnusedFallbackKeyTypes)
 
         // Notify the our listeners about room keys so decryption is retried.
         toDeviceEvents.events.orEmpty().forEach { event ->
