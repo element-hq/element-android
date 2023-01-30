@@ -151,7 +151,7 @@ class HomeRoomListFragment :
         roomListViewModel.onEach(HomeRoomListViewState::headersData) {
             headersController.submitData(it)
         }
-        roomListViewModel.roomsLivePagedList.observe(viewLifecycleOwner) { roomsList ->
+        roomListViewModel.filteredPagedRoomSummariesLive.livePagedList.observe(viewLifecycleOwner) { roomsList ->
             roomsController.submitRoomsList(roomsList)
         }
         roomListViewModel.onEach(HomeRoomListViewState::emptyState) { emptyState ->
