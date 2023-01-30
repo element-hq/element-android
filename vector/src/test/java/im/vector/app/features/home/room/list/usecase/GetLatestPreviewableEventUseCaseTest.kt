@@ -23,6 +23,7 @@ import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import im.vector.app.features.voicebroadcast.usecase.GetRoomLiveVoiceBroadcastsUseCase
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakeRoom
+import im.vector.app.test.fakes.FakeVectorPreferences
 import io.mockk.every
 import io.mockk.mockk
 import org.amshove.kluent.shouldBe
@@ -46,10 +47,12 @@ internal class GetLatestPreviewableEventUseCaseTest {
     private val fakeSessionHolder = FakeActiveSessionHolder()
     private val fakeRoomSummary = mockk<RoomSummary>()
     private val fakeGetRoomLiveVoiceBroadcastsUseCase = mockk<GetRoomLiveVoiceBroadcastsUseCase>()
+    private val fakeVectorPreferences = FakeVectorPreferences()
 
     private val getLatestPreviewableEventUseCase = GetLatestPreviewableEventUseCase(
             fakeSessionHolder.instance,
             fakeGetRoomLiveVoiceBroadcastsUseCase,
+            fakeVectorPreferences.instance,
     )
 
     @Before
@@ -62,6 +65,7 @@ internal class GetLatestPreviewableEventUseCaseTest {
                 every { eventId } returns firstArg()
             }
         }
+        fakeVectorPreferences.givenIsVoiceBroadcastEnabled(true)
     }
 
     @Test
