@@ -16,7 +16,6 @@
 
 package im.vector.app.features.roomprofile.polls.list.data
 
-data class LoadedPollsStatus(
-        val canLoadMore: Boolean,
-        val nbLoadedDays: Int,
-)
+sealed class PollHistoryError : Exception() {
+    object UnknownRoomError : PollHistoryError()
+}

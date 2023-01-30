@@ -80,6 +80,9 @@ class FlowSession(private val session: Session) {
 
     fun liveSyncState(): Flow<SyncState> {
         return session.syncService().getSyncStateLive().asFlow()
+                .startWith(session.coroutineDispatchers.io) {
+                    session.syncService().getSyncState()
+                }
     }
 
     fun livePushers(): Flow<List<Pusher>> {

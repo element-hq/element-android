@@ -198,7 +198,7 @@
     <string name="room_settings_set_main_address">メインアドレスとして設定</string>
     <string name="room_settings_unset_main_address">メインアドレスとしての設定を解除</string>
     <string name="device_manager_session_details_session_id">セッションID</string>
-    <string name="font_size">文字の大きさ</string>
+    <string name="font_size">フォントの大きさ</string>
     <string name="tiny">とても小さい</string>
     <string name="small">小さい</string>
     <string name="normal">標準</string>
@@ -2391,7 +2391,7 @@
     <string name="invites_title">招待</string>
     <string name="device_manager_push_notifications_title">プッシュ通知</string>
     <string name="device_manager_session_rename_edit_hint">セッション名</string>
-    <string name="device_manager_session_rename">セッションを改名</string>
+    <string name="device_manager_session_rename">セッション名を変更</string>
     <string name="device_manager_session_details_device_ip_address">IPアドレス</string>
     <string name="device_manager_session_details_device_operating_system">オペレーティングシステム</string>
     <string name="device_manager_session_details_device_model">形式</string>
@@ -2487,4 +2487,17 @@
     <plurals name="x_selected">
         <item quantity="other">%1$dを選択しました</item>
     </plurals>
+    <string name="settings_presence_user_always_appears_offline_summary">有効にすると、このアプリケーションを使用している際にも、他のユーザーにオフラインとして表示されます。</string>
+    <string name="settings_enable_direct_share_summary">最近のチャットをシステムの共有メニューに表示</string>
+    <string name="font_size_use_system">システムの既定値を使用</string>
+    <string name="font_size_section_manually">手動で設定</string>
+    <string name="font_size_section_auto">自動的に設定</string>
+    <string name="font_size_title">フォントの大きさを選択</string>
+    <string name="some_devices_will_not_be_able_to_decrypt">⚠ 未認証の端末がこのルームにあります。あなたが送信するメッセージを復号化することはできません。</string>
+    <string name="encryption_never_send_to_unverified_devices_in_room">このルームの未認証のセッションに暗号化されたメッセージを送信しない。</string>
+    <string name="thread_list_not_available">あなたのホームサーバーはスレッドの一覧表示をまだサポートしていません。</string>
+    <string name="invites_empty_message">ここに新しいリクエストと招待が表示されます。</string>
+    <string name="labs_enable_rich_text_editor_summary">リッチテキストエディターを試してみる（プレーンテキストモードは近日公開）</string>
+    <string name="labs_enable_new_app_layout_summary">タブを使用してElementの表示をシンプルにする</string>
+    <string name="device_manager_session_details_title">セッションの詳細</string>
 </resources>

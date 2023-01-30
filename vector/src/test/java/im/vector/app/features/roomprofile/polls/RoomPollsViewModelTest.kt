@@ -17,23 +17,26 @@
 package im.vector.app.features.roomprofile.polls
 
 import com.airbnb.mvrx.test.MavericksTestRule
-import im.vector.app.features.roomprofile.polls.list.data.LoadedPollsStatus
-import im.vector.app.features.roomprofile.polls.list.domain.GetLoadedPollsStatusUseCase
+import im.vector.app.features.roomprofile.polls.list.domain.DisposePollHistoryUseCase
 import im.vector.app.features.roomprofile.polls.list.domain.GetPollsUseCase
 import im.vector.app.features.roomprofile.polls.list.domain.LoadMorePollsUseCase
 import im.vector.app.features.roomprofile.polls.list.domain.SyncPollsUseCase
 import im.vector.app.features.roomprofile.polls.list.ui.PollSummary
+import im.vector.app.features.roomprofile.polls.list.ui.PollSummaryMapper
 import im.vector.app.test.test
 import im.vector.app.test.testDispatcher
 import io.mockk.coEvery
-import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import org.junit.Rule
 import org.junit.Test
+import org.matrix.android.sdk.api.session.room.poll.LoadedPollsStatus
+import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 
 private const val A_ROOM_ID = "room-id"
 
@@ -42,33 +45,37 @@ class RoomPollsViewModelTest {
     @get:Rule
     val mavericksTestRule = MavericksTestRule(testDispatcher = testDispatcher)
 
+    private val initialState = RoomPollsViewState(A_ROOM_ID)
     private val fakeGetPollsUseCase = mockk<GetPollsUseCase>()
-    private val fakeGetLoadedPollsStatusUseCase = mockk<GetLoadedPollsStatusUseCase>()
     private val fakeLoadMorePollsUseCase = mockk<LoadMorePollsUseCase>()
     private val fakeSyncPollsUseCase = mockk<SyncPollsUseCase>()
-    private val initialState = RoomPollsViewState(A_ROOM_ID)
+    private val fakeDisposePollHistoryUseCase = mockk<DisposePollHistoryUseCase>()
+    private val fakePollSummaryMapper = mockk<PollSummaryMapper>()
 
     private fun createViewModel(): RoomPollsViewModel {
         return RoomPollsViewModel(
                 initialState = initialState,
                 getPollsUseCase = fakeGetPollsUseCase,
-                getLoadedPollsStatusUseCase = fakeGetLoadedPollsStatusUseCase,
                 loadMorePollsUseCase = fakeLoadMorePollsUseCase,
                 syncPollsUseCase = fakeSyncPollsUseCase,
+                disposePollHistoryUseCase = fakeDisposePollHistoryUseCase,
+                pollSummaryMapper = fakePollSummaryMapper,
         )
     }
 
     @Test
     fun `given viewModel when created then polls list is observed, sync is launched and viewState is updated`() {
         // Given
-        val loadedPollsStatus = givenGetLoadedPollsStatusSuccess()
-        givenSyncPollsWithSuccess()
-        val polls = listOf(givenAPollSummary())
+        val loadedPollsStatus = givenSyncPollsWithSuccess()
+        val aPollEvent = givenAPollEvent()
+        val aPollSummary = givenAPollSummary()
+        val polls = listOf(aPollEvent)
         every { fakeGetPollsUseCase.execute(A_ROOM_ID) } returns flowOf(polls)
+        every { fakePollSummaryMapper.map(aPollEvent) } returns aPollSummary
         val expectedViewState = initialState.copy(
-                polls = polls,
+                polls = listOf(aPollSummary),
                 canLoadMore = loadedPollsStatus.canLoadMore,
-                nbLoadedDays = loadedPollsStatus.nbLoadedDays,
+                nbSyncedDays = loadedPollsStatus.daysSynced,
         )
 
         // When
@@ -81,6 +88,7 @@ class RoomPollsViewModelTest {
                 .finish()
         verify {
             fakeGetPollsUseCase.execute(A_ROOM_ID)
+            fakePollSummaryMapper.map(aPollEvent)
         }
         coVerify { fakeSyncPollsUseCase.execute(A_ROOM_ID) }
     }
@@ -88,10 +96,8 @@ class RoomPollsViewModelTest {
     @Test
     fun `given viewModel and error during sync process when created then error is raised in view event`() {
         // Given
-        givenGetLoadedPollsStatusSuccess()
         givenSyncPollsWithError(Exception())
-        val polls = listOf(givenAPollSummary())
-        every { fakeGetPollsUseCase.execute(A_ROOM_ID) } returns flowOf(polls)
+        every { fakeGetPollsUseCase.execute(A_ROOM_ID) } returns emptyFlow()
 
         // When
         val viewModel = createViewModel()
@@ -105,18 +111,31 @@ class RoomPollsViewModelTest {
     }
 
     @Test
+    fun `given viewModel when calling onCleared then poll history is disposed`() {
+        // Given
+        givenSyncPollsWithSuccess()
+        every { fakeGetPollsUseCase.execute(A_ROOM_ID) } returns emptyFlow()
+        justRun { fakeDisposePollHistoryUseCase.execute(A_ROOM_ID) }
+        val viewModel = createViewModel()
+
+        // When
+        viewModel.onCleared()
+
+        // Then
+        verify { fakeDisposePollHistoryUseCase.execute(A_ROOM_ID) }
+    }
+
+    @Test
     fun `given viewModel when handle load more action then viewState is updated`() {
         // Given
-        val loadedPollsStatus = givenGetLoadedPollsStatusSuccess()
-        givenSyncPollsWithSuccess()
-        val polls = listOf(givenAPollSummary())
-        every { fakeGetPollsUseCase.execute(A_ROOM_ID) } returns flowOf(polls)
+        val loadedPollsStatus = givenSyncPollsWithSuccess()
+        every { fakeGetPollsUseCase.execute(A_ROOM_ID) } returns emptyFlow()
         val newLoadedPollsStatus = givenLoadMoreWithSuccess()
         val viewModel = createViewModel()
         val stateAfterInit = initialState.copy(
-                polls = polls,
+                polls = emptyList(),
                 canLoadMore = loadedPollsStatus.canLoadMore,
-                nbLoadedDays = loadedPollsStatus.nbLoadedDays,
+                nbSyncedDays = loadedPollsStatus.daysSynced,
         )
 
         // When
@@ -128,7 +147,7 @@ class RoomPollsViewModelTest {
                 .assertStatesChanges(
                         stateAfterInit,
                         { copy(isLoadingMore = true) },
-                        { copy(canLoadMore = newLoadedPollsStatus.canLoadMore, nbLoadedDays = newLoadedPollsStatus.nbLoadedDays) },
+                        { copy(canLoadMore = newLoadedPollsStatus.canLoadMore, nbSyncedDays = newLoadedPollsStatus.daysSynced) },
                         { copy(isLoadingMore = false) },
                 )
                 .finish()
@@ -139,8 +158,14 @@ class RoomPollsViewModelTest {
         return mockk()
     }
 
-    private fun givenSyncPollsWithSuccess() {
-        coJustRun { fakeSyncPollsUseCase.execute(A_ROOM_ID) }
+    private fun givenAPollEvent(): TimelineEvent {
+        return mockk()
+    }
+
+    private fun givenSyncPollsWithSuccess(): LoadedPollsStatus {
+        val loadedPollsStatus = givenALoadedPollsStatus()
+        coEvery { fakeSyncPollsUseCase.execute(A_ROOM_ID) } returns loadedPollsStatus
+        return loadedPollsStatus
     }
 
     private fun givenSyncPollsWithError(error: Exception) {
@@ -148,20 +173,15 @@ class RoomPollsViewModelTest {
     }
 
     private fun givenLoadMoreWithSuccess(): LoadedPollsStatus {
-        val loadedPollsStatus = givenALoadedPollsStatus(canLoadMore = false, nbLoadedDays = 20)
+        val loadedPollsStatus = givenALoadedPollsStatus(canLoadMore = false, nbSyncedDays = 20)
         coEvery { fakeLoadMorePollsUseCase.execute(A_ROOM_ID) } returns loadedPollsStatus
         return loadedPollsStatus
     }
 
-    private fun givenGetLoadedPollsStatusSuccess(): LoadedPollsStatus {
-        val loadedPollsStatus = givenALoadedPollsStatus()
-        every { fakeGetLoadedPollsStatusUseCase.execute(A_ROOM_ID) } returns loadedPollsStatus
-        return loadedPollsStatus
-    }
-
-    private fun givenALoadedPollsStatus(canLoadMore: Boolean = true, nbLoadedDays: Int = 10) =
+    private fun givenALoadedPollsStatus(canLoadMore: Boolean = true, nbSyncedDays: Int = 10) =
             LoadedPollsStatus(
                     canLoadMore = canLoadMore,
-                    nbLoadedDays = nbLoadedDays,
+                    daysSynced = nbSyncedDays,
+                    hasCompletedASyncBackward = false,
             )
 }

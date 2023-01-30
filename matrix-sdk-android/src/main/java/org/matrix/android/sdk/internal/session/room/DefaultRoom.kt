@@ -30,6 +30,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.model.relation.RelationService
 import org.matrix.android.sdk.api.session.room.notification.RoomPushRuleService
+import org.matrix.android.sdk.api.session.room.poll.PollHistoryService
 import org.matrix.android.sdk.api.session.room.read.ReadService
 import org.matrix.android.sdk.api.session.room.reporting.ReportingService
 import org.matrix.android.sdk.api.session.room.send.DraftService
@@ -72,6 +73,7 @@ internal class DefaultRoom(
         private val roomVersionService: RoomVersionService,
         private val viaParameterFinder: ViaParameterFinder,
         private val locationSharingService: LocationSharingService,
+        private val pollHistoryService: PollHistoryService,
         override val coroutineDispatchers: MatrixCoroutineDispatchers
 ) : Room {
 
@@ -116,4 +118,5 @@ internal class DefaultRoom(
     override fun roomAccountDataService() = roomAccountDataService
     override fun roomVersionService() = roomVersionService
     override fun locationSharingService() = locationSharingService
+    override fun pollHistoryService() = pollHistoryService
 }

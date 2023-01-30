@@ -16,8 +16,8 @@
 
 package im.vector.app.features.roomprofile.polls.list.domain
 
-import im.vector.app.features.roomprofile.polls.list.data.LoadedPollsStatus
 import im.vector.app.features.roomprofile.polls.list.data.RoomPollRepository
+import org.matrix.android.sdk.api.session.room.poll.LoadedPollsStatus
 import javax.inject.Inject
 
 class LoadMorePollsUseCase @Inject constructor(

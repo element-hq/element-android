@@ -23,20 +23,23 @@ import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.roomprofile.polls.list.domain.GetLoadedPollsStatusUseCase
+import im.vector.app.features.roomprofile.polls.list.domain.DisposePollHistoryUseCase
 import im.vector.app.features.roomprofile.polls.list.domain.GetPollsUseCase
 import im.vector.app.features.roomprofile.polls.list.domain.LoadMorePollsUseCase
 import im.vector.app.features.roomprofile.polls.list.domain.SyncPollsUseCase
+import im.vector.app.features.roomprofile.polls.list.ui.PollSummaryMapper
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class RoomPollsViewModel @AssistedInject constructor(
         @Assisted initialState: RoomPollsViewState,
         private val getPollsUseCase: GetPollsUseCase,
-        private val getLoadedPollsStatusUseCase: GetLoadedPollsStatusUseCase,
         private val loadMorePollsUseCase: LoadMorePollsUseCase,
         private val syncPollsUseCase: SyncPollsUseCase,
+        private val disposePollHistoryUseCase: DisposePollHistoryUseCase,
+        private val pollSummaryMapper: PollSummaryMapper,
 ) : VectorViewModel<RoomPollsViewState, RoomPollsAction, RoomPollsViewEvent>(initialState) {
 
     @AssistedFactory
@@ -48,26 +51,26 @@ class RoomPollsViewModel @AssistedInject constructor(
 
     init {
         val roomId = initialState.roomId
-        updateLoadedPollStatus(roomId)
         syncPolls(roomId)
         observePolls(roomId)
     }
 
-    private fun updateLoadedPollStatus(roomId: String) {
-        val loadedPollsStatus = getLoadedPollsStatusUseCase.execute(roomId)
-        setState {
-            copy(
-                    canLoadMore = loadedPollsStatus.canLoadMore,
-                    nbLoadedDays = loadedPollsStatus.nbLoadedDays
-            )
-        }
+    override fun onCleared() {
+        withState { disposePollHistoryUseCase.execute(it.roomId) }
+        super.onCleared()
     }
 
     private fun syncPolls(roomId: String) {
         viewModelScope.launch {
             setState { copy(isSyncing = true) }
             val result = runCatching {
-                syncPollsUseCase.execute(roomId)
+                val loadedPollsStatus = syncPollsUseCase.execute(roomId)
+                setState {
+                    copy(
+                            canLoadMore = loadedPollsStatus.canLoadMore,
+                            nbSyncedDays = loadedPollsStatus.daysSynced,
+                    )
+                }
             }
             if (result.isFailure) {
                 _viewEvents.post(RoomPollsViewEvent.LoadingError)
@@ -78,6 +81,7 @@ class RoomPollsViewModel @AssistedInject constructor(
 
     private fun observePolls(roomId: String) {
         getPollsUseCase.execute(roomId)
+                .map { it.mapNotNull { event -> pollSummaryMapper.map(event) } }
                 .onEach { setState { copy(polls = it) } }
                 .launchIn(viewModelScope)
     }
@@ -96,7 +100,7 @@ class RoomPollsViewModel @AssistedInject constructor(
                 setState {
                     copy(
                             canLoadMore = status.canLoadMore,
-                            nbLoadedDays = status.nbLoadedDays,
+                            nbSyncedDays = status.daysSynced,
                     )
                 }
             }
