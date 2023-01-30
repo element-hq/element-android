@@ -252,7 +252,9 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
 
                 onNextMediaPlayerStarted(mp)
             } catch (failure: VoiceBroadcastFailure.ListeningError) {
-                playingState = State.Error(failure)
+                if (failure.cause !is CancellationException) {
+                    playingState = State.Error(failure)
+                }
             }
         }
     }
@@ -313,7 +315,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
                 } catch (failure: VoiceBroadcastFailure.ListeningError) {
                     // Do not change the playingState if the current player is still valid,
                     // the error will be thrown again when switching to the next player
-                    if (playingState == State.Buffering || tryOrNull { currentMediaPlayer?.isPlaying } != true) {
+                    if (failure.cause !is CancellationException && (playingState == State.Buffering || tryOrNull { currentMediaPlayer?.isPlaying } != true)) {
                         playingState = State.Error(failure)
                     }
                 }
