@@ -17,7 +17,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="48dp"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:visibility="visible" />
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/roomToolbar"
@@ -38,9 +39,9 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rootConstraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/rootConstraintLayout">
+        android:layout_height="match_parent">
 
         <im.vector.app.features.sync.widget.SyncStateView
             android:id="@+id/syncStateView"
@@ -75,7 +76,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:overScrollMode="always"
-            app:layout_constraintBottom_toTopOf="@id/notificationAreaView"
+            app:layout_constraintBottom_toTopOf="@id/failedMessagesWarningStub"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/removeJitsiWidgetView"
@@ -95,7 +96,19 @@
             app:closeIcon="@drawable/ic_close_24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/removeJitsiWidgetView" />
+            app:layout_constraintTop_toBottomOf="@id/removeJitsiWidgetView"
+            tools:visibility="visible" />
+
+        <ViewStub
+            android:id="@+id/failedMessagesWarningStub"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inflatedId="@+id/failedMessagesWarningStub"
+            android:layout="@layout/view_stub_failed_message_warning_layout"
+            app:layout_constraintBottom_toTopOf="@id/notificationAreaView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_height="300dp" />
 
         <im.vector.app.core.ui.views.NotificationAreaView
             android:id="@+id/notificationAreaView"
@@ -106,17 +119,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:visibility="visible" />
-
-        <ViewStub
-            android:id="@+id/failedMessagesWarningStub"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inflatedId="@+id/failedMessagesWarningStub"
-            android:layout="@layout/view_stub_failed_message_warning_layout"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:layout_height="300dp" />
 
         <ViewStub
             android:id="@+id/inviteViewStub"
@@ -208,8 +210,8 @@
         android:id="@+id/composerContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:translationZ="10dp"
         android:background="@android:color/transparent"
+        android:translationZ="10dp"
         app:layout_behavior="im.vector.app.core.utils.ExpandingBottomSheetBehavior" />
 
     <FrameLayout
@@ -217,7 +219,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:visibility="visible"
-        android:translationZ="10dp" />
+        android:translationZ="10dp"
+        android:visibility="visible" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

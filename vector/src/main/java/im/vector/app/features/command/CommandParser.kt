@@ -20,13 +20,16 @@ import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.isMsisdn
 import im.vector.app.core.extensions.orEmpty
 import im.vector.app.features.home.room.detail.ChatEffect
+import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.MatrixUrls.isMxcUrl
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import timber.log.Timber
 import javax.inject.Inject
 
-class CommandParser @Inject constructor() {
+class CommandParser @Inject constructor(
+        private val vectorPreferences: VectorPreferences
+) {
 
     /**
      * Convert the text message into a Slash command.
@@ -403,6 +406,9 @@ class CommandParser @Inject constructor() {
                     } else {
                         ParsedCommand.ErrorSyntax(Command.UPGRADE_ROOM)
                     }
+                }
+                Command.CRASH_APP.matches(slashCommand) && vectorPreferences.developerMode() -> {
+                    throw RuntimeException("Application crashed from user demand")
                 }
                 else -> {
                     // Unknown command
