@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Message view to be used when the rich text editor is enabled -->
+<io.element.android.wysiwyg.EditorStyledTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/messageTextView"
+    style="@style/Widget.Vector.TextView.Body"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textAlignment="viewStart"
+    android:textColor="?vctr_content_primary"
+    tools:text="@sample/messages.json/data/message" />
