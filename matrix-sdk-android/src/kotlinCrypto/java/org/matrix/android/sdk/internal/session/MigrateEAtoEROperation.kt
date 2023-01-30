@@ -22,7 +22,7 @@ import java.io.File
 
 class MigrateEAtoEROperation {
 
-    fun execute(cryptoRealm: RealmConfiguration, sessionFilesDir: File): File {
+    fun execute(cryptoRealm: RealmConfiguration, sessionFilesDir: File, passphrase: String?): File {
         Timber.v("Not used in kotlin crypto $cryptoRealm")
         // no op in kotlinCrypto
         return sessionFilesDir

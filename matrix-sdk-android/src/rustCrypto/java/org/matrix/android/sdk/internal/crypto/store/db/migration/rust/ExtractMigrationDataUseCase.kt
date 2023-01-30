@@ -29,7 +29,6 @@ import org.matrix.olm.OlmSession
 import org.matrix.olm.OlmUtility
 import org.matrix.rustcomponents.sdk.crypto.CrossSigningKeyExport
 import org.matrix.rustcomponents.sdk.crypto.MigrationData
-import org.matrix.rustcomponents.sdk.crypto.MigrationException
 import org.matrix.rustcomponents.sdk.crypto.PickledAccount
 import org.matrix.rustcomponents.sdk.crypto.PickledInboundGroupSession
 import org.matrix.rustcomponents.sdk.crypto.PickledSession
