@@ -16,7 +16,8 @@
 
 package im.vector.app.features.html
 
-import androidx.core.text.toSpannable
+import android.widget.TextView
+import androidx.core.text.toSpanned
 import androidx.test.platform.app.InstrumentationRegistry
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.ColorProvider
@@ -36,15 +37,18 @@ class EventHtmlRendererTest {
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
     private val fakeVectorPreferences = mockk<VectorPreferences>().also {
         every { it.latexMathsIsEnabled() } returns false
+        every { it.isRichTextEditorEnabled() } returns false
     }
     private val fakeSessionHolder = mockk<ActiveSessionHolder>()
 
     private val renderer = EventHtmlRenderer(
-            MatrixHtmlPluginConfigure(ColorProvider(context), context.resources),
+            MatrixHtmlPluginConfigure(ColorProvider(context), context.resources, fakeVectorPreferences),
             context,
             fakeVectorPreferences,
             fakeSessionHolder,
     )
+
+    private val textView: TextView = TextView(context)
 
     @Test
     fun takesInitialListPositionIntoAccount() {
@@ -57,7 +61,7 @@ class EventHtmlRendererTest {
     fun doesNotProcessMarkdownWithinCodeBlocks() {
         val result = """<code>__italic__ **bold**</code>""".renderAsTestSpan()
 
-        result shouldBeEqualTo "[code]__italic__ **bold**[/code]"
+        result shouldBeEqualTo "[inline code]__italic__ **bold**[/inline code]"
     }
 
     @Test
@@ -71,7 +75,15 @@ class EventHtmlRendererTest {
     fun processesHtmlWithinCodeBlocks() {
         val result = """<code><i>italic</i> <b>bold</b></code>""".renderAsTestSpan()
 
-        result shouldBeEqualTo "[code][italic]italic[/italic] [bold]bold[/bold][/code]"
+        result shouldBeEqualTo "[inline code][italic]italic[/italic] [bold]bold[/bold][/inline code]"
+    }
+
+    @Test
+    fun processesHtmlWithinCodeBlocks_givenRichTextEditorEnabled() {
+        every { fakeVectorPreferences.isRichTextEditorEnabled() } returns true
+        val result = """<code><i>italic</i> <b>bold</b></code>""".renderAsTestSpan()
+
+        result shouldBeEqualTo "[inline code][italic]italic[/italic] [bold]bold[/bold][/inline code]"
     }
 
     @Test
@@ -81,5 +93,9 @@ class EventHtmlRendererTest {
         result shouldBeEqualTo """& < > ' """"
     }
 
-    private fun String.renderAsTestSpan() = renderer.render(this).toSpannable().toTestSpan()
+    private fun String.renderAsTestSpan(): String {
+        textView.text = renderer.render(this).toSpanned()
+        renderer.plugins.forEach { markwonPlugin -> markwonPlugin.afterSetText(textView) }
+        return textView.text.toSpanned().toTestSpan()
+    }
 }
