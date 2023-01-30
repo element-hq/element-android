@@ -282,8 +282,6 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
                 playbackTracker.updatePausedAtPlaybackTime(voiceBroadcast.voiceBroadcastId, positionMillis, positionMillis.toFloat() / duration)
             }
             playingState == State.Playing || playingState == State.Buffering -> {
-                stopPlayer()
-                playbackTracker.updatePlayingAtPlaybackTime(voiceBroadcast.voiceBroadcastId, positionMillis, positionMillis.toFloat() / duration)
                 startPlayback(positionMillis)
             }
             playingState == State.Idle || playingState == State.Paused -> {
