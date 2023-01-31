@@ -478,6 +478,7 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
         if (vectorPreferences.p2pEnableStatic()) {
             monolith!!.setStaticPeer(vectorPreferences.p2pStaticURI())
         }
+        monolith!!.setRelayingEnabled(vectorPreferences.p2pRelayingEnabled())
 
         val selfRelayURI = monolith!!.getRelayServers(monolith?.publicKey())
         vectorPreferences.p2pSetSelfRelayURI(selfRelayURI)
@@ -562,6 +563,10 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
                     val uri = vectorPreferences.p2pStaticURI()
                     m.setStaticPeer(uri)
                 }
+            }
+
+            VectorPreferences.SETTINGS_P2P_ENABLE_RELAYING -> {
+                m.setRelayingEnabled(vectorPreferences.p2pRelayingEnabled())
             }
 
             VectorPreferences.SETTINGS_P2P_SELF_RELAY_URI -> {

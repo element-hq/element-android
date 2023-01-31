@@ -203,6 +203,7 @@ class VectorPreferences @Inject constructor(
         const val SETTINGS_P2P_ENABLE_NEARBY = "SETTINGS_P2P_ENABLE_NEARBY"
         const val SETTINGS_P2P_ENABLE_STATIC = "SETTINGS_P2P_ENABLE_STATIC"
         const val SETTINGS_P2P_STATIC_URI = "SETTINGS_P2P_STATIC_URI"
+        const val SETTINGS_P2P_ENABLE_RELAYING = "SETTINGS_P2P_ENABLE_RELAYING"
         const val SETTINGS_P2P_SELF_RELAY_URI = "SETTINGS_P2P_SELF_RELAY_URI"
         const val SETTINGS_P2P_ENABLE_MULTICAST = "SETTINGS_P2P_ENABLE_MULTICAST"
         const val SETTINGS_P2P_ENABLE_BLUETOOTH = "SETTINGS_P2P_ENABLE_BLUETOOTH"
@@ -302,6 +303,8 @@ class VectorPreferences @Inject constructor(
                 SETTINGS_P2P_ENABLE_STATIC,
                 SETTINGS_P2P_BLE_CODED_PHY,
                 SETTINGS_P2P_STATIC_URI,
+                SETTINGS_P2P_ENABLE_RELAYING,
+                SETTINGS_P2P_SELF_RELAY_URI,
                 )
     }
 
@@ -379,6 +382,10 @@ class VectorPreferences @Inject constructor(
         defaultPrefs.edit {
             putString(SETTINGS_P2P_SELF_RELAY_URI, uri)
         }
+    }
+
+    fun p2pRelayingEnabled(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_P2P_ENABLE_RELAYING, false)
     }
 
     fun areNotificationEnabledForDevice(): Boolean {
