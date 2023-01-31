@@ -17,10 +17,10 @@
 package im.vector.app.features.roomprofile.polls.detail
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -29,18 +29,24 @@ import im.vector.app.R
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentRoomPollDetailBinding
-import im.vector.app.features.roomprofile.RoomProfileArgs
 import im.vector.app.features.roomprofile.polls.RoomPollsType
 import im.vector.app.features.roomprofile.polls.RoomPollsViewModel
+import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
+
+@Parcelize
+data class RoomPollDetailArgs(
+        val roomId: String,
+        val pollId: String,
+) : Parcelable
 
 @AndroidEntryPoint
 class RoomPollDetailFragment : VectorBaseFragment<FragmentRoomPollDetailBinding>() {
 
     @Inject lateinit var roomPollDetailController: RoomPollDetailController
 
-    private val viewModel: RoomPollsViewModel by activityViewModel()
-    private val roomProfileArgs: RoomProfileArgs by args()
+    private val viewModel: RoomPollsViewModel by fragmentViewModel()
+    private val roomPollDetailArgs: RoomPollDetailArgs by args()
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomPollDetailBinding {
         return FragmentRoomPollDetailBinding.inflate(inflater, container, false)
