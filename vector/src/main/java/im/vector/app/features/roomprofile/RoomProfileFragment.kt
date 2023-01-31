@@ -64,7 +64,8 @@ import javax.inject.Inject
 
 @Parcelize
 data class RoomProfileArgs(
-        val roomId: String
+        val roomId: String,
+        val selectedPollId: String? = null,
 ) : Parcelable
 
 @AndroidEntryPoint

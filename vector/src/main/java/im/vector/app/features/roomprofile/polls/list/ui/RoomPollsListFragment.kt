@@ -68,7 +68,9 @@ abstract class RoomPollsListFragment :
         viewModel.observeViewEvents { viewEvent ->
             when (viewEvent) {
                 RoomPollsViewEvent.LoadingError -> showErrorInSnackbar(RoomPollsLoadingError())
-                RoomPollsViewEvent.NavigateToPollDetail -> sharedActionViewModel.post(RoomProfileSharedAction.OpenPollDetails)
+                is RoomPollsViewEvent.NavigateToPollDetail -> {
+                    sharedActionViewModel.post(RoomProfileSharedAction.OpenPollDetails(viewEvent.selectedPollId))
+                }
             }
         }
     }

@@ -106,7 +106,7 @@ class RoomProfileActivity :
                         RoomProfileSharedAction.OpenRoomUploads -> openRoomUploads()
                         RoomProfileSharedAction.OpenBannedRoomMembers -> openBannedRoomMembers()
                         RoomProfileSharedAction.OpenRoomNotificationSettings -> openRoomNotificationSettings()
-                        is RoomProfileSharedAction.OpenPollDetails -> handleOpenPollDetails()
+                        is RoomProfileSharedAction.OpenPollDetails -> handleOpenPollDetails(sharedAction)
                     }
                 }
                 .launchIn(lifecycleScope)
@@ -132,8 +132,12 @@ class RoomProfileActivity :
         finish()
     }
 
-    private fun handleOpenPollDetails() {
-        addFragmentToBackstack(views.simpleFragmentContainer, RoomPollDetailFragment::class.java, roomProfileArgs)
+    private fun handleOpenPollDetails(sharedAction: RoomProfileSharedAction.OpenPollDetails) {
+        addFragmentToBackstack(
+                views.simpleFragmentContainer,
+                RoomPollDetailFragment::class.java,
+                roomProfileArgs.copy(selectedPollId = sharedAction.pollId)
+        )
     }
 
     private fun openRoomPolls() {
