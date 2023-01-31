@@ -27,12 +27,15 @@ import kotlinx.coroutines.flow.onEach
 import java.util.concurrent.atomic.AtomicLong
 
 @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
-class CountUpTimer(initialTime: Long = 0L, private val intervalInMs: Long = 1_000) {
+class CountUpTimer(
+        private val clock: Clock = DefaultClock(),
+        private val intervalInMs: Long = 1_000,
+        initialTime: Long = 0L,
+) {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
     private var counterJob: Job? = null
 
-    private val clock: Clock = DefaultClock()
     private val lastTime: AtomicLong = AtomicLong()
     private val elapsedTime: AtomicLong = AtomicLong(initialTime)
 

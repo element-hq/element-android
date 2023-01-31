@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-package im.vector.app.core.time
-
-import javax.inject.Inject
+package im.vector.lib.core.utils.timer
 
 interface Clock {
     fun epochMillis(): Long
 }
 
-class DefaultClock @Inject constructor() : Clock {
+class DefaultClock : Clock {
 
     /**
      * Provides a UTC epoch in milliseconds

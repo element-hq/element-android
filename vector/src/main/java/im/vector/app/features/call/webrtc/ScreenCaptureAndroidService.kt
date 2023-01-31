@@ -22,8 +22,8 @@ import android.os.IBinder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.startForegroundCompat
 import im.vector.app.core.services.VectorAndroidService
-import im.vector.app.core.time.Clock
 import im.vector.app.features.notifications.NotificationUtils
+import im.vector.lib.core.utils.timer.Clock
 import javax.inject.Inject
 
 @AndroidEntryPoint

@@ -19,7 +19,6 @@ package im.vector.app.features.call.conference
 import im.vector.app.R
 import im.vector.app.core.network.await
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.ensureProtocol
 import im.vector.app.core.utils.toBase32String
 import im.vector.app.features.call.conference.jwt.JitsiJWTFactory
@@ -27,6 +26,7 @@ import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.settings.VectorLocaleProvider
 import im.vector.app.features.themes.ThemeProvider
+import im.vector.lib.core.utils.timer.Clock
 import okhttp3.Request
 import org.jitsi.meet.sdk.JitsiMeetUserInfo
 import org.matrix.android.sdk.api.extensions.tryOrNull

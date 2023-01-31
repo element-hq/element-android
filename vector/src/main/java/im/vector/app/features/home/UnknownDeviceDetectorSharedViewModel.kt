@@ -32,7 +32,7 @@ import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.VectorViewModelAction
 import im.vector.app.core.session.clientinfo.DeleteUnusedClientInformationUseCase
-import im.vector.app.core.time.Clock
+import im.vector.lib.core.utils.timer.Clock
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn

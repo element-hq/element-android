@@ -22,8 +22,8 @@ import com.google.firebase.appdistribution.FirebaseAppDistribution
 import com.google.firebase.appdistribution.FirebaseAppDistributionException
 import im.vector.app.core.di.DefaultPreferences
 import im.vector.app.core.resources.BuildMeta
-import im.vector.app.core.time.Clock
 import im.vector.app.features.home.NightlyProxy
+import im.vector.lib.core.utils.timer.Clock
 import timber.log.Timber
 import javax.inject.Inject
 

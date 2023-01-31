@@ -16,8 +16,8 @@
 
 package im.vector.app.features.home
 
-import im.vector.app.core.time.Clock
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.lib.core.utils.timer.Clock
 import javax.inject.Inject
 
 class SetUnverifiedSessionsAlertShownUseCase @Inject constructor(

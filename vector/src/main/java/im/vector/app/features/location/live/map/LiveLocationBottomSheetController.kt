@@ -23,8 +23,8 @@ import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.resources.DateProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.resources.toTimestamp
-import im.vector.app.core.time.Clock
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.lib.core.utils.timer.Clock
 import javax.inject.Inject
 
 class LiveLocationBottomSheetController @Inject constructor(

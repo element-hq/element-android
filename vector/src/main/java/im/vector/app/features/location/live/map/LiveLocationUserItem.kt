@@ -27,9 +27,9 @@ import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.TextUtils
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.lib.core.utils.timer.Clock
 import im.vector.lib.core.utils.timer.CountUpTimer
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.threeten.bp.Duration
