@@ -16,14 +16,12 @@
 
 package im.vector.lib.core.utils.timer
 
-import im.vector.lib.core.utils.flow.tickerFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.concurrent.atomic.AtomicLong
 
 @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
@@ -40,14 +38,12 @@ class CountUpTimer(
     private val elapsedTime: AtomicLong = AtomicLong(initialTime)
 
     private fun startCounter() {
-        counterJob = tickerFlow(
-                scope = coroutineScope,
-                delayMillis = intervalInMs,
-                initialDelayMillis = intervalInMs - (elapsedTime() % intervalInMs)
-        )
-                .map { elapsedTime() }
-                .onEach { tickListener?.onTick(it) }
-                .launchIn(coroutineScope)
+        counterJob = coroutineScope.launch {
+            while (true) {
+                delay(intervalInMs - elapsedTime() % intervalInMs)
+                tickListener?.onTick(elapsedTime())
+            }
+        }
     }
 
     var tickListener: TickListener? = null
@@ -63,7 +59,8 @@ class CountUpTimer(
 
     fun pause() {
         tickListener?.onTick(elapsedTime())
-        coroutineScope.cancel()
+        counterJob?.cancel()
+        counterJob = null
     }
 
     fun resume() {
@@ -74,6 +71,7 @@ class CountUpTimer(
     fun stop() {
         tickListener?.onTick(elapsedTime())
         coroutineScope.cancel()
+        counterJob = null
     }
 
     fun interface TickListener {
