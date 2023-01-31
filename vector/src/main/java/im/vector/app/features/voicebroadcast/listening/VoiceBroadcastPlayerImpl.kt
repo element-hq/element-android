@@ -223,28 +223,32 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
         }
     }
 
-    private fun startPlayback(position: Int) {
+    private fun startPlayback(playbackPosition: Int) {
         stopPlayer()
         playingState = State.Buffering
 
-        val playlistItem = playlist.findByPosition(position) ?: run {
-            Timber.w("## Voice Broadcast | No content to play at position $position"); stop(); return
+        val playlistItem = playlist.findByPosition(playbackPosition) ?: run {
+            Timber.w("## Voice Broadcast | No content to play at position $playbackPosition"); stop(); return
         }
         val sequence = playlistItem.sequence ?: run {
             Timber.w("## Voice Broadcast | Playlist item has no sequence"); stop(); return
         }
-        val sequencePosition = position - playlistItem.startTime
 
         currentVoiceBroadcast?.let {
-            val percentage = tryOrNull { position.toFloat() / playlist.duration } ?: 0f
-            playbackTracker.updatePausedAtPlaybackTime(it.voiceBroadcastId, position, percentage)
+            val percentage = tryOrNull { playbackPosition.toFloat() / playlist.duration } ?: 0f
+            playbackTracker.updatePausedAtPlaybackTime(it.voiceBroadcastId, playbackPosition, percentage)
         }
 
         prepareCurrentPlayerJob = sessionScope.launch {
             try {
                 val mp = prepareMediaPlayer(playlistItem.audioEvent.content)
-                playlist.currentSequence = sequence - 1 // will be incremented in onNextMediaPlayerStarted
 
+                // Take the difference between the duration given from the media player and the duration given from the chunk event
+                // If the offset is smaller than 500ms, we consider there is no offset to keep the normal behaviour
+                val offset = (mp.duration - playlistItem.duration).takeUnless { it < 500 }?.coerceAtLeast(0) ?: 0
+                val sequencePosition = offset + (playbackPosition - playlistItem.startTime)
+
+                playlist.currentSequence = sequence - 1 // will be incremented in onNextMediaPlayerStarted
                 mp.start()
                 if (sequencePosition > 0) {
                     mp.seekTo(sequencePosition)
