@@ -23,7 +23,6 @@ import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType.MSGTYPE_VOICE_BROADCAST_INFO
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
-import timber.log.Timber
 
 /**
  * Content of the state event of type [VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO].
@@ -50,8 +49,4 @@ data class MessageVoiceBroadcastInfoContent(
 
     val voiceBroadcastState: VoiceBroadcastState? = VoiceBroadcastState.values()
             .find { it.value == voiceBroadcastStateStr }
-            ?: run {
-                Timber.w("Invalid value for state: `$voiceBroadcastStateStr`")
-                null
-            }
 }
