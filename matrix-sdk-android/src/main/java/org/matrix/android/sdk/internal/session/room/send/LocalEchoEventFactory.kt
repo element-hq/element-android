@@ -731,6 +731,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                 localEchoRepository
                         .getRelatedPollEvent(timelineEvent)
                         ?.getLastMessageContent()
+                        ?: timelineEvent.getLastMessageContent()
             }
             else -> timelineEvent.getLastMessageContent()
         }
