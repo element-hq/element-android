@@ -24,17 +24,18 @@ import javax.inject.Inject
 
 class RoomPollDetailController @Inject constructor(
 
-) : TypedEpoxyController<RoomPollsViewState>() {
+) : TypedEpoxyController<RoomPollDetailViewState>() {
 
-    override fun buildModels(viewState: RoomPollsViewState?) {
+    override fun buildModels(viewState: RoomPollDetailViewState?) {
         viewState ?: return
-        val pollSummary = viewState.getSelectedPoll() ?: return
 
         PollItem_()
+        /*
                 .eventId(pollSummary.id)
                 .pollQuestion(pollSummary.title.toEpoxyCharSequence())
                 .canVote(viewState.canVoteSelectedPoll())
                 .optionViewStates(pollSummary.optionViewStates)
                 .ended(viewState.canVoteSelectedPoll().not())
+         */
     }
 }

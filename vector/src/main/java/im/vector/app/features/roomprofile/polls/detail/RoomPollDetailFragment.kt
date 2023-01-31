@@ -45,7 +45,7 @@ class RoomPollDetailFragment : VectorBaseFragment<FragmentRoomPollDetailBinding>
 
     @Inject lateinit var roomPollDetailController: RoomPollDetailController
 
-    private val viewModel: RoomPollsViewModel by fragmentViewModel()
+    private val viewModel: RoomPollDetailViewModel by fragmentViewModel()
     private val roomPollDetailArgs: RoomPollDetailArgs by args()
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomPollDetailBinding {
@@ -61,9 +61,9 @@ class RoomPollDetailFragment : VectorBaseFragment<FragmentRoomPollDetailBinding>
         )
     }
 
-    private fun setupToolbar(roomPollsType: RoomPollsType) {
-        val title = if (roomPollsType == RoomPollsType.ACTIVE) getString(R.string.room_polls_active)
-                else getString(R.string.room_polls_ended)
+    private fun setupToolbar(isEnded: Boolean) {
+        val title = if (isEnded) getString(R.string.room_polls_ended)
+                else getString(R.string.room_polls_active)
 
         setupToolbar(views.roomPollDetailToolbar)
                 .setTitle(title)
@@ -71,11 +71,15 @@ class RoomPollDetailFragment : VectorBaseFragment<FragmentRoomPollDetailBinding>
     }
 
     override fun invalidate() = withState(viewModel) { state ->
-        setupToolbar(state.selectedRoomPollsType)
+        state.pollDetail ?: return@withState
 
+        setupToolbar(state.pollDetail.isEnded)
+
+        /*
         state.getSelectedPoll()?.let { _ ->
             roomPollDetailController.setData(state)
         }
         Unit
+         */
     }
 }
