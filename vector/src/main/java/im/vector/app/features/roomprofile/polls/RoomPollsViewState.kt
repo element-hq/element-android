@@ -36,4 +36,5 @@ data class RoomPollsViewState(
     fun hasNoPolls() = polls.isEmpty()
     fun hasNoPollsAndCanLoadMore() = !isSyncing && hasNoPolls() && canLoadMore
     fun getSelectedPoll() = polls.find { it.id == selectedPollId }
+    fun canVoteSelectedPoll() = selectedRoomPollsType == RoomPollsType.ACTIVE
 }
