@@ -19,13 +19,13 @@ package im.vector.app.features.home.room.detail.timeline.render
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.StringProvider
+import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.getPollQuestion
 import org.matrix.android.sdk.api.session.events.model.getRelationContent
 import org.matrix.android.sdk.api.session.events.model.isAudioMessage
 import org.matrix.android.sdk.api.session.events.model.isFileMessage
 import org.matrix.android.sdk.api.session.events.model.isImageMessage
 import org.matrix.android.sdk.api.session.events.model.isLiveLocation
-import org.matrix.android.sdk.api.session.events.model.isPoll
 import org.matrix.android.sdk.api.session.events.model.isPollEnd
 import org.matrix.android.sdk.api.session.events.model.isPollStart
 import org.matrix.android.sdk.api.session.events.model.isSticker
@@ -97,29 +97,22 @@ class ProcessBodyOfReplyToEventUseCase @Inject constructor(
                             stringProvider.getString(R.string.message_reply_to_sender_sent_sticker)
                     )
                 }
-                repliedToEvent.isPoll() -> {
-                    val fallbackText = when {
-                        repliedToEvent.isPollStart() -> stringProvider.getString(R.string.message_reply_to_sender_created_poll)
-                        repliedToEvent.isPollEnd() -> stringProvider.getString(R.string.message_reply_to_sender_ended_poll)
-                        else -> ""
-                    }
-                    val repliedText = when {
-                        repliedToEvent.isPollEnd() -> {
-                            val eventId = repliedToEvent.getRelationContent()?.eventId
-                            val relatedPollContent = activeSessionHolder
-                                    .getSafeActiveSession()
-                                    ?.getRoom(repliedToEvent.roomId.orEmpty())
-                                    ?.getTimelineEvent(eventId.orEmpty())
-                                    ?.getLastMessageContent() as? MessagePollContent
-
-                            relatedPollContent?.getBestPollCreationInfo()?.question?.getBestQuestion()
-                        }
-                        else -> repliedToEvent.getPollQuestion()
-                    }
+                repliedToEvent.isPollEnd() -> {
+                    val fallbackText = stringProvider.getString(R.string.message_reply_to_sender_ended_poll)
+                    val repliedText = getPollQuestionFromPollEnd(repliedToEvent)
                     matrixFormattedBody.replaceRange(
                             afterBreakingLineIndex,
                             endOfBlockQuoteIndex,
-                            repliedText ?: fallbackText
+                            repliedText ?: fallbackText,
+                    )
+                }
+                repliedToEvent.isPollStart() -> {
+                    val fallbackText = stringProvider.getString(R.string.message_reply_to_sender_created_poll)
+                    val repliedText = repliedToEvent.getPollQuestion()
+                    matrixFormattedBody.replaceRange(
+                            afterBreakingLineIndex,
+                            endOfBlockQuoteIndex,
+                            repliedText ?: fallbackText,
                     )
                 }
                 repliedToEvent.isLiveLocation() -> {
@@ -142,8 +135,25 @@ class ProcessBodyOfReplyToEventUseCase @Inject constructor(
     }
 
     private fun getEvent(eventId: String, roomId: String) =
+            getTimelineEvent(eventId, roomId)
+                    ?.root
+
+    private fun getTimelineEvent(eventId: String, roomId: String) =
             activeSessionHolder.getSafeActiveSession()
                     ?.getRoom(roomId)
                     ?.getTimelineEvent(eventId)
-                    ?.root
+
+    private fun getPollQuestionFromPollEnd(event: Event): String? {
+        val eventId = event.getRelationContent()?.eventId.orEmpty()
+        val roomId = event.roomId.orEmpty()
+        return if (eventId.isEmpty() || roomId.isEmpty()) {
+            null
+        } else {
+            (getTimelineEvent(eventId, roomId)
+                    ?.getLastMessageContent() as? MessagePollContent)
+                    ?.getBestPollCreationInfo()
+                    ?.question
+                    ?.getBestQuestion()
+        }
+    }
 }
