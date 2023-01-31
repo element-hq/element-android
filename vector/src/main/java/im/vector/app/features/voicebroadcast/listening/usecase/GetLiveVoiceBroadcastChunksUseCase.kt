@@ -24,17 +24,15 @@ import im.vector.app.features.voicebroadcast.model.VoiceBroadcastEvent
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import im.vector.app.features.voicebroadcast.sequence
-import im.vector.app.features.voicebroadcast.usecase.GetVoiceBroadcastStateEventLiveUseCase
+import im.vector.app.features.voicebroadcast.usecase.GetVoiceBroadcastStateEventUseCase
 import im.vector.app.features.voicebroadcast.voiceBroadcastId
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.runningReduce
-import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioEvent
 import org.matrix.android.sdk.api.session.room.model.message.asMessageAudioEvent
@@ -48,7 +46,7 @@ import javax.inject.Inject
  */
 class GetLiveVoiceBroadcastChunksUseCase @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
-        private val getVoiceBroadcastEventUseCase: GetVoiceBroadcastStateEventLiveUseCase,
+        private val getVoiceBroadcastEventUseCase: GetVoiceBroadcastStateEventUseCase,
 ) {
 
     fun execute(voiceBroadcast: VoiceBroadcast): Flow<List<MessageAudioEvent>> {
@@ -60,7 +58,7 @@ class GetLiveVoiceBroadcastChunksUseCase @Inject constructor(
         val existingChunks = room.timelineService().getTimelineEventsRelatedTo(RelationType.REFERENCE, voiceBroadcast.voiceBroadcastId)
                 .mapNotNull { timelineEvent -> timelineEvent.root.asMessageAudioEvent().takeIf { it.isVoiceBroadcast() } }
 
-        val voiceBroadcastEvent = runBlocking { getVoiceBroadcastEventUseCase.execute(voiceBroadcast).firstOrNull()?.getOrNull() }
+        val voiceBroadcastEvent = getVoiceBroadcastEventUseCase.execute(voiceBroadcast)
         val voiceBroadcastState = voiceBroadcastEvent?.content?.voiceBroadcastState
 
         return if (voiceBroadcastState == null || voiceBroadcastState == VoiceBroadcastState.STOPPED) {
