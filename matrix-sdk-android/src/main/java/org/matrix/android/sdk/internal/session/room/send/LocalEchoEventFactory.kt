@@ -319,7 +319,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         val permalink = permalinkFactory.createPermalink(roomId, originalEvent.root.eventId ?: "", false)
         val userLink = originalEvent.root.senderId?.let { permalinkFactory.createPermalink(it, false) } ?: ""
 
-        val body = bodyForReply(originalEvent.getLastMessageContent(), originalEvent.isReply())
+        val body = bodyForReply(timelineEvent = originalEvent)
         // As we always supply formatted body for replies we should force the MarkdownParser to produce html.
         val newBodyFormatted = markdownParser.parse(newBodyText, force = true, advanced = autoMarkdown).takeFormatted()
         // Body of the original message may not have formatted version, so may also have to convert to html.
@@ -612,7 +612,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         val userId = eventReplied.root.senderId ?: return null
         val userLink = permalinkFactory.createPermalink(userId, false) ?: return null
 
-        val body = bodyForReply(eventReplied, isRedactedEvent)
+        val body = bodyForReply(timelineEvent = eventReplied, isRedactedEvent = isRedactedEvent)
 
         // As we always supply formatted body for replies we should force the MarkdownParser to produce html.
         val finalReplyTextFormatted = replyTextFormatted?.toString() ?: markdownParser.parse(replyText, force = true, advanced = autoMarkdown).takeFormatted()
@@ -727,13 +727,14 @@ internal class LocalEchoEventFactory @Inject constructor(
     private fun bodyForReply(timelineEvent: TimelineEvent, isRedactedEvent: Boolean = false): TextContent {
         val content = when (timelineEvent.root.getClearType()) {
             in EventType.POLL_END.values -> {
+                // for end poll event, we use the content of the start poll event
                 localEchoRepository
                         .getRelatedPollEvent(timelineEvent)
                         ?.getLastMessageContent()
             }
             else -> timelineEvent.getLastMessageContent()
         }
-        return bodyForReply(content, timelineEvent.isReply(), isRedactedEvent)
+        return bodyForReply(content = content, isReply = timelineEvent.isReply(), isRedactedEvent = isRedactedEvent)
     }
 
     /**
