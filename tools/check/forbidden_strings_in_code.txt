@@ -176,7 +176,7 @@ PreferenceManager\.getDefaultSharedPreferences==2
 R\.string\.template_
 
 ### Use the Clock interface, or use `measureTimeMillis`
-System\.currentTimeMillis\(\)===3
+System\.currentTimeMillis\(\)===2
 
 ### Remove extra space between the name and the description
 \* @\w+ \w+  +
