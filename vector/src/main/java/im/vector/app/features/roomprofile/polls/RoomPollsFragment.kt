@@ -20,6 +20,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.viewpager2.widget.ViewPager2
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.google.android.material.tabs.TabLayoutMediator
@@ -66,9 +69,35 @@ class RoomPollsFragment : VectorBaseFragment<FragmentRoomPollsBinding>() {
 
         tabLayoutMediator = TabLayoutMediator(views.roomPollsTabs, views.roomPollsViewPager) { tab, position ->
             when (position) {
-                RoomPollsType.ACTIVE.ordinal -> tab.text = getString(R.string.room_polls_active)
-                RoomPollsType.ENDED.ordinal -> tab.text = getString(R.string.room_polls_ended)
+                RoomPollsType.ACTIVE.ordinal -> {
+                    tab.text = getString(R.string.room_polls_active)
+                }
+                RoomPollsType.ENDED.ordinal -> {
+                    tab.text = getString(R.string.room_polls_ended)
+                }
             }
         }.also { it.attach() }
+
+        val onPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                when (position) {
+                    RoomPollsType.ACTIVE.ordinal -> {
+                        viewModel.handle(RoomPollsAction.OnRoomPollsTypeChange(RoomPollsType.ACTIVE))
+                    }
+                    RoomPollsType.ENDED.ordinal -> {
+                        viewModel.handle(RoomPollsAction.OnRoomPollsTypeChange(RoomPollsType.ENDED))
+                    }
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
+            override fun onCreate(owner: LifecycleOwner) {
+                views.roomPollsViewPager.registerOnPageChangeCallback(onPageChangeCallback)
+            }
+            override fun onDestroy(owner: LifecycleOwner) {
+                views.roomPollsViewPager.unregisterOnPageChangeCallback(onPageChangeCallback)
+            }
+        })
     }
 }

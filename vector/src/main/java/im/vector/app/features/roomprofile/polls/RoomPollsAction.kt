@@ -20,5 +20,6 @@ import im.vector.app.core.platform.VectorViewModelAction
 
 sealed interface RoomPollsAction : VectorViewModelAction {
     object LoadMorePolls : RoomPollsAction
+    data class OnRoomPollsTypeChange(val roomPollsType: RoomPollsType) : RoomPollsAction
     data class OnPollSelected(val selectedPollId: String) : RoomPollsAction
 }
