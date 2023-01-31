@@ -240,6 +240,7 @@ class MatrixHtmlPluginConfigure @Inject constructor(
         private val colorProvider: ColorProvider,
         private val resources: Resources,
         private val vectorPreferences: VectorPreferences,
+        private val dimensionConverter: DimensionConverter,
 ) : HtmlPlugin.HtmlConfigure {
 
     override fun configureHtml(plugin: HtmlPlugin) {
@@ -248,7 +249,7 @@ class MatrixHtmlPluginConfigure @Inject constructor(
                 .addHandler(FontTagHandler())
                 .addHandler(ParagraphHandler(DimensionConverter(resources)))
                 .addHandler(MxReplyTagHandler())
-                .addHandler(CodePostProcessorTagHandler(vectorPreferences))
+                .addHandler(CodePostProcessorTagHandler(vectorPreferences, dimensionConverter))
                 .addHandler(CodePreTagHandler())
                 .addHandler(CodeTagHandler())
                 .addHandler(SpanHandler(colorProvider))

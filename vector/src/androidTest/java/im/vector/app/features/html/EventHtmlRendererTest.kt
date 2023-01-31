@@ -21,6 +21,7 @@ import androidx.core.text.toSpanned
 import androidx.test.platform.app.InstrumentationRegistry
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.ColorProvider
+import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.core.utils.toTestSpan
 import im.vector.app.features.settings.VectorPreferences
 import io.mockk.every
@@ -40,9 +41,10 @@ class EventHtmlRendererTest {
         every { it.isRichTextEditorEnabled() } returns false
     }
     private val fakeSessionHolder = mockk<ActiveSessionHolder>()
+    private val fakeDimensionConverter = mockk<DimensionConverter>()
 
     private val renderer = EventHtmlRenderer(
-            MatrixHtmlPluginConfigure(ColorProvider(context), context.resources, fakeVectorPreferences),
+            MatrixHtmlPluginConfigure(ColorProvider(context), context.resources, fakeVectorPreferences, fakeDimensionConverter),
             context,
             fakeVectorPreferences,
             fakeSessionHolder,
