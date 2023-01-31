@@ -2632,7 +2632,7 @@
     <string name="labs_enable_live_location">位置情報（ライブ）の共有を有効にする</string>
     <string name="live_location_sharing_notification_description">位置情報を共有しています</string>
     <string name="live_location_sharing_notification_title">${app_name}位置情報（ライブ）</string>
-    <string name="location_share_live_remaining_time">残り%1$d</string>
+    <string name="location_share_live_remaining_time">残り%1$s</string>
     <string name="location_share_live_view">位置情報（ライブ）を表示</string>
     <string name="location_share_live_ended">位置情報（ライブ）が終了しました</string>
     <string name="location_share_live_started">位置情報（ライブ）を読み込んでいます…</string>
@@ -2655,7 +2655,7 @@
     <string name="labs_enable_msc3061_share_history">MSC3061：過去のメッセージ用にルームの鍵を共有</string>
     <string name="stop_voice_broadcast_content">ライブ配信を終了してよろしいですか？配信を終了し、録音をこのルームで利用できるよう設定します。</string>
     <string name="stop_voice_broadcast_dialog_title">ライブ配信を停止しますか？</string>
-    <string name="voice_broadcast_recording_time_left">残り%1$d</string>
+    <string name="voice_broadcast_recording_time_left">残り%1$s</string>
     <string name="error_voice_broadcast_no_connection_recording">接続エラー - 録音を停止しました</string>
     <string name="error_voice_broadcast_unable_to_play">この音声配信を再生できません。</string>
     <string name="error_voice_broadcast_already_in_progress_message">既に音声配信を録音しています。新しく始めるには今の音声配信を終了してください。</string>
