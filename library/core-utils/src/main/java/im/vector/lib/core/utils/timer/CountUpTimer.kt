@@ -19,31 +19,29 @@ package im.vector.lib.core.utils.timer
 import im.vector.lib.core.utils.flow.tickerFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicLong
 
 @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
 class CountUpTimer(initialTime: Long = 0L, private val intervalInMs: Long = 1_000) {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
-    private val resumed: AtomicBoolean = AtomicBoolean(false)
+    private var counterJob: Job? = null
 
     private val clock: Clock = DefaultClock()
     private val lastTime: AtomicLong = AtomicLong()
     private val elapsedTime: AtomicLong = AtomicLong(initialTime)
 
-    init {
-        startCounter()
-    }
-
     private fun startCounter() {
-        tickerFlow(coroutineScope, intervalInMs)
-                .filter { resumed.get() }
+        counterJob = tickerFlow(
+                scope = coroutineScope,
+                delayMillis = intervalInMs,
+                initialDelayMillis = intervalInMs - (elapsedTime() % intervalInMs)
+        )
                 .map { elapsedTime() }
                 .onEach { tickListener?.onTick(it) }
                 .launchIn(coroutineScope)
@@ -52,7 +50,7 @@ class CountUpTimer(initialTime: Long = 0L, private val intervalInMs: Long = 1_00
     var tickListener: TickListener? = null
 
     fun elapsedTime(): Long {
-        return if (resumed.get()) {
+        return if (counterJob?.isActive == true) {
             val now = clock.epochMillis()
             elapsedTime.addAndGet(now - lastTime.getAndSet(now))
         } else {
@@ -62,12 +60,12 @@ class CountUpTimer(initialTime: Long = 0L, private val intervalInMs: Long = 1_00
 
     fun pause() {
         tickListener?.onTick(elapsedTime())
-        resumed.set(false)
+        coroutineScope.cancel()
     }
 
     fun resume() {
         lastTime.set(clock.epochMillis())
-        resumed.set(true)
+        startCounter()
     }
 
     fun stop() {
