@@ -19,22 +19,21 @@ package im.vector.lib.core.utils.timer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.concurrent.atomic.AtomicLong
 
 @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
 class CountUpTimer(
+        private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Main),
         private val clock: Clock = DefaultClock(),
         private val intervalInMs: Long = 1_000,
         initialTime: Long = 0L,
 ) {
 
-    private val coroutineScope = CoroutineScope(Dispatchers.Main)
     private var counterJob: Job? = null
 
-    private val lastTime: AtomicLong = AtomicLong()
+    private val lastTime: AtomicLong = AtomicLong(clock.epochMillis())
     private val elapsedTime: AtomicLong = AtomicLong(initialTime)
 
     private fun startCounter() {
@@ -70,7 +69,7 @@ class CountUpTimer(
 
     fun stop() {
         tickListener?.onTick(elapsedTime())
-        coroutineScope.cancel()
+        counterJob?.cancel()
         counterJob = null
     }
 
