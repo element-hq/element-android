@@ -36,6 +36,7 @@ import javax.inject.Inject
 @Parcelize
 data class RoomPollDetailArgs(
         val pollId: String,
+        val roomId: String,
 ) : Parcelable
 
 @AndroidEntryPoint
@@ -80,13 +81,9 @@ class RoomPollDetailFragment : VectorBaseFragment<FragmentRoomPollDetailBinding>
     override fun invalidate() = withState(viewModel) { state ->
         state.pollDetail ?: return@withState
 
+        // TODO should we update the title when the poll status changes?
         setupToolbar(state.pollDetail.isEnded)
 
-        /*
-        state.getSelectedPoll()?.let { _ ->
-            roomPollDetailController.setData(state)
-        }
-        Unit
-         */
+        // TODO update data of the controller
     }
 }

@@ -127,8 +127,12 @@ abstract class RoomPollsListFragment :
         views.roomPollsLoadMoreWhenEmptyProgress.isVisible = viewState.hasNoPollsAndCanLoadMore() && viewState.isLoadingMore
     }
 
-    override fun onPollClicked(pollId: String) {
-        viewNavigator.goToPollDetails(requireContext(), pollId)
+    override fun onPollClicked(pollId: String) = withState(viewModel) {
+        viewNavigator.goToPollDetails(
+                context = requireContext(),
+                pollId = pollId,
+                roomId = it.roomId,
+        )
     }
 
     override fun onLoadMoreClicked() {

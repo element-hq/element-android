@@ -18,15 +18,25 @@ package im.vector.app.features.roomprofile.polls.detail.ui
 
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import im.vector.app.core.event.GetTimelineEventUseCase
 import im.vector.app.core.platform.VectorViewModel
+import kotlinx.coroutines.flow.launchIn
 
 class RoomPollDetailViewModel @AssistedInject constructor(
         @Assisted initialState: RoomPollDetailViewState,
+        private val getTimelineEventUseCase: GetTimelineEventUseCase,
 ) : VectorViewModel<RoomPollDetailViewState, RoomPollDetailAction, RoomPollDetailViewEvent>(initialState) {
 
     init {
-        // TODO observe poll using TimelineService.getTimelineEventLive
-        // TODO create a dedicated useCase and mapper
+        observePollDetails(
+                pollId = initialState.pollId,
+                roomId = initialState.roomId,
+        )
+    }
+
+    private fun observePollDetails(pollId: String, roomId: String) {
+        getTimelineEventUseCase.execute(roomId = roomId, eventId = pollId)
+                .launchIn(viewModelScope)
     }
 
     override fun handle(action: RoomPollDetailAction) {

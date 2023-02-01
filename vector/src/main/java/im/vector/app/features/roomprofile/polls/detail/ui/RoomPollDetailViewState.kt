@@ -20,8 +20,12 @@ import com.airbnb.mvrx.MavericksState
 
 data class RoomPollDetailViewState(
         val pollId: String,
+        val roomId: String,
         val pollDetail: RoomPollDetail? = null,
 ) : MavericksState {
 
-    constructor(roomPollDetailArgs: RoomPollDetailArgs) : this(pollId = roomPollDetailArgs.pollId)
+    constructor(roomPollDetailArgs: RoomPollDetailArgs) : this(
+            pollId = roomPollDetailArgs.pollId,
+            roomId = roomPollDetailArgs.roomId,
+    )
 }
