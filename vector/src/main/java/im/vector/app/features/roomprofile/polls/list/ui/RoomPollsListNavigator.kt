@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.roomprofile.polls.detail
+package im.vector.app.features.roomprofile.polls.list.ui
 
-import com.airbnb.mvrx.MavericksState
+import android.content.Context
+import im.vector.app.features.roomprofile.polls.detail.RoomPollDetailActivity
+import javax.inject.Inject
 
-data class RoomPollDetailViewState(
-        val pollId: String,
-        val pollDetail: RoomPollDetail? = null,
-) : MavericksState {
+// TODO add unit tests
+class RoomPollsListNavigator @Inject constructor() {
 
-    constructor(roomPollDetailArgs: RoomPollDetailArgs) : this(pollId = roomPollDetailArgs.pollId)
+    fun goToPollDetails(context: Context, pollId: String) {
+        context.startActivity(RoomPollDetailActivity.newIntent(context, pollId))
+    }
 }

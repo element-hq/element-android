@@ -37,7 +37,6 @@ import im.vector.app.features.roomprofile.members.RoomMemberListFragment
 import im.vector.app.features.roomprofile.notifications.RoomNotificationSettingsFragment
 import im.vector.app.features.roomprofile.permissions.RoomPermissionsFragment
 import im.vector.app.features.roomprofile.polls.RoomPollsFragment
-import im.vector.app.features.roomprofile.polls.detail.RoomPollDetailFragment
 import im.vector.app.features.roomprofile.settings.RoomSettingsFragment
 import im.vector.app.features.roomprofile.uploads.RoomUploadsFragment
 import im.vector.lib.core.utils.compat.getParcelableCompat
@@ -106,7 +105,6 @@ class RoomProfileActivity :
                         RoomProfileSharedAction.OpenRoomUploads -> openRoomUploads()
                         RoomProfileSharedAction.OpenBannedRoomMembers -> openBannedRoomMembers()
                         RoomProfileSharedAction.OpenRoomNotificationSettings -> openRoomNotificationSettings()
-                        is RoomProfileSharedAction.OpenPollDetails -> handleOpenPollDetails(sharedAction)
                     }
                 }
                 .launchIn(lifecycleScope)
@@ -130,14 +128,6 @@ class RoomProfileActivity :
             Toast.makeText(this, roomLeft.leftMessage, Toast.LENGTH_LONG).show()
         }
         finish()
-    }
-
-    private fun handleOpenPollDetails(sharedAction: RoomProfileSharedAction.OpenPollDetails) {
-        addFragmentToBackstack(
-                views.simpleFragmentContainer,
-                RoomPollDetailFragment::class.java,
-                roomProfileArgs.copy(selectedPollId = sharedAction.pollId)
-        )
     }
 
     private fun openRoomPolls() {

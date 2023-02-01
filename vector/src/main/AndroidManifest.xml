@@ -327,6 +327,7 @@
         <activity android:name=".features.settings.devices.v2.details.SessionDetailsActivity" />
         <activity android:name=".features.settings.devices.v2.rename.RenameSessionActivity" />
         <activity android:name=".features.login.qr.QrCodeLoginActivity" />
+        <activity android:name=".features.roomprofile.polls.detail.RoomPollDetailActivity" />
 
         <!-- Services -->
 

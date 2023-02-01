@@ -36,7 +36,6 @@ import javax.inject.Inject
 
 @Parcelize
 data class RoomPollDetailArgs(
-        val roomId: String,
         val pollId: String,
 ) : Parcelable
 

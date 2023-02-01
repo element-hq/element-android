@@ -29,8 +29,6 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.databinding.FragmentRoomPollsListBinding
-import im.vector.app.features.roomprofile.RoomProfileSharedAction
-import im.vector.app.features.roomprofile.RoomProfileSharedActionViewModel
 import im.vector.app.features.roomprofile.polls.RoomPollsAction
 import im.vector.app.features.roomprofile.polls.RoomPollsLoadingError
 import im.vector.app.features.roomprofile.polls.RoomPollsType
@@ -49,8 +47,10 @@ abstract class RoomPollsListFragment :
     @Inject
     lateinit var stringProvider: StringProvider
 
+    @Inject
+    lateinit var viewNavigator: RoomPollsListNavigator
+
     private val viewModel: RoomPollsViewModel by parentFragmentViewModel(RoomPollsViewModel::class)
-    private lateinit var sharedActionViewModel: RoomProfileSharedActionViewModel
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomPollsListBinding {
         return FragmentRoomPollsListBinding.inflate(inflater, container, false)
@@ -58,7 +58,6 @@ abstract class RoomPollsListFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        sharedActionViewModel = activityViewModelProvider[RoomProfileSharedActionViewModel::class.java]
         observeViewEvents()
         setupList()
         setupLoadMoreButton()
@@ -68,9 +67,6 @@ abstract class RoomPollsListFragment :
         viewModel.observeViewEvents { viewEvent ->
             when (viewEvent) {
                 RoomPollsViewEvent.LoadingError -> showErrorInSnackbar(RoomPollsLoadingError())
-                is RoomPollsViewEvent.NavigateToPollDetail -> {
-                    sharedActionViewModel.post(RoomProfileSharedAction.OpenPollDetails(viewEvent.selectedPollId))
-                }
             }
         }
     }
@@ -132,7 +128,7 @@ abstract class RoomPollsListFragment :
     }
 
     override fun onPollClicked(pollId: String) {
-        viewModel.handle(RoomPollsAction.OnPollSelected(pollId))
+        viewNavigator.goToPollDetails(requireContext(), pollId)
     }
 
     override fun onLoadMoreClicked() {

@@ -27,14 +27,10 @@ data class RoomPollsViewState(
         val canLoadMore: Boolean = true,
         val nbSyncedDays: Int = 0,
         val isSyncing: Boolean = false,
-        val selectedPollId: String? = null,
-        val selectedRoomPollsType: RoomPollsType = RoomPollsType.ACTIVE,
 ) : MavericksState {
 
     constructor(roomProfileArgs: RoomProfileArgs) : this(roomId = roomProfileArgs.roomId)
 
     fun hasNoPolls() = polls.isEmpty()
     fun hasNoPollsAndCanLoadMore() = !isSyncing && hasNoPolls() && canLoadMore
-    fun getSelectedPoll() = polls.find { it.id == selectedPollId }
-    fun canVoteSelectedPoll() = selectedRoomPollsType == RoomPollsType.ACTIVE
 }

@@ -25,10 +25,11 @@ class RoomPollDetailViewModel @AssistedInject constructor(
 ) : VectorViewModel<RoomPollDetailViewState, RoomPollDetailAction, RoomPollDetailViewEvent>(initialState) {
 
     init {
-        // Subscribe to the poll event and map it
+        // TODO observe poll using TimelineService.getTimelineEventLive
+        // TODO create a dedicated useCase and mapper
     }
 
     override fun handle(action: RoomPollDetailAction) {
-
+        // TODO handle go to timeline action
     }
 }
