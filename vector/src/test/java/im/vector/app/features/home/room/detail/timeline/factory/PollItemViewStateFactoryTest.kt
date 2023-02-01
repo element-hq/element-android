@@ -19,7 +19,7 @@ package im.vector.app.features.home.room.detail.timeline.factory
 import im.vector.app.R
 import im.vector.app.features.home.room.detail.timeline.item.PollOptionViewState
 import im.vector.app.features.home.room.detail.timeline.item.PollVoteSummaryData
-import im.vector.app.features.poll.PollViewState
+import im.vector.app.features.poll.PollItemViewState
 import im.vector.app.test.fakes.FakeStringProvider
 import im.vector.app.test.fixtures.PollFixture.A_MESSAGE_INFORMATION_DATA
 import im.vector.app.test.fixtures.PollFixture.A_POLL_CONTENT
@@ -57,7 +57,7 @@ class PollItemViewStateFactoryTest {
         )
 
         // Then
-        pollViewState shouldBeEqualTo PollViewState(
+        pollViewState shouldBeEqualTo PollItemViewState(
                 question = A_POLL_CONTENT.getBestPollCreationInfo()?.question?.getBestQuestion() ?: "",
                 votesStatus = fakeStringProvider.instance.getString(R.string.poll_no_votes_cast),
                 canVote = false,
@@ -90,7 +90,7 @@ class PollItemViewStateFactoryTest {
         )
 
         // Then
-        pollViewState shouldBeEqualTo PollViewState(
+        pollViewState shouldBeEqualTo PollItemViewState(
                 question = A_POLL_CONTENT.getBestPollCreationInfo()?.question?.getBestQuestion() ?: "",
                 votesStatus = fakeStringProvider.instance.getQuantityString(R.plurals.poll_total_vote_count_after_ended, 0, 0),
                 canVote = false,
@@ -155,7 +155,7 @@ class PollItemViewStateFactoryTest {
         )
 
         // Then
-        pollViewState shouldBeEqualTo PollViewState(
+        pollViewState shouldBeEqualTo PollItemViewState(
                 question = A_POLL_CONTENT.getBestPollCreationInfo()?.question?.getBestQuestion() ?: "",
                 votesStatus = fakeStringProvider.instance.getString(R.string.poll_undisclosed_not_ended),
                 canVote = true,
@@ -204,7 +204,7 @@ class PollItemViewStateFactoryTest {
         )
 
         // Then
-        pollViewState shouldBeEqualTo PollViewState(
+        pollViewState shouldBeEqualTo PollItemViewState(
                 question = A_POLL_CONTENT.getBestPollCreationInfo()?.question?.getBestQuestion() ?: "",
                 votesStatus = fakeStringProvider.instance.getQuantityString(R.plurals.poll_total_vote_count_before_ended_and_voted, 1, 1),
                 canVote = true,
@@ -286,7 +286,7 @@ class PollItemViewStateFactoryTest {
         )
 
         // Then
-        pollViewState shouldBeEqualTo PollViewState(
+        pollViewState shouldBeEqualTo PollItemViewState(
                 question = A_POLL_CONTENT.getBestPollCreationInfo()?.question?.getBestQuestion() ?: "",
                 votesStatus = fakeStringProvider.instance.getString(R.string.poll_no_votes_cast),
                 canVote = true,

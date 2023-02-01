@@ -16,14 +16,9 @@
 
 package im.vector.app.features.roomprofile.polls.detail.ui
 
-import im.vector.app.features.home.room.detail.timeline.item.PollOptionViewState
+import im.vector.app.features.poll.PollItemViewState
 
 data class RoomPollDetail(
-        val eventId: String,
-        val question: String,
-        val canVote: Boolean,
-        val votesStatusSummary: String,
-        val optionViewStates: List<PollOptionViewState>,
-        val hasBeenEdited: Boolean,
         val isEnded: Boolean,
+        val pollItemViewState: PollItemViewState,
 )

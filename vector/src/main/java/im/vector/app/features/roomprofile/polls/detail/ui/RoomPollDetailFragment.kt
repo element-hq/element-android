@@ -59,6 +59,7 @@ class RoomPollDetailFragment : VectorBaseFragment<FragmentRoomPollDetailBinding>
                 roomPollDetailController,
                 hasFixedSize = true,
         )
+        // TODO setup callback in controller for vote action
     }
 
     override fun onDestroyView() {
@@ -75,15 +76,13 @@ class RoomPollDetailFragment : VectorBaseFragment<FragmentRoomPollDetailBinding>
 
         setupToolbar(views.roomPollDetailToolbar)
                 .setTitle(title)
-                .allowBack()
+                .allowBack(useCross = true)
     }
 
     override fun invalidate() = withState(viewModel) { state ->
         state.pollDetail ?: return@withState
-
         // TODO should we update the title when the poll status changes?
         setupToolbar(state.pollDetail.isEnded)
-
-        // TODO update data of the controller
+        roomPollDetailController.setData(state)
     }
 }

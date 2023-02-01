@@ -17,22 +17,29 @@
 package im.vector.app.features.roomprofile.polls.detail.ui
 
 import com.airbnb.epoxy.TypedEpoxyController
-import im.vector.app.features.home.room.detail.timeline.item.PollItem_
 import javax.inject.Inject
 
-class RoomPollDetailController @Inject constructor()
-    : TypedEpoxyController<RoomPollDetailViewState>() {
+class RoomPollDetailController @Inject constructor() : TypedEpoxyController<RoomPollDetailViewState>() {
+
+    interface Callback {
+        fun vote(pollId: String, optionId: String)
+    }
+
+    var callback: Callback? = null
 
     override fun buildModels(viewState: RoomPollDetailViewState?) {
-        viewState ?: return
+        val pollDetail = viewState?.pollDetail ?: return
+        val pollItemViewState = pollDetail.pollItemViewState
+        val host = this
 
-        PollItem_()
-        /*
-                .eventId(pollSummary.id)
-                .pollQuestion(pollSummary.title.toEpoxyCharSequence())
-                .canVote(viewState.canVoteSelectedPoll())
-                .optionViewStates(pollSummary.optionViewStates)
-                .ended(viewState.canVoteSelectedPoll().not())
-         */
+        roomPollDetailItem {
+            id(viewState.pollId)
+            eventId(viewState.pollId)
+            question(pollItemViewState.question)
+            canVote(pollItemViewState.canVote)
+            votesStatus(pollItemViewState.votesStatus)
+            optionViewStates(pollItemViewState.optionViewStates.orEmpty())
+            callback(host.callback)
+        }
     }
 }

@@ -16,16 +16,33 @@
 
 package im.vector.app.features.roomprofile.polls.detail.ui
 
+import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.event.GetTimelineEventUseCase
+import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.auth.ReAuthState
+import im.vector.app.features.auth.ReAuthViewModel
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 
 class RoomPollDetailViewModel @AssistedInject constructor(
         @Assisted initialState: RoomPollDetailViewState,
         private val getTimelineEventUseCase: GetTimelineEventUseCase,
-) : VectorViewModel<RoomPollDetailViewState, RoomPollDetailAction, RoomPollDetailViewEvent>(initialState) {
+        private val roomPollDetailMapper: RoomPollDetailMapper,
+) : VectorViewModel<RoomPollDetailViewState, EmptyAction, RoomPollDetailViewEvent>(initialState) {
+
+    @AssistedFactory
+    interface Factory : MavericksAssistedViewModelFactory<RoomPollDetailViewModel, RoomPollDetailViewState> {
+        override fun create(initialState: RoomPollDetailViewState): RoomPollDetailViewModel
+    }
+
+    companion object : MavericksViewModelFactory<RoomPollDetailViewModel, RoomPollDetailViewState> by hiltMavericksViewModelFactory()
 
     init {
         observePollDetails(
@@ -36,10 +53,12 @@ class RoomPollDetailViewModel @AssistedInject constructor(
 
     private fun observePollDetails(pollId: String, roomId: String) {
         getTimelineEventUseCase.execute(roomId = roomId, eventId = pollId)
+                .map { roomPollDetailMapper.map(it) }
+                .onEach { setState { copy(pollDetail = it) } }
                 .launchIn(viewModelScope)
     }
 
-    override fun handle(action: RoomPollDetailAction) {
-        // TODO handle go to timeline action
+    override fun handle(action: EmptyAction) {
+        // do nothing for now
     }
 }
