@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.roomprofile.polls.detail
+package im.vector.app.features.roomprofile.polls.detail.ui
 
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject

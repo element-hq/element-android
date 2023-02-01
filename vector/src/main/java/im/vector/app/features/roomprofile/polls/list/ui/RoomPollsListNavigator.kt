@@ -17,7 +17,7 @@
 package im.vector.app.features.roomprofile.polls.list.ui
 
 import android.content.Context
-import im.vector.app.features.roomprofile.polls.detail.RoomPollDetailActivity
+import im.vector.app.features.roomprofile.polls.detail.ui.RoomPollDetailActivity
 import javax.inject.Inject
 
 // TODO add unit tests

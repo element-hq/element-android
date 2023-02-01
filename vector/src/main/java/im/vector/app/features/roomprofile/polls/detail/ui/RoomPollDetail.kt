@@ -14,10 +14,16 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.roomprofile.polls.detail
+package im.vector.app.features.roomprofile.polls.detail.ui
 
-import im.vector.app.core.platform.VectorViewModelAction
+import im.vector.app.features.home.room.detail.timeline.item.PollOptionViewState
 
-sealed interface RoomPollDetailAction : VectorViewModelAction {
-
-}
+data class RoomPollDetail(
+        val eventId: String,
+        val question: String,
+        val canVote: Boolean,
+        val votesStatusSummary: String,
+        val optionViewStates: List<PollOptionViewState>,
+        val hasBeenEdited: Boolean,
+        val isEnded: Boolean,
+)

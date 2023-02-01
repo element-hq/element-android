@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.roomprofile.polls.detail
+package im.vector.app.features.roomprofile.polls.detail.ui
 
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.features.home.room.detail.timeline.item.PollItem_
-import im.vector.app.features.roomprofile.polls.RoomPollsViewState
-import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import javax.inject.Inject
 
 class RoomPollDetailController @Inject constructor()
