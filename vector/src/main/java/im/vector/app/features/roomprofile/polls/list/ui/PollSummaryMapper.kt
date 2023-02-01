@@ -70,14 +70,12 @@ class PollSummaryMapper @Inject constructor(
                     title = pollTitle,
                     totalVotes = pollResponseData.totalVotes,
                     winnerOptions = pollOptionViewStateFactory.createPollEndedOptions(pollCreationInfo, pollResponseData),
-                    optionViewStates = pollOptionViewStateFactory.createPollSendingOptions(pollCreationInfo),
             )
         } else {
             PollSummary.ActivePoll(
                     id = eventId,
                     creationTimestamp = creationTimestamp,
                     title = pollTitle,
-                    optionViewStates = pollOptionViewStateFactory.createPollSendingOptions(pollCreationInfo),
             )
         }
     }

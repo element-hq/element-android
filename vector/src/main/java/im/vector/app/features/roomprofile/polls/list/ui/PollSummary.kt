@@ -22,13 +22,11 @@ sealed interface PollSummary {
     val id: String
     val creationTimestamp: Long
     val title: String
-    val optionViewStates: List<PollOptionViewState>
 
     data class ActivePoll(
             override val id: String,
             override val creationTimestamp: Long,
             override val title: String,
-            override val optionViewStates: List<PollOptionViewState>,
     ) : PollSummary
 
     data class EndedPoll(
@@ -37,6 +35,5 @@ sealed interface PollSummary {
             override val title: String,
             val totalVotes: Int,
             val winnerOptions: List<PollOptionViewState.PollEnded>,
-            override val optionViewStates: List<PollOptionViewState>,
     ) : PollSummary
 }
