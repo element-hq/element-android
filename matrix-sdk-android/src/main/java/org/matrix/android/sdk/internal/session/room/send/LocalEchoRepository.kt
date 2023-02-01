@@ -25,6 +25,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.api.session.room.timeline.getRelationContent
 import org.matrix.android.sdk.internal.database.RealmSessionProvider
 import org.matrix.android.sdk.internal.database.asyncTransaction
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
@@ -227,5 +228,16 @@ internal class LocalEchoRepository @Inject constructor(
         return realmSessionProvider.withRealm { realm ->
             EventEntity.where(realm, eventId = rootThreadEventId).findFirst()?.threadSummaryLatestMessage?.eventId
         } ?: rootThreadEventId
+    }
+
+    fun getRelatedPollEvent(timelineEvent: TimelineEvent): TimelineEvent? {
+        val roomId = timelineEvent.roomId
+        val pollEventId = timelineEvent.getRelationContent()?.eventId ?: return null
+
+        return realmSessionProvider.withRealm { realm ->
+            TimelineEventEntity.where(realm, roomId = roomId, eventId = pollEventId).findFirst()?.let {
+                timelineEventMapper.map(it)
+            }
+        }
     }
 }

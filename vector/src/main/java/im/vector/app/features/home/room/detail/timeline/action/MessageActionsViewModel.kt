@@ -219,6 +219,9 @@ class MessageActionsViewModel @AssistedInject constructor(
                         (timelineEvent.getVectorLastMessageContent() as? MessagePollContent)?.getBestPollCreationInfo()?.question?.getBestQuestion()
                                 ?: stringProvider.getString(R.string.message_reply_to_poll_preview)
                     }
+                    in EventType.POLL_END.values -> {
+                        stringProvider.getString(R.string.message_reply_to_ended_poll_preview)
+                    }
                     else -> null
                 }
             }
