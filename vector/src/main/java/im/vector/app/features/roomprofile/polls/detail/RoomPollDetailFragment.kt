@@ -26,11 +26,10 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
+import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentRoomPollDetailBinding
-import im.vector.app.features.roomprofile.polls.RoomPollsType
-import im.vector.app.features.roomprofile.polls.RoomPollsViewModel
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -53,6 +52,7 @@ class RoomPollDetailFragment : VectorBaseFragment<FragmentRoomPollDetailBinding>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupToolbar()
 
         views.pollDetailRecyclerView.configureWith(
                 roomPollDetailController,
@@ -60,9 +60,17 @@ class RoomPollDetailFragment : VectorBaseFragment<FragmentRoomPollDetailBinding>
         )
     }
 
-    private fun setupToolbar(isEnded: Boolean) {
-        val title = if (isEnded) getString(R.string.room_polls_ended)
-                else getString(R.string.room_polls_active)
+    override fun onDestroyView() {
+        views.pollDetailRecyclerView.cleanup()
+        super.onDestroyView()
+    }
+
+    private fun setupToolbar(isEnded: Boolean? = null) {
+        val title = when (isEnded) {
+            true -> getString(R.string.room_polls_ended)
+            false -> getString(R.string.room_polls_active)
+            else -> ""
+        }
 
         setupToolbar(views.roomPollDetailToolbar)
                 .setTitle(title)
