@@ -84,10 +84,12 @@ internal class PollSummaryMapperTest {
     }
 
     @Test
-    fun `given an ended poll event when mapping to model then result is ended poll`() {
+    fun `given an ended poll event when mapping to model then result is ended poll with only winner options`() {
         // Given
         val totalVotes = 10
-        val winnerOptions = listOf<PollOptionViewState.PollEnded>()
+        val option1 = givenAPollEndedOption(isWinner = false)
+        val option2 = givenAPollEndedOption(isWinner = true)
+        val winnerOptions = listOf(option1, option2)
         val endedPollEvent = givenAPollTimelineEvent(
                 eventId = AN_EVENT_ID,
                 creationTimestamp = AN_EVENT_TIMESTAMP,
@@ -101,7 +103,7 @@ internal class PollSummaryMapperTest {
                 creationTimestamp = AN_EVENT_TIMESTAMP,
                 title = A_POLL_TITLE,
                 totalVotes = totalVotes,
-                winnerOptions = winnerOptions,
+                winnerOptions = listOf(option2),
         )
 
         // When
@@ -197,5 +199,11 @@ internal class PollSummaryMapperTest {
                 isClosed = isClosed,
                 totalVotes = totalVotes,
         )
+    }
+
+    private fun givenAPollEndedOption(isWinner: Boolean): PollOptionViewState.PollEnded {
+        return mockk<PollOptionViewState.PollEnded>().also {
+            every { it.isWinner } returns isWinner
+        }
     }
 }
