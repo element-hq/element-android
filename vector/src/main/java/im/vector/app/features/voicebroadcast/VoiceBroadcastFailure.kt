@@ -32,5 +32,6 @@ sealed class VoiceBroadcastFailure : Throwable() {
          */
         data class UnableToPlay(val what: Int, val extra: Int) : ListeningError()
         data class PrepareMediaPlayerError(override val cause: Throwable? = null) : ListeningError()
+        object UnableToDecrypt : ListeningError()
     }
 }

@@ -19,11 +19,17 @@ package im.vector.app.features.home.room.detail.timeline.factory
 import im.vector.app.core.epoxy.TimelineEmptyItem
 import im.vector.app.core.epoxy.TimelineEmptyItem_
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.extensions.isVoiceBroadcast
 import im.vector.app.features.analytics.DecryptionFailureTracker
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventVisibilityHelper
 import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
+import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.RelationType
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.api.session.room.timeline.getRelationContent
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -39,6 +45,7 @@ class TimelineItemFactory @Inject constructor(
         private val callItemFactory: CallItemFactory,
         private val decryptionFailureTracker: DecryptionFailureTracker,
         private val timelineEventVisibilityHelper: TimelineEventVisibilityHelper,
+        private val session: Session,
 ) {
 
     /**
@@ -130,9 +137,18 @@ class TimelineItemFactory @Inject constructor(
                     EventType.CALL_ANSWER -> callItemFactory.create(params)
                     // Crypto
                     EventType.ENCRYPTED -> {
+                        val relationContent = event.getRelationContent()
                         if (event.root.isRedacted()) {
                             // Redacted event, let the MessageItemFactory handle it
                             messageItemFactory.create(params)
+                        } else if (relationContent?.type == RelationType.REFERENCE) {
+                            // Hide the decryption error for VoiceBroadcast chunks
+                            val startEvent = relationContent.eventId?.let { session.getRoom(event.roomId)?.getTimelineEvent(it) }
+                            if (startEvent?.isVoiceBroadcast() == false) {
+                                encryptedItemFactory.create(params)
+                            } else {
+                                null
+                            }
                         } else {
                             encryptedItemFactory.create(params)
                         }
