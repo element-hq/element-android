@@ -127,9 +127,6 @@ internal class RealmCryptoStore @Inject constructor(
      * Memory cache, to correctly release JNI objects
      * ========================================================================================== */
 
-    // A realm instance, for faster future getInstance. Do not use it
-    private var realmLocker: Realm? = null
-
     // The olm account
     private var olmAccount: OlmAccount? = null
 
@@ -199,11 +196,6 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun open() {
-        synchronized(this) {
-            if (realmLocker == null) {
-                realmLocker = Realm.getInstance(realmConfiguration)
-            }
-        }
     }
 
     override fun close() {
@@ -216,9 +208,6 @@ internal class RealmCryptoStore @Inject constructor(
         }
 
         olmAccount?.releaseAccount()
-
-        realmLocker?.close()
-        realmLocker = null
     }
 
     override fun storeDeviceId(deviceId: String) {
