@@ -31,7 +31,6 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentRoomPollDetailBinding
 import kotlinx.parcelize.Parcelize
-import timber.log.Timber
 import javax.inject.Inject
 
 @Parcelize
