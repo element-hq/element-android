@@ -250,6 +250,7 @@ class VectorSettingsGeneralFragment :
 
         // clear medias cache
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_CLEAR_MEDIA_CACHE_PREFERENCE_KEY)!!.let {
+            // TODO StrictMode policy violation; ~duration=3383 ms: android.os.strictmode.DiskReadViolation
             val size = getSizeOfFiles(File(requireContext().cacheDir, DiskCache.Factory.DEFAULT_DISK_CACHE_DIR)) + session.fileService().getCacheSize()
 
             it.summary = TextUtils.formatFileSize(requireContext(), size.toLong())
