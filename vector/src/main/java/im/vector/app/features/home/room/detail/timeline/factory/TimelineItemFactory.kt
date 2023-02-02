@@ -138,19 +138,15 @@ class TimelineItemFactory @Inject constructor(
                     // Crypto
                     EventType.ENCRYPTED -> {
                         val relationContent = event.getRelationContent()
-                        if (event.root.isRedacted()) {
+                        when {
                             // Redacted event, let the MessageItemFactory handle it
-                            messageItemFactory.create(params)
-                        } else if (relationContent?.type == RelationType.REFERENCE) {
-                            // Hide the decryption error for VoiceBroadcast chunks
-                            val startEvent = relationContent.eventId?.let { session.getRoom(event.roomId)?.getTimelineEvent(it) }
-                            if (startEvent?.isVoiceBroadcast() == false) {
-                                encryptedItemFactory.create(params)
-                            } else {
-                                null
+                            event.root.isRedacted() -> messageItemFactory.create(params)
+                            relationContent?.type == RelationType.REFERENCE -> {
+                                // Hide the decryption error for VoiceBroadcast chunks
+                                val relatedEvent = relationContent.eventId?.let { session.getRoom(event.roomId)?.getTimelineEvent(it) }
+                                if (relatedEvent?.isVoiceBroadcast() != true) encryptedItemFactory.create(params) else null
                             }
-                        } else {
-                            encryptedItemFactory.create(params)
+                            else -> encryptedItemFactory.create(params)
                         }
                     }
                     EventType.KEY_VERIFICATION_CANCEL,

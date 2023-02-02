@@ -146,7 +146,9 @@ class GetLiveVoiceBroadcastChunksUseCase @Inject constructor(
                                     it.isVoiceBroadcast() && it.getVoiceBroadcastEventId() == voiceBroadcastId && it.root.senderId == senderId
                                 }?.root
                     }
-                    event.getClearType() == EventType.ENCRYPTED && relationContent?.type == RelationType.REFERENCE -> event
+                    event.getClearType() == EventType.ENCRYPTED && relationContent?.type == RelationType.REFERENCE -> {
+                        event.takeIf { relationContent.eventId == voiceBroadcastId }
+                    }
                     else -> null
                 }
             }

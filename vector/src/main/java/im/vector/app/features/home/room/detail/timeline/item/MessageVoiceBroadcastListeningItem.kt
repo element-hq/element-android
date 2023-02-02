@@ -137,15 +137,19 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
 
     private fun renderPlaybackError(holder: Holder, playbackState: State) {
         with(holder) {
-            if (playbackState is State.Error) {
-                controlsGroup.isVisible = false
-                errorView.setTextOrHide(errorFormatter.toHumanReadable(playbackState.failure))
-            } else if (playbackState is State.Idle && hasUnableToDecryptEvent) {
-                controlsGroup.isVisible = false
-                errorView.setTextOrHide(errorFormatter.toHumanReadable(VoiceBroadcastFailure.ListeningError.UnableToDecrypt))
-            } else {
-                errorView.isVisible = false
-                controlsGroup.isVisible = true
+            when {
+                playbackState is State.Error -> {
+                    controlsGroup.isVisible = false
+                    errorView.setTextOrHide(errorFormatter.toHumanReadable(playbackState.failure))
+                }
+                playbackState is State.Idle && hasUnableToDecryptEvent -> {
+                    controlsGroup.isVisible = false
+                    errorView.setTextOrHide(errorFormatter.toHumanReadable(VoiceBroadcastFailure.ListeningError.UnableToDecrypt))
+                }
+                else -> {
+                    errorView.isVisible = false
+                    controlsGroup.isVisible = true
+                }
             }
         }
     }
