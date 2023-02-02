@@ -468,9 +468,12 @@ internal class OlmMachine @Inject constructor(
                     )
                 } catch (throwable: Throwable) {
                     val reThrow = when (throwable) {
-                        is DecryptionException.Megolm -> {
-                            // TODO more bindings for missing room key
+                        is DecryptionException.MissingRoomKey -> {
                             MXCryptoError.Base(MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID, throwable.message.orEmpty())
+                        }
+                        is DecryptionException.Megolm -> {
+                            // TODO check if it's the correct binding?
+                            MXCryptoError.Base(MXCryptoError.ErrorType.UNKNOWN_MESSAGE_INDEX, throwable.message.orEmpty())
                         }
                         is DecryptionException.Identifier -> {
                             MXCryptoError.Base(MXCryptoError.ErrorType.BAD_EVENT_FORMAT, MXCryptoError.BAD_EVENT_FORMAT_TEXT_REASON)
