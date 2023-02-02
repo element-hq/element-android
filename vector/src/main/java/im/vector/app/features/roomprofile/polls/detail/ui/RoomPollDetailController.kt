@@ -17,12 +17,14 @@
 package im.vector.app.features.roomprofile.polls.detail.ui
 
 import com.airbnb.epoxy.TypedEpoxyController
+import java.util.UUID
 import javax.inject.Inject
 
 class RoomPollDetailController @Inject constructor() : TypedEpoxyController<RoomPollDetailViewState>() {
 
     interface Callback {
         fun vote(pollEventId: String, optionId: String)
+        fun goToTimelineEvent(eventId: String)
     }
 
     var callback: Callback? = null
@@ -40,6 +42,18 @@ class RoomPollDetailController @Inject constructor() : TypedEpoxyController<Room
             votesStatus(pollItemViewState.votesStatus)
             optionViewStates(pollItemViewState.optionViewStates.orEmpty())
             callback(host.callback)
+        }
+
+        buildGoToTimelineItem(targetEventId = pollDetail.endedPollEventId ?: viewState.pollId)
+    }
+
+    private fun buildGoToTimelineItem(targetEventId: String) {
+        val host = this
+        roomPollGoToTimelineItem {
+            id(UUID.randomUUID().toString())
+            clickListener {
+                host.callback?.goToTimelineEvent(targetEventId)
+            }
         }
     }
 }

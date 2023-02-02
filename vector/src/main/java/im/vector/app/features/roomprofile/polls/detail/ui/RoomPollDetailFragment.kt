@@ -31,6 +31,7 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentRoomPollDetailBinding
 import kotlinx.parcelize.Parcelize
+import timber.log.Timber
 import javax.inject.Inject
 
 @Parcelize
@@ -45,6 +46,7 @@ class RoomPollDetailFragment :
         VectorBaseFragment<FragmentRoomPollDetailBinding>(),
         RoomPollDetailController.Callback {
 
+    @Inject lateinit var viewNavigator: RoomPollDetailNavigator
     @Inject lateinit var roomPollDetailController: RoomPollDetailController
 
     private val viewModel: RoomPollDetailViewModel by fragmentViewModel()
@@ -58,7 +60,6 @@ class RoomPollDetailFragment :
         super.onViewCreated(view, savedInstanceState)
         setupToolbar(isEnded = roomPollDetailArgs.isEnded)
         setupDetailView()
-        // TODO add link to go to timeline message + create a ViewNavigator
     }
 
     override fun onDestroyView() {
@@ -92,5 +93,13 @@ class RoomPollDetailFragment :
 
     override fun vote(pollEventId: String, optionId: String) {
         viewModel.handle(RoomPollDetailAction.Vote(pollEventId = pollEventId, optionId = optionId))
+    }
+
+    override fun goToTimelineEvent(eventId: String) = withState(viewModel) { state ->
+        viewNavigator.goToTimelineEvent(
+                context = requireContext(),
+                roomId = state.roomId,
+                eventId = eventId,
+        )
     }
 }

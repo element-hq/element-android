@@ -19,6 +19,9 @@ package im.vector.app.features.roomprofile.polls.detail.ui
 import im.vector.app.core.extensions.getVectorLastMessageContent
 import im.vector.app.features.home.room.detail.timeline.factory.PollItemViewStateFactory
 import im.vector.app.features.home.room.detail.timeline.helper.PollResponseDataFactory
+import im.vector.app.features.home.room.detail.timeline.item.PollResponseData
+import im.vector.app.features.roomprofile.polls.detail.domain.GetEndedPollEventIdUseCase
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import timber.log.Timber
@@ -28,6 +31,7 @@ import javax.inject.Inject
 class RoomPollDetailMapper @Inject constructor(
         private val pollResponseDataFactory: PollResponseDataFactory,
         private val pollItemViewStateFactory: PollItemViewStateFactory,
+        private val getEndedPollEventIdUseCase: GetEndedPollEventIdUseCase,
 ) {
 
     fun map(timelineEvent: TimelineEvent): RoomPollDetail? {
@@ -36,16 +40,13 @@ class RoomPollDetailMapper @Inject constructor(
             val content = timelineEvent.getVectorLastMessageContent()
             val pollResponseData = pollResponseDataFactory.create(timelineEvent)
             return if (eventId.isNotEmpty() && content is MessagePollContent) {
-                // we assume poll message has been sent here
-                val pollItemViewState = pollItemViewStateFactory.create(
-                        pollContent = content,
-                        pollResponseData = pollResponseData,
-                        isSent = true,
+                val isPollEnded = pollResponseData?.isClosed.orFalse()
+                val endedPollEventId = getEndedPollEventId(
+                        isPollEnded,
+                        startPollEventId = eventId,
+                        roomId = timelineEvent.roomId,
                 )
-                RoomPollDetail(
-                        isEnded = pollResponseData?.isClosed == true,
-                        pollItemViewState = pollItemViewState,
-                )
+                convertToRoomPollDetail(content, pollResponseData, isPollEnded, endedPollEventId)
             } else {
                 Timber.w("missing mandatory info about poll event with id=$eventId")
                 null
@@ -56,5 +57,36 @@ class RoomPollDetailMapper @Inject constructor(
             Timber.w("failed to map event with id $eventId")
         }
         return result.getOrNull()
+    }
+
+    private fun convertToRoomPollDetail(
+            content: MessagePollContent,
+            pollResponseData: PollResponseData?,
+            isPollEnded: Boolean,
+            endedPollEventId: String?,
+    ): RoomPollDetail {
+        // we assume the poll has been sent
+        val pollItemViewState = pollItemViewStateFactory.create(
+                pollContent = content,
+                pollResponseData = pollResponseData,
+                isSent = true,
+        )
+        return RoomPollDetail(
+                isEnded = isPollEnded,
+                pollItemViewState = pollItemViewState,
+                endedPollEventId = endedPollEventId,
+        )
+    }
+
+    private fun getEndedPollEventId(
+            isPollEnded: Boolean,
+            startPollEventId: String,
+            roomId: String,
+    ): String? {
+        return if (isPollEnded) {
+            getEndedPollEventIdUseCase.execute(startPollEventId = startPollEventId, roomId = roomId)
+        } else {
+            null
+        }
     }
 }

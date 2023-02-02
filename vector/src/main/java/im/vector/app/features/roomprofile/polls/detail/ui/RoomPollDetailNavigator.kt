@@ -16,10 +16,21 @@
 
 package im.vector.app.features.roomprofile.polls.detail.ui
 
-import im.vector.app.features.poll.PollItemViewState
+import android.content.Context
+import im.vector.app.features.navigation.Navigator
+import javax.inject.Inject
 
-data class RoomPollDetail(
-        val isEnded: Boolean,
-        val endedPollEventId: String?,
-        val pollItemViewState: PollItemViewState,
-)
+// TODO add unit tests
+class RoomPollDetailNavigator @Inject constructor(
+        private val navigator: Navigator,
+) {
+
+    fun goToTimelineEvent(context: Context, roomId: String, eventId: String) {
+        navigator.openRoom(
+                context = context,
+                roomId = roomId,
+                eventId = eventId,
+                buildTask = true,
+        )
+    }
+}
