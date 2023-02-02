@@ -132,6 +132,7 @@ abstract class RoomPollsListFragment :
                 context = requireContext(),
                 pollId = pollId,
                 roomId = it.roomId,
+                isEnded = getRoomPollsType() == RoomPollsType.ENDED,
         )
     }
 

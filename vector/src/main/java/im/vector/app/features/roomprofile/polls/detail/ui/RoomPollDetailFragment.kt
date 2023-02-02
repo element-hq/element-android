@@ -37,6 +37,7 @@ import javax.inject.Inject
 data class RoomPollDetailArgs(
         val pollId: String,
         val roomId: String,
+        val isEnded: Boolean,
 ) : Parcelable
 
 @AndroidEntryPoint
@@ -55,7 +56,7 @@ class RoomPollDetailFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupToolbar()
+        setupToolbar(isEnded = roomPollDetailArgs.isEnded)
         setupDetailView()
         // TODO add link to go to timeline message + create a ViewNavigator
     }
@@ -74,11 +75,10 @@ class RoomPollDetailFragment :
         )
     }
 
-    private fun setupToolbar(isEnded: Boolean? = null) {
+    private fun setupToolbar(isEnded: Boolean) {
         val title = when (isEnded) {
             true -> getString(R.string.room_polls_ended)
             false -> getString(R.string.room_polls_active)
-            else -> ""
         }
 
         setupToolbar(views.roomPollDetailToolbar)
@@ -87,9 +87,6 @@ class RoomPollDetailFragment :
     }
 
     override fun invalidate() = withState(viewModel) { state ->
-        state.pollDetail ?: return@withState
-        // TODO should we update the title when the poll status changes?
-        setupToolbar(state.pollDetail.isEnded)
         roomPollDetailController.setData(state)
     }
 

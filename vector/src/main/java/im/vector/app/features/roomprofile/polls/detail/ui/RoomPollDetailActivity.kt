@@ -47,11 +47,12 @@ class RoomPollDetailActivity : VectorBaseActivity<ActivitySimpleBinding>() {
     }
 
     companion object {
-        fun newIntent(context: Context, pollId: String, roomId: String): Intent {
+        fun newIntent(context: Context, pollId: String, roomId: String, isEnded: Boolean): Intent {
             return Intent(context, RoomPollDetailActivity::class.java).apply {
                 val args = RoomPollDetailArgs(
                         pollId = pollId,
                         roomId = roomId,
+                        isEnded = isEnded,
                 )
                 putExtra(Mavericks.KEY_ARG, args)
             }

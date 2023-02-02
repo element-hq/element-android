@@ -23,12 +23,13 @@ import javax.inject.Inject
 // TODO add unit tests
 class RoomPollsListNavigator @Inject constructor() {
 
-    fun goToPollDetails(context: Context, pollId: String, roomId: String) {
+    fun goToPollDetails(context: Context, pollId: String, roomId: String, isEnded: Boolean) {
         context.startActivity(
                 RoomPollDetailActivity.newIntent(
                         context = context,
                         pollId = pollId,
                         roomId = roomId,
+                        isEnded = isEnded,
                 )
         )
     }
