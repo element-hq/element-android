@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.home.room.detail.timeline.factory
+package im.vector.app.features.roomprofile.factory
 
 import im.vector.app.R
+import im.vector.app.features.home.room.detail.timeline.factory.PollItemViewStateFactory
+import im.vector.app.features.home.room.detail.timeline.factory.PollOptionViewStateFactory
 import im.vector.app.features.home.room.detail.timeline.item.PollOptionViewState
 import im.vector.app.features.home.room.detail.timeline.item.PollVoteSummaryData
 import im.vector.app.features.poll.PollItemViewState
@@ -31,7 +33,6 @@ import io.mockk.verify
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
 import org.matrix.android.sdk.api.session.room.model.message.PollType
-import org.matrix.android.sdk.api.session.room.send.SendState
 
 class PollItemViewStateFactoryTest {
 
@@ -46,14 +47,14 @@ class PollItemViewStateFactoryTest {
     @Test
     fun `given a sending poll state then poll is not votable and option states are PollSending`() {
         // Given
-        val sendingPollInformationData = A_MESSAGE_INFORMATION_DATA.copy(sendState = SendState.SENDING)
         val optionViewStates = listOf(PollOptionViewState.PollSending(optionId = "", optionAnswer = ""))
         every { fakePollOptionViewStateFactory.createPollSendingOptions(A_POLL_CONTENT.getBestPollCreationInfo()) } returns optionViewStates
 
         // When
         val pollViewState = pollItemViewStateFactory.create(
                 pollContent = A_POLL_CONTENT,
-                informationData = sendingPollInformationData,
+                pollResponseData = null,
+                isSent = false,
         )
 
         // Then
@@ -70,7 +71,6 @@ class PollItemViewStateFactoryTest {
     fun `given a sent poll state when poll is closed then poll is not votable and option states are Ended`() {
         // Given
         val closedPollSummary = A_POLL_RESPONSE_DATA.copy(isClosed = true)
-        val closedPollInformationData = A_MESSAGE_INFORMATION_DATA.copy(pollResponseAggregatedSummary = closedPollSummary)
         val optionViewStates = listOf(
                 PollOptionViewState.PollEnded(
                         optionId = "", optionAnswer = "", voteCount = 0, votePercentage = 0.0, isWinner = false
@@ -79,14 +79,15 @@ class PollItemViewStateFactoryTest {
         every {
             fakePollOptionViewStateFactory.createPollEndedOptions(
                     A_POLL_CONTENT.getBestPollCreationInfo(),
-                    closedPollInformationData.pollResponseAggregatedSummary,
+                    closedPollSummary,
             )
         } returns optionViewStates
 
         // When
         val pollViewState = pollItemViewStateFactory.create(
                 pollContent = A_POLL_CONTENT,
-                informationData = closedPollInformationData,
+                pollResponseData = closedPollSummary,
+                isSent = true,
         )
 
         // Then
@@ -99,7 +100,7 @@ class PollItemViewStateFactoryTest {
         verify {
             fakePollOptionViewStateFactory.createPollEndedOptions(
                     A_POLL_CONTENT.getBestPollCreationInfo(),
-                    closedPollInformationData.pollResponseAggregatedSummary,
+                    closedPollSummary,
             )
         }
     }
@@ -108,7 +109,6 @@ class PollItemViewStateFactoryTest {
     fun `given a sent poll state with some decryption error when poll is closed then warning message is displayed`() {
         // Given
         val closedPollSummary = A_POLL_RESPONSE_DATA.copy(isClosed = true, hasEncryptedRelatedEvents = true)
-        val closedPollInformationData = A_MESSAGE_INFORMATION_DATA.copy(pollResponseAggregatedSummary = closedPollSummary)
         val optionViewStates = listOf(
                 PollOptionViewState.PollEnded(
                         optionId = "", optionAnswer = "", voteCount = 0, votePercentage = 0.0, isWinner = false
@@ -117,14 +117,15 @@ class PollItemViewStateFactoryTest {
         every {
             fakePollOptionViewStateFactory.createPollEndedOptions(
                     A_POLL_CONTENT.getBestPollCreationInfo(),
-                    closedPollInformationData.pollResponseAggregatedSummary,
+                    closedPollSummary,
             )
         } returns optionViewStates
 
         // When
         val pollViewState = pollItemViewStateFactory.create(
                 pollContent = A_POLL_CONTENT,
-                informationData = closedPollInformationData,
+                pollResponseData = closedPollSummary,
+                isSent = true,
         )
 
         // Then
@@ -134,6 +135,7 @@ class PollItemViewStateFactoryTest {
     @Test
     fun `given a sent poll when undisclosed poll type is selected then poll is votable and option states are PollUndisclosed`() {
         // Given
+        val pollResponseData = A_POLL_RESPONSE_DATA
         val optionViewStates = listOf(
                 PollOptionViewState.PollUndisclosed(
                         optionId = "",
@@ -144,14 +146,15 @@ class PollItemViewStateFactoryTest {
         every {
             fakePollOptionViewStateFactory.createPollUndisclosedOptions(
                     A_POLL_CONTENT.getBestPollCreationInfo(),
-                    A_MESSAGE_INFORMATION_DATA.pollResponseAggregatedSummary,
+                    pollResponseData,
             )
         } returns optionViewStates
 
         // When
         val pollViewState = pollItemViewStateFactory.create(
                 pollContent = A_POLL_CONTENT,
-                informationData = A_MESSAGE_INFORMATION_DATA,
+                pollResponseData = pollResponseData,
+                isSent = true,
         )
 
         // Then
@@ -164,7 +167,7 @@ class PollItemViewStateFactoryTest {
         verify {
             fakePollOptionViewStateFactory.createPollUndisclosedOptions(
                     A_POLL_CONTENT.getBestPollCreationInfo(),
-                    A_MESSAGE_INFORMATION_DATA.pollResponseAggregatedSummary,
+                    A_POLL_RESPONSE_DATA,
             )
         }
     }
@@ -180,7 +183,6 @@ class PollItemViewStateFactoryTest {
                         kind = PollType.DISCLOSED_UNSTABLE
                 ),
         )
-        val votedInformationData = A_MESSAGE_INFORMATION_DATA.copy(pollResponseAggregatedSummary = votedPollData)
         val optionViewStates = listOf(
                 PollOptionViewState.PollVoted(
                         optionId = "",
@@ -193,14 +195,15 @@ class PollItemViewStateFactoryTest {
         every {
             fakePollOptionViewStateFactory.createPollVotedOptions(
                     disclosedPollContent.getBestPollCreationInfo(),
-                    votedInformationData.pollResponseAggregatedSummary,
+                    votedPollData,
             )
         } returns optionViewStates
 
         // When
         val pollViewState = pollItemViewStateFactory.create(
                 pollContent = disclosedPollContent,
-                informationData = votedInformationData,
+                pollResponseData = votedPollData,
+                isSent = true,
         )
 
         // Then
@@ -213,7 +216,7 @@ class PollItemViewStateFactoryTest {
         verify {
             fakePollOptionViewStateFactory.createPollVotedOptions(
                     disclosedPollContent.getBestPollCreationInfo(),
-                    votedInformationData.pollResponseAggregatedSummary,
+                    votedPollData,
             )
         }
     }
@@ -232,7 +235,6 @@ class PollItemViewStateFactoryTest {
                         kind = PollType.DISCLOSED_UNSTABLE
                 ),
         )
-        val votedInformationData = A_MESSAGE_INFORMATION_DATA.copy(pollResponseAggregatedSummary = votedPollData)
         val optionViewStates = listOf(
                 PollOptionViewState.PollVoted(
                         optionId = "",
@@ -245,14 +247,15 @@ class PollItemViewStateFactoryTest {
         every {
             fakePollOptionViewStateFactory.createPollVotedOptions(
                     disclosedPollContent.getBestPollCreationInfo(),
-                    votedInformationData.pollResponseAggregatedSummary,
+                    votedPollData,
             )
         } returns optionViewStates
 
         // When
         val pollViewState = pollItemViewStateFactory.create(
                 pollContent = disclosedPollContent,
-                informationData = votedInformationData,
+                pollResponseData = votedPollData,
+                isSent = true,
         )
 
         // Then
@@ -262,6 +265,7 @@ class PollItemViewStateFactoryTest {
     @Test
     fun `given a sent poll when poll type is disclosed then poll is votable and option view states are PollReady`() {
         // Given
+        val pollResponseData = A_POLL_RESPONSE_DATA
         val disclosedPollContent = A_POLL_CONTENT.copy(
                 unstablePollCreationInfo = A_POLL_CONTENT.getBestPollCreationInfo()?.copy(
                         kind = PollType.DISCLOSED_UNSTABLE
@@ -282,7 +286,8 @@ class PollItemViewStateFactoryTest {
         // When
         val pollViewState = pollItemViewStateFactory.create(
                 pollContent = disclosedPollContent,
-                informationData = A_MESSAGE_INFORMATION_DATA,
+                pollResponseData = pollResponseData,
+                isSent = true,
         )
 
         // Then

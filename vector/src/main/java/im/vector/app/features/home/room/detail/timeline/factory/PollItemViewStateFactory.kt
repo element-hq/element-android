@@ -36,9 +36,7 @@ class PollItemViewStateFactory @Inject constructor(
             isSent: Boolean,
     ): PollItemViewState {
         val pollCreationInfo = pollContent.getBestPollCreationInfo()
-
         val question = pollCreationInfo?.question?.getBestQuestion().orEmpty()
-
         val totalVotes = pollResponseData?.totalVotes ?: 0
 
         return when {
