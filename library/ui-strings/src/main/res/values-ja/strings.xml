@@ -93,7 +93,7 @@
     <string name="send_bug_report_include_logs">ログを送信</string>
     <string name="send_bug_report_logs_description">開発者が問題を診断するために、このクライアントのログがバグレポートと一緒に送信されます。バグレポートは、ログとスクリーンショットを含めて、公開されることはありません。上記の説明文だけを送信したい場合は、以下のチェックを解除してください。</string>
     <string name="send_bug_report_alert_message">あなたは不満で端末を振っているようです。バグレポートの画面を開きますか？</string>
-    <string name="send_bug_report_app_crashed">前回、アプリケーションは正常に停止しませんでした。クラッシュ報告の画面を開きますか？</string>
+    <string name="send_bug_report_app_crashed">前回アプリケーションは正常に停止しませんでした。クラッシュ報告の画面を開きますか？</string>
     <string name="send_bug_report_sent">不具合を報告しました</string>
     <string name="send_bug_report_failed">不具合の報告の送信に失敗しました (%s)</string>
     <string name="join_room">ルームに参加</string>
@@ -105,7 +105,7 @@
     <string name="auth_invalid_email">メールアドレスの形式が正しくありません</string>
     <string name="auth_email_already_defined">このメールアドレスは既に登録されています。</string>
     <string name="auth_forgot_password">パスワードを忘れましたか？</string>
-    <string name="login_error_invalid_home_server">正しいURLを入力して下さい</string>
+    <string name="login_error_invalid_home_server">正しいURLを入力してください</string>
     <string name="compression_opt_list_original">原寸</string>
     <string name="compression_opt_list_large">大き目</string>
     <string name="compression_opt_list_medium">中程度</string>
@@ -118,9 +118,9 @@
     <string name="room_participants_leave_prompt_title">ルームから退出</string>
     <string name="room_participants_leave_prompt_msg">このルームから退出してよろしいですか？</string>
     <string name="room_participants_action_invite">招待</string>
-    <string name="room_one_user_is_typing">%sさんが文字を入力しています…</string>
-    <string name="room_two_users_are_typing">%1$sさんと%2$sさんが文字を入力しています…</string>
-    <string name="room_many_users_are_typing">%1$sさん、%2$sさん他が文字を入力しています…</string>
+    <string name="room_one_user_is_typing">%sさんが入力しています…</string>
+    <string name="room_two_users_are_typing">%1$sさんと%2$sさんが入力しています…</string>
+    <string name="room_many_users_are_typing">%1$s、%2$s他が入力しています…</string>
     <string name="light_theme">明るいテーマ</string>
     <string name="dark_theme">暗いテーマ</string>
     <string name="black_theme">黒いテーマ</string>
@@ -144,7 +144,7 @@
     <string name="settings_messages_in_one_to_one">1対1のチャットでのメッセージ</string>
     <string name="settings_messages_in_group_chat">グループチャットでのメッセージ</string>
     <string name="settings_invited_to_room">ルームへ招待されたとき</string>
-    <string name="settings_call_invitations">通話の呼び出しがあったとき</string>
+    <string name="settings_call_invitations">通話への招待</string>
     <string name="settings_messages_sent_by_bot">自動発言プログラム（Bot）が発言した時</string>
     <string name="settings_start_on_boot">端末起動時に開始</string>
     <string name="settings_background_sync">アプリを閉じているときの動作</string>
@@ -247,9 +247,7 @@
     <string name="settings_old_password">現在のパスワード</string>
     <string name="settings_new_password">新しいパスワード</string>
     <string name="settings_fail_to_update_password">パスワードの更新に失敗しました</string>
-    <string name="settings_unignore_user">%sの全てのメッセージを表示しますか？
-\n
-\nこの操作はアプリを再起動するため、時間がかかる場合があります。</string>
+    <string name="settings_unignore_user">%sの全てのメッセージを表示しますか？</string>
     <string name="settings_theme">外観</string>
     <string name="encryption_information_device_name">公開端末名</string>
     <string name="encryption_export_e2e_room_keys">ルームのエンドツーエンド暗号鍵をエクスポート</string>
@@ -280,7 +278,7 @@
     <string name="widget_delete_message_confirmation">ウィジェットをこのルームから削除してもよろしいですか？</string>
     <string name="encryption_information_verify_device_warning2">一致していない場合は、コミュニケーションのセキュリティーが損なわれている可能性があります。</string>
     <string name="encryption_never_send_to_unverified_devices_summary">このセッションでは、未認証のセッションに対して暗号化されたメッセージを送信しない。</string>
-    <string name="encryption_never_send_to_unverified_devices_title">認証済のセッションに対してのみ暗号化</string>
+    <string name="encryption_never_send_to_unverified_devices_title">認証済のセッションにのみ暗号化</string>
     <string name="encryption_import_import">インポート</string>
     <string name="encryption_import_room_keys_summary">ローカルファイルから鍵をインポート</string>
     <string name="encryption_import_room_keys">ルームの暗号鍵をインポート</string>
@@ -294,7 +292,7 @@
     <string name="notification_noisy_notifications">通知あり（音量大）</string>
     <string name="notification_silent_notifications">通知あり（サイレント）</string>
     <string name="title_activity_bug_report">不具合の報告</string>
-    <string name="room_participants_power_level_prompt">このユーザーにあなたと同じ権限を与えます。この変更は取り消せません。
+    <string name="room_participants_power_level_prompt">このユーザーにあなたと同じ権限レベルを与えようとしています。この変更は取り消せません。
 \nよろしいですか？</string>
     <string name="ssl_trust">信用する</string>
     <string name="ssl_do_not_trust">信用しない</string>
@@ -314,8 +312,8 @@
     <string name="settings_olm_version">olmのバージョン</string>
     <string name="settings_third_party_notices">サードパーティーの使用に関する掲示</string>
     <string name="settings_home_display">ホーム画面</string>
-    <string name="settings_pin_missed_notifications">逃した通知があるルームを固定</string>
-    <string name="settings_pin_unread_messages">未読のあるルームを固定</string>
+    <string name="settings_pin_missed_notifications">逃した通知があるルームをピン止め</string>
+    <string name="settings_pin_unread_messages">未読メッセージがあるルームをピン止め</string>
     <string name="settings_analytics">分析</string>
     <string name="encryption_information_decryption_error">復号エラー</string>
     <string name="encryption_information_device_key">セッションキー</string>
@@ -420,14 +418,14 @@
     <string name="room_tombstone_versioned_description">このルームは置き換えられており、アクティブではありません。</string>
     <string name="room_tombstone_continuation_link">こちらから継続中の会話を確認</string>
     <string name="room_tombstone_continuation_description">このルームは別の会話の続きです</string>
-    <string name="room_tombstone_predecessor_link">以前のメッセージを見るには、ここをクリックしてください</string>
+    <string name="room_tombstone_predecessor_link">以前のメッセージを表示するには、ここをクリックしてください</string>
     <string name="resource_limit_contact_admin">サービス管理者に連絡してください</string>
     <string name="resource_limit_soft_default">このホームサーバーはリソース制限の1つを超過しているため、 <b>ユーザーがログインできなくなることがあります</b>。</string>
-    <string name="resource_limit_hard_default">このホームサーバーはリソース制限の1つを超過しています。</string>
+    <string name="resource_limit_hard_default">このホームサーバーはリソースの上限に達しました。</string>
     <string name="resource_limit_soft_mau"> このホームサーバーは月間アクティブユーザーの上限に達しているため、 <b>ユーザーがログインできなくなることがあります</b>。</string>
-    <string name="resource_limit_hard_mau">このホームサーバーは月間アクティブユーザーの上限に達しています。</string>
+    <string name="resource_limit_hard_mau">このホームサーバーは月間アクティブユーザー数の上限に達しました 。</string>
     <string name="resource_limit_soft_contact">この制限を上げるには、%sしてください。</string>
-    <string name="resource_limit_hard_contact">このサービスを使い続けるには、%sしてください。</string>
+    <string name="resource_limit_hard_contact">このサービスの使用を継続するには、%sしてください。</string>
     <string name="unknown_error">申し訳ありません、エラーが発生しました</string>
     <string name="encryption_export_notice">エクスポートされた鍵を暗号化するパスフレーズを作成してください。 鍵をインポートするには、同一のパスフレーズを入力する必要があります。</string>
     <string name="passphrase_create_passphrase">パスフレーズの作成</string>
@@ -485,7 +483,7 @@
     <string name="keys_backup_info_title_signature">署名</string>
     <string name="settings_notification_troubleshoot">通知に関する問題の解決</string>
     <string name="settings_troubleshoot_test_system_settings_title">システム設定。</string>
-    <string name="settings_troubleshoot_test_account_settings_title">アカウント設定。</string>
+    <string name="settings_troubleshoot_test_account_settings_title">アカウントの設定。</string>
     <string name="settings_troubleshoot_test_bing_settings_title">カスタム設定。</string>
     <string name="settings_troubleshoot_test_service_boot_title">起動時に実行</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">バックグラウンド制限の確認</string>
@@ -585,7 +583,7 @@
     <string name="action_copy">コピー</string>
     <string name="dialog_title_success">成功</string>
     <string name="bottom_action_notification">通知</string>
-    <string name="action_revoke">破棄</string>
+    <string name="action_revoke">取り消す</string>
     <string name="action_play">再生</string>
     <string name="action_dismiss">閉じる</string>
     <string name="action_skip">スキップ</string>
@@ -616,7 +614,7 @@
     <string name="settings_send_markdown">マークダウン書式</string>
     <string name="settings_send_markdown_summary">メッセージ送信前にマークダウン書式を適用します。これにより、アスタリスクを使用して斜体のテキストを表示するなどの高度な書式設定が利用できます。</string>
     <string name="preference_voice_and_video">音声とビデオ</string>
-    <string name="login_msisdn_notice">国際電話番号形式で入力してください（電話番号の最初に「+」が付きます）</string>
+    <string name="login_msisdn_notice">国際電話番号形式で入力してください（電話番号の最初に「+」を付けてください）</string>
     <string name="settings_emails">メールアドレス</string>
     <string name="settings_emails_empty">あなたのアカウントに追加されたメールアドレスはありません</string>
     <string name="settings_phone_number_empty">あなたのアカウントに追加された電話番号はありません</string>
@@ -678,7 +676,7 @@
     <string name="call_select_sound_device">サウンドデバイスを選択</string>
     <string name="call_failed_no_connection_description">リアルタイム接続を確立できませんでした。
 \nホームサーバーの管理者に、通話が正常に動作するためにTURNを設定するようご連絡ください。</string>
-    <string name="call_notification_hangup">終了</string>
+    <string name="call_notification_hangup">電話を切る</string>
     <string name="call_notification_reject">拒否</string>
     <string name="call_notification_answer">承諾</string>
     <string name="failed_to_remove_widget">ウィジェットを削除できませんでした</string>
@@ -691,8 +689,8 @@
     <string name="none">なし</string>
     <string name="room_settings_topic_hint">トピック</string>
     <string name="room_settings_name_hint">ルーム名</string>
-    <string name="room_profile_not_encrypted_subtitle">このルーム内のメッセージはエンドツーエンド暗号化されていません。</string>
-    <string name="direct_room_profile_not_encrypted_subtitle">ここでのメッセージはエンドツーエンド暗号化されていません。</string>
+    <string name="room_profile_not_encrypted_subtitle">このルーム内のメッセージはエンドツーエンドで暗号化されていません。</string>
+    <string name="direct_room_profile_not_encrypted_subtitle">ここでのメッセージはエンドツーエンドで暗号化されていません。</string>
     <string name="direct_room_profile_section_more_settings">設定</string>
     <string name="room_settings_enable_encryption_no_permission">あなたにはこのルームの暗号化を有効にする権限がありません。</string>
     <string name="timeline_unread_messages">未読メッセージ</string>
@@ -775,8 +773,8 @@
     <string name="room_participants_leave_private_warning">このルームは公開されていません。 招待がなければ再び参加することはできません。</string>
     <string name="permissions_denied_add_contact">連絡先へのアクセスを許可します。</string>
     <string name="permissions_denied_qr_code">QRコードをスキャンするには、カメラへのアクセスを許可する必要があります。</string>
-    <string name="call_held_by_you">通話をかけました</string>
-    <string name="call_held_by_user">%sが通話をかけました</string>
+    <string name="call_held_by_you">通話を保留しました</string>
+    <string name="call_held_by_user">%sが通話を保留しました</string>
     <string name="call_hold_action">保留</string>
     <string name="call_resume_action">通話をやり直す</string>
     <string name="video_call_in_progress">ビデオ通話が行われています…</string>
@@ -1221,7 +1219,7 @@
     <string name="hs_client_url">ホームサーバーAPIのURL</string>
     <string name="room_widget_revoke_access">アクセスを取り消す</string>
     <string name="active_widget_view_action">表示</string>
-    <string name="direct_room_encryption_enabled_tile_description">このルーム内のメッセージはエンドツーエンド暗号化されています。</string>
+    <string name="direct_room_encryption_enabled_tile_description">このルームのメッセージはエンドツーエンドで暗号化されています。</string>
     <string name="room_member_open_or_create_dm">ダイレクトメッセージ</string>
     <string name="room_filtering_footer_create_new_direct_message">新しいダイレクトメッセージを送信</string>
     <string name="login_set_email_optional_hint">メールアドレス（任意）</string>
@@ -1305,7 +1303,7 @@
     <string name="room_preview_not_found">現在、このルームにはアクセスできません。
 \n後でもう一度やり直すか、ルームの管理者にアクセス権があるかどうかを確認するよう依頼してください。</string>
     <string name="room_preview_no_preview">このルームはプレビューできません</string>
-    <string name="please_wait">お待ち下さい…</string>
+    <string name="please_wait">お待ちください…</string>
     <string name="error_no_network">ネットワークがありません。インターネット接続を確認してください。</string>
     <string name="malformed_message">不正な形式のイベントです。表示できません</string>
     <string name="event_redacted_by_admin_reason">ルームの管理者によってモデレートされたイベント</string>
@@ -1314,8 +1312,8 @@
     <string name="message_add_reaction">リアクションを追加</string>
     <string name="action_agree">同意</string>
     <string name="title_activity_emoji_reaction_picker">リアクション</string>
-    <string name="room_list_rooms_empty_body">ルームがここに表示されます。右下の[+]をタップして、既存のルームを検索するか、独自のルームを開始します。</string>
-    <string name="room_list_people_empty_body">ダイレクトメッセージの会話がここに表示されます。右下の[+]をタップして開始します。</string>
+    <string name="room_list_rooms_empty_body">ルームがここに表示されます。右下の＋をタップすると、既存のルームを検索するか、自分のルームを開始できます。</string>
+    <string name="room_list_people_empty_body">ダイレクトメッセージの会話がここに表示されます。右下の＋をタップして開始します。</string>
     <string name="room_list_rooms_empty_title">ルーム</string>
     <string name="room_list_people_empty_title">会話</string>
     <string name="room_list_catchup_empty_body">未読メッセージはありません</string>
@@ -1336,7 +1334,7 @@
     <string name="notification_ticker_text_group">%1$s：%2$s %3$s</string>
     <string name="notification_ticker_text_dm">%1$s：%2$s</string>
     <string name="other_spaces_or_rooms_you_might_not_know">あなたが知らないかもしれない他のスペースやルーム</string>
-    <string name="decide_who_can_find_and_join">誰がこのルームを検索し、参加できるか決める。</string>
+    <string name="decide_who_can_find_and_join">誰がこのルームを検索・参加できるか選択してください。</string>
     <string name="tap_to_edit_spaces">タップしスペースを編集</string>
     <string name="select_spaces">スペースを選択</string>
     <string name="spaces_which_can_access">アクセス可能なスペース</string>
@@ -1386,11 +1384,11 @@
     <string name="settings_discovery_confirm_mail_not_clicked">%sにメールを送りました。メールを確認してリンクをクリックしてください</string>
     <string name="settings_discovery_confirm_mail">%sにメールを送りました。メールの確認リンクをクリックしてください</string>
     <string name="settings_discovery_msisdn_title">発見可能な電話番号</string>
-    <string name="settings_discovery_disconnect_identity_server_info">IDサーバーとの接続を解除すると、他のユーザーによって発見されなくなり、また、メールアドレスや電話で他のユーザーを招待することができなくなります。</string>
+    <string name="settings_discovery_disconnect_identity_server_info">IDサーバーとの接続を解除すると、他のユーザーによって見つけられなくなり、また、メールアドレスや電話で他のユーザーを招待することもできなくなります。</string>
     <string name="settings_discovery_no_msisdn">電話番号を追加すると、発見可能に設定する電話番号を選択できるようになります。</string>
     <string name="settings_discovery_no_mails">メールアドレスを追加すると、発見可能に設定するメールアドレスを選択できるようになります。</string>
-    <string name="settings_discovery_identity_server_info_none">現在、IDサーバーを使用していません。あなたの知っている連絡先を発見したり、その連絡先から発見されるようにするには、以下でIDサーバーを設定してください。</string>
-    <string name="settings_discovery_identity_server_info">あなたは現在%1$sを使って連絡先を見つけたり、連絡先から見つけられるようにしています。</string>
+    <string name="settings_discovery_identity_server_info_none">現在、IDサーバーを使用していません。自分の連絡先を見つけたり、連絡先から見つけてもらったりするには、以下でIDサーバーを設定してください。</string>
+    <string name="settings_discovery_identity_server_info">現在%1$sを使って自分の連絡先を見つけたり、連絡先から見つけてもらったりできるようにしています。</string>
     <string name="change_identity_server">IDサーバーを変更</string>
     <string name="add_identity_server">IDサーバーの設定</string>
     <string name="disconnect_identity_server">IDサーバーの切断</string>
@@ -1521,7 +1519,7 @@
     <string name="error_voice_message_unable_to_record">音声メッセージを録音できません</string>
     <string name="upgrade_room_no_power_to_manage">ルームのアップグレードには権限が必要です</string>
     <string name="upgrade">アップグレード</string>
-    <string name="upgrade_required">アップグレードが必要です</string>
+    <string name="upgrade_required">アップグレードが必要</string>
     <string name="upgrade_private_room">非公開のルームをアップグレード</string>
     <string name="a11y_pause_voice_message">音声メッセージを一時停止</string>
     <string name="link_this_email_settings_link">このメールアドレスをアカウントにリンク</string>
@@ -1594,11 +1592,11 @@
     <string name="settings_notification_keyword_contains_invalid_character">キーワードに「%s」を含めることはできません</string>
     <string name="settings_notification_emails_enable_for_email">%sへのメール通知を有効にする</string>
     <string name="thread_list_empty_notice">ヒント：メッセージを長押しして「%s」を選択。</string>
-    <string name="thread_list_empty_subtitle">スレッドを用いると、会話のテーマを保ったり、会話を追跡したりするのが容易になります。</string>
+    <string name="thread_list_empty_subtitle">スレッド機能を使うと、会話のテーマを維持したり、会話を簡単に追跡したりすることができます。</string>
     <string name="your_private_space">あなたの非公開のスペース</string>
     <string name="your_public_space">あなたの公開スペース</string>
     <string name="create_spaces_just_me">自分のみ</string>
-    <string name="thread_list_empty_title">スレッドで議論を整理して管理</string>
+    <string name="thread_list_empty_title">スレッド機能を使って、会話をまとめましょう</string>
     <string name="verification_request_waiting_for">%sを待機しています…</string>
     <string name="verification_scan_with_this_device">この端末でスキャン</string>
     <string name="verification_sent">認証を送信済</string>
@@ -1819,7 +1817,7 @@
     <string name="login_msisdn_confirm_send_again">再送信</string>
     <string name="login_msisdn_confirm_hint">コードを入力</string>
     <string name="login_set_msisdn_mandatory_hint">電話番号</string>
-    <string name="a11y_presence_unavailable">退席中</string>
+    <string name="a11y_presence_unavailable">離席中</string>
     <string name="a11y_presence_offline">オフライン</string>
     <string name="a11y_presence_online">オンライン</string>
     <string name="create_spaces_default_public_room_name">一般</string>
@@ -1954,7 +1952,7 @@
     <string name="verification_profile_verify">認証</string>
     <string name="does_not_look_like_valid_email">メールアドレスが正しくないようです</string>
     <string name="login_set_msisdn_notice2">国際電話番号の形式を使用してください。</string>
-    <string name="login_msisdn_error_not_international">国際電話番号は「+」から始まる必要があります</string>
+    <string name="login_msisdn_error_not_international">国際電話番号は「+」から始めてください</string>
     <string name="login_msisdn_confirm_notice">コードを%1$sに送信しました。以下に入力して認証してください。</string>
     <string name="login_reset_password_error_not_found">このメールアドレスはどのアカウントにも登録されていません</string>
     <string name="login_reset_password_warning_content">パスワードを変更すると、全てのセッションでのエンドツーエンド暗号鍵がリセットされ、暗号化されたメッセージ履歴が読めなくなります。パスワードを再設定する前に、鍵のバックアップを設定するか、他のセッションからルームの鍵をエクスポートしておいてください。</string>
@@ -1988,7 +1986,7 @@
     <string name="a11y_rule_notify_silent">音を出さずに通知</string>
     <string name="a11y_rule_notify_noisy">音を出して通知</string>
     <string name="a11y_trust_level_default">既定の信頼レベル</string>
-    <string name="a11y_error_some_message_not_sent">いくつかのメッセージは送信されませんでした</string>
+    <string name="a11y_error_some_message_not_sent">いくつかのメッセージが送信されませんでした</string>
     <string name="warning_unsaved_change">保存されていない変更があります。変更を破棄しますか？</string>
     <string name="warning_room_not_created_yet">このルームはまだ作成されていません。キャンセルしますか？</string>
     <string name="share_by_text">テキストメッセージで共有</string>
@@ -2061,7 +2059,7 @@
     <string name="login_a11y_captcha_container">CAPTCHA認証を行ってください</string>
     <string name="login_signup_cancel_confirmation_content">アカウントがまだ作成されていません。登録を中止しますか？</string>
     <string name="login_signup_to">%1$sにアカウント登録</string>
-    <string name="login_reset_password_success_notice_2">あなたはすべてのセッションからログアウトしており、これ以上プッシュ通知を受け取れません。通知を再び有効にするには、各端末でサインインしてください。</string>
+    <string name="login_reset_password_success_notice_2">すべてのセッションからログアウトしているため、プッシュ通知を受け取れません。通知を再び有効にするには、各端末でサインインしてください。</string>
     <string name="set_a_security_phrase_title">セキュリティーフレーズを設定</string>
     <string name="bottom_sheet_setup_secure_backup_security_phrase_title">セキュリティーフレーズを使用</string>
     <string name="bottom_sheet_save_your_recovery_key_content">セキュリティーキーは、パスワードマネージャーもしくは金庫のような安全な場所で保管してください。</string>
@@ -2134,7 +2132,7 @@
     <string name="verification_conclusion_ok_notice">このユーザーとのメッセージはエンドツーエンドで暗号化されており、第三者が解読することはできません。</string>
     <string name="verification_code_notice">このコードを相手の画面に現れているコードと比較してください。</string>
     <string name="verification_emoji_notice">絵文字を比較して、同じ順番で現れているのを確認してください。</string>
-    <string name="verification_request_start_notice">セキュリティーを高めるために、対面で行うか、他の信頼できる通信手段を利用しましょう。</string>
+    <string name="verification_request_start_notice">セキュリティーを高めるために、対面で行うか、他の通信手段を利用しましょう。</string>
     <string name="command_description_rainbow_emote">選択されたエモートを虹色にして送信します</string>
     <string name="command_description_rainbow">選択されたテキストを虹色にして送信します</string>
     <string name="rendering_event_error_exception">${app_name}がID%1$sのイベントを処理中にエラーが発生しました</string>
@@ -2186,7 +2184,7 @@
     <string name="share_space_link_message">私のスペース %1$s %2$s に参加してください</string>
     <string name="skip_for_now">スキップ</string>
     <string name="room_message_autocomplete_notification">ルームの通知</string>
-    <string name="create_space_identity_server_info_none">現在、IDサーバーを使用していません。あなたの知っているチームメイトを発見したり、そのチームメイトから発見されるようにするには、以下でIDサーバーを設定してください。</string>
+    <string name="create_space_identity_server_info_none">現在、IDサーバーを使用していません。あなたの知っているチームメイトを招待したり、チームメイトから見つけてもらったりするには、以下でIDサーバーを設定してください。</string>
     <string name="finish_setting_up_discovery">ディスカバリーの設定を終了します。</string>
     <string name="space_leave_prompt_msg_only_you">ここの参加者はあなただけです。退出すると、今後あなたを含めて誰も参加できなくなります。</string>
     <string name="space_leave_prompt_msg_private">再び招待されない限り、再参加することはできません。</string>
@@ -2251,7 +2249,7 @@
     <string name="call_transfer_failure">通話の転送中にエラーが発生しました</string>
     <string name="settings_security_pin_code_grace_period_title">2分後にPINコードを要求</string>
     <string name="settings_security_pin_code_notifications_summary_on">ルーム名やメッセージの内容などの詳細を表示。</string>
-    <string name="too_many_pin_failures">エラーが多すぎます。ログアウトしました</string>
+    <string name="too_many_pin_failures">多数のエラーが発生したため、ログアウトしました</string>
     <string name="wrong_pin_message_last_remaining_attempt">警告！もう一度誤ったコードを入力すると、ログアウトします！</string>
     <plurals name="wrong_pin_message_remaining_attempts">
         <item quantity="other">コードが誤っています。残りの試行回数は%d回です</item>
@@ -2376,7 +2374,7 @@
         <item quantity="other">%1$sと他%2$d名</item>
     </plurals>
     <string name="search_space_two_parents">%1$sと%2$s</string>
-    <string name="threads_labs_enable_notice_message">ホームサーバーがサポートしていないため、スレッド機能は不安定かもしれません。スレッドのメッセージは安定して表示されないおそれがあります。%sスレッド機能を有効にしてよろしいですか？</string>
+    <string name="threads_labs_enable_notice_message">ホームサーバーがサポートしていないため、スレッド機能は不安定かもしれません。スレッドのメッセージが安定して表示されないおそれがあります。%sスレッド機能を有効にしてよろしいですか？</string>
     <string name="threads_labs_enable_notice_title">スレッド（ベータ版）</string>
     <string name="threads_beta_enable_notice_message">スレッドを用いると、会話のテーマを保ったり、会話を追跡したりするのが容易になります。%sスレッドを有効にするとアプリケーションが再起動します。再起動には時間がかかる可能性があります。</string>
     <string name="threads_beta_enable_notice_title">スレッド（ベータ版）</string>
@@ -2730,4 +2728,36 @@
     <string name="timeline_error_room_not_found">ルームが見つかりませんでした。
 \n後でやり直してください。%s</string>
     <string name="settings_enable_direct_share_title">直接共有を有効にする</string>
+    <string name="a11y_trust_level_trusted">信頼済の信頼レベル</string>
+    <string name="a11y_trust_level_warning">警告の信頼レベル</string>
+    <string name="call_transfer_consulting_with">%1$sと相談しています</string>
+    <string name="call_transfer_consult_first">初めに相談</string>
+    <string name="call_one_active">実施中の通話（%1$s）・</string>
+    <plurals name="call_active_status">
+        <item quantity="other">%1$d件の実施中の通話・</item>
+    </plurals>
+    <string name="call_only_active">実施中の通話（%1$s）</string>
+    <string name="call_tile_video_missed">不在着信（ビデオ）</string>
+    <string name="call_tile_voice_missed">不在着信（音声）</string>
+    <string name="call_tile_video_active">実施中のビデオ通話</string>
+    <string name="call_tile_voice_active">実施中の音声通話</string>
+    <string name="auth_biometric_key_invalidated_message">新しい生体認証の方法が最近追加されたため、生体認証は無効になりました。設定から再び有効にできます。</string>
+    <string name="identity_server_error_no_current_binding_error">このIDとの連携は現在ありません。</string>
+    <string name="error_forbidden_digits_only_username">このホームサーバーは数字だけからなるユーザー名を承諾しません。</string>
+    <string name="send_your_first_msg_to_invite">最初のメッセージを送信すると、%sを会話に招待</string>
+    <string name="settings_nightly_build">Nightly build</string>
+    <string name="verification_scan_self_notice">あなたの他の端末でコードをスキャンするか、もしくは反対に、このデバイスでスキャンしてください</string>
+    <string name="ftue_auth_choose_server_ems_subtitle">Element Matrix Services（EMS）は、高速、安全でリアルタイムのコミュニケーション向きの、堅牢で安定したホスティングサービスです。&lt;a href=\"${ftue_ems_url}\"&gt;element.io/ems&lt;/a&gt;で方法を調べましょう。</string>
+    <string name="ftue_auth_sign_in_choose_server_header">アカウントにサインインするサーバー</string>
+    <string name="ftue_auth_create_account_choose_server_header">アカウントを作成するサーバー</string>
+    <string name="send_feedback_threads_info">スレッドは、改良した通知など新機能の追加作業中です。フィードバックをお聞かせください！</string>
+    <string name="room_settings_global_block_unverified_info_text">🔒 セキュリティーの設定で、全てのルームに関して認証済のセッションにのみ暗号化を行うよう設定しました。</string>
+    <string name="settings_presence">プレゼンス（ステータス表示）</string>
+    <string name="a11y_presence_busy">取り込み中</string>
+    <string name="ftue_auth_create_account_username_entry_footer">他の人は %s であなたを見つけることができます</string>
+    <string name="push_gateway_item_enabled">有効：</string>
+    <string name="push_gateway_item_profile_tag">プロフィールのタグ：</string>
+    <string name="error_check_network" tools:ignore="UnusedResources">問題が発生しました。ネットワークの接続を確認して、もう一度やり直してください。</string>
+    <string name="quoting">引用</string>
+    <string name="home_empty_no_rooms_message">チーム、友達、組織向けのオールインワンの安全なチャットアプリです。はじめに、チャットを作成するか既存のルームに参加しましょう。</string>
 </resources>
