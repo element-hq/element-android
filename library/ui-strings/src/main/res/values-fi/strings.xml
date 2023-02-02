@@ -252,7 +252,7 @@
     <string name="incoming_video_call">Saapuva videopuhelu</string>
     <string name="incoming_voice_call">Saapuva puhelu</string>
     <string name="call_in_progress">Puhelu käynnissä…</string>
-    <string name="call_error_user_not_responding">Toinen puoli ei vastannut.</string>
+    <string name="call_error_user_not_responding">Toinen osapuoli ei vastannut.</string>
     <string name="permissions_rationale_popup_title">Huomio</string>
     <string name="permissions_rationale_msg_record_audio">${app_name} tarvitsee käyttöluvan mikrofoniin suorittakseen puheluita.</string>
     <string name="permissions_rationale_msg_camera_and_audio">${app_name} tarvitsee käyttöluvan kameraan ja mikrofoniin suorittakseen videopuheluita.
@@ -887,7 +887,7 @@
     <string name="settings_discovery_disconnect_with_bound_pid">Jaat sähköpostiosoitteita tai puhelinnumeroita identiteettipalvelimella %1$s. Sinun täytyy yhdistää uudelleen palvelimeen %2$s, jotta voit lopettaa niiden jakamisen.</string>
     <string name="settings_agree_to_terms">Hyväksy identiteettipalvelimen (%s) käyttöehdot salliaksesi, että sinut voi löytää sähköpostiosoitteen tai puhelinnumeron perusteella.</string>
     <string name="settings_discovery_disconnect_identity_server_info">Yhteyden katkaiseminen identiteettipalvelimeesi tarkoittaa, että muut käyttäjät eivät voi etsiä sinua etkä voi kutsua muita sähköpostin tai puhelinnumeron perusteella.</string>
-    <string name="settings_discovery_confirm_mail">Lähetimme sinulle vahvistussähköpostin osoitteeseen %s, tarkista sähköpostisi ja klikkaa vahvistuslinkkiä</string>
+    <string name="settings_discovery_confirm_mail">Lähetimme sinulle sähköpostia osoitteeseen %s. Tarkista sähköpostisi ja klikkaa vahvistuslinkkiä.</string>
     <string name="labs_allow_extended_logging">Ota yksityiskohtaiset lokit käyttöön.</string>
     <string name="error_terms_not_accepted">Yritä uudelleen, kun olet hyväksynyt kotipalvelimesi käyttöehdot.</string>
     <string name="error_network_timeout">Palvelimen vastaus näyttäisi olevan liian hidas. Tämä voi johtua kehnosta yhteydestä tai palvelimella olevasta ongelmasta. Yritä hetken kuluttua uudelleen.</string>
@@ -1026,7 +1026,7 @@
     <string name="login_signin_to">Kirjaudu sisään palvelimeen %1$s</string>
     <string name="login_signup">Rekisteröidy</string>
     <string name="login_signin">Kirjaudu sisään</string>
-    <string name="login_signin_sso">Jatka kertakirjautumiseen</string>
+    <string name="login_signin_sso">Jatka kertakirjautumisella</string>
     <string name="login_server_url_form_modular_hint">Element Matrix Services in osoite</string>
     <string name="login_server_url_form_other_hint">Osoite</string>
     <string name="login_server_url_form_modular_text">Korkealuokkaista isännöintiä organisaatioille</string>
@@ -1097,8 +1097,8 @@
     <string name="login_validation_code_is_not_correct">Syöttämäsi koodi ei ole kelvollinen. Tarkista se.</string>
     <string name="login_error_outdated_homeserver_title">Vanhentunut kotipalvelin</string>
     <plurals name="login_error_limit_exceeded_retry_after">
-        <item quantity="one">Liian monta pyyntöä lähetettiin. Voit yrittää uudelleen 1 sekunnissa…</item>
-        <item quantity="other">Liian monta pyyntöä lähetettiin. Voit yrittää uudelleen %1$d sekunnissa…</item>
+        <item quantity="one">Liian monta pyyntöä lähetettiin. Voit yrittää uudelleen sekunnin kuluttua…</item>
+        <item quantity="other">Liian monta pyyntöä lähetettiin. Voit yrittää uudelleen %1$d sekunnin kuluttua…</item>
     </plurals>
     <string name="seen_by">Nähneet</string>
     <string name="signed_out_title">Olet kirjautunut ulos</string>
@@ -2068,7 +2068,7 @@
     <string name="ftue_account_created_congratulations_title">Onnittelut!</string>
     <string name="ftue_account_created_personalize">Personoi profiili</string>
     <string name="ftue_auth_use_case_skip_partial">ohittaa tämän kysymyksen</string>
-    <string name="ftue_auth_use_case_skip">Ei varmuutta vielä\? Voit %s</string>
+    <string name="ftue_auth_use_case_skip">Etkö ole vielä varma\? Voit %s</string>
     <string name="settings_discovery_no_policy_provided">Identiteettipalvelin ei tarjoa käytäntöä</string>
     <string name="settings_discovery_hide_identity_server_policy_title">Piilota identiteettipalvelimen käytäntö</string>
     <string name="settings_discovery_show_identity_server_policy_title">Näytä identiteettipalvelimen käytäntö</string>
@@ -2307,4 +2307,54 @@
         <item quantity="one">%1$d valittu</item>
         <item quantity="other">%1$d valittu</item>
     </plurals>
+    <string name="voice_broadcast_buffering">Puskuroidaan…</string>
+    <string name="error_voice_message_broadcast_in_progress">Ääniviestiä ei voi aloittaa</string>
+    <string name="room_using_unstable_room_version">Tässä huoneessa on käytössä huoneversio %s, jonka tämä kotipalvelin on merkinnyt epävakaaksi.</string>
+    <string name="space_leave_radio_button_none">Älä poistu mistään</string>
+    <string name="space_leave_radio_button_all">Poistu kaikista</string>
+    <string name="a11y_delete_avatar">Poista profiilikuva</string>
+    <string name="a11y_change_avatar">Vaihda profiilikuva</string>
+    <string name="call_dial_pad_lookup_error">Puhelinnumeron haussa tapahtui virhe</string>
+    <plurals name="invitations_sent_to_one_and_more_users">
+        <item quantity="one">Kutsut lähetetty käyttäjälle %1$s ja yhdelle muulle</item>
+        <item quantity="other">Kutsut lähetetty käyttäjälle %1$s ja %2$d muulle</item>
+    </plurals>
+    <string name="invitations_sent_to_two_users">Kutsu lähetetty käyttäjille %1$s ja %2$s</string>
+    <string name="invitation_sent_to_one_user">Kutsu lähetetty käyttäjälle %1$s</string>
+    <string name="send_your_first_msg_to_invite">Kutsu %s keskusteluun lähettämällä ensimmäinen viesti</string>
+    <string name="this_is_the_beginning_of_dm">Tästä alkaa yksityisviestihistoriasi sinun ja käyttäjän %s välillä.</string>
+    <string name="this_is_the_beginning_of_room">%s alkaa tästä.</string>
+    <string name="encryption_misconfigured">Salaus on säädetty väärin</string>
+    <string name="encryption_has_been_misconfigured">Salaus on säädetty väärin.</string>
+    <string name="login_error_outdated_homeserver_warning_content">Tällä kotipalvelimella on vanha versio. Pyydä kotipalvelimesi ylläpitäjää päivittämään se. Voit jatkaa, mutta jotkin ominaisuudet eivät välttämättä toimi oikein.</string>
+    <string name="ftue_auth_choose_server_ems_cta">Ota yhteyttä</string>
+    <string name="login_social_continue_with">Jatka %s-kirjautumisella</string>
+    <string name="ftue_auth_create_account_sso_section_header">tai</string>
+    <string name="ftue_auth_sign_in_choose_server_header">Keskustelujesi koti</string>
+    <string name="ftue_auth_create_account_choose_server_header">Keskustelujesi koti</string>
+    <string name="ftue_auth_use_case_subtitle">Laitetaan yhteydet kuntoon</string>
+    <string name="ftue_auth_use_case_title">Kenen kanssa juttelet eniten\?</string>
+    <string name="ftue_auth_carousel_workplace_body">${app_name} toimii mainiosti työpaikallakin. Siihen luottavat maailman turvallisimmat organisaatiot.</string>
+    <string name="jitsi_leave_conf_to_join_another_one_content">Poistutaanko nykyisestä ryhmäpuhelusta ja vaihdetaan toiseen\?</string>
+    <string name="directory_add_a_new_server_error_already_added">Tämä palvelin on jo luettelossa</string>
+    <string name="directory_add_a_new_server_error">Tätä palvelinta tai sen huoneluetteloa ei löydy</string>
+    <string name="room_settings_room_access_entry_knock">Kuka vain voi koputtaa huoneeseen ja jäsenet voivat sen jälkeen hyväksyä tai hylätä</string>
+    <string name="room_alias_unpublish_confirmation">Poista osoitteen \"%1$s\" julkaiseminen\?</string>
+    <string name="room_settings_room_notifications_encryption_notice">Huomaa, että maininnat ja avainsanailmoitukset eivät ole käytössä salausta käyttävissä huoneissa mobiililaitteilla.</string>
+    <string name="settings_enable_direct_share_title">Ota suora jako käyttöön</string>
+    <string name="settings_autoplay_animated_images_summary">Toista aikajanalla olevat animoidut kuvat heti, kun ne näkyvät</string>
+    <string name="settings_autoplay_animated_images_title">Toista animoidut kuvat automaattisesti</string>
+    <string name="settings_mentions_and_keywords_encryption_notice">Et saa ilmoituksia maininnoista ja avainsanoista salausta käyttävissä huoneissa mobiililaitteilla.</string>
+    <string name="settings_room_upgrades">Huonepäivitykset</string>
+    <string name="settings_messages_by_bot">Botin lähettämät viestit</string>
+    <string name="settings_troubleshoot_test_system_settings_permission_failed">${app_name} tarvitsee luvan ilmoitusten näyttämiseen.
+\nAnna lupa.</string>
+    <string name="room_permissions_upgrade_the_room">Päivitä huone</string>
+    <string name="labs_enable_deferred_dm_title">Ota lykätyt yksityisviestit käyttöön</string>
+    <string name="action_deselect_all">Poista valinta kaikista</string>
+    <string name="action_select_all">Valitse kaikki</string>
+    <string name="denied_permission_voice_message">Anna mikrofonin käyttöoikeus ääniviestien lähettämiseksi.</string>
+    <string name="denied_permission_camera">Anna kameran käyttöoikeus järjestelmän asetuksista tämän toiminnon suorittamiseksi.</string>
+    <string name="denied_permission_generic">Tämän toiminnon suorittaminen vaatii enemmän oikeuksia. Anna oikeudet järjestelmän asetuksista.</string>
+    <string name="notification_listening_for_notifications">Kuunnellaan ilmoituksia</string>
 </resources>
