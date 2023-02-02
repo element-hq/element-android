@@ -189,7 +189,7 @@ internal class DefaultCryptoService @Inject constructor(
         private val liveEventManager: Lazy<StreamEventsManager>,
         private val unrequestedForwardManager: UnRequestedForwardManager,
         private val cryptoSyncHandler: CryptoSyncHandler,
-) : CryptoService {
+) : CryptoService, DeviceListManager.UserDevicesUpdateListener {
 
     private val isStarting = AtomicBoolean(false)
     private val isStarted = AtomicBoolean(false)
@@ -312,6 +312,7 @@ internal class DefaultCryptoService @Inject constructor(
                 fetchDevicesList()
             }
             cryptoStore.tidyUpDataBase()
+            deviceListManager.addListener(this@DefaultCryptoService)
         }
     }
 
@@ -375,6 +376,7 @@ internal class DefaultCryptoService @Inject constructor(
      * Close the crypto.
      */
     override fun close() = runBlocking(coroutineDispatchers.crypto) {
+        deviceListManager.removeListener(this@DefaultCryptoService)
         cryptoCoroutineScope.coroutineContext.cancelChildren(CancellationException("Closing crypto module"))
         incomingKeyRequestManager.close()
         outgoingKeyRequestManager.close()
@@ -1308,6 +1310,10 @@ internal class DefaultCryptoService @Inject constructor(
 
     override fun removeSessionListener(listener: NewSessionListener) {
         roomDecryptorProvider.removeSessionListener(listener)
+    }
+
+    override fun onUsersDeviceUpdate(userIds: List<String>) {
+        cryptoSessionInfoProvider.markMessageVerificationStateAsDirty(userIds)
     }
 /* ==========================================================================================
  * DEBUG INFO

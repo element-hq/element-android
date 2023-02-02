@@ -24,6 +24,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.matrix.android.sdk.api.MatrixConfiguration
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.internal.crypto.ComputeShieldForGroupUseCase
@@ -44,6 +45,7 @@ internal class OutgoingRequestsProcessor @Inject constructor(
         private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
         private val computeShieldForGroup: ComputeShieldForGroupUseCase,
         private val matrixConfiguration: MatrixConfiguration,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
 ) {
 
     private val lock: Mutex = Mutex()
@@ -136,6 +138,7 @@ internal class OutgoingRequestsProcessor @Inject constructor(
             val response = requestSender.queryKeys(request)
             olmMachine.markRequestAsSent(request.requestId, RequestType.KEYS_QUERY, response)
             coroutineScope.updateShields(olmMachine, request.users)
+            coroutineScope.markMessageVerificationStatesAsDirty(request.users)
             true
         } catch (throwable: Throwable) {
             Timber.tag(loggerTag.value).e(throwable, "## queryKeys(): error")
@@ -143,7 +146,7 @@ internal class OutgoingRequestsProcessor @Inject constructor(
         }
     }
 
-    private fun CoroutineScope.updateShields(olmMachine: OlmMachine, userIds: List<String>) = launch {
+    private fun CoroutineScope.updateShields(olmMachine: OlmMachine, userIds: List<String>) = launch(coroutineDispatchers.computation) {
         cryptoSessionInfoProvider.getRoomsWhereUsersAreParticipating(userIds).forEach { roomId ->
             if (cryptoSessionInfoProvider.isRoomEncrypted(roomId)) {
                 val userGroup = cryptoSessionInfoProvider.getUserListForShieldComputation(roomId)
@@ -153,6 +156,10 @@ internal class OutgoingRequestsProcessor @Inject constructor(
                 cryptoSessionInfoProvider.updateShieldForRoom(roomId, null)
             }
         }
+    }
+
+    private fun CoroutineScope.markMessageVerificationStatesAsDirty(userIds: List<String>) = launch(coroutineDispatchers.computation) {
+        cryptoSessionInfoProvider.markMessageVerificationStateAsDirty(userIds)
     }
 
     private suspend fun sendToDevice(olmMachine: OlmMachine, request: Request.ToDevice): Boolean {

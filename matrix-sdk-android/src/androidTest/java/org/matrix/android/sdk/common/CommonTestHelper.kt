@@ -20,6 +20,7 @@ import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -29,6 +30,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeout
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
@@ -181,6 +183,88 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
         // Check that all events has been created
         assertEquals("Message number do not match $sentEvents", nbOfMessages.toLong(), sentEvents.size.toLong())
         return sentEvents
+    }
+
+    suspend fun sendMessageInRoom(room: Room, text: String): String {
+        room.sendService().sendTextMessage(text)
+
+        val timeline = room.timelineService().createTimeline(null, TimelineSettings(60))
+        timeline.start()
+
+        val messageSent = CompletableDeferred<String>()
+        timeline.addListener(object : Timeline.Listener {
+            override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
+                val decryptedMsg = timeline.getSnapshot()
+                        .filter { it.root.getClearType() == EventType.MESSAGE }
+                        .also { list ->
+                            val message = list.joinToString(",", "[", "]") { "${it.root.type}|${it.root.sendState}" }
+                            Log.v("#E2E TEST", "Timeline snapshot is $message")
+                        }
+                        .filter { it.root.sendState == SendState.SYNCED }
+                        .firstOrNull { it.root.getClearContent().toModel<MessageContent>()?.body?.startsWith(text) == true }
+                if (decryptedMsg != null) {
+                    timeline.dispose()
+                    messageSent.complete(decryptedMsg.eventId)
+                }
+            }
+        })
+        return withTimeout(TestConstants.timeOutMillis) { messageSent.await() }
+    }
+
+    suspend fun ensureMessage(room: Room, eventId: String, block: ((event: TimelineEvent) -> Boolean)) {
+        val timeline = room.timelineService().createTimeline(null, TimelineSettings(60))
+        timeline.start()
+        val messageSent = CompletableDeferred<Unit>()
+        timeline.addListener(object : Timeline.Listener {
+            override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
+                val success = timeline.getSnapshot()
+                        .filter { it.root.getClearType() == EventType.MESSAGE }
+                        .also { list ->
+                            val message = list.joinToString(",", "[", "]") {
+                                "${it.root.type}|${it.root.getClearType()}|${it.root.sendState}|${it.root.mxDecryptionResult?.verificationState}"
+                            }
+                            Log.v("#E2E TEST", "Timeline snapshot is $message")
+                        }
+                        .firstOrNull { it.eventId == eventId }
+                        ?.let {
+                            block(it)
+                        } ?: false
+                if (success) {
+                    messageSent.complete(Unit)
+                    timeline.dispose()
+                }
+            }
+        })
+        return withTimeout(TestConstants.timeOutMillis) {
+            messageSent.await()
+        }
+    }
+
+     fun ensureMessagePromise(room: Room, eventId: String, block: ((event: TimelineEvent) -> Boolean)): CompletableDeferred<Unit> {
+        val timeline = room.timelineService().createTimeline(null, TimelineSettings(60))
+        timeline.start()
+        val messageSent = CompletableDeferred<Unit>()
+        timeline.addListener(object : Timeline.Listener {
+            override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
+                val success = timeline.getSnapshot()
+                        .filter { it.root.getClearType() == EventType.MESSAGE }
+                        .also { list ->
+                            val message = list.joinToString(",", "[", "]") {
+                                "${it.root.type}|${it.root.getClearType()}|${it.root.sendState}|${it.root.mxDecryptionResult?.verificationState}"
+                            }
+                            Log.v("#E2E TEST", "Promise Timeline snapshot is $message")
+                        }
+                        .firstOrNull { it.eventId == eventId }
+                        ?.let {
+                            block(it)
+                        } ?: false
+                if (success) {
+                    messageSent.complete(Unit)
+                    timeline.dispose()
+                }
+            }
+        })
+        return messageSent
     }
 
     /**

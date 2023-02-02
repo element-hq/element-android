@@ -108,6 +108,9 @@ data class Event(
     @Transient
     var threadDetails: ThreadDetails? = null
 
+    @Transient
+    var verificationStateIsDirty: Boolean? = null
+
     fun sendStateError(): MatrixError? {
         return sendStateDetails?.let {
             val matrixErrorAdapter = MoshiProvider.providesMoshi().adapter(MatrixError::class.java)

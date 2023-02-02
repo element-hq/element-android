@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.crypto
 import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.internal.database.mapper.EventMapper
 import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.EventEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntity
@@ -98,6 +99,23 @@ internal class CryptoSessionInfoProvider @Inject constructor(
                     .also { Timber.d("## CrossSigning -  ... impacted rooms ${it.logLimit()}") }
         }
         return roomIds.orEmpty()
+    }
+
+    fun markMessageVerificationStateAsDirty(userList: List<String>) {
+        monarchy.writeAsync { sessionRealm ->
+            sessionRealm.where(EventEntity::class.java)
+                    .`in`(EventEntityFields.SENDER, userList.toTypedArray())
+                    .equalTo(EventEntityFields.TYPE, EventType.ENCRYPTED)
+                    .isNotNull(EventEntityFields.DECRYPTION_RESULT_JSON)
+//                    // A bit annoying to have to do that like that and it could break :/
+//                    .contains(EventEntityFields.DECRYPTION_RESULT_JSON, "\"verification_state\":\"UNKNOWN_DEVICE\"")
+                    .findAll()
+                    .onEach {
+                        it.isVerificationStateDirty = true
+                    }
+                    .map { EventMapper.map(it) }
+                    .also { Timber.v("## VerificationState refresh -  ... impacted events ${it.joinToString{ it.eventId.orEmpty() }}") }
+        }
     }
 
     fun updateShieldForRoom(roomId: String, shield: RoomEncryptionTrustLevel?) {

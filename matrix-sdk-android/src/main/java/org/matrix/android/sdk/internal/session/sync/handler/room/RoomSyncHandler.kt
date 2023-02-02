@@ -414,7 +414,7 @@ internal class RoomSyncHandler @Inject constructor(
             // It's annoying roomId is not there, but lot of code rely on it.
             // And had to do it now as copy would delete all decryption results..
             val ageLocalTs = syncLocalTimestampMillis - (rawEvent.unsignedData?.age ?: 0)
-            val event = rawEvent.copy(roomId = roomId).also {
+            val event = rawEvent.copyAll(roomId = roomId).also {
                 it.ageLocalTs = ageLocalTs
             }
             if (event.eventId == null || event.senderId == null || event.type == null) {

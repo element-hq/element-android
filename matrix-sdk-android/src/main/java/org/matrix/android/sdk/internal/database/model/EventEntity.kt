@@ -47,7 +47,8 @@ internal open class EventEntity(
         @Index var rootThreadEventId: String? = null,
         // Number messages within the thread
         var numberOfThreads: Int = 0,
-        var threadSummaryLatestMessage: TimelineEventEntity? = null
+        var threadSummaryLatestMessage: TimelineEventEntity? = null,
+        var isVerificationStateDirty: Boolean? = null,
 ) : RealmObject() {
 
     private var sendStateStr: String = SendState.UNKNOWN.name
@@ -94,6 +95,7 @@ internal open class EventEntity(
         decryptionResultJson = adapter.toJson(decryptionResult)
         decryptionErrorCode = null
         decryptionErrorReason = null
+        isVerificationStateDirty = false
 
         // If we have an EventInsertEntity for the eventId we make sures it can be processed now.
         realm.where(EventInsertEntity::class.java)
