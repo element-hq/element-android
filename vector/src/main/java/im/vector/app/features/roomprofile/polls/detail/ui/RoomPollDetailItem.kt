@@ -72,7 +72,7 @@ abstract class RoomPollDetailItem : VectorEpoxyModel<RoomPollDetailItem.Holder>(
         val relatedEventId = eventId
 
         if (canVote && relatedEventId != null) {
-            callback?.vote(pollId = relatedEventId, optionId = optionViewState.optionId)
+            callback?.vote(pollEventId = relatedEventId, optionId = optionViewState.optionId)
         }
     }
 

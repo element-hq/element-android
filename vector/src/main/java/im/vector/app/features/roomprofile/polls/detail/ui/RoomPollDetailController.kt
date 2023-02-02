@@ -22,7 +22,7 @@ import javax.inject.Inject
 class RoomPollDetailController @Inject constructor() : TypedEpoxyController<RoomPollDetailViewState>() {
 
     interface Callback {
-        fun vote(pollId: String, optionId: String)
+        fun vote(pollEventId: String, optionId: String)
     }
 
     var callback: Callback? = null

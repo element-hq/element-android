@@ -40,7 +40,9 @@ data class RoomPollDetailArgs(
 ) : Parcelable
 
 @AndroidEntryPoint
-class RoomPollDetailFragment : VectorBaseFragment<FragmentRoomPollDetailBinding>() {
+class RoomPollDetailFragment :
+        VectorBaseFragment<FragmentRoomPollDetailBinding>(),
+        RoomPollDetailController.Callback {
 
     @Inject lateinit var roomPollDetailController: RoomPollDetailController
 
@@ -54,17 +56,22 @@ class RoomPollDetailFragment : VectorBaseFragment<FragmentRoomPollDetailBinding>
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupToolbar()
+        setupDetailView()
+        // TODO add link to go to timeline message + create a ViewNavigator
+    }
 
+    override fun onDestroyView() {
+        roomPollDetailController.callback = null
+        views.pollDetailRecyclerView.cleanup()
+        super.onDestroyView()
+    }
+
+    private fun setupDetailView() {
+        roomPollDetailController.callback = this
         views.pollDetailRecyclerView.configureWith(
                 roomPollDetailController,
                 hasFixedSize = true,
         )
-        // TODO setup callback in controller for vote action
-    }
-
-    override fun onDestroyView() {
-        views.pollDetailRecyclerView.cleanup()
-        super.onDestroyView()
     }
 
     private fun setupToolbar(isEnded: Boolean? = null) {
@@ -84,5 +91,9 @@ class RoomPollDetailFragment : VectorBaseFragment<FragmentRoomPollDetailBinding>
         // TODO should we update the title when the poll status changes?
         setupToolbar(state.pollDetail.isEnded)
         roomPollDetailController.setData(state)
+    }
+
+    override fun vote(pollEventId: String, optionId: String) {
+        viewModel.handle(RoomPollDetailAction.Vote(pollEventId = pollEventId, optionId = optionId))
     }
 }
