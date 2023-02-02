@@ -33,6 +33,7 @@ import org.matrix.android.sdk.internal.crypto.network.RequestSender
 import org.matrix.android.sdk.internal.crypto.verification.VerificationListenersHolder
 import org.matrix.rustcomponents.sdk.crypto.CryptoStoreException
 import org.matrix.rustcomponents.sdk.crypto.QrCode
+import org.matrix.rustcomponents.sdk.crypto.QrCodeState
 import timber.log.Timber
 
 /** Class representing a QR code based verification flow */
@@ -97,18 +98,21 @@ internal class QrCodeVerification @AssistedInject constructor(
     }
 
     override fun state(): QRCodeVerificationState {
-        Timber.w("VALR state: weStarted ${inner.weStarted()}")
-        Timber.w("VALR state: reciprocated ${inner.reciprocated()}")
-        Timber.w("VALR state: isDone ${inner.isDone()}")
-        Timber.w("VALR state: hasBeenScanned ${inner.hasBeenScanned()}")
-
-        if (inner.hasBeenScanned()) {
-            return QRCodeVerificationState.WaitingForScanConfirmation
+        Timber.v("SAS QR state${inner.state()}")
+        return when (inner.state()) {
+            // / The QR verification has been started.
+            QrCodeState.Started -> QRCodeVerificationState.Reciprocated
+            // / The QR verification has been scanned by the other side.
+            QrCodeState.Scanned -> QRCodeVerificationState.WaitingForScanConfirmation
+            // / The scanning of the QR code has been confirmed by us.
+            QrCodeState.Confirmed -> QRCodeVerificationState.WaitingForOtherDone
+            // / We have successfully scanned the QR code and are able to send a
+            // / reciprocation event.
+            QrCodeState.Reciprocated -> QRCodeVerificationState.WaitingForOtherDone
+            // / The verification process has been successfully concluded.
+            QrCodeState.Done -> QRCodeVerificationState.Done
+            is QrCodeState.Cancelled -> QRCodeVerificationState.Cancelled
         }
-        if (inner.isCancelled()) return QRCodeVerificationState.Cancelled
-        if (inner.isDone()) return QRCodeVerificationState.Done
-
-        return QRCodeVerificationState.Reciprocated
     }
 
     /** Get the unique id of this verification */

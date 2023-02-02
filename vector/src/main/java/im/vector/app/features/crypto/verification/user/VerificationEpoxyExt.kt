@@ -361,7 +361,30 @@ fun BaseEpoxyVerificationController.renderQrTransaction(transaction: Verificatio
                 listener { host.listener?.onUserConfirmsQrCodeScanned() }
             }
         }
-        QRCodeVerificationState.WaitingForOtherDone,
+        QRCodeVerificationState.WaitingForOtherDone -> {
+            bottomSheetVerificationNoticeItem {
+                id("notice")
+                apply {
+                    notice(host.stringProvider.getString(R.string.qr_code_scanned_verif_waiting_notice).toEpoxyCharSequence())
+                }
+            }
+
+            bottomSheetVerificationBigImageItem {
+                id("image")
+                roomEncryptionTrustLevel(RoomEncryptionTrustLevel.Trusted)
+            }
+
+            bottomSheetVerificationWaitingItem {
+                id("waiting")
+                apply {
+                    if (otherUserItem != null) {
+                        title(host.stringProvider.getString(R.string.qr_code_scanned_verif_waiting, otherUserItem.getBestName()))
+                    } else {
+                        title(host.stringProvider.getString(R.string.qr_code_scanned_verif_waiting, transaction.otherDeviceId.orEmpty()))
+                    }
+                }
+            }
+        }
         QRCodeVerificationState.Done -> {
             // Done
         }
