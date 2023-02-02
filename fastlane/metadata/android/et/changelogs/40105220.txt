@@ -1,0 +1,2 @@
+Põhilised muutused selles versioonis: täiendused ringhäälingukõnede lahendusele.
+Kogu ingliskeelne muudatuste logi: https://github.com/vector-im/element-android/releases

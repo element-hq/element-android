@@ -345,7 +345,7 @@
     <string name="encryption_import_room_keys_summary">Importuj klucze z lokalnego pliku</string>
     <string name="encryption_import_import">Importuj</string>
     <string name="encryption_never_send_to_unverified_devices_title">Szyfruj wiadomości tylko do zaufanych sesji</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">Nigdy nie wysyłaj szyfrowanych wiadomości do niezweryfikowanych sesji (bez zielonej tarczy) z tego urządzenia.</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Nigdy nie wysyłaj szyfrowanych wiadomości do niezweryfikowanych sesji (bez zielonej tarczy) z tej sesji.</string>
     <string name="encryption_information_verify_device_warning">Aby sprawdzić czy ta sesja jest zaufana, skontaktuj się z jej właścicielem używając innych form (np. osobiście lub telefonicznie) i zapytaj czy klucz, który widzą w ustawieniach użytkownika dla tego urządzenia pasuje do klucza poniżej:</string>
     <string name="encryption_information_verify_device_warning2">Jeśli klucz pasuje, potwierdź to przyciskiem poniżej. Jeśli nie, to ktoś inny najprawdopodobniej przejmuje lub podszywa się pod tą sesję i powinieneś dodać tę sesję do czarnej listy. W przyszłości proces weryfikacji będzie bardziej skomplikowany.</string>
     <string name="title_activity_choose_sticker">Wyślij naklejkę</string>
