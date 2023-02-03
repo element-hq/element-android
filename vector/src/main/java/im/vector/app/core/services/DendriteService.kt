@@ -417,9 +417,8 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
         val bluetoothPeers = monolith.peerCount(Gobind.PeerTypeBluetooth).toInt()
 
         val title: String = "P2P Matrix service running"
-        val text: String
 
-        text = if (remotePeers+multicastPeers+bluetoothPeers == 0) {
+        val text: String = if (remotePeers+multicastPeers+bluetoothPeers == 0) {
             "No connectivity"
         } else {
             val texts: MutableList<String> = mutableListOf<String>()
@@ -661,13 +660,13 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
                 Timber.i("BLE: BLUETOOTH_CONNECT permission not granted, Bluetooth will not be available")
                 return
             }
+            bluetoothAdapter.bluetoothLeAdvertiser == null -> {
+                Timber.i("BLE: Bluetooth adapter not available")
+                return
+            }
             else -> Timber.i("BLE: Bluetooth prerequisites satisfied")
         }
 
-        if (bluetoothAdapter.bluetoothLeAdvertiser == null) {
-            Timber.i("BLE: Bluetooth adapter not available")
-            return
-        }
         advertiser = bluetoothAdapter.bluetoothLeAdvertiser
         scanner = bluetoothAdapter.bluetoothLeScanner
 
@@ -695,11 +694,9 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
                     .setTxPowerLevel(AdvertisingSetParameters.TX_POWER_MAX)
                     .setConnectable(true)
 
-            if (isCodedPHY) {
-                parameters.setPrimaryPhy(BluetoothDevice.PHY_LE_CODED)
-                parameters.setSecondaryPhy(BluetoothDevice.PHY_LE_1M)
-                Toast.makeText(applicationContext, "Requesting Coded PHY + 1M PHY", Toast.LENGTH_SHORT).show()
-            }
+            parameters.setPrimaryPhy(BluetoothDevice.PHY_LE_CODED)
+            parameters.setSecondaryPhy(BluetoothDevice.PHY_LE_1M)
+            Toast.makeText(applicationContext, "Requesting Coded PHY + 1M PHY", Toast.LENGTH_SHORT).show()
 
             advertiser.startAdvertisingSet(parameters.build(), advertiseData, null, null, null, advertiseSetCallback)
         } else {
@@ -829,7 +826,7 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
 class NetworkCallback : gobind.InterfaceRetriever {
     private var interfaceCache: MutableList<gobind.InterfaceInfo> = mutableListOf<gobind.InterfaceInfo>()
 
-    override public fun cacheCurrentInterfaces(): Long {
+    override fun cacheCurrentInterfaces(): Long {
         interfaceCache.clear()
 
         for (iface in NetworkInterface.getNetworkInterfaces()) {
@@ -842,22 +839,22 @@ class NetworkCallback : gobind.InterfaceRetriever {
             }
 
             var ifaceInfo = gobind.InterfaceInfo()
-            ifaceInfo.setName(iface.name)
-            ifaceInfo.setIndex(iface.index.toLong())
-            ifaceInfo.setMtu(iface.mtu.toLong())
-            ifaceInfo.setUp(iface.isUp)
-            ifaceInfo.setBroadcast(iface.supportsMulticast())
-            ifaceInfo.setLoopback(iface.isLoopback)
-            ifaceInfo.setPointToPoint(iface.isPointToPoint)
-            ifaceInfo.setMulticast(iface.supportsMulticast())
-            ifaceInfo.setAddrs(addrs.toString())
+            ifaceInfo.name = iface.name
+            ifaceInfo.index = iface.index.toLong()
+            ifaceInfo.mtu = iface.mtu.toLong()
+            ifaceInfo.up = iface.isUp
+            ifaceInfo.broadcast = iface.supportsMulticast()
+            ifaceInfo.loopback = iface.isLoopback
+            ifaceInfo.pointToPoint = iface.isPointToPoint
+            ifaceInfo.multicast = iface.supportsMulticast()
+            ifaceInfo.addrs = addrs.toString()
 
             interfaceCache.add(ifaceInfo)
         }
         return interfaceCache.size.toLong()
     }
 
-    override public fun getCachedInterface(index: Long): InterfaceInfo? {
+    override fun getCachedInterface(index: Long): InterfaceInfo? {
         if (index >= interfaceCache.size) {
             return null
         }
