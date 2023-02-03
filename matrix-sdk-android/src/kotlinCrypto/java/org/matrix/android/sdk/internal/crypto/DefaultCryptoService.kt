@@ -1187,6 +1187,8 @@ internal class DefaultCryptoService @Inject constructor(
 
     override fun isShareKeysOnInviteEnabled() = cryptoStore.isShareKeysOnInviteEnabled()
 
+    override fun supportsShareKeysOnInvite() = true
+
     override fun enableShareKeyOnInvite(enable: Boolean) = cryptoStore.enableShareKeyOnInvite(enable)
 
     /**

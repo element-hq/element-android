@@ -89,6 +89,10 @@ interface CryptoService {
 
     fun isKeyGossipingEnabled(): Boolean
 
+    /*
+    * Tells if the current crypto implementation supports MSC3061
+     */
+    fun supportsShareKeysOnInvite(): Boolean
     /**
      * As per MSC3061.
      * If true will make it possible to share part of e2ee room history

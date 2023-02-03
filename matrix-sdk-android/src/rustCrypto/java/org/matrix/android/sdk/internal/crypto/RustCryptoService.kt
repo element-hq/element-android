@@ -724,15 +724,15 @@ internal class RustCryptoService @Inject constructor(
         return cryptoStore.isKeyGossipingEnabled()
     }
 
+    override fun supportsShareKeysOnInvite() = false
+
     override fun enableShareKeyOnInvite(enable: Boolean) {
         if (enable) {
             TODO("Enable share key on invite not implemented")
         }
     }
 
-    override fun isShareKeysOnInviteEnabled(): Boolean {
-        return false
-    }
+    override fun isShareKeysOnInviteEnabled() = false
 
     override fun setRoomUnBlockUnverifiedDevices(roomId: String) {
         cryptoStore.blockUnverifiedDevicesInRoom(roomId, false)
