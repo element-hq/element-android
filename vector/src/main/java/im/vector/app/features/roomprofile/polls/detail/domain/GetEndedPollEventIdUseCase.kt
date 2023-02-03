@@ -28,9 +28,7 @@ class GetEndedPollEventIdUseCase @Inject constructor(
 
     fun execute(roomId: String, startPollEventId: String): String? {
         val result = runCatching {
-            activeSessionHolder.getActiveSession()
-                    .roomService()
-                    .getRoom(roomId)
+            activeSessionHolder.getActiveSession().roomService().getRoom(roomId)
                     ?.timelineService()
                     ?.getTimelineEventsRelatedTo(RelationType.REFERENCE, startPollEventId)
                     ?.find { it.root.isPollEnd() }
