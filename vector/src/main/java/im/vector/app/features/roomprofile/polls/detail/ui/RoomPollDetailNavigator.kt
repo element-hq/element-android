@@ -20,7 +20,6 @@ import android.content.Context
 import im.vector.app.features.navigation.Navigator
 import javax.inject.Inject
 
-// TODO add unit tests
 class RoomPollDetailNavigator @Inject constructor(
         private val navigator: Navigator,
 ) {
