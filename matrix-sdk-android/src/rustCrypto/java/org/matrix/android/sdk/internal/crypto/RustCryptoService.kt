@@ -322,8 +322,6 @@ internal class RustCryptoService @Inject constructor(
             // keys claim request to be sent out.
             // This could be omitted but then devices might be waiting for the next
             outgoingRequestsProcessor.processOutgoingRequests(olmMachine)
-
-            keysBackupService.maybeBackupKeys()
         }
     }
 
@@ -596,6 +594,9 @@ internal class RustCryptoService @Inject constructor(
             sessionId: String,
     ) {
         megolmSessionImportManager.dispatchNewSession(roomId, sessionId)
+        cryptoCoroutineScope.launch {
+            keysBackupService.maybeBackupKeys()
+        }
     }
 
     override suspend fun onSyncWillProcess(isInitialSync: Boolean) {
