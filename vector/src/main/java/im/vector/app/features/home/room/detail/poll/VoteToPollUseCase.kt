@@ -19,6 +19,7 @@ package im.vector.app.features.home.room.detail.poll
 import im.vector.app.core.di.ActiveSessionHolder
 import org.matrix.android.sdk.api.session.events.model.LocalEcho
 import org.matrix.android.sdk.api.session.room.getTimelineEvent
+import timber.log.Timber
 import javax.inject.Inject
 
 // TODO add unit tests
@@ -30,22 +31,24 @@ class VoteToPollUseCase @Inject constructor(
         // Do not allow to vote unsent local echo of the poll event
         if (LocalEcho.isLocalEchoId(pollEventId)) return
 
-        val room = activeSessionHolder.getActiveSession()
-                .roomService()
-                .getRoom(roomId)
+        runCatching {
+            val room = activeSessionHolder.getActiveSession()
+                    .roomService()
+                    .getRoom(roomId)
 
-        room?.getTimelineEvent(pollEventId)?.let { pollTimelineEvent ->
-            val currentVote = pollTimelineEvent
-                    .annotations
-                    ?.pollResponseSummary
-                    ?.aggregatedContent
-                    ?.myVote
-            if (currentVote != optionId) {
-                room.sendService().voteToPoll(
-                        pollEventId = pollEventId,
-                        answerId = optionId
-                )
+            room?.getTimelineEvent(pollEventId)?.let { pollTimelineEvent ->
+                val currentVote = pollTimelineEvent
+                        .annotations
+                        ?.pollResponseSummary
+                        ?.aggregatedContent
+                        ?.myVote
+                if (currentVote != optionId) {
+                    room.sendService().voteToPoll(
+                            pollEventId = pollEventId,
+                            answerId = optionId
+                    )
+                }
             }
-        }
+        }.onFailure { Timber.w("Failed to vote in poll with id $pollEventId in room with id $roomId") }
     }
 }
