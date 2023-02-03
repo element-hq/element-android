@@ -3,26 +3,26 @@
     <string name="notice_room_invite_no_invitee">Convite de %s</string>
     <string name="notice_room_invite">%1$s convidou %2$s</string>
     <string name="notice_room_invite_you">%1$s convidou você</string>
-    <string name="notice_room_join">%1$s juntou-se à sala</string>
+    <string name="notice_room_join">%1$s entrou na sala</string>
     <string name="notice_room_leave">%1$s saiu da sala</string>
-    <string name="notice_room_reject">%1$s rejeitou o convite</string>
+    <string name="notice_room_reject">%1$s recusou o convite</string>
     <string name="notice_room_remove">%1$s removeu %2$s</string>
     <string name="notice_room_unban">%1$s desbaniu %2$s</string>
     <string name="notice_room_ban">%1$s baniu %2$s</string>
-    <string name="notice_room_withdraw">%1$s retirou o convite de %2$s</string>
-    <string name="notice_avatar_url_changed">%1$s mudou o avatar dela(e)</string>
-    <string name="notice_display_name_set">%1$s definiu o nome de exibição dela(e) para %2$s</string>
-    <string name="notice_display_name_changed_from">%1$s mudou o nome de exibição dela(e) de %2$s para %3$s</string>
-    <string name="notice_display_name_removed">%1$s removeu o nome de exibição dela(e) (era %2$s)</string>
+    <string name="notice_room_withdraw">%1$s desfez o convite para %2$s</string>
+    <string name="notice_avatar_url_changed">%1$s mudou seu avatar</string>
+    <string name="notice_display_name_set">%1$s definiu seu nome de exibição para %2$s</string>
+    <string name="notice_display_name_changed_from">%1$s mudou seu nome de exibição de %2$s para %3$s</string>
+    <string name="notice_display_name_removed">%1$s removeu seu nome de exibição (era %2$s)</string>
     <string name="notice_room_topic_changed">%1$s mudou o tópico para: %2$s</string>
     <string name="notice_room_name_changed">%1$s mudou o nome da sala para: %2$s</string>
     <string name="notice_placed_video_call">%s começou uma chamada de vídeo.</string>
     <string name="notice_placed_voice_call">%s começou uma chamada de voz.</string>
     <string name="notice_answered_call">%s atendeu a chamada.</string>
-    <string name="notice_ended_call">%s terminou a chamada.</string>
-    <string name="notice_made_future_room_visibility">%1$s fez histórico futuro da sala visível para %2$s</string>
-    <string name="notice_room_visibility_invited">todos os membros da sala, do ponto que foram convidados.</string>
-    <string name="notice_room_visibility_joined">todos os membros da sala, do ponto que se juntaram.</string>
+    <string name="notice_ended_call">%s encerrou a chamada.</string>
+    <string name="notice_made_future_room_visibility">%1$s tornou o histórico futuro da sala visível para %2$s</string>
+    <string name="notice_room_visibility_invited">todos os membros da sala, a partir do ponto que foram convidados.</string>
+    <string name="notice_room_visibility_joined">todos os membros da sala, a partir do ponto que entraram.</string>
     <string name="notice_room_visibility_shared">todos os membros da sala.</string>
     <string name="notice_room_visibility_world_readable">qualquer pessoa.</string>
     <string name="notice_avatar_changed_too">(avatar mudou também)</string>
@@ -43,13 +43,13 @@
     <string name="notice_room_created">%1$s criou a sala</string>
     <string name="notice_room_created_by_you">Você criou a sala</string>
     <string name="notice_room_invite_by_you">Você convidou %1$s</string>
-    <string name="notice_room_join_by_you">Você juntou-se à sala</string>
+    <string name="notice_room_join_by_you">Você entrou na sala</string>
     <string name="notice_room_leave_by_you">Você saiu da sala</string>
-    <string name="notice_room_reject_by_you">Você rejeitou o convite</string>
+    <string name="notice_room_reject_by_you">Você recusou o convite</string>
     <string name="notice_room_remove_by_you">Você removeu %1$s</string>
     <string name="notice_room_unban_by_you">Você desbaniu %1$s</string>
     <string name="notice_room_ban_by_you">Você baniu %1$s</string>
-    <string name="notice_room_withdraw_by_you">Você retirou o convite de %1$s</string>
+    <string name="notice_room_withdraw_by_you">Você desfez o convite para %1$s</string>
     <string name="notice_avatar_url_changed_by_you">Você mudou seu avatar</string>
     <string name="notice_display_name_set_by_you">Você definiu seu nome de exibição para %1$s</string>
     <string name="notice_display_name_changed_from_by_you">Você mudou seu nome de exibição de %1$s para %2$s</string>
@@ -63,8 +63,8 @@
     <string name="notice_call_candidates">%s enviou dados para configurar a chamada.</string>
     <string name="notice_call_candidates_by_you">Você enviou dados para configurar a chamada.</string>
     <string name="notice_answered_call_by_you">Você atendeu a chamada.</string>
-    <string name="notice_ended_call_by_you">Você terminou a chamada.</string>
-    <string name="notice_made_future_room_visibility_by_you">Você fez histórico futuro da sala visível para %1$s</string>
+    <string name="notice_ended_call_by_you">Você encerrou a chamada.</string>
+    <string name="notice_made_future_room_visibility_by_you">Você tornou o histórico futuro da sala visível para %1$s</string>
     <string name="notice_room_update">%s fez o upgrade desta sala.</string>
     <string name="notice_room_update_by_you">Você fez o upgrade desta sala.</string>
     <string name="notice_room_name_removed_by_you">Você removeu o nome da sala</string>
@@ -89,31 +89,31 @@
     <string name="notice_power_level_changed_by_you">Você mudou o nível de poder de %1$s.</string>
     <string name="notice_power_level_changed">%1$s mudou o nível de poder de %2$s.</string>
     <string name="notice_power_level_diff">%1$s de %2$s para %3$s</string>
-    <string name="initial_sync_start_importing_account">Sinc inicial:
+    <string name="initial_sync_start_importing_account">Sincronização inicial:
 \nImportando conta…</string>
-    <string name="initial_sync_start_importing_account_crypto">Sinc inicial:
-\nImportando crypto</string>
-    <string name="initial_sync_start_importing_account_rooms">Sinc inicial:
+    <string name="initial_sync_start_importing_account_crypto">Sincronização inicial:
+\nImportando criptografia</string>
+    <string name="initial_sync_start_importing_account_rooms">Sincronização inicial:
 \nImportando salas</string>
-    <string name="initial_sync_start_importing_account_joined_rooms">Sinc inicial:
+    <string name="initial_sync_start_importing_account_joined_rooms">Sincronização inicial:
 \nCarregando suas conversas
-\nSe você tem se juntado a muitas salas, isto podia levar um tempo</string>
-    <string name="initial_sync_start_importing_account_invited_rooms">Sinc inicial:
-\nImportando salas convidadas</string>
-    <string name="initial_sync_start_importing_account_left_rooms">Sinc inicial:
-\nImportando salas saídas</string>
-    <string name="initial_sync_start_importing_account_data">Sinc inicial:
+\nSe você entrou em muitas salas, isso pode demorar</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Sincronização inicial:
+\nImportando salas para as quais foi convidado</string>
+    <string name="initial_sync_start_importing_account_left_rooms">Sincronização inicial:
+\nImportando salas das quais saiu</string>
+    <string name="initial_sync_start_importing_account_data">Sincronização inicial:
 \nImportando dados de conta</string>
     <string name="event_status_sending_message">Enviando mensagem…</string>
-    <string name="notice_room_invite_no_invitee_with_reason">Convite de %1$s. Razão: %2$s</string>
-    <string name="notice_room_invite_no_invitee_with_reason_by_you">Seu convite. Razão: %1$s</string>
-    <string name="notice_room_invite_with_reason">%1$s convidou %2$s. Razão: %3$s</string>
-    <string name="notice_room_invite_with_reason_by_you">Você convidou %1$s. Razão: %2$s</string>
-    <string name="notice_room_invite_you_with_reason">%1$s convidou você. Razão: %2$s</string>
-    <string name="notice_room_join_with_reason">%1$s juntou-se à sala. Razão: %2$s</string>
-    <string name="notice_room_join_with_reason_by_you">Você juntou-se à sala. Razão: %1$s</string>
-    <string name="notice_room_leave_with_reason">%1$s saiu da sala. Razão: %2$s</string>
-    <string name="notice_room_leave_with_reason_by_you">Você saiu da sala. Razão: %1$s</string>
+    <string name="notice_room_invite_no_invitee_with_reason">Convite de %1$s. Motivo: %2$s</string>
+    <string name="notice_room_invite_no_invitee_with_reason_by_you">Seu convite. Motivo: %1$s</string>
+    <string name="notice_room_invite_with_reason">%1$s convidou %2$s. Motivo: %3$s</string>
+    <string name="notice_room_invite_with_reason_by_you">Você convidou %1$s. Motivo: %2$s</string>
+    <string name="notice_room_invite_you_with_reason">%1$s convidou você. Motivo: %2$s</string>
+    <string name="notice_room_join_with_reason">%1$s entrou na sala. Motivo: %2$s</string>
+    <string name="notice_room_join_with_reason_by_you">Você entrou na sala. Motivo: %1$s</string>
+    <string name="notice_room_leave_with_reason">%1$s saiu da sala. Motivo: %2$s</string>
+    <string name="notice_room_leave_with_reason_by_you">Você saiu da sala. Motivo: %1$s</string>
     <string name="notice_room_reject_with_reason">%1$s rejeitou o convite. Razão: %2$s</string>
     <string name="notice_room_reject_with_reason_by_you">Você rejeitou o convite. Razão: %1$s</string>
     <string name="notice_room_remove_with_reason">%1$s expulsou %2$s. Razão: %3$s</string>
@@ -160,22 +160,22 @@
     <string name="notice_direct_room_guest_access_forbidden">%1$s tem prevenido visitantes de se juntarem à sala.</string>
     <string name="notice_direct_room_guest_access_can_join_by_you">Você tem permitido visitantes se juntarem aqui.</string>
     <string name="notice_direct_room_guest_access_can_join">%1$s tem permitido visitantes se juntarem aqui.</string>
-    <string name="notice_direct_room_leave_with_reason_by_you">Você saiu. Razão: %1$s</string>
-    <string name="notice_direct_room_leave_with_reason">%1$s saiu. Razão: %2$s</string>
-    <string name="notice_direct_room_join_with_reason_by_you">Você juntou-se. Razão: %1$s</string>
-    <string name="notice_direct_room_join_with_reason">%1$s juntou-se. Razão: %2$s</string>
+    <string name="notice_direct_room_leave_with_reason_by_you">Você saiu. Motivo: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason">%1$s saiu. Motivo: %2$s</string>
+    <string name="notice_direct_room_join_with_reason_by_you">Você entrou. Motivo: %1$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$s entrou. Motivo: %2$s</string>
     <string name="notice_direct_room_third_party_revoked_invite_by_you">Você revogou o convite para %1$s</string>
     <string name="notice_direct_room_third_party_revoked_invite">%1$s revogou o convite para %2$s</string>
     <string name="notice_direct_room_third_party_invite_by_you">Você convidou %1$s</string>
     <string name="notice_direct_room_third_party_invite">%1$s convidou %2$s</string>
     <string name="notice_direct_room_update_by_you">Você fez o upgrade aqui.</string>
     <string name="notice_direct_room_update">%s fez o upgrade aqui.</string>
-    <string name="notice_made_future_direct_room_visibility_by_you">Você fez mensagens futuras visíveis para %1$s</string>
-    <string name="notice_made_future_direct_room_visibility">%1$s fez mensagens futuras visíveis para %2$s</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">Você tornou as mensagens futuras visíveis para %1$s</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s tornou as mensagens futuras visíveis para %2$s</string>
     <string name="notice_direct_room_leave_by_you">Você saiu da sala</string>
     <string name="notice_direct_room_leave">%1$s saiu da sala</string>
-    <string name="notice_direct_room_join_by_you">Você juntou-se</string>
-    <string name="notice_direct_room_join">%1$s juntou-se</string>
+    <string name="notice_direct_room_join_by_you">Você entrou</string>
+    <string name="notice_direct_room_join">%1$s entrou</string>
     <string name="notice_direct_room_created_by_you">Você criou a discussão</string>
     <string name="notice_direct_room_created">%1$s criou a discussão</string>
     <string name="room_displayname_empty_room_was">Sala vazia (era %s)</string>
@@ -408,7 +408,7 @@
     <string name="room_settings_read_history_entry_anyone">Qualquer pessoa</string>
     <string name="room_settings_read_history_entry_members_only_option_time_shared">Membros somente (desde o ponto no tempo de seleção desta opção)</string>
     <string name="room_settings_read_history_entry_members_only_invited">Membros somente (desde que eles foram convidados)</string>
-    <string name="room_settings_read_history_entry_members_only_joined">Membros somente (desde que eles se juntaram)</string>
+    <string name="room_settings_read_history_entry_members_only_joined">Membros somente (desde que eles entraram)</string>
     <string name="room_settings_banned_users_title">Usuárias(os) banidas(os)</string>
     <string name="room_settings_category_advanced_title">Avançadas</string>
     <string name="room_settings_room_internal_id">ID interno desta sala</string>
@@ -480,7 +480,7 @@
     <string name="settings_notification_ringtone">Som de notificação</string>
     <string name="settings_containing_my_display_name">Mnsgns contendo meu nome de exibição</string>
     <string name="settings_containing_my_user_name">Mnsgns contendo meu nome de usuária(o)</string>
-    <string name="settings_inline_url_preview">Previsualização de URL emlinha</string>
+    <string name="settings_inline_url_preview">Previsualização de URL inline</string>
     <string name="settings_12_24_timestamps">Mostrar timestamps em formato de 12 horas</string>
     <string name="settings_vibrate_on_mention">Vibrar ao mencionar um/uma usuário(a)</string>
     <string name="settings_analytics">Analítica</string>
@@ -1526,8 +1526,6 @@
     <string name="failed_to_access_secure_storage">Falha para acessar armazenamento seguro</string>
     <string name="unencrypted">Não-encripada</string>
     <string name="encrypted_unverified">Encriptada por um dispositivo não-verificado</string>
-    <string name="review_logins">Revisar onde você está com login feito</string>
-    <string name="verify_other_sessions">Verifique todas as suas sessões para assegurar que sua conta &amp; mensagens estão seguras</string>
     <string name="verify_this_session">Verifique o novo login acessando sua conta: %1$s</string>
     <string name="cross_signing_verify_by_text">Verificar Manualmente por Texto</string>
     <string name="crosssigning_verify_session">Verificar login</string>
@@ -1698,7 +1696,7 @@
     <string name="secure_backup_reset_all_no_other_devices">Somente faça isto se você não tem nenhum outro dispositivo com o qual você pode verificar este dispositivo.</string>
     <string name="secure_backup_reset_all">Resettar tudo</string>
     <string name="bad_passphrase_key_reset_all_action">Esqueceu ou perdeu todas as opções de recuperação\? Resette tudo</string>
-    <string name="direct_room_created_summary_item_by_you">Você juntou-se.</string>
+    <string name="direct_room_created_summary_item_by_you">Você entrou.</string>
     <string name="direct_room_encryption_enabled_tile_description">Mensagens neste chat são encriptadas ponta-a-ponta.</string>
     <string name="direct_room_profile_section_more_leave">Sair</string>
     <string name="direct_room_profile_section_more_settings">Configurações</string>
@@ -1722,7 +1720,7 @@
     <string name="action_reset">Resettar</string>
     <string name="direct_room_join_rules_invite">%1$s fez isto somente convite.</string>
     <string name="direct_room_join_rules_invite_by_you">Você fez isto somente convite.</string>
-    <string name="direct_room_created_summary_item">%s juntou-se.</string>
+    <string name="direct_room_created_summary_item">%s entrou.</string>
     <string name="search_banned_user_hint">Filtrar usuárias(os) banidas(os)</string>
     <string name="settings_troubleshoot_test_push_loop_title">Testar Push</string>
     <plurals name="notification_invitations">
@@ -1898,10 +1896,10 @@
     <string name="settings_category_room_directory">Diretório de salas</string>
     <string name="dialog_edit_hint">Novo valor</string>
     <string name="action_switch">Alterar</string>
-    <string name="initial_sync_start_downloading">Sinc inicial:
+    <string name="initial_sync_start_downloading">Sincronização inicial:
 \nFazendo download de dados…</string>
-    <string name="initial_sync_start_server_computing">Sinc inicial:
-\nEsperando por resposta de servidor…</string>
+    <string name="initial_sync_start_server_computing">Sincronização inicial:
+\nEsperando pela resposta do servidor…</string>
     <string name="a11y_trust_level_trusted">Nível de confiança confiado</string>
     <string name="a11y_trust_level_warning">Nível de confiança alerta</string>
     <string name="event_status_delete_all_failed_dialog_message">Você tem certeza que você quer deletar todas as mensagens não-enviadas nesta sala\?</string>
@@ -2009,8 +2007,8 @@
     <string name="space_add_child_title">Adicionar salas</string>
     <string name="space_explore_activity_title">Explorar salas</string>
     <plurals name="space_people_you_know">
-        <item quantity="one">%d pessoa que você conhece já tem se juntado</item>
-        <item quantity="other">%d pessoas que você conhece já têm se juntado</item>
+        <item quantity="one">%d pessoa que você conhece já entrou</item>
+        <item quantity="other">%d pessoas que você conhece já entraram</item>
     </plurals>
     <string name="join_space">Juntar-Se a Espaço</string>
     <string name="create_space">Criar espaço</string>
@@ -2272,7 +2270,6 @@
     <string name="end_poll_confirmation_approve_button">Terminar sondagem</string>
     <string name="end_poll_confirmation_description">Isto vai parar pessoas de serem capazes de votar e vai exibir os resultados finais da sondagem.</string>
     <string name="end_poll_confirmation_title">Terminar esta sondagem\?</string>
-    <string name="a11y_poll_winner_option">opção vencedora</string>
     <string name="poll_end_action">Terminar sondagem</string>
     <plurals name="poll_total_vote_count_after_ended">
         <item quantity="one">Resultado final baseado em %1$d voto</item>
@@ -2356,7 +2353,7 @@
     <string name="location_timeline_failed_to_load_map">Falha para carregar mapa</string>
     <string name="a11y_static_map_image">Mapa</string>
     <string name="labs_enable_thread_messages_desc">Nota: app vai ser recomeçado</string>
-    <string name="labs_enable_thread_messages">Habilitar Mensagens de Thread</string>
+    <string name="labs_enable_thread_messages">Habilitar mensagens com threads</string>
     <string name="ftue_auth_use_case_connect_to_server">Conectar a servidor</string>
     <string name="ftue_auth_use_case_join_existing_server">Procurando se juntar a um servidor existente\?</string>
     <string name="ftue_auth_use_case_skip_partial">Pular esta pergunta</string>
@@ -2470,7 +2467,7 @@
 \n%s
 \n
 \nNote que esta ação vai recomeçar o app e pode levar algum tempo.</string>
-    <string name="initial_sync_request_title">Requisição de sinc inicial</string>
+    <string name="initial_sync_request_title">Requisição de sincronização inicial</string>
     <string name="settings_show_latest_profile_description">Mostrar a info de perfil mais recente (avatar e nome de exibição) para todas as mensagens.</string>
     <string name="settings_show_latest_profile">Mostrar info de usuária(o) mais recente</string>
     <string name="a11y_presence_busy">Ocupada(o)</string>
@@ -2700,7 +2697,7 @@
     <string name="device_manager_session_last_activity">Última atividade %1$s</string>
     <string name="device_manager_device_title">Dispositivo</string>
     <string name="device_manager_session_title">Sessão</string>
-    <string name="device_manager_current_session_title">Sessão Atual</string>
+    <string name="device_manager_current_session_title">Sessão atual</string>
     <string name="device_manager_verification_status_detail_other_session_unverified">Verifique ou faça signout desta sessão para melhor segurança e fiabilidade.</string>
     <string name="device_manager_verification_status_detail_current_session_unverified">Verifique sua sessão atual para mensageria segura melhorada.</string>
     <string name="device_manager_verification_status_detail_other_session_verified">Esta sessão está pronta para mensageria segura.</string>
@@ -2713,9 +2710,6 @@
 \n
 \nIsto as/os provê com confiança que elas(es) são estão realmente falando com você, mas também significa que elas(es) veem o nome da sessão que você entrar aqui.</string>
     <string name="device_manager_learn_more_session_rename_title">Renomeando sessões</string>
-    <string name="device_manager_learn_more_sessions_verified">Sessões verificadas têm feito login com suas credenciais e então têm sido verificadas, ou usando sua frasepasse segura ou por verificação cruzada.
-\n
-\nIsto significa que elas mantêm chaves de encriptação para suas mensagens anteriores, e confirmam a outras(os) usuárias(os) com quem você está comunicando que estas sessões são realmente você.</string>
     <string name="device_manager_learn_more_sessions_verified_title">Sessões verificadas</string>
     <string name="device_manager_learn_more_sessions_unverified">Sessões não-verificadas são sessões que você tem feito login com suas credenciais mas não têm sido verificadas cruzado.
 \n
@@ -2813,8 +2807,8 @@
     <string name="qr_code_login_header_failed_e2ee_security_issue_description">Um problema de segurança foi encontrado ao configurar mensageria segura. Um dos seguintes pode ter sido comprometido: Seu servidorcasa; Sua(s) conexão(ões) de internet; Seu(s) dispositivo(s);</string>
     <string name="qr_code_login_header_failed_other_description">A requisição falhou.</string>
     <string name="labs_enable_voice_broadcast_summary">Seja capaz de gravar e enviar broadcast de voz em timeline de sala.</string>
-    <string name="labs_enable_voice_broadcast_title">Broadcast de voz (sob desenvolvimento ativo)</string>
-    <string name="a11y_voice_broadcast_buffering">Buffering</string>
+    <string name="labs_enable_voice_broadcast_title">Broadcast de voz</string>
+    <string name="voice_broadcast_buffering">Buffering…</string>
     <string name="a11y_pause_voice_broadcast">Pausar broadcast de voz</string>
     <string name="a11y_play_voice_broadcast">Tocar ou retomar broadcast de voz</string>
     <string name="a11y_stop_voice_broadcast_record">Parar gravação de broadcast de voz</string>
@@ -2833,8 +2827,8 @@
     <string name="action_deselect_all">Desselecionar todas(os)</string>
     <string name="action_select_all">Selecionar todas(os)</string>
     <plurals name="x_selected">
-        <item quantity="one">%1$d selecionada(o)</item>
-        <item quantity="other">%1$d selecionadas(os)</item>
+        <item quantity="one">%1$d selecionado(a)</item>
+        <item quantity="other">%1$d selecionados(as)</item>
     </plurals>
     <string name="error_voice_broadcast_blocked_by_someone_else_message">Alguma outra pessoa já está gravando um broadcast de voz. Espere que o broadcast de voz dela termine para começar um novo.</string>
     <string name="rich_text_editor_full_screen_toggle">Alternar modo de tela cheia</string>
@@ -2866,4 +2860,28 @@
     <string name="quoting">Citando</string>
     <string name="replying_to">Respondendo a %s</string>
     <string name="editing">Editando</string>
+    <string name="settings_enable_direct_share_summary">Mostrar chats recentes no menu de compartilhar do sistema</string>
+    <string name="settings_enable_direct_share_title">Habilitar compartilhar direto</string>
+    <string name="device_manager_learn_more_sessions_encryption_not_supported">Esta sessão não suporta encriptação, então ela não pode ser verificada.
+\n
+\nVocê não vai ser capaz de participar em salas onde encriptação está habilitada quando usando esta sessão.
+\n
+\nPara a melhor segurança e privacidade, é recomendado usar cliente Matrix que suportam encriptação.</string>
+    <string name="device_manager_signout_all_other_sessions">Fazer signout de todas as outras sessões</string>
+    <string name="device_manager_verification_status_detail_session_encryption_not_supported">Esta sessão não suporta encriptação e assim não pode ser verificada.</string>
+    <string name="review_unverified_sessions_description">Revise para assegurar que sua conta está segura</string>
+    <string name="review_unverified_sessions_title">Você tem sessões não-verificadas</string>
+    <string name="settings_nightly_build_update">Obtenha a build mais recente (note: você pode ter problema para fazer signin)</string>
+    <string name="settings_nightly_build">Build nightly</string>
+    <string name="voice_broadcast_live_broadcast">Broadcast ao vivo</string>
+    <string name="notice_voice_broadcast_ended_by_you">Você terminou um broadcast de voz.</string>
+    <string name="notice_voice_broadcast_ended">%1$s terminou um broadcast de voz.</string>
+    <string name="set_link_edit">Editar link</string>
+    <string name="set_link_create">Criar um link</string>
+    <string name="set_link_link">Link</string>
+    <string name="set_link_text">Texto</string>
+    <string name="rich_text_editor_link">Definir link</string>
+    <string name="stop_voice_broadcast_content">Tem certeza que você quer parar seu broadcast ao vivo\? Isto vai terminar o broadcast e a gravação completa vai estar disponível na sala.</string>
+    <string name="stop_voice_broadcast_dialog_title">Parar de fazer broadcasting ao vivo\?</string>
+    <string name="action_stop">Sim, Parar</string>
 </resources>

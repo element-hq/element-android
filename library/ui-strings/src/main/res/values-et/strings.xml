@@ -1078,7 +1078,7 @@
     <string name="unexpected_error">Ootamatu viga</string>
     <string name="keys_backup_setup_skip_title">Kas sa oled kindel\?</string>
     <string name="keys_backup_setup_skip_msg">Kui sa logid välja või kaotad seadme, siis sa ei saa enam lugeda oma krüptitud sõnumeid.</string>
-    <string name="keys_backup_restore_is_getting_backup_version">Laen varukoopia versiooni…</string>
+    <string name="keys_backup_restore_is_getting_backup_version">Laadin varukoopia versiooni…</string>
     <string name="keys_backup_restore_with_passphrase">Selleks, et krüptitud sõnumite ajalugu lukust lahti võtta, kasuta oma taastamiseks mõeldud paroolifraasi</string>
     <string name="keys_backup_restore_use_recovery_key">kasuta oma taastevõtit</string>
     <string name="keys_backup_restore_with_passphrase_helper_with_link">Kas sa ei tea oma taastamiseks mõeldud paroolifraasi\? Siis sa võid %s.</string>
@@ -1304,8 +1304,6 @@
     <string name="failed_to_access_secure_storage">Turvahoidla kasutamine ei õnnestu</string>
     <string name="unencrypted">Krüptimata</string>
     <string name="encrypted_unverified">Krüptitud verifitseerimata seadme poolt</string>
-    <string name="review_logins">Vaata üle, kust sa oled Matrix\'i võrku loginud</string>
-    <string name="verify_other_sessions">Selleks et sinu konto ja sõnumid oleks turvatud, verifitseeri kõik oma sessioonid</string>
     <string name="verify_this_session">Verifitseeri uus kasutajasessioon, mis pruugib sinu kontot: %1$s</string>
     <string name="cross_signing_verify_by_text">Verifitseeri käsitsi etteantud teksti abil</string>
     <string name="crosssigning_verify_session">Verifitseeri sisselogimissessioon</string>
@@ -1379,7 +1377,7 @@
     <string name="disclaimer_negative_button">Selge lugu</string>
     <string name="disclaimer_positive_button">Vaata lisateavet</string>
     <string name="save_recovery_key_chooser_hint">Salvesta taastevõti järgnevalt</string>
-    <string name="loading_contact_book">Laen sinu kontaktide loendit…</string>
+    <string name="loading_contact_book">Laadin sinu kontaktide loendit…</string>
     <string name="empty_contact_book">Sinu kontaktide loend on tühi</string>
     <string name="contacts_book_title">Sinu kontaktide loend</string>
     <string name="three_pid_revoke_invite_dialog_title">Tühista kutse</string>
@@ -2258,7 +2256,7 @@
     <string name="create_poll_options_title">Koosta valikud</string>
     <string name="create_poll_question_hint">Küsimus või teema</string>
     <string name="create_poll_question_title">Küsitluse küsimus või teema</string>
-    <string name="create_poll_title">Koosta üks küsitlus</string>
+    <string name="create_poll_title">Loo selline küsitlus</string>
     <string name="attachment_type_poll">Küsitlus</string>
     <string name="identity_server_consent_dialog_title_2">Saada e-posti aadressid ja telefoninumbrid %s serverisse</string>
     <string name="settings_discovery_consent_notice_off_2">Sinu kontaktid on vaid sinu teada. Kui tahad nende hulgast leida Matrix\'i kasutajaid, siis me vajame sinu luba nende andmete saatmiseks räsitud kujul isikutuvastusserverisse.</string>
@@ -2318,7 +2316,6 @@
     <string name="tooltip_attachment_file">Laadi fail üles</string>
     <string name="tooltip_attachment_gallery">Saada pilte ja videosid</string>
     <string name="tooltip_attachment_photo">Ava kaamera</string>
-    <string name="a11y_poll_winner_option">populaarsem valik</string>
     <string name="labs_auto_report_uisi_desc">Kui sõnumite dekrüptimisel tekib viga, siis rakendus saadab selle kohta automaatse teate arendajatele</string>
     <string name="labs_auto_report_uisi">Automaatselt teata dekrüptimise vigadest.</string>
     <string name="room_member_override_nick_color">Asenda kuvatava nime värvid</string>
@@ -2333,9 +2330,9 @@
     <string name="location_activity_title_preview">Asukoht</string>
     <string name="location_activity_title_static_sharing">Jaga asukohta</string>
     <string name="closed_poll_option_description">Tulemusi kuvame vaid siis, kui küsitlus on lõppenud</string>
-    <string name="closed_poll_option_title">Küsitlus on lõppenud</string>
+    <string name="closed_poll_option_title">Suletud valikutega küsitlus</string>
     <string name="open_poll_option_description">Osalejad näevad tulemusi peale oma valiku salvestamist</string>
-    <string name="open_poll_option_title">Ava küsitlus</string>
+    <string name="open_poll_option_title">Avatud valikutega küsitlus</string>
     <string name="poll_type_title">Küsitluse tüüp</string>
     <string name="edit_poll_title">Muuda küsitlust</string>
     <string name="poll_no_votes_cast">Hääletanuid ei ole</string>
@@ -2706,9 +2703,6 @@
 \n
 \nSee tähendab, et nad võivad uskuda, et tegemist on tõesti sinuga. Samal ajal näevad ka siin sisestatud sessiooninime.</string>
     <string name="device_manager_learn_more_session_rename_title">Sessioonide nimede muutmine</string>
-    <string name="device_manager_learn_more_sessions_verified">Verifitseeritud sessioonid on sellised, kuhu sa oled oma kasutajanime ja salasõnaga sisse loginud ning mille puhul oled risttunnustamise läbi teinud või paroolifraasi abil ta turvaliseks märkinud.
-\n
-\nSee tähendab, et nendes sessioonides on olemas sinu varasemate sõnumite krüptovõtmed ja teistele osapooltele on nad tuvastatavad nii, et tegemist on tõesti sinuga.</string>
     <string name="device_manager_learn_more_sessions_verified_title">Verifitseeritud sessioonid</string>
     <string name="device_manager_learn_more_sessions_unverified">Verifitseerimata sessioonid on sellised, kuhu sa oled oma kasutajanime ja salasõnaga sisse loginud, kuid mille puhul on risttunnustamine tegemata.
 \n
@@ -2797,7 +2791,7 @@
 \n
 \nJärgmistes vaadetes palun anna sellele rakendusele teavituste kuvamiseks vajalikud õigused.</string>
     <string name="labs_enable_voice_broadcast_summary">Võimalus salvestada ja postitada ringhäälingukõnesid jututoa ajajoonele.</string>
-    <string name="labs_enable_voice_broadcast_title">Võta kasutusele ringhäälingukõned (aktiivses arenduses)</string>
+    <string name="labs_enable_voice_broadcast_title">Võta kasutusele ringhäälingukõned</string>
     <string name="qr_code_login_header_failed_homeserver_is_not_supported_description">Koduserver ei toeta muude seadmete võrku logimise võimalust.</string>
     <string name="qr_code_login_header_failed_user_cancelled_description">Sisselogimine katkestati teises seadmes.</string>
     <string name="qr_code_login_header_failed_invalid_qr_code_description">See QR-kood on vigane.</string>
@@ -2805,7 +2799,7 @@
     <string name="qr_code_login_header_failed_other_device_already_signed_in_description">Teine seade on juba võrku loginud.</string>
     <string name="qr_code_login_header_failed_e2ee_security_issue_description">Turvalise sõnumivahetuse ülesseadmisel tekkis turvaviga. Üks kolmest võib olla sattunud vale osapoole kontrolli alla: sinu koduserver, sinu internetiühendus või sinu seade;</string>
     <string name="qr_code_login_header_failed_other_description">Päring ei õnnestunud.</string>
-    <string name="a11y_voice_broadcast_buffering">Andmed on puhverdamisel…</string>
+    <string name="voice_broadcast_buffering">Andmed on puhverdamisel…</string>
     <string name="a11y_play_voice_broadcast">Alusta või jätka ringhäälingukõne esitamist</string>
     <string name="a11y_stop_voice_broadcast_record">Lõpeta ringhäälingukõne salvestamine</string>
     <string name="a11y_pause_voice_broadcast_record">Peata ringhäälingukõne salvestamine</string>
@@ -2859,4 +2853,62 @@
     <string name="message_reply_to_sender_created_poll">koostas küsitluse.</string>
     <string name="settings_enable_direct_share_title">Kasuta otsejagamist</string>
     <string name="settings_enable_direct_share_summary">Näita viimaseid vestlusi süsteemses jagamisvaates</string>
+    <string name="review_unverified_sessions_description">Tagamaks, et su konto on sinu kontrolli all, vaata andmed üle</string>
+    <string name="review_unverified_sessions_title">Sul on verifitseerimata sessioone</string>
+    <string name="settings_nightly_build">Igaöine arendusversioon</string>
+    <string name="settings_nightly_build_update">Kasuta viimast arendusversiooni (aga võib tekkida erinevaid vigu, sealhulgas sisselogimisega)</string>
+    <string name="device_manager_verification_status_detail_session_encryption_not_supported">Seda sessiooni ei saa verifitseerida, sest seal puudub krüptimise tugi.</string>
+    <string name="device_manager_signout_all_other_sessions">Logi välja kõikidest oma muudest sessioonidest</string>
+    <string name="device_manager_learn_more_sessions_encryption_not_supported">Seda sessiooni ei saa verifitseerida, sest seal puudub krüptimise tugi.
+\n
+\nSelle sessiooniga ei saa sa osaleda krüptitud jututubades.
+\n
+\nParima turvalisuse ja privaatsuse nimel palun kasuta selliseid Matrix\'i kliente, mis toetavad krüptimist.</string>
+    <string name="voice_broadcast_live_broadcast">Ringhäälingukõne on eetris</string>
+    <string name="notice_voice_broadcast_ended_by_you">Sa lõpetasid ringhäälingukõne.</string>
+    <string name="notice_voice_broadcast_ended">%1$s lõpetas ringhäälingukõne.</string>
+    <string name="stop_voice_broadcast_content">Kas sa oled kindel, et soovid otseeetri lõpetada\? Sellega ringhäälingukõne salvestamine lõppeb ja salvestis on kättesaadav kõigile jututoas.</string>
+    <string name="stop_voice_broadcast_dialog_title">Kas lõpetame otseeetri\?</string>
+    <string name="action_stop">Jah, lõpetame</string>
+    <string name="rich_text_editor_link">Seadista linki</string>
+    <string name="set_link_text">Tekst</string>
+    <string name="set_link_link">Link</string>
+    <string name="set_link_create">Loo link</string>
+    <string name="set_link_edit">Muuda linki</string>
+    <string name="room_profile_section_more_polls">Küsitluste ajalugu</string>
+    <string name="room_polls_active">Käimasolevad küsitlused</string>
+    <string name="room_polls_active_no_item">Selles jututoas pole käimasolevaid küsitlusi</string>
+    <string name="room_polls_ended">Varasemad küsitlused</string>
+    <string name="room_polls_ended_no_item">Selles jututoas pole varasemaid küsitlusi</string>
+    <string name="rich_text_editor_numbered_list">Lülita nummerdatud loend sisse/välja</string>
+    <string name="rich_text_editor_bullet_list">Lülita täpploend sisse/välja</string>
+    <string name="settings_access_token">Pääsuluba</string>
+    <string name="settings_access_token_summary">Sinu pääsuluba annab täismahulise ligipääsu sinu kasutajakontole. Palun ära jaga seda teistega.</string>
+    <string name="message_reply_to_ended_poll_preview">Lõppenud küsitlus</string>
+    <string name="ended_poll_indicator">Küsitlus on lõppenud.</string>
+    <string name="message_reply_to_sender_ended_poll">lõpetas küsitluse.</string>
+    <string name="message_reply_to_poll_preview">Küsitlus</string>
+    <string name="thread_list_not_available">Sinu koduserver veel ei toeta jutulõngade loendit.</string>
+    <string name="started_a_voice_broadcast">Alustasime ringhäälingukõnega</string>
+    <string name="error_voice_broadcast_unable_to_play">Selle ringhäälingukõne esitamine ei õnnestu.</string>
+    <string name="unable_to_decrypt_some_events_in_poll">Krüptimisvigade tõttu jääb osa hääli lugemata</string>
+    <plurals name="room_polls_active_no_item_for_loaded_period">
+        <item quantity="one">Möödunud päevas polnud ühtegi toimumas olnud küsitlust.
+\nVarasemate päevade vaatamiseks laadi veel küsitlusi.</item>
+        <item quantity="other">Möödunud %1$d päeva jooksul polnud ühtegi toimumas olnud küsitlust.
+\nVarasemate päevade vaatamiseks laadi veel küsitlusi.</item>
+    </plurals>
+    <plurals name="room_polls_ended_no_item_for_loaded_period">
+        <item quantity="one">Möödunud päevas polnud ühtegi küsitlust.
+\nVarasemate päevade vaatamiseks laadi veel küsitlusi.</item>
+        <item quantity="other">Möödunud %1$d päeva jooksul polnud ühtegi küsitlust.
+\nVarasemate päevade vaatamiseks laadi veel küsitlusi.</item>
+    </plurals>
+    <string name="room_polls_wait_for_display">Küsitluste kuvamise ootel</string>
+    <string name="room_polls_load_more">Laadi veel küsitlusi</string>
+    <string name="room_polls_loading_error">Viga küsitluste laadimisel.</string>
+    <string name="error_voice_message_broadcast_in_progress">Häälsõnumi esitamine ei õnnestu</string>
+    <string name="error_voice_message_broadcast_in_progress_message">Kuna sa hetkel salvestad ringhäälingukõnet, siis häälsõnumi salvestamine või esitamine ei õnnestu. Selleks palun lõpeta ringhäälingukõne</string>
+    <string name="error_voice_broadcast_no_connection_recording">Viga võrguühenduses - salvestamine on peatatud</string>
+    <string name="rich_text_editor_inline_code">Kasuta lõimitud koodi vormingut</string>
 </resources>

@@ -176,7 +176,7 @@ android {
 
 //        applicationVariants.all { variant ->
 //            // assign different version code for each output
-//            def baseVariantVersion = variant.versionCode * 1
+//            def baseVariantVersion = variant.versionCode * 10
 //            variant.outputs.each { output ->
 //                def baseAbiVersionCode = project.ext.abiVersionCodes.get(output.getFilter(OutputFile.ABI))
 //                // Known limitation: it does not modify the value in the BuildConfig.java generated file
@@ -246,7 +246,7 @@ android {
                 optimizeCode true
                 proguardFiles 'proguard-rules.pro'
             }
-             signingConfig signingConfigs.release
+            signingConfig signingConfigs.release
         }
 
         nightly {
@@ -297,9 +297,9 @@ android {
                 tasks.matching { it.name.contains("GoogleServices") && !it.name.contains("Gplay") }*.enabled = false
             }
 
-            versionName "1.2.6"
             dimension "store"
             isDefault = true
+            versionName "${versionMajor}.${versionMinor}.${versionPatch}${getGplayVersionSuffix()}"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"G\""
             buildConfigField "String", "FLAVOR_DESCRIPTION", "\"GooglePlay\""
         }
@@ -350,10 +350,6 @@ dependencies {
     implementation libs.dagger.hilt
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation "androidx.sharetarget:sharetarget:1.2.0"
-    //noinspection GradleDynamicVersion
-    implementation 'com.amplitude:android-sdk:3.35.1'
-    implementation 'com.giphy.sdk:ui:2.3.0'
-    implementation 'org.brotli:dec:0.1.2'
 
     // Flipper, debug builds only
     debugImplementation(libs.flipper.flipper) {
@@ -367,7 +363,7 @@ dependencies {
 
     gplayImplementation "com.google.android.gms:play-services-location:21.0.1"
     // UnifiedPush gplay flavor only
-    gplayImplementation('com.google.firebase:firebase-messaging:23.1.1') {
+    gplayImplementation('com.google.firebase:firebase-messaging:23.1.0') {
         exclude group: 'com.google.firebase', module: 'firebase-core'
         exclude group: 'com.google.firebase', module: 'firebase-analytics'
         exclude group: 'com.google.firebase', module: 'firebase-measurement-connector'
@@ -409,3 +405,4 @@ dependencies {
     debugImplementation libs.androidx.fragmentTesting
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.10'
 }
+

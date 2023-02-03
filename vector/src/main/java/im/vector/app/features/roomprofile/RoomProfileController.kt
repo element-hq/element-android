@@ -18,6 +18,7 @@
 package im.vector.app.features.roomprofile
 
 import com.airbnb.epoxy.TypedEpoxyController
+import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.epoxy.expandableTextItem
 import im.vector.app.core.epoxy.profiles.buildProfileAction
@@ -56,6 +57,7 @@ class RoomProfileController @Inject constructor(
         fun onMemberListClicked()
         fun onBannedMemberListClicked()
         fun onNotificationsClicked()
+        fun onPollHistoryClicked()
         fun onUploadsClicked()
         fun createShortcut()
         fun onSettingsClicked()
@@ -261,6 +263,15 @@ class RoomProfileController @Inject constructor(
                     title = stringProvider.getString(R.string.room_settings_banned_users_title),
                     icon = R.drawable.ic_settings_root_labs,
                     action = { callback?.onBannedMemberListClicked() }
+            )
+        }
+        if (BuildConfig.DEBUG) {
+            // WIP, will be in release when related screens will be finished
+            buildProfileAction(
+                    id = "poll_history",
+                    title = stringProvider.getString(R.string.room_profile_section_more_polls),
+                    icon = R.drawable.ic_attachment_poll,
+                    action = { callback?.onPollHistoryClicked() }
             )
         }
         buildProfileAction(

@@ -1361,8 +1361,6 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="failed_to_access_secure_storage">A biztonsági tárolóhoz nem sikerült hozzáférni</string>
     <string name="unencrypted">Titkosítatlan</string>
     <string name="encrypted_unverified">Ellenőrizetlen eszközzel titkosította</string>
-    <string name="review_logins">Tekintsd át hol vagy bejelentkezve</string>
-    <string name="verify_other_sessions">Ellenőrizd minden munkamenetedet, hogy a fiókod és az üzeneteid biztonságban legyenek</string>
     <string name="verify_this_session">Ellenőrizd ezt az új bejelentkezést ami hozzáfér a fiókodhoz: %1$s</string>
     <string name="cross_signing_verify_by_text">Manuális szöveges ellenőrzés</string>
     <string name="crosssigning_verify_session">Belépés ellenőrzése</string>
@@ -2308,7 +2306,6 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 \n
 \nElolvashatod a feltételeinket %s.</string>
     <string name="analytics_opt_in_title">Segíts az ${app_name}-et jobbá tenni</string>
-    <string name="a11y_poll_winner_option">nyerő válasz</string>
     <string name="preference_root_legals">Jogi dolgok</string>
     <string name="restart_the_application_to_apply_changes">A változások életbelépéséhez indítsd újra az alkalmazást.</string>
     <string name="labs_enable_latex_maths">LaTeX matematikai szintaxis engedélyezése</string>
@@ -2702,7 +2699,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="device_manager_session_title">Munkamenet</string>
     <string name="device_manager_current_session_title">Jelenlegi munkamenet</string>
     <string name="device_manager_verification_status_detail_other_session_unverified">A jobb biztonság vagy megbízhatóság érdekében ellenőrizze vagy jelentkezzen ki ebből a munkamenetből.</string>
-    <string name="device_manager_verification_status_detail_current_session_unverified">Az aktuális munkamenet készen áll a biztonságos üzenetküldésre.</string>
+    <string name="device_manager_verification_status_detail_current_session_unverified">Ellenőrizd az aktuális munkamenetet a biztonságos üzenetküldéshez.</string>
     <string name="device_manager_verification_status_detail_other_session_verified">Ez a munkamenet beállítva a biztonságos üzenetküldéshez.</string>
     <string name="device_manager_verification_status_detail_current_session_verified">Az aktuális munkamenet készen áll a biztonságos üzenetküldésre.</string>
     <string name="labs_enable_deferred_dm_summary">Közvetlen beszélgetés indítása csak az első üzenettel</string>
@@ -2712,9 +2709,6 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="device_manager_learn_more_session_rename">Más felhasználók akikkel közvetlenül vagy szobában beszélgetsz látják a teljes listát a munkameneteidről.
 \n
 \nEzzel ők biztosak lehetnek abban, hogy ténylegesen veled beszélgetnek. Ez azt is jelenti, hogy látják a munkamenet nevét amit itt megadsz.</string>
-    <string name="device_manager_learn_more_sessions_verified">Ellenőrzött munkamenetbe a neveddel és jelszavaddal léptek be és ellenőrizve lett vagy a biztonsági jelmondattal vagy másik munkamenetből.
-\n
-\nEz azt jelenti, hogy tartalmazzák a titkosítási kulcsokat az régi üzenetekhez, és biztosítja a többieket a kommunikációban, hogy ezt a munkamenetet tényleg te használod.</string>
     <string name="rich_text_editor_format_underline">Aláhúzott</string>
     <string name="rich_text_editor_format_strikethrough">Áthúzott</string>
     <string name="rich_text_editor_format_italic">Dőlt</string>
@@ -2813,8 +2807,8 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="qr_code_login_header_failed_e2ee_security_issue_description">Biztonsági probléma lépett fel a biztonságos üzenetküldés beállításánál. Valamihez illetéktelenül fértek hozzá: Matrix szervered, Internet kapcsolatod, Eszközöd,</string>
     <string name="qr_code_login_header_failed_other_description">A kérés sikertelen.</string>
     <string name="labs_enable_voice_broadcast_summary">Hang közvetítés felvételéhez és a szoba idővonalára küldéséhez.</string>
-    <string name="labs_enable_voice_broadcast_title">Hang közvetítés engedélyezése (aktív fejlesztés alatt)</string>
-    <string name="a11y_voice_broadcast_buffering">Pufferelés</string>
+    <string name="labs_enable_voice_broadcast_title">Hang közvetítés engedélyezése</string>
+    <string name="voice_broadcast_buffering">Pufferelés…</string>
     <string name="a11y_pause_voice_broadcast">Hang közvetítés szüneteltetése</string>
     <string name="a11y_play_voice_broadcast">Hang közvetítés lejátszása vagy lejátszás folytatása</string>
     <string name="a11y_stop_voice_broadcast_record">Hang közvetítés felvétel leállítása</string>
@@ -2866,4 +2860,64 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="quoting">Idézet</string>
     <string name="replying_to">Válasz erre: %s</string>
     <string name="editing">Szerkesztés</string>
+    <string name="review_unverified_sessions_description">Tekintsd át, hogy meggyőződj arról, hogy a fiókod biztonságban van</string>
+    <string name="review_unverified_sessions_title">Ellenőrizetlen bejelentkezéseid vannak</string>
+    <string name="settings_enable_direct_share_summary">Friss beszélgetések megjelenítése a rendszer megosztó menüjében</string>
+    <string name="settings_enable_direct_share_title">Közvetlen megosztás engedélyezése</string>
+    <string name="settings_nightly_build_update">Szerezd be a napi összeállítást (megjegyzés: lehet, hogy problémáid lesznek a bejelentkezéssel)</string>
+    <string name="settings_nightly_build">Napi összeállítás</string>
+    <string name="device_manager_learn_more_sessions_encryption_not_supported">Ez a munkamenet nem támogatja a titkosítást, így nem lehet ellenőrizni sem.
+\n
+\nEzzel a munkamenettel nem tudsz részt venni olyan szobákban ahol a titkosítás be van kapcsolva.
+\n
+\nA biztonság és a adatbiztonsági okokból javasolt olyan Matrix kliens használata ami támogatja a titkosítást.</string>
+    <string name="device_manager_signout_all_other_sessions">Kijelentkezés minden más munkamenetből</string>
+    <string name="device_manager_verification_status_detail_session_encryption_not_supported">Ez a munkamenet nem támogatja a titkosítást, így nem lehet ellenőrizni sem.</string>
+    <string name="voice_broadcast_live_broadcast">Élő közvetítés</string>
+    <string name="notice_voice_broadcast_ended_by_you">A hang közvetítést befejezted.</string>
+    <string name="notice_voice_broadcast_ended">%1$s befejezte a hang közvetítést.</string>
+    <string name="stop_voice_broadcast_content">Biztos, hogy befejezed az élő közvetítést\? Ez befejezi a közvetítést és a felvétel az egész szoba számára elérhető lesz.</string>
+    <string name="stop_voice_broadcast_dialog_title">Megszakítod az élő közvetítést\?</string>
+    <string name="action_stop">Igen, befejez</string>
+    <string name="set_link_edit">Hivatkozás szerkesztése</string>
+    <string name="set_link_create">Hivatkozás készítése</string>
+    <string name="set_link_link">Hivatkozás</string>
+    <string name="set_link_text">Szöveg</string>
+    <string name="rich_text_editor_link">Hivatkozás beállítása</string>
+    <string name="settings_access_token_summary">A hozzáférési kulcs teljes elérést biztosít a fiókhoz. Soha ne ossza meg mással.</string>
+    <string name="settings_access_token">Elérési kulcs</string>
+    <string name="rich_text_editor_bullet_list">Lista ki-,bekapcsolása</string>
+    <string name="rich_text_editor_numbered_list">Számozott lista ki-,bekapcsolása</string>
+    <string name="room_polls_ended_no_item">Nincsenek régi szavazások ebben a szobában</string>
+    <string name="room_polls_ended">Régi szavazások</string>
+    <string name="room_polls_active_no_item">Nincsenek aktív szavazások ebben a szobában</string>
+    <string name="room_polls_active">Aktív szavazások</string>
+    <string name="room_profile_section_more_polls">Szavazás alakulása</string>
+    <string name="message_reply_to_ended_poll_preview">Lezárt szavazások</string>
+    <string name="message_reply_to_poll_preview">Szavazás</string>
+    <string name="message_reply_to_sender_ended_poll">befejezte a szavazást.</string>
+    <string name="ended_poll_indicator">Szavazás vége.</string>
+    <string name="thread_list_not_available">A matrix szerver nem támogatja az üzenetszálak listázását.</string>
+    <string name="error_voice_broadcast_unable_to_play">A hang közvetítés nem játszható le.</string>
+    <string name="started_a_voice_broadcast">Hang közvetítés indítva</string>
+    <string name="unable_to_decrypt_some_events_in_poll">Visszafejtési hibák miatt néhány szavazat nem kerül beszámításra</string>
+    <string name="room_polls_loading_error">Szavazás betöltési hiba.</string>
+    <string name="room_polls_load_more">Még több szavazás betöltése</string>
+    <string name="room_polls_wait_for_display">Szavazások megjelenítése</string>
+    <plurals name="room_polls_ended_no_item_for_loaded_period">
+        <item quantity="one">Egy napja nincs aktív szavazás.
+\nTovábbi szavazások betöltése a régi szavazások megjelenítéséhez.</item>
+        <item quantity="other">%1$d napja nincs aktív szavazás.
+\nTovábbi szavazások betöltése a régi szavazások megjelenítéséhez.</item>
+    </plurals>
+    <plurals name="room_polls_active_no_item_for_loaded_period">
+        <item quantity="one">Egy napja nincs aktív szavazás.
+\nTovábbi szavazások betöltése a régi szavazások megjelenítéséhez.</item>
+        <item quantity="other">%1$d napja nincs aktív szavazás.
+\nTovábbi szavazások betöltése a régi szavazások megjelenítéséhez.</item>
+    </plurals>
+    <string name="error_voice_message_broadcast_in_progress_message">Nem lehet hang üzenetet indítani élő közvetítés felvétele közben. Az élő közvetítés bejezése szükséges a hang üzenet indításához</string>
+    <string name="error_voice_message_broadcast_in_progress">Hang üzenetet nem lehet elindítani</string>
+    <string name="error_voice_broadcast_no_connection_recording">Kapcsolódási hiba – Felvétel szüneteltetve</string>
+    <string name="rich_text_editor_inline_code">Beágyazott kód formátum alkalmazása</string>
 </resources>

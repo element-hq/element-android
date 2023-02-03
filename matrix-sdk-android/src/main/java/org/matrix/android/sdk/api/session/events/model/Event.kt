@@ -126,8 +126,37 @@ data class Event(
     /**
      * Copy all fields, including transient fields.
      */
-    fun copyAll(): Event {
-        return copy().also {
+
+    fun copyAll(
+            type: String? = this.type,
+            eventId: String? = this.eventId,
+            content: Content? = this.content,
+            prevContent: Content? = this.prevContent,
+            originServerTs: Long? = this.originServerTs,
+            senderId: String? = this.senderId,
+            stateKey: String? = this.stateKey,
+            roomId: String? = this.roomId,
+            unsignedData: UnsignedData? = this.unsignedData,
+            redacts: String? = this.redacts,
+            mxDecryptionResult: OlmDecryptionResult? = this.mxDecryptionResult,
+            mCryptoError: MXCryptoError.ErrorType? = this.mCryptoError,
+            mCryptoErrorReason: String? = this.mCryptoErrorReason,
+            sendState: SendState = this.sendState,
+            ageLocalTs: Long? = this.ageLocalTs,
+            threadDetails: ThreadDetails? = this.threadDetails,
+    ): Event {
+        return copy(
+                type = type,
+                eventId = eventId,
+                content = content,
+                prevContent = prevContent,
+                originServerTs = originServerTs,
+                senderId = senderId,
+                stateKey = stateKey,
+                roomId = roomId,
+                unsignedData = unsignedData,
+                redacts = redacts
+        ).also {
             it.mxDecryptionResult = mxDecryptionResult
             it.mCryptoError = mCryptoError
             it.mCryptoErrorReason = mCryptoErrorReason
@@ -219,7 +248,7 @@ data class Event(
         if (isRedacted()) return "Message removed"
         val text = getDecryptedValue() ?: run {
             if (isPoll()) {
-                return getPollQuestion() ?: "created a poll."
+                return getTextSummaryForPoll()
             }
             return null
         }
@@ -232,10 +261,20 @@ data class Event(
             isImageMessage() -> "sent an image."
             isVideoMessage() -> "sent a video."
             isSticker() -> "sent a sticker."
-            isPoll() -> getPollQuestion() ?: "created a poll."
+            isPoll() -> getTextSummaryForPoll()
             isLiveLocation() -> "Live location."
             isLocationMessage() -> "has shared their location."
             else -> text
+        }
+    }
+
+    private fun getTextSummaryForPoll(): String? {
+        val pollQuestion = getPollQuestion()
+        return when {
+            pollQuestion != null -> pollQuestion
+            isPollStart() -> "created a poll."
+            isPollEnd() -> "ended a poll."
+            else -> null
         }
     }
 
@@ -429,7 +468,7 @@ fun Event.isReplyRenderedInThread(): Boolean {
     return isReply() && getRelationContent()?.shouldRenderInThread() == true
 }
 
-fun Event.isThread(): Boolean = getRelationContentForType(RelationType.THREAD)?.eventId != null
+fun Event.isThread(): Boolean = getRootThreadEventId() != null
 
 fun Event.getRootThreadEventId(): String? = getRelationContentForType(RelationType.THREAD)?.eventId
 

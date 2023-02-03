@@ -59,7 +59,7 @@ internal class EventDecryptor @Inject constructor(
         private val sendToDeviceTask: SendToDeviceTask,
         private val deviceListManager: DeviceListManager,
         private val ensureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction,
-        private val cryptoStore: IMXCryptoStore
+        private val cryptoStore: IMXCryptoStore,
 ) {
 
     /**

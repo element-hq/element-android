@@ -40,8 +40,8 @@ class SyncStateView @JvmOverloads constructor(context: Context, attrs: Attribute
 
     @SuppressLint("SetTextI18n")
     fun render(
-            newState: SyncState,
-            incrementalSyncRequestState: SyncRequestState.IncrementalSyncRequestState,
+            newState: SyncState?,
+            incrementalSyncRequestState: SyncRequestState.IncrementalSyncRequestState?,
             pushCounter: Int,
             showDebugInfo: Boolean
     ) {
@@ -64,8 +64,9 @@ class SyncStateView @JvmOverloads constructor(context: Context, attrs: Attribute
         }
     }
 
-    private fun SyncState.toHumanReadable(): String {
+    private fun SyncState?.toHumanReadable(): String {
         return when (this) {
+            null -> "Unknown"
             SyncState.Idle -> "Idle"
             SyncState.InvalidToken -> "InvalidToken"
             SyncState.Killed -> "Killed"
@@ -76,8 +77,9 @@ class SyncStateView @JvmOverloads constructor(context: Context, attrs: Attribute
         }
     }
 
-    private fun SyncRequestState.IncrementalSyncRequestState.toHumanReadable(): String {
+    private fun SyncRequestState.IncrementalSyncRequestState?.toHumanReadable(): String {
         return when (this) {
+            null -> "Unknown"
             SyncRequestState.IncrementalSyncIdle -> "Idle"
             is SyncRequestState.IncrementalSyncParsing -> "Parsing ${this.rooms} room(s) ${this.toDevice} toDevice(s)"
             SyncRequestState.IncrementalSyncError -> "Error"

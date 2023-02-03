@@ -25,17 +25,15 @@ buildscript {
         classpath libs.gradle.kotlinPlugin
         classpath libs.gradle.hiltPlugin
         classpath 'com.google.firebase:firebase-appdistribution-gradle:3.1.1'
-        classpath 'com.google.gms:google-services:4.3.14'
+        classpath 'com.google.gms:google-services:4.3.15'
         classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.5.0.2730'
         classpath 'com.google.android.gms:oss-licenses-plugin:0.10.5'
-        classpath "com.likethesalad.android:stem-plugin:2.2.3"
-        classpath 'org.owasp:dependency-check-gradle:7.4.1'
+        classpath "com.likethesalad.android:stem-plugin:2.3.0"
+        classpath 'org.owasp:dependency-check-gradle:8.0.1'
         classpath "org.jetbrains.dokka:dokka-gradle-plugin:1.7.20"
         classpath "org.jetbrains.kotlinx:kotlinx-knit:0.4.0"
         classpath 'com.jakewharton:butterknife-gradle-plugin:10.2.3'
         classpath libs.squareup.paparazziPlugin
-        //noinspection GradlePluginVersion
-        classpath 'com.android.tools.build:gradle:2.3.0'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -43,14 +41,14 @@ buildscript {
 
 plugins {
     // ktlint Plugin
-    id "org.jlleitschuh.gradle.ktlint" version "11.0.0"
+    id "org.jlleitschuh.gradle.ktlint" version "11.1.0"
     // Detekt
     id "io.gitlab.arturbosch.detekt" version "1.22.0"
     // Ksp
-    id "com.google.devtools.ksp" version "1.7.22-1.0.8"
-    id 'com.autonomousapps.dependency-analysis' version "1.17.0"
+    id "com.google.devtools.ksp" version "1.8.0-1.0.8"
 
     // Dependency Analysis
+    id 'com.autonomousapps.dependency-analysis' version "1.17.0"
     // Gradle doctor
     id "com.osacky.doctor" version "0.8.1"
 }

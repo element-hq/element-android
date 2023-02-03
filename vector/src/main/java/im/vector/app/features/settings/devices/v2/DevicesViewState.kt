@@ -23,9 +23,13 @@ import im.vector.app.features.settings.devices.v2.verification.CurrentSessionCro
 
 data class DevicesViewState(
         val currentSessionCrossSigningInfo: CurrentSessionCrossSigningInfo = CurrentSessionCrossSigningInfo(),
-        val devices: Async<List<DeviceFullInfo>> = Uninitialized,
-        val unverifiedSessionsCount: Int = 0,
-        val inactiveSessionsCount: Int = 0,
+        val devices: Async<DeviceFullInfoList> = Uninitialized,
         val isLoading: Boolean = false,
         val isShowingIpAddress: Boolean = false,
 ) : MavericksState
+
+data class DeviceFullInfoList(
+        val allSessions: List<DeviceFullInfo>,
+        val unverifiedSessionsCount: Int,
+        val inactiveSessionsCount: Int,
+)

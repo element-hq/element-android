@@ -3,10 +3,10 @@
     <string name="notice_room_invite_no_invitee">приглашение %s</string>
     <string name="notice_room_invite">%1$s пригласил(а) %2$s</string>
     <string name="notice_room_invite_you">%1$s пригласил(а) вас</string>
-    <string name="notice_room_join">%1$s вошёл(ла) в чат</string>
+    <string name="notice_room_join">%1$s вошёл(шла) в чат</string>
     <string name="notice_room_leave">%1$s покинул(а) чат</string>
     <string name="notice_room_reject">%1$s отклонил(а) приглашение</string>
-    <string name="notice_room_remove">%1$s выгнан %2$s</string>
+    <string name="notice_room_remove">%1$s выгнал %2$s</string>
     <string name="notice_room_unban">%1$s разблокировал(а) %2$s</string>
     <string name="notice_room_ban">%1$s заблокировал(а) %2$s</string>
     <string name="notice_room_withdraw">%1$s отозвал(а) приглашение %2$s</string>
@@ -284,7 +284,7 @@
     <string name="action_rename">Переименовать</string>
     <string name="report_content">Пожаловаться</string>
     <string name="or">или</string>
-    <string name="action_invite">Приглашение</string>
+    <string name="action_invite">Пригласить</string>
     <string name="action_sign_out">Выйти из учётной записи</string>
     <string name="action_voice_call">Голосовой вызов</string>
     <string name="action_video_call">Видео вызов</string>
@@ -398,8 +398,8 @@
     <string name="settings_add_phone_number">Добавить телефон</string>
     <string name="settings_app_info_link_summary">Системные настройки приложения.</string>
     <string name="settings_app_info_link_title">Сведения о приложении</string>
-    <string name="settings_enable_all_notif">Включить уведомления для этой учетной записи</string>
-    <string name="settings_enable_this_device">Включить уведомления для этой сессии</string>
+    <string name="settings_enable_all_notif">Уведомления для этой учётной записи</string>
+    <string name="settings_enable_this_device">Уведомления для этого сеанса</string>
     <string name="settings_messages_in_one_to_one">В персональных чатах</string>
     <string name="settings_messages_in_group_chat">В групповых чатах</string>
     <string name="settings_invited_to_room">Когда меня приглашают в комнату</string>

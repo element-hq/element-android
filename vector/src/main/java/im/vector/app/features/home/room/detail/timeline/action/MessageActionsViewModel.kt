@@ -216,8 +216,11 @@ class MessageActionsViewModel @AssistedInject constructor(
                         noticeEventFormatter.format(timelineEvent, room?.roomSummary()?.isDirect.orFalse())
                     }
                     in EventType.POLL_START.values -> {
-                        timelineEvent.root.getClearContent().toModel<MessagePollContent>(catchError = true)
-                                ?.getBestPollCreationInfo()?.question?.getBestQuestion() ?: ""
+                        (timelineEvent.getVectorLastMessageContent() as? MessagePollContent)?.getBestPollCreationInfo()?.question?.getBestQuestion()
+                                ?: stringProvider.getString(R.string.message_reply_to_poll_preview)
+                    }
+                    in EventType.POLL_END.values -> {
+                        stringProvider.getString(R.string.message_reply_to_ended_poll_preview)
                     }
                     else -> null
                 }
@@ -498,6 +501,7 @@ class MessageActionsViewModel @AssistedInject constructor(
             MessageType.MSGTYPE_AUDIO,
             MessageType.MSGTYPE_FILE,
             MessageType.MSGTYPE_POLL_START,
+            MessageType.MSGTYPE_POLL_END,
             MessageType.MSGTYPE_STICKER_LOCAL -> event.root.threadDetails?.isRootThread ?: false
             else -> false
         }
@@ -529,8 +533,8 @@ class MessageActionsViewModel @AssistedInject constructor(
     }
 
     private fun canViewReactions(event: TimelineEvent): Boolean {
-        // Only event of type EventType.MESSAGE, EventType.STICKER and EventType.POLL_START are supported for the moment
-        if (event.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER) + EventType.POLL_START.values) return false
+        // Only event of type EventType.MESSAGE, EventType.STICKER, EventType.POLL_START, EventType.POLL_END are supported for the moment
+        if (event.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER) + EventType.POLL_START.values + EventType.POLL_END.values) return false
         return event.annotations?.reactionsSummary?.isNotEmpty() ?: false
     }
 

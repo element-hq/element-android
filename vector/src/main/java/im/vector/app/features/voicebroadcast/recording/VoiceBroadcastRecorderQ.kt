@@ -29,10 +29,14 @@ import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.usecase.GetVoiceBroadcastStateEventLiveUseCase
 import im.vector.lib.core.utils.timer.CountUpTimer
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
+import org.matrix.android.sdk.api.session.sync.SyncState
+import org.matrix.android.sdk.flow.flow
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.TimeUnit
 
@@ -47,6 +51,7 @@ class VoiceBroadcastRecorderQ(
     private val sessionScope get() = session.coroutineScope
 
     private var voiceBroadcastStateObserver: Job? = null
+    private var syncStateObserver: Job? = null
 
     private var maxFileSize = 0L // zero or negative for no limit
     private var currentVoiceBroadcast: VoiceBroadcast? = null
@@ -96,21 +101,36 @@ class VoiceBroadcastRecorderQ(
         observeVoiceBroadcastStateEvent(voiceBroadcast)
     }
 
-    override fun pauseRecord() {
+    override fun startRecord(roomId: String) {
+        super.startRecord(roomId)
+        observeConnectionState()
+    }
+
+    override fun pauseOnError() {
         if (recordingState != VoiceBroadcastRecorder.State.Recording) return
-        tryOrNull { mediaRecorder?.stop() }
-        mediaRecorder?.reset()
+
+        pauseRecorder()
+        stopObservingConnectionState()
+        recordingState = VoiceBroadcastRecorder.State.Error
+    }
+
+    override fun pauseRecord() {
+        if (recordingState !in arrayOf(VoiceBroadcastRecorder.State.Recording, VoiceBroadcastRecorder.State.Error)) return
+
+        pauseRecorder()
+        stopObservingConnectionState()
         recordingState = VoiceBroadcastRecorder.State.Paused
-        recordingTicker.pause()
         notifyOutputFileCreated()
     }
 
     override fun resumeRecord() {
         if (recordingState != VoiceBroadcastRecorder.State.Paused) return
+
         currentSequence++
         currentVoiceBroadcast?.let { startRecord(it.roomId) }
         recordingState = VoiceBroadcastRecorder.State.Recording
         recordingTicker.resume()
+        observeConnectionState()
     }
 
     override fun stopRecord() {
@@ -127,6 +147,8 @@ class VoiceBroadcastRecorderQ(
         // Do not observe anymore voice broadcast changes
         voiceBroadcastStateObserver?.cancel()
         voiceBroadcastStateObserver = null
+
+        stopObservingConnectionState()
 
         // Reset data
         currentSequence = 0
@@ -197,6 +219,27 @@ class VoiceBroadcastRecorderQ(
         }
     }
 
+    private fun pauseRecorder() {
+        if (recordingState != VoiceBroadcastRecorder.State.Recording) return
+
+        tryOrNull { mediaRecorder?.stop() }
+        mediaRecorder?.reset()
+        recordingTicker.pause()
+    }
+
+    private fun observeConnectionState() {
+        syncStateObserver = session.flow().liveSyncState()
+                .distinctUntilChanged()
+                .filter { it is SyncState.NoNetwork }
+                .onEach { pauseOnError() }
+                .launchIn(sessionScope)
+    }
+
+    private fun stopObservingConnectionState() {
+        syncStateObserver?.cancel()
+        syncStateObserver = null
+    }
+
     private inner class RecordingTicker(
             private var recordingTicker: CountUpTimer? = null,
     ) {
@@ -205,30 +248,20 @@ class VoiceBroadcastRecorderQ(
             recordingTicker = CountUpTimer().apply {
                 tickListener = CountUpTimer.TickListener { onTick(elapsedTime()) }
                 resume()
-                onTick(elapsedTime())
             }
         }
 
         fun pause() {
-            recordingTicker?.apply {
-                pause()
-                onTick(elapsedTime())
-            }
+            recordingTicker?.pause()
         }
 
         fun resume() {
-            recordingTicker?.apply {
-                resume()
-                onTick(elapsedTime())
-            }
+            recordingTicker?.resume()
         }
 
         fun stop() {
-            recordingTicker?.apply {
-                stop()
-                onTick(elapsedTime())
-                recordingTicker = null
-            }
+            recordingTicker?.stop()
+            recordingTicker = null
         }
 
         private fun onTick(elapsedTimeMillis: Long) {

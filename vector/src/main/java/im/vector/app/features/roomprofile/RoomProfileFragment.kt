@@ -207,6 +207,7 @@ class RoomProfileFragment :
     }
 
     override fun onDestroyView() {
+        roomProfileController.callback = null
         views.matrixProfileAppBarLayout.removeOnOffsetChangedListener(appBarStateChangeListener)
         views.matrixProfileRecyclerView.cleanup()
         appBarStateChangeListener = null
@@ -267,6 +268,10 @@ class RoomProfileFragment :
 
     override fun onNotificationsClicked() {
         roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomNotificationSettings)
+    }
+
+    override fun onPollHistoryClicked() {
+        roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomPolls)
     }
 
     override fun onUploadsClicked() {

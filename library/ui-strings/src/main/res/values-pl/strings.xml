@@ -39,7 +39,7 @@
     <string name="notice_room_third_party_invite">%1$s wysłał(a) zaproszenie do %2$s aby dołączył(a) do tego pokoju</string>
     <string name="notice_room_third_party_registered_invite">%1$s zaakceptował(a) zaproszenie dla %2$s</string>
     <string name="notice_crypto_error_unknown_inbound_session_id">Urządzenie nadawcy nie wysłało nam kluczy do tej wiadomości.</string>
-    <string name="notice_room_update">%s zakutalizował(a) ten pokój.</string>
+    <string name="notice_room_update">%s zaktualizował(a) ten pokój.</string>
     <string name="initial_sync_start_importing_account">Wstępna synchronizacja:
 \nImportowanie konta…</string>
     <string name="initial_sync_start_importing_account_crypto">Wstępna synchronizacja:
@@ -345,7 +345,7 @@
     <string name="encryption_import_room_keys_summary">Importuj klucze z lokalnego pliku</string>
     <string name="encryption_import_import">Importuj</string>
     <string name="encryption_never_send_to_unverified_devices_title">Szyfruj wiadomości tylko do zaufanych sesji</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">Nigdy nie wysyłaj zaszyfrowanych wiadomości do niezweryfikowanych sesji w tym pokoju z tej sesji.</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Nigdy nie wysyłaj szyfrowanych wiadomości do niezweryfikowanych sesji (bez zielonej tarczy) z tej sesji.</string>
     <string name="encryption_information_verify_device_warning">Aby sprawdzić czy ta sesja jest zaufana, skontaktuj się z jej właścicielem używając innych form (np. osobiście lub telefonicznie) i zapytaj czy klucz, który widzą w ustawieniach użytkownika dla tego urządzenia pasuje do klucza poniżej:</string>
     <string name="encryption_information_verify_device_warning2">Jeśli klucz pasuje, potwierdź to przyciskiem poniżej. Jeśli nie, to ktoś inny najprawdopodobniej przejmuje lub podszywa się pod tą sesję i powinieneś dodać tę sesję do czarnej listy. W przyszłości proces weryfikacji będzie bardziej skomplikowany.</string>
     <string name="title_activity_choose_sticker">Wyślij naklejkę</string>
@@ -622,7 +622,7 @@
     <string name="error_no_network">Brak sieci. Sprawdź swoje połączenie z Internetem.</string>
     <string name="please_wait">Proszę czekać…</string>
     <string name="room_preview_no_preview">Tego pokoju nie można podejrzeć</string>
-    <string name="settings_security_and_privacy">Bezpieczeństwo i Prywatność</string>
+    <string name="settings_security_and_privacy">Bezpieczeństwo i prywatność</string>
     <string name="settings_push_rules_no_rules">Brak reguł push</string>
     <string name="send_file_step_idle">Oczekiwanie…</string>
     <string name="send_file_step_sending_thumbnail">Wysyłanie miniatury (%1$s / %2$s)</string>
@@ -665,7 +665,7 @@
     <string name="room_list_quick_actions_notifications_mute">Wycisz</string>
     <string name="room_list_quick_actions_settings">Ustawienia</string>
     <string name="no_ignored_users">Nie ignorujesz żadnych użytkowników</string>
-    <string name="seen_by">Widziany przez</string>
+    <string name="seen_by">Wyświetlono przez</string>
     <string name="settings_advanced_settings">Zaawansowane ustawienia</string>
     <string name="settings_developer_mode">Tryb programisty</string>
     <string name="settings">Ustawienia</string>
@@ -834,8 +834,8 @@
     <string name="import_e2e_keys_from_file">Importowanie kluczy E2E z pliku \"%1$s\".</string>
     <string name="settings_other_third_party_notices">Informacje o stronach trzecich</string>
     <string name="navigate_to_room_when_already_in_the_room">Już wyświetlasz ten pokój!</string>
-    <string name="push_gateway_item_app_id">id_aplikacji:</string>
-    <string name="push_gateway_item_push_key">klucz_push:</string>
+    <string name="push_gateway_item_app_id">App ID:</string>
+    <string name="push_gateway_item_push_key">Push Key:</string>
     <string name="push_gateway_item_app_display_name">wyświetlana_nazwa_aplikacji:</string>
     <string name="push_gateway_item_device_name">nazwa_sesji:</string>
     <string name="push_gateway_item_url">Url:</string>
@@ -1115,7 +1115,7 @@
 \nKlucze nie są zaufane</string>
     <string name="encryption_information_dg_xsigning_disabled">Podpis krzyżowy nie jest aktywowany</string>
     <string name="settings_active_sessions_list">Aktywne Sesje</string>
-    <string name="settings_active_sessions_show_all">Pokaż wszystkie Sesje</string>
+    <string name="settings_active_sessions_show_all">Pokaż wszystkie sesje</string>
     <string name="settings_active_sessions_manage">Zarządzaj Sesjami</string>
     <string name="settings_active_sessions_signout_device">Wyloguj z tej sesji</string>
     <string name="settings_failed_to_get_crypto_device_info">Brak dostępnej informacji o kryptografii</string>
@@ -1242,7 +1242,7 @@
     <string name="bottom_sheet_save_your_recovery_key_title">Zapisz Klucz Bezpieczeństwa</string>
     <string name="bottom_sheet_setup_secure_backup_security_phrase_title">Użyj Frazy Bezpieczeństwa</string>
     <string name="bottom_sheet_setup_secure_backup_security_key_title">Użyj klucza bezpieczeństwa</string>
-    <string name="bottom_sheet_setup_secure_backup_subtitle">Zabezpiecza przeciwko utracie dostępu do zaszyfrowanych wiadomości oraz danych poprzez zapisanie zaszyfrowanych kluczy na Twoim serwerze.</string>
+    <string name="bottom_sheet_setup_secure_backup_subtitle">Zabezpiecza przed utratą dostępu do zaszyfrowanych wiadomości poprzez zapisanie kluczy szyfrujących na twoim serwerze.</string>
     <string name="a11y_start_camera">Włącz aparat</string>
     <string name="a11y_stop_camera">Wyłącz aparat</string>
     <string name="a11y_unmute_microphone">Wyłącz wyciszenie mikrofonu</string>
@@ -1370,7 +1370,7 @@
     <string name="settings_hs_admin_e2e_disabled">Twój administrator serwera zablokował domyślne szyfrowanie punkt-punkt (e2e) w pokojach prywatnych w Wiadomościach Bezpośrednich.</string>
     <string name="room_settings_enable_encryption_no_permission">Nie masz uprawnień żeby uaktywnić szyfrowanie w tym pokoju.</string>
     <string name="room_member_open_or_create_dm">Wiadomość bezpośrednia</string>
-    <string name="room_member_power_level_default_in">Domyślnie w %1$s</string>
+    <string name="room_member_power_level_default_in">Zwykły w %1$s</string>
     <string name="direct_room_profile_section_more_leave">Opuść</string>
     <string name="direct_room_profile_section_more_settings">Ustawienia</string>
     <string name="room_profile_section_admin">Operacje administratora</string>
@@ -1493,7 +1493,7 @@
     <string name="disabled_integration_dialog_title">Integracje są zablokowane</string>
     <string name="reset_secure_backup_warning">To zastąpi obecny Klucz bądź Hasło.</string>
     <string name="reset_secure_backup_title">Wygeneruj nowy klucz bezpieczeństwa albo hasło dla istniejącej kopii zapasowej.</string>
-    <string name="settings_secure_backup_section_info">Zabezpiecza przeciwko utracie dostępu do zaszyfrowanych wiadomości oraz danych poprzez zapisanie zaszyfrowanych kluczy na Twoim serwerze.</string>
+    <string name="settings_secure_backup_section_info">Zabezpiecza przed utratą dostępu do zaszyfrowanych wiadomości poprzez zapisanie kluczy szyfrujących na twoim serwerze.</string>
     <string name="settings_troubleshoot_test_notification_notification_clicked">Powiadomienie zostało kliknięte!</string>
     <string name="settings_troubleshoot_test_notification_notice">Proszę kliknąć na powiadomieniu, Jeżeli nie widzisz powiadomienia, sprawdź ustawienia systemowe.</string>
     <string name="settings_troubleshoot_test_push_notification_content">Widzisz powiadomienia! Kliknij na mnie!</string>
@@ -1553,8 +1553,6 @@
     <string name="cross_signing_verify_by_emoji">Interaktywna weryfikacja z wykorzystaniem emotikon</string>
     <string name="crosssigning_verify_session">Zweryfikuj logowanie</string>
     <string name="verify_this_session">Zweryfikuj nowe logowanie do swojego konta: %1$s</string>
-    <string name="verify_other_sessions">Sprawdź wszystkie swoje sesje żeby upewnić się, że Twoje konto oraz wiadomości są bezpieczne</string>
-    <string name="review_logins">Sprawdź gdzie jesteś zalogowany(-na)</string>
     <string name="encrypted_unverified">Zaszyfrowane przez niezweryfikowane urządzenie</string>
     <string name="unencrypted">Niezaszyfrowane</string>
     <plurals name="secure_backup_reset_devices_you_can_verify">
@@ -2398,7 +2396,7 @@
     <string name="ftue_auth_carousel_control_body">Wybierz, gdzie prowadzone są Twoje rozmowy, dając Ci kontrolę i niezależność. Połączenie przez sieć Matrix.</string>
     <string name="ftue_auth_carousel_secure_body">Bezpieczna i niezależna komunikacja, która zapewnia ten sam poziom prywatności, co rozmowa twarzą w twarz we własnym domu.</string>
     <string name="ftue_auth_carousel_workplace_title">Komunikacja dla Twojego zespołu.</string>
-    <string name="attachment_type_location">Położenie</string>
+    <string name="attachment_type_location">Lokalizacja</string>
     <string name="preference_root_legals">Zagadnienia prawne</string>
     <string name="navigate_to_thread_when_already_in_the_thread">Już przeglądasz ten wątek!</string>
     <string name="view_in_room">Wyświetl w pokoju</string>
@@ -2514,7 +2512,6 @@
     <string name="open_poll_option_title">Otwarta ankieta</string>
     <string name="poll_type_title">Rodzaj ankiety</string>
     <string name="edit_poll_title">Modyfikacja ankiety</string>
-    <string name="a11y_poll_winner_option">opcja zwyciężająca</string>
     <string name="poll_no_votes_cast">Brak głosów</string>
     <string name="this_invite_to_this_space_was_sent">Zaproszenie do tej przestrzeni zostało wysłane do %s, które nie jest powiązane z Twoim kontem</string>
     <string name="this_invite_to_this_room_was_sent">Zaproszenie do tego pokoju zostało wysłane do %s, które nie jest powiązane z Twoim kontem</string>
@@ -2743,4 +2740,91 @@
     <string name="home_empty_space_no_rooms_title">%s
 \nwygląda nieco pusto.</string>
     <string name="space_list_empty_title">Brak przestrzeni.</string>
+    <string name="some_devices_will_not_be_able_to_decrypt">⚠ W tym pokoju znajdują się użytkownicy ze niezweryfikowanymi urządzeniami, nie będą one mogły odszyfrować wiadomości które wysyłasz.</string>
+    <string name="grant_permission">Udziel Uprawnień</string>
+    <string name="settings_troubleshoot_test_system_settings_permission_failed">${app_name} potrzebuje uprawnień aby wyświetlać powiadomienia.
+\nProszę udziel uprawnień.</string>
+    <string name="permissions_rationale_msg_notification">${app_name} potrzebuje uprawnień by wyświetlić powiadomienia. Będą one pokazywać twoje wiadomości, zaproszenia, itd.
+\n
+\nProszę zezwól na dostęp na następnym pop-upie aby móc zobaczyć powiadomienia.</string>
+    <string name="invites_empty_message">Tutaj będą twoje nowe zaproszenia.</string>
+    <string name="invites_empty_title">Brak zaproszeń.</string>
+    <string name="encryption_never_send_to_unverified_devices_in_room">Nigdy nie wysyłaj zaszyfrowanych wiadomości do niezweryfikowanych sesji w tym pokoju.</string>
+    <string name="device_manager_session_overview_signout">Wyloguj się z tej sesji</string>
+    <plurals name="device_manager_other_sessions_multi_signout_all">
+        <item quantity="one">Wyloguj się z %1$d sesji</item>
+        <item quantity="few">Wyloguj się z %1$d sesji</item>
+        <item quantity="many"/>
+        <item quantity="other"/>
+    </plurals>
+    <string name="device_manager_other_sessions_multi_signout_selection">Wyloguj się</string>
+    <string name="device_manager_other_sessions_select">Wybierz sesje</string>
+    <string name="device_manager_other_sessions_show_ip_address">Pokaż adres IP</string>
+    <string name="device_manager_learn_more_sessions_unverified_title">Niezweryfikowane sesje</string>
+    <string name="device_manager_other_sessions_no_unverified_sessions_found">Brak niezweryfikowanych sesji.</string>
+    <string name="device_manager_other_sessions_recommendation_description_unverified">Zweryfikuj swoje sesje dla zwiększenia bezpieczeństwa wiadomości lub wyloguj się z tych których nie rozpoznajesz lub już nie używasz.</string>
+    <string name="device_manager_other_sessions_recommendation_title_unverified">Niezweryfikowane</string>
+    <string name="device_manager_unverified_sessions_description">Zweryfikuj te sesje lub wyloguj się z nich.</string>
+    <string name="device_manager_unverified_sessions_title">Niezweryfikowane sesje</string>
+    <string name="device_manager_header_section_security_recommendations_description">Popraw swoje bezpieczeństwo stosując te zalecenia.</string>
+    <string name="device_manager_header_section_security_recommendations_title">Zalecenia bezpieczenstwa</string>
+    <string name="settings_enable_direct_share_summary">Pokaż ostatnie rozmowy w systemowym menu udostępniania</string>
+    <string name="settings_enable_direct_share_title">Bezpośrednie udostępnianie</string>
+    <string name="labs_enable_voice_broadcast_summary">Bądź w stanie nagrywać i wysyłać transmisje głosowe na osi czasu pokoju.</string>
+    <string name="labs_enable_voice_broadcast_title">Włącz transmicje głosowe</string>
+    <string name="labs_enable_client_info_recording_summary">Zachowuj nazwę aplikacji, wersję oraz jej url aby łatwiej rozpoznawać je w menedzerze sesji.</string>
+    <string name="labs_enable_client_info_recording_title">Włącz rejestrowanie informacji o kliencie</string>
+    <string name="labs_enable_session_manager_summary">Miej lepszą kontrolę nad zalogowanymi sesjami.</string>
+    <string name="labs_enable_session_manager_title">Włącz nowy manager sesji</string>
+    <string name="labs_enable_rich_text_editor_summary">Wypróbuj zaawansowany edytor tekstu (tryb zwykłego tekstu dostępny wkrótce)</string>
+    <string name="labs_enable_rich_text_editor_title">Włącz zaawansowany edytor tekstu</string>
+    <string name="attachment_type_selector_text_formatting">Formatowanie tekstu</string>
+    <string name="attachment_type_selector_poll">Ankiety</string>
+    <string name="attachment_type_voice_broadcast">Transmisja Głosowa</string>
+    <string name="attachment_type_selector_file">Załączniki</string>
+    <string name="attachment_type_selector_sticker">Naklejki</string>
+    <string name="attachment_type_selector_gallery">Galeria</string>
+    <string name="error_check_network" tools:ignore="UnusedResources">Coś poszło nie tak. Sprawdź swoje połączenie i spróbuj ponownie.</string>
+    <string name="quoting">Cytowanie</string>
+    <string name="replying_to">Odpowiadanie %s</string>
+    <string name="editing">Edytowanie</string>
+    <string name="command_description_devtools">Otwórz ekran narzędzi programisty</string>
+    <string name="room_settings_global_block_unverified_info_text">🔒 Włączyłeś ograniczenie szyfrowania tylko dla zweryfikowanych sesji dla wszystkich pokojów w ustawieniach bezpieczeństwa.</string>
+    <string name="action_deselect_all">Odznacz wszystko</string>
+    <string name="action_select_all">Zaznacz wszystko</string>
+    <string name="action_got_it">Rozumiem</string>
+    <string name="a11y_collapse_space_children">Zwiń %s pokojów</string>
+    <string name="a11y_expand_space_children">Rozwiń %s pokojów</string>
+    <string name="device_manager_inactive_sessions_title">Nieaktywne sesje</string>
+    <string name="device_manager_verification_status_detail_other_session_verified">Ta sesja jest gotowa do bezpiecznego przesyłania wiadomości.</string>
+    <string name="device_manager_verification_status_detail_current_session_verified">Twoja bieżąca sesja jest gotowa do bezpiecznego przesyłania wiadomości.</string>
+    <string name="attachment_type_selector_contact">Kontakt</string>
+    <string name="attachment_type_selector_location">Lokalizacja</string>
+    <string name="attachment_type_selector_camera">Aparat</string>
+    <string name="attachment_type_selector_voice_broadcast">Transmisja głosowa</string>
+    <string name="tooltip_attachment_voice_broadcast">Rozpocznij transmisję głosową</string>
+    <string name="room_polls_ended">Ostatnie ankiety</string>
+    <string name="room_polls_active_no_item">W tym pokoju nie ma aktywnych ankiet</string>
+    <string name="room_polls_active">Aktywne ankiety</string>
+    <string name="unable_to_decrypt_some_events_in_poll">Niektóre głosy mogą nie zostać policzone z powodu błędów w odszyfrowaniu</string>
+    <string name="ended_poll_indicator">Zakończono ankietę.</string>
+    <string name="error_voice_broadcast_no_connection_recording">Błąd połączenia - Nagrywanie wstrzymane</string>
+    <string name="error_voice_broadcast_unable_to_play">Nie można odtworzyć tej transmisji głosowej.</string>
+    <string name="error_voice_broadcast_already_in_progress_message">Jesteś już w trakcie nagrywania transmisji głosowej. Proszę zakończyć bieżącą transmisję, aby rozpocząć nową.</string>
+    <string name="error_voice_broadcast_blocked_by_someone_else_message">Ktoś inny nagrywa już transmisję głosową. Aby rozpocząć nową transmisję, należy poczekać na jej zakończenie.</string>
+    <string name="error_voice_broadcast_permission_denied_message">Nie masz wymaganych uprawnień do rozpoczęcia transmisji głosowej w tym pokoju. Skontaktuj się z administratorem pokoju, aby przyznał ci uprawnienia.</string>
+    <string name="error_voice_broadcast_unauthorized_title">Nie można rozpocząć nowej transmisji głosowej</string>
+    <string name="voice_broadcast_buffering">Buforowanie…</string>
+    <string name="error_voice_message_broadcast_in_progress">Nie można rozpocząć wiadomości głosowej</string>
+    <string name="review_unverified_sessions_title">Masz niezweryfikowane sesje</string>
+    <string name="key_authenticity_not_guaranteed">Autentyczność tej zaszyfrowanej wiadomości nie może być zagwarantowana na tym urządzeniu.</string>
+    <string name="room_profile_section_more_polls">Historia ankiet</string>
+    <string name="command_description_table_flip">Dodaje (╯°□°）╯︵ ┻━┻ do wiadomości tekstowej</string>
+    <string name="login_scan_qr_code">Skanuj kod QR</string>
+    <string name="notice_voice_broadcast_ended">%1$s zakończył(a) transmisję głosową.</string>
+    <string name="settings_security_incognito_keyboard_summary">Zarządaj od systemu Android aby klawiatura nie zapisywała żadnych danych takich jak historia pisania lub słownik. Pamiętaj, nie niektóre klawiatury mogą nie zastosować się do tego ustawienia.</string>
+    <string name="settings_security_incognito_keyboard_title">Klawiatura incognito</string>
+    <string name="home_empty_no_rooms_title">Witaj w ${app_name},
+\n%s.</string>
+    <string name="home_empty_no_rooms_message">Wszechstronna, bezpieczna aplikacja do czatowania dla zespołów, przyjaciół i organizacji. Utwórz czat lub dołącz do istniejącego pokoju, aby rozpocząć.</string>
 </resources>

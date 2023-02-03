@@ -1483,8 +1483,6 @@
     <string name="crosssigning_verify_session">Потвърди сесията</string>
     <string name="cross_signing_verify_by_text">Ръчно потвърждаване чрез текстово съобщение</string>
     <string name="verify_this_session">Потвърдете новия вход достъпващ профила ви: %1$s</string>
-    <string name="verify_other_sessions">Потвърдете всички сесии за да подсигурите, че профилът и съобщенията ви са в безопасност</string>
-    <string name="review_logins">Прегледайте от къде сте влезли</string>
     <string name="encrypted_unverified">Шифровано от непотвърдено устройство</string>
     <string name="unencrypted">Нешифровано</string>
     <plurals name="secure_backup_reset_devices_you_can_verify">

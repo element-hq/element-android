@@ -89,7 +89,7 @@ fun getString(@StringRes id: Int): String {
     return EspressoHelper.getCurrentActivity()!!.resources.getString(id)
 }
 
-fun waitForView(viewMatcher: Matcher<View>, timeout: Long = 10_000, waitForDisplayed: Boolean = true): ViewAction {
+fun waitForView(viewMatcher: Matcher<View>, timeout: Long = 20_000, waitForDisplayed: Boolean = true): ViewAction {
     return object : ViewAction {
         private val clock = DefaultClock()
 

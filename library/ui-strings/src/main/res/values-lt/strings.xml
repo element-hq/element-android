@@ -1324,7 +1324,6 @@
     <string name="poll_end_room_list_preview">Apklausa baigėsi</string>
     <string name="poll_response_room_list_preview">Prabalsuota</string>
     <string name="end_poll_confirmation_approve_button">Baigti apklausą</string>
-    <string name="a11y_poll_winner_option">laimėtojo parinktis</string>
     <string name="poll_undisclosed_not_ended">Rezultatai bus matomi pasibaigus apklausai</string>
     <string name="poll_no_votes_cast">Nėra balsų</string>
     <string name="restart_the_application_to_apply_changes">Iš naujo paleiskite programą, kad pakeitimas įsigaliotų.</string>

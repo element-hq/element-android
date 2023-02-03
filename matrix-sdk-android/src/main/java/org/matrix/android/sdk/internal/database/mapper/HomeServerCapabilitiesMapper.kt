@@ -47,6 +47,7 @@ internal object HomeServerCapabilitiesMapper {
                 canLoginWithQrCode = entity.canLoginWithQrCode,
                 canUseThreadReadReceiptsAndNotifications = entity.canUseThreadReadReceiptsAndNotifications,
                 canRemotelyTogglePushNotificationsOfDevices = entity.canRemotelyTogglePushNotificationsOfDevices,
+                canRedactEventWithRelations = entity.canRedactEventWithRelations,
         )
     }
 

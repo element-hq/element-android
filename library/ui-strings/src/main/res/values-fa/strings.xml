@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="notice_room_invite_no_invitee">دعوت %s</string>
     <string name="notice_room_invite">‫%1$s، %2$s را دعوت کرد</string>
     <string name="notice_room_invite_you">%1$s دعوتتان کرد</string>
@@ -1106,8 +1106,6 @@
     <string name="or_other_mx_capable_client">یا دیگر کاره‌های ماتریکس دادای قابلیت ورود چندگانه</string>
     <string name="cross_signing_verify_by_text">تأیید دستی با متن</string>
     <string name="verify_this_session">تأیید ورود جدیدی که به حسابتان دسترسی دارد: %1$s</string>
-    <string name="verify_other_sessions">تأیید همهٔ نشست‌هایتان برای اطمینان از این که حساب و پیام‌هایتان امنند</string>
-    <string name="review_logins">بازبینی جاهایی که وارد شده‌اید</string>
     <string name="cross_signing_verify_by_emoji">تأیید برهم‌کنشی با اموجی</string>
     <string name="crosssigning_verify_session">تأیید ورود</string>
     <string name="unencrypted">رمزنشده</string>
@@ -2275,7 +2273,6 @@
     <string name="end_poll_confirmation_approve_button">پایان نظرسنجی</string>
     <string name="end_poll_confirmation_description">این کار اجازهٔ رأی دادن افراد را پایان داده و نتیجهٔ نهایی نظرسنجی را نمایش خواهد داد.</string>
     <string name="end_poll_confirmation_title">پایان این نظرسنجی؟</string>
-    <string name="a11y_poll_winner_option">گزینهٔ غالب</string>
     <string name="poll_end_action">پایان نظرسنجی</string>
     <plurals name="poll_total_vote_count_after_ended">
         <item quantity="one">نتیجهٔ نهایی بر مبنای %1$d رأی</item>
@@ -2737,7 +2734,7 @@
     <string name="qr_code_login_new_device_instruction_2">به تنظیمات -&gt; امنیت و محرمانگی بروید</string>
     <string name="qr_code_login_new_device_instruction_1">کاره را روی افزارهٔ دیگرتان بگشایید</string>
     <string name="qr_code_login_header_failed_device_is_not_supported_description">پیوند دادن با این افزاره پشتیبانی نمی‌شود.</string>
-    <string name="labs_enable_voice_broadcast_title">به کار انداختن پخش صدا (زیر توسعهٔ فعّال)</string>
+    <string name="labs_enable_voice_broadcast_title">به کار انداختن پخش صدا</string>
     <string name="qr_code_login_show_qr_code_button">نمایش کد QR روی این افزاره</string>
     <string name="qr_code_login_link_a_device_show_qr_code_instruction_1">آغاز در صفحهٔ ورود</string>
     <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">گزینش‌«ورود با کد QR»</string>
@@ -2783,7 +2780,7 @@
     <string name="attachment_type_selector_poll">نظرسنجی‌ها</string>
     <string name="attachment_type_selector_file">پیوست‌ها</string>
     <string name="attachment_type_selector_sticker">برچسب‌ها</string>
-    <string name="a11y_voice_broadcast_buffering">میانگیری…</string>
+    <string name="voice_broadcast_buffering">میانگیری…</string>
     <string name="voice_broadcast_live">زنده</string>
     <string name="qr_code_login_confirm_security_code">تأیید</string>
     <string name="three">۳</string>
@@ -2849,4 +2846,78 @@
     <string name="qr_code_login_confirm_security_code_description">لطفاً مطمئن شوید که مبدأ این کد را می‌دانید. با پیوند دادن افزاره‌ها، دسترسی کامل را به حسابتان می‌دهید.</string>
     <string name="settings_enable_direct_share_summary">نمایش گپ‌های اخیر در فهرست هم رسانی سامانه</string>
     <string name="settings_enable_direct_share_title">به کار انداختن هم‌رسانی مستقیم</string>
+    <string name="settings_security_incognito_keyboard_summary">درخواست این که صفحه‌کلید نباید هیچ دادهٔ شخصی‌ شده‌ای را مانند نوشتن تاریخچه و واژه‌نامه برپایهٔ آن‌چه در گفت‌وگوها می‌نویسید به‌روز کند. توجّه داشته باشید که ممکن است برخی صفحه‌کلیدها به این تنظیمات احترام نگذارند.</string>
+    <string name="permissions_rationale_msg_notification">${app_name} برای نمایش آگاهی‌ها نیازمند اجازه است. آگاهی می‌تواندد پیام‌ها، دعوت‌ها و…تان را نشان دهند.
+\n
+\nلطفا در بیرون‌پریدنی بعدی اجازهٔ دسترسی بدهید تا بتوانید آگاهی‌ها را ببینید.</string>
+    <string name="device_manager_learn_more_session_rename">کاربران دیگر در پیام‌های مستقیم و اتاق‌هایی که می‌پیوندید قادر خواهند بود سیاهه‌ای کامل از نشست‌هایتان را ببینند.
+\n
+\nاین کار مطمئنشان می‌کند که دارند واقعاً با شما صحبت می‌کنند؛ ولی همچنین به این معنیست که می‌توانند نام نشست‌هایی که این‌جا وارد کرده‌اید را هم ببینند.</string>
+    <string name="device_manager_learn_more_sessions_verified_description">نشست‌های تأیید شده آن‌هاییند که پس از ورود عبارت عبورتان یا تأیید هویتتان با نشست تأیید شده‌ای دیگر، واردشان شده‌اید.
+\n
+\nیعنی تمامی کلیدهای لارم برای رمزگشایی پیام‌های رمزنگاشته‌تان را داشته و این تأیید را به دیگران می‌دهند که به این نشست اطمینان دارید.</string>
+    <string name="device_manager_learn_more_sessions_unverified">نشست‌های تأیید نشده نشست‌هاییند که به آن‌ها وارد شده‌اید، ولی تأیید متقبالشان نکرده‌اید.
+\n
+\nباید به طور خاص مطمئن شوید که این نشست‌ها را می‌شناسید؛ چرا که می‌توانند نشان‌دهندهٔ استفادهٔ تأییدنشده از حسابتان باشند.</string>
+    <string name="device_manager_learn_more_sessions_inactive">نشست‌های غیرفعّال نشست‌هاییند که مدّتیست استفاده نکرده‌اید، ولی به دریافت کلیدهای رمزنگاری ادامه می‌دهند.
+\n
+\nبرداشتن نشست‌های غیرفعّال امنیت و کارایی را بهبود داده و تشخیص مشکوک بودن نشست‌های جدید را برایتان راحت‌تر می‌کند.</string>
+    <string name="review_unverified_sessions_description">بازبینی برای اطمینان از امن بودن حسابتان</string>
+    <string name="review_unverified_sessions_title">نسشت‌هایی تأیید نشده دارید</string>
+    <string name="device_manager_learn_more_sessions_encryption_not_supported">این نشست از رمزنگاری پشتیبانی نمی‌کند؛ پس نمی‌تواند تأیید شود.
+\n
+\nهنگام استفاده از اسن نشست نخواهید توانست در اتاق‌هایی که رمزنگاریشان به کار افتاده شرکت کنید.
+\n
+\nبرای بهترین امنیت و محرمانگی، پیشنهاد می‌شود از کارخواه‌های ماتریکس دارای رمزنگاری استفاده کنید.</string>
+    <string name="device_manager_signout_all_other_sessions">خروج از تمامی نشست‌های دیگر</string>
+    <string name="device_manager_verification_status_detail_session_encryption_not_supported">این نشست از رمزنگاری پشتیبانی نکرده و بنابراین نمی‌تواند تأیید شود.</string>
+    <string name="settings_nightly_build_update">رفتن به جدیدترین ساخت (نکته: ممکن است برای ورود به مشکل بخورید)</string>
+    <string name="settings_nightly_build">ساخت شبانه</string>
+    <string name="voice_broadcast_live_broadcast">پخش زنده</string>
+    <string name="notice_voice_broadcast_ended_by_you">به پخش صوتی پایان دادید.</string>
+    <string name="notice_voice_broadcast_ended">%1$s به پخش صوتی پایان داد.</string>
+    <string name="stop_voice_broadcast_content">مطمئنید که می‌خواهید پخش زنده‌تان را قطع کنید؟ این کار پخش را پایان داده و ضبط کامل در اتاق موجود خواهد شد.</string>
+    <string name="stop_voice_broadcast_dialog_title">قطع پخش زنده؟</string>
+    <string name="action_stop">بله، متوقّف شود</string>
+    <string name="set_link_edit">ویرایش پیوند</string>
+    <string name="set_link_create">ایجاد پیوند</string>
+    <string name="set_link_link">پیوند</string>
+    <string name="set_link_text">متن</string>
+    <string name="rich_text_editor_link">تنظیم پیوند</string>
+    <string name="settings_access_token_summary">ژتون دسترسیتان، دسترسی کامل به حسابتان را می‌دهد. با هیچ‌کس هم‌رسانیش نکنید.</string>
+    <string name="settings_access_token">ژتون دسترسی</string>
+    <string name="rich_text_editor_bullet_list">تغییر وضعیت سیاههٔ گلوله‌ای</string>
+    <string name="rich_text_editor_numbered_list">تغییر وضعیت سیاههٔ شماره‌دار</string>
+    <string name="room_polls_ended_no_item">هیچ‌ نظرسنجی قدیمی‌ای در این اتاق وجود ندارد</string>
+    <string name="room_polls_ended">نظرسنجی‌های گذشته</string>
+    <string name="room_polls_active_no_item">هیچ نظرسنجی فعّالی در این اتاق وجود ندارد</string>
+    <string name="room_polls_active">نظرسنجی‌های فعّال</string>
+    <string name="room_profile_section_more_polls">تاریخچهٔ نظرسنجی‌ها</string>
+    <string name="message_reply_to_ended_poll_preview">نظرسنجی پایان یافته</string>
+    <string name="message_reply_to_poll_preview">نظرسنجی</string>
+    <string name="message_reply_to_sender_ended_poll">به نظرسنجی‌ای پایان داد.</string>
+    <string name="ended_poll_indicator">به نظرسنجی پایان داد.</string>
+    <string name="thread_list_not_available">کارساز خانگیتان هنوز از سیاهه کردن رشته‌ها پشتیبانی نمی‌کند.</string>
+    <string name="error_voice_broadcast_unable_to_play">ناتوان در پخش این صدا.</string>
+    <string name="started_a_voice_broadcast">پخش صوتی را آغاز کرد</string>
+    <string name="unable_to_decrypt_some_events_in_poll">به خاطر خطاهای رمزگشایی، ممکن است برخی رأی‌ها شمرده نشوند</string>
+    <string name="room_polls_loading_error">خطا در واکشی نظرسنجی‌ها.</string>
+    <string name="room_polls_load_more">بار کردن نظرسنجی‌های بیش‌تر</string>
+    <string name="room_polls_wait_for_display">نشان دادن نظرسنجی‌ها</string>
+    <plurals name="room_polls_ended_no_item_for_loaded_period">
+        <item quantity="one">نظرسنجی گذشته‌ای برای روز گذشته وجود ندارد.
+\nبرای دیدن نظرسنجی‌های روزهای پیش، نظرسنجی‌های بیش‌تری بار کنید.</item>
+        <item quantity="other">نظرسنجی گذشته‌ای برای %1$d روز گذشته وجود ندارد.
+\nبرای دیدن نظرسنجی‌های روزهای پیش، نظرسنجی‌های بیش‌تری بار کنید.</item>
+    </plurals>
+    <plurals name="room_polls_active_no_item_for_loaded_period">
+        <item quantity="one">نظرسنجی فعّالی برای روز گذشته وجود ندارد.
+\nبرای دیدن نظرسنجی‌های روزهای پیش، نظرسنجی‌های بیش‌تری بار کنید.</item>
+        <item quantity="other">نظرسنجی فعّالی برای %1$d روز گذشته وجود ندارد.
+\nبرای دیدن نظرسنجی‌های روزهای پیش، نظرسنجی‌های بیش‌تری بار کنید.</item>
+    </plurals>
+    <string name="error_voice_message_broadcast_in_progress_message">از آن‌جا که در حال ضبط پخشی زنده‌اید، نمی‌توانید پیامی صوتی را آغاز کنید. لطفاً برای آغاز ضبط یک پیام صوتی، پخش زنده‌تان را پایان دهید</string>
+    <string name="error_voice_message_broadcast_in_progress">نمی‌توان پخش صوتی را آغاز کرد</string>
+    <string name="error_voice_broadcast_no_connection_recording">خطای اتّصال - ضبط مکث شد</string>
+    <string name="rich_text_editor_inline_code">اعمال قالب کد درون‌خط</string>
 </resources>

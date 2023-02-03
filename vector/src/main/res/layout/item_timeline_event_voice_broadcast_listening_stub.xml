@@ -40,51 +40,59 @@
     <TextView
         android:id="@+id/titleText"
         style="@style/Widget.Vector.TextView.Body.Medium"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
         android:contentDescription="@string/avatar"
+        android:ellipsize="end"
+        android:maxLines="1"
+        app:layout_constraintEnd_toStartOf="@id/liveIndicator"
         app:layout_constraintStart_toEndOf="@id/avatarRightBarrier"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@sample/rooms.json/data/name" />
 
-    <androidx.constraintlayout.helper.widget.Flow
-        android:id="@+id/metadataFlow"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/metadataGroup"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
         android:orientation="vertical"
-        app:constraint_referenced_ids="broadcasterNameMetadata,bufferingMetadata,voiceBroadcastMetadata,listenersCountMetadata"
-        app:flow_horizontalAlign="start"
-        app:flow_verticalGap="4dp"
+        app:layout_constraintEnd_toStartOf="@id/liveIndicator"
         app:layout_constraintStart_toEndOf="@id/avatarRightBarrier"
-        app:layout_constraintTop_toBottomOf="@id/titleText" />
+        app:layout_constraintTop_toBottomOf="@id/titleText">
 
-    <im.vector.app.features.voicebroadcast.views.VoiceBroadcastMetadataView
-        android:id="@+id/broadcasterNameMetadata"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:metadataIcon="@drawable/ic_voice_broadcast_mic"
-        tools:metadataValue="@sample/users.json/data/displayName" />
+        <im.vector.app.features.voicebroadcast.views.VoiceBroadcastMetadataView
+            android:id="@+id/broadcasterNameMetadata"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            app:metadataIcon="@drawable/ic_voice_broadcast_mic"
+            tools:metadataValue="@sample/users.json/data/displayName" />
 
-    <im.vector.app.features.voicebroadcast.views.VoiceBroadcastBufferingView
-        android:id="@+id/bufferingMetadata"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <im.vector.app.features.voicebroadcast.views.VoiceBroadcastBufferingView
+            android:id="@+id/bufferingMetadata"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp" />
 
-    <im.vector.app.features.voicebroadcast.views.VoiceBroadcastMetadataView
-        android:id="@+id/voiceBroadcastMetadata"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:metadataIcon="@drawable/ic_voice_broadcast"
-        app:metadataValue="@string/attachment_type_voice_broadcast" />
+        <im.vector.app.features.voicebroadcast.views.VoiceBroadcastMetadataView
+            android:id="@+id/voiceBroadcastMetadata"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            app:metadataIcon="@drawable/ic_voice_broadcast"
+            app:metadataValue="@string/attachment_type_voice_broadcast" />
 
-    <im.vector.app.features.voicebroadcast.views.VoiceBroadcastMetadataView
-        android:id="@+id/listenersCountMetadata"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:metadataIcon="@drawable/ic_member_small"
-        app:metadataValue="@string/no_value_placeholder"
-        tools:metadataValue="5 listeners" />
+        <im.vector.app.features.voicebroadcast.views.VoiceBroadcastMetadataView
+            android:id="@+id/listenersCountMetadata"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            app:metadataIcon="@drawable/ic_member_small"
+            app:metadataValue="@string/no_value_placeholder"
+            tools:metadataValue="5 listeners" />
+    </LinearLayout>
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/headerBottomBarrier"
@@ -92,7 +100,7 @@
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
         app:barrierMargin="10dp"
-        app:constraint_referenced_ids="roomAvatarImageView,titleText,metadataFlow" />
+        app:constraint_referenced_ids="roomAvatarImageView,titleText,metadataGroup" />
 
     <androidx.constraintlayout.helper.widget.Flow
         android:id="@+id/controllerButtonsFlow"
@@ -105,8 +113,8 @@
 
     <ImageButton
         android:id="@+id/fastBackwardButton"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="@dimen/voice_broadcast_player_button_size"
+        android:layout_height="@dimen/voice_broadcast_player_button_size"
         android:background="@drawable/bg_rounded_button"
         android:contentDescription="@string/a11y_voice_broadcast_fast_backward"
         android:src="@drawable/ic_player_backward_30"
@@ -126,8 +134,8 @@
 
     <ImageButton
         android:id="@+id/fastForwardButton"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="@dimen/voice_broadcast_player_button_size"
+        android:layout_height="@dimen/voice_broadcast_player_button_size"
         android:background="@drawable/bg_rounded_button"
         android:contentDescription="@string/a11y_voice_broadcast_fast_forward"
         android:src="@drawable/ic_player_forward_30"
@@ -139,9 +147,11 @@
         android:id="@+id/seekBar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="20dp"
         android:paddingStart="0dp"
+        android:paddingTop="4dp"
         android:paddingEnd="0dp"
+        android:paddingBottom="4dp"
         android:progressDrawable="@drawable/bg_seek_bar"
         android:thumbOffset="3dp"
         android:thumbTint="?vctr_content_secondary"
@@ -156,7 +166,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="-3dp"
+        android:layout_marginTop="-7dp"
         android:textColor="?vctr_content_tertiary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/seekBar"
@@ -168,12 +178,35 @@
         style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="-3dp"
+        android:layout_marginTop="-7dp"
         android:layout_marginEnd="4dp"
         android:textColor="?vctr_content_tertiary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/seekBar"
         tools:ignore="NegativeMargin"
         tools:text="-0:12" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/controlsGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="controllerButtonsFlow,seekBar,elapsedTime,remainingTime" />
+
+    <TextView
+        android:id="@+id/errorView"
+        style="@style/Widget.Vector.TextView.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:drawablePadding="4dp"
+        android:text="@string/error_voice_broadcast_unable_to_play"
+        android:textColor="?colorError"
+        android:visibility="gone"
+        app:drawableStartCompat="@drawable/ic_voice_broadcast_error"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headerBottomBarrier"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

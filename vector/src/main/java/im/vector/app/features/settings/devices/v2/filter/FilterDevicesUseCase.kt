@@ -37,7 +37,9 @@ class FilterDevicesUseCase @Inject constructor() {
                         // when current session is not verified, other session status cannot be trusted
                         DeviceManagerFilterType.VERIFIED -> isCurrentSessionVerified && it.cryptoDeviceInfo?.trustLevel?.isCrossSigningVerified().orFalse()
                         // when current session is not verified, other session status cannot be trusted
-                        DeviceManagerFilterType.UNVERIFIED -> isCurrentSessionVerified && !it.cryptoDeviceInfo?.trustLevel?.isCrossSigningVerified().orFalse()
+                        DeviceManagerFilterType.UNVERIFIED ->
+                            (isCurrentSessionVerified && !it.cryptoDeviceInfo?.trustLevel?.isCrossSigningVerified().orFalse()) ||
+                                    it.cryptoDeviceInfo == null
                         DeviceManagerFilterType.INACTIVE -> it.isInactive
                     }
                 }

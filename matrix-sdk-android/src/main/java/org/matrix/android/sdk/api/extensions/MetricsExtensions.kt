@@ -44,6 +44,27 @@ inline fun List<MetricPlugin>.measureMetric(block: () -> Unit) {
 }
 
 /**
+ * Executes the given [block] while measuring the transaction.
+ *
+ * @param block Action/Task to be executed within this span.
+ */
+@OptIn(ExperimentalContracts::class)
+inline fun List<SpannableMetricPlugin>.measureSpannableMetric(block: List<SpannableMetricPlugin>.() -> Unit) {
+    contract {
+        callsInPlace(block, InvocationKind.EXACTLY_ONCE)
+    }
+    try {
+        this.forEach { plugin -> plugin.startTransaction() } // Start the transaction.
+        block()
+    } catch (throwable: Throwable) {
+        this.forEach { plugin -> plugin.onError(throwable) } // Capture if there is any exception thrown.
+        throw throwable
+    } finally {
+        this.forEach { plugin -> plugin.finishTransaction() } // Finally, finish this transaction.
+    }
+}
+
+/**
  * Executes the given [block] while measuring a span.
  *
  * @param operation Name of the new span.

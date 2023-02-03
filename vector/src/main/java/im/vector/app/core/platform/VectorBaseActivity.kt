@@ -41,6 +41,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.preference.PreferenceManager
 import androidx.viewbinding.ViewBinding
 import com.airbnb.mvrx.MavericksView
@@ -91,6 +92,7 @@ import im.vector.app.features.themes.ActivityOtherThemes
 import im.vector.app.features.themes.ThemeUtils
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.GlobalError
@@ -123,14 +125,20 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     protected val viewModelProvider
         get() = ViewModelProvider(this, viewModelFactory)
 
-    fun <T : VectorViewEvents> VectorViewModel<*, *, T>.observeViewEvents(observer: (T) -> Unit) {
-        viewEvents
-                .stream()
-                .onEach {
-                    hideWaitingView()
-                    observer(it)
-                }
-                .launchIn(lifecycleScope)
+    fun <T : VectorViewEvents> VectorViewModel<*, *, T>.observeViewEvents(
+            observer: (T) -> Unit,
+    ) {
+        val tag = this@VectorBaseActivity::class.simpleName.toString()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewEvents
+                        .stream(tag)
+                        .collect {
+                            hideWaitingView()
+                            observer(it)
+                        }
+            }
+        }
     }
 
     var toolbar: ToolbarConfig? = null

@@ -471,7 +471,7 @@
     <string name="widget_integration_room_not_visible">Raum %s ist nicht sichtbar.</string>
     <string name="room_add_matrix_apps">Integrationen hinzufügen</string>
     <string name="settings_notification_ringtone">Benachrichtigungston</string>
-    <string name="widget_integration_failed_to_send_request">Anfrage konnte nicht gesendet werden.</string>
+    <string name="widget_integration_failed_to_send_request">Übertragung der Anfrage fehlgeschlagen.</string>
     <string name="widget_integration_missing_user_id">user_id fehlt in der Anfrage.</string>
     <string name="light_theme">Helles Design</string>
     <string name="dark_theme">Dunkles Design</string>
@@ -1427,8 +1427,6 @@
     <string name="failed_to_access_secure_storage">Konnte nicht auf gesicherten Speicher zugreifen</string>
     <string name="unencrypted">Unverschlüsselt</string>
     <string name="encrypted_unverified">Verschlüsselt von einem nicht verifiziertem Gerät</string>
-    <string name="review_logins">Überprüfe, wo du angemeldet bist</string>
-    <string name="verify_other_sessions">Verifiziere alle deine Sitzungen, um sicherzustellen, dass dein Konto und deine Nachrichten sicher sind</string>
     <string name="verify_this_session">Bestätige neue Anmeldung zu deinem Konto: %1$s</string>
     <string name="cross_signing_verify_by_text">Verifiziere manuell mit einem Text</string>
     <string name="crosssigning_verify_session">Anmeldung verifizieren</string>
@@ -2319,7 +2317,6 @@
     <string name="end_poll_confirmation_approve_button">Umfrage beenden</string>
     <string name="end_poll_confirmation_description">Dies verhindert, dass andere Personen abstimmen können, und zeigt die Endergebnisse der Umfrage an.</string>
     <string name="end_poll_confirmation_title">Diese Umfrage beenden\?</string>
-    <string name="a11y_poll_winner_option">Gewinneroption</string>
     <string name="poll_end_action">Umfrage beenden</string>
     <plurals name="poll_total_vote_count_after_ended">
         <item quantity="one">Endgültiges Ergebnis basiert auf %1$d Stimme</item>
@@ -2711,9 +2708,6 @@
     <string name="device_manager_learn_more_session_rename">Andere Nutzer in Direktnachrichten und Räumen, in denen du dich befindest, können eine vollständige Liste deiner Sitzungen einsehen.
 \n
 \nDies gibt ihnen die Sicherheit, dass sie auch wirklich mit dir kommunizieren. Allerdings bedeutet es auch, dass sie die Sitzungsnamen sehen können, die du hier angibst.</string>
-    <string name="device_manager_learn_more_sessions_verified">Verifizierte Sitzungen wurden mit deinen Daten angemeldet und anschließend mit deiner Sicherheitspassphrase oder durch Quersignierung verifiziert.
-\n
-\nDies bedeutet, dass sie die Verschlüsselungs-Schlüssel für deine bisherigen Nachrichten besitzen und anderen Nutzern bestätigen können, dass diese Sitzungen tatsächlich von dir stammen.</string>
     <string name="device_manager_learn_more_session_rename_title">Sitzungen umbenennen</string>
     <string name="device_manager_learn_more_sessions_verified_title">Verifizierte Sitzungen</string>
     <string name="device_manager_learn_more_sessions_unverified">Nicht verifizierte Sitzungen sind jene, die angemeldet, aber nicht quer signiert sind.
@@ -2805,7 +2799,7 @@
     <string name="device_manager_sessions_sign_in_with_qr_code_title">Mit QR-Code anmelden</string>
     <string name="login_scan_qr_code">QR-Code einlesen</string>
     <string name="labs_enable_voice_broadcast_summary">Zeichne Sprachnachrichten auf, während du sie in Echtzeit in den Raumverlauf sendest.</string>
-    <string name="labs_enable_voice_broadcast_title">Sprachübertragung aktivieren (in aktiver Entwicklung)</string>
+    <string name="labs_enable_voice_broadcast_title">Sprachübertragung aktivieren</string>
     <string name="qr_code_login_header_failed_homeserver_is_not_supported_description">Der Heim-Server unterstützt Anmelden per QR-Code nicht.</string>
     <string name="qr_code_login_header_failed_user_cancelled_description">Die Anmeldung wurde vom anderen Gerät abgebrochen.</string>
     <string name="qr_code_login_header_failed_invalid_qr_code_description">Der QR-Code ist ungültig.</string>
@@ -2815,7 +2809,7 @@
     <string name="qr_code_login_header_failed_other_description">Die Anfrage ist fehlgeschlagen.</string>
     <string name="a11y_play_voice_broadcast">Abspielen oder fortsetzen der Sprachübertragung</string>
     <string name="a11y_resume_voice_broadcast_record">Fortsetzen der Sprachübertragung</string>
-    <string name="a11y_voice_broadcast_buffering">Puffere …</string>
+    <string name="voice_broadcast_buffering">Puffere …</string>
     <string name="a11y_pause_voice_broadcast">Pausiere Sprachübertragung</string>
     <string name="a11y_stop_voice_broadcast_record">Stoppe Aufzeichnung der Sprachübertragung</string>
     <string name="a11y_pause_voice_broadcast_record">Pausiere Aufzeichnung der Sprachübertragung</string>
@@ -2867,4 +2861,62 @@
     <string name="device_manager_other_sessions_show_ip_address">IP-Adresse anzeigen</string>
     <string name="settings_enable_direct_share_summary">Kürzliche Unterhaltungen im Teilen-Menü des Systems anzeigen</string>
     <string name="settings_enable_direct_share_title">Direktes Teilen aktivieren</string>
+    <string name="review_unverified_sessions_description">Überprüfe sie, um ein sicheres Konto gewährleisten zu können</string>
+    <string name="review_unverified_sessions_title">Du hast nicht verifizierte Sitzungen</string>
+    <string name="settings_nightly_build_update">Hol dir den neuesten Build (Achtung: Du kannst dich eventuell nicht anmelden)</string>
+    <string name="settings_nightly_build">Nightly-Build</string>
+    <string name="device_manager_learn_more_sessions_encryption_not_supported">Diese Sitzung unterstützt keine Verschlüsselung, weshalb sie nicht verifiziert werden kann.
+\n
+\nDu wirst dich mit dieser Sitzung nicht an Unterhaltungen in Räumen mit aktivierter Verschlüsselung beteiligen können.
+\n
+\nAus Sicherheits- und Datenschutzgründen, wird die Nutzung von verschlüsselungsfähigen Matrix-Anwendungen empfohlen.</string>
+    <string name="device_manager_signout_all_other_sessions">Von allen anderen Sitzungen abmelden</string>
+    <string name="device_manager_verification_status_detail_session_encryption_not_supported">Diese Sitzung unterstützt keine Verschlüsselung und kann deshalb nicht verifiziert werden.</string>
+    <string name="voice_broadcast_live_broadcast">Echtzeit-Übertragung</string>
+    <string name="notice_voice_broadcast_ended_by_you">Du hast eine Sprachübertragung beendet.</string>
+    <string name="notice_voice_broadcast_ended">%1$s beendete eine Sprachübertragung.</string>
+    <string name="stop_voice_broadcast_content">Möchtest du die Übertragung wirklich beenden\? Dies wird die Übertragung beenden und die vollständige Aufnahme im Raum bereitstellen.</string>
+    <string name="stop_voice_broadcast_dialog_title">Live-Übertragung beenden\?</string>
+    <string name="action_stop">Ja, beende</string>
+    <string name="rich_text_editor_link">Link setzen</string>
+    <string name="set_link_edit">Link bearbeiten</string>
+    <string name="set_link_create">Link erstellen</string>
+    <string name="set_link_link">Link</string>
+    <string name="set_link_text">Text</string>
+    <string name="settings_access_token_summary">Dein Zugriffstoken gewährt vollen Zugriff auf dein Konto. Teile ihn mit niemandem.</string>
+    <string name="settings_access_token">Zugriffstoken</string>
+    <string name="rich_text_editor_bullet_list">Unsortierte Liste umschalten</string>
+    <string name="rich_text_editor_numbered_list">Nummerierte Liste umschalten</string>
+    <string name="room_polls_ended_no_item">In diesem Raum gibt es keine abgeschlossenen Umfragen</string>
+    <string name="room_polls_ended">Vergangene Umfragen</string>
+    <string name="room_polls_active_no_item">In diesem Raum gibt es keine aktiven Umfragen</string>
+    <string name="room_polls_active">Aktive Umfragen</string>
+    <string name="room_profile_section_more_polls">Umfrageverlauf</string>
+    <string name="message_reply_to_ended_poll_preview">Beendete Umfrage</string>
+    <string name="message_reply_to_poll_preview">Umfrage</string>
+    <string name="message_reply_to_sender_ended_poll">beendete eine Umfrage.</string>
+    <string name="ended_poll_indicator">Umfrage beendet.</string>
+    <string name="thread_list_not_available">Dein Heim-Server unterstützt noch nicht das Auflisten von Threads.</string>
+    <string name="started_a_voice_broadcast">Eine Sprachübertragung wurde begonnen</string>
+    <string name="error_voice_broadcast_unable_to_play">Wiedergabe der Sprachübertragung nicht möglich.</string>
+    <string name="unable_to_decrypt_some_events_in_poll">Evtl. werden infolge von Entschlüsselungsfehlern einige Stimmen nicht gezählt</string>
+    <string name="room_polls_loading_error">Fehler beim Laden der Umfragen.</string>
+    <string name="room_polls_load_more">Weitere Umfragen laden</string>
+    <string name="room_polls_wait_for_display">Zeige Umfragen an</string>
+    <plurals name="room_polls_active_no_item_for_loaded_period">
+        <item quantity="one">Für den vergangenen Tag sind keine aktiven Umfragen verfügbar.
+\nLade weitere Umfragen, um die der vorherigen Tage zu sehen.</item>
+        <item quantity="other">Für die vergangenen %1$d Tage sind keine aktiven Umfragen verfügbar.
+\nLade weitere Umfragen, um die der vorherigen Tage zu sehen.</item>
+    </plurals>
+    <plurals name="room_polls_ended_no_item_for_loaded_period">
+        <item quantity="one">Für den vergangenen Tag sind keine beendeten Umfragen verfügbar.
+\nLade weitere Umfragen, um die der vorherigen Tage zu sehen.</item>
+        <item quantity="other">Für die vergangenen %1$d Tage sind keine beendeten Umfragen verfügbar.
+\nLade weitere Umfragen, um die der vorherigen Tage zu sehen.</item>
+    </plurals>
+    <string name="error_voice_message_broadcast_in_progress_message">Du kannst keine Sprachnachricht beginnen, da du im Moment eine Echtzeitübertragung aufzeichnest. Bitte beende deine Sprachübertragung, um ein Gespräch zu beginnen</string>
+    <string name="error_voice_message_broadcast_in_progress">Kann Sprachnachricht nicht beginnen</string>
+    <string name="error_voice_broadcast_no_connection_recording">Verbindungsfehler − Aufnahme pausiert</string>
+    <string name="rich_text_editor_inline_code">Als Inline-Code formatieren</string>
 </resources>

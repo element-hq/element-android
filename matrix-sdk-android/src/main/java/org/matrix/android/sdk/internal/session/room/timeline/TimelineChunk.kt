@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.session.room.timeline
 
 import io.realm.OrderedCollectionChangeSet
 import io.realm.OrderedRealmCollectionChangeListener
-import io.realm.RealmConfiguration
 import io.realm.RealmObjectChangeListener
 import io.realm.RealmQuery
 import io.realm.RealmResults
@@ -27,9 +26,11 @@ import kotlinx.coroutines.CompletableDeferred
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.isReply
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
+import org.matrix.android.sdk.api.session.room.timeline.getRelationContent
 import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.database.mapper.EventMapper
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
@@ -39,6 +40,8 @@ import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
 import org.matrix.android.sdk.internal.session.room.relation.threads.DefaultFetchThreadTimelineTask
 import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadTimelineTask
+import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
+import org.matrix.android.sdk.internal.session.room.timeline.decorator.TimelineEventDecorator
 import org.matrix.android.sdk.internal.session.sync.handler.room.ThreadsAwarenessHandler
 import timber.log.Timber
 import java.util.Collections
@@ -57,7 +60,6 @@ internal class TimelineChunk(
         private val fetchThreadTimelineTask: FetchThreadTimelineTask,
         private val eventDecryptor: TimelineEventDecryptor,
         private val paginationTask: PaginationTask,
-        private val realmConfiguration: RealmConfiguration,
         private val fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
         private val timelineEventMapper: TimelineEventMapper,
         private val uiEchoManager: UIEchoManager?,
@@ -66,6 +68,8 @@ internal class TimelineChunk(
         private val initialEventId: String?,
         private val onBuiltEvents: (Boolean) -> Unit,
         private val onEventsDeleted: () -> Unit,
+        private val decorator: TimelineEventDecorator,
+        val localEchoEventFactory: LocalEchoEventFactory,
 ) {
 
     private val isLastForward = AtomicBoolean(chunkEntity.isLastForward)
@@ -73,6 +77,13 @@ internal class TimelineChunk(
     private val nextToken = chunkEntity.nextToken
     private var prevChunkLatch: CompletableDeferred<Unit>? = null
     private var nextChunkLatch: CompletableDeferred<Unit>? = null
+
+    /**
+    Map of eventId -> eventId
+    The key holds the eventId of the repliedTo event.
+    The value holds a set of eventIds of all events replying to this event.
+     */
+    private val repliedEventsMap = HashMap<String, MutableSet<String>>()
 
     private val chunkObjectListener = RealmObjectChangeListener<ChunkEntity> { _, changeSet ->
         if (changeSet == null) return@RealmObjectChangeListener
@@ -353,9 +364,6 @@ internal class TimelineChunk(
         timelineEvents
                 .mapIndexed { index, timelineEventEntity ->
                     val timelineEvent = timelineEventEntity.buildAndDecryptIfNeeded()
-                    if (timelineEvent.root.type == EventType.STATE_ROOM_CREATE) {
-                        isLastBackward.set(true)
-                    }
                     if (direction == Timeline.Direction.FORWARDS) {
                         builtEventsIndexes[timelineEvent.eventId] = index
                         builtEvents.add(index, timelineEvent)
@@ -394,26 +402,45 @@ internal class TimelineChunk(
     }
 
     private fun TimelineEventEntity.buildAndDecryptIfNeeded(): TimelineEvent {
-        val timelineEvent = buildTimelineEvent(this)
-        val transactionId = timelineEvent.root.unsignedData?.transactionId
-        uiEchoManager?.onSyncedEvent(transactionId)
-        if (timelineEvent.isEncrypted() &&
-                timelineEvent.root.mxDecryptionResult == null) {
-            timelineEvent.root.eventId?.also { eventDecryptor.requestDecryption(TimelineEventDecryptor.DecryptionRequest(timelineEvent.root, timelineId)) }
+        /**
+         * Makes sure to update some internal state after a TimelineEvent is built.
+         */
+        fun processTimelineEvent(timelineEvent: TimelineEvent) {
+            if (timelineEvent.root.type == EventType.STATE_ROOM_CREATE) {
+                isLastBackward.set(true)
+            } else if (timelineEvent.root.isReply()) {
+                val relatesEventId = timelineEvent.getRelationContent()?.inReplyTo?.eventId
+                if (relatesEventId != null) {
+                    val relatedEvents = repliedEventsMap.getOrPut(relatesEventId) { mutableSetOf() }
+                    relatedEvents.add(timelineEvent.eventId)
+                }
+            }
+            val transactionId = timelineEvent.root.unsignedData?.transactionId
+            uiEchoManager?.onSyncedEvent(transactionId)
         }
-        if (!timelineEvent.isEncrypted() && !lightweightSettingsStorage.areThreadMessagesEnabled()) {
-            // Thread aware for not encrypted events
-            timelineEvent.root.eventId?.also { eventDecryptor.requestDecryption(TimelineEventDecryptor.DecryptionRequest(timelineEvent.root, timelineId)) }
+
+        fun decryptIfNeeded(timelineEvent: TimelineEvent) {
+            if (timelineEvent.isEncrypted() &&
+                    timelineEvent.root.mxDecryptionResult == null) {
+                timelineEvent.root.eventId?.also { eventDecryptor.requestDecryption(TimelineEventDecryptor.DecryptionRequest(timelineEvent.root, timelineId)) }
+            }
+            if (!timelineEvent.isEncrypted() && !lightweightSettingsStorage.areThreadMessagesEnabled()) {
+                // Thread aware for not encrypted events
+                timelineEvent.root.eventId?.also { eventDecryptor.requestDecryption(TimelineEventDecryptor.DecryptionRequest(timelineEvent.root, timelineId)) }
+            }
         }
-        return timelineEvent
+
+        return buildTimelineEvent(this).also { timelineEvent ->
+            decryptIfNeeded(timelineEvent)
+            processTimelineEvent(timelineEvent)
+        }
     }
 
     private fun buildTimelineEvent(eventEntity: TimelineEventEntity) = timelineEventMapper.map(
             timelineEventEntity = eventEntity,
             buildReadReceipts = timelineSettings.buildReadReceipts
-    ).let {
-        // eventually enhance with ui echo?
-        (uiEchoManager?.decorateEventWithReactionUiEcho(it) ?: it)
+    ).let { timelineEvent ->
+        decorator.decorate(timelineEvent)
     }
 
     /**
@@ -493,13 +520,9 @@ internal class TimelineChunk(
             if (!validateInsertion(range, results)) continue
             val newItems = results
                     .subList(range.startIndex, range.startIndex + range.length)
-                    .map { it.buildAndDecryptIfNeeded() }
-
             builtEventsIndexes.entries.filter { it.value >= range.startIndex }.forEach { it.setValue(it.value + range.length) }
-            newItems.mapIndexed { index, timelineEvent ->
-                if (timelineEvent.root.type == EventType.STATE_ROOM_CREATE) {
-                    isLastBackward.set(true)
-                }
+            newItems.mapIndexed { index, timelineEventEntity ->
+                val timelineEvent = timelineEventEntity.buildAndDecryptIfNeeded()
                 val correctedIndex = range.startIndex + index
                 builtEvents.add(correctedIndex, timelineEvent)
                 builtEventsIndexes[timelineEvent.eventId] = correctedIndex
@@ -509,11 +532,17 @@ internal class TimelineChunk(
         for (range in modifications) {
             for (modificationIndex in (range.startIndex until range.startIndex + range.length)) {
                 val updatedEntity = results[modificationIndex] ?: continue
-                val builtEventIndex = builtEventsIndexes[updatedEntity.eventId] ?: continue
-                try {
-                    builtEvents[builtEventIndex] = updatedEntity.buildAndDecryptIfNeeded()
-                } catch (failure: Throwable) {
-                    Timber.v("Fail to update items at index: $modificationIndex")
+                val updatedEventId = updatedEntity.eventId
+                val repliesOfUpdatedEvent = repliedEventsMap.getOrElse(updatedEventId) { emptySet() }.mapNotNull { eventId ->
+                    results.where().equalTo(TimelineEventEntityFields.EVENT_ID, eventId).findFirst()
+                }
+                repliesOfUpdatedEvent.plus(updatedEntity).forEach { entityToRebuild ->
+                    val builtEventIndex = builtEventsIndexes[entityToRebuild.eventId] ?: return@forEach
+                    try {
+                        builtEvents[builtEventIndex] = entityToRebuild.buildAndDecryptIfNeeded()
+                    } catch (failure: Throwable) {
+                        Timber.v("Fail to update items at index: $modificationIndex")
+                    }
                 }
             }
         }
@@ -571,7 +600,6 @@ internal class TimelineChunk(
                 timelineId = timelineId,
                 eventDecryptor = eventDecryptor,
                 paginationTask = paginationTask,
-                realmConfiguration = realmConfiguration,
                 fetchThreadTimelineTask = fetchThreadTimelineTask,
                 fetchTokenAndPaginateTask = fetchTokenAndPaginateTask,
                 timelineEventMapper = timelineEventMapper,
@@ -580,7 +608,9 @@ internal class TimelineChunk(
                 lightweightSettingsStorage = lightweightSettingsStorage,
                 initialEventId = null,
                 onBuiltEvents = this.onBuiltEvents,
-                onEventsDeleted = this.onEventsDeleted
+                onEventsDeleted = this.onEventsDeleted,
+                decorator = this.decorator,
+                localEchoEventFactory = localEchoEventFactory
         )
     }
 

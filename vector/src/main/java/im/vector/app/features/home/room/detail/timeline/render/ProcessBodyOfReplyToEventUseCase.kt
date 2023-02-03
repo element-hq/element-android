@@ -19,18 +19,23 @@ package im.vector.app.features.home.room.detail.timeline.render
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.StringProvider
+import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.getPollQuestion
+import org.matrix.android.sdk.api.session.events.model.getRelationContent
 import org.matrix.android.sdk.api.session.events.model.isAudioMessage
 import org.matrix.android.sdk.api.session.events.model.isFileMessage
 import org.matrix.android.sdk.api.session.events.model.isImageMessage
 import org.matrix.android.sdk.api.session.events.model.isLiveLocation
-import org.matrix.android.sdk.api.session.events.model.isPoll
+import org.matrix.android.sdk.api.session.events.model.isPollEnd
+import org.matrix.android.sdk.api.session.events.model.isPollStart
 import org.matrix.android.sdk.api.session.events.model.isSticker
 import org.matrix.android.sdk.api.session.events.model.isVideoMessage
 import org.matrix.android.sdk.api.session.events.model.isVoiceMessage
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.getTimelineEvent
+import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.relation.ReplyToContent
+import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import javax.inject.Inject
 
 private const val IN_REPLY_TO = "In reply to"
@@ -92,11 +97,22 @@ class ProcessBodyOfReplyToEventUseCase @Inject constructor(
                             stringProvider.getString(R.string.message_reply_to_sender_sent_sticker)
                     )
                 }
-                repliedToEvent.isPoll() -> {
+                repliedToEvent.isPollEnd() -> {
+                    val fallbackText = stringProvider.getString(R.string.message_reply_to_sender_ended_poll)
+                    val repliedText = getPollQuestionFromPollEnd(repliedToEvent)
                     matrixFormattedBody.replaceRange(
                             afterBreakingLineIndex,
                             endOfBlockQuoteIndex,
-                            repliedToEvent.getPollQuestion() ?: stringProvider.getString(R.string.message_reply_to_sender_created_poll)
+                            repliedText ?: fallbackText,
+                    )
+                }
+                repliedToEvent.isPollStart() -> {
+                    val fallbackText = stringProvider.getString(R.string.message_reply_to_sender_created_poll)
+                    val repliedText = repliedToEvent.getPollQuestion()
+                    matrixFormattedBody.replaceRange(
+                            afterBreakingLineIndex,
+                            endOfBlockQuoteIndex,
+                            repliedText ?: fallbackText,
                     )
                 }
                 repliedToEvent.isLiveLocation() -> {
@@ -119,8 +135,25 @@ class ProcessBodyOfReplyToEventUseCase @Inject constructor(
     }
 
     private fun getEvent(eventId: String, roomId: String) =
+            getTimelineEvent(eventId, roomId)
+                    ?.root
+
+    private fun getTimelineEvent(eventId: String, roomId: String) =
             activeSessionHolder.getSafeActiveSession()
                     ?.getRoom(roomId)
                     ?.getTimelineEvent(eventId)
-                    ?.root
+
+    private fun getPollQuestionFromPollEnd(event: Event): String? {
+        val eventId = event.getRelationContent()?.eventId.orEmpty()
+        val roomId = event.roomId.orEmpty()
+        return if (eventId.isEmpty() || roomId.isEmpty()) {
+            null
+        } else {
+            (getTimelineEvent(eventId, roomId)
+                    ?.getLastMessageContent() as? MessagePollContent)
+                    ?.getBestPollCreationInfo()
+                    ?.question
+                    ?.getBestQuestion()
+        }
+    }
 }

@@ -47,7 +47,7 @@
 \nKamers importeren</string>
     <string name="initial_sync_start_importing_account_joined_rooms">Initiële synchronisatie:
 \nGesprekken worden geladen
-\nAls je aan veel kamers deelneemt kan dit even duren</string>
+\nAls u aan veel kamers deelneemt kan dit even duren</string>
     <string name="initial_sync_start_importing_account_invited_rooms">Initiële synchronisatie:
 \nUitgenodigde kamers worden geïmporteerd</string>
     <string name="initial_sync_start_importing_account_left_rooms">Initiële synchronisatie:
@@ -73,12 +73,12 @@
         <item quantity="other">%1$s heeft %2$s als kameradressen toegevoegd.</item>
     </plurals>
     <plurals name="notice_room_aliases_removed">
-        <item quantity="one">%1$s heeft %2$s als gespreksadres verwijderd.</item>
-        <item quantity="other">%1$s heeft %2$s als gespreksadressen verwijderd.</item>
+        <item quantity="one">%1$s heeft %2$s verwijderd als adres voor deze kamer.</item>
+        <item quantity="other">%1$s heeft %2$s verwijderd als adressen voor deze kamer.</item>
     </plurals>
-    <string name="notice_room_aliases_added_and_removed">%1$s heeft %2$s als gespreksadres toegevoegd en %3$s verwijderd.</string>
-    <string name="notice_room_canonical_alias_set">%1$s heeft het hoofdadres voor dit gesprek ingesteld op %2$s.</string>
-    <string name="notice_room_canonical_alias_unset">%1$s heeft het hoofdadres voor dit gesprek verwijderd.</string>
+    <string name="notice_room_aliases_added_and_removed">%1$s heeft %2$s toegevoegd en %3$s verwijderd als adres voor deze kamer.</string>
+    <string name="notice_room_canonical_alias_set">%1$s heeft %2$s ingesteld als het hoofdadres voor deze kamer.</string>
+    <string name="notice_room_canonical_alias_unset">%1$s heeft het hoofdadres van deze kamer verwijderd.</string>
     <string name="notice_room_guest_access_can_join">%1$s heeft gasten de toegang tot dit gesprek verleend.</string>
     <string name="notice_room_guest_access_forbidden">%1$s heeft gasten de toegang tot het gesprek verhinderd.</string>
     <string name="notice_end_to_end_ok">%1$s heeft eind-tot-eind-versleuteling ingeschakeld.</string>
@@ -787,7 +787,7 @@
     <string name="create_room_public_title">Publiek</string>
     <string name="create_room_public_description">Iedereen kan deelnemer worden van deze kamer</string>
     <string name="action_play">Afspelen</string>
-    <string name="notice_room_canonical_alias_unset_by_you">Je hebt het hoofdadres voor dit gesprek verwijderd.</string>
+    <string name="notice_room_canonical_alias_unset_by_you">U heeft het hoofdadres van deze kamer verwijderd.</string>
     <string name="notice_room_invite_with_reason_by_you">Je hebt %1$s uitgenodigd. Reden: %2$s</string>
     <string name="notice_room_invite_no_invitee_with_reason_by_you">Jouw uitnodiging. Reden: %1$s</string>
     <string name="event_status_sent_message">Bericht verstuurd</string>
@@ -884,11 +884,11 @@
     <string name="error_voice_message_unable_to_record">Kan stembericht niet opnemen</string>
     <string name="error_voice_message_unable_to_play">Kan stembericht niet afspelen</string>
     <string name="notice_room_guest_access_can_join_by_you">Je hebt gasten de toegang tot dit gesprek verleend.</string>
-    <string name="notice_room_canonical_alias_set_by_you">Je hebt het hoofdadres voor dit gesprek ingesteld op %1$s.</string>
-    <string name="notice_room_aliases_added_and_removed_by_you">Je hebt %1$s als gespreksadres toegevoegd en %2$s verwijderd.</string>
+    <string name="notice_room_canonical_alias_set_by_you">U heeft %1$s ingesteld als hoofdadres van deze kamer.</string>
+    <string name="notice_room_aliases_added_and_removed_by_you">U heeft %1$s toegevoegd en %2$s verwijderd als adressen voor deze kamer.</string>
     <plurals name="notice_room_aliases_removed_by_you">
-        <item quantity="one">Je hebt %1$s als gespreksadres verwijderd.</item>
-        <item quantity="other">Je hebt %1$s als gespreksadressen verwijderd.</item>
+        <item quantity="one">U heeft %1$s verwijderd als adres voor deze kamer.</item>
+        <item quantity="other">U heeft %1$s verwijderd als adressen voor deze kamer.</item>
     </plurals>
     <plurals name="notice_room_aliases_added_by_you">
         <item quantity="one">Je hebt %1$s als kameradres toegevoegd.</item>
@@ -1858,8 +1858,6 @@
     <string name="cross_signing_verify_by_emoji">Interactief verifiëren door Emoji</string>
     <string name="cross_signing_verify_by_text">Handmatig verifiëren via tekst</string>
     <string name="verify_this_session">Verifieer de nieuwe login voor toegang tot je account: %1$s</string>
-    <string name="verify_other_sessions">Verifieer al je sessies om ervoor te zorgen dat je account en berichten veilig zijn</string>
-    <string name="review_logins">Bekijk waar je bent ingelogd</string>
     <string name="encrypted_unverified">Versleuteld door een niet-geverifieerd apparaat</string>
     <string name="default_message_emote_snow">stuurt sneeuwval ❄️</string>
     <string name="default_message_emote_confetti">stuurt confetti 🎉</string>
@@ -2186,7 +2184,6 @@
     <string name="end_poll_confirmation_approve_button">Einde poll</string>
     <string name="end_poll_confirmation_description">Hierdoor kunnen mensen niet meer stemmen en worden de definitieve resultaten van de poll weergegeven.</string>
     <string name="end_poll_confirmation_title">Deze poll beëindigen\?</string>
-    <string name="a11y_poll_winner_option">winnaar optie</string>
     <string name="poll_end_action">Einde poll</string>
     <plurals name="poll_total_vote_count_after_ended">
         <item quantity="one">Eindresultaat gebaseerd op %1$d stem</item>
@@ -2746,7 +2743,7 @@
     <string name="device_manager_verification_status_detail_other_session_verified">Deze sessie is klaar voor veilige communicatie.</string>
     <string name="device_manager_verification_status_detail_current_session_verified">Je huidige sessie is klaar voor veilige communicatie.</string>
     <string name="device_manager_verification_status_unknown">Onbekende verificatiestatus</string>
-    <string name="a11y_voice_broadcast_buffering">Bufferen</string>
+    <string name="voice_broadcast_buffering">Bufferen</string>
     <string name="voice_broadcast_live">Live</string>
     <string name="key_authenticity_not_guaranteed">De authenticiteit van dit versleutelde bericht kan niet worden gegarandeerd op dit apparaat.</string>
     <string name="settings_security_incognito_keyboard_title">Incognito toetsenbord</string>
@@ -2778,7 +2775,7 @@
     <string name="two">2</string>
     <string name="one">1</string>
     <string name="labs_enable_voice_broadcast_summary">In staat zijn om spraakuitzendingen op te nemen en te verzenden in de tijdlijn van de kamer.</string>
-    <string name="labs_enable_voice_broadcast_title">Spraakuitzending inschakelen (in actieve ontwikkeling)</string>
+    <string name="labs_enable_voice_broadcast_title">Spraakuitzending inschakelen</string>
     <string name="labs_enable_client_info_recording_summary">Noteer de naam, versie en url van de applicatie om sessies gemakkelijker te herkennen in sessiebeheer.</string>
     <string name="labs_enable_client_info_recording_title">Opname van applicatie informatie inschakelen</string>
     <string name="labs_enable_session_manager_summary">Meer zichtbaarheid en controle over al je sessies.</string>
@@ -2787,9 +2784,6 @@
 \n
 \nDit geeft ze het vertrouwen dat ze echt met jou praten, maar het betekent ook dat ze de sessienaam kunnen zien die je hier invoert.</string>
     <string name="device_manager_learn_more_session_rename_title">Sessies hernoemen</string>
-    <string name="device_manager_learn_more_sessions_verified">Geverifieerde sessies zijn ingelogd met jouw inloggegevens en vervolgens geverifieerd, hetzij met je veilige wachtwoordzin of door kruisverificatie.
-\n
-\nDit betekent dat ze coderingssleutels bevatten voor je eerdere berichten en bevestigen aan andere gebruikers waarmee je communiceert dat deze sessies echt van jou zijn.</string>
     <string name="device_manager_learn_more_sessions_unverified">Niet-geverifieerde sessies zijn sessies die zijn aangemeld met jouw inloggegevens, maar niet zijn geverifieerd.
 \n
 \nJe moet er vooral zeker van zijn dat je deze sessies herkent, omdat ze een ongeoorloofd gebruik van je account kunnen vertegenwoordigen.</string>
@@ -2836,4 +2830,10 @@
         <item quantity="one">%1$d geselecteerd</item>
         <item quantity="other">%1$d geselecteerd</item>
     </plurals>
+    <string name="settings_nightly_build">Nightly-versie</string>
+    <string name="quoting">Quoten</string>
+    <string name="replying_to">Reageren op %s</string>
+    <string name="editing">Bewerking</string>
+    <string name="settings_enable_direct_share_summary">Recente gesprekken in het deelmenu van het systeem tonen</string>
+    <string name="settings_enable_direct_share_title">Direct delen inschakelen</string>
 </resources>

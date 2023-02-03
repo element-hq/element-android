@@ -198,7 +198,7 @@ class AudioMessageHelper @Inject constructor(
 
     private fun startRecordingAmplitudes() {
         amplitudeTicker?.stop()
-        amplitudeTicker = CountUpTimer(50).apply {
+        amplitudeTicker = CountUpTimer(intervalInMs = 50).apply {
             tickListener = CountUpTimer.TickListener { onAmplitudeTick() }
             resume()
         }

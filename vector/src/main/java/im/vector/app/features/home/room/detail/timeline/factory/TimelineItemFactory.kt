@@ -102,6 +102,7 @@ class TimelineItemFactory @Inject constructor(
                     // Message itemsX
                     EventType.STICKER,
                     in EventType.POLL_START.values,
+                    in EventType.POLL_END.values,
                     EventType.MESSAGE -> messageItemFactory.create(params)
                     EventType.REDACTION,
                     EventType.KEY_VERIFICATION_ACCEPT,
@@ -114,8 +115,7 @@ class TimelineItemFactory @Inject constructor(
                     EventType.CALL_SELECT_ANSWER,
                     EventType.CALL_NEGOTIATE,
                     EventType.REACTION,
-                    in EventType.POLL_RESPONSE.values,
-                    in EventType.POLL_END.values -> noticeItemFactory.create(params)
+                    in EventType.POLL_RESPONSE.values -> noticeItemFactory.create(params)
                     in EventType.BEACON_LOCATION_DATA.values -> {
                         if (event.root.isRedacted()) {
                             messageItemFactory.create(params)

@@ -801,6 +801,7 @@
     <string name="thread_list_modal_my_threads_subtitle">Shows all threads you’ve participated in</string>
     <string name="thread_list_empty_title">Keep discussions organized with threads</string>
     <string name="thread_list_empty_subtitle">Threads help keep your conversations on-topic and easy to track.</string>
+    <string name="thread_list_not_available">Your homeserver does not support listing threads yet.</string>
     <!-- Parameter %s will be replaced by the value of string reply_in_thread -->
     <string name="thread_list_empty_notice">Tip: Long tap a message and use “%s”.</string>
     <string name="search_thread_from_a_thread">From a Thread</string>
@@ -2313,6 +2314,7 @@
     <string name="sent_verification_conclusion">Verification Conclusion</string>
     <string name="sent_location">Shared their location</string>
     <string name="sent_live_location">Shared their live location</string>
+    <string name="started_a_voice_broadcast">Started a voice broadcast</string>
 
     <string name="verification_request_waiting">Waiting…</string>
     <string name="verification_request_other_cancelled">%s canceled</string>
@@ -3125,8 +3127,7 @@
 
     <string name="voice_broadcast_live">Live</string>
     <string name="voice_broadcast_live_broadcast">Live broadcast</string>
-    <!-- TODO Rename id to voice_broadcast_buffering -->
-    <string name="a11y_voice_broadcast_buffering">Buffering…</string>
+    <string name="voice_broadcast_buffering">Buffering…</string>
     <string name="a11y_resume_voice_broadcast_record">Resume voice broadcast record</string>
     <string name="a11y_pause_voice_broadcast_record">Pause voice broadcast record</string>
     <string name="a11y_stop_voice_broadcast_record">Stop voice broadcast record</string>
@@ -3434,7 +3435,7 @@
     <string name="labs_enable_session_manager_summary">Have greater visibility and control over all your sessions.</string>
     <string name="labs_enable_client_info_recording_title">Enable client info recording</string>
     <string name="labs_enable_client_info_recording_summary">Record the client name, version, and url to recognise sessions more easily in session manager.</string>
-    <string name="labs_enable_voice_broadcast_title">Enable voice broadcast (under active development)</string>
+    <string name="labs_enable_voice_broadcast_title">Enable voice broadcast</string>
     <string name="labs_enable_voice_broadcast_summary">Be able to record and send voice broadcast in room timeline.</string>
 
     <!-- Note to translators: %s will be replaces with selected space name -->
@@ -3557,4 +3558,32 @@
     <string name="hours24">24h</string>
     <string name="title">Title</string>
     <string name="description">Description</string>
+    <string name="started_a_voice_broadcast">Started a voice broadcast</string>
+    <string name="error_voice_broadcast_unable_to_play">Unable to play this voice broadcast.</string>
+    <string name="room_profile_section_more_polls">Poll history</string>
+    <string name="error_voice_message_broadcast_in_progress">Cannot start voice message</string>
+    <string name="error_voice_message_broadcast_in_progress_message">You can’t start a voice message as you are currently recording a live broadcast. Please end your live broadcast in order to start recording a voice message</string>
+    <string name="error_voice_broadcast_unable_to_play">Unable to play this voice broadcast.</string>
+    <string name="error_voice_broadcast_no_connection_recording">Connection error - Recording paused</string>
+    <string name="ended_poll_indicator">Ended the poll.</string>
+    <string name="unable_to_decrypt_some_events_in_poll">Due to decryption errors, some votes may not be counted</string>
+    <string name="room_polls_active">Active polls</string>
+    <string name="room_polls_active_no_item">There are no active polls in this room</string>
+    <plurals name="room_polls_active_no_item_for_loaded_period">
+        <item quantity="one">"There are no active polls for the past day.\nLoad more polls to view polls for previous days."</item>
+        <item quantity="other">"There are no active polls for the past %1$d days.\nLoad more polls to view polls for previous days."</item>
+    </plurals>
+    <string name="room_polls_ended">Past polls</string>
+    <string name="room_polls_ended_no_item">There are no past polls in this room</string>
+    <plurals name="room_polls_ended_no_item_for_loaded_period">
+        <item quantity="one">"There are no past polls for the past day.\nLoad more polls to view polls for previous days."</item>
+        <item quantity="other">"There are no past polls for the past %1$d days.\nLoad more polls to view polls for previous days."</item>
+    </plurals>
+    <string name="room_polls_wait_for_display">Displaying polls</string>
+    <string name="room_polls_load_more">Load more polls</string>
+    <string name="room_polls_loading_error">Error fetching polls.</string>
+    <string name="rich_text_editor_numbered_list">Toggle numbered list</string>
+    <string name="rich_text_editor_bullet_list">Toggle bullet list</string>
+    <string name="rich_text_editor_inline_code">Apply inline code format</string>
+
 </resources>

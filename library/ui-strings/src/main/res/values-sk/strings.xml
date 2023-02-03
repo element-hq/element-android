@@ -2001,8 +2001,6 @@
     <string name="cross_signing_verify_by_emoji">Interaktívne overte pomocou emotikonov</string>
     <string name="cross_signing_verify_by_text">Manuálne overte pomocou textu</string>
     <string name="verify_this_session">Overte nové prihlásenie s prístupom k vášmu účtu: %1$s</string>
-    <string name="verify_other_sessions">Overte všetky vaše relácie, aby ste si boli istý, že sú vaše správy a účet bezpečné</string>
-    <string name="review_logins">Skontrolujte, kde ste prihlásení</string>
     <string name="encrypted_unverified">Šifrované neovereným zariadením</string>
     <string name="default_message_emote_snow">pošle sneženie ❄️</string>
     <string name="default_message_emote_confetti">pošle konfety 🎉</string>
@@ -2421,7 +2419,6 @@
     <string name="login_signin_sso">Pokračovať pomocou jednotného prihlásenia SSO</string>
     <string name="login_social_sso">jednotné prihlásenie SSO</string>
     <string name="a11y_close_keys_backup_banner">Zatvoriť výzvu na zálohovanie kľúčov</string>
-    <string name="a11y_poll_winner_option">Výťazná odpoveď</string>
     <string name="a11y_unchecked">Nezaškrtnuté</string>
     <string name="a11y_checked">Zaškrtnuté</string>
     <string name="a11y_unsent_draft">Rozpísaná správa</string>
@@ -2767,9 +2764,6 @@
 \n
 \nTo im poskytuje istotu, že sa komunikujú naozaj s vami, ale zároveň to znamená, že vidia názov relácie, ktorý sem zadáte.</string>
     <string name="device_manager_learn_more_session_rename_title">Premenovanie relácií</string>
-    <string name="device_manager_learn_more_sessions_verified">Overené relácie, do ktorých ste sa prihlásili pomocou svojich prihlasovacích údajov a ktoré boli následne overené buď pomocou vašej bezpečnostnej prístupovej frázy, alebo krížovým overením.
-\n
-\nTo znamená, že majú šifrovacie kľúče pre vaše predchádzajúce správy a potvrdzujú ostatným používateľom, s ktorými komunikujete, že tieto relácie ste skutočne vy.</string>
     <string name="device_manager_learn_more_sessions_verified_title">Overené relácie</string>
     <string name="device_manager_learn_more_sessions_unverified">Neoverené relácie sú relácie, do ktorých ste sa prihlásili pomocou svojich prístupových údajov, ale ktoré neboli krížovo overené.
 \n
@@ -2867,8 +2861,8 @@
     <string name="qr_code_login_header_failed_e2ee_security_issue_description">Pri nastavovaní zabezpečeného zasielania správ sa vyskytol bezpečnostný problém. Jedna z nasledujúcich možností môže byť kompromitovaná: Váš domovský server; Vaše internetové pripojenie (pripojenia); Vaše zariadenie (zariadenia);</string>
     <string name="qr_code_login_header_failed_other_description">Žiadosť zlyhala.</string>
     <string name="labs_enable_voice_broadcast_summary">Možnosť nahrávania a odosielania hlasového vysielania v časovej osi miestnosti.</string>
-    <string name="labs_enable_voice_broadcast_title">Zapnúť hlasové vysielanie (v štádiu aktívneho vývoja)</string>
-    <string name="a11y_voice_broadcast_buffering">Načítavanie do vyrovnávacej pamäte…</string>
+    <string name="labs_enable_voice_broadcast_title">Zapnúť hlasové vysielanie</string>
+    <string name="voice_broadcast_buffering">Načítavanie do vyrovnávacej pamäte…</string>
     <string name="a11y_pause_voice_broadcast">Pozastaviť hlasové vysielanie</string>
     <string name="a11y_play_voice_broadcast">Prehrať alebo pokračovať v nahrávaní hlasového vysielania</string>
     <string name="a11y_stop_voice_broadcast_record">Zastaviť nahrávanie hlasového vysielania</string>
@@ -2924,4 +2918,66 @@
     <string name="editing">Úprava</string>
     <string name="settings_enable_direct_share_summary">Zobraziť posledné konverzácie v systémovej ponuke zdieľania</string>
     <string name="settings_enable_direct_share_title">Povoliť priame zdieľanie</string>
+    <string name="review_unverified_sessions_description">Skontrolujte, či je vaše konto bezpečné</string>
+    <string name="review_unverified_sessions_title">Máte neoverené relácie</string>
+    <string name="device_manager_learn_more_sessions_encryption_not_supported">Táto relácia nepodporuje šifrovanie, takže ju nemožno overiť.
+\n
+\nPri používaní tejto relácie sa nebudete môcť zúčastňovať konverzácií v miestnostiach, kde je zapnuté šifrovanie.
+\n
+\nNa dosiahnutie čo najlepšieho zabezpečenia a súkromia sa odporúča používať Matrix klientov, ktoré podporujú šifrovanie.</string>
+    <string name="device_manager_signout_all_other_sessions">Odhlásiť zo všetkých ostatných relácií</string>
+    <string name="device_manager_verification_status_detail_session_encryption_not_supported">Táto relácia nepodporuje šifrovanie, a preto ju nemožno overiť.</string>
+    <string name="settings_nightly_build_update">Získajte najnovšiu zostavu (poznámka: môžete mať problémy s prihlásením)</string>
+    <string name="settings_nightly_build">Nočná zostava</string>
+    <string name="voice_broadcast_live_broadcast">Živé vysielanie</string>
+    <string name="notice_voice_broadcast_ended_by_you">Ukončili ste hlasové vysielanie.</string>
+    <string name="notice_voice_broadcast_ended">%1$s ukončil/a hlasové vysielanie.</string>
+    <string name="stop_voice_broadcast_content">Určite chcete zastaviť vysielanie naživo\? Tým sa vysielanie ukončí a v miestnosti bude k dispozícii celý záznam.</string>
+    <string name="stop_voice_broadcast_dialog_title">Zastaviť vysielanie naživo\?</string>
+    <string name="action_stop">Áno, zastaviť</string>
+    <string name="set_link_edit">Upraviť odkaz</string>
+    <string name="set_link_create">Vytvoriť odkaz</string>
+    <string name="set_link_link">Odkaz</string>
+    <string name="set_link_text">Text</string>
+    <string name="rich_text_editor_link">Nastaviť odkaz</string>
+    <string name="settings_access_token_summary">Váš prístupový token poskytuje úplný prístup k vášmu účtu. S nikým ho nezdieľajte.</string>
+    <string name="settings_access_token">Prístupový token</string>
+    <string name="rich_text_editor_numbered_list">Prepnúť na číslovaný zoznam</string>
+    <string name="rich_text_editor_bullet_list">Prepnúť zoznam s odrážkami</string>
+    <string name="room_polls_ended_no_item">V tejto miestnosti nie sú žiadne predchádzajúce ankety</string>
+    <string name="room_polls_ended">Predchádzajúce ankety</string>
+    <string name="room_polls_active_no_item">V tejto miestnosti nie sú žiadne aktívne ankety</string>
+    <string name="room_polls_active">Aktívne ankety</string>
+    <string name="room_profile_section_more_polls">História ankety</string>
+    <string name="message_reply_to_ended_poll_preview">Ukončená anketa</string>
+    <string name="message_reply_to_poll_preview">Anketa</string>
+    <string name="message_reply_to_sender_ended_poll">ukončil/a anketu.</string>
+    <string name="ended_poll_indicator">Ukončil/a anketu.</string>
+    <string name="thread_list_not_available">Váš domovský server zatiaľ nepodporuje zobrazovanie vlákien.</string>
+    <string name="error_voice_broadcast_unable_to_play">Toto hlasové vysielanie nie je možné prehrať.</string>
+    <string name="started_a_voice_broadcast">Spustil/a hlasové vysielanie</string>
+    <string name="unable_to_decrypt_some_events_in_poll">Z dôvodu chýb v dešifrovaní sa niektoré hlasy nemusia započítať</string>
+    <string name="room_polls_loading_error">Chyba pri načítavaní ankiet.</string>
+    <string name="room_polls_load_more">Načítať ďalšie ankety</string>
+    <string name="room_polls_wait_for_display">Zobrazenie ankiet</string>
+    <plurals name="room_polls_ended_no_item_for_loaded_period">
+        <item quantity="one">Za uplynulý deň nie sú k dispozícii žiadne ankety.
+\nNačítaním ďalších ankiet zobrazíte ankety za predchádzajúce dni.</item>
+        <item quantity="few">Za posledné %1$d dni nie sú aktívne žiadne ankety.
+\nNačítaním ďalších ankiet zobrazíte ankety za predchádzajúce dni.</item>
+        <item quantity="other">Za posledných %1$d dní nie sú aktívne žiadne ankety.
+\nNačítaním ďalších ankiet zobrazíte ankety za predchádzajúce dni.</item>
+    </plurals>
+    <plurals name="room_polls_active_no_item_for_loaded_period">
+        <item quantity="one">Za posledný deň nie sú aktívne žiadne ankety.
+\nNačítaním ďalších ankiet zobrazíte ankety za predchádzajúce dni.</item>
+        <item quantity="few">Za posledných %1$d dni nie sú aktívne žiadne ankety.
+\nNačítaním ďalších ankiet zobrazíte ankety za predchádzajúce dni.</item>
+        <item quantity="other">Za posledných %1$d dní nie sú aktívne žiadne ankety.
+\nNačítaním ďalších ankiet zobrazíte ankety za predchádzajúce dni.</item>
+    </plurals>
+    <string name="error_voice_message_broadcast_in_progress_message">Nemôžete spustiť hlasovú správu, pretože práve nahrávate živé vysielanie. Ukončite prosím živé vysielanie, aby ste mohli začať nahrávať hlasovú správu</string>
+    <string name="error_voice_message_broadcast_in_progress">Nemožno spustiť hlasovú správu</string>
+    <string name="error_voice_broadcast_no_connection_recording">Chyba pripojenia - nahrávanie pozastavené</string>
+    <string name="rich_text_editor_inline_code">Použiť formát riadkového kódu</string>
 </resources>

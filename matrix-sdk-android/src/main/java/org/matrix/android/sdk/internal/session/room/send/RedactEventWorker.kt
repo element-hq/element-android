@@ -20,8 +20,8 @@ import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.internal.SessionManager
+import org.matrix.android.sdk.internal.crypto.tasks.RedactEventTask
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
-import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.SessionComponent
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.worker.SessionSafeCoroutineWorker
@@ -43,27 +43,29 @@ internal class RedactEventWorker(context: Context, params: WorkerParameters, ses
             val roomId: String,
             val eventId: String,
             val reason: String?,
+            val withRelations: List<String>? = null,
             override val lastFailureMessage: String? = null
     ) : SessionWorkerParams
 
     @Inject lateinit var roomAPI: RoomAPI
     @Inject lateinit var globalErrorReceiver: GlobalErrorReceiver
+    @Inject lateinit var redactEventTask: RedactEventTask
 
     override fun injectWith(injector: SessionComponent) {
         injector.inject(this)
     }
 
     override suspend fun doSafeWork(params: Params): Result {
-        val eventId = params.eventId
         return runCatching {
-            executeRequest(globalErrorReceiver) {
-                roomAPI.redactEvent(
-                        params.txID,
-                        params.roomId,
-                        eventId,
-                        if (params.reason == null) emptyMap() else mapOf("reason" to params.reason)
-                )
-            }
+            redactEventTask.execute(
+                    RedactEventTask.Params(
+                            txID = params.txID,
+                            roomId = params.roomId,
+                            eventId = params.eventId,
+                            reason = params.reason,
+                            withRelations = params.withRelations,
+                    )
+            )
         }.fold(
                 {
                     Result.success()

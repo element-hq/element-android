@@ -1811,8 +1811,6 @@
     <string name="error_saving_media_file">No s\'ha pogut desar el fitxer multimèdia</string>
     <string name="confirm_your_identity_quad_s">Confirma la teva identitat verificant aquest inici de sessió i, així, poder-li donar accés als missatges xifrats.</string>
     <string name="crosssigning_verify_session">Verifica l\'inici de sessió</string>
-    <string name="verify_other_sessions">Verifica totes les teves sessions per assegurar-te que el teu compte i missatges estan segurs</string>
-    <string name="review_logins">Comprova on has iniciat sessió</string>
     <string name="encrypted_unverified">Xifrat amb un dispositiu no verificat</string>
     <string name="unencrypted">No xifrat</string>
     <plurals name="secure_backup_reset_devices_you_can_verify">
@@ -2293,7 +2291,6 @@
     <string name="end_poll_confirmation_approve_button">Acaba l\'enquesta</string>
     <string name="end_poll_confirmation_description">Això impedirà que la gent pugui votar i es mostraran els resultats finals de l\'enquesta.</string>
     <string name="end_poll_confirmation_title">Vols acabar l\'enquesta\?</string>
-    <string name="a11y_poll_winner_option">opció guanyadora</string>
     <plurals name="create_poll_not_enough_options_error">
         <item quantity="one">Es necessita almenys %1$s opció</item>
         <item quantity="other">Es necessiten almenys %1$s opcions</item>
@@ -2717,9 +2714,6 @@
     <string name="device_manager_learn_more_session_rename">Els usuaris dels xats directes i sales al les quals t\'hagis unit poden veure la llista completa de les teves sessions.
 \n
 \nAixò els pot proporcionar més confiança de que realment parlen amb tu però, poden veure el nom de sessió que introdueixis.</string>
-    <string name="device_manager_learn_more_sessions_verified">Les sessions verificades son sessions en què has iniciat sessió amb les teves credencials i s\'han verificat utilitzant una frase de seguretat o mitjançant la verificació creuada.
-\n
-\nAixò vol dir que contenen claus de xifrat dels teus missatges anteriors i confirmen als altres usuaris amb qui parles, que aquestes sessions son realment teves.</string>
     <string name="device_manager_learn_more_sessions_unverified">Les sessions no verificades son sessions en què has iniciat sessió amb les teves credencials però s\'hi ha fet una verificació creuada.
 \n
 \nAssegura\'t que reconeixes aquestes sessions especialment, ja que podrien representar un ús no autoritzat del teu compte.</string>
@@ -2790,7 +2784,7 @@
     <string name="two">2</string>
     <string name="one">1</string>
     <string name="labs_enable_voice_broadcast_summary">Permet enregistrar i enviar emissions de veu dins una sala.</string>
-    <string name="labs_enable_voice_broadcast_title">Activa l\'emissió de veu (en desenvolupament)</string>
+    <string name="labs_enable_voice_broadcast_title">Activa l\'emissió de veu</string>
     <string name="labs_enable_client_info_recording_title">Activa la gravació d\'informació de client</string>
     <string name="labs_enable_client_info_recording_summary">Desa el nom de client, la versió i l\'URL per reconèixer les sessions més fàcilment dins el gestor de sessions.</string>
     <string name="labs_enable_session_manager_summary">Obté un millor control i visibilitat de totes les teves sessions.</string>
@@ -2814,7 +2808,7 @@
     <string name="labs_enable_rich_text_editor_title">Activa l\'editor de text enriquit</string>
     <string name="device_manager_push_notifications_description">Rep notificacions en aquesta sessió.</string>
     <string name="device_manager_push_notifications_title">Notificacions</string>
-    <string name="a11y_voice_broadcast_buffering">Carregant</string>
+    <string name="voice_broadcast_buffering">Carregant</string>
     <string name="a11y_pause_voice_broadcast">Pausa l\'emissió de veu</string>
     <string name="a11y_play_voice_broadcast">Reprodueix o reprèn l\'emissió de veu</string>
     <string name="a11y_stop_voice_broadcast_record">Atura l\'enregistrament d\'emissió de veu</string>

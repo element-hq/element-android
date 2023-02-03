@@ -25,7 +25,6 @@ import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.devices.v2.notification.UpdateNotificationSettingsAccountDataUseCase
-import im.vector.app.features.sync.SyncUtils
 import io.realm.Realm
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
@@ -50,9 +49,6 @@ class ConfigureAndStartSessionUseCase @Inject constructor(
         editor?.putString("username", session.myUserId)
         editor?.apply()
 
-        session.coroutineScope.launch {
-            session.filterService().setSyncFilter(SyncUtils.getSyncFilterBuilder())
-        }
         if (startSyncing) {
             session.startSyncing(context)
         }

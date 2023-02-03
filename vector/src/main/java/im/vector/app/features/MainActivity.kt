@@ -58,8 +58,6 @@ import im.vector.app.features.themes.ActivityOtherThemes
 import im.vector.app.features.ui.UiStateRepository
 import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
@@ -147,9 +145,9 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
         startAppViewModel.onEach {
             renderState(it)
         }
-        startAppViewModel.viewEvents.stream()
-                .onEach(::handleViewEvents)
-                .launchIn(lifecycleScope)
+        startAppViewModel.observeViewEvents {
+            handleViewEvents(it)
+        }
 
         startAppViewModel.handle(StartAppAction.StartApp)
         FirebaseApp.initializeApp(/*context=*/this)

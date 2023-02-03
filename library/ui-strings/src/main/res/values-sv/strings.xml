@@ -662,8 +662,6 @@
     <string name="encryption_not_enabled">Kryptering inte aktiverat</string>
     <string name="settings_notification_configuration">Aviseringskonfiguration</string>
     <string name="settings_messages_at_room">Meddelanden som innehåller @room</string>
-    <string name="review_logins">Granska var du är inloggad</string>
-    <string name="verify_other_sessions">Verifiera alla dina sessioner för att se till att ditt konto och dina meddelanden är säkra</string>
     <string name="create_room_dm_failure">Vi kunde inte skapa ditt DM. Vänligen kolla användarna du vill bjuda in och försök igen.</string>
     <string name="invite_users_to_room_action_invite">BJUD IN</string>
     <string name="invite_users_to_room_title">Bjud in användare</string>
@@ -2281,7 +2279,6 @@
     <string name="end_poll_confirmation_approve_button">Avsluta omröstningen</string>
     <string name="end_poll_confirmation_description">Det här kommer att stoppa personer från att rösta och visa det slutgiltiga resultatet av omröstningen.</string>
     <string name="end_poll_confirmation_title">Avsluta den här omröstningen\?</string>
-    <string name="a11y_poll_winner_option">vinnande alternativ</string>
     <string name="poll_end_action">Avsluta omröstning</string>
     <plurals name="poll_total_vote_count_after_ended">
         <item quantity="one">Slutgiltigt resultat baserat på %1$d röst</item>
@@ -2728,7 +2725,7 @@
     <string name="home_empty_space_no_rooms_title">%s
 \nser lite tom ut.</string>
     <string name="labs_enable_voice_broadcast_summary">Möjliggör att spela in och skicka röstsändning i rummets tidslinje.</string>
-    <string name="labs_enable_voice_broadcast_title">Aktivera röstsändning (under aktiv utveckling)</string>
+    <string name="labs_enable_voice_broadcast_title">Aktivera röstsändning</string>
     <string name="labs_enable_client_info_recording_summary">Spara klientnamnet, versionen, och URL:en för att enklare känna igen sessioner i sessionehanteraren.</string>
     <string name="labs_enable_client_info_recording_title">Aktivera klientinforapportering</string>
     <string name="labs_enable_session_manager_summary">Ha bättre insyn i och kontroll över alla dina sessioner.</string>
@@ -2737,9 +2734,6 @@
 \n
 \nDet försäkrar dem om att de verkligen pratar med dig, men det betyder också att de kan se sessionsnamnet du anger här.</string>
     <string name="device_manager_learn_more_session_rename_title">Döper om sessioner</string>
-    <string name="device_manager_learn_more_sessions_verified">Verifierade sessioner har loggat in med dina uppgifter och har sedan verifierats, antingen med din säkra lösenfras eller genom att kors-verifiera.
-\n
-\nDet betyder att det har krypteringsnycklar för dina tidigare meddelanden, bekräftar för andra användare du kommunicerar med att dessa sessioner verkligen är du.</string>
     <string name="device_manager_learn_more_sessions_verified_title">Verifierade sessioner</string>
     <string name="device_manager_learn_more_sessions_unverified">Overifierade sessioner är sessioner som har loggat in med dina uppgifter men som inte har kors-verifierats.
 \n
@@ -2804,7 +2798,7 @@
     <string name="qr_code_login_header_show_qr_code_new_device_description">Använd din inloggade enhet för att skanna QR-koden nedan:</string>
     <string name="qr_code_login_header_show_qr_code_title">Logga in med QR-kod</string>
     <string name="qr_code_login_header_scan_qr_code_description">Använd den här enhetens kamera för att skanna QR-koden på din andra enhet:</string>
-    <string name="a11y_voice_broadcast_buffering">Buffrar</string>
+    <string name="voice_broadcast_buffering">Buffrar…</string>
     <string name="a11y_pause_voice_broadcast">Pausa röstsändning</string>
     <string name="a11y_play_voice_broadcast">Spela eller återuppta röstsändning</string>
     <string name="a11y_stop_voice_broadcast_record">Avsluta inspelning av röstsändning</string>
@@ -2866,4 +2860,63 @@
     <string name="quoting">Citerar</string>
     <string name="replying_to">Besvarar %s</string>
     <string name="editing">Redigerar</string>
+    <string name="review_unverified_sessions_description">Granska för att försäkra att ditt konto är säkert</string>
+    <string name="review_unverified_sessions_title">Du har overifierade sessioner</string>
+    <string name="settings_enable_direct_share_summary">Visa nyliga chattar i systemets delningsmeny</string>
+    <string name="settings_enable_direct_share_title">Aktivera direktdelning</string>
+    <string name="device_manager_learn_more_sessions_encryption_not_supported">Den här sessioner stöder inte kryptering, så den kan inte verifieras.
+\n
+\nDu kommer inte kunna delta i rum där kryptering är aktiverat när du använder den här sessionen.
+\n
+\nFör bäst säkerhet och sekretess så rekommenderas det att använda Matrix-klienter som stöder kryptering.</string>
+    <string name="device_manager_signout_all_other_sessions">Logga ut alla andra sessioner</string>
+    <string name="device_manager_verification_status_detail_session_encryption_not_supported">Den här sessioner stöder inte kryptering och kan därför inte verifieras.</string>
+    <string name="settings_nightly_build_update">Hämta det senaste bygget (obs: du kan ha problem med att logga in)</string>
+    <string name="settings_nightly_build">Nightly-bygge</string>
+    <string name="voice_broadcast_live_broadcast">Direktsändning</string>
+    <string name="notice_voice_broadcast_ended_by_you">Du avslutade en röstsändning.</string>
+    <string name="notice_voice_broadcast_ended">%1$s avslutade en röstsändning.</string>
+    <string name="settings_access_token_summary">Din åtkomsttoken ger full åtkomst till ditt konto. Dela den inte med någon.</string>
+    <string name="settings_access_token">Åtkomsttoken</string>
+    <string name="message_reply_to_ended_poll_preview">Avslutade omröstning</string>
+    <string name="message_reply_to_poll_preview">Omröstning</string>
+    <string name="message_reply_to_sender_ended_poll">avslutade en omröstning.</string>
+    <string name="set_link_edit">Redigera länk</string>
+    <string name="set_link_create">Skapa en länk</string>
+    <string name="set_link_link">Länk</string>
+    <string name="set_link_text">Text</string>
+    <string name="rich_text_editor_bullet_list">Växla punktlista</string>
+    <string name="rich_text_editor_numbered_list">Växla numrerad lista</string>
+    <string name="rich_text_editor_link">Sätt länk</string>
+    <string name="room_polls_ended_no_item">Det finns inga tidigare omröstningar i det här rummet</string>
+    <string name="room_polls_ended">Tidigare omröstningar</string>
+    <string name="room_polls_active_no_item">Det finns inga aktiva omröstningar i det här rummet</string>
+    <string name="room_polls_active">Aktiva omröstningar</string>
+    <string name="ended_poll_indicator">Avslutade omröstningen.</string>
+    <string name="stop_voice_broadcast_content">Är du säker på att du vill avsluta din direktsändning\? Detta kommer att avsluta sändningen och den fulla inspelningen kommer att bli tillgänglig i rummet.</string>
+    <string name="stop_voice_broadcast_dialog_title">Avsluta röstsändning\?</string>
+    <string name="room_profile_section_more_polls">Omröstningshistorik</string>
+    <string name="thread_list_not_available">Din hemserver har inte stöd för att lista trådar än.</string>
+    <string name="action_stop">Ja, sluta</string>
+    <string name="room_polls_loading_error">Fel vid hämtning av omröstningar.</string>
+    <string name="room_polls_load_more">Laddar fler omröstning</string>
+    <string name="room_polls_wait_for_display">Visar omröstningar</string>
+    <plurals name="room_polls_active_no_item_for_loaded_period">
+        <item quantity="one">Det finns inga aktiva omröstningar från förra dagen.
+\nLadda fler omröstningar för att se omröstningar från tidigare dagar.</item>
+        <item quantity="other">Det finns inga aktiva omröstningar från senaste %1$d dagarna.
+\nLadda fler omröstningar för att se omröstningar från tidigare dagar.</item>
+    </plurals>
+    <plurals name="room_polls_ended_no_item_for_loaded_period">
+        <item quantity="one">Det finns inga omröstningar från förra dagen.
+\nLadda fler omröstningar för att se omröstningar från tidigare dagar.</item>
+        <item quantity="other">Det finns inga omröstningar från senaste %1$d dagarna.
+\nLadda fler omröstningar för att se omröstningar från tidigare dagar.</item>
+    </plurals>
+    <string name="unable_to_decrypt_some_events_in_poll">På grund av avkrypteringsfel så kanske vissa röster inte räknas</string>
+    <string name="error_voice_broadcast_no_connection_recording">Anslutningsfel - Inspelning pausad</string>
+    <string name="error_voice_broadcast_unable_to_play">Kan inte spela den här röstsändningen.</string>
+    <string name="error_voice_message_broadcast_in_progress_message">Du kan inte påbörja ett röstmeddelande eftersom du för närvarande spelar in en röstsändning. Vänligen avsluta din röstsändning för att börja spela in ett röstmeddelande</string>
+    <string name="error_voice_message_broadcast_in_progress">Kan inte starta röstsändning</string>
+    <string name="started_a_voice_broadcast">Startade en röstsändning</string>
 </resources>

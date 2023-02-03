@@ -809,7 +809,7 @@ class TimelineFragment :
 
         // Custom thread notification menu item
         menu.findItem(R.id.menu_timeline_thread_list)?.let { menuItem ->
-            menuItem.actionView?.debouncedClicks {
+            menuItem.actionView?.setOnClickListener {
                 handleMenuItemSelected(menuItem)
             }
         }
@@ -868,8 +868,8 @@ class TimelineFragment :
                     session.userService().unIgnoreUserIds(listOf(timelineArgs.roomId))
                     session.userService().ignoreUserIds(listOf(session.roomService().getRoom(timelineArgs.roomId)?.membershipService()?.getRoomMembers(
                             roomMemberQueryParams {
-                        memberships = listOf(Membership.JOIN)
-                    })?.get(0)?.userId!!))
+                                memberships = listOf(Membership.JOIN)
+                            })?.get(0)?.userId!!))
                 }
                 true
             }

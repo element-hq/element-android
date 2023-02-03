@@ -44,6 +44,7 @@ import org.commonmark.parser.Parser
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageEndPollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageFormat
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
@@ -181,6 +182,7 @@ class PlainTextComposerLayout @JvmOverloads constructor(
             is MessageAudioContent -> getAudioContentBodyText(messageContent)
             is MessagePollContent -> messageContent.getBestPollCreationInfo()?.question?.getBestQuestion()
             is MessageBeaconInfoContent -> resources.getString(R.string.live_location_description)
+            is MessageEndPollContent -> resources.getString(R.string.message_reply_to_ended_poll_preview)
             else -> messageContent?.body.orEmpty()
         }
         var formattedBody: CharSequence? = null

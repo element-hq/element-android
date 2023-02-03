@@ -22,6 +22,7 @@ import im.vector.app.features.settings.devices.v2.details.extended.DeviceExtende
 import im.vector.app.features.settings.devices.v2.list.DeviceType
 import im.vector.app.features.settings.devices.v2.verification.CurrentSessionCrossSigningInfo
 import org.amshove.kluent.shouldBeEqualTo
+import org.amshove.kluent.shouldContain
 import org.amshove.kluent.shouldContainAll
 import org.junit.Test
 import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
@@ -82,11 +83,22 @@ private val inactiveUnverifiedDevice = DeviceFullInfo(
         matrixClientInfo = MatrixClientInfoContent(),
 )
 
+private val deviceWithoutEncryptionSupport = DeviceFullInfo(
+        deviceInfo = DeviceInfo(deviceId = "DEVICE_WITHOUT_ENCRYPTION_SUPPORT"),
+        cryptoDeviceInfo = null,
+        roomEncryptionTrustLevel = null,
+        isInactive = false,
+        isCurrentDevice = false,
+        deviceExtendedInfo = DeviceExtendedInfo(DeviceType.UNKNOWN),
+        matrixClientInfo = MatrixClientInfoContent(),
+)
+
 private val devices = listOf(
         activeVerifiedDevice,
         inactiveVerifiedDevice,
         activeUnverifiedDevice,
         inactiveUnverifiedDevice,
+        deviceWithoutEncryptionSupport,
 )
 
 class FilterDevicesUseCaseTest {
@@ -123,8 +135,8 @@ class FilterDevicesUseCaseTest {
         val currentSessionCrossSigningInfo = givenCurrentSessionVerified(true)
         val filteredDeviceList = filterDevicesUseCase.execute(currentSessionCrossSigningInfo, devices, DeviceManagerFilterType.UNVERIFIED, emptyList())
 
-        filteredDeviceList.size shouldBeEqualTo 2
-        filteredDeviceList shouldContainAll listOf(activeUnverifiedDevice, inactiveUnverifiedDevice)
+        filteredDeviceList.size shouldBeEqualTo 3
+        filteredDeviceList shouldContainAll listOf(activeUnverifiedDevice, inactiveUnverifiedDevice, deviceWithoutEncryptionSupport)
     }
 
     @Test
@@ -132,7 +144,8 @@ class FilterDevicesUseCaseTest {
         val currentSessionCrossSigningInfo = givenCurrentSessionVerified(false)
         val filteredDeviceList = filterDevicesUseCase.execute(currentSessionCrossSigningInfo, devices, DeviceManagerFilterType.UNVERIFIED, emptyList())
 
-        filteredDeviceList.size shouldBeEqualTo 0
+        filteredDeviceList.size shouldBeEqualTo 1
+        filteredDeviceList shouldContain deviceWithoutEncryptionSupport
     }
 
     @Test

@@ -7,14 +7,17 @@
     android:orientation="vertical"
     tools:viewBindingIgnore="true">
 
-    <TextView
-        android:id="@+id/messageTextView"
-        style="@style/Widget.Vector.TextView.Body"
+    <ViewStub
+        android:id="@+id/plainMessageTextViewStub"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAlignment="viewStart"
-        android:textColor="?vctr_content_primary"
-        tools:text="@sample/messages.json/data/message" />
+        android:layout="@layout/item_timeline_event_text_message_plain_stub" />
+
+    <ViewStub
+        android:id="@+id/richMessageTextViewStub"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout="@layout/item_timeline_event_text_message_rich_stub" />
 
     <im.vector.app.features.home.room.detail.timeline.url.PreviewUrlView
         android:id="@+id/messageUrlPreview"

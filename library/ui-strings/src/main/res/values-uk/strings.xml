@@ -1156,7 +1156,6 @@
     <string name="trusted">Довірений</string>
     <string name="verification_conclusion_warning">Не довірений вхід</string>
     <string name="confirm_your_identity">Підтвердьте особу, звіривши цей вхід своїм іншим сеансом і надавши йому доступ до зашифрованих повідомлень.</string>
-    <string name="verify_other_sessions">Звірте усі свої сеанси, щоб переконатись у безпечності вашого облікового запису та повідомлень</string>
     <string name="room_member_profile_sessions_section_title">Сеанси</string>
     <string name="room_member_profile_failed_to_get_devices">Не вдалось отримати сеанси</string>
     <string name="crypto_error_withheld_unverified">Ви не маєте доступу до цього повідомлення, бо відправник не довіряє вашому сеансу</string>
@@ -2012,7 +2011,6 @@
     <string name="add_people">Додати людей</string>
     <string name="add_members_to_room">Додати учасників</string>
     <string name="external_link_confirmation_title">Перевірте це посилання</string>
-    <string name="review_logins">Перевірте, де ви ввійшли</string>
     <string name="cross_signing_verify_by_emoji">Інтерактивна перевірка за допомогою емоджі</string>
     <string name="error_empty_field_choose_password">Виберіть пароль.</string>
     <string name="error_empty_field_choose_user_name">Виберіть ім\'я користувача.</string>
@@ -2360,7 +2358,6 @@
     <string name="end_poll_confirmation_approve_button">Завершити опитування</string>
     <string name="end_poll_confirmation_description">Люди більше не зможуть голосувати, і будуть показані остаточні результати опитування.</string>
     <string name="end_poll_confirmation_title">Завершити це опитування\?</string>
-    <string name="a11y_poll_winner_option">варіант-переможець</string>
     <string name="poll_end_action">Завершити опитування</string>
     <plurals name="poll_total_vote_count_after_ended">
         <item quantity="one">Остаточний результат на підставі %1$d голосу</item>
@@ -2821,9 +2818,6 @@
 \n
 \nЦе дає їм впевненість у тому, що вони дійсно розмовляють з вами, а також означає, що вони можуть бачити назву сеансу, яку ви ввели тут.</string>
     <string name="device_manager_learn_more_session_rename_title">Перейменування сеансів</string>
-    <string name="device_manager_learn_more_sessions_verified">Звірені сеанси — ті, до яких ви ввійшли за допомогою своїх облікових даних, а потім пройшли перевірку, використовуючи вашу захищену парольну фразу або шляхом перехресної перевірки.
-\n
-\nЦе означає, що вони мають ключі шифрування для ваших попередніх повідомлень і підтверджують іншим користувачам, з якими ви спілкуєтеся, що ці сеанси — це дійсно ви.</string>
     <string name="device_manager_learn_more_sessions_verified_title">Звірені сеанси</string>
     <string name="device_manager_learn_more_sessions_unverified">Не звірені сеанси — це сеанси, до яких ви ввійшли в за допомогою своїх облікових даних, але не пройшли перехресну перевірку.
 \n
@@ -2921,8 +2915,8 @@
     <string name="qr_code_login_header_failed_e2ee_security_issue_description">Під час налаштування захищеного обміну повідомленнями виникла проблема з безпекою. Можливо, порушено одне з таких налаштувань: Ваш домашній сервер; Ваше інтернет-з\'єднання; Ваш пристрій;</string>
     <string name="qr_code_login_header_failed_other_description">Запит не виконаний.</string>
     <string name="labs_enable_voice_broadcast_summary">Можливість записувати та надсилати голосові трансляції до стрічки кімнати.</string>
-    <string name="labs_enable_voice_broadcast_title">Увімкнути голосові трансляції (в активній розробці)</string>
-    <string name="a11y_voice_broadcast_buffering">Буферизація…</string>
+    <string name="labs_enable_voice_broadcast_title">Увімкнути голосові трансляції</string>
+    <string name="voice_broadcast_buffering">Буферизація…</string>
     <string name="a11y_pause_voice_broadcast">Призупинити голосову трансляцію</string>
     <string name="a11y_play_voice_broadcast">Відтворити або поновити відтворення голосової трансляції</string>
     <string name="a11y_stop_voice_broadcast_record">Припинити запис голосової трансляції</string>
@@ -2980,4 +2974,70 @@
     <string name="editing">Редагування</string>
     <string name="settings_enable_direct_share_summary">Показувати останні бесіди в системному меню загального доступу</string>
     <string name="settings_enable_direct_share_title">Увімкнути пряме поширення</string>
+    <string name="review_unverified_sessions_description">Перегляньте їх, щоб переконатися, що ваш обліковий запис у безпеці</string>
+    <string name="review_unverified_sessions_title">У вас є незвірені сеанси</string>
+    <string name="device_manager_learn_more_sessions_encryption_not_supported">Цей сеанс не підтримує шифрування, тому його неможливо звірити.
+\n
+\nПід час користування цим сеансом ви не зможете брати участь у кімнатах, в яких увімкнено шифрування.
+\n
+\nДля кращої безпеки й приватності радимо використовувати клієнти Matrix, які підтримують шифрування.</string>
+    <string name="device_manager_signout_all_other_sessions">Вийти з усіх інших сеансів</string>
+    <string name="device_manager_verification_status_detail_session_encryption_not_supported">Цей сеанс не підтримує шифрування і тому не може бути звірений.</string>
+    <string name="settings_nightly_build_update">Отримати найновішу збірку (примітка: у вас можуть виникнути проблеми з входом в систему)</string>
+    <string name="settings_nightly_build">Збірка Nightly</string>
+    <string name="voice_broadcast_live_broadcast">Трансляція наживо</string>
+    <string name="notice_voice_broadcast_ended_by_you">Ви завершили голосову трансляцію.</string>
+    <string name="notice_voice_broadcast_ended">%1$s завершує голосову трансляцію.</string>
+    <string name="stop_voice_broadcast_content">Ви впевнені, що хочете припинити голосову трансляцію\? На цьому трансляція завершиться, і повний запис буде доступний у кімнаті.</string>
+    <string name="stop_voice_broadcast_dialog_title">Припинити голосову трансляцію\?</string>
+    <string name="action_stop">Так, припинити</string>
+    <string name="set_link_edit">Змінити посилання</string>
+    <string name="set_link_create">Створити посилання</string>
+    <string name="set_link_link">Посилання</string>
+    <string name="set_link_text">Текст</string>
+    <string name="rich_text_editor_link">Налаштувати посилання</string>
+    <string name="settings_access_token_summary">Ваш токен доступу надає повний доступ до вашого облікового запису. Не передавайте його нікому.</string>
+    <string name="settings_access_token">Токен доступу</string>
+    <string name="rich_text_editor_bullet_list">Перемкнути на маркований список</string>
+    <string name="rich_text_editor_numbered_list">Перемкнути на нумерований список</string>
+    <string name="room_polls_ended_no_item">У цій кімнаті ще не проводилися опитування</string>
+    <string name="room_polls_ended">Минулі опитування</string>
+    <string name="room_polls_active_no_item">У цій кімнаті немає активних опитувань</string>
+    <string name="room_polls_active">Активні опитування</string>
+    <string name="room_profile_section_more_polls">Історія опитувань</string>
+    <string name="message_reply_to_ended_poll_preview">Завершене опитування</string>
+    <string name="message_reply_to_poll_preview">Опитування</string>
+    <string name="message_reply_to_sender_ended_poll">завершує опитування.</string>
+    <string name="ended_poll_indicator">Опитування завершено.</string>
+    <string name="thread_list_not_available">Ваш домашній сервер поки що не підтримує створення списків гілок.</string>
+    <string name="error_voice_broadcast_unable_to_play">Неможливо відтворити цю голосову трансляцію.</string>
+    <string name="started_a_voice_broadcast">Розпочато голосову трансляцію</string>
+    <string name="unable_to_decrypt_some_events_in_poll">Через помилки розшифрування деякі голоси можуть бути не враховані</string>
+    <plurals name="room_polls_ended_no_item_for_loaded_period">
+        <item quantity="one">За %1$d минулий день немає минулих опитувань.
+\nЗавантажте більше опитувань, щоб переглянути опитування за попередні дні.</item>
+        <item quantity="few">За минулі %1$d дні немає минулих опитувань.
+\nЗавантажте більше опитувань, щоб переглянути опитування за попередні дні.</item>
+        <item quantity="many">За минулі %1$d днів немає минулих опитувань.
+\nЗавантажте більше опитувань, щоб переглянути опитування за попередні дні.</item>
+        <item quantity="other">За минулі %1$d днів немає минулих опитувань.
+\nЗавантажте більше опитувань, щоб переглянути опитування за попередні дні.</item>
+    </plurals>
+    <plurals name="room_polls_active_no_item_for_loaded_period">
+        <item quantity="one">За %1$d останній день немає активних опитувань.
+\nЗавантажте більше опитувань, щоб переглянути опитування за попередні дні.</item>
+        <item quantity="few">За останні %1$d дні немає активних опитувань.
+\nЗавантажте більше опитувань, щоб переглянути опитування за попередні дні.</item>
+        <item quantity="many">За останні %1$d днів немає активних опитувань.
+\nЗавантажте більше опитувань, щоб переглянути опитування за попередні дні.</item>
+        <item quantity="other">За останні %1$d днів немає активних опитувань.
+\nЗавантажте більше опитувань, щоб переглянути опитування за попередні дні.</item>
+    </plurals>
+    <string name="room_polls_loading_error">Помилка отримання опитувань.</string>
+    <string name="room_polls_load_more">Завантажити більше опитувань</string>
+    <string name="room_polls_wait_for_display">Показ опитувань</string>
+    <string name="error_voice_message_broadcast_in_progress_message">Ви не можете розпочати запис голосового повідомлення, оскільки ви записуєте трансляцію наживо. Будь ласка, заверште її, щоб розпочати запис голосового повідомлення</string>
+    <string name="error_voice_message_broadcast_in_progress">Не вдалося розпочати запис голосового повідомлення</string>
+    <string name="error_voice_broadcast_no_connection_recording">Помилка з\'єднання - Запис призупинено</string>
+    <string name="rich_text_editor_inline_code">Застосовувати вбудований формат коду</string>
 </resources>

@@ -1413,8 +1413,6 @@
     <string name="create_room_dm_failure">Nous n’avons pas pu créer votre conversation privée. Vérifiez les utilisateurs que vous souhaitez inviter et réessayez.</string>
     <string name="unencrypted">Non chiffré</string>
     <string name="encrypted_unverified">Chiffré par un appareil non vérifié</string>
-    <string name="review_logins">Vérifiez où vous vous êtes connecté</string>
-    <string name="verify_other_sessions">Vérifiez toutes les sessions pour vous assurer que votre compte et vos messages sont en sécurité</string>
     <string name="verify_this_session">Vérifiez la nouvelle connexion accédant à votre compte : %1$s</string>
     <string name="notification_ticker_text_dm">%1$s : %2$s</string>
     <string name="notification_ticker_text_group">%1$s : %2$s %3$s</string>
@@ -2272,7 +2270,6 @@
     <string name="end_poll_confirmation_approve_button">Terminer le sondage</string>
     <string name="end_poll_confirmation_description">Cela empêchera les gens de voter et affichera le résultat final du sondage.</string>
     <string name="end_poll_confirmation_title">Terminer ce sondage \?</string>
-    <string name="a11y_poll_winner_option">option gagnante</string>
     <string name="poll_end_action">Terminer le sondage</string>
     <plurals name="poll_total_vote_count_after_ended">
         <item quantity="one">Résultat final sur la base de %1$d vote</item>
@@ -2713,9 +2710,6 @@
 \n
 \nCela leur fournit une preuve de confiance que c’est bien avec vous qu\'ils communiquent, mais cela veut également dire qu’ils peuvent voir le nom de la session que vous saisissez ici.</string>
     <string name="device_manager_learn_more_session_rename_title">Renommer les sessions</string>
-    <string name="device_manager_learn_more_sessions_verified">Les sessions vérifiées sont celles qui sont identifiées avec votre mot de passe puis vérifiée, soit à l’aide de votre phrase de sécurité, ou bien par la vérification croisée.
-\n
-\nCela signifie qu’elles possèdent les clés de chiffrement de vos messages passés, et certifient aux autres utilisateurs avec qui vous communiquez que ces sessions viennent vraiment de vous.</string>
     <string name="device_manager_learn_more_sessions_verified_title">Sessions vérifiées</string>
     <string name="device_manager_learn_more_sessions_unverified">Les sessions non vérifiées sont celles qui sont identifiées avec votre mot de passe sans avoir fait de vérification croisée.
 \n
@@ -2810,11 +2804,11 @@
     <string name="two">2</string>
     <string name="one">1</string>
     <string name="labs_enable_voice_broadcast_summary">Pouvoir enregistrer et envoyer une diffusion audio dans l’historique du salon.</string>
-    <string name="labs_enable_voice_broadcast_title">Activer la diffusion audio (en cours de développement)</string>
+    <string name="labs_enable_voice_broadcast_title">Activer la diffusion audio</string>
     <string name="device_manager_sessions_sign_in_with_qr_code_description">Vous pouvez utiliser cet appareil pour connecter un appareil mobile ou un client web avec un QR code. Il y a deux façons de le faire :</string>
     <string name="device_manager_sessions_sign_in_with_qr_code_title">Se connecter avec un QR code</string>
     <string name="login_scan_qr_code">Scanner le QR code</string>
-    <string name="a11y_voice_broadcast_buffering">Mise en mémoire tampon…</string>
+    <string name="voice_broadcast_buffering">Mise en mémoire tampon…</string>
     <string name="a11y_pause_voice_broadcast">Mettre en pause la diffusion audio</string>
     <string name="a11y_play_voice_broadcast">Lire ou continuer la diffusion audio</string>
     <string name="a11y_stop_voice_broadcast_record">Arrêter l’enregistrement de la diffusion audio</string>
@@ -2868,4 +2862,62 @@
     <string name="editing">Modification</string>
     <string name="settings_enable_direct_share_summary">Affiche les conversations récentes dans le menu de partage du système</string>
     <string name="settings_enable_direct_share_title">Activer le partage direct</string>
+    <string name="review_unverified_sessions_description">Vérifiez pour assurer la sécurité de votre compte</string>
+    <string name="review_unverified_sessions_title">Vous avez des sessions non vérifiées</string>
+    <string name="device_manager_learn_more_sessions_encryption_not_supported">Cette session ne prend pas en charge le chiffrement, elle ne peut donc pas être vérifiée.
+\n
+\nVous ne pourrez pas participer dans les salons où le chiffrement est activé en utilisant cette session.
+\n
+\nPour de meilleures sécurité et confidentialité, il est recommandé d’utiliser des clients Matrix qui prennent en charge le chiffrement.</string>
+    <string name="device_manager_signout_all_other_sessions">Déconnecter toutes les autres sessions</string>
+    <string name="device_manager_verification_status_detail_session_encryption_not_supported">Cette session ne prend pas en charge le chiffrement, elle ne peut donc pas être vérifiée.</string>
+    <string name="voice_broadcast_live_broadcast">Diffusion en direct</string>
+    <string name="settings_nightly_build_update">Obtenir la toute dernière version (note : vous pourriez avoir des problèmes pour vous connecter)</string>
+    <string name="settings_nightly_build">Version Nightly</string>
+    <string name="notice_voice_broadcast_ended_by_you">Vous avez terminé une diffusion audio.</string>
+    <string name="notice_voice_broadcast_ended">%1$s a terminé une diffusion audio.</string>
+    <string name="stop_voice_broadcast_content">Êtes-vous sûr de vouloir arrêter votre diffusion en direct \? Cela terminera la diffusion et l’enregistrement complet sera disponible dans le salon.</string>
+    <string name="stop_voice_broadcast_dialog_title">Arrêter la diffusion en direct \?</string>
+    <string name="action_stop">Oui, arrêter</string>
+    <string name="set_link_edit">Éditer le lien</string>
+    <string name="set_link_create">Crée un lien</string>
+    <string name="set_link_link">Lien</string>
+    <string name="set_link_text">Texte</string>
+    <string name="rich_text_editor_link">Définir un lien</string>
+    <string name="settings_access_token_summary">Votre jeton d’accès donne un accès intégral à votre compte. Ne le partagez avec personne.</string>
+    <string name="settings_access_token">Jeton d’accès</string>
+    <string name="rich_text_editor_bullet_list">(Dés)activer la liste à puce</string>
+    <string name="rich_text_editor_numbered_list">(Dés)activer la liste numérotée</string>
+    <string name="room_polls_ended_no_item">Il n’y a aucun ancien sondage dans ce salon</string>
+    <string name="room_polls_ended">Anciens sondages</string>
+    <string name="room_polls_active_no_item">Il n’y a aucun sondage en cours dans ce salon</string>
+    <string name="room_polls_active">Sondages actifs</string>
+    <string name="room_profile_section_more_polls">Historique des sondages</string>
+    <string name="message_reply_to_ended_poll_preview">Sondage terminé</string>
+    <string name="message_reply_to_poll_preview">Sondage</string>
+    <string name="message_reply_to_sender_ended_poll">a terminé un sondage.</string>
+    <string name="ended_poll_indicator">A terminé le sondage.</string>
+    <string name="thread_list_not_available">Votre serveur d’accueil ne prend pas encore en charge l’affichage de la liste des fils de discussion.</string>
+    <string name="error_voice_broadcast_unable_to_play">Impossible de lire cette diffusion audio.</string>
+    <string name="started_a_voice_broadcast">A démarré une diffusion audio</string>
+    <string name="unable_to_decrypt_some_events_in_poll">À cause d’erreurs de déchiffrement, certains votes pourraient ne pas avoir été pris en compte</string>
+    <string name="room_polls_loading_error">Erreur lors de la récupération des sondages.</string>
+    <string name="room_polls_load_more">Charger plus de sondages</string>
+    <string name="room_polls_wait_for_display">Affichage des sondages</string>
+    <plurals name="room_polls_ended_no_item_for_loaded_period">
+        <item quantity="one">Il n’y a aucun sondage terminé depuis hier.
+\nChargez plus de sondages pour voir les sondages des jours précédents.</item>
+        <item quantity="other">Il n’y a aucun sondage terminé depuis %1$d jours.
+\nChargez plus de sondages pour voir les sondages des jours précédents.</item>
+    </plurals>
+    <plurals name="room_polls_active_no_item_for_loaded_period">
+        <item quantity="one">Il n’y a aucun sondage actif depuis hier.
+\nChargez plus de sondages pour voir les sondages des jours précédents.</item>
+        <item quantity="other">Il n’y a aucun sondage actif depuis %1$d jours.
+\nChargez plus de sondages pour voir les sondages des jours précédents.</item>
+    </plurals>
+    <string name="error_voice_message_broadcast_in_progress_message">Vous ne pouvez pas commencer un message vocal car vous êtes en train d’enregistrer une diffusion en direct. Veuillez terminer cette diffusion pour commencer un message vocal</string>
+    <string name="error_voice_message_broadcast_in_progress">Impossible de démarrer un message vocal</string>
+    <string name="error_voice_broadcast_no_connection_recording">Erreur de connexion – Enregistrement en pause</string>
+    <string name="rich_text_editor_inline_code">Appliquer le formatage de code en ligne</string>
 </resources>

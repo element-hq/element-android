@@ -1672,8 +1672,6 @@
     </plurals>
     <string name="cross_signing_verify_by_text">אמת ידנית באמצעות טקסט</string>
     <string name="verify_this_session">אמת את הכניסה החדשה שניגשת לחשבונך: %1$s</string>
-    <string name="verify_other_sessions">אמת את כל ההפעלות שלך כדי להבטיח שהחשבון וההודעות שלך בטוחים</string>
-    <string name="review_logins">בדוק היכן נכנסת</string>
     <string name="encrypted_unverified">מוצפן על ידי מכשיר לא מאומת</string>
     <string name="unencrypted">לא מוצפן</string>
     <string name="default_message_emote_snow">שולח שלג ❄️</string>
@@ -2136,7 +2134,6 @@
     <string name="end_poll_confirmation_approve_button">סוף המשאל</string>
     <string name="end_poll_confirmation_description">פעולה זו תעצור את האפשרות להצביע ותציג את תוצאות המשאל.</string>
     <string name="end_poll_confirmation_title">סוף המשאל\?</string>
-    <string name="a11y_poll_winner_option">אפשרות הזוכה</string>
     <string name="poll_end_action">סוף המשאל</string>
     <string name="create_poll_empty_question_error">שאלה לא יכולה להיות ריקה</string>
     <string name="create_poll_button">צור משאל</string>

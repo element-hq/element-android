@@ -1413,8 +1413,6 @@
     <string name="failed_to_access_secure_storage">S’u arrit të hyhet në depozitë të sigurt</string>
     <string name="unencrypted">Të pafshehtëzuara</string>
     <string name="encrypted_unverified">Fshehtëzuar nga një pajisje e paverifikuar</string>
-    <string name="review_logins">Shqyrtojini kur të jeni i futur</string>
-    <string name="verify_other_sessions">Verifikoni krejt sesionet tuaj që të siguroheni se llogaria &amp; mesazhet tuaja janë të sigurt</string>
     <string name="verify_this_session">Verifikoni kredencialet e reja për hyrje te llogaria juaj: %1$s</string>
     <string name="cross_signing_verify_by_text">Verifikojeni Dorazi përmes Teksti</string>
     <string name="crosssigning_verify_session">Verifikoni kredenciale hyrjeje</string>
@@ -2343,7 +2341,7 @@
     <string name="location_timeline_failed_to_load_map">S’u arrit të ngarkohej hartë</string>
     <string name="a11y_static_map_image">Hartë</string>
     <string name="labs_enable_thread_messages_desc">Shënim: aplikacioni do të riniset</string>
-    <string name="labs_enable_thread_messages">Aktivizoni Rrjedha Mesazhesh</string>
+    <string name="labs_enable_thread_messages">Aktivizoni rrjedha mesazhesh</string>
     <string name="ftue_auth_use_case_connect_to_server">Lidhu te shërbyesi</string>
     <string name="ftue_auth_use_case_join_existing_server">Po shihni për të marrë pjesë në një shërbyes ekzistues\?</string>
     <string name="ftue_auth_use_case_skip_partial">anashkalojeni këtë pyetje</string>
@@ -2504,7 +2502,7 @@
     <string name="home_empty_space_no_rooms_title">%s
 \nduket paksa si i zbrazët.</string>
     <string name="labs_enable_voice_broadcast_summary">Jini në gjendje të incizoni dhe dërgoni transmetim zanor në rrjedhën kohore të dhomës.</string>
-    <string name="labs_enable_voice_broadcast_title">Aktivizoni transmetim zanor (nën zhvillim aktiv)</string>
+    <string name="labs_enable_voice_broadcast_title">Aktivizoni transmetim zanor</string>
     <string name="labs_enable_client_info_recording_title">Aktivizo regjistrim hollësish klienti</string>
     <string name="labs_enable_session_manager_summary">Shihini më qartë dhe kontrolloni më mirë krejt sesionet tuaj.</string>
     <string name="labs_enable_session_manager_title">Aktivizo përgjegjës të ri sesionesh</string>
@@ -2512,9 +2510,6 @@
 \n
 \nKjo u jep atyre besim se po flasin vërtet me ju, por do të thotë gjithashtu që mund shohin emrin e sesionit që jepni këtu.</string>
     <string name="device_manager_learn_more_session_rename_title">Riemërtim sesionesh</string>
-    <string name="device_manager_learn_more_sessions_verified">Sesionet e verifikuar përfaqësojnë sesione ku është bërë hyrja dhe janë verifikuar, ose duke përdorur togfjalëshin tuaj të sigurt, ose me verifikim.
-\n
-\nKjo do të thotë se zotërojnë kyçe fshehtëzimi për mesazhe tuajt të mëparshëm dhe u ripohojnë përdoruesve të tjerë, me të cilët po komunikoni, se këto sesione ju takojnë juve.</string>
     <string name="device_manager_learn_more_sessions_verified_title">Sesione të verifikuar</string>
     <string name="device_manager_learn_more_sessions_unverified">Sesionet e paverifikuar janë sesione në të cilët është bërë hyrja me kredencialet tuaja, por pa u bërë verifikim.
 \n
@@ -2573,7 +2568,7 @@
     <string name="device_manager_filter_bottom_sheet_title">Filtroji</string>
     <string name="device_manager_device_title">Pajisje</string>
     <string name="device_manager_session_title">Sesion</string>
-    <string name="device_manager_current_session_title">Sesioni i Tanishëm</string>
+    <string name="device_manager_current_session_title">Sesioni i tanishëm</string>
     <plurals name="device_manager_inactive_sessions_description">
         <item quantity="one">Shihni mundësinë e daljes nga sesione të vjetër (%1$d ditë ose më tepër) të cilët s’i përdorni më.</item>
         <item quantity="other">Shihni mundësinë e daljes nga sesione të vjetër (%1$d ditë ose më tepër) të cilët s’i përdorni më.</item>
@@ -2659,7 +2654,7 @@
 \nKy shërbyes Home mund të mos jetë formësuar të shfaqë harta.</string>
     <string name="poll_undisclosed_not_ended">Përfundimet do të jenë të dukshme pasi të ketë përfunduar pyetësori</string>
     <string name="labs_enable_msc3061_share_history_desc">Kur bëhet ftesë në një dhomë të fshehtëzuar që ka historik ndarjesh me të tjerët, historiku i fshehtëzuar do të jetë i dukshëm.</string>
-    <string name="a11y_voice_broadcast_buffering"></string>
+    <string name="voice_broadcast_buffering"/>
     <string name="a11y_pause_voice_broadcast">Ndal transmetim zanor</string>
     <string name="a11y_play_voice_broadcast">Luani ose vazhdoni luajtje transmetimi zanor</string>
     <string name="a11y_stop_voice_broadcast_record">Ndal incizim transmetimi zanor</string>
@@ -2853,4 +2848,62 @@
     <string name="labs_enable_deferred_dm_title">Aktivizo MD të lënë për më vonë</string>
     <string name="a11y_collapse_space_children">Tkurr pjella të %s</string>
     <string name="a11y_expand_space_children">Zgjero pjella të %s</string>
+    <string name="review_unverified_sessions_description">Shqyrtojini, për të garantuar se llogaria juaj është e parrezik</string>
+    <string name="review_unverified_sessions_title">Keni sesione të paverifikuar</string>
+    <string name="device_manager_learn_more_sessions_encryption_not_supported">Ky sesion nuk mbulon fshehtëzim, ndaj s’mund të verifikohet.
+\n
+\nS’do të jeni në gjendje të merrni pjesë në dhoma ku është i aktivizuar fshehtëzimi, kur përdorni këtë sesion.
+\n
+\nPër sigurinë dhe privatësinë më të mirë, rekomandohet të përdorni klientë Matrix që mbulojnë fshehtëzimin.</string>
+    <string name="device_manager_signout_all_other_sessions">Dilni nga krejt sesionet e tjerë</string>
+    <string name="device_manager_verification_status_detail_session_encryption_not_supported">Ky sesion nuk mbulon fshehtëzim dhe ndaj s’mund të verifikohet.</string>
+    <string name="voice_broadcast_live_broadcast">Transmetim i drejtpërdrejtë</string>
+    <string name="settings_nightly_build_update">Merrni montimin më të ri (shënim: mund të keni probleme të bëni hyrjen)</string>
+    <string name="settings_nightly_build">Montim i përnatshëm</string>
+    <string name="notice_voice_broadcast_ended_by_you">Përfunduat një transmetim zanor.</string>
+    <string name="notice_voice_broadcast_ended">%1$s përfundoi një transmetim zanor.</string>
+    <string name="stop_voice_broadcast_content">Jeni i sigurt se doni të ndalet transmetimi juaj i drejtpërdrejtë\? Kjo do të përfundojë transmetimin dhe regjistrimi i plotë do të jetë i passhëm te dhoma.</string>
+    <string name="stop_voice_broadcast_dialog_title">Të ndalet transmetimi i drejtpërdrejtë\?</string>
+    <string name="action_stop">Po, Ndale</string>
+    <string name="set_link_edit">Përpunoni lidhje</string>
+    <string name="set_link_create">Krijoni një lidhje</string>
+    <string name="set_link_link">Lidhje</string>
+    <string name="set_link_text">Tekst</string>
+    <string name="settings_access_token_summary">Tokeni juaj i hyrjeve jep hyrje të plotë në llogarinë tuaj. Mos ia jepni kujt.</string>
+    <string name="settings_access_token">Token Hyrjesh</string>
+    <string name="room_polls_ended_no_item">Në këtë dhomë s’ka pyetësorë të dikurshëm</string>
+    <string name="room_polls_ended">Pyetësorë të dikurshëm</string>
+    <string name="room_polls_active_no_item">S’ka pyetësorë aktivë në këtë dhomë</string>
+    <string name="room_polls_active">Pyetësorë aktivë</string>
+    <string name="room_profile_section_more_polls">Historik pyetësorësh</string>
+    <string name="message_reply_to_ended_poll_preview">Përfundoi pyetësorin</string>
+    <string name="ended_poll_indicator">Përfundoi pyetësorin.</string>
+    <string name="message_reply_to_poll_preview">Pyetësor</string>
+    <string name="message_reply_to_sender_ended_poll">përfundoi një pyetësor.</string>
+    <string name="rich_text_editor_bullet_list">Shfaq/fshi listë me toptha</string>
+    <string name="rich_text_editor_numbered_list">Shfaq/fshi listë të numërtuar</string>
+    <string name="rich_text_editor_link">Ujdisni lidhje</string>
+    <string name="unable_to_decrypt_some_events_in_poll">Për shkak gabimesh shfshehtëzimi, mund të mos jenë numëruar disa vota</string>
+    <string name="error_voice_broadcast_unable_to_play">S’arrihet të luhet ky transmetim zanor.</string>
+    <string name="started_a_voice_broadcast">Nisni një transmetim zanor</string>
+    <string name="thread_list_not_available">Shërbyesi juaj Home s’mbulon ende paraqitje rrjedhash.</string>
+    <string name="rich_text_editor_inline_code">Apliko format kodi brendazi</string>
+    <string name="room_polls_loading_error">Gabim në sjellje pyetësorësh.</string>
+    <string name="room_polls_load_more">Ngarko më tepër pyetësorë</string>
+    <string name="room_polls_wait_for_display">Shfaqje pyetësorësh</string>
+    <plurals name="room_polls_ended_no_item_for_loaded_period">
+        <item quantity="one">S’ka pyetësorë të kaluar për ditën e kaluar.
+\nQë të shihni pyetësorë për ditët e kaluara, ngarkoni më tepër pyetësorë.</item>
+        <item quantity="other">S’ka pyetësorë aktivë për %1$d ditët e kaluara.
+\nQë të shihni pyetësorë për ditët e kaluara, ngarkoni më tepër pyetësorë.</item>
+    </plurals>
+    <plurals name="room_polls_active_no_item_for_loaded_period">
+        <item quantity="one">S’ka pyetësorë aktivë për ditën e kaluar.
+\nQë të shihni pyetësorë për ditët e kaluara, ngarkoni më tepër pyetësorë.</item>
+        <item quantity="other">S’ka pyetësorë aktivë për%1$d ditët e kaluara.
+\nQë të shihni pyetësorë për ditët e kaluara, ngarkoni më tepër pyetësorë.</item>
+    </plurals>
+    <string name="error_voice_broadcast_no_connection_recording">Gabim lidhjeje - Incizimi u ndal</string>
+    <string name="error_voice_message_broadcast_in_progress_message">S’mund të nisni një mesazh zanor teksa jeni aktualisht duke incizuar një transmetim të drejtpërdrejtë. Ju lutemi, përfundoni transmetimin tuaj të drejtpërdrejtë, që të mund të nisni incizimin e një mesazhi zanor</string>
+    <string name="error_voice_message_broadcast_in_progress">S’niset dot mesazh zanor</string>
 </resources>

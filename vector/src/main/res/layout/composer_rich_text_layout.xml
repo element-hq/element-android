@@ -124,6 +124,8 @@
             app:layout_constraintEnd_toStartOf="@id/composerFullScreenButton"
             app:layout_constraintStart_toStartOf="@id/composerEditTextOuterBorder"
             app:layout_constraintTop_toBottomOf="@id/composerModeBarrier"
+            app:bulletRadius="4sp"
+            app:bulletGap="8sp"
             tools:text="@tools:sample/lorem/random" />
 
         <com.google.android.material.textfield.TextInputEditText
@@ -180,6 +182,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:minHeight="52dp"
+            android:requiresFadingEdge="horizontal"
+            android:fadingEdgeLength="28dp"
             app:layout_constraintTop_toBottomOf="@id/composerEditTextOuterBorder"
             app:layout_constraintStart_toEndOf="@id/attachmentButton"
             app:layout_constraintEnd_toStartOf="@id/sendButton"

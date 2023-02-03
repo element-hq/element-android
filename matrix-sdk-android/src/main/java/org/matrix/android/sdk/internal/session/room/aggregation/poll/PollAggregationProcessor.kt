@@ -21,7 +21,7 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 
-interface PollAggregationProcessor {
+internal interface PollAggregationProcessor {
     /**
      * Poll start events don't need to be processed by the aggregator.
      * This function will only handle if the poll is edited and will update the poll summary entity.

@@ -69,7 +69,7 @@ android {
     buildTypes {
         debug {
             if (project.hasProperty("coverage")) {
-                testCoverageEnabled = coverage.enableTestCoverage
+                testCoverageEnabled = coverage == "true"
             }
         }
     }
@@ -132,7 +132,7 @@ dependencies {
     implementation libs.androidx.biometric
 
     api "org.threeten:threetenbp:1.4.0:no-tzdb"
-    api "com.gabrielittner.threetenbp:lazythreetenbp:0.12.0"
+    api "com.gabrielittner.threetenbp:lazythreetenbp:0.13.0"
 
     //noinspection GradleDynamicVersion
     implementation 'com.amplitude:android-sdk:3.35.1'
@@ -248,7 +248,7 @@ dependencies {
     kapt libs.dagger.hiltCompiler
 
     // Analytics
-    implementation('com.posthog.android:posthog:2.0.0') {
+    implementation('com.posthog.android:posthog:2.0.1') {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
     implementation libs.sentry.sentryAndroid
@@ -324,7 +324,7 @@ dependencies {
     // Fix issue with Jitsi. Inspired from https://github.com/android/android-test/issues/861#issuecomment-872067868
     // Error was lots of `Duplicate class org.checkerframework.common.reflection.qual.MethodVal found in modules jetified-checker-3.1 (org.checkerframework:checker:3.1.1) and jetified-checker-qual-3.12.0 (org.checkerframework:checker-qual:3.12.0)
     //noinspection GradleDependency Cannot use latest 3.15.0 since it required min API 26.
-    implementation "org.checkerframework:checker:3.27.0"
+    implementation "org.checkerframework:checker:3.30.0"
 
     androidTestImplementation libs.androidx.testCore
     androidTestImplementation libs.androidx.testRunner
@@ -346,6 +346,7 @@ dependencies {
     }
     androidTestImplementation libs.mockk.mockkAndroid
     androidTestUtil libs.androidx.orchestrator
-    debugImplementation libs.androidx.fragmentTesting
-    androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:1.7.22"
+    debugImplementation libs.androidx.fragmentTestingManifest
+    androidTestImplementation libs.androidx.fragmentTesting
+    androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:1.8.0"
 }

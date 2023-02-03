@@ -55,7 +55,6 @@ import im.vector.app.features.settings.devices.v2.signout.BuildConfirmSignoutDia
 import im.vector.app.features.workers.signout.SignOutUiWorker
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.extensions.orFalse
-import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import javax.inject.Inject
 
 /**
@@ -282,13 +281,15 @@ class VectorSettingsDevicesFragment :
 
     override fun invalidate() = withState(viewModel) { state ->
         if (state.devices is Success) {
-            val devices = state.devices()
+            val deviceFullInfoList = state.devices()
+            val devices = deviceFullInfoList?.allSessions
             val currentDeviceId = state.currentSessionCrossSigningInfo.deviceId
             val currentDeviceInfo = devices?.firstOrNull { it.deviceInfo.deviceId == currentDeviceId }
-            val isCurrentSessionVerified = currentDeviceInfo?.roomEncryptionTrustLevel == RoomEncryptionTrustLevel.Trusted
             val otherDevices = devices?.filter { it.deviceInfo.deviceId != currentDeviceId }
+            val inactiveSessionsCount = deviceFullInfoList?.inactiveSessionsCount ?: 0
+            val unverifiedSessionsCount = deviceFullInfoList?.unverifiedSessionsCount ?: 0
 
-            renderSecurityRecommendations(state.inactiveSessionsCount, state.unverifiedSessionsCount, isCurrentSessionVerified)
+            renderSecurityRecommendations(inactiveSessionsCount, unverifiedSessionsCount)
             renderCurrentSessionView(currentDeviceInfo, hasOtherDevices = otherDevices?.isNotEmpty().orFalse())
             renderOtherSessionsView(otherDevices, state.isShowingIpAddress)
         } else {
@@ -303,9 +304,8 @@ class VectorSettingsDevicesFragment :
     private fun renderSecurityRecommendations(
             inactiveSessionsCount: Int,
             unverifiedSessionsCount: Int,
-            isCurrentSessionVerified: Boolean,
     ) {
-        val isUnverifiedSectionVisible = unverifiedSessionsCount > 0 && isCurrentSessionVerified
+        val isUnverifiedSectionVisible = unverifiedSessionsCount > 0
         val isInactiveSectionVisible = inactiveSessionsCount > 0
         if (isUnverifiedSectionVisible.not() && isInactiveSectionVisible.not()) {
             hideSecurityRecommendations()

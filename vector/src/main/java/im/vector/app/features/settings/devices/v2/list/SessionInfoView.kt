@@ -62,9 +62,10 @@ class SessionInfoView @JvmOverloads constructor(
             stringProvider: StringProvider,
     ) {
         renderDeviceInfo(
-                sessionInfoViewState.deviceFullInfo.deviceInfo.displayName.orEmpty(),
-                sessionInfoViewState.deviceFullInfo.deviceExtendedInfo.deviceType,
-                stringProvider,
+                sessionName = sessionInfoViewState.deviceFullInfo.deviceInfo.displayName
+                        ?: sessionInfoViewState.deviceFullInfo.deviceInfo.deviceId.orEmpty(),
+                deviceType = sessionInfoViewState.deviceFullInfo.deviceExtendedInfo.deviceType,
+                stringProvider = stringProvider,
         )
         renderVerificationStatus(
                 sessionInfoViewState.deviceFullInfo.roomEncryptionTrustLevel,

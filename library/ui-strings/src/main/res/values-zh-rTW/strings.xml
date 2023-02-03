@@ -1412,8 +1412,6 @@
     <string name="create_room_dm_failure">我們無法建立您的直接訊息。請檢查您想要邀請的使用者，然後再試一次。</string>
     <string name="unencrypted">未加密</string>
     <string name="encrypted_unverified">由未驗證的裝置加密</string>
-    <string name="review_logins">審閱您從何處登入</string>
-    <string name="verify_other_sessions">驗證您所有的工作階段以確保您的帳號與訊息都安全</string>
     <string name="verify_this_session">驗證正在存取您帳號的新登入：%1$s</string>
     <string name="notification_ticker_text_dm">%1$s：%2$s</string>
     <string name="notification_ticker_text_group">%1$s：%2$s %3$s</string>
@@ -2231,7 +2229,6 @@
     <string name="end_poll_confirmation_approve_button">結束投票</string>
     <string name="end_poll_confirmation_description">這將阻止人們投票並顯示投票的最終結果。</string>
     <string name="end_poll_confirmation_title">結束此投票？</string>
-    <string name="a11y_poll_winner_option">獲勝選項</string>
     <string name="poll_end_action">結束投票</string>
     <plurals name="poll_total_vote_count_after_ended">
         <item quantity="other">以 %1$d 票為基礎的最終結果</item>
@@ -2659,9 +2656,6 @@
 \n
 \n這讓他們確信他們真的在與您交談，但這也意味著他們可以看到您在此處輸入的工作階段名稱。</string>
     <string name="device_manager_learn_more_session_rename_title">正在重新命名工作階段</string>
-    <string name="device_manager_learn_more_sessions_verified">已驗證的工作階段代表使用您的憑證登入，然後使用您的安全通關密語或透過交叉驗證進行驗證。
-\n
-\n這代表了它們持有您先前訊息的加密金鑰，並向您正在與之通訊的其他使用者確認這些工作階段確實是您。</string>
     <string name="device_manager_learn_more_sessions_verified_title">已驗證的工作階段</string>
     <string name="device_manager_learn_more_sessions_unverified">未驗證的工作階段是使用您的憑證登入但未交叉驗證的工作階段。
 \n
@@ -2759,8 +2753,8 @@
     <string name="qr_code_login_header_failed_e2ee_security_issue_description">設定安全訊息傳遞時遇到安全問題。以下其中一項可能已被駭入：您的家伺服器、您的網際網路連線、您的裝置；</string>
     <string name="qr_code_login_header_failed_other_description">請求失敗。</string>
     <string name="labs_enable_voice_broadcast_summary">可以在聊天室時間軸中錄製並傳送語音廣播。</string>
-    <string name="labs_enable_voice_broadcast_title">啟用語音廣播（正在積極開發中）</string>
-    <string name="a11y_voice_broadcast_buffering">正在緩衝……</string>
+    <string name="labs_enable_voice_broadcast_title">啟用語音廣播</string>
+    <string name="voice_broadcast_buffering">正在緩衝……</string>
     <string name="a11y_pause_voice_broadcast">暫停語音廣播</string>
     <string name="a11y_play_voice_broadcast">播放或繼續語音廣播</string>
     <string name="a11y_stop_voice_broadcast_record">停止語音廣播錄製</string>
@@ -2812,4 +2806,58 @@
     <string name="editing">正在編輯</string>
     <string name="settings_enable_direct_share_summary">在系統分享選單中顯示最近聊天</string>
     <string name="settings_enable_direct_share_title">啟用直接分享</string>
+    <string name="review_unverified_sessions_description">檢查以確保您的帳號安全</string>
+    <string name="review_unverified_sessions_title">您有未驗證的工作階段</string>
+    <string name="device_manager_learn_more_sessions_encryption_not_supported">此工作階段不支援加密，因此無法驗證。
+\n
+\n使用此工作階段時，您將無法參與啟用了加密的聊天室。
+\n
+\n為了取得最佳的安全性與隱私，建議使用支援加密的 Matrix 客戶端。</string>
+    <string name="device_manager_signout_all_other_sessions">登出其他所有工作階段</string>
+    <string name="device_manager_verification_status_detail_session_encryption_not_supported">此工作階段不支援加密，因此無法驗證。</string>
+    <string name="settings_nightly_build_update">取得最新版本（注意：您可能會無法登入）</string>
+    <string name="settings_nightly_build">Nightly 版本</string>
+    <string name="voice_broadcast_live_broadcast">即時廣播</string>
+    <string name="notice_voice_broadcast_ended_by_you">您結束了語音廣播。</string>
+    <string name="notice_voice_broadcast_ended">%1$s 結束了語音廣播。</string>
+    <string name="stop_voice_broadcast_content">您真的想要停止您的即時廣播嗎？這將會結束廣播，完整的錄音會在聊天室中提供。</string>
+    <string name="stop_voice_broadcast_dialog_title">停止即時廣播？</string>
+    <string name="action_stop">是的，停止</string>
+    <string name="set_link_edit">編輯連結</string>
+    <string name="set_link_create">建立連結</string>
+    <string name="set_link_link">連結</string>
+    <string name="set_link_text">文字</string>
+    <string name="rich_text_editor_link">設定連結</string>
+    <string name="settings_access_token_summary">您的存取權杖可以完整存取您的帳號。不要將其與其他人分享。</string>
+    <string name="settings_access_token">存取權杖</string>
+    <string name="rich_text_editor_bullet_list">切換項目符號清單</string>
+    <string name="rich_text_editor_numbered_list">切換編號清單</string>
+    <string name="room_polls_ended_no_item">此聊天室沒有過去的投票</string>
+    <string name="room_polls_ended">過去的投票</string>
+    <string name="room_polls_active_no_item">此聊天室沒有正在進行的投票</string>
+    <string name="room_polls_active">進行中的投票</string>
+    <string name="room_profile_section_more_polls">投票歷史紀錄</string>
+    <string name="message_reply_to_ended_poll_preview">已結束投票</string>
+    <string name="message_reply_to_poll_preview">投票</string>
+    <string name="message_reply_to_sender_ended_poll">已結束投票。</string>
+    <string name="ended_poll_indicator">已結束投票。</string>
+    <string name="thread_list_not_available">您的家伺服器還不支援列出討論串。</string>
+    <string name="error_voice_broadcast_unable_to_play">無法播放此語音廣播。</string>
+    <string name="started_a_voice_broadcast">已開始語音廣播</string>
+    <string name="unable_to_decrypt_some_events_in_poll">因為解密錯誤，部份投票可能並未計算</string>
+    <string name="room_polls_loading_error">擷取投票時發生錯誤。</string>
+    <string name="room_polls_load_more">載入更多投票</string>
+    <string name="room_polls_wait_for_display">顯示投票</string>
+    <plurals name="room_polls_ended_no_item_for_loaded_period">
+        <item quantity="other">過去 %1$d 天沒有投票。
+\n載入更多投票以檢視過去幾天的投票。</item>
+    </plurals>
+    <plurals name="room_polls_active_no_item_for_loaded_period">
+        <item quantity="other">過去 %1$d 天沒有活躍的投票。
+\n載入更多投票以檢視過去幾天的投票。</item>
+    </plurals>
+    <string name="error_voice_broadcast_no_connection_recording">連線錯誤 - 錄製已暫停</string>
+    <string name="error_voice_message_broadcast_in_progress_message">您無法開始語音訊息，因為您目前正在錄製直播。請結束您的直播以開始錄製語音訊息</string>
+    <string name="error_voice_message_broadcast_in_progress">無法開始語音訊息</string>
+    <string name="rich_text_editor_inline_code">套用內嵌程式碼格式</string>
 </resources>

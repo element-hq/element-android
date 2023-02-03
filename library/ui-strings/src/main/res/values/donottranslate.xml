@@ -10,6 +10,8 @@
     <!-- onboarding english only word play -->
     <string name="cut_the_slack_from_teams" translatable="false">Use your free encrypted space.</string>
 
+    <string name="command_description_crash_application" translatable="false">Crash the application.</string>
+
     <!--  WIP -->
     <string name="location_map_view_copyright" translatable="false">© MapTiler © OpenStreetMap contributors</string>
 </resources>

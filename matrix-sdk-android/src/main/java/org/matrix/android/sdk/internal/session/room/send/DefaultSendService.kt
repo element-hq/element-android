@@ -140,11 +140,11 @@ internal class DefaultSendService @AssistedInject constructor(
                 .let { sendEvent(it) }
     }
 
-    override fun redactEvent(event: Event, reason: String?, additionalContent: Content?): Cancelable {
+    override fun redactEvent(event: Event, reason: String?, withRelations: List<String>?, additionalContent: Content?): Cancelable {
         // TODO manage media/attachements?
-        val redactionEcho = localEchoEventFactory.createRedactEvent(roomId, event.eventId!!, reason, additionalContent)
+        val redactionEcho = localEchoEventFactory.createRedactEvent(roomId, event.eventId!!, reason, withRelations, additionalContent)
                 .also { createLocalEcho(it) }
-        return eventSenderProcessor.postRedaction(redactionEcho, reason)
+        return eventSenderProcessor.postRedaction(redactionEcho, reason, withRelations)
     }
 
     override fun resendTextMessage(localEcho: TimelineEvent): Cancelable {

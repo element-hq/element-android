@@ -441,7 +441,7 @@
     <string name="none">Žádný</string>
     <string name="action_revoke">Zrušit</string>
     <string name="auth_login_sso">Přihlásit se se single sign-on</string>
-    <string name="login_error_no_homeserver_found">To není platná adresa Matrix serveru</string>
+    <string name="login_error_no_homeserver_found">Toto není platná adresa Matrix serveru</string>
     <string name="login_error_homeserver_not_found">Domovský server není dostupný na této adrese, zkontrolujte ji prosím</string>
     <string name="settings_notification_troubleshoot">Odstraňování problémů s oznámeními</string>
     <string name="settings_troubleshoot_diagnostic">Řešit diagnostiku</string>
@@ -1469,8 +1469,6 @@
     <string name="failed_to_access_secure_storage">Přístup k zabezpečenému úložišti selhal</string>
     <string name="unencrypted">Nezašifrováno</string>
     <string name="encrypted_unverified">Zašifrováno neověřeným zařízením</string>
-    <string name="review_logins">Přezkoumejte, kde jste se přihlásili</string>
-    <string name="verify_other_sessions">Ověřte všechny své relace za účelem bezpečí Vašeho účtu a zpráv</string>
     <string name="verify_this_session">Ověřte nové přihlášení s přístupem na Váš účet: %1$s</string>
     <string name="cross_signing_verify_by_text">Manuálně ověřit textem</string>
     <string name="crosssigning_verify_session">Ověřit přihlášení</string>
@@ -2313,7 +2311,6 @@
     <string name="end_poll_confirmation_approve_button">Ukončit hlasování</string>
     <string name="end_poll_confirmation_description">Toto zastaví možnost hlasování a zobrazí se konečné výsledky.</string>
     <string name="end_poll_confirmation_title">Ukončit toto hlasování\?</string>
-    <string name="a11y_poll_winner_option">vítězná volba</string>
     <string name="poll_end_action">Ukončit hlasování</string>
     <plurals name="poll_total_vote_count_after_ended">
         <item quantity="one">Konečný výsledek na základě %1$d hlasu</item>
@@ -2767,9 +2764,6 @@
 \n
 \nTo jim poskytuje jistotu, že s vámi skutečně mluví, ale také to znamená, že mohou vidět název relace, který zde zadáte.</string>
     <string name="device_manager_learn_more_session_rename_title">Přejmenování relací</string>
-    <string name="device_manager_learn_more_sessions_verified">Ověřené relace se přihlásily pomocí vašich přihlašovacích údajů a poté byly ověřeny buď pomocí vaší zabezpečené přístupové fráze, nebo křížovým ověřením.
-\n
-\nTo znamená, že uchovávají šifrovací klíče pro vaše předchozí zprávy a potvrzují ostatním uživatelům, se kterými komunikujete, že tyto relace jste skutečně vy.</string>
     <string name="device_manager_learn_more_sessions_verified_title">Ověřené relace</string>
     <string name="device_manager_learn_more_sessions_unverified">Neověřené relace jsou relace, které se přihlásily pomocí vašich přihlašovacích údajů, ale nebyly křížově ověřeny.
 \n
@@ -2860,7 +2854,7 @@
     <string name="device_manager_sessions_sign_in_with_qr_code_title">Přihlásit se pomocí QR kódu</string>
     <string name="login_scan_qr_code">Naskenovat QR kód</string>
     <string name="labs_enable_voice_broadcast_summary">Možnost nahrávat a odesílat hlasové vysílání na časové ose místnosti.</string>
-    <string name="labs_enable_voice_broadcast_title">Povolit hlasové vysílání (v aktivním vývoji)</string>
+    <string name="labs_enable_voice_broadcast_title">Povolit hlasové vysílání</string>
     <string name="qr_code_login_header_failed_homeserver_is_not_supported_description">Domovský server nepodporuje přihlášení pomocí QR kódu.</string>
     <string name="qr_code_login_header_failed_user_cancelled_description">Přihlášení bylo na druhém zařízení zrušeno.</string>
     <string name="qr_code_login_header_failed_invalid_qr_code_description">Tento QR kód je neplatný.</string>
@@ -2868,7 +2862,7 @@
     <string name="qr_code_login_header_failed_other_device_already_signed_in_description">Druhé zařízení je již přihlášeno.</string>
     <string name="qr_code_login_header_failed_e2ee_security_issue_description">Při nastavování zabezpečeného zasílání zpráv se vyskytl problém se zabezpečením. Může být napadena jedna z následujících věcí: váš domovský server; vaše internetové připojení; vaše zařízení;</string>
     <string name="qr_code_login_header_failed_other_description">Žádost se nezdařila.</string>
-    <string name="a11y_voice_broadcast_buffering">Ukládání do vyrovnávací paměti…</string>
+    <string name="voice_broadcast_buffering">Ukládání do vyrovnávací paměti…</string>
     <string name="a11y_pause_voice_broadcast">Pozastavit hlasové vysílání</string>
     <string name="a11y_play_voice_broadcast">Přehrát nebo obnovit hlasové vysílání</string>
     <string name="a11y_stop_voice_broadcast_record">Ukončit záznam hlasového vysílání</string>
@@ -2924,4 +2918,66 @@
     <string name="editing">Úpravy</string>
     <string name="settings_enable_direct_share_summary">Zobrazit poslední chaty v nabídce sdílení systému</string>
     <string name="settings_enable_direct_share_title">Povolit přímé sdílení</string>
+    <string name="review_unverified_sessions_description">Zkontrolujte, zda je váš účet v bezpečí</string>
+    <string name="review_unverified_sessions_title">Máte neověřené relace</string>
+    <string name="device_manager_learn_more_sessions_encryption_not_supported">Tato relace nepodporuje šifrování, takže ji nelze ověřit.
+\n
+\nPři použití této relace se nebudete moci účastnit místností, kde je šifrování povoleno.
+\n
+\nPro dosažení nejlepšího zabezpečení a soukromí se doporučuje používat klienty Matrix, které šifrování podporují.</string>
+    <string name="device_manager_signout_all_other_sessions">Odhlásit se ze všech ostatních relací</string>
+    <string name="device_manager_verification_status_detail_session_encryption_not_supported">Tato relace nepodporuje šifrování, a proto ji nelze ověřit.</string>
+    <string name="settings_nightly_build_update">Získejte nejnovější sestavení (poznámka: můžete mít potíže s přihlášením)</string>
+    <string name="settings_nightly_build">Noční sestavení</string>
+    <string name="voice_broadcast_live_broadcast">Živé vysílání</string>
+    <string name="notice_voice_broadcast_ended_by_you">Ukončili jste hlasové vysílání.</string>
+    <string name="notice_voice_broadcast_ended">%1$s ukončil(a) hlasové vysílání.</string>
+    <string name="stop_voice_broadcast_content">Jste si jisti, že chcete ukončit živé vysílání\? Tím se vysílání ukončí a v místnosti bude k dispozici celý záznam.</string>
+    <string name="stop_voice_broadcast_dialog_title">Zastavit živé vysílání\?</string>
+    <string name="action_stop">Ano, zastavit</string>
+    <string name="set_link_edit">Upravit odkaz</string>
+    <string name="set_link_create">Vytvořit odkaz</string>
+    <string name="set_link_link">Odkaz</string>
+    <string name="set_link_text">Text</string>
+    <string name="rich_text_editor_link">Nastavit odkaz</string>
+    <string name="settings_access_token_summary">Přístupový token umožňuje plný přístup k účtu. Nikomu ho nesdělujte.</string>
+    <string name="settings_access_token">Přístupový token</string>
+    <string name="rich_text_editor_bullet_list">Přepnout na odrážky</string>
+    <string name="rich_text_editor_numbered_list">Přepnout na číslovaný seznam</string>
+    <string name="room_polls_ended_no_item">V této místnosti nejsou žádné předchozí hlasování</string>
+    <string name="room_polls_ended">Předchozí hlasování</string>
+    <string name="room_polls_active_no_item">V této místnosti nejsou žádné aktivní hlasování</string>
+    <string name="room_polls_active">Aktivní hlasování</string>
+    <string name="room_profile_section_more_polls">Historie hlasování</string>
+    <string name="message_reply_to_ended_poll_preview">Ukončené hlasování</string>
+    <string name="message_reply_to_poll_preview">Hlasování</string>
+    <string name="message_reply_to_sender_ended_poll">ukončil(a) hlasování.</string>
+    <string name="ended_poll_indicator">Hlasování bylo ukončeno.</string>
+    <string name="thread_list_not_available">Váš domovský server zatím nepodporuje zobrazení seznamu vláken.</string>
+    <string name="error_voice_broadcast_unable_to_play">Nelze přehrát toto hlasové vysílání.</string>
+    <string name="started_a_voice_broadcast">Hlasové vysílání bylo zahájeno</string>
+    <string name="unable_to_decrypt_some_events_in_poll">Kvůli chybám při dešifrování nemusí být některé hlasy započítány</string>
+    <string name="room_polls_loading_error">Chyba při načítání hlasování.</string>
+    <string name="room_polls_load_more">Načíst další hlasování</string>
+    <string name="room_polls_wait_for_display">Zobrazení hlasování</string>
+    <plurals name="room_polls_ended_no_item_for_loaded_period">
+        <item quantity="one">Za uplynulý den nejsou k dispozici žádná hlasování.
+\nPro zobrazení hlasování z předchozích dnů načtěte další hlasování.</item>
+        <item quantity="few">Za poslední %1$d dny nejsou k dispozici žádná hlasování.
+\nPro zobrazení hlasování z předchozích dnů načtěte další hlasování.</item>
+        <item quantity="other">Za posledních %1$d dní nejsou k dispozici žádná hlasování.
+\nPro zobrazení hlasování z předchozích dnů načtěte další hlasování.</item>
+    </plurals>
+    <plurals name="room_polls_active_no_item_for_loaded_period">
+        <item quantity="one">Za uplynulý den nejsou žádná aktivní hlasování.
+\nPro zobrazení hlasování z předchozích dnů načtěte další ankety.</item>
+        <item quantity="few">Za poslední %1$d dny nejsou žádná aktivní hlasování.
+\nPro zobrazení hlasování z předchozích dnů načtěte další ankety.</item>
+        <item quantity="other">Za posledních %1$d dní nejsou žádná aktivní hlasování.
+\nPro zobrazení hlasování z předchozích dnů načtěte další ankety.</item>
+    </plurals>
+    <string name="error_voice_message_broadcast_in_progress_message">Hlasovou zprávu nelze spustit, protože právě nahráváte živé vysílání. Ukončete prosím živé vysílání, abyste mohli začít nahrávat hlasovou zprávu</string>
+    <string name="error_voice_message_broadcast_in_progress">Nelze spustit hlasovou zprávu</string>
+    <string name="error_voice_broadcast_no_connection_recording">Chyba připojení - nahrávání pozastaveno</string>
+    <string name="rich_text_editor_inline_code">Použít formát inline kódu</string>
 </resources>

@@ -77,6 +77,7 @@
     <issue id="UseValueOf" severity="error" />
     <issue id="ObsoleteSdkInt" severity="error" />
     <issue id="Recycle" severity="error" />
+    <issue id="KotlinNullnessAnnotation" severity="error" />
     <issue id="KotlinPropertyAccess" severity="error" />
     <issue id="DefaultLocale" severity="error" />
     <issue id="CheckResult" severity="error" />

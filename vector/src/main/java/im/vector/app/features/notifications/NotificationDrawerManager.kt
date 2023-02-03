@@ -47,6 +47,7 @@ class NotificationDrawerManager @Inject constructor(
         private val notifiableEventProcessor: NotifiableEventProcessor,
         private val notificationRenderer: NotificationRenderer,
         private val notificationEventPersistence: NotificationEventPersistence,
+        private val filteredEventDetector: FilteredEventDetector,
         private val buildMeta: BuildMeta,
 ) {
 
@@ -98,6 +99,11 @@ class NotificationDrawerManager @Inject constructor(
             Timber.d("onNotifiableEventReceived(): $notifiableEvent")
         } else {
             Timber.d("onNotifiableEventReceived(): is push: ${notifiableEvent.canBeReplaced}")
+        }
+
+        if (filteredEventDetector.shouldBeIgnored(notifiableEvent)) {
+            Timber.d("onNotifiableEventReceived(): ignore the event")
+            return
         }
 
         add(notifiableEvent)

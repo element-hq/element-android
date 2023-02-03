@@ -142,6 +142,7 @@ abstract class MessageAudioItem : AbsMessageItem<MessageAudioItem.Holder>() {
     private fun renderStateBasedOnAudioPlayback(holder: Holder) {
         audioMessagePlaybackTracker.track(attributes.informationData.eventId) { state ->
             when (state) {
+                is AudioMessagePlaybackTracker.Listener.State.Error,
                 is AudioMessagePlaybackTracker.Listener.State.Idle -> renderIdleState(holder)
                 is AudioMessagePlaybackTracker.Listener.State.Playing -> renderPlayingState(holder, state)
                 is AudioMessagePlaybackTracker.Listener.State.Paused -> renderPausedState(holder, state)

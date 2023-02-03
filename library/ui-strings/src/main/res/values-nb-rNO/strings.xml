@@ -1001,8 +1001,6 @@
     <string name="secure_backup_reset_if_you_reset_all">Hvis du tilbakestiller alt</string>
     <string name="secure_backup_reset_no_history">Du starter på nytt uten historikk, ingen meldinger, pålitelige enheter eller pålitelige brukere</string>
     <string name="encrypted_unverified">Kryptert av en ubekreftet enhet</string>
-    <string name="review_logins">Gjennomgå hvor du er logget inn</string>
-    <string name="verify_other_sessions">Bekreft alle øktene dine for å sikre at kontoen og meldingene dine er trygge</string>
     <string name="verify_this_session">Bekreft den nye påloggingen som får tilgang til kontoen din: %1$s</string>
     <string name="crosssigning_verify_session">Bekreft pålogging</string>
     <string name="confirm_your_identity">Bekreft identiteten din ved å bekrefte denne påloggingen fra en av de andre øktene dine, og gi den tilgang til krypterte meldinger.</string>

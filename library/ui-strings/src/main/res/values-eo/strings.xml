@@ -718,8 +718,8 @@
     <string name="settings_discovery_please_enter_server">Bonvolu enigi la URL-on de identiga servilo</string>
     <string name="settings_discovery_bad_identity_server">Ne povis konektiĝi al identiga servilo</string>
     <string name="settings_discovery_enter_identity_server">Enigu URL-on de identiga servilo</string>
-    <string name="settings_discovery_confirm_mail_not_clicked">Ni sendis al vi konfirman retleteron al %s, bonvolu unue kontroli vian retpoŝton kaj klaki la konfirman ligilon</string>
-    <string name="settings_discovery_confirm_mail">Ni sendis al vi konfirman retleteron al %s; kontrolu vian retpoŝton kaj klaku la konfirman ligilon</string>
+    <string name="settings_discovery_confirm_mail_not_clicked">Ni sendis retleteron al %s, bonvolu unue kontroli vian retpoŝton kaj klaki la konfirman ligilon</string>
+    <string name="settings_discovery_confirm_mail">Ni sendis retleteron al %s; kontrolu vian retpoŝton kaj klaku la konfirman ligilon</string>
     <string name="settings_discovery_msisdn_title">Troveblaj telefonnumeroj</string>
     <string name="settings_discovery_disconnect_identity_server_info">Malkonekto de via identiga servilo signifas, ke vi ne estos trovebla de aliaj uzantoj kaj ne povos inviti aliulojn per retpoŝtadreso aŭ telefono.</string>
     <string name="settings_discovery_no_msisdn">Elektebloj pri trovado aperos post aldono de telefonnumero.</string>
@@ -1123,9 +1123,7 @@
     <string name="settings_select_country">Elektu landon</string>
     <string name="settings_emails_and_phone_numbers_summary">Administri retpoŝtadresojn kaj telefonnumerojn ligitajn al via konto de Matrix</string>
     <string name="settings_emails_and_phone_numbers_title">Retpoŝtadresoj kaj telefonnumeroj</string>
-    <string name="settings_unignore_user">Ĉu montri ĉiujn mesaĝojn de %s\?
-\n
-\nSciu ke tiu ĉi ago reekigos la aplikaĵon, kaj tio povas daŭri iom da tempo.</string>
+    <string name="settings_unignore_user">Ĉu montri ĉiujn mesaĝojn de %s\?</string>
     <string name="settings_password_updated">Via pasvorto ĝisdatiĝis</string>
     <string name="settings_fail_to_update_password_invalid_current_password">La pasvorto ne validas</string>
     <string name="settings_fail_to_update_password">Malsukcesis ĝisdatigi pasvorton</string>
@@ -1485,8 +1483,6 @@
     <string name="add_members_to_room">Aldoni ĉambranojn</string>
     <string name="confirm_your_identity_quad_s">Konfirmu vian identecon per kontrolo de ĉi tiu saluto, donante al ĝi aliron al ĉifritaj mesaĝoj.</string>
     <string name="verify_this_session">Kontrolu la novan saluton, kiu aliras vian konton: %1$s</string>
-    <string name="verify_other_sessions">Rekontrolu ĉiujn viajn salutaĵojn por certigi, ke viaj konto kaj mesaĝoj estas sekuraj</string>
-    <string name="review_logins">Rekontrolu, kie vi salutis</string>
     <plurals name="secure_backup_reset_devices_you_can_verify">
         <item quantity="one">Montri la aparaton per kiu vi povas kontroli nun</item>
         <item quantity="other">Montri %d aparatojn per kiuj vi povas kontroli nun</item>
@@ -2201,4 +2197,5 @@
     <string name="call_ringing">Sonorante…</string>
     <string name="spaces">Aroj</string>
     <string name="initial_sync_request_reason_unignored_users">- Iom uzantoj reatentita</string>
+    <string name="settings_mentions_at_room">\@room</string>
 </resources>

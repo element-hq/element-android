@@ -91,11 +91,13 @@ import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.isThread
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContentWithFormattedBody
 import org.matrix.android.sdk.api.session.room.model.message.MessageEmoteContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageEndPollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageFileContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageInfoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageLocationContent
@@ -109,8 +111,10 @@ import org.matrix.android.sdk.api.session.room.model.message.asMessageAudioEvent
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
 import org.matrix.android.sdk.api.session.room.model.message.getThumbnailUrl
 import org.matrix.android.sdk.api.session.room.model.relation.ReplyToContent
+import org.matrix.android.sdk.api.session.room.timeline.getRelationContent
 import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import org.matrix.android.sdk.api.util.MimeTypes
+import timber.log.Timber
 import javax.inject.Inject
 
 class MessageItemFactory @Inject constructor(
@@ -155,6 +159,9 @@ class MessageItemFactory @Inject constructor(
     private val textRenderer by lazy {
         textRendererFactory.create(roomId)
     }
+
+    private val useRichTextEditorStyle: Boolean get() =
+        vectorPreferences.isRichTextEditorEnabled()
 
     fun create(params: TimelineItemFactoryParams): VectorEpoxyModel<*>? {
         val event = params.event
@@ -202,7 +209,8 @@ class MessageItemFactory @Inject constructor(
             is MessageFileContent -> buildFileMessageItem(messageContent, highlight, attributes)
             is MessageAudioContent -> buildAudioContent(params, messageContent, informationData, highlight, attributes)
             is MessageVerificationRequestContent -> buildVerificationRequestMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessagePollContent -> buildPollItem(messageContent, informationData, highlight, callback, attributes)
+            is MessagePollContent -> buildPollItem(messageContent, informationData, highlight, callback, attributes, isEnded = false)
+            is MessageEndPollContent -> buildEndedPollItem(event.getRelationContent()?.eventId, informationData, highlight, callback, attributes)
             is MessageLocationContent -> buildLocationItem(messageContent, informationData, highlight, attributes)
             is MessageBeaconInfoContent -> liveLocationShareMessageItemFactory.create(event, highlight, attributes)
             is MessageVoiceBroadcastInfoContent -> voiceBroadcastItemFactory.create(params, messageContent, highlight, attributes)
@@ -245,6 +253,7 @@ class MessageItemFactory @Inject constructor(
             highlight: Boolean,
             callback: TimelineEventController.Callback?,
             attributes: AbsMessageItem.Attributes,
+            isEnded: Boolean,
     ): PollItem {
         val pollViewState = pollItemViewStateFactory.create(pollContent, informationData)
 
@@ -256,9 +265,33 @@ class MessageItemFactory @Inject constructor(
                 .votesStatus(pollViewState.votesStatus)
                 .optionViewStates(pollViewState.optionViewStates.orEmpty())
                 .edited(informationData.hasBeenEdited)
+                .ended(isEnded)
                 .highlighted(highlight)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .callback(callback)
+    }
+
+    private fun buildEndedPollItem(
+            pollStartEventId: String?,
+            informationData: MessageInformationData,
+            highlight: Boolean,
+            callback: TimelineEventController.Callback?,
+            attributes: AbsMessageItem.Attributes,
+    ): PollItem? {
+        pollStartEventId ?: return null.also {
+            Timber.e("### buildEndedPollItem. Cannot render poll end event because poll start event id is null")
+        }
+        val pollStartEvent = session.roomService().getRoom(roomId)?.getTimelineEvent(pollStartEventId)
+        val pollContent = pollStartEvent?.root?.getClearContent()?.toModel<MessagePollContent>() ?: return null
+
+        return buildPollItem(
+                pollContent,
+                informationData,
+                highlight,
+                callback,
+                attributes,
+                isEnded = true
+        )
     }
 
     private fun createPollQuestion(
@@ -450,6 +483,7 @@ class MessageItemFactory @Inject constructor(
                 highlight,
                 callback,
                 attributes,
+                useRichTextEditorStyle = vectorPreferences.isRichTextEditorEnabled(),
         )
     }
 
@@ -556,7 +590,7 @@ class MessageItemFactory @Inject constructor(
             val replyToContent = messageContent.relatesTo?.inReplyTo
             buildFormattedTextItem(matrixFormattedBody, informationData, highlight, callback, attributes, replyToContent)
         } else {
-            buildMessageTextItem(messageContent.body, false, informationData, highlight, callback, attributes)
+            buildMessageTextItem(messageContent.body, false, informationData, highlight, callback, attributes, useRichTextEditorStyle)
         }
     }
 
@@ -580,6 +614,7 @@ class MessageItemFactory @Inject constructor(
                 highlight,
                 callback,
                 attributes,
+                useRichTextEditorStyle,
         )
     }
 
@@ -590,6 +625,7 @@ class MessageItemFactory @Inject constructor(
             highlight: Boolean,
             callback: TimelineEventController.Callback?,
             attributes: AbsMessageItem.Attributes,
+            useRichTextEditorStyle: Boolean,
     ): MessageTextItem? {
         val renderedBody = textRenderer.render(body)
         val bindingOptions = spanUtils.getBindingOptions(renderedBody)
@@ -610,6 +646,7 @@ class MessageItemFactory @Inject constructor(
                 .previewUrlRetriever(callback?.getPreviewUrlRetriever())
                 .imageContentRenderer(imageContentRenderer)
                 .previewUrlCallback(callback)
+                .useRichTextEditorStyle(useRichTextEditorStyle)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .attributes(attributes)
                 .highlighted(highlight)
