@@ -39,6 +39,7 @@ import org.matrix.rustcomponents.sdk.crypto.RequestType
 import timber.log.Timber
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
+import kotlin.system.measureTimeMillis
 
 private val loggerTag = LoggerTag("PrepareToEncryptUseCase", LoggerTag.CRYPTO)
 
@@ -62,11 +63,15 @@ internal class PrepareToEncryptUseCase @Inject constructor(
             Timber.tag(loggerTag.value).d("prepareToEncrypt() roomId:$roomId Check room members up to date")
             // Ensure to load all room members
             if (ensureAllMembersAreLoaded) {
-                try {
-                    loadRoomMembersTask.execute(LoadRoomMembersTask.Params(roomId))
-                } catch (failure: Throwable) {
-                    Timber.tag(loggerTag.value).e("prepareToEncrypt() : Failed to load room members")
-                    throw failure
+                measureTimeMillis {
+                    try {
+                        loadRoomMembersTask.execute(LoadRoomMembersTask.Params(roomId))
+                    } catch (failure: Throwable) {
+                        Timber.tag(loggerTag.value).e("prepareToEncrypt() : Failed to load room members")
+                        throw failure
+                    }
+                }.also {
+                    Timber.tag(loggerTag.value).d("prepareToEncrypt() roomId:$roomId load room members took: $it ms")
                 }
             }
             val userIds = getRoomUserIds(roomId)
@@ -85,7 +90,11 @@ internal class PrepareToEncryptUseCase @Inject constructor(
     }
 
     private suspend fun preshareRoomKey(roomId: String, roomMembers: List<String>, forceDistributeToUnverified: Boolean) {
-        claimMissingKeys(roomMembers)
+        measureTimeMillis {
+            claimMissingKeys(roomMembers)
+        }.also {
+            Timber.tag(loggerTag.value).d("prepareToEncrypt() roomId:$roomId claimMissingKeys took: $it ms")
+        }
         val keyShareLock = roomKeyShareLocks.getOrPut(roomId) { Mutex() }
         var sharedKey = false
 
@@ -113,25 +122,29 @@ internal class PrepareToEncryptUseCase @Inject constructor(
                     HistoryVisibility.JOINED
                 }
         )
-        keyShareLock.withLock {
-            coroutineScope {
-                olmMachine.shareRoomKey(roomId, roomMembers, settings).map {
-                    when (it) {
-                        is Request.ToDevice -> {
-                            sharedKey = true
-                            async {
-                                sendToDevice(olmMachine, it)
+        measureTimeMillis {
+            keyShareLock.withLock {
+                coroutineScope {
+                    olmMachine.shareRoomKey(roomId, roomMembers, settings).map {
+                        when (it) {
+                            is Request.ToDevice -> {
+                                sharedKey = true
+                                async {
+                                    sendToDevice(olmMachine, it)
+                                }
+                            }
+                            else -> {
+                                // This request can only be a to-device request but
+                                // we need to handle all our cases and put this
+                                // async block for our joinAll to work.
+                                async {}
                             }
                         }
-                        else -> {
-                            // This request can only be a to-device request but
-                            // we need to handle all our cases and put this
-                            // async block for our joinAll to work.
-                            async {}
-                        }
-                    }
-                }.joinAll()
+                    }.joinAll()
+                }
             }
+        }.also {
+            Timber.tag(loggerTag.value).d("prepareToEncrypt() roomId:$roomId shareRoomKeys took: $it ms")
         }
 
         // If we sent out a room key over to-device messages it's likely that we created a new one
