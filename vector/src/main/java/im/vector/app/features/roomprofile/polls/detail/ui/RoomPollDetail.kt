@@ -19,6 +19,7 @@ package im.vector.app.features.roomprofile.polls.detail.ui
 import im.vector.app.features.poll.PollItemViewState
 
 data class RoomPollDetail(
+        val creationTimestamp: Long,
         val isEnded: Boolean,
         val endedPollEventId: String?,
         val pollItemViewState: PollItemViewState,

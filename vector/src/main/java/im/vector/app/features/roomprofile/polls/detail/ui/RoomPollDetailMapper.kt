@@ -39,14 +39,21 @@ class RoomPollDetailMapper @Inject constructor(
         val result = runCatching {
             val content = timelineEvent.getVectorLastMessageContent()
             val pollResponseData = pollResponseDataFactory.create(timelineEvent)
-            return if (eventId.isNotEmpty() && content is MessagePollContent) {
+            val creationTimestamp = timelineEvent.root.originServerTs ?: 0
+            return if (eventId.isNotEmpty() && creationTimestamp > 0 && content is MessagePollContent) {
                 val isPollEnded = pollResponseData?.isClosed.orFalse()
                 val endedPollEventId = getEndedPollEventId(
                         isPollEnded,
                         startPollEventId = eventId,
                         roomId = timelineEvent.roomId,
                 )
-                convertToRoomPollDetail(content, pollResponseData, isPollEnded, endedPollEventId)
+                convertToRoomPollDetail(
+                        creationTimestamp = creationTimestamp,
+                        content = content,
+                        pollResponseData = pollResponseData,
+                        isPollEnded = isPollEnded,
+                        endedPollEventId = endedPollEventId,
+                )
             } else {
                 Timber.w("missing mandatory info about poll event with id=$eventId")
                 null
@@ -60,6 +67,7 @@ class RoomPollDetailMapper @Inject constructor(
     }
 
     private fun convertToRoomPollDetail(
+            creationTimestamp: Long,
             content: MessagePollContent,
             pollResponseData: PollResponseData?,
             isPollEnded: Boolean,
@@ -72,6 +80,7 @@ class RoomPollDetailMapper @Inject constructor(
                 isSent = true,
         )
         return RoomPollDetail(
+                creationTimestamp = creationTimestamp,
                 isEnded = isPollEnded,
                 pollItemViewState = pollItemViewState,
                 endedPollEventId = endedPollEventId,

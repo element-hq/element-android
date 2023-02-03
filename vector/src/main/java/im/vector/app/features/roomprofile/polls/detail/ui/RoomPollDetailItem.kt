@@ -28,7 +28,10 @@ import im.vector.app.features.home.room.detail.timeline.item.PollOptionView
 import im.vector.app.features.home.room.detail.timeline.item.PollOptionViewState
 
 @EpoxyModelClass
-abstract class RoomPollDetailItem : VectorEpoxyModel<RoomPollDetailItem.Holder>(R.layout.item_timeline_event_poll) {
+abstract class RoomPollDetailItem : VectorEpoxyModel<RoomPollDetailItem.Holder>(R.layout.item_poll_detail) {
+
+    @EpoxyAttribute
+    lateinit var formattedDate: String
 
     @EpoxyAttribute
     var question: String? = null
@@ -53,7 +56,7 @@ abstract class RoomPollDetailItem : VectorEpoxyModel<RoomPollDetailItem.Holder>(
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-
+        holder.date.text = formattedDate
         holder.questionTextView.text = question
         holder.votesStatusTextView.text = votesStatus
         holder.optionsContainer.removeAllViews()
@@ -77,6 +80,7 @@ abstract class RoomPollDetailItem : VectorEpoxyModel<RoomPollDetailItem.Holder>(
     }
 
     class Holder : VectorEpoxyHolder() {
+        val date by bind<TextView>(R.id.pollDetailDate)
         val questionTextView by bind<TextView>(R.id.questionTextView)
         val optionsContainer by bind<LinearLayout>(R.id.optionsContainer)
         val votesStatusTextView by bind<TextView>(R.id.optionsVotesStatusTextView)

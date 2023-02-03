@@ -17,10 +17,14 @@
 package im.vector.app.features.roomprofile.polls.detail.ui
 
 import com.airbnb.epoxy.TypedEpoxyController
+import im.vector.app.core.date.DateFormatKind
+import im.vector.app.core.date.VectorDateFormatter
 import java.util.UUID
 import javax.inject.Inject
 
-class RoomPollDetailController @Inject constructor() : TypedEpoxyController<RoomPollDetailViewState>() {
+class RoomPollDetailController @Inject constructor(
+        val dateFormatter: VectorDateFormatter,
+) : TypedEpoxyController<RoomPollDetailViewState>() {
 
     interface Callback {
         fun vote(pollEventId: String, optionId: String)
@@ -37,6 +41,7 @@ class RoomPollDetailController @Inject constructor() : TypedEpoxyController<Room
         roomPollDetailItem {
             id(viewState.pollId)
             eventId(viewState.pollId)
+            formattedDate(host.dateFormatter.format(pollDetail.creationTimestamp, DateFormatKind.TIMELINE_DAY_DIVIDER))
             question(pollItemViewState.question)
             canVote(pollItemViewState.canVote)
             votesStatus(pollItemViewState.votesStatus)
