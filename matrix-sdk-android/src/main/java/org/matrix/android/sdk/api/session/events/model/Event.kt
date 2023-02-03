@@ -142,6 +142,7 @@ data class Event(
             unsignedData: UnsignedData? = this.unsignedData,
             redacts: String? = this.redacts,
             mxDecryptionResult: OlmDecryptionResult? = this.mxDecryptionResult,
+            verificationStateIsDirty: Boolean? = this.verificationStateIsDirty,
             mCryptoError: MXCryptoError.ErrorType? = this.mCryptoError,
             mCryptoErrorReason: String? = this.mCryptoErrorReason,
             sendState: SendState = this.sendState,
@@ -158,7 +159,7 @@ data class Event(
                 stateKey = stateKey,
                 roomId = roomId,
                 unsignedData = unsignedData,
-                redacts = redacts
+                redacts = redacts,
         ).also {
             it.mxDecryptionResult = mxDecryptionResult
             it.mCryptoError = mCryptoError
@@ -166,6 +167,7 @@ data class Event(
             it.sendState = sendState
             it.ageLocalTs = ageLocalTs
             it.threadDetails = threadDetails
+            it.verificationStateIsDirty = verificationStateIsDirty
         }
     }
 
