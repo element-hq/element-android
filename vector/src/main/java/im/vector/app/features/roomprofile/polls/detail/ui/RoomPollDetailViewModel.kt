@@ -30,7 +30,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
-// TODO add unit tests
 class RoomPollDetailViewModel @AssistedInject constructor(
         @Assisted initialState: RoomPollDetailViewState,
         private val getTimelineEventUseCase: GetTimelineEventUseCase,
