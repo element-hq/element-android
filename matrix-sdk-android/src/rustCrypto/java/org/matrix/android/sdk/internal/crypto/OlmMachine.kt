@@ -20,8 +20,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
-import com.squareup.moshi.adapter
-import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.runBlocking
@@ -99,19 +97,6 @@ private class CryptoProgressListener(private val listener: ProgressListener?) : 
     }
 }
 
-private data class UserIdentityCollector(val userId: String, val collector: SendChannel<Optional<MXCrossSigningInfo>>) :
-        SendChannel<Optional<MXCrossSigningInfo>> by collector
-
-private data class DevicesCollector(val userIds: List<String>, val collector: SendChannel<List<CryptoDeviceInfo>>) :
-        SendChannel<List<CryptoDeviceInfo>> by collector
-private typealias PrivateKeysCollector = SendChannel<Optional<PrivateKeysInfo>>
-
-private class FlowCollectors {
-    val userIdentityCollectors = ArrayList<UserIdentityCollector>()
-    val privateKeyCollectors = ArrayList<PrivateKeysCollector>()
-    val deviceCollectors = ArrayList<DevicesCollector>()
-}
-
 fun setRustLogger() {
     setLogger(CryptoLogger() as Logger)
 }
@@ -130,7 +115,7 @@ internal class OlmMachine @Inject constructor(
         private val ensureUsersKeys: EnsureUsersKeysUseCase,
         private val matrixConfiguration: MatrixConfiguration,
         private val megolmSessionImportManager: MegolmSessionImportManager,
-        private val rustEncryptionConfiguration: RustEncryptionConfiguration,
+        rustEncryptionConfiguration: RustEncryptionConfiguration,
 ) {
 
     private val inner: InnerMachine
@@ -165,23 +150,23 @@ internal class OlmMachine @Inject constructor(
     }
 
     private suspend fun updateLiveDevices() {
-        for (deviceCollector in flowCollectors.deviceCollectors) {
-            val devices = getCryptoDeviceInfo(deviceCollector.userIds)
-            deviceCollector.trySend(devices)
+        flowCollectors.forEachDevicesCollector {
+            val devices = getCryptoDeviceInfo(it.userIds)
+            it.trySend(devices)
         }
     }
 
     private suspend fun updateLiveUserIdentities() {
-        for (userIdentityCollector in flowCollectors.userIdentityCollectors) {
-            val identity = getIdentity(userIdentityCollector.userId)?.toMxCrossSigningInfo()
-            userIdentityCollector.trySend(identity.toOptional())
+        flowCollectors.forEachIdentityCollector {
+            val identity = getIdentity(it.userId)?.toMxCrossSigningInfo().toOptional()
+            it.trySend(identity)
         }
     }
 
     private suspend fun updateLivePrivateKeys() {
         val keys = exportCrossSigningKeys().toOptional()
-        for (privateKeyCollector in flowCollectors.privateKeyCollectors) {
-            privateKeyCollector.trySend(keys)
+        flowCollectors.forEachPrivateKeysCollector {
+            it.trySend(keys)
         }
     }
 
@@ -699,9 +684,9 @@ internal class OlmMachine @Inject constructor(
         return channelFlow {
             val userIdentityCollector = UserIdentityCollector(userId, this)
             val onClose = safeInvokeOnClose {
-                flowCollectors.userIdentityCollectors.remove(userIdentityCollector)
+                flowCollectors.removeIdentityCollector(userIdentityCollector)
             }
-            flowCollectors.userIdentityCollectors.add(userIdentityCollector)
+            flowCollectors.addIdentityCollector(userIdentityCollector)
             val identity = getIdentity(userId)?.toMxCrossSigningInfo().toOptional()
             send(identity)
             onClose.await()
@@ -719,9 +704,9 @@ internal class OlmMachine @Inject constructor(
     fun getPrivateCrossSigningKeysFlow(): Flow<Optional<PrivateKeysInfo>> {
         return channelFlow {
             val onClose = safeInvokeOnClose {
-                flowCollectors.privateKeyCollectors.remove(this)
+                flowCollectors.removePrivateKeysCollector(this)
             }
-            flowCollectors.privateKeyCollectors.add(this)
+            flowCollectors.addPrivateKeysCollector(this)
             val keys = this@OlmMachine.exportCrossSigningKeys().toOptional()
             send(keys)
             onClose.await()
@@ -746,9 +731,9 @@ internal class OlmMachine @Inject constructor(
         return channelFlow {
             val devicesCollector = DevicesCollector(userIds, this)
             val onClose = safeInvokeOnClose {
-                flowCollectors.deviceCollectors.remove(devicesCollector)
+                flowCollectors.removeDevicesCollector(devicesCollector)
             }
-            flowCollectors.deviceCollectors.add(devicesCollector)
+            flowCollectors.addDevicesCollector(devicesCollector)
             val devices = getCryptoDeviceInfo(userIds)
             send(devices)
             onClose.await()
