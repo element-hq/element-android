@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,13 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.roomprofile.factory
+package im.vector.app.features.home.room.detail.timeline.factory
 
 import im.vector.app.R
-import im.vector.app.features.home.room.detail.timeline.factory.PollItemViewStateFactory
-import im.vector.app.features.home.room.detail.timeline.factory.PollOptionViewStateFactory
 import im.vector.app.features.home.room.detail.timeline.item.PollOptionViewState
 import im.vector.app.features.home.room.detail.timeline.item.PollVoteSummaryData
 import im.vector.app.features.poll.PollItemViewState
 import im.vector.app.test.fakes.FakeStringProvider
-import im.vector.app.test.fixtures.PollFixture.A_MESSAGE_INFORMATION_DATA
 import im.vector.app.test.fixtures.PollFixture.A_POLL_CONTENT
 import im.vector.app.test.fixtures.PollFixture.A_POLL_OPTION_IDS
 import im.vector.app.test.fixtures.PollFixture.A_POLL_RESPONSE_DATA
