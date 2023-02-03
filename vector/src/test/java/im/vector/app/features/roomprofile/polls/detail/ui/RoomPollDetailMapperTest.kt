@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.roomprofile.polls.list.ui
+package im.vector.app.features.roomprofile.polls.detail.ui
 
-import im.vector.app.features.home.room.detail.timeline.factory.PollOptionViewStateFactory
+import im.vector.app.features.home.room.detail.timeline.factory.PollItemViewStateFactory
 import im.vector.app.features.home.room.detail.timeline.helper.PollResponseDataFactory
-import im.vector.app.features.home.room.detail.timeline.item.PollOptionViewState
+import im.vector.app.features.poll.PollItemViewState
+import im.vector.app.features.roomprofile.polls.detail.domain.GetEndedPollEventIdUseCase
 import im.vector.app.test.fixtures.RoomPollFixture
 import io.mockk.every
 import io.mockk.mockk
@@ -33,17 +34,19 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 
 private const val AN_EVENT_ID = "event-id"
+private const val A_ROOM_ID = "room-id"
 private const val AN_EVENT_TIMESTAMP = 123L
-private const val A_POLL_TITLE = "poll-title"
 
-internal class PollSummaryMapperTest {
+internal class RoomPollDetailMapperTest {
 
     private val fakePollResponseDataFactory = mockk<PollResponseDataFactory>()
-    private val fakePollOptionViewStateFactory = mockk<PollOptionViewStateFactory>()
+    private val fakePollItemViewStateFactory = mockk<PollItemViewStateFactory>()
+    private val fakeGetEndedPollEventIdUseCase = mockk<GetEndedPollEventIdUseCase>()
 
-    private val pollSummaryMapper = PollSummaryMapper(
+    private val roomPollDetailMapper = RoomPollDetailMapper(
             pollResponseDataFactory = fakePollResponseDataFactory,
-            pollOptionViewStateFactory = fakePollOptionViewStateFactory,
+            pollItemViewStateFactory = fakePollItemViewStateFactory,
+            getEndedPollEventIdUseCase = fakeGetEndedPollEventIdUseCase,
     )
 
     @Before
@@ -57,52 +60,49 @@ internal class PollSummaryMapperTest {
     }
 
     @Test
-    fun `given a not ended poll event when mapping to model then result is active poll`() {
+    fun `given a not ended poll event when mapping to model then result contains correct poll details`() {
         // Given
-        val pollStartedEvent = givenAPollTimelineEvent(
+        val aPollItemViewState = givenAPollItemViewState()
+        val aPollEvent = givenAPollTimelineEvent(
                 eventId = AN_EVENT_ID,
                 creationTimestamp = AN_EVENT_TIMESTAMP,
-                pollTitle = A_POLL_TITLE,
                 isClosed = false,
+                pollItemViewState = aPollItemViewState,
         )
-        val expectedResult = PollSummary.ActivePoll(
-                id = AN_EVENT_ID,
+        val expectedResult = RoomPollDetail(
                 creationTimestamp = AN_EVENT_TIMESTAMP,
-                title = A_POLL_TITLE,
+                isEnded = false,
+                endedPollEventId = null,
+                pollItemViewState = aPollItemViewState,
         )
 
         // When
-        val result = pollSummaryMapper.map(pollStartedEvent)
+        val result = roomPollDetailMapper.map(aPollEvent)
 
         // Then
         result shouldBeEqualTo expectedResult
     }
 
     @Test
-    fun `given an ended poll event when mapping to model then result is ended poll with only winner options`() {
+    fun `given an ended poll event when mapping to model then result contains correct poll details`() {
         // Given
-        val totalVotes = 10
-        val option1 = givenAPollEndedOption(isWinner = false)
-        val option2 = givenAPollEndedOption(isWinner = true)
-        val winnerOptions = listOf(option1, option2)
-        val endedPollEvent = givenAPollTimelineEvent(
+        val aPollItemViewState = givenAPollItemViewState()
+        val aPollEvent = givenAPollTimelineEvent(
                 eventId = AN_EVENT_ID,
                 creationTimestamp = AN_EVENT_TIMESTAMP,
-                pollTitle = A_POLL_TITLE,
                 isClosed = true,
-                totalVotes = totalVotes,
-                winnerOptions = winnerOptions,
+                pollItemViewState = aPollItemViewState,
         )
-        val expectedResult = PollSummary.EndedPoll(
-                id = AN_EVENT_ID,
+        val endedPollEventId = givenEndedPollEventId()
+        val expectedResult = RoomPollDetail(
                 creationTimestamp = AN_EVENT_TIMESTAMP,
-                title = A_POLL_TITLE,
-                totalVotes = totalVotes,
-                winnerOptions = listOf(option2),
+                isEnded = true,
+                endedPollEventId = endedPollEventId,
+                pollItemViewState = aPollItemViewState,
         )
 
         // When
-        val result = pollSummaryMapper.map(endedPollEvent)
+        val result = roomPollDetailMapper.map(aPollEvent)
 
         // Then
         result shouldBeEqualTo expectedResult
@@ -111,17 +111,18 @@ internal class PollSummaryMapperTest {
     @Test
     fun `given missing data in event when mapping to model then result is null`() {
         // Given
+        val aPollItemViewState = givenAPollItemViewState()
         val noIdPollEvent = givenAPollTimelineEvent(
                 eventId = "",
                 creationTimestamp = AN_EVENT_TIMESTAMP,
-                pollTitle = A_POLL_TITLE,
                 isClosed = false,
+                pollItemViewState = aPollItemViewState,
         )
         val noTimestampPollEvent = givenAPollTimelineEvent(
                 eventId = AN_EVENT_ID,
                 creationTimestamp = 0,
-                pollTitle = A_POLL_TITLE,
                 isClosed = false,
+                pollItemViewState = aPollItemViewState,
         )
         val notAPollEvent = RoomPollFixture.givenATimelineEvent(
                 eventId = AN_EVENT_ID,
@@ -131,9 +132,9 @@ internal class PollSummaryMapperTest {
         )
 
         // When
-        val result1 = pollSummaryMapper.map(noIdPollEvent)
-        val result2 = pollSummaryMapper.map(noTimestampPollEvent)
-        val result3 = pollSummaryMapper.map(notAPollEvent)
+        val result1 = roomPollDetailMapper.map(noIdPollEvent)
+        val result2 = roomPollDetailMapper.map(noTimestampPollEvent)
+        val result3 = roomPollDetailMapper.map(notAPollEvent)
 
         // Then
         result1 shouldBe null
@@ -141,32 +142,45 @@ internal class PollSummaryMapperTest {
         result3 shouldBe null
     }
 
+    private fun givenAPollItemViewState(): PollItemViewState {
+        return PollItemViewState(
+                question = "",
+                votesStatus = "",
+                canVote = true,
+                optionViewStates = emptyList(),
+        )
+    }
+
     private fun givenAPollTimelineEvent(
             eventId: String,
             creationTimestamp: Long,
-            pollTitle: String,
             isClosed: Boolean,
-            totalVotes: Int = 0,
-            winnerOptions: List<PollOptionViewState.PollEnded> = emptyList(),
+            pollItemViewState: PollItemViewState,
     ): TimelineEvent {
-        val pollCreationInfo = RoomPollFixture.givenPollCreationInfo(pollTitle)
+        val pollCreationInfo = RoomPollFixture.givenPollCreationInfo("pollTitle")
         val messageContent = RoomPollFixture.givenAMessagePollContent(pollCreationInfo)
-        val timelineEvent = RoomPollFixture.givenATimelineEvent(eventId, "room-id", creationTimestamp, messageContent)
-        val pollResponseData = RoomPollFixture.givenAPollResponseData(isClosed, totalVotes)
+        val timelineEvent = RoomPollFixture.givenATimelineEvent(eventId, A_ROOM_ID, creationTimestamp, messageContent)
+        val pollResponseData = RoomPollFixture.givenAPollResponseData(isClosed, totalVotes = 1)
         every { fakePollResponseDataFactory.create(timelineEvent) } returns pollResponseData
         every {
-            fakePollOptionViewStateFactory.createPollEndedOptions(
-                    pollCreationInfo,
-                    pollResponseData
+            fakePollItemViewStateFactory.create(
+                    pollContent = messageContent,
+                    pollResponseData = pollResponseData,
+                    isSent = true
             )
-        } returns winnerOptions
+        } returns pollItemViewState
 
         return timelineEvent
     }
 
-    private fun givenAPollEndedOption(isWinner: Boolean): PollOptionViewState.PollEnded {
-        return mockk<PollOptionViewState.PollEnded>().also {
-            every { it.isWinner } returns isWinner
-        }
+    private fun givenEndedPollEventId(): String {
+        val eventId = "ended-poll-event-id"
+        every {
+            fakeGetEndedPollEventIdUseCase.execute(
+                    startPollEventId = AN_EVENT_ID,
+                    roomId = A_ROOM_ID,
+            )
+        } returns eventId
+        return eventId
     }
 }
