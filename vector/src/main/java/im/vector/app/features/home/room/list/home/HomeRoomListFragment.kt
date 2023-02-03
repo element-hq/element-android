@@ -160,6 +160,11 @@ class HomeRoomListFragment :
         roomListViewModel.filteredPagedRoomSummariesLive.livePagedList.observe(viewLifecycleOwner) { roomsList ->
             roomsController.submitRoomsList(roomsList)
         }
+
+        roomListViewModel.filteredPagedRoomSummariesLive.liveBoundaries.observe(viewLifecycleOwner) {
+            roomsController.boundaryChange(it)
+        }
+
         roomListViewModel.onEach(HomeRoomListViewState::emptyState) { emptyState ->
             roomsController.submitEmptyStateData(emptyState)
         }
