@@ -203,7 +203,7 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
             val psmBytes = characteristic.value
             val psm = bytesToInt(psmBytes)
 
-            var connection = connections[device.address.toString()]
+            val connection = connections[device.address.toString()]
             if (connection != null) {
                 if (connection.isConnected) {
                     connection.close()
@@ -445,7 +445,7 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
         notificationManager.notify(ID, notification)
     }
 
-    override fun onBind(intent: Intent?): IBinder? {
+    override fun onBind(intent: Intent?): IBinder {
         return binder
     }
 
@@ -838,7 +838,7 @@ class NetworkCallback : gobind.InterfaceRetriever {
                 }
             }
 
-            var ifaceInfo = gobind.InterfaceInfo()
+            val ifaceInfo = gobind.InterfaceInfo()
             ifaceInfo.name = iface.name
             ifaceInfo.index = iface.index.toLong()
             ifaceInfo.mtu = iface.mtu.toLong()
