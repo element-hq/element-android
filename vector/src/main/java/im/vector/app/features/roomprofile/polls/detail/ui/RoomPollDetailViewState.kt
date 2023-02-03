@@ -17,7 +17,6 @@
 package im.vector.app.features.roomprofile.polls.detail.ui
 
 import com.airbnb.mvrx.MavericksState
-import im.vector.app.features.poll.PollItemViewState
 
 data class RoomPollDetailViewState(
         val pollId: String,
