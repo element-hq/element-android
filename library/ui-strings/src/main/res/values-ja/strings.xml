@@ -848,7 +848,7 @@
     <plurals name="notice_room_aliases_added">
         <item quantity="other">%1$sがこのルームのアドレスに%2$sを追加しました。</item>
     </plurals>
-    <string name="notice_room_server_acl_updated_title">%sがこのルームのサーバーのアクセス制御リストを変更しました。</string>
+    <string name="notice_room_server_acl_updated_title">%sがこのサーバーのACLを変更しました。</string>
     <string name="notice_room_server_acl_set_ip_literals_not_allowed">IPリテラルに一致するサーバーは禁止されています。</string>
     <string name="notice_room_server_acl_set_ip_literals_allowed">・IPリテラルに一致するサーバーを許可します。</string>
     <string name="notice_room_server_acl_set_allowed">・%sに一致するサーバーは許可されています。</string>
