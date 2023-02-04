@@ -80,6 +80,7 @@ import java.util.Locale
 import java.util.Timer
 import java.util.TimerTask
 import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.concurrent.thread
 import kotlin.concurrent.timerTask
@@ -147,9 +148,9 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
     }
     private lateinit var l2capServer: BluetoothServerSocket
     private lateinit var l2capPSM: ByteArray
-    private var bleConnecting: MutableMap<String, Boolean> = mutableMapOf<String, Boolean>()
-    private var bleConnections: MutableMap<String, DendriteBLEPeering> = mutableMapOf<String, DendriteBLEPeering>()
-    private var conduits: MutableMap<String, Conduit> = mutableMapOf<String, Conduit>()
+    private var bleConnecting = ConcurrentHashMap<String, Boolean>()
+    private var bleConnections = ConcurrentHashMap<String, DendriteBLEPeering>()
+    private var conduits = ConcurrentHashMap<String, Conduit>()
     private val bleReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
@@ -284,7 +285,7 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
                 Timber.i("Creating DendriteBLEPeering")
                 val conduit = monolith.conduit("ble", Gobind.PeerTypeBluetooth)
                 conduits[gatt.device.address] = conduit
-                bleConnections[gatt.device.address] = DendriteBLEPeering(conduit, socket)
+                bleConnections[gatt.device.address] = DendriteBLEPeering(conduit, socket, gatt)
                 Timber.i("Starting DendriteBLEPeering")
                 bleConnections[gatt.device.address]!!.start()
                 bleConnecting.remove(gatt.device.address)
@@ -344,9 +345,9 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
                 val key = address.toString()
                 Timber.i("BLE: Scan result found $key")
 
-                if (bleConnections.containsKey(key)) {
-                    val connection = bleConnections[key]
-                    if (connection?.isConnected == true) {
+                val connection = bleConnections[key]
+                if (connection != null) {
+                    if (connection.isConnected) {
                         Timber.i("BLE: Ignoring device $key that we are already connected to")
                         return
                     }
@@ -373,10 +374,11 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
         private const val CHANNEL_NAME = "Element P2P"
     }
 
-    inner class DendriteBLEPeering(private var conduit: Conduit, private var socket: BluetoothSocket) {
+    inner class DendriteBLEPeering(private var conduit: Conduit, private var socket: BluetoothSocket, gatt: BluetoothGatt?) {
         public val isConnected: Boolean
             get() = socket.isConnected
 
+        private var gatt: BluetoothGatt? = gatt
         private var bleInput: InputStream = socket.inputStream
         private var bleOutput: OutputStream = socket.outputStream
 
@@ -421,7 +423,12 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
             clearBleConnectionState(device)
 
             updateNotification()
-            // TODO: close gatt
+
+            if (ActivityCompat.checkSelfPermission(applicationContext, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                return
+            }
+            gatt?.close()
+            restartBleScan()
         }
 
         private fun reader() {
@@ -851,7 +858,7 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
                     Timber.i("Creating DendriteBLEPeering")
                     val conduit = monolith.conduit("ble", Gobind.PeerTypeBluetooth)
                     conduits[device] = conduit
-                    bleConnections[device] = DendriteBLEPeering(conduit, remote)
+                    bleConnections[device] = DendriteBLEPeering(conduit, remote, null)
                     Timber.i("Starting DendriteBLEPeering")
                     bleConnections[device]!!.start()
 
