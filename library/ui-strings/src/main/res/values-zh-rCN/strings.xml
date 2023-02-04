@@ -1803,7 +1803,7 @@
         <item quantity="other">%d 个条目</item>
     </plurals>
     <string name="not_a_valid_qr_code">这不是有效的 Matrix QR码</string>
-    <string name="user_code_scan">扫描二维码</string>
+    <string name="user_code_scan">扫描QR码</string>
     <string name="add_people">添加人员</string>
     <string name="invite_friends">邀请朋友</string>
     <string name="settings_server_version">服务器版本</string>
@@ -2819,4 +2819,5 @@
     <string name="error_voice_broadcast_unable_to_play">无法播放此语音广播。</string>
     <string name="error_voice_message_broadcast_in_progress_message">你无法启动语音消息因为你正在录制实时广播。请终止实时广播以开始录制语音消息</string>
     <string name="error_voice_message_broadcast_in_progress">无法启动语音消息</string>
+    <string name="ended_poll_indicator">结束了投票。</string>
 </resources>
