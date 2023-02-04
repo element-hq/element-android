@@ -1236,7 +1236,7 @@
     <string name="login_set_email_submit">次に</string>
     <string name="login_reset_password_submit">次に</string>
     <string name="error_empty_field_choose_user_name">ユーザー名を選択してください。</string>
-    <string name="auth_invalid_login_param_space_in_password">ユーザー名やパスワードが正しくありません。 入力したパスワードは、スペースで開始または終了していますので、ご確認ください。</string>
+    <string name="auth_invalid_login_param_space_in_password">ユーザー名かパスワードが正しくありません。入力されたパスワードがスペースによって開始しているか終了しているので、確認してください。</string>
     <string name="login_signup_error_user_in_use">そのユーザー名は既に使用されています</string>
     <string name="login_signup_username_hint">ユーザー名</string>
     <string name="login_signin_username_hint">ユーザー名またはメールアドレス</string>
