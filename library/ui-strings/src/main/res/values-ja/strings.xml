@@ -1366,7 +1366,7 @@
     <plurals name="missed_audio_call">
         <item quantity="other">%d件の不在着信（音声）</item>
     </plurals>
-    <string name="use_as_default_and_do_not_ask_again">デフォルトで使いもう尋ねない</string>
+    <string name="use_as_default_and_do_not_ask_again">規定と設定して次回から確認しない</string>
     <string name="send_bug_report_include_key_share_history">鍵の共有リクエストの履歴を送信</string>
     <string name="no_more_results">結果がありません</string>
     <string name="cannot_call_yourself_with_invite">自分に電話をかけることはできません。参加者が招待を受け入れるまでお待ちください</string>
