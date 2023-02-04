@@ -1008,7 +1008,7 @@
         <item quantity="other">%1$s、%2$s、他%3$d人のユーザーが読みました</item>
     </plurals>
     <string name="three_users_read">%1$s、%2$s、%3$sが読みました</string>
-    <string name="command_description_plain">メッセージをマークダウンとして解釈せずにプレーンテキストとして送信</string>
+    <string name="command_description_plain">メッセージをマークダウンとして解釈せず、プレーンテキストとして送信</string>
     <string name="keys_backup_setup_step3_save_button_title">ファイルとして保存</string>
     <string name="keys_backup_setup_step3_share_recovery_file">共有</string>
     <string name="keys_backup_setup_step3_button_title">完了</string>
@@ -2173,9 +2173,9 @@
     <string name="create_spaces_private_teammates">自分とチームメイトの非公開のスペース</string>
     <string name="create_spaces_organise_rooms">ルームを整理するための非公開のスペース</string>
     <string name="this_is_the_beginning_of_room_no_name">ここが会話のスタート地点です。</string>
-    <string name="this_is_the_beginning_of_room">これは%sの始まりです。</string>
+    <string name="this_is_the_beginning_of_room">ここが%sの始まりです。</string>
     <string name="qr_code_scanned_verif_waiting_notice">もう少しです！確認を待機しています…</string>
-    <string name="qr_code_scanned_self_verif_notice">あと少しです！もう一方のデバイスは同じマークを表示していますか？</string>
+    <string name="qr_code_scanned_self_verif_notice">あと少しです！もう一方の端末は同じマークを表示していますか？</string>
     <string name="qr_code_scanned_verif_waiting">%sを待機しています…</string>
     <string name="verification_profile_device_untrust_info">このユーザーがこのセッションを認証するまで、送受信されるメッセージには警告マークが付きます。手動で認証することも可能です。</string>
     <string name="room_member_profile_failed_to_get_devices">セッションの取得に失敗しました</string>
