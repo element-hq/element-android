@@ -1060,7 +1060,7 @@
     <string name="space_add_child_title">ルームを追加</string>
     <string name="user_invites_you">%sはあなたを招待しています</string>
     <string name="no_permissions_to_start_conf_call">このルームでグループ通話を開始する権限がありません</string>
-    <string name="audio_meeting">オーディオミーティングを開始</string>
+    <string name="audio_meeting">音声通話を開始</string>
     <string name="secure_backup_setup">安全バックアップを設定</string>
     <string name="keys_backup_banner_update_line2">鍵のバックアップで管理</string>
     <string name="keys_backup_banner_recover_line2">鍵のバックアップを使用</string>
@@ -1370,7 +1370,7 @@
     <string name="send_bug_report_include_key_share_history">鍵の共有リクエストの履歴を送信</string>
     <string name="no_more_results">結果がありません</string>
     <string name="cannot_call_yourself_with_invite">自分に電話をかけることはできません。参加者が招待を受け入れるまでお待ちください</string>
-    <string name="audio_video_meeting_description">ミーティングはJitsiのセキュリティーとパーミッションポリシーを使用します。会議中は、現在ルームにいる全ての人に招待が表示されます。</string>
+    <string name="audio_video_meeting_description">ミーティングはJitsiのセキュリティーとパーミッションポリシーを使用します。ミーティング中は、現在ルームにいる全ての人に招待が表示されます。</string>
     <string name="missing_permissions_title">権限がありません</string>
     <string name="denied_permission_voice_message">音声メッセージを送信するには、マイクの権限を許可してください。</string>
     <string name="denied_permission_camera">この操作を実行するには、システム設定からカメラの権限を許可してください。</string>
