@@ -1354,8 +1354,8 @@
     <string name="settings_messages_direct_messages">ダイレクトメッセージ</string>
     <string name="settings_messages_containing_username">自分のユーザー名</string>
     <string name="settings_messages_containing_display_name">自分の表示名</string>
-    <string name="settings_messages_in_e2e_group_chat">グループチャットでのメッセージの暗号化</string>
-    <string name="settings_messages_in_e2e_one_to_one">個別チャットでのメッセージの暗号化</string>
+    <string name="settings_messages_in_e2e_group_chat">グループチャットで暗号化されたメッセージ</string>
+    <string name="settings_messages_in_e2e_one_to_one">1対1のチャットで暗号化されたメッセージ</string>
     <string name="settings_notification_notify_me_for">以下がメッセージに含まれる場合に通知</string>
     <string name="settings_notification_other">その他</string>
     <string name="settings_notification_mentions_and_keywords">メンションとキーワード</string>
@@ -1366,7 +1366,7 @@
     <plurals name="missed_audio_call">
         <item quantity="other">%d件の不在着信（音声）</item>
     </plurals>
-    <string name="use_as_default_and_do_not_ask_again">規定と設定して次回から確認しない</string>
+    <string name="use_as_default_and_do_not_ask_again">既定に設定して次回から確認しない</string>
     <string name="send_bug_report_include_key_share_history">鍵の共有リクエストの履歴を送信</string>
     <string name="no_more_results">結果がありません</string>
     <string name="cannot_call_yourself_with_invite">自分に電話をかけることはできません。参加者が招待を受け入れるまでお待ちください</string>
