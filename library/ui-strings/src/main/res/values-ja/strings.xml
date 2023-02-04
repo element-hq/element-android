@@ -2173,7 +2173,7 @@
     <string name="create_spaces_private_teammates">自分とチームメイトの非公開のスペース</string>
     <string name="create_spaces_organise_rooms">ルームを整理するための非公開のスペース</string>
     <string name="this_is_the_beginning_of_room_no_name">ここが会話のスタート地点です。</string>
-    <string name="this_is_the_beginning_of_room">ここが%sのスタート地点です。</string>
+    <string name="this_is_the_beginning_of_room">これは%sの始まりです。</string>
     <string name="qr_code_scanned_verif_waiting_notice">もう少しです！確認を待機しています…</string>
     <string name="qr_code_scanned_self_verif_notice">あと少しです！もう一方のデバイスは同じマークを表示していますか？</string>
     <string name="qr_code_scanned_verif_waiting">%sを待機しています…</string>
