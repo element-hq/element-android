@@ -121,9 +121,7 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
     private lateinit var gattServer: BluetoothGattServer
     private lateinit var gattCharacteristic: BluetoothGattCharacteristic
     private val gattService = BluetoothGattService(serviceUUID.uuid, BluetoothGattService.SERVICE_TYPE_PRIMARY)
-    private val bleAdvertiser: BluetoothLeAdvertiser by lazy {
-        bluetoothAdapter.bluetoothLeAdvertiser
-    }
+    private var bleAdvertiser: BluetoothLeAdvertiser? = null
     private val bleScanner: BluetoothLeScanner by lazy {
         bluetoothAdapter.bluetoothLeScanner
     }
@@ -873,8 +871,9 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
         bluetoothShutdown.set(false)
         val isCodedPHY = vectorPreferences.p2pBLECodedPhy() && bluetoothAdapter.isLeCodedPhySupported
 
-        bleAdvertiser.stopAdvertising(advertiseCallback)
-        bleAdvertiser.stopAdvertisingSet(advertiseSetCallback)
+        bleAdvertiser = bluetoothAdapter.bluetoothLeAdvertiser
+        bleAdvertiser?.stopAdvertising(advertiseCallback)
+        bleAdvertiser?.stopAdvertisingSet(advertiseSetCallback)
         stopBleScan()
 
         bleConnections.forEach { (id, _) ->
@@ -899,7 +898,7 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
             parameters.setSecondaryPhy(BluetoothDevice.PHY_LE_1M)
             Toast.makeText(applicationContext, "Requesting Coded PHY + 1M PHY", Toast.LENGTH_SHORT).show()
 
-            bleAdvertiser.startAdvertisingSet(parameters.build(), advertiseData, null, null, null, advertiseSetCallback)
+            bleAdvertiser?.startAdvertisingSet(parameters.build(), advertiseData, null, null, null, advertiseSetCallback)
         } else {
             val advertiseSettings = AdvertiseSettings.Builder()
                     .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_POWER)
@@ -908,7 +907,7 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
                     .setConnectable(true)
                     .build()
 
-            bleAdvertiser.startAdvertising(advertiseSettings, advertiseData, advertiseCallback)
+            bleAdvertiser?.startAdvertising(advertiseSettings, advertiseData, advertiseCallback)
         }
 
         gattCharacteristic = BluetoothGattCharacteristic(psmUUID, BluetoothGattCharacteristic.PROPERTY_READ, BluetoothGattCharacteristic.PERMISSION_READ)
@@ -966,10 +965,11 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
                         this,
                         Manifest.permission.BLUETOOTH_SCAN
                 ) == PackageManager.PERMISSION_GRANTED) {
-            bleAdvertiser.stopAdvertising(advertiseCallback)
-            bleAdvertiser.stopAdvertisingSet(advertiseSetCallback)
+            bleAdvertiser?.stopAdvertising(advertiseCallback)
+            bleAdvertiser?.stopAdvertisingSet(advertiseSetCallback)
             stopBleScan()
         }
+        bleAdvertiser = null
 
         bleConnections.forEach { (id, c) ->
             clearBleConnectionState(id)

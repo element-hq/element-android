@@ -314,12 +314,15 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleLoginWithDendrite(action: OnboardingAction.LoginWithDendrite) = withState { state ->
+    private fun handleLoginWithDendrite(action: OnboardingAction.LoginWithDendrite) {
+        setState { copy(isLoading = true) }
+
         Timber.i("login with Dendrite")
         val homeServerConnectionConfigFinal = homeServerConnectionConfigFactory.create(action.homeServerUrl)
 
         val dendriteConnection = object : ServiceConnection {
             override fun onServiceConnected(className: ComponentName, service: IBinder) {
+                Timber.e("Dendrite onboarding: started")
                 val binder = service as DendriteService.DendriteLocalBinder
                 val dendrite = binder.getService()
                 var accessToken: String = ""
@@ -339,7 +342,9 @@ class OnboardingViewModel @AssistedInject constructor(
                     return
                 }
 
-                val credentials: Credentials = Credentials(userID, accessToken, "", action.homeServerUrl, state.deviceId)
+                setState { copy(deviceId = "P2P") }
+                val credentials: Credentials = Credentials(userID, accessToken, "", action.homeServerUrl, "P2P")
+                Timber.e("Dendrite onboarding: device id: ${credentials.deviceId}")
 
                 setState { copy(isLoading = true) }
                 currentJob = viewModelScope.launch {

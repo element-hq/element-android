@@ -577,6 +577,7 @@ class HomeActivity :
         views.drawerLayout.removeDrawerListener(drawerListener)
         supportFragmentManager.unregisterFragmentLifecycleCallbacks(fragmentLifecycleCallbacks)
         super.onDestroy()
+        activeSessionHolder.stopSync()
     }
 
     override fun onResume() {

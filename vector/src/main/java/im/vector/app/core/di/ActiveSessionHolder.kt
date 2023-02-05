@@ -21,6 +21,7 @@ import arrow.core.Option
 import im.vector.app.ActiveSessionDataSource
 import im.vector.app.core.extensions.configureAndStart
 import im.vector.app.core.extensions.startSyncing
+import im.vector.app.core.extensions.stopSyncing
 import im.vector.app.core.pushers.UnifiedPushHelper
 import im.vector.app.core.services.GuardServiceStarter
 import im.vector.app.features.call.webrtc.WebRtcCallManager
@@ -116,6 +117,13 @@ class ActiveSessionHolder @Inject constructor(
     fun isWaitingForSessionInitialization() = activeSessionReference.get() == null && authenticationService.hasAuthenticatedSessions()
 
     // TODO Stop sync ?
+    fun stopSync() {
+        Timber.i("Sync: Stopping sync")
+        activeSessionReference.get()
+                ?.also {
+                    it.stopSyncing()
+                }
+    }
 //    fun switchToSession(sessionParams: SessionParams) {
 //        val newActiveSession = authenticationService.getSession(sessionParams)
 //        activeSession.set(newActiveSession)

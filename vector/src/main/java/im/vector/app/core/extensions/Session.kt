@@ -61,6 +61,10 @@ fun Session.startSyncing(context: Context) {
     }
 }
 
+fun Session.stopSyncing() {
+    syncService().stopSync()
+}
+
 /**
  * Tell is the session has unsaved e2e keys in the backup.
  */
