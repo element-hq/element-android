@@ -47,7 +47,7 @@ internal class DefaultToDeviceService @Inject constructor(
     }
 
     override suspend fun sendEncryptedToDevice(eventType: String, targets: Map<String, List<String>>, content: Content, txnId: String?) {
-        // TODO: add to rust-ffi
+        // TODO add to rust-ffi
         /*
         val payloadJson = mapOf(
                 "type" to eventType,
