@@ -149,7 +149,6 @@ internal class RustVerificationService @Inject constructor(
     /** Check if the start event created new verification objects and dispatch updates */
     private suspend fun onStart(event: Event) {
         if (event.unsignedData?.transactionId != null) return // remote echo
-        Timber.w("VALR onStart ${event.eventId}")
         val sender = event.senderId ?: return
         val flowId = getFlowId(event) ?: return
 

@@ -138,15 +138,7 @@ class DevicesViewModel @AssistedInject constructor(
                     }
                     .launchIn(viewModelScope)
         }
-        session.flow().liveUserCryptoDevices(session.myUserId)
-                .onEach {
-                    Timber.w("#VALR liveUserCryptoDevices: $it")
-                }
 
-//        session.flow().liveMyDevicesInfo()
-//                .onEach {
-//                    Timber.w("#VALR liveMyDevicesInfo: $it")
-//                }.launchIn(viewModelScope)
         combine(
                 session.flow().liveUserCryptoDevices(session.myUserId),
                 session.flow().liveMyDevicesInfo()

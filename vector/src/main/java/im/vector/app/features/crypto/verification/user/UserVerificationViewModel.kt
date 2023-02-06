@@ -157,7 +157,7 @@ class UserVerificationViewModel @AssistedInject constructor(
                             currentTransactionId == null && initialState.otherUserId == it.getRequest()?.otherUserId
                 }
                 .onEach {
-                    Timber.w("VALR update event ${it.getRequest()} ")
+//                    Timber.w("VALR update event ${it.getRequest()} ")
                     it.getRequest()?.let {
 //                        Timber.w("VALR state updated request to $it")
                         setState {
@@ -167,7 +167,6 @@ class UserVerificationViewModel @AssistedInject constructor(
                         }
                     }
                     it.getTransaction()?.let {
-                        Timber.w("VALR state updated transaction to $it")
                         val dClass = it.toDataClass()
                         if (dClass != null) {
                             setState {
