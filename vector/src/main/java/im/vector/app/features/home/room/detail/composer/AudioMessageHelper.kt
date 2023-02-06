@@ -217,7 +217,7 @@ class AudioMessageHelper @Inject constructor(
             stopRecordingAmplitudes()
         }
     }
-    
+
     private fun stopRecordingAmplitudes() {
         amplitudeTicker?.stop()
         amplitudeTicker = null
