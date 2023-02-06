@@ -18,7 +18,7 @@ package org.matrix.android.sdk.internal.crypto
 
 import android.util.Log
 import androidx.test.filters.LargeTest
-import junit.framework.Assert.fail
+import junit.framework.TestCase.fail
 import kotlinx.coroutines.delay
 import org.junit.FixMethodOrder
 import org.junit.Test

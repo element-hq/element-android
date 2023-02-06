@@ -41,7 +41,6 @@ import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventCon
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.getTimelineEvent
-import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
@@ -119,7 +118,7 @@ class E2eeSanityTests : InstrumentedTest {
                         fail("New Users shouldn't be able to decrypt history")
                     }
             ) {
-                val timelineEvent = otherSession.getRoom(e2eRoomID)?.getTimelineEvent(sentEventId!!).also {
+                val timelineEvent = otherSession.getRoom(e2eRoomID)?.getTimelineEvent(sentEventId).also {
                     Log.v("#E2E TEST", "Event seen by new user ${it?.root?.getClearType()}|${it?.root?.mCryptoError}")
                 }
                 timelineEvent != null &&
@@ -142,7 +141,7 @@ class E2eeSanityTests : InstrumentedTest {
                         fail("New user ${otherSession.myUserId.take(10)} should be able to decrypt the second message")
                     }
             ) {
-                val timelineEvent = otherSession.getRoom(e2eRoomID)?.getTimelineEvent(secondSentEventId!!).also {
+                val timelineEvent = otherSession.getRoom(e2eRoomID)?.getTimelineEvent(secondSentEventId).also {
                     Log.v("#E2E TEST", "Second Event seen by new user ${it?.root?.getClearType()}|${it?.root?.mCryptoError}")
                 }
                 timelineEvent != null &&
@@ -720,16 +719,6 @@ class E2eeSanityTests : InstrumentedTest {
 //            }
 //        }
 //    }
-
-    private suspend fun ensureMembersHaveJoined(testHelper: CommonTestHelper, aliceSession: Session, otherAccounts: List<Session>, e2eRoomID: String) {
-        testHelper.retryPeriodically {
-            otherAccounts.map {
-                aliceSession.roomService().getRoomMember(it.myUserId, e2eRoomID)?.membership
-            }.all {
-                it == Membership.JOIN
-            }
-        }
-    }
 
     private suspend fun ensureIsDecrypted(testHelper: CommonTestHelper, sentEventIds: List<String>, session: Session, e2eRoomID: String) {
         sentEventIds.forEach { sentEventId ->

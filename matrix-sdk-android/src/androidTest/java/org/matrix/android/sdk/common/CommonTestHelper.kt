@@ -541,7 +541,6 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
                 return
             }
         }
-        Timber.w("## VALR Trial success for")
     }
 
     suspend fun <T> waitForCallback(timeout: Long = TestConstants.timeOutMillis, block: (MatrixCallback<T>) -> Unit): T {
