@@ -24,7 +24,6 @@ import android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
 import com.tapadoo.alerter.Alerter
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
-import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.isAnimationEnabled
 import im.vector.app.features.MainActivity
 import im.vector.app.features.analytics.ui.consent.AnalyticsOptInActivity
@@ -32,6 +31,7 @@ import im.vector.app.features.home.room.list.home.release.ReleaseNotesActivity
 import im.vector.app.features.pin.PinActivity
 import im.vector.app.features.signout.hard.SignedOutActivity
 import im.vector.app.features.themes.ThemeUtils
+import im.vector.lib.core.utils.timer.Clock
 import timber.log.Timber
 import java.lang.ref.WeakReference
 import javax.inject.Inject

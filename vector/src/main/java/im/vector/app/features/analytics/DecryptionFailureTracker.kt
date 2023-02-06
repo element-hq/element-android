@@ -16,10 +16,10 @@
 
 package im.vector.app.features.analytics
 
-import im.vector.app.core.time.Clock
 import im.vector.app.features.analytics.plan.Error
 import im.vector.lib.core.utils.compat.removeIfCompat
 import im.vector.lib.core.utils.flow.tickerFlow
+import im.vector.lib.core.utils.timer.Clock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

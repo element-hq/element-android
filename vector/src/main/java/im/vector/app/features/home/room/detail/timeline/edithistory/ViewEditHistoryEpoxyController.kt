@@ -26,13 +26,13 @@ import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.time.Clock
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.core.ui.list.genericHeaderItem
 import im.vector.app.core.ui.list.genericItem
 import im.vector.app.core.ui.list.genericLoaderItem
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
+import im.vector.lib.core.utils.timer.Clock
 import me.gujun.android.span.span
 import name.fraser.neil.plaintext.diff_match_patch
 import org.matrix.android.sdk.api.session.events.model.Event

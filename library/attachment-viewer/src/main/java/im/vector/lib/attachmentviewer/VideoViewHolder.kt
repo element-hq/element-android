@@ -110,7 +110,7 @@ class VideoViewHolder constructor(itemView: View) :
                     //                        Log.v("FOO", "isPlaying $isPlaying $progress/$duration")
                     eventListener?.get()?.onEvent(AttachmentEvents.VideoEvent(isPlaying, progress, duration))
                 }
-                it.resume()
+                it.start()
             }
         }
         try {

@@ -16,7 +16,7 @@
 
 package im.vector.app.features.settings.devices.v2.list
 
-import im.vector.app.core.time.Clock
+import im.vector.lib.core.utils.timer.Clock
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
