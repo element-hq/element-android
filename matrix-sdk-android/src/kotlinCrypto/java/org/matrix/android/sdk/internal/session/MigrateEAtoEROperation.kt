@@ -23,7 +23,8 @@ import java.io.File
 class MigrateEAtoEROperation {
 
     fun execute(cryptoRealm: RealmConfiguration, sessionFilesDir: File, passphrase: String?): File {
-        Timber.v("Not used in kotlin crypto $cryptoRealm")
+        // to remove unused warning
+        Timber.v("Not used in kotlin crypto $cryptoRealm ${"*".repeat(passphrase?.length ?: 0)}")
         // no op in kotlinCrypto
         return sessionFilesDir
     }
