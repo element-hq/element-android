@@ -2919,5 +2919,5 @@
     <string name="error_voice_message_broadcast_in_progress_message">Du kan inte påbörja ett röstmeddelande eftersom du för närvarande spelar in en röstsändning. Vänligen avsluta din röstsändning för att börja spela in ett röstmeddelande</string>
     <string name="error_voice_message_broadcast_in_progress">Kan inte starta röstsändning</string>
     <string name="started_a_voice_broadcast">Startade en röstsändning</string>
-    <string name="rich_text_editor_inline_code">Använd inline kodformat</string>
+    <string name="rich_text_editor_inline_code">Använd inline-kodformat</string>
 </resources>
