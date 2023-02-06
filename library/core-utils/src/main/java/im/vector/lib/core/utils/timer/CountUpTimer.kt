@@ -28,41 +28,50 @@ import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicLong
 
 @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
-class CountUpTimer(private val intervalInMs: Long = 1_000) {
+class CountUpTimer(initialTime: Long = 0L, private val intervalInMs: Long = 1_000) {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
-    private val elapsedTime: AtomicLong = AtomicLong()
     private val resumed: AtomicBoolean = AtomicBoolean(false)
+
+    private val clock: Clock = DefaultClock()
+    private val lastTime: AtomicLong = AtomicLong()
+    private val elapsedTime: AtomicLong = AtomicLong(initialTime)
 
     init {
         startCounter()
     }
 
     private fun startCounter() {
-        tickerFlow(coroutineScope, intervalInMs / 10)
+        tickerFlow(coroutineScope, intervalInMs)
                 .filter { resumed.get() }
-                .map { elapsedTime.addAndGet(intervalInMs / 10) }
-                .filter { it % intervalInMs == 0L }
-                .onEach {
-                    tickListener?.onTick(it)
-                }.launchIn(coroutineScope)
+                .map { elapsedTime() }
+                .onEach { tickListener?.onTick(it) }
+                .launchIn(coroutineScope)
     }
 
     var tickListener: TickListener? = null
 
     fun elapsedTime(): Long {
-        return elapsedTime.get()
+        return if (resumed.get()) {
+            val now = clock.epochMillis()
+            elapsedTime.addAndGet(now - lastTime.getAndSet(now))
+        } else {
+            elapsedTime.get()
+        }
     }
 
     fun pause() {
+        tickListener?.onTick(elapsedTime())
         resumed.set(false)
     }
 
     fun resume() {
+        lastTime.set(clock.epochMillis())
         resumed.set(true)
     }
 
     fun stop() {
+        tickListener?.onTick(elapsedTime())
         coroutineScope.cancel()
     }
 

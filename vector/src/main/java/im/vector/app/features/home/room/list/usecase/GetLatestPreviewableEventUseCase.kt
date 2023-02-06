@@ -17,6 +17,7 @@
 package im.vector.app.features.home.room.list.usecase
 
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.voicebroadcast.isLive
 import im.vector.app.features.voicebroadcast.isVoiceBroadcast
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
@@ -35,14 +36,21 @@ import javax.inject.Inject
 class GetLatestPreviewableEventUseCase @Inject constructor(
         private val sessionHolder: ActiveSessionHolder,
         private val getRoomLiveVoiceBroadcastsUseCase: GetRoomLiveVoiceBroadcastsUseCase,
+        private val vectorPreferences: VectorPreferences,
 ) {
 
     fun execute(roomId: String): TimelineEvent? {
         val room = sessionHolder.getSafeActiveSession()?.getRoom(roomId) ?: return null
         val roomSummary = room.roomSummary() ?: return null
-        return getCallEvent(roomSummary)
-                ?: getLiveVoiceBroadcastEvent(room)
-                ?: getDefaultLatestEvent(room, roomSummary)
+        // FIXME Observing live broadcasts results in many db requests,
+        //  to prevent performances issues, we only enable this mechanism if the voice broadcast flag is enabled
+        return if (vectorPreferences.isVoiceBroadcastEnabled()) {
+            getCallEvent(roomSummary)
+                    ?: getLiveVoiceBroadcastEvent(room)
+                    ?: getDefaultLatestEvent(room, roomSummary)
+        } else {
+            roomSummary.latestPreviewableEvent
+        }
     }
 
     private fun getCallEvent(roomSummary: RoomSummary): TimelineEvent? {
