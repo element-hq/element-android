@@ -18,11 +18,11 @@ package im.vector.app.features.home.room.detail.poll
 
 import im.vector.app.core.di.ActiveSessionHolder
 import org.matrix.android.sdk.api.session.events.model.LocalEcho
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import timber.log.Timber
 import javax.inject.Inject
 
-// TODO add unit tests
 class VoteToPollUseCase @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
 ) {
@@ -32,10 +32,7 @@ class VoteToPollUseCase @Inject constructor(
         if (LocalEcho.isLocalEchoId(pollEventId)) return
 
         runCatching {
-            val room = activeSessionHolder.getActiveSession()
-                    .roomService()
-                    .getRoom(roomId)
-
+            val room = activeSessionHolder.getActiveSession().getRoom(roomId)
             room?.getTimelineEvent(pollEventId)?.let { pollTimelineEvent ->
                 val currentVote = pollTimelineEvent
                         .annotations
