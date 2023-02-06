@@ -23,7 +23,7 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoRoomEntityFie
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
 /**
- * This migration stores the rotation parameters for megolm oubound sessions
+ * This migration stores the rotation parameters for megolm oubound sessions.
  */
 internal class MigrateCryptoTo021(realm: DynamicRealm) : RealmMigrator(realm, 21) {
 

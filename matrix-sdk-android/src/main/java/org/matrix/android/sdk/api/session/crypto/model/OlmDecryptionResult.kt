@@ -53,7 +53,7 @@ data class OlmDecryptionResult(
         @Json(name = "key_safety") val isSafe: Boolean? = null,
 
         /**
-         * Authenticity info for that message
+         * Authenticity info for that message.
          */
         @Json(name = "verification_state") val verificationState: MessageVerificationState? = null,
 )

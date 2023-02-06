@@ -61,7 +61,7 @@ class SelfVerificationController @Inject constructor(
         fun confirmCancelRequest(confirm: Boolean)
 
         /**
-         * An incoming request, when I am the verified request
+         * An incoming request, when I am the verified request.
          */
         fun wasNotMe()
     }
