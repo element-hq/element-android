@@ -245,9 +245,9 @@ class VoiceBroadcastRecorderQ(
     ) {
         fun start() {
             recordingTicker?.stop()
-            recordingTicker = CountUpTimer().apply {
-                tickListener = CountUpTimer.TickListener { onTick(elapsedTime()) }
-                resume()
+            recordingTicker = CountUpTimer().also {
+                it.tickListener = CountUpTimer.TickListener { tick -> onTick(tick) }
+                it.start()
             }
         }
 

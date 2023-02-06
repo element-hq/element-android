@@ -42,10 +42,9 @@ internal class CountUpTimerTest {
                 coroutineScope = this,
                 clock = fakeClock,
                 intervalInMs = AN_INTERVAL,
-                initialTime = 0,
         ).also { it.tickListener = tickListener }
 
-        timer.resume()
+        timer.start()
         advanceTimeBy(AN_INTERVAL / 2) // no tick
         timer.pause() // tick
         advanceTimeBy(AN_INTERVAL * 10) // no tick
@@ -71,10 +70,9 @@ internal class CountUpTimerTest {
                 coroutineScope = this,
                 clock = fakeClock,
                 intervalInMs = AN_INTERVAL,
-                initialTime = AN_INITIAL_TIME,
         ).also { it.tickListener = tickListener }
 
-        timer.resume()
+        timer.start(AN_INITIAL_TIME)
         advanceTimeBy(AN_INTERVAL) // tick
         timer.pause() // tick
         advanceTimeBy(AN_INTERVAL * 10) // no tick

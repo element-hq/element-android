@@ -193,7 +193,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
                 val isLocked = startFromLocked || lastKnownState is RecordingUiState.Locked
                 onRecordingTick(isLocked, milliseconds + startMs)
             }
-            resume()
+            start()
         }
         onRecordingTick(startFromLocked, milliseconds = startMs)
     }

@@ -79,10 +79,12 @@ abstract class LiveLocationUserItem : VectorEpoxyModel<LiveLocationUserItem.Hold
             }
         }
 
-        holder.timer.tickListener = CountUpTimer.TickListener {
-            holder.itemLastUpdatedAtTextView.text = getFormattedLastUpdatedAt(locationUpdateTimeMillis)
+        holder.timer.apply {
+            tickListener = CountUpTimer.TickListener {
+                holder.itemLastUpdatedAtTextView.text = getFormattedLastUpdatedAt(locationUpdateTimeMillis)
+            }
+            start()
         }
-        holder.timer.resume()
 
         holder.view.setOnClickListener { callback?.onUserSelected(matrixItem.id) }
     }

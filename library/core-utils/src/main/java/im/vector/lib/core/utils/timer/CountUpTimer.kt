@@ -23,18 +23,16 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.concurrent.atomic.AtomicLong
 
-@OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
 class CountUpTimer(
         private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Main),
         private val clock: Clock = DefaultClock(),
         private val intervalInMs: Long = 1_000,
-        initialTime: Long = 0L,
 ) {
 
     private var counterJob: Job? = null
 
     private val lastTime: AtomicLong = AtomicLong(clock.epochMillis())
-    private val elapsedTime: AtomicLong = AtomicLong(initialTime)
+    private val elapsedTime: AtomicLong = AtomicLong(0)
 
     private fun startCounter() {
         counterJob = coroutineScope.launch {
@@ -56,6 +54,11 @@ class CountUpTimer(
         }
     }
 
+    fun start(initialTime: Long = 0L) {
+        elapsedTime.set(initialTime)
+        resume()
+    }
+
     fun pause() {
         tickListener?.onTick(elapsedTime())
         counterJob?.cancel()
@@ -71,6 +74,7 @@ class CountUpTimer(
         tickListener?.onTick(elapsedTime())
         counterJob?.cancel()
         counterJob = null
+        elapsedTime.set(0L)
     }
 
     fun interface TickListener {
