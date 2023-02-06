@@ -33,6 +33,7 @@ import android.webkit.WebViewClient
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.utils.AssetReader
 import im.vector.app.databinding.FragmentLoginCaptchaBinding
@@ -51,9 +52,11 @@ data class LoginCaptchaFragmentArgument(
 /**
  * In this screen, the user is asked to confirm he is not a robot.
  */
-class LoginCaptchaFragment @Inject constructor(
-        private val assetReader: AssetReader
-) : AbstractLoginFragment<FragmentLoginCaptchaBinding>() {
+@AndroidEntryPoint
+class LoginCaptchaFragment :
+        AbstractLoginFragment<FragmentLoginCaptchaBinding>() {
+
+    @Inject lateinit var assetReader: AssetReader
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginCaptchaBinding {
         return FragmentLoginCaptchaBinding.inflate(inflater, container, false)
@@ -141,7 +144,6 @@ class LoginCaptchaFragment @Inject constructor(
                 // runOnUiThread(Runnable { finish() })
             }
 
-            @SuppressLint("NewApi")
             override fun onReceivedHttpError(view: WebView, request: WebResourceRequest, errorResponse: WebResourceResponse) {
                 super.onReceivedHttpError(view, request, errorResponse)
 

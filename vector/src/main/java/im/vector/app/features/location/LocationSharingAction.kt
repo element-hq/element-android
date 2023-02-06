@@ -23,5 +23,7 @@ sealed class LocationSharingAction : VectorViewModelAction {
     data class PinnedLocationSharing(val locationData: LocationData?) : LocationSharingAction()
     data class LocationTargetChange(val locationData: LocationData) : LocationSharingAction()
     object ZoomToUserLocation : LocationSharingAction()
+    object LiveLocationSharingRequested : LocationSharingAction()
     data class StartLiveLocationSharing(val durationMillis: Long) : LocationSharingAction()
+    object ShowMapLoadingError : LocationSharingAction()
 }

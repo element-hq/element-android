@@ -31,6 +31,7 @@ import android.webkit.SslErrorHandler
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.utils.AssetReader
 import im.vector.app.databinding.FragmentLoginWebBinding
@@ -49,9 +50,11 @@ import javax.inject.Inject
  * This screen is displayed when the application does not support login flow or registration flow
  * of the homeserver, as a fallback to login or to create an account.
  */
-class FtueAuthWebFragment @Inject constructor(
-        private val assetReader: AssetReader
-) : AbstractFtueAuthFragment<FragmentLoginWebBinding>() {
+@AndroidEntryPoint
+class FtueAuthWebFragment :
+        AbstractFtueAuthFragment<FragmentLoginWebBinding>() {
+
+    @Inject lateinit var assetReader: AssetReader
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginWebBinding {
         return FragmentLoginWebBinding.inflate(inflater, container, false)

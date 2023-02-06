@@ -16,9 +16,10 @@
 package im.vector.app.features.notifications
 
 import android.net.Uri
-import im.vector.app.BuildConfig
 import im.vector.app.R
+import im.vector.app.core.extensions.getVectorLastMessageContent
 import im.vector.app.core.extensions.takeAs
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.time.Clock
 import im.vector.app.features.displayname.getBestName
@@ -31,13 +32,14 @@ import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.getRootThreadEventId
 import org.matrix.android.sdk.api.session.events.model.isEdition
 import org.matrix.android.sdk.api.session.events.model.isImageMessage
 import org.matrix.android.sdk.api.session.events.model.supportsNotification
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.getRoomSummary
-import org.matrix.android.sdk.api.session.getUser
+import org.matrix.android.sdk.api.session.getUserOrDefault
 import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
@@ -45,7 +47,6 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachme
 import org.matrix.android.sdk.api.session.room.sender.SenderInfo
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getEditedEventId
-import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.util.toMatrixItem
 import timber.log.Timber
 import java.util.UUID
@@ -62,11 +63,13 @@ class NotifiableEventResolver @Inject constructor(
         private val noticeEventFormatter: NoticeEventFormatter,
         private val displayableEventFormatter: DisplayableEventFormatter,
         private val clock: Clock,
+        private val buildMeta: BuildMeta,
 ) {
 
-    // private val eventDisplay = RiotEventDisplay(context)
+    private val nonEncryptedNotifiableEventTypes: List<String> =
+            listOf(EventType.MESSAGE) + EventType.POLL_START.values + EventType.STATE_ROOM_BEACON_INFO.values
 
-    suspend fun resolveEvent(event: Event/*, roomState: RoomState?, bingRule: PushRule?*/, session: Session, isNoisy: Boolean): NotifiableEvent? {
+    suspend fun resolveEvent(event: Event, session: Session, isNoisy: Boolean): NotifiableEvent? {
         val roomID = event.roomId ?: return null
         val eventId = event.eventId ?: return null
         if (event.getClearType() == EventType.STATE_ROOM_MEMBER) {
@@ -74,7 +77,7 @@ class NotifiableEventResolver @Inject constructor(
         }
         val timelineEvent = session.getRoom(roomID)?.getTimelineEvent(eventId) ?: return null
         return when (event.getClearType()) {
-            EventType.MESSAGE,
+            in nonEncryptedNotifiableEventTypes,
             EventType.ENCRYPTED -> {
                 resolveMessageEvent(timelineEvent, session, canBeReplaced = false, isNoisy = isNoisy)
             }
@@ -110,7 +113,7 @@ class NotifiableEventResolver @Inject constructor(
         val notificationAction = actions.toNotificationAction()
 
         return if (notificationAction.shouldNotify) {
-            val user = session.getUser(event.senderId!!) ?: return null
+            val user = session.getUserOrDefault(event.senderId!!)
 
             val timelineEvent = TimelineEvent(
                     root = event,
@@ -131,7 +134,7 @@ class NotifiableEventResolver @Inject constructor(
         }
     }
 
-    private suspend fun resolveMessageEvent(event: TimelineEvent, session: Session, canBeReplaced: Boolean, isNoisy: Boolean): NotifiableEvent? {
+    private suspend fun resolveMessageEvent(event: TimelineEvent, session: Session, canBeReplaced: Boolean, isNoisy: Boolean): NotifiableMessageEvent? {
         // The event only contains an eventId, and roomId (type is m.room.*) , we need to get the displayable content (names, avatar, text, etc...)
         val room = session.getRoom(event.root.roomId!! /*roomID cannot be null*/)
 
@@ -153,6 +156,7 @@ class NotifiableEventResolver @Inject constructor(
                     body = body.toString(),
                     imageUriString = event.fetchImageIfPresent(session)?.toString(),
                     roomId = event.root.roomId!!,
+                    threadId = event.root.getRootThreadEventId(),
                     roomName = roomName,
                     matrixID = session.myUserId
             )
@@ -160,9 +164,7 @@ class NotifiableEventResolver @Inject constructor(
             event.attemptToDecryptIfNeeded(session)
             // only convert encrypted messages to NotifiableMessageEvents
             when (event.root.getClearType()) {
-                EventType.MESSAGE,
-                in EventType.POLL_START,
-                in EventType.STATE_ROOM_BEACON_INFO -> {
+                in nonEncryptedNotifiableEventTypes -> {
                     val body = displayableEventFormatter.format(event, isDm = room.roomSummary()?.isDirect.orFalse(), appendAuthor = false).toString()
                     val roomName = room.roomSummary()?.displayName ?: ""
                     val senderDisplayName = event.senderInfo.disambiguatedDisplayName
@@ -178,6 +180,7 @@ class NotifiableEventResolver @Inject constructor(
                             body = body,
                             imageUriString = event.fetchImageIfPresent(session)?.toString(),
                             roomId = event.root.roomId!!,
+                            threadId = event.root.getRootThreadEventId(),
                             roomName = roomName,
                             roomIsDirect = room.roomSummary()?.isDirect ?: false,
                             roomAvatarPath = session.contentUrlResolver()
@@ -213,7 +216,8 @@ class NotifiableEventResolver @Inject constructor(
                         payload = result.clearEvent,
                         senderKey = result.senderCurve25519Key,
                         keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },
-                        forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
+                        forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain,
+                        isSafe = result.isSafe
                 )
             } catch (ignore: MXCryptoError) {
             }
@@ -230,7 +234,7 @@ class NotifiableEventResolver @Inject constructor(
 
     private suspend fun TimelineEvent.downloadAndExportImage(session: Session): Uri? {
         return kotlin.runCatching {
-            getLastMessageContent()?.takeAs<MessageWithAttachmentContent>()?.let { imageMessage ->
+            getVectorLastMessageContent()?.takeAs<MessageWithAttachmentContent>()?.let { imageMessage ->
                 val fileService = session.fileService()
                 fileService.downloadFile(imageMessage)
                 fileService.getTemporarySharableURI(imageMessage)
@@ -264,7 +268,7 @@ class NotifiableEventResolver @Inject constructor(
             )
         } else {
             Timber.e("## unsupported notifiable event for eventId [${event.eventId}]")
-            if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
+            if (buildMeta.lowPrivacyLoggingEnabled) {
                 Timber.e("## unsupported notifiable event for event [$event]")
             }
             // TODO generic handling?

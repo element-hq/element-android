@@ -20,9 +20,8 @@ import android.content.Context
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import im.vector.app.ActiveSessionDataSource
-import im.vector.app.BuildConfig
 import im.vector.app.core.pushers.UnifiedPushHelper
-import im.vector.app.core.services.CallService
+import im.vector.app.core.services.CallAndroidService
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.plan.CallEnded
 import im.vector.app.features.analytics.plan.CallStarted
@@ -74,6 +73,7 @@ class WebRtcCallManager @Inject constructor(
         private val activeSessionDataSource: ActiveSessionDataSource,
         private val analyticsTracker: AnalyticsTracker,
         private val unifiedPushHelper: UnifiedPushHelper,
+        private val voipConfig: VoipConfig,
 ) : CallListener,
         DefaultLifecycleObserver {
 
@@ -254,7 +254,7 @@ class WebRtcCallManager @Inject constructor(
             Timber.tag(loggerTag.value).v("On call ended for unknown call $callId")
         }
         webRtcCall.trackCallEnded()
-        CallService.onCallTerminated(context, callId, endCallReason, rejected)
+        CallAndroidService.onCallTerminated(context, callId, endCallReason, rejected)
         callsByRoomId[webRtcCall.signalingRoomId]?.remove(webRtcCall)
         callsByRoomId[webRtcCall.nativeRoomId]?.remove(webRtcCall)
         transferees.remove(callId)
@@ -305,7 +305,7 @@ class WebRtcCallManager @Inject constructor(
         if (transferee != null) {
             transferees[webRtcCall.callId] = transferee
         }
-        CallService.onOutgoingCallRinging(
+        CallAndroidService.onOutgoingCallRinging(
                 context = context.applicationContext,
                 callId = mxCall.callId
         )
@@ -370,7 +370,7 @@ class WebRtcCallManager @Inject constructor(
             offerSdp = callInviteContent.offer
         }
         // Start background service with notification
-        CallService.onIncomingCallRinging(
+        CallAndroidService.onIncomingCallRinging(
                 context = context,
                 callId = mxCall.callId,
                 isInBackground = isInBackground
@@ -395,7 +395,7 @@ class WebRtcCallManager @Inject constructor(
                 }
         val mxCall = call.mxCall
         // Update service state
-        CallService.onPendingCall(
+        CallAndroidService.onPendingCall(
                 context = context,
                 callId = mxCall.callId
         )
@@ -444,7 +444,7 @@ class WebRtcCallManager @Inject constructor(
     }
 
     override fun onCallAssertedIdentityReceived(callAssertedIdentityContent: CallAssertedIdentityContent) {
-        if (!BuildConfig.handleCallAssertedIdentityEvents) {
+        if (!voipConfig.handleCallAssertedIdentityEvents) {
             return
         }
         val call = callsByCallId[callAssertedIdentityContent.callId]

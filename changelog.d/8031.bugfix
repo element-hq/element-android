@@ -1,0 +1,1 @@
+Do not send any request to Posthog if no consent is provided.

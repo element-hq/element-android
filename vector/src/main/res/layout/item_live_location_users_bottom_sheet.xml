@@ -52,8 +52,7 @@
         style="@style/Widget.Vector.Button.Text.BottomSheetStopSharing"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:text="@string/live_location_bottom_sheet_stop_sharing"
+        android:text="@string/location_share_live_stop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

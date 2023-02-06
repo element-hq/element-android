@@ -26,8 +26,6 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.session.crypto.crosssigning.PrivateKeysInfo
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
-import org.matrix.android.sdk.api.session.group.GroupSummaryQueryParams
-import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.pushers.Pusher
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
@@ -59,13 +57,6 @@ class FlowSession(private val session: Session) {
                 }
     }
 
-    fun liveGroupSummaries(queryParams: GroupSummaryQueryParams): Flow<List<GroupSummary>> {
-        return session.groupService().getGroupSummariesLive(queryParams).asFlow()
-                .startWith(session.coroutineDispatchers.io) {
-                    session.groupService().getGroupSummaries(queryParams)
-                }
-    }
-
     fun liveSpaceSummaries(queryParams: SpaceSummaryQueryParams): Flow<List<RoomSummary>> {
         return session.spaceService().getSpaceSummariesLive(queryParams).asFlow()
                 .startWith(session.coroutineDispatchers.io) {
@@ -81,7 +72,7 @@ class FlowSession(private val session: Session) {
     }
 
     fun liveMyDevicesInfo(): Flow<List<DeviceInfo>> {
-        return session.cryptoService().getLiveMyDevicesInfo().asFlow()
+        return session.cryptoService().getMyDevicesInfoLive().asFlow()
                 .startWith(session.coroutineDispatchers.io) {
                     session.cryptoService().getMyDevicesInfo()
                 }
@@ -89,6 +80,9 @@ class FlowSession(private val session: Session) {
 
     fun liveSyncState(): Flow<SyncState> {
         return session.syncService().getSyncStateLive().asFlow()
+                .startWith(session.coroutineDispatchers.io) {
+                    session.syncService().getSyncState()
+                }
     }
 
     fun livePushers(): Flow<List<Pusher>> {

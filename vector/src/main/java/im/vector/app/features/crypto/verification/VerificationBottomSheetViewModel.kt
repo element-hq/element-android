@@ -37,6 +37,7 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
@@ -70,7 +71,7 @@ data class VerificationBottomSheetViewState(
         val roomId: String?,
         // true when we display the loading and we wait for the other (incoming request)
         val selfVerificationMode: Boolean,
-        val otherUserMxItem: MatrixItem? = null,
+        val otherUserMxItem: MatrixItem,
         val pendingRequest: Async<PendingVerificationRequest> = Uninitialized,
         val pendingLocalId: String? = null,
         val sasTransactionState: VerificationTxState? = null,
@@ -92,7 +93,8 @@ data class VerificationBottomSheetViewState(
             otherUserId = args.otherUserId,
             verificationId = args.verificationId,
             roomId = args.roomId,
-            selfVerificationMode = args.selfVerificationMode
+            selfVerificationMode = args.selfVerificationMode,
+            otherUserMxItem = MatrixItem.UserItem(args.otherUserId),
     )
 }
 
@@ -126,7 +128,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
             }
         }
 
-        val userItem = session.getUser(initialState.otherUserId)
+        fetchOtherUserProfile(initialState.otherUserId)
 
         var autoReady = false
         val pr = if (initialState.selfVerificationMode) {
@@ -160,7 +162,6 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
 
         setState {
             copy(
-                    otherUserMxItem = userItem?.toMatrixItem(),
                     sasTransactionState = sasTx?.state,
                     qrTransactionState = qrTx?.state,
                     transactionId = pr?.transactionId ?: initialState.verificationId,
@@ -180,6 +181,28 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                             pr!!.otherUserId,
                             pr.transactionId ?: ""
                     )
+        }
+    }
+
+    private fun fetchOtherUserProfile(otherUserId: String) {
+        session.getUser(otherUserId)?.toMatrixItem()?.let {
+            setState {
+                copy(
+                        otherUserMxItem = it
+                )
+            }
+        }
+        // Always fetch the latest User data
+        viewModelScope.launch {
+            tryOrNull { session.userService().resolveUser(otherUserId) }
+                    ?.toMatrixItem()
+                    ?.let {
+                        setState {
+                            copy(
+                                    otherUserMxItem = it
+                            )
+                        }
+                    }
         }
     }
 
@@ -216,12 +239,12 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
 
     private fun cancelAllPendingVerifications(state: VerificationBottomSheetViewState) {
         session.cryptoService()
-                .verificationService().getExistingVerificationRequest(state.otherUserMxItem?.id ?: "", state.transactionId)?.let {
+                .verificationService().getExistingVerificationRequest(state.otherUserId, state.transactionId)?.let {
                     session.cryptoService().verificationService().cancelVerificationRequest(it)
                 }
         session.cryptoService()
                 .verificationService()
-                .getExistingTransaction(state.otherUserMxItem?.id ?: "", state.transactionId ?: "")
+                .getExistingTransaction(state.otherUserId, state.transactionId ?: "")
                 ?.cancel(CancelCode.User)
     }
 
@@ -249,7 +272,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
     }
 
     override fun handle(action: VerificationAction) = withState { state ->
-        val otherUserId = state.otherUserMxItem?.id ?: return@withState
+        val otherUserId = state.otherUserId
         val roomId = state.roomId
                 ?: session.roomService().getExistingDirectRoomWithUser(otherUserId)
 
@@ -514,7 +537,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
     override fun transactionUpdated(tx: VerificationTransaction) = withState { state ->
         if (state.selfVerificationMode && state.transactionId == null) {
             // is this an incoming with that user
-            if (tx.isIncoming && tx.otherUserId == state.otherUserMxItem?.id) {
+            if (tx.isIncoming && tx.otherUserId == state.otherUserId) {
                 // Also auto accept incoming if needed!
                 if (tx is IncomingSasVerificationTransaction) {
                     if (tx.uxState == IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT) {
@@ -564,7 +587,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
 
         if (state.selfVerificationMode && state.pendingRequest.invoke() == null && state.transactionId == null) {
             // is this an incoming with that user
-            if (pr.isIncoming && pr.otherUserId == state.otherUserMxItem?.id) {
+            if (pr.isIncoming && pr.otherUserId == state.otherUserId) {
                 if (!pr.isReady) {
                     // auto ready in this case, as we are waiting
                     // TODO, can I be here in DM mode? in this case should test if roomID is null?

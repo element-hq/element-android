@@ -97,7 +97,9 @@ class SectionHeaderAdapter constructor(
             binding.root.isClickable = roomsSectionData.isCollapsable
             binding.roomCategoryCounterView.setCompoundDrawablesWithIntrinsicBounds(null, null, collapsableArrowDrawable, null)
             binding.roomCategoryCounterView.text = roomsSectionData.itemCount.takeIf { it > 0 }?.toString().orEmpty()
-            binding.roomCategoryUnreadCounterBadgeView.render(UnreadCounterBadgeView.State(roomsSectionData.notificationCount, roomsSectionData.isHighlighted))
+            binding.roomCategoryUnreadCounterBadgeView.render(
+                    UnreadCounterBadgeView.State.Count(roomsSectionData.notificationCount, roomsSectionData.isHighlighted)
+            )
         }
 
         companion object {

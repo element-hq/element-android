@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="ellipsis" translatable="false">…</string>
+    <string name="no_value_placeholder" translatable="false">–</string>
+
+    <!-- Temporary string -->
+    <string name="not_implemented" translatable="false">Not implemented yet in ${app_name}</string>
+
+    <!-- onboarding english only word play -->
+    <string name="cut_the_slack_from_teams" translatable="false">Cut the slack from teams.</string>
+
+    <string name="command_description_crash_application" translatable="false">Crash the application.</string>
+
+    <!--  WIP -->
+    <string name="location_map_view_copyright" translatable="false">© MapTiler © OpenStreetMap contributors</string>
+</resources>

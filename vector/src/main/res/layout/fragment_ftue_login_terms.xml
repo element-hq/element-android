@@ -73,7 +73,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:gravity="center"
-            android:text="@string/ftue_auth_terms_subtitle"
             android:textColor="?vctr_content_secondary"
             app:layout_constraintBottom_toTopOf="@id/titleContentSpacing"
             app:layout_constraintEnd_toEndOf="@id/termsGutterEnd"

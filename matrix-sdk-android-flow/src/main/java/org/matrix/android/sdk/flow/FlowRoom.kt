@@ -25,12 +25,12 @@ import org.matrix.android.sdk.api.session.room.getStateEvent
 import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.members.RoomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.EventAnnotationsSummary
+import org.matrix.android.sdk.api.session.room.model.LocalRoomSummary
 import org.matrix.android.sdk.api.session.room.model.ReadReceipt
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 import org.matrix.android.sdk.api.session.room.send.UserDraft
-import org.matrix.android.sdk.api.session.room.threads.model.ThreadSummary
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
@@ -43,6 +43,13 @@ class FlowRoom(private val room: Room) {
         return room.getRoomSummaryLive().asFlow()
                 .startWith(room.coroutineDispatchers.io) {
                     room.roomSummary().toOptional()
+                }
+    }
+
+    fun liveLocalRoomSummary(): Flow<Optional<LocalRoomSummary>> {
+        return room.getLocalRoomSummaryLive().asFlow()
+                .startWith(room.coroutineDispatchers.io) {
+                    room.localRoomSummary().toOptional()
                 }
     }
 
@@ -92,8 +99,8 @@ class FlowRoom(private val room: Room) {
         return room.readService().getReadMarkerLive().asFlow()
     }
 
-    fun liveReadReceipt(): Flow<Optional<String>> {
-        return room.readService().getMyReadReceiptLive().asFlow()
+    fun liveReadReceipt(threadId: String?): Flow<Optional<String>> {
+        return room.readService().getMyReadReceiptLive(threadId).asFlow()
     }
 
     fun liveEventReadReceipts(eventId: String): Flow<List<ReadReceipt>> {
@@ -109,13 +116,6 @@ class FlowRoom(private val room: Room) {
 
     fun liveNotificationState(): Flow<RoomNotificationState> {
         return room.roomPushRuleService().getLiveRoomNotificationState().asFlow()
-    }
-
-    fun liveThreadSummaries(): Flow<List<ThreadSummary>> {
-        return room.threadsService().getAllThreadSummariesLive().asFlow()
-                .startWith(room.coroutineDispatchers.io) {
-                    room.threadsService().getAllThreadSummaries()
-                }
     }
 
     fun liveThreadList(): Flow<List<ThreadRootEvent>> {

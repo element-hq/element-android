@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/roomPollsList"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="@dimen/layout_horizontal_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:itemCount="5"
+        tools:listitem="@layout/item_poll" />
+
+    <ProgressBar
+        android:id="@+id/roomPollsSyncingProgress"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:indeterminateTint="?vctr_content_secondary"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/roomPollsSyncingTitle"
+        app:layout_constraintEnd_toStartOf="@id/roomPollsSyncingTitle"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/roomPollsSyncingTitle" />
+
+    <TextView
+        android:id="@+id/roomPollsSyncingTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="9dp"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin"
+        android:gravity="center"
+        android:text="@string/room_polls_wait_for_display"
+        android:textAppearance="@style/TextAppearance.Vector.Body"
+        android:textColor="?vctr_content_secondary"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/roomPollsSyncingProgress"
+        app:layout_constraintTop_toTopOf="@id/roomPollsTitleGuideline" />
+
+    <TextView
+        android:id="@+id/roomPollsEmptyTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/layout_horizontal_margin"
+        android:layout_marginBottom="@dimen/layout_vertical_margin"
+        android:gravity="center"
+        android:textAppearance="@style/TextAppearance.Vector.Body"
+        android:textColor="?vctr_content_secondary"
+        android:textSize="17sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/roomPollsTitleGuideline"
+        tools:text="@string/room_polls_active_no_item" />
+
+    <Button
+        android:id="@+id/roomPollsLoadMoreWhenEmpty"
+        style="@style/Widget.Vector.Button.Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/layout_horizontal_margin"
+        android:layout_marginTop="8dp"
+        android:text="@string/room_polls_load_more"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/roomPollsEmptyTitle" />
+
+    <ProgressBar
+        android:id="@+id/roomPollsLoadMoreWhenEmptyProgress"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="9dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/roomPollsLoadMoreWhenEmpty"
+        app:layout_constraintStart_toEndOf="@id/roomPollsLoadMoreWhenEmpty"
+        app:layout_constraintTop_toTopOf="@id/roomPollsLoadMoreWhenEmpty" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/roomPollsTitleGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.33" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

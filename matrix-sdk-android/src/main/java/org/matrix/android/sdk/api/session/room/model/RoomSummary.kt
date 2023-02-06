@@ -98,6 +98,14 @@ data class RoomSummary(
          */
         val highlightCount: Int = 0,
         /**
+         * Number of threads with unread messages in this room.
+         */
+        val threadNotificationCount: Int = 0,
+        /**
+         * Number of threads with highlighted messages in this room.
+         */
+        val threadHighlightCount: Int = 0,
+        /**
          * True if this room has unread messages.
          */
         val hasUnreadMessages: Boolean = false,
@@ -164,9 +172,9 @@ data class RoomSummary(
          */
         val spaceChildren: List<SpaceChildInfo>? = null,
         /**
-         * List of all the space parents. Will be empty by default, you have to explicitly request it.
+         * The names of the room's direct space parents if any.
          */
-        val flattenParents: List<RoomSummary> = emptyList(),
+        val directParentNames: List<String> = emptyList(),
         /**
          * List of all the space parent Ids.
          */

@@ -16,8 +16,9 @@
 
 package im.vector.app.features
 
-import im.vector.app.BuildConfig
 import im.vector.app.config.Config
+import im.vector.app.config.OnboardingVariant
+import im.vector.app.features.settings.VectorPreferences
 
 interface VectorFeatures {
 
@@ -30,22 +31,38 @@ interface VectorFeatures {
     fun isOnboardingCombinedLoginEnabled(): Boolean
     fun allowExternalUnifiedPushDistributors(): Boolean
     fun isScreenSharingEnabled(): Boolean
+    fun isLocationSharingEnabled(): Boolean
+    fun forceUsageOfOpusEncoder(): Boolean
 
-    enum class OnboardingVariant {
-        LEGACY,
-        LOGIN_2,
-        FTUE_AUTH
-    }
+    /**
+     * This is only to enable if the labs flag should be visible and effective.
+     * If on the client-side you want functionality that should be enabled with the new layout,
+     * use [VectorPreferences.isNewAppLayoutEnabled] instead.
+     */
+    fun isNewAppLayoutFeatureEnabled(): Boolean
+    fun isQrCodeLoginEnabled(): Boolean
+    fun isQrCodeLoginForAllServers(): Boolean
+    fun isReciprocateQrCodeLogin(): Boolean
+    fun isVoiceBroadcastEnabled(): Boolean
+    fun isUnverifiedSessionsAlertEnabled(): Boolean
 }
 
 class DefaultVectorFeatures : VectorFeatures {
-    override fun onboardingVariant(): VectorFeatures.OnboardingVariant = BuildConfig.ONBOARDING_VARIANT
+    override fun onboardingVariant() = Config.ONBOARDING_VARIANT
     override fun isOnboardingAlreadyHaveAccountSplashEnabled() = true
     override fun isOnboardingSplashCarouselEnabled() = true
     override fun isOnboardingUseCaseEnabled() = true
-    override fun isOnboardingPersonalizeEnabled() = false
-    override fun isOnboardingCombinedRegisterEnabled() = false
-    override fun isOnboardingCombinedLoginEnabled() = false
+    override fun isOnboardingPersonalizeEnabled() = true
+    override fun isOnboardingCombinedRegisterEnabled() = true
+    override fun isOnboardingCombinedLoginEnabled() = true
     override fun allowExternalUnifiedPushDistributors(): Boolean = Config.ALLOW_EXTERNAL_UNIFIED_PUSH_DISTRIBUTORS
     override fun isScreenSharingEnabled(): Boolean = true
+    override fun isLocationSharingEnabled() = Config.ENABLE_LOCATION_SHARING
+    override fun forceUsageOfOpusEncoder(): Boolean = false
+    override fun isNewAppLayoutFeatureEnabled(): Boolean = true
+    override fun isQrCodeLoginEnabled(): Boolean = true
+    override fun isQrCodeLoginForAllServers(): Boolean = false
+    override fun isReciprocateQrCodeLogin(): Boolean = false
+    override fun isVoiceBroadcastEnabled(): Boolean = true
+    override fun isUnverifiedSessionsAlertEnabled(): Boolean = true
 }

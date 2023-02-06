@@ -26,6 +26,7 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -46,12 +47,13 @@ import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
-class RoomAliasFragment @Inject constructor(
-        private val controller: RoomAliasController,
-        private val avatarRenderer: AvatarRenderer
-) :
+@AndroidEntryPoint
+class RoomAliasFragment :
         VectorBaseFragment<FragmentRoomSettingGenericBinding>(),
         RoomAliasController.Callback {
+
+    @Inject lateinit var controller: RoomAliasController
+    @Inject lateinit var avatarRenderer: AvatarRenderer
 
     private val viewModel: RoomAliasViewModel by fragmentViewModel()
     private lateinit var sharedActionViewModel: RoomAliasBottomSheetSharedActionViewModel

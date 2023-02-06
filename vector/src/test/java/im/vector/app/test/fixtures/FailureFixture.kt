@@ -18,6 +18,7 @@ package im.vector.app.test.fixtures
 
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
+import org.matrix.android.sdk.api.network.ssl.Fingerprint
 import java.net.UnknownHostException
 import javax.net.ssl.HttpsURLConnection
 
@@ -38,3 +39,5 @@ fun aLoginEmailUnknownError() = Failure.ServerError(
 )
 
 fun aHomeserverUnavailableError() = Failure.NetworkConnection(UnknownHostException())
+
+fun anUnrecognisedCertificateError() = Failure.UnrecognizedCertificateFailure("a-url", Fingerprint(ByteArray(1), Fingerprint.HashType.SHA1))

@@ -26,11 +26,13 @@ import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.arguments.TimelineArgs
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.popup.VerificationVectorAlert
+import im.vector.lib.core.utils.compat.getParcelableCompat
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
+import org.matrix.android.sdk.api.session.getUserOrDefault
 import org.matrix.android.sdk.api.util.toMatrixItem
 import timber.log.Timber
 import javax.inject.Inject
@@ -67,13 +69,14 @@ class IncomingVerificationRequestHandler @Inject constructor(
         when (tx.state) {
             is VerificationTxState.OnStarted -> {
                 // Add a notification for every incoming request
-                val user = session?.userService()?.getUser(tx.otherUserId)
-                val name = user?.toMatrixItem()?.getBestName() ?: tx.otherUserId
+                val user = session.getUserOrDefault(tx.otherUserId).toMatrixItem()
+                val name = user.getBestName()
                 val alert = VerificationVectorAlert(
-                        uid,
-                        context.getString(R.string.sas_incoming_request_notif_title),
-                        context.getString(R.string.sas_incoming_request_notif_content, name),
-                        R.drawable.ic_shield_black,
+                        uid = uid,
+                        title = context.getString(R.string.sas_incoming_request_notif_title),
+                        description = context.getString(R.string.sas_incoming_request_notif_content, name),
+                        iconId = R.drawable.ic_shield_black,
+                        priority = PopupAlertManager.INCOMING_VERIFICATION_REQUEST_PRIORITY,
                         shouldBeDisplayedIn = { activity ->
                             if (activity is VectorBaseActivity<*>) {
                                 // TODO a bit too ugly :/
@@ -83,10 +86,10 @@ class IncomingVerificationRequestHandler @Inject constructor(
                                     }
                                 } ?: true
                             } else true
-                        }
+                        },
                 )
                         .apply {
-                            viewBinder = VerificationVectorAlert.ViewBinder(user?.toMatrixItem(), avatarRenderer.get())
+                            viewBinder = VerificationVectorAlert.ViewBinder(user, avatarRenderer.get())
                             contentAction = Runnable {
                                 (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let {
                                     it.navigator.performDeviceVerification(it, tx.otherUserId, tx.transactionId)
@@ -125,14 +128,11 @@ class IncomingVerificationRequestHandler @Inject constructor(
         // For incoming request we should prompt (if not in activity where this request apply)
         if (pr.isIncoming) {
             // if it's a self verification for my devices, we can discard the review login alert
-            // if not this request will be underneath and not visible by the user...
+            // if not, this request will be underneath and not visible by the user...
             // it will re-appear later
-            if (pr.otherUserId == session?.myUserId) {
-                // XXX this is a bit hard coded :/
-                popupAlertManager.cancelAlert("review_login")
-            }
-            val user = session?.userService()?.getUser(pr.otherUserId)?.toMatrixItem()
-            val name = user?.getBestName() ?: pr.otherUserId
+            cancelAnyVerifySessionAlerts(pr)
+            val user = session.getUserOrDefault(pr.otherUserId).toMatrixItem()
+            val name = user.getBestName()
             val description = if (name == pr.otherUserId) {
                 name
             } else {
@@ -140,21 +140,23 @@ class IncomingVerificationRequestHandler @Inject constructor(
             }
 
             val alert = VerificationVectorAlert(
-                    uniqueIdForVerificationRequest(pr),
-                    context.getString(R.string.sas_incoming_request_notif_title),
-                    description,
-                    R.drawable.ic_shield_black,
+                    uid = uniqueIdForVerificationRequest(pr),
+                    title = context.getString(R.string.sas_incoming_request_notif_title),
+                    description = description,
+                    iconId = R.drawable.ic_shield_black,
+                    priority = PopupAlertManager.INCOMING_VERIFICATION_REQUEST_PRIORITY,
                     shouldBeDisplayedIn = { activity ->
                         if (activity is RoomDetailActivity) {
-                            activity.intent?.extras?.getParcelable<TimelineArgs>(RoomDetailActivity.EXTRA_ROOM_DETAIL_ARGS)?.let {
+                            activity.intent?.extras?.getParcelableCompat<TimelineArgs>(RoomDetailActivity.EXTRA_ROOM_DETAIL_ARGS)?.let {
                                 it.roomId != pr.roomId
                             } ?: true
                         } else true
-                    }
+                    },
             )
                     .apply {
                         viewBinder = VerificationVectorAlert.ViewBinder(user, avatarRenderer.get())
                         contentAction = Runnable {
+                            cancelAnyVerifySessionAlerts(pr)
                             (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let {
                                 val roomId = pr.roomId
                                 if (roomId.isNullOrBlank()) {
@@ -181,6 +183,13 @@ class IncomingVerificationRequestHandler @Inject constructor(
                         expirationTimestamp = clock.epochMillis() + (5 * 60 * 1000L)
                     }
             popupAlertManager.postVectorAlert(alert)
+        }
+    }
+
+    private fun cancelAnyVerifySessionAlerts(pr: PendingVerificationRequest) {
+        if (pr.otherUserId == session?.myUserId) {
+            popupAlertManager.cancelAlert(PopupAlertManager.REVIEW_LOGIN_UID)
+            popupAlertManager.cancelAlert(PopupAlertManager.VERIFY_SESSION_UID)
         }
     }
 

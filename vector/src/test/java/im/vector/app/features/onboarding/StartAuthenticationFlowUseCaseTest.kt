@@ -16,13 +16,11 @@
 
 package im.vector.app.features.onboarding
 
-import im.vector.app.R
 import im.vector.app.features.login.LoginMode
+import im.vector.app.features.login.SsoState
 import im.vector.app.features.onboarding.StartAuthenticationFlowUseCase.StartAuthenticationResult
 import im.vector.app.test.fakes.FakeAuthenticationService
-import im.vector.app.test.fakes.FakeStringProvider
 import im.vector.app.test.fakes.FakeUri
-import im.vector.app.test.fakes.toTestString
 import io.mockk.coVerifyOrder
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
@@ -33,17 +31,19 @@ import org.matrix.android.sdk.api.auth.data.LoginFlowResult
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 
-private const val MATRIX_ORG_URL = "https://any-value.org/"
 private const val A_DECLARED_HOMESERVER_URL = "https://foo.bar"
 private val A_HOMESERVER_CONFIG = HomeServerConnectionConfig(homeServerUri = FakeUri().instance)
-private val SSO_IDENTITY_PROVIDERS = emptyList<SsoIdentityProvider>()
+private val FALLBACK_SSO_IDENTITY_PROVIDERS = emptyList<SsoIdentityProvider>()
+private val SSO_IDENTITY_PROVIDERS = listOf(SsoIdentityProvider(id = "id", "name", null, "sso-brand"))
+private val SSO_LOGIN_TYPE = listOf(LoginFlowTypes.SSO)
+private val SSO_AND_PASSWORD_LOGIN_TYPES = listOf(LoginFlowTypes.SSO, LoginFlowTypes.PASSWORD)
+private val PASSWORD_LOGIN_TYPE = listOf(LoginFlowTypes.PASSWORD)
 
 class StartAuthenticationFlowUseCaseTest {
 
     private val fakeAuthenticationService = FakeAuthenticationService()
-    private val fakeStringProvider = FakeStringProvider()
 
-    private val useCase = StartAuthenticationFlowUseCase(fakeAuthenticationService, fakeStringProvider.instance)
+    private val useCase = StartAuthenticationFlowUseCase(fakeAuthenticationService)
 
     @Before
     fun setUp() {
@@ -52,7 +52,7 @@ class StartAuthenticationFlowUseCaseTest {
 
     @Test
     fun `given empty login result when starting authentication flow then returns empty result`() = runTest {
-        val loginResult = aLoginResult()
+        val loginResult = aLoginResult(supportedLoginTypes = emptyList())
         fakeAuthenticationService.givenLoginFlow(A_HOMESERVER_CONFIG, loginResult)
 
         val result = useCase.execute(A_HOMESERVER_CONFIG)
@@ -62,86 +62,96 @@ class StartAuthenticationFlowUseCaseTest {
     }
 
     @Test
-    fun `given login supports SSO and Password when starting authentication flow then prefers SsoAndPassword`() = runTest {
-        val supportedLoginTypes = listOf(LoginFlowTypes.SSO, LoginFlowTypes.PASSWORD)
-        val loginResult = aLoginResult(supportedLoginTypes = supportedLoginTypes)
+    fun `given empty sso providers and login supports SSO and Password when starting authentication flow then prefers fallback SsoAndPassword`() = runTest {
+        val loginResult = aLoginResult(supportedLoginTypes = SSO_AND_PASSWORD_LOGIN_TYPES, ssoProviders = emptyList())
         fakeAuthenticationService.givenLoginFlow(A_HOMESERVER_CONFIG, loginResult)
 
         val result = useCase.execute(A_HOMESERVER_CONFIG)
 
         result shouldBeEqualTo expectedResult(
-                supportedLoginTypes = supportedLoginTypes,
-                preferredLoginMode = LoginMode.SsoAndPassword(SSO_IDENTITY_PROVIDERS),
+                supportedLoginTypes = SSO_AND_PASSWORD_LOGIN_TYPES,
+                preferredLoginMode = LoginMode.SsoAndPassword(SsoState.Fallback),
         )
         verifyClearsAndThenStartsLogin(A_HOMESERVER_CONFIG)
     }
 
     @Test
-    fun `given login supports SSO when starting authentication flow then prefers Sso`() = runTest {
-        val supportedLoginTypes = listOf(LoginFlowTypes.SSO)
-        val loginResult = aLoginResult(supportedLoginTypes = supportedLoginTypes)
+    fun `given sso providers and login supports SSO and Password when starting authentication flow then prefers SsoAndPassword`() = runTest {
+        val loginResult = aLoginResult(supportedLoginTypes = SSO_AND_PASSWORD_LOGIN_TYPES, ssoProviders = SSO_IDENTITY_PROVIDERS)
         fakeAuthenticationService.givenLoginFlow(A_HOMESERVER_CONFIG, loginResult)
 
         val result = useCase.execute(A_HOMESERVER_CONFIG)
 
         result shouldBeEqualTo expectedResult(
-                supportedLoginTypes = supportedLoginTypes,
-                preferredLoginMode = LoginMode.Sso(SSO_IDENTITY_PROVIDERS),
+                supportedLoginTypes = SSO_AND_PASSWORD_LOGIN_TYPES,
+                preferredLoginMode = LoginMode.SsoAndPassword(SsoState.IdentityProviders(SSO_IDENTITY_PROVIDERS)),
+        )
+        verifyClearsAndThenStartsLogin(A_HOMESERVER_CONFIG)
+    }
+
+    @Test
+    fun `given empty sso providers and login supports SSO when starting authentication flow then prefers fallback Sso`() = runTest {
+        val loginResult = aLoginResult(supportedLoginTypes = SSO_LOGIN_TYPE, ssoProviders = emptyList())
+        fakeAuthenticationService.givenLoginFlow(A_HOMESERVER_CONFIG, loginResult)
+
+        val result = useCase.execute(A_HOMESERVER_CONFIG)
+
+        result shouldBeEqualTo expectedResult(
+                supportedLoginTypes = SSO_LOGIN_TYPE,
+                preferredLoginMode = LoginMode.Sso(SsoState.Fallback),
+        )
+        verifyClearsAndThenStartsLogin(A_HOMESERVER_CONFIG)
+    }
+
+    @Test
+    fun `given identity providers and login supports SSO when starting authentication flow then prefers Sso`() = runTest {
+        val loginResult = aLoginResult(supportedLoginTypes = SSO_LOGIN_TYPE, ssoProviders = SSO_IDENTITY_PROVIDERS)
+        fakeAuthenticationService.givenLoginFlow(A_HOMESERVER_CONFIG, loginResult)
+
+        val result = useCase.execute(A_HOMESERVER_CONFIG)
+
+        result shouldBeEqualTo expectedResult(
+                supportedLoginTypes = SSO_LOGIN_TYPE,
+                preferredLoginMode = LoginMode.Sso(SsoState.IdentityProviders(SSO_IDENTITY_PROVIDERS)),
         )
         verifyClearsAndThenStartsLogin(A_HOMESERVER_CONFIG)
     }
 
     @Test
     fun `given login supports Password when starting authentication flow then prefers Password`() = runTest {
-        val supportedLoginTypes = listOf(LoginFlowTypes.PASSWORD)
-        val loginResult = aLoginResult(supportedLoginTypes = supportedLoginTypes)
+        val loginResult = aLoginResult(supportedLoginTypes = PASSWORD_LOGIN_TYPE)
         fakeAuthenticationService.givenLoginFlow(A_HOMESERVER_CONFIG, loginResult)
 
         val result = useCase.execute(A_HOMESERVER_CONFIG)
 
         result shouldBeEqualTo expectedResult(
-                supportedLoginTypes = supportedLoginTypes,
+                supportedLoginTypes = PASSWORD_LOGIN_TYPE,
                 preferredLoginMode = LoginMode.Password,
         )
         verifyClearsAndThenStartsLogin(A_HOMESERVER_CONFIG)
     }
 
-    @Test
-    fun `given matrix dot org url when starting authentication flow then provides description`() = runTest {
-        val matrixOrgConfig = HomeServerConnectionConfig(homeServerUri = FakeUri(MATRIX_ORG_URL).instance)
-        fakeStringProvider.given(R.string.matrix_org_server_url, result = MATRIX_ORG_URL)
-        fakeAuthenticationService.givenLoginFlow(matrixOrgConfig, aLoginResult())
-
-        val result = useCase.execute(matrixOrgConfig)
-
-        result shouldBeEqualTo expectedResult(
-                description = R.string.ftue_auth_create_account_matrix_dot_org_server_description.toTestString(),
-                homeserverSourceUrl = MATRIX_ORG_URL
-        )
-        verifyClearsAndThenStartsLogin(matrixOrgConfig)
-    }
-
     private fun aLoginResult(
-            supportedLoginTypes: List<String> = emptyList()
+            supportedLoginTypes: List<String>,
+            ssoProviders: List<SsoIdentityProvider> = FALLBACK_SSO_IDENTITY_PROVIDERS
     ) = LoginFlowResult(
             supportedLoginTypes = supportedLoginTypes,
-            ssoIdentityProviders = SSO_IDENTITY_PROVIDERS,
+            ssoIdentityProviders = ssoProviders,
             isLoginAndRegistrationSupported = true,
             homeServerUrl = A_DECLARED_HOMESERVER_URL,
             isOutdatedHomeserver = false,
-            isLogoutDevicesSupported = false
+            isLogoutDevicesSupported = false,
+            isLoginWithQrSupported = false
     )
 
     private fun expectedResult(
             isHomeserverOutdated: Boolean = false,
-            description: String? = null,
             preferredLoginMode: LoginMode = LoginMode.Unsupported,
             supportedLoginTypes: List<String> = emptyList(),
             homeserverSourceUrl: String = A_HOMESERVER_CONFIG.homeServerUri.toString()
     ) = StartAuthenticationResult(
             isHomeserverOutdated,
             SelectedHomeserverState(
-                    description = description,
                     userFacingUrl = homeserverSourceUrl,
                     upstreamUrl = A_DECLARED_HOMESERVER_URL,
                     preferredLoginMode = preferredLoginMode,

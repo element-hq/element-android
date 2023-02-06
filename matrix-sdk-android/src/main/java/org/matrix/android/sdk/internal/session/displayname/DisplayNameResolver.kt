@@ -25,7 +25,7 @@ internal class DisplayNameResolver @Inject constructor(
         private val matrixConfiguration: MatrixConfiguration
 ) {
     fun getBestName(matrixItem: MatrixItem): String {
-        return if (matrixItem is MatrixItem.GroupItem || matrixItem is MatrixItem.RoomAliasItem) {
+        return if (matrixItem is MatrixItem.RoomAliasItem) {
             // Best name is the id, and we keep the displayName of the room for the case we need the first letter
             matrixItem.id
         } else {

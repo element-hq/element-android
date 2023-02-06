@@ -23,6 +23,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -35,12 +36,14 @@ import org.matrix.android.sdk.api.session.room.notification.RoomNotificationStat
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
-class RoomNotificationSettingsFragment @Inject constructor(
-        val viewModelFactory: RoomNotificationSettingsViewModel.Factory,
-        private val roomNotificationSettingsController: RoomNotificationSettingsController,
-        private val avatarRenderer: AvatarRenderer
-) : VectorBaseFragment<FragmentRoomSettingGenericBinding>(),
+@AndroidEntryPoint
+class RoomNotificationSettingsFragment :
+        VectorBaseFragment<FragmentRoomSettingGenericBinding>(),
         RoomNotificationSettingsController.Callback {
+
+    @Inject lateinit var viewModelFactory: RoomNotificationSettingsViewModel.Factory
+    @Inject lateinit var roomNotificationSettingsController: RoomNotificationSettingsController
+    @Inject lateinit var avatarRenderer: AvatarRenderer
 
     private val viewModel: RoomNotificationSettingsViewModel by fragmentViewModel()
 

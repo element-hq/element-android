@@ -16,19 +16,13 @@
 
 package im.vector.app.features.analytics.extensions
 
-import im.vector.app.RoomGroupingMethod
 import im.vector.app.features.analytics.plan.ViewRoom
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.RoomType
 
-fun RoomSummary?.toAnalyticsViewRoom(trigger: ViewRoom.Trigger?, groupingMethod: RoomGroupingMethod? = null, viaKeyboard: Boolean? = null): ViewRoom {
-    val activeSpace = groupingMethod?.let {
-        when (it) {
-            is RoomGroupingMethod.BySpace -> it.spaceSummary?.toActiveSpace() ?: ViewRoom.ActiveSpace.Home
-            else -> null
-        }
-    }
+fun RoomSummary?.toAnalyticsViewRoom(trigger: ViewRoom.Trigger?, selectedSpace: RoomSummary? = null, viaKeyboard: Boolean? = null): ViewRoom {
+    val activeSpace = selectedSpace?.toActiveSpace() ?: ViewRoom.ActiveSpace.Home
 
     return ViewRoom(
             isDM = this?.isDirect.orFalse(),

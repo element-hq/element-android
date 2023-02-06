@@ -29,6 +29,7 @@ import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.args
 import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.isEmail
@@ -41,7 +42,6 @@ import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.is401
 import reactivecircus.flowbinding.android.widget.textChanges
-import javax.inject.Inject
 
 enum class TextInputFormFragmentMode {
     SetEmail,
@@ -59,7 +59,9 @@ data class LoginGenericTextInputFormFragmentArgument(
 /**
  * In this screen, the user is asked for a text input.
  */
-class LoginGenericTextInputFormFragment @Inject constructor() : AbstractLoginFragment<FragmentLoginGenericTextInputFormBinding>() {
+@AndroidEntryPoint
+class LoginGenericTextInputFormFragment :
+        AbstractLoginFragment<FragmentLoginGenericTextInputFormBinding>() {
 
     private val params: LoginGenericTextInputFormFragmentArgument by args()
 

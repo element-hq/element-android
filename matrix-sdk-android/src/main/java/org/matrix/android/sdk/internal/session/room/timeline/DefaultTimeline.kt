@@ -20,6 +20,7 @@ import io.realm.Realm
 import io.realm.RealmConfiguration
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.android.asCoroutineDispatcher
 import kotlinx.coroutines.cancelChildren
@@ -41,6 +42,7 @@ import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
 import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadTimelineTask
+import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
 import org.matrix.android.sdk.internal.session.room.state.StateEventDataSource
 import org.matrix.android.sdk.internal.session.sync.handler.room.ReadReceiptHandler
 import org.matrix.android.sdk.internal.session.sync.handler.room.ThreadsAwarenessHandler
@@ -62,6 +64,7 @@ internal class DefaultTimeline(
         private val settings: TimelineSettings,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val clock: Clock,
+        localEchoEventFactory: LocalEchoEventFactory,
         stateEventDataSource: StateEventDataSource,
         paginationTask: PaginationTask,
         getEventTask: GetContextOfEventTask,
@@ -75,7 +78,7 @@ internal class DefaultTimeline(
 ) : Timeline {
 
     companion object {
-        val BACKGROUND_HANDLER = createBackgroundHandler("DefaultTimeline_Thread")
+        val BACKGROUND_HANDLER = createBackgroundHandler("Matrix-DefaultTimeline_Thread")
     }
 
     override val timelineID = UUID.randomUUID().toString()
@@ -99,7 +102,6 @@ internal class DefaultTimeline(
             realm = backgroundRealm,
             eventDecryptor = eventDecryptor,
             paginationTask = paginationTask,
-            realmConfiguration = realmConfiguration,
             fetchTokenAndPaginateTask = fetchTokenAndPaginateTask,
             fetchThreadTimelineTask = fetchThreadTimelineTask,
             getContextOfEventTask = getEventTask,
@@ -113,9 +115,11 @@ internal class DefaultTimeline(
             onNewTimelineEvents = this::onNewTimelineEvents,
             stateEventDataSource = stateEventDataSource,
             matrixCoroutineDispatchers = coroutineDispatchers,
+            localEchoEventFactory = localEchoEventFactory
     )
 
     private var strategy: LoadTimelineStrategy = buildStrategy(LoadTimelineStrategy.Mode.Live)
+    private var startTimelineJob: Job? = null
 
     override val isLive: Boolean
         get() = !getPaginationState(Timeline.Direction.FORWARDS).hasMoreToLoad
@@ -143,7 +147,7 @@ internal class DefaultTimeline(
         timelineScope.launch {
             loadRoomMembersIfNeeded()
         }
-        timelineScope.launch {
+        startTimelineJob = timelineScope.launch {
             sequencer.post {
                 if (isStarted.compareAndSet(false, true)) {
                     isFromThreadTimeline = rootThreadEventId != null
@@ -174,8 +178,10 @@ internal class DefaultTimeline(
 
     override fun restartWithEventId(eventId: String?) {
         timelineScope.launch {
-            openAround(eventId, rootThreadEventId)
-            postSnapshot()
+            sequencer.post {
+                openAround(eventId, rootThreadEventId)
+                postSnapshot()
+            }
         }
     }
 
@@ -185,6 +191,7 @@ internal class DefaultTimeline(
 
     override fun paginate(direction: Timeline.Direction, count: Int) {
         timelineScope.launch {
+            startTimelineJob?.join()
             val postSnapshot = loadMore(count, direction, fetchOnServerIfNeeded = true)
             if (postSnapshot) {
                 postSnapshot()
@@ -193,6 +200,7 @@ internal class DefaultTimeline(
     }
 
     override suspend fun awaitPaginate(direction: Timeline.Direction, count: Int): List<TimelineEvent> {
+        startTimelineJob?.join()
         withContext(timelineDispatcher) {
             loadMore(count, direction, fetchOnServerIfNeeded = true)
         }
@@ -279,6 +287,7 @@ internal class DefaultTimeline(
                 direction = Timeline.Direction.BACKWARDS,
                 fetchOnServerIfNeeded = false
         )
+
         Timber.v("$baseLogMessage finished")
     }
 
@@ -312,9 +321,11 @@ internal class DefaultTimeline(
 
     private fun onLimitedTimeline() {
         timelineScope.launch {
-            initPaginationStates(null)
-            loadMore(settings.initialSize, Timeline.Direction.BACKWARDS, false)
-            postSnapshot()
+            sequencer.post {
+                initPaginationStates(null)
+                loadMore(settings.initialSize, Timeline.Direction.BACKWARDS, false)
+                postSnapshot()
+            }
         }
     }
 
@@ -402,7 +413,7 @@ internal class DefaultTimeline(
     private fun ensureReadReceiptAreLoaded(realm: Realm) {
         readReceiptHandler.getContentFromInitSync(roomId)
                 ?.also {
-                    Timber.w("INIT_SYNC Insert when opening timeline RR for room $roomId")
+                    Timber.d("INIT_SYNC Insert when opening timeline RR for room $roomId")
                 }
                 ?.let { readReceiptContent ->
                     realm.executeTransactionAsync {

@@ -20,11 +20,13 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.features.home.room.detail.arguments.TimelineArgs
+import im.vector.app.features.share.SharedData
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.model.localecho.RoomLocalEcho
 import org.matrix.android.sdk.api.session.room.sender.SenderInfo
 import org.matrix.android.sdk.api.session.sync.SyncRequestState
 import org.matrix.android.sdk.api.session.sync.SyncState
@@ -58,8 +60,8 @@ data class RoomDetailViewState(
         val formattedTypingUsers: String? = null,
         val tombstoneEvent: Event? = null,
         val joinUpgradedRoomAsync: Async<String> = Uninitialized,
-        val syncState: SyncState = SyncState.Idle,
-        val incrementalSyncRequestState: SyncRequestState.IncrementalSyncRequestState = SyncRequestState.IncrementalSyncIdle,
+        val syncState: SyncState? = null,
+        val incrementalSyncRequestState: SyncRequestState.IncrementalSyncRequestState? = null,
         val pushCounter: Int = 0,
         val highlightedEventId: String? = null,
         val unreadState: UnreadState = UnreadState.Unknown,
@@ -74,7 +76,10 @@ data class RoomDetailViewState(
         val switchToParentSpace: Boolean = false,
         val rootThreadEventId: String? = null,
         val threadNotificationBadgeState: ThreadNotificationBadgeState = ThreadNotificationBadgeState(),
-        val typingUsers: List<SenderInfo>? = null
+        val typingUsers: List<SenderInfo>? = null,
+        val isSharingLiveLocation: Boolean = false,
+        val showKeyboardWhenPresented: Boolean = false,
+        val sharedData: SharedData? = null,
 ) : MavericksState {
 
     constructor(args: TimelineArgs) : this(
@@ -84,7 +89,9 @@ data class RoomDetailViewState(
             // Also highlight the target event, if any
             highlightedEventId = args.eventId,
             switchToParentSpace = args.switchToParentSpace,
-            rootThreadEventId = args.threadTimelineArgs?.rootThreadEventId
+            rootThreadEventId = args.threadTimelineArgs?.rootThreadEventId,
+            showKeyboardWhenPresented = args.threadTimelineArgs?.showKeyboard.orFalse(),
+            sharedData = args.sharedData,
     )
 
     fun isCallOptionAvailable(): Boolean {
@@ -100,7 +107,11 @@ data class RoomDetailViewState(
     // It can differs for a short period of time on the JitsiState as its computed async.
     fun hasActiveJitsiWidget() = activeRoomWidgets()?.any { it.type == WidgetType.Jitsi && it.isActive }.orFalse()
 
+    fun hasActiveElementCallWidget() = activeRoomWidgets()?.any { it.type == WidgetType.ElementCall && it.isActive }.orFalse()
+
     fun isDm() = asyncRoomSummary()?.isDirect == true
 
     fun isThreadTimeline() = rootThreadEventId != null
+
+    fun isLocalRoom() = RoomLocalEcho.isLocalEchoId(roomId)
 }

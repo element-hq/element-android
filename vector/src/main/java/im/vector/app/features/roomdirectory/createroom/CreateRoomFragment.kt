@@ -30,14 +30,14 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
+import im.vector.app.core.dialogs.GalleryOrCameraDialogHelperFactory
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.core.resources.ColorProvider
-import im.vector.app.core.time.Clock
 import im.vector.app.databinding.FragmentCreateRoomBinding
 import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.navigation.Navigator
@@ -61,15 +61,16 @@ data class CreateRoomArgs(
         val openAfterCreate: Boolean = true
 ) : Parcelable
 
-class CreateRoomFragment @Inject constructor(
-        private val createRoomController: CreateRoomController,
-        private val createSpaceController: CreateSubSpaceController,
-        colorProvider: ColorProvider,
-        clock: Clock,
-) : VectorBaseFragment<FragmentCreateRoomBinding>(),
+@AndroidEntryPoint
+class CreateRoomFragment :
+        VectorBaseFragment<FragmentCreateRoomBinding>(),
         CreateRoomController.Listener,
         GalleryOrCameraDialogHelper.Listener,
         OnBackPressed {
+
+    @Inject lateinit var createRoomController: CreateRoomController
+    @Inject lateinit var createSpaceController: CreateSubSpaceController
+    @Inject lateinit var galleryOrCameraDialogHelperFactory: GalleryOrCameraDialogHelperFactory
 
     private lateinit var sharedActionViewModel: RoomDirectorySharedActionViewModel
     private val viewModel: CreateRoomViewModel by fragmentViewModel()
@@ -77,10 +78,15 @@ class CreateRoomFragment @Inject constructor(
 
     private lateinit var roomJoinRuleSharedActionViewModel: RoomJoinRuleSharedActionViewModel
 
-    private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider, clock)
+    private lateinit var galleryOrCameraDialogHelper: GalleryOrCameraDialogHelper
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentCreateRoomBinding {
         return FragmentCreateRoomBinding.inflate(inflater, container, false)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        galleryOrCameraDialogHelper = galleryOrCameraDialogHelperFactory.create(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -94,7 +100,10 @@ class CreateRoomFragment @Inject constructor(
                 .allowBack(useCross = true)
         viewModel.observeViewEvents {
             when (it) {
-                CreateRoomViewEvents.Quit -> vectorBaseActivity.onBackPressed()
+                CreateRoomViewEvents.Quit -> {
+                    @Suppress("DEPRECATION")
+                    vectorBaseActivity.onBackPressed()
+                }
                 is CreateRoomViewEvents.Failure -> showFailure(it.throwable)
             }
         }

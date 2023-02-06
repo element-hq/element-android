@@ -19,7 +19,7 @@ package im.vector.app.features.home.room.detail.timeline.helper
 import android.os.Handler
 import android.os.HandlerThread
 
-private const val THREAD_NAME = "Timeline_Building_Thread"
+private const val THREAD_NAME = "Vector-Timeline_Building_Thread"
 
 object TimelineAsyncHelper {
 

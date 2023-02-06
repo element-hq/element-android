@@ -1,1 +1,0 @@
-Adds LoginType to SessionParams to fix soft logout form not showing for SSO and Password type

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="dialpad_bottom_space_height">65dp</dimen>
+    <dimen name="dialpad_key_margin_right">5dp</dimen>
+    <dimen name="dialpad_key_number_width">20sp</dimen>
+    <dimen name="dialpad_key_one_margin_right">3dp</dimen>
+    <dimen name="dialpad_key_text_width">35dp</dimen>
+    <dimen name="dialpad_symbol_margin_bottom">0dp</dimen>
+    <style name="DialpadKeyLettersStyle">
+    <item name="android:textColor">@color/dialpad_secondary_text_color</item>
+    <item name="android:textSize">@dimen/dialpad_key_letters_size</item>
+    <item name="android:fontFamily">sans-serif-regular</item>
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:gravity">left</item>
+  </style>
+    <style name="DialpadKeyNumberStyle">
+    <item name="android:textColor">?attr/colorPrimary</item>
+    <item name="android:textSize">@dimen/dialpad_key_numbers_default_size</item>
+    <item name="android:fontFamily">sans-serif-light</item>
+    <item name="android:layout_width">@dimen/dialpad_key_number_width</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginBottom">@dimen/dialpad_key_number_default_margin_bottom</item>
+  </style>
+</resources>

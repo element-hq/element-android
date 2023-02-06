@@ -17,6 +17,7 @@
 package im.vector.app.test.fakes
 
 import im.vector.app.core.resources.StringProvider
+import io.mockk.InternalPlatformDsl.toStr
 import io.mockk.every
 import io.mockk.mockk
 
@@ -26,6 +27,9 @@ class FakeStringProvider {
     init {
         every { instance.getString(any()) } answers {
             "test-${args[0]}"
+        }
+        every { instance.getString(any(), any()) } answers {
+            "test-${args[0]}-${args[1].toStr()}"
         }
 
         every { instance.getQuantityString(any(), any(), any()) } answers {

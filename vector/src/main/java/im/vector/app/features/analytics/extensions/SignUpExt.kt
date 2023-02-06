@@ -21,11 +21,11 @@ import im.vector.app.features.onboarding.AuthenticationDescription
 
 fun AuthenticationDescription.AuthenticationType.toAnalyticsType() = when (this) {
     AuthenticationDescription.AuthenticationType.Password -> Signup.AuthenticationType.Password
-    AuthenticationDescription.AuthenticationType.Apple    -> Signup.AuthenticationType.Apple
+    AuthenticationDescription.AuthenticationType.Apple -> Signup.AuthenticationType.Apple
     AuthenticationDescription.AuthenticationType.Facebook -> Signup.AuthenticationType.Facebook
     AuthenticationDescription.AuthenticationType.GitHub -> Signup.AuthenticationType.GitHub
     AuthenticationDescription.AuthenticationType.GitLab -> Signup.AuthenticationType.GitLab
     AuthenticationDescription.AuthenticationType.Google -> Signup.AuthenticationType.Google
-    AuthenticationDescription.AuthenticationType.SSO      -> Signup.AuthenticationType.SSO
-    AuthenticationDescription.AuthenticationType.Other    -> Signup.AuthenticationType.Other
+    AuthenticationDescription.AuthenticationType.SSO -> Signup.AuthenticationType.SSO
+    AuthenticationDescription.AuthenticationType.Other -> Signup.AuthenticationType.Other
 }

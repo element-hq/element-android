@@ -23,6 +23,8 @@ style:
     active: false
   ProtectedMemberInFinalClass:
     active: false
+  UseCheckOrError:
+    active: false
 
 empty-blocks:
   EmptyFunctionBlock:
@@ -43,6 +45,8 @@ exceptions:
     active: false
   TooGenericExceptionThrown:
     active: false
+  InstanceOfCheckForException:
+    active: false
 
 complexity:
   TooManyFunctions:
@@ -51,7 +55,7 @@ complexity:
     active: false
   LongParameterList:
     active: false
-  ComplexMethod:
+  CyclomaticComplexMethod:
     active: false
   NestedBlockDepth:
     active: false

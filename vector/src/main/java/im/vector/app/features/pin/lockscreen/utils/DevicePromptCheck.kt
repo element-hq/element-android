@@ -48,15 +48,15 @@ object DevicePromptCheck {
      * See [this OP forum thread](https://forums.oneplus.com/threads/oneplus-7-pro-fingerprint-biometricprompt-does-not-show.1035821/).
      */
     private val isOnePlusDeviceWithNoBiometricUI: Boolean =
-        Build.BRAND.equals("OnePlus", ignoreCase = true) &&
-                !onePlusModelsWithWorkingBiometricUI.contains(Build.MODEL) &&
-                Build.VERSION.SDK_INT < Build.VERSION_CODES.R
+            Build.BRAND.equals("OnePlus", ignoreCase = true) &&
+                    !onePlusModelsWithWorkingBiometricUI.contains(Build.MODEL) &&
+                    Build.VERSION.SDK_INT < Build.VERSION_CODES.R
 
     /**
      * Some LG models don't seem to have a system biometric prompt at all.
      */
     private val isLGDeviceWithNoBiometricUI: Boolean =
-        Build.BRAND.equals("LG", ignoreCase = true) && lgModelsWithoutBiometricUI.contains(Build.MODEL)
+            Build.BRAND.equals("LG", ignoreCase = true) && lgModelsWithoutBiometricUI.contains(Build.MODEL)
 
     /**
      * Check if this device is included in the list of devices with known Biometric Prompt issues.

@@ -66,7 +66,7 @@ abstract class WidgetTileTimelineItem : AbsBaseMessageItem<WidgetTileTimelineIte
     }
 
     companion object {
-        private const val STUB_ID = R.id.messageWidgetStub
+        private val STUB_ID = R.id.messageWidgetStub
     }
 
     /**

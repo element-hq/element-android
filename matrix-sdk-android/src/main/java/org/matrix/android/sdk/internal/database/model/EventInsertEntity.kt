@@ -27,7 +27,7 @@ internal open class EventInsertEntity(
         var eventType: String = "",
         /**
          * This flag will be used to filter EventInsertEntity in EventInsertLiveObserver.
-         * Currently it's set to false when the event content is encrypted.
+         * Currently it's set to false after an event with encrypted content has been processed.
          */
         var canBeProcessed: Boolean = true
 ) : RealmObject() {

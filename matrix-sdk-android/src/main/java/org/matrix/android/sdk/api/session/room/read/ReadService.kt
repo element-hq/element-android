@@ -34,12 +34,14 @@ interface ReadService {
     /**
      * Force the read marker to be set on the latest event.
      */
-    suspend fun markAsRead(params: MarkAsReadParams = MarkAsReadParams.BOTH)
+    suspend fun markAsRead(params: MarkAsReadParams = MarkAsReadParams.BOTH, mainTimeLineOnly: Boolean = true)
 
     /**
      * Set the read receipt on the event with provided eventId.
+     * @param eventId the id of the event where read receipt will be set
+     * @param threadId the id of the thread in which read receipt will be set. For main thread use [ReadService.THREAD_ID_MAIN] constant
      */
-    suspend fun setReadReceipt(eventId: String)
+    suspend fun setReadReceipt(eventId: String, threadId: String)
 
     /**
      * Set the read marker on the event with provided eventId.
@@ -59,10 +61,10 @@ interface ReadService {
     /**
      * Returns a live read receipt id for the room.
      */
-    fun getMyReadReceiptLive(): LiveData<Optional<String>>
+    fun getMyReadReceiptLive(threadId: String?): LiveData<Optional<String>>
 
     /**
-     * Get the eventId where the read receipt for the provided user is.
+     * Get the eventId from the main timeline where the read receipt for the provided user is.
      * @param userId the id of the user to look for
      *
      * @return the eventId where the read receipt for the provided user is attached, or null if not found
@@ -74,4 +76,8 @@ interface ReadService {
      * @param eventId the event
      */
     fun getEventReadReceiptsLive(eventId: String): LiveData<List<ReadReceipt>>
+
+    companion object {
+        const val THREAD_ID_MAIN = "main"
+    }
 }

@@ -33,7 +33,6 @@ import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.events.EventService
 import org.matrix.android.sdk.api.session.file.ContentDownloadStateTracker
 import org.matrix.android.sdk.api.session.file.FileService
-import org.matrix.android.sdk.api.session.group.GroupService
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
 import org.matrix.android.sdk.api.session.identity.IdentityService
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
@@ -51,7 +50,6 @@ import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageServi
 import org.matrix.android.sdk.api.session.signout.SignOutService
 import org.matrix.android.sdk.api.session.space.SpaceService
 import org.matrix.android.sdk.api.session.statistics.StatisticsListener
-import org.matrix.android.sdk.api.session.sync.FilterService
 import org.matrix.android.sdk.api.session.sync.SyncService
 import org.matrix.android.sdk.api.session.terms.TermsService
 import org.matrix.android.sdk.api.session.thirdparty.ThirdPartyService
@@ -155,11 +153,6 @@ interface Session {
     fun roomDirectoryService(): RoomDirectoryService
 
     /**
-     * Returns the GroupService associated with the session.
-     */
-    fun groupService(): GroupService
-
-    /**
      * Returns the UserService associated with the session.
      */
     fun userService(): UserService
@@ -168,11 +161,6 @@ interface Session {
      * Returns the SignOutService associated with the session.
      */
     fun signOutService(): SignOutService
-
-    /**
-     * Returns the FilterService associated with the session.
-     */
-    fun filterService(): FilterService
 
     /**
      * Returns the PushRuleService associated with the session.
@@ -329,9 +317,9 @@ interface Session {
     fun getUiaSsoFallbackUrl(authenticationSessionId: String): String
 
     /**
-     * Debug API, will print out info on DB size to logcat.
+     * Debug API, will return info about the DB.
      */
-    fun logDbUsageInfo()
+    fun getDbUsageInfo(): String
 
     /**
      * Debug API, return the list of all RealmConfiguration used by this session.

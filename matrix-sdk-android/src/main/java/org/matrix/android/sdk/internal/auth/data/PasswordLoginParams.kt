@@ -30,8 +30,8 @@ internal data class PasswordLoginParams(
         @Json(name = "identifier") val identifier: Map<String, String>,
         @Json(name = "password") val password: String,
         @Json(name = "type") override val type: String,
-        @Json(name = "initial_device_display_name") val deviceDisplayName: String?,
-        @Json(name = "device_id") val deviceId: String?
+        @Json(name = "initial_device_display_name") override val deviceDisplayName: String?,
+        @Json(name = "device_id") override val deviceId: String?
 ) : LoginParams {
 
     companion object {

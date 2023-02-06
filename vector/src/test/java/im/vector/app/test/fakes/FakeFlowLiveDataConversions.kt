@@ -28,6 +28,6 @@ class FakeFlowLiveDataConversions {
     }
 }
 
-fun <T> LiveData<T>.givenAsFlowReturns(value: T) {
-    every { asFlow() } returns flowOf(value)
+fun <T> LiveData<T>.givenAsFlow() {
+    every { asFlow() } returns flowOf(value!!)
 }

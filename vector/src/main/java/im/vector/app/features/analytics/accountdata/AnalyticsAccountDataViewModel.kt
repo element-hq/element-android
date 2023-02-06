@@ -16,7 +16,6 @@
 
 package im.vector.app.features.analytics.accountdata
 
-import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -66,7 +65,7 @@ class AnalyticsAccountDataViewModel @AssistedInject constructor(
 
     private fun observeInitSync() {
         combine(
-                session.syncService().getSyncRequestStateLive().asFlow(),
+                session.syncService().getSyncRequestStateFlow(),
                 analytics.getUserConsent(),
                 analytics.getAnalyticsId()
         ) { status, userConsent, analyticsId ->

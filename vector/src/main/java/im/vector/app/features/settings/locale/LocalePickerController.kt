@@ -37,13 +37,15 @@ import javax.inject.Inject
 class LocalePickerController @Inject constructor(
         private val vectorPreferences: VectorPreferences,
         private val stringProvider: StringProvider,
-        private val errorFormatter: ErrorFormatter
+        private val errorFormatter: ErrorFormatter,
+        private val vectorLocale: VectorLocale,
 ) : TypedEpoxyController<LocalePickerViewState>() {
 
     var listener: Listener? = null
 
     override fun buildModels(data: LocalePickerViewState?) {
         val list = data?.locales ?: return
+        val currentLocale = data.currentLocale ?: return
         val host = this
 
         profileSectionItem {
@@ -51,10 +53,10 @@ class LocalePickerController @Inject constructor(
             title(host.stringProvider.getString(R.string.choose_locale_current_locale_title))
         }
         localeItem {
-            id(data.currentLocale.toString())
-            title(VectorLocale.localeToLocalisedString(data.currentLocale).safeCapitalize(data.currentLocale))
+            id(currentLocale.toString())
+            title(host.vectorLocale.localeToLocalisedString(currentLocale).safeCapitalize(currentLocale))
             if (host.vectorPreferences.developerMode()) {
-                subtitle(VectorLocale.localeToLocalisedStringInfo(data.currentLocale))
+                subtitle(host.vectorLocale.localeToLocalisedStringInfo(currentLocale))
             }
             clickListener { host.listener?.onUseCurrentClicked() }
         }
@@ -78,13 +80,13 @@ class LocalePickerController @Inject constructor(
                     }
                 } else {
                     list()
-                            .filter { it.toString() != data.currentLocale.toString() }
+                            .filter { it.toString() != currentLocale.toString() }
                             .forEach { locale ->
                                 localeItem {
                                     id(locale.toString())
-                                    title(VectorLocale.localeToLocalisedString(locale).safeCapitalize(locale))
+                                    title(host.vectorLocale.localeToLocalisedString(locale).safeCapitalize(locale))
                                     if (host.vectorPreferences.developerMode()) {
-                                        subtitle(VectorLocale.localeToLocalisedStringInfo(locale))
+                                        subtitle(host.vectorLocale.localeToLocalisedStringInfo(locale))
                                     }
                                     clickListener { host.listener?.onLocaleClicked(locale) }
                                 }

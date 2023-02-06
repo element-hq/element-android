@@ -21,6 +21,7 @@ import android.view.MotionEvent
 import im.vector.app.R
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView.DraggingState
+import kotlin.math.absoluteValue
 
 class DraggableStateProcessor(
         resources: Resources,
@@ -46,7 +47,7 @@ class DraggableStateProcessor(
     fun process(event: MotionEvent, draggingState: DraggingState): DraggingState {
         val currentX = event.rawX
         val currentY = event.rawY
-        val distanceX = firstX - currentX
+        val distanceX = (firstX - currentX).absoluteValue
         val distanceY = firstY - currentY
         return draggingState.nextDragState(currentX, currentY, distanceX, distanceY).also {
             lastDistanceX = distanceX

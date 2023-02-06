@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <im.vector.app.features.settings.devices.v2.list.SessionsListHeaderView
+            android:id="@+id/deviceListHeaderSectionSecurityRecommendations"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:sessionsListHeaderDescription="@string/device_manager_header_section_security_recommendations_description"
+            app:sessionsListHeaderHasLearnMoreLink="false"
+            app:sessionsListHeaderTitle="@string/device_manager_header_section_security_recommendations_title" />
+
+        <im.vector.app.features.settings.devices.v2.list.SecurityRecommendationView
+            android:id="@+id/deviceListUnverifiedSessionsRecommendation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/deviceListHeaderSectionSecurityRecommendations"
+            app:recommendationDescription="@string/device_manager_unverified_sessions_description"
+            app:recommendationImageBackgroundTint="@color/shield_color_warning_background"
+            app:recommendationImageResource="@drawable/ic_shield_warning_no_border"
+            app:recommendationTitle="@string/device_manager_unverified_sessions_title" />
+
+        <im.vector.app.features.settings.devices.v2.list.SecurityRecommendationView
+            android:id="@+id/deviceListInactiveSessionsRecommendation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/deviceListUnverifiedSessionsRecommendation"
+            app:recommendationDescription="@plurals/device_manager_inactive_sessions_description"
+            app:recommendationImageBackgroundTint="?vctr_system"
+            app:recommendationImageResource="@drawable/ic_inactive_sessions"
+            app:recommendationTitle="@string/device_manager_inactive_sessions_title" />
+
+        <View
+            android:id="@+id/deviceListSecurityRecommendationsDivider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/divider_horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/deviceListInactiveSessionsRecommendation" />
+
+        <im.vector.app.features.settings.devices.v2.list.SessionsListHeaderView
+            android:id="@+id/deviceListHeaderCurrentSession"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/deviceListSecurityRecommendationsDivider"
+            app:sessionsListHeaderDescription=""
+            app:sessionsListHeaderHasLearnMoreLink="false"
+            app:sessionsListHeaderMenu="@menu/menu_current_session_header"
+            app:sessionsListHeaderTitle="@string/device_manager_current_session_title" />
+
+        <im.vector.app.features.settings.devices.v2.list.SessionInfoView
+            android:id="@+id/deviceListCurrentSession"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/deviceListHeaderCurrentSession" />
+
+        <View
+            android:id="@+id/deviceListDividerCurrentSession"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/divider_horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/deviceListCurrentSession" />
+
+        <im.vector.app.features.settings.devices.v2.list.SessionsListHeaderView
+            android:id="@+id/deviceListHeaderOtherSessions"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/deviceListDividerCurrentSession"
+            app:sessionsListHeaderDescription="@string/device_manager_sessions_other_description"
+            app:sessionsListHeaderHasLearnMoreLink="false"
+            app:sessionsListHeaderMenu="@menu/menu_other_sessions_header"
+            app:sessionsListHeaderTitle="@string/device_manager_sessions_other_title" />
+
+        <im.vector.app.features.settings.devices.v2.list.OtherSessionsView
+            android:id="@+id/deviceListOtherSessions"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/deviceListHeaderOtherSessions" />
+
+        <im.vector.app.features.settings.devices.v2.list.SessionsListHeaderView
+            android:id="@+id/deviceListHeaderSignInWithQrCode"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/deviceListOtherSessions"
+            app:sessionsListHeaderDescription="@string/device_manager_sessions_sign_in_with_qr_code_description"
+            app:sessionsListHeaderHasLearnMoreLink="false"
+            app:sessionsListHeaderTitle="@string/device_manager_sessions_sign_in_with_qr_code_title"
+            tools:visibility="visible" />
+
+        <Button
+            android:id="@+id/deviceListHeaderScanQrCodeButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="12dp"
+            android:text="@string/qr_code_login_scan_qr_code_button"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/deviceListHeaderSignInWithQrCode"
+            tools:visibility="visible" />
+
+        <Button
+            android:id="@+id/deviceListHeaderShowQrCodeButton"
+            style="@style/Widget.Vector.Button.Outlined"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="12dp"
+            android:text="@string/qr_code_login_show_qr_code_button"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/deviceListHeaderScanQrCodeButton"
+            tools:visibility="visible" />
+
+        <include
+            android:id="@+id/waiting_view"
+            layout="@layout/merge_overlay_waiting_view"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

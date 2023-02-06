@@ -18,7 +18,7 @@ package org.matrix.android.sdk.internal.session.space
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.space.model.SpaceChildSummaryEvent
 
 /**
  * The fields are the same as those returned by /publicRooms (see spec), with the addition of:
@@ -36,10 +36,11 @@ internal data class SpaceChildSummaryResponse(
          */
         @Json(name = "room_type") val roomType: String? = null,
 
-        /**  The m.space.child events of the room. For each event, only the following fields are included:
-         *  type, state_key, content, room_id, sender, with the addition of origin_server_ts.
+        /**
+         * The m.space.child events of the room. For each event, only the following fields are included:
+         * type, state_key, content, sender, and of origin_server_ts.
          */
-        @Json(name = "children_state") val childrenState: List<Event>? = null,
+        @Json(name = "children_state") val childrenState: List<SpaceChildSummaryEvent>? = null,
 
         /**
          * Aliases of the room. May be empty.

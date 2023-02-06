@@ -41,6 +41,46 @@ data class Interaction(
 
     enum class Name {
         /**
+         * User tapped the All filter in the All Chats filter tab.
+         */
+        MobileAllChatsFilterAll,
+
+        /**
+         * User tapped the Favourites filter in the All Chats filter tab.
+         */
+        MobileAllChatsFilterFavourites,
+
+        /**
+         * User tapped the People filter in the All Chats filter tab.
+         */
+        MobileAllChatsFilterPeople,
+
+        /**
+         * User tapped the Unreads filter in the All Chats filter tab.
+         */
+        MobileAllChatsFilterUnreads,
+
+        /**
+         * User disabled filters from the all chats layout settings.
+         */
+        MobileAllChatsFiltersDisabled,
+
+        /**
+         * User enabled filters from the all chats layout settings.
+         */
+        MobileAllChatsFiltersEnabled,
+
+        /**
+         * User disabled recents from the all chats layout settings.
+         */
+        MobileAllChatsRecentsDisabled,
+
+        /**
+         * User enabled recents from the all chats layout settings.
+         */
+        MobileAllChatsRecentsEnabled,
+
+        /**
          * User tapped on Add to Home button on Room Details screen.
          */
         MobileRoomAddHome,
@@ -59,6 +99,11 @@ data class Interaction(
          * User tapped on a thread summary item on Room screen.
          */
         MobileRoomThreadSummaryItem,
+
+        /**
+         * User validated the creation of a new space.
+         */
+        MobileSpaceCreationValidated,
 
         /**
          * User tapped on the filter button on ThreadList screen.
@@ -80,6 +125,12 @@ data class Interaction(
          * switching should occur.
          */
         SpacePanelSwitchSpace,
+
+        /**
+         * User tapped an unselected sub space from the space list -> space
+         * switching should occur.
+         */
+        SpacePanelSwitchSubSpace,
 
         /**
          * User clicked the create room button in the add existing room to space
@@ -116,6 +167,12 @@ data class Interaction(
          * top of the left panel in Element Web/Desktop.
          */
         WebLeftPanelExploreRoomsButton,
+
+        /**
+         * User clicked on the avatar uploader in the profile settings of
+         * Element Web/Desktop.
+         */
+        WebProfileSettingsAvatarUploadButton,
 
         /**
          * User interacted with pin to sidebar checkboxes in the quick settings
@@ -280,6 +337,18 @@ data class Interaction(
         WebRoomListRoomsSublistPlusMenuExploreRoomsItem,
 
         /**
+         * User clicked on the button to return to the user onboarding list in
+         * the room list in Element Web/Desktop.
+         */
+        WebRoomListUserOnboardingButton,
+
+        /**
+         * User clicked on the button to close the user onboarding button in the
+         * room list in Element Web/Desktop.
+         */
+        WebRoomListUserOnboardingIgnoreButton,
+
+        /**
          * User interacted with leave action in the general tab of the room
          * settings dialog in Element Web/Desktop.
          */
@@ -349,6 +418,36 @@ data class Interaction(
          * Web/Desktop.
          */
         WebUserMenuThemeToggleButton,
+
+        /**
+         * User clicked on the send DM CTA in the header of the new user
+         * onboarding page in Element Web/Desktop.
+         */
+        WebUserOnboardingHeaderSendDm,
+
+        /**
+         * User clicked on the action of the download apps task on the new user
+         * onboarding page in Element Web/Desktop.
+         */
+        WebUserOnboardingTaskDownloadApps,
+
+        /**
+         * User clicked on the action of the enable notifications task on the
+         * new user onboarding page in Element Web/Desktop.
+         */
+        WebUserOnboardingTaskEnableNotifications,
+
+        /**
+         * User clicked on the action of the find people task on the new user
+         * onboarding page in Element Web/Desktop.
+         */
+        WebUserOnboardingTaskSendDm,
+
+        /**
+         * User clicked on the action of the your profile task on the new user
+         * onboarding page in Element Web/Desktop.
+         */
+        WebUserOnboardingTaskSetupProfile,
     }
 
     enum class InteractionType {

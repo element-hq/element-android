@@ -28,10 +28,12 @@ fun MapboxMap?.zoomToLocation(locationData: LocationData, preserveCurrentZoomLev
     } else {
         INITIAL_MAP_ZOOM_IN_PREVIEW
     }
-    this?.cameraPosition = CameraPosition.Builder()
-            .target(LatLng(locationData.latitude, locationData.longitude))
-            .zoom(zoomLevel)
-            .build()
+    this?.easeCamera {
+        CameraPosition.Builder()
+                .target(LatLng(locationData.latitude, locationData.longitude))
+                .zoom(zoomLevel)
+                .build()
+    }
 }
 
 fun MapboxMap?.zoomToBounds(latLngBounds: LatLngBounds) {

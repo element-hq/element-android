@@ -28,6 +28,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.ButtonStateView
@@ -38,10 +39,12 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomType
 import javax.inject.Inject
 
-class MatrixToRoomSpaceFragment @Inject constructor(
-        private val avatarRenderer: AvatarRenderer,
-        private val spaceCardRenderer: SpaceCardRenderer
-) : VectorBaseFragment<FragmentMatrixToRoomSpaceCardBinding>() {
+@AndroidEntryPoint
+class MatrixToRoomSpaceFragment :
+        VectorBaseFragment<FragmentMatrixToRoomSpaceCardBinding>() {
+
+    @Inject lateinit var avatarRenderer: AvatarRenderer
+    @Inject lateinit var spaceCardRenderer: SpaceCardRenderer
 
     private val sharedViewModel: MatrixToBottomSheetViewModel by parentFragmentViewModel()
 

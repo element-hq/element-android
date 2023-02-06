@@ -92,7 +92,6 @@ class CaptchaWebview @Inject constructor(
                 Timber.e("## onError() : $errorMessage")
             }
 
-            @SuppressLint("NewApi")
             override fun onReceivedHttpError(view: WebView, request: WebResourceRequest, errorResponse: WebResourceResponse) {
                 super.onReceivedHttpError(view, request, errorResponse)
                 when {

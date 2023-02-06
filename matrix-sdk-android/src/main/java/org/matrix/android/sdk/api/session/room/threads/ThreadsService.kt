@@ -16,26 +16,25 @@
 
 package org.matrix.android.sdk.api.session.room.threads
 
-import androidx.lifecycle.LiveData
+import androidx.paging.PagedList
 import org.matrix.android.sdk.api.session.room.threads.model.ThreadSummary
 
 /**
  * This interface defines methods to interact with thread related features.
  * It's the dynamic threads implementation and the homeserver must return
  * a capability entry for threads. If the server do not support m.thread
- * then [ThreadsLocalService] should be used instead
+ * then [org.matrix.android.sdk.api.session.room.threads.local.ThreadsLocalService] should be used instead
  */
 interface ThreadsService {
 
-    /**
-     * Returns a [LiveData] list of all the [ThreadSummary] that exists at the room level.
-     */
-    fun getAllThreadSummariesLive(): LiveData<List<ThreadSummary>>
+    suspend fun getPagedThreadsList(userParticipating: Boolean, pagedListConfig: PagedList.Config): ThreadLivePageResult
+
+    suspend fun fetchThreadList(nextBatchId: String?, limit: Int, filter: ThreadFilter = ThreadFilter.ALL): FetchThreadsResult
 
     /**
      * Returns a list of all the [ThreadSummary] that exists at the room level.
      */
-    fun getAllThreadSummaries(): List<ThreadSummary>
+    suspend fun getAllThreadSummaries(): List<ThreadSummary>
 
     /**
      * Enhance the provided ThreadSummary[List] by adding the latest
@@ -51,9 +50,4 @@ interface ThreadsService {
      * @param limit defines the number of max results the api will respond with
      */
     suspend fun fetchThreadTimeline(rootThreadEventId: String, from: String, limit: Int)
-
-    /**
-     * Fetch all thread summaries for the current room using the enhanced /messages api.
-     */
-    suspend fun fetchThreadSummaries()
 }

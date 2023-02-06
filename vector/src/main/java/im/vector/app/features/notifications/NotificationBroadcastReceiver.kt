@@ -48,31 +48,32 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var analyticsTracker: AnalyticsTracker
     @Inject lateinit var clock: Clock
+    @Inject lateinit var actionIds: NotificationActionIds
 
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent == null || context == null) return
         Timber.v("NotificationBroadcastReceiver received : $intent")
         when (intent.action) {
-            NotificationUtils.SMART_REPLY_ACTION ->
+            actionIds.smartReply ->
                 handleSmartReply(intent, context)
-            NotificationUtils.DISMISS_ROOM_NOTIF_ACTION ->
+            actionIds.dismissRoom ->
                 intent.getStringExtra(KEY_ROOM_ID)?.let { roomId ->
                     notificationDrawerManager.updateEvents { it.clearMessagesForRoom(roomId) }
                 }
-            NotificationUtils.DISMISS_SUMMARY_ACTION ->
+            actionIds.dismissSummary ->
                 notificationDrawerManager.clearAllEvents()
-            NotificationUtils.MARK_ROOM_READ_ACTION ->
+            actionIds.markRoomRead ->
                 intent.getStringExtra(KEY_ROOM_ID)?.let { roomId ->
                     notificationDrawerManager.updateEvents { it.clearMessagesForRoom(roomId) }
                     handleMarkAsRead(roomId)
                 }
-            NotificationUtils.JOIN_ACTION -> {
+            actionIds.join -> {
                 intent.getStringExtra(KEY_ROOM_ID)?.let { roomId ->
                     notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(roomId) }
                     handleJoinRoom(roomId)
                 }
             }
-            NotificationUtils.REJECT_ACTION -> {
+            actionIds.reject -> {
                 intent.getStringExtra(KEY_ROOM_ID)?.let { roomId ->
                     notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(roomId) }
                     handleRejectRoom(roomId)
@@ -108,7 +109,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
             val room = session.getRoom(roomId)
             if (room != null) {
                 session.coroutineScope.launch {
-                    tryOrNull { room.readService().markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT) }
+                    tryOrNull { room.readService().markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT, mainTimeLineOnly = false) }
                 }
             }
         }
@@ -117,6 +118,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
     private fun handleSmartReply(intent: Intent, context: Context) {
         val message = getReplyMessage(intent)
         val roomId = intent.getStringExtra(KEY_ROOM_ID)
+        val threadId = intent.getStringExtra(KEY_THREAD_ID)
 
         if (message.isNullOrBlank() || roomId.isNullOrBlank()) {
             // ignore this event
@@ -125,13 +127,20 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
         }
         activeSessionHolder.getActiveSession().let { session ->
             session.getRoom(roomId)?.let { room ->
-                sendMatrixEvent(message, session, room, context)
+                sendMatrixEvent(message, threadId, session, room, context)
             }
         }
     }
 
-    private fun sendMatrixEvent(message: String, session: Session, room: Room, context: Context?) {
-        room.sendService().sendTextMessage(message)
+    private fun sendMatrixEvent(message: String, threadId: String?, session: Session, room: Room, context: Context?) {
+        if (threadId != null) {
+            room.relationService().replyInThread(
+                    rootThreadEventId = threadId,
+                    replyInThreadText = message,
+            )
+        } else {
+            room.sendService().sendTextMessage(message)
+        }
 
         // Create a new event to be displayed in the notification drawer, right now
 
@@ -147,6 +156,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                 body = message,
                 imageUriString = null,
                 roomId = room.roomId,
+                threadId = threadId,
                 roomName = room.roomSummary()?.displayName ?: room.roomId,
                 roomIsDirect = room.roomSummary()?.isDirect == true,
                 outGoingMessage = true,
@@ -221,6 +231,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
 
     companion object {
         const val KEY_ROOM_ID = "roomID"
+        const val KEY_THREAD_ID = "threadID"
         const val KEY_TEXT_REPLY = "key_text_reply"
     }
 }

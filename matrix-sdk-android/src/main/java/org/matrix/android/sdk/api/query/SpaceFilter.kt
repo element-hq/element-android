@@ -35,9 +35,19 @@ sealed interface SpaceFilter {
      * Used to get all the rooms that do not have the provided space in their parent hierarchy.
      */
     data class ExcludeSpace(val spaceId: String) : SpaceFilter
+
+    /**
+     * Used to apply no filtering to the space.
+     */
+    object NoFilter : SpaceFilter
 }
 
 /**
  * Return a [SpaceFilter.ActiveSpace] if the String is not null, or [SpaceFilter.OrphanRooms].
  */
 fun String?.toActiveSpaceOrOrphanRooms(): SpaceFilter = this?.let { SpaceFilter.ActiveSpace(it) } ?: SpaceFilter.OrphanRooms
+
+/**
+ * Return a [SpaceFilter.ActiveSpace] if the String is not null, or [SpaceFilter.NoFilter].
+ */
+fun String?.toActiveSpaceOrNoFilter(): SpaceFilter = this?.let { SpaceFilter.ActiveSpace(it) } ?: SpaceFilter.NoFilter

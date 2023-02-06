@@ -16,6 +16,8 @@
 
 package im.vector.app.test.fakes
 
+import io.mockk.every
+import io.mockk.mockk
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.securestorage.IntegrityResult
 import org.matrix.android.sdk.api.session.securestorage.KeyInfoResult
@@ -26,7 +28,7 @@ import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageServi
 import org.matrix.android.sdk.api.session.securestorage.SsssKeyCreationInfo
 import org.matrix.android.sdk.api.session.securestorage.SsssKeySpec
 
-class FakeSharedSecretStorageService : SharedSecretStorageService {
+class FakeSharedSecretStorageService : SharedSecretStorageService by mockk() {
 
     var integrityResult: IntegrityResult = IntegrityResult.Error(SharedSecretStorageError.OtherError(IllegalStateException()))
     var _defaultKey: KeyInfoResult = KeyInfoResult.Error(SharedSecretStorageError.OtherError(IllegalStateException()))
@@ -75,5 +77,9 @@ class FakeSharedSecretStorageService : SharedSecretStorageService {
 
     override suspend fun requestSecret(name: String, myOtherDeviceId: String) {
         TODO("Not yet implemented")
+    }
+
+    fun givenIsRecoverySetupReturns(isRecoverySetup: Boolean) {
+        every { isRecoverySetup() } returns isRecoverySetup
     }
 }

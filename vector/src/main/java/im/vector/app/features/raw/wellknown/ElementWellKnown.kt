@@ -68,7 +68,7 @@ data class E2EWellKnownConfig(
         val secureBackupSetupMethods: List<String>? = null,
 
         /**
-         * Configuration for sharing keys strategy which should be used instead of [im.vector.app.BuildConfig.outboundSessionKeySharingStrategy].
+         * Configuration for sharing keys strategy which should be used instead of [im.vector.app.config.Config.KEY_SHARING_STRATEGY].
          * One of on_room_opening, on_typing or disabled.
          */
         @Json(name = "outbound_keys_pre_sharing_mode")

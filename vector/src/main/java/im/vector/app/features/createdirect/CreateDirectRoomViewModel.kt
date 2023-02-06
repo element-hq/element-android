@@ -30,23 +30,24 @@ import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.plan.CreatedRoom
 import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.raw.wellknown.isE2EByDefault
+import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.userdirectory.PendingSelection
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.getUser
+import org.matrix.android.sdk.api.session.getUserOrDefault
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
-import org.matrix.android.sdk.api.session.user.model.User
 
 class CreateDirectRoomViewModel @AssistedInject constructor(
         @Assisted initialState: CreateDirectRoomViewState,
         private val rawService: RawService,
+        private val vectorPreferences: VectorPreferences,
         val session: Session,
-        val analyticsTracker: AnalyticsTracker
+        val analyticsTracker: AnalyticsTracker,
 ) :
         VectorViewModel<CreateDirectRoomViewState, CreateDirectRoomAction, CreateDirectRoomViewEvents>(initialState) {
 
@@ -59,7 +60,8 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
 
     override fun handle(action: CreateDirectRoomAction) {
         when (action) {
-            is CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers -> onSubmitInvitees(action.selections)
+            is CreateDirectRoomAction.PrepareRoomWithSelectedUsers -> onSubmitInvitees(action.selections)
+            is CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers -> onCreateRoomWithInvitees()
             is CreateDirectRoomAction.QrScannedAction -> onCodeParsed(action)
         }
     }
@@ -75,11 +77,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
                 _viewEvents.post(CreateDirectRoomViewEvents.DmSelf)
             } else {
                 // Try to get user from known users and fall back to creating a User object from MXID
-                val qrInvitee = if (session.getUser(mxid) != null) {
-                    session.getUser(mxid)!!
-                } else {
-                    User(mxid, null, null)
-                }
+                val qrInvitee = session.getUserOrDefault(mxid)
                 onSubmitInvitees(setOf(PendingSelection.UserPendingSelection(qrInvitee)))
             }
         }
@@ -94,16 +92,18 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
         }
         if (existingRoomId != null) {
             // Do not create a new DM, just tell that the creation is successful by passing the existing roomId
-            setState {
-                copy(createAndInviteState = Success(existingRoomId))
-            }
+            setState { copy(createAndInviteState = Success(existingRoomId)) }
         } else {
-            // Create the DM
-            createRoomAndInviteSelectedUsers(selections)
+            createLocalRoomWithSelectedUsers(selections)
         }
     }
 
-    private fun createRoomAndInviteSelectedUsers(selections: Set<PendingSelection>) {
+    private fun onCreateRoomWithInvitees() {
+        // Create the DM
+        withState { createLocalRoomWithSelectedUsers(it.pendingSelections) }
+    }
+
+    private fun createLocalRoomWithSelectedUsers(selections: Set<PendingSelection>) {
         setState { copy(createAndInviteState = Loading()) }
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -124,9 +124,13 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
                     }
 
             val result = runCatchingToAsync {
-                session.roomService().createRoom(roomParams)
+                if (vectorPreferences.isDeferredDmEnabled()) {
+                    session.roomService().createLocalRoom(roomParams)
+                } else {
+                    analyticsTracker.capture(CreatedRoom(isDM = roomParams.isDirect.orFalse()))
+                    session.roomService().createRoom(roomParams)
+                }
             }
-            analyticsTracker.capture(CreatedRoom(isDM = roomParams.isDirect.orFalse()))
 
             setState {
                 copy(

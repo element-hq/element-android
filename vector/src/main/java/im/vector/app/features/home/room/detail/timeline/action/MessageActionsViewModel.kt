@@ -25,6 +25,7 @@ import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.canReact
+import im.vector.app.core.extensions.getVectorLastMessageContent
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
@@ -60,7 +61,6 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachme
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
-import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.hasBeenEdited
 import org.matrix.android.sdk.api.session.room.timeline.isPoll
 import org.matrix.android.sdk.api.session.room.timeline.isRootThread
@@ -82,6 +82,7 @@ class MessageActionsViewModel @AssistedInject constructor(
         private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
         private val vectorPreferences: VectorPreferences,
         private val checkIfCanReplyEventUseCase: CheckIfCanReplyEventUseCase,
+        private val checkIfCanRedactEventUseCase: CheckIfCanRedactEventUseCase,
 ) : VectorViewModel<MessageActionState, MessageActionsAction, EmptyViewEvents>(initialState) {
 
     private val informationData = initialState.informationData
@@ -186,7 +187,7 @@ class MessageActionsViewModel @AssistedInject constructor(
                 when (timelineEvent.root.getClearType()) {
                     EventType.MESSAGE,
                     EventType.STICKER -> {
-                        val messageContent: MessageContent? = timelineEvent.getLastMessageContent()
+                        val messageContent: MessageContent? = timelineEvent.getVectorLastMessageContent()
                         if (messageContent is MessageTextContent && messageContent.format == MessageFormat.FORMAT_MATRIX_HTML) {
                             val html = messageContent.formattedBody
                                     ?.takeIf { it.isNotBlank() }
@@ -214,9 +215,12 @@ class MessageActionsViewModel @AssistedInject constructor(
                     EventType.CALL_ANSWER -> {
                         noticeEventFormatter.format(timelineEvent, room?.roomSummary()?.isDirect.orFalse())
                     }
-                    in EventType.POLL_START -> {
-                        timelineEvent.root.getClearContent().toModel<MessagePollContent>(catchError = true)
-                                ?.getBestPollCreationInfo()?.question?.getBestQuestion() ?: ""
+                    in EventType.POLL_START.values -> {
+                        (timelineEvent.getVectorLastMessageContent() as? MessagePollContent)?.getBestPollCreationInfo()?.question?.getBestQuestion()
+                                ?: stringProvider.getString(R.string.message_reply_to_poll_preview)
+                    }
+                    in EventType.POLL_END.values -> {
+                        stringProvider.getString(R.string.message_reply_to_ended_poll_preview)
                     }
                     else -> null
                 }
@@ -252,7 +256,7 @@ class MessageActionsViewModel @AssistedInject constructor(
     }
 
     private fun actionsForEvent(timelineEvent: TimelineEvent, actionPermissions: ActionPermissions): List<EventSharedAction> {
-        val messageContent = timelineEvent.getLastMessageContent()
+        val messageContent = timelineEvent.getVectorLastMessageContent()
         val msgType = messageContent?.msgType
 
         return arrayListOf<EventSharedAction>().apply {
@@ -382,7 +386,7 @@ class MessageActionsViewModel @AssistedInject constructor(
             }
 
             if (canRedact(timelineEvent, actionPermissions)) {
-                if (timelineEvent.root.getClearType() in EventType.POLL_START) {
+                if (timelineEvent.root.getClearType() in EventType.POLL_START.values) {
                     add(
                             EventSharedAction.Redact(
                                     eventId,
@@ -497,6 +501,7 @@ class MessageActionsViewModel @AssistedInject constructor(
             MessageType.MSGTYPE_AUDIO,
             MessageType.MSGTYPE_FILE,
             MessageType.MSGTYPE_POLL_START,
+            MessageType.MSGTYPE_POLL_END,
             MessageType.MSGTYPE_STICKER_LOCAL -> event.root.threadDetails?.isRootThread ?: false
             else -> false
         }
@@ -518,12 +523,7 @@ class MessageActionsViewModel @AssistedInject constructor(
     }
 
     private fun canRedact(event: TimelineEvent, actionPermissions: ActionPermissions): Boolean {
-        // Only event of type EventType.MESSAGE, EventType.STICKER and EventType.POLL_START are supported for the moment
-        if (event.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER) + EventType.POLL_START) return false
-        // Message sent by the current user can always be redacted
-        if (event.root.senderId == session.myUserId) return true
-        // Check permission for messages sent by other users
-        return actionPermissions.canRedact
+        return checkIfCanRedactEventUseCase.execute(event, actionPermissions)
     }
 
     private fun canRetry(event: TimelineEvent, actionPermissions: ActionPermissions): Boolean {
@@ -533,14 +533,14 @@ class MessageActionsViewModel @AssistedInject constructor(
     }
 
     private fun canViewReactions(event: TimelineEvent): Boolean {
-        // Only event of type EventType.MESSAGE, EventType.STICKER and EventType.POLL_START are supported for the moment
-        if (event.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER) + EventType.POLL_START) return false
+        // Only event of type EventType.MESSAGE, EventType.STICKER, EventType.POLL_START, EventType.POLL_END are supported for the moment
+        if (event.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER) + EventType.POLL_START.values + EventType.POLL_END.values) return false
         return event.annotations?.reactionsSummary?.isNotEmpty() ?: false
     }
 
     private fun canEdit(event: TimelineEvent, myUserId: String, actionPermissions: ActionPermissions): Boolean {
         // Only event of type EventType.MESSAGE and EventType.POLL_START are supported for the moment
-        if (event.root.getClearType() !in listOf(EventType.MESSAGE) + EventType.POLL_START) return false
+        if (event.root.getClearType() !in listOf(EventType.MESSAGE) + EventType.POLL_START.values) return false
         if (!actionPermissions.canSendMessage) return false
         // TODO if user is admin or moderator
         val messageContent = event.root.getClearContent().toModel<MessageContent>()
@@ -586,14 +586,14 @@ class MessageActionsViewModel @AssistedInject constructor(
     }
 
     private fun canEndPoll(event: TimelineEvent, actionPermissions: ActionPermissions): Boolean {
-        return event.root.getClearType() in EventType.POLL_START &&
+        return event.root.getClearType() in EventType.POLL_START.values &&
                 canRedact(event, actionPermissions) &&
                 event.annotations?.pollResponseSummary?.closedTime == null
     }
 
     private fun canEditPoll(event: TimelineEvent): Boolean {
-        return event.root.getClearType() in EventType.POLL_START &&
+        return event.root.getClearType() in EventType.POLL_START.values &&
                 event.annotations?.pollResponseSummary?.closedTime == null &&
-                event.annotations?.pollResponseSummary?.aggregatedContent?.totalVotes ?: 0 == 0
+                (event.annotations?.pollResponseSummary?.aggregatedContent?.totalVotes ?: 0) == 0
     }
 }

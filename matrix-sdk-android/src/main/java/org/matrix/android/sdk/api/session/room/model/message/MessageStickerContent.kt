@@ -34,7 +34,7 @@ data class MessageStickerContent(
          * Required. A textual representation of the image. This could be the alt text of the image, the filename of the image,
          * or some kind of content description for accessibility e.g. 'image attachment'.
          */
-        @Json(name = "body") override val body: String,
+        @Json(name = "body") override val body: String = "",
 
         /**
          * Metadata about the image referred to in url.

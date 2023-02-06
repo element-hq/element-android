@@ -25,6 +25,7 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -37,11 +38,14 @@ import im.vector.app.features.roomprofile.settings.joinrule.advanced.RoomJoinRul
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import javax.inject.Inject
 
-class RoomJoinRuleFragment @Inject constructor(
-        val controller: RoomJoinRuleAdvancedController,
-        val avatarRenderer: AvatarRenderer
-) : VectorBaseFragment<FragmentJoinRulesRecyclerBinding>(),
-        OnBackPressed, RoomJoinRuleAdvancedController.InteractionListener {
+@AndroidEntryPoint
+class RoomJoinRuleFragment :
+        VectorBaseFragment<FragmentJoinRulesRecyclerBinding>(),
+        OnBackPressed,
+        RoomJoinRuleAdvancedController.InteractionListener {
+
+    @Inject lateinit var controller: RoomJoinRuleAdvancedController
+    @Inject lateinit var avatarRenderer: AvatarRenderer
 
     private val viewModel: RoomJoinRuleChooseRestrictedViewModel by activityViewModel()
 

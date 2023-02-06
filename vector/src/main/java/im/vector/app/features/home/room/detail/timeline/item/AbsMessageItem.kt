@@ -63,12 +63,6 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder>(
         }
     }
 
-    private val _memberNameClickListener = object : ClickListener {
-        override fun invoke(p1: View) {
-            attributes.avatarCallback?.onMemberNameClicked(attributes.informationData)
-        }
-    }
-
     private val _threadClickListener = object : ClickListener {
         override fun invoke(p1: View) {
             attributes.threadCallback?.onThreadSummaryClicked(attributes.informationData.eventId, attributes.threadDetails?.isRootThread ?: false)
@@ -95,7 +89,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder>(
             holder.memberNameView.isVisible = true
             holder.memberNameView.text = attributes.informationData.memberName
             holder.memberNameView.setTextColor(attributes.getMemberNameColor())
-            holder.memberNameView.onClick(_memberNameClickListener)
+            holder.memberNameView.onClick(attributes.memberClickListener)
             holder.memberNameView.setOnLongClickListener(attributes.itemLongClickListener)
         } else {
             holder.memberNameView.setOnClickListener(null)

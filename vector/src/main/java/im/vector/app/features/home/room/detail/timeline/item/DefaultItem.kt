@@ -61,6 +61,6 @@ abstract class DefaultItem : BaseEventItem<DefaultItem.Holder>(R.layout.item_tim
     )
 
     companion object {
-        private const val STUB_ID = R.id.messageContentDefaultStub
+        private val STUB_ID = R.id.messageContentDefaultStub
     }
 }

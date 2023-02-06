@@ -16,7 +16,7 @@
 
 package im.vector.app.features.home.room.detail.timeline.url
 
-import im.vector.app.BuildConfig
+import im.vector.app.core.resources.BuildMeta
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -27,7 +27,8 @@ import org.matrix.android.sdk.api.session.room.timeline.getLatestEventId
 
 class PreviewUrlRetriever(
         session: Session,
-        private val coroutineScope: CoroutineScope
+        private val coroutineScope: CoroutineScope,
+        private val buildMeta: BuildMeta,
 ) {
     private val mediaService = session.mediaService()
 
@@ -77,7 +78,7 @@ class PreviewUrlRetriever(
                     mediaService.getPreviewUrl(
                             url = urlToRetrieve,
                             timestamp = null,
-                            cacheStrategy = if (BuildConfig.DEBUG) CacheStrategy.NoCache else CacheStrategy.TtlCache(CACHE_VALIDITY, false)
+                            cacheStrategy = if (buildMeta.isDebug) CacheStrategy.NoCache else CacheStrategy.TtlCache(CACHE_VALIDITY, false)
                     )
                 }.fold(
                         {

@@ -16,18 +16,18 @@
 
 package im.vector.app.features.settings.troubleshoot
 
-import android.content.Intent
-import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.Observer
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.pushers.PushersManager
+import im.vector.app.core.pushers.RegisterUnifiedPushUseCase
 import im.vector.app.core.pushers.UnifiedPushHelper
-import im.vector.app.core.pushers.UnifiedPushStore
+import im.vector.app.core.pushers.UnregisterUnifiedPushUseCase
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.session.coroutineScope
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.pushers.PusherState
 import javax.inject.Inject
 
@@ -37,12 +37,13 @@ class TestEndpointAsTokenRegistration @Inject constructor(
         private val pushersManager: PushersManager,
         private val activeSessionHolder: ActiveSessionHolder,
         private val unifiedPushHelper: UnifiedPushHelper,
-        private val unifiedPushStore: UnifiedPushStore,
+        private val registerUnifiedPushUseCase: RegisterUnifiedPushUseCase,
+        private val unregisterUnifiedPushUseCase: UnregisterUnifiedPushUseCase,
 ) : TroubleshootTest(R.string.settings_troubleshoot_test_endpoint_registration_title) {
 
-    override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
+    override fun perform(testParameters: TestParameters) {
         // Check if we have a registered pusher for this token
-        val endpoint = unifiedPushStore.getEndpointOrToken() ?: run {
+        val endpoint = unifiedPushHelper.getEndpointOrToken() ?: run {
             status = TestStatus.FAILED
             return
         }
@@ -60,27 +61,52 @@ class TestEndpointAsTokenRegistration @Inject constructor(
             )
             quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_endpoint_registration_quick_fix) {
                 override fun doFix() {
-                    unifiedPushHelper.reRegister(
-                            context,
-                            pushersManager
-                    )
-                    val workId = pushersManager.enqueueRegisterPusherWithFcmKey(endpoint)
-                    WorkManager.getInstance(context).getWorkInfoByIdLiveData(workId).observe(context, Observer { workInfo ->
-                        if (workInfo != null) {
-                            if (workInfo.state == WorkInfo.State.SUCCEEDED) {
-                                manager?.retry(activityResultLauncher)
-                            } else if (workInfo.state == WorkInfo.State.FAILED) {
-                                manager?.retry(activityResultLauncher)
-                            }
-                        }
-                    })
+                    unregisterThenRegister(testParameters, endpoint)
                 }
             }
-
             status = TestStatus.FAILED
         } else {
             description = stringProvider.getString(R.string.settings_troubleshoot_test_endpoint_registration_success)
             status = TestStatus.SUCCESS
+        }
+    }
+
+    private fun unregisterThenRegister(testParameters: TestParameters, pushKey: String) {
+        activeSessionHolder.getSafeActiveSession()?.coroutineScope?.launch {
+            unregisterUnifiedPushUseCase.execute(pushersManager)
+            registerUnifiedPush(distributor = "", testParameters, pushKey)
+        }
+    }
+
+    private fun registerUnifiedPush(
+            distributor: String,
+            testParameters: TestParameters,
+            pushKey: String,
+    ) {
+        when (registerUnifiedPushUseCase.execute(distributor)) {
+            is RegisterUnifiedPushUseCase.RegisterUnifiedPushResult.NeedToAskUserForDistributor ->
+                askUserForDistributor(testParameters, pushKey)
+            RegisterUnifiedPushUseCase.RegisterUnifiedPushResult.Success -> {
+                val workId = pushersManager.enqueueRegisterPusherWithFcmKey(pushKey)
+                WorkManager.getInstance(context).getWorkInfoByIdLiveData(workId).observe(context) { workInfo ->
+                    if (workInfo != null) {
+                        if (workInfo.state == WorkInfo.State.SUCCEEDED) {
+                            manager?.retry(testParameters)
+                        } else if (workInfo.state == WorkInfo.State.FAILED) {
+                            manager?.retry(testParameters)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun askUserForDistributor(
+            testParameters: TestParameters,
+            pushKey: String,
+    ) {
+        unifiedPushHelper.showSelectDistributorDialog(context) { selection ->
+            registerUnifiedPush(distributor = selection, testParameters, pushKey)
         }
     }
 }

@@ -22,6 +22,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.args
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.associateContentStateWith
 import im.vector.app.core.extensions.clearErrorOnChange
@@ -32,14 +33,15 @@ import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.RegisterAction
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.failure.Failure
-import javax.inject.Inject
 
 @Parcelize
 data class FtueAuthPhoneConfirmationFragmentArgument(
         val msisdn: String
 ) : Parcelable
 
-class FtueAuthPhoneConfirmationFragment @Inject constructor() : AbstractFtueAuthFragment<FragmentFtuePhoneConfirmationBinding>() {
+@AndroidEntryPoint
+class FtueAuthPhoneConfirmationFragment :
+        AbstractFtueAuthFragment<FragmentFtuePhoneConfirmationBinding>() {
 
     private val params: FtueAuthPhoneConfirmationFragmentArgument by args()
 

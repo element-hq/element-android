@@ -5,6 +5,8 @@ plugins {
 }
 
 android {
+    namespace "org.matrix.android.sdk.flow"
+
     compileSdk versions.compileSdk
 
     defaultConfig {

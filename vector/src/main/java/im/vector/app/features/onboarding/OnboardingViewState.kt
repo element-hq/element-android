@@ -49,13 +49,18 @@ data class OnboardingViewState(
         val isForceLoginFallbackEnabled: Boolean = false,
 
         @PersistState
+        val registrationState: RegistrationState = RegistrationState(),
+
+        @PersistState
         val selectedHomeserver: SelectedHomeserverState = SelectedHomeserverState(),
 
         @PersistState
         val selectedAuthenticationState: SelectedAuthenticationState = SelectedAuthenticationState(),
 
         @PersistState
-        val personalizationState: PersonalizationState = PersonalizationState()
+        val personalizationState: PersonalizationState = PersonalizationState(),
+
+        val canLoginWithQrCode: Boolean = false,
 ) : MavericksState
 
 enum class OnboardingFlow {
@@ -66,20 +71,21 @@ enum class OnboardingFlow {
 
 @Parcelize
 data class SelectedHomeserverState(
-        val description: String? = null,
         val userFacingUrl: String? = null,
         val upstreamUrl: String? = null,
         val preferredLoginMode: LoginMode = LoginMode.Unknown,
         val supportedLoginTypes: List<String> = emptyList(),
         val isLogoutDevicesSupported: Boolean = false,
+        val isLoginWithQrSupported: Boolean = false,
 ) : Parcelable
 
 @Parcelize
 data class PersonalizationState(
+        val userId: String = "",
         val supportsChangingDisplayName: Boolean = false,
         val supportsChangingProfilePicture: Boolean = false,
         val displayName: String? = null,
-        val selectedPictureUri: Uri? = null
+        val selectedPictureUri: Uri? = null,
 ) : Parcelable {
 
     fun supportsPersonalization() = supportsChangingDisplayName || supportsChangingProfilePicture
@@ -95,4 +101,11 @@ data class ResetState(
 @Parcelize
 data class SelectedAuthenticationState(
         val description: AuthenticationDescription? = null,
+) : Parcelable
+
+@Parcelize
+data class RegistrationState(
+        val email: String? = null,
+        val isUserNameAvailable: Boolean = false,
+        val selectedMatrixId: String? = null,
 ) : Parcelable

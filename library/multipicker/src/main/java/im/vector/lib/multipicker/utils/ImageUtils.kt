@@ -30,7 +30,15 @@ object ImageUtils {
     fun getBitmap(context: Context, uri: Uri): Bitmap? {
         return try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, uri))
+                val source = ImageDecoder.createSource(context.contentResolver, uri)
+                val listener = ImageDecoder.OnHeaderDecodedListener { decoder, _, _ ->
+                    if (Build.VERSION.SDK_INT == Build.VERSION_CODES.P) {
+                        // Allocating hardware bitmap may cause a crash on framework versions prior to Android Q
+                        decoder.allocator = ImageDecoder.ALLOCATOR_SOFTWARE
+                    }
+                }
+
+                ImageDecoder.decodeBitmap(source, listener)
             } else {
                 context.contentResolver.openInputStream(uri)?.use { inputStream ->
                     BitmapFactory.decodeStream(inputStream)

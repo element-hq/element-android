@@ -16,7 +16,7 @@
 
 package im.vector.app.test.fakes
 
-import im.vector.app.features.location.LocationSharingServiceConnection
+import im.vector.app.features.location.live.tracking.LocationSharingServiceConnection
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk

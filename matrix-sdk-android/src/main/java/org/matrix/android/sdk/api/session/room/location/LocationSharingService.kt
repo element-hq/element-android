@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.api.session.room.location
 
-import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationShareAggregatedSummary
 import org.matrix.android.sdk.api.util.Cancelable
@@ -48,10 +47,9 @@ interface LocationSharingService {
     /**
      * Starts sharing live location in the room.
      * @param timeoutMillis timeout of the live in milliseconds
-     * @param description description of the live for text fallback
      * @return the result of the update of the live
      */
-    suspend fun startLiveLocationShare(timeoutMillis: Long, description: String): UpdateLiveLocationShareResult
+    suspend fun startLiveLocationShare(timeoutMillis: Long): UpdateLiveLocationShareResult
 
     /**
      * Stops sharing live location in the room.
@@ -60,15 +58,20 @@ interface LocationSharingService {
     suspend fun stopLiveLocationShare(): UpdateLiveLocationShareResult
 
     /**
+     * Redact (delete) the live associated to the given beacon info event id.
+     * @param beaconInfoEventId event id of the initial beacon info state event
+     * @param reason Optional reason string
+     */
+    suspend fun redactLiveLocationShare(beaconInfoEventId: String, reason: String?)
+
+    /**
      * Returns a LiveData on the list of current running live location shares.
      */
-    @MainThread
     fun getRunningLiveLocationShareSummaries(): LiveData<List<LiveLocationShareAggregatedSummary>>
 
     /**
      * Returns a LiveData on the live location share summary with the given eventId.
      * @param beaconInfoEventId event id of the initial beacon info state event
      */
-    @MainThread
     fun getLiveLocationShareSummary(beaconInfoEventId: String): LiveData<Optional<LiveLocationShareAggregatedSummary>>
 }

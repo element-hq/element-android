@@ -18,8 +18,12 @@ package im.vector.lib.ui.styles.debug
 
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import im.vector.lib.ui.styles.R
@@ -31,6 +35,7 @@ abstract class DebugMaterialThemeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setupMenu()
         val views = ActivityDebugMaterialThemeBinding.inflate(layoutInflater)
         setContentView(views.root)
 
@@ -72,6 +77,27 @@ abstract class DebugMaterialThemeActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupMenu() {
+        addMenuProvider(
+                object : MenuProvider {
+                    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                        menuInflater.inflate(R.menu.menu_debug, menu)
+                    }
+
+                    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                        Toast.makeText(
+                                this@DebugMaterialThemeActivity,
+                                "Menu ${menuItem.title} clicked!",
+                                Toast.LENGTH_SHORT
+                        ).show()
+                        return true
+                    }
+                },
+                this,
+                Lifecycle.State.RESUMED
+        )
+    }
+
     private fun showTestDialog(theme: Int) {
         MaterialAlertDialogBuilder(this, theme)
                 .setTitle("Dialog title")
@@ -81,10 +107,5 @@ abstract class DebugMaterialThemeActivity : AppCompatActivity() {
                 .setNegativeButton("Negative", null)
                 .setNeutralButton("Neutral", null)
                 .show()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_debug, menu)
-        return true
     }
 }

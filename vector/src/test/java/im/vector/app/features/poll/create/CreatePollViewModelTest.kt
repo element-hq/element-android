@@ -16,7 +16,7 @@
 
 package im.vector.app.features.poll.create
 
-import com.airbnb.mvrx.test.MvRxTestRule
+import com.airbnb.mvrx.test.MavericksTestRule
 import im.vector.app.features.poll.PollMode
 import im.vector.app.test.fakes.FakeCreatePollViewStates.A_FAKE_OPTIONS
 import im.vector.app.test.fakes.FakeCreatePollViewStates.A_FAKE_QUESTION
@@ -48,7 +48,7 @@ class CreatePollViewModelTest {
     private val testDispatcher = UnconfinedTestDispatcher()
 
     @get:Rule
-    val mvRxTestRule = MvRxTestRule(
+    val mavericksTestRule = MavericksTestRule(
             testDispatcher = testDispatcher // See https://github.com/airbnb/mavericks/issues/599
     )
 
@@ -68,7 +68,7 @@ class CreatePollViewModelTest {
                 .roomService()
                 .getRoom(A_FAKE_ROOM_ID)
                 .timelineService()
-                .givenTimelineEvent(A_POLL_START_TIMELINE_EVENT)
+                .givenTimelineEventReturns(A_POLL_START_TIMELINE_EVENT.eventId, A_POLL_START_TIMELINE_EVENT)
     }
 
     @After

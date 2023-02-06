@@ -39,4 +39,14 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <!-- Material 3 -->
+
+    <style name="Widget.Vector.Material3.Toolbar" parent="Widget.Material3.Toolbar" />
+
+    <style name="Widget.Vector.Material3.CollapsingToolbar.Medium" parent="Widget.Material3.CollapsingToolbar.Medium">
+        <item name="expandedTitleTextAppearance">@style/TextAppearance.Vector.Title.Medium</item>
+        <item name="expandedTitleMarginBottom">20dp</item>
+        <item name="collapsedTitleTextAppearance">@style/TextAppearance.Vector.Headline.Bold</item>
+    </style>
+
 </resources>

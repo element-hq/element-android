@@ -36,7 +36,7 @@ import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.network.toFailure
 import org.matrix.android.sdk.internal.session.SessionListeners
 import org.matrix.android.sdk.internal.session.dispatchTo
-import org.matrix.android.sdk.internal.session.filter.FilterRepository
+import org.matrix.android.sdk.internal.session.filter.GetCurrentFilterTask
 import org.matrix.android.sdk.internal.session.homeserver.GetHomeServerCapabilitiesTask
 import org.matrix.android.sdk.internal.session.sync.parsing.InitialSyncResponseParser
 import org.matrix.android.sdk.internal.session.user.UserStore
@@ -64,11 +64,9 @@ internal interface SyncTask : Task<SyncTask.Params, SyncResponse> {
 internal class DefaultSyncTask @Inject constructor(
         private val syncAPI: SyncAPI,
         @UserId private val userId: String,
-        private val filterRepository: FilterRepository,
         private val syncResponseHandler: SyncResponseHandler,
         private val syncRequestStateTracker: SyncRequestStateTracker,
         private val syncTokenStore: SyncTokenStore,
-        private val getHomeServerCapabilitiesTask: GetHomeServerCapabilitiesTask,
         private val userStore: UserStore,
         private val session: Session,
         private val sessionListeners: SessionListeners,
@@ -79,6 +77,8 @@ internal class DefaultSyncTask @Inject constructor(
         private val syncResponseParser: InitialSyncResponseParser,
         private val roomSyncEphemeralTemporaryStore: RoomSyncEphemeralTemporaryStore,
         private val clock: Clock,
+        private val getHomeServerCapabilitiesTask: GetHomeServerCapabilitiesTask,
+        private val getCurrentFilterTask: GetCurrentFilterTask
 ) : SyncTask {
 
     private val workingDir = File(fileDirectory, "is")
@@ -100,8 +100,13 @@ internal class DefaultSyncTask @Inject constructor(
             requestParams["since"] = token
             timeout = params.timeout
         }
+
+        // Maybe refresh the homeserver capabilities data we know
+        getHomeServerCapabilitiesTask.execute(GetHomeServerCapabilitiesTask.Params(forceRefresh = false))
+        val filter = getCurrentFilterTask.execute(Unit)
+
         requestParams["timeout"] = timeout.toString()
-        requestParams["filter"] = filterRepository.getFilter()
+        requestParams["filter"] = filter
         params.presence?.let { requestParams["set_presence"] = it.value }
 
         val isInitialSync = token == null
@@ -115,8 +120,6 @@ internal class DefaultSyncTask @Inject constructor(
             )
             syncRequestStateTracker.startRoot(InitialSyncStep.ImportingAccount, 100)
         }
-        // Maybe refresh the homeserver capabilities data we know
-        getHomeServerCapabilitiesTask.execute(GetHomeServerCapabilitiesTask.Params(forceRefresh = false))
 
         val readTimeOut = (params.timeout + TIMEOUT_MARGIN).coerceAtLeast(TimeOutInterceptor.DEFAULT_LONG_TIMEOUT)
 
@@ -140,7 +143,7 @@ internal class DefaultSyncTask @Inject constructor(
                         executeRequest(globalErrorReceiver) {
                             syncAPI.sync(
                                     params = requestParams,
-                                    readTimeOut = readTimeOut
+                                    readTimeOut = readTimeOut,
                             )
                         }
                     }
@@ -148,7 +151,7 @@ internal class DefaultSyncTask @Inject constructor(
                     syncStatisticsData.requestInitSyncTime = SystemClock.elapsedRealtime()
                     syncStatisticsData.downloadInitSyncTime = syncStatisticsData.requestInitSyncTime
                     logDuration("INIT_SYNC Database insertion", loggerTag, clock) {
-                        syncResponseHandler.handleResponse(syncResponse, token, syncRequestStateTracker)
+                        syncResponseHandler.handleResponse(syncResponse, null, afterPause = true, syncRequestStateTracker)
                     }
                     syncResponseToReturn = syncResponse
                 }
@@ -178,10 +181,10 @@ internal class DefaultSyncTask @Inject constructor(
             syncRequestStateTracker.setSyncRequestState(
                     SyncRequestState.IncrementalSyncParsing(
                             rooms = nbRooms,
-                            toDevice = nbToDevice
+                            toDevice = nbToDevice,
                     )
             )
-            syncResponseHandler.handleResponse(syncResponse, token, null)
+            syncResponseHandler.handleResponse(syncResponse, token, afterPause = params.afterPause, null)
             syncResponseToReturn = syncResponse
             Timber.tag(loggerTag.value).d("Incremental sync done")
             syncRequestStateTracker.setSyncRequestState(SyncRequestState.IncrementalSyncDone)
@@ -261,7 +264,7 @@ internal class DefaultSyncTask @Inject constructor(
             Timber.tag(loggerTag.value).d("INIT_SYNC $nbOfJoinedRooms rooms, $nbOfJoinedRoomsInFile ephemeral stored into files")
 
             logDuration("INIT_SYNC Database insertion", loggerTag, clock) {
-                syncResponseHandler.handleResponse(syncResponse, null, syncRequestStateTracker)
+                syncResponseHandler.handleResponse(syncResponse, null, afterPause = true, syncRequestStateTracker)
             }
             initialSyncStatusRepository.setStep(InitialSyncStatus.STEP_SUCCESS)
             syncResponse

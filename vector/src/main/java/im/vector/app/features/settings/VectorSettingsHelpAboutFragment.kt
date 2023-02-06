@@ -18,10 +18,11 @@ package im.vector.app.features.settings
 
 import android.os.Bundle
 import androidx.preference.Preference
-import im.vector.app.BuildConfig
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.orEmpty
 import im.vector.app.core.preference.VectorPreference
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.utils.FirstThrottler
 import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.openAppSettingsPage
@@ -31,9 +32,12 @@ import im.vector.app.features.version.VersionProvider
 import org.matrix.android.sdk.api.Matrix
 import javax.inject.Inject
 
-class VectorSettingsHelpAboutFragment @Inject constructor(
-        private val versionProvider: VersionProvider
-) : VectorSettingsBaseFragment() {
+@AndroidEntryPoint
+class VectorSettingsHelpAboutFragment :
+        VectorSettingsBaseFragment() {
+
+    @Inject lateinit var versionProvider: VersionProvider
+    @Inject lateinit var buildMeta: BuildMeta
 
     override var titleRes = R.string.preference_root_help_about
     override val preferenceXmlRes = R.xml.vector_settings_help_about
@@ -65,10 +69,12 @@ class VectorSettingsHelpAboutFragment @Inject constructor(
         // application version
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_VERSION_PREFERENCE_KEY)!!.let {
             it.summary = buildString {
-                append(versionProvider.getVersion(longFormat = false, useBuildNumber = true))
-                if (BuildConfig.DEBUG) {
+                append(versionProvider.getVersion(longFormat = false))
+                if (buildMeta.isDebug) {
                     append(" ")
-                    append(BuildConfig.GIT_BRANCH_NAME)
+                    append(buildMeta.gitBranchName)
+                    append(" ")
+                    append(buildMeta.gitRevision)
                 }
             }
 

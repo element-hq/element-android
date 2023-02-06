@@ -17,7 +17,8 @@
 package org.matrix.android.sdk.internal.crypto.algorithms.megolm
 
 import dagger.Lazy
-import org.matrix.android.sdk.api.MatrixConfiguration
+import org.matrix.android.sdk.api.crypto.MXCryptoConfig
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.NewSessionListener
@@ -34,16 +35,20 @@ import org.matrix.android.sdk.internal.crypto.algorithms.IMXDecrypting
 import org.matrix.android.sdk.internal.crypto.keysbackup.DefaultKeysBackupService
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.session.StreamEventsManager
+import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 
 private val loggerTag = LoggerTag("MXMegolmDecryption", LoggerTag.CRYPTO)
 
 internal class MXMegolmDecryption(
         private val olmDevice: MXOlmDevice,
+        private val myUserId: String,
         private val outgoingKeyRequestManager: OutgoingKeyRequestManager,
         private val cryptoStore: IMXCryptoStore,
-        private val matrixConfiguration: MatrixConfiguration,
-        private val liveEventManager: Lazy<StreamEventsManager>
+        private val liveEventManager: Lazy<StreamEventsManager>,
+        private val unrequestedForwardManager: UnRequestedForwardManager,
+        private val cryptoConfig: MXCryptoConfig,
+        private val clock: Clock,
 ) : IMXDecrypting {
 
     var newSessionListener: NewSessionListener? = null
@@ -94,7 +99,8 @@ internal class MXMegolmDecryption(
                                         senderCurve25519Key = olmDecryptionResult.senderKey,
                                         claimedEd25519Key = olmDecryptionResult.keysClaimed?.get("ed25519"),
                                         forwardingCurve25519KeyChain = olmDecryptionResult.forwardingCurve25519KeyChain
-                                                .orEmpty()
+                                                .orEmpty(),
+                                        isSafe = olmDecryptionResult.isSafe.orFalse()
                                 ).also {
                                     liveEventManager.get().dispatchLiveEventDecrypted(event, it)
                                 }
@@ -181,13 +187,23 @@ internal class MXMegolmDecryption(
      *
      * @param event the key event.
      * @param defaultKeysBackupService the keys backup service
+     * @param forceAccept if true will force to accept the forwarded key
      */
-    override fun onRoomKeyEvent(event: Event, defaultKeysBackupService: DefaultKeysBackupService) {
-        Timber.tag(loggerTag.value).v("onRoomKeyEvent()")
+    override fun onRoomKeyEvent(event: Event, defaultKeysBackupService: DefaultKeysBackupService, forceAccept: Boolean) {
+        Timber.tag(loggerTag.value).v("onRoomKeyEvent(${event.getSenderKey()})")
         var exportFormat = false
-        val roomKeyContent = event.getClearContent().toModel<RoomKeyContent>() ?: return
+        val roomKeyContent = event.getDecryptedContent()?.toModel<RoomKeyContent>() ?: return
 
-        var senderKey: String? = event.getSenderKey()
+        val eventSenderKey: String = event.getSenderKey() ?: return Unit.also {
+            Timber.tag(loggerTag.value).e("onRoom Key/Forward Event() : event is missing sender_key field")
+        }
+
+        // this device might not been downloaded now?
+        val fromDevice = cryptoStore.deviceWithIdentityKey(eventSenderKey)
+
+        lateinit var sessionInitiatorSenderKey: String
+        val trusted: Boolean
+
         var keysClaimed: MutableMap<String, String> = HashMap()
         val forwardingCurve25519KeyChain: MutableList<String> = ArrayList()
 
@@ -195,32 +211,25 @@ internal class MXMegolmDecryption(
             Timber.tag(loggerTag.value).e("onRoomKeyEvent() :  Key event is missing fields")
             return
         }
-        if (event.getClearType() == EventType.FORWARDED_ROOM_KEY) {
+        if (event.getDecryptedType() == EventType.FORWARDED_ROOM_KEY) {
             if (!cryptoStore.isKeyGossipingEnabled()) {
                 Timber.tag(loggerTag.value)
                         .i("onRoomKeyEvent(), ignore forward adding as per crypto config : ${roomKeyContent.roomId}|${roomKeyContent.sessionId}")
                 return
             }
             Timber.tag(loggerTag.value).i("onRoomKeyEvent(), forward adding key : ${roomKeyContent.roomId}|${roomKeyContent.sessionId}")
-            val forwardedRoomKeyContent = event.getClearContent().toModel<ForwardedRoomKeyContent>()
+            val forwardedRoomKeyContent = event.getDecryptedContent()?.toModel<ForwardedRoomKeyContent>()
                     ?: return
 
             forwardedRoomKeyContent.forwardingCurve25519KeyChain?.let {
                 forwardingCurve25519KeyChain.addAll(it)
             }
 
-            if (senderKey == null) {
-                Timber.tag(loggerTag.value).e("onRoomKeyEvent() : event is missing sender_key field")
-                return
-            }
-
-            forwardingCurve25519KeyChain.add(senderKey)
+            forwardingCurve25519KeyChain.add(eventSenderKey)
 
             exportFormat = true
-            senderKey = forwardedRoomKeyContent.senderKey
-            if (null == senderKey) {
+            sessionInitiatorSenderKey = forwardedRoomKeyContent.senderKey ?: return Unit.also {
                 Timber.tag(loggerTag.value).e("onRoomKeyEvent() : forwarded_room_key event is missing sender_key field")
-                return
             }
 
             if (null == forwardedRoomKeyContent.senderClaimedEd25519Key) {
@@ -229,13 +238,52 @@ internal class MXMegolmDecryption(
             }
 
             keysClaimed["ed25519"] = forwardedRoomKeyContent.senderClaimedEd25519Key
-        } else {
-            Timber.tag(loggerTag.value).i("onRoomKeyEvent(), Adding key : ${roomKeyContent.roomId}|${roomKeyContent.sessionId}")
-            if (null == senderKey) {
-                Timber.tag(loggerTag.value).e("## onRoomKeyEvent() : key event has no sender key (not encrypted?)")
+
+            // checking if was requested once.
+            // should we check if the request is sort of active?
+            val wasNotRequested = cryptoStore.getOutgoingRoomKeyRequest(
+                    roomId = forwardedRoomKeyContent.roomId.orEmpty(),
+                    sessionId = forwardedRoomKeyContent.sessionId.orEmpty(),
+                    algorithm = forwardedRoomKeyContent.algorithm.orEmpty(),
+                    senderKey = forwardedRoomKeyContent.senderKey.orEmpty(),
+            ).isEmpty()
+
+            trusted = false
+
+            if (!forceAccept && wasNotRequested) {
+//                val senderId = cryptoStore.deviceWithIdentityKey(event.getSenderKey().orEmpty())?.userId.orEmpty()
+                unrequestedForwardManager.onUnRequestedKeyForward(roomKeyContent.roomId, event, clock.epochMillis())
+                // Ignore unsolicited
+                Timber.tag(loggerTag.value).w("Ignoring forwarded_room_key_event for ${roomKeyContent.sessionId} that was not requested")
                 return
             }
 
+            // Check who sent the request, as we requested we have the device keys (no need to download)
+            val sessionThatIsSharing = cryptoStore.deviceWithIdentityKey(eventSenderKey)
+            if (sessionThatIsSharing == null) {
+                Timber.tag(loggerTag.value).w("Ignoring forwarded_room_key from unknown device with identity $eventSenderKey")
+                return
+            }
+            val isOwnDevice = myUserId == sessionThatIsSharing.userId
+            val isDeviceVerified = sessionThatIsSharing.isVerified
+            val isFromSessionInitiator = sessionThatIsSharing.identityKey() == sessionInitiatorSenderKey
+
+            val isLegitForward = (isOwnDevice && isDeviceVerified) ||
+                    (!cryptoConfig.limitRoomKeyRequestsToMyDevices && isFromSessionInitiator)
+
+            val shouldAcceptForward = forceAccept || isLegitForward
+
+            if (!shouldAcceptForward) {
+                Timber.tag(loggerTag.value)
+                        .w("Ignoring forwarded_room_key device:$eventSenderKey, ownVerified:{$isOwnDevice&&$isDeviceVerified}," +
+                                " fromInitiator:$isFromSessionInitiator")
+                return
+            }
+        } else {
+            // It's a m.room_key so safe
+            trusted = true
+            sessionInitiatorSenderKey = eventSenderKey
+            Timber.tag(loggerTag.value).i("onRoomKeyEvent(), Adding key : ${roomKeyContent.roomId}|${roomKeyContent.sessionId}")
             // inherit the claimed ed25519 key from the setup message
             keysClaimed = event.getKeysClaimed().toMutableMap()
         }
@@ -245,12 +293,15 @@ internal class MXMegolmDecryption(
                 sessionId = roomKeyContent.sessionId,
                 sessionKey = roomKeyContent.sessionKey,
                 roomId = roomKeyContent.roomId,
-                senderKey = senderKey,
+                senderKey = sessionInitiatorSenderKey,
                 forwardingCurve25519KeyChain = forwardingCurve25519KeyChain,
                 keysClaimed = keysClaimed,
                 exportFormat = exportFormat,
-                sharedHistory = roomKeyContent.getSharedKey()
-        )
+                sharedHistory = roomKeyContent.getSharedKey(),
+                trusted = trusted
+        ).also {
+            Timber.tag(loggerTag.value).v(".. onRoomKeyEvent addInboundGroupSession ${roomKeyContent.sessionId} result: $it")
+        }
 
         when (addSessionResult) {
             is MXOlmDevice.AddSessionResult.Imported -> addSessionResult.ratchetIndex
@@ -258,35 +309,28 @@ internal class MXMegolmDecryption(
             else -> null
         }?.let { index ->
             if (event.getClearType() == EventType.FORWARDED_ROOM_KEY) {
-                val fromDevice = (event.content?.get("sender_key") as? String)?.let { senderDeviceIdentityKey ->
-                    cryptoStore.getUserDeviceList(event.senderId ?: "")
-                            ?.firstOrNull {
-                                it.identityKey() == senderDeviceIdentityKey
-                            }
-                }?.deviceId
-
                 outgoingKeyRequestManager.onRoomKeyForwarded(
                         sessionId = roomKeyContent.sessionId,
                         algorithm = roomKeyContent.algorithm ?: "",
                         roomId = roomKeyContent.roomId,
-                        senderKey = senderKey,
+                        senderKey = sessionInitiatorSenderKey,
                         fromIndex = index,
-                        fromDevice = fromDevice,
+                        fromDevice = fromDevice?.deviceId,
                         event = event
                 )
 
                 cryptoStore.saveIncomingForwardKeyAuditTrail(
                         roomId = roomKeyContent.roomId,
                         sessionId = roomKeyContent.sessionId,
-                        senderKey = senderKey,
+                        senderKey = sessionInitiatorSenderKey,
                         algorithm = roomKeyContent.algorithm ?: "",
-                        userId = event.senderId ?: "",
-                        deviceId = fromDevice ?: "",
+                        userId = event.senderId.orEmpty(),
+                        deviceId = fromDevice?.deviceId.orEmpty(),
                         chainIndex = index.toLong()
                 )
 
                 // The index is used to decide if we cancel sent request or if we wait for a better key
-                outgoingKeyRequestManager.postCancelRequestForSessionIfNeeded(roomKeyContent.sessionId, roomKeyContent.roomId, senderKey, index)
+                outgoingKeyRequestManager.postCancelRequestForSessionIfNeeded(roomKeyContent.sessionId, roomKeyContent.roomId, sessionInitiatorSenderKey, index)
             }
         }
 
@@ -295,7 +339,7 @@ internal class MXMegolmDecryption(
                     .d("onRoomKeyEvent(${event.getClearType()}) : Added megolm session ${roomKeyContent.sessionId} in ${roomKeyContent.roomId}")
             defaultKeysBackupService.maybeBackupKeys()
 
-            onNewSession(roomKeyContent.roomId, senderKey, roomKeyContent.sessionId)
+            onNewSession(roomKeyContent.roomId, sessionInitiatorSenderKey, roomKeyContent.sessionId)
         }
     }
 

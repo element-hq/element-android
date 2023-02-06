@@ -27,7 +27,7 @@ import androidx.core.view.marginEnd
 import androidx.core.view.marginStart
 import androidx.core.view.marginTop
 import im.vector.app.R
-import im.vector.app.core.resources.LocaleProvider
+import im.vector.app.core.resources.DefaultLocaleProvider
 import im.vector.app.core.resources.getLayoutDirectionFromCurrentLocale
 
 class MessageBubbleContentLayout @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
@@ -53,7 +53,7 @@ class MessageBubbleContentLayout @JvmOverloads constructor(context: Context, att
             textViewStub.setOnInflateListener(null)
             messageTextView = inflated.findViewById(R.id.messageTextView)
         }
-        localeLayoutDirection = LocaleProvider(resources).getLayoutDirectionFromCurrentLocale()
+        localeLayoutDirection = DefaultLocaleProvider(resources).getLayoutDirectionFromCurrentLocale()
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {

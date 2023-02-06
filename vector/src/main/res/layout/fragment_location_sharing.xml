@@ -52,4 +52,14 @@
         app:layout_constraintBottom_toBottomOf="@id/shareLocationOptionsPicker"
         app:layout_constraintEnd_toEndOf="@id/shareLocationOptionsPicker" />
 
+    <im.vector.app.features.location.MapLoadingErrorView
+        android:id="@+id/shareLocationMapLoadingError"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/shareLocationOptionsPicker"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

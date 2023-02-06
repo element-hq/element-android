@@ -22,6 +22,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentManager
 import com.airbnb.mvrx.args
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
@@ -47,12 +48,7 @@ class InviteRoomSpaceChooserBottomSheet : VectorBaseBottomSheetDialogFragment<Bo
     @Inject
     lateinit var activeSessionHolder: ActiveSessionHolder
 
-    interface InteractionListener {
-        fun inviteToSpace(spaceId: String)
-        fun inviteToRoom(roomId: String)
-    }
-
-    var interactionListener: InteractionListener? = null
+    var onItemSelected: ((roomId: String) -> Unit)? = null
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetSpaceInviteChooserBinding {
         return BottomSheetSpaceInviteChooserBinding.inflate(inflater, container, false)
@@ -72,7 +68,7 @@ class InviteRoomSpaceChooserBottomSheet : VectorBaseBottomSheetDialogFragment<Bo
         views.inviteToSpaceButton.subTitle = getString(R.string.invite_to_space_with_name_desc, spaceName)
         views.inviteToSpaceButton.debouncedClicks {
             dismiss()
-            interactionListener?.inviteToSpace(inviteArgs.spaceId)
+            onItemSelected?.invoke(inviteArgs.spaceId)
         }
 
         views.inviteToRoomOnly.isVisible = true
@@ -80,17 +76,21 @@ class InviteRoomSpaceChooserBottomSheet : VectorBaseBottomSheetDialogFragment<Bo
         views.inviteToRoomOnly.subTitle = getString(R.string.invite_just_to_this_room_desc, spaceName)
         views.inviteToRoomOnly.debouncedClicks {
             dismiss()
-            interactionListener?.inviteToRoom(inviteArgs.roomId)
+            onItemSelected?.invoke(inviteArgs.roomId)
         }
     }
 
     companion object {
-
-        fun newInstance(spaceId: String, roomId: String, interactionListener: InteractionListener): InviteRoomSpaceChooserBottomSheet {
-            return InviteRoomSpaceChooserBottomSheet().apply {
-                this.interactionListener = interactionListener
+        fun showInstance(
+                fragmentManager: FragmentManager,
+                spaceId: String,
+                roomId: String,
+                onItemSelected: (roomId: String) -> Unit
+        ) {
+            InviteRoomSpaceChooserBottomSheet().apply {
+                this.onItemSelected = onItemSelected
                 setArguments(Args(spaceId, roomId))
-            }
+            }.show(fragmentManager, InviteRoomSpaceChooserBottomSheet::class.java.name)
         }
     }
 }

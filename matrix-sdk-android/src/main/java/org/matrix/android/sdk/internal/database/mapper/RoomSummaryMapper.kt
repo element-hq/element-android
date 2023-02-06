@@ -61,6 +61,8 @@ internal class RoomSummaryMapper @Inject constructor(
                 otherMemberIds = roomSummaryEntity.otherMemberIds.toList(),
                 highlightCount = roomSummaryEntity.highlightCount,
                 notificationCount = roomSummaryEntity.notificationCount,
+                threadHighlightCount = roomSummaryEntity.threadHighlightCount,
+                threadNotificationCount = roomSummaryEntity.threadNotificationCount,
                 hasUnreadMessages = roomSummaryEntity.hasUnreadMessages,
                 tags = tags,
                 typingUsers = typingUsers,
@@ -106,6 +108,7 @@ internal class RoomSummaryMapper @Inject constructor(
                             worldReadable = it.childSummaryEntity?.joinRules == RoomJoinRules.PUBLIC
                     )
                 },
+                directParentNames = roomSummaryEntity.directParentNames.toList(),
                 flattenParentIds = roomSummaryEntity.flattenParentIds?.split("|") ?: emptyList(),
                 roomEncryptionAlgorithm = when (val alg = roomSummaryEntity.e2eAlgorithm) {
                     // I should probably use #hasEncryptorClassForAlgorithm but it says it supports

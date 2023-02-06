@@ -36,6 +36,7 @@ object MessageType {
     // Because poll events are not message events and they don't have msgtype field
     const val MSGTYPE_POLL_START = "org.matrix.android.sdk.poll.start"
     const val MSGTYPE_POLL_RESPONSE = "org.matrix.android.sdk.poll.response"
+    const val MSGTYPE_POLL_END = "org.matrix.android.sdk.poll.end"
 
     const val MSGTYPE_CONFETTI = "nic.custom.confetti"
     const val MSGTYPE_SNOWFALL = "io.element.effect.snowfall"
@@ -43,4 +44,7 @@ object MessageType {
     // Fake message types for live location events to be able to inherit them from MessageContent
     const val MSGTYPE_BEACON_INFO = "org.matrix.android.sdk.beacon.info"
     const val MSGTYPE_BEACON_LOCATION_DATA = "org.matrix.android.sdk.beacon.location.data"
+
+    // Fake message types for voice broadcast events to be able to inherit them from MessageContent
+    const val MSGTYPE_VOICE_BROADCAST_INFO = "io.element.voicebroadcast.info"
 }

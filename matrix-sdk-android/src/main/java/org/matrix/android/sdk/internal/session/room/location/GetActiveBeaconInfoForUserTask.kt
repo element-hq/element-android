@@ -39,7 +39,7 @@ internal class DefaultGetActiveBeaconInfoForUserTask @Inject constructor(
 ) : GetActiveBeaconInfoForUserTask {
 
     override suspend fun execute(params: GetActiveBeaconInfoForUserTask.Params): Event? {
-        return EventType.STATE_ROOM_BEACON_INFO
+        return EventType.STATE_ROOM_BEACON_INFO.values
                 .mapNotNull {
                     stateEventDataSource.getStateEvent(
                             roomId = params.roomId,

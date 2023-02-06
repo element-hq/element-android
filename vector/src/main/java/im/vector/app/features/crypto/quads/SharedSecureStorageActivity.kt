@@ -30,13 +30,11 @@ import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.features.crypto.recover.SetupMode
 import kotlinx.parcelize.Parcelize
-import javax.inject.Inject
 import kotlin.reflect.KClass
 
 @AndroidEntryPoint
@@ -54,7 +52,6 @@ class SharedSecureStorageActivity :
     ) : Parcelable
 
     private val viewModel: SharedSecureStorageViewModel by viewModel()
-    @Inject lateinit var errorFormatter: ErrorFormatter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +59,7 @@ class SharedSecureStorageActivity :
 
         views.toolbar.visibility = View.GONE
 
-        viewModel.observeViewEvents { observeViewEvents(it) }
+        viewModel.observeViewEvents { onViewEvents(it) }
 
         viewModel.onEach { renderState(it) }
     }
@@ -88,7 +85,7 @@ class SharedSecureStorageActivity :
         showFragment(fragment)
     }
 
-    private fun observeViewEvents(it: SharedSecureStorageViewEvent?) {
+    private fun onViewEvents(it: SharedSecureStorageViewEvent) {
         when (it) {
             is SharedSecureStorageViewEvent.Dismiss -> {
                 finish()

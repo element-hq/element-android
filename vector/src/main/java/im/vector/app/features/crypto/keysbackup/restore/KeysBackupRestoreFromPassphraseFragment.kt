@@ -24,12 +24,14 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.core.text.set
 import androidx.core.widget.doOnTextChanged
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentKeysBackupRestoreFromPassphraseBinding
-import javax.inject.Inject
 
-class KeysBackupRestoreFromPassphraseFragment @Inject constructor() : VectorBaseFragment<FragmentKeysBackupRestoreFromPassphraseBinding>() {
+@AndroidEntryPoint
+class KeysBackupRestoreFromPassphraseFragment :
+        VectorBaseFragment<FragmentKeysBackupRestoreFromPassphraseBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentKeysBackupRestoreFromPassphraseBinding {
         return FragmentKeysBackupRestoreFromPassphraseBinding.inflate(inflater, container, false)

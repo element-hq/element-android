@@ -131,11 +131,10 @@ class SecretStoringUtils @Inject constructor(
      *
      * The secret is encrypted using the following method: AES/GCM/NoPadding
      */
-    @SuppressLint("NewApi")
     @Throws(Exception::class)
     fun securelyStoreBytes(secret: ByteArray, keyAlias: String): ByteArray {
         return when {
-            buildVersionSdkIntProvider.get() >= Build.VERSION_CODES.M -> encryptBytesM(secret, keyAlias)
+            buildVersionSdkIntProvider.isAtLeast(Build.VERSION_CODES.M) -> encryptBytesM(secret, keyAlias)
             else -> encryptBytes(secret, keyAlias)
         }
     }
@@ -156,10 +155,9 @@ class SecretStoringUtils @Inject constructor(
         }
     }
 
-    @SuppressLint("NewApi")
     fun securelyStoreObject(any: Any, keyAlias: String, output: OutputStream) {
         when {
-            buildVersionSdkIntProvider.get() >= Build.VERSION_CODES.M -> saveSecureObjectM(keyAlias, output, any)
+            buildVersionSdkIntProvider.isAtLeast(Build.VERSION_CODES.M) -> saveSecureObjectM(keyAlias, output, any)
             else -> saveSecureObject(keyAlias, output, any)
         }
     }
@@ -180,16 +178,15 @@ class SecretStoringUtils @Inject constructor(
             is KeyStore.PrivateKeyEntry -> keyEntry.certificate.publicKey
             else -> throw IllegalStateException("Unknown KeyEntry type.")
         }
-        val cipherMode = when {
+        val cipherAlgorithm = when {
             buildVersionSdkIntProvider.get() >= Build.VERSION_CODES.M -> AES_MODE
             else -> RSA_MODE
         }
-        val cipher = Cipher.getInstance(cipherMode)
+        val cipher = Cipher.getInstance(cipherAlgorithm)
         cipher.init(Cipher.ENCRYPT_MODE, key)
         return cipher
     }
 
-    @SuppressLint("NewApi")
     @RequiresApi(Build.VERSION_CODES.M)
     private fun getOrGenerateSymmetricKeyForAliasM(alias: String): SecretKey {
         val secretKeyEntry = (keyStore.getEntry(alias, null) as? KeyStore.SecretKeyEntry)
@@ -204,13 +201,17 @@ class SecretStoringUtils @Inject constructor(
                     .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
                     .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
                     .setKeySize(128)
+                    .setUserAuthenticationRequired(keyNeedsUserAuthentication)
                     .apply {
-                        setUserAuthenticationRequired(keyNeedsUserAuthentication)
-                        if (buildVersionSdkIntProvider.get() >= Build.VERSION_CODES.N) {
-                            setInvalidatedByBiometricEnrollment(true)
+                        if (keyNeedsUserAuthentication) {
+                            buildVersionSdkIntProvider.whenAtLeast(Build.VERSION_CODES.N) {
+                                setInvalidatedByBiometricEnrollment(true)
+                            }
+                            buildVersionSdkIntProvider.whenAtLeast(Build.VERSION_CODES.P) {
+                                setUnlockedDeviceRequired(true)
+                            }
                         }
                     }
-                    .setUserAuthenticationRequired(keyNeedsUserAuthentication)
                     .build()
             generator.init(keyGenSpec)
             return generator.generateKey()

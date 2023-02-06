@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Widget.Vector.TabLayout" parent="Widget.MaterialComponents.TabLayout">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.Vector.HomeFilterTabLayout</item>
+        <item name="tabTextAppearance">@style/TextAppearance.Vector.FilterTabTextAppearance</item>
+    </style>
+
+    <style name="TextAppearance.Vector.FilterTabTextAppearance" parent="TextAppearance.Vector.Subtitle">
+        <item name="textAllCaps">false</item>
+    </style>
+
+    <style name="ThemeOverlay.Vector.HomeFilterTabLayout" parent="Theme.Vector.Launcher">
+        <item name="colorSurface">?vctr_toolbar_background</item>
+        <item name="colorOnSurface">?vctr_content_secondary</item>
+    </style>
+
+</resources>

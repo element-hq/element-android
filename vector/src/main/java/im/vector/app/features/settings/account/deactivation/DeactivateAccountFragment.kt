@@ -24,6 +24,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.mvrx.fragmentViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
@@ -35,9 +36,10 @@ import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.settings.VectorSettingsActivity
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.session.uia.exceptions.UiaCancelledException
-import javax.inject.Inject
 
-class DeactivateAccountFragment @Inject constructor() : VectorBaseFragment<FragmentDeactivateAccountBinding>() {
+@AndroidEntryPoint
+class DeactivateAccountFragment :
+        VectorBaseFragment<FragmentDeactivateAccountBinding>() {
 
     private val viewModel: DeactivateAccountViewModel by fragmentViewModel()
 

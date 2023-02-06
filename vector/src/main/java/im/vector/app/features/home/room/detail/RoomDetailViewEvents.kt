@@ -51,7 +51,7 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
     object OpenRoomProfile : RoomDetailViewEvents()
     data class ShowRoomAvatarFullScreen(val matrixItem: MatrixItem?, val view: View?) : RoomDetailViewEvents()
 
-    object ShowWaitingView : RoomDetailViewEvents()
+    data class ShowWaitingView(val text: String? = null) : RoomDetailViewEvents()
     object HideWaitingView : RoomDetailViewEvents()
 
     data class DownloadFileState(
@@ -71,6 +71,8 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
 
     object DisplayEnableIntegrationsWarning : RoomDetailViewEvents()
 
+    object DisplayPromptToStopVoiceBroadcast : RoomDetailViewEvents()
+
     data class OpenStickerPicker(val widget: Widget) : RoomDetailViewEvents()
 
     object OpenIntegrationManager : RoomDetailViewEvents()
@@ -84,6 +86,5 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
     data class StartChatEffect(val type: ChatEffect) : RoomDetailViewEvents()
     object StopChatEffects : RoomDetailViewEvents()
     object RoomReplacementStarted : RoomDetailViewEvents()
-
-    data class ChangeLocationIndicator(val isVisible: Boolean) : RoomDetailViewEvents()
+    object OpenElementCallWidget : RoomDetailViewEvents()
 }

@@ -19,17 +19,26 @@ package im.vector.app.features.settings
 import android.os.Bundle
 import androidx.preference.Preference
 import androidx.preference.SeekBarPreference
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorPreferenceCategory
 import im.vector.app.core.preference.VectorSwitchPreference
+import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.features.analytics.plan.MobileScreen
+import im.vector.app.features.home.NightlyProxy
 import im.vector.app.features.rageshake.RageShake
+import javax.inject.Inject
 
-class VectorSettingsAdvancedSettingsFragment : VectorSettingsBaseFragment() {
+@AndroidEntryPoint
+class VectorSettingsAdvancedSettingsFragment :
+        VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.settings_advanced_settings
     override val preferenceXmlRes = R.xml.vector_settings_advanced_settings
+
+    @Inject lateinit var nightlyProxy: NightlyProxy
 
     private var rageshake: RageShake? = null
 
@@ -54,6 +63,19 @@ class VectorSettingsAdvancedSettingsFragment : VectorSettingsBaseFragment() {
     }
 
     override fun bindPref() {
+        setupRageShakeSection()
+        setupNightlySection()
+        setupDevToolsSection()
+    }
+
+    private fun setupDevToolsSection() {
+        findPreference<VectorPreference>("SETTINGS_ACCESS_TOKEN")?.setOnPreferenceClickListener {
+            copyToClipboard(requireActivity(), session.sessionParams.credentials.accessToken)
+            true
+        }
+    }
+
+    private fun setupRageShakeSection() {
         val isRageShakeAvailable = RageShake.isAvailable(requireContext())
 
         if (isRageShakeAvailable) {
@@ -81,6 +103,14 @@ class VectorSettingsAdvancedSettingsFragment : VectorSettingsBaseFragment() {
             }
         } else {
             findPreference<VectorPreferenceCategory>("SETTINGS_RAGE_SHAKE_CATEGORY_KEY")!!.isVisible = false
+        }
+    }
+
+    private fun setupNightlySection() {
+        findPreference<VectorPreferenceCategory>("SETTINGS_NIGHTLY_BUILD_PREFERENCE_KEY")?.isVisible = nightlyProxy.isNightlyBuild()
+        findPreference<VectorPreference>("SETTINGS_NIGHTLY_BUILD_UPDATE_PREFERENCE_KEY")?.setOnPreferenceClickListener {
+            nightlyProxy.updateApplication()
+            true
         }
     }
 }

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_live_location_users_bottom_sheet">
+
+    <View
+        android:id="@+id/liveLocationPopupAnchor"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_gravity="center" />
+
+    <FrameLayout
+        android:id="@+id/liveLocationMapFragmentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <im.vector.app.features.location.MapLoadingErrorView
+        android:id="@+id/mapPreviewLoadingError"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="180dp"
+        android:visibility="gone" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bottomSheet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_live_location_users_bottom_sheet"
+        app:behavior_hideable="false"
+        app:behavior_peekHeight="200dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+        <View
+            android:id="@+id/liveLocationMapBottomSheetHandle"
+            android:layout_width="36dp"
+            android:layout_height="6dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/ic_bottom_sheet_handle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/liveLocationBottomSheetRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/liveLocationMapBottomSheetHandle"
+            tools:listitem="@layout/item_live_location_users_bottom_sheet" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <im.vector.app.features.location.live.LiveLocationEndedBannerView
+        android:id="@+id/liveLocationMapFragmentEndedBanner"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_gravity="bottom"
+        android:visibility="gone"
+        app:locLiveEndedBkgWithAlpha="false"
+        app:locLiveEndedIconMarginStart="16dp"
+        tools:visibility="visible" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -143,6 +143,14 @@ class MessageActionsEpoxyController @Inject constructor(
                     drawableStart(R.drawable.ic_shield_warning_small)
                 }
             }
+            E2EDecoration.WARN_UNSAFE_KEY -> {
+                bottomSheetSendStateItem {
+                    id("e2e_unsafe")
+                    showProgress(false)
+                    text(host.stringProvider.getString(R.string.key_authenticity_not_guaranteed))
+                    drawableStart(R.drawable.ic_shield_gray)
+                }
+            }
             else -> {
                 // nothing
             }

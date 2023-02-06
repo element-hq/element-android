@@ -28,7 +28,7 @@ jobs:
             echo "ALREADY_IN_BOARD=false" >> $GITHUB_ENV
           fi
       - name: Move issue
-        uses: alex-page/github-project-automation-plus@bb266ff4dde9242060e2d5418e120a133586d488
+        uses: alex-page/github-project-automation-plus@7ffb872c64bd809d23563a130a0a97d01dfa8f43
         if: ${{ env.ALREADY_IN_BOARD == 'true' }}
         with:
           project: Issue triage

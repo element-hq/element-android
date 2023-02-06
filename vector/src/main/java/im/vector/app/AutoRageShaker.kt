@@ -17,7 +17,6 @@
 package im.vector.app
 
 import android.content.SharedPreferences
-import androidx.lifecycle.asFlow
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.features.rageshake.BugReporter
 import im.vector.app.features.rageshake.ReportType
@@ -261,8 +260,7 @@ class AutoRageShaker @Inject constructor(
         this.currentActiveSessionId = sessionId
 
         hasSynced = session.syncService().hasAlreadySynced()
-        session.syncService().getSyncRequestStateLive()
-                .asFlow()
+        session.syncService().getSyncRequestStateFlow()
                 .onEach {
                     hasSynced = it !is SyncRequestState.InitialSyncProgressing
                 }

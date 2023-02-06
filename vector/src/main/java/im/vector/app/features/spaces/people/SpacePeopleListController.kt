@@ -77,7 +77,7 @@ class SpacePeopleListController @Inject constructor(
                                     id(roomMember.userId)
                                     matrixItem(roomMember.toMatrixItem())
                                     avatarRenderer(host.avatarRenderer)
-                                    userEncryptionTrustLevel(data.trustLevelMap.invoke()?.get(roomMember.userId))
+                                    userVerificationLevel(data.trustLevelMap.invoke()?.get(roomMember.userId))
                                             .apply {
                                                 val pl = host.toPowerLevelLabel(memberEntry.first)
                                                 if (memberEntry.first == RoomMemberListCategories.INVITE) {

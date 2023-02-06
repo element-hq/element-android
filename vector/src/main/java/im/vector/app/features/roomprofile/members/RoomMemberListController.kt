@@ -129,7 +129,7 @@ class RoomMemberListController @Inject constructor(
             id(roomMember.userId)
             matrixItem(roomMember.toMatrixItem())
             avatarRenderer(host.avatarRenderer)
-            userEncryptionTrustLevel(data.trustLevelMap.invoke()?.get(roomMember.userId))
+            userVerificationLevel(data.trustLevelMap.invoke()?.get(roomMember.userId))
             clickListener {
                 host.callback?.onRoomMemberClicked(roomMember)
             }

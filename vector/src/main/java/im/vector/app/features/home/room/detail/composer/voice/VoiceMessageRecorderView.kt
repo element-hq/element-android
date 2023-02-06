@@ -21,7 +21,6 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.hardware.vibrate
 import im.vector.app.core.time.Clock
@@ -57,6 +56,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
     }
 
     @Inject lateinit var clock: Clock
+    @Inject lateinit var voiceMessageConfig: VoiceMessageConfig
 
     // We need to define views as lateinit var to be able to check if initialized for the bug fix on api 21 and 22.
     @Suppress("UNNECESSARY_LATEINIT")
@@ -189,11 +189,9 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         val startMs = ((clock.epochMillis() - startAt)).coerceAtLeast(0)
         recordingTicker?.stop()
         recordingTicker = CountUpTimer().apply {
-            tickListener = object : CountUpTimer.TickListener {
-                override fun onTick(milliseconds: Long) {
-                    val isLocked = startFromLocked || lastKnownState is RecordingUiState.Locked
-                    onRecordingTick(isLocked, milliseconds + startMs)
-                }
+            tickListener = CountUpTimer.TickListener { milliseconds ->
+                val isLocked = startFromLocked || lastKnownState is RecordingUiState.Locked
+                onRecordingTick(isLocked, milliseconds + startMs)
             }
             resume()
         }
@@ -202,7 +200,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
 
     private fun onRecordingTick(isLocked: Boolean, milliseconds: Long) {
         voiceMessageViews.renderRecordingTimer(isLocked, milliseconds / 1_000)
-        val timeDiffToRecordingLimit = BuildConfig.VOICE_MESSAGE_DURATION_LIMIT_MS - milliseconds
+        val timeDiffToRecordingLimit = voiceMessageConfig.lengthLimitMs - milliseconds
         if (timeDiffToRecordingLimit <= 0) {
             post {
                 callback.onRecordingLimitReached()
@@ -231,6 +229,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
                 voiceMessageViews.renderPlaying(state)
             }
             is AudioMessagePlaybackTracker.Listener.State.Paused,
+            is AudioMessagePlaybackTracker.Listener.State.Error,
             is AudioMessagePlaybackTracker.Listener.State.Idle -> {
                 voiceMessageViews.renderIdle()
             }

@@ -17,7 +17,7 @@
         android:backgroundTint="?vctr_live_location"
         android:importantForAccessibility="no"
         android:padding="4dp"
-        android:src="@drawable/ic_attachment_location_live_white" />
+        android:src="@drawable/ic_attachment_live_location_white" />
 
     <TextView
         style="@style/TextAppearance.Vector.Headline.Medium"

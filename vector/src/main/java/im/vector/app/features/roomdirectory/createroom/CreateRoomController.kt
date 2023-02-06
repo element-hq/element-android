@@ -67,6 +67,7 @@ class CreateRoomController @Inject constructor(
             enabled(enableFormElement)
             value(viewState.roomName)
             hint(host.stringProvider.getString(R.string.create_room_name_hint))
+            autoCapitalize(true)
 
             onTextChange { text ->
                 host.listener?.onNameChange(text)

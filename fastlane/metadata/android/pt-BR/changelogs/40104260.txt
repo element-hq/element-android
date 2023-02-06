@@ -1,0 +1,2 @@
+Principais mudanças nesta versão: Usar UnifiedPush e permite usuária(o) ter push sem FCM.
+Changelog completo: https://github.com/vector-im/element-android/releases

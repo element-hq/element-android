@@ -23,6 +23,7 @@ import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.doOnLayout
 import com.airbnb.mvrx.args
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -43,10 +44,12 @@ import kotlin.math.roundToInt
 /**
  * LoginTermsFragment displays the list of policies the user has to accept.
  */
-class FtueAuthTermsFragment @Inject constructor(
-        private val policyController: PolicyController
-) : AbstractFtueAuthFragment<FragmentFtueLoginTermsBinding>(),
+@AndroidEntryPoint
+class FtueAuthTermsFragment :
+        AbstractFtueAuthFragment<FragmentFtueLoginTermsBinding>(),
         PolicyController.PolicyControllerListener {
+
+    @Inject lateinit var policyController: PolicyController
 
     private val params: FtueAuthTermsLegacyStyleFragmentArgument by args()
 
@@ -114,7 +117,9 @@ class FtueAuthTermsFragment @Inject constructor(
     }
 
     override fun updateWithState(state: OnboardingViewState) {
-        policyController.homeServer = state.selectedHomeserver.userFacingUrl.toReducedUrl()
+        val homeserverName = state.selectedHomeserver.userFacingUrl.toReducedUrl()
+        views.termsHeaderSubtitle.text = getString(R.string.ftue_auth_terms_subtitle, homeserverName)
+        policyController.homeServer = homeserverName
         renderState()
     }
 

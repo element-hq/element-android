@@ -106,6 +106,18 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
                                     .toEpoxyCharSequence()
                     )
                 }
+            } else {
+                genericItem {
+                    id("reset${cryptoDeviceInfo.deviceId}")
+                    style(ItemStyle.BIG_TEXT)
+                    titleIconResourceId(shield)
+                    title(host.stringProvider.getString(R.string.crosssigning_cannot_verify_this_session).toEpoxyCharSequence())
+                    description(
+                            host.stringProvider
+                                    .getString(R.string.crosssigning_cannot_verify_this_session_desc)
+                                    .toEpoxyCharSequence()
+                    )
+                }
             }
         } else {
             if (!currentSessionIsTrusted) {
@@ -141,22 +153,42 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
             description("(${cryptoDeviceInfo.deviceId})".toEpoxyCharSequence())
         }
 
-        if (isMine && !currentSessionIsTrusted && data.canVerifySession) {
-            // Add complete security
-            bottomSheetDividerItem {
-                id("completeSecurityDiv")
-            }
-            bottomSheetVerificationActionItem {
-                id("completeSecurity")
-                title(host.stringProvider.getString(R.string.crosssigning_verify_this_session))
-                titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
-                iconRes(R.drawable.ic_arrow_right)
-                iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
-                listener {
-                    host.callback?.onAction(DevicesAction.CompleteSecurity)
+        if (isMine) {
+            if (!currentSessionIsTrusted) {
+                if (data.canVerifySession) {
+                    // Add complete security
+                    bottomSheetDividerItem {
+                        id("completeSecurityDiv")
+                    }
+                    bottomSheetVerificationActionItem {
+                        id("completeSecurity")
+                        title(host.stringProvider.getString(R.string.crosssigning_verify_this_session))
+                        titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+                        iconRes(R.drawable.ic_arrow_right)
+                        iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+                        listener {
+                            host.callback?.onAction(DevicesAction.CompleteSecurity)
+                        }
+                    }
+                } else {
+                    bottomSheetDividerItem {
+                        id("resetSecurityDiv")
+                    }
+                    bottomSheetVerificationActionItem {
+                        id("resetSecurity")
+                        title(host.stringProvider.getString(R.string.secure_backup_reset_all))
+                        titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+                        iconRes(R.drawable.ic_arrow_right)
+                        iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+                        listener {
+                            host.callback?.onAction(DevicesAction.ResetSecurity)
+                        }
+                    }
                 }
             }
-        } else if (!isMine) {
+        } else
+        /** if (!isMine) **/
+        {
             if (currentSessionIsTrusted) {
                 // we can propose to verify it
                 val isVerified = cryptoDeviceInfo.trustLevel?.crossSigningVerified.orFalse()

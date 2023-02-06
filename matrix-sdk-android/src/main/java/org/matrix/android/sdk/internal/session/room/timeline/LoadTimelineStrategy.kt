@@ -19,9 +19,9 @@ package org.matrix.android.sdk.internal.session.room.timeline
 import io.realm.OrderedCollectionChangeSet
 import io.realm.OrderedRealmCollectionChangeListener
 import io.realm.Realm
-import io.realm.RealmConfiguration
 import io.realm.RealmResults
 import io.realm.kotlin.createObject
+import io.realm.kotlin.executeTransactionAwait
 import kotlinx.coroutines.CompletableDeferred
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -42,7 +42,12 @@ import org.matrix.android.sdk.internal.database.query.findAllIncludingEvents
 import org.matrix.android.sdk.internal.database.query.findLastForwardChunkOfThread
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadTimelineTask
+import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
 import org.matrix.android.sdk.internal.session.room.state.StateEventDataSource
+import org.matrix.android.sdk.internal.session.room.timeline.decorator.TimelineEventDecorator
+import org.matrix.android.sdk.internal.session.room.timeline.decorator.TimelineEventDecoratorChain
+import org.matrix.android.sdk.internal.session.room.timeline.decorator.UiEchoDecorator
+import org.matrix.android.sdk.internal.session.room.timeline.decorator.UpdatedReplyDecorator
 import org.matrix.android.sdk.internal.session.sync.handler.room.ThreadsAwarenessHandler
 import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
@@ -91,7 +96,6 @@ internal class LoadTimelineStrategy constructor(
             val realm: AtomicReference<Realm>,
             val eventDecryptor: TimelineEventDecryptor,
             val paginationTask: PaginationTask,
-            val realmConfiguration: RealmConfiguration,
             val fetchThreadTimelineTask: FetchThreadTimelineTask,
             val fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
             val getContextOfEventTask: GetContextOfEventTask,
@@ -105,6 +109,7 @@ internal class LoadTimelineStrategy constructor(
             val onNewTimelineEvents: (List<String>) -> Unit,
             val stateEventDataSource: StateEventDataSource,
             val matrixCoroutineDispatchers: MatrixCoroutineDispatchers,
+            val localEchoEventFactory: LocalEchoEventFactory
     )
 
     private var getContextLatch: CompletableDeferred<Unit>? = null
@@ -265,7 +270,7 @@ internal class LoadTimelineStrategy constructor(
         }
     }
 
-    private fun getChunkEntity(realm: Realm): RealmResults<ChunkEntity> {
+    private suspend fun getChunkEntity(realm: Realm): RealmResults<ChunkEntity> {
         return when (mode) {
             is Mode.Live -> {
                 ChunkEntity.where(realm, roomId)
@@ -289,8 +294,8 @@ internal class LoadTimelineStrategy constructor(
      * Clear any existing thread chunk entity and create a new one, with the
      * rootThreadEventId included.
      */
-    private fun recreateThreadChunkEntity(realm: Realm, rootThreadEventId: String) {
-        realm.executeTransaction {
+    private suspend fun recreateThreadChunkEntity(realm: Realm, rootThreadEventId: String) {
+        realm.executeTransactionAwait {
             // Lets delete the chunk and start a new one
             ChunkEntity.findLastForwardChunkOfThread(it, roomId, rootThreadEventId)?.deleteAndClearThreadEvents()?.let {
                 Timber.i("###THREADS LoadTimelineStrategy [onStart] thread chunk cleared..")
@@ -309,8 +314,8 @@ internal class LoadTimelineStrategy constructor(
     /**
      * Clear any existing thread chunk.
      */
-    private fun clearThreadChunkEntity(realm: Realm, rootThreadEventId: String) {
-        realm.executeTransaction {
+    private suspend fun clearThreadChunkEntity(realm: Realm, rootThreadEventId: String) {
+        realm.executeTransactionAwait {
             ChunkEntity.findLastForwardChunkOfThread(it, roomId, rootThreadEventId)?.deleteAndClearThreadEvents()?.let {
                 Timber.i("###THREADS LoadTimelineStrategy [onStop] thread chunk cleared..")
             }
@@ -322,6 +327,19 @@ internal class LoadTimelineStrategy constructor(
     }
 
     private fun RealmResults<ChunkEntity>.createTimelineChunk(): TimelineChunk? {
+        fun createTimelineEventDecorator(): TimelineEventDecorator {
+            val decorators = listOf(
+                    UiEchoDecorator(uiEchoManager),
+                    UpdatedReplyDecorator(
+                            realm = dependencies.realm,
+                            roomId = roomId,
+                            localEchoEventFactory = dependencies.localEchoEventFactory,
+                            timelineEventMapper = dependencies.timelineEventMapper
+                    )
+            )
+            return TimelineEventDecoratorChain(decorators)
+        }
+
         return firstOrNull()?.let {
             return TimelineChunk(
                     chunkEntity = it,
@@ -331,7 +349,6 @@ internal class LoadTimelineStrategy constructor(
                     fetchThreadTimelineTask = dependencies.fetchThreadTimelineTask,
                     eventDecryptor = dependencies.eventDecryptor,
                     paginationTask = dependencies.paginationTask,
-                    realmConfiguration = dependencies.realmConfiguration,
                     fetchTokenAndPaginateTask = dependencies.fetchTokenAndPaginateTask,
                     timelineEventMapper = dependencies.timelineEventMapper,
                     uiEchoManager = uiEchoManager,
@@ -340,6 +357,8 @@ internal class LoadTimelineStrategy constructor(
                     initialEventId = mode.originEventId(),
                     onBuiltEvents = dependencies.onEventsUpdated,
                     onEventsDeleted = dependencies.onEventsDeleted,
+                    localEchoEventFactory = dependencies.localEchoEventFactory,
+                    decorator = createTimelineEventDecorator()
             )
         }
     }

@@ -20,16 +20,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.databinding.FragmentLoginServerSelectionBinding
 import me.gujun.android.span.span
-import javax.inject.Inject
 
 /**
  * In this screen, the user will choose between matrix.org, modular or other type of homeserver.
  */
-class LoginServerSelectionFragment @Inject constructor() : AbstractLoginFragment<FragmentLoginServerSelectionBinding>() {
+@AndroidEntryPoint
+class LoginServerSelectionFragment :
+        AbstractLoginFragment<FragmentLoginServerSelectionBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginServerSelectionBinding {
         return FragmentLoginServerSelectionBinding.inflate(inflater, container, false)

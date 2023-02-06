@@ -16,16 +16,16 @@
 
 package im.vector.app.features.pin.lockscreen.crypto
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.hardware.biometrics.BiometricPrompt
 import android.os.Build
 import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.util.Base64
-import androidx.annotation.RequiresApi
+import androidx.annotation.VisibleForTesting
+import androidx.biometric.BiometricPrompt
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.securestorage.SecretStoringUtils
 import org.matrix.android.sdk.api.util.BuildVersionSdkIntProvider
 import java.security.Key
@@ -40,8 +40,6 @@ class KeyStoreCrypto @AssistedInject constructor(
         context: Context,
         private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
         private val keyStore: KeyStore,
-        // It's easier to test it this way
-        private val secretStoringUtils: SecretStoringUtils = SecretStoringUtils(context, keyStore, buildVersionSdkIntProvider, keyNeedsUserAuthentication)
 ) {
 
     @AssistedFactory
@@ -49,11 +47,13 @@ class KeyStoreCrypto @AssistedInject constructor(
         fun provide(alias: String, keyNeedsUserAuthentication: Boolean): KeyStoreCrypto
     }
 
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    internal var secretStoringUtils: SecretStoringUtils = SecretStoringUtils(context, keyStore, buildVersionSdkIntProvider, keyNeedsUserAuthentication)
+
     /**
      * Ensures a [Key] for the [alias] exists and validates it.
      * @throws KeyPermanentlyInvalidatedException if key is not valid.
      */
-    @SuppressLint("NewApi")
     @Throws(KeyPermanentlyInvalidatedException::class)
     fun ensureKey() = secretStoringUtils.ensureKey(alias).also {
         // Check validity of Key by initializing an encryption Cipher
@@ -107,16 +107,11 @@ class KeyStoreCrypto @AssistedInject constructor(
     /**
      * Check if the key associated with the [alias] is valid.
      */
-    @SuppressLint("NewApi")
     fun hasValidKey(): Boolean {
         val keyExists = hasKey()
-        return if (buildVersionSdkIntProvider.get() >= Build.VERSION_CODES.M && keyExists) {
-            try {
-                ensureKey()
-                true
-            } catch (e: KeyPermanentlyInvalidatedException) {
-                false
-            }
+        return if (buildVersionSdkIntProvider.isAtLeast(Build.VERSION_CODES.M) && keyExists) {
+            val initializedKey = tryOrNull("Error validating lockscreen system key.") { ensureKey() }
+            initializedKey != null
         } else {
             keyExists
         }
@@ -137,6 +132,5 @@ class KeyStoreCrypto @AssistedInject constructor(
      * @throws KeyPermanentlyInvalidatedException if key is invalidated.
      */
     @Throws(KeyPermanentlyInvalidatedException::class)
-    @RequiresApi(Build.VERSION_CODES.P)
-    fun getCryptoObject() = BiometricPrompt.CryptoObject(secretStoringUtils.getEncryptCipher(alias))
+    fun getAuthCryptoObject() = BiometricPrompt.CryptoObject(secretStoringUtils.getEncryptCipher(alias))
 }

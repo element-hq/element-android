@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<im.vector.app.core.platform.StateView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/stateView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/groupListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:minHeight="195dp"
+        android:overScrollMode="always"
+        tools:listitem="@layout/item_space" />
+
+
+    <LinearLayout
+        android:id="@+id/spaces_empty_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:padding="@dimen/layout_horizontal_margin"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <TextView
+            android:id="@+id/spaces_empty_title"
+            style="@style/Widget.Vector.TextView.Subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:text="@string/space_list_empty_title"
+            android:textColor="?vctr_content_primary"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/spaces_empty_message"
+            style="@style/Widget.Vector.TextView.Body"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@string/space_list_empty_message"
+            android:textColor="?vctr_content_secondary" />
+
+        <Button
+            android:id="@+id/spaces_empty_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:minWidth="190dp"
+            android:text="@string/create_space" />
+
+    </LinearLayout>
+
+</im.vector.app.core.platform.StateView>

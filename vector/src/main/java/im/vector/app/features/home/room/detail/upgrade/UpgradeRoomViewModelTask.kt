@@ -84,8 +84,6 @@ class UpgradeRoomViewModelTask @Inject constructor(
 //                                autoJoin = currentInfo.autoJoin ?: false,
                                 suggested = currentInfo.suggested
                         )
-
-                        parentSpace.removeChildren(params.roomId)
                     }
                 }
             } catch (failure: Throwable) {

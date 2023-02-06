@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2015 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<view xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/dialpad_view"
+  class="com.android.dialer.dialpadview.DialpadView"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:layout_gravity="bottom"
+  android:clickable="true"
+  android:elevation="0dp"
+  android:layoutDirection="ltr"
+  android:orientation="vertical">
+
+  <!-- Text field where call rate is displayed for ILD calls. -->
+  <LinearLayout
+    android:id="@+id/rate_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:visibility="gone">
+
+    <LinearLayout
+      android:id="@+id/ild_container"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/ild_margin_height"
+      android:layout_marginBottom="@dimen/ild_margin_height"
+      android:layout_gravity="center_horizontal"
+      android:orientation="horizontal">
+
+      <TextView
+        android:id="@+id/ild_country"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+      <TextView
+        android:id="@+id/ild_rate"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"/>
+
+    </LinearLayout>
+
+    <View
+      android:layout_width="match_parent"
+      android:layout_height="1dp"
+      android:background="#e3e3e3"/>
+
+  </LinearLayout>
+
+  <!-- Text field and possibly soft menu button above the keypad where
+   the digits are displayed. -->
+  <LinearLayout
+    android:id="@+id/digits_container"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dialpad_digits_height"
+    android:orientation="horizontal">
+
+    <ImageButton
+      android:id="@+id/dialpad_back"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:layout_margin="@dimen/dialpad_overflow_margin"
+      android:paddingLeft="@dimen/dialpad_digits_menu_left_padding"
+      android:paddingRight="@dimen/dialpad_digits_menu_right_padding"
+      android:background="@drawable/btn_dialpad_key"
+      android:contentDescription="@string/description_dialpad_back"
+      android:gravity="center"
+      android:src="@drawable/quantum_ic_close_white_24"
+      android:tint="@color/dialpad_icon_tint"
+      android:tintMode="src_in"
+      android:visibility="gone"/>
+
+    <ImageButton
+      android:id="@+id/dialpad_overflow"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:layout_margin="@dimen/dialpad_overflow_margin"
+      android:paddingLeft="@dimen/dialpad_digits_menu_left_padding"
+      android:paddingRight="@dimen/dialpad_digits_menu_right_padding"
+      android:background="@drawable/btn_dialpad_key"
+      android:contentDescription="@string/description_dialpad_overflow"
+      android:gravity="center"
+      android:src="@drawable/quantum_ic_more_vert_white_24"
+      android:tint="@color/dialpad_icon_tint"
+      android:tintMode="src_in"
+      android:visibility="gone"/>
+
+    <view xmlns:ex="http://schemas.android.com/apk/res-auto"
+      android:id="@+id/digits"
+      class="com.android.dialer.dialpadview.DigitsEditText"
+      android:textStyle="normal"
+      android:layout_width="0dp"
+      android:layout_height="match_parent"
+      android:layout_weight="1"
+      android:background="@android:color/transparent"
+      android:cursorVisible="false"
+      android:focusableInTouchMode="true"
+      android:fontFamily="sans-serif"
+      android:freezesText="true"
+      android:gravity="center"
+      android:maxLines="1"
+      android:scrollHorizontally="true"
+      android:singleLine="true"
+      android:textColor="@color/dialpad_digits_text_color"
+      android:textCursorDrawable="@null"
+      android:textSize="@dimen/dialpad_digits_text_size"
+      ex:resizing_text_min_size="@dimen/dialpad_digits_text_min_size"/>
+
+    <ImageButton
+      android:id="@+id/deleteButton"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:paddingLeft="@dimen/dialpad_digits_padding"
+      android:paddingRight="@dimen/dialpad_digits_padding"
+      android:background="@drawable/btn_dialpad_key"
+      android:contentDescription="@string/description_delete_button"
+      android:src="@drawable/quantum_ic_backspace_white_24"
+      android:state_enabled="false"
+      android:tint="@color/dialpad_icon_tint"
+      android:tintMode="src_in"/>
+  </LinearLayout>
+
+  <View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="#e3e3e3"/>
+
+  <Space
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dialpad_space_above_keys"/>
+
+  <include layout="@layout/dialpad"/>
+
+  <Space
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dialpad_space_below_keys"/>
+
+</view>

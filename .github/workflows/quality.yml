@@ -7,10 +7,8 @@ on:
 
 # Enrich gradle.properties for CI/CD
 env:
-  CI_GRADLE_ARG_PROPERTIES: >
-    -Porg.gradle.jvmargs=-Xmx4g
-    -Porg.gradle.parallel=false
-    --no-daemon
+  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3072m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -XX:MaxPermSize=512m -Dkotlin.daemon.jvm.options="-Xmx2g" -Dkotlin.incremental=false
+  CI_GRADLE_ARG_PROPERTIES: --stacktrace -PpreDexEnable=false --max-workers 2 --no-daemon
 
 jobs:
   check:
@@ -21,7 +19,7 @@ jobs:
       - name: Run code quality check suite
         run: ./tools/check/check_code_quality.sh
 
-# Knit for all the modules (https://github.com/Kotlin/kotlinx-knit)
+  # Knit for all the modules (https://github.com/Kotlin/kotlinx-knit)
   knit:
     name: Knit
     runs-on: ubuntu-latest
@@ -29,82 +27,54 @@ jobs:
       - uses: actions/checkout@v3
       - name: Run knit
         run: |
-          ./gradlew knit
+          ./gradlew knitCheck $CI_GRADLE_ARG_PROPERTIES
 
-# ktlint for all the modules
-  ktlint:
-    name: Kotlin Linter
+  # Check the project: ktlint, detekt, lint
+  lint:
+    name: Android Linter
     runs-on: ubuntu-latest
     # Allow all jobs on main and develop. Just one per PR.
     concurrency:
-      group: ${{ github.ref == 'refs/heads/main' && format('ktlint-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('ktlint-develop-{0}', github.sha) || format('ktlint-{0}', github.ref) }}
+      group: ${{ github.ref == 'refs/heads/main' && format('lint-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('lint-develop-{0}', github.sha) || format('lint-{0}', github.ref) }}
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v3
       - name: Run ktlint
         run: |
-          ./gradlew ktlintCheck --continue
+          ./gradlew ktlintCheck $CI_GRADLE_ARG_PROPERTIES --continue
+      - name: Run detekt
+        if: always()
+        run: |
+          ./gradlew detekt $CI_GRADLE_ARG_PROPERTIES
+      - name: Run lint
+        # Not always, if ktlint or detekt fail, avoid running the long lint check.
+        run: |
+          ./gradlew vector-app:lintGplayRelease $CI_GRADLE_ARG_PROPERTIES
+          ./gradlew vector-app:lintFdroidRelease $CI_GRADLE_ARG_PROPERTIES
       - name: Upload reports
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: ktlinting-report
+          name: linting-report
           path: |
-            */build/reports/ktlint/ktlint*/ktlint*.txt
-      - name: Handle Results
+            */build/reports/**/*.*
+      - name: Prepare Danger
         if: always()
-        id: ktlint-results
         run: |
-          results="$(cat */*/build/reports/ktlint/ktlint*/ktlint*.txt */build/reports/ktlint/ktlint*/ktlint*.txt | sed -r "s/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g")"
-          if [ -z  "$results" ]; then
-            echo "::set-output name=add_comment::false"
-          else
-            body="👎\`Failed${results}\`"
-            body="${body//'%'/'%25'}"
-            body="${body//$'\n'/'%0A'}"
-            body="${body//$'\r'/'%0D'}"
-            body="$( echo $body | sed 's/\/home\/runner\/work\/element-android\/element-android\//\`<br\/>\`/g')"
-            body="$( echo $body | sed 's/\/src\/main\/java\// 🔸 /g')"
-            body="$( echo $body | sed 's/im\/vector\/app\///g')"
-            body="$( echo $body | sed 's/im\/vector\/lib\/attachmentviewer\///g')"
-            body="$( echo $body | sed 's/im\/vector\/lib\/multipicker\///g')"
-            body="$( echo $body | sed 's/im\/vector\/lib\///g')"
-            body="$( echo $body | sed 's/org\/matrix\/android\/sdk\///g')"
-            body="$( echo $body | sed 's/\/src\/androidTest\/java\// 🔸 /g')"
-            echo "::set-output name=add_comment::true"
-            echo "::set-output name=body::$body"
-          fi
-      - name: Find Comment
-        if: always() && github.event_name == 'pull_request'
-        uses: peter-evans/find-comment@v2
-        id: fc
+          npm install --save-dev @babel/core
+          npm install --save-dev @babel/plugin-transform-flow-strip-types
+          yarn add danger-plugin-lint-report --dev
+      - name: Danger lint
+        if: always()
+        uses: danger/danger-js@11.2.2
         with:
-          issue-number: ${{ github.event.pull_request.number }}
-          comment-author: 'github-actions[bot]'
-          body-includes: Ktlint Results
-      - name: Add comment if needed
-        if: always() && github.event_name == 'pull_request' && steps.ktlint-results.outputs.add_comment == 'true'
-        uses: peter-evans/create-or-update-comment@v2
-        with:
-          comment-id: ${{ steps.fc.outputs.comment-id }}
-          issue-number: ${{ github.event.pull_request.number }}
-          body: |
-            ### Ktlint Results
+          args: "--dangerfile ./tools/danger/dangerfile-lint.js"
+        env:
+          DANGER_GITHUB_API_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
+          # Fallback for forks
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-            ${{ steps.ktlint-results.outputs.body }}
-          edit-mode: replace
-      - name: Delete comment if needed
-        if: always() && github.event_name == 'pull_request' && steps.fc.outputs.comment-id != '' && steps.ktlint-results.outputs.add_comment == 'false'
-        uses: actions/github-script@v3
-        with:
-          script: |
-            github.issues.deleteComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              comment_id: ${{ steps.fc.outputs.comment-id }}
-            })
-
-# Gradle dependency analysis using https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin
+  # Gradle dependency analysis using https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin
   dependency-analysis:
     name: Dependency analysis
     runs-on: ubuntu-latest
@@ -122,84 +92,3 @@ jobs:
         with:
           name: dependency-analysis
           path: build/reports/dependency-check-report.html
-
-# Lint for main module
-  android-lint:
-    name: Android Linter
-    runs-on: ubuntu-latest
-    # Allow all jobs on main and develop. Just one per PR.
-    concurrency:
-      group: ${{ github.ref == 'refs/heads/main' && format('android-lint-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('android-lint-develop-{0}', github.sha) || format('android-lint-{0}', github.ref) }}
-      cancel-in-progress: true
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-      - name: Lint analysis
-        run: ./gradlew clean :vector:lint --stacktrace $CI_GRADLE_ARG_PROPERTIES
-      - name: Upload reports
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: lint-report
-          path: |
-            vector/build/reports/*.*
-
-# Lint for Gplay and Fdroid release APK
-  apk-lint:
-    name: Lint APK (${{ matrix.target }})
-    runs-on: ubuntu-latest
-    if: github.ref != 'refs/heads/main'
-    strategy:
-      fail-fast: false
-      matrix:
-        target: [ Gplay, Fdroid ]
-    # Allow all jobs on develop. Just one per PR.
-    concurrency:
-      group: ${{ github.ref == 'refs/heads/develop' && format('apk-lint-develop-{0}-{1}', matrix.target, github.sha) || format('apk-lint-{0}-{1}', matrix.target, github.ref) }}
-      cancel-in-progress: true
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-      - name: Lint ${{ matrix.target }} release
-        run: ./gradlew clean lint${{ matrix.target }}Release --stacktrace $CI_GRADLE_ARG_PROPERTIES
-      - name: Upload ${{ matrix.target }} linting report
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: release-lint-report-${{ matrix.target }}
-          path: |
-            vector/build/reports/*.*
-
-  detekt:
-    name: Detekt Analysis
-    runs-on: ubuntu-latest
-    # Allow all jobs on main and develop. Just one per PR.
-    concurrency:
-      group: ${{ github.ref == 'refs/heads/main' && format('detekt-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('detekt-develop-{0}', github.sha) || format('detekt-{0}', github.ref) }}
-      cancel-in-progress: true
-    steps:
-      - uses: actions/checkout@v3
-      - name: Run detekt
-        run: |
-          ./gradlew detekt $CI_GRADLE_ARG_PROPERTIES
-      - name: Upload reports
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: detekt-report
-          path: |
-            */build/reports/detekt/detekt.html

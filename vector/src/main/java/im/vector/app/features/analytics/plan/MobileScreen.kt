@@ -44,6 +44,11 @@ data class MobileScreen(
         CreateRoom,
 
         /**
+         * The screen shown to create a new space.
+         */
+        CreateSpace,
+
+        /**
          * The confirmation screen shown before deactivating an account.
          */
         DeactivateAccount,
@@ -77,6 +82,11 @@ data class MobileScreen(
          * The screen shown to share a link to download the app.
          */
         InviteFriends,
+
+        /**
+         * Room accessed via space bottom sheet list.
+         */
+        Invites,
 
         /**
          * The screen that displays the login flow (when the user already has an
@@ -260,6 +270,11 @@ data class MobileScreen(
          * The sidebar shown on mobile with spaces, settings etc.
          */
         Sidebar,
+
+        /**
+         * Room accessed via space bottom sheet list.
+         */
+        SpaceBottomSheet,
 
         /**
          * Screen that displays the list of rooms and spaces of a space.

@@ -7,7 +7,7 @@
 
     <!-- Size will be overrode -->
     <ImageView
-        android:id="@+id/locationLiveInactiveMap"
+        android:id="@+id/liveLocationInactiveMap"
         android:layout_width="300dp"
         android:layout_height="200dp"
         android:contentDescription="@string/a11y_static_map_image"
@@ -15,58 +15,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/locationLiveInactiveBanner"
+    <im.vector.app.features.location.live.LiveLocationEndedBannerView
+        android:id="@+id/liveLocationEndedBanner"
         android:layout_width="0dp"
         android:layout_height="48dp"
-        android:alpha="0.75"
-        android:src="?android:colorBackground"
-        app:layout_constraintBottom_toBottomOf="@id/locationLiveInactiveMap"
-        app:layout_constraintEnd_toEndOf="@id/locationLiveInactiveMap"
-        app:layout_constraintStart_toStartOf="@id/locationLiveInactiveMap"
-        tools:ignore="ContentDescription" />
+        app:layout_constraintBottom_toBottomOf="@id/liveLocationInactiveMap"
+        app:layout_constraintEnd_toEndOf="@id/liveLocationInactiveMap"
+        app:layout_constraintStart_toStartOf="@id/liveLocationInactiveMap"
+        app:locLiveEndedBkgWithAlpha="true"
+        app:locLiveEndedIconMarginStart="8dp" />
 
     <ImageView
-        android:id="@+id/locationLiveInactiveIcon"
+        android:id="@+id/liveLocationInactiveIcon"
         android:layout_width="0dp"
         android:layout_height="65dp"
         android:src="@drawable/ic_attachment_location_white"
-        app:layout_constraintBottom_toTopOf="@id/locationLiveInactiveVerticalCenter"
-        app:layout_constraintEnd_toEndOf="@id/locationLiveInactiveMap"
-        app:layout_constraintStart_toStartOf="@id/locationLiveInactiveMap"
+        app:layout_constraintBottom_toTopOf="@id/liveLocationInactiveVerticalCenter"
+        app:layout_constraintEnd_toEndOf="@id/liveLocationInactiveMap"
+        app:layout_constraintStart_toStartOf="@id/liveLocationInactiveMap"
         app:tint="?vctr_content_quaternary"
         tools:ignore="ContentDescription" />
 
-    <ImageView
-        android:id="@+id/locationLiveInactiveBannerIcon"
-        android:layout_width="26dp"
-        android:layout_height="26dp"
-        android:layout_marginVertical="8dp"
-        android:layout_marginStart="8dp"
-        android:background="@drawable/circle"
-        android:backgroundTint="?vctr_content_quaternary"
-        android:padding="3dp"
-        app:layout_constraintBottom_toBottomOf="@id/locationLiveInactiveBanner"
-        app:layout_constraintStart_toStartOf="@id/locationLiveInactiveBanner"
-        app:layout_constraintTop_toTopOf="@id/locationLiveInactiveBanner"
-        app:srcCompat="@drawable/ic_attachment_location_live_white"
-        app:tint="?android:colorBackground"
-        tools:ignore="ContentDescription" />
-
-    <TextView
-        android:id="@+id/locationLiveInactiveTitle"
-        style="@style/Widget.Vector.TextView.Caption"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="8dp"
-        android:text="@string/location_share_live_ended"
-        android:textColor="?vctr_content_tertiary"
-        app:layout_constraintBottom_toBottomOf="@id/locationLiveInactiveBanner"
-        app:layout_constraintStart_toEndOf="@id/locationLiveInactiveBannerIcon"
-        app:layout_constraintTop_toTopOf="@id/locationLiveInactiveBanner" />
-
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/locationLiveInactiveVerticalCenter"
+        android:id="@+id/liveLocationInactiveVerticalCenter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"

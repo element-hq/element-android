@@ -17,153 +17,163 @@
 package im.vector.app.features.home.room.detail.timeline.factory
 
 import im.vector.app.R
-import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.app.features.home.room.detail.timeline.item.PollOptionViewState
-import im.vector.app.features.home.room.detail.timeline.item.PollResponseData
 import im.vector.app.features.home.room.detail.timeline.item.PollVoteSummaryData
-import im.vector.app.features.home.room.detail.timeline.item.ReactionsSummaryData
-import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayout
 import im.vector.app.features.poll.PollViewState
 import im.vector.app.test.fakes.FakeStringProvider
+import im.vector.app.test.fixtures.PollFixture.A_MESSAGE_INFORMATION_DATA
+import im.vector.app.test.fixtures.PollFixture.A_POLL_CONTENT
+import im.vector.app.test.fixtures.PollFixture.A_POLL_OPTION_IDS
+import im.vector.app.test.fixtures.PollFixture.A_POLL_RESPONSE_DATA
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
-import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
-import org.matrix.android.sdk.api.session.room.model.message.PollAnswer
-import org.matrix.android.sdk.api.session.room.model.message.PollCreationInfo
-import org.matrix.android.sdk.api.session.room.model.message.PollQuestion
 import org.matrix.android.sdk.api.session.room.model.message.PollType
 import org.matrix.android.sdk.api.session.room.send.SendState
 
-private val A_MESSAGE_INFORMATION_DATA = MessageInformationData(
-        eventId = "eventId",
-        senderId = "senderId",
-        ageLocalTS = 0,
-        avatarUrl = "",
-        sendState = SendState.SENT,
-        messageLayout = TimelineMessageLayout.Default(showAvatar = true, showDisplayName = true, showTimestamp = true),
-        reactionsSummary = ReactionsSummaryData(),
-        sentByMe = true,
-)
-
-private val A_POLL_RESPONSE_DATA = PollResponseData(
-        myVote = null,
-        votes = emptyMap(),
-)
-
-private val A_POLL_OPTION_IDS = listOf("5ef5f7b0-c9a1-49cf-a0b3-374729a43e76", "ec1a4db0-46d8-4d7a-9bb6-d80724715938", "3677ca8e-061b-40ab-bffe-b22e4e88fcad")
-
-private val A_POLL_CONTENT = MessagePollContent(
-        unstablePollCreationInfo = PollCreationInfo(
-                question = PollQuestion(
-                        unstableQuestion = "What is your favourite coffee?"
-                ),
-                kind = PollType.UNDISCLOSED_UNSTABLE,
-                maxSelections = 1,
-                answers = listOf(
-                        PollAnswer(
-                                id = A_POLL_OPTION_IDS[0],
-                                unstableAnswer = "Double Espresso"
-                        ),
-                        PollAnswer(
-                                id = A_POLL_OPTION_IDS[1],
-                                unstableAnswer = "Macchiato"
-                        ),
-                        PollAnswer(
-                                id = A_POLL_OPTION_IDS[2],
-                                unstableAnswer = "Iced Coffee"
-                        ),
-                )
-        )
-)
-
 class PollItemViewStateFactoryTest {
+
+    private val fakeStringProvider = FakeStringProvider()
+    private val fakePollOptionViewStateFactory = mockk<PollOptionViewStateFactory>()
+
+    private val pollItemViewStateFactory = PollItemViewStateFactory(
+            stringProvider = fakeStringProvider.instance,
+            pollOptionViewStateFactory = fakePollOptionViewStateFactory,
+    )
 
     @Test
     fun `given a sending poll state then poll is not votable and option states are PollSending`() {
-        val stringProvider = FakeStringProvider()
-        val pollItemViewStateFactory = PollItemViewStateFactory(stringProvider.instance)
-
+        // Given
         val sendingPollInformationData = A_MESSAGE_INFORMATION_DATA.copy(sendState = SendState.SENDING)
+        val optionViewStates = listOf(PollOptionViewState.PollSending(optionId = "", optionAnswer = ""))
+        every { fakePollOptionViewStateFactory.createPollSendingOptions(A_POLL_CONTENT.getBestPollCreationInfo()) } returns optionViewStates
+
+        // When
         val pollViewState = pollItemViewStateFactory.create(
                 pollContent = A_POLL_CONTENT,
                 informationData = sendingPollInformationData,
         )
 
+        // Then
         pollViewState shouldBeEqualTo PollViewState(
                 question = A_POLL_CONTENT.getBestPollCreationInfo()?.question?.getBestQuestion() ?: "",
-                votesStatus = stringProvider.instance.getString(R.string.poll_no_votes_cast),
+                votesStatus = fakeStringProvider.instance.getString(R.string.poll_no_votes_cast),
                 canVote = false,
-                optionViewStates = A_POLL_CONTENT.getBestPollCreationInfo()?.answers?.map { answer ->
-                    PollOptionViewState.PollSending(
-                            optionId = answer.id ?: "",
-                            optionAnswer = answer.getBestAnswer() ?: ""
-                    )
-                },
+                optionViewStates = optionViewStates,
         )
+        verify { fakePollOptionViewStateFactory.createPollSendingOptions(A_POLL_CONTENT.getBestPollCreationInfo()) }
     }
 
     @Test
     fun `given a sent poll state when poll is closed then poll is not votable and option states are Ended`() {
-        val stringProvider = FakeStringProvider()
-        val pollItemViewStateFactory = PollItemViewStateFactory(stringProvider.instance)
-
+        // Given
         val closedPollSummary = A_POLL_RESPONSE_DATA.copy(isClosed = true)
         val closedPollInformationData = A_MESSAGE_INFORMATION_DATA.copy(pollResponseAggregatedSummary = closedPollSummary)
+        val optionViewStates = listOf(
+                PollOptionViewState.PollEnded(
+                        optionId = "", optionAnswer = "", voteCount = 0, votePercentage = 0.0, isWinner = false
+                )
+        )
+        every {
+            fakePollOptionViewStateFactory.createPollEndedOptions(
+                    A_POLL_CONTENT.getBestPollCreationInfo(),
+                    closedPollInformationData.pollResponseAggregatedSummary,
+            )
+        } returns optionViewStates
 
+        // When
         val pollViewState = pollItemViewStateFactory.create(
                 pollContent = A_POLL_CONTENT,
                 informationData = closedPollInformationData,
         )
 
+        // Then
         pollViewState shouldBeEqualTo PollViewState(
                 question = A_POLL_CONTENT.getBestPollCreationInfo()?.question?.getBestQuestion() ?: "",
-                votesStatus = stringProvider.instance.getQuantityString(R.plurals.poll_total_vote_count_after_ended, 0, 0),
+                votesStatus = fakeStringProvider.instance.getQuantityString(R.plurals.poll_total_vote_count_after_ended, 0, 0),
                 canVote = false,
-                optionViewStates = A_POLL_CONTENT.getBestPollCreationInfo()?.answers?.map { answer ->
-                    PollOptionViewState.PollEnded(
-                            optionId = answer.id ?: "",
-                            optionAnswer = answer.getBestAnswer() ?: "",
-                            voteCount = 0,
-                            votePercentage = 0.0,
-                            isWinner = false
-                    )
-                },
+                optionViewStates = optionViewStates,
         )
+        verify {
+            fakePollOptionViewStateFactory.createPollEndedOptions(
+                    A_POLL_CONTENT.getBestPollCreationInfo(),
+                    closedPollInformationData.pollResponseAggregatedSummary,
+            )
+        }
+    }
+
+    @Test
+    fun `given a sent poll state with some decryption error when poll is closed then warning message is displayed`() {
+        // Given
+        val closedPollSummary = A_POLL_RESPONSE_DATA.copy(isClosed = true, hasEncryptedRelatedEvents = true)
+        val closedPollInformationData = A_MESSAGE_INFORMATION_DATA.copy(pollResponseAggregatedSummary = closedPollSummary)
+        val optionViewStates = listOf(
+                PollOptionViewState.PollEnded(
+                        optionId = "", optionAnswer = "", voteCount = 0, votePercentage = 0.0, isWinner = false
+                )
+        )
+        every {
+            fakePollOptionViewStateFactory.createPollEndedOptions(
+                    A_POLL_CONTENT.getBestPollCreationInfo(),
+                    closedPollInformationData.pollResponseAggregatedSummary,
+            )
+        } returns optionViewStates
+
+        // When
+        val pollViewState = pollItemViewStateFactory.create(
+                pollContent = A_POLL_CONTENT,
+                informationData = closedPollInformationData,
+        )
+
+        // Then
+        pollViewState.votesStatus shouldBeEqualTo fakeStringProvider.instance.getString(R.string.unable_to_decrypt_some_events_in_poll)
     }
 
     @Test
     fun `given a sent poll when undisclosed poll type is selected then poll is votable and option states are PollUndisclosed`() {
-        val stringProvider = FakeStringProvider()
-        val pollItemViewStateFactory = PollItemViewStateFactory(stringProvider.instance)
+        // Given
+        val optionViewStates = listOf(
+                PollOptionViewState.PollUndisclosed(
+                        optionId = "",
+                        optionAnswer = "",
+                        isSelected = false,
+                )
+        )
+        every {
+            fakePollOptionViewStateFactory.createPollUndisclosedOptions(
+                    A_POLL_CONTENT.getBestPollCreationInfo(),
+                    A_MESSAGE_INFORMATION_DATA.pollResponseAggregatedSummary,
+            )
+        } returns optionViewStates
 
+        // When
         val pollViewState = pollItemViewStateFactory.create(
                 pollContent = A_POLL_CONTENT,
                 informationData = A_MESSAGE_INFORMATION_DATA,
         )
 
+        // Then
         pollViewState shouldBeEqualTo PollViewState(
                 question = A_POLL_CONTENT.getBestPollCreationInfo()?.question?.getBestQuestion() ?: "",
-                votesStatus = stringProvider.instance.getString(R.string.poll_undisclosed_not_ended),
+                votesStatus = fakeStringProvider.instance.getString(R.string.poll_undisclosed_not_ended),
                 canVote = true,
-                optionViewStates = A_POLL_CONTENT.getBestPollCreationInfo()?.answers?.map { answer ->
-                    PollOptionViewState.PollUndisclosed(
-                            optionId = answer.id ?: "",
-                            optionAnswer = answer.getBestAnswer() ?: "",
-                            isSelected = false
-                    )
-                },
+                optionViewStates = optionViewStates,
         )
+        verify {
+            fakePollOptionViewStateFactory.createPollUndisclosedOptions(
+                    A_POLL_CONTENT.getBestPollCreationInfo(),
+                    A_MESSAGE_INFORMATION_DATA.pollResponseAggregatedSummary,
+            )
+        }
     }
 
     @Test
     fun `given a sent poll when my vote exists then poll is still votable and options states are PollVoted`() {
-        val stringProvider = FakeStringProvider()
-        val pollItemViewStateFactory = PollItemViewStateFactory(stringProvider.instance)
-
+        // Given
         val votedPollData = A_POLL_RESPONSE_DATA.copy(
-                totalVotes = 1,
-                myVote = A_POLL_OPTION_IDS[0],
-                votes = mapOf(A_POLL_OPTION_IDS[0] to PollVoteSummaryData(total = 1, percentage = 1.0))
+                totalVotes = 1, myVote = A_POLL_OPTION_IDS[0], votes = mapOf(A_POLL_OPTION_IDS[0] to PollVoteSummaryData(total = 1, percentage = 1.0))
         )
         val disclosedPollContent = A_POLL_CONTENT.copy(
                 unstablePollCreationInfo = A_POLL_CONTENT.getBestPollCreationInfo()?.copy(
@@ -171,53 +181,121 @@ class PollItemViewStateFactoryTest {
                 ),
         )
         val votedInformationData = A_MESSAGE_INFORMATION_DATA.copy(pollResponseAggregatedSummary = votedPollData)
+        val optionViewStates = listOf(
+                PollOptionViewState.PollVoted(
+                        optionId = "",
+                        optionAnswer = "",
+                        voteCount = 0,
+                        votePercentage = 0.0,
+                        isSelected = false,
+                )
+        )
+        every {
+            fakePollOptionViewStateFactory.createPollVotedOptions(
+                    disclosedPollContent.getBestPollCreationInfo(),
+                    votedInformationData.pollResponseAggregatedSummary,
+            )
+        } returns optionViewStates
 
+        // When
         val pollViewState = pollItemViewStateFactory.create(
                 pollContent = disclosedPollContent,
                 informationData = votedInformationData,
         )
 
+        // Then
         pollViewState shouldBeEqualTo PollViewState(
                 question = A_POLL_CONTENT.getBestPollCreationInfo()?.question?.getBestQuestion() ?: "",
-                votesStatus = stringProvider.instance.getQuantityString(R.plurals.poll_total_vote_count_before_ended_and_voted, 1, 1),
+                votesStatus = fakeStringProvider.instance.getQuantityString(R.plurals.poll_total_vote_count_before_ended_and_voted, 1, 1),
                 canVote = true,
-                optionViewStates = A_POLL_CONTENT.getBestPollCreationInfo()?.answers?.mapIndexed { index, answer ->
-                    PollOptionViewState.PollVoted(
-                            optionId = answer.id ?: "",
-                            optionAnswer = answer.getBestAnswer() ?: "",
-                            voteCount = if (index == 0) 1 else 0,
-                            votePercentage = if (index == 0) 1.0 else 0.0,
-                            isSelected = index == 0
-                    )
-                },
+                optionViewStates = optionViewStates,
         )
+        verify {
+            fakePollOptionViewStateFactory.createPollVotedOptions(
+                    disclosedPollContent.getBestPollCreationInfo(),
+                    votedInformationData.pollResponseAggregatedSummary,
+            )
+        }
+    }
+
+    @Test
+    fun `given a sent poll with decryption failure when my vote exists then a warning message is displayed`() {
+        // Given
+        val votedPollData = A_POLL_RESPONSE_DATA.copy(
+                totalVotes = 1,
+                myVote = A_POLL_OPTION_IDS[0],
+                votes = mapOf(A_POLL_OPTION_IDS[0] to PollVoteSummaryData(total = 1, percentage = 1.0)),
+                hasEncryptedRelatedEvents = true,
+        )
+        val disclosedPollContent = A_POLL_CONTENT.copy(
+                unstablePollCreationInfo = A_POLL_CONTENT.getBestPollCreationInfo()?.copy(
+                        kind = PollType.DISCLOSED_UNSTABLE
+                ),
+        )
+        val votedInformationData = A_MESSAGE_INFORMATION_DATA.copy(pollResponseAggregatedSummary = votedPollData)
+        val optionViewStates = listOf(
+                PollOptionViewState.PollVoted(
+                        optionId = "",
+                        optionAnswer = "",
+                        voteCount = 0,
+                        votePercentage = 0.0,
+                        isSelected = false,
+                )
+        )
+        every {
+            fakePollOptionViewStateFactory.createPollVotedOptions(
+                    disclosedPollContent.getBestPollCreationInfo(),
+                    votedInformationData.pollResponseAggregatedSummary,
+            )
+        } returns optionViewStates
+
+        // When
+        val pollViewState = pollItemViewStateFactory.create(
+                pollContent = disclosedPollContent,
+                informationData = votedInformationData,
+        )
+
+        // Then
+        pollViewState.votesStatus shouldBeEqualTo fakeStringProvider.instance.getString(R.string.unable_to_decrypt_some_events_in_poll)
     }
 
     @Test
     fun `given a sent poll when poll type is disclosed then poll is votable and option view states are PollReady`() {
-        val stringProvider = FakeStringProvider()
-        val pollItemViewStateFactory = PollItemViewStateFactory(stringProvider.instance)
-
+        // Given
         val disclosedPollContent = A_POLL_CONTENT.copy(
                 unstablePollCreationInfo = A_POLL_CONTENT.getBestPollCreationInfo()?.copy(
                         kind = PollType.DISCLOSED_UNSTABLE
                 )
         )
+        val optionViewStates = listOf(
+                PollOptionViewState.PollReady(
+                        optionId = "",
+                        optionAnswer = "",
+                )
+        )
+        every {
+            fakePollOptionViewStateFactory.createPollReadyOptions(
+                    disclosedPollContent.getBestPollCreationInfo(),
+            )
+        } returns optionViewStates
+
+        // When
         val pollViewState = pollItemViewStateFactory.create(
                 pollContent = disclosedPollContent,
                 informationData = A_MESSAGE_INFORMATION_DATA,
         )
 
+        // Then
         pollViewState shouldBeEqualTo PollViewState(
                 question = A_POLL_CONTENT.getBestPollCreationInfo()?.question?.getBestQuestion() ?: "",
-                votesStatus = stringProvider.instance.getString(R.string.poll_no_votes_cast),
+                votesStatus = fakeStringProvider.instance.getString(R.string.poll_no_votes_cast),
                 canVote = true,
-                optionViewStates = A_POLL_CONTENT.getBestPollCreationInfo()?.answers?.map { answer ->
-                    PollOptionViewState.PollReady(
-                            optionId = answer.id ?: "",
-                            optionAnswer = answer.getBestAnswer() ?: ""
-                    )
-                },
+                optionViewStates = optionViewStates,
         )
+        verify {
+            fakePollOptionViewStateFactory.createPollReadyOptions(
+                    disclosedPollContent.getBestPollCreationInfo(),
+            )
+        }
     }
 }

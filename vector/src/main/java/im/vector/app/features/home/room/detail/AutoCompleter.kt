@@ -32,7 +32,6 @@ import im.vector.app.core.glide.GlideRequests
 import im.vector.app.features.autocomplete.command.AutocompleteCommandPresenter
 import im.vector.app.features.autocomplete.command.CommandAutocompletePolicy
 import im.vector.app.features.autocomplete.emoji.AutocompleteEmojiPresenter
-import im.vector.app.features.autocomplete.group.AutocompleteGroupPresenter
 import im.vector.app.features.autocomplete.member.AutocompleteMemberItem
 import im.vector.app.features.autocomplete.member.AutocompleteMemberPresenter
 import im.vector.app.features.autocomplete.room.AutocompleteRoomPresenter
@@ -41,7 +40,6 @@ import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.html.PillImageSpan
 import im.vector.app.features.themes.ThemeUtils
-import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toEveryoneInRoomMatrixItem
@@ -56,7 +54,6 @@ class AutoCompleter @AssistedInject constructor(
         autocompleteCommandPresenterFactory: AutocompleteCommandPresenter.Factory,
         private val autocompleteMemberPresenterFactory: AutocompleteMemberPresenter.Factory,
         private val autocompleteRoomPresenter: AutocompleteRoomPresenter,
-        private val autocompleteGroupPresenter: AutocompleteGroupPresenter,
         private val autocompleteEmojiPresenter: AutocompleteEmojiPresenter
 ) {
 
@@ -89,7 +86,6 @@ class AutoCompleter @AssistedInject constructor(
         val backgroundDrawable = ColorDrawable(ThemeUtils.getColor(editText.context, android.R.attr.colorBackground))
         setupCommands(backgroundDrawable, editText)
         setupMembers(backgroundDrawable, editText)
-        setupGroups(backgroundDrawable, editText)
         setupEmojis(backgroundDrawable, editText)
         setupRooms(backgroundDrawable, editText)
     }
@@ -97,7 +93,6 @@ class AutoCompleter @AssistedInject constructor(
     fun clear() {
         this.editText = null
         autocompleteEmojiPresenter.clear()
-        autocompleteGroupPresenter.clear()
         autocompleteRoomPresenter.clear()
         autocompleteCommandPresenter.clear()
         autocompleteMemberPresenter.clear()
@@ -161,24 +156,6 @@ class AutoCompleter @AssistedInject constructor(
                 .with(object : AutocompleteCallback<RoomSummary> {
                     override fun onPopupItemClicked(editable: Editable, item: RoomSummary): Boolean {
                         insertMatrixItem(editText, editable, TRIGGER_AUTO_COMPLETE_ROOMS, item.toRoomAliasMatrixItem())
-                        return true
-                    }
-
-                    override fun onPopupVisibilityChanged(shown: Boolean) {
-                    }
-                })
-                .build()
-    }
-
-    private fun setupGroups(backgroundDrawable: ColorDrawable, editText: EditText) {
-        Autocomplete.on<GroupSummary>(editText)
-                .with(CharPolicy(TRIGGER_AUTO_COMPLETE_GROUPS, true))
-                .with(autocompleteGroupPresenter)
-                .with(ELEVATION_DP)
-                .with(backgroundDrawable)
-                .with(object : AutocompleteCallback<GroupSummary> {
-                    override fun onPopupItemClicked(editable: Editable, item: GroupSummary): Boolean {
-                        insertMatrixItem(editText, editable, TRIGGER_AUTO_COMPLETE_GROUPS, item.toMatrixItem())
                         return true
                     }
 
@@ -262,7 +239,6 @@ class AutoCompleter @AssistedInject constructor(
         private const val ELEVATION_DP = 6f
         private const val TRIGGER_AUTO_COMPLETE_MEMBERS = '@'
         private const val TRIGGER_AUTO_COMPLETE_ROOMS = '#'
-        private const val TRIGGER_AUTO_COMPLETE_GROUPS = '+'
         private const val TRIGGER_AUTO_COMPLETE_EMOJIS = ':'
     }
 }

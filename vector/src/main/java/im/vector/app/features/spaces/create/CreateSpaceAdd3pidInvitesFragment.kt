@@ -21,6 +21,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.activityViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -31,11 +32,13 @@ import im.vector.app.databinding.FragmentSpaceCreateGenericEpoxyFormBinding
 import im.vector.app.features.settings.VectorSettingsActivity
 import javax.inject.Inject
 
-class CreateSpaceAdd3pidInvitesFragment @Inject constructor(
-        private val epoxyController: SpaceAdd3pidEpoxyController
-) : VectorBaseFragment<FragmentSpaceCreateGenericEpoxyFormBinding>(),
+@AndroidEntryPoint
+class CreateSpaceAdd3pidInvitesFragment :
+        VectorBaseFragment<FragmentSpaceCreateGenericEpoxyFormBinding>(),
         SpaceAdd3pidEpoxyController.Listener,
         OnBackPressed {
+
+    @Inject lateinit var epoxyController: SpaceAdd3pidEpoxyController
 
     private val sharedViewModel: CreateSpaceViewModel by activityViewModel()
 

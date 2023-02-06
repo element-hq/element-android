@@ -27,10 +27,11 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
-import im.vector.app.BuildConfig
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.incrementByOneAndWrap
 import im.vector.app.core.extensions.setCurrentItem
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.databinding.FragmentFtueSplashCarouselBinding
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.onboarding.OnboardingAction
@@ -44,12 +45,17 @@ import javax.inject.Inject
 private const val CAROUSEL_ROTATION_DELAY_MS = 5000L
 private const val CAROUSEL_TRANSITION_TIME_MS = 500L
 
-class FtueAuthSplashCarouselFragment @Inject constructor(
-        private val vectorPreferences: VectorPreferences,
-        private val vectorFeatures: VectorFeatures,
-        private val carouselController: SplashCarouselController,
-        private val carouselStateFactory: SplashCarouselStateFactory
-) : AbstractFtueAuthFragment<FragmentFtueSplashCarouselBinding>() {
+@AndroidEntryPoint
+class FtueAuthSplashCarouselFragment :
+        AbstractFtueAuthFragment<FragmentFtueSplashCarouselBinding>() {
+
+    @Inject lateinit var vectorPreferences: VectorPreferences
+    @Inject lateinit var vectorFeatures: VectorFeatures
+    @Inject lateinit var carouselController: SplashCarouselController
+    @Inject lateinit var carouselStateFactory: SplashCarouselStateFactory
+    @Inject lateinit var buildMeta: BuildMeta
+
+    private var tabLayoutMediator: TabLayoutMediator? = null
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueSplashCarouselBinding {
         return FragmentFtueSplashCarouselBinding.inflate(inflater, container, false)
@@ -60,10 +66,19 @@ class FtueAuthSplashCarouselFragment @Inject constructor(
         setupViews()
     }
 
+    override fun onDestroyView() {
+        tabLayoutMediator?.detach()
+        tabLayoutMediator = null
+        views.splashCarousel.adapter = null
+        super.onDestroyView()
+    }
+
     private fun setupViews() {
         val carouselAdapter = carouselController.adapter
         views.splashCarousel.adapter = carouselAdapter
-        TabLayoutMediator(views.carouselIndicator, views.splashCarousel) { _, _ -> }.attach()
+        tabLayoutMediator = TabLayoutMediator(views.carouselIndicator, views.splashCarousel) { _, _ -> }
+                .also { it.attach() }
+
         carouselController.setData(carouselStateFactory.create())
 
         val isAlreadyHaveAccountEnabled = vectorFeatures.isOnboardingAlreadyHaveAccountSplashEnabled()
@@ -76,11 +91,11 @@ class FtueAuthSplashCarouselFragment @Inject constructor(
             debouncedClicks { alreadyHaveAnAccount() }
         }
 
-        if (BuildConfig.DEBUG || vectorPreferences.developerMode()) {
+        if (buildMeta.isDebug || vectorPreferences.developerMode()) {
             views.loginSplashVersion.isVisible = true
             @SuppressLint("SetTextI18n")
-            views.loginSplashVersion.text = "Version : ${BuildConfig.VERSION_NAME}#${BuildConfig.BUILD_NUMBER}\n" +
-                    "Branch: ${BuildConfig.GIT_BRANCH_NAME}"
+            views.loginSplashVersion.text = "Version : ${buildMeta.versionName}\n" +
+                    "Branch: ${buildMeta.gitBranchName} ${buildMeta.gitRevision}"
             views.loginSplashVersion.debouncedClicks { navigator.openDebug(requireContext()) }
         }
         views.splashCarousel.registerAutomaticUntilInteractionTransitions()

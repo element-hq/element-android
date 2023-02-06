@@ -22,11 +22,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.args
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.databinding.FragmentLoginWaitForEmailBinding
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.failure.is401
-import javax.inject.Inject
 
 @Parcelize
 data class LoginWaitForEmailFragmentArgument(
@@ -36,7 +36,9 @@ data class LoginWaitForEmailFragmentArgument(
 /**
  * In this screen, the user is asked to check their emails.
  */
-class LoginWaitForEmailFragment @Inject constructor() : AbstractLoginFragment<FragmentLoginWaitForEmailBinding>() {
+@AndroidEntryPoint
+class LoginWaitForEmailFragment :
+        AbstractLoginFragment<FragmentLoginWaitForEmailBinding>() {
 
     private val params: LoginWaitForEmailFragmentArgument by args()
 

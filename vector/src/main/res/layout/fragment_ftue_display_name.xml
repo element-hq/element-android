@@ -58,24 +58,10 @@
             android:gravity="center"
             android:text="@string/ftue_display_name_title"
             android:textColor="?vctr_content_primary"
-            app:layout_constraintBottom_toTopOf="@id/displayNameHeaderSubtitle"
-            app:layout_constraintEnd_toEndOf="@id/displayNameGutterEnd"
-            app:layout_constraintStart_toStartOf="@id/displayNameGutterStart"
-            app:layout_constraintTop_toBottomOf="@id/displayNameHeaderIcon" />
-
-        <TextView
-            android:id="@+id/displayNameHeaderSubtitle"
-            style="@style/Widget.Vector.TextView.Subtitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="center"
-            android:text="@string/ftue_display_name_subtitle"
-            android:textColor="?vctr_content_secondary"
             app:layout_constraintBottom_toTopOf="@id/titleContentSpacing"
             app:layout_constraintEnd_toEndOf="@id/displayNameGutterEnd"
             app:layout_constraintStart_toStartOf="@id/displayNameGutterStart"
-            app:layout_constraintTop_toBottomOf="@id/displayNameHeaderTitle" />
+            app:layout_constraintTop_toBottomOf="@id/displayNameHeaderIcon" />
 
         <Space
             android:id="@+id/titleContentSpacing"
@@ -83,7 +69,7 @@
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@id/displayNameInput"
             app:layout_constraintHeight_percent="0.03"
-            app:layout_constraintTop_toBottomOf="@id/displayNameHeaderSubtitle" />
+            app:layout_constraintTop_toBottomOf="@id/displayNameHeaderTitle" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/displayNameInput"

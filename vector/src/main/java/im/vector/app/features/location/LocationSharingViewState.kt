@@ -34,7 +34,9 @@ data class LocationSharingViewState(
         val userItem: MatrixItem.UserItem? = null,
         val areTargetAndUserLocationEqual: Boolean? = null,
         val lastKnownUserLocation: LocationData? = null,
-        val locationTargetDrawable: Drawable? = null
+        val locationTargetDrawable: Drawable? = null,
+        val canShareLiveLocation: Boolean = false,
+        val loadingMapHasFailed: Boolean = false
 ) : MavericksState {
 
     constructor(locationSharingArgs: LocationSharingArgs) : this(

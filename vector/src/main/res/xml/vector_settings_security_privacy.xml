@@ -35,7 +35,7 @@
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_ENCRYPTION_INFORMATION_DEVICE_ID_PREFERENCE_KEY"
             android:persistent="false"
-            android:title="@string/encryption_information_device_id"
+            android:title="@string/device_manager_session_details_session_id"
             tools:summary="VZRHETBEER" />
 
         <im.vector.app.core.preference.VectorPreference
@@ -61,6 +61,11 @@
             android:key="SETTINGS_SHOW_DEVICES_LIST_PREFERENCE_KEY"
             android:title="@string/settings_active_sessions_show_all"
             app:fragment="im.vector.app.features.settings.devices.VectorSettingsDevicesFragment" />
+
+        <im.vector.app.core.preference.VectorPreference
+            android:key="SETTINGS_SHOW_DEVICES_LIST_V2_PREFERENCE_KEY"
+            android:title="@string/settings_active_sessions_show_all"
+            app:fragment="im.vector.app.features.settings.devices.v2.VectorSettingsDevicesFragment" />
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
@@ -135,6 +140,12 @@
             android:persistent="false"
             android:summary="@string/settings_security_application_protection_summary"
             android:title="@string/settings_security_application_protection_title" />
+
+        <im.vector.app.core.preference.VectorSwitchPreference
+            android:defaultValue="false"
+            android:key="SETTINGS_SECURITY_INCOGNITO_KEYBOARD_PREFERENCE_KEY"
+            android:summary="@string/settings_security_incognito_keyboard_summary"
+            android:title="@string/settings_security_incognito_keyboard_title" />
 
         <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="false"

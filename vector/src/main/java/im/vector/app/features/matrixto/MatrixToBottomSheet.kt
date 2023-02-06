@@ -75,8 +75,7 @@ class MatrixToBottomSheet :
                 views.matrixToCardContentLoading.isVisible = state.matrixItem is Incomplete
                 showFragment(MatrixToUserFragment::class, Bundle())
             }
-            is PermalinkData.GroupLink -> Unit
-            is PermalinkData.FallbackLink -> Unit
+            is PermalinkData.FallbackLink,
             is PermalinkData.RoomEmailInviteLink -> Unit
         }
     }

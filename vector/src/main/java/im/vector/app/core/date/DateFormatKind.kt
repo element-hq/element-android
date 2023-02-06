@@ -27,7 +27,7 @@ enum class DateFormatKind {
     // Will show hour or date relative (9:30am or yesterday or Sep 7 or 09/07/2020)
     ROOM_LIST,
 
-    // Will show full date (Sep 7 2020)
+    // Will show full date (Sep 7, 2020)
     TIMELINE_DAY_DIVIDER,
 
     // Will show full date and time (Mon, Sep 7 2020, 9:30am)

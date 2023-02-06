@@ -30,6 +30,7 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.content.EncryptionEventContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoomSummary
+import org.matrix.android.sdk.api.session.room.model.localecho.RoomLocalEcho
 import javax.inject.Inject
 
 class EncryptionItemFactory @Inject constructor(
@@ -55,12 +56,19 @@ class EncryptionItemFactory @Inject constructor(
         val description: String
         val shield: StatusTileTimelineItem.ShieldUIState
         if (isSafeAlgorithm) {
+            val isDirect = session.getRoomSummary(event.root.roomId.orEmpty())?.isDirect.orFalse()
             title = stringProvider.getString(R.string.encryption_enabled)
             description = stringProvider.getString(
-                    if (session.getRoomSummary(event.root.roomId ?: "")?.isDirect.orFalse()) {
-                        R.string.direct_room_encryption_enabled_tile_description
-                    } else {
-                        R.string.encryption_enabled_tile_description
+                    when {
+                        isDirect && RoomLocalEcho.isLocalEchoId(event.root.roomId.orEmpty()) -> {
+                            R.string.direct_room_encryption_enabled_tile_description_future
+                        }
+                        isDirect -> {
+                            R.string.direct_room_encryption_enabled_tile_description
+                        }
+                        else -> {
+                            R.string.encryption_enabled_tile_description
+                        }
                     }
             )
             shield = StatusTileTimelineItem.ShieldUIState.BLACK

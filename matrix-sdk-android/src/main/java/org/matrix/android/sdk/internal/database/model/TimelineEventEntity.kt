@@ -20,6 +20,7 @@ import io.realm.RealmObject
 import io.realm.RealmResults
 import io.realm.annotations.Index
 import io.realm.annotations.LinkingObjects
+import org.matrix.android.sdk.api.session.room.read.ReadService
 import org.matrix.android.sdk.internal.extensions.assertIsManaged
 
 internal open class TimelineEventEntity(
@@ -51,4 +52,8 @@ internal fun TimelineEventEntity.deleteOnCascade(canDeleteRoot: Boolean) {
         root?.deleteFromRealm()
     }
     deleteFromRealm()
+}
+
+internal fun TimelineEventEntity.getThreadId(): String {
+    return root?.rootThreadEventId ?: ReadService.THREAD_ID_MAIN
 }

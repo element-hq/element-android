@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+        <activity android:name="im.vector.app.features.debug.TestLinkifyActivity" />
+        <activity android:name="im.vector.app.features.debug.DebugPermissionActivity" />
+        <activity android:name="im.vector.app.features.debug.jitsi.DebugJitsiActivity" />
+        <activity android:name="im.vector.app.features.debug.analytics.DebugAnalyticsActivity" />
+        <activity android:name="im.vector.app.features.debug.settings.DebugPrivateSettingsActivity" />
+        <activity android:name="im.vector.app.features.debug.sas.DebugSasEmojiActivity" />
+        <activity android:name="im.vector.app.features.debug.features.DebugFeaturesSettingsActivity" />
+        <activity android:name="im.vector.app.features.debug.DebugMenuActivity" />
+        <activity android:name="im.vector.app.features.debug.leak.DebugMemoryLeaksActivity" />
+
+        <activity
+            android:name="com.facebook.flipper.android.diagnostics.FlipperDiagnosticActivity"
+            android:exported="true" />
+
+    </application>
+
+</manifest>

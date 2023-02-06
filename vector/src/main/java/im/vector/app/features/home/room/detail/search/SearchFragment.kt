@@ -29,6 +29,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -51,12 +52,13 @@ data class SearchArgs(
         val roomAvatarUrl: String?
 ) : Parcelable
 
-class SearchFragment @Inject constructor(
-        private val controller: SearchResultController
-) : VectorBaseFragment<FragmentSearchBinding>(),
+@AndroidEntryPoint
+class SearchFragment :
+        VectorBaseFragment<FragmentSearchBinding>(),
         StateView.EventCallback,
         SearchResultController.Listener {
 
+    @Inject lateinit var controller: SearchResultController
     private val fragmentArgs: SearchArgs by args()
     private val searchViewModel: SearchViewModel by fragmentViewModel()
 

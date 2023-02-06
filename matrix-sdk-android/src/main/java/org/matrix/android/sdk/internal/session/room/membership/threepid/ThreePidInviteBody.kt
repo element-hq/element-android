@@ -18,6 +18,8 @@ package org.matrix.android.sdk.internal.session.room.membership.threepid
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import org.matrix.android.sdk.api.session.identity.ThreePid
+import org.matrix.android.sdk.internal.auth.data.ThreePidMedium
 
 @JsonClass(generateAdapter = true)
 internal data class ThreePidInviteBody(
@@ -43,3 +45,9 @@ internal data class ThreePidInviteBody(
         @Json(name = "address")
         val address: String
 )
+
+internal fun ThreePidInviteBody.toThreePid() = when (medium) {
+    ThreePidMedium.EMAIL -> ThreePid.Email(address)
+    ThreePidMedium.MSISDN -> ThreePid.Msisdn(address)
+    else -> null
+}

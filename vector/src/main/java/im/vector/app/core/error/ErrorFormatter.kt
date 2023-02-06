@@ -16,15 +16,20 @@
 
 package im.vector.app.core.error
 
+import android.content.ActivityNotFoundException
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.call.dialpad.DialPadLookup
+import im.vector.app.features.roomprofile.polls.RoomPollsLoadingError
 import im.vector.app.features.voice.VoiceFailure
+import im.vector.app.features.voicebroadcast.VoiceBroadcastFailure
+import im.vector.app.features.voicebroadcast.VoiceBroadcastFailure.RecordingError
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.failure.MatrixIdFailure
 import org.matrix.android.sdk.api.failure.isInvalidPassword
 import org.matrix.android.sdk.api.failure.isLimitExceededError
+import org.matrix.android.sdk.api.failure.isMissingEmailVerification
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import java.net.HttpURLConnection
 import java.net.SocketTimeoutException
@@ -105,6 +110,9 @@ class DefaultErrorFormatter @Inject constructor(
                             throwable.error.message == "Not allowed to join this room" -> {
                         stringProvider.getString(R.string.room_error_access_unauthorized)
                     }
+                    throwable.isMissingEmailVerification() -> {
+                        stringProvider.getString(R.string.auth_reset_password_error_unverified)
+                    }
                     else -> {
                         throwable.error.message.takeIf { it.isNotEmpty() }
                                 ?: throwable.error.code.takeIf { it.isNotEmpty() }
@@ -130,6 +138,10 @@ class DefaultErrorFormatter @Inject constructor(
             is MatrixIdFailure.InvalidMatrixId ->
                 stringProvider.getString(R.string.login_signin_matrix_id_error_invalid_matrix_id)
             is VoiceFailure -> voiceMessageError(throwable)
+            is VoiceBroadcastFailure -> voiceBroadcastMessageError(throwable)
+            is RoomPollsLoadingError -> stringProvider.getString(R.string.room_polls_loading_error)
+            is ActivityNotFoundException ->
+                stringProvider.getString(R.string.error_no_external_application_found)
             else -> throwable.localizedMessage
         }
                 ?: stringProvider.getString(R.string.unknown_error)
@@ -139,6 +151,16 @@ class DefaultErrorFormatter @Inject constructor(
         return when (throwable) {
             is VoiceFailure.UnableToPlay -> stringProvider.getString(R.string.error_voice_message_unable_to_play)
             is VoiceFailure.UnableToRecord -> stringProvider.getString(R.string.error_voice_message_unable_to_record)
+            is VoiceFailure.VoiceBroadcastInProgress -> stringProvider.getString(R.string.error_voice_message_broadcast_in_progress)
+        }
+    }
+
+    private fun voiceBroadcastMessageError(throwable: VoiceBroadcastFailure): String {
+        return when (throwable) {
+            RecordingError.BlockedBySomeoneElse -> stringProvider.getString(R.string.error_voice_broadcast_blocked_by_someone_else_message)
+            RecordingError.NoPermission -> stringProvider.getString(R.string.error_voice_broadcast_permission_denied_message)
+            RecordingError.UserAlreadyBroadcasting -> stringProvider.getString(R.string.error_voice_broadcast_already_in_progress_message)
+            is VoiceBroadcastFailure.ListeningError -> stringProvider.getString(R.string.error_voice_broadcast_unable_to_play)
         }
     }
 

@@ -26,6 +26,7 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -38,11 +39,13 @@ import im.vector.app.features.roomprofile.uploads.RoomUploadsViewModel
 import org.matrix.android.sdk.api.session.room.uploads.UploadEvent
 import javax.inject.Inject
 
-class RoomUploadsFilesFragment @Inject constructor(
-        private val controller: UploadsFileController
-) : VectorBaseFragment<FragmentGenericStateViewRecyclerBinding>(),
+@AndroidEntryPoint
+class RoomUploadsFilesFragment :
+        VectorBaseFragment<FragmentGenericStateViewRecyclerBinding>(),
         UploadsFileController.Listener,
         StateView.EventCallback {
+
+    @Inject lateinit var controller: UploadsFileController
 
     private val uploadsViewModel by parentFragmentViewModel(RoomUploadsViewModel::class)
 

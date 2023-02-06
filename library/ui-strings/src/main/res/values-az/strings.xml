@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notice_room_invite_no_invitee">%s-nin dəvəti</string>
+    <string name="notice_room_invite">%1$s dəvət etdi %2$s</string>
+    <string name="notice_room_invite_you">%1$s sizi dəvət etdi</string>
+    <string name="notice_room_join">%1$s qoşuldu</string>
+    <string name="notice_room_leave">%1$s qalıb</string>
+    <string name="notice_room_reject">%1$s dəvəti rədd etdi</string>
+    <string name="notice_room_remove">%1$s %2$s-i xaric etdi</string>
+    <string name="notice_room_unban">%1$s %2$s-i blokdan açdı</string>
+    <string name="notice_room_ban">%1$s %2$s-i blokladı</string>
+    <string name="notice_room_withdraw">%1$s %2$s-in dəvətini geri götürdü</string>
+    <string name="notice_avatar_url_changed">%1$s avatarı dəyişdi</string>
+    <string name="notice_display_name_set">%1$s ekran adını %2$s olaraq təyin etdi</string>
+    <string name="notice_display_name_changed_from">%1$s ekran adını %2$s-dan %3$s-ya dəyişdi</string>
+    <string name="notice_display_name_removed">%1$s onların göstərilən adlarını sildi (%2$s)</string>
+    <string name="notice_room_topic_changed">%1$s mövzunu dəyişdi: %2$s</string>
+    <string name="notice_room_name_changed">%1$s otaq adını dəyişdirdi: %2$s</string>
+    <string name="notice_placed_video_call">%s video zəng etdi.</string>
+    <string name="notice_placed_voice_call">%s səsli zəng etdi.</string>
+    <string name="notice_answered_call">%s zəngə cavab verdi.</string>
+    <string name="notice_ended_call">%s zəng başa çatdı.</string>
+    <string name="notice_made_future_room_visibility">%1$s gələcək otaq tarixçəsini %2$s-ə görünən etdi</string>
+    <string name="notice_room_visibility_invited">bütün otaq üzvləri, dəvət olunduğu andan.</string>
+    <string name="notice_room_visibility_joined">bütün otaq üzvləri, qoşulduğu andan.</string>
+    <string name="notice_room_visibility_shared">bütün otaq üzvləri.</string>
+    <string name="notice_room_visibility_world_readable">hər kəs.</string>
+    <string name="notice_room_update">%s bu otağı təkmilləşdirdi.</string>
+    <string name="notice_avatar_changed_too">(avatar da dəyişdirilib)</string>
+    <string name="notice_room_name_removed">%1$s otaq adını sildi</string>
+    <string name="notice_room_topic_removed">%1$s otaq mövzusunu sildi</string>
+    <string name="notice_room_third_party_invite">%1$s otağa qoşulmaq üçün %2$s dəvətnamə göndərdi</string>
+    <string name="notice_room_third_party_revoked_invite">%1$s otağa qoşulmaq üçün %2$s dəvətini ləğv etdi</string>
+    <string name="notice_room_third_party_registered_invite">%1$s %2$s üçün dəvəti qəbul etdi</string>
+    <string name="notice_crypto_unable_to_decrypt">** Şifrəni aça bilmir: %s **</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">Göndərənin cihazı bu mesaj üçün açarları bizə göndərməyib.</string>
+    <string name="unable_to_send_message">Mesaj göndərmək olmur</string>
+    <string name="matrix_error">Matrix xətası</string>
+    <string name="encrypted_message">Şifrəli mesaj</string>
+    <string name="medium_email">Elektron poçt ünvanı</string>
+    <string name="medium_phone_number">Telefon nömrəsi</string>
+    <string name="room_displayname_room_invite">Otağa dəvət</string>
+    <string name="room_displayname_two_members">%1$s və %2$s</string>
+    <string name="room_displayname_empty_room">Boş otaq</string>
+    <string name="initial_sync_start_importing_account">İlkin sinxronizasiya:
+\nHesab idxal olunur…</string>
+    <string name="initial_sync_start_importing_account_crypto">İlkin sinxronizasiya:
+\nKriptografiyanın idxalı</string>
+    <string name="initial_sync_start_importing_account_rooms">İlkin sinxronizasiya:
+\nOtaqlar idxalı</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">İlkin sinxronizasiya: 
+\nSöhbətləriniz yüklənilir
+\nƏgər çoxlu otaqlara qoşulmusunuzsa, bu, bir az vaxt apara bilər</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">İlkin sinxronizasiya:
+\nDəvət olunmuş otaqların idxalı</string>
+    <string name="initial_sync_start_importing_account_left_rooms">İlkin sinxronizasiya:
+\nTərk olunmuş otaqların idxalı</string>
+    <string name="initial_sync_start_importing_account_data">İlkin sinxronizasiya:
+\nHesab məlumatlarının idxalı</string>
+    <string name="event_status_sending_message">Mesaj göndərilir…</string>
+    <string name="notice_room_invite_no_invitee_with_reason">%1$s-nin dəvəti. Səbəb: %2$s</string>
+    <string name="notice_room_invite_with_reason">%1$s dəvət olunmuş %2$s. Səbəb: %3$s</string>
+    <string name="notice_room_invite_you_with_reason">%1$s sizi dəvət etdi. Səbəb: %2$s</string>
+    <string name="notice_room_join_with_reason">%1$s qoşuldu. Səbəb: %2$s</string>
+    <string name="notice_room_leave_with_reason">%1$s qalıb. Səbəb: %2$s</string>
+    <string name="notice_room_reject_with_reason">%1$s dəvəti rədd etdi. Səbəb: %2$s</string>
+    <string name="notice_room_remove_with_reason">%1$s %2$s-i xaric etdi. Səbəb: %3$s</string>
+    <string name="notice_room_unban_with_reason">%1$s blokdan açdı %2$s. Səbəb: %3$s</string>
+    <string name="notice_room_ban_with_reason">%1$s blokladı %2$s. Səbəb: %3$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason">%1$s %2$s üçün dəvəti qəbul etdi. Səbəb: %3$s</string>
+    <string name="notice_room_withdraw_with_reason">%1$s %2$s dəvətini geri götürdü. Səbəb: %3$s</string>
+    <string name="notice_room_created_by_you">Otağ yaratdınız</string>
+    <string name="denied_permission_camera">Bu əməliyyatı yerinə yetirmək üçün sistem tənzimləmələrindən Kameraya icazə verin.</string>
+    <string name="title_activity_settings">Tənzimləmələr</string>
+    <string name="notice_direct_room_join">%1$s qoşuldu</string>
+    <string name="notice_room_join_by_you">Otağa qoşuldunuz</string>
+    <string name="notice_room_invite_by_you">%1$s-ı dəvət etdiniz</string>
+    <string name="notice_direct_room_created_by_you">Müzakirə yaratdınız</string>
+    <string name="notice_room_created">%1$s otağı yaratdı</string>
+    <string name="notification_noisy_notifications">Səsli bildirişlər</string>
+    <string name="notification_listening_for_notifications">Bildirişləri dinləmək</string>
+    <string name="create_spaces_default_public_room_name">Ümumi</string>
+    <string name="settings_general_title">Ümumi</string>
+    <string name="room_participants_action_ignore_prompt_msg">Bu istifadəçiyə məhəl qoymamaq onun mesajlarını paylaşdığınız otaqlardan siləcək.
+\n
+\nBu əməliyyatı istənilən vaxt ümumi tənzimləmələrdə geri qaytara bilərsiniz.</string>
+    <string name="denied_permission_generic">Bu tələbi yerinə yetirmək üçün bəzi icazələr yoxdur, lütfən, sistem tənzimləmələrindən icazələr verin.</string>
+    <string name="notice_room_avatar_removed_by_you">Otaq avatarını sildiniz</string>
+    <string name="notice_room_avatar_removed">%1$s otaq avatarını sildi</string>
+    <string name="notice_room_topic_removed_by_you">Otaq mövzusunu sildiniz</string>
+    <string name="notice_room_name_removed_by_you">Otağın adını sildiniz</string>
+    <string name="notice_room_server_acl_allow_is_empty">🎉 Bütün serverlərin iştirakı qadağandır! Bu otaq artıq istifadə edilə bilməz.</string>
+    <string name="notice_room_server_acl_updated_no_change">Dəyişiklik yoxdur.</string>
+    <string name="notice_room_server_acl_updated_title_by_you">Bu otaq üçün server ACL-lərini dəyişdirdiniz.</string>
+    <string name="notice_room_server_acl_set_banned">• %s ilə uyğunlaşan serverlər qadağan edilib.</string>
+    <string name="notice_room_server_acl_set_title_by_you">Bu otaq üçün server ACL-lərini təyin etdiniz.</string>
+    <string name="notice_room_server_acl_set_title">%s bu otaq üçün server ACL-lərini təyin etdi.</string>
+    <string name="notice_direct_room_update_by_you">Burada təkmilləşdirdiniz.</string>
+    <string name="notice_direct_room_update">%s burada təkmilləşdi.</string>
+    <string name="notice_room_update_by_you">Bu otağı təkmilləşdirdiniz.</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">Gələcək mesajları %1$s üçün görünən etdiniz</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s gələcək mesajları %2$s üçün görünən etdi</string>
+    <string name="notice_made_future_room_visibility_by_you">Gələcək otaq tarixçəsini %1$s üçün görünən etdiniz</string>
+    <string name="notice_ended_call_by_you">Zəngi bitirdiniz.</string>
+    <string name="notice_answered_call_by_you">Zəngə cavab verdiniz.</string>
+    <string name="notice_call_candidates_by_you">Zəngi qurmaq üçün məlumat göndərdiniz.</string>
+    <string name="notice_call_candidates">%s zəngi qurmaq üçün məlumat göndərdi.</string>
+    <string name="notice_placed_voice_call_by_you">Səsli zəng etdiniz.</string>
+    <string name="notice_placed_video_call_by_you">Video zəng etdiniz.</string>
+    <string name="notice_room_name_changed_by_you">Otağın adını buna dəyişdiniz: %1$s</string>
+    <string name="notice_room_avatar_changed_by_you">Otaq avatarını dəyişdiniz</string>
+    <string name="notice_room_avatar_changed">%1$s otaq avatarını dəyişdi</string>
+    <string name="notice_room_topic_changed_by_you">Mövzunu buna dəyişdiniz: %1$s</string>
+    <string name="notice_display_name_removed_by_you">Ekran adınızı sildiniz (bu, %1$s idi)</string>
+    <string name="notice_display_name_changed_from_by_you">%1$s ekran adınızı %2$s olaraq dəyişdiniz</string>
+    <string name="notice_display_name_set_by_you">Ekran adınızı %1$s qoydunuz</string>
+    <string name="notice_avatar_url_changed_by_you">Avatarınızı dəyişdirmisiniz</string>
+    <string name="notice_room_withdraw_by_you">%1$s dəvətini geri götürdünüz</string>
+    <string name="notice_room_ban_by_you">%1$s adlı istifadəçini qadağan etdiniz</string>
+    <string name="notice_room_unban_by_you">%1$s adlı istifadəçini qadağan etdiniz</string>
+    <string name="notice_room_remove_by_you">%1$s adlı istifadəçini qovdunuz</string>
+    <string name="notice_room_reject_by_you">Dəvəti rədd etdiniz</string>
+    <string name="notice_direct_room_leave_by_you">Otağı tərk etdiniz</string>
+    <string name="notice_direct_room_leave">%1$s otaqdan çıxdı</string>
+    <string name="notice_room_leave_by_you">Otağı tərk etdiniz</string>
+    <string name="notice_direct_room_join_by_you">Qoşuldunuz</string>
+    <string name="notice_direct_room_created">%1$s müzakirə yaratdı</string>
+    <string name="notice_room_invite_no_invitee_by_you">Sizin dəvətiniz</string>
+    <plurals name="x_selected">
+        <item quantity="one">%1$d seçildi</item>
+        <item quantity="other">%1$d seçildi</item>
+    </plurals>
+    <string name="notice_direct_room_third_party_invite">%1$s, %2$s-ı dəvət etdi</string>
+    <string name="notice_room_third_party_invite_by_you">Otağa qoşulmaq üçün %1$s-a dəvət göndərdiniz</string>
+    <string name="notice_room_server_acl_updated_title">%s, bu otaq üçün server ACL-lərini dəyişdi.</string>
+    <string name="notice_room_server_acl_set_allowed">• %s ilə uyğunlaşan serverlərə icazə verildi.</string>
+    <string name="notice_room_third_party_revoked_invite_by_you">Siz %1$s üçün otağa qoşulmaq dəvətin ləğv etdiniz</string>
+    <string name="notice_direct_room_third_party_invite_by_you">%1$s-ı dəvət etdiniz</string>
+    <string name="rich_text_editor_full_screen_toggle">Tam ekran rejimini dəyiş</string>
+    <string name="message_reply_to_prefix">buna cavab olaraq</string>
+    <string name="message_reply_to_sender_sent_file">fayl göndərdi.</string>
+    <string name="message_reply_to_sender_sent_audio_file">səs faylı göndərdi.</string>
+    <string name="message_reply_to_sender_sent_voice_message">səsli mesaj göndərdi.</string>
+    <string name="message_reply_to_sender_sent_image">şəkil göndərdi.</string>
+    <string name="message_reply_to_sender_sent_video">video göndərdi.</string>
+    <string name="message_reply_to_sender_sent_sticker">stiker göndərdi.</string>
+    <string name="message_reply_to_sender_created_poll">sorğu yaratdı.</string>
+    <string name="qr_code_login_header_failed_user_cancelled_description">Digər cihazda giriş ləğv edildi.</string>
+    <string name="qr_code_login_header_failed_homeserver_is_not_supported_description">Ev serveri QR kodu ilə daxil olmağı dəstəkləmir.</string>
+    <string name="qr_code_login_new_device_instruction_1">Tətbiqi digər cihazınızda açın</string>
+    <string name="qr_code_login_new_device_instruction_2">Tənzimləmələr -&gt; Təhlükəsizlik &amp; Məxfilik bölməsinə keç</string>
+    <string name="qr_code_login_new_device_instruction_3">\'QR kodunu göstər\' seç</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_1">Giriş ekranında başlat</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">\'QR kodu ilə daxil ol\' seç</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_1">Giriş ekranında başlat</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_2">\'QR kodunu skan et\' seç</string>
+    <string name="qr_code_login_show_qr_code_button">QR kodunu bu cihazda göstər</string>
+    <string name="qr_code_login_signing_in_a_mobile_device">Mobil cihazda daxil olursunuz\?</string>
+    <string name="qr_code_login_scan_qr_code_button">QR kodunu skan et</string>
+    <string name="qr_code_login_connecting_to_device">Cihaza qoşulur</string>
+    <string name="qr_code_login_signing_in">Daxil olursunuz</string>
+    <string name="qr_code_login_status_no_match">Uyğunluq yoxdur\?</string>
+    <string name="qr_code_login_try_again">Bir daha cəhd et</string>
+    <string name="qr_code_login_confirm_security_code">Təsdiqlə</string>
+    <string name="qr_code_login_confirm_security_code_description">Bu kodun mənbəyini bildiyinizə əmin olun. Cihazları əlaqələndirməklə siz kiməsə hesabınıza tam giriş imkanı təmin edəcəksiniz.</string>
+    <string name="rich_text_editor_format_bold">Qalın format tətbiq et</string>
+    <string name="rich_text_editor_format_italic">Kursiv formatını tətbiq et</string>
+    <string name="rich_text_editor_format_underline">Alt xətt formatını tətbiq et</string>
+    <string name="notice_room_canonical_alias_unset_by_you">Bu otaq üçün əsas ünvanı sildiniz.</string>
+    <string name="notice_room_aliases_added_and_removed">%1$s, %2$s əlavə etdi və %3$s-nı bu otaq üçün ünvan kimi sildi.</string>
+    <plurals name="notice_room_aliases_removed_by_you">
+        <item quantity="one">Bu otaq üçün ünvan kimi %1$s-nı sildiniz.</item>
+        <item quantity="other">Bu otaq üçün ünvan kimi %1$s-nı sildiniz.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_removed">
+        <item quantity="one">%1$s, bu otaq üçün %2$s ünvanını sildi.</item>
+        <item quantity="other">%1$s, bu otaq üçün %2$s ünvanını sildi.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_added_by_you">
+        <item quantity="one">Bu otaq üçün ünvan olaraq %1$s əlavə etdiniz.</item>
+        <item quantity="other">Bu otaq üçün ünvan olaraq %1$s əlavə etdiniz.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_added">
+        <item quantity="one">%1$s, bu otaq üçün %2$s ünvanını əlavə etdi.</item>
+        <item quantity="other">%1$s, bu otaq üçün %2$s ünvanını əlavə etdi.</item>
+    </plurals>
+    <string name="notice_room_withdraw_with_reason_by_you">%1$s-ın⁴ dəvətini geri götürdünüz. Səbəb: %2$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason_by_you">%1$s üçün dəvəti qəbul etdiniz. Səbəb: %2$s</string>
+    <string name="notice_room_ban_with_reason_by_you">%1$s-ı qadağan etdiniz. Səbəb: %2$s</string>
+    <string name="notice_room_unban_with_reason_by_you">Siz %1$s qadağanını sildiniz. Səbəb: %2$s</string>
+    <string name="notice_room_remove_with_reason_by_you">%1$s-ı sildiniz. Səbəb: %2$s</string>
+    <string name="notice_room_reject_with_reason_by_you">Siz dəvəti rədd etdiniz. Səbəb: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason_by_you">Siz getdiniz. Səbəb: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason">%1$s tərk etdi. Səbəb: %2$s</string>
+    <string name="notice_room_leave_with_reason_by_you">Otağı tərk etdiniz. Səbəb: %1$s</string>
+    <string name="notice_direct_room_join_with_reason_by_you">Siz qoşuldunuz. Əsas: %1$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$s qoşuldu. Əsas: %2$s</string>
+    <string name="notice_room_join_with_reason_by_you">Otağa qoşuldunuz. Əsas: %1$s</string>
+    <string name="notice_room_invite_with_reason_by_you">%1$s-ı dəvət etdiniz. Əsas: %2$s</string>
+    <string name="notice_room_invite_no_invitee_with_reason_by_you">Sizin dəvətiniz. Əsas: %1$s</string>
+    <string name="event_status_sent_message">Mesaj göndərildi</string>
+    <string name="initial_sync_request_reason_unignored_users">- Bəzi istifadəçilər nəzərə alınmayıb</string>
+    <string name="initial_sync_request_content">${app_name} aşağıdakı səbəbə görə:
+\n%s 
+\n
+\nGüncəl olmaq üçün təmiz keşi yerinə yetirməlidir.
+\nNəzərə alın ki, bu əməliyyat tətbiqi yenidən işə salacaq və bir az vaxt apara bilər.</string>
+    <string name="initial_sync_request_title">İlkin sinxronizasiya sorğusu</string>
+    <string name="initial_sync_start_downloading">İlkin sinxronizasiya:
+\nMəlumat endirilir…</string>
+    <string name="initial_sync_start_server_computing">İlkin sinxronizasiya:
+\n Server cavabı gözlənilir…</string>
+    <string name="room_displayname_empty_room_was">Boş otaq (%s idi)</string>
+    <plurals name="room_displayname_four_and_more_members">
+        <item quantity="one">%1$s, %2$s, %3$s və digər %4$d</item>
+        <item quantity="other">%1$s, %2$s, %3$s və digər %4$d</item>
+    </plurals>
+    <string name="room_displayname_4_members">%1$s, %2$s, %3$s və %4$s</string>
+    <string name="room_displayname_3_members">%1$s, %2$s və %3$s</string>
+    <string name="room_error_access_unauthorized">Bu otağa qoşulmağa icazəniz yoxdur</string>
+    <string name="a11y_expand_space_children">%s uşağı yay</string>
+    <string name="a11y_collapse_space_children">%s uşağı yığışdır</string>
+    <string name="explore_rooms">Otaqları Araşdır</string>
+    <string name="change_space">Yeri Dəyiş</string>
+    <string name="create_room">Otaq Yarat</string>
+    <string name="start_chat">Söhbət Başlat</string>
+    <string name="all_chats">Bütün Söhbətlər</string>
+    <string name="notice_voice_broadcast_ended_by_you">Səsli yayımı bitirdiniz.</string>
+    <string name="notice_voice_broadcast_ended">%1$s səsli yayımı bitirdi.</string>
+    <string name="notice_power_level_diff">%1$s, %2$s - %3$s</string>
+    <string name="notice_power_level_changed">%1$s, %2$s üçün güc səviyyəsini dəyişdi.</string>
+    <string name="notice_power_level_changed_by_you">Siz %1$s üçün güc səviyyəsini dəyişdirdiniz.</string>
+    <string name="power_level_custom_no_value">Xüsusi</string>
+    <string name="power_level_custom">Fərdi (%1$d)</string>
+    <string name="power_level_default">Defolt</string>
+    <string name="power_level_moderator">Münsif</string>
+    <string name="power_level_admin">Müdir</string>
+    <string name="notice_widget_modified_by_you">%1$s vidcetini dəyişdirdiniz</string>
+    <string name="notice_widget_modified">%1$s, %2$s vidcetini dəyişdirdi</string>
+    <string name="notice_widget_removed_by_you">%1$s vidcetini sildiniz</string>
+    <string name="notice_widget_removed">%1$s, %2$s vidcetini sildi</string>
+    <string name="notice_widget_added_by_you">%1$s vidceti əlavə etdiniz</string>
+    <string name="notice_widget_added">%1$s, %2$s vidceti əlavə etdi</string>
+    <string name="notice_room_third_party_registered_invite_by_you">%1$s üçün dəvəti qəbul etdiniz</string>
+    <string name="notice_direct_room_third_party_revoked_invite_by_you">%1$s üçün dəvəti ləğv etdiniz</string>
+    <string name="notice_direct_room_third_party_revoked_invite">%1$s, %2$s üçün dəvəti ləğv etdi</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• IP literallarına uyğunlaşan serverlər indi qadağan edilib.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• IP literalları uyğunlaşan serverlərə indi icazə verilir.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• %s ilə uyğunlaşan serverlər icazə verilən siyahıdan təmizləndi.</string>
+    <string name="notice_room_server_acl_updated_allowed">• %s ilə uyğunlaşan serverlərə indi icazə verilir.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• %s ilə uyğunlaşan serverlər qadağa siyahısından təmizləndi.</string>
+    <string name="notice_room_server_acl_updated_banned">• %s ilə uyğunlaşan serverlər indi qadağan edilib.</string>
+    <plurals name="notice_room_server_acl_changes">
+        <item quantity="one">%d server ACLs dəyişiklik</item>
+        <item quantity="other">%d server ACLs dəyişiklik</item>
+    </plurals>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• IP literallarına uyğunlaşan serverlər qadağan edildi.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• IP literallarına uyğunlaşan serverlərə icazə verilir.</string>
+</resources>

@@ -29,7 +29,7 @@ import im.vector.app.databinding.BottomSheetLiveLocationLabsFlagPromotionBinding
  * This should not be shown if the user already enabled the labs flag.
  */
 class LiveLocationLabsFlagPromotionBottomSheet :
-    VectorBaseBottomSheetDialogFragment<BottomSheetLiveLocationLabsFlagPromotionBinding>() {
+        VectorBaseBottomSheetDialogFragment<BottomSheetLiveLocationLabsFlagPromotionBinding>() {
 
     override val showExpanded = true
 

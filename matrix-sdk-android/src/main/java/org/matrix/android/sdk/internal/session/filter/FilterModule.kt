@@ -19,7 +19,6 @@ package org.matrix.android.sdk.internal.session.filter
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
-import org.matrix.android.sdk.api.session.sync.FilterService
 import org.matrix.android.sdk.internal.session.SessionScope
 import retrofit2.Retrofit
 
@@ -40,8 +39,8 @@ internal abstract class FilterModule {
     abstract fun bindFilterRepository(repository: DefaultFilterRepository): FilterRepository
 
     @Binds
-    abstract fun bindFilterService(service: DefaultFilterService): FilterService
+    abstract fun bindSaveFilterTask(task: DefaultSaveFilterTask): SaveFilterTask
 
     @Binds
-    abstract fun bindSaveFilterTask(task: DefaultSaveFilterTask): SaveFilterTask
+    abstract fun bindGetCurrentFilterTask(task: DefaultGetCurrentFilterTask): GetCurrentFilterTask
 }

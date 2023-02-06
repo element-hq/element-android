@@ -35,73 +35,89 @@ class PushParserTest {
     )
 
     @Test
-    fun `test edge cases`() {
-        doAllEdgeTests(true)
-        doAllEdgeTests(false)
+    fun `test edge cases Firebase`() {
+        val pushParser = PushParser()
+        // Empty Json
+        pushParser.parsePushDataFcm(emptyMap()) shouldBeEqualTo emptyData
+        // Bad Json
+        pushParser.parsePushDataFcm(FIREBASE_PUSH_DATA.mutate("unread", "str")) shouldBeEqualTo validData.copy(unread = null)
+        // Extra data
+        pushParser.parsePushDataFcm(FIREBASE_PUSH_DATA.mutate("extra", "5")) shouldBeEqualTo validData
     }
 
-    private fun doAllEdgeTests(firebaseFormat: Boolean) {
+    @Test
+    fun `test edge cases UnifiedPush`() {
         val pushParser = PushParser()
         // Empty string
-        pushParser.parseData("", firebaseFormat) shouldBe null
+        pushParser.parsePushDataUnifiedPush("".toByteArray()) shouldBe null
         // Empty Json
-        pushParser.parseData("{}", firebaseFormat) shouldBeEqualTo emptyData
+        pushParser.parsePushDataUnifiedPush("{}".toByteArray()) shouldBeEqualTo emptyData
         // Bad Json
-        pushParser.parseData("ABC", firebaseFormat) shouldBe null
+        pushParser.parsePushDataUnifiedPush("ABC".toByteArray()) shouldBe null
     }
 
     @Test
-    fun `test unified push format`() {
+    fun `test UnifiedPush format`() {
         val pushParser = PushParser()
-
-        pushParser.parseData(UNIFIED_PUSH_DATA, false) shouldBeEqualTo validData
-        pushParser.parseData(UNIFIED_PUSH_DATA, true) shouldBeEqualTo emptyData
+        pushParser.parsePushDataUnifiedPush(UNIFIED_PUSH_DATA.toByteArray()) shouldBeEqualTo validData
     }
 
     @Test
-    fun `test firebase push format`() {
+    fun `test Firebase format`() {
         val pushParser = PushParser()
-
-        pushParser.parseData(FIREBASE_PUSH_DATA, true) shouldBeEqualTo validData
-        pushParser.parseData(FIREBASE_PUSH_DATA, false) shouldBeEqualTo emptyData
+        pushParser.parsePushDataFcm(FIREBASE_PUSH_DATA) shouldBeEqualTo validData
     }
 
     @Test
     fun `test empty roomId`() {
         val pushParser = PushParser()
-
-        pushParser.parseData(FIREBASE_PUSH_DATA.replace("!aRoomId:domain", ""), true) shouldBeEqualTo validData.copy(roomId = null)
-        pushParser.parseData(UNIFIED_PUSH_DATA.replace("!aRoomId:domain", ""), false) shouldBeEqualTo validData.copy(roomId = null)
+        val expected = validData.copy(roomId = null)
+        pushParser.parsePushDataFcm(FIREBASE_PUSH_DATA.mutate("room_id", null)) shouldBeEqualTo expected
+        pushParser.parsePushDataFcm(FIREBASE_PUSH_DATA.mutate("room_id", "")) shouldBeEqualTo expected
+        pushParser.parsePushDataUnifiedPush(UNIFIED_PUSH_DATA.replace("!aRoomId:domain", "").toByteArray()) shouldBeEqualTo expected
     }
 
     @Test
     fun `test invalid roomId`() {
         val pushParser = PushParser()
-
-        pushParser.parseData(FIREBASE_PUSH_DATA.replace("!aRoomId:domain", "aRoomId:domain"), true) shouldBeEqualTo validData.copy(roomId = null)
-        pushParser.parseData(UNIFIED_PUSH_DATA.replace("!aRoomId:domain", "aRoomId:domain"), false) shouldBeEqualTo validData.copy(roomId = null)
+        val expected = validData.copy(roomId = null)
+        pushParser.parsePushDataFcm(FIREBASE_PUSH_DATA.mutate("room_id", "aRoomId:domain")) shouldBeEqualTo expected
+        pushParser.parsePushDataUnifiedPush(UNIFIED_PUSH_DATA.mutate("!aRoomId:domain", "aRoomId:domain")) shouldBeEqualTo expected
     }
 
     @Test
     fun `test empty eventId`() {
         val pushParser = PushParser()
-
-        pushParser.parseData(FIREBASE_PUSH_DATA.replace("\$anEventId", ""), true) shouldBeEqualTo validData.copy(eventId = null)
-        pushParser.parseData(UNIFIED_PUSH_DATA.replace("\$anEventId", ""), false) shouldBeEqualTo validData.copy(eventId = null)
+        val expected = validData.copy(eventId = null)
+        pushParser.parsePushDataFcm(FIREBASE_PUSH_DATA.mutate("event_id", null)) shouldBeEqualTo expected
+        pushParser.parsePushDataFcm(FIREBASE_PUSH_DATA.mutate("event_id", "")) shouldBeEqualTo expected
+        pushParser.parsePushDataUnifiedPush(UNIFIED_PUSH_DATA.mutate("\$anEventId", "")) shouldBeEqualTo expected
     }
 
     @Test
     fun `test invalid eventId`() {
         val pushParser = PushParser()
-
-        pushParser.parseData(FIREBASE_PUSH_DATA.replace("\$anEventId", "anEventId"), true) shouldBeEqualTo validData.copy(eventId = null)
-        pushParser.parseData(UNIFIED_PUSH_DATA.replace("\$anEventId", "anEventId"), false) shouldBeEqualTo validData.copy(eventId = null)
+        val expected = validData.copy(eventId = null)
+        pushParser.parsePushDataFcm(FIREBASE_PUSH_DATA.mutate("event_id", "anEventId")) shouldBeEqualTo expected
+        pushParser.parsePushDataUnifiedPush(UNIFIED_PUSH_DATA.mutate("\$anEventId", "anEventId")) shouldBeEqualTo expected
     }
 
     companion object {
         private const val UNIFIED_PUSH_DATA =
                 "{\"notification\":{\"event_id\":\"\$anEventId\",\"room_id\":\"!aRoomId:domain\",\"counts\":{\"unread\":1},\"prio\":\"high\"}}"
-        private const val FIREBASE_PUSH_DATA =
-                "{\"event_id\":\"\$anEventId\",\"room_id\":\"!aRoomId:domain\",\"unread\":\"1\",\"prio\":\"high\"}"
+        private val FIREBASE_PUSH_DATA = mapOf(
+                "event_id" to "\$anEventId",
+                "room_id" to "!aRoomId:domain",
+                "unread" to "1",
+                "prio" to "high",
+        )
     }
+}
+
+private fun Map<String, String?>.mutate(key: String, value: String?): Map<String, String?> {
+    return toMutableMap().apply { put(key, value) }
+}
+
+private fun String.mutate(oldValue: String, newValue: String): ByteArray {
+    return replace(oldValue, newValue).toByteArray()
 }

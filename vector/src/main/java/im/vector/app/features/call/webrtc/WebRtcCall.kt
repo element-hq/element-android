@@ -19,7 +19,7 @@ package im.vector.app.features.call.webrtc
 import android.content.Context
 import android.hardware.camera2.CameraManager
 import androidx.core.content.getSystemService
-import im.vector.app.core.services.CallService
+import im.vector.app.core.services.CallAndroidService
 import im.vector.app.core.utils.PublishDataSource
 import im.vector.app.core.utils.TextUtils.formatDuration
 import im.vector.app.features.call.CameraEventsHandlerAdapter
@@ -166,13 +166,11 @@ class WebRtcCall(
     private var videoSender: RtpSender? = null
     private var screenSender: RtpSender? = null
 
-    private val timer = CountUpTimer(1000L).apply {
-        tickListener = object : CountUpTimer.TickListener {
-            override fun onTick(milliseconds: Long) {
-                val formattedDuration = formatDuration(Duration.ofMillis(milliseconds))
-                listeners.forEach {
-                    tryOrNull { it.onTick(formattedDuration) }
-                }
+    private val timer = CountUpTimer(intervalInMs = 1000L).apply {
+        tickListener = CountUpTimer.TickListener { milliseconds ->
+            val formattedDuration = formatDuration(Duration.ofMillis(milliseconds))
+            listeners.forEach {
+                tryOrNull { it.onTick(formattedDuration) }
             }
         }
     }
@@ -477,7 +475,7 @@ class WebRtcCall(
         val turnServerResponse = getTurnServer()
         // Update service state
         withContext(Dispatchers.Main) {
-            CallService.onPendingCall(
+            CallAndroidService.onPendingCall(
                     context = context,
                     callId = mxCall.callId
             )

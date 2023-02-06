@@ -19,6 +19,7 @@ package im.vector.app.features.settings
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import androidx.preference.SwitchPreference
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.preference.VectorPreference
@@ -28,21 +29,30 @@ import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.pin.PinCodeStore
 import im.vector.app.features.pin.PinMode
 import im.vector.app.features.pin.lockscreen.biometrics.BiometricHelper
+import im.vector.app.features.pin.lockscreen.configuration.LockScreenConfiguration
+import im.vector.app.features.pin.lockscreen.configuration.LockScreenMode
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
 import timber.log.Timber
 import javax.inject.Inject
 
-class VectorSettingsPinFragment @Inject constructor(
-        private val pinCodeStore: PinCodeStore,
-        private val navigator: Navigator,
-        private val notificationDrawerManager: NotificationDrawerManager,
-        private val biometricHelper: BiometricHelper,
-) : VectorSettingsBaseFragment() {
+@AndroidEntryPoint
+class VectorSettingsPinFragment :
+        VectorSettingsBaseFragment() {
+
+    @Inject lateinit var pinCodeStore: PinCodeStore
+    @Inject lateinit var navigator: Navigator
+    @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
+    @Inject lateinit var biometricHelperFactory: BiometricHelper.BiometricHelperFactory
+    @Inject lateinit var defaultLockScreenConfiguration: LockScreenConfiguration
 
     override var titleRes = R.string.settings_security_application_protection_screen_title
     override val preferenceXmlRes = R.xml.vector_settings_pin
+
+    private val biometricHelper by lazy {
+        biometricHelperFactory.create(defaultLockScreenConfiguration.copy(mode = LockScreenMode.CREATE))
+    }
 
     private val usePinCodePref by lazy {
         findPreference<SwitchPreference>(VectorPreferences.SETTINGS_SECURITY_USE_PIN_CODE_FLAG)!!
@@ -60,17 +70,16 @@ class VectorSettingsPinFragment @Inject constructor(
         findPreference<SwitchPreference>(VectorPreferences.SETTINGS_SECURITY_USE_BIOMETRICS_FLAG)!!
     }
 
-    private fun shouldCheckBiometricPref(isPinCodeChecked: Boolean): Boolean {
-        return isPinCodeChecked && // Biometric auth depends on PIN auth
-                biometricHelper.isSystemAuthEnabledAndValid &&
-                biometricHelper.isSystemKeyValid
+    private fun updateBiometricPrefState(isPinCodeChecked: Boolean) {
+        // Biometric auth depends on PIN auth
+        useBiometricPref.isEnabled = isPinCodeChecked && biometricHelper.canUseAnySystemAuth
+        useBiometricPref.isChecked = isPinCodeChecked && biometricHelper.isSystemAuthEnabledAndValid
     }
 
     override fun onResume() {
         super.onResume()
 
-        useBiometricPref.isEnabled = usePinCodePref.isChecked
-        useBiometricPref.isChecked = shouldCheckBiometricPref(usePinCodePref.isChecked)
+        updateBiometricPrefState(isPinCodeChecked = usePinCodePref.isChecked)
     }
 
     override fun bindPref() {
@@ -78,8 +87,7 @@ class VectorSettingsPinFragment @Inject constructor(
 
         usePinCodePref.setOnPreferenceChangeListener { _, value ->
             val isChecked = (value as? Boolean).orFalse()
-            useBiometricPref.isEnabled = isChecked
-            useBiometricPref.isChecked = shouldCheckBiometricPref(isChecked)
+            updateBiometricPrefState(isPinCodeChecked = isChecked)
             if (!isChecked) {
                 disableBiometricAuthentication()
             }
@@ -104,9 +112,10 @@ class VectorSettingsPinFragment @Inject constructor(
                     }.onFailure {
                         showEnableBiometricErrorMessage()
                     }
-                    useBiometricPref.isChecked = shouldCheckBiometricPref(usePinCodePref.isChecked)
+
+                    updateBiometricPrefState(isPinCodeChecked = usePinCodePref.isChecked)
                 }
-                false
+                true
             } else {
                 disableBiometricAuthentication()
                 true

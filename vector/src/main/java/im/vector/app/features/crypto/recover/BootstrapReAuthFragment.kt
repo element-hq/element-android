@@ -23,15 +23,14 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.core.resources.ColorProvider
 import im.vector.app.databinding.FragmentBootstrapReauthBinding
-import javax.inject.Inject
 
-class BootstrapReAuthFragment @Inject constructor(
-        private val colorProvider: ColorProvider
-) : VectorBaseFragment<FragmentBootstrapReauthBinding>() {
+@AndroidEntryPoint
+class BootstrapReAuthFragment :
+        VectorBaseFragment<FragmentBootstrapReauthBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentBootstrapReauthBinding {
         return FragmentBootstrapReauthBinding.inflate(inflater, container, false)

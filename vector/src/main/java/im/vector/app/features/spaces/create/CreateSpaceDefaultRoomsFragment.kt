@@ -21,6 +21,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.activityViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.hideKeyboard
@@ -29,11 +30,13 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSpaceCreateGenericEpoxyFormBinding
 import javax.inject.Inject
 
-class CreateSpaceDefaultRoomsFragment @Inject constructor(
-        private val epoxyController: SpaceDefaultRoomEpoxyController
-) : VectorBaseFragment<FragmentSpaceCreateGenericEpoxyFormBinding>(),
+@AndroidEntryPoint
+class CreateSpaceDefaultRoomsFragment :
+        VectorBaseFragment<FragmentSpaceCreateGenericEpoxyFormBinding>(),
         SpaceDefaultRoomEpoxyController.Listener,
         OnBackPressed {
+
+    @Inject lateinit var epoxyController: SpaceDefaultRoomEpoxyController
 
     private val sharedViewModel: CreateSpaceViewModel by activityViewModel()
 

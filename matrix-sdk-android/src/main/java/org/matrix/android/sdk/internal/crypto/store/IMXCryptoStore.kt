@@ -18,12 +18,13 @@ package org.matrix.android.sdk.internal.crypto.store
 
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
+import org.matrix.android.sdk.api.session.crypto.GlobalCryptoConfig
 import org.matrix.android.sdk.api.session.crypto.NewSessionListener
 import org.matrix.android.sdk.api.session.crypto.OutgoingKeyRequest
 import org.matrix.android.sdk.api.session.crypto.OutgoingRoomKeyRequestState
-import org.matrix.android.sdk.api.session.crypto.crosssigning.CryptoCrossSigningKey
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.session.crypto.crosssigning.PrivateKeysInfo
+import org.matrix.android.sdk.api.session.crypto.crosssigning.UserIdentity
 import org.matrix.android.sdk.api.session.crypto.keysbackup.SavedKeyBackupKeyInfo
 import org.matrix.android.sdk.api.session.crypto.model.AuditTrail
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
@@ -38,6 +39,7 @@ import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.crypto.model.MXInboundMegolmSessionWrapper
 import org.matrix.android.sdk.internal.crypto.model.OlmSessionWrapper
 import org.matrix.android.sdk.internal.crypto.model.OutboundGroupSessionWrapper
+import org.matrix.android.sdk.internal.crypto.store.db.CryptoStoreAggregator
 import org.matrix.android.sdk.internal.crypto.store.db.model.KeysBackupDataEntity
 import org.matrix.olm.OlmAccount
 import org.matrix.olm.OlmOutboundGroupSession
@@ -120,11 +122,26 @@ internal interface IMXCryptoStore {
     fun getRoomsListBlacklistUnverifiedDevices(): List<String>
 
     /**
-     * Updates the rooms ids list in which the messages are not encrypted for the unverified devices.
+     * A live status regarding sharing keys for unverified devices in this room.
      *
-     * @param roomIds the room ids list
+     * @return Live status
      */
-    fun setRoomsListBlacklistUnverifiedDevices(roomIds: List<String>)
+    fun getLiveBlockUnverifiedDevices(roomId: String): LiveData<Boolean>
+
+    /**
+     * Tell if unverified devices should be blacklisted when sending keys.
+     *
+     * @return true if should not send keys to unverified devices
+     */
+    fun getBlockUnverifiedDevices(roomId: String): Boolean
+
+    /**
+     * Define if encryption keys should be sent to unverified devices in this room.
+     *
+     * @param roomId the roomId
+     * @param block if true will not send keys to unverified devices
+     */
+    fun blockUnverifiedDevicesInRoom(roomId: String, block: Boolean)
 
     /**
      * Get the current keys backup version.
@@ -214,11 +231,12 @@ internal interface IMXCryptoStore {
      */
     fun storeUserDevices(userId: String, devices: Map<String, CryptoDeviceInfo>?)
 
-    fun storeUserCrossSigningKeys(
+    /**
+     * Store the cross signing keys for the user userId.
+     */
+    fun storeUserIdentity(
             userId: String,
-            masterKey: CryptoCrossSigningKey?,
-            selfSigningKey: CryptoCrossSigningKey?,
-            userSigningKey: CryptoCrossSigningKey?
+            userIdentity: UserIdentity
     )
 
     /**
@@ -238,9 +256,13 @@ internal interface IMXCryptoStore {
     // TODO temp
     fun getLiveDeviceList(): LiveData<List<CryptoDeviceInfo>>
 
+    fun getLiveDeviceWithId(deviceId: String): LiveData<Optional<CryptoDeviceInfo>>
+
     fun getMyDevicesInfo(): List<DeviceInfo>
 
     fun getLiveMyDevicesInfo(): LiveData<List<DeviceInfo>>
+
+    fun getLiveMyDevicesInfo(deviceId: String): LiveData<Optional<DeviceInfo>>
 
     fun saveMyDevicesInfo(info: List<DeviceInfo>)
 
@@ -270,6 +292,13 @@ internal interface IMXCryptoStore {
 
     fun shouldEncryptForInvitedMembers(roomId: String): Boolean
 
+    /**
+     * Sets a boolean flag that will determine whether or not this device should encrypt Events for
+     * invited members.
+     *
+     * @param roomId the room id
+     * @param shouldEncryptForInvitedMembers The boolean flag
+     */
     fun setShouldEncryptForInvitedMembers(roomId: String, shouldEncryptForInvitedMembers: Boolean)
 
     fun shouldShareHistory(roomId: String): Boolean
@@ -512,6 +541,9 @@ internal interface IMXCryptoStore {
     fun getCrossSigningPrivateKeys(): PrivateKeysInfo?
     fun getLiveCrossSigningPrivateKeys(): LiveData<Optional<PrivateKeysInfo>>
 
+    fun getGlobalCryptoConfig(): GlobalCryptoConfig
+    fun getLiveGlobalCryptoConfig(): LiveData<GlobalCryptoConfig>
+
     fun saveBackupRecoveryKey(recoveryKey: String?, version: String?)
     fun getKeyBackupRecoveryKeyInfo(): SavedKeyBackupKeyInfo?
 
@@ -557,4 +589,14 @@ internal interface IMXCryptoStore {
     fun areDeviceKeysUploaded(): Boolean
     fun tidyUpDataBase()
     fun getOutgoingRoomKeyRequests(inStates: Set<OutgoingRoomKeyRequestState>): List<OutgoingKeyRequest>
+
+    /**
+     * Store a bunch of data collected during a sync response treatment. @See [CryptoStoreAggregator].
+     */
+    fun storeData(cryptoStoreAggregator: CryptoStoreAggregator)
+
+    /**
+     * Store a bunch of data related to the users. @See [UserDataToStore].
+     */
+    fun storeData(userDataToStore: UserDataToStore)
 }

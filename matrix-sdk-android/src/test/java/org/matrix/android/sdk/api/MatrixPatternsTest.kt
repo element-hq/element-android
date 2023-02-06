@@ -35,6 +35,23 @@ class MatrixPatternsTest {
             MatrixPatterns.isUserId(input) shouldBeEqualTo expected
         }
     }
+
+    @Test
+    fun `given matrix id cases, when extracting userName, then returns expected`() {
+        val cases = listOf(
+                MatrixIdCase("foobar", userName = null),
+                MatrixIdCase("@foobar", userName = null),
+                MatrixIdCase("foobar@matrix.org", userName = null),
+                MatrixIdCase("@foobar: matrix.org", userName = null),
+                MatrixIdCase("foobar:matrix.org", userName = null),
+                MatrixIdCase("@foobar:matrix.org", userName = "foobar"),
+        )
+
+        cases.forEach { (input, expected) ->
+            MatrixPatterns.extractUserNameFromId(input) shouldBeEqualTo expected
+        }
+    }
 }
 
 private data class UserIdCase(val input: String, val isUserId: Boolean)
+private data class MatrixIdCase(val input: String, val userName: String?)

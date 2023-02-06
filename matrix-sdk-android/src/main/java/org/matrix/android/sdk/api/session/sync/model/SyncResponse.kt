@@ -65,10 +65,4 @@ data class SyncResponse(
          */
         @Json(name = "org.matrix.msc2732.device_unused_fallback_key_types")
         val deviceUnusedFallbackKeyTypes: List<String>? = null,
-
-        /**
-         * List of groups.
-         */
-        @Json(name = "groups") val groups: GroupsSyncResponse? = null
-
 )

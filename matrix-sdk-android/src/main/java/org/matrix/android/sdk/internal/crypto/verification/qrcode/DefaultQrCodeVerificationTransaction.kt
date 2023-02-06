@@ -84,7 +84,7 @@ internal class DefaultQrCodeVerificationTransaction(
         // Perform some checks
         if (otherQrCodeData.transactionId != transactionId) {
             Timber.d("## Verification QR: Invalid transaction actual ${otherQrCodeData.transactionId} expected:$transactionId")
-            cancel(CancelCode.QrCodeInvalid)
+            cancel(CancelCode.UnknownTransaction)
             return
         }
 

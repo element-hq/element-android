@@ -91,7 +91,8 @@ interface RelationService {
      * Edit a text message body. Limited to "m.text" contentType.
      * @param targetEvent The event to edit
      * @param msgType the message type
-     * @param newBodyText The edited body
+     * @param newBodyText The edited body in plain text
+     * @param newFormattedBodyText The edited body with format
      * @param newBodyAutoMarkdown true to parse markdown on the new body
      * @param compatibilityBodyText The text that will appear on clients that don't support yet edition
      */
@@ -99,6 +100,7 @@ interface RelationService {
             targetEvent: TimelineEvent,
             msgType: String,
             newBodyText: CharSequence,
+            newFormattedBodyText: CharSequence? = null,
             newBodyAutoMarkdown: Boolean,
             compatibilityBodyText: String = "* $newBodyText"
     ): Cancelable
@@ -108,13 +110,15 @@ interface RelationService {
      * This method will take the new body (stripped from fallbacks) and re-add them before sending.
      * @param replyToEdit The event to edit
      * @param originalTimelineEvent the message that this reply (being edited) is relating to
-     * @param newBodyText The edited body (stripped from in reply to content)
+     * @param newBodyText The plain text edited body (stripped from in reply to content)
+     * @param newFormattedBodyText The formatted edited body (stripped from in reply to content)
      * @param compatibilityBodyText The text that will appear on clients that don't support yet edition
      */
     fun editReply(
             replyToEdit: TimelineEvent,
             originalTimelineEvent: TimelineEvent,
             newBodyText: String,
+            newFormattedBodyText: String? = null,
             compatibilityBodyText: String = "* $newBodyText"
     ): Cancelable
 
@@ -133,6 +137,7 @@ interface RelationService {
      * by the sdk into pills.
      * @param eventReplied the event referenced by the reply
      * @param replyText the reply text
+     * @param replyFormattedText the reply text, formatted
      * @param autoMarkdown If true, the SDK will generate a formatted HTML message from the body text if markdown syntax is present
      * @param showInThread If true, relation will be added to the reply in order to be visible from within threads
      * @param rootThreadEventId If show in thread is true then we need the rootThreadEventId to generate the relation
@@ -140,6 +145,7 @@ interface RelationService {
     fun replyToMessage(
             eventReplied: TimelineEvent,
             replyText: CharSequence,
+            replyFormattedText: CharSequence? = null,
             autoMarkdown: Boolean = false,
             showInThread: Boolean = false,
             rootThreadEventId: String? = null

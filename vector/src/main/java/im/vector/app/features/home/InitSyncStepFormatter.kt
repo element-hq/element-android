@@ -32,7 +32,6 @@ class InitSyncStepFormatter @Inject constructor(
                     InitialSyncStep.ImportingAccount -> R.string.initial_sync_start_importing_account
                     InitialSyncStep.ImportingAccountCrypto -> R.string.initial_sync_start_importing_account_crypto
                     InitialSyncStep.ImportingAccountRoom -> R.string.initial_sync_start_importing_account_rooms
-                    InitialSyncStep.ImportingAccountGroups -> R.string.initial_sync_start_importing_account_groups
                     InitialSyncStep.ImportingAccountData -> R.string.initial_sync_start_importing_account_data
                     InitialSyncStep.ImportingAccountJoinedRooms -> R.string.initial_sync_start_importing_account_joined_rooms
                     InitialSyncStep.ImportingAccountInvitedRooms -> R.string.initial_sync_start_importing_account_invited_rooms

@@ -55,11 +55,4 @@ class PinCodeHelper @Inject constructor(
         encryptedStorage.deletePinCode()
         lockScreenKeyRepository.deletePinCodeKey()
     }
-
-    /**
-     * Migrates the PIN code key and encrypted value to use a more secure cipher.
-     */
-    suspend fun migratePinCodeIfNeeded() {
-        lockScreenKeyRepository.migrateKeysIfNeeded()
-    }
 }

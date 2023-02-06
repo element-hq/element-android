@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/messageRootLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_rect_shape_8"
+    android:backgroundTint="?vctr_content_quinary"
+    android:padding="12dp">
+
+    <TextView
+        android:id="@+id/liveIndicator"
+        style="@style/VoiceBroadcastLiveIndicator"
+        android:background="@drawable/rounded_rect_shape_2"
+        android:text="@string/voice_broadcast_live"
+        app:drawableStartCompat="@drawable/ic_voice_broadcast"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/roomAvatarImageView"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:contentDescription="@string/avatar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@sample/user_round_avatars" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/avatarRightBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="right"
+        app:barrierMargin="6dp"
+        app:constraint_referenced_ids="roomAvatarImageView" />
+
+    <TextView
+        android:id="@+id/titleText"
+        style="@style/Widget.Vector.TextView.Body.Medium"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:contentDescription="@string/avatar"
+        android:ellipsize="end"
+        android:maxLines="1"
+        app:layout_constraintEnd_toStartOf="@id/liveIndicator"
+        app:layout_constraintStart_toEndOf="@id/avatarRightBarrier"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@sample/rooms.json/data/name" />
+
+    <LinearLayout
+        android:id="@+id/metadataGroup"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toStartOf="@id/liveIndicator"
+        app:layout_constraintStart_toEndOf="@id/avatarRightBarrier"
+        app:layout_constraintTop_toBottomOf="@id/titleText">
+
+        <im.vector.app.features.voicebroadcast.views.VoiceBroadcastMetadataView
+            android:id="@+id/listenersCountMetadata"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            app:metadataIcon="@drawable/ic_member_small"
+            app:metadataValue="@string/no_value_placeholder"
+            tools:metadataValue="5 listening" />
+
+        <im.vector.app.features.voicebroadcast.views.VoiceBroadcastMetadataView
+            android:id="@+id/remainingTimeMetadata"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            app:metadataIcon="@drawable/ic_timer"
+            tools:metadataValue="3h 2m 50s left" />
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/headerBottomBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:barrierMargin="12dp"
+        app:constraint_referenced_ids="roomAvatarImageView,titleText,metadataGroup" />
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/controllerButtonsFlow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        app:constraint_referenced_ids="recordButton,stopRecordButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headerBottomBarrier" />
+
+    <ImageButton
+        android:id="@+id/recordButton"
+        android:layout_width="@dimen/voice_broadcast_recorder_button_size"
+        android:layout_height="@dimen/voice_broadcast_recorder_button_size"
+        android:background="@drawable/bg_rounded_button"
+        android:backgroundTint="?vctr_system"
+        android:contentDescription="@string/a11y_resume_voice_broadcast_record"
+        android:src="@drawable/ic_recording_dot" />
+
+    <ImageButton
+        android:id="@+id/stopRecordButton"
+        android:layout_width="@dimen/voice_broadcast_recorder_button_size"
+        android:layout_height="@dimen/voice_broadcast_recorder_button_size"
+        android:background="@drawable/bg_rounded_button"
+        android:backgroundTint="?vctr_system"
+        android:contentDescription="@string/a11y_stop_voice_broadcast_record"
+        android:src="@drawable/ic_stop" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/controlsGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="controllerButtonsFlow,recordButton,stopRecordButton" />
+
+    <TextView
+        android:id="@+id/errorView"
+        style="@style/Widget.Vector.TextView.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="4dp"
+        android:gravity="center"
+        android:text="@string/error_voice_broadcast_no_connection_recording"
+        android:textColor="?colorError"
+        android:visibility="gone"
+        app:drawableStartCompat="@drawable/ic_voice_broadcast_error"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headerBottomBarrier"
+        tools:visibility="visible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

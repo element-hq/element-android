@@ -33,5 +33,8 @@ object RoomSummaryConstants {
             EventType.ENCRYPTED,
             EventType.STICKER,
             EventType.REACTION
-    ) + EventType.POLL_START + EventType.STATE_ROOM_BEACON_INFO
+    ) +
+            EventType.POLL_START.values +
+            EventType.POLL_END.values +
+            EventType.STATE_ROOM_BEACON_INFO.values
 }

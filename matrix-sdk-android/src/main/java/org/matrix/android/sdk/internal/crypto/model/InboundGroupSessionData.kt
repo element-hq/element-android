@@ -38,14 +38,17 @@ data class InboundGroupSessionData(
         @Json(name = "forwarding_curve25519_key_chain")
         var forwardingCurve25519KeyChain: List<String>? = emptyList(),
 
-        /** Not yet used, will be in backup v2
-        val untrusted?: Boolean = false */
-
         /**
          * Flag that indicates whether or not the current inboundSession will be shared to
          * invited users to decrypt past messages.
          */
         @Json(name = "shared_history")
         val sharedHistory: Boolean = false,
+
+        /**
+         * Flag indicating that this key is trusted.
+         */
+        @Json(name = "trusted")
+        val trusted: Boolean? = null,
 
         )

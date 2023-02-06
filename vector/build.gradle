@@ -1,13 +1,9 @@
-import com.android.build.OutputFile
-
-apply plugin: 'com.android.application'
-apply plugin: 'com.google.android.gms.oss-licenses-plugin'
+apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'com.likethesalad.stem'
+apply plugin: 'com.google.devtools.ksp'
 apply plugin: 'dagger.hilt.android.plugin'
-apply plugin: 'kotlinx-knit'
 
 if (project.hasProperty("coverage")) {
     apply plugin: 'jacoco'
@@ -17,95 +13,9 @@ kapt {
     correctErrorTypes = true
 }
 
-knit {
-    files = fileTree(project.rootDir) {
-        include '**/*.md'
-        include '**/*.kt'
-        include '**/*.kts'
-        exclude '**/build/**'
-        exclude '**/.gradle/**'
-        exclude '**/towncrier/template.md'
-        exclude '**/CHANGES.md'
-    }
-}
-
-// Note: 2 digits max for each value
-ext.versionMajor = 1
-ext.versionMinor = 4
-// Note: even values are reserved for regular release, odd values for hotfix release.
-// When creating a hotfix, you should decrease the value, since the current value
-// is the value for the next regular release.
-ext.versionPatch = 28
-
-static def getGitTimestamp() {
-    def cmd = 'git show -s --format=%ct'
-    return cmd.execute().text.trim() as Long
-}
-
-static def generateVersionCodeFromTimestamp() {
-    // It's unix timestamp, minus timestamp of October 3rd 2018 (first commit date) divided by 100: It's incremented by one every 100 seconds.
-    // plus 20_000_000 for compatibility reason with the previous way the Version Code was computed
-    // Note that the result will be multiplied by 10 when adding the digit for the arch
-    return ((getGitTimestamp() - 1_538_524_800) / 100).toInteger() + 20_000_000
-}
-
-def generateVersionCodeFromVersionName() {
-    // plus 4_000_000 for compatibility reason with the previous way the Version Code was computed
-    // Note that the result will be multiplied by 10 when adding the digit for the arch
-    return (versionMajor * 1_00_00 + versionMinor * 1_00 + versionPatch) + 4_000_000
-}
-
-def getVersionCode() {
-    if (gitBranchName() == "develop") {
-        return generateVersionCodeFromTimestamp()
-    } else {
-        return generateVersionCodeFromVersionName()
-    }
-}
-
 static def gitRevision() {
     def cmd = "git rev-parse --short=8 HEAD"
     return cmd.execute().text.trim()
-}
-
-static def gitRevisionDate() {
-    def cmd = "git show -s --format=%ci HEAD^{commit}"
-    return cmd.execute().text.trim()
-}
-
-static def gitBranchName() {
-    def fromEnv = System.env.BUILDKITE_BRANCH as String ?: ""
-
-    if (!fromEnv.isEmpty()) {
-        return fromEnv
-    } else {
-        // Note: this command return "HEAD" on Buildkite, so use the system env 'BUILDKITE_BRANCH' content first
-        def cmd = "git rev-parse --abbrev-ref HEAD"
-        return cmd.execute().text.trim()
-    }
-}
-
-// For Google Play build, build on any other branch than main will have a "-dev" suffix
-static def getGplayVersionSuffix() {
-    if (gitBranchName() == "main") {
-        return ""
-    } else {
-        return "-dev"
-    }
-}
-
-static def gitTag() {
-    def cmd = "git describe --exact-match --tags"
-    return cmd.execute().text.trim()
-}
-
-// For F-Droid build, build on a not tagged commit will have a "-dev" suffix
-static def getFdroidVersionSuffix() {
-    if (gitTag() == "") {
-        return "-dev"
-    } else {
-        return ""
-    }
 }
 
 project.android.buildTypes.all { buildType ->
@@ -115,14 +25,10 @@ project.android.buildTypes.all { buildType ->
             ]
 }
 
-// map for the version codes last digit
-// x86 must have greater values than arm
-// 64 bits have greater value than 32 bits
-ext.abiVersionCodes = ["armeabi-v7a": 1, "arm64-v8a": 2, "x86": 3, "x86_64": 4].withDefault { 0 }
-
-def buildNumber = System.env.BUILDKITE_BUILD_NUMBER as Integer ?: 0
+initScreenshotTests(project)
 
 android {
+    namespace "im.vector.app"
     // Due to a bug introduced in Android gradle plugin 3.6.0, we have to specify the ndk version to use
     // Ref: https://issuetracker.google.com/issues/144111441
     ndkVersion "21.3.6528147"
@@ -130,42 +36,9 @@ android {
     compileSdk versions.compileSdk
 
     defaultConfig {
-        applicationId "im.vector.app"
         // Set to API 21: see #405
         minSdk versions.minSdk
         targetSdk versions.targetSdk
-        multiDexEnabled true
-
-        renderscriptTargetApi 24
-        renderscriptSupportModeEnabled true
-
-        // `develop` branch will have version code from timestamp, to ensure each build from CI has a incremented versionCode.
-        // Other branches (main, features, etc.) will have version code based on application version.
-        versionCode project.getVersionCode()
-
-        // Required for sonar analysis
-        versionName "${versionMajor}.${versionMinor}.${versionPatch}-sonar"
-
-        // Generate a random app task affinity
-        manifestPlaceholders = [appTaskAffinitySuffix: "H_${gitRevision()}"]
-
-        buildConfigField "String", "GIT_REVISION", "\"${gitRevision()}\""
-        buildConfigField "String", "GIT_REVISION_DATE", "\"${gitRevisionDate()}\""
-        buildConfigField "String", "GIT_BRANCH_NAME", "\"${gitBranchName()}\""
-        buildConfigField "String", "BUILD_NUMBER", "\"${buildNumber}\""
-
-        buildConfigField "im.vector.app.features.VectorFeatures.OnboardingVariant", "ONBOARDING_VARIANT", "im.vector.app.features.VectorFeatures.OnboardingVariant.FTUE_AUTH"
-
-        buildConfigField "im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy", "outboundSessionKeySharingStrategy", "im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy.WhenTyping"
-
-        buildConfigField "Long", "VOICE_MESSAGE_DURATION_LIMIT_MS", "120_000L"
-
-        //  If set, MSC3086 asserted identity messages sent on VoIP calls will cause the call to appear in the room corresponding to the asserted identity.
-        //  This *must* only be set in trusted environments.
-        buildConfigField "Boolean", "handleCallAssertedIdentityEvents", "false"
-
-        buildConfigField "Boolean", "enableLocationSharing", "true"
-        buildConfigField "String", "mapTilerKey", "\"fU3vlMsMn4Jb6dnEIFsx\""
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -174,43 +47,15 @@ android {
             abiFilters "armeabi-v7a", "x86", 'arm64-v8a', 'x86_64'
         }
 
-        // Ref: https://developer.android.com/studio/build/configure-apk-splits.html
-        splits {
-            // Configures multiple APKs based on ABI.
-            abi {
-                // Enables building multiple APKs per ABI.
-                enable true
-
-                // By default all ABIs are included, so use reset() and include to specify that we only
-                // want APKs for armeabi-v7a, x86, arm64-v8a and x86_64.
-
-                // Resets the list of ABIs that Gradle should create APKs for to none.
-                reset()
-
-                // Specifies a list of ABIs that Gradle should create APKs for.
-                include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
-
-                // Generate a universal APK that includes all ABIs, so user who install from CI tool can use this one by default.
-                universalApk true
-            }
-        }
-
-        applicationVariants.all { variant ->
-            // assign different version code for each output
-            def baseVariantVersion = variant.versionCode * 10
-            variant.outputs.each { output ->
-                def baseAbiVersionCode = project.ext.abiVersionCodes.get(output.getFilter(OutputFile.ABI))
-                // Known limitation: it does not modify the value in the BuildConfig.java generated file
-                // See https://issuetracker.google.com/issues/171133218
-                output.versionCodeOverride = baseVariantVersion + baseAbiVersionCode
-                print "ABI " + output.getFilter(OutputFile.ABI) + " \t-> VersionCode = " + output.versionCodeOverride + "\n"
-            }
-        }
+        // Generate a random app task affinity
+        manifestPlaceholders = [appTaskAffinitySuffix: "H_${gitRevision()}"]
 
         // The following argument makes the Android Test Orchestrator run its
         // "pm clear" command after each test invocation. This command ensures
         // that the app's state is completely cleared between tests.
         testInstrumentationRunnerArguments clearPackageData: 'true'
+
+        vectorDrawables.useSupportLibrary = true
     }
 
     testOptions {
@@ -221,91 +66,12 @@ android {
         // Comment to run on Android 12
 //        execution 'ANDROIDX_TEST_ORCHESTRATOR'
     }
-    signingConfigs {
-        debug {
-            keyAlias 'androiddebugkey'
-            keyPassword 'android'
-            storeFile file('./signature/debug.keystore')
-            storePassword 'android'
-        }
-        release {
-            keyAlias project.property("signing.element.keyId")
-            keyPassword project.property("signing.element.keyPassword")
-            storeFile file(project.property("signing.element.storePath"))
-            storePassword project.property("signing.element.storePassword")
-        }
-    }
-
     buildTypes {
         debug {
-            applicationIdSuffix ".debug"
-            resValue "string", "app_name", "Element dbg"
-
-            buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
-            // Set to true if you want to enable strict mode in debug
-            buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
-
-            signingConfig signingConfigs.debug
-
             if (project.hasProperty("coverage")) {
-                testCoverageEnabled = coverage.enableTestCoverage
+                testCoverageEnabled = coverage == "true"
             }
         }
-
-        release {
-            resValue "string", "app_name", "Element"
-
-            buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
-            buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
-
-            postprocessing {
-                removeUnusedCode true
-                removeUnusedResources true
-                // We do not activate obfuscation as it makes it hard then to read crash reports, and it's a bit useless on an open source project :)
-                obfuscate false
-                optimizeCode true
-                proguardFiles 'proguard-rules.pro'
-            }
-            // signingConfig signingConfigs.release
-        }
-    }
-
-    flavorDimensions "store"
-
-    productFlavors {
-        gplay {
-            apply plugin: 'com.google.gms.google-services'
-            afterEvaluate {
-                tasks.matching { it.name.contains("GoogleServices") && !it.name.contains("Gplay") }*.enabled = false
-            }
-
-            dimension "store"
-            isDefault = true
-            versionName "${versionMajor}.${versionMinor}.${versionPatch}${getGplayVersionSuffix()}"
-
-            resValue "bool", "isGplay", "true"
-            buildConfigField "boolean", "ALLOW_FCM_USE", "true"
-            buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"G\""
-            buildConfigField "String", "FLAVOR_DESCRIPTION", "\"GooglePlay\""
-        }
-
-        fdroid {
-            dimension "store"
-
-            versionName "${versionMajor}.${versionMinor}.${versionPatch}${getFdroidVersionSuffix()}"
-
-            resValue "bool", "isGplay", "false"
-            buildConfigField "boolean", "ALLOW_FCM_USE", "false"
-            buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"F\""
-            buildConfigField "String", "FLAVOR_DESCRIPTION", "\"FDroid\""
-        }
-    }
-
-    lintOptions {
-        lintConfig file("lint.xml")
-
-        checkDependencies true
-        abortOnError true
     }
 
     compileOptions {
@@ -340,20 +106,18 @@ android {
         viewBinding true
     }
 }
-
 dependencies {
-    implementation project(':library:opusencoder')
 
     implementation project(":vector-config")
-    implementation project(":matrix-sdk-android")
+    api project(":matrix-sdk-android")
     implementation project(":matrix-sdk-android-flow")
-    implementation project(":library:jsonviewer")
+    implementation project(":library:external:jsonviewer")
+    implementation project(":library:external:diff-match-patch")
+    implementation project(":library:ui-strings")
     implementation project(":library:ui-styles")
     implementation project(":library:core-utils")
     implementation project(":library:attachment-viewer")
-    implementation project(":library:diff-match-patch")
     implementation project(":library:multipicker")
-    implementation 'androidx.multidex:multidex:2.0.1'
 
     implementation libs.jetbrains.coroutinesCore
     implementation libs.jetbrains.coroutinesAndroid
@@ -362,63 +126,69 @@ dependencies {
     implementation libs.androidx.appCompat
     implementation libs.androidx.fragmentKtx
     implementation libs.androidx.constraintLayout
-    implementation "androidx.sharetarget:sharetarget:1.1.0"
     implementation libs.androidx.core
     implementation "androidx.media:media:1.6.0"
     implementation "androidx.transition:transition:1.4.1"
     implementation libs.androidx.biometric
 
-    implementation "org.threeten:threetenbp:1.4.0:no-tzdb"
-    implementation "com.gabrielittner.threetenbp:lazythreetenbp:0.10.0"
+    api "org.threeten:threetenbp:1.4.0:no-tzdb"
+    api "com.gabrielittner.threetenbp:lazythreetenbp:0.13.0"
 
     implementation libs.squareup.moshi
     kapt libs.squareup.moshiKotlin
 
     // Lifecycle
     implementation libs.androidx.lifecycleLivedata
-    implementation libs.androidx.lifecycleProcess
+    api libs.androidx.lifecycleProcess
     implementation libs.androidx.lifecycleRuntimeKtx
 
-    implementation libs.androidx.datastorepreferences
+    api libs.androidx.datastorepreferences
 
+    // Opus Encoder
+    implementation libs.element.opusencoder
+
+    // WYSIWYG Editor
+    implementation libs.element.wysiwyg
 
     // Log
-    implementation libs.jakewharton.timber
+    api libs.jakewharton.timber
 
     // Debug
-    implementation 'com.facebook.stetho:stetho:1.6.0'
+    api 'com.facebook.stetho:stetho:1.6.0'
 
-    // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.51'
+    api libs.google.phonenumber
 
     // FlowBinding
     implementation libs.github.flowBinding
     implementation libs.github.flowBindingAppcompat
 
-    implementation libs.airbnb.epoxy
+    api libs.airbnb.epoxy
     implementation libs.airbnb.epoxyGlide
-    kapt libs.airbnb.epoxyProcessor
+    ksp libs.airbnb.epoxyProcessor
     implementation libs.airbnb.epoxyPaging
-    implementation libs.airbnb.mavericks
+    api libs.airbnb.mavericks
+
+    // Snap Helper https://github.com/rubensousa/GravitySnapHelper
+    api 'com.github.rubensousa:gravitysnaphelper:2.2.2'
 
     // Work
-    implementation libs.androidx.work
+    api libs.androidx.work
 
     // Paging
     implementation libs.androidx.pagingRuntimeKtx
 
-    // Functional Programming
-    implementation libs.arrow.core
-
     // Pref
-    implementation libs.androidx.preferenceKtx
+    api libs.androidx.preferenceKtx
 
     // UI
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
     implementation libs.google.material
-    implementation 'me.gujun.android:span:1.7'
+    api('me.gujun.android:span:1.7') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
     implementation libs.markwon.core
     implementation libs.markwon.extLatex
+    implementation libs.markwon.imageGlide
     implementation libs.markwon.inlineParser
     implementation libs.markwon.html
     implementation 'com.googlecode.htmlcompressor:htmlcompressor:1.5.2'
@@ -445,7 +215,6 @@ dependencies {
     // Image Loading
     implementation libs.github.bigImageViewer
     implementation libs.github.glideImageLoader
-    implementation libs.github.progressPieIndicator
     implementation libs.github.glideImageViewFactory
 
     // implementation 'com.github.MikeOrtiz:TouchImageView:3.0.2'
@@ -464,44 +233,48 @@ dependencies {
     kapt libs.dagger.hiltCompiler
 
     // Analytics
-    implementation 'com.posthog.android:posthog:1.1.2'
+    implementation('com.posthog.android:posthog:2.0.1') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    implementation libs.sentry.sentryAndroid
 
     // UnifiedPush
-    implementation 'com.github.UnifiedPush:android-connector:2.0.0'
-    // UnifiedPush gplay flavor only
-    gplayImplementation('com.github.UnifiedPush:android-embedded_fcm_distributor:2.1.1') {
-        exclude group: 'com.google.firebase', module: 'firebase-core'
-        exclude group: 'com.google.firebase', module: 'firebase-analytics'
-        exclude group: 'com.google.firebase', module: 'firebase-measurement-connector'
-    }
+    implementation 'com.github.UnifiedPush:android-connector:2.1.1'
 
-    // OSS License, gplay flavor only
-    gplayImplementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
-
-    implementation "androidx.emoji2:emoji2:1.1.0"
+    implementation "androidx.emoji2:emoji2:1.2.0"
 
     // WebRTC
     // org.webrtc:google-webrtc is for development purposes only
     // implementation 'org.webrtc:google-webrtc:1.0.+'
-    implementation('com.facebook.react:react-native-webrtc:1.94.2-jitsi-10227332@aar')
-
+    implementation('com.facebook.react:react-native-webrtc:1.106.1-jitsi-12039821@aar')
     // Jitsi
-    implementation('org.jitsi.react:jitsi-meet-sdk:5.0.2') {
+    // Note: version is 6.2.0, but built from the tag `android-sdk-6.2.2`.
+    api('org.jitsi.react:jitsi-meet-sdk:6.2.0') {
         exclude group: 'com.google.firebase'
         exclude group: 'com.google.android.gms'
         exclude group: 'com.android.installreferrer'
+
+        // Exclude jitsi's android-scalablevideoview fork's support library
+        // The library exports a jetified artifact but doesn't remove the support library dependency
+        // https://github.com/MatrixFrog/Android-ScalableVideoView/blob/master/gradle.properties#L1
+        exclude group: 'com.android.support', module: 'appcompat-v7'
     }
 
     // QR-code
     // Stick to 3.3.3 because of https://github.com/zxing/zxing/issues/1170
     implementation 'com.google.zxing:core:3.3.3'
-    implementation 'me.dm7.barcodescanner:zxing:1.9.13'
+
+    // Excludes the legacy support library annotation usages
+    // https://github.com/dm77/barcodescanner/blob/d036996c8a6f36a68843ffe539c834c28944b2d5/core/src/main/java/me/dm7/barcodescanner/core/CameraWrapper.java#L4
+    implementation ('me.dm7.barcodescanner:zxing:1.9.13') {
+        exclude group: 'com.android.support', module: 'support-v4'
+    }
 
     // Emoji Keyboard
-    implementation libs.vanniktech.emojiMaterial
-    implementation libs.vanniktech.emojiGoogle
+    api libs.vanniktech.emojiMaterial
+    api libs.vanniktech.emojiGoogle
 
-    implementation 'im.dlg:android-dialer:1.2.5'
+    implementation project(":library:external:dialpad")
 
     // JWT
     api libs.jsonwebtoken.jjwtApi
@@ -512,38 +285,30 @@ dependencies {
     implementation 'commons-codec:commons-codec:1.15'
 
     // MapTiler
-    fdroidImplementation(libs.maplibre.androidSdk) {
+    api(libs.maplibre.androidSdk) {
         exclude group: 'com.google.android.gms', module: 'play-services-location'
     }
-    fdroidImplementation(libs.maplibre.pluginAnnotation) {
+    api(libs.maplibre.pluginAnnotation) {
         exclude group: 'com.google.android.gms', module: 'play-services-location'
     }
-    gplayImplementation libs.maplibre.androidSdk
-    gplayImplementation libs.maplibre.pluginAnnotation
 
     // TESTS
     testImplementation libs.tests.junit
     testImplementation libs.tests.kluent
     testImplementation libs.mockk.mockk
+    testImplementation libs.androidx.coreTesting
     // Plant Timber tree for test
     testImplementation libs.tests.timberJunitRule
     testImplementation libs.airbnb.mavericksTesting
+    testImplementation libs.androidx.coreTesting
     testImplementation(libs.jetbrains.coroutinesTest) {
         exclude group: "org.jetbrains.kotlinx", module: "kotlinx-coroutines-debug"
     }
 
-    // Flipper, debug builds only
-    debugImplementation(libs.flipper.flipper) {
-        exclude group: 'com.facebook.fbjni', module: 'fbjni'
-    }
-    debugImplementation(libs.flipper.flipperNetworkPlugin) {
-        exclude group: 'com.facebook.fbjni', module: 'fbjni'
-    }
-    debugImplementation 'com.facebook.soloader:soloader:0.10.4'
-    debugImplementation "com.kgurgul.flipper:flipper-realm-android:2.2.0"
-
-    // Activate when you want to check for leaks, from time to time.
-    //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.3'
+    // Fix issue with Jitsi. Inspired from https://github.com/android/android-test/issues/861#issuecomment-872067868
+    // Error was lots of `Duplicate class org.checkerframework.common.reflection.qual.MethodVal found in modules jetified-checker-3.1 (org.checkerframework:checker:3.1.1) and jetified-checker-qual-3.12.0 (org.checkerframework:checker-qual:3.12.0)
+    //noinspection GradleDependency Cannot use latest 3.15.0 since it required min API 26.
+    implementation "org.checkerframework:checker:3.30.0"
 
     androidTestImplementation libs.androidx.testCore
     androidTestImplementation libs.androidx.testRunner
@@ -560,10 +325,12 @@ dependencies {
     // Plant Timber tree for test
     androidTestImplementation libs.tests.timberJunitRule
     // "The one who serves a great Espresso"
-    androidTestImplementation('com.adevinta.android:barista:4.2.0') {
+    androidTestImplementation('com.adevinta.android:barista:4.3.0') {
         exclude group: 'org.jetbrains.kotlin'
     }
     androidTestImplementation libs.mockk.mockkAndroid
     androidTestUtil libs.androidx.orchestrator
-    debugImplementation libs.androidx.fragmentTesting
+    debugImplementation libs.androidx.fragmentTestingManifest
+    androidTestImplementation libs.androidx.fragmentTesting
+    androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:1.8.0"
 }

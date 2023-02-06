@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+
+    <TextView
+        android:id="@+id/sessionsOverviewEntryTitle"
+        style="@style/TextAppearance.Vector.Subtitle.DevicesManagement"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/layout_horizontal_margin"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Session details" />
+
+    <TextView
+        android:id="@+id/sessionsOverviewEntryDescription"
+        style="@style/TextAppearance.Vector.Body.DevicesManagement"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        app:layout_constraintEnd_toEndOf="@id/sessionsOverviewEntryTitle"
+        app:layout_constraintStart_toStartOf="@id/sessionsOverviewEntryTitle"
+        app:layout_constraintTop_toBottomOf="@id/sessionsOverviewEntryTitle"
+        tools:text="Application, device, and activity information." />
+
+    <View
+        android:id="@+id/sessionsOverviewEntryDivider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/divider_horizontal"
+        app:layout_constraintEnd_toEndOf="@id/sessionsOverviewEntryTitle"
+        app:layout_constraintStart_toStartOf="@id/sessionsOverviewEntryTitle"
+        app:layout_constraintTop_toBottomOf="@id/sessionsOverviewEntryDescription" />
+
+</merge>

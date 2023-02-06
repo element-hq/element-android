@@ -41,7 +41,6 @@ import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.events.EventService
 import org.matrix.android.sdk.api.session.file.ContentDownloadStateTracker
 import org.matrix.android.sdk.api.session.file.FileService
-import org.matrix.android.sdk.api.session.group.GroupService
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
 import org.matrix.android.sdk.api.session.identity.IdentityService
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
@@ -58,7 +57,6 @@ import org.matrix.android.sdk.api.session.search.SearchService
 import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
 import org.matrix.android.sdk.api.session.signout.SignOutService
 import org.matrix.android.sdk.api.session.space.SpaceService
-import org.matrix.android.sdk.api.session.sync.FilterService
 import org.matrix.android.sdk.api.session.sync.SyncService
 import org.matrix.android.sdk.api.session.terms.TermsService
 import org.matrix.android.sdk.api.session.thirdparty.ThirdPartyService
@@ -97,9 +95,7 @@ internal class DefaultSession @Inject constructor(
         private val sessionListeners: SessionListeners,
         private val roomService: Lazy<RoomService>,
         private val roomDirectoryService: Lazy<RoomDirectoryService>,
-        private val groupService: Lazy<GroupService>,
         private val userService: Lazy<UserService>,
-        private val filterService: Lazy<FilterService>,
         private val federationService: Lazy<FederationService>,
         private val cacheService: Lazy<CacheService>,
         private val signOutService: Lazy<SignOutService>,
@@ -209,10 +205,8 @@ internal class DefaultSession @Inject constructor(
     override fun homeServerCapabilitiesService(): HomeServerCapabilitiesService = homeServerCapabilitiesService.get()
     override fun roomService(): RoomService = roomService.get()
     override fun roomDirectoryService(): RoomDirectoryService = roomDirectoryService.get()
-    override fun groupService(): GroupService = groupService.get()
     override fun userService(): UserService = userService.get()
     override fun signOutService(): SignOutService = signOutService.get()
-    override fun filterService(): FilterService = filterService.get()
     override fun pushRuleService(): PushRuleService = pushRuleService.get()
     override fun pushersService(): PushersService = pushersService.get()
     override fun eventService(): EventService = eventService.get()
@@ -266,11 +260,11 @@ internal class DefaultSession @Inject constructor(
         }
     }
 
-    override fun logDbUsageInfo() {
-        RealmDebugTools(realmConfiguration).logInfo("Session")
-        RealmDebugTools(realmConfigurationCrypto).logInfo("Crypto")
-        RealmDebugTools(realmConfigurationIdentity).logInfo("Identity")
-        RealmDebugTools(realmConfigurationContentScanner).logInfo("ContentScanner")
+    override fun getDbUsageInfo() = buildString {
+        append(RealmDebugTools(realmConfiguration).getInfo("Session"))
+        append(RealmDebugTools(realmConfigurationCrypto).getInfo("Crypto"))
+        append(RealmDebugTools(realmConfigurationIdentity).getInfo("Identity"))
+        append(RealmDebugTools(realmConfigurationContentScanner).getInfo("ContentScanner"))
     }
 
     override fun getRealmConfigurations(): List<RealmConfiguration> {

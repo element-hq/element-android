@@ -137,7 +137,7 @@ abstract class VerificationRequestItem : AbsBaseMessageItem<VerificationRequestI
     }
 
     companion object {
-        private const val STUB_ID = R.id.messageVerificationRequestStub
+        private val STUB_ID = R.id.messageVerificationRequestStub
     }
 
     /**

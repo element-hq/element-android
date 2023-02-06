@@ -23,6 +23,7 @@ import android.view.ViewGroup
 import androidx.core.text.toSpannable
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
@@ -30,9 +31,11 @@ import im.vector.app.core.utils.colorizeMatchingText
 import im.vector.app.databinding.FragmentBootstrapConclusionBinding
 import javax.inject.Inject
 
-class BootstrapConclusionFragment @Inject constructor(
-        private val colorProvider: ColorProvider
-) : VectorBaseFragment<FragmentBootstrapConclusionBinding>() {
+@AndroidEntryPoint
+class BootstrapConclusionFragment :
+        VectorBaseFragment<FragmentBootstrapConclusionBinding>() {
+
+    @Inject lateinit var colorProvider: ColorProvider
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentBootstrapConclusionBinding {
         return FragmentBootstrapConclusionBinding.inflate(inflater, container, false)

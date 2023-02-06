@@ -63,7 +63,7 @@ internal class VerificationMessageProcessor @Inject constructor(
         // the message should be ignored by the receiver.
 
         if (!VerificationService.isValidRequest(event.ageLocalTs, clock.epochMillis())) return Unit.also {
-            Timber.d("## SAS Verification live observer: msgId: ${event.eventId} is outdated age:$event.ageLocalTs ms")
+            Timber.d("## SAS Verification live observer: msgId: ${event.eventId} is outdated age:${event.ageLocalTs} ms")
         }
 
         Timber.v("## SAS Verification live observer: received msgId: ${event.eventId} type: ${event.getClearType()}")

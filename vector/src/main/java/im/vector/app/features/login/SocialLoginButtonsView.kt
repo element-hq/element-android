@@ -160,8 +160,11 @@ class SocialLoginButtonsView @JvmOverloads constructor(context: Context, attrs: 
     }
 }
 
-fun SocialLoginButtonsView.render(ssoProviders: List<SsoIdentityProvider>?, mode: SocialLoginButtonsView.Mode, listener: (SsoIdentityProvider?) -> Unit) {
+fun SocialLoginButtonsView.render(state: SsoState, mode: SocialLoginButtonsView.Mode, listener: (SsoIdentityProvider?) -> Unit) {
     this.mode = mode
-    this.ssoIdentityProviders = ssoProviders?.sorted()
+    this.ssoIdentityProviders = when (state) {
+        SsoState.Fallback -> null
+        is SsoState.IdentityProviders -> state.providers.sorted()
+    }
     this.listener = SocialLoginButtonsView.InteractionListener { listener(it) }
 }

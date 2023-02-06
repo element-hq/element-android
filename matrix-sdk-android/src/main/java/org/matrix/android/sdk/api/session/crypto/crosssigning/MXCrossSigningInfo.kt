@@ -18,7 +18,8 @@ package org.matrix.android.sdk.api.session.crypto.crosssigning
 
 data class MXCrossSigningInfo(
         val userId: String,
-        val crossSigningKeys: List<CryptoCrossSigningKey>
+        val crossSigningKeys: List<CryptoCrossSigningKey>,
+        val wasTrustedOnce: Boolean
 ) {
 
     fun isTrusted(): Boolean = masterKey()?.trustLevel?.isVerified() == true &&

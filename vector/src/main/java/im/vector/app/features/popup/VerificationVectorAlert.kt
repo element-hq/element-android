@@ -30,6 +30,7 @@ class VerificationVectorAlert(
         title: String,
         override val description: String,
         @DrawableRes override val iconId: Int?,
+        override val priority: Int = PopupAlertManager.DEFAULT_PRIORITY,
         /**
          * Alert are displayed by default, but let this lambda return false to prevent displaying.
          */
@@ -38,13 +39,13 @@ class VerificationVectorAlert(
     override val layoutRes = R.layout.alerter_verification_layout
 
     class ViewBinder(
-            private val matrixItem: MatrixItem?,
+            private val matrixItem: MatrixItem,
             private val avatarRenderer: AvatarRenderer
     ) : VectorAlert.ViewBinder {
 
         override fun bind(view: View) {
             val views = AlerterVerificationLayoutBinding.bind(view)
-            matrixItem?.let { avatarRenderer.render(it, views.ivUserAvatar, GlideApp.with(view.context.applicationContext)) }
+            avatarRenderer.render(matrixItem, views.ivUserAvatar, GlideApp.with(view.context.applicationContext))
         }
     }
 }

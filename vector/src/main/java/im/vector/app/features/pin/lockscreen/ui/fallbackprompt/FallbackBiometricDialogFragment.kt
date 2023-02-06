@@ -50,10 +50,10 @@ class FallbackBiometricDialogFragment : DialogFragment(R.layout.fragment_biometr
 
     private val parsedArgs by args<Args>()
 
-    @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        @Suppress("DEPRECATION")
         retainInstance = true
 
         setStyle(STYLE_NORMAL, android.R.style.Theme_Material_Light_Dialog)

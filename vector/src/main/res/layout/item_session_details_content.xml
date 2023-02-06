@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/sessionDetailsContentTitle"
+        style="@style/TextAppearance.Vector.Body.DevicesManagement"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/layout_horizontal_margin"
+        app:layout_constraintBottom_toTopOf="@id/sessionDetailsContentDivider"
+        app:layout_constraintEnd_toStartOf="@id/sessionDetailsContentDescription"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/sessionDetailsContentTop"
+        tools:text="Session name" />
+
+    <TextView
+        android:id="@+id/sessionDetailsContentDescription"
+        style="@style/TextAppearance.Vector.Body"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin"
+        android:gravity="end"
+        app:layout_constraintBottom_toTopOf="@id/sessionDetailsContentDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/sessionDetailsContentTitle"
+        app:layout_constraintTop_toTopOf="@id/sessionDetailsContentTop"
+        tools:text="app.element.io: Firefox on macOS" />
+
+    <View
+        android:id="@+id/sessionDetailsContentDivider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@drawable/divider_horizontal"
+        app:layout_constraintEnd_toEndOf="@id/sessionDetailsContentDescription"
+        app:layout_constraintStart_toStartOf="@id/sessionDetailsContentTitle"
+        app:layout_constraintTop_toTopOf="@id/sessionDetailsContentBarrier" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/sessionDetailsContentBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:barrierMargin="14dp"
+        app:constraint_referenced_ids="sessionDetailsContentTitle, sessionDetailsContentDescription" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/sessionDetailsContentTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="14dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

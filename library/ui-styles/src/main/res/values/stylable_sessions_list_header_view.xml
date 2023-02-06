@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="SessionsListHeaderView">
+        <attr name="sessionsListHeaderTitle" format="string" />
+        <attr name="sessionsListHeaderDescription" format="string" />
+        <attr name="sessionsListHeaderHasLearnMoreLink" format="boolean" />
+        <attr name="sessionsListHeaderMenu" format="reference" />
+    </declare-styleable>
+
+</resources>

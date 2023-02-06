@@ -17,6 +17,7 @@
 package im.vector.app.features.voice
 
 import im.vector.app.core.utils.waitUntil
+import im.vector.app.test.fakes.FakeOggOpusEncoder
 import org.amshove.kluent.shouldExist
 import org.amshove.kluent.shouldNotBeNull
 import java.io.File
@@ -34,3 +35,5 @@ suspend fun VoiceRecorder.waitUntilRecordingFileExists(timeout: Duration = 1.sec
     }
     return getVoiceMessageFile()
 }
+
+internal fun createFakeOpusEncoder() = FakeOggOpusEncoder().apply { createEmptyFileOnInit() }

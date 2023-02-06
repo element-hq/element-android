@@ -18,8 +18,6 @@ package im.vector.app
 
 import org.matrix.android.sdk.api.util.BuildVersionSdkIntProvider
 
-class TestBuildVersionSdkIntProvider : BuildVersionSdkIntProvider {
-    var value: Int = 0
-
+class TestBuildVersionSdkIntProvider(var value: Int = 0) : BuildVersionSdkIntProvider {
     override fun get() = value
 }

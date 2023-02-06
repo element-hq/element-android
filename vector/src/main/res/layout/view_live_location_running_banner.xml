@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+
+    <ImageView
+        android:id="@+id/liveLocationRunningBannerBackground"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:alpha="0.75"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:background="?android:colorBackground"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/liveLocationRunningBannerIcon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginHorizontal="8dp"
+        android:background="@drawable/circle"
+        android:backgroundTint="?vctr_live_location"
+        android:padding="3dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/liveLocationRunningBannerBackground"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_attachment_live_location_white"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/liveLocationRunningBannerTitle"
+        style="@style/Widget.Vector.TextView.Caption"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:ellipsize="end"
+        android:lines="1"
+        android:textColor="?colorOnSurface"
+        app:layout_constraintBottom_toTopOf="@id/liveLocationRunningBannerSubTitle"
+        app:layout_constraintEnd_toStartOf="@id/liveLocationRunningBannerStop"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/liveLocationRunningBannerIcon"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="@string/location_share_live_enabled" />
+
+    <TextView
+        android:id="@+id/liveLocationRunningBannerSubTitle"
+        style="@style/Widget.Vector.TextView.Caption"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:lines="1"
+        android:textColor="?vctr_content_secondary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/liveLocationRunningBannerTitle"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="@id/liveLocationRunningBannerTitle"
+        app:layout_constraintTop_toBottomOf="@id/liveLocationRunningBannerTitle"
+        tools:text="9min left" />
+
+    <Button
+        android:id="@+id/liveLocationRunningBannerStop"
+        style="@style/Widget.Vector.Button.Text.LiveLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/location_share_live_stop"
+        app:layout_constraintBottom_toBottomOf="@id/liveLocationRunningBannerBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/liveLocationRunningBannerBackground" />
+</merge>

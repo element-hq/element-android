@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<im.vector.app.core.platform.CheckableConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/itemGroupLayout"
+    android:layout_width="match_parent"
+    android:layout_height="65dp"
+    android:background="@drawable/bg_space_item"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    tools:viewBindingIgnore="true">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="26dp"
+        android:background="?attr/vctr_system"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/plus"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="@dimen/layout_horizontal_margin"
+        android:background="@drawable/rounded_rect_shape_8"
+        android:backgroundTint="#4D8D97A5"
+        android:duplicateParentState="true"
+        android:importantForAccessibility="no"
+        android:padding="10dp"
+        android:src="@drawable/ic_plus"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/groupNameView"
+        style="@style/Widget.Vector.TextView.Subtitle.Medium"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/layout_horizontal_margin"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="@string/create_space"
+        android:textColor="?vctr_message_text_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/plus"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</im.vector.app.core.platform.CheckableConstraintLayout>

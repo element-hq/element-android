@@ -19,7 +19,10 @@ package im.vector.app.features.home.room.detail.timeline.item
 import android.content.res.Resources
 import android.graphics.drawable.ColorDrawable
 import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
+import com.bumptech.glide.load.MultiTransformation
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.GranularRoundedCorners
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import im.vector.app.R
@@ -50,8 +53,8 @@ class DefaultLiveLocationShareStatusItem : LiveLocationShareStatusItem {
             height = mapHeight
         }
         GlideApp.with(mapImageView)
-                .load(R.drawable.bg_no_location_map)
-                .transform(mapCornerTransformation)
+                .load(ContextCompat.getDrawable(mapImageView.context, R.drawable.bg_no_location_map))
+                .transform(MultiTransformation(CenterCrop(), mapCornerTransformation))
                 .into(mapImageView)
     }
 

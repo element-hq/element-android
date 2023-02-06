@@ -18,6 +18,7 @@ package im.vector.app.test.fakes
 
 import io.mockk.coEvery
 import io.mockk.coJustRun
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import org.matrix.android.sdk.api.auth.AuthenticationService
@@ -67,5 +68,17 @@ class FakeAuthenticationService : AuthenticationService by mockk() {
 
     fun givenDirectAuthenticationThrows(config: HomeServerConnectionConfig, matrixId: String, password: String, deviceName: String, cause: Throwable) {
         coEvery { directAuthentication(config, matrixId, password, deviceName) } throws cause
+    }
+
+    fun verifyReset() {
+        coVerify { reset() }
+    }
+
+    fun verifyCancelsPendingLogin() {
+        coVerify { cancelPendingLoginOrRegistration() }
+    }
+
+    fun givenSsoUrl(redirectUri: String, deviceId: String, providerId: String, result: String) {
+        coEvery { getSsoUrl(redirectUri, deviceId, providerId) } returns result
     }
 }

@@ -24,10 +24,10 @@ jobs:
         contains(github.event.issue.labels.*.name, 'A11y') &&
         contains(github.event.issue.labels.*.name, 'O-Frequent'))
     steps:
-      - uses: alex-page/github-project-automation-plus@bb266ff4dde9242060e2d5418e120a133586d488
+      - uses: alex-page/github-project-automation-plus@7ffb872c64bd809d23563a130a0a97d01dfa8f43
         with:
           project: Android App Team
-          column: P1
+          column: Important Issues & Topics (P1)
           repo-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
   P1_issues_to_crypto_team_workboard:
@@ -50,7 +50,7 @@ jobs:
         contains(github.event.issue.labels.*.name, 'A11y') &&
         contains(github.event.issue.labels.*.name, 'O-Frequent')))
     steps:
-      - uses: alex-page/github-project-automation-plus@bb266ff4dde9242060e2d5418e120a133586d488
+      - uses: alex-page/github-project-automation-plus@7ffb872c64bd809d23563a130a0a97d01dfa8f43
         with:
           project: Crypto Team
           column: Ready

@@ -15,7 +15,9 @@
             android:id="@+id/userListToolbar"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
-            app:title="@string/fab_menu_create_chat"/>
+            android:paddingEnd="@dimen/layout_horizontal_margin"
+            app:title="@string/fab_menu_create_chat"
+            tools:ignore="RtlSymmetry" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
