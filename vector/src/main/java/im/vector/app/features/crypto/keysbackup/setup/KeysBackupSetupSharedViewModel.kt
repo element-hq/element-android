@@ -23,8 +23,8 @@ import androidx.lifecycle.viewModelScope
 import com.nulabinc.zxcvbn.Strength
 import im.vector.app.R
 import im.vector.app.core.platform.WaitingViewData
-import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.LiveEvent
+import im.vector.lib.core.utils.timer.Clock
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.Session

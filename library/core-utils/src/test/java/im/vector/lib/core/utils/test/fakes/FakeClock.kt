@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,23 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.app.core.time
+package im.vector.lib.core.utils.test.fakes
 
-import javax.inject.Inject
+import im.vector.lib.core.utils.timer.Clock
+import io.mockk.every
+import io.mockk.mockk
 
-interface Clock {
-    fun epochMillis(): Long
-}
-
-class DefaultClock @Inject constructor() : Clock {
-
-    /**
-     * Provides a UTC epoch in milliseconds
-     *
-     * This value is not guaranteed to be correct with reality
-     * as a User can override the system time and date to any values.
-     */
-    override fun epochMillis(): Long {
-        return System.currentTimeMillis()
+class FakeClock : Clock by mockk() {
+    fun givenEpoch(epoch: Long) {
+        every { epochMillis() } returns epoch
     }
 }

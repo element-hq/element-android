@@ -17,8 +17,6 @@ package org.matrix.android.sdk.api.session.pushrules
 
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.internal.di.MoshiProvider
-import org.matrix.android.sdk.internal.util.caseInsensitiveFind
-import org.matrix.android.sdk.internal.util.hasSpecialGlobChar
 import org.matrix.android.sdk.internal.util.simpleGlobToRegExp
 import timber.log.Timber
 
@@ -31,18 +29,14 @@ class EventMatchCondition(
          * The glob-style pattern to match against. Patterns with no special glob characters should
          * be treated as having asterisks prepended and appended when testing the condition.
          */
-        val pattern: String,
-        /**
-         * true to match only words. In this case pattern will not be considered as a glob
-         */
-        val wordsOnly: Boolean
+        val pattern: String
 ) : Condition {
 
     override fun isSatisfied(event: Event, conditionResolver: ConditionResolver): Boolean {
         return conditionResolver.resolveEventMatchCondition(event, this)
     }
 
-    override fun technicalDescription() = "'$key' matches '$pattern', words only '$wordsOnly'"
+    override fun technicalDescription() = "'$key' matches '$pattern'"
 
     fun isSatisfied(event: Event): Boolean {
         // TODO encrypted events?
@@ -50,21 +44,28 @@ class EventMatchCondition(
                 ?: return false
         val value = extractField(rawJson, key) ?: return false
 
-        // Patterns with no special glob characters should be treated as having asterisks prepended
-        // and appended when testing the condition.
+        // The match is performed case-insensitively, and must match the entire value of
+        // the event field given by `key` (though see below regarding `content.body`). The
+        // exact meaning of "case insensitive" is defined by the implementation of the
+        // homeserver.
+        //
+        // As a special case, if `key` is `content.body`, then `pattern` must instead
+        // match any substring of the value of the property which starts and ends at a
+        // word boundary.
         return try {
-            if (wordsOnly) {
-                value.caseInsensitiveFind(pattern)
-            } else {
-                val modPattern = if (pattern.hasSpecialGlobChar()) {
+            if (key == "content.body") {
+                val modPattern = if (pattern.startsWith("*") && pattern.endsWith("*")) {
                     // Regex.containsMatchIn() is way faster without leading and trailing
                     // stars, that don't make any difference for the evaluation result
                     pattern.removePrefix("*").removeSuffix("*").simpleGlobToRegExp()
                 } else {
-                    pattern.simpleGlobToRegExp()
+                    "(\\W|^)" + pattern.simpleGlobToRegExp() + "(\\W|$)"
                 }
-                val regex = Regex(modPattern, RegexOption.DOT_MATCHES_ALL)
+                val regex = Regex(modPattern, setOf(RegexOption.DOT_MATCHES_ALL, RegexOption.IGNORE_CASE))
                 regex.containsMatchIn(value)
+            } else {
+                val regex = Regex(pattern.simpleGlobToRegExp(), setOf(RegexOption.DOT_MATCHES_ALL, RegexOption.IGNORE_CASE))
+                regex.matches(value)
             }
         } catch (e: Throwable) {
             // e.g PatternSyntaxException

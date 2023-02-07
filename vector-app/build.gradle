@@ -392,6 +392,7 @@ android {
 dependencies {
     implementation project(':vector')
     implementation project(':vector-config')
+    implementation project(':library:core-utils')
     debugImplementation project(':library:ui-styles')
     implementation libs.dagger.hilt
     implementation 'androidx.multidex:multidex:2.0.1'

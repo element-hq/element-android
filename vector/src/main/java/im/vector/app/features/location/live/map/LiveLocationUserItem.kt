@@ -27,9 +27,9 @@ import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.TextUtils
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.lib.core.utils.timer.Clock
 import im.vector.lib.core.utils.timer.CountUpTimer
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.threeten.bp.Duration
@@ -79,10 +79,12 @@ abstract class LiveLocationUserItem : VectorEpoxyModel<LiveLocationUserItem.Hold
             }
         }
 
-        holder.timer.tickListener = CountUpTimer.TickListener {
-            holder.itemLastUpdatedAtTextView.text = getFormattedLastUpdatedAt(locationUpdateTimeMillis)
+        holder.timer.apply {
+            tickListener = CountUpTimer.TickListener {
+                holder.itemLastUpdatedAtTextView.text = getFormattedLastUpdatedAt(locationUpdateTimeMillis)
+            }
+            start()
         }
-        holder.timer.resume()
 
         holder.view.setOnClickListener { callback?.onUserSelected(matrixItem.id) }
     }

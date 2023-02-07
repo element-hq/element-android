@@ -16,7 +16,7 @@
 
 package im.vector.app.test.fakes
 
-import im.vector.app.core.time.Clock
+import im.vector.lib.core.utils.timer.Clock
 import io.mockk.every
 import io.mockk.mockk
 

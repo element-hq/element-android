@@ -24,7 +24,7 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
-import im.vector.app.core.time.DefaultClock
+import im.vector.lib.core.utils.timer.DefaultClock
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 import timber.log.Timber

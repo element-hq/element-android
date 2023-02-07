@@ -22,7 +22,7 @@ import android.text.format.DateUtils
 import im.vector.app.core.resources.DateProvider
 import im.vector.app.core.resources.LocaleProvider
 import im.vector.app.core.resources.toTimestamp
-import im.vector.app.core.time.Clock
+import im.vector.lib.core.utils.timer.Clock
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.Period
 import org.threeten.bp.format.DateTimeFormatter
