@@ -51,7 +51,6 @@ internal class DefaultEventService @Inject constructor(
             )
                     .findFirst()
                     ?.asDomain()
-
         }
     }
 }
