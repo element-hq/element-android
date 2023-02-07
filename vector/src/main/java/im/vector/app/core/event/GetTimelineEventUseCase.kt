@@ -25,7 +25,6 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.flow.unwrap
 import javax.inject.Inject
 
-// TODO add unit tests
 class GetTimelineEventUseCase @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
 ) {
