@@ -395,6 +395,7 @@ class SelfVerificationViewModel @AssistedInject constructor(
                     if (state.isThisSessionVerified) {
                         // we are the verified session, so just dismiss?
                         // do we want to prompt confirm??
+                        _viewEvents.post(VerificationBottomSheetViewEvents.Dismiss)
                     } else {
                         // cancel the active request and go back?
                         setState {

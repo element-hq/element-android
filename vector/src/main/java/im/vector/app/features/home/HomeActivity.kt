@@ -257,12 +257,7 @@ class HomeActivity :
                 HomeActivityViewEvents.PromptToEnableSessionPush -> handlePromptToEnablePush()
                 HomeActivityViewEvents.StartRecoverySetupFlow -> handleStartRecoverySetup()
                 is HomeActivityViewEvents.ForceVerification -> {
-                    // TODO
-//                    if (it.sendRequest) {
-                        navigator.requestSelfSessionVerification(this)
-//                    } else {
-//                        navigator.waitSessionVerification(this)
-//                    }
+                    navigator.requestSelfSessionVerification(this)
                 }
                 is HomeActivityViewEvents.OnCrossSignedInvalidated -> handleCrossSigningInvalidated(it)
                 HomeActivityViewEvents.ShowAnalyticsOptIn -> handleShowAnalyticsOptIn()
@@ -479,12 +474,7 @@ class HomeActivity :
                 titleRes = R.string.crosssigning_verify_this_session,
                 descRes = R.string.confirm_your_identity,
         ) {
-//            navigator.openSettings(this, SettingsActivityPayload.SecurityPrivacy)
-//            if (event.waitForIncomingRequest) {
-//                //it.navigator.waitSessionVerification(it)
-//            } else {
-                it.navigator.requestSelfSessionVerification(it)
-//            }
+            it.navigator.requestSelfSessionVerification(it)
         }
     }
 
