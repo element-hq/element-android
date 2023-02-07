@@ -19,15 +19,13 @@ package im.vector.app.features.home.room.detail.timeline.factory
 import im.vector.app.core.epoxy.TimelineEmptyItem
 import im.vector.app.core.epoxy.TimelineEmptyItem_
 import im.vector.app.core.epoxy.VectorEpoxyModel
-import im.vector.app.core.extensions.isVoiceBroadcast
 import im.vector.app.features.analytics.DecryptionFailureTracker
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventVisibilityHelper
 import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
+import im.vector.app.features.voicebroadcast.model.isVoiceBroadcast
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.RelationType
-import org.matrix.android.sdk.api.session.getRoom
-import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getRelationContent
 import timber.log.Timber
@@ -143,7 +141,7 @@ class TimelineItemFactory @Inject constructor(
                             event.root.isRedacted() -> messageItemFactory.create(params)
                             relationContent?.type == RelationType.REFERENCE -> {
                                 // Hide the decryption error for VoiceBroadcast chunks
-                                val relatedEvent = relationContent.eventId?.let { session.getRoom(event.roomId)?.getTimelineEvent(it) }
+                                val relatedEvent = relationContent.eventId?.let { session.eventService().getEventFromCache(event.roomId, it) }
                                 if (relatedEvent?.isVoiceBroadcast() != true) encryptedItemFactory.create(params) else null
                             }
                             else -> encryptedItemFactory.create(params)
