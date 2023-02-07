@@ -40,7 +40,9 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
+import org.matrix.android.sdk.api.session.room.model.message.asMessageAudioEvent
 import timber.log.Timber
 import java.util.concurrent.CopyOnWriteArrayList
 import javax.inject.Inject
@@ -189,9 +191,13 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
 
     private fun fetchPlaylistAndStartPlayback(voiceBroadcast: VoiceBroadcast) {
         fetchPlaylistTask = getLiveVoiceBroadcastChunksUseCase.execute(voiceBroadcast)
-                .onEach {
-                    playlist.setItems(it)
-                    onPlaylistUpdated()
+                .onEach { events ->
+                    if (events.any { it.getClearType() == EventType.ENCRYPTED }) {
+                        playingState = State.Error(VoiceBroadcastFailure.ListeningError.UnableToDecrypt)
+                    } else {
+                        playlist.setItems(events.mapNotNull { it.asMessageAudioEvent() })
+                        onPlaylistUpdated()
+                    }
                 }
                 .launchIn(sessionScope)
     }

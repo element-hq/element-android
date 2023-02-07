@@ -28,4 +28,12 @@ interface EventService {
             roomId: String,
             eventId: String
     ): Event
+
+    /**
+     * Get an Event from cache. Return null if not found.
+     */
+    fun getEventFromCache(
+            roomId: String,
+            eventId: String
+    ): Event?
 }
