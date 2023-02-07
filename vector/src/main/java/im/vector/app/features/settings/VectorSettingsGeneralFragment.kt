@@ -250,37 +250,28 @@ class VectorSettingsGeneralFragment :
 
         // clear medias cache
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_CLEAR_MEDIA_CACHE_PREFERENCE_KEY)!!.let {
-            val size = getSizeOfFiles(File(requireContext().cacheDir, DiskCache.Factory.DEFAULT_DISK_CACHE_DIR)) + session.fileService().getCacheSize()
-
-            it.summary = TextUtils.formatFileSize(requireContext(), size.toLong())
-
-            it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                lifecycleScope.launch(Dispatchers.Main) {
-                    // On UI Thread
-                    displayLoadingView()
-
-                    Glide.get(requireContext()).clearMemory()
-                    session.fileService().clearCache()
-
-                    var newSize: Long
-
-                    withContext(Dispatchers.IO) {
-                        // On BG thread
-                        Glide.get(requireContext()).clearDiskCache()
-
-                        newSize = getSizeOfFiles(File(requireContext().cacheDir, DiskCache.Factory.DEFAULT_DISK_CACHE_DIR))
-                        newSize += session.fileService().getCacheSize()
+            lifecycleScope.launch(Dispatchers.Main) {
+                it.summary = getString(R.string.loading)
+                val size = getCacheSize()
+                it.summary = TextUtils.formatFileSize(requireContext(), size)
+                it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        // On UI Thread
+                        displayLoadingView()
+                        Glide.get(requireContext()).clearMemory()
+                        session.fileService().clearCache()
+                        val newSize = withContext(Dispatchers.IO) {
+                            // On BG thread
+                            Glide.get(requireContext()).clearDiskCache()
+                            getCacheSize()
+                        }
+                        it.summary = TextUtils.formatFileSize(requireContext(), newSize)
+                        hideLoadingView()
                     }
-
-                    it.summary = TextUtils.formatFileSize(requireContext(), newSize)
-
-                    hideLoadingView()
+                    false
                 }
-
-                false
             }
         }
-
         // Sign out
         findPreference<VectorPreference>("SETTINGS_SIGN_OUT_KEY")!!
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
@@ -290,6 +281,11 @@ class VectorSettingsGeneralFragment :
 
             false
         }
+    }
+
+    private suspend fun getCacheSize(): Long = withContext(Dispatchers.IO) {
+        getSizeOfFiles(File(requireContext().cacheDir, DiskCache.Factory.DEFAULT_DISK_CACHE_DIR)) +
+                session.fileService().getCacheSize()
     }
 
     override fun onResume() {
