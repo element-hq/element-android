@@ -294,7 +294,7 @@ internal class RichTextComposerLayout @JvmOverloads constructor(
 
     private fun updateEditTextVisibility() {
         views.richTextComposerEditText.isVisible = isTextFormattingEnabled
-        views.richTextMenu.isVisible = isTextFormattingEnabled
+        views.richTextMenuScrollView.isVisible = isTextFormattingEnabled
         views.plainTextComposerEditText.isVisible = !isTextFormattingEnabled
 
         // The layouts for formatted text mode and plain text mode are different, so we need to update the constraints
