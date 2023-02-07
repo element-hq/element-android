@@ -42,6 +42,7 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.unmockkAll
+import io.mockk.verify
 import io.mockk.verifyAll
 import kotlinx.coroutines.flow.flowOf
 import org.amshove.kluent.shouldBeEqualTo
@@ -55,7 +56,6 @@ import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
 
 private const val A_CURRENT_DEVICE_ID = "current-device-id"
@@ -78,9 +78,8 @@ class DevicesViewModelTest {
     private val fakeRefreshDevicesUseCase = mockk<RefreshDevicesUseCase>(relaxUnitFun = true)
     private val fakeVectorPreferences = FakeVectorPreferences()
     private val toggleIpAddressVisibilityUseCase = mockk<ToggleIpAddressVisibilityUseCase>()
-
     private val verifiedTransaction = mockk<VerificationTransaction>().apply {
-        every { state } returns VerificationTxState.Verified
+        every { isSuccessful() } returns true
     }
 
     private fun createViewModel(): DevicesViewModel {
@@ -115,7 +114,9 @@ class DevicesViewModelTest {
         return fakeActiveSessionHolder
                 .fakeSession
                 .fakeCryptoService
-                .fakeVerificationService
+                .fakeVerificationService.also {
+                    it.givenEventFlow()
+                }
     }
 
     @After
