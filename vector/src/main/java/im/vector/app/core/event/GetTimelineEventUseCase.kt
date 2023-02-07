@@ -20,6 +20,7 @@ import androidx.lifecycle.asFlow
 import im.vector.app.core.di.ActiveSessionHolder
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.flow.unwrap
 import javax.inject.Inject
@@ -30,7 +31,7 @@ class GetTimelineEventUseCase @Inject constructor(
 ) {
 
     fun execute(roomId: String, eventId: String): Flow<TimelineEvent> {
-        return activeSessionHolder.getActiveSession().roomService().getRoom(roomId)
+        return activeSessionHolder.getActiveSession().getRoom(roomId)
                 ?.timelineService()
                 ?.getTimelineEventLive(eventId)
                 ?.asFlow()
