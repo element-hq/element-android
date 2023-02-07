@@ -2091,6 +2091,7 @@ $dokka.location:org.matrix.android.sdk.api.session.events.model/ValidDecryptedEv
 $dokka.location:org.matrix.android.sdk.api.session.events////PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.events/index.html
 $dokka.location:org.matrix.android.sdk.api.session.events/EventService///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.events/-event-service/index.html
 $dokka.location:org.matrix.android.sdk.api.session.events/EventService/getEvent/#kotlin.String#kotlin.String/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.events/-event-service/get-event.html
+$dokka.location:org.matrix.android.sdk.api.session.events/EventService/getEventFromCache/#kotlin.String#kotlin.String/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.events/-event-service/get-event-from-cache.html
 $dokka.location:org.matrix.android.sdk.api.session.file////PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.file/index.html
 $dokka.location:org.matrix.android.sdk.api.session.file/ContentDownloadStateTracker.State.Decrypting///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.file/-content-download-state-tracker/-state/-decrypting/index.html
 $dokka.location:org.matrix.android.sdk.api.session.file/ContentDownloadStateTracker.State.Downloading///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.file/-content-download-state-tracker/-state/-downloading/index.html
