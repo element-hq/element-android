@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.notifications
+package im.vector.app.features.settings.notifications.keywordandmentions
 
 import android.os.Bundle
 import android.view.View
@@ -26,6 +26,10 @@ import im.vector.app.core.preference.VectorCheckboxPreference
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorPreferenceCategory
 import im.vector.app.features.analytics.plan.MobileScreen
+import im.vector.app.features.settings.notifications.NotificationIndex
+import im.vector.app.features.settings.notifications.StandardActions
+import im.vector.app.features.settings.notifications.VectorSettingsPushRuleNotificationPreferenceFragment
+import im.vector.app.features.settings.notifications.getStandardAction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

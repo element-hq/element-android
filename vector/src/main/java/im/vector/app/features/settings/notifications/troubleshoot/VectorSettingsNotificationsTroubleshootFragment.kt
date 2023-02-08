@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.app.features.settings.notifications
+package im.vector.app.features.settings.notifications.troubleshoot
 
 import android.app.Activity
 import android.content.BroadcastReceiver

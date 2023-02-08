@@ -31,6 +31,9 @@ import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.pushers.RegisterUnifiedPushUseCase
 import im.vector.app.core.pushers.UnregisterUnifiedPushUseCase
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.settings.notifications.usecase.DisableNotificationsForCurrentSessionUseCase
+import im.vector.app.features.settings.notifications.usecase.EnableNotificationsForCurrentSessionUseCase
+import im.vector.app.features.settings.notifications.usecase.ToggleNotificationsForCurrentSessionUseCase
 import kotlinx.coroutines.launch
 
 class VectorSettingsNotificationPreferenceViewModel @AssistedInject constructor(
