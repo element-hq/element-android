@@ -20,9 +20,9 @@ import android.content.Context
 import androidx.core.net.toUri
 import dagger.hilt.android.qualifiers.ApplicationContext
 import im.vector.app.core.intent.getMimeTypeFromUri
-import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.saveMedia
 import im.vector.app.features.notifications.NotificationUtils
+import im.vector.lib.core.utils.timer.Clock
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.session.Session
 import java.io.File

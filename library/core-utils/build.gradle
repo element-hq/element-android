@@ -53,4 +53,12 @@ android {
 
 dependencies {
     implementation libs.jetbrains.coroutinesAndroid
+
+    // TESTS
+    testImplementation libs.tests.junit
+    testImplementation libs.tests.kluent
+    testImplementation libs.mockk.mockk
+    testImplementation(libs.jetbrains.coroutinesTest) {
+        exclude group: "org.jetbrains.kotlinx", module: "kotlinx-coroutines-debug"
+    }
 }

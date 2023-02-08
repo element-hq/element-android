@@ -32,6 +32,7 @@ enum class Command(
         val isDevCommand: Boolean,
         val isThreadCommand: Boolean
 ) {
+    CRASH_APP("/crash", null, "", R.string.command_description_crash_application, true, true),
     EMOTE("/me", null, "<message>", R.string.command_description_emote, false, true),
     BAN_USER("/ban", null, "<user-id> [reason]", R.string.command_description_ban_user, false, false),
     UNBAN_USER("/unban", null, "<user-id> [reason]", R.string.command_description_unban_user, false, false),

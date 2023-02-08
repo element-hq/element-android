@@ -245,33 +245,23 @@ class VoiceBroadcastRecorderQ(
     ) {
         fun start() {
             recordingTicker?.stop()
-            recordingTicker = CountUpTimer().apply {
-                tickListener = CountUpTimer.TickListener { onTick(elapsedTime()) }
-                resume()
-                onTick(elapsedTime())
+            recordingTicker = CountUpTimer().also {
+                it.tickListener = CountUpTimer.TickListener { tick -> onTick(tick) }
+                it.start()
             }
         }
 
         fun pause() {
-            recordingTicker?.apply {
-                pause()
-                onTick(elapsedTime())
-            }
+            recordingTicker?.pause()
         }
 
         fun resume() {
-            recordingTicker?.apply {
-                resume()
-                onTick(elapsedTime())
-            }
+            recordingTicker?.resume()
         }
 
         fun stop() {
-            recordingTicker?.apply {
-                stop()
-                onTick(elapsedTime())
-                recordingTicker = null
-            }
+            recordingTicker?.stop()
+            recordingTicker = null
         }
 
         private fun onTick(elapsedTimeMillis: Long) {

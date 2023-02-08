@@ -38,8 +38,8 @@ data class HomeDetailViewState(
         val notificationCountRooms: Int = 0,
         val notificationHighlightRooms: Boolean = false,
         val hasUnreadMessages: Boolean = false,
-        val syncState: SyncState = SyncState.Idle,
-        val incrementalSyncRequestState: SyncRequestState.IncrementalSyncRequestState = SyncRequestState.IncrementalSyncIdle,
+        val syncState: SyncState? = null,
+        val incrementalSyncRequestState: SyncRequestState.IncrementalSyncRequestState? = null,
         val pushCounter: Int = 0,
         val pstnSupportFlag: Boolean = false,
         val forceDialPadTab: Boolean = false

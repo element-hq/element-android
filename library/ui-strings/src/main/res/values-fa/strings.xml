@@ -2918,4 +2918,6 @@
     </plurals>
     <string name="error_voice_message_broadcast_in_progress_message">از آن‌جا که در حال ضبط پخشی زنده‌اید، نمی‌توانید پیامی صوتی را آغاز کنید. لطفاً برای آغاز ضبط یک پیام صوتی، پخش زنده‌تان را پایان دهید</string>
     <string name="error_voice_message_broadcast_in_progress">نمی‌توان پخش صوتی را آغاز کرد</string>
+    <string name="error_voice_broadcast_no_connection_recording">خطای اتّصال - ضبط مکث شد</string>
+    <string name="rich_text_editor_inline_code">اعمال قالب کد درون‌خط</string>
 </resources>

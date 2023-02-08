@@ -25,7 +25,6 @@ import im.vector.app.R
 import im.vector.app.core.extensions.createIgnoredUri
 import im.vector.app.core.platform.PendingIntentCompat
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.time.Clock
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.arguments.TimelineArgs
@@ -34,6 +33,7 @@ import im.vector.app.features.location.live.map.LiveLocationMapViewArgs
 import im.vector.app.features.notifications.NotificationActionIds
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.themes.ThemeUtils
+import im.vector.lib.core.utils.timer.Clock
 import javax.inject.Inject
 import javax.inject.Singleton
 

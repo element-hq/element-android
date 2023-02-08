@@ -3038,4 +3038,6 @@
     <string name="room_polls_wait_for_display">Показ опитувань</string>
     <string name="error_voice_message_broadcast_in_progress_message">Ви не можете розпочати запис голосового повідомлення, оскільки ви записуєте трансляцію наживо. Будь ласка, заверште її, щоб розпочати запис голосового повідомлення</string>
     <string name="error_voice_message_broadcast_in_progress">Не вдалося розпочати запис голосового повідомлення</string>
+    <string name="error_voice_broadcast_no_connection_recording">Помилка з\'єднання - Запис призупинено</string>
+    <string name="rich_text_editor_inline_code">Застосовувати вбудований формат коду</string>
 </resources>

@@ -40,7 +40,9 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
+import org.matrix.android.sdk.api.session.room.model.message.asMessageAudioEvent
 import timber.log.Timber
 import java.util.concurrent.CopyOnWriteArrayList
 import javax.inject.Inject
@@ -189,9 +191,13 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
 
     private fun fetchPlaylistAndStartPlayback(voiceBroadcast: VoiceBroadcast) {
         fetchPlaylistTask = getLiveVoiceBroadcastChunksUseCase.execute(voiceBroadcast)
-                .onEach {
-                    playlist.setItems(it)
-                    onPlaylistUpdated()
+                .onEach { events ->
+                    if (events.any { it.getClearType() == EventType.ENCRYPTED }) {
+                        playingState = State.Error(VoiceBroadcastFailure.ListeningError.UnableToDecrypt)
+                    } else {
+                        playlist.setItems(events.mapNotNull { it.asMessageAudioEvent() })
+                        onPlaylistUpdated()
+                    }
                 }
                 .launchIn(sessionScope)
     }
@@ -206,7 +212,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
                 }
             }
             State.Buffering -> {
-                val savedPosition = currentVoiceBroadcast?.voiceBroadcastId?.let { playbackTracker.getPlaybackTime(it) }
+                val savedPosition = currentVoiceBroadcast?.let { playbackTracker.getPlaybackTime(it.voiceBroadcastId) }
                 when {
                     // resume playback from the next sequence item
                     playlist.currentSequence != null -> playlist.getNextItem()?.let { startPlayback(it.startTime) }
@@ -223,24 +229,42 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
         }
     }
 
-    private fun startPlayback(position: Int) {
+    private fun startPlayback(playbackPosition: Int) {
         stopPlayer()
+        playingState = State.Buffering
 
-        val playlistItem = playlist.findByPosition(position)
-        val content = playlistItem?.audioEvent?.content ?: run { Timber.w("## Voice Broadcast | No content to play at position $position"); return }
-        val sequence = playlistItem.sequence ?: run { Timber.w("## Voice Broadcast | Playlist item has no sequence"); return }
-        val sequencePosition = position - playlistItem.startTime
+        val playlistItem = playlist.findByPosition(playbackPosition) ?: run {
+            Timber.w("## Voice Broadcast | No content to play at position $playbackPosition"); stop(); return
+        }
+        val sequence = playlistItem.sequence ?: run {
+            Timber.w("## Voice Broadcast | Playlist item has no sequence"); stop(); return
+        }
+
+        currentVoiceBroadcast?.let {
+            val percentage = tryOrNull { playbackPosition.toFloat() / playlist.duration } ?: 0f
+            playbackTracker.updatePausedAtPlaybackTime(it.voiceBroadcastId, playbackPosition, percentage)
+        }
+
         prepareCurrentPlayerJob = sessionScope.launch {
             try {
-                val mp = prepareMediaPlayer(content)
+                val mp = prepareMediaPlayer(playlistItem.audioEvent.content)
+
+                // Take the difference between the duration given from the media player and the duration given from the chunk event
+                // If the offset is smaller than 500ms, we consider there is no offset to keep the normal behaviour
+                val offset = (mp.duration - playlistItem.duration).takeUnless { it < 500 }?.coerceAtLeast(0) ?: 0
+                val sequencePosition = offset + (playbackPosition - playlistItem.startTime)
+
                 playlist.currentSequence = sequence - 1 // will be incremented in onNextMediaPlayerStarted
                 mp.start()
                 if (sequencePosition > 0) {
                     mp.seekTo(sequencePosition)
                 }
+
                 onNextMediaPlayerStarted(mp)
             } catch (failure: VoiceBroadcastFailure.ListeningError) {
-                playingState = State.Error(failure)
+                if (failure.cause !is CancellationException) {
+                    playingState = State.Error(failure)
+                }
             }
         }
     }
@@ -259,7 +283,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
             playingState = State.Playing
             currentMediaPlayer?.start()
         } else {
-            val savedPosition = currentVoiceBroadcast?.voiceBroadcastId?.let { playbackTracker.getPlaybackTime(it) } ?: 0
+            val savedPosition = currentVoiceBroadcast?.let { playbackTracker.getPlaybackTime(it.voiceBroadcastId) } ?: 0
             startPlayback(savedPosition)
         }
     }
@@ -301,7 +325,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
                 } catch (failure: VoiceBroadcastFailure.ListeningError) {
                     // Do not change the playingState if the current player is still valid,
                     // the error will be thrown again when switching to the next player
-                    if (playingState == State.Buffering || tryOrNull { currentMediaPlayer?.isPlaying } != true) {
+                    if (failure.cause !is CancellationException && (playingState == State.Buffering || tryOrNull { currentMediaPlayer?.isPlaying } != true)) {
                         playingState = State.Error(failure)
                     }
                 }
@@ -355,6 +379,8 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
 
     private fun stopPlayer() {
         tryOrNull { currentMediaPlayer?.stop() }
+        playbackTicker.stopPlaybackTicker()
+
         currentMediaPlayer?.release()
         currentMediaPlayer = null
 
@@ -376,7 +402,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
                 State.Paused,
                 State.Buffering,
                 is State.Error,
-                State.Idle -> playbackTicker.stopPlaybackTicker(voiceBroadcastId)
+                State.Idle -> playbackTicker.stopPlaybackTicker()
             }
 
             // Notify playback tracker about error
@@ -414,22 +440,6 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
         currentMediaPlayer = mp
         nextMediaPlayer = null
         prepareNextMediaPlayer()
-    }
-
-    private fun getCurrentPlaybackPosition(): Int? {
-        val voiceBroadcastId = currentVoiceBroadcast?.voiceBroadcastId ?: return null
-        val computedPosition = tryOrNull { currentMediaPlayer?.currentPosition }?.let { playlist.currentItem?.startTime?.plus(it) }
-        val savedPosition = playbackTracker.getPlaybackTime(voiceBroadcastId)
-        return computedPosition ?: savedPosition
-    }
-
-    private fun getCurrentPlaybackPercentage(): Float? {
-        val playlistPosition = playlist.currentItem?.startTime
-        val computedPosition = tryOrNull { currentMediaPlayer?.currentPosition }?.let { playlistPosition?.plus(it) } ?: playlistPosition
-        val duration = playlist.duration
-        val computedPercentage = if (computedPosition != null && duration > 0) computedPosition.toFloat() / duration else null
-        val savedPercentage = currentVoiceBroadcast?.voiceBroadcastId?.let { playbackTracker.getPercentage(it) }
-        return computedPercentage ?: savedPercentage
     }
 
     private inner class MediaPlayerListener :
@@ -488,40 +498,38 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
 
         fun startPlaybackTicker(id: String) {
             playbackTicker?.stop()
-            playbackTicker = CountUpTimer(50L).apply {
-                tickListener = CountUpTimer.TickListener { onPlaybackTick(id) }
-                resume()
+            playbackTicker = CountUpTimer(intervalInMs = 50L).apply {
+                tickListener = CountUpTimer.TickListener { onPlaybackTick(id, it.toInt()) }
+                start(initialTime = playbackTracker.getPlaybackTime(id)?.toLong() ?: 0L)
             }
-            onPlaybackTick(id)
         }
 
-        fun stopPlaybackTicker(id: String) {
+        fun stopPlaybackTicker() {
             playbackTicker?.stop()
+            playbackTicker?.tickListener = null
             playbackTicker = null
-            onPlaybackTick(id)
         }
 
-        private fun onPlaybackTick(id: String) {
-            val playbackTime = getCurrentPlaybackPosition()
-            val percentage = getCurrentPlaybackPercentage()
+        private fun onPlaybackTick(id: String, position: Int) {
+            val percentage = tryOrNull { position.toFloat() / playlist.duration }
             when (playingState) {
                 State.Playing -> {
-                    if (playbackTime != null && percentage != null) {
-                        playbackTracker.updatePlayingAtPlaybackTime(id, playbackTime, percentage)
+                    if (percentage != null) {
+                        playbackTracker.updatePlayingAtPlaybackTime(id, position, percentage)
                     }
                 }
                 State.Paused,
                 State.Buffering -> {
-                    if (playbackTime != null && percentage != null) {
-                        playbackTracker.updatePausedAtPlaybackTime(id, playbackTime, percentage)
+                    if (percentage != null) {
+                        playbackTracker.updatePausedAtPlaybackTime(id, position, percentage)
                     }
                 }
                 State.Idle -> {
-                    // restart the playback time if player completed with less than 250 ms remaining time
-                    if (playbackTime == null || percentage == null || (playlist.duration - playbackTime) < 250) {
+                    // restart the playback time if player completed with less than 1s remaining time
+                    if (percentage == null || (playlist.duration - position) < 1000) {
                         playbackTracker.stopPlayback(id)
                     } else {
-                        playbackTracker.updatePausedAtPlaybackTime(id, playbackTime, percentage)
+                        playbackTracker.updatePausedAtPlaybackTime(id, position, percentage)
                     }
                 }
                 is State.Error -> Unit

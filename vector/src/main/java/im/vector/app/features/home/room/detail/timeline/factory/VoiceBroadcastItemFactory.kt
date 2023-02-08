@@ -75,6 +75,7 @@ class VoiceBroadcastItemFactory @Inject constructor(
                 voiceBroadcast = voiceBroadcast,
                 voiceBroadcastState = voiceBroadcastContent.voiceBroadcastState,
                 duration = voiceBroadcastEventsGroup.getDuration(),
+                hasUnableToDecryptEvent = voiceBroadcastEventsGroup.hasUnableToDecryptEvent(),
                 recorderName = params.event.senderInfo.disambiguatedDisplayName,
                 recorder = voiceBroadcastRecorder,
                 player = voiceBroadcastPlayer,

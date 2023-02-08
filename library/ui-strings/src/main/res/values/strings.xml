@@ -3120,6 +3120,7 @@
     <string name="error_voice_broadcast_already_in_progress_message">You are already recording a voice broadcast. Please end your current voice broadcast to start a new one.</string>
     <string name="error_voice_broadcast_unable_to_play">Unable to play this voice broadcast.</string>
     <string name="error_voice_broadcast_no_connection_recording">Connection error - Recording paused</string>
+    <string name="error_voice_broadcast_unable_to_decrypt">Unable to decrypt this voice broadcast.</string>
     <!-- Examples of usage: 6h 15min 30sec left / 15min 30sec left / 30sec left -->
     <string name="voice_broadcast_recording_time_left">%1$s left</string>
     <string name="stop_voice_broadcast_dialog_title">Stop live broadcasting?</string>
@@ -3502,6 +3503,7 @@
     <string name="rich_text_editor_link">Set link</string>
     <string name="rich_text_editor_numbered_list">Toggle numbered list</string>
     <string name="rich_text_editor_bullet_list">Toggle bullet list</string>
+    <string name="rich_text_editor_inline_code">Apply inline code format</string>
     <string name="rich_text_editor_full_screen_toggle">Toggle full screen mode</string>
 
     <string name="set_link_text">Text</string>

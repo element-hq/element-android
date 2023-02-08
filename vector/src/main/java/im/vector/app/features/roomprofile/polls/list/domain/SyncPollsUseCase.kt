@@ -17,16 +17,26 @@
 package im.vector.app.features.roomprofile.polls.list.domain
 
 import im.vector.app.features.roomprofile.polls.list.data.RoomPollRepository
+import org.matrix.android.sdk.api.session.room.poll.LoadedPollsStatus
 import javax.inject.Inject
 
 /**
- * Sync the polls of a given room from last manual loading (see LoadMorePollsUseCase) until now.
+ * Sync the polls of a given room from last manual loading if any (see LoadMorePollsUseCase) until now.
+ * Resume or start loading more to have at least a complete load.
  */
 class SyncPollsUseCase @Inject constructor(
         private val roomPollRepository: RoomPollRepository,
+        private val getLoadedPollsStatusUseCase: GetLoadedPollsStatusUseCase,
+        private val loadMorePollsUseCase: LoadMorePollsUseCase,
 ) {
 
-    suspend fun execute(roomId: String) {
+    suspend fun execute(roomId: String): LoadedPollsStatus {
         roomPollRepository.syncPolls(roomId)
+        val loadedStatus = getLoadedPollsStatusUseCase.execute(roomId)
+        return if (loadedStatus.hasCompletedASyncBackward) {
+            loadedStatus
+        } else {
+            loadMorePollsUseCase.execute(roomId)
+        }
     }
 }

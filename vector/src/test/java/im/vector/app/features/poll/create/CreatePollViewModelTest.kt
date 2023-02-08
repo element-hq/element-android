@@ -68,7 +68,7 @@ class CreatePollViewModelTest {
                 .roomService()
                 .getRoom(A_FAKE_ROOM_ID)
                 .timelineService()
-                .givenTimelineEvent(A_POLL_START_TIMELINE_EVENT)
+                .givenTimelineEventReturns(A_POLL_START_TIMELINE_EVENT.eventId, A_POLL_START_TIMELINE_EVENT)
     }
 
     @After

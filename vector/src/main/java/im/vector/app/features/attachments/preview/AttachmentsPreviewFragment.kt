@@ -47,12 +47,12 @@ import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.resources.ColorProvider
-import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.OnSnapPositionChangeListener
 import im.vector.app.core.utils.SnapOnScrollListener
 import im.vector.app.core.utils.attachSnapHelperWithListener
 import im.vector.app.databinding.FragmentAttachmentsPreviewBinding
 import im.vector.app.features.media.createUCropWithDefaultSettings
+import im.vector.lib.core.utils.timer.Clock
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData

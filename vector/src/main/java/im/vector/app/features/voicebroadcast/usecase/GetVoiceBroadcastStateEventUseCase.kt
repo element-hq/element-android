@@ -49,14 +49,15 @@ class GetVoiceBroadcastStateEventUseCase @Inject constructor(
      * Get the most recent event related to the given voice broadcast.
      */
     private fun getMostRecentRelatedEvent(room: Room, voiceBroadcast: VoiceBroadcast): VoiceBroadcastEvent? {
-        val startedEvent = room.getTimelineEvent(voiceBroadcast.voiceBroadcastId)
-        return if (startedEvent?.root?.isRedacted().orTrue()) {
+        val startedEvent = room.getTimelineEvent(voiceBroadcast.voiceBroadcastId)?.root
+        return if (startedEvent?.isRedacted().orTrue()) {
             null
         } else {
             room.timelineService().getTimelineEventsRelatedTo(RelationType.REFERENCE, voiceBroadcast.voiceBroadcastId)
                     .mapNotNull { timelineEvent -> timelineEvent.root.asVoiceBroadcastEvent() }
                     .filterNot { it.root.isRedacted() }
                     .maxByOrNull { it.root.originServerTs ?: 0 }
+                    ?: startedEvent?.asVoiceBroadcastEvent()
         }
     }
 }

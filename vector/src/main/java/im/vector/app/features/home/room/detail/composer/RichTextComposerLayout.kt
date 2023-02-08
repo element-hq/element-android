@@ -246,6 +246,9 @@ internal class RichTextComposerLayout @JvmOverloads constructor(
         addRichTextMenuItem(R.drawable.ic_composer_numbered_list, R.string.rich_text_editor_numbered_list, ComposerAction.ORDERED_LIST) {
             views.richTextComposerEditText.toggleList(ordered = true)
         }
+        addRichTextMenuItem(R.drawable.ic_composer_inline_code, R.string.rich_text_editor_inline_code, ComposerAction.INLINE_CODE) {
+            views.richTextComposerEditText.toggleInlineFormat(InlineFormat.InlineCode)
+        }
     }
 
     fun setLink(link: String?) =
@@ -291,7 +294,7 @@ internal class RichTextComposerLayout @JvmOverloads constructor(
 
     private fun updateEditTextVisibility() {
         views.richTextComposerEditText.isVisible = isTextFormattingEnabled
-        views.richTextMenu.isVisible = isTextFormattingEnabled
+        views.richTextMenuScrollView.isVisible = isTextFormattingEnabled
         views.plainTextComposerEditText.isVisible = !isTextFormattingEnabled
 
         // The layouts for formatted text mode and plain text mode are different, so we need to update the constraints

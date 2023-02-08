@@ -6,9 +6,9 @@ ext.versions = [
         'targetCompat'      : JavaVersion.VERSION_11,
 ]
 
-def gradle = "7.3.1"
+def gradle = "7.4.1"
 // Ref: https://kotlinlang.org/releases.html
-def kotlin = "1.8.0"
+def kotlin = "1.8.10"
 def kotlinCoroutines = "1.6.4"
 def dagger = "2.44.2"
 def firebaseBom = "31.2.0"
@@ -18,7 +18,7 @@ def markwon = "4.6.2"
 def moshi = "1.14.0"
 def lifecycle = "2.5.1"
 def flowBinding = "1.2.0"
-def flipper = "0.177.0"
+def flipper = "0.178.1"
 def epoxy = "5.0.0"
 def mavericks = "3.0.1"
 def glide = "4.14.2"
@@ -27,7 +27,7 @@ def jjwt = "0.11.5"
 // Temporary version to unblock #6929. Once 0.16.0 is released we should use it, and revert
 // the whole commit which set version 0.16.0-SNAPSHOT
 def vanniktechEmoji = "0.16.0-SNAPSHOT"
-def sentry = "6.12.1"
+def sentry = "6.13.0"
 // Use 1.6.0 alpha to fix issue with test
 def fragment = "1.6.0-alpha04"
 // Testing
@@ -35,7 +35,7 @@ def mockk = "1.12.3" // We need to use 1.12.3 to have mocking in androidTest unt
 def espresso = "3.5.1"
 def androidxTest = "1.5.0"
 def androidxOrchestrator = "1.4.2"
-def paparazzi = "1.1.0"
+def paparazzi = "1.2.0"
 
 ext.libs = [
         gradle      : [
@@ -82,7 +82,7 @@ ext.libs = [
                 'transition'              : "androidx.transition:transition:1.2.0",
         ],
         google      : [
-                'material'                : "com.google.android.material:material:1.7.0",
+                'material'                : "com.google.android.material:material:1.8.0",
                 'firebaseBom'             : "com.google.firebase:firebase-bom:$firebaseBom",
                 'messaging'               : "com.google.firebase:firebase-messaging",
                 'appdistributionApi'      : "com.google.firebase:firebase-appdistribution-api-ktx:$appDistribution",
@@ -103,7 +103,7 @@ ext.libs = [
         ],
         element     : [
                 'opusencoder'             : "io.element.android:opusencoder:1.1.0",
-                'wysiwyg'                 : "io.element.android:wysiwyg:0.18.0"
+                'wysiwyg'                 : "io.element.android:wysiwyg:0.23.0"
         ],
         squareup    : [
                 'moshi'                  : "com.squareup.moshi:moshi:$moshi",

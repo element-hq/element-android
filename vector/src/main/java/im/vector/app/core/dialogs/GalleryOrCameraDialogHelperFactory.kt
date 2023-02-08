@@ -18,7 +18,7 @@ package im.vector.app.core.dialogs
 
 import androidx.fragment.app.Fragment
 import im.vector.app.core.resources.ColorProvider
-import im.vector.app.core.time.Clock
+import im.vector.lib.core.utils.timer.Clock
 import javax.inject.Inject
 
 /**

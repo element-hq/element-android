@@ -36,9 +36,9 @@ import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.safeOpenOutputStream
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.VectorMenuProvider
-import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.selectTxtFileToWrite
 import im.vector.app.databinding.FragmentDevtoolKeyrequestsBinding
+import im.vector.lib.core.utils.timer.Clock
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import javax.inject.Inject
 

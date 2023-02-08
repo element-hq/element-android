@@ -43,8 +43,8 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
-import im.vector.app.core.time.DefaultClock
 import im.vector.app.espresso.tools.waitUntilViewVisible
+import im.vector.lib.core.utils.timer.DefaultClock
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
 import org.hamcrest.StringDescription

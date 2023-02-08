@@ -2898,4 +2898,26 @@
     <string name="room_profile_section_more_polls">Omröstningshistorik</string>
     <string name="thread_list_not_available">Din hemserver har inte stöd för att lista trådar än.</string>
     <string name="action_stop">Ja, sluta</string>
+    <string name="room_polls_loading_error">Fel vid hämtning av omröstningar.</string>
+    <string name="room_polls_load_more">Laddar fler omröstning</string>
+    <string name="room_polls_wait_for_display">Visar omröstningar</string>
+    <plurals name="room_polls_active_no_item_for_loaded_period">
+        <item quantity="one">Det finns inga aktiva omröstningar från förra dagen.
+\nLadda fler omröstningar för att se omröstningar från tidigare dagar.</item>
+        <item quantity="other">Det finns inga aktiva omröstningar från senaste %1$d dagarna.
+\nLadda fler omröstningar för att se omröstningar från tidigare dagar.</item>
+    </plurals>
+    <plurals name="room_polls_ended_no_item_for_loaded_period">
+        <item quantity="one">Det finns inga omröstningar från förra dagen.
+\nLadda fler omröstningar för att se omröstningar från tidigare dagar.</item>
+        <item quantity="other">Det finns inga omröstningar från senaste %1$d dagarna.
+\nLadda fler omröstningar för att se omröstningar från tidigare dagar.</item>
+    </plurals>
+    <string name="unable_to_decrypt_some_events_in_poll">På grund av avkrypteringsfel så kanske vissa röster inte räknas</string>
+    <string name="error_voice_broadcast_no_connection_recording">Anslutningsfel - Inspelning pausad</string>
+    <string name="error_voice_broadcast_unable_to_play">Kan inte spela den här röstsändningen.</string>
+    <string name="error_voice_message_broadcast_in_progress_message">Du kan inte påbörja ett röstmeddelande eftersom du för närvarande spelar in en röstsändning. Vänligen avsluta din röstsändning för att börja spela in ett röstmeddelande</string>
+    <string name="error_voice_message_broadcast_in_progress">Kan inte starta röstsändning</string>
+    <string name="started_a_voice_broadcast">Startade en röstsändning</string>
+    <string name="rich_text_editor_inline_code">Använd inline-kodformat</string>
 </resources>

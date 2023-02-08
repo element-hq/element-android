@@ -45,6 +45,7 @@ abstract class AbsMessageVoiceBroadcastItem<H : AbsMessageVoiceBroadcastItem.Hol
     protected val player get() = voiceBroadcastAttributes.player
     protected val playbackTracker get() = voiceBroadcastAttributes.playbackTracker
     protected val duration get() = voiceBroadcastAttributes.duration
+    protected val hasUnableToDecryptEvent get() = voiceBroadcastAttributes.hasUnableToDecryptEvent
     protected val roomItem get() = voiceBroadcastAttributes.roomItem
     protected val colorProvider get() = voiceBroadcastAttributes.colorProvider
     protected val drawableProvider get() = voiceBroadcastAttributes.drawableProvider
@@ -102,6 +103,7 @@ abstract class AbsMessageVoiceBroadcastItem<H : AbsMessageVoiceBroadcastItem.Hol
             val voiceBroadcast: VoiceBroadcast,
             val voiceBroadcastState: VoiceBroadcastState?,
             val duration: Int,
+            val hasUnableToDecryptEvent: Boolean,
             val recorderName: String,
             val recorder: VoiceBroadcastRecorder?,
             val player: VoiceBroadcastPlayer,

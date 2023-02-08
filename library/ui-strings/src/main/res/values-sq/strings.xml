@@ -2887,4 +2887,23 @@
     <string name="error_voice_broadcast_unable_to_play">S’arrihet të luhet ky transmetim zanor.</string>
     <string name="started_a_voice_broadcast">Nisni një transmetim zanor</string>
     <string name="thread_list_not_available">Shërbyesi juaj Home s’mbulon ende paraqitje rrjedhash.</string>
+    <string name="rich_text_editor_inline_code">Apliko format kodi brendazi</string>
+    <string name="room_polls_loading_error">Gabim në sjellje pyetësorësh.</string>
+    <string name="room_polls_load_more">Ngarko më tepër pyetësorë</string>
+    <string name="room_polls_wait_for_display">Shfaqje pyetësorësh</string>
+    <plurals name="room_polls_ended_no_item_for_loaded_period">
+        <item quantity="one">S’ka pyetësorë të kaluar për ditën e kaluar.
+\nQë të shihni pyetësorë për ditët e kaluara, ngarkoni më tepër pyetësorë.</item>
+        <item quantity="other">S’ka pyetësorë aktivë për %1$d ditët e kaluara.
+\nQë të shihni pyetësorë për ditët e kaluara, ngarkoni më tepër pyetësorë.</item>
+    </plurals>
+    <plurals name="room_polls_active_no_item_for_loaded_period">
+        <item quantity="one">S’ka pyetësorë aktivë për ditën e kaluar.
+\nQë të shihni pyetësorë për ditët e kaluara, ngarkoni më tepër pyetësorë.</item>
+        <item quantity="other">S’ka pyetësorë aktivë për%1$d ditët e kaluara.
+\nQë të shihni pyetësorë për ditët e kaluara, ngarkoni më tepër pyetësorë.</item>
+    </plurals>
+    <string name="error_voice_broadcast_no_connection_recording">Gabim lidhjeje - Incizimi u ndal</string>
+    <string name="error_voice_message_broadcast_in_progress_message">S’mund të nisni një mesazh zanor teksa jeni aktualisht duke incizuar një transmetim të drejtpërdrejtë. Ju lutemi, përfundoni transmetimin tuaj të drejtpërdrejtë, që të mund të nisni incizimin e një mesazhi zanor</string>
+    <string name="error_voice_message_broadcast_in_progress">S’niset dot mesazh zanor</string>
 </resources>

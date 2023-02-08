@@ -31,7 +31,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.intent.getMimeTypeFromUri
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.saveMedia
 import im.vector.app.core.utils.shareMedia
 import im.vector.app.databinding.FragmentRoomUploadsBinding
@@ -39,6 +38,7 @@ import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.roomprofile.RoomProfileArgs
+import im.vector.lib.core.utils.timer.Clock
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject

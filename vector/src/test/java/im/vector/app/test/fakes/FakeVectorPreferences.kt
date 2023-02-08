@@ -85,4 +85,8 @@ class FakeVectorPreferences {
     fun verifySetIpAddressVisibilityInDeviceManagerScreens(isVisible: Boolean) {
         verify { instance.setIpAddressVisibilityInDeviceManagerScreens(isVisible) }
     }
+
+    fun givenIsVoiceBroadcastEnabled(isEnabled: Boolean) {
+        every { instance.isVoiceBroadcastEnabled() } returns isEnabled
+    }
 }

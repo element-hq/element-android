@@ -2856,4 +2856,8 @@
         <item quantity="other">過去 %1$d 天沒有活躍的投票。
 \n載入更多投票以檢視過去幾天的投票。</item>
     </plurals>
+    <string name="error_voice_broadcast_no_connection_recording">連線錯誤 - 錄製已暫停</string>
+    <string name="error_voice_message_broadcast_in_progress_message">您無法開始語音訊息，因為您目前正在錄製直播。請結束您的直播以開始錄製語音訊息</string>
+    <string name="error_voice_message_broadcast_in_progress">無法開始語音訊息</string>
+    <string name="rich_text_editor_inline_code">套用內嵌程式碼格式</string>
 </resources>
