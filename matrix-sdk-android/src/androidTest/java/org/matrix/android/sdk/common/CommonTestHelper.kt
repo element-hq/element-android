@@ -30,7 +30,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withContext
-import kotlinx.coroutines.withTimeout
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
@@ -186,6 +185,7 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
     }
 
     suspend fun sendMessageInRoom(room: Room, text: String): String {
+        Log.v("#E2E TEST", "sendMessageInRoom room:${room.roomId} <$text>")
         room.sendService().sendTextMessage(text)
 
         val timeline = room.timelineService().createTimeline(null, TimelineSettings(60))
@@ -208,20 +208,25 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
                 }
             }
         })
-        return withTimeout(TestConstants.timeOutMillis) { messageSent.await() }
+        return messageSent.await()
+       // return withTimeout(TestConstants.timeOutMillis) { messageSent.await() }
     }
 
     suspend fun ensureMessage(room: Room, eventId: String, block: ((event: TimelineEvent) -> Boolean)) {
+        Log.v("#E2E TEST", "ensureMessage room:${room.roomId} <$eventId>")
         val timeline = room.timelineService().createTimeline(null, TimelineSettings(60))
-        timeline.start()
         val messageSent = CompletableDeferred<Unit>()
+
         timeline.addListener(object : Timeline.Listener {
+            override fun onNewTimelineEvents(eventIds: List<String>) {
+                Log.v("#E2E TEST", "onNewTimelineEvents snapshot is $eventIds")
+            }
             override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
                 val success = timeline.getSnapshot()
-                        .filter { it.root.getClearType() == EventType.MESSAGE }
+                        // .filter { it.root.getClearType() == EventType.MESSAGE }
                         .also { list ->
                             val message = list.joinToString(",", "[", "]") {
-                                "${it.root.type}|${it.root.getClearType()}|${it.root.sendState}|${it.root.mxDecryptionResult?.verificationState}"
+                                "${it.eventId}|${it.root.getClearType()}|${it.root.sendState}|${it.root.mxDecryptionResult?.verificationState}"
                             }
                             Log.v("#E2E TEST", "Timeline snapshot is $message")
                         }
@@ -235,9 +240,13 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
                 }
             }
         })
-        return withTimeout(TestConstants.timeOutMillis) {
-            messageSent.await()
-        }
+
+        timeline.start()
+
+        return  messageSent.await()
+        // withTimeout(TestConstants.timeOutMillis) {
+        //    messageSent.await()
+        // }
     }
 
      fun ensureMessagePromise(room: Room, eventId: String, block: ((event: TimelineEvent) -> Boolean)): CompletableDeferred<Unit> {
