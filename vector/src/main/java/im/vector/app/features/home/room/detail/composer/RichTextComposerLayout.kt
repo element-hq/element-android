@@ -343,11 +343,11 @@ internal class RichTextComposerLayout @JvmOverloads constructor(
      * Updates the non-active input with the contents of the active input.
      */
     private fun syncEditTexts() =
-        if (isTextFormattingEnabled) {
-            views.plainTextComposerEditText.setText(views.richTextComposerEditText.getMarkdown())
-        } else {
-            views.richTextComposerEditText.setMarkdown(views.plainTextComposerEditText.text.toString())
-        }
+            if (isTextFormattingEnabled) {
+                views.plainTextComposerEditText.setText(views.richTextComposerEditText.getMarkdown())
+            } else {
+                views.richTextComposerEditText.setMarkdown(views.plainTextComposerEditText.text.toString())
+            }
 
     private fun addRichTextMenuItem(@DrawableRes iconId: Int, @StringRes description: Int, action: ComposerAction, onClick: () -> Unit) {
         val inflater = LayoutInflater.from(context)
@@ -367,6 +367,13 @@ internal class RichTextComposerLayout @JvmOverloads constructor(
         val stateForAction = menuState[action]
         button.isEnabled = stateForAction != ActionState.DISABLED
         button.isSelected = stateForAction == ActionState.REVERSED
+
+        if (action == ComposerAction.INDENT || action == ComposerAction.UNINDENT) {
+            val indentationButtonIsVisible =
+                    menuState[ComposerAction.ORDERED_LIST] == ActionState.REVERSED ||
+                            menuState[ComposerAction.UNORDERED_LIST] == ActionState.REVERSED
+            button.isVisible = indentationButtonIsVisible
+        }
     }
 
     fun estimateCollapsedHeight(): Int {
