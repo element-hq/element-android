@@ -16,7 +16,9 @@
 
 package im.vector.app.features.html
 
+import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.settings.VectorPreferences
+import io.element.android.wysiwyg.spans.CodeBlockSpan
 import io.element.android.wysiwyg.spans.InlineCodeSpan
 import io.noties.markwon.MarkwonVisitor
 import io.noties.markwon.SpannableBuilder
@@ -68,6 +70,7 @@ internal class CodePreTagHandler : TagHandler() {
 
 internal class CodePostProcessorTagHandler(
         private val vectorPreferences: VectorPreferences,
+        private val dimensionConverter: DimensionConverter,
 ) : TagHandler() {
 
     override fun supportedTags() = listOf(HtmlRootTagPlugin.ROOT_TAG_NAME)
@@ -90,6 +93,7 @@ internal class CodePostProcessorTagHandler(
                     val intermediateCodeSpan = code.what as IntermediateCodeSpan
                     val theme = visitor.configuration().theme()
                     val span = intermediateCodeSpan.toFinalCodeSpan(theme)
+
                     SpannableBuilder.setSpans(
                             visitor.builder(), span, code.start, code.end
                     )
@@ -98,9 +102,15 @@ internal class CodePostProcessorTagHandler(
 
     private fun IntermediateCodeSpan.toFinalCodeSpan(
             markwonTheme: MarkwonTheme
-    ): Any = if (vectorPreferences.isRichTextEditorEnabled() && !isBlock) {
-        InlineCodeSpan()
+    ): Any = if (vectorPreferences.isRichTextEditorEnabled()) {
+        toRichTextEditorSpan()
     } else {
         HtmlCodeSpan(markwonTheme, isBlock)
+    }
+
+    private fun IntermediateCodeSpan.toRichTextEditorSpan() = if (isBlock) {
+        CodeBlockSpan(dimensionConverter.dpToPx(10), dimensionConverter.dpToPx(4))
+    } else {
+        InlineCodeSpan()
     }
 }
