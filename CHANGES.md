@@ -1,3 +1,37 @@
+Changes in Element v1.5.24 (2023-02-08)
+=======================================
+
+Features ✨
+----------
+ - [Rich text editor] Add inline code to rich text editor ([#8011](https://github.com/vector-im/element-android/issues/8011))
+
+Bugfixes 🐛
+----------
+ - If media cache is large, Settings > General takes a long time to open ([#5918](https://github.com/vector-im/element-android/issues/5918))
+ - Fix that replies to @roomba would be highlighted as a room ping. Contributed by Nico. ([#6457](https://github.com/vector-im/element-android/issues/6457))
+ - Cannot select text properly in plain text mode when using Rich Text Editor. ([#7801](https://github.com/vector-im/element-android/issues/7801))
+ - Fix the next button disabled issue after going to change homeserver screen ([#7928](https://github.com/vector-im/element-android/issues/7928))
+ - Fix extra new lines added to inline code ([#7975](https://github.com/vector-im/element-android/issues/7975))
+ - [Voice Broadcast] Use internal playback timer to compute the current playback position ([#8012](https://github.com/vector-im/element-android/issues/8012))
+ - Do not send any request to Posthog if no consent is provided. ([#8031](https://github.com/vector-im/element-android/issues/8031))
+ - [Voice Broadcast] We should not be able to start broadcasting if there is already a live broadcast in the Room ([#8062](https://github.com/vector-im/element-android/issues/8062))
+
+In development 🚧
+----------------
+ - [Poll] History list: unmock data ([#7864](https://github.com/vector-im/element-android/issues/7864))
+
+SDK API changes ⚠️
+------------------
+ - [Poll] Adding PollHistoryService ([#7864](https://github.com/vector-im/element-android/issues/7864))
+ - [Push rules] Call /actions api before /enabled api ([#8005](https://github.com/vector-im/element-android/issues/8005))
+
+Other changes
+-------------
+ - Let the user know when we are not able to decrypt the voice broadcast chunks ([#7820](https://github.com/vector-im/element-android/issues/7820))
+ - [Voice Broadcast] Show Live broadcast in the room list only if the feature flag is enabled in the lab ([#8042](https://github.com/vector-im/element-android/issues/8042))
+ - Improve the `CountUpTimer` implementation ([#8058](https://github.com/vector-im/element-android/issues/8058))
+
+
 Changes in Element v1.5.22 (2023-01-25)
 =======================================
 

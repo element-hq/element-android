@@ -1,1 +1,0 @@
-[Rich text editor] Add inline code to rich text editor
