@@ -16,18 +16,35 @@
 
 package im.vector.app.features.settings.notifications
 
-import androidx.lifecycle.lifecycleScope
+import android.os.Bundle
+import android.view.View
 import androidx.preference.Preference
+import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.withState
 import im.vector.app.core.preference.VectorCheckboxPreference
 import im.vector.app.features.settings.VectorSettingsBaseFragment
-import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.session.pushrules.RuleKind
 import org.matrix.android.sdk.api.session.pushrules.rest.PushRuleAndKind
 
 abstract class VectorSettingsPushRuleNotificationPreferenceFragment :
         VectorSettingsBaseFragment() {
 
+    private val viewModel: VectorSettingsPushRuleNotificationPreferenceViewModel by fragmentViewModel()
+
     abstract val prefKeyToPushRuleId: Map<String, String>
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        observeViewEvents()
+    }
+
+    private fun observeViewEvents() {
+        viewModel.observeViewEvents {
+            when (it) {
+                is VectorSettingsPushRuleNotificationPreferenceViewEvent.Failure -> refreshDisplay()
+                is VectorSettingsPushRuleNotificationPreferenceViewEvent.PushRuleUpdated -> updatePreference(it.ruleId, it.enabled)
+            }
+        }
+    }
 
     override fun bindPref() {
         for (preferenceKey in prefKeyToPushRuleId.keys) {
@@ -42,45 +59,29 @@ abstract class VectorSettingsPushRuleNotificationPreferenceFragment :
                 val initialIndex = ruleAndKind.pushRule.notificationIndex
                 preference.isChecked = initialIndex != NotificationIndex.OFF
                 preference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                    updatePushRule(ruleAndKind.pushRule.ruleId, ruleAndKind.kind, newValue as Boolean, preference)
+                    viewModel.handle(VectorSettingsPushRuleNotificationPreferenceViewAction.UpdatePushRule(ruleAndKind, newValue as Boolean))
                     false
                 }
             }
         }
     }
 
-    fun updatePushRule(ruleId: String, kind: RuleKind, checked: Boolean, preference: VectorCheckboxPreference) {
-        val newIndex = if (checked) NotificationIndex.NOISY else NotificationIndex.OFF
-        val standardAction = getStandardAction(ruleId, newIndex) ?: return
-        val enabled = standardAction != StandardActions.Disabled
-        val newActions = standardAction.actions
-        displayLoadingView()
-
-        lifecycleScope.launch {
-            val result = runCatching {
-                session.pushRuleService().updatePushRuleActions(
-                        kind,
-                        ruleId,
-                        enabled,
-                        newActions
-                )
-            }
+    override fun invalidate() = withState(viewModel) { state ->
+        if (state.isLoading) {
+            displayLoadingView()
+        } else {
             hideLoadingView()
-            if (!isAdded) {
-                return@launch
-            }
-            result.onSuccess {
-                preference.isChecked = checked
-            }
-            result.onFailure { failure ->
-                // Restore the previous value
-                refreshDisplay()
-                displayErrorDialog(failure)
-            }
         }
     }
 
-    fun refreshDisplay() {
+    protected fun refreshDisplay() {
         listView?.adapter?.notifyDataSetChanged()
+    }
+
+    private fun updatePreference(ruleId: String, checked: Boolean) {
+        val preferenceKey = prefKeyToPushRuleId.entries.find { it.value == ruleId }?.key ?: return
+        val preference = findPreference<VectorCheckboxPreference>(preferenceKey) ?: return
+
+        preference.isChecked = checked
     }
 }

@@ -108,6 +108,7 @@ import im.vector.app.features.settings.labs.VectorSettingsLabsViewModel
 import im.vector.app.features.settings.legals.LegalsViewModel
 import im.vector.app.features.settings.locale.LocalePickerViewModel
 import im.vector.app.features.settings.notifications.VectorSettingsNotificationPreferenceViewModel
+import im.vector.app.features.settings.notifications.VectorSettingsPushRuleNotificationPreferenceViewModel
 import im.vector.app.features.settings.push.PushGatewaysViewModel
 import im.vector.app.features.settings.threepids.ThreePidsSettingsViewModel
 import im.vector.app.features.share.IncomingShareViewModel
@@ -692,6 +693,13 @@ interface MavericksViewModelModule {
     @MavericksViewModelKey(VectorSettingsNotificationPreferenceViewModel::class)
     fun vectorSettingsNotificationPreferenceViewModelFactory(
             factory: VectorSettingsNotificationPreferenceViewModel.Factory
+    ): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(VectorSettingsPushRuleNotificationPreferenceViewModel::class)
+    fun vectorSettingsPushRuleNotificationPreferenceViewModelFactory(
+            factory: VectorSettingsPushRuleNotificationPreferenceViewModel.Factory
     ): MavericksAssistedViewModelFactory<*, *>
 
     @Binds
