@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright 2023 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,25 @@
 
 package org.matrix.android.sdk.api.auth.data
 
-data class LoginFlowResult(
-        val supportedLoginTypes: List<String>,
-        val ssoIdentityProviders: List<SsoIdentityProvider>?,
-        val isLoginAndRegistrationSupported: Boolean,
-        val homeServerUrl: String,
-        val isOutdatedHomeserver: Boolean,
-        val hasOidcCompatibilityFlow: Boolean,
-        val isLogoutDevicesSupported: Boolean,
-        val isLoginWithQrSupported: Boolean,
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+
+/**
+ * https://github.com/matrix-org/matrix-spec-proposals/pull/2965
+ * <pre>
+ * {
+ *     "issuer": "https://id.server.org",
+ *     "account": "https://id.server.org/my-account",
+ * }
+ * </pre>
+ * .
+ */
+
+@JsonClass(generateAdapter = true)
+data class DelegatedAuthConfig(
+        @Json(name = "issuer")
+        val issuer: String,
+
+        @Json(name = "account")
+        val accountManagementUrl: String,
 )

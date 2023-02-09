@@ -47,13 +47,17 @@ class StartAuthenticationFlowUseCase @Inject constructor(
             upstreamUrl = authFlow.homeServerUrl,
             preferredLoginMode = preferredLoginMode,
             supportedLoginTypes = authFlow.supportedLoginTypes,
+            hasOidcCompatibilityFlow = authFlow.hasOidcCompatibilityFlow,
             isLogoutDevicesSupported = authFlow.isLogoutDevicesSupported,
-            isLoginWithQrSupported = authFlow.isLoginWithQrSupported,
+            isLoginWithQrSupported = authFlow.isLoginWithQrSupported
     )
 
     private fun LoginFlowResult.findPreferredLoginMode() = when {
-        supportedLoginTypes.containsAllItems(LoginFlowTypes.SSO, LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(ssoIdentityProviders.toSsoState())
-        supportedLoginTypes.contains(LoginFlowTypes.SSO) -> LoginMode.Sso(ssoIdentityProviders.toSsoState())
+        supportedLoginTypes.containsAllItems(LoginFlowTypes.SSO, LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(
+                ssoIdentityProviders.toSsoState(),
+                hasOidcCompatibilityFlow
+        )
+        supportedLoginTypes.contains(LoginFlowTypes.SSO) -> LoginMode.Sso(ssoIdentityProviders.toSsoState(), hasOidcCompatibilityFlow)
         supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.Password
         else -> LoginMode.Unsupported
     }

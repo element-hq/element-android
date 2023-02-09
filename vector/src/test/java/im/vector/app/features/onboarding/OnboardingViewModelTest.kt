@@ -57,6 +57,7 @@ import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.matrix.android.sdk.api.auth.SSOAction
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 import org.matrix.android.sdk.api.auth.registration.Stage
@@ -1088,9 +1089,9 @@ class OnboardingViewModelTest {
     fun `given returns Sso url, when fetching Sso url, then updates authentication state and returns supplied Sso url`() = runTest {
         val test = viewModel.test()
         val provider = SsoIdentityProvider(id = "provider_id", null, null, null)
-        fakeAuthenticationService.givenSsoUrl(A_REDIRECT_URI, A_DEVICE_ID, provider.id, result = A_SSO_URL)
+        fakeAuthenticationService.givenSsoUrl(A_REDIRECT_URI, A_DEVICE_ID, provider.id, SSOAction.LOGIN, result = A_SSO_URL)
 
-        val result = viewModel.fetchSsoUrl(A_REDIRECT_URI, A_DEVICE_ID, provider)
+        val result = viewModel.fetchSsoUrl(A_REDIRECT_URI, A_DEVICE_ID, provider, SSOAction.LOGIN)
 
         result shouldBeEqualTo A_SSO_URL
         test

@@ -118,8 +118,11 @@ class SoftLogoutViewModel @AssistedInject constructor(
             val loginMode = when {
                 // SSO login is taken first
                 data.supportedLoginTypes.contains(LoginFlowTypes.SSO) &&
-                        data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders.toSsoState())
-                data.supportedLoginTypes.contains(LoginFlowTypes.SSO) -> LoginMode.Sso(data.ssoIdentityProviders.toSsoState())
+                        data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(
+                            data.ssoIdentityProviders.toSsoState(),
+                            data.hasOidcCompatibilityFlow
+                        )
+                data.supportedLoginTypes.contains(LoginFlowTypes.SSO) -> LoginMode.Sso(data.ssoIdentityProviders.toSsoState(), data.hasOidcCompatibilityFlow)
                 data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.Password
                 else -> LoginMode.Unsupported
             }

@@ -29,6 +29,7 @@ fun aHomeServerCapabilities(
         defaultIdentityServerUrl: String? = null,
         roomVersions: RoomVersionCapabilities? = null,
         canRemotelyTogglePushNotificationsOfDevices: Boolean = true,
+        externalAccountManagementUrl: String? = null,
 ) = HomeServerCapabilities(
         canChangePassword = canChangePassword,
         canChangeDisplayName = canChangeDisplayName,
@@ -39,4 +40,5 @@ fun aHomeServerCapabilities(
         defaultIdentityServerUrl = defaultIdentityServerUrl,
         roomVersions = roomVersions,
         canRemotelyTogglePushNotificationsOfDevices = canRemotelyTogglePushNotificationsOfDevices,
+        externalAccountManagementUrl = externalAccountManagementUrl,
 )

@@ -70,7 +70,7 @@ class StartAuthenticationFlowUseCaseTest {
 
         result shouldBeEqualTo expectedResult(
                 supportedLoginTypes = SSO_AND_PASSWORD_LOGIN_TYPES,
-                preferredLoginMode = LoginMode.SsoAndPassword(SsoState.Fallback),
+                preferredLoginMode = LoginMode.SsoAndPassword(SsoState.Fallback, false),
         )
         verifyClearsAndThenStartsLogin(A_HOMESERVER_CONFIG)
     }
@@ -84,7 +84,7 @@ class StartAuthenticationFlowUseCaseTest {
 
         result shouldBeEqualTo expectedResult(
                 supportedLoginTypes = SSO_AND_PASSWORD_LOGIN_TYPES,
-                preferredLoginMode = LoginMode.SsoAndPassword(SsoState.IdentityProviders(SSO_IDENTITY_PROVIDERS)),
+                preferredLoginMode = LoginMode.SsoAndPassword(SsoState.IdentityProviders(SSO_IDENTITY_PROVIDERS), false),
         )
         verifyClearsAndThenStartsLogin(A_HOMESERVER_CONFIG)
     }
@@ -98,7 +98,7 @@ class StartAuthenticationFlowUseCaseTest {
 
         result shouldBeEqualTo expectedResult(
                 supportedLoginTypes = SSO_LOGIN_TYPE,
-                preferredLoginMode = LoginMode.Sso(SsoState.Fallback),
+                preferredLoginMode = LoginMode.Sso(SsoState.Fallback, false),
         )
         verifyClearsAndThenStartsLogin(A_HOMESERVER_CONFIG)
     }
@@ -112,7 +112,7 @@ class StartAuthenticationFlowUseCaseTest {
 
         result shouldBeEqualTo expectedResult(
                 supportedLoginTypes = SSO_LOGIN_TYPE,
-                preferredLoginMode = LoginMode.Sso(SsoState.IdentityProviders(SSO_IDENTITY_PROVIDERS)),
+                preferredLoginMode = LoginMode.Sso(SsoState.IdentityProviders(SSO_IDENTITY_PROVIDERS), false),
         )
         verifyClearsAndThenStartsLogin(A_HOMESERVER_CONFIG)
     }
@@ -131,31 +131,50 @@ class StartAuthenticationFlowUseCaseTest {
         verifyClearsAndThenStartsLogin(A_HOMESERVER_CONFIG)
     }
 
+    @Test
+    fun `given identity providers and login supports SSO with OIDC compatibility then prefers Sso for compatibility`() = runTest {
+        val loginResult = aLoginResult(supportedLoginTypes = SSO_LOGIN_TYPE, ssoProviders = SSO_IDENTITY_PROVIDERS, hasOidcCompatibilityFlow = true)
+        fakeAuthenticationService.givenLoginFlow(A_HOMESERVER_CONFIG, loginResult)
+
+        val result = useCase.execute(A_HOMESERVER_CONFIG)
+
+        result shouldBeEqualTo expectedResult(
+                supportedLoginTypes = SSO_LOGIN_TYPE,
+                preferredLoginMode = LoginMode.Sso(SsoState.IdentityProviders(SSO_IDENTITY_PROVIDERS), hasOidcCompatibilityFlow = true),
+                hasOidcCompatibilityFlow = true
+        )
+        verifyClearsAndThenStartsLogin(A_HOMESERVER_CONFIG)
+    }
+
     private fun aLoginResult(
             supportedLoginTypes: List<String>,
-            ssoProviders: List<SsoIdentityProvider> = FALLBACK_SSO_IDENTITY_PROVIDERS
+            ssoProviders: List<SsoIdentityProvider> = FALLBACK_SSO_IDENTITY_PROVIDERS,
+            hasOidcCompatibilityFlow: Boolean = false
     ) = LoginFlowResult(
             supportedLoginTypes = supportedLoginTypes,
             ssoIdentityProviders = ssoProviders,
             isLoginAndRegistrationSupported = true,
             homeServerUrl = A_DECLARED_HOMESERVER_URL,
             isOutdatedHomeserver = false,
+            hasOidcCompatibilityFlow = hasOidcCompatibilityFlow,
             isLogoutDevicesSupported = false,
-            isLoginWithQrSupported = false
+            isLoginWithQrSupported = false,
     )
 
     private fun expectedResult(
             isHomeserverOutdated: Boolean = false,
             preferredLoginMode: LoginMode = LoginMode.Unsupported,
             supportedLoginTypes: List<String> = emptyList(),
-            homeserverSourceUrl: String = A_HOMESERVER_CONFIG.homeServerUri.toString()
+            homeserverSourceUrl: String = A_HOMESERVER_CONFIG.homeServerUri.toString(),
+            hasOidcCompatibilityFlow: Boolean = false
     ) = StartAuthenticationResult(
             isHomeserverOutdated,
             SelectedHomeserverState(
                     userFacingUrl = homeserverSourceUrl,
                     upstreamUrl = A_DECLARED_HOMESERVER_URL,
                     preferredLoginMode = preferredLoginMode,
-                    supportedLoginTypes = supportedLoginTypes
+                    supportedLoginTypes = supportedLoginTypes,
+                    hasOidcCompatibilityFlow = hasOidcCompatibilityFlow
             )
     )
 

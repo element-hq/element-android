@@ -55,6 +55,7 @@ import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.MatrixPatterns.getServerName
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
+import org.matrix.android.sdk.api.auth.SSOAction
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 import org.matrix.android.sdk.api.auth.login.LoginWizard
@@ -841,12 +842,12 @@ class OnboardingViewModel @AssistedInject constructor(
 
     fun getDefaultHomeserverUrl() = defaultHomeserverUrl
 
-    fun fetchSsoUrl(redirectUrl: String, deviceId: String?, provider: SsoIdentityProvider?): String? {
+    fun fetchSsoUrl(redirectUrl: String, deviceId: String?, provider: SsoIdentityProvider?, action: SSOAction): String? {
         setState {
             val authDescription = AuthenticationDescription.Register(provider.toAuthenticationType())
             copy(selectedAuthenticationState = SelectedAuthenticationState(authDescription))
         }
-        return authenticationService.getSsoUrl(redirectUrl, deviceId, provider?.id)
+        return authenticationService.getSsoUrl(redirectUrl, deviceId, provider?.id, action)
     }
 
     fun getFallbackUrl(forSignIn: Boolean, deviceId: String?): String? {
