@@ -23,7 +23,6 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.core.preference.VectorCheckboxPreference
 import im.vector.app.features.settings.VectorSettingsBaseFragment
-import org.matrix.android.sdk.api.session.pushrules.rest.PushRuleAndKind
 
 abstract class VectorSettingsPushRuleNotificationFragment :
         VectorSettingsBaseFragment() {
@@ -35,13 +34,20 @@ abstract class VectorSettingsPushRuleNotificationFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeViewEvents()
+        viewModel.onEach(VectorSettingsPushRuleNotificationViewState::isLoading) { isLoading ->
+            if (isLoading) {
+                displayLoadingView()
+            } else {
+                hideLoadingView()
+            }
+        }
     }
 
     private fun observeViewEvents() {
         viewModel.observeViewEvents {
             when (it) {
                 is VectorSettingsPushRuleNotificationViewEvent.Failure -> refreshDisplay()
-                is VectorSettingsPushRuleNotificationViewEvent.PushRuleUpdated -> updatePreference(it.ruleId, it.enabled)
+                is VectorSettingsPushRuleNotificationViewEvent.PushRuleUpdated -> updatePreference(it.ruleId, it.checked)
             }
         }
     }
@@ -50,14 +56,13 @@ abstract class VectorSettingsPushRuleNotificationFragment :
         for (preferenceKey in prefKeyToPushRuleId.keys) {
             val preference = findPreference<VectorCheckboxPreference>(preferenceKey)!!
             preference.isIconSpaceReserved = false
-            val ruleAndKind: PushRuleAndKind? = session.pushRuleService().getPushRules().findDefaultRule(prefKeyToPushRuleId[preferenceKey])
+            val ruleAndKind = prefKeyToPushRuleId[preferenceKey]?.let { viewModel.getPushRuleAndKind(it) }
             if (ruleAndKind == null) {
                 // The rule is not defined, hide the preference
                 preference.isVisible = false
             } else {
                 preference.isVisible = true
-                val initialIndex = ruleAndKind.pushRule.notificationIndex
-                preference.isChecked = initialIndex != NotificationIndex.OFF
+                updatePreference(ruleAndKind.pushRule.ruleId, viewModel.isPushRuleChecked(ruleAndKind.pushRule.ruleId))
                 preference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                     viewModel.handle(VectorSettingsPushRuleNotificationViewAction.UpdatePushRule(ruleAndKind, newValue as Boolean))
                     false
@@ -81,7 +86,6 @@ abstract class VectorSettingsPushRuleNotificationFragment :
     private fun updatePreference(ruleId: String, checked: Boolean) {
         val preferenceKey = prefKeyToPushRuleId.entries.find { it.value == ruleId }?.key ?: return
         val preference = findPreference<VectorCheckboxPreference>(preferenceKey) ?: return
-
         preference.isChecked = checked
     }
 }

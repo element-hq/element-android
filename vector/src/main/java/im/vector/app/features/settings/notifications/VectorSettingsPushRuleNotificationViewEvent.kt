@@ -19,6 +19,6 @@ package im.vector.app.features.settings.notifications
 import im.vector.app.core.platform.VectorViewEvents
 
 sealed interface VectorSettingsPushRuleNotificationViewEvent : VectorViewEvents {
-    data class PushRuleUpdated(val ruleId: String, val enabled: Boolean) : VectorSettingsPushRuleNotificationViewEvent
+    data class PushRuleUpdated(val ruleId: String, val checked: Boolean) : VectorSettingsPushRuleNotificationViewEvent
     data class Failure(val throwable: Throwable) : VectorSettingsPushRuleNotificationViewEvent
 }

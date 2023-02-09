@@ -27,6 +27,11 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.settings.notifications.VectorSettingsPushRuleNotificationViewEvent.Failure
 import im.vector.app.features.settings.notifications.VectorSettingsPushRuleNotificationViewEvent.PushRuleUpdated
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.failure.Failure.ServerError
+import org.matrix.android.sdk.api.failure.MatrixError
+import org.matrix.android.sdk.api.session.pushrules.Action
+import org.matrix.android.sdk.api.session.pushrules.RuleIds
+import org.matrix.android.sdk.api.session.pushrules.RuleKind
 import org.matrix.android.sdk.api.session.pushrules.rest.PushRuleAndKind
 
 private typealias ViewModel = VectorSettingsPushRuleNotificationViewModel
@@ -52,6 +57,15 @@ class VectorSettingsPushRuleNotificationViewModel @AssistedInject constructor(
         }
     }
 
+    fun getPushRuleAndKind(ruleId: String): PushRuleAndKind? {
+        return activeSessionHolder.getSafeActiveSession()?.pushRuleService()?.getPushRules()?.findDefaultRule(ruleId)
+    }
+
+    fun isPushRuleChecked(ruleId: String): Boolean {
+        val rulesGroup = listOf(ruleId) + RuleIds.getSyncedRules(ruleId)
+        return rulesGroup.mapNotNull { getPushRuleAndKind(it) }.any { it.pushRule.notificationIndex != NotificationIndex.OFF }
+    }
+
     private fun handleUpdatePushRule(pushRuleAndKind: PushRuleAndKind, checked: Boolean) {
         val ruleId = pushRuleAndKind.pushRule.ruleId
         val kind = pushRuleAndKind.kind
@@ -62,23 +76,35 @@ class VectorSettingsPushRuleNotificationViewModel @AssistedInject constructor(
         setState { copy(isLoading = true) }
 
         viewModelScope.launch {
-            runCatching {
-                activeSessionHolder.getSafeActiveSession()?.pushRuleService()?.updatePushRuleActions(
-                        kind = kind,
-                        ruleId = ruleId,
-                        enable = enabled,
-                        actions = newActions
-                )
-            }.fold(
-                    onSuccess = {
-                        setState { copy(isLoading = false) }
-                        _viewEvents.post(PushRuleUpdated(ruleId, checked))
-                    },
-                    onFailure = { failure ->
-                        setState { copy(isLoading = false) }
-                        _viewEvents.post(Failure(failure))
-                    }
+            val rulesToUpdate = listOf(ruleId) + RuleIds.getSyncedRules(ruleId)
+            val results = rulesToUpdate.map { ruleId ->
+                runCatching {
+                    updatePushRule(kind, ruleId, enabled, newActions)
+                }
+            }
+            setState { copy(isLoading = false) }
+            val failure = results.firstNotNullOfOrNull { it.exceptionOrNull() }
+            if (failure == null) {
+                _viewEvents.post(PushRuleUpdated(ruleId, checked))
+            } else {
+                _viewEvents.post(Failure(failure))
+            }
+        }
+    }
+
+    private suspend fun updatePushRule(kind: RuleKind, ruleId: String, enable: Boolean, newActions: List<Action>?) {
+        try {
+            activeSessionHolder.getSafeActiveSession()?.pushRuleService()?.updatePushRuleActions(
+                    kind = kind,
+                    ruleId = ruleId,
+                    enable = enable,
+                    actions = newActions
             )
+        } catch (failure: ServerError) {
+            // Ignore the error if the rule id is not known from the server
+            if (failure.error.code != MatrixError.M_NOT_FOUND) {
+                throw failure
+            }
         }
     }
 }
