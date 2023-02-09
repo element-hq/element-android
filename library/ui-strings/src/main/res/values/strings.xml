@@ -792,7 +792,7 @@
     <string name="thread_list_modal_all_threads_subtitle">Shows all threads from current room</string>
     <string name="thread_list_modal_my_threads_title">My Threads</string>
     <string name="thread_list_modal_my_threads_subtitle">Shows all threads you’ve participated in</string>
-    <string name="thread_list_empty_title">Keep discussions organized with threads</string>
+    <string name="thread_list_empty_title">Keep discussions organised with threads</string>
     <string name="thread_list_empty_subtitle">Threads help keep your conversations on-topic and easy to track.</string>
     <string name="thread_list_not_available">Your homeserver does not support listing threads yet.</string>
     <!-- Parameter %s will be replaced by the value of string reply_in_thread -->
@@ -2954,7 +2954,7 @@
     <string name="create_spaces_who_are_you_working_with">Who are you working with?</string>
     <string name="create_spaces_make_sure_access">Make sure the right people have access to %s.</string>
     <string name="create_spaces_just_me">Just me</string>
-    <string name="create_spaces_organise_rooms">A private space to organize your rooms</string>
+    <string name="create_spaces_organise_rooms">A private space to organise your rooms</string>
     <string name="create_spaces_me_and_teammates">Me and teammates</string>
     <string name="create_spaces_private_teammates">A private space for you &amp; your teammates</string>
     <string name="space_type_public">Public</string>
