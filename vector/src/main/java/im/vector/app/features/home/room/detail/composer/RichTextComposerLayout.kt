@@ -232,6 +232,27 @@ internal class RichTextComposerLayout @JvmOverloads constructor(
         addRichTextMenuItem(R.drawable.ic_composer_strikethrough, R.string.rich_text_editor_format_strikethrough, ComposerAction.STRIKE_THROUGH) {
             views.richTextComposerEditText.toggleInlineFormat(InlineFormat.StrikeThrough)
         }
+        addRichTextMenuItem(R.drawable.ic_composer_bullet_list, R.string.rich_text_editor_bullet_list, ComposerAction.UNORDERED_LIST) {
+            views.richTextComposerEditText.toggleList(ordered = false)
+        }
+        addRichTextMenuItem(R.drawable.ic_composer_numbered_list, R.string.rich_text_editor_numbered_list, ComposerAction.ORDERED_LIST) {
+            views.richTextComposerEditText.toggleList(ordered = true)
+        }
+        addRichTextMenuItem(R.drawable.ic_composer_indent, R.string.rich_text_editor_indent, ComposerAction.INDENT) {
+            views.richTextComposerEditText.indent()
+        }
+        addRichTextMenuItem(R.drawable.ic_composer_unindent, R.string.rich_text_editor_unindent, ComposerAction.UNINDENT) {
+            views.richTextComposerEditText.unindent()
+        }
+        addRichTextMenuItem(R.drawable.ic_composer_quote, R.string.rich_text_editor_quote, ComposerAction.QUOTE) {
+            views.richTextComposerEditText.toggleQuote()
+        }
+        addRichTextMenuItem(R.drawable.ic_composer_inline_code, R.string.rich_text_editor_inline_code, ComposerAction.INLINE_CODE) {
+            views.richTextComposerEditText.toggleInlineFormat(InlineFormat.InlineCode)
+        }
+        addRichTextMenuItem(R.drawable.ic_composer_code_block, R.string.rich_text_editor_code_block, ComposerAction.CODE_BLOCK) {
+            views.richTextComposerEditText.toggleCodeBlock()
+        }
         addRichTextMenuItem(R.drawable.ic_composer_link, R.string.rich_text_editor_link, ComposerAction.LINK) {
             views.richTextComposerEditText.getLinkAction()?.let {
                 when (it) {
@@ -239,12 +260,6 @@ internal class RichTextComposerLayout @JvmOverloads constructor(
                     is LinkAction.SetLink -> callback?.onSetLink(isTextSupported = false, initialLink = it.currentLink)
                 }
             }
-        }
-        addRichTextMenuItem(R.drawable.ic_composer_bullet_list, R.string.rich_text_editor_bullet_list, ComposerAction.UNORDERED_LIST) {
-            views.richTextComposerEditText.toggleList(ordered = false)
-        }
-        addRichTextMenuItem(R.drawable.ic_composer_numbered_list, R.string.rich_text_editor_numbered_list, ComposerAction.ORDERED_LIST) {
-            views.richTextComposerEditText.toggleList(ordered = true)
         }
     }
 
@@ -291,7 +306,7 @@ internal class RichTextComposerLayout @JvmOverloads constructor(
 
     private fun updateEditTextVisibility() {
         views.richTextComposerEditText.isVisible = isTextFormattingEnabled
-        views.richTextMenu.isVisible = isTextFormattingEnabled
+        views.richTextMenuScrollView.isVisible = isTextFormattingEnabled
         views.plainTextComposerEditText.isVisible = !isTextFormattingEnabled
 
         // The layouts for formatted text mode and plain text mode are different, so we need to update the constraints
@@ -328,11 +343,11 @@ internal class RichTextComposerLayout @JvmOverloads constructor(
      * Updates the non-active input with the contents of the active input.
      */
     private fun syncEditTexts() =
-        if (isTextFormattingEnabled) {
-            views.plainTextComposerEditText.setText(views.richTextComposerEditText.getMarkdown())
-        } else {
-            views.richTextComposerEditText.setMarkdown(views.plainTextComposerEditText.text.toString())
-        }
+            if (isTextFormattingEnabled) {
+                views.plainTextComposerEditText.setText(views.richTextComposerEditText.getMarkdown())
+            } else {
+                views.richTextComposerEditText.setMarkdown(views.plainTextComposerEditText.text.toString())
+            }
 
     private fun addRichTextMenuItem(@DrawableRes iconId: Int, @StringRes description: Int, action: ComposerAction, onClick: () -> Unit) {
         val inflater = LayoutInflater.from(context)
@@ -352,6 +367,13 @@ internal class RichTextComposerLayout @JvmOverloads constructor(
         val stateForAction = menuState[action]
         button.isEnabled = stateForAction != ActionState.DISABLED
         button.isSelected = stateForAction == ActionState.REVERSED
+
+        if (action == ComposerAction.INDENT || action == ComposerAction.UNINDENT) {
+            val indentationButtonIsVisible =
+                    menuState[ComposerAction.ORDERED_LIST] == ActionState.REVERSED ||
+                            menuState[ComposerAction.UNORDERED_LIST] == ActionState.REVERSED
+            button.isVisible = indentationButtonIsVisible
+        }
     }
 
     fun estimateCollapsedHeight(): Int {

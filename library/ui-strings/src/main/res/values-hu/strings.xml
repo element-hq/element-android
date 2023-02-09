@@ -2918,4 +2918,6 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     </plurals>
     <string name="error_voice_message_broadcast_in_progress_message">Nem lehet hang üzenetet indítani élő közvetítés felvétele közben. Az élő közvetítés bejezése szükséges a hang üzenet indításához</string>
     <string name="error_voice_message_broadcast_in_progress">Hang üzenetet nem lehet elindítani</string>
+    <string name="error_voice_broadcast_no_connection_recording">Kapcsolódási hiba – Felvétel szüneteltetve</string>
+    <string name="rich_text_editor_inline_code">Beágyazott kód formátum alkalmazása</string>
 </resources>

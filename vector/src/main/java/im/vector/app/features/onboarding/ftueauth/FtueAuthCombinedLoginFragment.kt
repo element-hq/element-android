@@ -23,6 +23,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.autofill.HintConstants
 import androidx.core.view.isVisible
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
@@ -103,7 +104,7 @@ class FtueAuthCombinedLoginFragment :
 
         combine(views.loginInput.editText().textChanges(), views.loginPasswordInput.editText().textChanges()) { account, password ->
             views.loginSubmit.isEnabled = account.isNotEmpty() && password.isNotEmpty()
-        }.launchIn(viewLifecycleOwner.lifecycleScope)
+        }.flowWithLifecycle(lifecycle).launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun submit() {

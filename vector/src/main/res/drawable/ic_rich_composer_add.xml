@@ -5,11 +5,11 @@
     android:viewportHeight="36">
   <path
       android:pathData="M18,18m-18,0a18,18 0,1 1,36 0a18,18 0,1 1,-36 0"
-      android:fillColor="#F4F6FA"/>
+      android:fillColor="?vctr_system"/>
   <path
       android:pathData="M11.251,18H24.751M18.001,11.25V24.75"
       android:strokeWidth="2"
       android:fillColor="#00000000"
-      android:strokeColor="#737D8C"
+      android:strokeColor="?vctr_content_secondary"
       android:strokeLineCap="round"/>
 </vector>

@@ -102,7 +102,7 @@ class VideoViewHolder constructor(itemView: View) :
 
         views.videoView.setOnPreparedListener {
             stopTimer()
-            countUpTimer = CountUpTimer(100).also {
+            countUpTimer = CountUpTimer(intervalInMs = 100).also {
                 it.tickListener = CountUpTimer.TickListener {
                     val duration = views.videoView.duration
                     val progress = views.videoView.currentPosition
@@ -110,7 +110,7 @@ class VideoViewHolder constructor(itemView: View) :
                     //                        Log.v("FOO", "isPlaying $isPlaying $progress/$duration")
                     eventListener?.get()?.onEvent(AttachmentEvents.VideoEvent(isPlaying, progress, duration))
                 }
-                it.resume()
+                it.start()
             }
         }
         try {

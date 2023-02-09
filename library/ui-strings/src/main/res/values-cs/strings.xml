@@ -2978,4 +2978,6 @@
     </plurals>
     <string name="error_voice_message_broadcast_in_progress_message">Hlasovou zprávu nelze spustit, protože právě nahráváte živé vysílání. Ukončete prosím živé vysílání, abyste mohli začít nahrávat hlasovou zprávu</string>
     <string name="error_voice_message_broadcast_in_progress">Nelze spustit hlasovou zprávu</string>
+    <string name="error_voice_broadcast_no_connection_recording">Chyba připojení - nahrávání pozastaveno</string>
+    <string name="rich_text_editor_inline_code">Použít formát inline kódu</string>
 </resources>

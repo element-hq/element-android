@@ -65,6 +65,6 @@ class VoiceBroadcastPlaylist(
 }
 
 data class PlaylistItem(val audioEvent: MessageAudioEvent, val startTime: Int) {
-    val sequence: Int?
-        get() = audioEvent.sequence
+    val sequence: Int? = audioEvent.sequence
+    val duration: Int = audioEvent.duration
 }

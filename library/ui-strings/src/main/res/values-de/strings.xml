@@ -2917,4 +2917,6 @@
     </plurals>
     <string name="error_voice_message_broadcast_in_progress_message">Du kannst keine Sprachnachricht beginnen, da du im Moment eine Echtzeitübertragung aufzeichnest. Bitte beende deine Sprachübertragung, um ein Gespräch zu beginnen</string>
     <string name="error_voice_message_broadcast_in_progress">Kann Sprachnachricht nicht beginnen</string>
+    <string name="error_voice_broadcast_no_connection_recording">Verbindungsfehler − Aufnahme pausiert</string>
+    <string name="rich_text_editor_inline_code">Als Inline-Code formatieren</string>
 </resources>

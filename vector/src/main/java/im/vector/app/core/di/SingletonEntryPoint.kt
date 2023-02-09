@@ -21,7 +21,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.error.ErrorFormatter
-import im.vector.app.core.time.Clock
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.home.AvatarRenderer
@@ -31,6 +30,7 @@ import im.vector.app.features.rageshake.BugReporter
 import im.vector.app.features.session.SessionListener
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.ui.UiStateRepository
+import im.vector.lib.core.utils.timer.Clock
 import kotlinx.coroutines.CoroutineScope
 
 @InstallIn(SingletonComponent::class)

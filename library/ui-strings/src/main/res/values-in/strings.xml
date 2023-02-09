@@ -2858,4 +2858,8 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
         <item quantity="other">Tidak ada pemungutan suara aktif %1$d hari terakhir.
 \nMuat lebih banyak pemungutan suara untuk melihat pemungutan suara untuk hari sebelumnya.</item>
     </plurals>
+    <string name="error_voice_broadcast_no_connection_recording">Kesalahan koneksi - Perekaman dijeda</string>
+    <string name="error_voice_message_broadcast_in_progress_message">Anda tidak dapat memulai sebuah pesan suara karena Anda saat ini merekam sebuah siaran langsung. Silakan mengakhiri siaran langsung Anda untuk memulai merekam sebuah pesan suara</string>
+    <string name="error_voice_message_broadcast_in_progress">Tidak dapat memulai pesan suara</string>
+    <string name="rich_text_editor_inline_code">Terapkan format kode dalam baris</string>
 </resources>

@@ -345,7 +345,7 @@
     <string name="encryption_import_room_keys_summary">Importuj klucze z lokalnego pliku</string>
     <string name="encryption_import_import">Importuj</string>
     <string name="encryption_never_send_to_unverified_devices_title">Szyfruj wiadomości tylko do zaufanych sesji</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">Nigdy nie wysyłaj szyfrowanych wiadomości do sesji (np urządzeń innych użytkowników) które nie zostały zweryfikowane.</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Nigdy nie wysyłaj szyfrowanych wiadomości do niezweryfikowanych sesji (bez zielonej tarczy) z tej sesji.</string>
     <string name="encryption_information_verify_device_warning">Aby sprawdzić czy ta sesja jest zaufana, skontaktuj się z jej właścicielem używając innych form (np. osobiście lub telefonicznie) i zapytaj czy klucz, który widzą w ustawieniach użytkownika dla tego urządzenia pasuje do klucza poniżej:</string>
     <string name="encryption_information_verify_device_warning2">Jeśli klucz pasuje, potwierdź to przyciskiem poniżej. Jeśli nie, to ktoś inny najprawdopodobniej przejmuje lub podszywa się pod tą sesję i powinieneś dodać tę sesję do czarnej listy. W przyszłości proces weryfikacji będzie bardziej skomplikowany.</string>
     <string name="title_activity_choose_sticker">Wyślij naklejkę</string>
@@ -1115,7 +1115,7 @@
 \nKlucze nie są zaufane</string>
     <string name="encryption_information_dg_xsigning_disabled">Podpis krzyżowy nie jest aktywowany</string>
     <string name="settings_active_sessions_list">Aktywne Sesje</string>
-    <string name="settings_active_sessions_show_all">Pokaż wszystkie Sesje</string>
+    <string name="settings_active_sessions_show_all">Pokaż wszystkie sesje</string>
     <string name="settings_active_sessions_manage">Zarządzaj Sesjami</string>
     <string name="settings_active_sessions_signout_device">Wyloguj z tej sesji</string>
     <string name="settings_failed_to_get_crypto_device_info">Brak dostępnej informacji o kryptografii</string>
@@ -1242,7 +1242,7 @@
     <string name="bottom_sheet_save_your_recovery_key_title">Zapisz Klucz Bezpieczeństwa</string>
     <string name="bottom_sheet_setup_secure_backup_security_phrase_title">Użyj Frazy Bezpieczeństwa</string>
     <string name="bottom_sheet_setup_secure_backup_security_key_title">Użyj klucza bezpieczeństwa</string>
-    <string name="bottom_sheet_setup_secure_backup_subtitle">Zabezpiecza przeciwko utracie dostępu do zaszyfrowanych wiadomości oraz danych poprzez zapisanie zaszyfrowanych kluczy na Twoim serwerze.</string>
+    <string name="bottom_sheet_setup_secure_backup_subtitle">Zabezpiecza przed utratą dostępu do zaszyfrowanych wiadomości poprzez zapisanie kluczy szyfrujących na twoim serwerze.</string>
     <string name="a11y_start_camera">Włącz aparat</string>
     <string name="a11y_stop_camera">Wyłącz aparat</string>
     <string name="a11y_unmute_microphone">Wyłącz wyciszenie mikrofonu</string>
@@ -1493,7 +1493,7 @@
     <string name="disabled_integration_dialog_title">Integracje są zablokowane</string>
     <string name="reset_secure_backup_warning">To zastąpi obecny Klucz bądź Hasło.</string>
     <string name="reset_secure_backup_title">Wygeneruj nowy klucz bezpieczeństwa albo hasło dla istniejącej kopii zapasowej.</string>
-    <string name="settings_secure_backup_section_info">Zabezpiecza przeciwko utracie dostępu do zaszyfrowanych wiadomości oraz danych poprzez zapisanie zaszyfrowanych kluczy na Twoim serwerze.</string>
+    <string name="settings_secure_backup_section_info">Zabezpiecza przed utratą dostępu do zaszyfrowanych wiadomości poprzez zapisanie kluczy szyfrujących na twoim serwerze.</string>
     <string name="settings_troubleshoot_test_notification_notification_clicked">Powiadomienie zostało kliknięte!</string>
     <string name="settings_troubleshoot_test_notification_notice">Proszę kliknąć na powiadomieniu, Jeżeli nie widzisz powiadomienia, sprawdź ustawienia systemowe.</string>
     <string name="settings_troubleshoot_test_push_notification_content">Widzisz powiadomienia! Kliknij na mnie!</string>
@@ -2795,4 +2795,36 @@
     <string name="action_got_it">Rozumiem</string>
     <string name="a11y_collapse_space_children">Zwiń %s pokojów</string>
     <string name="a11y_expand_space_children">Rozwiń %s pokojów</string>
+    <string name="device_manager_inactive_sessions_title">Nieaktywne sesje</string>
+    <string name="device_manager_verification_status_detail_other_session_verified">Ta sesja jest gotowa do bezpiecznego przesyłania wiadomości.</string>
+    <string name="device_manager_verification_status_detail_current_session_verified">Twoja bieżąca sesja jest gotowa do bezpiecznego przesyłania wiadomości.</string>
+    <string name="attachment_type_selector_contact">Kontakt</string>
+    <string name="attachment_type_selector_location">Lokalizacja</string>
+    <string name="attachment_type_selector_camera">Aparat</string>
+    <string name="attachment_type_selector_voice_broadcast">Transmisja głosowa</string>
+    <string name="tooltip_attachment_voice_broadcast">Rozpocznij transmisję głosową</string>
+    <string name="room_polls_ended">Ostatnie ankiety</string>
+    <string name="room_polls_active_no_item">W tym pokoju nie ma aktywnych ankiet</string>
+    <string name="room_polls_active">Aktywne ankiety</string>
+    <string name="unable_to_decrypt_some_events_in_poll">Niektóre głosy mogą nie zostać policzone z powodu błędów w odszyfrowaniu</string>
+    <string name="ended_poll_indicator">Zakończono ankietę.</string>
+    <string name="error_voice_broadcast_no_connection_recording">Błąd połączenia - Nagrywanie wstrzymane</string>
+    <string name="error_voice_broadcast_unable_to_play">Nie można odtworzyć tej transmisji głosowej.</string>
+    <string name="error_voice_broadcast_already_in_progress_message">Jesteś już w trakcie nagrywania transmisji głosowej. Proszę zakończyć bieżącą transmisję, aby rozpocząć nową.</string>
+    <string name="error_voice_broadcast_blocked_by_someone_else_message">Ktoś inny nagrywa już transmisję głosową. Aby rozpocząć nową transmisję, należy poczekać na jej zakończenie.</string>
+    <string name="error_voice_broadcast_permission_denied_message">Nie masz wymaganych uprawnień do rozpoczęcia transmisji głosowej w tym pokoju. Skontaktuj się z administratorem pokoju, aby przyznał ci uprawnienia.</string>
+    <string name="error_voice_broadcast_unauthorized_title">Nie można rozpocząć nowej transmisji głosowej</string>
+    <string name="voice_broadcast_buffering">Buforowanie…</string>
+    <string name="error_voice_message_broadcast_in_progress">Nie można rozpocząć wiadomości głosowej</string>
+    <string name="review_unverified_sessions_title">Masz niezweryfikowane sesje</string>
+    <string name="key_authenticity_not_guaranteed">Autentyczność tej zaszyfrowanej wiadomości nie może być zagwarantowana na tym urządzeniu.</string>
+    <string name="room_profile_section_more_polls">Historia ankiet</string>
+    <string name="command_description_table_flip">Dodaje (╯°□°）╯︵ ┻━┻ do wiadomości tekstowej</string>
+    <string name="login_scan_qr_code">Skanuj kod QR</string>
+    <string name="notice_voice_broadcast_ended">%1$s zakończył(a) transmisję głosową.</string>
+    <string name="settings_security_incognito_keyboard_summary">Zarządaj od systemu Android aby klawiatura nie zapisywała żadnych danych takich jak historia pisania lub słownik. Pamiętaj, nie niektóre klawiatury mogą nie zastosować się do tego ustawienia.</string>
+    <string name="settings_security_incognito_keyboard_title">Klawiatura incognito</string>
+    <string name="home_empty_no_rooms_title">Witaj w ${app_name},
+\n%s.</string>
+    <string name="home_empty_no_rooms_message">Wszechstronna, bezpieczna aplikacja do czatowania dla zespołów, przyjaciół i organizacji. Utwórz czat lub dołącz do istniejącego pokoju, aby rozpocząć.</string>
 </resources>

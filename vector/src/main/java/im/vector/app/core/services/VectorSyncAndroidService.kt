@@ -34,10 +34,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.startForegroundCompat
 import im.vector.app.core.platform.PendingIntentCompat
-import im.vector.app.core.time.Clock
-import im.vector.app.core.time.DefaultClock
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.settings.BackgroundSyncMode
+import im.vector.lib.core.utils.timer.Clock
+import im.vector.lib.core.utils.timer.DefaultClock
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.session.sync.job.SyncAndroidService
 import timber.log.Timber

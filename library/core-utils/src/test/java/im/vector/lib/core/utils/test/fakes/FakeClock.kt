@@ -14,9 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.roomprofile.polls.list.data
+package im.vector.lib.core.utils.test.fakes
 
-data class LoadedPollsStatus(
-        val canLoadMore: Boolean,
-        val nbLoadedDays: Int,
-)
+import im.vector.lib.core.utils.timer.Clock
+import io.mockk.every
+import io.mockk.mockk
+
+class FakeClock : Clock by mockk() {
+    fun givenEpoch(epoch: Long) {
+        every { epochMillis() } returns epoch
+    }
+}

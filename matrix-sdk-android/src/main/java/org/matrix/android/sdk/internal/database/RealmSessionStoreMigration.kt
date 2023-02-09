@@ -75,7 +75,7 @@ internal class RealmSessionStoreMigration @Inject constructor(
         private val normalizer: Normalizer
 ) : MatrixRealmMigration(
         dbName = "Session",
-        schemaVersion = 49L,
+        schemaVersion = 50L,
 ) {
     /**
      * Forces all RealmSessionStoreMigration instances to be equal.

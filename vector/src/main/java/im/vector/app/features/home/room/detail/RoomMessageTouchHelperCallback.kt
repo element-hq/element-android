@@ -33,8 +33,8 @@ import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.EpoxyTouchHelperCallback
 import com.airbnb.epoxy.EpoxyViewHolder
 import im.vector.app.R
-import im.vector.app.core.time.Clock
 import im.vector.app.features.themes.ThemeUtils
+import im.vector.lib.core.utils.timer.Clock
 import timber.log.Timber
 import kotlin.math.abs
 import kotlin.math.min

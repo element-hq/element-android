@@ -17,17 +17,17 @@
 package im.vector.app.features.roomprofile.polls.list.domain
 
 import im.vector.app.features.roomprofile.polls.list.data.RoomPollRepository
-import im.vector.app.features.roomprofile.polls.list.ui.PollSummary
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import javax.inject.Inject
 
 class GetPollsUseCase @Inject constructor(
         private val roomPollRepository: RoomPollRepository,
 ) {
 
-    fun execute(roomId: String): Flow<List<PollSummary>> {
+    fun execute(roomId: String): Flow<List<TimelineEvent>> {
         return roomPollRepository.getPolls(roomId)
-                .map { it.sortedByDescending { poll -> poll.creationTimestamp } }
+                .map { it.sortedByDescending { event -> event.root.originServerTs } }
     }
 }

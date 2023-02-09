@@ -97,6 +97,7 @@ class DefaultVectorAnalyticsTest {
     @Test
     fun `given lateinit user properties when valid analytics id updates then identify with lateinit properties`() = runTest {
         fakeLateInitUserPropertiesFactory.givenCreatesProperties(A_LATE_INIT_USER_PROPERTIES)
+        fakeAnalyticsStore.givenUserContent(true)
 
         fakeAnalyticsStore.givenAnalyticsId(AN_ANALYTICS_ID)
 
@@ -106,6 +107,7 @@ class DefaultVectorAnalyticsTest {
     @Test
     fun `when signing out then resets posthog and closes Sentry`() = runTest {
         fakeAnalyticsStore.allowSettingAnalyticsIdToCallBackingFlow()
+        fakeAnalyticsStore.givenUserContent(true)
 
         defaultVectorAnalytics.onSignOut()
 

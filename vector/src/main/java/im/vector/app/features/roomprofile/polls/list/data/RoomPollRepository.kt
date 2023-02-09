@@ -16,20 +16,24 @@
 
 package im.vector.app.features.roomprofile.polls.list.data
 
-import im.vector.app.features.roomprofile.polls.list.ui.PollSummary
 import kotlinx.coroutines.flow.Flow
+import org.matrix.android.sdk.api.session.room.poll.LoadedPollsStatus
+import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import javax.inject.Inject
 
 class RoomPollRepository @Inject constructor(
         private val roomPollDataSource: RoomPollDataSource,
 ) {
 
-    // TODO after unmock, expose domain layer model (entity) and do the mapping to PollSummary in the UI layer
-    fun getPolls(roomId: String): Flow<List<PollSummary>> {
+    fun dispose(roomId: String) {
+        roomPollDataSource.dispose(roomId)
+    }
+
+    fun getPolls(roomId: String): Flow<List<TimelineEvent>> {
         return roomPollDataSource.getPolls(roomId)
     }
 
-    fun getLoadedPollsStatus(roomId: String): LoadedPollsStatus {
+    suspend fun getLoadedPollsStatus(roomId: String): LoadedPollsStatus {
         return roomPollDataSource.getLoadedPollsStatus(roomId)
     }
 

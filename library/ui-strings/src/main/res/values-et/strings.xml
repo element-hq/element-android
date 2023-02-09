@@ -2256,7 +2256,7 @@
     <string name="create_poll_options_title">Koosta valikud</string>
     <string name="create_poll_question_hint">Küsimus või teema</string>
     <string name="create_poll_question_title">Küsitluse küsimus või teema</string>
-    <string name="create_poll_title">Koosta üks küsitlus</string>
+    <string name="create_poll_title">Loo selline küsitlus</string>
     <string name="attachment_type_poll">Küsitlus</string>
     <string name="identity_server_consent_dialog_title_2">Saada e-posti aadressid ja telefoninumbrid %s serverisse</string>
     <string name="settings_discovery_consent_notice_off_2">Sinu kontaktid on vaid sinu teada. Kui tahad nende hulgast leida Matrix\'i kasutajaid, siis me vajame sinu luba nende andmete saatmiseks räsitud kujul isikutuvastusserverisse.</string>
@@ -2330,9 +2330,9 @@
     <string name="location_activity_title_preview">Asukoht</string>
     <string name="location_activity_title_static_sharing">Jaga asukohta</string>
     <string name="closed_poll_option_description">Tulemusi kuvame vaid siis, kui küsitlus on lõppenud</string>
-    <string name="closed_poll_option_title">Küsitlus on lõppenud</string>
+    <string name="closed_poll_option_title">Suletud valikutega küsitlus</string>
     <string name="open_poll_option_description">Osalejad näevad tulemusi peale oma valiku salvestamist</string>
-    <string name="open_poll_option_title">Ava küsitlus</string>
+    <string name="open_poll_option_title">Avatud valikutega küsitlus</string>
     <string name="poll_type_title">Küsitluse tüüp</string>
     <string name="edit_poll_title">Muuda küsitlust</string>
     <string name="poll_no_votes_cast">Hääletanuid ei ole</string>
@@ -2909,4 +2909,6 @@
     <string name="room_polls_loading_error">Viga küsitluste laadimisel.</string>
     <string name="error_voice_message_broadcast_in_progress">Häälsõnumi esitamine ei õnnestu</string>
     <string name="error_voice_message_broadcast_in_progress_message">Kuna sa hetkel salvestad ringhäälingukõnet, siis häälsõnumi salvestamine või esitamine ei õnnestu. Selleks palun lõpeta ringhäälingukõne</string>
+    <string name="error_voice_broadcast_no_connection_recording">Viga võrguühenduses - salvestamine on peatatud</string>
+    <string name="rich_text_editor_inline_code">Kasuta lõimitud koodi vormingut</string>
 </resources>

@@ -207,6 +207,7 @@ class RoomProfileFragment :
     }
 
     override fun onDestroyView() {
+        roomProfileController.callback = null
         views.matrixProfileAppBarLayout.removeOnOffsetChangedListener(appBarStateChangeListener)
         views.matrixProfileRecyclerView.cleanup()
         appBarStateChangeListener = null

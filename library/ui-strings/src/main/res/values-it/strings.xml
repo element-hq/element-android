@@ -2909,4 +2909,6 @@
     </plurals>
     <string name="error_voice_message_broadcast_in_progress_message">Non puoi iniziare un messaggio vocale perché stai registrando una trasmissione in diretta. Termina la trasmissione per potere iniziare un messaggio vocale</string>
     <string name="error_voice_message_broadcast_in_progress">Impossibile iniziare il messaggio vocale</string>
+    <string name="rich_text_editor_inline_code">Applica formato codice interlinea</string>
+    <string name="error_voice_broadcast_no_connection_recording">Errore di connessione - Registrazione in pausa</string>
 </resources>

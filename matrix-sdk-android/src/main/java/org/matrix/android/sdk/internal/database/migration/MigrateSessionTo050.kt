@@ -17,15 +17,25 @@
 package org.matrix.android.sdk.internal.database.migration
 
 import io.realm.DynamicRealm
-import org.matrix.android.sdk.internal.database.model.HomeServerCapabilitiesEntityFields
-import org.matrix.android.sdk.internal.extensions.forceRefreshOfHomeServerCapabilities
+import org.matrix.android.sdk.internal.database.model.PollHistoryStatusEntityFields
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
+/**
+ * Adding new entity PollHistoryStatusEntity.
+ */
 internal class MigrateSessionTo050(realm: DynamicRealm) : RealmMigrator(realm, 50) {
 
     override fun doMigrate(realm: DynamicRealm) {
-        realm.schema.get("HomeServerCapabilitiesEntity")
-                ?.addField(HomeServerCapabilitiesEntityFields.EXTERNAL_ACCOUNT_MANAGEMENT_URL, String::class.java)
-                ?.forceRefreshOfHomeServerCapabilities()
+        realm.schema.create("PollHistoryStatusEntity")
+                .addField(PollHistoryStatusEntityFields.ROOM_ID, String::class.java)
+                .addPrimaryKey(PollHistoryStatusEntityFields.ROOM_ID)
+                .setRequired(PollHistoryStatusEntityFields.ROOM_ID, true)
+                .addField(PollHistoryStatusEntityFields.CURRENT_TIMESTAMP_TARGET_BACKWARD_MS, Long::class.java)
+                .setNullable(PollHistoryStatusEntityFields.CURRENT_TIMESTAMP_TARGET_BACKWARD_MS, true)
+                .addField(PollHistoryStatusEntityFields.OLDEST_TIMESTAMP_TARGET_REACHED_MS, Long::class.java)
+                .setNullable(PollHistoryStatusEntityFields.OLDEST_TIMESTAMP_TARGET_REACHED_MS, true)
+                .addField(PollHistoryStatusEntityFields.OLDEST_EVENT_ID_REACHED, String::class.java)
+                .addField(PollHistoryStatusEntityFields.MOST_RECENT_EVENT_ID_REACHED, String::class.java)
+                .addField(PollHistoryStatusEntityFields.IS_END_OF_POLLS_BACKWARD, Boolean::class.java)
     }
 }
