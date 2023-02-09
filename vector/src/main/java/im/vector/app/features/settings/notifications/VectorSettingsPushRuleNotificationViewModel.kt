@@ -24,26 +24,31 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.settings.notifications.VectorSettingsPushRuleNotificationViewEvent.Failure
+import im.vector.app.features.settings.notifications.VectorSettingsPushRuleNotificationViewEvent.PushRuleUpdated
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.pushrules.rest.PushRuleAndKind
 
-class VectorSettingsPushRuleNotificationPreferenceViewModel @AssistedInject constructor(
-        @Assisted initialState: VectorSettingsPushRuleNotificationPreferenceViewState,
+private typealias ViewModel = VectorSettingsPushRuleNotificationViewModel
+private typealias ViewState = VectorSettingsPushRuleNotificationViewState
+
+class VectorSettingsPushRuleNotificationViewModel @AssistedInject constructor(
+        @Assisted initialState: ViewState,
         private val activeSessionHolder: ActiveSessionHolder,
-) : VectorViewModel<VectorSettingsPushRuleNotificationPreferenceViewState,
-        VectorSettingsPushRuleNotificationPreferenceViewAction,
-        VectorSettingsPushRuleNotificationPreferenceViewEvent>(initialState) {
+) : VectorViewModel<VectorSettingsPushRuleNotificationViewState,
+        VectorSettingsPushRuleNotificationViewAction,
+        VectorSettingsPushRuleNotificationViewEvent>(initialState) {
 
     @AssistedFactory
-    interface Factory : MavericksAssistedViewModelFactory<VectorSettingsPushRuleNotificationPreferenceViewModel, VectorSettingsPushRuleNotificationPreferenceViewState> {
-        override fun create(initialState: VectorSettingsPushRuleNotificationPreferenceViewState): VectorSettingsPushRuleNotificationPreferenceViewModel
+    interface Factory : MavericksAssistedViewModelFactory<ViewModel, ViewState> {
+        override fun create(initialState: ViewState): ViewModel
     }
 
-    companion object : MavericksViewModelFactory<VectorSettingsPushRuleNotificationPreferenceViewModel, VectorSettingsPushRuleNotificationPreferenceViewState> by hiltMavericksViewModelFactory()
+    companion object : MavericksViewModelFactory<ViewModel, ViewState> by hiltMavericksViewModelFactory()
 
-    override fun handle(action: VectorSettingsPushRuleNotificationPreferenceViewAction) {
+    override fun handle(action: VectorSettingsPushRuleNotificationViewAction) {
         when (action) {
-            is VectorSettingsPushRuleNotificationPreferenceViewAction.UpdatePushRule -> handleUpdatePushRule(action.pushRuleAndKind, action.checked)
+            is VectorSettingsPushRuleNotificationViewAction.UpdatePushRule -> handleUpdatePushRule(action.pushRuleAndKind, action.checked)
         }
     }
 
@@ -67,11 +72,11 @@ class VectorSettingsPushRuleNotificationPreferenceViewModel @AssistedInject cons
             }.fold(
                     onSuccess = {
                         setState { copy(isLoading = false) }
-                        _viewEvents.post(VectorSettingsPushRuleNotificationPreferenceViewEvent.PushRuleUpdated(ruleId, checked))
+                        _viewEvents.post(PushRuleUpdated(ruleId, checked))
                     },
                     onFailure = { failure ->
                         setState { copy(isLoading = false) }
-                        _viewEvents.post(VectorSettingsPushRuleNotificationPreferenceViewEvent.Failure(failure))
+                        _viewEvents.post(Failure(failure))
                     }
             )
         }

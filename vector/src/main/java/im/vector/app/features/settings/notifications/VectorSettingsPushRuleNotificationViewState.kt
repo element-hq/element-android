@@ -16,9 +16,8 @@
 
 package im.vector.app.features.settings.notifications
 
-import im.vector.app.core.platform.VectorViewModelAction
-import org.matrix.android.sdk.api.session.pushrules.rest.PushRuleAndKind
+import com.airbnb.mvrx.MavericksState
 
-sealed interface VectorSettingsPushRuleNotificationPreferenceViewAction : VectorViewModelAction {
-    data class UpdatePushRule(val pushRuleAndKind: PushRuleAndKind, val checked: Boolean) : VectorSettingsPushRuleNotificationPreferenceViewAction
-}
+data class VectorSettingsPushRuleNotificationViewState(
+        val isLoading: Boolean = false,
+): MavericksState

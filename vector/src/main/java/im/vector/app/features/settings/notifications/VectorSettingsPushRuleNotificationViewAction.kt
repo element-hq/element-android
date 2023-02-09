@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,8 @@
 package im.vector.app.features.settings.notifications
 
 import im.vector.app.core.platform.VectorViewModelAction
+import org.matrix.android.sdk.api.session.pushrules.rest.PushRuleAndKind
 
-sealed interface VectorSettingsNotificationPreferenceViewAction : VectorViewModelAction {
-    data class EnableNotificationsForDevice(val pushDistributor: String) : VectorSettingsNotificationPreferenceViewAction
-    object DisableNotificationsForDevice : VectorSettingsNotificationPreferenceViewAction
-    data class RegisterPushDistributor(val pushDistributor: String) : VectorSettingsNotificationPreferenceViewAction
+sealed interface VectorSettingsPushRuleNotificationViewAction : VectorViewModelAction {
+    data class UpdatePushRule(val pushRuleAndKind: PushRuleAndKind, val checked: Boolean) : VectorSettingsPushRuleNotificationViewAction
 }

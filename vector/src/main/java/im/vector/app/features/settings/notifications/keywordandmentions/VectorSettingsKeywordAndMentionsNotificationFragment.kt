@@ -28,7 +28,7 @@ import im.vector.app.core.preference.VectorPreferenceCategory
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.settings.notifications.NotificationIndex
 import im.vector.app.features.settings.notifications.StandardActions
-import im.vector.app.features.settings.notifications.VectorSettingsPushRuleNotificationPreferenceFragment
+import im.vector.app.features.settings.notifications.VectorSettingsPushRuleNotificationFragment
 import im.vector.app.features.settings.notifications.getStandardAction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -38,8 +38,8 @@ import org.matrix.android.sdk.api.session.pushrules.RuleKind
 import org.matrix.android.sdk.api.session.pushrules.rest.PushRule
 import org.matrix.android.sdk.api.session.pushrules.toJson
 
-class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment :
-        VectorSettingsPushRuleNotificationPreferenceFragment() {
+class VectorSettingsKeywordAndMentionsNotificationFragment :
+        VectorSettingsPushRuleNotificationFragment() {
 
     override var titleRes: Int = R.string.settings_notification_mentions_and_keywords
 

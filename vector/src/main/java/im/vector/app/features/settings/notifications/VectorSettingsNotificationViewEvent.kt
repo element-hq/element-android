@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,9 @@ package im.vector.app.features.settings.notifications
 
 import im.vector.app.core.platform.VectorViewEvents
 
-sealed interface VectorSettingsPushRuleNotificationPreferenceViewEvent : VectorViewEvents {
-    data class PushRuleUpdated(val ruleId: String, val enabled: Boolean) : VectorSettingsPushRuleNotificationPreferenceViewEvent
-    data class Failure(val throwable: Throwable) : VectorSettingsPushRuleNotificationPreferenceViewEvent
+sealed interface VectorSettingsNotificationViewEvent : VectorViewEvents {
+    object NotificationsForDeviceEnabled : VectorSettingsNotificationViewEvent
+    object NotificationsForDeviceDisabled : VectorSettingsNotificationViewEvent
+    object AskUserForPushDistributor : VectorSettingsNotificationViewEvent
+    object NotificationMethodChanged : VectorSettingsNotificationViewEvent
 }

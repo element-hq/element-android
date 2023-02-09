@@ -25,10 +25,10 @@ import im.vector.app.core.preference.VectorCheckboxPreference
 import im.vector.app.features.settings.VectorSettingsBaseFragment
 import org.matrix.android.sdk.api.session.pushrules.rest.PushRuleAndKind
 
-abstract class VectorSettingsPushRuleNotificationPreferenceFragment :
+abstract class VectorSettingsPushRuleNotificationFragment :
         VectorSettingsBaseFragment() {
 
-    private val viewModel: VectorSettingsPushRuleNotificationPreferenceViewModel by fragmentViewModel()
+    private val viewModel: VectorSettingsPushRuleNotificationViewModel by fragmentViewModel()
 
     abstract val prefKeyToPushRuleId: Map<String, String>
 
@@ -40,8 +40,8 @@ abstract class VectorSettingsPushRuleNotificationPreferenceFragment :
     private fun observeViewEvents() {
         viewModel.observeViewEvents {
             when (it) {
-                is VectorSettingsPushRuleNotificationPreferenceViewEvent.Failure -> refreshDisplay()
-                is VectorSettingsPushRuleNotificationPreferenceViewEvent.PushRuleUpdated -> updatePreference(it.ruleId, it.enabled)
+                is VectorSettingsPushRuleNotificationViewEvent.Failure -> refreshDisplay()
+                is VectorSettingsPushRuleNotificationViewEvent.PushRuleUpdated -> updatePreference(it.ruleId, it.enabled)
             }
         }
     }
@@ -59,7 +59,7 @@ abstract class VectorSettingsPushRuleNotificationPreferenceFragment :
                 val initialIndex = ruleAndKind.pushRule.notificationIndex
                 preference.isChecked = initialIndex != NotificationIndex.OFF
                 preference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                    viewModel.handle(VectorSettingsPushRuleNotificationPreferenceViewAction.UpdatePushRule(ruleAndKind, newValue as Boolean))
+                    viewModel.handle(VectorSettingsPushRuleNotificationViewAction.UpdatePushRule(ruleAndKind, newValue as Boolean))
                     false
                 }
             }

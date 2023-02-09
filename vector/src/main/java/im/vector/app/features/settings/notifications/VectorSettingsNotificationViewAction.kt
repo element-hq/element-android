@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,10 @@
 
 package im.vector.app.features.settings.notifications
 
-import com.airbnb.mvrx.MavericksState
+import im.vector.app.core.platform.VectorViewModelAction
 
-data class VectorSettingsPushRuleNotificationPreferenceViewState(
-        val isLoading: Boolean = false,
-): MavericksState
+sealed interface VectorSettingsNotificationViewAction : VectorViewModelAction {
+    data class EnableNotificationsForDevice(val pushDistributor: String) : VectorSettingsNotificationViewAction
+    object DisableNotificationsForDevice : VectorSettingsNotificationViewAction
+    data class RegisterPushDistributor(val pushDistributor: String) : VectorSettingsNotificationViewAction
+}
