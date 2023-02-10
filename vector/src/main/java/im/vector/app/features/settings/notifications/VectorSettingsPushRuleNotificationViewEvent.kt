@@ -19,6 +19,19 @@ package im.vector.app.features.settings.notifications
 import im.vector.app.core.platform.VectorViewEvents
 
 sealed interface VectorSettingsPushRuleNotificationViewEvent : VectorViewEvents {
-    data class PushRuleUpdated(val ruleId: String, val checked: Boolean) : VectorSettingsPushRuleNotificationViewEvent
-    data class Failure(val throwable: Throwable) : VectorSettingsPushRuleNotificationViewEvent
+    /**
+     * A global push rule checked state has changed.
+     *
+     * @property ruleId the global rule id which has been updated.
+     * @property checked whether the global rule is checked.
+     * @property failure whether there has been a failure when updating the global rule (ie. a sub rule has not been updated).
+     */
+    data class PushRuleUpdated(val ruleId: String, val checked: Boolean, val failure: Throwable? = null) : VectorSettingsPushRuleNotificationViewEvent
+
+    /**
+     * A failure has occurred.
+     *
+     * @property throwable the related exception, if any.
+     */
+    data class Failure(val throwable: Throwable?) : VectorSettingsPushRuleNotificationViewEvent
 }

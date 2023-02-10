@@ -83,9 +83,19 @@ class VectorSettingsPushRuleNotificationViewModel @AssistedInject constructor(
                 }
             }
             setState { copy(isLoading = false) }
-            val failure = results.firstNotNullOfOrNull { it.exceptionOrNull() }
-            if (failure == null) {
-                _viewEvents.post(PushRuleUpdated(ruleId, checked))
+            val failure = results.firstNotNullOfOrNull { result ->
+                // If the failure is a rule not found error, do not consider it
+                result.exceptionOrNull()?.takeUnless { it is ServerError && it.error.code == MatrixError.M_NOT_FOUND }
+            }
+            val newChecked = if (checked) {
+                // If any rule is checked, the global rule is checked
+                results.any { it.isSuccess }
+            } else {
+                // If any rule has not been unchecked, the global rule remains checked
+                failure != null
+            }
+            if (results.any { it.isSuccess }) {
+                _viewEvents.post(PushRuleUpdated(ruleId, newChecked, failure))
             } else {
                 _viewEvents.post(Failure(failure))
             }
@@ -93,18 +103,11 @@ class VectorSettingsPushRuleNotificationViewModel @AssistedInject constructor(
     }
 
     private suspend fun updatePushRule(kind: RuleKind, ruleId: String, enable: Boolean, newActions: List<Action>?) {
-        try {
-            activeSessionHolder.getSafeActiveSession()?.pushRuleService()?.updatePushRuleActions(
-                    kind = kind,
-                    ruleId = ruleId,
-                    enable = enable,
-                    actions = newActions
-            )
-        } catch (failure: ServerError) {
-            // Ignore the error if the rule id is not known from the server
-            if (failure.error.code != MatrixError.M_NOT_FOUND) {
-                throw failure
-            }
-        }
+        activeSessionHolder.getSafeActiveSession()?.pushRuleService()?.updatePushRuleActions(
+                kind = kind,
+                ruleId = ruleId,
+                enable = enable,
+                actions = newActions
+        )
     }
 }
