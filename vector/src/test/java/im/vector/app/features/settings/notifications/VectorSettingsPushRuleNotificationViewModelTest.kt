@@ -59,7 +59,7 @@ internal class VectorSettingsPushRuleNotificationViewModelTest {
     }
 
     @Test
-    fun `given a ruleId, when the rule is checked or unchecked, then the related rules are also updated and a view event is posted`() = runTest {
+    fun `given a ruleId, when the rule is checked or unchecked with no error, then the expected view event is posted`() = runTest {
         // Given
         val viewModel = createViewModel()
 
@@ -105,7 +105,7 @@ internal class VectorSettingsPushRuleNotificationViewModelTest {
     }
 
     @Test
-    fun `given a ruleId, when the rule is checked and an error is thrown, then all the related rules are updated and an event is posted with the failure`() = runTest {
+    fun `given a ruleId, when the rule is checked with an error, then expected view event is posted`() = runTest {
         // Given
         val viewModel = createViewModel()
         val failure = mockk<Throwable>()
@@ -161,7 +161,7 @@ internal class VectorSettingsPushRuleNotificationViewModelTest {
     }
 
     @Test
-    fun `given a ruleId, when the rule is unchecked and an error is thrown, then all the related rules are updated and an event is posted with the failure`() = runTest {
+    fun `given a ruleId, when the rule is unchecked with an error, then the expected view event is posted`() = runTest {
         // Given
         val viewModel = createViewModel()
         val failure = mockk<Throwable>()

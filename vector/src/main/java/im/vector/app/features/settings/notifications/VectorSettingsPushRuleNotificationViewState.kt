@@ -20,4 +20,4 @@ import com.airbnb.mvrx.MavericksState
 
 data class VectorSettingsPushRuleNotificationViewState(
         val isLoading: Boolean = false,
-): MavericksState
+) : MavericksState
