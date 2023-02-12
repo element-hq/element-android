@@ -509,7 +509,7 @@ class MessageItemFactory @Inject constructor(
                 allowNonMxcUrls = informationData.sendState.isSending()
         )
 
-        val playable = messageContent.mimeType == MimeTypes.Gif
+        val playable = messageContent.mimeType == MimeTypes.Gif || messageContent.mimeType == MimeTypes.Webp
 
         return MessageImageVideoItem_()
                 .attributes(attributes)
