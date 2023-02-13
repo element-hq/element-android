@@ -255,7 +255,11 @@ class MessageItemFactory @Inject constructor(
             attributes: AbsMessageItem.Attributes,
             isEnded: Boolean,
     ): PollItem {
-        val pollViewState = pollItemViewStateFactory.create(pollContent, informationData)
+        val pollViewState = pollItemViewStateFactory.create(
+                pollContent = pollContent,
+                pollResponseData = informationData.pollResponseAggregatedSummary,
+                isSent = informationData.sendState.isSent(),
+        )
 
         return PollItem_()
                 .attributes(attributes)

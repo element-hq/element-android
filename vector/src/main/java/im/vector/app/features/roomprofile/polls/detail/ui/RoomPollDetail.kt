@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.poll
+package im.vector.app.features.roomprofile.polls.detail.ui
 
-import im.vector.app.features.home.room.detail.timeline.item.PollOptionViewState
+import im.vector.app.features.poll.PollItemViewState
 
-data class PollViewState(
-        val question: String,
-        val votesStatus: String,
-        val canVote: Boolean,
-        val optionViewStates: List<PollOptionViewState>?,
+data class RoomPollDetail(
+        val creationTimestamp: Long,
+        val isEnded: Boolean,
+        val endedPollEventId: String?,
+        val pollItemViewState: PollItemViewState,
 )
