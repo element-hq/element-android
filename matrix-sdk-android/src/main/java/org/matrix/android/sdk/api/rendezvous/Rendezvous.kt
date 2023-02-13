@@ -71,7 +71,7 @@ class Rendezvous(
 
             // and, that the transport is supported
             if (!RendezvousTransportType.values().map { it.value }.contains(genericParsed.rendezvous.transport.type)) {
-                throw RendezvousError("Unsupported trnsport", RendezvousFailureReason.UnsupportedTransport)
+                throw RendezvousError("Unsupported transport", RendezvousFailureReason.UnsupportedTransport)
             }
 
             // now that we know the overall structure looks sensible, we rely on moshi validating the code and
