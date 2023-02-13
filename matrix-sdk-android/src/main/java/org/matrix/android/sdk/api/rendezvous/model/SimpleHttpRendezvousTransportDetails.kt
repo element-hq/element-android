@@ -21,4 +21,4 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class SimpleHttpRendezvousTransportDetails(
         val uri: String
-) : RendezvousTransportDetails(type = RendezvousTransportType.MSC3886_SIMPLE_HTTP_V1)
+) : RendezvousTransportDetails(type = RendezvousTransportType.MSC3886_SIMPLE_HTTP_V1.name)
