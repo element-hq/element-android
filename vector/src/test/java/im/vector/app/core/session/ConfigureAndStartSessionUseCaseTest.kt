@@ -56,6 +56,7 @@ class ConfigureAndStartSessionUseCaseTest {
             vectorPreferences = fakeVectorPreferences.instance,
             notificationsSettingUpdater = fakeNotificationsSettingUpdater.instance,
             updateNotificationSettingsAccountDataUseCase = fakeUpdateNotificationSettingsAccountDataUseCase,
+            pushRulesUpdater = mockk(),
     )
 
     @Before
