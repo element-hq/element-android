@@ -1265,7 +1265,7 @@
     </plurals>
     <string name="room_profile_section_more_uploads">上传</string>
     <string name="room_profile_section_more_leave">离开房间</string>
-    <string name="room_profile_leaving_room">正在离开房间…</string>
+    <string name="room_profile_leaving_room">正在离开房间……</string>
     <string name="room_member_power_level_admins">管理员</string>
     <string name="room_member_power_level_moderators">协管员</string>
     <string name="room_member_power_level_custom">自定义</string>
@@ -1758,7 +1758,7 @@
     <string name="room_permissions_title">权限</string>
     <string name="room_settings_permissions_subtitle">查看和更新更改房间各个部分所需的角色。</string>
     <string name="room_settings_permissions_title">房间权限</string>
-    <string name="room_participants_leave_private_warning">此房间不公开。你没有邀请将无法重新加入。</string>
+    <string name="room_participants_leave_private_warning">此房间不公开。没有邀请，你将无法重新加入。</string>
     <string name="call_held_by_you">你保持通话</string>
     <string name="call_held_by_user">%s 保持通话</string>
     <string name="call_hold_action">保持</string>
@@ -2820,4 +2820,6 @@
     <string name="error_voice_message_broadcast_in_progress_message">你无法启动语音消息因为你正在录制实时广播。请终止实时广播以开始录制语音消息</string>
     <string name="error_voice_message_broadcast_in_progress">无法启动语音消息</string>
     <string name="ended_poll_indicator">结束了投票。</string>
+    <string name="settings_access_token_summary">你的访问令牌提供对你账户的完全访问权限。勿与任何人分享它。</string>
+    <string name="settings_access_token">访问令牌</string>
 </resources>
