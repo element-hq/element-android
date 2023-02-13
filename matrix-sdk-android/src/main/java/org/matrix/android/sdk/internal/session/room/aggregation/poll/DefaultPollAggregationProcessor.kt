@@ -84,7 +84,6 @@ internal class DefaultPollAggregationProcessor @Inject constructor(
         val roomId = event.roomId ?: return false
         val senderId = event.senderId ?: return false
         val targetEventId = event.getRelationContent()?.eventId ?: return false
-        val targetPollContent = getPollContent(session, roomId, targetEventId) ?: return false
 
         val annotationsSummaryEntity = getAnnotationsSummaryEntity(realm, roomId, targetEventId)
         val aggregatedPollSummaryEntity = getAggregatedPollSummaryEntity(realm, annotationsSummaryEntity)
@@ -108,7 +107,8 @@ internal class DefaultPollAggregationProcessor @Inject constructor(
         }
 
         val vote = content.getBestResponse()?.answers?.first() ?: return false
-        if (!targetPollContent.getBestPollCreationInfo()?.answers?.map { it.id }?.contains(vote).orFalse()) {
+        val targetPollContent = getPollContent(session, roomId, targetEventId)
+        if (targetPollContent != null && !targetPollContent.getBestPollCreationInfo()?.answers?.map { it.id }?.contains(vote).orFalse()) {
             return false
         }
 
