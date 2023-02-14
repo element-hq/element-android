@@ -31,6 +31,7 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.pushrules.RuleIds
 import org.matrix.android.sdk.api.session.pushrules.rest.PushRuleAndKind
 
+// TODO This fragment seems not used anymore, we can probably delete it
 @AndroidEntryPoint
 class VectorSettingsAdvancedNotificationPreferenceFragment :
         VectorSettingsBaseFragment() {
@@ -43,7 +44,7 @@ class VectorSettingsAdvancedNotificationPreferenceFragment :
         for (preferenceKey in prefKeyToPushRuleId.keys) {
             val preference = findPreference<VectorPreference>(preferenceKey)
             if (preference is PushRulePreference) {
-                val ruleAndKind: PushRuleAndKind? = session.pushRuleService().getPushRules().findDefaultRule(prefKeyToPushRuleId[preferenceKey])
+                val ruleAndKind: PushRuleAndKind? = prefKeyToPushRuleId[preferenceKey]?.let { session.pushRuleService().getPushRules().findDefaultRule(it) }
 
                 if (ruleAndKind == null) {
                     // The rule is not defined, hide the preference
