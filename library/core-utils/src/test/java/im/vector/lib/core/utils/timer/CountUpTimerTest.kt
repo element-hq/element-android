@@ -121,7 +121,7 @@ internal class CountUpTimerTest {
         advanceTimeBy(AN_INTERVAL * 10)
 
         // Then
-        verify(exactly = 2) { timer.stop() } // one call at the first tick, a second time because of the tick on the previous stop action
+        verify(exactly = 2) { timer.stop() } // one call at the first tick, a second time because of the tick of the first stop
         verify(exactly = 2) { tickListener.onTick(any()) } // one after reaching the first interval, a second after the stop action
     }
 
@@ -146,7 +146,7 @@ internal class CountUpTimerTest {
         advanceTimeBy(AN_INTERVAL * 10)
 
         // Then
-        verify(exactly = 2) { timer.pause() } // one call at the first tick, a second time because of the tick on the previous pause action
+        verify(exactly = 2) { timer.pause() } // one call at the first tick, a second time because of the tick of the first pause
         verify(exactly = 2) { tickListener.onTick(any()) } // one after reaching the first interval, a second after the pause action
     }
 }
