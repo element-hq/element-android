@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.notifications
+package im.vector.app.features.settings.notifications.usecase
 
 import im.vector.app.core.pushers.EnsureFcmTokenIsRetrievedUseCase
 import im.vector.app.core.pushers.RegisterUnifiedPushUseCase
-import im.vector.app.features.settings.notifications.usecase.EnableNotificationsForCurrentSessionUseCase
-import im.vector.app.features.settings.notifications.usecase.ToggleNotificationsForCurrentSessionUseCase
 import im.vector.app.test.fakes.FakePushersManager
 import io.mockk.coJustRun
 import io.mockk.coVerify
