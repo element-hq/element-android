@@ -61,8 +61,8 @@ class Rendezvous(
                 // we rely on moshi validating the code and throwing exception if invalid JSON or algorithm doesn't match
                 MatrixJsonParser.getMoshi().adapter(RendezvousCode::class.java).fromJson(code)
             } catch (a: Throwable) {
-                throw RendezvousError("Invalid code", RendezvousFailureReason.InvalidCode)
-            } ?: throw RendezvousError("Invalid code", RendezvousFailureReason.InvalidCode)
+                throw RendezvousError("Malformed code", RendezvousFailureReason.InvalidCode)
+            } ?: throw RendezvousError("Code is null", RendezvousFailureReason.InvalidCode)
 
             // then we check that algorithm is supported
             if (!SecureRendezvousChannelAlgorithm.values().map { it.value }.contains(genericParsed.rendezvous.algorithm)) {
@@ -79,8 +79,8 @@ class Rendezvous(
             val supportedParsed = try {
                 MatrixJsonParser.getMoshi().adapter(ECDHRendezvousCode::class.java).fromJson(code)
             } catch (a: Throwable) {
-                throw RendezvousError("Invalid code", RendezvousFailureReason.InvalidCode)
-            } ?: throw RendezvousError("Invalid code", RendezvousFailureReason.InvalidCode)
+                throw RendezvousError("Malformed ECDH rendezvous code", RendezvousFailureReason.InvalidCode)
+            } ?: throw RendezvousError("ECDH rendezvous code is null", RendezvousFailureReason.InvalidCode)
 
             val transport = SimpleHttpRendezvousTransport(supportedParsed.rendezvous.transport.uri)
 
