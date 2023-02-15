@@ -33,12 +33,15 @@ class CountUpTimer(
 
     private val lastTime: AtomicLong = AtomicLong(clock.epochMillis())
     private val elapsedTime: AtomicLong = AtomicLong(0)
+    // To ensure that the regular tick value is an exact multiple of `intervalInMs`
+    private val specialRound = SpecialRound(intervalInMs)
 
     private fun startCounter() {
+        counterJob?.cancel()
         counterJob = coroutineScope.launch {
             while (true) {
                 delay(intervalInMs - elapsedTime() % intervalInMs)
-                tickListener?.onTick(elapsedTime())
+                tickListener?.onTick(specialRound.round(elapsedTime()))
             }
         }
     }
@@ -54,27 +57,52 @@ class CountUpTimer(
         }
     }
 
+    /**
+     * Start a new timer with the initial given time, if any.
+     * If the timer is already started, it will be restarted.
+     */
     fun start(initialTime: Long = 0L) {
         elapsedTime.set(initialTime)
-        resume()
-    }
-
-    fun pause() {
-        tickListener?.onTick(elapsedTime())
-        counterJob?.cancel()
-        counterJob = null
-    }
-
-    fun resume() {
         lastTime.set(clock.epochMillis())
         startCounter()
     }
 
+    /**
+     * Pause the timer at the current time.
+     */
+    fun pause() {
+        pauseAndTick()
+    }
+
+    /**
+     * Resume the timer from the current time.
+     * Does nothing if the timer is already running.
+     */
+    fun resume() {
+        if (counterJob?.isActive != true) {
+            lastTime.set(clock.epochMillis())
+            startCounter()
+        }
+    }
+
+    /**
+     * Stop and reset the timer.
+     */
     fun stop() {
-        tickListener?.onTick(elapsedTime())
-        counterJob?.cancel()
-        counterJob = null
+        pauseAndTick()
         elapsedTime.set(0L)
+    }
+
+    private fun pauseAndTick() {
+        if (counterJob?.isActive == true) {
+            // get the elapsed time before cancelling the timer
+            val elapsedTime = elapsedTime()
+            // cancel the timer before ticking
+            counterJob?.cancel()
+            counterJob = null
+            // tick with the computed elapsed time
+            tickListener?.onTick(elapsedTime)
+        }
     }
 
     fun interface TickListener {
