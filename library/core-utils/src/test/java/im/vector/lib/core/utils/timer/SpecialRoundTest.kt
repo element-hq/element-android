@@ -31,6 +31,7 @@ class SpecialRoundTest {
         sut.round(1000) shouldBeEqualTo 1_000
         sut.round(1001) shouldBeEqualTo 1_000
         sut.round(1499) shouldBeEqualTo 1_500
+        sut.round(1500) shouldBeEqualTo 1_500
         sut.round(1501) shouldBeEqualTo 1_500
     }
 
@@ -45,6 +46,7 @@ class SpecialRoundTest {
         sut.round(1000) shouldBeEqualTo 1_000
         sut.round(1001) shouldBeEqualTo 1_000
         sut.round(1499) shouldBeEqualTo 1_000
+        sut.round(1500) shouldBeEqualTo 2_000
         sut.round(1501) shouldBeEqualTo 2_000
     }
 }
