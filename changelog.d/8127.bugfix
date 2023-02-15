@@ -1,1 +1,0 @@
-CountUpTimer - Fix StackOverFlow exception when stop action is called within the tick event

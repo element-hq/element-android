@@ -1,3 +1,11 @@
+Changes in Element v1.5.25 (2023-02-15)
+=======================================
+
+Bugfixes 🐛
+----------
+ - CountUpTimer - Fix StackOverFlow exception when stop action is called within the tick event ([#8127](https://github.com/vector-im/element-android/issues/8127))
+
+
 Changes in Element v1.5.24 (2023-02-08)
 =======================================
 
