@@ -89,6 +89,16 @@ internal class CleanupSession @Inject constructor(
         sessionCache.deleteRecursively()
     }
 
+    suspend fun clearSessionData() {
+        Timber.d("Clear data: clear session data...")
+        clearSessionDataTask.execute(Unit)
+
+        waitRealmRelease()
+
+        Timber.d("Clear data: clear session cache")
+        sessionCache.deleteRecursively()
+    }
+
     private suspend fun waitRealmRelease() {
         var timeToWaitMillis = MAX_TIME_TO_WAIT_MILLIS
         do {

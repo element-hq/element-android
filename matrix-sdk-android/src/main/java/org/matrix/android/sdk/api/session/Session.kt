@@ -26,6 +26,7 @@ import org.matrix.android.sdk.api.federation.FederationService
 import org.matrix.android.sdk.api.session.account.AccountService
 import org.matrix.android.sdk.api.session.accountdata.SessionAccountDataService
 import org.matrix.android.sdk.api.session.call.CallSignalingService
+import org.matrix.android.sdk.api.session.cleardata.ClearDataService
 import org.matrix.android.sdk.api.session.content.ContentUploadStateTracker
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
 import org.matrix.android.sdk.api.session.contentscanner.ContentScannerService
@@ -161,6 +162,11 @@ interface Session {
      * Returns the SignOutService associated with the session.
      */
     fun signOutService(): SignOutService
+
+    /**
+     * Returns the ClearDataService associated with the session.
+     */
+    fun clearDataService(): ClearDataService
 
     /**
      * Returns the PushRuleService associated with the session.

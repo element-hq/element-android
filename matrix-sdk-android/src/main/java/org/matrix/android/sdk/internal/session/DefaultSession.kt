@@ -34,6 +34,7 @@ import org.matrix.android.sdk.api.session.account.AccountService
 import org.matrix.android.sdk.api.session.accountdata.SessionAccountDataService
 import org.matrix.android.sdk.api.session.cache.CacheService
 import org.matrix.android.sdk.api.session.call.CallSignalingService
+import org.matrix.android.sdk.api.session.cleardata.ClearDataService
 import org.matrix.android.sdk.api.session.content.ContentUploadStateTracker
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
 import org.matrix.android.sdk.api.session.contentscanner.ContentScannerService
@@ -99,6 +100,7 @@ internal class DefaultSession @Inject constructor(
         private val federationService: Lazy<FederationService>,
         private val cacheService: Lazy<CacheService>,
         private val signOutService: Lazy<SignOutService>,
+        private val clearDataService: Lazy<ClearDataService>,
         private val pushRuleService: Lazy<PushRuleService>,
         private val pushersService: Lazy<PushersService>,
         private val termsService: Lazy<TermsService>,
@@ -207,6 +209,7 @@ internal class DefaultSession @Inject constructor(
     override fun roomDirectoryService(): RoomDirectoryService = roomDirectoryService.get()
     override fun userService(): UserService = userService.get()
     override fun signOutService(): SignOutService = signOutService.get()
+    override fun clearDataService(): ClearDataService = clearDataService.get()
     override fun pushRuleService(): PushRuleService = pushRuleService.get()
     override fun pushersService(): PushersService = pushersService.get()
     override fun eventService(): EventService = eventService.get()

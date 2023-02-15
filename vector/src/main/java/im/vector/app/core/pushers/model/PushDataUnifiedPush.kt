@@ -53,7 +53,8 @@ data class PushDataUnifiedPushCounts(
         @Json(name = "unread") val unread: Int?
 )
 
-fun PushDataUnifiedPush.toPushData() = PushData(
+// TODO
+fun PushDataUnifiedPush.toPushData() = PushData.Event(
         eventId = notification?.eventId?.takeIf { MatrixPatterns.isEventId(it) },
         roomId = notification?.roomId?.takeIf { MatrixPatterns.isRoomId(it) },
         unread = notification?.counts?.unread

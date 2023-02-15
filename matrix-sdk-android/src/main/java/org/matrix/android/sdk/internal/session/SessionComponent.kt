@@ -31,6 +31,7 @@ import org.matrix.android.sdk.internal.network.RequestModule
 import org.matrix.android.sdk.internal.session.account.AccountModule
 import org.matrix.android.sdk.internal.session.cache.CacheModule
 import org.matrix.android.sdk.internal.session.call.CallModule
+import org.matrix.android.sdk.internal.session.cleardata.ClearDataModule
 import org.matrix.android.sdk.internal.session.content.ContentModule
 import org.matrix.android.sdk.internal.session.content.UploadContentWorker
 import org.matrix.android.sdk.internal.session.contentscanner.ContentScannerModule
@@ -73,6 +74,7 @@ import org.matrix.android.sdk.internal.util.system.SystemModule
             SyncModule::class,
             HomeServerCapabilitiesModule::class,
             SignOutModule::class,
+            ClearDataModule::class,
             UserModule::class,
             FilterModule::class,
             ContentModule::class,

@@ -49,15 +49,15 @@ import javax.inject.Inject
 private val loggerTag = LoggerTag("Push", LoggerTag.SYNC)
 
 class VectorPushHandler @Inject constructor(
-    private val notificationDrawerManager: NotificationDrawerManager,
-    private val notifiableEventResolver: NotifiableEventResolver,
-    private val activeSessionHolder: ActiveSessionHolder,
-    private val vectorPreferences: VectorPreferences,
-    private val vectorDataStore: VectorDataStore,
-    private val wifiDetector: WifiDetector,
-    private val actionIds: NotificationActionIds,
-    private val context: Context,
-    private val buildMeta: BuildMeta
+        private val notificationDrawerManager: NotificationDrawerManager,
+        private val notifiableEventResolver: NotifiableEventResolver,
+        private val activeSessionHolder: ActiveSessionHolder,
+        private val vectorPreferences: VectorPreferences,
+        private val vectorDataStore: VectorDataStore,
+        private val wifiDetector: WifiDetector,
+        private val actionIds: NotificationActionIds,
+        private val context: Context,
+        private val buildMeta: BuildMeta
 ) {
 
     private val coroutineScope = CoroutineScope(SupervisorJob())
@@ -83,24 +83,30 @@ class VectorPushHandler @Inject constructor(
             vectorDataStore.incrementPushCounter()
         }
 
-        // Diagnostic Push
-        if (pushData.eventId == PushersManager.TEST_EVENT_ID) {
-            val intent = Intent(actionIds.push)
-            LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
-            return
-        }
-
-        if (!vectorPreferences.areNotificationEnabledForDevice()) {
-            Timber.tag(loggerTag.value).i("Notification are disabled for this device")
-            return
-        }
-
-        mUIHandler.post {
-            if (ProcessLifecycleOwner.get().lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
-                // we are in foreground, let the sync do the things?
-                Timber.tag(loggerTag.value).d("PUSH received in a foreground state, ignore")
-            } else {
+        when (pushData) {
+            PushData.Diagnostic -> {
+                val intent = Intent(actionIds.push)
+                LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
+                return
+            }
+            is PushData.RemoteWipe -> {
                 coroutineScope.launch(Dispatchers.IO) { handleInternal(pushData) }
+                return
+            }
+            is PushData.Event -> {
+                if (!vectorPreferences.areNotificationEnabledForDevice()) {
+                    Timber.tag(loggerTag.value).i("Notification are disabled for this device")
+                    return
+                }
+
+                mUIHandler.post {
+                    if (ProcessLifecycleOwner.get().lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+                        // we are in foreground, let the sync do the things?
+                        Timber.tag(loggerTag.value).d("PUSH received in a foreground state, ignore")
+                    } else {
+                        coroutineScope.launch(Dispatchers.IO) { handleInternal(pushData) }
+                    }
+                }
             }
         }
     }
@@ -122,8 +128,11 @@ class VectorPushHandler @Inject constructor(
 
             if (session == null) {
                 Timber.tag(loggerTag.value).w("## Can't sync from push, no current session")
-            } else {
-                if (isEventAlreadyKnown(pushData)) {
+                return
+            }
+            when (pushData) {
+                PushData.Diagnostic -> {}
+                is PushData.Event -> if (isEventAlreadyKnown(pushData)) {
                     Timber.tag(loggerTag.value).d("Ignoring push, event already known")
                 } else {
                     // Try to get the Event content faster
@@ -133,13 +142,19 @@ class VectorPushHandler @Inject constructor(
                     Timber.tag(loggerTag.value).d("Requesting background sync")
                     session.syncService().requireBackgroundSync()
                 }
+                is PushData.RemoteWipe -> {
+                    Timber.tag(loggerTag.value).d("## Remote wipe: received")
+
+                    Timber.tag(loggerTag.value).d("## Remote wipe: clearing data")
+                    session.clearDataService().clearData()
+                }
             }
         } catch (e: Exception) {
             Timber.tag(loggerTag.value).e(e, "## handleInternal() failed")
         }
     }
 
-    private suspend fun getEventFastLane(session: Session, pushData: PushData) {
+    private suspend fun getEventFastLane(session: Session, pushData: PushData.Event) {
         pushData.roomId ?: return
         pushData.eventId ?: return
 
@@ -169,7 +184,7 @@ class VectorPushHandler @Inject constructor(
 
     // check if the event was not yet received
     // a previous catchup might have already retrieved the notified event
-    private fun isEventAlreadyKnown(pushData: PushData): Boolean {
+    private fun isEventAlreadyKnown(pushData: PushData.Event): Boolean {
         if (pushData.eventId != null && pushData.roomId != null) {
             try {
                 val session = activeSessionHolder.getSafeActiveSession() ?: return false
