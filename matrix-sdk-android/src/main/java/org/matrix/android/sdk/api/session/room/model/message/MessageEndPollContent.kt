@@ -39,5 +39,3 @@ data class MessageEndPollContent(
 ) : MessageContent {
     fun getBestText() = text ?: unstableText
 }
-
-
