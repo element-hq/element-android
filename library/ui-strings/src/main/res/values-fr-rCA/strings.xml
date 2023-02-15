@@ -296,7 +296,7 @@
     <string name="qr_code">code QR</string>
     <string name="add_by_qr_code">Ajouter avec un code QR</string>
     <string name="link_copied_to_clipboard">Lien copié dans le presse-papiers</string>
-    <string name="labs_show_unread_notifications_as_tab">Ajouter un onglet dédié aux notifications non-lues sur l’écran principal.</string>
+    <string name="labs_show_unread_notifications_as_tab">Ajouter un onglet dédié aux notifications non lues sur l’écran principal.</string>
     <string name="labs_swipe_to_reply_in_timeline">Activer le balayage pour répondre dans l’historique</string>
     <string name="room_directory_search_hint">Nom ou identifiant (#exemple:matrix.org)</string>
     <string name="room_filtering_footer_open_room_directory">Voir le répertoire des salons</string>
@@ -842,7 +842,7 @@
     <string name="settings_security_pin_code_grace_period_summary_off">Le code est requis à l’ouverture d’${app_name}.</string>
     <string name="settings_security_pin_code_grace_period_summary_on">Le code est demandé après 2 minutes d\'inutilisation d’${app_name}.</string>
     <string name="settings_security_pin_code_grace_period_title">Demander le code après 2 minutes</string>
-    <string name="settings_security_pin_code_notifications_summary_off">Afficher uniquement le numéro de messages non-lus dans une simple notification.</string>
+    <string name="settings_security_pin_code_notifications_summary_off">Afficher uniquement le numéro de messages non lus dans une simple notification.</string>
     <string name="settings_security_pin_code_notifications_summary_on">Afficher les détails comme les noms des salons et le contenu du message.</string>
     <string name="settings_security_pin_code_notifications_title">Afficher le contenu dans les notifications</string>
     <string name="settings_security_pin_code_use_biometrics_summary_off">Le code est la seule façon de déverrouiller ${app_name}.</string>
