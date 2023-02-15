@@ -2783,7 +2783,7 @@
     <string name="qr_code_login_new_device_instruction_1">Öffne die App auf deinem anderen Gerät</string>
     <string name="qr_code_login_header_failed_denied_description">Die Anfrage wurde auf dem anderen Gerät abgelehnt.</string>
     <string name="qr_code_login_header_failed_timeout_description">Die Verbindung konnte nicht in der erforderlichen Zeit hergestellt werden.</string>
-    <string name="qr_code_login_header_failed_device_is_not_supported_description">Verbindung mit diesem Gerät nicht unterstützt.</string>
+    <string name="qr_code_login_header_failed_device_is_not_supported_description">Die Verbindung mit diesem Gerät wird nicht unterstützt.</string>
     <string name="qr_code_login_header_failed_title">Verbindung fehlgeschlagen</string>
     <string name="qr_code_login_header_connected_description">Überprüfe dein angemeldetes Gerät. Der unten gezeigte Code sollte angezeigt werden. Bestätige, dass beide Codes übereinstimmen:</string>
     <string name="qr_code_login_header_connected_title">Sichere Verbindung hergestellt</string>
