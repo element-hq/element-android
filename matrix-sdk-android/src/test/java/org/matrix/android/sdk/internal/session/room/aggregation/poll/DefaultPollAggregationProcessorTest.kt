@@ -148,6 +148,19 @@ class DefaultPollAggregationProcessorTest {
     }
 
     @Test
+    fun `given a poll response event and no existing poll start event, when processing, then is processed and returns true`() {
+        // Given
+        mockRoom(roomId = A_ROOM_ID, eventId = AN_EVENT_ID, hasExistingTimelineEvent = false)
+        every { realm.instance.createObject(PollResponseAggregatedSummaryEntity::class.java) } returns PollResponseAggregatedSummaryEntity()
+
+        // When
+        val result = pollAggregationProcessor.handlePollResponseEvent(session, realm.instance, A_POLL_RESPONSE_EVENT)
+
+        // Then
+        result.shouldBeTrue()
+    }
+
+    @Test
     fun `given a poll end event, when processing, then is processed and return true`() = runTest {
         // Given
         every { realm.instance.createObject(PollResponseAggregatedSummaryEntity::class.java) } returns PollResponseAggregatedSummaryEntity()
@@ -234,11 +247,12 @@ class DefaultPollAggregationProcessorTest {
 
     private fun mockRoom(
             roomId: String,
-            eventId: String
+            eventId: String,
+            hasExistingTimelineEvent: Boolean = true,
     ) {
         val room = mockk<Room>()
         every { session.getRoom(roomId) } returns room
-        every { room.getTimelineEvent(eventId) } returns A_TIMELINE_EVENT
+        every { room.getTimelineEvent(eventId) } returns if (hasExistingTimelineEvent) A_TIMELINE_EVENT else null
     }
 
     private fun mockRedactionPowerLevels(userId: String, isAbleToRedact: Boolean): PowerLevelsHelper {
