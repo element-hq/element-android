@@ -23,6 +23,7 @@ import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
 import im.vector.app.features.location.LocationData
 import im.vector.app.features.location.LocationTracker
 import kotlinx.coroutines.Dispatchers
@@ -32,6 +33,7 @@ import kotlinx.coroutines.launch
 
 class LocationPreviewViewModel @AssistedInject constructor(
         @Assisted private val initialState: LocationPreviewViewState,
+        private val locationPinProvider: LocationPinProvider,
         private val locationTracker: LocationTracker,
 ) : VectorViewModel<LocationPreviewViewState, LocationPreviewAction, LocationPreviewViewEvents>(initialState), LocationTracker.Callback {
 
@@ -43,7 +45,16 @@ class LocationPreviewViewModel @AssistedInject constructor(
     companion object : MavericksViewModelFactory<LocationPreviewViewModel, LocationPreviewViewState> by hiltMavericksViewModelFactory()
 
     init {
+        initialState.pinUserId?.let { userId ->
+            initPin(userId)
+        }
         initLocationTracking()
+    }
+
+    private fun initPin(userId: String) {
+        locationPinProvider.create(userId) { pinDrawable ->
+            setState { copy(pinDrawable = pinDrawable) }
+        }
     }
 
     private fun initLocationTracking() {

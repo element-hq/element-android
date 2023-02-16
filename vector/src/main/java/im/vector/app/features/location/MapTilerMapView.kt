@@ -38,6 +38,8 @@ import im.vector.app.R
 import im.vector.app.core.utils.DimensionConverter
 import timber.log.Timber
 
+private const val USER_PIN_ID = "user-pin-id"
+
 class MapTilerMapView @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
@@ -173,13 +175,13 @@ class MapTilerMapView @JvmOverloads constructor(
             }
         }
 
-        state.userLocationData?.let { locationData ->
+        safeMapRefs.symbolManager.deleteAll()
+        state.pinLocationData?.let { locationData ->
             if (!initZoomDone || !state.zoomOnlyOnce) {
                 zoomToLocation(locationData)
                 initZoomDone = true
             }
 
-            safeMapRefs.symbolManager.deleteAll()
             if (pinDrawable != null && state.showPin) {
                 safeMapRefs.symbolManager.create(
                         SymbolOptions()
@@ -188,6 +190,20 @@ class MapTilerMapView @JvmOverloads constructor(
                                 .withIconAnchor(Property.ICON_ANCHOR_BOTTOM)
                 )
             }
+        }
+
+        state.userLocationData?.let { locationData ->
+            if (!safeMapRefs.style.isFullyLoaded || safeMapRefs.style.getImage(USER_PIN_ID) == null) {
+                userLocationDrawable?.let { drawable ->
+                    safeMapRefs.style.addImage(USER_PIN_ID, drawable.toBitmap())
+                }
+            }
+            safeMapRefs.symbolManager.create(
+                    SymbolOptions()
+                            .withLatLng(LatLng(locationData.latitude, locationData.longitude))
+                            .withIconImage(USER_PIN_ID)
+                            .withIconAnchor(Property.ICON_ANCHOR_BOTTOM)
+            )
         }
     }
 
