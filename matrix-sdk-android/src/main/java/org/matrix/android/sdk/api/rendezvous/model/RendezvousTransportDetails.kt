@@ -20,5 +20,5 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 open class RendezvousTransportDetails(
-    val type: RendezvousTransportType
+    val type: String
 )
