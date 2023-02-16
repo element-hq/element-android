@@ -24,6 +24,8 @@ import android.view.ViewGroup
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import androidx.core.view.marginBottom
+import androidx.core.view.marginTop
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -192,6 +194,7 @@ class LiveLocationMapViewFragment :
             updateMap(viewState.userLocations)
         }
         updateUserListBottomSheet(viewState.userLocations)
+        updateLocateButton(showLocateButton = false)
     }
 
     private fun updateUserListBottomSheet(userLocations: List<UserLiveLocationViewState>) {
@@ -233,6 +236,20 @@ class LiveLocationMapViewFragment :
                         bottomOffset + dimensionConverter.dpToPx(COPYRIGHT_MARGIN_DP)
                 )
             }
+        }
+    }
+
+    private fun updateLocateButton(showLocateButton: Boolean) {
+        views.liveLocationMapLocateButton.isVisible = showLocateButton
+        adjustCompassButton()
+    }
+
+    private fun adjustCompassButton() {
+        val locateButton = views.liveLocationMapLocateButton
+        locateButton.post {
+            val marginTop = locateButton.height + locateButton.marginTop + locateButton.marginBottom
+            val marginRight = locateButton.context.resources.getDimensionPixelOffset(R.dimen.location_sharing_compass_button_margin_horizontal)
+            mapboxMap?.get()?.uiSettings?.setCompassMargins(0, marginTop, marginRight, 0)
         }
     }
 
