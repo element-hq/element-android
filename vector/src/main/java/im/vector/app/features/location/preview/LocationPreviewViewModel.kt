@@ -22,12 +22,18 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.location.LocationData
+import im.vector.app.features.location.LocationTracker
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 class LocationPreviewViewModel @AssistedInject constructor(
         @Assisted private val initialState: LocationPreviewViewState,
-) : VectorViewModel<LocationPreviewViewState, LocationPreviewAction, EmptyViewEvents>(initialState) {
+        private val locationTracker: LocationTracker,
+) : VectorViewModel<LocationPreviewViewState, LocationPreviewAction, LocationPreviewViewEvents>(initialState), LocationTracker.Callback {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<LocationPreviewViewModel, LocationPreviewViewState> {
@@ -36,13 +42,61 @@ class LocationPreviewViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<LocationPreviewViewModel, LocationPreviewViewState> by hiltMavericksViewModelFactory()
 
+    init {
+        initLocationTracking()
+    }
+
+    private fun initLocationTracking() {
+        locationTracker.addCallback(this)
+        locationTracker.locations
+                .onEach(::onLocationUpdate)
+                .launchIn(viewModelScope)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        locationTracker.removeCallback(this)
+    }
+
     override fun handle(action: LocationPreviewAction) {
         when (action) {
             LocationPreviewAction.ShowMapLoadingError -> handleShowMapLoadingError()
+            LocationPreviewAction.ZoomToUserLocation -> handleZoomToUserLocationAction()
         }
     }
 
     private fun handleShowMapLoadingError() {
         setState { copy(loadingMapHasFailed = true) }
+    }
+
+    private fun handleZoomToUserLocationAction() = withState { state ->
+        if (!state.isLoadingUserLocation) {
+            setState {
+                copy(isLoadingUserLocation = true)
+            }
+            viewModelScope.launch(Dispatchers.Main) {
+                locationTracker.start()
+                locationTracker.requestLastKnownLocation()
+            }
+        }
+    }
+
+    override fun onNoLocationProviderAvailable() {
+        _viewEvents.post(LocationPreviewViewEvents.UserLocationNotAvailableError)
+    }
+
+    private fun onLocationUpdate(locationData: LocationData) {
+        withState { state ->
+            if (state.isLoadingUserLocation) {
+                _viewEvents.post(LocationPreviewViewEvents.ZoomToUserLocation(locationData))
+            }
+        }
+
+        setState {
+            copy(
+                    lastKnownUserLocation = locationData,
+                    isLoadingUserLocation = false,
+            )
+        }
     }
 }

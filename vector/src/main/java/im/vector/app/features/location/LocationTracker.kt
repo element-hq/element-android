@@ -90,6 +90,7 @@ class LocationTracker @Inject constructor(
 
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
     fun start() {
+        // TODO start only if not already started
         Timber.d("start()")
 
         if (locationManager == null) {

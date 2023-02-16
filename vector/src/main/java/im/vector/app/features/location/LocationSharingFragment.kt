@@ -176,14 +176,7 @@ class LocationSharingFragment :
     }
 
     private fun handleLocationNotAvailableError() {
-        MaterialAlertDialogBuilder(requireActivity())
-                .setTitle(R.string.location_not_available_dialog_title)
-                .setMessage(R.string.location_not_available_dialog_content)
-                .setPositiveButton(R.string.ok) { _, _ ->
-                    locationSharingNavigator.quit()
-                }
-                .setCancelable(false)
-                .show()
+        showUserLocationNotAvailableErrorDialog { locationSharingNavigator.quit() }
     }
 
     private fun handleLiveLocationSharingNotEnoughPermission() {

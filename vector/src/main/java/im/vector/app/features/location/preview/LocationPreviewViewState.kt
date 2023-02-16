@@ -17,7 +17,10 @@
 package im.vector.app.features.location.preview
 
 import com.airbnb.mvrx.MavericksState
+import im.vector.app.features.location.LocationData
 
 data class LocationPreviewViewState(
-        val loadingMapHasFailed: Boolean = false
+        val loadingMapHasFailed: Boolean = false,
+        val isLoadingUserLocation: Boolean = false,
+        val lastKnownUserLocation: LocationData? = null,
 ) : MavericksState

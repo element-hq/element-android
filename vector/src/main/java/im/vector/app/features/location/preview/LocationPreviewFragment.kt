@@ -31,13 +31,18 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.VectorMenuProvider
+import im.vector.app.core.utils.PERMISSIONS_FOR_FOREGROUND_LOCATION_SHARING
+import im.vector.app.core.utils.checkPermissions
+import im.vector.app.core.utils.onPermissionDeniedDialog
 import im.vector.app.core.utils.openLocation
+import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.databinding.FragmentLocationPreviewBinding
 import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
 import im.vector.app.features.location.DEFAULT_PIN_ID
 import im.vector.app.features.location.LocationSharingArgs
 import im.vector.app.features.location.MapState
 import im.vector.app.features.location.UrlMapProvider
+import im.vector.app.features.location.showUserLocationNotAvailableErrorDialog
 import java.lang.ref.WeakReference
 import javax.inject.Inject
 
@@ -78,6 +83,28 @@ class LocationPreviewFragment :
             views.mapView.initialize(urlMapProvider.getMapUrl())
             loadPinDrawable()
         }
+
+        observeViewEvents()
+        initLocateButton()
+    }
+
+    private fun observeViewEvents() {
+        viewModel.observeViewEvents {
+            when (it) {
+                LocationPreviewViewEvents.UserLocationNotAvailableError -> handleUserLocationNotAvailableError()
+                is LocationPreviewViewEvents.ZoomToUserLocation -> handleZoomToUserLocationEvent(it)
+            }
+        }
+    }
+
+    private fun handleUserLocationNotAvailableError() {
+        showUserLocationNotAvailableErrorDialog {
+            // do nothing
+        }
+    }
+
+    private fun handleZoomToUserLocationEvent(event: LocationPreviewViewEvents.ZoomToUserLocation) {
+        views.mapView.zoomToLocation(event.userLocation)
     }
 
     override fun onDestroyView() {
@@ -124,6 +151,12 @@ class LocationPreviewFragment :
 
     override fun invalidate() = withState(viewModel) { state ->
         views.mapPreviewLoadingError.isVisible = state.loadingMapHasFailed
+        // TODO render pin for user location
+        if(state.isLoadingUserLocation) {
+            showLoadingDialog()
+        } else {
+            dismissLoadingDialog()
+        }
     }
 
     override fun getMenuRes() = R.menu.menu_location_preview
@@ -154,10 +187,30 @@ class LocationPreviewFragment :
                                 zoomOnlyOnce = true,
                                 userLocationData = location,
                                 pinId = args.locationOwnerId ?: DEFAULT_PIN_ID,
-                                pinDrawable = pinDrawable
+                                pinDrawable = pinDrawable,
                         )
                 )
             }
+        }
+    }
+
+    private fun initLocateButton() {
+        views.mapView.locateButton.setOnClickListener {
+            if (checkPermissions(PERMISSIONS_FOR_FOREGROUND_LOCATION_SHARING, requireActivity(), foregroundLocationResultLauncher)) {
+                zoomToUserLocation()
+            }
+        }
+    }
+
+    private fun zoomToUserLocation() {
+        viewModel.handle(LocationPreviewAction.ZoomToUserLocation)
+    }
+
+    private val foregroundLocationResultLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
+        if (allGranted) {
+            zoomToUserLocation()
+        } else if (deniedPermanently) {
+            activity?.onPermissionDeniedDialog(R.string.denied_permission_generic)
         }
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,10 @@
 
 package im.vector.app.features.location.preview
 
-import im.vector.app.core.platform.VectorViewModelAction
+import im.vector.app.core.platform.VectorViewEvents
+import im.vector.app.features.location.LocationData
 
-sealed class LocationPreviewAction : VectorViewModelAction {
-    object ShowMapLoadingError : LocationPreviewAction()
-    object ZoomToUserLocation : LocationPreviewAction()
+sealed class LocationPreviewViewEvents : VectorViewEvents {
+    data class ZoomToUserLocation(val userLocation: LocationData) : LocationPreviewViewEvents()
+    object UserLocationNotAvailableError : LocationPreviewViewEvents()
 }
