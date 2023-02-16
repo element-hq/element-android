@@ -28,10 +28,12 @@ import im.vector.app.features.location.live.tracking.LocationSharingServiceConne
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.location.UpdateLiveLocationShareResult
 
 class LiveLocationMapViewModel @AssistedInject constructor(
         @Assisted private val initialState: LiveLocationMapViewState,
+        private val session: Session,
         getListOfUserLiveLocationUseCase: GetListOfUserLiveLocationUseCase,
         private val locationSharingServiceConnection: LocationSharingServiceConnection,
         private val stopLiveLocationShareUseCase: StopLiveLocationShareUseCase,
@@ -46,7 +48,7 @@ class LiveLocationMapViewModel @AssistedInject constructor(
 
     init {
         getListOfUserLiveLocationUseCase.execute(initialState.roomId)
-                .onEach { setState { copy(userLocations = it) } }
+                .onEach { setState { copy(userLocations = it, showLocateButton = it.none { it.matrixItem.id == session.myUserId }) } }
                 .launchIn(viewModelScope)
         locationSharingServiceConnection.bind(this)
     }

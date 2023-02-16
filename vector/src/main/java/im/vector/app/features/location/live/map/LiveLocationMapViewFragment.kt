@@ -194,7 +194,7 @@ class LiveLocationMapViewFragment :
             updateMap(viewState.userLocations)
         }
         updateUserListBottomSheet(viewState.userLocations)
-        updateLocateButton(showLocateButton = false)
+        updateLocateButton(showLocateButton = viewState.showLocateButton)
     }
 
     private fun updateUserListBottomSheet(userLocations: List<UserLiveLocationViewState>) {

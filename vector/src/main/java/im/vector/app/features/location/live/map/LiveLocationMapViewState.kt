@@ -29,6 +29,7 @@ data class LiveLocationMapViewState(
          */
         val mapSymbolIds: Map<String, Long> = emptyMap(),
         val loadingMapHasFailed: Boolean = false,
+        val showLocateButton: Boolean = false,
 ) : MavericksState {
     constructor(liveLocationMapViewArgs: LiveLocationMapViewArgs) : this(
             roomId = liveLocationMapViewArgs.roomId
