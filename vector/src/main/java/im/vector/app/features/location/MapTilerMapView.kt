@@ -103,9 +103,11 @@ class MapTilerMapView @JvmOverloads constructor(
 
     private fun initMapStyle(map: MapboxMap, url: String) {
         map.setStyle(url) { style ->
+            val symbolManager = SymbolManager(this, map, style)
+            symbolManager.iconAllowOverlap = true
             mapRefs = MapRefs(
                     map,
-                    SymbolManager(this, map, style),
+                    symbolManager,
                     style
             )
             pendingState?.let { render(it) }

@@ -45,13 +45,11 @@ class LocationPreviewViewModel @AssistedInject constructor(
     companion object : MavericksViewModelFactory<LocationPreviewViewModel, LocationPreviewViewState> by hiltMavericksViewModelFactory()
 
     init {
-        initialState.pinUserId?.let { userId ->
-            initPin(userId)
-        }
+        initPin(initialState.pinUserId)
         initLocationTracking()
     }
 
-    private fun initPin(userId: String) {
+    private fun initPin(userId: String?) {
         locationPinProvider.create(userId) { pinDrawable ->
             setState { copy(pinDrawable = pinDrawable) }
         }
