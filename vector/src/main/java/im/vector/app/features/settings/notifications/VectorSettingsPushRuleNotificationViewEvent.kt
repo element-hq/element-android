@@ -33,5 +33,5 @@ sealed interface VectorSettingsPushRuleNotificationViewEvent : VectorViewEvents 
      *
      * @property throwable the related exception, if any.
      */
-    data class Failure(val throwable: Throwable?) : VectorSettingsPushRuleNotificationViewEvent
+    data class Failure(val ruleId: String, val throwable: Throwable?) : VectorSettingsPushRuleNotificationViewEvent
 }

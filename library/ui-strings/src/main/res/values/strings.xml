@@ -862,6 +862,8 @@
     <string name="settings_notification_keyword_contains_dot">Keywords cannot start with \'.\'</string>
     <string name="settings_notification_keyword_contains_invalid_character">Keywords cannot contain \'%s\'</string>
 
+    <string name="settings_notification_error_on_update">An error occurred when updating your notification preferences. Please try again.</string>
+
     <string name="settings_notification_troubleshoot">Troubleshoot Notifications</string>
     <string name="settings_troubleshoot_diagnostic">Troubleshooting diagnostics</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Run Tests</string>

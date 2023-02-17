@@ -21,33 +21,35 @@ import android.view.View
 import androidx.preference.Preference
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import im.vector.app.R
 import im.vector.app.core.preference.VectorCheckboxPreference
 import im.vector.app.features.settings.VectorSettingsBaseFragment
+import im.vector.app.features.themes.ThemeUtils
 
 abstract class VectorSettingsPushRuleNotificationFragment :
         VectorSettingsBaseFragment() {
 
-    private val viewModel: VectorSettingsPushRuleNotificationViewModel by fragmentViewModel()
+    protected val viewModel: VectorSettingsPushRuleNotificationViewModel by fragmentViewModel()
 
     abstract val prefKeyToPushRuleId: Map<String, String>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeViewEvents()
-        viewModel.onEach(VectorSettingsPushRuleNotificationViewState::isLoading) { isLoading ->
-            if (isLoading) {
-                displayLoadingView()
-            } else {
-                hideLoadingView()
-            }
-        }
+        viewModel.onEach(VectorSettingsPushRuleNotificationViewState::isLoading) { updateLoadingView(it) }
+        viewModel.onEach(VectorSettingsPushRuleNotificationViewState::rulesOnError) { refreshErrors(it) }
     }
 
     private fun observeViewEvents() {
         viewModel.observeViewEvents {
             when (it) {
-                is VectorSettingsPushRuleNotificationViewEvent.Failure -> refreshDisplay()
-                is VectorSettingsPushRuleNotificationViewEvent.PushRuleUpdated -> updatePreference(it.ruleId, it.checked)
+                is VectorSettingsPushRuleNotificationViewEvent.Failure -> onFailure(it.ruleId)
+                is VectorSettingsPushRuleNotificationViewEvent.PushRuleUpdated -> {
+                    updatePreference(it.ruleId, it.checked)
+                    if (it.failure != null) {
+                        onFailure(it.ruleId)
+                    }
+                }
             }
         }
     }
@@ -71,11 +73,25 @@ abstract class VectorSettingsPushRuleNotificationFragment :
         }
     }
 
-    override fun invalidate() = withState(viewModel) { state ->
-        if (state.isLoading) {
+    private fun updateLoadingView(isLoading: Boolean) {
+        if (isLoading) {
             displayLoadingView()
         } else {
             hideLoadingView()
+        }
+    }
+
+    private fun refreshErrors(rulesWithError: Set<String>) {
+        if (withState(viewModel, VectorSettingsPushRuleNotificationViewState::isLoading)) return
+        prefKeyToPushRuleId.forEach { (preferenceKey, ruleId) ->
+            val preference = findPreference<VectorCheckboxPreference>(preferenceKey)!!
+            if (ruleId in rulesWithError) {
+                preference.summaryTextColor = context?.let { ThemeUtils.getColor(it, R.attr.colorError) }
+                preference.setSummary(R.string.settings_notification_error_on_update)
+            } else {
+                preference.summaryTextColor = null
+                preference.summary = null
+            }
         }
     }
 
@@ -87,5 +103,9 @@ abstract class VectorSettingsPushRuleNotificationFragment :
         val preferenceKey = prefKeyToPushRuleId.entries.find { it.value == ruleId }?.key ?: return
         val preference = findPreference<VectorCheckboxPreference>(preferenceKey) ?: return
         preference.isChecked = checked
+    }
+
+    protected open fun onFailure(ruleId: String) {
+        refreshDisplay()
     }
 }

@@ -52,7 +52,7 @@ class ConfigureAndStartSessionUseCase @Inject constructor(
         updateMatrixClientInfoIfNeeded(session)
         createNotificationSettingsAccountDataIfNeeded(session)
         notificationsSettingUpdater.onSessionStarted(session)
-        pushRulesUpdater.onSessionStarted(session)
+//        pushRulesUpdater.onSessionStarted(session)
     }
 
     private fun updateMatrixClientInfoIfNeeded(session: Session) {
