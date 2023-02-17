@@ -16,10 +16,10 @@
 
 package im.vector.app.features.settings.notifications.usecase
 
+import im.vector.app.features.settings.notifications.getParentRule
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.pushrules.RuleIds
 import org.matrix.android.sdk.api.session.pushrules.getActions
-import org.matrix.android.sdk.api.session.pushrules.getParentRule
 import org.matrix.android.sdk.api.session.pushrules.rest.PushRule
 import org.matrix.android.sdk.api.session.pushrules.rest.PushRuleAndKind
 import javax.inject.Inject

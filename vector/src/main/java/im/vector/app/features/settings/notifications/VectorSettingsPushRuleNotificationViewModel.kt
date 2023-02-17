@@ -32,7 +32,6 @@ import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.session.pushrules.Action
 import org.matrix.android.sdk.api.session.pushrules.RuleIds
 import org.matrix.android.sdk.api.session.pushrules.RuleKind
-import org.matrix.android.sdk.api.session.pushrules.getSyncedRules
 import org.matrix.android.sdk.api.session.pushrules.rest.PushRuleAndKind
 
 private typealias ViewModel = VectorSettingsPushRuleNotificationViewModel
