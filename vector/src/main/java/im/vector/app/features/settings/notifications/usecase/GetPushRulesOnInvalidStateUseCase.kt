@@ -16,12 +16,12 @@
 
 package im.vector.app.features.settings.notifications.usecase
 
+import im.vector.app.features.settings.notifications.getParentRule
+import im.vector.app.features.settings.notifications.getSyncedRules
 import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.pushrules.RuleIds
 import org.matrix.android.sdk.api.session.pushrules.getActions
-import org.matrix.android.sdk.api.session.pushrules.getParentRule
-import org.matrix.android.sdk.api.session.pushrules.getSyncedRules
 import org.matrix.android.sdk.api.session.pushrules.rest.PushRule
 import javax.inject.Inject
 
