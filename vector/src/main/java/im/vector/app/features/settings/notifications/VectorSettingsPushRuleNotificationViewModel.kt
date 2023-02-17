@@ -20,7 +20,6 @@ import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
@@ -30,6 +29,7 @@ import im.vector.app.features.settings.notifications.usecase.GetPushRulesOnInval
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.failure.Failure.ServerError
 import org.matrix.android.sdk.api.failure.MatrixError
+import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.api.session.pushrules.Action
 import org.matrix.android.sdk.api.session.pushrules.RuleIds
@@ -43,7 +43,7 @@ private typealias ViewState = VectorSettingsPushRuleNotificationViewState
 
 class VectorSettingsPushRuleNotificationViewModel @AssistedInject constructor(
         @Assisted initialState: ViewState,
-        private val activeSessionHolder: ActiveSessionHolder,
+        private val session: Session,
         private val getPushRulesOnInvalidStateUseCase: GetPushRulesOnInvalidStateUseCase,
 ) : VectorViewModel<VectorSettingsPushRuleNotificationViewState,
         VectorSettingsPushRuleNotificationViewAction,
@@ -57,24 +57,27 @@ class VectorSettingsPushRuleNotificationViewModel @AssistedInject constructor(
     companion object : MavericksViewModelFactory<ViewModel, ViewState> by hiltMavericksViewModelFactory()
 
     init {
-        val session = activeSessionHolder.getSafeActiveSession()
-        session?.flow()
-                ?.liveUserAccountData(UserAccountDataTypes.TYPE_PUSH_RULES)
-                ?.unwrap()
-                ?.setOnEach {
+        session.flow()
+                .liveUserAccountData(UserAccountDataTypes.TYPE_PUSH_RULES)
+                .unwrap()
+                .setOnEach {
+                    val allRules = session.pushRuleService().getPushRules().getAllRules()
                     val rulesOnError = getPushRulesOnInvalidStateUseCase.execute(session).map { it.ruleId }.toSet()
-                    copy(rulesOnError = rulesOnError)
+                    copy(
+                            allRules = allRules,
+                            rulesOnError = rulesOnError
+                    )
                 }
     }
 
     override fun handle(action: VectorSettingsPushRuleNotificationViewAction) {
         when (action) {
-            is VectorSettingsPushRuleNotificationViewAction.UpdatePushRule -> handleUpdatePushRule(action.pushRuleAndKind, action.checked)
+            is VectorSettingsPushRuleNotificationViewAction.UpdatePushRule -> handleUpdatePushRule(action.ruleId, action.checked)
         }
     }
 
     fun getPushRuleAndKind(ruleId: String): PushRuleAndKind? {
-        return activeSessionHolder.getSafeActiveSession()?.pushRuleService()?.getPushRules()?.findDefaultRule(ruleId)
+        return session.pushRuleService().getPushRules().findDefaultRule(ruleId)
     }
 
     fun isPushRuleChecked(ruleId: String): Boolean {
@@ -82,9 +85,8 @@ class VectorSettingsPushRuleNotificationViewModel @AssistedInject constructor(
         return rulesGroup.mapNotNull { getPushRuleAndKind(it) }.any { it.pushRule.notificationIndex != NotificationIndex.OFF }
     }
 
-    private fun handleUpdatePushRule(pushRuleAndKind: PushRuleAndKind, checked: Boolean) {
-        val ruleId = pushRuleAndKind.pushRule.ruleId
-        val kind = pushRuleAndKind.kind
+    private fun handleUpdatePushRule(ruleId: String, checked: Boolean) {
+        val kind = getPushRuleAndKind(ruleId)?.kind ?: return
         val newIndex = if (checked) NotificationIndex.NOISY else NotificationIndex.OFF
         val standardAction = getStandardAction(ruleId, newIndex) ?: return
         val enabled = standardAction != StandardActions.Disabled
@@ -129,7 +131,7 @@ class VectorSettingsPushRuleNotificationViewModel @AssistedInject constructor(
     }
 
     private suspend fun updatePushRule(kind: RuleKind, ruleId: String, enable: Boolean, newActions: List<Action>?) {
-        activeSessionHolder.getSafeActiveSession()?.pushRuleService()?.updatePushRuleActions(
+        session.pushRuleService().updatePushRuleActions(
                 kind = kind,
                 ruleId = ruleId,
                 enable = enable,

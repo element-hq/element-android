@@ -36,6 +36,7 @@ abstract class VectorSettingsPushRuleNotificationFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeViewEvents()
+        viewModel.onEach(VectorSettingsPushRuleNotificationViewState::allRules) { refreshPreferences() }
         viewModel.onEach(VectorSettingsPushRuleNotificationViewState::isLoading) { updateLoadingView(it) }
         viewModel.onEach(VectorSettingsPushRuleNotificationViewState::rulesOnError) { refreshErrors(it) }
     }
@@ -55,18 +56,11 @@ abstract class VectorSettingsPushRuleNotificationFragment :
     }
 
     override fun bindPref() {
-        for (preferenceKey in prefKeyToPushRuleId.keys) {
-            val preference = findPreference<VectorCheckboxPreference>(preferenceKey)!!
-            preference.isIconSpaceReserved = false
-            val ruleAndKind = prefKeyToPushRuleId[preferenceKey]?.let { viewModel.getPushRuleAndKind(it) }
-            if (ruleAndKind == null) {
-                // The rule is not defined, hide the preference
-                preference.isVisible = false
-            } else {
-                preference.isVisible = true
-                updatePreference(ruleAndKind.pushRule.ruleId, viewModel.isPushRuleChecked(ruleAndKind.pushRule.ruleId))
-                preference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                    viewModel.handle(VectorSettingsPushRuleNotificationViewAction.UpdatePushRule(ruleAndKind, newValue as Boolean))
+        prefKeyToPushRuleId.forEach { (preferenceKey, ruleId) ->
+            findPreference<VectorCheckboxPreference>(preferenceKey)?.apply {
+                isIconSpaceReserved = false
+                onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+                    viewModel.handle(VectorSettingsPushRuleNotificationViewAction.UpdatePushRule(ruleId, newValue as Boolean))
                     false
                 }
             }
@@ -81,16 +75,21 @@ abstract class VectorSettingsPushRuleNotificationFragment :
         }
     }
 
+    private fun refreshPreferences() {
+        prefKeyToPushRuleId.values.forEach { ruleId -> updatePreference(ruleId, viewModel.isPushRuleChecked(ruleId)) }
+    }
+
     private fun refreshErrors(rulesWithError: Set<String>) {
         if (withState(viewModel, VectorSettingsPushRuleNotificationViewState::isLoading)) return
         prefKeyToPushRuleId.forEach { (preferenceKey, ruleId) ->
-            val preference = findPreference<VectorCheckboxPreference>(preferenceKey)!!
-            if (ruleId in rulesWithError) {
-                preference.summaryTextColor = context?.let { ThemeUtils.getColor(it, R.attr.colorError) }
-                preference.setSummary(R.string.settings_notification_error_on_update)
-            } else {
-                preference.summaryTextColor = null
-                preference.summary = null
+            findPreference<VectorCheckboxPreference>(preferenceKey)?.apply {
+                if (ruleId in rulesWithError) {
+                    summaryTextColor = ThemeUtils.getColor(context, R.attr.colorError)
+                    setSummary(R.string.settings_notification_error_on_update)
+                } else {
+                    summaryTextColor = null
+                    summary = null
+                }
             }
         }
     }
@@ -102,6 +101,8 @@ abstract class VectorSettingsPushRuleNotificationFragment :
     private fun updatePreference(ruleId: String, checked: Boolean) {
         val preferenceKey = prefKeyToPushRuleId.entries.find { it.value == ruleId }?.key ?: return
         val preference = findPreference<VectorCheckboxPreference>(preferenceKey) ?: return
+        val ruleIds = withState(viewModel) { state -> state.allRules.map { it.ruleId } }
+        preference.isVisible = ruleId in ruleIds
         preference.isChecked = checked
     }
 
