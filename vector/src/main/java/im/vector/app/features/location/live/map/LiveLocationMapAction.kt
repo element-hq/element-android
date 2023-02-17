@@ -23,4 +23,5 @@ sealed class LiveLocationMapAction : VectorViewModelAction {
     data class RemoveMapSymbol(val key: String) : LiveLocationMapAction()
     object StopSharing : LiveLocationMapAction()
     object ShowMapLoadingError : LiveLocationMapAction()
+    object ZoomToUserLocation : LiveLocationMapAction()
 }

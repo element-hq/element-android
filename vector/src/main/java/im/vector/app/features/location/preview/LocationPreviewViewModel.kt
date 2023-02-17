@@ -94,18 +94,18 @@ class LocationPreviewViewModel @AssistedInject constructor(
         _viewEvents.post(LocationPreviewViewEvents.UserLocationNotAvailableError)
     }
 
-    private fun onLocationUpdate(locationData: LocationData) {
-        withState { state ->
-            if (state.isLoadingUserLocation) {
-                _viewEvents.post(LocationPreviewViewEvents.ZoomToUserLocation(locationData))
-            }
-        }
+    private fun onLocationUpdate(locationData: LocationData) = withState { state ->
+        val zoomToUserLocation = state.isLoadingUserLocation
 
         setState {
             copy(
                     lastKnownUserLocation = locationData,
                     isLoadingUserLocation = false,
             )
+        }
+
+        if (zoomToUserLocation) {
+            _viewEvents.post(LocationPreviewViewEvents.ZoomToUserLocation(locationData))
         }
     }
 }

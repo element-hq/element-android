@@ -30,7 +30,7 @@ data class LocationPreviewViewState(
         val lastKnownUserLocation: LocationData? = null,
 ) : MavericksState {
 
-    constructor(args: LocationSharingArgs): this(
+    constructor(args: LocationSharingArgs) : this(
             pinLocationData = args.initialLocationData,
             pinUserId = args.locationOwnerId,
     )

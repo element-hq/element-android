@@ -33,6 +33,7 @@ class CountUpTimer(
 
     private val lastTime: AtomicLong = AtomicLong(clock.epochMillis())
     private val elapsedTime: AtomicLong = AtomicLong(0)
+
     // To ensure that the regular tick value is an exact multiple of `intervalInMs`
     private val specialRound = SpecialRound(intervalInMs)
 
