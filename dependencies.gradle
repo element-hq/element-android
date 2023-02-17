@@ -10,7 +10,7 @@ def gradle = "7.4.1"
 // Ref: https://kotlinlang.org/releases.html
 def kotlin = "1.8.10"
 def kotlinCoroutines = "1.6.4"
-def dagger = "2.44.2"
+def dagger = "2.45"
 def firebaseBom = "31.2.1"
 def appDistribution = "16.0.0-beta05"
 def retrofit = "2.9.0"
