@@ -18,6 +18,7 @@ package im.vector.app.features.location
 
 import android.content.Context
 import android.content.res.TypedArray
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.Gravity
 import android.widget.ImageView
@@ -170,12 +171,7 @@ class MapTilerMapView @JvmOverloads constructor(
         }
 
         val pinDrawable = state.pinDrawable ?: userLocationDrawable
-        pinDrawable?.let { drawable ->
-            if (!safeMapRefs.style.isFullyLoaded ||
-                    safeMapRefs.style.getImage(state.pinId) == null) {
-                safeMapRefs.style.addImage(state.pinId, drawable.toBitmap())
-            }
-        }
+        addImageToMapStyle(pinDrawable, state.pinId, safeMapRefs)
 
         safeMapRefs.symbolManager.deleteAll()
         state.pinLocationData?.let { locationData ->
@@ -185,28 +181,33 @@ class MapTilerMapView @JvmOverloads constructor(
             }
 
             if (pinDrawable != null && state.showPin) {
-                safeMapRefs.symbolManager.create(
-                        SymbolOptions()
-                                .withLatLng(LatLng(locationData.latitude, locationData.longitude))
-                                .withIconImage(state.pinId)
-                                .withIconAnchor(Property.ICON_ANCHOR_BOTTOM)
-                )
+                createSymbol(locationData, state.pinId, safeMapRefs)
             }
         }
 
         state.userLocationData?.let { locationData ->
-            if (!safeMapRefs.style.isFullyLoaded || safeMapRefs.style.getImage(USER_PIN_ID) == null) {
-                userLocationDrawable?.let { drawable ->
-                    safeMapRefs.style.addImage(USER_PIN_ID, drawable.toBitmap())
-                }
+            addImageToMapStyle(userLocationDrawable, USER_PIN_ID, safeMapRefs)
+            if (userLocationDrawable != null) {
+                createSymbol(locationData, USER_PIN_ID, safeMapRefs)
             }
-            safeMapRefs.symbolManager.create(
-                    SymbolOptions()
-                            .withLatLng(LatLng(locationData.latitude, locationData.longitude))
-                            .withIconImage(USER_PIN_ID)
-                            .withIconAnchor(Property.ICON_ANCHOR_BOTTOM)
-            )
         }
+    }
+
+    private fun addImageToMapStyle(image: Drawable?, imageId: String, mapRefs: MapRefs) {
+        image?.let { drawable ->
+            if (!mapRefs.style.isFullyLoaded || mapRefs.style.getImage(imageId) == null) {
+                mapRefs.style.addImage(imageId, drawable.toBitmap())
+            }
+        }
+    }
+
+    private fun createSymbol(locationData: LocationData, imageId: String, mapRefs: MapRefs) {
+        mapRefs.symbolManager.create(
+                SymbolOptions()
+                        .withLatLng(LatLng(locationData.latitude, locationData.longitude))
+                        .withIconImage(imageId)
+                        .withIconAnchor(Property.ICON_ANCHOR_BOTTOM)
+        )
     }
 
     fun zoomToLocation(locationData: LocationData) {
