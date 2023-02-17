@@ -16,14 +16,14 @@
 
 package im.vector.app.test.fakes
 
-import im.vector.app.core.notification.NotificationsSettingUpdater
+import im.vector.app.core.notification.PushRulesUpdater
 import io.mockk.justRun
 import io.mockk.mockk
 import org.matrix.android.sdk.api.session.Session
 
-class FakeNotificationsSettingUpdater {
+class FakePushRulesUpdater {
 
-    val instance = mockk<NotificationsSettingUpdater>()
+    val instance = mockk<PushRulesUpdater>()
 
     fun givenOnSessionStarted(session: Session) {
         justRun { instance.onSessionStarted(session) }
