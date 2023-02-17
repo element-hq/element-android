@@ -40,6 +40,9 @@ data class HomeServerConnectionConfig(
         val homeServerUriBase: Uri = homeServerUri,
         val identityServerUri: Uri? = null,
         val antiVirusServerUri: Uri? = null,
+        // Allowed fingerprints can represent either
+        // - a set of pinned certificates (if shouldPin is true), or
+        // - an extra set of certificates to trust (if shouldPin is false)
         val allowedFingerprints: List<Fingerprint> = emptyList(),
         val shouldPin: Boolean = false,
         val tlsVersions: List<TlsVersion>? = null,

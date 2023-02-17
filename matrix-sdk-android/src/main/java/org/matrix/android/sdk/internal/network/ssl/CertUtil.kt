@@ -202,9 +202,10 @@ internal object CertUtil {
     fun newHostnameVerifier(hsConfig: HomeServerConnectionConfig): HostnameVerifier {
         val defaultVerifier: HostnameVerifier = OkHostnameVerifier // HttpsURLConnection.getDefaultHostnameVerifier()
         val trustedFingerprints = hsConfig.allowedFingerprints
+        val shouldPin = hsConfig.shouldPin
 
         return HostnameVerifier { hostname, session ->
-            if (USE_DEFAULT_HOSTNAME_VERIFIER) {
+            if (USE_DEFAULT_HOSTNAME_VERIFIER && !shouldPin) {
                 if (defaultVerifier.verify(hostname, session)) return@HostnameVerifier true
             }
             // TODO How to recover from this error?
