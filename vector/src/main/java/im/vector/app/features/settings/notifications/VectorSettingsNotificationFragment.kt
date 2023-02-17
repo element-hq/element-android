@@ -71,7 +71,7 @@ import javax.inject.Inject
 
 // Referenced in vector_settings_preferences_root.xml
 @AndroidEntryPoint
-class VectorSettingsNotificationPreferenceFragment :
+class VectorSettingsNotificationFragment :
         VectorSettingsBaseFragment(),
         BackgroundSyncModeChooserDialog.InteractionListener {
 
@@ -90,7 +90,7 @@ class VectorSettingsNotificationPreferenceFragment :
 
     private var interactionListener: VectorSettingsFragmentInteractionListener? = null
 
-    private val viewModel: VectorSettingsNotificationPreferenceViewModel by fragmentViewModel()
+    private val viewModel: VectorSettingsNotificationViewModel by fragmentViewModel()
 
     private val notificationStartForActivityResult = registerStartForActivityResult { _ ->
         // No op
@@ -116,10 +116,10 @@ class VectorSettingsNotificationPreferenceFragment :
     private fun observeViewEvents() {
         viewModel.observeViewEvents {
             when (it) {
-                VectorSettingsNotificationPreferenceViewEvent.NotificationsForDeviceEnabled -> onNotificationsForDeviceEnabled()
-                VectorSettingsNotificationPreferenceViewEvent.NotificationsForDeviceDisabled -> onNotificationsForDeviceDisabled()
-                is VectorSettingsNotificationPreferenceViewEvent.AskUserForPushDistributor -> askUserToSelectPushDistributor()
-                VectorSettingsNotificationPreferenceViewEvent.NotificationMethodChanged -> onNotificationMethodChanged()
+                VectorSettingsNotificationViewEvent.NotificationsForDeviceEnabled -> onNotificationsForDeviceEnabled()
+                VectorSettingsNotificationViewEvent.NotificationsForDeviceDisabled -> onNotificationsForDeviceDisabled()
+                is VectorSettingsNotificationViewEvent.AskUserForPushDistributor -> askUserToSelectPushDistributor()
+                VectorSettingsNotificationViewEvent.NotificationMethodChanged -> onNotificationMethodChanged()
             }
         }
     }
@@ -143,9 +143,9 @@ class VectorSettingsNotificationPreferenceFragment :
         findPreference<SwitchPreference>(VectorPreferences.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY)
                 ?.setOnPreferenceChangeListener { _, isChecked ->
                     val action = if (isChecked as Boolean) {
-                        VectorSettingsNotificationPreferenceViewAction.EnableNotificationsForDevice(pushDistributor = "")
+                        VectorSettingsNotificationViewAction.EnableNotificationsForDevice(pushDistributor = "")
                     } else {
-                        VectorSettingsNotificationPreferenceViewAction.DisableNotificationsForDevice
+                        VectorSettingsNotificationViewAction.DisableNotificationsForDevice
                     }
                     viewModel.handle(action)
                     // preference will be updated on ViewEvent reception
@@ -231,9 +231,9 @@ class VectorSettingsNotificationPreferenceFragment :
     private fun askUserToSelectPushDistributor(withUnregister: Boolean = false) {
         unifiedPushHelper.showSelectDistributorDialog(requireContext()) { selection ->
             if (withUnregister) {
-                viewModel.handle(VectorSettingsNotificationPreferenceViewAction.RegisterPushDistributor(selection))
+                viewModel.handle(VectorSettingsNotificationViewAction.RegisterPushDistributor(selection))
             } else {
-                viewModel.handle(VectorSettingsNotificationPreferenceViewAction.EnableNotificationsForDevice(selection))
+                viewModel.handle(VectorSettingsNotificationViewAction.EnableNotificationsForDevice(selection))
             }
         }
     }

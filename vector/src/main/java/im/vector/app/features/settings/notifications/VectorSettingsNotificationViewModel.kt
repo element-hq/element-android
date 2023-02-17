@@ -31,9 +31,12 @@ import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.pushers.RegisterUnifiedPushUseCase
 import im.vector.app.core.pushers.UnregisterUnifiedPushUseCase
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.settings.notifications.usecase.DisableNotificationsForCurrentSessionUseCase
+import im.vector.app.features.settings.notifications.usecase.EnableNotificationsForCurrentSessionUseCase
+import im.vector.app.features.settings.notifications.usecase.ToggleNotificationsForCurrentSessionUseCase
 import kotlinx.coroutines.launch
 
-class VectorSettingsNotificationPreferenceViewModel @AssistedInject constructor(
+class VectorSettingsNotificationViewModel @AssistedInject constructor(
         @Assisted initialState: VectorDummyViewState,
         private val pushersManager: PushersManager,
         private val vectorPreferences: VectorPreferences,
@@ -43,23 +46,23 @@ class VectorSettingsNotificationPreferenceViewModel @AssistedInject constructor(
         private val registerUnifiedPushUseCase: RegisterUnifiedPushUseCase,
         private val ensureFcmTokenIsRetrievedUseCase: EnsureFcmTokenIsRetrievedUseCase,
         private val toggleNotificationsForCurrentSessionUseCase: ToggleNotificationsForCurrentSessionUseCase,
-) : VectorViewModel<VectorDummyViewState, VectorSettingsNotificationPreferenceViewAction, VectorSettingsNotificationPreferenceViewEvent>(initialState) {
+) : VectorViewModel<VectorDummyViewState, VectorSettingsNotificationViewAction, VectorSettingsNotificationViewEvent>(initialState) {
 
     @AssistedFactory
-    interface Factory : MavericksAssistedViewModelFactory<VectorSettingsNotificationPreferenceViewModel, VectorDummyViewState> {
-        override fun create(initialState: VectorDummyViewState): VectorSettingsNotificationPreferenceViewModel
+    interface Factory : MavericksAssistedViewModelFactory<VectorSettingsNotificationViewModel, VectorDummyViewState> {
+        override fun create(initialState: VectorDummyViewState): VectorSettingsNotificationViewModel
     }
 
-    companion object : MavericksViewModelFactory<VectorSettingsNotificationPreferenceViewModel, VectorDummyViewState> by hiltMavericksViewModelFactory()
+    companion object : MavericksViewModelFactory<VectorSettingsNotificationViewModel, VectorDummyViewState> by hiltMavericksViewModelFactory()
 
     @VisibleForTesting
     val notificationsPreferenceListener: SharedPreferences.OnSharedPreferenceChangeListener =
             SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
                 if (key == VectorPreferences.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY) {
                     if (vectorPreferences.areNotificationEnabledForDevice()) {
-                        _viewEvents.post(VectorSettingsNotificationPreferenceViewEvent.NotificationsForDeviceEnabled)
+                        _viewEvents.post(VectorSettingsNotificationViewEvent.NotificationsForDeviceEnabled)
                     } else {
-                        _viewEvents.post(VectorSettingsNotificationPreferenceViewEvent.NotificationsForDeviceDisabled)
+                        _viewEvents.post(VectorSettingsNotificationViewEvent.NotificationsForDeviceDisabled)
                     }
                 }
             }
@@ -77,18 +80,18 @@ class VectorSettingsNotificationPreferenceViewModel @AssistedInject constructor(
         super.onCleared()
     }
 
-    override fun handle(action: VectorSettingsNotificationPreferenceViewAction) {
+    override fun handle(action: VectorSettingsNotificationViewAction) {
         when (action) {
-            VectorSettingsNotificationPreferenceViewAction.DisableNotificationsForDevice -> handleDisableNotificationsForDevice()
-            is VectorSettingsNotificationPreferenceViewAction.EnableNotificationsForDevice -> handleEnableNotificationsForDevice(action.pushDistributor)
-            is VectorSettingsNotificationPreferenceViewAction.RegisterPushDistributor -> handleRegisterPushDistributor(action.pushDistributor)
+            VectorSettingsNotificationViewAction.DisableNotificationsForDevice -> handleDisableNotificationsForDevice()
+            is VectorSettingsNotificationViewAction.EnableNotificationsForDevice -> handleEnableNotificationsForDevice(action.pushDistributor)
+            is VectorSettingsNotificationViewAction.RegisterPushDistributor -> handleRegisterPushDistributor(action.pushDistributor)
         }
     }
 
     private fun handleDisableNotificationsForDevice() {
         viewModelScope.launch {
             disableNotificationsForCurrentSessionUseCase.execute()
-            _viewEvents.post(VectorSettingsNotificationPreferenceViewEvent.NotificationsForDeviceDisabled)
+            _viewEvents.post(VectorSettingsNotificationViewEvent.NotificationsForDeviceDisabled)
         }
     }
 
@@ -96,10 +99,10 @@ class VectorSettingsNotificationPreferenceViewModel @AssistedInject constructor(
         viewModelScope.launch {
             when (enableNotificationsForCurrentSessionUseCase.execute(distributor)) {
                 is EnableNotificationsForCurrentSessionUseCase.EnableNotificationsResult.NeedToAskUserForDistributor -> {
-                    _viewEvents.post(VectorSettingsNotificationPreferenceViewEvent.AskUserForPushDistributor)
+                    _viewEvents.post(VectorSettingsNotificationViewEvent.AskUserForPushDistributor)
                 }
                 EnableNotificationsForCurrentSessionUseCase.EnableNotificationsResult.Success -> {
-                    _viewEvents.post(VectorSettingsNotificationPreferenceViewEvent.NotificationsForDeviceEnabled)
+                    _viewEvents.post(VectorSettingsNotificationViewEvent.NotificationsForDeviceEnabled)
                 }
             }
         }
@@ -110,13 +113,13 @@ class VectorSettingsNotificationPreferenceViewModel @AssistedInject constructor(
             unregisterUnifiedPushUseCase.execute(pushersManager)
             when (registerUnifiedPushUseCase.execute(distributor)) {
                 RegisterUnifiedPushUseCase.RegisterUnifiedPushResult.NeedToAskUserForDistributor -> {
-                    _viewEvents.post(VectorSettingsNotificationPreferenceViewEvent.AskUserForPushDistributor)
+                    _viewEvents.post(VectorSettingsNotificationViewEvent.AskUserForPushDistributor)
                 }
                 RegisterUnifiedPushUseCase.RegisterUnifiedPushResult.Success -> {
                     val areNotificationsEnabled = vectorPreferences.areNotificationEnabledForDevice()
                     ensureFcmTokenIsRetrievedUseCase.execute(pushersManager, registerPusher = areNotificationsEnabled)
                     toggleNotificationsForCurrentSessionUseCase.execute(enabled = areNotificationsEnabled)
-                    _viewEvents.post(VectorSettingsNotificationPreferenceViewEvent.NotificationMethodChanged)
+                    _viewEvents.post(VectorSettingsNotificationViewEvent.NotificationMethodChanged)
                 }
             }
         }

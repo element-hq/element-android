@@ -18,6 +18,8 @@ package im.vector.app.features.settings.notifications
 
 import im.vector.app.core.pushers.EnsureFcmTokenIsRetrievedUseCase
 import im.vector.app.core.pushers.RegisterUnifiedPushUseCase
+import im.vector.app.features.settings.notifications.usecase.EnableNotificationsForCurrentSessionUseCase
+import im.vector.app.features.settings.notifications.usecase.ToggleNotificationsForCurrentSessionUseCase
 import im.vector.app.test.fakes.FakePushersManager
 import io.mockk.coJustRun
 import io.mockk.coVerify

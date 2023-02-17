@@ -14,12 +14,20 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.notifications
+package im.vector.app.test.fakes
 
-import im.vector.app.core.platform.VectorViewModelAction
+import io.mockk.coEvery
+import io.mockk.coJustRun
+import io.mockk.mockk
+import org.matrix.android.sdk.api.session.pushrules.PushRuleService
 
-sealed interface VectorSettingsNotificationPreferenceViewAction : VectorViewModelAction {
-    data class EnableNotificationsForDevice(val pushDistributor: String) : VectorSettingsNotificationPreferenceViewAction
-    object DisableNotificationsForDevice : VectorSettingsNotificationPreferenceViewAction
-    data class RegisterPushDistributor(val pushDistributor: String) : VectorSettingsNotificationPreferenceViewAction
+class FakePushRuleService : PushRuleService by mockk(relaxed = true) {
+
+    fun givenUpdatePushRuleActionsSucceed(ruleId: String? = null) {
+        coJustRun { updatePushRuleActions(any(), ruleId ?: any(), any(), any()) }
+    }
+
+    fun givenUpdatePushRuleActionsFail(ruleId: String? = null, failure: Throwable = mockk()) {
+        coEvery { updatePushRuleActions(any(), ruleId ?: any(), any(), any()) }.throws(failure)
+    }
 }

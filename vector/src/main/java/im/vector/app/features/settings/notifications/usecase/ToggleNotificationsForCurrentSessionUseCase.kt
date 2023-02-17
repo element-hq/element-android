@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.notifications
+package im.vector.app.features.settings.notifications.usecase
 
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.pushers.UnifiedPushHelper

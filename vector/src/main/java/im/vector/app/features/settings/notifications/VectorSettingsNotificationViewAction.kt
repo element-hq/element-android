@@ -16,18 +16,10 @@
 
 package im.vector.app.features.settings.notifications
 
-import im.vector.app.core.pushers.PushersManager
-import im.vector.app.core.pushers.UnregisterUnifiedPushUseCase
-import javax.inject.Inject
+import im.vector.app.core.platform.VectorViewModelAction
 
-class DisableNotificationsForCurrentSessionUseCase @Inject constructor(
-        private val pushersManager: PushersManager,
-        private val toggleNotificationsForCurrentSessionUseCase: ToggleNotificationsForCurrentSessionUseCase,
-        private val unregisterUnifiedPushUseCase: UnregisterUnifiedPushUseCase,
-) {
-
-    suspend fun execute() {
-        toggleNotificationsForCurrentSessionUseCase.execute(enabled = false)
-        unregisterUnifiedPushUseCase.execute(pushersManager)
-    }
+sealed interface VectorSettingsNotificationViewAction : VectorViewModelAction {
+    data class EnableNotificationsForDevice(val pushDistributor: String) : VectorSettingsNotificationViewAction
+    object DisableNotificationsForDevice : VectorSettingsNotificationViewAction
+    data class RegisterPushDistributor(val pushDistributor: String) : VectorSettingsNotificationViewAction
 }

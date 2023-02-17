@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.app.features.settings.notifications
+package im.vector.app.features.settings.notifications.advanced
 
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
@@ -23,10 +23,15 @@ import im.vector.app.core.preference.PushRulePreference
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.utils.toast
 import im.vector.app.features.settings.VectorSettingsBaseFragment
+import im.vector.app.features.settings.notifications.NotificationIndex
+import im.vector.app.features.settings.notifications.StandardActions
+import im.vector.app.features.settings.notifications.getStandardAction
+import im.vector.app.features.settings.notifications.notificationIndex
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.pushrules.RuleIds
 import org.matrix.android.sdk.api.session.pushrules.rest.PushRuleAndKind
 
+// TODO This fragment seems not used anymore, we can probably delete it
 @AndroidEntryPoint
 class VectorSettingsAdvancedNotificationPreferenceFragment :
         VectorSettingsBaseFragment() {
@@ -39,7 +44,7 @@ class VectorSettingsAdvancedNotificationPreferenceFragment :
         for (preferenceKey in prefKeyToPushRuleId.keys) {
             val preference = findPreference<VectorPreference>(preferenceKey)
             if (preference is PushRulePreference) {
-                val ruleAndKind: PushRuleAndKind? = session.pushRuleService().getPushRules().findDefaultRule(prefKeyToPushRuleId[preferenceKey])
+                val ruleAndKind: PushRuleAndKind? = prefKeyToPushRuleId[preferenceKey]?.let { session.pushRuleService().getPushRules().findDefaultRule(it) }
 
                 if (ruleAndKind == null) {
                     // The rule is not defined, hide the preference

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.notifications
+package im.vector.app.features.settings.notifications.defaults
 
 import android.os.Bundle
 import im.vector.app.R
 import im.vector.app.core.preference.VectorPreferenceCategory
 import im.vector.app.features.analytics.plan.MobileScreen
+import im.vector.app.features.settings.notifications.VectorSettingsPushRuleNotificationFragment
 import org.matrix.android.sdk.api.session.pushrules.RuleIds
 
-class VectorSettingsDefaultNotificationPreferenceFragment :
-        VectorSettingsPushRuleNotificationPreferenceFragment() {
+class VectorSettingsDefaultNotificationFragment :
+        VectorSettingsPushRuleNotificationFragment() {
 
     override var titleRes: Int = R.string.settings_notification_default
 

@@ -47,8 +47,36 @@ object RuleIds {
     const val RULE_ID_ALL_OTHER_MESSAGES_ROOMS = ".m.rule.message"
     const val RULE_ID_ENCRYPTED = ".m.rule.encrypted"
 
+    const val RULE_ID_POLL_START_ONE_TO_ONE = ".m.rule.poll_start_one_to_one"
+    const val RULE_ID_POLL_START_ONE_TO_ONE_UNSTABLE = ".org.matrix.msc3930.rule.poll_start_one_to_one"
+    const val RULE_ID_POLL_END_ONE_TO_ONE = ".m.rule.poll_end_one_to_one"
+    const val RULE_ID_POLL_END_ONE_TO_ONE_UNSTABLE = ".org.matrix.msc3930.rule.poll_end_one_to_one"
+
+    const val RULE_ID_POLL_START = ".m.rule.poll_start"
+    const val RULE_ID_POLL_START_UNSTABLE = ".org.matrix.msc3930.rule.poll_start"
+    const val RULE_ID_POLL_END = ".m.rule.poll_end"
+    const val RULE_ID_POLL_END_UNSTABLE = ".org.matrix.msc3930.rule.poll_end"
+
     // Not documented
     const val RULE_ID_FALLBACK = ".m.rule.fallback"
 
     const val RULE_ID_REACTION = ".m.rule.reaction"
+
+    fun getSyncedRules(ruleId: String): List<String> {
+        return when (ruleId) {
+            RULE_ID_ONE_TO_ONE_ROOM -> listOf(
+                    RULE_ID_POLL_START_ONE_TO_ONE,
+                    RULE_ID_POLL_START_ONE_TO_ONE_UNSTABLE,
+                    RULE_ID_POLL_END_ONE_TO_ONE,
+                    RULE_ID_POLL_END_ONE_TO_ONE_UNSTABLE,
+            )
+            RULE_ID_ALL_OTHER_MESSAGES_ROOMS -> listOf(
+                    RULE_ID_POLL_START,
+                    RULE_ID_POLL_START_UNSTABLE,
+                    RULE_ID_POLL_END,
+                    RULE_ID_POLL_END_UNSTABLE,
+            )
+            else -> emptyList()
+        }
+    }
 }
