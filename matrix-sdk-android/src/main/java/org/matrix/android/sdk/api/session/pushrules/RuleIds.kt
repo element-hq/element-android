@@ -61,22 +61,4 @@ object RuleIds {
     const val RULE_ID_FALLBACK = ".m.rule.fallback"
 
     const val RULE_ID_REACTION = ".m.rule.reaction"
-
-    fun getSyncedRules(ruleId: String): List<String> {
-        return when (ruleId) {
-            RULE_ID_ONE_TO_ONE_ROOM -> listOf(
-                    RULE_ID_POLL_START_ONE_TO_ONE,
-                    RULE_ID_POLL_START_ONE_TO_ONE_UNSTABLE,
-                    RULE_ID_POLL_END_ONE_TO_ONE,
-                    RULE_ID_POLL_END_ONE_TO_ONE_UNSTABLE,
-            )
-            RULE_ID_ALL_OTHER_MESSAGES_ROOMS -> listOf(
-                    RULE_ID_POLL_START,
-                    RULE_ID_POLL_START_UNSTABLE,
-                    RULE_ID_POLL_END,
-                    RULE_ID_POLL_END_UNSTABLE,
-            )
-            else -> emptyList()
-        }
-    }
 }
