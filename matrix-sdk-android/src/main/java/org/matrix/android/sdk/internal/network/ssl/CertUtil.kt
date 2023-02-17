@@ -176,18 +176,18 @@ internal object CertUtil {
                 }
             }
 
-            val trustPinned = arrayOf<TrustManager>(PinnedTrustManagerProvider.provide(hsConfig.allowedFingerprints, defaultTrustManager))
+            val pinnedTrustManager = PinnedTrustManagerProvider.provide(hsConfig.allowedFingerprints, defaultTrustManager)
 
             val sslSocketFactory = if (hsConfig.forceUsageTlsVersions && !hsConfig.tlsVersions.isNullOrEmpty()) {
                 // Force usage of accepted Tls Versions for Android < 20
-                TLSSocketFactory(trustPinned, hsConfig.tlsVersions)
+                TLSSocketFactory(arrayOf(pinnedTrustManager), hsConfig.tlsVersions)
             } else {
                 val sslContext = SSLContext.getInstance("TLS")
-                sslContext.init(null, trustPinned, java.security.SecureRandom())
+                sslContext.init(null, arrayOf(pinnedTrustManager), java.security.SecureRandom())
                 sslContext.socketFactory
             }
 
-            return PinnedSSLSocketFactory(sslSocketFactory, defaultTrustManager!!)
+            return PinnedSSLSocketFactory(sslSocketFactory, pinnedTrustManager)
         } catch (e: Exception) {
             throw RuntimeException(e)
         }
