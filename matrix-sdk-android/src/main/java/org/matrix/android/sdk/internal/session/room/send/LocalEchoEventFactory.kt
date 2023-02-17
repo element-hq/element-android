@@ -242,7 +242,8 @@ internal class LocalEchoEventFactory @Inject constructor(
                 relatesTo = RelationDefaultContent(
                         type = RelationType.REFERENCE,
                         eventId = eventId
-                )
+                ),
+                unstableText = "Ended poll",
         )
         val localId = LocalEcho.createLocalEchoId()
         return Event(
