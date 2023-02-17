@@ -127,7 +127,6 @@ class LiveLocationMapViewModel @AssistedInject constructor(
         setState { copy(loadingMapHasFailed = true) }
     }
 
-    // TODO add unit tests
     private fun handleZoomToUserLocation() = withState { state ->
         if (!state.isLoadingUserLocation) {
             setState {

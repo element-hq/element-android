@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,28 +16,19 @@
 
 package im.vector.app.test.fakes
 
-import im.vector.app.features.location.live.tracking.LocationSharingServiceConnection
-import io.mockk.justRun
+import im.vector.app.features.location.LocationTracker
 import io.mockk.mockk
 import io.mockk.verify
 
-class FakeLocationSharingServiceConnection {
+class FakeLocationTracker {
 
-    val instance = mockk<LocationSharingServiceConnection>()
+    val instance: LocationTracker = mockk(relaxed = true)
 
-    fun givenBind() {
-        justRun { instance.bind(any()) }
+    fun verifyAddCallback(callback: LocationTracker.Callback) {
+        verify { instance.addCallback(callback) }
     }
 
-    fun verifyBind(callback: LocationSharingServiceConnection.Callback) {
-        verify { instance.bind(callback) }
-    }
-
-    fun givenUnbind() {
-        justRun { instance.unbind(any()) }
-    }
-
-    fun verifyUnbind(callback: LocationSharingServiceConnection.Callback) {
-        verify { instance.unbind(callback) }
+    fun verifyRemoveCallback(callback: LocationTracker.Callback) {
+        verify { instance.removeCallback(callback) }
     }
 }
