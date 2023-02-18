@@ -41,4 +41,6 @@ fun PublicKeyBytes.toPublicKey(): PublicKey {
 object BLEConstants {
     val SERVICE_UUID: UUID = UUID.fromString("a2fda8dd-d250-4a64-8b9a-248f50b93c64")
     val PSM_UUID: UUID = UUID.fromString("15d4151b-1008-41c0-85f2-950facf8a3cd")
+    const val PSM_CHARACTERISTIC_SIZE = 20
+    const val PSM_CHARACTERISTIC_KEY_SIZE = PSM_CHARACTERISTIC_SIZE - 2
 }

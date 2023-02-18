@@ -43,7 +43,7 @@ import java.nio.ByteBuffer
 import java.util.concurrent.atomic.AtomicBoolean
 
 class BLEClient(
-        private val ourPublicKeyFirstEightBytes: PublicKey,
+        private val ourPublicKey: PublicKey,
         private val bleDevice: BluetoothDevice,
         private val context: Context,
         private val bleManagerChannel: SendChannel<BLEManagerCommand>,
@@ -291,7 +291,7 @@ class BLEClient(
                         // NOTE: Register the device or it won't get cleaned up properly later
                         bleManagerChannel.send(BLEManagerRegisterDevice(key, bleDevice))
 
-                        if (key.compareTo(ourPublicKeyFirstEightBytes, true) <= 0) {
+                        if (key.compareTo(ourPublicKey.toPublicKeyBytes().slice(0 until BLEConstants.PSM_CHARACTERISTIC_KEY_SIZE).toByteArray().toPublicKey(), true) <= 0) {
                             Timber.w("$tag: Not connecting to device with lower key: $key")
                             stop(false)
                             return
@@ -446,7 +446,7 @@ class BLEClient(
                 Timber.e("$tag: Received characteristic value is > 50 bytes...")
             }
 
-            if (characteristic.value.size != 10) {
+            if (characteristic.value.size != BLEConstants.PSM_CHARACTERISTIC_SIZE) {
                 Timber.e("$tag: Received incorrect number of bytes for psm & public key")
                 runBlocking {
                     stop(false)
@@ -456,7 +456,7 @@ class BLEClient(
 
             val psmBytes = characteristic.value.slice(0..1)
             val psm = bytesToShort(psmBytes.toByteArray())
-            val keyBytes: PublicKeyBytes = characteristic.value.slice(2..9).toByteArray()
+            val keyBytes: PublicKeyBytes = characteristic.value.slice(2 until BLEConstants.PSM_CHARACTERISTIC_KEY_SIZE).toByteArray()
             val key = keyBytes.toPublicKey()
 
             runBlocking {

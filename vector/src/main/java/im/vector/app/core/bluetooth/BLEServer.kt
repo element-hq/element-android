@@ -141,7 +141,7 @@ class BLEServer(
 
         l2capServer = bluetoothAdapter.listenUsingInsecureL2capChannel()
         Timber.w("$TAG: Server PSM: ${l2capServer.psm}")
-        psmAndPublicKey = shortToBytes(l2capServer.psm.toShort()) + publicKey.toPublicKeyBytes().slice(0..7).toByteArray()
+        psmAndPublicKey = shortToBytes(l2capServer.psm.toShort()) + publicKey.toPublicKeyBytes().slice(0 until BLEConstants.PSM_CHARACTERISTIC_KEY_SIZE).toByteArray()
 
         gattCharacteristic = BluetoothGattCharacteristic(BLEConstants.PSM_UUID, BluetoothGattCharacteristic.PROPERTY_READ, BluetoothGattCharacteristic.PERMISSION_READ)
         gattService.addCharacteristic(gattCharacteristic)

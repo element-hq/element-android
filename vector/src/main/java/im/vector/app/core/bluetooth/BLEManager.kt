@@ -323,7 +323,7 @@ class BLEManager(
             val shortKey = publicKey.toPublicKeyBytes().slice(0..7).toByteArray().toPublicKey()
             Timber.e("$TAG: Our Key: $shortKey")
             val client = BLEClient(
-                    shortKey,
+                    publicKey,
                     result.device,
                     context,
                     clientChannel,
