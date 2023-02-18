@@ -57,7 +57,7 @@ def generateVersionCodeFromVersionName() {
 }
 
 def getVersionCode() {
-    return 115
+    return 116
 
     if (gitBranchName() == "develop") {
         return generateVersionCodeFromTimestamp()
