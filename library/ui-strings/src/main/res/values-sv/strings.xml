@@ -2920,4 +2920,12 @@
     <string name="error_voice_message_broadcast_in_progress">Kan inte starta röstsändning</string>
     <string name="started_a_voice_broadcast">Startade en röstsändning</string>
     <string name="rich_text_editor_inline_code">Använd inline-kodformat</string>
+    <string name="rich_text_editor_code_block">Växla kodblock</string>
+    <string name="rich_text_editor_quote">Växla citat</string>
+    <string name="rich_text_editor_unindent">Minska indrag</string>
+    <string name="rich_text_editor_indent">Indrag</string>
+    <string name="room_poll_details_go_to_timeline">Visa omröstning i tidslinjen</string>
+    <string name="error_voice_broadcast_unable_to_decrypt">Kunder inte avkryptera den här röstsändningen.</string>
+    <string name="settings_external_account_management">Dina kontodetaljer hanteras separat på %1$s.</string>
+    <string name="settings_external_account_management_title">Konto</string>
 </resources>
