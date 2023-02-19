@@ -2920,4 +2920,12 @@
     <string name="error_voice_message_broadcast_in_progress">Impossible de démarrer un message vocal</string>
     <string name="error_voice_broadcast_no_connection_recording">Erreur de connexion – Enregistrement en pause</string>
     <string name="rich_text_editor_inline_code">Appliquer le formatage de code en ligne</string>
+    <string name="rich_text_editor_code_block">Bloc de code</string>
+    <string name="rich_text_editor_quote">Citation</string>
+    <string name="rich_text_editor_unindent">Désindenter</string>
+    <string name="rich_text_editor_indent">Indenter</string>
+    <string name="room_poll_details_go_to_timeline">Consulter la chronologie des sondages</string>
+    <string name="error_voice_broadcast_unable_to_decrypt">Impossible de déchiffrer cette diffusion audio.</string>
+    <string name="settings_external_account_management">Les détails de votre compte sont gérés séparément sur %1$s.</string>
+    <string name="settings_external_account_management_title">Compte</string>
 </resources>
