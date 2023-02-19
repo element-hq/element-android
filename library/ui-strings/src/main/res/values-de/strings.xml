@@ -2919,4 +2919,12 @@
     <string name="error_voice_message_broadcast_in_progress">Kann Sprachnachricht nicht beginnen</string>
     <string name="error_voice_broadcast_no_connection_recording">Verbindungsfehler − Aufnahme pausiert</string>
     <string name="rich_text_editor_inline_code">Als Inline-Code formatieren</string>
+    <string name="rich_text_editor_indent">Einrücken</string>
+    <string name="room_poll_details_go_to_timeline">Zeige Umfrage in der Zeitleiste an</string>
+    <string name="error_voice_broadcast_unable_to_decrypt">Verschlüsselung dieser Sprachübertragung ist nicht möglich.</string>
+    <string name="rich_text_editor_quote">Zitat umschalten</string>
+    <string name="rich_text_editor_unindent">Nicht einrücken</string>
+    <string name="rich_text_editor_code_block">Codeblock umschalten</string>
+    <string name="settings_external_account_management_title">Konto</string>
+    <string name="settings_external_account_management">Deine Kontodetails werden separat verwaltet bei %1$s.</string>
 </resources>
