@@ -92,7 +92,7 @@ class LocationTracker @Inject constructor(
 
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
     fun start() {
-        if(!isStarting && !isStarted) {
+        if (!isStarting && !isStarted) {
             isStarting = true
             Timber.d("start()")
 
