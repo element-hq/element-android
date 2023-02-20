@@ -27,7 +27,6 @@ import im.vector.app.features.location.LocationData
 import im.vector.app.features.location.LocationTracker
 import im.vector.app.features.location.live.StopLiveLocationShareUseCase
 import im.vector.app.features.location.live.tracking.LocationSharingServiceConnection
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -132,7 +131,7 @@ class LiveLocationMapViewModel @AssistedInject constructor(
             setState {
                 copy(isLoadingUserLocation = true)
             }
-            viewModelScope.launch(Dispatchers.Main) {
+            viewModelScope.launch(session.coroutineDispatchers.main) {
                 locationTracker.start()
                 locationTracker.requestLastKnownLocation()
             }

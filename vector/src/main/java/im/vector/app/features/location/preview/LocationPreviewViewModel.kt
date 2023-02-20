@@ -26,13 +26,14 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
 import im.vector.app.features.location.LocationData
 import im.vector.app.features.location.LocationTracker
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.session.Session
 
 class LocationPreviewViewModel @AssistedInject constructor(
         @Assisted private val initialState: LocationPreviewViewState,
+        private val session: Session,
         private val locationPinProvider: LocationPinProvider,
         private val locationTracker: LocationTracker,
 ) : VectorViewModel<LocationPreviewViewState, LocationPreviewAction, LocationPreviewViewEvents>(initialState), LocationTracker.Callback {
@@ -83,7 +84,7 @@ class LocationPreviewViewModel @AssistedInject constructor(
             setState {
                 copy(isLoadingUserLocation = true)
             }
-            viewModelScope.launch(Dispatchers.Main) {
+            viewModelScope.launch(session.coroutineDispatchers.main) {
                 locationTracker.start()
                 locationTracker.requestLastKnownLocation()
             }
