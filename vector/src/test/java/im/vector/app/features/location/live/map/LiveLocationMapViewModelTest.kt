@@ -20,13 +20,14 @@ import com.airbnb.mvrx.test.MavericksTestRule
 import im.vector.app.features.location.LocationData
 import im.vector.app.features.location.live.StopLiveLocationShareUseCase
 import im.vector.app.test.fakes.FakeLocationSharingServiceConnection
+import im.vector.app.test.fakes.FakeLocationTracker
+import im.vector.app.test.fakes.FakeSession
 import im.vector.app.test.test
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Rule
 import org.junit.Test
@@ -41,16 +42,20 @@ class LiveLocationMapViewModelTest {
 
     private val args = LiveLocationMapViewArgs(roomId = A_ROOM_ID)
 
-    private val getListOfUserLiveLocationUseCase = mockk<GetListOfUserLiveLocationUseCase>()
-    private val locationServiceConnection = FakeLocationSharingServiceConnection()
-    private val stopLiveLocationShareUseCase = mockk<StopLiveLocationShareUseCase>()
+    private val fakeSession = FakeSession()
+    private val fakeGetListOfUserLiveLocationUseCase = mockk<GetListOfUserLiveLocationUseCase>()
+    private val fakeLocationSharingServiceConnection = FakeLocationSharingServiceConnection()
+    private val fakeStopLiveLocationShareUseCase = mockk<StopLiveLocationShareUseCase>()
+    private val fakeLocationTracker = FakeLocationTracker()
 
     private fun createViewModel(): LiveLocationMapViewModel {
         return LiveLocationMapViewModel(
                 LiveLocationMapViewState(args),
-                getListOfUserLiveLocationUseCase,
-                locationServiceConnection.instance,
-                stopLiveLocationShareUseCase
+                session = fakeSession,
+                getListOfUserLiveLocationUseCase = fakeGetListOfUserLiveLocationUseCase,
+                locationSharingServiceConnection = fakeLocationSharingServiceConnection.instance,
+                stopLiveLocationShareUseCase = fakeStopLiveLocationShareUseCase,
+                locationTracker = fakeLocationTracker.instance,
         )
     }
 
@@ -60,30 +65,94 @@ class LiveLocationMapViewModelTest {
     }
 
     @Test
-    fun `given the viewModel has been initialized then viewState contains user locations list`() = runTest {
-        val userLocations = listOf(
-                UserLiveLocationViewState(
-                        MatrixItem.UserItem(id = "@userId1:matrix.org", displayName = "User 1", avatarUrl = ""),
-                        pinDrawable = mockk(),
-                        locationData = LocationData(latitude = 1.0, longitude = 2.0, uncertainty = null),
-                        endOfLiveTimestampMillis = 123,
-                        locationTimestampMillis = 123,
-                        showStopSharingButton = false
-                )
-        )
-        locationServiceConnection.givenBind()
-        every { getListOfUserLiveLocationUseCase.execute(A_ROOM_ID) } returns flowOf(userLocations)
+    fun `given the viewModel has been initialized then viewState contains user locations list and location tracker is setup`() {
+        // Given
+        val userLocations = listOf(givenAUserLiveLocationViewState(userId = "@userId1:matrix.org"))
+        fakeLocationSharingServiceConnection.givenBind()
+        every { fakeGetListOfUserLiveLocationUseCase.execute(A_ROOM_ID) } returns flowOf(userLocations)
 
+        // When
         val viewModel = createViewModel()
-        viewModel
-                .test()
+        val viewModelTest = viewModel.test()
+
+        // Then
+        viewModelTest
                 .assertState(
                         LiveLocationMapViewState(args).copy(
-                                userLocations = userLocations
+                                userLocations = userLocations,
+                                showLocateUserButton = true,
+                        )
+                ).finish()
+        fakeLocationSharingServiceConnection.verifyBind(viewModel)
+        fakeLocationTracker.verifyAddCallback(viewModel)
+    }
+
+    @Test
+    fun `given the viewModel when it is cleared cleanUp are done`() {
+        // Given
+        fakeLocationSharingServiceConnection.givenBind()
+        fakeLocationSharingServiceConnection.givenUnbind()
+        every { fakeGetListOfUserLiveLocationUseCase.execute(A_ROOM_ID) } returns flowOf(emptyList())
+        val viewModel = createViewModel()
+
+        // When
+        viewModel.onCleared()
+
+        // Then
+        fakeLocationSharingServiceConnection.verifyUnbind(viewModel)
+        fakeLocationTracker.verifyRemoveCallback(viewModel)
+    }
+
+    @Test
+    fun `given current user shares their live location then locate button should not be shown`() {
+        // Given
+        val userLocations = listOf(givenAUserLiveLocationViewState(userId = fakeSession.myUserId))
+        fakeLocationSharingServiceConnection.givenBind()
+        every { fakeGetListOfUserLiveLocationUseCase.execute(A_ROOM_ID) } returns flowOf(userLocations)
+        val viewModel = createViewModel()
+
+        // When
+        val viewModelTest = viewModel.test()
+
+        // Then
+        viewModelTest
+                .assertState(
+                        LiveLocationMapViewState(args).copy(
+                                userLocations = userLocations,
+                                showLocateUserButton = false,
                         )
                 )
                 .finish()
-
-        locationServiceConnection.verifyBind(viewModel)
     }
+
+    @Test
+    fun `given current user does not share their live location then locate button should be shown`() {
+        // Given
+        val userLocations = listOf(givenAUserLiveLocationViewState(userId = "@userId1:matrix.org"))
+        fakeLocationSharingServiceConnection.givenBind()
+        every { fakeGetListOfUserLiveLocationUseCase.execute(A_ROOM_ID) } returns flowOf(userLocations)
+        val viewModel = createViewModel()
+
+        // When
+        val viewModelTest = viewModel.test()
+
+        // Then
+        viewModelTest
+                .assertState(
+                        LiveLocationMapViewState(args).copy(
+                                userLocations = userLocations,
+                                showLocateUserButton = true,
+                        )
+                )
+                .finish()
+    }
+
+    private fun givenAUserLiveLocationViewState(userId: String) = UserLiveLocationViewState(
+            MatrixItem.UserItem(id = userId, displayName = "User 1", avatarUrl = ""),
+            pinDrawable = mockk(),
+            locationData = LocationData(latitude = 1.0, longitude = 2.0, uncertainty = null),
+            endOfLiveTimestampMillis = 123,
+            locationTimestampMillis = 123,
+            showStopSharingButton = false
+    )
 }

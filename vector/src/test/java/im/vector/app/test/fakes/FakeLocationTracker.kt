@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,21 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.location.preview
+package im.vector.app.test.fakes
 
-import im.vector.app.core.platform.VectorViewModelAction
+import im.vector.app.features.location.LocationTracker
+import io.mockk.mockk
+import io.mockk.verify
 
-sealed class LocationPreviewAction : VectorViewModelAction {
-    object ShowMapLoadingError : LocationPreviewAction()
-    object ZoomToUserLocation : LocationPreviewAction()
+class FakeLocationTracker {
+
+    val instance: LocationTracker = mockk(relaxed = true)
+
+    fun verifyAddCallback(callback: LocationTracker.Callback) {
+        verify { instance.addCallback(callback) }
+    }
+
+    fun verifyRemoveCallback(callback: LocationTracker.Callback) {
+        verify { instance.removeCallback(callback) }
+    }
 }

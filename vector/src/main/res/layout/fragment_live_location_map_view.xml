@@ -17,6 +17,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <ImageView
+        android:id="@+id/liveLocationMapLocateButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_marginHorizontal="@dimen/location_sharing_locate_button_margin_horizontal"
+        android:layout_marginVertical="@dimen/location_sharing_locate_button_margin_vertical"
+        android:clickable="true"
+        android:contentDescription="@string/a11y_location_share_locate_button"
+        android:focusable="true"
+        android:src="@drawable/btn_locate"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
     <im.vector.app.features.location.MapLoadingErrorView
         android:id="@+id/mapPreviewLoadingError"
         android:layout_width="match_parent"
