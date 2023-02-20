@@ -1279,10 +1279,10 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="keys_backup_restore_with_recovery_key">Izmantojiet savu Atgūšanas Atslēgu, lai atbloķētu savu šifrēto ziņu vēsturi</string>
     <string name="keys_backup_restore_use_recovery_key">izmantojiet savu atgūšanas atslēgu</string>
     <string name="settings_show_join_leave_messages_summary">Lietotāju ielūgšana, izmešana un aizliegšana tika neaizskarta.</string>
-    <string name="settings_noisy_notifications_preferences">Konfigurēt Skaļās Notifikācijas</string>
+    <string name="settings_noisy_notifications_preferences">Uzstādīt skaļos paziņojumus</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Izslēgt ierobežojumus</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">Pārbaudīt fona ierobežojumus</string>
-    <string name="settings_troubleshoot_test_notification_notification_clicked">Notifikācija tika nospiesta!</string>
+    <string name="settings_troubleshoot_test_notification_notification_clicked">Paziņojumam tika piesists!</string>
     <string name="settings_troubleshoot_test_token_registration_failed">Neizdevās reģistrēt FCM žetonu mājasserverī:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_token_registration_success">FCM žetons veiksmīgi reģistrēts mājasserverī.</string>
@@ -1300,15 +1300,15 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
 \nLūdzu, jautājiet sava servera administratoram, lai konfigurētu PAGRIEZIENA serveri, lai zvani strādātu uzticami.</string>
     <string name="settings_integrations_summary">Izmantojiet Integrācijas Pārvaldnieku, lai pārvaldītu botus, tiltus, logrīkus un uzlīmes.
 \nIntegrācijas Pārvaldnieks saņem konfigurācijas datus un var modificēt logrīkus, sūtīt istabu uzaicinājumus jūsu vārdā.</string>
-    <string name="settings_background_fdroid_sync_mode_disabled_description">Jūs nesaņemsiet jaunas notifikācijas, kad aplikācija ir fonā.</string>
+    <string name="settings_background_fdroid_sync_mode_disabled_description">Par ienākošajiem ziņojumiem netiks paziņots, kad lietotne darbojas fonā.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Bez fona sinhronizācijas</string>
     <string name="settings_background_fdroid_sync_mode_real_time">Optimizēts reālajam laikam</string>
     <string name="settings_background_fdroid_sync_mode">Fona Sinhronizācijas Režīms</string>
     <string name="settings_system_preferences_summary">Izvēlaites LED krāsu, vibrāciju, skaņu…</string>
-    <string name="settings_silent_notifications_preferences">Konfigurēt Klusās Notifikācijas</string>
-    <string name="settings_call_notifications_preferences">Konfigurēt Zvanu Notifikācijas</string>
+    <string name="settings_silent_notifications_preferences">Uzstādīt klusos paziņojumus</string>
+    <string name="settings_call_notifications_preferences">Uzstādīt zvanu paziņojumus</string>
     <string name="settings_troubleshoot_test_service_boot_success">Pakalpojums startēsies, kad ierīce būs restartēta.</string>
-    <string name="settings_troubleshoot_test_notification_title">Notifikāciju Displejs</string>
+    <string name="settings_troubleshoot_test_notification_title">Paziņojumu attēlošana</string>
     <string name="settings_troubleshoot_test_play_services_success">Google Play Servisu APK ir pieejams un atjaunināts.</string>
     <string name="search_banned_user_hint">Filtrēt aizliegtos lietotājus</string>
     <string name="e2e_re_request_encryption_key_dialog_content">Lūdzu palaidiet ${app_name} citā ierīcē, kas var atšifrēt ziņu, lai tā varētu nosūtīt šīs sesijas atslēgas.</string>
@@ -1481,7 +1481,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_troubleshoot_diagnostic">Pārbaudes diagnostika</string>
     <string name="settings_notification_troubleshoot">Paziņojumu pārbaude</string>
     <string name="settings_notification_by_event">Paziņojumu svarīgums</string>
-    <string name="settings_notification_advanced">Advancēti Notifikāciju Iestatījumi</string>
+    <string name="settings_notification_advanced">Paziņojumu papildu iestatījumi</string>
     <string name="call_held_by_you">Jūs apturējāt zvanu</string>
     <string name="call_held_by_user">%s apturēja zvanu</string>
     <string name="call_hold_action">Apturēt</string>
@@ -1801,7 +1801,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_security_prevent_screenshots_title">Neatļaut ekrānšāviņus lietotnē</string>
     <string name="use_file">Izmantot failu</string>
     <string name="bootstrap_enter_recovery">Ievadiet savu %s, lai turpinātu</string>
-    <string name="settings_notification_configuration">Notifikāciju iestatījumi</string>
+    <string name="settings_notification_configuration">Paziņojumu uzstādīšana</string>
     <string name="error_failed_to_import_keys">Neizdevās importēt atslēgas</string>
     <string name="room_created_summary_no_topic_creation_text">%s, lai ļautu cilvēkiem uzzināt, par ko ir šī istaba.</string>
     <string name="bootstrap_crosssigning_save_cloud">Nokopējiet to uz personālās mākoņa krātuves</string>
