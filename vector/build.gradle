@@ -233,7 +233,7 @@ dependencies {
     kapt libs.dagger.hiltCompiler
 
     // Analytics
-    implementation('com.posthog.android:posthog:2.0.1') {
+    implementation('com.posthog.android:posthog:2.0.2') {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
     implementation libs.sentry.sentryAndroid
