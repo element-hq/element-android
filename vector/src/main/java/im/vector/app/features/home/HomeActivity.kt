@@ -17,10 +17,13 @@
 package im.vector.app.features.home
 
 import android.app.Activity
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
 import android.net.Uri
 import android.os.Bundle
+import android.os.IBinder
 import android.os.Parcelable
 import android.view.Menu
 import android.view.MenuItem
@@ -48,6 +51,7 @@ import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.pushers.FcmHelper
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.pushers.UnifiedPushHelper
+import im.vector.app.core.services.DendriteService
 import im.vector.app.core.utils.PERMISSIONS_FOR_P2P
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.registerForPermissionsResult
@@ -290,20 +294,31 @@ class HomeActivity :
 
         // Dendrite needs location permissions to get BLE data, thanks Google
         if (checkPermissions(PERMISSIONS_FOR_P2P, this, launcher, R.string.permissions_rationale_msg_p2p)) {
-            Timber.i("BLE: Got permissions")
+            Timber.i("BLE: Permissions were granted previously")
         } else {
-            Timber.i("BLE: No permissions")
+            Timber.w("BLE: Permissions not granted")
         }
     }
 
     private val launcher = registerForPermissionsResult { allGranted, deniedPermanently ->
         if (allGranted) {
-            Timber.i("BLE: Permission granted")
+            Timber.i("BLE: Permission was granted")
+            Timber.i("BLE: Retrying Dendrite service start")
+            val dendriteConnection = object : ServiceConnection {
+                override fun onServiceConnected(name: ComponentName?, service: IBinder?) { }
+                override fun onServiceDisconnected(name: ComponentName?) { }
+            }
+            Intent(this, DendriteService::class.java).also { dendriteIntent ->
+                dendriteIntent.putExtra(DendriteService.ACTION, DendriteService.ACTION_START)
+                startService(dendriteIntent)
+            }.also { intent ->
+                applicationContext.bindService(intent, dendriteConnection, Context.BIND_AUTO_CREATE)
+            }
         } else {
             if (deniedPermanently) {
-                Timber.i("BLE: Permission denied permanently")
+                Timber.w("BLE: Permission denied permanently")
             } else {
-                Timber.i("BLE: Permission denied")
+                Timber.w("BLE: Permission denied")
             }
         }
     }
