@@ -185,7 +185,7 @@ class NewHomeDetailFragment :
                 }
 
         newHomeDetailViewModel.onEach { viewState ->
-            refreshUnreadCounterBadge(viewState.spacesNotificationCount)
+            refreshUnreadCounterBadge(viewState.spacesNotificationCount, viewState.hasPendingSpaceInvites)
         }
     }
 
@@ -386,11 +386,21 @@ class NewHomeDetailFragment :
         }
     }
 
-    private fun refreshUnreadCounterBadge(roomAggregateNotificationCount: RoomAggregateNotificationCount) {
-        val badgeState = UnreadCounterBadgeView.State.Count(
-                count = roomAggregateNotificationCount.notificationCount,
-                highlighted = roomAggregateNotificationCount.isHighlight,
-        )
+    private fun refreshUnreadCounterBadge(
+            spacesNotificationCount: RoomAggregateNotificationCount,
+            hasPendingSpaceInvites: Boolean,
+    ) {
+        val badgeState = if (hasPendingSpaceInvites && spacesNotificationCount.notificationCount == 0) {
+            UnreadCounterBadgeView.State.Text(
+                    text = "!",
+                    highlighted = true,
+            )
+        } else {
+            UnreadCounterBadgeView.State.Count(
+                    count = spacesNotificationCount.notificationCount,
+                    highlighted = spacesNotificationCount.isHighlight,
+            )
+        }
         views.spacesUnreadCounterBadge.render(badgeState)
     }
 

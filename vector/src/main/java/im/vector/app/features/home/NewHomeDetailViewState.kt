@@ -21,4 +21,5 @@ import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotification
 
 data class NewHomeDetailViewState(
         val spacesNotificationCount: RoomAggregateNotificationCount = RoomAggregateNotificationCount(notificationCount = 0, highlightCount = 0),
+        val hasPendingSpaceInvites: Boolean = false,
 ) : MavericksState
