@@ -76,7 +76,7 @@ class BLEManager(
         private val pineconeDisconenct: (Conduit) -> Unit,
 ) {
     private val bluetoothAdapter: BluetoothAdapter = bluetoothManager.adapter
-    private val bleScanner: BluetoothLeScanner = bluetoothAdapter.bluetoothLeScanner
+    private var bleScanner: BluetoothLeScanner? = null
 
     private lateinit var scanSettings: ScanSettings
     private val scanFilters: MutableList<ScanFilter> by lazy {
@@ -174,6 +174,11 @@ class BLEManager(
 
     @RequiresApi(Build.VERSION_CODES.Q)
     suspend fun start(isCodedPHY: Boolean) = CoroutineScope(Dispatchers.Default).launch {
+        bleScanner = bluetoothAdapter.bluetoothLeScanner
+        if (bleScanner == null) {
+            Timber.w("$TAG: BLE Scanner is null, not starting")
+            return@launch
+        }
         if (!started.getAndSet(true)) {
             Timber.i("$TAG: Starting")
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
@@ -250,7 +255,7 @@ class BLEManager(
     private fun startBleScan() {
         if (!scanning.getAndSet(true)) {
             Timber.i("$TAG: Starting scan")
-            bleScanner.startScan(scanFilters, scanSettings, scanCallback)
+            bleScanner?.startScan(scanFilters, scanSettings, scanCallback)
             // TODO: restart before 30min timeout
         }
     }
@@ -259,11 +264,11 @@ class BLEManager(
     private fun stopBleScan() {
         Timber.i("$TAG: Stopping scan")
         scanning.set(false)
-        bleScanner.stopScan(scanCallback)
+        bleScanner?.stopScan(scanCallback)
         // NOTE: Stopping the scan can still result in callbacks happening later
         // So we flush pending results with `scanning` set to false to ensure they
         // are all cleared.
-        bleScanner.flushPendingScanResults(scanCallback)
+        bleScanner?.flushPendingScanResults(scanCallback)
     }
 
     private fun updateBleScanSettings() {

@@ -140,8 +140,16 @@ class BLEServer(
         Timber.i("$TAG: Starting")
 
         l2capServer = bluetoothAdapter.listenUsingInsecureL2capChannel()
-        Timber.w("$TAG: Server PSM: ${l2capServer.psm}")
-        psmAndPublicKey = shortToBytes(l2capServer.psm.toShort()) + publicKey.toPublicKeyBytes().slice(0 until BLEConstants.PSM_CHARACTERISTIC_KEY_SIZE).toByteArray()
+        val psm = l2capServer.psm
+        Timber.w("$TAG: Server PSM: $psm")
+
+        if (psm < 1 || psm > 65535) {
+            Timber.e("$TAG: Server PSM is out of acceptable 16-bit range: $psm, stopping BLE server.")
+            l2capServer.close()
+            return
+        }
+
+        psmAndPublicKey = uShortToBytes(psm.toUShort()) + publicKey.toPublicKeyBytes().slice(0 until BLEConstants.PSM_CHARACTERISTIC_KEY_SIZE).toByteArray()
 
         gattCharacteristic = BluetoothGattCharacteristic(BLEConstants.PSM_UUID, BluetoothGattCharacteristic.PROPERTY_READ, BluetoothGattCharacteristic.PERMISSION_READ)
         gattService.addCharacteristic(gattCharacteristic)
@@ -159,7 +167,7 @@ class BLEServer(
 
         l2capSocketServer = CoroutineScope(Dispatchers.Default).launch {
             while (true) {
-                Timber.i("$TAG: Waiting for connection on PSM ${l2capServer.psm}")
+                Timber.i("$TAG: Waiting for connection on PSM $psm")
                 try {
                     val remote = try {
                         l2capServer.accept()
@@ -173,16 +181,16 @@ class BLEServer(
                     }
                     val device = remote.remoteDevice.address.toString()
 
-                    Timber.i("$TAG: Connected inbound $device PSM ${l2capServer.psm}")
+                    Timber.i("$TAG: Connected inbound $device PSM $psm")
                     gattServerCallback.onConnectionStateChange(remote.remoteDevice, BluetoothGatt.GATT_SUCCESS, BluetoothProfile.STATE_CONNECTED)
 
                     Timber.i("$TAG: Creating BLEPineconePeer")
                     pineconeConnect()?.let { newConduit ->
-                        Timber.i("$TAG: Successful inbound pinecone peering with $device PSM ${l2capServer.psm}")
+                        Timber.i("$TAG: Successful inbound pinecone peering with $device PSM $psm")
                         val stopCallback =  { gattServerCallback.onConnectionStateChange(remote.remoteDevice, BluetoothGatt.GATT_SUCCESS, BluetoothProfile.STATE_DISCONNECTED) }
                         pineconePeers[remote.remoteDevice.address] = BLEPineconePeer(remote.remoteDevice.address, newConduit, remote, pineconeDisconenct, stopCallback)
                     } ?: run {
-                        Timber.e("$TAG: Failed pinecone peering with $device PSM ${l2capServer.psm}")
+                        Timber.e("$TAG: Failed pinecone peering with $device PSM $psm")
                     }
 
                 } catch (e: Exception) {
@@ -283,10 +291,4 @@ class BLEServer(
             Timber.i("$TAG: AdvertiseSet stopped")
         }
     }
-}
-
-private fun shortToBytes(x: Short): ByteArray {
-    val buffer: ByteBuffer = ByteBuffer.allocate(java.lang.Short.BYTES)
-    buffer.putShort(x)
-    return buffer.array()
 }

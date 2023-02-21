@@ -16,9 +16,27 @@
 
 package im.vector.app.core.bluetooth
 
+import java.nio.ByteBuffer
 import java.util.UUID
 
 typealias DeviceAddress = String
+
+fun uShortToBytes(x: UShort): ByteArray {
+    val buffer: ByteBuffer = ByteBuffer.allocate(java.lang.Short.BYTES)
+    buffer.putShort(x.toShort())
+    return buffer.array()
+}
+
+fun bytesToUShort(bytes: ByteArray): UShort {
+    val buffer: ByteBuffer = ByteBuffer.allocate(java.lang.Short.BYTES)
+    buffer.put(bytes.sliceArray(0 until java.lang.Short.BYTES))
+    buffer.flip()
+    return buffer.getUShort()
+}
+
+fun ByteBuffer.getUShort() =
+        (((this[0].toUInt() and 0xFFu) shl 8) or
+                (this[1].toUInt() and 0xFFu)).toUShort()
 
 fun String.decodeHex(): ByteArray {
     check(length % 2 == 0) { "Hex string must have an even length"}

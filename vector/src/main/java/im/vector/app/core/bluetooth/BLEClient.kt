@@ -455,7 +455,16 @@ class BLEClient(
             }
 
             val psmBytes = characteristic.value.slice(0..1)
-            val psm = bytesToShort(psmBytes.toByteArray())
+            val psm = bytesToUShort(psmBytes.toByteArray())
+
+            if (psm < 1u) {
+                Timber.e("$tag: Received invalid psm value $psm")
+                runBlocking {
+                    stop(false)
+                }
+                return
+            }
+
             val keyBytes: PublicKeyBytes = characteristic.value.slice(2 until BLEConstants.PSM_CHARACTERISTIC_KEY_SIZE).toByteArray()
             val key = keyBytes.toPublicKey()
 
@@ -464,11 +473,4 @@ class BLEClient(
             }
         }
     }
-}
-
-private fun bytesToShort(bytes: ByteArray): Short {
-    val buffer: ByteBuffer = ByteBuffer.allocate(java.lang.Short.BYTES)
-    buffer.put(bytes.sliceArray(0 until java.lang.Short.BYTES))
-    buffer.flip()
-    return buffer.short
 }
