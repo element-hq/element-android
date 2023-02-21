@@ -32,13 +32,11 @@ import im.vector.app.features.analytics.plan.Interaction
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
-import kotlinx.coroutines.Dispatchers
+import im.vector.app.features.spaces.notification.GetNotificationCountForSpacesUseCase
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.QueryStringValue
@@ -48,12 +46,9 @@ import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.getUserOrDefault
-import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.accountdata.RoomAccountDataTypes
 import org.matrix.android.sdk.api.session.room.model.Membership
-import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.spaceSummaryQueryParams
-import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
 import org.matrix.android.sdk.api.session.space.SpaceOrderUtils
 import org.matrix.android.sdk.api.session.space.model.SpaceOrderContent
 import org.matrix.android.sdk.api.session.space.model.TopLevelSpaceComparator
@@ -67,6 +62,7 @@ class SpaceListViewModel @AssistedInject constructor(
         private val vectorPreferences: VectorPreferences,
         private val autoAcceptInvites: AutoAcceptInvites,
         private val analyticsTracker: AnalyticsTracker,
+        private val getNotificationCountForSpacesUseCase: GetNotificationCountForSpacesUseCase,
 ) : VectorViewModel<SpaceListViewState, SpaceListAction, SpaceListViewEvents>(initialState) {
 
     @AssistedFactory
@@ -92,39 +88,14 @@ class SpaceListViewModel @AssistedInject constructor(
                     copy(selectedSpace = selectedSpaceOption.orNull())
                 }
 
-        // XXX there should be a way to refactor this and share it
-        session.roomService().getPagedRoomSummariesLive(
-                roomSummaryQueryParams {
-                    this.memberships = listOf(Membership.JOIN)
-                    this.spaceFilter = roomsInSpaceFilter()
-                }, sortOrder = RoomSortOrder.NONE
-        ).asFlow()
-                .sample(300)
-                .onEach {
-                    val inviteCount = if (autoAcceptInvites.hideInvites) {
-                        0
-                    } else {
-                        session.roomService().getRoomSummaries(
-                                roomSummaryQueryParams { this.memberships = listOf(Membership.INVITE) }
-                        ).size
-                    }
-                    val totalCount = session.roomService().getNotificationCountForRooms(
-                            roomSummaryQueryParams {
-                                this.memberships = listOf(Membership.JOIN)
-                                this.spaceFilter = roomsInSpaceFilter()
-                            }
-                    )
-                    val counts = RoomAggregateNotificationCount(
-                            totalCount.notificationCount + inviteCount,
-                            totalCount.highlightCount + inviteCount
-                    )
+        getNotificationCountForSpacesUseCase.execute(roomsInSpaceFilter())
+                .onEach { counts ->
                     setState {
                         copy(
                                 homeAggregateCount = counts
                         )
                     }
                 }
-                .flowOn(Dispatchers.Default)
                 .launchIn(viewModelScope)
     }
 
