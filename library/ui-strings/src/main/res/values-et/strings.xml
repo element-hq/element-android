@@ -2911,4 +2911,12 @@
     <string name="error_voice_message_broadcast_in_progress_message">Kuna sa hetkel salvestad ringhäälingukõnet, siis häälsõnumi salvestamine või esitamine ei õnnestu. Selleks palun lõpeta ringhäälingukõne</string>
     <string name="error_voice_broadcast_no_connection_recording">Viga võrguühenduses - salvestamine on peatatud</string>
     <string name="rich_text_editor_inline_code">Kasuta lõimitud koodi vormingut</string>
+    <string name="settings_external_account_management_title">Kasutajakonto</string>
+    <string name="settings_external_account_management">Sinu kasutajakonto andmeid hallatakse siin: %1$s.</string>
+    <string name="error_voice_broadcast_unable_to_decrypt">Selle ringhäälingukõne dekrüptimine ei õnnestu.</string>
+    <string name="room_poll_details_go_to_timeline">Näita küsitlust ajajoonel</string>
+    <string name="rich_text_editor_indent">Lisa taandrida</string>
+    <string name="rich_text_editor_unindent">Eemalda taandrida</string>
+    <string name="rich_text_editor_quote">Lülita tsiteerimine sisse/välja</string>
+    <string name="rich_text_editor_code_block">Lülita koodiblokk sisse/välja</string>
 </resources>

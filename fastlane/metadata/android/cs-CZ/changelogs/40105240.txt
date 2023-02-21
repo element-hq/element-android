@@ -1,0 +1,2 @@
+Hlavní změny v této verzi: Hlavně opravy chyb, zejména oprava zpráv, které se nezobrazovaly na časové ose.
+Úplný seznam změn: https://github.com/vector-im/element-android/releases
