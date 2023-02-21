@@ -47,6 +47,7 @@ import im.vector.app.features.call.SharedKnownCallsViewModel
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.dialpad.PstnDialActivity
 import im.vector.app.features.call.webrtc.WebRtcCallManager
+import im.vector.app.features.home.room.list.UnreadCounterBadgeView
 import im.vector.app.features.home.room.list.actions.RoomListSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListSharedActionViewModel
 import im.vector.app.features.home.room.list.home.HomeRoomListFragment
@@ -63,6 +64,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -82,6 +84,7 @@ class NewHomeDetailFragment :
     @Inject lateinit var buildMeta: BuildMeta
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
+    private val newHomeDetailViewModel: NewHomeDetailViewModel by fragmentViewModel()
     private val unknownDeviceDetectorSharedViewModel: UnknownDeviceDetectorSharedViewModel by activityViewModel()
     private val serverBackupStatusViewModel: ServerBackupStatusViewModel by activityViewModel()
 
@@ -180,6 +183,10 @@ class NewHomeDetailFragment :
                     currentCallsViewPresenter.updateCall(callManager.getCurrentCall(), callManager.getCalls())
                     invalidateOptionsMenu()
                 }
+
+        newHomeDetailViewModel.onEach { viewState ->
+            refreshUnreadCounterBadge(viewState.spacesNotificationCount)
+        }
     }
 
     private fun setupObservers() {
@@ -377,6 +384,14 @@ class NewHomeDetailFragment :
         state.myMatrixItem?.let { user ->
             avatarRenderer.render(user, views.avatar)
         }
+    }
+
+    private fun refreshUnreadCounterBadge(roomAggregateNotificationCount: RoomAggregateNotificationCount) {
+        val badgeState = UnreadCounterBadgeView.State.Count(
+                count = roomAggregateNotificationCount.notificationCount,
+                highlighted = roomAggregateNotificationCount.isHighlight,
+        )
+        views.spacesUnreadCounterBadge.render(badgeState)
     }
 
     override fun onTapToReturnToCall() {
