@@ -53,6 +53,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.TransitionManager
 import com.airbnb.epoxy.EpoxyModel
+import com.airbnb.epoxy.EpoxyVisibilityTracker
 import com.airbnb.epoxy.OnModelBuildFinishedListener
 import com.airbnb.epoxy.addGlidePreloader
 import com.airbnb.epoxy.glidePreloader
@@ -76,7 +77,6 @@ import im.vector.app.core.extensions.filterDirectionOverrides
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.setTextOrHide
-import im.vector.app.core.extensions.trackItemsVisibilityChange
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.glide.GlideRequests
 import im.vector.app.core.intent.getFilenameFromUri
@@ -265,6 +265,7 @@ class TimelineFragment :
     private val timelineViewModel: TimelineViewModel by fragmentViewModel()
     private val messageComposerViewModel: MessageComposerViewModel by fragmentViewModel()
     private val debouncer = Debouncer(createUIHandler())
+    private val itemVisibilityTracker = EpoxyVisibilityTracker()
 
     private lateinit var scrollOnNewMessageCallback: ScrollOnNewMessageCallback
     private lateinit var scrollOnHighlightedEventCallback: ScrollOnHighlightedEventCallback
@@ -972,11 +973,11 @@ class TimelineFragment :
 
     override fun onResume() {
         super.onResume()
+        itemVisibilityTracker.attach(views.timelineRecyclerView)
         notificationDrawerManager.setCurrentRoom(timelineArgs.roomId)
         notificationDrawerManager.setCurrentThread(timelineArgs.threadTimelineArgs?.rootThreadEventId)
         roomDetailPendingActionStore.data?.let { handlePendingAction(it) }
         roomDetailPendingActionStore.data = null
-        views.timelineRecyclerView.adapter = timelineEventController.adapter
     }
 
     private fun handlePendingAction(roomDetailPendingAction: RoomDetailPendingAction) {
@@ -993,9 +994,9 @@ class TimelineFragment :
 
     override fun onPause() {
         super.onPause()
+        itemVisibilityTracker.detach(views.timelineRecyclerView)
         notificationDrawerManager.setCurrentRoom(null)
         notificationDrawerManager.setCurrentThread(null)
-        views.timelineRecyclerView.adapter = null
     }
 
     private val emojiActivityResultLauncher = registerStartForActivityResult { activityResult ->
@@ -1038,7 +1039,6 @@ class TimelineFragment :
         timelineEventController.callback = this
         timelineEventController.timeline = timelineViewModel.timeline
 
-        views.timelineRecyclerView.trackItemsVisibilityChange()
         layoutManager = object : LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, true) {
             override fun onLayoutCompleted(state: RecyclerView.State) {
                 super.onLayoutCompleted(state)
@@ -1061,6 +1061,7 @@ class TimelineFragment :
             it.dispatchTo(scrollOnHighlightedEventCallback)
         }
         timelineEventController.addModelBuildListener(modelBuildListener)
+        views.timelineRecyclerView.adapter = timelineEventController.adapter
 
         if (vectorPreferences.swipeToReplyIsEnabled()) {
             val quickReplyHandler = object : RoomMessageTouchHelperCallback.QuickReplayHandler {
