@@ -14,23 +14,24 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.spaces
+package im.vector.app.test.fakes
 
-import im.vector.app.core.di.ActiveSessionHolder
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import io.mockk.every
+import io.mockk.mockk
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
-import org.matrix.android.sdk.api.session.space.SpaceSummaryQueryParams
-import org.matrix.android.sdk.flow.flow
-import javax.inject.Inject
+import org.matrix.android.sdk.api.session.space.SpaceService
 
-class GetSpacesUseCase @Inject constructor(
-        private val activeSessionHolder: ActiveSessionHolder,
-) {
+class FakeSpaceService : SpaceService by mockk() {
 
-    fun execute(params: SpaceSummaryQueryParams): Flow<List<RoomSummary>> {
-        val session = activeSessionHolder.getSafeActiveSession()
+    fun givenGetSpaceSummariesLiveReturns(roomSummaries: List<RoomSummary>): LiveData<List<RoomSummary>> {
+        return MutableLiveData(roomSummaries).also {
+            every { getSpaceSummariesLive(any()) } returns it
+        }
+    }
 
-        return session?.flow()?.liveSpaceSummaries(params) ?: emptyFlow()
+    fun givenGetSpaceSummariesReturns(roomSummaries: List<RoomSummary>) {
+        every { getSpaceSummaries(any()) } returns roomSummaries
     }
 }
