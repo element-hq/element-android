@@ -103,7 +103,7 @@ class VectorSettingsPreferencesFragment :
         }
 
         findPreference<Preference>(VectorPreferences.SETTINGS_PREF_SPACE_CATEGORY)!!.let { pref ->
-            pref.isVisible = !vectorFeatures.isNewAppLayoutFeatureEnabled()
+            pref.isVisible = !vectorPreferences.isNewAppLayoutEnabled()
             pref.isEnabled = !vectorPreferences.isNewAppLayoutEnabled()
         }
 
