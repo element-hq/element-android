@@ -27,6 +27,8 @@ import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.sync.FilterService
 import timber.log.Timber
 
+var shuttingDown: Boolean = false
+
 fun Session.configureAndStart(context: Context, startSyncing: Boolean = true) {
     Timber.i("Configure and start session for $myUserId. startSyncing: $startSyncing")
     open()
@@ -39,6 +41,10 @@ fun Session.configureAndStart(context: Context, startSyncing: Boolean = true) {
 }
 
 fun Session.startSyncing(context: Context) {
+    if (shuttingDown) {
+        Timber.w("Already shutting down, not restarting sync")
+        return
+    }
     val applicationContext = context.applicationContext
     if (!syncService().hasAlreadySynced()) {
         // initial sync is done as a service so it can continue below app lifecycle
@@ -62,6 +68,7 @@ fun Session.startSyncing(context: Context) {
 }
 
 fun Session.stopSyncing() {
+    shuttingDown = true
     syncService().stopSync()
 }
 

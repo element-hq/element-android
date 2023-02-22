@@ -124,6 +124,7 @@ class ActiveSessionHolder @Inject constructor(
                     it.stopSyncing()
                 }
     }
+
 //    fun switchToSession(sessionParams: SessionParams) {
 //        val newActiveSession = authenticationService.getSession(sessionParams)
 //        activeSession.set(newActiveSession)

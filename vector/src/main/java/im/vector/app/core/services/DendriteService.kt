@@ -143,7 +143,7 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
 
         val intentFilter = IntentFilter()
         intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED)
-        this.registerReceiver(bleReceiver, intentFilter)
+        registerReceiver(bleReceiver, intentFilter)
 
         vectorPreferences = singletonEntryPoint().vectorPreferences()
         vectorPreferences.subscribeToChanges(this)
@@ -181,6 +181,7 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
     }
 
     override fun onTaskRemoved(rootIntent: Intent?) {
+        Timber.i("$TAG: onTaskRemoved")
         super.onTaskRemoved(rootIntent)
         if (serviceStarted.getAndSet(false)) {
             disableNotifications.set(true)
