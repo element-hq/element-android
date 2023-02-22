@@ -1,0 +1,2 @@
+Legnagyobb változtatás ebben a verzióban: Leginkább hibajavítások, mint amikor az üzenet nem jelenik meg az idővonalon.
+Teljes változási napló: https://github.com/vector-im/element-android/releases
