@@ -19,7 +19,6 @@ package im.vector.app.features.spaces.notification
 import androidx.lifecycle.asFlow
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.features.invite.AutoAcceptInvites
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOn
