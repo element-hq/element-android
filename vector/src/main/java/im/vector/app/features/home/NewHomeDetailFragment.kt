@@ -398,7 +398,7 @@ class NewHomeDetailFragment :
         } else {
             UnreadCounterBadgeView.State.Count(
                     count = spacesNotificationCount.notificationCount,
-                    highlighted = spacesNotificationCount.isHighlight,
+                    highlighted = spacesNotificationCount.isHighlight || hasPendingSpaceInvites,
             )
         }
         views.spacesUnreadCounterBadge.render(badgeState)
