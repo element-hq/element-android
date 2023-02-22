@@ -29,7 +29,6 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.plan.Interaction
-import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.spaces.notification.GetNotificationCountForSpacesUseCase
@@ -53,16 +52,15 @@ import org.matrix.android.sdk.api.session.space.SpaceOrderUtils
 import org.matrix.android.sdk.api.session.space.model.SpaceOrderContent
 import org.matrix.android.sdk.api.session.space.model.TopLevelSpaceComparator
 import org.matrix.android.sdk.api.util.toMatrixItem
-import org.matrix.android.sdk.flow.flow
 
 class SpaceListViewModel @AssistedInject constructor(
         @Assisted initialState: SpaceListViewState,
         private val spaceStateHandler: SpaceStateHandler,
         private val session: Session,
         private val vectorPreferences: VectorPreferences,
-        private val autoAcceptInvites: AutoAcceptInvites,
         private val analyticsTracker: AnalyticsTracker,
-        private val getNotificationCountForSpacesUseCase: GetNotificationCountForSpacesUseCase,
+        getNotificationCountForSpacesUseCase: GetNotificationCountForSpacesUseCase,
+        private val getSpacesUseCase: GetSpacesUseCase,
 ) : VectorViewModel<SpaceListViewState, SpaceListAction, SpaceListViewEvents>(initialState) {
 
     @AssistedFactory
@@ -238,7 +236,7 @@ class SpaceListViewModel @AssistedInject constructor(
         }
 
         combine(
-                session.flow().liveSpaceSummaries(params),
+                getSpacesUseCase.execute(params),
                 session.accountDataService()
                         .getLiveRoomAccountDataEvents(setOf(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER))
                         .asFlow()

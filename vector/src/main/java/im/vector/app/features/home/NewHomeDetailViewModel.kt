@@ -25,16 +25,20 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.roomprofile.polls.RoomPollsViewModel
-import im.vector.app.features.roomprofile.polls.RoomPollsViewState
+import im.vector.app.features.spaces.GetSpacesUseCase
 import im.vector.app.features.spaces.notification.GetNotificationCountForSpacesUseCase
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.query.SpaceFilter
+import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.spaceSummaryQueryParams
 
+// TODO add unit tests
 class NewHomeDetailViewModel @AssistedInject constructor(
         @Assisted initialState: NewHomeDetailViewState,
         private val getNotificationCountForSpacesUseCase: GetNotificationCountForSpacesUseCase,
+        private val getSpacesUseCase: GetSpacesUseCase,
 ) : VectorViewModel<NewHomeDetailViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
@@ -46,11 +50,22 @@ class NewHomeDetailViewModel @AssistedInject constructor(
 
     init {
         observeSpacesNotificationCount()
+        observeSpacesInvite()
     }
 
     private fun observeSpacesNotificationCount() {
         getNotificationCountForSpacesUseCase.execute(SpaceFilter.NoFilter)
                 .onEach { setState { copy(spacesNotificationCount = it) } }
+                .launchIn(viewModelScope)
+    }
+
+    private fun observeSpacesInvite() {
+        val params = spaceSummaryQueryParams {
+            memberships = listOf(Membership.INVITE)
+            displayName = QueryStringValue.IsNotEmpty
+        }
+        getSpacesUseCase.execute(params)
+                .onEach { setState { copy(hasPendingSpaceInvites = it.isNotEmpty()) } }
                 .launchIn(viewModelScope)
     }
 
