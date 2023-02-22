@@ -33,6 +33,12 @@
             android:summary="@string/settings_discovery_manage"
             android:title="@string/settings_discovery_category" />
 
+        <im.vector.app.core.preference.VectorPreference
+            android:key="SETTINGS_EXTERNAL_ACCOUNT_MANAGEMENT_KEY"
+            android:persistent="false"
+            android:summary="@string/settings_external_account_management"
+            android:title="@string/settings_external_account_management_title" />
+
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
     <im.vector.app.core.preference.VectorPreferenceCategory

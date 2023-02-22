@@ -85,6 +85,7 @@ import im.vector.app.features.roomprofile.members.RoomMemberListViewModel
 import im.vector.app.features.roomprofile.notifications.RoomNotificationSettingsViewModel
 import im.vector.app.features.roomprofile.permissions.RoomPermissionsViewModel
 import im.vector.app.features.roomprofile.polls.RoomPollsViewModel
+import im.vector.app.features.roomprofile.polls.detail.ui.RoomPollDetailViewModel
 import im.vector.app.features.roomprofile.settings.RoomSettingsViewModel
 import im.vector.app.features.roomprofile.settings.joinrule.advanced.RoomJoinRuleChooseRestrictedViewModel
 import im.vector.app.features.roomprofile.uploads.RoomUploadsViewModel
@@ -107,7 +108,8 @@ import im.vector.app.features.settings.ignored.IgnoredUsersViewModel
 import im.vector.app.features.settings.labs.VectorSettingsLabsViewModel
 import im.vector.app.features.settings.legals.LegalsViewModel
 import im.vector.app.features.settings.locale.LocalePickerViewModel
-import im.vector.app.features.settings.notifications.VectorSettingsNotificationPreferenceViewModel
+import im.vector.app.features.settings.notifications.VectorSettingsNotificationViewModel
+import im.vector.app.features.settings.notifications.VectorSettingsPushRuleNotificationViewModel
 import im.vector.app.features.settings.push.PushGatewaysViewModel
 import im.vector.app.features.settings.threepids.ThreePidsSettingsViewModel
 import im.vector.app.features.share.IncomingShareViewModel
@@ -689,9 +691,16 @@ interface MavericksViewModelModule {
 
     @Binds
     @IntoMap
-    @MavericksViewModelKey(VectorSettingsNotificationPreferenceViewModel::class)
+    @MavericksViewModelKey(VectorSettingsNotificationViewModel::class)
     fun vectorSettingsNotificationPreferenceViewModelFactory(
-            factory: VectorSettingsNotificationPreferenceViewModel.Factory
+            factory: VectorSettingsNotificationViewModel.Factory
+    ): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(VectorSettingsPushRuleNotificationViewModel::class)
+    fun vectorSettingsPushRuleNotificationPreferenceViewModelFactory(
+            factory: VectorSettingsPushRuleNotificationViewModel.Factory
     ): MavericksAssistedViewModelFactory<*, *>
 
     @Binds
@@ -703,4 +712,9 @@ interface MavericksViewModelModule {
     @IntoMap
     @MavericksViewModelKey(RoomPollsViewModel::class)
     fun roomPollsViewModelFactory(factory: RoomPollsViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(RoomPollDetailViewModel::class)
+    fun roomPollDetailViewModelFactory(factory: RoomPollDetailViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 }

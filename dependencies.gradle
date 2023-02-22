@@ -10,8 +10,8 @@ def gradle = "7.4.1"
 // Ref: https://kotlinlang.org/releases.html
 def kotlin = "1.8.10"
 def kotlinCoroutines = "1.6.4"
-def dagger = "2.44.2"
-def firebaseBom = "31.2.0"
+def dagger = "2.45"
+def firebaseBom = "31.2.1"
 def appDistribution = "16.0.0-beta05"
 def retrofit = "2.9.0"
 def markwon = "4.6.2"
@@ -27,7 +27,7 @@ def jjwt = "0.11.5"
 // Temporary version to unblock #6929. Once 0.16.0 is released we should use it, and revert
 // the whole commit which set version 0.16.0-SNAPSHOT
 def vanniktechEmoji = "0.16.0-SNAPSHOT"
-def sentry = "6.13.0"
+def sentry = "6.14.0"
 // Use 1.6.0 alpha to fix issue with test
 def fragment = "1.6.0-alpha04"
 // Testing
@@ -50,11 +50,11 @@ ext.libs = [
         ],
         androidx    : [
                 'activity'                : "androidx.activity:activity-ktx:1.6.1",
-                'appCompat'               : "androidx.appcompat:appcompat:1.6.0",
+                'appCompat'               : "androidx.appcompat:appcompat:1.6.1",
                 'biometric'               : "androidx.biometric:biometric:1.1.0",
                 'core'                    : "androidx.core:core-ktx:1.9.0",
                 'recyclerview'            : "androidx.recyclerview:recyclerview:1.2.1",
-                'exifinterface'           : "androidx.exifinterface:exifinterface:1.3.5",
+                'exifinterface'           : "androidx.exifinterface:exifinterface:1.3.6",
                 'fragmentKtx'             : "androidx.fragment:fragment-ktx:$fragment",
                 'fragmentTesting'         : "androidx.fragment:fragment-testing:$fragment",
                 'fragmentTestingManifest' : "androidx.fragment:fragment-testing-manifest:$fragment",
@@ -88,7 +88,7 @@ ext.libs = [
                 'appdistributionApi'      : "com.google.firebase:firebase-appdistribution-api-ktx:$appDistribution",
                 'appdistribution'         : "com.google.firebase:firebase-appdistribution:$appDistribution",
                 // Phone number https://github.com/google/libphonenumber
-                'phonenumber'             : "com.googlecode.libphonenumber:libphonenumber:8.13.5"
+                'phonenumber'             : "com.googlecode.libphonenumber:libphonenumber:8.13.6"
         ],
         dagger      : [
                 'dagger'                  : "com.google.dagger:dagger:$dagger",
@@ -103,7 +103,7 @@ ext.libs = [
         ],
         element     : [
                 'opusencoder'             : "io.element.android:opusencoder:1.1.0",
-                'wysiwyg'                 : "io.element.android:wysiwyg:0.23.0"
+                'wysiwyg'                 : "io.element.android:wysiwyg:1.0.0"
         ],
         squareup    : [
                 'moshi'                  : "com.squareup.moshi:moshi:$moshi",

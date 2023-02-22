@@ -44,7 +44,7 @@ interface AuthenticationService {
     /**
      * Get a SSO url.
      */
-    fun getSsoUrl(redirectUrl: String, deviceId: String?, providerId: String?): String?
+    fun getSsoUrl(redirectUrl: String, deviceId: String?, providerId: String?, action: SSOAction): String?
 
     /**
      * Get the sign in or sign up fallback URL.

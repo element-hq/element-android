@@ -24,6 +24,8 @@ import android.view.ViewGroup
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import androidx.core.view.marginBottom
+import androidx.core.view.marginTop
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -46,17 +48,25 @@ import im.vector.app.core.extensions.addChildFragment
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.core.utils.DimensionConverter
+import im.vector.app.core.utils.PERMISSIONS_FOR_FOREGROUND_LOCATION_SHARING
+import im.vector.app.core.utils.checkPermissions
+import im.vector.app.core.utils.onPermissionDeniedDialog
 import im.vector.app.core.utils.openLocation
+import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.databinding.FragmentLiveLocationMapViewBinding
 import im.vector.app.features.location.LocationData
 import im.vector.app.features.location.UrlMapProvider
+import im.vector.app.features.location.showUserLocationNotAvailableErrorDialog
 import im.vector.app.features.location.zoomToBounds
 import im.vector.app.features.location.zoomToLocation
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.lang.ref.WeakReference
 import javax.inject.Inject
+
+private const val USER_LOCATION_PIN_ID = "user-location-pin-id"
 
 /**
  * Screen showing a map with all the current users sharing their live location in a room.
@@ -68,6 +78,7 @@ class LiveLocationMapViewFragment :
     @Inject lateinit var urlMapProvider: UrlMapProvider
     @Inject lateinit var bottomSheetController: LiveLocationBottomSheetController
     @Inject lateinit var dimensionConverter: DimensionConverter
+    @Inject lateinit var drawableProvider: DrawableProvider
 
     private val viewModel: LiveLocationMapViewModel by fragmentViewModel()
 
@@ -75,7 +86,7 @@ class LiveLocationMapViewFragment :
     private var mapView: MapView? = null
     private var symbolManager: SymbolManager? = null
     private var mapStyle: Style? = null
-    private val pendingLiveLocations = mutableListOf<UserLiveLocationViewState>()
+    private val userLocationDrawable by lazy { drawableProvider.getDrawable(R.drawable.ic_location_user) }
     private var isMapFirstUpdate = true
     private var onSymbolClickListener: OnSymbolClickListener? = null
     private var mapLoadingErrorListener: MapView.OnDidFailLoadingMapListener? = null
@@ -88,6 +99,7 @@ class LiveLocationMapViewFragment :
         super.onViewCreated(view, savedInstanceState)
         observeViewEvents()
         setupMap()
+        initLocateButton()
 
         views.liveLocationBottomSheetRecyclerView.configureWith(bottomSheetController, hasFixedSize = false, disableItemAnimation = true)
 
@@ -105,8 +117,20 @@ class LiveLocationMapViewFragment :
     private fun observeViewEvents() {
         viewModel.observeViewEvents { viewEvent ->
             when (viewEvent) {
-                is LiveLocationMapViewEvents.Error -> displayErrorDialog(viewEvent.error)
+                is LiveLocationMapViewEvents.LiveLocationError -> displayErrorDialog(viewEvent.error)
+                is LiveLocationMapViewEvents.ZoomToUserLocation -> handleZoomToUserLocationEvent(viewEvent)
+                LiveLocationMapViewEvents.UserLocationNotAvailableError -> handleUserLocationNotAvailableError()
             }
+        }
+    }
+
+    private fun handleZoomToUserLocationEvent(event: LiveLocationMapViewEvents.ZoomToUserLocation) {
+        mapboxMap?.get().zoomToLocation(event.userLocation)
+    }
+
+    private fun handleUserLocationNotAvailableError() {
+        showUserLocationNotAvailableErrorDialog {
+            // do nothing
         }
     }
 
@@ -139,11 +163,30 @@ class LiveLocationMapViewFragment :
                             true
                         }.also { addClickListener(it) }
                     }
-                    pendingLiveLocations
-                            .takeUnless { it.isEmpty() }
-                            ?.let { updateMap(it) }
+                    // force refresh of the map using the last viewState
+                    invalidate()
                 }
             }
+        }
+    }
+
+    private fun initLocateButton() {
+        views.liveLocationMapLocateButton.setOnClickListener {
+            if (checkPermissions(PERMISSIONS_FOR_FOREGROUND_LOCATION_SHARING, requireActivity(), foregroundLocationResultLauncher)) {
+                zoomToUserLocation()
+            }
+        }
+    }
+
+    private fun zoomToUserLocation() {
+        viewModel.handle(LiveLocationMapAction.ZoomToUserLocation)
+    }
+
+    private val foregroundLocationResultLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
+        if (allGranted) {
+            zoomToUserLocation()
+        } else if (deniedPermanently) {
+            activity?.onPermissionDeniedDialog(R.string.denied_permission_generic)
         }
     }
 
@@ -189,9 +232,15 @@ class LiveLocationMapViewFragment :
             views.mapPreviewLoadingError.isVisible = true
         } else {
             views.mapPreviewLoadingError.isGone = true
-            updateMap(viewState.userLocations)
+            updateMap(userLiveLocations = viewState.userLocations, userLocation = viewState.lastKnownUserLocation)
+        }
+        if (viewState.isLoadingUserLocation) {
+            showLoadingDialog()
+        } else {
+            dismissLoadingDialog()
         }
         updateUserListBottomSheet(viewState.userLocations)
+        updateLocateButton(showLocateButton = viewState.showLocateUserButton)
     }
 
     private fun updateUserListBottomSheet(userLocations: List<UserLiveLocationViewState>) {
@@ -236,7 +285,24 @@ class LiveLocationMapViewFragment :
         }
     }
 
-    private fun updateMap(userLiveLocations: List<UserLiveLocationViewState>) {
+    private fun updateLocateButton(showLocateButton: Boolean) {
+        views.liveLocationMapLocateButton.isVisible = showLocateButton
+        adjustCompassButton()
+    }
+
+    private fun adjustCompassButton() {
+        val locateButton = views.liveLocationMapLocateButton
+        locateButton.post {
+            val marginTop = locateButton.height + locateButton.marginTop + locateButton.marginBottom
+            val marginRight = locateButton.context.resources.getDimensionPixelOffset(R.dimen.location_sharing_compass_button_margin_horizontal)
+            mapboxMap?.get()?.uiSettings?.setCompassMargins(0, marginTop, marginRight, 0)
+        }
+    }
+
+    private fun updateMap(
+            userLiveLocations: List<UserLiveLocationViewState>,
+            userLocation: LocationData?,
+    ) {
         symbolManager?.let { sManager ->
             val latLngBoundsBuilder = LatLngBounds.Builder()
             userLiveLocations.forEach { userLocation ->
@@ -249,28 +315,60 @@ class LiveLocationMapViewFragment :
 
             removeOutdatedSymbols(userLiveLocations, sManager)
             updateMapZoomWhenNeeded(userLiveLocations, latLngBoundsBuilder)
-        } ?: postponeUpdateOfMap(userLiveLocations)
-    }
-
-    private fun createOrUpdateSymbol(userLocation: UserLiveLocationViewState, symbolManager: SymbolManager) = withState(viewModel) { state ->
-        val symbolId = state.mapSymbolIds[userLocation.matrixItem.id]
-
-        if (symbolId == null || symbolManager.annotations.get(symbolId) == null) {
-            createSymbol(userLocation, symbolManager)
-        } else {
-            updateSymbol(symbolId, userLocation, symbolManager)
+            if (userLocation == null) {
+                removeUserSymbol(sManager)
+            } else {
+                createOrUpdateUserSymbol(userLocation, sManager)
+            }
         }
     }
 
-    private fun createSymbol(userLocation: UserLiveLocationViewState, symbolManager: SymbolManager) {
-        addUserPinToMapStyle(userLocation.matrixItem.id, userLocation.pinDrawable)
-        val symbolOptions = buildSymbolOptions(userLocation)
-        val symbol = symbolManager.create(symbolOptions)
-        viewModel.handle(LiveLocationMapAction.AddMapSymbol(userLocation.matrixItem.id, symbol.id))
+    private fun createOrUpdateSymbol(userLocation: UserLiveLocationViewState, symbolManager: SymbolManager) {
+        val pinId = userLocation.matrixItem.id
+        val pinDrawable = userLocation.pinDrawable
+        createOrUpdateSymbol(pinId, pinDrawable, userLocation.locationData, symbolManager)
     }
 
-    private fun updateSymbol(symbolId: Long, userLocation: UserLiveLocationViewState, symbolManager: SymbolManager) {
-        val newLocation = LatLng(userLocation.locationData.latitude, userLocation.locationData.longitude)
+    private fun createOrUpdateUserSymbol(locationData: LocationData, symbolManager: SymbolManager) {
+        userLocationDrawable?.let { pinDrawable -> createOrUpdateSymbol(USER_LOCATION_PIN_ID, pinDrawable, locationData, symbolManager) }
+    }
+
+    private fun removeUserSymbol(symbolManager: SymbolManager) = withState(viewModel) { state ->
+        val pinId = USER_LOCATION_PIN_ID
+        state.mapSymbolIds[pinId]?.let { symbolId ->
+            removeSymbol(pinId, symbolId, symbolManager)
+        }
+    }
+
+    private fun createOrUpdateSymbol(
+            pinId: String,
+            pinDrawable: Drawable,
+            locationData: LocationData,
+            symbolManager: SymbolManager
+    ) = withState(viewModel) { state ->
+        val symbolId = state.mapSymbolIds[pinId]
+
+        if (symbolId == null || symbolManager.annotations.get(symbolId) == null) {
+            createSymbol(pinId, pinDrawable, locationData, symbolManager)
+        } else {
+            updateSymbol(symbolId, locationData, symbolManager)
+        }
+    }
+
+    private fun createSymbol(
+            pinId: String,
+            pinDrawable: Drawable,
+            locationData: LocationData,
+            symbolManager: SymbolManager
+    ) {
+        addPinToMapStyle(pinId, pinDrawable)
+        val symbolOptions = buildSymbolOptions(locationData, pinId)
+        val symbol = symbolManager.create(symbolOptions)
+        viewModel.handle(LiveLocationMapAction.AddMapSymbol(pinId, symbol.id))
+    }
+
+    private fun updateSymbol(symbolId: Long, locationData: LocationData, symbolManager: SymbolManager) {
+        val newLocation = LatLng(locationData.latitude, locationData.longitude)
         val symbol = symbolManager.annotations.get(symbolId)
         symbol?.let {
             it.latLng = newLocation
@@ -279,17 +377,11 @@ class LiveLocationMapViewFragment :
     }
 
     private fun removeOutdatedSymbols(userLiveLocations: List<UserLiveLocationViewState>, symbolManager: SymbolManager) = withState(viewModel) { state ->
-        val userIdsToRemove = state.mapSymbolIds.keys.subtract(userLiveLocations.map { it.matrixItem.id }.toSet())
-        userIdsToRemove.forEach { userId ->
-            removeUserPinFromMapStyle(userId)
-            viewModel.handle(LiveLocationMapAction.RemoveMapSymbol(userId))
-
-            state.mapSymbolIds[userId]?.let { symbolId ->
-                Timber.d("trying to delete symbol with id: $symbolId")
-                symbolManager.annotations.get(symbolId)?.let {
-                    symbolManager.delete(it)
-                }
-            }
+        val pinIdsToKeep = userLiveLocations.map { it.matrixItem.id } + USER_LOCATION_PIN_ID
+        val pinIdsToRemove = state.mapSymbolIds.keys.subtract(pinIdsToKeep.toSet())
+        pinIdsToRemove.forEach { pinId ->
+            val symbolId = state.mapSymbolIds[pinId]
+            removeSymbol(pinId, symbolId, symbolManager)
         }
     }
 
@@ -304,27 +396,35 @@ class LiveLocationMapViewFragment :
         }
     }
 
-    private fun postponeUpdateOfMap(userLiveLocations: List<UserLiveLocationViewState>) {
-        pendingLiveLocations.clear()
-        pendingLiveLocations.addAll(userLiveLocations)
-    }
-
-    private fun addUserPinToMapStyle(userId: String, userPinDrawable: Drawable) {
+    private fun addPinToMapStyle(pinId: String, pinDrawable: Drawable) {
         mapStyle?.let { style ->
-            if (style.getImage(userId) == null) {
-                style.addImage(userId, userPinDrawable.toBitmap())
+            if (style.getImage(pinId) == null) {
+                style.addImage(pinId, pinDrawable.toBitmap())
             }
         }
     }
 
-    private fun removeUserPinFromMapStyle(userId: String) {
-        mapStyle?.removeImage(userId)
+    private fun removeSymbol(pinId: String, symbolId: Long?, symbolManager: SymbolManager) {
+        removeUserPinFromMapStyle(pinId)
+
+        symbolId?.let { id ->
+            Timber.d("trying to delete symbol with id: $id")
+            symbolManager.annotations.get(id)?.let {
+                symbolManager.delete(it)
+            }
+        }
+
+        viewModel.handle(LiveLocationMapAction.RemoveMapSymbol(pinId))
     }
 
-    private fun buildSymbolOptions(userLiveLocation: UserLiveLocationViewState) =
+    private fun removeUserPinFromMapStyle(pinId: String) {
+        mapStyle?.removeImage(pinId)
+    }
+
+    private fun buildSymbolOptions(locationData: LocationData, pinId: String) =
             SymbolOptions()
-                    .withLatLng(LatLng(userLiveLocation.locationData.latitude, userLiveLocation.locationData.longitude))
-                    .withIconImage(userLiveLocation.matrixItem.id)
+                    .withLatLng(LatLng(locationData.latitude, locationData.longitude))
+                    .withIconImage(pinId)
                     .withIconAnchor(Property.ICON_ANCHOR_BOTTOM)
 
     private fun handleBottomSheetUserSelected(userId: String) = withState(viewModel) { state ->

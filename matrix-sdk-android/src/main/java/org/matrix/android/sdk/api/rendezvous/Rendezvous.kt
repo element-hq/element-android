@@ -26,8 +26,11 @@ import org.matrix.android.sdk.api.rendezvous.model.Outcome
 import org.matrix.android.sdk.api.rendezvous.model.Payload
 import org.matrix.android.sdk.api.rendezvous.model.PayloadType
 import org.matrix.android.sdk.api.rendezvous.model.Protocol
+import org.matrix.android.sdk.api.rendezvous.model.RendezvousCode
 import org.matrix.android.sdk.api.rendezvous.model.RendezvousError
 import org.matrix.android.sdk.api.rendezvous.model.RendezvousIntent
+import org.matrix.android.sdk.api.rendezvous.model.RendezvousTransportType
+import org.matrix.android.sdk.api.rendezvous.model.SecureRendezvousChannelAlgorithm
 import org.matrix.android.sdk.api.rendezvous.transports.SimpleHttpRendezvousTransport
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
@@ -53,18 +56,37 @@ class Rendezvous(
 
         @Throws(RendezvousError::class)
         fun buildChannelFromCode(code: String): Rendezvous {
-            val parsed = try {
-                // we rely on moshi validating the code and throwing exception if invalid JSON or doesn't
+            // we first check that the code is valid JSON and has right high-level structure
+            val genericParsed = try {
+                // we rely on moshi validating the code and throwing exception if invalid JSON or algorithm doesn't match
+                MatrixJsonParser.getMoshi().adapter(RendezvousCode::class.java).fromJson(code)
+            } catch (a: Throwable) {
+                throw RendezvousError("Malformed code", RendezvousFailureReason.InvalidCode)
+            } ?: throw RendezvousError("Code is null", RendezvousFailureReason.InvalidCode)
+
+            // then we check that algorithm is supported
+            if (!SecureRendezvousChannelAlgorithm.values().map { it.value }.contains(genericParsed.rendezvous.algorithm)) {
+                throw RendezvousError("Unsupported algorithm", RendezvousFailureReason.UnsupportedAlgorithm)
+            }
+
+            // and, that the transport is supported
+            if (!RendezvousTransportType.values().map { it.value }.contains(genericParsed.rendezvous.transport.type)) {
+                throw RendezvousError("Unsupported transport", RendezvousFailureReason.UnsupportedTransport)
+            }
+
+            // now that we know the overall structure looks sensible, we rely on moshi validating the code and
+            // throwing exception if other parts are invalid
+            val supportedParsed = try {
                 MatrixJsonParser.getMoshi().adapter(ECDHRendezvousCode::class.java).fromJson(code)
             } catch (a: Throwable) {
-                throw RendezvousError("Invalid code", RendezvousFailureReason.InvalidCode)
-            } ?: throw RendezvousError("Invalid code", RendezvousFailureReason.InvalidCode)
+                throw RendezvousError("Malformed ECDH rendezvous code", RendezvousFailureReason.InvalidCode)
+            } ?: throw RendezvousError("ECDH rendezvous code is null", RendezvousFailureReason.InvalidCode)
 
-            val transport = SimpleHttpRendezvousTransport(parsed.rendezvous.transport.uri)
+            val transport = SimpleHttpRendezvousTransport(supportedParsed.rendezvous.transport.uri)
 
             return Rendezvous(
-                    ECDHRendezvousChannel(transport, parsed.rendezvous.key),
-                    parsed.intent
+                    ECDHRendezvousChannel(transport, supportedParsed.rendezvous.algorithm, supportedParsed.rendezvous.key),
+                    supportedParsed.intent
             )
         }
     }

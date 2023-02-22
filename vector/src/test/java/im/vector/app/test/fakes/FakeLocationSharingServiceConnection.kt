@@ -17,10 +17,8 @@
 package im.vector.app.test.fakes
 
 import im.vector.app.features.location.live.tracking.LocationSharingServiceConnection
-import io.mockk.every
-import io.mockk.just
+import io.mockk.justRun
 import io.mockk.mockk
-import io.mockk.runs
 import io.mockk.verify
 
 class FakeLocationSharingServiceConnection {
@@ -28,10 +26,18 @@ class FakeLocationSharingServiceConnection {
     val instance = mockk<LocationSharingServiceConnection>()
 
     fun givenBind() {
-        every { instance.bind(any()) } just runs
+        justRun { instance.bind(any()) }
     }
 
     fun verifyBind(callback: LocationSharingServiceConnection.Callback) {
         verify { instance.bind(callback) }
+    }
+
+    fun givenUnbind() {
+        justRun { instance.unbind(any()) }
+    }
+
+    fun verifyUnbind(callback: LocationSharingServiceConnection.Callback) {
+        verify { instance.unbind(callback) }
     }
 }

@@ -1063,6 +1063,9 @@
     <string name="settings_discovery_category">Discovery</string>
     <string name="settings_discovery_manage">Manage your discovery settings.</string>
 
+    <string name="settings_external_account_management_title">Account</string>
+    <string name="settings_external_account_management">Your account details are managed separately at %1$s.</string>
+
     <!-- analytics -->
     <string name="settings_analytics">Analytics</string>
     <string name="settings_opt_in_of_analytics">Send analytics data</string>
@@ -1820,7 +1823,7 @@
     <!-- Terms -->
     <string name="terms_of_service">Terms of Service</string>
     <string name="terms_description_for_identity_server">Be discoverable by others</string>
-    <string name="terms_description_for_integration_manager">Use Bots, bridges, widgets and sticker packs</string>
+    <string name="terms_description_for_integration_manager">Use bots, bridges, widgets and sticker packs</string>
 
     <string name="identity_server">Identity server</string>
     <string name="disconnect_identity_server">Disconnect identity server</string>
@@ -3208,6 +3211,7 @@
     <string name="room_polls_wait_for_display">Displaying polls</string>
     <string name="room_polls_load_more">Load more polls</string>
     <string name="room_polls_loading_error">Error fetching polls.</string>
+    <string name="room_poll_details_go_to_timeline">View poll in timeline</string>
 
     <!-- Location -->
     <string name="location_activity_title_static_sharing">Share location</string>
@@ -3503,7 +3507,11 @@
     <string name="rich_text_editor_link">Set link</string>
     <string name="rich_text_editor_numbered_list">Toggle numbered list</string>
     <string name="rich_text_editor_bullet_list">Toggle bullet list</string>
+    <string name="rich_text_editor_indent">Indent</string>
+    <string name="rich_text_editor_unindent">Unindent</string>
+    <string name="rich_text_editor_quote">Toggle quote</string>
     <string name="rich_text_editor_inline_code">Apply inline code format</string>
+    <string name="rich_text_editor_code_block">Toggle code block</string>
     <string name="rich_text_editor_full_screen_toggle">Toggle full screen mode</string>
 
     <string name="set_link_text">Text</string>

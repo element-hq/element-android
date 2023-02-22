@@ -13,7 +13,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:mapbox_renderTextureMode="true"
-        app:showLocateButton="false" />
+        app:showLocateButton="true" />
 
     <im.vector.app.features.location.MapLoadingErrorView
         android:id="@+id/mapPreviewLoadingError"

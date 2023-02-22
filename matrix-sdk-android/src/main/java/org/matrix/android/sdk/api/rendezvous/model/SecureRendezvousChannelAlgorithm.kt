@@ -22,5 +22,7 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = false)
 enum class SecureRendezvousChannelAlgorithm(val value: String) {
     @Json(name = "org.matrix.msc3903.rendezvous.v1.curve25519-aes-sha256")
-    ECDH_V1("org.matrix.msc3903.rendezvous.v1.curve25519-aes-sha256")
+    ECDH_V1("org.matrix.msc3903.rendezvous.v1.curve25519-aes-sha256"),
+    @Json(name = "org.matrix.msc3903.rendezvous.v2.curve25519-aes-sha256")
+    ECDH_V2("org.matrix.msc3903.rendezvous.v2.curve25519-aes-sha256")
 }

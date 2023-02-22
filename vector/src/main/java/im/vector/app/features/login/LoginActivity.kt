@@ -46,6 +46,7 @@ import im.vector.app.features.login.terms.LoginTermsFragmentArgument
 import im.vector.app.features.onboarding.AuthenticationDescription
 import im.vector.app.features.pin.UnlockedActivity
 import im.vector.lib.core.utils.compat.getParcelableExtraCompat
+import org.matrix.android.sdk.api.auth.SSOAction
 import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.Stage
 import org.matrix.android.sdk.api.auth.toLocalizedLoginTerms
@@ -300,6 +301,7 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
                 redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                 deviceId = state.deviceId,
                 providerId = null,
+                action = SSOAction.LOGIN
         )?.let { ssoUrl ->
             openUrlInChromeCustomTab(this, null, ssoUrl)
         }

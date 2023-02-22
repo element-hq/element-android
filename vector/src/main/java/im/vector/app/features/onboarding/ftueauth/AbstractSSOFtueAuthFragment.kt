@@ -27,6 +27,8 @@ import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.features.login.SSORedirectRouterActivity
 import im.vector.app.features.login.hasSso
 import im.vector.app.features.login.ssoState
+import im.vector.app.features.onboarding.OnboardingFlow
+import org.matrix.android.sdk.api.auth.SSOAction
 
 abstract class AbstractSSOFtueAuthFragment<VB : ViewBinding> : AbstractFtueAuthFragment<VB>() {
 
@@ -93,7 +95,8 @@ abstract class AbstractSSOFtueAuthFragment<VB : ViewBinding> : AbstractFtueAuthF
                 viewModel.fetchSsoUrl(
                         redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                         deviceId = state.deviceId,
-                        provider = null
+                        provider = null,
+                        action = if (state.onboardingFlow == OnboardingFlow.SignUp) SSOAction.REGISTER else SSOAction.LOGIN
                 )
                         ?.let { prefetchUrl(it) }
             }

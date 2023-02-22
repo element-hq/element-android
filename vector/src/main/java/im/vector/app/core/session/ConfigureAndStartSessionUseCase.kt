@@ -20,6 +20,7 @@ import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
 import im.vector.app.core.extensions.startSyncing
 import im.vector.app.core.notification.NotificationsSettingUpdater
+import im.vector.app.core.notification.PushRulesUpdater
 import im.vector.app.core.session.clientinfo.UpdateMatrixClientInfoUseCase
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.session.coroutineScope
@@ -37,6 +38,7 @@ class ConfigureAndStartSessionUseCase @Inject constructor(
         private val vectorPreferences: VectorPreferences,
         private val notificationsSettingUpdater: NotificationsSettingUpdater,
         private val updateNotificationSettingsAccountDataUseCase: UpdateNotificationSettingsAccountDataUseCase,
+        private val pushRulesUpdater: PushRulesUpdater,
 ) {
 
     fun execute(session: Session, startSyncing: Boolean = true) {
@@ -50,6 +52,7 @@ class ConfigureAndStartSessionUseCase @Inject constructor(
         updateMatrixClientInfoIfNeeded(session)
         createNotificationSettingsAccountDataIfNeeded(session)
         notificationsSettingUpdater.onSessionStarted(session)
+        pushRulesUpdater.onSessionStarted(session)
     }
 
     private fun updateMatrixClientInfoIfNeeded(session: Session) {

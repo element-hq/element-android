@@ -41,7 +41,6 @@ import im.vector.app.features.VectorFeatures
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.SSORedirectRouterActivity
 import im.vector.app.features.login.SocialLoginButtonsView
-import im.vector.app.features.login.SsoState
 import im.vector.app.features.login.qr.QrCodeLoginArgs
 import im.vector.app.features.login.qr.QrCodeLoginType
 import im.vector.app.features.login.render
@@ -50,6 +49,7 @@ import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewState
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
+import org.matrix.android.sdk.api.auth.SSOAction
 import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
@@ -153,11 +153,11 @@ class FtueAuthCombinedLoginFragment :
         when (state.selectedHomeserver.preferredLoginMode) {
             is LoginMode.SsoAndPassword -> {
                 showUsernamePassword()
-                renderSsoProviders(state.deviceId, state.selectedHomeserver.preferredLoginMode.ssoState)
+                renderSsoProviders(state.deviceId, state.selectedHomeserver.preferredLoginMode)
             }
             is LoginMode.Sso -> {
                 hideUsernamePassword()
-                renderSsoProviders(state.deviceId, state.selectedHomeserver.preferredLoginMode.ssoState)
+                renderSsoProviders(state.deviceId, state.selectedHomeserver.preferredLoginMode)
             }
             else -> {
                 showUsernamePassword()
@@ -166,14 +166,15 @@ class FtueAuthCombinedLoginFragment :
         }
     }
 
-    private fun renderSsoProviders(deviceId: String?, ssoState: SsoState) {
+    private fun renderSsoProviders(deviceId: String?, loginMode: LoginMode) {
         views.ssoGroup.isVisible = true
         views.ssoButtonsHeader.isVisible = isUsernameAndPasswordVisible()
-        views.ssoButtons.render(ssoState, SocialLoginButtonsView.Mode.MODE_CONTINUE) { id ->
+        views.ssoButtons.render(loginMode, SocialLoginButtonsView.Mode.MODE_CONTINUE) { id ->
             viewModel.fetchSsoUrl(
                     redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                     deviceId = deviceId,
-                    provider = id
+                    provider = id,
+                    action = SSOAction.LOGIN
             )?.let { openInCustomTab(it) }
         }
     }

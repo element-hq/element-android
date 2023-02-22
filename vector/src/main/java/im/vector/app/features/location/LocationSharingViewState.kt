@@ -47,7 +47,7 @@ data class LocationSharingViewState(
 
 fun LocationSharingViewState.toMapState() = MapState(
         zoomOnlyOnce = true,
-        userLocationData = lastKnownUserLocation,
+        pinLocationData = lastKnownUserLocation,
         pinId = DEFAULT_PIN_ID,
         pinDrawable = null,
         // show the map pin only when target location and user location are not equal

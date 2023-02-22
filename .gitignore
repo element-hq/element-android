@@ -5,6 +5,7 @@
 .idea/caches
 .idea/libraries
 .idea/inspectionProfiles
+.idea/sonarlint
 .idea/*.xml
 .DS_Store
 /build
