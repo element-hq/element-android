@@ -2891,7 +2891,7 @@
     <string name="thread_list_not_available">Sinu koduserver veel ei toeta jutulõngade loendit.</string>
     <string name="started_a_voice_broadcast">Alustasime ringhäälingukõnega</string>
     <string name="error_voice_broadcast_unable_to_play">Selle ringhäälingukõne esitamine ei õnnestu.</string>
-    <string name="unable_to_decrypt_some_events_in_poll">Krüptimisvigade tõttu jääb osa hääli lugemata</string>
+    <string name="unable_to_decrypt_some_events_in_poll">Dekrüptimisvigade tõttu jääb osa hääli lugemata</string>
     <plurals name="room_polls_active_no_item_for_loaded_period">
         <item quantity="one">Möödunud päevas polnud ühtegi toimumas olnud küsitlust.
 \nVarasemate päevade vaatamiseks laadi veel küsitlusi.</item>
