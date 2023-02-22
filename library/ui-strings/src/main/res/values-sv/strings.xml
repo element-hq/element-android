@@ -326,7 +326,7 @@
 \nLägg till några nu\?</string>
     <string name="error_no_external_application_found">Tyvärr har ingen extern applikation hittats som kan fullfölja denna handling.</string>
     <string name="auth_login">Logga in</string>
-    <string name="auth_login_sso">Logga in med externt konto</string>
+    <string name="auth_login_sso">Logga in med samlad inloggning</string>
     <string name="auth_submit">Skicka in</string>
     <string name="auth_invalid_login_param">Fel användarnamn och/eller lösenord</string>
     <string name="auth_invalid_email">Det här ser inte ut som en giltig e-postadress</string>
@@ -1820,7 +1820,7 @@
     <string name="command_snow">Skickar det givna meddelandet med snöfall</string>
     <string name="command_confetti">Skickar de givna meddelandet med konfetti</string>
     <string name="login_clear_homeserver_history">Rensa historik</string>
-    <string name="login_social_sso">externt konto</string>
+    <string name="login_social_sso">samlad inloggning</string>
     <string name="login_social_signin_with">Logga in med %s</string>
     <string name="login_social_signup_with">Skapa konto med %s</string>
     <string name="login_social_continue_with">Fortsätt med %s</string>
