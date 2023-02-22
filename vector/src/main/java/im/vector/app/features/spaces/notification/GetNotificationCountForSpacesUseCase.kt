@@ -32,7 +32,6 @@ import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
 import javax.inject.Inject
 
-// TODO add unit tests
 class GetNotificationCountForSpacesUseCase @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
         private val autoAcceptInvites: AutoAcceptInvites,
@@ -64,7 +63,7 @@ class GetNotificationCountForSpacesUseCase @Inject constructor(
                             highlightCount = totalCount.highlightCount + inviteCount,
                     )
                 }
-                ?.flowOn(Dispatchers.Default)
+                ?.flowOn(session.coroutineDispatchers.main)
                 ?: emptyFlow()
     }
 }
