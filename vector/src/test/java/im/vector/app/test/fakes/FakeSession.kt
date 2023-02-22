@@ -41,10 +41,11 @@ class FakeSession(
         val fakeHomeServerCapabilitiesService: FakeHomeServerCapabilitiesService = FakeHomeServerCapabilitiesService(),
         val fakeSharedSecretStorageService: FakeSharedSecretStorageService = FakeSharedSecretStorageService(),
         val fakeRoomService: FakeRoomService = FakeRoomService(),
+        val fakePushRuleService: FakePushRuleService = FakePushRuleService(),
         val fakePushersService: FakePushersService = FakePushersService(),
         val fakeUserService: FakeUserService = FakeUserService(),
         private val fakeEventService: FakeEventService = FakeEventService(),
-        val fakeSessionAccountDataService: FakeSessionAccountDataService = FakeSessionAccountDataService()
+        val fakeSessionAccountDataService: FakeSessionAccountDataService = FakeSessionAccountDataService(),
 ) : Session by mockk(relaxed = true) {
 
     init {
@@ -61,6 +62,7 @@ class FakeSession(
     override fun sharedSecretStorageService() = fakeSharedSecretStorageService
     override fun roomService() = fakeRoomService
     override fun eventService() = fakeEventService
+    override fun pushRuleService() = fakePushRuleService
     override fun pushersService() = fakePushersService
     override fun accountDataService() = fakeSessionAccountDataService
     override fun userService() = fakeUserService

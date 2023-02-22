@@ -196,7 +196,7 @@ dependencies {
     implementation 'com.facebook.stetho:stetho-okhttp3:1.6.0'
 
     // Video compression
-    implementation 'com.otaliastudios:transcoder:0.10.4'
+    implementation 'com.otaliastudios:transcoder:0.10.5'
 
     // Exif data handling
     implementation libs.apache.commonsImaging

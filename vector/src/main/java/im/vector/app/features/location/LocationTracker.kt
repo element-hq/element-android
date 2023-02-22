@@ -66,6 +66,8 @@ class LocationTracker @Inject constructor(
     @VisibleForTesting
     var hasLocationFromGPSProvider = false
 
+    private var isStarted = false
+    private var isStarting = false
     private var firstLocationHandled = false
     private val _locations = MutableSharedFlow<Location>(replay = 1)
 
@@ -90,43 +92,48 @@ class LocationTracker @Inject constructor(
 
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
     fun start() {
-        Timber.d("start()")
+        if (!isStarting && !isStarted) {
+            isStarting = true
+            Timber.d("start()")
 
-        if (locationManager == null) {
-            Timber.v("LocationManager is not available")
-            onNoLocationProviderAvailable()
-            return
-        }
+            if (locationManager == null) {
+                Timber.v("LocationManager is not available")
+                onNoLocationProviderAvailable()
+                return
+            }
 
-        val providers = locationManager.allProviders
+            val providers = locationManager.allProviders
 
-        if (providers.isEmpty()) {
-            Timber.v("There is no location provider available")
-            onNoLocationProviderAvailable()
-        } else {
-            // Take GPS first
-            providers.sortedByDescending(::getProviderPriority)
-                    .mapNotNull { provider ->
-                        Timber.d("track location using $provider")
+            if (providers.isEmpty()) {
+                Timber.v("There is no location provider available")
+                onNoLocationProviderAvailable()
+            } else {
+                // Take GPS first
+                providers.sortedByDescending(::getProviderPriority)
+                        .mapNotNull { provider ->
+                            Timber.d("track location using $provider")
 
-                        locationManager.requestLocationUpdates(
-                                provider,
-                                minDurationToUpdateLocationMillis,
-                                MIN_DISTANCE_TO_UPDATE_LOCATION_METERS,
-                                this
-                        )
+                            locationManager.requestLocationUpdates(
+                                    provider,
+                                    minDurationToUpdateLocationMillis,
+                                    MIN_DISTANCE_TO_UPDATE_LOCATION_METERS,
+                                    this
+                            )
 
-                        locationManager.getLastKnownLocation(provider)
-                    }
-                    .maxByOrNull { location -> location.time }
-                    ?.let { latestKnownLocation ->
-                        if (buildMeta.lowPrivacyLoggingEnabled) {
-                            Timber.d("lastKnownLocation: $latestKnownLocation")
-                        } else {
-                            Timber.d("lastKnownLocation: ${latestKnownLocation.provider}")
+                            locationManager.getLastKnownLocation(provider)
                         }
-                        notifyLocation(latestKnownLocation)
-                    }
+                        .maxByOrNull { location -> location.time }
+                        ?.let { latestKnownLocation ->
+                            if (buildMeta.lowPrivacyLoggingEnabled) {
+                                Timber.d("lastKnownLocation: $latestKnownLocation")
+                            } else {
+                                Timber.d("lastKnownLocation: ${latestKnownLocation.provider}")
+                            }
+                            notifyLocation(latestKnownLocation)
+                        }
+            }
+            isStarted = true
+            isStarting = false
         }
     }
 
@@ -148,6 +155,8 @@ class LocationTracker @Inject constructor(
         callbacks.clear()
         hasLocationFromGPSProvider = false
         hasLocationFromFusedProvider = false
+        isStarting = false
+        isStarted = false
     }
 
     /**

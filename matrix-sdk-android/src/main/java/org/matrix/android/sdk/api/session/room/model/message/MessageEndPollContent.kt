@@ -33,5 +33,9 @@ data class MessageEndPollContent(
         override val msgType: String = MessageType.MSGTYPE_POLL_END,
         @Json(name = "body") override val body: String = "",
         @Json(name = "m.new_content") override val newContent: Content? = null,
-        @Json(name = "m.relates_to") override val relatesTo: RelationDefaultContent? = null
-) : MessageContent
+        @Json(name = "m.relates_to") override val relatesTo: RelationDefaultContent? = null,
+        @Json(name = "org.matrix.msc1767.text") val unstableText: String? = null,
+        @Json(name = "m.text") val text: String? = null,
+) : MessageContent {
+    fun getBestText() = text ?: unstableText
+}

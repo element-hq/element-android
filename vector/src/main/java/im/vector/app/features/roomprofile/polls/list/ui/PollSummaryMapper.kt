@@ -69,7 +69,9 @@ class PollSummaryMapper @Inject constructor(
                     creationTimestamp = creationTimestamp,
                     title = pollTitle,
                     totalVotes = pollResponseData.totalVotes,
-                    winnerOptions = pollOptionViewStateFactory.createPollEndedOptions(pollCreationInfo, pollResponseData)
+                    winnerOptions = pollOptionViewStateFactory
+                            .createPollEndedOptions(pollCreationInfo, pollResponseData)
+                            .filter { it.isWinner },
             )
         } else {
             PollSummary.ActivePoll(

@@ -4,6 +4,8 @@ on:
   pull_request: { }
   push:
     branches: [ main, develop ]
+    paths-ignore:
+      - '.github/**'
 
 # Enrich gradle.properties for CI/CD
 env:

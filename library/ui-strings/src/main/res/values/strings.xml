@@ -1823,7 +1823,7 @@
     <!-- Terms -->
     <string name="terms_of_service">Terms of Service</string>
     <string name="terms_description_for_identity_server">Be discoverable by others</string>
-    <string name="terms_description_for_integration_manager">Use Bots, bridges, widgets and sticker packs</string>
+    <string name="terms_description_for_integration_manager">Use bots, bridges, widgets and sticker packs</string>
 
     <string name="identity_server">Identity server</string>
     <string name="disconnect_identity_server">Disconnect identity server</string>
@@ -3211,6 +3211,7 @@
     <string name="room_polls_wait_for_display">Displaying polls</string>
     <string name="room_polls_load_more">Load more polls</string>
     <string name="room_polls_loading_error">Error fetching polls.</string>
+    <string name="room_poll_details_go_to_timeline">View poll in timeline</string>
 
     <!-- Location -->
     <string name="location_activity_title_static_sharing">Share location</string>
