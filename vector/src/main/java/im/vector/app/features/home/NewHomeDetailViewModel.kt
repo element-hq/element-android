@@ -34,7 +34,6 @@ import org.matrix.android.sdk.api.query.SpaceFilter
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.spaceSummaryQueryParams
 
-// TODO add unit tests
 class NewHomeDetailViewModel @AssistedInject constructor(
         @Assisted initialState: NewHomeDetailViewState,
         private val getNotificationCountForSpacesUseCase: GetNotificationCountForSpacesUseCase,
