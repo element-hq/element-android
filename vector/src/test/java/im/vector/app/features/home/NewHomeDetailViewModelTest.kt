@@ -18,7 +18,6 @@ package im.vector.app.features.home
 
 import com.airbnb.mvrx.test.MavericksTestRule
 import im.vector.app.features.home.room.list.UnreadCounterBadgeView
-import im.vector.app.features.spaces.GetSpacesUseCase
 import im.vector.app.test.test
 import io.mockk.every
 import io.mockk.mockk
