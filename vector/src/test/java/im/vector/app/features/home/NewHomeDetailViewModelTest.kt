@@ -17,8 +17,8 @@
 package im.vector.app.features.home
 
 import com.airbnb.mvrx.test.MavericksTestRule
+import im.vector.app.features.home.room.list.UnreadCounterBadgeView
 import im.vector.app.features.spaces.GetSpacesUseCase
-import im.vector.app.features.spaces.notification.GetNotificationCountForSpacesUseCase
 import im.vector.app.test.test
 import io.mockk.every
 import io.mockk.mockk
@@ -27,10 +27,6 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.junit.Rule
 import org.junit.Test
-import org.matrix.android.sdk.api.query.SpaceFilter
-import org.matrix.android.sdk.api.session.room.model.Membership
-import org.matrix.android.sdk.api.session.room.model.RoomSummary
-import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
 
 internal class NewHomeDetailViewModelTest {
 
@@ -38,43 +34,34 @@ internal class NewHomeDetailViewModelTest {
     val mavericksTestRule = MavericksTestRule(testDispatcher = UnconfinedTestDispatcher())
 
     private val initialState = NewHomeDetailViewState()
-    private val fakeGetNotificationCountForSpacesUseCase = mockk<GetNotificationCountForSpacesUseCase>()
-    private val fakeGetSpacesUseCase = mockk<GetSpacesUseCase>()
+    private val fakeGetSpacesNotificationBadgeStateUseCase = mockk<GetSpacesNotificationBadgeStateUseCase>()
 
     private fun createViewModel(): NewHomeDetailViewModel {
         return NewHomeDetailViewModel(
                 initialState = initialState,
-                getNotificationCountForSpacesUseCase = fakeGetNotificationCountForSpacesUseCase,
-                getSpacesUseCase = fakeGetSpacesUseCase,
+                getSpacesNotificationBadgeStateUseCase = fakeGetSpacesNotificationBadgeStateUseCase,
         )
     }
 
     @Test
-    fun `given the viewModel is created then viewState is updated with space notifications count and pending space invites`() {
+    fun `given the viewModel is created then viewState is updated with space notifications badge state`() {
         // Given
-        val spacesNotificationCount = RoomAggregateNotificationCount(
-                notificationCount = 1,
-                highlightCount = 1,
-        )
-        every { fakeGetNotificationCountForSpacesUseCase.execute(any()) } returns flowOf(spacesNotificationCount)
-        val spaceInvites = listOf<RoomSummary>(mockk())
-        every { fakeGetSpacesUseCase.execute(any()) } returns flowOf(spaceInvites)
-        val expectedViewState = initialState.copy(
-                spacesNotificationCount = spacesNotificationCount,
-                hasPendingSpaceInvites = true,
-        )
+        val aBadgeState = UnreadCounterBadgeView.State.Count(count = 1, highlighted = false)
+        every { fakeGetSpacesNotificationBadgeStateUseCase.execute() } returns flowOf(aBadgeState)
 
         // When
         val viewModel = createViewModel()
         val viewModelTest = viewModel.test()
 
         // Then
+        val expectedViewState = initialState.copy(
+                spacesNotificationCounterBadgeState = aBadgeState,
+        )
         viewModelTest
                 .assertLatestState(expectedViewState)
                 .finish()
         verify {
-            fakeGetNotificationCountForSpacesUseCase.execute(SpaceFilter.NoFilter)
-            fakeGetSpacesUseCase.execute(match { it.memberships == listOf(Membership.INVITE) })
+            fakeGetSpacesNotificationBadgeStateUseCase.execute()
         }
     }
 }

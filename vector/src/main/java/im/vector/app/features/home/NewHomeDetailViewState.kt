@@ -17,9 +17,8 @@
 package im.vector.app.features.home
 
 import com.airbnb.mvrx.MavericksState
-import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
+import im.vector.app.features.home.room.list.UnreadCounterBadgeView
 
 data class NewHomeDetailViewState(
-        val spacesNotificationCount: RoomAggregateNotificationCount = RoomAggregateNotificationCount(notificationCount = 0, highlightCount = 0),
-        val hasPendingSpaceInvites: Boolean = false,
+        val spacesNotificationCounterBadgeState: UnreadCounterBadgeView.State = UnreadCounterBadgeView.State.Count(count = 0, highlighted = false),
 ) : MavericksState

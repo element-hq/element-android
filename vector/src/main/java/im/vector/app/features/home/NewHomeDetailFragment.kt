@@ -64,7 +64,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
-import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -185,7 +184,7 @@ class NewHomeDetailFragment :
                 }
 
         newHomeDetailViewModel.onEach { viewState ->
-            refreshUnreadCounterBadge(viewState.spacesNotificationCount, viewState.hasPendingSpaceInvites)
+            refreshUnreadCounterBadge(viewState.spacesNotificationCounterBadgeState)
         }
     }
 
@@ -386,21 +385,7 @@ class NewHomeDetailFragment :
         }
     }
 
-    private fun refreshUnreadCounterBadge(
-            spacesNotificationCount: RoomAggregateNotificationCount,
-            hasPendingSpaceInvites: Boolean,
-    ) {
-        val badgeState = if (hasPendingSpaceInvites && spacesNotificationCount.notificationCount == 0) {
-            UnreadCounterBadgeView.State.Text(
-                    text = "!",
-                    highlighted = true,
-            )
-        } else {
-            UnreadCounterBadgeView.State.Count(
-                    count = spacesNotificationCount.notificationCount,
-                    highlighted = spacesNotificationCount.isHighlight || hasPendingSpaceInvites,
-            )
-        }
+    private fun refreshUnreadCounterBadge(badgeState: UnreadCounterBadgeView.State) {
         views.spacesUnreadCounterBadge.render(badgeState)
     }
 

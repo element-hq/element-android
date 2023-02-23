@@ -25,19 +25,12 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.spaces.GetSpacesUseCase
-import im.vector.app.features.spaces.notification.GetNotificationCountForSpacesUseCase
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.matrix.android.sdk.api.query.QueryStringValue
-import org.matrix.android.sdk.api.query.SpaceFilter
-import org.matrix.android.sdk.api.session.room.model.Membership
-import org.matrix.android.sdk.api.session.room.spaceSummaryQueryParams
 
 class NewHomeDetailViewModel @AssistedInject constructor(
         @Assisted initialState: NewHomeDetailViewState,
-        private val getNotificationCountForSpacesUseCase: GetNotificationCountForSpacesUseCase,
-        private val getSpacesUseCase: GetSpacesUseCase,
+        private val getSpacesNotificationBadgeStateUseCase: GetSpacesNotificationBadgeStateUseCase,
 ) : VectorViewModel<NewHomeDetailViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
@@ -48,23 +41,12 @@ class NewHomeDetailViewModel @AssistedInject constructor(
     companion object : MavericksViewModelFactory<NewHomeDetailViewModel, NewHomeDetailViewState> by hiltMavericksViewModelFactory()
 
     init {
-        observeSpacesNotificationCount()
-        observeSpacesInvite()
+        observeSpacesNotificationBadgeState()
     }
 
-    private fun observeSpacesNotificationCount() {
-        getNotificationCountForSpacesUseCase.execute(SpaceFilter.NoFilter)
-                .onEach { setState { copy(spacesNotificationCount = it) } }
-                .launchIn(viewModelScope)
-    }
-
-    private fun observeSpacesInvite() {
-        val params = spaceSummaryQueryParams {
-            memberships = listOf(Membership.INVITE)
-            displayName = QueryStringValue.IsNotEmpty
-        }
-        getSpacesUseCase.execute(params)
-                .onEach { setState { copy(hasPendingSpaceInvites = it.isNotEmpty()) } }
+    private fun observeSpacesNotificationBadgeState() {
+        getSpacesNotificationBadgeStateUseCase.execute()
+                .onEach { badgeState -> setState { copy(spacesNotificationCounterBadgeState = badgeState) } }
                 .launchIn(viewModelScope)
     }
 
