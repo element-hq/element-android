@@ -72,15 +72,16 @@ internal fun ChunkEntity.Companion.findEventInThreadChunk(realm: Realm, roomId: 
             .findFirst()
 }
 
-internal fun ChunkEntity.Companion.findAllIncludingEvents(realm: Realm, eventIds: List<String>): RealmResults<ChunkEntity> {
+internal fun ChunkEntity.Companion.findAllIncludingEvents(realm: Realm, roomId: String, eventIds: List<String>): RealmResults<ChunkEntity> {
     return realm.where<ChunkEntity>()
+            .equalTo(ChunkEntityFields.ROOM.ROOM_ID, roomId)
             .`in`(ChunkEntityFields.TIMELINE_EVENTS.EVENT_ID, eventIds.toTypedArray())
             .isNull(ChunkEntityFields.ROOT_THREAD_EVENT_ID)
             .findAll()
 }
 
-internal fun ChunkEntity.Companion.findIncludingEvent(realm: Realm, eventId: String): ChunkEntity? {
-    return findAllIncludingEvents(realm, listOf(eventId)).firstOrNull()
+internal fun ChunkEntity.Companion.findIncludingEvent(realm: Realm, roomId: String, eventId: String): ChunkEntity? {
+    return findAllIncludingEvents(realm, roomId, listOf(eventId)).firstOrNull()
 }
 
 internal fun ChunkEntity.Companion.create(

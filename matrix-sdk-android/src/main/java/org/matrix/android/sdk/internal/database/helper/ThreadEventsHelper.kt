@@ -297,7 +297,7 @@ internal fun updateThreadNotifications(roomId: String, realm: Realm, currentUser
     val readReceipt = findMyReadReceipt(realm, roomId, currentUserId, threadId = rootThreadEventId) ?: return
 
     val readReceiptChunk = ChunkEntity
-            .findIncludingEvent(realm, readReceipt) ?: return
+            .findIncludingEvent(realm, roomId, readReceipt) ?: return
 
     val readReceiptChunkThreadEvents = readReceiptChunk
             .timelineEvents
