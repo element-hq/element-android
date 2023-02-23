@@ -38,6 +38,7 @@ class HomeServerConnectionConfigFactory @Inject constructor() {
                             withAllowedFingerPrints(listOf(fingerprint))
                         }
                     }
+                    .withPin(true)
                     .build()
         } catch (t: Throwable) {
             Timber.e(t)
