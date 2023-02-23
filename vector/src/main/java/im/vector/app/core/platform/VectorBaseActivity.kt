@@ -337,13 +337,16 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     }
 
     private fun handleCertificateError(certificateError: GlobalError.CertificateError) {
+        if(this is MainActivity) {
+            return
+        }
         singletonEntryPoint()
                 .unrecognizedCertificateDialog()
                 .show(this,
                         certificateError.fingerprint,
                         object : UnrecognizedCertificateDialog.Callback {
                             override fun onAccept() {
-                                // TODO Support certificate error once logged
+                                // TODO Store new cert in hs config
                             }
 
                             override fun onIgnore() {

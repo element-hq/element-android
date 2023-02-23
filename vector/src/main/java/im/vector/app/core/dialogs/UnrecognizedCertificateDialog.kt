@@ -24,10 +24,12 @@ import im.vector.app.databinding.DialogSslFingerprintBinding
 import org.matrix.android.sdk.api.network.ssl.Fingerprint
 import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * This class displays the unknown certificate dialog.
  */
+@Singleton
 class UnrecognizedCertificateDialog @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
         private val stringProvider: StringProvider
@@ -102,7 +104,7 @@ class UnrecognizedCertificateDialog @Inject constructor(
             homeServerUrl: String,
             homeServerConnectionConfigHasFingerprints: Boolean
     ) {
-        val dialogId = userId ?: homeServerUrl + unrecognizedFingerprint.displayableHexRepr
+        val dialogId = userId ?: (homeServerUrl + unrecognizedFingerprint.displayableHexRepr)
 
         if (openDialogIds.contains(dialogId)) {
             Timber.i("Not opening dialog $dialogId as one is already open.")

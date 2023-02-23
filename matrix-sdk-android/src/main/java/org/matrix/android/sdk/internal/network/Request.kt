@@ -70,11 +70,10 @@ internal suspend inline fun <DATA> executeRequest(
 
             // Check if this is a certificateException
             CertUtil.getCertificateException(exception)
-                    // TODO Support certificate error once logged
-                    // ?.also { unrecognizedCertificateException ->
-                    //    // Send the error to the bus, for a global management
-                    //    eventBus?.post(GlobalError.CertificateError(unrecognizedCertificateException))
-                    // }
+                     ?.also { unrecognizedCertificateException ->
+                        // Send the error to the bus, for a global management
+                        globalErrorReceiver?.handleGlobalError(GlobalError.CertificateError(unrecognizedCertificateException.fingerprint))
+                     }
                     ?.also { unrecognizedCertificateException -> throw unrecognizedCertificateException }
 
             currentRetryCount++
