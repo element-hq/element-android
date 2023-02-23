@@ -27,8 +27,8 @@ import org.matrix.android.sdk.internal.util.database.RealmMigrator
 internal class MigrateSessionTo051(realm: DynamicRealm) : RealmMigrator(realm, 51) {
 
     override fun doMigrate(realm: DynamicRealm) {
-        realm.schema.create("EventEntity")
-                .addField(EventEntityFields.IS_VERIFICATION_STATE_DIRTY, Boolean::class.java)
-                .setNullable(EventEntityFields.IS_VERIFICATION_STATE_DIRTY, true)
+        realm.schema.get("EventEntity")
+                ?.addField(EventEntityFields.IS_VERIFICATION_STATE_DIRTY, Boolean::class.java)
+                ?.setNullable(EventEntityFields.IS_VERIFICATION_STATE_DIRTY, true)
     }
 }
