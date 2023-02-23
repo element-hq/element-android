@@ -62,7 +62,7 @@ internal class GetNotificationCountForSpacesUseCaseTest {
     }
 
     @Test
-    fun `given space filter and hide invites when execute then correct notification count is returned`() = runTest {
+    fun `given space filter and auto accept invites when execute then correct notification count is returned`() = runTest {
         // given
         val spaceFilter = SpaceFilter.NoFilter
         val pagedList = mockk<PagedList<RoomSummary>>()
@@ -78,7 +78,7 @@ internal class GetNotificationCountForSpacesUseCaseTest {
         fakeActiveSessionHolder.fakeSession
                 .fakeRoomService
                 .givenGetNotificationCountForRoomsReturns(expectedNotificationCount)
-        fakeAutoAcceptInvites._hideInvites = true
+        fakeAutoAcceptInvites._isEnabled = true
 
         // When
         val testObserver = getNotificationCountForSpacesUseCase.execute(spaceFilter).test(this)
@@ -121,7 +121,7 @@ internal class GetNotificationCountForSpacesUseCaseTest {
         fakeActiveSessionHolder.fakeSession
                 .fakeRoomService
                 .givenGetRoomSummaries(invitedRooms)
-        fakeAutoAcceptInvites._hideInvites = false
+        fakeAutoAcceptInvites._isEnabled = false
         val expectedNotificationCount = RoomAggregateNotificationCount(
                 notificationCount = notificationCount.notificationCount + invitedRooms.size,
                 highlightCount = notificationCount.highlightCount + invitedRooms.size,
