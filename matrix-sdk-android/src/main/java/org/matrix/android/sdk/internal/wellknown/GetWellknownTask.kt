@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.wellknown
 import android.util.MalformedJsonException
 import dagger.Lazy
 import okhttp3.OkHttpClient
+import org.matrix.android.sdk.api.auth.certs.TrustedCertificateRepository
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.WellKnown
 import org.matrix.android.sdk.api.auth.wellknown.WellknownResult
@@ -53,7 +54,8 @@ internal interface GetWellknownTask : Task<GetWellknownTask.Params, WellknownRes
 internal class DefaultGetWellknownTask @Inject constructor(
         @Unauthenticated
         private val okHttpClient: Lazy<OkHttpClient>,
-        private val retrofitFactory: RetrofitFactory
+        private val retrofitFactory: RetrofitFactory,
+        private val trustedCertificateRepository: TrustedCertificateRepository,
 ) : GetWellknownTask {
 
     override suspend fun execute(params: GetWellknownTask.Params): WellknownResult {
@@ -64,7 +66,7 @@ internal class DefaultGetWellknownTask @Inject constructor(
     private fun buildClient(homeServerConnectionConfig: HomeServerConnectionConfig): OkHttpClient {
         return okHttpClient.get()
                 .newBuilder()
-                .addSocketFactory(homeServerConnectionConfig)
+                .addSocketFactory(homeServerConnectionConfig, trustedCertificateRepository)
                 .build()
     }
 

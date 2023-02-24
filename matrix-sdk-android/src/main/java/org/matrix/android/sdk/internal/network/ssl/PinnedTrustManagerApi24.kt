@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.network.ssl
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import org.matrix.android.sdk.api.auth.certs.TrustedCertificateRepository
 import org.matrix.android.sdk.api.network.ssl.Fingerprint
 import java.net.Socket
 import java.security.cert.CertificateException
@@ -36,8 +37,11 @@ import javax.net.ssl.X509ExtendedTrustManager
 @RequiresApi(Build.VERSION_CODES.N)
 internal class PinnedTrustManagerApi24(
         private val fingerprints: List<Fingerprint>,
-        private val defaultTrustManager: X509ExtendedTrustManager?
+        private val defaultTrustManager: X509ExtendedTrustManager?,
+        private val trustedCertificateRepository: TrustedCertificateRepository,
 ) : X509ExtendedTrustManager() {
+
+    private val allFingerprints get() = fingerprints + listOfNotNull(trustedCertificateRepository.getCurTrustedCert())
 
     @Throws(CertificateException::class)
     override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String, engine: SSLEngine?) {
@@ -48,7 +52,7 @@ internal class PinnedTrustManagerApi24(
             }
         } catch (e: CertificateException) {
             // If there is an exception we fall back to checking fingerprints
-            if (fingerprints.isEmpty()) {
+            if (allFingerprints.isEmpty()) {
                 throw UnrecognizedCertificateException(chain[0], Fingerprint.newSha256Fingerprint(chain[0]), e.cause)
             }
         }
@@ -65,7 +69,7 @@ internal class PinnedTrustManagerApi24(
             }
         } catch (e: CertificateException) {
             // If there is an exception we fall back to checking fingerprints
-            if (fingerprints.isEmpty()) {
+            if (allFingerprints.isEmpty()) {
                 throw UnrecognizedCertificateException(chain[0], Fingerprint.newSha256Fingerprint(chain[0]), e.cause)
             }
         }
@@ -82,7 +86,7 @@ internal class PinnedTrustManagerApi24(
             }
         } catch (e: CertificateException) {
             // If there is an exception we fall back to checking fingerprints
-            if (fingerprints.isEmpty()) {
+            if (allFingerprints.isEmpty()) {
                 throw UnrecognizedCertificateException(chain[0], Fingerprint.newSha256Fingerprint(chain[0]), e.cause)
             }
         }
@@ -99,7 +103,7 @@ internal class PinnedTrustManagerApi24(
             }
         } catch (e: CertificateException) {
             // If there is an exception we fall back to checking fingerprints
-            if (fingerprints.isEmpty()) {
+            if (allFingerprints.isEmpty()) {
                 throw UnrecognizedCertificateException(chain[0], Fingerprint.newSha256Fingerprint(chain[0]), e.cause /* BMA: Shouldn't be `e` ? */)
             }
         }
@@ -116,7 +120,7 @@ internal class PinnedTrustManagerApi24(
             }
         } catch (e: CertificateException) {
             // If there is an exception we fall back to checking fingerprints
-            if (fingerprints.isEmpty()) {
+            if (allFingerprints.isEmpty()) {
                 throw UnrecognizedCertificateException(chain[0], Fingerprint.newSha256Fingerprint(chain[0]), e.cause /* BMA: Shouldn't be `e` ? */)
             }
         }
@@ -133,7 +137,7 @@ internal class PinnedTrustManagerApi24(
             }
         } catch (e: CertificateException) {
             // If there is an exception we fall back to checking fingerprints
-            if (fingerprints.isEmpty()) {
+            if (allFingerprints.isEmpty()) {
                 throw UnrecognizedCertificateException(chain[0], Fingerprint.newSha256Fingerprint(chain[0]), e.cause /* BMA: Shouldn't be `e` ? */)
             }
         }
@@ -145,7 +149,7 @@ internal class PinnedTrustManagerApi24(
     private fun checkTrusted(chain: Array<X509Certificate>) {
         val cert = chain[0]
 
-        if (!fingerprints.any { it.matchesCert(cert) }) {
+        if (!allFingerprints.any { it.matchesCert(cert) }) {
             throw UnrecognizedCertificateException(cert, Fingerprint.newSha256Fingerprint(cert), null)
         }
     }

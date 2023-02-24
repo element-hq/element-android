@@ -23,6 +23,7 @@ import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
+import org.matrix.android.sdk.api.auth.certs.TrustedCertificateRepository
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.failure.GlobalError
 import org.matrix.android.sdk.api.federation.FederationService
@@ -82,6 +83,7 @@ import javax.inject.Inject
 @SessionScope
 internal class DefaultSession @Inject constructor(
         override val sessionParams: SessionParams,
+        private val trustedCertificateRepository: TrustedCertificateRepository,
         private val workManagerProvider: WorkManagerProvider,
         private val globalErrorHandler: GlobalErrorHandler,
         @SessionId
@@ -230,6 +232,7 @@ internal class DefaultSession @Inject constructor(
     override fun openIdService(): OpenIdService = openIdService.get()
     override fun accountDataService(): SessionAccountDataService = accountDataService.get()
     override fun sharedSecretStorageService(): SharedSecretStorageService = sharedSecretStorageService.get()
+    override fun trustedCertificateRepository(): TrustedCertificateRepository = trustedCertificateRepository
 
     override fun getOkHttpClient(): OkHttpClient {
         return unauthenticatedWithCertificateOkHttpClient.get()

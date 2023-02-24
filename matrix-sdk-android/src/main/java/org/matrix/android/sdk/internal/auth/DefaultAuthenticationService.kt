@@ -24,6 +24,7 @@ import org.matrix.android.sdk.api.MatrixPatterns.getServerName
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.LoginType
 import org.matrix.android.sdk.api.auth.SSOAction
+import org.matrix.android.sdk.api.auth.certs.TrustedCertificateRepository
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.LoginFlowResult
@@ -66,7 +67,8 @@ internal class DefaultAuthenticationService @Inject constructor(
         private val pendingSessionStore: PendingSessionStore,
         private val getWellknownTask: GetWellknownTask,
         private val directLoginTask: DirectLoginTask,
-        private val qrLoginTokenTask: QrLoginTokenTask
+        private val qrLoginTokenTask: QrLoginTokenTask,
+        private val trustedCertificateRepository: TrustedCertificateRepository,
 ) : AuthenticationService {
 
     private var pendingSessionData: PendingSessionData? = pendingSessionStore.getPendingSessionData()
@@ -442,7 +444,7 @@ internal class DefaultAuthenticationService @Inject constructor(
     private fun buildClient(homeServerConnectionConfig: HomeServerConnectionConfig): OkHttpClient {
         return okHttpClient.get()
                 .newBuilder()
-                .addSocketFactory(homeServerConnectionConfig)
+                .addSocketFactory(homeServerConnectionConfig, trustedCertificateRepository)
                 .build()
     }
 }

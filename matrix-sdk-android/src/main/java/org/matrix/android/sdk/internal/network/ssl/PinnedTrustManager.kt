@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.network.ssl
 
+import org.matrix.android.sdk.api.auth.certs.TrustedCertificateRepository
 import org.matrix.android.sdk.api.network.ssl.Fingerprint
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
@@ -31,8 +32,11 @@ import javax.net.ssl.X509TrustManager
  */
 internal class PinnedTrustManager(
         private val fingerprints: List<Fingerprint>,
-        private val defaultTrustManager: X509TrustManager?
+        private val defaultTrustManager: X509TrustManager?,
+        private val trustedCertificateRepository: TrustedCertificateRepository,
 ) : X509TrustManager {
+
+    private val allFingerprints get() = fingerprints + listOfNotNull(trustedCertificateRepository.getCurTrustedCert())
 
     @Throws(CertificateException::class)
     override fun checkClientTrusted(chain: Array<X509Certificate>, s: String) {
@@ -43,7 +47,7 @@ internal class PinnedTrustManager(
             }
         } catch (e: CertificateException) {
             // If there is an exception we fall back to checking fingerprints
-            if (fingerprints.isEmpty()) {
+            if (allFingerprints.isEmpty()) {
                 throw UnrecognizedCertificateException(chain[0], Fingerprint.newSha256Fingerprint(chain[0]), e.cause)
             }
         }
@@ -60,7 +64,7 @@ internal class PinnedTrustManager(
             }
         } catch (e: CertificateException) {
             // If there is an exception we fall back to checking fingerprints
-            if (fingerprints.isEmpty()) {
+            if (allFingerprints.isEmpty()) {
                 throw UnrecognizedCertificateException(chain[0], Fingerprint.newSha256Fingerprint(chain[0]), e.cause /* BMA: Shouldn't be `e` ? */)
             }
         }
@@ -72,7 +76,7 @@ internal class PinnedTrustManager(
     private fun checkTrusted(chain: Array<X509Certificate>) {
         val cert = chain[0]
 
-        if (!fingerprints.any { it.matchesCert(cert) }) {
+        if (!allFingerprints.any { it.matchesCert(cert) }) {
             throw UnrecognizedCertificateException(cert, Fingerprint.newSha256Fingerprint(cert), null)
         }
     }

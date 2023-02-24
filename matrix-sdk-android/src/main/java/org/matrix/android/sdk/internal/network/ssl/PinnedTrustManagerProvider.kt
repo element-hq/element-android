@@ -17,6 +17,8 @@
 package org.matrix.android.sdk.internal.network.ssl
 
 import android.os.Build
+import org.matrix.android.sdk.api.Matrix
+import org.matrix.android.sdk.api.auth.certs.TrustedCertificateRepository
 import org.matrix.android.sdk.api.network.ssl.Fingerprint
 import javax.net.ssl.X509ExtendedTrustManager
 import javax.net.ssl.X509TrustManager
@@ -27,17 +29,20 @@ internal object PinnedTrustManagerProvider {
 
     fun provide(
             fingerprints: List<Fingerprint>?,
-            defaultTrustManager: X509TrustManager?
+            defaultTrustManager: X509TrustManager?,
+            trustedCertificateRepository: TrustedCertificateRepository,
     ): X509TrustManager {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && defaultTrustManager is X509ExtendedTrustManager) {
             PinnedTrustManagerApi24(
                     fingerprints.orEmpty(),
-                    defaultTrustManager.takeIf { USE_DEFAULT_TRUST_MANAGER }
+                    defaultTrustManager.takeIf { USE_DEFAULT_TRUST_MANAGER },
+                    trustedCertificateRepository,
             )
         } else {
             PinnedTrustManager(
                     fingerprints.orEmpty(),
-                    defaultTrustManager.takeIf { USE_DEFAULT_TRUST_MANAGER }
+                    defaultTrustManager.takeIf { USE_DEFAULT_TRUST_MANAGER },
+                    trustedCertificateRepository,
             )
         }
     }

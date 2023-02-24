@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.auth.login
 import dagger.Lazy
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.auth.LoginType
+import org.matrix.android.sdk.api.auth.certs.TrustedCertificateRepository
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
@@ -47,6 +48,7 @@ internal class DefaultQrLoginTokenTask @Inject constructor(
         private val okHttpClient: Lazy<OkHttpClient>,
         private val retrofitFactory: RetrofitFactory,
         private val sessionCreator: SessionCreator,
+        private val trustedCertificateRepository: TrustedCertificateRepository,
 ) : QrLoginTokenTask {
 
     override suspend fun execute(params: QrLoginTokenTask.Params): Session {
@@ -82,7 +84,7 @@ internal class DefaultQrLoginTokenTask @Inject constructor(
     private fun buildClient(homeServerConnectionConfig: HomeServerConnectionConfig): OkHttpClient {
         return okHttpClient.get()
                 .newBuilder()
-                .addSocketFactory(homeServerConnectionConfig)
+                .addSocketFactory(homeServerConnectionConfig, trustedCertificateRepository)
                 .build()
     }
 }

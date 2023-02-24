@@ -20,6 +20,7 @@ import androidx.annotation.MainThread
 import io.realm.RealmConfiguration
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
+import org.matrix.android.sdk.api.auth.certs.TrustedCertificateRepository
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.failure.GlobalError
 import org.matrix.android.sdk.api.federation.FederationService
@@ -325,4 +326,5 @@ interface Session {
      * Debug API, return the list of all RealmConfiguration used by this session.
      */
     fun getRealmConfigurations(): List<RealmConfiguration>
+    fun trustedCertificateRepository(): TrustedCertificateRepository
 }

@@ -27,6 +27,7 @@ import dagger.multibindings.IntoSet
 import io.realm.RealmConfiguration
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.MatrixConfiguration
+import org.matrix.android.sdk.api.auth.certs.TrustedCertificateRepository
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.SessionParams
@@ -213,10 +214,11 @@ internal abstract class SessionModule {
         fun providesOkHttpClientWithCertificate(
                 @Unauthenticated okHttpClient: OkHttpClient,
                 homeServerConnectionConfig: HomeServerConnectionConfig,
+                trustedCertificateRepository: TrustedCertificateRepository,
         ): OkHttpClient {
             return okHttpClient
                     .newBuilder()
-                    .addSocketFactory(homeServerConnectionConfig)
+                    .addSocketFactory(homeServerConnectionConfig, trustedCertificateRepository)
                     .build()
         }
 
@@ -302,6 +304,13 @@ internal abstract class SessionModule {
         @SessionScope
         fun providesMxCryptoConfig(matrixConfiguration: MatrixConfiguration): MXCryptoConfig {
             return matrixConfiguration.cryptoConfig
+        }
+
+        @Provides
+        @JvmStatic
+        @SessionScope
+        fun providesTrustedCertificateRepository(context: Context): TrustedCertificateRepository {
+            return TrustedCertificateRepository(context)
         }
     }
 

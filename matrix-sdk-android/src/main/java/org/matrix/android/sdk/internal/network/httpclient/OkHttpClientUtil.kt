@@ -17,7 +17,9 @@
 package org.matrix.android.sdk.internal.network.httpclient
 
 import okhttp3.OkHttpClient
+import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.MatrixConfiguration
+import org.matrix.android.sdk.api.auth.certs.TrustedCertificateRepository
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.internal.network.AccessTokenInterceptor
 import org.matrix.android.sdk.internal.network.interceptors.CurlLoggingInterceptor
@@ -40,11 +42,11 @@ internal fun OkHttpClient.Builder.addAccessTokenInterceptor(accessTokenProvider:
     return this
 }
 
-internal fun OkHttpClient.Builder.addSocketFactory(homeServerConnectionConfig: HomeServerConnectionConfig): OkHttpClient.Builder {
+internal fun OkHttpClient.Builder.addSocketFactory(homeServerConnectionConfig: HomeServerConnectionConfig, trustedCertificateRepository: TrustedCertificateRepository): OkHttpClient.Builder {
     try {
-        val pair = CertUtil.newPinnedSSLSocketFactory(homeServerConnectionConfig)
+        val pair = CertUtil.newPinnedSSLSocketFactory(homeServerConnectionConfig, trustedCertificateRepository)
         sslSocketFactory(pair.sslSocketFactory, pair.x509TrustManager)
-        hostnameVerifier(CertUtil.newHostnameVerifier(homeServerConnectionConfig))
+        hostnameVerifier(CertUtil.newHostnameVerifier(homeServerConnectionConfig, trustedCertificateRepository))
         connectionSpecs(CertUtil.newConnectionSpecs(homeServerConnectionConfig))
     } catch (e: Exception) {
         Timber.e(e, "addSocketFactory failed")

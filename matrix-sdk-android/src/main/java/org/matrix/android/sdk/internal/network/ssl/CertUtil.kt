@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.network.ssl
 
 import okhttp3.ConnectionSpec
 import okhttp3.internal.tls.OkHostnameVerifier
+import org.matrix.android.sdk.api.auth.certs.TrustedCertificateRepository
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import timber.log.Timber
 import java.security.KeyStore
@@ -28,7 +29,6 @@ import javax.net.ssl.HostnameVerifier
 import javax.net.ssl.SSLContext
 import javax.net.ssl.SSLPeerUnverifiedException
 import javax.net.ssl.SSLSocketFactory
-import javax.net.ssl.TrustManager
 import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager
 
@@ -140,7 +140,7 @@ internal object CertUtil {
      * @param hsConfig the HS config.
      * @return SSLSocket factory
      */
-    fun newPinnedSSLSocketFactory(hsConfig: HomeServerConnectionConfig): PinnedSSLSocketFactory {
+    fun newPinnedSSLSocketFactory(hsConfig: HomeServerConnectionConfig, trustedCertificateRepository: TrustedCertificateRepository): PinnedSSLSocketFactory {
         try {
             var defaultTrustManager: X509TrustManager? = null
 
@@ -176,7 +176,7 @@ internal object CertUtil {
                 }
             }
 
-            val pinnedTrustManager = PinnedTrustManagerProvider.provide(hsConfig.allowedFingerprints, defaultTrustManager)
+            val pinnedTrustManager = PinnedTrustManagerProvider.provide(hsConfig.allowedFingerprints, defaultTrustManager, trustedCertificateRepository)
 
             val sslSocketFactory = if (hsConfig.forceUsageTlsVersions && !hsConfig.tlsVersions.isNullOrEmpty()) {
                 // Force usage of accepted Tls Versions for Android < 20
@@ -199,9 +199,9 @@ internal object CertUtil {
      * @param hsConfig the hs config.
      * @return a new HostnameVerifier.
      */
-    fun newHostnameVerifier(hsConfig: HomeServerConnectionConfig): HostnameVerifier {
+    fun newHostnameVerifier(hsConfig: HomeServerConnectionConfig, trustedCertificateRepository: TrustedCertificateRepository): HostnameVerifier {
         val defaultVerifier: HostnameVerifier = OkHostnameVerifier // HttpsURLConnection.getDefaultHostnameVerifier()
-        val trustedFingerprints = hsConfig.allowedFingerprints
+        val trustedFingerprints = hsConfig.allowedFingerprints + listOfNotNull(trustedCertificateRepository.getCurTrustedCert())
         val shouldPin = hsConfig.shouldPin
 
         return HostnameVerifier { hostname, session ->
