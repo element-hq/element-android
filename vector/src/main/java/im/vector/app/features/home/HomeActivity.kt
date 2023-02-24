@@ -17,6 +17,7 @@
 package im.vector.app.features.home
 
 import android.app.Activity
+import android.app.ActivityManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -28,6 +29,7 @@ import android.os.Parcelable
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.core.content.getSystemService
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
@@ -592,7 +594,11 @@ class HomeActivity :
         views.drawerLayout.removeDrawerListener(drawerListener)
         supportFragmentManager.unregisterFragmentLifecycleCallbacks(fragmentLifecycleCallbacks)
         super.onDestroy()
+        Timber.w("Shutting down everything")
         activeSessionHolder.stopSync()
+        Intent(this, DendriteService::class.java).also { dendriteIntent ->
+            stopService(dendriteIntent)
+        }
     }
 
     override fun onResume() {

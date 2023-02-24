@@ -386,7 +386,10 @@
 
         <!-- P2P -->
         <service android:name=".core.services.DendriteService"
-            android:exported="false" />
+            android:exported="false" /> <!--
+            android:stopWithTask="false"
+            android:foregroundServiceType="dataSync" />
+            -->
 
         <!-- Receivers -->
 

@@ -20,13 +20,6 @@ import android.Manifest
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
-import android.bluetooth.le.AdvertiseCallback
-import android.bluetooth.le.AdvertiseData
-import android.bluetooth.le.AdvertiseSettings
-import android.bluetooth.le.AdvertisingSet
-import android.bluetooth.le.AdvertisingSetCallback
-import android.bluetooth.le.AdvertisingSetParameters
-import android.bluetooth.le.BluetoothLeAdvertiser
 import android.bluetooth.le.BluetoothLeScanner
 import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanFilter
@@ -35,7 +28,6 @@ import android.bluetooth.le.ScanSettings
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
-import android.os.Parcel
 import android.os.ParcelUuid
 import android.os.SystemClock
 import androidx.annotation.RequiresApi
@@ -103,8 +95,8 @@ class BLEManager(
     // NOTE: All 3 maps below are protected by this mutex
     private val bleClientsMutex = Mutex()
     private val bleClients = HashMap<BluetoothDevice, BLEClient>()
-    private val blePublicKeys = HashMap<PublicKey, MutableList<BluetoothDevice>>()
-    private val bleConnectedDevices = HashMap<BluetoothDevice, PublicKey>()
+    private val bleDevicesForKey = HashMap<PublicKey, MutableList<BluetoothDevice>>()
+    private val bleDevicePublicKey = HashMap<BluetoothDevice, PublicKey>()
 
     private suspend fun registerClient(client: BLEClient, device: BluetoothDevice) {
         bleClientsMutex.withLock {
@@ -120,28 +112,28 @@ class BLEManager(
 
     private suspend fun clearDeviceState(publicKey: PublicKey) {
         bleClientsMutex.withLock {
-            val devices = blePublicKeys[publicKey]
+            val devices = bleDevicesForKey[publicKey]
             devices?.forEach {
                 bleClients.remove(it)
-                bleConnectedDevices.remove(it)
+                bleDevicePublicKey.remove(it)
             }
 
-            blePublicKeys.remove(publicKey)
+            bleDevicesForKey.remove(publicKey)
         }
     }
 
     private suspend fun clearAllDeviceState() {
         bleClientsMutex.withLock {
             bleClients.clear()
-            blePublicKeys.clear()
-            bleConnectedDevices.clear()
+            bleDevicesForKey.clear()
+            bleDevicePublicKey.clear()
             deviceBackoff.clear()
         }
     }
 
     private suspend fun isKnownDevice(device: BluetoothDevice): Boolean {
         bleClientsMutex.withLock {
-            if (bleClients.containsKey(device) || bleConnectedDevices.containsKey(device)) {
+            if (bleClients.containsKey(device) || bleDevicePublicKey.containsKey(device)) {
                 return true
             }
             return false
@@ -150,17 +142,17 @@ class BLEManager(
 
     private suspend fun registerDevice(publicKey: PublicKey, device: BluetoothDevice) {
         bleClientsMutex.withLock {
-            if (!blePublicKeys.containsKey(publicKey)) {
-                blePublicKeys[publicKey] = mutableListOf<BluetoothDevice>()
+            if (!bleDevicesForKey.containsKey(publicKey)) {
+                bleDevicesForKey[publicKey] = mutableListOf<BluetoothDevice>()
             }
-            blePublicKeys[publicKey]!!.add(device)
-            bleConnectedDevices[device] = publicKey
+            bleDevicesForKey[publicKey]!!.add(device)
+            bleDevicePublicKey[device] = publicKey
         }
     }
 
     suspend fun isKnownKey(publicKey: PublicKey): Boolean {
         bleClientsMutex.withLock {
-            if (blePublicKeys.containsKey(publicKey)) {
+            if (bleDevicesForKey.containsKey(publicKey)) {
                 return true
             }
             return false
@@ -179,48 +171,49 @@ class BLEManager(
             Timber.w("$TAG: BLE Scanner is null, not starting")
             return@launch
         }
-        if (!started.getAndSet(true)) {
-            Timber.i("$TAG: Starting")
-            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
-                Timber.e("$TAG: Insufficient permissions to start scanning, aborting start")
-                return@launch
-            }
-            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_ADVERTISE) != PackageManager.PERMISSION_GRANTED) {
-                Timber.e("$TAG: Insufficient permissions to start advertising, aborting start")
-                return@launch
-            }
+        if (started.getAndSet(true)) {
+            Timber.w("$TAG: Already started")
+            return@launch
+        }
 
-            codedPHY = isCodedPHY
+        Timber.i("$TAG: Starting")
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+            Timber.e("$TAG: Insufficient permissions to start scanning, aborting start")
+            return@launch
+        }
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_ADVERTISE) != PackageManager.PERMISSION_GRANTED) {
+            Timber.e("$TAG: Insufficient permissions to start advertising, aborting start")
+            return@launch
+        }
 
-            // Start BLEServer
-            bleServer = BLEServer(context, bluetoothManager, bluetoothAdapter, publicKey, pineconeConnect, pineconeDisconenct)
-            bleServer?.start(codedPHY)
+        codedPHY = isCodedPHY
 
-            // Start Scanning
-            updateBleScanSettings()
-            startBleScan()
+        // Start BLEServer
+        bleServer = BLEServer(context, bluetoothManager, bluetoothAdapter, publicKey, pineconeConnect, pineconeDisconenct)
+        bleServer?.start(codedPHY)
 
-            // Block handling BLEClient/s
-            for (command in clientChannel) {
-                when(command) {
-                    is BLEManagerClearDeviceState -> {
-                        Timber.i("$TAG: Clearing device state for ${command.publicKey}")
-                        clearDeviceState(command.publicKey)
-                    }
-                    is BLEManagerRegisterDevice -> {
-                        Timber.i("$TAG: Registering device ${command.device} for ${command.publicKey}")
-                        registerDevice(command.publicKey, command.device)
-                    }
-                    is BLEManagerUnregisterClient -> {
-                        Timber.i("$TAG: Unregistering client for ${command.device}")
-                        unregisterClient(command.device)
-                    }
+        // Start Scanning
+        updateBleScanSettings()
+        startBleScan()
+
+        // Block handling BLEClient/s
+        for (command in clientChannel) {
+            when (command) {
+                is BLEManagerClearDeviceState -> {
+                    Timber.i("$TAG: Clearing device state for ${command.publicKey}")
+                    clearDeviceState(command.publicKey)
+                }
+                is BLEManagerRegisterDevice -> {
+                    Timber.i("$TAG: Registering device ${command.device} for ${command.publicKey}")
+                    registerDevice(command.publicKey, command.device)
+                }
+                is BLEManagerUnregisterClient -> {
+                    Timber.i("$TAG: Unregistering client for ${command.device}")
+                    unregisterClient(command.device)
                 }
             }
-            Timber.i("$TAG: Stopped processing client stop events")
-        } else {
-            Timber.w("$TAG: Already started")
         }
+        Timber.i("$TAG: Stopped processing client stop events")
     }
 
     fun stop() {

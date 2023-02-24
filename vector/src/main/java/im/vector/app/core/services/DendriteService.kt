@@ -50,6 +50,7 @@ import java.util.Locale
 import java.util.Timer
 import java.util.TimerTask
 import java.util.concurrent.atomic.AtomicBoolean
+import kotlin.system.exitProcess
 
 class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPreferenceChangeListener {
     private lateinit var vectorPreferences: VectorPreferences
@@ -180,24 +181,35 @@ class DendriteService : VectorAndroidService(), SharedPreferences.OnSharedPrefer
         }, 0, 1000)
     }
 
+    override fun onDestroy() {
+        Timber.i("$TAG: onDestroy")
+        super.onDestroy()
+        onTaskRemoved(null)
+    }
+
     override fun onTaskRemoved(rootIntent: Intent?) {
         Timber.i("$TAG: onTaskRemoved")
+        Timber.i("$TAG: Stopping")
         super.onTaskRemoved(rootIntent)
         if (serviceStarted.getAndSet(false)) {
             disableNotifications.set(true)
-
-            Timber.i("$TAG: Stopping Dendrite")
 
             // Occurs when the element app is closed from the system tray
             unregisterReceiver(bleReceiver)
             stopBluetooth()
 
             monolith?.stop()
+            monolith = null
 
             notificationManager.cancelAll()
-            stopForeground(true)
+            stopForeground(STOP_FOREGROUND_REMOVE)
+
+            myStopSelf()
+            Timber.i("$TAG: Stopped")
+
+            // NOTE: If DendriteService stops, stop the entire process.
+            exitProcess(0)
         }
-        myStopSelf()
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {

@@ -47,31 +47,33 @@ class BLEPineconePeer(
     private val TAG = "BLEPineconePeer: $deviceAddress"
 
     fun close() {
-        if (!stopped.getAndSet(true)) {
-            Timber.i("$TAG: Closing")
-            try {
-                conduit.close()
-            } catch (_: Exception) {
-            }
-            pineconeDisconenct(conduit)
-
-            try {
-                bleInput.close()
-            } catch (_: Exception) {
-            }
-            try {
-                bleOutput.close()
-            } catch (_: Exception) {
-            }
-            try {
-                socket.close()
-            } catch (_: Exception) {
-            }
-
-            readerThread.interrupt()
-            writerThread.interrupt()
-            Timber.i("$TAG: Closed")
+        if (stopped.getAndSet(true)) {
+            return
         }
+
+        Timber.i("$TAG: Closing")
+        try {
+            conduit.close()
+        } catch (_: Exception) {
+        }
+        pineconeDisconenct(conduit)
+
+        try {
+            bleInput.close()
+        } catch (_: Exception) {
+        }
+        try {
+            bleOutput.close()
+        } catch (_: Exception) {
+        }
+        try {
+            socket.close()
+        } catch (_: Exception) {
+        }
+
+        readerThread.interrupt()
+        writerThread.interrupt()
+        Timber.i("$TAG: Closed")
     }
 
     private fun reader() {

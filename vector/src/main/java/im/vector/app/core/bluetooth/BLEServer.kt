@@ -48,11 +48,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.channels.SendChannel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import java.nio.ByteBuffer
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.atomic.AtomicBoolean
 
 class BLEServer(
         private val context: Context,
@@ -62,6 +64,7 @@ class BLEServer(
         private val pineconeConnect: () -> Conduit?,
         private val pineconeDisconenct: (Conduit) -> Unit,
 ) {
+    private var started = AtomicBoolean(false)
     private val bleAdvertiser = bluetoothAdapter.bluetoothLeAdvertiser
     companion object {
         private const val TAG = "BLEServer"
@@ -70,9 +73,9 @@ class BLEServer(
     private var pineconePeers = ConcurrentHashMap<DeviceAddress, BLEPineconePeer>()
     private var connectedDevices = ConcurrentHashMap<DeviceAddress, BluetoothDevice>()
 
-    private lateinit var gattServer: BluetoothGattServer
-    private lateinit var gattCharacteristic: BluetoothGattCharacteristic
+    private var gattServer: BluetoothGattServer? = null
     private val gattService = BluetoothGattService(BLEConstants.SERVICE_UUID, BluetoothGattService.SERVICE_TYPE_PRIMARY)
+    private val gattCharacteristic = BluetoothGattCharacteristic(BLEConstants.PSM_UUID, BluetoothGattCharacteristic.PROPERTY_READ, BluetoothGattCharacteristic.PERMISSION_READ)
     private lateinit var l2capServer: BluetoothServerSocket
     private lateinit var l2capSocketServer: Job
     private lateinit var psmAndPublicKey: ByteArray
@@ -81,7 +84,7 @@ class BLEServer(
         override fun onCharacteristicReadRequest(device: BluetoothDevice, requestId: Int, offset: Int, characteristic: BluetoothGattCharacteristic) {
             Timber.i("$TAG: Received characteristic read request from ${device.address}")
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
-                gattServer.sendResponse(device, requestId, BluetoothGatt.GATT_SUCCESS, offset, psmAndPublicKey);
+                gattServer?.sendResponse(device, requestId, BluetoothGatt.GATT_SUCCESS, offset, psmAndPublicKey);
             }
         }
 
@@ -93,9 +96,6 @@ class BLEServer(
                     handleDeviceConnected(device)
                 } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                     Timber.i("$TAG: Device disconnected: ${device.address}")
-                    // TODO: I get these every ~7s from iOS... why?
-                    // Only if I have android scanning enabled.
-                    // The l2cap socket works just fine...
                     handleDeviceDisconnected(device)
                 }
             } else {
@@ -105,30 +105,38 @@ class BLEServer(
         }
     }
 
+    init {
+        gattService.addCharacteristic(gattCharacteristic)
+    }
+
     @Synchronized
     fun handleDeviceConnected(device: BluetoothDevice) {
         if (connectedDevices.containsKey(device.address)) {
             return
         }
 
-        Timber.i("$TAG: Handling connected pinecone peer for ${device.address}")
+        Timber.i("$TAG: Handling device connect for ${device.address}")
         // Calling connect here apparently tells android that we are
         // using this connection. Whatever that means?
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
-            gattServer.connect(device, false)
+            // NOTE: Including this connect call causes a ~30s timeout delay before connecting
+            // if we get to this point as a result of the BLEClient connecting outward,
+            // before we receive an inbound connection.
+            //gattServer?.connect(device, false)
         }
         connectedDevices[device.address] = device
     }
 
     fun handleDeviceDisconnected(device: BluetoothDevice) {
-        Timber.i("$TAG: Closing pinecone peer for ${device.address}")
+        Timber.i("$TAG: Handling device disconnect for ${device.address}")
         pineconePeers[device.address]?.let {
+            Timber.i("$TAG: Closing pinecone peer for ${device.address}")
             it.close()
         }
         pineconePeers.remove(device.address)
         connectedDevices[device.address]?.let {
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
-                gattServer.cancelConnection(it)
+                gattServer?.cancelConnection(it)
             }
         }
         connectedDevices.remove(device.address)
@@ -137,8 +145,16 @@ class BLEServer(
     @RequiresApi(Build.VERSION_CODES.Q)
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     fun start(isCodedPHY: Boolean) {
-        Timber.i("$TAG: Starting")
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_ADVERTISE) != PackageManager.PERMISSION_GRANTED) {
+            Timber.e("$TAG: Insufficient permissions to start advertising, aborting start")
+            return
+        }
+        if (started.getAndSet(true)) {
+            Timber.w("$TAG: Already started")
+            return
+        }
 
+        Timber.i("$TAG: Starting")
         l2capServer = bluetoothAdapter.listenUsingInsecureL2capChannel()
         val psm = l2capServer.psm
         Timber.w("$TAG: Server PSM: $psm")
@@ -151,55 +167,18 @@ class BLEServer(
 
         psmAndPublicKey = uShortToBytes(psm.toUShort()) + publicKey.toPublicKeyBytes().slice(0 until BLEConstants.PSM_CHARACTERISTIC_KEY_SIZE).toByteArray()
 
-        gattCharacteristic = BluetoothGattCharacteristic(BLEConstants.PSM_UUID, BluetoothGattCharacteristic.PROPERTY_READ, BluetoothGattCharacteristic.PERMISSION_READ)
-        gattService.addCharacteristic(gattCharacteristic)
-
         gattServer = bluetoothManager.openGattServer(context, gattServerCallback)
-        gattServer.addService(gattService)
+        gattServer?.addService(gattService)
 
-        // Start Advertising
         // NOTE: Start advertising after gattServer and l2capSocket are listening
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_ADVERTISE) != PackageManager.PERMISSION_GRANTED) {
-            Timber.e("$TAG: Insufficient permissions to start advertising, aborting start")
-            return
-        }
         startAdvertising(isCodedPHY)
 
         l2capSocketServer = CoroutineScope(Dispatchers.Default).launch {
-            while (true) {
-                Timber.i("$TAG: Waiting for connection on PSM $psm")
-                try {
-                    val remote = try {
-                        l2capServer.accept()
-                    } catch (e: CancellationException) {
-                        Timber.i("$TAG: Socket server cancelled, exiting")
-                        return@launch
-                    } catch (e: Exception) {
-                        Timber.i("$TAG: Socket server cancelled, exiting: ${e.message}")
-                        //Timber.i("$TAG: Socket server exception: ${e.message}, continuing")
-                        return@launch
-                    }
-                    val device = remote.remoteDevice.address.toString()
-
-                    Timber.i("$TAG: Connected inbound $device PSM $psm")
-                    gattServerCallback.onConnectionStateChange(remote.remoteDevice, BluetoothGatt.GATT_SUCCESS, BluetoothProfile.STATE_CONNECTED)
-
-                    Timber.i("$TAG: Creating BLEPineconePeer")
-                    pineconeConnect()?.let { newConduit ->
-                        Timber.i("$TAG: Successful inbound pinecone peering with $device PSM $psm")
-                        val stopCallback =  { gattServerCallback.onConnectionStateChange(remote.remoteDevice, BluetoothGatt.GATT_SUCCESS, BluetoothProfile.STATE_DISCONNECTED) }
-                        pineconePeers[remote.remoteDevice.address] = BLEPineconePeer(remote.remoteDevice.address, newConduit, remote, pineconeDisconenct, stopCallback)
-                    } ?: run {
-                        Timber.e("$TAG: Failed pinecone peering with $device PSM $psm")
-                    }
-
-                } catch (e: Exception) {
-                    Timber.i("$TAG: Accept exception: ${e.message}")
-                }
-            }
+            serveL2CAPSocket(psm)
         }
     }
 
+    @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     fun stop() {
         Timber.i("$TAG: Stopping")
 
@@ -215,6 +194,10 @@ class BLEServer(
             peer.value.close()
         }
         pineconePeers.clear()
+
+        for (device in connectedDevices) {
+            gattServer?.cancelConnection(device.value)
+        }
         connectedDevices.clear()
 
         // Stop Advertising
@@ -224,9 +207,51 @@ class BLEServer(
             stopAdvertising()
         }
 
-        gattServer.clearServices()
-        gattServer.close()
+        gattServer?.clearServices()
+        gattServer?.close()
+        gattServer = null
         Timber.i("$TAG: Stopped")
+        started.set(false)
+    }
+
+    private fun serveL2CAPSocket(psm: Int) {
+        while (true) {
+            Timber.i("$TAG: Waiting for connection on PSM $psm")
+            try {
+                val remote = try {
+                    l2capServer.accept()
+                } catch (e: CancellationException) {
+                    Timber.i("$TAG: Socket server cancelled, exiting")
+                    return
+                } catch (e: Exception) {
+                    Timber.i("$TAG: Socket server cancelled, exiting: ${e.message}")
+                    //Timber.i("$TAG: Socket server exception: ${e.message}, continuing")
+                    return
+                }
+                val device = remote.remoteDevice.address.toString()
+
+                Timber.i("$TAG: Connected inbound $device PSM $psm")
+                gattServerCallback.onConnectionStateChange(remote.remoteDevice, BluetoothGatt.GATT_SUCCESS, BluetoothProfile.STATE_CONNECTED)
+
+                Timber.i("$TAG: Creating BLEPineconePeer")
+                pineconeConnect()?.let { newConduit ->
+                    Timber.i("$TAG: Successful inbound pinecone peering with $device PSM $psm")
+                    val stopCallback = {
+                        gattServerCallback.onConnectionStateChange(
+                                remote.remoteDevice,
+                                BluetoothGatt.GATT_SUCCESS,
+                                BluetoothProfile.STATE_DISCONNECTED
+                        )
+                    }
+                    pineconePeers[remote.remoteDevice.address] =
+                            BLEPineconePeer(remote.remoteDevice.address, newConduit, remote, pineconeDisconenct, stopCallback)
+                } ?: run {
+                    Timber.e("$TAG: Failed pinecone peering with $device PSM $psm")
+                }
+            } catch (e: Exception) {
+                Timber.i("$TAG: L2CAP socket accept exception: ${e.message}")
+            }
+        }
     }
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_ADVERTISE)

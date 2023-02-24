@@ -95,31 +95,32 @@ class BLEClient(
     @RequiresApi(Build.VERSION_CODES.Q)
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     suspend fun start() = CoroutineScope(Dispatchers.Default).launch {
-        if (!started.getAndSet(true)) {
-            Timber.i("$tag: Starting")
-            processCommands()
-            commandChannel.send(BLEGattConnect)
-            for (msg in quitChannel) {
-                Timber.i("$tag: Received quit")
-                stopProcessingCommands()
-                cleanupBLEResources()
-                quitChannel.close()
-                msg.response.complete(Unit)
-                break
-            }
-            Timber.i("$tag: Stopped")
-            try {
-                devicePublicKey?.let {
-                    Timber.i("$tag: Unregister all device state with BLEManager")
-                    bleManagerChannel.send(BLEManagerClearDeviceState(it))
-                } ?: run {
-                    Timber.i("$tag: Unregister this BLEClient with BLEManager")
-                    bleManagerChannel.send(BLEManagerUnregisterClient(bleDevice))
-                }
-            } catch (_: Exception) {}
-        } else {
+        if (started.getAndSet(true)) {
             Timber.w("$tag: Already started")
+            return@launch
         }
+
+        Timber.i("$tag: Starting")
+        processCommands()
+        commandChannel.send(BLEGattConnect)
+        for (msg in quitChannel) {
+            Timber.i("$tag: Received quit")
+            stopProcessingCommands()
+            cleanupBLEResources()
+            quitChannel.close()
+            msg.response.complete(Unit)
+            break
+        }
+        Timber.i("$tag: Stopped")
+        try {
+            devicePublicKey?.let {
+                Timber.i("$tag: Unregister all device state with BLEManager")
+                bleManagerChannel.send(BLEManagerClearDeviceState(it))
+            } ?: run {
+                Timber.i("$tag: Unregister this BLEClient with BLEManager")
+                bleManagerChannel.send(BLEManagerUnregisterClient(bleDevice))
+            }
+        } catch (_: Exception) {}
     }
 
     suspend fun stop(waitForShutdown: Boolean) {
@@ -156,11 +157,15 @@ class BLEClient(
         l2capSocket = null
 
         try {
-            runBlocking {
-                clearServicesCache()
-            }
             gattClient?.disconnect()
             gattClient?.close()
+
+            // NOTE: This is useful if we want to force rediscover services or characteristics.
+            // Since our service & characteristic never change, we shouldn't need this.
+            // This is assuming that the characteristic value is still being updated.
+            //runBlocking {
+            //    clearServicesCache()
+            //}
         } catch (_: Exception) {}
         gattClient = null
     }
