@@ -29,9 +29,9 @@ class VectorRoomDisplayNameFallbackProvider @Inject constructor(
         return context.getString(R.string.room_displayname_room_invite)
     }
 
-    override fun getNameForEmptyRoom(isDirect: Boolean, leftMemberNames: List<String>): String {
+    override fun getNameForEmptyRoom(isDirect: Boolean, directUserId: String?, leftMemberNames: List<String>): String {
         return if (leftMemberNames.isEmpty()) {
-            context.getString(R.string.room_displayname_empty_room)
+            if (isDirect && directUserId != null) directUserId else context.getString(R.string.room_displayname_empty_room)
         } else {
             val was = when (val size = leftMemberNames.size) {
                 1 -> getNameFor1member(leftMemberNames[0])

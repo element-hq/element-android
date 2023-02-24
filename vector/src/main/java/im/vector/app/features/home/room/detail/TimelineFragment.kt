@@ -75,6 +75,7 @@ import im.vector.app.core.extensions.containsRtLOverride
 import im.vector.app.core.extensions.ensureEndsLeftToRight
 import im.vector.app.core.extensions.filterDirectionOverrides
 import im.vector.app.core.extensions.hideKeyboard
+import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.glide.GlideApp
@@ -192,6 +193,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.billcarsonfr.jsonviewer.JSonViewerDialog
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
@@ -1175,6 +1177,10 @@ class TimelineFragment :
             } else {
                 views.hideComposerViews()
                 views.notificationAreaView.render(NotificationAreaView.State.Tombstone(mainState.tombstoneEvent))
+            }
+
+            if (summary.isDirect && summary.isEncrypted && summary.joinedMembersCount == 1 && summary.invitedMembersCount == 0) {
+                views.hideComposerViews()
             }
         } else if (summary?.membership == Membership.INVITE && inviter != null) {
             views.hideComposerViews()

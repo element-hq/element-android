@@ -115,7 +115,7 @@ internal class RoomDisplayNameResolver @Inject constructor(
                     val leftMembersNames = roomMembers.queryLeftRoomMembersEvent()
                             .findAll()
                             .map { displayNameResolver.getBestName(it.toMatrixItem()) }
-                    roomDisplayNameFallbackProvider.getNameForEmptyRoom(roomSummary?.isDirect.orFalse(), leftMembersNames)
+                    roomDisplayNameFallbackProvider.getNameForEmptyRoom(roomSummary?.isDirect.orFalse(), roomSummary?.directUserId, leftMembersNames)
                 }
                 1 -> {
                     roomDisplayNameFallbackProvider.getNameFor1member(
