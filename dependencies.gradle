@@ -79,7 +79,7 @@ ext.libs = [
                 'espressoContrib'         : "androidx.test.espresso:espresso-contrib:$espresso",
                 'espressoIntents'         : "androidx.test.espresso:espresso-intents:$espresso",
                 'viewpager2'              : "androidx.viewpager2:viewpager2:1.0.0",
-                'transition'              : "androidx.transition:transition:1.2.0",
+                'transition'              : "androidx.transition:transition:1.4.1",
         ],
         google      : [
                 'material'                : "com.google.android.material:material:1.8.0",
