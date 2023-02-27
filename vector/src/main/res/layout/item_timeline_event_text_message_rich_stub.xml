@@ -8,4 +8,10 @@
     android:layout_height="wrap_content"
     android:textAlignment="viewStart"
     android:textColor="?vctr_content_primary"
+    app:codeBlockBackgroundDrawable="@drawable/bg_code_block"
+    app:inlineCodeSingleLineBg="@drawable/bg_inline_code_single_line"
+    app:inlineCodeMultiLineBgLeft="@drawable/bg_inline_code_multi_line_left"
+    app:inlineCodeMultiLineBgMid="@drawable/bg_inline_code_multi_line_mid"
+    app:inlineCodeMultiLineBgRight="@drawable/bg_inline_code_multi_line_right"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:text="@sample/messages.json/data/message" />
