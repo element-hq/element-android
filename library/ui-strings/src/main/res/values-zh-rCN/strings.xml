@@ -1702,7 +1702,7 @@
     <string name="login_social_continue">或</string>
     <string name="room_list_quick_actions_low_priority_remove">从低优先级移除</string>
     <string name="room_list_quick_actions_low_priority_add">添加到低优先级</string>
-    <string name="attachment_viewer_item_x_of_y">%2$d 的 %1$d</string>
+    <string name="attachment_viewer_item_x_of_y">%1$d / %2$d</string>
     <string name="rotate_and_crop_screen_title">旋转和裁剪</string>
     <string name="attachment_type_dialog_title">添加图像自</string>
     <string name="settings_discovery_consent_action_give_consent">授予许可</string>
