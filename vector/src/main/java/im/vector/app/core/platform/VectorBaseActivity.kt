@@ -76,7 +76,6 @@ import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.configuration.VectorConfiguration
 import im.vector.app.features.consent.ConsentNotGivenHelper
-import org.matrix.android.sdk.api.auth.certs.TrustedCertificateRepository
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.pin.PinLocker
 import im.vector.app.features.pin.PinMode
@@ -94,12 +93,10 @@ import im.vector.app.features.themes.ThemeUtils
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.GlobalError
 import org.matrix.android.sdk.api.failure.InitialSyncRequestReason
-import org.matrix.android.sdk.api.session.Session
 import reactivecircus.flowbinding.android.view.clicks
 import timber.log.Timber
 import javax.inject.Inject
@@ -350,6 +347,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
                 .unrecognizedCertificateDialog()
                 .show(this,
                         certificateError.fingerprint,
+                        certificateError.isCaCert,
                         object : UnrecognizedCertificateDialog.Callback {
                             override fun onAccept() {
                                 session.trustedCertificateRepository().updateCurTrustedCert(certificateError.fingerprint)

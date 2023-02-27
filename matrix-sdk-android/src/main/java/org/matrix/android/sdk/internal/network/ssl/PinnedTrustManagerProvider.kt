@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.network.ssl
 
 import android.os.Build
-import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.auth.certs.TrustedCertificateRepository
 import org.matrix.android.sdk.api.network.ssl.Fingerprint
 import javax.net.ssl.X509ExtendedTrustManager

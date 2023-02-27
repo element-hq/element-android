@@ -30,126 +30,105 @@ import javax.net.ssl.X509ExtendedTrustManager
  * Implements a TrustManager that checks Certificates against an explicit list of known
  * fingerprints.
  *
- * @property fingerprints An array of SHA256 cert fingerprints
- * @property defaultTrustManager Optional trust manager to fall back on if cert does not match
+ * @property staticFingerprints An array of SHA256 cert fingerprints
+ * @property defaultTrustManager Optional truHst manager to fall back on if cert does not match
  * any of the fingerprints. Can be null.
  */
 @RequiresApi(Build.VERSION_CODES.N)
 internal class PinnedTrustManagerApi24(
-        private val fingerprints: List<Fingerprint>,
+        private val staticFingerprints: List<Fingerprint>,
         private val defaultTrustManager: X509ExtendedTrustManager?,
         private val trustedCertificateRepository: TrustedCertificateRepository,
 ) : X509ExtendedTrustManager() {
 
-    private val allFingerprints get() = fingerprints + listOfNotNull(trustedCertificateRepository.getCurTrustedCert())
+    private val fingerprints: List<Fingerprint>
+        get() = staticFingerprints +
+                listOfNotNull(trustedCertificateRepository.getCurTrustedCert())
 
     @Throws(CertificateException::class)
     override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String, engine: SSLEngine?) {
-        try {
-            if (defaultTrustManager != null) {
-                defaultTrustManager.checkClientTrusted(chain, authType, engine)
-                return
-            }
-        } catch (e: CertificateException) {
-            // If there is an exception we fall back to checking fingerprints
-            if (allFingerprints.isEmpty()) {
-                throw UnrecognizedCertificateException(chain[0], Fingerprint.newSha256Fingerprint(chain[0]), e.cause)
-            }
+        check(chain) {
+            checkClientTrusted(chain, authType, engine)
         }
-
-        checkTrusted(chain)
     }
 
     @Throws(CertificateException::class)
     override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String, socket: Socket?) {
-        try {
-            if (defaultTrustManager != null) {
-                defaultTrustManager.checkClientTrusted(chain, authType, socket)
-                return
-            }
-        } catch (e: CertificateException) {
-            // If there is an exception we fall back to checking fingerprints
-            if (allFingerprints.isEmpty()) {
-                throw UnrecognizedCertificateException(chain[0], Fingerprint.newSha256Fingerprint(chain[0]), e.cause)
-            }
+        check(chain) {
+            checkClientTrusted(chain, authType, socket)
         }
-
-        checkTrusted(chain)
     }
 
     @Throws(CertificateException::class)
     override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String) {
-        try {
-            if (defaultTrustManager != null) {
-                defaultTrustManager.checkClientTrusted(chain, authType)
-                return
-            }
-        } catch (e: CertificateException) {
-            // If there is an exception we fall back to checking fingerprints
-            if (allFingerprints.isEmpty()) {
-                throw UnrecognizedCertificateException(chain[0], Fingerprint.newSha256Fingerprint(chain[0]), e.cause)
-            }
+        check(chain) {
+            checkClientTrusted(chain, authType)
         }
-
-        checkTrusted(chain)
     }
 
     @Throws(CertificateException::class)
     override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String, socket: Socket?) {
-        try {
-            if (defaultTrustManager != null) {
-                defaultTrustManager.checkServerTrusted(chain, authType, socket)
-                return
-            }
-        } catch (e: CertificateException) {
-            // If there is an exception we fall back to checking fingerprints
-            if (allFingerprints.isEmpty()) {
-                throw UnrecognizedCertificateException(chain[0], Fingerprint.newSha256Fingerprint(chain[0]), e.cause /* BMA: Shouldn't be `e` ? */)
-            }
+        check(chain) {
+            checkServerTrusted(chain, authType, socket)
         }
-
-        checkTrusted(chain)
     }
 
     @Throws(CertificateException::class)
     override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String, engine: SSLEngine?) {
-        try {
-            if (defaultTrustManager != null) {
-                defaultTrustManager.checkServerTrusted(chain, authType, engine)
-                return
-            }
-        } catch (e: CertificateException) {
-            // If there is an exception we fall back to checking fingerprints
-            if (allFingerprints.isEmpty()) {
-                throw UnrecognizedCertificateException(chain[0], Fingerprint.newSha256Fingerprint(chain[0]), e.cause /* BMA: Shouldn't be `e` ? */)
-            }
+        check(chain) {
+            checkServerTrusted(chain, authType, engine)
         }
-
-        checkTrusted(chain)
     }
 
     @Throws(CertificateException::class)
-    override fun checkServerTrusted(chain: Array<X509Certificate>, s: String) {
-        try {
-            if (defaultTrustManager != null) {
-                defaultTrustManager.checkServerTrusted(chain, s)
-                return
+    override fun checkServerTrusted(chain: Array<X509Certificate>, s: String) =
+            check(chain) {
+                checkServerTrusted(chain, s)
             }
-        } catch (e: CertificateException) {
-            // If there is an exception we fall back to checking fingerprints
-            if (allFingerprints.isEmpty()) {
-                throw UnrecognizedCertificateException(chain[0], Fingerprint.newSha256Fingerprint(chain[0]), e.cause /* BMA: Shouldn't be `e` ? */)
-            }
-        }
 
-        checkTrusted(chain)
+    private fun check(chain: Array<X509Certificate>, defaultCheck: X509ExtendedTrustManager.() -> Unit) {
+        if (defaultTrustManager != null) {
+            try {
+                defaultTrustManager.defaultCheck()
+            } catch (e: CertificateException) {
+                checkPins(chain)
+            }
+            checkCaTrusted(chain)
+        } else {
+            checkPins(chain)
+        }
     }
 
     @Throws(CertificateException::class)
-    private fun checkTrusted(chain: Array<X509Certificate>) {
+    private fun checkCaTrusted(chain: Array<X509Certificate>) {
+        // Get the certificate closest to the root.
+        // This may or may not be the root certificate.
+        val cert = chain[chain.size - 1]
+
+        val root = acceptedIssuers.firstOrNull { issuer ->
+            if (issuer.subjectDN != cert.subjectDN &&
+                    issuer.subjectDN != cert.issuerDN)
+                return@firstOrNull false
+
+            try {
+                cert.verify(issuer.publicKey)
+            } catch (e: Exception) {
+                return@firstOrNull false
+            }
+
+            return@firstOrNull true
+        } ?: throw UnrecognizedCertificateException(cert, Fingerprint.newSha256Fingerprint(cert), isCaCert = false, null)
+
+        if (!fingerprints.any { it.matchesCert(root) }) {
+            throw UnrecognizedCertificateException(root, Fingerprint.newSha256Fingerprint(root), isCaCert = true, null)
+        }
+    }
+
+    @Throws(CertificateException::class)
+    private fun checkPins(chain: Array<X509Certificate>) {
         val cert = chain[0]
 
-        if (!allFingerprints.any { it.matchesCert(cert) }) {
+        if (!staticFingerprints.any { it.matchesCert(cert) }) {
             throw UnrecognizedCertificateException(cert, Fingerprint.newSha256Fingerprint(cert), null)
         }
     }

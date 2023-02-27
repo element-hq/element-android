@@ -72,7 +72,8 @@ internal class DefaultQrLoginTokenTask @Inject constructor(
             throw when (throwable) {
                 is UnrecognizedCertificateException -> Failure.UnrecognizedCertificateFailure(
                         homeServerUrl,
-                        throwable.fingerprint
+                        throwable.fingerprint,
+                        throwable.isCaCert,
                 )
                 else -> throwable
             }

@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.network.httpclient
 
 import okhttp3.OkHttpClient
-import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.auth.certs.TrustedCertificateRepository
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig

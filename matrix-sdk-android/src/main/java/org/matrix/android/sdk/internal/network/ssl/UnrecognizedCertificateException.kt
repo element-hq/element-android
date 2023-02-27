@@ -27,5 +27,14 @@ import java.security.cert.X509Certificate
 internal data class UnrecognizedCertificateException(
         val certificate: X509Certificate,
         val fingerprint: Fingerprint,
+        val isCaCert: Boolean = false,
         override val cause: Throwable?
-) : CertificateException("Unrecognized certificate with unknown fingerprint: " + certificate.subjectDN, cause)
+) : CertificateException("Unrecognized certificate with unknown fingerprint: " + certificate.subjectDN, cause) {
+    constructor(
+            certificate: X509Certificate,
+            fingerprint: Fingerprint,
+            cause: Throwable?
+    ) : this(
+            certificate, fingerprint, false, cause
+    )
+}

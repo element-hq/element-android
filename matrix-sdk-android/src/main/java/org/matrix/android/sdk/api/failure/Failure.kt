@@ -32,7 +32,7 @@ import java.io.IOException
  */
 sealed class Failure(cause: Throwable? = null) : Throwable(cause = cause) {
     data class Unknown(val throwable: Throwable? = null) : Failure(throwable)
-    data class UnrecognizedCertificateFailure(val url: String, val fingerprint: Fingerprint) : Failure()
+    data class UnrecognizedCertificateFailure(val url: String, val fingerprint: Fingerprint, val isCaCert: Boolean) : Failure()
     data class NetworkConnection(val ioException: IOException? = null) : Failure(ioException)
     data class ServerError(val error: MatrixError, val httpCode: Int) : Failure(RuntimeException(error.toString()))
     object SuccessError : Failure(RuntimeException(RuntimeException("SuccessResult is false")))

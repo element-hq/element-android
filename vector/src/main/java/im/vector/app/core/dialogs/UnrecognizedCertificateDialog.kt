@@ -48,6 +48,7 @@ class UnrecognizedCertificateDialog @Inject constructor(
     fun show(
             activity: Activity,
             unrecognizedFingerprint: Fingerprint,
+            isCaCert: Boolean,
             callback: Callback
     ) {
         val userId = activeSessionHolder.getSafeActiveSession()?.myUserId
@@ -56,11 +57,12 @@ class UnrecognizedCertificateDialog @Inject constructor(
         internalShow(
                 activity = activity,
                 unrecognizedFingerprint = unrecognizedFingerprint,
-                existing = true,
+                isLoggedIn = true,
                 callback = callback,
                 userId = userId,
                 homeServerUrl = hsConfig.homeServerUriBase.toString(),
-                homeServerConnectionConfigHasFingerprints = hsConfig.allowedFingerprints.isNotEmpty()
+                homeServerConnectionConfigHasFingerprints = hsConfig.allowedFingerprints.isNotEmpty(),
+                isCaCert = isCaCert,
         )
     }
 
@@ -70,17 +72,19 @@ class UnrecognizedCertificateDialog @Inject constructor(
     fun show(
             activity: Activity,
             unrecognizedFingerprint: Fingerprint,
+            isCaCert: Boolean,
             homeServerUrl: String,
             callback: Callback
     ) {
         internalShow(
                 activity = activity,
                 unrecognizedFingerprint = unrecognizedFingerprint,
-                existing = false,
+                isLoggedIn = false,
                 callback = callback,
                 userId = null,
                 homeServerUrl = homeServerUrl,
-                homeServerConnectionConfigHasFingerprints = false
+                homeServerConnectionConfigHasFingerprints = false,
+                isCaCert = isCaCert,
         )
     }
 
@@ -89,7 +93,7 @@ class UnrecognizedCertificateDialog @Inject constructor(
      *
      * @param activity the Activity
      * @param unrecognizedFingerprint the fingerprint for the unknown certificate
-     * @param existing the current session already exist, so it mean that something has changed server side
+     * @param isLoggedIn the current session already exist, so it mean that something has changed server side
      * @param callback callback to fire when the user makes a decision
      * @param userId the matrix userId
      * @param homeServerUrl the homeserver url
@@ -98,11 +102,12 @@ class UnrecognizedCertificateDialog @Inject constructor(
     private fun internalShow(
             activity: Activity,
             unrecognizedFingerprint: Fingerprint,
-            existing: Boolean,
+            isLoggedIn: Boolean,
             callback: Callback,
             userId: String?,
             homeServerUrl: String,
-            homeServerConnectionConfigHasFingerprints: Boolean
+            homeServerConnectionConfigHasFingerprints: Boolean,
+            isCaCert: Boolean,
     ) {
         val dialogId = userId ?: (homeServerUrl + unrecognizedFingerprint.displayableHexRepr)
 
@@ -138,7 +143,9 @@ class UnrecognizedCertificateDialog @Inject constructor(
                     homeServerUrl
             )
         }
-        if (existing) {
+        if (isCaCert) {
+            views.sslExplanation.text = stringProvider.getString(R.string.ssl_ca_change_expl)
+        } else if (isLoggedIn) {
             if (homeServerConnectionConfigHasFingerprints) {
                 views.sslExplanation.text = stringProvider.getString(R.string.ssl_expected_existing_expl)
             } else {
@@ -148,11 +155,17 @@ class UnrecognizedCertificateDialog @Inject constructor(
             views.sslExplanation.text = stringProvider.getString(R.string.ssl_cert_new_account_expl)
         }
         builder.setView(layout)
-        builder.setTitle(R.string.ssl_could_not_verify)
+        builder.setTitle(
+                if(isCaCert) {
+                    R.string.ssl_ca_cert_not_trusted
+                } else {
+                    R.string.ssl_could_not_verify
+                }
+        )
         builder.setPositiveButton(R.string.ssl_trust) { _, _ ->
             callback.onAccept()
         }
-        if (existing) {
+        if (isLoggedIn) {
             builder.setNegativeButton(R.string.ssl_remain_offline) { _, _ ->
                 if (userId != null) {
                     var f = ignoredFingerprints[userId]

@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.internal.di
 
-import android.content.Context
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.squareup.moshi.Moshi
 import dagger.Module
@@ -28,7 +27,6 @@ import okhttp3.Protocol
 import okhttp3.logging.HttpLoggingInterceptor
 import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.MatrixConfiguration
-import org.matrix.android.sdk.api.auth.certs.TrustedCertificateRepository
 import org.matrix.android.sdk.internal.network.ApiInterceptor
 import org.matrix.android.sdk.internal.network.TimeOutInterceptor
 import org.matrix.android.sdk.internal.network.UserAgentInterceptor

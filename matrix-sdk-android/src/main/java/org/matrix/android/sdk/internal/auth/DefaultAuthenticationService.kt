@@ -156,7 +156,7 @@ internal class DefaultAuthenticationService @Inject constructor(
                 },
                 {
                     if (it is UnrecognizedCertificateException) {
-                        throw Failure.UnrecognizedCertificateFailure(homeServerConnectionConfig.homeServerUriBase.toString(), it.fingerprint)
+                        throw Failure.UnrecognizedCertificateFailure(homeServerConnectionConfig.homeServerUriBase.toString(), it.fingerprint, it.isCaCert)
                     } else {
                         throw it
                     }

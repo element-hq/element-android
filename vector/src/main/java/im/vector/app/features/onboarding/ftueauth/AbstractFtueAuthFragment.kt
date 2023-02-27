@@ -93,6 +93,7 @@ abstract class AbstractFtueAuthFragment<VB : ViewBinding> : VectorBaseFragment<V
         val cause = event.cause
         unrecognizedCertificateDialog.show(requireActivity(),
                 cause.fingerprint,
+                cause.isCaCert,
                 cause.url,
                 object : UnrecognizedCertificateDialog.Callback {
                     override fun onAccept() {

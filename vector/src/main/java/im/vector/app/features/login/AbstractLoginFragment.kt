@@ -103,6 +103,7 @@ abstract class AbstractLoginFragment<VB : ViewBinding> : VectorBaseFragment<VB>(
         // Ask the user to accept the certificate
         unrecognizedCertificateDialog.show(requireActivity(),
                 failure.fingerprint,
+                failure.isCaCert,
                 failure.url,
                 object : UnrecognizedCertificateDialog.Callback {
                     override fun onAccept() {

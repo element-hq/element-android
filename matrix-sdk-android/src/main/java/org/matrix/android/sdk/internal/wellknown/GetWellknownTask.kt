@@ -106,7 +106,8 @@ internal class DefaultGetWellknownTask @Inject constructor(
                 is UnrecognizedCertificateException -> {
                     throw Failure.UnrecognizedCertificateFailure(
                             "https://$domain",
-                            throwable.fingerprint
+                            throwable.fingerprint,
+                            isCaCert = throwable.isCaCert,
                     )
                 }
                 is Failure.NetworkConnection -> {
