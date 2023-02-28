@@ -44,6 +44,7 @@ import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.contactsbook.ContactsBookFragment
+import im.vector.app.features.homeserver.HomeServerCapabilitiesViewModel
 import im.vector.app.features.qrcode.QrCodeScannerEvents
 import im.vector.app.features.qrcode.QrCodeScannerFragment
 import im.vector.app.features.qrcode.QrCodeScannerViewModel
@@ -63,6 +64,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
 
     private val viewModel: CreateDirectRoomViewModel by viewModel()
     private val qrViewModel: QrCodeScannerViewModel by viewModel()
+    private val homeServerCapabilitiesViewModel: HomeServerCapabilitiesViewModel by viewModel()
 
     private lateinit var sharedActionViewModel: UserListSharedActionViewModel
 
@@ -85,16 +87,19 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                     }
                 }
                 .launchIn(lifecycleScope)
-        if (isFirstCreation()) {
-            addFragment(
-                    views.container,
-                    UserListFragment::class.java,
-                    UserListFragmentArgs(
-                            title = getString(R.string.fab_menu_create_chat),
-                            menuResId = R.menu.vector_create_direct_room,
-                            submitMenuItemId = R.id.action_create_direct_room,
-                    )
-            )
+        homeServerCapabilitiesViewModel.onEach {
+            if (isFirstCreation()) {
+                addFragment(
+                        views.container,
+                        UserListFragment::class.java,
+                        UserListFragmentArgs(
+                                title = getString(R.string.fab_menu_create_chat),
+                                menuResId = R.menu.vector_create_direct_room,
+                                submitMenuItemId = R.id.action_create_direct_room,
+                                isE2EByDefault = it.isE2EByDefault,
+                        )
+                )
+            }
         }
         viewModel.onEach(CreateDirectRoomViewState::createAndInviteState) {
             renderCreateAndInviteState(it)

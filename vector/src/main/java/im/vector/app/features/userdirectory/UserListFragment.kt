@@ -63,7 +63,6 @@ class UserListFragment :
 
     private val args: UserListFragmentArgs by args()
     private val viewModel: UserListViewModel by activityViewModel()
-    private val homeServerCapabilitiesViewModel: HomeServerCapabilitiesViewModel by fragmentViewModel()
     private lateinit var sharedActionViewModel: UserListSharedActionViewModel
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentUserListBinding {
@@ -86,7 +85,7 @@ class UserListFragment :
         setupRecyclerView()
         setupSearchView()
 
-        homeServerCapabilitiesViewModel.onEach {
+        viewModel.onEach {
             views.userListE2EbyDefaultDisabled.isVisible = !it.isE2EByDefault
         }
 

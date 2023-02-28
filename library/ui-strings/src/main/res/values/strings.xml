@@ -1817,6 +1817,7 @@
     <string name="add_by_qr_code">Add by QR code</string>
     <string name="qr_code">QR code</string>
     <string name="creating_direct_room">"Creating room…"</string>
+    <string name="direct_room_user_list_only_invite_one_email">You can only invite one email at a time</string>
     <string name="direct_room_user_list_known_title">Known Users</string>
     <string name="direct_room_user_list_suggestions_title">Suggestions</string>
 

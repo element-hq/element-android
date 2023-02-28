@@ -32,6 +32,7 @@ data class UserListViewState(
         val pendingSelections: Set<PendingSelection> = emptySet(),
         val searchTerm: String = "",
         val singleSelection: Boolean,
+        val isE2EByDefault: Boolean,
         val configuredIdentityServer: String? = null,
         private val showInviteActions: Boolean,
         val showContactBookAction: Boolean
@@ -40,6 +41,7 @@ data class UserListViewState(
     constructor(args: UserListFragmentArgs) : this(
             excludedUserIds = args.excludedUserIds,
             singleSelection = args.singleSelection,
+            isE2EByDefault = args.isE2EByDefault,
             showInviteActions = args.showInviteActions,
             showContactBookAction = args.showContactBookAction
     )
