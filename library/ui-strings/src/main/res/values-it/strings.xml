@@ -2911,4 +2911,12 @@
     <string name="error_voice_message_broadcast_in_progress">Impossibile iniziare il messaggio vocale</string>
     <string name="rich_text_editor_inline_code">Applica formato codice interlinea</string>
     <string name="error_voice_broadcast_no_connection_recording">Errore di connessione - Registrazione in pausa</string>
+    <string name="rich_text_editor_code_block">Attiva/disattiva blocco di codice</string>
+    <string name="rich_text_editor_quote">Attiva/disattiva citazione</string>
+    <string name="rich_text_editor_unindent">Rimuovi indentazione</string>
+    <string name="rich_text_editor_indent">Indenta</string>
+    <string name="room_poll_details_go_to_timeline">Vedi sondaggio nella linea temporale</string>
+    <string name="error_voice_broadcast_unable_to_decrypt">Impossibile decifrare questa trasmissione vocale.</string>
+    <string name="settings_external_account_management">I dettagli del tuo account sono gestiti separatamente su %1$s.</string>
+    <string name="settings_external_account_management_title">Account</string>
 </resources>
