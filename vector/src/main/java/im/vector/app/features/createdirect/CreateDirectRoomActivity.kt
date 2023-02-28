@@ -29,6 +29,7 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.viewModel
+import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
@@ -87,8 +88,8 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                     }
                 }
                 .launchIn(lifecycleScope)
-        homeServerCapabilitiesViewModel.onEach {
-            if (isFirstCreation()) {
+        if (isFirstCreation()) {
+            withState(homeServerCapabilitiesViewModel) { homeServerCapabilitiesViewState ->
                 addFragment(
                         views.container,
                         UserListFragment::class.java,
@@ -96,7 +97,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                                 title = getString(R.string.fab_menu_create_chat),
                                 menuResId = R.menu.vector_create_direct_room,
                                 submitMenuItemId = R.id.action_create_direct_room,
-                                isE2EByDefault = it.isE2EByDefault,
+                                isE2EByDefault = homeServerCapabilitiesViewState.isE2EByDefault,
                         )
                 )
             }
