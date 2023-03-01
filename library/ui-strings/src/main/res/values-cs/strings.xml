@@ -2988,4 +2988,5 @@
     <string name="error_voice_broadcast_unable_to_decrypt">Nelze dešifrovat toto hlasové vysílání.</string>
     <string name="settings_external_account_management">Údaje o vašem účtu jsou spravovány odděleně na adrese %1$s.</string>
     <string name="settings_external_account_management_title">Účet</string>
+    <string name="settings_notification_error_on_update">Při aktualizaci předvoleb oznámení došlo k chybě. Zkuste to prosím znovu.</string>
 </resources>
