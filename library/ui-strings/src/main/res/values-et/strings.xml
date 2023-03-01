@@ -2919,4 +2919,5 @@
     <string name="rich_text_editor_unindent">Eemalda taandrida</string>
     <string name="rich_text_editor_quote">Lülita tsiteerimine sisse/välja</string>
     <string name="rich_text_editor_code_block">Lülita koodiblokk sisse/välja</string>
+    <string name="settings_notification_error_on_update">Sinu teavituste seadistuste muutmisel tekkis viga. Palu proovi uuesti.</string>
 </resources>
