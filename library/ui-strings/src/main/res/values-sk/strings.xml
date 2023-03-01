@@ -2988,4 +2988,5 @@
     <string name="error_voice_broadcast_unable_to_decrypt">Toto hlasové vysielanie sa nedá dešifrovať.</string>
     <string name="settings_external_account_management">Údaje o vašom účte sú spravované samostatne na %1$s.</string>
     <string name="settings_external_account_management_title">Účet</string>
+    <string name="settings_notification_error_on_update">Pri aktualizácii vašich predvolieb oznámení došlo k chybe. Skúste prosím znova.</string>
 </resources>
