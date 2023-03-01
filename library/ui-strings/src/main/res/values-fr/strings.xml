@@ -2928,4 +2928,5 @@
     <string name="error_voice_broadcast_unable_to_decrypt">Impossible de déchiffrer cette diffusion audio.</string>
     <string name="settings_external_account_management">Les détails de votre compte sont gérés séparément sur %1$s.</string>
     <string name="settings_external_account_management_title">Compte</string>
+    <string name="settings_notification_error_on_update">Nous avons rencontré une erreur lors de la mise-à-jour de vos préférences de notification. Veuillez réessayer.</string>
 </resources>
