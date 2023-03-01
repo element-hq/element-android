@@ -2914,4 +2914,5 @@
     <string name="error_voice_broadcast_unable_to_decrypt">S’arrihet të shfeshtëzohet ky transmetim zanor.</string>
     <string name="settings_external_account_management">Hollësitë e llogarisë tuaj administrohen më vete, te %1$s.</string>
     <string name="settings_external_account_management_title">Llogari</string>
+    <string name="settings_notification_error_on_update">Ndodhi një gabim, kur u përditësuan parapëlqimet tuaja për njoftime. Ju lutemi, riprovoni.</string>
 </resources>
