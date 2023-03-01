@@ -23,7 +23,11 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.matrix.android.sdk.MatrixTest
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
+import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.members.MembershipService
@@ -38,12 +42,25 @@ class PushRulesConditionTest : MatrixTest {
      * Test EventMatchCondition
      * ========================================================================================== */
 
+    private fun createFakeEncryptedEvent() = Event(
+            type = EventType.ENCRYPTED,
+            eventId = "mx0",
+            roomId = "!fakeRoom",
+            content = EncryptedEventContent(
+                    algorithm = MXCRYPTO_ALGORITHM_MEGOLM,
+                    ciphertext = "AwgBEpACQEKOkd4Gp0+gSXG4M+btcrnPgsF23xs/lUmS2I4YjmqF...",
+                    sessionId = "TO2G4u2HlnhtbIJk",
+                    senderKey = "5e3EIqg3JfooZnLQ2qHIcBarbassQ4qXblai0",
+                    deviceId = "FAKEE"
+            ).toContent()
+    )
+
     private fun createSimpleTextEvent(text: String): Event {
         return Event(
-                type = "m.room.message",
+                type = EventType.MESSAGE,
                 eventId = "mx0",
                 content = MessageTextContent("m.text", text).toContent(),
-                originServerTs = 0
+                originServerTs = 0,
         )
     }
 
@@ -153,6 +170,33 @@ class PushRulesConditionTest : MatrixTest {
         ).also {
             assertTrue("Notice", conditionEqual.isSatisfied(it))
         }
+    }
+
+    @Test
+    fun test_decrypted_eventmatch_type_condition() {
+        val condition = EventMatchCondition("type", "m.room.message")
+
+        val simpleDecryptedTextEvent = createFakeEncryptedEvent().apply {
+            mxDecryptionResult = OlmDecryptionResult(
+                    payload = mapOf(
+                            "type" to EventType.MESSAGE,
+                            "content" to MessageTextContent("m.text", "Yo wtf?").toContent(),
+                    ),
+                    senderKey = "the_real_sender_key",
+            )
+        }
+        val decryptedDummyEvent = createFakeEncryptedEvent().apply {
+            mxDecryptionResult = OlmDecryptionResult(
+                    payload = mapOf(
+                            "type" to EventType.DUMMY,
+                    )
+            )
+        }
+        val encryptedEvent = createFakeEncryptedEvent()
+
+        assert(condition.isSatisfied(simpleDecryptedTextEvent))
+        assertFalse(condition.isSatisfied(decryptedDummyEvent))
+        assertFalse(condition.isSatisfied(encryptedEvent))
     }
 
     /* ==========================================================================================

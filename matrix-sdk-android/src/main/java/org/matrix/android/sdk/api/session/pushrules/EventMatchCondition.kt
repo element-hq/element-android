@@ -39,8 +39,20 @@ class EventMatchCondition(
     override fun technicalDescription() = "'$key' matches '$pattern'"
 
     fun isSatisfied(event: Event): Boolean {
-        val rawJson: Map<*, *> = event.mxDecryptionResult?.payload
-                ?: MoshiProvider.providesMoshi().adapter(Event::class.java).toJsonValue(event) as? Map<*, *>
+        val rawJson: Map<*, *> = (MoshiProvider.providesMoshi().adapter(Event::class.java).toJsonValue(event) as? Map<*, *>)
+                ?.let { rawJson ->
+                    val decryptedRawJson = event.mxDecryptionResult?.payload
+                    if (decryptedRawJson != null) {
+                        rawJson
+                                .toMutableMap()
+                                .apply {
+                                    set("type", decryptedRawJson["type"])
+                                    set("content", decryptedRawJson["content"])
+                                }
+                    } else {
+                        rawJson
+                    }
+                }
                 ?: return false
         val value = extractField(rawJson, key) ?: return false
 
