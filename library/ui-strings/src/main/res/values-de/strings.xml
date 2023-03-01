@@ -2927,4 +2927,5 @@
     <string name="rich_text_editor_code_block">Codeblock umschalten</string>
     <string name="settings_external_account_management_title">Konto</string>
     <string name="settings_external_account_management">Deine Kontodetails werden separat verwaltet bei %1$s.</string>
+    <string name="settings_notification_error_on_update">Ein Fehler ist während der Aktualisierung deiner Benachrichtigungseinstellungen aufgetreten. Bitte versuche es erneut.</string>
 </resources>
