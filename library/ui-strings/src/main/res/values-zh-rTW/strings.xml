@@ -2868,4 +2868,5 @@
     <string name="error_voice_broadcast_unable_to_decrypt">無法解密此語音廣播。</string>
     <string name="settings_external_account_management">您的帳號詳細資訊已單獨於 %1$s 中管理。</string>
     <string name="settings_external_account_management_title">帳號</string>
+    <string name="settings_notification_error_on_update">更新您的通知偏好設定時發生錯誤。請再試一次。</string>
 </resources>
