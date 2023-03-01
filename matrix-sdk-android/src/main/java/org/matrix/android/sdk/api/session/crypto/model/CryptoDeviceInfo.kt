@@ -34,6 +34,9 @@ data class CryptoDeviceInfo(
     val isVerified: Boolean
         get() = trustLevel?.isVerified() == true
 
+    val isCrossSigningVerified: Boolean
+        get() = trustLevel?.isCrossSigningVerified() == true
+
     val isUnknown: Boolean
         get() = trustLevel == null
 
