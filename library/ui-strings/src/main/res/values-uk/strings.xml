@@ -3048,4 +3048,5 @@
     <string name="error_voice_broadcast_unable_to_decrypt">Неможливо розшифрувати цю голосову трансляцію.</string>
     <string name="settings_external_account_management">Керування подробицями вашого облікового запису відбувається окремо на %1$s.</string>
     <string name="settings_external_account_management_title">Обліковий запис</string>
+    <string name="settings_notification_error_on_update">Сталася помилка під час оновлення налаштувань сповіщень. Повторіть спробу.</string>
 </resources>
