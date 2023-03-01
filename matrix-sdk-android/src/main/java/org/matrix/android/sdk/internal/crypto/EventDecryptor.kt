@@ -94,6 +94,7 @@ internal class EventDecryptor @Inject constructor(
      * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
      */
     suspend fun decryptEventAndSaveResult(event: Event, timeline: String) {
+        if (event.type == EventType.ENCRYPTED && event.mxDecryptionResult != null) return
         tryOrNull(message = "Unable to decrypt the event") {
             decryptEvent(event, timeline)
         }

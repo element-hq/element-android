@@ -21,6 +21,7 @@ import org.matrix.android.sdk.api.session.events.model.isInvitation
 import org.matrix.android.sdk.api.session.pushrules.PushEvents
 import org.matrix.android.sdk.api.session.pushrules.rest.PushRule
 import org.matrix.android.sdk.api.session.sync.model.RoomsSyncResponse
+import org.matrix.android.sdk.internal.crypto.EventDecryptor
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.task.Task
 import timber.log.Timber
@@ -36,7 +37,8 @@ internal interface ProcessEventForPushTask : Task<ProcessEventForPushTask.Params
 internal class DefaultProcessEventForPushTask @Inject constructor(
         private val defaultPushRuleService: DefaultPushRuleService,
         private val pushRuleFinder: PushRuleFinder,
-        @UserId private val userId: String
+        @UserId private val userId: String,
+        private val eventDecryptor: EventDecryptor,
 ) : ProcessEventForPushTask {
 
     override suspend fun execute(params: ProcessEventForPushTask.Params) {
@@ -73,6 +75,7 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
                         " to check for push rules with ${params.rules.size} rules"
         )
         val matchedEvents = allEvents.mapNotNull { event ->
+            eventDecryptor.decryptEventAndSaveResult(event, "")
             pushRuleFinder.fulfilledBingRule(event, params.rules)?.let {
                 Timber.v("[PushRules] Rule $it match for event ${event.eventId}")
                 event to it

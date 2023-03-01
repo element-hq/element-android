@@ -45,10 +45,7 @@ class EventMatchCondition(
                     if (decryptedRawJson != null) {
                         rawJson
                                 .toMutableMap()
-                                .apply {
-                                    set("type", decryptedRawJson["type"])
-                                    set("content", decryptedRawJson["content"])
-                                }
+                                .apply { putAll(decryptedRawJson) }
                     } else {
                         rawJson
                     }
