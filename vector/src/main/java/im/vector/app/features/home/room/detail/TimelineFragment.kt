@@ -47,7 +47,9 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -1109,29 +1111,31 @@ class TimelineFragment :
 
     private fun updateJumpToReadMarkerViewVisibility() {
         if (isThreadTimeLine()) return
-        viewLifecycleOwner.lifecycleScope.launchWhenResumed {
-            val state = timelineViewModel.awaitState()
-            val showJumpToUnreadBanner = when (state.unreadState) {
-                UnreadState.Unknown,
-                UnreadState.HasNoUnread -> false
-                is UnreadState.ReadMarkerNotLoaded -> true
-                is UnreadState.HasUnread -> {
-                    if (state.canShowJumpToReadMarker) {
-                        val lastVisibleItem = layoutManager.findLastCompletelyVisibleItemPosition()
-                        val positionOfReadMarker = withContext(Dispatchers.Default) {
-                            timelineEventController.getPositionOfReadMarker()
-                        }
-                        if (positionOfReadMarker == null) {
-                            false
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                val state = timelineViewModel.awaitState()
+                val showJumpToUnreadBanner = when (state.unreadState) {
+                    UnreadState.Unknown,
+                    UnreadState.HasNoUnread -> false
+                    is UnreadState.ReadMarkerNotLoaded -> true
+                    is UnreadState.HasUnread -> {
+                        if (state.canShowJumpToReadMarker) {
+                            val lastVisibleItem = layoutManager.findLastCompletelyVisibleItemPosition()
+                            val positionOfReadMarker = withContext(Dispatchers.Default) {
+                                timelineEventController.getPositionOfReadMarker()
+                            }
+                            if (positionOfReadMarker == null) {
+                                false
+                            } else {
+                                positionOfReadMarker > lastVisibleItem
+                            }
                         } else {
-                            positionOfReadMarker > lastVisibleItem
+                            false
                         }
-                    } else {
-                        false
                     }
                 }
+                views.jumpToReadMarkerView.isVisible = showJumpToUnreadBanner
             }
-            views.jumpToReadMarkerView.isVisible = showJumpToUnreadBanner
         }
     }
 
@@ -1621,14 +1625,16 @@ class TimelineFragment :
     }
 
     override fun onRoomCreateLinkClicked(url: String) {
-        viewLifecycleOwner.lifecycleScope.launchWhenResumed {
-            permalinkHandler
-                    .launch(requireActivity(), url, object : NavigationInterceptor {
-                        override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?, rootThreadEventId: String?): Boolean {
-                            requireActivity().finish()
-                            return false
-                        }
-                    })
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                permalinkHandler
+                        .launch(requireActivity(), url, object : NavigationInterceptor {
+                            override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?, rootThreadEventId: String?): Boolean {
+                                requireActivity().finish()
+                                return false
+                            }
+                        })
+            }
         }
     }
 

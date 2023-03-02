@@ -22,7 +22,9 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -42,6 +44,7 @@ import im.vector.app.features.location.LocationSharingArgs
 import im.vector.app.features.location.MapState
 import im.vector.app.features.location.UrlMapProvider
 import im.vector.app.features.location.showUserLocationNotAvailableErrorDialog
+import kotlinx.coroutines.launch
 import java.lang.ref.WeakReference
 import javax.inject.Inject
 
@@ -77,8 +80,10 @@ class LocationPreviewFragment :
         }.also { views.mapView.addOnDidFailLoadingMapListener(it) }
         views.mapView.onCreate(savedInstanceState)
 
-        lifecycleScope.launchWhenCreated {
-            views.mapView.initialize(urlMapProvider.getMapUrl())
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
+                views.mapView.initialize(urlMapProvider.getMapUrl())
+            }
         }
 
         observeViewEvents()

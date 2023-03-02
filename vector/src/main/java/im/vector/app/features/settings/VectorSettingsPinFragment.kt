@@ -16,7 +16,9 @@
 
 package im.vector.app.features.settings
 
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.preference.Preference
 import androidx.preference.SwitchPreference
 import dagger.hilt.android.AndroidEntryPoint
@@ -129,34 +131,36 @@ class VectorSettingsPinFragment :
     }
 
     private fun refreshPinCodeStatus() {
-        lifecycleScope.launchWhenResumed {
-            val hasPinCode = pinCodeStore.hasEncodedPin()
-            usePinCodePref.isChecked = hasPinCode
-            usePinCodePref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                if (hasPinCode) {
-                    lifecycleScope.launch {
-                        pinCodeStore.deletePinCode()
-                        refreshPinCodeStatus()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                val hasPinCode = pinCodeStore.hasEncodedPin()
+                usePinCodePref.isChecked = hasPinCode
+                usePinCodePref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                    if (hasPinCode) {
+                        lifecycleScope.launch {
+                            pinCodeStore.deletePinCode()
+                            refreshPinCodeStatus()
+                        }
+                    } else {
+                        navigator.openPinCode(
+                                requireContext(),
+                                pinActivityResultLauncher,
+                                PinMode.CREATE
+                        )
                     }
-                } else {
-                    navigator.openPinCode(
-                            requireContext(),
-                            pinActivityResultLauncher,
-                            PinMode.CREATE
-                    )
+                    true
                 }
-                true
-            }
 
-            changePinCodePref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                if (hasPinCode) {
-                    navigator.openPinCode(
-                            requireContext(),
-                            pinActivityResultLauncher,
-                            PinMode.MODIFY
-                    )
+                changePinCodePref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                    if (hasPinCode) {
+                        navigator.openPinCode(
+                                requireContext(),
+                                pinActivityResultLauncher,
+                                PinMode.MODIFY
+                        )
+                    }
+                    true
                 }
-                true
             }
         }
     }
