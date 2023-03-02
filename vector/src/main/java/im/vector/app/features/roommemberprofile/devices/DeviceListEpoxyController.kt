@@ -38,7 +38,6 @@ import me.gujun.android.span.span
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
-import org.matrix.android.sdk.api.session.crypto.model.UserVerificationLevel
 import javax.inject.Inject
 
 class DeviceListEpoxyController @Inject constructor(
