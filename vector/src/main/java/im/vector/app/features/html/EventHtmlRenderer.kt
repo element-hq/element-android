@@ -164,16 +164,19 @@ class EventHtmlRenderer @Inject constructor(
             super.afterSetText(textView)
 
             val text = SpannableStringBuilder(textView.text.toSpannable())
+            val length = textView.length()
             val spans = arrayOf(
-                    text.getSpans(0, textView.length(), InlineCodeSpan::class.java),
-                    text.getSpans(0, textView.length(), HtmlCodeSpan::class.java).filter { !it.isBlock }.toTypedArray(),
-                    text.getSpans(0, textView.length(), EmphasisSpan::class.java),
-                    text.getSpans(0, textView.length(), CustomTypefaceSpan::class.java),
-                    text.getSpans(0, textView.length(), StrongEmphasisSpan::class.java),
-                    text.getSpans(0, textView.length(), UnderlineSpan::class.java),
-                    text.getSpans(0, textView.length(), URLSpan::class.java),
-                    text.getSpans(0, textView.length(), StrikethroughSpan::class.java),
-            ).flatten()
+                    InlineCodeSpan::class.java,
+                    EmphasisSpan::class.java,
+                    CustomTypefaceSpan::class.java,
+                    StrongEmphasisSpan::class.java,
+                    UnderlineSpan::class.java,
+                    URLSpan::class.java,
+                    StrikethroughSpan::class.java
+            ).map { text.getSpans(0, length, it) }
+                    .toTypedArray()
+                    .plus(text.getSpans(0, length, HtmlCodeSpan::class.java).filter { !it.isBlock }.toTypedArray())
+                    .flatten()
 
             if (spans.isEmpty()) return
 
