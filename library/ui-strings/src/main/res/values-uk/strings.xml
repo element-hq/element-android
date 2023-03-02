@@ -1147,7 +1147,7 @@
     <string name="signed_out_title">Ви вийшли</string>
     <string name="message_action_item_redact">Вилучити…</string>
     <string name="send_a_sticker">Наліпка</string>
-    <string name="terms_description_for_integration_manager">Використовувати ботів, мости, віджети та пакунки наліпок</string>
+    <string name="terms_description_for_integration_manager">Використовувати боти, мости, віджети та пакунки наліпок</string>
     <string name="no_connectivity_to_the_server_indicator">Зв\'язок із сервером втрачено</string>
     <string name="no_message_edits_found">Виправлень не знайдено</string>
     <string name="message_edits">Історія виправлень</string>
@@ -3040,4 +3040,13 @@
     <string name="error_voice_message_broadcast_in_progress">Не вдалося розпочати запис голосового повідомлення</string>
     <string name="error_voice_broadcast_no_connection_recording">Помилка з\'єднання - Запис призупинено</string>
     <string name="rich_text_editor_inline_code">Застосовувати вбудований формат коду</string>
+    <string name="rich_text_editor_code_block">Перемкнути блок коду</string>
+    <string name="rich_text_editor_quote">Перемкнути цитування</string>
+    <string name="rich_text_editor_unindent">Без відступу</string>
+    <string name="rich_text_editor_indent">Відступ</string>
+    <string name="room_poll_details_go_to_timeline">Переглянути опитування у стрічці</string>
+    <string name="error_voice_broadcast_unable_to_decrypt">Неможливо розшифрувати цю голосову трансляцію.</string>
+    <string name="settings_external_account_management">Керування подробицями вашого облікового запису відбувається окремо на %1$s.</string>
+    <string name="settings_external_account_management_title">Обліковий запис</string>
+    <string name="settings_notification_error_on_update">Сталася помилка під час оновлення налаштувань сповіщень. Повторіть спробу.</string>
 </resources>
