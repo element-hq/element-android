@@ -40,6 +40,7 @@ import im.vector.app.features.discovery.DiscoverySettingsViewModel
 import im.vector.app.features.discovery.change.SetIdentityServerViewModel
 import im.vector.app.features.home.HomeActivityViewModel
 import im.vector.app.features.home.HomeDetailViewModel
+import im.vector.app.features.home.NewHomeDetailViewModel
 import im.vector.app.features.home.UnknownDeviceDetectorSharedViewModel
 import im.vector.app.features.home.UnreadMessagesSharedViewModel
 import im.vector.app.features.home.UserColorAccountDataViewModel
@@ -717,4 +718,9 @@ interface MavericksViewModelModule {
     @IntoMap
     @MavericksViewModelKey(RoomPollDetailViewModel::class)
     fun roomPollDetailViewModelFactory(factory: RoomPollDetailViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(NewHomeDetailViewModel::class)
+    fun newHomeDetailViewModelFactory(factory: NewHomeDetailViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 }

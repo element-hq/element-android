@@ -278,7 +278,7 @@ internal class LoadTimelineStrategy constructor(
                         .findAll()
             }
             is Mode.Permalink -> {
-                ChunkEntity.findAllIncludingEvents(realm, listOf(mode.originEventId))
+                ChunkEntity.findAllIncludingEvents(realm, roomId, listOf(mode.originEventId))
             }
             is Mode.Thread -> {
                 recreateThreadChunkEntity(realm, mode.rootThreadEventId)

@@ -65,7 +65,7 @@ dependencies {
     implementation libs.jetbrains.coroutinesCore
     implementation libs.jetbrains.coroutinesAndroid
 
-    testImplementation 'org.json:json:20220924'
+    testImplementation 'org.json:json:20230227'
     testImplementation libs.tests.junit
     androidTestImplementation libs.androidx.junit
     androidTestImplementation libs.androidx.espressoCore

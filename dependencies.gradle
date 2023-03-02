@@ -11,17 +11,17 @@ def gradle = "7.4.1"
 def kotlin = "1.8.10"
 def kotlinCoroutines = "1.6.4"
 def dagger = "2.45"
-def firebaseBom = "31.2.1"
+def firebaseBom = "31.2.2"
 def appDistribution = "16.0.0-beta05"
 def retrofit = "2.9.0"
 def markwon = "4.6.2"
 def moshi = "1.14.0"
 def lifecycle = "2.5.1"
 def flowBinding = "1.2.0"
-def flipper = "0.182.0"
+def flipper = "0.183.0"
 def epoxy = "5.0.0"
 def mavericks = "3.0.1"
-def glide = "4.14.2"
+def glide = "4.15.0"
 def bigImageViewer = "1.8.1"
 def jjwt = "0.11.5"
 // Temporary version to unblock #6929. Once 0.16.0 is released we should use it, and revert
@@ -59,7 +59,7 @@ ext.libs = [
                 'fragmentTesting'         : "androidx.fragment:fragment-testing:$fragment",
                 'fragmentTestingManifest' : "androidx.fragment:fragment-testing-manifest:$fragment",
                 'constraintLayout'        : "androidx.constraintlayout:constraintlayout:2.1.4",
-                'work'                    : "androidx.work:work-runtime-ktx:2.7.1",
+                'work'                    : "androidx.work:work-runtime-ktx:2.8.0",
                 'autoFill'                : "androidx.autofill:autofill:1.1.0",
                 'preferenceKtx'           : "androidx.preference:preference-ktx:1.2.0",
                 'junit'                   : "androidx.test.ext:junit:1.1.5",
@@ -70,7 +70,7 @@ ext.libs = [
                 'datastore'               : "androidx.datastore:datastore:1.0.0",
                 'datastorepreferences'    : "androidx.datastore:datastore-preferences:1.0.0",
                 'pagingRuntimeKtx'        : "androidx.paging:paging-runtime-ktx:2.1.2",
-                'coreTesting'             : "androidx.arch.core:core-testing:2.1.0",
+                'coreTesting'             : "androidx.arch.core:core-testing:2.2.0",
                 'testCore'                : "androidx.test:core:$androidxTest",
                 'orchestrator'            : "androidx.test:orchestrator:$androidxOrchestrator",
                 'testRunner'              : "androidx.test:runner:$androidxTest",
@@ -79,7 +79,7 @@ ext.libs = [
                 'espressoContrib'         : "androidx.test.espresso:espresso-contrib:$espresso",
                 'espressoIntents'         : "androidx.test.espresso:espresso-intents:$espresso",
                 'viewpager2'              : "androidx.viewpager2:viewpager2:1.0.0",
-                'transition'              : "androidx.transition:transition:1.2.0",
+                'transition'              : "androidx.transition:transition:1.4.1",
         ],
         google      : [
                 'material'                : "com.google.android.material:material:1.8.0",
@@ -88,7 +88,7 @@ ext.libs = [
                 'appdistributionApi'      : "com.google.firebase:firebase-appdistribution-api-ktx:$appDistribution",
                 'appdistribution'         : "com.google.firebase:firebase-appdistribution:$appDistribution",
                 // Phone number https://github.com/google/libphonenumber
-                'phonenumber'             : "com.googlecode.libphonenumber:libphonenumber:8.13.6"
+                'phonenumber'             : "com.googlecode.libphonenumber:libphonenumber:8.13.7"
         ],
         dagger      : [
                 'dagger'                  : "com.google.dagger:dagger:$dagger",
@@ -103,7 +103,7 @@ ext.libs = [
         ],
         element     : [
                 'opusencoder'             : "io.element.android:opusencoder:1.1.0",
-                'wysiwyg'                 : "io.element.android:wysiwyg:1.0.0"
+                'wysiwyg'                 : "io.element.android:wysiwyg:1.1.1"
         ],
         squareup    : [
                 'moshi'                  : "com.squareup.moshi:moshi:$moshi",
