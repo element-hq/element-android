@@ -1883,7 +1883,7 @@
     </plurals>
     <string name="room_alias_preview_not_found">此别名当前无法被访问。
 \n请稍后再试，或询问房间管理员你身份有权访问。</string>
-    <string name="join_anyway">无论以何种方式加入</string>
+    <string name="join_anyway">依然加入</string>
     <string name="join_space">加入空间</string>
     <string name="create_space">创建空间</string>
     <string name="skip_for_now">暂且略过</string>
