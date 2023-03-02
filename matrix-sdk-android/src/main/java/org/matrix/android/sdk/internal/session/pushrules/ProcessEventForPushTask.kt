@@ -45,14 +45,14 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
         val newJoinEvents = params.syncResponse.join
                 .mapNotNull { (key, value) ->
                     value.timeline?.events?.mapNotNull {
-                        it.takeIf { !it.isInvitation() }?.copy(roomId = key)
+                        it.takeIf { !it.isInvitation() }?.copyAll(roomId = key)
                     }
                 }
                 .flatten()
 
         val inviteEvents = params.syncResponse.invite
                 .mapNotNull { (key, value) ->
-                    value.inviteState?.events?.map { it.copy(roomId = key) }
+                    value.inviteState?.events?.map { it.copyAll(roomId = key) }
                 }
                 .flatten()
 
@@ -75,7 +75,6 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
                         " to check for push rules with ${params.rules.size} rules"
         )
         val matchedEvents = allEvents.mapNotNull { event ->
-            eventDecryptor.decryptEventAndSaveResult(event, "")
             pushRuleFinder.fulfilledBingRule(event, params.rules)?.let {
                 Timber.v("[PushRules] Rule $it match for event ${event.eventId}")
                 event to it
