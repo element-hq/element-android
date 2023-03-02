@@ -2860,4 +2860,13 @@
     <string name="error_voice_message_broadcast_in_progress_message">您無法開始語音訊息，因為您目前正在錄製直播。請結束您的直播以開始錄製語音訊息</string>
     <string name="error_voice_message_broadcast_in_progress">無法開始語音訊息</string>
     <string name="rich_text_editor_inline_code">套用內嵌程式碼格式</string>
+    <string name="rich_text_editor_code_block">切換程式碼區塊</string>
+    <string name="rich_text_editor_quote">切換引用</string>
+    <string name="rich_text_editor_unindent">取消縮排</string>
+    <string name="rich_text_editor_indent">縮排</string>
+    <string name="room_poll_details_go_to_timeline">在時間軸中檢視投票</string>
+    <string name="error_voice_broadcast_unable_to_decrypt">無法解密此語音廣播。</string>
+    <string name="settings_external_account_management">您的帳號詳細資訊已單獨於 %1$s 中管理。</string>
+    <string name="settings_external_account_management_title">帳號</string>
+    <string name="settings_notification_error_on_update">更新您的通知偏好設定時發生錯誤。請再試一次。</string>
 </resources>

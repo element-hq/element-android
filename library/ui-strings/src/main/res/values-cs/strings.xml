@@ -2980,4 +2980,13 @@
     <string name="error_voice_message_broadcast_in_progress">Nelze spustit hlasovou zprávu</string>
     <string name="error_voice_broadcast_no_connection_recording">Chyba připojení - nahrávání pozastaveno</string>
     <string name="rich_text_editor_inline_code">Použít formát inline kódu</string>
+    <string name="rich_text_editor_code_block">Přepnout blok kódu</string>
+    <string name="rich_text_editor_quote">Přepnout citaci</string>
+    <string name="rich_text_editor_unindent">Zrušit odsazení</string>
+    <string name="rich_text_editor_indent">Odsazení</string>
+    <string name="room_poll_details_go_to_timeline">Zobrazit hlasování na časové ose</string>
+    <string name="error_voice_broadcast_unable_to_decrypt">Nelze dešifrovat toto hlasové vysílání.</string>
+    <string name="settings_external_account_management">Údaje o vašem účtu jsou spravovány odděleně na adrese %1$s.</string>
+    <string name="settings_external_account_management_title">Účet</string>
+    <string name="settings_notification_error_on_update">Při aktualizaci předvoleb oznámení došlo k chybě. Zkuste to prosím znovu.</string>
 </resources>

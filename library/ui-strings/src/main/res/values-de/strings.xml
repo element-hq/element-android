@@ -941,7 +941,7 @@
     <string name="push_gateway_item_url">Url:</string>
     <string name="terms_of_service">Nutzungsbedingungen</string>
     <string name="terms_description_for_identity_server">Für andere auffindbar sein</string>
-    <string name="terms_description_for_integration_manager">Verwende Bots, Bridges, Widgets und Sticker-Pakete</string>
+    <string name="terms_description_for_integration_manager">Nutze Bots, Brücken, Widgets und Sticker-Pakete</string>
     <string name="identity_server">Identitäts-Server</string>
     <string name="disconnect_identity_server">Verbindung zum Identitäts-Server trennen</string>
     <string name="add_identity_server">Identitäts-Server konfigurieren</string>
@@ -2783,7 +2783,7 @@
     <string name="qr_code_login_new_device_instruction_1">Öffne die App auf deinem anderen Gerät</string>
     <string name="qr_code_login_header_failed_denied_description">Die Anfrage wurde auf dem anderen Gerät abgelehnt.</string>
     <string name="qr_code_login_header_failed_timeout_description">Die Verbindung konnte nicht in der erforderlichen Zeit hergestellt werden.</string>
-    <string name="qr_code_login_header_failed_device_is_not_supported_description">Verbindung mit diesem Gerät nicht unterstützt.</string>
+    <string name="qr_code_login_header_failed_device_is_not_supported_description">Die Verbindung mit diesem Gerät wird nicht unterstützt.</string>
     <string name="qr_code_login_header_failed_title">Verbindung fehlgeschlagen</string>
     <string name="qr_code_login_header_connected_description">Überprüfe dein angemeldetes Gerät. Der unten gezeigte Code sollte angezeigt werden. Bestätige, dass beide Codes übereinstimmen:</string>
     <string name="qr_code_login_header_connected_title">Sichere Verbindung hergestellt</string>
@@ -2919,4 +2919,13 @@
     <string name="error_voice_message_broadcast_in_progress">Kann Sprachnachricht nicht beginnen</string>
     <string name="error_voice_broadcast_no_connection_recording">Verbindungsfehler − Aufnahme pausiert</string>
     <string name="rich_text_editor_inline_code">Als Inline-Code formatieren</string>
+    <string name="rich_text_editor_indent">Einrücken</string>
+    <string name="room_poll_details_go_to_timeline">Umfrage im Verlauf anzeigen</string>
+    <string name="error_voice_broadcast_unable_to_decrypt">Entschlüsseln der Sprachübertragung nicht möglich.</string>
+    <string name="rich_text_editor_quote">Zitat umschalten</string>
+    <string name="rich_text_editor_unindent">Nicht einrücken</string>
+    <string name="rich_text_editor_code_block">Codeblock umschalten</string>
+    <string name="settings_external_account_management_title">Konto</string>
+    <string name="settings_external_account_management">Deine Kontodetails werden separat verwaltet bei %1$s.</string>
+    <string name="settings_notification_error_on_update">Ein Fehler ist während der Aktualisierung deiner Benachrichtigungseinstellungen aufgetreten. Bitte versuche es erneut.</string>
 </resources>

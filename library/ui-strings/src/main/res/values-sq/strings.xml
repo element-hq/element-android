@@ -2906,4 +2906,13 @@
     <string name="error_voice_broadcast_no_connection_recording">Gabim lidhjeje - Incizimi u ndal</string>
     <string name="error_voice_message_broadcast_in_progress_message">S’mund të nisni një mesazh zanor teksa jeni aktualisht duke incizuar një transmetim të drejtpërdrejtë. Ju lutemi, përfundoni transmetimin tuaj të drejtpërdrejtë, që të mund të nisni incizimin e një mesazhi zanor</string>
     <string name="error_voice_message_broadcast_in_progress">S’niset dot mesazh zanor</string>
+    <string name="rich_text_editor_code_block">Shfaq/fshih bllok kodi</string>
+    <string name="rich_text_editor_quote">Shfaq/fshih citim</string>
+    <string name="rich_text_editor_unindent">Hiqe zhvendosjen e kryeradhës</string>
+    <string name="rich_text_editor_indent">Zhvendos kryeradhën</string>
+    <string name="room_poll_details_go_to_timeline">Shihni pyetësor në rrjedhë kohore</string>
+    <string name="error_voice_broadcast_unable_to_decrypt">S’arrihet të shfeshtëzohet ky transmetim zanor.</string>
+    <string name="settings_external_account_management">Hollësitë e llogarisë tuaj administrohen më vete, te %1$s.</string>
+    <string name="settings_external_account_management_title">Llogari</string>
+    <string name="settings_notification_error_on_update">Ndodhi një gabim, kur u përditësuan parapëlqimet tuaja për njoftime. Ju lutemi, riprovoni.</string>
 </resources>
