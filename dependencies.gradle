@@ -70,7 +70,7 @@ ext.libs = [
                 'datastore'               : "androidx.datastore:datastore:1.0.0",
                 'datastorepreferences'    : "androidx.datastore:datastore-preferences:1.0.0",
                 'pagingRuntimeKtx'        : "androidx.paging:paging-runtime-ktx:2.1.2",
-                'coreTesting'             : "androidx.arch.core:core-testing:2.1.0",
+                'coreTesting'             : "androidx.arch.core:core-testing:2.2.0",
                 'testCore'                : "androidx.test:core:$androidxTest",
                 'orchestrator'            : "androidx.test:orchestrator:$androidxOrchestrator",
                 'testRunner'              : "androidx.test:runner:$androidxTest",
