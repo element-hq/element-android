@@ -2827,4 +2827,5 @@
     <string name="home_empty_no_rooms_title">Witaj w ${app_name},
 \n%s.</string>
     <string name="home_empty_no_rooms_message">Wszechstronna, bezpieczna aplikacja do czatowania dla zespołów, przyjaciół i organizacji. Utwórz czat lub dołącz do istniejącego pokoju, aby rozpocząć.</string>
+    <string name="settings_access_token_summary">Twój token dostępu zapewnia pełny dostęp do Twojego konta. Nie udostępniaj go nikomu.</string>
 </resources>
