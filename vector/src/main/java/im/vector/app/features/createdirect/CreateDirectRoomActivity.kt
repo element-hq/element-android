@@ -29,7 +29,6 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.viewModel
-import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
@@ -45,7 +44,6 @@ import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.contactsbook.ContactsBookFragment
-import im.vector.app.features.homeserver.HomeServerCapabilitiesViewModel
 import im.vector.app.features.qrcode.QrCodeScannerEvents
 import im.vector.app.features.qrcode.QrCodeScannerFragment
 import im.vector.app.features.qrcode.QrCodeScannerViewModel
@@ -65,7 +63,6 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
 
     private val viewModel: CreateDirectRoomViewModel by viewModel()
     private val qrViewModel: QrCodeScannerViewModel by viewModel()
-    private val homeServerCapabilitiesViewModel: HomeServerCapabilitiesViewModel by viewModel()
 
     private lateinit var sharedActionViewModel: UserListSharedActionViewModel
 
@@ -89,18 +86,15 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                 }
                 .launchIn(lifecycleScope)
         if (isFirstCreation()) {
-            withState(homeServerCapabilitiesViewModel) { homeServerCapabilitiesViewState ->
-                addFragment(
-                        views.container,
-                        UserListFragment::class.java,
-                        UserListFragmentArgs(
-                                title = getString(R.string.fab_menu_create_chat),
-                                menuResId = R.menu.vector_create_direct_room,
-                                submitMenuItemId = R.id.action_create_direct_room,
-                                isE2EByDefault = homeServerCapabilitiesViewState.isE2EByDefault,
-                        )
-                )
-            }
+            addFragment(
+                    views.container,
+                    UserListFragment::class.java,
+                    UserListFragmentArgs(
+                            title = getString(R.string.fab_menu_create_chat),
+                            menuResId = R.menu.vector_create_direct_room,
+                            submitMenuItemId = R.id.action_create_direct_room,
+                    )
+            )
         }
         viewModel.onEach(CreateDirectRoomViewState::createAndInviteState) {
             renderCreateAndInviteState(it)
