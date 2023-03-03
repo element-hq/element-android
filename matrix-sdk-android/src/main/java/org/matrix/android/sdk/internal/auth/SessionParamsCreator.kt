@@ -50,7 +50,10 @@ internal class DefaultSessionParamsCreator @Inject constructor(
     )
 
     private suspend fun HomeServerConnectionConfig.overrideWithCredentials(credentials: Credentials) = copy(
-            homeServerUriBase = credentials.getHomeServerUri(this) ?: homeServerUriBase,
+            homeServerUriBase = credentials.getHomeServerUri(this)
+                    .takeUnless {
+                        homeServerUriBase.host == "10.0.2.2" // don't override the special host alias when running inside an emulator
+                    } ?: homeServerUriBase,
             identityServerUri = credentials.getIdentityServerUri() ?: identityServerUri
     )
 
