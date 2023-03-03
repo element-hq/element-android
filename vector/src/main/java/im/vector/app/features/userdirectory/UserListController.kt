@@ -62,7 +62,7 @@ class UserListController @Inject constructor(
         val currentState = state ?: return
         val host = this
 
-        if (currentState.isE2EByDefault && currentState.pendingSelections.isNotEmpty()) {
+        if (currentState.isE2EByDefault && currentState.single3pidSelection && currentState.pendingSelections.isNotEmpty()) {
             textHeaderItem {
                 id("userListNotificationHeader")
                 textRes(R.string.direct_room_user_list_only_invite_one_email)

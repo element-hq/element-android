@@ -280,7 +280,7 @@ class UserListViewModel @AssistedInject constructor(
     }
 
     private fun handleSelectUser(action: UserListAction.AddPendingSelection) = withState { state ->
-        val canSelectUser = !state.isE2EByDefault || state.pendingSelections.isEmpty() ||
+        val canSelectUser = !state.isE2EByDefault || state.pendingSelections.isEmpty() || !state.single3pidSelection ||
                 (action.pendingSelection is PendingSelection.UserPendingSelection &&
                         state.pendingSelections.last() is PendingSelection.UserPendingSelection)
         if (canSelectUser) {
