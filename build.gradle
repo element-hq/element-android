@@ -203,10 +203,10 @@ if (launchTask.contains("coverage".toLowerCase())) {
 apply plugin: 'org.sonarqube'
 
 // To run a sonar analysis:
-// Run './gradlew sonarqube -Dsonar.login=<REPLACE_WITH_SONAR_KEY>'
+// Run './gradlew sonar -Dsonar.login=<REPLACE_WITH_SONAR_KEY>'
 // The SONAR_KEY is stored in passbolt as Token Sonar Cloud Bma
 
-sonarqube {
+sonar {
     properties {
         property "sonar.projectName", "element-android"
         property "sonar.projectKey", "vector-im_element-android"
@@ -225,7 +225,7 @@ sonarqube {
 }
 
 project(":vector") {
-    sonarqube {
+    sonar {
         properties {
             property "sonar.sources", project(":vector").android.sourceSets.main.java.srcDirs
             // exclude source code from analyses separated by a colon (:)
@@ -236,13 +236,13 @@ project(":vector") {
 }
 
 project(":library:external:diff-match-patch") {
-    sonarqube {
+    sonar {
         skipProject = true
     }
 }
 
 //project(":matrix-sdk-android") {
-//    sonarqube {
+//    sonar {
 //        properties {
 //            property "sonar.sources", project(":matrix-sdk-android").android.sourceSets.main.java.srcDirs
 //            // exclude source code from analyses separated by a colon (:)
