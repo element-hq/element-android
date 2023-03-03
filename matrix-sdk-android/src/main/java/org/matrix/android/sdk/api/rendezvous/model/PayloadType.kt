@@ -21,12 +21,33 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = false)
 internal enum class PayloadType(val value: String) {
-    @Json(name = "m.login.start")
-    START("m.login.start"),
-
+    /**
+     * This is only used in v1 of MSC3906 and will be removed in future
+     */
     @Json(name = "m.login.finish")
     FINISH("m.login.finish"),
 
     @Json(name = "m.login.progress")
-    PROGRESS("m.login.progress")
+    PROGRESS("m.login.progress"),
+
+    @Json(name = "m.login.protocol")
+    PROTOCOL("m.login.protocol"),
+
+    @Json(name = "m.login.protocols")
+    PROTOCOLS("m.login.protocols"),
+
+    @Json(name = "m.login.approved")
+    APPROVED("m.login.approved"),
+
+    @Json(name = "m.login.success")
+    SUCCESS("m.login.success"),
+
+    @Json(name = "m.login.verified")
+    VERIFIED("m.login.verified"),
+
+    @Json(name = "m.login.failure")
+    FAILURE("m.login.failure"),
+
+    @Json(name = "m.login.declined")
+    DECLINED("m.login.declined"),
 }

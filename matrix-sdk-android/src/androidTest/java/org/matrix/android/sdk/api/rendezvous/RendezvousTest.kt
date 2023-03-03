@@ -25,27 +25,53 @@ import org.junit.Test
 import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.rendezvous.channels.ECDHRendezvousChannel
 import org.matrix.android.sdk.api.rendezvous.model.RendezvousError
+import org.matrix.android.sdk.api.rendezvous.model.RendezvousFlow
 import org.matrix.android.sdk.common.CommonTestHelper
 
 class RendezvousTest : InstrumentedTest {
 
     @Test
-    fun shouldSuccessfullyBuildChannels() = CommonTestHelper.runCryptoTest(context()) { _, _ ->
+    fun shouldSuccessfullyBuildMSC3906V1Channels() = CommonTestHelper.runCryptoTest(context()) { _, _ ->
         val cases = listOf(
-            // v1:
+            // MSC3903 v1 + MSC3906 v1:
             "{\"rendezvous\":{\"algorithm\":\"org.matrix.msc3903.rendezvous.v1.curve25519-aes-sha256\"," +
             "\"key\":\"aeSGwYTV1IUhikUyCapzC6p2xG5NpJ4Lwj2UgUMlcTk\",\"transport\":" +
             "{\"type\":\"org.matrix.msc3886.http.v1\",\"uri\":\"https://rendezvous.lab.element.dev/bcab62cd-3e34-48b4-bc39-90895da8f6fe\"}}," +
             "\"intent\":\"login.reciprocate\"}",
-            // v2:
+            // MSC3903 v2 + MSC3906 v1:
             "{\"rendezvous\":{\"algorithm\":\"org.matrix.msc3903.rendezvous.v2.curve25519-aes-sha256\"," +
             "\"key\":\"aeSGwYTV1IUhikUyCapzC6p2xG5NpJ4Lwj2UgUMlcTk\",\"transport\":" +
             "{\"type\":\"org.matrix.msc3886.http.v1\",\"uri\":\"https://rendezvous.lab.element.dev/bcab62cd-3e34-48b4-bc39-90895da8f6fe\"}}," +
-            "\"intent\":\"login.reciprocate\"}",
+            "\"intent\":\"login.reciprocate\"}"
         )
 
         cases.forEach { input ->
-            Rendezvous.buildChannelFromCode(input).channel shouldBeInstanceOf ECDHRendezvousChannel::class
+            val rz = Rendezvous.buildChannelFromCode(input)
+            rz.channel shouldBeInstanceOf ECDHRendezvousChannel::class
+            rz.flow shouldBeEqualTo RendezvousFlow.SETUP_ADDITIONAL_DEVICE_V1
+        }
+    }
+
+    fun shouldSuccessfullyBuildMSC3906V2Channels() = CommonTestHelper.runCryptoTest(context()) { _, _ ->
+        val cases = listOf(
+                // MSC3903 v1:
+                "{\"rendezvous\":{\"algorithm\":\"org.matrix.msc3903.rendezvous.v1.curve25519-aes-sha256\"," +
+                        "\"key\":\"aeSGwYTV1IUhikUyCapzC6p2xG5NpJ4Lwj2UgUMlcTk\",\"transport\":" +
+                        "{\"type\":\"org.matrix.msc3886.http.v1\",\"uri\":\"https://rendezvous.lab.element.dev/bcab62cd-3e34-48b4-bc39-90895da8f6fe\"}}," +
+                        "\"flow\":\"org.matrix.msc3906.setup.additional_device.v2\"," +
+                        "\"intent\":\"login.reciprocate\"}",
+                // MSC3903 v2:
+                "{\"rendezvous\":{\"algorithm\":\"org.matrix.msc3903.rendezvous.v2.curve25519-aes-sha256\"," +
+                        "\"key\":\"aeSGwYTV1IUhikUyCapzC6p2xG5NpJ4Lwj2UgUMlcTk\",\"transport\":" +
+                        "{\"type\":\"org.matrix.msc3886.http.v1\",\"uri\":\"https://rendezvous.lab.element.dev/bcab62cd-3e34-48b4-bc39-90895da8f6fe\"}}," +
+                        "\"flow\":\"org.matrix.msc3906.setup.additional_device.v2\"," +
+                        "\"intent\":\"login.reciprocate\"}"
+        )
+
+        cases.forEach { input ->
+            val rz = Rendezvous.buildChannelFromCode(input)
+            rz.channel shouldBeInstanceOf ECDHRendezvousChannel::class
+            rz.flow shouldBeEqualTo RendezvousFlow.SETUP_ADDITIONAL_DEVICE_V2
         }
     }
 
@@ -56,6 +82,7 @@ class RendezvousTest : InstrumentedTest {
                 "{\"rendezvous\":{\"algorithm\":\"bad algo\"," +
                 "\"key\":\"aeSGwYTV1IUhikUyCapzC6p2xG5NpJ4Lwj2UgUMlcTk\",\"transport\":" +
                 "{\"type\":\"org.matrix.msc3886.http.v1\",\"uri\":\"https://rendezvous.lab.element.dev/bcab62cd-3e34-48b4-bc39-90895da8f6fe\"}}," +
+                "\"flow\":\"org.matrix.msc3906.setup.additional_device.v2\"," +
                 "\"intent\":\"login.reciprocate\"}"
             )
         } shouldThrow RendezvousError::class with {
@@ -70,6 +97,7 @@ class RendezvousTest : InstrumentedTest {
                     "{\"rendezvous\":{\"algorithm\":\"org.matrix.msc3903.rendezvous.v1.curve25519-aes-sha256\"," +
                             "\"key\":\"aeSGwYTV1IUhikUyCapzC6p2xG5NpJ4Lwj2UgUMlcTk\",\"transport\":" +
                             "{\"type\":\"bad transport\",\"uri\":\"https://rendezvous.lab.element.dev/bcab62cd-3e34-48b4-bc39-90895da8f6fe\"}}," +
+                            "\"flow\":\"org.matrix.msc3906.setup.additional_device.v2\"," +
                             "\"intent\":\"login.reciprocate\"}"
             )
         } shouldThrow RendezvousError::class with {
@@ -84,6 +112,7 @@ class RendezvousTest : InstrumentedTest {
                     "{\"rendezvous\":{\"algorithm\":\"org.matrix.msc3903.rendezvous.v1.curve25519-aes-sha256\"," +
                             "\"key\":\"aeSGwYTV1IUhikUyCapzC6p2xG5NpJ4Lwj2UgUMlcTk\",\"transport\":" +
                             "{\"type\":\"org.matrix.msc3886.http.v1\",\"uri\":\"https://rendezvous.lab.element.dev/bcab62cd-3e34-48b4-bc39-90895da8f6fe\"}}," +
+                            "\"flow\":\"org.matrix.msc3906.setup.additional_device.v2\"," +
                             "\"intent\":\"foo\"}"
             )
         } shouldThrow RendezvousError::class with {

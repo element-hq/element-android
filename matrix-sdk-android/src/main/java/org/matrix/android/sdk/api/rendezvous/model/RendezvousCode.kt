@@ -21,5 +21,6 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 open class RendezvousCode(
         open val intent: RendezvousIntent,
+        open val flow: String?,
         open val rendezvous: Rendezvous
 )

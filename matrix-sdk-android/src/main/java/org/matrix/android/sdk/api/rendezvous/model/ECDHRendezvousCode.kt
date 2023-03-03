@@ -21,5 +21,6 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class ECDHRendezvousCode(
         val intent: RendezvousIntent,
+        val flow: RendezvousFlow?,
         val rendezvous: ECDHRendezvous
 )

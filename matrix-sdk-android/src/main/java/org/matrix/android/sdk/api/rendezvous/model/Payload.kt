@@ -23,7 +23,11 @@ import com.squareup.moshi.JsonClass
 internal data class Payload(
         val type: PayloadType,
         val intent: RendezvousIntent? = null,
+        /**
+         * This is only used in v1 of MSC3906 and will be removed in future.
+         */
         val outcome: Outcome? = null,
+        val reason: FailureReason? = null,
         val protocols: List<Protocol>? = null,
         val protocol: Protocol? = null,
         val homeserver: String? = null,
@@ -32,5 +36,5 @@ internal data class Payload(
         @Json(name = "device_key") val deviceKey: String? = null,
         @Json(name = "verifying_device_id") val verifyingDeviceId: String? = null,
         @Json(name = "verifying_device_key") val verifyingDeviceKey: String? = null,
-        @Json(name = "master_key") val masterKey: String? = null
+        @Json(name = "master_key") val masterKey: String? = null,
 )

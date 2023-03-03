@@ -22,12 +22,14 @@ import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.rendezvous.channels.ECDHRendezvousChannel
 import org.matrix.android.sdk.api.rendezvous.model.ECDHRendezvousCode
+import org.matrix.android.sdk.api.rendezvous.model.FailureReason
 import org.matrix.android.sdk.api.rendezvous.model.Outcome
 import org.matrix.android.sdk.api.rendezvous.model.Payload
 import org.matrix.android.sdk.api.rendezvous.model.PayloadType
 import org.matrix.android.sdk.api.rendezvous.model.Protocol
 import org.matrix.android.sdk.api.rendezvous.model.RendezvousCode
 import org.matrix.android.sdk.api.rendezvous.model.RendezvousError
+import org.matrix.android.sdk.api.rendezvous.model.RendezvousFlow
 import org.matrix.android.sdk.api.rendezvous.model.RendezvousIntent
 import org.matrix.android.sdk.api.rendezvous.model.RendezvousTransportType
 import org.matrix.android.sdk.api.rendezvous.model.SecureRendezvousChannelAlgorithm
@@ -42,11 +44,14 @@ import org.matrix.android.sdk.api.util.MatrixJsonParser
 import timber.log.Timber
 
 /**
- * Implementation of MSC3906 to sign in + E2EE set up using a QR code.
+ * Implementation of MSC3906 to sign in + E2EE set up using a QR code: https://github.com/matrix-org/matrix-spec-proposals/pull/3906
+ *
+ * @alpha This is an experimental API, and is subject to change until MSC3906 is stabilised and accepted.
  */
 class Rendezvous(
         val channel: RendezvousChannel,
         val theirIntent: RendezvousIntent,
+        val flow: RendezvousFlow,
 ) {
     companion object {
         private val TAG = LoggerTag(Rendezvous::class.java.simpleName, LoggerTag.RENDEZVOUS).value
@@ -60,6 +65,11 @@ class Rendezvous(
             } catch (a: Throwable) {
                 throw RendezvousError("Malformed code", RendezvousFailureReason.InvalidCode)
             } ?: throw RendezvousError("Code is null", RendezvousFailureReason.InvalidCode)
+
+            // then we check that flow is supported
+            if (genericParsed.flow != null && !RendezvousFlow.values().map { it.value }.contains(genericParsed.flow)) {
+                throw RendezvousError("Unsupported flow", RendezvousFailureReason.UnsupportedAlgorithm)
+            }
 
             // then we check that algorithm is supported
             if (!SecureRendezvousChannelAlgorithm.values().map { it.value }.contains(genericParsed.rendezvous.algorithm)) {
@@ -83,25 +93,33 @@ class Rendezvous(
 
             return Rendezvous(
                     ECDHRendezvousChannel(transport, supportedParsed.rendezvous.algorithm, supportedParsed.rendezvous.key),
-                    supportedParsed.intent
+                    supportedParsed.intent,
+                    // default to v1 if not specified:
+                    supportedParsed.flow ?: RendezvousFlow.SETUP_ADDITIONAL_DEVICE_V1
             )
         }
     }
 
     private val adapter = MatrixJsonParser.getMoshi().adapter(Payload::class.java)
 
-    // not yet implemented: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE
-    val ourIntent: RendezvousIntent = RendezvousIntent.LOGIN_ON_NEW_DEVICE
+    fun isUsingV1(): Boolean = flow == RendezvousFlow.SETUP_ADDITIONAL_DEVICE_V1
 
     @Throws(RendezvousError::class)
     private suspend fun checkCompatibility() {
+        // not yet implemented: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE
+        val ourIntent: RendezvousIntent = RendezvousIntent.LOGIN_ON_NEW_DEVICE
+
         val incompatible = theirIntent == ourIntent
 
-        Timber.tag(TAG).d("ourIntent: $ourIntent, theirIntent: $theirIntent, incompatible: $incompatible")
+        Timber.tag(TAG).d("ourIntent: $ourIntent, theirIntent: $theirIntent, incompatible: $incompatible, flow: $flow")
 
         if (incompatible) {
             // inform the other side
-            send(Payload(PayloadType.FINISH, intent = ourIntent))
+            if (isUsingV1()) {
+                send(Payload(PayloadType.FINISH, intent = ourIntent))
+            } else {
+                send(Payload(PayloadType.FAILURE, intent = ourIntent))
+            }
             if (ourIntent == RendezvousIntent.LOGIN_ON_NEW_DEVICE) {
                 throw RendezvousError("The other device isn't signed in", RendezvousFailureReason.OtherDeviceNotSignedIn)
             } else {
@@ -123,11 +141,19 @@ class Rendezvous(
         val protocolsResponse = receive()
 
         if (protocolsResponse?.protocols == null || !protocolsResponse.protocols.contains(Protocol.LOGIN_TOKEN)) {
-            send(Payload(PayloadType.FINISH, outcome = Outcome.UNSUPPORTED))
+            if (isUsingV1()) {
+                send(Payload(PayloadType.FINISH, outcome = Outcome.UNSUPPORTED))
+            } else {
+                send(Payload(PayloadType.FAILURE, reason = FailureReason.UNSUPPORTED))
+            }
             throw RendezvousError("Unsupported protocols", RendezvousFailureReason.UnsupportedHomeserver)
         }
 
-        send(Payload(PayloadType.PROGRESS, protocol = Protocol.LOGIN_TOKEN))
+        if (isUsingV1()) {
+            send(Payload(PayloadType.PROGRESS, protocol = Protocol.LOGIN_TOKEN))
+        } else {
+            send(Payload(PayloadType.PROTOCOL, protocol = Protocol.LOGIN_TOKEN))
+        }
 
         return checksum
     }
@@ -138,6 +164,7 @@ class Rendezvous(
 
         val loginToken = receive()
 
+        // v1:
         if (loginToken?.type == PayloadType.FINISH) {
             when (loginToken.outcome) {
                 Outcome.DECLINED -> {
@@ -146,6 +173,28 @@ class Rendezvous(
                 Outcome.UNSUPPORTED -> {
                     throw RendezvousError("Homeserver lacks support", RendezvousFailureReason.UnsupportedHomeserver)
                 }
+                else -> {
+                    throw RendezvousError("Unknown error", RendezvousFailureReason.Unknown)
+                }
+            }
+        }
+
+        // v2:
+        if (loginToken?.type == PayloadType.DECLINED) {
+            throw RendezvousError("Login declined by other device", RendezvousFailureReason.UserDeclined)
+        }
+        if (loginToken?.type == PayloadType.FAILURE) {
+            when (loginToken.reason) {
+                FailureReason.UNSUPPORTED -> {
+                    throw RendezvousError("Homeserver lacks support", RendezvousFailureReason.UnsupportedHomeserver)
+                }
+                FailureReason.CANCELLED -> {
+                    throw RendezvousError("Login cancelled by other device", RendezvousFailureReason.UserDeclined)
+                }
+                FailureReason.E2EE_SECURITY_ERROR -> {
+                    throw RendezvousError("E2EE security error", RendezvousFailureReason.E2EESecurityIssue)
+                }
+                // incompatible intent shouldn't be received at this stage
                 else -> {
                     throw RendezvousError("Unknown error", RendezvousFailureReason.Unknown)
                 }
@@ -167,8 +216,11 @@ class Rendezvous(
         val crypto = session.cryptoService()
         val deviceId = crypto.getMyCryptoDevice().deviceId
         val deviceKey = crypto.getMyCryptoDevice().fingerprint()
-        send(Payload(PayloadType.PROGRESS, outcome = Outcome.SUCCESS, deviceId = deviceId, deviceKey = deviceKey))
-
+        if (isUsingV1()) {
+            send(Payload(PayloadType.PROGRESS, outcome = Outcome.SUCCESS, deviceId = deviceId, deviceKey = deviceKey))
+        } else {
+            send(Payload(PayloadType.SUCCESS, deviceId = deviceId, deviceKey = deviceKey))
+        }
         try {
             // explicitly download keys for ourself rather than racing with initial sync which might not complete in time
             crypto.downloadKeysIfNeeded(listOf(userId), false)
@@ -179,7 +231,7 @@ class Rendezvous(
 
         // await confirmation of verification
         val verificationResponse = receive()
-        if (verificationResponse?.outcome == Outcome.VERIFIED) {
+        if (verificationResponse?.outcome == Outcome.VERIFIED || verificationResponse?.type == PayloadType.VERIFIED) {
             val verifyingDeviceId = verificationResponse.verifyingDeviceId
                     ?: throw RendezvousError("No verifying device id returned", RendezvousFailureReason.ProtocolError)
             val verifyingDeviceFromServer = crypto.getCryptoDeviceInfo(userId, verifyingDeviceId)
@@ -190,7 +242,11 @@ class Rendezvous(
                         } vs ${verificationResponse.verifyingDeviceKey})"
                 )
                 // inform the other side
-                send(Payload(PayloadType.FINISH, outcome = Outcome.E2EE_SECURITY_ERROR))
+                if (isUsingV1()) {
+                    send(Payload(PayloadType.FINISH, outcome = Outcome.E2EE_SECURITY_ERROR))
+                } else {
+                    send(Payload(PayloadType.FAILURE, reason = FailureReason.E2EE_SECURITY_ERROR))
+                }
                 throw RendezvousError("Key from verifying device doesn't match", RendezvousFailureReason.E2EESecurityIssue)
             }
 
@@ -204,7 +260,11 @@ class Rendezvous(
                 if (localMasterKey?.unpaddedBase64PublicKey != masterKeyFromVerifyingDevice) {
                     Timber.tag(TAG).w("Master key from verifying device doesn't match: $masterKeyFromVerifyingDevice vs $localMasterKey")
                     // inform the other side
-                    send(Payload(PayloadType.FINISH, outcome = Outcome.E2EE_SECURITY_ERROR))
+                    if (isUsingV1()) {
+                        send(Payload(PayloadType.FINISH, outcome = Outcome.E2EE_SECURITY_ERROR))
+                    } else {
+                        send(Payload(PayloadType.FAILURE, reason = FailureReason.E2EE_SECURITY_ERROR))
+                    }
                     throw RendezvousError("Master key from verifying device doesn't match", RendezvousFailureReason.E2EESecurityIssue)
                 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Matrix.org Foundation C.I.C.
+ * Copyright 2023 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,23 +19,17 @@ package org.matrix.android.sdk.api.rendezvous.model
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
-/**
- * This is only used for v1 of MSC3906 and will be removed in future. FailureReason is used in v2.
- */
 @JsonClass(generateAdapter = false)
-enum class Outcome(val value: String) {
-    @Json(name = "success")
-    SUCCESS("success"),
-
-    @Json(name = "declined")
-    DECLINED("declined"),
+enum class FailureReason(val value: String) {
+    @Json(name = "cancelled")
+    CANCELLED("cancelled"),
 
     @Json(name = "unsupported")
     UNSUPPORTED("unsupported"),
 
-    @Json(name = "verified")
-    VERIFIED("verified"),
-
     @Json(name = "e2ee_security_error")
-    E2EE_SECURITY_ERROR("e2ee_security_error")
+    E2EE_SECURITY_ERROR("e2ee_security_error"),
+
+    @Json(name = "incompatible_intent")
+    INCOMPATIBLE_INTENT("incompatible_intent")
 }

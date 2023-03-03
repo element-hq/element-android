@@ -33,6 +33,8 @@ import java.util.Locale
 
 /**
  * Implementation of the Simple HTTP transport MSC3886: https://github.com/matrix-org/matrix-spec-proposals/pull/3886
+ *
+ * @alpha This is an experimental API, and is subject to change until MSC3886 is stabilised and accepted.
  */
 class SimpleHttpRendezvousTransport(rendezvousUri: String?) : RendezvousTransport {
     companion object {

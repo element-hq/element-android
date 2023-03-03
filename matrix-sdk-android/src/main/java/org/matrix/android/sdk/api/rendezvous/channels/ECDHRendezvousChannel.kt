@@ -40,6 +40,8 @@ import javax.crypto.spec.SecretKeySpec
 /**
  *  Implements X25519 ECDH key agreement and AES-256-GCM encryption channel as per MSC3903:
  *  https://github.com/matrix-org/matrix-spec-proposals/pull/3903
+ *
+ * @alpha This is an experimental API, and is subject to change until MSC3903 is stabilised and accepted.
  */
 class ECDHRendezvousChannel(
         override var transport: RendezvousTransport,
