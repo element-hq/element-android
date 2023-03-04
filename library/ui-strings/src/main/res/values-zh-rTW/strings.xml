@@ -1727,7 +1727,7 @@
     <string name="add_people">新增夥伴</string>
     <string name="add_a_topic_link_text">新增主題</string>
     <string name="room_created_summary_no_topic_creation_text">%s 讓人們知道這個聊天室是做什麼用的。</string>
-    <string name="this_is_the_beginning_of_dm">這是您與 %s 直接訊息歷史紀錄的開頭。</string>
+    <string name="this_is_the_beginning_of_dm">這是您與 %s 私人訊息紀錄的開頭。</string>
     <string name="this_is_the_beginning_of_room_no_name">這是此對話的開頭。</string>
     <string name="this_is_the_beginning_of_room">這是 %s 的開頭。</string>
     <string name="room_settings_enable_encryption_no_permission">您沒有在此聊天室中啟用加密的權限。</string>
