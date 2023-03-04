@@ -493,7 +493,7 @@
     <string name="directory_server_all_rooms_on_server">在 %s 伺服器上的所有聊天室</string>
     <string name="directory_server_native_rooms">所有本地 %s 聊天室</string>
     <plurals name="notification_unread_notified_messages">
-        <item quantity="other">%d 條未讀的已通知訊息</item>
+        <item quantity="other">%d 則未讀的通知訊息</item>
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="other">%d 個聊天室</item>
@@ -838,7 +838,7 @@
     <string name="room_list_catchup_empty_title">您都看完了！</string>
     <string name="room_list_catchup_empty_body">您已經沒有未讀的訊息了</string>
     <string name="room_list_people_empty_title">對話</string>
-    <string name="room_list_people_empty_body">您的直接訊息對話將會在此顯示。點擊右下角的 + 開始一些直接訊息。</string>
+    <string name="room_list_people_empty_body">您的私人訊息對話將會在此顯示。點擊右下角的 + 可以建立私訊。</string>
     <string name="room_list_rooms_empty_title">聊天室</string>
     <string name="room_list_rooms_empty_body">您的聊天室將會在此顯示。點擊右下角的 + 來尋找既有的或開始您自己的。</string>
     <string name="title_activity_emoji_reaction_picker">反應</string>
@@ -1902,8 +1902,8 @@
     <string name="event_status_a11y_failed">失敗</string>
     <string name="event_status_a11y_sent">已傳送</string>
     <string name="event_status_a11y_sending">正在傳送</string>
-    <string name="settings_room_directory_show_all_rooms_summary">顯示聊天室目錄中的所有聊天室，包含有明確內容的聊天室。</string>
-    <string name="settings_room_directory_show_all_rooms">顯示帶有明確內容的聊天室</string>
+    <string name="settings_room_directory_show_all_rooms_summary">顯示聊天室目錄中的所有聊天室時，也顯示含有兒童不宜內容的聊天室。</string>
+    <string name="settings_room_directory_show_all_rooms">顯示帶有兒童不宜內容的聊天室</string>
     <string name="settings_category_room_directory">聊天室目錄</string>
     <string name="event_status_sent_message">訊息已傳送</string>
     <string name="you_are_invited">您被邀請了</string>
@@ -2092,8 +2092,8 @@
     <string name="settings_room_invitations">聊天室邀請</string>
     <string name="settings_encrypted_group_messages">已加密的群組訊息</string>
     <string name="settings_group_messages">群組訊息</string>
-    <string name="settings_encrypted_direct_messages">已加密的直接訊息</string>
-    <string name="settings_messages_direct_messages">直接訊息</string>
+    <string name="settings_encrypted_direct_messages">已加密的私人訊息</string>
+    <string name="settings_messages_direct_messages">私人訊息</string>
     <string name="settings_messages_containing_username">我的使用者名稱</string>
     <string name="settings_messages_containing_display_name">我的顯示名稱</string>
     <string name="settings_notification_notify_me_for">通知我</string>
