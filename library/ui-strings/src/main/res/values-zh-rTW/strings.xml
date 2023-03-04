@@ -1530,7 +1530,7 @@
     <string name="send_a_sticker">貼圖</string>
     <string name="room_profile_section_admin">管理動作</string>
     <string name="room_member_power_level_default_in">在 %1$s 中的預設</string>
-    <string name="settings_hs_admin_e2e_disabled">您的伺服器管理員已在私人聊天室與私人訊息中預設停用端對端加密。</string>
+    <string name="settings_hs_admin_e2e_disabled">您的伺服器管理員已在私人聊天室與私人訊息中預設停用端到端加密。</string>
     <string name="bootstrap_info_text_2">輸入只有您知道的安全密語，用於保護您伺服器上的安全祕密。</string>
     <string name="bootstrap_cancel_text">如果您現在取消，您可能會失去存取已加密訊息與資料，如果您失去存取您的登入。
 \n
