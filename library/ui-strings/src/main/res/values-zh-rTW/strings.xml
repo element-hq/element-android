@@ -856,7 +856,7 @@
     <string name="please_wait">請稍候…</string>
     <string name="room_preview_no_preview">無法預覽此聊天室</string>
     <string name="fab_menu_create_room">聊天室</string>
-    <string name="fab_menu_create_chat">直接訊息</string>
+    <string name="fab_menu_create_chat">私人訊息</string>
     <string name="create_room_action_create">建立</string>
     <string name="create_room_name_hint">名稱</string>
     <string name="create_room_public_title">公開</string>
@@ -888,7 +888,7 @@
     <string name="send_suggestion_sent">感謝，建議已成功傳送</string>
     <string name="send_suggestion_failed">無法傳送建議（%s）</string>
     <string name="settings_labs_show_hidden_events_in_timeline">在時間軸中顯示隱藏的活動</string>
-    <string name="bottom_action_people_x">直接訊息</string>
+    <string name="bottom_action_people_x">私人訊息</string>
     <string name="send_file_step_idle">正在等待…</string>
     <string name="send_file_step_encrypting_thumbnail">正在加密縮圖…</string>
     <string name="send_file_step_sending_thumbnail">正在傳送縮圖 (%1$s / %2$s)</string>
@@ -901,7 +901,7 @@
     <string name="room_filtering_filter_hint">過濾對話…</string>
     <string name="room_filtering_footer_title">找不到您要尋找的東西？</string>
     <string name="room_filtering_footer_create_new_room">建立一間新聊天室</string>
-    <string name="room_filtering_footer_create_new_direct_message">傳送一則新的直接訊息</string>
+    <string name="room_filtering_footer_create_new_direct_message">傳送新的私人訊息</string>
     <string name="room_filtering_footer_open_room_directory">檢視聊天室目錄</string>
     <string name="room_directory_search_hint">名稱或 ID（#example:matrix.org）</string>
     <string name="labs_swipe_to_reply_in_timeline">啟用滑動以在時間軸上回覆</string>
@@ -959,7 +959,7 @@
     <string name="a11y_open_drawer">開啟導航選單</string>
     <string name="a11y_create_menu_open">開啟建立聊天室選單</string>
     <string name="a11y_create_menu_close">關閉建立聊天室選單…</string>
-    <string name="a11y_create_direct_message">建立一則新的直接對話</string>
+    <string name="a11y_create_direct_message">建立新的私人對話</string>
     <string name="a11y_create_room">建立一間新聊天室</string>
     <string name="a11y_close_keys_backup_banner">關閉金鑰備份橫幅</string>
     <string name="a11y_jump_to_bottom">跳到底部</string>
@@ -1240,7 +1240,7 @@
     <string name="settings_category_timeline">時間軸</string>
     <string name="settings_category_composer">訊息編輯器</string>
     <string name="room_settings_enable_encryption">啟用端對端加密…</string>
-    <string name="room_settings_enable_encryption_dialog_title">啟用加密？</string>
+    <string name="room_settings_enable_encryption_dialog_title">是否啟用加密？</string>
     <string name="room_settings_enable_encryption_dialog_content">一旦啟用，對聊天室的加密就無法停用。傳送到已加密聊天室的訊息無法被伺服器看見，僅有聊天室的參與者可見。啟用加密可能會讓許多聊天機器人與橋接無法運作。</string>
     <string name="room_settings_enable_encryption_dialog_submit">啟用加密</string>
     <string name="verification_request_notice">要確定安全，請透過一次性的代碼驗證 %s。</string>
@@ -1705,7 +1705,7 @@
     <string name="create_room_topic_section">聊天室主題（選擇性）</string>
     <string name="create_room_name_section">聊天室名稱</string>
     <string name="settings_export_trail">匯出審核</string>
-    <string name="room_member_open_or_create_dm">直接訊息</string>
+    <string name="room_member_open_or_create_dm">私人訊息</string>
     <string name="send_bug_report_include_key_share_history">傳送金鑰共享請求歷史</string>
     <string name="no_more_results">沒有更多結果</string>
     <string name="qr_code_not_scanned">未掃描 QR 碼！</string>
