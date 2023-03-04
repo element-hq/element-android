@@ -838,7 +838,7 @@
     <string name="room_list_catchup_empty_title">您都看完了！</string>
     <string name="room_list_catchup_empty_body">您已經沒有未讀的訊息了</string>
     <string name="room_list_people_empty_title">對話</string>
-    <string name="room_list_people_empty_body">您的私人訊息對話將會在此顯示。點擊右下角的 + 可以建立私訊。</string>
+    <string name="room_list_people_empty_body">將會在此顯示您的私人訊息對話。點擊右下角的 + 可以建立私訊。</string>
     <string name="room_list_rooms_empty_title">聊天室</string>
     <string name="room_list_rooms_empty_body">您的聊天室將會在此顯示。點擊右下角的 + 來尋找既有的或開始您自己的聊天室。</string>
     <string name="title_activity_emoji_reaction_picker">反應</string>
