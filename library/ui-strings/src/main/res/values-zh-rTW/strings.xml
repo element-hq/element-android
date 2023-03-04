@@ -1240,7 +1240,7 @@
     <string name="settings_category_timeline">時間軸</string>
     <string name="settings_category_composer">訊息編輯器</string>
     <string name="room_settings_enable_encryption">啟用端對端加密…</string>
-    <string name="room_settings_enable_encryption_dialog_title">是否啟用加密？</string>
+    <string name="room_settings_enable_encryption_dialog_title">要開啟加密嗎？</string>
     <string name="room_settings_enable_encryption_dialog_content">一旦啟用，對聊天室的加密就無法停用。傳送到已加密聊天室的訊息無法被伺服器看見，僅有聊天室的參與者可見。啟用加密可能會讓許多聊天機器人與橋接無法運作。</string>
     <string name="room_settings_enable_encryption_dialog_submit">啟用加密</string>
     <string name="verification_request_notice">要確定安全，請透過一次性的代碼驗證 %s。</string>
@@ -1530,7 +1530,7 @@
     <string name="send_a_sticker">貼圖</string>
     <string name="room_profile_section_admin">管理動作</string>
     <string name="room_member_power_level_default_in">在 %1$s 中的預設</string>
-    <string name="settings_hs_admin_e2e_disabled">您的伺服器管理員已在私人聊天室與直接訊息中預設停用端對端加密。</string>
+    <string name="settings_hs_admin_e2e_disabled">您的伺服器管理員已在私人聊天室與私人訊息中預設停用端對端加密。</string>
     <string name="bootstrap_info_text_2">輸入只有您知道的安全密語，用於保護您伺服器上的安全祕密。</string>
     <string name="bootstrap_cancel_text">如果您現在取消，您可能會失去存取已加密訊息與資料，如果您失去存取您的登入。
 \n
