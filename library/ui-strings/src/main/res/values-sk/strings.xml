@@ -2980,4 +2980,13 @@
     <string name="error_voice_message_broadcast_in_progress">Nemožno spustiť hlasovú správu</string>
     <string name="error_voice_broadcast_no_connection_recording">Chyba pripojenia - nahrávanie pozastavené</string>
     <string name="rich_text_editor_inline_code">Použiť formát riadkového kódu</string>
+    <string name="rich_text_editor_code_block">Prepnutie bloku kódu</string>
+    <string name="rich_text_editor_quote">Prepínanie citácie</string>
+    <string name="rich_text_editor_unindent">Zrušiť odsadenie</string>
+    <string name="rich_text_editor_indent">Odsadenie</string>
+    <string name="room_poll_details_go_to_timeline">Zobraziť anketu na časovej osi</string>
+    <string name="error_voice_broadcast_unable_to_decrypt">Toto hlasové vysielanie sa nedá dešifrovať.</string>
+    <string name="settings_external_account_management">Údaje o vašom účte sú spravované samostatne na %1$s.</string>
+    <string name="settings_external_account_management_title">Účet</string>
+    <string name="settings_notification_error_on_update">Pri aktualizácii vašich predvolieb oznámení došlo k chybe. Skúste prosím znova.</string>
 </resources>

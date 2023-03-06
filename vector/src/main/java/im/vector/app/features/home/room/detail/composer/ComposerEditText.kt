@@ -17,7 +17,6 @@
 
 package im.vector.app.features.home.room.detail.composer
 
-import android.content.ClipData
 import android.content.Context
 import android.net.Uri
 import android.os.Build
@@ -27,12 +26,12 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatEditText
-import androidx.core.view.OnReceiveContentListener
 import androidx.core.view.ViewCompat
 import androidx.core.view.inputmethod.EditorInfoCompat
 import androidx.core.view.inputmethod.InputConnectionCompat
 import im.vector.app.core.extensions.ooi
 import im.vector.app.core.platform.SimpleTextWatcher
+import im.vector.app.features.home.room.detail.composer.images.UriContentListener
 import im.vector.app.features.html.PillImageSpan
 import timber.log.Timber
 
@@ -56,27 +55,11 @@ class ComposerEditText @JvmOverloads constructor(
         EditorInfoCompat.setContentMimeTypes(editorInfo, mimeTypes)
         ic = InputConnectionCompat.createWrapper(this, ic, editorInfo)
 
-        val onReceiveContentListener = OnReceiveContentListener { _, payload ->
-            val split = payload.partition { item -> item.uri != null }
-            val uriContent = split.first
-            val remaining = split.second
-
-            if (uriContent != null) {
-                val clip: ClipData = uriContent.clip
-                for (i in 0 until clip.itemCount) {
-                    val uri = clip.getItemAt(i).uri
-                    // ... app-specific logic to handle the URI ...
-                    callback?.onRichContentSelected(uri)
-                }
-            }
-            // Return anything that we didn't handle ourselves. This preserves the default platform
-            // behavior for text and anything else for which we are not implementing custom handling.
-            // Return anything that we didn't handle ourselves. This preserves the default platform
-            // behavior for text and anything else for which we are not implementing custom handling.
-            remaining
-        }
-
-        ViewCompat.setOnReceiveContentListener(this, mimeTypes, onReceiveContentListener)
+        ViewCompat.setOnReceiveContentListener(
+                this,
+                mimeTypes,
+                UriContentListener { callback?.onRichContentSelected(it) }
+        )
 
         return ic
     }

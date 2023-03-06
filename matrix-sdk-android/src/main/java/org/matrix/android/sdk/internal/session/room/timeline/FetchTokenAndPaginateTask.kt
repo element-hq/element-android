@@ -59,7 +59,7 @@ internal class DefaultFetchTokenAndPaginateTask @Inject constructor(
                 ?: throw IllegalStateException("No token found")
 
         monarchy.awaitTransaction { realm ->
-            val chunkToUpdate = ChunkEntity.findIncludingEvent(realm, params.lastKnownEventId)
+            val chunkToUpdate = ChunkEntity.findIncludingEvent(realm, params.roomId, params.lastKnownEventId)
             if (params.direction == PaginationDirection.FORWARDS) {
                 chunkToUpdate?.nextToken = fromToken
             } else {
