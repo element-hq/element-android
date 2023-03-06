@@ -82,6 +82,7 @@ class PinCodeHelperTests {
         val originalPinCode = "1234"
         val encryptedPinCode = "SOME_ENCRYPTED_VALUE"
         coEvery { storageEncrypted.getPinCode() } returns encryptedPinCode
+        coEvery { storageEncrypted.isHashedPinCode() } returns true
         every { lockScreenKeyRepository.decryptPinCode(encryptedPinCode) } returns originalPinCode.sha256()
         pinCodeHelper.verifyPinCode(originalPinCode).shouldBeTrue()
 
