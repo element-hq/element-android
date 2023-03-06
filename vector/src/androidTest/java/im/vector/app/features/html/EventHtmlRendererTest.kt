@@ -73,6 +73,30 @@ class EventHtmlRendererTest {
         result shouldBeEqualTo "__italic__ **bold**"
     }
 
+    // https://github.com/noties/Markwon/issues/423
+    @Test
+    fun doesNotIntroduceExtraNewLines() {
+        // Given initial render (required to trigger bug)
+        """Some <i>italic</i>""".renderAsTestSpan()
+        val results = arrayOf(
+                """Some <i>italic</i>""".renderAsTestSpan(),
+                """Some <b>bold</b>""".renderAsTestSpan(),
+                """Some <code>code</code>""".renderAsTestSpan(),
+                """Some <a href="link">link</a>""".renderAsTestSpan(),
+                """Some <del>strikethrough</del>""".renderAsTestSpan(),
+                """Some <span>span</span>""".renderAsTestSpan(),
+        )
+
+        results shouldBeEqualTo arrayOf(
+                "Some [italic]italic[/italic]",
+                "Some [bold]bold[/bold]",
+                "Some [inline code]code[/inline code]",
+                "Some [link]link[/link]",
+                "Some \n[strikethrough]strikethrough[/strikethrough]", // FIXME
+                "Some \nspan", // FIXME
+        )
+    }
+
     @Test
     fun processesHtmlWithinCodeBlocks() {
         val result = """<code><i>italic</i> <b>bold</b></code>""".renderAsTestSpan()
