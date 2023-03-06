@@ -143,7 +143,9 @@ class OnboardingViewModel @AssistedInject constructor(
     }
 
     private val matrixOrgUrl = stringProvider.getString(R.string.matrix_org_server_url).ensureTrailingSlash()
-    private val defaultHomeserverUrl = matrixOrgUrl
+
+    // TODO: Do not merge... this is for testing.
+    private val defaultHomeserverUrl = "https://localhost:8480"
 
     private val registrationWizard: RegistrationWizard
         get() = authenticationService.getRegistrationWizard()
