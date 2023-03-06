@@ -21,9 +21,7 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = false)
 enum class RendezvousFlow(val value: String) {
-    /**
-     * v1 is never represented in JSON so we don't annotate it
-     */
+    // v1 is never represented in JSON so we don't annotate it
     SETUP_ADDITIONAL_DEVICE_V1("org.matrix.msc3906.v1"),
     @Json(name = "org.matrix.msc3906.setup.additional_device.v2")
     SETUP_ADDITIONAL_DEVICE_V2("org.matrix.msc3906.setup.additional_device.v2"),

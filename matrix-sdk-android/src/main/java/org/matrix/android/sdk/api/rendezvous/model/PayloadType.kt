@@ -22,7 +22,7 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = false)
 internal enum class PayloadType(val value: String) {
     /**
-     * This is only used in v1 of MSC3906 and will be removed in future
+     * This is only used in v1 of MSC3906 and will be removed in future.
      */
     @Json(name = "m.login.finish")
     FINISH("m.login.finish"),
