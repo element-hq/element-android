@@ -1176,6 +1176,10 @@ class TimelineFragment :
                 views.hideComposerViews()
                 views.notificationAreaView.render(NotificationAreaView.State.Tombstone(mainState.tombstoneEvent))
             }
+
+            if (summary.isDirect && summary.isEncrypted && summary.joinedMembersCount == 1 && summary.invitedMembersCount == 0) {
+                views.hideComposerViews()
+            }
         } else if (summary?.membership == Membership.INVITE && inviter != null) {
             views.hideComposerViews()
             lazyLoadedViews.inviteView(true)?.apply {

@@ -1817,6 +1817,7 @@
     <string name="add_by_qr_code">Add by QR code</string>
     <string name="qr_code">QR code</string>
     <string name="creating_direct_room">"Creating room…"</string>
+    <string name="direct_room_user_list_only_invite_one_email">You can only invite one email at a time</string>
     <string name="direct_room_user_list_known_title">Known Users</string>
     <string name="direct_room_user_list_suggestions_title">Suggestions</string>
 
@@ -2561,6 +2562,8 @@
     <string name="encryption_enabled_tile_description">Messages in this room are end-to-end encrypted. Learn more &amp; verify users in their profile.</string>
     <string name="direct_room_encryption_enabled_tile_description">Messages in this chat are end-to-end encrypted.</string>
     <string name="direct_room_encryption_enabled_tile_description_future">Messages in this chat will be end-to-end encrypted.</string>
+    <string name="direct_room_encryption_enabled_waiting_users">Waiting for users to join ${app_name}</string>
+    <string name="direct_room_encryption_enabled_waiting_users_tile_description">Once invited users have joined ${app_name}, you will be able to chat and the room will be end-to-end encrypted</string>
     <string name="encryption_not_enabled">Encryption not enabled</string>
     <string name="encryption_misconfigured">Encryption is misconfigured</string>
     <string name="encryption_unknown_algorithm_tile_description">The encryption used by this room is not supported</string>

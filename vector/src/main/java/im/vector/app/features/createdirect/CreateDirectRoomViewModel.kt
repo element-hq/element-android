@@ -124,7 +124,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
                     }
 
             val result = runCatchingToAsync {
-                if (vectorPreferences.isDeferredDmEnabled()) {
+                if (vectorPreferences.isDeferredDmEnabled() && roomParams.invite3pids.isEmpty()) {
                     session.roomService().createLocalRoom(roomParams)
                 } else {
                     analyticsTracker.capture(CreatedRoom(isDM = roomParams.isDirect.orFalse()))

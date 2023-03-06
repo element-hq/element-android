@@ -25,6 +25,7 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.errorWithRetryItem
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.epoxy.noResultItem
+import im.vector.app.core.epoxy.profiles.notifications.textHeaderItem
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
@@ -60,6 +61,13 @@ class UserListController @Inject constructor(
     override fun buildModels() {
         val currentState = state ?: return
         val host = this
+
+        if (currentState.isE2EByDefault && currentState.single3pidSelection && currentState.pendingSelections.isNotEmpty()) {
+            textHeaderItem {
+                id("userListNotificationHeader")
+                textRes(R.string.direct_room_user_list_only_invite_one_email)
+            }
+        }
 
         // Build generic items
         if (currentState.searchTerm.isBlank()) {
