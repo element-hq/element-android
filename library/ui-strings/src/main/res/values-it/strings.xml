@@ -2919,4 +2919,5 @@
     <string name="error_voice_broadcast_unable_to_decrypt">Impossibile decifrare questa trasmissione vocale.</string>
     <string name="settings_external_account_management">I dettagli del tuo account sono gestiti separatamente su %1$s.</string>
     <string name="settings_external_account_management_title">Account</string>
+    <string name="settings_notification_error_on_update">Si è verificato un errore aggiornando le tue preferenze di notifica. Riprova.</string>
 </resources>
