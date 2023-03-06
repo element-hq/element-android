@@ -1160,7 +1160,7 @@
     <string name="room_settings_topic_hint">Tema</string>
     <string name="topic_prefix">"Tema: "</string>
     <string name="add_a_topic_link_text">Afegeix un tema</string>
-    <string name="room_created_summary_no_topic_creation_text">%s perquè la gent sàpiga de que tracta la sala.</string>
+    <string name="room_created_summary_no_topic_creation_text">%s perquè la gent sàpiga de què tracta la sala.</string>
     <string name="create_room_topic_hint">Tema</string>
     <string name="create_room_topic_section">Tema de la sala (opcional)</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Esperant l\'històric xifrat</string>
@@ -2808,7 +2808,7 @@
     <string name="labs_enable_rich_text_editor_title">Activa l\'editor de text enriquit</string>
     <string name="device_manager_push_notifications_description">Rep notificacions en aquesta sessió.</string>
     <string name="device_manager_push_notifications_title">Notificacions</string>
-    <string name="voice_broadcast_buffering">Carregant</string>
+    <string name="voice_broadcast_buffering">Carregant…</string>
     <string name="a11y_pause_voice_broadcast">Pausa l\'emissió de veu</string>
     <string name="a11y_play_voice_broadcast">Reprodueix o reprèn l\'emissió de veu</string>
     <string name="a11y_stop_voice_broadcast_record">Atura l\'enregistrament d\'emissió de veu</string>
@@ -2833,4 +2833,19 @@
     <string name="attachment_type_selector_text_formatting">Format de text</string>
     <string name="a11y_voice_broadcast_fast_backward">Enrere 30 segons</string>
     <string name="a11y_voice_broadcast_fast_forward">Avança 30 segons</string>
+    <string name="error_voice_broadcast_unauthorized_title">No es pot iniciar la nova l\'emissió de veu</string>
+    <string name="voice_broadcast_live_broadcast">Emissió en directe</string>
+    <string name="error_voice_message_broadcast_in_progress">No es pot iniciar el missatge de veu</string>
+    <string name="review_unverified_sessions_description">Comprova-ho per assegurar que el teu compte és segur</string>
+    <string name="review_unverified_sessions_title">Tens sessions no verificades</string>
+    <string name="room_profile_section_more_polls">Històric de l\'enquesta</string>
+    <string name="started_a_voice_broadcast">Emissió de veu iniciada</string>
+    <string name="quoting">Citant</string>
+    <string name="replying_to">Responent a %s</string>
+    <string name="editing">Editant</string>
+    <string name="settings_enable_direct_share_summary">Mostra els xats recents al menú de compartició del sistema</string>
+    <string name="settings_enable_direct_share_title">Activa la compartició directa</string>
+    <string name="notice_voice_broadcast_ended_by_you">Has finalitzat una emissió de veu.</string>
+    <string name="notice_voice_broadcast_ended">%1$s a finalitzat una emissió de veu.</string>
+    <string name="action_stop">Sí, atura</string>
 </resources>

@@ -41,7 +41,7 @@ internal class WorkManagerProvider @Inject constructor(
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val sessionScope: CoroutineScope
 ) {
-    private val tag = MATRIX_SDK_TAG_PREFIX + sessionId
+    val tag = MATRIX_SDK_TAG_PREFIX + sessionId
 
     val workManager = WorkManager.getInstance(context)
 
