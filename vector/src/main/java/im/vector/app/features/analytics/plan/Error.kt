@@ -29,6 +29,10 @@ data class Error(
          * Context - client defined, can be used for debugging.
          */
         val context: String? = null,
+        /**
+         * Which crypto module is the client currently using.
+         */
+        val cryptoModule: CryptoModule? = null,
         val domain: Domain,
         val name: Name,
 ) : VectorAnalyticsEvent {
@@ -52,11 +56,25 @@ data class Error(
         VoipUserMediaFailed,
     }
 
+    enum class CryptoModule {
+
+        /**
+         * Native / legacy crypto module specific to each platform.
+         */
+        Native,
+
+        /**
+         * Shared / cross-platform crypto module written in Rust.
+         */
+        Rust,
+    }
+
     override fun getName() = "Error"
 
     override fun getProperties(): Map<String, Any>? {
         return mutableMapOf<String, Any>().apply {
             context?.let { put("context", it) }
+            cryptoModule?.let { put("cryptoModule", it.name) }
             put("domain", domain.name)
             put("name", name.name)
         }.takeIf { it.isNotEmpty() }
