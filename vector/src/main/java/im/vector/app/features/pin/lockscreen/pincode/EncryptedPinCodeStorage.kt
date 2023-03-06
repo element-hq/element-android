@@ -40,4 +40,9 @@ interface EncryptedPinCodeStorage {
      * Returns whether the encrypted PIN code is stored or not.
      */
     suspend fun hasEncodedPin(): Boolean
+
+    /**
+     * Returns true if PIN code is hashed.
+     */
+    suspend fun isHashedPinCode(): Boolean
 }

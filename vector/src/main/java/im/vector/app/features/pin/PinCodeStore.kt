@@ -69,6 +69,7 @@ class SharedPrefPinCodeStore @Inject constructor(private val sharedPreferences: 
         withContext(Dispatchers.IO) {
             sharedPreferences.edit {
                 putString(ENCODED_PIN_CODE_KEY, pinCode)
+                putBoolean(IS_HASHED_PIN_CODE, true)
             }
         }
         listeners.forEach { it.onPinSetUpChange(isConfigured = true) }
@@ -87,6 +88,10 @@ class SharedPrefPinCodeStore @Inject constructor(private val sharedPreferences: 
 
     override suspend fun hasEncodedPin(): Boolean {
         return withContext(Dispatchers.IO) { sharedPreferences.contains(ENCODED_PIN_CODE_KEY) }
+    }
+
+    override suspend fun isHashedPinCode(): Boolean {
+        return sharedPreferences.getBoolean(IS_HASHED_PIN_CODE, false)
     }
 
     override fun getRemainingPinCodeAttemptsNumber(): Int {
@@ -120,6 +125,7 @@ class SharedPrefPinCodeStore @Inject constructor(private val sharedPreferences: 
         private const val ENCODED_PIN_CODE_KEY = "ENCODED_PIN_CODE_KEY"
         private const val REMAINING_PIN_CODE_ATTEMPTS_KEY = "REMAINING_PIN_CODE_ATTEMPTS_KEY"
         private const val REMAINING_BIOMETRICS_ATTEMPTS_KEY = "REMAINING_BIOMETRICS_ATTEMPTS_KEY"
+        private const val IS_HASHED_PIN_CODE = "IS_HASHED_PIN_CODE"
 
         private const val MAX_PIN_CODE_ATTEMPTS_NUMBER_BEFORE_LOGOUT = 3
     }

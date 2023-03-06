@@ -16,7 +16,6 @@
 
 package im.vector.app.features.pin.lockscreen.pincode
 
-import android.content.SharedPreferences
 import im.vector.app.features.pin.lockscreen.crypto.LockScreenKeyRepository
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
@@ -35,14 +34,13 @@ class PinCodeHelperTests {
 
     private val lockScreenKeyRepository = mockk<LockScreenKeyRepository>(relaxed = true)
     private val storageEncrypted = mockk<EncryptedPinCodeStorage>(relaxed = true)
-    private val sharedPreferences = mockk<SharedPreferences>(relaxed = true)
     lateinit var pinCodeHelper: PinCodeHelper
 
     @Before
     fun setup() {
         clearAllMocks()
 
-        pinCodeHelper = PinCodeHelper(lockScreenKeyRepository, storageEncrypted, sharedPreferences)
+        pinCodeHelper = PinCodeHelper(lockScreenKeyRepository, storageEncrypted)
     }
 
     @Test
@@ -85,7 +83,6 @@ class PinCodeHelperTests {
         val encryptedPinCode = "SOME_ENCRYPTED_VALUE"
         coEvery { storageEncrypted.getPinCode() } returns encryptedPinCode
         every { lockScreenKeyRepository.decryptPinCode(encryptedPinCode) } returns originalPinCode.sha256()
-        every { sharedPreferences.getBoolean(any(), any()) } returns true
         pinCodeHelper.verifyPinCode(originalPinCode).shouldBeTrue()
 
         every { lockScreenKeyRepository.decryptPinCode(encryptedPinCode) } returns "SOME_OTHER_VALUE"
