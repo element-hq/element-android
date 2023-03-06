@@ -16,7 +16,10 @@
 
 package im.vector.app.features.pin.lockscreen.pincode
 
+import android.content.SharedPreferences
+import androidx.core.content.edit
 import im.vector.app.features.pin.lockscreen.crypto.LockScreenKeyRepository
+import org.matrix.android.sdk.api.util.sha256
 import javax.inject.Inject
 
 /**
@@ -25,6 +28,7 @@ import javax.inject.Inject
 class PinCodeHelper @Inject constructor(
         private val lockScreenKeyRepository: LockScreenKeyRepository,
         private val encryptedStorage: EncryptedPinCodeStorage,
+        private val sharedPreferences: SharedPreferences,
 ) {
 
     /**
@@ -36,8 +40,12 @@ class PinCodeHelper @Inject constructor(
      * Creates a PIN code key if needed and stores the PIN code encrypted with it.
      */
     suspend fun createPinCode(pinCode: String) {
-        val encryptedValue = lockScreenKeyRepository.encryptPinCode(pinCode)
+        val encryptedValue = lockScreenKeyRepository.encryptPinCode(pinCode.sha256())
         encryptedStorage.savePinCode(encryptedValue)
+
+        sharedPreferences.edit {
+            putBoolean(IS_HASHED_PIN_CODE, true)
+        }
     }
 
     /**
@@ -45,7 +53,14 @@ class PinCodeHelper @Inject constructor(
      */
     suspend fun verifyPinCode(pinCode: String): Boolean {
         val encryptedPinCode = encryptedStorage.getPinCode() ?: return false
-        return lockScreenKeyRepository.decryptPinCode(encryptedPinCode) == pinCode
+        val decryptedPinCode = lockScreenKeyRepository.decryptPinCode(encryptedPinCode)
+
+        return if (!sharedPreferences.getBoolean(IS_HASHED_PIN_CODE, false)) {
+            createPinCode(decryptedPinCode)
+            verifyPinCode(pinCode)
+        } else {
+            decryptedPinCode == pinCode.sha256()
+        }
     }
 
     /**
@@ -54,5 +69,9 @@ class PinCodeHelper @Inject constructor(
     suspend fun deletePinCode() {
         encryptedStorage.deletePinCode()
         lockScreenKeyRepository.deletePinCodeKey()
+    }
+
+    companion object {
+        private const val IS_HASHED_PIN_CODE = "IS_HASHED_PIN_CODE"
     }
 }

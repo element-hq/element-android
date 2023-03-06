@@ -22,8 +22,15 @@ import java.util.Locale
 /**
  * Compute a Hash of a String, using md5 algorithm.
  */
-fun String.md5() = try {
-    val digest = MessageDigest.getInstance("md5")
+fun String.md5() = hashString("md5")
+
+/**
+ * Compute a Hash of a String, using sha256 algorithm.
+ */
+fun String.sha256() = hashString("SHA-256")
+
+private fun String.hashString(type: String) = try {
+    val digest = MessageDigest.getInstance(type)
     digest.update(toByteArray())
     digest.digest()
             .joinToString("") { String.format("%02X", it) }
