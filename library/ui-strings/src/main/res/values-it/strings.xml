@@ -2920,4 +2920,7 @@
     <string name="settings_external_account_management">I dettagli del tuo account sono gestiti separatamente su %1$s.</string>
     <string name="settings_external_account_management_title">Account</string>
     <string name="settings_notification_error_on_update">Si è verificato un errore aggiornando le tue preferenze di notifica. Riprova.</string>
+    <string name="direct_room_encryption_enabled_waiting_users_tile_description">Una volta che gli utenti si saranno uniti a ${app_name}, potrete scrivervi e la stanza sarà crittografata end-to-end</string>
+    <string name="direct_room_encryption_enabled_waiting_users">In attesa che gli utenti si uniscano a ${app_name}</string>
+    <string name="direct_room_user_list_only_invite_one_email">Puoi invitare una sola email alla volta</string>
 </resources>
