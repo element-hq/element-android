@@ -437,6 +437,10 @@ internal class RoomSyncHandler @Inject constructor(
             if (event.isEncrypted() && !isInitialSync) {
                 try {
                     decryptIfNeeded(event, roomId)
+                    // share the decryption result with the rawEvent because the decryption is done on a copy containing the roomId, see previous comment
+                    rawEvent.mxDecryptionResult = event.mxDecryptionResult
+                    rawEvent.mCryptoError = event.mCryptoError
+                    rawEvent.mCryptoErrorReason = event.mCryptoErrorReason
                 } catch (e: InterruptedException) {
                     Timber.i("Decryption got interrupted")
                 }
