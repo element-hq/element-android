@@ -2929,4 +2929,7 @@
     <string name="error_voice_broadcast_unable_to_decrypt">ناتوان در رمزگشایی این پخش صوتی.</string>
     <string name="settings_external_account_management">جزییات حسابتان جداگانه در %1$s مدیریت می‌شود.</string>
     <string name="settings_notification_error_on_update">هنگام به‌روز رسانی ترجیحات آگاهیتان خطایی رخ داد. لطفاً دوباره تلاش کنید.</string>
+    <string name="direct_room_encryption_enabled_waiting_users_tile_description">به محض پیوستن کاربران دعوت شده، قادر به گپ خواهید بود و اتاق رمزنگاری سرتاسری می‌شود</string>
+    <string name="direct_room_encryption_enabled_waiting_users">منتظر پیوستن کاربران به ${app_name}</string>
+    <string name="direct_room_user_list_only_invite_one_email">در هر زمان تنها می‌توانید یک رایانامه را دعوت کنید</string>
 </resources>
