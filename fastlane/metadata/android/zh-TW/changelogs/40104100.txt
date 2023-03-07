@@ -1,2 +1,2 @@
-此版本中的主要變動：捲動音訊訊息。多個臭蟲修復與穩定性改善。
+此版本的主要變動：捲動語音訊息。修復多個錯誤與改善穩定性。
 完整的變更紀錄：https://github.com/vector-im/element-android/releases
