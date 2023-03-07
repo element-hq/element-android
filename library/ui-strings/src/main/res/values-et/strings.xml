@@ -2920,4 +2920,16 @@
     <string name="rich_text_editor_quote">Lülita tsiteerimine sisse/välja</string>
     <string name="rich_text_editor_code_block">Lülita koodiblokk sisse/välja</string>
     <string name="settings_notification_error_on_update">Sinu teavituste seadistuste muutmisel tekkis viga. Palu proovi uuesti.</string>
+    <string name="settings_troubleshoot_test_current_endpoint_failed">Lõppsõlme ei õnnestu leida.</string>
+    <string name="settings_troubleshoot_test_current_endpoint_success">Hetkel kasutatav lõppsõlm: %s</string>
+    <string name="settings_troubleshoot_test_current_endpoint_title">Lõppsõlm</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">Lõppsõlme tunnusloa registreerimine koduserveris ei õnnestunud:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">Lõppsõlme registreerimine koduserveris õnnestus.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_title">Lõppsõlme registreerimine</string>
+    <string name="settings_troubleshoot_test_current_gateway_title">Lüüs</string>
+    <string name="settings_troubleshoot_test_current_gateway">Praegune lüüs: %s</string>
+    <string name="direct_room_user_list_only_invite_one_email">E-posti teel saad saata kutseid vaid ükshaaval</string>
+    <string name="direct_room_encryption_enabled_waiting_users">Kasutajate liitumise ootel ${app_name} või mõnes muud ühilduvas rakenduses</string>
+    <string name="direct_room_encryption_enabled_waiting_users_tile_description">Kui kutse saanud kasutajad on liitunud jututoaga ${app_name}, siis saad sa nendega suhelda ja jututuba on läbivalt krüptitud</string>
 </resources>
