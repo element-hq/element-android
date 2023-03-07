@@ -2915,4 +2915,7 @@
     <string name="settings_external_account_management">Hollësitë e llogarisë tuaj administrohen më vete, te %1$s.</string>
     <string name="settings_external_account_management_title">Llogari</string>
     <string name="settings_notification_error_on_update">Ndodhi një gabim, kur u përditësuan parapëlqimet tuaja për njoftime. Ju lutemi, riprovoni.</string>
+    <string name="direct_room_encryption_enabled_waiting_users">Po pritet që përdoruesit të bëhen pjesë e ${app_name}</string>
+    <string name="direct_room_encryption_enabled_waiting_users_tile_description">Pasi përdoruesit e ftuar të jenë bërë pjesë e ${app_name}, do të jeni në gjendje të bisedoni dhe dhoma do të jetë e fshehtëzuar skaj-më-skaj</string>
+    <string name="direct_room_user_list_only_invite_one_email">Mund të ftoni vetëm një email në herë</string>
 </resources>
