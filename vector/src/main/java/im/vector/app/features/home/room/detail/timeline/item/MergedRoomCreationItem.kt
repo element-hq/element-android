@@ -40,6 +40,7 @@ import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.tools.linkify
 import im.vector.app.features.themes.ThemeUtils
 import me.gujun.android.span.span
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.localecho.RoomLocalEcho
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -127,26 +128,38 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
     }
 
     private fun renderE2ESecureTile(holder: Holder) {
-        val resources = holder.expandView.resources
-        val description = when {
+        val (title, description, drawable) = when {
             isDirectRoom -> {
-                if (attributes.isLocalRoom) {
-                    resources.getString(R.string.direct_room_encryption_enabled_tile_description_future)
-                } else {
-                    resources.getString(R.string.direct_room_encryption_enabled_tile_description)
+                val isWaitingUser = roomSummary?.isEncrypted.orFalse() && roomSummary?.joinedMembersCount == 1 && roomSummary?.invitedMembersCount == 0
+                when {
+                    attributes.isLocalRoom -> Triple(
+                            R.string.encryption_enabled,
+                            R.string.direct_room_encryption_enabled_tile_description_future,
+                            R.drawable.ic_shield_black
+                    )
+                    isWaitingUser -> Triple(
+                            R.string.direct_room_encryption_enabled_waiting_users,
+                            R.string.direct_room_encryption_enabled_waiting_users_tile_description,
+                            R.drawable.ic_room_profile_member_list
+                    )
+                    else -> Triple(
+                            R.string.encryption_enabled,
+                            R.string.direct_room_encryption_enabled_tile_description,
+                            R.drawable.ic_shield_black
+                    )
                 }
             }
             else -> {
-                resources.getString(R.string.encryption_enabled_tile_description)
+                Triple(R.string.encryption_enabled, R.string.encryption_enabled_tile_description, R.drawable.ic_shield_black)
             }
         }
 
-        holder.e2eTitleTextView.text = holder.expandView.resources.getString(R.string.encryption_enabled)
+        holder.e2eTitleTextView.text = holder.expandView.resources.getString(title)
         holder.e2eTitleTextView.setCompoundDrawablesWithIntrinsicBounds(
-                ContextCompat.getDrawable(holder.view.context, R.drawable.ic_shield_black),
+                ContextCompat.getDrawable(holder.view.context, drawable),
                 null, null, null
         )
-        holder.e2eTitleDescriptionView.text = description
+        holder.e2eTitleDescriptionView.text = holder.expandView.resources.getString(description)
         holder.e2eTitleDescriptionView.textAlignment = View.TEXT_ALIGNMENT_CENTER
     }
 

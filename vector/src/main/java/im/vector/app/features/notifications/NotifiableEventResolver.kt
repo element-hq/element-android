@@ -66,9 +66,6 @@ class NotifiableEventResolver @Inject constructor(
         private val buildMeta: BuildMeta,
 ) {
 
-    private val nonEncryptedNotifiableEventTypes: List<String> =
-            listOf(EventType.MESSAGE) + EventType.POLL_START.values + EventType.POLL_END.values + EventType.STATE_ROOM_BEACON_INFO.values
-
     suspend fun resolveEvent(event: Event, session: Session, isNoisy: Boolean): NotifiableEvent? {
         val roomID = event.roomId ?: return null
         val eventId = event.eventId ?: return null
@@ -76,9 +73,8 @@ class NotifiableEventResolver @Inject constructor(
             return resolveStateRoomEvent(event, session, canBeReplaced = false, isNoisy = isNoisy)
         }
         val timelineEvent = session.getRoom(roomID)?.getTimelineEvent(eventId) ?: return null
-        return when (event.getClearType()) {
-            in nonEncryptedNotifiableEventTypes,
-            EventType.ENCRYPTED -> {
+        return when {
+            event.supportsNotification() || event.type == EventType.ENCRYPTED -> {
                 resolveMessageEvent(timelineEvent, session, canBeReplaced = false, isNoisy = isNoisy)
             }
             else -> {
@@ -163,8 +159,8 @@ class NotifiableEventResolver @Inject constructor(
         } else {
             event.attemptToDecryptIfNeeded(session)
             // only convert encrypted messages to NotifiableMessageEvents
-            when (event.root.getClearType()) {
-                in nonEncryptedNotifiableEventTypes -> {
+            when {
+                event.root.supportsNotification() -> {
                     val body = displayableEventFormatter.format(event, isDm = room.roomSummary()?.isDirect.orFalse(), appendAuthor = false).toString()
                     val roomName = room.roomSummary()?.displayName ?: ""
                     val senderDisplayName = event.senderInfo.disambiguatedDisplayName

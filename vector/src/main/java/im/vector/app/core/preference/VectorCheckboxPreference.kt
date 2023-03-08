@@ -32,6 +32,8 @@ class VectorCheckboxPreference : CheckBoxPreference {
 
     constructor(context: Context) : super(context)
 
+    var summaryTextColor: Int? = null
+
     init {
         // Set to false to remove the space when there is no icon
         isIconSpaceReserved = true
@@ -41,5 +43,10 @@ class VectorCheckboxPreference : CheckBoxPreference {
         // display the title in multi-line to avoid ellipsis.
         (holder.findViewById(android.R.id.title) as? TextView)?.isSingleLine = false
         super.onBindViewHolder(holder)
+    }
+
+    override fun syncSummaryView(holder: PreferenceViewHolder) {
+        super.syncSummaryView(holder)
+        summaryTextColor?.let { (holder.findViewById(android.R.id.summary) as? TextView)?.setTextColor(it) }
     }
 }

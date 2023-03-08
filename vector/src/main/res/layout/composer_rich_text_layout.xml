@@ -126,6 +126,11 @@
             app:layout_constraintTop_toBottomOf="@id/composerModeBarrier"
             app:bulletRadius="4sp"
             app:bulletGap="8sp"
+            app:codeBlockBackgroundDrawable="@drawable/bg_code_block"
+            app:inlineCodeSingleLineBg="@drawable/bg_inline_code_single_line"
+            app:inlineCodeMultiLineBgLeft="@drawable/bg_inline_code_multi_line_left"
+            app:inlineCodeMultiLineBgMid="@drawable/bg_inline_code_multi_line_mid"
+            app:inlineCodeMultiLineBgRight="@drawable/bg_inline_code_multi_line_right"
             tools:text="@tools:sample/lorem/random" />
 
         <com.google.android.material.textfield.TextInputEditText

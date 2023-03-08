@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.homeserver
+package im.vector.app.features.home
 
 import com.airbnb.mvrx.MavericksState
-import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
+import im.vector.app.features.home.room.list.UnreadCounterBadgeView
 
-data class HomeServerCapabilitiesViewState(
-        val capabilities: HomeServerCapabilities = HomeServerCapabilities(),
-        val isE2EByDefault: Boolean = true
+data class NewHomeDetailViewState(
+        val spacesNotificationCounterBadgeState: UnreadCounterBadgeView.State = UnreadCounterBadgeView.State.Count(count = 0, highlighted = false),
 ) : MavericksState

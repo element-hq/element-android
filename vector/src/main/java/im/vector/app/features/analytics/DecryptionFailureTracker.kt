@@ -137,7 +137,7 @@ class DecryptionFailureTracker @Inject constructor(
                     // for now we ignore events already reported even if displayed again?
                     .filter { alreadyReported.contains(it).not() }
                     .forEach { failedEventId ->
-                        analyticsTracker.capture(Error(aggregation.key.first, Error.Domain.E2EE, aggregation.key.second))
+                        analyticsTracker.capture(Error(context = aggregation.key.first, domain = Error.Domain.E2EE, name = aggregation.key.second))
                         alreadyReported.add(failedEventId)
                     }
         }

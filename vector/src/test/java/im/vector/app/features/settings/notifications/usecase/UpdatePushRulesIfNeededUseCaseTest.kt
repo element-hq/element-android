@@ -17,6 +17,7 @@
 package im.vector.app.features.settings.notifications.usecase
 
 import im.vector.app.test.fakes.FakeSession
+import im.vector.app.test.fixtures.PushRuleFixture
 import io.mockk.coVerifySequence
 import io.mockk.every
 import io.mockk.mockk
@@ -28,14 +29,13 @@ import org.junit.Before
 import org.junit.Test
 import org.matrix.android.sdk.api.session.pushrules.Action
 import org.matrix.android.sdk.api.session.pushrules.RuleIds
-import org.matrix.android.sdk.api.session.pushrules.getActions
 import org.matrix.android.sdk.api.session.pushrules.rest.PushRule
-import org.matrix.android.sdk.api.session.pushrules.rest.PushRuleAndKind
 
 internal class UpdatePushRulesIfNeededUseCaseTest {
 
     private val fakeSession = FakeSession()
-    private val updatePushRulesIfNeededUseCase = UpdatePushRulesIfNeededUseCase()
+    private val fakeGetPushRulesOnInvalidStateUseCase = mockk<GetPushRulesOnInvalidStateUseCase>()
+    private val updatePushRulesIfNeededUseCase = UpdatePushRulesIfNeededUseCase(fakeGetPushRulesOnInvalidStateUseCase)
 
     @Before
     fun setup() {
@@ -50,25 +50,26 @@ internal class UpdatePushRulesIfNeededUseCaseTest {
     @Test
     fun test() = runTest {
         // Given
-        val firstActions = listOf(Action.Notify)
-        val secondActions = listOf(Action.DoNotNotify)
-        val rules = listOf(
+        val firstParentEnabled = true
+        val firstParentActions = listOf(Action.Notify)
+        val firstParent = givenARuleId(RuleIds.RULE_ID_ONE_TO_ONE_ROOM, firstParentEnabled, firstParentActions)
+        val secondParentEnabled = false
+        val secondParentActions = listOf(Action.DoNotNotify)
+        val secondParent = givenARuleId(RuleIds.RULE_ID_ALL_OTHER_MESSAGES_ROOMS, secondParentEnabled, secondParentActions)
+        val rulesOnError = listOf(
                 // first set of related rules
-                givenARuleId(RuleIds.RULE_ID_ONE_TO_ONE_ROOM, true, firstActions),
+                firstParent,
                 givenARuleId(RuleIds.RULE_ID_POLL_START_ONE_TO_ONE, true, listOf(Action.DoNotNotify)), // diff
                 givenARuleId(RuleIds.RULE_ID_POLL_START_ONE_TO_ONE_UNSTABLE, true, emptyList()), // diff
                 givenARuleId(RuleIds.RULE_ID_POLL_END_ONE_TO_ONE, false, listOf(Action.Notify)), // diff
-                givenARuleId(RuleIds.RULE_ID_POLL_END_ONE_TO_ONE_UNSTABLE, true, listOf(Action.Notify)),
                 // second set of related rules
-                givenARuleId(RuleIds.RULE_ID_ALL_OTHER_MESSAGES_ROOMS, false, secondActions),
+                secondParent,
                 givenARuleId(RuleIds.RULE_ID_POLL_START, true, listOf(Action.Notify)), // diff
-                givenARuleId(RuleIds.RULE_ID_POLL_START_UNSTABLE, false, listOf(Action.DoNotNotify)),
                 givenARuleId(RuleIds.RULE_ID_POLL_END, false, listOf(Action.Notify)), // diff
                 givenARuleId(RuleIds.RULE_ID_POLL_END_UNSTABLE, true, listOf()), // diff
-                // Another rule
-                givenARuleId(RuleIds.RULE_ID_CONTAIN_USER_NAME, true, listOf(Action.Notify)),
         )
-        every { fakeSession.fakePushRuleService.getPushRules().getAllRules() } returns rules
+        every { fakeGetPushRulesOnInvalidStateUseCase.execute(fakeSession) } returns rulesOnError
+        every { fakeSession.fakePushRuleService.getPushRules().getAllRules() } returns rulesOnError
 
         // When
         updatePushRulesIfNeededUseCase.execute(fakeSession)
@@ -77,30 +78,23 @@ internal class UpdatePushRulesIfNeededUseCaseTest {
         coVerifySequence {
             fakeSession.fakePushRuleService.getPushRules()
             // first set
-            fakeSession.fakePushRuleService.updatePushRuleActions(any(), RuleIds.RULE_ID_POLL_START_ONE_TO_ONE, true, firstActions)
-            fakeSession.fakePushRuleService.updatePushRuleActions(any(), RuleIds.RULE_ID_POLL_START_ONE_TO_ONE_UNSTABLE, true, firstActions)
-            fakeSession.fakePushRuleService.updatePushRuleActions(any(), RuleIds.RULE_ID_POLL_END_ONE_TO_ONE, true, firstActions)
+            fakeSession.fakePushRuleService.updatePushRuleActions(any(), RuleIds.RULE_ID_POLL_START_ONE_TO_ONE, firstParentEnabled, firstParentActions)
+            fakeSession.fakePushRuleService.updatePushRuleActions(any(), RuleIds.RULE_ID_POLL_START_ONE_TO_ONE_UNSTABLE, firstParentEnabled, firstParentActions)
+            fakeSession.fakePushRuleService.updatePushRuleActions(any(), RuleIds.RULE_ID_POLL_END_ONE_TO_ONE, firstParentEnabled, firstParentActions)
             // second set
-            fakeSession.fakePushRuleService.updatePushRuleActions(any(), RuleIds.RULE_ID_POLL_START, false, secondActions)
-            fakeSession.fakePushRuleService.updatePushRuleActions(any(), RuleIds.RULE_ID_POLL_END, false, secondActions)
-            fakeSession.fakePushRuleService.updatePushRuleActions(any(), RuleIds.RULE_ID_POLL_END_UNSTABLE, false, secondActions)
+            fakeSession.fakePushRuleService.updatePushRuleActions(any(), RuleIds.RULE_ID_POLL_START, secondParentEnabled, secondParentActions)
+            fakeSession.fakePushRuleService.updatePushRuleActions(any(), RuleIds.RULE_ID_POLL_END, secondParentEnabled, secondParentActions)
+            fakeSession.fakePushRuleService.updatePushRuleActions(any(), RuleIds.RULE_ID_POLL_END_UNSTABLE, secondParentEnabled, secondParentActions)
         }
     }
 
     private fun givenARuleId(ruleId: String, enabled: Boolean, actions: List<Action>): PushRule {
-        val pushRule = mockk<PushRule> {
-            every { this@mockk.ruleId } returns ruleId
-            every { this@mockk.enabled } returns enabled
-            every { this@mockk.actions } returns actions
-            every { getActions() } returns actions
-        }
-        val ruleAndKind = mockk<PushRuleAndKind> {
-            every { this@mockk.pushRule } returns pushRule
-            every { kind } returns mockk()
-        }
+        val ruleAndKind = PushRuleFixture.aPushRuleAndKind(
+                pushRule = PushRuleFixture.aPushRule(ruleId, enabled, actions),
+        )
 
         every { fakeSession.fakePushRuleService.getPushRules().findDefaultRule(ruleId) } returns ruleAndKind
 
-        return pushRule
+        return ruleAndKind.pushRule
     }
 }

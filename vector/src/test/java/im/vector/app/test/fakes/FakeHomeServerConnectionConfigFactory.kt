@@ -25,7 +25,7 @@ import org.matrix.android.sdk.api.network.ssl.Fingerprint
 class FakeHomeServerConnectionConfigFactory {
     val instance: HomeServerConnectionConfigFactory = mockk()
 
-    fun givenConfigFor(url: String, fingerprint: Fingerprint? = null, config: HomeServerConnectionConfig) {
-        every { instance.create(url, fingerprint) } returns config
+    fun givenConfigFor(url: String, fingerprints: List<Fingerprint>? = null, config: HomeServerConnectionConfig) {
+        every { instance.create(url, fingerprints) } returns config
     }
 }

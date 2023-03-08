@@ -76,11 +76,11 @@ private fun hasReadMissingEvent(realm: Realm,
                                 userId: String,
                                 eventId: String,
                                 threadId: String? = ReadService.THREAD_ID_MAIN): Boolean {
-    return realm.doesEventExistInChunkHistory(eventId) && realm.hasReadReceiptInLatestChunk(latestChunkEntity, roomId, userId, threadId)
+    return realm.doesEventExistInChunkHistory(roomId, eventId) && realm.hasReadReceiptInLatestChunk(latestChunkEntity, roomId, userId, threadId)
 }
 
-private fun Realm.doesEventExistInChunkHistory(eventId: String): Boolean {
-    return ChunkEntity.findIncludingEvent(this, eventId) != null
+private fun Realm.doesEventExistInChunkHistory(roomId: String, eventId: String): Boolean {
+    return ChunkEntity.findIncludingEvent(this, roomId, eventId) != null
 }
 
 private fun Realm.hasReadReceiptInLatestChunk(latestChunkEntity: ChunkEntity, roomId: String, userId: String, threadId: String?): Boolean {

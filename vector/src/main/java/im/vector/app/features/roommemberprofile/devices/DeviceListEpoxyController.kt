@@ -32,9 +32,12 @@ import im.vector.app.core.ui.list.genericItem
 import im.vector.app.core.ui.list.genericWithValueItem
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.settings.devices.TrustUtils
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.span
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import javax.inject.Inject
 
 class DeviceListEpoxyController @Inject constructor(
@@ -68,10 +71,20 @@ class DeviceListEpoxyController @Inject constructor(
                     it.isVerified
                 }
 
+                val trustMSK = data.memberCrossSigningKey?.isTrusted().orFalse()
+                val legacyMode = data.memberCrossSigningKey == null
+
                 // Build top header
-                val allGreen = deviceList.fold(true, { prev, device ->
-                    prev && device.isVerified
-                })
+                val allGreen = deviceList.fold(true) { prev, device ->
+                    val trustLevel = TrustUtils.shieldForTrust(
+                            data.myDeviceId == device.deviceId,
+                            trustMSK,
+                            legacyMode,
+                            device.trustLevel
+                    )
+
+                    prev && trustLevel == RoomEncryptionTrustLevel.Trusted
+                }
 
                 genericItem {
                     id("title")
@@ -105,8 +118,21 @@ class DeviceListEpoxyController @Inject constructor(
                     // Build list of device with status
                     deviceList.forEach { device ->
                         genericWithValueItem {
+                            val trustLevel = TrustUtils.shieldForTrust(
+                                    data.myDeviceId == device.deviceId,
+                                    trustMSK,
+                                    legacyMode,
+                                    device.trustLevel
+                            )
+                            val shield = when (trustLevel) {
+                                RoomEncryptionTrustLevel.Default -> R.drawable.ic_shield_unknown
+                                RoomEncryptionTrustLevel.Warning -> R.drawable.ic_shield_warning
+                                RoomEncryptionTrustLevel.Trusted -> R.drawable.ic_shield_trusted
+                                RoomEncryptionTrustLevel.E2EWithUnsupportedAlgorithm -> R.drawable.ic_warning_badge
+                            }
+
                             id(device.deviceId)
-                            titleIconResourceId(if (device.isVerified) R.drawable.ic_shield_trusted else R.drawable.ic_shield_warning)
+                            titleIconResourceId(shield)
                             apply {
                                 val title = if (host.vectorPreferences.developerMode()) {
                                     val seq = span {
@@ -126,12 +152,12 @@ class DeviceListEpoxyController @Inject constructor(
                             }
                             value(
                                     host.stringProvider.getString(
-                                            if (device.isVerified) R.string.trusted else R.string.not_trusted
+                                            if (trustLevel == RoomEncryptionTrustLevel.Trusted) R.string.trusted else R.string.not_trusted
                                     )
                             )
                             valueColorInt(
                                     host.colorProvider.getColorFromAttribute(
-                                            if (device.isVerified) R.attr.colorPrimary else R.attr.colorError
+                                            if (trustLevel == RoomEncryptionTrustLevel.Trusted) R.attr.colorPrimary else R.attr.colorError
                                     )
                             )
                             itemClickAction {

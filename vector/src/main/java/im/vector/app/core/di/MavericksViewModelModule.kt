@@ -40,6 +40,7 @@ import im.vector.app.features.discovery.DiscoverySettingsViewModel
 import im.vector.app.features.discovery.change.SetIdentityServerViewModel
 import im.vector.app.features.home.HomeActivityViewModel
 import im.vector.app.features.home.HomeDetailViewModel
+import im.vector.app.features.home.NewHomeDetailViewModel
 import im.vector.app.features.home.UnknownDeviceDetectorSharedViewModel
 import im.vector.app.features.home.UnreadMessagesSharedViewModel
 import im.vector.app.features.home.UserColorAccountDataViewModel
@@ -56,7 +57,6 @@ import im.vector.app.features.home.room.list.RoomListViewModel
 import im.vector.app.features.home.room.list.home.HomeRoomListViewModel
 import im.vector.app.features.home.room.list.home.invites.InvitesViewModel
 import im.vector.app.features.home.room.list.home.release.ReleaseNotesViewModel
-import im.vector.app.features.homeserver.HomeServerCapabilitiesViewModel
 import im.vector.app.features.invite.InviteUsersToRoomViewModel
 import im.vector.app.features.location.LocationSharingViewModel
 import im.vector.app.features.location.live.map.LiveLocationMapViewModel
@@ -501,11 +501,6 @@ interface MavericksViewModelModule {
 
     @Binds
     @IntoMap
-    @MavericksViewModelKey(HomeServerCapabilitiesViewModel::class)
-    fun homeServerCapabilitiesViewModelFactory(factory: HomeServerCapabilitiesViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
-
-    @Binds
-    @IntoMap
     @MavericksViewModelKey(InviteUsersToRoomViewModel::class)
     fun inviteUsersToRoomViewModelFactory(factory: InviteUsersToRoomViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 
@@ -717,4 +712,9 @@ interface MavericksViewModelModule {
     @IntoMap
     @MavericksViewModelKey(RoomPollDetailViewModel::class)
     fun roomPollDetailViewModelFactory(factory: RoomPollDetailViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(NewHomeDetailViewModel::class)
+    fun newHomeDetailViewModelFactory(factory: NewHomeDetailViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 }

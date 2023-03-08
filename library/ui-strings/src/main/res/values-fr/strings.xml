@@ -274,9 +274,9 @@
     <string name="action_join">Rejoindre</string>
     <string name="action_reject">Rejeter</string>
     <string name="room_participants_leave_prompt_title">Quitter le salon</string>
-    <string name="room_participants_header_direct_chats">Conversations privées</string>
+    <string name="room_participants_header_direct_chats">Messages directs</string>
     <string name="room_participants_action_invite">Inviter</string>
-    <string name="room_participants_action_ban">Bannir</string>
+    <string name="room_participants_action_ban">Interdire l’accès au salon (définitif)</string>
     <string name="room_participants_action_unban">Révoquer le bannissement</string>
     <string name="room_participants_action_mention">Mentionner</string>
     <string name="ssl_trust">Faire confiance</string>
@@ -473,7 +473,7 @@
     <string name="loading">Chargement…</string>
     <string name="start_voice_call_prompt_msg">Voulez-vous vraiment engager un nouvel appel audio \?</string>
     <string name="start_video_call_prompt_msg">Voulez-vous vraiment engager un nouvel appel vidéo \?</string>
-    <string name="room_participants_ban_prompt_msg">Bannir un utilisateur va l’expulser du salon et l’empêcher de le rejoindre à nouveau.</string>
+    <string name="room_participants_ban_prompt_msg">L’exclusion de l’utilisateur va l’expulser du salon et l’empêcher de le rejoindre à nouveau.</string>
     <string name="room_settings_all_messages">Notification pour chaque message</string>
     <string name="room_settings_add_homescreen_shortcut">Ajouter à l’écran d’accueil</string>
     <string name="settings_inline_url_preview">Aperçu des liens</string>
@@ -579,7 +579,7 @@
     <string name="merged_events_collapse">réduire</string>
     <string name="generic_label_and_value">%1$s : %2$s</string>
     <string name="x_plus">+%d</string>
-    <string name="room_participants_action_remove">Expulser</string>
+    <string name="room_participants_action_remove">Retirer du salon (réversible)</string>
     <string name="settings_inline_url_preview_summary">Afficher un aperçu des liens dans la discussion quand votre serveur d’accueil le permet.</string>
     <string name="settings_send_typing_notifs">Envoyer des notifications de saisie</string>
     <string name="settings_send_typing_notifs_summary">Les autres utilisateurs pourront voir que vous êtes en train d’écrire.</string>
@@ -836,7 +836,7 @@
     <string name="change_room_directory_network">Changer de réseau</string>
     <string name="please_wait">Veuillez patienter…</string>
     <string name="keys_backup_setup_override_backup_prompt_description">On dirait que vous avez déjà configuré une sauvegarde de clé depuis une autre session. Voulez-vous la remplacer par celle que vous êtes en train de créer \?</string>
-    <string name="room_list_people_empty_body">Vos conversations privées seront affichées ici. Appuyez sur « + » en bas à droite pour en démarrer une.</string>
+    <string name="room_list_people_empty_body">Vos messages directs seront affichés ici. Appuyez sur « + » en bas à droite pour en démarrer une.</string>
     <string name="room_list_rooms_empty_title">Salons</string>
     <string name="room_list_rooms_empty_body">Vos salons seront affichés ici. Appuyez sur le « + » en bas à droite pour trouver ceux existant ou en créer de nouveaux.</string>
     <string name="title_activity_emoji_reaction_picker">Réactions</string>
@@ -852,7 +852,7 @@
     <string name="action_change">Changer</string>
     <string name="room_preview_no_preview">Impossible d’avoir un aperçu de ce salon</string>
     <string name="fab_menu_create_room">Salons</string>
-    <string name="fab_menu_create_chat">Conversations privées</string>
+    <string name="fab_menu_create_chat">Messages directs</string>
     <string name="create_room_action_create">CRÉER</string>
     <string name="create_room_name_hint">Nom</string>
     <string name="create_room_public_title">Public</string>
@@ -884,7 +884,7 @@
     <string name="send_suggestion_sent">Merci, la suggestion a bien été envoyée</string>
     <string name="send_suggestion_failed">Échec d’envoi de la suggestion (%s)</string>
     <string name="settings_labs_show_hidden_events_in_timeline">Afficher les évènements cachés dans les discussions</string>
-    <string name="bottom_action_people_x">Conversations privées</string>
+    <string name="bottom_action_people_x">Messages directs</string>
     <string name="send_file_step_idle">Attente…</string>
     <string name="send_file_step_encrypting_thumbnail">Chiffrement de la miniature…</string>
     <string name="send_file_step_sending_thumbnail">Envoi de la miniature (%1$s / %2$s)</string>
@@ -1410,7 +1410,7 @@
     <string name="external_link_confirmation_message">Le lien %1$s vous emmène sur un autre site : %2$s.
 \n
 \nVoulez-vous vraiment poursuivre \?</string>
-    <string name="create_room_dm_failure">Nous n’avons pas pu créer votre conversation privée. Vérifiez les utilisateurs que vous souhaitez inviter et réessayez.</string>
+    <string name="create_room_dm_failure">Nous n’avons pas pu créer votre message direct. Vérifiez les utilisateurs que vous souhaitez inviter et réessayez.</string>
     <string name="unencrypted">Non chiffré</string>
     <string name="encrypted_unverified">Chiffré par un appareil non vérifié</string>
     <string name="verify_this_session">Vérifiez la nouvelle connexion accédant à votre compte : %1$s</string>
@@ -1570,7 +1570,7 @@
     <string name="settings_security_pin_code_grace_period_summary_off">Le code est requis à l’ouverture de ${app_name}.</string>
     <string name="settings_security_pin_code_grace_period_summary_on">Le code est demandé après 2 minutes d\'inutilisation de ${app_name}.</string>
     <string name="settings_security_pin_code_grace_period_title">Demander le code après 2 minutes</string>
-    <string name="settings_security_pin_code_notifications_summary_off">Afficher uniquement le numéro de messages non-lus dans une simple notification.</string>
+    <string name="settings_security_pin_code_notifications_summary_off">Afficher uniquement le numéro de messages non lus dans une simple notification.</string>
     <string name="settings_security_pin_code_notifications_summary_on">Afficher les détails comme les noms des salons et le contenu du message.</string>
     <string name="settings_security_pin_code_notifications_title">Afficher le contenu dans les notifications</string>
     <string name="settings_security_pin_code_use_biometrics_summary_off">Le code est la seule façon de déverrouiller ${app_name}.</string>
@@ -1607,7 +1607,7 @@
         <item quantity="one">%1$s, %2$s et %3$d autre ont lu</item>
         <item quantity="other">%1$s, %2$s et %3$d autres ont lu</item>
     </plurals>
-    <string name="labs_show_unread_notifications_as_tab">Ajouter un onglet dédié aux notifications non-lues sur l’écran principal.</string>
+    <string name="labs_show_unread_notifications_as_tab">Ajouter un onglet dédié aux notifications non lues sur l’écran principal.</string>
     <string name="create_room_federation_error">Le salon a été créé, mais certaines invitations n’ont pas été envoyées pour la raison suivante :
 \n
 \n%s</string>
@@ -1716,12 +1716,12 @@
     <string name="create_room_topic_hint">Sujet</string>
     <string name="create_room_topic_section">Sujet du salon (facultatif)</string>
     <string name="create_room_name_section">Nom du salon</string>
-    <string name="room_member_open_or_create_dm">Conversation privée</string>
+    <string name="room_member_open_or_create_dm">Message direct</string>
     <string name="send_bug_report_include_key_share_history">Inclure l’historique d’échange de clés</string>
     <string name="no_more_results">Plus aucun résultat</string>
     <string name="settings_export_trail">Exporter le rapport d’audit</string>
     <string name="room_created_summary_no_topic_creation_text">%s pour permettre aux gens de connaître le sujet de ce salon.</string>
-    <string name="this_is_the_beginning_of_dm">Ceci est le début de l’historique de votre conversation privée avec %s.</string>
+    <string name="this_is_the_beginning_of_dm">Ceci est le début de l’historique de votre message direct avec %s.</string>
     <string name="this_is_the_beginning_of_room_no_name">Ceci est le début de cette conversation.</string>
     <string name="this_is_the_beginning_of_room">Ceci est le début de %s.</string>
     <string name="room_settings_enable_encryption_no_permission">Vous n\'avez pas le droit d’activer le chiffrement dans ce salon.</string>
@@ -2131,8 +2131,8 @@
     <string name="settings_room_invitations">Les invitations à des salons</string>
     <string name="settings_encrypted_group_messages">Les conversations de groupe chiffrées</string>
     <string name="settings_group_messages">Les conversations de groupe</string>
-    <string name="settings_encrypted_direct_messages">Les conversations privées chiffrées</string>
-    <string name="settings_messages_direct_messages">Les conversations privées</string>
+    <string name="settings_encrypted_direct_messages">Les conversations à deux chiffrées</string>
+    <string name="settings_messages_direct_messages">Les messages directs</string>
     <string name="settings_messages_containing_username">Mon nom d’utilisateur</string>
     <string name="settings_messages_containing_display_name">Mon nom d’affichage</string>
     <string name="settings_notification_notify_me_for">Me notifier pour</string>
@@ -2614,7 +2614,7 @@
     <string name="home_layout_preferences">Préférences de présentation</string>
     <string name="explore_rooms">Parcourir les salons</string>
     <string name="create_room">Créer un salon</string>
-    <string name="start_chat">Commencer une discussion</string>
+    <string name="start_chat">Commencer un message direct</string>
     <string name="device_manager_other_sessions_description_unverified">Non vérifiée · Dernière activité %1$s</string>
     <string name="device_manager_other_sessions_description_verified">Vérifié · Dernière activité %1$s</string>
     <string name="device_manager_other_sessions_view_all">Tout voir (%1$d)</string>
@@ -2636,7 +2636,7 @@
     <string name="onboarding_new_app_layout_spaces_title">Accéder aux espaces</string>
     <string name="onboarding_new_app_layout_welcome_message">Pour simplifier Element, les onglets sont désormais facultatifs. Gérez les depuis le menu en haut à droite.</string>
     <string name="onboarding_new_app_layout_welcome_title">Bienvenu dans une nouvelle vue !</string>
-    <string name="home_empty_no_unreads_message">C\'est ici que vos messages non-lus s’afficheront lorsque vous en aurez.</string>
+    <string name="home_empty_no_unreads_message">C\'est ici que vos messages non lus s’afficheront lorsque vous en aurez.</string>
     <string name="home_empty_no_unreads_title">Rien à signaler.</string>
     <string name="home_empty_no_rooms_message">La messagerie sécurisée tout-en-un pour les équipes, les amis, et les organisations. Créez une discussion ou rejoignez un salon pour démarrer.</string>
     <string name="home_empty_no_rooms_title">Bienvenue dans ${app_name},
@@ -2920,4 +2920,13 @@
     <string name="error_voice_message_broadcast_in_progress">Impossible de démarrer un message vocal</string>
     <string name="error_voice_broadcast_no_connection_recording">Erreur de connexion – Enregistrement en pause</string>
     <string name="rich_text_editor_inline_code">Appliquer le formatage de code en ligne</string>
+    <string name="rich_text_editor_code_block">Bloc de code</string>
+    <string name="rich_text_editor_quote">Citation</string>
+    <string name="rich_text_editor_unindent">Désindenter</string>
+    <string name="rich_text_editor_indent">Indenter</string>
+    <string name="room_poll_details_go_to_timeline">Consulter la chronologie des sondages</string>
+    <string name="error_voice_broadcast_unable_to_decrypt">Impossible de déchiffrer cette diffusion audio.</string>
+    <string name="settings_external_account_management">Les détails de votre compte sont gérés séparément sur %1$s.</string>
+    <string name="settings_external_account_management_title">Compte</string>
+    <string name="settings_notification_error_on_update">Nous avons rencontré une erreur lors de la mise-à-jour de vos préférences de notification. Veuillez réessayer.</string>
 </resources>

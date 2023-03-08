@@ -42,8 +42,7 @@ fun getStandardAction(ruleId: String, index: NotificationIndex): StandardActions
         RuleIds.RULE_ID_POLL_START_ONE_TO_ONE,
         RuleIds.RULE_ID_POLL_START_ONE_TO_ONE_UNSTABLE,
         RuleIds.RULE_ID_POLL_END_ONE_TO_ONE,
-        RuleIds.RULE_ID_POLL_END_ONE_TO_ONE_UNSTABLE,
-        ->
+        RuleIds.RULE_ID_POLL_END_ONE_TO_ONE_UNSTABLE ->
             when (index) {
                 NotificationIndex.OFF -> StandardActions.DontNotify
                 NotificationIndex.SILENT -> StandardActions.Notify

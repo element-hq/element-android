@@ -191,7 +191,7 @@
     <string name="title_activity_settings">تنظیمات</string>
     <string name="title_activity_bug_report">گزارش اشکال</string>
     <string name="loading">در حال بارگذاری…</string>
-    <string name="ok">باشه</string>
+    <string name="ok">قبول</string>
     <string name="action_cancel">لغو</string>
     <string name="action_save">ذخیره</string>
     <string name="action_leave">ترک کردن</string>
@@ -2920,4 +2920,13 @@
     <string name="error_voice_message_broadcast_in_progress">نمی‌توان پخش صوتی را آغاز کرد</string>
     <string name="error_voice_broadcast_no_connection_recording">خطای اتّصال - ضبط مکث شد</string>
     <string name="rich_text_editor_inline_code">اعمال قالب کد درون‌خط</string>
+    <string name="rich_text_editor_code_block">تغییر حالت بلوک کد</string>
+    <string name="rich_text_editor_quote">تغییر حالت نقل قول</string>
+    <string name="rich_text_editor_unindent">تونرفتگی</string>
+    <string name="rich_text_editor_indent">تورفتگی</string>
+    <string name="room_poll_details_go_to_timeline">دیدن نظرسنجی در خط زمانی</string>
+    <string name="settings_external_account_management_title">حساب</string>
+    <string name="error_voice_broadcast_unable_to_decrypt">ناتوان در رمزگشایی این پخش صوتی.</string>
+    <string name="settings_external_account_management">جزییات حسابتان جداگانه در %1$s مدیریت می‌شود.</string>
+    <string name="settings_notification_error_on_update">هنگام به‌روز رسانی ترجیحات آگاهیتان خطایی رخ داد. لطفاً دوباره تلاش کنید.</string>
 </resources>

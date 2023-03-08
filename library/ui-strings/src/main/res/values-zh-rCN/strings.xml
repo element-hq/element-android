@@ -9,7 +9,7 @@
     <string name="notice_room_remove">%1$s 移除了 %2$s</string>
     <string name="notice_room_unban">%1$s 解封了 %2$s</string>
     <string name="notice_room_ban">%1$s 封禁了 %2$s</string>
-    <string name="notice_avatar_url_changed">%1$s 更换了他们的头像</string>
+    <string name="notice_avatar_url_changed">%1$s 更换了其头像</string>
     <string name="notice_display_name_set">%1$s 将他们的显示名称设置为 %2$s</string>
     <string name="notice_display_name_changed_from">%1$s 将其显示名称从 %2$s 更改为 %3$s</string>
     <string name="notice_display_name_removed">%1$s 移除了他们的显示名称（%2$s）</string>
@@ -178,7 +178,7 @@
     <string name="call_notification_reject">拒绝</string>
     <string name="call_notification_hangup">挂断</string>
     <string name="action_quote">引用</string>
-    <string name="action_share">共享</string>
+    <string name="action_share">分享</string>
     <string name="action_voice_call">语音通话</string>
     <string name="action_video_call">视频通话</string>
     <string name="action_mark_all_as_read">全部标记为已读</string>
@@ -797,10 +797,10 @@
     <string name="room_list_rooms_empty_title">房间</string>
     <string name="title_activity_emoji_reaction_picker">回应</string>
     <string name="action_agree">同意</string>
-    <string name="message_add_reaction">添加反应</string>
-    <string name="message_view_reaction">查看反应</string>
+    <string name="message_add_reaction">添加回应</string>
+    <string name="message_view_reaction">查看回应</string>
     <string name="reactions">反应</string>
-    <string name="event_redacted_by_user_reason">由用户删除的事件</string>
+    <string name="event_redacted_by_user_reason">事件被用户删除</string>
     <string name="create_new_room">创建新房间</string>
     <string name="action_change">修改</string>
     <string name="please_wait">请稍候……</string>
@@ -825,7 +825,7 @@
     <string name="preference_root_help_about">帮助和关于</string>
     <string name="edited_suffix">（已编辑）</string>
     <string name="none">无</string>
-    <string name="action_revoke">撤消</string>
+    <string name="action_revoke">撤销</string>
     <string name="action_disconnect">断开连接</string>
     <string name="action_decline">拒绝</string>
     <string name="login_error_no_homeserver_found">这不是有效的 Matrix 服务器地址</string>
@@ -942,7 +942,7 @@
     <string name="event_redacted">消息已移除</string>
     <string name="settings_show_redacted">显示已移除消息</string>
     <string name="settings_show_redacted_summary">对已移除消息显示占位符</string>
-    <string name="event_redacted_by_admin_reason">房间管理员主持的事件</string>
+    <string name="event_redacted_by_admin_reason">事件被房间管理员删除</string>
     <string name="malformed_message">格式错误事件，无法显示</string>
     <string name="error_no_network">无网络。请检查你的网络连接。</string>
     <string name="change_room_directory_network">更改网络</string>
@@ -1265,7 +1265,7 @@
     </plurals>
     <string name="room_profile_section_more_uploads">上传</string>
     <string name="room_profile_section_more_leave">离开房间</string>
-    <string name="room_profile_leaving_room">正在离开房间…</string>
+    <string name="room_profile_leaving_room">正在离开房间……</string>
     <string name="room_member_power_level_admins">管理员</string>
     <string name="room_member_power_level_moderators">协管员</string>
     <string name="room_member_power_level_custom">自定义</string>
@@ -1597,7 +1597,7 @@
         <item quantity="other">%d 秒</item>
     </plurals>
     <string name="sent_a_poll">轮询</string>
-    <string name="sent_a_reaction">用%s反应</string>
+    <string name="sent_a_reaction">用%s回应</string>
     <string name="sent_verification_conclusion">验证结果</string>
     <string name="delete_account_data_warning">是否删除类型 %1$s 的账户数据？
 \n
@@ -1702,7 +1702,7 @@
     <string name="login_social_continue">或</string>
     <string name="room_list_quick_actions_low_priority_remove">从低优先级移除</string>
     <string name="room_list_quick_actions_low_priority_add">添加到低优先级</string>
-    <string name="attachment_viewer_item_x_of_y">%2$d 的 %1$d</string>
+    <string name="attachment_viewer_item_x_of_y">%1$d / %2$d</string>
     <string name="rotate_and_crop_screen_title">旋转和裁剪</string>
     <string name="attachment_type_dialog_title">添加图像自</string>
     <string name="settings_discovery_consent_action_give_consent">授予许可</string>
@@ -1758,7 +1758,7 @@
     <string name="room_permissions_title">权限</string>
     <string name="room_settings_permissions_subtitle">查看和更新更改房间各个部分所需的角色。</string>
     <string name="room_settings_permissions_title">房间权限</string>
-    <string name="room_participants_leave_private_warning">此房间不公开。你没有邀请将无法重新加入。</string>
+    <string name="room_participants_leave_private_warning">此房间不公开。没有邀请，你将无法重新加入。</string>
     <string name="call_held_by_you">你保持通话</string>
     <string name="call_held_by_user">%s 保持通话</string>
     <string name="call_hold_action">保持</string>
@@ -1883,7 +1883,7 @@
     </plurals>
     <string name="room_alias_preview_not_found">此别名当前无法被访问。
 \n请稍后再试，或询问房间管理员你身份有权访问。</string>
-    <string name="join_anyway">无论以何种方式加入</string>
+    <string name="join_anyway">依然加入</string>
     <string name="join_space">加入空间</string>
     <string name="create_space">创建空间</string>
     <string name="skip_for_now">暂且略过</string>
@@ -2820,4 +2820,6 @@
     <string name="error_voice_message_broadcast_in_progress_message">你无法启动语音消息因为你正在录制实时广播。请终止实时广播以开始录制语音消息</string>
     <string name="error_voice_message_broadcast_in_progress">无法启动语音消息</string>
     <string name="ended_poll_indicator">结束了投票。</string>
+    <string name="settings_access_token_summary">你的访问令牌提供对你账户的完全访问权限。勿与任何人分享它。</string>
+    <string name="settings_access_token">访问令牌</string>
 </resources>

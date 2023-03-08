@@ -27,7 +27,6 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.args
-import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,7 +41,6 @@ import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.core.utils.showIdentityServerConsentDialog
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.FragmentUserListBinding
-import im.vector.app.features.homeserver.HomeServerCapabilitiesViewModel
 import im.vector.app.features.settings.VectorSettingsActivity
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -63,7 +61,6 @@ class UserListFragment :
 
     private val args: UserListFragmentArgs by args()
     private val viewModel: UserListViewModel by activityViewModel()
-    private val homeServerCapabilitiesViewModel: HomeServerCapabilitiesViewModel by fragmentViewModel()
     private lateinit var sharedActionViewModel: UserListSharedActionViewModel
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentUserListBinding {
@@ -86,7 +83,7 @@ class UserListFragment :
         setupRecyclerView()
         setupSearchView()
 
-        homeServerCapabilitiesViewModel.onEach {
+        viewModel.onEach {
             views.userListE2EbyDefaultDisabled.isVisible = !it.isE2EByDefault
         }
 
