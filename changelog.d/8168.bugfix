@@ -1,1 +1,0 @@
-Fix timeline loading a wrong room on permalink if a matching event id is found in a different room

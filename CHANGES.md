@@ -1,3 +1,27 @@
+Changes in Element v1.5.28 (2023-03-08)
+=======================================
+
+Features ✨
+----------
+ - [Poll] Error handling for push rules synchronization ([#8141](https://github.com/vector-im/element-android/issues/8141))
+ - Add aggregated unread indicator for spaces in the new layout ([#8157](https://github.com/vector-im/element-android/issues/8157))
+ - [Rich text editor] Add ability to insert GIFs from keyboard ([#8185](https://github.com/vector-im/element-android/issues/8185))
+
+Bugfixes 🐛
+----------
+ - Space setting category doesn't show up ([#7989](https://github.com/vector-im/element-android/issues/7989))
+ - Fix timeline loading a wrong room on permalink if a matching event id is found in a different room ([#8168](https://github.com/vector-im/element-android/issues/8168))
+ - Reapply local push rules after event decryption ([#8170](https://github.com/vector-im/element-android/issues/8170))
+ - [Rich text editor] Fix code appearance ([#8171](https://github.com/vector-im/element-android/issues/8171))
+ - Extend workaround for extra new lines in timeline ([#8187](https://github.com/vector-im/element-android/issues/8187))
+ - [Poll history] Fixing small issue about font style ([#8190](https://github.com/vector-im/element-android/issues/8190))
+ - Update room member shields behavior ([#8195](https://github.com/vector-im/element-android/issues/8195))
+
+Other changes
+-------------
+ - Direct Message: Manage encrypted DM in case of invite by email ([#6912](https://github.com/vector-im/element-android/issues/6912))
+
+
 Changes in Element v1.5.26 (2023-02-22)
 =======================================
 
