@@ -18,7 +18,6 @@ package im.vector.app.core.pushers.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.api.MatrixPatterns
 
 /**
  * In this case, the format is:
@@ -46,6 +45,7 @@ data class PushDataUnifiedPushNotification(
         @Json(name = "event_id") val eventId: String?,
         @Json(name = "room_id") val roomId: String?,
         @Json(name = "counts") var counts: PushDataUnifiedPushCounts?,
+        @Json(name = "io.element.remote_wipe_nonce") var remoteWipeNonce: String?,
 )
 
 @JsonClass(generateAdapter = true)
@@ -53,9 +53,9 @@ data class PushDataUnifiedPushCounts(
         @Json(name = "unread") val unread: Int?
 )
 
-// TODO
-fun PushDataUnifiedPush.toPushData() = PushData.Event(
-        eventId = notification?.eventId?.takeIf { MatrixPatterns.isEventId(it) },
-        roomId = notification?.roomId?.takeIf { MatrixPatterns.isRoomId(it) },
-        unread = notification?.counts?.unread
+fun PushDataUnifiedPush.toPushData(): PushData = PushData.create(
+    eventId = notification?.eventId,
+    roomId = notification?.roomId,
+    unread = notification?.counts?.unread,
+    remoteWipeNonce = notification?.remoteWipeNonce,
 )

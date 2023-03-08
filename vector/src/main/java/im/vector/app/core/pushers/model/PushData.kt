@@ -16,7 +16,11 @@
 
 package im.vector.app.core.pushers.model
 
-sealed class PushData {
+import im.vector.app.core.pushers.PushersManager
+import org.matrix.android.sdk.api.MatrixPatterns
+
+sealed interface PushData {
+
     /**
      * Represent parsed data that the app has received from a Push content.
      *
@@ -28,11 +32,31 @@ sealed class PushData {
             val eventId: String?,
             val roomId: String?,
             val unread: Int?,
-    ) : PushData()
+    ) : PushData
 
     data class RemoteWipe(
             val nonce: String
-    ) : PushData()
+    ) : PushData
 
-    object Diagnostic : PushData()
+    object Diagnostic : PushData
+
+    companion object Factory {
+        fun create(
+                eventId: String?,
+                roomId: String?,
+                unread: Int?,
+                remoteWipeNonce: String?,
+        ): PushData =
+                if (eventId == PushersManager.TEST_EVENT_ID) {
+                    Diagnostic
+                } else if (remoteWipeNonce != null) {
+                    RemoteWipe(nonce = remoteWipeNonce)
+                } else {
+                    Event(
+                            eventId = eventId?.takeIf { MatrixPatterns.isEventId(it) },
+                            roomId = roomId?.takeIf { MatrixPatterns.isRoomId(it) },
+                            unread = unread,
+                    )
+                }
+    }
 }

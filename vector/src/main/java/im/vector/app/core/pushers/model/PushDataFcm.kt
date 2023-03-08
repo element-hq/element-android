@@ -16,9 +16,6 @@
 
 package im.vector.app.core.pushers.model
 
-import im.vector.app.core.pushers.PushersManager
-import org.matrix.android.sdk.api.MatrixPatterns
-
 /**
  * In this case, the format is:
  * <pre>
@@ -38,15 +35,9 @@ data class PushDataFcm(
         val remoteWipeNonce: String?,
 )
 
-fun PushDataFcm.toPushData(): PushData =
-    if (eventId == PushersManager.TEST_EVENT_ID) {
-        PushData.Diagnostic
-    } else if (remoteWipeNonce != null) {
-        PushData.RemoteWipe(nonce = remoteWipeNonce)
-    } else {
-        PushData.Event(
-                eventId = eventId?.takeIf { MatrixPatterns.isEventId(it) },
-                roomId = roomId?.takeIf { MatrixPatterns.isRoomId(it) },
-                unread = unread,
-        )
-    }
+fun PushDataFcm.toPushData(): PushData = PushData.create(
+        eventId = eventId,
+        roomId = roomId,
+        unread = unread,
+        remoteWipeNonce = remoteWipeNonce,
+)

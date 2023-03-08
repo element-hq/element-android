@@ -71,7 +71,11 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
         if (vectorPreferences.areNotificationEnabledForDevice() && activeSessionHolder.hasActiveSession()) {
             // If the endpoint has changed
             // or the gateway has changed
-            if (unifiedPushHelper.getEndpointOrToken() != endpoint) {
+            // or the remote wipe nonce has not yet been set
+            if (
+                    unifiedPushHelper.getEndpointOrToken() != endpoint ||
+                    pushersManager.getPusherForCurrentSession()?.data?.remoteWipeNonce == null
+            ) {
                 unifiedPushStore.storeUpEndpoint(endpoint)
                 coroutineScope.launch {
                     unifiedPushHelper.storeCustomOrDefaultGateway(endpoint) {
