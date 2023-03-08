@@ -2869,4 +2869,7 @@
     <string name="settings_external_account_management">您的帳號詳細資訊已單獨於 %1$s 中管理。</string>
     <string name="settings_external_account_management_title">帳號</string>
     <string name="settings_notification_error_on_update">更新您的通知偏好設定時發生錯誤。請再試一次。</string>
+    <string name="direct_room_encryption_enabled_waiting_users_tile_description">受邀使用者加入 ${app_name} 後，您就可以聊天，聊天室將進行端到端加密</string>
+    <string name="direct_room_encryption_enabled_waiting_users">正在等待使用者加入 ${app_name}</string>
+    <string name="direct_room_user_list_only_invite_one_email">您一次僅能邀請一個電子郵件</string>
 </resources>
