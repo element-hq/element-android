@@ -98,8 +98,9 @@ class PushersManager @Inject constructor(
 
     fun getPusherForCurrentSession(): Pusher? {
         val session = activeSessionHolder.getSafeActiveSession() ?: return null
-        val deviceId = session.sessionParams.deviceId
-        return session.pushersService().getPushers().firstOrNull { it.deviceId == deviceId }
+        return session.pushersService().getPushers().firstOrNull {
+            it.pushKey == unifiedPushHelper.getEndpointOrToken()
+        }
     }
 
     suspend fun unregisterEmailPusher(email: String) {
