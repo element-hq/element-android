@@ -24,8 +24,5 @@ import org.matrix.android.sdk.api.session.cleardata.ClearDataService
 internal abstract class ClearDataModule {
 
     @Binds
-    abstract fun bindClearDataTask(task: DefaultClearDataTask): ClearDataTask
-
-    @Binds
     abstract fun bindClearDataService(service: DefaultClearDataService): ClearDataService
 }

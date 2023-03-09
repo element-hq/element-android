@@ -17,13 +17,27 @@
 package org.matrix.android.sdk.internal.session.cleardata
 
 import org.matrix.android.sdk.api.session.cleardata.ClearDataService
+import org.matrix.android.sdk.internal.di.SessionDatabase
+import org.matrix.android.sdk.internal.di.SessionDownloadsDirectory
+import org.matrix.android.sdk.internal.session.cache.ClearCacheTask
+import org.matrix.android.sdk.internal.session.cleanup.CleanupSession
+import timber.log.Timber
+import java.io.File
 import javax.inject.Inject
 
 internal class DefaultClearDataService @Inject constructor(
-        private val clearDataTask: ClearDataTask,
+        private val cleanupSession: CleanupSession,
+        @SessionDatabase private val clearSessionDatabaseTask: ClearCacheTask,
+        @SessionDownloadsDirectory private val sessionDownloads: File,
 ) : ClearDataService {
 
-    override suspend fun clearData() {
-        return clearDataTask.execute(ClearDataTask.Params)
+    override suspend fun clearSessionData() {
+        cleanupSession.stopActiveTasks()
+
+        Timber.d("Clear data: clear session database")
+        clearSessionDatabaseTask.execute(Unit)
+
+        Timber.d("Clear data: clear session cache")
+        sessionDownloads.deleteRecursively()
     }
 }

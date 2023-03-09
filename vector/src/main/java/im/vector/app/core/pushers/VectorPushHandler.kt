@@ -146,7 +146,7 @@ class VectorPushHandler @Inject constructor(
                     Timber.tag(loggerTag.value).d("## Remote wipe: received")
 
                     Timber.tag(loggerTag.value).d("## Remote wipe: clearing data")
-                    session.clearDataService().clearData()
+                    session.clearDataService().clearSessionData()
                 }
             }
         } catch (e: Exception) {

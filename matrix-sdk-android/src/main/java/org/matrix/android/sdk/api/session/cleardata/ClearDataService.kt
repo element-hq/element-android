@@ -19,7 +19,8 @@ package org.matrix.android.sdk.api.session.cleardata
 interface ClearDataService {
 
     /**
-     * Clear all data except for basic session data such as credentials
+     * Clear all session data except for basic session information
+     * such as access tokens and connection configuration.
      */
-    suspend fun clearData()
+    suspend fun clearSessionData()
 }
