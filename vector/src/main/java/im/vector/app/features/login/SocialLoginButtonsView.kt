@@ -56,6 +56,14 @@ class SocialLoginButtonsView @JvmOverloads constructor(context: Context, attrs: 
             }
         }
 
+    var hasOidcCompatibilityFlow: Boolean = false
+        set(value) {
+            if (value != hasOidcCompatibilityFlow) {
+                field = value
+                update()
+            }
+        }
+
     var listener: InteractionListener? = null
 
     private fun update() {
@@ -70,7 +78,8 @@ class SocialLoginButtonsView @JvmOverloads constructor(context: Context, attrs: 
                 transformationMethod = null
                 textAlignment = View.TEXT_ALIGNMENT_CENTER
             }.let {
-                it.text = getButtonTitle(context.getString(R.string.login_social_sso))
+                it.text = if (hasOidcCompatibilityFlow) context.getString(R.string.login_continue)
+                    else getButtonTitle(context.getString(R.string.login_social_sso))
                 it.textAlignment = View.TEXT_ALIGNMENT_CENTER
                 it.setOnClickListener {
                     listener?.onProviderSelected(null)
@@ -160,11 +169,14 @@ class SocialLoginButtonsView @JvmOverloads constructor(context: Context, attrs: 
     }
 }
 
-fun SocialLoginButtonsView.render(state: SsoState, mode: SocialLoginButtonsView.Mode, listener: (SsoIdentityProvider?) -> Unit) {
+fun SocialLoginButtonsView.render(loginMode: LoginMode, mode: SocialLoginButtonsView.Mode, listener: (SsoIdentityProvider?) -> Unit) {
     this.mode = mode
+    val state = loginMode.ssoState()
     this.ssoIdentityProviders = when (state) {
         SsoState.Fallback -> null
         is SsoState.IdentityProviders -> state.providers.sorted()
     }
+    this.hasOidcCompatibilityFlow = (loginMode is LoginMode.Sso && loginMode.hasOidcCompatibilityFlow) ||
+            (loginMode is LoginMode.SsoAndPassword && loginMode.hasOidcCompatibilityFlow)
     this.listener = SocialLoginButtonsView.InteractionListener { listener(it) }
 }

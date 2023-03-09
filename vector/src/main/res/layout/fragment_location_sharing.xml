@@ -13,7 +13,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:mapbox_renderTextureMode="true"
+        app:maplibre_renderTextureMode="true"
         app:showLocateButton="true"
         tools:background="#4F00" />
 

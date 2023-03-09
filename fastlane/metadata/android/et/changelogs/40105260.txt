@@ -1,0 +1,2 @@
+Põhilised muutused selles versioonis: põhiliselt veaparandused.
+Kogu ingliskeelne muudatuste logi: https://github.com/vector-im/element-android/releases

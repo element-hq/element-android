@@ -25,6 +25,8 @@ import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.RelationType
+import org.matrix.android.sdk.api.session.events.model.getRelationContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
 import org.matrix.android.sdk.api.session.room.model.message.asMessageAudioEvent
@@ -61,6 +63,7 @@ class TimelineEventsGroups {
     private fun TimelineEvent.getGroupIdOrNull(): String? {
         val type = root.getClearType()
         val content = root.getClearContent()
+        val relationContent = root.getRelationContent()
         return when {
             EventType.isCallEvent(type) -> (content?.get("call_id") as? String)
             type == VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO -> root.asVoiceBroadcastEvent()?.reference?.eventId
@@ -68,6 +71,9 @@ class TimelineEventsGroups {
             type == EventType.MESSAGE && root.asMessageAudioEvent().isVoiceBroadcast() -> {
                 // Group voice messages with a reference to an eventId
                 root.asMessageAudioEvent()?.getVoiceBroadcastEventId()
+            }
+            type == EventType.ENCRYPTED && relationContent?.type == RelationType.REFERENCE -> {
+                relationContent.eventId
             }
             else -> {
                 null
@@ -152,5 +158,9 @@ class VoiceBroadcastEventsGroup(private val group: TimelineEventsGroup) {
 
     fun getDuration(): Int {
         return group.events.mapNotNull { it.root.asMessageAudioEvent()?.duration }.sum()
+    }
+
+    fun hasUnableToDecryptEvent(): Boolean {
+        return group.events.any { it.root.getClearType() == EventType.ENCRYPTED }
     }
 }

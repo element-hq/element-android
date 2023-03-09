@@ -35,7 +35,6 @@ import im.vector.app.features.roomprofile.polls.RoomPollsType
 import im.vector.app.features.roomprofile.polls.RoomPollsViewEvent
 import im.vector.app.features.roomprofile.polls.RoomPollsViewModel
 import im.vector.app.features.roomprofile.polls.RoomPollsViewState
-import timber.log.Timber
 import javax.inject.Inject
 
 abstract class RoomPollsListFragment :
@@ -47,6 +46,9 @@ abstract class RoomPollsListFragment :
 
     @Inject
     lateinit var stringProvider: StringProvider
+
+    @Inject
+    lateinit var viewNavigator: RoomPollsListNavigator
 
     private val viewModel: RoomPollsViewModel by parentFragmentViewModel(RoomPollsViewModel::class)
 
@@ -125,9 +127,13 @@ abstract class RoomPollsListFragment :
         views.roomPollsLoadMoreWhenEmptyProgress.isVisible = viewState.hasNoPollsAndCanLoadMore() && viewState.isLoadingMore
     }
 
-    override fun onPollClicked(pollId: String) {
-        // TODO navigate to details
-        Timber.d("poll with id $pollId clicked")
+    override fun onPollClicked(pollId: String) = withState(viewModel) {
+        viewNavigator.goToPollDetails(
+                context = requireContext(),
+                pollId = pollId,
+                roomId = it.roomId,
+                isEnded = getRoomPollsType() == RoomPollsType.ENDED,
+        )
     }
 
     override fun onLoadMoreClicked() {

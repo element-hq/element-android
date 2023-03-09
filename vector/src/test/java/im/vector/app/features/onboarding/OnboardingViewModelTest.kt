@@ -57,6 +57,7 @@ import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.matrix.android.sdk.api.auth.SSOAction
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 import org.matrix.android.sdk.api.auth.registration.Stage
@@ -620,7 +621,7 @@ class OnboardingViewModelTest {
 
     @Test
     fun `when editing homeserver errors with certificate error, then emits error`() = runTest {
-        fakeHomeServerConnectionConfigFactory.givenConfigFor(A_HOMESERVER_URL, fingerprint = null, A_HOMESERVER_CONFIG)
+        fakeHomeServerConnectionConfigFactory.givenConfigFor(A_HOMESERVER_URL, fingerprints = null, A_HOMESERVER_CONFIG)
         fakeStartAuthenticationFlowUseCase.givenErrors(A_HOMESERVER_CONFIG, AN_UNRECOGNISED_CERTIFICATE_ERROR)
         val editAction = OnboardingAction.HomeServerChange.EditHomeServer(A_HOMESERVER_URL)
         val test = viewModel.test()
@@ -639,7 +640,7 @@ class OnboardingViewModelTest {
 
     @Test
     fun `when selecting homeserver errors with certificate error, then emits error`() = runTest {
-        fakeHomeServerConnectionConfigFactory.givenConfigFor(A_HOMESERVER_URL, fingerprint = null, A_HOMESERVER_CONFIG)
+        fakeHomeServerConnectionConfigFactory.givenConfigFor(A_HOMESERVER_URL, fingerprints = null, A_HOMESERVER_CONFIG)
         fakeStartAuthenticationFlowUseCase.givenErrors(A_HOMESERVER_CONFIG, AN_UNRECOGNISED_CERTIFICATE_ERROR)
         val selectAction = OnboardingAction.HomeServerChange.SelectHomeServer(A_HOMESERVER_URL)
         val test = viewModel.test()
@@ -841,7 +842,7 @@ class OnboardingViewModelTest {
                 A_HOMESERVER_URL,
                 SELECTED_HOMESERVER_STATE,
                 config = A_HOMESERVER_CONFIG.copy(allowedFingerprints = listOf(A_FINGERPRINT)),
-                fingerprint = A_FINGERPRINT,
+                fingerprints = listOf(A_FINGERPRINT),
         )
 
         viewModel.handle(OnboardingAction.UserAcceptCertificate(A_FINGERPRINT, OnboardingAction.HomeServerChange.SelectHomeServer(A_HOMESERVER_URL)))
@@ -865,7 +866,7 @@ class OnboardingViewModelTest {
                 A_HOMESERVER_URL,
                 SELECTED_HOMESERVER_STATE,
                 config = A_HOMESERVER_CONFIG.copy(allowedFingerprints = listOf(A_FINGERPRINT)),
-                fingerprint = A_FINGERPRINT,
+                fingerprints = listOf(A_FINGERPRINT),
         )
         val test = viewModel.test()
 
@@ -885,7 +886,7 @@ class OnboardingViewModelTest {
 
     @Test
     fun `given DirectLogin retry action, when accepting user certificate, then logs in directly`() = runTest {
-        fakeHomeServerConnectionConfigFactory.givenConfigFor("https://dummy.org", A_FINGERPRINT, A_HOMESERVER_CONFIG)
+        fakeHomeServerConnectionConfigFactory.givenConfigFor("https://dummy.org", listOf(A_FINGERPRINT), A_HOMESERVER_CONFIG)
         fakeDirectLoginUseCase.givenSuccessResult(A_DIRECT_LOGIN, config = A_HOMESERVER_CONFIG, result = fakeSession)
         givenInitialisesSession(fakeSession)
         val test = viewModel.test()
@@ -1088,9 +1089,9 @@ class OnboardingViewModelTest {
     fun `given returns Sso url, when fetching Sso url, then updates authentication state and returns supplied Sso url`() = runTest {
         val test = viewModel.test()
         val provider = SsoIdentityProvider(id = "provider_id", null, null, null)
-        fakeAuthenticationService.givenSsoUrl(A_REDIRECT_URI, A_DEVICE_ID, provider.id, result = A_SSO_URL)
+        fakeAuthenticationService.givenSsoUrl(A_REDIRECT_URI, A_DEVICE_ID, provider.id, SSOAction.LOGIN, result = A_SSO_URL)
 
-        val result = viewModel.fetchSsoUrl(A_REDIRECT_URI, A_DEVICE_ID, provider)
+        val result = viewModel.fetchSsoUrl(A_REDIRECT_URI, A_DEVICE_ID, provider, SSOAction.LOGIN)
 
         result shouldBeEqualTo A_SSO_URL
         test
@@ -1174,16 +1175,16 @@ class OnboardingViewModelTest {
             homeserverUrl: String,
             resultingState: SelectedHomeserverState,
             config: HomeServerConnectionConfig = A_HOMESERVER_CONFIG,
-            fingerprint: Fingerprint? = null,
+            fingerprints: List<Fingerprint>? = null,
     ) {
-        fakeHomeServerConnectionConfigFactory.givenConfigFor(homeserverUrl, fingerprint, config)
+        fakeHomeServerConnectionConfigFactory.givenConfigFor(homeserverUrl, fingerprints, config)
         fakeStartAuthenticationFlowUseCase.givenResult(config, StartAuthenticationResult(isHomeserverOutdated = false, resultingState))
         givenRegistrationResultFor(RegisterAction.StartRegistration, RegistrationActionHandler.Result.StartRegistration)
         fakeHomeServerHistoryService.expectUrlToBeAdded(config.homeServerUri.toString())
     }
 
     private fun givenUpdatingHomeserverErrors(homeserverUrl: String, resultingState: SelectedHomeserverState, error: Throwable) {
-        fakeHomeServerConnectionConfigFactory.givenConfigFor(homeserverUrl, fingerprint = null, A_HOMESERVER_CONFIG)
+        fakeHomeServerConnectionConfigFactory.givenConfigFor(homeserverUrl, fingerprints = null, A_HOMESERVER_CONFIG)
         fakeStartAuthenticationFlowUseCase.givenResult(A_HOMESERVER_CONFIG, StartAuthenticationResult(isHomeserverOutdated = false, resultingState))
         givenRegistrationResultFor(RegisterAction.StartRegistration, RegistrationActionHandler.Result.Error(error))
         fakeHomeServerHistoryService.expectUrlToBeAdded(A_HOMESERVER_CONFIG.homeServerUri.toString())
@@ -1208,13 +1209,13 @@ class OnboardingViewModelTest {
 
     private fun givenHomeserverSelectionFailsWithNetworkError() {
         fakeContext.givenHasConnection()
-        fakeHomeServerConnectionConfigFactory.givenConfigFor(A_HOMESERVER_URL, fingerprint = null, A_HOMESERVER_CONFIG)
+        fakeHomeServerConnectionConfigFactory.givenConfigFor(A_HOMESERVER_URL, fingerprints = null, A_HOMESERVER_CONFIG)
         fakeStartAuthenticationFlowUseCase.givenHomeserverUnavailable(A_HOMESERVER_CONFIG)
     }
 
     private fun givenHomeserverSelectionFailsWith(cause: Throwable) {
         fakeContext.givenHasConnection()
-        fakeHomeServerConnectionConfigFactory.givenConfigFor(A_HOMESERVER_URL, fingerprint = null, A_HOMESERVER_CONFIG)
+        fakeHomeServerConnectionConfigFactory.givenConfigFor(A_HOMESERVER_URL, fingerprints = null, A_HOMESERVER_CONFIG)
         fakeStartAuthenticationFlowUseCase.givenErrors(A_HOMESERVER_CONFIG, cause)
     }
 }

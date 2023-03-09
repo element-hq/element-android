@@ -22,6 +22,7 @@ import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.devices.v2.notification.UpdateNotificationSettingsAccountDataUseCase
 import im.vector.app.test.fakes.FakeContext
 import im.vector.app.test.fakes.FakeNotificationsSettingUpdater
+import im.vector.app.test.fakes.FakePushRulesUpdater
 import im.vector.app.test.fakes.FakeSession
 import im.vector.app.test.fakes.FakeVectorPreferences
 import im.vector.app.test.fakes.FakeWebRtcCallManager
@@ -47,6 +48,7 @@ class ConfigureAndStartSessionUseCaseTest {
     private val fakeUpdateMatrixClientInfoUseCase = mockk<UpdateMatrixClientInfoUseCase>()
     private val fakeVectorPreferences = FakeVectorPreferences()
     private val fakeNotificationsSettingUpdater = FakeNotificationsSettingUpdater()
+    private val fakePushRulesUpdater = FakePushRulesUpdater()
     private val fakeUpdateNotificationSettingsAccountDataUseCase = mockk<UpdateNotificationSettingsAccountDataUseCase>()
 
     private val configureAndStartSessionUseCase = ConfigureAndStartSessionUseCase(
@@ -56,6 +58,7 @@ class ConfigureAndStartSessionUseCaseTest {
             vectorPreferences = fakeVectorPreferences.instance,
             notificationsSettingUpdater = fakeNotificationsSettingUpdater.instance,
             updateNotificationSettingsAccountDataUseCase = fakeUpdateNotificationSettingsAccountDataUseCase,
+            pushRulesUpdater = fakePushRulesUpdater.instance,
     )
 
     @Before
@@ -78,7 +81,8 @@ class ConfigureAndStartSessionUseCaseTest {
         coJustRun { fakeUpdateMatrixClientInfoUseCase.execute(any()) }
         coJustRun { fakeUpdateNotificationSettingsAccountDataUseCase.execute(any()) }
         fakeVectorPreferences.givenIsClientInfoRecordingEnabled(isEnabled = true)
-        fakeNotificationsSettingUpdater.givenOnSessionsStarted(aSession)
+        fakeNotificationsSettingUpdater.givenOnSessionStarted(aSession)
+        fakePushRulesUpdater.givenOnSessionStarted(aSession)
 
         // When
         configureAndStartSessionUseCase.execute(aSession, startSyncing = true)
@@ -102,7 +106,8 @@ class ConfigureAndStartSessionUseCaseTest {
         fakeWebRtcCallManager.givenCheckForProtocolsSupportIfNeededSucceeds()
         coJustRun { fakeUpdateNotificationSettingsAccountDataUseCase.execute(any()) }
         fakeVectorPreferences.givenIsClientInfoRecordingEnabled(isEnabled = false)
-        fakeNotificationsSettingUpdater.givenOnSessionsStarted(aSession)
+        fakeNotificationsSettingUpdater.givenOnSessionStarted(aSession)
+        fakePushRulesUpdater.givenOnSessionStarted(aSession)
 
         // When
         configureAndStartSessionUseCase.execute(aSession, startSyncing = true)
@@ -129,7 +134,8 @@ class ConfigureAndStartSessionUseCaseTest {
         coJustRun { fakeUpdateMatrixClientInfoUseCase.execute(any()) }
         coJustRun { fakeUpdateNotificationSettingsAccountDataUseCase.execute(any()) }
         fakeVectorPreferences.givenIsClientInfoRecordingEnabled(isEnabled = true)
-        fakeNotificationsSettingUpdater.givenOnSessionsStarted(aSession)
+        fakeNotificationsSettingUpdater.givenOnSessionStarted(aSession)
+        fakePushRulesUpdater.givenOnSessionStarted(aSession)
 
         // When
         configureAndStartSessionUseCase.execute(aSession, startSyncing = false)

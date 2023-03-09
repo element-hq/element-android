@@ -25,6 +25,9 @@ jobs:
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v3
+        with:
+          # https://github.com/actions/checkout/issues/881
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
       - name: Configure gradle
         uses: gradle/gradle-build-action@v2
         with:
@@ -46,6 +49,9 @@ jobs:
       cancel-in-progress: ${{ github.ref != 'refs/head/main' }}
     steps:
       - uses: actions/checkout@v3
+        with:
+          # https://github.com/actions/checkout/issues/881
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
       - name: Configure gradle
         uses: gradle/gradle-build-action@v2
         with:

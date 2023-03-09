@@ -22,7 +22,9 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -31,18 +33,23 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.VectorMenuProvider
+import im.vector.app.core.utils.PERMISSIONS_FOR_FOREGROUND_LOCATION_SHARING
+import im.vector.app.core.utils.checkPermissions
+import im.vector.app.core.utils.onPermissionDeniedDialog
 import im.vector.app.core.utils.openLocation
+import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.databinding.FragmentLocationPreviewBinding
-import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
 import im.vector.app.features.location.DEFAULT_PIN_ID
 import im.vector.app.features.location.LocationSharingArgs
 import im.vector.app.features.location.MapState
 import im.vector.app.features.location.UrlMapProvider
+import im.vector.app.features.location.showUserLocationNotAvailableErrorDialog
+import kotlinx.coroutines.launch
 import java.lang.ref.WeakReference
 import javax.inject.Inject
 
-/*
- * TODO Move locationPinProvider to a ViewModel
+/**
+ * Screen displaying the expanded map of a static location share.
  */
 @AndroidEntryPoint
 class LocationPreviewFragment :
@@ -50,7 +57,6 @@ class LocationPreviewFragment :
         VectorMenuProvider {
 
     @Inject lateinit var urlMapProvider: UrlMapProvider
-    @Inject lateinit var locationPinProvider: LocationPinProvider
 
     private val args: LocationSharingArgs by args()
 
@@ -74,10 +80,33 @@ class LocationPreviewFragment :
         }.also { views.mapView.addOnDidFailLoadingMapListener(it) }
         views.mapView.onCreate(savedInstanceState)
 
-        lifecycleScope.launchWhenCreated {
-            views.mapView.initialize(urlMapProvider.getMapUrl())
-            loadPinDrawable()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
+                views.mapView.initialize(urlMapProvider.getMapUrl())
+            }
         }
+
+        observeViewEvents()
+        initLocateButton()
+    }
+
+    private fun observeViewEvents() {
+        viewModel.observeViewEvents {
+            when (it) {
+                LocationPreviewViewEvents.UserLocationNotAvailableError -> handleUserLocationNotAvailableError()
+                is LocationPreviewViewEvents.ZoomToUserLocation -> handleZoomToUserLocationEvent(it)
+            }
+        }
+    }
+
+    private fun handleUserLocationNotAvailableError() {
+        showUserLocationNotAvailableErrorDialog {
+            // do nothing
+        }
+    }
+
+    private fun handleZoomToUserLocationEvent(event: LocationPreviewViewEvents.ZoomToUserLocation) {
+        views.mapView.zoomToLocation(event.userLocation)
     }
 
     override fun onDestroyView() {
@@ -124,6 +153,24 @@ class LocationPreviewFragment :
 
     override fun invalidate() = withState(viewModel) { state ->
         views.mapPreviewLoadingError.isVisible = state.loadingMapHasFailed
+        if (state.isLoadingUserLocation) {
+            showLoadingDialog()
+        } else {
+            dismissLoadingDialog()
+        }
+        updateMap(state)
+    }
+
+    private fun updateMap(viewState: LocationPreviewViewState) {
+        views.mapView.render(
+                MapState(
+                        zoomOnlyOnce = true,
+                        pinLocationData = viewState.pinLocationData,
+                        pinId = viewState.pinUserId ?: DEFAULT_PIN_ID,
+                        pinDrawable = viewState.pinDrawable,
+                        userLocationData = viewState.lastKnownUserLocation,
+                )
+        )
     }
 
     override fun getMenuRes() = R.menu.menu_location_preview
@@ -143,21 +190,23 @@ class LocationPreviewFragment :
         openLocation(requireActivity(), location.latitude, location.longitude)
     }
 
-    private fun loadPinDrawable() {
-        val location = args.initialLocationData ?: return
-        val userId = args.locationOwnerId
-
-        locationPinProvider.create(userId) { pinDrawable ->
-            lifecycleScope.launchWhenResumed {
-                views.mapView.render(
-                        MapState(
-                                zoomOnlyOnce = true,
-                                userLocationData = location,
-                                pinId = args.locationOwnerId ?: DEFAULT_PIN_ID,
-                                pinDrawable = pinDrawable
-                        )
-                )
+    private fun initLocateButton() {
+        views.mapView.locateButton.setOnClickListener {
+            if (checkPermissions(PERMISSIONS_FOR_FOREGROUND_LOCATION_SHARING, requireActivity(), foregroundLocationResultLauncher)) {
+                zoomToUserLocation()
             }
+        }
+    }
+
+    private fun zoomToUserLocation() {
+        viewModel.handle(LocationPreviewAction.ZoomToUserLocation)
+    }
+
+    private val foregroundLocationResultLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
+        if (allGranted) {
+            zoomToUserLocation()
+        } else if (deniedPermanently) {
+            activity?.onPermissionDeniedDialog(R.string.denied_permission_generic)
         }
     }
 }

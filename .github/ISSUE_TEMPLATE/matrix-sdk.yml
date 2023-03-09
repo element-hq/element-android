@@ -1,5 +1,5 @@
 name: Matrix SDK bug or enhancement
-description: Report issue or ask for a feature in the [Android Matrix SDK](https://github.com/matrix-org/matrix-android-sdk2)
+description: "Report issue or ask for a feature in the Android Matrix SDK: https://github.com/matrix-org/matrix-android-sdk2"
 title: "[SDK] "
 labels: [matrix-sdk]
 

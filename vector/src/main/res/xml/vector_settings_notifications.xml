@@ -25,21 +25,21 @@
             android:key="SETTINGS_NOTIFICATION_DEFAULT_PREFERENCE_KEY"
             android:persistent="false"
             android:title="@string/settings_notification_default"
-            app:fragment="im.vector.app.features.settings.notifications.VectorSettingsDefaultNotificationPreferenceFragment" />
+            app:fragment="im.vector.app.features.settings.notifications.defaults.VectorSettingsDefaultNotificationFragment" />
 
         <im.vector.app.core.preference.VectorPreference
             android:dependency="SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
             android:key="SETTINGS_NOTIFICATION_KEYWORD_AND_MENTIONS_PREFERENCE_KEY"
             android:persistent="false"
             android:title="@string/settings_notification_mentions_and_keywords"
-            app:fragment="im.vector.app.features.settings.notifications.VectorSettingsKeywordAndMentionsNotificationPreferenceFragment" />
+            app:fragment="im.vector.app.features.settings.notifications.keywordandmentions.VectorSettingsKeywordAndMentionsNotificationFragment" />
 
         <im.vector.app.core.preference.VectorPreference
             android:dependency="SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
             android:key="SETTINGS_NOTIFICATION_OTHER_PREFERENCE_KEY"
             android:persistent="false"
             android:title="@string/settings_notification_other"
-            app:fragment="im.vector.app.features.settings.notifications.VectorSettingsOtherNotificationPreferenceFragment" />
+            app:fragment="im.vector.app.features.settings.notifications.other.VectorSettingsOtherNotificationFragment" />
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
@@ -119,7 +119,7 @@
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY"
             android:title="@string/settings_notification_troubleshoot"
-            app:fragment="im.vector.app.features.settings.notifications.VectorSettingsNotificationsTroubleshootFragment" />
+            app:fragment="im.vector.app.features.settings.notifications.troubleshoot.VectorSettingsNotificationsTroubleshootFragment" />
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 

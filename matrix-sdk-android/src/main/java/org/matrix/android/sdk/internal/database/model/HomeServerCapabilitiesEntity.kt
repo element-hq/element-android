@@ -35,6 +35,7 @@ internal open class HomeServerCapabilitiesEntity(
         var canUseThreadReadReceiptsAndNotifications: Boolean = false,
         var canRemotelyTogglePushNotificationsOfDevices: Boolean = false,
         var canRedactEventWithRelations: Boolean = false,
+        var externalAccountManagementUrl: String? = null,
 ) : RealmObject() {
 
     companion object

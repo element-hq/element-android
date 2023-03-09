@@ -55,6 +55,7 @@ import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.MatrixPatterns.getServerName
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
+import org.matrix.android.sdk.api.auth.SSOAction
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 import org.matrix.android.sdk.api.auth.login.LoginWizard
@@ -158,6 +159,8 @@ class OnboardingViewModel @AssistedInject constructor(
 
     private var emailVerificationPollingJob: Job? by cancelCurrentOnSet()
     private var currentJob: Job? by cancelCurrentOnSet()
+
+    private val trustedFingerprints = mutableListOf<Fingerprint>()
 
     override fun handle(action: OnboardingAction) {
         when (action) {
@@ -292,13 +295,14 @@ class OnboardingViewModel @AssistedInject constructor(
     private fun handleUserAcceptCertificate(action: OnboardingAction.UserAcceptCertificate) {
         // It happens when we get the login flow, or during direct authentication.
         // So alter the homeserver config and retrieve again the login flow
+        trustedFingerprints.add(action.fingerprint)
         when (action.retryAction) {
-            is OnboardingAction.HomeServerChange -> handleHomeserverChange(action.retryAction, fingerprint = action.fingerprint)
+            is OnboardingAction.HomeServerChange -> handleHomeserverChange(action.retryAction, fingerprints = trustedFingerprints)
             is AuthenticateAction.LoginDirect ->
                 handleDirectLogin(
                         action.retryAction,
                         // Will be replaced by the task
-                        homeServerConnectionConfigFactory.create("https://dummy.org", action.fingerprint)
+                        homeServerConnectionConfigFactory.create("https://dummy.org", trustedFingerprints)
                 )
             else -> Unit
         }
@@ -695,10 +699,10 @@ class OnboardingViewModel @AssistedInject constructor(
     private fun handleHomeserverChange(
             action: OnboardingAction.HomeServerChange,
             serverTypeOverride: ServerType? = null,
-            fingerprint: Fingerprint? = null,
+            fingerprints: List<Fingerprint>? = null,
             postAction: suspend () -> Unit = {},
     ) {
-        val homeServerConnectionConfig = homeServerConnectionConfigFactory.create(action.homeServerUrl, fingerprint)
+        val homeServerConnectionConfig = homeServerConnectionConfigFactory.create(action.homeServerUrl, fingerprints)
         if (homeServerConnectionConfig == null) {
             // This is invalid
             _viewEvents.post(OnboardingViewEvents.Failure(Throwable("Unable to create a HomeServerConnectionConfig")))
@@ -841,12 +845,12 @@ class OnboardingViewModel @AssistedInject constructor(
 
     fun getDefaultHomeserverUrl() = defaultHomeserverUrl
 
-    fun fetchSsoUrl(redirectUrl: String, deviceId: String?, provider: SsoIdentityProvider?): String? {
+    fun fetchSsoUrl(redirectUrl: String, deviceId: String?, provider: SsoIdentityProvider?, action: SSOAction): String? {
         setState {
             val authDescription = AuthenticationDescription.Register(provider.toAuthenticationType())
             copy(selectedAuthenticationState = SelectedAuthenticationState(authDescription))
         }
-        return authenticationService.getSsoUrl(redirectUrl, deviceId, provider?.id)
+        return authenticationService.getSsoUrl(redirectUrl, deviceId, provider?.id, action)
     }
 
     fun getFallbackUrl(forSignIn: Boolean, deviceId: String?): String? {

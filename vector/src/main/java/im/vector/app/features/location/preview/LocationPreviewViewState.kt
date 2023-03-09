@@ -16,8 +16,22 @@
 
 package im.vector.app.features.location.preview
 
+import android.graphics.drawable.Drawable
 import com.airbnb.mvrx.MavericksState
+import im.vector.app.features.location.LocationData
+import im.vector.app.features.location.LocationSharingArgs
 
 data class LocationPreviewViewState(
-        val loadingMapHasFailed: Boolean = false
-) : MavericksState
+        val pinLocationData: LocationData? = null,
+        val pinUserId: String? = null,
+        val pinDrawable: Drawable? = null,
+        val loadingMapHasFailed: Boolean = false,
+        val isLoadingUserLocation: Boolean = false,
+        val lastKnownUserLocation: LocationData? = null,
+) : MavericksState {
+
+    constructor(args: LocationSharingArgs) : this(
+            pinLocationData = args.initialLocationData,
+            pinUserId = args.locationOwnerId,
+    )
+}

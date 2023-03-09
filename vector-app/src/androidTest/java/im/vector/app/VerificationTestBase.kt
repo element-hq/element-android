@@ -141,7 +141,7 @@ abstract class VerificationTestBase {
             session.syncService().getSyncStateLive()
         }
         val syncObserver = object : Observer<SyncState> {
-            override fun onChanged(t: SyncState?) {
+            override fun onChanged(value: SyncState) {
                 if (session.syncService().hasAlreadySynced()) {
                     lock.countDown()
                     syncLiveData.removeObserver(this)

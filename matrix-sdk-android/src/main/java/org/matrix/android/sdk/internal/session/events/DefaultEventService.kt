@@ -18,13 +18,18 @@ package org.matrix.android.sdk.internal.session.events
 
 import org.matrix.android.sdk.api.session.events.EventService
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.internal.database.RealmSessionProvider
+import org.matrix.android.sdk.internal.database.mapper.asDomain
+import org.matrix.android.sdk.internal.database.model.EventEntity
+import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.session.call.CallEventProcessor
 import org.matrix.android.sdk.internal.session.room.timeline.GetEventTask
 import javax.inject.Inject
 
 internal class DefaultEventService @Inject constructor(
         private val getEventTask: GetEventTask,
-        private val callEventProcessor: CallEventProcessor
+        private val callEventProcessor: CallEventProcessor,
+        private val realmSessionProvider: RealmSessionProvider,
 ) : EventService {
 
     override suspend fun getEvent(roomId: String, eventId: String): Event {
@@ -35,5 +40,17 @@ internal class DefaultEventService @Inject constructor(
         }
 
         return event
+    }
+
+    override fun getEventFromCache(roomId: String, eventId: String): Event? {
+        return realmSessionProvider.withRealm { realm ->
+            EventEntity.where(
+                    realm = realm,
+                    roomId = roomId,
+                    eventId = eventId
+            )
+                    .findFirst()
+                    ?.asDomain()
+        }
     }
 }

@@ -22,12 +22,21 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
+import im.vector.app.features.location.LocationData
+import im.vector.app.features.location.LocationTracker
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.session.Session
 
 class LocationPreviewViewModel @AssistedInject constructor(
         @Assisted private val initialState: LocationPreviewViewState,
-) : VectorViewModel<LocationPreviewViewState, LocationPreviewAction, EmptyViewEvents>(initialState) {
+        private val session: Session,
+        private val locationPinProvider: LocationPinProvider,
+        private val locationTracker: LocationTracker,
+) : VectorViewModel<LocationPreviewViewState, LocationPreviewAction, LocationPreviewViewEvents>(initialState), LocationTracker.Callback {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<LocationPreviewViewModel, LocationPreviewViewState> {
@@ -36,13 +45,68 @@ class LocationPreviewViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<LocationPreviewViewModel, LocationPreviewViewState> by hiltMavericksViewModelFactory()
 
+    init {
+        initPin(initialState.pinUserId)
+        initLocationTracking()
+    }
+
+    private fun initPin(userId: String?) {
+        locationPinProvider.create(userId) { pinDrawable ->
+            setState { copy(pinDrawable = pinDrawable) }
+        }
+    }
+
+    private fun initLocationTracking() {
+        locationTracker.addCallback(this)
+        locationTracker.locations
+                .onEach(::onLocationUpdate)
+                .launchIn(viewModelScope)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        locationTracker.removeCallback(this)
+    }
+
     override fun handle(action: LocationPreviewAction) {
         when (action) {
             LocationPreviewAction.ShowMapLoadingError -> handleShowMapLoadingError()
+            LocationPreviewAction.ZoomToUserLocation -> handleZoomToUserLocationAction()
         }
     }
 
     private fun handleShowMapLoadingError() {
         setState { copy(loadingMapHasFailed = true) }
+    }
+
+    private fun handleZoomToUserLocationAction() = withState { state ->
+        if (!state.isLoadingUserLocation) {
+            setState {
+                copy(isLoadingUserLocation = true)
+            }
+            viewModelScope.launch(session.coroutineDispatchers.main) {
+                locationTracker.start()
+                locationTracker.requestLastKnownLocation()
+            }
+        }
+    }
+
+    override fun onNoLocationProviderAvailable() {
+        _viewEvents.post(LocationPreviewViewEvents.UserLocationNotAvailableError)
+    }
+
+    private fun onLocationUpdate(locationData: LocationData) = withState { state ->
+        val zoomToUserLocation = state.isLoadingUserLocation
+
+        setState {
+            copy(
+                    lastKnownUserLocation = locationData,
+                    isLoadingUserLocation = false,
+            )
+        }
+
+        if (zoomToUserLocation) {
+            _viewEvents.post(LocationPreviewViewEvents.ZoomToUserLocation(locationData))
+        }
     }
 }

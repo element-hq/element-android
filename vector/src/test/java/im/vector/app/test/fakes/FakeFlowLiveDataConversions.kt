@@ -20,6 +20,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.asFlow
 import io.mockk.every
 import io.mockk.mockkStatic
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
 class FakeFlowLiveDataConversions {
@@ -28,6 +29,8 @@ class FakeFlowLiveDataConversions {
     }
 }
 
-fun <T> LiveData<T>.givenAsFlow() {
-    every { asFlow() } returns flowOf(value!!)
+fun <T> LiveData<T>.givenAsFlow(): Flow<T> {
+    return flowOf(value!!).also {
+        every { asFlow() } returns it
+    }
 }

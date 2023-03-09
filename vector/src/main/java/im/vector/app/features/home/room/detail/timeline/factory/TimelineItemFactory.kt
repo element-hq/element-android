@@ -22,8 +22,12 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.features.analytics.DecryptionFailureTracker
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventVisibilityHelper
 import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
+import im.vector.app.features.voicebroadcast.model.isVoiceBroadcast
+import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.api.session.room.timeline.getRelationContent
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -39,6 +43,7 @@ class TimelineItemFactory @Inject constructor(
         private val callItemFactory: CallItemFactory,
         private val decryptionFailureTracker: DecryptionFailureTracker,
         private val timelineEventVisibilityHelper: TimelineEventVisibilityHelper,
+        private val session: Session,
 ) {
 
     /**
@@ -130,11 +135,16 @@ class TimelineItemFactory @Inject constructor(
                     EventType.CALL_ANSWER -> callItemFactory.create(params)
                     // Crypto
                     EventType.ENCRYPTED -> {
-                        if (event.root.isRedacted()) {
+                        val relationContent = event.getRelationContent()
+                        when {
                             // Redacted event, let the MessageItemFactory handle it
-                            messageItemFactory.create(params)
-                        } else {
-                            encryptedItemFactory.create(params)
+                            event.root.isRedacted() -> messageItemFactory.create(params)
+                            relationContent?.type == RelationType.REFERENCE -> {
+                                // Hide the decryption error for VoiceBroadcast chunks
+                                val relatedEvent = relationContent.eventId?.let { session.eventService().getEventFromCache(event.roomId, it) }
+                                if (relatedEvent?.isVoiceBroadcast() != true) encryptedItemFactory.create(params) else null
+                            }
+                            else -> encryptedItemFactory.create(params)
                         }
                     }
                     EventType.KEY_VERIFICATION_CANCEL,

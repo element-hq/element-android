@@ -23,8 +23,8 @@ sealed class LoginMode : Parcelable { // Parcelable because persist state
 
     @Parcelize object Unknown : LoginMode()
     @Parcelize object Password : LoginMode()
-    @Parcelize data class Sso(val ssoState: SsoState) : LoginMode()
-    @Parcelize data class SsoAndPassword(val ssoState: SsoState) : LoginMode()
+    @Parcelize data class Sso(val ssoState: SsoState, val hasOidcCompatibilityFlow: Boolean) : LoginMode()
+    @Parcelize data class SsoAndPassword(val ssoState: SsoState, val hasOidcCompatibilityFlow: Boolean) : LoginMode()
     @Parcelize object Unsupported : LoginMode()
 }
 

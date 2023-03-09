@@ -2862,4 +2862,13 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="error_voice_message_broadcast_in_progress_message">Anda tidak dapat memulai sebuah pesan suara karena Anda saat ini merekam sebuah siaran langsung. Silakan mengakhiri siaran langsung Anda untuk memulai merekam sebuah pesan suara</string>
     <string name="error_voice_message_broadcast_in_progress">Tidak dapat memulai pesan suara</string>
     <string name="rich_text_editor_inline_code">Terapkan format kode dalam baris</string>
+    <string name="rich_text_editor_code_block">Alih balok kode</string>
+    <string name="rich_text_editor_quote">Alih kutipan</string>
+    <string name="rich_text_editor_unindent">Batalkan inden</string>
+    <string name="rich_text_editor_indent">Inden</string>
+    <string name="room_poll_details_go_to_timeline">Tampilkan pemungutan suara di lini masa</string>
+    <string name="error_voice_broadcast_unable_to_decrypt">Tidak dapat mendekripsi siaran suara ini.</string>
+    <string name="settings_external_account_management">Detail akun Anda dikelola secara terpisah di %1$s.</string>
+    <string name="settings_external_account_management_title">Akun</string>
+    <string name="settings_notification_error_on_update">Terjadi kesalahan saat memperbarui preferensi notifikasi Anda. Silakan coba lagi.</string>
 </resources>

@@ -26,7 +26,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -47,6 +49,7 @@ import im.vector.app.features.location.live.duration.ChooseLiveDurationBottomShe
 import im.vector.app.features.location.live.tracking.LocationSharingAndroidService
 import im.vector.app.features.location.option.LocationSharingOption
 import im.vector.app.features.settings.VectorPreferences
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.util.MatrixItem
 import java.lang.ref.WeakReference
 import javax.inject.Inject
@@ -97,11 +100,13 @@ class LocationSharingFragment :
         }.also { views.mapView.addOnDidFailLoadingMapListener(it) }
         views.mapView.onCreate(savedInstanceState)
 
-        lifecycleScope.launchWhenCreated {
-            views.mapView.initialize(
-                    url = urlMapProvider.getMapUrl(),
-                    locationTargetChangeListener = this@LocationSharingFragment
-            )
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
+                views.mapView.initialize(
+                        url = urlMapProvider.getMapUrl(),
+                        locationTargetChangeListener = this@LocationSharingFragment
+                )
+            }
         }
 
         initLocateButton()
@@ -176,14 +181,7 @@ class LocationSharingFragment :
     }
 
     private fun handleLocationNotAvailableError() {
-        MaterialAlertDialogBuilder(requireActivity())
-                .setTitle(R.string.location_not_available_dialog_title)
-                .setMessage(R.string.location_not_available_dialog_content)
-                .setPositiveButton(R.string.ok) { _, _ ->
-                    locationSharingNavigator.quit()
-                }
-                .setCancelable(false)
-                .show()
+        showUserLocationNotAvailableErrorDialog { locationSharingNavigator.quit() }
     }
 
     private fun handleLiveLocationSharingNotEnoughPermission() {

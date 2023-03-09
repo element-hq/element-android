@@ -31,6 +31,9 @@ import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.text.Spannable
 import android.text.SpannableStringBuilder
+import android.text.style.StrikethroughSpan
+import android.text.style.URLSpan
+import android.text.style.UnderlineSpan
 import android.widget.TextView
 import androidx.core.text.toSpannable
 import com.bumptech.glide.Glide
@@ -46,6 +49,8 @@ import io.noties.markwon.Markwon
 import io.noties.markwon.MarkwonPlugin
 import io.noties.markwon.MarkwonSpansFactory
 import io.noties.markwon.PrecomputedFutureTextSetterCompat
+import io.noties.markwon.core.spans.EmphasisSpan
+import io.noties.markwon.core.spans.StrongEmphasisSpan
 import io.noties.markwon.ext.latex.JLatexMathPlugin
 import io.noties.markwon.ext.latex.JLatexMathTheme
 import io.noties.markwon.html.HtmlPlugin
@@ -154,14 +159,24 @@ class EventHtmlRenderer @Inject constructor(
     /**
      * Workaround for https://github.com/noties/Markwon/issues/423
      */
-    private val removeLeadingNewlineForInlineCode = object : AbstractMarkwonPlugin() {
+    private val removeLeadingNewlineForInlineElement = object : AbstractMarkwonPlugin() {
         override fun afterSetText(textView: TextView) {
             super.afterSetText(textView)
 
             val text = SpannableStringBuilder(textView.text.toSpannable())
-            val inlineCodeSpans = text.getSpans(0, textView.length(), InlineCodeSpan::class.java).toList()
-            val legacyInlineCodeSpans = text.getSpans(0, textView.length(), HtmlCodeSpan::class.java).filter { !it.isBlock }
-            val spans = inlineCodeSpans + legacyInlineCodeSpans
+            val length = textView.length()
+            val spans = arrayOf(
+                    InlineCodeSpan::class.java,
+                    EmphasisSpan::class.java,
+                    CustomTypefaceSpan::class.java,
+                    StrongEmphasisSpan::class.java,
+                    UnderlineSpan::class.java,
+                    URLSpan::class.java,
+                    StrikethroughSpan::class.java
+            ).map { text.getSpans(0, length, it) }
+                    .toTypedArray()
+                    .plus(text.getSpans(0, length, HtmlCodeSpan::class.java).filter { !it.isBlock }.toTypedArray())
+                    .flatten()
 
             if (spans.isEmpty()) return
 
@@ -179,11 +194,11 @@ class EventHtmlRenderer @Inject constructor(
     private val markwon = Markwon.builder(context)
             .usePlugin(HtmlRootTagPlugin())
             .usePlugin(HtmlPlugin.create(htmlConfigure))
-            .usePlugin(removeLeadingNewlineForInlineCode)
+            .usePlugin(removeLeadingNewlineForInlineElement)
             .usePlugin(glidePlugin)
             .apply {
                 if (vectorPreferences.latexMathsIsEnabled()) {
-                    // If latex maths is enabled in app preferences, refomat it so Markwon recognises it
+                    // If latex maths is enabled in app preferences, reformat it so Markwon recognises it
                     // It needs to be in this specific format: https://noties.io/Markwon/docs/v4/ext-latex
                     latexPlugins.forEach(::usePlugin)
                 }
@@ -240,6 +255,7 @@ class MatrixHtmlPluginConfigure @Inject constructor(
         private val colorProvider: ColorProvider,
         private val resources: Resources,
         private val vectorPreferences: VectorPreferences,
+        private val dimensionConverter: DimensionConverter,
 ) : HtmlPlugin.HtmlConfigure {
 
     override fun configureHtml(plugin: HtmlPlugin) {
@@ -248,7 +264,7 @@ class MatrixHtmlPluginConfigure @Inject constructor(
                 .addHandler(FontTagHandler())
                 .addHandler(ParagraphHandler(DimensionConverter(resources)))
                 .addHandler(MxReplyTagHandler())
-                .addHandler(CodePostProcessorTagHandler(vectorPreferences))
+                .addHandler(CodePostProcessorTagHandler(vectorPreferences, dimensionConverter))
                 .addHandler(CodePreTagHandler())
                 .addHandler(CodeTagHandler())
                 .addHandler(SpanHandler(colorProvider))

@@ -326,7 +326,7 @@
 \nLägg till några nu\?</string>
     <string name="error_no_external_application_found">Tyvärr har ingen extern applikation hittats som kan fullfölja denna handling.</string>
     <string name="auth_login">Logga in</string>
-    <string name="auth_login_sso">Logga in med externt konto</string>
+    <string name="auth_login_sso">Logga in med samlad inloggning</string>
     <string name="auth_submit">Skicka in</string>
     <string name="auth_invalid_login_param">Fel användarnamn och/eller lösenord</string>
     <string name="auth_invalid_email">Det här ser inte ut som en giltig e-postadress</string>
@@ -1820,7 +1820,7 @@
     <string name="command_snow">Skickar det givna meddelandet med snöfall</string>
     <string name="command_confetti">Skickar de givna meddelandet med konfetti</string>
     <string name="login_clear_homeserver_history">Rensa historik</string>
-    <string name="login_social_sso">externt konto</string>
+    <string name="login_social_sso">samlad inloggning</string>
     <string name="login_social_signin_with">Logga in med %s</string>
     <string name="login_social_signup_with">Skapa konto med %s</string>
     <string name="login_social_continue_with">Fortsätt med %s</string>
@@ -2919,4 +2919,13 @@
     <string name="error_voice_message_broadcast_in_progress_message">Du kan inte påbörja ett röstmeddelande eftersom du för närvarande spelar in en röstsändning. Vänligen avsluta din röstsändning för att börja spela in ett röstmeddelande</string>
     <string name="error_voice_message_broadcast_in_progress">Kan inte starta röstsändning</string>
     <string name="started_a_voice_broadcast">Startade en röstsändning</string>
+    <string name="rich_text_editor_inline_code">Använd inline-kodformat</string>
+    <string name="rich_text_editor_code_block">Växla kodblock</string>
+    <string name="rich_text_editor_quote">Växla citat</string>
+    <string name="rich_text_editor_unindent">Minska indrag</string>
+    <string name="rich_text_editor_indent">Indrag</string>
+    <string name="room_poll_details_go_to_timeline">Visa omröstning i tidslinjen</string>
+    <string name="error_voice_broadcast_unable_to_decrypt">Kunder inte avkryptera den här röstsändningen.</string>
+    <string name="settings_external_account_management">Dina kontodetaljer hanteras separat på %1$s.</string>
+    <string name="settings_external_account_management_title">Konto</string>
 </resources>

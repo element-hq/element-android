@@ -21,6 +21,7 @@ import org.matrix.android.sdk.api.session.events.model.isInvitation
 import org.matrix.android.sdk.api.session.pushrules.PushEvents
 import org.matrix.android.sdk.api.session.pushrules.rest.PushRule
 import org.matrix.android.sdk.api.session.sync.model.RoomsSyncResponse
+import org.matrix.android.sdk.internal.crypto.EventDecryptor
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.task.Task
 import timber.log.Timber
@@ -36,27 +37,29 @@ internal interface ProcessEventForPushTask : Task<ProcessEventForPushTask.Params
 internal class DefaultProcessEventForPushTask @Inject constructor(
         private val defaultPushRuleService: DefaultPushRuleService,
         private val pushRuleFinder: PushRuleFinder,
-        @UserId private val userId: String
+        @UserId private val userId: String,
+        private val eventDecryptor: EventDecryptor,
 ) : ProcessEventForPushTask {
 
     override suspend fun execute(params: ProcessEventForPushTask.Params) {
         val newJoinEvents = params.syncResponse.join
                 .mapNotNull { (key, value) ->
                     value.timeline?.events?.mapNotNull {
-                        it.takeIf { !it.isInvitation() }?.copy(roomId = key)
+                        it.takeIf { !it.isInvitation() }?.copyAll(roomId = key)
                     }
                 }
                 .flatten()
 
         val inviteEvents = params.syncResponse.invite
                 .mapNotNull { (key, value) ->
-                    value.inviteState?.events?.map { it.copy(roomId = key) }
+                    value.inviteState?.events?.map { it.copyAll(roomId = key) }
                 }
                 .flatten()
 
         val allEvents = (newJoinEvents + inviteEvents).filter { event ->
             when (event.type) {
                 in EventType.POLL_START.values,
+                in EventType.POLL_END.values,
                 in EventType.STATE_ROOM_BEACON_INFO.values,
                 EventType.MESSAGE,
                 EventType.REDACTION,

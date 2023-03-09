@@ -69,7 +69,8 @@ sealed class LoginAction : VectorViewModelAction {
     data class SetupSsoForSessionRecovery(
             val homeServerUrl: String,
             val deviceId: String,
-            val ssoIdentityProviders: List<SsoIdentityProvider>?
+            val ssoIdentityProviders: List<SsoIdentityProvider>?,
+            val hasOidcCompatibilityFlow: Boolean
     ) : LoginAction()
 
     data class PostViewEvent(val viewEvent: LoginViewEvents) : LoginAction()

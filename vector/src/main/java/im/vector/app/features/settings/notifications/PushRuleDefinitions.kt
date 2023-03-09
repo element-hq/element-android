@@ -38,7 +38,11 @@ fun getStandardAction(ruleId: String, index: NotificationIndex): StandardActions
                 NotificationIndex.SILENT -> StandardActions.Notify
                 NotificationIndex.NOISY -> StandardActions.Highlight
             }
-        RuleIds.RULE_ID_ONE_TO_ONE_ROOM ->
+        RuleIds.RULE_ID_ONE_TO_ONE_ROOM,
+        RuleIds.RULE_ID_POLL_START_ONE_TO_ONE,
+        RuleIds.RULE_ID_POLL_START_ONE_TO_ONE_UNSTABLE,
+        RuleIds.RULE_ID_POLL_END_ONE_TO_ONE,
+        RuleIds.RULE_ID_POLL_END_ONE_TO_ONE_UNSTABLE ->
             when (index) {
                 NotificationIndex.OFF -> StandardActions.DontNotify
                 NotificationIndex.SILENT -> StandardActions.Notify
@@ -50,7 +54,11 @@ fun getStandardAction(ruleId: String, index: NotificationIndex): StandardActions
                 NotificationIndex.SILENT -> StandardActions.Notify
                 NotificationIndex.NOISY -> StandardActions.NotifyDefaultSound
             }
-        RuleIds.RULE_ID_ALL_OTHER_MESSAGES_ROOMS ->
+        RuleIds.RULE_ID_ALL_OTHER_MESSAGES_ROOMS,
+        RuleIds.RULE_ID_POLL_START,
+        RuleIds.RULE_ID_POLL_START_UNSTABLE,
+        RuleIds.RULE_ID_POLL_END,
+        RuleIds.RULE_ID_POLL_END_UNSTABLE ->
             when (index) {
                 NotificationIndex.OFF -> StandardActions.DontNotify
                 NotificationIndex.SILENT -> StandardActions.Notify

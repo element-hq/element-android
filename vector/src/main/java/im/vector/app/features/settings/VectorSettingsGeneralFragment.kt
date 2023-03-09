@@ -48,6 +48,7 @@ import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorSwitchPreference
 import im.vector.app.core.utils.TextUtils
 import im.vector.app.core.utils.getSizeOfFiles
+import im.vector.app.core.utils.openUrlInExternalBrowser
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.DialogChangePasswordBinding
 import im.vector.app.features.MainActivity
@@ -71,6 +72,7 @@ import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerS
 import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
 import java.io.File
+import java.net.URL
 import java.util.UUID
 import javax.inject.Inject
 
@@ -100,6 +102,9 @@ class VectorSettingsGeneralFragment :
     }
     private val mIdentityServerPreference by lazy {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY)!!
+    }
+    private val mExternalAccountManagementPreference by lazy {
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_EXTERNAL_ACCOUNT_MANAGEMENT_KEY)!!
     }
 
     // Local contacts
@@ -204,6 +209,24 @@ class VectorSettingsGeneralFragment :
 
         mIdentityServerPreference.onPreferenceClickListener = openDiscoveryScreenPreferenceClickListener
 
+        // External account management URL for delegated OIDC auth
+        // Hide the preference if no URL is given by server
+        if (homeServerCapabilities.externalAccountManagementUrl != null) {
+            mExternalAccountManagementPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                openUrlInExternalBrowser(it.context, homeServerCapabilities.externalAccountManagementUrl)
+                true
+            }
+
+            val hostname = URL(homeServerCapabilities.externalAccountManagementUrl).host
+
+            mExternalAccountManagementPreference.summary = requireContext().getString(
+                    R.string.settings_external_account_management,
+                    hostname
+            )
+        } else {
+            mExternalAccountManagementPreference.isVisible = false
+        }
+
         // Advanced settings
 
         // user account
@@ -250,38 +273,28 @@ class VectorSettingsGeneralFragment :
 
         // clear medias cache
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_CLEAR_MEDIA_CACHE_PREFERENCE_KEY)!!.let {
-            // TODO StrictMode policy violation; ~duration=3383 ms: android.os.strictmode.DiskReadViolation
-            val size = getSizeOfFiles(File(requireContext().cacheDir, DiskCache.Factory.DEFAULT_DISK_CACHE_DIR)) + session.fileService().getCacheSize()
-
-            it.summary = TextUtils.formatFileSize(requireContext(), size.toLong())
-
-            it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                lifecycleScope.launch(Dispatchers.Main) {
-                    // On UI Thread
-                    displayLoadingView()
-
-                    Glide.get(requireContext()).clearMemory()
-                    session.fileService().clearCache()
-
-                    var newSize: Long
-
-                    withContext(Dispatchers.IO) {
-                        // On BG thread
-                        Glide.get(requireContext()).clearDiskCache()
-
-                        newSize = getSizeOfFiles(File(requireContext().cacheDir, DiskCache.Factory.DEFAULT_DISK_CACHE_DIR))
-                        newSize += session.fileService().getCacheSize()
+            lifecycleScope.launch(Dispatchers.Main) {
+                it.summary = getString(R.string.loading)
+                val size = getCacheSize()
+                it.summary = TextUtils.formatFileSize(requireContext(), size)
+                it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        // On UI Thread
+                        displayLoadingView()
+                        Glide.get(requireContext()).clearMemory()
+                        session.fileService().clearCache()
+                        val newSize = withContext(Dispatchers.IO) {
+                            // On BG thread
+                            Glide.get(requireContext()).clearDiskCache()
+                            getCacheSize()
+                        }
+                        it.summary = TextUtils.formatFileSize(requireContext(), newSize)
+                        hideLoadingView()
                     }
-
-                    it.summary = TextUtils.formatFileSize(requireContext(), newSize)
-
-                    hideLoadingView()
+                    false
                 }
-
-                false
             }
         }
-
         // Sign out
         findPreference<VectorPreference>("SETTINGS_SIGN_OUT_KEY")!!
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
@@ -291,6 +304,11 @@ class VectorSettingsGeneralFragment :
 
             false
         }
+    }
+
+    private suspend fun getCacheSize(): Long = withContext(Dispatchers.IO) {
+        getSizeOfFiles(File(requireContext().cacheDir, DiskCache.Factory.DEFAULT_DISK_CACHE_DIR)) +
+                session.fileService().getCacheSize()
     }
 
     override fun onResume() {

@@ -45,6 +45,7 @@ data class DeviceListViewState(
         val allowDeviceAction: Boolean,
         val userItem: MatrixItem? = null,
         val memberCrossSigningKey: MXCrossSigningInfo? = null,
+        val myDeviceId: String = "",
         val cryptoDevices: Async<List<CryptoDeviceInfo>> = Loading(),
         val selectedDevice: CryptoDeviceInfo? = null
 ) : MavericksState
@@ -70,6 +71,7 @@ class DeviceListBottomSheetViewModel @AssistedInject constructor(
                     userId = userId,
                     allowDeviceAction = args.allowDeviceAction,
                     userItem = session.getUserOrDefault(userId).toMatrixItem(),
+                    myDeviceId = session.sessionParams.deviceId ?: "",
             )
         }
     }

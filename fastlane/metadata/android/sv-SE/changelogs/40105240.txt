@@ -1,0 +1,2 @@
+Huvudsakliga ändringar i den här versionen: Huvudsakligen buggfixar, fixar speciellt meddelanden som inte visas i tidslinjen.
+Full ändringslogg: https://github.com/vector-im/element-android/releases

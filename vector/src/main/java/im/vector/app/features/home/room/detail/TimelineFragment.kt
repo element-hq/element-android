@@ -47,12 +47,15 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.TransitionManager
 import com.airbnb.epoxy.EpoxyModel
+import com.airbnb.epoxy.EpoxyVisibilityTracker
 import com.airbnb.epoxy.OnModelBuildFinishedListener
 import com.airbnb.epoxy.addGlidePreloader
 import com.airbnb.epoxy.glidePreloader
@@ -76,7 +79,6 @@ import im.vector.app.core.extensions.filterDirectionOverrides
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.setTextOrHide
-import im.vector.app.core.extensions.trackItemsVisibilityChange
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.glide.GlideRequests
 import im.vector.app.core.intent.getFilenameFromUri
@@ -265,6 +267,7 @@ class TimelineFragment :
     private val timelineViewModel: TimelineViewModel by fragmentViewModel()
     private val messageComposerViewModel: MessageComposerViewModel by fragmentViewModel()
     private val debouncer = Debouncer(createUIHandler())
+    private val itemVisibilityTracker = EpoxyVisibilityTracker()
 
     private lateinit var scrollOnNewMessageCallback: ScrollOnNewMessageCallback
     private lateinit var scrollOnHighlightedEventCallback: ScrollOnHighlightedEventCallback
@@ -972,11 +975,11 @@ class TimelineFragment :
 
     override fun onResume() {
         super.onResume()
+        itemVisibilityTracker.attach(views.timelineRecyclerView)
         notificationDrawerManager.setCurrentRoom(timelineArgs.roomId)
         notificationDrawerManager.setCurrentThread(timelineArgs.threadTimelineArgs?.rootThreadEventId)
         roomDetailPendingActionStore.data?.let { handlePendingAction(it) }
         roomDetailPendingActionStore.data = null
-        views.timelineRecyclerView.adapter = timelineEventController.adapter
     }
 
     private fun handlePendingAction(roomDetailPendingAction: RoomDetailPendingAction) {
@@ -993,9 +996,9 @@ class TimelineFragment :
 
     override fun onPause() {
         super.onPause()
+        itemVisibilityTracker.detach(views.timelineRecyclerView)
         notificationDrawerManager.setCurrentRoom(null)
         notificationDrawerManager.setCurrentThread(null)
-        views.timelineRecyclerView.adapter = null
     }
 
     private val emojiActivityResultLauncher = registerStartForActivityResult { activityResult ->
@@ -1038,7 +1041,6 @@ class TimelineFragment :
         timelineEventController.callback = this
         timelineEventController.timeline = timelineViewModel.timeline
 
-        views.timelineRecyclerView.trackItemsVisibilityChange()
         layoutManager = object : LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, true) {
             override fun onLayoutCompleted(state: RecyclerView.State) {
                 super.onLayoutCompleted(state)
@@ -1061,6 +1063,7 @@ class TimelineFragment :
             it.dispatchTo(scrollOnHighlightedEventCallback)
         }
         timelineEventController.addModelBuildListener(modelBuildListener)
+        views.timelineRecyclerView.adapter = timelineEventController.adapter
 
         if (vectorPreferences.swipeToReplyIsEnabled()) {
             val quickReplyHandler = object : RoomMessageTouchHelperCallback.QuickReplayHandler {
@@ -1108,29 +1111,31 @@ class TimelineFragment :
 
     private fun updateJumpToReadMarkerViewVisibility() {
         if (isThreadTimeLine()) return
-        viewLifecycleOwner.lifecycleScope.launchWhenResumed {
-            val state = timelineViewModel.awaitState()
-            val showJumpToUnreadBanner = when (state.unreadState) {
-                UnreadState.Unknown,
-                UnreadState.HasNoUnread -> false
-                is UnreadState.ReadMarkerNotLoaded -> true
-                is UnreadState.HasUnread -> {
-                    if (state.canShowJumpToReadMarker) {
-                        val lastVisibleItem = layoutManager.findLastCompletelyVisibleItemPosition()
-                        val positionOfReadMarker = withContext(Dispatchers.Default) {
-                            timelineEventController.getPositionOfReadMarker()
-                        }
-                        if (positionOfReadMarker == null) {
-                            false
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                val state = timelineViewModel.awaitState()
+                val showJumpToUnreadBanner = when (state.unreadState) {
+                    UnreadState.Unknown,
+                    UnreadState.HasNoUnread -> false
+                    is UnreadState.ReadMarkerNotLoaded -> true
+                    is UnreadState.HasUnread -> {
+                        if (state.canShowJumpToReadMarker) {
+                            val lastVisibleItem = layoutManager.findLastCompletelyVisibleItemPosition()
+                            val positionOfReadMarker = withContext(Dispatchers.Default) {
+                                timelineEventController.getPositionOfReadMarker()
+                            }
+                            if (positionOfReadMarker == null) {
+                                false
+                            } else {
+                                positionOfReadMarker > lastVisibleItem
+                            }
                         } else {
-                            positionOfReadMarker > lastVisibleItem
+                            false
                         }
-                    } else {
-                        false
                     }
                 }
+                views.jumpToReadMarkerView.isVisible = showJumpToUnreadBanner
             }
-            views.jumpToReadMarkerView.isVisible = showJumpToUnreadBanner
         }
     }
 
@@ -1174,6 +1179,10 @@ class TimelineFragment :
             } else {
                 views.hideComposerViews()
                 views.notificationAreaView.render(NotificationAreaView.State.Tombstone(mainState.tombstoneEvent))
+            }
+
+            if (summary.isDirect && summary.isEncrypted && summary.joinedMembersCount == 1 && summary.invitedMembersCount == 0) {
+                views.hideComposerViews()
             }
         } else if (summary?.membership == Membership.INVITE && inviter != null) {
             views.hideComposerViews()
@@ -1615,14 +1624,16 @@ class TimelineFragment :
     }
 
     override fun onRoomCreateLinkClicked(url: String) {
-        viewLifecycleOwner.lifecycleScope.launchWhenResumed {
-            permalinkHandler
-                    .launch(requireActivity(), url, object : NavigationInterceptor {
-                        override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?, rootThreadEventId: String?): Boolean {
-                            requireActivity().finish()
-                            return false
-                        }
-                    })
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                permalinkHandler
+                        .launch(requireActivity(), url, object : NavigationInterceptor {
+                            override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?, rootThreadEventId: String?): Boolean {
+                                requireActivity().finish()
+                                return false
+                            }
+                        })
+            }
         }
     }
 

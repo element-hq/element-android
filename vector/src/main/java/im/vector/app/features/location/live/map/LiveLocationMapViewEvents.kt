@@ -17,7 +17,10 @@
 package im.vector.app.features.location.live.map
 
 import im.vector.app.core.platform.VectorViewEvents
+import im.vector.app.features.location.LocationData
 
 sealed interface LiveLocationMapViewEvents : VectorViewEvents {
-    data class Error(val error: Throwable) : LiveLocationMapViewEvents
+    data class LiveLocationError(val error: Throwable) : LiveLocationMapViewEvents
+    data class ZoomToUserLocation(val userLocation: LocationData) : LiveLocationMapViewEvents
+    object UserLocationNotAvailableError : LiveLocationMapViewEvents
 }

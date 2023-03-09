@@ -863,6 +863,8 @@
     <string name="settings_notification_keyword_contains_dot">Keywords cannot start with \'.\'</string>
     <string name="settings_notification_keyword_contains_invalid_character">Keywords cannot contain \'%s\'</string>
 
+    <string name="settings_notification_error_on_update">An error occurred when updating your notification preferences. Please try again.</string>
+
     <string name="settings_notification_troubleshoot">Troubleshoot Notifications</string>
     <string name="settings_troubleshoot_diagnostic">Troubleshooting diagnostics</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Run Tests</string>
@@ -1063,6 +1065,9 @@
     <string name="settings_deactivate_my_account">Deactivate my account</string>
     <string name="settings_discovery_category">Discovery</string>
     <string name="settings_discovery_manage">Manage your discovery settings.</string>
+
+    <string name="settings_external_account_management_title">Account</string>
+    <string name="settings_external_account_management">Your account details are managed separately at %1$s.</string>
 
     <!-- analytics -->
     <string name="settings_analytics">Analytics</string>
@@ -1813,6 +1818,7 @@
     <string name="add_by_qr_code">Add by QR code</string>
     <string name="qr_code">QR code</string>
     <string name="creating_direct_room">"Creating room…"</string>
+    <string name="direct_room_user_list_only_invite_one_email">You can only invite one email at a time</string>
     <string name="direct_room_user_list_known_title">Known Users</string>
     <string name="direct_room_user_list_suggestions_title">Suggestions</string>
 
@@ -1821,7 +1827,7 @@
     <!-- Terms -->
     <string name="terms_of_service">Terms of Service</string>
     <string name="terms_description_for_identity_server">Be discoverable by others</string>
-    <string name="terms_description_for_integration_manager">Use Bots, bridges, widgets and sticker packs</string>
+    <string name="terms_description_for_integration_manager">Use bots, bridges, widgets and sticker packs</string>
 
     <string name="identity_server">Identity server</string>
     <string name="disconnect_identity_server">Disconnect identity server</string>
@@ -2564,6 +2570,8 @@
     <string name="encryption_enabled_tile_description">Messages in this room are end-to-end encrypted. Learn more &amp; verify users in their profile.</string>
     <string name="direct_room_encryption_enabled_tile_description">Messages in this chat are end-to-end encrypted.</string>
     <string name="direct_room_encryption_enabled_tile_description_future">Messages in this chat will be end-to-end encrypted.</string>
+    <string name="direct_room_encryption_enabled_waiting_users">Waiting for users to join ${app_name}</string>
+    <string name="direct_room_encryption_enabled_waiting_users_tile_description">Once invited users have joined ${app_name}, you will be able to chat and the room will be end-to-end encrypted</string>
     <string name="encryption_not_enabled">Encryption not enabled</string>
     <string name="encryption_misconfigured">Encryption is misconfigured</string>
     <string name="encryption_unknown_algorithm_tile_description">The encryption used by this room is not supported</string>
@@ -3131,6 +3139,7 @@
     <string name="error_voice_broadcast_already_in_progress_message">You are already recording a voice broadcast. Please end your current voice broadcast to start a new one.</string>
     <string name="error_voice_broadcast_unable_to_play">Unable to play this voice broadcast.</string>
     <string name="error_voice_broadcast_no_connection_recording">Connection error - Recording paused</string>
+    <string name="error_voice_broadcast_unable_to_decrypt">Unable to decrypt this voice broadcast.</string>
     <!-- Examples of usage: 6h 15min 30sec left / 15min 30sec left / 30sec left -->
     <string name="voice_broadcast_recording_time_left">%1$s left</string>
     <string name="stop_voice_broadcast_dialog_title">Stop live broadcasting?</string>
@@ -3218,6 +3227,7 @@
     <string name="room_polls_wait_for_display">Displaying polls</string>
     <string name="room_polls_load_more">Load more polls</string>
     <string name="room_polls_loading_error">Error fetching polls.</string>
+    <string name="room_poll_details_go_to_timeline">View poll in timeline</string>
 
     <!-- Location -->
     <string name="location_activity_title_static_sharing">Share location</string>
@@ -3513,7 +3523,11 @@
     <string name="rich_text_editor_link">Set link</string>
     <string name="rich_text_editor_numbered_list">Toggle numbered list</string>
     <string name="rich_text_editor_bullet_list">Toggle bullet list</string>
+    <string name="rich_text_editor_indent">Indent</string>
+    <string name="rich_text_editor_unindent">Unindent</string>
+    <string name="rich_text_editor_quote">Toggle quote</string>
     <string name="rich_text_editor_inline_code">Apply inline code format</string>
+    <string name="rich_text_editor_code_block">Toggle code block</string>
     <string name="rich_text_editor_full_screen_toggle">Toggle full screen mode</string>
 
     <string name="set_link_text">Text</string>

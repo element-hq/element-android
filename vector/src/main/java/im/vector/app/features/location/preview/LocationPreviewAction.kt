@@ -20,4 +20,5 @@ import im.vector.app.core.platform.VectorViewModelAction
 
 sealed class LocationPreviewAction : VectorViewModelAction {
     object ShowMapLoadingError : LocationPreviewAction()
+    object ZoomToUserLocation : LocationPreviewAction()
 }

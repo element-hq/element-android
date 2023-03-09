@@ -4,6 +4,8 @@ on:
   pull_request: { }
   push:
     branches: [ main, develop ]
+    paths-ignore:
+      - '.github/**'
 
 # Enrich gradle.properties for CI/CD
 env:
@@ -109,7 +111,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           ORG_GRADLE_PROJECT_SONAR_LOGIN: ${{ secrets.SONAR_TOKEN }}
         if: ${{ always() && env.GITHUB_TOKEN != '' && env.SONAR_TOKEN != '' && env.ORG_GRADLE_PROJECT_SONAR_LOGIN != '' }}
-        run: ./gradlew sonarqube $CI_GRADLE_ARG_PROPERTIES
+        run: ./gradlew sonar $CI_GRADLE_ARG_PROPERTIES
 
       - name: Format unit test results
         if: always()

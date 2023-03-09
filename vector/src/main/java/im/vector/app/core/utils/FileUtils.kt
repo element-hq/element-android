@@ -17,6 +17,7 @@
 package im.vector.app.core.utils
 
 import android.content.Context
+import androidx.annotation.WorkerThread
 import timber.log.Timber
 import java.io.File
 import java.util.Locale
@@ -125,6 +126,7 @@ fun getFileExtension(fileUri: String): String? {
  * Size
  * ========================================================================================== */
 
+@WorkerThread
 fun getSizeOfFiles(root: File): Long {
     return root.walkTopDown()
             .onEnter {

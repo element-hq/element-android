@@ -17,18 +17,14 @@
 package org.matrix.android.sdk.internal.database.migration
 
 import io.realm.DynamicRealm
-import org.matrix.android.sdk.internal.database.model.EventEntityFields
+import org.matrix.android.sdk.internal.database.model.HomeServerCapabilitiesEntityFields
+import org.matrix.android.sdk.internal.extensions.forceRefreshOfHomeServerCapabilities
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
-/**
- * As we compute message e2ee verification state at decryption time, it might get outdated.
- * Adding a new field to mark a decryption state as dirty
- */
 internal class MigrateSessionTo051(realm: DynamicRealm) : RealmMigrator(realm, 51) {
-
     override fun doMigrate(realm: DynamicRealm) {
-        realm.schema.get("EventEntity")
-                ?.addField(EventEntityFields.IS_VERIFICATION_STATE_DIRTY, Boolean::class.java)
-                ?.setNullable(EventEntityFields.IS_VERIFICATION_STATE_DIRTY, true)
+        realm.schema.get("HomeServerCapabilitiesEntity")
+                ?.addField(HomeServerCapabilitiesEntityFields.EXTERNAL_ACCOUNT_MANAGEMENT_URL, String::class.java)
+                ?.forceRefreshOfHomeServerCapabilities()
     }
 }

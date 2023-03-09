@@ -56,22 +56,37 @@ class EncryptionItemFactory @Inject constructor(
         val description: String
         val shield: StatusTileTimelineItem.ShieldUIState
         if (isSafeAlgorithm) {
-            val isDirect = session.getRoomSummary(event.root.roomId.orEmpty())?.isDirect.orFalse()
-            title = stringProvider.getString(R.string.encryption_enabled)
-            description = stringProvider.getString(
+            val roomSummary = session.getRoomSummary(event.root.roomId.orEmpty())
+            val isDirect = roomSummary?.isDirect.orFalse()
+            val (resTitle, resDescription, resShield) = when {
+                isDirect -> {
+                    val isWaitingUser = roomSummary?.isEncrypted.orFalse() && roomSummary?.joinedMembersCount == 1 && roomSummary.invitedMembersCount == 0
                     when {
-                        isDirect && RoomLocalEcho.isLocalEchoId(event.root.roomId.orEmpty()) -> {
-                            R.string.direct_room_encryption_enabled_tile_description_future
-                        }
-                        isDirect -> {
-                            R.string.direct_room_encryption_enabled_tile_description
-                        }
-                        else -> {
-                            R.string.encryption_enabled_tile_description
-                        }
+                        RoomLocalEcho.isLocalEchoId(event.root.roomId.orEmpty()) -> Triple(
+                                R.string.encryption_enabled,
+                                R.string.direct_room_encryption_enabled_tile_description_future,
+                                StatusTileTimelineItem.ShieldUIState.BLACK
+                        )
+                        isWaitingUser -> Triple(
+                                R.string.direct_room_encryption_enabled_waiting_users,
+                                R.string.direct_room_encryption_enabled_waiting_users_tile_description,
+                                StatusTileTimelineItem.ShieldUIState.WAITING
+                        )
+                        else -> Triple(
+                                R.string.encryption_enabled,
+                                R.string.direct_room_encryption_enabled_tile_description,
+                                StatusTileTimelineItem.ShieldUIState.BLACK
+                        )
                     }
-            )
-            shield = StatusTileTimelineItem.ShieldUIState.BLACK
+                }
+                else -> {
+                    Triple(R.string.encryption_enabled, R.string.encryption_enabled_tile_description, StatusTileTimelineItem.ShieldUIState.BLACK)
+                }
+            }
+
+            title = stringProvider.getString(resTitle)
+            description = stringProvider.getString(resDescription)
+            shield = resShield
         } else {
             title = stringProvider.getString(R.string.encryption_misconfigured)
             description = stringProvider.getString(R.string.encryption_unknown_algorithm_tile_description)

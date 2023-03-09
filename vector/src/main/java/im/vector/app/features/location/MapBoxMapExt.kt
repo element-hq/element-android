@@ -17,6 +17,7 @@
 package im.vector.app.features.location
 
 import com.mapbox.mapboxsdk.camera.CameraPosition
+import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
 import com.mapbox.mapboxsdk.constants.MapboxConstants
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.geometry.LatLngBounds
@@ -28,12 +29,12 @@ fun MapboxMap?.zoomToLocation(locationData: LocationData, preserveCurrentZoomLev
     } else {
         INITIAL_MAP_ZOOM_IN_PREVIEW
     }
-    this?.easeCamera {
-        CameraPosition.Builder()
-                .target(LatLng(locationData.latitude, locationData.longitude))
-                .zoom(zoomLevel)
-                .build()
-    }
+    val expectedCameraPosition = CameraPosition.Builder()
+            .target(LatLng(locationData.latitude, locationData.longitude))
+            .zoom(zoomLevel)
+            .build()
+    val cameraUpdate = CameraUpdateFactory.newCameraPosition(expectedCameraPosition)
+    this?.easeCamera(cameraUpdate)
 }
 
 fun MapboxMap?.zoomToBounds(latLngBounds: LatLngBounds) {

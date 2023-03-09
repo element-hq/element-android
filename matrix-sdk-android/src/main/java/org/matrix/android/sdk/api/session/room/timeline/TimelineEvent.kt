@@ -28,6 +28,7 @@ import org.matrix.android.sdk.api.session.events.model.isLiveLocation
 import org.matrix.android.sdk.api.session.events.model.isPoll
 import org.matrix.android.sdk.api.session.events.model.isReply
 import org.matrix.android.sdk.api.session.events.model.isSticker
+import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.EventAnnotationsSummary
 import org.matrix.android.sdk.api.session.room.model.ReadReceipt
@@ -36,6 +37,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocati
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContentWithFormattedBody
 import org.matrix.android.sdk.api.session.room.model.message.MessageEndPollContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageFormat
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageStickerContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
@@ -157,7 +159,39 @@ fun TimelineEvent.getLastMessageContent(): MessageContent? {
 }
 
 fun TimelineEvent.getLastEditNewContent(): Content? {
-    return annotations?.editSummary?.latestEdit?.getClearContent()?.toModel<MessageContent>()?.newContent
+    val lastContent = annotations?.editSummary?.latestEdit?.getClearContent()?.toModel<MessageContent>()?.newContent
+    return if (isReply()) {
+        val previousFormattedBody = root.getClearContent().toModel<MessageTextContent>()?.formattedBody
+        if (previousFormattedBody?.isNotEmpty() == true) {
+            val lastMessageContent = lastContent.toModel<MessageTextContent>()
+            lastMessageContent?.let { ensureCorrectFormattedBodyInTextReply(it, previousFormattedBody) }?.toContent() ?: lastContent
+        } else {
+            lastContent
+        }
+    } else {
+        lastContent
+    }
+}
+
+private const val MX_REPLY_END_TAG = "</mx-reply>"
+
+/**
+ * Not every client sends a formatted body in the last edited event since this is not required in the
+ * [Matrix specification](https://spec.matrix.org/v1.4/client-server-api/#applying-mnew_content).
+ * We must ensure there is one so that it is still considered as a reply when rendering the message.
+ */
+private fun ensureCorrectFormattedBodyInTextReply(messageTextContent: MessageTextContent, previousFormattedBody: String): MessageTextContent {
+    return when {
+        messageTextContent.formattedBody.isNullOrEmpty() && previousFormattedBody.contains(MX_REPLY_END_TAG) -> {
+            // take previous formatted body with the new body content
+            val newFormattedBody = previousFormattedBody.replaceAfterLast(MX_REPLY_END_TAG, messageTextContent.body)
+            messageTextContent.copy(
+                    formattedBody = newFormattedBody,
+                    format = MessageFormat.FORMAT_MATRIX_HTML,
+            )
+        }
+        else -> messageTextContent
+    }
 }
 
 private fun TimelineEvent.getLastPollEditNewContent(): Content? {
