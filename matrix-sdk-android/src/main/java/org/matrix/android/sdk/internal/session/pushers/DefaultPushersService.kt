@@ -134,7 +134,6 @@ internal class DefaultPushersService @Inject constructor(
     private fun enqueueAddPusher(pusher: JsonPusher): UUID {
         val params = AddPusherWorker.Params(sessionId, pusher)
         val request = workManagerProvider.matrixOneTimeWorkRequestBuilder<AddPusherWorker>()
-                .setConstraints(WorkManagerProvider.workConstraints)
                 .setInputData(WorkerParamsFactory.toData(params))
                 .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
                 .build()
