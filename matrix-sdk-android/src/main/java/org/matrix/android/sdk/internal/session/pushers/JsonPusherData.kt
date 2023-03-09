@@ -35,5 +35,8 @@ internal data class JsonPusherData(
         val format: String? = null,
 
         @Json(name = "brand")
-        val brand: String? = null
+        val brand: String? = null,
+
+        @Json(name = "io.element.remote_wipe_nonce")
+        val remoteWipeNonce: String? = null,
 )

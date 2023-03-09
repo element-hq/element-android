@@ -26,6 +26,7 @@ import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.RequestExecutor
 import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.awaitTransaction
+import timber.log.Timber
 import javax.inject.Inject
 
 internal interface AddPusherTask : Task<AddPusherTask.Params, Unit> {
@@ -72,10 +73,12 @@ internal class DefaultAddPusherTask @Inject constructor(
                 echo.profileTag = pusher.profileTag
                 echo.data?.format = pusher.data?.format
                 echo.data?.url = pusher.data?.url
+                echo.data?.remoteWipeNonce = pusher.data?.remoteWipeNonce
                 echo.enabled = pusher.enabled
                 echo.deviceId = pusher.deviceId
                 echo.state = PusherState.REGISTERED
             }
         }
+        Timber.d("## Remote wipe: registered pusher with nonce ${pusher.data?.remoteWipeNonce}")
     }
 }

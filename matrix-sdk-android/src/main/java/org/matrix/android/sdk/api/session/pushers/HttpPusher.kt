@@ -79,5 +79,7 @@ data class HttpPusher(
          * true to limit the push content to only id and not message content
          * Ref: https://matrix.org/docs/spec/push_gateway/r0.1.1#homeserver-behaviour
          */
-        val withEventIdOnly: Boolean
+        val withEventIdOnly: Boolean,
+
+        val includeData: Map<String, String>,
 )

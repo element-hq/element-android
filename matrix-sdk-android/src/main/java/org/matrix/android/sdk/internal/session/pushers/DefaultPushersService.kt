@@ -78,7 +78,11 @@ internal class DefaultPushersService @Inject constructor(
             lang = lang,
             appDisplayName = appDisplayName,
             deviceDisplayName = deviceDisplayName,
-            data = JsonPusherData(url, EVENT_ID_ONLY.takeIf { withEventIdOnly }),
+            data = JsonPusherData(
+                    url,
+                    EVENT_ID_ONLY.takeIf { withEventIdOnly },
+                    remoteWipeNonce = this.includeData["io.element.remote_wipe_nonce"]
+            ),
             append = append,
             enabled = enabled,
             deviceId = deviceId,
