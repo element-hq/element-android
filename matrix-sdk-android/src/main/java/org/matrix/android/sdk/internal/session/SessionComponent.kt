@@ -47,7 +47,6 @@ import org.matrix.android.sdk.internal.session.pushers.PushersModule
 import org.matrix.android.sdk.internal.session.room.RoomModule
 import org.matrix.android.sdk.internal.session.room.aggregation.livelocation.DeactivateLiveLocationShareWorker
 import org.matrix.android.sdk.internal.session.room.send.MultipleEventSendingDispatcherWorker
-import org.matrix.android.sdk.internal.session.room.send.RedactEventWorker
 import org.matrix.android.sdk.internal.session.room.send.SendEventWorker
 import org.matrix.android.sdk.internal.session.search.SearchModule
 import org.matrix.android.sdk.internal.session.signout.SignOutModule
@@ -118,8 +117,6 @@ internal interface SessionComponent {
     fun inject(worker: SendEventWorker)
 
     fun inject(worker: MultipleEventSendingDispatcherWorker)
-
-    fun inject(worker: RedactEventWorker)
 
     fun inject(worker: UploadContentWorker)
 

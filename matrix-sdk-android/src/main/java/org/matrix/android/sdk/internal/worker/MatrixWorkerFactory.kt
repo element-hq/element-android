@@ -28,7 +28,6 @@ import org.matrix.android.sdk.internal.session.content.UploadContentWorker
 import org.matrix.android.sdk.internal.session.pushers.AddPusherWorker
 import org.matrix.android.sdk.internal.session.room.aggregation.livelocation.DeactivateLiveLocationShareWorker
 import org.matrix.android.sdk.internal.session.room.send.MultipleEventSendingDispatcherWorker
-import org.matrix.android.sdk.internal.session.room.send.RedactEventWorker
 import org.matrix.android.sdk.internal.session.room.send.SendEventWorker
 import org.matrix.android.sdk.internal.session.sync.handler.UpdateUserWorker
 import org.matrix.android.sdk.internal.session.sync.job.SyncWorker
@@ -55,8 +54,6 @@ internal class MatrixWorkerFactory @Inject constructor(private val sessionManage
                 AddPusherWorker(appContext, workerParameters, sessionManager)
             MultipleEventSendingDispatcherWorker::class.java.name ->
                 MultipleEventSendingDispatcherWorker(appContext, workerParameters, sessionManager)
-            RedactEventWorker::class.java.name ->
-                RedactEventWorker(appContext, workerParameters, sessionManager)
             SendEventWorker::class.java.name ->
                 SendEventWorker(appContext, workerParameters, sessionManager)
             SyncWorker::class.java.name ->
