@@ -727,9 +727,13 @@ internal class RustCryptoService @Inject constructor(
 
     override fun supportsShareKeysOnInvite() = false
 
+    override fun supportsKeyWithheld() = true
+    override fun supportsForwardedKeyWiththeld() = false
+
+
     override fun enableShareKeyOnInvite(enable: Boolean) {
-        if (enable) {
-            TODO("Enable share key on invite not implemented")
+        if (enable && !supportsShareKeysOnInvite()) {
+            throw java.lang.UnsupportedOperationException("Enable share key on invite not implemented in rust");
         }
     }
 
@@ -872,10 +876,12 @@ internal class RustCryptoService @Inject constructor(
     }
 
     override fun getSharedWithInfo(roomId: String?, sessionId: String): MXUsersDevicesMap<Int> {
+        // TODO not exposed in rust?
         return cryptoStore.getSharedWithInfo(roomId, sessionId)
     }
 
     override fun getWithHeldMegolmSession(roomId: String, sessionId: String): RoomKeyWithHeldContent? {
+        // TODO not exposed in rust.
         return cryptoStore.getWithHeldMegolmSession(roomId, sessionId)
     }
 

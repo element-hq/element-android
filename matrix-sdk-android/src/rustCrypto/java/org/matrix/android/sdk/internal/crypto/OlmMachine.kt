@@ -38,6 +38,7 @@ import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.api.session.crypto.model.MXEventDecryptionResult
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
+import org.matrix.android.sdk.api.session.crypto.model.MessageVerificationState
 import org.matrix.android.sdk.api.session.crypto.model.UnsignedDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.events.model.Content
@@ -77,6 +78,8 @@ import org.matrix.rustcomponents.sdk.crypto.MegolmV1BackupKey
 import org.matrix.rustcomponents.sdk.crypto.Request
 import org.matrix.rustcomponents.sdk.crypto.RequestType
 import org.matrix.rustcomponents.sdk.crypto.RoomKeyCounts
+import org.matrix.rustcomponents.sdk.crypto.ShieldColor
+import org.matrix.rustcomponents.sdk.crypto.ShieldState
 import org.matrix.rustcomponents.sdk.crypto.setLogger
 import timber.log.Timber
 import java.io.File
@@ -180,7 +183,7 @@ internal class OlmMachine @Inject constructor(
 
         val crossSigningVerified = when (val ownIdentity = getIdentity(userId())) {
             is OwnUserIdentity -> ownIdentity.trustsOurOwnDevice()
-            else               -> false
+            else -> false
         }
 
         return CryptoDeviceInfo(
@@ -437,7 +440,7 @@ internal class OlmMachine @Inject constructor(
                         throw MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS, MXCryptoError.MISSING_FIELDS_REASON)
                     }
                     val serializedEvent = adapter.toJson(event)
-                    val decrypted = inner.decryptRoomEvent(serializedEvent, event.roomId, false)
+                    val decrypted = inner.decryptRoomEvent(serializedEvent, event.roomId, false, false)
 
                     val deserializationAdapter =
                             moshi.adapter<JsonDict>(Map::class.java)
@@ -449,16 +452,20 @@ internal class OlmMachine @Inject constructor(
                             senderCurve25519Key = decrypted.senderCurve25519Key,
                             claimedEd25519Key = decrypted.claimedEd25519Key,
                             forwardingCurve25519KeyChain = decrypted.forwardingCurve25519Chain,
-                            messageVerificationState = decrypted.verificationState.fromInner(),
+                            messageVerificationState = decrypted.shieldState.toVerificationState(),
                     )
                 } catch (throwable: Throwable) {
                     val reThrow = when (throwable) {
                         is DecryptionException.MissingRoomKey -> {
-                            MXCryptoError.Base(MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID, throwable.message.orEmpty())
+                            if (throwable.withheldCode != null) {
+                                MXCryptoError.Base(MXCryptoError.ErrorType.KEYS_WITHHELD, throwable.withheldCode!!)
+                            } else {
+                                MXCryptoError.Base(MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID, throwable.error)
+                            }
                         }
                         is DecryptionException.Megolm -> {
                             // TODO check if it's the correct binding?
-                            MXCryptoError.Base(MXCryptoError.ErrorType.UNKNOWN_MESSAGE_INDEX, throwable.message.orEmpty())
+                            MXCryptoError.Base(MXCryptoError.ErrorType.UNKNOWN_MESSAGE_INDEX, throwable.error)
                         }
                         is DecryptionException.Identifier -> {
                             MXCryptoError.Base(MXCryptoError.ErrorType.BAD_EVENT_FORMAT, MXCryptoError.BAD_EVENT_FORMAT_TEXT_REASON)
@@ -479,6 +486,24 @@ internal class OlmMachine @Inject constructor(
                     throw reThrow
                 }
             }
+
+    private fun ShieldState.toVerificationState(): MessageVerificationState? {
+        return when (this.color) {
+            ShieldColor.GREEN -> MessageVerificationState.VERIFIED
+            ShieldColor.RED -> {
+                when (this.message) {
+                    "Encrypted by an unverified device." -> MessageVerificationState.UN_SIGNED_DEVICE
+                    "Encrypted by a device not verified by its owner." -> MessageVerificationState.UN_SIGNED_DEVICE_OF_VERIFIED_USER
+                    "Encrypted by an unknown or deleted device." -> MessageVerificationState.UNKNOWN_DEVICE
+                    else -> MessageVerificationState.UN_SIGNED_DEVICE
+                }
+            }
+            ShieldColor.GRAY -> {
+                MessageVerificationState.UNSAFE_SOURCE
+            }
+            ShieldColor.NONE -> null
+        }
+    }
 
     /**
      * Request the room key that was used to encrypt the given undecrypted event.

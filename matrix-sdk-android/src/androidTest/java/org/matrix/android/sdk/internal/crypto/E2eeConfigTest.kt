@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.crypto
 
+import android.util.Log
 import androidx.test.filters.LargeTest
 import org.amshove.kluent.shouldBe
 import org.junit.FixMethodOrder
@@ -98,32 +99,34 @@ class E2eeConfigTest : InstrumentedTest {
 
         val roomAlicePOV = cryptoTestData.firstSession.roomService().getRoom(cryptoTestData.roomId)!!
 
-        val beforeMessage = testHelper.sendTextMessage(roomAlicePOV, "you can read", 1).first()
+        val beforeMessage =  testHelper.sendMessageInRoom(roomAlicePOV, "you can read")
 
         val roomBobPOV = cryptoTestData.secondSession!!.roomService().getRoom(cryptoTestData.roomId)!!
         // ensure other received
-        testHelper.retryPeriodically {
-            roomBobPOV.timelineService().getTimelineEvent(beforeMessage.eventId) != null
-        }
+        Log.v("#E2E TEST", "Wait for bob to get the message")
+        testHelper.ensureMessage(roomBobPOV, beforeMessage) { true }
 
+        Log.v("#E2E TEST", "ensure bob Can Decrypt first message")
         cryptoTestHelper.ensureCanDecrypt(
-                listOf(beforeMessage.eventId),
+                listOf(beforeMessage),
                 cryptoTestData.secondSession!!,
                 cryptoTestData.roomId,
-                listOf(beforeMessage.getLastMessageContent()!!.body)
+                listOf("you can read")
         )
 
+        Log.v("#E2E TEST", "setRoomBlockUnverifiedDevices true")
         cryptoTestData.firstSession.cryptoService().setRoomBlockUnverifiedDevices(cryptoTestData.roomId, true)
 
-        val afterMessage = testHelper.sendTextMessage(roomAlicePOV, "you are blocked", 1).first()
+        Log.v("#E2E TEST", "let alice send the message")
+        val afterMessage = testHelper.sendMessageInRoom(roomAlicePOV, "you are blocked")
 
         // ensure received
-        testHelper.retryPeriodically {
-            cryptoTestData.secondSession?.getRoom(cryptoTestData.roomId)?.timelineService()?.getTimelineEvent(afterMessage.eventId)?.root != null
-        }
+
+        Log.v("#E2E TEST", "Ensure bob received second message")
+        testHelper.ensureMessage(roomBobPOV, afterMessage) { true }
 
         cryptoTestHelper.ensureCannotDecrypt(
-                listOf(afterMessage.eventId),
+                listOf(afterMessage),
                 cryptoTestData.secondSession!!,
                 cryptoTestData.roomId,
                 MXCryptoError.ErrorType.KEYS_WITHHELD

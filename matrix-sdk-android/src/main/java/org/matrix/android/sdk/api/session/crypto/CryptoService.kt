@@ -94,6 +94,9 @@ interface CryptoService {
      */
     fun supportsShareKeysOnInvite(): Boolean
 
+    fun supportsKeyWithheld(): Boolean
+    fun supportsForwardedKeyWiththeld(): Boolean
+
     /**
      * As per MSC3061.
      * If true will make it possible to share part of e2ee room history
