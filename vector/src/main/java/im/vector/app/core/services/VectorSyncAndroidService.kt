@@ -129,7 +129,7 @@ class VectorSyncAndroidService : SyncAndroidService() {
                         .setInputData(RestartWhenNetworkOn.createInputData(sessionId, syncTimeoutSeconds, syncDelaySeconds, isPeriodic))
                         .setConstraints(
                                 Constraints.Builder()
-                                        .setRequiredNetworkType(NetworkType.CONNECTED)
+                                        // .setRequiredNetworkType(NetworkType.CONNECTED)
                                         .build()
                         )
                         .build()

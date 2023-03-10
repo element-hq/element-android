@@ -23,6 +23,7 @@ import androidx.core.net.toUri
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.crypto.model.EncryptedFileInfo
@@ -365,6 +366,8 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
     }
 
     private fun handleFailure(params: Params, failure: Throwable): Result {
+        if (failure is Failure.NetworkConnection) return Result.retry()
+
         notifyTracker(params) { contentUploadStateTracker.setFailure(it, failure) }
 
         return Result.success(
