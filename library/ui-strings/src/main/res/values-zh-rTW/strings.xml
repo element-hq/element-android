@@ -621,17 +621,17 @@
     <string name="settings_troubleshoot_test_system_settings_title">系統設定</string>
     <string name="settings_troubleshoot_test_system_settings_success">已在系統設定中開啟通知。</string>
     <string name="settings_troubleshoot_test_system_settings_failed">系統設定中停用了通知。
-\n請檢查系統設定。</string>
+\n請確認系統設定。</string>
     <string name="open_settings">開啟設定</string>
     <string name="settings_troubleshoot_test_account_settings_title">帳號設定</string>
     <string name="settings_troubleshoot_test_account_settings_success">您的帳號已開啟通知。</string>
     <string name="settings_troubleshoot_test_account_settings_failed">您的帳號已關閉通知。
-\n請檢查帳號設定。</string>
+\n請確認帳號設定。</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">啟用</string>
     <string name="settings_troubleshoot_test_device_settings_title">工作階段設定</string>
     <string name="settings_troubleshoot_test_device_settings_success">此工作階段已啟用通知。</string>
     <string name="settings_troubleshoot_test_device_settings_failed">此工作階段未啟用通知。
-\n請檢查 ${app_name} 設定。</string>
+\n請確認 ${app_name} 設定。</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">啟用</string>
     <string name="settings_troubleshoot_test_play_services_title">Play Services 檢查</string>
     <string name="settings_troubleshoot_test_play_services_success">Google Play Services APK 可用且已為最新版。</string>
@@ -850,7 +850,7 @@
     <string name="event_redacted_by_admin_reason">聊天室管理員刪除的事件</string>
     <string name="malformed_message">事件格式錯誤，無法顯示</string>
     <string name="create_new_room">建立新聊天室</string>
-    <string name="error_no_network">沒有網路。請檢查您的網路連線。</string>
+    <string name="error_no_network">沒有網路。請確認您的網路連線。</string>
     <string name="action_change">變更</string>
     <string name="change_room_directory_network">變更網路</string>
     <string name="please_wait">請稍候…</string>
@@ -917,7 +917,7 @@
     <string name="none">無</string>
     <string name="action_revoke">撤銷</string>
     <string name="action_disconnect">斷線</string>
-    <string name="login_error_homeserver_not_found">無法在此 URL 找到家伺服器，請檢查</string>
+    <string name="login_error_homeserver_not_found">無法在此 URL 找到家伺服器，請確認</string>
     <string name="settings_background_fdroid_sync_mode">背景同步模式</string>
     <string name="settings_background_fdroid_sync_mode_battery">電力最佳化</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} 將會在背景同步以節省裝置的電力資源。
@@ -1079,7 +1079,7 @@
     <string name="login_reset_password_warning_content">變更您的密碼將會重設您所有工作階段中任何的端對端加密金鑰，讓加密聊天紀錄無法讀取。請在重設您的密碼前從其他工作階段設定金鑰備份或匯出聊天室金鑰。</string>
     <string name="login_reset_password_warning_submit">繼續</string>
     <string name="login_reset_password_error_not_found">此電子郵件位址未連結到任何帳號</string>
-    <string name="login_reset_password_mail_confirmation_title">檢查您的收件匣</string>
+    <string name="login_reset_password_mail_confirmation_title">請到信箱收信</string>
     <string name="login_reset_password_mail_confirmation_notice">驗證電子郵件已傳送至 %1$s。</string>
     <string name="login_reset_password_mail_confirmation_notice_2">點擊連結即可確認您的新密碼。完成驗證後，請點擊下方。</string>
     <string name="login_reset_password_mail_confirmation_submit">我已經驗證了電子郵件地址</string>
@@ -1108,7 +1108,7 @@
     <string name="login_msisdn_confirm_send_again">再次傳送</string>
     <string name="login_msisdn_confirm_submit">下一個</string>
     <string name="login_msisdn_error_not_international">國際電話號碼必須以「+」開頭</string>
-    <string name="login_msisdn_error_other">電話號碼似乎無效。請檢查</string>
+    <string name="login_msisdn_error_other">電話號碼似乎無效。請確認</string>
     <string name="login_signup_to">註冊至 %1$s</string>
     <string name="login_signin_username_hint">使用者名稱或電子郵件</string>
     <string name="login_signup_password_hint">密碼</string>
@@ -1121,23 +1121,23 @@
     <string name="login_a11y_choose_other">選取自訂的家伺服器</string>
     <string name="login_a11y_captcha_container">請執行 captcha 驗證</string>
     <string name="login_terms_title">接受條款以繼續</string>
-    <string name="login_wait_for_email_title">請檢查您的電子郵件</string>
+    <string name="login_wait_for_email_title">請到電子郵件信箱收信</string>
     <string name="login_wait_for_email_notice">我們剛傳送電子郵件給 %1$s。
 \n請點擊其中所包含的連結以繼續建立帳號。</string>
-    <string name="login_validation_code_is_not_correct">輸入的驗證碼不正確。請檢查。</string>
-    <string name="login_error_outdated_homeserver_title">未更新的家伺服器</string>
+    <string name="login_validation_code_is_not_correct">輸入的驗證碼不正確。請確認。</string>
+    <string name="login_error_outdated_homeserver_title">舊版的家伺服器</string>
     <plurals name="login_error_limit_exceeded_retry_after">
-        <item quantity="other">傳送了太多請求。您可以在 %1$d 秒後重試…</item>
+        <item quantity="other">傳送了太多請求。請等 %1$d 秒後再試…</item>
     </plurals>
-    <string name="seen_by">檢視由</string>
+    <string name="seen_by">已讀</string>
     <string name="signed_out_title">您已登出</string>
-    <string name="signed_out_notice">這可能有多種原因： 
-\n 
-\n• 您已在其他工作階段中變更您的密碼。 
-\n 
-\n• 您已從其他工作階段刪除此工作階段。 
-\n 
-\n• 您伺服器的管理員為了安全性讓您的存取無效。</string>
+    <string name="signed_out_notice">這可能有多種原因：
+\n
+\n• 您已在其他工作階段中變改密碼。
+\n
+\n• 您已從其他工作階段刪除此工作階段。
+\n
+\n• 您的伺服器管理員因安全性因素，讓您的存取權限失效。</string>
     <string name="signed_out_submit">再次登入</string>
     <string name="soft_logout_title">您已登出</string>
     <string name="soft_logout_signin_title">登入</string>
@@ -1148,31 +1148,31 @@
     <string name="soft_logout_clear_data_title">清除個人資料</string>
     <string name="soft_logout_clear_data_notice">警告：您的個人資料（包含加密金鑰）仍儲存在此裝置上。
 \n
-\n如果您已不想使用此裝置，請將其清除，或是登入到其他帳號。</string>
+\n如果您已不想使用此裝置或想要登入其他帳號，請將其清除。</string>
     <string name="soft_logout_clear_data_submit">清除所有資料</string>
     <string name="soft_logout_clear_data_dialog_title">清除資料</string>
-    <string name="soft_logout_clear_data_dialog_content">清除目前儲存在此裝置上的所有資料嗎？
-\n再次登入以存取您的帳號資料與訊息。</string>
-    <string name="soft_logout_clear_data_dialog_e2e_warning_content">除非您登入以復原您的加密金鑰，否則您將會失去對安全訊息的存取權。</string>
-    <string name="soft_logout_sso_not_same_user_error">使用者 %1$s 目前的工作階段與您提供的使用者 %2$s 憑證。${app_name} 並不支援。
-\n請先清除您的資料，然後再以其他帳號登入。</string>
+    <string name="soft_logout_clear_data_dialog_content">確定要清除目前儲存在此裝置上的所有資料嗎？
+\n若要存取您的帳號資料與訊息，請重新登入。</string>
+    <string name="soft_logout_clear_data_dialog_e2e_warning_content">除非您登入並復原加密金鑰，否則將失去對安全訊息的存取權。</string>
+    <string name="soft_logout_sso_not_same_user_error">目前工作階段登入的使用者 %1$s 與您提供的使用者 %2$s 的登入資訊不同。${app_name} 不支援此差異。
+\n請先清除資料，然後再以其他帳號登入。</string>
     <string name="permalink_malformed">您的 matrix.to 連結格式錯誤</string>
     <string name="bug_report_error_too_short">描述太短了</string>
     <string name="notification_initial_sync">初始化同步…</string>
     <string name="settings_advanced_settings">進階設定</string>
     <string name="settings_developer_mode">開發者模式</string>
-    <string name="settings_developer_mode_summary">開發者模式會啟用隱藏的功能，但可能會造成應用程式較不穩定。僅供開發者使用！</string>
+    <string name="settings_developer_mode_summary">可透過開發者模式開啟隱藏功能，但可能會造成應用程式較不穩定。僅供開發者使用！</string>
     <string name="settings_rageshake">憤怒搖晃</string>
-    <string name="settings_rageshake_detection_threshold">偵測閾值</string>
-    <string name="settings_rageshake_detection_threshold_summary">搖晃您的手機以測試偵測閾值</string>
+    <string name="settings_rageshake_detection_threshold">偵測門檻</string>
+    <string name="settings_rageshake_detection_threshold_summary">搖晃您的手機即可測試偵測門檻</string>
     <string name="rageshake_detected">偵測到搖晃！</string>
     <string name="settings">設定</string>
     <string name="devices_current_device">目前的工作階段</string>
     <string name="devices_other_devices">其他工作階段</string>
-    <string name="autocomplete_limited_results">僅顯示第一個結果，輸入更多字母…</string>
+    <string name="autocomplete_limited_results">僅顯示初始結果，請繼續輸入文字…</string>
     <string name="settings_developer_mode_fail_fast_title">快速失敗</string>
     <string name="settings_developer_mode_fail_fast_summary">在發生非預期的錯誤時，${app_name} 可能更常當機</string>
-    <string name="command_description_shrug">將 ¯\\_(ツ)_/¯ 附加到純文字訊息中</string>
+    <string name="command_description_shrug">在文字訊息前加入 ¯\\_(ツ)_/¯</string>
     <string name="create_room_encryption_title">啟用加密</string>
     <string name="create_room_encryption_description">一旦啟用加密就無法停用。</string>
     <string name="login_error_threepid_denied">您的電子郵件網域無法在此伺服器上註冊</string>
@@ -1180,12 +1180,12 @@
     <string name="verification_sas_match">它們相符</string>
     <string name="verification_sas_do_not_match">它們不相符</string>
     <string name="verification_conclusion_not_secure">不安全</string>
-    <string name="verification_conclusion_compromised">以下的其中一項可能會受到威脅：
+    <string name="verification_conclusion_compromised">下列其一項目可能已遭到破解或入侵：
 \n
 \n- 您的家伺服器
-\n- 您正在驗證的使用者連線的家伺服器
-\n- 您的或其他使用者的網際網路連線
-\n- 您的或其他使用者的裝置</string>
+\n- 您要驗證的使用者所連線的家伺服器
+\n- 您的，或對方的網際網路連線
+\n- 您的，或對方的裝置</string>
     <string name="sent_a_video">影片。</string>
     <string name="sent_an_image">圖片。</string>
     <string name="sent_an_audio_file">音訊</string>
@@ -1201,72 +1201,72 @@
     <string name="verification_scan_notice">掃描其他使用者裝置的條碼以安全地相互驗證</string>
     <string name="verification_scan_their_code">掃描他們的條碼</string>
     <string name="verification_scan_emoji_title">無法掃描</string>
-    <string name="verification_scan_emoji_subtitle">如果您無法面對面進行，請用比較表情符號代替</string>
-    <string name="verification_no_scan_emoji_title">透過比較表情符號驗證</string>
+    <string name="verification_scan_emoji_subtitle">如果你們無法面對面進行驗證，可改用比對表情符號來替代</string>
+    <string name="verification_no_scan_emoji_title">比對表情符號進行驗證</string>
     <string name="verification_verify_user">驗證 %s</string>
     <string name="verification_verified_user">已驗證 %s</string>
-    <string name="verification_request_waiting_for">正在等待驗證 %s…</string>
-    <string name="room_profile_not_encrypted_subtitle">此聊天室中的訊息未端對端加密。</string>
-    <string name="room_profile_encrypted_subtitle">此聊天室的訊息有端對端加密。
+    <string name="verification_request_waiting_for">正在等待 %s…</string>
+    <string name="room_profile_not_encrypted_subtitle">此聊天室中的訊息未經端對端加密。</string>
+    <string name="room_profile_encrypted_subtitle">此聊天室的訊息已進行端對端加密。
 \n
-\n您的訊息已被鎖保護，只有您與收件者有獨特的金鑰可以解鎖。</string>
-    <string name="room_profile_section_security">安全</string>
+\n您的訊息收發前已加密，只有您與收件者有唯一的金鑰可以解密。</string>
+    <string name="room_profile_section_security">安全性</string>
     <string name="room_profile_section_security_learn_more">取得更多資訊</string>
     <string name="room_profile_section_more">更多</string>
     <string name="room_profile_section_more_settings">聊天室設定</string>
     <string name="room_profile_section_more_notifications">通知</string>
     <plurals name="room_profile_section_more_member_list">
-        <item quantity="other">%1$d 個夥伴</item>
+        <item quantity="other">%1$d 位夥伴</item>
     </plurals>
-    <string name="room_profile_section_more_uploads">上傳</string>
+    <string name="room_profile_section_more_uploads">上傳項目</string>
     <string name="room_profile_section_more_leave">離開聊天室</string>
     <string name="room_profile_leaving_room">正在離開聊天室…</string>
     <string name="room_member_power_level_admins">管理員</string>
-    <string name="room_member_power_level_moderators">主持人</string>
+    <string name="room_member_power_level_moderators">版主</string>
     <string name="room_member_power_level_custom">自訂</string>
     <string name="room_member_power_level_invites">邀請</string>
     <string name="room_member_power_level_users">使用者</string>
     <string name="room_member_power_level_admin_in">%1$s 中的管理員</string>
-    <string name="room_member_power_level_moderator_in">%1$s 中的主持人</string>
+    <string name="room_member_power_level_moderator_in">%1$s 中的版主</string>
     <string name="room_member_power_level_custom_in">自訂 %2$s 中的（%1$d）</string>
     <string name="room_member_jump_to_read_receipt">跳至讀取回條</string>
     <string name="rendering_event_error_type_of_event_not_handled">${app_name} 無法處理類型為「%1$s」的事件</string>
-    <string name="rendering_event_error_exception">在渲染 ID「%1$s」事件的內容時，${app_name} 遇到問題</string>
+    <string name="rendering_event_error_exception">${app_name} 在渲染 ID 為「%1$s」的事件內容時遇到問題</string>
     <string name="unignore">取消忽略</string>
-    <string name="verify_cannot_cross_sign">此工作階段無法與您其他的工作階段分享此驗證。
-\n驗證將會儲存在本機並在未來版本的應用程式中共享。</string>
+    <string name="verify_cannot_cross_sign">此工作階段無法與您其他的工作階段共用驗證。
+\n驗證將儲存在本機，並與未來版本的應用程式共享。</string>
     <string name="command_description_rainbow">將指定的訊息以彩虹的方式上色後傳送</string>
-    <string name="command_description_rainbow_emote">將指定的表情符號以彩虹的方式上色後傳送</string>
+    <string name="command_description_rainbow_emote">將指定的表情文字以彩虹的方式上色後傳送</string>
     <string name="settings_category_timeline">時間軸</string>
     <string name="settings_category_composer">訊息編輯器</string>
     <string name="room_settings_enable_encryption">啟用端對端加密…</string>
     <string name="room_settings_enable_encryption_dialog_title">要開啟加密嗎？</string>
     <string name="room_settings_enable_encryption_dialog_content">啟用後，就無法再停用對聊天室的加密。伺服器無法解讀傳送到加密聊天室的訊息內容，而僅有聊天室的參與者可見。開啟加密可能會讓許多聊天機器人與橋接無法運作。</string>
     <string name="room_settings_enable_encryption_dialog_submit">啟用加密</string>
-    <string name="verification_request_notice">要確定安全，請透過一次性的代碼驗證 %s。</string>
-    <string name="verification_request_start_notice">要確定安全，請面對面進行或使用其他方式來通訊。</string>
-    <string name="verification_emoji_notice">比較獨特的表情符號，並確保它們以相同的順序出現。</string>
-    <string name="verification_code_notice">以其中一方的畫面上顯示的代碼與其他使用者的畫面比較。</string>
-    <string name="verification_conclusion_ok_notice">與此使用者的訊息是端對端加密的，無法被第三方讀取。</string>
-    <string name="verification_conclusion_ok_self_notice">您新的工作階段現在已被驗證。新階段可存取您的加密訊息，其他使用者也會看到其已受信任。</string>
+    <string name="verification_request_notice">為了確保安全，請透過單次使用的代碼來驗證 %s。</string>
+    <string name="verification_request_start_notice">為了確保安全，請面對面進行驗證，或使用其他方式來通訊。</string>
+    <string name="verification_emoji_notice">比對顯示的表情符號，確認它們以相同的順序出現。</string>
+    <string name="verification_code_notice">比對畫面上顯示的代碼與對方的代碼。</string>
+    <string name="verification_conclusion_ok_notice">與此使用者的訊息已開啟端對端加密，無法被第三方讀取。</string>
+    <string name="verification_conclusion_ok_self_notice">已驗證您的新工作階段。新階段可存取您的加密訊息，其他使用者也會看到這是受信任的階段。</string>
     <string name="encryption_information_cross_signing_state">交叉簽署</string>
     <string name="encryption_information_dg_xsigning_complete">交叉簽署已啟用
 \n私鑰在裝置上。</string>
     <string name="encryption_information_dg_xsigning_trusted">交叉簽署已啟用
 \n金鑰已受信任。
-\n私鑰未顯示</string>
+\n私鑰未知</string>
     <string name="encryption_information_dg_xsigning_not_trusted">交叉簽署已啟用。
 \n金鑰未受信任</string>
     <string name="encryption_information_dg_xsigning_disabled">交叉簽署未啟用</string>
-    <string name="settings_active_sessions_list">活躍的工作階段</string>
+    <string name="settings_active_sessions_list">使用中的工作階段</string>
     <string name="settings_active_sessions_show_all">顯示所有工作階段</string>
     <string name="settings_active_sessions_manage">管理工作階段</string>
     <string name="settings_active_sessions_signout_device">登出此工作階段</string>
-    <string name="settings_failed_to_get_crypto_device_info">無可用的密碼學資訊</string>
-    <string name="settings_active_sessions_verified_device_desc">因為您已驗證此工作階段，所以其在安全通訊上是可受信任的：</string>
+    <string name="settings_failed_to_get_crypto_device_info">無可用的加密資訊</string>
+    <string name="settings_active_sessions_verified_device_desc">因為您已驗證此工作階段，可信任其用於安全通訊：</string>
     <string name="settings_active_sessions_unverified_device_desc">驗證此工作階段以將其標記為受信任並讓其可以存取加密訊息。如果您並未登入此工作階段，您的帳號可能遭到盜用：</string>
     <plurals name="settings_active_sessions_count">
-        <item quantity="other">%d 活躍的工作階段</item>
+        <item quantity="other">%d 個使用中的工作階段</item>
     </plurals>
     <string name="crosssigning_verify_this_session">驗證此裝置</string>
     <string name="verification_open_other_to_verify">使用已存在的使用階段來驗證這個階段，讓此階段可以存取加密訊息。</string>
@@ -1279,20 +1279,20 @@
     <string name="not_trusted">未受信任</string>
     <string name="verification_profile_device_verified_because">因為 %1$s （%2$s）已驗證此工作階段，所以其在安全通訊上是可受信任的：</string>
     <string name="verification_profile_device_new_signing">%1$s（%2$s）使用新的工作階段登入：</string>
-    <string name="verification_profile_device_untrust_info">直到此使用者信任此工作階段為止，傳送到該工作階段與從它傳送的訊息都會標記為警告。或者您可以手動進行驗證。</string>
+    <string name="verification_profile_device_untrust_info">直到此使用者信任此工作階段為止，該工作階段收發的訊息都會有警告標籤。您也可以手動進行驗證。</string>
     <string name="initialize_cross_signing">初始化交叉簽署</string>
     <string name="reset_cross_signing">重設金鑰</string>
     <string name="a11y_qr_code_for_verification">QR Code</string>
     <string name="qr_code_scanned_by_other_notice">就快完成了！%s 有顯示打勾嗎？</string>
     <string name="qr_code_scanned_by_other_yes">是</string>
     <string name="qr_code_scanned_by_other_no">否</string>
-    <string name="no_connectivity_to_the_server_indicator">到伺服器的連線已遺失</string>
+    <string name="no_connectivity_to_the_server_indicator">對伺服器的連線已中斷</string>
     <string name="login_signup_username_hint">使用者名稱</string>
     <string name="settings_dev_tools">開發者工具</string>
     <string name="settings_account_data">帳號資料</string>
     <string name="verification_cannot_access_other_session">使用復原安全密語或金鑰</string>
     <string name="verification_use_passphrase">如果您無法存取既有的工作階段的話</string>
-    <string name="enter_secret_storage_invalid">在儲存空間找不到秘密</string>
+    <string name="enter_secret_storage_invalid">無法在儲存空間找到加密資訊</string>
     <string name="message_action_item_redact">移除…</string>
     <string name="share_confirm_room">您想要傳送此附件到 %1$s 嗎？</string>
     <plurals name="send_images_with_original_size">
@@ -1310,12 +1310,12 @@
     <string name="e2e_use_keybackup">解鎖加密訊息紀錄</string>
     <string name="refresh">重新整理</string>
     <string name="new_session">新登入。是您嗎？</string>
-    <string name="verify_new_session_notice">使用此使用階段來驗證新的使用階段，讓新階段可以存取加密訊息。</string>
+    <string name="verify_new_session_notice">使用此工作階段來驗證新的工作階段，讓新階段可以存取加密訊息。</string>
     <string name="verify_new_session_was_not_me">這不是我</string>
     <string name="verify_new_session_compromized">您的帳號可能已被盜用</string>
     <string name="verify_cancel_self_verification_from_untrusted">如果您取消，可能無法在此裝置上讀取加密訊息，而其他使用者也不會信任此階段</string>
     <string name="verify_cancel_self_verification_from_trusted">如果您取消，可能無法在您的新裝置讀取加密訊息，而其他使用者也不會信任此裝置</string>
-    <string name="verify_cancel_other">如果您現在取消，您將無法驗證 %1$s（%2$s）。在他們的使用者檔案中重新開始。</string>
+    <string name="verify_cancel_other">如果您現在取消，將無法驗證 %1$s（%2$s）。請到他們的使用者資料頁面重新開始。</string>
     <string name="verify_not_me_self_verification">下列其中一項可能已被盜用：
 \n
 \n- 您的密碼
@@ -1323,7 +1323,7 @@
 \n- 此裝置或其他裝置
 \n- 任一裝置正在使用的網際網路連線
 \n
-\n我們建議您立刻在設定中變更您的密碼與復原金鑰。</string>
+\n我們建議您立刻到「設定」更換密碼與復原金鑰。</string>
     <string name="verify_cancelled_notice">已取消驗證。您可以再次開始驗證。</string>
     <string name="verification_cancelled">驗證已取消</string>
     <string name="recovery_passphrase">復原安全密語</string>
@@ -1335,7 +1335,7 @@
     <string name="bootstrap_finish_title">已完成！</string>
     <string name="keep_it_safe">把它放在安全的地方</string>
     <string name="finish">完成</string>
-    <string name="bootstrap_crosssigning_progress_initializing">正在發佈已建立的識別金鑰</string>
+    <string name="bootstrap_crosssigning_progress_initializing">正在發佈已建立的身分金鑰</string>
     <string name="bootstrap_crosssigning_progress_pbkdf2">從安全密語產生安全金鑰</string>
     <string name="bootstrap_crosssigning_progress_default_key">正在定義 SSSS 預設金鑰</string>
     <string name="bootstrap_crosssigning_progress_save_msk">正在同步主金鑰</string>
@@ -1349,14 +1349,14 @@
     <string name="bootstrap_crosssigning_save_usb">將其儲存在 USB 隨身碟或備份磁碟上</string>
     <string name="bootstrap_crosssigning_save_cloud">將其複製到您的私人雲端儲存空間</string>
     <string name="encryption_enabled">加密已啟用</string>
-    <string name="encryption_enabled_tile_description">在此聊天室中的訊息已端對端加密。取得更多資訊並在使用者的個人檔案中驗證他們。</string>
+    <string name="encryption_enabled_tile_description">在此聊天室中的訊息已端對端加密。可到使用者的個人資料頁面中取得更多資訊並驗證他們的身分。</string>
     <string name="encryption_not_enabled">加密未啟用</string>
-    <string name="encryption_unknown_algorithm_tile_description">用於此聊天室的加密未受支援</string>
+    <string name="encryption_unknown_algorithm_tile_description">不支援此聊天室使用的加密方式</string>
     <string name="room_created_summary_item">%s 建立並設定聊天室。</string>
     <string name="qr_code_scanned_self_verif_notice">就快完成了！其他裝置有顯示打勾嗎？</string>
     <string name="qr_code_scanned_verif_waiting_notice">就快完成了！正在等待確認…</string>
     <string name="qr_code_scanned_verif_waiting">正在等待 %s…</string>
-    <string name="error_failed_to_import_keys">無法匯入金鑰</string>
+    <string name="error_failed_to_import_keys">金鑰匯入失敗</string>
     <string name="settings_notification_configuration">通知設定</string>
     <string name="settings_messages_at_room">訊息包含 @room</string>
     <string name="settings_messages_in_e2e_one_to_one">一對一聊天中的加密訊息</string>
@@ -1364,7 +1364,7 @@
     <string name="settings_when_rooms_are_upgraded">當聊天室升級時</string>
     <string name="settings_troubleshoot_title">疑難排解</string>
     <string name="command_description_plain">傳送純文字訊息，不將它們轉譯為 markdown</string>
-    <string name="auth_invalid_login_param_space_in_password">不正確的使用者名稱及／或密碼。輸入的密碼以空格開頭或結尾，請檢查。</string>
+    <string name="auth_invalid_login_param_space_in_password">不正確的使用者名稱及／或密碼。輸入的密碼以空格開頭或結尾，請確認。</string>
     <string name="room_message_placeholder">訊息…</string>
     <string name="upgrade_security">提供加密升級</string>
     <string name="security_prompt_text">驗證您自己與其他人以確保聊天安全</string>
@@ -1378,13 +1378,13 @@
     <string name="bootstrap_progress_generating_ssss">從安全密語產生 SSSS 金鑰</string>
     <string name="bootstrap_progress_generating_ssss_with_info">從安全密語產生 SSSS 金鑰（%s）</string>
     <string name="bootstrap_progress_generating_ssss_recovery">從復原金鑰產生 SSSS 金鑰</string>
-    <string name="bootstrap_progress_storing_in_sss">正在 SSSS 中儲存金鑰備份的秘密</string>
+    <string name="bootstrap_progress_storing_in_sss">正在將金鑰備份的秘密資訊儲存至 SSSS 中</string>
     <string name="bootstrap_migration_enter_backup_password">輸入您的金鑰備份安全密語以繼續。</string>
     <string name="bootstrap_migration_use_recovery_key">使用您的金鑰備份復原金鑰</string>
-    <string name="bootstrap_migration_with_passphrase_helper_with_link">不知道您的金鑰備份安全密語，您可以 %s。</string>
+    <string name="bootstrap_migration_with_passphrase_helper_with_link">若不知道您的金鑰備份安全密語，可以 %s。</string>
     <string name="bootstrap_migration_backup_recovery_key">金鑰備份復原金鑰</string>
     <string name="settings_security_prevent_screenshots_title">避免對應用程式進行螢幕截圖</string>
-    <string name="settings_security_prevent_screenshots_summary">啟用此設定會新增 FLAG_SECURE 到所有活動。重新啟動應用程式以讓變動生效。</string>
+    <string name="settings_security_prevent_screenshots_summary">開啟此設定後，會新增 FLAG_SECURE 到所有畫面。請重新啟動應用程式以讓變動生效。</string>
     <string name="change_password_summary">設定新的帳號密碼…</string>
     <string name="use_other_session_content_description">在您的其他裝置上使用最新的 ${app_name}、${app_name} 網頁版、${app_name} 桌面版、${app_name} iOS、${app_name} for Android 或其他有交叉簽署功能的 Matrix 客戶端</string>
     <string name="app_desktop_web">${app_name} 網頁版
@@ -1405,11 +1405,11 @@
     <string name="confirm_your_identity">從您的其他工作階段驗證此登入以確認您的身分，並授予存取加密訊息的權限。</string>
     <string name="error_empty_field_choose_user_name">請選擇使用者名稱。</string>
     <string name="error_empty_field_choose_password">請選擇密碼。</string>
-    <string name="external_link_confirmation_title">請再次檢查此連結</string>
+    <string name="external_link_confirmation_title">請確認此連結</string>
     <string name="external_link_confirmation_message">連結 %1$s 正在將您帶往其他網站：%2$s。
 \n
 \n您確定要繼續嗎？</string>
-    <string name="create_room_dm_failure">我們無法建立您的直接訊息。請檢查您想要邀請的使用者，然後再試一次。</string>
+    <string name="create_room_dm_failure">我們無法建立您的私訊。請確認您想要邀請的使用者，然後再試一次。</string>
     <string name="unencrypted">未加密</string>
     <string name="encrypted_unverified">已由未驗證的裝置加密</string>
     <string name="verify_this_session">驗證正在存取您帳號的新登入：%1$s</string>
@@ -1424,7 +1424,7 @@
     <plurals name="invitations_sent_to_one_and_more_users">
         <item quantity="other">邀請已傳送給 %1$s 與其他 %2$d 個人</item>
     </plurals>
-    <string name="invite_users_to_room_failure">我們無法邀請使用者。請檢查您想要邀請的使用者並再試一次。</string>
+    <string name="invite_users_to_room_failure">我們無法邀請使用者。請確認您想要邀請那些使用者後再試一次。</string>
     <string name="event_redacted">訊息已移除</string>
     <string name="settings_show_redacted">顯示已移除的訊息</string>
     <string name="settings_show_redacted_summary">為已移除的訊息顯示佔位符</string>
@@ -1435,12 +1435,12 @@
     <string name="uploads_files_title">檔案</string>
     <string name="uploads_files_subtitle">由 %1$s 於 %2$s 上傳</string>
     <string name="uploads_files_no_result">此聊天室中沒有檔案</string>
-    <string name="login_connect_using_matrix_id_submit">使用我的 Matrix 識別符登入</string>
-    <string name="login_signin_matrix_id_title">登入</string>
-    <string name="login_signin_matrix_id_notice">如果您在家伺服器上建立了帳號，使用您的 Matrix ID（例如 @user:domain.com）與下方的密碼。</string>
+    <string name="login_connect_using_matrix_id_submit">使用 Matrix ID 登入</string>
+    <string name="login_signin_matrix_id_title">使用 Matrix ID 登入</string>
+    <string name="login_signin_matrix_id_notice">如果您在家伺服器上建立了帳號，請在下方輸入您的 Matrix ID（例如 @user:domain.com）與密碼。</string>
     <string name="login_signin_matrix_id_hint">Matrix ID</string>
-    <string name="login_signin_matrix_id_error_invalid_matrix_id">這不是有效的使用者識別符。預期中的格式：\'@user:homeserver.org\'</string>
-    <string name="autodiscover_well_known_error">找不到有效的家伺服器。請檢查您的識別符</string>
+    <string name="login_signin_matrix_id_error_invalid_matrix_id">這不是有效的使用者 ID。預期的格式：「@user:homeserver.org」</string>
+    <string name="autodiscover_well_known_error">找不到有效的家伺服器。請確認您的 ID</string>
     <string name="no_connectivity_to_the_server_indicator_airplane">飛航模式開啟</string>
     <string name="choose_locale_current_locale_title">目前語言</string>
     <string name="choose_locale_other_locales_title">其他可用的語言</string>
@@ -1452,13 +1452,13 @@
     <string name="identity_server_error_no_identity_server_configured">請先設定身分伺服器。</string>
     <string name="identity_server_error_terms_not_signed">請先在設定中同意身分伺服器的條款。</string>
     <string name="identity_server_error_bulk_sha256_not_supported">為了保護您的隱私，${app_name} 僅支援傳送雜湊過的使用者電子郵件地址與電話號碼。</string>
-    <string name="identity_server_error_binding_error">已無法關聯。</string>
-    <string name="identity_server_error_no_current_binding_error">目前沒有此識別符的關聯。</string>
+    <string name="identity_server_error_binding_error">關聯失敗。</string>
+    <string name="identity_server_error_no_current_binding_error">目前沒有此 ID 的關聯。</string>
     <string name="identity_server_set_default_notice">您的家伺服器（%1$s） 建議將 %2$s 用於您的身分伺服器</string>
     <string name="identity_server_set_default_submit">使用 %1$s</string>
     <string name="identity_server_set_alternative_notice">或者您可以輸入任何身分伺服器 URL</string>
     <string name="identity_server_set_alternative_notice_no_default">輸入身分伺服器 URL</string>
-    <string name="identity_server_set_alternative_submit">遞交</string>
+    <string name="identity_server_set_alternative_submit">送出</string>
     <string name="action_play">播放</string>
     <string name="action_dismiss">關閉</string>
     <string name="action_copy">複製</string>
@@ -1526,12 +1526,12 @@
     <string name="room_join_rules_public_by_you">您讓聊天室對所有知道連結的人公開。</string>
     <string name="room_join_rules_invite_by_you">您讓聊天室變為邀請才可加入。</string>
     <string name="login_server_url_form_common_notice">輸入您想要使用的伺服器位址</string>
-    <string name="login_signin_matrix_id_password_notice">如果您不知道您的密碼，請返回並重設。</string>
+    <string name="login_signin_matrix_id_password_notice">如果您不知道密碼，請返回並重設。</string>
     <string name="send_a_sticker">貼圖</string>
-    <string name="room_profile_section_admin">管理動作</string>
+    <string name="room_profile_section_admin">管理員動作</string>
     <string name="room_member_power_level_default_in">在 %1$s 中的預設</string>
     <string name="settings_hs_admin_e2e_disabled">您的伺服器管理員已在私人聊天室與私人訊息中預設停用端對端加密。</string>
-    <string name="bootstrap_info_text_2">輸入只有您知道的安全密語，用於保護您伺服器上的安全祕密。</string>
+    <string name="bootstrap_info_text_2">輸入只有您知道的安全密語，用於保護您在伺服器上的祕密資訊。</string>
     <string name="bootstrap_cancel_text">如果您現在取消，當您忘記登入資訊的話，可能會失去存取加密訊息與資料。
 \n
 \n您也可以在「設定」中設定安全備份並管理您的金鑰。</string>
@@ -1546,7 +1546,7 @@
     <string name="a11y_stop_camera">停止相機</string>
     <string name="a11y_start_camera">開啟相機</string>
     <string name="bottom_sheet_setup_secure_backup_title">安全備份</string>
-    <string name="bottom_sheet_setup_secure_backup_subtitle">確保您能存取加密訊息與資料，請在您的伺服器上備份您的金鑰。</string>
+    <string name="bottom_sheet_setup_secure_backup_subtitle">請在您的伺服器上備份加密金鑰，確保您不會失去對加密訊息與資料的存取權限。</string>
     <string name="bottom_sheet_setup_secure_backup_submit">設定</string>
     <string name="bottom_sheet_setup_secure_backup_security_key_title">使用安全金鑰</string>
     <string name="bottom_sheet_setup_secure_backup_security_key_subtitle">產生安全金鑰並儲存在安全的地方，如密碼管理員或保險櫃。</string>
@@ -1555,7 +1555,7 @@
     <string name="bottom_sheet_save_your_recovery_key_title">儲存您的安全金鑰</string>
     <string name="bottom_sheet_save_your_recovery_key_content">將您的安全金鑰儲存在安全的地方，如密碼管理員或保險櫃。</string>
     <string name="set_a_security_phrase_title">設定安全密語</string>
-    <string name="set_a_security_phrase_notice">輸入僅有您知道的安全密語，用於保護在您伺服器上的安全祕密。</string>
+    <string name="set_a_security_phrase_notice">輸入僅有您知道的安全密語，用於保護在您伺服器上的私人加密資訊。</string>
     <string name="set_a_security_phrase_hint">安全密語</string>
     <string name="set_a_security_phrase_again_notice">再次輸入您的安全密語以確認。</string>
     <string name="room_settings_name_hint">聊天室設定</string>
@@ -1566,14 +1566,14 @@
     <string name="notice_crypto_unable_to_decrypt_friendly_desc">由於端對端加密，您可能要等待某人的訊息抵達，因為加密金鑰未正確地傳送給您。</string>
     <string name="crypto_error_withheld_blacklisted">您無法存取此訊息，因為您被傳送者封鎖</string>
     <string name="crypto_error_withheld_unverified">您無法存取此訊息，因為您的工作階段未被傳送者所信任</string>
-    <string name="crypto_error_withheld_generic">您無法存取此訊息，因為傳送者刻意未傳送金鑰</string>
+    <string name="crypto_error_withheld_generic">您無法存取此訊息，因為傳送者刻意不傳送金鑰</string>
     <string name="notice_crypto_unable_to_decrypt_merged">正在等待加密紀錄</string>
-    <string name="disclaimer_title">Riot 現在是 Element 了！</string>
-    <string name="disclaimer_content">我們很高興地我們已變更名稱！您的應用程式是最新的，而您也登入了您的帳號。</string>
+    <string name="disclaimer_title">Riot 改名為 Element 了！</string>
+    <string name="disclaimer_content">很高興宣布，我們已改名為 Element！您的應用程式已經更新，也已經登入帳號。</string>
     <string name="disclaimer_negative_button">了解</string>
     <string name="disclaimer_positive_button">取得更多資訊</string>
     <string name="save_recovery_key_chooser_hint">儲存復原金鑰於</string>
-    <string name="loading_contact_book">正在擷取您的聯絡人…</string>
+    <string name="loading_contact_book">正在取得您的聯絡人…</string>
     <string name="empty_contact_book">您的通訊錄為空</string>
     <string name="contacts_book_title">通訊錄</string>
     <string name="three_pid_revoke_invite_dialog_title">撤銷邀請</string>
@@ -1589,9 +1589,9 @@
     <string name="auth_pin_forgot">忘記 PIN 碼？</string>
     <string name="auth_pin_reset_title">重設 PIN 碼</string>
     <string name="auth_pin_new_pin_action">新 PIN 碼</string>
-    <string name="auth_pin_reset_content">要重設您的 PIN 碼，您將需要重新登入並建立新的。</string>
+    <string name="auth_pin_reset_content">若要重設 PIN 碼，需要重新登入並建立新的 PIN 碼。</string>
     <string name="settings_security_pin_code_title">啟用 PIN 碼</string>
-    <string name="settings_security_pin_code_summary">如果您想要重設您的 PIN 碼，點擊忘記 PIN 碼以登出並重設。</string>
+    <string name="settings_security_pin_code_summary">如果您想要重設 PIN 碼，請點擊「忘記 PIN 碼」即可登出並重設。</string>
     <string name="settings_call_show_confirmation_dialog_title">避免不小心撥出通話</string>
     <string name="settings_call_show_confirmation_dialog_summary">開始通話前要求確認</string>
     <string name="no_permissions_to_start_conf_call">您沒有在此聊天室中開始會議通話的權限</string>
@@ -1614,10 +1614,10 @@
         <item quantity="other">%1$s、%2$s 與另 %3$d 個人已讀取</item>
     </plurals>
     <plurals name="wrong_pin_message_remaining_attempts">
-        <item quantity="other">錯誤的代碼，還可以嘗試 %d 次</item>
+        <item quantity="other">代碼錯誤，還可以嘗試 %d 次</item>
     </plurals>
-    <string name="wrong_pin_message_last_remaining_attempt">警告！登出前的最後一次嘗試！</string>
-    <string name="too_many_pin_failures">太多錯誤，您已被登出</string>
+    <string name="wrong_pin_message_last_remaining_attempt">警告！最後一次機會！若仍錯誤將會登出！</string>
+    <string name="too_many_pin_failures">錯誤太多次，已將您登出</string>
     <string name="auth_msisdn_already_defined">此電話號碼已被定義。</string>
     <string name="settings_phone_number_empty">未新增電話號碼到您的帳號</string>
     <string name="settings_emails">電子郵件地址</string>
@@ -1636,40 +1636,40 @@
         <item quantity="other">%d 秒</item>
     </plurals>
     <string name="sent_a_poll">投票</string>
-    <string name="sent_a_reaction">反應：%s</string>
-    <string name="sent_verification_conclusion">驗證結論</string>
+    <string name="sent_a_reaction">送出反應：%s</string>
+    <string name="sent_verification_conclusion">驗證結果</string>
     <string name="universal_link_malformed">連結格式錯誤</string>
     <string name="no_permissions_to_start_webrtc_call">您沒有在此聊天室開始通話的權限</string>
     <string name="delete_account_data_warning">刪除類型為 %1$s 的帳號資料？
 \n
 \n小心使用，它可能會導致意料之外的行為。</string>
     <string name="settings_security_pin_code_grace_period_summary_off">每次打開 ${app_name} 時都需要 PIN 碼。</string>
-    <string name="settings_security_pin_code_grace_period_summary_on">未使用 ${app_name} 2分鐘後，要求輸入 PIN 碼。</string>
-    <string name="settings_security_pin_code_grace_period_title">2分鐘後要求輸入 PIN 碼</string>
+    <string name="settings_security_pin_code_grace_period_summary_on">未使用 ${app_name} 2 分鐘後，要求輸入 PIN 碼。</string>
+    <string name="settings_security_pin_code_grace_period_title">2 分鐘後要求輸入 PIN 碼</string>
     <string name="settings_security_pin_code_notifications_summary_off">在簡易通知中僅顯示未讀訊息數量。</string>
     <string name="settings_security_pin_code_notifications_summary_on">顯示如聊天室名稱與訊息內容等詳細資訊。</string>
     <string name="settings_security_pin_code_notifications_title">在通知中顯示內容</string>
     <string name="settings_security_pin_code_use_biometrics_summary_off">PIN 碼是解鎖 ${app_name} 的唯一方式。</string>
-    <string name="settings_security_pin_code_use_biometrics_summary_on">啟用特定裝置的生物識別技術，如指紋與臉部辨識。</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_on">開啟裝置的生物特徵驗證功能，如指紋與臉部辨識等。</string>
     <string name="settings_security_application_protection_screen_title">設定保護</string>
-    <string name="settings_security_application_protection_summary">使用 PIN 碼與生物識別技術來保護存取權。</string>
+    <string name="settings_security_application_protection_summary">使用 PIN 碼與生物特徵驗證方式來保護存取權。</string>
     <string name="settings_security_application_protection_title">保護存取權</string>
     <plurals name="secure_backup_reset_devices_you_can_verify">
         <item quantity="other">顯示您現在可以驗證的 %d 個裝置</item>
     </plurals>
     <string name="secure_backup_reset_no_history">重新啟動後，將清空所有聊天紀錄、訊息、已信任的裝置或已信任的使用者</string>
     <string name="secure_backup_reset_if_you_reset_all">如果您重設了所有東西</string>
-    <string name="secure_backup_reset_all_no_other_devices">僅在您沒有其他裝置可以驗證此裝置時才使用這個。</string>
-    <string name="secure_backup_reset_all">恢復所有設定</string>
+    <string name="secure_backup_reset_all_no_other_devices">僅在您沒有其他裝置可以驗證此裝置時才使用此方式。</string>
+    <string name="secure_backup_reset_all">重設所有東西</string>
     <string name="bad_passphrase_key_reset_all_action">忘記或遺失所有復原選項？重設所有東西</string>
     <string name="direct_room_created_summary_item_by_you">您已加入。</string>
     <string name="direct_room_created_summary_item">%s 已加入。</string>
     <string name="direct_room_encryption_enabled_tile_description">此聊天中的訊息有端對端加密。</string>
     <string name="direct_room_profile_section_more_leave">離開</string>
     <string name="direct_room_profile_section_more_settings">設定</string>
-    <string name="direct_room_profile_encrypted_subtitle">這裡的訊息有端對端加密。
+    <string name="direct_room_profile_encrypted_subtitle">這裡的訊息已進行端對端加密。
 \n
-\n您的訊息已被鎖保護，只有您與收件者有獨特的金鑰可以解鎖。</string>
+\n您的訊息收發前已加密，只有您與收件者有唯一的金鑰可以解密。</string>
     <string name="direct_room_profile_not_encrypted_subtitle">這裡的訊息沒有端對端加密。</string>
     <string name="login_error_outdated_homeserver_warning_content">此家伺服器執行的是舊版伺服器。請要求您的家伺服器管理員升級。您可以繼續，但某些功能可能無法正常運作。</string>
     <string name="direct_room_join_rules_invite_by_you">您讓此變為邀請制。</string>
@@ -1692,7 +1692,7 @@
     <string name="no_permissions_to_start_webrtc_call_in_direct_room">您沒有開始通話的權限</string>
     <string name="no_permissions_to_start_conf_call_in_direct_room">您沒有開始會議通話的權限</string>
     <string name="action_reset">重設</string>
-    <string name="settings_security_pin_code_use_biometrics_title">啟用生物識別技術</string>
+    <string name="settings_security_pin_code_use_biometrics_title">啟用生物特徵驗證</string>
     <string name="warning_unsaved_change_discard">放棄變更</string>
     <string name="warning_unsaved_change">有未儲存的變更。要放棄變更嗎？</string>
     <string name="warning_room_not_created_yet">聊天室尚未建立。取消建立聊天室？</string>
@@ -1710,11 +1710,11 @@
     <string name="no_more_results">沒有更多結果</string>
     <string name="qr_code_not_scanned">未掃描 QR Code！</string>
     <string name="invalid_qr_code_uri">無效的 QR Code（無效的 URI）！</string>
-    <string name="cannot_dm_self">無法對您自己直接訊息！</string>
+    <string name="cannot_dm_self">無法傳送私訊給您自己！</string>
     <string name="share_by_text">透過文字分享</string>
     <string name="phone_book_perform_lookup">在 Matrix 上搜尋聯絡人</string>
     <string name="room_settings_set_avatar">設定大頭照</string>
-    <string name="identity_server_user_consent_not_provided">使用者尚未提供其同意。</string>
+    <string name="identity_server_user_consent_not_provided">使用者尚未同意。</string>
     <string name="user_code_info_text">與夥伴們分享此邀請碼，這樣他們就可以掃描它來加入您並開始聊天。</string>
     <string name="user_code_my_code">我的邀請碼</string>
     <string name="user_code_share">分享我的邀請碼</string>
@@ -1732,11 +1732,11 @@
     <string name="this_is_the_beginning_of_room">這是 %s 的開頭。</string>
     <string name="room_settings_enable_encryption_no_permission">您沒有在此聊天室中啟用加密的權限。</string>
     <string name="create_room_in_progress">正在建立聊天室…</string>
-    <string name="create_room_alias_invalid">有些字元未被允許</string>
+    <string name="create_room_alias_invalid">不允許使用某些字元</string>
     <string name="create_room_alias_empty">請提供聊天室位址</string>
     <string name="create_room_alias_already_in_use">此位址已被使用</string>
     <string name="create_room_disable_federation_description">如果聊天室僅用於與您家伺服器上內部團隊協作的話，可以啟用此功能。但無法在稍後變更。</string>
-    <string name="create_room_disable_federation_title">封鎖任何不是 %s 一部分的人加入此聊天室</string>
+    <string name="create_room_disable_federation_title">封鎖任何不屬於 %s 的成員加入此聊天室</string>
     <string name="hide_advanced">隱藏進階</string>
     <string name="show_advanced">顯示進階</string>
     <string name="attachment_viewer_item_x_of_y">第 %1$d 個，共 %2$d 個</string>
@@ -1755,7 +1755,7 @@
     <string name="settings_security_pin_code_change_pin_title">變更 PIN</string>
     <string name="room_preview_no_preview_join">無法預覽此聊天室。您想要加入嗎？</string>
     <string name="room_preview_not_found">目前無法存取此聊天室。
-\n請稍後再試，或是詢問聊天室管理員來檢查您是否可以存取。</string>
+\n請稍後再試，或是詢問聊天室管理員來確認您是否可以存取。</string>
     <string name="room_alias_publish_to_directory_error">無法擷取目前的聊天室目錄可見度（%1$s）。</string>
     <string name="room_alias_publish_to_directory">將此聊天室在 %1$s 的聊天室目錄中公開發佈？</string>
     <string name="room_alias_action_unpublish">取消發佈此位址</string>
@@ -1821,7 +1821,7 @@
     <string name="settings_show_emoji_keyboard_summary">在訊息編輯器上新增按鈕以開啟表情符號鍵盤</string>
     <string name="settings_show_emoji_keyboard">顯示表情符號鍵盤</string>
     <string name="authentication_error">無法驗證</string>
-    <string name="re_authentication_default_confirm_text">${app_name} 需要您輸入您的憑證來執行此動作。</string>
+    <string name="re_authentication_default_confirm_text">${app_name} 需要您輸入登入資訊來執行此動作。</string>
     <string name="re_authentication_activity_title">需要重新驗證</string>
     <string name="failed_to_initialize_cross_signing">未能設定交叉簽署</string>
     <string name="error_unauthorized">未授權，缺少有效的身分驗證憑證</string>
@@ -1835,7 +1835,7 @@
     <string name="call_dial_pad_title">撥號鍵盤</string>
     <string name="call_tile_call_back">回撥</string>
     <string name="call_tile_ended">此通話已結束</string>
-    <string name="call_tile_other_declined">%1$s 婉拒了此通話</string>
+    <string name="call_tile_other_declined">%1$s 拒接這通電話</string>
     <string name="call_held_by_you">您保留了通話</string>
     <string name="call_held_by_user">%s 保留了通話</string>
     <string name="call_hold_action">保留</string>
@@ -1878,7 +1878,7 @@
     <string name="a11y_open_widget">開啟小工具</string>
     <string name="a11y_screenshot">螢幕截圖</string>
     <plurals name="entries">
-        <item quantity="other">%d 項目</item>
+        <item quantity="other">%d 筆項目</item>
     </plurals>
     <string name="settings_server_upload_size_unknown">限制未知。</string>
     <string name="settings_server_upload_size_content">您的家伺服器接受大小最大為 %s 的附件（檔案、媒體等）。</string>
@@ -1894,7 +1894,7 @@
 \n正在下載資料…</string>
     <string name="initial_sync_start_server_computing">初始同步：
 \n正在等待伺服器回應…</string>
-    <string name="event_status_delete_all_failed_dialog_message">您確定您想要刪除此聊天室中所有未傳送的訊息嗎？</string>
+    <string name="event_status_delete_all_failed_dialog_message">您確定要刪除此聊天室中所有未傳送的訊息嗎？</string>
     <string name="event_status_delete_all_failed_dialog_title">刪除未傳送的訊息</string>
     <string name="event_status_failed_messages_warning">無法傳送訊息</string>
     <string name="event_status_cancel_sending_dialog_message">您想要取消傳送訊息嗎？</string>
@@ -1916,19 +1916,19 @@
         <item quantity="other">您認識的 %d 個人已加入</item>
     </plurals>
     <string name="room_alias_preview_not_found">目前無法存取此別名。
-\n請稍後再試，或要求聊天室管理員檢查您是否有權存取。</string>
+\n請稍後再試，或要求聊天室管理員確認您是否有權存取。</string>
     <string name="join_anyway">無論如何都要加入</string>
     <string name="join_space">加入聊天空間</string>
     <string name="create_space">建立聊天空間</string>
     <string name="skip_for_now">現在略過</string>
     <string name="share_space_link_message">加入我的聊天空間 %1$s %2$s</string>
     <string name="invite_just_to_this_room_desc">他們不會是 %s 的一部分</string>
-    <string name="invite_just_to_this_room">剛到此聊天室</string>
+    <string name="invite_just_to_this_room">只傳到此聊天室</string>
     <string name="invite_to_space_with_name_desc">他們將可以探索 %s</string>
     <string name="invite_to_space_with_name">邀請至 %s</string>
     <string name="invite_by_link">分享連結</string>
     <string name="invite_by_email">透過電子郵件邀請</string>
-    <string name="invite_people_to_your_space_desc">此刻只有您。%s 與其他人一起會更好。</string>
+    <string name="invite_people_to_your_space_desc">此刻只有您。%s 有其他人一起加入會更好。</string>
     <string name="invite_people_menu">邀請夥伴</string>
     <string name="invite_people_to_your_space">邀請夥伴進入您的聊天空間</string>
     <string name="create_space_topic_hint">描述</string>
@@ -1943,9 +1943,9 @@
     <string name="create_spaces_details_private_header">新增一些詳細資訊以協助人們識別。您隨時可以變更這些資訊。</string>
     <string name="create_spaces_details_public_header">加入一些詳細資訊以協助其脫穎而出。您隨時都可以變更這些資料。</string>
     <string name="activity_create_space_title">建立聊天空間</string>
-    <string name="space_type_private_desc">邀請制，最適合您自己或團隊</string>
+    <string name="space_type_private_desc">邀請制，適用於您自己或團隊使用</string>
     <string name="space_type_private">私人</string>
-    <string name="space_type_public_desc">對任何人開放，最適合社群</string>
+    <string name="space_type_public_desc">對任何人開放，適用於社群</string>
     <string name="space_type_public">公開</string>
     <string name="create_spaces_private_teammates">您與您的團隊成員的私人聊天空間</string>
     <string name="create_spaces_me_and_teammates">我與團隊成員</string>
@@ -1959,7 +1959,7 @@
     <string name="your_private_space">您的私人聊天空間</string>
     <string name="your_public_space">您公開的聊天空間</string>
     <string name="add_space">新增聊天空間</string>
-    <string name="command_description_leave_room">離開有指定 ID 的聊天室（如果是 null 的話則為目前聊天室）</string>
+    <string name="command_description_leave_room">離開指定 ID 的聊天室（如果是 null 的話則為目前聊天室）</string>
     <string name="command_description_join_space">使用特定的 ID 加入聊天空間</string>
     <string name="command_description_create_space">建立聊天空間</string>
     <string name="a11y_unchecked">未檢查</string>
@@ -1980,7 +1980,7 @@
     <string name="space_mark_as_suggested">標記為建議</string>
     <string name="space_suggested">建議</string>
     <string name="space_settings_manage_rooms">管理聊天室</string>
-    <string name="looking_for_someone_not_in_space">正在尋找不在 %s 中的人？</string>
+    <string name="looking_for_someone_not_in_space">想尋找不在 %s 中的人？</string>
     <string name="user_invites_you">%s 邀請您</string>
     <string name="a11y_public_room">公開聊天室</string>
     <string name="send_images_and_video_with_original_size">傳送原始大小的媒體</string>
@@ -1997,10 +1997,10 @@
 \n您沒有權限新增聊天室。</string>
     <string name="this_space_has_no_rooms">此聊天空間沒有聊天室</string>
     <string name="spaces_no_server_support_description">請聯絡您的家伺服器管理員以取得進一步的資訊</string>
-    <string name="spaces_no_server_support_title">看來您的家伺服器尚未支援聊天空間</string>
+    <string name="spaces_no_server_support_title">看來您的家伺服器尚未支援聊天空間功能</string>
     <string name="spaces_feeling_experimental_subspace">想要做點實驗嗎？
 \n您可以將既有的聊天空間新增至其他聊天空間中。</string>
-    <string name="space_leave_prompt_msg_as_admin">您是此聊天空間唯一的管理員。若離開將意味著沒有人可以控制它。</string>
+    <string name="space_leave_prompt_msg_as_admin">您是此聊天空間唯一的管理員。離開後將沒有人可以再管理此空間。</string>
     <string name="space_leave_prompt_msg_private">除非被重新邀請，否則您將無法重新加入。</string>
     <string name="space_leave_prompt_msg_only_you">您是這裡唯一的人。如果您離開，包含您在內的所有人都將無法加入。</string>
     <string name="invite_to_space">邀請至 %s</string>
@@ -2028,7 +2028,7 @@
     <string name="space_settings_alias_subtitle">檢視與管理此聊天空間的位址。</string>
     <string name="space_settings_alias_title">聊天空間位址</string>
     <string name="room_upgrade_to_recommended_version">升級到建議的聊天室版本</string>
-    <string name="room_using_unstable_room_version">此聊天室正在執行聊天室版本 %s，此家伺服器已被標記為不穩定。</string>
+    <string name="room_using_unstable_room_version">此聊天室執行的是聊天室版本 %s，您的家伺服器已將其標記為不穩定版本。</string>
     <string name="upgrade_room_no_power_to_manage">您需要升級聊天室的權限</string>
     <string name="upgrade_room_update_parent_space">自動更新母聊天空間</string>
     <string name="upgrade_room_auto_invite">自動邀請使用者</string>
@@ -2038,14 +2038,14 @@
     <string name="upgrade_private_room">升級私人聊天室</string>
     <string name="upgrade_public_room">升級公開聊天室</string>
     <string name="upgrade">升級</string>
-    <string name="it_may_take_some_time">請耐心等待，這可能會需要一些時間。</string>
-    <string name="joining_replacement_room">加入取代的聊天室</string>
+    <string name="it_may_take_some_time">請稍候，可能需要一些時間。</string>
+    <string name="joining_replacement_room">加入新的聊天室</string>
     <string name="command_description_upgrade_room">升級聊天室到新版本</string>
-    <string name="settings_server_room_version_unstable">不穩定</string>
-    <string name="settings_server_room_version_stable">穩定</string>
+    <string name="settings_server_room_version_unstable">不穩定版</string>
+    <string name="settings_server_room_version_stable">穩定版</string>
     <string name="settings_server_default_room_version">預設版本</string>
     <string name="settings_server_room_versions">聊天室版本 👓</string>
-    <string name="verification_scan_self_emoji_subtitle">透過比較表情符號來驗證</string>
+    <string name="verification_scan_self_emoji_subtitle">改用比對表情符號進行驗證</string>
     <string name="verification_scan_with_this_device">使用此裝置掃描</string>
     <string name="verification_scan_self_notice">使用您的其他裝置掃描條碼或切換並使用此裝置掃描</string>
     <string name="hs_client_url">家伺服器 API URL</string>
@@ -2062,11 +2062,11 @@
     <string name="upgrade_room_for_restricted_no_param">母聊天空間中的任何人都可以找到並加入此聊天室，不需要手動邀請所有人。您隨時都可以在聊天室設定中變更此設定。</string>
     <string name="upgrade_room_for_restricted">任何在 %s 中的人都可以找到並加入此聊天室，不需要手動邀請所有人。您隨時都可以在聊天室設定中變更此設定。</string>
     <string name="voice_message_reply_content">語音訊息（%1$s）</string>
-    <string name="error_voice_message_cannot_reply_or_edit">語音訊息活躍時無法回覆或編輯</string>
+    <string name="error_voice_message_cannot_reply_or_edit">播放語音訊息時無法回覆或編輯</string>
     <string name="error_voice_message_unable_to_record">無法錄製語音訊息</string>
     <string name="error_voice_message_unable_to_play">無法播放此語音訊息</string>
     <string name="voice_message_tap_to_stop_toast">點擊您的錄音以停止或收聽</string>
-    <string name="voice_message_n_seconds_warning_toast">剩下%1$d秒</string>
+    <string name="voice_message_n_seconds_warning_toast">剩下 %1$d 秒</string>
     <string name="voice_message_release_to_send_toast">按住以錄製，放開以傳送</string>
     <string name="a11y_delete_recorded_voice_message">刪除錄音</string>
     <string name="a11y_recording_voice_message">正在錄製語音訊息</string>
@@ -2100,30 +2100,30 @@
     <string name="settings_notification_other">其他</string>
     <string name="settings_notification_mentions_and_keywords">僅有被提及與出現關鍵字時</string>
     <string name="settings_notification_default">預設通知</string>
-    <string name="link_this_email_with_your_account">設定中的 %s 可直接在 ${app_name} 中接收邀請。</string>
+    <string name="link_this_email_with_your_account">在設定%s，即可直接在 ${app_name} 中接收邀請。</string>
     <string name="link_this_email_settings_link">將此電子郵件地址與您的帳號連結</string>
-    <string name="this_invite_to_this_space_was_sent">此聊天空間的邀請已傳送給與您的帳號無關聯的 %s</string>
-    <string name="this_invite_to_this_room_was_sent">此聊天室的邀請已傳送給與您的帳號無關聯的 %s</string>
-    <string name="all_rooms_youre_in_will_be_shown_in_home">您所在的所有聊天室都會顯示在 Home 中。</string>
-    <string name="preference_show_all_rooms_in_home">顯示 Home 中的所有聊天室</string>
+    <string name="this_invite_to_this_space_was_sent">此聊天空間的邀請是傳送給與您的帳號無關的 %s</string>
+    <string name="this_invite_to_this_room_was_sent">此聊天室的邀請是傳送給與您的帳號無關的 %s</string>
+    <string name="all_rooms_youre_in_will_be_shown_in_home">您加入的所有聊天室都會顯示在首頁中。</string>
+    <string name="preference_show_all_rooms_in_home">在首頁顯示所有聊天室</string>
     <string name="call_slide_to_end_conference">滑動結束通話</string>
     <string name="call_tap_to_return">%1$s 點擊返回</string>
     <string name="call_one_active">進行中的通話（%1$s）。</string>
     <plurals name="call_active_status">
-        <item quantity="other">%1$d 活躍的通話。</item>
+        <item quantity="other">%1$d 通進行中的通話。</item>
     </plurals>
     <string name="call_tile_no_answer">無回應</string>
     <string name="call_tile_video_missed">未接聽的視訊通話</string>
     <string name="call_tile_voice_missed">未接聽的語音通話</string>
-    <string name="call_tile_video_declined">視訊通話已回絕</string>
-    <string name="call_tile_voice_declined">視訊通話已回絕</string>
+    <string name="call_tile_video_declined">已拒接視訊通話</string>
+    <string name="call_tile_voice_declined">已拒接視訊通話</string>
     <string name="call_tile_video_call_has_ended">視訊通話已結束 • %1$s</string>
     <string name="call_tile_voice_call_has_ended">語音通話已結束 • %1$s</string>
     <string name="call_tile_video_active">進行中的視訊通話</string>
     <string name="call_tile_voice_active">進行中的語音通話</string>
     <string name="call_tile_video_incoming">視訊通話來電中</string>
     <string name="call_tile_voice_incoming">語音通話來電中</string>
-    <string name="call_tile_you_declined_this_call">您回絕了此通話</string>
+    <string name="call_tile_you_declined_this_call">您拒接了這通來電</string>
     <string name="room_settings_room_notifications_account_settings">帳號設定</string>
     <string name="room_settings_room_notifications_manage_notifications">您可以管理 %1$s 中的通知。</string>
     <string name="room_settings_room_notifications_encryption_notice">請注意，行動裝置上的加密聊天室不提供被提及與關鍵字通知。</string>
@@ -2153,10 +2153,10 @@
     <string name="finish_setup">結束設定</string>
     <string name="discovery_invite">透過電子郵件邀請、尋找聯絡人以及更多…</string>
     <string name="finish_setting_up_discovery">完成探索設定。</string>
-    <string name="create_space_identity_server_info_none">您目前並未使用身分認證伺服器。為了邀請團隊成員並被他們探索，請在下方設定一個。</string>
+    <string name="create_space_identity_server_info_none">您目前並未使用身分認證伺服器。為了邀請團隊成員並可讓他們找到您，請在下方設定一個。</string>
     <string name="invite_by_username_or_mail">透過使用者名稱或電子郵件邀請</string>
-    <string name="create_spaces_invite_public_header_desc">確保合適的人可以存取 %s 公司。您可以稍後再邀請。</string>
-    <string name="create_spaces_invite_public_header">誰是您的團隊成員？</string>
+    <string name="create_spaces_invite_public_header_desc">確保合適的人可以存取 %s 公司。您之後也可以繼續邀請。</string>
+    <string name="create_spaces_invite_public_header">有哪些團隊成員？</string>
     <string name="command_description_add_to_space">新增至特定的聊天空間</string>
     <string name="create_space_in_progress">正在建立聊天空間…</string>
     <string name="settings_developer_mode_show_info_on_screen_summary">顯示一些有用的資訊以協助應用程式除錯</string>
@@ -2186,7 +2186,7 @@
 \n
 \n為了防止他們再加入，您應該封鎖他們。</string>
     <string name="a11y_stop_voice_message">停止錄製</string>
-    <string name="command_description_lenny">將 ( ͡° ͜ʖ ͡°) 附加至純文字訊息</string>
+    <string name="command_description_lenny">在文字訊息前加入 ( ͡° ͜ʖ ͡°)</string>
     <string name="settings_discovery_no_policy_provided">身分伺服器未提供政策</string>
     <string name="settings_discovery_hide_identity_server_policy_title">隱藏身分伺服器政策</string>
     <string name="settings_discovery_show_identity_server_policy_title">顯示身分伺服器政策</string>
@@ -2201,10 +2201,10 @@
     <string name="a11y_presence_offline">離線</string>
     <string name="a11y_presence_online">線上</string>
     <string name="login_error_homeserver_from_url_not_found_enter_manual">選擇家伺服器</string>
-    <string name="login_error_homeserver_from_url_not_found">無法存取 URL %s 的家伺服器。請檢查您的連結或手動選擇家伺服器。</string>
+    <string name="login_error_homeserver_from_url_not_found">無法存取 URL %s 的家伺服器。請確認您的連結或手動選擇家伺服器。</string>
     <string name="notification_listening_for_notifications">正在監聽通知</string>
     <plurals name="create_poll_not_enough_options_error">
-        <item quantity="other">需要至少 %1$s 選項</item>
+        <item quantity="other">需要至少 %1$s 個選項</item>
     </plurals>
     <string name="create_poll_empty_question_error">問題不能為空</string>
     <string name="create_poll_button">建立投票</string>
@@ -2227,17 +2227,17 @@
     <string name="poll_end_room_list_preview">投票已結束</string>
     <string name="poll_response_room_list_preview">投票</string>
     <string name="end_poll_confirmation_approve_button">結束投票</string>
-    <string name="end_poll_confirmation_description">這將阻止人們投票並顯示投票的最終結果。</string>
+    <string name="end_poll_confirmation_description">將停止投票，並顯示投票最終結果。</string>
     <string name="end_poll_confirmation_title">結束此投票？</string>
     <string name="poll_end_action">結束投票</string>
     <plurals name="poll_total_vote_count_after_ended">
-        <item quantity="other">以 %1$d 票為基礎的最終結果</item>
+        <item quantity="other">最終投票結果，共投 %1$d 票</item>
     </plurals>
     <plurals name="poll_total_vote_count_before_ended_and_not_voted">
-        <item quantity="other">已投 %1$d 票。投票以檢視結果</item>
+        <item quantity="other">已投 %1$d 票。投票後即可檢視結果</item>
     </plurals>
     <plurals name="poll_total_vote_count_before_ended_and_voted">
-        <item quantity="other">以 %1$d 票為基礎</item>
+        <item quantity="other">獲得 %1$d 票</item>
     </plurals>
     <plurals name="poll_option_vote_count">
         <item quantity="other">%1$d 票</item>
@@ -2279,13 +2279,13 @@
     <string name="ftue_auth_carousel_control_title">您已掌控了您的資料。</string>
     <string name="ftue_auth_carousel_secure_title">擁有您的對話。</string>
     <string name="tooltip_attachment_location">分享位置</string>
-    <string name="location_share_external">開啟時用</string>
+    <string name="location_share_external">使用…開啟</string>
     <string name="location_not_available_dialog_content">${app_name} 無法存取您的位置。請稍後再試。</string>
     <string name="location_not_available_dialog_title">${app_name} 無法存取您的位置</string>
     <string name="location_activity_title_preview">位置</string>
     <string name="location_activity_title_static_sharing">分享位置</string>
     <string name="closed_poll_option_description">結果僅在您結束投票後顯示</string>
-    <string name="closed_poll_option_title">已結束投票</string>
+    <string name="closed_poll_option_title">秘密投票</string>
     <string name="open_poll_option_description">投票者在投票後可以立刻看到投票結果</string>
     <string name="open_poll_option_title">開放式投票</string>
     <string name="poll_type_title">投票類型</string>
@@ -2341,7 +2341,7 @@
     <string name="room_message_autocomplete_users">使用者</string>
     <string name="room_message_notify_everyone">通知整個聊天室</string>
     <plurals name="message_reaction_show_more">
-        <item quantity="other">還有%1$d個</item>
+        <item quantity="other">還有 %1$d 個</item>
     </plurals>
     <string name="message_reaction_show_less">顯示較少</string>
     <plurals name="notice_room_server_acl_changes">
@@ -2365,7 +2365,7 @@
 \n
 \n這只會發生一次，因為「討論串」功能現在已經進入 Matrix 規格了。</string>
     <string name="threads_notice_migration_title">「討論串」快要有 Beta 測試版了 🎉</string>
-    <string name="live_location_sharing_notification_description">正在進行位置分享</string>
+    <string name="live_location_sharing_notification_description">正在分享位置</string>
     <string name="live_location_sharing_notification_title">${app_name} 即時位置</string>
     <string name="error_forbidden_digits_only_username">家伺服器不接受僅有數字的使用者名稱。</string>
     <string name="ftue_personalize_skip_this_step">略過此步驟</string>
@@ -2384,17 +2384,17 @@
     <string name="ftue_account_created_personalize">個人化簡介檔案</string>
     <string name="action_disable">停用</string>
     <string name="location_share_live_started">正在載入即時位置…</string>
-    <string name="location_share_live_select_duration_option_3">8小時</string>
-    <string name="location_share_live_select_duration_option_2">1小時</string>
-    <string name="location_share_live_select_duration_option_1">15分鐘</string>
+    <string name="location_share_live_select_duration_option_3">8 小時</string>
+    <string name="location_share_live_select_duration_option_2">1 小時</string>
+    <string name="location_share_live_select_duration_option_1">15 分鐘</string>
     <string name="location_share_live_select_duration_title">分享您的即時位置</string>
-    <string name="audio_message_file_size">(%1$s)</string>
+    <string name="audio_message_file_size">（%1$s）</string>
     <string name="audio_message_reply_content">%1$s（%2$s）</string>
     <string name="error_audio_message_unable_to_play">無法播放 %1$s</string>
     <string name="a11y_pause_audio_message">暫停 %1$s</string>
     <string name="a11y_play_audio_message">播放 %1$s</string>
-    <string name="a11y_audio_playback_duration">%1$d分鐘%2$d秒</string>
-    <string name="a11y_audio_message_item">%1$s, %2$s, %3$s</string>
+    <string name="a11y_audio_playback_duration">%1$d 分 %2$d 秒</string>
+    <string name="a11y_audio_message_item">%1$s、%2$s、%3$s</string>
     <string name="sent_live_location">分享了他們的即時位置</string>
     <string name="ftue_auth_carousel_workplace_body">${app_name} 也非常適合工作場所。其受到世界上最安全的組織信任。</string>
     <string name="beta">Beta 測試版</string>
@@ -2425,13 +2425,13 @@
     <string name="settings_show_latest_profile">顯示最新的使用者資訊</string>
     <string name="a11y_presence_busy">忙碌</string>
     <string name="keys_backup_settings_signature_from_this_user">備份具有來自該使用者的有效簽章。</string>
-    <string name="live_location_bottom_sheet_last_updated_at">%1$s 前已更新</string>
+    <string name="live_location_bottom_sheet_last_updated_at">更新於 %1$s 前</string>
     <string name="labs_enable_live_location_summary">暫時實作：保留位置資訊在聊天紀錄中</string>
     <string name="labs_enable_live_location">啟用即時位置分享</string>
     <string name="location_share_live_remaining_time">剩餘 %1$s</string>
     <string name="location_share_live_until">即時分享至 %1$s</string>
     <string name="location_share_live_view">檢視即時位置</string>
-    <string name="location_share_live_ended">即時位置已結束</string>
+    <string name="location_share_live_ended">已結束分享即時位置</string>
     <string name="space_explore_filter_no_result_description">有些結果可能會被隱藏，因為它們是私密的，您需要邀請才能加入。</string>
     <string name="space_explore_filter_no_result_title">找不到結果</string>
     <string name="space_leave_radio_button_none">不離開</string>
@@ -2443,7 +2443,7 @@
     <string name="time_unit_minute_short">分</string>
     <string name="time_unit_hour_short">小時</string>
     <string name="live_location_labs_promotion_switch_title">啟用位置分享</string>
-    <string name="live_location_labs_promotion_description">請注意：這是使用暫時實作的實驗性功能。這代表您將無法刪除您的位置紀錄，即使您停止與此聊天室分享您的即時位置，進階使用者也還是能看到您的位置紀錄。</string>
+    <string name="live_location_labs_promotion_description">請注意：這是暫時實作的實驗性功能。您將無法刪除位置紀錄。就算停止與此聊天室分享您的即時位置，進階使用者也還是能看到位置紀錄。</string>
     <string name="live_location_labs_promotion_title">即時位置分享</string>
     <string name="settings_troubleshoot_test_current_gateway">目前閘道：%s</string>
     <string name="settings_troubleshoot_test_current_gateway_title">閘道</string>
@@ -2456,14 +2456,14 @@
         <item quantity="other">找到 %d 種方式。</item>
     </plurals>
     <string name="settings_troubleshoot_test_distributors_fdroid">找不到除了背景同步以外的方式。</string>
-    <string name="settings_troubleshoot_test_distributors_gplay">找不到除了 Google Play 服務以外的方式。</string>
+    <string name="settings_troubleshoot_test_distributors_gplay">找不到除了 Google Play Service 以外的方式。</string>
     <string name="settings_troubleshoot_test_distributors_title">可用方式</string>
     <string name="settings_notification_method">通知方式</string>
     <string name="unifiedpush_distributor_background_sync">背景同步</string>
     <string name="unifiedpush_distributor_fcm_fallback">Google 服務</string>
     <string name="unifiedpush_getdistributors_dialog_title">選擇如何接收通知</string>
-    <string name="settings_security_pin_code_use_biometrics_error">無法啟用生物特徵驗證。</string>
-    <string name="auth_biometric_key_invalidated_message">生物特徵驗證方式被停用，因為最新增了生物特徵驗證方式。您可以在「設定」中再次啟用它。</string>
+    <string name="settings_security_pin_code_use_biometrics_error">無法啟用生物特徵驗證方式。</string>
+    <string name="auth_biometric_key_invalidated_message">因為最近新增了新的生物特徵驗證方式，已暫時停用。您可以到「設定」中再次啟用。</string>
     <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">重設通知方式</string>
     <string name="push_gateway_item_profile_tag">個人檔案標籤：</string>
     <string name="settings_troubleshoot_test_endpoint_registration_failed">無法將端點權杖註冊至家伺服器：
@@ -2471,7 +2471,7 @@
     <string name="settings_troubleshoot_test_endpoint_registration_success">端點成功註冊至家伺服器。</string>
     <string name="settings_troubleshoot_test_endpoint_registration_title">端點註冊</string>
     <string name="action_next">下一步</string>
-    <string name="poll_undisclosed_not_ended">結果將在投票結束時可見</string>
+    <string name="poll_undisclosed_not_ended">投票結束後將顯示結果</string>
     <string name="labs_enable_msc3061_share_history_desc">邀請成員進入分享聊天紀錄的加密聊天室時，加密紀錄會是可見的。</string>
     <string name="labs_enable_msc3061_share_history">MSC3061：為過去的訊息分享聊天室金鑰</string>
     <string name="send_your_first_msg_to_invite">傳送您的第一則訊息以邀請 %s 來聊天</string>
@@ -2547,7 +2547,7 @@
 \n此家伺服器可能未設定好顯示地圖。</string>
     <string name="a11y_open_settings">開啟設定</string>
     <string name="all_chats">所有聊天</string>
-    <string name="device_manager_sessions_other_description">為了取得最佳安全性，請驗證您的工作階段並登出任何您無法識別或不再使用的工作階段。</string>
+    <string name="device_manager_sessions_other_description">為了取得最佳安全性，請驗證您的工作階段並登出所有不認得或不再使用的工作階段。</string>
     <string name="device_manager_sessions_other_title">其他工作階段</string>
     <string name="settings_sessions_list">工作階段</string>
     <string name="a11y_open_spaces">開啟聊天空間清單</string>
@@ -2580,30 +2580,30 @@
 \n請稍後再試。%s</string>
     <string name="invites_title">邀請</string>
     <string name="onboarding_new_app_layout_button_try">試試看</string>
-    <string name="onboarding_new_app_layout_feedback_message">輕點右上角來檢視回饋選項。</string>
+    <string name="onboarding_new_app_layout_feedback_message">點擊右上角來提供意見回饋。</string>
     <string name="onboarding_new_app_layout_feedback_title">給予回饋</string>
-    <string name="onboarding_new_app_layout_spaces_message">存取您的聊天空間（右下角）比以往任何時候都更快且更輕鬆。</string>
+    <string name="onboarding_new_app_layout_spaces_message">用比以往更快、更輕鬆的方式使用您的聊天空間（右下角）。</string>
     <string name="onboarding_new_app_layout_spaces_title">存取聊天空間</string>
-    <string name="onboarding_new_app_layout_welcome_message">為了簡化您的 ${app_name}，分頁現在是選擇性的。使用右上角的選單管理它們。</string>
-    <string name="onboarding_new_app_layout_welcome_title">歡迎使用新的檢視！</string>
+    <string name="onboarding_new_app_layout_welcome_message">為了簡化您的 ${app_name}，現在不一定需要使用分頁標籤。可使用右上角的選單進行管理。</string>
+    <string name="onboarding_new_app_layout_welcome_title">歡迎使用新的畫面！</string>
     <string name="home_empty_no_unreads_message">當您有一些未讀的訊息時，這裡會顯示您的未讀訊息。</string>
     <string name="home_empty_no_unreads_title">沒有要回報的東西。</string>
     <string name="home_empty_no_rooms_message">適用於團隊、朋友與組織的多合一安全聊天應用程式。建立聊天室，或加入一個既有的聊天室。</string>
-    <string name="home_empty_no_rooms_title">歡迎使用 ${app_name},
-\n%s.</string>
+    <string name="home_empty_no_rooms_title">歡迎使用 ${app_name}，
+\n%s。</string>
     <string name="home_empty_space_no_rooms_message">聊天空間是一種為聊天室與人們分組的新方式。使用右下角的按鈕新增既有的聊天室或建立新的。</string>
     <string name="home_empty_space_no_rooms_title">%s
 \n看起來有點空。</string>
     <plurals name="device_manager_inactive_sessions_description">
-        <item quantity="other">考慮登出您不再使用的舊工作階段（%1$d天或更久）。</item>
+        <item quantity="other">請考慮登出您不再使用的舊工作階段（%1$d 天以上）。</item>
     </plurals>
-    <string name="device_manager_inactive_sessions_title">不活躍的工作階段</string>
+    <string name="device_manager_inactive_sessions_title">未使用的工作階段</string>
     <string name="device_manager_unverified_sessions_description">驗證或從未驗證的工作階段登出。</string>
     <string name="device_manager_unverified_sessions_title">未驗證的工作階段</string>
     <string name="device_manager_header_section_security_recommendations_description">按照這些建議提高您的帳號安全性。</string>
     <string name="device_manager_header_section_security_recommendations_title">安全建議</string>
     <plurals name="device_manager_other_sessions_description_inactive">
-        <item quantity="other">不活躍 %1$d+ 天（%2$s）</item>
+        <item quantity="other">超過 %1$d 天未使用（%2$s）</item>
     </plurals>
     <string name="invites_empty_message">這是您新請求與邀請的所在。</string>
     <string name="invites_empty_title">沒有新東西。</string>
@@ -2618,22 +2618,22 @@
     <string name="device_manager_session_details_description">應用程式、裝置與活動資訊。</string>
     <string name="device_manager_session_details_title">工作階段詳細資訊</string>
     <string name="device_manager_other_sessions_clear_filter">清除過濾條件</string>
-    <string name="device_manager_other_sessions_no_inactive_sessions_found">找不到不活躍的工作階段。</string>
+    <string name="device_manager_other_sessions_no_inactive_sessions_found">找不到未使用的工作階段。</string>
     <string name="device_manager_other_sessions_no_unverified_sessions_found">找不到未驗證的工作階段。</string>
     <string name="device_manager_other_sessions_no_verified_sessions_found">找不到已驗證的工作階段。</string>
     <plurals name="device_manager_filter_option_inactive_description">
-        <item quantity="other">閒置 %1$d 天或更久</item>
+        <item quantity="other">%1$d 天以上未使用</item>
     </plurals>
     <plurals name="device_manager_other_sessions_recommendation_description_inactive">
-        <item quantity="other">考慮登出您不再使用（%1$d天或更久）的舊工作階段。</item>
+        <item quantity="other">考慮登出您不再使用（%1$d 天以上）的舊工作階段。</item>
     </plurals>
-    <string name="device_manager_other_sessions_recommendation_title_inactive">不活躍</string>
-    <string name="device_manager_other_sessions_recommendation_description_unverified">驗證您的工作階段以強化安全通訊，或從您無法識別或不再使用的工作階段登出。</string>
+    <string name="device_manager_other_sessions_recommendation_title_inactive">未使用</string>
+    <string name="device_manager_other_sessions_recommendation_description_unverified">請驗證您的工作階段來加強安全通訊，或登出您不認識，或已不使用的工作階段。</string>
     <string name="device_manager_other_sessions_recommendation_title_unverified">未驗證</string>
-    <string name="device_manager_other_sessions_recommendation_description_verified">為取得最佳安全性，請從任何您無法識別或不再使用的工作階段登出。</string>
+    <string name="device_manager_other_sessions_recommendation_description_verified">為取得最佳安全性，請登出您不認識，或已不使用的工作階段。</string>
     <string name="device_manager_other_sessions_recommendation_title_verified">已驗證</string>
     <string name="a11y_device_manager_filter">過濾</string>
-    <string name="device_manager_filter_option_inactive">不活躍</string>
+    <string name="device_manager_filter_option_inactive">未使用</string>
     <string name="device_manager_filter_option_unverified_description">尚未準備好安全通訊</string>
     <string name="device_manager_filter_option_unverified">未驗證</string>
     <string name="device_manager_filter_option_verified_description">已準備好安全通訊</string>
@@ -2652,30 +2652,30 @@
     <string name="labs_enable_deferred_dm_title">啟用延期的私人訊息</string>
     <string name="labs_enable_new_app_layout_summary">包含選擇性分頁的簡潔 Element</string>
     <string name="labs_enable_new_app_layout_title">啟用新佈局</string>
-    <string name="device_manager_learn_more_session_rename">您加入的直接消息與聊天室中的其他使用者，可以檢視您的工作階段的完整清單。
+    <string name="device_manager_learn_more_session_rename">私人訊息與您加入的聊天室當中的其他使用者，可以檢視您有哪些工作階段。
 \n
-\n這讓他們確信他們真的在與您交談，但這也意味著他們可以看到您在此處輸入的工作階段名稱。</string>
+\n此功能讓對方能夠確認真的在與您交談，但他們也因此會看到您在此處輸入的工作階段名稱。</string>
     <string name="device_manager_learn_more_session_rename_title">正在重新命名工作階段</string>
     <string name="device_manager_learn_more_sessions_verified_title">已驗證的工作階段</string>
-    <string name="device_manager_learn_more_sessions_unverified">未驗證的工作階段是使用您的憑證登入但未交叉驗證的工作階段。
+    <string name="device_manager_learn_more_sessions_unverified">未驗證的工作階段是使用您的憑證登入但未進行交叉驗證的工作階段。
 \n
-\n您應特別確定您可以識別這些工作階段，因為它們可能代表未經授權使用您的帳號。</string>
+\n您應特別確認都能認得出這些工作階段，因為若有無法識別的階段，代表您的帳號可能遭到未經授權的登入。</string>
     <string name="device_manager_learn_more_sessions_unverified_title">未驗證的工作階段</string>
-    <string name="device_manager_learn_more_sessions_inactive">不活躍的工作階段是您有一段時間未使用的工作階段，但它們會繼續接收加密金鑰。
+    <string name="device_manager_learn_more_sessions_inactive">未使用的工作階段是您有一段時間未使用的工作階段，但它們會繼續接收加密金鑰。
 \n
-\n刪除不活躍的工作階段可以改善安全性與效能，並讓您可以更容易地識別新的工作階段是否可疑。</string>
-    <string name="device_manager_learn_more_sessions_inactive_title">不活躍的工作階段</string>
+\n刪除未使用的工作階段可以改善安全性與效能，並讓您可以更容易地識別新的工作階段是否可疑。</string>
+    <string name="device_manager_learn_more_sessions_inactive_title">未使用的工作階段</string>
     <string name="device_manager_session_rename_warning">請注意，與您交流的人也可以看到工作階段名稱。</string>
     <string name="device_manager_session_rename_description">自訂工作階段名稱可以協助您更輕鬆地識別您的裝置。</string>
     <string name="device_manager_session_rename_edit_hint">工作階段名稱</string>
     <string name="device_manager_session_rename">重新命名工作階段</string>
     <string name="device_manager_session_overview_signout">登出此工作階段</string>
-    <string name="device_manager_other_sessions_description_unverified_current_session">未驗證 · 您目前的工作階段</string>
+    <string name="device_manager_other_sessions_description_unverified_current_session">未驗證 · 目前的工作階段</string>
     <string name="tooltip_attachment_voice_broadcast">開始語音廣播</string>
     <string name="key_authenticity_not_guaranteed">此裝置無法保證此加密訊息的真實性。</string>
     <string name="settings_security_incognito_keyboard_summary">要求鍵盤不要根據您在對話中輸入的內容更新任何個人化資料（如輸入紀錄與字典等）。請注意，某些鍵盤可能不會遵守此設定。</string>
     <string name="settings_security_incognito_keyboard_title">無痕式鍵盤</string>
-    <string name="command_description_table_flip">將 (╯°□°）╯︵ ┻━┻ 放到純文字訊息之前</string>
+    <string name="command_description_table_flip">在文字訊息前加入 (╯°□°）╯︵ ┻━┻</string>
     <string name="attachment_type_voice_broadcast">語音廣播</string>
     <string name="command_description_devtools">開啟開發者工具畫面</string>
     <string name="room_settings_global_block_unverified_info_text">🔒 您已在「安全性設定」中為所有聊天室啟用僅傳送加密訊息至已驗證的工作階段。</string>
@@ -2684,14 +2684,14 @@
     <string name="action_got_it">了解</string>
     <string name="rich_text_editor_format_underline">套用底線格式</string>
     <string name="rich_text_editor_format_strikethrough">套用刪除線格式</string>
-    <string name="rich_text_editor_format_italic">套用義式斜體格式</string>
+    <string name="rich_text_editor_format_italic">套用斜體格式</string>
     <string name="rich_text_editor_format_bold">套用粗體格式</string>
     <string name="labs_enable_client_info_recording_summary">記錄客戶端名稱、版本與 URL，以便在工作階段管理程式中可以更簡單地辨認工作階段。</string>
     <string name="labs_enable_client_info_recording_title">啟用客戶端資訊記錄</string>
     <string name="labs_enable_session_manager_summary">對所有工作階段有更大的能見度與控制。</string>
     <string name="labs_enable_session_manager_title">啟用新的工作階段管理程式</string>
     <string name="device_manager_session_details_device_operating_system">作業系統</string>
-    <string name="device_manager_session_details_device_model">模型</string>
+    <string name="device_manager_session_details_device_model">機型</string>
     <string name="device_manager_session_details_device_browser">瀏覽器</string>
     <string name="device_manager_session_details_application_url">URL</string>
     <string name="device_manager_session_details_application_version">版本</string>
@@ -2729,10 +2729,10 @@
     <string name="qr_code_login_new_device_instruction_2">到「設定」→「安全性與隱私權」</string>
     <string name="qr_code_login_new_device_instruction_1">在您的另一台裝置上開啟應用程式</string>
     <string name="qr_code_login_header_failed_denied_description">請求在另一台裝置上被拒絕。</string>
-    <string name="qr_code_login_header_failed_timeout_description">連結未在要求的時間內完成。</string>
-    <string name="qr_code_login_header_failed_device_is_not_supported_description">不支援與其裝置連結。</string>
+    <string name="qr_code_login_header_failed_timeout_description">未在要求的時間內完成連結。</string>
+    <string name="qr_code_login_header_failed_device_is_not_supported_description">不支援與此裝置連結。</string>
     <string name="qr_code_login_header_failed_title">連線不成功</string>
-    <string name="qr_code_login_header_connected_description">請檢查您已登入的裝置，應該會顯示以下驗證碼。請確認以下驗證碼與該裝置相符：</string>
+    <string name="qr_code_login_header_connected_description">請到您其他已登入的裝置確認，當中應該會顯示下列驗證碼。請確認下列驗證碼與該裝置顯示的相符：</string>
     <string name="qr_code_login_header_connected_title">已建立安全連線</string>
     <string name="qr_code_login_header_show_qr_code_link_a_device_description">使用您已登出的裝置掃描以下 QR Code。</string>
     <string name="qr_code_login_header_show_qr_code_new_device_description">使用您已登入的裝置來掃描下方的 QR Code：</string>
@@ -2750,8 +2750,8 @@
     <string name="qr_code_login_header_failed_invalid_qr_code_description">該 QR Code 無效。</string>
     <string name="qr_code_login_header_failed_other_device_not_signed_in_description">另一台裝置必須登入。</string>
     <string name="qr_code_login_header_failed_other_device_already_signed_in_description">另一台裝置已登入。</string>
-    <string name="qr_code_login_header_failed_e2ee_security_issue_description">設定安全訊息傳遞時遇到安全問題。以下其中一項可能已被駭入：您的家伺服器；您的網際網路連線；您的裝置；</string>
-    <string name="qr_code_login_header_failed_other_description">無法請求。</string>
+    <string name="qr_code_login_header_failed_e2ee_security_issue_description">設定安全訊息傳遞時遇到安全性問題。以下其中一項可能已被駭入：您的家伺服器、您的網際網路連線、您的裝置</string>
+    <string name="qr_code_login_header_failed_other_description">請求失敗。</string>
     <string name="labs_enable_voice_broadcast_summary">可以在聊天室時間軸中錄製並傳送語音廣播。</string>
     <string name="labs_enable_voice_broadcast_title">啟用語音廣播</string>
     <string name="voice_broadcast_buffering">正在緩衝…</string>
@@ -2776,16 +2776,16 @@
         <item quantity="other">已選取 %1$d</item>
     </plurals>
     <string name="rich_text_editor_full_screen_toggle">切換全螢幕模式</string>
-    <string name="attachment_type_selector_text_formatting">文字格式化</string>
-    <string name="error_voice_broadcast_already_in_progress_message">您已在錄製語音廣播。請結束您目前的語音廣播以開始新的。</string>
-    <string name="error_voice_broadcast_blocked_by_someone_else_message">其他人已在錄製語音廣播。等待他們的語音廣播結束以開始新的。</string>
+    <string name="attachment_type_selector_text_formatting">文字格式</string>
+    <string name="error_voice_broadcast_already_in_progress_message">您正在錄製語音廣播。請結束您目前的語音廣播，再開始新錄音。</string>
+    <string name="error_voice_broadcast_blocked_by_someone_else_message">其他人已在錄製語音廣播。請稍候他們的語音廣播結束，再開始新錄音。</string>
     <string name="error_voice_broadcast_permission_denied_message">您沒有在此聊天室中開始語音廣播的必要權限。請聯絡聊天室管理員以升級您的權限。</string>
     <string name="error_voice_broadcast_unauthorized_title">無法開始新的語音廣播</string>
-    <string name="a11y_voice_broadcast_fast_forward">快轉30秒</string>
-    <string name="a11y_voice_broadcast_fast_backward">快退30秒</string>
+    <string name="a11y_voice_broadcast_fast_forward">快轉 30 秒</string>
+    <string name="a11y_voice_broadcast_fast_backward">倒帶 30 秒</string>
     <string name="device_manager_learn_more_sessions_verified_description">已驗證的工作階段是您輸入安全密語或透過另一個已驗證工作階段確認您的身分後，使用此帳號的任何地方。
 \n
-\n這代表您擁有解鎖加密訊息並向其他使用者確認您信任此工作階段所需的所有金鑰。</string>
+\n這代表您擁有解鎖加密訊息，並向其他使用者確認您信任此工作階段所需的所有金鑰。</string>
     <plurals name="device_manager_other_sessions_multi_signout_all">
         <item quantity="other">登出 %1$d 個工作階段</item>
     </plurals>
@@ -2808,19 +2808,19 @@
     <string name="settings_enable_direct_share_title">啟用直接分享</string>
     <string name="review_unverified_sessions_description">請確認您的帳號安全</string>
     <string name="review_unverified_sessions_title">您有未驗證的工作階段</string>
-    <string name="device_manager_learn_more_sessions_encryption_not_supported">無法對此對話進行加密，因此也無法驗證。
+    <string name="device_manager_learn_more_sessions_encryption_not_supported">此使用階段不支援加密，因此也無法驗證。
 \n
-\n使用此工作階段時無法進入加密聊天室中。
+\n使用此工作階段時無法進入加密聊天室。
 \n
 \n為了安全與隱私，建議使用支援加密的 Matrix 客戶端。</string>
     <string name="device_manager_signout_all_other_sessions">登出所有其他的工作階段</string>
     <string name="device_manager_verification_status_detail_session_encryption_not_supported">此工作階段無法被加密，因此無法被驗證。</string>
-    <string name="settings_nightly_build_update">取得最新版本的建構（注意：您可能會無法登入）</string>
-    <string name="settings_nightly_build">每夜建構</string>
+    <string name="settings_nightly_build_update">取得最新建構版本（注意：可能會無法登入）</string>
+    <string name="settings_nightly_build">Nightly build</string>
     <string name="voice_broadcast_live_broadcast">直播</string>
     <string name="notice_voice_broadcast_ended_by_you">您已結束語音直播。</string>
     <string name="notice_voice_broadcast_ended">%1$s 已結束語音直播。</string>
-    <string name="stop_voice_broadcast_content">您真的想要停止您的即時廣播嗎？這將會結束廣播，完整的錄音會在聊天室中提供。</string>
+    <string name="stop_voice_broadcast_content">您真的要停止即時廣播嗎？將會結束廣播，完整錄音存檔稍後將在聊天室中提供。</string>
     <string name="stop_voice_broadcast_dialog_title">停止即時廣播？</string>
     <string name="action_stop">是的，停止</string>
     <string name="set_link_edit">編輯連結</string>
@@ -2828,7 +2828,7 @@
     <string name="set_link_link">連結</string>
     <string name="set_link_text">文字</string>
     <string name="rich_text_editor_link">設定連結</string>
-    <string name="settings_access_token_summary">您的存取權杖可以完整存取您的帳號。不要將其與其他人分享。</string>
+    <string name="settings_access_token_summary">您的存取權杖可以完整存取您的帳號。請勿與其他人分享。</string>
     <string name="settings_access_token">存取權杖</string>
     <string name="rich_text_editor_bullet_list">切換項目符號清單</string>
     <string name="rich_text_editor_numbered_list">切換編號清單</string>
@@ -2844,17 +2844,17 @@
     <string name="thread_list_not_available">您的家伺服器還不支援列出討論串。</string>
     <string name="error_voice_broadcast_unable_to_play">無法播放此語音廣播。</string>
     <string name="started_a_voice_broadcast">已開始語音廣播</string>
-    <string name="unable_to_decrypt_some_events_in_poll">因為解密錯誤，部份投票可能並未計算</string>
+    <string name="unable_to_decrypt_some_events_in_poll">因為解密錯誤，不會計算部份投票</string>
     <string name="room_polls_loading_error">擷取投票時發生錯誤。</string>
     <string name="room_polls_load_more">載入更多投票</string>
     <string name="room_polls_wait_for_display">顯示投票</string>
     <plurals name="room_polls_ended_no_item_for_loaded_period">
         <item quantity="other">過去 %1$d 天沒有投票。
-\n載入更多投票以檢視過去幾天的投票。</item>
+\n載入更多投票以檢視更早幾天的投票。</item>
     </plurals>
     <plurals name="room_polls_active_no_item_for_loaded_period">
         <item quantity="other">過去 %1$d 天沒有活躍的投票。
-\n載入更多投票以檢視過去幾天的投票。</item>
+\n載入更多投票以檢視更早幾天的投票。</item>
     </plurals>
     <string name="error_voice_broadcast_no_connection_recording">連線錯誤 - 錄製已暫停</string>
     <string name="error_voice_message_broadcast_in_progress_message">您無法開始語音訊息，因為您目前正在錄製直播。請結束您的直播以開始錄製語音訊息</string>
@@ -2869,4 +2869,7 @@
     <string name="settings_external_account_management">您的帳號詳細資訊已單獨於 %1$s 中管理。</string>
     <string name="settings_external_account_management_title">帳號</string>
     <string name="settings_notification_error_on_update">更新您的通知偏好設定時發生錯誤。請再試一次。</string>
+    <string name="direct_room_encryption_enabled_waiting_users_tile_description">受邀使用者加入 ${app_name} 後，您就可以聊天，聊天室將進行端到端加密</string>
+    <string name="direct_room_encryption_enabled_waiting_users">正在等待使用者加入 ${app_name}</string>
+    <string name="direct_room_user_list_only_invite_one_email">您一次僅能邀請一個電子郵件</string>
 </resources>
