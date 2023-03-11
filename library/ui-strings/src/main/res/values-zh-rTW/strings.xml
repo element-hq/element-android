@@ -699,7 +699,7 @@
     <string name="keys_backup_setup_step3_copy_button_title">儲存復原金鑰</string>
     <string name="keys_backup_setup_step3_save_button_title">儲存為檔案</string>
     <string name="keys_backup_setup_step3_please_make_copy">請複製金鑰</string>
-    <string name="keys_backup_setup_step3_share_intent_chooser_title">使用…分享復原金鑰</string>
+    <string name="keys_backup_setup_step3_share_intent_chooser_title">將復原金鑰分享給…</string>
     <string name="keys_backup_setup_step3_generating_key_status">正在使用安全密語產生復原金鑰，這個過程可能需要數秒鐘。</string>
     <string name="recovery_key">復原金鑰</string>
     <string name="unexpected_error">未預期的錯誤</string>
