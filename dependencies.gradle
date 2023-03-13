@@ -21,7 +21,7 @@ def flowBinding = "1.2.0"
 def flipper = "0.183.0"
 def epoxy = "5.0.0"
 def mavericks = "3.0.1"
-def glide = "4.15.0"
+def glide = "4.15.1"
 def bigImageViewer = "1.8.1"
 def jjwt = "0.11.5"
 // Temporary version to unblock #6929. Once 0.16.0 is released we should use it, and revert
