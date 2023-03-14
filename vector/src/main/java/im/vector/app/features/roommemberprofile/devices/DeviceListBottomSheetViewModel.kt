@@ -71,7 +71,7 @@ class DeviceListBottomSheetViewModel @AssistedInject constructor(
                     userId = userId,
                     allowDeviceAction = args.allowDeviceAction,
                     userItem = session.getUserOrDefault(userId).toMatrixItem(),
-                    myDeviceId = session.sessionParams.deviceId ?: "",
+                    myDeviceId = session.sessionParams.deviceId,
             )
         }
     }

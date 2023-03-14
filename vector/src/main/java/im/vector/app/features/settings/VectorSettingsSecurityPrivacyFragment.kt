@@ -69,9 +69,11 @@ import im.vector.app.features.pin.PinMode
 import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.raw.wellknown.isE2EByDefault
 import im.vector.app.features.themes.ThemeUtils
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.extensions.getFingerprintHumanReadable
 import org.matrix.android.sdk.api.raw.RawService
@@ -175,9 +177,6 @@ class VectorSettingsSecurityPrivacyFragment :
 
     override fun onResume() {
         super.onResume()
-        // My device name may have been updated
-        refreshMyDevice()
-        refreshXSigningStatus()
         session.liveSecretSynchronisationInfo()
                 .onEach {
                     refresh4SSection(it)
@@ -186,10 +185,10 @@ class VectorSettingsSecurityPrivacyFragment :
                 .launchIn(viewLifecycleOwner.lifecycleScope)
 
         viewLifecycleOwner.lifecycleScope.launch {
-                findPreference<VectorPreference>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT)?.isVisible =
-                        rawService
-                                .getElementWellknown(session.sessionParams)
-                                ?.isE2EByDefault() == false
+            findPreference<VectorPreference>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT)?.isVisible =
+                    rawService
+                            .getElementWellknown(session.sessionParams)
+                            ?.isE2EByDefault() == false
         }
     }
 
@@ -288,7 +287,18 @@ class VectorSettingsSecurityPrivacyFragment :
             true
         }
 
-        refreshXSigningStatus()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                refreshXSigningStatus()
+            }
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                // My device name may have been updated
+                refreshMyDevice()
+            }
+        }
 
         secureBackupPreference.icon = activity?.let {
             ThemeUtils.tintDrawable(
@@ -349,13 +359,13 @@ class VectorSettingsSecurityPrivacyFragment :
     }
 
     // Todo this should be refactored and use same state as 4S section
-    private fun refreshXSigningStatus() {
-        lifecycleScope.launchWhenResumed {
-            val crossSigningKeys = session.cryptoService().crossSigningService().getMyCrossSigningKeys()
-            val xSigningIsEnableInAccount = crossSigningKeys != null
-            val xSigningKeysAreTrusted = session.cryptoService().crossSigningService().checkUserTrust(session.myUserId).isVerified()
-            val xSigningKeyCanSign = session.cryptoService().crossSigningService().canCrossSign()
+    private suspend fun refreshXSigningStatus() {
+        val crossSigningKeys = session.cryptoService().crossSigningService().getMyCrossSigningKeys()
+        val xSigningIsEnableInAccount = crossSigningKeys != null
+        val xSigningKeysAreTrusted = session.cryptoService().crossSigningService().checkUserTrust(session.myUserId).isVerified()
+        val xSigningKeyCanSign = session.cryptoService().crossSigningService().canCrossSign()
 
+        withContext(Dispatchers.Main) {
             when {
                 xSigningKeyCanSign -> {
                     mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_trusted)
@@ -623,19 +633,21 @@ class VectorSettingsSecurityPrivacyFragment :
     // devices list
     // ==============================================================================================================
 
-    private fun refreshMyDevice() {
-        viewLifecycleOwner.lifecycleScope.launchWhenResumed {
-            session.cryptoService().getUserDevices(session.myUserId).map {
-                DeviceInfo(
-                        userId = session.myUserId,
-                        deviceId = it.deviceId,
-                        displayName = it.displayName()
-                )
-            }.let {
+    private suspend fun refreshMyDevice() {
+        session.cryptoService().getUserDevices(session.myUserId).map {
+            DeviceInfo(
+                    userId = session.myUserId,
+                    deviceId = it.deviceId,
+                    displayName = it.displayName()
+            )
+        }.let {
+            withContext(Dispatchers.Main) {
                 refreshCryptographyPreference(it)
             }
-            // TODO Move to a ViewModel...
-            val devicesList = session.cryptoService().fetchDevicesList()
+        }
+        // TODO Move to a ViewModel...
+        val devicesList = session.cryptoService().fetchDevicesList()
+        withContext(Dispatchers.Main) {
             refreshCryptographyPreference(devicesList)
         }
     }
