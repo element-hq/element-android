@@ -63,18 +63,22 @@ object MatrixPatterns {
     // Android does not support in URL so extract it.
     private const val PERMALINK_BASE_REGEX = "https://matrix\\.to/#/"
     private const val APP_BASE_REGEX = "https://[A-Z0-9.-]+\\.[A-Z]{2,}/[A-Z]{3,}/#/room/"
+    private const val URL_PARAMS = "\\b[-a-zA-Z0-9()@:%_\\+.~#?&//=]*"
     const val SEP_REGEX = "/"
 
-    private const val LINK_TO_ROOM_ID_REGEXP = PERMALINK_BASE_REGEX + MATRIX_ROOM_IDENTIFIER_REGEX + SEP_REGEX + MATRIX_EVENT_IDENTIFIER_REGEX
+    private val PATTERN_CONTAIN_MATRIX_TO_PERMALINK = PERMALINK_BASE_REGEX.toRegex(RegexOption.IGNORE_CASE)
+    private val PATTERN_CONTAIN_APP_PERMALINK = APP_BASE_REGEX.toRegex(RegexOption.IGNORE_CASE)
+
+    private const val LINK_TO_ROOM_ID_REGEXP = PERMALINK_BASE_REGEX + MATRIX_ROOM_IDENTIFIER_REGEX + SEP_REGEX + MATRIX_EVENT_IDENTIFIER_V4_REGEX + URL_PARAMS
     private val PATTERN_CONTAIN_MATRIX_TO_PERMALINK_ROOM_ID = LINK_TO_ROOM_ID_REGEXP.toRegex(RegexOption.IGNORE_CASE)
 
-    private const val LINK_TO_ROOM_ALIAS_REGEXP = PERMALINK_BASE_REGEX + MATRIX_ROOM_ALIAS_REGEX + SEP_REGEX + MATRIX_EVENT_IDENTIFIER_REGEX
+    private const val LINK_TO_ROOM_ALIAS_REGEXP = PERMALINK_BASE_REGEX + MATRIX_ROOM_ALIAS_REGEX + SEP_REGEX + MATRIX_EVENT_IDENTIFIER_V4_REGEX + URL_PARAMS
     private val PATTERN_CONTAIN_MATRIX_TO_PERMALINK_ROOM_ALIAS = LINK_TO_ROOM_ALIAS_REGEXP.toRegex(RegexOption.IGNORE_CASE)
 
-    private const val LINK_TO_APP_ROOM_ID_REGEXP = APP_BASE_REGEX + MATRIX_ROOM_IDENTIFIER_REGEX + SEP_REGEX + MATRIX_EVENT_IDENTIFIER_REGEX
+    private const val LINK_TO_APP_ROOM_ID_REGEXP = APP_BASE_REGEX + MATRIX_ROOM_IDENTIFIER_REGEX + SEP_REGEX + MATRIX_EVENT_IDENTIFIER_V4_REGEX + URL_PARAMS
     private val PATTERN_CONTAIN_APP_LINK_PERMALINK_ROOM_ID = LINK_TO_APP_ROOM_ID_REGEXP.toRegex(RegexOption.IGNORE_CASE)
 
-    private const val LINK_TO_APP_ROOM_ALIAS_REGEXP = APP_BASE_REGEX + MATRIX_ROOM_ALIAS_REGEX + SEP_REGEX + MATRIX_EVENT_IDENTIFIER_REGEX
+    private const val LINK_TO_APP_ROOM_ALIAS_REGEXP = APP_BASE_REGEX + MATRIX_ROOM_ALIAS_REGEX + SEP_REGEX + MATRIX_EVENT_IDENTIFIER_V4_REGEX + URL_PARAMS
     private val PATTERN_CONTAIN_APP_LINK_PERMALINK_ROOM_ALIAS = LINK_TO_APP_ROOM_ALIAS_REGEXP.toRegex(RegexOption.IGNORE_CASE)
 
     // ascii characters in the range \x20 (space) to \x7E (~)
@@ -144,6 +148,12 @@ object MatrixPatterns {
      */
     fun isGroupId(str: String?): Boolean {
         return str != null && str matches PATTERN_CONTAIN_MATRIX_GROUP_IDENTIFIER
+    }
+
+    fun isPermalink(str: String?): Boolean {
+        return str != null &&
+                (PATTERN_CONTAIN_MATRIX_TO_PERMALINK.containsMatchIn(str) ||
+                        PATTERN_CONTAIN_APP_PERMALINK.containsMatchIn(str))
     }
 
     /**

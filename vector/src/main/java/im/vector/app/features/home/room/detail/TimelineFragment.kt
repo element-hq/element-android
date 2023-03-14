@@ -247,7 +247,6 @@ class TimelineFragment :
     @Inject lateinit var matrixItemColorProvider: MatrixItemColorProvider
     @Inject lateinit var imageContentRenderer: ImageContentRenderer
     @Inject lateinit var roomDetailPendingActionStore: RoomDetailPendingActionStore
-    @Inject lateinit var pillsPostProcessorFactory: PillsPostProcessor.Factory
     @Inject lateinit var callManager: WebRtcCallManager
     @Inject lateinit var audioMessagePlaybackTracker: AudioMessagePlaybackTracker
     @Inject lateinit var shareIntentHandler: ShareIntentHandler
