@@ -230,7 +230,7 @@
     <string name="loading">載入中…</string>
     <string name="action_send">傳送</string>
     <string name="action_share">分享</string>
-    <string name="view_source">查看原始碼</string>
+    <string name="view_source">檢視原始碼</string>
     <string name="notification_noisy_notifications">吵雜通知</string>
     <string name="notification_silent_notifications">靜音通知</string>
     <string name="action_quote">引用</string>
@@ -258,7 +258,7 @@
     <string name="home_filter_placeholder_home">過濾聊天室名稱</string>
     <string name="invitations_header">邀請</string>
     <string name="low_priority_header">低優先度</string>
-    <string name="direct_chats_header">聊天</string>
+    <string name="direct_chats_header">對話</string>
     <string name="matrix_only_filter">僅 Matrix 聯絡人</string>
     <string name="no_result_placeholder">沒有結果</string>
     <string name="rooms_header">聊天室</string>
@@ -328,7 +328,7 @@
         <item quantity="other">%d 位成員</item>
     </plurals>
     <string name="room_participants_leave_prompt_title">離開聊天室</string>
-    <string name="room_participants_leave_prompt_msg">您確定想要離開聊天室？</string>
+    <string name="room_participants_leave_prompt_msg">您確定要離開此聊天室嗎？</string>
     <string name="room_participants_header_direct_chats">私密訊息</string>
     <string name="room_participants_action_invite">邀請</string>
     <string name="room_participants_action_ban">封鎖</string>
@@ -342,7 +342,7 @@
     <string name="room_participants_power_level_prompt">由於您將此使用者的權限等級提升到與您相同，因此將無法還原此變更。
 \n確定嗎？</string>
     <string name="room_many_users_are_typing">%1$s 及 %2$s 和其他人正在打字…</string>
-    <string name="room_do_not_have_permission_to_post">您沒有權限在此聊天室發言。</string>
+    <string name="room_do_not_have_permission_to_post">您沒有權限在此聊天室貼文。</string>
     <plurals name="room_new_messages_notification">
         <item quantity="other">%d 則新訊息</item>
     </plurals>
@@ -361,7 +361,7 @@
     <string name="title_activity_choose_sticker">傳送貼圖</string>
     <string name="action_download">下載</string>
     <string name="option_send_voice">發送語音訊息</string>
-    <string name="option_send_sticker">發送貼圖</string>
+    <string name="option_send_sticker">傳送貼圖</string>
     <string name="no_sticker_application_dialog_content">您目前沒有任何貼圖。 
 \n
 \n要現在新增一些貼圖嗎？</string>
@@ -515,7 +515,7 @@
     <string name="widget_integration_failed_to_send_request">無法傳送請求。</string>
     <string name="widget_integration_positive_power_level">權限等級必需為正整數。</string>
     <string name="widget_integration_must_be_in_room">您不在此聊天室。</string>
-    <string name="widget_integration_no_permission_in_room">您沒有在這個聊天室做執行此操作的權限。</string>
+    <string name="widget_integration_no_permission_in_room">您沒有在這個聊天室做這件事的權限。</string>
     <string name="widget_integration_missing_room_id">請求中缺少 room_id。</string>
     <string name="widget_integration_missing_user_id">請求中缺少 user_id。</string>
     <string name="widget_integration_room_not_visible">聊天室 %s 不可見。</string>
@@ -566,8 +566,8 @@
     <string name="command_description_clear_scalar_token">為了修復 Matrix 應用程式管理</string>
     <string name="room_tombstone_versioned_description">這個聊天室已被取代，且不再使用。</string>
     <string name="room_tombstone_continuation_link">對話在此繼續</string>
-    <string name="room_tombstone_continuation_description">這個聊天室是其他對話的延續</string>
-    <string name="room_tombstone_predecessor_link">點擊這裡以檢視更舊的訊息</string>
+    <string name="room_tombstone_continuation_description">此聊天室是另一個對話的延續</string>
+    <string name="room_tombstone_predecessor_link">點擊此處以檢視更早以前的訊息</string>
     <plurals name="room_details_selected">
         <item quantity="other">已選擇 %d 個</item>
     </plurals>
@@ -896,7 +896,7 @@
     <string name="send_file_step_sending_file">正在傳送檔案（%1$s / %2$s）</string>
     <string name="downloaded_file">檔案 %1$s 已下載！</string>
     <string name="edited_suffix">（已編輯）</string>
-    <string name="message_edits">訊息編輯</string>
+    <string name="message_edits">訊息編輯紀錄</string>
     <string name="no_message_edits_found">找不到編輯</string>
     <string name="room_filtering_filter_hint">過濾對話…</string>
     <string name="room_filtering_footer_title">找不到您要尋找的東西？</string>
@@ -1056,7 +1056,7 @@
     <string name="login_signin_to">登入到 %1$s</string>
     <string name="login_signup">註冊</string>
     <string name="login_signin">登入</string>
-    <string name="login_signin_sso">以 SSO 繼續</string>
+    <string name="login_signin_sso">使用 SSO 繼續</string>
     <string name="login_server_url_form_modular_hint">Element Matrix Services 位址</string>
     <string name="login_server_url_form_other_hint">位址</string>
     <string name="login_server_url_form_modular_text">組織用的收費代管服務</string>
@@ -1206,10 +1206,10 @@
     <string name="verification_verify_user">驗證 %s</string>
     <string name="verification_verified_user">已驗證 %s</string>
     <string name="verification_request_waiting_for">正在等待 %s…</string>
-    <string name="room_profile_not_encrypted_subtitle">此聊天室中的訊息未經端對端加密。</string>
-    <string name="room_profile_encrypted_subtitle">此聊天室的訊息已進行端對端加密。
+    <string name="room_profile_not_encrypted_subtitle">此聊天室內的訊息未經端到端加密。</string>
+    <string name="room_profile_encrypted_subtitle">此聊天室的訊息有端到端加密。
 \n
-\n您的訊息收發前已加密，只有您與收件者有唯一的金鑰可以解密。</string>
+\n您的訊息已被加密保護，只有您和收件人能使用唯一的金鑰來解密。</string>
     <string name="room_profile_section_security">安全性</string>
     <string name="room_profile_section_security_learn_more">取得更多資訊</string>
     <string name="room_profile_section_more">更多</string>
@@ -1365,8 +1365,8 @@
     <string name="settings_troubleshoot_title">疑難排解</string>
     <string name="command_description_plain">傳送純文字訊息，不將它們轉譯為 markdown</string>
     <string name="auth_invalid_login_param_space_in_password">不正確的使用者名稱及／或密碼。輸入的密碼以空格開頭或結尾，請確認。</string>
-    <string name="room_message_placeholder">訊息…</string>
-    <string name="upgrade_security">提供加密升級</string>
+    <string name="room_message_placeholder">傳送訊息…</string>
+    <string name="upgrade_security">已提供加密升級</string>
     <string name="security_prompt_text">驗證您自己與其他人以確保聊天安全</string>
     <string name="bootstrap_enter_recovery">輸入您的 %s 以繼續</string>
     <string name="use_file">使用檔案</string>
@@ -1409,7 +1409,7 @@
     <string name="external_link_confirmation_message">連結 %1$s 正在將您帶往其他網站：%2$s。
 \n
 \n您確定要繼續嗎？</string>
-    <string name="create_room_dm_failure">我們無法建立您的私訊。請確認您想要邀請的使用者，然後再試一次。</string>
+    <string name="create_room_dm_failure">無法建立您的私訊。請重新確認您想要邀請的使用者後再次傳送。</string>
     <string name="unencrypted">未加密</string>
     <string name="encrypted_unverified">已由未驗證的裝置加密</string>
     <string name="verify_this_session">驗證正在存取您帳號的新登入：%1$s</string>
@@ -1424,7 +1424,7 @@
     <plurals name="invitations_sent_to_one_and_more_users">
         <item quantity="other">邀請已傳送給 %1$s 與其他 %2$d 個人</item>
     </plurals>
-    <string name="invite_users_to_room_failure">我們無法邀請使用者。請確認您想要邀請那些使用者後再試一次。</string>
+    <string name="invite_users_to_room_failure">無法邀請使用者。請重新確認您想要邀請的使用者後再試一次。</string>
     <string name="event_redacted">訊息已移除</string>
     <string name="settings_show_redacted">顯示已移除的訊息</string>
     <string name="settings_show_redacted_summary">為已移除的訊息顯示佔位符</string>
@@ -1639,7 +1639,7 @@
     <string name="sent_a_reaction">送出反應：%s</string>
     <string name="sent_verification_conclusion">驗證結果</string>
     <string name="universal_link_malformed">連結格式錯誤</string>
-    <string name="no_permissions_to_start_webrtc_call">您沒有在此聊天室開始通話的權限</string>
+    <string name="no_permissions_to_start_webrtc_call">您沒有權限在此聊天室開始通話</string>
     <string name="delete_account_data_warning">刪除類型為 %1$s 的帳號資料？
 \n
 \n小心使用，它可能會導致意料之外的行為。</string>
@@ -1667,10 +1667,10 @@
     <string name="direct_room_encryption_enabled_tile_description">此聊天中的訊息有端對端加密。</string>
     <string name="direct_room_profile_section_more_leave">離開</string>
     <string name="direct_room_profile_section_more_settings">設定</string>
-    <string name="direct_room_profile_encrypted_subtitle">這裡的訊息已進行端對端加密。
+    <string name="direct_room_profile_encrypted_subtitle">這裡的訊息有端到端加密。
 \n
-\n您的訊息收發前已加密，只有您與收件者有唯一的金鑰可以解密。</string>
-    <string name="direct_room_profile_not_encrypted_subtitle">這裡的訊息沒有端對端加密。</string>
+\n您的訊息已被加密保護，只有您和收件人能使用唯一的金鑰來解密。</string>
+    <string name="direct_room_profile_not_encrypted_subtitle">這裡的訊息未經端到端加密。</string>
     <string name="login_error_outdated_homeserver_warning_content">此家伺服器執行的是舊版伺服器。請要求您的家伺服器管理員升級。您可以繼續，但某些功能可能無法正常運作。</string>
     <string name="direct_room_join_rules_invite_by_you">您讓此變為邀請制。</string>
     <string name="direct_room_join_rules_invite">%1$s 讓此變為邀請制。</string>
@@ -1896,7 +1896,7 @@
 \n正在等待伺服器回應…</string>
     <string name="event_status_delete_all_failed_dialog_message">您確定要刪除此聊天室中所有未傳送的訊息嗎？</string>
     <string name="event_status_delete_all_failed_dialog_title">刪除未傳送的訊息</string>
-    <string name="event_status_failed_messages_warning">無法傳送訊息</string>
+    <string name="event_status_failed_messages_warning">訊息傳送失敗</string>
     <string name="event_status_cancel_sending_dialog_message">您想要取消傳送訊息嗎？</string>
     <string name="event_status_a11y_delete_all">刪除所有錯誤的訊息</string>
     <string name="event_status_a11y_failed">錯誤</string>
@@ -2148,7 +2148,7 @@
     <string name="space_add_space_to_any_space_you_manage">新增聊天空間至您管理的任何聊天空間。</string>
     <string name="space_add_existing_spaces">新增既有的聊天空間</string>
     <string name="space_add_existing_rooms_only">新增既有的聊天室</string>
-    <string name="space_leave_prompt_msg_with_name">您確定您想要離開 %s？</string>
+    <string name="space_leave_prompt_msg_with_name">您確定要離開 %s 嗎？</string>
     <string name="discovery_section">探索 （%s）</string>
     <string name="finish_setup">結束設定</string>
     <string name="discovery_invite">透過電子郵件邀請、尋找聯絡人以及更多…</string>
@@ -2330,7 +2330,7 @@
     <string name="thread_list_modal_my_threads_title">我的討論串</string>
     <string name="thread_list_modal_all_threads_subtitle">顯示目前聊天室的所有討論串</string>
     <string name="thread_list_modal_all_threads_title">所有討論串</string>
-    <string name="thread_list_modal_title">過濾</string>
+    <string name="thread_list_modal_title">篩選</string>
     <string name="thread_list_title">討論串</string>
     <string name="thread_timeline_title">討論串</string>
     <string name="room_threads_filter">過濾聊天室中的討論串</string>
@@ -2343,7 +2343,7 @@
     <plurals name="message_reaction_show_more">
         <item quantity="other">還有 %1$d 個</item>
     </plurals>
-    <string name="message_reaction_show_less">顯示較少</string>
+    <string name="message_reaction_show_less">顯示更少</string>
     <plurals name="notice_room_server_acl_changes">
         <item quantity="other">改變了伺服器 %d 的存取控制清單</item>
     </plurals>
@@ -2475,7 +2475,7 @@
     <string name="labs_enable_msc3061_share_history_desc">邀請成員進入分享聊天紀錄的加密聊天室時，加密紀錄會是可見的。</string>
     <string name="labs_enable_msc3061_share_history">MSC3061：為過去的訊息分享聊天室金鑰</string>
     <string name="send_your_first_msg_to_invite">傳送您的第一則訊息以邀請 %s 來聊天</string>
-    <string name="direct_room_encryption_enabled_tile_description_future">此聊天中的訊息將會是端對端加密。</string>
+    <string name="direct_room_encryption_enabled_tile_description_future">此聊天中的訊息將使用端對端加密。</string>
     <string name="create_room_action_go">繼續前往</string>
     <plurals name="room_removed_messages">
         <item quantity="other">已移除 %d 則訊息</item>
@@ -2632,14 +2632,14 @@
     <string name="device_manager_other_sessions_recommendation_title_unverified">未驗證</string>
     <string name="device_manager_other_sessions_recommendation_description_verified">為取得最佳安全性，請登出您不認識，或已不使用的工作階段。</string>
     <string name="device_manager_other_sessions_recommendation_title_verified">已驗證</string>
-    <string name="a11y_device_manager_filter">過濾</string>
+    <string name="a11y_device_manager_filter">篩選</string>
     <string name="device_manager_filter_option_inactive">未使用</string>
     <string name="device_manager_filter_option_unverified_description">尚未準備好安全通訊</string>
     <string name="device_manager_filter_option_unverified">未驗證</string>
     <string name="device_manager_filter_option_verified_description">已準備好安全通訊</string>
     <string name="device_manager_filter_option_verified">已驗證</string>
     <string name="device_manager_filter_option_all_sessions">所有工作階段</string>
-    <string name="device_manager_filter_bottom_sheet_title">過濾</string>
+    <string name="device_manager_filter_bottom_sheet_title">篩選</string>
     <string name="device_manager_session_last_activity">最後活動 %1$s</string>
     <string name="device_manager_device_title">裝置</string>
     <string name="device_manager_session_title">工作階段</string>
@@ -2871,5 +2871,5 @@
     <string name="settings_notification_error_on_update">更新您的通知偏好設定時發生錯誤。請再試一次。</string>
     <string name="direct_room_encryption_enabled_waiting_users_tile_description">受邀使用者加入 ${app_name} 後，您就可以聊天，聊天室將進行端對端加密</string>
     <string name="direct_room_encryption_enabled_waiting_users">正在等待使用者加入 ${app_name}</string>
-    <string name="direct_room_user_list_only_invite_one_email">您一次僅能邀請一個電子郵件</string>
+    <string name="direct_room_user_list_only_invite_one_email">您一次僅能邀請一個電子郵件地址</string>
 </resources>
