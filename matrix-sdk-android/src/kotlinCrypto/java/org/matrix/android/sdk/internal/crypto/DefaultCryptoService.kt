@@ -194,6 +194,15 @@ internal class DefaultCryptoService @Inject constructor(
     private val isStarting = AtomicBoolean(false)
     private val isStarted = AtomicBoolean(false)
 
+    override fun name() = "kotlin-sdk"
+
+    override fun supportsKeyWithheld() = true
+    override fun supportKeyRequestInspection() = true
+
+    override fun supportsDisablingKeyGossiping() = true
+
+    override fun supportsForwardedKeyWiththeld() = true
+
     override suspend fun onStateEvent(roomId: String, event: Event, cryptoStoreAggregator: CryptoStoreAggregator?) {
         when (event.type) {
             EventType.STATE_ROOM_ENCRYPTION -> onRoomEncryptionEvent(roomId, event)
@@ -1395,7 +1404,7 @@ internal class DefaultCryptoService @Inject constructor(
                 throw IllegalArgumentException("Missing algorithm")
             }
 
-                (alg as? IMXGroupEncryption)?.preshareKey(userIds)
+            (alg as? IMXGroupEncryption)?.preshareKey(userIds)
         }
     }
 

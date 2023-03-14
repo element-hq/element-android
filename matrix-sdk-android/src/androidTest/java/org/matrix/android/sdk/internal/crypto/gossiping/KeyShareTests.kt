@@ -25,6 +25,7 @@ import junit.framework.TestCase.assertTrue
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Assert
 import org.junit.Assert.assertNull
+import org.junit.Assume
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -59,6 +60,8 @@ class KeyShareTests : InstrumentedTest {
     fun test_DoNotSelfShareIfNotTrusted() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
 
         val aliceSession = commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(true))
+
+        Assume.assumeTrue("Not supported", aliceSession.cryptoService().supportKeyRequestInspection())
         Log.v("#TEST", "=======> AliceSession 1 is ${aliceSession.sessionParams.deviceId}")
 
         // Create an encrypted room and add a message
@@ -70,8 +73,9 @@ class KeyShareTests : InstrumentedTest {
         )
         val room = aliceSession.getRoom(roomId)
         assertNotNull(room)
-        Thread.sleep(4_000)
-        assertTrue(room?.roomCryptoService()?.isEncrypted() == true)
+        commonTestHelper.retryWithBackoff {
+            room?.roomCryptoService()?.isEncrypted() == true
+        }
 
         val sentEvent = commonTestHelper.sendTextMessage(room!!, "My Message", 1).first()
         val sentEventId = sentEvent.eventId
@@ -207,6 +211,9 @@ class KeyShareTests : InstrumentedTest {
 
         val testData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true)
         val aliceSession = testData.firstSession
+
+        Assume.assumeTrue("Not supported", aliceSession.cryptoService().supportKeyRequestInspection())
+
         val roomFromAlice = aliceSession.getRoom(testData.roomId)!!
         val bobSession = testData.secondSession!!
 
@@ -239,6 +246,9 @@ class KeyShareTests : InstrumentedTest {
 
         val testData = cryptoTestHelper.doE2ETestWithAliceInARoom(true)
         val aliceSession = testData.firstSession
+
+        Assume.assumeTrue("Not supported", aliceSession.cryptoService().supportKeyRequestInspection())
+
         val roomFromAlice = aliceSession.getRoom(testData.roomId)!!
 
         val aliceNewSession = commonTestHelper.logIntoAccount(aliceSession.myUserId, SessionTestParams(true))
@@ -274,6 +284,9 @@ class KeyShareTests : InstrumentedTest {
 
         val testData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true)
         val aliceSession = testData.firstSession
+
+        Assume.assumeTrue("Not supported", aliceSession.cryptoService().supportKeyRequestInspection())
+
         val bobSession = testData.secondSession!!
         val roomFromBob = bobSession.getRoom(testData.roomId)!!
 
@@ -386,6 +399,9 @@ class KeyShareTests : InstrumentedTest {
     ) { cryptoTestHelper, commonTestHelper ->
         val testData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true)
         val aliceSession = testData.firstSession
+
+        Assume.assumeTrue("Not supported", aliceSession.cryptoService().supportKeyRequestInspection())
+
         val bobSession = testData.secondSession!!
         val roomFromBob = bobSession.getRoom(testData.roomId)!!
 

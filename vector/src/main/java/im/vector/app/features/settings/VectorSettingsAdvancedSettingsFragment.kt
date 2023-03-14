@@ -73,6 +73,10 @@ class VectorSettingsAdvancedSettingsFragment :
             copyToClipboard(requireActivity(), session.sessionParams.credentials.accessToken)
             true
         }
+
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_DEVELOPER_MODE_KEY_REQUEST_AUDIT_KEY)?.apply {
+            isVisible = session.cryptoService().supportKeyRequestInspection()
+        }
     }
 
     private fun setupRageShakeSection() {

@@ -53,15 +53,13 @@ class E2eeConfigTest : InstrumentedTest {
 
         val roomAlicePOV = cryptoTestData.firstSession.roomService().getRoom(cryptoTestData.roomId)!!
 
-        val sentMessage = testHelper.sendTextMessage(roomAlicePOV, "you are blocked", 1).first()
+        val sentMessage = testHelper.sendMessageInRoom(roomAlicePOV, "you are blocked")
 
         val roomBobPOV = cryptoTestData.secondSession!!.roomService().getRoom(cryptoTestData.roomId)!!
         // ensure other received
-        testHelper.retryPeriodically {
-            roomBobPOV.timelineService().getTimelineEvent(sentMessage.eventId) != null
-        }
+        testHelper.ensureMessage(roomBobPOV, sentMessage) { true }
 
-        cryptoTestHelper.ensureCannotDecrypt(listOf(sentMessage.eventId), cryptoTestData.secondSession!!, cryptoTestData.roomId)
+        cryptoTestHelper.ensureCannotDecrypt(listOf(sentMessage), cryptoTestData.secondSession!!, cryptoTestData.roomId)
     }
 
     @Test
@@ -77,19 +75,20 @@ class E2eeConfigTest : InstrumentedTest {
 
         val roomAlicePOV = cryptoTestData.firstSession.roomService().getRoom(cryptoTestData.roomId)!!
 
-        val sentMessage = testHelper.sendTextMessage(roomAlicePOV, "you can read", 1).first()
+        val sentMessage = testHelper.sendMessageInRoom(roomAlicePOV, "you can read")
 
         val roomBobPOV = cryptoTestData.secondSession!!.roomService().getRoom(cryptoTestData.roomId)!!
         // ensure other received
-        testHelper.retryPeriodically {
-            roomBobPOV.timelineService().getTimelineEvent(sentMessage.eventId) != null
-        }
+
+        testHelper.ensureMessage(roomBobPOV, sentMessage) { true }
 
         cryptoTestHelper.ensureCanDecrypt(
-                listOf(sentMessage.eventId),
+                listOf(sentMessage),
                 cryptoTestData.secondSession!!,
                 cryptoTestData.roomId,
-                listOf(sentMessage.getLastMessageContent()!!.body)
+                listOf(
+                        roomBobPOV.timelineService().getTimelineEvent(sentMessage)?.getLastMessageContent()!!.body
+                )
         )
     }
 

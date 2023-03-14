@@ -20,6 +20,7 @@ import android.util.Log
 import androidx.test.filters.LargeTest
 import org.amshove.kluent.internal.assertEquals
 import org.junit.Assert
+import org.junit.Assume
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -28,6 +29,7 @@ import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
@@ -58,15 +60,15 @@ class E2EShareKeysConfigTest : InstrumentedTest {
             enableEncryption()
         })
 
-        commonTestHelper.retryPeriodically {
+        commonTestHelper.retryWithBackoff {
             aliceSession.roomService().getRoomSummary(roomId)?.isEncrypted == true
         }
         val roomAlice = aliceSession.roomService().getRoom(roomId)!!
 
         // send some messages
-        val withSession1 = commonTestHelper.sendTextMessage(roomAlice, "Hello", 1)
+        val withSession1 = commonTestHelper.sendMessageInRoom(roomAlice, "Hello")
         aliceSession.cryptoService().discardOutboundSession(roomId)
-        val withSession2 = commonTestHelper.sendTextMessage(roomAlice, "World", 1)
+        val withSession2 = commonTestHelper.sendMessageInRoom(roomAlice, "World")
 
         // Create bob account
         val bobSession = commonTestHelper.createAccount(TestConstants.USER_BOB, SessionTestParams(withInitialSync = true))
@@ -78,7 +80,7 @@ class E2EShareKeysConfigTest : InstrumentedTest {
 
         // Bob has join but should not be able to decrypt history
         cryptoTestHelper.ensureCannotDecrypt(
-                withSession1.map { it.eventId } + withSession2.map { it.eventId },
+                listOf(withSession1, withSession2),
                 bobSession,
                 roomId
         )
@@ -86,44 +88,53 @@ class E2EShareKeysConfigTest : InstrumentedTest {
         // We don't need bob anymore
         commonTestHelper.signOutAndClose(bobSession)
 
-        // Now let's enable history key sharing on alice side
-        aliceSession.cryptoService().enableShareKeyOnInvite(true)
+        if (aliceSession.cryptoService().supportsShareKeysOnInvite()) {
+            // Now let's enable history key sharing on alice side
+            aliceSession.cryptoService().enableShareKeyOnInvite(true)
 
-        // let's add a new message first
-        val afterFlagOn = commonTestHelper.sendTextMessage(roomAlice, "After", 1)
+            // let's add a new message first
+            val afterFlagOn = commonTestHelper.sendMessageInRoom(roomAlice, "After")
 
-        // Worth nothing to check that the session was rotated
-        Assert.assertNotEquals(
-                "Session should have been rotated",
-                withSession2.first().root.content?.get("session_id")!!,
-                afterFlagOn.first().root.content?.get("session_id")!!
-        )
+            // Worth nothing to check that the session was rotated
+            Assert.assertNotEquals(
+                    "Session should have been rotated",
+                    aliceSession.roomService().getRoom(roomId)?.getTimelineEvent(withSession1)?.root?.content?.get("session_id")!!,
+                    aliceSession.roomService().getRoom(roomId)?.getTimelineEvent(afterFlagOn)?.root?.content?.get("session_id")!!
+            )
 
-        // Invite a new user
-        val samSession = commonTestHelper.createAccount(TestConstants.USER_SAM, SessionTestParams(withInitialSync = true))
+            // Invite a new user
+            val samSession = commonTestHelper.createAccount(TestConstants.USER_SAM, SessionTestParams(withInitialSync = true))
 
-        // Let alice invite sam
-        roomAlice.membershipService().invite(samSession.myUserId)
+            // Let alice invite sam
+            roomAlice.membershipService().invite(samSession.myUserId)
 
-        commonTestHelper.waitForAndAcceptInviteInRoom(samSession, roomId)
+            commonTestHelper.waitForAndAcceptInviteInRoom(samSession, roomId)
 
-        // Sam shouldn't be able to decrypt messages with the first session, but should decrypt the one with 3rd session
-        cryptoTestHelper.ensureCannotDecrypt(
-                withSession1.map { it.eventId } + withSession2.map { it.eventId },
-                samSession,
-                roomId
-        )
+            // Sam shouldn't be able to decrypt messages with the first session, but should decrypt the one with 3rd session
+            cryptoTestHelper.ensureCannotDecrypt(
+                    listOf(withSession1, withSession2),
+                    samSession,
+                    roomId
+            )
 
-        cryptoTestHelper.ensureCanDecrypt(
-                afterFlagOn.map { it.eventId },
-                samSession,
-                roomId,
-                afterFlagOn.map { it.root.getClearContent()?.get("body") as String })
+            cryptoTestHelper.ensureCanDecrypt(
+                    listOf(afterFlagOn),
+                    samSession,
+                    roomId,
+                    listOf(aliceSession.roomService().getRoom(roomId)?.getTimelineEvent(afterFlagOn)?.root?.getClearContent()?.get("body") as String)
+            )
+        }
     }
 
     @Test
     fun ifSharingDisabledOnAliceSideBobShouldNotShareAliceHistory() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
+
         val testData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(roomHistoryVisibility = RoomHistoryVisibility.SHARED)
+
+        Assume.assumeTrue("Shared key on invite needed to test this",
+                testData.firstSession.cryptoService().supportsShareKeysOnInvite()
+        )
+
         val aliceSession = testData.firstSession.also {
             it.cryptoService().enableShareKeyOnInvite(false)
         }
@@ -151,6 +162,11 @@ class E2EShareKeysConfigTest : InstrumentedTest {
     @Test
     fun ifSharingEnabledOnAliceSideBobShouldShareAliceHistory() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
         val testData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(roomHistoryVisibility = RoomHistoryVisibility.SHARED)
+
+        Assume.assumeTrue("Shared key on invite needed to test this",
+                testData.firstSession.cryptoService().supportsShareKeysOnInvite()
+        )
+
         val aliceSession = testData.firstSession.also {
             it.cryptoService().enableShareKeyOnInvite(true)
         }
@@ -193,6 +209,11 @@ class E2EShareKeysConfigTest : InstrumentedTest {
     @Test
     fun testBackupFlagIsCorrect() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
         val aliceSession = commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = true))
+
+        Assume.assumeTrue("Shared key on invite needed to test this",
+                aliceSession.cryptoService().supportsShareKeysOnInvite()
+        )
+
         aliceSession.cryptoService().enableShareKeyOnInvite(false)
         val roomId = aliceSession.roomService().createRoom(CreateRoomParams().apply {
             historyVisibility = RoomHistoryVisibility.SHARED
@@ -206,9 +227,10 @@ class E2EShareKeysConfigTest : InstrumentedTest {
         val roomAlice = aliceSession.roomService().getRoom(roomId)!!
 
         // send some messages
-        val notSharableMessage = commonTestHelper.sendTextMessage(roomAlice, "Hello", 1)
+        val notSharableMessage = commonTestHelper.sendMessageInRoom(roomAlice, "Hello")
+
         aliceSession.cryptoService().enableShareKeyOnInvite(true)
-        val sharableMessage = commonTestHelper.sendTextMessage(roomAlice, "World", 1)
+        val sharableMessage = commonTestHelper.sendMessageInRoom(roomAlice, "World")
 
         Log.v("#E2E TEST", "Create and start key backup for bob ...")
         val keysBackupService = aliceSession.cryptoService().keysBackupService()
@@ -224,6 +246,7 @@ class E2EShareKeysConfigTest : InstrumentedTest {
         commonTestHelper.signOutAndClose(aliceSession)
 
         val newAliceSession = commonTestHelper.logIntoAccount(aliceSession.myUserId, SessionTestParams(true))
+
         newAliceSession.cryptoService().enableShareKeyOnInvite(true)
 
         newAliceSession.cryptoService().keysBackupService().let { kbs ->
@@ -251,15 +274,16 @@ class E2EShareKeysConfigTest : InstrumentedTest {
 
         // Sam shouldn't be able to decrypt messages with the first session, but should decrypt the one with 3rd session
         cryptoTestHelper.ensureCannotDecrypt(
-                notSharableMessage.map { it.eventId },
+                listOf(notSharableMessage),
                 samSession,
                 roomId
         )
 
         cryptoTestHelper.ensureCanDecrypt(
-                sharableMessage.map { it.eventId },
+                listOf(sharableMessage),
                 samSession,
                 roomId,
-                sharableMessage.map { it.root.getClearContent()?.get("body") as String })
+                listOf(roomAlice.getTimelineEvent(sharableMessage)?.root?.getClearContent()?.get("body") as String)
+        )
     }
 }

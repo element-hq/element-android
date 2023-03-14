@@ -22,6 +22,7 @@ import org.amshove.kluent.fail
 import org.amshove.kluent.internal.assertEquals
 import org.amshove.kluent.internal.assertNotEquals
 import org.junit.Assert
+import org.junit.Assume
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -79,9 +80,9 @@ class E2eeShareKeysHistoryTest : InstrumentedTest {
             runCryptoTest(context()) { cryptoTestHelper, testHelper ->
                 val aliceMessageText = "Hello Bob, I am Alice!"
                 val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true, roomHistoryVisibility)
-
                 val e2eRoomID = cryptoTestData.roomId
 
+                Assume.assumeTrue(cryptoTestData.firstSession.cryptoService().supportsShareKeysOnInvite())
                 // Alice
                 val aliceSession = cryptoTestData.firstSession.also {
                     it.cryptoService().enableShareKeyOnInvite(true)
@@ -250,6 +251,8 @@ class E2eeShareKeysHistoryTest : InstrumentedTest {
     ) = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true, initRoomHistoryVisibility)
         val e2eRoomID = cryptoTestData.roomId
+
+        Assume.assumeTrue(cryptoTestData.firstSession.cryptoService().supportsShareKeysOnInvite())
 
         // Alice
         val aliceSession = cryptoTestData.firstSession.also {

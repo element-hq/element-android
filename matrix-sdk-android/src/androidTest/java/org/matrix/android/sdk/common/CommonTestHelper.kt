@@ -45,6 +45,7 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.failure.JoinRoomFailure
+import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.send.SendState
@@ -83,7 +84,7 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
         }
 
         @OptIn(ExperimentalCoroutinesApi::class)
-        internal fun runCryptoTest(context: Context, cryptoConfig: MXCryptoConfig? = null,  autoSignoutOnClose: Boolean = true, block: suspend CoroutineScope.(CryptoTestHelper, CommonTestHelper) -> Unit) {
+        internal fun runCryptoTest(context: Context, cryptoConfig: MXCryptoConfig? = null, autoSignoutOnClose: Boolean = true, block: suspend CoroutineScope.(CryptoTestHelper, CommonTestHelper) -> Unit) {
             val testHelper = CommonTestHelper(context, cryptoConfig)
             val cryptoTestHelper = CryptoTestHelper(testHelper)
             return try {
@@ -209,18 +210,28 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
             }
         })
         return messageSent.await()
-       // return withTimeout(TestConstants.timeOutMillis) { messageSent.await() }
+        // return withTimeout(TestConstants.timeOutMillis) { messageSent.await() }
     }
 
     suspend fun ensureMessage(room: Room, eventId: String, block: ((event: TimelineEvent) -> Boolean)) {
         Log.v("#E2E TEST", "ensureMessage room:${room.roomId} <$eventId>")
-        val timeline = room.timelineService().createTimeline(null, TimelineSettings(60))
+        val timeline = room.timelineService().createTimeline(null, TimelineSettings(60, buildReadReceipts = false))
+
+        // check if not already there?
+        val existing = withContext(Dispatchers.Main) {
+            room.getTimelineEvent(eventId)
+        }
+        if (existing != null && block(existing)) return Unit.also {
+            Log.v("#E2E TEST", "Already received")
+        }
+
         val messageSent = CompletableDeferred<Unit>()
 
         timeline.addListener(object : Timeline.Listener {
             override fun onNewTimelineEvents(eventIds: List<String>) {
                 Log.v("#E2E TEST", "onNewTimelineEvents snapshot is $eventIds")
             }
+
             override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
                 val success = timeline.getSnapshot()
                         // .filter { it.root.getClearType() == EventType.MESSAGE }
@@ -243,13 +254,13 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
 
         timeline.start()
 
-        return  messageSent.await()
+        return messageSent.await()
         // withTimeout(TestConstants.timeOutMillis) {
         //    messageSent.await()
         // }
     }
 
-     fun ensureMessagePromise(room: Room, eventId: String, block: ((event: TimelineEvent) -> Boolean)): CompletableDeferred<Unit> {
+    fun ensureMessagePromise(room: Room, eventId: String, block: ((event: TimelineEvent) -> Boolean)): CompletableDeferred<Unit> {
         val timeline = room.timelineService().createTimeline(null, TimelineSettings(60))
         timeline.start()
         val messageSent = CompletableDeferred<Unit>()
@@ -334,11 +345,11 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
     }
 
     suspend fun waitForAndAcceptInviteInRoom(otherSession: Session, roomID: String) {
-        retryPeriodically {
+        retryWithBackoff {
             val roomSummary = otherSession.getRoomSummary(roomID)
             (roomSummary != null && roomSummary.membership == Membership.INVITE).also {
                 if (it) {
-                    Log.v("# TEST", "${otherSession.myUserId} can see the invite")
+                    Log.v("#E2E TEST", "${otherSession.myUserId} can see the invite")
                 }
             }
         }
@@ -354,7 +365,7 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
         }
 
         Log.v("#E2E TEST", "${otherSession.myUserId} waiting for join echo ...")
-        retryPeriodically {
+        retryWithBackoff {
             val roomSummary = otherSession.getRoomSummary(roomID)
             roomSummary != null && roomSummary.membership == Membership.JOIN
         }

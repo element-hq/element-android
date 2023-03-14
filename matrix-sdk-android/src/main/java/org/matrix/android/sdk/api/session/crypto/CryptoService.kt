@@ -48,6 +48,7 @@ import org.matrix.android.sdk.internal.crypto.store.db.CryptoStoreAggregator
 
 interface CryptoService {
 
+    fun name(): String
     fun verificationService(): VerificationService
 
     fun crossSigningService(): CrossSigningService
@@ -79,6 +80,8 @@ interface CryptoService {
     fun setGlobalBlacklistUnverifiedDevices(block: Boolean)
 
     fun getLiveGlobalCryptoConfig(): LiveData<GlobalCryptoConfig>
+
+    fun supportsDisablingKeyGossiping(): Boolean
 
     /**
      * Enable or disable key gossiping.
@@ -185,6 +188,8 @@ interface CryptoService {
 
     fun addNewSessionListener(newSessionListener: NewSessionListener)
     fun removeSessionListener(listener: NewSessionListener)
+
+    fun supportKeyRequestInspection(): Boolean
 
     fun getOutgoingRoomKeyRequests(): List<OutgoingKeyRequest>
     fun getOutgoingRoomKeyRequestsPaged(): LiveData<PagedList<OutgoingKeyRequest>>

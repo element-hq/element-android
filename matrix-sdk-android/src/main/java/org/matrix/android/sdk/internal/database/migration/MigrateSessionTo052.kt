@@ -28,4 +28,3 @@ internal class MigrateSessionTo052(realm: DynamicRealm) : RealmMigrator(realm, 5
                 ?.setNullable(EventEntityFields.IS_VERIFICATION_STATE_DIRTY, true)
     }
 }
-

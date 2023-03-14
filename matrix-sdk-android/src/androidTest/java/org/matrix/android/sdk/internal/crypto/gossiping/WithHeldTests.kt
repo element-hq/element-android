@@ -20,6 +20,7 @@ import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import org.junit.Assert
+import org.junit.Assume
 import org.junit.FixMethodOrder
 import org.junit.Rule
 import org.junit.Test
@@ -153,6 +154,7 @@ class WithHeldTests : InstrumentedTest {
 
         val testData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
         val aliceSession = testData.firstSession
+        Assume.assumeTrue("Not supported", aliceSession.cryptoService().supportKeyRequestInspection())
         val bobSession = testData.secondSession!!
         val aliceInterceptor = testHelper.getTestInterceptor(aliceSession)
 
@@ -222,6 +224,7 @@ class WithHeldTests : InstrumentedTest {
 
         val testData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
         val aliceSession = testData.firstSession
+        Assume.assumeTrue("Not supported by rust sdk", aliceSession.cryptoService().supportsForwardedKeyWiththeld())
         val bobSession = testData.secondSession!!
 
         val roomAlicePov = aliceSession.getRoom(testData.roomId)!!
@@ -236,19 +239,9 @@ class WithHeldTests : InstrumentedTest {
         // initialize to force request keys if missing
         cryptoTestHelper.initializeCrossSigning(bobSecondSession)
 
-//        // wait until alice downloaded the new device
-//        testHelper.retryWithBackoff {
-//            aliceSession.cryptoService().getUserDevices(bobSession.myUserId).any { it.deviceId ==  bobSecondSession.sessionParams.deviceId}
-//        }
-//
-//        // Trust bob second device from Alice POV
-//        aliceSession.cryptoService().crossSigningService().trustDevice(bobSecondSession.sessionParams.deviceId)
-//
-//        // wait until bob downloaded alice device
-//        testHelper.retryWithBackoff {
-//            bobSecondSession.cryptoService().getUserDevices(aliceSession.myUserId).any { it.deviceId ==  aliceSession.sessionParams.deviceId}
-//        }
-//        bobSecondSession.cryptoService().crossSigningService().trustDevice(aliceSession.sessionParams.deviceId)
+        // Trust bob second device from Alice POV
+        aliceSession.cryptoService().crossSigningService().trustDevice(bobSecondSession.sessionParams.deviceId)
+        bobSecondSession.cryptoService().crossSigningService().trustDevice(aliceSession.sessionParams.deviceId)
 
         var sessionId: String? = null
         // Check that the
@@ -264,18 +257,10 @@ class WithHeldTests : InstrumentedTest {
             timeLineEvent != null
         }
 
-
-        mustFail(
-                message = "This session should not be able to decrypt",
-                failureBlock = { failure ->
-                    val type = (failure as MXCryptoError.Base).errorType
-                    val technicalMessage = failure.technicalMessage
-                    Assert.assertEquals("Error should be withheld", MXCryptoError.ErrorType.KEYS_WITHHELD, type)
-                    Assert.assertEquals("Cause should be unverified", WithHeldCode.UNVERIFIED.value, technicalMessage)
-                }
-        ) {
-            val timeLineEvent = bobSecondSession.getRoom(testData.roomId)?.getTimelineEvent(eventId)
-            bobSecondSession.cryptoService().decryptEvent(timeLineEvent!!.root, "")
+        // Check that bob second session requested the key
+        testHelper.retryPeriodically {
+            val wc = bobSecondSession.cryptoService().getWithHeldMegolmSession(roomAlicePov.roomId, sessionId!!)
+            wc?.code == WithHeldCode.UNAUTHORISED
         }
 //        // Check that bob second session requested the key
 //        testHelper.retryPeriodically {

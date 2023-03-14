@@ -75,8 +75,12 @@ class E2eeSanityTests : InstrumentedTest {
         val e2eRoomID = cryptoTestData.roomId
         val aliceRoomPOV = aliceSession.getRoom(e2eRoomID)!!
         // we want to disable key gossiping to just check initial sending of keys
-        aliceSession.cryptoService().enableKeyGossiping(false)
-        cryptoTestData.secondSession?.cryptoService()?.enableKeyGossiping(false)
+        if (aliceSession.cryptoService().supportsDisablingKeyGossiping()) {
+            aliceSession.cryptoService().enableKeyGossiping(false)
+        }
+        if (cryptoTestData.secondSession?.cryptoService()?.supportsDisablingKeyGossiping() == true) {
+            cryptoTestData.secondSession?.cryptoService()?.enableKeyGossiping(false)
+        }
 
         // add some more users and invite them
         val otherAccounts = listOf("benoit", "valere", "ganfra") // , "adam", "manu")

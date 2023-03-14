@@ -43,6 +43,8 @@ import org.matrix.android.sdk.api.session.crypto.model.UnsignedDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.sync.model.DeviceListResponse
 import org.matrix.android.sdk.api.session.sync.model.DeviceOneTimeKeysCountSyncResponse
 import org.matrix.android.sdk.api.session.sync.model.ToDeviceSyncResponse
@@ -439,6 +441,19 @@ internal class OlmMachine @Inject constructor(
                     if (event.roomId.isNullOrBlank()) {
                         throw MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS, MXCryptoError.MISSING_FIELDS_REASON)
                     }
+                    if (event.isRedacted()) {
+                        // we shouldn't attempt to decrypt a redacted event because the content is cleared and decryption will fail because of null algorithm
+                        // Workaround until https://github.com/matrix-org/matrix-rust-sdk/issues/1642
+                        return@withContext MXEventDecryptionResult(
+                                clearEvent = mapOf(
+                                        "room_id" to event.roomId,
+                                        "type" to EventType.MESSAGE,
+                                        "content" to emptyMap<String, Any>(),
+                                        "unsigned" to event.unsignedData.toContent()
+                                )
+                        )
+                    }
+
                     val serializedEvent = adapter.toJson(event)
                     val decrypted = inner.decryptRoomEvent(serializedEvent, event.roomId, false, false)
 
@@ -493,7 +508,7 @@ internal class OlmMachine @Inject constructor(
             ShieldColor.RED -> {
                 when (this.message) {
                     "Encrypted by an unverified device." -> MessageVerificationState.UN_SIGNED_DEVICE
-                    "Encrypted by a device not verified by its owner." -> MessageVerificationState.UN_SIGNED_DEVICE_OF_VERIFIED_USER
+                    "Encrypted by a device not verified by its owner." -> MessageVerificationState.UN_SIGNED_DEVICE
                     "Encrypted by an unknown or deleted device." -> MessageVerificationState.UNKNOWN_DEVICE
                     else -> MessageVerificationState.UN_SIGNED_DEVICE
                 }

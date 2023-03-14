@@ -136,7 +136,9 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
     suspend fun inviteNewUsersAndWaitForThemToJoin(session: Session, roomId: String, usernames: List<String>): List<Session> {
         val newSessions = usernames.map { username ->
             testHelper.createAccount(username, SessionTestParams(true)).also {
-                it.cryptoService().enableKeyGossiping(false)
+                if (it.cryptoService().supportsDisablingKeyGossiping()) {
+                    it.cryptoService().enableKeyGossiping(false)
+                }
             }
         }
 
@@ -560,7 +562,7 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
                 } catch (error: MXCryptoError) {
                     // nop
                 }
-                Log.v("TEST", "ensureCanDecrypt ${event.getClearType()} is ${event.getClearContent()}")
+                Log.v("#E2E TEST", "ensureCanDecrypt ${event.getClearType()} is ${event.getClearContent()}")
                 event.getClearType() == EventType.MESSAGE &&
                         messagesText[index] == event.getClearContent()?.toModel<MessageContent>()?.body
             }

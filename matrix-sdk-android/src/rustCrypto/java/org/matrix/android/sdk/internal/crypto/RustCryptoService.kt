@@ -53,7 +53,6 @@ import org.matrix.android.sdk.api.session.crypto.model.IncomingRoomKeyRequest
 import org.matrix.android.sdk.api.session.crypto.model.MXEncryptEventContentResult
 import org.matrix.android.sdk.api.session.crypto.model.MXEventDecryptionResult
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
-import org.matrix.android.sdk.api.session.crypto.model.TrailType
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -140,6 +139,8 @@ internal class RustCryptoService @Inject constructor(
 
     private val isStarting = AtomicBoolean(false)
     private val isStarted = AtomicBoolean(false)
+
+    override fun name() = "rust-sdk"
 
     override suspend fun onStateEvent(roomId: String, event: Event, cryptoStoreAggregator: CryptoStoreAggregator?) {
         when (event.type) {
@@ -510,8 +511,8 @@ internal class RustCryptoService @Inject constructor(
 //            } catch (throwable: Throwable) {
 //                Timber.e(throwable, "## CRYPTO | onRoomEncryptionEvent ERROR FAILED TO SETUP CRYPTO ")
 //            } finally {
-            val userIds = getRoomUserIds(roomId)
-            setEncryptionInRoom(roomId, event.content?.toModel<EncryptionEventContent>(), userIds)
+        val userIds = getRoomUserIds(roomId)
+        setEncryptionInRoom(roomId, event.content?.toModel<EncryptionEventContent>(), userIds)
 //            }
 //        }
     }
@@ -559,7 +560,7 @@ internal class RustCryptoService @Inject constructor(
                 // know what other servers are in the room at the time they've been invited.
                 // They therefore will not send device updates if a user logs in whilst
                 // their state is invite.
-                    olmMachine.updateTrackedUsers(listOf(userId))
+                olmMachine.updateTrackedUsers(listOf(userId))
             } else {
                 // nop
             }
@@ -651,8 +652,8 @@ internal class RustCryptoService @Inject constructor(
                     this.verificationService.onEvent(null, event)
                 }
             }
-                liveEventManager.get().dispatchOnLiveToDevice(event)
-            }
+            liveEventManager.get().dispatchOnLiveToDevice(event)
+        }
     }
 
     /**
@@ -717,12 +718,14 @@ internal class RustCryptoService @Inject constructor(
         return cryptoStore.getLiveGlobalCryptoConfig()
     }
 
+    // Until https://github.com/matrix-org/matrix-rust-sdk/issues/1364
+    override fun supportsDisablingKeyGossiping() = false
     override fun enableKeyGossiping(enable: Boolean) {
-        cryptoStore.enableKeyGossiping(enable)
+        if (!enable) throw UnsupportedOperationException("Not supported by rust")
     }
 
     override fun isKeyGossipingEnabled(): Boolean {
-        return cryptoStore.isKeyGossipingEnabled()
+        return true
     }
 
     override fun supportsShareKeysOnInvite() = false
@@ -730,10 +733,9 @@ internal class RustCryptoService @Inject constructor(
     override fun supportsKeyWithheld() = true
     override fun supportsForwardedKeyWiththeld() = false
 
-
     override fun enableShareKeyOnInvite(enable: Boolean) {
         if (enable && !supportsShareKeysOnInvite()) {
-            throw java.lang.UnsupportedOperationException("Enable share key on invite not implemented in rust");
+            throw java.lang.UnsupportedOperationException("Enable share key on invite not implemented in rust")
         }
     }
 
@@ -844,19 +846,20 @@ internal class RustCryptoService @Inject constructor(
         return "DefaultCryptoService of $myUserId ($deviceId)"
     }
 
+    // Until https://github.com/matrix-org/matrix-rust-sdk/issues/701
+    // https://github.com/matrix-org/matrix-rust-sdk/issues/702
+    override fun supportKeyRequestInspection() = false
     override fun getOutgoingRoomKeyRequests(): List<OutgoingKeyRequest> {
-        return cryptoStore.getOutgoingRoomKeyRequests()
+        throw UnsupportedOperationException("Not supported by rust")
     }
 
     override fun getOutgoingRoomKeyRequestsPaged(): LiveData<PagedList<OutgoingKeyRequest>> {
-        return cryptoStore.getOutgoingRoomKeyRequestsPaged()
+        throw UnsupportedOperationException("Not supported by rust")
+//        return cryptoStore.getOutgoingRoomKeyRequestsPaged()
     }
 
     override fun getIncomingRoomKeyRequestsPaged(): LiveData<PagedList<IncomingRoomKeyRequest>> {
-        return cryptoStore.getGossipingEventsTrail(TrailType.IncomingKeyRequest) {
-            IncomingRoomKeyRequest.fromEvent(it)
-                    ?: IncomingRoomKeyRequest(localCreationTimestamp = 0L)
-        }
+        throw UnsupportedOperationException("Not supported by rust")
     }
 
     override suspend fun manuallyAcceptRoomKeyRequest(request: IncomingRoomKeyRequest) {
@@ -864,25 +867,23 @@ internal class RustCryptoService @Inject constructor(
     }
 
     override fun getIncomingRoomKeyRequests(): List<IncomingRoomKeyRequest> {
-        return emptyList()
+        throw UnsupportedOperationException("Not supported by rust")
     }
 
     override fun getGossipingEventsTrail(): LiveData<PagedList<AuditTrail>> {
-        return cryptoStore.getGossipingEventsTrail()
+        throw UnsupportedOperationException("Not supported by rust")
     }
 
     override fun getGossipingEvents(): List<AuditTrail> {
-        return cryptoStore.getGossipingEvents()
+        throw UnsupportedOperationException("Not supported by rust")
     }
 
     override fun getSharedWithInfo(roomId: String?, sessionId: String): MXUsersDevicesMap<Int> {
-        // TODO not exposed in rust?
-        return cryptoStore.getSharedWithInfo(roomId, sessionId)
+        throw UnsupportedOperationException("Not supported by rust")
     }
 
     override fun getWithHeldMegolmSession(roomId: String, sessionId: String): RoomKeyWithHeldContent? {
-        // TODO not exposed in rust.
-        return cryptoStore.getWithHeldMegolmSession(roomId, sessionId)
+        throw UnsupportedOperationException("Not supported by rust")
     }
 
     override fun logDbUsageInfo() {
