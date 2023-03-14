@@ -278,7 +278,7 @@
     <string name="join_room">加入聊天室</string>
     <string name="username">使用者名稱</string>
     <string name="logout">登出</string>
-    <string name="hs_url">家伺服器 URL</string>
+    <string name="hs_url">家伺服器網址</string>
     <string name="search">搜尋</string>
     <string name="start_voice_call">開始語音通話</string>
     <string name="start_video_call">開始視訊通話</string>
@@ -291,12 +291,12 @@
     <string name="auth_login">登入</string>
     <string name="auth_submit">送出</string>
     <string name="auth_invalid_login_param">使用者名稱和／或密碼不正確</string>
-    <string name="auth_invalid_email">這看起來不是有效的電子郵件地址</string>
+    <string name="auth_invalid_email">不像是有效的電子郵件地址</string>
     <string name="auth_email_already_defined">此電子郵件地址已經被定義。</string>
     <string name="auth_forgot_password">忘記密碼？</string>
     <string name="auth_recaptcha_message">這個家伺服器想要確認您不是機器人</string>
-    <string name="auth_reset_password_error_unauthorized">電子郵件地址驗證失敗： 請確保您已點擊郵件中的連結</string>
-    <string name="login_error_invalid_home_server">請輸入有效的 URL</string>
+    <string name="auth_reset_password_error_unauthorized">電子郵件地址驗證失敗：請確認您已點擊郵件中的連結</string>
+    <string name="login_error_invalid_home_server">請輸入有效的網址</string>
     <string name="login_error_bad_json">異常的 JSON</string>
     <string name="login_error_not_json">沒有包含有效的 JSON</string>
     <string name="login_error_limit_exceeded">傳送太多請求</string>
@@ -329,7 +329,7 @@
     </plurals>
     <string name="room_participants_leave_prompt_title">離開聊天室</string>
     <string name="room_participants_leave_prompt_msg">您確定想要離開聊天室？</string>
-    <string name="room_participants_header_direct_chats">私人訊息</string>
+    <string name="room_participants_header_direct_chats">私密訊息</string>
     <string name="room_participants_action_invite">邀請</string>
     <string name="room_participants_action_ban">封鎖</string>
     <string name="room_participants_action_unban">解除封鎖</string>
@@ -417,7 +417,7 @@
     <string name="settings_home_display">主頁顯示</string>
     <string name="settings_pin_missed_notifications">釘選含有錯過的通知的聊天室</string>
     <string name="settings_pin_unread_messages">釘選含有未讀訊息的聊天室</string>
-    <string name="settings_inline_url_preview">內嵌 URL 預覽</string>
+    <string name="settings_inline_url_preview">內嵌網址預覽</string>
     <string name="settings_always_show_timestamps">對所有訊息顯示時間戳記</string>
     <string name="settings_12_24_timestamps">用 12 小時制顯示時間戳記</string>
     <string name="settings_vibrate_on_mention">提及使用者時震動</string>
@@ -440,7 +440,7 @@
     <string name="settings_select_language">選擇語言</string>
     <string name="account_email_validation_message">請收信並點擊信中的連結。完成後，再點擊「繼續」。</string>
     <string name="account_email_already_used_error">此電子郵件地址已經被使用。</string>
-    <string name="account_phone_number_already_used_error">此電話號碼已被使用。</string>
+    <string name="account_phone_number_already_used_error">這個電話號碼已被使用。</string>
     <string name="settings_change_password">變更密碼</string>
     <string name="settings_old_password">目前的密碼</string>
     <string name="settings_new_password">新密碼</string>
@@ -471,13 +471,13 @@
     <string name="encryption_information_device_name">公開名稱</string>
     <string name="device_manager_session_details_session_id">工作階段 ID</string>
     <string name="encryption_information_device_key">工作階段金鑰</string>
-    <string name="encryption_export_e2e_room_keys">匯出聊天室的端到端加密金鑰</string>
+    <string name="encryption_export_e2e_room_keys">匯出聊天室的端對端加密金鑰</string>
     <string name="encryption_export_room_keys">匯出聊天室的加密金鑰</string>
     <string name="encryption_export_room_keys_summary">匯出金鑰到本機檔案</string>
     <string name="encryption_export_export">匯出</string>
     <string name="passphrase_enter_passphrase">輸入安全密語</string>
     <string name="passphrase_confirm_passphrase">確認安全密語</string>
-    <string name="encryption_import_e2e_room_keys">匯入聊天室端到端加密金鑰</string>
+    <string name="encryption_import_e2e_room_keys">匯入聊天室端對端加密金鑰</string>
     <string name="encryption_import_room_keys">匯入聊天室金鑰</string>
     <string name="encryption_import_room_keys_summary">從本機檔案匯入金鑰</string>
     <string name="encryption_import_import">匯入</string>
@@ -639,9 +639,9 @@
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">修復 Play Services</string>
     <string name="settings_troubleshoot_test_fcm_title">Firebase Token</string>
-    <string name="settings_troubleshoot_test_fcm_success">成功擷取 FCM token：
+    <string name="settings_troubleshoot_test_fcm_success">成功取得 FCM token：
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_fcm_failed">無法擷取 FCM token：
+    <string name="settings_troubleshoot_test_fcm_failed">無法取得 FCM token：
 \n%1$s</string>
     <string name="settings_troubleshoot_test_token_registration_title">註冊權杖</string>
     <string name="settings_troubleshoot_test_token_registration_success">FCM token 成功註冊至家伺服器。</string>
@@ -838,7 +838,7 @@
     <string name="room_list_catchup_empty_title">您都看完了！</string>
     <string name="room_list_catchup_empty_body">您已經沒有未讀的訊息了</string>
     <string name="room_list_people_empty_title">對話</string>
-    <string name="room_list_people_empty_body">將會在此顯示您的私人訊息對話。點擊右下角的 + 可以建立私訊。</string>
+    <string name="room_list_people_empty_body">將會在此顯示您的私密訊息對話。點擊右下角的 + 可以建立私訊。</string>
     <string name="room_list_rooms_empty_title">聊天室</string>
     <string name="room_list_rooms_empty_body">您的聊天室將會在此顯示。點擊右下角的 + 來尋找既有的或開始您自己的聊天室。</string>
     <string name="title_activity_emoji_reaction_picker">反應</string>
@@ -856,7 +856,7 @@
     <string name="please_wait">請稍候…</string>
     <string name="room_preview_no_preview">無法預覽此聊天室</string>
     <string name="fab_menu_create_room">聊天室</string>
-    <string name="fab_menu_create_chat">私人訊息</string>
+    <string name="fab_menu_create_chat">私密訊息</string>
     <string name="create_room_action_create">建立</string>
     <string name="create_room_name_hint">名稱</string>
     <string name="create_room_public_title">公開</string>
@@ -888,7 +888,7 @@
     <string name="send_suggestion_sent">感謝，建議已成功傳送</string>
     <string name="send_suggestion_failed">無法傳送建議（%s）</string>
     <string name="settings_labs_show_hidden_events_in_timeline">在時間軸中顯示隱藏的事件</string>
-    <string name="bottom_action_people_x">私人訊息</string>
+    <string name="bottom_action_people_x">私密訊息</string>
     <string name="send_file_step_idle">正在等待…</string>
     <string name="send_file_step_encrypting_thumbnail">正在加密縮圖…</string>
     <string name="send_file_step_sending_thumbnail">正在傳送縮圖（%1$s / %2$s）</string>
@@ -901,7 +901,7 @@
     <string name="room_filtering_filter_hint">過濾對話…</string>
     <string name="room_filtering_footer_title">找不到您要尋找的東西？</string>
     <string name="room_filtering_footer_create_new_room">建立一間新聊天室</string>
-    <string name="room_filtering_footer_create_new_direct_message">傳送新的私人訊息</string>
+    <string name="room_filtering_footer_create_new_direct_message">傳送新的私密訊息</string>
     <string name="room_filtering_footer_open_room_directory">檢視聊天室目錄</string>
     <string name="room_directory_search_hint">名稱或 ID（#example:matrix.org）</string>
     <string name="labs_swipe_to_reply_in_timeline">啟用滑動以在時間軸上回覆</string>
@@ -909,7 +909,7 @@
     <string name="settings_integration_manager">整合管理員</string>
     <string name="creating_direct_room">正在建立聊天室…</string>
     <string name="message_view_edit_history">檢視編輯紀錄</string>
-    <string name="action_decline">婉拒</string>
+    <string name="action_decline">拒絕</string>
     <string name="widget_integration_review_terms">要繼續，您必須接受此服務的條款。</string>
     <string name="terms_of_service">服務條款</string>
     <string name="terms_description_for_identity_server">可被其他人探索</string>
@@ -917,7 +917,7 @@
     <string name="none">無</string>
     <string name="action_revoke">撤銷</string>
     <string name="action_disconnect">斷線</string>
-    <string name="login_error_homeserver_not_found">無法在此 URL 找到家伺服器，請確認</string>
+    <string name="login_error_homeserver_not_found">無法在此網址找到家伺服器，請確認</string>
     <string name="settings_background_fdroid_sync_mode">背景同步模式</string>
     <string name="settings_background_fdroid_sync_mode_battery">電力最佳化</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} 將會在背景同步以節省裝置的電力資源。
@@ -943,9 +943,9 @@
     <string name="settings_discovery_disconnect_identity_server_info">與您的身分伺服器斷線代表您無法被其他使用者探索，且您將無法透過電子郵件或電話邀請其他人。</string>
     <string name="settings_discovery_msisdn_title">可探索的電話號碼</string>
     <string name="settings_discovery_confirm_mail">我們已傳送電子郵件到 %s，請收信並點擊確認連結</string>
-    <string name="settings_discovery_enter_identity_server">輸入身分伺服器 URL</string>
+    <string name="settings_discovery_enter_identity_server">輸入身分伺服器網址</string>
     <string name="settings_discovery_bad_identity_server">無法連線到身分伺服器</string>
-    <string name="settings_discovery_please_enter_server">請輸入身分伺服器 URL</string>
+    <string name="settings_discovery_please_enter_server">請輸入身分伺服器網址</string>
     <string name="settings_discovery_no_terms_title">身分伺服器無服務條款</string>
     <string name="settings_discovery_no_terms">您選擇的身分伺服器沒有任何服務條款。僅在您信任服務擁有者時才繼續</string>
     <string name="settings_text_message_sent">已傳送簡訊給 %s。請輸入簡訊中的驗證碼。</string>
@@ -959,7 +959,7 @@
     <string name="a11y_open_drawer">開啟導航選單</string>
     <string name="a11y_create_menu_open">開啟建立聊天室選單</string>
     <string name="a11y_create_menu_close">關閉建立聊天室選單…</string>
-    <string name="a11y_create_direct_message">建立新的私人對話</string>
+    <string name="a11y_create_direct_message">建立新的私密對話</string>
     <string name="a11y_create_room">建立一間新聊天室</string>
     <string name="a11y_close_keys_backup_banner">關閉金鑰備份橫幅</string>
     <string name="a11y_jump_to_bottom">跳到底部</string>
@@ -1009,7 +1009,7 @@
     <string name="room_widget_open_in_browser">在瀏覽器中開啟</string>
     <string name="room_widget_revoke_access">撤銷我的存取權限</string>
     <string name="room_widget_permission_display_name">您的顯示名稱</string>
-    <string name="room_widget_permission_avatar_url">您的大頭照 URL</string>
+    <string name="room_widget_permission_avatar_url">您的大頭照網址</string>
     <string name="room_widget_permission_user_id">您的使用者 ID</string>
     <string name="room_widget_permission_theme">您的佈景主題</string>
     <string name="room_widget_permission_widget_id">小工具 ID</string>
@@ -1073,7 +1073,7 @@
     <string name="login_reset_password_on">在 %1$s 上重設密碼</string>
     <string name="login_reset_password_notice">將傳送確認信到您的信箱，以確定您要設定新密碼。</string>
     <string name="login_reset_password_submit">下一步</string>
-    <string name="login_reset_password_email_hint">電子郵件</string>
+    <string name="login_reset_password_email_hint">電子郵件地址</string>
     <string name="login_reset_password_password_hint">新密碼</string>
     <string name="login_reset_password_warning_title">警告！</string>
     <string name="login_reset_password_warning_content">變更您的密碼將會重設您所有工作階段中任何的端對端加密金鑰，讓加密聊天紀錄無法讀取。請在重設您的密碼前從其他工作階段設定金鑰備份或匯出聊天室金鑰。</string>
@@ -1093,26 +1093,26 @@
 \n要停止密碼變更流程嗎？</string>
     <string name="login_set_email_title">設定電子郵件地址</string>
     <string name="login_set_email_notice">設定電子郵件地址以復原您的帳號。之後您也可以選擇性地讓您認識的人透過此地址找到您。</string>
-    <string name="login_set_email_mandatory_hint">電子郵件</string>
+    <string name="login_set_email_mandatory_hint">電子郵件地址</string>
     <string name="login_set_email_optional_hint">電子郵件（選填）</string>
-    <string name="login_set_email_submit">下一個</string>
+    <string name="login_set_email_submit">下一步</string>
     <string name="login_set_msisdn_title">設定電話號碼</string>
     <string name="login_set_msisdn_notice">設定電話號碼以讓您認識的人找到您。</string>
     <string name="login_set_msisdn_notice2">請使用國際格式。</string>
     <string name="login_set_msisdn_mandatory_hint">電話號碼</string>
     <string name="login_set_msisdn_optional_hint">電話號碼（選填）</string>
-    <string name="login_set_msisdn_submit">下一個</string>
+    <string name="login_set_msisdn_submit">下一步</string>
     <string name="login_msisdn_confirm_title">確認電話號碼</string>
     <string name="login_msisdn_confirm_notice">我們剛傳送了驗證碼給 %1$s。請在下方輸入以驗證您的號碼。</string>
     <string name="login_msisdn_confirm_hint">輸入驗證碼</string>
     <string name="login_msisdn_confirm_send_again">再次傳送</string>
-    <string name="login_msisdn_confirm_submit">下一個</string>
+    <string name="login_msisdn_confirm_submit">下一步</string>
     <string name="login_msisdn_error_not_international">國際電話號碼必須以「+」開頭</string>
     <string name="login_msisdn_error_other">電話號碼似乎無效。請確認</string>
     <string name="login_signup_to">註冊至 %1$s</string>
     <string name="login_signin_username_hint">使用者名稱或電子郵件</string>
     <string name="login_signup_password_hint">密碼</string>
-    <string name="login_signup_submit">下一個</string>
+    <string name="login_signup_submit">下一步</string>
     <string name="login_signup_error_user_in_use">使用者名稱已被使用</string>
     <string name="login_signup_cancel_confirmation_title">警告</string>
     <string name="login_signup_cancel_confirmation_content">尚未建立您的帳號。停止註冊流程？</string>
@@ -1142,7 +1142,7 @@
     <string name="soft_logout_title">您已登出</string>
     <string name="soft_logout_signin_title">登入</string>
     <string name="soft_logout_signin_notice">您的家伺服器（%1$s） 管理員已將您的帳號 %2$s（%3$s） 登出。</string>
-    <string name="soft_logout_signin_e2e_warning_notice">登入以復原僅儲存在此裝置上的加密金鑰。您在任何裝置上都需要它們來讀取您所有的安全訊息。</string>
+    <string name="soft_logout_signin_e2e_warning_notice">登入後即可還原僅儲存在此裝置上的加密金鑰。您需要這把金鑰才可以在其他裝置讀取加密訊息。</string>
     <string name="soft_logout_signin_submit">登入</string>
     <string name="soft_logout_signin_password_hint">密碼</string>
     <string name="soft_logout_clear_data_title">清除個人資料</string>
@@ -1347,7 +1347,7 @@
 \n請把它們保管好！如果您失去所有使用中的工作階段，將會需要使用它們來解鎖加密訊息與安全資訊。</string>
     <string name="bootstrap_crosssigning_print_it">列印並將其存放在安全的地方</string>
     <string name="bootstrap_crosssigning_save_usb">將其儲存在 USB 隨身碟或備份磁碟上</string>
-    <string name="bootstrap_crosssigning_save_cloud">將其複製到您的私人雲端儲存空間</string>
+    <string name="bootstrap_crosssigning_save_cloud">將其複製到您的私密雲端儲存空間</string>
     <string name="encryption_enabled">加密已啟用</string>
     <string name="encryption_enabled_tile_description">在此聊天室中的訊息已端對端加密。可到使用者的個人資料頁面中取得更多資訊並驗證他們的身分。</string>
     <string name="encryption_not_enabled">加密未啟用</string>
@@ -1456,8 +1456,8 @@
     <string name="identity_server_error_no_current_binding_error">目前沒有此 ID 的關聯。</string>
     <string name="identity_server_set_default_notice">您的家伺服器（%1$s） 建議將 %2$s 用於您的身分伺服器</string>
     <string name="identity_server_set_default_submit">使用 %1$s</string>
-    <string name="identity_server_set_alternative_notice">或者您可以輸入任何身分伺服器 URL</string>
-    <string name="identity_server_set_alternative_notice_no_default">輸入身分伺服器 URL</string>
+    <string name="identity_server_set_alternative_notice">或者您可以輸入任何身分伺服器網址</string>
+    <string name="identity_server_set_alternative_notice_no_default">輸入身分伺服器網址</string>
     <string name="identity_server_set_alternative_submit">送出</string>
     <string name="action_play">播放</string>
     <string name="action_dismiss">關閉</string>
@@ -1474,7 +1474,7 @@
     <string name="sound_device_wireless_headset">無線耳機</string>
     <string name="call_switch_camera">切換相機</string>
     <string name="call_camera_front">前</string>
-    <string name="call_camera_back">後</string>
+    <string name="call_camera_back">上一步</string>
     <string name="call_format_turn_hd_off">關閉 HD</string>
     <string name="call_format_turn_hd_on">開啟 HD</string>
     <string name="login_error_ssl_peer_unverified">SSL 錯誤：無法驗證對方的身分。</string>
@@ -1530,7 +1530,7 @@
     <string name="send_a_sticker">貼圖</string>
     <string name="room_profile_section_admin">管理員動作</string>
     <string name="room_member_power_level_default_in">在 %1$s 中的預設</string>
-    <string name="settings_hs_admin_e2e_disabled">您的伺服器管理員已在私人聊天室與私人訊息中預設停用端對端加密。</string>
+    <string name="settings_hs_admin_e2e_disabled">您的伺服器管理員已在私密聊天室與私密訊息中預設停用端對端加密。</string>
     <string name="bootstrap_info_text_2">輸入只有您知道的安全密語，用於保護您在伺服器上的祕密資訊。</string>
     <string name="bootstrap_cancel_text">如果您現在取消，當您忘記登入資訊的話，可能會失去存取加密訊息與資料。
 \n
@@ -1555,7 +1555,7 @@
     <string name="bottom_sheet_save_your_recovery_key_title">儲存您的安全金鑰</string>
     <string name="bottom_sheet_save_your_recovery_key_content">將您的安全金鑰儲存在安全的地方，如密碼管理員或保險櫃。</string>
     <string name="set_a_security_phrase_title">設定安全密語</string>
-    <string name="set_a_security_phrase_notice">輸入僅有您知道的安全密語，用於保護在您伺服器上的私人加密資訊。</string>
+    <string name="set_a_security_phrase_notice">輸入僅有您知道的安全密語，用於保護在您伺服器上的私密加密資訊。</string>
     <string name="set_a_security_phrase_hint">安全密語</string>
     <string name="set_a_security_phrase_again_notice">再次輸入您的安全密語以確認。</string>
     <string name="room_settings_name_hint">聊天室設定</string>
@@ -1705,7 +1705,7 @@
     <string name="create_room_topic_section">聊天室主題（選填）</string>
     <string name="create_room_name_section">聊天室名稱</string>
     <string name="settings_export_trail">匯出審核</string>
-    <string name="room_member_open_or_create_dm">私人訊息</string>
+    <string name="room_member_open_or_create_dm">私密訊息</string>
     <string name="send_bug_report_include_key_share_history">傳送金鑰共享請求紀錄</string>
     <string name="no_more_results">沒有更多結果</string>
     <string name="qr_code_not_scanned">未掃描 QR Code！</string>
@@ -1727,7 +1727,7 @@
     <string name="add_people">新增夥伴</string>
     <string name="add_a_topic_link_text">新增主題</string>
     <string name="room_created_summary_no_topic_creation_text">%s 讓人們知道這個聊天室是做什麼用的。</string>
-    <string name="this_is_the_beginning_of_dm">這是您與 %s 私人訊息紀錄的開頭。</string>
+    <string name="this_is_the_beginning_of_dm">這是您與 %s 私密訊息紀錄的開頭。</string>
     <string name="this_is_the_beginning_of_room_no_name">這是此對話的開頭。</string>
     <string name="this_is_the_beginning_of_room">這是 %s 的開頭。</string>
     <string name="room_settings_enable_encryption_no_permission">您沒有在此聊天室中啟用加密的權限。</string>
@@ -1756,7 +1756,7 @@
     <string name="room_preview_no_preview_join">無法預覽此聊天室。您想要加入嗎？</string>
     <string name="room_preview_not_found">目前無法存取此聊天室。
 \n請稍後再試，或是詢問聊天室管理員來確認您是否可以存取。</string>
-    <string name="room_alias_publish_to_directory_error">無法擷取目前的聊天室目錄可見度（%1$s）。</string>
+    <string name="room_alias_publish_to_directory_error">無法取得目前的聊天室目錄可見度（%1$s）。</string>
     <string name="room_alias_publish_to_directory">將此聊天室在 %1$s 的聊天室目錄中公開發佈？</string>
     <string name="room_alias_action_unpublish">取消發佈此位址</string>
     <string name="room_alias_action_publish">發佈此位址</string>
@@ -1901,7 +1901,7 @@
     <string name="event_status_a11y_delete_all">刪除所有錯誤的訊息</string>
     <string name="event_status_a11y_failed">錯誤</string>
     <string name="event_status_a11y_sent">已傳送</string>
-    <string name="event_status_a11y_sending">正在傳送</string>
+    <string name="event_status_a11y_sending">傳送中</string>
     <string name="settings_room_directory_show_all_rooms_summary">顯示聊天室目錄中的所有聊天室時，也顯示含有兒童不宜內容的聊天室。</string>
     <string name="settings_room_directory_show_all_rooms">顯示帶有兒童不宜內容的聊天室</string>
     <string name="settings_category_room_directory">聊天室目錄</string>
@@ -1944,19 +1944,19 @@
     <string name="create_spaces_details_public_header">加入一些詳細資訊以協助其脫穎而出。您隨時都可以變更這些資料。</string>
     <string name="activity_create_space_title">建立聊天空間</string>
     <string name="space_type_private_desc">邀請制，適用於您自己或團隊使用</string>
-    <string name="space_type_private">私人</string>
+    <string name="space_type_private">私密</string>
     <string name="space_type_public_desc">對任何人開放，適用於社群</string>
     <string name="space_type_public">公開</string>
-    <string name="create_spaces_private_teammates">您與您的團隊成員的私人聊天空間</string>
+    <string name="create_spaces_private_teammates">您與您的團隊成員的私密聊天空間</string>
     <string name="create_spaces_me_and_teammates">我與團隊成員</string>
-    <string name="create_spaces_organise_rooms">整理您聊天室的私人聊天空間</string>
+    <string name="create_spaces_organise_rooms">整理您聊天室的私密聊天空間</string>
     <string name="create_spaces_just_me">只有我</string>
     <string name="create_spaces_make_sure_access">確定合適的人有權存取 %s。</string>
     <string name="create_spaces_who_are_you_working_with">您與誰一起工作？</string>
     <string name="create_spaces_join_info_help">要加入既有的聊天空間，您需要取得邀請。</string>
     <string name="create_spaces_you_can_change_later">您可以稍後再更改</string>
     <string name="create_spaces_choose_type_label">您想要建立哪種類型的聊天空間？</string>
-    <string name="your_private_space">您的私人聊天空間</string>
+    <string name="your_private_space">您的私密聊天空間</string>
     <string name="your_public_space">您公開的聊天空間</string>
     <string name="add_space">新增聊天空間</string>
     <string name="command_description_leave_room">離開指定 ID 的聊天室（如果是 null 的話則為目前聊天室）</string>
@@ -1969,7 +1969,7 @@
     <string name="room_settings_room_access_public_description">任何人都可以尋找聊天室並加入</string>
     <string name="room_settings_room_access_public_title">公開</string>
     <string name="room_settings_room_access_private_description">僅被邀請的夥伴可以尋找並加入</string>
-    <string name="room_settings_room_access_private_title">私人</string>
+    <string name="room_settings_room_access_private_title">私密</string>
     <string name="room_settings_room_access_entry_unknown">存取設定未知（%s）</string>
     <string name="room_settings_room_access_entry_knock">任何人都可以要求加入聊天室，成員可以接受或拒絕</string>
     <string name="room_settings_guest_access_title">允許訪客加入</string>
@@ -1992,8 +1992,8 @@
     <string name="send_file_step_compressing_image">正在壓縮圖片…</string>
     <string name="use_as_default_and_do_not_ask_again">預設使用，不再詢問</string>
     <string name="option_always_ask">總是詢問</string>
-    <string name="this_space_has_no_rooms_admin">有些聊天室可能是隱藏的，因為其為私人聊天室，您需要被邀請。</string>
-    <string name="this_space_has_no_rooms_not_admin">有些聊天室可能是隱藏的，因為其為私人聊天室，您需要被邀請。
+    <string name="this_space_has_no_rooms_admin">有些聊天室可能是隱藏的，因為其為私密聊天室，您需要被邀請。</string>
+    <string name="this_space_has_no_rooms_not_admin">有些聊天室可能是隱藏的，因為其為私密聊天室，您需要被邀請。
 \n您沒有權限新增聊天室。</string>
     <string name="this_space_has_no_rooms">此聊天空間沒有聊天室</string>
     <string name="spaces_no_server_support_description">請聯絡您的家伺服器管理員以取得進一步的資訊</string>
@@ -2013,7 +2013,7 @@
     <string name="send_feedback_space_title">聊天空間回饋</string>
     <string name="error_jitsi_join_conf">抱歉，嘗試加入會議時發生錯誤</string>
     <string name="unnamed_room">未命名聊天室</string>
-    <string name="private_space">私人聊天空間</string>
+    <string name="private_space">私密聊天空間</string>
     <string name="public_space">公開聊天空間</string>
     <string name="call_transfer_unknown_person">未知的人</string>
     <string name="call_transfer_transfer_to_title">轉接至 %1$s</string>
@@ -2035,7 +2035,7 @@
     <string name="upgrade_public_room_from_to">您將要把此聊天室從 %1$s 升級到 %2$s。</string>
     <string name="upgrade_room_warning">升級聊天室是一項進階動作，通常建議在聊天室因錯誤、缺少功能或安全漏洞而不穩定時使用。
 \n這通常只會影響在伺服器上處理聊天室的方式。</string>
-    <string name="upgrade_private_room">升級私人聊天室</string>
+    <string name="upgrade_private_room">升級私密聊天室</string>
     <string name="upgrade_public_room">升級公開聊天室</string>
     <string name="upgrade">升級</string>
     <string name="it_may_take_some_time">請稍候，可能需要一些時間。</string>
@@ -2048,7 +2048,7 @@
     <string name="verification_scan_self_emoji_subtitle">改用比對表情符號進行驗證</string>
     <string name="verification_scan_with_this_device">使用此裝置掃描</string>
     <string name="verification_scan_self_notice">使用您的其他裝置掃描條碼或切換並使用此裝置掃描</string>
-    <string name="hs_client_url">家伺服器 API URL</string>
+    <string name="hs_client_url">家伺服器 API 網址</string>
     <string name="missing_permissions_title">缺少權限</string>
     <string name="denied_permission_camera">要執行此動作，請至系統設定授予「相機」權限。</string>
     <string name="denied_permission_generic">缺少執行此動作的部份權限，請至系統設定授予權限。</string>
@@ -2085,15 +2085,15 @@
     <string name="spaces_which_can_access">可以存取的聊天空間</string>
     <string name="allow_space_member_to_find_and_access">允許聊天空間成員找到並存取此空間。</string>
     <string name="room_create_member_of_space_name_can_join">聊天空間 %s 的成員可以找到、預覽並加入。</string>
-    <string name="room_settings_room_access_private_invite_only_title">私人（邀請制）</string>
+    <string name="room_settings_room_access_private_invite_only_title">私密（邀請制）</string>
     <string name="denied_permission_voice_message">要傳送語音訊息，請授予「麥克風」權限。</string>
     <string name="settings_room_upgrades">聊天室升級</string>
     <string name="settings_messages_by_bot">來自聊天機器人的訊息</string>
     <string name="settings_room_invitations">聊天室邀請</string>
     <string name="settings_encrypted_group_messages">加密的群組訊息</string>
     <string name="settings_group_messages">群組訊息</string>
-    <string name="settings_encrypted_direct_messages">加密的私人訊息</string>
-    <string name="settings_messages_direct_messages">私人訊息</string>
+    <string name="settings_encrypted_direct_messages">加密的私密訊息</string>
+    <string name="settings_messages_direct_messages">私密訊息</string>
     <string name="settings_messages_containing_username">我的使用者名稱</string>
     <string name="settings_messages_containing_display_name">我的顯示名稱</string>
     <string name="settings_notification_notify_me_for">通知我</string>
@@ -2161,7 +2161,7 @@
     <string name="create_space_in_progress">正在建立聊天空間…</string>
     <string name="settings_developer_mode_show_info_on_screen_summary">顯示一些有用的資訊以協助應用程式除錯</string>
     <string name="settings_developer_mode_show_info_on_screen_title">在畫面上顯示除錯資訊</string>
-    <string name="does_not_look_like_valid_email">看起來不是有效的電子郵件地址</string>
+    <string name="does_not_look_like_valid_email">不像是有效的電子郵件地址</string>
     <string name="open_discovery_settings">開啟探索設定</string>
     <string name="user_directory_search_hint_2">以名稱、ID 或電子郵件搜尋</string>
     <string name="create_new_space">建立新聊天空間</string>
@@ -2201,7 +2201,7 @@
     <string name="a11y_presence_offline">離線</string>
     <string name="a11y_presence_online">線上</string>
     <string name="login_error_homeserver_from_url_not_found_enter_manual">選擇家伺服器</string>
-    <string name="login_error_homeserver_from_url_not_found">無法存取 URL %s 的家伺服器。請確認您的連結或手動選擇家伺服器。</string>
+    <string name="login_error_homeserver_from_url_not_found">無法存取網址 %s 的家伺服器。請確認您的連結或手動選擇家伺服器。</string>
     <string name="notification_listening_for_notifications">正在監聽通知</string>
     <plurals name="create_poll_not_enough_options_error">
         <item quantity="other">需要至少 %1$s 個選項</item>
@@ -2216,7 +2216,7 @@
     <string name="create_poll_title">建立投票</string>
     <string name="attachment_type_poll">投票</string>
     <string name="identity_server_consent_dialog_title_2">向 %s 傳送電子郵件地址與電話號碼</string>
-    <string name="settings_discovery_consent_notice_off_2">您的通訊錄是私人的。要從您的通訊錄中探索使用者，我們需要您的權限來傳送聯絡人資訊到您的身分伺服器。</string>
+    <string name="settings_discovery_consent_notice_off_2">您的通訊錄是私密的。要從您的通訊錄中探索使用者，我們需要您的權限來傳送聯絡人資訊到您的身分伺服器。</string>
     <string name="shortcut_disabled_reason_sign_out">已登出工作階段！</string>
     <string name="shortcut_disabled_reason_room_left">已離開聊天室！</string>
     <string name="identity_server_consent_dialog_content_question">您同意傳送此資訊嗎？</string>
@@ -2274,9 +2274,9 @@
     <string name="labs_auto_report_uisi_desc">發生無法解密錯誤時，您的系統將會自動傳送紀錄檔</string>
     <string name="labs_auto_report_uisi">自動回報解密錯誤。</string>
     <string name="room_member_override_nick_color">覆寫顯示名稱色彩</string>
-    <string name="login_splash_already_have_account">我已有帳號</string>
-    <string name="ftue_auth_carousel_encrypted_title">安全傳送訊息。</string>
-    <string name="ftue_auth_carousel_control_title">您已掌控了您的資料。</string>
+    <string name="login_splash_already_have_account">我已經有帳號了</string>
+    <string name="ftue_auth_carousel_encrypted_title">安全地傳輸訊息。</string>
+    <string name="ftue_auth_carousel_control_title">一切都在您的掌控之中。</string>
     <string name="ftue_auth_carousel_secure_title">擁有您的對話。</string>
     <string name="tooltip_attachment_location">分享位置</string>
     <string name="location_share_external">使用…開啟</string>
@@ -2297,9 +2297,9 @@
     <string name="encryption_has_been_misconfigured">加密設定錯誤。</string>
     <string name="sent_location">分享了他們的位置</string>
     <string name="login_splash_create_account">建立帳號</string>
-    <string name="ftue_auth_carousel_workplace_title">為您的團隊傳送訊息。</string>
-    <string name="ftue_auth_carousel_encrypted_body">端對端加密且不需電話號碼。沒有廣告或資料探勘。</string>
-    <string name="ftue_auth_carousel_control_body">選擇保留對話的位置，讓您擁有控制權與獨立性。透過 Matrix 連結。</string>
+    <string name="ftue_auth_carousel_workplace_title">傳訊息給您的團隊。</string>
+    <string name="ftue_auth_carousel_encrypted_body">端對端加密且無須電話號碼。沒有廣告也不探勘您的個資。</string>
+    <string name="ftue_auth_carousel_control_body">選擇儲存對話的位置，讓您擁有控制權與獨立性。透過 Matrix 連結。</string>
     <string name="ftue_auth_carousel_secure_body">安全且獨立的通訊，為您提供與在家中進行面對面對話相同的隱私等級。</string>
     <string name="attachment_type_location">位置</string>
     <string name="room_unsupported_e2e_algorithm_as_admin">加密設定錯誤，因此您無法傳送訊息。點擊以開啟設定。</string>
@@ -2312,12 +2312,12 @@
     <string name="ftue_auth_use_case_connect_to_server">連線至伺服器</string>
     <string name="ftue_auth_use_case_join_existing_server">想要加入現有的伺服器？</string>
     <string name="ftue_auth_use_case_skip_partial">略過此問題</string>
-    <string name="ftue_auth_use_case_skip">還不確定？%s</string>
+    <string name="ftue_auth_use_case_skip">還不確定嗎？%s</string>
     <string name="ftue_auth_use_case_option_three">社群</string>
     <string name="ftue_auth_use_case_option_two">團隊</string>
     <string name="ftue_auth_use_case_option_one">朋友與家人</string>
     <string name="ftue_auth_use_case_subtitle">我們將會協助您建立聯繫</string>
-    <string name="ftue_auth_use_case_title">您與誰聊最多？</string>
+    <string name="ftue_auth_use_case_title">您最常與誰聊天？</string>
     <string name="navigate_to_thread_when_already_in_the_thread">您已經在檢視此討論串了！</string>
     <string name="view_in_room">在聊天室中檢視</string>
     <string name="reply_in_thread">在討論串中回覆</string>
@@ -2370,18 +2370,18 @@
     <string name="error_forbidden_digits_only_username">家伺服器不接受僅有數字的使用者名稱。</string>
     <string name="ftue_personalize_skip_this_step">略過此步驟</string>
     <string name="ftue_personalize_submit">儲存並繼續</string>
-    <string name="ftue_personalize_complete_subtitle">隨時前往設定以更新您的個人資料</string>
-    <string name="ftue_personalize_complete_title">看起來不錯！</string>
-    <string name="ftue_personalize_lets_go">走吧</string>
+    <string name="ftue_personalize_complete_subtitle">您可以隨時到設定頁面更新個人資料</string>
+    <string name="ftue_personalize_complete_title">看起來真棒！</string>
+    <string name="ftue_personalize_lets_go">開始吧</string>
     <string name="ftue_profile_picture_subtitle">是時候為名字加上臉了</string>
-    <string name="ftue_profile_picture_title">新增個人資訊照片</string>
+    <string name="ftue_profile_picture_title">新增大頭照</string>
     <string name="ftue_display_name_entry_footer">您可以在稍後變更這個</string>
     <string name="ftue_display_name_entry_title">顯示名稱</string>
     <string name="ftue_display_name_title">選擇顯示名稱</string>
     <string name="ftue_account_created_subtitle">您的帳號 %s 已建立</string>
     <string name="ftue_account_created_congratulations_title">恭喜！</string>
-    <string name="ftue_account_created_take_me_home">帶我回家</string>
-    <string name="ftue_account_created_personalize">個人化簡介檔案</string>
+    <string name="ftue_account_created_take_me_home">回到首頁</string>
+    <string name="ftue_account_created_personalize">調整個人資料</string>
     <string name="action_disable">停用</string>
     <string name="location_share_live_started">正在載入即時位置…</string>
     <string name="location_share_live_select_duration_option_3">8 小時</string>
@@ -2396,7 +2396,7 @@
     <string name="a11y_audio_playback_duration">%1$d 分 %2$d 秒</string>
     <string name="a11y_audio_message_item">%1$s、%2$s、%3$s</string>
     <string name="sent_live_location">分享了他們的即時位置</string>
-    <string name="ftue_auth_carousel_workplace_body">${app_name} 也非常適合工作場所。其受到世界上最安全的組織信任。</string>
+    <string name="ftue_auth_carousel_workplace_body">${app_name} 也很適合用在工作場合。許多最重視安全的組織也使用此軟體。</string>
     <string name="beta">Beta 測試版</string>
     <string name="send_feedback_threads_info">「討論串」是一項正在進行中的工作，包含了即將推出令人興奮的新功能（例如改善後的通知）。我們想要聽到您的回饋！</string>
     <string name="send_feedback_threads_title">「討論串」功能 Beta 測試回饋</string>
@@ -2484,45 +2484,45 @@
     <string name="live_location_not_enough_permission_dialog_description">您必須擁有正確的權限才能在此聊天室中分享即時位置。</string>
     <string name="live_location_not_enough_permission_dialog_title">您沒有權限分享即時位置</string>
     <string name="permalink_unsupported_groups">無法開啟此連結：社群已被聊天空間取代</string>
-    <string name="ftue_auth_login_username_entry">使用者名稱／電子郵件／電話</string>
-    <string name="ftue_auth_captcha_title">您是人類嗎？</string>
-    <string name="ftue_auth_password_reset_email_confirmation_subtitle">按照寄送到 %s 的說明操作</string>
+    <string name="ftue_auth_login_username_entry">使用者名稱 / 電子郵件 / 電話號碼</string>
+    <string name="ftue_auth_captcha_title">您是人類使用者嗎？</string>
+    <string name="ftue_auth_password_reset_email_confirmation_subtitle">請依照傳送到 %s 的郵件指示操作</string>
     <string name="ftue_auth_password_reset_confirmation">密碼重設</string>
     <string name="ftue_auth_forgot_password">忘記密碼</string>
     <string name="ftue_auth_email_resend_email">重新傳送電子郵件</string>
-    <string name="ftue_auth_email_verification_footer">沒有收到電子郵件？</string>
-    <string name="ftue_auth_email_verification_subtitle">請遵循傳送至 %s 中的步驟</string>
-    <string name="ftue_auth_email_verification_title">驗證您的電子郵件</string>
+    <string name="ftue_auth_email_verification_footer">沒收到電子郵件嗎？</string>
+    <string name="ftue_auth_email_verification_subtitle">請依照傳送到 %s 的郵件指示操作</string>
+    <string name="ftue_auth_email_verification_title">驗證您的電子郵件地址</string>
     <string name="ftue_auth_phone_confirmation_resend_code">重新傳送驗證碼</string>
     <string name="ftue_auth_phone_confirmation_subtitle">驗證碼已傳送至 %s</string>
     <string name="ftue_auth_phone_confirmation_title">確認您的電話號碼</string>
     <string name="ftue_auth_sign_out_all_devices">登出所有裝置</string>
     <string name="ftue_auth_reset_password">重設密碼</string>
     <string name="ftue_auth_new_password_subtitle">確認長度需有 8 個字元以上。</string>
-    <string name="ftue_auth_new_password_title">選擇新密碼</string>
+    <string name="ftue_auth_new_password_title">輸入新密碼</string>
     <string name="ftue_auth_new_password_entry_title">新密碼</string>
     <string name="ftue_auth_reset_password_breaker_title">請到您的電子郵件信箱收信。</string>
     <string name="ftue_auth_reset_password_email_subtitle">%s 將會傳送驗證連結給您</string>
     <string name="ftue_auth_phone_confirmation_entry_title">驗證碼</string>
     <string name="ftue_auth_phone_entry_title">電話號碼</string>
-    <string name="ftue_auth_phone_subtitle">%s 必須驗證您的帳號</string>
+    <string name="ftue_auth_phone_subtitle">%s 需要驗證您的帳號</string>
     <string name="ftue_auth_phone_title">輸入您的電話號碼</string>
-    <string name="ftue_auth_email_entry_title">電子郵件</string>
-    <string name="ftue_auth_email_subtitle">%s 必須驗證您的帳號</string>
-    <string name="ftue_auth_email_title">輸入您的電子郵件</string>
-    <string name="ftue_auth_terms_subtitle">請仔細閱讀 %s 的條款與政策</string>
+    <string name="ftue_auth_email_entry_title">電子郵件地址</string>
+    <string name="ftue_auth_email_subtitle">%s 需要驗證您的帳號</string>
+    <string name="ftue_auth_email_title">輸入您的電子郵件地址</string>
+    <string name="ftue_auth_terms_subtitle">請閱讀 %s 的服務條款與政策</string>
     <string name="ftue_auth_terms_title">伺服器政策</string>
     <string name="ftue_auth_choose_server_ems_cta">保持聯絡</string>
     <string name="ftue_auth_choose_server_ems_subtitle">Element Matrix Services（EMS）是一套強大且可靠的代管服務，可進行快速、安全且即時的通訊。可到 <a href="${ftue_ems_url}">element.io/ems</a> 了解如何使用</string>
     <string name="ftue_auth_choose_server_ems_title">想要架設自己的伺服器？</string>
-    <string name="ftue_auth_choose_server_entry_hint">伺服器 URL</string>
+    <string name="ftue_auth_choose_server_entry_hint">伺服器網址</string>
     <string name="ftue_auth_choose_server_subtitle">您的伺服器位址是什麼？這就像您所有資料的家</string>
-    <string name="ftue_auth_choose_server_title">選取您的伺服器</string>
+    <string name="ftue_auth_choose_server_title">選擇您的伺服器</string>
     <string name="ftue_auth_welcome_back_title">歡迎回來！</string>
     <string name="ftue_auth_create_account_edit_server_selection">編輯</string>
     <string name="ftue_auth_create_account_sso_section_header">或</string>
     <string name="ftue_auth_create_account_choose_server_header">您的對話將在哪裡進行</string>
-    <string name="ftue_auth_create_account_password_entry_footer">必須是 8 個以上字元長</string>
+    <string name="ftue_auth_create_account_password_entry_footer">至少需要 8 個字元</string>
     <string name="ftue_auth_create_account_username_entry_footer">其他人可以透過 %s 找到您</string>
     <string name="ftue_auth_create_account_title">建立您的帳號</string>
     <string name="font_size_use_system">使用系統預設值</string>
@@ -2648,11 +2648,11 @@
     <string name="device_manager_verification_status_detail_current_session_unverified">驗證您目前的工作階段以強化安全通訊。</string>
     <string name="device_manager_verification_status_detail_other_session_verified">此工作階段已準備好安全通訊。</string>
     <string name="device_manager_verification_status_detail_current_session_verified">您目前的工作階段已準備好安全通訊。</string>
-    <string name="labs_enable_deferred_dm_summary">僅在第一則訊息上建立私人訊息</string>
-    <string name="labs_enable_deferred_dm_title">啟用延期的私人訊息</string>
+    <string name="labs_enable_deferred_dm_summary">僅在第一則訊息上建立私密訊息</string>
+    <string name="labs_enable_deferred_dm_title">啟用延期的私密訊息</string>
     <string name="labs_enable_new_app_layout_summary">包含選擇性分頁的簡潔 Element</string>
     <string name="labs_enable_new_app_layout_title">啟用新佈局</string>
-    <string name="device_manager_learn_more_session_rename">私人訊息與您加入的聊天室當中的其他使用者，可以檢視您有哪些工作階段。
+    <string name="device_manager_learn_more_session_rename">私密訊息與您加入的聊天室當中的其他使用者，可以檢視您有哪些工作階段。
 \n
 \n此功能讓對方能夠確認真的在與您交談，但他們也因此會看到您在此處輸入的工作階段名稱。</string>
     <string name="device_manager_learn_more_session_rename_title">正在重新命名工作階段</string>
@@ -2686,7 +2686,7 @@
     <string name="rich_text_editor_format_strikethrough">套用刪除線格式</string>
     <string name="rich_text_editor_format_italic">套用斜體格式</string>
     <string name="rich_text_editor_format_bold">套用粗體格式</string>
-    <string name="labs_enable_client_info_recording_summary">記錄客戶端名稱、版本與 URL，以便在工作階段管理程式中可以更簡單地辨認工作階段。</string>
+    <string name="labs_enable_client_info_recording_summary">記錄客戶端名稱、版本與網址，以便在工作階段管理程式中可以更簡單地辨認工作階段。</string>
     <string name="labs_enable_client_info_recording_title">啟用客戶端資訊記錄</string>
     <string name="labs_enable_session_manager_summary">對所有工作階段有更大的能見度與控制。</string>
     <string name="labs_enable_session_manager_title">啟用新的工作階段管理程式</string>
@@ -2714,10 +2714,10 @@
     <string name="labs_enable_rich_text_editor_title">啟用富文字編輯器</string>
     <string name="qr_code_login_confirm_security_code_description">請確認您知道此驗證碼的來源。連結裝置後，您將為某人提供對您帳號的完整存取權限。</string>
     <string name="qr_code_login_confirm_security_code">確認</string>
-    <string name="qr_code_login_try_again">再次嘗試</string>
+    <string name="qr_code_login_try_again">再試一次</string>
     <string name="qr_code_login_status_no_match">不相符？</string>
     <string name="qr_code_login_signing_in">正在將你登入</string>
-    <string name="qr_code_login_connecting_to_device">連線至裝置</string>
+    <string name="qr_code_login_connecting_to_device">正在連線至裝置</string>
     <string name="qr_code_login_scan_qr_code_button">掃描 QR Code</string>
     <string name="qr_code_login_signing_in_a_mobile_device">要登入行動裝置嗎？</string>
     <string name="qr_code_login_show_qr_code_button">在此裝置顯示 QR Code</string>
@@ -2734,7 +2734,7 @@
     <string name="qr_code_login_header_failed_title">連線不成功</string>
     <string name="qr_code_login_header_connected_description">請到您其他已登入的裝置確認，當中應該會顯示下列驗證碼。請確認下列驗證碼與該裝置顯示的相符：</string>
     <string name="qr_code_login_header_connected_title">已建立安全連線</string>
-    <string name="qr_code_login_header_show_qr_code_link_a_device_description">使用您已登出的裝置掃描以下 QR Code。</string>
+    <string name="qr_code_login_header_show_qr_code_link_a_device_description">請用您已登出的裝置掃描下列 QR Code。</string>
     <string name="qr_code_login_header_show_qr_code_new_device_description">使用您已登入的裝置來掃描下方的 QR Code：</string>
     <string name="qr_code_login_header_show_qr_code_title">使用 QR Code 登入</string>
     <string name="qr_code_login_header_scan_qr_code_description">使用此裝置的相機掃描您其他裝置上顯示的 QR Code：</string>
@@ -2747,7 +2747,7 @@
     <string name="login_scan_qr_code">掃描 QR Code</string>
     <string name="qr_code_login_header_failed_homeserver_is_not_supported_description">家伺服器不支援使用 QR Code 登入。</string>
     <string name="qr_code_login_header_failed_user_cancelled_description">已在另一台裝置上取消登入。</string>
-    <string name="qr_code_login_header_failed_invalid_qr_code_description">該 QR Code 無效。</string>
+    <string name="qr_code_login_header_failed_invalid_qr_code_description">此 QR Code 無效。</string>
     <string name="qr_code_login_header_failed_other_device_not_signed_in_description">另一台裝置必須登入。</string>
     <string name="qr_code_login_header_failed_other_device_already_signed_in_description">另一台裝置已登入。</string>
     <string name="qr_code_login_header_failed_e2ee_security_issue_description">設定安全訊息傳遞時遇到安全性問題。以下其中一項可能已被駭入：您的家伺服器、您的網際網路連線、您的裝置</string>
@@ -2845,18 +2845,18 @@
     <string name="error_voice_broadcast_unable_to_play">無法播放此語音廣播。</string>
     <string name="started_a_voice_broadcast">已開始語音廣播</string>
     <string name="unable_to_decrypt_some_events_in_poll">因為解密錯誤，不會計算部份投票</string>
-    <string name="room_polls_loading_error">擷取投票時發生錯誤。</string>
+    <string name="room_polls_loading_error">取得投票時發生錯誤。</string>
     <string name="room_polls_load_more">載入更多投票</string>
     <string name="room_polls_wait_for_display">顯示投票</string>
     <plurals name="room_polls_ended_no_item_for_loaded_period">
-        <item quantity="other">過去 %1$d 天沒有投票。
+        <item quantity="other">過去 %1$d 天沒有過去的投票。
 \n載入更多投票以檢視更早幾天的投票。</item>
     </plurals>
     <plurals name="room_polls_active_no_item_for_loaded_period">
-        <item quantity="other">過去 %1$d 天沒有活躍的投票。
+        <item quantity="other">過去 %1$d 天沒有進行中的投票。
 \n載入更多投票以檢視更早幾天的投票。</item>
     </plurals>
-    <string name="error_voice_broadcast_no_connection_recording">連線錯誤 - 錄製已暫停</string>
+    <string name="error_voice_broadcast_no_connection_recording">連線錯誤 - 已暫停錄音</string>
     <string name="error_voice_message_broadcast_in_progress_message">您無法開始語音訊息，因為您目前正在錄製直播。請結束您的直播以開始錄製語音訊息</string>
     <string name="error_voice_message_broadcast_in_progress">無法開始語音訊息</string>
     <string name="rich_text_editor_inline_code">套用內嵌程式碼格式</string>
@@ -2869,7 +2869,7 @@
     <string name="settings_external_account_management">您的帳號詳細資訊已單獨於 %1$s 中管理。</string>
     <string name="settings_external_account_management_title">帳號</string>
     <string name="settings_notification_error_on_update">更新您的通知偏好設定時發生錯誤。請再試一次。</string>
-    <string name="direct_room_encryption_enabled_waiting_users_tile_description">受邀使用者加入 ${app_name} 後，您就可以聊天，聊天室將進行端到端加密</string>
+    <string name="direct_room_encryption_enabled_waiting_users_tile_description">受邀使用者加入 ${app_name} 後，您就可以聊天，聊天室將進行端對端加密</string>
     <string name="direct_room_encryption_enabled_waiting_users">正在等待使用者加入 ${app_name}</string>
     <string name="direct_room_user_list_only_invite_one_email">您一次僅能邀請一個電子郵件</string>
 </resources>
