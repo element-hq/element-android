@@ -49,8 +49,6 @@ class EventTextRenderer @AssistedInject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
 ) {
 
-    private val urlRegex = Patterns.WEB_URL.toRegex()
-
     @AssistedFactory
     interface Factory {
         fun create(roomId: String?): EventTextRenderer
@@ -104,7 +102,7 @@ class EventTextRenderer @AssistedInject constructor(
     private fun addPermalinksSpans(text: Spannable) {
         val session = activeSessionHolder.getSafeActiveSession()
 
-        for (pattern in listOf(urlRegex).plus(MatrixPatterns.MATRIX_PATTERNS)) {
+        for (pattern in listOf(Patterns.WEB_URL.toRegex()).plus(MatrixPatterns.MATRIX_PATTERNS)) {
             for (match in pattern.findAll(text)) {
                 val startPos = match.range.first
                 if (startPos == 0 || text[startPos - 1] != '/') {
@@ -114,16 +112,8 @@ class EventTextRenderer @AssistedInject constructor(
                         when (val permalinkData = PermalinkParser.parse(url)) {
                             is PermalinkData.RoomLink -> createMatrixItem(permalinkData.roomIdOrAlias, permalinkData.eventId, session)
                             is PermalinkData.UserLink -> createMatrixItem(permalinkData.userId, null, session)
-                            else -> {
-                                null
-                            }
+                            else -> null
                         }
-                    } else if (MatrixPatterns.isUserId(url) ||
-                            MatrixPatterns.isRoomAlias(url) ||
-                            MatrixPatterns.isRoomId(url) ||
-                            MatrixPatterns.isGroupId(url) ||
-                            MatrixPatterns.isEventId(url)) {
-                        createMatrixItem(url, null, session)
                     } else null
 
                     if (matrixItem != null) {

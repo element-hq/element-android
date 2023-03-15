@@ -3542,7 +3542,7 @@
 
     <!-- Pills -->
     <string name="pill_message_from_user">Message from %s</string>
-    <string name="pill_message_from_unknown_user">Message from user</string>
+    <string name="pill_message_from_unknown_user">Message</string>
     <string name="pill_message_in_room">Message in %s</string>
     <string name="pill_message_in_unknown_room">Message in room</string>
     <string name="pill_message_unknown_room_or_space">Room/Space</string>
