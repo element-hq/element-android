@@ -2325,7 +2325,8 @@
     <string name="verification_no_scan_emoji_title">Verify by comparing emojis</string>
 
     <string name="verification_verify_user">Verify %s</string>
-    <string name="verification_verified_user">Verified %s</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="verification_verified_user">Verified %s</string>
     <string name="verification_request_waiting_for">Waiting for %s…</string>
     <string name="verification_request_waiting_for_recovery">Verifying from Secure Key or Phrase…</string>
     <string name="room_profile_not_encrypted_subtitle">Messages in this room are not end-to-end encrypted.</string>
