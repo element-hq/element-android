@@ -328,7 +328,7 @@
         <item quantity="other">%d 位成員</item>
     </plurals>
     <string name="room_participants_leave_prompt_title">離開聊天室</string>
-    <string name="room_participants_leave_prompt_msg">您確定要離開此聊天室嗎？</string>
+    <string name="room_participants_leave_prompt_msg">您確定要離開聊天室嗎？</string>
     <string name="room_participants_header_direct_chats">私人訊息</string>
     <string name="room_participants_action_invite">邀請</string>
     <string name="room_participants_action_ban">封鎖</string>
