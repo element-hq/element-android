@@ -1645,7 +1645,8 @@
     <string name="sas_got_it">Got it</string>
 
     <string name="sas_incoming_request_notif_title">Verification Request</string>
-    <string name="sas_incoming_request_notif_content">%s wants to verify your session</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="sas_incoming_request_notif_content">%s wants to verify your session</string>
 
     <!-- SAS Errors -->
     <string name="sas_error_unknown">Unknown Error</string>
