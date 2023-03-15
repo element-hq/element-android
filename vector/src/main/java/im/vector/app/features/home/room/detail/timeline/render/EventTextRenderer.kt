@@ -58,8 +58,8 @@ class EventTextRenderer @AssistedInject constructor(
      * @param text the text to be rendered
      */
     fun render(text: CharSequence): CharSequence {
-        return renderNotifyEveryone(renderPermalinks(text))
-//        return renderNotifyEveryone(text)
+        val formattedText = renderPermalinks(text)
+        return renderNotifyEveryone(formattedText)
     }
 
     private fun renderNotifyEveryone(text: CharSequence): CharSequence {

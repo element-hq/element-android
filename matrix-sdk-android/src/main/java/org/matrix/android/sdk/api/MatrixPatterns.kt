@@ -63,7 +63,6 @@ object MatrixPatterns {
     // Android does not support in URL so extract it.
     private const val PERMALINK_BASE_REGEX = "https://matrix\\.to/#/"
     private const val APP_BASE_REGEX = "https://[A-Z0-9.-]+\\.[A-Z]{2,}/[A-Z]{3,}/#/room/"
-    private const val URL_PARAMS = "\\b[-a-zA-Z0-9()@:%_\\+.~#?&//=]*"
     const val SEP_REGEX = "/"
 
     private val PATTERN_CONTAIN_MATRIX_TO_PERMALINK = PERMALINK_BASE_REGEX.toRegex(RegexOption.IGNORE_CASE)
