@@ -413,7 +413,8 @@
     <string name="action_disconnect">Disconnect</string>
     <string name="action_play">Play</string>
     <string name="action_dismiss">Dismiss</string>
-    <string name="action_reset">Reset</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="action_reset">Reset</string>
     <string name="action_proceed_to_reset">Proceed to reset</string>
     <string name="action_learn_more">Learn more</string>
     <string name="action_next">Next</string>
