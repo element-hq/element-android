@@ -32,7 +32,6 @@ import im.vector.app.features.html.PillImageSpan
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.getUser
-import org.matrix.android.sdk.api.session.getUserOrDefault
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -135,8 +134,12 @@ class EventTextRenderer @AssistedInject constructor(
                 sessionHolder.getSafeActiveSession()?.getUser(userId)?.toMatrixItem()
             } else {
                 val session = sessionHolder.getSafeActiveSession()
-                session?.roomService()?.getRoomMember(userId, roomId)?.toMatrixItem() ?: session?.getUser(userId)?.toMatrixItem() ?:
-                MatrixItem.UserItem(userId, context.getString(R.string.pill_message_unknown_user))
+                session?.roomService()?.getRoomMember(userId, roomId)?.toMatrixItem()
+                        ?: session?.getUser(userId)?.toMatrixItem()
+                        ?: MatrixItem.UserItem(
+                                userId,
+                                context.getString(R.string.pill_message_unknown_user)
+                        )
             }
 
     private fun PermalinkData.RoomLink.toMatrixItem(): MatrixItem =
