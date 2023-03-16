@@ -2686,7 +2686,7 @@
     <string name="rich_text_editor_format_strikethrough">套用刪除線格式</string>
     <string name="rich_text_editor_format_italic">套用斜體格式</string>
     <string name="rich_text_editor_format_bold">套用粗體格式</string>
-    <string name="labs_enable_client_info_recording_summary">記錄客戶端名稱、版本與網址，以便在工作階段管理員當中能更輕鬆找出工作階段</string>
+    <string name="labs_enable_client_info_recording_summary">記錄客戶端名稱、版本與網址，以便在工作階段管理員當中能更輕鬆找出工作階段。</string>
     <string name="labs_enable_client_info_recording_title">啟用客戶端資訊記錄</string>
     <string name="labs_enable_session_manager_summary">對所有工作階段有更大的能見度與控制。</string>
     <string name="labs_enable_session_manager_title">啟用新的工作階段管理員</string>
