@@ -30,13 +30,11 @@ import im.vector.app.core.glide.GlideApp
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.html.PillImageSpan
 import org.matrix.android.sdk.api.MatrixPatterns
-import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.getUser
+import org.matrix.android.sdk.api.session.getUserOrDefault
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
-import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -46,7 +44,7 @@ class EventTextRenderer @AssistedInject constructor(
         @Assisted private val roomId: String?,
         private val context: Context,
         private val avatarRenderer: AvatarRenderer,
-        private val activeSessionHolder: ActiveSessionHolder,
+        private val sessionHolder: ActiveSessionHolder,
 ) {
 
     @AssistedFactory
@@ -83,7 +81,7 @@ class EventTextRenderer @AssistedInject constructor(
     }
 
     private fun addNotifyEveryoneSpans(text: Spannable, roomId: String) {
-        val room: RoomSummary? = activeSessionHolder.getSafeActiveSession()?.roomService()?.getRoomSummary(roomId)
+        val room: RoomSummary? = sessionHolder.getSafeActiveSession()?.roomService()?.getRoomSummary(roomId)
         val matrixItem = MatrixItem.EveryoneInRoomItem(
                 id = roomId,
                 avatarUrl = room?.avatarUrl,
@@ -100,63 +98,23 @@ class EventTextRenderer @AssistedInject constructor(
     }
 
     private fun addPermalinksSpans(text: Spannable) {
-        val session = activeSessionHolder.getSafeActiveSession()
-
-        for (pattern in listOf(Patterns.WEB_URL.toRegex()).plus(MatrixPatterns.MATRIX_PATTERNS)) {
-            for (match in pattern.findAll(text)) {
-                val startPos = match.range.first
-                if (startPos == 0 || text[startPos - 1] != '/') {
-                    val endPos = match.range.last + 1
-                    val url = text.substring(match.range)
-                    val matrixItem = if (MatrixPatterns.isPermalink(url)) {
-                        when (val permalinkData = PermalinkParser.parse(url)) {
-                            is PermalinkData.RoomLink -> createMatrixItem(permalinkData.roomIdOrAlias, permalinkData.eventId, session)
-                            is PermalinkData.UserLink -> createMatrixItem(permalinkData.userId, null, session)
-                            else -> null
-                        }
-                    } else null
-
-                    if (matrixItem != null) {
-                        addPillSpan(text, createPillImageSpan(matrixItem), startPos, endPos)
+        for (match in Patterns.WEB_URL.toRegex().findAll(text)) {
+            val startPos = match.range.first
+            if (startPos == 0 || text[startPos - 1] != '/') {
+                val endPos = match.range.last + 1
+                val url = text.substring(match.range)
+                val matrixItem = if (MatrixPatterns.isPermalink(url)) {
+                    when (val permalinkData = PermalinkParser.parse(url)) {
+                        is PermalinkData.UserLink -> permalinkData.toMatrixItem()
+                        is PermalinkData.RoomLink -> permalinkData.toMatrixItem()
+                        else -> null
                     }
-                }
-            }
-        }
-    }
+                } else null
 
-    private fun createMatrixItem(matrixId: String, eventId: String?, session: Session?): MatrixItem? {
-        return when {
-            MatrixPatterns.isUserId(matrixId) -> {
-                session?.getUser(matrixId)?.toMatrixItem() ?: MatrixItem.UserItem(matrixId, context.getString(R.string.pill_message_unknown_user))
-            }
-            !eventId.isNullOrEmpty() -> {
-                if (matrixId == roomId) {
-                    val room = session?.getRoom(matrixId)
-                    val event = room?.getTimelineEvent(eventId)
-                    val user = event?.senderInfo?.userId?.let { room.membershipService().getRoomMember(it) }
-                    val text = user?.let {
-                        context.getString(R.string.pill_message_from_user, user.displayName)
-                    } ?: context.getString(R.string.pill_message_from_unknown_user)
-                    MatrixItem.RoomItem(matrixId, text, event?.senderInfo?.avatarUrl)
-                } else {
-                    val room: RoomSummary? = session?.getRoomSummary(matrixId)
-                    val text = room?.displayName?.let {
-                        context.getString(R.string.pill_message_in_room, it)
-                    } ?: context.getString(R.string.pill_message_in_unknown_room)
-                    MatrixItem.RoomItem(matrixId, text, room?.avatarUrl)
+                if (matrixItem != null) {
+                    addPillSpan(text, createPillImageSpan(matrixItem), startPos, endPos)
                 }
             }
-            MatrixPatterns.isRoomAlias(matrixId) || MatrixPatterns.isRoomId(matrixId) -> {
-                val room: RoomSummary? = session?.getRoomSummary(matrixId)
-                if (room == null) {
-                    MatrixItem.RoomItem(matrixId, context.getString(R.string.pill_message_unknown_room_or_space))
-                } else if (room.roomType == RoomType.SPACE) {
-                    MatrixItem.SpaceItem(matrixId, room.displayName, room.avatarUrl)
-                } else {
-                    MatrixItem.RoomItem(matrixId, room.displayName, room.avatarUrl)
-                }
-            }
-            else -> null
         }
     }
 
@@ -171,4 +129,39 @@ class EventTextRenderer @AssistedInject constructor(
     ) {
         renderedText.setSpan(pillSpan, startSpan, endSpan, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
     }
+
+    private fun PermalinkData.UserLink.toMatrixItem(): MatrixItem? =
+            if (roomId == null) {
+                sessionHolder.getSafeActiveSession()?.getUser(userId)?.toMatrixItem()
+            } else {
+                val session = sessionHolder.getSafeActiveSession()
+                session?.roomService()?.getRoomMember(userId, roomId)?.toMatrixItem() ?: session?.getUser(userId)?.toMatrixItem() ?:
+                MatrixItem.UserItem(userId, context.getString(R.string.pill_message_unknown_user))
+            }
+
+    private fun PermalinkData.RoomLink.toMatrixItem(): MatrixItem =
+            if (eventId.isNullOrEmpty()) {
+                val room: RoomSummary? = sessionHolder.getSafeActiveSession()?.getRoomSummary(roomIdOrAlias)
+                when {
+                    room == null -> MatrixItem.RoomItem(roomIdOrAlias, context.getString(R.string.pill_message_unknown_room_or_space))
+                    room.roomType == RoomType.SPACE -> MatrixItem.SpaceItem(roomIdOrAlias, room.displayName, room.avatarUrl)
+                    else -> MatrixItem.RoomItem(roomIdOrAlias, room.displayName, room.avatarUrl)
+                }
+            } else {
+                if (roomIdOrAlias == roomId) {
+                    val session = sessionHolder.getSafeActiveSession()
+                    val event = session?.eventService()?.getEventFromCache(roomId, eventId!!)
+                    val user = event?.senderId?.let { session.roomService().getRoomMember(it, roomId) }
+                    val text = user?.let {
+                        context.getString(R.string.pill_message_from_user, user.displayName)
+                    } ?: context.getString(R.string.pill_message_from_unknown_user)
+                    MatrixItem.RoomItem(roomIdOrAlias, text, user?.avatarUrl)
+                } else {
+                    val room: RoomSummary? = sessionHolder.getSafeActiveSession()?.getRoomSummary(roomIdOrAlias)
+                    val text = room?.displayName?.let {
+                        context.getString(R.string.pill_message_in_room, it)
+                    } ?: context.getString(R.string.pill_message_in_unknown_room)
+                    MatrixItem.RoomItem(roomIdOrAlias, text, room?.avatarUrl)
+                }
+            }
 }

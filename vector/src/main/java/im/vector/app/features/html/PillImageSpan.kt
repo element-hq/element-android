@@ -27,6 +27,7 @@ import android.text.style.ReplacementSpan
 import android.widget.TextView
 import androidx.annotation.UiThread
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.chip.ChipDrawable
@@ -122,7 +123,8 @@ class PillImageSpan(
             }
             matrixItem is MatrixItem.UserItem && matrixItem.avatarUrl.isNullOrEmpty() &&
                     matrixItem.displayName == context.getString(R.string.pill_message_unknown_user) -> {
-                ContextCompat.getDrawable(context, R.drawable.ic_user_round)
+                ContextCompat.getDrawable(context, R.drawable.ic_user_round)?.also {
+                    DrawableCompat.setTint(it, ThemeUtils.getColor(context, R.attr.vctr_content_secondary)) }
             }
             else -> {
                 try {
