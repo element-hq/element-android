@@ -119,7 +119,7 @@ class PillImageSpan(
             hasRoomAvatar &&
                     (matrixItem.displayName == context.getString(R.string.pill_message_in_unknown_room) ||
                             matrixItem.displayName == context.getString(R.string.pill_message_unknown_room_or_space)) -> {
-                ContextCompat.getDrawable(context, R.drawable.ic_permalink)
+                ContextCompat.getDrawable(context, R.drawable.ic_permalink_round)
             }
             matrixItem is MatrixItem.UserItem && matrixItem.avatarUrl.isNullOrEmpty() &&
                     matrixItem.displayName == context.getString(R.string.pill_message_unknown_user) -> {
