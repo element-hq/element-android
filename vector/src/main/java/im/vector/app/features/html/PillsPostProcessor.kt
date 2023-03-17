@@ -114,12 +114,8 @@ class PillsPostProcessor @AssistedInject constructor(
     }
 
     private fun PermalinkData.UserLink.toMatrixItem(): MatrixItem? =
-            if (roomId == null) {
-                sessionHolder.getSafeActiveSession()?.getUser(userId)?.toMatrixItem()
-            } else {
-                val session = sessionHolder.getSafeActiveSession()
-                session?.roomService()?.getRoomMember(userId, roomId)?.toMatrixItem() ?: session?.getUser(userId)?.toMatrixItem()
-            }
+            roomId?.let { sessionHolder.getSafeActiveSession()?.roomService()?.getRoomMember(userId, it)?.toMatrixItem() }
+                    ?: sessionHolder.getSafeActiveSession()?.getUser(userId)?.toMatrixItem()
 
     private fun PermalinkData.RoomLink.toMatrixItem(): MatrixItem? =
             if (eventId == null) {

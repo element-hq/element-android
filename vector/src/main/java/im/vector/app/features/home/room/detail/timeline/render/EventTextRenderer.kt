@@ -31,7 +31,7 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.html.PillImageSpan
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.session.getRoomSummary
-import org.matrix.android.sdk.api.session.getUser
+import org.matrix.android.sdk.api.session.getUserOrDefault
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -98,21 +98,17 @@ class EventTextRenderer @AssistedInject constructor(
 
     private fun addPermalinksSpans(text: Spannable) {
         for (match in Patterns.WEB_URL.toRegex().findAll(text)) {
-            val startPos = match.range.first
-            if (startPos == 0 || text[startPos - 1] != '/') {
-                val endPos = match.range.last + 1
-                val url = text.substring(match.range)
-                val matrixItem = if (MatrixPatterns.isPermalink(url)) {
-                    when (val permalinkData = PermalinkParser.parse(url)) {
-                        is PermalinkData.UserLink -> permalinkData.toMatrixItem()
-                        is PermalinkData.RoomLink -> permalinkData.toMatrixItem()
-                        else -> null
-                    }
-                } else null
-
-                if (matrixItem != null) {
-                    addPillSpan(text, createPillImageSpan(matrixItem), startPos, endPos)
+            val url = text.substring(match.range)
+            val matrixItem = if (MatrixPatterns.isPermalink(url)) {
+                when (val permalinkData = PermalinkParser.parse(url)) {
+                    is PermalinkData.UserLink -> permalinkData.toMatrixItem()
+                    is PermalinkData.RoomLink -> permalinkData.toMatrixItem()
+                    else -> null
                 }
+            } else null
+
+            if (matrixItem != null) {
+                addPillSpan(text, createPillImageSpan(matrixItem), match.range.first, match.range.last + 1)
             }
         }
     }
@@ -130,17 +126,8 @@ class EventTextRenderer @AssistedInject constructor(
     }
 
     private fun PermalinkData.UserLink.toMatrixItem(): MatrixItem? =
-            if (roomId == null) {
-                sessionHolder.getSafeActiveSession()?.getUser(userId)?.toMatrixItem()
-            } else {
-                val session = sessionHolder.getSafeActiveSession()
-                session?.roomService()?.getRoomMember(userId, roomId)?.toMatrixItem()
-                        ?: session?.getUser(userId)?.toMatrixItem()
-                        ?: MatrixItem.UserItem(
-                                userId,
-                                context.getString(R.string.pill_message_unknown_user)
-                        )
-            }
+            roomId?.let { sessionHolder.getSafeActiveSession()?.roomService()?.getRoomMember(userId, it)?.toMatrixItem() }
+                    ?: sessionHolder.getSafeActiveSession()?.getUserOrDefault(userId)?.toMatrixItem()
 
     private fun PermalinkData.RoomLink.toMatrixItem(): MatrixItem =
             if (eventId.isNullOrEmpty()) {
