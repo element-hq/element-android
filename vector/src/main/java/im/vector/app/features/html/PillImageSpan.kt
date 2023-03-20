@@ -31,10 +31,12 @@ import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.chip.ChipDrawable
 import im.vector.app.R
+import im.vector.app.core.extensions.isMatrixId
 import im.vector.app.core.glide.GlideRequests
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.themes.ThemeUtils
+import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.session.room.send.MatrixItemSpan
 import org.matrix.android.sdk.api.util.MatrixItem
 import java.lang.ref.WeakReference
@@ -119,6 +121,9 @@ class PillImageSpan(
                     R.string.pill_message_unknown_room_or_space
             )) -> {
                 ContextCompat.getDrawable(context, R.drawable.ic_permalink_round)
+            }
+            matrixItem is MatrixItem.UserItem && matrixItem.avatarUrl.isNullOrEmpty() && matrixItem.displayName?.isMatrixId().orTrue() -> {
+                ContextCompat.getDrawable(context, R.drawable.ic_user_round)
             }
             else -> {
                 try {
