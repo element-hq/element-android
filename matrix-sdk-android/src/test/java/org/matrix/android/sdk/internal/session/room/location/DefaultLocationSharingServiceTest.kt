@@ -16,8 +16,9 @@
 
 package org.matrix.android.sdk.internal.session.room.location
 
-import androidx.arch.core.util.Function
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.map
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -263,19 +264,18 @@ internal class DefaultLocationSharingServiceTest {
         fakeMonarchy.givenWhere<LiveLocationShareAggregatedSummaryEntity>()
                 .givenEqualTo(LiveLocationShareAggregatedSummaryEntityFields.ROOM_ID, A_ROOM_ID)
                 .givenEqualTo(LiveLocationShareAggregatedSummaryEntityFields.EVENT_ID, AN_EVENT_ID)
-        val liveData = fakeMonarchy.givenFindAllMappedWithChangesReturns(
+        fakeMonarchy.givenFindAllMappedWithChangesReturns(
                 realmEntities = listOf(entity),
                 mappedResult = listOf(summary),
                 fakeLiveLocationShareAggregatedSummaryMapper
         )
-        val mapper = slot<Function<List<LiveLocationShareAggregatedSummary>, Optional<LiveLocationShareAggregatedSummary>>>()
+        val mapper = slot<(List<LiveLocationShareAggregatedSummary>) -> Optional<List<LiveLocationShareAggregatedSummary>>>()
         every {
-            Transformations.map(
-                    liveData,
+            any<LiveData<List<LiveLocationShareAggregatedSummary>>>().map(
                     capture(mapper)
             )
         } answers {
-            val value = secondArg<Function<List<LiveLocationShareAggregatedSummary>, Optional<LiveLocationShareAggregatedSummary>>>().apply(listOf(summary))
+            val value = secondArg<(List<LiveLocationShareAggregatedSummary>) -> Optional<List<LiveLocationShareAggregatedSummary>>>().invoke(listOf(summary))
             MutableLiveData(value)
         }
 
