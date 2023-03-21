@@ -3049,4 +3049,7 @@
     <string name="settings_external_account_management">Керування подробицями вашого облікового запису відбувається окремо на %1$s.</string>
     <string name="settings_external_account_management_title">Обліковий запис</string>
     <string name="settings_notification_error_on_update">Сталася помилка під час оновлення налаштувань сповіщень. Повторіть спробу.</string>
+    <string name="direct_room_encryption_enabled_waiting_users_tile_description">Після того, як запрошені користувачі приєднаються до ${app_name}, ви зможете спілкуватися з ними, а кімната буде захищена наскрізним шифруванням</string>
+    <string name="direct_room_encryption_enabled_waiting_users">Очікування на приєднання користувачів до ${app_name}</string>
+    <string name="direct_room_user_list_only_invite_one_email">Ви можете запросити лише одну адресу електронної пошти за раз</string>
 </resources>
