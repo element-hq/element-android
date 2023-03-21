@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.internal.session.room.state
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.map
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
 import io.realm.RealmQuery
@@ -52,7 +52,7 @@ internal class StateEventDataSource @Inject constructor(
                 { realm -> buildStateEventQuery(realm, roomId, setOf(eventType), stateKey) },
                 { it.root?.asDomain() }
         )
-        return Transformations.map(liveData) { results ->
+        return liveData.map { results ->
             results.firstOrNull().toOptional()
         }
     }
@@ -72,7 +72,7 @@ internal class StateEventDataSource @Inject constructor(
                 { realm -> buildStateEventQuery(realm, roomId, eventTypes, stateKey) },
                 { it.root?.asDomain() }
         )
-        return Transformations.map(liveData) { results ->
+        return liveData.map { results ->
             results.filterNotNull()
         }
     }

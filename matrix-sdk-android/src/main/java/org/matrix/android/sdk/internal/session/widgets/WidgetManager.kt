@@ -20,7 +20,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.map
 import org.matrix.android.sdk.api.query.QueryStateEventValue
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
@@ -82,7 +82,7 @@ internal class WidgetManager @Inject constructor(
                 eventTypes = setOf(EventType.STATE_ROOM_WIDGET, EventType.STATE_ROOM_WIDGET_LEGACY),
                 stateKey = widgetId
         )
-        return Transformations.map(liveWidgetEvents) { widgetEvents ->
+        return liveWidgetEvents.map { widgetEvents ->
             widgetEvents.mapEventsToWidgets(widgetTypes, excludedTypes)
         }
     }
@@ -141,7 +141,7 @@ internal class WidgetManager @Inject constructor(
             excludedTypes: Set<String>? = null
     ): LiveData<List<Widget>> {
         val widgetsAccountData = userAccountDataDataSource.getLiveAccountDataEvent(UserAccountDataTypes.TYPE_WIDGETS)
-        return Transformations.map(widgetsAccountData) {
+        return widgetsAccountData.map {
             it.getOrNull()?.mapToWidgets(widgetTypes, excludedTypes).orEmpty()
         }
     }

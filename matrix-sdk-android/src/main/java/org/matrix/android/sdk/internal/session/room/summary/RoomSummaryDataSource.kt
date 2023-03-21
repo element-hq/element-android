@@ -19,7 +19,8 @@ package org.matrix.android.sdk.internal.session.room.summary
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.map
+import androidx.lifecycle.switchMap
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.zhuinden.monarchy.Monarchy
@@ -84,7 +85,7 @@ internal class RoomSummaryDataSource @Inject constructor(
                 { realm -> RoomSummaryEntity.where(realm, roomId).isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME) },
                 { roomSummaryMapper.map(it) }
         )
-        return Transformations.map(liveData) { results ->
+        return liveData.map { results ->
             results.firstOrNull().toOptional()
         }
     }
@@ -113,7 +114,7 @@ internal class RoomSummaryDataSource @Inject constructor(
                 { realm -> LocalRoomSummaryEntity.where(realm, roomId) },
                 { localRoomSummaryMapper.map(it) }
         )
-        return Transformations.map(liveData) { results ->
+        return liveData.map { results ->
             results.firstOrNull().toOptional()
         }
     }
@@ -153,7 +154,7 @@ internal class RoomSummaryDataSource @Inject constructor(
                     roomSummaryMapper.map(it)
                 }
         )
-        return Transformations.map(liveData) { results ->
+        return liveData.map { results ->
             results.firstOrNull().toOptional()
         }
     }
@@ -272,7 +273,7 @@ internal class RoomSummaryDataSource @Inject constructor(
         val liveRooms = monarchy.findAllManagedWithChanges {
             roomSummariesQuery(it, queryParams)
         }
-        return Transformations.map(liveRooms) {
+        return liveRooms.map {
             it.realmResults.where().count().toInt()
         }
     }
@@ -367,7 +368,7 @@ internal class RoomSummaryDataSource @Inject constructor(
         // and switch map to listen those?
         val mediatorLiveData = HierarchyLiveDataHelper(spaceId, memberShips, this).liveData()
 
-        return Transformations.switchMap(mediatorLiveData) { allIds ->
+        return mediatorLiveData.switchMap { allIds ->
             monarchy.findAllMappedWithChanges(
                     {
                         it.where<RoomSummaryEntity>()
@@ -392,13 +393,11 @@ internal class RoomSummaryDataSource @Inject constructor(
     }
 
     fun getFlattenOrphanRoomsLive(): LiveData<List<RoomSummary>> {
-        return Transformations.map(
-                getRoomSummariesLive(roomSummaryQueryParams {
-                    memberships = Membership.activeMemberships()
-                    excludeType = listOf(RoomType.SPACE)
-                    roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-                })
-        ) {
+        return getRoomSummariesLive(roomSummaryQueryParams {
+            memberships = Membership.activeMemberships()
+            excludeType = listOf(RoomType.SPACE)
+            roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+        }).map {
             it.filter { isOrphan(it) }
         }
     }

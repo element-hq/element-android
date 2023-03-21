@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.internal.session.room.read
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.map
 import com.zhuinden.monarchy.Monarchy
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -91,7 +91,7 @@ internal class DefaultReadService @AssistedInject constructor(
                 { ReadMarkerEntity.where(it, roomId) },
                 { it.eventId }
         )
-        return Transformations.map(liveRealmData) {
+        return liveRealmData.map {
             it.firstOrNull().toOptional()
         }
     }
@@ -101,7 +101,7 @@ internal class DefaultReadService @AssistedInject constructor(
                 { ReadReceiptEntity.where(it, roomId = roomId, userId = userId, threadId = threadId) },
                 { it.eventId }
         )
-        return Transformations.map(liveRealmData) {
+        return liveRealmData.map {
             it.firstOrNull().toOptional()
         }
     }
@@ -122,7 +122,7 @@ internal class DefaultReadService @AssistedInject constructor(
                 { ReadReceiptsSummaryEntity.where(it, eventId) },
                 { readReceiptsSummaryMapper.map(it) }
         )
-        return Transformations.map(liveRealmData) {
+        return liveRealmData.map {
             it.firstOrNull().orEmpty()
         }
     }

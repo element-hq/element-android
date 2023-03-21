@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.internal.crypto.store.db
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.map
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.zhuinden.monarchy.Monarchy
@@ -452,7 +452,7 @@ internal class RealmCryptoStore @Inject constructor(
                     )
                 }
         )
-        return Transformations.map(liveData) {
+        return liveData.map {
             it.firstOrNull().toOptional()
         }
     }
@@ -484,7 +484,7 @@ internal class RealmCryptoStore @Inject constructor(
                     )
                 }
         )
-        return Transformations.map(liveData) {
+        return liveData.map {
             it.firstOrNull() ?: GlobalCryptoConfig(false, false, false)
         }
     }
@@ -590,7 +590,7 @@ internal class RealmCryptoStore @Inject constructor(
                     entity.devices.map { CryptoMapper.mapToModel(it) }
                 }
         )
-        return Transformations.map(liveData) {
+        return liveData.map {
             it.firstOrNull().orEmpty()
         }
     }
@@ -606,7 +606,7 @@ internal class RealmCryptoStore @Inject constructor(
                     entity.devices.map { CryptoMapper.mapToModel(it) }
                 }
         )
-        return Transformations.map(liveData) {
+        return liveData.map {
             it.flatten()
         }
     }
@@ -620,13 +620,13 @@ internal class RealmCryptoStore @Inject constructor(
                     entity.devices.map { CryptoMapper.mapToModel(it) }
                 }
         )
-        return Transformations.map(liveData) {
+        return liveData.map {
             it.firstOrNull().orEmpty()
         }
     }
 
     override fun getLiveDeviceWithId(deviceId: String): LiveData<Optional<CryptoDeviceInfo>> {
-        return Transformations.map(getLiveDeviceList()) { devices ->
+        return getLiveDeviceList().map { devices ->
             devices.firstOrNull { it.deviceId == deviceId }.toOptional()
         }
     }
@@ -662,7 +662,7 @@ internal class RealmCryptoStore @Inject constructor(
                 { entity -> myDeviceLastSeenInfoEntityMapper.map(entity) }
         )
 
-        return Transformations.map(liveData) {
+        return liveData.map {
             it.firstOrNull().toOptional()
         }
     }
@@ -1111,7 +1111,7 @@ internal class RealmCryptoStore @Inject constructor(
                     it.blacklistUnverifiedDevices
                 }
         )
-        return Transformations.map(liveData) {
+        return liveData.map {
             it.firstOrNull() ?: false
         }
     }
@@ -1673,7 +1673,7 @@ internal class RealmCryptoStore @Inject constructor(
                 },
                 { mapCrossSigningInfoEntity(it) }
         )
-        return Transformations.map(liveData) {
+        return liveData.map {
             it.firstOrNull().toOptional()
         }
     }

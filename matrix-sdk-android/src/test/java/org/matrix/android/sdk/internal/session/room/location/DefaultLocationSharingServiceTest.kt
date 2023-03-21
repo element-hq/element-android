@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.session.room.location
 
 import androidx.arch.core.util.Function
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
