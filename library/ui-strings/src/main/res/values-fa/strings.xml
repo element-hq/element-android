@@ -1229,7 +1229,7 @@
     <string name="settings_troubleshoot_diagnostic_running_status">در حال اجرا (%1$d از %2$d)</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">تست‌ها را اجرا کن</string>
     <string name="settings_troubleshoot_diagnostic">در حال تشخیص مشکل</string>
-    <string name="error_threepid_auth_failed">مطمئن شوید لینک فعال‌سازی‌ای را که به ایمیل شما ارسال شده، باز کرده‌اید.</string>
+    <string name="error_threepid_auth_failed">مطمئن شوید روی پیوند درون رایانامه‌ای که بهتان فرستاده‌ایم زده‌اید.</string>
     <string name="settings_remove_three_pid_confirmation_content">برداشتن %s؟</string>
     <string name="settings_phone_numbers">شماره تلفن‌ها</string>
     <string name="settings_emails_empty">هیچ نشانی رایانامه‌ای به حسابتان افزوده نشده</string>
@@ -1303,12 +1303,12 @@
     <string name="bootstrap_dont_reuse_pwd">ترجیحا از گذرواژه حساب خود استفاده نکنید.</string>
     <string name="verify_not_me_self_verification">ممکن است یکی از موارد زیر به خطر افتاده‌باشد:
 \n
-\n- گذرواژه شما
-\n- سرور شما
-\n- این دستگاه یا دستگاه دیگر
-\n- اتصال اینترنت دستگاه
+\n- گذرواژه‌تان
+\n- کارساز خانکیتان
+\n- این افزاره یا افزارهٔ دیگر
+\n- اتّصال اینترنتی هر یک از افزاره‌ها
 \n
-\nما توصیه می‌کنیم گذرواژه و کلید بازیابی خود را بلافاصله در تنظیمات تغییر دهید.</string>
+\nتوصیه می‌کنیم فوراً گذرواژه و کلید بازیابیتان را در تنظیمات تغییر دهید.</string>
     <string name="verify_cancel_other">اگر اکنون انصراف دهید، %1$s (%2$s) را تأیید نخواهید کرد. دوباره در نمایه‌اش آغاز کنید.</string>
     <string name="verify_cancel_self_verification_from_trusted">اگر لغو کنید، نمی توانید پیام های رمزگذاری شده را در دستگاه جدید خود بخوانید و سایر کاربران به آن اعتماد نخواهند کرد</string>
     <string name="verify_cancel_self_verification_from_untrusted">در صورت لغو ، نمی توانید پیام های رمزشده را در این دستگاه بخوانید و سایر کاربران به آن اعتماد نخواهند کرد</string>
@@ -1341,19 +1341,19 @@
     <string name="room_settings_enable_encryption">به کار انداختن رمزنگاری سرتاسری…</string>
     <string name="command_description_rainbow_emote">شکلک را با رنگ‌بندی رنگین گمان ارسال می کند</string>
     <string name="command_description_rainbow">پیام را با رنگ‌بندی رنگین کمان ارسال می کند</string>
-    <string name="verify_cannot_cross_sign">این نشست نمی‌تواند تائید را با نشست‌های دیگر شما به اشتراک بگذارد.
-\nتائید به صورت محلی ذخیره می‌شود و در نسخه‌ی بعدی برنامه به اشتراک گذاشته می‌شود.</string>
+    <string name="verify_cannot_cross_sign">این نشست نمی‌تواند این تائید را با دیگر نشست‌هایتان هم‌رسانی کند.
+\nتائید به صورت محلی ذخیره شده و در نگارشی جدیدتر از کاره هم‌رسانی خواهد شد.</string>
     <string name="rendering_event_error_exception">المنت هنگام ارائه محتوای رویدادی با شناسه \'%1$s\' با مشکل روبرو شد</string>
     <string name="rendering_event_error_type_of_event_not_handled">المنت رویداد \'%1$s\' را پشتیبانی نمی‌کند</string>
     <string name="verification_conclusion_compromised">ممکن است یکی از موارد زیر به خطر افتاده باشد:
 \n
-\n- سرور میزبان شما
-\n- سرور کاربری که او را تائید می‌کنید
-\n- اتصال اینترنت شما یا کاربران دیگر
-\n- دستگاه شما یا دستگاه سایر کاربران</string>
+\n- کارساز خانگیتان
+\n- کارساز خانگی کاربری که دارید تائیدش می‌کنید
+\n- اتّصال اینترنتی شما یا دیگر کاربران
+\n- افزارهٔ شما یا دیگر کاربران</string>
     <string name="login_error_threepid_denied">دامنهٔ رایانامه‌تان مجاز به ثبت‌نام روی این کارساز نیست</string>
     <string name="command_description_shrug">¯\\\\_(ツ)_/¯ را به یک پیام متنی ساده تغییر می دهد</string>
-    <string name="permalink_malformed">لینک مشکل دارد</string>
+    <string name="permalink_malformed">پیوند ‪matrix.to‬تان بدریخت است</string>
     <string name="soft_logout_sso_not_same_user_error">نشست فعلی مربوط به کاربر %1$s است و شما اطلاعات حساب کاربر %2$s را ارائه داده‌اید. این مورد توسط المنت پشتیبانی نمی‌شود .
 \nلطفا ابتدا داده ها را پاک کنید، سپس با یک حساب دیگر وارد برنامه شوید.</string>
     <string name="soft_logout_clear_data_dialog_e2e_warning_content">دسترسی به پیام‌های رمزشده را از دست خواهید داد مگر اینکه برای بازیابی کلیدهای رمزگذاری خود، به حساب خود وارد شوید.</string>
@@ -1364,13 +1364,13 @@
 \nاگر کارتان با این افزاره تمام شده یا می‌خواهید به حساب دیگری وارد شوید، پاکشان کنید.</string>
     <string name="soft_logout_signin_e2e_warning_notice">برای بازیابی کلیدهای رمزگذاری ذخیره شده در این دستگاه، وارد حساب خود شوید. شما برای خواندن همه پیام‌های رمزشده‌ی خود در هر دستگاهی به این کلید‌ها نیاز دارید.</string>
     <string name="soft_logout_signin_notice">مدیر کارساز خانگیتان (%1$s) شما (%2$s) را از حسابتان (%3$s) خارج کرد.</string>
-    <string name="signed_out_notice">این می تواند به دلایل مختلف باشد:
+    <string name="signed_out_notice">می‌تواند به دلایل مختلفی باشد:
 \n
-\n• شما گذرواژه خود را در نشست دیگری تغییر داده‌اید.
+\n• گذرواژه‌تان را در نشستی دیگر تغییر داده‌اید.
 \n
-\n• این نشست را در یکی از نشست دیگر خود حذف کرده‌اید.
+\n• این نشست را از نشستی دیگر حذف کرده‌اید.
 \n
-\n• ادمین سرور حساب شما را غیرفعال کرده‌است.</string>
+\n• مدیر کارسازتان دسترسی حسابتان را به دلایل امنیت نامعتبر کرده.</string>
     <string name="autodiscover_well_known_error">ناتوان در یافتن یک کارساز خانگی معتبر. لطفاً شناسه‌تان را بررسی کنید</string>
     <string name="login_signin_matrix_id_error_invalid_matrix_id">این یک شناسه کاربری معتبر نیست. قالب صحیح: \\\'@user:homeserver.org\\\'</string>
     <string name="login_signin_matrix_id_password_notice">اگر گذرواژه خود را نمی‌دانید، برای تنظیم مجدد آن بازگردید.</string>
@@ -1379,19 +1379,19 @@
         <item quantity="one">درخواست های زیادی ارسال شده است. می توانید در %1$d ثانیه دوباره امتحان کنید…</item>
         <item quantity="other">درخواست های زیادی ارسال شده است. می توانید در %1$d ثانیه دوباره امتحان کنید…</item>
     </plurals>
-    <string name="login_error_outdated_homeserver_warning_content">این نسخه سرور بسیار قدیمی است. از ادمین خود بخواهید که آن را ارتقا دهد. البته شما می‌توانید ادامه دهید ، اما برخی از ویژگی ها ممکن است به درستی کار نکنند.</string>
+    <string name="login_error_outdated_homeserver_warning_content">این کارساز خانگی نگارشی قدیمی را اجرا می‌کند. از مدیر درخواست ارتقا کنید. می‌توانید ادامه دهید؛ گرچه ممکن است برخی ویژگی‌ها درست کار نکنند.</string>
     <string name="login_error_outdated_homeserver_title">کارساز خانگی قدیمی</string>
     <string name="login_validation_code_is_not_correct">کد وارد شده صحیح نیست. لطفا بررسی فرمائید.</string>
-    <string name="login_wait_for_email_notice">ما ایمیلی به %1$s ارسال کردیم.
-\nلطفاً برای ادامه فرآیند ایجاد حساب‌کاربری بر روی لینک موجود در آن کلیک کنید.</string>
-    <string name="login_wait_for_email_title">لطفا ایمیل خود را بررسی کنید</string>
+    <string name="login_wait_for_email_notice">رایانامه‌ای به %1$s فرستادیم.
+\nلطفاً برای ادامهٔ ایجاد حساب، پیوند درونش را بزنید.</string>
+    <string name="login_wait_for_email_title">لطفاً رایانامه‌تان را بررسی کنید</string>
     <string name="login_terms_title">برای ادامه، شرایط را قبول کنید</string>
     <string name="login_a11y_captcha_container">لطفا کپچا را حل کنید</string>
     <string name="login_a11y_choose_other">گزینش یک کارساز خانگی سفارشی</string>
     <string name="login_a11y_choose_modular">گزینش خدمات ماتریکس المنت</string>
     <string name="login_a11y_choose_matrix_org">انتخاب matrix.org</string>
     <string name="login_signup_cancel_confirmation_content">حسابتان هنوز ایجاد نشده. توقّف فرآیند ثبت‌نام؟</string>
-    <string name="login_signin_username_hint">نام‌کاربری یا ایمیل</string>
+    <string name="login_signin_username_hint">نام‌کاربری یا رایانامه</string>
     <string name="login_signup_to">ثبت نام در %1$s</string>
     <string name="login_msisdn_error_other">شماره تلفن نامعتبر است. لطفا آن را بررسی کنید</string>
     <string name="login_msisdn_confirm_notice">ما یک کد فعال‌سازی به %1$s ارسال کردیم. لطفا آن را وارد کنید.</string>
@@ -1401,28 +1401,28 @@
 \n
 \nفرآیند تغییر گذرواژه را متوقف می‌کنید؟</string>
     <string name="login_reset_password_success_notice_2">از تمام نشست‌ها خارج شده و دیگر آگاهی‌ای دریافت نخواهید کرد. برای به کار انداختن دوبارهٔ آگاهی‌ها، روی هر دستگاهی، دوباره وارد شوید.</string>
-    <string name="login_reset_password_mail_confirmation_submit">ایمیل را تایید کردم</string>
-    <string name="login_reset_password_mail_confirmation_notice_2">برای تایید گذرواژه جدید لینک ارسالی را باز کرده، سپس روی متن زیر کلیک کنید.</string>
-    <string name="login_reset_password_mail_confirmation_notice">یک ایمیل تائید به %1$s ارسال شد.</string>
-    <string name="login_reset_password_mail_confirmation_title">صندوق ایمیل خود را بررسی کنید</string>
+    <string name="login_reset_password_mail_confirmation_submit">نشانی رایانامه‌ام را تأیید کرده‌ام</string>
+    <string name="login_reset_password_mail_confirmation_notice_2">برای تأیید گذرواژهٔ جدیدتان روی پیوند بزنید. پس از پیروی از پیوند درونش،‌ پایین را بزنید.</string>
+    <string name="login_reset_password_mail_confirmation_notice">رایانامهٔ تأییدی به %1$s فرستاده شد.</string>
+    <string name="login_reset_password_mail_confirmation_title">صندوق ورودیتان را بررسی کنید</string>
     <string name="login_reset_password_error_not_found">این نشانی رایانامه به هیچ حسابی پیوند داده نشده</string>
     <string name="login_reset_password_warning_content">با تغییر گذرواژه ، کلیدهای رمزگذاری سرتاسر در تمام نشست‌های شما تغییر کرده و تاریخچه گفتگوی رمزشده‌ی شما غیرقابل خواندن می‌شود. قبل از تغییر گذرواژه، کلید امنیتی یا کلید پشتیبان را وارد کرده و یا کلیدهای اتاق خود را از نشست دیگری استخراج کنید.</string>
     <string name="login_reset_password_submit">بعدی</string>
-    <string name="login_reset_password_notice">برای تأیید تنظیم گذرواژه‌ی جدید ، یک ایمیل تأیید به آدرس ایمیل شما ارسال خواهد شد.</string>
+    <string name="login_reset_password_notice">برای تأیید تنظیم گذرواژهٔ جدیدتان رایانامهٔ تأییدی به صندوق وردیتان فرستاده خواهد شد.</string>
     <string name="login_reset_password_on">بازنشانی گذرواژه در %1$s</string>
     <string name="login_login_with_email_error">این نشانی رایانامه به هیچ حسابی مرتبط نیست.</string>
-    <string name="login_registration_not_supported">برنامه قادر به ایجاد حساب در این سرور نیست.
+    <string name="login_registration_not_supported">برنامه قادر به ایجاد حساب روی این کارساز خانگی نیست.
 \n
-\nآیا می خواهید با استفاده از مرورگر حساب کاربری بسازید؟</string>
+\nمی‌خواهید با یک کارخواه وب ثبت نام کنید؟</string>
     <string name="login_registration_disabled">متأسفانه این کارساز، حساب جدید نمی‌پذیرد.</string>
-    <string name="login_mode_not_supported">برنامه نمی‌تواند به این سرور متصل شود. سرور از این مکانیزم‌(ها) برای ورود پشتیبانی می کند: %1$s.
+    <string name="login_mode_not_supported">برنامه قادر به ورود به این کارساز خانگی نیست. کارساز خانگی از گونه‌های ورود زیر پشتیبانی می کند: %1$s.
 \n
-\nآیا می خواهید با استفاده از مرورگر وارد شوید؟</string>
+\nمی‌خواهید با یک کارخواه وب وارد شوید؟</string>
     <string name="login_sso_error_message">هنگام بارگیری صفحه، خطایی روی داد: %1$s (%2$d)</string>
     <string name="login_server_url_form_common_notice">نشانی کارسازی که می‌خواهید استفاده کنید را وارد کنید</string>
     <string name="login_server_url_form_modular_notice">نشانی کارساز یا المنت ماژولاری که می‌خواهید استفاده کنید را وارد کنید</string>
     <string name="login_server_matrix_org_text">به میلیون‌ها نفر در بزرگ‌ترین کارساز عمومی بپیوندید</string>
-    <string name="login_server_text">درست مانند ایمیل، حساب‌های کاربری یک خانه دارند؛ اگرچه می توانید با هر کسی که دوست دارید، صحبت کنید</string>
+    <string name="login_server_text">درست مانند رایانامه، حساب‌ها یک خانه دارند؛ گرچه می توانید با هر کسی صحبت کنید</string>
     <string name="login_server_title">کارسازی برگزینید</string>
     <string name="login_splash_submit">شروع کنید</string>
     <string name="login_splash_text3">تجربه‌هایتان را گسترش داده و شخصی‌سازی کنید</string>
@@ -1434,8 +1434,8 @@
     <string name="direct_room_join_rules_invite">%1$s اتاق را به گونه‌ای تنظیم کرده که تنها افراد با دعوت بتوانند به اتاق بپیوندند.</string>
     <string name="room_join_rules_invite_by_you">شما اتاق را به گونه‌ای تنظیم کرده‌اید که تنها افراد با دعوت بتوانند به اتاق بپیوندند.</string>
     <string name="room_join_rules_invite">%1$s اتاق را به گونه‌ای تنظیم کرده‌است که تنها اعضا با دعوت بتوانند به اتاق بپیوندند.</string>
-    <string name="room_join_rules_public_by_you">شما اتاق را برای هر فردی که لینک آن را دارد عمومی کردید.</string>
-    <string name="room_join_rules_public">%1$s اتاق را برای هر کس که لینک آن را دارد، عمومی کن.</string>
+    <string name="room_join_rules_public_by_you">اتاق را برای هرکسی که پیوندش را دارد عمومی کردید.</string>
+    <string name="room_join_rules_public">%1$s اتاق را برای هرکسی که پیوندش را دارد عمومی کرد.</string>
     <string name="help_long_click_on_room_for_more_options">برای دیدن گزینه‌های بیشتر، روی یک اتاق کلیک طولانی کنید</string>
     <string name="spoiler">تباه‌کننده</string>
     <string name="command_description_spoiler">ارسال به عنوان پیام تباه‌کننده</string>
@@ -1470,21 +1470,21 @@
     <string name="a11y_create_menu_open">گشودن فهرست ایجاد اتاق</string>
     <string name="a11y_open_drawer">کشوی پیمایش را باز کنید</string>
     <string name="send_attachment">ارسال ضمیمه</string>
-    <string name="error_network_timeout">به نظر می رسد پاسخگویی سرور بسیار طولانی شده‌است، این امر می‌تواند به دلیل اتصال ضعیف یا خطای موجود در سرور باشد. لطفا پس از مدتی دوباره امتحان کنید.</string>
-    <string name="error_terms_not_accepted">لطفاً هنگامی که شرایط و ضوابط سرور خود را پذیرفتید، دوباره امتحان کنید.</string>
-    <string name="settings_agree_to_terms">با شرایط خدمات سرور هویت‌سنجی (%s) موافقت کنید تا بتوانید از طریق آدرس ایمیل یا شماره تلفن قابل پیدا شدن باشید.</string>
-    <string name="settings_discovery_disconnect_with_bound_pid">شما در حال حاضر آدرس‌های ایمیل یا شماره تلفن‌ها را در سرور هویت‌سنجی %1$s به اشتراک می گذارید. برای توقف اشتراک آنها باید دوباره به %2$s متصل شوید.</string>
+    <string name="error_network_timeout">به نظر کارساز بیش از حد برای پاسخ وقت می‌گیرد. این امر می‌تواند ناشی از اتّصال ضعیف یا خطایی در کارساز باشد. لطفاً پس از مدتی دوباره تلاش کنید.</string>
+    <string name="error_terms_not_accepted">لطفاً پس از پذیرش شرایط و ضوابط کارساز خانگیتان دوباره تلاش کنید.</string>
+    <string name="settings_agree_to_terms">برای قابل کشف بودن با نشانی رایانامه یا شماره تلفن با شرایط خدمت کارساز هویت (%s) موافقت کنید.</string>
+    <string name="settings_discovery_disconnect_with_bound_pid">دارید نشانی‌های رایانامه یا شماره‌های تلفن را روی کارساز هویت %1$s هم‌رسانی می‌کنید برای توقّف هم‌رسانیشان باید دوباره به %2$s وصل شوید.</string>
     <string name="settings_text_message_sent_wrong_code">کد تائید صحیح نیست.</string>
     <string name="settings_text_message_sent_hint">کد</string>
     <string name="settings_text_message_sent">پیامکی به %s ارسال شده است. لطفاً کد تأیید موجود در آن را وارد کنید.</string>
-    <string name="settings_discovery_no_terms">سرور هویت‌سنجی‌ای که انتخاب کرده‌اید هیچگونه شرایط و ضوابطی ندارد. فقط اگر به صاحب سرویس اعتماد دارید ادامه دهید</string>
+    <string name="settings_discovery_no_terms">کارساز هویت گزیده‌تان هیچ شرایط خدمتی ندارد. تنها اگر به صاحب خدمت اعتماد دارید ادامه دهید</string>
     <string name="settings_discovery_no_terms_title">کارساز هویت، شرایط و ضوابط استفاده ندارد</string>
     <string name="settings_discovery_please_enter_server">لطفاً نشانی کارساز هویت را وارد کنید</string>
     <string name="settings_discovery_bad_identity_server">نتوانست به کارساز هویت وصل شود</string>
     <string name="settings_discovery_enter_identity_server">یک نشانی کارساز هویت وارد کنید</string>
     <string name="settings_discovery_confirm_mail_not_clicked">رایانامه‌ای به %s فرستادیم. لطفاً نخست رایانامه‌تان را بررسی کرده و روی پیوند تأیید کلیک کنید</string>
     <string name="settings_discovery_confirm_mail">رایانامه‌ای به %s فرستادیم. رایانامه‌تان را بررسی کرده و روی پیوند تأیید کلیک کنید</string>
-    <string name="settings_discovery_disconnect_identity_server_info">قطع ارتباط با سرور هویت‌سنجی به این معنی است که توسط کاربران دیگر قابل شناسایی نخواهید بود و نمی توانید دیگران را از طریق ایمیل یا تلفن دعوت کنید.</string>
+    <string name="settings_discovery_disconnect_identity_server_info">قطع شدن ازکارساز هویت به معنی قابل کشف نبودنتان به دست دیگر کابران است و نخواهید توانست دیگران را با رایانامه یا تلفن دعوت کنید.</string>
     <string name="settings_discovery_identity_server_info_none">در حال استفاده از کارساز هویتی نیستید. برای کشق و قابل کشف بودن به دست آشنایان موجودی که می‌شناسید، یک کارساز هویت در زیر پیکربندی کنید.</string>
     <string name="settings_discovery_identity_server_info">دارید برای کشف و قابل کشف بودن به دست آشنایان موجودی که می‌شناسید از %1$s استفاده می‌کنید.</string>
     <string name="settings_troubleshoot_test_token_registration_quick_fix">ثبت ژتون</string>
@@ -1526,7 +1526,7 @@
     <string name="keys_backup_banner_in_progress">پشتیبان‌گیری از کلیدهای شما. این ممکن است چند دقیقه طول بکشد…</string>
     <string name="keys_backup_banner_update_line2">مدیریت در بخش پشتیبان‌گیری از کلید</string>
     <string name="keys_backup_banner_update_line1">کلیدهای رمزگذاری جدید</string>
-    <string name="keys_backup_settings_delete_confirm_message">کلیدهای رمزگذاری پشتیبان شما از سرور حذف شوند؟ در اینن صورت دیگر نخواهید توانست از کلید بازیابی خود برای خواندن پیام رمزشده‌ی قبلی خود استفاده کنید.</string>
+    <string name="keys_backup_settings_delete_confirm_message">حذف کلیدهای رمزنگاری پشتیبان گرفته از کارساز؟ دیگر قادر به استفاده از کلید بازیابیتان برای خواندن تاریخچهٔ پیام‌های رمزشده‌‌تان نخواهید بود.</string>
     <string name="keys_backup_settings_delete_confirm_title">حذف نسخه‌ی پشتیبان</string>
     <string name="keys_backup_settings_checking_backup_state">در حال بررسی وضعیت نسخه‌ی پشتیبان</string>
     <string name="keys_backup_settings_deleting_backup">در حال حذف نسخه‌ی پشتیبان…</string>
@@ -1571,9 +1571,9 @@
 \nکلید بازیابی خود را در جایی بسیار امن نظیر برنامه‌های شناخته‌شده‌ی مدیریت گذرواژه نگه دارید</string>
     <string name="keys_backup_setup_step3_text_line1">درحال پشتیبان‌گیری از کلید‌های شما.</string>
     <string name="keys_backup_setup_step1_recovery_key_alternative">یا، نسخه‌ی پشتیبان خود را با یک کلید بازیابی ایمن کنید، و آن را در جایی امن ذخیره کنید.</string>
-    <string name="keys_backup_setup_step2_text_description">ما یک نسخه رمزگذاری شده از کلیدهای شما را در سرور ذخیره خواهیم کرد. با استفاده از کلید امنیتی قوی، از نسخه‌ی پشتیبان خود محافظت کنید.
+    <string name="keys_backup_setup_step2_text_description">نگارشی رمز شده از کلیدهایتان را روی کارساز خانگیتان ذخیره خواهیم کرد. برای امن نگه داشنتن پشتیبانتان با عبارت عبوری محافظتش کنید.
 \n
-\nبرای حداکثر امنیت، کلید امنیتی باید با رمز ورود حساب شما متفاوت باشد.</string>
+\nبرای امنیت بیشینه باید با گذرواژهٔ حسابتان فرق داشته باشد.</string>
     <string name="keys_backup_setup_step1_description">پیام‌‌ها در اتاق‌های رمزشده، با رمزنگاری سرتاسری امن شده‌اند. فقط شما و گیرنده(ها) کلیدهای خواندم این پیام‌ها را دارید.
 \n
 \nبرای جلوگیری از گم کردن کلیدهایتان، از آن‌ها به صورت امن، پشتیبان بگیرید.</string>
@@ -1656,8 +1656,8 @@
     <string name="settings_media">رسانه</string>
     <string name="settings_select_country">گزینش یک کشور</string>
     <string name="account_phone_number_already_used_error">این شماره تلفن قبلا استفاده شده‌است.</string>
-    <string name="account_email_already_used_error">این آدرس ایمیل قبلا استفاده شده‌است.</string>
-    <string name="account_email_validation_message">لطفاً ایمیل خود را بررسی کنید و روی لینک ارسال شده، کلیک کنید. پس از انجام این کار، روی ادامه کلیک کنید.</string>
+    <string name="account_email_already_used_error">این نشانی رایانامه در حال استفاده است.</string>
+    <string name="account_email_validation_message">لطفاً رایانامه‌تان را بررسی کرده رو روی پیوند درونش بزنید. پس از این کار، ادامه را بزنید.</string>
     <string name="disabled_integration_dialog_content">برای انجام این کار اجازه‌ی یکپارچه‌سازی را در تنظیمات فعال کنید.</string>
     <string name="disabled_integration_dialog_title">یکپارچه‌سازی‌ها غیر فعال هستند</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
@@ -1736,7 +1736,7 @@
     <string name="permissions_denied_qr_code">برای پویش یک رمز QR نیاز است دسترسی به دوربین را مجاز کنید.</string>
     <string name="start_chatting">آغاز به گپ</string>
     <string name="settings_export_trail">برون‌ریزی بازرسی</string>
-    <string name="create_room_disable_federation_description">اگر اتاق فقط برای تعامل با افراد داخل سرور خانه شما می‌باشد، این قابلیت را فعال کنید. این تنظیم را بعدا نمی‌توانید تغییر دهید.</string>
+    <string name="create_room_disable_federation_description">اگر اتاق فقط برای تعامل با گروه‌های داخلی روی کارساز خانگیتان است، این قابلیت را به کار بیندازید. بعداُ قابل تغییر نیست.</string>
     <string name="bottom_sheet_setup_secure_backup_security_key_subtitle">یک کلید امنیتی ایجاد کنید تا در مکانی امن مانند سامانه مدیریت رمز عبور یا گاوصندوق آن را ذخیره کنید.</string>
     <string name="identity_server_error_no_current_binding_error">ارتباطی با این شناسه وجود ندارد.</string>
     <string name="confirm_your_identity_quad_s">هویت خود را تأیید کنید تا به پیام‌های رمز شده دسترسی پیدا کنید.</string>
@@ -1877,10 +1877,10 @@
         <item quantity="other">%d ورودی</item>
     </plurals>
     <string name="settings_server_upload_size_unknown">این محدودیت ناشناخته است.</string>
-    <string name="settings_server_upload_size_content">سرور شما فایل‌های ضمیمه (پرونده‌ها، فایل‌های چندرسانه‌ای و غیره) تا حجم %s را می‌پذیرد.</string>
-    <string name="settings_server_upload_size_title">محدودیت بارگذاری فایل بر روی سرور</string>
-    <string name="settings_server_version">ورژن سرور</string>
-    <string name="settings_server_name">نام سرور</string>
+    <string name="settings_server_upload_size_content">کارساز خانگیتان پیوست(پرونده‌ها، رسانه و…) را تا %s می‌پذیرد.</string>
+    <string name="settings_server_upload_size_title">کران بارگذاری پروندهٔ کارساز</string>
+    <string name="settings_server_version">نگارش کارساز</string>
+    <string name="settings_server_name">نام کارساز</string>
     <string name="room_list_quick_actions_room_settings">تنظیمات اتاق</string>
     <string name="jitsi_leave_conf_to_join_another_one_content">آیا مایل به ترک جلسه‌ی فعلی و ورود به جلسه‌ی دیگری هستید؟</string>
     <string name="room_settings_room_version_title">ورژن اتاق</string>
@@ -1962,8 +1962,8 @@
     <string name="invite_just_to_this_room">فقط به این اتاق</string>
     <string name="invite_to_space_with_name_desc">آنها قادر به کاوش در %s خواهند بود</string>
     <string name="invite_to_space_with_name">دعوت به %s</string>
-    <string name="invite_by_link">به اشتراک‌گذاری لینک</string>
-    <string name="invite_by_email">دعوت با ایمیل</string>
+    <string name="invite_by_link">هم‌رسانی پیوند</string>
+    <string name="invite_by_email">دعوت با رایانامه</string>
     <string name="invite_people_to_your_space_desc">در حال حاضر فقط شما هستید. %s با دیگران حتی بهتر خواهد بود.</string>
     <string name="invite_people_menu">دعوت افراد</string>
     <string name="invite_people_to_your_space">دعوت افراد به فضایتان</string>
@@ -2929,4 +2929,7 @@
     <string name="error_voice_broadcast_unable_to_decrypt">ناتوان در رمزگشایی این پخش صوتی.</string>
     <string name="settings_external_account_management">جزییات حسابتان جداگانه در %1$s مدیریت می‌شود.</string>
     <string name="settings_notification_error_on_update">هنگام به‌روز رسانی ترجیحات آگاهیتان خطایی رخ داد. لطفاً دوباره تلاش کنید.</string>
+    <string name="direct_room_encryption_enabled_waiting_users_tile_description">به محض پیوستن کاربران دعوت شده، قادر به گپ خواهید بود و اتاق رمزنگاری سرتاسری می‌شود</string>
+    <string name="direct_room_encryption_enabled_waiting_users">منتظر پیوستن کاربران به ${app_name}</string>
+    <string name="direct_room_user_list_only_invite_one_email">در هر زمان تنها می‌توانید یک رایانامه را دعوت کنید</string>
 </resources>

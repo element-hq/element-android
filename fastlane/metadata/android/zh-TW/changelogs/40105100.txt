@@ -1,2 +1,2 @@
-此版本中的主要變動：格式化文字編輯器的全螢幕模式新實作與臭蟲修復。
+此版本的主要變動：全新實作的富文本編輯器全螢幕模式與錯誤修復。
 完整的變更紀錄：https://github.com/vector-im/element-android/releases

@@ -160,6 +160,8 @@ class OnboardingViewModel @AssistedInject constructor(
     private var emailVerificationPollingJob: Job? by cancelCurrentOnSet()
     private var currentJob: Job? by cancelCurrentOnSet()
 
+    private val trustedFingerprints = mutableListOf<Fingerprint>()
+
     override fun handle(action: OnboardingAction) {
         when (action) {
             is OnboardingAction.SplashAction -> handleSplashAction(action)
@@ -293,13 +295,14 @@ class OnboardingViewModel @AssistedInject constructor(
     private fun handleUserAcceptCertificate(action: OnboardingAction.UserAcceptCertificate) {
         // It happens when we get the login flow, or during direct authentication.
         // So alter the homeserver config and retrieve again the login flow
+        trustedFingerprints.add(action.fingerprint)
         when (action.retryAction) {
-            is OnboardingAction.HomeServerChange -> handleHomeserverChange(action.retryAction, fingerprint = action.fingerprint)
+            is OnboardingAction.HomeServerChange -> handleHomeserverChange(action.retryAction, fingerprints = trustedFingerprints)
             is AuthenticateAction.LoginDirect ->
                 handleDirectLogin(
                         action.retryAction,
                         // Will be replaced by the task
-                        homeServerConnectionConfigFactory.create("https://dummy.org", action.fingerprint)
+                        homeServerConnectionConfigFactory.create("https://dummy.org", trustedFingerprints)
                 )
             else -> Unit
         }
@@ -696,10 +699,10 @@ class OnboardingViewModel @AssistedInject constructor(
     private fun handleHomeserverChange(
             action: OnboardingAction.HomeServerChange,
             serverTypeOverride: ServerType? = null,
-            fingerprint: Fingerprint? = null,
+            fingerprints: List<Fingerprint>? = null,
             postAction: suspend () -> Unit = {},
     ) {
-        val homeServerConnectionConfig = homeServerConnectionConfigFactory.create(action.homeServerUrl, fingerprint)
+        val homeServerConnectionConfig = homeServerConnectionConfigFactory.create(action.homeServerUrl, fingerprints)
         if (homeServerConnectionConfig == null) {
             // This is invalid
             _viewEvents.post(OnboardingViewEvents.Failure(Throwable("Unable to create a HomeServerConnectionConfig")))

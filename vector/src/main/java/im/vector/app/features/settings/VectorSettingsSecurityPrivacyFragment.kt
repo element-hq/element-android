@@ -27,7 +27,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.SwitchPreference
@@ -185,11 +187,11 @@ class VectorSettingsSecurityPrivacyFragment :
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
 
-        lifecycleScope.launchWhenResumed {
-            findPreference<VectorPreference>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT)?.isVisible =
-                    rawService
-                            .getElementWellknown(session.sessionParams)
-                            ?.isE2EByDefault() == false
+        viewLifecycleOwner.lifecycleScope.launch {
+                findPreference<VectorPreference>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT)?.isVisible =
+                        rawService
+                                .getElementWellknown(session.sessionParams)
+                                ?.isE2EByDefault() == false
         }
     }
 
@@ -416,16 +418,18 @@ class VectorSettingsSecurityPrivacyFragment :
     }
 
     private fun openPinCodePreferenceScreen() {
-        lifecycleScope.launchWhenResumed {
-            val hasPinCode = pinCodeStore.hasEncodedPin()
-            if (hasPinCode) {
-                navigator.openPinCode(
-                        requireContext(),
-                        pinActivityResultLauncher,
-                        PinMode.AUTH
-                )
-            } else {
-                doOpenPinCodePreferenceScreen()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                val hasPinCode = pinCodeStore.hasEncodedPin()
+                if (hasPinCode) {
+                    navigator.openPinCode(
+                            requireContext(),
+                            pinActivityResultLauncher,
+                            PinMode.AUTH
+                    )
+                } else {
+                    doOpenPinCodePreferenceScreen()
+                }
             }
         }
     }
