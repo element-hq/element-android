@@ -76,7 +76,8 @@ sealed class MatrixItem(
     data class RoomItem(
             override val id: String,
             override val displayName: String? = null,
-            override val avatarUrl: String? = null
+            override val avatarUrl: String? = null,
+            val roomDisplayName: String? = null
     ) :
             MatrixItem(id, displayName, avatarUrl) {
         init {
@@ -102,7 +103,8 @@ sealed class MatrixItem(
     data class RoomAliasItem(
             override val id: String,
             override val displayName: String? = null,
-            override val avatarUrl: String? = null
+            override val avatarUrl: String? = null,
+            val roomDisplayName: String? = null
     ) :
             MatrixItem(id, displayName, avatarUrl) {
         init {
@@ -136,6 +138,8 @@ sealed class MatrixItem(
         val displayName = when (this) {
             // use the room display name for the notify everyone item
             is EveryoneInRoomItem -> roomDisplayName
+            is RoomItem -> roomDisplayName ?: displayName
+            is RoomAliasItem -> roomDisplayName ?: displayName
             else -> displayName
         }
         return (displayName?.takeIf { it.isNotBlank() } ?: id)

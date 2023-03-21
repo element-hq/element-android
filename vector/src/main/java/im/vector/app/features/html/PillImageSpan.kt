@@ -115,6 +115,10 @@ class PillImageSpan(
     private fun createChipDrawable(): ChipDrawable {
         val textPadding = context.resources.getDimension(R.dimen.pill_text_padding)
         val icon = when {
+            matrixItem is MatrixItem.RoomAliasItem && matrixItem.avatarUrl.isNullOrEmpty() &&
+                    matrixItem.displayName == context.getString(R.string.pill_message_in_room, matrixItem.id) -> {
+                ContextCompat.getDrawable(context, R.drawable.ic_permalink_round)
+            }
             matrixItem is MatrixItem.RoomItem && matrixItem.avatarUrl.isNullOrEmpty() && (
                     matrixItem.displayName == context.getString(R.string.pill_message_in_unknown_room) ||
                             matrixItem.displayName == context.getString(R.string.pill_message_unknown_room_or_space) ||
