@@ -57,7 +57,10 @@ internal class WidgetManager @Inject constructor(
 
         IntegrationManagerService.Listener, SessionLifecycleObserver {
 
-    private val lifecycleOwner: LifecycleOwner = LifecycleOwner { lifecycleRegistry }
+    private val lifecycleOwner: LifecycleOwner = object : LifecycleOwner {
+        override val lifecycle: Lifecycle
+            get() = lifecycleRegistry
+    }
     private val lifecycleRegistry: LifecycleRegistry = LifecycleRegistry(lifecycleOwner)
 
     override fun onSessionStarted(session: Session) {

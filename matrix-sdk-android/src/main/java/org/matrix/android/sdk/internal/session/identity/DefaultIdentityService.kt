@@ -84,7 +84,10 @@ internal class DefaultIdentityService @Inject constructor(
         private val sessionParams: SessionParams
 ) : IdentityService, SessionLifecycleObserver {
 
-    private val lifecycleOwner: LifecycleOwner = LifecycleOwner { lifecycleRegistry }
+    private val lifecycleOwner: LifecycleOwner = object : LifecycleOwner {
+        override val lifecycle: Lifecycle
+            get() = lifecycleRegistry
+    }
     private val lifecycleRegistry: LifecycleRegistry = LifecycleRegistry(lifecycleOwner)
 
     private val listeners = mutableSetOf<IdentityServiceListener>()
