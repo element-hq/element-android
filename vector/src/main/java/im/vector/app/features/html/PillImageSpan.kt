@@ -26,14 +26,17 @@ import android.graphics.drawable.Drawable
 import android.text.style.ReplacementSpan
 import android.widget.TextView
 import androidx.annotation.UiThread
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.chip.ChipDrawable
 import im.vector.app.R
+import im.vector.app.core.extensions.isMatrixId
 import im.vector.app.core.glide.GlideRequests
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.themes.ThemeUtils
+import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.session.room.send.MatrixItemSpan
 import org.matrix.android.sdk.api.util.MatrixItem
 import java.lang.ref.WeakReference
@@ -111,10 +114,28 @@ class PillImageSpan(
 
     private fun createChipDrawable(): ChipDrawable {
         val textPadding = context.resources.getDimension(R.dimen.pill_text_padding)
-        val icon = try {
-            avatarRenderer.getCachedDrawable(glideRequests, matrixItem)
-        } catch (exception: Exception) {
-            avatarRenderer.getPlaceholderDrawable(matrixItem)
+        val icon = when {
+            matrixItem is MatrixItem.RoomAliasItem && matrixItem.avatarUrl.isNullOrEmpty() &&
+                    matrixItem.displayName == context.getString(R.string.pill_message_in_room, matrixItem.id) -> {
+                ContextCompat.getDrawable(context, R.drawable.ic_permalink_round)
+            }
+            matrixItem is MatrixItem.RoomItem && matrixItem.avatarUrl.isNullOrEmpty() && (
+                    matrixItem.displayName == context.getString(R.string.pill_message_in_unknown_room) ||
+                            matrixItem.displayName == context.getString(R.string.pill_message_unknown_room_or_space) ||
+                            matrixItem.displayName == context.getString(R.string.pill_message_from_unknown_user)
+                    ) -> {
+                ContextCompat.getDrawable(context, R.drawable.ic_permalink_round)
+            }
+            matrixItem is MatrixItem.UserItem && matrixItem.avatarUrl.isNullOrEmpty() && matrixItem.displayName?.isMatrixId().orTrue() -> {
+                ContextCompat.getDrawable(context, R.drawable.ic_user_round)
+            }
+            else -> {
+                try {
+                    avatarRenderer.getCachedDrawable(glideRequests, matrixItem)
+                } catch (exception: Exception) {
+                    avatarRenderer.getPlaceholderDrawable(matrixItem)
+                }
+            }
         }
 
         return ChipDrawable.createFromResource(context, R.xml.pill_view).apply {

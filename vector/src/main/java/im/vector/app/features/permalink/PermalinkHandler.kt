@@ -110,13 +110,8 @@ class PermalinkHandler @Inject constructor(
 
         val rootThreadEventId = permalinkData.eventId?.let { eventId ->
             val room = roomId?.let { session?.getRoom(it) }
-
-            val rootThreadEventId = room?.getTimelineEvent(eventId)?.root?.getRootThreadEventId()
-            rootThreadEventId ?: if (room?.getTimelineEvent(eventId)?.isRootThread() == true) {
-                eventId
-            } else {
-                null
-            }
+            val event = room?.getTimelineEvent(eventId)
+            event?.root?.getRootThreadEventId() ?: eventId.takeIf { event?.isRootThread() == true }
         }
         openRoom(
                 navigationInterceptor,

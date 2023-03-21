@@ -18,8 +18,8 @@
 
     <item name="dialog_width_ratio" format="float" type="dimen">0.75</item>
 
-    <dimen name="pill_avatar_size">16dp</dimen>
-    <dimen name="pill_min_height">20dp</dimen>
+    <dimen name="pill_avatar_size">20sp</dimen>
+    <dimen name="pill_min_height">26sp</dimen>
     <dimen name="pill_text_padding">4dp</dimen>
 
     <dimen name="call_pip_height">128dp</dimen>
