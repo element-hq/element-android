@@ -59,7 +59,7 @@ ext.libs = [
                 'fragmentTesting'         : "androidx.fragment:fragment-testing:$fragment",
                 'fragmentTestingManifest' : "androidx.fragment:fragment-testing-manifest:$fragment",
                 'constraintLayout'        : "androidx.constraintlayout:constraintlayout:2.1.4",
-                'work'                    : "androidx.work:work-runtime-ktx:2.8.0",
+                'work'                    : "androidx.work:work-runtime-ktx:2.8.1",
                 'autoFill'                : "androidx.autofill:autofill:1.1.0",
                 'preferenceKtx'           : "androidx.preference:preference-ktx:1.2.0",
                 'junit'                   : "androidx.test.ext:junit:1.1.5",
