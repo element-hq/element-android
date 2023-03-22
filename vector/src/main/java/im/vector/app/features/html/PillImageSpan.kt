@@ -22,7 +22,9 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.graphics.Rect
 import android.graphics.drawable.Drawable
+import android.text.TextUtils
 import android.text.style.ReplacementSpan
 import android.widget.TextView
 import androidx.annotation.UiThread
@@ -101,6 +103,15 @@ class PillImageSpan(
         val transY: Int = y + (fm.descent + fm.ascent - pillDrawable.bounds.bottom) / 2
         canvas.save()
         canvas.translate(x, transY.toFloat())
+
+        val rect = Rect()
+        canvas.getClipBounds(rect)
+        val maxWidth = rect.right
+        if (pillDrawable.intrinsicWidth > maxWidth) {
+            pillDrawable.setBounds(0, 0, maxWidth, pillDrawable.intrinsicHeight)
+            pillDrawable.ellipsize = TextUtils.TruncateAt.END
+        }
+
         pillDrawable.draw(canvas)
         canvas.restore()
     }
