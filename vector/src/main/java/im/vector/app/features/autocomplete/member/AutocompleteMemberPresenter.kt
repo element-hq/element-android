@@ -24,6 +24,8 @@ import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.features.autocomplete.AutocompleteClickListener
 import im.vector.app.features.autocomplete.RecyclerViewPresenter
+import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -83,9 +85,9 @@ class AutocompleteMemberPresenter @AssistedInject constructor(
     }
 
     override fun onQuery(query: CharSequence?) {
-        val queryParams = createQueryParams(query)
+        val queryParams = createQueryParams()
         val membersHeader = createMembersHeader()
-        val members = createMemberItems(queryParams)
+        val members = createMemberItems(queryParams, query)
         val everyone = createEveryoneItem(query)
         // add headers only when user can notify everyone
         val canAddHeaders = canNotifyEveryone()
@@ -111,12 +113,8 @@ class AutocompleteMemberPresenter @AssistedInject constructor(
      * Helper methods
      * ========================================================================================== */
 
-    private fun createQueryParams(query: CharSequence?) = roomMemberQueryParams {
-        displayName = if (query.isNullOrBlank()) {
-            QueryStringValue.IsNotEmpty
-        } else {
-            QueryStringValue.Contains(query.toString(), QueryStringValue.Case.INSENSITIVE)
-        }
+    private fun createQueryParams() = roomMemberQueryParams {
+        displayName = QueryStringValue.IsNotEmpty
         memberships = listOf(Membership.JOIN)
         excludeSelf = true
     }
@@ -127,9 +125,14 @@ class AutocompleteMemberPresenter @AssistedInject constructor(
                     context.getString(R.string.room_message_autocomplete_users)
             )
 
-    private fun createMemberItems(queryParams: RoomMemberQueryParams) =
+    private fun createMemberItems(queryParams: RoomMemberQueryParams, query: CharSequence?) =
             room.membershipService()
                     .getRoomMembers(queryParams)
+                    .filter { roomMemberSummary ->
+                        query?.let {
+                            it.isBlank() || roomMemberSummary.displayName?.contains(it, true).orFalse() || roomMemberSummary.userId.contains(it, true)
+                        }.orTrue()
+                    }
                     .asSequence()
                     .sortedBy { it.displayName }
                     .disambiguate()
