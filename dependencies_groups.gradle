@@ -42,7 +42,6 @@ ext.groups = [
                 regex: [
                 ],
                 group: [
-                        'com.vanniktech',
                 ]
         ],
         mavenCentral: [
@@ -128,7 +127,7 @@ ext.groups = [
                         'com.sun.xml.bind.mvn',
                         'com.sun.xml.fastinfoset',
                         'com.thoughtworks.qdox',
-                        // 'com.vanniktech',
+                        'com.vanniktech',
                         'commons-cli',
                         'commons-codec',
                         'commons-io',

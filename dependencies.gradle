@@ -24,9 +24,7 @@ def mavericks = "3.0.1"
 def glide = "4.15.1"
 def bigImageViewer = "1.8.1"
 def jjwt = "0.11.5"
-// Temporary version to unblock #6929. Once 0.16.0 is released we should use it, and revert
-// the whole commit which set version 0.16.0-SNAPSHOT
-def vanniktechEmoji = "0.16.0-SNAPSHOT"
+def vanniktechEmoji = "0.16.0"
 def sentry = "6.16.0"
 // Use 1.6.0 alpha to fix issue with test
 def fragment = "1.6.0-alpha08"
