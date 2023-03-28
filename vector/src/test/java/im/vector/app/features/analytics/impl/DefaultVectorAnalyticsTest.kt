@@ -80,6 +80,12 @@ class DefaultVectorAnalyticsTest {
 
     @Test
     fun `when revoking consent to analytics then updates posthog opt out to true and closes Sentry`() = runTest {
+        // For opt-out to have effect on Posthog, it has to be used first, so it has to be opt-in first
+        fakeAnalyticsStore.givenUserContent(consent = true)
+        fakePostHog.verifyOptOutStatus(optedOut = false)
+        fakeSentryAnalytics.verifySentryInit()
+
+        // Then test opt-out
         fakeAnalyticsStore.givenUserContent(consent = false)
 
         fakePostHog.verifyOptOutStatus(optedOut = true)

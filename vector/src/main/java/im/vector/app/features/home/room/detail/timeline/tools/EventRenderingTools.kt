@@ -44,12 +44,11 @@ fun CharSequence.findPillsAndProcess(scope: CoroutineScope, processBlock: (PillI
 }
 
 fun CharSequence.linkify(callback: TimelineEventController.UrlClickCallback?): CharSequence {
-    val text = this.toString()
     // SpannableStringBuilder is used to avoid Epoxy throwing ImmutableModelException
     val spannable = SpannableStringBuilder(this)
     MatrixLinkify.addLinks(spannable, object : MatrixPermalinkSpan.Callback {
         override fun onUrlClicked(url: String) {
-            callback?.onUrlClicked(url, text)
+            callback?.onUrlClicked(url, this.toString())
         }
     })
     VectorLinkify.addLinks(spannable, true)

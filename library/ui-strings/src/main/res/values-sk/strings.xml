@@ -2989,4 +2989,7 @@
     <string name="settings_external_account_management">Údaje o vašom účte sú spravované samostatne na %1$s.</string>
     <string name="settings_external_account_management_title">Účet</string>
     <string name="settings_notification_error_on_update">Pri aktualizácii vašich predvolieb oznámení došlo k chybe. Skúste prosím znova.</string>
+    <string name="direct_room_encryption_enabled_waiting_users_tile_description">Keď sa pozvaní používatelia pripoja k aplikácii ${app_name}, budete môcť konverzovať a miestnosť bude end-to-end šifrovaná</string>
+    <string name="direct_room_encryption_enabled_waiting_users">Čaká sa na pripojenie používateľov k aplikácii ${app_name}</string>
+    <string name="direct_room_user_list_only_invite_one_email">Naraz môžete pozvať len jeden e-mail</string>
 </resources>
