@@ -472,15 +472,19 @@ internal class OlmMachine @Inject constructor(
                 } catch (throwable: Throwable) {
                     val reThrow = when (throwable) {
                         is DecryptionException.MissingRoomKey -> {
-                            if (throwable.withheldCode != null) {
-                                MXCryptoError.Base(MXCryptoError.ErrorType.KEYS_WITHHELD, throwable.withheldCode!!)
-                            } else {
-                                MXCryptoError.Base(MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID, throwable.error)
-                            }
+                            // Revert when witheld PR merged
+//                            if (throwable.withheldCode != null) {
+//                                MXCryptoError.Base(MXCryptoError.ErrorType.KEYS_WITHHELD, throwable.withheldCode!!)
+//                            } else {
+//                                MXCryptoError.Base(MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID, throwable.error)
+//                            }
+
+                            MXCryptoError.Base(MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID, throwable.message.orEmpty())
                         }
                         is DecryptionException.Megolm -> {
                             // TODO check if it's the correct binding?
-                            MXCryptoError.Base(MXCryptoError.ErrorType.UNKNOWN_MESSAGE_INDEX, throwable.error)
+//                            MXCryptoError.Base(MXCryptoError.ErrorType.UNKNOWN_MESSAGE_INDEX, throwable.error)
+                            MXCryptoError.Base(MXCryptoError.ErrorType.UNKNOWN_MESSAGE_INDEX, throwable.message.orEmpty())
                         }
                         is DecryptionException.Identifier -> {
                             MXCryptoError.Base(MXCryptoError.ErrorType.BAD_EVENT_FORMAT, MXCryptoError.BAD_EVENT_FORMAT_TEXT_REASON)
@@ -504,7 +508,7 @@ internal class OlmMachine @Inject constructor(
 
     private fun ShieldState.toVerificationState(): MessageVerificationState? {
         return when (this.color) {
-            ShieldColor.GREEN -> MessageVerificationState.VERIFIED
+            ShieldColor.NONE -> MessageVerificationState.VERIFIED
             ShieldColor.RED -> {
                 when (this.message) {
                     "Encrypted by an unverified device." -> MessageVerificationState.UN_SIGNED_DEVICE
@@ -513,10 +517,9 @@ internal class OlmMachine @Inject constructor(
                     else -> MessageVerificationState.UN_SIGNED_DEVICE
                 }
             }
-            ShieldColor.GRAY -> {
+            ShieldColor.GREY -> {
                 MessageVerificationState.UNSAFE_SOURCE
             }
-            ShieldColor.NONE -> null
         }
     }
 

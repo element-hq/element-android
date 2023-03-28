@@ -102,6 +102,8 @@ internal class ExtractMigrationDataUseCase {
                 trackedUsers = emptyList(),
                 inboundGroupSessions = emptyList(),
                 backupVersion = backupVersion,
+                // TODO import room settings from legacy DB
+                roomSettings = emptyMap()
         )
         // import the account asap
         importPartial(baseExtract)
