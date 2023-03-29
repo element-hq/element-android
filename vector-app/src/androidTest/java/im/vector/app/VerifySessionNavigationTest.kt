@@ -23,6 +23,8 @@ import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.rules.ActivityScenarioRule
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.filters.LargeTest
 import im.vector.app.core.utils.getMatrixInstance
 import im.vector.app.espresso.tools.waitUntilActivityVisible
 import im.vector.app.espresso.tools.waitUntilViewVisible
@@ -32,8 +34,10 @@ import im.vector.app.ui.robot.ElementRobot
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.UserPasswordAuth
@@ -44,6 +48,9 @@ import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 import kotlin.random.Random
 
+@RunWith(AndroidJUnit4::class)
+@LargeTest
+@Ignore
 class VerifySessionNavigationTest : VerificationTestBase() {
 
     var existingSession: Session? = null

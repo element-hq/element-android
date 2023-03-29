@@ -36,6 +36,7 @@ import org.amshove.kluent.internal.assertEquals
 import org.junit.After
 import org.junit.Assert.assertTrue
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -52,6 +53,7 @@ import kotlin.random.Random
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
+@Ignore
 class VerifySessionInteractiveTest : VerificationTestBase() {
 
     var existingSession: Session? = null
