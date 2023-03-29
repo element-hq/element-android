@@ -174,7 +174,7 @@ dependencies {
     implementation libs.androidx.exifinterface
 
     // Database
-    implementation 'com.github.Zhuinden:realm-monarchy:0.7.1'
+    implementation 'com.github.Zhuinden:realm-monarchy:2.1.0'
 
     kapt 'dk.ilios:realmfieldnameshelper:2.0.0'
 
