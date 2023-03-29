@@ -2397,7 +2397,8 @@
     <string name="verification_request_notice">To be secure, verify %s by checking a one-time code.</string>
     <string name="verification_request_start_notice">To be secure, do this in person or use another way to communicate.</string>
 
-    <string name="verification_emoji_notice">Compare the unique emoji, ensuring they appear in the same order.</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="verification_emoji_notice">Compare the unique emoji, ensuring they appear in the same order.</string>
     <string name="verification_code_notice">Compare the code with the one displayed on the other user\'s screen.</string>
     <string name="verification_conclusion_ok_notice">Messages with this user are end-to-end encrypted and can\'t be read by third parties.</string>
     <string name="verification_conclusion_ok_self_notice">Your new session is now verified. It has access to your encrypted messages, and other users will see it as trusted.</string>
