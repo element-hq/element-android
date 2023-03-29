@@ -17,14 +17,12 @@
 package org.matrix.android.sdk.internal.session.room.membership
 
 import androidx.lifecycle.LiveData
-import com.otaliastudios.opengl.core.use
 import com.zhuinden.monarchy.Monarchy
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.realm.Realm
 import io.realm.RealmQuery
-import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.room.members.MembershipService
@@ -58,7 +56,6 @@ internal class DefaultMembershipService @AssistedInject constructor(
         private val cryptoService: CryptoService,
         @UserId
         private val userId: String,
-        private val matrixConfiguration: MatrixConfiguration,
         private val queryStringValueProcessor: QueryStringValueProcessor
 ) : MembershipService {
 
@@ -116,6 +113,11 @@ internal class DefaultMembershipService @AssistedInject constructor(
                     .process(RoomMemberSummaryEntityFields.USER_ID, queryParams.userId)
                     .process(RoomMemberSummaryEntityFields.MEMBERSHIP_STR, queryParams.memberships)
                     .process(RoomMemberSummaryEntityFields.DISPLAY_NAME, queryParams.displayName)
+                    .beginGroup()
+                    .process(RoomMemberSummaryEntityFields.USER_ID, queryParams.displayNameOrUserId)
+                    .or()
+                    .process(RoomMemberSummaryEntityFields.DISPLAY_NAME, queryParams.displayNameOrUserId)
+                    .endGroup()
                     .apply {
                         if (queryParams.excludeSelf) {
                             notEqualTo(RoomMemberSummaryEntityFields.USER_ID, userId)
