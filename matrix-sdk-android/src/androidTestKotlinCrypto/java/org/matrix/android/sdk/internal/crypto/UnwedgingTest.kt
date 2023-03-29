@@ -94,9 +94,7 @@ class UnwedgingTest : InstrumentedTest {
         val bobSession = cryptoTestData.secondSession!!
 
         val aliceCryptoStore = (aliceSession.cryptoService() as DefaultCryptoService).cryptoStoreForTesting
-
-        // bobSession.cryptoService().setWarnOnUnknownDevices(false)
-        // aliceSession.cryptoService().setWarnOnUnknownDevices(false)
+        val olmDevice = (aliceSession.cryptoService() as DefaultCryptoService).olmDeviceForTest
 
         val roomFromBobPOV = bobSession.getRoom(aliceRoomId)!!
         val roomFromAlicePOV = aliceSession.getRoom(aliceRoomId)!!
@@ -146,8 +144,7 @@ class UnwedgingTest : InstrumentedTest {
                 OlmSessionWrapper(deserializeFromRealm<OlmSession>(oldSession)!!),
                 bobSession.cryptoService().getMyCryptoDevice().identityKey()!!
         )
-        // TODO mmm we can't do that with rust
-//        olmDevice.clearOlmSessionCache()
+        olmDevice.clearOlmSessionCache()
 
         // Force new session, and key share
         aliceSession.cryptoService().discardOutboundSession(roomFromAlicePOV.roomId)
