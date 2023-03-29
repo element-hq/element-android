@@ -2397,11 +2397,12 @@
     <string name="verification_request_notice">To be secure, verify %s by checking a one-time code.</string>
     <string name="verification_request_start_notice">To be secure, do this in person or use another way to communicate.</string>
 
+    <string name="verification_emoji_notice">Compare the unique emoji, ensuring they appear in the same order.</string>
     <!-- TODO TO BE REMOVED -->
-    <string tools:ignore="UnusedResources" name="verification_emoji_notice">Compare the unique emoji, ensuring they appear in the same order.</string>
-    <string name="verification_code_notice">Compare the code with the one displayed on the other user\'s screen.</string>
+    <string tools:ignore="UnusedResources" name="verification_code_notice">Compare the code with the one displayed on the other user\'s screen.</string>
     <string name="verification_conclusion_ok_notice">Messages with this user are end-to-end encrypted and can\'t be read by third parties.</string>
-    <string name="verification_conclusion_ok_self_notice">Your new session is now verified. It has access to your encrypted messages, and other users will see it as trusted.</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="verification_conclusion_ok_self_notice">Your new session is now verified. It has access to your encrypted messages, and other users will see it as trusted.</string>
 
     <string name="encryption_information_cross_signing_state">Cross-Signing</string>
     <string name="encryption_information_dg_xsigning_complete">Cross-Signing is enabled\nPrivate Keys on device.</string>
@@ -2442,7 +2443,8 @@
 
     <string name="verification_verify_with_another_device">Verify with another device</string>
     <string name="verification_verify_identity">Verify your identity to access encrypted messages and prove your identity to others.</string>
-    <string name="verification_open_other_to_verify">Use an existing session to verify this one, granting it access to encrypted messages.</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="verification_open_other_to_verify">Use an existing session to verify this one, granting it access to encrypted messages.</string>
 
     <string name="verification_profile_verify">Verify</string>
     <string name="verification_profile_verified">Verified</string>
@@ -2518,7 +2520,8 @@
     <string name="verify_new_session_notice">Use this session to verify your new one, granting it access to encrypted messages.</string>
     <string name="verification_request_was_sent">A verification request has been sent. Open one of your other sessions to accept and start the verification.</string>
     <string name="verify_new_session_was_not_me">This wasn’t me</string>
-    <string name="verify_new_session_compromized">Your account may be compromised</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="verify_new_session_compromized">Your account may be compromised</string>
 
     <string name="_resume">Resume</string>
 
@@ -2526,14 +2529,17 @@
     <string name="verify_cancel_self_verification_from_trusted">If you cancel, you won’t be able to read encrypted messages on your new device, and other users won’t trust it</string>
     <string name="verify_cancel_other">You won’t verify %1$s (%2$s) if you cancel now. Start again in their user profile.</string>
 
-    <string name="verify_not_me_self_verification">
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="verify_not_me_self_verification">
         One of the following may be compromised:\n\n- Your password\n- Your homeserver\n- This device, or the other device\n- The internet connection either device is using\n\nWe recommend you change your password &amp; recovery key in Settings immediately.
     </string>
 
     <string name="verify_cancelled_notice">Verification has been canceled. You can start verification again.</string>
     <string name="verification_not_found">The verification request was not found. It may have been cancelled, or handled by another session.</string>
-    <string name="verify_invalid_qr_notice">This QR code looks malformed. Please try to verify with another method.</string>
-    <string name="verification_cancelled">Verification Canceled</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="verify_invalid_qr_notice">This QR code looks malformed. Please try to verify with another method.</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="verification_cancelled">Verification Canceled</string>
 
     <string name="recovery_passphrase">Recovery Passphrase</string>
     <string name="message_key">Message Key</string>
@@ -2662,8 +2668,10 @@
     <string name="secure_backup_reset_all">Reset everything</string>
     <string name="secure_backup_reset_all_no_other_devices">Only do this if you have no other device you can verify this device with.</string>
     <string name="secure_backup_reset_all_no_other_devices_long">Resetting your verification keys cannot be undone. After resetting, you won\'t have access to old encrypted messages, and any friends who have previously verified you will see security warnings until you re-verify with them.</string>
-    <string name="secure_backup_reset_if_you_reset_all">If you reset everything</string>
-    <string name="secure_backup_reset_no_history">You will restart with no history, no messages, trusted devices or trusted users</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="secure_backup_reset_if_you_reset_all">If you reset everything</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="secure_backup_reset_no_history">You will restart with no history, no messages, trusted devices or trusted users</string>
     <string name="secure_backup_reset_danger_warning">Please only proceed if you\'re sure you\'ve lost all of your other devices and your security key.</string>
     <plurals name="secure_backup_reset_devices_you_can_verify">
         <item quantity="one">Show the device you can verify with now</item>
@@ -2687,7 +2695,8 @@
     <string name="verify_this_session">Verify the new login accessing your account: %1$s</string>
 
     <string name="cross_signing_verify_by_text">Manually Verify by Text</string>
-    <string name="crosssigning_verify_session">Verify login</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="crosssigning_verify_session">Verify login</string>
     <string name="cross_signing_verify_by_emoji">Interactively Verify by Emoji</string>
     <string name="confirm_your_identity">Confirm your identity by verifying this login from one of your other sessions, granting it access to encrypted messages.</string>
     <string name="confirm_your_identity_quad_s">Confirm your identity by verifying this login, granting it access to encrypted messages.</string>
