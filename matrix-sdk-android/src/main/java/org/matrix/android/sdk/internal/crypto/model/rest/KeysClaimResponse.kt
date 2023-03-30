@@ -27,7 +27,7 @@ internal data class KeysClaimResponse(
         // / If any remote homeservers could not be reached, they are recorded here.
         // / The names of the properties are the names of the unreachable servers.
         @Json(name = "failures")
-        val failures: Map<String, Any>,
+        val failures: Map<String, Any>? = null,
 
         /**
          * The requested keys ordered by device by user.
