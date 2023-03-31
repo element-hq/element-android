@@ -219,6 +219,7 @@ class WithHeldTests : InstrumentedTest {
     }
 
     @Test
+    @Ignore("Outdated test, we don't request to others")
     fun test_WithHeldKeyRequest() = runCryptoTest(
             context(),
             cryptoConfig = MXCryptoConfig(limitRoomKeyRequestsToMyDevices = false)
