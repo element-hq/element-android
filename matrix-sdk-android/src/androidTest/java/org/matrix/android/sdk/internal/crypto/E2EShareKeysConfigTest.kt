@@ -221,7 +221,7 @@ class E2EShareKeysConfigTest : InstrumentedTest {
             enableEncryption()
         })
 
-        commonTestHelper.retryPeriodically {
+        commonTestHelper.retryWithBackoff {
             aliceSession.roomService().getRoomSummary(roomId)?.isEncrypted == true
         }
         val roomAlice = aliceSession.roomService().getRoom(roomId)!!
@@ -238,20 +238,28 @@ class E2EShareKeysConfigTest : InstrumentedTest {
         val megolmBackupCreationInfo = keysBackupService.prepareKeysBackupVersion(keyBackupPassword, null)
         val version = keysBackupService.createKeysBackupVersion(megolmBackupCreationInfo)
 
+        Log.v("#E2E TEST", "... Backup created.")
+
         commonTestHelper.retryPeriodically {
+            Log.v("#E2E TEST", "Backup status ${keysBackupService.getTotalNumbersOfBackedUpKeys()}/${keysBackupService.getTotalNumbersOfKeys()}")
             keysBackupService.getTotalNumbersOfKeys() == keysBackupService.getTotalNumbersOfBackedUpKeys()
         }
 
+        val aliceId = aliceSession.myUserId
         // signout
+
+        Log.v("#E2E TEST", "Sign out alice")
         commonTestHelper.signOutAndClose(aliceSession)
 
-        val newAliceSession = commonTestHelper.logIntoAccount(aliceSession.myUserId, SessionTestParams(true))
+        Log.v("#E2E TEST", "Sign in a new alice device")
+        val newAliceSession = commonTestHelper.logIntoAccount(aliceId, SessionTestParams(true))
 
         newAliceSession.cryptoService().enableShareKeyOnInvite(true)
 
         newAliceSession.cryptoService().keysBackupService().let { kbs ->
             val keyVersionResult = kbs.getVersion(version.version)
 
+            Log.v("#E2E TEST", "Restore new backup")
             val importedResult =  kbs.restoreKeyBackupWithPassword(
                         keyVersionResult!!,
                         keyBackupPassword,
@@ -265,9 +273,12 @@ class E2EShareKeysConfigTest : InstrumentedTest {
 
         // Now let's invite sam
         // Invite a new user
+
+        Log.v("#E2E TEST", "Create Sam account")
         val samSession = commonTestHelper.createAccount(TestConstants.USER_SAM, SessionTestParams(withInitialSync = true))
 
         // Let alice invite sam
+        Log.v("#E2E TEST", "Let alice invite sam")
         newAliceSession.getRoom(roomId)!!.membershipService().invite(samSession.myUserId)
 
         commonTestHelper.waitForAndAcceptInviteInRoom(samSession, roomId)
@@ -283,7 +294,12 @@ class E2EShareKeysConfigTest : InstrumentedTest {
                 listOf(sharableMessage),
                 samSession,
                 roomId,
-                listOf(roomAlice.getTimelineEvent(sharableMessage)?.root?.getClearContent()?.get("body") as String)
+                listOf(newAliceSession.getRoom(roomId)!!
+                        .getTimelineEvent(sharableMessage)
+                        ?.root
+                        ?.getClearContent()
+                        ?.get("body") as String
+                )
         )
     }
 }
