@@ -332,5 +332,5 @@ dependencies {
     androidTestUtil libs.androidx.orchestrator
     debugImplementation libs.androidx.fragmentTestingManifest
     androidTestImplementation libs.androidx.fragmentTesting
-    androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:1.8.10"
+    androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:1.8.20"
 }
