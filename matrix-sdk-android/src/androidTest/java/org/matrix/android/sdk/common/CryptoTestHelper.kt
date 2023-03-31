@@ -64,7 +64,6 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.securestorage.EmptyKeySigner
 import org.matrix.android.sdk.api.session.securestorage.KeyRef
-import timber.log.Timber
 import java.util.UUID
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
@@ -441,13 +440,15 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
                     .cancellable()
                     .collect {
                         val transaction = it.getTransaction()
-                        Timber.d("#TEST flow ${bob.myUserId.take(5)} ${transaction?.transactionId}|${transaction?.dbgState()}")
+                        Log.v("#E2E TEST", "#TEST flow ${bob.myUserId.take(5)} ${transaction?.transactionId}|${transaction?.dbgState()}")
                         val tx = transaction as? SasVerificationTransaction
                         if (tx?.state() == SasTransactionState.SasShortCodeReady) {
+                            Log.v("#E2E TEST", "COMPLETE BOB CODE")
                             bobCode.complete(tx)
                             return@collect cancel()
                         }
                         if (it.getRequest()?.state == EVerificationState.Cancelled) {
+                            Log.v("#E2E TEST", "EXCEPTION BOB CODE")
                             bobCode.completeExceptionally(AssertionError("Request as been cancelled"))
                             return@collect cancel()
                         }
@@ -461,29 +462,33 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
                     .cancellable()
                     .collect {
                         val transaction = it.getTransaction()
-                        Timber.d("#TEST flow ${alice.myUserId.take(5)}  ${transaction?.transactionId}|${transaction?.dbgState()}")
+                        Log.v("#E2E TEST", "#TEST flow ${alice.myUserId.take(5)}  ${transaction?.transactionId}|${transaction?.dbgState()}")
                         val tx = transaction as? SasVerificationTransaction
                         if (tx?.state() == SasTransactionState.SasShortCodeReady) {
+                            Log.v("#E2E TEST", "COMPLETE ALICE CODE")
                             aliceCode.complete(tx)
                             return@collect cancel()
                         }
                         if (it.getRequest()?.state == EVerificationState.Cancelled) {
+                            Log.v("#E2E TEST", "EXCEPTION ALICE CODE")
                             aliceCode.completeExceptionally(AssertionError("Request as been cancelled"))
                             return@collect cancel()
                         }
                     }
         }
 
-        Timber.v("#TEST let alice start the verification")
+        Log.v("#E2E TEST", "#TEST let alice start the verification")
         val id = aliceVerificationService.startKeyVerification(
                 VerificationMethod.SAS,
                 bob.myUserId,
                 requestID,
         )
-        Timber.v("#TEST alice started: $id")
+        Log.v("#E2E TEST", "#TEST alice started: $id")
 
         val bobTx = bobCode.await()
         val aliceTx = aliceCode.await()
+        Log.v("#E2E TEST", "#TEST Alice code ${aliceTx.getDecimalCodeRepresentation()}")
+        Log.v("#E2E TEST", "#TEST Bob code ${bobTx.getDecimalCodeRepresentation()}")
         assertEquals("SAS code do not match", aliceTx.getDecimalCodeRepresentation()!!, bobTx.getDecimalCodeRepresentation())
 
         val aliceDone = CompletableDeferred<Unit>()
@@ -491,8 +496,12 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
             aliceVerificationService.requestEventFlow()
                     .cancellable()
                     .collect {
+                        val transaction = it.getTransaction()
+                        Log.v("#E2E TEST", "#TEST flow ${alice.myUserId.take(5)}  ${transaction?.transactionId}|${transaction?.dbgState()}")
+
                         val request = it.getRequest()
-                        if (request?.state == EVerificationState.Done) {
+                        Log.v("#E2E TEST", "#TEST flow request ${alice.myUserId.take(5)}  ${request?.transactionId}|${request?.state}")
+                        if (request?.state == EVerificationState.Done || request?.state == EVerificationState.WaitingForDone) {
                             aliceDone.complete(Unit)
                             return@collect cancel()
                         }
@@ -503,18 +512,28 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
             bobVerificationService.requestEventFlow()
                     .cancellable()
                     .collect {
+                        val transaction = it.getTransaction()
+                        Log.v("#E2E TEST", "#TEST flow ${bob.myUserId.take(5)}  ${transaction?.transactionId}|${transaction?.dbgState()}")
+
                         val request = it.getRequest()
-                        if (request?.state == EVerificationState.Done) {
+                        Log.v("#E2E TEST", "#TEST flow request ${bob.myUserId.take(5)}  ${request?.transactionId}|${request?.state}")
+
+                        if (request?.state == EVerificationState.Done || request?.state == EVerificationState.WaitingForDone) {
                             bobDone.complete(Unit)
                             return@collect cancel()
                         }
                     }
         }
+
+        Log.v("#E2E TEST", "#TEST Bob confirm sas code")
         bobTx.userHasVerifiedShortCode()
+        Log.v("#E2E TEST", "#TEST Alice confirm sas code")
         aliceTx.userHasVerifiedShortCode()
 
+        Log.v("#E2E TEST", "#TEST Waiting for Done..")
         bobDone.await()
         aliceDone.await()
+        Log.v("#E2E TEST", "#TEST .. ok")
 
         alice.cryptoService().crossSigningService().isUserTrusted(bob.myUserId)
         bob.cryptoService().crossSigningService().isUserTrusted(alice.myUserId)

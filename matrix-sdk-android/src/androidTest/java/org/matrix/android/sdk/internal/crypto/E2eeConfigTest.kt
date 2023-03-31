@@ -66,15 +66,19 @@ class E2eeConfigTest : InstrumentedTest {
     fun testCanDecryptIfGlobalUnverifiedAndUserTrusted() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true)
 
+        Log.v("#E2E TEST", "Initializing cross signing for alice and bob...")
         cryptoTestHelper.initializeCrossSigning(cryptoTestData.firstSession)
         cryptoTestHelper.initializeCrossSigning(cryptoTestData.secondSession!!)
+        Log.v("#E2E TEST", "... Initialized")
 
+        Log.v("#E2E TEST", "Start User Verification")
         cryptoTestHelper.verifySASCrossSign(cryptoTestData.firstSession, cryptoTestData.secondSession!!, cryptoTestData.roomId)
 
         cryptoTestData.firstSession.cryptoService().setGlobalBlacklistUnverifiedDevices(true)
 
         val roomAlicePOV = cryptoTestData.firstSession.roomService().getRoom(cryptoTestData.roomId)!!
 
+        Log.v("#E2E TEST", "Send message in room")
         val sentMessage = testHelper.sendMessageInRoom(roomAlicePOV, "you can read")
 
         val roomBobPOV = cryptoTestData.secondSession!!.roomService().getRoom(cryptoTestData.roomId)!!
