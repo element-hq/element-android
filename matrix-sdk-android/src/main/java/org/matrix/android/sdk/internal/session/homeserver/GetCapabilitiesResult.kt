@@ -71,7 +71,14 @@ internal data class Capabilities(
          * True if the user can use m.thread relation, false otherwise.
          */
         @Json(name = "m.thread")
-        val threads: BooleanCapability? = null
+        val threads: BooleanCapability? = null,
+
+        /**
+         * Capability to indicate if the server supports MSC3882 login token issuance for signing in another deivce.
+         * True if the user can use /login/get_token, false otherwise.
+         */
+        @Json(name = "org.matrix.msc3882.get_login_token")
+        val getLoginToken: BooleanCapability? = null
 )
 
 @JsonClass(generateAdapter = true)
