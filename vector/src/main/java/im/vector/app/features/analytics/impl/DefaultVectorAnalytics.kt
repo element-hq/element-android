@@ -164,6 +164,7 @@ class DefaultVectorAnalytics @Inject constructor(
                     // When opting out, ensure that the queue is flushed first, or it will be flushed later (after user has revoked consent)
                     posthog?.flush()
                     posthog?.optOut(true)
+                    posthog?.shutdown()
                     posthog = null
                 }
             }
