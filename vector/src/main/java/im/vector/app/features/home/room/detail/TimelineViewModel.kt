@@ -1033,7 +1033,7 @@ class TimelineViewModel @AssistedInject constructor(
         if (action.highlight) {
             setState { copy(highlightedEventId = targetEventId) }
         }
-        _viewEvents.post(RoomDetailViewEvents.NavigateToEvent(targetEventId))
+        _viewEvents.post(RoomDetailViewEvents.NavigateToEvent(targetEventId, action.isFirstUnreadEvent))
     }
 
     private fun handleResendEvent(action: RoomDetailAction.ResendMessage) {

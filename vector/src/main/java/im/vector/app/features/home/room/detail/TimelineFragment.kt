@@ -748,7 +748,9 @@ class TimelineFragment :
     }
 
     private fun navigateToEvent(action: RoomDetailViewEvents.NavigateToEvent) {
-        val scrollPosition = timelineEventController.searchPositionOfEvent(action.eventId)
+        val scrollPosition = timelineEventController.getPositionOfReadMarker().takeIf { action.isFirstUnreadEvent }
+                ?: timelineEventController.searchPositionOfEvent(action.eventId)
+
         if (scrollPosition == null) {
             scrollOnHighlightedEventCallback.scheduleScrollTo(action.eventId)
         } else {
@@ -1995,10 +1997,10 @@ class TimelineFragment :
 
     private fun onJumpToReadMarkerClicked() = withState(timelineViewModel) {
         if (it.unreadState is UnreadState.HasUnread) {
-            timelineViewModel.handle(RoomDetailAction.NavigateToEvent(it.unreadState.firstUnreadEventId, false))
+            timelineViewModel.handle(RoomDetailAction.NavigateToEvent(it.unreadState.firstUnreadEventId, highlight = false, isFirstUnreadEvent = true))
         }
         if (it.unreadState is UnreadState.ReadMarkerNotLoaded) {
-            timelineViewModel.handle(RoomDetailAction.NavigateToEvent(it.unreadState.readMarkerId, false))
+            timelineViewModel.handle(RoomDetailAction.NavigateToEvent(it.unreadState.readMarkerId, highlight = false))
         }
     }
 
