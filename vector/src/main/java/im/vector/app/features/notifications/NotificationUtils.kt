@@ -521,6 +521,19 @@ class NotificationUtils @Inject constructor(
     }
 
     /**
+     * Creates a notification that indicates the application is communicating with a BLE device mainly for push-to-talk in Element Call Widget.
+     */
+    fun buildBluetoothLowEnergyNotification(): Notification {
+        return NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
+                .setContentTitle(stringProvider.getString(R.string.push_to_talk_notification_title))
+                .setContentText(stringProvider.getString(R.string.push_to_talk_notification_description))
+                .setSmallIcon(R.drawable.quantum_ic_bluetooth_audio_white_36)
+                .setColor(ThemeUtils.getColor(context, android.R.attr.colorPrimary))
+                .setContentIntent(buildOpenHomePendingIntentForSummary())
+                .build()
+    }
+
+    /**
      * Creates a notification that indicates the application is capturing the screen.
      */
     fun buildScreenSharingNotification(): Notification {

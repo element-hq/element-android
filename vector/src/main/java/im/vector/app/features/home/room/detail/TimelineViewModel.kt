@@ -47,6 +47,7 @@ import im.vector.app.features.call.conference.ConferenceEvent
 import im.vector.app.features.call.conference.JitsiActiveConferenceHolder
 import im.vector.app.features.call.conference.JitsiService
 import im.vector.app.features.call.lookup.CallProtocolsChecker
+import im.vector.app.features.call.ptt.ElementCallPttService
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.createdirect.DirectRoomHelper
 import im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy
@@ -72,6 +73,7 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.voicebroadcast.VoiceBroadcastHelper
 import im.vector.lib.core.utils.flow.chunk
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -148,6 +150,7 @@ class TimelineViewModel @AssistedInject constructor(
         private val notificationDrawerManager: NotificationDrawerManager,
         private val locationSharingServiceConnection: LocationSharingServiceConnection,
         private val stopLiveLocationShareUseCase: StopLiveLocationShareUseCase,
+        private val elementCallPttService: ElementCallPttService,
         private val redactLiveLocationShareEventUseCase: RedactLiveLocationShareEventUseCase,
         private val cryptoConfig: CryptoConfig,
         buildMeta: BuildMeta,
@@ -519,12 +522,6 @@ class TimelineViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleOpenElementCallWidget() = withState { state ->
-        if (state.hasActiveElementCallWidget()) {
-            _viewEvents.post(RoomDetailViewEvents.OpenElementCallWidget)
-        }
-    }
-
     private fun handleJitsiCallJoinStatus(action: RoomDetailAction.UpdateJoinJitsiCallStatus) = withState { state ->
         if (state.jitsiState.confId == null) {
             // If jitsi widget is removed while on the call
@@ -663,7 +660,10 @@ class TimelineViewModel @AssistedInject constructor(
     }
 
     private fun handleManageIntegrations() = withState { state ->
-        if (state.activeRoomWidgets().isNullOrEmpty()) {
+        val isOnlyElementCallWidget = state.activeRoomWidgets()?.size == 1 && state.hasActiveElementCallWidget()
+        if (isOnlyElementCallWidget) {
+            _viewEvents.post(RoomDetailViewEvents.OpenElementCallWidget)
+        } else if (state.activeRoomWidgets().isNullOrEmpty()) {
             // Directly open integration manager screen
             handleOpenIntegrationManager()
         } else {
@@ -683,6 +683,37 @@ class TimelineViewModel @AssistedInject constructor(
             } finally {
                 _viewEvents.post(RoomDetailViewEvents.HideWaitingView)
             }
+        }
+    }
+
+    private fun handleOpenElementCallWidget() = withState { state ->
+        if (state.hasActiveElementCallWidget()) {
+            _viewEvents.post(RoomDetailViewEvents.OpenElementCallWidget)
+        } else if (room != null) {
+            _viewEvents.post(RoomDetailViewEvents.ShowWaitingView())
+            viewModelScope.launch(Dispatchers.IO) {
+                try {
+                    val alias = generateElementCallRoomAlias(room.roomId)
+                    elementCallPttService.createElementCallPttWidget(room.roomId, alias)
+                    delay(200)
+                    _viewEvents.post(RoomDetailViewEvents.OpenElementCallWidget)
+                } catch (failure: Throwable) {
+                    _viewEvents.post(RoomDetailViewEvents.ShowMessage(stringProvider.getString(R.string.failed_to_add_widget)))
+                } finally {
+                    _viewEvents.post(RoomDetailViewEvents.HideWaitingView)
+                }
+            }
+        } else {
+            Timber.e("handleOpenElementCallWidget. room is null")
+        }
+    }
+
+    private fun generateElementCallRoomAlias(roomId: String): String {
+        val pureRoomId = roomId.replace("!", "").substringBefore(":")
+        return buildString {
+            append("#")
+            append(pureRoomId)
+            append(":call.ems.host")
         }
     }
 
@@ -839,7 +870,7 @@ class TimelineViewModel @AssistedInject constructor(
                     R.id.timeline_setting -> true
                     R.id.invite -> state.canInvite
                     R.id.open_matrix_apps -> true
-                    R.id.voice_call -> state.isCallOptionAvailable() || state.hasActiveElementCallWidget()
+                    R.id.voice_call -> state.isAllowedToManageWidgets || state.hasActiveElementCallWidget()
                     R.id.video_call -> state.isCallOptionAvailable() || state.jitsiState.confId == null || state.jitsiState.hasJoined
                     // Show Join conference button only if there is an active conf id not joined. Otherwise fallback to default video disabled. ^
                     R.id.join_conference -> !state.isCallOptionAvailable() && state.jitsiState.confId != null && !state.jitsiState.hasJoined

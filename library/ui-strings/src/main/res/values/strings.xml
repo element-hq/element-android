@@ -351,6 +351,7 @@
     <string name="denied_permission_generic">Some permissions are missing to perform this action, please grant the permissions from the system settings.</string>
     <string name="denied_permission_camera">To perform this action, please grant the Camera permission from the system settings.</string>
     <string name="denied_permission_voice_message">To send voice messages, please grant the Microphone permission.</string>
+    <string name="denied_permission_bluetooth">To perform this action, please grant the Bluetooth permission from the system settings.</string>
 
     <string name="missing_permissions_title">Missing permissions</string>
     <string name="no_permissions_to_start_conf_call">You do not have permission to start a conference call in this room</string>
@@ -3318,6 +3319,15 @@
     <string name="live_location_labs_promotion_title">Live location sharing</string>
     <string name="live_location_labs_promotion_description">Please note: this is a labs feature using a temporary implementation. This means you will not be able to delete your location history, and advanced users will be able to see your location history even after you stop sharing your live location with this room.</string>
     <string name="live_location_labs_promotion_switch_title">Enable location sharing</string>
+
+    <!-- Element Call Widget - Push to Talk -->
+    <string name="push_to_talk_notification_title">${app_name} Push to Talk</string>
+    <string name="push_to_talk_notification_description">A service is running to communicate with BLE device</string>
+    <string name="push_to_talk_activity_title">Walkie-Talkie Call</string>
+    <string name="action_push_to_talk_configure_device">Configure push to talk device</string>
+    <string name="push_to_talk_bottom_sheet_title">Bluetooth</string>
+    <string name="push_to_talk_device_connected">Connected</string>
+    <string name="push_to_talk_device_disconnected">Disconnected</string>
 
     <plurals name="room_removed_messages">
         <item quantity="one">%d message removed</item>

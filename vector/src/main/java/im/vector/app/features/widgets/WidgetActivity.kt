@@ -63,6 +63,9 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
         fun newIntent(context: Context, args: WidgetArgs): Intent {
             return Intent(context, WidgetActivity::class.java).apply {
                 putExtra(Mavericks.KEY_ARG, args)
+                if (args.kind == WidgetKind.ELEMENT_CALL) {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                }
             }
         }
 
@@ -179,11 +182,15 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
         return PictureInPictureParams.Builder()
                 .setAspectRatio(aspectRatio)
                 .setActions(actions)
+                .apply {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        setAutoEnterEnabled(true)
+                    }
+                }
                 .build()
     }
 
     private var hangupBroadcastReceiver: BroadcastReceiver? = null
-
     private val pictureInPictureModeChangedInfoConsumer = Consumer<PictureInPictureModeChangedInfo> {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) return@Consumer
 
@@ -193,7 +200,7 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
                     if (intent?.action == ACTION_MEDIA_CONTROL) {
                         val controlType = intent.getIntExtra(EXTRA_CONTROL_TYPE, 0)
                         if (controlType == CONTROL_TYPE_HANGUP) {
-                            viewModel.handle(WidgetAction.CloseWidget)
+                            viewModel.handle(WidgetAction.HangupElementCall)
                         }
                     }
                 }

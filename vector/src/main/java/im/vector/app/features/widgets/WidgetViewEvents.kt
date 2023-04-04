@@ -25,4 +25,5 @@ sealed class WidgetViewEvents : VectorViewEvents {
     data class DisplayIntegrationManager(val integId: String?, val integType: String?) : WidgetViewEvents()
     data class OnURLFormatted(val formattedURL: String) : WidgetViewEvents()
     data class DisplayTerms(val url: String, val token: String) : WidgetViewEvents()
+    data class OnBluetoothDeviceData(val data: ByteArray) : WidgetViewEvents()
 }

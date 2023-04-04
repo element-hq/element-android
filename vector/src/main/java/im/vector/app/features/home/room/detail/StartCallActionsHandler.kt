@@ -47,7 +47,8 @@ class StartCallActionsHandler(
     }
 
     private fun handleCallRequest(isVideoCall: Boolean) = withState(timelineViewModel) { state ->
-        if (state.hasActiveElementCallWidget() && !isVideoCall) {
+        // Hack for the EC widget
+        if (!isVideoCall) {
             timelineViewModel.handle(RoomDetailAction.OpenElementCallWidget)
             return@withState
         }

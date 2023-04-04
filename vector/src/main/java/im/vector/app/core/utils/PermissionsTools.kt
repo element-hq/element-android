@@ -19,6 +19,8 @@ package im.vector.app.core.utils
 import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
+import android.os.Build
+import android.webkit.PermissionRequest
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -43,6 +45,33 @@ val PERMISSIONS_FOR_WRITING_FILES = listOf(Manifest.permission.WRITE_EXTERNAL_ST
 val PERMISSIONS_FOR_PICKING_CONTACT = listOf(Manifest.permission.READ_CONTACTS)
 val PERMISSIONS_FOR_FOREGROUND_LOCATION_SHARING = listOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
 val PERMISSIONS_FOR_VOICE_BROADCAST = listOf(Manifest.permission.RECORD_AUDIO)
+
+// See https://developer.android.com/guide/topics/connectivity/bluetooth/permissions
+val PERMISSIONS_FOR_BLUETOOTH = when {
+    Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+        listOf(
+                Manifest.permission.BLUETOOTH_SCAN,
+                Manifest.permission.BLUETOOTH_CONNECT,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+        )
+    }
+    Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> {
+        listOf(
+                Manifest.permission.BLUETOOTH,
+                Manifest.permission.BLUETOOTH_ADMIN,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+        )
+    }
+    else -> {
+        listOf(
+                Manifest.permission.BLUETOOTH,
+                Manifest.permission.BLUETOOTH_ADMIN,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+        )
+    }
+}
 
 // This is not ideal to store the value like that, but it works
 private var permissionDialogDisplayed = false
@@ -135,6 +164,32 @@ fun checkPermissions(
     } else {
         // permissions were granted, start now.
         true
+    }
+}
+
+/**
+ * Checks if required WebView permissions are already granted system level.
+ * @param activity the calling Activity that is requesting the permissions (or fragment parent)
+ * @param request WebView permission request of onPermissionRequest function
+ * @return true if WebView permissions are already granted, false otherwise
+ */
+fun checkWebViewPermissions(activity: Activity, request: PermissionRequest): Boolean {
+    return request.resources.all {
+        when (it) {
+            PermissionRequest.RESOURCE_AUDIO_CAPTURE -> {
+                PERMISSIONS_FOR_AUDIO_IP_CALL.all { permission ->
+                    ContextCompat.checkSelfPermission(activity.applicationContext, permission) == PackageManager.PERMISSION_GRANTED
+                }
+            }
+            PermissionRequest.RESOURCE_VIDEO_CAPTURE -> {
+                PERMISSIONS_FOR_VIDEO_IP_CALL.all { permission ->
+                    ContextCompat.checkSelfPermission(activity.applicationContext, permission) == PackageManager.PERMISSION_GRANTED
+                }
+            }
+            else -> {
+                false
+            }
+        }
     }
 }
 

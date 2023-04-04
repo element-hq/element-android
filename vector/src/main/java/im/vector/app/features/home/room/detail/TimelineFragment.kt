@@ -827,8 +827,8 @@ class TimelineFragment :
             val hasCallInRoom = callManager.getCallsByRoomId(state.roomId).isNotEmpty() || state.jitsiState.hasJoined
             val callButtonsEnabled = !hasCallInRoom && when (state.asyncRoomSummary.invoke()?.joinedMembersCount) {
                 1 -> false
-                2 -> state.isAllowedToStartWebRTCCall
-                else -> state.isAllowedToManageWidgets
+                2 -> state.isAllowedToStartWebRTCCall || state.hasActiveElementCallWidget()
+                else -> state.isAllowedToManageWidgets || state.hasActiveElementCallWidget()
             }
             menu.findItem(R.id.video_call).icon?.alpha = if (callButtonsEnabled) 0xFF else 0x40
             menu.findItem(R.id.voice_call).icon?.alpha = if (callButtonsEnabled || state.hasActiveElementCallWidget()) 0xFF else 0x40

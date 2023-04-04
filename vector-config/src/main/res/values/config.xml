@@ -28,6 +28,9 @@
     <!-- preferred jitsi domain -->
     <string name="preferred_jitsi_domain" translatable="false">meet.element.io</string>
 
+    <!-- preferred element call domain -->
+    <string name="preferred_element_call_domain" translatable="false">https://call-ptt.lab.element.dev/room/?embed</string>
+
     <string-array name="room_directory_servers" translatable="false">
         <item>matrix.org</item>
         <item>gitter.im</item>

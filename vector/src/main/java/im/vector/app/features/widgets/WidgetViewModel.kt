@@ -16,6 +16,7 @@
 
 package im.vector.app.features.widgets
 
+import android.bluetooth.BluetoothDevice
 import android.net.Uri
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -29,6 +30,9 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.widgets.permissions.WidgetPermissionsHelper
+import im.vector.app.features.widgets.ptt.BluetoothLowEnergyDevice
+import im.vector.app.features.widgets.ptt.BluetoothLowEnergyDeviceScanner
+import im.vector.app.features.widgets.ptt.BluetoothLowEnergyServiceConnection
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -46,17 +50,21 @@ import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.mapOptional
 import org.matrix.android.sdk.flow.unwrap
 import timber.log.Timber
+import javax.inject.Inject
 import javax.net.ssl.HttpsURLConnection
 
 class WidgetViewModel @AssistedInject constructor(
         @Assisted val initialState: WidgetViewState,
         widgetPostAPIHandlerFactory: WidgetPostAPIHandler.Factory,
         private val stringProvider: StringProvider,
-        private val session: Session
+        private val session: Session,
+        private val bluetoothLowEnergyServiceConnection: BluetoothLowEnergyServiceConnection,
+        private val bluetoothLowEnergyDeviceScanner: BluetoothLowEnergyDeviceScanner,
 ) :
         VectorViewModel<WidgetViewState, WidgetAction, WidgetViewEvents>(initialState),
         WidgetPostAPIHandler.NavigationCallback,
-        IntegrationManagerService.Listener {
+        IntegrationManagerService.Listener, BluetoothLowEnergyServiceConnection.Callback,
+        BluetoothLowEnergyDeviceScanner.Callback {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<WidgetViewModel, WidgetViewState> {
@@ -91,6 +99,7 @@ class WidgetViewModel @AssistedInject constructor(
         observePowerLevel()
         observeWidgetIfNeeded()
         subscribeToWidget()
+        bluetoothLowEnergyDeviceScanner.callback = this
     }
 
     private fun subscribeToWidget() {
@@ -147,8 +156,24 @@ class WidgetViewModel @AssistedInject constructor(
             WidgetAction.DeleteWidget -> handleDeleteWidget()
             WidgetAction.RevokeWidget -> handleRevokeWidget()
             WidgetAction.OnTermsReviewed -> loadFormattedUrl(forceFetchToken = false)
+            is WidgetAction.ConnectToBluetoothDevice -> handleConnectToBluetoothDevice(action)
+            WidgetAction.HangupElementCall -> handleHangupElementCall()
             WidgetAction.CloseWidget -> handleCloseWidget()
+            WidgetAction.StartBluetoothScan -> handleStartBluetoothScan()
         }
+    }
+
+    private fun handleStartBluetoothScan() {
+        bluetoothLowEnergyDeviceScanner.startScanning()
+    }
+
+    private fun handleHangupElementCall() {
+        bluetoothLowEnergyServiceConnection.stopService()
+        _viewEvents.post(WidgetViewEvents.Close())
+    }
+
+    private fun handleConnectToBluetoothDevice(action: WidgetAction.ConnectToBluetoothDevice) {
+        bluetoothLowEnergyServiceConnection.bind(action.deviceAddress, this)
     }
 
     private fun handleCloseWidget() {
@@ -273,6 +298,7 @@ class WidgetViewModel @AssistedInject constructor(
         integrationManagerService.removeListener(this)
         widgetPostAPIHandler?.navigationCallback = null
         postAPIMediator.setHandler(null)
+        bluetoothLowEnergyServiceConnection.stopService()
         super.onCleared()
     }
 
@@ -300,5 +326,46 @@ class WidgetViewModel @AssistedInject constructor(
 
     override fun openIntegrationManager(integId: String?, integType: String?) {
         _viewEvents.post(WidgetViewEvents.DisplayIntegrationManager(integId, integType))
+    }
+
+    override fun onCharacteristicRead(data: ByteArray) {
+        Timber.d("### Posting onCharacteristicRead: " + String(data))
+        _viewEvents.post(WidgetViewEvents.OnBluetoothDeviceData(data))
+    }
+
+    override fun onPairedDeviceFound(device: BluetoothDevice) {
+        bluetoothLowEnergyServiceConnection.bind(device.address, this)
+    }
+
+    override fun onConnectedToDevice(device: BluetoothDevice) {
+        handleNewBluetoothDevice(device, isConnected = true)
+    }
+
+    override fun onScanResult(device: BluetoothDevice) = withState {
+        handleNewBluetoothDevice(device, isConnected = false)
+    }
+
+    private fun handleNewBluetoothDevice(device: BluetoothDevice, isConnected: Boolean) = withState { state ->
+        if (device.name == null || device.address == null) {
+            return@withState
+        }
+        val bluetoothLowEnergyDevice = BluetoothLowEnergyDevice(
+                name = device.name,
+                macAddress = device.address,
+                isConnected = isConnected
+        )
+        val currentDevices = state.bluetoothDeviceList
+        val newList = currentDevices.toMutableList()
+        val index = currentDevices.indexOfFirst { it.macAddress == bluetoothLowEnergyDevice.macAddress }
+        if (index > -1) {
+            newList[index] = bluetoothLowEnergyDevice
+        } else {
+            newList.add(bluetoothLowEnergyDevice)
+        }
+        setState {
+            copy(
+                    bluetoothDeviceList = newList
+            )
+        }
     }
 }

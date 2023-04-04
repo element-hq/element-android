@@ -17,8 +17,13 @@
 package im.vector.app.features.widgets
 
 import android.app.Activity
+import android.bluetooth.BluetoothDevice
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.AudioDeviceInfo
+import android.media.AudioManager
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
@@ -27,9 +32,14 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.PermissionRequest
+import android.webkit.WebMessage
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
+import androidx.core.content.getSystemService
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
@@ -37,22 +47,35 @@ import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.withState
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
+import im.vector.app.core.extensions.cleanup
+import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.utils.CheckWebViewPermissionsUseCase
+import im.vector.app.core.utils.PERMISSIONS_FOR_BLUETOOTH
+import im.vector.app.core.utils.checkPermissions
+import im.vector.app.core.utils.onPermissionDeniedDialog
 import im.vector.app.core.utils.openUrlInExternalBrowser
+import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.databinding.FragmentRoomWidgetBinding
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.webview.WebEventListener
+import im.vector.app.features.widgets.ptt.BluetoothLowEnergyDevice
+import im.vector.app.features.widgets.ptt.BluetoothLowEnergyDeviceScanner
+import im.vector.app.features.widgets.ptt.BluetoothLowEnergyDevicesBottomSheetController
+import im.vector.app.features.widgets.ptt.BluetoothLowEnergyService
 import im.vector.app.features.widgets.webview.WebviewPermissionUtils
 import im.vector.app.features.widgets.webview.clearAfterWidget
 import im.vector.app.features.widgets.webview.setupForWidget
 import im.vector.lib.core.utils.compat.resolveActivityCompat
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.terms.TermsService
 import timber.log.Timber
@@ -78,9 +101,19 @@ class WidgetFragment :
     @Inject lateinit var permissionUtils: WebviewPermissionUtils
     @Inject lateinit var checkWebViewPermissionsUseCase: CheckWebViewPermissionsUseCase
     @Inject lateinit var vectorPreferences: VectorPreferences
+    @Inject lateinit var bluetoothLowEnergyDevicesBottomSheetController: BluetoothLowEnergyDevicesBottomSheetController
 
     private val fragmentArgs: WidgetArgs by args()
     private val viewModel: WidgetViewModel by activityViewModel()
+    private var viewEventsListener: Job? = null
+
+    private val scanBluetoothResultLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
+        if (allGranted) {
+            startBluetoothScanning()
+        } else if (deniedPermanently) {
+            activity?.onPermissionDeniedDialog(R.string.denied_permission_bluetooth)
+        }
+    }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomWidgetBinding {
         return FragmentRoomWidgetBinding.inflate(inflater, container, false)
@@ -89,20 +122,56 @@ class WidgetFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         views.widgetWebView.setupForWidget(requireActivity(), checkWebViewPermissionsUseCase, this)
+
         if (fragmentArgs.kind.isAdmin()) {
             viewModel.getPostAPIMediator().setWebView(views.widgetWebView)
         }
-        viewModel.observeViewEvents {
-            Timber.v("Observed view events: $it")
-            when (it) {
-                is WidgetViewEvents.DisplayTerms -> displayTerms(it)
-                is WidgetViewEvents.OnURLFormatted -> loadFormattedUrl(it)
-                is WidgetViewEvents.DisplayIntegrationManager -> displayIntegrationManager(it)
-                is WidgetViewEvents.Failure -> displayErrorDialog(it.throwable)
-                is WidgetViewEvents.Close -> Unit
+
+        if (fragmentArgs.kind == WidgetKind.ELEMENT_CALL) {
+            if (checkPermissions(PERMISSIONS_FOR_BLUETOOTH, requireActivity(), scanBluetoothResultLauncher)) {
+                startBluetoothScanning()
+                startBluetoothService()
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                configureAudioDevice()
+            }
+            views.widgetBluetoothListRecyclerView.configureWith(bluetoothLowEnergyDevicesBottomSheetController, hasFixedSize = false)
+            bluetoothLowEnergyDevicesBottomSheetController.callback = object : BluetoothLowEnergyDevicesBottomSheetController.Callback {
+                override fun onItemSelected(deviceAddress: String) {
+                    onBluetoothDeviceSelected(deviceAddress)
+                }
             }
         }
+
+        viewEventsListener = lifecycleScope.launch {
+            viewModel.viewEvents
+                    .stream(consumerId = this::class.simpleName.toString())
+                    .collect {
+                        dismissLoadingDialog()
+                        Timber.v("Observed view events: $it")
+                        when (it) {
+                            is WidgetViewEvents.DisplayTerms -> displayTerms(it)
+                            is WidgetViewEvents.OnURLFormatted -> loadFormattedUrl(it)
+                            is WidgetViewEvents.DisplayIntegrationManager -> displayIntegrationManager(it)
+                            is WidgetViewEvents.Failure -> displayErrorDialog(it.throwable)
+                            is WidgetViewEvents.Close -> Unit
+                            is WidgetViewEvents.OnBluetoothDeviceData -> handleBluetoothDeviceData(it)
+                        }
+                    }
+        }
         viewModel.handle(WidgetAction.LoadFormattedUrl)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    private fun configureAudioDevice() {
+        requireContext().getSystemService<AudioManager>()?.let { audioManager ->
+            audioManager
+                    .availableCommunicationDevices
+                    .find { it.type == AudioDeviceInfo.TYPE_BLUETOOTH_SCO }
+                    ?.let { bluetoothAudioDevice ->
+                        audioManager.setCommunicationDevice(bluetoothAudioDevice)
+                    }
+        }
     }
 
     private val termsActivityResultLauncher = registerStartForActivityResult {
@@ -124,7 +193,10 @@ class WidgetFragment :
         if (fragmentArgs.kind.isAdmin()) {
             viewModel.getPostAPIMediator().clearWebView()
         }
+        viewEventsListener?.cancel()
+        viewEventsListener = null
         views.widgetWebView.clearAfterWidget()
+        views.widgetBluetoothListRecyclerView.cleanup()
         super.onDestroyView()
     }
 
@@ -151,7 +223,8 @@ class WidgetFragment :
     override fun handlePrepareMenu(menu: Menu) {
         withState(viewModel) { state ->
             val widget = state.asyncWidget()
-            menu.findItem(R.id.action_edit)?.isVisible = state.widgetKind != WidgetKind.INTEGRATION_MANAGER
+            menu.findItem(R.id.action_edit)?.isVisible = state.widgetKind !in listOf(WidgetKind.INTEGRATION_MANAGER, WidgetKind.ELEMENT_CALL)
+            menu.findItem(R.id.action_push_to_talk)?.isVisible = state.widgetKind == WidgetKind.ELEMENT_CALL
             if (widget == null) {
                 menu.findItem(R.id.action_refresh)?.isVisible = false
                 menu.findItem(R.id.action_widget_open_ext)?.isVisible = false
@@ -199,6 +272,10 @@ class WidgetFragment :
                     if (state.status == WidgetStatus.WIDGET_ALLOWED) {
                         revokeWidget()
                     }
+                    true
+                }
+                R.id.action_push_to_talk -> {
+                    showBluetoothLowEnergyDevicesBottomSheet()
                     true
                 }
                 else -> false
@@ -258,6 +335,10 @@ class WidgetFragment :
                 views.widgetProgressBar.isVisible = false
                 setStateError(formattedUrl.error.message)
             }
+        }
+
+        if (state.bluetoothDeviceList.isNotEmpty()) {
+            handleBluetoothDeviceList(state.bluetoothDeviceList)
         }
     }
 
@@ -368,5 +449,51 @@ class WidgetFragment :
 
     private fun revokeWidget() {
         viewModel.handle(WidgetAction.RevokeWidget)
+    }
+
+    private fun startBluetoothScanning() {
+        viewModel.handle(WidgetAction.StartBluetoothScan)
+    }
+
+    private fun handleBluetoothDeviceList(bluetoothDeviceList: List<BluetoothLowEnergyDevice>) {
+        bluetoothLowEnergyDevicesBottomSheetController.setData(bluetoothDeviceList)
+    }
+
+    private fun showBluetoothLowEnergyDevicesBottomSheet() {
+        viewModel.handle(WidgetAction.StartBluetoothScan)
+        views.bottomSheet.isVisible = true
+        BottomSheetBehavior.from(views.bottomSheet).state = BottomSheetBehavior.STATE_HALF_EXPANDED
+    }
+
+    private fun onBluetoothDeviceSelected(deviceAddress: String) {
+        viewModel.handle(WidgetAction.ConnectToBluetoothDevice(deviceAddress))
+
+        Intent(requireContext(), BluetoothLowEnergyService::class.java).also {
+            ContextCompat.startForegroundService(requireContext(), it)
+        }
+    }
+
+    private fun startBluetoothService() {
+        Intent(requireContext(), BluetoothLowEnergyService::class.java).also {
+            ContextCompat.startForegroundService(requireContext(), it)
+        }
+    }
+
+    // 0x01: pressed, 0x00: released
+    private fun handleBluetoothDeviceData(event: WidgetViewEvents.OnBluetoothDeviceData) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
+
+        activity?.let {
+            val widgetUri = Uri.parse(fragmentArgs.baseUrl)
+
+            Timber.d("### WidgetFragment.handleBluetoothDeviceData: $event")
+            if (event.data contentEquals byteArrayOf(0x00)) {
+                views.widgetWebView.postWebMessage(WebMessage("pttr"), widgetUri)
+            } else if (event.data contentEquals byteArrayOf(0x01)) {
+                views.widgetWebView.postWebMessage(WebMessage("pttp"), widgetUri)
+            }
+        } ?: run {
+            Timber.d("### WidgetFragment.handleBluetoothDeviceData: Cannot handle since activity is destroyed")
+        }
     }
 }
