@@ -20,6 +20,7 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import org.junit.Assert
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeyBackupConfig
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupService
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupStateListener
@@ -34,7 +35,8 @@ import kotlin.coroutines.resume
 
 internal class KeysBackupTestHelper(
         private val testHelper: CommonTestHelper,
-        private val cryptoTestHelper: CryptoTestHelper
+        private val cryptoTestHelper: CryptoTestHelper,
+        private val keyBackupConfig: KeyBackupConfig? = null
 ) {
 
     fun waitForKeybackUpBatching() {
@@ -55,6 +57,9 @@ internal class KeysBackupTestHelper(
 
         val cryptoStore = (cryptoTestData.firstSession.cryptoService().keysBackupService() as DefaultKeysBackupService).store
         val keysBackup = cryptoTestData.firstSession.cryptoService().keysBackupService()
+        if (keyBackupConfig != null) {
+            keysBackup.keyBackupConfig = keyBackupConfig
+        }
 
         val stateObserver = StateObserver(keysBackup)
 
@@ -81,7 +86,10 @@ internal class KeysBackupTestHelper(
 
         // - Log Alice on a new device
         val aliceSession2 = testHelper.logIntoAccount(aliceUserId, KeysBackupTestConstants.defaultSessionParamsWithInitialSync)
-
+        if (keyBackupConfig != null) {
+            aliceSession2.cryptoService().keysBackupService().keyBackupConfig = keyBackupConfig
+        }
+        aliceSession2.cryptoService().keysBackupService().checkAndStartKeysBackup()
         // Test check: aliceSession2 has no keys at login
         Assert.assertEquals(0, aliceSession2.cryptoService().inboundGroupSessionsCount(false))
 
@@ -105,7 +113,7 @@ internal class KeysBackupTestHelper(
         val stateObserver = StateObserver(keysBackup)
 
         val megolmBackupCreationInfo = testHelper.waitForCallback<MegolmBackupCreationInfo> {
-            keysBackup.prepareKeysBackupVersion(password, null, it)
+            keysBackup.prepareKeysBackupVersion(password, null, null, it)
         }
 
         Assert.assertNotNull(megolmBackupCreationInfo)
@@ -116,6 +124,7 @@ internal class KeysBackupTestHelper(
         val keysVersion = testHelper.waitForCallback<KeysVersion> {
             keysBackup.createKeysBackupVersion(megolmBackupCreationInfo, it)
         }
+        keysBackup.saveBackupRecoveryKey(megolmBackupCreationInfo.recoveryKey, version = keysVersion.version)
 
         Assert.assertNotNull("Key backup version should not be null", keysVersion.version)
 

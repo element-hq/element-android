@@ -22,6 +22,13 @@ import org.matrix.android.sdk.api.listeners.StepProgressListener
 import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
 
 interface KeysBackupService {
+
+    /**
+     * Define the backup internal configuration, supported algorithm, default algorithm.
+     * @param keyBackupConfig the config
+     */
+    var keyBackupConfig: KeyBackupConfig
+
     /**
      * Retrieve the current version of the backup from the homeserver.
      *
@@ -124,6 +131,7 @@ interface KeysBackupService {
      */
     fun prepareKeysBackupVersion(
             password: String?,
+            algorithm: String? = null,
             progressListener: ProgressListener?,
             callback: MatrixCallback<MegolmBackupCreationInfo>
     )

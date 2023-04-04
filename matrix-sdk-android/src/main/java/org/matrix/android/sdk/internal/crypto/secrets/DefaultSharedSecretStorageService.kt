@@ -21,7 +21,6 @@ import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.crypto.SSSS_ALGORITHM_AES_HMAC_SHA2
 import org.matrix.android.sdk.api.crypto.SSSS_ALGORITHM_CURVE25519_AES_SHA2
-import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.accountdata.SessionAccountDataService
 import org.matrix.android.sdk.api.session.crypto.keysbackup.computeRecoveryKey
@@ -43,17 +42,12 @@ import org.matrix.android.sdk.api.util.fromBase64
 import org.matrix.android.sdk.api.util.toBase64NoPadding
 import org.matrix.android.sdk.internal.crypto.SecretShareManager
 import org.matrix.android.sdk.internal.crypto.keysbackup.generatePrivateKeyWithPassword
-import org.matrix.android.sdk.internal.crypto.tools.HkdfSha256
+import org.matrix.android.sdk.internal.crypto.tools.AesHmacSha2
 import org.matrix.android.sdk.internal.crypto.tools.withOlmDecryption
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.olm.OlmPkMessage
 import java.security.SecureRandom
-import javax.crypto.Cipher
-import javax.crypto.Mac
-import javax.crypto.spec.IvParameterSpec
-import javax.crypto.spec.SecretKeySpec
 import javax.inject.Inject
-import kotlin.experimental.and
 
 internal class DefaultSharedSecretStorageService @Inject constructor(
         @UserId private val userId: String,
@@ -214,84 +208,25 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
     @Throws
     private fun encryptAesHmacSha2(secretKey: SsssKeySpec, secretName: String, clearDataBase64: String): EncryptedSecretContent {
         secretKey as RawBytesKeySpec
-        val pseudoRandomKey = HkdfSha256.deriveSecret(
-                secretKey.privateKey,
-                ByteArray(32) { 0.toByte() },
-                secretName.toByteArray(),
-                64
-        )
-
-        // The first 32 bytes are used as the AES key, and the next 32 bytes are used as the MAC key
-        val aesKey = pseudoRandomKey.copyOfRange(0, 32)
-        val macKey = pseudoRandomKey.copyOfRange(32, 64)
-
-        val secureRandom = SecureRandom()
-        val iv = ByteArray(16)
-        secureRandom.nextBytes(iv)
-
-        // clear bit 63 of the salt to stop us hitting the 64-bit counter boundary
-        // (which would mean we wouldn't be able to decrypt on Android). The loss
-        // of a single bit of salt is a price we have to pay.
-        iv[9] = iv[9] and 0x7f
-
-        val cipher = Cipher.getInstance("AES/CTR/NoPadding")
-
-        val secretKeySpec = SecretKeySpec(aesKey, "AES")
-        val ivParameterSpec = IvParameterSpec(iv)
-        cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec)
-        // secret are not that big, just do Final
-        val cipherBytes = cipher.doFinal(clearDataBase64.toByteArray())
-        require(cipherBytes.isNotEmpty())
-
-        val macKeySpec = SecretKeySpec(macKey, "HmacSHA256")
-        val mac = Mac.getInstance("HmacSHA256")
-        mac.init(macKeySpec)
-        val digest = mac.doFinal(cipherBytes)
-
+        val result = AesHmacSha2.encrypt(secretKey.privateKey, secretName, clearDataBase64)
         return EncryptedSecretContent(
-                ciphertext = cipherBytes.toBase64NoPadding(),
-                initializationVector = iv.toBase64NoPadding(),
-                mac = digest.toBase64NoPadding()
+                ciphertext = result.cipherRawBytes.toBase64NoPadding(),
+                initializationVector = result.initializationVector.toBase64NoPadding(),
+                mac = result.mac.toBase64NoPadding()
         )
     }
 
     private fun decryptAesHmacSha2(secretKey: SsssKeySpec, secretName: String, cipherContent: EncryptedSecretContent): String {
         secretKey as RawBytesKeySpec
-        val pseudoRandomKey = HkdfSha256.deriveSecret(
-                secretKey.privateKey,
-                ByteArray(32) { 0.toByte() },
-                secretName.toByteArray(),
-                64
-        )
-
-        // The first 32 bytes are used as the AES key, and the next 32 bytes are used as the MAC key
-        val aesKey = pseudoRandomKey.copyOfRange(0, 32)
-        val macKey = pseudoRandomKey.copyOfRange(32, 64)
-
         val iv = cipherContent.initializationVector?.fromBase64() ?: ByteArray(16)
-
-        val cipherRawBytes = cipherContent.ciphertext?.fromBase64() ?: throw SharedSecretStorageError.BadCipherText
-
-        // Check Signature
-        val macKeySpec = SecretKeySpec(macKey, "HmacSHA256")
-        val mac = Mac.getInstance("HmacSHA256").apply { init(macKeySpec) }
-        val digest = mac.doFinal(cipherRawBytes)
-
-        if (!cipherContent.mac?.fromBase64()?.contentEquals(digest).orFalse()) {
-            throw SharedSecretStorageError.BadMac
-        }
-
-        val cipher = Cipher.getInstance("AES/CTR/NoPadding")
-
-        val secretKeySpec = SecretKeySpec(aesKey, "AES")
-        val ivParameterSpec = IvParameterSpec(iv)
-        cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, ivParameterSpec)
-        // secret are not that big, just do Final
-        val decryptedSecret = cipher.doFinal(cipherRawBytes)
-
-        require(decryptedSecret.isNotEmpty())
-
-        return String(decryptedSecret, Charsets.UTF_8)
+        val cipher = cipherContent.ciphertext?.fromBase64() ?: throw SharedSecretStorageError.BadCipherText
+        val mac = cipherContent.mac?.fromBase64() ?: throw SharedSecretStorageError.BadMac
+        val encryptionInfo = AesHmacSha2.EncryptionInfo(
+                cipherRawBytes = cipher,
+                initializationVector = iv,
+                mac = mac
+        )
+        return AesHmacSha2.decrypt(secretKey.privateKey, secretName, encryptionInfo)
     }
 
     override fun getAlgorithmsForSecret(name: String): List<KeyInfoResult> {

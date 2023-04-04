@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,11 @@
 
 package org.matrix.android.sdk.api.session.crypto.keysbackup
 
-import org.matrix.android.sdk.api.util.JsonDict
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_CURVE_25519_BACKUP
 
-sealed interface MegolmBackupAuthData {
-    val privateKeySalt: String?
-    val privateKeyIterations: Int?
-    val signatures: Map<String, Map<String, String>>?
-
-    fun isValid(): Boolean
-
-    fun toJsonDict(): JsonDict
-    fun copy(newSignatures: Map<String, Map<String, String>>?): MegolmBackupAuthData
+data class KeyBackupConfig(
+        val defaultAlgorithm: String = MXCRYPTO_ALGORITHM_CURVE_25519_BACKUP,
+        val supportedAlgorithms: List<String> = listOf(MXCRYPTO_ALGORITHM_CURVE_25519_BACKUP)
+) {
+    fun isAlgorithmSupported(alg: String) = supportedAlgorithms.contains(alg)
 }

@@ -247,7 +247,7 @@ class BootstrapCrossSigningTask @Inject constructor(
 
                 Timber.d("## BootstrapCrossSigningTask: Creating 4S - Create megolm backup")
                 val creationInfo = awaitCallback<MegolmBackupCreationInfo> {
-                    session.cryptoService().keysBackupService().prepareKeysBackupVersion(null, null, it)
+                    session.cryptoService().keysBackupService().prepareKeysBackupVersion(null, null, null, it)
                 }
                 val version = awaitCallback<KeysVersion> {
                     session.cryptoService().keysBackupService().createKeysBackupVersion(creationInfo, it)

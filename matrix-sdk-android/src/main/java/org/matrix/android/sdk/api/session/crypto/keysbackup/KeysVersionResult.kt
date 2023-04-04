@@ -24,14 +24,16 @@ import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysAlgorith
 @JsonClass(generateAdapter = true)
 data class KeysVersionResult(
         /**
-         * The algorithm used for storing backups. Currently, only "m.megolm_backup.v1.curve25519-aes-sha2" is defined
+         * The algorithm used for storing backups.
+         * Currently, "m.megolm_backup.v1.curve25519-aes-sha2" and
+         * org.matrix.msc3270.v1.aes-hmac-sha2 are defined.
          */
         @Json(name = "algorithm")
         override val algorithm: String,
 
         /**
          * algorithm-dependent data, for "m.megolm_backup.v1.curve25519-aes-sha2".
-         * @see [org.matrix.android.sdk.internal.crypto.keysbackup.MegolmBackupAuthData]
+         * @see [org.matrix.android.sdk.internal.crypto.keysbackup.MegolmBackupCurve25519AuthData]
          */
         @Json(name = "auth_data")
         override val authData: JsonDict,

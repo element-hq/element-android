@@ -20,12 +20,14 @@ import android.util.Log
 import org.amshove.kluent.fail
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
-import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_CURVE_25519_BACKUP
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
@@ -34,15 +36,17 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NA
 import org.matrix.android.sdk.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersion
-import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupAuthData
 import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreationInfo
+import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCurve25519AuthData
 import org.matrix.android.sdk.api.session.crypto.keysbackup.extractCurveKeyFromRecoveryKey
 import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.crypto.verification.IncomingSasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.OutgoingSasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
+import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -52,6 +56,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.securestorage.EmptyKeySigner
 import org.matrix.android.sdk.api.session.securestorage.KeyRef
+import org.matrix.android.sdk.api.util.awaitCallback
 import org.matrix.android.sdk.api.util.toBase64NoPadding
 import java.util.UUID
 import kotlin.coroutines.Continuation
@@ -178,8 +183,35 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
         }
     }
 
-    private fun createFakeMegolmBackupAuthData(): MegolmBackupAuthData {
-        return MegolmBackupAuthData(
+    fun checkEncryptedEvent(event: Event, roomId: String, clearMessage: String, senderSession: Session) {
+        assertEquals(EventType.ENCRYPTED, event.type)
+        assertNotNull(event.content)
+
+        val eventWireContent = event.content.toContent()
+        assertNotNull(eventWireContent)
+
+        assertNull(eventWireContent["body"])
+        assertEquals(MXCRYPTO_ALGORITHM_MEGOLM, eventWireContent["algorithm"])
+
+        assertNotNull(eventWireContent["ciphertext"])
+        assertNotNull(eventWireContent["session_id"])
+        assertNotNull(eventWireContent["sender_key"])
+
+        assertEquals(senderSession.sessionParams.deviceId, eventWireContent["device_id"])
+
+        assertNotNull(event.eventId)
+        assertEquals(roomId, event.roomId)
+        assertEquals(EventType.MESSAGE, event.getClearType())
+        // TODO assertTrue(event.getAge() < 10000)
+
+        val eventContent = event.toContent()
+        assertNotNull(eventContent)
+        assertEquals(clearMessage, eventContent["body"])
+        assertEquals(senderSession.myUserId, event.senderId)
+    }
+
+    fun createFakeMegolmBackupAuthData(): MegolmBackupCurve25519AuthData {
+        return MegolmBackupCurve25519AuthData(
                 publicKey = "abcdefg",
                 signatures = mapOf("something" to mapOf("ed25519:something" to "hijklmnop"))
         )
@@ -187,7 +219,7 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
 
     fun createFakeMegolmBackupCreationInfo(): MegolmBackupCreationInfo {
         return MegolmBackupCreationInfo(
-                algorithm = MXCRYPTO_ALGORITHM_MEGOLM_BACKUP,
+                algorithm = MXCRYPTO_ALGORITHM_CURVE_25519_BACKUP,
                 authData = createFakeMegolmBackupAuthData(),
                 recoveryKey = "fake"
         )
@@ -272,10 +304,10 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
         )
 
         // set up megolm backup
-        val creationInfo = testHelper.waitForCallback<MegolmBackupCreationInfo> {
-            session.cryptoService().keysBackupService().prepareKeysBackupVersion(null, null, it)
+        val creationInfo = awaitCallback<MegolmBackupCreationInfo> {
+            session.cryptoService().keysBackupService().prepareKeysBackupVersion(null, null, null, it)
         }
-        val version = testHelper.waitForCallback<KeysVersion> {
+        val version = awaitCallback<KeysVersion> {
             session.cryptoService().keysBackupService().createKeysBackupVersion(creationInfo, it)
         }
         // Save it for gossiping
