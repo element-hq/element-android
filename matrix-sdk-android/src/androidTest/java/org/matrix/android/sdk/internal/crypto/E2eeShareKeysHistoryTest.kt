@@ -116,10 +116,10 @@ class E2eeShareKeysHistoryTest : InstrumentedTest {
                             timelineEvent.root.getClearType() == EventType.MESSAGE
                             // && timelineEvent.root.mxDecryptionResult?.verificationState == MessageVerificationState.UN_SIGNED_DEVICE
                             ).also {
-                        if (it) {
-                            Log.v("#E2E TEST", "Bob can decrypt the message: ${timelineEvent?.root?.getDecryptedTextSummary()}")
-                        }
-                    }
+                                if (it) {
+                                    Log.v("#E2E TEST", "Bob can decrypt the message: ${timelineEvent?.root?.getDecryptedTextSummary()}")
+                                }
+                            }
                 }
 
                 // Create a new user
@@ -386,7 +386,8 @@ class E2eeShareKeysHistoryTest : InstrumentedTest {
                 }
             }
         }
-
+        Log.v("#E2E TEST ROTATION", "second session id $secondAliceMessageSessionId")
+        Log.v("#E2E TEST ROTATION", "third session id $aliceThirdMessageSessionId")
         when {
             initRoomHistoryVisibility.shouldShareHistory() == nextRoomHistoryVisibility.historyVisibility?.shouldShareHistory() -> {
                 assertEquals("Session shouldn't have been rotated", secondAliceMessageSessionId, aliceThirdMessageSessionId)
@@ -397,8 +398,6 @@ class E2eeShareKeysHistoryTest : InstrumentedTest {
                 Log.v("#E2E TEST ROTATION", "Rotation is needed!")
             }
         }
-
-        cryptoTestData.cleanUp(testHelper)
     }
 
     private suspend fun sendMessageInRoom(aliceRoomPOV: Room, text: String, testHelper: CommonTestHelper): String? {
@@ -428,12 +427,12 @@ class E2eeShareKeysHistoryTest : InstrumentedTest {
             }
         }
 
-            Log.v("#E2E TEST", "${otherSession.myUserId} tries to join room $e2eRoomID")
-            try {
-                otherSession.roomService().joinRoom(e2eRoomID)
-            } catch (ex: JoinRoomFailure.JoinedWithTimeout) {
-                // it's ok we will wait after
-            }
+        Log.v("#E2E TEST", "${otherSession.myUserId} tries to join room $e2eRoomID")
+        try {
+            otherSession.roomService().joinRoom(e2eRoomID)
+        } catch (ex: JoinRoomFailure.JoinedWithTimeout) {
+            // it's ok we will wait after
+        }
 
         Log.v("#E2E TEST", "${otherSession.myUserId} waiting for join echo ...")
         testHelper.retryWithBackoff {
