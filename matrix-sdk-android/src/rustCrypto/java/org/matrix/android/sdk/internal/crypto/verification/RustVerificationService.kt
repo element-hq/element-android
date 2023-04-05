@@ -173,6 +173,7 @@ internal class RustVerificationService @Inject constructor(
 
             Timber.d("## Verification: start for $sender")
             // update the request as the start updates it's state
+            verificationListenersHolder.dispatchRequestUpdated(request)
             verificationListenersHolder.dispatchTxUpdated(transaction)
         } else {
             // This didn't originate from a request, so tell our listeners that
@@ -322,6 +323,9 @@ internal class RustVerificationService @Inject constructor(
 
             if (sas != null) {
                 verificationListenersHolder.dispatchTxAdded(sas)
+                // we need to update the request as the state mapping depends on the
+                // sas or qr beeing started
+                verificationListenersHolder.dispatchRequestUpdated(request)
                 sas.transactionId
             } else {
                 Timber.w("Failed to start verification with method $method")

@@ -166,8 +166,8 @@ class UserVerificationViewModel @AssistedInject constructor(
                             )
                         }
                     }
-                    it.getTransaction()?.let {
-                        val dClass = it.toDataClass()
+                    it.getTransaction()?.let { transaction ->
+                        val dClass = transaction.toDataClass()
                         if (dClass != null) {
                             setState {
                                 copy(
