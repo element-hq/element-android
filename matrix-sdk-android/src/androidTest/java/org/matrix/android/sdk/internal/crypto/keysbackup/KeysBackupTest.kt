@@ -20,6 +20,7 @@ import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import kotlinx.coroutines.suspendCancellableCoroutine
+import org.amshove.kluent.internal.assertFails
 import org.amshove.kluent.internal.assertFailsWith
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -522,10 +523,12 @@ class KeysBackupTest : InstrumentedTest {
         assertEquals(KeysBackupState.NotTrusted, testData.aliceSession2.cryptoService().keysBackupService().getState())
 
         // - Try to trust the backup from the new device with a wrong recovery key
-        testData.aliceSession2.cryptoService().keysBackupService().trustKeysBackupVersionWithRecoveryKey(
-                testData.aliceSession2.cryptoService().keysBackupService().keysBackupVersion!!,
-                BackupUtils.recoveryKeyFromPassphrase("Bad recovery key")!!,
-        )
+        assertFails {
+            testData.aliceSession2.cryptoService().keysBackupService().trustKeysBackupVersionWithRecoveryKey(
+                    testData.aliceSession2.cryptoService().keysBackupService().keysBackupVersion!!,
+                    BackupUtils.recoveryKeyFromPassphrase("Bad recovery key")!!,
+            )
+        }
 
         // - The new device must still see the previous backup as not trusted
         assertNotNull(testData.aliceSession2.cryptoService().keysBackupService().keysBackupVersion)
@@ -621,10 +624,12 @@ class KeysBackupTest : InstrumentedTest {
         assertEquals(KeysBackupState.NotTrusted, testData.aliceSession2.cryptoService().keysBackupService().getState())
 
         // - Try to trust the backup from the new device with a wrong password
-        testData.aliceSession2.cryptoService().keysBackupService().trustKeysBackupVersionWithPassphrase(
-                testData.aliceSession2.cryptoService().keysBackupService().keysBackupVersion!!,
-                badPassword,
-        )
+        assertFails {
+            testData.aliceSession2.cryptoService().keysBackupService().trustKeysBackupVersionWithPassphrase(
+                    testData.aliceSession2.cryptoService().keysBackupService().keysBackupVersion!!,
+                    badPassword,
+            )
+        }
 
         // - The new device must still see the previous backup as not trusted
         assertNotNull(testData.aliceSession2.cryptoService().keysBackupService().keysBackupVersion)
