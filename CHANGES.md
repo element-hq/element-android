@@ -1,3 +1,26 @@
+Changes in Element v1.5.30 (2023-04-05)
+=======================================
+
+Features ✨
+----------
+ - Permalinks to a room/space are pillified ([#8219](https://github.com/vector-im/element-android/issues/8219))
+ - Permalinks to a matrix user are pillified ([#8220](https://github.com/vector-im/element-android/issues/8220))
+ - Permalinks to messages are pillified ([#8221](https://github.com/vector-im/element-android/issues/8221))
+
+Bugfixes 🐛
+----------
+ - Custom sticker picker loads indefinitely ([#8026](https://github.com/vector-im/element-android/issues/8026))
+ - Replace hardcoded colors by theming colors on save button. ([#8208](https://github.com/vector-im/element-android/issues/8208))
+ - Add RTL support to RemoveJitsiWidgetView ([#8210](https://github.com/vector-im/element-android/issues/8210))
+ - Add user completion for matrix ids ([#8217](https://github.com/vector-im/element-android/issues/8217))
+ - Long name are truncated in the pills ([#8218](https://github.com/vector-im/element-android/issues/8218))
+ - The read marker is stuck in the past ([#8268](https://github.com/vector-im/element-android/issues/8268))
+
+Other changes
+-------------
+ - Replace Terms and Conditions with Acceptable Use Policy. ([#8286](https://github.com/vector-im/element-android/issues/8286))
+
+
 Changes in Element v1.5.28 (2023-03-08)
 =======================================
 
