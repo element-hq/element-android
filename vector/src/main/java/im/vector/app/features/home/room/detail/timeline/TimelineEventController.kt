@@ -58,6 +58,7 @@ import im.vector.app.features.home.room.detail.timeline.item.ReactionsSummaryEve
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptsItem
 import im.vector.app.features.home.room.detail.timeline.item.TypingItem_
+import im.vector.app.features.home.room.detail.timeline.readreceipts.ReadReceiptsCache
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.media.AttachmentData
 import im.vector.app.features.media.ImageContentRenderer
@@ -74,7 +75,6 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageInfoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
-import org.matrix.android.sdk.api.session.room.read.ReadService
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import timber.log.Timber
@@ -201,7 +201,7 @@ class TimelineEventController @Inject constructor(
     // Map eventId to adapter position
     private val adapterPositionMapping = HashMap<String, Int>()
     private val timelineEventsGroups = TimelineEventsGroups()
-    private val receiptsByEvent = HashMap<String, MutableList<ReadReceipt>>()
+    private val readReceiptsCache = ReadReceiptsCache()
     private val modelCache = arrayListOf<CacheItemData?>()
     private var currentSnapshot: List<TimelineEvent> = emptyList()
     private var inSubmitList: Boolean = false
@@ -417,7 +417,7 @@ class TimelineEventController @Inject constructor(
         }
         Timber.v("Preprocess events took $preprocessEventsTiming ms")
         var numberOfEventsToBuild = 0
-        val lastSentEventWithoutReadReceipts = searchLastSentEventWithoutReadReceipts(receiptsByEvent)
+        val lastSentEventWithoutReadReceipts = searchLastSentEventWithoutReadReceipts(readReceiptsCache.receiptsByEvent())
         (0 until modelCache.size).forEach { position ->
             val event = currentSnapshot[position]
             val nextEvent = currentSnapshot.nextOrNull(position)
@@ -463,7 +463,7 @@ class TimelineEventController @Inject constructor(
             }
             val itemCachedData = modelCache[position] ?: return@forEach
             // Then update with additional models if needed
-            modelCache[position] = itemCachedData.enrichWithModels(event, nextEvent, position, receiptsByEvent)
+            modelCache[position] = itemCachedData.enrichWithModels(event, nextEvent, position, readReceiptsCache.receiptsByEvent())
         }
         Timber.v("Number of events to rebuild: $numberOfEventsToBuild on ${modelCache.size} total events")
     }
@@ -552,15 +552,15 @@ class TimelineEventController @Inject constructor(
     }
 
     private fun preprocessReverseEvents() {
-        receiptsByEvent.clear()
+        readReceiptsCache.clear()
         timelineEventsGroups.clear()
         val itr = currentSnapshot.listIterator(currentSnapshot.size)
         var lastShownEventId: String? = null
         while (itr.hasPrevious()) {
             val event = itr.previous()
             timelineEventsGroups.addOrIgnore(event)
-            val currentReadReceipts = ArrayList(event.readReceipts).filter {
-                it.roomMember.userId != session.myUserId && it.isVisibleInThisThread()
+            val currentReadReceipts = event.readReceipts.filter {
+                it.roomMember.userId != session.myUserId
             }
             if (timelineEventVisibilityHelper.shouldShowEvent(
                             timelineEvent = event,
@@ -573,16 +573,7 @@ class TimelineEventController @Inject constructor(
             if (lastShownEventId == null) {
                 continue
             }
-            val existingReceipts = receiptsByEvent.getOrPut(lastShownEventId) { ArrayList() }
-            existingReceipts.addAll(currentReadReceipts)
-        }
-    }
-
-    private fun ReadReceipt.isVisibleInThisThread(): Boolean {
-        return if (partialState.isFromThreadTimeline()) {
-            this.threadId == partialState.rootThreadEventId
-        } else {
-            this.threadId == null || this.threadId == ReadService.THREAD_ID_MAIN
+            readReceiptsCache.addReceiptsOnEvent(currentReadReceipts, lastShownEventId)
         }
     }
 
