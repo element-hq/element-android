@@ -31,7 +31,6 @@ import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.crypto.model.MessageVerificationState
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -153,7 +152,7 @@ class E2eeShareKeysHistoryTest : InstrumentedTest {
                             (timelineEvent != null &&
                                     timelineEvent.isEncrypted() &&
                                     timelineEvent.root.getClearType() == EventType.MESSAGE // &&
-                                    //timelineEvent.root.mxDecryptionResult?.verificationState == MessageVerificationState.UN_SIGNED_DEVICE
+                                    // timelineEvent.root.mxDecryptionResult?.verificationState == MessageVerificationState.UN_SIGNED_DEVICE
                                     ).also {
                                         if (it) {
                                             Log.v("#E2E TEST", "Aris can decrypt the message: ${timelineEvent?.root?.getDecryptedTextSummary()}")

@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.crypto.verification
 
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
 import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupService
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.actions.SetDeviceVerificationAction
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
@@ -28,6 +29,7 @@ import javax.inject.Inject
 internal class VerificationTrustBackend @Inject constructor(
         private val crossSigningService: dagger.Lazy<CrossSigningService>,
         private val setDeviceVerificationAction: SetDeviceVerificationAction,
+        private val keysBackupService: dagger.Lazy<KeysBackupService>,
         private val cryptoStore: IMXCryptoStore,
         @UserId private val myUserId: String,
         @DeviceId private val myDeviceId: String,
@@ -70,6 +72,7 @@ internal class VerificationTrustBackend @Inject constructor(
 
     suspend fun markMyMasterKeyAsTrusted() {
         crossSigningService.get().markMyMasterKeyAsTrusted()
+        keysBackupService.get().checkAndStartKeysBackup()
     }
 
     fun getUserDevice(userId: String, deviceId: String): CryptoDeviceInfo? {

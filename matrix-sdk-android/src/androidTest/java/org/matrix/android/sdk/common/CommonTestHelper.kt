@@ -209,7 +209,9 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
                 }
             }
         })
-        return messageSent.await()
+        return messageSent.await().also {
+            Log.v("#E2E TEST", "Message <${text}> sent and synced with id $it")
+        }
         // return withTimeout(TestConstants.timeOutMillis) { messageSent.await() }
     }
 

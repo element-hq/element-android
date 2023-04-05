@@ -81,10 +81,8 @@ internal class KeysBackupTestHelper(
 
         stateObserver.stopAndCheckStates(null)
 
-        val totalNumbersOfBackedUpKeysFromNewSession = aliceSession2.cryptoService().keysBackupService().getTotalNumbersOfBackedUpKeys()
-
         return KeysBackupScenarioData(cryptoTestData,
-                totalNumbersOfBackedUpKeysFromNewSession,
+                totalNumbersOfBackedUpKeys,
                 prepareKeysBackupDataResult,
                 aliceSession2)
     }

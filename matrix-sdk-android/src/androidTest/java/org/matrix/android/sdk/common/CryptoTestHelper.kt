@@ -224,37 +224,22 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
         val roomFromAlicePOV = aliceSession.getRoom(aliceRoomId)!!
 
         // Alice sends a message
-        testHelper.sendTextMessage(roomFromAlicePOV, messagesFromAlice[0], 1).first().eventId.let { sentEventId ->
-            // ensure bob got it
-            ensureEventReceived(aliceRoomId, sentEventId, bobSession, true)
-        }
+        ensureEventReceived(aliceRoomId, testHelper.sendMessageInRoom(roomFromAlicePOV, messagesFromAlice[0]), bobSession, true)
 
         // Bob send 3 messages
-        testHelper.sendTextMessage(roomFromBobPOV, messagesFromBob[0], 1).first().eventId.let { sentEventId ->
-            // ensure alice got it
-            ensureEventReceived(aliceRoomId, sentEventId, aliceSession, true)
-        }
-
-        testHelper.sendTextMessage(roomFromBobPOV, messagesFromBob[1], 1).first().eventId.let { sentEventId ->
-            // ensure alice got it
-            ensureEventReceived(aliceRoomId, sentEventId, aliceSession, true)
-        }
-        testHelper.sendTextMessage(roomFromBobPOV, messagesFromBob[2], 1).first().eventId.let { sentEventId ->
-            // ensure alice got it
-            ensureEventReceived(aliceRoomId, sentEventId, aliceSession, true)
+        for (msg in messagesFromBob) {
+            ensureEventReceived(aliceRoomId, testHelper.sendMessageInRoom(roomFromBobPOV, msg), aliceSession, true)
         }
 
         // Alice sends a message
-        testHelper.sendTextMessage(roomFromAlicePOV, messagesFromAlice[1], 1).first().eventId.let { sentEventId ->
-            // ensure bob got it
-            ensureEventReceived(aliceRoomId, sentEventId, bobSession, true)
-        }
+        ensureEventReceived(aliceRoomId, testHelper.sendMessageInRoom(roomFromAlicePOV, messagesFromAlice[1]), bobSession, true)
         return cryptoTestData
     }
 
     private suspend fun ensureEventReceived(roomId: String, eventId: String, session: Session, andCanDecrypt: Boolean) {
-        testHelper.retryPeriodically {
+        testHelper.retryWithBackoff {
             val timeLineEvent = session.getRoom(roomId)?.timelineService()?.getTimelineEvent(eventId)
+            Log.d("#E2E", "ensureEventReceived $eventId => ${timeLineEvent?.senderInfo?.userId}| ${timeLineEvent?.root?.getClearType()}")
             if (andCanDecrypt) {
                 timeLineEvent != null &&
                         timeLineEvent.isEncrypted() &&
@@ -539,6 +524,95 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
         bob.cryptoService().crossSigningService().isUserTrusted(alice.myUserId)
 
         scope.cancel()
+    }
+
+    suspend fun verifyNewSession(oldDevice: Session, newDevice: Session) {
+        val scope = CoroutineScope(SupervisorJob())
+
+        assertTrue(oldDevice.cryptoService().crossSigningService().canCrossSign())
+
+        val verificationServiceOld = oldDevice.cryptoService().verificationService()
+        val verificationServiceNew = newDevice.cryptoService().verificationService()
+
+        val oldSeesVerification = CompletableDeferred<PendingVerificationRequest>()
+        scope.launch(Dispatchers.IO) {
+            verificationServiceOld.requestEventFlow()
+                    .cancellable()
+                    .collect {
+                        val request = it.getRequest()
+                        Log.d("#E2E", "Verification request received: $request")
+                        if (request != null) {
+                            oldSeesVerification.complete(request)
+                            return@collect cancel()
+                        }
+                    }
+        }
+
+        val newReady = CompletableDeferred<PendingVerificationRequest>()
+        scope.launch(Dispatchers.IO) {
+            verificationServiceNew.requestEventFlow()
+                    .cancellable()
+                    .collect {
+                        val request = it.getRequest()
+                        Log.d("#E2E", "new state: ${request?.state}")
+                        if (request?.state == EVerificationState.Ready) {
+                            newReady.complete(request)
+                            return@collect cancel()
+                        }
+                    }
+        }
+
+        val txId = verificationServiceNew.requestSelfKeyVerification(listOf(VerificationMethod.SAS)).transactionId
+        oldSeesVerification.await()
+
+        verificationServiceOld.readyPendingVerification(
+                listOf(VerificationMethod.SAS),
+                oldDevice.myUserId,
+                txId
+        )
+
+        newReady.await()
+
+        val newConfirmed = CompletableDeferred<Unit>()
+        scope.launch(Dispatchers.IO) {
+            verificationServiceNew.requestEventFlow()
+                    .cancellable()
+                    .collect {
+                        val tx = it.getTransaction() as? SasVerificationTransaction
+                        Log.d("#E2E", "new tx state: ${tx?.state()}")
+                        if (tx?.state() == SasTransactionState.SasShortCodeReady) {
+                            tx.userHasVerifiedShortCode()
+                            newConfirmed.complete(Unit)
+                            return@collect cancel()
+                        }
+                    }
+        }
+
+        val oldConfirmed = CompletableDeferred<Unit>()
+        scope.launch(Dispatchers.IO) {
+            verificationServiceOld.requestEventFlow()
+                    .cancellable()
+                    .collect {
+                        val tx = it.getTransaction() as? SasVerificationTransaction
+                        Log.d("#E2E", "old tx state: ${tx?.state()}")
+                        if (tx?.state() == SasTransactionState.SasShortCodeReady) {
+                            tx.userHasVerifiedShortCode()
+                            oldConfirmed.complete(Unit)
+                            return@collect cancel()
+                        }
+                    }
+        }
+
+        verificationServiceNew.startKeyVerification(VerificationMethod.SAS, newDevice.myUserId, txId)
+
+        newConfirmed.await()
+        oldConfirmed.await()
+
+        testHelper.retryPeriodically {
+            oldDevice.cryptoService().crossSigningService().isCrossSigningVerified()
+        }
+
+        Log.d("#E2E", "New session is trusted")
     }
 
     suspend fun doE2ETestWithManyMembers(numberOfMembers: Int): CryptoTestData {

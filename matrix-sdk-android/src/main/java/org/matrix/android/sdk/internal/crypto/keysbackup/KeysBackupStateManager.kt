@@ -62,6 +62,7 @@ internal class KeysBackupStateManager(private val uiHandler: Handler) {
         synchronized(listeners) {
             listeners.add(listener)
         }
+        listener.onStateChange(state)
     }
 
     fun removeListener(listener: KeysBackupStateListener) {
