@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.crypto.verification
 
+import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
@@ -35,10 +36,10 @@ import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.EVerificationState
 import org.matrix.android.sdk.api.session.crypto.verification.SasTransactionState
 import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationEvent
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
+import org.matrix.android.sdk.api.session.crypto.verification.dbgState
+import org.matrix.android.sdk.api.session.crypto.verification.getTransaction
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
-import timber.log.Timber
 
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -49,9 +50,9 @@ class SASTest : InstrumentedTest {
     @Test
     fun test_aliceStartThenAliceCancel() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
 
-        Timber.v("verification: doE2ETestWithAliceAndBobInARoom")
+        Log.d("#E2E", "verification: doE2ETestWithAliceAndBobInARoom")
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
-        Timber.v("verification: initializeCrossSigning")
+        Log.d("#E2E", "verification: initializeCrossSigning")
         cryptoTestData.initializeCrossSigning(cryptoTestHelper)
         val aliceSession = cryptoTestData.firstSession
         val bobSession = cryptoTestData.secondSession
@@ -59,19 +60,20 @@ class SASTest : InstrumentedTest {
         val aliceVerificationService = aliceSession.cryptoService().verificationService()
         val bobVerificationService = bobSession!!.cryptoService().verificationService()
 
-        Timber.v("verification: requestVerificationAndWaitForReadyState")
+        Log.d("#E2E", "verification: requestVerificationAndWaitForReadyState")
         val txId = SasVerificationTestHelper(testHelper)
-                .requestVerificationAndWaitForReadyState(cryptoTestData, listOf(VerificationMethod.SAS))
+                .requestVerificationAndWaitForReadyState(scope, cryptoTestData, listOf(VerificationMethod.SAS))
 
-        Timber.v("verification: startKeyVerification")
+        Log.d("#E2E", "verification: startKeyVerification")
         aliceVerificationService.startKeyVerification(
                 VerificationMethod.SAS,
                 bobSession.myUserId,
                 txId
         )
 
-        Timber.v("verification: ensure bob has received starete")
+        Log.d("#E2E", "verification: ensure bob has received start")
         testHelper.retryWithBackoff {
+            Log.d("#E2E", "verification: ${bobVerificationService.getExistingVerificationRequest(aliceSession.myUserId, txId)?.state}")
             bobVerificationService.getExistingVerificationRequest(aliceSession.myUserId, txId)?.state == EVerificationState.Started
         }
 
@@ -85,41 +87,35 @@ class SASTest : InstrumentedTest {
 
         assertEquals("Alice and Bob have same transaction id", aliceKeyTx!!.transactionId, bobKeyTx!!.transactionId)
 
-        val aliceCancelled = CompletableDeferred<Unit>()
+        val aliceCancelled = CompletableDeferred<SasTransactionState.Cancelled>()
         aliceVerificationService.requestEventFlow().onEach {
-            println("alice flow event $it")
-            if (it is VerificationEvent.TransactionUpdated && it.transactionId == txId) {
-                val sasVerificationTransaction = it.transaction as SasVerificationTransaction
-                if (sasVerificationTransaction.state() is SasTransactionState.Cancelled) {
-                    aliceCancelled.complete(Unit)
+            Log.d("#E2E", "alice flow event $it | ${it.getTransaction()?.dbgState()}")
+            val tx = it.getTransaction()
+            if (tx?.transactionId == txId && tx is SasVerificationTransaction) {
+                if (tx.state() is SasTransactionState.Cancelled) {
+                    aliceCancelled.complete(tx.state() as SasTransactionState.Cancelled)
                 }
             }
         }.launchIn(scope)
 
-        val bobCancelled = CompletableDeferred<Unit>()
+        val bobCancelled = CompletableDeferred<SasTransactionState.Cancelled>()
         bobVerificationService.requestEventFlow().onEach {
-            println("alice flow event $it")
-            if (it is VerificationEvent.TransactionUpdated && it.transactionId == txId) {
-                val sasVerificationTransaction = it.transaction as SasVerificationTransaction
-                if (sasVerificationTransaction.state() is SasTransactionState.Cancelled) {
-                    bobCancelled.complete(Unit)
+            Log.d("#E2E", "bob flow event $it | ${it.getTransaction()?.dbgState()}")
+            val tx = it.getTransaction()
+            if (tx?.transactionId == txId && tx is SasVerificationTransaction) {
+                if (tx.state() is SasTransactionState.Cancelled) {
+                    bobCancelled.complete(tx.state() as SasTransactionState.Cancelled)
                 }
             }
         }.launchIn(scope)
 
         aliceVerificationService.cancelVerificationRequest(bobSession.myUserId, txId)
 
-        aliceCancelled.await()
-        bobCancelled.await()
+        val cancelledAlice = aliceCancelled.await()
+        val cancelledBob = bobCancelled.await()
 
-        val cancelledAlice = aliceVerificationService.getExistingVerificationRequest(bobSession.myUserId, txId)!!
-        val cancelledBob = aliceVerificationService.getExistingVerificationRequest(aliceSession.myUserId, txId)!!
-
-        assertEquals("Should be cancelled on alice side", cancelledAlice.state, EVerificationState.Cancelled)
-        assertEquals("Should be cancelled on alice side", cancelledBob.state, EVerificationState.Cancelled)
-
-        assertEquals("Should be User cancelled on alice side", CancelCode.User, cancelledAlice.cancelConclusion)
-        assertEquals("Should be User cancelled on bob side", CancelCode.User, cancelledBob.cancelConclusion)
+        assertEquals("Should be User cancelled on alice side", CancelCode.User, cancelledAlice.cancelCode)
+        assertEquals("Should be User cancelled on bob side", CancelCode.User, cancelledBob.cancelCode)
 
         assertNull(bobVerificationService.getExistingTransaction(aliceSession.myUserId, txId))
         assertNull(aliceVerificationService.getExistingTransaction(bobSession.myUserId, txId))

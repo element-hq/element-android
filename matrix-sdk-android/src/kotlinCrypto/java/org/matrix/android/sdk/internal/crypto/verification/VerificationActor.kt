@@ -271,15 +271,15 @@ internal class VerificationActor @AssistedInject constructor(
             is VerificationIntent.GetExistingTransaction -> {
                 verificationRequestsStore
                         .getExistingTransaction(msg.fromUser, msg.transactionId)
-                        ?.let {
+                        .let {
                             msg.deferred.complete(it)
                         }
             }
             is VerificationIntent.GetExistingRequest -> {
                 verificationRequestsStore
                         .getExistingRequest(msg.otherUserId, msg.transactionId)
-                        ?.let {
-                            msg.deferred.complete(it.toPendingVerificationRequest())
+                        .let {
+                            msg.deferred.complete(it?.toPendingVerificationRequest())
                         }
             }
             is VerificationIntent.OnCancelReceived -> {

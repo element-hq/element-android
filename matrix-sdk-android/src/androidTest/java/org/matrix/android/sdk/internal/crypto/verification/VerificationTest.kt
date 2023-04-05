@@ -17,6 +17,13 @@
 package org.matrix.android.sdk.internal.crypto.verification
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.cancellable
+import kotlinx.coroutines.launch
 import org.amshove.kluent.shouldBe
 import org.junit.FixMethodOrder
 import org.junit.Test
@@ -24,7 +31,9 @@ import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.session.crypto.verification.EVerificationState
+import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
+import org.matrix.android.sdk.api.session.crypto.verification.getRequest
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 
 @RunWith(AndroidJUnit4::class)
@@ -142,7 +151,7 @@ class VerificationTest : InstrumentedTest {
             bobSupportedMethods: List<VerificationMethod>,
             expectedResultForAlice: ExpectedResult,
             expectedResultForBob: ExpectedResult
-    ) = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
+    ) = runCryptoTest(context()) { cryptoTestHelper, _ ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val aliceSession = cryptoTestData.firstSession
@@ -151,49 +160,76 @@ class VerificationTest : InstrumentedTest {
         cryptoTestHelper.initializeCrossSigning(aliceSession)
         cryptoTestHelper.initializeCrossSigning(bobSession)
 
+        val scope = CoroutineScope(SupervisorJob())
+
         val aliceVerificationService = aliceSession.cryptoService().verificationService()
         val bobVerificationService = bobSession.cryptoService().verificationService()
 
-        val transactionId = aliceVerificationService.requestKeyVerificationInDMs(
-                aliceSupportedMethods, bobSession.myUserId, cryptoTestData.roomId
+        val bobSeesVerification = CompletableDeferred<PendingVerificationRequest>()
+        scope.launch(Dispatchers.IO) {
+            bobVerificationService.requestEventFlow()
+                    .cancellable()
+                    .collect {
+                        val request = it.getRequest()
+                        if (request != null) {
+                            bobSeesVerification.complete(request)
+                            return@collect cancel()
+                        }
+                    }
+        }
+
+        val aliceReady = CompletableDeferred<PendingVerificationRequest>()
+        scope.launch(Dispatchers.IO) {
+            aliceVerificationService.requestEventFlow()
+                    .cancellable()
+                    .collect {
+                        val request = it.getRequest()
+                        if (request?.state == EVerificationState.Ready) {
+                            aliceReady.complete(request)
+                            return@collect cancel()
+                        }
+                    }
+        }
+        val bobReady = CompletableDeferred<PendingVerificationRequest>()
+        scope.launch(Dispatchers.IO) {
+            bobVerificationService.requestEventFlow()
+                    .cancellable()
+                    .collect {
+                        val request = it.getRequest()
+                        if (request?.state == EVerificationState.Ready) {
+                            bobReady.complete(request)
+                            return@collect cancel()
+                        }
+                    }
+        }
+
+        val requestID = aliceVerificationService.requestKeyVerificationInDMs(
+                methods = aliceSupportedMethods,
+                otherUserId = bobSession.myUserId,
+                roomId = cryptoTestData.roomId
+        ).transactionId
+
+        bobSeesVerification.await()
+        bobVerificationService.readyPendingVerification(
+                bobSupportedMethods,
+                aliceSession.myUserId,
+                requestID
         )
-                .transactionId
+        val aliceRequest = aliceReady.await()
+        val bobRequest = bobReady.await()
 
-        testHelper.retryPeriodically {
-            val incomingRequest = bobVerificationService.getExistingVerificationRequest(aliceSession.myUserId, transactionId)
-            if (incomingRequest != null) {
-                bobVerificationService.readyPendingVerification(
-                        bobSupportedMethods,
-                        aliceSession.myUserId,
-                        incomingRequest.transactionId
-                )
-                true
-            } else {
-                false
-            }
-        }
-
-        // wait for alice to see the ready
-        testHelper.retryPeriodically {
-            val pendingRequest = aliceVerificationService.getExistingVerificationRequest(bobSession.myUserId, transactionId)
-            pendingRequest?.state == EVerificationState.Ready
-        }
-
-        val aliceReadyPendingVerificationRequest = aliceVerificationService.getExistingVerificationRequest(bobSession.myUserId, transactionId)!!
-        val bobReadyPendingVerificationRequest = bobVerificationService.getExistingVerificationRequest(aliceSession.myUserId, transactionId)!!
-
-        aliceReadyPendingVerificationRequest.let { pr ->
+        aliceRequest.let { pr ->
             pr.isSasSupported shouldBe expectedResultForAlice.sasIsSupported
             pr.weShouldShowScanOption shouldBe expectedResultForAlice.otherCanShowQrCode
             pr.weShouldDisplayQRCode shouldBe expectedResultForAlice.otherCanScanQrCode
         }
 
-        bobReadyPendingVerificationRequest.let { pr ->
+        bobRequest.let { pr ->
             pr.isSasSupported shouldBe expectedResultForBob.sasIsSupported
             pr.weShouldShowScanOption shouldBe expectedResultForBob.otherCanShowQrCode
             pr.weShouldDisplayQRCode shouldBe expectedResultForBob.otherCanScanQrCode
         }
 
-        cryptoTestData.cleanUp(testHelper)
+        scope.cancel()
     }
 }

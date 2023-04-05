@@ -16,56 +16,71 @@
 
 package org.matrix.android.sdk.internal.crypto.verification
 
-import org.amshove.kluent.fail
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.cancellable
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.verification.EVerificationState
+import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
+import org.matrix.android.sdk.api.session.crypto.verification.getRequest
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CryptoTestData
 
 class SasVerificationTestHelper(private val testHelper: CommonTestHelper) {
-    suspend fun requestVerificationAndWaitForReadyState(cryptoTestData: CryptoTestData, supportedMethods: List<VerificationMethod>): String {
+    suspend fun requestVerificationAndWaitForReadyState(
+            scope: CoroutineScope,
+            cryptoTestData: CryptoTestData, supportedMethods: List<VerificationMethod>
+    ): String {
         val aliceSession = cryptoTestData.firstSession
         val bobSession = cryptoTestData.secondSession!!
 
         val aliceVerificationService = aliceSession.cryptoService().verificationService()
         val bobVerificationService = bobSession.cryptoService().verificationService()
 
+        val bobSeesVerification = CompletableDeferred<PendingVerificationRequest>()
+        scope.launch(Dispatchers.IO) {
+            bobVerificationService.requestEventFlow()
+                    .cancellable()
+                    .collect {
+                        val request = it.getRequest()
+                        if (request != null) {
+                            bobSeesVerification.complete(request)
+                            return@collect cancel()
+                        }
+                    }
+        }
+
         val bobUserId = bobSession.myUserId
         // Step 1: Alice starts a verification request
         val transactionId = aliceVerificationService.requestKeyVerificationInDMs(
                 supportedMethods, bobUserId, cryptoTestData.roomId
+        ).transactionId
+
+        val aliceReady = CompletableDeferred<PendingVerificationRequest>()
+        scope.launch(Dispatchers.IO) {
+            aliceVerificationService.requestEventFlow()
+                    .cancellable()
+                    .collect {
+                        val request = it.getRequest()
+                        if (request?.state == EVerificationState.Ready) {
+                            aliceReady.complete(request)
+                            return@collect cancel()
+                        }
+                    }
+        }
+
+        bobSeesVerification.await()
+        bobVerificationService.readyPendingVerification(
+                supportedMethods,
+                aliceSession.myUserId,
+                transactionId
         )
-                .transactionId
 
-        testHelper.retryWithBackoff(
-                onFail = {
-                    fail("bob should see an incoming verification request with id $transactionId")
-                }
-        ) {
-            val incomingRequest = bobVerificationService.getExistingVerificationRequest(aliceSession.myUserId, transactionId)
-            if (incomingRequest != null) {
-                bobVerificationService.readyPendingVerification(
-                        supportedMethods,
-                        aliceSession.myUserId,
-                        incomingRequest.transactionId
-                )
-                true
-            } else {
-                false
-            }
-        }
-
-        // wait for alice to see the ready
-        testHelper.retryWithBackoff(
-                onFail = {
-                    fail("Alice request whould be ready $transactionId")
-                }
-        ) {
-            val pendingRequest = aliceVerificationService.getExistingVerificationRequest(bobUserId, transactionId)
-            pendingRequest?.state == EVerificationState.Ready
-        }
-
+        aliceReady.await()
         return transactionId
     }
 
