@@ -2871,4 +2871,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="settings_external_account_management">Detail akun Anda dikelola secara terpisah di %1$s.</string>
     <string name="settings_external_account_management_title">Akun</string>
     <string name="settings_notification_error_on_update">Terjadi kesalahan saat memperbarui preferensi notifikasi Anda. Silakan coba lagi.</string>
+    <string name="direct_room_encryption_enabled_waiting_users_tile_description">Ketika pengguna yang diundang trlah bergabung ${app_name}, Anda akan dapat mengobrol dan ruangannya akan terenkripsi secara ujung ke ujung</string>
+    <string name="direct_room_encryption_enabled_waiting_users">Menunggu pengguna untuk bergabung ${app_name}</string>
+    <string name="direct_room_user_list_only_invite_one_email">Amda hanya dapat mengundang satu surel satu-satu</string>
 </resources>

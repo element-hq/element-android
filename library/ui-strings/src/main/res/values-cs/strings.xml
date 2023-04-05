@@ -2688,7 +2688,7 @@
     <string name="onboarding_new_app_layout_welcome_title">Vítejte v novém zobrazení!</string>
     <string name="home_empty_no_unreads_message">Zde se zobrazí nepřečtené zprávy, pokud nějaké máte.</string>
     <string name="home_empty_no_unreads_title">Nic k nahlášení.</string>
-    <string name="home_empty_no_rooms_message">Univerzální zabezpečená chatovací aplikace pro týmy, přátele a organizace. Vytvořte si chat nebo se připojte k existující místnosti a začněte.</string>
+    <string name="home_empty_no_rooms_message">Univerzální zabezpečený komunikátor pro týmy, přátele a organizace. Vytvořte si chat nebo se připojte k existující místnosti a začněte.</string>
     <string name="home_empty_no_rooms_title">Vítejte v aplikaci ${app_name},
 \n%s.</string>
     <string name="home_empty_space_no_rooms_message">Prostory představují nový způsob seskupování místností a osob. Pomocí tlačítka vpravo dole můžete přidat stávající místnost nebo vytvořit novou.</string>
@@ -2989,4 +2989,7 @@
     <string name="settings_external_account_management">Údaje o vašem účtu jsou spravovány odděleně na adrese %1$s.</string>
     <string name="settings_external_account_management_title">Účet</string>
     <string name="settings_notification_error_on_update">Při aktualizaci předvoleb oznámení došlo k chybě. Zkuste to prosím znovu.</string>
+    <string name="direct_room_encryption_enabled_waiting_users_tile_description">Jakmile se pozvaní uživatelé připojí do aplikace ${app_name}, budete moci komunikovat a místnost bude koncově šifrovaná</string>
+    <string name="direct_room_encryption_enabled_waiting_users">Čekání na uživatele, než se připojí do ${app_name}</string>
+    <string name="direct_room_user_list_only_invite_one_email">Můžete pozvat pouze jeden e-mail najednou</string>
 </resources>

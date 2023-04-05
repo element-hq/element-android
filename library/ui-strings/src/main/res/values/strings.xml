@@ -1002,6 +1002,7 @@
     <string name="settings_version">Version</string>
     <string name="settings_olm_version">olm version</string>
     <string name="settings_app_term_conditions">Terms &amp; conditions</string>
+    <string name="settings_acceptable_use_policy">Acceptable Use Policy</string>
     <string name="settings_third_party_notices">Third party notices</string>
     <string name="settings_copyright">Copyright</string>
     <string name="settings_privacy_policy">Privacy policy</string>
@@ -3539,4 +3540,11 @@
 
     <string name="settings_access_token">Access Token</string>
     <string name="settings_access_token_summary">Your access token gives full access to your account. Do not share it with anyone.</string>
+
+    <!-- Pills -->
+    <string name="pill_message_from_user">Message from %s</string>
+    <string name="pill_message_from_unknown_user">Message</string>
+    <string name="pill_message_in_room">Message in %s</string>
+    <string name="pill_message_in_unknown_room">Message in room</string>
+    <string name="pill_message_unknown_room_or_space">Room/Space</string>
 </resources>

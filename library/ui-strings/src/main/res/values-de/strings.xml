@@ -1249,7 +1249,7 @@
     <string name="room_member_power_level_moderators">Moderatoren</string>
     <string name="room_member_power_level_custom">Benutzerdefiniert</string>
     <string name="room_member_power_level_invites">Eingeladen</string>
-    <string name="room_member_power_level_users">Nutzer</string>
+    <string name="room_member_power_level_users">Benutzer</string>
     <string name="room_member_power_level_admin_in">Administrator in %1$s</string>
     <string name="room_member_power_level_moderator_in">Moderator in %1$s</string>
     <string name="room_member_jump_to_read_receipt">Springen und als gelesen markieren</string>
@@ -1859,7 +1859,7 @@
     <string name="re_authentication_activity_title">Erneute Authentifizierung erforderlich</string>
     <string name="failed_to_initialize_cross_signing">Quersignierung konnte nicht eingerichtet werden</string>
     <string name="error_unauthorized">Nicht autorisierte, fehlende gültige Authentifizierungsdaten</string>
-    <string name="call_transfer_users_tab_title">Nutzer</string>
+    <string name="call_transfer_users_tab_title">Benutzer</string>
     <string name="call_transfer_failure">Beim Weiterleiten des Anrufs ist ein Fehler aufgetreten</string>
     <string name="call_transfer_title">Weiterleiten</string>
     <string name="call_transfer_connect_action">Verbinden</string>
@@ -2928,4 +2928,7 @@
     <string name="settings_external_account_management_title">Konto</string>
     <string name="settings_external_account_management">Deine Kontodetails werden separat verwaltet bei %1$s.</string>
     <string name="settings_notification_error_on_update">Ein Fehler ist während der Aktualisierung deiner Benachrichtigungseinstellungen aufgetreten. Bitte versuche es erneut.</string>
+    <string name="direct_room_encryption_enabled_waiting_users_tile_description">Sobald eingeladene Benutzer ${app_name} beigetreten sind, werdet ihr euch unterhalten können und der Raum Ende-zu-Ende-verschlüsselt sein</string>
+    <string name="direct_room_encryption_enabled_waiting_users">Warte darauf, dass Benutzer ${app_name} beitreten</string>
+    <string name="direct_room_user_list_only_invite_one_email">Du kannst E-Mail-Einladung nur nacheinander verschicken</string>
 </resources>

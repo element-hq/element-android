@@ -41,19 +41,23 @@ private val IGNORED_OPTIONS: Options? = null
 
 @Singleton
 class DefaultVectorAnalytics @Inject constructor(
-        postHogFactory: PostHogFactory,
+        private val postHogFactory: PostHogFactory,
         private val sentryAnalytics: SentryAnalytics,
-        analyticsConfig: AnalyticsConfig,
+        private val analyticsConfig: AnalyticsConfig,
         private val analyticsStore: AnalyticsStore,
         private val lateInitUserPropertiesFactory: LateInitUserPropertiesFactory,
         @NamedGlobalScope private val globalScope: CoroutineScope
 ) : VectorAnalytics {
 
-    private val posthog: PostHog? = when {
-        analyticsConfig.isEnabled -> postHogFactory.createPosthog()
-        else -> {
-            Timber.tag(analyticsTag.value).w("Analytics is disabled")
-            null
+    private var posthog: PostHog? = null
+
+    private fun createPosthog(): PostHog? {
+        return when {
+            analyticsConfig.isEnabled -> postHogFactory.createPosthog()
+            else -> {
+                Timber.tag(analyticsTag.value).w("Analytics is disabled")
+                null
+            }
         }
     }
 
@@ -150,6 +154,7 @@ class DefaultVectorAnalytics @Inject constructor(
         userConsent?.let { _userConsent ->
             when (_userConsent) {
                 true -> {
+                    posthog = createPosthog()
                     posthog?.optOut(false)
                     identifyPostHog()
                     pendingUserProperties?.let { doUpdateUserProperties(it) }
@@ -159,6 +164,8 @@ class DefaultVectorAnalytics @Inject constructor(
                     // When opting out, ensure that the queue is flushed first, or it will be flushed later (after user has revoked consent)
                     posthog?.flush()
                     posthog?.optOut(true)
+                    posthog?.shutdown()
+                    posthog = null
                 }
             }
         }
