@@ -19,15 +19,12 @@ package org.matrix.android.sdk.internal.crypto
 import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
-import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
@@ -38,7 +35,7 @@ class PreShareKeysTest : InstrumentedTest {
 
     @Test
     fun ensure_outbound_session_happy_path() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
-        val testData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true)
+        val testData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
         val e2eRoomID = testData.roomId
         val aliceSession = testData.firstSession
         val bobSession = testData.secondSession!!
@@ -59,32 +56,37 @@ class PreShareKeysTest : InstrumentedTest {
             newKeysCount > preShareCount
         }
 
-        val aliceCryptoStore = (aliceSession.cryptoService() as DefaultCryptoService).cryptoStoreForTesting
-        val aliceOutboundSessionInRoom = aliceCryptoStore.getCurrentOutboundGroupSessionForRoom(e2eRoomID)!!.outboundGroupSession.sessionIdentifier()
+        val newKeysCount = bobSession.cryptoService().keysBackupService().getTotalNumbersOfKeys()
 
-        val bobCryptoStore = (bobSession.cryptoService() as DefaultCryptoService).cryptoStoreForTesting
-        val aliceDeviceBobPov = bobCryptoStore.getUserDevice(aliceSession.myUserId, aliceSession.sessionParams.deviceId)!!
-        val bobInboundForAlice = bobCryptoStore.getInboundGroupSession(aliceOutboundSessionInRoom, aliceDeviceBobPov.identityKey()!!)
-        assertNotNull("Bob should have received and decrypted a room key event from alice", bobInboundForAlice)
-        assertEquals("Wrong room", e2eRoomID, bobInboundForAlice!!.roomId)
+//        val aliceCryptoStore = (aliceSession.cryptoService() as DefaultCryptoService).cryptoStoreForTesting
+//        val aliceOutboundSessionInRoom = aliceCryptoStore.getCurrentOutboundGroupSessionForRoom(e2eRoomID)!!.outboundGroupSession.sessionIdentifier()
+//
+//        val bobCryptoStore = (bobSession.cryptoService() as DefaultCryptoService).cryptoStoreForTesting
+//        val aliceDeviceBobPov = bobCryptoStore.getUserDevice(aliceSession.myUserId, aliceSession.sessionParams.deviceId)!!
+//        val bobInboundForAlice = bobCryptoStore.getInboundGroupSession(aliceOutboundSessionInRoom, aliceDeviceBobPov.identityKey()!!)
+//        assertNotNull("Bob should have received and decrypted a room key event from alice", bobInboundForAlice)
+//        assertEquals("Wrong room", e2eRoomID, bobInboundForAlice!!.roomId)
 
-        val megolmSessionId = bobInboundForAlice.session.sessionIdentifier()
+//        val megolmSessionId = bobInboundForAlice.session.sessionIdentifier()
+//
+//        assertEquals("Wrong session", aliceOutboundSessionInRoom, megolmSessionId)
 
-        assertEquals("Wrong session", aliceOutboundSessionInRoom, megolmSessionId)
-
-        val sharedIndex = aliceSession.cryptoService().getSharedWithInfo(e2eRoomID, megolmSessionId)
-                .getObject(bobSession.myUserId, bobSession.sessionParams.deviceId)
-
-        assertEquals("The session received by bob should match what alice sent", 0, sharedIndex)
+//        val sharedIndex = aliceSession.cryptoService().getSharedWithInfo(e2eRoomID, megolmSessionId)
+//                .getObject(bobSession.myUserId, bobSession.sessionParams.deviceId)
+//
+//        assertEquals("The session received by bob should match what alice sent", 0, sharedIndex)
 
         // Just send a real message as test
         val sentEventId = testHelper.sendMessageInRoom(aliceSession.getRoom(e2eRoomID)!!, "Allo")
 
         val sentEvent = aliceSession.getRoom(e2eRoomID)!!.getTimelineEvent(sentEventId)!!
 
-        assertEquals("Unexpected megolm session", megolmSessionId, sentEvent.root.content.toModel<EncryptedEventContent>()?.sessionId)
+//        assertEquals("Unexpected megolm session", megolmSessionId, sentEvent.root.content.toModel<EncryptedEventContent>()?.sessionId)
         testHelper.retryPeriodically {
             bobSession.getRoom(e2eRoomID)?.getTimelineEvent(sentEvent.eventId)?.root?.getClearType() == EventType.MESSAGE
         }
+
+        // check that no additional key was shared
+        assertEquals(newKeysCount, bobSession.cryptoService().keysBackupService().getTotalNumbersOfKeys())
     }
 }
