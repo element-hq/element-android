@@ -2599,7 +2599,9 @@
                 "face",
                 "shaking",
                 "shock",
-                "vibrate"
+                "vibrate",
+                "dizzy",
+                "blurry"
             ]
         },
         "relieved-face": {
@@ -3800,7 +3802,8 @@
                 "heart",
                 "like",
                 "love",
-                "pink"
+                "pink",
+                "valentines"
             ]
         },
         "orange-heart": {
@@ -3854,8 +3857,9 @@
                 "cyan",
                 "heart",
                 "light blue",
-                "light blue heart",
-                "teal"
+                "teal",
+                "ice",
+                "baby blue"
             ]
         },
         "purple-heart": {
@@ -3892,10 +3896,10 @@
             "b": "1FA76",
             "j": [
                 "gray",
-                "grey heart",
                 "heart",
                 "silver",
-                "slate"
+                "slate",
+                "monochrome"
             ]
         },
         "white-heart": {
@@ -4198,11 +4202,12 @@
             "j": [
                 "high five",
                 "leftward",
-                "leftwards pushing hand",
                 "push",
                 "refuse",
                 "stop",
-                "wait"
+                "wait",
+                "highfive",
+                "pressing"
             ]
         },
         "rightwards-pushing-hand": {
@@ -4213,9 +4218,10 @@
                 "push",
                 "refuse",
                 "rightward",
-                "rightwards pushing hand",
                 "stop",
-                "wait"
+                "wait",
+                "highfive",
+                "pressing"
             ]
         },
         "ok-hand": {
@@ -8620,7 +8626,11 @@
                 "antlers",
                 "elk",
                 "mammal",
-                "moose"
+                "shrek",
+                "canada",
+                "sweden",
+                "sven",
+                "cool"
             ]
         },
         "donkey": {
@@ -8630,10 +8640,10 @@
                 "animal",
                 "ass",
                 "burro",
-                "donkey",
                 "mammal",
                 "mule",
-                "stubborn"
+                "stubborn",
+                "eeyore"
             ]
         },
         "horse": {
@@ -9311,7 +9321,8 @@
                 "bird",
                 "flying",
                 "mythology",
-                "wing"
+                "angel",
+                "birds"
             ]
         },
         "black-bird": {
@@ -9331,9 +9342,10 @@
             "j": [
                 "bird",
                 "fowl",
-                "goose",
                 "honk",
-                "silly"
+                "silly",
+                "jemima",
+                "goosebumps"
             ]
         },
         "frog": {
@@ -9581,10 +9593,11 @@
                 "burn",
                 "invertebrate",
                 "jelly",
-                "jellyfish",
                 "marine",
                 "ouch",
-                "stinger"
+                "stinger",
+                "sting",
+                "tentacles"
             ]
         },
         "snail": {
@@ -9885,7 +9898,6 @@
             "j": [
                 "bluebonnet",
                 "flower",
-                "hyacinth",
                 "lavender",
                 "lupine",
                 "snapdragon"
@@ -10423,9 +10435,11 @@
             "b": "1FADA",
             "j": [
                 "beer",
-                "ginger root",
                 "root",
-                "spice"
+                "spice",
+                "yellow",
+                "cooking",
+                "gingerbread"
             ]
         },
         "pea-pod": {
@@ -10437,7 +10451,9 @@
                 "legume",
                 "pea",
                 "pod",
-                "vegetable"
+                "vegetable",
+                "cozy",
+                "green"
             ]
         },
         "bread": {
@@ -15533,9 +15549,9 @@
                 "dance",
                 "fan",
                 "flutter",
-                "folding hand fan",
                 "hot",
-                "shy"
+                "shy",
+                "flamenco"
             ]
         },
         "purse": {
@@ -15719,7 +15735,8 @@
                 "Afro",
                 "comb",
                 "hair",
-                "pick"
+                "pick",
+                "afro"
             ]
         },
         "crown": {
@@ -16165,7 +16182,6 @@
             "b": "1FA87",
             "j": [
                 "instrument",
-                "maracas",
                 "music",
                 "percussion",
                 "rattle",
@@ -16177,11 +16193,13 @@
             "b": "1FA88",
             "j": [
                 "fife",
-                "flute",
                 "music",
                 "pipe",
                 "recorder",
-                "woodwind"
+                "woodwind",
+                "bamboo",
+                "instrument",
+                "pied piper"
             ]
         },
         "mobile-phone": {
@@ -19036,9 +19054,9 @@
             "a": "⊛ Khanda",
             "b": "1FAAF",
             "j": [
-                "khanda",
                 "religion",
-                "Sikh"
+                "Sikh",
+                "Sikhism"
             ]
         },
         "aries": {
@@ -19460,7 +19478,9 @@
                 "computer",
                 "internet",
                 "network",
-                "wireless"
+                "wifi",
+                "contactless",
+                "signal"
             ]
         },
         "vibration-mode": {

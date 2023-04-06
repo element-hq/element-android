@@ -11,23 +11,21 @@ def gradle = "7.4.2"
 def kotlin = "1.8.10"
 def kotlinCoroutines = "1.6.4"
 def dagger = "2.45"
-def firebaseBom = "31.3.0"
+def firebaseBom = "31.4.0"
 def appDistribution = "16.0.0-beta06"
 def retrofit = "2.9.0"
 def markwon = "4.6.2"
 def moshi = "1.14.0"
 def lifecycle = "2.5.1"
 def flowBinding = "1.2.0"
-def flipper = "0.187.0"
+def flipper = "0.188.0"
 def epoxy = "5.0.0"
 def mavericks = "3.0.2"
 def glide = "4.15.1"
 def bigImageViewer = "1.8.1"
 def jjwt = "0.11.5"
-// Temporary version to unblock #6929. Once 0.16.0 is released we should use it, and revert
-// the whole commit which set version 0.16.0-SNAPSHOT
-def vanniktechEmoji = "0.16.0-SNAPSHOT"
-def sentry = "6.16.0"
+def vanniktechEmoji = "0.16.0"
+def sentry = "6.17.0"
 // Use 1.6.0 alpha to fix issue with test
 def fragment = "1.6.0-alpha08"
 // Testing
@@ -59,7 +57,7 @@ ext.libs = [
                 'fragmentTesting'         : "androidx.fragment:fragment-testing:$fragment",
                 'fragmentTestingManifest' : "androidx.fragment:fragment-testing-manifest:$fragment",
                 'constraintLayout'        : "androidx.constraintlayout:constraintlayout:2.1.4",
-                'work'                    : "androidx.work:work-runtime-ktx:2.8.0",
+                'work'                    : "androidx.work:work-runtime-ktx:2.8.1",
                 'autoFill'                : "androidx.autofill:autofill:1.1.0",
                 'preferenceKtx'           : "androidx.preference:preference-ktx:1.2.0",
                 'junit'                   : "androidx.test.ext:junit:1.1.5",
@@ -88,7 +86,7 @@ ext.libs = [
                 'appdistributionApi'      : "com.google.firebase:firebase-appdistribution-api-ktx:$appDistribution",
                 'appdistribution'         : "com.google.firebase:firebase-appdistribution:$appDistribution",
                 // Phone number https://github.com/google/libphonenumber
-                'phonenumber'             : "com.googlecode.libphonenumber:libphonenumber:8.13.8"
+                'phonenumber'             : "com.googlecode.libphonenumber:libphonenumber:8.13.9"
         ],
         dagger      : [
                 'dagger'                  : "com.google.dagger:dagger:$dagger",

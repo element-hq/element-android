@@ -218,7 +218,7 @@ class WidgetFragment :
 
     override fun invalidate() = withState(viewModel) { state ->
         Timber.v("Invalidate state: $state")
-        when (state.formattedURL) {
+        when (val formattedUrl = state.formattedURL) {
             Uninitialized,
             is Loading -> {
                 setStateError(null)
@@ -227,6 +227,9 @@ class WidgetFragment :
                 views.widgetProgressBar.isVisible = true
             }
             is Success -> {
+                if (views.widgetWebView.url == null) {
+                    loadFormattedUrl(formattedUrl())
+                }
                 setStateError(null)
                 when (state.webviewLoadedUrl) {
                     Uninitialized -> {
@@ -253,7 +256,7 @@ class WidgetFragment :
                 // we need to show Error
                 views.widgetWebView.isInvisible = true
                 views.widgetProgressBar.isVisible = false
-                setStateError(state.formattedURL.error.message)
+                setStateError(formattedUrl.error.message)
             }
         }
     }
@@ -323,8 +326,12 @@ class WidgetFragment :
     }
 
     private fun loadFormattedUrl(event: WidgetViewEvents.OnURLFormatted) {
+        loadFormattedUrl(event.formattedURL)
+    }
+
+    private fun loadFormattedUrl(formattedUrl: String) {
         views.widgetWebView.clearHistory()
-        views.widgetWebView.loadUrl(event.formattedURL)
+        views.widgetWebView.loadUrl(formattedUrl)
     }
 
     private fun setStateError(message: String?) {

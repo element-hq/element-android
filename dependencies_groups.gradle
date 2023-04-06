@@ -42,7 +42,6 @@ ext.groups = [
                 regex: [
                 ],
                 group: [
-                        'com.vanniktech',
                 ]
         ],
         mavenSnapshots: [

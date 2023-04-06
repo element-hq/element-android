@@ -76,6 +76,7 @@ class AutocompleteMemberController @Inject constructor(private val context: Cont
             roomMember.roomMemberSummary.let { user ->
                 id(user.userId)
                 matrixItem(user.toMatrixItem())
+                subName(user.userId)
                 avatarRenderer(host.avatarRenderer)
                 clickListener { host.listener?.onItemClick(roomMember) }
             }

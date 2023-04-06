@@ -21,6 +21,7 @@ import io.realm.kotlin.createObject
 import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
+import org.matrix.android.sdk.api.session.room.read.ReadService
 import org.matrix.android.sdk.internal.crypto.model.SessionInfo
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
@@ -76,7 +77,7 @@ internal fun ChunkEntity.addTimelineEvent(
     val senderId = eventEntity.sender ?: ""
 
     // Update RR for the sender of a new message with a dummy one
-    val readReceiptsSummaryEntity = if (!ownedByThreadChunk) handleReadReceipts(realm, roomId, eventEntity, senderId) else null
+    val readReceiptsSummaryEntity = handleReadReceiptsOfSender(realm, roomId, eventEntity, senderId)
     val timelineEventEntity = realm.createObject<TimelineEventEntity>().apply {
         this.localId = localId
         this.root = eventEntity
@@ -124,7 +125,7 @@ internal fun computeIsUnique(
     }
 }
 
-private fun handleReadReceipts(realm: Realm, roomId: String, eventEntity: EventEntity, senderId: String): ReadReceiptsSummaryEntity {
+private fun handleReadReceiptsOfSender(realm: Realm, roomId: String, eventEntity: EventEntity, senderId: String): ReadReceiptsSummaryEntity {
     val readReceiptsSummaryEntity = ReadReceiptsSummaryEntity.where(realm, eventEntity.eventId).findFirst()
             ?: realm.createObject<ReadReceiptsSummaryEntity>(eventEntity.eventId).apply {
                 this.roomId = roomId
@@ -132,7 +133,12 @@ private fun handleReadReceipts(realm: Realm, roomId: String, eventEntity: EventE
     val originServerTs = eventEntity.originServerTs
     if (originServerTs != null) {
         val timestampOfEvent = originServerTs.toDouble()
-        val readReceiptOfSender = ReadReceiptEntity.getOrCreate(realm, roomId = roomId, userId = senderId, threadId = eventEntity.rootThreadEventId)
+        val readReceiptOfSender = ReadReceiptEntity.getOrCreate(
+                realm = realm,
+                roomId = roomId,
+                userId = senderId,
+                threadId = eventEntity.rootThreadEventId ?: ReadService.THREAD_ID_MAIN
+        )
         // If the synced RR is older, update
         if (timestampOfEvent > readReceiptOfSender.originServerTs) {
             val previousReceiptsSummary = ReadReceiptsSummaryEntity.where(realm, eventId = readReceiptOfSender.eventId).findFirst()
