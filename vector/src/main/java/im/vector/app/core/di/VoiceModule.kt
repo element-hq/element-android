@@ -23,6 +23,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import im.vector.app.features.voicebroadcast.listening.VoiceBroadcastPlayer
 import im.vector.app.features.voicebroadcast.listening.VoiceBroadcastPlayerImpl
 import im.vector.app.features.voicebroadcast.recording.VoiceBroadcastRecorder
@@ -41,12 +42,14 @@ abstract class VoiceModule {
                 context: Context,
                 sessionHolder: ActiveSessionHolder,
                 getVoiceBroadcastStateEventLiveUseCase: GetVoiceBroadcastStateEventLiveUseCase,
+                playbackTracker: AudioMessagePlaybackTracker
         ): VoiceBroadcastRecorder? {
             return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 VoiceBroadcastRecorderQ(
                         context = context,
                         sessionHolder = sessionHolder,
-                        getVoiceBroadcastEventUseCase = getVoiceBroadcastStateEventLiveUseCase
+                        getVoiceBroadcastEventUseCase = getVoiceBroadcastStateEventLiveUseCase,
+                        playbackTracker = playbackTracker
                 )
             } else {
                 null
