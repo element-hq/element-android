@@ -49,7 +49,7 @@ class PreShareKeysTest : InstrumentedTest {
         val preShareCount = bobSession.cryptoService().keysBackupService().getTotalNumbersOfKeys()
 
         assertEquals("Bob should not have receive any key from alice at this point", 0, preShareCount)
-        Log.d("#Test", "Room Key Received from alice $preShareCount")
+        Log.d("#E2E", "Room Key Received from alice $preShareCount")
 
         // Force presharing of new outbound key
         aliceSession.cryptoService().prepareToEncrypt(e2eRoomID)
@@ -78,7 +78,9 @@ class PreShareKeysTest : InstrumentedTest {
         assertEquals("The session received by bob should match what alice sent", 0, sharedIndex)
 
         // Just send a real message as test
-        val sentEvent = testHelper.sendTextMessage(aliceSession.getRoom(e2eRoomID)!!, "Allo", 1).first()
+        val sentEventId = testHelper.sendMessageInRoom(aliceSession.getRoom(e2eRoomID)!!, "Allo")
+
+        val sentEvent = aliceSession.getRoom(e2eRoomID)!!.getTimelineEvent(sentEventId)!!
 
         assertEquals("Unexpected megolm session", megolmSessionId, sentEvent.root.content.toModel<EncryptedEventContent>()?.sessionId)
         testHelper.retryPeriodically {
