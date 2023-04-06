@@ -176,7 +176,6 @@ class E2eeShareKeysHistoryTest : InstrumentedTest {
                     }
                 }
 
-                testHelper.signOutAndClose(arisSession)
                 cryptoTestData.cleanUp(testHelper)
             }
 
