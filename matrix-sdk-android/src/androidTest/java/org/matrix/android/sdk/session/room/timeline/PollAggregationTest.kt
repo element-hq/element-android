@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.session.room.timeline
 
+import android.util.Log
+import kotlinx.coroutines.CompletableDeferred
 import org.amshove.kluent.fail
 import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldBeEqualTo
@@ -45,8 +47,9 @@ import java.util.concurrent.CountDownLatch
 @FixMethodOrder(MethodSorters.JVM)
 class PollAggregationTest : InstrumentedTest {
 
+    // This test needs to be refactored, I am not sure it's working properly
     @Test
-    fun testAllPollUseCases() = runCryptoTest(context()) { cryptoTestHelper, commonTestHelper ->
+    fun testAllPollUseCases() = runCryptoTest(context()) { cryptoTestHelper, _ ->
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(false)
 
         val aliceSession = cryptoTestData.firstSession
@@ -57,14 +60,14 @@ class PollAggregationTest : InstrumentedTest {
         // Bob creates a poll
         roomFromBobPOV.sendService().sendPoll(PollType.DISCLOSED, pollQuestion, pollOptions)
 
-        aliceSession.syncService().startSync(true)
         val aliceTimeline = roomFromAlicePOV.timelineService().createTimeline(null, TimelineSettings(30))
-        aliceTimeline.start()
 
         val TOTAL_TEST_COUNT = 7
         val lock = CountDownLatch(TOTAL_TEST_COUNT)
+        val deff = CompletableDeferred<Unit>()
 
         val aliceEventsListener = object : Timeline.Listener {
+
             override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
                 snapshot.firstOrNull { it.root.getClearType() in EventType.POLL_START.values }?.let { pollEvent ->
                     val pollEventId = pollEvent.eventId
@@ -123,21 +126,28 @@ class PollAggregationTest : InstrumentedTest {
                             fail("Lock count ${lock.count} didn't handled.")
                         }
                     }
+
+                    if (lock.count.toInt() == 0) deff.complete(Unit)
                 }
             }
         }
 
+        aliceTimeline.start()
+
         aliceTimeline.addListener(aliceEventsListener)
 
-        commonTestHelper.await(lock)
+        // QUICK FIX
+        // This was locking the thread thus blocking the timeline updates
+        // Changed to a suspendable but this test is not well constructed..
+//        commonTestHelper.await(lock)
+        deff.await()
 
         aliceTimeline.removeAllListeners()
-
-        aliceSession.syncService().stopSync()
         aliceTimeline.dispose()
     }
 
     private fun testInitialPollConditions(pollContent: MessagePollContent, pollSummary: PollResponseAggregatedSummary?) {
+        Log.v("#E2E TEST", "testInitialPollConditions")
         // No votes yet, poll summary should be null
         pollSummary shouldBe null
         // Question should be the same as intended
@@ -150,6 +160,7 @@ class PollAggregationTest : InstrumentedTest {
     }
 
     private fun testBobVotesOption1(pollContent: MessagePollContent, pollSummary: PollResponseAggregatedSummary?) {
+        Log.v("#E2E TEST", "testBobVotesOption1")
         if (pollSummary == null) {
             fail("Poll summary shouldn't be null when someone votes")
             return
@@ -165,6 +176,7 @@ class PollAggregationTest : InstrumentedTest {
     }
 
     private fun testBobChangesVoteToOption2(pollContent: MessagePollContent, pollSummary: PollResponseAggregatedSummary?) {
+        Log.v("#E2E TEST", "testBobChangesVoteToOption2")
         if (pollSummary == null) {
             fail("Poll summary shouldn't be null when someone votes")
             return
@@ -180,6 +192,7 @@ class PollAggregationTest : InstrumentedTest {
     }
 
     private fun testAliceAndBobVoteToOption2(pollContent: MessagePollContent, pollSummary: PollResponseAggregatedSummary?) {
+        Log.v("#E2E TEST", "testAliceAndBobVoteToOption2")
         if (pollSummary == null) {
             fail("Poll summary shouldn't be null when someone votes")
             return
@@ -196,6 +209,7 @@ class PollAggregationTest : InstrumentedTest {
     }
 
     private fun testAliceVotesOption1AndBobVotesOption2(pollContent: MessagePollContent, pollSummary: PollResponseAggregatedSummary?) {
+        Log.v("#E2E TEST", "testAliceVotesOption1AndBobVotesOption2")
         if (pollSummary == null) {
             fail("Poll summary shouldn't be null when someone votes")
             return
@@ -215,10 +229,12 @@ class PollAggregationTest : InstrumentedTest {
     }
 
     private fun testEndedPoll(pollSummary: PollResponseAggregatedSummary?) {
+        Log.v("#E2E TEST", "testEndedPoll")
         pollSummary?.closedTime ?: 0 shouldBeGreaterThan 0
     }
 
     private fun assertTotalVotesCount(aggregatedContent: PollSummaryContent, expectedVoteCount: Int) {
+        Log.v("#E2E TEST", "assertTotalVotesCount")
         aggregatedContent.totalVotes shouldBeEqualTo expectedVoteCount
         aggregatedContent.votes?.size shouldBeEqualTo expectedVoteCount
     }
