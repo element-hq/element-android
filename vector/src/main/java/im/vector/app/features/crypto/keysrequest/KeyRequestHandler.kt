@@ -28,6 +28,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.cancellable
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -73,23 +74,21 @@ class KeyRequestHandler @Inject constructor(
     // This functionality is disabled in element for now. As it could be prone to social attacks
     var enablePromptingForRequest = false
 
-//    lateinit var listenerJob: Job
+    //    lateinit var listenerJob: Job
     fun start(session: Session) {
         this.session = session
-        scope = CoroutineScope(SupervisorJob() + session.coroutineScope.coroutineContext)
-//        session.cryptoService().verificationService().addListener(this)
-        scope!!.launch {
-            session.cryptoService().verificationService().requestEventFlow()
-                    .cancellable()
-                    .onEach {
-                        when (it) {
-                            is VerificationEvent.RequestAdded -> verificationRequestCreated(it.request)
-                            is VerificationEvent.RequestUpdated -> verificationRequestUpdated(it.request)
-                            is VerificationEvent.TransactionAdded -> transactionCreated(it.transaction)
-                            is VerificationEvent.TransactionUpdated -> transactionUpdated(it.transaction)
-                        }
+        val scope = CoroutineScope(SupervisorJob() + session.coroutineScope.coroutineContext)
+        this.scope = scope
+        session.cryptoService().verificationService().requestEventFlow()
+                .cancellable()
+                .onEach {
+                    when (it) {
+                        is VerificationEvent.RequestAdded -> verificationRequestCreated(it.request)
+                        is VerificationEvent.RequestUpdated -> verificationRequestUpdated(it.request)
+                        is VerificationEvent.TransactionAdded -> transactionCreated(it.transaction)
+                        is VerificationEvent.TransactionUpdated -> transactionUpdated(it.transaction)
                     }
-        }
+                }.launchIn(scope)
 
         session.cryptoService().addRoomKeysRequestListener(this)
     }
