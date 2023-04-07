@@ -87,15 +87,13 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
         internal fun runCryptoTest(context: Context, cryptoConfig: MXCryptoConfig? = null, autoSignoutOnClose: Boolean = true, block: suspend CoroutineScope.(CryptoTestHelper, CommonTestHelper) -> Unit) {
             val testHelper = CommonTestHelper(context, cryptoConfig)
             val cryptoTestHelper = CryptoTestHelper(testHelper)
-            return try {
-                runTest(dispatchTimeoutMs = TestConstants.timeOutMillis * 2) {
-                    withContext(Dispatchers.Main) {
+            return runTest(dispatchTimeoutMs = TestConstants.timeOutMillis) {
+                try {
+                    withContext(Dispatchers.Default) {
                         block(cryptoTestHelper, testHelper)
                     }
-                }
-            } finally {
-                if (autoSignoutOnClose) {
-                    runBlocking {
+                } finally {
+                    if (autoSignoutOnClose) {
                         testHelper.cleanUpOpenedSessions()
                     }
                 }

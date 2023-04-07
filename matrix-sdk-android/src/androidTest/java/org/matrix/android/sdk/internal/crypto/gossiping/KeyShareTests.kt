@@ -193,8 +193,8 @@ class KeyShareTests : InstrumentedTest {
 
         cryptoTestHelper.ensureCanDecrypt(listOf(receivedEvent.eventId), aliceSession2, roomId, listOf(sentEventText ?: ""))
 
-        commonTestHelper.signOutAndClose(aliceSession)
-        commonTestHelper.signOutAndClose(aliceSession2)
+//        commonTestHelper.signOutAndClose(aliceSession)
+//        commonTestHelper.signOutAndClose(aliceSession2)
     }
 
     // See E2ESanityTest for a test regarding secret sharing
@@ -272,8 +272,8 @@ class KeyShareTests : InstrumentedTest {
             ownDeviceReply != null && ownDeviceReply.result is RequestResult.Success
         }
 
-        commonTestHelper.signOutAndClose(aliceSession)
-        commonTestHelper.signOutAndClose(aliceNewSession)
+//        commonTestHelper.signOutAndClose(aliceSession)
+//        commonTestHelper.signOutAndClose(aliceNewSession)
     }
 
     @Test
@@ -387,9 +387,9 @@ class KeyShareTests : InstrumentedTest {
             result != null && result is RequestResult.Success && result.chainIndex == 3
         }
 
-        commonTestHelper.signOutAndClose(aliceNewSession)
-        commonTestHelper.signOutAndClose(aliceSession)
-        commonTestHelper.signOutAndClose(bobSession)
+//        commonTestHelper.signOutAndClose(aliceNewSession)
+//        commonTestHelper.signOutAndClose(aliceSession)
+//        commonTestHelper.signOutAndClose(bobSession)
     }
 
     @Test
@@ -479,8 +479,8 @@ class KeyShareTests : InstrumentedTest {
         val outgoing = aliceNewSession.cryptoService().getOutgoingRoomKeyRequests().firstOrNull { it.sessionId == sentEventMegolmSession }
         assertEquals("The request should be canceled", OutgoingRoomKeyRequestState.SENT_THEN_CANCELED, outgoing!!.state)
 
-        commonTestHelper.signOutAndClose(aliceNewSession)
-        commonTestHelper.signOutAndClose(aliceSession)
-        commonTestHelper.signOutAndClose(bobSession)
+//        commonTestHelper.signOutAndClose(aliceNewSession)
+//        commonTestHelper.signOutAndClose(aliceSession)
+//        commonTestHelper.signOutAndClose(bobSession)
     }
 }

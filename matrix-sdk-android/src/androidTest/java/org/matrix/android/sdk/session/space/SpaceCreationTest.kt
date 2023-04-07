@@ -124,8 +124,8 @@ class SpaceCreationTest : InstrumentedTest {
         assertEquals("Room name should be set", roomName, spaceBobPov?.asRoom()?.roomSummary()?.name)
         assertEquals("Room topic should be set", topic, spaceBobPov?.asRoom()?.roomSummary()?.topic)
 
-        commonTestHelper.signOutAndClose(aliceSession)
-        commonTestHelper.signOutAndClose(bobSession)
+//        commonTestHelper.signOutAndClose(aliceSession)
+//        commonTestHelper.signOutAndClose(bobSession)
     }
 
     @Test

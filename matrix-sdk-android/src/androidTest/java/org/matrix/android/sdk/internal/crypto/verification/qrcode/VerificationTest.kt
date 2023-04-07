@@ -300,8 +300,8 @@ class VerificationTest : InstrumentedTest {
             requests.any { it.cancelConclusion == CancelCode.AcceptedByAnotherDevice }
         }
 
-        testHelper.signOutAndClose(aliceSessionToVerify)
-        testHelper.signOutAndClose(aliceSessionThatVerifies)
-        testHelper.signOutAndClose(aliceSessionThatReceivesCanceledEvent)
+//        testHelper.signOutAndClose(aliceSessionToVerify)
+//        testHelper.signOutAndClose(aliceSessionThatVerifies)
+//        testHelper.signOutAndClose(aliceSessionThatReceivesCanceledEvent)
     }
 }
