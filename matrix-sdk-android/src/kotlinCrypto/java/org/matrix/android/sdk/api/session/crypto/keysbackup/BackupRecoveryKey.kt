@@ -27,6 +27,10 @@ class BackupRecoveryKey(private val key: ByteArray) : IBackupRecoveryKey {
         return this.toBase58() == other.toBase58()
     }
 
+    override fun hashCode(): Int {
+        return key.contentHashCode()
+    }
+
     override fun toBase58() = computeRecoveryKey(key)
 
     override fun toBase64() = key.toBase64NoPadding()
