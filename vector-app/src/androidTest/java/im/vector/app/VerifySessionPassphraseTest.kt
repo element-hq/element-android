@@ -37,6 +37,7 @@ import com.adevinta.android.barista.internal.viewaction.SleepViewAction
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.getMatrixInstance
 import im.vector.app.features.MainActivity
+import im.vector.app.features.analytics.ui.consent.AnalyticsOptInActivity
 import im.vector.app.features.crypto.quads.SharedSecureStorageActivity
 import im.vector.app.features.crypto.recover.BootstrapCrossSigningTask
 import im.vector.app.features.crypto.recover.Params
@@ -44,9 +45,9 @@ import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.home.HomeActivity
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
@@ -59,14 +60,15 @@ import kotlin.random.Random
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
-@Ignore
 class VerifySessionPassphraseTest : VerificationTestBase() {
 
     var existingSession: Session? = null
     val passphrase = "person woman camera tv"
 
     @get:Rule
-    val activityRule = ActivityScenarioRule(MainActivity::class.java)
+    val testRule: RuleChain = RuleChain
+            .outerRule(ActivityScenarioRule(MainActivity::class.java))
+            .around(ClearCurrentSessionRule())
 
     @Before
     fun createSessionWithCrossSigningAnd4S() {
@@ -74,7 +76,7 @@ class VerifySessionPassphraseTest : VerificationTestBase() {
         val matrix = getMatrixInstance()
         val userName = "foobar_${Random.nextLong()}"
         existingSession = createAccountAndSync(matrix, userName, password, true)
-        doSync<Unit> {
+        doSync {
             existingSession!!.cryptoService().crossSigningService()
                     .initializeCrossSigning(
                             object : UserInteractiveAuthInterceptor {
@@ -119,6 +121,12 @@ class VerifySessionPassphraseTest : VerificationTestBase() {
         val userId: String = existingSession!!.myUserId
 
         uiTestBase.login(userId = userId, password = password, homeServerUrl = homeServerUrl)
+
+        withIdlingResource(activityIdlingResource(AnalyticsOptInActivity::class.java)) {
+            onView(withId(R.id.submit))
+                    .check(matches(isDisplayed()))
+                    .perform(click())
+        }
 
         // Thread.sleep(6000)
         withIdlingResource(activityIdlingResource(HomeActivity::class.java)) {

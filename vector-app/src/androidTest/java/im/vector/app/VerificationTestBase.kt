@@ -17,7 +17,11 @@
 package im.vector.app
 
 import android.net.Uri
+import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.Observer
+import androidx.test.platform.app.InstrumentationRegistry
+import dagger.hilt.EntryPoints
+import im.vector.app.core.di.SingletonEntryPoint
 import im.vector.app.ui.robot.OnboardingRobot
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -25,6 +29,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
+import org.junit.After
 import org.junit.Assert
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.MatrixCallback
@@ -114,7 +119,9 @@ abstract class VerificationTestBase {
     private fun syncSession(session: Session) {
         val lock = CountDownLatch(1)
 
-        GlobalScope.launch(Dispatchers.Main) { session.open() }
+        runBlocking(Dispatchers.Main) {
+            session.open()
+        }
 
         session.syncService().startSync(true)
 
@@ -132,5 +139,23 @@ abstract class VerificationTestBase {
         GlobalScope.launch(Dispatchers.Main) { syncLiveData.observeForever(syncObserver) }
 
         lock.await(20_000, TimeUnit.MILLISECONDS)
+    }
+
+    /**
+     * Clears the session after every test. It is necessary to reset otherwise further UI tests fails.
+     */
+    @After
+    fun tearDown() {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        runBlocking {
+            reflectAnalyticDatastore(context).edit { it.clear() }
+            runCatching {
+                val entryPoint = EntryPoints.get(context.applicationContext, SingletonEntryPoint::class.java)
+                val sessionHolder = entryPoint.activeSessionHolder()
+                sessionHolder.getSafeActiveSession()?.signOutService()?.signOut(true)
+                entryPoint.vectorPreferences().clearPreferences()
+                sessionHolder.clearActiveSession()
+            }
+        }
     }
 }

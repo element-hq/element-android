@@ -36,12 +36,13 @@ import androidx.test.filters.LargeTest
 import com.adevinta.android.barista.internal.viewaction.SleepViewAction
 import im.vector.app.core.utils.getMatrixInstance
 import im.vector.app.features.MainActivity
+import im.vector.app.features.analytics.ui.consent.AnalyticsOptInActivity
 import im.vector.app.features.home.HomeActivity
 import org.hamcrest.CoreMatchers.not
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
@@ -59,20 +60,21 @@ import kotlin.random.Random
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
-@Ignore
 class VerifySessionInteractiveTest : VerificationTestBase() {
 
     var existingSession: Session? = null
 
     @get:Rule
-    val activityRule = ActivityScenarioRule(MainActivity::class.java)
+    val testRule: RuleChain = RuleChain
+            .outerRule(ActivityScenarioRule(MainActivity::class.java))
+            .around(ClearCurrentSessionRule())
 
     @Before
     fun createSessionWithCrossSigning() {
         val matrix = getMatrixInstance()
         val userName = "foobar_${Random.nextLong()}"
         existingSession = createAccountAndSync(matrix, userName, password, true)
-        doSync<Unit> {
+        doSync {
             existingSession!!.cryptoService().crossSigningService()
                     .initializeCrossSigning(
                             object : UserInteractiveAuthInterceptor {
@@ -95,6 +97,12 @@ class VerifySessionInteractiveTest : VerificationTestBase() {
         val userId: String = existingSession!!.myUserId
 
         uiTestBase.login(userId = userId, password = password, homeServerUrl = homeServerUrl)
+
+        withIdlingResource(activityIdlingResource(AnalyticsOptInActivity::class.java)) {
+            onView(withId(R.id.submit))
+                    .check(matches(isDisplayed()))
+                    .perform(click())
+        }
 
         // Thread.sleep(6000)
         withIdlingResource(activityIdlingResource(HomeActivity::class.java)) {
@@ -139,21 +147,29 @@ class VerifySessionInteractiveTest : VerificationTestBase() {
         onView(withId(R.id.bottomSheetFragmentContainer))
                 .check(matches(not(hasDescendant(withText(R.string.verification_cannot_access_other_session)))))
 
-        val request = existingSession!!.cryptoService().verificationService().requestKeyVerification(
-                listOf(VerificationMethod.SAS, VerificationMethod.QR_CODE_SCAN, VerificationMethod.QR_CODE_SHOW),
-                existingSession!!.myUserId,
-                listOf(uiSession.sessionParams.deviceId!!)
+        // The emulator at this point has sent requests to other sessions.
+        // Find the incoming request from the existing session and start the verification process.
+        val incomingRequest = existingSession!!.cryptoService().verificationService().getExistingVerificationRequests(existingSession!!.myUserId).first {
+            it.requestInfo?.fromDevice == uiSession.sessionParams.deviceId
+        }
+
+        existingSession!!.cryptoService().verificationService().readyPendingVerification(
+                listOf(
+                        VerificationMethod.SAS,
+                        VerificationMethod.QR_CODE_SCAN,
+                        VerificationMethod.QR_CODE_SHOW
+                ), existingSession!!.myUserId, incomingRequest.transactionId!!
         )
 
-        val transactionId = request.transactionId!!
+        val transactionId = incomingRequest.transactionId!!
         val sasReadyIdle = verificationStateIdleResource(transactionId, VerificationTxState.ShortCodeReady, uiSession)
         val otherSessionSasReadyIdle = verificationStateIdleResource(transactionId, VerificationTxState.ShortCodeReady, existingSession!!)
 
-        onView(isRoot()).perform(SleepViewAction.sleep(1000))
+        onView(isRoot()).perform(SleepViewAction.sleep(5000))
 
         // Assert QR code option is there and available
         onView(withId(R.id.bottomSheetVerificationRecyclerView))
-                .check(matches(hasDescendant(withText(R.string.verification_scan_their_code))))
+                .check(matches(hasDescendant(withText(R.string.verification_scan_with_this_device))))
 
         onView(withId(R.id.bottomSheetVerificationRecyclerView))
                 .check(matches(hasDescendant(withId(R.id.itemVerificationQrCodeImage))))
@@ -173,7 +189,7 @@ class VerifySessionInteractiveTest : VerificationTestBase() {
 
         IdlingRegistry.getInstance().register(sasReadyIdle)
         IdlingRegistry.getInstance().register(otherSessionSasReadyIdle)
-        onView(isRoot()).perform(SleepViewAction.sleep(300))
+        onView(isRoot()).perform(SleepViewAction.sleep(5000))
         // will only execute when Idle is ready
         val expectedEmojis = firstSessionTr.getEmojiCodeRepresentation()
         val targets = listOf(R.id.emoji0, R.id.emoji1, R.id.emoji2, R.id.emoji3, R.id.emoji4, R.id.emoji5, R.id.emoji6)
@@ -241,7 +257,7 @@ class VerifySessionInteractiveTest : VerificationTestBase() {
                 .perform(click())
     }
 
-    fun verificationStateIdleResource(transactionId: String, checkForState: VerificationTxState, session: Session): IdlingResource {
+    private fun verificationStateIdleResource(transactionId: String, checkForState: VerificationTxState, session: Session): IdlingResource {
         val idle = object : IdlingResource, VerificationService.Listener {
             private var callback: IdlingResource.ResourceCallback? = null
 
