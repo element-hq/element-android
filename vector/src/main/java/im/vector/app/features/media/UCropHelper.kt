@@ -39,8 +39,7 @@ fun createUCropWithDefaultSettings(
                                         /* tabAspectRatio = */ UCropActivity.SCALE
                                 )
                                 setToolbarTitle(toolbarTitle)
-                                // Disable freestyle crop, usability was not easy
-                                // setFreeStyleCropEnabled(true)
+                                setFreeStyleCropEnabled(true)
                                 // Color used for toolbar icon and text
                                 setToolbarColor(colorProvider.getColorFromAttribute(android.R.attr.colorBackground))
                                 setToolbarWidgetColor(colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
