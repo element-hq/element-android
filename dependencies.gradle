@@ -29,7 +29,7 @@ def sentry = "6.17.0"
 // Use 1.6.0 alpha to fix issue with test
 def fragment = "1.6.0-alpha09"
 // Testing
-def mockk = "1.12.3" // We need to use 1.12.3 to have mocking in androidTest until a new version is released: https://github.com/mockk/mockk/issues/819
+def mockk = "1.13.5" // We need to use 1.12.3 to have mocking in androidTest until a new version is released: https://github.com/mockk/mockk/issues/819
 def espresso = "3.5.1"
 def androidxTest = "1.5.0"
 def androidxOrchestrator = "1.4.2"
