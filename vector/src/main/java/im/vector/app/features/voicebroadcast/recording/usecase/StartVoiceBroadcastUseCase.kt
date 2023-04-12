@@ -20,6 +20,7 @@ import android.content.Context
 import androidx.core.content.FileProvider
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.features.attachments.toContentAttachmentData
+import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.voicebroadcast.VoiceBroadcastConstants
 import im.vector.app.features.voicebroadcast.VoiceBroadcastFailure
@@ -54,6 +55,7 @@ import javax.inject.Inject
 class StartVoiceBroadcastUseCase @Inject constructor(
         private val session: Session,
         private val voiceBroadcastRecorder: VoiceBroadcastRecorder?,
+        private val playbackTracker: AudioMessagePlaybackTracker,
         private val context: Context,
         private val buildMeta: BuildMeta,
         private val getRoomLiveVoiceBroadcastsUseCase: GetRoomLiveVoiceBroadcastsUseCase,
@@ -106,10 +108,14 @@ class StartVoiceBroadcastUseCase @Inject constructor(
             }
 
             override fun onStateUpdated(state: VoiceBroadcastRecorder.State) {
-                if (state == VoiceBroadcastRecorder.State.Error) {
-                    session.coroutineScope.launch {
-                        pauseVoiceBroadcastUseCase.execute(room.roomId)
+                when (state) {
+                    VoiceBroadcastRecorder.State.Recording -> playbackTracker.updateCurrentRecording(AudioMessagePlaybackTracker.RECORDING_ID, emptyList())
+                    VoiceBroadcastRecorder.State.Idle -> playbackTracker.stopPlaybackOrRecorder(AudioMessagePlaybackTracker.RECORDING_ID)
+                    VoiceBroadcastRecorder.State.Error -> {
+                        playbackTracker.stopPlaybackOrRecorder(AudioMessagePlaybackTracker.RECORDING_ID)
+                        session.coroutineScope.launch { pauseVoiceBroadcastUseCase.execute(room.roomId) }
                     }
+                    else -> Unit
                 }
             }
         })
