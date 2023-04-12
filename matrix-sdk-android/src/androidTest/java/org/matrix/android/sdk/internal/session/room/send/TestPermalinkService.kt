@@ -48,4 +48,8 @@ class TestPermalinkService : PermalinkService {
             MARKDOWN -> "[%2\$s](https://matrix.to/#/%1\$s)"
         }
     }
+
+    override fun isPermalinkSupported(supportedHosts: Array<String>, url: String): Boolean {
+        return false
+    }
 }
