@@ -239,7 +239,7 @@ class AudioMessageHelper @Inject constructor(
             val percentage = currentPosition.toFloat() / totalDuration
             playbackTracker.updatePlayingAtPlaybackTime(id, currentPosition, percentage)
         } else {
-            playbackTracker.stopPlayback(id)
+            playbackTracker.stopPlaybackOrRecorder(id)
             stopPlaybackTicker()
         }
     }

@@ -57,6 +57,7 @@ class StartVoiceBroadcastUseCaseTest {
             StartVoiceBroadcastUseCase(
                     session = fakeSession,
                     voiceBroadcastRecorder = fakeVoiceBroadcastRecorder,
+                    playbackTracker = mockk(),
                     context = FakeContext().instance,
                     buildMeta = mockk(),
                     getRoomLiveVoiceBroadcastsUseCase = fakeGetRoomLiveVoiceBroadcastsUseCase,

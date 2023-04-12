@@ -21,7 +21,6 @@ import android.media.MediaRecorder
 import android.os.Build
 import androidx.annotation.RequiresApi
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.voice.AbstractVoiceRecorderQ
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcast
@@ -45,8 +44,7 @@ import java.util.concurrent.TimeUnit
 class VoiceBroadcastRecorderQ(
         context: Context,
         private val sessionHolder: ActiveSessionHolder,
-        private val getVoiceBroadcastEventUseCase: GetVoiceBroadcastStateEventLiveUseCase,
-        private val playbackTracker: AudioMessagePlaybackTracker
+        private val getVoiceBroadcastEventUseCase: GetVoiceBroadcastStateEventLiveUseCase
 ) : AbstractVoiceRecorderQ(context), VoiceBroadcastRecorder {
 
     private val session get() = sessionHolder.getActiveSession()
@@ -105,7 +103,6 @@ class VoiceBroadcastRecorderQ(
 
     override fun startRecord(roomId: String) {
         super.startRecord(roomId)
-        playbackTracker.updateCurrentRecording(AudioMessagePlaybackTracker.RECORDING_ID, emptyList())
         observeConnectionState()
     }
 
