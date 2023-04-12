@@ -97,4 +97,15 @@ interface PermalinkService {
      * @return the created template
      */
     fun createMentionSpanTemplate(type: SpanTemplateType, forceMatrixTo: Boolean = false): String
+
+    /**
+     * Check if the url is a permalink. It must be a matrix.to link
+     * or a link with host provided by the string-array `permalink_supported_hosts` in the config file
+     *
+     * @param supportedHosts the list of hosts supported for permalinks
+     * @param url the link to check, Ex: "https://matrix.to/#/@benoit:matrix.org"
+     *
+     * @return true when url is a permalink
+     */
+    fun isPermalinkSupported(supportedHosts: Array<String>, url: String): Boolean
 }

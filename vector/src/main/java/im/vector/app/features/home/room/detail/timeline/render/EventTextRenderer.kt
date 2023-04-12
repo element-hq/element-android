@@ -29,7 +29,7 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.html.PillImageSpan
-import org.matrix.android.sdk.api.MatrixPatterns
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.getUserOrDefault
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
@@ -99,7 +99,9 @@ class EventTextRenderer @AssistedInject constructor(
     private fun addPermalinksSpans(text: Spannable) {
         for (match in Patterns.WEB_URL.toRegex().findAll(text)) {
             val url = text.substring(match.range)
-            val matrixItem = if (MatrixPatterns.isPermalink(url)) {
+            val supportedHosts = context.resources.getStringArray(R.array.permalink_supported_hosts)
+            val isPermalinkSupported = sessionHolder.getSafeActiveSession()?.permalinkService()?.isPermalinkSupported(supportedHosts, url).orFalse()
+            val matrixItem = if (isPermalinkSupported) {
                 when (val permalinkData = PermalinkParser.parse(url)) {
                     is PermalinkData.UserLink -> permalinkData.toMatrixItem()
                     is PermalinkData.RoomLink -> permalinkData.toMatrixItem()
