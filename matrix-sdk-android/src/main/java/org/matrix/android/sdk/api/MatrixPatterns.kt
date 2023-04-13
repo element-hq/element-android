@@ -62,7 +62,7 @@ object MatrixPatterns {
     // regex pattern to find permalink with message id.
     // Android does not support in URL so extract it.
     private const val PERMALINK_BASE_REGEX = "https://matrix\\.to/#/"
-    private const val APP_BASE_REGEX = "https://[A-Z0-9.-]+\\.[A-Z]{2,}/[A-Z]{3,}/#/room/"
+    private const val APP_BASE_REGEX = "https://[A-Z0-9.-]+\\.[A-Z]{2,}/#/(room|user)/"
     const val SEP_REGEX = "/"
 
     private val PATTERN_CONTAIN_MATRIX_TO_PERMALINK = PERMALINK_BASE_REGEX.toRegex(RegexOption.IGNORE_CASE)

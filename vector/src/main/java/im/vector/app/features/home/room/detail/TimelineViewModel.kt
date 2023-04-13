@@ -1333,13 +1333,17 @@ class TimelineViewModel @AssistedInject constructor(
             computeUnreadState(timelineEvents, roomSummary)
         }
                 // We don't want live update of unread so we skip when we already had a HasUnread or HasNoUnread
-                // However, we want to update an existing HasUnread, if the readMarkerId hasn't changed,
+                // However, we want to update an existing HasUnread, if the readMarkerId hasn't changed or when we go back in live,
                 // as we might be loading new events to fill gaps in the timeline.
                 .distinctUntilChanged { previous, current ->
                     when {
                         previous is UnreadState.Unknown || previous is UnreadState.ReadMarkerNotLoaded -> false
                         previous is UnreadState.HasUnread && current is UnreadState.HasUnread &&
                                 previous.readMarkerId == current.readMarkerId -> false
+                        previous is UnreadState.HasUnread && (
+                                current is UnreadState.HasUnread && previous.firstUnreadEventId != current.firstUnreadEventId ||
+                                        current is UnreadState.HasNoUnread
+                                ) && timeline?.isLive.orFalse() -> false
                         current is UnreadState.HasUnread || current is UnreadState.HasNoUnread -> true
                         else -> false
                     }

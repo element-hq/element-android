@@ -18,7 +18,6 @@ package im.vector.app.features.permalink
 
 import android.content.Context
 import android.net.Uri
-import androidx.core.net.toUri
 import androidx.fragment.app.FragmentActivity
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
@@ -38,7 +37,6 @@ import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
-import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -68,10 +66,11 @@ class PermalinkHandler @Inject constructor(
             navigationInterceptor: NavigationInterceptor? = null,
             buildTask: Boolean = false
     ): Boolean {
+        val supportedHosts = fragmentActivity.resources.getStringArray(R.array.permalink_supported_hosts)
         return when {
             deepLink == null -> false
             deepLink.isIgnored() -> true
-            !isPermalinkSupported(fragmentActivity, deepLink.toString()) -> false
+            !activeSessionHolder.getSafeActiveSession()?.permalinkService()?.isPermalinkSupported(supportedHosts, deepLink.toString()).orFalse() -> false
             else -> {
                 tryOrNull {
                     withContext(Dispatchers.Default) {
@@ -165,12 +164,6 @@ class PermalinkHandler @Inject constructor(
         } else {
             false
         }
-    }
-
-    private fun isPermalinkSupported(context: Context, url: String): Boolean {
-        return url.startsWith(PermalinkService.MATRIX_TO_URL_BASE) ||
-                context.resources.getStringArray(R.array.permalink_supported_hosts)
-                        .any { url.toUri().host == it }
     }
 
     private suspend fun PermalinkData.RoomLink.getRoomId(): String? {
