@@ -340,6 +340,10 @@ internal class DefaultCryptoService @Inject constructor(
                 uploadDeviceKeys()
             }
 
+            tryOrNull {
+                deviceListManager.recover()
+            }
+
             oneTimeKeysUploader.maybeUploadOneTimeKeys()
             // this can throw if no backup
             tryOrNull {

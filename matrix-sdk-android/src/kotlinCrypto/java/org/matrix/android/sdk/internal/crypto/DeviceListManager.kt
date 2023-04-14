@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.crypto
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.MatrixPatterns
@@ -93,8 +94,9 @@ internal class DeviceListManager @Inject constructor(
 
     private val cryptoCoroutineContext = coroutineDispatchers.crypto
 
-    init {
-        cryptoCoroutineScope.launch(cryptoCoroutineContext) {
+    // Reset in progress status in case of restart
+    suspend fun recover() {
+        withContext(cryptoCoroutineContext) {
             var isUpdated = false
             val deviceTrackingStatuses = cryptoStore.getDeviceTrackingStatuses().toMutableMap()
             for ((userId, status) in deviceTrackingStatuses) {
