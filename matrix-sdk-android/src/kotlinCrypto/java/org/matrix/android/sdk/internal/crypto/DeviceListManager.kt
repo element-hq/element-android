@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.crypto
 
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
@@ -35,7 +36,6 @@ import org.matrix.android.sdk.internal.crypto.store.UserDataToStore
 import org.matrix.android.sdk.internal.crypto.tasks.DownloadKeysForUsersTask
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.sync.SyncTokenStore
-import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.util.logLimit
 import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
@@ -51,7 +51,7 @@ internal class DeviceListManager @Inject constructor(
         private val downloadKeysForUsersTask: DownloadKeysForUsersTask,
         private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
         coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val taskExecutor: TaskExecutor,
+        private val cryptoCoroutineScope: CoroutineScope,
         private val clock: Clock,
         matrixConfiguration: MatrixConfiguration
 ) {
@@ -94,7 +94,7 @@ internal class DeviceListManager @Inject constructor(
     private val cryptoCoroutineContext = coroutineDispatchers.crypto
 
     init {
-        taskExecutor.executorScope.launch(cryptoCoroutineContext) {
+        cryptoCoroutineScope.launch(cryptoCoroutineContext) {
             var isUpdated = false
             val deviceTrackingStatuses = cryptoStore.getDeviceTrackingStatuses().toMutableMap()
             for ((userId, status) in deviceTrackingStatuses) {
@@ -142,7 +142,7 @@ internal class DeviceListManager @Inject constructor(
     }
 
     fun onRoomMembersLoadedFor(roomId: String) {
-        taskExecutor.executorScope.launch(cryptoCoroutineContext) {
+        cryptoCoroutineScope.launch(cryptoCoroutineContext) {
             if (cryptoSessionInfoProvider.isRoomEncrypted(roomId)) {
                 // It's OK to track also device for invited users
                 val userIds = cryptoSessionInfoProvider.getRoomUserIds(roomId, true)
