@@ -282,6 +282,7 @@ dependencies {
     runtimeOnly(libs.jsonwebtoken.jjwtOrgjson) {
         exclude group: 'org.json', module: 'json' //provided by Android natively
     }
+    testImplementation(libs.jsonwebtoken.jjwtOrgjson)
     implementation 'commons-codec:commons-codec:1.15'
 
     // MapTiler
