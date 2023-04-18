@@ -58,6 +58,8 @@ class DecryptionFailureTracker @Inject constructor(
     private val failures = mutableListOf<DecryptionFailure>()
     private val alreadyReported = mutableListOf<String>()
 
+    var currentModule: Error.CryptoModule? = null
+
     init {
         start()
     }
@@ -137,7 +139,12 @@ class DecryptionFailureTracker @Inject constructor(
                     // for now we ignore events already reported even if displayed again?
                     .filter { alreadyReported.contains(it).not() }
                     .forEach { failedEventId ->
-                        analyticsTracker.capture(Error(context = aggregation.key.first, domain = Error.Domain.E2EE, name = aggregation.key.second))
+                        analyticsTracker.capture(Error(
+                                context = aggregation.key.first,
+                                domain = Error.Domain.E2EE,
+                                name = aggregation.key.second,
+                                cryptoModule = currentModule
+                        ))
                         alreadyReported.add(failedEventId)
                     }
         }
