@@ -1,3 +1,13 @@
+Changes in Element v1.5.32 (2023-04-19)
+=======================================
+
+Bugfixes 🐛
+----------
+ - Fix multiple read receipts for the same user in timeline. ([#7882](https://github.com/vector-im/element-android/issues/7882))
+ - The new permalink rendering is not applied on permalink created with the potential clientPermalinkBaseUrl ([#8307](https://github.com/vector-im/element-android/issues/8307))
+ - Keep screen on while recording voicebroadcast ([#8313](https://github.com/vector-im/element-android/issues/8313))
+
+
 Changes in Element v1.5.30 (2023-04-05)
 =======================================
 

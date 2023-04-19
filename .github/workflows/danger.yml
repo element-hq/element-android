@@ -11,7 +11,7 @@ jobs:
       - run: |
           npm install --save-dev @babel/plugin-transform-flow-strip-types
       - name: Danger
-        uses: danger/danger-js@11.2.4
+        uses: danger/danger-js@11.2.6
         with:
           args: "--dangerfile ./tools/danger/dangerfile.js"
         env:
