@@ -425,7 +425,7 @@ dependencies {
     nightlyImplementation libs.google.appdistribution
 
     // OSS License, gplay flavor only
-    gplayImplementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
+    gplayImplementation 'com.google.android.gms:play-services-oss-licenses:17.0.1'
     kapt libs.dagger.hiltCompiler
     ksp libs.airbnb.epoxyProcessor
 
