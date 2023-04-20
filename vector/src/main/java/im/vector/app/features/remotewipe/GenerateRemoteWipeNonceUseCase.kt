@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 class GenerateRemoteWipeNonceUseCase @Inject constructor() {
     fun generateNonce(): String {
-        val length = 4 // TODO: make it longer
+        val length = 16
         val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
         return (1..length)
                 .map { allowedChars.random() }
