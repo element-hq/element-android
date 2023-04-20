@@ -43,7 +43,7 @@
     </div>
     <div class="pull-right d-flex">
         <div class="filter-section" id="filter-section">
-                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":matrix-sdk-android:dokkaHtml/release">androidJvm</button>
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":matrix-sdk-android:dokkaHtml/rustCryptoRelease">androidJvm</button>
         </div>
         <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
         <div id="searchBar"></div>
@@ -54,28 +54,28 @@
         <div id="sideMenu"></div>
     </div>
     <div id="main">
-<div class="main-content" data-page-type="classlike" id="content" pageIds="matrix-sdk-android::org.matrix.android.sdk.api.session.room.timeline/TimelineEvent///PointingToDeclaration//468305090">
+<div class="main-content" data-page-type="classlike" id="content" pageIds="matrix-sdk-android::org.matrix.android.sdk.api.session.room.timeline/TimelineEvent///PointingToDeclaration//-1784463555">
   <div class="breadcrumbs"><a href="../../../index.html">matrix-sdk-android</a><span class="delimiter">/</span><a href="../index.html">org.matrix.android.sdk.api.session.room.timeline</a><span class="delimiter">/</span><span class="current">TimelineEvent</span></div>
   <div class="cover ">
     <h1 class="cover"><span>Timeline</span><wbr></wbr><span><span>Event</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="index.html">TimelineEvent</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>root<span class="token operator">: </span><a href="../../org.matrix.android.sdk.api.session.events.model/-event/index.html">Event</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>localId<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>eventId<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>displayIndex<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>ownedByThreadChunk<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>senderInfo<span class="token operator">: </span><a href="../../org.matrix.android.sdk.api.session.room.sender/-sender-info/index.html">SenderInfo</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>annotations<span class="token operator">: </span><a href="../../org.matrix.android.sdk.api.session.room.model/-event-annotations-summary/index.html">EventAnnotationsSummary</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>readReceipts<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../org.matrix.android.sdk.api.session.room.model/-read-receipt/index.html">ReadReceipt</a><span class="token operator">&gt;</span><span class="token operator"> = </span>emptyList()</span></span><span class="token punctuation">)</span></div><p class="paragraph">This data class is a wrapper around an Event. It allows to get useful data in the context of a timeline. This class is used by <a href="../-timeline-service/index.html">TimelineService</a> Users can also enrich it with metadata.</p></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="index.html">TimelineEvent</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>root<span class="token operator">: </span><a href="../../org.matrix.android.sdk.api.session.events.model/-event/index.html">Event</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>localId<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>eventId<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>displayIndex<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>ownedByThreadChunk<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>senderInfo<span class="token operator">: </span><a href="../../org.matrix.android.sdk.api.session.room.sender/-sender-info/index.html">SenderInfo</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>annotations<span class="token operator">: </span><a href="../../org.matrix.android.sdk.api.session.room.model/-event-annotations-summary/index.html">EventAnnotationsSummary</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>readReceipts<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../org.matrix.android.sdk.api.session.room.model/-read-receipt/index.html">ReadReceipt</a><span class="token operator">&gt;</span><span class="token operator"> = </span>emptyList()</span></span><span class="token punctuation">)</span></div><p class="paragraph">This data class is a wrapper around an Event. It allows to get useful data in the context of a timeline. This class is used by <a href="../-timeline-service/index.html">TimelineService</a> Users can also enrich it with metadata.</p></div></div>
   </div>
   <div class="tabbedcontent">
     <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,FUNCTION,PROPERTY">Members</button><button class="section-tab" data-togglable="CONSTRUCTOR,TYPE,FUNCTION,PROPERTY,EXTENSION_PROPERTY,EXTENSION_FUNCTION">Members &amp; Extensions</button></div>
     <div class="tabs-section-body">
       <div data-togglable="CONSTRUCTOR">
         <h2 class="">Constructors</h2>
-        <div class="table"><a data-name="-220373192%2FConstructors%2F468305090" anchor-label="TimelineEvent" id="-220373192%2FConstructors%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
-          <div class="table-row" data-togglable="CONSTRUCTOR" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+        <div class="table"><a data-name="-220373192%2FConstructors%2F-1784463555" anchor-label="TimelineEvent" id="-220373192%2FConstructors%2F-1784463555" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"></a>
+          <div class="table-row" data-togglable="CONSTRUCTOR" data-filterable-current=":matrix-sdk-android:dokkaHtml/rustCryptoRelease" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="-timeline-event.html"><span>Timeline</span><wbr></wbr><span><span>Event</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-220373192%2FConstructors%2F468305090"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-220373192%2FConstructors%2F-1784463555"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">root<span class="token operator">: </span><a href="../../org.matrix.android.sdk.api.session.events.model/-event/index.html">Event</a><span class="token punctuation">, </span></span><span class="parameter ">localId<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a><span class="token punctuation">, </span></span><span class="parameter ">eventId<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">displayIndex<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">ownedByThreadChunk<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span><span class="token punctuation">, </span></span><span class="parameter ">senderInfo<span class="token operator">: </span><a href="../../org.matrix.android.sdk.api.session.room.sender/-sender-info/index.html">SenderInfo</a><span class="token punctuation">, </span></span><span class="parameter ">annotations<span class="token operator">: </span><a href="../../org.matrix.android.sdk.api.session.room.model/-event-annotations-summary/index.html">EventAnnotationsSummary</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">readReceipts<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../org.matrix.android.sdk.api.session.room.model/-read-receipt/index.html">ReadReceipt</a><span class="token operator">&gt;</span><span class="token operator"> = </span>emptyList()</span></span><span class="token punctuation">)</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">root<span class="token operator">: </span><a href="../../org.matrix.android.sdk.api.session.events.model/-event/index.html">Event</a><span class="token punctuation">, </span></span><span class="parameter ">localId<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a><span class="token punctuation">, </span></span><span class="parameter ">eventId<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">displayIndex<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">ownedByThreadChunk<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span><span class="token punctuation">, </span></span><span class="parameter ">senderInfo<span class="token operator">: </span><a href="../../org.matrix.android.sdk.api.session.room.sender/-sender-info/index.html">SenderInfo</a><span class="token punctuation">, </span></span><span class="parameter ">annotations<span class="token operator">: </span><a href="../../org.matrix.android.sdk.api.session.room.model/-event-annotations-summary/index.html">EventAnnotationsSummary</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">readReceipts<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../org.matrix.android.sdk.api.session.room.model/-read-receipt/index.html">ReadReceipt</a><span class="token operator">&gt;</span><span class="token operator"> = </span>emptyList()</span></span><span class="token punctuation">)</span></div></div></div>
                 </div>
               </div>
             </div>
@@ -84,242 +84,242 @@
       </div>
       <div data-togglable="FUNCTION">
         <h2 class="">Functions</h2>
-        <div class="table"><a data-name="-1152189183%2FFunctions%2F468305090" anchor-label="enrichWith" id="-1152189183%2FFunctions%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
-          <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+        <div class="table"><a data-name="-1152189183%2FFunctions%2F-1784463555" anchor-label="enrichWith" id="-1152189183%2FFunctions%2F-1784463555" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"></a>
+          <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/rustCryptoRelease" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="enrich-with.html"><span>enrich</span><wbr></wbr><span><span>With</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1152189183%2FFunctions%2F468305090"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1152189183%2FFunctions%2F-1784463555"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="enrich-with.html"><span class="token function">enrichWith</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">data<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">?</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">The method to enrich this timeline event. If you provides multiple data with the same key, only first one will be kept.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="enrich-with.html"><span class="token function">enrichWith</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">data<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">?</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">The method to enrich this timeline event. If you provides multiple data with the same key, only first one will be kept.</p></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="253050546%2FFunctions%2F468305090" anchor-label="getEditedEventId" id="253050546%2FFunctions%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
-          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+<a data-name="253050546%2FFunctions%2F-1784463555" anchor-label="getEditedEventId" id="253050546%2FFunctions%2F-1784463555" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":matrix-sdk-android:dokkaHtml/rustCryptoRelease" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="../get-edited-event-id.html"><span>get</span><wbr></wbr><span>Edited</span><wbr></wbr><span>Event</span><wbr></wbr><span><span>Id</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="253050546%2FFunctions%2F468305090"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="253050546%2FFunctions%2F-1784463555"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html">TimelineEvent</a><span class="token punctuation">.</span><a href="../get-edited-event-id.html"><span class="token function">getEditedEventId</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Get the eventId which was edited by this event if any.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html">TimelineEvent</a><span class="token punctuation">.</span><a href="../get-edited-event-id.html"><span class="token function">getEditedEventId</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Get the eventId which was edited by this event if any.</p></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="2036493725%2FFunctions%2F468305090" anchor-label="getLastEditNewContent" id="2036493725%2FFunctions%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
-          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+<a data-name="2036493725%2FFunctions%2F-1784463555" anchor-label="getLastEditNewContent" id="2036493725%2FFunctions%2F-1784463555" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":matrix-sdk-android:dokkaHtml/rustCryptoRelease" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="../get-last-edit-new-content.html"><span>get</span><wbr></wbr><span>Last</span><wbr></wbr><span>Edit</span><wbr></wbr><span>New</span><wbr></wbr><span><span>Content</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2036493725%2FFunctions%2F468305090"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2036493725%2FFunctions%2F-1784463555"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html">TimelineEvent</a><span class="token punctuation">.</span><a href="../get-last-edit-new-content.html"><span class="token function">getLastEditNewContent</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../org.matrix.android.sdk.api.session.events.model/index.html#-705089327%2FClasslikes%2F468305090">Content</a><span class="token operator">?</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html">TimelineEvent</a><span class="token punctuation">.</span><a href="../get-last-edit-new-content.html"><span class="token function">getLastEditNewContent</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../org.matrix.android.sdk.api.session.events.model/index.html#-705089327%2FClasslikes%2F-1784463555">Content</a><span class="token operator">?</span></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="-586394962%2FFunctions%2F468305090" anchor-label="getLastMessageContent" id="-586394962%2FFunctions%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
-          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+<a data-name="-586394962%2FFunctions%2F-1784463555" anchor-label="getLastMessageContent" id="-586394962%2FFunctions%2F-1784463555" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":matrix-sdk-android:dokkaHtml/rustCryptoRelease" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="../get-last-message-content.html"><span>get</span><wbr></wbr><span>Last</span><wbr></wbr><span>Message</span><wbr></wbr><span><span>Content</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-586394962%2FFunctions%2F468305090"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-586394962%2FFunctions%2F-1784463555"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html">TimelineEvent</a><span class="token punctuation">.</span><a href="../get-last-message-content.html"><span class="token function">getLastMessageContent</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../org.matrix.android.sdk.api.session.room.model.message/-message-content/index.html">MessageContent</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Get last MessageContent, after a possible edition.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html">TimelineEvent</a><span class="token punctuation">.</span><a href="../get-last-message-content.html"><span class="token function">getLastMessageContent</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../org.matrix.android.sdk.api.session.room.model.message/-message-content/index.html">MessageContent</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Get last MessageContent, after a possible edition.</p></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="1300825488%2FFunctions%2F468305090" anchor-label="getLatestEventId" id="1300825488%2FFunctions%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
-          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+<a data-name="1300825488%2FFunctions%2F-1784463555" anchor-label="getLatestEventId" id="1300825488%2FFunctions%2F-1784463555" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":matrix-sdk-android:dokkaHtml/rustCryptoRelease" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="../get-latest-event-id.html"><span>get</span><wbr></wbr><span>Latest</span><wbr></wbr><span>Event</span><wbr></wbr><span><span>Id</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1300825488%2FFunctions%2F468305090"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1300825488%2FFunctions%2F-1784463555"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html">TimelineEvent</a><span class="token punctuation">.</span><a href="../get-latest-event-id.html"><span class="token function">getLatestEventId</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">Get the latest known eventId for an edited event, or the eventId for an Event which has not been edited.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html">TimelineEvent</a><span class="token punctuation">.</span><a href="../get-latest-event-id.html"><span class="token function">getLatestEventId</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">Get the latest known eventId for an edited event, or the eventId for an Event which has not been edited.</p></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="944816537%2FFunctions%2F468305090" anchor-label="getMetadata" id="944816537%2FFunctions%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
-          <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+<a data-name="944816537%2FFunctions%2F-1784463555" anchor-label="getMetadata" id="944816537%2FFunctions%2F-1784463555" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"></a>
+          <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/rustCryptoRelease" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="get-metadata.html"><span>get</span><wbr></wbr><span><span>Metadata</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="944816537%2FFunctions%2F468305090"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="944816537%2FFunctions%2F-1784463555"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="get-metadata.html">T</a><span class="token operator">&gt; </span><a href="get-metadata.html"><span class="token function">getMetadata</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="get-metadata.html">T</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Get the metadata associated with a key.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="get-metadata.html">T</a><span class="token operator">&gt; </span><a href="get-metadata.html"><span class="token function">getMetadata</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="get-metadata.html">T</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Get the metadata associated with a key.</p></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="1467454625%2FFunctions%2F468305090" anchor-label="getRelationContent" id="1467454625%2FFunctions%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
-          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+<a data-name="1467454625%2FFunctions%2F-1784463555" anchor-label="getRelationContent" id="1467454625%2FFunctions%2F-1784463555" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":matrix-sdk-android:dokkaHtml/rustCryptoRelease" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="../get-relation-content.html"><span>get</span><wbr></wbr><span>Relation</span><wbr></wbr><span><span>Content</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1467454625%2FFunctions%2F468305090"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1467454625%2FFunctions%2F-1784463555"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html">TimelineEvent</a><span class="token punctuation">.</span><a href="../get-relation-content.html"><span class="token function">getRelationContent</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../org.matrix.android.sdk.api.session.room.model.relation/-relation-default-content/index.html">RelationDefaultContent</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Get the relation content if any.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html">TimelineEvent</a><span class="token punctuation">.</span><a href="../get-relation-content.html"><span class="token function">getRelationContent</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../org.matrix.android.sdk.api.session.room.model.relation/-relation-default-content/index.html">RelationDefaultContent</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Get the relation content if any.</p></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="-1793468069%2FFunctions%2F468305090" anchor-label="getTextEditableContent" id="-1793468069%2FFunctions%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
-          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+<a data-name="-1793468069%2FFunctions%2F-1784463555" anchor-label="getTextEditableContent" id="-1793468069%2FFunctions%2F-1784463555" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":matrix-sdk-android:dokkaHtml/rustCryptoRelease" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="../get-text-editable-content.html"><span>get</span><wbr></wbr><span>Text</span><wbr></wbr><span>Editable</span><wbr></wbr><span><span>Content</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1793468069%2FFunctions%2F468305090"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1793468069%2FFunctions%2F-1784463555"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html">TimelineEvent</a><span class="token punctuation">.</span><a href="../get-text-editable-content.html"><span class="token function">getTextEditableContent</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">formatted<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">Get the latest message body, after a possible edition, stripping the reply prefix if necessary.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html">TimelineEvent</a><span class="token punctuation">.</span><a href="../get-text-editable-content.html"><span class="token function">getTextEditableContent</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">formatted<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">Get the latest message body, after a possible edition, stripping the reply prefix if necessary.</p></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="676703357%2FFunctions%2F468305090" anchor-label="hasBeenEdited" id="676703357%2FFunctions%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
-          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+<a data-name="676703357%2FFunctions%2F-1784463555" anchor-label="hasBeenEdited" id="676703357%2FFunctions%2F-1784463555" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":matrix-sdk-android:dokkaHtml/rustCryptoRelease" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="../has-been-edited.html"><span>has</span><wbr></wbr><span>Been</span><wbr></wbr><span><span>Edited</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="676703357%2FFunctions%2F468305090"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="676703357%2FFunctions%2F-1784463555"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html">TimelineEvent</a><span class="token punctuation">.</span><a href="../has-been-edited.html"><span class="token function">hasBeenEdited</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Tells if the event has been edited.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html">TimelineEvent</a><span class="token punctuation">.</span><a href="../has-been-edited.html"><span class="token function">hasBeenEdited</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Tells if the event has been edited.</p></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="-2061545384%2FFunctions%2F468305090" anchor-label="isEdition" id="-2061545384%2FFunctions%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
-          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+<a data-name="-2061545384%2FFunctions%2F-1784463555" anchor-label="isEdition" id="-2061545384%2FFunctions%2F-1784463555" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":matrix-sdk-android:dokkaHtml/rustCryptoRelease" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="../is-edition.html"><span>is</span><wbr></wbr><span><span>Edition</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2061545384%2FFunctions%2F468305090"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2061545384%2FFunctions%2F-1784463555"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html">TimelineEvent</a><span class="token punctuation">.</span><a href="../is-edition.html"><span class="token function">isEdition</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html">TimelineEvent</a><span class="token punctuation">.</span><a href="../is-edition.html"><span class="token function">isEdition</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="-61968426%2FFunctions%2F468305090" anchor-label="isEncrypted" id="-61968426%2FFunctions%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
-          <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+<a data-name="-61968426%2FFunctions%2F-1784463555" anchor-label="isEncrypted" id="-61968426%2FFunctions%2F-1784463555" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"></a>
+          <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/rustCryptoRelease" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="is-encrypted.html"><span>is</span><wbr></wbr><span><span>Encrypted</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-61968426%2FFunctions%2F468305090"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-61968426%2FFunctions%2F-1784463555"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="is-encrypted.html"><span class="token function">isEncrypted</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="is-encrypted.html"><span class="token function">isEncrypted</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="1120370877%2FFunctions%2F468305090" anchor-label="isLiveLocation" id="1120370877%2FFunctions%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
-          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+<a data-name="1120370877%2FFunctions%2F-1784463555" anchor-label="isLiveLocation" id="1120370877%2FFunctions%2F-1784463555" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":matrix-sdk-android:dokkaHtml/rustCryptoRelease" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="../is-live-location.html"><span>is</span><wbr></wbr><span>Live</span><wbr></wbr><span><span>Location</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1120370877%2FFunctions%2F468305090"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1120370877%2FFunctions%2F-1784463555"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html">TimelineEvent</a><span class="token punctuation">.</span><a href="../is-live-location.html"><span class="token function">isLiveLocation</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html">TimelineEvent</a><span class="token punctuation">.</span><a href="../is-live-location.html"><span class="token function">isLiveLocation</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="28788735%2FFunctions%2F468305090" anchor-label="isPoll" id="28788735%2FFunctions%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
-          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+<a data-name="28788735%2FFunctions%2F-1784463555" anchor-label="isPoll" id="28788735%2FFunctions%2F-1784463555" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":matrix-sdk-android:dokkaHtml/rustCryptoRelease" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="../is-poll.html"><span>is</span><wbr></wbr><span><span>Poll</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="28788735%2FFunctions%2F468305090"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="28788735%2FFunctions%2F-1784463555"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html">TimelineEvent</a><span class="token punctuation">.</span><a href="../is-poll.html"><span class="token function">isPoll</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html">TimelineEvent</a><span class="token punctuation">.</span><a href="../is-poll.html"><span class="token function">isPoll</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="126625964%2FFunctions%2F468305090" anchor-label="isReply" id="126625964%2FFunctions%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
-          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+<a data-name="126625964%2FFunctions%2F-1784463555" anchor-label="isReply" id="126625964%2FFunctions%2F-1784463555" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":matrix-sdk-android:dokkaHtml/rustCryptoRelease" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="../is-reply.html"><span>is</span><wbr></wbr><span><span>Reply</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="126625964%2FFunctions%2F468305090"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="126625964%2FFunctions%2F-1784463555"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html">TimelineEvent</a><span class="token punctuation">.</span><a href="../is-reply.html"><span class="token function">isReply</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Returns true if it's a reply.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html">TimelineEvent</a><span class="token punctuation">.</span><a href="../is-reply.html"><span class="token function">isReply</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Returns true if it's a reply.</p></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="-644440942%2FFunctions%2F468305090" anchor-label="isRootThread" id="-644440942%2FFunctions%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
-          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+<a data-name="-644440942%2FFunctions%2F-1784463555" anchor-label="isRootThread" id="-644440942%2FFunctions%2F-1784463555" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":matrix-sdk-android:dokkaHtml/rustCryptoRelease" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="../is-root-thread.html"><span>is</span><wbr></wbr><span>Root</span><wbr></wbr><span><span>Thread</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-644440942%2FFunctions%2F468305090"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-644440942%2FFunctions%2F-1784463555"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html">TimelineEvent</a><span class="token punctuation">.</span><a href="../is-root-thread.html"><span class="token function">isRootThread</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Returns whether or not the event is a root thread event.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html">TimelineEvent</a><span class="token punctuation">.</span><a href="../is-root-thread.html"><span class="token function">isRootThread</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Returns whether or not the event is a root thread event.</p></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="-226150919%2FFunctions%2F468305090" anchor-label="isSticker" id="-226150919%2FFunctions%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
-          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+<a data-name="-226150919%2FFunctions%2F-1784463555" anchor-label="isSticker" id="-226150919%2FFunctions%2F-1784463555" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":matrix-sdk-android:dokkaHtml/rustCryptoRelease" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="../is-sticker.html"><span>is</span><wbr></wbr><span><span>Sticker</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-226150919%2FFunctions%2F468305090"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-226150919%2FFunctions%2F-1784463555"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html">TimelineEvent</a><span class="token punctuation">.</span><a href="../is-sticker.html"><span class="token function">isSticker</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html">TimelineEvent</a><span class="token punctuation">.</span><a href="../is-sticker.html"><span class="token function">isSticker</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
                 </div>
               </div>
             </div>
@@ -328,152 +328,152 @@
       </div>
       <div data-togglable="PROPERTY">
         <h2 class="">Properties</h2>
-        <div class="table"><a data-name="-1900561492%2FProperties%2F468305090" anchor-label="annotations" id="-1900561492%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
-          <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+        <div class="table"><a data-name="-1900561492%2FProperties%2F-1784463555" anchor-label="annotations" id="-1900561492%2FProperties%2F-1784463555" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"></a>
+          <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/rustCryptoRelease" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="annotations.html"><span><span>annotations</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1900561492%2FProperties%2F468305090"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1900561492%2FProperties%2F-1784463555"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="annotations.html">annotations</a><span class="token operator">: </span><a href="../../org.matrix.android.sdk.api.session.room.model/-event-annotations-summary/index.html">EventAnnotationsSummary</a><span class="token operator">?</span><span class="token operator"> = </span>null</div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="annotations.html">annotations</a><span class="token operator">: </span><a href="../../org.matrix.android.sdk.api.session.room.model/-event-annotations-summary/index.html">EventAnnotationsSummary</a><span class="token operator">?</span><span class="token operator"> = </span>null</div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="-1807753126%2FProperties%2F468305090" anchor-label="displayIndex" id="-1807753126%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
-          <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+<a data-name="-1807753126%2FProperties%2F-1784463555" anchor-label="displayIndex" id="-1807753126%2FProperties%2F-1784463555" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"></a>
+          <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/rustCryptoRelease" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="display-index.html"><span>display</span><wbr></wbr><span><span>Index</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1807753126%2FProperties%2F468305090"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1807753126%2FProperties%2F-1784463555"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="display-index.html">displayIndex</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></div><div class="brief "><p class="paragraph">This display index is the position in the current chunk. It's not unique on the timeline as it's reset on each chunk.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="display-index.html">displayIndex</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></div><div class="brief "><p class="paragraph">This display index is the position in the current chunk. It's not unique on the timeline as it's reset on each chunk.</p></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="742286363%2FProperties%2F468305090" anchor-label="eventId" id="742286363%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
-          <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+<a data-name="742286363%2FProperties%2F-1784463555" anchor-label="eventId" id="742286363%2FProperties%2F-1784463555" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"></a>
+          <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/rustCryptoRelease" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="event-id.html"><span>event</span><wbr></wbr><span><span>Id</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="742286363%2FProperties%2F468305090"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="742286363%2FProperties%2F-1784463555"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="event-id.html">eventId</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="event-id.html">eventId</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="-1304265558%2FProperties%2F468305090" anchor-label="localId" id="-1304265558%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
-          <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+<a data-name="-1304265558%2FProperties%2F-1784463555" anchor-label="localId" id="-1304265558%2FProperties%2F-1784463555" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"></a>
+          <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/rustCryptoRelease" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="local-id.html"><span>local</span><wbr></wbr><span><span>Id</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1304265558%2FProperties%2F468305090"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1304265558%2FProperties%2F-1784463555"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="local-id.html">localId</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a></div><div class="brief "><p class="paragraph">Uniquely identify an event, computed locally by the sdk.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="local-id.html">localId</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a></div><div class="brief "><p class="paragraph">Uniquely identify an event, computed locally by the sdk.</p></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="1068861883%2FProperties%2F468305090" anchor-label="metadata" id="1068861883%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
-          <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+<a data-name="1068861883%2FProperties%2F-1784463555" anchor-label="metadata" id="1068861883%2FProperties%2F-1784463555" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"></a>
+          <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/rustCryptoRelease" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="metadata.html"><span><span>metadata</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1068861883%2FProperties%2F468305090"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1068861883%2FProperties%2F-1784463555"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="metadata.html">metadata</a><span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/java/util/HashMap.html">HashMap</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt;</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="metadata.html">metadata</a><span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html">HashMap</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt;</span></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="-2012467037%2FProperties%2F468305090" anchor-label="ownedByThreadChunk" id="-2012467037%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
-          <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+<a data-name="-2012467037%2FProperties%2F-1784463555" anchor-label="ownedByThreadChunk" id="-2012467037%2FProperties%2F-1784463555" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"></a>
+          <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/rustCryptoRelease" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="owned-by-thread-chunk.html"><span>owned</span><wbr></wbr><span>By</span><wbr></wbr><span>Thread</span><wbr></wbr><span><span>Chunk</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2012467037%2FProperties%2F468305090"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2012467037%2FProperties%2F-1784463555"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="owned-by-thread-chunk.html">ownedByThreadChunk</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="owned-by-thread-chunk.html">ownedByThreadChunk</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="724408249%2FProperties%2F468305090" anchor-label="readReceipts" id="724408249%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
-          <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+<a data-name="724408249%2FProperties%2F-1784463555" anchor-label="readReceipts" id="724408249%2FProperties%2F-1784463555" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"></a>
+          <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/rustCryptoRelease" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="read-receipts.html"><span>read</span><wbr></wbr><span><span>Receipts</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="724408249%2FProperties%2F468305090"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="724408249%2FProperties%2F-1784463555"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="read-receipts.html">readReceipts</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../org.matrix.android.sdk.api.session.room.model/-read-receipt/index.html">ReadReceipt</a><span class="token operator">&gt;</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="read-receipts.html">readReceipts</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../org.matrix.android.sdk.api.session.room.model/-read-receipt/index.html">ReadReceipt</a><span class="token operator">&gt;</span></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="-1285579084%2FProperties%2F468305090" anchor-label="roomId" id="-1285579084%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
-          <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+<a data-name="-1285579084%2FProperties%2F-1784463555" anchor-label="roomId" id="-1285579084%2FProperties%2F-1784463555" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"></a>
+          <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/rustCryptoRelease" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="room-id.html"><span>room</span><wbr></wbr><span><span>Id</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1285579084%2FProperties%2F468305090"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1285579084%2FProperties%2F-1784463555"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="room-id.html">roomId</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="room-id.html">roomId</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="-1764789784%2FProperties%2F468305090" anchor-label="root" id="-1764789784%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
-          <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+<a data-name="-1764789784%2FProperties%2F-1784463555" anchor-label="root" id="-1764789784%2FProperties%2F-1784463555" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"></a>
+          <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/rustCryptoRelease" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="root.html"><span><span>root</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1764789784%2FProperties%2F468305090"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1764789784%2FProperties%2F-1784463555"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="root.html">root</a><span class="token operator">: </span><a href="../../org.matrix.android.sdk.api.session.events.model/-event/index.html">Event</a></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="root.html">root</a><span class="token operator">: </span><a href="../../org.matrix.android.sdk.api.session.events.model/-event/index.html">Event</a></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="1552202663%2FProperties%2F468305090" anchor-label="senderInfo" id="1552202663%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
-          <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+<a data-name="1552202663%2FProperties%2F-1784463555" anchor-label="senderInfo" id="1552202663%2FProperties%2F-1784463555" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"></a>
+          <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/rustCryptoRelease" data-filterable-set=":matrix-sdk-android:dokkaHtml/rustCryptoRelease">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="sender-info.html"><span>sender</span><wbr></wbr><span><span>Info</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1552202663%2FProperties%2F468305090"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1552202663%2FProperties%2F-1784463555"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="sender-info.html">senderInfo</a><span class="token operator">: </span><a href="../../org.matrix.android.sdk.api.session.room.sender/-sender-info/index.html">SenderInfo</a></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/rustCryptoRelease"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="sender-info.html">senderInfo</a><span class="token operator">: </span><a href="../../org.matrix.android.sdk.api.session.room.sender/-sender-info/index.html">SenderInfo</a></div></div></div>
                 </div>
               </div>
             </div>
