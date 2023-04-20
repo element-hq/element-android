@@ -25,13 +25,13 @@ TLDR; Verification UI and engine has been refactored.
 In order to run a custom rust SDK branch you can follow the direction in the [bindings repository](https://github.com/matrix-org/matrix-rust-components-kotlin) 
 in order to build the `matrix-rust-sdk-crypto.aar`.
 
-Copy this lib in `library/rustCrypto/`.
+Copy this lib in `library/rustCrypto/`, and rename it `matrix-rust-sdk-crypto.aar`.
 
 Then go to `matrix-sdk-android/build.gradle` and toggle the comments between the following lines.
 
 ````
-// rustCryptoImplementation files('libs/matrix-rust-sdk-crypto.aar')
-rustCryptoImplementation("org.matrix.rustcomponents:crypto-android:0.3.4")
+ rustCryptoImplementation("org.matrix.rustcomponents:crypto-android:0.3.1")
+ // rustCryptoApi project(":library:rustCrypto")
 ````
 
 ## Changes in CI
