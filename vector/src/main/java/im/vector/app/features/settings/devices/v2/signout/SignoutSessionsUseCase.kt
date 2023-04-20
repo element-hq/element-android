@@ -21,7 +21,6 @@ import im.vector.app.core.di.ActiveSessionHolder
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
-import org.matrix.android.sdk.api.util.awaitCallback
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.coroutines.Continuation
@@ -49,9 +48,7 @@ class SignoutSessionsUseCase @Inject constructor(
     }
 
     private suspend fun deleteDevices(deviceIds: List<String>, userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor) =
-            awaitCallback { matrixCallback ->
-                activeSessionHolder.getActiveSession()
-                        .cryptoService()
-                        .deleteDevices(deviceIds, userInteractiveAuthInterceptor, matrixCallback)
-            }
+            activeSessionHolder.getActiveSession()
+                    .cryptoService()
+                    .deleteDevices(deviceIds, userInteractiveAuthInterceptor)
 }

@@ -17,20 +17,36 @@
 package im.vector.app
 
 import android.net.Uri
+import android.view.View
 import androidx.lifecycle.Observer
+import androidx.test.espresso.Espresso
+import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.matcher.ViewMatchers
+import im.vector.app.espresso.tools.waitUntilActivityVisible
+import im.vector.app.espresso.tools.waitUntilViewVisible
+import im.vector.app.features.home.HomeActivity
+import im.vector.app.ui.robot.AnalyticsRobot
 import im.vector.app.ui.robot.OnboardingRobot
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
+import org.hamcrest.CoreMatchers
 import org.junit.Assert
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.registration.RegistrationResult
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
+import org.matrix.android.sdk.api.session.crypto.verification.getRequest
 import org.matrix.android.sdk.api.session.sync.SyncState
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
@@ -41,6 +57,8 @@ abstract class VerificationTestBase {
     val homeServerUrl: String = "http://10.0.2.2:8080"
 
     protected val uiTestBase = OnboardingRobot()
+
+    protected val testScope = CoroutineScope(SupervisorJob())
 
     fun createAccountAndSync(
             matrix: Matrix,
@@ -114,9 +132,10 @@ abstract class VerificationTestBase {
     private fun syncSession(session: Session) {
         val lock = CountDownLatch(1)
 
-        GlobalScope.launch(Dispatchers.Main) { session.open() }
-
-        session.syncService().startSync(true)
+        GlobalScope.launch(Dispatchers.Main) {
+            session.open()
+            session.syncService().startSync(true)
+        }
 
         val syncLiveData = runBlocking(Dispatchers.Main) {
             session.syncService().getSyncStateLive()
@@ -132,5 +151,68 @@ abstract class VerificationTestBase {
         GlobalScope.launch(Dispatchers.Main) { syncLiveData.observeForever(syncObserver) }
 
         lock.await(20_000, TimeUnit.MILLISECONDS)
+    }
+
+    protected fun loginAndClickVerifyToast(userId: String): Session {
+        uiTestBase.login(userId = userId, password = password, homeServerUrl = homeServerUrl)
+
+        tryOrNull {
+            val analyticsRobot = AnalyticsRobot()
+            analyticsRobot.optOut()
+        }
+
+        waitUntilActivityVisible<HomeActivity> {
+            waitUntilViewVisible(ViewMatchers.withId(R.id.roomListContainer))
+        }
+        val activity = EspressoHelper.getCurrentActivity()!!
+        val uiSession = (activity as HomeActivity).activeSessionHolder.getActiveSession()
+        withIdlingResource(initialSyncIdlingResource(uiSession)) {
+            waitUntilViewVisible(ViewMatchers.withId(R.id.roomListContainer))
+        }
+
+        // THIS IS THE ONLY WAY I FOUND TO CLICK ON ALERTERS... :(
+        // Cannot wait for view because of alerter animation? ...
+        Espresso.onView(ViewMatchers.isRoot())
+                .perform(waitForView(ViewMatchers.withId(com.tapadoo.alerter.R.id.llAlertBackground)))
+
+        Thread.sleep(1000)
+        val popup = activity.findViewById<View>(com.tapadoo.alerter.R.id.llAlertBackground)
+        activity.runOnUiThread {
+            popup.performClick()
+        }
+
+        Espresso.onView(ViewMatchers.isRoot())
+                .perform(waitForView(ViewMatchers.withId(R.id.bottomSheetFragmentContainer)))
+
+        Espresso.onView(ViewMatchers.withText(R.string.verification_verify_identity))
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+
+        // 4S is not setup so passphrase option should be hidden
+        Espresso.onView(ViewMatchers.withId(R.id.bottomSheetVerificationRecyclerView))
+                .check(ViewAssertions.matches(CoreMatchers.not(ViewMatchers.hasDescendant(ViewMatchers.withText(R.string.verification_cannot_access_other_session)))))
+
+        Espresso.onView(ViewMatchers.withId(R.id.bottomSheetVerificationRecyclerView))
+                .check(ViewAssertions.matches(ViewMatchers.hasDescendant(ViewMatchers.withText(R.string.verification_verify_with_another_device))))
+
+        Espresso.onView(ViewMatchers.withId(R.id.bottomSheetVerificationRecyclerView))
+                .check(ViewAssertions.matches(ViewMatchers.hasDescendant(ViewMatchers.withText(R.string.bad_passphrase_key_reset_all_action))))
+
+        return uiSession
+    }
+
+    protected fun deferredRequestUntil(session: Session, block: ((PendingVerificationRequest) -> Boolean)): CompletableDeferred<PendingVerificationRequest> {
+        val completableDeferred = CompletableDeferred<PendingVerificationRequest>()
+
+        testScope.launch {
+            session.cryptoService().verificationService().requestEventFlow().collect {
+                val request = it.getRequest()
+                if (request != null && block(request)) {
+                    completableDeferred.complete(request)
+                    return@collect cancel()
+                }
+            }
+        }
+
+        return completableDeferred
     }
 }

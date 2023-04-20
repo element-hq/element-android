@@ -64,5 +64,12 @@ data class SyncResponse(
          * but that algorithm is not listed in device_unused_fallback_key_types, the client will upload a new key.
          */
         @Json(name = "org.matrix.msc2732.device_unused_fallback_key_types")
-        val deviceUnusedFallbackKeyTypes: List<String>? = null,
-)
+        val devDeviceUnusedFallbackKeyTypes: List<String>? = null,
+        @Json(name = "device_unused_fallback_key_types")
+        val stableDeviceUnusedFallbackKeyTypes: List<String>? = null,
+
+        ) {
+
+    @Transient
+    val deviceUnusedFallbackKeyTypes: List<String>? = stableDeviceUnusedFallbackKeyTypes ?: devDeviceUnusedFallbackKeyTypes
+}

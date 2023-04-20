@@ -40,6 +40,8 @@ import java.io.IOException
  * @param maxRetriesCount the max number of retries
  * @param requestBlock a suspend lambda to perform the network request
  */
+
+const val DEFAULT_REQUEST_RETRY_COUNT = 3
 internal suspend inline fun <DATA> executeRequest(
         globalErrorReceiver: GlobalErrorReceiver?,
         canRetry: Boolean = false,

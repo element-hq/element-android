@@ -38,8 +38,16 @@ object ConfigurationModule {
     @Provides
     fun providesAnalyticsConfig(): AnalyticsConfig {
         val config: Analytics = when (BuildConfig.BUILD_TYPE) {
-            "debug" -> Config.DEBUG_ANALYTICS_CONFIG
-            "nightly" -> Config.NIGHTLY_ANALYTICS_CONFIG
+            "debug" -> if (BuildConfig.FLAVOR == "rustCrypto") {
+                Config.ER_DEBUG_ANALYTICS_CONFIG
+            } else {
+                Config.DEBUG_ANALYTICS_CONFIG
+            }
+            "nightly" -> if (BuildConfig.FLAVOR == "rustCrypto") {
+                Config.ER_NIGHTLY_ANALYTICS_CONFIG
+            } else {
+                Config.NIGHTLY_ANALYTICS_CONFIG
+            }
             "release" -> Config.RELEASE_ANALYTICS_CONFIG
             else -> throw IllegalStateException("Unhandled build type: ${BuildConfig.BUILD_TYPE}")
         }

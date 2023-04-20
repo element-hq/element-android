@@ -23,13 +23,13 @@ import im.vector.app.core.resources.StringProvider
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
+import org.matrix.android.sdk.api.session.crypto.keysbackup.BackupUtils
 import org.matrix.android.sdk.api.session.crypto.keysbackup.computeRecoveryKey
 import org.matrix.android.sdk.api.session.crypto.keysbackup.extractCurveKeyFromRecoveryKey
 import org.matrix.android.sdk.api.session.securestorage.EmptyKeySigner
 import org.matrix.android.sdk.api.session.securestorage.KeyRef
 import org.matrix.android.sdk.api.session.securestorage.RawBytesKeySpec
 import org.matrix.android.sdk.api.session.securestorage.SsssKeyCreationInfo
-import org.matrix.android.sdk.api.util.awaitCallback
 import org.matrix.android.sdk.api.util.toBase64NoPadding
 import timber.log.Timber
 import java.util.UUID
@@ -92,10 +92,9 @@ class BackupToQuadSMigrationTask @Inject constructor(
 
             reportProgress(params, R.string.bootstrap_progress_compute_curve_key)
             val recoveryKey = computeRecoveryKey(curveKey)
-
-            val isValid = awaitCallback<Boolean> {
-                keysBackupService.isValidRecoveryKeyForCurrentVersion(recoveryKey, it)
-            }
+            val backupRecoveryKey = BackupUtils.recoveryKeyFromBase58(recoveryKey)
+            val isValid = backupRecoveryKey?.let { keysBackupService.isValidRecoveryKeyForCurrentVersion(it) }
+                    ?: false
 
             if (!isValid) return Result.InvalidRecoverySecret
 
@@ -146,11 +145,9 @@ class BackupToQuadSMigrationTask @Inject constructor(
             )
 
             // save for gossiping
-            keysBackupService.saveBackupRecoveryKey(recoveryKey, version.version)
-
+            keysBackupService.saveBackupRecoveryKey(backupRecoveryKey, version.version)
             // It's not a good idea to download the full backup, it might take very long
             // and use a lot of resources
-
             return Result.Success
         } catch (failure: Throwable) {
             Timber.e(failure, "## BackupToQuadSMigrationTask - Failed to migrate backup")

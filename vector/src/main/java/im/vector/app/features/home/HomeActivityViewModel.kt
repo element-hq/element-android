@@ -25,6 +25,7 @@ import dagger.assisted.AssistedInject
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
+import im.vector.app.core.dispatchers.CoroutineDispatchers
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.pushers.EnsureFcmTokenIsRetrievedUseCase
 import im.vector.app.core.pushers.PushersManager
@@ -64,15 +65,12 @@ import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
-import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
-import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.api.session.getUserOrDefault
 import org.matrix.android.sdk.api.session.pushrules.RuleIds
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.sync.SyncRequestState
 import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
-import org.matrix.android.sdk.api.util.awaitCallback
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
@@ -97,6 +95,7 @@ class HomeActivityViewModel @AssistedInject constructor(
         private val unregisterUnifiedPushUseCase: UnregisterUnifiedPushUseCase,
         private val ensureFcmTokenIsRetrievedUseCase: EnsureFcmTokenIsRetrievedUseCase,
         private val ensureSessionSyncingUseCase: EnsureSessionSyncingUseCase,
+        private val coroutineDispatchers: CoroutineDispatchers,
 ) : VectorViewModel<HomeActivityViewState, HomeActivityViewActions, HomeActivityViewEvents>(initialState) {
 
     @AssistedFactory
@@ -123,7 +122,9 @@ class HomeActivityViewModel @AssistedInject constructor(
         // Ensure Session is syncing
         ensureSessionSyncingUseCase.execute()
         registerUnifiedPushIfNeeded()
-        cleanupFiles()
+        viewModelScope.launch(coroutineDispatchers.io) {
+            cleanupFiles()
+        }
         observeInitialSync()
         checkSessionPushIsOn()
         observeCrossSigningReset()
@@ -360,8 +361,10 @@ class HomeActivityViewModel @AssistedInject constructor(
         if (isSecureBackupRequired) {
             // If 4S is forced, force verification
             // for stability cancel all pending verifications?
-            session.cryptoService().verificationService().getExistingVerificationRequests(session.myUserId).forEach {
-                session.cryptoService().verificationService().cancelVerificationRequest(it)
+            viewModelScope.launch {
+                session.cryptoService().verificationService().getExistingVerificationRequests(session.myUserId).forEach {
+                    session.cryptoService().verificationService().cancelVerificationRequest(it)
+                }
             }
             _viewEvents.post(HomeActivityViewEvents.ForceVerification(false))
         } else {
@@ -420,9 +423,7 @@ class HomeActivityViewModel @AssistedInject constructor(
             }
 
             tryOrNull("## MaybeVerifyOrBootstrapCrossSigning: Failed to download keys") {
-                awaitCallback<MXUsersDevicesMap<CryptoDeviceInfo>> {
-                    session.cryptoService().downloadKeys(listOf(session.myUserId), true, it)
-                }
+                session.cryptoService().downloadKeysIfNeeded(listOf(session.myUserId), true)
             }
 
             // From there we are up to date with server
@@ -452,8 +453,6 @@ class HomeActivityViewModel @AssistedInject constructor(
                                 _viewEvents.post(
                                         HomeActivityViewEvents.CurrentSessionNotVerified(
                                                 session.getUserOrDefault(session.myUserId).toMatrixItem(),
-                                                // Always send request instead of waiting for an incoming as per recent EW changes
-                                                false
                                         )
                                 )
                             } else {
@@ -530,14 +529,11 @@ class HomeActivityViewModel @AssistedInject constructor(
 private suspend fun CrossSigningService.awaitCrossSigninInitialization(
         block: Continuation<UIABaseAuth>.(response: RegistrationFlowResponse, errCode: String?) -> Unit
 ) {
-    awaitCallback<Unit> {
         initializeCrossSigning(
                 object : UserInteractiveAuthInterceptor {
                     override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
                         promise.block(flowResponse, errCode)
                     }
-                },
-                callback = it
+                }
         )
-    }
 }

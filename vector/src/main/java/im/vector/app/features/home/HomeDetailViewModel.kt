@@ -90,7 +90,7 @@ class HomeDetailViewModel @AssistedInject constructor(
     }
 
     private val refreshRoomSummariesOnCryptoSessionChange = object : NewSessionListener {
-        override fun onNewSession(roomId: String?, senderKey: String, sessionId: String) {
+        override fun onNewSession(roomId: String?, sessionId: String) {
             session.roomService().refreshJoinedRoomSummaryPreviews(roomId)
         }
     }

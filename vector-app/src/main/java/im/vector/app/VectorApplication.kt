@@ -25,6 +25,7 @@ import android.content.res.Configuration
 import android.os.Handler
 import android.os.HandlerThread
 import android.os.StrictMode
+import android.util.Log
 import android.view.Gravity
 import androidx.core.provider.FontRequest
 import androidx.core.provider.FontsContractCompat
@@ -180,9 +181,12 @@ class VectorApplication :
             override fun onResume(owner: LifecycleOwner) {
                 Timber.i("App entered foreground")
                 fcmHelper.onEnterForeground(activeSessionHolder)
-                activeSessionHolder.getSafeActiveSession()?.also {
-                    it.syncService().stopAnyBackgroundSync()
+                activeSessionHolder.getSafeActiveSessionAsync {
+                    it?.syncService()?.stopAnyBackgroundSync()
                 }
+//                activeSessionHolder.getSafeActiveSession()?.also {
+//                    it.syncService().stopAnyBackgroundSync()
+//                }
             }
 
             override fun onPause(owner: LifecycleOwner) {
@@ -234,6 +238,7 @@ class VectorApplication :
     override fun getWorkManagerConfiguration(): WorkConfiguration {
         return WorkConfiguration.Builder()
                 .setWorkerFactory(matrix.getWorkerFactory())
+                .setMinimumLoggingLevel(Log.DEBUG)
                 .setExecutor(Executors.newCachedThreadPool())
                 .build()
     }

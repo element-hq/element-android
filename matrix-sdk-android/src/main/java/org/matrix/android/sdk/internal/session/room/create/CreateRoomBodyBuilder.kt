@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.room.create
 
 import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.content.EncryptionEventContent
@@ -29,7 +30,6 @@ import org.matrix.android.sdk.api.session.room.model.RoomGuestAccessContent
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibilityContent
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.util.MimeTypes
-import org.matrix.android.sdk.internal.crypto.DeviceListManager
 import org.matrix.android.sdk.internal.di.AuthenticatedIdentity
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.network.token.AccessTokenProvider
@@ -44,7 +44,7 @@ import javax.inject.Inject
 
 internal class CreateRoomBodyBuilder @Inject constructor(
         private val ensureIdentityTokenTask: EnsureIdentityTokenTask,
-        private val deviceListManager: DeviceListManager,
+        private val cryptoService: CryptoService,
         private val identityStore: IdentityStore,
         private val fileUploader: FileUploader,
         @UserId
@@ -193,8 +193,7 @@ internal class CreateRoomBodyBuilder @Inject constructor(
                 // for now remove checks on cross signing
                 // && crossSigningService.isCrossSigningVerified()
                 params.invitedUserIds.let { userIds ->
-                    val keys = deviceListManager.downloadKeys(userIds, forceDownload = false)
-
+                    val keys = cryptoService.downloadKeysIfNeeded(userIds, forceDownload = false)
                     userIds.all { userId ->
                         keys.map[userId].let { deviceMap ->
                             if (deviceMap.isNullOrEmpty()) {

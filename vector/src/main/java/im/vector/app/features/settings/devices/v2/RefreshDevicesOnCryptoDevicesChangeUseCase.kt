@@ -22,7 +22,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.sample
-import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.flow.flow
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
@@ -41,7 +40,7 @@ class RefreshDevicesOnCryptoDevicesChangeUseCase @Inject constructor(
                             .sample(samplingPeriodMs)
                             .onEach {
                                 // If we have a new crypto device change, we might want to trigger refresh of device info
-                                session.cryptoService().fetchDevicesList(NoOpMatrixCallback())
+                                session.cryptoService().fetchDevicesList()
                             }
                             .collect()
                 }

@@ -32,7 +32,12 @@ internal open class CryptoRoomEntity(
         var outboundSessionInfo: OutboundGroupSessionInfoEntity? = null,
         // a security to ensure that a room will never revert to not encrypted
         // even if a new state event with empty encryption, or state is reset somehow
-        var wasEncryptedOnce: Boolean? = false
+        var wasEncryptedOnce: Boolean? = false,
+
+        // How long the session should be used before changing it. 604800000 (a week) is the recommended default.
+        var rotationPeriodMs: Long? = null,
+        // How many messages should be sent before changing the session. 100 is the recommended default.
+        var rotationPeriodMsgs: Long? = null,
 ) :
         RealmObject() {
 

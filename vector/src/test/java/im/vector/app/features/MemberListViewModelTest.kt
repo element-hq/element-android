@@ -142,11 +142,11 @@ class MemberListViewModelTest {
     val fakeSession: Session = mockk {
 
         val fakeCrossSigningService: CrossSigningService = mockk {
-            every { isUserTrusted(aliceMxid) } returns true
-            every { isUserTrusted(bobMxid) } returns true
-            every { isUserTrusted(marcMxid) } returns false
+            coEvery { isUserTrusted(aliceMxid) } returns true
+            coEvery { isUserTrusted(bobMxid) } returns true
+            coEvery { isUserTrusted(marcMxid) } returns false
 
-            every { getUserCrossSigningKeys(aliceMxid) } returns MXCrossSigningInfo(
+            coEvery { getUserCrossSigningKeys(aliceMxid) } returns MXCrossSigningInfo(
                     aliceMxid,
                     crossSigningKeys = listOf(
                             CryptoCrossSigningKey(
@@ -173,7 +173,7 @@ class MemberListViewModelTest {
                     ),
                     true
             )
-            every { getUserCrossSigningKeys(bobMxid) } returns MXCrossSigningInfo(
+            coEvery { getUserCrossSigningKeys(bobMxid) } returns MXCrossSigningInfo(
                     aliceMxid,
                     crossSigningKeys = listOf(
                             CryptoCrossSigningKey(
@@ -200,7 +200,7 @@ class MemberListViewModelTest {
                     ),
                     true
             )
-            every { getUserCrossSigningKeys(marcMxid) } returns MXCrossSigningInfo(
+            coEvery { getUserCrossSigningKeys(marcMxid) } returns MXCrossSigningInfo(
                     aliceMxid,
                     crossSigningKeys = listOf(
                             CryptoCrossSigningKey(

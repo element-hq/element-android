@@ -54,6 +54,7 @@ internal object EventMapper {
         eventEntity.decryptionResultJson = event.mxDecryptionResult?.let {
             MoshiProvider.providesMoshi().adapter(OlmDecryptionResult::class.java).toJson(it)
         }
+        eventEntity.isVerificationStateDirty = event.verificationStateIsDirty
         eventEntity.decryptionErrorReason = event.mCryptoErrorReason
         eventEntity.decryptionErrorCode = event.mCryptoError?.name
         eventEntity.isRootThread = event.threadDetails?.isRootThread ?: false
@@ -93,6 +94,7 @@ internal object EventMapper {
             eventEntity.decryptionResultJson?.let { json ->
                 try {
                     it.mxDecryptionResult = MoshiProvider.providesMoshi().adapter(OlmDecryptionResult::class.java).fromJson(json)
+                    it.verificationStateIsDirty = eventEntity.isVerificationStateDirty
                 } catch (t: JsonDataException) {
                     Timber.e(t, "Failed to parse decryption result")
                 }

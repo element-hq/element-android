@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.api.session.room.model.message
 
+import org.matrix.android.sdk.api.session.events.model.EventType
+
 object MessageType {
     const val MSGTYPE_TEXT = "m.text"
     const val MSGTYPE_EMOTE = "m.emote"
@@ -26,7 +28,7 @@ object MessageType {
     const val MSGTYPE_LOCATION = "m.location"
     const val MSGTYPE_FILE = "m.file"
 
-    const val MSGTYPE_VERIFICATION_REQUEST = "m.key.verification.request"
+    const val MSGTYPE_VERIFICATION_REQUEST = EventType.KEY_VERIFICATION_REQUEST
 
     // Add, in local, a fake message type in order to StickerMessage can inherit Message class
     // Because sticker isn't a message type but a event type without msgtype field

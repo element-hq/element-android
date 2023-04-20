@@ -19,7 +19,7 @@ package org.matrix.android.sdk.internal.session.sync.handler
 import androidx.work.BackoffPolicy
 import androidx.work.ExistingWorkPolicy
 import org.matrix.android.sdk.api.MatrixPatterns
-import org.matrix.android.sdk.internal.crypto.crosssigning.DefaultCrossSigningService
+import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
 import org.matrix.android.sdk.internal.crypto.crosssigning.UpdateTrustWorker
 import org.matrix.android.sdk.internal.crypto.crosssigning.UpdateTrustWorkerDataRepository
 import org.matrix.android.sdk.internal.di.SessionId
@@ -39,7 +39,7 @@ internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
         private val directChatsHelper: DirectChatsHelper,
         private val ephemeralTemporaryStore: RoomSyncEphemeralTemporaryStore,
         private val updateUserAccountDataTask: UpdateUserAccountDataTask,
-        private val crossSigningService: DefaultCrossSigningService,
+        private val crossSigningService: CrossSigningService,
         private val updateTrustWorkerDataRepository: UpdateTrustWorkerDataRepository,
         private val workManagerProvider: WorkManagerProvider,
         @SessionId private val sessionId: String,
@@ -105,7 +105,7 @@ internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
                 .enqueue()
     }
 
-    private fun handleUserIdsForCheckingTrustAndAffectedRoomShields(userIdsWithDeviceUpdate: Collection<String>) {
+    private suspend fun handleUserIdsForCheckingTrustAndAffectedRoomShields(userIdsWithDeviceUpdate: Collection<String>) {
         if (userIdsWithDeviceUpdate.isEmpty()) return
         crossSigningService.checkTrustAndAffectedRoomShields(userIdsWithDeviceUpdate.toList())
     }

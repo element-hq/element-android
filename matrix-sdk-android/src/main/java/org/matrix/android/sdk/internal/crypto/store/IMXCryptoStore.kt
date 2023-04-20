@@ -28,11 +28,13 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.UserIdentity
 import org.matrix.android.sdk.api.session.crypto.keysbackup.SavedKeyBackupKeyInfo
 import org.matrix.android.sdk.api.session.crypto.model.AuditTrail
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.CryptoRoomInfo
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.api.session.crypto.model.RoomKeyRequestBody
 import org.matrix.android.sdk.api.session.crypto.model.TrailType
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.events.model.content.EncryptionEventContent
 import org.matrix.android.sdk.api.session.events.model.content.RoomKeyWithHeldContent
 import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
 import org.matrix.android.sdk.api.util.Optional
@@ -249,6 +251,8 @@ internal interface IMXCryptoStore {
 
     fun getUserDeviceList(userId: String): List<CryptoDeviceInfo>?
 
+//    fun getUserDeviceListFlow(userId: String): Flow<List<CryptoDeviceInfo>>
+
     fun getLiveDeviceList(userId: String): LiveData<List<CryptoDeviceInfo>>
 
     fun getLiveDeviceList(userIds: List<String>): LiveData<List<CryptoDeviceInfo>>
@@ -281,6 +285,9 @@ internal interface IMXCryptoStore {
      * @return the algorithm, null is the room is not encrypted
      */
     fun getRoomAlgorithm(roomId: String): String?
+
+    fun getRoomCryptoInfo(roomId: String): CryptoRoomInfo?
+    fun setAlgorithmInfo(roomId: String, encryption: EncryptionEventContent?)
 
     /**
      * This is a bit different than isRoomEncrypted.
@@ -529,6 +536,8 @@ internal interface IMXCryptoStore {
 
     fun getCrossSigningInfo(userId: String): MXCrossSigningInfo?
     fun getLiveCrossSigningInfo(userId: String): LiveData<Optional<MXCrossSigningInfo>>
+
+//    fun getCrossSigningInfoFlow(userId: String): Flow<Optional<MXCrossSigningInfo>>
     fun setCrossSigningInfo(userId: String, info: MXCrossSigningInfo?)
 
     fun markMyMasterKeyAsLocallyTrusted(trusted: Boolean)
@@ -540,6 +549,7 @@ internal interface IMXCryptoStore {
 
     fun getCrossSigningPrivateKeys(): PrivateKeysInfo?
     fun getLiveCrossSigningPrivateKeys(): LiveData<Optional<PrivateKeysInfo>>
+//    fun getCrossSigningPrivateKeysFlow():  Flow<Optional<PrivateKeysInfo>>
 
     fun getGlobalCryptoConfig(): GlobalCryptoConfig
     fun getLiveGlobalCryptoConfig(): LiveData<GlobalCryptoConfig>

@@ -42,3 +42,6 @@ const val SSSS_ALGORITHM_AES_HMAC_SHA2 = "m.secret_storage.v1.aes-hmac-sha2"
 // TODO Refacto: use this constants everywhere
 const val ed25519 = "ed25519"
 const val curve25519 = "curve25519"
+
+const val MEGOLM_DEFAULT_ROTATION_MSGS = 100L
+const val MEGOLM_DEFAULT_ROTATION_PERIOD_MS = 7 * 24 * 3600 * 1000L

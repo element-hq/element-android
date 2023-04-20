@@ -149,12 +149,14 @@ import javax.inject.Singleton
     ): MatrixConfiguration {
         return MatrixConfiguration(
                 applicationFlavor = BuildConfig.FLAVOR_DESCRIPTION,
+                cryptoFlavor = BuildConfig.CRYPTO_FLAVOR_DESCRIPTION,
                 roomDisplayNameFallbackProvider = vectorRoomDisplayNameFallbackProvider,
                 threadMessagesEnabledDefault = vectorPreferences.areThreadMessagesEnabled(),
                 networkInterceptors = listOfNotNull(
                         flipperProxy.networkInterceptor(),
                 ),
                 metricPlugins = vectorPlugins.plugins(),
+                cryptoAnalyticsPlugin = vectorPlugins.cryptoMetricPlugin,
                 customEventTypesProvider = vectorCustomEventTypesProvider,
                 syncConfig = SyncConfig(
                         syncFilterParams = SyncFilterParams(lazyLoadMembersForStateEvents = true, useThreadNotifications = true)

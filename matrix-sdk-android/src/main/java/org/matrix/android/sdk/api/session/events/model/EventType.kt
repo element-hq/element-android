@@ -96,6 +96,7 @@ object EventType {
     const val SEND_SECRET = "m.secret.send"
 
     // Interactive key verification
+    const val KEY_VERIFICATION_REQUEST = "m.key.verification.request"
     const val KEY_VERIFICATION_START = "m.key.verification.start"
     const val KEY_VERIFICATION_ACCEPT = "m.key.verification.accept"
     const val KEY_VERIFICATION_KEY = "m.key.verification.key"

@@ -106,6 +106,9 @@ android {
         viewBinding true
     }
 }
+
+apply from: '../flavor.gradle'
+
 dependencies {
 
     implementation project(":vector-config")

@@ -187,6 +187,7 @@ class VectorPreferences @Inject constructor(
         const val SETTINGS_PREF_SPACE_CATEGORY = "SETTINGS_PREF_SPACE_CATEGORY"
 
         private const val SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY = "SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY"
+        const val SETTINGS_DEVELOPER_MODE_KEY_REQUEST_AUDIT_KEY = "SETTINGS_DEVELOPER_MODE_KEY_REQUEST_AUDIT_KEY"
         private const val SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY = "SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY"
         private const val SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY = "SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY"
         private const val SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY = "SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY"
@@ -1081,6 +1082,12 @@ class VectorPreferences @Inject constructor(
 
     fun labsAutoReportUISI(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_LABS_AUTO_REPORT_UISI, false)
+    }
+
+    fun setLabsAutoReportUISI(enabled: Boolean) {
+        return defaultPrefs.edit {
+            putBoolean(SETTINGS_LABS_AUTO_REPORT_UISI, enabled)
+        }
     }
 
     fun prefSpacesShowAllRoomInHome(): Boolean {

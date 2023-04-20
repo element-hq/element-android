@@ -12,6 +12,9 @@
 /benchmark-out
 /captures
 .externalNativeBuild
+rust-sdk/target/*
+rust-sdk/src/uniffi/*
+Cargo.lock
 
 /tmp
 /fastlane/private
@@ -24,3 +27,10 @@
 /yarn.lock
 /node_modules
 **/out/failures
+
+# For manual dependency to rust crypto sdk
+matrix-sdk-android/src/main/jniLibs/
+
+matrix-sdk-android/libs/crypto-android-release.aar
+
+matrix-sdk-android/libs/matrix-rust-sdk-crypto.aar

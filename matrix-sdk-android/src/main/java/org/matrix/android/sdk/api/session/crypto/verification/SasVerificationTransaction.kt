@@ -18,19 +18,45 @@ package org.matrix.android.sdk.api.session.crypto.verification
 
 interface SasVerificationTransaction : VerificationTransaction {
 
-    fun supportsEmoji(): Boolean
+    companion object {
+        const val SAS_MAC_SHA256_LONGKDF = "hmac-sha256"
+        const val SAS_MAC_SHA256 = "hkdf-hmac-sha256"
 
-    fun supportsDecimal(): Boolean
+        // Deprecated maybe removed later, use V2
+        const val KEY_AGREEMENT_V1 = "curve25519"
+        const val KEY_AGREEMENT_V2 = "curve25519-hkdf-sha256"
+
+        // ordered by preferred order
+        val KNOWN_AGREEMENT_PROTOCOLS = listOf(KEY_AGREEMENT_V2, KEY_AGREEMENT_V1)
+
+        // ordered by preferred order
+        val KNOWN_HASHES = listOf("sha256")
+
+        // ordered by preferred order
+        val KNOWN_MACS = listOf(SAS_MAC_SHA256, SAS_MAC_SHA256_LONGKDF)
+
+        // older devices have limited support of emoji but SDK offers images for the 64 verification emojis
+        // so always send that we support EMOJI
+        val KNOWN_SHORT_CODES = listOf(SasMode.EMOJI, SasMode.DECIMAL)
+    }
+
+    fun state(): SasTransactionState
+
+    override fun isSuccessful() = state() is SasTransactionState.Done
+
+//    fun supportsEmoji(): Boolean
 
     fun getEmojiCodeRepresentation(): List<EmojiRepresentation>
 
-    fun getDecimalCodeRepresentation(): String
+    fun getDecimalCodeRepresentation(): String?
 
     /**
      * To be called by the client when the user has verified that
      * both short codes do match.
      */
-    fun userHasVerifiedShortCode()
+    suspend fun userHasVerifiedShortCode()
 
-    fun shortCodeDoesNotMatch()
+    suspend fun acceptVerification()
+
+    suspend fun shortCodeDoesNotMatch()
 }

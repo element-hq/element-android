@@ -17,16 +17,15 @@
 package im.vector.app.features.settings.devices.v2
 
 import im.vector.app.core.di.ActiveSessionHolder
-import org.matrix.android.sdk.api.NoOpMatrixCallback
 import javax.inject.Inject
 
 class RefreshDevicesUseCase @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
 ) {
-    fun execute() {
+    suspend fun execute() {
         activeSessionHolder.getSafeActiveSession()?.let { session ->
-            session.cryptoService().fetchDevicesList(NoOpMatrixCallback())
-            session.cryptoService().downloadKeys(listOf(session.myUserId), true, NoOpMatrixCallback())
+            session.cryptoService().fetchDevicesList()
+            session.cryptoService().downloadKeysIfNeeded(listOf(session.myUserId), true)
         }
     }
 }

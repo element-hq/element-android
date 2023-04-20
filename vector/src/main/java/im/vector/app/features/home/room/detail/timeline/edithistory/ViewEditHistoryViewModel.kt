@@ -84,7 +84,7 @@ class ViewEditHistoryViewModel @AssistedInject constructor(
                                 senderKey = result.senderCurve25519Key,
                                 keysClaimed = result.claimedEd25519Key?.let { k -> mapOf("ed25519" to k) },
                                 forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain,
-                                isSafe = result.isSafe
+                                verificationState = result.messageVerificationState
                         )
                     } catch (e: MXCryptoError) {
                         Timber.w("Failed to decrypt event in history")

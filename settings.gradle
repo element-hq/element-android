@@ -12,5 +12,6 @@ include ':library:external:jsonviewer'
 include ':library:external:diff-match-patch'
 include ':library:external:dialpad'
 
+include ':library:rustCrypto'
 include ':matrix-sdk-android'
 include ':matrix-sdk-android-flow'

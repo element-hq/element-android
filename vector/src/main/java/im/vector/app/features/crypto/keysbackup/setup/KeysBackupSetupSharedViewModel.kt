@@ -19,15 +19,16 @@ package im.vector.app.features.crypto.keysbackup.setup
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.nulabinc.zxcvbn.Strength
 import im.vector.app.R
 import im.vector.app.core.platform.WaitingViewData
 import im.vector.app.core.utils.LiveEvent
 import im.vector.lib.core.utils.timer.Clock
-import org.matrix.android.sdk.api.MatrixCallback
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupLastVersionResult
+import org.matrix.android.sdk.api.session.crypto.keysbackup.IBackupRecoveryKey
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupService
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersion
 import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreationInfo
@@ -72,7 +73,7 @@ class KeysBackupSetupSharedViewModel @Inject constructor(
     // Step 3
     // Var to ignore events from previous request(s) to generate a recovery key
     private var currentRequestId: MutableLiveData<Long> = MutableLiveData()
-    var recoveryKey: MutableLiveData<String?> = MutableLiveData(null)
+    var recoveryKey: MutableLiveData<IBackupRecoveryKey?> = MutableLiveData(null)
     var prepareRecoverFailError: MutableLiveData<Throwable?> = MutableLiveData(null)
     var megolmBackupCreationInfo: MegolmBackupCreationInfo? = null
     var copyHasBeenMade = false
@@ -93,50 +94,47 @@ class KeysBackupSetupSharedViewModel @Inject constructor(
 
         recoveryKey.value = null
         prepareRecoverFailError.value = null
-        session.let { mxSession ->
-            val requestedId = currentRequestId.value!!
+        val requestedId = currentRequestId.value!!
+        val progressListener = object : ProgressListener {
+            override fun onProgress(progress: Int, total: Int) {
+                if (requestedId != currentRequestId.value) {
+                    // this is an old request, we can't cancel but we can ignore
+                    return
+                }
 
-            mxSession.cryptoService().keysBackupService().prepareKeysBackupVersion(withPassphrase,
-                    object : ProgressListener {
-                        override fun onProgress(progress: Int, total: Int) {
-                            if (requestedId != currentRequestId.value) {
-                                // this is an old request, we can't cancel but we can ignore
-                                return
-                            }
+                loadingStatus.postValue(
+                        WaitingViewData(
+                                context.getString(R.string.keys_backup_setup_step3_generating_key_status),
+                                progress,
+                                total
+                        )
+                )
+            }
+        }
 
-                            loadingStatus.value = WaitingViewData(
-                                    context.getString(R.string.keys_backup_setup_step3_generating_key_status),
-                                    progress,
-                                    total
-                            )
-                        }
-                    },
-                    object : MatrixCallback<MegolmBackupCreationInfo> {
-                        override fun onSuccess(data: MegolmBackupCreationInfo) {
-                            if (requestedId != currentRequestId.value) {
-                                // this is an old request, we can't cancel but we can ignore
-                                return
-                            }
-                            recoveryKey.value = data.recoveryKey
-                            megolmBackupCreationInfo = data
-                            copyHasBeenMade = false
+        viewModelScope.launch {
+            try {
+                val data = session.cryptoService().keysBackupService().prepareKeysBackupVersion(withPassphrase, progressListener)
+                if (requestedId != currentRequestId.value) {
+                    // this is an old request, we can't cancel but we can ignore
+                    return@launch
+                }
+                recoveryKey.postValue(data.recoveryKey)
+                megolmBackupCreationInfo = data
+                copyHasBeenMade = false
 
-                            val keyBackup = session.cryptoService().keysBackupService()
-                            createKeysBackup(context, keyBackup)
-                        }
+                val keyBackup = session.cryptoService().keysBackupService()
+                createKeysBackup(context, keyBackup)
+            } catch (failure: Throwable) {
+                if (requestedId != currentRequestId.value) {
+                    // this is an old request, we can't cancel but we can ignore
+                    return@launch
+                }
 
-                        override fun onFailure(failure: Throwable) {
-                            if (requestedId != currentRequestId.value) {
-                                // this is an old request, we can't cancel but we can ignore
-                                return
-                            }
-
-                            loadingStatus.value = null
-
-                            isCreatingBackupVersion.value = false
-                            prepareRecoverFailError.value = failure
-                        }
-                    })
+                loadingStatus.postValue(null)
+                isCreatingBackupVersion.postValue(false)
+                prepareRecoverFailError.postValue(failure)
+            }
         }
     }
 
@@ -146,9 +144,11 @@ class KeysBackupSetupSharedViewModel @Inject constructor(
     }
 
     fun stopAndKeepAfterDetectingExistingOnServer() {
-        loadingStatus.value = null
-        navigateEvent.value = LiveEvent(NAVIGATE_FINISH)
-        session.cryptoService().keysBackupService().checkAndStartKeysBackup()
+        loadingStatus.postValue(null)
+        navigateEvent.postValue(LiveEvent(NAVIGATE_FINISH))
+        viewModelScope.launch {
+            session.cryptoService().keysBackupService().checkAndStartKeysBackup()
+        }
     }
 
     private fun createKeysBackup(context: Context, keysBackup: KeysBackupService, forceOverride: Boolean = false) {
@@ -156,45 +156,36 @@ class KeysBackupSetupSharedViewModel @Inject constructor(
 
         creatingBackupError.value = null
 
-        keysBackup.getCurrentVersion(object : MatrixCallback<KeysBackupLastVersionResult> {
-            override fun onSuccess(data: KeysBackupLastVersionResult) {
-                if (data.toKeysVersionResult()?.version.isNullOrBlank() || forceOverride) {
-                    processOnCreate()
+        viewModelScope.launch {
+            try {
+                val data = keysBackup.getCurrentVersion()?.toKeysVersionResult()
+                if (data?.version.isNullOrBlank() || forceOverride) {
+                    processOnCreate(keysBackup)
                 } else {
-                    loadingStatus.value = null
+                    loadingStatus.postValue(null)
                     // we should prompt
-                    isCreatingBackupVersion.value = false
-                    navigateEvent.value = LiveEvent(NAVIGATE_PROMPT_REPLACE)
+                    isCreatingBackupVersion.postValue(false)
+                    navigateEvent.postValue(LiveEvent(NAVIGATE_PROMPT_REPLACE))
                 }
+            } catch (failure: Throwable) {
+                Timber.w(failure, "Failed to createKeysBackup")
             }
+        }
+    }
 
-            override fun onFailure(failure: Throwable) {
-                Timber.e(failure, "## createKeyBackupVersion")
-                loadingStatus.value = null
+    suspend fun processOnCreate(keysBackup: KeysBackupService) {
+        try {
+            loadingStatus.postValue(null)
+            val created = keysBackup.createKeysBackupVersion(megolmBackupCreationInfo!!)
+            isCreatingBackupVersion.postValue(false)
+            keysVersion.postValue(created)
+            navigateEvent.value = LiveEvent(NAVIGATE_TO_STEP_3)
+        } catch (failure: Throwable) {
+            Timber.e(failure, "## createKeyBackupVersion")
+            loadingStatus.postValue(null)
 
-                isCreatingBackupVersion.value = false
-                creatingBackupError.value = failure
-            }
-
-            fun processOnCreate() {
-                keysBackup.createKeysBackupVersion(megolmBackupCreationInfo!!, object : MatrixCallback<KeysVersion> {
-                    override fun onSuccess(data: KeysVersion) {
-                        loadingStatus.value = null
-
-                        isCreatingBackupVersion.value = false
-                        keysVersion.value = data
-                        navigateEvent.value = LiveEvent(NAVIGATE_TO_STEP_3)
-                    }
-
-                    override fun onFailure(failure: Throwable) {
-                        Timber.e(failure, "## createKeyBackupVersion")
-                        loadingStatus.value = null
-
-                        isCreatingBackupVersion.value = false
-                        creatingBackupError.value = failure
-                    }
-                })
-            }
-        })
+            isCreatingBackupVersion.postValue(false)
+            creatingBackupError.postValue(failure)
+        }
     }
 }

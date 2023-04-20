@@ -34,6 +34,7 @@ import org.matrix.android.sdk.internal.crypto.store.db.RealmCryptoStoreMigration
 import org.matrix.android.sdk.internal.crypto.store.db.RealmCryptoStoreModule
 import org.matrix.android.sdk.internal.database.RealmKeysUtils
 import org.matrix.android.sdk.internal.legacy.riot.LoginStorage
+import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
@@ -44,7 +45,7 @@ internal class DefaultLegacySessionImporter @Inject constructor(
         private val context: Context,
         private val sessionParamsStore: SessionParamsStore,
         private val realmKeysUtils: RealmKeysUtils,
-        private val realmCryptoStoreMigration: RealmCryptoStoreMigration
+        private val clock: Clock,
 ) : LegacySessionImporter {
 
     private val loginStorage = LoginStorage(context)
@@ -166,6 +167,8 @@ internal class DefaultLegacySessionImporter @Inject constructor(
         // Ensure newLocation does not exist (can happen in case of partial migration)
         newLocation.deleteRecursively()
         newLocation.mkdirs()
+
+        val realmCryptoStoreMigration = RealmCryptoStoreMigration(clock)
 
         Timber.d("Migration: create legacy realm configuration")
 

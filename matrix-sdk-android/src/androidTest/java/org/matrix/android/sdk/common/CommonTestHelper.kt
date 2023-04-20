@@ -20,6 +20,7 @@ import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -44,6 +45,7 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.failure.JoinRoomFailure
+import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.send.SendState
@@ -82,7 +84,7 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
         }
 
         @OptIn(ExperimentalCoroutinesApi::class)
-        internal fun runCryptoTest(context: Context, cryptoConfig: MXCryptoConfig? = null,  autoSignoutOnClose: Boolean = true, block: suspend CoroutineScope.(CryptoTestHelper, CommonTestHelper) -> Unit) {
+        internal fun runCryptoTest(context: Context, cryptoConfig: MXCryptoConfig? = null, autoSignoutOnClose: Boolean = true, block: suspend CoroutineScope.(CryptoTestHelper, CommonTestHelper) -> Unit) {
             val testHelper = CommonTestHelper(context, cryptoConfig)
             val cryptoTestHelper = CryptoTestHelper(testHelper)
             return runTest(dispatchTimeoutMs = TestConstants.timeOutMillis) {
@@ -181,6 +183,110 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
         return sentEvents
     }
 
+    suspend fun sendMessageInRoom(room: Room, text: String): String {
+        Log.v("#E2E TEST", "sendMessageInRoom room:${room.roomId} <$text>")
+        room.sendService().sendTextMessage(text)
+
+        val timeline = room.timelineService().createTimeline(null, TimelineSettings(60))
+        timeline.start()
+
+        val messageSent = CompletableDeferred<String>()
+        timeline.addListener(object : Timeline.Listener {
+            override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
+                val decryptedMsg = timeline.getSnapshot()
+                        .filter { it.root.getClearType() == EventType.MESSAGE }
+                        .also { list ->
+                            val message = list.joinToString(",", "[", "]") { "${it.root.type}|${it.root.sendState}" }
+                            Log.v("#E2E TEST", "Timeline snapshot is $message")
+                        }
+                        .filter { it.root.sendState == SendState.SYNCED }
+                        .firstOrNull { it.root.getClearContent().toModel<MessageContent>()?.body?.startsWith(text) == true }
+                if (decryptedMsg != null) {
+                    timeline.dispose()
+                    messageSent.complete(decryptedMsg.eventId)
+                }
+            }
+        })
+        return messageSent.await().also {
+            Log.v("#E2E TEST", "Message <${text}> sent and synced with id $it")
+        }
+        // return withTimeout(TestConstants.timeOutMillis) { messageSent.await() }
+    }
+
+    suspend fun ensureMessage(room: Room, eventId: String, block: ((event: TimelineEvent) -> Boolean)) {
+        Log.v("#E2E TEST", "ensureMessage room:${room.roomId} <$eventId>")
+        val timeline = room.timelineService().createTimeline(null, TimelineSettings(60, buildReadReceipts = false))
+
+        // check if not already there?
+        val existing = withContext(Dispatchers.Main) {
+            room.getTimelineEvent(eventId)
+        }
+        if (existing != null && block(existing)) return Unit.also {
+            Log.v("#E2E TEST", "Already received")
+        }
+
+        val messageSent = CompletableDeferred<Unit>()
+
+        timeline.addListener(object : Timeline.Listener {
+            override fun onNewTimelineEvents(eventIds: List<String>) {
+                Log.v("#E2E TEST", "onNewTimelineEvents snapshot is $eventIds")
+            }
+
+            override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
+                val success = timeline.getSnapshot()
+                        // .filter { it.root.getClearType() == EventType.MESSAGE }
+                        .also { list ->
+                            val message = list.joinToString(",", "[", "]") {
+                                "${it.eventId}|${it.root.getClearType()}|${it.root.sendState}|${it.root.mxDecryptionResult?.verificationState}"
+                            }
+                            Log.v("#E2E TEST", "Timeline snapshot is $message")
+                        }
+                        .firstOrNull { it.eventId == eventId }
+                        ?.let {
+                            block(it)
+                        } ?: false
+                if (success) {
+                    messageSent.complete(Unit)
+                    timeline.dispose()
+                }
+            }
+        })
+
+        timeline.start()
+
+        return messageSent.await()
+        // withTimeout(TestConstants.timeOutMillis) {
+        //    messageSent.await()
+        // }
+    }
+
+    fun ensureMessagePromise(room: Room, eventId: String, block: ((event: TimelineEvent) -> Boolean)): CompletableDeferred<Unit> {
+        val timeline = room.timelineService().createTimeline(null, TimelineSettings(60))
+        timeline.start()
+        val messageSent = CompletableDeferred<Unit>()
+        timeline.addListener(object : Timeline.Listener {
+            override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
+                val success = timeline.getSnapshot()
+                        .filter { it.root.getClearType() == EventType.MESSAGE }
+                        .also { list ->
+                            val message = list.joinToString(",", "[", "]") {
+                                "${it.root.type}|${it.root.getClearType()}|${it.root.sendState}|${it.root.mxDecryptionResult?.verificationState}"
+                            }
+                            Log.v("#E2E TEST", "Promise Timeline snapshot is $message")
+                        }
+                        .firstOrNull { it.eventId == eventId }
+                        ?.let {
+                            block(it)
+                        } ?: false
+                if (success) {
+                    messageSent.complete(Unit)
+                    timeline.dispose()
+                }
+            }
+        })
+        return messageSent
+    }
+
     /**
      * Will send nb of messages provided by count parameter but waits every 10 messages to avoid gap in sync
      */
@@ -239,18 +345,18 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
     }
 
     suspend fun waitForAndAcceptInviteInRoom(otherSession: Session, roomID: String) {
-        retryPeriodically {
+        retryWithBackoff {
             val roomSummary = otherSession.getRoomSummary(roomID)
             (roomSummary != null && roomSummary.membership == Membership.INVITE).also {
                 if (it) {
-                    Log.v("# TEST", "${otherSession.myUserId} can see the invite")
+                    Log.v("#E2E TEST", "${otherSession.myUserId} can see the invite")
                 }
             }
         }
 
         // not sure why it's taking so long :/
         wrapWithTimeout(90_000) {
-            Log.v("#E2E TEST", "${otherSession.myUserId} tries to join room $roomID")
+            Log.v("#E2E TEST", "${otherSession.myUserId.take(10)} tries to join room $roomID")
             try {
                 otherSession.roomService().joinRoom(roomID)
             } catch (ex: JoinRoomFailure.JoinedWithTimeout) {
@@ -259,7 +365,7 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
         }
 
         Log.v("#E2E TEST", "${otherSession.myUserId} waiting for join echo ...")
-        retryPeriodically {
+        retryWithBackoff {
             val roomSummary = otherSession.getRoomSummary(roomID)
             roomSummary != null && roomSummary.membership == Membership.JOIN
         }
@@ -428,6 +534,31 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
         wrapWithTimeout(timeout) {
             while (!predicate()) {
                 runBlocking { delay(500) }
+            }
+        }
+    }
+
+    private val backoff = listOf(60L, 75L, 100L, 300L, 300L, 500L, 1_000L, 1_000L, 1_500L, 1_500L, 3_000L)
+    suspend fun retryWithBackoff(
+            timeout: Long = TestConstants.timeOutMillis,
+            // we use on fail to let caller report a proper error that will show nicely in junit test result with correct line
+            // just call fail with your message
+            onFail: (() -> Unit)? = null,
+            predicate: suspend () -> Boolean,
+    ) {
+        var backoffTry = 0
+        val now = System.currentTimeMillis()
+        while (!predicate()) {
+            Timber.v("## retryWithBackoff Trial nb $backoffTry")
+            withContext(Dispatchers.IO) {
+                delay(backoff[backoffTry])
+            }
+            backoffTry++
+            if (backoffTry >= backoff.size) backoffTry = 0
+            if (System.currentTimeMillis() - now > timeout) {
+                Timber.v("## retryWithBackoff Trial fail")
+                onFail?.invoke()
+                return
             }
         }
     }

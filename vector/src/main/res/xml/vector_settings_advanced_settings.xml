@@ -90,6 +90,7 @@
 
         <im.vector.app.core.preference.VectorPreference
             android:persistent="false"
+            android:key="SETTINGS_DEVELOPER_MODE_KEY_REQUEST_AUDIT_KEY"
             android:title="@string/settings_key_requests"
             app:fragment="im.vector.app.features.settings.devtools.KeyRequestsFragment" />
 

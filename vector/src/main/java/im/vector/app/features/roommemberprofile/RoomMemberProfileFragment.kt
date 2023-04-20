@@ -50,7 +50,7 @@ import im.vector.app.databinding.DialogShareQrCodeBinding
 import im.vector.app.databinding.FragmentMatrixProfileBinding
 import im.vector.app.databinding.ViewStubRoomMemberProfileHeaderBinding
 import im.vector.app.features.analytics.plan.MobileScreen
-import im.vector.app.features.crypto.verification.VerificationBottomSheet
+import im.vector.app.features.crypto.verification.user.UserVerificationBottomSheet
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.RoomDetailPendingAction
@@ -178,16 +178,16 @@ class RoomMemberProfileFragment :
 
     private fun handleStartVerification(startVerification: RoomMemberProfileViewEvents.StartVerification) {
         if (startVerification.canCrossSign) {
-            VerificationBottomSheet
-                    .withArgs(roomId = null, otherUserId = startVerification.userId)
+            UserVerificationBottomSheet
+                    .verifyUser(otherUserId = startVerification.userId)
                     .show(parentFragmentManager, "VERIF")
         } else {
             MaterialAlertDialogBuilder(requireContext())
                     .setTitle(R.string.dialog_title_warning)
                     .setMessage(R.string.verify_cannot_cross_sign)
                     .setPositiveButton(R.string.verification_profile_verify) { _, _ ->
-                        VerificationBottomSheet
-                                .withArgs(roomId = null, otherUserId = startVerification.userId)
+                        UserVerificationBottomSheet
+                                .verifyUser(otherUserId = startVerification.userId)
                                 .show(parentFragmentManager, "VERIF")
                     }
                     .setNegativeButton(R.string.action_cancel, null)

@@ -45,6 +45,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.espresso.tools.waitUntilViewVisible
 import im.vector.lib.core.utils.timer.DefaultClock
+import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
 import org.hamcrest.StringDescription
@@ -229,7 +230,7 @@ fun allSecretsKnownIdling(session: Session): IdlingResource {
     val res = object : IdlingResource, Observer<Optional<PrivateKeysInfo>> {
         private var callback: IdlingResource.ResourceCallback? = null
 
-        var privateKeysInfo: PrivateKeysInfo? = session.cryptoService().crossSigningService().getCrossSigningPrivateKeys()
+        var privateKeysInfo: PrivateKeysInfo? = null
         override fun getName() = "AllSecretsKnownIdling_${session.myUserId}"
 
         override fun isIdleNow(): Boolean {
@@ -249,6 +250,10 @@ fun allSecretsKnownIdling(session: Session): IdlingResource {
                 callback?.onTransitionToIdle()
             }
         }
+    }
+
+    res.privateKeysInfo = runBlocking {
+        session.cryptoService().crossSigningService().getCrossSigningPrivateKeys()
     }
 
     runOnUiThread {

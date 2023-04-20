@@ -26,6 +26,7 @@ import org.matrix.android.sdk.api.session.crypto.model.DevicesListResponse
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
+import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.crypto.api.CryptoApi
 import org.matrix.android.sdk.internal.crypto.model.rest.DeleteDeviceParams
 import org.matrix.android.sdk.internal.crypto.model.rest.DeleteDevicesParams
@@ -34,7 +35,6 @@ import org.matrix.android.sdk.internal.crypto.model.rest.KeysClaimBody
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysClaimResponse
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysQueryBody
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysQueryResponse
-import org.matrix.android.sdk.internal.crypto.model.rest.KeysUploadBody
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysUploadResponse
 import org.matrix.android.sdk.internal.crypto.model.rest.SendToDeviceBody
 import org.matrix.android.sdk.internal.crypto.model.rest.SignatureUploadResponse
@@ -211,7 +211,7 @@ class DefaultSendToDeviceTaskTest {
             throw java.lang.AssertionError("Should not be called")
         }
 
-        override suspend fun uploadKeys(body: KeysUploadBody): KeysUploadResponse {
+        override suspend fun uploadKeys(body: JsonDict): KeysUploadResponse {
             throw java.lang.AssertionError("Should not be called")
         }
 

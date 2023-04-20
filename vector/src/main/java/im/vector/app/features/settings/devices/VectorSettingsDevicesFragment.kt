@@ -39,7 +39,6 @@ import im.vector.app.databinding.DialogBaseEditTextBinding
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.crypto.recover.SetupMode
-import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import javax.inject.Inject
@@ -78,11 +77,12 @@ class VectorSettingsDevicesFragment :
                 is DevicesViewEvents.RequestReAuth -> askForReAuthentication(it)
                 is DevicesViewEvents.PromptRenameDevice -> displayDeviceRenameDialog(it.deviceInfo)
                 is DevicesViewEvents.ShowVerifyDevice -> {
-                    VerificationBottomSheet.withArgs(
-                            roomId = null,
-                            otherUserId = it.userId,
-                            transactionId = it.transactionId
-                    ).show(childFragmentManager, "REQPOP")
+                    // TODO selfverif
+//                    VerificationBottomSheet.withArgs(
+// //                            roomId = null,
+//                            otherUserId = it.userId,
+//                            transactionId = it.transactionId ?: ""
+//                    ).show(childFragmentManager, "REQPOP")
                 }
                 is DevicesViewEvents.SelfVerification -> {
                     navigator.requestSelfSessionVerification(requireActivity())

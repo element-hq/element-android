@@ -130,6 +130,18 @@ internal class RoomSummaryDataSource @Inject constructor(
         )
     }
 
+    fun getRoomSummariesChangesLive(
+            queryParams: RoomSummaryQueryParams,
+            sortOrder: RoomSortOrder = RoomSortOrder.NONE
+    ): LiveData<List<Unit>> {
+        return monarchy.findAllMappedWithChanges(
+                {
+                    roomSummariesQuery(it, queryParams).process(sortOrder)
+                },
+                { emptyList<Unit>() }
+        )
+    }
+
     fun getSpaceSummariesLive(
             queryParams: SpaceSummaryQueryParams,
             sortOrder: RoomSortOrder = RoomSortOrder.NONE
@@ -253,6 +265,7 @@ internal class RoomSummaryDataSource @Inject constructor(
         )
 
         return object : UpdatableLivePageResult {
+
             override val livePagedList: LiveData<PagedList<RoomSummary>> = mapped
 
             override val liveBoundaries: LiveData<ResultBoundaries>
@@ -262,7 +275,14 @@ internal class RoomSummaryDataSource @Inject constructor(
                 set(value) {
                     field = value
                     realmDataSourceFactory.updateQuery {
-                        roomSummariesQuery(it, value).process(sortOrder)
+                        roomSummariesQuery(it, value).process(this.sortOrder)
+                    }
+                }
+            override var sortOrder: RoomSortOrder = sortOrder
+                set(value) {
+                    field = value
+                    realmDataSourceFactory.updateQuery {
+                        roomSummariesQuery(it, this.queryParams).process(value)
                     }
                 }
         }

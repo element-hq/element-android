@@ -121,6 +121,15 @@ allprojects {
                 groups.jcenter.group.each { includeGroup it }
             }
         }
+
+        maven {
+            url 'https://s01.oss.sonatype.org/content/repositories/snapshots'
+            content {
+                groups.mavenSnapshots.regex.each { includeGroupByRegex it }
+                groups.mavenSnapshots.group.each { includeGroup it }
+            }
+        }
+
     }
 
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
@@ -314,7 +323,7 @@ tasks.register("recordScreenshots", GradleBuild) {
 
 tasks.register("verifyScreenshots", GradleBuild) {
     startParameter.projectProperties.screenshot = ""
-    tasks = [':vector:verifyPaparazziDebug']
+    tasks = [':vector:verifyPaparazziKotlinCryptoDebug']
 }
 
 ext.initScreenshotTests = { project ->

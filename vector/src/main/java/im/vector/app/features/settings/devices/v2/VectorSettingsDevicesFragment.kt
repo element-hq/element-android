@@ -41,7 +41,6 @@ import im.vector.app.databinding.FragmentSettingsDevicesBinding
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.crypto.recover.SetupMode
-import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.login.qr.QrCodeLoginArgs
 import im.vector.app.features.login.qr.QrCodeLoginType
 import im.vector.app.features.settings.devices.v2.filter.DeviceManagerFilterType
@@ -114,11 +113,12 @@ class VectorSettingsDevicesFragment :
             when (it) {
                 is DevicesViewEvent.RequestReAuth -> askForReAuthentication(it)
                 is DevicesViewEvent.ShowVerifyDevice -> {
-                    VerificationBottomSheet.withArgs(
-                            roomId = null,
-                            otherUserId = it.userId,
-                            transactionId = it.transactionId
-                    ).show(childFragmentManager, "REQPOP")
+                    // TODO selfverif
+//                    VerificationBottomSheet.withArgs(
+// //                            roomId = null,
+//                            otherUserId = it.userId,
+//                            transactionId = it.transactionId ?:""
+//                    ).show(childFragmentManager, "REQPOP")
                 }
                 is DevicesViewEvent.SelfVerification -> {
                     navigator.requestSelfSessionVerification(requireActivity())

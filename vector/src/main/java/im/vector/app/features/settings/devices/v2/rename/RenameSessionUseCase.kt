@@ -19,7 +19,6 @@ package im.vector.app.features.settings.devices.v2.rename
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.andThen
 import im.vector.app.features.settings.devices.v2.RefreshDevicesUseCase
-import org.matrix.android.sdk.api.util.awaitCallback
 import javax.inject.Inject
 
 class RenameSessionUseCase @Inject constructor(
@@ -33,12 +32,10 @@ class RenameSessionUseCase @Inject constructor(
     }
 
     private suspend fun renameDevice(deviceId: String, newName: String) = runCatching {
-        awaitCallback<Unit> { matrixCallback ->
             activeSessionHolder.getActiveSession()
                     .cryptoService()
-                    .setDeviceName(deviceId, newName, matrixCallback)
-        }
+                    .setDeviceName(deviceId, newName)
     }
 
-    private fun refreshDevices() = runCatching { refreshDevicesUseCase.execute() }
+    private suspend fun refreshDevices() = runCatching { refreshDevicesUseCase.execute() }
 }
