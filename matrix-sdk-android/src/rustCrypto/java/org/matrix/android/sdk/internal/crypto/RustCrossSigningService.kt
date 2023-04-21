@@ -40,7 +40,7 @@ internal class RustCrossSigningService @Inject constructor(
      */
     override suspend fun isCrossSigningVerified(): Boolean {
         return when (val identity = olmMachine.getIdentity(olmMachine.userId())) {
-            is OwnUserIdentity -> identity.trustsOurOwnDevice()
+            is OwnUserIdentity -> identity.verified()
             else               -> false
         }
     }
