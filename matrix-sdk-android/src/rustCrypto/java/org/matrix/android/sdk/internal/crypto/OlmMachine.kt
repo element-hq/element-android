@@ -472,19 +472,16 @@ internal class OlmMachine @Inject constructor(
                 } catch (throwable: Throwable) {
                     val reThrow = when (throwable) {
                         is DecryptionException.MissingRoomKey -> {
-                            // Revert when witheld PR merged
-//                            if (throwable.withheldCode != null) {
-//                                MXCryptoError.Base(MXCryptoError.ErrorType.KEYS_WITHHELD, throwable.withheldCode!!)
-//                            } else {
-//                                MXCryptoError.Base(MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID, throwable.error)
-//                            }
-
-                            MXCryptoError.Base(MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID, throwable.message.orEmpty())
+                            if (throwable.withheldCode != null) {
+                                MXCryptoError.Base(MXCryptoError.ErrorType.KEYS_WITHHELD, throwable.withheldCode!!)
+                            } else {
+                                MXCryptoError.Base(MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID, throwable.error)
+                            }
                         }
                         is DecryptionException.Megolm -> {
                             // TODO check if it's the correct binding?
-//                            MXCryptoError.Base(MXCryptoError.ErrorType.UNKNOWN_MESSAGE_INDEX, throwable.error)
-                            MXCryptoError.Base(MXCryptoError.ErrorType.UNKNOWN_MESSAGE_INDEX, throwable.message.orEmpty())
+                            // Could encapsulate more than that, need to update sdk
+                            MXCryptoError.Base(MXCryptoError.ErrorType.UNKNOWN_MESSAGE_INDEX, throwable.error)
                         }
                         is DecryptionException.Identifier -> {
                             MXCryptoError.Base(MXCryptoError.ErrorType.BAD_EVENT_FORMAT, MXCryptoError.BAD_EVENT_FORMAT_TEXT_REASON)
