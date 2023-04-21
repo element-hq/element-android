@@ -69,7 +69,7 @@ def getNightlyUniversalApkPath() {
     def taskNames = gradle.getStartParameter().taskNames.toString()
     if(taskNames.contains("RustCryptoNightly")) {
         return "vector-app/build/outputs/apk/gplayRustCrypto/nightly/vector-gplay-rustCrypto-universal-nightly.apk"
-    } else if (taskNames.contains("KoltinCryptoNightly")) {
+    } else if (taskNames.contains("KotlinCryptoNightly")) {
         return "vector-app/build/outputs/apk/gplayKotlinCrypto/nightly/vector-gplay-kotlinCrypto-universal-nightly.apk"
     } else {
         return ""
@@ -80,7 +80,7 @@ def getFirebaseAppId() {
     def taskNames = gradle.getStartParameter().taskNames.toString()
     if(taskNames.contains("RustCryptoNightly")) {
         return "1:912726360885:android:94fb99347eaa36d100427c"
-    } else if (taskNames.contains("KoltinCryptoNightly")) {
+    } else if (taskNames.contains("KotlinCryptoNightly")) {
         return "1:912726360885:android:efd8545af52a9f9300427c"
     } else {
         return ""
