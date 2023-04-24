@@ -24,7 +24,7 @@ import org.matrix.android.sdk.api.util.Optional
 
 interface CrossSigningService {
     /**
-     * Is our own device signed by our own cross signing identity.
+     * Is our published identity trusted.
      */
     suspend fun isCrossSigningVerified(): Boolean
 
