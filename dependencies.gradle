@@ -47,7 +47,7 @@ ext.libs = [
                 'coroutinesTest'          : "org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinCoroutines"
         ],
         androidx    : [
-                'activity'                : "androidx.activity:activity-ktx:1.7.0",
+                'activity'                : "androidx.activity:activity-ktx:1.7.1",
                 'appCompat'               : "androidx.appcompat:appcompat:1.6.1",
                 'biometric'               : "androidx.biometric:biometric:1.1.0",
                 'core'                    : "androidx.core:core-ktx:1.10.0",
