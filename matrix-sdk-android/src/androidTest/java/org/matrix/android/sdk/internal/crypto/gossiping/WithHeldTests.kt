@@ -80,14 +80,14 @@ class WithHeldTests : InstrumentedTest {
         // Alice decide to not send to unverified sessions
         aliceSession.cryptoService().setGlobalBlacklistUnverifiedDevices(true)
 
-        val timelineEvent = testHelper.sendTextMessage(roomAlicePOV, "Hello Bob", 1).first()
+        val eventId = testHelper.sendMessageInRoom(roomAlicePOV, "Hello Bob")
 
         // await for bob unverified session to get the message
         testHelper.retryWithBackoff {
-            bobUnverifiedSession.getRoom(roomId)?.getTimelineEvent(timelineEvent.eventId) != null
+            bobUnverifiedSession.getRoom(roomId)?.getTimelineEvent(eventId) != null
         }
 
-        val eventBobPOV = bobUnverifiedSession.getRoom(roomId)?.getTimelineEvent(timelineEvent.eventId)!!
+        val eventBobPOV = bobUnverifiedSession.getRoom(roomId)?.getTimelineEvent(eventId)!!
 
         val megolmSessionId = eventBobPOV.root.content.toModel<EncryptedEventContent>()!!.sessionId!!
         // =============================
@@ -96,6 +96,7 @@ class WithHeldTests : InstrumentedTest {
 
         // Bob should not be able to decrypt because the keys is withheld
         // .. might need to wait a bit for stability?
+        // WILL FAIL for rust until this fixed https://github.com/matrix-org/matrix-rust-sdk/issues/1806
         mustFail(
                 message = "This session should not be able to decrypt",
                 failureBlock = { failure ->
@@ -108,7 +109,7 @@ class WithHeldTests : InstrumentedTest {
             bobUnverifiedSession.cryptoService().decryptEvent(eventBobPOV.root, "")
         }
 
-        if (bobUnverifiedSession.cryptoService().supportsForwardedKeyWiththeld()) {
+        if (bobUnverifiedSession.cryptoService().supportKeyRequestInspection()) {
             // Let's see if the reply we got from bob first session is unverified
             testHelper.retryWithBackoff {
                 bobUnverifiedSession.cryptoService().getOutgoingRoomKeyRequests()
@@ -125,10 +126,10 @@ class WithHeldTests : InstrumentedTest {
         // enable back sending to unverified
         aliceSession.cryptoService().setGlobalBlacklistUnverifiedDevices(false)
 
-        val secondEvent = testHelper.sendTextMessage(roomAlicePOV, "Verify your device!!", 1).first()
+        val secondEventId = testHelper.sendMessageInRoom(roomAlicePOV, "Verify your device!!")
 
         testHelper.retryWithBackoff {
-            val ev = bobUnverifiedSession.getRoom(roomId)?.getTimelineEvent(secondEvent.eventId)
+            val ev = bobUnverifiedSession.getRoom(roomId)?.getTimelineEvent(secondEventId)
             // wait until it's decrypted
             ev?.root?.getClearType() == EventType.MESSAGE
         }
