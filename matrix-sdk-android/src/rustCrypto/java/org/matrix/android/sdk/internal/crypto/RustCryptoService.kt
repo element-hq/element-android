@@ -184,8 +184,9 @@ internal class RustCryptoService @Inject constructor(
     }
 
     override fun getCryptoVersion(context: Context, longFormat: Boolean): String {
-        // TODO we should provide olm and rust-sdk version from the rust-sdk
-        return if (longFormat) "Rust SDK 0.3" else "0.3"
+        val version = org.matrix.rustcomponents.sdk.crypto.version()
+        val vodozemac = org.matrix.rustcomponents.sdk.crypto.vodozemacVersion()
+        return if (longFormat) "Rust SDK $version, Vodozemac $vodozemac" else version
     }
 
     override fun getMyCryptoDevice(): CryptoDeviceInfo {

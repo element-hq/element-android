@@ -1002,7 +1002,9 @@
     </plurals>
 
     <string name="settings_version">Version</string>
-    <string name="settings_olm_version">olm version</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="settings_olm_version">olm version</string>
+    <string name="settings_crypto_version">Crypto version</string>
     <string name="settings_app_term_conditions">Terms &amp; conditions</string>
     <string name="settings_acceptable_use_policy">Acceptable Use Policy</string>
     <string name="settings_third_party_notices">Third party notices</string>
