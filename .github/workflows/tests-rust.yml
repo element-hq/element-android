@@ -74,7 +74,6 @@ jobs:
           # emulator-build: 7425822
           script: |
             ./gradlew gatherGplayRustCryptoDebugStringTemplates $CI_GRADLE_ARG_PROPERTIES
-#            ./gradlew unitTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
             ./gradlew instrumentationTestsRustWithCoverage $CI_GRADLE_ARG_PROPERTIES
             ./gradlew generateCoverageReport $CI_GRADLE_ARG_PROPERTIES
 
