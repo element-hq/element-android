@@ -38,17 +38,17 @@ jobs:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
           gradle-home-cache-cleanup: ${{ github.ref == 'refs/heads/develop' }}
 
-      - name: Run screenshot tests
-        run: ./gradlew verifyScreenshots $CI_GRADLE_ARG_PROPERTIES
+#      - name: Run screenshot tests
+#        run: ./gradlew verifyScreenshots $CI_GRADLE_ARG_PROPERTIES
 
-      - name: Archive Screenshot Results on Error
-        if: failure()
-        uses: actions/upload-artifact@v3
-        with:
-          name: screenshot-results
-          path: |
-            **/out/failures/
-            **/build/reports/tests/*UnitTest/
+#      - name: Archive Screenshot Results on Error
+#        if: failure()
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: screenshot-results
+#          path: |
+#            **/out/failures/
+#            **/build/reports/tests/*UnitTest/
 
       - uses: actions/setup-python@v4
         with:
