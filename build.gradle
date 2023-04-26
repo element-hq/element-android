@@ -41,7 +41,7 @@ buildscript {
 
 plugins {
     // ktlint Plugin
-    id "org.jlleitschuh.gradle.ktlint" version "11.3.1"
+    id "org.jlleitschuh.gradle.ktlint" version "11.3.2"
     // Detekt
     id "io.gitlab.arturbosch.detekt" version "1.22.0"
     // Ksp
