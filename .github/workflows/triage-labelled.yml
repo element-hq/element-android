@@ -80,7 +80,7 @@ jobs:
           github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
   add_product_issues:
-    name: X-Needs-Product to Design project board
+    name: X-Needs-Product to Product project board
     runs-on: ubuntu-latest
     if: >
       contains(github.event.issue.labels.*.name, 'X-Needs-Product')
