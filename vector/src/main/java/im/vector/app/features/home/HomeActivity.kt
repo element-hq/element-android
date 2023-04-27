@@ -597,17 +597,6 @@ class HomeActivity :
         }
 
         checkNewAppLayoutFlagChange()
-
-        activeSessionHolder.getActiveSession().also { session ->
-            val devicePusher = session.pushersService().getPushers().firstOrNull {
-                it.pushKey == unifiedPushHelper.getEndpointOrToken()
-            }
-            // TODO: Remove these logs
-            Timber.d("## Remote wipe: nonce is ${devicePusher?.data?.remoteWipeNonce}")
-            if (!unifiedPushHelper.isEmbeddedDistributor()) {
-                Timber.d("## Remote wipe: push key is ${devicePusher?.pushKey}")
-            }
-        }
     }
 
     private fun checkNewAppLayoutFlagChange() {

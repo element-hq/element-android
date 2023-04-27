@@ -35,15 +35,7 @@ class EnsureFcmTokenIsRetrievedUseCase @Inject constructor(
         val currentSession = activeSessionHolder.getActiveSession()
         val currentPushers = currentSession.pushersService().getPushers()
 
-        currentPushers.none {
-            // Check the push key because device ID may not be supported by the home server
-            it.pushKey == unifiedPushHelper.getEndpointOrToken() &&
-
-                    // TODO:
-                    //  Is the home server guaranteed to store and return the data dictionary?
-                    //  If not, this check can never succeed.
-                     it.data.remoteWipeNonce != null
-        }
+        currentPushers.none { it.pushKey == unifiedPushHelper.getEndpointOrToken() }
     } else {
         false
     }

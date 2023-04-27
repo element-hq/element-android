@@ -22,7 +22,6 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.AppNameProvider
 import im.vector.app.core.resources.LocaleProvider
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.features.remotewipe.GenerateRemoteWipeNonceUseCase
 import org.matrix.android.sdk.api.session.pushers.HttpPusher
 import org.matrix.android.sdk.api.session.pushers.Pusher
 import java.util.UUID
@@ -38,7 +37,6 @@ class PushersManager @Inject constructor(
         private val stringProvider: StringProvider,
         private val appNameProvider: AppNameProvider,
         private val getDeviceInfoUseCase: GetDeviceInfoUseCase,
-        private val generateRemoteWipeNonceUseCase: GenerateRemoteWipeNonceUseCase,
 ) {
     suspend fun testPush() {
         val currentSession = activeSessionHolder.getActiveSession()
@@ -79,9 +77,6 @@ class PushersManager @Inject constructor(
             deviceId = activeSessionHolder.getActiveSession().sessionParams.deviceId ?: "MOBILE",
             append = false,
             withEventIdOnly = true,
-            includeData = mapOf(
-                    "io.element.remote_wipe_nonce" to generateRemoteWipeNonceUseCase.generateNonce()
-            ),
     )
 
     suspend fun registerEmailForPush(email: String) {

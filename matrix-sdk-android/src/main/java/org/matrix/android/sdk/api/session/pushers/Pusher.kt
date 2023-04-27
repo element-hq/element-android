@@ -46,6 +46,5 @@ enum class PusherState {
 
 data class PusherData(
         val url: String? = null,
-        val format: String? = null,
-        val remoteWipeNonce: String? = null,
+        val format: String? = null
 )
