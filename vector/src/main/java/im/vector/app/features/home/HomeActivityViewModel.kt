@@ -43,6 +43,7 @@ import im.vector.app.features.raw.wellknown.ElementWellKnown
 import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.raw.wellknown.isSecureBackupRequired
 import im.vector.app.features.raw.wellknown.withElementWellKnown
+import im.vector.app.features.remotewipe.SetUpRemoteWipeUseCase
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.voicebroadcast.recording.usecase.StopOngoingVoiceBroadcastUseCase
@@ -97,6 +98,7 @@ class HomeActivityViewModel @AssistedInject constructor(
         private val unregisterUnifiedPushUseCase: UnregisterUnifiedPushUseCase,
         private val ensureFcmTokenIsRetrievedUseCase: EnsureFcmTokenIsRetrievedUseCase,
         private val ensureSessionSyncingUseCase: EnsureSessionSyncingUseCase,
+        private val setUpRemoteWipeUseCase: SetUpRemoteWipeUseCase,
 ) : VectorViewModel<HomeActivityViewState, HomeActivityViewActions, HomeActivityViewEvents>(initialState) {
 
     @AssistedFactory
@@ -122,6 +124,7 @@ class HomeActivityViewModel @AssistedInject constructor(
         isInitialized = true
         // Ensure Session is syncing
         ensureSessionSyncingUseCase.execute()
+        setUpRemoteWipe()
         registerUnifiedPushIfNeeded()
         cleanupFiles()
         observeInitialSync()
@@ -159,6 +162,11 @@ class HomeActivityViewModel @AssistedInject constructor(
             unregisterUnifiedPushUseCase.execute(pushersManager)
         }
     }
+
+    private fun setUpRemoteWipe() =
+        viewModelScope.launch {
+            setUpRemoteWipeUseCase.execute()
+        }
 
     private fun observeReleaseNotes() = withState { state ->
         if (vectorPreferences.isNewAppLayoutEnabled()) {

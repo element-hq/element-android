@@ -51,6 +51,7 @@ import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageServi
 import org.matrix.android.sdk.api.session.signout.SignOutService
 import org.matrix.android.sdk.api.session.space.SpaceService
 import org.matrix.android.sdk.api.session.statistics.StatisticsListener
+import org.matrix.android.sdk.api.session.synapse.SynapseService
 import org.matrix.android.sdk.api.session.sync.SyncService
 import org.matrix.android.sdk.api.session.terms.TermsService
 import org.matrix.android.sdk.api.session.thirdparty.ThirdPartyService
@@ -282,6 +283,11 @@ interface Session {
      * Returns the SharedSecretStorageService associated with the session.
      */
     fun sharedSecretStorageService(): SharedSecretStorageService
+
+    /**
+     * Returns the SynapseService associated with the session
+     */
+    fun synapseService(): SynapseService
 
     /**
      * Add a listener to the session.

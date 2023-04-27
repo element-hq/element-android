@@ -53,6 +53,7 @@ import org.matrix.android.sdk.internal.session.room.send.SendEventWorker
 import org.matrix.android.sdk.internal.session.search.SearchModule
 import org.matrix.android.sdk.internal.session.signout.SignOutModule
 import org.matrix.android.sdk.internal.session.space.SpaceModule
+import org.matrix.android.sdk.internal.session.synapse.SynapseModule
 import org.matrix.android.sdk.internal.session.sync.SyncModule
 import org.matrix.android.sdk.internal.session.sync.SyncTask
 import org.matrix.android.sdk.internal.session.sync.SyncTokenStore
@@ -100,6 +101,7 @@ import org.matrix.android.sdk.internal.util.system.SystemModule
             PresenceModule::class,
             RequestModule::class,
             SecureStorageModule::class,
+            SynapseModule::class,
         ]
 )
 @SessionScope

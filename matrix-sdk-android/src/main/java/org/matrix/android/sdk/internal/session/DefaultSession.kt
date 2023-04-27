@@ -58,6 +58,7 @@ import org.matrix.android.sdk.api.session.search.SearchService
 import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
 import org.matrix.android.sdk.api.session.signout.SignOutService
 import org.matrix.android.sdk.api.session.space.SpaceService
+import org.matrix.android.sdk.api.session.synapse.SynapseService
 import org.matrix.android.sdk.api.session.sync.SyncService
 import org.matrix.android.sdk.api.session.terms.TermsService
 import org.matrix.android.sdk.api.session.thirdparty.ThirdPartyService
@@ -135,6 +136,7 @@ internal class DefaultSession @Inject constructor(
         @UnauthenticatedWithCertificate
         private val unauthenticatedWithCertificateOkHttpClient: Lazy<OkHttpClient>,
         private val sessionState: SessionState,
+        private val synapseService: Lazy<SynapseService>,
 ) : Session,
         GlobalErrorHandler.Listener {
 
@@ -233,6 +235,7 @@ internal class DefaultSession @Inject constructor(
     override fun openIdService(): OpenIdService = openIdService.get()
     override fun accountDataService(): SessionAccountDataService = accountDataService.get()
     override fun sharedSecretStorageService(): SharedSecretStorageService = sharedSecretStorageService.get()
+    override fun synapseService(): SynapseService = synapseService.get()
 
     override fun getOkHttpClient(): OkHttpClient {
         return unauthenticatedWithCertificateOkHttpClient.get()

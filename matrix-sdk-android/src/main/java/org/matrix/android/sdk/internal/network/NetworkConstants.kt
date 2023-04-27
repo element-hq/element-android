@@ -45,4 +45,7 @@ internal object NetworkConstants {
 
     // Federation
     const val URI_FEDERATION_PATH = "_matrix/federation/v1/"
+
+    // Synapse-specific
+    const val URI_SYNAPSE_CLIENT = "_synapse/client/"
 }

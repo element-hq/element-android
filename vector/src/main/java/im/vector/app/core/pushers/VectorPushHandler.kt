@@ -31,6 +31,7 @@ import im.vector.app.features.notifications.NotifiableEventResolver
 import im.vector.app.features.notifications.NotifiableMessageEvent
 import im.vector.app.features.notifications.NotificationActionIds
 import im.vector.app.features.notifications.NotificationDrawerManager
+import im.vector.app.features.remotewipe.GetRemoteWipeNonceUseCase
 import im.vector.app.features.settings.VectorDataStore
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.CoroutineScope
@@ -58,7 +59,7 @@ class VectorPushHandler @Inject constructor(
         private val actionIds: NotificationActionIds,
         private val context: Context,
         private val buildMeta: BuildMeta,
-        private val unifiedPushHelper: UnifiedPushHelper,
+        private val getRemoteWipeNonceUseCase: GetRemoteWipeNonceUseCase,
 ) {
 
     private val coroutineScope = CoroutineScope(SupervisorJob())
@@ -146,17 +147,15 @@ class VectorPushHandler @Inject constructor(
                 is PushData.RemoteWipe -> {
                     Timber.tag(loggerTag.value).d("## Remote wipe: received")
 
-                    val devicePusher = session.pushersService().getPushers().firstOrNull {
-                        it.pushKey == unifiedPushHelper.getEndpointOrToken()
-                    }
+                    val remoteWipeNonce = getRemoteWipeNonceUseCase.execute()
 
                     // TODO: delete these logs
-                    if (devicePusher != null) {
-                        Timber.tag(loggerTag.value).d("## Remote wipe: checking nonce ${pushData.nonce} against stored nonce ${devicePusher.data.remoteWipeNonce}")
+                    if (remoteWipeNonce != null) {
+                        Timber.tag(loggerTag.value).d("## Remote wipe: checking nonce ${pushData.nonce} against stored nonce $remoteWipeNonce")
                     } else {
                         Timber.tag(loggerTag.value).d("## Remote wipe: no pusher found")
                     }
-                    if (devicePusher != null && devicePusher.data.remoteWipeNonce == pushData.nonce) {
+                    if (remoteWipeNonce != null && remoteWipeNonce == pushData.nonce) {
                         Timber.tag(loggerTag.value).d("## Remote wipe: clearing data")
                         session.clearDataService().clearSessionData()
                     } else {
