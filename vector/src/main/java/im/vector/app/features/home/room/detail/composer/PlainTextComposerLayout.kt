@@ -209,7 +209,13 @@ class PlainTextComposerLayout @JvmOverloads constructor(
 
         avatarRenderer.render(event.senderInfo.toMatrixItem(), views.composerRelatedMessageAvatar)
 
-        views.composerEditText.setText(formattedBody ?: defaultContent)
+        val content = if (specialMode is MessageComposerMode.Edit) {
+            formattedBody ?: defaultContent
+        } else {
+            defaultContent
+        }
+
+        views.composerEditText.setText(content)
 
         expand {
             // need to do it here also when not using quick reply
