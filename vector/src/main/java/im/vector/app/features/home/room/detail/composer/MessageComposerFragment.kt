@@ -205,10 +205,10 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
                 return@onEach
             }
             when (mode) {
-                is SendMode.Regular -> renderRegularMode(mode.text.toString())
-                is SendMode.Edit -> renderSpecialMode(MessageComposerMode.Edit(mode.timelineEvent, mode.text.toString()))
-                is SendMode.Quote -> renderSpecialMode(MessageComposerMode.Quote(mode.timelineEvent, mode.text.toString()))
-                is SendMode.Reply -> renderSpecialMode(MessageComposerMode.Reply(mode.timelineEvent, mode.text.toString()))
+                is SendMode.Regular -> renderRegularMode(mode.text)
+                is SendMode.Edit -> renderSpecialMode(MessageComposerMode.Edit(mode.timelineEvent, mode.text))
+                is SendMode.Quote -> renderSpecialMode(MessageComposerMode.Quote(mode.timelineEvent, mode.text))
+                is SendMode.Reply -> renderSpecialMode(MessageComposerMode.Reply(mode.timelineEvent, mode.text))
                 is SendMode.Voice -> renderVoiceMessageMode(mode.text)
             }
         }

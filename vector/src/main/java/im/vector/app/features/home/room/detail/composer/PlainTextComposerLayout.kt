@@ -209,7 +209,7 @@ class PlainTextComposerLayout @JvmOverloads constructor(
 
         avatarRenderer.render(event.senderInfo.toMatrixItem(), views.composerRelatedMessageAvatar)
 
-        views.composerEditText.setText(defaultContent)
+        views.composerEditText.setText(formattedBody ?: defaultContent)
 
         expand {
             // need to do it here also when not using quick reply
