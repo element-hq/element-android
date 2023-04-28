@@ -74,172 +74,21 @@ jobs:
         contains(github.event.issue.labels.*.name, 'O-Frequent')) ||
        contains(github.event.issue.labels.*.name, 'A11y'))
     steps:
-      - uses: octokit/graphql-action@v2.x
-        id: add_to_project
+      - uses: actions/add-to-project@main
         with:
-          headers: '{"GraphQL-Features": "projects_next_graphql"}'
-          query: |
-            mutation add_to_project($projectid:ID!,$contentid:ID!) {
-              addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
-                item {
-                  id
-                }
-              }
-            }
-          projectid: ${{ env.PROJECT_ID }}
-          contentid: ${{ github.event.issue.node_id }}
-        env:
-          PROJECT_ID: "PVT_kwDOAM0swc0sUA"
-          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+          project-url: https://github.com/orgs/vector-im/projects/18
+          github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
   add_product_issues:
-    name: X-Needs-Product to Design project board
+    name: X-Needs-Product to Product project board
     runs-on: ubuntu-latest
     if: >
       contains(github.event.issue.labels.*.name, 'X-Needs-Product')
     steps:
-      - uses: octokit/graphql-action@v2.x
-        id: add_to_project
+      - uses: actions/add-to-project@main
         with:
-          headers: '{"GraphQL-Features": "projects_next_graphql"}'
-          query: |
-            mutation add_to_project($projectid:ID!,$contentid:ID!) {
-              addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
-                item {
-                  id
-                }
-              }
-            }
-          projectid: ${{ env.PROJECT_ID }}
-          contentid: ${{ github.event.issue.node_id }}
-        env:
-          PROJECT_ID: "PVT_kwDOAM0swc4AAg6N"
-          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
-
-  delight_issues_to_board:
-    name: Spaces issues to Delight project board
-    runs-on: ubuntu-latest
-    # Skip in forks
-    if: >
-      github.repository == 'vector-im/element-android' &&
-      (contains(github.event.issue.labels.*.name, 'Team: Delight') ||
-       contains(github.event.issue.labels.*.name, 'Z-AppLayout'))
-    steps:
-      - uses: octokit/graphql-action@v2.x
-        with:
-          headers: '{"GraphQL-Features": "projects_next_graphql"}'
-          query: |
-            mutation add_to_project($projectid:ID!,$contentid:ID!) {
-              addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
-                item {
-                  id
-                }
-              }
-            }
-          projectid: ${{ env.PROJECT_ID }}
-          contentid: ${{ github.event.issue.node_id }}
-        env:
-          PROJECT_ID: "PVT_kwDOAM0swc1HvQ"
-          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
-
-  move_voice-message_issues:
-    name: A-Voice Messages to voice message board
-    runs-on: ubuntu-latest
-    # Skip in forks
-    if: >
-      github.repository == 'vector-im/element-android' &&
-      contains(github.event.issue.labels.*.name, 'A-Voice Messages')
-    steps:
-      - uses: octokit/graphql-action@v2.x
-        with:
-          headers: '{"GraphQL-Features": "projects_next_graphql"}'
-          query: |
-            mutation add_to_project($projectid:ID!,$contentid:ID!) {
-              addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
-                item {
-                  id
-                }
-              }
-            }
-          projectid: ${{ env.PROJECT_ID }}
-          contentid: ${{ github.event.issue.node_id }}
-        env:
-          PROJECT_ID: "PVT_kwDOAM0swc2KCw"
-          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
-  move_message_bubbles_issues:
-    name: A-Message-Bubbles to Message bubbles board
-    runs-on: ubuntu-latest
-    # Skip in forks
-    if: >
-      github.repository == 'vector-im/element-android' &&
-      contains(github.event.issue.labels.*.name, 'A-Message-Bubbles')
-    steps:
-      - uses: octokit/graphql-action@v2.x
-        with:
-          headers: '{"GraphQL-Features": "projects_next_graphql"}'
-          query: |
-            mutation add_to_project($projectid:ID!,$contentid:ID!) {
-              addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
-                item {
-                  id
-                }
-              }
-            }
-          projectid: ${{ env.PROJECT_ID }}
-          contentid: ${{ github.event.issue.node_id }}
-        env:
-          PROJECT_ID: "PVT_kwDOAM0swc3m-g"
-          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
-
-  move_ftue_issues:
-    name: Z-FTUE to Mobile FTUE board
-    runs-on: ubuntu-latest
-    # Skip in forks
-    if: >
-      github.repository == 'vector-im/element-android' &&
-      contains(github.event.issue.labels.*.name, 'Z-FTUE')
-    steps:
-      - uses: octokit/graphql-action@v2.x
-        with:
-          headers: '{"GraphQL-Features": "projects_next_graphql"}'
-          query: |
-            mutation add_to_project($projectid:ID!,$contentid:ID!) {
-              addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
-                item {
-                  id
-                }
-              }
-            }
-          projectid: ${{ env.PROJECT_ID }}
-          contentid: ${{ github.event.issue.node_id }}
-        env:
-          PROJECT_ID: "PVT_kwDOAM0swc4AAqVx"
-          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
-
-  move_WTF_issues:
-    name: Z-WTF to WTF board
-    runs-on: ubuntu-latest
-    # Skip in forks
-    if: >
-      github.repository == 'vector-im/element-android' &&
-      contains(github.event.issue.labels.*.name, 'Z-WTF')
-    steps:
-      - uses: octokit/graphql-action@v2.x
-        with:
-          headers: '{"GraphQL-Features": "projects_next_graphql"}'
-          query: |
-            mutation add_to_project($projectid:ID!,$contentid:ID!) {
-              addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
-                item {
-                  id
-                }
-              }
-            }
-          projectid: ${{ env.PROJECT_ID }}
-          contentid: ${{ github.event.issue.node_id }}
-        env:
-          PROJECT_ID: "PVT_kwDOAM0swc4AArk0"
-          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+          project-url: https://github.com/orgs/vector-im/projects/28
+          github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
   move_element_x_issues:
     name: ElementX issues to ElementX project board
@@ -254,23 +103,10 @@ jobs:
         contains(github.event.issue.labels.*.name, 'Z-Banquet-Beta') ||
         contains(github.event.issue.labels.*.name, 'Z-Banquet-Release'))
     steps:
-      - uses: octokit/graphql-action@v2.x
+      - uses: actions/add-to-project@main
         with:
-          headers: '{"GraphQL-Features": "projects_next_graphql"}'
-          query: |
-            mutation add_to_project($projectid:ID!,$contentid:ID!) {
-              addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
-                item {
-                  id
-                }
-              }
-            }
-          projectid: ${{ env.PROJECT_ID }}
-          contentid: ${{ github.event.issue.node_id }}
-        env:
-          PROJECT_ID: "PVT_kwDOAM0swc4ABTXY"
-          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
-
+          project-url: https://github.com/orgs/vector-im/projects/43
+          github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
   ex_plorers:
     name: Add labelled issues to X-Plorer project
@@ -278,23 +114,10 @@ jobs:
     if: >
       contains(github.event.issue.labels.*.name, 'Team: Element X Feature')
     steps:
-      - uses: octokit/graphql-action@v2.x
-        id: add_to_project
+      - uses: actions/add-to-project@main
         with:
-          headers: '{"GraphQL-Features": "projects_next_graphql"}'
-          query: |
-              mutation add_to_project($projectid:ID!,$contentid:ID!) {
-                addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
-                item {
-                  id
-                  }
-                }
-              }
-          projectid: ${{ env.PROJECT_ID }}
-          contentid: ${{ github.event.issue.node_id }}
-        env:
-          PROJECT_ID: "PVT_kwDOAM0swc4ALoFY"
-          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+          project-url: https://github.com/orgs/vector-im/projects/73
+          github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
   ps_features1:
     name: Add labelled issues to PS features team 1
@@ -307,23 +130,10 @@ jobs:
       (contains(github.event.issue.labels.*.name, 'A-Session-Mgmt') &&
         contains(github.event.issue.labels.*.name, 'A-User-Settings'))
     steps:
-      - uses: octokit/graphql-action@v2.x
-        id: add_to_project
+      - uses: actions/add-to-project@main
         with:
-          headers: '{"GraphQL-Features": "projects_next_graphql"}'
-          query: |
-              mutation add_to_project($projectid:ID!,$contentid:ID!) {
-                addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
-                item {
-                  id
-                  }
-                }
-              }
-          projectid: ${{ env.PROJECT_ID }}
-          contentid: ${{ github.event.issue.node_id }}
-        env:
-          PROJECT_ID: "PVT_kwDOAM0swc4AHJKF"
-          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+          project-url: https://github.com/orgs/vector-im/projects/56
+          github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
   ps_features2:
     name: Add labelled issues to PS features team 2
@@ -332,23 +142,10 @@ jobs:
       contains(github.event.issue.labels.*.name, 'A-DM-Start') ||
       contains(github.event.issue.labels.*.name, 'A-Broadcast')
     steps:
-      - uses: octokit/graphql-action@v2.x
-        id: add_to_project
+      - uses: actions/add-to-project@main
         with:
-          headers: '{"GraphQL-Features": "projects_next_graphql"}'
-          query: |
-              mutation add_to_project($projectid:ID!,$contentid:ID!) {
-                addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
-                item {
-                  id
-                  }
-                }
-              }
-          projectid: ${{ env.PROJECT_ID }}
-          contentid: ${{ github.event.issue.node_id }}
-        env:
-          PROJECT_ID: "PVT_kwDOAM0swc4AHJKd"
-          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+          project-url: https://github.com/orgs/vector-im/projects/58
+          github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
   ps_features3:
     name: Add labelled issues to PS features team 3
@@ -356,23 +153,10 @@ jobs:
     if: >
       contains(github.event.issue.labels.*.name, 'A-Rich-Text-Editor')
     steps:
-      - uses: octokit/graphql-action@v2.x
-        id: add_to_project
+      - uses: actions/add-to-project@main
         with:
-          headers: '{"GraphQL-Features": "projects_next_graphql"}'
-          query: |
-              mutation add_to_project($projectid:ID!,$contentid:ID!) {
-                addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
-                item {
-                  id
-                  }
-                }
-              }
-          projectid: ${{ env.PROJECT_ID }}
-          contentid: ${{ github.event.issue.node_id }}
-        env:
-          PROJECT_ID: "PVT_kwDOAM0swc4AHJKW"
-          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+          project-url: https://github.com/orgs/vector-im/projects/57
+          github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
   voip:
     name: Add labelled issues to VoIP project board
@@ -380,20 +164,7 @@ jobs:
     if: >
       contains(github.event.issue.labels.*.name, 'Team: VoIP')
     steps:
-      - uses: octokit/graphql-action@v2.x
-        id: add_to_project
+      - uses: actions/add-to-project@main
         with:
-          headers: '{"GraphQL-Features": "projects_next_graphql"}'
-          query: |
-              mutation add_to_project($projectid:ID!,$contentid:ID!) {
-                addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
-                item {
-                  id
-                  }
-                }
-              }
-          projectid: ${{ env.PROJECT_ID }}
-          contentid: ${{ github.event.issue.node_id }}
-        env:
-          PROJECT_ID: "PVT_kwDOAM0swc4ABMIk"
-          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+          project-url: https://github.com/orgs/vector-im/projects/41
+          github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
