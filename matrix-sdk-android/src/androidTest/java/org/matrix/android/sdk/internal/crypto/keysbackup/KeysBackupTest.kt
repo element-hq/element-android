@@ -26,6 +26,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
+import org.junit.Assume
 import org.junit.FixMethodOrder
 import org.junit.Ignore
 import org.junit.Test
@@ -128,6 +129,7 @@ class KeysBackupTest : InstrumentedTest {
     @Test
     fun createKeysBackupVersionTest() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
         val bobSession = testHelper.createAccount(TestConstants.USER_BOB, KeysBackupTestConstants.defaultSessionParams)
+        Log.d("#E2E", "Initializing crosssigning for ${bobSession.myUserId.take(8)}")
         cryptoTestHelper.initializeCrossSigning(bobSession)
 
         val keysBackup = bobSession.cryptoService().keysBackupService()
@@ -136,12 +138,14 @@ class KeysBackupTest : InstrumentedTest {
 
         assertFalse(keysBackup.isEnabled())
 
+        Log.d("#E2E", "prepareKeysBackupVersion")
         val megolmBackupCreationInfo =
                 keysBackup.prepareKeysBackupVersion(null, null)
 
         assertFalse(keysBackup.isEnabled())
 
         // Create the version
+        Log.d("#E2E", "createKeysBackupVersion")
         val version = keysBackup.createKeysBackupVersion(megolmBackupCreationInfo)
 
         // Backup must be enable now
@@ -151,6 +155,7 @@ class KeysBackupTest : InstrumentedTest {
         val versionResult = keysBackup.getVersion(version.version)
         val trust = keysBackup.getKeysBackupTrust(versionResult!!)
 
+        Log.d("#E2E", "Check backup signatures")
         assertEquals("Should have 2 signatures", 2, trust.signatures.size)
 
         trust.signatures
@@ -672,11 +677,16 @@ class KeysBackupTest : InstrumentedTest {
      */
     @Test
     fun testBackupWithPassword() = runCryptoTest(context()) { cryptoTestHelper, testHelper ->
+
         val keysBackupTestHelper = KeysBackupTestHelper(testHelper, cryptoTestHelper)
 
         val password = "password"
 
         val testData = keysBackupTestHelper.createKeysBackupScenarioWithPassword(password)
+        Assume.assumeTrue(
+                "Can't report progress same way in rust",
+                testData.cryptoTestData.firstSession.cryptoService().name() != "rust-sdk"
+        )
 
         // - Restore the e2e backup with the password
         val steps = ArrayList<StepProgressListener.Step>()

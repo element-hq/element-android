@@ -28,10 +28,13 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.isVerified
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.util.Optional
+import org.matrix.android.sdk.internal.crypto.network.OutgoingRequestsProcessor
+import org.matrix.rustcomponents.sdk.crypto.Request
 import javax.inject.Inject
 
 internal class RustCrossSigningService @Inject constructor(
         private val olmMachine: OlmMachine,
+        private val outgoingRequestsProcessor: OutgoingRequestsProcessor,
         private val computeShieldForGroup: ComputeShieldForGroupUseCase
 ) : CrossSigningService {
 
@@ -78,6 +81,10 @@ internal class RustCrossSigningService @Inject constructor(
      * Users needs to enter credentials
      */
     override suspend fun initializeCrossSigning(uiaInterceptor: UserInteractiveAuthInterceptor?) {
+        // ensure our keys are sent before initialising
+        outgoingRequestsProcessor.processOutgoingRequests(olmMachine) {
+            it is Request.KeysUpload
+        }
         olmMachine.bootstrapCrossSigning(uiaInterceptor)
     }
 
