@@ -203,6 +203,7 @@ ext.groups = [
                         'org.jetbrains.kotlin',
                         'org.jetbrains.kotlinx',
                         'org.jetbrains.trove4j',
+                        'org.jitsi',
                         'org.json',
                         'org.jsoup',
                         'org.junit',
