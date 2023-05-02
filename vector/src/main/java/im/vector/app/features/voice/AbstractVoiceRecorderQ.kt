@@ -28,7 +28,7 @@ import java.io.File
  * VoiceRecorder abstraction to be used on Android versions >= [Build.VERSION_CODES.Q].
  */
 @RequiresApi(Build.VERSION_CODES.Q)
-abstract class AbstractVoiceRecorderQ(private val context: Context) : AbstractVoiceRecorder(context) {
+abstract class AbstractVoiceRecorderQ(protected val context: Context) : AbstractVoiceRecorder(context) {
 
     var mediaRecorder: MediaRecorder? = null
     protected var nextOutputFile: File? = null
