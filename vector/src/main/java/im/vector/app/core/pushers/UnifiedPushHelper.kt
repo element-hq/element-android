@@ -104,7 +104,8 @@ class UnifiedPushHelper @Inject constructor(
         // else, unifiedpush, and pushkey is an endpoint
         val gateway = stringProvider.getString(R.string.default_push_gateway_http_url)
         val parsed = URL(endpoint)
-        val custom = "${parsed.protocol}://${parsed.host}/_matrix/push/v1/notify"
+        val port = if (parsed.port != -1) { ":${parsed.port}" } else { "" }
+        val custom = "${parsed.protocol}://${parsed.host}${port}/_matrix/push/v1/notify"
         Timber.i("Testing $custom")
         try {
             val response = matrix.rawService().getUrl(custom, CacheStrategy.NoCache)
