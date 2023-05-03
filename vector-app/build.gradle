@@ -332,16 +332,16 @@ android {
 
         kotlinCrypto {
             dimension "crypto"
-            isDefault = true
             // versionName "${versionMajor}.${versionMinor}.${versionPatch}${getFdroidVersionSuffix()}"
             buildConfigField "String", "CRYPTO_FLAVOR_DESCRIPTION", "\"olm-crypto\""
 //            buildConfigField "String", "FLAVOR_DESCRIPTION", "\"KotlinCrypto\""
         }
         rustCrypto {
             dimension "crypto"
-            applicationIdSuffix ".corroded"
-            versionNameSuffix "-R"
-            resValue "string", "app_name", "ER"
+            isDefault = true
+            // applicationIdSuffix ".corroded"
+            // versionNameSuffix "-R"
+            // resValue "string", "app_name", "ER"
 
 //            // versionName "${versionMajor}.${versionMinor}.${versionPatch}${getFdroidVersionSuffix()}"
             buildConfigField "String", "CRYPTO_FLAVOR_DESCRIPTION", "\"rust-crypto\""
