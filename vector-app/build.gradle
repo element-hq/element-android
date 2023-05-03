@@ -61,7 +61,8 @@ def getVersionCode() {
     if (gitBranchName() == "develop") {
         return generateVersionCodeFromTimestamp()
     } else {
-        return generateVersionCodeFromVersionName()
+        // DO NOT COMMIT
+        return generateVersionCodeFromTimestamp()
     }
 }
 
@@ -276,11 +277,11 @@ android {
             // Just override the background color of the launcher icon for the nightly build.
             // We need to copy paste this block, this is not done automatically by `initWith release`
             postprocessing {
-                removeUnusedCode true
-                removeUnusedResources true
+                removeUnusedCode false
+                removeUnusedResources false
                 // We do not activate obfuscation as it makes it hard then to read crash reports, and it's a bit useless on an open source project :)
                 obfuscate false
-                optimizeCode true
+                optimizeCode false
                 proguardFiles 'proguard-rules.pro'
             }
             matchingFallbacks = ['release']
