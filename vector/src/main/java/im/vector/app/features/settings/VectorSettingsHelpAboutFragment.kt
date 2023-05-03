@@ -95,8 +95,8 @@ class VectorSettingsHelpAboutFragment :
         }
 
         // olm version
-        findPreference<VectorPreference>(VectorPreferences.SETTINGS_OLM_VERSION_PREFERENCE_KEY)!!
-                .summary = session.cryptoService().getCryptoVersion(requireContext(), false)
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_CRYPTO_VERSION_PREFERENCE_KEY)!!
+                .summary = session.cryptoService().getCryptoVersion(requireContext(), true)
     }
 
     companion object {
