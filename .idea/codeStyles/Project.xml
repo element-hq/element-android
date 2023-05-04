@@ -8,8 +8,7 @@
         </value>
       </option>
       <option name="ALIGN_IN_COLUMNS_CASE_BRANCH" value="true" />
-      <option name="NAME_COUNT_TO_USE_STAR_IMPORT" value="2147483647" />
-      <option name="NAME_COUNT_TO_USE_STAR_IMPORT_FOR_MEMBERS" value="2147483647" />
+      <option name="LINE_BREAK_AFTER_MULTILINE_WHEN_ENTRY" value="false" />
       <option name="CONTINUATION_INDENT_IN_PARAMETER_LISTS" value="true" />
       <option name="CONTINUATION_INDENT_IN_ARGUMENT_LISTS" value="true" />
       <option name="CONTINUATION_INDENT_FOR_EXPRESSION_BODIES" value="true" />
