@@ -52,6 +52,7 @@ import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
@@ -190,7 +191,7 @@ class DevicesViewModel @AssistedInject constructor(
                 .sample(5_000)
                 .onEach {
                     // If we have a new crypto device change, we might want to trigger refresh of device info
-                    session.cryptoService().fetchDevicesList()
+                    tryOrNull { session.cryptoService().fetchDevicesList() }
                 }
                 .launchIn(viewModelScope)
 
@@ -203,7 +204,7 @@ class DevicesViewModel @AssistedInject constructor(
 
         refreshSource.stream().throttleFirst(4_000)
                 .onEach {
-                    session.cryptoService().fetchDevicesList()
+                    tryOrNull { session.cryptoService().fetchDevicesList() }
                     session.cryptoService().downloadKeysIfNeeded(listOf(session.myUserId), true)
                 }
                 .launchIn(viewModelScope)
