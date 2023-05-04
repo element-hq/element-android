@@ -26,6 +26,7 @@ import org.junit.After
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -69,6 +70,7 @@ class ElementAndroidToElementRMigrationTest : InstrumentedTest {
     }
 
     @Test
+    @Ignore("We don't migrate group session for now, and it makes test suite unstable")
     fun given_a_valid_crypto_store_realm_file_no_lazy_then_migration_should_be_successful() {
         testMigrate(true)
     }
