@@ -34,6 +34,7 @@ import im.vector.app.features.voicebroadcast.isLive
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -49,6 +50,7 @@ class RoomSummaryItemFactory @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
         private val errorFormatter: ErrorFormatter,
         private val getLatestPreviewableEventUseCase: GetLatestPreviewableEventUseCase,
+        private val session: Session
 ) {
 
     fun create(
@@ -136,7 +138,7 @@ class RoomSummaryItemFactory @Inject constructor(
         var latestEventTime = ""
         val latestEvent = getLatestPreviewableEventUseCase.execute(roomSummary.roomId)
         if (latestEvent != null) {
-            latestFormattedEvent = displayableEventFormatter.format(latestEvent, roomSummary.isDirect, roomSummary.isDirect.not())
+            latestFormattedEvent = displayableEventFormatter.format(latestEvent, roomSummary.isDirect, roomSummary.isDirect.not(), session)
             latestEventTime = dateFormatter.format(latestEvent.root.originServerTs, DateFormatKind.ROOM_LIST)
         }
 

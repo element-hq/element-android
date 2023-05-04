@@ -137,7 +137,7 @@ class NotifiableEventResolver @Inject constructor(
         return if (room == null) {
             Timber.e("## Unable to resolve room for eventId [$event]")
             // Ok room is not known in store, but we can still display something
-            val body = displayableEventFormatter.format(event, isDm = false, appendAuthor = false)
+            val body = displayableEventFormatter.format(event, isDm = false, appendAuthor = false, session)
             val roomName = stringProvider.getString(R.string.notification_unknown_room_name)
             val senderDisplayName = event.senderInfo.disambiguatedDisplayName
 
@@ -161,7 +161,7 @@ class NotifiableEventResolver @Inject constructor(
             // only convert encrypted messages to NotifiableMessageEvents
             when {
                 event.root.supportsNotification() -> {
-                    val body = displayableEventFormatter.format(event, isDm = room.roomSummary()?.isDirect.orFalse(), appendAuthor = false).toString()
+                    val body = displayableEventFormatter.format(event, isDm = room.roomSummary()?.isDirect.orFalse(), appendAuthor = false, session).toString()
                     val roomName = room.roomSummary()?.displayName ?: ""
                     val senderDisplayName = event.senderInfo.disambiguatedDisplayName
 

@@ -214,7 +214,7 @@ class MessageActionsViewModel @AssistedInject constructor(
                     EventType.CALL_CANDIDATES,
                     EventType.CALL_HANGUP,
                     EventType.CALL_ANSWER -> {
-                        noticeEventFormatter.format(timelineEvent, room?.roomSummary()?.isDirect.orFalse())
+                        noticeEventFormatter.format(timelineEvent, room?.roomSummary()?.isDirect.orFalse(), session)
                     }
                     in EventType.POLL_START.values -> {
                         (timelineEvent.getVectorLastMessageContent() as? MessagePollContent)?.getBestPollCreationInfo()?.question?.getBestQuestion()

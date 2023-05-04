@@ -32,6 +32,7 @@ import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import me.gujun.android.span.image
 import me.gujun.android.span.span
 import org.commonmark.node.Document
+import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -55,7 +56,7 @@ class DisplayableEventFormatter @Inject constructor(
         private val htmlRenderer: Lazy<EventHtmlRenderer>
 ) {
 
-    fun format(timelineEvent: TimelineEvent, isDm: Boolean, appendAuthor: Boolean): CharSequence {
+    fun format(timelineEvent: TimelineEvent, isDm: Boolean, appendAuthor: Boolean, session: Session): CharSequence {
         if (timelineEvent.root.isRedacted()) {
             return noticeEventFormatter.formatRedactedEvent(timelineEvent.root)
         }
@@ -155,7 +156,7 @@ class DisplayableEventFormatter @Inject constructor(
             }
             else -> {
                 span {
-                    text = noticeEventFormatter.format(timelineEvent, isDm) ?: ""
+                    text = noticeEventFormatter.format(timelineEvent, isDm, session) ?: ""
                     textStyle = "italic"
                 }
             }

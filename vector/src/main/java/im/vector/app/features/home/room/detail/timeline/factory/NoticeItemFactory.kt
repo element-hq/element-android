@@ -24,18 +24,20 @@ import im.vector.app.features.home.room.detail.timeline.item.NoticeItem
 import im.vector.app.features.home.room.detail.timeline.item.NoticeItem_
 import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.session.Session
 import javax.inject.Inject
 
 class NoticeItemFactory @Inject constructor(
         private val eventFormatter: NoticeEventFormatter,
         private val avatarRenderer: AvatarRenderer,
         private val informationDataFactory: MessageInformationDataFactory,
-        private val avatarSizeProvider: AvatarSizeProvider
+        private val avatarSizeProvider: AvatarSizeProvider,
+        private val session: Session
 ) {
 
     fun create(params: TimelineItemFactoryParams): NoticeItem? {
         val event = params.event
-        val formattedText = eventFormatter.format(event, isDm = params.partialState.roomSummary?.isDirect.orFalse()) ?: return null
+        val formattedText = eventFormatter.format(event, isDm = params.partialState.roomSummary?.isDirect.orFalse(), session) ?: return null
         val informationData = informationDataFactory.create(params)
         val attributes = NoticeItem.Attributes(
                 avatarRenderer = avatarRenderer,
