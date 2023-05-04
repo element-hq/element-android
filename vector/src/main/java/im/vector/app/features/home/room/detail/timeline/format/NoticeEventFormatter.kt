@@ -646,8 +646,7 @@ class NoticeEventFormatter @Inject constructor(
                     if (event.isSentByCurrentUser()) {
                         sp.getString(R.string.notice_display_name_changed_from_by_you, prevEventContent?.displayName, eventContent?.displayName)
                     } else {
-                        // TODO remove senderId argument when all strings will up to date
-                        sp.getString(R.string.notice_display_name_changed_from, event.senderId, prevEventContent?.displayName, eventContent?.displayName)
+                        sp.getString(R.string.notice_display_name_changed_to, prevEventContent?.displayName, eventContent?.displayName)
                     }
             }
             displayText.append(displayNameText)
