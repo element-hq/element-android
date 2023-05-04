@@ -23,14 +23,14 @@ import org.matrix.rustcomponents.sdk.crypto.ProgressListener
 import timber.log.Timber
 import java.io.File
 
-class MigrateEAtoEROperation {
+class MigrateEAtoEROperation(private val migrateGroupSessions: Boolean = false) {
 
     fun execute(cryptoRealm: RealmConfiguration, rustFilesDir: File, passphrase: String?): File {
         // Temporary code for migration
         if (!rustFilesDir.exists()) {
             rustFilesDir.mkdir()
             // perform a migration?
-            val extractMigrationData = ExtractMigrationDataUseCase()
+            val extractMigrationData = ExtractMigrationDataUseCase(migrateGroupSessions)
             val hasExitingData = extractMigrationData.hasExistingData(cryptoRealm)
             if (!hasExitingData) return rustFilesDir
 

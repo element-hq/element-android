@@ -20,11 +20,11 @@ import io.realm.RealmConfiguration
 import timber.log.Timber
 import java.io.File
 
-class MigrateEAtoEROperation {
+class MigrateEAtoEROperation(private val migrateGroupSessions: Boolean = false) {
 
     fun execute(cryptoRealm: RealmConfiguration, sessionFilesDir: File, passphrase: String?): File {
         // to remove unused warning
-        Timber.v("Not used in kotlin crypto $cryptoRealm ${"*".repeat(passphrase?.length ?: 0)}")
+        Timber.v("Not used in kotlin crypto $cryptoRealm ${"*".repeat(passphrase?.length ?: 0)} lazy:$migrateGroupSessions")
         // no op in kotlinCrypto
         return sessionFilesDir
     }

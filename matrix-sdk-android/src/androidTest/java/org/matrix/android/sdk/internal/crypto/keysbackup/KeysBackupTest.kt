@@ -963,7 +963,6 @@ class KeysBackupTest : InstrumentedTest {
         val signatures = keysBackup2.getCurrentVersion()?.toKeysVersionResult()?.getAuthDataAsMegolmBackupAuthData()?.signatures
         Log.d("#E2E", "keysBackup2 signatures: $signatures")
 
-
         // - Validate the old device from the new one
         cryptoTestHelper.verifyNewSession(cryptoTestData.firstSession, aliceSession2)
 

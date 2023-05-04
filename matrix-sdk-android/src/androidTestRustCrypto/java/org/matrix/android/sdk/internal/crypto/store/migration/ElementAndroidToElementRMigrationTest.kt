@@ -65,6 +65,15 @@ class ElementAndroidToElementRMigrationTest : InstrumentedTest {
 
     @Test
     fun given_a_valid_crypto_store_realm_file_then_migration_should_be_successful() {
+        testMigrate(false)
+    }
+
+    @Test
+    fun given_a_valid_crypto_store_realm_file_no_lazy_then_migration_should_be_successful() {
+        testMigrate(true)
+    }
+
+    private fun testMigrate(migrateGroupSessions: Boolean) {
         val realmName = "crypto_store_migration_16.realm"
         val migration = RealmCryptoStoreMigration(object : Clock {
             override fun epochMillis() = 0L
@@ -86,7 +95,7 @@ class ElementAndroidToElementRMigrationTest : InstrumentedTest {
         val deviceId = metaData.deviceId!!
         val olmAccount = metaData.getOlmAccount()!!
 
-        val extractor = MigrateEAtoEROperation()
+        val extractor = MigrateEAtoEROperation(migrateGroupSessions)
 
         val targetFile = File(configurationFactory.root, "rust-sdk")
 
@@ -101,14 +110,16 @@ class ElementAndroidToElementRMigrationTest : InstrumentedTest {
         assertTrue(crossSigningStatus.hasSelfSigning)
         assertTrue(crossSigningStatus.hasUserSigning)
 
-        val inboundGroupSessionEntities = realm!!.where<OlmInboundGroupSessionEntity>().findAll()
-        assertEquals(inboundGroupSessionEntities.size, machine.roomKeyCounts().total.toInt())
+        if (migrateGroupSessions) {
+            val inboundGroupSessionEntities = realm!!.where<OlmInboundGroupSessionEntity>().findAll()
+            assertEquals(inboundGroupSessionEntities.size, machine.roomKeyCounts().total.toInt())
 
-        val backedUpInboundGroupSessionEntities = realm!!
-                .where<OlmInboundGroupSessionEntity>()
-                .equalTo(OlmInboundGroupSessionEntityFields.BACKED_UP, true)
-                .findAll()
-        assertEquals(backedUpInboundGroupSessionEntities.size, machine.roomKeyCounts().backedUp.toInt())
+            val backedUpInboundGroupSessionEntities = realm!!
+                    .where<OlmInboundGroupSessionEntity>()
+                    .equalTo(OlmInboundGroupSessionEntityFields.BACKED_UP, true)
+                    .findAll()
+            assertEquals(backedUpInboundGroupSessionEntities.size, machine.roomKeyCounts().backedUp.toInt())
+        }
     }
 
 //    @Test
