@@ -216,7 +216,7 @@ dependencies {
 
     implementation libs.google.phonenumber
 
-    rustCryptoImplementation("org.matrix.rustcomponents:crypto-android:0.3.5")
+    rustCryptoImplementation("org.matrix.rustcomponents:crypto-android:0.3.7")
     // rustCryptoApi project(":library:rustCrypto")
 
     testImplementation libs.tests.junit
