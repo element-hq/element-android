@@ -28,7 +28,6 @@ import im.vector.app.core.di.DefaultPreferences
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.VectorFeatures
-import im.vector.app.features.disclaimer.SHARED_PREF_KEY
 import im.vector.app.features.home.ShortcutsHandler
 import im.vector.app.features.homeserver.ServerUrlsRepository
 import im.vector.app.features.themes.ThemeUtils
@@ -333,9 +332,6 @@ class VectorPreferences @Inject constructor(
 
         // theme
         keysToKeep.add(ThemeUtils.APPLICATION_THEME_KEY)
-
-        // Disclaimer dialog
-        keysToKeep.add(SHARED_PREF_KEY)
 
         // get all the existing keys
         val keys = defaultPrefs.all.keys

@@ -56,7 +56,6 @@ import im.vector.app.features.analytics.accountdata.AnalyticsAccountDataViewMode
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.crypto.recover.SetupMode
-import im.vector.app.features.disclaimer.DisclaimerDialog
 import im.vector.app.features.home.room.list.actions.RoomListSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListSharedActionViewModel
 import im.vector.app.features.home.room.list.home.layout.HomeLayoutSettingBottomDialogFragment
@@ -140,7 +139,6 @@ class HomeActivity :
     @Inject lateinit var spaceStateHandler: SpaceStateHandler
     @Inject lateinit var unifiedPushHelper: UnifiedPushHelper
     @Inject lateinit var nightlyProxy: NightlyProxy
-    @Inject lateinit var disclaimerDialog: DisclaimerDialog
     @Inject lateinit var notificationPermissionManager: NotificationPermissionManager
 
     private var isNewAppLayoutEnabled: Boolean = false // delete once old app layout is removed
@@ -588,8 +586,6 @@ class HomeActivity :
                     .setPositiveButton(R.string.yes) { _, _ -> bugReporter.openBugReportScreen(this) }
                     .setNegativeButton(R.string.no) { _, _ -> bugReporter.deleteCrashFile() }
                     .show()
-        } else {
-            disclaimerDialog.showDisclaimerDialog(this)
         }
 
         // Force remote backup state update to update the banner if needed
