@@ -76,6 +76,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.extensions.getFingerprintHumanReadable
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.crypto.crosssigning.isVerified
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
@@ -646,9 +647,11 @@ class VectorSettingsSecurityPrivacyFragment :
             }
         }
         // TODO Move to a ViewModel...
-        val devicesList = session.cryptoService().fetchDevicesList()
-        withContext(Dispatchers.Main) {
-            refreshCryptographyPreference(devicesList)
+        val devicesList = tryOrNull { session.cryptoService().fetchDevicesList() }
+        devicesList?.let {
+            withContext(Dispatchers.Main) {
+                refreshCryptographyPreference(it)
+            }
         }
     }
 }
