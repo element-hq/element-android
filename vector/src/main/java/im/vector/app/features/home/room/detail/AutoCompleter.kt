@@ -40,22 +40,30 @@ import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.html.PillImageSpan
 import im.vector.app.features.themes.ThemeUtils
+import io.element.android.wysiwyg.EditorEditText
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toEveryoneInRoomMatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.api.util.toRoomAliasMatrixItem
+import timber.log.Timber
 
 class AutoCompleter @AssistedInject constructor(
         @Assisted val roomId: String,
         @Assisted val isInThreadTimeline: Boolean,
+        private val session: Session,
         private val avatarRenderer: AvatarRenderer,
         private val commandAutocompletePolicy: CommandAutocompletePolicy,
         autocompleteCommandPresenterFactory: AutocompleteCommandPresenter.Factory,
         private val autocompleteMemberPresenterFactory: AutocompleteMemberPresenter.Factory,
         private val autocompleteRoomPresenter: AutocompleteRoomPresenter,
-        private val autocompleteEmojiPresenter: AutocompleteEmojiPresenter
+        private val autocompleteEmojiPresenter: AutocompleteEmojiPresenter,
 ) {
+
+    private val permalinkService: PermalinkService
+        get() = session.permalinkService()
 
     private lateinit var autocompleteMemberPresenter: AutocompleteMemberPresenter
 
@@ -99,6 +107,9 @@ class AutoCompleter @AssistedInject constructor(
     }
 
     private fun setupCommands(backgroundDrawable: Drawable, editText: EditText) {
+        // Rich text editor is not yet supported
+        if (editText is EditorEditText) return
+
         Autocomplete.on<Command>(editText)
                 .with(commandAutocompletePolicy)
                 .with(autocompleteCommandPresenter)
@@ -128,17 +139,15 @@ class AutoCompleter @AssistedInject constructor(
                 .with(backgroundDrawable)
                 .with(object : AutocompleteCallback<AutocompleteMemberItem> {
                     override fun onPopupItemClicked(editable: Editable, item: AutocompleteMemberItem): Boolean {
-                        return when (item) {
-                            is AutocompleteMemberItem.Header -> false // do nothing header is not clickable
-                            is AutocompleteMemberItem.RoomMember -> {
-                                insertMatrixItem(editText, editable, TRIGGER_AUTO_COMPLETE_MEMBERS, item.roomMemberSummary.toMatrixItem())
-                                true
-                            }
-                            is AutocompleteMemberItem.Everyone -> {
-                                insertMatrixItem(editText, editable, TRIGGER_AUTO_COMPLETE_MEMBERS, item.roomSummary.toEveryoneInRoomMatrixItem())
-                                true
-                            }
-                        }
+                        val matrixItem = when (item) {
+                            is AutocompleteMemberItem.Header -> null // do nothing header is not clickable
+                            is AutocompleteMemberItem.RoomMember -> item.roomMemberSummary.toMatrixItem()
+                            is AutocompleteMemberItem.Everyone -> item.roomSummary.toEveryoneInRoomMatrixItem()
+                        } ?: return false
+
+                        insertMatrixItem(editText, editable, TRIGGER_AUTO_COMPLETE_MEMBERS, matrixItem)
+
+                        return true
                     }
 
                     override fun onPopupVisibilityChanged(shown: Boolean) {
@@ -166,6 +175,9 @@ class AutoCompleter @AssistedInject constructor(
     }
 
     private fun setupEmojis(backgroundDrawable: Drawable, editText: EditText) {
+        // Rich text editor is not yet supported
+        if (editText is EditorEditText) return
+
         Autocomplete.on<String>(editText)
                 .with(CharPolicy(TRIGGER_AUTO_COMPLETE_EMOJIS, false))
                 .with(autocompleteEmojiPresenter)
@@ -197,7 +209,41 @@ class AutoCompleter @AssistedInject constructor(
                 .build()
     }
 
-    private fun insertMatrixItem(editText: EditText, editable: Editable, firstChar: Char, matrixItem: MatrixItem) {
+    private fun insertMatrixItem(editText: EditText, editable: Editable, firstChar: Char, matrixItem: MatrixItem) =
+            if (editText is EditorEditText) {
+                insertMatrixItemIntoRichTextEditor(editText, matrixItem)
+            } else {
+                insertMatrixItemIntoEditable(editText, editable, firstChar, matrixItem)
+            }
+
+    private fun insertMatrixItemIntoRichTextEditor(editorEditText: EditorEditText, matrixItem: MatrixItem) {
+        if (matrixItem is MatrixItem.EveryoneInRoomItem) {
+            editorEditText.replaceTextSuggestion(matrixItem.displayName)
+            return
+        }
+
+        val permalink = permalinkService.createPermalink(matrixItem.id)
+
+        if (permalink == null) {
+            Timber.e(NullPointerException("Cannot autocomplete as permalink is null"))
+            return
+        }
+
+        val linkText = when (matrixItem) {
+            is MatrixItem.RoomAliasItem,
+            is MatrixItem.RoomItem,
+            is MatrixItem.SpaceItem ->
+                matrixItem.id
+            is MatrixItem.EveryoneInRoomItem,
+            is MatrixItem.UserItem,
+            is MatrixItem.EventItem ->
+                matrixItem.getBestName()
+        }
+
+        editorEditText.setLinkSuggestion(url = permalink, text = linkText)
+    }
+
+    private fun insertMatrixItemIntoEditable(editText: EditText, editable: Editable, firstChar: Char, matrixItem: MatrixItem) {
         // Detect last firstChar and remove it
         var startIndex = editable.lastIndexOf(firstChar)
         if (startIndex == -1) {

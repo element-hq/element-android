@@ -101,7 +101,7 @@ ext.libs = [
         ],
         element     : [
                 'opusencoder'             : "io.element.android:opusencoder:1.1.0",
-                'wysiwyg'                 : "io.element.android:wysiwyg:1.2.2"
+                'wysiwyg'                 : "io.element.android:wysiwyg:2.2.0"
         ],
         squareup    : [
                 'moshi'                  : "com.squareup.moshi:moshi:$moshi",
@@ -172,6 +172,7 @@ ext.libs = [
                 'kluent'                 : "org.amshove.kluent:kluent-android:1.73",
                 'timberJunitRule'        : "net.lachlanmckee:timber-junit-rule:1.0.1",
                 'junit'                  : "junit:junit:4.13.2",
+                'robolectric'            : "org.robolectric:robolectric:4.9",
         ]
 ]
 

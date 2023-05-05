@@ -83,6 +83,7 @@ import im.vector.app.features.home.room.detail.TimelineViewModel
 import im.vector.app.features.home.room.detail.composer.link.SetLinkFragment
 import im.vector.app.features.home.room.detail.composer.link.SetLinkSharedAction
 import im.vector.app.features.home.room.detail.composer.link.SetLinkSharedActionViewModel
+import im.vector.app.features.home.room.detail.composer.mentions.PillDisplayHandler
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView
 import im.vector.app.features.home.room.detail.timeline.action.MessageSharedActionViewModel
 import im.vector.app.features.home.room.detail.upgrade.MigrateRoomBottomSheet
@@ -315,9 +316,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
         val composerEditText = composer.editText
         composerEditText.setHint(R.string.room_message_placeholder)
 
-        if (!vectorPreferences.isRichTextEditorEnabled()) {
-            autoCompleter.setup(composerEditText)
-        }
+        autoCompleter.setup(composerEditText)
 
         observerUserTyping()
 
@@ -403,6 +402,13 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
             override fun onSetLink(isTextSupported: Boolean, initialLink: String?) {
                 SetLinkFragment.show(isTextSupported, initialLink, childFragmentManager)
             }
+        }
+        (composer as? RichTextComposerLayout)?.pillDisplayHandler = PillDisplayHandler(
+                roomId = roomId,
+                getRoom = timelineViewModel::getRoom,
+                getMember = timelineViewModel::getMember,
+        ) { matrixItem: MatrixItem ->
+            PillImageSpan(glideRequests, avatarRenderer, requireContext(), matrixItem)
         }
     }
 
