@@ -38,7 +38,7 @@ import kotlin.system.measureTimeMillis
 
 private val charset = Charset.forName("UTF-8")
 
-internal class ExtractMigrationDataUseCase {
+internal class ExtractMigrationDataUseCase(val migrateGroupSessions: Boolean = false) {
 
     fun extractData(realm: Realm, importPartial: ((MigrationData) -> Unit)) {
         return try {
@@ -143,35 +143,37 @@ internal class ExtractMigrationDataUseCase {
             Timber.i("Migration: rust import time $writeTime")
         }
 
-        // We don't migrate outbound session directly after migration
+        // We don't migrate outbound session by default directly after migration
         // We are going to do it lazyly when decryption fails
-//        var migratedInboundGroupSessionCount = 0
-//        readTime = 0
-//        writeTime = 0
-//        measureTimeMillis {
-//        realm.where<OlmInboundGroupSessionEntity>()
-//                .findAll()
-//                .chunked(chunkSize) { chunk ->
-//                    val export: List<PickledInboundGroupSession>
-//                    measureTimeMillis {
-//                        export = chunk.mapNotNull { it.toPickledInboundGroupSession(pickleKey) }
-//                    }.also {
-//                        readTime += it
-//                    }
-//                    migratedInboundGroupSessionCount+=export.size
-//                    measureTimeMillis {
-//                        importPartial(
-//                                baseExtract.copy(inboundGroupSessions = export)
-//                        )
-//                    }.also {
-//                        writeTime += it
-//                    }
-//                }
-//        }.also {
-//            Timber.i("Migration: took $it ms to migrate $migratedInboundGroupSessionCount group sessions")
-//            Timber.i("Migration: extract time $readTime")
-//            Timber.i("Migration: rust import time $writeTime")
-//        }
+        if (migrateGroupSessions) {
+            var migratedInboundGroupSessionCount = 0
+            readTime = 0
+            writeTime = 0
+            measureTimeMillis {
+                realm.where<OlmInboundGroupSessionEntity>()
+                        .findAll()
+                        .chunked(chunkSize) { chunk ->
+                            val export: List<PickledInboundGroupSession>
+                            measureTimeMillis {
+                                export = chunk.mapNotNull { it.toPickledInboundGroupSession(pickleKey) }
+                            }.also {
+                                readTime += it
+                            }
+                            migratedInboundGroupSessionCount += export.size
+                            measureTimeMillis {
+                                importPartial(
+                                        baseExtract.copy(inboundGroupSessions = export)
+                                )
+                            }.also {
+                                writeTime += it
+                            }
+                        }
+            }.also {
+                Timber.i("Migration: took $it ms to migrate $migratedInboundGroupSessionCount group sessions")
+                Timber.i("Migration: extract time $readTime")
+                Timber.i("Migration: rust import time $writeTime")
+            }
+        }
 
 //        return baseExtract
     }

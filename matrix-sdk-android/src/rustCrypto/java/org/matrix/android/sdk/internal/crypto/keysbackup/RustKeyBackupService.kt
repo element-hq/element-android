@@ -43,6 +43,7 @@ import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupService
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupStateListener
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupVersionTrust
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupVersionTrustSignature
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersion
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersionResult
 import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupAuthData
@@ -67,6 +68,8 @@ import org.matrix.android.sdk.internal.util.JsonCanonicalizer
 import org.matrix.olm.OlmException
 import org.matrix.rustcomponents.sdk.crypto.Request
 import org.matrix.rustcomponents.sdk.crypto.RequestType
+import org.matrix.rustcomponents.sdk.crypto.SignatureState
+import org.matrix.rustcomponents.sdk.crypto.SignatureVerification
 import timber.log.Timber
 import java.security.InvalidParameterException
 import javax.inject.Inject
@@ -266,12 +269,54 @@ internal class RustKeyBackupService @Inject constructor(
     private suspend fun checkBackupTrust(algAndData: KeysAlgorithmAndData?): KeysBackupVersionTrust {
         if (algAndData == null) return KeysBackupVersionTrust(usable = false)
         try {
-            val isTrusted = olmMachine.checkAuthDataSignature(algAndData)
-            return KeysBackupVersionTrust(isTrusted)
+            val authData = olmMachine.checkAuthDataSignature(algAndData)
+            val signatures = authData.mapRustToAPI()
+            return KeysBackupVersionTrust(authData.trusted, signatures)
         } catch (failure: Throwable) {
             Timber.w(failure, "Failed to trust backup")
             return KeysBackupVersionTrust(usable = false)
         }
+    }
+
+    private suspend fun SignatureVerification.mapRustToAPI(): List<KeysBackupVersionTrustSignature> {
+        val signatures = mutableListOf<KeysBackupVersionTrustSignature>()
+        // signature state of own device
+        val ownDeviceState = this.deviceSignature
+        if (ownDeviceState != SignatureState.MISSING && ownDeviceState != SignatureState.INVALID) {
+            // we can add it
+            signatures.add(
+                    KeysBackupVersionTrustSignature.DeviceSignature(
+                            olmMachine.deviceId(),
+                            olmMachine.getCryptoDeviceInfo(olmMachine.userId(), olmMachine.deviceId()),
+                            ownDeviceState == SignatureState.VALID_AND_TRUSTED
+                    )
+            )
+        }
+        // signature state of our own identity
+        val ownIdentityState = this.userIdentitySignature
+        if (ownIdentityState != SignatureState.MISSING && ownIdentityState != SignatureState.INVALID) {
+            // we can add it
+            val masterKey = olmMachine.getIdentity(olmMachine.userId())?.toMxCrossSigningInfo()?.masterKey()
+            signatures.add(
+                    KeysBackupVersionTrustSignature.UserSignature(
+                            masterKey?.unpaddedBase64PublicKey,
+                            masterKey,
+                            ownIdentityState == SignatureState.VALID_AND_TRUSTED
+                    )
+            )
+        }
+        signatures.addAll(
+                this.otherDevicesSignatures
+                        .filter { it.value == SignatureState.VALID_AND_TRUSTED || it.value == SignatureState.VALID_BUT_NOT_TRUSTED }
+                        .map {
+                            KeysBackupVersionTrustSignature.DeviceSignature(
+                                    it.key,
+                                    olmMachine.getCryptoDeviceInfo(olmMachine.userId(), it.key),
+                                    ownDeviceState == SignatureState.VALID_AND_TRUSTED
+                            )
+                        }
+        )
+        return signatures
     }
 
     override suspend fun getKeysBackupTrust(keysBackupVersion: KeysVersionResult): KeysBackupVersionTrust {
@@ -341,7 +386,7 @@ internal class RustKeyBackupService @Inject constructor(
         val authData = getMegolmBackupAuthData(keysBackupData)
 
         when {
-            authData == null                          -> {
+            authData == null -> {
                 Timber.w("isValidRecoveryKeyForKeysBackupVersion: Key backup is missing required data")
                 throw IllegalArgumentException("Missing element")
             }
@@ -349,7 +394,7 @@ internal class RustKeyBackupService @Inject constructor(
                 Timber.w("isValidRecoveryKeyForKeysBackupVersion: Public keys mismatch")
                 throw IllegalArgumentException("Invalid recovery key or password")
             }
-            else                                      -> {
+            else -> {
                 // This case is fine, the public key on the server matches the public key the
                 // recovery key produced.
             }
@@ -428,10 +473,10 @@ internal class RustKeyBackupService @Inject constructor(
             roomId != null && sessionId != null -> {
                 sender.downloadBackedUpKeys(version, roomId, sessionId)
             }
-            roomId != null                      -> {
+            roomId != null -> {
                 sender.downloadBackedUpKeys(version, roomId)
             }
-            else                                -> {
+            else -> {
                 sender.downloadBackedUpKeys(version)
             }
         }
@@ -570,20 +615,24 @@ internal class RustKeyBackupService @Inject constructor(
         }
     }
 
-    override suspend fun restoreKeysWithRecoveryKey(keysVersionResult: KeysVersionResult,
-                                                    recoveryKey: IBackupRecoveryKey,
-                                                    roomId: String?,
-                                                    sessionId: String?,
-                                                    stepProgressListener: StepProgressListener?): ImportRoomKeysResult {
+    override suspend fun restoreKeysWithRecoveryKey(
+            keysVersionResult: KeysVersionResult,
+            recoveryKey: IBackupRecoveryKey,
+            roomId: String?,
+            sessionId: String?,
+            stepProgressListener: StepProgressListener?
+    ): ImportRoomKeysResult {
         Timber.v("restoreKeysWithRecoveryKey: From backup version: ${keysVersionResult.version}")
         return restoreBackup(keysVersionResult, recoveryKey, roomId, sessionId, stepProgressListener)
     }
 
-    override suspend fun restoreKeyBackupWithPassword(keysBackupVersion: KeysVersionResult,
-                                                      password: String,
-                                                      roomId: String?,
-                                                      sessionId: String?,
-                                                      stepProgressListener: StepProgressListener?): ImportRoomKeysResult {
+    override suspend fun restoreKeyBackupWithPassword(
+            keysBackupVersion: KeysVersionResult,
+            password: String,
+            roomId: String?,
+            sessionId: String?,
+            stepProgressListener: StepProgressListener?
+    ): ImportRoomKeysResult {
         Timber.v("[MXKeyBackup] restoreKeyBackup with password: From backup version: ${keysBackupVersion.version}")
         val recoveryKey = withContext(coroutineDispatchers.crypto) {
             recoveryKeyFromPassword(password, keysBackupVersion)
@@ -752,13 +801,13 @@ internal class RustKeyBackupService @Inject constructor(
         val authData = getMegolmBackupAuthData(keysBackupData)
 
         return when {
-            authData == null                                                                 -> {
+            authData == null -> {
                 throw IllegalArgumentException("recoveryKeyFromPassword: invalid parameter")
             }
             authData.privateKeySalt.isNullOrBlank() || authData.privateKeyIterations == null -> {
                 throw java.lang.IllegalArgumentException("recoveryKeyFromPassword: Salt and/or iterations not found in key backup auth data")
             }
-            else                                                                             -> {
+            else -> {
                 BackupRecoveryKey.fromPassphrase(password, authData.privateKeySalt, authData.privateKeyIterations)
             }
         }
@@ -811,7 +860,7 @@ internal class RustKeyBackupService @Inject constructor(
     suspend fun maybeBackupKeys() {
         withContext(coroutineDispatchers.crypto) {
             when {
-                isStuck()                              -> {
+                isStuck() -> {
                     // If not already done, or in error case, check for a valid backup version on the homeserver.
                     // If there is one, maybeBackupKeys will be called again.
                     checkAndStartKeysBackup()
@@ -829,7 +878,7 @@ internal class RustKeyBackupService @Inject constructor(
                         tryOrNull("AUTO backup failed") { backupKeys() }
                     }
                 }
-                else                                   -> {
+                else -> {
                     Timber.v("maybeBackupKeys: Skip it because state: ${getState()}")
                 }
             }
@@ -907,7 +956,7 @@ internal class RustKeyBackupService @Inject constructor(
                                     // is available on the homeserver
                                     checkAndStartKeysBackup()
                                 }
-                                else                                  ->
+                                else ->
                                     // Come back to the ready state so that we will retry on the next received key
                                     keysBackupStateManager.state = KeysBackupState.ReadyToBackUp
                             }

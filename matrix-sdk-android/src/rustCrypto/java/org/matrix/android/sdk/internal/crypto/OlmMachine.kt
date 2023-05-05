@@ -82,6 +82,7 @@ import org.matrix.rustcomponents.sdk.crypto.RequestType
 import org.matrix.rustcomponents.sdk.crypto.RoomKeyCounts
 import org.matrix.rustcomponents.sdk.crypto.ShieldColor
 import org.matrix.rustcomponents.sdk.crypto.ShieldState
+import org.matrix.rustcomponents.sdk.crypto.SignatureVerification
 import org.matrix.rustcomponents.sdk.crypto.setLogger
 import timber.log.Timber
 import java.io.File
@@ -916,7 +917,7 @@ internal class OlmMachine @Inject constructor(
     }
 
     @Throws(CryptoStoreException::class)
-    suspend fun checkAuthDataSignature(authData: KeysAlgorithmAndData): Boolean {
+    suspend fun checkAuthDataSignature(authData: KeysAlgorithmAndData): SignatureVerification {
         return withContext(coroutineDispatchers.computation) {
             val adapter = moshi
                     .newBuilder()
@@ -929,7 +930,7 @@ internal class OlmMachine @Inject constructor(
                     )
             )
 
-            inner.verifyBackup(serializedAuthData).trusted
+            inner.verifyBackup(serializedAuthData)
         }
     }
 }
