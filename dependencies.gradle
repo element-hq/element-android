@@ -80,7 +80,7 @@ ext.libs = [
                 'transition'              : "androidx.transition:transition:1.4.1",
         ],
         google      : [
-                'material'                : "com.google.android.material:material:1.8.0",
+                'material'                : "com.google.android.material:material:1.9.0",
                 'firebaseBom'             : "com.google.firebase:firebase-bom:$firebaseBom",
                 'messaging'               : "com.google.firebase:firebase-messaging",
                 'appdistributionApi'      : "com.google.firebase:firebase-appdistribution-api-ktx:$appDistribution",
