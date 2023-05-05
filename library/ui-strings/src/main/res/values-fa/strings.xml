@@ -2948,4 +2948,5 @@
     <string name="verification_request_waiting_for_recovery">تأیید از کلید امن به عبارت…</string>
     <string name="settings_acceptable_use_policy">سیاست استفادهٔ پذیرفتنی</string>
     <string name="action_proceed_to_reset">ادامه برای بازنشانی</string>
+    <string name="settings_crypto_version">نگارش Crypto</string>
 </resources>
