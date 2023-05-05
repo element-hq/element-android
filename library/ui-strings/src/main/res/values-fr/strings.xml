@@ -2932,4 +2932,21 @@
     <string name="direct_room_encryption_enabled_waiting_users_tile_description">Une fois que les utilisateurs invités seront connectés sur ${app_name}, vous pourrez discuter et le salon sera chiffré de bout en bout</string>
     <string name="direct_room_encryption_enabled_waiting_users">En attente de la connexion des utilisateurs sur ${app_name}</string>
     <string name="direct_room_user_list_only_invite_one_email">Vous ne pouvez envoyer qu’une seule invitation par e-mail à la fois</string>
+    <string name="pill_message_unknown_room_or_space">Salon/Espace</string>
+    <string name="pill_message_in_unknown_room">Message dans le salon</string>
+    <string name="pill_message_in_room">Message dans %s</string>
+    <string name="pill_message_from_unknown_user">Message</string>
+    <string name="pill_message_from_user">Message de %s</string>
+    <string name="encrypted_by_deleted">Chiffré par un appareil supprimé</string>
+    <string name="secure_backup_reset_danger_warning">Veuillez ne continuer que si vous êtes certain d’avoir perdu tous vos autres appareils et votre clé de sécurité.</string>
+    <string name="secure_backup_reset_all_no_other_devices_long">La réinitialisation de vos clés de vérification ne peut pas être annulé. Après la réinitialisation, vous n’aurez plus accès à vos anciens messages chiffrés, et tous les amis que vous aviez précédemment vérifiés verront des avertissement de sécurité jusqu\'à ce vous les vérifiiez à nouveau.</string>
+    <string name="verification_not_found">La demande de vérification n’a pas été trouvée. Elle a peut-être été annulée, ou prise en charge dans une autre session.</string>
+    <string name="verification_request_was_sent">Une demande de vérification a été envoyée. Ouvrez l’une de vos autres sessions pour accepter et commencer la vérification.</string>
+    <string name="_resume">Reprendre</string>
+    <string name="verification_verify_identity">Vérifiez votre identité pour accéder aux messages chiffrés et prouver votre identité aux autres.</string>
+    <string name="verification_verify_with_another_device">Vérifier avec un autre appareil</string>
+    <string name="verification_request_waiting_for_recovery">Vérification depuis la clé ou phrase de sécurité…</string>
+    <string name="settings_acceptable_use_policy">Politique d’utilisation acceptable</string>
+    <string name="settings_crypto_version">Version de cryptographie</string>
+    <string name="action_proceed_to_reset">Faire la réinitialisation</string>
 </resources>
