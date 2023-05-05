@@ -3008,4 +3008,5 @@
     <string name="verification_request_waiting_for_recovery">Overovanie z bezpečnostného kľúča alebo frázy…</string>
     <string name="settings_acceptable_use_policy">Zásady prijateľného používania</string>
     <string name="action_proceed_to_reset">Pokračovať v obnovení</string>
+    <string name="settings_crypto_version">Krypto verzia</string>
 </resources>
