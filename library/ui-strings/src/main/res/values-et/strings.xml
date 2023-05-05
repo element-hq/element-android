@@ -2948,4 +2948,5 @@
     <string name="pill_message_in_room">Sõnum jututoas %s</string>
     <string name="pill_message_from_unknown_user">Sõnum</string>
     <string name="pill_message_from_user">Sõnum kasutajalt %s</string>
+    <string name="settings_crypto_version">Krüptoteekide versioon</string>
 </resources>
