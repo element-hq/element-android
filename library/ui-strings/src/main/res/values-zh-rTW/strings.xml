@@ -2888,4 +2888,5 @@
     <string name="verification_request_waiting_for_recovery">正從安全金鑰或密語驗證……</string>
     <string name="settings_acceptable_use_policy">可接受的使用政策</string>
     <string name="action_proceed_to_reset">繼續重設</string>
+    <string name="settings_crypto_version">加密版本</string>
 </resources>
