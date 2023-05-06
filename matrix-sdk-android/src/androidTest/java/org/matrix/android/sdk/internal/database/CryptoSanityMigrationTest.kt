@@ -18,14 +18,20 @@ package org.matrix.android.sdk.internal.database
 
 import android.content.Context
 import androidx.test.platform.app.InstrumentationRegistry
+import io.mockk.spyk
 import io.realm.Realm
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.matrix.android.sdk.TestBuildVersionSdkIntProvider
+import org.matrix.android.sdk.api.securestorage.SecretStoringUtils
+import org.matrix.android.sdk.internal.crypto.RustEncryptionConfiguration
 import org.matrix.android.sdk.internal.crypto.store.db.RealmCryptoStoreMigration
 import org.matrix.android.sdk.internal.crypto.store.db.RealmCryptoStoreModule
 import org.matrix.android.sdk.internal.util.time.Clock
+import java.io.File
+import java.security.KeyStore
 
 class CryptoSanityMigrationTest {
     @get:Rule val configurationFactory = TestRealmConfigurationFactory()
@@ -43,14 +49,28 @@ class CryptoSanityMigrationTest {
         realm?.close()
     }
 
+    private val keyStore = spyk(KeyStore.getInstance("AndroidKeyStore")).also { it.load(null) }
+
     @Test
     fun cryptoDatabaseShouldMigrateGracefully() {
         val realmName = "crypto_store_20.realm"
-        val migration = RealmCryptoStoreMigration(object : Clock {
-            override fun epochMillis(): Long {
-                return 0L
-            }
-        })
+
+        val migration = RealmCryptoStoreMigration(
+                object : Clock {
+                    override fun epochMillis(): Long {
+                        return 0L
+                    }
+                },
+                RustEncryptionConfiguration(
+                        "foo",
+                        RealmKeysUtils(
+                                context,
+                                SecretStoringUtils(context, keyStore, TestBuildVersionSdkIntProvider(), false)
+                        )
+                ),
+                File("test_rust")
+        )
+
         val realmConfiguration = configurationFactory.createConfiguration(
                 realmName,
                 "7b9a21a8a311e85d75b069a343c23fc952fc3fec5e0c83ecfa13f24b787479c487c3ed587db3dd1f5805d52041fc0ac246516e94b27ffa699ff928622e621aca",

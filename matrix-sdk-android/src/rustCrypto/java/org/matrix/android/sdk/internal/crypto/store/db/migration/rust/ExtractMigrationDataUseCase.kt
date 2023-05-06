@@ -24,12 +24,9 @@ import org.matrix.android.sdk.internal.crypto.store.db.deserializeFromRealm
 import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoMetadataEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.OlmInboundGroupSessionEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.OlmSessionEntity
-import org.matrix.android.sdk.internal.crypto.store.db.model.UserEntity
 import org.matrix.olm.OlmSession
 import org.matrix.olm.OlmUtility
-import org.matrix.rustcomponents.sdk.crypto.CrossSigningKeyExport
 import org.matrix.rustcomponents.sdk.crypto.MigrationData
-import org.matrix.rustcomponents.sdk.crypto.PickledAccount
 import org.matrix.rustcomponents.sdk.crypto.PickledInboundGroupSession
 import org.matrix.rustcomponents.sdk.crypto.PickledSession
 import timber.log.Timber
@@ -40,7 +37,7 @@ private val charset = Charset.forName("UTF-8")
 
 internal class ExtractMigrationDataUseCase(val migrateGroupSessions: Boolean = false) {
 
-    fun extractData(realm: Realm, importPartial: ((MigrationData) -> Unit)) {
+    fun extractData(realm: RealmToMigrate, importPartial: ((MigrationData) -> Unit)) {
         return try {
             extract(realm, importPartial)
         } catch (failure: Throwable) {
@@ -57,89 +54,33 @@ internal class ExtractMigrationDataUseCase(val migrateGroupSessions: Boolean = f
         }
     }
 
-    private fun extract(realm: Realm, importPartial: ((MigrationData) -> Unit)) {
-        val metadataEntity = realm.where<CryptoMetadataEntity>().findFirst()
-                ?: throw java.lang.IllegalArgumentException("Rust db migration: No existing metadataEntity")
-
+    private fun extract(realm: RealmToMigrate, importPartial: ((MigrationData) -> Unit)) {
         val pickleKey = OlmUtility.getRandomKey()
 
-        val masterKey = metadataEntity.xSignMasterPrivateKey
-        val userKey = metadataEntity.xSignUserPrivateKey
-        val selfSignedKey = metadataEntity.xSignSelfSignedPrivateKey
-
-        val userId = metadataEntity.userId
-                ?: throw java.lang.IllegalArgumentException("Rust db migration: userId is null")
-        val deviceId = metadataEntity.deviceId
-                ?: throw java.lang.IllegalArgumentException("Rust db migration: deviceID is null")
-
-        val backupVersion = metadataEntity.backupVersion
-        val backupRecoveryKey = metadataEntity.keyBackupRecoveryKey
-
-        val isOlmAccountShared = metadataEntity.deviceKeysSentToServer
-
-        val olmAccount = metadataEntity.getOlmAccount()
-                ?: throw java.lang.IllegalArgumentException("Rust db migration: No existing account")
-        val pickledOlmAccount = olmAccount.pickle(pickleKey, StringBuffer()).asString()
-        olmAccount.oneTimeKeys()
-        val pickledAccount = PickledAccount(
-                userId = userId,
-                deviceId = deviceId,
-                pickle = pickledOlmAccount,
-                shared = isOlmAccountShared,
-                uploadedSignedKeyCount = 50
-        )
-
-        val baseExtract = MigrationData(
-                account = pickledAccount,
-                pickleKey = pickleKey.map { it.toUByte() },
-                crossSigning = CrossSigningKeyExport(
-                        masterKey = masterKey,
-                        selfSigningKey = selfSignedKey,
-                        userSigningKey = userKey
-                ),
-                sessions = emptyList(),
-                backupRecoveryKey = backupRecoveryKey,
-                trackedUsers = emptyList(),
-                inboundGroupSessions = emptyList(),
-                backupVersion = backupVersion,
-                // TODO import room settings from legacy DB
-                roomSettings = emptyMap()
-        )
+        val baseExtract = realm.getPickledAccount(pickleKey)
         // import the account asap
         importPartial(baseExtract)
 
         val chunkSize = 500
-        realm.where<UserEntity>()
-                .findAll()
-                .chunked(chunkSize) { chunk ->
-                    val trackedUserIds = chunk.mapNotNull { it.userId }
-                    importPartial(
-                            baseExtract.copy(trackedUsers = trackedUserIds)
-                    )
-                }
+        realm.trackedUsersChunk(500) {
+            importPartial(
+                    baseExtract.copy(trackedUsers = it)
+            )
+        }
 
         var migratedOlmSessionCount = 0
-        var readTime = 0L
         var writeTime = 0L
         measureTimeMillis {
-            realm.where<OlmSessionEntity>().findAll()
-                    .chunked(chunkSize) { chunk ->
-                        migratedOlmSessionCount += chunk.size
-                        val export: List<PickledSession>
-                        measureTimeMillis {
-                            export = chunk.map { it.toPickledSession(pickleKey) }
-                        }.also {
-                            readTime += it
-                        }
-                        measureTimeMillis {
-                            importPartial(
-                                    baseExtract.copy(sessions = export)
-                            )
-                        }.also { writeTime += it }
-                    }
+            realm.pickledOlmSessions(pickleKey, chunkSize) { pickledSessions ->
+                migratedOlmSessionCount += pickledSessions.size
+                measureTimeMillis {
+                    importPartial(
+                            baseExtract.copy(sessions = pickledSessions)
+                    )
+                }.also { writeTime += it }
+            }
         }.also {
             Timber.i("Migration: took $it ms to migrate $migratedOlmSessionCount olm sessions")
-            Timber.i("Migration: extract time $readTime")
             Timber.i("Migration: rust import time $writeTime")
         }
 
