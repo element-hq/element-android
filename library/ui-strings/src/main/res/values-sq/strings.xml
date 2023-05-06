@@ -2934,4 +2934,5 @@
     <string name="settings_enable_direct_share_summary">Shfaq fjalosje së fundi te menu ndarjeje me të tjerë e sistemit</string>
     <string name="settings_acceptable_use_policy">Rregulla të Pranueshme Përdorimi</string>
     <string name="action_proceed_to_reset">Vazhdo me rikthimin te parazgjedhjet</string>
+    <string name="settings_crypto_version">Version kriptografie</string>
 </resources>
