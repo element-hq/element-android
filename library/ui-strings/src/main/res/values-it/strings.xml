@@ -2939,4 +2939,5 @@
     <string name="verification_request_waiting_for_recovery">Verifica da chiave sicura o frase…</string>
     <string name="settings_acceptable_use_policy">Politica di utilizzo accettabile</string>
     <string name="action_proceed_to_reset">Procedi con la reimpostazione</string>
+    <string name="settings_crypto_version">Versione crittografia</string>
 </resources>
