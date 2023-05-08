@@ -466,9 +466,6 @@ $dokka.location:org.matrix.android.sdk.api.federation/FederationVersion/version/
 $dokka.location:org.matrix.android.sdk.api.interfaces////PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.interfaces/index.html
 $dokka.location:org.matrix.android.sdk.api.interfaces/DatedObject///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.interfaces/-dated-object/index.html
 $dokka.location:org.matrix.android.sdk.api.interfaces/DatedObject/date/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.interfaces/-dated-object/date.html
-$dokka.location:org.matrix.android.sdk.api.legacy////PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.legacy/index.html
-$dokka.location:org.matrix.android.sdk.api.legacy/LegacySessionImporter///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.legacy/-legacy-session-importer/index.html
-$dokka.location:org.matrix.android.sdk.api.legacy/LegacySessionImporter/process/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.legacy/-legacy-session-importer/process.html
 $dokka.location:org.matrix.android.sdk.api.listeners////PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.listeners/index.html
 $dokka.location:org.matrix.android.sdk.api.listeners/ProgressListener///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.listeners/-progress-listener/index.html
 $dokka.location:org.matrix.android.sdk.api.listeners/ProgressListener/onProgress/#kotlin.Int#kotlin.Int/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.listeners/-progress-listener/on-progress.html
@@ -5041,7 +5038,6 @@ $dokka.location:org.matrix.android.sdk.api/Matrix/debugService/#/PointingToDecla
 $dokka.location:org.matrix.android.sdk.api/Matrix/getUserAgent/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api/-matrix/get-user-agent.html
 $dokka.location:org.matrix.android.sdk.api/Matrix/getWorkerFactory/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api/-matrix/get-worker-factory.html
 $dokka.location:org.matrix.android.sdk.api/Matrix/homeServerHistoryService/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api/-matrix/home-server-history-service.html
-$dokka.location:org.matrix.android.sdk.api/Matrix/legacySessionImporter/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api/-matrix/legacy-session-importer.html
 $dokka.location:org.matrix.android.sdk.api/Matrix/lightweightSettingsStorage/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api/-matrix/lightweight-settings-storage.html
 $dokka.location:org.matrix.android.sdk.api/Matrix/rawService/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api/-matrix/raw-service.html
 $dokka.location:org.matrix.android.sdk.api/Matrix/registerApiInterceptorListener/#org.matrix.android.sdk.api.network.ApiPath#org.matrix.android.sdk.api.network.ApiInterceptorListener/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api/-matrix/register-api-interceptor-listener.html
@@ -5203,7 +5199,6 @@ org.matrix.android.sdk.api.extensions
 org.matrix.android.sdk.api.failure
 org.matrix.android.sdk.api.federation
 org.matrix.android.sdk.api.interfaces
-org.matrix.android.sdk.api.legacy
 org.matrix.android.sdk.api.listeners
 org.matrix.android.sdk.api.logger
 org.matrix.android.sdk.api.metrics
