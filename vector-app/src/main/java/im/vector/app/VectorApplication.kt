@@ -54,7 +54,6 @@ import im.vector.app.core.resources.BuildMeta
 import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.configuration.VectorConfiguration
-import im.vector.app.features.disclaimer.DisclaimerDialog
 import im.vector.app.features.invite.InvitesAcceptor
 import im.vector.app.features.lifecycle.VectorActivityLifecycleCallbacks
 import im.vector.app.features.notifications.NotificationDrawerManager
@@ -71,7 +70,6 @@ import im.vector.application.R
 import org.jitsi.meet.sdk.log.JitsiMeetDefaultLogHandler
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.auth.AuthenticationService
-import org.matrix.android.sdk.api.legacy.LegacySessionImporter
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -86,7 +84,6 @@ class VectorApplication :
         WorkConfiguration.Provider {
 
     lateinit var appContext: Context
-    @Inject lateinit var legacySessionImporter: LegacySessionImporter
     @Inject lateinit var authenticationService: AuthenticationService
     @Inject lateinit var vectorConfiguration: VectorConfiguration
     @Inject lateinit var emojiCompatFontProvider: EmojiCompatFontProvider
@@ -111,7 +108,6 @@ class VectorApplication :
     @Inject lateinit var buildMeta: BuildMeta
     @Inject lateinit var leakDetector: LeakDetector
     @Inject lateinit var vectorLocale: VectorLocale
-    @Inject lateinit var disclaimerDialog: DisclaimerDialog
 
     // font thread handler
     private var fontThreadHandler: Handler? = null
@@ -169,13 +165,6 @@ class VectorApplication :
         emojiCompatWrapper.init(fontRequest)
 
         notificationUtils.createNotificationChannels()
-
-        // It can takes time, but do we care?
-        val sessionImported = legacySessionImporter.process()
-        if (!sessionImported) {
-            // Do not display the name change popup
-            disclaimerDialog.doNotShowDisclaimerDialog()
-        }
 
         ProcessLifecycleOwner.get().lifecycle.addObserver(object : DefaultLifecycleObserver {
             override fun onResume(owner: LifecycleOwner) {
