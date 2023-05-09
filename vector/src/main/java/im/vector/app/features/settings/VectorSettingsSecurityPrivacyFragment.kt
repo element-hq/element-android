@@ -27,9 +27,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.withResumed
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.SwitchPreference
@@ -190,6 +189,10 @@ class VectorSettingsSecurityPrivacyFragment :
                     rawService
                             .getElementWellknown(session.sessionParams)
                             ?.isE2EByDefault() == false
+
+            refreshXSigningStatus()
+            // My device name may have been updated
+            refreshMyDevice()
         }
     }
 
@@ -286,19 +289,6 @@ class VectorSettingsSecurityPrivacyFragment :
         openPinCodeSettingsPref.setOnPreferenceClickListener {
             openPinCodePreferenceScreen()
             true
-        }
-
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                refreshXSigningStatus()
-            }
-        }
-
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                // My device name may have been updated
-                refreshMyDevice()
-            }
         }
 
         secureBackupPreference.icon = activity?.let {
@@ -429,16 +419,18 @@ class VectorSettingsSecurityPrivacyFragment :
 
     private fun openPinCodePreferenceScreen() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                val hasPinCode = pinCodeStore.hasEncodedPin()
-                if (hasPinCode) {
-                    navigator.openPinCode(
-                            requireContext(),
-                            pinActivityResultLauncher,
-                            PinMode.AUTH
-                    )
-                } else {
-                    doOpenPinCodePreferenceScreen()
+            withResumed {
+                viewLifecycleOwner.lifecycleScope.launch {
+                    val hasPinCode = pinCodeStore.hasEncodedPin()
+                    if (hasPinCode) {
+                        navigator.openPinCode(
+                                requireContext(),
+                                pinActivityResultLauncher,
+                                PinMode.AUTH
+                        )
+                    } else {
+                        doOpenPinCodePreferenceScreen()
+                    }
                 }
             }
         }
