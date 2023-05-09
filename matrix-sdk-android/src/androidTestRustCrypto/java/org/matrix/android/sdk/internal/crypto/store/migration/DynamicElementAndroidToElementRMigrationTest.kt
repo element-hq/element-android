@@ -37,6 +37,7 @@ import org.matrix.android.sdk.internal.crypto.store.db.RealmCryptoStoreMigration
 import org.matrix.android.sdk.internal.crypto.store.db.RealmCryptoStoreModule
 import org.matrix.android.sdk.internal.crypto.store.db.RustMigrationInfoProvider
 import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoMetadataEntity
+import org.matrix.android.sdk.internal.crypto.store.db.model.OlmSessionEntity
 import org.matrix.android.sdk.internal.database.RealmKeysUtils
 import org.matrix.android.sdk.internal.database.TestRealmConfigurationFactory
 import org.matrix.android.sdk.internal.util.time.Clock
@@ -136,5 +137,9 @@ class DynamicElementAndroidToElementRMigrationTest {
             assertTrue(machine.roomKeyCounts().total.toInt() == 0)
             assertTrue(machine.roomKeyCounts().backedUp.toInt() == 0)
         }
+
+        // legacy olm sessions should have been deleted
+        val remainingOlmSessions = realm!!.where<OlmSessionEntity>().findAll().size
+        assertEquals("legacy olm sessions should have been removed from store",0, remainingOlmSessions)
     }
 }
