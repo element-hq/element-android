@@ -27,7 +27,6 @@ import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.api.extensions.appendNl
 import org.matrix.android.sdk.api.extensions.orFalse
-import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.content.EncryptionEventContent
@@ -69,7 +68,7 @@ class NoticeEventFormatter @Inject constructor(
 
     private fun Event.isSentByCurrentUser() = senderId != null && senderId == currentUserId
 
-    fun format(timelineEvent: TimelineEvent, isDm: Boolean, session: Session): CharSequence? {
+    fun format(timelineEvent: TimelineEvent, isDm: Boolean): CharSequence? {
         val event = timelineEvent.root
         val senderName = timelineEvent.senderInfo.disambiguatedDisplayName
         return when (val type = event.getClearType()) {
@@ -89,7 +88,7 @@ class NoticeEventFormatter @Inject constructor(
             EventType.STATE_ROOM_WIDGET,
             EventType.STATE_ROOM_WIDGET_LEGACY -> formatWidgetEvent(event, senderName)
             EventType.STATE_ROOM_TOMBSTONE -> formatRoomTombstoneEvent(event, senderName, isDm)
-            EventType.STATE_ROOM_POWER_LEVELS -> formatRoomPowerLevels(event, senderName, session)
+            EventType.STATE_ROOM_POWER_LEVELS -> formatRoomPowerLevels(event, senderName)
             EventType.CALL_INVITE,
             EventType.CALL_CANDIDATES,
             EventType.CALL_HANGUP,
@@ -122,9 +121,10 @@ class NoticeEventFormatter @Inject constructor(
         }
     }
 
-    private fun formatRoomPowerLevels(event: Event, disambiguatedDisplayName: String, session: Session): CharSequence? {
+    private fun formatRoomPowerLevels(event: Event, disambiguatedDisplayName: String): CharSequence? {
         val powerLevelsContent: PowerLevelsContent = event.content.toModel() ?: return null
         val previousPowerLevelsContent: PowerLevelsContent = event.resolvedPrevContent().toModel() ?: return null
+        val roomService = activeSessionDataSource.currentValue?.orNull()?.roomService()
         val userIds = HashSet<String>()
         userIds.addAll(powerLevelsContent.users.orEmpty().keys)
         userIds.addAll(previousPowerLevelsContent.users.orEmpty().keys)
@@ -135,7 +135,7 @@ class NoticeEventFormatter @Inject constructor(
             if (from != to) {
                 val fromStr = roleFormatter.format(from)
                 val toStr = roleFormatter.format(to)
-                val displayName = event.roomId?.let { session.roomService().getRoomMember(userId, it)?.displayName } ?: userId
+                val displayName = event.roomId?.let { roomService?.getRoomMember(userId, it)?.displayName } ?: userId
                 val diff = sp.getString(R.string.notice_power_level_diff, displayName, fromStr, toStr)
                 diffs.add(diff)
             }
