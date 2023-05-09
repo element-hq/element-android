@@ -59,7 +59,7 @@ class MigrateEAtoEROperation(private val migrateGroupSessions: Boolean = false) 
         if (!rustFilesDir.exists()) {
             rustFilesDir.mkdir()
         }
-        val extractMigrationData = ExtractMigrationDataUseCase()
+        val extractMigrationData = ExtractMigrationDataUseCase(migrateGroupSessions)
 
         try {
             val progressListener = object : ProgressListener {

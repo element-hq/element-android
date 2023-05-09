@@ -28,14 +28,15 @@ import java.io.File
 internal class MigrateCryptoTo022(
         realm: DynamicRealm,
         private val rustDirectory: File,
-        private val rustEncryptionConfiguration: RustEncryptionConfiguration
+        private val rustEncryptionConfiguration: RustEncryptionConfiguration,
+        private val migrateMegolmGroupSessions: Boolean = false
 ) : RealmMigrator(
         realm,
         22
 ) {
     override fun doMigrate(realm: DynamicRealm) {
         // Migrate to rust!
-        val migrateOperation = MigrateEAtoEROperation()
+        val migrateOperation = MigrateEAtoEROperation(migrateMegolmGroupSessions)
         migrateOperation.dynamicExecute(realm, rustDirectory, rustEncryptionConfiguration.getDatabasePassphrase())
 
         // wa can't delete all for now, but we can do some cleaning

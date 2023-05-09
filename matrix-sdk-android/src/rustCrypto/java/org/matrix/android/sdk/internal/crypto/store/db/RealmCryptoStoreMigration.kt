@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.crypto.store.db
 
 import io.realm.DynamicRealm
-import org.matrix.android.sdk.internal.crypto.RustEncryptionConfiguration
 import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo001Legacy
 import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo002Legacy
 import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo003RiotX
@@ -40,10 +39,8 @@ import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo
 import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo020
 import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo021
 import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo022
-import org.matrix.android.sdk.internal.di.SessionRustFilesDirectory
 import org.matrix.android.sdk.internal.util.database.MatrixRealmMigration
 import org.matrix.android.sdk.internal.util.time.Clock
-import java.io.File
 import javax.inject.Inject
 
 /**
@@ -54,9 +51,7 @@ import javax.inject.Inject
  */
 internal class RealmCryptoStoreMigration @Inject constructor(
         private val clock: Clock,
-        private val rustEncryptionConfiguration: RustEncryptionConfiguration,
-        @SessionRustFilesDirectory
-        private val rustDirectory: File,
+        private val rustMigrationInfoProvider: RustMigrationInfoProvider,
 ) : MatrixRealmMigration(
         dbName = "Crypto",
         schemaVersion = 22L,
@@ -90,6 +85,11 @@ internal class RealmCryptoStoreMigration @Inject constructor(
         if (oldVersion < 19) MigrateCryptoTo019(realm).perform()
         if (oldVersion < 20) MigrateCryptoTo020(realm).perform()
         if (oldVersion < 21) MigrateCryptoTo021(realm).perform()
-        if (oldVersion < 22) MigrateCryptoTo022(realm, rustDirectory, rustEncryptionConfiguration).perform()
+        if (oldVersion < 22) MigrateCryptoTo022(
+                realm,
+                rustMigrationInfoProvider.rustDirectory,
+                rustMigrationInfoProvider.rustEncryptionConfiguration,
+                rustMigrationInfoProvider.migrateMegolmGroupSessions
+        ).perform()
     }
 }

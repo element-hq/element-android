@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 The Matrix.org Foundation C.I.C.
+ * Copyright 2023 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,18 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.crypto.store.db.migration.rust
+package org.matrix.android.sdk.internal.crypto.store.db
 
-data class ExtractMigrationDataFailure(override val cause: Throwable) :
-        java.lang.RuntimeException("Can't proceed with migration, crypto store is empty or some necessary data is missing.", cause)
+import org.matrix.android.sdk.internal.crypto.RustEncryptionConfiguration
+import org.matrix.android.sdk.internal.di.SessionRustFilesDirectory
+import java.io.File
+import javax.inject.Inject
+
+internal class RustMigrationInfoProvider @Inject constructor(
+        @SessionRustFilesDirectory
+        val rustDirectory: File,
+        val rustEncryptionConfiguration: RustEncryptionConfiguration
+) {
+
+    var migrateMegolmGroupSessions: Boolean = false
+}
