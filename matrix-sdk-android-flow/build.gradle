@@ -29,7 +29,7 @@ android {
         targetCompatibility versions.targetCompat
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
 
 //    publishNonDefault true

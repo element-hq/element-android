@@ -107,7 +107,7 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
         freeCompilerArgs += [
                 // Disabled for now, there are too many errors. Could be handled in another dedicated PR
                 // '-Xexplicit-api=strict', // or warning

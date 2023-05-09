@@ -7,7 +7,7 @@ on:
 
 # Enrich gradle.properties for CI/CD
 env:
-  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3072m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -XX:MaxPermSize=512m -Dkotlin.daemon.jvm.options="-Xmx2g" -Dkotlin.incremental=false
+  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3072m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -XX:MaxMetaspaceSize=512m -Dkotlin.daemon.jvm.options="-Xmx2g" -Dkotlin.incremental=false
   CI_GRADLE_ARG_PROPERTIES: --stacktrace -PpreDexEnable=false --max-workers 2 --no-daemon
 
 jobs:
@@ -16,6 +16,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Use JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '17'
       - name: Run code quality check suite
         run: ./tools/check/check_code_quality.sh
 
@@ -25,6 +30,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Use JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '17'
       - name: Run knit
         run: |
           ./gradlew knitCheck $CI_GRADLE_ARG_PROPERTIES
@@ -39,6 +49,11 @@ jobs:
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v3
+      - name: Use JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '17'
       - name: Run ktlint
         run: |
           ./gradlew ktlintCheck $CI_GRADLE_ARG_PROPERTIES --continue
@@ -86,6 +101,11 @@ jobs:
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v3
+      - name: Use JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '17'
       - name: Dependency analysis
         run: ./gradlew dependencyCheckAnalyze $CI_GRADLE_ARG_PROPERTIES
       - name: Upload dependency analysis
