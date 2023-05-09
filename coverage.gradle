@@ -33,9 +33,9 @@ def initializeReport(report, projects, classExcludes) {
         )
     }
     report.reports {
-        xml.enabled true
-        html.enabled true
-        csv.enabled false
+        xml.required.set(true)
+        html.required.set(true)
+        csv.required.set(true)
     }
 
     gradle.projectsEvaluated {
