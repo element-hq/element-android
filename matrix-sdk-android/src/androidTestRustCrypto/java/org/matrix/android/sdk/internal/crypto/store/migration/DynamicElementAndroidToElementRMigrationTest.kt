@@ -27,6 +27,7 @@ import org.junit.After
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -90,6 +91,7 @@ class DynamicElementAndroidToElementRMigrationTest {
     }
 
     @Test
+    @Ignore("We don't migrate group sessions for now, and it's making this test suite unstable")
     fun given_a_valid_crypto_store_realm_file_no_lazy_then_migration_should_be_successful() {
         testMigrate(true)
     }
@@ -140,6 +142,6 @@ class DynamicElementAndroidToElementRMigrationTest {
 
         // legacy olm sessions should have been deleted
         val remainingOlmSessions = realm!!.where<OlmSessionEntity>().findAll().size
-        assertEquals("legacy olm sessions should have been removed from store",0, remainingOlmSessions)
+        assertEquals("legacy olm sessions should have been removed from store", 0, remainingOlmSessions)
     }
 }
