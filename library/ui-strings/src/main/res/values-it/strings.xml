@@ -351,9 +351,9 @@
     <string name="settings_display_name">Nome visualizzato</string>
     <string name="settings_add_email_address">Aggiungi indirizzo email</string>
     <string name="settings_add_phone_number">Aggiungi numero di telefono</string>
-    <string name="settings_app_info_link_summary">Mostra le informazioni dell\'App nelle Impostazioni di sistema.</string>
-    <string name="settings_app_info_link_title">Informazioni sull\'App</string>
-    <string name="settings_enable_all_notif">Abilita le notifiche per questo account</string>
+    <string name="settings_app_info_link_summary">Mostra le informazioni dell\'app nelle Impostazioni di sistema.</string>
+    <string name="settings_app_info_link_title">Informazioni sull\'app</string>
+    <string name="settings_enable_all_notif">Attiva le notifiche per questo account</string>
     <string name="settings_enable_this_device">Attiva le notifiche per questa sessione</string>
     <string name="settings_messages_in_one_to_one">Messaggi nelle chat dirette</string>
     <string name="settings_messages_in_group_chat">Messaggi nelle chat di gruppo</string>
@@ -379,7 +379,7 @@
     <string name="settings_other">Altro</string>
     <string name="settings_advanced">Avanzate</string>
     <string name="settings_cryptography">Crittografia</string>
-    <string name="settings_notifications_targets">Target delle notifiche</string>
+    <string name="settings_notifications_targets">Destinazioni delle notifiche</string>
     <string name="settings_contact">Contatti locali</string>
     <string name="settings_contacts_app_permission">Consenti l\'accesso alla Rubrica locale</string>
     <string name="settings_contacts_phonebook_country">Prefisso telefonico internazionale</string>
@@ -414,8 +414,8 @@
     <string name="media_saving_period_1_month">1 mese</string>
     <string name="media_saving_period_forever">Per sempre</string>
     <string name="room_settings_topic">Argomento</string>
-    <string name="room_settings_room_read_history_rules_pref_title">Accesso alla Timeline</string>
-    <string name="room_settings_room_read_history_rules_pref_dialog_title">Chi può leggere la Timeline\?</string>
+    <string name="room_settings_room_read_history_rules_pref_title">Accesso alla linea temporale</string>
+    <string name="room_settings_room_read_history_rules_pref_dialog_title">Chi può leggere la cronologia\?</string>
     <string name="room_settings_read_history_entry_anyone">Chiunque</string>
     <string name="room_settings_read_history_entry_members_only_option_time_shared">Solo i membri (dal momento in cui questa opzione è stata selezionata)</string>
     <string name="room_settings_read_history_entry_members_only_invited">Solo i membri (dal momento in cui vengono invitati)</string>
@@ -424,7 +424,7 @@
     <string name="room_settings_category_advanced_title">Avanzate</string>
     <string name="room_settings_room_internal_id">ID interno della stanza</string>
     <string name="room_settings_labs_pref_title">Laboratorio</string>
-    <string name="room_settings_labs_warning_message">Queste sono caratteristiche sperimentali che potrebbero dare risultati inattesi. Usali con cautela.</string>
+    <string name="room_settings_labs_warning_message">Queste sono caratteristiche sperimentali che potrebbero dare risultati inattesi. Usale con cautela.</string>
     <string name="room_settings_set_main_address">Imposta come indirizzo principale</string>
     <string name="room_settings_unset_main_address">Non usare più come indirizzo principale</string>
     <string name="settings_theme">Tema</string>
@@ -453,7 +453,7 @@
     <string name="directory_server_placeholder">Nome del server</string>
     <string name="directory_server_all_rooms_on_server">Tutte le stanze sull\'Home Server %s</string>
     <string name="directory_server_native_rooms">Tutte le stanze native %s</string>
-    <string name="font_size">Dimensione font</string>
+    <string name="font_size">Dimensione carattere</string>
     <string name="tiny">Minuscolo</string>
     <string name="small">Piccolo</string>
     <string name="normal">Normale</string>
@@ -650,7 +650,7 @@
     <string name="settings_troubleshoot_test_device_settings_quickfix">Abilita</string>
     <string name="settings_troubleshoot_test_play_services_title">Esegui un controllo dei servizi</string>
     <string name="settings_troubleshoot_test_play_services_success">L\'APK Google Play Services è disponibile e aggiornato.</string>
-    <string name="settings_troubleshoot_test_play_services_failed">${app_name} usa Google Play Services per consegnare i messaggi a comparsa, ma sembra non sia stato configurato correttamente:
+    <string name="settings_troubleshoot_test_play_services_failed">${app_name} usa Google Play Services per consegnare i messaggi push, ma non sembra configurato correttamente:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Correggi i Play Services</string>
     <string name="settings_troubleshoot_test_fcm_title">Token di Firebase</string>
@@ -669,15 +669,15 @@
     <string name="settings_troubleshoot_test_bg_restricted_title">Verifica se Element sia stato configurato per funzionare in modo limitato quando lavora in background</string>
     <string name="settings_troubleshoot_test_bg_restricted_success">${app_name} non funziona senza alcuna restrizione anche quando è eseguito in background. Questo test andrebbe eseguito usando dati mobili (non WIFI).
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_bg_restricted_failed">${app_name} è stato configurato per funzionare in modo limitato quando è eseguito in background.
-\nIl funzionamento dell\'App, quando è eseguita in background, è stato fortemente limitato e ciò potrebbe influenzare la ricezione delle notifiche.
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Ci sono restrizioni attive quando ${app_name} è in secondo piano.
+\nIl funzionamento dell\'app, quando è eseguita in secondo piano, verrà fortemente limitato e ciò potrebbe influenzare la ricezione di notifiche.
 \n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Disabilita le restrizioni</string>
     <string name="settings_troubleshoot_test_battery_title">Ottimizzazione della batteria</string>
     <string name="settings_troubleshoot_test_battery_success">${app_name} non è influenzato dall\'ottimizzazione della batteria.</string>
     <string name="settings_troubleshoot_test_battery_failed">Se si lascia un dispositivo scollegato, fermo e con lo schermo spento, dopo un certo tempo questo entra in modalità Doze. Ciò impedisce alle App di accedere alla rete e ritarda le attività, le sincronizzazioni e la ricezione dei normali allarmi.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignora l\'ottimizzazione</string>
-    <string name="no_valid_google_play_services_apk">Non è stato trovato nessun APK Google Play Services valido. Le notifiche non funzioneranno correttamente.</string>
+    <string name="no_valid_google_play_services_apk">Nessun APK Google Play Services trovato. Le notifiche non funzioneranno bene.</string>
     <string name="video_call_in_progress">Chiamata video in corso…</string>
     <string name="title_activity_keys_backup_setup">Backup delle chiavi</string>
     <string name="title_activity_keys_backup_restore">Usa il Backup delle chiavi</string>
@@ -702,7 +702,7 @@
     <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
 \nQuesto errore non dipende da ${app_name}. Secondo Google dipende dal fatto che questo dispositivo ha troppe App registrate con FCM. L\'errore si verifica solo in casi in cui ci sia un numero estremo di app, quindi non dovrebbe affliggere l\'utente medio.</string>
     <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
-\nQuesto errore non dipende da ${app_name} e può avere diverse cause. Potresti riprovare più tardi o controllare che Google Play Service non abbia configurato nelle Impostazioni di sistema dei limiti di utilizzo di dati. Anche un orologio di sistema regolato male potrebbe esserne la causa. Oppure può verificarsi se hai una ROM customizzata.</string>
+\nQuesto errore non dipende da ${app_name} e può avere diverse cause. Potresti riprovare più tardi o controllare che Google Play Service non abbia configurato nelle Impostazioni di sistema dei limiti di utilizzo di dati, oppure l\'orologio di sistema è sbagliato, o ancora può verificarsi se usi una ROM non ufficiale.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 \nQuesto errore non dipende da ${app_name}. Non c\'è alcun account Google nel telefono. Apri il gestore di account ed aggiungi un account Google.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Aggiungi account</string>
@@ -757,7 +757,7 @@
     <string name="keys_backup_restore_with_passphrase">Usa la tua Passphrase per sbloccare i messaggi criptati</string>
     <string name="keys_backup_restore_use_recovery_key">usa il tuo codice di recupero</string>
     <string name="keys_backup_restore_with_passphrase_helper_with_link">Se non ricordi la tua Passphrase, puoi %s.</string>
-    <string name="keys_backup_restore_with_recovery_key">Usa il tuo codice di recupero per sbloccare la Timeline dei messaggi cifrati</string>
+    <string name="keys_backup_restore_with_recovery_key">Usa la tua chiave di recupero per sbloccare la cronologia dei messaggi cifrati</string>
     <string name="keys_backup_restore_key_enter_hint">Inserisci codice di recupero</string>
     <string name="keys_backup_restore_with_key_helper">Hai perso il codice di recupero\? Nelle Impostazioni puoi crearne uno nuovo.</string>
     <string name="keys_backup_passphrase_error_decrypt">Impossibile decrittare il backup con questa Passphrase: verifica che sia corretta.</string>
@@ -903,7 +903,7 @@
     <string name="send_suggestion_report_placeholder">Descrivi qui il tuo suggerimento</string>
     <string name="send_suggestion_sent">Grazie, il suggerimento è stato inviato correttamente</string>
     <string name="send_suggestion_failed">L\'invio del suggerimento è fallito (%s)</string>
-    <string name="settings_labs_show_hidden_events_in_timeline">Mostra gli eventi nascosti nella Timeline</string>
+    <string name="settings_labs_show_hidden_events_in_timeline">Mostra gli eventi nascosti nella linea temporale</string>
     <string name="room_list_catchup_empty_title">Non hai nulla di nuovo da vedere!</string>
     <string name="bottom_action_people_x">Messaggi diretti</string>
     <string name="send_file_step_idle">In attesa…</string>
@@ -921,11 +921,11 @@
     <string name="room_filtering_footer_create_new_direct_message">Invia un nuovo messaggio diretto</string>
     <string name="room_filtering_footer_open_room_directory">Guarda l\'elenco delle stanze pubbliche</string>
     <string name="room_directory_search_hint">Nome o ID stanza (#esempio:matrix.org)</string>
-    <string name="labs_swipe_to_reply_in_timeline">Attiva lo swipe per rispondere nella timeline</string>
+    <string name="labs_swipe_to_reply_in_timeline">Attiva lo swipe per rispondere nella linea temporale</string>
     <string name="link_copied_to_clipboard">Link URL copiato negli appunti</string>
     <string name="settings_integration_manager">Gestore di integrazioni</string>
     <string name="creating_direct_room">Creazione stanza …</string>
-    <string name="message_view_edit_history">Visualizza Modifica Timeline</string>
+    <string name="message_view_edit_history">Vedi cronologia modifiche</string>
     <string name="action_decline">Rifiuta</string>
     <string name="widget_integration_review_terms">Per continuare devi accettare i termini di servizio.</string>
     <string name="terms_of_service">Termini di servizio</string>
@@ -1189,7 +1189,7 @@
     <string name="devices_current_device">Sessione attuale</string>
     <string name="devices_other_devices">Altre sessioni</string>
     <string name="autocomplete_limited_results">Si vedono solo i primi risultati: digita più lettere…</string>
-    <string name="settings_developer_mode_fail_fast_title">Fail-fast</string>
+    <string name="settings_developer_mode_fail_fast_title">Fallimento rapido</string>
     <string name="settings_developer_mode_fail_fast_summary">Se si verifica un errore imprevisto ${app_name} potrebbe crashare più spesso</string>
     <string name="command_description_shrug">Antepone ¯\\_(ツ)_/¯ in un messaggio testuale</string>
     <string name="create_room_encryption_title">Attiva la crittografia</string>
@@ -2026,7 +2026,7 @@
     <string name="feedback_failed">L\'invio del feedback non è riuscito (%s)</string>
     <string name="feedback_sent">Grazie! Il tuo feedback è stato ricevuto</string>
     <string name="you_may_contact_me">Se hai altre domande puoi contattarmi</string>
-    <string name="send_feedback_space_info">Gli Spazi sono ancora in via di sviluppo. Il tuo feedback ci è utile per migliorarli. Il tuo nome utente e i dati sull\'App verranno comunicati per permetterci di utilizzare il tuo feedback al meglio.</string>
+    <string name="send_feedback_space_info">Gli Spazi sono ancora in via di sviluppo. Il tuo feedback ci è utile per migliorarli. Il tuo nome utente e i dati sull\'app verranno comunicati per permetterci di utilizzare il tuo feedback al meglio.</string>
     <string name="feedback">Feedback</string>
     <string name="send_feedback_space_title">Feedback sugli Spazi</string>
     <string name="error_jitsi_join_conf">Ops! Qualcosa è andato storto nel cercar di entrare nella conferenza</string>
@@ -2923,4 +2923,21 @@
     <string name="direct_room_encryption_enabled_waiting_users_tile_description">Una volta che gli utenti si saranno uniti a ${app_name}, potrete scrivervi e la stanza sarà crittografata end-to-end</string>
     <string name="direct_room_encryption_enabled_waiting_users">In attesa che gli utenti si uniscano a ${app_name}</string>
     <string name="direct_room_user_list_only_invite_one_email">Puoi invitare una sola email alla volta</string>
+    <string name="pill_message_unknown_room_or_space">Stanza/Spazio</string>
+    <string name="pill_message_in_unknown_room">Messaggio in stanza</string>
+    <string name="pill_message_in_room">Messaggio in %s</string>
+    <string name="pill_message_from_unknown_user">Messaggio</string>
+    <string name="pill_message_from_user">Messaggio da %s</string>
+    <string name="encrypted_by_deleted">Cifrato da un dispositivo eliminato</string>
+    <string name="secure_backup_reset_danger_warning">Procedi solo se sei sicuro di avere perso tutti gli altri tuoi dispositivi e la chiave di sicurezza.</string>
+    <string name="secure_backup_reset_all_no_other_devices_long">La reimpostazione delle chiavi di verifica non può essere annullata. Dopo averlo fatto, non avrai accesso ai vecchi messaggi cifrati, e gli amici che ti avevano verificato in precedenza vedranno avvisi di sicurezza fino a quando non ti ri-verifichi con loro.</string>
+    <string name="verification_not_found">La richiesta di verifica non è stata trovata. Potrebbe essere stata cancellata o gestita da un\'altra sessione.</string>
+    <string name="_resume">Riprendi</string>
+    <string name="verification_request_was_sent">È stata inviata una richiesta di verifica. Apri una delle tue altre sessioni per accettare ed iniziare la verifica.</string>
+    <string name="verification_verify_identity">Verifica la tua identità per accedere ai messaggi cifrati e provare agli altri che sei tu.</string>
+    <string name="verification_verify_with_another_device">Verifica con un altro dispositivo</string>
+    <string name="verification_request_waiting_for_recovery">Verifica da chiave sicura o frase…</string>
+    <string name="settings_acceptable_use_policy">Politica di utilizzo accettabile</string>
+    <string name="action_proceed_to_reset">Procedi con la reimpostazione</string>
+    <string name="settings_crypto_version">Versione crittografia</string>
 </resources>

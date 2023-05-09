@@ -2932,4 +2932,21 @@
     <string name="direct_room_encryption_enabled_waiting_users_tile_description">به محض پیوستن کاربران دعوت شده، قادر به گپ خواهید بود و اتاق رمزنگاری سرتاسری می‌شود</string>
     <string name="direct_room_encryption_enabled_waiting_users">منتظر پیوستن کاربران به ${app_name}</string>
     <string name="direct_room_user_list_only_invite_one_email">در هر زمان تنها می‌توانید یک رایانامه را دعوت کنید</string>
+    <string name="pill_message_unknown_room_or_space">اتاق یا فضا</string>
+    <string name="pill_message_in_unknown_room">پیام در اتاق</string>
+    <string name="pill_message_in_room">پیام در %s</string>
+    <string name="pill_message_from_unknown_user">پیام</string>
+    <string name="pill_message_from_user">پیام از %s</string>
+    <string name="encrypted_by_deleted">رمز شده با افزاره‌ای حذف شده</string>
+    <string name="secure_backup_reset_danger_warning">لطفاً فقز در صورتی ادامه دهید که مطمئنید تمامی دیگر افزاره‌ها و کلید امنیتیتانرا از دست داده‌اید.</string>
+    <string name="secure_backup_reset_all_no_other_devices_long">بازنشانی کلیدهای تأیید هویتتان بازگشت‌پذیر نیست. پس از بازنشانی به پیام‌های رمزشدهٔ قدیمی دسترسی نخواهید داشت و هر دوستی که پیش‌تر تأییدتان کرده بود، تا زمان تأیید دوباره هشداری امنیت خواهد دید.</string>
+    <string name="verification_not_found">درخواست تأیید پیدا نشد. ممکن است لغو یا از نشستی دیگر انجام شده باشد.</string>
+    <string name="_resume">از سر گیری</string>
+    <string name="verification_request_was_sent">درخواست تأییدی فرستاده شد. برای پذیرفتن و آغاز تأیید، یکی از دیگر نشست‌هایتان را بگشایید.</string>
+    <string name="verification_verify_identity">برای دسترسی به پیام‌های رمزشده و اثبات هویتتان به دیگران تأیید هویت کنید.</string>
+    <string name="verification_verify_with_another_device">تأیید با افزاره‌ای دیگر</string>
+    <string name="verification_request_waiting_for_recovery">تأیید از کلید امن به عبارت…</string>
+    <string name="settings_acceptable_use_policy">سیاست استفادهٔ پذیرفتنی</string>
+    <string name="action_proceed_to_reset">ادامه برای بازنشانی</string>
+    <string name="settings_crypto_version">نگارش Crypto</string>
 </resources>

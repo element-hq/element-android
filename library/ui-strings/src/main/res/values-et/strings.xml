@@ -2932,4 +2932,21 @@
     <string name="direct_room_user_list_only_invite_one_email">E-posti teel saad saata kutseid vaid ükshaaval</string>
     <string name="direct_room_encryption_enabled_waiting_users">Kasutajate liitumise ootel ${app_name} või mõnes muud ühilduvas rakenduses</string>
     <string name="direct_room_encryption_enabled_waiting_users_tile_description">Kui kutse saanud kasutajad on liitunud jututoaga ${app_name}, siis saad sa nendega suhelda ja jututuba on läbivalt krüptitud</string>
+    <string name="encrypted_by_deleted">Krüptitud kustutatud seadme poolt</string>
+    <string name="secure_backup_reset_danger_warning">Palun jätka ainult siis, kui sa oled kaotanud ligipääsu kõikidele oma seadmetele ning oma turvavõtmele.</string>
+    <string name="secure_backup_reset_all_no_other_devices_long">Verifitseerimisvõtmete kustutamist ei saa hiljem tagasi võtta. Peale seda sul puudub ligipääs vanadele krüptitud sõnumitele ja kõik sinu verifitseeritud sõbrad-tuttavad näevad turvahoiatusi seni kuni sa uuesti nad verifitseerid.</string>
+    <string name="verification_not_found">Verifitseerimispäringut ei leidu. Ta on kas katkestatud või temaga juba tegeleb mõni muu seade.</string>
+    <string name="_resume">Jätka</string>
+    <string name="verification_request_was_sent">Verifitseerimispäring on saadetud. Päringule vastamiseks ja verifitseerimise lõpetamiseks ava kasutajasessioon mõnes muus oma seadmes.</string>
+    <string name="verification_verify_identity">Tagamaks ligipääsu oma krüptitud sõnumitele ja tõestamaks oma isikut teistele kasutajatale, verifitseeri end.</string>
+    <string name="verification_verify_with_another_device">Verifitseeri teise seadmega</string>
+    <string name="verification_request_waiting_for_recovery">Verifitseerime turvavõtme või turvafraasi alusel…</string>
+    <string name="settings_acceptable_use_policy">Vastuvõetava kasutamise põhimõtted</string>
+    <string name="action_proceed_to_reset">Lähtestamiseks jätka</string>
+    <string name="pill_message_unknown_room_or_space">Jututuba/kogukond</string>
+    <string name="pill_message_in_unknown_room">Sõnum jututoas</string>
+    <string name="pill_message_in_room">Sõnum jututoas %s</string>
+    <string name="pill_message_from_unknown_user">Sõnum</string>
+    <string name="pill_message_from_user">Sõnum kasutajalt %s</string>
+    <string name="settings_crypto_version">Krüptoteekide versioon</string>
 </resources>

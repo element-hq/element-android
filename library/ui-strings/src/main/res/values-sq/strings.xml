@@ -2918,4 +2918,21 @@
     <string name="direct_room_encryption_enabled_waiting_users">Po pritet që përdoruesit të bëhen pjesë e ${app_name}</string>
     <string name="direct_room_encryption_enabled_waiting_users_tile_description">Pasi përdoruesit e ftuar të jenë bërë pjesë e ${app_name}, do të jeni në gjendje të bisedoni dhe dhoma do të jetë e fshehtëzuar skaj-më-skaj</string>
     <string name="direct_room_user_list_only_invite_one_email">Mund të ftoni vetëm një email në herë</string>
+    <string name="pill_message_unknown_room_or_space">Dhomë/Hapësirë</string>
+    <string name="pill_message_in_unknown_room">Mesazh në dhomë</string>
+    <string name="pill_message_in_room">Mesazh në %s</string>
+    <string name="pill_message_from_unknown_user">Mesazh</string>
+    <string name="pill_message_from_user">Mesazh nga %s</string>
+    <string name="encrypted_by_deleted">Fshehtëzuar nga një pajisje e fshirë</string>
+    <string name="secure_backup_reset_danger_warning">Ju lutemi, vazhdoni më tej vetëm nëse keni humbur krejt pajisjet tuaja të tjera dhe kyçet tuaj të sigurisë.</string>
+    <string name="secure_backup_reset_all_no_other_devices_long">Ricaktimi i kyçeve tuaj të verifikimit s’mund të zhbëhet. Pas ricaktimit, s’do të mund të hyni më te mesazhe të dikurshëm të fshehtëzuar dhe, cilido shok që ju ka verifikuar më herët, do të shohë sinjalizime sigurie, deri sa të ribëni verifikimin me ta.</string>
+    <string name="verification_not_found">Kërkesa për verifikim s’u gjet. Mund të jetë anuluar, ose trajtuar nga një tjetër sesion.</string>
+    <string name="verification_request_was_sent">Është dërguar një kërkesë verifikimi. Që ta pranoni dhe të filloni verifikimin, hapni një nga sesionet tuaj të tjerë.</string>
+    <string name="verification_verify_identity">Verifikoni identitetin tuaj, që të hyni në mesazhe të fshehtëzuar dhe t’u vërtetoni të tjerëve identitetin tuaj.</string>
+    <string name="verification_verify_with_another_device">Verifikojeni me një tjetër pajisje</string>
+    <string name="verification_request_waiting_for_recovery">Po verifikohet prej Kyçi ose Togfjalëshi të Siguruar…</string>
+    <string name="settings_enable_direct_share_summary">Shfaq fjalosje së fundi te menu ndarjeje me të tjerë e sistemit</string>
+    <string name="settings_acceptable_use_policy">Rregulla të Pranueshme Përdorimi</string>
+    <string name="action_proceed_to_reset">Vazhdo me rikthimin te parazgjedhjet</string>
+    <string name="settings_crypto_version">Version kriptografie</string>
 </resources>
