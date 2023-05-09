@@ -29,6 +29,7 @@ import org.matrix.android.sdk.api.securestorage.SecretStoringUtils
 import org.matrix.android.sdk.internal.crypto.RustEncryptionConfiguration
 import org.matrix.android.sdk.internal.crypto.store.db.RealmCryptoStoreMigration
 import org.matrix.android.sdk.internal.crypto.store.db.RealmCryptoStoreModule
+import org.matrix.android.sdk.internal.crypto.store.db.RustMigrationInfoProvider
 import org.matrix.android.sdk.internal.util.time.Clock
 import org.matrix.olm.OlmManager
 import java.io.File
@@ -58,12 +59,8 @@ class CryptoSanityMigrationTest {
     fun cryptoDatabaseShouldMigrateGracefully() {
         val realmName = "crypto_store_20.realm"
 
-        val migration = RealmCryptoStoreMigration(
-                object : Clock {
-                    override fun epochMillis(): Long {
-                        return 0L
-                    }
-                },
+        val rustMigrationInfo = RustMigrationInfoProvider(
+                File(configurationFactory.root, "test_rust"),
                 RustEncryptionConfiguration(
                         "foo",
                         RealmKeysUtils(
@@ -71,7 +68,14 @@ class CryptoSanityMigrationTest {
                                 SecretStoringUtils(context, keyStore, TestBuildVersionSdkIntProvider(), false)
                         )
                 ),
-                File(configurationFactory.root, "rust-sdk")
+        )
+        val migration = RealmCryptoStoreMigration(
+                object : Clock {
+                    override fun epochMillis(): Long {
+                        return 0L
+                    }
+                },
+                rustMigrationInfo
         )
 
         val realmConfiguration = configurationFactory.createConfiguration(

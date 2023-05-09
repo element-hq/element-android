@@ -18,19 +18,27 @@ package org.matrix.android.sdk.internal.crypto.store.db.migration.rust
 
 import io.realm.kotlin.where
 import okhttp3.internal.toImmutableList
+import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.internal.crypto.model.InboundGroupSessionData
 import org.matrix.android.sdk.internal.crypto.store.db.deserializeFromRealm
 import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoMetadataEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoMetadataEntityFields
+import org.matrix.android.sdk.internal.crypto.store.db.model.OlmInboundGroupSessionEntity
+import org.matrix.android.sdk.internal.crypto.store.db.model.OlmInboundGroupSessionEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.OlmSessionEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.OlmSessionEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.UserEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.UserEntityFields
+import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.olm.OlmAccount
+import org.matrix.olm.OlmInboundGroupSession
 import org.matrix.olm.OlmSession
 import org.matrix.rustcomponents.sdk.crypto.CrossSigningKeyExport
 import org.matrix.rustcomponents.sdk.crypto.MigrationData
 import org.matrix.rustcomponents.sdk.crypto.PickledAccount
+import org.matrix.rustcomponents.sdk.crypto.PickledInboundGroupSession
 import org.matrix.rustcomponents.sdk.crypto.PickledSession
+import timber.log.Timber
 import java.nio.charset.Charset
 
 sealed class RealmToMigrate {
@@ -225,6 +233,80 @@ fun RealmToMigrate.pickledOlmSessions(pickleKey: ByteArray, chunkSize: Int, onCh
     }
 }
 
+private val sessionDataAdapter = MoshiProvider.providesMoshi()
+        .adapter(InboundGroupSessionData::class.java)
+fun RealmToMigrate.pickledOlmGroupSessions(pickleKey: ByteArray, chunkSize: Int, onChunk: ((List<PickledInboundGroupSession>) -> Unit)) {
+    when (this) {
+        is RealmToMigrate.ClassicRealm -> {
+            realm.where<OlmInboundGroupSessionEntity>()
+                    .findAll()
+                    .chunked(chunkSize) { chunk ->
+                        val export = chunk.mapNotNull { it.toPickledInboundGroupSession(pickleKey) }
+                        onChunk(export)
+                    }
+        }
+        is RealmToMigrate.DynamicRealm ->  {
+            val pickledSessions = mutableListOf<PickledInboundGroupSession>()
+            realm.schema.get("OlmInboundGroupSessionEntity")?.transform {
+                val senderKey = it.getString(OlmInboundGroupSessionEntityFields.SENDER_KEY)
+                val roomId = it.getString(OlmInboundGroupSessionEntityFields.ROOM_ID)
+                val backedUp = it.getBoolean(OlmInboundGroupSessionEntityFields.BACKED_UP)
+                val serializedOlmInboundGroupSession = it.getString(OlmInboundGroupSessionEntityFields.SERIALIZED_OLM_INBOUND_GROUP_SESSION)
+                val inboundSession = deserializeFromRealm<OlmInboundGroupSession>(serializedOlmInboundGroupSession) ?: return@transform Unit.also {
+                    Timber.w("Rust db migration: Failed to migrated group session, no meta data")
+                }
+                val sessionData = it.getString(OlmInboundGroupSessionEntityFields.INBOUND_GROUP_SESSION_DATA_JSON).let { json ->
+                    sessionDataAdapter.fromJson(json)
+                } ?: return@transform Unit.also {
+                    Timber.w("Rust db migration: Failed to migrated group session, no meta data")
+                }
+                val pickle = inboundSession.pickle(pickleKey, StringBuffer()).asString()
+                val pickledSession =  PickledInboundGroupSession(
+                        pickle = pickle,
+                        senderKey = senderKey,
+                        signingKey = sessionData.keysClaimed.orEmpty(),
+                        roomId = roomId,
+                        forwardingChains = sessionData.forwardingCurve25519KeyChain.orEmpty(),
+                        imported = sessionData.trusted.orFalse().not(),
+                        backedUp = backedUp
+                )
+                // should we check the tracking status?
+                pickledSessions.add(pickledSession)
+                if (pickledSessions.size > chunkSize) {
+                    onChunk(pickledSessions.toImmutableList())
+                    pickledSessions.clear()
+                }
+            }
+            if (pickledSessions.isNotEmpty()) {
+                onChunk(pickledSessions)
+            }
+        }
+    }
+}
+
+private fun OlmInboundGroupSessionEntity.toPickledInboundGroupSession(pickleKey: ByteArray): PickledInboundGroupSession? {
+    val senderKey = this.senderKey ?: return null
+    val backedUp = this.backedUp
+    val olmInboundGroupSession = this.getOlmGroupSession() ?: return null.also {
+        Timber.w("Rust db migration: Failed to migrated group session $sessionId")
+    }
+    val data = this.getData() ?: return null.also {
+        Timber.w("Rust db migration: Failed to migrated group session $sessionId, no meta data")
+    }
+    val roomId = data.roomId ?: return null.also {
+        Timber.w("Rust db migration: Failed to migrated group session $sessionId, no roomId")
+    }
+    val pickledInboundGroupSession = olmInboundGroupSession.pickle(pickleKey, StringBuffer()).asString()
+    return PickledInboundGroupSession(
+            pickle = pickledInboundGroupSession,
+            senderKey = senderKey,
+            signingKey = data.keysClaimed.orEmpty(),
+            roomId = roomId,
+            forwardingChains = data.forwardingCurve25519KeyChain.orEmpty(),
+            imported = data.trusted.orFalse().not(),
+            backedUp = backedUp
+    )
+}
 private fun OlmSessionEntity.toPickledSession(pickleKey: ByteArray): PickledSession {
     val deviceKey = this.deviceKey ?: ""
     val lastReceivedMessageTs = this.lastReceivedMessageTs
