@@ -141,6 +141,7 @@ class BootstrapMigrateBackupFragment :
 
             views.bootstrapMigrateUseFile.isVisible = false
         }
+        views.bootstrapDescriptionText.giveAccessibilityFocusOnce()
     }
 
     private val importFileStartForActivityResult = registerStartForActivityResult { activityResult ->

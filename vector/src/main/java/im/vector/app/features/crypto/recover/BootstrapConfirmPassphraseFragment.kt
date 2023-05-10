@@ -52,6 +52,7 @@ class BootstrapConfirmPassphraseFragment :
         views.ssssPassphraseSecurityProgress.isGone = true
 
         views.bootstrapDescriptionText.text = getString(R.string.set_a_security_phrase_again_notice)
+        views.bootstrapDescriptionText.giveAccessibilityFocusOnce()
         views.ssssPassphraseEnterEdittext.hint = getString(R.string.set_a_security_phrase_hint)
 
         withState(sharedViewModel) {
