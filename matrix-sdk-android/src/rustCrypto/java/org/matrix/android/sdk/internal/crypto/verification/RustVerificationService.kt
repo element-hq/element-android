@@ -342,6 +342,9 @@ internal class RustVerificationService @Inject constructor(
         val qrVerification = matchingRequest.scanQrCode(scannedData)
                 ?: return null
         verificationListenersHolder.dispatchTxAdded(qrVerification)
+        // we need to update the request as the state mapping depends on the
+        // sas or qr beeing started
+        verificationListenersHolder.dispatchRequestUpdated(matchingRequest)
         return qrVerification.transactionId
     }
 
