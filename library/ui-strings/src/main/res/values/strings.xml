@@ -1470,6 +1470,9 @@
     <string name="reason_colon">Reason: %1$s</string>
 
     <string name="avatar">Avatar</string>
+    <string name="avatar_of_space">Avatar of space %1$s</string>
+    <string name="avatar_of_room">Avatar of room %1$s</string>
+    <string name="avatar_of_user">Profile picture of user %1$s</string>
 
     <!-- Consent modal -->
     <string name="dialog_user_consent_content">To continue using the %1$s homeserver you must review and agree to the terms and conditions.</string>
