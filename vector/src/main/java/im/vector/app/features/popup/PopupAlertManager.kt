@@ -24,6 +24,7 @@ import android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
 import androidx.core.view.ViewCompat
 import com.tapadoo.alerter.Alerter
 import im.vector.app.R
+import im.vector.app.core.extensions.giveAccessibilityFocus
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.isAnimationEnabled
@@ -286,7 +287,7 @@ class PopupAlertManager @Inject constructor(
                     currentIsDismissed()
                 }
                 .setOnShowListener {
-                    handleAccessibility(activity)
+                    handleAccessibility(activity, animate)
                 }
                 .enableSwipeToDismiss()
                 .enableInfiniteDuration(true)
@@ -304,7 +305,7 @@ class PopupAlertManager @Inject constructor(
     }
 
     /* a11y */
-    private fun handleAccessibility(activity: Activity) {
+    private fun handleAccessibility(activity: Activity, giveFocus: Boolean) {
         activity.window.decorView.findViewById<View>(R.id.llAlertBackground)?.let { alertView ->
             alertView.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
 
@@ -317,6 +318,11 @@ class PopupAlertManager @Inject constructor(
                 currentIsDismissed()
                 Alerter.hide()
                 true
+            }
+
+            // And give focus to the alert right now, only for first display, i.e. when there is an animation.
+            if (giveFocus) {
+                alertView.giveAccessibilityFocus()
             }
         }
     }
