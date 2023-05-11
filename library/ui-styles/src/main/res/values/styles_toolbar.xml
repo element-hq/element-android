@@ -42,10 +42,6 @@
         <item name="android:textSize">12sp</item>
     </style>
 
-    <!-- Material 3 -->
-
-    <style name="Widget.Vector.Material3.Toolbar" parent="Widget.Material3.Toolbar" />
-
     <!-- CollapsingToolbar -->
 
     <style name="Widget.Vector.CollapsingToolbar" parent="Widget.Material3.CollapsingToolbar">
