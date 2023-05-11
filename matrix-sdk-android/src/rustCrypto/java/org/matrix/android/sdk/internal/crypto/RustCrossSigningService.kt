@@ -238,6 +238,6 @@ internal class RustCrossSigningService @Inject constructor(
 
     override fun checkOtherMSKTrusted(myCrossSigningInfo: MXCrossSigningInfo?, otherInfo: MXCrossSigningInfo?): UserTrustResult {
         // is this needed in rust? should be moved to internal API?
-        UserTrustResult.Failure("Not used in rust")
+        return UserTrustResult.Failure("Not used in rust")
     }
 }
