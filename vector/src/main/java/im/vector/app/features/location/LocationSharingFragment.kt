@@ -26,9 +26,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -101,12 +99,10 @@ class LocationSharingFragment :
         views.mapView.onCreate(savedInstanceState)
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
-                views.mapView.initialize(
-                        url = urlMapProvider.getMapUrl(),
-                        locationTargetChangeListener = this@LocationSharingFragment
-                )
-            }
+            views.mapView.initialize(
+                    url = urlMapProvider.getMapUrl(),
+                    locationTargetChangeListener = this@LocationSharingFragment
+            )
         }
 
         initLocateButton()

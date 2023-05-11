@@ -30,9 +30,8 @@ import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.withResumed
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -402,7 +401,9 @@ class HomeActivity :
     private fun handleStartRecoverySetup() {
         // To avoid IllegalStateException in case the transaction was executed after onSaveInstanceState
         lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.RESUMED) { navigator.open4SSetup(this@HomeActivity, SetupMode.NORMAL) }
+            withResumed {
+                navigator.open4SSetup(this@HomeActivity, SetupMode.NORMAL)
+            }
         }
     }
 
