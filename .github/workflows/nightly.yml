@@ -1,6 +1,7 @@
 name: Build and release nightly APK
 
 on:
+  workflow_dispatch:
   schedule:
     # Every nights at 4
     - cron: "0 4 * * *"
