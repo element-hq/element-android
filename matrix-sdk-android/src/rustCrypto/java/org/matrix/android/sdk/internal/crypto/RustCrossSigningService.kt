@@ -44,7 +44,7 @@ internal class RustCrossSigningService @Inject constructor(
     override suspend fun isCrossSigningVerified(): Boolean {
         return when (val identity = olmMachine.getIdentity(olmMachine.userId())) {
             is OwnUserIdentity -> identity.verified()
-            else               -> false
+            else -> false
         }
     }
 
@@ -177,7 +177,7 @@ internal class RustCrossSigningService @Inject constructor(
                 throw IllegalArgumentException("This device [$deviceId] is not known, or not yours")
             }
         } else {
-            throw  IllegalArgumentException("This device [$deviceId] is not known")
+            throw IllegalArgumentException("This device [$deviceId] is not known")
         }
     }
 
@@ -238,6 +238,6 @@ internal class RustCrossSigningService @Inject constructor(
 
     override fun checkOtherMSKTrusted(myCrossSigningInfo: MXCrossSigningInfo?, otherInfo: MXCrossSigningInfo?): UserTrustResult {
         // is this needed in rust? should be moved to internal API?
-        TODO()
+        UserTrustResult.Failure("Not used in rust")
     }
 }
