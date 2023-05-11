@@ -16,9 +16,11 @@
 
 package org.matrix.android.sdk.internal.session
 
+import io.realm.DynamicRealm
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import org.matrix.android.sdk.internal.crypto.store.db.migration.rust.ExtractMigrationDataUseCase
+import org.matrix.android.sdk.internal.crypto.store.db.migration.rust.RealmToMigrate
 import org.matrix.rustcomponents.sdk.crypto.ProgressListener
 import timber.log.Timber
 import java.io.File
@@ -40,9 +42,8 @@ class MigrateEAtoEROperation(private val migrateGroupSessions: Boolean = false) 
                         Timber.v("OnProgress: $progress/$total")
                     }
                 }
-
                 Realm.getInstance(cryptoRealm).use { realm ->
-                    extractMigrationData.extractData(realm) {
+                    extractMigrationData.extractData(RealmToMigrate.ClassicRealm(realm)) {
                         org.matrix.rustcomponents.sdk.crypto.migrate(it, rustFilesDir.path, passphrase, progressListener)
                     }
                 }
@@ -52,5 +53,26 @@ class MigrateEAtoEROperation(private val migrateGroupSessions: Boolean = false) 
             }
         }
         return rustFilesDir
+    }
+
+    fun dynamicExecute(dynamicRealm: DynamicRealm, rustFilesDir: File, passphrase: String?) {
+        if (!rustFilesDir.exists()) {
+            rustFilesDir.mkdir()
+        }
+        val extractMigrationData = ExtractMigrationDataUseCase(migrateGroupSessions)
+
+        try {
+            val progressListener = object : ProgressListener {
+                override fun onProgress(progress: Int, total: Int) {
+                    Timber.v("OnProgress: $progress/$total")
+                }
+            }
+            extractMigrationData.extractData(RealmToMigrate.DynamicRealm(dynamicRealm)) {
+                org.matrix.rustcomponents.sdk.crypto.migrate(it, rustFilesDir.path, passphrase, progressListener)
+            }
+        } catch (failure: Throwable) {
+            Timber.e(failure, "Failure while calling rust migration method")
+            throw failure
+        }
     }
 }

@@ -16,4 +16,5 @@
 
 package org.matrix.android.sdk.internal.crypto.store.db.migration.rust
 
-object ExtractMigrationDataFailure : java.lang.RuntimeException("Can't proceed with migration, crypto store is empty or some necessary data is missing.")
+data class ExtractMigrationDataFailure(override val cause: Throwable) :
+        java.lang.RuntimeException("Can't proceed with migration, crypto store is empty or some necessary data is missing.", cause)

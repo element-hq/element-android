@@ -44,7 +44,6 @@ import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
 import org.matrix.android.sdk.api.session.typing.TypingUsersTracker
 import org.matrix.android.sdk.api.util.md5
-import org.matrix.android.sdk.internal.crypto.RustEncryptionConfiguration
 import org.matrix.android.sdk.internal.crypto.secrets.DefaultSharedSecretStorageService
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultRedactEventTask
 import org.matrix.android.sdk.internal.crypto.tasks.RedactEventTask
@@ -53,7 +52,6 @@ import org.matrix.android.sdk.internal.database.RealmSessionProvider
 import org.matrix.android.sdk.internal.database.SessionRealmConfigurationFactory
 import org.matrix.android.sdk.internal.di.Authenticated
 import org.matrix.android.sdk.internal.di.CacheDirectory
-import org.matrix.android.sdk.internal.di.CryptoDatabase
 import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.SessionDownloadsDirectory
@@ -100,11 +98,9 @@ import org.matrix.android.sdk.internal.session.typing.DefaultTypingUsersTracker
 import org.matrix.android.sdk.internal.session.user.accountdata.DefaultSessionAccountDataService
 import org.matrix.android.sdk.internal.session.widgets.DefaultWidgetURLFormatter
 import retrofit2.Retrofit
-import timber.log.Timber
 import java.io.File
 import javax.inject.Provider
 import javax.inject.Qualifier
-import kotlin.system.measureTimeMillis
 
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
@@ -189,17 +185,8 @@ internal abstract class SessionModule {
         @SessionScope
         fun providesRustCryptoFilesDir(
                 @SessionFilesDirectory parent: File,
-                @CryptoDatabase realmConfiguration: RealmConfiguration,
-                rustEncryptionConfiguration: RustEncryptionConfiguration,
         ): File {
-            val target = File(parent, "rustFlavor")
-            val file: File
-            measureTimeMillis {
-                file = MigrateEAtoEROperation().execute(realmConfiguration, target, rustEncryptionConfiguration.getDatabasePassphrase())
-            }.let { duration ->
-                Timber.v("Migrating to ER in $duration ms")
-            }
-            return file
+            return File(parent, "rustFlavor")
         }
 
         @JvmStatic

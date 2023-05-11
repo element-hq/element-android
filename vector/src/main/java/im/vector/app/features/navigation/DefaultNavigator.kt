@@ -241,12 +241,8 @@ class DefaultNavigator @Inject constructor(
             }
 
             if (context is AppCompatActivity) {
-                TODO()
-//                VerificationBottomSheet.withArgs(
-//                        roomId = null,
-//                        otherUserId = otherUserId,
-//                        transactionId = sasTransactionId
-//                ).show(context.supportFragmentManager, "REQPOP")
+               SelfVerificationBottomSheet.forTransaction(tx.transactionId)
+                       .show(context.supportFragmentManager, "VERIF")
             }
         }
     }
@@ -254,16 +250,14 @@ class DefaultNavigator @Inject constructor(
     override fun requestSessionVerification(context: Context, otherSessionId: String) {
         coroutineScope.launch {
             val session = sessionHolder.getSafeActiveSession() ?: return@launch
-//            val pr =
-            session.cryptoService().verificationService().requestSelfKeyVerification(
-                    supportedVerificationMethodsProvider.provide()
+            val request = session.cryptoService().verificationService().requestDeviceVerification(
+                    supportedVerificationMethodsProvider.provide(),
+                    session.myUserId,
+                    otherSessionId
             )
             if (context is AppCompatActivity) {
-                TODO()
-//                VerificationBottomSheet.withArgs(
-//                        otherUserId = session.myUserId,
-//                        transactionId = pr.requestId()
-//                ).show(context.supportFragmentManager)
+                SelfVerificationBottomSheet.forTransaction(request.transactionId)
+                        .show(context.supportFragmentManager, "VERIF")
             }
         }
     }

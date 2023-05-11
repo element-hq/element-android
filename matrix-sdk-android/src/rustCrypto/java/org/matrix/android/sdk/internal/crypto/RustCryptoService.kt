@@ -266,6 +266,15 @@ internal class RustCryptoService @Inject constructor(
             Timber.tag(loggerTag.value).v("Failed create an Olm machine: $throwable")
         }
 
+        // After the initial rust migration the current keys & signature might not be there
+        // The session is then in an invalid state and can fire unexpected verify popups
+        // this will only do network request once.
+        cryptoCoroutineScope.launch(coroutineDispatchers.io) {
+            tryOrNull {
+                downloadKeysIfNeeded(listOf(myUserId), false)
+            }
+        }
+
         // We try to enable key backups, if the backup version on the server is trusted,
         // we're gonna continue backing up.
         cryptoCoroutineScope.launch {
