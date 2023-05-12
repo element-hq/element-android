@@ -77,14 +77,14 @@ def getNightlyUniversalApkPath() {
 }
 
 def getFirebaseAppId() {
-    def taskNames = gradle.getStartParameter().taskNames.toString()
-    if(taskNames.contains("RustCryptoNightly")) {
-        return "1:912726360885:android:94fb99347eaa36d100427c"
-    } else if (taskNames.contains("KotlinCryptoNightly")) {
+//    def taskNames = gradle.getStartParameter().taskNames.toString()
+//    if(taskNames.contains("RustCryptoNightly")) {
+//        return "1:912726360885:android:94fb99347eaa36d100427c"
+//    } else if (taskNames.contains("KotlinCryptoNightly")) {
         return "1:912726360885:android:efd8545af52a9f9300427c"
-    } else {
-        return ""
-    }
+//    } else {
+//        return ""
+//    }
 }
 static def gitRevision() {
     def cmd = "git rev-parse --short=8 HEAD"
