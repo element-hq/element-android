@@ -776,7 +776,7 @@
     <string name="send_bug_report_include_key_share_history">أرسل سجل طلبات مشاركة المفاتيح</string>
     <string name="audio_meeting">ابدأ مقابلة صوتية</string>
     <string name="video_meeting">ابدأ مقابلة فيديو</string>
-    <string name="notice_end_to_end_unknown_algorithm">%1$s فعّل تشفير طرف لطرف (لم يُتعرف على خوارزمية %2$s).</string>
+    <string name="notice_end_to_end_unknown_algorithm">%1$s فعّل تعمية طرف لطرف (لم يُتعرف على خوارزمية %2$s).</string>
     <string name="notice_end_to_end_ok_by_you">عطلتّ تشفير طرف لطرف.</string>
     <string name="notice_end_to_end_ok">%1$s فعّل تشفير طرف لطرف.</string>
     <string name="room_permissions_change_topic">غيّر الموضوع</string>
@@ -1195,4 +1195,19 @@
         <item quantity="many">العديد</item>
         <item quantity="other">أخرى</item>
     </plurals>
+    <string name="labs_enable_new_app_layout_title">فعّل التخطيط الجديد</string>
+    <string name="home_layout_preferences_sort_name">A - Z</string>
+    <string name="home_layout_preferences_sort_activity">النشاط</string>
+    <string name="home_layout_preferences_sort_by">رتب حسب</string>
+    <string name="home_layout_preferences_recents">أظهر الأخيرة</string>
+    <string name="home_layout_preferences_filters">أظهر المرشحات</string>
+    <string name="action_stop">نعم توقف</string>
+    <string name="action_deselect_all">ألغ تحديد الكل</string>
+    <string name="action_select_all">حدد الكل</string>
+    <string name="action_got_it">فهمتُ</string>
+    <string name="action_next">التالي</string>
+    <string name="time_unit_second_short">ثا</string>
+    <string name="time_unit_minute_short">د</string>
+    <string name="time_unit_hour_short">سا</string>
+    <string name="notice_voice_broadcast_ended">أنهى %1$s البث الصوتي.</string>
 </resources>

@@ -368,7 +368,7 @@
     <plurals name="room_title_members">
         <item quantity="other">%d thành viên</item>
     </plurals>
-    <string name="room_jump_to_first_unread">Nhảy đến tin nhắn chưa đọc.</string>
+    <string name="room_jump_to_first_unread">Nhảy đến tin chưa đọc</string>
     <string name="list_members">Các thành viên</string>
     <string name="action_reject">Từ chối</string>
     <string name="action_join">Tham gia</string>
@@ -414,8 +414,8 @@
     <string name="settings_room_directory_show_all_rooms">Hiện các phòng có nội dung phản cảm</string>
     <string name="settings_category_room_directory">Danh sách phòng</string>
     <string name="system_theme">Mặc định hệ thống</string>
-    <string name="notice_end_to_end_unknown_algorithm_by_you">Bạn đã bật mã hoá đầu cuối (thuật toán không được nhận ra %1$s).</string>
-    <string name="notice_end_to_end_unknown_algorithm">%1$s đã bật mã hoá đầu cuối (thuật toán không được nhận ra %2$s).</string>
+    <string name="notice_end_to_end_unknown_algorithm_by_you">Bạn đã bật mã hoá đầu cuối (thuật toán %1$s không rõ).</string>
+    <string name="notice_end_to_end_unknown_algorithm">%1$s đã bật mã hoá đầu cuối (thuật toán %2$s không rõ).</string>
     <string name="notice_end_to_end_ok_by_you">Bạn đã bật mã hoá đầu cuối.</string>
     <string name="notice_end_to_end_ok">%1$s đã bật mã hoá đầu cuối.</string>
     <string name="notice_direct_room_guest_access_forbidden_by_you">Bạn đã ngăn chặn khách tham gia phòng.</string>
@@ -495,7 +495,7 @@
 \nĐang nhập các phòng đã mời vào</string>
     <string name="initial_sync_start_importing_account_joined_rooms">Đồng bộ ban đầu:
 \nTải hội thoại của bạn
-\nNếu bạn đã tham gia nhiều phòng, điều này có thể mất một thời gian.</string>
+\nNếu bạn đã tham gia nhiều phòng, điều này có thể mất một thời gian</string>
     <string name="initial_sync_start_importing_account_rooms">Đồng bộ ban đầu:
 \nĐang nhập các phòng</string>
     <string name="initial_sync_start_importing_account_crypto">Đồng bộ ban đầu:
@@ -1229,7 +1229,7 @@
     <string name="upgrade_room_no_power_to_manage">Bạn cần sự cho phép để nâng cấp một phòng</string>
     <string name="upgrade_room_update_parent_space">Tự động cập nhật Space cha mẹ</string>
     <string name="upgrade_room_auto_invite">Tự động mời người dùng</string>
-    <string name="upgrade_public_room_from_to">Bạn sẽ nâng cấp phòng này từ %1$s lên %2$s</string>
+    <string name="upgrade_public_room_from_to">Bạn sẽ nâng cấp phòng này từ %1$s lên %2$s.</string>
     <string name="upgrade_room_warning">Nâng cấp phòng là một hành động nâng cao và thường được khuyến khích khi phòng không ổn định do lỗi, thiếu tính năng hoặc lỗ hổng bảo mật.
 \nĐiều này thường chỉ ảnh hưởng đến cách phòng được xử lý trên máy chủ.</string>
     <string name="upgrade_private_room">Nâng cấp phòng riêng tư</string>
@@ -1264,7 +1264,7 @@
     <string name="space_add_existing_rooms">Thêm các phòng và Space hiện có</string>
     <string name="space_leave_prompt_msg_as_admin">Bạn là quản trị viên duy nhất của không gian này. Rời khỏi nó sẽ có nghĩa là không ai có quyền kiểm soát nó.</string>
     <string name="space_leave_prompt_msg_private">Bạn sẽ không thể tham gia lại trừ khi bạn được mời lại.</string>
-    <string name="space_leave_prompt_msg_only_you">Bạn là người duy nhất ở đây. Nếu bạn rời đi, sẽ không ai có thể tham gia trong tương lai, kể cả bạn</string>
+    <string name="space_leave_prompt_msg_only_you">Bạn là người duy nhất ở đây. Nếu bạn rời, sẽ không ai có thể tham gia trong tương lai, kể cả bạn.</string>
     <string name="space_leave_prompt_msg_with_name">Bạn có chắc chắn muốn rời khỏi %s không\?</string>
     <string name="leave_space">Rời khỏi</string>
     <string name="space_add_child_title">Thêm phòng</string>
@@ -1559,7 +1559,7 @@
     <string name="room_created_summary_item">%s đã tạo và cấu hình phòng.</string>
     <string name="encryption_unknown_algorithm_tile_description">Mã hóa được sử dụng bởi phòng này không được hỗ trợ</string>
     <string name="encryption_not_enabled">Mã hóa không được bật</string>
-    <string name="direct_room_encryption_enabled_tile_description">Tin nhắn trong phòng này được mã hóa đầu cuối</string>
+    <string name="direct_room_encryption_enabled_tile_description">Tin nhắn trong phòng này được mã hóa đầu cuối.</string>
     <string name="encryption_enabled_tile_description">Tin nhắn trong phòng này được mã hóa đầu cuối. Tìm hiểu thêm và xác minh người dùng trong hồ sơ của họ.</string>
     <string name="encryption_enabled">Mã hóa được bật</string>
     <string name="bootstrap_cancel_text">Nếu bạn hủy ngay bây giờ, bạn có thể mất tin nhắn và dữ liệu được mã hóa nếu bạn mất quyền truy cập vào thông tin đăng nhập của mình.
@@ -1753,7 +1753,7 @@
     <string name="login_registration_not_supported">Ứng dụng không thể tạo tài khoản trên homeerver này.
 \n
 \nBạn có muốn đăng ký bằng máy khách web không\?</string>
-    <string name="login_registration_disabled">Xin lỗi, máy chủ này không chấp nhận tài khoản mới</string>
+    <string name="login_registration_disabled">Xin lỗi, máy chủ này không chấp nhận tài khoản mới.</string>
     <string name="login_mode_not_supported">Ứng dụng không thể đăng nhập vào homeerver này. Homeerver hỗ trợ loại signin sau đây:%1$s.
 \n
 \nBạn có muốn đăng nhập bằng máy khách web không\?</string>
@@ -1788,7 +1788,7 @@
     <string name="call_tile_call_back">Gọi lại</string>
     <string name="call_tile_ended">Cuộc gọi này đã kết thúc</string>
     <string name="call_tile_other_declined">%1$s đã từ chối cuộc gọi này</string>
-    <string name="call_tile_you_declined_this_call">Bạn đã từ chối cuộc gọi này.</string>
+    <string name="call_tile_you_declined_this_call">Bạn đã từ chối cuộc gọi này</string>
     <string name="settings_text_message_sent_hint">Mã</string>
     <string name="settings_text_message_sent">Thư văn bản đã được gửi đến %s. Vui lòng nhập mã xác minh mà nó chứa.</string>
     <string name="settings_discovery_no_terms">Máy chủ xác thực bạn đã chọn không có bất kỳ điều khoản dịch vụ nào. Chỉ tiếp tục nếu bạn tin tưởng chủ sở hữu dịch vụ</string>
@@ -1825,7 +1825,7 @@
     <string name="create_room_federation_error">Căn phòng đã được tạo ra, nhưng một số lời mời đã không được gửi vì lý do sau:
 \n
 \n%s</string>
-    <string name="create_room_public_description">Bất cứ ai cũng có thể tham gia vào căn phòng này.</string>
+    <string name="create_room_public_description">Bất cứ ai cũng có thể tham gia phòng này</string>
     <string name="create_room_public_title">Công cộng</string>
     <string name="create_room_settings_section">Cài đặt phòng</string>
     <string name="create_room_topic_hint">Chủ đề</string>
@@ -1842,7 +1842,7 @@
     <string name="please_wait">Vui lòng chờ…</string>
     <string name="change_room_directory_network">Thay đổi mạng</string>
     <string name="action_change">Thay đổi</string>
-    <string name="error_no_network">Không có mạng. Vui lòng kiểm tra kết nối internet</string>
+    <string name="error_no_network">Không có mạng. Vui lòng kiểm tra kết nối Internet.</string>
     <string name="create_new_space">Tạo Space mới</string>
     <string name="create_new_room">Tạo phòng mới</string>
     <string name="malformed_message">Sự kiện bị hỏng, không thể hiển thị</string>
@@ -1974,10 +1974,10 @@
 \n
 \nChúng tôi khuyên bạn nên thay đổi mật khẩu và khóa khôi phục trong Cài đặt ngay lập tức.</string>
     <string name="verify_cancel_other">Bạn sẽ không xác minh %1$s (%2$s) nếu bạn hủy ngay. Bắt đầu lại trong hồ sơ người dùng của họ.</string>
-    <string name="verify_cancel_self_verification_from_trusted">Nếu bạn hủy, bạn sẽ không thể đọc tin nhắn được mã hóa trên thiết bị mới của mình và những người dùng khác sẽ không tin tưởng nó.</string>
-    <string name="verify_cancel_self_verification_from_untrusted">Nếu bạn hủy, bạn sẽ không thể đọc tin nhắn được mã hóa trên thiết bị này và những người dùng khác sẽ không tin tưởng nó.</string>
+    <string name="verify_cancel_self_verification_from_trusted">Nếu bạn hủy, bạn sẽ không thể đọc tin nhắn được mã hóa trên thiết bị mới của mình và những người dùng khác sẽ không tin tưởng nó</string>
+    <string name="verify_cancel_self_verification_from_untrusted">Nếu bạn hủy, bạn sẽ không thể đọc tin nhắn được mã hóa trên thiết bị này và những người dùng khác sẽ không tin tưởng nó</string>
     <string name="verify_new_session_compromized">Tài khoản của bạn có thể bị xâm phạm</string>
-    <string name="verify_new_session_was_not_me">Đây không phải là tôi.</string>
+    <string name="verify_new_session_was_not_me">Không phải tôi</string>
     <string name="verify_new_session_notice">Sử dụng phiên này để xác minh phiên mới của bạn, cấp cho nó quyền truy cập vào các tin nhắn được mã hóa.</string>
     <string name="new_session">Đăng nhập mới. Đây có phải là bạn không\?</string>
     <string name="refresh">Làm tươi</string>
@@ -2051,7 +2051,7 @@
     <string name="resource_limit_soft_default">Homeerver này đã vượt quá một trong những giới hạn tài nguyên của nó vì vậy <b>một số người dùng sẽ không thể đăng nhập</b>.</string>
     <string name="resource_limit_contact_admin">liên hệ với người quản trị dịch vụ của bạn</string>
     <string name="room_tombstone_predecessor_link">Bấm vào đây để xem tin nhắn cũ hơn</string>
-    <string name="room_tombstone_continuation_description">Phòng này là sự tiếp nối của một cuộc trò chuyện khác.</string>
+    <string name="room_tombstone_continuation_description">Phòng này tiếp nối một cuộc trò chuyện khác</string>
     <string name="room_tombstone_continuation_link">Cuộc trò chuyện tiếp tục ở đây</string>
     <string name="room_tombstone_versioned_description">Phòng này đã được thay thế và không còn hoạt động nữa.</string>
     <string name="error_empty_field_your_password">Vui lòng nhập mật khẩu của bạn.</string>
@@ -2106,7 +2106,7 @@
 \nTên phiên: %1$s
 \nLần nhìn thấy lần cuối: %2$s
 \nNếu bạn không đăng nhập vào phiên khác, hãy bỏ qua yêu cầu này.</string>
-    <string name="your_unverified_device_requesting">Phiên chưa được xác minh của bạn \'%s\' đang yêu cầu khóa mã hóa</string>
+    <string name="your_unverified_device_requesting">Phiên chưa được xác thực của bạn \'%s\' đang yêu cầu khóa mã hóa.</string>
     <string name="you_added_a_new_device_with_info">Một phiên mới đang yêu cầu các khóa mã hóa.
 \nTên phiên: %1$s
 \nLần nhìn thấy lần cuối: %2$s
@@ -2120,7 +2120,7 @@
     <string name="room_add_matrix_apps">Thêm ứng dụng Matrix</string>
     <string name="widget_integration_missing_parameter">Một tham số cần thiết bị thiếu.</string>
     <string name="widget_integration_room_not_visible">Phòng %s không hiển thị.</string>
-    <string name="widget_integration_missing_user_id">Thiếu user_id trong yêu cầu</string>
+    <string name="widget_integration_missing_user_id">Thiếu user_id trong yêu cầu.</string>
     <string name="widget_integration_missing_room_id">Thiếu room_id trong yêu cầu.</string>
     <string name="widget_integration_no_permission_in_room">Bạn không được phép làm điều đó trong căn phòng này.</string>
     <string name="widget_integration_must_be_in_room">Bạn không ở trong căn phòng này.</string>
@@ -2269,4 +2269,55 @@
     <string name="unifiedpush_getdistributors_dialog_title">Chọn cách nhận thông báo</string>
     <string name="settings_notification_method">Phương thức thông báo</string>
     <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">Đặt lại phương thức thông báo</string>
+    <string name="action_proceed_to_reset">Tiến hành đặt lại</string>
+    <string name="action_view_threads">Xem các chủ đề</string>
+    <plurals name="x_selected">
+        <item quantity="other">Đã chọn %1$d</item>
+    </plurals>
+    <string name="room_unsupported_e2e_algorithm_as_admin">Thiết lập mã hóa sai nên bạn không thể gửi tin nhắn. Bấm vào để mở cài đặt.</string>
+    <string name="room_unsupported_e2e_algorithm">Thiết lập mã hóa sai nên bạn không thể gửi tin nhắn. Liên hệ quản trị viên để khôi phục mã hóa về trạng thái hợp lệ.</string>
+    <string name="room_notification_more_than_two_users_are_typing">%1$s, %2$s và nhiều người khác</string>
+    <string name="room_notification_two_users_are_typing">%1$s và %2$s</string>
+    <string name="permissions_rationale_msg_notification">${app_name} cần được cấp quyền để hiển thị thông báo. Thông báo có thể hiển thị tin nhắn, lời mời, v.v .
+\n
+\nHãy đồng ý ở cửa sổ bật lên tiếp theo để có thể hiển thị thông báo.</string>
+    <string name="auth_reset_password_error_unverified">Địa chỉ thư điện tử chưa được xác nhận, kiểm tra hộp thư của bạn</string>
+    <string name="call_stop_screen_sharing">Ngừng chia sẻ màn hình</string>
+    <string name="call_start_screen_sharing">Chia sẻ màn hình</string>
+    <string name="invites_empty_title">Không có gì mới.</string>
+    <string name="invites_title">Lời mời</string>
+    <string name="home_layout_preferences_sort_name">từ A - Z</string>
+    <string name="home_layout_preferences_sort_activity">Hoạt động</string>
+    <string name="home_layout_preferences_sort_by">Sắp xếp theo</string>
+    <string name="home_layout_preferences_recents">Gần đây</string>
+    <string name="home_layout_preferences_filters">Xem các bộ lọc</string>
+    <string name="action_thread_view_in_room">Xem trong phòng</string>
+    <string name="action_stop">Ngừng lại</string>
+    <string name="action_deselect_all">Loại tất cả</string>
+    <string name="action_select_all">Chọn tất cả</string>
+    <string name="action_got_it">Hiểu rồi</string>
+    <string name="action_next">Tiếp</string>
+    <string name="action_learn_more">Tìm hiểu thêm</string>
+    <string name="action_try_it_out">Hãy thử nó</string>
+    <string name="action_disable">Vô hiệu</string>
+    <string name="time_unit_second_short">giây</string>
+    <string name="time_unit_minute_short">phút</string>
+    <string name="time_unit_hour_short">g</string>
+    <string name="initial_sync_request_reason_unignored_users">- Một số người dùng đã ngừng bị ẩn</string>
+    <string name="initial_sync_request_content">${app_name} cần xóa bộ nhớ đệm để cập nhật, do:
+\n%s
+\n
+\nỨng dụng sẽ khởi động lại và có thể mất thời gian.</string>
+    <string name="initial_sync_request_title">Bắt đầu yêu cầu đồng bộ</string>
+    <string name="room_error_access_unauthorized">Bạn không được phép tham gia phòng này</string>
+    <string name="explore_rooms">Khám phá các phòng</string>
+    <string name="change_space">Thay đổi Space</string>
+    <string name="create_room">Tạo phòng</string>
+    <string name="start_chat">Bắt đầu trò chuyện</string>
+    <string name="all_chats">Tất cả cuộc trò chuyện</string>
+    <string name="notice_voice_broadcast_ended_by_you">Bạn đã ngừng phát thanh.</string>
+    <string name="notice_voice_broadcast_ended">%1$s kết thúc phát thanh.</string>
+    <plurals name="notice_room_server_acl_changes">
+        <item quantity="other">%d thay đổi về danh sách truy cập</item>
+    </plurals>
 </resources>
