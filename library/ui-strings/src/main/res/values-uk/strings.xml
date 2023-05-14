@@ -3069,4 +3069,5 @@
     <string name="settings_acceptable_use_policy">Політика прийнятного користування</string>
     <string name="action_proceed_to_reset">Перейти до скидання</string>
     <string name="settings_crypto_version">Криптоверсія</string>
+    <string name="notice_display_name_changed_to">%1$s змінює своє ім\'я на %2$s</string>
 </resources>
