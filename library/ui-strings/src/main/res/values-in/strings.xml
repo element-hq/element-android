@@ -2891,4 +2891,5 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="settings_acceptable_use_policy">Kebijakan Penggunaan Wajar</string>
     <string name="settings_crypto_version">Versi kripto</string>
     <string name="action_proceed_to_reset">Lanjutkan mengatur ulang</string>
+    <string name="notice_display_name_changed_to">%1$s mengubah nama tampilannya ke %2$s</string>
 </resources>
