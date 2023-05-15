@@ -2949,4 +2949,5 @@
     <string name="pill_message_from_unknown_user">Sõnum</string>
     <string name="pill_message_from_user">Sõnum kasutajalt %s</string>
     <string name="settings_crypto_version">Krüptoteekide versioon</string>
+    <string name="notice_display_name_changed_to">%1$s muutis oma uueks kuvatavaks nimeks %2$s</string>
 </resources>
