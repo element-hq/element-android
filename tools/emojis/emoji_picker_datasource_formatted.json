@@ -3368,7 +3368,7 @@
                 "creepy",
                 "devil",
                 "demon",
-                "japanese"
+                "japanese_ogre"
             ]
         },
         "goblin": {
@@ -3385,7 +3385,7 @@
                 "mask",
                 "scary",
                 "creepy",
-                "japanese"
+                "japanese_goblin"
             ]
         },
         "ghost": {
@@ -7459,6 +7459,7 @@
                 "bicycle",
                 "biking",
                 "cyclist",
+                "bike",
                 "sport",
                 "move"
             ]
@@ -7471,8 +7472,8 @@
                 "biking",
                 "cyclist",
                 "man",
-                "sports",
                 "bike",
+                "sports",
                 "exercise",
                 "hipster"
             ]
@@ -7485,8 +7486,8 @@
                 "biking",
                 "cyclist",
                 "woman",
-                "sports",
                 "bike",
+                "sports",
                 "exercise",
                 "hipster",
                 "female"
@@ -10524,7 +10525,7 @@
                 "schmear",
                 "food",
                 "bread",
-                "jewish"
+                "jewish_bakery"
             ]
         },
         "pancakes": {
@@ -18549,6 +18550,7 @@
                 "forbidden",
                 "no",
                 "prohibited",
+                "no_bikes",
                 "cyclist",
                 "circle"
             ]
