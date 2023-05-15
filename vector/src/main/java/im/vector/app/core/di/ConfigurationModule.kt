@@ -48,7 +48,11 @@ object ConfigurationModule {
             } else {
                 Config.NIGHTLY_ANALYTICS_CONFIG
             }
-            "release" -> Config.RELEASE_ANALYTICS_CONFIG
+            "release" -> if (BuildConfig.FLAVOR == "rustCrypto") {
+                Config.RELEASE_R_ANALYTICS_CONFIG
+            } else {
+                Config.RELEASE_ANALYTICS_CONFIG
+            }
             else -> throw IllegalStateException("Unhandled build type: ${BuildConfig.BUILD_TYPE}")
         }
         return when (config) {
