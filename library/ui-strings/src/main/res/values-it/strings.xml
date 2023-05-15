@@ -2940,4 +2940,5 @@
     <string name="settings_acceptable_use_policy">Politica di utilizzo accettabile</string>
     <string name="action_proceed_to_reset">Procedi con la reimpostazione</string>
     <string name="settings_crypto_version">Versione crittografia</string>
+    <string name="notice_display_name_changed_to">%1$s ha cambiato il nome visualizzato in %2$s</string>
 </resources>
