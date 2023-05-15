@@ -52,5 +52,6 @@ class BootstrapWaitingFragment :
                 views.bootstrapDescriptionText.isVisible = false
             }
         }
+        views.bootstrapDescriptionText.giveAccessibilityFocusOnce()
     }
 }

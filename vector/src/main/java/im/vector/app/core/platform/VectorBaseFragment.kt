@@ -45,6 +45,7 @@ import im.vector.app.R
 import im.vector.app.core.di.ActivityEntryPoint
 import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.error.ErrorFormatter
+import im.vector.app.core.extensions.giveAccessibilityFocus
 import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.utils.ToolbarConfig
@@ -317,5 +318,20 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
                 .setMessage(errorFormatter.toHumanReadable(throwable))
                 .setPositiveButton(R.string.ok, null)
                 .show()
+    }
+
+    /* ==========================================================================================
+     * Accessibility - a11y
+     * ========================================================================================== */
+
+    private var hasBeenAccessibilityFocused = false
+
+    /**
+     * Ensure the View get the accessibility focus. This method has effect only once per fragment instance.
+     */
+    protected fun View.giveAccessibilityFocusOnce() {
+        if (hasBeenAccessibilityFocused) return
+        hasBeenAccessibilityFocused = true
+        giveAccessibilityFocus()
     }
 }

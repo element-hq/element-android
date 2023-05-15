@@ -83,6 +83,9 @@
         <item name="android:textViewStyle">@style/Widget.Vector.TextView.Body</item>
         <item name="materialButtonStyle">@style/Widget.Vector.Button</item>
         <item name="toolbarStyle">@style/Widget.Vector.Toolbar</item>
+        <item name="collapsingToolbarLayoutStyle">@style/Widget.Vector.CollapsingToolbar</item>
+        <item name="collapsingToolbarLayoutMediumStyle">@style/Widget.Vector.CollapsingToolbar.Medium</item>
+        <item name="collapsingToolbarLayoutLargeStyle">@style/Widget.Vector.CollapsingToolbar.Large</item>
         <item name="bottomNavigationStyle">@style/BottomNavigation.Vector</item>
         <item name="searchViewStyle">@style/Widget.Vector.SearchView</item>
         <item name="textInputStyle">@style/Widget.Vector.TextInputLayout</item>

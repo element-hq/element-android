@@ -68,6 +68,7 @@ class BootstrapSetupRecoveryKeyFragment :
             // Choose between create a passphrase or use a recovery key
             renderBackupMethodActions(firstFormStep.methods)
         }
+        views.bootstrapSetupSecureText.giveAccessibilityFocusOnce()
     }
 
     private fun renderStateWithExistingKeyBackup() = with(views) {

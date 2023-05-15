@@ -12,6 +12,9 @@
         <item name="subtitleTextAppearance">@style/TextAppearance.Vector.Widget.ActionBarSubTitle</item>
 
         <item name="navigationIconTint">?vctr_content_secondary</item>
+
+        <!-- a11y -->
+        <item name="android:touchscreenBlocksFocus">false</item>
     </style>
 
     <!-- Default toolbar style -->
@@ -39,14 +42,24 @@
         <item name="android:textSize">12sp</item>
     </style>
 
-    <!-- Material 3 -->
+    <!-- CollapsingToolbar -->
 
-    <style name="Widget.Vector.Material3.Toolbar" parent="Widget.Material3.Toolbar" />
+    <style name="Widget.Vector.CollapsingToolbar" parent="Widget.Material3.CollapsingToolbar">
+        <!-- a11y -->
+        <item name="android:touchscreenBlocksFocus">false</item>
+    </style>
 
-    <style name="Widget.Vector.Material3.CollapsingToolbar.Medium" parent="Widget.Material3.CollapsingToolbar.Medium">
+    <style name="Widget.Vector.CollapsingToolbar.Medium" parent="Widget.Material3.CollapsingToolbar.Medium">
         <item name="expandedTitleTextAppearance">@style/TextAppearance.Vector.Title.Medium</item>
         <item name="expandedTitleMarginBottom">20dp</item>
         <item name="collapsedTitleTextAppearance">@style/TextAppearance.Vector.Headline.Bold</item>
+        <!-- a11y -->
+        <item name="android:touchscreenBlocksFocus">false</item>
+    </style>
+
+    <style name="Widget.Vector.CollapsingToolbar.Large" parent="Widget.Material3.CollapsingToolbar.Large">
+        <!-- a11y -->
+        <item name="android:touchscreenBlocksFocus">false</item>
     </style>
 
 </resources>
