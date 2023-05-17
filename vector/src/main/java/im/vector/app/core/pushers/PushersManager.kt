@@ -74,7 +74,7 @@ class PushersManager @Inject constructor(
             deviceDisplayName = getDeviceInfoUseCase.execute().displayName().orEmpty(),
             url = gateway,
             enabled = true,
-            deviceId = activeSessionHolder.getActiveSession().sessionParams.deviceId ?: "MOBILE",
+            deviceId = activeSessionHolder.getActiveSession().sessionParams.deviceId,
             append = false,
             withEventIdOnly = true,
     )
@@ -87,7 +87,7 @@ class PushersManager @Inject constructor(
                 lang = localeProvider.current().language,
                 emailBranding = appName,
                 appDisplayName = appName,
-                deviceDisplayName = currentSession.sessionParams.deviceId ?: "MOBILE"
+                deviceDisplayName = currentSession.sessionParams.deviceId
         )
     }
 

@@ -32,9 +32,8 @@ import im.vector.app.features.createdirect.CreateDirectRoomViewModel
 import im.vector.app.features.crypto.keysbackup.settings.KeysBackupSettingsViewModel
 import im.vector.app.features.crypto.quads.SharedSecureStorageViewModel
 import im.vector.app.features.crypto.recover.BootstrapSharedViewModel
-import im.vector.app.features.crypto.verification.VerificationBottomSheetViewModel
-import im.vector.app.features.crypto.verification.choose.VerificationChooseMethodViewModel
-import im.vector.app.features.crypto.verification.emoji.VerificationEmojiCodeViewModel
+import im.vector.app.features.crypto.verification.self.SelfVerificationViewModel
+import im.vector.app.features.crypto.verification.user.UserVerificationViewModel
 import im.vector.app.features.devtools.RoomDevToolViewModel
 import im.vector.app.features.discovery.DiscoverySettingsViewModel
 import im.vector.app.features.discovery.change.SetIdentityServerViewModel
@@ -514,15 +513,10 @@ interface MavericksViewModelModule {
     @MavericksViewModelKey(MessageActionsViewModel::class)
     fun messageActionsViewModelFactory(factory: MessageActionsViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 
-    @Binds
-    @IntoMap
-    @MavericksViewModelKey(VerificationChooseMethodViewModel::class)
-    fun verificationChooseMethodViewModelFactory(factory: VerificationChooseMethodViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
-
-    @Binds
-    @IntoMap
-    @MavericksViewModelKey(VerificationEmojiCodeViewModel::class)
-    fun verificationEmojiCodeViewModelFactory(factory: VerificationEmojiCodeViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+//    @Binds
+//    @IntoMap
+//    @MavericksViewModelKey(VerificationChooseMethodViewModel::class)
+//    fun verificationChooseMethodViewModelFactory(factory: VerificationChooseMethodViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 
     @Binds
     @IntoMap
@@ -594,10 +588,20 @@ interface MavericksViewModelModule {
     @MavericksViewModelKey(BootstrapSharedViewModel::class)
     fun bootstrapSharedViewModelFactory(factory: BootstrapSharedViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 
+//    @Binds
+//    @IntoMap
+//    @MavericksViewModelKey(VerificationBottomSheetViewModel::class)
+//    fun verificationBottomSheetViewModelFactory(factory: VerificationBottomSheetViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
     @Binds
     @IntoMap
-    @MavericksViewModelKey(VerificationBottomSheetViewModel::class)
-    fun verificationBottomSheetViewModelFactory(factory: VerificationBottomSheetViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+    @MavericksViewModelKey(UserVerificationViewModel::class)
+    fun userVerificationBottomSheetViewModelFactory(factory: UserVerificationViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(SelfVerificationViewModel::class)
+    fun selfVerificationBottomSheetViewModelFactory(factory: SelfVerificationViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 
     @Binds
     @IntoMap

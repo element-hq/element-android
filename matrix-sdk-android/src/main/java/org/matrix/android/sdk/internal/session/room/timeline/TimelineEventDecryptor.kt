@@ -42,7 +42,7 @@ internal class TimelineEventDecryptor @Inject constructor(
 ) {
 
     private val newSessionListener = object : NewSessionListener {
-        override fun onNewSession(roomId: String?, senderKey: String, sessionId: String) {
+        override fun onNewSession(roomId: String?, sessionId: String) {
             synchronized(unknownSessionsFailure) {
                 unknownSessionsFailure[sessionId]
                         ?.toList()
@@ -130,8 +130,9 @@ internal class TimelineEventDecryptor @Inject constructor(
             return
         }
         try {
-            // note: runBlocking should be used here while we are in realm single thread executor, to avoid thread switching
-            val result = runBlocking { cryptoService.decryptEvent(request.event, timelineId) }
+            val result = runBlocking {
+                cryptoService.decryptEvent(request.event, timelineId)
+            }
             Timber.v("Successfully decrypted event ${event.eventId}")
             realm.executeTransaction {
                 val eventId = event.eventId ?: return@executeTransaction

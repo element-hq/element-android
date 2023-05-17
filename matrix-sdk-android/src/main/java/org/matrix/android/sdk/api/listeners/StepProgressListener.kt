@@ -24,6 +24,7 @@ interface StepProgressListener {
     sealed class Step {
         data class ComputingKey(val progress: Int, val total: Int) : Step()
         object DownloadingKey : Step()
+        data class DecryptingKey(val progress: Int, val total: Int) : Step()
         data class ImportingKey(val progress: Int, val total: Int) : Step()
     }
 

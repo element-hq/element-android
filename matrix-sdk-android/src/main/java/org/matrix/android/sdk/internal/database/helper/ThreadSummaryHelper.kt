@@ -210,7 +210,7 @@ private fun decryptIfNeeded(cryptoService: CryptoService?, eventEntity: EventEnt
                     senderKey = result.senderCurve25519Key,
                     keysClaimed = result.claimedEd25519Key?.let { k -> mapOf("ed25519" to k) },
                     forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain,
-                    isSafe = result.isSafe
+                    verificationState = result.messageVerificationState
             )
             // Save decryption result, to not decrypt every time we enter the thread list
             eventEntity.setDecryptionResult(result)

@@ -38,10 +38,7 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_S
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
-import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
-import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.api.util.MatrixJsonParser
-import org.matrix.android.sdk.api.util.awaitCallback
 import timber.log.Timber
 
 /**
@@ -168,13 +165,13 @@ class Rendezvous(
     suspend fun completeVerificationOnNewDevice(session: Session) {
         val userId = session.myUserId
         val crypto = session.cryptoService()
-        val deviceId = crypto.getMyDevice().deviceId
-        val deviceKey = crypto.getMyDevice().fingerprint()
+        val deviceId = crypto.getMyCryptoDevice().deviceId
+        val deviceKey = crypto.getMyCryptoDevice().fingerprint()
         send(Payload(PayloadType.PROGRESS, outcome = Outcome.SUCCESS, deviceId = deviceId, deviceKey = deviceKey))
 
         try {
             // explicitly download keys for ourself rather than racing with initial sync which might not complete in time
-            awaitCallback<MXUsersDevicesMap<CryptoDeviceInfo>> { crypto.downloadKeys(listOf(userId), false, it) }
+            crypto.downloadKeysIfNeeded(listOf(userId), false)
         } catch (e: Throwable) {
             // log as warning and continue as initial sync might still complete
             Timber.tag(TAG).w(e, "Failed to download keys for self")

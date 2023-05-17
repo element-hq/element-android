@@ -18,11 +18,9 @@ package im.vector.app.features.settings.devices.v2.rename
 
 import im.vector.app.features.settings.devices.v2.RefreshDevicesUseCase
 import im.vector.app.test.fakes.FakeActiveSessionHolder
-import io.mockk.every
-import io.mockk.just
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
-import io.mockk.runs
-import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldBeEqualTo
@@ -45,17 +43,17 @@ class RenameSessionUseCaseTest {
     fun `given a device id and a new name when no error during rename then the device is renamed with success`() = runTest {
         // Given
         fakeActiveSessionHolder.fakeSession.fakeCryptoService.givenSetDeviceNameSucceeds()
-        every { refreshDevicesUseCase.execute() } just runs
+        coVerify { refreshDevicesUseCase.execute() }
 
         // When
         val result = renameSessionUseCase.execute(A_DEVICE_ID, A_DEVICE_NAME)
 
         // Then
         result.isSuccess shouldBe true
-        verify {
+        coVerify {
             fakeActiveSessionHolder.fakeSession
                     .cryptoService()
-                    .setDeviceName(A_DEVICE_ID, A_DEVICE_NAME, any())
+                    .setDeviceName(A_DEVICE_ID, A_DEVICE_NAME)
             refreshDevicesUseCase.execute()
         }
     }
@@ -79,7 +77,7 @@ class RenameSessionUseCaseTest {
         // Given
         val error = Exception()
         fakeActiveSessionHolder.fakeSession.fakeCryptoService.givenSetDeviceNameSucceeds()
-        every { refreshDevicesUseCase.execute() } throws error
+        coEvery { refreshDevicesUseCase.execute() } throws error
 
         // When
         val result = renameSessionUseCase.execute(A_DEVICE_ID, A_DEVICE_NAME)

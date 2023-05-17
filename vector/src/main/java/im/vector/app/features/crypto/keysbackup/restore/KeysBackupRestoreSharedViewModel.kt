@@ -23,21 +23,23 @@ import im.vector.app.R
 import im.vector.app.core.platform.WaitingViewData
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.LiveEvent
+import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.Matrix
-import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.listeners.StepProgressListener
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
-import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupLastVersionResult
+import org.matrix.android.sdk.api.session.crypto.keysbackup.BackupUtils
+import org.matrix.android.sdk.api.session.crypto.keysbackup.IBackupRecoveryKey
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupService
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersionResult
 import org.matrix.android.sdk.api.session.crypto.keysbackup.computeRecoveryKey
 import org.matrix.android.sdk.api.session.crypto.keysbackup.toKeysVersionResult
 import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.api.session.securestorage.KeyInfoResult
-import org.matrix.android.sdk.api.util.awaitCallback
 import org.matrix.android.sdk.api.util.fromBase64
 import timber.log.Timber
 import javax.inject.Inject
@@ -79,10 +81,15 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
     var importRoomKeysFinishWithResult: MutableLiveData<LiveEvent<ImportRoomKeysResult>> = MutableLiveData()
 
     fun initSession(session: Session) {
-        this.session = session
+        if (!this::session.isInitialized) {
+            this.session = session
+            viewModelScope.launch {
+                getLatestVersion()
+            }
+        }
     }
 
-    val progressObserver = object : StepProgressListener {
+    private val progressObserver = object : StepProgressListener {
         override fun onStepProgress(step: StepProgressListener.Step) {
             when (step) {
                 is StepProgressListener.Step.ComputingKey -> {
@@ -126,62 +133,79 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
                         )
                     }
                 }
+                is StepProgressListener.Step.DecryptingKey -> {
+                    if (step.progress == 0) {
+                        loadingEvent.postValue(
+                                WaitingViewData(
+                                        stringProvider.getString(R.string.keys_backup_restoring_waiting_message) +
+                                                "\n" + stringProvider.getString(R.string.keys_backup_restoring_importing_keys_waiting_message),
+                                        isIndeterminate = true
+                                )
+                        )
+                    } else {
+                        loadingEvent.postValue(
+                                WaitingViewData(
+                                        stringProvider.getString(R.string.keys_backup_restoring_waiting_message) +
+                                                "\n" + stringProvider.getString(R.string.keys_backup_restoring_importing_keys_waiting_message),
+                                        step.progress,
+                                        step.total
+                                )
+                        )
+                    }
+                }
             }
         }
     }
 
-    fun getLatestVersion() {
+    private suspend fun getLatestVersion() {
         val keysBackup = session.cryptoService().keysBackupService()
 
-        loadingEvent.value = WaitingViewData(stringProvider.getString(R.string.keys_backup_restore_is_getting_backup_version))
+        loadingEvent.postValue(WaitingViewData(stringProvider.getString(R.string.keys_backup_restore_is_getting_backup_version)))
 
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val version = awaitCallback<KeysBackupLastVersionResult> {
-                    keysBackup.getCurrentVersion(it)
-                }.toKeysVersionResult()
-                if (version?.version == null) {
-                    loadingEvent.postValue(null)
-                    _keyVersionResultError.postValue(LiveEvent(stringProvider.getString(R.string.keys_backup_get_version_error, "")))
-                    return@launch
-                }
+        try {
+            val version = keysBackup.getCurrentVersion()?.toKeysVersionResult()
+            if (version?.version == null) {
+                loadingEvent.postValue(null)
+                _keyVersionResultError.postValue(LiveEvent(stringProvider.getString(R.string.keys_backup_get_version_error, "")))
+                return
+            }
 
-                keyVersionResult.postValue(version)
-                // Let's check if there is quads
-                val isBackupKeyInQuadS = isBackupKeyInQuadS()
+            keyVersionResult.postValue(version)
+            // Let's check if there is quads
+            val isBackupKeyInQuadS = isBackupKeyInQuadS()
 
-                val savedSecret = session.cryptoService().keysBackupService().getKeyBackupRecoveryKeyInfo()
-                if (savedSecret != null && savedSecret.version == version.version) {
-                    // key is in memory!
-                    keySourceModel.postValue(
-                            KeySource(isInMemory = true, isInQuadS = true)
-                    )
-                    // Go and use it!!
-                    try {
-                        recoverUsingBackupRecoveryKey(savedSecret.recoveryKey)
-                    } catch (failure: Throwable) {
-                        keySourceModel.postValue(
-                                KeySource(isInMemory = false, isInQuadS = true)
-                        )
-                    }
-                } else if (isBackupKeyInQuadS) {
-                    // key is in QuadS!
+            val savedSecret = session.cryptoService().keysBackupService().getKeyBackupRecoveryKeyInfo()
+            if (savedSecret != null && savedSecret.version == version.version) {
+                // key is in memory!
+                keySourceModel.postValue(
+                        KeySource(isInMemory = true, isInQuadS = true)
+                )
+                // Go and use it!!
+                try {
+                    recoverUsingBackupRecoveryKey(savedSecret.recoveryKey, version)
+                } catch (failure: Throwable) {
+                    Timber.e(failure, "## recoverUsingBackupRecoveryKey FAILED")
                     keySourceModel.postValue(
                             KeySource(isInMemory = false, isInQuadS = true)
                     )
-                    _navigateEvent.postValue(LiveEvent(NAVIGATE_TO_4S))
-                } else {
-                    // we need to restore directly
-                    keySourceModel.postValue(
-                            KeySource(isInMemory = false, isInQuadS = false)
-                    )
                 }
-
-                loadingEvent.postValue(null)
-            } catch (failure: Throwable) {
-                loadingEvent.postValue(null)
-                _keyVersionResultError.postValue(LiveEvent(stringProvider.getString(R.string.keys_backup_get_version_error, failure.localizedMessage)))
+            } else if (isBackupKeyInQuadS) {
+                // key is in QuadS!
+                keySourceModel.postValue(
+                        KeySource(isInMemory = false, isInQuadS = true)
+                )
+                _navigateEvent.postValue(LiveEvent(NAVIGATE_TO_4S))
+            } else {
+                // we need to restore directly
+                keySourceModel.postValue(
+                        KeySource(isInMemory = false, isInQuadS = false)
+                )
             }
+
+            loadingEvent.postValue(null)
+        } catch (failure: Throwable) {
+            loadingEvent.postValue(null)
+            _keyVersionResultError.postValue(LiveEvent(stringProvider.getString(R.string.keys_backup_get_version_error, failure.localizedMessage)))
         }
     }
 
@@ -196,11 +220,13 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
                     )
                     return
                 }
-                loadingEvent.value = WaitingViewData(stringProvider.getString(R.string.keys_backup_restore_is_getting_backup_version))
+                loadingEvent.postValue(WaitingViewData(stringProvider.getString(R.string.keys_backup_restore_is_getting_backup_version)))
 
                 viewModelScope.launch(Dispatchers.IO) {
                     try {
-                        recoverUsingBackupRecoveryKey(computeRecoveryKey(secret.fromBase64()))
+                        val computedRecoveryKey = computeRecoveryKey(secret.fromBase64())
+                        val backupRecoveryKey = BackupUtils.recoveryKeyFromBase58(computedRecoveryKey)
+                        recoverUsingBackupRecoveryKey(backupRecoveryKey!!)
                     } catch (failure: Throwable) {
                         _navigateEvent.postValue(
                                 LiveEvent(NAVIGATE_FAILED_TO_LOAD_4S)
@@ -222,16 +248,13 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
         loadingEvent.postValue(WaitingViewData(stringProvider.getString(R.string.loading)))
 
         try {
-            val result = awaitCallback<ImportRoomKeysResult> {
-                keysBackup.restoreKeyBackupWithPassword(
-                        keyVersion,
-                        passphrase,
-                        null,
-                        session.myUserId,
-                        progressObserver,
-                        it
-                )
-            }
+            val result = keysBackup.restoreKeyBackupWithPassword(
+                    keyVersion,
+                    passphrase,
+                    null,
+                    session.myUserId,
+                    progressObserver
+            )
             loadingEvent.postValue(null)
             didRecoverSucceed(result)
             trustOnDecrypt(keysBackup, keyVersion)
@@ -241,27 +264,28 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
         }
     }
 
-    suspend fun recoverUsingBackupRecoveryKey(recoveryKey: String) {
+    suspend fun recoverUsingBackupRecoveryKey(recoveryKey: IBackupRecoveryKey, keyVersion: KeysVersionResult? = null) {
         val keysBackup = session.cryptoService().keysBackupService()
-        val keyVersion = keyVersionResult.value ?: return
+        // This is badddddd
+        val version = keyVersion ?: keyVersionResult.value ?: return
 
         loadingEvent.postValue(WaitingViewData(stringProvider.getString(R.string.loading)))
 
         try {
-            val result = awaitCallback<ImportRoomKeysResult> {
-                keysBackup.restoreKeysWithRecoveryKey(
-                        keyVersion,
-                        recoveryKey,
-                        null,
-                        session.myUserId,
-                        progressObserver,
-                        it
-                )
-            }
+            val result = keysBackup.restoreKeysWithRecoveryKey(
+                    version,
+                    recoveryKey,
+                    null,
+                    session.myUserId,
+                    progressObserver
+            )
             loadingEvent.postValue(null)
-            didRecoverSucceed(result)
-            trustOnDecrypt(keysBackup, keyVersion)
+            withContext(Dispatchers.Main) {
+                didRecoverSucceed(result)
+                trustOnDecrypt(keysBackup, version)
+            }
         } catch (failure: Throwable) {
+            Timber.e(failure, "##  restoreKeysWithRecoveryKey failure")
             loadingEvent.postValue(null)
             throw failure
         }
@@ -280,19 +304,19 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
     }
 
     private fun trustOnDecrypt(keysBackup: KeysBackupService, keysVersionResult: KeysVersionResult) {
-        keysBackup.trustKeysBackupVersion(keysVersionResult, true,
-                object : MatrixCallback<Unit> {
-                    override fun onSuccess(data: Unit) {
-                        Timber.v("##### trustKeysBackupVersion onSuccess")
-                    }
-                })
+        // do that on session scope because could happen outside of view model lifecycle
+        session.coroutineScope.launch {
+            tryOrNull("## Failed to trustKeysBackupVersion") {
+                keysBackup.trustKeysBackupVersion(keysVersionResult, true)
+            }
+        }
     }
 
     fun moveToRecoverWithKey() {
-        _navigateEvent.value = LiveEvent(NAVIGATE_TO_RECOVER_WITH_KEY)
+        _navigateEvent.postValue(LiveEvent(NAVIGATE_TO_RECOVER_WITH_KEY))
     }
 
-    fun didRecoverSucceed(result: ImportRoomKeysResult) {
+    private fun didRecoverSucceed(result: ImportRoomKeysResult) {
         importKeyResult = result
         _navigateEvent.postValue(LiveEvent(NAVIGATE_TO_SUCCESS))
     }

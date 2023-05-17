@@ -24,12 +24,12 @@ class GetCurrentSessionCrossSigningInfoUseCase @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
 ) {
 
-    fun execute(): CurrentSessionCrossSigningInfo {
+    suspend fun execute(): CurrentSessionCrossSigningInfo {
         val session = activeSessionHolder.getActiveSession()
         val isCrossSigningInitialized = session.cryptoService().crossSigningService().isCrossSigningInitialized()
         val isCrossSigningVerified = session.cryptoService().crossSigningService().isCrossSigningVerified()
         return CurrentSessionCrossSigningInfo(
-                deviceId = session.sessionParams.deviceId.orEmpty(),
+                deviceId = session.sessionParams.deviceId,
                 isCrossSigningInitialized = isCrossSigningInitialized,
                 isCrossSigningVerified = isCrossSigningVerified
         )

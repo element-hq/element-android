@@ -17,9 +17,6 @@
 package im.vector.app.features.home.room.list.home
 
 import android.widget.ImageView
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.paging.PagedList
 import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
@@ -88,19 +85,25 @@ class HomeRoomListViewModel @AssistedInject constructor(
     companion object : MavericksViewModelFactory<HomeRoomListViewModel, HomeRoomListViewState> by hiltMavericksViewModelFactory()
 
     private val pagedListConfig = PagedList.Config.Builder()
-            .setPageSize(10)
-            .setInitialLoadSizeHint(20)
+            .setPageSize(30)
+            .setInitialLoadSizeHint(50)
             .setEnablePlaceholders(true)
+            .setPrefetchDistance(10)
             .build()
 
-    private val _roomsLivePagedList = MutableLiveData<PagedList<RoomSummary>>()
-    val roomsLivePagedList: LiveData<PagedList<RoomSummary>> = _roomsLivePagedList
-
-    private val internalPagedListObserver = Observer<PagedList<RoomSummary>> {
-        _roomsLivePagedList.postValue(it)
+    val filteredPagedRoomSummariesLive: UpdatableLivePageResult by lazy {
+        val builder = RoomSummaryQueryParams.Builder().also {
+            it.memberships = listOf(Membership.JOIN)
+            it.spaceFilter = spaceStateHandler.getCurrentSpace()?.roomId.toActiveSpaceOrNoFilter()
+        }
+        val params = getFilteredQueryParams(initialState.headersData.currentFilter, builder.build())
+        val sortOrder = RoomSortOrder.ACTIVITY
+        session.roomService().getFilteredPagedRoomSummariesLive(
+                params,
+                pagedListConfig,
+                sortOrder
+        )
     }
-
-    private var filteredPagedRoomSummariesLive: UpdatableLivePageResult? = null
 
     init {
         observeOrderPreferences()
@@ -119,11 +122,9 @@ class HomeRoomListViewModel @AssistedInject constructor(
                 .onEach { selectedSpaceOption ->
                     val selectedSpace = selectedSpaceOption.orNull()
                     updateEmptyState()
-                    filteredPagedRoomSummariesLive?.let { liveResults ->
-                        liveResults.queryParams = liveResults.queryParams.copy(
-                                spaceFilter = selectedSpace?.roomId.toActiveSpaceOrNoFilter()
-                        )
-                    }
+                    filteredPagedRoomSummariesLive.queryParams = filteredPagedRoomSummariesLive.queryParams.copy(
+                            spaceFilter = selectedSpace?.roomId.toActiveSpaceOrNoFilter()
+                    )
                 }
                 .launchIn(viewModelScope)
     }
@@ -239,33 +240,14 @@ class HomeRoomListViewModel @AssistedInject constructor(
         }
     }
 
-    private fun observeRooms(currentFilter: HomeRoomFilter, isAZOrdering: Boolean) {
-        filteredPagedRoomSummariesLive?.livePagedList?.removeObserver(internalPagedListObserver)
-        val builder = RoomSummaryQueryParams.Builder().also {
-            it.memberships = listOf(Membership.JOIN)
-            it.spaceFilter = spaceStateHandler.getCurrentSpace()?.roomId.toActiveSpaceOrNoFilter()
-        }
-        val params = getFilteredQueryParams(currentFilter, builder.build())
-        val sortOrder = if (isAZOrdering) {
-            RoomSortOrder.NAME
-        } else {
-            RoomSortOrder.ACTIVITY
-        }
-        val liveResults = session.roomService().getFilteredPagedRoomSummariesLive(
-                params,
-                pagedListConfig,
-                sortOrder
-        ).also {
-            filteredPagedRoomSummariesLive = it
-        }
-        liveResults.livePagedList.observeForever(internalPagedListObserver)
-    }
-
     private fun observeOrderPreferences() {
         preferencesStore.isAZOrderingEnabledFlow
                 .onEach { isAZOrdering ->
-                    val currentFilter = awaitState().headersData.currentFilter
-                    observeRooms(currentFilter, isAZOrdering)
+                    filteredPagedRoomSummariesLive.sortOrder = if (isAZOrdering) {
+                        RoomSortOrder.NAME
+                    } else {
+                        RoomSortOrder.ACTIVITY
+                    }
                 }.launchIn(viewModelScope)
     }
 
@@ -340,11 +322,6 @@ class HomeRoomListViewModel @AssistedInject constructor(
         }
     }
 
-    override fun onCleared() {
-        filteredPagedRoomSummariesLive?.livePagedList?.removeObserver(internalPagedListObserver)
-        super.onCleared()
-    }
-
     private fun handleChangeRoomFilter(newFilter: HomeRoomFilter) {
         viewModelScope.launch {
             changeRoomFilter(newFilter)
@@ -359,9 +336,7 @@ class HomeRoomListViewModel @AssistedInject constructor(
         setState { copy(headersData = headersData.copy(currentFilter = newFilter)) }
         updateEmptyState()
         analyticsTracker.updateUserProperties(UserProperties(allChatsActiveFilter = newFilter.toTrackingValue()))
-        filteredPagedRoomSummariesLive?.let { liveResults ->
-            liveResults.queryParams = getFilteredQueryParams(newFilter, liveResults.queryParams)
-        }
+        filteredPagedRoomSummariesLive.queryParams = getFilteredQueryParams(newFilter, filteredPagedRoomSummariesLive.queryParams)
     }
 
     fun isPublicRoom(roomId: String): Boolean {

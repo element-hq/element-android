@@ -17,9 +17,9 @@
 package im.vector.app.features.settings.devices.v2.signout
 
 import im.vector.app.test.fakes.FakeActiveSessionHolder
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBe
 import org.junit.Test
@@ -51,10 +51,10 @@ class SignoutSessionsUseCaseTest {
 
         // Then
         result.isSuccess shouldBe true
-        verify {
+        coVerify {
             fakeActiveSessionHolder.fakeSession
                     .fakeCryptoService
-                    .deleteDevices(deviceIds, any(), any())
+                    .deleteDevices(deviceIds, any())
         }
     }
 
@@ -73,10 +73,10 @@ class SignoutSessionsUseCaseTest {
 
         // Then
         result.isFailure shouldBe true
-        verify {
+        coVerify {
             fakeActiveSessionHolder.fakeSession
                     .fakeCryptoService
-                    .deleteDevices(deviceIds, any(), any())
+                    .deleteDevices(deviceIds, any())
         }
     }
 
@@ -101,10 +101,10 @@ class SignoutSessionsUseCaseTest {
 
         // Then
         result.isSuccess shouldBe true
-        verify {
+        coVerify {
             fakeActiveSessionHolder.fakeSession
                     .fakeCryptoService
-                    .deleteDevices(deviceIds, any(), any())
+                    .deleteDevices(deviceIds, any())
             callback(reAuthNeeded)
         }
     }

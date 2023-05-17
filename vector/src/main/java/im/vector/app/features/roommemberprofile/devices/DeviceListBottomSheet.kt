@@ -31,7 +31,6 @@ import im.vector.app.R
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetWithFragmentsBinding
-import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import kotlinx.parcelize.Parcelize
 import kotlin.reflect.KClass
 
@@ -50,11 +49,12 @@ class DeviceListBottomSheet :
         viewModel.observeViewEvents {
             when (it) {
                 is DeviceListBottomSheetViewEvents.Verify -> {
-                    VerificationBottomSheet.withArgs(
-                            roomId = null,
-                            otherUserId = it.userId,
-                            transactionId = it.txID
-                    ).show(requireActivity().supportFragmentManager, "REQPOP")
+                    // TODO selfverif
+//                    VerificationBottomSheet.withArgs(
+// //                            roomId = null,
+//                            otherUserId = it.userId,
+//                            transactionId = it.txID
+//                    ).show(requireActivity().supportFragmentManager, "REQPOP")
                 }
             }
         }

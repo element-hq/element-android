@@ -27,18 +27,11 @@ import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupService
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupStateListener
-import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupVersionTrust
-import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersion
 import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreationInfo
-import org.matrix.android.sdk.api.session.crypto.keysbackup.extractCurveKeyFromRecoveryKey
-import org.matrix.android.sdk.api.util.awaitCallback
-import org.matrix.android.sdk.api.util.toBase64NoPadding
 import timber.log.Timber
 
 class KeysBackupSettingsViewModel @AssistedInject constructor(
@@ -54,6 +47,7 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<KeysBackupSettingsViewModel, KeysBackupSettingViewState> by hiltMavericksViewModelFactory()
 
+    private val cryptoService = session.cryptoService()
     private val keysBackupService: KeysBackupService = session.cryptoService().keysBackupService()
 
     var pendingBackupCreationInfo: MegolmBackupCreationInfo? = null
@@ -73,7 +67,9 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(
         when (action) {
             KeyBackupSettingsAction.Init -> init()
             KeyBackupSettingsAction.GetKeyBackupTrust -> getKeysBackupTrust()
-            KeyBackupSettingsAction.DeleteKeyBackup -> deleteCurrentBackup()
+            KeyBackupSettingsAction.DeleteKeyBackup -> viewModelScope.launch {
+                deleteCurrentBackup()
+            }
             KeyBackupSettingsAction.SetUpKeyBackup -> viewModelScope.launch {
                 setUpKeyBackup()
             }
@@ -87,7 +83,9 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(
     }
 
     private fun init() {
-        keysBackupService.forceUsingLastVersion(NoOpMatrixCallback())
+        viewModelScope.launch {
+            keysBackupService.forceUsingLastVersion()
+        }
     }
 
     private fun getKeysBackupTrust() = withState { state ->
@@ -100,25 +98,14 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(
                         deleteBackupRequest = Uninitialized
                 )
             }
-
-            keysBackupService
-                    .getKeysBackupTrust(versionResult, object : MatrixCallback<KeysBackupVersionTrust> {
-                        override fun onSuccess(data: KeysBackupVersionTrust) {
-                            setState {
-                                copy(
-                                        keysBackupVersionTrust = Success(data)
-                                )
-                            }
-                        }
-
-                        override fun onFailure(failure: Throwable) {
-                            setState {
-                                copy(
-                                        keysBackupVersionTrust = Fail(failure)
-                                )
-                            }
-                        }
-                    })
+            viewModelScope.launch {
+                val trust = keysBackupService.getKeysBackupTrust(versionResult)
+                setState {
+                    copy(
+                            keysBackupVersionTrust = Success(trust)
+                    )
+                }
+            }
         }
     }
 
@@ -134,8 +121,22 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(
                     keysBackupVersion = keysBackupService.keysBackupVersion
             )
         }
-
+        when (newState) {
+            KeysBackupState.BackingUp, KeysBackupState.WillBackUp -> updateKeysCount()
+            else                                                  -> Unit
+        }
         getKeysBackupTrust()
+    }
+
+    private fun updateKeysCount() {
+        viewModelScope.launch {
+            val totalKeys = cryptoService.inboundGroupSessionsCount(false)
+            val backedUpKeys = cryptoService.inboundGroupSessionsCount(true)
+            val remainingKeysToBackup = totalKeys - backedUpKeys
+            setState {
+                copy(remainingKeysToBackup = remainingKeysToBackup)
+            }
+        }
     }
 
     suspend fun setUpKeyBackup() {
@@ -143,12 +144,10 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(
         // If it is we need to use it, generate a random key
         // for the backup and store it in the 4S
         if (session.sharedSecretStorageService().isRecoverySetup()) {
-            val creationInfo = awaitCallback<MegolmBackupCreationInfo> {
-                session.cryptoService().keysBackupService().prepareKeysBackupVersion(null, null, it)
-            }
+            val creationInfo = session.cryptoService().keysBackupService().prepareKeysBackupVersion(null, null)
             pendingBackupCreationInfo = creationInfo
-            val recoveryKey = extractCurveKeyFromRecoveryKey(creationInfo.recoveryKey)?.toBase64NoPadding()
-            _viewEvents.post(KeysBackupViewEvents.RequestStore4SSecret(recoveryKey!!))
+            val recoveryKey = creationInfo.recoveryKey.toBase64()
+            _viewEvents.post(KeysBackupViewEvents.RequestStore4SSecret(recoveryKey))
         } else {
             // No 4S so we can open legacy flow
             _viewEvents.post(KeysBackupViewEvents.OpenLegacyCreateBackup)
@@ -158,22 +157,19 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(
     suspend fun completeBackupCreation() {
         val info = pendingBackupCreationInfo ?: return
         try {
-            val version = awaitCallback<KeysVersion> {
-                session.cryptoService().keysBackupService().createKeysBackupVersion(info, it)
-            }
+            val version = session.cryptoService().keysBackupService().createKeysBackupVersion(info)
             // Save it for gossiping
             Timber.d("## BootstrapCrossSigningTask: Creating 4S - Save megolm backup key for gossiping")
             session.cryptoService().keysBackupService().saveBackupRecoveryKey(info.recoveryKey, version = version.version)
         } catch (failure: Throwable) {
             // XXX mm... failed we should remove what we put in 4S, as it was not created?
-
             // for now just stay on the screen, user can retry, there is no api to delete account data
         } finally {
             pendingBackupCreationInfo = null
         }
     }
 
-    private fun deleteCurrentBackup() {
+    private suspend fun deleteCurrentBackup() {
         val keysBackupService = keysBackupService
 
         if (keysBackupService.currentBackupVersion != null) {
@@ -183,26 +179,23 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(
                 )
             }
 
-            keysBackupService.deleteBackup(keysBackupService.currentBackupVersion!!, object : MatrixCallback<Unit> {
-                override fun onSuccess(data: Unit) {
-                    setState {
-                        copy(
-                                keysBackupVersion = null,
-                                keysBackupVersionTrust = Uninitialized,
-                                // We do not care about the success data
-                                deleteBackupRequest = Uninitialized
-                        )
-                    }
+            try {
+                keysBackupService.deleteBackup(keysBackupService.currentBackupVersion!!)
+                setState {
+                    copy(
+                            keysBackupVersion = null,
+                            keysBackupVersionTrust = Uninitialized,
+                            // We do not care about the success data
+                            deleteBackupRequest = Uninitialized
+                    )
                 }
-
-                override fun onFailure(failure: Throwable) {
-                    setState {
-                        copy(
-                                deleteBackupRequest = Fail(failure)
-                        )
-                    }
+            } catch (failure: Throwable) {
+                setState {
+                    copy(
+                            deleteBackupRequest = Fail(failure)
+                    )
                 }
-            })
+            }
         }
     }
 

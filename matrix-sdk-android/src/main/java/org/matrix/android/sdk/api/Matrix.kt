@@ -28,7 +28,6 @@ import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.debug.DebugService
-import org.matrix.android.sdk.api.legacy.LegacySessionImporter
 import org.matrix.android.sdk.api.network.ApiInterceptorListener
 import org.matrix.android.sdk.api.network.ApiPath
 import org.matrix.android.sdk.api.raw.RawService
@@ -55,7 +54,6 @@ import javax.inject.Inject
  */
 class Matrix(context: Context, matrixConfiguration: MatrixConfiguration) {
 
-    @Inject internal lateinit var legacySessionImporter: LegacySessionImporter
     @Inject internal lateinit var authenticationService: AuthenticationService
     @Inject internal lateinit var rawService: RawService
     @Inject internal lateinit var debugService: DebugService
@@ -117,11 +115,6 @@ class Matrix(context: Context, matrixConfiguration: MatrixConfiguration) {
      * Return the HomeServerHistoryService.
      */
     fun homeServerHistoryService() = homeServerHistoryService
-
-    /**
-     * Return the legacy session importer, useful if you want to migrate an app, which was using the legacy Matrix Android Sdk.
-     */
-    fun legacySessionImporter() = legacySessionImporter
 
     /**
      * Returns the SecureStorageService used to encrypt and decrypt sensitive data.

@@ -97,7 +97,7 @@ internal class DefaultDownloadKeysForUsers @Inject constructor(
             )
         } else {
             // No need to chunk, direct request
-            executeRequest(globalErrorReceiver) {
+            executeRequest(globalErrorReceiver, canRetry = true) {
                 cryptoApi.downloadKeysForUsers(
                         KeysQueryBody(
                                 deviceKeys = params.userIds.associateWith { emptyList() },

@@ -88,7 +88,7 @@ class QuadSTests : InstrumentedTest {
         assertNotNull(defaultKeyAccountData?.content)
         assertEquals("Unexpected default key ${defaultKeyAccountData?.content}", TEST_KEY_ID, defaultKeyAccountData?.content?.get("key"))
 
-        testHelper.signOutAndClose(aliceSession)
+//        testHelper.signOutAndClose(aliceSession)
     }
 
     @Test

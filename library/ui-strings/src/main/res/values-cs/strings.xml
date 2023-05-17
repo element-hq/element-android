@@ -818,7 +818,7 @@
     <string name="error_empty_field_enter_user_name">Zadejte, prosím, uživatelské jméno.</string>
     <string name="error_empty_field_your_password">Prosím, zadejte své heslo.</string>
     <string name="room_tombstone_versioned_description">Tato místnost byla nahrazena a není již aktivní.</string>
-    <string name="room_tombstone_continuation_link">Konverzace pokračuje tady</string>
+    <string name="room_tombstone_continuation_link">Konverzace pokračuje zde</string>
     <string name="room_tombstone_continuation_description">Tato místnost je pokračováním jiné konverzace</string>
     <string name="room_tombstone_predecessor_link">Po kliknutí zde uvidíte starší zprávy</string>
     <string name="resource_limit_contact_admin">kontaktovat Vašeho správce služby</string>
@@ -2992,4 +2992,21 @@
     <string name="direct_room_encryption_enabled_waiting_users_tile_description">Jakmile se pozvaní uživatelé připojí do aplikace ${app_name}, budete moci komunikovat a místnost bude koncově šifrovaná</string>
     <string name="direct_room_encryption_enabled_waiting_users">Čekání na uživatele, než se připojí do ${app_name}</string>
     <string name="direct_room_user_list_only_invite_one_email">Můžete pozvat pouze jeden e-mail najednou</string>
+    <string name="pill_message_unknown_room_or_space">Místnost/prostor</string>
+    <string name="pill_message_in_unknown_room">Zpráva v místnosti</string>
+    <string name="pill_message_in_room">Zpráva v %s</string>
+    <string name="pill_message_from_unknown_user">Zpráva</string>
+    <string name="pill_message_from_user">Zpráva od %s</string>
+    <string name="encrypted_by_deleted">Zašifrováno smazaným zařízením</string>
+    <string name="secure_backup_reset_danger_warning">Pokračujte pouze v případě, že jste si jisti, že jste ztratili všechna ostatní zařízení a bezpečnostní klíč.</string>
+    <string name="secure_backup_reset_all_no_other_devices_long">Obnovení ověřovacích klíčů nelze vrátit zpět. Po resetování nebudete mít přístup ke starým zašifrovaným zprávám a všem přátelům, kteří vás dříve ověřili, se zobrazí bezpečnostní varování, dokud se u nich znovu neověříte.</string>
+    <string name="verification_not_found">Požadavek na ověření nebyl nalezen. Mohl být zrušen nebo zpracován jinou relací.</string>
+    <string name="_resume">Obnovit</string>
+    <string name="verification_request_was_sent">Byla odeslána žádost o ověření. Otevřete jednu z dalších relací, abyste ji přijali a zahájili ověření.</string>
+    <string name="verification_verify_identity">Ověřte svou identitu, abyste měli přístup k šifrovaným zprávám a prokázali svou totožnost ostatním.</string>
+    <string name="verification_verify_with_another_device">Ověření pomocí jiného zařízení</string>
+    <string name="verification_request_waiting_for_recovery">Ověření pomocí bezpečnostního klíče nebo fráze…</string>
+    <string name="settings_acceptable_use_policy">Zásady přijatelného používání</string>
+    <string name="action_proceed_to_reset">Přejít k obnovení</string>
+    <string name="settings_crypto_version">Verze šifrování</string>
 </resources>

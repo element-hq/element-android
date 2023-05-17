@@ -19,6 +19,7 @@ package org.matrix.android.sdk.api
 import okhttp3.ConnectionSpec
 import okhttp3.Interceptor
 import org.matrix.android.sdk.api.crypto.MXCryptoConfig
+import org.matrix.android.sdk.api.metrics.CryptoMetricPlugin
 import org.matrix.android.sdk.api.metrics.MetricPlugin
 import org.matrix.android.sdk.api.provider.CustomEventTypesProvider
 import org.matrix.android.sdk.api.provider.MatrixItemDisplayNameFallbackProvider
@@ -28,6 +29,7 @@ import java.net.Proxy
 data class MatrixConfiguration(
         val applicationFlavor: String = "Default-application-flavor",
         val cryptoConfig: MXCryptoConfig = MXCryptoConfig(),
+        val cryptoFlavor: String = "Default-crypto-flavor",
         val integrationUIUrl: String = "https://scalar.vector.im/",
         val integrationRestUrl: String = "https://scalar.vector.im/api",
         val integrationWidgetUrls: List<String> = listOf(
@@ -82,6 +84,8 @@ data class MatrixConfiguration(
          * Metrics plugin that can be used to capture metrics from matrix-sdk-android.
          */
         val metricPlugins: List<MetricPlugin> = emptyList(),
+
+        val cryptoAnalyticsPlugin: CryptoMetricPlugin? = null,
         /**
          * CustomEventTypesProvider to provide custom event types to the sdk which should be processed with internal events.
          */

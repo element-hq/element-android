@@ -28,7 +28,6 @@ import im.vector.app.core.di.DefaultPreferences
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.VectorFeatures
-import im.vector.app.features.disclaimer.SHARED_PREF_KEY
 import im.vector.app.features.home.ShortcutsHandler
 import im.vector.app.features.homeserver.ServerUrlsRepository
 import im.vector.app.features.themes.ThemeUtils
@@ -52,7 +51,7 @@ class VectorPreferences @Inject constructor(
         const val SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY = "SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY"
         const val SETTINGS_VERSION_PREFERENCE_KEY = "SETTINGS_VERSION_PREFERENCE_KEY"
         const val SETTINGS_SDK_VERSION_PREFERENCE_KEY = "SETTINGS_SDK_VERSION_PREFERENCE_KEY"
-        const val SETTINGS_OLM_VERSION_PREFERENCE_KEY = "SETTINGS_OLM_VERSION_PREFERENCE_KEY"
+        const val SETTINGS_CRYPTO_VERSION_PREFERENCE_KEY = "SETTINGS_CRYPTO_VERSION_PREFERENCE_KEY"
         const val SETTINGS_LOGGED_IN_PREFERENCE_KEY = "SETTINGS_LOGGED_IN_PREFERENCE_KEY"
         const val SETTINGS_HOME_SERVER_PREFERENCE_KEY = "SETTINGS_HOME_SERVER_PREFERENCE_KEY"
         const val SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY = "SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY"
@@ -187,6 +186,7 @@ class VectorPreferences @Inject constructor(
         const val SETTINGS_PREF_SPACE_CATEGORY = "SETTINGS_PREF_SPACE_CATEGORY"
 
         private const val SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY = "SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY"
+        const val SETTINGS_DEVELOPER_MODE_KEY_REQUEST_AUDIT_KEY = "SETTINGS_DEVELOPER_MODE_KEY_REQUEST_AUDIT_KEY"
         private const val SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY = "SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY"
         private const val SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY = "SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY"
         private const val SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY = "SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY"
@@ -332,9 +332,6 @@ class VectorPreferences @Inject constructor(
 
         // theme
         keysToKeep.add(ThemeUtils.APPLICATION_THEME_KEY)
-
-        // Disclaimer dialog
-        keysToKeep.add(SHARED_PREF_KEY)
 
         // get all the existing keys
         val keys = defaultPrefs.all.keys
@@ -1081,6 +1078,12 @@ class VectorPreferences @Inject constructor(
 
     fun labsAutoReportUISI(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_LABS_AUTO_REPORT_UISI, false)
+    }
+
+    fun setLabsAutoReportUISI(enabled: Boolean) {
+        return defaultPrefs.edit {
+            putBoolean(SETTINGS_LABS_AUTO_REPORT_UISI, enabled)
+        }
     }
 
     fun prefSpacesShowAllRoomInHome(): Boolean {

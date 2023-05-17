@@ -2201,7 +2201,7 @@
         },
         "smiling-face": {
             "a": "Smiling Face",
-            "b": "263A",
+            "b": "263A-FE0F",
             "j": [
                 "face",
                 "outlined",
@@ -2455,7 +2455,7 @@
         },
         "neutral-face": {
             "a": "Neutral Face",
-            "b": "1F610",
+            "b": "1F610-FE0F",
             "j": [
                 "deadpan",
                 "face",
@@ -2948,7 +2948,7 @@
         },
         "frowning-face": {
             "a": "Frowning Face",
-            "b": "2639",
+            "b": "2639-FE0F",
             "j": [
                 "face",
                 "frown",
@@ -3312,7 +3312,7 @@
         },
         "skull-and-crossbones": {
             "a": "Skull and Crossbones",
-            "b": "2620",
+            "b": "2620-FE0F",
             "j": [
                 "crossbones",
                 "death",
@@ -3368,7 +3368,7 @@
                 "creepy",
                 "devil",
                 "demon",
-                "japanese"
+                "japanese_ogre"
             ]
         },
         "goblin": {
@@ -3385,7 +3385,7 @@
                 "mask",
                 "scary",
                 "creepy",
-                "japanese"
+                "japanese_goblin"
             ]
         },
         "ghost": {
@@ -3404,7 +3404,7 @@
         },
         "alien": {
             "a": "Alien",
-            "b": "1F47D",
+            "b": "1F47D-FE0F",
             "j": [
                 "creature",
                 "extraterrestrial",
@@ -3735,7 +3735,7 @@
         },
         "heart-exclamation": {
             "a": "Heart Exclamation",
-            "b": "2763",
+            "b": "2763-FE0F",
             "j": [
                 "exclamation",
                 "mark",
@@ -3786,7 +3786,7 @@
         },
         "red-heart": {
             "a": "Red Heart",
-            "b": "2764",
+            "b": "2764-FE0F",
             "j": [
                 "heart",
                 "love",
@@ -4003,7 +4003,7 @@
         },
         "hole": {
             "a": "Hole",
-            "b": "1F573",
+            "b": "1F573-FE0F",
             "j": [
                 "embarrassing"
             ]
@@ -4037,7 +4037,7 @@
         },
         "left-speech-bubble": {
             "a": "Left Speech Bubble",
-            "b": "1F5E8",
+            "b": "1F5E8-FE0F",
             "j": [
                 "balloon",
                 "bubble",
@@ -4051,7 +4051,7 @@
         },
         "right-anger-bubble": {
             "a": "Right Anger Bubble",
-            "b": "1F5EF",
+            "b": "1F5EF-FE0F",
             "j": [
                 "angry",
                 "balloon",
@@ -4117,7 +4117,7 @@
         },
         "hand-with-fingers-splayed": {
             "a": "Hand with Fingers Splayed",
-            "b": "1F590",
+            "b": "1F590-FE0F",
             "j": [
                 "finger",
                 "hand",
@@ -4263,7 +4263,7 @@
         },
         "victory-hand": {
             "a": "Victory Hand",
-            "b": "270C",
+            "b": "270C-FE0F",
             "j": [
                 "hand",
                 "v",
@@ -4338,7 +4338,7 @@
         },
         "backhand-index-pointing-left": {
             "a": "Backhand Index Pointing Left",
-            "b": "1F448",
+            "b": "1F448-FE0F",
             "j": [
                 "backhand",
                 "finger",
@@ -4352,7 +4352,7 @@
         },
         "backhand-index-pointing-right": {
             "a": "Backhand Index Pointing Right",
-            "b": "1F449",
+            "b": "1F449-FE0F",
             "j": [
                 "backhand",
                 "finger",
@@ -4366,7 +4366,7 @@
         },
         "backhand-index-pointing-up": {
             "a": "Backhand Index Pointing Up",
-            "b": "1F446",
+            "b": "1F446-FE0F",
             "j": [
                 "backhand",
                 "finger",
@@ -4391,7 +4391,7 @@
         },
         "backhand-index-pointing-down": {
             "a": "Backhand Index Pointing Down",
-            "b": "1F447",
+            "b": "1F447-FE0F",
             "j": [
                 "backhand",
                 "down",
@@ -4404,7 +4404,7 @@
         },
         "index-pointing-up": {
             "a": "Index Pointing Up",
-            "b": "261D",
+            "b": "261D-FE0F",
             "j": [
                 "finger",
                 "hand",
@@ -4426,7 +4426,7 @@
         },
         "thumbs-up": {
             "a": "Thumbs Up",
-            "b": "1F44D",
+            "b": "1F44D-FE0F",
             "j": [
                 "+1",
                 "hand",
@@ -4444,7 +4444,7 @@
         },
         "thumbs-down": {
             "a": "Thumbs Down",
-            "b": "1F44E",
+            "b": "1F44E-FE0F",
             "j": [
                 "-1",
                 "down",
@@ -4593,7 +4593,7 @@
         },
         "writing-hand": {
             "a": "Writing Hand",
-            "b": "270D",
+            "b": "270D-FE0F",
             "j": [
                 "hand",
                 "write",
@@ -4672,7 +4672,7 @@
         },
         "ear": {
             "a": "Ear",
-            "b": "1F442",
+            "b": "1F442-FE0F",
             "j": [
                 "body",
                 "face",
@@ -4761,7 +4761,7 @@
         },
         "eye": {
             "a": "Eye",
-            "b": "1F441",
+            "b": "1F441-FE0F",
             "j": [
                 "body",
                 "face",
@@ -6074,7 +6074,7 @@
         },
         "detective": {
             "a": "Detective",
-            "b": "1F575",
+            "b": "1F575-FE0F",
             "j": [
                 "sleuth",
                 "spy",
@@ -7088,7 +7088,7 @@
         },
         "person-in-suit-levitating": {
             "a": "Person in Suit Levitating",
-            "b": "1F574",
+            "b": "1F574-FE0F",
             "j": [
                 "business",
                 "person",
@@ -7231,7 +7231,7 @@
         },
         "skier": {
             "a": "Skier",
-            "b": "26F7",
+            "b": "26F7-FE0F",
             "j": [
                 "ski",
                 "snow",
@@ -7241,7 +7241,7 @@
         },
         "snowboarder": {
             "a": "Snowboarder",
-            "b": "1F3C2",
+            "b": "1F3C2-FE0F",
             "j": [
                 "ski",
                 "snow",
@@ -7252,7 +7252,7 @@
         },
         "person-golfing": {
             "a": "Person Golfing",
-            "b": "1F3CC",
+            "b": "1F3CC-FE0F",
             "j": [
                 "ball",
                 "golf",
@@ -7282,7 +7282,7 @@
         },
         "person-surfing": {
             "a": "Person Surfing",
-            "b": "1F3C4",
+            "b": "1F3C4-FE0F",
             "j": [
                 "surfing",
                 "sport",
@@ -7355,7 +7355,7 @@
         },
         "person-swimming": {
             "a": "Person Swimming",
-            "b": "1F3CA",
+            "b": "1F3CA-FE0F",
             "j": [
                 "swim",
                 "sport",
@@ -7393,7 +7393,7 @@
         },
         "person-bouncing-ball": {
             "a": "Person Bouncing Ball",
-            "b": "26F9",
+            "b": "26F9-FE0F",
             "j": [
                 "ball",
                 "sports",
@@ -7422,7 +7422,7 @@
         },
         "person-lifting-weights": {
             "a": "Person Lifting Weights",
-            "b": "1F3CB",
+            "b": "1F3CB-FE0F",
             "j": [
                 "lifter",
                 "weight",
@@ -7459,6 +7459,7 @@
                 "bicycle",
                 "biking",
                 "cyclist",
+                "bike",
                 "sport",
                 "move"
             ]
@@ -7471,8 +7472,8 @@
                 "biking",
                 "cyclist",
                 "man",
-                "sports",
                 "bike",
+                "sports",
                 "exercise",
                 "hipster"
             ]
@@ -7485,8 +7486,8 @@
                 "biking",
                 "cyclist",
                 "woman",
-                "sports",
                 "bike",
+                "sports",
                 "exercise",
                 "hipster",
                 "female"
@@ -7930,7 +7931,7 @@
         },
         "family": {
             "a": "Family",
-            "b": "1F46A",
+            "b": "1F46A-FE0F",
             "j": [
                 "home",
                 "parents",
@@ -8301,7 +8302,7 @@
         },
         "speaking-head": {
             "a": "Speaking Head",
-            "b": "1F5E3",
+            "b": "1F5E3-FE0F",
             "j": [
                 "face",
                 "head",
@@ -8459,7 +8460,7 @@
         },
         "dog": {
             "a": "Dog",
-            "b": "1F415",
+            "b": "1F415-FE0F",
             "j": [
                 "pet",
                 "animal",
@@ -8546,7 +8547,7 @@
         },
         "cat": {
             "a": "Cat",
-            "b": "1F408",
+            "b": "1F408-FE0F",
             "j": [
                 "pet",
                 "animal",
@@ -8980,7 +8981,7 @@
         },
         "chipmunk": {
             "a": "Chipmunk",
-            "b": "1F43F",
+            "b": "1F43F-FE0F",
             "j": [
                 "squirrel",
                 "animal",
@@ -9189,7 +9190,7 @@
         },
         "bird": {
             "a": "Bird",
-            "b": "1F426",
+            "b": "1F426-FE0F",
             "j": [
                 "animal",
                 "nature",
@@ -9209,7 +9210,7 @@
         },
         "dove": {
             "a": "Dove",
-            "b": "1F54A",
+            "b": "1F54A-FE0F",
             "j": [
                 "bird",
                 "fly",
@@ -9506,7 +9507,7 @@
         },
         "fish": {
             "a": "Fish",
-            "b": "1F41F",
+            "b": "1F41F-FE0F",
             "j": [
                 "Pisces",
                 "zodiac",
@@ -9695,7 +9696,7 @@
         },
         "spider": {
             "a": "Spider",
-            "b": "1F577",
+            "b": "1F577-FE0F",
             "j": [
                 "insect",
                 "animal",
@@ -9704,7 +9705,7 @@
         },
         "spider-web": {
             "a": "Spider Web",
-            "b": "1F578",
+            "b": "1F578-FE0F",
             "j": [
                 "spider",
                 "web",
@@ -9818,7 +9819,7 @@
         },
         "rosette": {
             "a": "Rosette",
-            "b": "1F3F5",
+            "b": "1F3F5-FE0F",
             "j": [
                 "plant",
                 "flower",
@@ -9998,7 +9999,7 @@
         },
         "shamrock": {
             "a": "Shamrock",
-            "b": "2618",
+            "b": "2618-FE0F",
             "j": [
                 "plant",
                 "vegetable",
@@ -10328,7 +10329,7 @@
         },
         "hot-pepper": {
             "a": "Hot Pepper",
-            "b": "1F336",
+            "b": "1F336-FE0F",
             "j": [
                 "hot",
                 "pepper",
@@ -10524,7 +10525,7 @@
                 "schmear",
                 "food",
                 "bread",
-                "jewish"
+                "jewish_bakery"
             ]
         },
         "pancakes": {
@@ -11290,7 +11291,7 @@
         },
         "hot-beverage": {
             "a": "Hot Beverage",
-            "b": "2615",
+            "b": "2615-FE0F",
             "j": [
                 "beverage",
                 "coffee",
@@ -11374,7 +11375,7 @@
         },
         "cocktail-glass": {
             "a": "Cocktail Glass",
-            "b": "1F378",
+            "b": "1F378-FE0F",
             "j": [
                 "bar",
                 "cocktail",
@@ -11556,7 +11557,7 @@
         },
         "fork-and-knife-with-plate": {
             "a": "Fork and Knife with Plate",
-            "b": "1F37D",
+            "b": "1F37D-FE0F",
             "j": [
                 "cooking",
                 "fork",
@@ -11630,7 +11631,7 @@
         },
         "globe-showing-europeafrica": {
             "a": "Globe Showing Europe-Africa",
-            "b": "1F30D",
+            "b": "1F30D-FE0F",
             "j": [
                 "Africa",
                 "earth",
@@ -11644,7 +11645,7 @@
         },
         "globe-showing-americas": {
             "a": "Globe Showing Americas",
-            "b": "1F30E",
+            "b": "1F30E-FE0F",
             "j": [
                 "Americas",
                 "earth",
@@ -11657,7 +11658,7 @@
         },
         "globe-showing-asiaaustralia": {
             "a": "Globe Showing Asia-Australia",
-            "b": "1F30F",
+            "b": "1F30F-FE0F",
             "j": [
                 "Asia",
                 "Australia",
@@ -11686,7 +11687,7 @@
         },
         "world-map": {
             "a": "World Map",
-            "b": "1F5FA",
+            "b": "1F5FA-FE0F",
             "j": [
                 "map",
                 "world",
@@ -11718,7 +11719,7 @@
         },
         "snowcapped-mountain": {
             "a": "Snow-Capped Mountain",
-            "b": "1F3D4",
+            "b": "1F3D4-FE0F",
             "j": [
                 "cold",
                 "mountain",
@@ -11733,7 +11734,7 @@
         },
         "mountain": {
             "a": "Mountain",
-            "b": "26F0",
+            "b": "26F0-FE0F",
             "j": [
                 "photo",
                 "nature",
@@ -11764,7 +11765,7 @@
         },
         "camping": {
             "a": "Camping",
-            "b": "1F3D5",
+            "b": "1F3D5-FE0F",
             "j": [
                 "photo",
                 "outdoors",
@@ -11773,7 +11774,7 @@
         },
         "beach-with-umbrella": {
             "a": "Beach with Umbrella",
-            "b": "1F3D6",
+            "b": "1F3D6-FE0F",
             "j": [
                 "beach",
                 "umbrella",
@@ -11786,7 +11787,7 @@
         },
         "desert": {
             "a": "Desert",
-            "b": "1F3DC",
+            "b": "1F3DC-FE0F",
             "j": [
                 "photo",
                 "warm",
@@ -11795,7 +11796,7 @@
         },
         "desert-island": {
             "a": "Desert Island",
-            "b": "1F3DD",
+            "b": "1F3DD-FE0F",
             "j": [
                 "desert",
                 "island",
@@ -11806,7 +11807,7 @@
         },
         "national-park": {
             "a": "National Park",
-            "b": "1F3DE",
+            "b": "1F3DE-FE0F",
             "j": [
                 "park",
                 "photo",
@@ -11816,7 +11817,7 @@
         },
         "stadium": {
             "a": "Stadium",
-            "b": "1F3DF",
+            "b": "1F3DF-FE0F",
             "j": [
                 "photo",
                 "place",
@@ -11827,7 +11828,7 @@
         },
         "classical-building": {
             "a": "Classical Building",
-            "b": "1F3DB",
+            "b": "1F3DB-FE0F",
             "j": [
                 "classical",
                 "art",
@@ -11837,7 +11838,7 @@
         },
         "building-construction": {
             "a": "Building Construction",
-            "b": "1F3D7",
+            "b": "1F3D7-FE0F",
             "j": [
                 "construction",
                 "wip",
@@ -11888,7 +11889,7 @@
         },
         "houses": {
             "a": "Houses",
-            "b": "1F3D8",
+            "b": "1F3D8-FE0F",
             "j": [
                 "buildings",
                 "photo"
@@ -11896,7 +11897,7 @@
         },
         "derelict-house": {
             "a": "Derelict House",
-            "b": "1F3DA",
+            "b": "1F3DA-FE0F",
             "j": [
                 "derelict",
                 "house",
@@ -11908,7 +11909,7 @@
         },
         "house": {
             "a": "House",
-            "b": "1F3E0",
+            "b": "1F3E0-FE0F",
             "j": [
                 "home",
                 "building"
@@ -12034,7 +12035,7 @@
         },
         "factory": {
             "a": "Factory",
-            "b": "1F3ED",
+            "b": "1F3ED-FE0F",
             "j": [
                 "building",
                 "industry",
@@ -12099,7 +12100,7 @@
         },
         "church": {
             "a": "Church",
-            "b": "26EA",
+            "b": "26EA-FE0F",
             "j": [
                 "Christian",
                 "cross",
@@ -12143,7 +12144,7 @@
         },
         "shinto-shrine": {
             "a": "Shinto Shrine",
-            "b": "26E9",
+            "b": "26E9-FE0F",
             "j": [
                 "religion",
                 "shinto",
@@ -12166,7 +12167,7 @@
         },
         "fountain": {
             "a": "Fountain",
-            "b": "26F2",
+            "b": "26F2-FE0F",
             "j": [
                 "photo",
                 "summer",
@@ -12176,7 +12177,7 @@
         },
         "tent": {
             "a": "Tent",
-            "b": "26FA",
+            "b": "26FA-FE0F",
             "j": [
                 "camping",
                 "photo",
@@ -12205,7 +12206,7 @@
         },
         "cityscape": {
             "a": "Cityscape",
-            "b": "1F3D9",
+            "b": "1F3D9-FE0F",
             "j": [
                 "city",
                 "photo",
@@ -12274,7 +12275,7 @@
         },
         "hot-springs": {
             "a": "Hot Springs",
-            "b": "2668",
+            "b": "2668-FE0F",
             "j": [
                 "hot",
                 "hotsprings",
@@ -12420,7 +12421,7 @@
         },
         "metro": {
             "a": "Metro",
-            "b": "1F687",
+            "b": "1F687-FE0F",
             "j": [
                 "subway",
                 "transportation",
@@ -12503,7 +12504,7 @@
         },
         "oncoming-bus": {
             "a": "Oncoming Bus",
-            "b": "1F68D",
+            "b": "1F68D-FE0F",
             "j": [
                 "bus",
                 "oncoming",
@@ -12535,7 +12536,7 @@
         },
         "ambulance": {
             "a": "Ambulance",
-            "b": "1F691",
+            "b": "1F691-FE0F",
             "j": [
                 "vehicle",
                 "health",
@@ -12572,7 +12573,7 @@
         },
         "oncoming-police-car": {
             "a": "Oncoming Police Car",
-            "b": "1F694",
+            "b": "1F694-FE0F",
             "j": [
                 "car",
                 "oncoming",
@@ -12617,7 +12618,7 @@
         },
         "oncoming-automobile": {
             "a": "Oncoming Automobile",
-            "b": "1F698",
+            "b": "1F698-FE0F",
             "j": [
                 "automobile",
                 "car",
@@ -12682,7 +12683,7 @@
         },
         "racing-car": {
             "a": "Racing Car",
-            "b": "1F3CE",
+            "b": "1F3CE-FE0F",
             "j": [
                 "car",
                 "racing",
@@ -12695,7 +12696,7 @@
         },
         "motorcycle": {
             "a": "Motorcycle",
-            "b": "1F3CD",
+            "b": "1F3CD-FE0F",
             "j": [
                 "racing",
                 "race",
@@ -12739,7 +12740,7 @@
         },
         "bicycle": {
             "a": "Bicycle",
-            "b": "1F6B2",
+            "b": "1F6B2-FE0F",
             "j": [
                 "bike",
                 "sports",
@@ -12786,7 +12787,7 @@
         },
         "motorway": {
             "a": "Motorway",
-            "b": "1F6E3",
+            "b": "1F6E3-FE0F",
             "j": [
                 "highway",
                 "road",
@@ -12796,7 +12797,7 @@
         },
         "railway-track": {
             "a": "Railway Track",
-            "b": "1F6E4",
+            "b": "1F6E4-FE0F",
             "j": [
                 "railway",
                 "train",
@@ -12805,7 +12806,7 @@
         },
         "oil-drum": {
             "a": "Oil Drum",
-            "b": "1F6E2",
+            "b": "1F6E2-FE0F",
             "j": [
                 "drum",
                 "oil",
@@ -12814,7 +12815,7 @@
         },
         "fuel-pump": {
             "a": "Fuel Pump",
-            "b": "26FD",
+            "b": "26FD-FE0F",
             "j": [
                 "diesel",
                 "fuel",
@@ -12899,7 +12900,7 @@
         },
         "anchor": {
             "a": "Anchor",
-            "b": "2693",
+            "b": "2693-FE0F",
             "j": [
                 "ship",
                 "tool",
@@ -12921,7 +12922,7 @@
         },
         "sailboat": {
             "a": "Sailboat",
-            "b": "26F5",
+            "b": "26F5-FE0F",
             "j": [
                 "boat",
                 "resort",
@@ -12957,7 +12958,7 @@
         },
         "passenger-ship": {
             "a": "Passenger Ship",
-            "b": "1F6F3",
+            "b": "1F6F3-FE0F",
             "j": [
                 "passenger",
                 "ship",
@@ -12968,7 +12969,7 @@
         },
         "ferry": {
             "a": "Ferry",
-            "b": "26F4",
+            "b": "26F4-FE0F",
             "j": [
                 "boat",
                 "passenger",
@@ -12978,7 +12979,7 @@
         },
         "motor-boat": {
             "a": "Motor Boat",
-            "b": "1F6E5",
+            "b": "1F6E5-FE0F",
             "j": [
                 "boat",
                 "motorboat",
@@ -12998,7 +12999,7 @@
         },
         "airplane": {
             "a": "Airplane",
-            "b": "2708",
+            "b": "2708-FE0F",
             "j": [
                 "aeroplane",
                 "vehicle",
@@ -13009,7 +13010,7 @@
         },
         "small-airplane": {
             "a": "Small Airplane",
-            "b": "1F6E9",
+            "b": "1F6E9-FE0F",
             "j": [
                 "aeroplane",
                 "airplane",
@@ -13118,7 +13119,7 @@
         },
         "satellite": {
             "a": "Satellite",
-            "b": "1F6F0",
+            "b": "1F6F0-FE0F",
             "j": [
                 "space",
                 "communication",
@@ -13155,7 +13156,7 @@
         },
         "bellhop-bell": {
             "a": "Bellhop Bell",
-            "b": "1F6CE",
+            "b": "1F6CE-FE0F",
             "j": [
                 "bell",
                 "bellhop",
@@ -13173,7 +13174,7 @@
         },
         "hourglass-done": {
             "a": "Hourglass Done",
-            "b": "231B",
+            "b": "231B-FE0F",
             "j": [
                 "sand",
                 "timer",
@@ -13188,7 +13189,7 @@
         },
         "hourglass-not-done": {
             "a": "Hourglass Not Done",
-            "b": "23F3",
+            "b": "23F3-FE0F",
             "j": [
                 "hourglass",
                 "sand",
@@ -13200,7 +13201,7 @@
         },
         "watch": {
             "a": "Watch",
-            "b": "231A",
+            "b": "231A-FE0F",
             "j": [
                 "clock",
                 "time",
@@ -13219,7 +13220,7 @@
         },
         "stopwatch": {
             "a": "Stopwatch",
-            "b": "23F1",
+            "b": "23F1-FE0F",
             "j": [
                 "clock",
                 "time",
@@ -13228,7 +13229,7 @@
         },
         "timer-clock": {
             "a": "Timer Clock",
-            "b": "23F2",
+            "b": "23F2-FE0F",
             "j": [
                 "clock",
                 "timer",
@@ -13237,7 +13238,7 @@
         },
         "mantelpiece-clock": {
             "a": "Mantelpiece Clock",
-            "b": "1F570",
+            "b": "1F570-FE0F",
             "j": [
                 "clock",
                 "time"
@@ -13245,7 +13246,7 @@
         },
         "twelve-oclock": {
             "a": "Twelve O’Clock",
-            "b": "1F55B",
+            "b": "1F55B-FE0F",
             "j": [
                 "00",
                 "12",
@@ -13268,7 +13269,7 @@
         },
         "twelvethirty": {
             "a": "Twelve-Thirty",
-            "b": "1F567",
+            "b": "1F567-FE0F",
             "j": [
                 "12",
                 "12:30",
@@ -13288,7 +13289,7 @@
         },
         "one-oclock": {
             "a": "One O’Clock",
-            "b": "1F550",
+            "b": "1F550-FE0F",
             "j": [
                 "00",
                 "1",
@@ -13308,7 +13309,7 @@
         },
         "onethirty": {
             "a": "One-Thirty",
-            "b": "1F55C",
+            "b": "1F55C-FE0F",
             "j": [
                 "1",
                 "1:30",
@@ -13328,7 +13329,7 @@
         },
         "two-oclock": {
             "a": "Two O’Clock",
-            "b": "1F551",
+            "b": "1F551-FE0F",
             "j": [
                 "00",
                 "2",
@@ -13348,7 +13349,7 @@
         },
         "twothirty": {
             "a": "Two-Thirty",
-            "b": "1F55D",
+            "b": "1F55D-FE0F",
             "j": [
                 "2",
                 "2:30",
@@ -13368,7 +13369,7 @@
         },
         "three-oclock": {
             "a": "Three O’Clock",
-            "b": "1F552",
+            "b": "1F552-FE0F",
             "j": [
                 "00",
                 "3",
@@ -13388,7 +13389,7 @@
         },
         "threethirty": {
             "a": "Three-Thirty",
-            "b": "1F55E",
+            "b": "1F55E-FE0F",
             "j": [
                 "3",
                 "3:30",
@@ -13408,7 +13409,7 @@
         },
         "four-oclock": {
             "a": "Four O’Clock",
-            "b": "1F553",
+            "b": "1F553-FE0F",
             "j": [
                 "00",
                 "4",
@@ -13428,7 +13429,7 @@
         },
         "fourthirty": {
             "a": "Four-Thirty",
-            "b": "1F55F",
+            "b": "1F55F-FE0F",
             "j": [
                 "4",
                 "4:30",
@@ -13448,7 +13449,7 @@
         },
         "five-oclock": {
             "a": "Five O’Clock",
-            "b": "1F554",
+            "b": "1F554-FE0F",
             "j": [
                 "00",
                 "5",
@@ -13468,7 +13469,7 @@
         },
         "fivethirty": {
             "a": "Five-Thirty",
-            "b": "1F560",
+            "b": "1F560-FE0F",
             "j": [
                 "5",
                 "5:30",
@@ -13488,7 +13489,7 @@
         },
         "six-oclock": {
             "a": "Six O’Clock",
-            "b": "1F555",
+            "b": "1F555-FE0F",
             "j": [
                 "00",
                 "6",
@@ -13510,7 +13511,7 @@
         },
         "sixthirty": {
             "a": "Six-Thirty",
-            "b": "1F561",
+            "b": "1F561-FE0F",
             "j": [
                 "6",
                 "6:30",
@@ -13530,7 +13531,7 @@
         },
         "seven-oclock": {
             "a": "Seven O’Clock",
-            "b": "1F556",
+            "b": "1F556-FE0F",
             "j": [
                 "00",
                 "7",
@@ -13550,7 +13551,7 @@
         },
         "seventhirty": {
             "a": "Seven-Thirty",
-            "b": "1F562",
+            "b": "1F562-FE0F",
             "j": [
                 "7",
                 "7:30",
@@ -13570,7 +13571,7 @@
         },
         "eight-oclock": {
             "a": "Eight O’Clock",
-            "b": "1F557",
+            "b": "1F557-FE0F",
             "j": [
                 "00",
                 "8",
@@ -13590,7 +13591,7 @@
         },
         "eightthirty": {
             "a": "Eight-Thirty",
-            "b": "1F563",
+            "b": "1F563-FE0F",
             "j": [
                 "8",
                 "8:30",
@@ -13610,7 +13611,7 @@
         },
         "nine-oclock": {
             "a": "Nine O’Clock",
-            "b": "1F558",
+            "b": "1F558-FE0F",
             "j": [
                 "00",
                 "9",
@@ -13630,7 +13631,7 @@
         },
         "ninethirty": {
             "a": "Nine-Thirty",
-            "b": "1F564",
+            "b": "1F564-FE0F",
             "j": [
                 "9",
                 "9:30",
@@ -13650,7 +13651,7 @@
         },
         "ten-oclock": {
             "a": "Ten O’Clock",
-            "b": "1F559",
+            "b": "1F559-FE0F",
             "j": [
                 "00",
                 "10",
@@ -13670,7 +13671,7 @@
         },
         "tenthirty": {
             "a": "Ten-Thirty",
-            "b": "1F565",
+            "b": "1F565-FE0F",
             "j": [
                 "10",
                 "10:30",
@@ -13690,7 +13691,7 @@
         },
         "eleven-oclock": {
             "a": "Eleven O’Clock",
-            "b": "1F55A",
+            "b": "1F55A-FE0F",
             "j": [
                 "00",
                 "11",
@@ -13710,7 +13711,7 @@
         },
         "eleventhirty": {
             "a": "Eleven-Thirty",
-            "b": "1F566",
+            "b": "1F566-FE0F",
             "j": [
                 "11",
                 "11:30",
@@ -13794,7 +13795,7 @@
         },
         "full-moon": {
             "a": "Full Moon",
-            "b": "1F315",
+            "b": "1F315-FE0F",
             "j": [
                 "full",
                 "moon",
@@ -13902,7 +13903,7 @@
         },
         "last-quarter-moon-face": {
             "a": "Last Quarter Moon Face",
-            "b": "1F31C",
+            "b": "1F31C-FE0F",
             "j": [
                 "face",
                 "moon",
@@ -13918,7 +13919,7 @@
         },
         "thermometer": {
             "a": "Thermometer",
-            "b": "1F321",
+            "b": "1F321-FE0F",
             "j": [
                 "weather",
                 "temperature",
@@ -13928,7 +13929,7 @@
         },
         "sun": {
             "a": "Sun",
-            "b": "2600",
+            "b": "2600-FE0F",
             "j": [
                 "bright",
                 "rays",
@@ -13981,7 +13982,7 @@
         },
         "star": {
             "a": "Star",
-            "b": "2B50",
+            "b": "2B50-FE0F",
             "j": [
                 "night",
                 "yellow"
@@ -14024,7 +14025,7 @@
         },
         "cloud": {
             "a": "Cloud",
-            "b": "2601",
+            "b": "2601-FE0F",
             "j": [
                 "weather",
                 "sky"
@@ -14032,7 +14033,7 @@
         },
         "sun-behind-cloud": {
             "a": "Sun Behind Cloud",
-            "b": "26C5",
+            "b": "26C5-FE0F",
             "j": [
                 "cloud",
                 "sun",
@@ -14046,7 +14047,7 @@
         },
         "cloud-with-lightning-and-rain": {
             "a": "Cloud with Lightning and Rain",
-            "b": "26C8",
+            "b": "26C8-FE0F",
             "j": [
                 "cloud",
                 "rain",
@@ -14057,7 +14058,7 @@
         },
         "sun-behind-small-cloud": {
             "a": "Sun Behind Small Cloud",
-            "b": "1F324",
+            "b": "1F324-FE0F",
             "j": [
                 "cloud",
                 "sun",
@@ -14066,7 +14067,7 @@
         },
         "sun-behind-large-cloud": {
             "a": "Sun Behind Large Cloud",
-            "b": "1F325",
+            "b": "1F325-FE0F",
             "j": [
                 "cloud",
                 "sun",
@@ -14075,7 +14076,7 @@
         },
         "sun-behind-rain-cloud": {
             "a": "Sun Behind Rain Cloud",
-            "b": "1F326",
+            "b": "1F326-FE0F",
             "j": [
                 "cloud",
                 "rain",
@@ -14085,7 +14086,7 @@
         },
         "cloud-with-rain": {
             "a": "Cloud with Rain",
-            "b": "1F327",
+            "b": "1F327-FE0F",
             "j": [
                 "cloud",
                 "rain",
@@ -14094,7 +14095,7 @@
         },
         "cloud-with-snow": {
             "a": "Cloud with Snow",
-            "b": "1F328",
+            "b": "1F328-FE0F",
             "j": [
                 "cloud",
                 "cold",
@@ -14104,7 +14105,7 @@
         },
         "cloud-with-lightning": {
             "a": "Cloud with Lightning",
-            "b": "1F329",
+            "b": "1F329-FE0F",
             "j": [
                 "cloud",
                 "lightning",
@@ -14114,7 +14115,7 @@
         },
         "tornado": {
             "a": "Tornado",
-            "b": "1F32A",
+            "b": "1F32A-FE0F",
             "j": [
                 "cloud",
                 "whirlwind",
@@ -14125,7 +14126,7 @@
         },
         "fog": {
             "a": "Fog",
-            "b": "1F32B",
+            "b": "1F32B-FE0F",
             "j": [
                 "cloud",
                 "weather"
@@ -14133,7 +14134,7 @@
         },
         "wind-face": {
             "a": "Wind Face",
-            "b": "1F32C",
+            "b": "1F32C-FE0F",
             "j": [
                 "blow",
                 "cloud",
@@ -14188,7 +14189,7 @@
         },
         "umbrella": {
             "a": "Umbrella",
-            "b": "2602",
+            "b": "2602-FE0F",
             "j": [
                 "clothing",
                 "rain",
@@ -14198,7 +14199,7 @@
         },
         "umbrella-with-rain-drops": {
             "a": "Umbrella with Rain Drops",
-            "b": "2614",
+            "b": "2614-FE0F",
             "j": [
                 "clothing",
                 "drop",
@@ -14211,7 +14212,7 @@
         },
         "umbrella-on-ground": {
             "a": "Umbrella on Ground",
-            "b": "26F1",
+            "b": "26F1-FE0F",
             "j": [
                 "rain",
                 "sun",
@@ -14222,7 +14223,7 @@
         },
         "high-voltage": {
             "a": "High Voltage",
-            "b": "26A1",
+            "b": "26A1-FE0F",
             "j": [
                 "danger",
                 "electric",
@@ -14237,7 +14238,7 @@
         },
         "snowflake": {
             "a": "Snowflake",
-            "b": "2744",
+            "b": "2744-FE0F",
             "j": [
                 "cold",
                 "snow",
@@ -14250,7 +14251,7 @@
         },
         "snowman": {
             "a": "Snowman",
-            "b": "2603",
+            "b": "2603-FE0F",
             "j": [
                 "cold",
                 "snow",
@@ -14264,7 +14265,7 @@
         },
         "snowman-without-snow": {
             "a": "Snowman Without Snow",
-            "b": "26C4",
+            "b": "26C4-FE0F",
             "j": [
                 "cold",
                 "snow",
@@ -14280,7 +14281,7 @@
         },
         "comet": {
             "a": "Comet",
-            "b": "2604",
+            "b": "2604-FE0F",
             "j": [
                 "space"
             ]
@@ -14564,7 +14565,7 @@
         },
         "reminder-ribbon": {
             "a": "Reminder Ribbon",
-            "b": "1F397",
+            "b": "1F397-FE0F",
             "j": [
                 "celebration",
                 "reminder",
@@ -14577,7 +14578,7 @@
         },
         "admission-tickets": {
             "a": "Admission Tickets",
-            "b": "1F39F",
+            "b": "1F39F-FE0F",
             "j": [
                 "admission",
                 "ticket",
@@ -14598,7 +14599,7 @@
         },
         "military-medal": {
             "a": "Military Medal",
-            "b": "1F396",
+            "b": "1F396-FE0F",
             "j": [
                 "celebration",
                 "medal",
@@ -14610,7 +14611,7 @@
         },
         "trophy": {
             "a": "Trophy",
-            "b": "1F3C6",
+            "b": "1F3C6-FE0F",
             "j": [
                 "prize",
                 "win",
@@ -14663,7 +14664,7 @@
         },
         "soccer-ball": {
             "a": "Soccer Ball",
-            "b": "26BD",
+            "b": "26BD-FE0F",
             "j": [
                 "ball",
                 "football",
@@ -14673,7 +14674,7 @@
         },
         "baseball": {
             "a": "Baseball",
-            "b": "26BE",
+            "b": "26BE-FE0F",
             "j": [
                 "ball",
                 "sports",
@@ -14866,7 +14867,7 @@
         },
         "flag-in-hole": {
             "a": "Flag in Hole",
-            "b": "26F3",
+            "b": "26F3-FE0F",
             "j": [
                 "golf",
                 "hole",
@@ -14878,7 +14879,7 @@
         },
         "ice-skate": {
             "a": "Ice Skate",
-            "b": "26F8",
+            "b": "26F8-FE0F",
             "j": [
                 "ice",
                 "skate",
@@ -15041,7 +15042,7 @@
         },
         "video-game": {
             "a": "Video Game",
-            "b": "1F3AE",
+            "b": "1F3AE-FE0F",
             "j": [
                 "controller",
                 "game",
@@ -15052,7 +15053,7 @@
         },
         "joystick": {
             "a": "Joystick",
-            "b": "1F579",
+            "b": "1F579-FE0F",
             "j": [
                 "game",
                 "video game",
@@ -15142,7 +15143,7 @@
         },
         "spade-suit": {
             "a": "Spade Suit",
-            "b": "2660",
+            "b": "2660-FE0F",
             "j": [
                 "card",
                 "game",
@@ -15154,7 +15155,7 @@
         },
         "heart-suit": {
             "a": "Heart Suit",
-            "b": "2665",
+            "b": "2665-FE0F",
             "j": [
                 "card",
                 "game",
@@ -15166,7 +15167,7 @@
         },
         "diamond-suit": {
             "a": "Diamond Suit",
-            "b": "2666",
+            "b": "2666-FE0F",
             "j": [
                 "card",
                 "game",
@@ -15178,7 +15179,7 @@
         },
         "club-suit": {
             "a": "Club Suit",
-            "b": "2663",
+            "b": "2663-FE0F",
             "j": [
                 "card",
                 "game",
@@ -15190,7 +15191,7 @@
         },
         "chess-pawn": {
             "a": "Chess Pawn",
-            "b": "265F",
+            "b": "265F-FE0F",
             "j": [
                 "chess",
                 "dupe",
@@ -15212,7 +15213,7 @@
         },
         "mahjong-red-dragon": {
             "a": "Mahjong Red Dragon",
-            "b": "1F004",
+            "b": "1F004-FE0F",
             "j": [
                 "game",
                 "mahjong",
@@ -15237,7 +15238,7 @@
         },
         "performing-arts": {
             "a": "Performing Arts",
-            "b": "1F3AD",
+            "b": "1F3AD-FE0F",
             "j": [
                 "art",
                 "mask",
@@ -15250,7 +15251,7 @@
         },
         "framed-picture": {
             "a": "Framed Picture",
-            "b": "1F5BC",
+            "b": "1F5BC-FE0F",
             "j": [
                 "art",
                 "frame",
@@ -15319,7 +15320,7 @@
         },
         "glasses": {
             "a": "Glasses",
-            "b": "1F453",
+            "b": "1F453-FE0F",
             "j": [
                 "clothing",
                 "eye",
@@ -15335,7 +15336,7 @@
         },
         "sunglasses": {
             "a": "Sunglasses",
-            "b": "1F576",
+            "b": "1F576-FE0F",
             "j": [
                 "dark",
                 "eye",
@@ -15593,7 +15594,7 @@
         },
         "shopping-bags": {
             "a": "Shopping Bags",
-            "b": "1F6CD",
+            "b": "1F6CD-FE0F",
             "j": [
                 "bag",
                 "hotel",
@@ -15784,7 +15785,7 @@
         },
         "graduation-cap": {
             "a": "Graduation Cap",
-            "b": "1F393",
+            "b": "1F393-FE0F",
             "j": [
                 "cap",
                 "celebration",
@@ -15823,7 +15824,7 @@
         },
         "rescue-workers-helmet": {
             "a": "Rescue Worker’S Helmet",
-            "b": "26D1",
+            "b": "26D1-FE0F",
             "j": [
                 "aid",
                 "cross",
@@ -15903,7 +15904,7 @@
         },
         "speaker-low-volume": {
             "a": "Speaker Low Volume",
-            "b": "1F508",
+            "b": "1F508-FE0F",
             "j": [
                 "soft",
                 "sound",
@@ -16023,7 +16024,7 @@
         },
         "studio-microphone": {
             "a": "Studio Microphone",
-            "b": "1F399",
+            "b": "1F399-FE0F",
             "j": [
                 "mic",
                 "microphone",
@@ -16037,7 +16038,7 @@
         },
         "level-slider": {
             "a": "Level Slider",
-            "b": "1F39A",
+            "b": "1F39A-FE0F",
             "j": [
                 "level",
                 "music",
@@ -16047,7 +16048,7 @@
         },
         "control-knobs": {
             "a": "Control Knobs",
-            "b": "1F39B",
+            "b": "1F39B-FE0F",
             "j": [
                 "control",
                 "knobs",
@@ -16070,7 +16071,7 @@
         },
         "headphone": {
             "a": "Headphone",
-            "b": "1F3A7",
+            "b": "1F3A7-FE0F",
             "j": [
                 "earbud",
                 "music",
@@ -16080,7 +16081,7 @@
         },
         "radio": {
             "a": "Radio",
-            "b": "1F4FB",
+            "b": "1F4FB-FE0F",
             "j": [
                 "video",
                 "communication",
@@ -16231,7 +16232,7 @@
         },
         "telephone": {
             "a": "Telephone",
-            "b": "260E",
+            "b": "260E-FE0F",
             "j": [
                 "phone",
                 "technology",
@@ -16253,7 +16254,7 @@
         },
         "pager": {
             "a": "Pager",
-            "b": "1F4DF",
+            "b": "1F4DF-FE0F",
             "j": [
                 "bbcall",
                 "oldschool",
@@ -16301,7 +16302,7 @@
         },
         "laptop": {
             "a": "Laptop",
-            "b": "1F4BB",
+            "b": "1F4BB-FE0F",
             "j": [
                 "computer",
                 "pc",
@@ -16314,7 +16315,7 @@
         },
         "desktop-computer": {
             "a": "Desktop Computer",
-            "b": "1F5A5",
+            "b": "1F5A5-FE0F",
             "j": [
                 "computer",
                 "desktop",
@@ -16325,7 +16326,7 @@
         },
         "printer": {
             "a": "Printer",
-            "b": "1F5A8",
+            "b": "1F5A8-FE0F",
             "j": [
                 "computer",
                 "paper",
@@ -16334,7 +16335,7 @@
         },
         "keyboard": {
             "a": "Keyboard",
-            "b": "2328",
+            "b": "2328-FE0F",
             "j": [
                 "computer",
                 "technology",
@@ -16345,7 +16346,7 @@
         },
         "computer-mouse": {
             "a": "Computer Mouse",
-            "b": "1F5B1",
+            "b": "1F5B1-FE0F",
             "j": [
                 "computer",
                 "click"
@@ -16353,7 +16354,7 @@
         },
         "trackball": {
             "a": "Trackball",
-            "b": "1F5B2",
+            "b": "1F5B2-FE0F",
             "j": [
                 "computer",
                 "technology",
@@ -16390,7 +16391,7 @@
         },
         "optical-disk": {
             "a": "Optical Disk",
-            "b": "1F4BF",
+            "b": "1F4BF-FE0F",
             "j": [
                 "CD",
                 "computer",
@@ -16435,7 +16436,7 @@
         },
         "film-frames": {
             "a": "Film Frames",
-            "b": "1F39E",
+            "b": "1F39E-FE0F",
             "j": [
                 "cinema",
                 "film",
@@ -16445,7 +16446,7 @@
         },
         "film-projector": {
             "a": "Film Projector",
-            "b": "1F4FD",
+            "b": "1F4FD-FE0F",
             "j": [
                 "cinema",
                 "film",
@@ -16458,7 +16459,7 @@
         },
         "clapper-board": {
             "a": "Clapper Board",
-            "b": "1F3AC",
+            "b": "1F3AC-FE0F",
             "j": [
                 "clapper",
                 "movie",
@@ -16468,7 +16469,7 @@
         },
         "television": {
             "a": "Television",
-            "b": "1F4FA",
+            "b": "1F4FA-FE0F",
             "j": [
                 "tv",
                 "video",
@@ -16480,7 +16481,7 @@
         },
         "camera": {
             "a": "Camera",
-            "b": "1F4F7",
+            "b": "1F4F7-FE0F",
             "j": [
                 "video",
                 "gadgets",
@@ -16500,7 +16501,7 @@
         },
         "video-camera": {
             "a": "Video Camera",
-            "b": "1F4F9",
+            "b": "1F4F9-FE0F",
             "j": [
                 "camera",
                 "video",
@@ -16523,7 +16524,7 @@
         },
         "magnifying-glass-tilted-left": {
             "a": "Magnifying Glass Tilted Left",
-            "b": "1F50D",
+            "b": "1F50D-FE0F",
             "j": [
                 "glass",
                 "magnifying",
@@ -16549,7 +16550,7 @@
         },
         "candle": {
             "a": "Candle",
-            "b": "1F56F",
+            "b": "1F56F-FE0F",
             "j": [
                 "light",
                 "fire",
@@ -16687,7 +16688,7 @@
         },
         "books": {
             "a": "Books",
-            "b": "1F4DA",
+            "b": "1F4DA-FE0F",
             "j": [
                 "book",
                 "literature",
@@ -16761,7 +16762,7 @@
         },
         "rolledup-newspaper": {
             "a": "Rolled-Up Newspaper",
-            "b": "1F5DE",
+            "b": "1F5DE-FE0F",
             "j": [
                 "news",
                 "newspaper",
@@ -16799,7 +16800,7 @@
         },
         "label": {
             "a": "Label",
-            "b": "1F3F7",
+            "b": "1F3F7-FE0F",
             "j": [
                 "sale",
                 "tag"
@@ -16807,7 +16808,7 @@
         },
         "money-bag": {
             "a": "Money Bag",
-            "b": "1F4B0",
+            "b": "1F4B0-FE0F",
             "j": [
                 "bag",
                 "dollar",
@@ -16907,7 +16908,7 @@
         },
         "credit-card": {
             "a": "Credit Card",
-            "b": "1F4B3",
+            "b": "1F4B3-FE0F",
             "j": [
                 "card",
                 "credit",
@@ -16946,7 +16947,7 @@
         },
         "envelope": {
             "a": "Envelope",
-            "b": "2709",
+            "b": "2709-FE0F",
             "j": [
                 "email",
                 "letter",
@@ -16994,7 +16995,7 @@
         },
         "outbox-tray": {
             "a": "Outbox Tray",
-            "b": "1F4E4",
+            "b": "1F4E4-FE0F",
             "j": [
                 "box",
                 "letter",
@@ -17008,7 +17009,7 @@
         },
         "inbox-tray": {
             "a": "Inbox Tray",
-            "b": "1F4E5",
+            "b": "1F4E5-FE0F",
             "j": [
                 "box",
                 "inbox",
@@ -17022,7 +17023,7 @@
         },
         "package": {
             "a": "Package",
-            "b": "1F4E6",
+            "b": "1F4E6-FE0F",
             "j": [
                 "box",
                 "parcel",
@@ -17034,7 +17035,7 @@
         },
         "closed-mailbox-with-raised-flag": {
             "a": "Closed Mailbox with Raised Flag",
-            "b": "1F4EB",
+            "b": "1F4EB-FE0F",
             "j": [
                 "closed",
                 "mail",
@@ -17047,7 +17048,7 @@
         },
         "closed-mailbox-with-lowered-flag": {
             "a": "Closed Mailbox with Lowered Flag",
-            "b": "1F4EA",
+            "b": "1F4EA-FE0F",
             "j": [
                 "closed",
                 "lowered",
@@ -17061,7 +17062,7 @@
         },
         "open-mailbox-with-raised-flag": {
             "a": "Open Mailbox with Raised Flag",
-            "b": "1F4EC",
+            "b": "1F4EC-FE0F",
             "j": [
                 "mail",
                 "mailbox",
@@ -17074,7 +17075,7 @@
         },
         "open-mailbox-with-lowered-flag": {
             "a": "Open Mailbox with Lowered Flag",
-            "b": "1F4ED",
+            "b": "1F4ED-FE0F",
             "j": [
                 "lowered",
                 "mail",
@@ -17098,7 +17099,7 @@
         },
         "ballot-box-with-ballot": {
             "a": "Ballot Box with Ballot",
-            "b": "1F5F3",
+            "b": "1F5F3-FE0F",
             "j": [
                 "ballot",
                 "box",
@@ -17108,7 +17109,7 @@
         },
         "pencil": {
             "a": "Pencil",
-            "b": "270F",
+            "b": "270F-FE0F",
             "j": [
                 "stationery",
                 "write",
@@ -17120,7 +17121,7 @@
         },
         "black-nib": {
             "a": "Black Nib",
-            "b": "2712",
+            "b": "2712-FE0F",
             "j": [
                 "nib",
                 "pen",
@@ -17131,7 +17132,7 @@
         },
         "fountain-pen": {
             "a": "Fountain Pen",
-            "b": "1F58B",
+            "b": "1F58B-FE0F",
             "j": [
                 "fountain",
                 "pen",
@@ -17142,7 +17143,7 @@
         },
         "pen": {
             "a": "Pen",
-            "b": "1F58A",
+            "b": "1F58A-FE0F",
             "j": [
                 "ballpoint",
                 "stationery",
@@ -17152,7 +17153,7 @@
         },
         "paintbrush": {
             "a": "Paintbrush",
-            "b": "1F58C",
+            "b": "1F58C-FE0F",
             "j": [
                 "painting",
                 "drawing",
@@ -17162,7 +17163,7 @@
         },
         "crayon": {
             "a": "Crayon",
-            "b": "1F58D",
+            "b": "1F58D-FE0F",
             "j": [
                 "drawing",
                 "creativity"
@@ -17223,7 +17224,7 @@
         },
         "card-index-dividers": {
             "a": "Card Index Dividers",
-            "b": "1F5C2",
+            "b": "1F5C2-FE0F",
             "j": [
                 "card",
                 "dividers",
@@ -17255,7 +17256,7 @@
         },
         "spiral-notepad": {
             "a": "Spiral Notepad",
-            "b": "1F5D2",
+            "b": "1F5D2-FE0F",
             "j": [
                 "note",
                 "pad",
@@ -17266,7 +17267,7 @@
         },
         "spiral-calendar": {
             "a": "Spiral Calendar",
-            "b": "1F5D3",
+            "b": "1F5D3-FE0F",
             "j": [
                 "calendar",
                 "pad",
@@ -17339,7 +17340,7 @@
         },
         "clipboard": {
             "a": "Clipboard",
-            "b": "1F4CB",
+            "b": "1F4CB-FE0F",
             "j": [
                 "stationery",
                 "documents"
@@ -17377,7 +17378,7 @@
         },
         "linked-paperclips": {
             "a": "Linked Paperclips",
-            "b": "1F587",
+            "b": "1F587-FE0F",
             "j": [
                 "link",
                 "paperclip",
@@ -17416,7 +17417,7 @@
         },
         "scissors": {
             "a": "Scissors",
-            "b": "2702",
+            "b": "2702-FE0F",
             "j": [
                 "cutting",
                 "tool",
@@ -17426,7 +17427,7 @@
         },
         "card-file-box": {
             "a": "Card File Box",
-            "b": "1F5C3",
+            "b": "1F5C3-FE0F",
             "j": [
                 "box",
                 "card",
@@ -17437,7 +17438,7 @@
         },
         "file-cabinet": {
             "a": "File Cabinet",
-            "b": "1F5C4",
+            "b": "1F5C4-FE0F",
             "j": [
                 "cabinet",
                 "file",
@@ -17447,7 +17448,7 @@
         },
         "wastebasket": {
             "a": "Wastebasket",
-            "b": "1F5D1",
+            "b": "1F5D1-FE0F",
             "j": [
                 "bin",
                 "trash",
@@ -17458,7 +17459,7 @@
         },
         "locked": {
             "a": "Locked",
-            "b": "1F512",
+            "b": "1F512-FE0F",
             "j": [
                 "closed",
                 "security",
@@ -17468,7 +17469,7 @@
         },
         "unlocked": {
             "a": "Unlocked",
-            "b": "1F513",
+            "b": "1F513-FE0F",
             "j": [
                 "lock",
                 "open",
@@ -17513,7 +17514,7 @@
         },
         "old-key": {
             "a": "Old Key",
-            "b": "1F5DD",
+            "b": "1F5DD-FE0F",
             "j": [
                 "clue",
                 "key",
@@ -17547,7 +17548,7 @@
         },
         "pick": {
             "a": "Pick",
-            "b": "26CF",
+            "b": "26CF-FE0F",
             "j": [
                 "mining",
                 "tool",
@@ -17557,7 +17558,7 @@
         },
         "hammer-and-pick": {
             "a": "Hammer and Pick",
-            "b": "2692",
+            "b": "2692-FE0F",
             "j": [
                 "hammer",
                 "pick",
@@ -17569,7 +17570,7 @@
         },
         "hammer-and-wrench": {
             "a": "Hammer and Wrench",
-            "b": "1F6E0",
+            "b": "1F6E0-FE0F",
             "j": [
                 "hammer",
                 "spanner",
@@ -17582,7 +17583,7 @@
         },
         "dagger": {
             "a": "Dagger",
-            "b": "1F5E1",
+            "b": "1F5E1-FE0F",
             "j": [
                 "knife",
                 "weapon"
@@ -17590,7 +17591,7 @@
         },
         "crossed-swords": {
             "a": "Crossed Swords",
-            "b": "2694",
+            "b": "2694-FE0F",
             "j": [
                 "crossed",
                 "swords",
@@ -17599,7 +17600,7 @@
         },
         "bomb": {
             "a": "Bomb",
-            "b": "1F4A3",
+            "b": "1F4A3-FE0F",
             "j": [
                 "comic",
                 "boom",
@@ -17632,7 +17633,7 @@
         },
         "shield": {
             "a": "Shield",
-            "b": "1F6E1",
+            "b": "1F6E1-FE0F",
             "j": [
                 "weapon",
                 "protection",
@@ -17687,7 +17688,7 @@
         },
         "gear": {
             "a": "Gear",
-            "b": "2699",
+            "b": "2699-FE0F",
             "j": [
                 "cog",
                 "cogwheel",
@@ -17696,7 +17697,7 @@
         },
         "clamp": {
             "a": "Clamp",
-            "b": "1F5DC",
+            "b": "1F5DC-FE0F",
             "j": [
                 "compress",
                 "tool",
@@ -17705,7 +17706,7 @@
         },
         "balance-scale": {
             "a": "Balance Scale",
-            "b": "2696",
+            "b": "2696-FE0F",
             "j": [
                 "balance",
                 "justice",
@@ -17736,7 +17737,7 @@
         },
         "chains": {
             "a": "Chains",
-            "b": "26D3",
+            "b": "26D3-FE0F",
             "j": [
                 "chain",
                 "lock",
@@ -17789,7 +17790,7 @@
         },
         "alembic": {
             "a": "Alembic",
-            "b": "2697",
+            "b": "2697-FE0F",
             "j": [
                 "chemistry",
                 "tool",
@@ -17995,7 +17996,7 @@
         },
         "bed": {
             "a": "Bed",
-            "b": "1F6CF",
+            "b": "1F6CF-FE0F",
             "j": [
                 "hotel",
                 "sleep",
@@ -18004,7 +18005,7 @@
         },
         "couch-and-lamp": {
             "a": "Couch and Lamp",
-            "b": "1F6CB",
+            "b": "1F6CB-FE0F",
             "j": [
                 "couch",
                 "hotel",
@@ -18214,7 +18215,7 @@
         },
         "coffin": {
             "a": "Coffin",
-            "b": "26B0",
+            "b": "26B0-FE0F",
             "j": [
                 "death",
                 "vampire",
@@ -18242,7 +18243,7 @@
         },
         "funeral-urn": {
             "a": "Funeral Urn",
-            "b": "26B1",
+            "b": "26B1-FE0F",
             "j": [
                 "ashes",
                 "death",
@@ -18354,7 +18355,7 @@
         },
         "wheelchair-symbol": {
             "a": "Wheelchair Symbol",
-            "b": "267F",
+            "b": "267F-FE0F",
             "j": [
                 "access",
                 "blue-square",
@@ -18364,7 +18365,7 @@
         },
         "mens-room": {
             "a": "Men’S Room",
-            "b": "1F6B9",
+            "b": "1F6B9-FE0F",
             "j": [
                 "bathroom",
                 "lavatory",
@@ -18382,7 +18383,7 @@
         },
         "womens-room": {
             "a": "Women’S Room",
-            "b": "1F6BA",
+            "b": "1F6BA-FE0F",
             "j": [
                 "bathroom",
                 "lavatory",
@@ -18414,7 +18415,7 @@
         },
         "baby-symbol": {
             "a": "Baby Symbol",
-            "b": "1F6BC",
+            "b": "1F6BC-FE0F",
             "j": [
                 "baby",
                 "changing",
@@ -18479,7 +18480,7 @@
         },
         "warning": {
             "a": "Warning",
-            "b": "26A0",
+            "b": "26A0-FE0F",
             "j": [
                 "exclamation",
                 "wip",
@@ -18507,7 +18508,7 @@
         },
         "no-entry": {
             "a": "No Entry",
-            "b": "26D4",
+            "b": "26D4-FE0F",
             "j": [
                 "entry",
                 "forbidden",
@@ -18549,13 +18550,14 @@
                 "forbidden",
                 "no",
                 "prohibited",
+                "no_bikes",
                 "cyclist",
                 "circle"
             ]
         },
         "no-smoking": {
             "a": "No Smoking",
-            "b": "1F6AD",
+            "b": "1F6AD-FE0F",
             "j": [
                 "forbidden",
                 "no",
@@ -18644,7 +18646,7 @@
         },
         "radioactive": {
             "a": "Radioactive",
-            "b": "2622",
+            "b": "2622-FE0F",
             "j": [
                 "sign",
                 "nuclear",
@@ -18653,7 +18655,7 @@
         },
         "biohazard": {
             "a": "Biohazard",
-            "b": "2623",
+            "b": "2623-FE0F",
             "j": [
                 "sign",
                 "danger"
@@ -18661,7 +18663,7 @@
         },
         "up-arrow": {
             "a": "Up Arrow",
-            "b": "2B06",
+            "b": "2B06-FE0F",
             "j": [
                 "arrow",
                 "cardinal",
@@ -18674,7 +18676,7 @@
         },
         "upright-arrow": {
             "a": "Up-Right Arrow",
-            "b": "2197",
+            "b": "2197-FE0F",
             "j": [
                 "arrow",
                 "direction",
@@ -18689,7 +18691,7 @@
         },
         "right-arrow": {
             "a": "Right Arrow",
-            "b": "27A1",
+            "b": "27A1-FE0F",
             "j": [
                 "arrow",
                 "cardinal",
@@ -18701,7 +18703,7 @@
         },
         "downright-arrow": {
             "a": "Down-Right Arrow",
-            "b": "2198",
+            "b": "2198-FE0F",
             "j": [
                 "arrow",
                 "direction",
@@ -18715,7 +18717,7 @@
         },
         "down-arrow": {
             "a": "Down Arrow",
-            "b": "2B07",
+            "b": "2B07-FE0F",
             "j": [
                 "arrow",
                 "cardinal",
@@ -18728,7 +18730,7 @@
         },
         "downleft-arrow": {
             "a": "Down-Left Arrow",
-            "b": "2199",
+            "b": "2199-FE0F",
             "j": [
                 "arrow",
                 "direction",
@@ -18742,7 +18744,7 @@
         },
         "left-arrow": {
             "a": "Left Arrow",
-            "b": "2B05",
+            "b": "2B05-FE0F",
             "j": [
                 "arrow",
                 "cardinal",
@@ -18755,7 +18757,7 @@
         },
         "upleft-arrow": {
             "a": "Up-Left Arrow",
-            "b": "2196",
+            "b": "2196-FE0F",
             "j": [
                 "arrow",
                 "direction",
@@ -18770,7 +18772,7 @@
         },
         "updown-arrow": {
             "a": "Up-Down Arrow",
-            "b": "2195",
+            "b": "2195-FE0F",
             "j": [
                 "arrow",
                 "up-down arrow",
@@ -18783,7 +18785,7 @@
         },
         "leftright-arrow": {
             "a": "Left-Right Arrow",
-            "b": "2194",
+            "b": "2194-FE0F",
             "j": [
                 "arrow",
                 "left-right arrow",
@@ -18796,7 +18798,7 @@
         },
         "right-arrow-curving-left": {
             "a": "Right Arrow Curving Left",
-            "b": "21A9",
+            "b": "21A9-FE0F",
             "j": [
                 "arrow",
                 "back",
@@ -18808,7 +18810,7 @@
         },
         "left-arrow-curving-right": {
             "a": "Left Arrow Curving Right",
-            "b": "21AA",
+            "b": "21AA-FE0F",
             "j": [
                 "arrow",
                 "blue-square",
@@ -18819,7 +18821,7 @@
         },
         "right-arrow-curving-up": {
             "a": "Right Arrow Curving Up",
-            "b": "2934",
+            "b": "2934-FE0F",
             "j": [
                 "arrow",
                 "blue-square",
@@ -18829,7 +18831,7 @@
         },
         "right-arrow-curving-down": {
             "a": "Right Arrow Curving Down",
-            "b": "2935",
+            "b": "2935-FE0F",
             "j": [
                 "arrow",
                 "down",
@@ -18927,7 +18929,7 @@
         },
         "atom-symbol": {
             "a": "Atom Symbol",
-            "b": "269B",
+            "b": "269B-FE0F",
             "j": [
                 "atheist",
                 "atom",
@@ -18938,7 +18940,7 @@
         },
         "om": {
             "a": "Om",
-            "b": "1F549",
+            "b": "1F549-FE0F",
             "j": [
                 "Hindu",
                 "religion",
@@ -18950,7 +18952,7 @@
         },
         "star-of-david": {
             "a": "Star of David",
-            "b": "2721",
+            "b": "2721-FE0F",
             "j": [
                 "David",
                 "Jew",
@@ -18963,7 +18965,7 @@
         },
         "wheel-of-dharma": {
             "a": "Wheel of Dharma",
-            "b": "2638",
+            "b": "2638-FE0F",
             "j": [
                 "Buddhist",
                 "dharma",
@@ -18977,7 +18979,7 @@
         },
         "yin-yang": {
             "a": "Yin Yang",
-            "b": "262F",
+            "b": "262F-FE0F",
             "j": [
                 "religion",
                 "tao",
@@ -18989,7 +18991,7 @@
         },
         "latin-cross": {
             "a": "Latin Cross",
-            "b": "271D",
+            "b": "271D-FE0F",
             "j": [
                 "Christian",
                 "cross",
@@ -18999,7 +19001,7 @@
         },
         "orthodox-cross": {
             "a": "Orthodox Cross",
-            "b": "2626",
+            "b": "2626-FE0F",
             "j": [
                 "Christian",
                 "cross",
@@ -19009,7 +19011,7 @@
         },
         "star-and-crescent": {
             "a": "Star and Crescent",
-            "b": "262A",
+            "b": "262A-FE0F",
             "j": [
                 "islam",
                 "Muslim",
@@ -19018,7 +19020,7 @@
         },
         "peace-symbol": {
             "a": "Peace Symbol",
-            "b": "262E",
+            "b": "262E-FE0F",
             "j": [
                 "peace",
                 "hippie"
@@ -19061,7 +19063,7 @@
         },
         "aries": {
             "a": "Aries",
-            "b": "2648",
+            "b": "2648-FE0F",
             "j": [
                 "ram",
                 "zodiac",
@@ -19072,7 +19074,7 @@
         },
         "taurus": {
             "a": "Taurus",
-            "b": "2649",
+            "b": "2649-FE0F",
             "j": [
                 "bull",
                 "ox",
@@ -19084,7 +19086,7 @@
         },
         "gemini": {
             "a": "Gemini",
-            "b": "264A",
+            "b": "264A-FE0F",
             "j": [
                 "twins",
                 "zodiac",
@@ -19095,7 +19097,7 @@
         },
         "cancer": {
             "a": "Cancer",
-            "b": "264B",
+            "b": "264B-FE0F",
             "j": [
                 "crab",
                 "zodiac",
@@ -19106,7 +19108,7 @@
         },
         "leo": {
             "a": "Leo",
-            "b": "264C",
+            "b": "264C-FE0F",
             "j": [
                 "lion",
                 "zodiac",
@@ -19117,7 +19119,7 @@
         },
         "virgo": {
             "a": "Virgo",
-            "b": "264D",
+            "b": "264D-FE0F",
             "j": [
                 "zodiac",
                 "sign",
@@ -19127,7 +19129,7 @@
         },
         "libra": {
             "a": "Libra",
-            "b": "264E",
+            "b": "264E-FE0F",
             "j": [
                 "balance",
                 "justice",
@@ -19140,7 +19142,7 @@
         },
         "scorpio": {
             "a": "Scorpio",
-            "b": "264F",
+            "b": "264F-FE0F",
             "j": [
                 "scorpion",
                 "scorpius",
@@ -19152,7 +19154,7 @@
         },
         "sagittarius": {
             "a": "Sagittarius",
-            "b": "2650",
+            "b": "2650-FE0F",
             "j": [
                 "archer",
                 "zodiac",
@@ -19163,7 +19165,7 @@
         },
         "capricorn": {
             "a": "Capricorn",
-            "b": "2651",
+            "b": "2651-FE0F",
             "j": [
                 "goat",
                 "zodiac",
@@ -19174,7 +19176,7 @@
         },
         "aquarius": {
             "a": "Aquarius",
-            "b": "2652",
+            "b": "2652-FE0F",
             "j": [
                 "bearer",
                 "water",
@@ -19186,7 +19188,7 @@
         },
         "pisces": {
             "a": "Pisces",
-            "b": "2653",
+            "b": "2653-FE0F",
             "j": [
                 "fish",
                 "zodiac",
@@ -19245,7 +19247,7 @@
         },
         "play-button": {
             "a": "Play Button",
-            "b": "25B6",
+            "b": "25B6-FE0F",
             "j": [
                 "arrow",
                 "play",
@@ -19257,7 +19259,7 @@
         },
         "fastforward-button": {
             "a": "Fast-Forward Button",
-            "b": "23E9",
+            "b": "23E9-FE0F",
             "j": [
                 "arrow",
                 "double",
@@ -19273,7 +19275,7 @@
         },
         "next-track-button": {
             "a": "Next Track Button",
-            "b": "23ED",
+            "b": "23ED-FE0F",
             "j": [
                 "arrow",
                 "next scene",
@@ -19286,7 +19288,7 @@
         },
         "play-or-pause-button": {
             "a": "Play or Pause Button",
-            "b": "23EF",
+            "b": "23EF-FE0F",
             "j": [
                 "arrow",
                 "pause",
@@ -19298,7 +19300,7 @@
         },
         "reverse-button": {
             "a": "Reverse Button",
-            "b": "25C0",
+            "b": "25C0-FE0F",
             "j": [
                 "arrow",
                 "left",
@@ -19310,7 +19312,7 @@
         },
         "fast-reverse-button": {
             "a": "Fast Reverse Button",
-            "b": "23EA",
+            "b": "23EA-FE0F",
             "j": [
                 "arrow",
                 "double",
@@ -19321,7 +19323,7 @@
         },
         "last-track-button": {
             "a": "Last Track Button",
-            "b": "23EE",
+            "b": "23EE-FE0F",
             "j": [
                 "arrow",
                 "previous scene",
@@ -19381,7 +19383,7 @@
         },
         "pause-button": {
             "a": "Pause Button",
-            "b": "23F8",
+            "b": "23F8-FE0F",
             "j": [
                 "bar",
                 "double",
@@ -19392,7 +19394,7 @@
         },
         "stop-button": {
             "a": "Stop Button",
-            "b": "23F9",
+            "b": "23F9-FE0F",
             "j": [
                 "square",
                 "stop",
@@ -19401,7 +19403,7 @@
         },
         "record-button": {
             "a": "Record Button",
-            "b": "23FA",
+            "b": "23FA-FE0F",
             "j": [
                 "circle",
                 "record",
@@ -19410,7 +19412,7 @@
         },
         "eject-button": {
             "a": "Eject Button",
-            "b": "23CF",
+            "b": "23CF-FE0F",
             "j": [
                 "eject",
                 "blue-square"
@@ -19513,7 +19515,7 @@
         },
         "female-sign": {
             "a": "Female Sign",
-            "b": "2640",
+            "b": "2640-FE0F",
             "j": [
                 "woman",
                 "women",
@@ -19523,7 +19525,7 @@
         },
         "male-sign": {
             "a": "Male Sign",
-            "b": "2642",
+            "b": "2642-FE0F",
             "j": [
                 "man",
                 "boy",
@@ -19532,7 +19534,7 @@
         },
         "transgender-symbol": {
             "a": "Transgender Symbol",
-            "b": "26A7",
+            "b": "26A7-FE0F",
             "j": [
                 "transgender",
                 "lgbtq"
@@ -19540,7 +19542,7 @@
         },
         "multiply": {
             "a": "Multiply",
-            "b": "2716",
+            "b": "2716-FE0F",
             "j": [
                 "×",
                 "cancel",
@@ -19602,7 +19604,7 @@
         },
         "infinity": {
             "a": "Infinity",
-            "b": "267E",
+            "b": "267E-FE0F",
             "j": [
                 "forever",
                 "unbounded",
@@ -19611,7 +19613,7 @@
         },
         "double-exclamation-mark": {
             "a": "Double Exclamation Mark",
-            "b": "203C",
+            "b": "203C-FE0F",
             "j": [
                 "!",
                 "!!",
@@ -19623,7 +19625,7 @@
         },
         "exclamation-question-mark": {
             "a": "Exclamation Question Mark",
-            "b": "2049",
+            "b": "2049-FE0F",
             "j": [
                 "!",
                 "!?",
@@ -19639,7 +19641,7 @@
         },
         "red-question-mark": {
             "a": "Red Question Mark",
-            "b": "2753",
+            "b": "2753-FE0F",
             "j": [
                 "?",
                 "mark",
@@ -19682,7 +19684,7 @@
         },
         "red-exclamation-mark": {
             "a": "Red Exclamation Mark",
-            "b": "2757",
+            "b": "2757-FE0F",
             "j": [
                 "!",
                 "exclamation",
@@ -19698,7 +19700,7 @@
         },
         "wavy-dash": {
             "a": "Wavy Dash",
-            "b": "3030",
+            "b": "3030-FE0F",
             "j": [
                 "dash",
                 "punctuation",
@@ -19738,7 +19740,7 @@
         },
         "medical-symbol": {
             "a": "Medical Symbol",
-            "b": "2695",
+            "b": "2695-FE0F",
             "j": [
                 "aesculapius",
                 "medicine",
@@ -19749,7 +19751,7 @@
         },
         "recycling-symbol": {
             "a": "Recycling Symbol",
-            "b": "267B",
+            "b": "267B-FE0F",
             "j": [
                 "recycle",
                 "arrow",
@@ -19760,7 +19762,7 @@
         },
         "fleurdelis": {
             "a": "Fleur-De-Lis",
-            "b": "269C",
+            "b": "269C-FE0F",
             "j": [
                 "fleur-de-lis",
                 "fleur_de_lis",
@@ -19806,7 +19808,7 @@
         },
         "hollow-red-circle": {
             "a": "Hollow Red Circle",
-            "b": "2B55",
+            "b": "2B55-FE0F",
             "j": [
                 "circle",
                 "large",
@@ -19834,7 +19836,7 @@
         },
         "check-box-with-check": {
             "a": "Check Box with Check",
-            "b": "2611",
+            "b": "2611-FE0F",
             "j": [
                 "✓",
                 "box",
@@ -19851,7 +19853,7 @@
         },
         "check-mark": {
             "a": "Check Mark",
-            "b": "2714",
+            "b": "2714-FE0F",
             "j": [
                 "✓",
                 "check",
@@ -19918,7 +19920,7 @@
         },
         "part-alternation-mark": {
             "a": "Part Alternation Mark",
-            "b": "303D",
+            "b": "303D-FE0F",
             "j": [
                 "mark",
                 "part",
@@ -19932,7 +19934,7 @@
         },
         "eightspoked-asterisk": {
             "a": "Eight-Spoked Asterisk",
-            "b": "2733",
+            "b": "2733-FE0F",
             "j": [
                 "*",
                 "asterisk",
@@ -19945,7 +19947,7 @@
         },
         "eightpointed-star": {
             "a": "Eight-Pointed Star",
-            "b": "2734",
+            "b": "2734-FE0F",
             "j": [
                 "*",
                 "eight-pointed star",
@@ -19958,7 +19960,7 @@
         },
         "sparkle": {
             "a": "Sparkle",
-            "b": "2747",
+            "b": "2747-FE0F",
             "j": [
                 "*",
                 "stars",
@@ -19970,7 +19972,7 @@
         },
         "copyright": {
             "a": "Copyright",
-            "b": "00A9",
+            "b": "00A9-FE0F",
             "j": [
                 "C",
                 "ip",
@@ -19982,7 +19984,7 @@
         },
         "registered": {
             "a": "Registered",
-            "b": "00AE",
+            "b": "00AE-FE0F",
             "j": [
                 "R",
                 "alphabet",
@@ -19991,7 +19993,7 @@
         },
         "trade-mark": {
             "a": "Trade Mark",
-            "b": "2122",
+            "b": "2122-FE0F",
             "j": [
                 "mark",
                 "TM",
@@ -20194,7 +20196,7 @@
         },
         "a-button-blood-type": {
             "a": "A Button (Blood Type)",
-            "b": "1F170",
+            "b": "1F170-FE0F",
             "j": [
                 "A",
                 "A button (blood type)",
@@ -20219,7 +20221,7 @@
         },
         "b-button-blood-type": {
             "a": "B Button (Blood Type)",
-            "b": "1F171",
+            "b": "1F171-FE0F",
             "j": [
                 "B",
                 "B button (blood type)",
@@ -20263,7 +20265,7 @@
         },
         "information": {
             "a": "Information",
-            "b": "2139",
+            "b": "2139-FE0F",
             "j": [
                 "i",
                 "blue-square",
@@ -20284,7 +20286,7 @@
         },
         "circled-m": {
             "a": "Circled M",
-            "b": "24C2",
+            "b": "24C2-FE0F",
             "j": [
                 "circle",
                 "circled M",
@@ -20319,7 +20321,7 @@
         },
         "o-button-blood-type": {
             "a": "O Button (Blood Type)",
-            "b": "1F17E",
+            "b": "1F17E-FE0F",
             "j": [
                 "blood type",
                 "O",
@@ -20344,7 +20346,7 @@
         },
         "p-button": {
             "a": "P Button",
-            "b": "1F17F",
+            "b": "1F17F-FE0F",
             "j": [
                 "P",
                 "P button",
@@ -20409,7 +20411,7 @@
         },
         "japanese-service-charge-button": {
             "a": "Japanese “Service Charge” Button",
-            "b": "1F202",
+            "b": "1F202-FE0F",
             "j": [
                 "“service charge”",
                 "Japanese",
@@ -20422,7 +20424,7 @@
         },
         "japanese-monthly-amount-button": {
             "a": "Japanese “Monthly Amount” Button",
-            "b": "1F237",
+            "b": "1F237-FE0F",
             "j": [
                 "“monthly amount”",
                 "ideograph",
@@ -20454,7 +20456,7 @@
         },
         "japanese-reserved-button": {
             "a": "Japanese “Reserved” Button",
-            "b": "1F22F",
+            "b": "1F22F-FE0F",
             "j": [
                 "“reserved”",
                 "ideograph",
@@ -20501,7 +20503,7 @@
         },
         "japanese-free-of-charge-button": {
             "a": "Japanese “Free of Charge” Button",
-            "b": "1F21A",
+            "b": "1F21A-FE0F",
             "j": [
                 "“free of charge”",
                 "ideograph",
@@ -20601,7 +20603,7 @@
         },
         "japanese-congratulations-button": {
             "a": "Japanese “Congratulations” Button",
-            "b": "3297",
+            "b": "3297-FE0F",
             "j": [
                 "“congratulations”",
                 "ideograph",
@@ -20616,7 +20618,7 @@
         },
         "japanese-secret-button": {
             "a": "Japanese “Secret” Button",
-            "b": "3299",
+            "b": "3299-FE0F",
             "j": [
                 "“secret”",
                 "ideograph",
@@ -20731,7 +20733,7 @@
         },
         "black-circle": {
             "a": "Black Circle",
-            "b": "26AB",
+            "b": "26AB-FE0F",
             "j": [
                 "circle",
                 "geometric",
@@ -20742,7 +20744,7 @@
         },
         "white-circle": {
             "a": "White Circle",
-            "b": "26AA",
+            "b": "26AA-FE0F",
             "j": [
                 "circle",
                 "geometric",
@@ -20808,7 +20810,7 @@
         },
         "black-large-square": {
             "a": "Black Large Square",
-            "b": "2B1B",
+            "b": "2B1B-FE0F",
             "j": [
                 "geometric",
                 "square",
@@ -20819,7 +20821,7 @@
         },
         "white-large-square": {
             "a": "White Large Square",
-            "b": "2B1C",
+            "b": "2B1C-FE0F",
             "j": [
                 "geometric",
                 "square",
@@ -20831,7 +20833,7 @@
         },
         "black-medium-square": {
             "a": "Black Medium Square",
-            "b": "25FC",
+            "b": "25FC-FE0F",
             "j": [
                 "geometric",
                 "square",
@@ -20842,7 +20844,7 @@
         },
         "white-medium-square": {
             "a": "White Medium Square",
-            "b": "25FB",
+            "b": "25FB-FE0F",
             "j": [
                 "geometric",
                 "square",
@@ -20853,7 +20855,7 @@
         },
         "black-mediumsmall-square": {
             "a": "Black Medium-Small Square",
-            "b": "25FE",
+            "b": "25FE-FE0F",
             "j": [
                 "black medium-small square",
                 "geometric",
@@ -20866,7 +20868,7 @@
         },
         "white-mediumsmall-square": {
             "a": "White Medium-Small Square",
-            "b": "25FD",
+            "b": "25FD-FE0F",
             "j": [
                 "geometric",
                 "square",
@@ -20880,7 +20882,7 @@
         },
         "black-small-square": {
             "a": "Black Small Square",
-            "b": "25AA",
+            "b": "25AA-FE0F",
             "j": [
                 "geometric",
                 "square",
@@ -20890,7 +20892,7 @@
         },
         "white-small-square": {
             "a": "White Small Square",
-            "b": "25AB",
+            "b": "25AB-FE0F",
             "j": [
                 "geometric",
                 "square",
@@ -21069,7 +21071,7 @@
         },
         "white-flag": {
             "a": "White Flag",
-            "b": "1F3F3",
+            "b": "1F3F3-FE0F",
             "j": [
                 "waving",
                 "losing",

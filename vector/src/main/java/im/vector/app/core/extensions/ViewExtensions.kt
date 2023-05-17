@@ -20,6 +20,8 @@ import android.graphics.drawable.Drawable
 import android.text.InputType
 import android.view.View
 import android.view.ViewGroup
+import android.view.accessibility.AccessibilityEvent
+import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.annotation.AttrRes
@@ -28,6 +30,7 @@ import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.transition.ChangeBounds
 import androidx.transition.Fade
@@ -95,6 +98,14 @@ fun ImageView.setAttributeTintedImageResource(@DrawableRes drawableRes: Int, @At
 fun View.setAttributeBackground(@AttrRes attributeId: Int) {
     val attribute = ThemeUtils.getAttribute(context, attributeId)!!
     setBackgroundResource(attribute.resourceId)
+}
+
+/**
+ * Inspired from https://stackoverflow.com/a/64597532/1472514. Safer to call the 2 available API.
+ */
+fun View.giveAccessibilityFocus() {
+    ViewCompat.performAccessibilityAction(this, AccessibilityNodeInfo.ACTION_ACCESSIBILITY_FOCUS, null)
+    sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_SELECTED)
 }
 
 fun ViewGroup.animateLayoutChange(animationDuration: Long, transitionComplete: (() -> Unit)? = null) {

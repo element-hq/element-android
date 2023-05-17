@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2023 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,11 @@ package org.matrix.android.sdk.api.session.crypto.verification
 
 interface VerificationTransaction {
 
-    var state: VerificationTxState
+    val method: VerificationMethod
 
     val transactionId: String
     val otherUserId: String
-    var otherDeviceId: String?
+    val otherDeviceId: String?
 
     // TODO Not used. Remove?
     val isIncoming: Boolean
@@ -30,9 +30,19 @@ interface VerificationTransaction {
     /**
      * User wants to cancel the transaction.
      */
-    fun cancel()
+    suspend fun cancel()
 
-    fun cancel(code: CancelCode)
+    suspend fun cancel(code: CancelCode)
 
     fun isToDeviceTransport(): Boolean
+
+    fun isSuccessful(): Boolean
+}
+
+internal fun VerificationTransaction.dbgState(): String? {
+    return when (this) {
+        is SasVerificationTransaction -> "${this.state()}"
+        is QrCodeVerificationTransaction -> "${this.state()}"
+        else -> "??"
+    }
 }

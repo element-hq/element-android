@@ -23,20 +23,27 @@ import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.features.popup.DefaultVectorAlert
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.session.coroutineScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.cancellable
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.MatrixCallback
+import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.api.session.crypto.keyshare.GossipingRequestListener
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.IncomingRoomKeyRequest
-import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.api.session.crypto.model.SecretShareRequest
+import org.matrix.android.sdk.api.session.crypto.verification.SasTransactionState
 import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationEvent
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -49,6 +56,7 @@ import javax.inject.Singleton
  * depending on user action)
  */
 
+// TODO Do we ever request to users anymore?
 @Singleton
 class KeyRequestHandler @Inject constructor(
         private val context: Context,
@@ -61,17 +69,34 @@ class KeyRequestHandler @Inject constructor(
 
     var session: Session? = null
 
+    var scope: CoroutineScope? = null
+
     // This functionality is disabled in element for now. As it could be prone to social attacks
     var enablePromptingForRequest = false
 
+    //    lateinit var listenerJob: Job
     fun start(session: Session) {
         this.session = session
-        session.cryptoService().verificationService().addListener(this)
+        val scope = CoroutineScope(SupervisorJob() + session.coroutineScope.coroutineContext)
+        this.scope = scope
+        session.cryptoService().verificationService().requestEventFlow()
+                .cancellable()
+                .onEach {
+                    when (it) {
+                        is VerificationEvent.RequestAdded -> verificationRequestCreated(it.request)
+                        is VerificationEvent.RequestUpdated -> verificationRequestUpdated(it.request)
+                        is VerificationEvent.TransactionAdded -> transactionCreated(it.transaction)
+                        is VerificationEvent.TransactionUpdated -> transactionUpdated(it.transaction)
+                    }
+                }.launchIn(scope)
+
         session.cryptoService().addRoomKeysRequestListener(this)
     }
 
     fun stop() {
-        session?.cryptoService()?.verificationService()?.removeListener(this)
+        scope?.cancel()
+        scope = null
+        // session?.cryptoService()?.verificationService()?.removeListener(this)
         session?.cryptoService()?.removeRoomKeysRequestListener(this)
         session = null
     }
@@ -109,38 +134,42 @@ class KeyRequestHandler @Inject constructor(
 
         alertsToRequests[mappingKey] = ArrayList<IncomingRoomKeyRequest>().apply { this.add(request) }
 
-        // Add a notification for every incoming request
-        session?.cryptoService()?.downloadKeys(listOf(userId), false, object : MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>> {
-            override fun onSuccess(data: MXUsersDevicesMap<CryptoDeviceInfo>) {
+        scope?.launch {
+            try {
+                val data = session?.cryptoService()?.downloadKeysIfNeeded(listOf(userId), false)
+                        ?: return@launch
                 val deviceInfo = data.getObject(userId, deviceId)
 
                 if (null == deviceInfo) {
                     Timber.e("## displayKeyShareDialog() : No details found for device $userId:$deviceId")
                     // ignore
-                    return
+                    return@launch
                 }
 
                 if (deviceInfo.isUnknown) {
-                    session?.cryptoService()?.setDeviceVerification(DeviceTrustLevel(crossSigningVerified = false, locallyVerified = false), userId, deviceId)
+                    session?.cryptoService()?.verificationService()?.markedLocallyAsManuallyVerified(userId, deviceId)
 
                     deviceInfo.trustLevel = DeviceTrustLevel(crossSigningVerified = false, locallyVerified = false)
 
                     // can we get more info on this device?
                     session?.cryptoService()?.getMyDevicesInfo()?.firstOrNull { it.deviceId == deviceId }?.let {
-                        postAlert(context, userId, deviceId, true, deviceInfo, it)
+                        withContext(Dispatchers.Main) {
+                            postAlert(context, userId, deviceId, true, deviceInfo, it)
+                        }
                     } ?: run {
-                        postAlert(context, userId, deviceId, true, deviceInfo)
+                        withContext(Dispatchers.Main) {
+                            postAlert(context, userId, deviceId, true, deviceInfo)
+                        }
                     }
                 } else {
-                    postAlert(context, userId, deviceId, false, deviceInfo)
+                    withContext(Dispatchers.Main) {
+                        postAlert(context, userId, deviceId, false, deviceInfo)
+                    }
                 }
-            }
-
-            override fun onFailure(failure: Throwable) {
-                // ignore
+            } catch (failure: Throwable) {
                 Timber.e(failure, "## displayKeyShareDialog : downloadKeys")
             }
-        })
+        }
     }
 
     private fun postAlert(
@@ -244,8 +273,8 @@ class KeyRequestHandler @Inject constructor(
 
     override fun transactionUpdated(tx: VerificationTransaction) {
         if (tx is SasVerificationTransaction) {
-            val state = tx.state
-            if (state == VerificationTxState.Verified) {
+            val state = tx.state()
+            if (state is SasTransactionState.Done) {
                 // ok it's verified, see if we have key request for that
                 shareAllSessions("${tx.otherDeviceId}${tx.otherUserId}")
                 popupAlertManager.cancelAlert("ikr_${tx.otherDeviceId}${tx.otherUserId}")

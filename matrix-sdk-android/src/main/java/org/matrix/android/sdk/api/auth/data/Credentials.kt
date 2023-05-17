@@ -49,7 +49,7 @@ data class Credentials(
         /**
          * ID of the logged-in device. Will be the same as the corresponding parameter in the request, if one was specified.
          */
-        @Json(name = "device_id") val deviceId: String?,
+        @Json(name = "device_id") val deviceId: String,
         /**
          * Optional client configuration provided by the server. If present, clients SHOULD use the provided object to
          * reconfigure themselves, optionally validating the URLs within.
@@ -59,5 +59,5 @@ data class Credentials(
 )
 
 internal fun Credentials.sessionId(): String {
-    return (if (deviceId.isNullOrBlank()) userId else "$userId|$deviceId").md5()
+    return (if (deviceId.isBlank()) userId else "$userId|$deviceId").md5()
 }

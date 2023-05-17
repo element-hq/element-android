@@ -24,6 +24,7 @@ interface UpdatableLivePageResult {
     val livePagedList: LiveData<PagedList<RoomSummary>>
     val liveBoundaries: LiveData<ResultBoundaries>
     var queryParams: RoomSummaryQueryParams
+    var sortOrder: RoomSortOrder
 }
 
 data class ResultBoundaries(

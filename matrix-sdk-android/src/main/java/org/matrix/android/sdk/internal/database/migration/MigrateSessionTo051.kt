@@ -22,7 +22,6 @@ import org.matrix.android.sdk.internal.extensions.forceRefreshOfHomeServerCapabi
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
 internal class MigrateSessionTo051(realm: DynamicRealm) : RealmMigrator(realm, 51) {
-
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.get("HomeServerCapabilitiesEntity")
                 ?.addField(HomeServerCapabilitiesEntityFields.EXTERNAL_ACCOUNT_MANAGEMENT_URL, String::class.java)

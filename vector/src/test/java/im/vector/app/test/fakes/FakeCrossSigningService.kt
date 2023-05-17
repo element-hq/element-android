@@ -16,17 +16,17 @@
 
 package im.vector.app.test.fakes
 
-import io.mockk.every
+import io.mockk.coEvery
 import io.mockk.mockk
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
 
 class FakeCrossSigningService : CrossSigningService by mockk() {
 
     fun givenIsCrossSigningInitializedReturns(isInitialized: Boolean) {
-        every { isCrossSigningInitialized() } returns isInitialized
+        coEvery { isCrossSigningInitialized() } returns isInitialized
     }
 
     fun givenIsCrossSigningVerifiedReturns(isVerified: Boolean) {
-        every { isCrossSigningVerified() } returns isVerified
+        coEvery { isCrossSigningVerified() } returns isVerified
     }
 }

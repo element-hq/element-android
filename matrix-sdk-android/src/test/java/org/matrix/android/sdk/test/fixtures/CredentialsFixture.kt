@@ -32,7 +32,7 @@ object CredentialsFixture {
             accessToken,
             refreshToken,
             homeServer,
-            deviceId,
+            deviceId ?: "",
             discoveryInformation,
     )
 }

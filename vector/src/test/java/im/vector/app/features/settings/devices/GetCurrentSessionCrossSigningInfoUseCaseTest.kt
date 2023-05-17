@@ -18,6 +18,7 @@ package im.vector.app.features.settings.devices
 
 import im.vector.app.features.settings.devices.v2.verification.CurrentSessionCrossSigningInfo
 import im.vector.app.test.fakes.FakeActiveSessionHolder
+import kotlinx.coroutines.runBlocking
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
 
@@ -50,7 +51,9 @@ class GetCurrentSessionCrossSigningInfoUseCaseTest {
                 isCrossSigningVerified = isCrossSigningVerified
         )
 
-        val result = getCurrentSessionCrossSigningInfoUseCase.execute()
+        val result = runBlocking {
+            getCurrentSessionCrossSigningInfoUseCase.execute()
+        }
 
         result shouldBeEqualTo expectedResult
     }

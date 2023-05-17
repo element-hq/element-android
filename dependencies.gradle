@@ -11,23 +11,23 @@ def gradle = "7.4.2"
 def kotlin = "1.8.10"
 def kotlinCoroutines = "1.6.4"
 def dagger = "2.45"
-def firebaseBom = "31.4.0"
-def appDistribution = "16.0.0-beta06"
+def firebaseBom = "32.0.0"
+def appDistribution = "16.0.0-beta08"
 def retrofit = "2.9.0"
 def markwon = "4.6.2"
 def moshi = "1.14.0"
 def lifecycle = "2.5.1"
 def flowBinding = "1.2.0"
-def flipper = "0.189.0"
+def flipper = "0.190.0"
 def epoxy = "5.0.0"
 def mavericks = "3.0.2"
 def glide = "4.15.1"
 def bigImageViewer = "1.8.1"
 def jjwt = "0.11.5"
 def vanniktechEmoji = "0.16.0"
-def sentry = "6.17.0"
+def sentry = "6.18.1"
 // Use 1.6.0 alpha to fix issue with test
-def fragment = "1.6.0-alpha09"
+def fragment = "1.6.0-beta01"
 // Testing
 def mockk = "1.12.3" // We need to use 1.12.3 to have mocking in androidTest until a new version is released: https://github.com/mockk/mockk/issues/819
 def espresso = "3.5.1"
@@ -47,10 +47,10 @@ ext.libs = [
                 'coroutinesTest'          : "org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinCoroutines"
         ],
         androidx    : [
-                'activity'                : "androidx.activity:activity-ktx:1.7.0",
+                'activity'                : "androidx.activity:activity-ktx:1.7.1",
                 'appCompat'               : "androidx.appcompat:appcompat:1.6.1",
                 'biometric'               : "androidx.biometric:biometric:1.1.0",
-                'core'                    : "androidx.core:core-ktx:1.10.0",
+                'core'                    : "androidx.core:core-ktx:1.10.1",
                 'recyclerview'            : "androidx.recyclerview:recyclerview:1.3.0",
                 'exifinterface'           : "androidx.exifinterface:exifinterface:1.3.6",
                 'fragmentKtx'             : "androidx.fragment:fragment-ktx:$fragment",
@@ -80,13 +80,13 @@ ext.libs = [
                 'transition'              : "androidx.transition:transition:1.4.1",
         ],
         google      : [
-                'material'                : "com.google.android.material:material:1.8.0",
+                'material'                : "com.google.android.material:material:1.9.0",
                 'firebaseBom'             : "com.google.firebase:firebase-bom:$firebaseBom",
                 'messaging'               : "com.google.firebase:firebase-messaging",
                 'appdistributionApi'      : "com.google.firebase:firebase-appdistribution-api-ktx:$appDistribution",
                 'appdistribution'         : "com.google.firebase:firebase-appdistribution:$appDistribution",
                 // Phone number https://github.com/google/libphonenumber
-                'phonenumber'             : "com.googlecode.libphonenumber:libphonenumber:8.13.10"
+                'phonenumber'             : "com.googlecode.libphonenumber:libphonenumber:8.13.11"
         ],
         dagger      : [
                 'dagger'                  : "com.google.dagger:dagger:$dagger",
@@ -169,7 +169,7 @@ ext.libs = [
                 'sentryAndroid'         : "io.sentry:sentry-android:$sentry"
         ],
         tests       : [
-                'kluent'                 : "org.amshove.kluent:kluent-android:1.72",
+                'kluent'                 : "org.amshove.kluent:kluent-android:1.73",
                 'timberJunitRule'        : "net.lachlanmckee:timber-junit-rule:1.0.1",
                 'junit'                  : "junit:junit:4.13.2",
         ]

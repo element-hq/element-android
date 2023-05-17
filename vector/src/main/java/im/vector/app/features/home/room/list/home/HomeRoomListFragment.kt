@@ -23,6 +23,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ConcatAdapter
+import androidx.recyclerview.widget.ConcatAdapter.Config.StableIdMode
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.epoxy.OnModelBuildFinishedListener
 import com.airbnb.mvrx.fragmentViewModel
@@ -64,7 +65,12 @@ class HomeRoomListFragment :
 
     private val roomListViewModel: HomeRoomListViewModel by fragmentViewModel()
     private lateinit var sharedQuickActionsViewModel: RoomListQuickActionsSharedActionViewModel
-    private var concatAdapter = ConcatAdapter()
+    private var concatAdapter = ConcatAdapter(
+            ConcatAdapter.Config.Builder()
+                    .setIsolateViewTypes(true)
+                    .setStableIdMode(StableIdMode.ISOLATED_STABLE_IDS).build(),
+            emptyList()
+    )
     private lateinit var firstItemObserver: FirstItemUpdatedObserver
     private var modelBuildListener: OnModelBuildFinishedListener? = null
 
@@ -151,9 +157,14 @@ class HomeRoomListFragment :
         roomListViewModel.onEach(HomeRoomListViewState::headersData) {
             headersController.submitData(it)
         }
-        roomListViewModel.roomsLivePagedList.observe(viewLifecycleOwner) { roomsList ->
+        roomListViewModel.filteredPagedRoomSummariesLive.livePagedList.observe(viewLifecycleOwner) { roomsList ->
             roomsController.submitRoomsList(roomsList)
         }
+
+        roomListViewModel.filteredPagedRoomSummariesLive.liveBoundaries.observe(viewLifecycleOwner) {
+            roomsController.boundaryChange(it)
+        }
+
         roomListViewModel.onEach(HomeRoomListViewState::emptyState) { emptyState ->
             roomsController.submitEmptyStateData(emptyState)
         }

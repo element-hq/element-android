@@ -39,8 +39,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.api.session.getUserOrDefault
@@ -101,14 +101,19 @@ class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(
         combine(
                 session.flow().liveUserCryptoDevices(session.myUserId),
                 session.flow().liveMyDevicesInfo(),
-                session.flow().liveCrossSigningPrivateKeys()
+                session.flow().liveCrossSigningPrivateKeys(),
         ) { cryptoList, infoList, pInfo ->
-            //                    Timber.v("## Detector trigger ${cryptoList.map { "${it.deviceId} ${it.trustLevel}" }}")
-//                    Timber.v("## Detector trigger canCrossSign ${pInfo.get().selfSigned != null}")
+            Timber.v("## Detector trigger ${cryptoList.map { "${it.deviceId} ${it.trustLevel}" }}")
+            Timber.v("## Detector trigger canCrossSign ${pInfo.get().selfSigned != null}")
 
             deleteUnusedClientInformation(infoList)
 
             infoList
+                    .asSequence()
+                    .filter {
+                        // filter out own device
+                        session.sessionParams.deviceId != it.deviceId
+                    }
                     .filter { info ->
                         // filter out verified sessions or those which do not support encryption (i.e. without crypto info)
                         cryptoList.firstOrNull { info.deviceId == it.deviceId }?.isVerified?.not().orFalse()
@@ -126,10 +131,11 @@ class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(
                                 pInfo.getOrNull()?.selfSigned != null // adding this to pass distinct when cross sign change
                         )
                     }
+                    .toList()
         }
                 .distinctUntilChanged()
                 .execute { async ->
-                    //                    Timber.v("## Detector trigger passed distinct")
+                    Timber.v("## Detector trigger passed distinct")
                     copy(
                             myMatrixItem = session.getUserOrDefault(session.myUserId).toMatrixItem(),
                             unknownSessions = async
@@ -141,12 +147,14 @@ class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(
                 .sample(5_000)
                 .onEach {
                     // If we have a new crypto device change, we might want to trigger refresh of device info
-                    session.cryptoService().fetchDevicesList(NoOpMatrixCallback())
+                    tryOrNull { session.cryptoService().fetchDevicesList() }
                 }
                 .launchIn(viewModelScope)
 
         // trigger a refresh of lastSeen / last Ip
-        session.cryptoService().fetchDevicesList(NoOpMatrixCallback())
+        viewModelScope.launch {
+            tryOrNull { session.cryptoService().fetchDevicesList() }
+        }
     }
 
     private fun deleteUnusedClientInformation(deviceFullInfoList: List<DeviceInfo>) {

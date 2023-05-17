@@ -24,8 +24,8 @@
             tools:summary="4.5.6" />
 
         <im.vector.app.core.preference.VectorPreference
-            android:key="SETTINGS_OLM_VERSION_PREFERENCE_KEY"
-            android:title="@string/settings_olm_version"
+            android:key="SETTINGS_CRYPTO_VERSION_PREFERENCE_KEY"
+            android:title="@string/settings_crypto_version"
             tools:summary="7.8.9" />
 
     </im.vector.app.core.preference.VectorPreferenceCategory>

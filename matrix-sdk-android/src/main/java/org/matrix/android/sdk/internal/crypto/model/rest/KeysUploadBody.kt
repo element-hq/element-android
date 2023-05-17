@@ -46,6 +46,6 @@ internal data class KeysUploadBody(
          * If the user had previously uploaded a fallback key for a given algorithm, it is replaced.
          * The server will only keep one fallback key per algorithm for each user.
          */
-        @Json(name = "org.matrix.msc2732.fallback_keys")
+        @Json(name = "fallback_keys")
         val fallbackKeys: JsonDict? = null
 )

@@ -27,9 +27,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.withResumed
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.SwitchPreference
@@ -69,16 +68,17 @@ import im.vector.app.features.pin.PinMode
 import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.raw.wellknown.isE2EByDefault
 import im.vector.app.features.themes.ThemeUtils
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.gujun.android.span.span
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.extensions.getFingerprintHumanReadable
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.crypto.crosssigning.isVerified
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
-import org.matrix.android.sdk.api.session.crypto.model.DevicesListResponse
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -177,9 +177,6 @@ class VectorSettingsSecurityPrivacyFragment :
 
     override fun onResume() {
         super.onResume()
-        // My device name may have been updated
-        refreshMyDevice()
-        refreshXSigningStatus()
         session.liveSecretSynchronisationInfo()
                 .onEach {
                     refresh4SSection(it)
@@ -188,10 +185,14 @@ class VectorSettingsSecurityPrivacyFragment :
                 .launchIn(viewLifecycleOwner.lifecycleScope)
 
         viewLifecycleOwner.lifecycleScope.launch {
-                findPreference<VectorPreference>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT)?.isVisible =
-                        rawService
-                                .getElementWellknown(session.sessionParams)
-                                ?.isE2EByDefault() == false
+            findPreference<VectorPreference>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT)?.isVisible =
+                    rawService
+                            .getElementWellknown(session.sessionParams)
+                            ?.isE2EByDefault() == false
+
+            refreshXSigningStatus()
+            // My device name may have been updated
+            refreshMyDevice()
         }
     }
 
@@ -290,8 +291,6 @@ class VectorSettingsSecurityPrivacyFragment :
             true
         }
 
-        refreshXSigningStatus()
-
         secureBackupPreference.icon = activity?.let {
             ThemeUtils.tintDrawable(
                     it,
@@ -351,32 +350,33 @@ class VectorSettingsSecurityPrivacyFragment :
     }
 
     // Todo this should be refactored and use same state as 4S section
-    private fun refreshXSigningStatus() {
+    private suspend fun refreshXSigningStatus() {
         val crossSigningKeys = session.cryptoService().crossSigningService().getMyCrossSigningKeys()
         val xSigningIsEnableInAccount = crossSigningKeys != null
         val xSigningKeysAreTrusted = session.cryptoService().crossSigningService().checkUserTrust(session.myUserId).isVerified()
         val xSigningKeyCanSign = session.cryptoService().crossSigningService().canCrossSign()
 
-        when {
-            xSigningKeyCanSign -> {
-                mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_trusted)
-                mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_complete)
+        withContext(Dispatchers.Main) {
+            when {
+                xSigningKeyCanSign -> {
+                    mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_trusted)
+                    mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_complete)
+                }
+                xSigningKeysAreTrusted -> {
+                    mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_custom)
+                    mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_trusted)
+                }
+                xSigningIsEnableInAccount -> {
+                    mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_black)
+                    mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_not_trusted)
+                }
+                else -> {
+                    mCrossSigningStatePreference.setIcon(android.R.color.transparent)
+                    mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_disabled)
+                }
             }
-            xSigningKeysAreTrusted -> {
-                mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_custom)
-                mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_trusted)
-            }
-            xSigningIsEnableInAccount -> {
-                mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_black)
-                mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_not_trusted)
-            }
-            else -> {
-                mCrossSigningStatePreference.setIcon(android.R.color.transparent)
-                mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_disabled)
-            }
+            mCrossSigningStatePreference.isVisible = true
         }
-
-        mCrossSigningStatePreference.isVisible = true
     }
 
     private val saveMegolmStartForActivityResult = registerStartForActivityResult {
@@ -419,16 +419,18 @@ class VectorSettingsSecurityPrivacyFragment :
 
     private fun openPinCodePreferenceScreen() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                val hasPinCode = pinCodeStore.hasEncodedPin()
-                if (hasPinCode) {
-                    navigator.openPinCode(
-                            requireContext(),
-                            pinActivityResultLauncher,
-                            PinMode.AUTH
-                    )
-                } else {
-                    doOpenPinCodePreferenceScreen()
+            withResumed {
+                viewLifecycleOwner.lifecycleScope.launch {
+                    val hasPinCode = pinCodeStore.hasEncodedPin()
+                    if (hasPinCode) {
+                        navigator.openPinCode(
+                                requireContext(),
+                                pinActivityResultLauncher,
+                                PinMode.AUTH
+                        )
+                    } else {
+                        doOpenPinCodePreferenceScreen()
+                    }
                 }
             }
         }
@@ -564,7 +566,7 @@ class VectorSettingsSecurityPrivacyFragment :
     /**
      * Build the cryptography preference section.
      */
-    private fun refreshCryptographyPreference(devices: List<DeviceInfo>) {
+    private suspend fun refreshCryptographyPreference(devices: List<DeviceInfo>) {
         showDeviceListPref.isVisible = !vectorPreferences.isNewSessionManagerEnabled()
         showDeviceListPref.isEnabled = devices.isNotEmpty()
         showDeviceListPref.summary = resources.getQuantityString(R.plurals.settings_active_sessions_count, devices.size, devices.size)
@@ -624,7 +626,7 @@ class VectorSettingsSecurityPrivacyFragment :
     // devices list
     // ==============================================================================================================
 
-    private fun refreshMyDevice() {
+    private suspend fun refreshMyDevice() {
         session.cryptoService().getUserDevices(session.myUserId).map {
             DeviceInfo(
                     userId = session.myUserId,
@@ -632,21 +634,16 @@ class VectorSettingsSecurityPrivacyFragment :
                     displayName = it.displayName()
             )
         }.let {
-            refreshCryptographyPreference(it)
+            withContext(Dispatchers.Main) {
+                refreshCryptographyPreference(it)
+            }
         }
         // TODO Move to a ViewModel...
-        session.cryptoService().fetchDevicesList(object : MatrixCallback<DevicesListResponse> {
-            override fun onSuccess(data: DevicesListResponse) {
-                if (isAdded) {
-                    refreshCryptographyPreference(data.devices.orEmpty())
-                }
+        val devicesList = tryOrNull { session.cryptoService().fetchDevicesList() }
+        devicesList?.let {
+            withContext(Dispatchers.Main) {
+                refreshCryptographyPreference(it)
             }
-
-            override fun onFailure(failure: Throwable) {
-                if (isAdded) {
-                    refreshCryptographyPreference(emptyList())
-                }
-            }
-        })
+        }
     }
 }

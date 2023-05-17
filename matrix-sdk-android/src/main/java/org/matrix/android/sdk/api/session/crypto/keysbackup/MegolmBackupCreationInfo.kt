@@ -31,7 +31,7 @@ data class MegolmBackupCreationInfo(
         val authData: MegolmBackupAuthData,
 
         /**
-         * The Base58 recovery key.
+         * The recovery key.
          */
-        val recoveryKey: String
+        val recoveryKey: IBackupRecoveryKey
 )

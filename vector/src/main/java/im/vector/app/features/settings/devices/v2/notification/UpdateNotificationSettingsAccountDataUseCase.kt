@@ -43,7 +43,7 @@ class UpdateNotificationSettingsAccountDataUseCase @Inject constructor(
     }
 
     private suspend fun setCurrentNotificationStatus(session: Session) {
-        val deviceId = session.sessionParams.deviceId ?: return
+        val deviceId = session.sessionParams.deviceId
         val areNotificationsSilenced = !vectorPreferences.areNotificationEnabledForDevice()
         val isSilencedAccountData = getNotificationSettingsAccountDataUseCase.execute(session, deviceId)?.isSilenced
         if (areNotificationsSilenced != isSilencedAccountData) {

@@ -25,7 +25,7 @@ object CredentialsFixture {
             accessToken: String = "",
             refreshToken: String? = null,
             homeServer: String? = null,
-            deviceId: String? = null,
+            deviceId: String = "VOPOED",
             discoveryInformation: DiscoveryInformation? = null,
     ) = Credentials(
             userId,

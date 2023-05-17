@@ -213,7 +213,7 @@ class NotifiableEventResolver @Inject constructor(
                         senderKey = result.senderCurve25519Key,
                         keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },
                         forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain,
-                        isSafe = result.isSafe
+                        verificationState = result.messageVerificationState
                 )
             } catch (ignore: MXCryptoError) {
             }

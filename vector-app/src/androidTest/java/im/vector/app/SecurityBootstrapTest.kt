@@ -164,7 +164,10 @@ class SecurityBootstrapTest : VerificationTestBase() {
         onView(withText(R.string._continue)).perform(click())
 
         // Assert that all is configured
-        assert(uiSession.cryptoService().crossSigningService().isCrossSigningInitialized())
+        val crossSigningInitialized = runBlockingTest {
+            uiSession.cryptoService().crossSigningService().isCrossSigningInitialized()
+        }
+        assert(crossSigningInitialized)
         assert(uiSession.cryptoService().crossSigningService().canCrossSign())
         assert(uiSession.cryptoService().crossSigningService().allPrivateKeysKnown())
         assert(uiSession.cryptoService().keysBackupService().isEnabled())

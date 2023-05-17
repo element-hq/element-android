@@ -2928,4 +2928,25 @@
     <string name="error_voice_broadcast_unable_to_decrypt">Kunder inte avkryptera den här röstsändningen.</string>
     <string name="settings_external_account_management">Dina kontodetaljer hanteras separat på %1$s.</string>
     <string name="settings_external_account_management_title">Konto</string>
+    <string name="pill_message_unknown_room_or_space">Rum/utrymme</string>
+    <string name="pill_message_in_unknown_room">Meddelande i rummet</string>
+    <string name="pill_message_in_room">Meddelande i %s</string>
+    <string name="pill_message_from_unknown_user">Meddelande</string>
+    <string name="pill_message_from_user">Meddelande från %s</string>
+    <string name="encrypted_by_deleted">Krypterat av en raderad enhet</string>
+    <string name="secure_backup_reset_danger_warning">Fortsätt bara om du är säker på att du har tappat bort alla dina andra enheter och din säkerhetsnyckel.</string>
+    <string name="secure_backup_reset_all_no_other_devices_long">Återställning av dina verifieringsnycklar kan inte ångras. Efter återställningen kommer du inte att ha tillgång till gamla krypterade meddelanden, och alla vänner som tidigare har verifierat dig kommer att se säkerhetsvarningar tills du verifierar med dem igen.</string>
+    <string name="direct_room_encryption_enabled_waiting_users_tile_description">När inbjudna användare har gått med i ${app_name} kommer du att kunna chatta och rummet kommer att totalsträckskrypteras</string>
+    <string name="direct_room_encryption_enabled_waiting_users">Väntar på att användare ska gå med i ${app_name}</string>
+    <string name="verification_not_found">Begäran om verifiering hittades inte. Det kan ha avbrutits eller hanterats av en annan session.</string>
+    <string name="_resume">Återuppta</string>
+    <string name="verification_request_was_sent">En verifieringsbegäran har skickats. Öppna en av dina andra sessioner för att acceptera och starta verifieringen.</string>
+    <string name="verification_verify_identity">Verifiera din identitet för att komma åt krypterade meddelanden och bevisa din identitet för andra.</string>
+    <string name="verification_verify_with_another_device">Verifiera med en annan enhet</string>
+    <string name="verification_request_waiting_for_recovery">Verifierar från säker nyckel eller fras…</string>
+    <string name="direct_room_user_list_only_invite_one_email">Du kan bara bjuda in ett e-brev åt gången</string>
+    <string name="settings_acceptable_use_policy">Policy för acceptabel användning</string>
+    <string name="settings_crypto_version">Kryptoversion</string>
+    <string name="settings_notification_error_on_update">Ett fel uppstod när du uppdaterade dina aviseringsinställningar. Var god försök igen.</string>
+    <string name="action_proceed_to_reset">Fortsätt till återställning</string>
 </resources>

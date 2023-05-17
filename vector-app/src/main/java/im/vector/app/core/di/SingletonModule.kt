@@ -73,7 +73,6 @@ import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.SyncConfig
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
-import org.matrix.android.sdk.api.legacy.LegacySessionImporter
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.sync.filter.SyncFilterParams
@@ -149,12 +148,14 @@ import javax.inject.Singleton
     ): MatrixConfiguration {
         return MatrixConfiguration(
                 applicationFlavor = BuildConfig.FLAVOR_DESCRIPTION,
+                cryptoFlavor = BuildConfig.CRYPTO_FLAVOR_DESCRIPTION,
                 roomDisplayNameFallbackProvider = vectorRoomDisplayNameFallbackProvider,
                 threadMessagesEnabledDefault = vectorPreferences.areThreadMessagesEnabled(),
                 networkInterceptors = listOfNotNull(
                         flipperProxy.networkInterceptor(),
                 ),
                 metricPlugins = vectorPlugins.plugins(),
+                cryptoAnalyticsPlugin = vectorPlugins.cryptoMetricPlugin,
                 customEventTypesProvider = vectorCustomEventTypesProvider,
                 syncConfig = SyncConfig(
                         syncFilterParams = SyncFilterParams(lazyLoadMembersForStateEvents = true, useThreadNotifications = true)
@@ -172,11 +173,6 @@ import javax.inject.Singleton
     fun providesCurrentSession(activeSessionHolder: ActiveSessionHolder): Session {
         // TODO handle session injection better
         return activeSessionHolder.getActiveSession()
-    }
-
-    @Provides
-    fun providesLegacySessionImporter(matrix: Matrix): LegacySessionImporter {
-        return matrix.legacySessionImporter()
     }
 
     @Provides

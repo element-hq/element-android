@@ -75,7 +75,7 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(
     private val roomService = session.roomService()
 
     init {
-        roomService.getPagedRoomSummariesLive(
+        roomService.roomSummariesChangesLive(
                 roomSummaryQueryParams {
                     this.memberships = listOf(Membership.JOIN)
                     this.spaceFilter = SpaceFilter.OrphanRooms
@@ -111,7 +111,7 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(
         combine(
                 spaceStateHandler.getSelectedSpaceFlow().distinctUntilChanged(),
                 spaceStateHandler.getSelectedSpaceFlow().flatMapLatest {
-                    roomService.getPagedRoomSummariesLive(
+                    roomService.roomSummariesChangesLive(
                             roomSummaryQueryParams {
                                 this.memberships = Membership.activeMemberships()
                             }, sortOrder = RoomSortOrder.NONE

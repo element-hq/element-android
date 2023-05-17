@@ -18,14 +18,19 @@ package im.vector.app.core.di
 
 import android.content.Context
 import im.vector.app.ActiveSessionDataSource
+import im.vector.app.core.dispatchers.CoroutineDispatchers
 import im.vector.app.core.pushers.UnregisterUnifiedPushUseCase
 import im.vector.app.core.services.GuardServiceStarter
 import im.vector.app.core.session.ConfigureAndStartSessionUseCase
+import im.vector.app.features.analytics.DecryptionFailureTracker
+import im.vector.app.features.analytics.plan.Error
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.crypto.keysrequest.KeyRequestHandler
 import im.vector.app.features.crypto.verification.IncomingVerificationRequestHandler
 import im.vector.app.features.notifications.PushRuleTriggerListener
 import im.vector.app.features.session.SessionListener
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.session.Session
@@ -51,6 +56,9 @@ class ActiveSessionHolder @Inject constructor(
         private val authenticationService: AuthenticationService,
         private val configureAndStartSessionUseCase: ConfigureAndStartSessionUseCase,
         private val unregisterUnifiedPushUseCase: UnregisterUnifiedPushUseCase,
+        private val applicationCoroutineScope: CoroutineScope,
+        private val coroutineDispatchers: CoroutineDispatchers,
+        private val decryptionFailureTracker: DecryptionFailureTracker,
 ) {
 
     private var activeSessionReference: AtomicReference<Session?> = AtomicReference()
@@ -67,6 +75,11 @@ class ActiveSessionHolder @Inject constructor(
         session.callSignalingService().addCallListener(callManager)
         imageManager.onSessionStarted(session)
         guardServiceStarter.start()
+        decryptionFailureTracker.currentModule = if (session.cryptoService().name() == "rust-sdk") {
+            Error.CryptoModule.Rust
+        } else {
+            Error.CryptoModule.Native
+        }
     }
 
     suspend fun clearActiveSession() {
@@ -94,6 +107,13 @@ class ActiveSessionHolder @Inject constructor(
 
     fun getSafeActiveSession(): Session? {
         return runBlocking { getOrInitializeSession() }
+    }
+
+    fun getSafeActiveSessionAsync(withSession: ((Session?) -> Unit)) {
+        applicationCoroutineScope.launch(coroutineDispatchers.io) {
+            val session = getOrInitializeSession()
+            withSession(session)
+        }
     }
 
     fun getActiveSession(): Session {

@@ -21,6 +21,7 @@ import org.amshove.kluent.internal.assertFailsWith
 import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.fail
+import org.junit.Assume
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -43,6 +44,9 @@ class ReplayAttackTest : InstrumentedTest {
 
         // Alice
         val aliceSession = cryptoTestData.firstSession
+
+        // Until https://github.com/matrix-org/matrix-rust-sdk/issues/397
+        Assume.assumeTrue("Not yet supported by rust", cryptoTestData.firstSession.cryptoService().name() != "rust-sdk")
         val aliceRoomPOV = aliceSession.roomService().getRoom(e2eRoomID)!!
 
         // Bob

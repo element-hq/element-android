@@ -2931,4 +2931,21 @@
     <string name="direct_room_encryption_enabled_waiting_users_tile_description">Sobald eingeladene Benutzer ${app_name} beigetreten sind, werdet ihr euch unterhalten können und der Raum Ende-zu-Ende-verschlüsselt sein</string>
     <string name="direct_room_encryption_enabled_waiting_users">Warte darauf, dass Benutzer ${app_name} beitreten</string>
     <string name="direct_room_user_list_only_invite_one_email">Du kannst E-Mail-Einladung nur nacheinander verschicken</string>
+    <string name="action_proceed_to_reset">Mit Zurücksetzen fortfahren</string>
+    <string name="pill_message_unknown_room_or_space">Raum/Space</string>
+    <string name="pill_message_in_unknown_room">Nachricht in Raum</string>
+    <string name="pill_message_in_room">Nachricht in %s</string>
+    <string name="pill_message_from_unknown_user">Nachricht</string>
+    <string name="pill_message_from_user">Nachricht von %s</string>
+    <string name="encrypted_by_deleted">Von einem gelöschten Gerät verschlüsselt</string>
+    <string name="secure_backup_reset_danger_warning">Bitte fahre nur fort, wenn du sicher bist, dass du alle anderen Geräte und deinen Sicherheitsschlüssel verloren hast.</string>
+    <string name="secure_backup_reset_all_no_other_devices_long">Das Zurücksetzen deiner Sicherheitsschlüssel kann nicht rückgängig gemacht werden. Nach dem Zurücksetzen wirst du alte Nachrichten nicht mehr lesen können un Freunde, die dich vorher verifiziert haben werden Sicherheitswarnungen bekommen, bis du dich erneut mit ihnen verifizierst.</string>
+    <string name="verification_not_found">Die Verifizierungsanfrage wurde nicht gefunden. Sie wurde eventuell abgebrochen oder mit einer anderen Sitzung abgeschlossen.</string>
+    <string name="_resume">Fortsetzen</string>
+    <string name="verification_request_was_sent">Eine Verifizierungsanfrage wurde gesendet. Öffne eine deiner anderen Sitzungen, um sie zu akzeptieren und mit der Verifizierung zu beginnen.</string>
+    <string name="verification_verify_identity">Verifiziere diese Anmeldung, um auf verschlüsselte Nachrichten zuzugreifen und dich anderen gegenüber zu identifizieren.</string>
+    <string name="verification_verify_with_another_device">Mit anderem Gerät verifizieren</string>
+    <string name="verification_request_waiting_for_recovery">Mit Sicherheitsschlüssel oder -phrase verifizieren …</string>
+    <string name="settings_acceptable_use_policy">Nutzungsbedingungen</string>
+    <string name="settings_crypto_version">Verschlüsselungsversion</string>
 </resources>

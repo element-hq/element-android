@@ -34,7 +34,7 @@ class UpdateEnableNotificationsSettingOnChangeUseCase @Inject constructor(
 ) {
 
     suspend fun execute(session: Session) {
-        val deviceId = session.sessionParams.deviceId ?: return
+        val deviceId = session.sessionParams.deviceId
         getNotificationsStatusUseCase.execute(session, deviceId)
                 .onEach(::updatePreference)
                 .collect()

@@ -18,8 +18,11 @@ package im.vector.app.features.voicebroadcast.recording
 
 import android.content.Context
 import android.media.MediaRecorder
+import android.media.RingtoneManager
+import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
+import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.voice.AbstractVoiceRecorderQ
@@ -112,6 +115,7 @@ class VoiceBroadcastRecorderQ(
         pauseRecorder()
         stopObservingConnectionState()
         recordingState = VoiceBroadcastRecorder.State.Error
+        notifyError()
     }
 
     override fun pauseRecord() {
@@ -207,6 +211,12 @@ class VoiceBroadcastRecorderQ(
             outputFile = nextOutputFile
             nextOutputFile = null
         }
+    }
+
+    private fun notifyError() {
+        val ringtoneUri = Uri.parse("android.resource://${context.packageName}/${R.raw.vberror}")
+        val ringtone = RingtoneManager.getRingtone(context, ringtoneUri)
+        ringtone?.play()
     }
 
     private fun onElapsedTimeUpdated(elapsedTimeMillis: Long) {

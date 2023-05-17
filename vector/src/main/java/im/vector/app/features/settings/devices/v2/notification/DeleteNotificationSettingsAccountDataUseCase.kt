@@ -29,7 +29,7 @@ class DeleteNotificationSettingsAccountDataUseCase @Inject constructor(
 ) {
 
     suspend fun execute(session: Session) {
-        val deviceId = session.sessionParams.deviceId ?: return
+        val deviceId = session.sessionParams.deviceId
         if (getNotificationSettingsAccountDataUseCase.execute(session, deviceId)?.isSilenced != null) {
             val emptyNotificationSettingsContent = LocalNotificationSettingsContent(
                     isSilenced = null

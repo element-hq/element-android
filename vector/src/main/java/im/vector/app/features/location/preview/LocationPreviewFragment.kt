@@ -22,9 +22,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -81,9 +79,7 @@ class LocationPreviewFragment :
         views.mapView.onCreate(savedInstanceState)
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
-                views.mapView.initialize(urlMapProvider.getMapUrl())
-            }
+            views.mapView.initialize(urlMapProvider.getMapUrl())
         }
 
         observeViewEvents()
