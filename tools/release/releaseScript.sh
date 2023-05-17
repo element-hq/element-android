@@ -160,11 +160,11 @@ adb -e uninstall im.vector.app.debug.test
 
 printf "\n================================================================================\n"
 printf "Running the integration test UiAllScreensSanityTest.allScreensTest()...\n"
-./gradlew connectedGplayDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=im.vector.app.ui.UiAllScreensSanityTest
+./gradlew connectedGplayRustCryptoDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=im.vector.app.ui.UiAllScreensSanityTest
 
 printf "\n================================================================================\n"
 printf "Building the app...\n"
-./gradlew assembleGplayDebug
+./gradlew assembleGplayRustCryptoDebug
 
 printf "\n================================================================================\n"
 printf "Uninstalling previous debug app if any...\n"
@@ -172,7 +172,7 @@ adb -e uninstall im.vector.app.debug
 
 printf "\n================================================================================\n"
 printf "Installing the app...\n"
-adb -e install ./vector-app/build/outputs/apk/gplay/debug/vector-gplay-arm64-v8a-debug.apk
+adb -e install ./vector-app/build/outputs/apk/gplayRustCrypto/debug/vector-gplay-rustCrypto-arm64-v8a-debug.apk
 
 printf "\n================================================================================\n"
 printf "Running the app...\n"
@@ -267,7 +267,7 @@ fi
 
 printf "\n================================================================================\n"
 printf "Wait for the GitHub action https://github.com/vector-im/element-android/actions/workflows/build.yml?query=branch%%3Amain to build the 'main' branch.\n"
-read -p "After GHA is finished, please enter the artifact URL (for 'vector-gplay-release-unsigned'): " artifactUrl
+read -p "After GHA is finished, please enter the artifact URL (for 'vector-gplay-rustCrypto-release-unsigned'): " artifactUrl
 
 printf "\n================================================================================\n"
 printf "Downloading the artifact...\n"
@@ -290,70 +290,70 @@ set -e
 printf "\n================================================================================\n"
 printf "Unzipping the artifact...\n"
 
-unzip ${targetPath}/vector-gplay-release-unsigned.zip -d ${targetPath}
+unzip ${targetPath}/vector-gplay-rustCrypto-release-unsigned.zip -d ${targetPath}
 
 # Flatten folder hierarchy
-mv ${targetPath}/gplay/release/* ${targetPath}
+mv ${targetPath}/gplayRustCrypto/release/* ${targetPath}
 rm -rf ${targetPath}/gplay
 
 printf "\n================================================================================\n"
 printf "Signing the APKs...\n"
 
-cp ${targetPath}/vector-gplay-arm64-v8a-release-unsigned.apk \
-   ${targetPath}/vector-gplay-arm64-v8a-release-signed.apk
+cp ${targetPath}/vector-gplay-rustCrypto-arm64-v8a-release-unsigned.apk \
+   ${targetPath}/vector-gplay-rustCrypto-arm64-v8a-release-signed.apk
 ./tools/release/sign_apk_unsafe.sh \
     ${keyStorePath} \
-    ${targetPath}/vector-gplay-arm64-v8a-release-signed.apk \
+    ${targetPath}/vector-gplay-rustCrypto-arm64-v8a-release-signed.apk \
     ${keyStorePassword} \
     ${keyPassword}
 
-cp ${targetPath}/vector-gplay-armeabi-v7a-release-unsigned.apk \
-   ${targetPath}/vector-gplay-armeabi-v7a-release-signed.apk
+cp ${targetPath}/vector-gplay-rustCrypto-armeabi-v7a-release-unsigned.apk \
+   ${targetPath}/vector-gplay-rustCrypto-armeabi-v7a-release-signed.apk
 ./tools/release/sign_apk_unsafe.sh \
     ${keyStorePath} \
-    ${targetPath}/vector-gplay-armeabi-v7a-release-signed.apk \
+    ${targetPath}/vector-gplay-rustCrypto-armeabi-v7a-release-signed.apk \
     ${keyStorePassword} \
     ${keyPassword}
 
-cp ${targetPath}/vector-gplay-x86-release-unsigned.apk \
-   ${targetPath}/vector-gplay-x86-release-signed.apk
+cp ${targetPath}/vector-gplay-rustCrypto-x86-release-unsigned.apk \
+   ${targetPath}/vector-gplay-rustCrypto-x86-release-signed.apk
 ./tools/release/sign_apk_unsafe.sh \
     ${keyStorePath} \
-    ${targetPath}/vector-gplay-x86-release-signed.apk \
+    ${targetPath}/vector-gplay-rustCrypto-x86-release-signed.apk \
     ${keyStorePassword} \
     ${keyPassword}
 
-cp ${targetPath}/vector-gplay-x86_64-release-unsigned.apk \
-   ${targetPath}/vector-gplay-x86_64-release-signed.apk
+cp ${targetPath}/vector-gplay-rustCrypto-x86_64-release-unsigned.apk \
+   ${targetPath}/vector-gplay-rustCrypto-x86_64-release-signed.apk
 ./tools/release/sign_apk_unsafe.sh \
     ${keyStorePath} \
-    ${targetPath}/vector-gplay-x86_64-release-signed.apk \
+    ${targetPath}/vector-gplay-rustCrypto-x86_64-release-signed.apk \
     ${keyStorePassword} \
     ${keyPassword}
 
 # Ref: https://docs.fastlane.tools/getting-started/android/beta-deployment/#uploading-your-app
-# set SUPPLY_APK_PATHS="${targetPath}/vector-gplay-arm64-v8a-release-unsigned.apk,${targetPath}/vector-gplay-armeabi-v7a-release-unsigned.apk,${targetPath}/vector-gplay-x86-release-unsigned.apk,${targetPath}/vector-gplay-x86_64-release-unsigned.apk"
+# set SUPPLY_APK_PATHS="${targetPath}/vector-gplay-rustCrypto-arm64-v8a-release-unsigned.apk,${targetPath}/vector-gplay-rustCrypto-armeabi-v7a-release-unsigned.apk,${targetPath}/vector-gplay-rustCrypto-x86-release-unsigned.apk,${targetPath}/vector-gplay-rustCrypto-x86_64-release-unsigned.apk"
 #
 # ./fastlane beta
 
 printf "\n================================================================================\n"
 printf "Please check the information below:\n"
 
-printf "File vector-gplay-arm64-v8a-release-signed.apk:\n"
-${buildToolsPath}/aapt dump badging ${targetPath}/vector-gplay-arm64-v8a-release-signed.apk | grep package
-printf "File vector-gplay-armeabi-v7a-release-signed.apk:\n"
-${buildToolsPath}/aapt dump badging ${targetPath}/vector-gplay-armeabi-v7a-release-signed.apk | grep package
-printf "File vector-gplay-x86-release-signed.apk:\n"
-${buildToolsPath}/aapt dump badging ${targetPath}/vector-gplay-x86-release-signed.apk | grep package
-printf "File vector-gplay-x86_64-release-signed.apk:\n"
-${buildToolsPath}/aapt dump badging ${targetPath}/vector-gplay-x86_64-release-signed.apk | grep package
+printf "File vector-gplay-rustCrypto-arm64-v8a-release-signed.apk:\n"
+${buildToolsPath}/aapt dump badging ${targetPath}/vector-gplay-rustCrypto-arm64-v8a-release-signed.apk | grep package
+printf "File vector-gplay-rustCrypto-armeabi-v7a-release-signed.apk:\n"
+${buildToolsPath}/aapt dump badging ${targetPath}/vector-gplay-rustCrypto-armeabi-v7a-release-signed.apk | grep package
+printf "File vector-gplay-rustCrypto-x86-release-signed.apk:\n"
+${buildToolsPath}/aapt dump badging ${targetPath}/vector-gplay-rustCrypto-x86-release-signed.apk | grep package
+printf "File vector-gplay-rustCrypto-x86_64-release-signed.apk:\n"
+${buildToolsPath}/aapt dump badging ${targetPath}/vector-gplay-rustCrypto-x86_64-release-signed.apk | grep package
 
 printf "\n"
 read -p "Does it look correct? Press enter when it's done."
 
 printf "\n================================================================================\n"
 read -p "Installing apk on a real device, press enter when a real device is connected. "
-apkPath="${targetPath}/vector-gplay-arm64-v8a-release-signed.apk"
+apkPath="${targetPath}/vector-gplay-rustCrypto-arm64-v8a-release-signed.apk"
 adb -d install ${apkPath}
 
 read -p "Please run the APK on your phone to check that the upgrade went well (no init sync, etc.). Press enter when it's done."
