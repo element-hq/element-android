@@ -1,0 +1,1 @@
+[Rich text editor] Add mentions and slash commands
