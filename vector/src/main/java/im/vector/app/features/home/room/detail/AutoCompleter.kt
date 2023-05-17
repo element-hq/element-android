@@ -107,9 +107,6 @@ class AutoCompleter @AssistedInject constructor(
     }
 
     private fun setupCommands(backgroundDrawable: Drawable, editText: EditText) {
-        // Rich text editor is not yet supported
-        if (editText is EditorEditText) return
-
         Autocomplete.on<Command>(editText)
                 .with(commandAutocompletePolicy)
                 .with(autocompleteCommandPresenter)
@@ -117,10 +114,14 @@ class AutoCompleter @AssistedInject constructor(
                 .with(backgroundDrawable)
                 .with(object : AutocompleteCallback<Command> {
                     override fun onPopupItemClicked(editable: Editable, item: Command): Boolean {
-                        editable.clear()
-                        editable
-                                .append(item.command)
-                                .append(" ")
+                        if (editText is EditorEditText) {
+                            editText.replaceTextSuggestion(item.command)
+                        } else {
+                            editable.clear()
+                            editable
+                                    .append(item.command)
+                                    .append(" ")
+                        }
                         return true
                     }
 
