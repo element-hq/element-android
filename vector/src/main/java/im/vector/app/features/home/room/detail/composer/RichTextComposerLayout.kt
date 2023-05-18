@@ -106,6 +106,11 @@ internal class RichTextComposerLayout @JvmOverloads constructor(
     override val attachmentButton: ImageButton
         get() = views.attachmentButton
 
+    val richTextEditText: EditText get() =
+        views.richTextComposerEditText
+    val plainTextEditText: EditText get() =
+        views.plainTextComposerEditText
+
     var pillDisplayHandler: PillDisplayHandler? = null
 
     // Border of the EditText

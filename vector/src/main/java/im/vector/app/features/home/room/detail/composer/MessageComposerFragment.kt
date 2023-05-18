@@ -125,9 +125,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
 
     private val roomId: String get() = withState(timelineViewModel) { it.roomId }
 
-    private val autoCompleter: AutoCompleter by lazy {
-        autoCompleterFactory.create(roomId, isThreadTimeLine())
-    }
+    private val autoCompleters: MutableMap<EditText, AutoCompleter> = hashMapOf()
 
     private val emojiPopup: EmojiPopup by lifecycleAwareLazy {
         createEmojiPopup()
@@ -262,9 +260,8 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
     override fun onDestroyView() {
         super.onDestroyView()
 
-        if (!vectorPreferences.isRichTextEditorEnabled()) {
-            autoCompleter.clear()
-        }
+        autoCompleters.values.forEach(AutoCompleter::clear)
+        autoCompleters.clear()
         messageComposerViewModel.endAllVoiceActions()
     }
 
@@ -275,7 +272,12 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
 
         (composer as? View)?.isVisible = messageComposerState.isComposerVisible
         composer.sendButton.isInvisible = !messageComposerState.isSendButtonVisible
-        (composer as? RichTextComposerLayout)?.isTextFormattingEnabled = attachmentState.isTextFormattingEnabled
+        (composer as? RichTextComposerLayout)?.also {
+            val isTextFormattingEnabled = attachmentState.isTextFormattingEnabled
+            it.isTextFormattingEnabled = isTextFormattingEnabled
+            autoCompleters[it.richTextEditText]?.setEnabled(isTextFormattingEnabled)
+            autoCompleters[it.plainTextEditText]?.setEnabled(!isTextFormattingEnabled)
+        }
     }
 
     private fun setupBottomSheet() {
@@ -316,7 +318,12 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
         val composerEditText = composer.editText
         composerEditText.setHint(R.string.room_message_placeholder)
 
-        autoCompleter.setup(composerEditText)
+        (composer as? RichTextComposerLayout)?.let {
+            initAutoCompleter(it.richTextEditText)
+            initAutoCompleter(it.plainTextEditText)
+        } ?: run {
+            initAutoCompleter(composer.editText)
+        }
 
         observerUserTyping()
 
@@ -412,6 +419,14 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
         }
     }
 
+    private fun initAutoCompleter(editText: EditText) {
+        if (autoCompleters.containsKey(editText)) return
+
+        autoCompleters[editText] =
+                autoCompleterFactory.create(roomId, isThreadTimeLine())
+                        .also { it.setup(editText) }
+    }
+
     private fun sendTextMessage(text: CharSequence, formattedText: String? = null) {
         if (lockSendButton) {
             Timber.w("Send button is locked")
@@ -441,12 +456,12 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
     }
 
     private fun renderRegularMode(content: CharSequence) {
-        autoCompleter.exitSpecialMode()
+        autoCompleters.values.forEach(AutoCompleter::exitSpecialMode)
         composer.renderComposerMode(MessageComposerMode.Normal(content))
     }
 
     private fun renderSpecialMode(mode: MessageComposerMode.Special) {
-        autoCompleter.enterSpecialMode()
+        autoCompleters.values.forEach(AutoCompleter::enterSpecialMode)
         composer.renderComposerMode(mode)
     }
 

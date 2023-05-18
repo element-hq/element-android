@@ -87,6 +87,7 @@ class AutoCompleter @AssistedInject constructor(
     }
 
     private lateinit var glideRequests: GlideRequests
+    private val autocompletes: MutableSet<Autocomplete<*>> = hashSetOf()
 
     fun setup(editText: EditText) {
         this.editText = editText
@@ -98,16 +99,27 @@ class AutoCompleter @AssistedInject constructor(
         setupRooms(backgroundDrawable, editText)
     }
 
+    fun setEnabled(isEnabled: Boolean) =
+        autocompletes.forEach {
+            if (!isEnabled) { it.dismissPopup() }
+            it.setEnabled(isEnabled)
+        }
+
     fun clear() {
         this.editText = null
         autocompleteEmojiPresenter.clear()
         autocompleteRoomPresenter.clear()
         autocompleteCommandPresenter.clear()
         autocompleteMemberPresenter.clear()
+        autocompletes.forEach {
+            it.setEnabled(false)
+            it.dismissPopup()
+        }
+        autocompletes.clear()
     }
 
     private fun setupCommands(backgroundDrawable: Drawable, editText: EditText) {
-        Autocomplete.on<Command>(editText)
+        autocompletes += Autocomplete.on<Command>(editText)
                 .with(commandAutocompletePolicy)
                 .with(autocompleteCommandPresenter)
                 .with(ELEVATION_DP)
@@ -133,7 +145,7 @@ class AutoCompleter @AssistedInject constructor(
 
     private fun setupMembers(backgroundDrawable: ColorDrawable, editText: EditText) {
         autocompleteMemberPresenter = autocompleteMemberPresenterFactory.create(roomId)
-        Autocomplete.on<AutocompleteMemberItem>(editText)
+        autocompletes += Autocomplete.on<AutocompleteMemberItem>(editText)
                 .with(CharPolicy(TRIGGER_AUTO_COMPLETE_MEMBERS, true))
                 .with(autocompleteMemberPresenter)
                 .with(ELEVATION_DP)
@@ -158,7 +170,7 @@ class AutoCompleter @AssistedInject constructor(
     }
 
     private fun setupRooms(backgroundDrawable: ColorDrawable, editText: EditText) {
-        Autocomplete.on<RoomSummary>(editText)
+        autocompletes += Autocomplete.on<RoomSummary>(editText)
                 .with(CharPolicy(TRIGGER_AUTO_COMPLETE_ROOMS, true))
                 .with(autocompleteRoomPresenter)
                 .with(ELEVATION_DP)
@@ -179,7 +191,7 @@ class AutoCompleter @AssistedInject constructor(
         // Rich text editor is not yet supported
         if (editText is EditorEditText) return
 
-        Autocomplete.on<String>(editText)
+        autocompletes += Autocomplete.on<String>(editText)
                 .with(CharPolicy(TRIGGER_AUTO_COMPLETE_EMOJIS, false))
                 .with(autocompleteEmojiPresenter)
                 .with(ELEVATION_DP)
