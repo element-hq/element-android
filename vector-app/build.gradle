@@ -454,5 +454,5 @@ dependencies {
     androidTestImplementation libs.androidx.fragmentTesting
     androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:1.8.21"
     debugImplementation libs.androidx.fragmentTestingManifest
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.10'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.11'
 }
