@@ -2949,4 +2949,7 @@
     <string name="settings_acceptable_use_policy">Nutzungsbedingungen</string>
     <string name="settings_crypto_version">Verschlüsselungsversion</string>
     <string name="notice_display_name_changed_to">%1$s hat den Anzeigenamen zu %2$s geändert</string>
+    <string name="avatar_of_user">Benutzer-Profilbild von %1$s</string>
+    <string name="avatar_of_room">Raum-Avatar von %1$s</string>
+    <string name="avatar_of_space">Space-Avatar von %1$s</string>
 </resources>
