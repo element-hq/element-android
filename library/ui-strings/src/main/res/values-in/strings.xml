@@ -2892,4 +2892,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="settings_crypto_version">Versi kripto</string>
     <string name="action_proceed_to_reset">Lanjutkan mengatur ulang</string>
     <string name="notice_display_name_changed_to">%1$s mengubah nama tampilannya ke %2$s</string>
+    <string name="avatar_of_user">Foto profil pengguna %1$s</string>
+    <string name="avatar_of_room">Avatar ruangan %1$s</string>
+    <string name="avatar_of_space">Avatar space %1$s</string>
 </resources>
