@@ -2949,4 +2949,5 @@
     <string name="settings_acceptable_use_policy">سیاست استفادهٔ پذیرفتنی</string>
     <string name="action_proceed_to_reset">ادامه برای بازنشانی</string>
     <string name="settings_crypto_version">نگارش Crypto</string>
+    <string name="notice_display_name_changed_to">%1$s نام نمایشیش را به %2$s تغییر داد</string>
 </resources>

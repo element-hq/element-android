@@ -3009,4 +3009,5 @@
     <string name="settings_acceptable_use_policy">Zásady prijateľného používania</string>
     <string name="action_proceed_to_reset">Pokračovať v obnovení</string>
     <string name="settings_crypto_version">Krypto verzia</string>
+    <string name="notice_display_name_changed_to">%1$s zmenil/a svoje zobrazované meno na %2$s</string>
 </resources>

@@ -2935,4 +2935,5 @@
     <string name="settings_acceptable_use_policy">Rregulla të Pranueshme Përdorimi</string>
     <string name="action_proceed_to_reset">Vazhdo me rikthimin te parazgjedhjet</string>
     <string name="settings_crypto_version">Version kriptografie</string>
+    <string name="notice_display_name_changed_to">%1$s ndërroi emrin e vet në ekran në %2$s</string>
 </resources>
