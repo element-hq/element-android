@@ -2950,4 +2950,7 @@
     <string name="settings_crypto_version">Version de cryptographie</string>
     <string name="action_proceed_to_reset">Faire la réinitialisation</string>
     <string name="notice_display_name_changed_to">%1$s a modifié son nom d’affichage en %2$s</string>
+    <string name="avatar_of_user">Image de profile de l’utilisateur %1$s</string>
+    <string name="avatar_of_room">Avatar du salon %1$s</string>
+    <string name="avatar_of_space">Avatar de l’espace %1$s</string>
 </resources>
