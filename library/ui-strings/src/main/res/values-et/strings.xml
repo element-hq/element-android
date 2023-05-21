@@ -2950,4 +2950,7 @@
     <string name="pill_message_from_user">Sõnum kasutajalt %s</string>
     <string name="settings_crypto_version">Krüptoteekide versioon</string>
     <string name="notice_display_name_changed_to">%1$s muutis oma uueks kuvatavaks nimeks %2$s</string>
+    <string name="avatar_of_user">Kasutaja %1$s tunnuspilt</string>
+    <string name="avatar_of_room">%1$s jututoa tunnuspilt</string>
+    <string name="avatar_of_space">%1$s kogukonna tunnuspilt</string>
 </resources>
