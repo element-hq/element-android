@@ -360,9 +360,7 @@ internal class RustCryptoService @Inject constructor(
     }
 
     override fun getLiveCryptoDeviceInfo(userIds: List<String>): LiveData<List<CryptoDeviceInfo>> {
-        return olmMachine.getLiveDevices(listOf(myUserId)).map {
-            it.filter { it.userId == myUserId }
-        }
+        return olmMachine.getLiveDevices(userIds)
     }
 
     override fun getLiveCryptoDeviceInfoWithId(deviceId: String): LiveData<Optional<CryptoDeviceInfo>> {
