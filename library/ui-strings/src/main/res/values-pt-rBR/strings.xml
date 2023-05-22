@@ -2292,8 +2292,8 @@
     <string name="preference_root_legals">Jurídicos</string>
     <string name="legals_no_policy_provided">Este servidor não provê nenhuma política.</string>
     <string name="legals_third_party_notices">Bibliotecas de terceiros</string>
-    <string name="legals_identity_server_title">A política de seu servidor de identidade</string>
-    <string name="legals_home_server_title">A política de seu servidorcasa</string>
+    <string name="legals_identity_server_title">A política do seu servidor de identidade</string>
+    <string name="legals_home_server_title">A política do seu servidor local</string>
     <string name="legals_application_title">Política de ${app_name}</string>
     <string name="analytics_opt_in_list_item_1">Nós <b>não</b> gravaremos nem criaremos um perfil dos dados de sua conta</string>
     <string name="analytics_opt_in_content">Ajude-nos a identificar problemas e melhorar ${app_name} ao compartilhar dados de uso anônimos. Para entender como pessoas usam seus múltiplos dispositivos, nós vamos gerar um identificador aleatório, compartilhado por seus dispositivos.
