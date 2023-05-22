@@ -28,7 +28,6 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.databinding.BottomSheetGenericListBinding
-import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -62,9 +61,5 @@ class DeviceTrustInfoActionFragment :
 
     override fun invalidate() = withState(viewModel) {
         epoxyController.setData(it)
-    }
-
-    override fun onVerifyManually(device: CryptoDeviceInfo) {
-        viewModel.handle(DeviceListAction.ManuallyVerify(device.deviceId))
     }
 }

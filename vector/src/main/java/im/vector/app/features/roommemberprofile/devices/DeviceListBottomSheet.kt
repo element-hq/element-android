@@ -47,16 +47,7 @@ class DeviceListBottomSheet :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.observeViewEvents {
-            when (it) {
-                is DeviceListBottomSheetViewEvents.Verify -> {
-                    // TODO selfverif
-//                    VerificationBottomSheet.withArgs(
-// //                            roomId = null,
-//                            otherUserId = it.userId,
-//                            transactionId = it.txID
-//                    ).show(requireActivity().supportFragmentManager, "REQPOP")
-                }
-            }
+            // nop
         }
     }
 
