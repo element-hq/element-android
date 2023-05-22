@@ -2890,4 +2890,7 @@
     <string name="action_proceed_to_reset">繼續重設</string>
     <string name="settings_crypto_version">加密版本</string>
     <string name="notice_display_name_changed_to">%1$s 變更了他們的顯示名稱為 %2$s</string>
+    <string name="avatar_of_user">使用者 %1$s 的個人資料照片</string>
+    <string name="avatar_of_room">聊天室 %1$s 的大頭貼</string>
+    <string name="avatar_of_space">聊天空間 %1$s 的大頭貼</string>
 </resources>
