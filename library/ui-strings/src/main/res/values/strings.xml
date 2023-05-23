@@ -2465,7 +2465,9 @@
 
     <string name="verification_profile_device_verified_because">This session is trusted for secure messaging because %1$s (%2$s) verified it:</string>
     <string name="verification_profile_device_new_signing">%1$s (%2$s) signed in using a new session:</string>
-    <string name="verification_profile_device_untrust_info">Until this user trusts this session, messages sent to and from it are labeled with warnings. Alternatively, you can manually verify it.</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="verification_profile_device_untrust_info">Until this user trusts this session, messages sent to and from it are labeled with warnings. Alternatively, you can manually verify it.</string>
+    <string name="verification_profile_other_device_untrust_info">Until this user trusts this session, messages sent to and from it are labeled with warnings.</string>
 
 
     <string name="initialize_cross_signing">Initialize CrossSigning</string>
