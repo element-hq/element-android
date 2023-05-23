@@ -1,0 +1,1 @@
+Fix: The device list screen from the member profile page was always showing the current user devices (rust crypto).
