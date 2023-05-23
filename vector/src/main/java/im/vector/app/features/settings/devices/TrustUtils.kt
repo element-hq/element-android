@@ -22,8 +22,6 @@ import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 // TODO Replace usage by the use case GetEncryptionTrustLevelForDeviceUseCase
 object TrustUtils {
 
-    // XXX why is this using the RoomEncryptionTrustLevel?
-    // should be using a new DeviceTrustShield enum
     fun shieldForTrust(
             currentDevice: Boolean,
             trustMSK: Boolean,

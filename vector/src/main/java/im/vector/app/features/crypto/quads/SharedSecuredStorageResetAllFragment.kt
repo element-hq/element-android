@@ -52,7 +52,7 @@ class SharedSecuredStorageResetAllFragment :
 
         views.ssssResetOtherDevices.debouncedClicks {
             withState(sharedViewModel) {
-                DeviceListBottomSheet.newInstance(it.userId, false).show(childFragmentManager, "DEV_LIST")
+                DeviceListBottomSheet.newInstance(it.userId).show(childFragmentManager, "DEV_LIST")
             }
         }
 

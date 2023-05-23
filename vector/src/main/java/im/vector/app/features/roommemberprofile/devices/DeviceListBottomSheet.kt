@@ -100,13 +100,12 @@ class DeviceListBottomSheet :
     @Parcelize
     data class Args(
             val userId: String,
-            val allowDeviceAction: Boolean
     ) : Parcelable
 
     companion object {
-        fun newInstance(userId: String, allowDeviceAction: Boolean = true): DeviceListBottomSheet {
+        fun newInstance(userId: String): DeviceListBottomSheet {
             return DeviceListBottomSheet().apply {
-                setArguments(Args(userId, allowDeviceAction))
+                setArguments(Args(userId))
             }
         }
     }
