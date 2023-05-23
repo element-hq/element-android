@@ -453,6 +453,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                                 _viewEvents.post(
                                         HomeActivityViewEvents.CurrentSessionNotVerified(
                                                 session.getUserOrDefault(session.myUserId).toMatrixItem(),
+                                                vectorPreferences.isOnRustCrypto() && vectorPreferences.hadExistingLegacyData()
                                         )
                                 )
                             } else {

@@ -254,6 +254,8 @@ class VectorPreferences @Inject constructor(
         const val TAKE_PHOTO_VIDEO_MODE_PHOTO = 1
         const val TAKE_PHOTO_VIDEO_MODE_VIDEO = 2
 
+        const val HAD_EXISTING_LEGACY_DATA = "HAD_EXISTING_LEGACY_DATA"
+        const val IS_ON_RUST_CRYPTO = "IS_ON_RUST_CRYPTO"
         // Background sync modes
 
         // some preferences keys must be kept after a logout
@@ -1276,6 +1278,26 @@ class VectorPreferences @Inject constructor(
     fun setNewLoginAlertShownForDevice(deviceId: String) {
         defaultPrefs.edit {
             putBoolean(SETTINGS_NEW_LOGIN_ALERT_SHOWN_FOR_DEVICE + deviceId, true)
+        }
+    }
+
+    fun hadExistingLegacyData(): Boolean {
+        return defaultPrefs.getBoolean(HAD_EXISTING_LEGACY_DATA, false)
+    }
+
+    fun setHadExistingLegacyData(had: Boolean) {
+        defaultPrefs.edit {
+            putBoolean(HAD_EXISTING_LEGACY_DATA, had)
+        }
+    }
+
+    fun isOnRustCrypto(): Boolean {
+        return defaultPrefs.getBoolean(IS_ON_RUST_CRYPTO, false)
+    }
+
+    fun setIsOnRustCrypto(boolean: Boolean) {
+        defaultPrefs.edit {
+            putBoolean(IS_ON_RUST_CRYPTO, boolean)
         }
     }
 }

@@ -469,11 +469,21 @@ class HomeActivity :
 
     private fun handleOnNewSession(event: HomeActivityViewEvents.CurrentSessionNotVerified) {
         // We need to ask
+        val titleRes = if (event.afterMigration) {
+            R.string.crosssigning_verify_after_update
+        } else {
+            R.string.crosssigning_verify_this_session
+        }
+        val descRes = if (event.afterMigration) {
+            R.string.confirm_your_identity_after_update
+        } else {
+            R.string.confirm_your_identity
+        }
         promptSecurityEvent(
                 uid = PopupAlertManager.VERIFY_SESSION_UID,
                 userItem = event.userItem,
-                titleRes = R.string.crosssigning_verify_this_session,
-                descRes = R.string.confirm_your_identity,
+                titleRes = titleRes,
+                descRes = descRes,
         ) {
             it.navigator.requestSelfSessionVerification(it)
         }
