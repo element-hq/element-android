@@ -1127,7 +1127,7 @@
         <item quantity="many">%d aktywnych sesji</item>
         <item quantity="other">%d aktywnych sesji</item>
     </plurals>
-    <string name="crosssigning_verify_this_session">Weryfikuj inne urządzenie</string>
+    <string name="crosssigning_verify_this_session">Weryfikuj to urządzenie</string>
     <string name="verification_open_other_to_verify">Otwórz obecną sesję i użyj jej do zweryfikowania obecnej, przyznając jej dostęp do zaszyfrowanych wiadomości.</string>
     <string name="verification_profile_verify">Zweryfkuj</string>
     <string name="verification_profile_verified">Zweryfikowano</string>
@@ -3069,4 +3069,7 @@
         <item quantity="other">%1$d zaznaczono</item>
     </plurals>
     <string name="notice_display_name_changed_to">%1$s zmienił swoją wyświetlaną nazwę na %2$s</string>
+    <string name="avatar_of_user">Zdjęcie profilowe użytkownika %1$s</string>
+    <string name="avatar_of_room">Awatar pokoju %1$s</string>
+    <string name="avatar_of_space">Awatar przestrzeni %1$s</string>
 </resources>
