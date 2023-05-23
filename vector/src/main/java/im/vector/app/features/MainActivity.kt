@@ -252,13 +252,10 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                     try {
                         session.signOutService().signOut(!args.isUserLoggedOut)
                     } catch (failure: Throwable) {
-                        displayError(failure)
+                        displaySignOutFailedDialog(onboardingStore)
                         return@launch
                     }
-                    Timber.w("SIGN_OUT: success, start app")
-                    activeSessionHolder.clearActiveSession()
-                    doLocalCleanup(clearPreferences = true, onboardingStore)
-                    startNextActivityAndFinish()
+                    completeSignout(onboardingStore)
                 }
             }
             args.clearCache -> {
@@ -269,6 +266,15 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                     startNextActivityAndFinish()
                 }
             }
+        }
+    }
+
+    private fun completeSignout(onboardingStore: VectorSessionStore) {
+        lifecycleScope.launch {
+            Timber.w("SIGN_OUT: success, start app")
+            activeSessionHolder.clearActiveSession()
+            doLocalCleanup(clearPreferences = true, onboardingStore)
+            startNextActivityAndFinish()
         }
     }
 
@@ -299,12 +305,13 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
         }
     }
 
-    private fun displayError(failure: Throwable) {
+    private fun displaySignOutFailedDialog(onboardingStore: VectorSessionStore) {
         if (lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
             MaterialAlertDialogBuilder(this)
                     .setTitle(R.string.dialog_title_error)
-                    .setMessage(errorFormatter.toHumanReadable(failure))
-                    .setPositiveButton(R.string.global_retry) { _, _ -> doCleanUp() }
+                    .setMessage(R.string.sign_out_failed_dialog_message)
+                    .setPositiveButton(R.string.sign_out_anyway) { _, _ -> completeSignout(onboardingStore) }
+                    .setNeutralButton(R.string.global_retry) { _, _ -> doCleanUp() }
                     .setNegativeButton(R.string.action_cancel) { _, _ -> startNextActivityAndFinish(ignoreClearCredentials = true) }
                     .setCancelable(false)
                     .show()

@@ -328,6 +328,9 @@
     <string name="backup">Back up</string>
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">You’ll lose access to your encrypted messages unless you back up your keys before signing out.</string>
 
+    <string name="sign_out_failed_dialog_message">Cannot reach the homeserver. If you sign out anyway, this device will not be erased from your device list, you may want to remove it using another client.</string>
+    <string name="sign_out_anyway">Sign out anyway</string>
+
     <!-- splash screen accessibility -->
     <string name="loading">Loading…</string>
 
