@@ -2825,4 +2825,5 @@
     <string name="action_proceed_to_reset">继续重设</string>
     <string name="notice_display_name_changed_to">%1$s更改了其显示名称为%2$s</string>
     <string name="settings_external_account_management_title">账户</string>
+    <string name="action_stop">是的，停止</string>
 </resources>
