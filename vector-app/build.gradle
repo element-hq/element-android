@@ -58,11 +58,11 @@ def generateVersionCodeFromVersionName() {
 }
 
 def getVersionCode() {
-    if (gitBranchName() == "develop") {
+//    if (gitBranchName() == "develop") {
         return generateVersionCodeFromTimestamp()
-    } else {
-        return generateVersionCodeFromVersionName()
-    }
+//    } else {
+//        return generateVersionCodeFromVersionName()
+//    }
 }
 
 def getNightlyUniversalApkPath() {
