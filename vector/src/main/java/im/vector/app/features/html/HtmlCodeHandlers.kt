@@ -18,8 +18,8 @@ package im.vector.app.features.html
 
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.settings.VectorPreferences
-import io.element.android.wysiwyg.spans.CodeBlockSpan
-import io.element.android.wysiwyg.spans.InlineCodeSpan
+import io.element.android.wysiwyg.view.spans.CodeBlockSpan
+import io.element.android.wysiwyg.view.spans.InlineCodeSpan
 import io.noties.markwon.MarkwonVisitor
 import io.noties.markwon.SpannableBuilder
 import io.noties.markwon.core.MarkwonTheme
