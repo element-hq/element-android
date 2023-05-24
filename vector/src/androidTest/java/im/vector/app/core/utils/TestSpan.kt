@@ -23,7 +23,7 @@ import android.text.Spanned
 import android.text.style.StrikethroughSpan
 import androidx.core.text.getSpans
 import im.vector.app.features.html.HtmlCodeSpan
-import io.element.android.wysiwyg.spans.InlineCodeSpan
+import io.element.android.wysiwyg.view.spans.InlineCodeSpan
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.slot
