@@ -3009,4 +3009,8 @@
     <string name="settings_acceptable_use_policy">Zásady přijatelného používání</string>
     <string name="action_proceed_to_reset">Přejít k obnovení</string>
     <string name="settings_crypto_version">Verze šifrování</string>
+    <string name="notice_display_name_changed_to">%1$s změnil(a) své zobrazované jméno na %2$s</string>
+    <string name="avatar_of_user">Profilový obrázek uživatele %1$s</string>
+    <string name="avatar_of_room">Avatar místnosti %1$s</string>
+    <string name="avatar_of_space">Avatar prostoru %1$s</string>
 </resources>
