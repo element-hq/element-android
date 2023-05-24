@@ -2446,6 +2446,7 @@
     </plurals>
 
     <string name="crosssigning_verify_this_session">Verify this device</string>
+    <string name="crosssigning_verify_after_update">App updated</string>
     <string name="crosssigning_cannot_verify_this_session">Unable to verify this device</string>
     <string name="crosssigning_cannot_verify_this_session_desc">You won’t be able to access encrypted message history. Reset your Secure Message Backup and verification keys to start fresh.</string>
 
@@ -2709,6 +2710,7 @@
     <string tools:ignore="UnusedResources" name="crosssigning_verify_session">Verify login</string>
     <string name="cross_signing_verify_by_emoji">Interactively Verify by Emoji</string>
     <string name="confirm_your_identity">Confirm your identity by verifying this login from one of your other sessions, granting it access to encrypted messages.</string>
+    <string name="confirm_your_identity_after_update">Secure messaging has been improved with the latest update. Please re-verify your device.</string>
     <string name="confirm_your_identity_quad_s">Confirm your identity by verifying this login, granting it access to encrypted messages.</string>
 
     <string name="failed_to_initialize_cross_signing">Failed to set up Cross Signing</string>
