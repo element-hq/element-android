@@ -71,6 +71,10 @@ fun RealmToMigrate.getPickledAccount(pickleKey: ByteArray): MigrationData {
             val userKey = metadataEntity.xSignUserPrivateKey
             val selfSignedKey = metadataEntity.xSignSelfSignedPrivateKey
 
+            Timber.i("## Migration: has private MSK ${masterKey.isNullOrBlank().not()}")
+            Timber.i("## Migration: has private USK ${userKey.isNullOrBlank().not()}")
+            Timber.i("## Migration: has private SSK ${selfSignedKey.isNullOrBlank().not()}")
+
             val userId = metadataEntity.userId
                     ?: throw java.lang.IllegalArgumentException("Rust db migration: userId is null")
             val deviceId = metadataEntity.deviceId
@@ -78,6 +82,8 @@ fun RealmToMigrate.getPickledAccount(pickleKey: ByteArray): MigrationData {
 
             val backupVersion = metadataEntity.backupVersion
             val backupRecoveryKey = metadataEntity.keyBackupRecoveryKey
+
+            Timber.i("## Migration: has private backup key ${backupRecoveryKey != null} for version $backupVersion")
 
             val isOlmAccountShared = metadataEntity.deviceKeysSentToServer
 
