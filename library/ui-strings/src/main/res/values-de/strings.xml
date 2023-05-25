@@ -2952,4 +2952,7 @@
     <string name="avatar_of_user">Benutzer-Profilbild von %1$s</string>
     <string name="avatar_of_room">Raum-Avatar von %1$s</string>
     <string name="avatar_of_space">Space-Avatar von %1$s</string>
+    <string name="confirm_your_identity_after_update">Verschlüsselte Kommunikation wurde mit der neuesten Aktualisierung verbessert. Bitte verifiziere deine Geräte erneut.</string>
+    <string name="verification_profile_other_device_untrust_info">Solange der Benutzer dieser Sitzung nicht vertraut, werden Nachrichten mit Warnungen versehen.</string>
+    <string name="crosssigning_verify_after_update">App aktualisiert</string>
 </resources>
