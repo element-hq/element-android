@@ -3013,4 +3013,7 @@
     <string name="avatar_of_user">Profilový obrázok používateľa %1$s</string>
     <string name="avatar_of_room">Obrázok miestnosti %1$s</string>
     <string name="avatar_of_space">Obrázok priestoru %1$s</string>
+    <string name="confirm_your_identity_after_update">Najnovšou aktualizáciou sa zlepšilo bezpečné zasielanie správ. Overte prosím znova svoje zariadenie.</string>
+    <string name="verification_profile_other_device_untrust_info">Pokiaľ tento používateľ tejto relácii nedôveruje, správy odoslané do nej a z nej sú označené varovaním.</string>
+    <string name="crosssigning_verify_after_update">Aplikácia bola aktualizovaná</string>
 </resources>
