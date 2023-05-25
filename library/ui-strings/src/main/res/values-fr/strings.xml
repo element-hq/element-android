@@ -2953,4 +2953,7 @@
     <string name="avatar_of_user">Image de profile de l’utilisateur %1$s</string>
     <string name="avatar_of_room">Avatar du salon %1$s</string>
     <string name="avatar_of_space">Avatar de l’espace %1$s</string>
+    <string name="confirm_your_identity_after_update">La messagerie sécurisée a été améliorée avec la dernière mise-à-jour. Veuillez re-vérifier votre appareil.</string>
+    <string name="verification_profile_other_device_untrust_info">Jusqu’à ce que cet utilisateur fasse confiance à cette session, les messages sur cette session sont étiquetés avec des avertissements.</string>
+    <string name="crosssigning_verify_after_update">Application mise-à-jour</string>
 </resources>
