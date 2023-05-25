@@ -2895,4 +2895,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="avatar_of_user">Foto profil pengguna %1$s</string>
     <string name="avatar_of_room">Avatar ruangan %1$s</string>
     <string name="avatar_of_space">Avatar space %1$s</string>
+    <string name="confirm_your_identity_after_update">Perpesanan aman telah ditingkatkan dengan pembaruan terkini. Silakan verifikasi ulang perangkat Anda.</string>
+    <string name="verification_profile_other_device_untrust_info">Sampai pengguna ini mempercayai sesi ini, pesan yang dikirim dan diterima akan ditandai dengan peringatan.</string>
+    <string name="crosssigning_verify_after_update">Aplikasi diperbarui</string>
 </resources>
