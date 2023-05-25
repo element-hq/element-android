@@ -1,3 +1,20 @@
+Changes in Element v1.6.1 (2023-05-25)
+======================================
+
+Corrective release for 1.6.0
+
+Bugfixes 🐛
+----------
+ - Allow stateloss on verification dialogfragment ([#8439](https://github.com/vector-im/element-android/issues/8439))
+ - Fix: Update verification popup text when a re-verification is needed after rust migration (read only sessions) ([#8445](https://github.com/vector-im/element-android/issues/8445))
+ - Fix several performance issues causing app non responsive issues. ([#8454](https://github.com/vector-im/element-android/issues/8454))
+ - Fix: The device list screen from the member profile page was always showing the current user devices (rust crypto). ([#8457](https://github.com/vector-im/element-android/issues/8457))
+
+Other changes
+-------------
+ - Remove UI option to manually verify a specific device of another user (deprecated behaviour) ([#8458](https://github.com/vector-im/element-android/issues/8458))
+
+
 Changes in Element v1.6.0 (2023-05-17)
 ======================================
 
