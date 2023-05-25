@@ -2446,6 +2446,7 @@
     </plurals>
 
     <string name="crosssigning_verify_this_session">Verify this device</string>
+    <string name="crosssigning_verify_after_update">App updated</string>
     <string name="crosssigning_cannot_verify_this_session">Unable to verify this device</string>
     <string name="crosssigning_cannot_verify_this_session_desc">You won’t be able to access encrypted message history. Reset your Secure Message Backup and verification keys to start fresh.</string>
 
@@ -2465,7 +2466,9 @@
 
     <string name="verification_profile_device_verified_because">This session is trusted for secure messaging because %1$s (%2$s) verified it:</string>
     <string name="verification_profile_device_new_signing">%1$s (%2$s) signed in using a new session:</string>
-    <string name="verification_profile_device_untrust_info">Until this user trusts this session, messages sent to and from it are labeled with warnings. Alternatively, you can manually verify it.</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="verification_profile_device_untrust_info">Until this user trusts this session, messages sent to and from it are labeled with warnings. Alternatively, you can manually verify it.</string>
+    <string name="verification_profile_other_device_untrust_info">Until this user trusts this session, messages sent to and from it are labeled with warnings.</string>
 
 
     <string name="initialize_cross_signing">Initialize CrossSigning</string>
@@ -2707,6 +2710,7 @@
     <string tools:ignore="UnusedResources" name="crosssigning_verify_session">Verify login</string>
     <string name="cross_signing_verify_by_emoji">Interactively Verify by Emoji</string>
     <string name="confirm_your_identity">Confirm your identity by verifying this login from one of your other sessions, granting it access to encrypted messages.</string>
+    <string name="confirm_your_identity_after_update">Secure messaging has been improved with the latest update. Please re-verify your device.</string>
     <string name="confirm_your_identity_quad_s">Confirm your identity by verifying this login, granting it access to encrypted messages.</string>
 
     <string name="failed_to_initialize_cross_signing">Failed to set up Cross Signing</string>

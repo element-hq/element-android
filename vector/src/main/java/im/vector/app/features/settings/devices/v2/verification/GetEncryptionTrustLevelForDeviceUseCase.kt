@@ -25,6 +25,8 @@ class GetEncryptionTrustLevelForDeviceUseCase @Inject constructor(
         private val getEncryptionTrustLevelForOtherDeviceUseCase: GetEncryptionTrustLevelForOtherDeviceUseCase,
 ) {
 
+    // XXX why is this using the RoomEncryptionTrustLevel?
+    // should be using a new DeviceTrustShield enum
     fun execute(currentSessionCrossSigningInfo: CurrentSessionCrossSigningInfo, cryptoDeviceInfo: CryptoDeviceInfo?): RoomEncryptionTrustLevel? {
         if (cryptoDeviceInfo == null) {
             return null

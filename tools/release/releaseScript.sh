@@ -267,7 +267,7 @@ fi
 
 printf "\n================================================================================\n"
 printf "Wait for the GitHub action https://github.com/vector-im/element-android/actions/workflows/build.yml?query=branch%%3Amain to build the 'main' branch.\n"
-read -p "After GHA is finished, please enter the artifact URL (for 'vector-gplay-rustCrypto-release-unsigned'): " artifactUrl
+read -p "After GHA is finished, please enter the artifact URL (for 'vector-gplay-release-unsigned'): " artifactUrl
 
 printf "\n================================================================================\n"
 printf "Downloading the artifact...\n"
@@ -290,7 +290,7 @@ set -e
 printf "\n================================================================================\n"
 printf "Unzipping the artifact...\n"
 
-unzip ${targetPath}/vector-gplay-rustCrypto-release-unsigned.zip -d ${targetPath}
+unzip ${targetPath}/vector-gplay-release-unsigned.zip -d ${targetPath}
 
 # Flatten folder hierarchy
 mv ${targetPath}/gplayRustCrypto/release/* ${targetPath}

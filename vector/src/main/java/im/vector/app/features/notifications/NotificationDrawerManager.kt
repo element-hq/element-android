@@ -24,7 +24,9 @@ import im.vector.app.R
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.utils.FirstThrottler
 import im.vector.app.features.displayname.getBestName
+import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
 import org.matrix.android.sdk.api.session.getUserOrDefault
@@ -121,11 +123,15 @@ class NotificationDrawerManager @Inject constructor(
      * Used to ignore events related to that room (no need to display notification) and clean any existing notification on this room.
      */
     fun setCurrentRoom(roomId: String?) {
-        updateEvents {
-            val hasChanged = roomId != currentRoomId
-            currentRoomId = roomId
-            if (hasChanged && roomId != null) {
-                it.clearMessagesForRoom(roomId)
+        val dispatcher = currentSession?.coroutineDispatchers?.io ?: return
+        val scope = currentSession?.coroutineScope ?: return
+        scope.launch(dispatcher) {
+            updateEvents {
+                val hasChanged = roomId != currentRoomId
+                currentRoomId = roomId
+                if (hasChanged && roomId != null) {
+                    it.clearMessagesForRoom(roomId)
+                }
             }
         }
     }
@@ -135,12 +141,16 @@ class NotificationDrawerManager @Inject constructor(
      * Used to ignore events related to that thread (no need to display notification) and clean any existing notification on this room.
      */
     fun setCurrentThread(threadId: String?) {
-        updateEvents {
-            val hasChanged = threadId != currentThreadId
-            currentThreadId = threadId
-            currentRoomId?.let { roomId ->
-                if (hasChanged && threadId != null) {
-                    it.clearMessagesForThread(roomId, threadId)
+        val dispatcher = currentSession?.coroutineDispatchers?.io ?: return
+        val scope = currentSession?.coroutineScope ?: return
+        scope.launch(dispatcher) {
+            updateEvents {
+                val hasChanged = threadId != currentThreadId
+                currentThreadId = threadId
+                currentRoomId?.let { roomId ->
+                    if (hasChanged && threadId != null) {
+                        it.clearMessagesForThread(roomId, threadId)
+                    }
                 }
             }
         }
