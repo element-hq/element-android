@@ -3072,4 +3072,7 @@
     <string name="avatar_of_user">Zdjęcie profilowe użytkownika %1$s</string>
     <string name="avatar_of_room">Awatar pokoju %1$s</string>
     <string name="avatar_of_space">Awatar przestrzeni %1$s</string>
+    <string name="confirm_your_identity_after_update">Bezpieczne wysyłanie wiadomości zostało usprawnione z najnowszą aktualizacją. Zweryfikuj swoje urządzenie ponownie.</string>
+    <string name="verification_profile_other_device_untrust_info">Dopóki ten użytkownik nie zweryfikuje tej sesji, wysłane wiadomości będą zawierać ostrzeżenie.</string>
+    <string name="crosssigning_verify_after_update">Zaktualizowano aplikację</string>
 </resources>
