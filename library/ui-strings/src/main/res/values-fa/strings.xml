@@ -2953,4 +2953,7 @@
     <string name="avatar_of_user">نگارهٔ نمایهٔ کاربر %1$s</string>
     <string name="avatar_of_room">چهرک اتاق %1$s</string>
     <string name="avatar_of_space">چهرک فضای %1$s</string>
+    <string name="confirm_your_identity_after_update">پیام‌رسانی امن با جدیدترین به‌روز رسانی بهبود یافته است. لطفاً افزاره‌تان را دوباره تأیید کنید.</string>
+    <string name="verification_profile_other_device_untrust_info">تا کاربر این نشست را تأیید کند، پیام‌های فرستاده و گرفته‌اش با هشدار برچسب می‌خورند.</string>
+    <string name="crosssigning_verify_after_update">کاره به‌روز شد</string>
 </resources>
