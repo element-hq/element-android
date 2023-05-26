@@ -163,14 +163,14 @@ class ServerBackupStatusViewModel @AssistedInject constructor(
     /**
      * Safe way to get the number of keys to backup.
      */
-    fun getNumberOfKeysToBackup(): Int {
+    private suspend fun getNumberOfKeysToBackup(): Int {
         return session.cryptoService().inboundGroupSessionsCount(false)
     }
 
     /**
      * Safe way to tell if there are more keys on the server.
      */
-    fun canRestoreKeys(): Boolean {
+    private suspend fun canRestoreKeys(): Boolean {
         return session.cryptoService().keysBackupService().canRestoreKeys()
     }
 
@@ -188,7 +188,9 @@ class ServerBackupStatusViewModel @AssistedInject constructor(
 
     fun refreshRemoteStateIfNeeded() {
         if (keysBackupState.value == KeysBackupState.Disabled) {
-            session.cryptoService().keysBackupService().checkAndStartKeysBackup()
+            viewModelScope.launch {
+                session.cryptoService().keysBackupService().checkAndStartKeysBackup()
+            }
         }
     }
 

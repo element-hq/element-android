@@ -23,25 +23,28 @@ import org.matrix.android.sdk.api.extensions.measureSpan
 import org.matrix.android.sdk.api.extensions.measureSpannableMetric
 import org.matrix.android.sdk.api.metrics.SpannableMetricPlugin
 import org.matrix.android.sdk.api.metrics.SyncDurationMetricPlugin
+import org.matrix.android.sdk.api.session.crypto.CryptoService
+import org.matrix.android.sdk.api.session.crypto.MXCryptoError
+import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
+import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.pushrules.PushRuleService
 import org.matrix.android.sdk.api.session.pushrules.RuleScope
 import org.matrix.android.sdk.api.session.sync.InitialSyncStep
 import org.matrix.android.sdk.api.session.sync.model.RoomsSyncResponse
 import org.matrix.android.sdk.api.session.sync.model.SyncResponse
 import org.matrix.android.sdk.internal.SessionManager
-import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
 import org.matrix.android.sdk.internal.crypto.store.db.CryptoStoreAggregator
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.session.SessionListeners
 import org.matrix.android.sdk.internal.session.dispatchTo
 import org.matrix.android.sdk.internal.session.pushrules.ProcessEventForPushTask
-import org.matrix.android.sdk.internal.session.sync.handler.CryptoSyncHandler
 import org.matrix.android.sdk.internal.session.sync.handler.PresenceSyncHandler
 import org.matrix.android.sdk.internal.session.sync.handler.SyncResponsePostTreatmentAggregatorHandler
 import org.matrix.android.sdk.internal.session.sync.handler.UserAccountDataSyncHandler
 import org.matrix.android.sdk.internal.session.sync.handler.room.RoomSyncHandler
 import org.matrix.android.sdk.internal.util.awaitTransaction
+import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.system.measureTimeMillis
@@ -53,13 +56,13 @@ internal class SyncResponseHandler @Inject constructor(
         private val sessionListeners: SessionListeners,
         private val roomSyncHandler: RoomSyncHandler,
         private val userAccountDataSyncHandler: UserAccountDataSyncHandler,
-        private val cryptoSyncHandler: CryptoSyncHandler,
         private val aggregatorHandler: SyncResponsePostTreatmentAggregatorHandler,
-        private val cryptoService: DefaultCryptoService,
+        private val cryptoService: CryptoService,
         private val tokenStore: SyncTokenStore,
         private val processEventForPushTask: ProcessEventForPushTask,
         private val pushRuleService: PushRuleService,
         private val presenceSyncHandler: PresenceSyncHandler,
+        private val clock: Clock,
         matrixConfiguration: MatrixConfiguration,
 ) {
 
@@ -72,16 +75,47 @@ internal class SyncResponseHandler @Inject constructor(
             reporter: ProgressReporter?
     ) {
         val isInitialSync = fromToken == null
-        Timber.v("Start handling sync, is InitialSync: $isInitialSync")
+
+        val aggregator = SyncResponsePostTreatmentAggregator()
 
         relevantPlugins.filter { it.shouldReport(isInitialSync, afterPause) }.measureSpannableMetric {
             startCryptoService(isInitialSync)
 
             // Handle the to device events before the room ones
             // to ensure to decrypt them properly
-            handleToDevice(syncResponse, reporter)
+            handleToDevice(syncResponse)
 
-            val aggregator = SyncResponsePostTreatmentAggregator()
+            val syncLocalTimestampMillis = clock.epochMillis()
+
+            // pass live state/crypto related event to crypto
+
+            measureSpan("task", "crypto_session_event_handling") {
+                syncResponse.rooms?.invite?.entries?.map { (roomId, roomSync) ->
+                    roomSync.inviteState
+                            ?.events
+                            ?.filter { it.isStateEvent() }
+                            ?.forEach {
+                                cryptoService.onStateEvent(roomId, it, aggregator.cryptoStoreAggregator)
+                            }
+                }
+
+                syncResponse.rooms?.join?.entries?.map { (roomId, roomSync) ->
+                    roomSync.state
+                            ?.events
+                            ?.filter { it.isStateEvent() }
+                            ?.forEach {
+                                cryptoService.onStateEvent(roomId, it, aggregator.cryptoStoreAggregator)
+                            }
+
+                    roomSync.timeline?.events?.forEach {
+                        if (it.isEncrypted() && !isInitialSync) {
+                            decryptIfNeeded(it, roomId)
+                        }
+                        it.ageLocalTs = syncLocalTimestampMillis - (it.unsignedData?.age ?: 0)
+                        cryptoService.onLiveEvent(roomId, it, isInitialSync, aggregator.cryptoStoreAggregator)
+                    }
+                }
+            }
 
             // Prerequisite for thread events handling in RoomSyncHandler
             // Disabled due to the new fallback
@@ -103,7 +137,32 @@ internal class SyncResponseHandler @Inject constructor(
         }
     }
 
-    private fun List<SpannableMetricPlugin>.startCryptoService(isInitialSync: Boolean) {
+    private suspend fun decryptIfNeeded(event: Event, roomId: String) {
+        try {
+            val timelineId = generateTimelineId(roomId)
+            // Event from sync does not have roomId, so add it to the event first
+            val result = cryptoService.decryptEvent(event.copy(roomId = roomId), timelineId)
+            event.mxDecryptionResult = OlmDecryptionResult(
+                    payload = result.clearEvent,
+                    senderKey = result.senderCurve25519Key,
+                    keysClaimed = result.claimedEd25519Key?.let { k -> mapOf("ed25519" to k) },
+                    forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain,
+                    verificationState = result.messageVerificationState
+            )
+        } catch (e: MXCryptoError) {
+            Timber.v(e, "Failed to decrypt $roomId")
+            if (e is MXCryptoError.Base) {
+                event.mCryptoError = e.errorType
+                event.mCryptoErrorReason = e.technicalMessage.takeIf { it.isNotEmpty() } ?: e.detailedErrorDescription
+            }
+        }
+    }
+
+    private fun generateTimelineId(roomId: String): String {
+        return "RoomSyncHandler$roomId"
+    }
+
+    private suspend fun List<SpannableMetricPlugin>.startCryptoService(isInitialSync: Boolean) {
         measureSpan("task", "start_crypto_service") {
             measureTimeMillis {
                 if (!cryptoService.isStarted()) {
@@ -117,15 +176,16 @@ internal class SyncResponseHandler @Inject constructor(
         }
     }
 
-    private suspend fun List<SpannableMetricPlugin>.handleToDevice(syncResponse: SyncResponse, reporter: ProgressReporter?) {
+    private suspend fun List<SpannableMetricPlugin>.handleToDevice(syncResponse: SyncResponse) {
         measureSpan("task", "handle_to_device") {
             measureTimeMillis {
                 Timber.v("Handle toDevice")
-                reportSubtask(reporter, InitialSyncStep.ImportingAccountCrypto, 100, 0.1f) {
-                    if (syncResponse.toDevice != null) {
-                        cryptoSyncHandler.handleToDevice(syncResponse.toDevice, reporter)
-                    }
-                }
+                cryptoService.receiveSyncChanges(
+                        syncResponse.toDevice,
+                        syncResponse.deviceLists,
+                        syncResponse.deviceOneTimeKeysCount,
+                        syncResponse.deviceUnusedFallbackKeyTypes
+                )
             }.also {
                 Timber.v("Finish handling toDevice in $it ms")
             }
@@ -221,10 +281,10 @@ internal class SyncResponseHandler @Inject constructor(
         }
     }
 
-    private fun List<SpannableMetricPlugin>.markCryptoSyncCompleted(syncResponse: SyncResponse, cryptoStoreAggregator: CryptoStoreAggregator) {
+    private suspend fun List<SpannableMetricPlugin>.markCryptoSyncCompleted(syncResponse: SyncResponse, cryptoStoreAggregator: CryptoStoreAggregator) {
         measureSpan("task", "crypto_sync_handler_onSyncCompleted") {
             measureTimeMillis {
-                cryptoSyncHandler.onSyncCompleted(syncResponse, cryptoStoreAggregator)
+                cryptoService.onSyncCompleted(syncResponse, cryptoStoreAggregator)
             }.also {
                 Timber.v("cryptoSyncHandler.onSyncCompleted took $it ms")
             }

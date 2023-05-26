@@ -33,3 +33,7 @@ internal annotation class CacheDirectory
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
 internal annotation class ExternalFilesDirectory
+
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+internal annotation class SessionRustFilesDirectory

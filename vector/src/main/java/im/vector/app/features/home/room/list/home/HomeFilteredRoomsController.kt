@@ -26,16 +26,19 @@ import im.vector.app.features.home.room.list.RoomListListener
 import im.vector.app.features.home.room.list.RoomSummaryItemFactory
 import im.vector.app.features.home.room.list.RoomSummaryPlaceHolderItem_
 import im.vector.app.features.settings.FontScalePreferences
+import org.matrix.android.sdk.api.session.room.ResultBoundaries
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 
 class HomeFilteredRoomsController @Inject constructor(
         private val roomSummaryItemFactory: RoomSummaryItemFactory,
-        fontScalePreferences: FontScalePreferences
+        fontScalePreferences: FontScalePreferences,
+        roomSummaryRoomListDiffCallback: RoomSummaryRoomListDiffCallback,
 ) : PagedListEpoxyController<RoomSummary>(
         // Important it must match the PageList builder notify Looper
-        modelBuildingHandler = createUIHandler()
+        modelBuildingHandler = createUIHandler(),
+        itemDiffCallback = roomSummaryRoomListDiffCallback,
 ) {
 
     private var roomChangeMembershipStates: Map<String, ChangeMembershipState>? = null
@@ -50,6 +53,8 @@ class HomeFilteredRoomsController @Inject constructor(
     private var emptyStateData: StateView.State.Empty? = null
 
     private val shouldUseSingleLine: Boolean
+
+    var initialLoadOccurred = false
 
     init {
         val fontScale = fontScalePreferences.getResolvedFontScaleValue()
@@ -73,6 +78,15 @@ class HomeFilteredRoomsController @Inject constructor(
             }
         } else {
             super.addModels(models)
+        }
+    }
+
+    fun boundaryChange(boundary: ResultBoundaries) {
+        // Sometimes the room stays on empty state, need
+        val boundaryHasLoadedSomething = boundary.frontLoaded || boundary.zeroItemLoaded
+        if (initialLoadOccurred != boundaryHasLoadedSomething) {
+            initialLoadOccurred = boundaryHasLoadedSomething
+            requestForcedModelBuild()
         }
     }
 

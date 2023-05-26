@@ -31,6 +31,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.withResumed
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -54,7 +55,6 @@ import im.vector.app.features.analytics.accountdata.AnalyticsAccountDataViewMode
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.crypto.recover.SetupMode
-import im.vector.app.features.disclaimer.DisclaimerDialog
 import im.vector.app.features.home.room.list.actions.RoomListSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListSharedActionViewModel
 import im.vector.app.features.home.room.list.home.layout.HomeLayoutSettingBottomDialogFragment
@@ -74,6 +74,7 @@ import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.popup.VerificationVectorAlert
 import im.vector.app.features.rageshake.ReportType
 import im.vector.app.features.rageshake.VectorUncaughtExceptionHandler
+import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.spaces.SpaceCreationActivity
 import im.vector.app.features.spaces.SpacePreviewActivity
@@ -84,9 +85,11 @@ import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.usercode.UserCodeActivity
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import im.vector.lib.core.utils.compat.getParcelableExtraCompat
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.sync.InitialSyncStrategy
@@ -135,7 +138,6 @@ class HomeActivity :
     @Inject lateinit var spaceStateHandler: SpaceStateHandler
     @Inject lateinit var unifiedPushHelper: UnifiedPushHelper
     @Inject lateinit var nightlyProxy: NightlyProxy
-    @Inject lateinit var disclaimerDialog: DisclaimerDialog
     @Inject lateinit var notificationPermissionManager: NotificationPermissionManager
 
     private var isNewAppLayoutEnabled: Boolean = false // delete once old app layout is removed
@@ -254,11 +256,7 @@ class HomeActivity :
                 HomeActivityViewEvents.PromptToEnableSessionPush -> handlePromptToEnablePush()
                 HomeActivityViewEvents.StartRecoverySetupFlow -> handleStartRecoverySetup()
                 is HomeActivityViewEvents.ForceVerification -> {
-                    if (it.sendRequest) {
-                        navigator.requestSelfSessionVerification(this)
-                    } else {
-                        navigator.waitSessionVerification(this)
-                    }
+                    navigator.requestSelfSessionVerification(this)
                 }
                 is HomeActivityViewEvents.OnCrossSignedInvalidated -> handleCrossSigningInvalidated(it)
                 HomeActivityViewEvents.ShowAnalyticsOptIn -> handleShowAnalyticsOptIn()
@@ -402,8 +400,10 @@ class HomeActivity :
 
     private fun handleStartRecoverySetup() {
         // To avoid IllegalStateException in case the transaction was executed after onSaveInstanceState
-        lifecycleScope.launchWhenResumed {
-            navigator.open4SSetup(this@HomeActivity, SetupMode.NORMAL)
+        lifecycleScope.launch {
+            withResumed {
+                navigator.open4SSetup(this@HomeActivity, SetupMode.NORMAL)
+            }
         }
     }
 
@@ -454,23 +454,38 @@ class HomeActivity :
                 titleRes = R.string.crosssigning_verify_this_session,
                 descRes = R.string.confirm_your_identity,
         ) {
-            it.navigator.waitSessionVerification(it)
+            // check first if it's not an outdated request?
+            activeSessionHolder.getSafeActiveSession()?.let { session ->
+                session.coroutineScope.launch {
+                    if (!session.cryptoService().crossSigningService().isCrossSigningVerified()) {
+                        withContext(Dispatchers.Main) {
+                            it.navigator.requestSelfSessionVerification(it)
+                        }
+                    }
+                }
+            }
         }
     }
 
     private fun handleOnNewSession(event: HomeActivityViewEvents.CurrentSessionNotVerified) {
         // We need to ask
+        val titleRes = if (event.afterMigration) {
+            R.string.crosssigning_verify_after_update
+        } else {
+            R.string.crosssigning_verify_this_session
+        }
+        val descRes = if (event.afterMigration) {
+            R.string.confirm_your_identity_after_update
+        } else {
+            R.string.confirm_your_identity
+        }
         promptSecurityEvent(
                 uid = PopupAlertManager.VERIFY_SESSION_UID,
                 userItem = event.userItem,
-                titleRes = R.string.crosssigning_verify_this_session,
-                descRes = R.string.confirm_your_identity,
+                titleRes = titleRes,
+                descRes = descRes,
         ) {
-            if (event.waitForIncomingRequest) {
-                it.navigator.waitSessionVerification(it)
-            } else {
-                it.navigator.requestSelfSessionVerification(it)
-            }
+            it.navigator.requestSelfSessionVerification(it)
         }
     }
 
@@ -582,8 +597,6 @@ class HomeActivity :
                     .setPositiveButton(R.string.yes) { _, _ -> bugReporter.openBugReportScreen(this) }
                     .setNegativeButton(R.string.no) { _, _ -> bugReporter.deleteCrashFile() }
                     .show()
-        } else {
-            disclaimerDialog.showDisclaimerDialog(this)
         }
 
         // Force remote backup state update to update the banner if needed

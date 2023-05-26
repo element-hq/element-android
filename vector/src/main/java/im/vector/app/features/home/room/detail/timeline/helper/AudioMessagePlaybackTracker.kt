@@ -100,7 +100,7 @@ class AudioMessagePlaybackTracker @Inject constructor() {
         }
     }
 
-    fun stopPlayback(id: String) {
+    fun stopPlaybackOrRecorder(id: String) {
         val state = getPlaybackState(id)
         if (state !is Listener.State.Error) {
             setState(id, Listener.State.Idle)

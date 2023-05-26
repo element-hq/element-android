@@ -245,6 +245,15 @@ interface RoomService {
     ): LiveData<PagedList<RoomSummary>>
 
     /**
+     * Only notifies when this query has changes.
+     * It doesn't load any items in memory
+     */
+    fun roomSummariesChangesLive(
+            queryParams: RoomSummaryQueryParams,
+            sortOrder: RoomSortOrder = RoomSortOrder.ACTIVITY
+    ): LiveData<List<Unit>>
+
+    /**
      * Get's a live paged list from a filter that can be dynamically updated.
      *
      * @param queryParams The filter to use

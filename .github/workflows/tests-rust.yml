@@ -1,0 +1,102 @@
+name: Test
+
+on:
+  pull_request: { }
+  push:
+    branches: [ main, develop ]
+    paths-ignore:
+      - '.github/**'
+
+# Enrich gradle.properties for CI/CD
+env:
+  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3072m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -Dkotlin.daemon.jvm.options="-Xmx2560m" -Dkotlin.incremental=false
+  CI_GRADLE_ARG_PROPERTIES: --stacktrace -PpreDexEnable=false --max-workers 4 --no-daemon
+
+jobs:
+  tests:
+    name: Runs all tests with rust crypto
+    runs-on: buildjet-4vcpu-ubuntu-2204
+    timeout-minutes: 90 # We might need to increase it if the time for tests grows
+    strategy:
+      matrix:
+        api-level: [28]
+    # Allow all jobs on main and develop. Just one per PR.
+    concurrency:
+      group: ${{ github.ref == 'refs/heads/main' && format('unit-tests-main-rust-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('unit-tests-develop-rust-{0}', github.sha) || format('unit-tests-rust-{0}', github.ref) }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          lfs: true
+          fetch-depth: 0
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+      - uses: gradle/gradle-build-action@v2
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
+          gradle-home-cache-cleanup: ${{ github.ref == 'refs/heads/develop' }}
+
+#      - name: Run screenshot tests
+#        run: ./gradlew verifyScreenshots $CI_GRADLE_ARG_PROPERTIES
+
+#      - name: Archive Screenshot Results on Error
+#        if: failure()
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: screenshot-results
+#          path: |
+#            **/out/failures/
+#            **/build/reports/tests/*UnitTest/
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
+      - uses: michaelkaye/setup-matrix-synapse@v1.0.4
+        with:
+          uploadLogs: true
+          httpPort: 8080
+          disableRateLimiting: true
+          public_baseurl: "http://10.0.2.2:8080/"
+
+      - name: Run all the codecoverage tests at once
+        uses: reactivecircus/android-emulator-runner@v2
+        # continue-on-error: true
+        with:
+          api-level: ${{ matrix.api-level }}
+          arch: x86
+          profile: Nexus 5X
+          target: playstore
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
+          # emulator-build: 7425822
+          script: |
+            ./gradlew gatherGplayRustCryptoDebugStringTemplates $CI_GRADLE_ARG_PROPERTIES
+            ./gradlew instrumentationTestsRustWithCoverage $CI_GRADLE_ARG_PROPERTIES
+            ./gradlew generateCoverageReport $CI_GRADLE_ARG_PROPERTIES
+
+      - name: Upload Rust Integration Test Report Log
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: integration-test-rust-error-results
+          path: |
+            */build/outputs/androidTest-results/connected/
+            */build/reports/androidTests/connected/
+
+      # For now ignore sonar
+#      - name: Publish results to Sonar
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.SONARQUBE_GITHUB_API_TOKEN }}  # Needed to get PR information, if any
+#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#          ORG_GRADLE_PROJECT_SONAR_LOGIN: ${{ secrets.SONAR_TOKEN }}
+#        if: ${{ always() && env.GITHUB_TOKEN != '' && env.SONAR_TOKEN != '' && env.ORG_GRADLE_PROJECT_SONAR_LOGIN != '' }}
+#        run: ./gradlew sonar $CI_GRADLE_ARG_PROPERTIES
+
+      - name: Format unit test results
+        if: always()
+        run: python3 ./tools/ci/render_test_output.py unit ./**/build/test-results/**/*.xml
+
+

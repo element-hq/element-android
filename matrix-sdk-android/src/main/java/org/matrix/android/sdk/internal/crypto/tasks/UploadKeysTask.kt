@@ -16,9 +16,8 @@
 
 package org.matrix.android.sdk.internal.crypto.tasks
 
-import org.matrix.android.sdk.api.util.JsonDict
+import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.internal.crypto.api.CryptoApi
-import org.matrix.android.sdk.internal.crypto.model.rest.DeviceKeys
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysUploadBody
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysUploadResponse
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
@@ -29,11 +28,7 @@ import javax.inject.Inject
 
 internal interface UploadKeysTask : Task<UploadKeysTask.Params, KeysUploadResponse> {
     data class Params(
-            // the device keys to send.
-            val deviceKeys: DeviceKeys?,
-            // the one-time keys to send.
-            val oneTimeKeys: JsonDict?,
-            val fallbackKeys: JsonDict?
+            val body: KeysUploadBody,
     )
 }
 
@@ -43,16 +38,11 @@ internal class DefaultUploadKeysTask @Inject constructor(
 ) : UploadKeysTask {
 
     override suspend fun execute(params: UploadKeysTask.Params): KeysUploadResponse {
-        val body = KeysUploadBody(
-                deviceKeys = params.deviceKeys,
-                oneTimeKeys = params.oneTimeKeys,
-                fallbackKeys = params.fallbackKeys
-        )
-
-        Timber.i("## Uploading device keys -> $body")
-
-        return executeRequest(globalErrorReceiver) {
-            cryptoApi.uploadKeys(body)
+        Timber.v("## Uploading device keys -> ${params.body}")
+        return executeRequest(globalErrorReceiver, canRetry = true) {
+            cryptoApi.uploadKeys(
+                    params.body.toContent()
+            )
         }
     }
 }

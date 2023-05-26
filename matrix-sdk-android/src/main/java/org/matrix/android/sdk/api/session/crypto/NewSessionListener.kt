@@ -23,8 +23,7 @@ interface NewSessionListener {
 
     /**
      * @param roomId the room id where the new Megolm session has been created for, may be null when importing from external sessions
-     * @param senderKey the sender key of the device which the Megolm session is shared with
      * @param sessionId the session id of the Megolm session
      */
-    fun onNewSession(roomId: String?, senderKey: String, sessionId: String)
+    fun onNewSession(roomId: String?, sessionId: String)
 }

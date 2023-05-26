@@ -23,11 +23,13 @@ import android.view.inputmethod.EditorInfo
 import androidx.autofill.HintConstants
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.withResumed
 import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.core.platform.SimpleTextWatcher
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import reactivecircus.flowbinding.android.widget.textChanges
 
 fun TextInputLayout.editText() = this.editText!!
@@ -85,7 +87,7 @@ fun TextInputLayout.setOnImeDoneListener(action: () -> Unit) {
 fun TextInputLayout.setOnFocusLostListener(lifecycleOwner: LifecycleOwner, action: () -> Unit) {
     editText().setOnFocusChangeListener { _, hasFocus ->
         when (hasFocus) {
-            false -> lifecycleOwner.lifecycleScope.launchWhenResumed { action() }
+            false -> lifecycleOwner.lifecycleScope.launch { lifecycleOwner.withResumed { action() } }
             else -> {
                 // do nothing
             }

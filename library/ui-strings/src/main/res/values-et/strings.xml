@@ -2891,7 +2891,7 @@
     <string name="thread_list_not_available">Sinu koduserver veel ei toeta jutulõngade loendit.</string>
     <string name="started_a_voice_broadcast">Alustasime ringhäälingukõnega</string>
     <string name="error_voice_broadcast_unable_to_play">Selle ringhäälingukõne esitamine ei õnnestu.</string>
-    <string name="unable_to_decrypt_some_events_in_poll">Krüptimisvigade tõttu jääb osa hääli lugemata</string>
+    <string name="unable_to_decrypt_some_events_in_poll">Dekrüptimisvigade tõttu jääb osa hääli lugemata</string>
     <plurals name="room_polls_active_no_item_for_loaded_period">
         <item quantity="one">Möödunud päevas polnud ühtegi toimumas olnud küsitlust.
 \nVarasemate päevade vaatamiseks laadi veel küsitlusi.</item>
@@ -2911,4 +2911,42 @@
     <string name="error_voice_message_broadcast_in_progress_message">Kuna sa hetkel salvestad ringhäälingukõnet, siis häälsõnumi salvestamine või esitamine ei õnnestu. Selleks palun lõpeta ringhäälingukõne</string>
     <string name="error_voice_broadcast_no_connection_recording">Viga võrguühenduses - salvestamine on peatatud</string>
     <string name="rich_text_editor_inline_code">Kasuta lõimitud koodi vormingut</string>
+    <string name="settings_external_account_management_title">Kasutajakonto</string>
+    <string name="settings_external_account_management">Sinu kasutajakonto andmeid hallatakse siin: %1$s.</string>
+    <string name="error_voice_broadcast_unable_to_decrypt">Selle ringhäälingukõne dekrüptimine ei õnnestu.</string>
+    <string name="room_poll_details_go_to_timeline">Näita küsitlust ajajoonel</string>
+    <string name="rich_text_editor_indent">Lisa taandrida</string>
+    <string name="rich_text_editor_unindent">Eemalda taandrida</string>
+    <string name="rich_text_editor_quote">Lülita tsiteerimine sisse/välja</string>
+    <string name="rich_text_editor_code_block">Lülita koodiblokk sisse/välja</string>
+    <string name="settings_notification_error_on_update">Sinu teavituste seadistuste muutmisel tekkis viga. Palu proovi uuesti.</string>
+    <string name="settings_troubleshoot_test_current_endpoint_failed">Lõppsõlme ei õnnestu leida.</string>
+    <string name="settings_troubleshoot_test_current_endpoint_success">Hetkel kasutatav lõppsõlm: %s</string>
+    <string name="settings_troubleshoot_test_current_endpoint_title">Lõppsõlm</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">Lõppsõlme tunnusloa registreerimine koduserveris ei õnnestunud:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">Lõppsõlme registreerimine koduserveris õnnestus.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_title">Lõppsõlme registreerimine</string>
+    <string name="settings_troubleshoot_test_current_gateway_title">Lüüs</string>
+    <string name="settings_troubleshoot_test_current_gateway">Praegune lüüs: %s</string>
+    <string name="direct_room_user_list_only_invite_one_email">E-posti teel saad saata kutseid vaid ükshaaval</string>
+    <string name="direct_room_encryption_enabled_waiting_users">Kasutajate liitumise ootel ${app_name} või mõnes muud ühilduvas rakenduses</string>
+    <string name="direct_room_encryption_enabled_waiting_users_tile_description">Kui kutse saanud kasutajad on liitunud jututoaga ${app_name}, siis saad sa nendega suhelda ja jututuba on läbivalt krüptitud</string>
+    <string name="encrypted_by_deleted">Krüptitud kustutatud seadme poolt</string>
+    <string name="secure_backup_reset_danger_warning">Palun jätka ainult siis, kui sa oled kaotanud ligipääsu kõikidele oma seadmetele ning oma turvavõtmele.</string>
+    <string name="secure_backup_reset_all_no_other_devices_long">Verifitseerimisvõtmete kustutamist ei saa hiljem tagasi võtta. Peale seda sul puudub ligipääs vanadele krüptitud sõnumitele ja kõik sinu verifitseeritud sõbrad-tuttavad näevad turvahoiatusi seni kuni sa uuesti nad verifitseerid.</string>
+    <string name="verification_not_found">Verifitseerimispäringut ei leidu. Ta on kas katkestatud või temaga juba tegeleb mõni muu seade.</string>
+    <string name="_resume">Jätka</string>
+    <string name="verification_request_was_sent">Verifitseerimispäring on saadetud. Päringule vastamiseks ja verifitseerimise lõpetamiseks ava kasutajasessioon mõnes muus oma seadmes.</string>
+    <string name="verification_verify_identity">Tagamaks ligipääsu oma krüptitud sõnumitele ja tõestamaks oma isikut teistele kasutajatale, verifitseeri end.</string>
+    <string name="verification_verify_with_another_device">Verifitseeri teise seadmega</string>
+    <string name="verification_request_waiting_for_recovery">Verifitseerime turvavõtme või turvafraasi alusel…</string>
+    <string name="settings_acceptable_use_policy">Vastuvõetava kasutamise põhimõtted</string>
+    <string name="action_proceed_to_reset">Lähtestamiseks jätka</string>
+    <string name="pill_message_unknown_room_or_space">Jututuba/kogukond</string>
+    <string name="pill_message_in_unknown_room">Sõnum jututoas</string>
+    <string name="pill_message_in_room">Sõnum jututoas %s</string>
+    <string name="pill_message_from_unknown_user">Sõnum</string>
+    <string name="pill_message_from_user">Sõnum kasutajalt %s</string>
+    <string name="settings_crypto_version">Krüptoteekide versioon</string>
 </resources>

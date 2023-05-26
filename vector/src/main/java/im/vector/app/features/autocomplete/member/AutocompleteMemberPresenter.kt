@@ -112,8 +112,8 @@ class AutocompleteMemberPresenter @AssistedInject constructor(
      * ========================================================================================== */
 
     private fun createQueryParams(query: CharSequence?) = roomMemberQueryParams {
-        displayName = if (query.isNullOrBlank()) {
-            QueryStringValue.IsNotEmpty
+        displayNameOrUserId = if (query.isNullOrBlank()) {
+            QueryStringValue.NoCondition
         } else {
             QueryStringValue.Contains(query.toString(), QueryStringValue.Case.INSENSITIVE)
         }

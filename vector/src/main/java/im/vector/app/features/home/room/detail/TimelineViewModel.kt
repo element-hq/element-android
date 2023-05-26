@@ -90,6 +90,7 @@ import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
+import org.matrix.android.sdk.api.session.crypto.verification.EVerificationState
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
@@ -1033,7 +1034,7 @@ class TimelineViewModel @AssistedInject constructor(
         if (action.highlight) {
             setState { copy(highlightedEventId = targetEventId) }
         }
-        _viewEvents.post(RoomDetailViewEvents.NavigateToEvent(targetEventId))
+        _viewEvents.post(RoomDetailViewEvents.NavigateToEvent(targetEventId, action.isFirstUnreadEvent))
     }
 
     private fun handleResendEvent(action: RoomDetailAction.ResendMessage) {
@@ -1169,25 +1170,28 @@ class TimelineViewModel @AssistedInject constructor(
     }
 
     private fun handleAcceptVerification(action: RoomDetailAction.AcceptVerificationRequest) {
-        Timber.v("## SAS handleAcceptVerification ${action.otherUserId},  roomId:${initialState.roomId}, txId:${action.transactionId}")
-        if (session.cryptoService().verificationService().readyPendingVerificationInDMs(
-                        supportedVerificationMethodsProvider.provide(),
-                        action.otherUserId,
-                        initialState.roomId,
-                        action.transactionId
-                )) {
-            _viewEvents.post(RoomDetailViewEvents.ActionSuccess(action))
-        } else {
-            // TODO
+        viewModelScope.launch {
+            Timber.v("## SAS handleAcceptVerification ${action.otherUserId},  roomId:${initialState.roomId}, txId:${action.transactionId}")
+            if (session.cryptoService().verificationService().readyPendingVerification(
+                            methods = supportedVerificationMethodsProvider.provide(),
+                            otherUserId = action.otherUserId,
+                            transactionId = action.transactionId
+                    )) {
+                _viewEvents.post(RoomDetailViewEvents.ActionSuccess(action))
+            } else {
+                // TODO
+            }
         }
     }
 
     private fun handleDeclineVerification(action: RoomDetailAction.DeclineVerificationRequest) {
-        session.cryptoService().verificationService().declineVerificationRequestInDMs(
-                action.otherUserId,
-                action.transactionId,
-                initialState.roomId
-        )
+        viewModelScope.launch {
+            session.cryptoService().verificationService().declineVerificationRequestInDMs(
+                    action.otherUserId,
+                    action.transactionId,
+                    initialState.roomId
+            )
+        }
     }
 
     private fun handleRequestVerification(action: RoomDetailAction.RequestVerification) {
@@ -1196,27 +1200,31 @@ class TimelineViewModel @AssistedInject constructor(
     }
 
     private fun handleResumeRequestVerification(action: RoomDetailAction.ResumeVerification) {
-        // Check if this request is still active and handled by me
-        session.cryptoService().verificationService().getExistingVerificationRequestInRoom(initialState.roomId, action.transactionId)?.let {
-            if (it.handledByOtherSession) return
-            if (!it.isFinished) {
-                _viewEvents.post(
-                        RoomDetailViewEvents.ActionSuccess(
-                                action.copy(
-                                        otherUserId = it.otherUserId
-                                )
-                        )
-                )
+        viewModelScope.launch {
+            // Check if this request is still active and handled by me
+            session.cryptoService().verificationService().getExistingVerificationRequestInRoom(initialState.roomId, action.transactionId)?.let {
+                if (it.state == EVerificationState.HandledByOtherSession) return@launch
+                if (!it.isFinished) {
+                    _viewEvents.post(
+                            RoomDetailViewEvents.ActionSuccess(
+                                    action.copy(
+                                            otherUserId = it.otherUserId
+                                    )
+                            )
+                    )
+                }
             }
         }
     }
 
     private fun handleReRequestKeys(action: RoomDetailAction.ReRequestKeys) {
         if (room == null) return
-        // Check if this request is still active and handled by me
-        room.getTimelineEvent(action.eventId)?.let {
-            session.cryptoService().reRequestRoomKeyForEvent(it.root)
-            _viewEvents.post(RoomDetailViewEvents.ShowMessage(stringProvider.getString(R.string.e2e_re_request_encryption_key_dialog_content)))
+        viewModelScope.launch {
+            // Check if this request is still active and handled by me
+            room.getTimelineEvent(action.eventId)?.let {
+                session.cryptoService().reRequestRoomKeyForEvent(it.root)
+                _viewEvents.post(RoomDetailViewEvents.ShowMessage(stringProvider.getString(R.string.e2e_re_request_encryption_key_dialog_content)))
+            }
         }
     }
 
@@ -1325,13 +1333,17 @@ class TimelineViewModel @AssistedInject constructor(
             computeUnreadState(timelineEvents, roomSummary)
         }
                 // We don't want live update of unread so we skip when we already had a HasUnread or HasNoUnread
-                // However, we want to update an existing HasUnread, if the readMarkerId hasn't changed,
+                // However, we want to update an existing HasUnread, if the readMarkerId hasn't changed or when we go back in live,
                 // as we might be loading new events to fill gaps in the timeline.
                 .distinctUntilChanged { previous, current ->
                     when {
                         previous is UnreadState.Unknown || previous is UnreadState.ReadMarkerNotLoaded -> false
                         previous is UnreadState.HasUnread && current is UnreadState.HasUnread &&
                                 previous.readMarkerId == current.readMarkerId -> false
+                        previous is UnreadState.HasUnread && (
+                                current is UnreadState.HasUnread && previous.firstUnreadEventId != current.firstUnreadEventId ||
+                                        current is UnreadState.HasNoUnread
+                                ) && timeline?.isLive.orFalse() -> false
                         current is UnreadState.HasUnread || current is UnreadState.HasNoUnread -> true
                         else -> false
                     }

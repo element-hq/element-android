@@ -34,7 +34,6 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.getUserOrDefault
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -42,9 +41,10 @@ import org.matrix.android.sdk.flow.flow
 
 data class DeviceListViewState(
         val userId: String,
-        val allowDeviceAction: Boolean,
+        val myUserId: String,
         val userItem: MatrixItem? = null,
         val memberCrossSigningKey: MXCrossSigningInfo? = null,
+        val myDeviceId: String = "",
         val cryptoDevices: Async<List<CryptoDeviceInfo>> = Loading(),
         val selectedDevice: CryptoDeviceInfo? = null
 ) : MavericksState
@@ -68,8 +68,9 @@ class DeviceListBottomSheetViewModel @AssistedInject constructor(
             val session = EntryPoints.get(viewModelContext.app(), SingletonEntryPoint::class.java).activeSessionHolder().getActiveSession()
             return DeviceListViewState(
                     userId = userId,
-                    allowDeviceAction = args.allowDeviceAction,
+                    myUserId = session.myUserId,
                     userItem = session.getUserOrDefault(userId).toMatrixItem(),
+                    myDeviceId = session.sessionParams.deviceId,
             )
         }
     }
@@ -102,7 +103,6 @@ class DeviceListBottomSheetViewModel @AssistedInject constructor(
         when (action) {
             is DeviceListAction.SelectDevice -> selectDevice(action)
             is DeviceListAction.DeselectDevice -> deselectDevice()
-            is DeviceListAction.ManuallyVerify -> manuallyVerify(action)
         }
     }
 
@@ -119,7 +119,6 @@ class DeviceListBottomSheetViewModel @AssistedInject constructor(
     }
 
     private fun selectDevice(action: DeviceListAction.SelectDevice) {
-        if (!initialState.allowDeviceAction) return
         setState {
             copy(selectedDevice = action.device)
         }
@@ -128,13 +127,6 @@ class DeviceListBottomSheetViewModel @AssistedInject constructor(
     private fun deselectDevice() {
         setState {
             copy(selectedDevice = null)
-        }
-    }
-
-    private fun manuallyVerify(action: DeviceListAction.ManuallyVerify) {
-        if (!initialState.allowDeviceAction) return
-        session.cryptoService().verificationService().beginKeyVerification(VerificationMethod.SAS, initialState.userId, action.deviceId, null)?.let { txID ->
-            _viewEvents.post(DeviceListBottomSheetViewEvents.Verify(initialState.userId, txID))
         }
     }
 }

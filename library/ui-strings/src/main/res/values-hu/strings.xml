@@ -2920,4 +2920,16 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="error_voice_message_broadcast_in_progress">Hang üzenetet nem lehet elindítani</string>
     <string name="error_voice_broadcast_no_connection_recording">Kapcsolódási hiba – Felvétel szüneteltetve</string>
     <string name="rich_text_editor_inline_code">Beágyazott kód formátum alkalmazása</string>
+    <string name="rich_text_editor_code_block">Kód blokk be/ki</string>
+    <string name="rich_text_editor_quote">Idézet be/ki</string>
+    <string name="rich_text_editor_unindent">Behúzás kijjebb</string>
+    <string name="rich_text_editor_indent">Behúzás</string>
+    <string name="room_poll_details_go_to_timeline">Szavazás megjelenítése az idővonalon</string>
+    <string name="error_voice_broadcast_unable_to_decrypt">A hang közvetítés nem fejthető vissza.</string>
+    <string name="settings_external_account_management">A fiókadatok külön vannak kezelve itt: %1$s.</string>
+    <string name="settings_external_account_management_title">Fiók</string>
+    <string name="settings_notification_error_on_update">Hiba történt az értesítések beállításának frissítésekor. Próbáld újra.</string>
+    <string name="direct_room_encryption_enabled_waiting_users_tile_description">Miután a meghívott felhasználók csatlakoztak a(z) ${app_name} alkalmazáshoz, beszélhetsz velük és a szoba végpontok között titkosítva lesz</string>
+    <string name="direct_room_encryption_enabled_waiting_users">${app_name} alkalmazáshoz csatlakozó emberekre várakozás</string>
+    <string name="direct_room_user_list_only_invite_one_email">E-mail meghívóból egyszerre csak egy küldhető</string>
 </resources>

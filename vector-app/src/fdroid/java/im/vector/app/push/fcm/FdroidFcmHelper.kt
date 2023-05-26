@@ -49,7 +49,9 @@ class FdroidFcmHelper @Inject constructor(
 
     override fun onEnterForeground(activeSessionHolder: ActiveSessionHolder) {
         // try to stop all regardless of background mode
-        activeSessionHolder.getSafeActiveSession()?.syncService()?.stopAnyBackgroundSync()
+        activeSessionHolder.getSafeActiveSessionAsync {
+            it?.syncService()?.stopAnyBackgroundSync()
+        }
         AlarmSyncBroadcastReceiver.cancelAlarm(context)
     }
 

@@ -28,7 +28,7 @@ import org.matrix.android.sdk.api.rendezvous.RendezvousTransport
 import org.matrix.android.sdk.api.rendezvous.model.RendezvousError
 import org.matrix.android.sdk.api.rendezvous.model.SecureRendezvousChannelAlgorithm
 import org.matrix.android.sdk.api.util.MatrixJsonParser
-import org.matrix.android.sdk.internal.crypto.verification.SASDefaultVerificationTransaction
+import org.matrix.android.sdk.internal.crypto.verification.getDecimalCodeRepresentation
 import org.matrix.olm.OlmSAS
 import timber.log.Timber
 import java.security.SecureRandom
@@ -125,7 +125,7 @@ class ECDHRendezvousChannel(
             aesKey = sas.generateShortCode(aesInfo, 32)
 
             val rawChecksum = sas.generateShortCode(aesInfo, 5)
-            return SASDefaultVerificationTransaction.getDecimalCodeRepresentation(rawChecksum, separator = "-")
+            return rawChecksum.getDecimalCodeRepresentation(separator = "-")
         }
     }
 

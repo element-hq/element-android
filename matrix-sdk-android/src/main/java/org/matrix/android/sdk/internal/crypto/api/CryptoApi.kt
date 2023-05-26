@@ -17,6 +17,7 @@ package org.matrix.android.sdk.internal.crypto.api
 
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.DevicesListResponse
+import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.crypto.model.rest.DeleteDeviceParams
 import org.matrix.android.sdk.internal.crypto.model.rest.DeleteDevicesParams
 import org.matrix.android.sdk.internal.crypto.model.rest.KeyChangesResponse
@@ -24,7 +25,6 @@ import org.matrix.android.sdk.internal.crypto.model.rest.KeysClaimBody
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysClaimResponse
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysQueryBody
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysQueryResponse
-import org.matrix.android.sdk.internal.crypto.model.rest.KeysUploadBody
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysUploadResponse
 import org.matrix.android.sdk.internal.crypto.model.rest.SendToDeviceBody
 import org.matrix.android.sdk.internal.crypto.model.rest.SignatureUploadResponse
@@ -56,13 +56,11 @@ internal interface CryptoApi {
     suspend fun getDeviceInfo(@Path("deviceId") deviceId: String): DeviceInfo
 
     /**
-     * Upload device and/or one-time keys.
-     * Doc: https://matrix.org/docs/spec/client_server/r0.4.0.html#post-matrix-client-r0-keys-upload
-     *
+     * Upload device and one-time keys.
      * @param body the keys to be sent.
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "keys/upload")
-    suspend fun uploadKeys(@Body body: KeysUploadBody): KeysUploadResponse
+    suspend fun uploadKeys(@Body body: JsonDict): KeysUploadResponse
 
     /**
      * Download device keys.

@@ -118,5 +118,6 @@ class BootstrapEnterPassphraseFragment :
                 }
             }
         }
+        views.bootstrapDescriptionText.giveAccessibilityFocusOnce()
     }
 }

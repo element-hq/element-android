@@ -25,35 +25,47 @@ import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.core.ui.list.genericItem
 import im.vector.app.core.ui.list.genericWithValueItem
 import im.vector.app.core.utils.DimensionConverter
-import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
-import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.settings.devices.TrustUtils
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.span
-import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import javax.inject.Inject
 
 class DeviceTrustInfoEpoxyController @Inject constructor(
         private val stringProvider: StringProvider,
         private val colorProvider: ColorProvider,
         private val dimensionConverter: DimensionConverter,
-        private val vectorPreferences: VectorPreferences
 ) :
         TypedEpoxyController<DeviceListViewState>() {
 
-    interface InteractionListener {
-        fun onVerifyManually(device: CryptoDeviceInfo)
-    }
+    interface InteractionListener
 
     var interactionListener: InteractionListener? = null
 
     override fun buildModels(data: DeviceListViewState?) {
         val host = this
         data?.selectedDevice?.let { cryptoDeviceInfo ->
-            val isVerified = cryptoDeviceInfo.trustLevel?.isVerified() == true
+            val trustMSK = data.memberCrossSigningKey?.isTrusted().orFalse()
+            val legacyMode = data.memberCrossSigningKey == null
+            val isMyDevice = data.userId == data.myUserId && data.myDeviceId == cryptoDeviceInfo.deviceId
+            val trustLevel = TrustUtils.shieldForTrust(
+                    isMyDevice,
+                    trustMSK,
+                    legacyMode,
+                    cryptoDeviceInfo.trustLevel
+            )
+            val isVerified = trustLevel == RoomEncryptionTrustLevel.Trusted
+            val shield = when (trustLevel) {
+                RoomEncryptionTrustLevel.Default -> R.drawable.ic_shield_unknown
+                RoomEncryptionTrustLevel.Warning -> R.drawable.ic_shield_warning
+                RoomEncryptionTrustLevel.Trusted -> R.drawable.ic_shield_trusted
+                RoomEncryptionTrustLevel.E2EWithUnsupportedAlgorithm -> R.drawable.ic_warning_badge
+            }
             genericItem {
                 id("title")
                 style(ItemStyle.BIG_TEXT)
-                titleIconResourceId(if (isVerified) R.drawable.ic_shield_trusted else R.drawable.ic_shield_warning)
+                titleIconResourceId(shield)
                 title(
                         host.stringProvider
                                 .getString(if (isVerified) R.string.verification_profile_verified else R.string.verification_profile_warning)
@@ -90,7 +102,7 @@ class DeviceTrustInfoEpoxyController @Inject constructor(
 
             genericWithValueItem {
                 id(cryptoDeviceInfo.deviceId)
-                titleIconResourceId(if (isVerified) R.drawable.ic_shield_trusted else R.drawable.ic_shield_warning)
+                titleIconResourceId(shield)
                 title(
                         span {
                             +(cryptoDeviceInfo.displayName() ?: "")
@@ -103,23 +115,12 @@ class DeviceTrustInfoEpoxyController @Inject constructor(
                 )
             }
 
-            if (!isVerified) {
+            if (!isVerified && !isMyDevice) {
                 genericFooterItem {
                     id("warn")
                     centered(false)
                     textColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
-                    text(host.stringProvider.getString(R.string.verification_profile_device_untrust_info).toEpoxyCharSequence())
-                }
-
-                bottomSheetVerificationActionItem {
-                    id("verify")
-                    title(host.stringProvider.getString(R.string.cross_signing_verify_by_emoji))
-                    titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
-                    iconRes(R.drawable.ic_arrow_right)
-                    iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
-                    listener {
-                        host.interactionListener?.onVerifyManually(cryptoDeviceInfo)
-                    }
+                    text(host.stringProvider.getString(R.string.verification_profile_other_device_untrust_info).toEpoxyCharSequence())
                 }
             }
         }

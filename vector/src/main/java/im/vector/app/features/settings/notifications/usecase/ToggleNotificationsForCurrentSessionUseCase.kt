@@ -35,7 +35,7 @@ class ToggleNotificationsForCurrentSessionUseCase @Inject constructor(
 
     suspend fun execute(enabled: Boolean) {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
-        val deviceId = session.sessionParams.deviceId ?: return
+        val deviceId = session.sessionParams.deviceId
 
         if (unifiedPushHelper.isBackgroundSync()) {
             Timber.d("background sync is enabled, setting account data event")

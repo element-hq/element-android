@@ -19,7 +19,7 @@ package org.matrix.android.sdk.api.session.crypto.model
 class MXUsersDevicesMap<E> {
 
     // A map of maps (userId -> (deviceId -> Object)).
-    val map = HashMap<String /* userId */, HashMap<String /* deviceId */, E>>()
+    val map = HashMap<String /* userId */, MutableMap<String /* deviceId */, E>>()
 
     /**
      * @return the user Ids
@@ -102,6 +102,10 @@ class MXUsersDevicesMap<E> {
      */
     fun removeAllObjects() {
         map.clear()
+    }
+
+    fun join(other: Map<out String, Map<String, E>>) {
+        map.putAll(other.map { it.key to it.value.toMutableMap() })
     }
 
     /**

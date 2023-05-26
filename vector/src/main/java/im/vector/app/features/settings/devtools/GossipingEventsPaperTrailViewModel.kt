@@ -52,11 +52,13 @@ class GossipingEventsPaperTrailViewModel @AssistedInject constructor(
         setState {
             copy(events = Loading())
         }
-        session.cryptoService().getGossipingEventsTrail()
-                .asFlow()
-                .execute {
-                    copy(events = it)
-                }
+        if (session.cryptoService().supportKeyRequestInspection()) {
+            session.cryptoService().getGossipingEventsTrail()
+                    .asFlow()
+                    .execute {
+                        copy(events = it)
+                    }
+        }
     }
 
     override fun handle(action: EmptyAction) {}

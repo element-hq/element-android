@@ -46,7 +46,7 @@ class DecryptRedactedEventTest : InstrumentedTest {
         roomALicePOV.sendService().redactEvent(timelineEvent.root, redactionReason)
 
         // get the event from bob
-        testHelper.retryPeriodically {
+        testHelper.retryWithBackoff {
             bobSession.getRoom(e2eRoomID)?.getTimelineEvent(timelineEvent.eventId)?.root?.isRedacted() == true
         }
 

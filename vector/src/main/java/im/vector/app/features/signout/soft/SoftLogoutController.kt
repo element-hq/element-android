@@ -37,6 +37,7 @@ import im.vector.app.features.signout.soft.epoxy.loginTextItem
 import im.vector.app.features.signout.soft.epoxy.loginTitleItem
 import im.vector.app.features.signout.soft.epoxy.loginTitleSmallItem
 import org.matrix.android.sdk.api.auth.LoginType
+import org.matrix.android.sdk.api.extensions.orFalse
 import javax.inject.Inject
 
 class SoftLogoutController @Inject constructor(
@@ -55,6 +56,7 @@ class SoftLogoutController @Inject constructor(
 
     override fun buildModels() {
         val safeViewState = viewState ?: return
+        if (safeViewState.hasUnsavedKeys is Incomplete) return
 
         buildHeader(safeViewState)
         buildForm(safeViewState)
@@ -85,7 +87,7 @@ class SoftLogoutController @Inject constructor(
                     )
             )
         }
-        if (state.hasUnsavedKeys) {
+        if (state.hasUnsavedKeys().orFalse()) {
             loginTextItem {
                 id("signText2")
                 text(host.stringProvider.getString(R.string.soft_logout_signin_e2e_warning_notice))

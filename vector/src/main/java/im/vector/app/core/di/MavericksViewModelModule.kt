@@ -32,14 +32,14 @@ import im.vector.app.features.createdirect.CreateDirectRoomViewModel
 import im.vector.app.features.crypto.keysbackup.settings.KeysBackupSettingsViewModel
 import im.vector.app.features.crypto.quads.SharedSecureStorageViewModel
 import im.vector.app.features.crypto.recover.BootstrapSharedViewModel
-import im.vector.app.features.crypto.verification.VerificationBottomSheetViewModel
-import im.vector.app.features.crypto.verification.choose.VerificationChooseMethodViewModel
-import im.vector.app.features.crypto.verification.emoji.VerificationEmojiCodeViewModel
+import im.vector.app.features.crypto.verification.self.SelfVerificationViewModel
+import im.vector.app.features.crypto.verification.user.UserVerificationViewModel
 import im.vector.app.features.devtools.RoomDevToolViewModel
 import im.vector.app.features.discovery.DiscoverySettingsViewModel
 import im.vector.app.features.discovery.change.SetIdentityServerViewModel
 import im.vector.app.features.home.HomeActivityViewModel
 import im.vector.app.features.home.HomeDetailViewModel
+import im.vector.app.features.home.NewHomeDetailViewModel
 import im.vector.app.features.home.UnknownDeviceDetectorSharedViewModel
 import im.vector.app.features.home.UnreadMessagesSharedViewModel
 import im.vector.app.features.home.UserColorAccountDataViewModel
@@ -56,7 +56,6 @@ import im.vector.app.features.home.room.list.RoomListViewModel
 import im.vector.app.features.home.room.list.home.HomeRoomListViewModel
 import im.vector.app.features.home.room.list.home.invites.InvitesViewModel
 import im.vector.app.features.home.room.list.home.release.ReleaseNotesViewModel
-import im.vector.app.features.homeserver.HomeServerCapabilitiesViewModel
 import im.vector.app.features.invite.InviteUsersToRoomViewModel
 import im.vector.app.features.location.LocationSharingViewModel
 import im.vector.app.features.location.live.map.LiveLocationMapViewModel
@@ -501,11 +500,6 @@ interface MavericksViewModelModule {
 
     @Binds
     @IntoMap
-    @MavericksViewModelKey(HomeServerCapabilitiesViewModel::class)
-    fun homeServerCapabilitiesViewModelFactory(factory: HomeServerCapabilitiesViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
-
-    @Binds
-    @IntoMap
     @MavericksViewModelKey(InviteUsersToRoomViewModel::class)
     fun inviteUsersToRoomViewModelFactory(factory: InviteUsersToRoomViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 
@@ -519,15 +513,10 @@ interface MavericksViewModelModule {
     @MavericksViewModelKey(MessageActionsViewModel::class)
     fun messageActionsViewModelFactory(factory: MessageActionsViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 
-    @Binds
-    @IntoMap
-    @MavericksViewModelKey(VerificationChooseMethodViewModel::class)
-    fun verificationChooseMethodViewModelFactory(factory: VerificationChooseMethodViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
-
-    @Binds
-    @IntoMap
-    @MavericksViewModelKey(VerificationEmojiCodeViewModel::class)
-    fun verificationEmojiCodeViewModelFactory(factory: VerificationEmojiCodeViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+//    @Binds
+//    @IntoMap
+//    @MavericksViewModelKey(VerificationChooseMethodViewModel::class)
+//    fun verificationChooseMethodViewModelFactory(factory: VerificationChooseMethodViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 
     @Binds
     @IntoMap
@@ -599,10 +588,20 @@ interface MavericksViewModelModule {
     @MavericksViewModelKey(BootstrapSharedViewModel::class)
     fun bootstrapSharedViewModelFactory(factory: BootstrapSharedViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 
+//    @Binds
+//    @IntoMap
+//    @MavericksViewModelKey(VerificationBottomSheetViewModel::class)
+//    fun verificationBottomSheetViewModelFactory(factory: VerificationBottomSheetViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
     @Binds
     @IntoMap
-    @MavericksViewModelKey(VerificationBottomSheetViewModel::class)
-    fun verificationBottomSheetViewModelFactory(factory: VerificationBottomSheetViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+    @MavericksViewModelKey(UserVerificationViewModel::class)
+    fun userVerificationBottomSheetViewModelFactory(factory: UserVerificationViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(SelfVerificationViewModel::class)
+    fun selfVerificationBottomSheetViewModelFactory(factory: SelfVerificationViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 
     @Binds
     @IntoMap
@@ -717,4 +716,9 @@ interface MavericksViewModelModule {
     @IntoMap
     @MavericksViewModelKey(RoomPollDetailViewModel::class)
     fun roomPollDetailViewModelFactory(factory: RoomPollDetailViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(NewHomeDetailViewModel::class)
+    fun newHomeDetailViewModelFactory(factory: NewHomeDetailViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 }

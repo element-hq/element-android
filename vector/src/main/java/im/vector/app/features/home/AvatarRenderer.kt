@@ -35,13 +35,16 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.DrawableImageViewTarget
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.signature.ObjectKey
+import im.vector.app.R
 import im.vector.app.core.contacts.MappedContact
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.glide.AvatarPlaceholder
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.glide.GlideRequest
 import im.vector.app.core.glide.GlideRequests
+import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.DimensionConverter
+import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
 import jp.wasabeef.glide.transformations.BlurTransformation
 import jp.wasabeef.glide.transformations.ColorFilterTransformation
@@ -58,7 +61,8 @@ import javax.inject.Inject
 class AvatarRenderer @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
         private val matrixItemColorProvider: MatrixItemColorProvider,
-        private val dimensionConverter: DimensionConverter
+        private val dimensionConverter: DimensionConverter,
+        private val stringProvider: StringProvider,
 ) {
 
     companion object {
@@ -67,6 +71,7 @@ class AvatarRenderer @Inject constructor(
 
     @UiThread
     fun render(matrixItem: MatrixItem, imageView: ImageView) {
+        imageView.setContentDescription(matrixItem)
         render(
                 GlideApp.with(imageView),
                 matrixItem,
@@ -100,6 +105,7 @@ class AvatarRenderer @Inject constructor(
 
     @UiThread
     fun render(matrixItem: MatrixItem, imageView: ImageView, glideRequests: GlideRequests) {
+        imageView.setContentDescription(matrixItem)
         render(
                 glideRequests,
                 matrixItem,
@@ -109,6 +115,7 @@ class AvatarRenderer @Inject constructor(
 
     @UiThread
     fun render(matrixItem: MatrixItem, localUri: Uri?, imageView: ImageView) {
+        imageView.setContentDescription(matrixItem)
         val placeholder = getPlaceholderDrawable(matrixItem)
         GlideApp.with(imageView)
                 .load(localUri?.let { File(localUri.path!!) })
@@ -294,5 +301,29 @@ class AvatarRenderer @Inject constructor(
     private fun resolvedUrl(avatarUrl: String?): String? {
         return activeSessionHolder.getSafeActiveSession()?.contentUrlResolver()
                 ?.resolveThumbnail(avatarUrl, THUMBNAIL_SIZE, THUMBNAIL_SIZE, ContentUrlResolver.ThumbnailMethod.SCALE)
+    }
+
+    /**
+     * Accessibility management.
+     */
+    private fun ImageView.setContentDescription(matrixItem: MatrixItem) {
+        // Do not set contentDescription if the ImageView should be ignored regarding accessibility.
+        if (isImportantForAccessibility.not()) return
+        when (matrixItem) {
+            is MatrixItem.SpaceItem -> {
+                contentDescription = stringProvider.getString(R.string.avatar_of_space, matrixItem.getBestName())
+            }
+            is MatrixItem.RoomAliasItem,
+            is MatrixItem.RoomItem -> {
+                contentDescription = stringProvider.getString(R.string.avatar_of_room, matrixItem.getBestName())
+            }
+            is MatrixItem.UserItem -> {
+                contentDescription = stringProvider.getString(R.string.avatar_of_user, matrixItem.getBestName())
+            }
+            is MatrixItem.EveryoneInRoomItem,
+            is MatrixItem.EventItem -> {
+                // NA
+            }
+        }
     }
 }

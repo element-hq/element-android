@@ -124,6 +124,7 @@ class NoticeEventFormatter @Inject constructor(
     private fun formatRoomPowerLevels(event: Event, disambiguatedDisplayName: String): CharSequence? {
         val powerLevelsContent: PowerLevelsContent = event.content.toModel() ?: return null
         val previousPowerLevelsContent: PowerLevelsContent = event.resolvedPrevContent().toModel() ?: return null
+        val roomService = activeSessionDataSource.currentValue?.orNull()?.roomService()
         val userIds = HashSet<String>()
         userIds.addAll(powerLevelsContent.users.orEmpty().keys)
         userIds.addAll(previousPowerLevelsContent.users.orEmpty().keys)
@@ -134,7 +135,8 @@ class NoticeEventFormatter @Inject constructor(
             if (from != to) {
                 val fromStr = roleFormatter.format(from)
                 val toStr = roleFormatter.format(to)
-                val diff = sp.getString(R.string.notice_power_level_diff, userId, fromStr, toStr)
+                val displayName = event.roomId?.let { roomService?.getRoomMember(userId, it)?.displayName } ?: userId
+                val diff = sp.getString(R.string.notice_power_level_diff, displayName, fromStr, toStr)
                 diffs.add(diff)
             }
         }
@@ -644,7 +646,7 @@ class NoticeEventFormatter @Inject constructor(
                     if (event.isSentByCurrentUser()) {
                         sp.getString(R.string.notice_display_name_changed_from_by_you, prevEventContent?.displayName, eventContent?.displayName)
                     } else {
-                        sp.getString(R.string.notice_display_name_changed_from, event.senderId, prevEventContent?.displayName, eventContent?.displayName)
+                        sp.getString(R.string.notice_display_name_changed_to, prevEventContent?.displayName, eventContent?.displayName)
                     }
             }
             displayText.append(displayNameText)

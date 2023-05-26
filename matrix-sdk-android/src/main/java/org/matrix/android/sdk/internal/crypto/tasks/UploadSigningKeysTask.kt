@@ -60,7 +60,7 @@ internal class DefaultUploadSigningKeysTask @Inject constructor(
     }
 
     private suspend fun doRequest(uploadQuery: UploadSigningKeysBody) {
-        val keysQueryResponse = executeRequest(globalErrorReceiver) {
+        val keysQueryResponse = executeRequest(globalErrorReceiver, canRetry = true) {
             cryptoApi.uploadSigningKeys(uploadQuery)
         }
         if (keysQueryResponse.failures?.isNotEmpty() == true) {

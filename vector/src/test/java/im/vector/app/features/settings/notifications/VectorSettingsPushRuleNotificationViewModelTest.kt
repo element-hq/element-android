@@ -17,7 +17,9 @@
 package im.vector.app.features.settings.notifications
 
 import com.airbnb.mvrx.test.MavericksTestRule
-import im.vector.app.test.fakes.FakeActiveSessionHolder
+import im.vector.app.features.settings.notifications.usecase.GetPushRulesOnInvalidStateUseCase
+import im.vector.app.test.fakes.FakeSession
+import im.vector.app.test.fixtures.PushRuleFixture
 import im.vector.app.test.test
 import im.vector.app.test.testDispatcher
 import io.mockk.coVerifyOrder
@@ -32,25 +34,27 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.matrix.android.sdk.api.session.pushrules.RuleIds
-import org.matrix.android.sdk.api.session.pushrules.rest.PushRuleAndKind
 
 internal class VectorSettingsPushRuleNotificationViewModelTest {
 
     @get:Rule
     val mavericksTestRule = MavericksTestRule(testDispatcher = testDispatcher)
 
-    private val fakeActiveSessionHolder = FakeActiveSessionHolder()
-    private val fakePushRuleService = fakeActiveSessionHolder.fakeSession.fakePushRuleService
+    private val fakeSession = FakeSession()
+    private val fakePushRuleService = fakeSession.fakePushRuleService
+    private val fakeGetPushRulesOnInvalidStateUseCase = mockk<GetPushRulesOnInvalidStateUseCase>()
 
     private val initialState = VectorSettingsPushRuleNotificationViewState()
     private fun createViewModel() = VectorSettingsPushRuleNotificationViewModel(
             initialState = initialState,
-            activeSessionHolder = fakeActiveSessionHolder.instance,
+            session = fakeSession,
+            fakeGetPushRulesOnInvalidStateUseCase,
     )
 
     @Before
     fun setup() {
         mockkStatic("im.vector.app.features.settings.notifications.NotificationIndexKt")
+        every { fakeGetPushRulesOnInvalidStateUseCase.execute(any()) } returns emptyList()
     }
 
     @After
@@ -65,12 +69,14 @@ internal class VectorSettingsPushRuleNotificationViewModelTest {
 
         val firstRuleId = RuleIds.RULE_ID_ONE_TO_ONE_ROOM
         val secondRuleId = RuleIds.RULE_ID_ALL_OTHER_MESSAGES_ROOMS
+        givenARuleId(firstRuleId)
+        givenARuleId(secondRuleId)
         fakePushRuleService.givenUpdatePushRuleActionsSucceed()
 
         // When
         val viewModelTest = viewModel.test()
-        viewModel.handle(VectorSettingsPushRuleNotificationViewAction.UpdatePushRule(givenARuleId(firstRuleId), true))
-        viewModel.handle(VectorSettingsPushRuleNotificationViewAction.UpdatePushRule(givenARuleId(secondRuleId), false))
+        viewModel.handle(VectorSettingsPushRuleNotificationViewAction.UpdatePushRule(firstRuleId, true))
+        viewModel.handle(VectorSettingsPushRuleNotificationViewAction.UpdatePushRule(secondRuleId, false))
 
         // Then
         coVerifyOrder {
@@ -98,8 +104,8 @@ internal class VectorSettingsPushRuleNotificationViewModelTest {
                         { copy(isLoading = false) },
                 )
                 .assertEvents(
-                        VectorSettingsPushRuleNotificationViewEvent.PushRuleUpdated(RuleIds.RULE_ID_ONE_TO_ONE_ROOM, true),
-                        VectorSettingsPushRuleNotificationViewEvent.PushRuleUpdated(RuleIds.RULE_ID_ALL_OTHER_MESSAGES_ROOMS, false),
+                        VectorSettingsPushRuleNotificationViewEvent.PushRuleUpdated(firstRuleId, true),
+                        VectorSettingsPushRuleNotificationViewEvent.PushRuleUpdated(secondRuleId, false),
                 )
                 .finish()
     }
@@ -111,10 +117,12 @@ internal class VectorSettingsPushRuleNotificationViewModelTest {
         val failure = mockk<Throwable>()
 
         val firstRuleId = RuleIds.RULE_ID_ONE_TO_ONE_ROOM
+        givenARuleId(firstRuleId)
         fakePushRuleService.givenUpdatePushRuleActionsSucceed()
         fakePushRuleService.givenUpdatePushRuleActionsFail(RuleIds.RULE_ID_POLL_START_ONE_TO_ONE_UNSTABLE, failure)
 
         val secondRuleId = RuleIds.RULE_ID_ALL_OTHER_MESSAGES_ROOMS
+        givenARuleId(secondRuleId)
         fakePushRuleService.givenUpdatePushRuleActionsFail(secondRuleId, failure)
         fakePushRuleService.givenUpdatePushRuleActionsFail(RuleIds.RULE_ID_POLL_START, failure)
         fakePushRuleService.givenUpdatePushRuleActionsFail(RuleIds.RULE_ID_POLL_START_UNSTABLE, failure)
@@ -124,9 +132,9 @@ internal class VectorSettingsPushRuleNotificationViewModelTest {
         // When
         val viewModelTest = viewModel.test()
         // One rule failed to update
-        viewModel.handle(VectorSettingsPushRuleNotificationViewAction.UpdatePushRule(givenARuleId(firstRuleId), true))
+        viewModel.handle(VectorSettingsPushRuleNotificationViewAction.UpdatePushRule(firstRuleId, true))
         // All the rules failed to update
-        viewModel.handle(VectorSettingsPushRuleNotificationViewAction.UpdatePushRule(givenARuleId(secondRuleId), true))
+        viewModel.handle(VectorSettingsPushRuleNotificationViewAction.UpdatePushRule(secondRuleId, true))
 
         // Then
         coVerifyOrder {
@@ -149,13 +157,13 @@ internal class VectorSettingsPushRuleNotificationViewModelTest {
                 .assertStatesChanges(
                         initialState,
                         { copy(isLoading = true) },
-                        { copy(isLoading = false) },
+                        { copy(isLoading = false, rulesOnError = setOf(firstRuleId)) },
                         { copy(isLoading = true) },
                         { copy(isLoading = false) },
                 )
                 .assertEvents(
-                        VectorSettingsPushRuleNotificationViewEvent.PushRuleUpdated(RuleIds.RULE_ID_ONE_TO_ONE_ROOM, true, failure),
-                        VectorSettingsPushRuleNotificationViewEvent.Failure(failure),
+                        VectorSettingsPushRuleNotificationViewEvent.PushRuleUpdated(firstRuleId, true, failure),
+                        VectorSettingsPushRuleNotificationViewEvent.Failure(secondRuleId, failure),
                 )
                 .finish()
     }
@@ -167,10 +175,12 @@ internal class VectorSettingsPushRuleNotificationViewModelTest {
         val failure = mockk<Throwable>()
 
         val firstRuleId = RuleIds.RULE_ID_ONE_TO_ONE_ROOM
+        givenARuleId(firstRuleId)
         fakePushRuleService.givenUpdatePushRuleActionsSucceed()
         fakePushRuleService.givenUpdatePushRuleActionsFail(RuleIds.RULE_ID_POLL_START_ONE_TO_ONE_UNSTABLE, failure)
 
         val secondRuleId = RuleIds.RULE_ID_ALL_OTHER_MESSAGES_ROOMS
+        givenARuleId(secondRuleId)
         fakePushRuleService.givenUpdatePushRuleActionsFail(secondRuleId, failure)
         fakePushRuleService.givenUpdatePushRuleActionsFail(RuleIds.RULE_ID_POLL_START, failure)
         fakePushRuleService.givenUpdatePushRuleActionsFail(RuleIds.RULE_ID_POLL_START_UNSTABLE, failure)
@@ -180,9 +190,9 @@ internal class VectorSettingsPushRuleNotificationViewModelTest {
         // When
         val viewModelTest = viewModel.test()
         // One rule failed to update
-        viewModel.handle(VectorSettingsPushRuleNotificationViewAction.UpdatePushRule(givenARuleId(firstRuleId), false))
+        viewModel.handle(VectorSettingsPushRuleNotificationViewAction.UpdatePushRule(firstRuleId, false))
         // All the rules failed to update
-        viewModel.handle(VectorSettingsPushRuleNotificationViewAction.UpdatePushRule(givenARuleId(secondRuleId), false))
+        viewModel.handle(VectorSettingsPushRuleNotificationViewAction.UpdatePushRule(secondRuleId, false))
 
         // Then
         coVerifyOrder {
@@ -205,14 +215,14 @@ internal class VectorSettingsPushRuleNotificationViewModelTest {
                 .assertStatesChanges(
                         initialState,
                         { copy(isLoading = true) },
-                        { copy(isLoading = false) },
+                        { copy(isLoading = false, rulesOnError = setOf(firstRuleId)) },
                         { copy(isLoading = true) },
                         { copy(isLoading = false) },
                 )
                 .assertEvents(
                         // The global rule remains checked if all the rules are not unchecked
-                        VectorSettingsPushRuleNotificationViewEvent.PushRuleUpdated(RuleIds.RULE_ID_ONE_TO_ONE_ROOM, true, failure),
-                        VectorSettingsPushRuleNotificationViewEvent.Failure(failure),
+                        VectorSettingsPushRuleNotificationViewEvent.PushRuleUpdated(firstRuleId, true, failure),
+                        VectorSettingsPushRuleNotificationViewEvent.Failure(secondRuleId, failure),
                 )
                 .finish()
     }
@@ -244,15 +254,11 @@ internal class VectorSettingsPushRuleNotificationViewModelTest {
         secondResult shouldBe false
     }
 
-    private fun givenARuleId(ruleId: String, notificationIndex: NotificationIndex = NotificationIndex.NOISY): PushRuleAndKind {
-        val ruleAndKind = mockk<PushRuleAndKind> {
-            every { pushRule.ruleId } returns ruleId
-            every { pushRule.notificationIndex } returns notificationIndex
-            every { kind } returns mockk()
-        }
+    private fun givenARuleId(ruleId: String, notificationIndex: NotificationIndex = NotificationIndex.NOISY) {
+        val pushRule = PushRuleFixture.aPushRule(ruleId)
+        every { pushRule.notificationIndex } returns notificationIndex
+        val ruleAndKind = PushRuleFixture.aPushRuleAndKind(pushRule)
 
         every { fakePushRuleService.getPushRules().findDefaultRule(ruleId) } returns ruleAndKind
-
-        return ruleAndKind
     }
 }

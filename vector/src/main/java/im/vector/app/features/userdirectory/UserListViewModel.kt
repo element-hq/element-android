@@ -31,6 +31,9 @@ import im.vector.app.core.extensions.toggle
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.discovery.fetchIdentityServerWithTerms
+import im.vector.app.features.raw.wellknown.getElementWellknown
+import im.vector.app.features.raw.wellknown.isE2EByDefault
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter
@@ -41,6 +44,7 @@ import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import org.matrix.android.sdk.api.session.identity.IdentityServiceListener
@@ -57,6 +61,7 @@ data class ThreePidUser(
 class UserListViewModel @AssistedInject constructor(
         @Assisted initialState: UserListViewState,
         private val stringProvider: StringProvider,
+        private val rawService: RawService,
         private val session: Session
 ) : VectorViewModel<UserListViewState, UserListAction, UserListViewEvents>(initialState) {
 
@@ -84,6 +89,7 @@ class UserListViewModel @AssistedInject constructor(
     }
 
     init {
+        initAdminE2eByDefault()
         observeUsers()
         setState {
             copy(
@@ -91,6 +97,22 @@ class UserListViewModel @AssistedInject constructor(
             )
         }
         session.identityService().addListener(identityServerListener)
+    }
+
+    private fun initAdminE2eByDefault() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val adminE2EByDefault = tryOrNull {
+                rawService.getElementWellknown(session.sessionParams)
+                        ?.isE2EByDefault()
+                        ?: true
+            } ?: true
+
+            setState {
+                copy(
+                        isE2EByDefault = adminE2EByDefault
+                )
+            }
+        }
     }
 
     private fun cleanISURL(url: String?): String? {
@@ -258,8 +280,13 @@ class UserListViewModel @AssistedInject constructor(
     }
 
     private fun handleSelectUser(action: UserListAction.AddPendingSelection) = withState { state ->
-        val selections = state.pendingSelections.toggle(action.pendingSelection, singleElement = state.singleSelection)
-        setState { copy(pendingSelections = selections) }
+        val canSelectUser = !state.isE2EByDefault || state.pendingSelections.isEmpty() || !state.single3pidSelection ||
+                (action.pendingSelection is PendingSelection.UserPendingSelection &&
+                        state.pendingSelections.last() is PendingSelection.UserPendingSelection)
+        if (canSelectUser) {
+            val selections = state.pendingSelections.toggle(action.pendingSelection, singleElement = state.singleSelection)
+            setState { copy(pendingSelections = selections) }
+        }
     }
 
     private fun handleRemoveSelectedUser(action: UserListAction.RemovePendingSelection) = withState { state ->

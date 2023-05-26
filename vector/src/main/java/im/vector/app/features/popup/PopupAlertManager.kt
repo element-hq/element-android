@@ -21,9 +21,12 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+import androidx.core.view.ViewCompat
 import com.tapadoo.alerter.Alerter
 import im.vector.app.R
+import im.vector.app.core.extensions.giveAccessibilityFocus
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.isAnimationEnabled
 import im.vector.app.features.MainActivity
 import im.vector.app.features.analytics.ui.consent.AnalyticsOptInActivity
@@ -46,6 +49,7 @@ import javax.inject.Singleton
 @Singleton
 class PopupAlertManager @Inject constructor(
         private val clock: Clock,
+        private val stringProvider: StringProvider,
 ) {
 
     companion object {
@@ -282,6 +286,9 @@ class PopupAlertManager @Inject constructor(
                     }
                     currentIsDismissed()
                 }
+                .setOnShowListener {
+                    handleAccessibility(activity, animate)
+                }
                 .enableSwipeToDismiss()
                 .enableInfiniteDuration(true)
                 .apply {
@@ -295,6 +302,29 @@ class PopupAlertManager @Inject constructor(
                 }
                 .enableIconPulse(!noAnimation)
                 .show()
+    }
+
+    /* a11y */
+    private fun handleAccessibility(activity: Activity, giveFocus: Boolean) {
+        activity.window.decorView.findViewById<View>(R.id.llAlertBackground)?.let { alertView ->
+            alertView.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
+
+            // Add close action for a11y (same action than swipe). User can select the action by swiping on the screen vertically,
+            // and double tap to perform the action
+            ViewCompat.addAccessibilityAction(
+                    alertView,
+                    stringProvider.getString(R.string.action_close)
+            ) { _, _ ->
+                currentIsDismissed()
+                Alerter.hide()
+                true
+            }
+
+            // And give focus to the alert right now, only for first display, i.e. when there is an animation.
+            if (giveFocus) {
+                alertView.giveAccessibilityFocus()
+            }
+        }
     }
 
     private fun currentIsDismissed() {

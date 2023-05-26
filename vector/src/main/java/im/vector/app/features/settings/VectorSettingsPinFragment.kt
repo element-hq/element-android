@@ -78,13 +78,13 @@ class VectorSettingsPinFragment :
 
     override fun onResume() {
         super.onResume()
-
         updateBiometricPrefState(isPinCodeChecked = usePinCodePref.isChecked)
+        viewLifecycleOwner.lifecycleScope.launch {
+            refreshPinCodeStatus()
+        }
     }
 
     override fun bindPref() {
-        refreshPinCodeStatus()
-
         usePinCodePref.setOnPreferenceChangeListener { _, value ->
             val isChecked = (value as? Boolean).orFalse()
             updateBiometricPrefState(isPinCodeChecked = isChecked)
@@ -128,36 +128,34 @@ class VectorSettingsPinFragment :
                 .onFailure { Timber.e(it) }
     }
 
-    private fun refreshPinCodeStatus() {
-        lifecycleScope.launchWhenResumed {
-            val hasPinCode = pinCodeStore.hasEncodedPin()
-            usePinCodePref.isChecked = hasPinCode
-            usePinCodePref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                if (hasPinCode) {
-                    lifecycleScope.launch {
-                        pinCodeStore.deletePinCode()
-                        refreshPinCodeStatus()
-                    }
-                } else {
-                    navigator.openPinCode(
-                            requireContext(),
-                            pinActivityResultLauncher,
-                            PinMode.CREATE
-                    )
+    private suspend fun refreshPinCodeStatus() {
+        val hasPinCode = pinCodeStore.hasEncodedPin()
+        usePinCodePref.isChecked = hasPinCode
+        usePinCodePref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            if (hasPinCode) {
+                lifecycleScope.launch {
+                    pinCodeStore.deletePinCode()
+                    refreshPinCodeStatus()
                 }
-                true
+            } else {
+                navigator.openPinCode(
+                        requireContext(),
+                        pinActivityResultLauncher,
+                        PinMode.CREATE
+                )
             }
+            true
+        }
 
-            changePinCodePref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                if (hasPinCode) {
-                    navigator.openPinCode(
-                            requireContext(),
-                            pinActivityResultLauncher,
-                            PinMode.MODIFY
-                    )
-                }
-                true
+        changePinCodePref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            if (hasPinCode) {
+                navigator.openPinCode(
+                        requireContext(),
+                        pinActivityResultLauncher,
+                        PinMode.MODIFY
+                )
             }
+            true
         }
     }
 
@@ -166,6 +164,6 @@ class VectorSettingsPinFragment :
     }
 
     private val pinActivityResultLauncher = registerStartForActivityResult {
-        refreshPinCodeStatus()
+        // Nothing to do, refreshPinCodeStatus() will be called by `onResume`
     }
 }

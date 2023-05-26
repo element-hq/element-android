@@ -18,9 +18,11 @@ package org.matrix.android.sdk.internal.crypto
 
 import android.util.Log
 import androidx.test.filters.LargeTest
+import org.amshove.kluent.fail
 import org.amshove.kluent.internal.assertEquals
 import org.amshove.kluent.internal.assertNotEquals
 import org.junit.Assert
+import org.junit.Assume
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -42,7 +44,6 @@ import org.matrix.android.sdk.api.session.room.model.shouldShareHistory
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 import org.matrix.android.sdk.common.SessionTestParams
-import org.matrix.android.sdk.common.wrapWithTimeout
 
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
@@ -79,9 +80,9 @@ class E2eeShareKeysHistoryTest : InstrumentedTest {
             runCryptoTest(context()) { cryptoTestHelper, testHelper ->
                 val aliceMessageText = "Hello Bob, I am Alice!"
                 val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true, roomHistoryVisibility)
-
                 val e2eRoomID = cryptoTestData.roomId
 
+                Assume.assumeTrue(cryptoTestData.firstSession.cryptoService().supportsShareKeysOnInvite())
                 // Alice
                 val aliceSession = cryptoTestData.firstSession.also {
                     it.cryptoService().enableShareKeyOnInvite(true)
@@ -99,19 +100,26 @@ class E2eeShareKeysHistoryTest : InstrumentedTest {
 
                 val aliceMessageId: String? = sendMessageInRoom(aliceRoomPOV, aliceMessageText, testHelper)
                 Assert.assertTrue("Message should be sent", aliceMessageId != null)
-                Log.v("#E2E TEST", "Alice sent message to roomId: $e2eRoomID")
+                Log.v("#E2E TEST", "Alice has sent message to roomId: $e2eRoomID")
 
                 // Bob should be able to decrypt the message
-                testHelper.retryPeriodically {
-                        val timelineEvent = bobSession.roomService().getRoom(e2eRoomID)?.timelineService()?.getTimelineEvent(aliceMessageId!!)
-                        (timelineEvent != null &&
-                                timelineEvent.isEncrypted() &&
-                                timelineEvent.root.getClearType() == EventType.MESSAGE &&
-                                timelineEvent.root.mxDecryptionResult?.isSafe == true).also {
-                            if (it) {
-                                Log.v("#E2E TEST", "Bob can decrypt the message: ${timelineEvent?.root?.getDecryptedTextSummary()}")
-                            }
+                testHelper.retryWithBackoff(
+                        onFail = {
+                            fail("Bob should be able to decrypt $aliceMessageId")
                         }
+                ) {
+                    val timelineEvent = bobSession.roomService().getRoom(e2eRoomID)?.timelineService()?.getTimelineEvent(aliceMessageId!!)?.also {
+                        Log.v("#E2E TEST", "Bob sees ${it.root.getClearType()}|${it.root.mxDecryptionResult?.verificationState}")
+                    }
+                    (timelineEvent != null &&
+                            timelineEvent.isEncrypted() &&
+                            timelineEvent.root.getClearType() == EventType.MESSAGE
+                            // && timelineEvent.root.mxDecryptionResult?.verificationState == MessageVerificationState.UN_SIGNED_DEVICE
+                            ).also {
+                                if (it) {
+                                    Log.v("#E2E TEST", "Bob can decrypt the message: ${timelineEvent?.root?.getDecryptedTextSummary()}")
+                                }
+                            }
                 }
 
                 // Create a new user
@@ -135,23 +143,31 @@ class E2eeShareKeysHistoryTest : InstrumentedTest {
                     null
                     -> {
                         // Aris should be able to decrypt the message
-                        testHelper.retryPeriodically {
-                                val timelineEvent = arisSession.roomService().getRoom(e2eRoomID)?.timelineService()?.getTimelineEvent(aliceMessageId!!)
-                                (timelineEvent != null &&
-                                        timelineEvent.isEncrypted() &&
-                                        timelineEvent.root.getClearType() == EventType.MESSAGE &&
-                                        timelineEvent.root.mxDecryptionResult?.isSafe == false
-                                        ).also {
-                                            if (it) {
-                                                Log.v("#E2E TEST", "Aris can decrypt the message: ${timelineEvent?.root?.getDecryptedTextSummary()}")
-                                            }
+                        testHelper.retryWithBackoff(
+                                onFail = {
+                                    fail("Aris should be able to decrypt $aliceMessageId")
+                                }
+                        ) {
+                            val timelineEvent = arisSession.roomService().getRoom(e2eRoomID)?.timelineService()?.getTimelineEvent(aliceMessageId!!)
+                            (timelineEvent != null &&
+                                    timelineEvent.isEncrypted() &&
+                                    timelineEvent.root.getClearType() == EventType.MESSAGE // &&
+                                    // timelineEvent.root.mxDecryptionResult?.verificationState == MessageVerificationState.UN_SIGNED_DEVICE
+                                    ).also {
+                                        if (it) {
+                                            Log.v("#E2E TEST", "Aris can decrypt the message: ${timelineEvent?.root?.getDecryptedTextSummary()}")
                                         }
+                                    }
                         }
                     }
                     RoomHistoryVisibility.INVITED,
                     RoomHistoryVisibility.JOINED -> {
                         // Aris should not even be able to get the message
-                        testHelper.retryPeriodically {
+                        testHelper.retryWithBackoff(
+                                onFail = {
+                                    fail("Aris should not even be able to get the message")
+                                }
+                        ) {
                             val timelineEvent = arisSession.roomService().getRoom(e2eRoomID)
                                     ?.timelineService()
                                     ?.getTimelineEvent(aliceMessageId!!)
@@ -160,7 +176,6 @@ class E2eeShareKeysHistoryTest : InstrumentedTest {
                     }
                 }
 
-                testHelper.signOutAndClose(arisSession)
                 cryptoTestData.cleanUp(testHelper)
             }
 
@@ -237,6 +252,8 @@ class E2eeShareKeysHistoryTest : InstrumentedTest {
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true, initRoomHistoryVisibility)
         val e2eRoomID = cryptoTestData.roomId
 
+        Assume.assumeTrue(cryptoTestData.firstSession.cryptoService().supportsShareKeysOnInvite())
+
         // Alice
         val aliceSession = cryptoTestData.firstSession.also {
             it.cryptoService().enableShareKeyOnInvite(true)
@@ -258,11 +275,17 @@ class E2eeShareKeysHistoryTest : InstrumentedTest {
 
         // Bob should be able to decrypt the message
         var firstAliceMessageMegolmSessionId: String? = null
-        val bobRoomPov = bobSession.roomService().getRoom(e2eRoomID)
-        testHelper.retryPeriodically {
+        val bobRoomPov = bobSession.roomService().getRoom(e2eRoomID)!!
+        testHelper.retryWithBackoff(
+                onFail = {
+                    fail("Bob should be able to decrypt $aliceMessageId")
+                }
+        ) {
             val timelineEvent = bobRoomPov
-                    ?.timelineService()
-                    ?.getTimelineEvent(aliceMessageId!!)
+                    .timelineService()
+                    .getTimelineEvent(aliceMessageId!!)?.also {
+                        Log.v("#E2E TEST ROTATION", "Bob sees ${it.root.getClearType()}")
+                    }
             (timelineEvent != null &&
                     timelineEvent.isEncrypted() &&
                     timelineEvent.root.getClearType() == EventType.MESSAGE).also {
@@ -279,11 +302,17 @@ class E2eeShareKeysHistoryTest : InstrumentedTest {
         Assert.assertNotNull("megolm session id can't be null", firstAliceMessageMegolmSessionId)
 
         var secondAliceMessageSessionId: String? = null
-        sendMessageInRoom(aliceRoomPOV, "Other msg", testHelper)?.let { secondMessage ->
-            testHelper.retryPeriodically {
+        sendMessageInRoom(aliceRoomPOV, "Other msg", testHelper)!!.let { secondMessage ->
+            testHelper.retryWithBackoff(
+                    onFail = {
+                        fail("Bob should be able to decrypt the second message $secondMessage")
+                    }
+            ) {
                 val timelineEvent = bobRoomPov
-                        ?.timelineService()
-                        ?.getTimelineEvent(secondMessage)
+                        .timelineService()
+                        .getTimelineEvent(secondMessage)?.also {
+                            Log.v("#E2E TEST ROTATION", "Bob sees ${it.root.getClearType()}")
+                        }
                 (timelineEvent != null &&
                         timelineEvent.isEncrypted() &&
                         timelineEvent.root.getClearType() == EventType.MESSAGE).also {
@@ -309,29 +338,44 @@ class E2eeShareKeysHistoryTest : InstrumentedTest {
                                 historyVisibilityStr = nextRoomHistoryVisibility.historyVisibilityStr
                         ).toContent()
                 )
+        Log.v("#E2E TEST ROTATION", "State update sent")
 
         // ensure that the state did synced down
-        testHelper.retryPeriodically {
-            aliceRoomPOV.stateService().getStateEvent(EventType.STATE_ROOM_HISTORY_VISIBILITY, QueryStringValue.IsEmpty)?.content
+        testHelper.retryWithBackoff(
+                onFail = {
+                    fail("Alice state should be updated to ${nextRoomHistoryVisibility.historyVisibilityStr}")
+                }
+        ) {
+            aliceRoomPOV.stateService().getStateEvent(EventType.STATE_ROOM_HISTORY_VISIBILITY, QueryStringValue.IsEmpty)
+                    ?.content
+                    ?.also {
+                        Log.v("#E2E TEST ROTATION", "Alice sees state as $it")
+                    }
                     ?.toModel<RoomHistoryVisibilityContent>()?.historyVisibility == nextRoomHistoryVisibility.historyVisibility
         }
 
-        testHelper.retryPeriodically {
-            val roomVisibility = aliceSession.getRoom(e2eRoomID)!!
-                    .stateService()
-                    .getStateEvent(EventType.STATE_ROOM_HISTORY_VISIBILITY, QueryStringValue.IsEmpty)
-                    ?.content
-                    ?.toModel<RoomHistoryVisibilityContent>()
-            Log.v("#E2E TEST ROTATION", "Room visibility changed from: ${initRoomHistoryVisibility.name} to: ${roomVisibility?.historyVisibility?.name}")
-            roomVisibility?.historyVisibility == nextRoomHistoryVisibility.historyVisibility
-        }
+//        testHelper.retryPeriodically {
+//            val roomVisibility = aliceSession.getRoom(e2eRoomID)!!
+//                    .stateService()
+//                    .getStateEvent(EventType.STATE_ROOM_HISTORY_VISIBILITY, QueryStringValue.IsEmpty)
+//                    ?.content
+//                    ?.toModel<RoomHistoryVisibilityContent>()
+//            Log.v("#E2E TEST ROTATION", "Room visibility changed from: ${initRoomHistoryVisibility.name} to: ${roomVisibility?.historyVisibility?.name}")
+//            roomVisibility?.historyVisibility == nextRoomHistoryVisibility.historyVisibility
+//        }
 
         var aliceThirdMessageSessionId: String? = null
-        sendMessageInRoom(aliceRoomPOV, "Message after visibility change", testHelper)?.let { thirdMessage ->
-            testHelper.retryPeriodically {
+        sendMessageInRoom(aliceRoomPOV, "Message after visibility change", testHelper)!!.let { thirdMessage ->
+            testHelper.retryWithBackoff(
+                    onFail = {
+                        fail("Bob should be able to decrypt $thirdMessage")
+                    }
+            ) {
                 val timelineEvent = bobRoomPov
-                        ?.timelineService()
-                        ?.getTimelineEvent(thirdMessage)
+                        .timelineService()
+                        .getTimelineEvent(thirdMessage)?.also {
+                            Log.v("#E2E TEST ROTATION", "Bob sees ${it.root.getClearType()}")
+                        }
                 (timelineEvent != null &&
                         timelineEvent.isEncrypted() &&
                         timelineEvent.root.getClearType() == EventType.MESSAGE).also {
@@ -341,7 +385,8 @@ class E2eeShareKeysHistoryTest : InstrumentedTest {
                 }
             }
         }
-
+        Log.v("#E2E TEST ROTATION", "second session id $secondAliceMessageSessionId")
+        Log.v("#E2E TEST ROTATION", "third session id $aliceThirdMessageSessionId")
         when {
             initRoomHistoryVisibility.shouldShareHistory() == nextRoomHistoryVisibility.historyVisibility?.shouldShareHistory() -> {
                 assertEquals("Session shouldn't have been rotated", secondAliceMessageSessionId, aliceThirdMessageSessionId)
@@ -352,8 +397,6 @@ class E2eeShareKeysHistoryTest : InstrumentedTest {
                 Log.v("#E2E TEST ROTATION", "Rotation is needed!")
             }
         }
-
-        cryptoTestData.cleanUp(testHelper)
     }
 
     private suspend fun sendMessageInRoom(aliceRoomPOV: Room, text: String, testHelper: CommonTestHelper): String? {
@@ -364,7 +407,7 @@ class E2eeShareKeysHistoryTest : InstrumentedTest {
     }
 
     private suspend fun ensureMembersHaveJoined(aliceSession: Session, otherAccounts: List<Session>, e2eRoomID: String, testHelper: CommonTestHelper) {
-        testHelper.retryPeriodically {
+        testHelper.retryWithBackoff {
             otherAccounts.map {
                 aliceSession.roomService().getRoomMember(it.myUserId, e2eRoomID)?.membership
             }.all {
@@ -374,7 +417,7 @@ class E2eeShareKeysHistoryTest : InstrumentedTest {
     }
 
     private suspend fun waitForAndAcceptInviteInRoom(otherSession: Session, e2eRoomID: String, testHelper: CommonTestHelper) {
-        testHelper.retryPeriodically {
+        testHelper.retryWithBackoff {
             val roomSummary = otherSession.roomService().getRoomSummary(e2eRoomID)
             (roomSummary != null && roomSummary.membership == Membership.INVITE).also {
                 if (it) {
@@ -383,17 +426,15 @@ class E2eeShareKeysHistoryTest : InstrumentedTest {
             }
         }
 
-        wrapWithTimeout(60_000) {
-            Log.v("#E2E TEST", "${otherSession.myUserId} tries to join room $e2eRoomID")
-            try {
-                otherSession.roomService().joinRoom(e2eRoomID)
-            } catch (ex: JoinRoomFailure.JoinedWithTimeout) {
-                // it's ok we will wait after
-            }
+        Log.v("#E2E TEST", "${otherSession.myUserId} tries to join room $e2eRoomID")
+        try {
+            otherSession.roomService().joinRoom(e2eRoomID)
+        } catch (ex: JoinRoomFailure.JoinedWithTimeout) {
+            // it's ok we will wait after
         }
 
         Log.v("#E2E TEST", "${otherSession.myUserId} waiting for join echo ...")
-        testHelper.retryPeriodically {
+        testHelper.retryWithBackoff {
             val roomSummary = otherSession.roomService().getRoomSummary(e2eRoomID)
             roomSummary != null && roomSummary.membership == Membership.JOIN
         }

@@ -29,6 +29,7 @@ import im.vector.app.R
 import im.vector.app.databinding.ViewRemoveJitsiWidgetBinding
 import im.vector.app.features.home.room.detail.RoomDetailViewState
 import org.matrix.android.sdk.api.session.room.model.Membership
+import kotlin.math.absoluteValue
 
 @SuppressLint("ClickableViewAccessibility") class RemoveJitsiWidgetView @JvmOverloads constructor(
         context: Context,
@@ -55,7 +56,7 @@ import org.matrix.android.sdk.api.session.room.model.Membership
             return@setOnTouchListener when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
                     if (currentState == State.Idle) {
-                        val initialX = views.removeJitsiSlidingContainer.x - event.rawX
+                        val initialX = event.rawX
                         updateState(State.Sliding(initialX, 0f, false))
                     }
                     true
@@ -73,8 +74,9 @@ import org.matrix.android.sdk.api.session.room.model.Membership
                 }
                 MotionEvent.ACTION_MOVE -> {
                     if (currentState is State.Sliding) {
-                        val translationX = (currentState.initialX + event.rawX).coerceAtLeast(0f)
-                        val hasReachedActivationThreshold = translationX >= views.root.width / 4
+                        val deltaX = event.rawX - currentState.initialX
+                        val translationX = if (!isRtl) deltaX.coerceAtLeast(0f) else deltaX.coerceAtMost(0f)
+                        val hasReachedActivationThreshold = translationX.absoluteValue >= views.root.width / 4
                         updateState(State.Sliding(currentState.initialX, translationX, hasReachedActivationThreshold))
                     }
                     true

@@ -23,6 +23,8 @@ import com.squareup.moshi.Moshi
 import java.io.IOException
 import java.lang.reflect.Type
 import java.math.BigDecimal
+import kotlin.math.ceil
+import kotlin.math.floor
 
 /**
  * This is used to check if NUMBER in json is integer or double, so we can preserve typing when serializing/deserializing in a row.
@@ -53,7 +55,16 @@ internal interface CheckNumberType {
                     }
 
                     override fun toJson(writer: JsonWriter, value: Any?) {
-                        delegate.toJson(writer, value)
+                        if (value is Number) {
+                            val double = value.toDouble()
+                            if (ceil(double) == floor(double)) {
+                                writer.value(value.toLong())
+                            } else {
+                                writer.value(value.toDouble())
+                            }
+                        } else {
+                            delegate.toJson(writer, value)
+                        }
                     }
                 }
             }

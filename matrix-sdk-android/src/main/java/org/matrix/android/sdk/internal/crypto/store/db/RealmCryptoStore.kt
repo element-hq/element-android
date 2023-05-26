@@ -36,9 +36,11 @@ import org.matrix.android.sdk.api.session.crypto.OutgoingRoomKeyRequestState
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.session.crypto.crosssigning.PrivateKeysInfo
 import org.matrix.android.sdk.api.session.crypto.crosssigning.UserIdentity
+import org.matrix.android.sdk.api.session.crypto.keysbackup.BackupUtils
 import org.matrix.android.sdk.api.session.crypto.keysbackup.SavedKeyBackupKeyInfo
 import org.matrix.android.sdk.api.session.crypto.model.AuditTrail
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.CryptoRoomInfo
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.ForwardInfo
 import org.matrix.android.sdk.api.session.crypto.model.IncomingKeyRequestInfo
@@ -47,6 +49,7 @@ import org.matrix.android.sdk.api.session.crypto.model.RoomKeyRequestBody
 import org.matrix.android.sdk.api.session.crypto.model.TrailType
 import org.matrix.android.sdk.api.session.crypto.model.WithheldInfo
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.events.model.content.EncryptionEventContent
 import org.matrix.android.sdk.api.session.events.model.content.RoomKeyWithHeldContent
 import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
 import org.matrix.android.sdk.api.util.Optional
@@ -57,6 +60,7 @@ import org.matrix.android.sdk.internal.crypto.model.OutboundGroupSessionWrapper
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.store.UserDataToStore
 import org.matrix.android.sdk.internal.crypto.store.db.mapper.CrossSigningKeysMapper
+import org.matrix.android.sdk.internal.crypto.store.db.mapper.CryptoRoomInfoMapper
 import org.matrix.android.sdk.internal.crypto.store.db.mapper.MyDeviceLastSeenInfoEntityMapper
 import org.matrix.android.sdk.internal.crypto.store.db.model.AuditTrailEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.AuditTrailEntityFields
@@ -114,7 +118,7 @@ internal class RealmCryptoStore @Inject constructor(
         @CryptoDatabase private val realmConfiguration: RealmConfiguration,
         private val crossSigningKeysMapper: CrossSigningKeysMapper,
         @UserId private val userId: String,
-        @DeviceId private val deviceId: String?,
+        @DeviceId private val deviceId: String,
         private val clock: Clock,
         private val myDeviceLastSeenInfoEntityMapper: MyDeviceLastSeenInfoEntityMapper,
 ) : IMXCryptoStore {
@@ -122,9 +126,6 @@ internal class RealmCryptoStore @Inject constructor(
     /* ==========================================================================================
      * Memory cache, to correctly release JNI objects
      * ========================================================================================== */
-
-    // A realm instance, for faster future getInstance. Do not use it
-    private var realmLocker: Realm? = null
 
     // The olm account
     private var olmAccount: OlmAccount? = null
@@ -157,8 +158,7 @@ internal class RealmCryptoStore @Inject constructor(
                 // Check credentials
                 // The device id may not have been provided in credentials.
                 // Check it only if provided, else trust the stored one.
-                if (currentMetadata.userId != userId ||
-                        (deviceId != null && deviceId != currentMetadata.deviceId)) {
+                if (currentMetadata.userId != userId || deviceId != currentMetadata.deviceId) {
                     Timber.w("## open() : Credentials do not match, close this store and delete data")
                     deleteAll = true
                     currentMetadata = null
@@ -196,11 +196,6 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun open() {
-        synchronized(this) {
-            if (realmLocker == null) {
-                realmLocker = Realm.getInstance(realmConfiguration)
-            }
-        }
     }
 
     override fun close() {
@@ -213,9 +208,6 @@ internal class RealmCryptoStore @Inject constructor(
         }
 
         olmAccount?.releaseAccount()
-
-        realmLocker?.close()
-        realmLocker = null
     }
 
     override fun storeDeviceId(deviceId: String) {
@@ -457,6 +449,21 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
+    override fun getLiveCrossSigningInfo(userId: String): LiveData<Optional<MXCrossSigningInfo>> {
+        val liveData = monarchy.findAllMappedWithChanges(
+                { realm: Realm ->
+                    realm.where(CrossSigningInfoEntity::class.java)
+                            .equalTo(CrossSigningInfoEntityFields.USER_ID, userId)
+                },
+                {
+                    mapCrossSigningInfoEntity(it)
+                }
+        )
+        return Transformations.map(liveData) {
+            it.firstOrNull().toOptional()
+        }
+    }
+
     override fun getGlobalCryptoConfig(): GlobalCryptoConfig {
         return doWithRealm(realmConfiguration) { realm ->
             realm.where<CryptoMetadataEntity>().findFirst()
@@ -517,7 +524,9 @@ internal class RealmCryptoStore @Inject constructor(
                         val key = it.keyBackupRecoveryKey
                         val version = it.keyBackupRecoveryKeyVersion
                         if (!key.isNullOrBlank() && !version.isNullOrBlank()) {
-                            SavedKeyBackupKeyInfo(recoveryKey = key, version = version)
+                            BackupUtils.recoveryKeyFromBase58(key)?.let { recoveryKey ->
+                                SavedKeyBackupKeyInfo(recoveryKey = recoveryKey, version = version)
+                            }
                         } else {
                             null
                         }
@@ -694,6 +703,30 @@ internal class RealmCryptoStore @Inject constructor(
     override fun getRoomAlgorithm(roomId: String): String? {
         return doWithRealm(realmConfiguration) {
             CryptoRoomEntity.getById(it, roomId)?.algorithm
+        }
+    }
+
+    override fun getRoomCryptoInfo(roomId: String): CryptoRoomInfo? {
+        return doWithRealm(realmConfiguration) { realm ->
+            CryptoRoomEntity.getById(realm, roomId)?.let {
+                CryptoRoomInfoMapper.map(it)
+            }
+        }
+    }
+
+    override fun setAlgorithmInfo(roomId: String, encryption: EncryptionEventContent?) {
+        doRealmTransaction("setAlgorithmInfo", realmConfiguration) {
+            CryptoRoomEntity.getOrCreate(it, roomId).let { entity ->
+                entity.algorithm = encryption?.algorithm
+                // store anyway the new algorithm, but mark the room
+                // as having been encrypted once whatever, this can never
+                // go back to false
+                if (encryption?.algorithm == MXCRYPTO_ALGORITHM_MEGOLM) {
+                    entity.wasEncryptedOnce = true
+                    entity.rotationPeriodMs = encryption.rotationPeriodMs
+                    entity.rotationPeriodMsgs = encryption.rotationPeriodMsgs
+                }
+            }
         }
     }
 
@@ -1665,19 +1698,6 @@ internal class RealmCryptoStore @Inject constructor(
         )
     }
 
-    override fun getLiveCrossSigningInfo(userId: String): LiveData<Optional<MXCrossSigningInfo>> {
-        val liveData = monarchy.findAllMappedWithChanges(
-                { realm: Realm ->
-                    realm.where<CrossSigningInfoEntity>()
-                            .equalTo(UserEntityFields.USER_ID, userId)
-                },
-                { mapCrossSigningInfoEntity(it) }
-        )
-        return Transformations.map(liveData) {
-            it.firstOrNull().toOptional()
-        }
-    }
-
     override fun setCrossSigningInfo(userId: String, info: MXCrossSigningInfo?) {
         doRealmTransaction("setCrossSigningInfo", realmConfiguration) { realm ->
             addOrUpdateCrossSigningInfo(realm, userId, info)
@@ -1834,6 +1854,8 @@ internal class RealmCryptoStore @Inject constructor(
         doRealmTransaction("storeData - CryptoStoreAggregator", realmConfiguration) { realm ->
             // setShouldShareHistory
             cryptoStoreAggregator.setShouldShareHistoryData.forEach {
+                Timber.tag(loggerTag.value)
+                        .v("setShouldShareHistory for room ${it.key} is ${it.value}")
                 CryptoRoomEntity.getOrCreate(realm, it.key).shouldShareHistory = it.value
             }
             // setShouldEncryptForInvitedMembers

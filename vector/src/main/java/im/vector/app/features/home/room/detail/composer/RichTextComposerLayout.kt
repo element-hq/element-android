@@ -36,6 +36,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.text.toSpannable
+import androidx.core.view.ViewCompat
 import androidx.core.view.isGone
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
@@ -47,10 +48,11 @@ import im.vector.app.core.extensions.showKeyboard
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.databinding.ComposerRichTextLayoutBinding
 import im.vector.app.databinding.ViewRichTextMenuButtonBinding
+import im.vector.app.features.home.room.detail.composer.images.UriContentListener
 import io.element.android.wysiwyg.EditorEditText
-import io.element.android.wysiwyg.inputhandlers.models.InlineFormat
-import io.element.android.wysiwyg.inputhandlers.models.LinkAction
 import io.element.android.wysiwyg.utils.RustErrorCollector
+import io.element.android.wysiwyg.view.models.InlineFormat
+import io.element.android.wysiwyg.view.models.LinkAction
 import uniffi.wysiwyg_composer.ActionState
 import uniffi.wysiwyg_composer.ComposerAction
 
@@ -188,6 +190,16 @@ internal class RichTextComposerLayout @JvmOverloads constructor(
         views.plainTextComposerEditText.addTextChangedListener(
                 TextChangeListener({ callback?.onTextChanged(it) }, { updateTextFieldBorder(isFullScreen) })
         )
+        ViewCompat.setOnReceiveContentListener(
+                views.richTextComposerEditText,
+                arrayOf("image/*"),
+                UriContentListener { callback?.onRichContentSelected(it) }
+        )
+        ViewCompat.setOnReceiveContentListener(
+                views.plainTextComposerEditText,
+                arrayOf("image/*"),
+                UriContentListener { callback?.onRichContentSelected(it) }
+        )
 
         disallowParentInterceptTouchEvent(views.richTextComposerEditText)
         disallowParentInterceptTouchEvent(views.plainTextComposerEditText)
@@ -257,7 +269,7 @@ internal class RichTextComposerLayout @JvmOverloads constructor(
             views.richTextComposerEditText.getLinkAction()?.let {
                 when (it) {
                     LinkAction.InsertLink -> callback?.onSetLink(isTextSupported = true, initialLink = null)
-                    is LinkAction.SetLink -> callback?.onSetLink(isTextSupported = false, initialLink = it.currentLink)
+                    is LinkAction.SetLink -> callback?.onSetLink(isTextSupported = false, initialLink = it.currentUrl)
                 }
             }
         }

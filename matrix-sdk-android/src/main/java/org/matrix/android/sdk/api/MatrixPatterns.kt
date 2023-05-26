@@ -62,30 +62,17 @@ object MatrixPatterns {
     // regex pattern to find permalink with message id.
     // Android does not support in URL so extract it.
     private const val PERMALINK_BASE_REGEX = "https://matrix\\.to/#/"
-    private const val APP_BASE_REGEX = "https://[A-Z0-9.-]+\\.[A-Z]{2,}/[A-Z]{3,}/#/room/"
+    private const val APP_BASE_REGEX = "https://[A-Z0-9.-]+\\.[A-Z]{2,}/#/(room|user)/"
     const val SEP_REGEX = "/"
 
-    private const val LINK_TO_ROOM_ID_REGEXP = PERMALINK_BASE_REGEX + MATRIX_ROOM_IDENTIFIER_REGEX + SEP_REGEX + MATRIX_EVENT_IDENTIFIER_REGEX
-    private val PATTERN_CONTAIN_MATRIX_TO_PERMALINK_ROOM_ID = LINK_TO_ROOM_ID_REGEXP.toRegex(RegexOption.IGNORE_CASE)
-
-    private const val LINK_TO_ROOM_ALIAS_REGEXP = PERMALINK_BASE_REGEX + MATRIX_ROOM_ALIAS_REGEX + SEP_REGEX + MATRIX_EVENT_IDENTIFIER_REGEX
-    private val PATTERN_CONTAIN_MATRIX_TO_PERMALINK_ROOM_ALIAS = LINK_TO_ROOM_ALIAS_REGEXP.toRegex(RegexOption.IGNORE_CASE)
-
-    private const val LINK_TO_APP_ROOM_ID_REGEXP = APP_BASE_REGEX + MATRIX_ROOM_IDENTIFIER_REGEX + SEP_REGEX + MATRIX_EVENT_IDENTIFIER_REGEX
-    private val PATTERN_CONTAIN_APP_LINK_PERMALINK_ROOM_ID = LINK_TO_APP_ROOM_ID_REGEXP.toRegex(RegexOption.IGNORE_CASE)
-
-    private const val LINK_TO_APP_ROOM_ALIAS_REGEXP = APP_BASE_REGEX + MATRIX_ROOM_ALIAS_REGEX + SEP_REGEX + MATRIX_EVENT_IDENTIFIER_REGEX
-    private val PATTERN_CONTAIN_APP_LINK_PERMALINK_ROOM_ALIAS = LINK_TO_APP_ROOM_ALIAS_REGEXP.toRegex(RegexOption.IGNORE_CASE)
+    private val PATTERN_CONTAIN_MATRIX_TO_PERMALINK = PERMALINK_BASE_REGEX.toRegex(RegexOption.IGNORE_CASE)
+    private val PATTERN_CONTAIN_APP_PERMALINK = APP_BASE_REGEX.toRegex(RegexOption.IGNORE_CASE)
 
     // ascii characters in the range \x20 (space) to \x7E (~)
     val ORDER_STRING_REGEX = "[ -~]+".toRegex()
 
     // list of patterns to find some matrix item.
     val MATRIX_PATTERNS = listOf(
-            PATTERN_CONTAIN_MATRIX_TO_PERMALINK_ROOM_ID,
-            PATTERN_CONTAIN_MATRIX_TO_PERMALINK_ROOM_ALIAS,
-            PATTERN_CONTAIN_APP_LINK_PERMALINK_ROOM_ID,
-            PATTERN_CONTAIN_APP_LINK_PERMALINK_ROOM_ALIAS,
             PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER,
             PATTERN_CONTAIN_MATRIX_ALIAS,
             PATTERN_CONTAIN_MATRIX_ROOM_IDENTIFIER,
@@ -144,6 +131,12 @@ object MatrixPatterns {
      */
     fun isGroupId(str: String?): Boolean {
         return str != null && str matches PATTERN_CONTAIN_MATRIX_GROUP_IDENTIFIER
+    }
+
+    fun isPermalink(str: String?): Boolean {
+        return str != null &&
+                (PATTERN_CONTAIN_MATRIX_TO_PERMALINK.containsMatchIn(str) ||
+                        PATTERN_CONTAIN_APP_PERMALINK.containsMatchIn(str))
     }
 
     /**

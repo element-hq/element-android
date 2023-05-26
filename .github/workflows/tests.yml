@@ -73,7 +73,7 @@ jobs:
           disable-animations: true
           # emulator-build: 7425822
           script: |
-            ./gradlew gatherGplayDebugStringTemplates $CI_GRADLE_ARG_PROPERTIES
+            ./gradlew gatherGplayKotlinCryptoDebugStringTemplates $CI_GRADLE_ARG_PROPERTIES
             ./gradlew unitTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
             ./gradlew instrumentationTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
             ./gradlew generateCoverageReport $CI_GRADLE_ARG_PROPERTIES
@@ -111,7 +111,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           ORG_GRADLE_PROJECT_SONAR_LOGIN: ${{ secrets.SONAR_TOKEN }}
         if: ${{ always() && env.GITHUB_TOKEN != '' && env.SONAR_TOKEN != '' && env.ORG_GRADLE_PROJECT_SONAR_LOGIN != '' }}
-        run: ./gradlew sonarqube $CI_GRADLE_ARG_PROPERTIES
+        run: ./gradlew sonar $CI_GRADLE_ARG_PROPERTIES
 
       - name: Format unit test results
         if: always()

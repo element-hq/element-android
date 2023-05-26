@@ -1,1 +1,0 @@
-[Rich text editor] Add code block, quote and indentation actions

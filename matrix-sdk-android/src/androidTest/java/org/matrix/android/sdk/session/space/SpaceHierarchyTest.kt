@@ -334,7 +334,7 @@ class SpaceHierarchyTest : InstrumentedTest {
                 }
         )
 
-        commonTestHelper.signOutAndClose(session)
+//        commonTestHelper.signOutAndClose(session)
     }
 
     data class TestSpaceCreationResult(

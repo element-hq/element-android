@@ -26,6 +26,8 @@ import im.vector.app.test.fakes.FakeVectorFeatures
 import im.vector.app.test.fakes.FakeVectorPreferences
 import im.vector.app.test.fakes.FakeWidgetArgsBuilder
 import im.vector.app.test.fixtures.RoomSummaryFixture.aRoomSummary
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
 import org.junit.Test
 
 internal class DefaultNavigatorTest {
@@ -38,6 +40,7 @@ internal class DefaultNavigatorTest {
     private val features = FakeVectorFeatures()
     private val analyticsTracker = FakeAnalyticsTracker()
     private val debugNavigator = FakeDebugNavigator()
+    private val coroutineScope = CoroutineScope(SupervisorJob())
 
     private val navigator = DefaultNavigator(
             sessionHolder.instance,
@@ -46,6 +49,7 @@ internal class DefaultNavigatorTest {
             spaceStateHandler,
             supportedVerificationMethodsProvider.instance,
             features,
+            coroutineScope,
             analyticsTracker,
             debugNavigator,
     )

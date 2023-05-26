@@ -117,5 +117,6 @@ class BootstrapSaveRecoveryKeyFragment :
 
         views.recoveryContinue.isVisible = step.isSaved
         views.bootstrapRecoveryKeyText.text = state.recoveryKeyCreationInfo?.recoveryKey?.formatRecoveryKey()
+        views.bootstrapSaveText.giveAccessibilityFocusOnce()
     }
 }

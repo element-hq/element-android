@@ -67,7 +67,7 @@ class KeysBackupSetupStep3Fragment :
                 views.keysBackupSetupStep3Label2.text = getString(R.string.keys_backup_setup_step3_text_line2_no_passphrase)
                 views.keysBackupSetupStep3FinishButton.text = getString(R.string.keys_backup_setup_step3_button_title_no_passphrase)
 
-                views.keysBackupSetupStep3RecoveryKeyText.text = viewModel.recoveryKey.value!!
+                views.keysBackupSetupStep3RecoveryKeyText.text = viewModel.recoveryKey.value!!.toBase58()
                         .replace(" ", "")
                         .chunked(16)
                         .joinToString("\n") {
@@ -115,7 +115,8 @@ class KeysBackupSetupStep3Fragment :
         } else {
             dialog.findViewById<TextView>(R.id.keys_backup_recovery_key_text)?.let {
                 it.isVisible = true
-                it.text = recoveryKey.replace(" ", "")
+                it.text = recoveryKey.toBase58()
+                        .replace(" ", "")
                         .chunked(16)
                         .joinToString("\n") {
                             it
@@ -124,7 +125,7 @@ class KeysBackupSetupStep3Fragment :
                         }
 
                 it.debouncedClicks {
-                    copyToClipboard(requireActivity(), recoveryKey)
+                    copyToClipboard(requireActivity(), recoveryKey.toBase58())
                 }
             }
         }
@@ -146,7 +147,7 @@ class KeysBackupSetupStep3Fragment :
                     context = requireContext(),
                     activityResultLauncher = null,
                     chooserTitle = context?.getString(R.string.keys_backup_setup_step3_share_intent_chooser_title),
-                    text = recoveryKey,
+                    text = recoveryKey.toBase58(),
                     subject = context?.getString(R.string.recovery_key)
             )
             viewModel.copyHasBeenMade = true
@@ -160,7 +161,7 @@ class KeysBackupSetupStep3Fragment :
         viewModel.recoveryKey.value?.let {
             viewModel.copyHasBeenMade = true
 
-            copyToClipboard(requireActivity(), it)
+            copyToClipboard(requireActivity(), it.toBase58())
         }
     }
 
@@ -198,7 +199,7 @@ class KeysBackupSetupStep3Fragment :
         val uri = activityRessult.data?.data ?: return@registerStartForActivityResult
         if (activityRessult.resultCode == Activity.RESULT_OK) {
             viewModel.recoveryKey.value?.let {
-                exportRecoveryKeyToFile(uri, it)
+                exportRecoveryKeyToFile(uri, it.toBase58())
             }
         }
     }

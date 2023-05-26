@@ -30,6 +30,6 @@ class DefaultGetDeviceInfoUseCase @Inject constructor(
 ) : GetDeviceInfoUseCase {
 
     override fun execute(): CryptoDeviceInfo {
-        return activeSessionHolder.getActiveSession().cryptoService().getMyDevice()
+        return activeSessionHolder.getActiveSession().cryptoService().getMyCryptoDevice()
     }
 }

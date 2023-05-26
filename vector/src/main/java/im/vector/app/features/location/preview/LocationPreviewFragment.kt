@@ -42,6 +42,7 @@ import im.vector.app.features.location.LocationSharingArgs
 import im.vector.app.features.location.MapState
 import im.vector.app.features.location.UrlMapProvider
 import im.vector.app.features.location.showUserLocationNotAvailableErrorDialog
+import kotlinx.coroutines.launch
 import java.lang.ref.WeakReference
 import javax.inject.Inject
 
@@ -77,7 +78,7 @@ class LocationPreviewFragment :
         }.also { views.mapView.addOnDidFailLoadingMapListener(it) }
         views.mapView.onCreate(savedInstanceState)
 
-        lifecycleScope.launchWhenCreated {
+        viewLifecycleOwner.lifecycleScope.launch {
             views.mapView.initialize(urlMapProvider.getMapUrl())
         }
 

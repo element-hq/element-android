@@ -25,6 +25,7 @@ import io.realm.Sort
 import kotlinx.coroutines.CompletableDeferred
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.session.crypto.model.MessageVerificationState
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.isReply
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
@@ -420,13 +421,22 @@ internal class TimelineChunk(
         }
 
         fun decryptIfNeeded(timelineEvent: TimelineEvent) {
-            if (timelineEvent.isEncrypted() &&
-                    timelineEvent.root.mxDecryptionResult == null) {
+            if (!timelineEvent.isEncrypted()) return
+            val mxDecryptionResult = timelineEvent.root.mxDecryptionResult
+            if (mxDecryptionResult == null) {
                 timelineEvent.root.eventId?.also { eventDecryptor.requestDecryption(TimelineEventDecryptor.DecryptionRequest(timelineEvent.root, timelineId)) }
-            }
-            if (!timelineEvent.isEncrypted() && !lightweightSettingsStorage.areThreadMessagesEnabled()) {
-                // Thread aware for not encrypted events
-                timelineEvent.root.eventId?.also { eventDecryptor.requestDecryption(TimelineEventDecryptor.DecryptionRequest(timelineEvent.root, timelineId)) }
+            } else if (timelineEvent.root.verificationStateIsDirty.orFalse() &&
+                    mxDecryptionResult.verificationState == MessageVerificationState.UNKNOWN_DEVICE
+            ) {
+                // The goal is to catch late download of devices
+                timelineEvent.root.eventId?.also {
+                    eventDecryptor.requestDecryption(
+                            TimelineEventDecryptor.DecryptionRequest(
+                                    timelineEvent.root,
+                                    timelineId
+                            )
+                    )
+                }
             }
         }
 

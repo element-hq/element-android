@@ -20,14 +20,16 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.text.Layout
 import android.text.Spanned
+import android.text.style.StrikethroughSpan
 import androidx.core.text.getSpans
 import im.vector.app.features.html.HtmlCodeSpan
-import io.element.android.wysiwyg.spans.InlineCodeSpan
+import io.element.android.wysiwyg.view.spans.InlineCodeSpan
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import io.noties.markwon.core.spans.EmphasisSpan
+import io.noties.markwon.core.spans.LinkSpan
 import io.noties.markwon.core.spans.OrderedListItemSpan
 import io.noties.markwon.core.spans.StrongEmphasisSpan
 import me.gujun.android.span.style.CustomTypefaceSpan
@@ -59,6 +61,8 @@ private fun Any.readTags(): SpanTags {
         StrongEmphasisSpan::class -> "bold"
         EmphasisSpan::class, CustomTypefaceSpan::class -> "italic"
         InlineCodeSpan::class -> "inline code"
+        StrikethroughSpan::class -> "strikethrough"
+        LinkSpan::class -> "link"
         else -> if (this::class.qualifiedName!!.startsWith("android.widget")) {
             null
         } else {

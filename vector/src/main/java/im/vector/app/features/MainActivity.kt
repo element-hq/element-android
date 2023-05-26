@@ -29,6 +29,7 @@ import com.airbnb.mvrx.viewModel
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.extensions.startSyncing
 import im.vector.app.core.extensions.vectorStore
@@ -170,6 +171,19 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
     }
 
     private fun handleAppStarted() {
+        // On the first run with rust crypto this would be false
+        if (!vectorPreferences.isOnRustCrypto()) {
+            if (activeSessionHolder.hasActiveSession()) {
+                vectorPreferences.setHadExistingLegacyData(activeSessionHolder.getActiveSession().isOpenable)
+            } else {
+                vectorPreferences.setHadExistingLegacyData(false)
+            }
+        }
+
+        if (BuildConfig.FLAVOR == "rustCrypto") {
+            vectorPreferences.setIsOnRustCrypto(true)
+        }
+
         if (intent.hasExtra(EXTRA_NEXT_INTENT)) {
             // Start the next Activity
             startSyncing()

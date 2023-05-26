@@ -75,7 +75,7 @@ class PushersManagerTest {
                 deviceDisplayName = deviceDisplayName,
                 url = gateway,
                 enabled = true,
-                deviceId = session.sessionParams.deviceId!!,
+                deviceId = session.sessionParams.deviceId,
                 append = false,
                 withEventIdOnly = true,
         )

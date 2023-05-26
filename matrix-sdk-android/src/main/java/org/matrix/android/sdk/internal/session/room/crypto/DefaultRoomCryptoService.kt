@@ -23,7 +23,6 @@ import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.crypto.RoomCryptoService
-import org.matrix.android.sdk.api.util.awaitCallback
 import org.matrix.android.sdk.internal.session.room.state.SendStateTask
 import java.security.InvalidParameterException
 
@@ -51,9 +50,7 @@ internal class DefaultRoomCryptoService @AssistedInject constructor(
     }
 
     override suspend fun prepareToEncrypt() {
-        awaitCallback<Unit> {
-            cryptoService.prepareToEncrypt(roomId, it)
-        }
+        cryptoService.prepareToEncrypt(roomId)
     }
 
     override suspend fun enableEncryption(algorithm: String, force: Boolean) {

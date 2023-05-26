@@ -30,7 +30,8 @@ data class RoomMemberQueryParams(
         val displayName: QueryStringValue,
         val memberships: List<Membership>,
         val userId: QueryStringValue,
-        val excludeSelf: Boolean
+        val excludeSelf: Boolean,
+        val displayNameOrUserId: QueryStringValue,
 ) {
 
     class Builder {
@@ -39,12 +40,14 @@ data class RoomMemberQueryParams(
         var displayName: QueryStringValue = QueryStringValue.IsNotEmpty
         var memberships: List<Membership> = Membership.all()
         var excludeSelf: Boolean = false
+        var displayNameOrUserId: QueryStringValue = QueryStringValue.NoCondition
 
         fun build() = RoomMemberQueryParams(
                 displayName = displayName,
                 memberships = memberships,
                 userId = userId,
-                excludeSelf = excludeSelf
+                excludeSelf = excludeSelf,
+                displayNameOrUserId = displayNameOrUserId
         )
     }
 }

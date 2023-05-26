@@ -17,12 +17,11 @@
 package im.vector.app.features.settings.devices.v2
 
 import im.vector.app.test.fakes.FakeActiveSessionHolder
-import io.mockk.every
-import io.mockk.just
-import io.mockk.runs
-import io.mockk.verifyAll
+import io.mockk.coEvery
+import io.mockk.coVerifyAll
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
-import org.matrix.android.sdk.api.NoOpMatrixCallback
+import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
 
 class RefreshDevicesUseCaseTest {
 
@@ -35,14 +34,16 @@ class RefreshDevicesUseCaseTest {
     @Test
     fun `given current session when refreshing then devices list and keys are fetched`() {
         val session = fakeActiveSessionHolder.fakeSession
-        every { session.cryptoService().fetchDevicesList(any()) } just runs
-        every { session.cryptoService().downloadKeys(any(), any(), any()) } just runs
+        coEvery { session.cryptoService().fetchDevicesList() } returns emptyList()
+        coEvery { session.cryptoService().downloadKeysIfNeeded(any()) } returns MXUsersDevicesMap()
 
-        refreshDevicesUseCase.execute()
+        runBlocking {
+            refreshDevicesUseCase.execute()
+        }
 
-        verifyAll {
-            session.cryptoService().fetchDevicesList(match { it is NoOpMatrixCallback })
-            session.cryptoService().downloadKeys(listOf(session.myUserId), true, match { it is NoOpMatrixCallback })
+        coVerifyAll {
+            session.cryptoService().fetchDevicesList()
+            session.cryptoService().downloadKeysIfNeeded(listOf(session.myUserId), true)
         }
     }
 }

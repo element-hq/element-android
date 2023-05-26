@@ -23,7 +23,7 @@ import javax.inject.Inject
 
 class HomeServerConnectionConfigFactory @Inject constructor() {
 
-    fun create(url: String?, fingerprint: Fingerprint? = null): HomeServerConnectionConfig? {
+    fun create(url: String?, fingerprints: List<Fingerprint>? = null): HomeServerConnectionConfig? {
         if (url == null) {
             return null
         }
@@ -31,13 +31,7 @@ class HomeServerConnectionConfigFactory @Inject constructor() {
         return try {
             HomeServerConnectionConfig.Builder()
                     .withHomeServerUri(url)
-                    .run {
-                        if (fingerprint == null) {
-                            this
-                        } else {
-                            withAllowedFingerPrints(listOf(fingerprint))
-                        }
-                    }
+                    .withAllowedFingerPrints(fingerprints)
                     .build()
         } catch (t: Throwable) {
             Timber.e(t)

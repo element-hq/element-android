@@ -78,5 +78,6 @@ class BootstrapReAuthFragment :
             views.bootstrapCancelButton.isVisible = true
             views.bootstrapRetryButton.isVisible = true
         }
+        views.bootstrapDescriptionText.giveAccessibilityFocusOnce()
     }
 }

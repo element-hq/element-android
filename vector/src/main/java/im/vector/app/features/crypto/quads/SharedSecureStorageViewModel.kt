@@ -58,7 +58,7 @@ data class SharedSecureStorageViewState(
         val ready: Boolean = false,
         val hasPassphrase: Boolean = true,
         val checkingSSSSAction: Async<Unit> = Uninitialized,
-        val step: Step = Step.EnterPassphrase,
+        val step: Step = Step.ResetAll,
         val activeDeviceCount: Int = 0,
         val showResetAllAction: Boolean = false,
         val userId: String = "",
@@ -74,7 +74,8 @@ data class SharedSecureStorageViewState(
             } else {
                 RequestType.ReadSecrets(args.requestedSecrets)
             },
-            resultKeyStoreAlias = args.resultKeyStoreAlias
+            resultKeyStoreAlias = args.resultKeyStoreAlias,
+            step = args.currentStep,
     )
 
     enum class Step {
@@ -113,30 +114,35 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
                 )
             }
         }
-        val keyResult = initialState.keyId?.let { session.sharedSecretStorageService().getKey(it) }
-                ?: session.sharedSecretStorageService().getDefaultKey()
 
-        if (!keyResult.isSuccess()) {
-            _viewEvents.post(SharedSecureStorageViewEvent.Dismiss)
-        } else {
-            val info = (keyResult as KeyInfoResult.Success).keyInfo
-            if (info.content.passphrase != null) {
-                setState {
-                    copy(
-                            hasPassphrase = true,
-                            ready = true,
-                            step = SharedSecureStorageViewState.Step.EnterPassphrase
-                    )
-                }
+        if (initialState.step != SharedSecureStorageViewState.Step.ResetAll) {
+            val keyResult = initialState.keyId?.let { session.sharedSecretStorageService().getKey(it) }
+                    ?: session.sharedSecretStorageService().getDefaultKey()
+
+            if (!keyResult.isSuccess()) {
+                _viewEvents.post(SharedSecureStorageViewEvent.Dismiss)
             } else {
-                setState {
-                    copy(
-                            hasPassphrase = false,
-                            ready = true,
-                            step = SharedSecureStorageViewState.Step.EnterKey
-                    )
+                val info = (keyResult as KeyInfoResult.Success).keyInfo
+                if (info.content.passphrase != null) {
+                    setState {
+                        copy(
+                                hasPassphrase = true,
+                                ready = true,
+                                step = SharedSecureStorageViewState.Step.EnterPassphrase
+                        )
+                    }
+                } else {
+                    setState {
+                        copy(
+                                hasPassphrase = false,
+                                ready = true,
+                                step = SharedSecureStorageViewState.Step.EnterKey
+                        )
+                    }
                 }
             }
+        } else {
+            setState { copy(ready = true) }
         }
 
         session.flow()
@@ -165,10 +171,12 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
         // as we are going to reset, we'd better cancel all outgoing requests
         // if not they could be accepted in the middle of the reset process
         // and cause strange use cases
-        session.cryptoService().verificationService().getExistingVerificationRequests(session.myUserId).forEach {
-            session.cryptoService().verificationService().cancelVerificationRequest(it)
+        viewModelScope.launch {
+            session.cryptoService().verificationService().getExistingVerificationRequests(session.myUserId).forEach {
+                session.cryptoService().verificationService().cancelVerificationRequest(it)
+            }
+            _viewEvents.post(SharedSecureStorageViewEvent.ShowResetBottomSheet)
         }
-        _viewEvents.post(SharedSecureStorageViewEvent.ShowResetBottomSheet)
     }
 
     private fun handleResetAll() {
@@ -201,6 +209,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
                     _viewEvents.post(SharedSecureStorageViewEvent.Dismiss)
                 }
             }
+            /*
             SharedSecureStorageViewState.Step.ResetAll -> {
                 setState {
                     copy(
@@ -209,6 +218,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
                     )
                 }
             }
+             */
             else -> {
                 _viewEvents.post(SharedSecureStorageViewEvent.Dismiss)
             }

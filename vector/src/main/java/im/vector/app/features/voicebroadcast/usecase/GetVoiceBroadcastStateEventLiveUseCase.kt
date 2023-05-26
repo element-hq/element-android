@@ -47,8 +47,7 @@ class GetVoiceBroadcastStateEventLiveUseCase @Inject constructor(
 ) {
 
     fun execute(voiceBroadcast: VoiceBroadcast): Flow<Optional<VoiceBroadcastEvent>> {
-        val room = session.getRoom(voiceBroadcast.roomId) ?: error("Unknown roomId: ${voiceBroadcast.roomId}")
-        return getMostRecentVoiceBroadcastEventFlow(room, voiceBroadcast)
+        return getMostRecentVoiceBroadcastEventFlow(voiceBroadcast)
                 .onEach { event ->
                     Timber.d(
                             "## VoiceBroadcast | " +
@@ -61,7 +60,8 @@ class GetVoiceBroadcastStateEventLiveUseCase @Inject constructor(
     /**
      * Get a flow of the most recent event for the given voice broadcast.
      */
-    private fun getMostRecentVoiceBroadcastEventFlow(room: Room, voiceBroadcast: VoiceBroadcast): Flow<Optional<VoiceBroadcastEvent>> {
+    private fun getMostRecentVoiceBroadcastEventFlow(voiceBroadcast: VoiceBroadcast): Flow<Optional<VoiceBroadcastEvent>> {
+        val room = session.getRoom(voiceBroadcast.roomId) ?: error("Unknown roomId: ${voiceBroadcast.roomId}")
         val startedEventFlow = room.flow().liveTimelineEvent(voiceBroadcast.voiceBroadcastId)
         // observe started event changes
         return startedEventFlow

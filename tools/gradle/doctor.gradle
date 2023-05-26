@@ -42,7 +42,7 @@ doctor {
     /**
      * Warn if using Android Jetifier. It slows down builds.
      */
-    warnWhenJetifierEnabled = true
+    warnWhenJetifierEnabled = false
     /**
      * Negative Avoidance Savings Threshold
      * By default the Gradle Doctor will print out a warning when a task is slower to pull from the cache than to

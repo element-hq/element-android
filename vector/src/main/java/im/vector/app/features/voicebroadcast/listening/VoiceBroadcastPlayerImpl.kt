@@ -527,7 +527,7 @@ class VoiceBroadcastPlayerImpl @Inject constructor(
                 State.Idle -> {
                     // restart the playback time if player completed with less than 1s remaining time
                     if (percentage == null || (playlist.duration - position) < 1000) {
-                        playbackTracker.stopPlayback(id)
+                        playbackTracker.stopPlaybackOrRecorder(id)
                     } else {
                         playbackTracker.updatePausedAtPlaybackTime(id, position, percentage)
                     }

@@ -26,5 +26,6 @@ internal class FakeWorkManagerProvider(
 
     val instance = mockk<WorkManagerProvider>().also {
         every { it.workManager } returns fakeWorkManager.instance
+        every { it.tag } returns "Tag"
     }
 }

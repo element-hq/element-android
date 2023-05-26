@@ -24,18 +24,18 @@ import org.matrix.android.sdk.api.session.pushrules.rest.PushRule
 import org.matrix.android.sdk.api.session.pushrules.rest.PushRuleAndKind
 import javax.inject.Inject
 
-class UpdatePushRulesIfNeededUseCase @Inject constructor() {
+class UpdatePushRulesIfNeededUseCase @Inject constructor(
+        private val getPushRulesOnInvalidStateUseCase: GetPushRulesOnInvalidStateUseCase,
+) {
 
     suspend fun execute(session: Session) {
+        val rulesOnError = getPushRulesOnInvalidStateUseCase.execute(session).takeUnless { it.isEmpty() } ?: return
+
         val ruleSet = session.pushRuleService().getPushRules()
-        val pushRules = ruleSet.getAllRules()
-        val rulesToUpdate = pushRules.mapNotNull { rule ->
-            val parent = RuleIds.getParentRule(rule.ruleId)?.let { ruleId -> ruleSet.findDefaultRule(ruleId) }
-            if (parent != null && (rule.enabled != parent.pushRule.enabled || rule.actions != parent.pushRule.actions)) {
-                PushRuleWithParent(rule, parent)
-            } else {
-                null
-            }
+        val rulesToUpdate = rulesOnError.mapNotNull { rule ->
+            RuleIds.getParentRule(rule.ruleId)
+                    ?.let { ruleId -> ruleSet.findDefaultRule(ruleId) }
+                    ?.let { PushRuleWithParent(rule, it) }
         }
 
         rulesToUpdate.forEach {

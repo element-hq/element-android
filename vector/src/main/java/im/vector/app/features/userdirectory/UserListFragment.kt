@@ -25,9 +25,9 @@ import android.view.ViewGroup
 import android.widget.ScrollView
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.withResumed
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.args
-import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,11 +42,11 @@ import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.core.utils.showIdentityServerConsentDialog
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.FragmentUserListBinding
-import im.vector.app.features.homeserver.HomeServerCapabilitiesViewModel
 import im.vector.app.features.settings.VectorSettingsActivity
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.user.model.User
 import reactivecircus.flowbinding.android.widget.textChanges
@@ -63,7 +63,6 @@ class UserListFragment :
 
     private val args: UserListFragmentArgs by args()
     private val viewModel: UserListViewModel by activityViewModel()
-    private val homeServerCapabilitiesViewModel: HomeServerCapabilitiesViewModel by fragmentViewModel()
     private lateinit var sharedActionViewModel: UserListSharedActionViewModel
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentUserListBinding {
@@ -86,7 +85,7 @@ class UserListFragment :
         setupRecyclerView()
         setupSearchView()
 
-        homeServerCapabilitiesViewModel.onEach {
+        viewModel.onEach {
             views.userListE2EbyDefaultDisabled.isVisible = !it.isE2EByDefault
         }
 
@@ -177,8 +176,10 @@ class UserListFragment :
 
         // Scroll to the bottom when adding chips. When removing chips, do not scroll
         if (newNumberOfChips >= currentNumberOfChips) {
-            viewLifecycleOwner.lifecycleScope.launchWhenResumed {
-                views.chipGroupScrollView.fullScroll(ScrollView.FOCUS_DOWN)
+            viewLifecycleOwner.lifecycleScope.launch {
+                withResumed {
+                    views.chipGroupScrollView.fullScroll(ScrollView.FOCUS_DOWN)
+                }
             }
         }
     }
