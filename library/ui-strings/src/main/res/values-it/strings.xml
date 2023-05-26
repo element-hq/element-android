@@ -1451,7 +1451,7 @@
     <string name="uploads_media_title">MEDIA</string>
     <string name="uploads_media_no_result">In questa stanza non ci sono file multimediali</string>
     <string name="uploads_files_title">FILE</string>
-    <string name="uploads_files_subtitle">%1$s alle %2$s</string>
+    <string name="uploads_files_subtitle">%1$s: %2$s</string>
     <string name="uploads_files_no_result">In questa stanza non ci sono file</string>
     <string name="login_connect_using_matrix_id_submit">Accedi con il tuo ID utente</string>
     <string name="login_signin_matrix_id_title">Accedi con il tuo ID utente</string>
@@ -2287,7 +2287,7 @@
     <string name="legals_no_policy_provided">Questo server non presenta alcuna informativa.</string>
     <string name="legals_third_party_notices">Librerie di terze parti</string>
     <string name="legals_identity_server_title">L\'informativa del tuo server d\'identità</string>
-    <string name="legals_home_server_title">L\'informativa del tuo homeserver</string>
+    <string name="legals_home_server_title">Informativa del tuo homeserver</string>
     <string name="legals_application_title">Informativa di ${app_name}</string>
     <string name="analytics_opt_in_list_item_3">Puoi disattivarlo in qualsiasi momento nelle impostazioni</string>
     <string name="analytics_opt_in_list_item_2"><b>Non</b> condividiamo informazioni con terze parti</string>
@@ -2941,4 +2941,10 @@
     <string name="action_proceed_to_reset">Procedi con la reimpostazione</string>
     <string name="settings_crypto_version">Versione crittografia</string>
     <string name="notice_display_name_changed_to">%1$s ha cambiato il nome visualizzato in %2$s</string>
+    <string name="confirm_your_identity_after_update">La messaggistica sicura è stata migliorata con l\'aggiornamento più recente. Ri-verifica il tuo dispositivo.</string>
+    <string name="verification_profile_other_device_untrust_info">Finché l\'utente si fida di questa sessione, i messaggi inviati da e verso essa sono contrassegnati da avvisi.</string>
+    <string name="crosssigning_verify_after_update">App aggiornata</string>
+    <string name="avatar_of_user">Immagine del profilo dell\'utente %1$s</string>
+    <string name="avatar_of_room">Avatar della stanza %1$s</string>
+    <string name="avatar_of_space">Avatar dello spazio %1$s</string>
 </resources>
