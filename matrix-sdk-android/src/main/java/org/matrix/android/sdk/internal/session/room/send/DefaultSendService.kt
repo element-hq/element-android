@@ -49,7 +49,7 @@ import org.matrix.android.sdk.api.util.CancelableBag
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.api.util.NoOpCancellable
 import org.matrix.android.sdk.api.util.TextContent
-import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
+import org.matrix.android.sdk.internal.crypto.store.IMXCommonCryptoStore
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.session.content.UploadContentWorker
@@ -69,7 +69,7 @@ internal class DefaultSendService @AssistedInject constructor(
         private val workManagerProvider: WorkManagerProvider,
         @SessionId private val sessionId: String,
         private val localEchoEventFactory: LocalEchoEventFactory,
-        private val cryptoStore: IMXCryptoStore,
+        private val cryptoStore: IMXCommonCryptoStore,
         private val taskExecutor: TaskExecutor,
         private val localEchoRepository: LocalEchoRepository,
         private val eventSenderProcessor: EventSenderProcessor,

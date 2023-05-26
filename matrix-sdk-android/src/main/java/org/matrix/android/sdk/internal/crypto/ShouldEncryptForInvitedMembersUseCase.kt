@@ -17,11 +17,11 @@
 package org.matrix.android.sdk.internal.crypto
 
 import org.matrix.android.sdk.api.crypto.MXCryptoConfig
-import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
+import org.matrix.android.sdk.internal.crypto.store.IMXCommonCryptoStore
 import javax.inject.Inject
 
 internal class ShouldEncryptForInvitedMembersUseCase @Inject constructor(private val cryptoConfig: MXCryptoConfig,
-                                                                         private val cryptoStore: IMXCryptoStore) {
+                                                                         private val cryptoStore: IMXCommonCryptoStore) {
 
     operator fun invoke(roomId: String): Boolean {
         return cryptoConfig.enableEncryptionForInvitedMembers && cryptoStore.shouldEncryptForInvitedMembers(roomId)
