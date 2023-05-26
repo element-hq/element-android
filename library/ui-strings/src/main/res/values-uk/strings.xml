@@ -3069,4 +3069,11 @@
     <string name="settings_acceptable_use_policy">Політика прийнятного користування</string>
     <string name="action_proceed_to_reset">Перейти до скидання</string>
     <string name="settings_crypto_version">Криптоверсія</string>
+    <string name="notice_display_name_changed_to">%1$s змінює своє ім\'я на %2$s</string>
+    <string name="avatar_of_user">Зображення профілю користувача %1$s</string>
+    <string name="avatar_of_room">Аватар кімнати %1$s</string>
+    <string name="avatar_of_space">Аватар простору %1$s</string>
+    <string name="confirm_your_identity_after_update">В останньому оновленні було вдосконалено захищений обмін повідомленнями. Перевірте свій пристрій ще раз.</string>
+    <string name="verification_profile_other_device_untrust_info">Поки користувач не довіряє цьому сеансу, повідомлення, надіслані до нього та від нього, позначаються попередженнями.</string>
+    <string name="crosssigning_verify_after_update">Застосунок оновлено</string>
 </resources>

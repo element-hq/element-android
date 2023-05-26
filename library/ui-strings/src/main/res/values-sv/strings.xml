@@ -2949,4 +2949,8 @@
     <string name="settings_crypto_version">Kryptoversion</string>
     <string name="settings_notification_error_on_update">Ett fel uppstod när du uppdaterade dina aviseringsinställningar. Var god försök igen.</string>
     <string name="action_proceed_to_reset">Fortsätt till återställning</string>
+    <string name="avatar_of_user">Profilbild för användaren %1$s</string>
+    <string name="avatar_of_room">Avatar för rummet %1$s</string>
+    <string name="avatar_of_space">Avatar för utrymmet %1$s</string>
+    <string name="notice_display_name_changed_to">%1$s bytte sitt visningsnamn till %2$s</string>
 </resources>
