@@ -306,7 +306,7 @@
     <string name="auth_invalid_login_param">Nesprávné uživatelské jméno nebo heslo</string>
     <string name="auth_invalid_email">Zdá se, že toto není platná e-mailová adresa</string>
     <string name="auth_email_already_defined">Tato e-mailová adresa je již zadána.</string>
-    <string name="auth_forgot_password">Zapomenuté heslo?</string>
+    <string name="auth_forgot_password">Zapomněli jste heslo\?</string>
     <string name="auth_recaptcha_message">Tento domovský server by se rád přesvědčil, že nejste robot</string>
     <string name="auth_reset_password_error_unauthorized">E-mailovou adresu se nepodařilo ověřit. Přesvědčte se, že jste klepli na zaslaný odkaz</string>
     <string name="login_error_invalid_home_server">Prosím, zadejte platné URL</string>
@@ -3013,4 +3013,7 @@
     <string name="avatar_of_user">Profilový obrázek uživatele %1$s</string>
     <string name="avatar_of_room">Avatar místnosti %1$s</string>
     <string name="avatar_of_space">Avatar prostoru %1$s</string>
+    <string name="confirm_your_identity_after_update">Nejnovější aktualizace vylepšila zabezpečené zasílání zpráv. Znovu ověřte své zařízení.</string>
+    <string name="verification_profile_other_device_untrust_info">Dokud tento uživatel této relaci nedůvěřuje, jsou zprávy odesílané do ní a z ní označeny varováním.</string>
+    <string name="crosssigning_verify_after_update">Aplikace aktualizována</string>
 </resources>
