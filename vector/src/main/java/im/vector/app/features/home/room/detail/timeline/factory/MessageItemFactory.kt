@@ -528,6 +528,8 @@ class MessageItemFactory @Inject constructor(
         )
 
         val playable = messageContent.mimeType == MimeTypes.Gif
+        // don't show play button because detecting animated webp isn't possible via mimetype
+        val playableIfAutoplay = playable || messageContent.mimeType == MimeTypes.Webp
 
         return MessageImageVideoItem_()
                 .attributes(attributes)
@@ -549,7 +551,7 @@ class MessageItemFactory @Inject constructor(
                         }
                     }
                 }.apply {
-                    if (playable && vectorPreferences.autoplayAnimatedImages()) {
+                    if (playableIfAutoplay && vectorPreferences.autoplayAnimatedImages()) {
                         mode(ImageContentRenderer.Mode.ANIMATED_THUMBNAIL)
                     }
                 }
