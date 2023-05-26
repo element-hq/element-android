@@ -57,6 +57,8 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.createPrimaryKey
 import org.matrix.android.sdk.internal.crypto.store.db.query.getById
 import org.matrix.android.sdk.internal.crypto.store.db.query.getOrCreate
 import org.matrix.android.sdk.internal.di.CryptoDatabase
+import org.matrix.android.sdk.internal.di.DeviceId
+import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
@@ -74,10 +76,44 @@ private val loggerTag = LoggerTag("RealmCryptoStore", LoggerTag.CRYPTO)
 internal class RustCryptoStore @Inject constructor(
         @CryptoDatabase private val realmConfiguration: RealmConfiguration,
         private val clock: Clock,
+        @UserId private val userId: String,
+        @DeviceId private val deviceId: String,
         private val myDeviceLastSeenInfoEntityMapper: MyDeviceLastSeenInfoEntityMapper,
         private val olmMachine: dagger.Lazy<OlmMachine>,
         private val matrixCoroutineDispatchers: MatrixCoroutineDispatchers,
 ) : IMXCommonCryptoStore {
+
+    // still needed on rust due to the global crypto settings
+    init {
+        // Ensure CryptoMetadataEntity is inserted in DB
+        doRealmTransaction("init", realmConfiguration) { realm ->
+            var currentMetadata = realm.where<CryptoMetadataEntity>().findFirst()
+
+            var deleteAll = false
+
+            if (currentMetadata != null) {
+                // Check credentials
+                // The device id may not have been provided in credentials.
+                // Check it only if provided, else trust the stored one.
+                if (currentMetadata.userId != userId || deviceId != currentMetadata.deviceId) {
+                    Timber.w("## open() : Credentials do not match, close this store and delete data")
+                    deleteAll = true
+                    currentMetadata = null
+                }
+            }
+
+            if (currentMetadata == null) {
+                if (deleteAll) {
+                    realm.deleteAll()
+                }
+
+                // Metadata not found, or database cleaned, create it
+                realm.createObject(CryptoMetadataEntity::class.java, userId).apply {
+                    deviceId = this@RustCryptoStore.deviceId
+                }
+            }
+        }
+    }
 
     /**
      * Retrieve a device by its identity key.
