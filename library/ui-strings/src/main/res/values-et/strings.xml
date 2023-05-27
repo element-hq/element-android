@@ -2953,4 +2953,7 @@
     <string name="avatar_of_user">Kasutaja %1$s tunnuspilt</string>
     <string name="avatar_of_room">%1$s jututoa tunnuspilt</string>
     <string name="avatar_of_space">%1$s kogukonna tunnuspilt</string>
+    <string name="confirm_your_identity_after_update">Turvalisele sõnumivahetusele on lisandunud palju täiendusi. Palun verifitseeri oma seade uuesti.</string>
+    <string name="verification_profile_other_device_untrust_info">Seni kuni nimetatud kasutaja usaldab seda sessiooni, kõik siit ja siia saadetud sõnumid on märgistatud hoiatusega.</string>
+    <string name="crosssigning_verify_after_update">Rakendus on uuendatud</string>
 </resources>
