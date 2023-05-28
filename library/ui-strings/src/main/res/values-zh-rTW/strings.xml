@@ -2889,4 +2889,11 @@
     <string name="settings_acceptable_use_policy">可接受的使用政策</string>
     <string name="action_proceed_to_reset">繼續重設</string>
     <string name="settings_crypto_version">加密版本</string>
+    <string name="notice_display_name_changed_to">%1$s 變更了他們的顯示名稱為 %2$s</string>
+    <string name="avatar_of_user">使用者 %1$s 的個人資料照片</string>
+    <string name="avatar_of_room">聊天室 %1$s 的大頭貼</string>
+    <string name="avatar_of_space">聊天空間 %1$s 的大頭貼</string>
+    <string name="confirm_your_identity_after_update">最新更新改善了安全訊息傳遞。請重新驗證您的裝置。</string>
+    <string name="verification_profile_other_device_untrust_info">在該使用者信任該工作階段之前，發送到該工作階段與從該工作階段傳送的訊息都帶有警告標籤。</string>
+    <string name="crosssigning_verify_after_update">應用程式已更新</string>
 </resources>
