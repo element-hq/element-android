@@ -22,6 +22,8 @@ import com.zhuinden.monarchy.Monarchy
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.session.room.model.ReadReceipt
 import org.matrix.android.sdk.api.session.room.read.ReadService
 import org.matrix.android.sdk.api.util.Optional
@@ -43,7 +45,8 @@ internal class DefaultReadService @AssistedInject constructor(
         private val setReadMarkersTask: SetReadMarkersTask,
         private val readReceiptsSummaryMapper: ReadReceiptsSummaryMapper,
         @UserId private val userId: String,
-        private val homeServerCapabilitiesDataSource: HomeServerCapabilitiesDataSource
+        private val homeServerCapabilitiesDataSource: HomeServerCapabilitiesDataSource,
+        private val matrixCoroutineDispatchers: MatrixCoroutineDispatchers,
 ) : ReadService {
 
     @AssistedFactory
@@ -66,7 +69,7 @@ internal class DefaultReadService @AssistedInject constructor(
         setReadMarkersTask.execute(taskParams)
     }
 
-    override suspend fun setReadReceipt(eventId: String, threadId: String) {
+    override suspend fun setReadReceipt(eventId: String, threadId: String) = withContext(matrixCoroutineDispatchers.io) {
         val readReceiptThreadId = if (homeServerCapabilitiesDataSource.getHomeServerCapabilities()?.canUseThreadReadReceiptsAndNotifications == true) {
             threadId
         } else {

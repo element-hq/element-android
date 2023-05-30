@@ -92,11 +92,6 @@ class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(
     }
 
     init {
-        val currentSessionTs = session.cryptoService().getCryptoDeviceInfo(session.myUserId)
-                .firstOrNull { it.deviceId == session.sessionParams.deviceId }
-                ?.firstTimeSeenLocalTs
-                ?: clock.epochMillis()
-        Timber.v("## Detector - Current Session first time seen $currentSessionTs")
 
         combine(
                 session.flow().liveUserCryptoDevices(session.myUserId),
@@ -107,6 +102,12 @@ class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(
             Timber.v("## Detector trigger canCrossSign ${pInfo.get().selfSigned != null}")
 
             deleteUnusedClientInformation(infoList)
+
+            val currentSessionTs = session.cryptoService().getCryptoDeviceInfo(session.myUserId)
+                    .firstOrNull { it.deviceId == session.sessionParams.deviceId }
+                    ?.firstTimeSeenLocalTs
+                    ?: clock.epochMillis()
+            Timber.v("## Detector - Current Session first time seen $currentSessionTs")
 
             infoList
                     .asSequence()

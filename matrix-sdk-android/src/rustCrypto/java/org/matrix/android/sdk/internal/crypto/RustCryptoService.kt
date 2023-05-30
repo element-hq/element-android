@@ -344,8 +344,8 @@ internal class RustCryptoService @Inject constructor(
         return olmMachine.getCryptoDeviceInfo(userId, deviceId)
     }
 
-    override fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo> {
-        return runBlocking {
+    override suspend fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo> {
+        return withContext(coroutineDispatchers.io) {
             olmMachine.getCryptoDeviceInfo(userId)
         }
     }

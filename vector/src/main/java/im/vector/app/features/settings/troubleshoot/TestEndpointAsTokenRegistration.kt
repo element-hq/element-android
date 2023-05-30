@@ -17,6 +17,7 @@
 package im.vector.app.features.settings.troubleshoot
 
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import im.vector.app.R
@@ -72,13 +73,15 @@ class TestEndpointAsTokenRegistration @Inject constructor(
     }
 
     private fun unregisterThenRegister(testParameters: TestParameters, pushKey: String) {
-        activeSessionHolder.getSafeActiveSession()?.coroutineScope?.launch {
+        val scope = activeSessionHolder.getSafeActiveSession()?.coroutineScope ?: return
+        val io = activeSessionHolder.getActiveSession().coroutineDispatchers.io
+        scope.launch(io) {
             unregisterUnifiedPushUseCase.execute(pushersManager)
             registerUnifiedPush(distributor = "", testParameters, pushKey)
         }
     }
 
-    private fun registerUnifiedPush(
+    private suspend fun registerUnifiedPush(
             distributor: String,
             testParameters: TestParameters,
             pushKey: String,
@@ -106,7 +109,9 @@ class TestEndpointAsTokenRegistration @Inject constructor(
             pushKey: String,
     ) {
         unifiedPushHelper.showSelectDistributorDialog(context) { selection ->
-            registerUnifiedPush(distributor = selection, testParameters, pushKey)
+            context.lifecycleScope.launch {
+                registerUnifiedPush(distributor = selection, testParameters, pushKey)
+            }
         }
     }
 }

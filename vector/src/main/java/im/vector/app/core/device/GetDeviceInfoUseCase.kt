@@ -22,14 +22,14 @@ import javax.inject.Inject
 
 interface GetDeviceInfoUseCase {
 
-    fun execute(): CryptoDeviceInfo
+    suspend fun execute(): CryptoDeviceInfo
 }
 
 class DefaultGetDeviceInfoUseCase @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder
 ) : GetDeviceInfoUseCase {
 
-    override fun execute(): CryptoDeviceInfo {
+    override suspend fun execute(): CryptoDeviceInfo {
         return activeSessionHolder.getActiveSession().cryptoService().getMyCryptoDevice()
     }
 }

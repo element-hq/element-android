@@ -17,6 +17,7 @@ package im.vector.app.gplay.features.settings.troubleshoot
 
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import im.vector.app.R
@@ -25,6 +26,8 @@ import im.vector.app.core.pushers.FcmHelper
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.settings.troubleshoot.TroubleshootTest
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.pushers.PusherState
 import javax.inject.Inject
 
@@ -60,16 +63,18 @@ class TestTokenRegistration @Inject constructor(
             )
             quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_token_registration_quick_fix) {
                 override fun doFix() {
-                    val workId = pushersManager.enqueueRegisterPusherWithFcmKey(fcmToken)
-                    WorkManager.getInstance(context).getWorkInfoByIdLiveData(workId).observe(context, Observer { workInfo ->
-                        if (workInfo != null) {
-                            if (workInfo.state == WorkInfo.State.SUCCEEDED) {
-                                manager?.retry(testParameters)
-                            } else if (workInfo.state == WorkInfo.State.FAILED) {
-                                manager?.retry(testParameters)
+                    context.lifecycleScope.launch(Dispatchers.IO) {
+                        val workId = pushersManager.enqueueRegisterPusherWithFcmKey(fcmToken)
+                        WorkManager.getInstance(context).getWorkInfoByIdLiveData(workId).observe(context, Observer { workInfo ->
+                            if (workInfo != null) {
+                                if (workInfo.state == WorkInfo.State.SUCCEEDED) {
+                                    manager?.retry(testParameters)
+                                } else if (workInfo.state == WorkInfo.State.FAILED) {
+                                    manager?.retry(testParameters)
+                                }
                             }
-                        }
-                    })
+                        })
+                    }
                 }
             }
 
