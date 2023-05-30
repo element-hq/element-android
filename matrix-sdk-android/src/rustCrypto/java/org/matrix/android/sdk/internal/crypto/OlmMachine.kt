@@ -54,6 +54,7 @@ import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.coroutines.builder.safeInvokeOnClose
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.DefaultKeysAlgorithmAndData
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysAlgorithmAndData
+import org.matrix.android.sdk.internal.crypto.model.MXInboundMegolmSessionWrapper
 import org.matrix.android.sdk.internal.crypto.network.RequestSender
 import org.matrix.android.sdk.internal.crypto.verification.SasVerification
 import org.matrix.android.sdk.internal.crypto.verification.VerificationRequest
@@ -312,10 +313,10 @@ internal class OlmMachine @Inject constructor(
     /**
      * Used for lazy migration of inboundGroupSession from EA to ER
      */
-    suspend fun importRoomKey(inbound: InboundGroupSessionHolder): Result<Unit> {
+    suspend fun importRoomKey(inbound: MXInboundMegolmSessionWrapper): Result<Unit> {
         Timber.v("Migration:: Tentative lazy migration")
         return withContext(coroutineDispatchers.io) {
-            val export = inbound.wrapper.exportKeys()
+            val export = inbound.exportKeys()
                     ?: return@withContext Result.failure(Exception("Failed to export key"))
             val result = importDecryptedKeys(listOf(export), null).also {
                 Timber.v("Migration:: Tentative lazy migration result: ${it.totalNumberOfKeys}")

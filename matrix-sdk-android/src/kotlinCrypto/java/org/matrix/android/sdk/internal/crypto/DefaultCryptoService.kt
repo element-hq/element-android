@@ -506,10 +506,7 @@ internal class DefaultCryptoService @Inject constructor(
             null
         } else {
             withContext(coroutineDispatchers.io) {
-                cryptoStore.deviceWithIdentityKey(senderKey).takeIf {
-                    // check that the claimed user id matches
-                    it?.userId == userId
-                }
+                cryptoStore.deviceWithIdentityKey(userId, senderKey)
             }
         }
     }

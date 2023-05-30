@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.crypto
 
 import android.content.Context
-import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import androidx.paging.PagedList
@@ -76,7 +75,7 @@ import org.matrix.android.sdk.internal.crypto.keysbackup.RustKeyBackupService
 import org.matrix.android.sdk.internal.crypto.model.SessionInfo
 import org.matrix.android.sdk.internal.crypto.network.OutgoingRequestsProcessor
 import org.matrix.android.sdk.internal.crypto.repository.WarnOnUnknownDeviceRepository
-import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
+import org.matrix.android.sdk.internal.crypto.store.IMXCommonCryptoStore
 import org.matrix.android.sdk.internal.crypto.store.db.CryptoStoreAggregator
 import org.matrix.android.sdk.internal.crypto.tasks.DeleteDeviceTask
 import org.matrix.android.sdk.internal.crypto.tasks.GetDeviceInfoTask
@@ -111,7 +110,7 @@ internal class RustCryptoService @Inject constructor(
         @UserId private val myUserId: String,
         @DeviceId private val deviceId: String,
         // the crypto store
-        private val cryptoStore: IMXCryptoStore,
+        private val cryptoStore: IMXCommonCryptoStore,
         // Set of parameters used to configure/customize the end-to-end crypto.
         private val mxCryptoConfig: MXCryptoConfig,
         // Actions
@@ -902,13 +901,6 @@ internal class RustCryptoService @Inject constructor(
     override suspend fun sendSharedHistoryKeys(roomId: String, userId: String, sessionInfoSet: Set<SessionInfo>?) {
         // TODO("Not yet implemented")
     }
-
-    /* ==========================================================================================
-     * For test only
-     * ========================================================================================== */
-
-    @VisibleForTesting
-    val cryptoStoreForTesting = cryptoStore
 
     companion object {
         const val CRYPTO_MIN_FORCE_SESSION_PERIOD_MILLIS = 3_600_000 // one hour

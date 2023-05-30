@@ -26,11 +26,11 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.events.model.toValidDecryptedEvent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
-import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
+import org.matrix.android.sdk.internal.crypto.store.IMXCommonCryptoStore
 import timber.log.Timber
 import javax.inject.Inject
 
-internal class EventEditValidator @Inject constructor(val cryptoStore: IMXCryptoStore) {
+internal class EventEditValidator @Inject constructor(val cryptoStore: IMXCommonCryptoStore) {
 
     sealed class EditValidity {
         object Valid : EditValidity()
@@ -80,25 +80,21 @@ internal class EventEditValidator @Inject constructor(val cryptoStore: IMXCrypto
             val replaceDecrypted = replaceEvent.toValidDecryptedEvent()
                     ?: return EditValidity.Unknown // UTD can't decide
 
-            val originalCryptoSenderId = cryptoStore.deviceWithIdentityKey(originalDecrypted.cryptoSenderKey)?.userId
-            val editCryptoSenderId = cryptoStore.deviceWithIdentityKey(replaceDecrypted.cryptoSenderKey)?.userId
+            if (originalEvent.senderId != replaceEvent.senderId) {
+                return EditValidity.Invalid("original event and replacement event must have the same sender")
+            }
+
+            val originalSendingDevice = originalEvent.senderId?.let { cryptoStore.deviceWithIdentityKey(it, originalDecrypted.cryptoSenderKey) }
+            val editSendingDevice = originalEvent.senderId?.let { cryptoStore.deviceWithIdentityKey(it, replaceDecrypted.cryptoSenderKey) }
 
             if (originalDecrypted.getRelationContent()?.type == RelationType.REPLACE) {
                 return EditValidity.Invalid("The original event must not, itself, have a rel_type of m.replace ")
             }
 
-            if (originalCryptoSenderId == null || editCryptoSenderId == null) {
+            if (originalSendingDevice == null || editSendingDevice == null) {
                 // mm what can we do? we don't know if it's cryptographically from same user?
-                // let valid and UI should display send by deleted device warning?
-                val bestEffortOriginal = originalCryptoSenderId ?: originalEvent.senderId
-                val bestEffortEdit = editCryptoSenderId ?: replaceEvent.senderId
-                if (bestEffortOriginal != bestEffortEdit) {
-                    return EditValidity.Invalid("original event and replacement event must have the same sender")
-                }
-            } else {
-                if (originalCryptoSenderId != editCryptoSenderId) {
-                    return EditValidity.Invalid("Crypto: original event and replacement event must have the same sender")
-                }
+                // maybe it's a deleted device or a not yet downloaded one?
+                return EditValidity.Unknown
             }
 
             if (originalDecrypted.type != replaceDecrypted.type) {

@@ -58,8 +58,8 @@ import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.StoreRoomSessionD
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.StoreRoomSessionsDataTask
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.StoreSessionsDataTask
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.UpdateKeysBackupVersionTask
-import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
-import org.matrix.android.sdk.internal.crypto.store.db.RealmCryptoStore
+import org.matrix.android.sdk.internal.crypto.store.IMXCommonCryptoStore
+import org.matrix.android.sdk.internal.crypto.store.RustCryptoStore
 import org.matrix.android.sdk.internal.crypto.store.db.RealmCryptoStoreMigration
 import org.matrix.android.sdk.internal.crypto.store.db.RealmCryptoStoreModule
 import org.matrix.android.sdk.internal.crypto.tasks.ClaimOneTimeKeysForUsersDeviceTask
@@ -246,7 +246,7 @@ internal abstract class CryptoModule {
     abstract fun bindVerificationService(service: RustVerificationService): VerificationService
 
     @Binds
-    abstract fun bindCryptoStore(store: RealmCryptoStore): IMXCryptoStore
+    abstract fun bindCryptoStore(store: RustCryptoStore): IMXCommonCryptoStore
 
     @Binds
     abstract fun bindSendEventTask(task: DefaultSendEventTask): SendEventTask
