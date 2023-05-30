@@ -54,7 +54,7 @@ private const val FEATURE_ID_ACCESS_TOKEN = "m.id_access_token"
 private const val FEATURE_SEPARATE_ADD_AND_BIND = "m.separate_add_and_bind"
 private const val FEATURE_THREADS_MSC3440 = "org.matrix.msc3440"
 private const val FEATURE_THREADS_MSC3440_STABLE = "org.matrix.msc3440.stable"
-@Deprecated("The availability of MSC3882 is now exposed as a capability or part of login flow from revision 1 onwards")
+@Deprecated("The availability of stable get_login_token is now exposed as a capability and part of login flow")
 private const val FEATURE_QR_CODE_LOGIN = "org.matrix.msc3882"
 private const val FEATURE_THREADS_MSC3771 = "org.matrix.msc3771"
 private const val FEATURE_THREADS_MSC3773 = "org.matrix.msc3773"
@@ -95,7 +95,7 @@ internal fun Versions.doesServerSupportThreadUnreadNotifications(): Boolean {
     return getMaxVersion() >= HomeServerVersion.v1_4_0 || (msc3771 && msc3773)
 }
 
-@Deprecated("The availability of MSC3882 is now exposed as a capability or part of login flow from revision 1 onwards")
+@Deprecated("The availability of stable get_login_token is now exposed as a capability and part of login flow")
 internal fun Versions.doesServerSupportQrCodeLogin(): Boolean {
     @Suppress("DEPRECATION")
     return unstableFeatures?.get(FEATURE_QR_CODE_LOGIN) ?: false

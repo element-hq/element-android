@@ -74,10 +74,10 @@ internal data class Capabilities(
         val threads: BooleanCapability? = null,
 
         /**
-         * Capability to indicate if the server supports MSC3882 login token issuance for signing in another deivce.
+         * Capability to indicate if the server supports login token issuance for signing in another device.
          * True if the user can use /login/get_token, false otherwise.
          */
-        @Json(name = "org.matrix.msc3882.get_login_token")
+        @Json(name = "m.get_login_token")
         val getLoginToken: BooleanCapability? = null
 )
 

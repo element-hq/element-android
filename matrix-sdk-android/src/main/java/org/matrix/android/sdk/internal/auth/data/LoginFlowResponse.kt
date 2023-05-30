@@ -54,10 +54,10 @@ internal data class LoginFlow(
         val delegatedOidcCompatibilty: Boolean? = null,
 
         /**
-         * Whether a login flow of type m.login.token could accept a token issued using MSC3882.
+         * Whether a login flow of type m.login.token could accept a token issued using /login/get_token.
          *
-         * See [MSC3882](https://github.com/matrix-org/matrix-spec-proposals/pull/3882)
+         * See https://spec.matrix.org/v1.7/client-server-api/#post_matrixclientv1loginget_token
          */
-        @Json(name = "org.matrix.msc3882.get_login_token")
+        @Json(name = "get_login_token")
         val getLoginToken: Boolean? = null
 )

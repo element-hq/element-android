@@ -175,9 +175,9 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
     }
 
     private fun canLoginWithQrCode(getCapabilitiesResult: GetCapabilitiesResult?, getVersionResult: Versions?): Boolean {
-        // in r0 of MSC3882 an unstable feature was exposed. In r1 it is done via /capabilities and /login
+        // in r0 of MSC3882 an unstable feature was exposed. In stable it is done via /capabilities and /login
 
-        // in r1 of MSC3882 a capability is exposed for the authenticated in user
+        // in stable 1.7 a capability is exposed for the authenticated user
         if (getCapabilitiesResult?.capabilities?.getLoginToken != null) {
             return getCapabilitiesResult.capabilities.getLoginToken.enabled == true
         }
