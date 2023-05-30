@@ -30,6 +30,7 @@ data class UserListViewState(
         val matchingEmail: Async<ThreePidUser?> = Uninitialized,
         val filteredMappedContacts: List<MappedContact> = emptyList(),
         val pendingSelections: Set<PendingSelection> = emptySet(),
+        val unknownUserId: String? = null,
         val searchTerm: String = "",
         val singleSelection: Boolean,
         val single3pidSelection: Boolean,
