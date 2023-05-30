@@ -2953,4 +2953,7 @@
     <string name="avatar_of_room">Avatar för rummet %1$s</string>
     <string name="avatar_of_space">Avatar för utrymmet %1$s</string>
     <string name="notice_display_name_changed_to">%1$s bytte sitt visningsnamn till %2$s</string>
+    <string name="confirm_your_identity_after_update">Säker meddelandehantering har förbättrats med den senaste uppdateringen. Vänligen verifiera din enhet igen.</string>
+    <string name="verification_profile_other_device_untrust_info">Tills den här användaren litar på den här sessionen märks meddelanden som skickas till och från den med varningar.</string>
+    <string name="crosssigning_verify_after_update">App uppdaterad</string>
 </resources>
