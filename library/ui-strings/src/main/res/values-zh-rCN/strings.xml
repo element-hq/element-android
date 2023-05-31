@@ -652,7 +652,7 @@
     <string name="settings_noisy_notifications_preferences">设置响铃通知</string>
     <string name="settings_call_notifications_preferences">设置电话通知</string>
     <string name="settings_silent_notifications_preferences">设置静音通知</string>
-    <string name="settings_system_preferences_summary">选择指示灯颜色，震动，铃声…</string>
+    <string name="settings_system_preferences_summary">选择LED颜色、震动、铃声……</string>
     <string name="settings_cryptography_manage_keys">加密密钥管理</string>
     <string name="encryption_message_recovery">恢复已加密消息</string>
     <string name="encryption_settings_manage_message_recovery_summary">管理密钥备份</string>
@@ -2822,4 +2822,8 @@
     <string name="ended_poll_indicator">结束了投票。</string>
     <string name="settings_access_token_summary">你的访问令牌提供对你账户的完全访问权限。勿与任何人分享它。</string>
     <string name="settings_access_token">访问令牌</string>
+    <string name="action_proceed_to_reset">继续重设</string>
+    <string name="notice_display_name_changed_to">%1$s更改了其显示名称为%2$s</string>
+    <string name="settings_external_account_management_title">账户</string>
+    <string name="action_stop">是的，停止</string>
 </resources>

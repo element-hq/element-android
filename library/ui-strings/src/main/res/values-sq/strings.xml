@@ -2935,4 +2935,12 @@
     <string name="settings_acceptable_use_policy">Rregulla të Pranueshme Përdorimi</string>
     <string name="action_proceed_to_reset">Vazhdo me rikthimin te parazgjedhjet</string>
     <string name="settings_crypto_version">Version kriptografie</string>
+    <string name="notice_display_name_changed_to">%1$s ndërroi emrin e vet në ekran në %2$s</string>
+    <string name="avatar_of_user">Foto profili i përdoruesit %1$s</string>
+    <string name="avatar_of_room">Avatar i dhomës %1$s</string>
+    <string name="avatar_of_space">Avatar i hapësirës %1$s</string>
+    <string name="confirm_your_identity_after_update">Shkëmbimi i siguruar i mesazheve është përmirësuar me përditësimin më të ri. Ju lutemi, riverifikoni pajisjen tuaj.</string>
+    <string name="_resume">Rimerre</string>
+    <string name="verification_profile_other_device_untrust_info">Deri kur ky përdorues të besojë këtë sesion, mesazhet dërguar për të dhe nga ai etiketohem me sinjalizime.</string>
+    <string name="crosssigning_verify_after_update">Aplikacioni u përditësua</string>
 </resources>
