@@ -260,8 +260,7 @@ class UserListViewModel @AssistedInject constructor(
                         .sortedBy { it.toMatrixItem().firstLetterOfDisplayName() }
                 val userProfile = if (MatrixPatterns.isUserId(search)) {
                     val user = tryOrNull { session.profileService().getProfileAsUser(search) }
-                    val unknownUserId = if (user == null) { search } else { null }
-                    setState { copy(unknownUserId = unknownUserId) }
+                    setState { copy(unknownUserId = search.takeIf { user == null }) }
                     User(
                             userId = search,
                             displayName = user?.displayName,

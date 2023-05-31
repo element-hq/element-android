@@ -163,7 +163,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
     private fun handleOnMenuItemSubmitClick(action: UserListSharedAction.OnMenuItemSubmitClick) {
         val unknownUsers = action.selections
                 .filter { it is PendingSelection.UserPendingSelection && it.isUnknownUser }
-                .joinToString("\n • ", " • " ) { it.getMxId() }
+                .joinToString("\n • ", " • ") { it.getMxId() }
         if (unknownUsers.isBlank()) {
             viewModel.handle(CreateDirectRoomAction.PrepareRoomWithSelectedUsers(action.selections))
         } else {
