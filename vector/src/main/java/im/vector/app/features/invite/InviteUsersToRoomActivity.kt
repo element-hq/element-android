@@ -95,15 +95,13 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity() {
     }
 
     private fun handleOnMenuItemSubmitClick(action: UserListSharedAction.OnMenuItemSubmitClick) {
-        val unknownUsers = action.selections
-                .filter { it is PendingSelection.UserPendingSelection && it.isUnknownUser }
-                .joinToString("\n • ", " • ") { it.getMxId() }
-        if (unknownUsers.isBlank()) {
+        val unknownUsers = action.selections.filter { it is PendingSelection.UserPendingSelection && it.isUnknownUser }
+        if (unknownUsers.isEmpty()) {
             viewModel.handle(InviteUsersToRoomAction.InviteSelectedUsers(action.selections))
         } else {
             MaterialAlertDialogBuilder(this)
                     .setTitle(R.string.dialog_title_confirmation)
-                    .setMessage(getString(R.string.invite_unknow_users_dialog_content, unknownUsers))
+                    .setMessage(getString(R.string.invite_unknow_users_dialog_content, unknownUsers.joinToString("\n • ", " • ") { it.getMxId() }))
                     .setPositiveButton(R.string.invite_unknow_users_dialog_submit) { _, _ ->
                         viewModel.handle(InviteUsersToRoomAction.InviteSelectedUsers(action.selections))
                     }
