@@ -29,7 +29,7 @@ import im.vector.app.test.fixtures.CryptoDeviceInfoFixture.aCryptoDeviceInfo
 import im.vector.app.test.fixtures.PusherFixture
 import im.vector.app.test.fixtures.SessionParamsFixture
 import io.mockk.mockk
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
 import org.matrix.android.sdk.api.session.crypto.model.UnsignedDeviceInfo
@@ -81,7 +81,7 @@ class PushersManagerTest {
                 withEventIdOnly = true,
         )
 
-        runBlocking {
+        runTest {
             pushersManager.enqueueRegisterPusher(pushKey, gateway)
         }
 

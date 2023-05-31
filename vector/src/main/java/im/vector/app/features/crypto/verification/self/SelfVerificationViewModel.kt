@@ -147,7 +147,7 @@ class SelfVerificationViewModel @AssistedInject constructor(
         }
 
         setState { copy(hasAnyOtherSession = Loading()) }
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val hasAnyOtherSession = session.cryptoService()
                     .getCryptoDeviceInfo(session.myUserId)
                     .any {
