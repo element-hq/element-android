@@ -33,7 +33,7 @@ def mockk = "1.12.3" // We need to use 1.12.3 to have mocking in androidTest unt
 def espresso = "3.5.1"
 def androidxTest = "1.5.0"
 def androidxOrchestrator = "1.4.2"
-def paparazzi = "1.2.0"
+def paparazzi = "1.3.0"
 
 ext.libs = [
         gradle      : [
