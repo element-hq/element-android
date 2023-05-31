@@ -19,6 +19,7 @@ package im.vector.app.core.device
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakeCryptoService
 import im.vector.app.test.fakes.FakeSession
+import kotlinx.coroutines.runBlocking
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
 
@@ -32,7 +33,7 @@ class DefaultGetDeviceInfoUseCaseTest {
 
     @Test
     fun `when execute, then get crypto device info`() {
-        val result = getDeviceInfoUseCase.execute()
+        val result = runBlocking { getDeviceInfoUseCase.execute() }
 
         result shouldBeEqualTo cryptoService.cryptoDeviceInfo
     }

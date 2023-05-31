@@ -29,6 +29,7 @@ import im.vector.app.test.fixtures.CryptoDeviceInfoFixture.aCryptoDeviceInfo
 import im.vector.app.test.fixtures.PusherFixture
 import im.vector.app.test.fixtures.SessionParamsFixture
 import io.mockk.mockk
+import kotlinx.coroutines.runBlocking
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
 import org.matrix.android.sdk.api.session.crypto.model.UnsignedDeviceInfo
@@ -80,7 +81,9 @@ class PushersManagerTest {
                 withEventIdOnly = true,
         )
 
-        pushersManager.enqueueRegisterPusher(pushKey, gateway)
+        runBlocking {
+            pushersManager.enqueueRegisterPusher(pushKey, gateway)
+        }
 
         val httpPusher = pushersService.verifyEnqueueAddHttpPusher()
         httpPusher shouldBeEqualTo expectedHttpPusher
