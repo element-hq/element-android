@@ -32,8 +32,8 @@ class DefaultGetDeviceInfoUseCaseTest {
     private val getDeviceInfoUseCase = DefaultGetDeviceInfoUseCase(activeSessionHolder.instance)
 
     @Test
-    fun `when execute, then get crypto device info`() {
-        val result = runTest { getDeviceInfoUseCase.execute() }
+    fun `when execute, then get crypto device info`() = runTest {
+        val result = getDeviceInfoUseCase.execute()
 
         result shouldBeEqualTo cryptoService.cryptoDeviceInfo
     }

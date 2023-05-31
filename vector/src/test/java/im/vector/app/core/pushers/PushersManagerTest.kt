@@ -57,7 +57,7 @@ class PushersManagerTest {
     )
 
     @Test
-    fun `when enqueueRegisterPusher, then HttpPusher created and enqueued`() {
+    fun `when enqueueRegisterPusher, then HttpPusher created and enqueued`() = runTest {
         val pushKey = "abc"
         val gateway = "123"
         val pusherAppId = "app-id"
@@ -81,9 +81,7 @@ class PushersManagerTest {
                 withEventIdOnly = true,
         )
 
-        runTest {
-            pushersManager.enqueueRegisterPusher(pushKey, gateway)
-        }
+        pushersManager.enqueueRegisterPusher(pushKey, gateway)
 
         val httpPusher = pushersService.verifyEnqueueAddHttpPusher()
         httpPusher shouldBeEqualTo expectedHttpPusher
