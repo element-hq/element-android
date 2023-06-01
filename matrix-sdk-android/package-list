@@ -4356,7 +4356,7 @@ $dokka.location:org.matrix.android.sdk.api.session.securestorage/SsssPassphrase/
 $dokka.location:org.matrix.android.sdk.api.session.signout////PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.signout/index.html
 $dokka.location:org.matrix.android.sdk.api.session.signout/SignOutService///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.signout/-sign-out-service/index.html
 $dokka.location:org.matrix.android.sdk.api.session.signout/SignOutService/signInAgain/#kotlin.String/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.signout/-sign-out-service/sign-in-again.html
-$dokka.location:org.matrix.android.sdk.api.session.signout/SignOutService/signOut/#kotlin.Boolean/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.signout/-sign-out-service/sign-out.html
+$dokka.location:org.matrix.android.sdk.api.session.signout/SignOutService/signOut/#kotlin.Boolean#kotlin.Boolean/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.signout/-sign-out-service/sign-out.html
 $dokka.location:org.matrix.android.sdk.api.session.signout/SignOutService/updateCredentials/#org.matrix.android.sdk.api.auth.data.Credentials/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.signout/-sign-out-service/update-credentials.html
 $dokka.location:org.matrix.android.sdk.api.session.space.model////PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.space.model/index.html
 $dokka.location:org.matrix.android.sdk.api.session.space.model/SpaceChildContent.Companion///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.space.model/-space-child-content/-companion/index.html
