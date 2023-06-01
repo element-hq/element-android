@@ -136,9 +136,9 @@ internal class VerificationRequest @AssistedInject constructor(
      * concrete verification flow, i.e. we can show/scan a QR code or start emoji
      * verification.
      */
-    internal fun isReady(): Boolean {
-        return innerVerificationRequest.isReady()
-    }
+//    internal fun isReady(): Boolean {
+//        return innerVerificationRequest.isReady()
+//    }
 
     /** Did we advertise that we're able to scan QR codes */
     internal fun canScanQrCodes(): Boolean {
