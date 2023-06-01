@@ -275,7 +275,7 @@ class SelfVerificationController @Inject constructor(
             id("notice_div")
         }
         // Option to verify with another device
-        if (state.hasAnyOtherSession) {
+        if (state.hasAnyOtherSession.invoke() == true) {
             bottomSheetVerificationActionItem {
                 id("start")
                 title(host.stringProvider.getString(R.string.verification_verify_with_another_device))

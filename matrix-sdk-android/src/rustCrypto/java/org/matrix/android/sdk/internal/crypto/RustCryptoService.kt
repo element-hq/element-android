@@ -25,7 +25,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
@@ -188,8 +187,8 @@ internal class RustCryptoService @Inject constructor(
         return if (longFormat) "Rust SDK $version, Vodozemac $vodozemac" else version
     }
 
-    override fun getMyCryptoDevice(): CryptoDeviceInfo {
-        return runBlocking { olmMachine.ownDevice() }
+    override suspend fun getMyCryptoDevice(): CryptoDeviceInfo = withContext(coroutineDispatchers.io) {
+        olmMachine.ownDevice()
     }
 
     override suspend fun fetchDevicesList(): List<DeviceInfo> {
@@ -341,11 +340,11 @@ internal class RustCryptoService @Inject constructor(
      */
     override suspend fun getCryptoDeviceInfo(userId: String, deviceId: String?): CryptoDeviceInfo? {
         if (userId.isEmpty() || deviceId.isNullOrEmpty()) return null
-        return olmMachine.getCryptoDeviceInfo(userId, deviceId)
+        return withContext(coroutineDispatchers.io) { olmMachine.getCryptoDeviceInfo(userId, deviceId) }
     }
 
-    override fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo> {
-        return runBlocking {
+    override suspend fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo> {
+        return withContext(coroutineDispatchers.io) {
             olmMachine.getCryptoDeviceInfo(userId)
         }
     }

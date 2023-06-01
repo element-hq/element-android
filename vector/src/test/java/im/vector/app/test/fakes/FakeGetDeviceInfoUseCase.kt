@@ -17,13 +17,13 @@
 package im.vector.app.test.fakes
 
 import im.vector.app.core.device.GetDeviceInfoUseCase
-import io.mockk.every
+import io.mockk.coEvery
 import io.mockk.mockk
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 
 class FakeGetDeviceInfoUseCase : GetDeviceInfoUseCase by mockk() {
 
     fun givenDeviceInfo(cryptoDeviceInfo: CryptoDeviceInfo) {
-        every { execute() } returns cryptoDeviceInfo
+        coEvery { execute() } returns cryptoDeviceInfo
     }
 }

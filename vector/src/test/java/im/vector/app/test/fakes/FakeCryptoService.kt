@@ -84,5 +84,5 @@ class FakeCryptoService(
         }
     }
 
-    override fun getMyCryptoDevice() = cryptoDeviceInfo
+    override suspend fun getMyCryptoDevice() = cryptoDeviceInfo
 }
