@@ -216,8 +216,8 @@ dependencies {
 
     implementation libs.google.phonenumber
 
-    rustCryptoImplementation("org.matrix.rustcomponents:crypto-android:0.3.8")
-    // rustCryptoApi project(":library:rustCrypto")
+    rustCryptoImplementation("org.matrix.rustcomponents:crypto-android:0.3.9")
+//    rustCryptoApi project(":library:rustCrypto")
 
     testImplementation libs.tests.junit
     // Note: version sticks to 1.9.2 due to https://github.com/mockk/mockk/issues/281
