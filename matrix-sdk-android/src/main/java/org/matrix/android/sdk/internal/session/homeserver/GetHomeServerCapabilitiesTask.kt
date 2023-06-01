@@ -151,8 +151,6 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
                         getVersionResult.doesServerSupportThreads()
                 homeServerCapabilitiesEntity.canUseThreadReadReceiptsAndNotifications =
                         getVersionResult.doesServerSupportThreadUnreadNotifications()
-                homeServerCapabilitiesEntity.canLoginWithQrCode =
-                        getVersionResult.doesServerSupportQrCodeLogin()
                 homeServerCapabilitiesEntity.canRemotelyTogglePushNotificationsOfDevices =
                         getVersionResult.doesServerSupportRemoteToggleOfPushNotifications()
                 homeServerCapabilitiesEntity.canRedactEventWithRelations =
@@ -169,8 +167,23 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
                 }
                 homeServerCapabilitiesEntity.externalAccountManagementUrl = getWellknownResult.wellKnown.unstableDelegatedAuthConfig?.accountManagementUrl
             }
+
+            homeServerCapabilitiesEntity.canLoginWithQrCode = canLoginWithQrCode(getCapabilitiesResult, getVersionResult)
+
             homeServerCapabilitiesEntity.lastUpdatedTimestamp = Date().time
         }
+    }
+
+    private fun canLoginWithQrCode(getCapabilitiesResult: GetCapabilitiesResult?, getVersionResult: Versions?): Boolean {
+        // in r0 of MSC3882 an unstable feature was exposed. In stable it is done via /capabilities and /login
+
+        // in stable 1.7 a capability is exposed for the authenticated user
+        if (getCapabilitiesResult?.capabilities?.getLoginToken != null) {
+            return getCapabilitiesResult.capabilities.getLoginToken.enabled == true
+        }
+
+        @Suppress("DEPRECATION")
+        return getVersionResult?.doesServerSupportQrCodeLogin() == true
     }
 
     companion object {

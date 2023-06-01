@@ -301,6 +301,9 @@ internal class DefaultAuthenticationService @Inject constructor(
         val oidcCompatibilityFlow = loginFlowResponse.flows.orEmpty().firstOrNull { it.type == "m.login.sso" && it.delegatedOidcCompatibilty == true }
         val flows = if (oidcCompatibilityFlow != null) listOf(oidcCompatibilityFlow) else loginFlowResponse.flows
 
+        val supportsGetLoginTokenFlow = loginFlowResponse.flows.orEmpty().firstOrNull { it.type == "m.login.token" && it.getLoginToken == true } != null
+
+        @Suppress("DEPRECATION")
         return LoginFlowResult(
                 supportedLoginTypes = flows.orEmpty().mapNotNull { it.type },
                 ssoIdentityProviders = flows.orEmpty().firstOrNull { it.type == LoginFlowTypes.SSO }?.ssoIdentityProvider,
@@ -309,7 +312,7 @@ internal class DefaultAuthenticationService @Inject constructor(
                 isOutdatedHomeserver = !versions.isSupportedBySdk(),
                 hasOidcCompatibilityFlow = oidcCompatibilityFlow != null,
                 isLogoutDevicesSupported = versions.doesServerSupportLogoutDevices(),
-                isLoginWithQrSupported = versions.doesServerSupportQrCodeLogin(),
+                isLoginWithQrSupported = supportsGetLoginTokenFlow || versions.doesServerSupportQrCodeLogin(),
         )
     }
 
