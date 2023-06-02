@@ -1729,8 +1729,8 @@
     <string name="create_room_public_title">"Public"</string>
     <string name="create_room_public_description">"Anyone will be able to join this room"</string>
     <string name="create_room_federation_error">"The room has been created, but some invitations have not been sent for the following reason:\n\n%s"</string>
-    <string name="create_room_unknow_users_dialog_content">Unable to find profiles for the Matrix IDs listed below. Would you like to start a chat anyway?\n\n%s</string>
-    <string name="create_room_unknow_users_dialog_submit">Start chat anyway</string>
+    <string name="create_room_unknown_users_dialog_content">Unable to find profiles for the Matrix IDs listed below. Would you like to start a chat anyway?\n\n%s</string>
+    <string name="create_room_unknown_users_dialog_submit">Start chat anyway</string>
 
     <string name="keys_backup_unable_to_get_trust_info">"An error occurred getting trust info"</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">"An error occurred getting keys backup data"</string>
@@ -2746,8 +2746,8 @@
         <item quantity="other">Invitations sent to %1$s and %2$d more</item>
     </plurals>
     <string name="invite_users_to_room_failure">We could not invite users. Please check the users you want to invite and try again.</string>
-    <string name="invite_unknow_users_dialog_content">Unable to find profiles for the Matrix IDs listed below. Would you like to invite them anyway?\n\n%s</string>
-    <string name="invite_unknow_users_dialog_submit">Invite anyway</string>
+    <string name="invite_unknown_users_dialog_content">Unable to find profiles for the Matrix IDs listed below. Would you like to invite them anyway?\n\n%s</string>
+    <string name="invite_unknown_users_dialog_submit">Invite anyway</string>
 
     <string name="user_code_scan">Scan a QR code</string>
     <string name="user_code_share">Share my code</string>

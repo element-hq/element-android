@@ -167,8 +167,8 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
         } else {
             MaterialAlertDialogBuilder(this)
                     .setTitle(R.string.dialog_title_confirmation)
-                    .setMessage(getString(R.string.create_room_unknow_users_dialog_content, unknownUsers.joinToString("\n • ", " • ") { it.getMxId() }))
-                    .setPositiveButton(R.string.create_room_unknow_users_dialog_submit) { _, _ ->
+                    .setMessage(getString(R.string.create_room_unknown_users_dialog_content, unknownUsers.joinToString("\n • ", " • ") { it.getMxId() }))
+                    .setPositiveButton(R.string.create_room_unknown_users_dialog_submit) { _, _ ->
                         viewModel.handle(CreateDirectRoomAction.PrepareRoomWithSelectedUsers(action.selections))
                     }
                     .setNegativeButton(R.string.action_cancel, null)

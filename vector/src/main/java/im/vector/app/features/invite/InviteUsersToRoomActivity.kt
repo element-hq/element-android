@@ -101,8 +101,8 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity() {
         } else {
             MaterialAlertDialogBuilder(this)
                     .setTitle(R.string.dialog_title_confirmation)
-                    .setMessage(getString(R.string.invite_unknow_users_dialog_content, unknownUsers.joinToString("\n • ", " • ") { it.getMxId() }))
-                    .setPositiveButton(R.string.invite_unknow_users_dialog_submit) { _, _ ->
+                    .setMessage(getString(R.string.invite_unknown_users_dialog_content, unknownUsers.joinToString("\n • ", " • ") { it.getMxId() }))
+                    .setPositiveButton(R.string.invite_unknown_users_dialog_submit) { _, _ ->
                         viewModel.handle(InviteUsersToRoomAction.InviteSelectedUsers(action.selections))
                     }
                     .setNegativeButton(R.string.action_cancel, null)
