@@ -1,3 +1,23 @@
+Changes in Element v1.6.2 (2023-06-02)
+======================================
+
+Features ✨
+----------
+ - **Element Android is now using the Crypto Rust SDK**. Migration of user's data should be done at first launch after application upgrade. ([#8390](https://github.com/vector-im/element-android/issues/8390))
+ - Marks WebP files as Animated and allows them to play ([#8120](https://github.com/vector-im/element-android/issues/8120))
+ - Updates to protocol used for Sign in with QR code ([#8299](https://github.com/vector-im/element-android/issues/8299))
+ - Updated rust crypto SDK to version 0.3.9 ([#8488](https://github.com/vector-im/element-android/issues/8488))
+
+Bugfixes 🐛
+----------
+ - Fix: Allow users to sign out even if the sign out request fails. ([#4855](https://github.com/vector-im/element-android/issues/4855))
+ - fix: Make some crypto calls suspendable to avoid reported ANR ([#8482](https://github.com/vector-im/element-android/issues/8482))
+
+Other changes
+-------------
+ - Refactoring: Extract a new interface for common access to crypto store between kotlin and rust crypto ([#8470](https://github.com/vector-im/element-android/issues/8470))
+
+
 Changes in Element v1.6.1 (2023-05-25)
 ======================================
 
