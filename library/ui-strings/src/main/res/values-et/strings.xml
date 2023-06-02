@@ -2956,4 +2956,6 @@
     <string name="confirm_your_identity_after_update">Turvalisele sõnumivahetusele on lisandunud palju täiendusi. Palun verifitseeri oma seade uuesti.</string>
     <string name="verification_profile_other_device_untrust_info">Seni kuni nimetatud kasutaja usaldab seda sessiooni, kõik siit ja siia saadetud sõnumid on märgistatud hoiatusega.</string>
     <string name="crosssigning_verify_after_update">Rakendus on uuendatud</string>
+    <string name="sign_out_anyway">Jah, ikkagi logi välja</string>
+    <string name="sign_out_failed_dialog_message">Ühendus koduserveriga puudub. Kui sa jätkad ja logid võrgust välja, siis seda seadet ei kustutata sinu seadmete loendist ning saad seda hiljem mõnest muust Matrixi kliendist teha.</string>
 </resources>
