@@ -2943,4 +2943,6 @@
     <string name="_resume">Rimerre</string>
     <string name="verification_profile_other_device_untrust_info">Deri kur ky përdorues të besojë këtë sesion, mesazhet dërguar për të dhe nga ai etiketohem me sinjalizime.</string>
     <string name="crosssigning_verify_after_update">Aplikacioni u përditësua</string>
+    <string name="sign_out_anyway">Dil, sido qoftë</string>
+    <string name="sign_out_failed_dialog_message">S’kapet dot shërbyesi Home. Nëse keni dalë, sido qoftë, kjo pajisje s’do të fshihet te lista e pajisjeve tuaja, mund të doni ta hiqni duke përdorur klient tjetër.</string>
 </resources>
