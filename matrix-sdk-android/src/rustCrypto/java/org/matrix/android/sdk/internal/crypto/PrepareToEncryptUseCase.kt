@@ -28,7 +28,7 @@ import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.internal.crypto.keysbackup.RustKeyBackupService
 import org.matrix.android.sdk.internal.crypto.network.RequestSender
-import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
+import org.matrix.android.sdk.internal.crypto.store.IMXCommonCryptoStore
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
 import org.matrix.rustcomponents.sdk.crypto.EncryptionSettings
@@ -47,7 +47,7 @@ private val loggerTag = LoggerTag("PrepareToEncryptUseCase", LoggerTag.CRYPTO)
 internal class PrepareToEncryptUseCase @Inject constructor(
         private val olmMachine: OlmMachine,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val cryptoStore: IMXCryptoStore,
+        private val cryptoStore: IMXCommonCryptoStore,
         private val getRoomUserIds: GetRoomUserIdsUseCase,
         private val requestSender: RequestSender,
         private val loadRoomMembersTask: LoadRoomMembersTask,

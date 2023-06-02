@@ -256,7 +256,7 @@ internal class DefaultCryptoService @Inject constructor(
         return if (longFormat) olmManager.getDetailedVersion(context) else olmManager.version
     }
 
-    override fun getMyCryptoDevice(): CryptoDeviceInfo {
+    override suspend fun getMyCryptoDevice(): CryptoDeviceInfo {
         return myDeviceInfoHolder.get().myDevice
     }
 
@@ -506,10 +506,7 @@ internal class DefaultCryptoService @Inject constructor(
             null
         } else {
             withContext(coroutineDispatchers.io) {
-                cryptoStore.deviceWithIdentityKey(senderKey).takeIf {
-                    // check that the claimed user id matches
-                    it?.userId == userId
-                }
+                cryptoStore.deviceWithIdentityKey(userId, senderKey)
             }
         }
     }
@@ -539,7 +536,7 @@ internal class DefaultCryptoService @Inject constructor(
 //                .executeBy(taskExecutor)
 //    }
 
-    override fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo> {
+    override suspend fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo> {
         return cryptoStore.getUserDeviceList(userId).orEmpty()
     }
 //

@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.crypto
 
 import android.content.Context
-import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import androidx.paging.PagedList
@@ -26,7 +25,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
@@ -76,7 +74,7 @@ import org.matrix.android.sdk.internal.crypto.keysbackup.RustKeyBackupService
 import org.matrix.android.sdk.internal.crypto.model.SessionInfo
 import org.matrix.android.sdk.internal.crypto.network.OutgoingRequestsProcessor
 import org.matrix.android.sdk.internal.crypto.repository.WarnOnUnknownDeviceRepository
-import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
+import org.matrix.android.sdk.internal.crypto.store.IMXCommonCryptoStore
 import org.matrix.android.sdk.internal.crypto.store.db.CryptoStoreAggregator
 import org.matrix.android.sdk.internal.crypto.tasks.DeleteDeviceTask
 import org.matrix.android.sdk.internal.crypto.tasks.GetDeviceInfoTask
@@ -111,7 +109,7 @@ internal class RustCryptoService @Inject constructor(
         @UserId private val myUserId: String,
         @DeviceId private val deviceId: String,
         // the crypto store
-        private val cryptoStore: IMXCryptoStore,
+        private val cryptoStore: IMXCommonCryptoStore,
         // Set of parameters used to configure/customize the end-to-end crypto.
         private val mxCryptoConfig: MXCryptoConfig,
         // Actions
@@ -185,12 +183,13 @@ internal class RustCryptoService @Inject constructor(
 
     override fun getCryptoVersion(context: Context, longFormat: Boolean): String {
         val version = org.matrix.rustcomponents.sdk.crypto.version()
+        val gitHash = org.matrix.rustcomponents.sdk.crypto.versionInfo().gitSha
         val vodozemac = org.matrix.rustcomponents.sdk.crypto.vodozemacVersion()
-        return if (longFormat) "Rust SDK $version, Vodozemac $vodozemac" else version
+        return if (longFormat) "Rust SDK $version ($gitHash), Vodozemac $vodozemac" else version
     }
 
-    override fun getMyCryptoDevice(): CryptoDeviceInfo {
-        return runBlocking { olmMachine.ownDevice() }
+    override suspend fun getMyCryptoDevice(): CryptoDeviceInfo = withContext(coroutineDispatchers.io) {
+        olmMachine.ownDevice()
     }
 
     override suspend fun fetchDevicesList(): List<DeviceInfo> {
@@ -342,11 +341,11 @@ internal class RustCryptoService @Inject constructor(
      */
     override suspend fun getCryptoDeviceInfo(userId: String, deviceId: String?): CryptoDeviceInfo? {
         if (userId.isEmpty() || deviceId.isNullOrEmpty()) return null
-        return olmMachine.getCryptoDeviceInfo(userId, deviceId)
+        return withContext(coroutineDispatchers.io) { olmMachine.getCryptoDeviceInfo(userId, deviceId) }
     }
 
-    override fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo> {
-        return runBlocking {
+    override suspend fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo> {
+        return withContext(coroutineDispatchers.io) {
             olmMachine.getCryptoDeviceInfo(userId)
         }
     }
@@ -902,13 +901,6 @@ internal class RustCryptoService @Inject constructor(
     override suspend fun sendSharedHistoryKeys(roomId: String, userId: String, sessionInfoSet: Set<SessionInfo>?) {
         // TODO("Not yet implemented")
     }
-
-    /* ==========================================================================================
-     * For test only
-     * ========================================================================================== */
-
-    @VisibleForTesting
-    val cryptoStoreForTesting = cryptoStore
 
     companion object {
         const val CRYPTO_MIN_FORCE_SESSION_PERIOD_MILLIS = 3_600_000 // one hour

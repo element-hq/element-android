@@ -27,6 +27,10 @@ import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.pushers.UnifiedPushHelper
 import im.vector.app.core.pushers.VectorPushHandler
 import im.vector.app.features.settings.VectorPreferences
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.logger.LoggerTag
 import timber.log.Timber
 import javax.inject.Inject
@@ -43,6 +47,12 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
     @Inject lateinit var vectorPushHandler: VectorPushHandler
     @Inject lateinit var unifiedPushHelper: UnifiedPushHelper
 
+    private val scope = CoroutineScope(SupervisorJob())
+
+    override fun onDestroy() {
+        scope.cancel()
+        super.onDestroy()
+    }
     override fun onNewToken(token: String) {
         Timber.tag(loggerTag.value).d("New Firebase token")
         fcmHelper.storeFcmToken(token)
@@ -51,7 +61,9 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
                 activeSessionHolder.hasActiveSession() &&
                 unifiedPushHelper.isEmbeddedDistributor()
         ) {
-            pushersManager.enqueueRegisterPusher(token, getString(R.string.pusher_http_url))
+            scope.launch {
+                pushersManager.enqueueRegisterPusher(token, getString(R.string.pusher_http_url))
+            }
         }
     }
 

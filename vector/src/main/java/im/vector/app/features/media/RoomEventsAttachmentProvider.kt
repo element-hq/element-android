@@ -71,7 +71,7 @@ class RoomEventsAttachmentProvider(
                         allowNonMxcUrls = it.root.sendState.isSending()
 
                 )
-                if (content.mimeType == MimeTypes.Gif) {
+                if (content.mimeType == MimeTypes.Gif || content.mimeType == MimeTypes.Webp) {
                     AttachmentInfo.AnimatedImage(
                             uid = it.eventId,
                             url = content.url ?: "",

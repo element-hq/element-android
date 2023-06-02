@@ -76,7 +76,9 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
                 coroutineScope.launch {
                     unifiedPushHelper.storeCustomOrDefaultGateway(endpoint) {
                         unifiedPushHelper.getPushGateway()?.let {
-                            pushersManager.enqueueRegisterPusher(endpoint, it)
+                            coroutineScope.launch {
+                                pushersManager.enqueueRegisterPusher(endpoint, it)
+                            }
                         }
                     }
                 }

@@ -36,6 +36,7 @@ import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_QR_
 import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_RECIPROCATE
 import org.matrix.android.sdk.internal.crypto.model.rest.toValue
 import org.matrix.android.sdk.internal.session.SessionScope
+import org.matrix.rustcomponents.sdk.crypto.VerificationRequestState
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -165,7 +166,7 @@ internal class RustVerificationService @Inject constructor(
             // If this is a SAS verification originating from a `m.key.verification.request`
             // event, we auto-accept here considering that we either initiated the request or
             // accepted the request. If it's a QR code verification, just dispatch an update.
-            if (request.isReady() && transaction is SasVerification) {
+            if (request.innerState() is VerificationRequestState.Ready && transaction is SasVerification) {
                 // accept() will dispatch an update, no need to do it twice.
                 Timber.d("## Verification: Auto accepting SAS verification with $sender")
                 transaction.accept()
@@ -308,7 +309,7 @@ internal class RustVerificationService @Inject constructor(
         return if (request != null) {
             request.acceptWithMethods(methods)
             request.startQrCode()
-            request.isReady()
+            request.innerState() is VerificationRequestState.Ready
         } else {
             false
         }

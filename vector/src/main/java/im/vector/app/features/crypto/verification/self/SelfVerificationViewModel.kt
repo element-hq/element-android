@@ -83,7 +83,7 @@ data class SelfVerificationViewState(
         val transactionId: String? = null,
         val currentDeviceCanCrossSign: Boolean = false,
         val userWantsToCancel: Boolean = false,
-        val hasAnyOtherSession: Boolean = false,
+        val hasAnyOtherSession: Async<Boolean> = Uninitialized,
         val quadSContainsSecrets: Boolean = false,
         val isVerificationRequired: Boolean = false,
         val isThisSessionVerified: Boolean = false,
@@ -146,21 +146,28 @@ class SelfVerificationViewModel @AssistedInject constructor(
             }
         }
 
-        val hasAnyOtherSession = session.cryptoService()
-                .getCryptoDeviceInfo(session.myUserId)
-                .any {
-                    it.deviceId != session.sessionParams.deviceId
-                }
+        setState { copy(hasAnyOtherSession = Loading()) }
+        viewModelScope.launch {
+            val hasAnyOtherSession = session.cryptoService()
+                    .getCryptoDeviceInfo(session.myUserId)
+                    .any {
+                        it.deviceId != session.sessionParams.deviceId
+                    }
+            setState {
+                copy(
+                        hasAnyOtherSession = Success(hasAnyOtherSession)
+                )
+            }
+        }
 
         setState {
             copy(
                     currentDeviceCanCrossSign = session.cryptoService().crossSigningService().canCrossSign(),
                     quadSContainsSecrets = session.sharedSecretStorageService().isRecoverySetup(),
-                    hasAnyOtherSession = hasAnyOtherSession
             )
         }
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val isThisSessionVerified = session.cryptoService().crossSigningService().isCrossSigningVerified()
             setState {
                 copy(
