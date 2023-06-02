@@ -3076,4 +3076,6 @@
     <string name="confirm_your_identity_after_update">В останньому оновленні було вдосконалено захищений обмін повідомленнями. Перевірте свій пристрій ще раз.</string>
     <string name="verification_profile_other_device_untrust_info">Поки користувач не довіряє цьому сеансу, повідомлення, надіслані до нього та від нього, позначаються попередженнями.</string>
     <string name="crosssigning_verify_after_update">Застосунок оновлено</string>
+    <string name="sign_out_anyway">Усе одно вийти</string>
+    <string name="sign_out_failed_dialog_message">Не вдалося зв\'язатися з домашнім сервером. Якщо ви все одно вийдете з системи, цей пристрій не буде видалено з вашого списку пристроїв, можливо, ви захочете видалити його за допомогою іншого клієнта.</string>
 </resources>
