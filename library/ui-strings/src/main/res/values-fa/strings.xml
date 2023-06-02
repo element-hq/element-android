@@ -2956,4 +2956,6 @@
     <string name="confirm_your_identity_after_update">پیام‌رسانی امن با جدیدترین به‌روز رسانی بهبود یافته است. لطفاً افزاره‌تان را دوباره تأیید کنید.</string>
     <string name="verification_profile_other_device_untrust_info">تا کاربر این نشست را تأیید کند، پیام‌های فرستاده و گرفته‌اش با هشدار برچسب می‌خورند.</string>
     <string name="crosssigning_verify_after_update">کاره به‌روز شد</string>
+    <string name="sign_out_anyway">خروج به هر صورت</string>
+    <string name="sign_out_failed_dialog_message">نمی‌توان به کارساز خانگی رسید. اگر همچنان خارج شوید این افزاره از سیاههٔ افزاره‌هایتان پاک نخواهد شد و باید از کارخواهس دیگر برش دارید.</string>
 </resources>
