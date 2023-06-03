@@ -2955,4 +2955,6 @@
     <string name="confirm_your_identity_after_update">Verschlüsselte Kommunikation wurde mit der neuesten Aktualisierung verbessert. Bitte verifiziere deine Geräte erneut.</string>
     <string name="verification_profile_other_device_untrust_info">Solange der Benutzer dieser Sitzung nicht vertraut, werden Nachrichten mit Warnungen versehen.</string>
     <string name="crosssigning_verify_after_update">App aktualisiert</string>
+    <string name="sign_out_failed_dialog_message">Dein Heim-Server ist nicht erreichbar. Falls du dich dennoch abmeldest, wird dieses Gerät nicht von deiner Geräteliste entfernt, also müsstest du dies mit einer anderen Sitzung selbst machen.</string>
+    <string name="sign_out_anyway">Dennoch abmelden</string>
 </resources>
