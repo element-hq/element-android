@@ -1301,9 +1301,9 @@
     <string name="delete_event_dialog_title">確認移除</string>
     <string name="delete_event_dialog_content">您確定要刪除此事件嗎？注意，如果您刪除聊天室名稱或主題的變更事件，該變更將被取消。</string>
     <string name="delete_event_dialog_reason_checkbox">包含理由</string>
-    <string name="delete_event_dialog_reason_hint">修改原因</string>
+    <string name="delete_event_dialog_reason_hint">刪除原因</string>
     <string name="event_redacted_by_user_reason_with_reason">使用者刪除事件，理由：%1$s</string>
-    <string name="event_redacted_by_admin_reason_with_reason">聊天室管理員管理了事件，理由：%1$s</string>
+    <string name="event_redacted_by_admin_reason_with_reason">聊天室管理員刪除了事件，理由：%1$s</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">金鑰已為最新！</string>
     <string name="login_default_session_public_name">${app_name} Android</string>
     <string name="settings_key_requests">金鑰請求</string>
