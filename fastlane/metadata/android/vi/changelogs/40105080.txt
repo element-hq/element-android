@@ -1,2 +1,2 @@
-Thay đổi chính trong phiên bản này: Chủ yếu là sửa lỗi.
+Thay đổi chính trong phiên bản này: Sửa lỗi và cải thiện.
 Toàn bộ nhật ký sửa đổi: https://github.com/vector-im/element-android/releases
