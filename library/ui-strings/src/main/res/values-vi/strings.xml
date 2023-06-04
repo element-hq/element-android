@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="send_bug_report_rage_shake">Lắc điện thoại để báo cáo lỗi</string>
     <string name="send_bug_report_alert_message">Có vẻ bạn đang lắc điện thoại một cách tức giận. Bạn có muốn mở màn hình báo cáo lỗi không\?</string>
     <string name="send_bug_report_placeholder">Miêu tả vấn đề của bạn ở đây</string>
@@ -1203,7 +1203,7 @@
     <string name="create_poll_question_title">Câu hỏi hoặc chủ đề thăm dò ý kiến</string>
     <string name="create_poll_title">Tạo Cuộc thăm dò ý kiến</string>
     <string name="link_this_email_with_your_account">%s trong Cài đặt để nhận lời mời trực tiếp trong ${app_name}.</string>
-    <string name="link_this_email_settings_link">Liên kết email này với tài khoản của bạn</string>
+    <string name="link_this_email_settings_link">Liên kết địa chỉ thư điện tử này với tài khoản của bạn</string>
     <string name="this_invite_to_this_space_was_sent">Lời mời này đến Space này đã được gửi đến %s không được liên kết với tài khoản của bạn</string>
     <string name="this_invite_to_this_room_was_sent">Lời mời này đến phòng này đã được gửi đến %s không được liên kết với tài khoản của bạn</string>
     <string name="upgrade_room_for_restricted_note">Xin lưu ý nâng cấp sẽ tạo ra một phiên bản mới của căn phòng. Tất cả các tin nhắn hiện tại sẽ ở trong phòng lưu trữ này.</string>
@@ -1431,7 +1431,7 @@
     <string name="identity_server_user_consent_not_provided">Sự đồng ý của người dùng chưa được cung cấp.</string>
     <string name="identity_server_error_no_current_binding_error">Không có mối liên hệ hiện tại với mã định danh này.</string>
     <string name="identity_server_error_binding_error">Sự kết hợp đã thất bại.</string>
-    <string name="identity_server_error_bulk_sha256_not_supported">Đối với quyền riêng tư của bạn, ${app_name} chỉ hỗ trợ gửi email và số điện thoại của người dùng băm.</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">Để đảm bảo quyền riêng tư cho bạn, ${app_name} chỉ hỗ trợ gửi địa chỉ thư điện tử và số điện thoại của người dùng khi đã được băm.</string>
     <string name="identity_server_error_terms_not_signed">Trước tiên, vui lòng chấp nhận các điều khoản của máy chủ nhận dạng trong cài đặt.</string>
     <string name="identity_server_error_no_identity_server_configured">Trước tiên, vui lòng cấu hình máy chủ nhận dạng.</string>
     <string name="identity_server_error_outdated_home_server">Hoạt động này là không thể. Homeerver đã lỗi thời.</string>
@@ -2011,7 +2011,7 @@
     <string name="a11y_qr_code_for_verification">Mã QR</string>
     <string name="reset_cross_signing">Đặt lại khóa</string>
     <string name="initialize_cross_signing">Khởi tạo xác thực chéo</string>
-    <string name="verification_profile_device_untrust_info">Cho đến khi người dùng này tin tưởng phiên này, tin nhắn được gửi đến và đi từ nó được dán nhãn cảnh báo. Ngoài ra, bạn có thể xác minh thủ công.</string>
+    <string name="verification_profile_device_untrust_info">Cho đến khi người dùng này tin tưởng phiên này, tin nhắn được gửi đến nó và từ nó đều mang nhãn cảnh báo. Ngoài ra, bạn có thể xác minh thủ công.</string>
     <string name="verification_profile_device_new_signing">%1$s (%2$s) đã đăng nhập bằng phiên mới:</string>
     <string name="verification_profile_device_verified_because">Phiên này được tin cậy để nhắn tin an toàn vì %1$s (%2$s) đã xác minh:</string>
     <string name="not_trusted">Không tin cậy</string>
@@ -2410,4 +2410,50 @@
     <string name="space_list_empty_message">Space là một cách mới để nhóm các phòng và mọi người. Tạo một space để bắt đầu.</string>
     <string name="space_list_empty_title">Chưa có space nào.</string>
     <string name="notice_display_name_changed_to">%1$s đã đổi tên hiển thị thành %2$s</string>
+    <string name="sign_out_anyway">Cứ đăng xuất</string>
+    <string name="sign_out_failed_dialog_message">Không thể kết nối tới máy chủ nhà. Nếu bạn cứ đăng xuất, thiết bị này sẽ không được xóa khỏi danh sách thiết bị của bạn, bạn có thể muốn xóa nó bằng thiết bị khác.</string>
+    <string name="ftue_auth_carousel_secure_body">Giao tiếp độc lập và bảo mật cho bạn mức độ riêng tư ngang với trò chuyện trực tiếp trong nhà.</string>
+    <string name="ftue_auth_carousel_encrypted_body">Được mã hóa đầu cuối và không yêu cầu số điện thoại. Không quảng cáo hay khai thác dữ liệu.</string>
+    <string name="space_leave_radio_button_all">Rời tất cả</string>
+    <string name="secure_backup_reset_all_no_other_devices_long">Đặt lại các khóa xác thực không thể được hoàn tác. Sau khi đặt lại, bạn không thể truy cập vào các tin nhắn đã được mã hóa cũ, và tất cả bạn bè đã xác thực bạn trước đó sẽ thấy các cảnh báo cho đến khi nào bạn xác thực lại với họ.</string>
+    <string name="settings_show_latest_profile_description">Hiện thông tin hồ sơ mới nhất (ảnh đại diện và tên hiển thị) cho tất cả các tin nhắn.</string>
+    <string name="device_manager_signout_all_other_sessions">Đăng xuất khỏi mọi phiên khác</string>
+    <string name="device_manager_learn_more_sessions_unverified">Các phiên chưa được xác thực là các phiên đã đăng nhập bằng thông tin của bạn nhưng chưa được xác thực chéo.
+\n
+\nBạn cần đặc biệt chắc chắn là bạn nhận ra các phiên này vì chúng có thể đang sử dụng trái phép tài khoản của bạn.</string>
+    <string name="device_manager_learn_more_session_rename">Những người dùng khác trong tin nhắn trực tiếp và các phòng bạn tham gia có thể xem danh sách các phiên của bạn.
+\n
+\nNhư vậy giúp họ chắc chắn họ đang thực sự nói chuyện với bạn, nhưng vì thế mà họ cũng có thể thấy tên phiên bạn nhập ở đây.</string>
+    <string name="labs_enable_rich_text_editor_title">Bật trình soạn thảo văn bản phong phú</string>
+    <string name="labs_enable_rich_text_editor_summary">Thử trình soạn thảo văn bản phong phú (sẽ có chế độ văn bản thuần)</string>
+    <string name="invites_empty_message">Đây là nơi chứa các yêu cầu và lời mời mới.</string>
+    <string name="avatar_of_space">Ảnh đại diện cho space %1$s</string>
+    <string name="avatar_of_room">Ảnh đại diện cho phòng %1$s</string>
+    <string name="avatar_of_user">Ảnh đại diện cho người dùng %1$s</string>
+    <string name="command_description_devtools">Mở màn hình công cụ cho nhà phát triển</string>
+    <string name="attachment_type_selector_gallery">Thư viện ảnh</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_title">Đăng ký điểm cuối</string>
+    <string name="error_check_network" tools:ignore="UnusedResources">Có một lỗi đã xảy ra. Kiểm tra kết nối mạng và thử lại.</string>
+    <string name="beta_title_bottom_sheet_action">Đang thử nghiệm</string>
+    <string name="ftue_auth_choose_server_subtitle">Địa chỉ máy chủ của bạn là gì\? Đó như là nhà của tất cả dữ liệu của bạn</string>
+    <string name="tooltip_attachment_gallery">Gửi ảnh và phim</string>
+    <string name="device_manager_other_sessions_view_all">Hiện tất cả (%1$d)</string>
+    <string name="ftue_auth_carousel_workplace_body">${app_name} cũng là nơi tốt cho nơi làm việc. Được tin cậy bởi những tổ chức bảo mật nhất thế giới.</string>
+    <string name="home_layout_preferences">Tùy chọn bố cục</string>
+    <string name="device_manager_filter_option_all_sessions">Mọi phiên</string>
+    <string name="labs_enable_new_app_layout_title">Sử dụng bố cục mới</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">Điểm cuối đã được đăng ký với máy chủ nhà.</string>
+    <string name="attachment_type_location">Vị trí</string>
+    <string name="unifiedpush_distributor_fcm_fallback">Dịch vụ của Google</string>
+    <string name="labs_auto_report_uisi_desc">Hệ thống sẽ tự động gửi nhật ký khi nào xảy ra lỗi giải mã tin nhắn</string>
+    <plurals name="device_manager_other_sessions_multi_signout_all">
+        <item quantity="other">Đăng xuất khỏi %1$d phiên</item>
+    </plurals>
+    <string name="device_manager_learn_more_sessions_verified_description">Các phiên đã được xác thực là phiên mà bạn đăng nhập bằng mật khẩu hay xác thực danh tính bằng một phiên khác
+\n
+\nNghĩa là bạn đã có tất cả các khóa cần thiết để mở khóa các tin nhắn đã được mã hóa và xác nhận với những người khác là bạn tin cậy phiên này.</string>
+    <string name="labs_enable_session_manager_summary">Hiển thị và kiểm soát các phiên của bạn tốt hơn.</string>
+    <string name="home_empty_no_rooms_message">Ứng dụng nhắn tin bảo mật tất cả-trong-một cho nhóm, bạn bè và tổ chức. Tạo một cuộc trò chuyện, hay tham gia vào một phòng, để bắt đầu.</string>
+    <string name="ftue_auth_carousel_control_body">Chọn nơi lưu trữ các cuộc trò chuyện của bạn, cho bạn quyền kiểm soát và độc lập. Kết nối qua giao thức Matrix.</string>
+    <string name="secure_backup_reset_danger_warning">Chỉ tiếp tục nếu bạn chắc chắn là bạn đã mất tất cả các thiết bị và khóa bảo mật.</string>
 </resources>
