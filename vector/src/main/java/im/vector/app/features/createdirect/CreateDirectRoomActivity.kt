@@ -48,6 +48,7 @@ import im.vector.app.features.qrcode.QrCodeScannerEvents
 import im.vector.app.features.qrcode.QrCodeScannerFragment
 import im.vector.app.features.qrcode.QrCodeScannerViewModel
 import im.vector.app.features.qrcode.QrScannerArgs
+import im.vector.app.features.userdirectory.PendingSelection
 import im.vector.app.features.userdirectory.UserListFragment
 import im.vector.app.features.userdirectory.UserListFragmentArgs
 import im.vector.app.features.userdirectory.UserListSharedAction
@@ -160,7 +161,19 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
     }
 
     private fun handleOnMenuItemSubmitClick(action: UserListSharedAction.OnMenuItemSubmitClick) {
-        viewModel.handle(CreateDirectRoomAction.PrepareRoomWithSelectedUsers(action.selections))
+        val unknownUsers = action.selections.filter { it is PendingSelection.UserPendingSelection && it.isUnknownUser }
+        if (unknownUsers.isEmpty()) {
+            viewModel.handle(CreateDirectRoomAction.PrepareRoomWithSelectedUsers(action.selections))
+        } else {
+            MaterialAlertDialogBuilder(this)
+                    .setTitle(R.string.dialog_title_confirmation)
+                    .setMessage(getString(R.string.create_room_unknown_users_dialog_content, unknownUsers.joinToString("\n • ", " • ") { it.getMxId() }))
+                    .setPositiveButton(R.string.create_room_unknown_users_dialog_submit) { _, _ ->
+                        viewModel.handle(CreateDirectRoomAction.PrepareRoomWithSelectedUsers(action.selections))
+                    }
+                    .setNegativeButton(R.string.action_cancel, null)
+                    .show()
+        }
     }
 
     private fun renderCreateAndInviteState(state: Async<String>) {

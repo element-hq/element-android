@@ -37,6 +37,7 @@ import im.vector.app.core.utils.onPermissionDeniedSnackbar
 import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.core.utils.toast
 import im.vector.app.features.contactsbook.ContactsBookFragment
+import im.vector.app.features.userdirectory.PendingSelection
 import im.vector.app.features.userdirectory.UserListFragment
 import im.vector.app.features.userdirectory.UserListFragmentArgs
 import im.vector.app.features.userdirectory.UserListSharedAction
@@ -94,7 +95,19 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity() {
     }
 
     private fun handleOnMenuItemSubmitClick(action: UserListSharedAction.OnMenuItemSubmitClick) {
-        viewModel.handle(InviteUsersToRoomAction.InviteSelectedUsers(action.selections))
+        val unknownUsers = action.selections.filter { it is PendingSelection.UserPendingSelection && it.isUnknownUser }
+        if (unknownUsers.isEmpty()) {
+            viewModel.handle(InviteUsersToRoomAction.InviteSelectedUsers(action.selections))
+        } else {
+            MaterialAlertDialogBuilder(this)
+                    .setTitle(R.string.dialog_title_confirmation)
+                    .setMessage(getString(R.string.invite_unknown_users_dialog_content, unknownUsers.joinToString("\n • ", " • ") { it.getMxId() }))
+                    .setPositiveButton(R.string.invite_unknown_users_dialog_submit) { _, _ ->
+                        viewModel.handle(InviteUsersToRoomAction.InviteSelectedUsers(action.selections))
+                    }
+                    .setNegativeButton(R.string.action_cancel, null)
+                    .show()
+        }
     }
 
     private fun openPhoneBook() {
