@@ -2896,4 +2896,6 @@
     <string name="confirm_your_identity_after_update">最新更新改善了安全訊息傳遞。請重新驗證您的裝置。</string>
     <string name="verification_profile_other_device_untrust_info">在該使用者信任該工作階段之前，發送到該工作階段與從該工作階段傳送的訊息都帶有警告標籤。</string>
     <string name="crosssigning_verify_after_update">應用程式已更新</string>
+    <string name="sign_out_failed_dialog_message">無法連線至家伺服器。若您仍要登出，此裝置將不會從您的裝置清單中移除，您可能需要使用其他客戶端來移除。</string>
+    <string name="sign_out_anyway">仍要登出</string>
 </resources>
