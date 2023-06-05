@@ -2947,4 +2947,6 @@
     <string name="avatar_of_user">Immagine del profilo dell\'utente %1$s</string>
     <string name="avatar_of_room">Avatar della stanza %1$s</string>
     <string name="avatar_of_space">Avatar dello spazio %1$s</string>
+    <string name="sign_out_anyway">Disconnetti comunque</string>
+    <string name="sign_out_failed_dialog_message">Impossibile contattare l\'homeserver. Se ti disconnetti comunque, questo dispositivo non verrà cancellato dalla tua lista, meglio se lo rimuovi da un altro client.</string>
 </resources>
