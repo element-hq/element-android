@@ -2898,4 +2898,6 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="confirm_your_identity_after_update">Perpesanan aman telah ditingkatkan dengan pembaruan terkini. Silakan verifikasi ulang perangkat Anda.</string>
     <string name="verification_profile_other_device_untrust_info">Sampai pengguna ini mempercayai sesi ini, pesan yang dikirim dan diterima akan ditandai dengan peringatan.</string>
     <string name="crosssigning_verify_after_update">Aplikasi diperbarui</string>
+    <string name="sign_out_failed_dialog_message">Tidak dapat mencapai homeserver. Jika Anda tetap keluar, perangkat ini tidak akan dihapus dari daftar perangkat. Anda dapat menghapusnya menggunakan klien lain.</string>
+    <string name="sign_out_anyway">Tetap keluar</string>
 </resources>
