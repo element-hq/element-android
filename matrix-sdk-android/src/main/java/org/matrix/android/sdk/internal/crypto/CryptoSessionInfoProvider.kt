@@ -19,19 +19,19 @@ package org.matrix.android.sdk.internal.crypto
 import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.internal.database.mapper.EventMapper
 import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.EventEntityFields
-import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntity
-import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
+import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.database.query.whereType
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.query.process
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberHelper
 import org.matrix.android.sdk.internal.util.fetchCopied
-import org.matrix.android.sdk.internal.util.logLimit
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -89,14 +89,30 @@ internal class CryptoSessionInfoProvider @Inject constructor(
     }
 
     fun getRoomsWhereUsersAreParticipating(userList: List<String>): List<String> {
+        if (userList.contains(myUserId)) {
+            // just take all
+            val roomIds: List<String>? = null
+            monarchy.doWithRealm { sessionRealm ->
+                RoomSummaryEntity.where(sessionRealm)
+                        .process(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.activeMemberships())
+                        .findAll()
+                        .map { it.roomId }
+            }
+            return roomIds.orEmpty()
+        }
         var roomIds: List<String>? = null
         monarchy.doWithRealm { sessionRealm ->
-            roomIds = sessionRealm.where(RoomMemberSummaryEntity::class.java)
-                    .`in`(RoomMemberSummaryEntityFields.USER_ID, userList.toTypedArray())
-                    .distinct(RoomMemberSummaryEntityFields.ROOM_ID)
+            roomIds = RoomSummaryEntity.where(sessionRealm)
+                    .process(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.activeMemberships())
                     .findAll()
+                    .filter { it.otherMemberIds.any { it in userList } }
                     .map { it.roomId }
-                    .also { Timber.d("## CrossSigning -  ... impacted rooms ${it.logLimit()}") }
+//            roomIds = sessionRealm.where(RoomMemberSummaryEntity::class.java)
+//                    .`in`(RoomMemberSummaryEntityFields.USER_ID, userList.toTypedArray())
+//                    .distinct(RoomMemberSummaryEntityFields.ROOM_ID)
+//                    .findAll()
+//                    .map { it.roomId }
+//                    .also { Timber.d("## CrossSigning -  ... impacted rooms ${it.logLimit()}") }
         }
         return roomIds.orEmpty()
     }
