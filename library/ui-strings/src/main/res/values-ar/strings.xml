@@ -1218,4 +1218,6 @@
     <string name="space_list_empty_title">بدون فضاءات.</string>
     <string name="home_layout_preferences">تفضيلات التخطيط</string>
     <string name="notice_display_name_changed_to">غير %1$s اسمه العلني إلى %2$s</string>
+    <string name="a11y_collapse_space_children">إغلاق %s العناصر الفرعية</string>
+    <string name="a11y_expand_space_children">توسيع %s العناصر الفرعية</string>
 </resources>
