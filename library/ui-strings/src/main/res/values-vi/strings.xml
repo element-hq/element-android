@@ -2483,4 +2483,5 @@
     <string name="ftue_auth_use_case_subtitle">Chúng tôi sẽ giúp bạn kết nối</string>
     <string name="ftue_auth_use_case_join_existing_server">Tìm để tham gia một máy chủ sẵn có\?</string>
     <string name="started_a_voice_broadcast">Đã bắt đầu phát thanh</string>
+    <string name="verification_request_waiting_for_recovery">Xác thực bằng khóa bảo mật hay chuỗi từ bảo mật</string>
 </resources>
