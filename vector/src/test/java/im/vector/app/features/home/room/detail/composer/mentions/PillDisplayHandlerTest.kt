@@ -55,6 +55,8 @@ internal class PillDisplayHandlerTest {
         const val KNOWN_MATRIX_USER_URL = "https://matrix.to/#/$KNOWN_MATRIX_USER_ID"
         const val KNOWN_MATRIX_USER_AVATAR = "https://example.com/avatar.png"
         const val KNOWN_MATRIX_USER_NAME = "known user"
+        const val CUSTOM_DOMAIN_MATRIX_ROOM_URL = "https://customdomain/#/room/$KNOWN_MATRIX_ROOM_ID"
+        const val CUSTOM_DOMAIN_MATRIX_USER_URL = "https://customdomain.com/#/user/$KNOWN_MATRIX_USER_ID"
     }
 
     @Before
@@ -151,6 +153,26 @@ internal class PillDisplayHandlerTest {
         val subject = createSubject()
 
         assertEquals(listOf("@room"), subject.keywords)
+    }
+
+    @Test
+    fun `when resolve known user for custom domain link, then it returns named custom pill`() {
+        val subject = createSubject()
+
+        val matrixItem = subject.resolveLinkDisplay("text", CUSTOM_DOMAIN_MATRIX_USER_URL)
+                .getMatrixItem()
+
+        assertEquals(MatrixItem.UserItem(KNOWN_MATRIX_USER_ID, KNOWN_MATRIX_USER_NAME, KNOWN_MATRIX_USER_AVATAR), matrixItem)
+    }
+
+    @Test
+    fun `when resolve known room for custom domain link, then it returns named custom pill`() {
+        val subject = createSubject()
+
+        val matrixItem = subject.resolveLinkDisplay("text", CUSTOM_DOMAIN_MATRIX_ROOM_URL)
+                .getMatrixItem()
+
+        assertEquals(MatrixItem.RoomItem(KNOWN_MATRIX_ROOM_ID, KNOWN_MATRIX_ROOM_NAME, KNOWN_MATRIX_ROOM_AVATAR), matrixItem)
     }
 
     private fun TextDisplay.getMatrixItem(): MatrixItem? {
