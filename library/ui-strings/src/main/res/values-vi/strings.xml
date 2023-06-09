@@ -1963,8 +1963,8 @@
     <string name="enter_account_password">Nhập %s của bạn để tiếp tục.</string>
     <string name="message_key">Chìa khóa tin nhắn</string>
     <string name="recovery_passphrase">Cụm mật khẩu phục hồi</string>
-    <string name="verification_cancelled">Xác minh bị hủy bỏ</string>
-    <string name="verify_cancelled_notice">Xác minh đã bị hủy bỏ. Bạn có thể bắt đầu xác minh lại.</string>
+    <string name="verification_cancelled">Xác thực đã bị hủy bỏ</string>
+    <string name="verify_cancelled_notice">Xác thực đã bị hủy bỏ. Bạn có thể bắt đầu xác thực lại.</string>
     <string name="verify_not_me_self_verification">Một trong những điều sau đây có thể bị xâm phạm:
 \n
 \n- Mật khẩu của bạn
@@ -2411,7 +2411,7 @@
     <string name="space_list_empty_title">Chưa có space nào.</string>
     <string name="notice_display_name_changed_to">%1$s đã đổi tên hiển thị thành %2$s</string>
     <string name="sign_out_anyway">Cứ đăng xuất</string>
-    <string name="sign_out_failed_dialog_message">Không thể kết nối tới máy chủ nhà. Nếu bạn cứ đăng xuất, thiết bị này sẽ không được xóa khỏi danh sách thiết bị của bạn, bạn có thể muốn xóa nó bằng thiết bị khác.</string>
+    <string name="sign_out_failed_dialog_message">Không thể kết nối tới máy chủ nhà. Nếu bạn cứ đăng xuất, thiết bị này sẽ không được xóa khỏi danh sách, bạn có thể muốn xóa nó bằng thiết bị khác.</string>
     <string name="ftue_auth_carousel_secure_body">Giao tiếp độc lập và bảo mật cho bạn mức độ riêng tư ngang với trò chuyện trực tiếp trong nhà.</string>
     <string name="ftue_auth_carousel_encrypted_body">Được mã hóa đầu cuối và không yêu cầu số điện thoại. Không quảng cáo hay khai thác dữ liệu.</string>
     <string name="space_leave_radio_button_all">Rời tất cả</string>
@@ -2456,4 +2456,6 @@
     <string name="home_empty_no_rooms_message">Ứng dụng nhắn tin bảo mật tất cả-trong-một cho nhóm, bạn bè và tổ chức. Tạo một cuộc trò chuyện, hay tham gia vào một phòng, để bắt đầu.</string>
     <string name="ftue_auth_carousel_control_body">Chọn nơi lưu trữ các cuộc trò chuyện của bạn, cho bạn quyền kiểm soát và độc lập. Kết nối qua giao thức Matrix.</string>
     <string name="secure_backup_reset_danger_warning">Chỉ tiếp tục nếu bạn chắc chắn là bạn đã mất tất cả các thiết bị và khóa bảo mật.</string>
+    <string name="a11y_collapse_space_children">Đóng %s mục</string>
+    <string name="a11y_expand_space_children">Mở %s mục</string>
 </resources>
