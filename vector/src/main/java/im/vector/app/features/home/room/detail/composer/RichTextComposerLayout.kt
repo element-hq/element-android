@@ -88,7 +88,7 @@ internal class RichTextComposerLayout @JvmOverloads constructor(
     override val text: Editable?
         get() = editText.text
     override val formattedText: String?
-        get() = (editText as? EditorEditText)?.getHtmlOutput()
+        get() = (editText as? EditorEditText)?.getContentAsMessageHtml()
     override val editText: EditText
         get() = if (isTextFormattingEnabled) {
             views.richTextComposerEditText
