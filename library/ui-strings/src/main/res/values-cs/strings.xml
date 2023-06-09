@@ -1635,7 +1635,7 @@
     <string name="power_level_title">Role</string>
     <string name="a11y_open_chat">Otevřít chat</string>
     <string name="a11y_mute_microphone">Umlčet mikrofon</string>
-    <string name="a11y_unmute_microphone">Zrušit umlčení mikrofonu</string>
+    <string name="a11y_unmute_microphone">Zrušit ztlumení mikrofonu</string>
     <string name="a11y_stop_camera">Zastavit fotoaparát</string>
     <string name="a11y_start_camera">Spustit fotoaparát</string>
     <string name="bottom_sheet_setup_secure_backup_title">Bezpečná záloha</string>
@@ -3018,4 +3018,12 @@
     <string name="crosssigning_verify_after_update">Aplikace aktualizována</string>
     <string name="sign_out_anyway">Přesto se odhlásit</string>
     <string name="sign_out_failed_dialog_message">Nelze se spojit s domovským serverem. Pokud se přesto odhlásíte, nebude toto zařízení vymazáno ze seznamu zařízení, můžete jej odstranit pomocí jiného klienta.</string>
+    <string name="create_room_unknown_users_dialog_submit">Přesto zahájit chat</string>
+    <string name="invite_unknown_users_dialog_submit">Přesto pozvat</string>
+    <string name="create_room_unknown_users_dialog_content">Nelze najít profily pro níže uvedené Matrix identifikátory. Chcete přesto zahájit chat\?
+\n
+\n%s</string>
+    <string name="invite_unknown_users_dialog_content">Nelze najít profily pro níže uvedené Matrix identifikátory. Chcete je přesto pozvat\?
+\n
+\n%s</string>
 </resources>
