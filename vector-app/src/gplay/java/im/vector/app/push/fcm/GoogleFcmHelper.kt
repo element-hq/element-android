@@ -26,8 +26,11 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.DefaultPreferences
+import im.vector.app.core.dispatchers.CoroutineDispatchers
 import im.vector.app.core.pushers.FcmHelper
 import im.vector.app.core.pushers.PushersManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -38,7 +41,12 @@ import javax.inject.Inject
 class GoogleFcmHelper @Inject constructor(
         @ApplicationContext private val context: Context,
         @DefaultPreferences private val sharedPrefs: SharedPreferences,
+        appScope: CoroutineScope,
+        private val coroutineDispatchers: CoroutineDispatchers
 ) : FcmHelper {
+
+    private val scope = CoroutineScope(appScope.coroutineContext + coroutineDispatchers.io)
+
     companion object {
         private const val PREFS_KEY_FCM_TOKEN = "FCM_TOKEN"
     }
@@ -64,7 +72,9 @@ class GoogleFcmHelper @Inject constructor(
                         .addOnSuccessListener { token ->
                             storeFcmToken(token)
                             if (registerPusher) {
-                                pushersManager.enqueueRegisterPusherWithFcmKey(token)
+                                scope.launch {
+                                    pushersManager.enqueueRegisterPusherWithFcmKey(token)
+                                }
                             }
                         }
                         .addOnFailureListener { e ->

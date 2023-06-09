@@ -322,11 +322,10 @@ class RoomListViewModel @AssistedInject constructor(
     }
 
     private fun handleDeleteLocalRooms() {
-        val localRoomIds = session.roomService()
-                .getRoomSummaries(roomSummaryQueryParams { roomId = QueryStringValue.Contains(RoomLocalEcho.PREFIX) })
-                .map { it.roomId }
-
-        viewModelScope.launch {
+        viewModelScope.launch(session.coroutineDispatchers.io) {
+            val localRoomIds = session.roomService()
+                    .getRoomSummaries(roomSummaryQueryParams { roomId = QueryStringValue.Contains(RoomLocalEcho.PREFIX) })
+                    .map { it.roomId }
             localRoomIds.forEach {
                 session.roomService().deleteLocalRoom(it)
             }

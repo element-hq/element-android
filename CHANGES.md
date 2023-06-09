@@ -1,3 +1,76 @@
+Changes in Element v1.6.2 (2023-06-02)
+======================================
+
+Features ✨
+----------
+ - **Element Android is now using the Crypto Rust SDK**. Migration of user's data should be done at first launch after application upgrade. ([#8390](https://github.com/vector-im/element-android/issues/8390))
+ - Marks WebP files as Animated and allows them to play ([#8120](https://github.com/vector-im/element-android/issues/8120))
+ - Updates to protocol used for Sign in with QR code ([#8299](https://github.com/vector-im/element-android/issues/8299))
+ - Updated rust crypto SDK to version 0.3.9 ([#8488](https://github.com/vector-im/element-android/issues/8488))
+
+Bugfixes 🐛
+----------
+ - Fix: Allow users to sign out even if the sign out request fails. ([#4855](https://github.com/vector-im/element-android/issues/4855))
+ - fix: Make some crypto calls suspendable to avoid reported ANR ([#8482](https://github.com/vector-im/element-android/issues/8482))
+
+Other changes
+-------------
+ - Refactoring: Extract a new interface for common access to crypto store between kotlin and rust crypto ([#8470](https://github.com/vector-im/element-android/issues/8470))
+
+
+Changes in Element v1.6.1 (2023-05-25)
+======================================
+
+Corrective release for 1.6.0
+
+Bugfixes 🐛
+----------
+ - Allow stateloss on verification dialogfragment ([#8439](https://github.com/vector-im/element-android/issues/8439))
+ - Fix: Update verification popup text when a re-verification is needed after rust migration (read only sessions) ([#8445](https://github.com/vector-im/element-android/issues/8445))
+ - Fix several performance issues causing app non responsive issues. ([#8454](https://github.com/vector-im/element-android/issues/8454))
+ - Fix: The device list screen from the member profile page was always showing the current user devices (rust crypto). ([#8457](https://github.com/vector-im/element-android/issues/8457))
+
+Other changes
+-------------
+ - Remove UI option to manually verify a specific device of another user (deprecated behaviour) ([#8458](https://github.com/vector-im/element-android/issues/8458))
+
+
+Changes in Element v1.6.0 (2023-05-17)
+======================================
+
+Features ✨
+----------
+ - **Element Android is now using the Crypto Rust SDK**. Migration of user's data should be done at first launch after application upgrade. ([#8390](https://github.com/vector-im/element-android/issues/8390))
+ - Enable free style cropping for camera and gallery images ([#8325](https://github.com/vector-im/element-android/issues/8325))
+
+Bugfixes 🐛
+----------
+ - User pills get lost at message editing ([#748](https://github.com/vector-im/element-android/issues/748))
+ - Upgrade Jitsi SDK from 6.2.2 to 8.1.1. This fixes video call on some Android devices. ([#7619](https://github.com/vector-im/element-android/issues/7619))
+ - Fix duplicate reactions when using full emoji picker. Contributed by @tulir @ Beeper. ([#8327](https://github.com/vector-im/element-android/issues/8327))
+ - Fix: RustCrossSigning service API confusion (identity trusted vs own device trusted by identity) ([#8352](https://github.com/vector-im/element-android/issues/8352))
+ - Allow custom push gateway to use non-default port ([#8376](https://github.com/vector-im/element-android/issues/8376))
+ - Fix crash when opening "Protect access" screen, and various other issue with `repeatOnLifecycle` ([#8410](https://github.com/vector-im/element-android/issues/8410))
+ - RustCrypto: Verification UX not refreshed after scanning a QR code ([#8418](https://github.com/vector-im/element-android/issues/8418))
+
+SDK API changes ⚠️
+------------------
+ - First integration of rust crypto module. See documentation for details `docs/rust_crypto_integration.md` ([#7628](https://github.com/vector-im/element-android/issues/7628))
+ - Add crypto database migration 22, that extract account and olm session to the new rust DB format ([#8405](https://github.com/vector-im/element-android/issues/8405))
+
+Other changes
+-------------
+ - Add an audio alert when the voice broadcast recording is automatically paused ([#8339](https://github.com/vector-im/element-android/issues/8339))
+ - Analytics: add crypto module to E2E events ([#8340](https://github.com/vector-im/element-android/issues/8340))
+ - Bump rust crypto crate to 0.3.5 ([#8354](https://github.com/vector-im/element-android/issues/8354))
+ - Expose Rust SDK Version in Help & About page and in Bug Reports ([#8364](https://github.com/vector-im/element-android/issues/8364))
+ - Matrix-Ids are sometimes shown in notice events instead of display names ([#8365](https://github.com/vector-im/element-android/issues/8365))
+ - CI: Add workflow to run test with crypto flavor ([#8366](https://github.com/vector-im/element-android/issues/8366))
+ - Remove ability to migrate session from Riot to Element. ([#8402](https://github.com/vector-im/element-android/issues/8402))
+ - Improve keyboard navigation and accessibility when using a screen reader. ([#8426](https://github.com/vector-im/element-android/issues/8426))
+ - Updated posthog url (cosmetic, target same server) and added a new sentry env. ([#8436](https://github.com/vector-im/element-android/issues/8436))
+
+
 Changes in Element v1.5.32 (2023-04-19)
 =======================================
 

@@ -23,7 +23,7 @@ sealed interface HomeActivityViewEvents : VectorViewEvents {
     data class AskPasswordToInitCrossSigning(val userItem: MatrixItem.UserItem) : HomeActivityViewEvents
     data class CurrentSessionNotVerified(
             val userItem: MatrixItem.UserItem,
-//            val waitForIncomingRequest: Boolean = true,
+            val afterMigration: Boolean
     ) : HomeActivityViewEvents
 
     data class CurrentSessionCannotBeVerified(

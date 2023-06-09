@@ -38,6 +38,7 @@ import im.vector.app.config.OnboardingVariant
 import im.vector.app.core.debug.DebugNavigator
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.error.fatalError
+import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.extensions.toAnalyticsViewRoom
@@ -256,8 +257,9 @@ class DefaultNavigator @Inject constructor(
                     otherSessionId
             )
             if (context is AppCompatActivity) {
-                SelfVerificationBottomSheet.forTransaction(request.transactionId)
-                        .show(context.supportFragmentManager, "VERIF")
+                context.supportFragmentManager.commitTransaction(allowStateLoss = true) {
+                    add(SelfVerificationBottomSheet.forTransaction(request.transactionId), "VERIF")
+                }
             }
         }
     }
@@ -271,8 +273,9 @@ class DefaultNavigator @Inject constructor(
 //                    .filter { it.deviceId != session.sessionParams.deviceId }
 //                    .map { it.deviceId }
             if (context is AppCompatActivity) {
-                SelfVerificationBottomSheet.verifyOwnUntrustedDevice()
-                        .show(context.supportFragmentManager, "VERIF")
+                context.supportFragmentManager.commitTransaction(allowStateLoss = true) {
+                    add(SelfVerificationBottomSheet.verifyOwnUntrustedDevice(), "VERIF")
+                }
 //                if (otherSessions.isNotEmpty()) {
 //                    val pr = session.cryptoService().verificationService().requestSelfKeyVerification(
 //                            supportedVerificationMethodsProvider.provide())

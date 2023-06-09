@@ -30,7 +30,8 @@ import javax.inject.Inject
 
 internal interface SignOutTask : Task<SignOutTask.Params, Unit> {
     data class Params(
-            val signOutFromHomeserver: Boolean
+            val signOutFromHomeserver: Boolean,
+            val ignoreServerRequestError: Boolean,
     )
 }
 
@@ -59,7 +60,9 @@ internal class DefaultSignOutTask @Inject constructor(
                     // Ignore
                     Timber.w("Ignore error due to https://github.com/matrix-org/synapse/issues/5755")
                 } else {
-                    throw throwable
+                    if (!params.ignoreServerRequestError) {
+                        throw throwable
+                    }
                 }
             }
         }

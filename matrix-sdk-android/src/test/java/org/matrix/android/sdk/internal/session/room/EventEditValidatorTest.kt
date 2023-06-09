@@ -24,7 +24,7 @@ import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
+import org.matrix.android.sdk.internal.crypto.store.IMXCommonCryptoStore
 
 class EventEditValidatorTest {
 
@@ -62,7 +62,7 @@ class EventEditValidatorTest {
 
     @Test
     fun `edit should be valid`() {
-        val mockCryptoStore = mockk<IMXCryptoStore>()
+        val mockCryptoStore = mockk<IMXCommonCryptoStore>()
         val validator = EventEditValidator(mockCryptoStore)
 
         validator
@@ -71,7 +71,7 @@ class EventEditValidatorTest {
 
     @Test
     fun `original event and replacement event must have the same sender`() {
-        val mockCryptoStore = mockk<IMXCryptoStore>()
+        val mockCryptoStore = mockk<IMXCommonCryptoStore>()
         val validator = EventEditValidator(mockCryptoStore)
 
         validator
@@ -83,7 +83,7 @@ class EventEditValidatorTest {
 
     @Test
     fun `original event and replacement event must have the same room_id`() {
-        val mockCryptoStore = mockk<IMXCryptoStore>()
+        val mockCryptoStore = mockk<IMXCommonCryptoStore>()
         val validator = EventEditValidator(mockCryptoStore)
 
         validator
@@ -101,7 +101,7 @@ class EventEditValidatorTest {
 
     @Test
     fun `replacement and original events must not have a state_key property`() {
-        val mockCryptoStore = mockk<IMXCryptoStore>()
+        val mockCryptoStore = mockk<IMXCommonCryptoStore>()
         val validator = EventEditValidator(mockCryptoStore)
 
         validator
@@ -119,8 +119,8 @@ class EventEditValidatorTest {
 
     @Test
     fun `replacement event must have an new_content property`() {
-        val mockCryptoStore = mockk<IMXCryptoStore> {
-            every { deviceWithIdentityKey("R0s/7Aindgg/RNWqUGJyJOXtCz5H7Gx7fInFuroq1xo") } returns
+        val mockCryptoStore = mockk<IMXCommonCryptoStore> {
+            every { deviceWithIdentityKey("@alice:example.com", "R0s/7Aindgg/RNWqUGJyJOXtCz5H7Gx7fInFuroq1xo") } returns
                     mockk<CryptoDeviceInfo> {
                         every { userId } returns "@alice:example.com"
                     }
@@ -157,8 +157,8 @@ class EventEditValidatorTest {
 
     @Test
     fun `The original event must not itself have a rel_type of m_replace`() {
-        val mockCryptoStore = mockk<IMXCryptoStore> {
-            every { deviceWithIdentityKey("R0s/7Aindgg/RNWqUGJyJOXtCz5H7Gx7fInFuroq1xo") } returns
+        val mockCryptoStore = mockk<IMXCommonCryptoStore> {
+            every { deviceWithIdentityKey("@alice:example.com", "R0s/7Aindgg/RNWqUGJyJOXtCz5H7Gx7fInFuroq1xo") } returns
                     mockk<CryptoDeviceInfo> {
                         every { userId } returns "@alice:example.com"
                     }
@@ -207,8 +207,8 @@ class EventEditValidatorTest {
 
     @Test
     fun `valid e2ee edit`() {
-        val mockCryptoStore = mockk<IMXCryptoStore> {
-            every { deviceWithIdentityKey("R0s/7Aindgg/RNWqUGJyJOXtCz5H7Gx7fInFuroq1xo") } returns
+        val mockCryptoStore = mockk<IMXCommonCryptoStore> {
+            every { deviceWithIdentityKey("@alice:example.com", "R0s/7Aindgg/RNWqUGJyJOXtCz5H7Gx7fInFuroq1xo") } returns
                     mockk<CryptoDeviceInfo> {
                         every { userId } returns "@alice:example.com"
                     }
@@ -224,8 +224,8 @@ class EventEditValidatorTest {
 
     @Test
     fun `If the original event was encrypted, the replacement should be too`() {
-        val mockCryptoStore = mockk<IMXCryptoStore> {
-            every { deviceWithIdentityKey("R0s/7Aindgg/RNWqUGJyJOXtCz5H7Gx7fInFuroq1xo") } returns
+        val mockCryptoStore = mockk<IMXCommonCryptoStore> {
+            every { deviceWithIdentityKey("@alice:example.com", "R0s/7Aindgg/RNWqUGJyJOXtCz5H7Gx7fInFuroq1xo") } returns
                     mockk<CryptoDeviceInfo> {
                         every { userId } returns "@alice:example.com"
                     }
@@ -241,12 +241,12 @@ class EventEditValidatorTest {
 
     @Test
     fun `encrypted, original event and replacement event must have the same sender`() {
-        val mockCryptoStore = mockk<IMXCryptoStore> {
-            every { deviceWithIdentityKey("R0s/7Aindgg/RNWqUGJyJOXtCz5H7Gx7fInFuroq1xo") } returns
+        val mockCryptoStore = mockk<IMXCommonCryptoStore> {
+            every { deviceWithIdentityKey("@alice:example.com", "R0s/7Aindgg/RNWqUGJyJOXtCz5H7Gx7fInFuroq1xo") } returns
                     mockk {
                         every { userId } returns "@alice:example.com"
                     }
-            every { deviceWithIdentityKey("7V5e/2O93mf4GeW7Mtq4YWcRNpYS9NhQbdJMgdnIPUI") } returns
+            every { deviceWithIdentityKey("@bob:example.com", "7V5e/2O93mf4GeW7Mtq4YWcRNpYS9NhQbdJMgdnIPUI") } returns
                     mockk {
                         every { userId } returns "@bob:example.com"
                     }
@@ -256,7 +256,9 @@ class EventEditValidatorTest {
         validator
                 .validateEdit(
                         encryptedEvent,
-                        encryptedEditEvent.copy().apply {
+                        encryptedEditEvent.copy(
+                                senderId = "@bob:example.com"
+                        ).apply {
                             mxDecryptionResult = encryptedEditEvent.mxDecryptionResult!!.copy(
                                     senderKey = "7V5e/2O93mf4GeW7Mtq4YWcRNpYS9NhQbdJMgdnIPUI"
                             )
@@ -269,12 +271,12 @@ class EventEditValidatorTest {
 
     @Test
     fun `encrypted, sent fom a deleted device, original event and replacement event must have the same sender`() {
-        val mockCryptoStore = mockk<IMXCryptoStore> {
-            every { deviceWithIdentityKey("R0s/7Aindgg/RNWqUGJyJOXtCz5H7Gx7fInFuroq1xo") } returns
+        val mockCryptoStore = mockk<IMXCommonCryptoStore> {
+            every { deviceWithIdentityKey("@alice:example.com", "R0s/7Aindgg/RNWqUGJyJOXtCz5H7Gx7fInFuroq1xo") } returns
                     mockk {
                         every { userId } returns "@alice:example.com"
                     }
-            every { deviceWithIdentityKey("7V5e/2O93mf4GeW7Mtq4YWcRNpYS9NhQbdJMgdnIPUI") } returns
+            every { deviceWithIdentityKey(any(), "7V5e/2O93mf4GeW7Mtq4YWcRNpYS9NhQbdJMgdnIPUI") } returns
                     null
         }
         val validator = EventEditValidator(mockCryptoStore)
@@ -288,7 +290,7 @@ class EventEditValidatorTest {
                             )
                         }
 
-                ) shouldBeInstanceOf EventEditValidator.EditValidity.Valid::class
+                ) shouldBeInstanceOf EventEditValidator.EditValidity.Unknown::class
 
         validator
                 .validateEdit(

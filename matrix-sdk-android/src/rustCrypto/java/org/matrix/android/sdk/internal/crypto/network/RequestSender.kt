@@ -24,6 +24,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupLastVersionResult
@@ -36,7 +37,6 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.uia.UiaResult
 import org.matrix.android.sdk.internal.auth.registration.handleUIA
-import org.matrix.android.sdk.internal.crypto.InboundGroupSessionStore
 import org.matrix.android.sdk.internal.crypto.OlmMachine
 import org.matrix.android.sdk.internal.crypto.PerSessionBackupQueryRateLimiter
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.BackupKeysResult
@@ -59,6 +59,7 @@ import org.matrix.android.sdk.internal.crypto.model.rest.KeysUploadBody
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysUploadResponse
 import org.matrix.android.sdk.internal.crypto.model.rest.RestKeyInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.SignatureUploadResponse
+import org.matrix.android.sdk.internal.crypto.store.IMXCommonCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.ClaimOneTimeKeysForUsersDeviceTask
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultSendVerificationMessageTask
 import org.matrix.android.sdk.internal.crypto.tasks.DownloadKeysForUsersTask
@@ -102,7 +103,7 @@ internal class RequestSender @Inject constructor(
         private val moshi: Moshi,
         cryptoCoroutineScope: CoroutineScope,
         private val rateLimiter: PerSessionBackupQueryRateLimiter,
-        private val inboundGroupSessionStore: InboundGroupSessionStore,
+        private val cryptoStore: IMXCommonCryptoStore,
         private val localEchoRepository: LocalEchoRepository,
         private val olmMachine: Lazy<OlmMachine>,
 ) {
@@ -266,7 +267,9 @@ internal class RequestSender @Inject constructor(
                                 val senderKey = requestBody?.get("sender_key") as? String
                                 if (roomId != null && sessionId != null) {
                                     // try to perform a lazy migration from legacy store
-                                    val legacy = inboundGroupSessionStore.getInboundGroupSession(sessionId, senderKey.orEmpty())
+                                    val legacy = tryOrNull("Failed to access legacy crypto store") {
+                                        cryptoStore.getInboundGroupSession(sessionId, senderKey.orEmpty())
+                                    }
                                     if (legacy == null || olmMachine.get().importRoomKey(legacy).isFailure) {
                                         rateLimiter.tryFromBackupIfPossible(sessionId, roomId)
                                     }

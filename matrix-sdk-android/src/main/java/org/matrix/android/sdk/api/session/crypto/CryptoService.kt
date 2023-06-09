@@ -73,7 +73,7 @@ interface CryptoService {
 
     suspend fun getUserDevices(userId: String): List<CryptoDeviceInfo>
 
-    fun getMyCryptoDevice(): CryptoDeviceInfo
+    suspend fun getMyCryptoDevice(): CryptoDeviceInfo
 
     fun getGlobalBlacklistUnverifiedDevices(): Boolean
 
@@ -130,7 +130,7 @@ interface CryptoService {
 
     suspend fun getCryptoDeviceInfo(userId: String, deviceId: String?): CryptoDeviceInfo?
 
-    fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo>
+    suspend fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo>
 
 //    fun getCryptoDeviceInfoFlow(userId: String): Flow<List<CryptoDeviceInfo>>
 
