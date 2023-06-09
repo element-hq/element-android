@@ -27,6 +27,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toEveryoneInRoomMatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
+import org.matrix.android.sdk.api.util.toRoomAliasMatrixItem
 
 /**
  * A rich text editor [LinkDisplayHandler] and [KeywordDisplayHandler]
@@ -53,6 +54,7 @@ internal class PillDisplayHandler(
                 when {
                     room == null -> MatrixItem.RoomItem(roomId, roomId, null)
                     text == MatrixItem.NOTIFY_EVERYONE -> room.toEveryoneInRoomMatrixItem()
+                    permalink.isRoomAlias -> room.toRoomAliasMatrixItem()
                     else -> room.toMatrixItem()
                 }
             }

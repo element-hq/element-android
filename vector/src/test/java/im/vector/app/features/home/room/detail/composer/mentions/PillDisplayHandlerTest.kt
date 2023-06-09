@@ -57,7 +57,10 @@ internal class PillDisplayHandlerTest {
         const val KNOWN_MATRIX_USER_NAME = "known user"
         const val CUSTOM_DOMAIN_MATRIX_ROOM_URL = "https://customdomain/#/room/$KNOWN_MATRIX_ROOM_ID"
         const val CUSTOM_DOMAIN_MATRIX_USER_URL = "https://customdomain.com/#/user/$KNOWN_MATRIX_USER_ID"
+        const val KNOWN_MATRIX_ROOM_ALIAS = "#known-alias:matrix.org"
+        const val KNOWN_MATRIX_ROOM_ALIAS_URL = "https://matrix.to/#/$KNOWN_MATRIX_ROOM_ALIAS"
     }
+    https://matrix.to/#/#rich-text-editor:matrix.org
 
     @Before
     fun setUp() {
@@ -66,6 +69,7 @@ internal class PillDisplayHandlerTest {
         every { mockGetRoom(UNKNOWN_MATRIX_ROOM_ID) } returns null
         every { mockGetRoom(KNOWN_MATRIX_ROOM_ID) } returns createFakeRoom(KNOWN_MATRIX_ROOM_ID, KNOWN_MATRIX_ROOM_NAME, KNOWN_MATRIX_ROOM_AVATAR)
         every { mockGetRoom(ROOM_ID) } returns createFakeRoom(ROOM_ID, KNOWN_MATRIX_ROOM_NAME, KNOWN_MATRIX_ROOM_AVATAR)
+        every { mockGetRoom(KNOWN_MATRIX_ROOM_ALIAS) } returns createFakeRoomWithAlias(KNOWN_MATRIX_ROOM_ALIAS, KNOWN_MATRIX_ROOM_ID, KNOWN_MATRIX_ROOM_NAME, KNOWN_MATRIX_ROOM_AVATAR)
     }
 
     @Test
@@ -175,6 +179,16 @@ internal class PillDisplayHandlerTest {
         assertEquals(MatrixItem.RoomItem(KNOWN_MATRIX_ROOM_ID, KNOWN_MATRIX_ROOM_NAME, KNOWN_MATRIX_ROOM_AVATAR), matrixItem)
     }
 
+    @Test
+    fun `when resolve known room with alias link, then it returns named custom pill`() {
+        val subject = createSubject()
+
+        val matrixItem = subject.resolveLinkDisplay("text", KNOWN_MATRIX_ROOM_ALIAS_URL)
+                .getMatrixItem()
+
+        assertEquals(MatrixItem.RoomAliasItem(KNOWN_MATRIX_ROOM_ALIAS, KNOWN_MATRIX_ROOM_NAME, KNOWN_MATRIX_ROOM_AVATAR), matrixItem)
+    }
+
     private fun TextDisplay.getMatrixItem(): MatrixItem? {
         val customSpan = this as? TextDisplay.Custom
         assertNotNull("The URL did not resolve to a custom link display method", customSpan)
@@ -204,6 +218,16 @@ internal class PillDisplayHandlerTest {
             encryptionEventTs = null,
             typingUsers = emptyList(),
             isEncrypted = false
+    )
+
+    private fun createFakeRoomWithAlias(roomAlias: String, roomId: String, roomName: String, avatarUrl: String): RoomSummary = RoomSummary(
+            roomId = roomId,
+            displayName = roomName,
+            avatarUrl = avatarUrl,
+            encryptionEventTs = null,
+            typingUsers = emptyList(),
+            isEncrypted = false,
+            canonicalAlias = roomAlias
     )
 
     data class MatrixItemHolderSpan(
