@@ -2485,4 +2485,5 @@
     <string name="started_a_voice_broadcast">Đã bắt đầu phát thanh</string>
     <string name="verification_request_waiting_for_recovery">Xác thực bằng khóa bảo mật hay chuỗi từ bảo mật…</string>
     <string name="contact_admin_to_restore_encryption">Vui lòng liên hệ một quản trị viên để khôi phục mã hóa về trạng thái hợp lệ.</string>
+    <string name="room_profile_section_restore_security">Khôi phục mã hóa</string>
 </resources>
