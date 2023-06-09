@@ -60,7 +60,6 @@ internal class PillDisplayHandlerTest {
         const val KNOWN_MATRIX_ROOM_ALIAS = "#known-alias:matrix.org"
         const val KNOWN_MATRIX_ROOM_ALIAS_URL = "https://matrix.to/#/$KNOWN_MATRIX_ROOM_ALIAS"
     }
-    https://matrix.to/#/#rich-text-editor:matrix.org
 
     @Before
     fun setUp() {
@@ -69,7 +68,12 @@ internal class PillDisplayHandlerTest {
         every { mockGetRoom(UNKNOWN_MATRIX_ROOM_ID) } returns null
         every { mockGetRoom(KNOWN_MATRIX_ROOM_ID) } returns createFakeRoom(KNOWN_MATRIX_ROOM_ID, KNOWN_MATRIX_ROOM_NAME, KNOWN_MATRIX_ROOM_AVATAR)
         every { mockGetRoom(ROOM_ID) } returns createFakeRoom(ROOM_ID, KNOWN_MATRIX_ROOM_NAME, KNOWN_MATRIX_ROOM_AVATAR)
-        every { mockGetRoom(KNOWN_MATRIX_ROOM_ALIAS) } returns createFakeRoomWithAlias(KNOWN_MATRIX_ROOM_ALIAS, KNOWN_MATRIX_ROOM_ID, KNOWN_MATRIX_ROOM_NAME, KNOWN_MATRIX_ROOM_AVATAR)
+        every { mockGetRoom(KNOWN_MATRIX_ROOM_ALIAS) } returns createFakeRoomWithAlias(
+                KNOWN_MATRIX_ROOM_ALIAS,
+                KNOWN_MATRIX_ROOM_ID,
+                KNOWN_MATRIX_ROOM_NAME,
+                KNOWN_MATRIX_ROOM_AVATAR
+        )
     }
 
     @Test
