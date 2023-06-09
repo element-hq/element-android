@@ -808,15 +808,14 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
                 )
                 append(if (startToCompose) ": " else " ")
             }
-            if (startToCompose) {
-                if (displayName.startsWith("/")) {
-                    // Ensure displayName will not be interpreted as a Slash command
-                    composer.editText.append("\\")
-                }
-                composer.editText.append(pill)
-            } else {
-                composer.editText.text?.insert(composer.editText.selectionStart, pill)
+            if (startToCompose && displayName.startsWith("/")) {
+                // Ensure displayName will not be interpreted as a Slash command
+                composer.editText.append("\\")
             }
+            // Always use EditText.getText().insert for adding pills as TextView.append doesn't appear
+            // to upgrade to BufferType.Spannable as hinted at in the docs:
+            // https://developer.android.com/reference/android/widget/TextView#append(java.lang.CharSequence)
+            composer.editText.text.insert(composer.editText.selectionStart, pill)
         }
         focusComposerAndShowKeyboard()
     }
