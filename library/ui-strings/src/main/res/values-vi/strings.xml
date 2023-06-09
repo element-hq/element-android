@@ -2486,7 +2486,7 @@
     <string name="verification_request_waiting_for_recovery">Xác thực bằng khóa bảo mật hay chuỗi từ bảo mật…</string>
     <string name="contact_admin_to_restore_encryption">Vui lòng liên hệ một quản trị viên để khôi phục mã hóa về trạng thái hợp lệ.</string>
     <string name="room_profile_section_restore_security">Khôi phục mã hóa</string>
-    <string name="settings_nightly_build">Bản dựng mỗi ngày</string>
+    <string name="settings_nightly_build">Bản dựng hằng ngày</string>
     <string name="verification_verify_with_another_device">Xác thực với thiết bị khác</string>
     <string name="room_profile_section_more_polls">Lịch sử bỏ phiếu</string>
     <string name="settings_sessions_list">Các phiên</string>
@@ -2495,4 +2495,6 @@
     <string name="crosssigning_verify_after_update">Ứng dụng được cập nhật</string>
     <string name="verification_profile_other_device_untrust_info">Trước khi người dùng này tin tưởng phiên này, các tin nhắn gửi đến phiên và từ phiên đều mang nhãn cảnh báo.</string>
     <string name="verification_verify_identity">Xác thực danh tính để truy cập vào các tin nhắn được mã hóa và chứng minh danh tính của bạn với những người khác.</string>
+    <string name="settings_nightly_build_update">Tải bản dựng mới nhất (ghi chú: bạn có thể gặp vấn đề khi đăng nhập)</string>
+    <string name="verification_request_was_sent"></string>
 </resources>
