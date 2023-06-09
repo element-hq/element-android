@@ -2458,4 +2458,5 @@
     <string name="secure_backup_reset_danger_warning">Chỉ tiếp tục nếu bạn chắc chắn là bạn đã mất tất cả các thiết bị và khóa bảo mật.</string>
     <string name="a11y_collapse_space_children">Đóng %s mục</string>
     <string name="a11y_expand_space_children">Mở %s mục</string>
+    <string name="direct_room_user_list_only_invite_one_email">Bạn chỉ có thể mời một địa chỉ thư điện tử một lần</string>
 </resources>
