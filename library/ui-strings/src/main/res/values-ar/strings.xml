@@ -1162,12 +1162,12 @@
     <string name="login_reset_password_password_hint">كلمة السر الجديدة</string>
     <string name="login_reset_password_submit">التالي</string>
     <plurals name="x_selected">
-        <item quantity="zero">صفر</item>
-        <item quantity="one">واحد</item>
-        <item quantity="two">اثنان</item>
-        <item quantity="few">قليلة</item>
-        <item quantity="many">كثيرة</item>
-        <item quantity="other">اخرى</item>
+        <item quantity="zero">لم تحدد</item>
+        <item quantity="one">واحد محدد</item>
+        <item quantity="two">اثنان محددان</item>
+        <item quantity="few">%1$d محددة</item>
+        <item quantity="many">%1$d محددة</item>
+        <item quantity="other">%1$d محددة</item>
     </plurals>
     <plurals name="notice_room_canonical_alias_alternative_removed">
         <item quantity="zero">صفر</item>
@@ -1210,4 +1210,14 @@
     <string name="time_unit_minute_short">د</string>
     <string name="time_unit_hour_short">سا</string>
     <string name="notice_voice_broadcast_ended">أنهى %1$s البث الصوتي.</string>
+    <string name="settings_room_directory_show_all_rooms_summary">أظهر كل الغرف في دليل الغرف. حتى الغرف ذات المحتوى الحساس.</string>
+    <string name="invites_empty_message">هنا ستجد الطلبات والدعوات.</string>
+    <string name="invites_empty_title">لا جديد.</string>
+    <string name="invites_title">الدعوات</string>
+    <string name="space_list_empty_message">الفضاءات هي طريقة جديدة لتنظيم الغرف والأفراد.أنشئ فضاءً للبدأ.</string>
+    <string name="space_list_empty_title">بدون فضاءات.</string>
+    <string name="home_layout_preferences">تفضيلات التخطيط</string>
+    <string name="notice_display_name_changed_to">غير %1$s اسمه العلني إلى %2$s</string>
+    <string name="a11y_collapse_space_children">إغلاق %s العناصر الفرعية</string>
+    <string name="a11y_expand_space_children">توسيع %s العناصر الفرعية</string>
 </resources>

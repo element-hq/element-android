@@ -2949,4 +2949,13 @@
     <string name="pill_message_from_unknown_user">Sõnum</string>
     <string name="pill_message_from_user">Sõnum kasutajalt %s</string>
     <string name="settings_crypto_version">Krüptoteekide versioon</string>
+    <string name="notice_display_name_changed_to">%1$s muutis oma uueks kuvatavaks nimeks %2$s</string>
+    <string name="avatar_of_user">Kasutaja %1$s tunnuspilt</string>
+    <string name="avatar_of_room">%1$s jututoa tunnuspilt</string>
+    <string name="avatar_of_space">%1$s kogukonna tunnuspilt</string>
+    <string name="confirm_your_identity_after_update">Turvalisele sõnumivahetusele on lisandunud palju täiendusi. Palun verifitseeri oma seade uuesti.</string>
+    <string name="verification_profile_other_device_untrust_info">Seni kuni nimetatud kasutaja usaldab seda sessiooni, kõik siit ja siia saadetud sõnumid on märgistatud hoiatusega.</string>
+    <string name="crosssigning_verify_after_update">Rakendus on uuendatud</string>
+    <string name="sign_out_anyway">Jah, ikkagi logi välja</string>
+    <string name="sign_out_failed_dialog_message">Ühendus koduserveriga puudub. Kui sa jätkad ja logid võrgust välja, siis seda seadet ei kustutata sinu seadmete loendist ning saad seda hiljem mõnest muust Matrixi kliendist teha.</string>
 </resources>
