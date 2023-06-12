@@ -677,7 +677,7 @@
     <string name="settings_troubleshoot_test_battery_success">${app_name} non è influenzato dall\'ottimizzazione della batteria.</string>
     <string name="settings_troubleshoot_test_battery_failed">Se si lascia un dispositivo scollegato, fermo e con lo schermo spento, dopo un certo tempo questo entra in modalità Doze. Ciò impedisce alle App di accedere alla rete e ritarda le attività, le sincronizzazioni e la ricezione dei normali allarmi.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignora l\'ottimizzazione</string>
-    <string name="no_valid_google_play_services_apk">Nessun APK Google Play Services trovato. Le notifiche non funzioneranno bene.</string>
+    <string name="no_valid_google_play_services_apk">Google Play Services non trovato. Le notifiche non funzioneranno bene.</string>
     <string name="video_call_in_progress">Chiamata video in corso…</string>
     <string name="title_activity_keys_backup_setup">Backup delle chiavi</string>
     <string name="title_activity_keys_backup_restore">Usa il Backup delle chiavi</string>
