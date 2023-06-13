@@ -19,7 +19,6 @@ package org.matrix.android.sdk.internal.session.sync.handler
 import androidx.work.BackoffPolicy
 import androidx.work.ExistingWorkPolicy
 import org.matrix.android.sdk.api.MatrixPatterns
-import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
 import org.matrix.android.sdk.internal.crypto.crosssigning.UpdateTrustWorker
 import org.matrix.android.sdk.internal.crypto.crosssigning.UpdateTrustWorkerDataRepository
 import org.matrix.android.sdk.internal.di.SessionId
@@ -39,16 +38,16 @@ internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
         private val directChatsHelper: DirectChatsHelper,
         private val ephemeralTemporaryStore: RoomSyncEphemeralTemporaryStore,
         private val updateUserAccountDataTask: UpdateUserAccountDataTask,
-        private val crossSigningService: CrossSigningService,
         private val updateTrustWorkerDataRepository: UpdateTrustWorkerDataRepository,
         private val workManagerProvider: WorkManagerProvider,
+        private val roomShieldSummaryUpdater: ShieldSummaryUpdater,
         @SessionId private val sessionId: String,
 ) {
     suspend fun handle(aggregator: SyncResponsePostTreatmentAggregator) {
         cleanupEphemeralFiles(aggregator.ephemeralFilesToDelete)
         updateDirectUserIds(aggregator.directChatsToCheck)
         fetchAndUpdateUsers(aggregator.userIdsToFetch)
-        handleUserIdsForCheckingTrustAndAffectedRoomShields(aggregator.userIdsForCheckingTrustAndAffectedRoomShields)
+        handleRefreshRoomShieldsForRooms(aggregator.roomsWithMembershipChangesForShieldUpdate)
     }
 
     private fun cleanupEphemeralFiles(ephemeralFilesToDelete: List<String>) {
@@ -105,8 +104,8 @@ internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
                 .enqueue()
     }
 
-    private suspend fun handleUserIdsForCheckingTrustAndAffectedRoomShields(userIdsWithDeviceUpdate: Collection<String>) {
-        if (userIdsWithDeviceUpdate.isEmpty()) return
-        crossSigningService.checkTrustAndAffectedRoomShields(userIdsWithDeviceUpdate.toList())
+    private fun handleRefreshRoomShieldsForRooms(roomIds: Set<String>) {
+        if (roomIds.isEmpty()) return
+        roomShieldSummaryUpdater.refreshShieldsForRoomIds(roomIds)
     }
 }

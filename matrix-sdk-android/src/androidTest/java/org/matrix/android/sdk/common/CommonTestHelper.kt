@@ -99,6 +99,23 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
                 }
             }
         }
+
+        @OptIn(ExperimentalCoroutinesApi::class)
+        internal fun runLongCryptoTest(context: Context, cryptoConfig: MXCryptoConfig? = null, autoSignoutOnClose: Boolean = true, block: suspend CoroutineScope.(CryptoTestHelper, CommonTestHelper) -> Unit) {
+            val testHelper = CommonTestHelper(context, cryptoConfig)
+            val cryptoTestHelper = CryptoTestHelper(testHelper)
+            return runTest(dispatchTimeoutMs = TestConstants.timeOutMillis * 4) {
+                try {
+                    withContext(Dispatchers.Default) {
+                        block(cryptoTestHelper, testHelper)
+                    }
+                } finally {
+                    if (autoSignoutOnClose) {
+                        testHelper.cleanUpOpenedSessions()
+                    }
+                }
+            }
+        }
     }
 
     internal val matrix: TestMatrix

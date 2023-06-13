@@ -28,7 +28,10 @@ import javax.inject.Inject
 @JsonClass(generateAdapter = true)
 internal data class UpdateTrustWorkerData(
         @Json(name = "userIds")
-        val userIds: List<String>
+        val userIds: List<String>,
+        // When we just need to refresh the room shield (no change on user keys, but a membership change)
+        @Json(name = "roomIds")
+        val roomIds: List<String>? = null
 )
 
 internal class UpdateTrustWorkerDataRepository @Inject constructor(
@@ -38,12 +41,12 @@ internal class UpdateTrustWorkerDataRepository @Inject constructor(
     private val jsonAdapter = MoshiProvider.providesMoshi().adapter(UpdateTrustWorkerData::class.java)
 
     // Return the path of the created file
-    fun createParam(userIds: List<String>): String {
+    fun createParam(userIds: List<String>, roomIds: List<String>? = null): String {
         val filename = "${UUID.randomUUID()}.json"
         workingDirectory.mkdirs()
         val file = File(workingDirectory, filename)
 
-        UpdateTrustWorkerData(userIds = userIds)
+        UpdateTrustWorkerData(userIds = userIds, roomIds = roomIds)
                 .let { jsonAdapter.toJson(it) }
                 .let { file.writeText(it) }
 

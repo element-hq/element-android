@@ -29,7 +29,8 @@ internal class SyncResponsePostTreatmentAggregator {
     val userIdsToFetch = mutableSetOf<String>()
 
     // Set of users to call `crossSigningService.checkTrustAndAffectedRoomShields` once per sync
-    val userIdsForCheckingTrustAndAffectedRoomShields = mutableSetOf<String>()
+
+    val roomsWithMembershipChangesForShieldUpdate = mutableSetOf<String>()
 
     // For the crypto store
     val cryptoStoreAggregator = CryptoStoreAggregator()

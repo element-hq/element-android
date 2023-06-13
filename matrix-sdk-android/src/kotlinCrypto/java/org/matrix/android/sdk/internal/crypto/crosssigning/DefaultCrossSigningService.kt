@@ -49,7 +49,6 @@ import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.session.SessionScope
-import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.util.JsonCanonicalizer
 import org.matrix.android.sdk.internal.util.logLimit
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
@@ -66,7 +65,6 @@ internal class DefaultCrossSigningService @Inject constructor(
         private val deviceListManager: DeviceListManager,
         private val initializeCrossSigningTask: InitializeCrossSigningTask,
         private val uploadSignaturesTask: UploadSignaturesTask,
-        private val taskExecutor: TaskExecutor,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val cryptoCoroutineScope: CoroutineScope,
         private val workManagerProvider: WorkManagerProvider,
@@ -612,9 +610,7 @@ internal class DefaultCrossSigningService @Inject constructor(
         withContext(coroutineDispatchers.crypto) {
             // This device should be yours
             val device = cryptoStore.getUserDevice(myUserId, deviceId)
-            if (device == null) {
-                throw IllegalArgumentException("This device [$deviceId] is not known, or not yours")
-            }
+                    ?: throw IllegalArgumentException("This device [$deviceId] is not known, or not yours")
 
             val myKeys = getUserCrossSigningKeys(myUserId)
                     ?: throw Throwable("CrossSigning is not setup for this account")
