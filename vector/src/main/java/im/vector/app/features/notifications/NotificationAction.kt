@@ -30,7 +30,6 @@ fun List<Action>.toNotificationAction(): NotificationAction {
     forEach { action ->
         when (action) {
             is Action.Notify -> shouldNotify = true
-            is Action.DoNotNotify -> shouldNotify = false
             is Action.Highlight -> highlight = action.highlight
             is Action.Sound -> sound = action.sound
         }

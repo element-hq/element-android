@@ -63,7 +63,7 @@ internal fun RoomNotificationState.toRoomPushRule(roomId: String): RoomPushRule?
                     pattern = roomId
             )
             val rule = PushRule(
-                    actions = listOf(Action.DoNotNotify).toJson(),
+                    actions = emptyList<Action>().toJson(),
                     enabled = true,
                     ruleId = roomId,
                     conditions = listOf(condition)
@@ -81,7 +81,7 @@ internal fun RoomNotificationState.toRoomPushRule(roomId: String): RoomPushRule?
 internal fun RoomPushRule.toRoomNotificationState(): RoomNotificationState {
     return if (rule.enabled) {
         val actions = rule.getActions()
-        if (actions.contains(Action.DoNotNotify)) {
+        if (actions.isEmpty()) {
             if (kind == RuleSetKey.OVERRIDE) {
                 RoomNotificationState.MUTE
             } else {

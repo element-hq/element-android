@@ -26,6 +26,6 @@ sealed class StandardActions(
     object NotifyRingSound : StandardActions(actions = listOf(Action.Notify, Action.Sound(sound = Action.ACTION_OBJECT_VALUE_VALUE_RING)))
     object Highlight : StandardActions(actions = listOf(Action.Notify, Action.Highlight(highlight = true)))
     object HighlightDefaultSound : StandardActions(actions = listOf(Action.Notify, Action.Highlight(highlight = true), Action.Sound()))
-    object DontNotify : StandardActions(actions = listOf(Action.DoNotNotify))
+    object DontNotify : StandardActions(actions = emptyList())
     object Disabled : StandardActions(actions = null)
 }

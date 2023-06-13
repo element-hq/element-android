@@ -121,8 +121,6 @@ data class PushRule(
 
         if (notify) {
             mutableActions.add(Action.ACTION_NOTIFY)
-        } else {
-            mutableActions.add(Action.ACTION_DONT_NOTIFY)
         }
 
         return copy(actions = mutableActions)
@@ -140,5 +138,5 @@ data class PushRule(
      *
      * @return true if the rule should not play sound
      */
-    fun shouldNotNotify() = actions.contains(Action.ACTION_DONT_NOTIFY)
+    fun shouldNotNotify() = actions.isEmpty() || actions.contains(Action.ACTION_DONT_NOTIFY)
 }
