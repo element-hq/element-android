@@ -1,0 +1,1 @@
+MSC3987 implementation: the 'dont_notify' action for a push_rule is now deprecated and replaced by an empty action list.
