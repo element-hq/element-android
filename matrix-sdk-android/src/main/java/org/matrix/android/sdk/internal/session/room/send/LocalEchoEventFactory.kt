@@ -817,7 +817,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         val content = if (reason != null || withRelations != null) {
             EventRedactBody(
                     reason = reason,
-                    withRelations = withRelations,
+                    unstableWithRelations = withRelations,
             ).toContent().plus(additionalContent.orEmpty())
         } else {
             additionalContent

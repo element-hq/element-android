@@ -55,7 +55,7 @@ internal class DefaultRedactEventTask @Inject constructor(
                     eventId = params.eventId,
                     body = EventRedactBody(
                             reason = params.reason,
-                            withRelations = withRelations,
+                            unstableWithRelations = withRelations,
                     )
             )
         }
