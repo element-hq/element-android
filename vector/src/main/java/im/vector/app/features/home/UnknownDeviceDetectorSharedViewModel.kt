@@ -39,7 +39,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
@@ -116,8 +115,14 @@ class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(
                         session.sessionParams.deviceId != it.deviceId
                     }
                     .filter { info ->
-                        // filter out verified sessions or those which do not support encryption (i.e. without crypto info)
-                        cryptoList.firstOrNull { info.deviceId == it.deviceId }?.isVerified?.not().orFalse()
+                        val matchingDeviceWithKeys = cryptoList.firstOrNull { it.deviceId == info.deviceId }
+                        if (matchingDeviceWithKeys == null) {
+                            // filter out verified sessions or those which do not support encryption (i.e. without crypto info)
+                            false
+                        } else {
+                            // Only report unverified
+                            !matchingDeviceWithKeys.isVerified
+                        }
                     }
                     // filter out ignored devices
                     .filter { shouldShowUnverifiedSessionsAlertUseCase.execute(it.deviceId) }
@@ -136,7 +141,7 @@ class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(
         }
                 .distinctUntilChanged()
                 .execute { async ->
-                    Timber.v("## Detector trigger passed distinct")
+                    Timber.v("## Detector trigger passed distinct ${async.invoke()}")
                     copy(
                             myMatrixItem = session.getUserOrDefault(session.myUserId).toMatrixItem(),
                             unknownSessions = async

@@ -242,8 +242,8 @@ class DefaultNavigator @Inject constructor(
             }
 
             if (context is AppCompatActivity) {
-               SelfVerificationBottomSheet.forTransaction(tx.transactionId)
-                       .show(context.supportFragmentManager, "VERIF")
+                SelfVerificationBottomSheet.forTransaction(tx.transactionId)
+                        .show(context.supportFragmentManager, "VERIF")
             }
         }
     }
@@ -258,7 +258,7 @@ class DefaultNavigator @Inject constructor(
             )
             if (context is AppCompatActivity) {
                 context.supportFragmentManager.commitTransaction(allowStateLoss = true) {
-                    add(SelfVerificationBottomSheet.forTransaction(request.transactionId), "VERIF")
+                    add(SelfVerificationBottomSheet.forTransaction(request.transactionId), SelfVerificationBottomSheet.TAG)
                 }
             }
         }
@@ -266,25 +266,10 @@ class DefaultNavigator @Inject constructor(
 
     override fun requestSelfSessionVerification(context: Context) {
         coroutineScope.launch {
-            // TODO
-            // val session = sessionHolder.getSafeActiveSession() ?: return@launch
-//            val otherSessions = session.cryptoService()
-//                    .getCryptoDeviceInfoList(session.myUserId)
-//                    .filter { it.deviceId != session.sessionParams.deviceId }
-//                    .map { it.deviceId }
             if (context is AppCompatActivity) {
                 context.supportFragmentManager.commitTransaction(allowStateLoss = true) {
-                    add(SelfVerificationBottomSheet.verifyOwnUntrustedDevice(), "VERIF")
+                    add(SelfVerificationBottomSheet.verifyOwnUntrustedDevice(), SelfVerificationBottomSheet.TAG)
                 }
-//                if (otherSessions.isNotEmpty()) {
-//                    val pr = session.cryptoService().verificationService().requestSelfKeyVerification(
-//                            supportedVerificationMethodsProvider.provide())
-//                    VerificationBottomSheet.forSelfVerification(session, pr.transactionId)
-//                            .show(context.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
-//                } else {
-//                    VerificationBottomSheet.forSelfVerification(session)
-//                            .show(context.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
-//                }
             }
         }
     }
@@ -293,7 +278,7 @@ class DefaultNavigator @Inject constructor(
 //        val session = sessionHolder.getSafeActiveSession() ?: return
         coroutineScope.launch(Dispatchers.Main) {
             SelfVerificationBottomSheet.forTransaction(transactionId)
-                    .show(fragmentActivity.supportFragmentManager, "SELF_VERIF_TAG")
+                    .show(fragmentActivity.supportFragmentManager, SelfVerificationBottomSheet.TAG)
         }
     }
 
