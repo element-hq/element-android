@@ -930,7 +930,7 @@ internal class RealmCryptoStore @Inject constructor(
                     val info = realm.createObject(OutboundGroupSessionInfoEntity::class.java).apply {
                         creationTime = clock.epochMillis()
                         // Store the room history visibility on the outbound session creation
-                        shouldShareHistory = entity.shouldShareHistory
+                        shouldShareHistory = isShareKeysOnInviteEnabled() && entity.shouldShareHistory
                         putOutboundGroupSession(outboundGroupSession)
                     }
                     entity.outboundSessionInfo = info
