@@ -20,6 +20,7 @@ import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
 import io.realm.RealmList
 import io.realm.kotlin.where
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.GlobalError
 import org.matrix.android.sdk.api.failure.InitialSyncRequestReason
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
@@ -122,7 +123,7 @@ internal class UserAccountDataSyncHandler @Inject constructor(
             val updateUserAccountParams = UpdateUserAccountDataTask.DirectChatParams(
                     directMessages = directChats
             )
-            updateUserAccountDataTask.execute(updateUserAccountParams)
+            tryOrNull("Unable to update user account data") { updateUserAccountDataTask.execute(updateUserAccountParams) }
         }
     }
 
