@@ -56,6 +56,7 @@ import org.matrix.android.sdk.api.session.crypto.keysbackup.toKeysVersionResult
 import org.matrix.android.sdk.api.session.securestorage.RawBytesKeySpec
 import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
 import org.matrix.android.sdk.api.util.awaitCallback
+import timber.log.Timber
 import java.io.OutputStream
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resumeWithException
@@ -120,38 +121,49 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                 }
             }
             SetupMode.NORMAL -> {
-                // need to check if user have an existing keybackup
-                setState {
-                    copy(step = BootstrapStep.CheckingMigration)
-                }
+                checkMigration()
+            }
+        }
+    }
 
-                // We need to check if there is an existing backup
-                viewModelScope.launch(Dispatchers.IO) {
-                    val version = awaitCallback<KeysBackupLastVersionResult> {
-                        session.cryptoService().keysBackupService().getCurrentVersion(it)
-                    }.toKeysVersionResult()
-                    if (version == null) {
-                        // we just resume plain bootstrap
-                        doesKeyBackupExist = false
+    private fun checkMigration() {
+        // need to check if user have an existing keybackup
+        setState {
+            copy(step = BootstrapStep.CheckingMigration)
+        }
+
+        // We need to check if there is an existing backup
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val version = awaitCallback<KeysBackupLastVersionResult> {
+                    session.cryptoService().keysBackupService().getCurrentVersion(it)
+                }.toKeysVersionResult()
+                if (version == null) {
+                    // we just resume plain bootstrap
+                    doesKeyBackupExist = false
+                    setState {
+                        copy(step = BootstrapStep.FirstForm(keyBackUpExist = doesKeyBackupExist, methods = this.secureBackupMethod))
+                    }
+                } else {
+                    // we need to get existing backup passphrase/key and convert to SSSS
+                    val keyVersion = awaitCallback<KeysVersionResult?> {
+                        session.cryptoService().keysBackupService().getVersion(version.version, it)
+                    }
+                    if (keyVersion == null) {
+                        // strange case... just finish?
+                        _viewEvents.post(BootstrapViewEvents.Dismiss(false))
+                    } else {
+                        doesKeyBackupExist = true
+                        isBackupCreatedFromPassphrase = keyVersion.getAuthDataAsMegolmBackupAuthData()?.privateKeySalt != null
                         setState {
                             copy(step = BootstrapStep.FirstForm(keyBackUpExist = doesKeyBackupExist, methods = this.secureBackupMethod))
                         }
-                    } else {
-                        // we need to get existing backup passphrase/key and convert to SSSS
-                        val keyVersion = awaitCallback<KeysVersionResult?> {
-                            session.cryptoService().keysBackupService().getVersion(version.version, it)
-                        }
-                        if (keyVersion == null) {
-                            // strange case... just finish?
-                            _viewEvents.post(BootstrapViewEvents.Dismiss(false))
-                        } else {
-                            doesKeyBackupExist = true
-                            isBackupCreatedFromPassphrase = keyVersion.getAuthDataAsMegolmBackupAuthData()?.privateKeySalt != null
-                            setState {
-                                copy(step = BootstrapStep.FirstForm(keyBackUpExist = doesKeyBackupExist, methods = this.secureBackupMethod))
-                            }
-                        }
                     }
+                }
+            } catch (failure: Throwable) {
+                Timber.e(failure, "Error while checking key backup")
+                setState {
+                    copy(step = BootstrapStep.Error(failure))
                 }
             }
         }
@@ -271,6 +283,9 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                 setState {
                     copy(step = BootstrapStep.AccountReAuth(stringProvider.getString(R.string.authentication_error)))
                 }
+            }
+            BootstrapActions.Retry -> {
+                checkMigration()
             }
         }
     }
@@ -570,6 +585,12 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                             // Also reset the key
                             migrationRecoveryKey = null
                     )
+                }
+            }
+            is BootstrapStep.Error -> {
+                // do we let you cancel from here?
+                if (state.canLeave) {
+                    _viewEvents.post(BootstrapViewEvents.SkipBootstrap(state.passphrase != null))
                 }
             }
         }

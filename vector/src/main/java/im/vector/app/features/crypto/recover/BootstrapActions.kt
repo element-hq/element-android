@@ -20,6 +20,7 @@ import im.vector.app.core.platform.VectorViewModelAction
 import java.io.OutputStream
 
 sealed class BootstrapActions : VectorViewModelAction {
+    object Retry : BootstrapActions()
 
     // Navigation
 
