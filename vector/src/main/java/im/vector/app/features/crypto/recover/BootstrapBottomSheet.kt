@@ -212,6 +212,11 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetBoot
                 views.bootstrapTitleText.text = getString(R.string.upgrade_security)
                 showFragment(BootstrapMigrateBackupFragment::class)
             }
+            is BootstrapStep.Error -> {
+                views.bootstrapIcon.isVisible = true
+                views.bootstrapTitleText.text = getString(R.string.bottom_sheet_setup_secure_backup_title)
+                showFragment(BootstrapErrorFragment::class)
+            }
         }
         super.invalidate()
     }
