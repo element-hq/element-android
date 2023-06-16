@@ -2,9 +2,9 @@
 <resources>
     <string name="notice_room_invite_no_invitee">Invito di %s</string>
     <string name="notice_room_invite">%1$s ha invitato %2$s</string>
-    <string name="notice_room_invite_you">%1$s ti ha invitato</string>
-    <string name="notice_room_join">%1$s è entrato nella stanza</string>
-    <string name="notice_room_leave">%1$s è uscito dalla stanza</string>
+    <string name="notice_room_invite_you">%1$s ti ha invitato/a</string>
+    <string name="notice_room_join">%1$s è entrato/a nella stanza</string>
+    <string name="notice_room_leave">%1$s è uscito/a dalla stanza</string>
     <string name="notice_room_reject">%1$s ha rifiutato l\'invito</string>
     <string name="notice_room_remove">%1$s ha buttato fuori %2$s</string>
     <string name="notice_room_unban">%1$s ha rimosso il ban nei confronti di %2$s</string>
@@ -60,8 +60,8 @@
     <string name="notice_room_invite_no_invitee_with_reason">Invito di %1$s. Motivo: %2$s</string>
     <string name="notice_room_invite_with_reason">%1$s ha invitato %2$s. Motivo: %3$s</string>
     <string name="notice_room_invite_you_with_reason">%1$s ti ha invitato. Motivo: %2$s</string>
-    <string name="notice_room_join_with_reason">%1$s è entrato nella stanza. Motivo: %2$s</string>
-    <string name="notice_room_leave_with_reason">%1$s è uscito dalla stanza. Motivo: %2$s</string>
+    <string name="notice_room_join_with_reason">%1$s è entrato/a nella stanza. Motivo: %2$s</string>
+    <string name="notice_room_leave_with_reason">%1$s è uscito/a dalla stanza. Motivo: %2$s</string>
     <string name="notice_room_reject_with_reason">%1$s ha rifiutato l\'invito. Motivo: %2$s</string>
     <string name="notice_room_remove_with_reason">%1$s ha cacciato fuori %2$s. Motivo: %3$s</string>
     <string name="notice_room_unban_with_reason">%1$s ha riammesso %2$s. Motivo: %3$s</string>
@@ -87,8 +87,8 @@
     <string name="notice_room_invite_no_invitee_by_you">Il tuo invito</string>
     <string name="notice_room_created_by_you">Hai creato la stanza</string>
     <string name="notice_room_invite_by_you">Hai invitato %1$s</string>
-    <string name="notice_room_join_by_you">Sei entrato nella stanza</string>
-    <string name="notice_room_leave_by_you">Sei uscito dalla stanza</string>
+    <string name="notice_room_join_by_you">Sei entrato/a nella stanza</string>
+    <string name="notice_room_leave_by_you">Sei uscito/a dalla stanza</string>
     <string name="notice_room_reject_by_you">Hai rifiutato l\'invito</string>
     <string name="notice_room_remove_by_you">Hai buttato fuori %1$s</string>
     <string name="notice_room_unban_by_you">Hai rimosso il ban nei confronti di %1$s</string>
@@ -133,8 +133,8 @@
     <string name="notice_power_level_diff">%1$s da %2$s a %3$s</string>
     <string name="notice_room_invite_no_invitee_with_reason_by_you">Il tuo invito. Motivo: %1$s</string>
     <string name="notice_room_invite_with_reason_by_you">Hai invitato %1$s. Motivo: %2$s</string>
-    <string name="notice_room_join_with_reason_by_you">Sei entrato nella stanza. Motivo: %1$s</string>
-    <string name="notice_room_leave_with_reason_by_you">Sei uscito dalla stanza. Motivo: %1$s</string>
+    <string name="notice_room_join_with_reason_by_you">Sei entrato/a nella stanza. Motivo: %1$s</string>
+    <string name="notice_room_leave_with_reason_by_you">Sei uscito/a dalla stanza. Motivo: %1$s</string>
     <string name="notice_room_reject_with_reason_by_you">Hai rifiutato l\'invito. Motivo: %1$s</string>
     <string name="notice_room_remove_with_reason_by_you">Hai cacciato %1$s. Motivo: %2$s</string>
     <string name="notice_room_unban_with_reason_by_you">Hai riammesso %1$s. Motivo: %2$s</string>
@@ -160,10 +160,10 @@
     <string name="notice_direct_room_guest_access_forbidden">%1$s ha impedito l\'accesso alla stanza agli ospiti.</string>
     <string name="notice_direct_room_guest_access_can_join_by_you">Hai permesso l\'accesso agli ospiti.</string>
     <string name="notice_direct_room_guest_access_can_join">%1$s ha permesso l\'accesso agli ospiti.</string>
-    <string name="notice_direct_room_join_with_reason_by_you">Sei entrato. Motivo: %1$s</string>
-    <string name="notice_direct_room_leave_with_reason_by_you">Sei uscito. Motivo: %1$s</string>
-    <string name="notice_direct_room_leave_with_reason">%1$s è uscito. Motivo: %2$s</string>
-    <string name="notice_direct_room_join_with_reason">%1$s è entrato. Motivo: %2$s</string>
+    <string name="notice_direct_room_join_with_reason_by_you">Sei entrato/a. Motivo: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason_by_you">Sei uscito/a. Motivo: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason">%1$s è uscito/a. Motivo: %2$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$s è entrato/a. Motivo: %2$s</string>
     <string name="notice_direct_room_third_party_revoked_invite_by_you">Hai revocato l\'invito a %1$s</string>
     <string name="notice_direct_room_third_party_revoked_invite">%1$s ha revocato l\'invito a %2$s</string>
     <string name="notice_direct_room_third_party_invite_by_you">Hai invitato %1$s</string>
@@ -172,10 +172,10 @@
     <string name="notice_direct_room_update">%s ha aggiornato la stanza.</string>
     <string name="notice_made_future_direct_room_visibility_by_you">Hai reso visibili i messaggi futuri a %1$s</string>
     <string name="notice_made_future_direct_room_visibility">%1$s ha reso visibili i messaggi futuri a %2$s</string>
-    <string name="notice_direct_room_leave_by_you">Sei uscito dalla stanza</string>
-    <string name="notice_direct_room_leave">%1$s è uscito dalla stanza</string>
-    <string name="notice_direct_room_join_by_you">Sei entrato</string>
-    <string name="notice_direct_room_join">%1$s è entrato</string>
+    <string name="notice_direct_room_leave_by_you">Sei uscito/a dalla stanza</string>
+    <string name="notice_direct_room_leave">%1$s è uscito/a dalla stanza</string>
+    <string name="notice_direct_room_join_by_you">Sei entrato/a</string>
+    <string name="notice_direct_room_join">%1$s è entrato/a</string>
     <string name="notice_direct_room_created_by_you">Hai creato la discussione</string>
     <string name="notice_direct_room_created">%1$s ha creato la discussione</string>
     <string name="room_displayname_empty_room_was">Stanza vuota (era %s)</string>
@@ -528,7 +528,7 @@
     <string name="create">Crea</string>
     <string name="group_details_home">Home</string>
     <string name="rooms">Stanze</string>
-    <string name="invited">Invitato</string>
+    <string name="invited">Invitato/a</string>
     <string name="has_been_removed">%2$s ti ha buttato fuori da %1$s</string>
     <string name="has_been_banned">%2$s ti ha bannato da %1$s</string>
     <string name="reason_colon">Motivo: %1$s</string>
@@ -851,7 +851,7 @@
     <string name="reply">Rispondi</string>
     <string name="global_retry">Riprova</string>
     <string name="send_you_invite">Ti ha inviato un invito</string>
-    <string name="invited_by">Invitato da %s</string>
+    <string name="invited_by">Invitato/a da %s</string>
     <string name="room_list_catchup_empty_body">Non hai più messaggi non letti</string>
     <string name="room_list_people_empty_title">Conversazioni</string>
     <string name="room_list_people_empty_body">Le tue conversazioni dirette verranno mostrate qui. Tocca il pulsante + in basso a destra per iniziarne qualcuna.</string>
@@ -1684,7 +1684,7 @@
     <string name="secure_backup_reset_all_no_other_devices">Fallo solo se non hai altri dispositivi con cui fare la verifica.</string>
     <string name="secure_backup_reset_all">Reimposta tutto</string>
     <string name="bad_passphrase_key_reset_all_action">Hai dimenticato o perso tutte le opzioni di ripristino\? Reimposta tutto</string>
-    <string name="direct_room_created_summary_item_by_you">Sei entrato.</string>
+    <string name="direct_room_created_summary_item_by_you">Sei entrato/a.</string>
     <string name="direct_room_encryption_enabled_tile_description">I messaggi in questa conversazione sono cifrati end-to-end.</string>
     <string name="direct_room_profile_section_more_leave">Esci</string>
     <string name="direct_room_profile_section_more_settings">Impostazioni</string>
@@ -1716,7 +1716,7 @@
     <string name="settings_security_pin_code_grace_period_summary_off">Il codice PIN è richiesto ogni volta che apri ${app_name}.</string>
     <string name="settings_security_pin_code_grace_period_summary_on">Il codice PIN è richiesto dopo 2 minuti di inattività su ${app_name}.</string>
     <string name="settings_security_pin_code_grace_period_title">Richiedi il PIN dopo 2 minuti</string>
-    <string name="direct_room_created_summary_item">%s è entrato.</string>
+    <string name="direct_room_created_summary_item">%s è entrato/a.</string>
     <string name="settings_troubleshoot_test_push_loop_waiting_for_push">L\'applicazione è in attesa del PUSH</string>
     <string name="warning_unsaved_change_discard">Scarta le modifiche</string>
     <string name="warning_unsaved_change">Ci sono modifiche non salvate. Scartare le modifiche\?</string>
@@ -1932,7 +1932,7 @@
     <string name="initial_sync_start_server_computing">Sincronizzazione iniziale:
 \nIn attesa di risposta dal server…</string>
     <string name="event_status_sent_message">Messaggio inviato</string>
-    <string name="you_are_invited">Sei stato invitato</string>
+    <string name="you_are_invited">Sei stato/a invitato/a</string>
     <string name="spaces_beta_welcome_to_spaces_desc">Gli Spazi sono un nuovo modo per raggruppare stanze e contatti.</string>
     <string name="space_add_existing_rooms">Aggiungi stanze e Spazi esistenti</string>
     <string name="leave_space">Esci</string>
@@ -2008,7 +2008,7 @@
     <string name="space_suggested">Consigliato</string>
     <string name="space_settings_manage_rooms">Gestisci stanze</string>
     <string name="looking_for_someone_not_in_space">Cerchi qualcuno che non è in %s\?</string>
-    <string name="user_invites_you">%s ti ha invitato</string>
+    <string name="user_invites_you">%s ti ha invitato/a</string>
     <string name="a11y_public_room">Stanza pubblica</string>
     <string name="send_images_and_video_with_original_size">Invia i file multimediali nella dimensione originale</string>
     <plurals name="send_videos_with_original_size">
