@@ -77,8 +77,8 @@ object ConfigurationModule {
     fun providesCryptoConfig() = CryptoConfig(
             fallbackKeySharingStrategy = when (Config.KEY_SHARING_STRATEGY) {
                 KeySharingStrategy.WhenSendingEvent -> OutboundSessionKeySharingStrategy.WhenSendingEvent
-                KeySharingStrategy.WhenEnteringRoom -> OutboundSessionKeySharingStrategy.WhenSendingEvent
-                KeySharingStrategy.WhenTyping -> OutboundSessionKeySharingStrategy.WhenSendingEvent
+                KeySharingStrategy.WhenEnteringRoom -> OutboundSessionKeySharingStrategy.WhenEnteringRoom
+                KeySharingStrategy.WhenTyping -> OutboundSessionKeySharingStrategy.WhenTyping
             }
     )
 
