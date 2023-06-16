@@ -48,19 +48,19 @@ internal class GetPushRulesOnInvalidStateUseCaseTest {
     fun `given a list of push rules with children not matching their parent when execute then returns the list of not matching rules`() {
         // Given
         val firstActions = listOf(Action.Notify)
-        val secondActions = listOf(Action.DoNotNotify)
+        val secondActions = emptyList<Action>()
         givenARuleList(
                 listOf(
                         // first set of related rules
                         givenARuleId(RuleIds.RULE_ID_ONE_TO_ONE_ROOM, true, firstActions),
-                        givenARuleId(RuleIds.RULE_ID_POLL_START_ONE_TO_ONE, true, listOf(Action.DoNotNotify)), // diff
+                        givenARuleId(RuleIds.RULE_ID_POLL_START_ONE_TO_ONE, true, emptyList()), // diff
                         givenARuleId(RuleIds.RULE_ID_POLL_START_ONE_TO_ONE_UNSTABLE, true, emptyList()), // diff
                         givenARuleId(RuleIds.RULE_ID_POLL_END_ONE_TO_ONE, false, listOf(Action.Notify)), // diff
                         givenARuleId(RuleIds.RULE_ID_POLL_END_ONE_TO_ONE_UNSTABLE, true, listOf(Action.Notify)),
                         // second set of related rules
                         givenARuleId(RuleIds.RULE_ID_ALL_OTHER_MESSAGES_ROOMS, false, secondActions),
                         givenARuleId(RuleIds.RULE_ID_POLL_START, true, listOf(Action.Notify)), // diff
-                        givenARuleId(RuleIds.RULE_ID_POLL_START_UNSTABLE, false, listOf(Action.DoNotNotify)),
+                        givenARuleId(RuleIds.RULE_ID_POLL_START_UNSTABLE, false, emptyList()),
                         givenARuleId(RuleIds.RULE_ID_POLL_END, false, listOf(Action.Notify)), // diff
                         givenARuleId(RuleIds.RULE_ID_POLL_END_UNSTABLE, true, listOf()), // diff
                         // Another rule

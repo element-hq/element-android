@@ -20,7 +20,6 @@ import timber.log.Timber
 
 sealed class Action {
     object Notify : Action()
-    object DoNotNotify : Action()
     data class Sound(val sound: String = ACTION_OBJECT_VALUE_VALUE_DEFAULT) : Action()
     data class Highlight(val highlight: Boolean) : Action()
 
@@ -72,7 +71,6 @@ fun List<Action>.toJson(): List<Any> {
     return map { action ->
         when (action) {
             is Action.Notify -> Action.ACTION_NOTIFY
-            is Action.DoNotNotify -> Action.ACTION_DONT_NOTIFY
             is Action.Sound -> {
                 mapOf(
                         Action.ACTION_OBJECT_SET_TWEAK_KEY to Action.ACTION_OBJECT_SET_TWEAK_VALUE_SOUND,
@@ -95,7 +93,7 @@ fun PushRule.getActions(): List<Action> {
     actions.forEach { actionStrOrObj ->
         when (actionStrOrObj) {
             Action.ACTION_NOTIFY -> Action.Notify
-            Action.ACTION_DONT_NOTIFY -> Action.DoNotNotify
+            Action.ACTION_DONT_NOTIFY -> return@forEach
             is Map<*, *> -> {
                 when (actionStrOrObj[Action.ACTION_OBJECT_SET_TWEAK_KEY]) {
                     Action.ACTION_OBJECT_SET_TWEAK_VALUE_SOUND -> {
