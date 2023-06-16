@@ -210,7 +210,7 @@
     <string name="send_bug_report_description">请描述你遇到的问题。你做了什么？你期望发生什么？实际上发生了什么？</string>
     <string name="send_bug_report_placeholder">在这里描述你的问题</string>
     <string name="send_bug_report_progress">进度（%s%%）</string>
-    <string name="hs_url">主服务器 URL</string>
+    <string name="hs_url">家服务器 URL</string>
     <string name="auth_login">登录</string>
     <string name="auth_submit">提交</string>
     <string name="auth_invalid_login_param">错误的用户名和/或密码</string>
@@ -256,7 +256,7 @@
     <string name="start_voice_call">开始语音通话</string>
     <string name="start_video_call">开始视频通话</string>
     <string name="option_take_photo_video">拍摄照片或视频</string>
-    <string name="auth_recaptcha_message">此主服务器想确认你不是机器人</string>
+    <string name="auth_recaptcha_message">此家服务器想确认你不是机器人</string>
     <string name="auth_reset_password_error_unauthorized">电子邮件地址验证失败：请确保你已点击邮件中的链接</string>
     <string name="compression_opt_list_original">原始</string>
     <string name="call_connecting">通话正在连接……</string>
@@ -368,7 +368,7 @@
     <string name="devices_details_name_title">公开名称</string>
     <string name="devices_details_last_seen_title">最近一次上线</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="settings_home_server">主服务器</string>
+    <string name="settings_home_server">家服务器</string>
     <string name="settings_identity_server">身份服务器</string>
     <string name="room_settings_labs_pref_title">实验室</string>
     <string name="encryption_information_verify_device_warning">通过和你其它会话里的用户设置对比以下内容来确认：</string>
@@ -501,7 +501,7 @@
 \n
 \n要添加一些吗？</string>
     <string name="widget_integration_missing_parameter">缺少一个必需参数。</string>
-    <string name="dialog_user_consent_content">要想继续使用主服务器 %1$s 你必须阅读并同意其服务条款。</string>
+    <string name="dialog_user_consent_content">要想继续使用家服务器 %1$s 你必须阅读并同意其服务条款。</string>
     <string name="dialog_user_consent_submit">现在阅读</string>
     <string name="action_download">下载</string>
     <string name="option_send_voice">发送语音消息</string>
@@ -535,13 +535,13 @@
     <string name="resource_limit_contact_admin">联系你的服务管理员</string>
     <string name="resource_limit_soft_default">本服务器其中一项资源已超出限制，<b>部分用户将无法登录</b>。</string>
     <string name="resource_limit_hard_default">本服务器其中一项资源已超出限制。</string>
-    <string name="resource_limit_soft_mau">" 此主服务器已达到其每月活跃用户限制，因此&lt;b&gt;某些用户将无法登录&lt;/b&gt;。"</string>
-    <string name="resource_limit_hard_mau">此主服务器已达到其每月活跃用户限制。</string>
+    <string name="resource_limit_soft_mau">" 此家服务器已达到其每月活跃用户限制，因此&lt;b&gt;某些用户将无法登录&lt;/b&gt;。"</string>
+    <string name="resource_limit_hard_mau">此家服务器已达到其每月活跃用户限制。</string>
     <string name="resource_limit_hard_contact">请 %s 以继续使用本服务。</string>
     <string name="resource_limit_soft_contact">请 %s 以增加此限制的额度。</string>
     <string name="action_accept">接受</string>
     <string name="dialog_title_error">错误</string>
-    <string name="auth_accept_policies">请审阅并接受此主服务器的政策：</string>
+    <string name="auth_accept_policies">请审阅并接受此家服务器的政策：</string>
     <string name="settings_call_category">通话</string>
     <string name="settings_call_ringtone_use_app_ringtone">为来电使用 ${app_name} 的默认铃声</string>
     <string name="settings_call_ringtone_title">来电铃声</string>
@@ -580,15 +580,15 @@
     <string name="settings_troubleshoot_test_fcm_failed">FCM令牌获取失败：
 \n%1$s</string>
     <string name="settings_troubleshoot_test_token_registration_title">注册令牌</string>
-    <string name="settings_troubleshoot_test_token_registration_success">FCM令牌已成功注册至主服务器。</string>
-    <string name="settings_troubleshoot_test_token_registration_failed">未能将FCM令牌注册到主服务器：
+    <string name="settings_troubleshoot_test_token_registration_success">FCM令牌已成功注册至家服务器。</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">未能将FCM令牌注册到家服务器：
 \n %1$s</string>
     <string name="settings_labs_native_camera_summary">启动系统相机而非自定义的相机屏幕。</string>
     <string name="settings_troubleshoot_test_service_boot_title">开机时启动</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">启用开机时启动</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">检查后台限制</string>
     <string name="settings_troubleshoot_test_battery_title">电池优化</string>
-    <string name="settings_inline_url_preview_summary">当主服务器支持此功能时，在聊天中预览链接。</string>
+    <string name="settings_inline_url_preview_summary">当家服务器支持此功能时，在聊天中预览链接。</string>
     <string name="settings_send_typing_notifs">发送正在输入通知</string>
     <string name="settings_send_typing_notifs_summary">让房间中的其他用户知道你正在输入。</string>
     <string name="settings_send_markdown">Markdown 格式化</string>
@@ -652,7 +652,7 @@
     <string name="settings_noisy_notifications_preferences">设置响铃通知</string>
     <string name="settings_call_notifications_preferences">设置电话通知</string>
     <string name="settings_silent_notifications_preferences">设置静音通知</string>
-    <string name="settings_system_preferences_summary">选择指示灯颜色，震动，铃声…</string>
+    <string name="settings_system_preferences_summary">选择LED颜色、震动、铃声……</string>
     <string name="settings_cryptography_manage_keys">加密密钥管理</string>
     <string name="encryption_message_recovery">恢复已加密消息</string>
     <string name="encryption_settings_manage_message_recovery_summary">管理密钥备份</string>
@@ -669,7 +669,7 @@
     <string name="keys_backup_setup_step1_advanced">（高级）</string>
     <string name="keys_backup_setup_step1_manual_export">手动导出密钥</string>
     <string name="keys_backup_setup_step2_text_title">使用口令词组保护你的备份。</string>
-    <string name="keys_backup_setup_step2_text_description">我们将会在主服务器上为你的密钥保存一份加密拷贝。设置一个口令词组来保护你的备份的安全。
+    <string name="keys_backup_setup_step2_text_description">我们将会在家服务器上为你的密钥保存一份加密拷贝。设置一个口令词组来保护你的备份的安全。
 \n
 \n为了最大的安全性，此口令词组应当与你的账户密码不同。</string>
     <string name="keys_backup_setup_step2_button_title">设置口令词组</string>
@@ -829,7 +829,7 @@
     <string name="action_disconnect">断开连接</string>
     <string name="action_decline">拒绝</string>
     <string name="login_error_no_homeserver_found">这不是有效的 Matrix 服务器地址</string>
-    <string name="login_error_homeserver_not_found">无法在此 URL 找到主服务器，请检查</string>
+    <string name="login_error_homeserver_not_found">无法在此 URL 找到家服务器，请检查</string>
     <string name="action_play">播放</string>
     <string name="action_dismiss">忽略</string>
     <string name="action_copy">复制</string>
@@ -837,7 +837,7 @@
     <string name="bottom_action_notification">通知</string>
     <string name="call_failed_no_connection">${app_name} 呼叫失败</string>
     <string name="call_failed_no_connection_description">无法建立实时连接。
-\n请让你的主服务器的管理员配置一个 TURN 服务器，以便呼叫能够可靠地工作。</string>
+\n请让你的家服务器的管理员配置一个 TURN 服务器，以便呼叫能够可靠地工作。</string>
     <string name="call_select_sound_device">选择声音设备</string>
     <string name="sound_device_phone">电话</string>
     <string name="sound_device_speaker">扬声器</string>
@@ -928,13 +928,13 @@
     <string name="room_widget_webview_read_protected_media">读取受 DRM 保护的媒体</string>
     <string name="widget_integration_review_terms">若要继续请接受服务条款。</string>
     <string name="recovery_key_export_saved">恢复密钥已保存。</string>
-    <string name="keys_backup_setup_override_backup_prompt_tile">你的主服务器上已存在备份</string>
+    <string name="keys_backup_setup_override_backup_prompt_tile">你的家服务器上已存在备份</string>
     <string name="keys_backup_setup_override_backup_prompt_description">你似乎已在另一个会话中设置密钥备份。你想要将其替换为正在创建的吗？</string>
     <string name="secure_backup_banner_setup_line1">安全备份</string>
     <string name="secure_backup_banner_setup_line2">保护加密消息及数据的访问权</string>
     <string name="secure_backup_setup">设置安全备份</string>
     <string name="identity_server_not_defined">你未使用身份服务器</string>
-    <string name="error_user_already_logged_in">你似乎正在试图连接到另一个主服务器。你想要登出吗？</string>
+    <string name="error_user_already_logged_in">你似乎正在试图连接到另一个家服务器。你想要登出吗？</string>
     <string name="room_list_catchup_empty_title">你已经跟上了！</string>
     <string name="room_list_catchup_empty_body">你没有未读消息</string>
     <string name="room_list_people_empty_body">你的私聊消息将显示在此处。点击右下角的 + 开始一些对话。</string>
@@ -1008,7 +1008,7 @@
     <string name="settings_agree_to_terms">同意身份服务器 (%s) 服务条款使你可以通过电子邮件地址或电话号码被发现。</string>
     <string name="labs_allow_extended_logging">启用详细日志。</string>
     <string name="labs_allow_extended_logging_summary">详细日志将通过在你发送愤怒摇动（RageShake）时提供更多日志来帮助开发人员。即使启用，应用程序也不会记录消息内容或任何其他私人数据。</string>
-    <string name="error_terms_not_accepted">接收你的主服务器条款和条件后请重试。</string>
+    <string name="error_terms_not_accepted">接收你的家服务器条款和条件后请重试。</string>
     <string name="error_network_timeout">服务器似乎响应时间太长，这可能是由于连接不良或服务器错误引起的。请稍后再试。</string>
     <string name="send_attachment">发送附件</string>
     <string name="a11y_open_drawer">打开导航菜单</string>
@@ -1098,7 +1098,7 @@
     <string name="login_server_url_form_modular_notice">输入 Modular Element 或你想使用的服务器地址</string>
     <string name="login_server_url_form_common_notice">输入你想使用的服务器的地址</string>
     <string name="login_sso_error_message">载入页面时出错：%1$s (%2$d)</string>
-    <string name="login_mode_not_supported">应用无法登录到此主服务器。主服务器支持以下登录类型：%1$s。
+    <string name="login_mode_not_supported">应用无法登录到此家服务器。家服务器支持以下登录类型：%1$s。
 \n
 \n你想要通过网页客户端登录吗？</string>
     <string name="login_registration_disabled">抱歉，此服务器不接受新账户。</string>
@@ -1155,24 +1155,24 @@
     <string name="login_signup_cancel_confirmation_content">你的账户尚未创建。是否中止注册过程？</string>
     <string name="login_a11y_choose_matrix_org">选择 matrix.org</string>
     <string name="login_a11y_choose_modular">选择 Element Matrix Services</string>
-    <string name="login_a11y_choose_other">选择自定义主服务器</string>
+    <string name="login_a11y_choose_other">选择自定义家服务器</string>
     <string name="login_a11y_captcha_container">请进行人机验证</string>
     <string name="login_terms_title">接受条款以继续</string>
     <string name="login_wait_for_email_title">请检查你的电子邮件</string>
     <string name="login_wait_for_email_notice">我们向 %1$s 发送了电子邮件。
 \n请点击其中包含的链接继续账户创建。</string>
     <string name="login_validation_code_is_not_correct">输入的验证码不正确。请检查。</string>
-    <string name="login_error_outdated_homeserver_title">过时的主服务器</string>
+    <string name="login_error_outdated_homeserver_title">过时的家服务器</string>
     <plurals name="login_error_limit_exceeded_retry_after">
         <item quantity="other">发送了太多请求。你可以在 %1$d 秒后重试…</item>
     </plurals>
     <string name="login_connect_using_matrix_id_submit">使用 Matrix ID 登录</string>
     <string name="login_signin_matrix_id_title">使用 Matrix ID 登录</string>
-    <string name="login_signin_matrix_id_notice">如果你在主服务器上设置了账户，在下方使用你的 Matrix ID（例 @user:domain.com）和密码。</string>
+    <string name="login_signin_matrix_id_notice">如果你在家服务器上设置了账户，在下方使用你的 Matrix ID（例 @user:domain.com）和密码。</string>
     <string name="login_signin_matrix_id_hint">Matrix ID</string>
     <string name="login_signin_matrix_id_password_notice">如果你不知道你的密码，返回并重置。</string>
     <string name="login_signin_matrix_id_error_invalid_matrix_id">这不是有效的用户标识符。预期格式：\'@user:homeserver.org\'</string>
-    <string name="autodiscover_well_known_error">无法找到有效的主服务器。请检查你的标识符</string>
+    <string name="autodiscover_well_known_error">无法找到有效的家服务器。请检查你的标识符</string>
     <string name="signed_out_title">你已登出</string>
     <string name="signed_out_notice">这可能由于多种原因：
 \n
@@ -1184,7 +1184,7 @@
     <string name="signed_out_submit">重新登录</string>
     <string name="soft_logout_title">你已登出</string>
     <string name="soft_logout_signin_title">登录</string>
-    <string name="soft_logout_signin_notice">你的主服务器 (%1$s) 管理员将你从你的账户 %2$s (%3$s) 登出。</string>
+    <string name="soft_logout_signin_notice">你的家服务器 (%1$s) 管理员将你从你的账户 %2$s (%3$s) 登出。</string>
     <string name="soft_logout_signin_e2e_warning_notice">登录以恢复仅存储在此设备上的加密密钥。 你需要使用它们在任何设备上阅读所有安全消息。</string>
     <string name="soft_logout_signin_submit">登录</string>
     <string name="soft_logout_signin_password_hint">密码</string>
@@ -1225,8 +1225,8 @@
     <string name="verification_conclusion_not_secure">不安全</string>
     <string name="verification_conclusion_compromised">以下其中一项可能会受到威胁：
 \n
-\n - 你的主服务器
-\n - 你验证的用户连接到的主服务器
+\n - 你的家服务器
+\n - 你验证的用户连接到的家服务器
 \n - 你或其他用户的网络连接
 \n - 你或其他用户的设备</string>
     <string name="sent_a_video">视频。</string>
@@ -1347,7 +1347,7 @@
     <string name="delete_event_dialog_title">确认移除</string>
     <string name="delete_event_dialog_content">你确定要移除（删除）此事件吗？注意，如果删除房间名称或话题的更改，更改会被撤销。</string>
     <string name="delete_event_dialog_reason_checkbox">附加理由</string>
-    <string name="delete_event_dialog_reason_hint">编辑理由</string>
+    <string name="delete_event_dialog_reason_hint">删除理由</string>
     <string name="event_redacted_by_user_reason_with_reason">事件被用户删除，理由：%1$s</string>
     <string name="login_default_session_public_name">${app_name} Android</string>
     <string name="settings_key_requests">密钥请求</string>
@@ -1363,7 +1363,7 @@
     <string name="verify_not_me_self_verification">以下其中一项可能有风险：
 \n
 \n- 你的密码
-\n- 你的主服务器
+\n- 你的家服务器
 \n- 此设备或其它设备
 \n- 设备使用的网络连接
 \n
@@ -1396,7 +1396,7 @@
     <string name="reaction_search_type_hint">输入关键字以查找反应。</string>
     <string name="seen_by">已读</string>
     <string name="room_member_jump_to_read_receipt">跳至已读回执</string>
-    <string name="event_redacted_by_admin_reason_with_reason">事件被房间管理员调整，理由：%1$s</string>
+    <string name="event_redacted_by_admin_reason_with_reason">事件被房间管理员删除，理由：%1$s</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">密钥已是最新！</string>
     <string name="bootstrap_crosssigning_save_usb">保存到优盘或者备份盘</string>
     <string name="bootstrap_crosssigning_save_cloud">复制到你的个人云存储</string>
@@ -1487,13 +1487,13 @@
     <string name="open_terms_of">打开 %s 条款</string>
     <string name="disconnect_identity_server_dialog_content">是否从身份服务器 %s 断开？</string>
     <string name="identity_server_error_outdated_identity_server">身份服务器已过期。${app_name} 仅支持 API V2。</string>
-    <string name="identity_server_error_outdated_home_server">无法执行此操作。主服务器已过期。</string>
+    <string name="identity_server_error_outdated_home_server">无法执行此操作。家服务器已过时。</string>
     <string name="identity_server_error_no_identity_server_configured">请先配置身份服务器。</string>
     <string name="identity_server_error_terms_not_signed">请先在设置中接受身份服务器的条款。</string>
     <string name="identity_server_error_bulk_sha256_not_supported">为了你的隐私，${app_name}仅支持发送经过哈希处理的用户电子邮件的和电话号码。</string>
     <string name="identity_server_error_binding_error">关联失败。</string>
     <string name="identity_server_error_no_current_binding_error">当前与此标识符没有关联。</string>
-    <string name="identity_server_set_default_notice">你的主服务器（%1$s）建议使用 %2$s 作为你的身份服务器</string>
+    <string name="identity_server_set_default_notice">你的家服务器（%1$s）建议使用 %2$s 作为你的身份服务器</string>
     <string name="identity_server_set_default_submit">使用 %1$s</string>
     <string name="identity_server_set_alternative_notice">或者，你可以输入任何其它身份服务器网址</string>
     <string name="identity_server_set_alternative_notice_no_default">输入身份服务器 URL</string>
@@ -1632,7 +1632,7 @@
 \n
 \n你的消息受加密保护，并且只有你和消息接收者拥有唯一解密密钥。</string>
     <string name="direct_room_profile_not_encrypted_subtitle">此处的消息未经端到端加密。</string>
-    <string name="login_error_outdated_homeserver_warning_content">此主服务器正在运行旧版本。 请让你的主服务器管理员升级。 你可以继续，但某些功能可能无法正常工作。</string>
+    <string name="login_error_outdated_homeserver_warning_content">此家服务器正在运行旧版本。 请让你的家服务器管理员升级。 你可以继续，但某些功能可能无法正常工作。</string>
     <string name="direct_room_join_rules_invite_by_you">你将此房间设为仅邀请。</string>
     <string name="direct_room_join_rules_invite">%1$s 仅发出此邀请。</string>
     <string name="settings_labs_show_complete_history_in_encrypted_room">在加密房间显示完整历史</string>
@@ -1690,7 +1690,7 @@
     <string name="create_room_alias_invalid">一些字符不被允许</string>
     <string name="create_room_alias_empty">请提供一个房间地址</string>
     <string name="create_room_alias_already_in_use">此地址已被使用</string>
-    <string name="create_room_disable_federation_description">若房间仅用于与你的主服务器上的内部团队协作，则你可以启用此选项。此选项之后无法更改。</string>
+    <string name="create_room_disable_federation_description">若房间仅用于与你的家服务器上的内部团队协作，则你可以启用此选项。此选项之后无法更改。</string>
     <string name="create_room_disable_federation_title">阻止任何不属于%s的人加入此房间</string>
     <string name="hide_advanced">隐藏高级</string>
     <string name="show_advanced">显示高级</string>
@@ -1726,7 +1726,7 @@
     <string name="room_alias_action_publish">发布此地址</string>
     <string name="room_alias_local_address_add">添加本地地址</string>
     <string name="room_alias_local_address_empty">此房间没有本地地址</string>
-    <string name="room_alias_local_address_subtitle">为此房间设置地址以便用户通过你的主服务器（%1$s）找到此房间</string>
+    <string name="room_alias_local_address_subtitle">为此房间设置地址以便用户通过你的家服务器（%1$s）找到此房间</string>
     <string name="room_alias_local_address_title">本地地址</string>
     <string name="room_alias_address_hint">新的发布的地址（例如 #alias:server）</string>
     <string name="room_alias_address_empty">尚无其它已发布地址。</string>
@@ -1858,8 +1858,8 @@
     <string name="this_space_has_no_rooms_not_admin">有些房间可能被隐藏，因为其为私有房间，你需要得到邀请。
 \n你没有权限添加房间。</string>
     <string name="this_space_has_no_rooms">此空间没有房间</string>
-    <string name="spaces_no_server_support_description">请联系你的主服务器管理员以取得进一步资讯</string>
-    <string name="spaces_no_server_support_title">看来你的主服务器尚未支持空间</string>
+    <string name="spaces_no_server_support_description">请联系你的家服务器管理员以取得进一步资讯</string>
+    <string name="spaces_no_server_support_title">看来你的家服务器尚未支持空间</string>
     <string name="spaces_feeling_experimental_subspace">想要使用实验功能？
 \n你可以将现有的空间添加到其它空间中。</string>
     <string name="space_manage_rooms_and_spaces">管理房间和空间</string>
@@ -1882,7 +1882,7 @@
         <item quantity="other">你认识的 %d 个人已加入</item>
     </plurals>
     <string name="room_alias_preview_not_found">此别名当前无法被访问。
-\n请稍后再试，或询问房间管理员你身份有权访问。</string>
+\n请稍后再试，或询问房间管理员你是否有权访问。</string>
     <string name="join_anyway">依然加入</string>
     <string name="join_space">加入空间</string>
     <string name="create_space">创建空间</string>
@@ -1954,7 +1954,7 @@
         <item quantity="other">发送原始大小的视频</item>
     </plurals>
     <string name="settings_server_upload_size_unknown">限制未知。</string>
-    <string name="settings_server_upload_size_content">你的主服务器能接受大小最大为 %s 的附件（文件、媒体等）。</string>
+    <string name="settings_server_upload_size_content">你的家服务器能接受大小最大为 %s 的附件（文件、媒体等）。</string>
     <string name="settings_server_upload_size_title">服务器文件上传限制</string>
     <string name="error_file_too_big_simple">此文件过大，无法上传。</string>
     <string name="search_hint_room_name">搜索名称</string>
@@ -2028,7 +2028,7 @@
     <string name="space_settings_alias_subtitle">查看和管理这个空间的地址。</string>
     <string name="space_settings_alias_title">空间地址</string>
     <string name="room_upgrade_to_recommended_version">升级到推荐的房间版本</string>
-    <string name="room_using_unstable_room_version">这个房间运行房间版本 %s，此主服务器已将其标记为不稳定。</string>
+    <string name="room_using_unstable_room_version">这个房间运行房间版本 %s，此家服务器已将其标记为不稳定。</string>
     <string name="upgrade_room_no_power_to_manage">你需要权限才能升级房间</string>
     <string name="upgrade_room_update_parent_space">自动更新空间父级</string>
     <string name="upgrade_room_auto_invite">自动邀请用户</string>
@@ -2048,7 +2048,7 @@
     <string name="verification_scan_self_emoji_subtitle">通过比较表情符号来验证</string>
     <string name="verification_scan_with_this_device">使用此设备扫描</string>
     <string name="verification_scan_self_notice">使用其它设备扫码或切换并使用本设备扫码</string>
-    <string name="hs_client_url">主服务器 API 网址</string>
+    <string name="hs_client_url">家服务器API URL</string>
     <string name="missing_permissions_title">缺少权限</string>
     <string name="denied_permission_camera">要执行此操作，请从系统设置中授予相机权限。</string>
     <string name="denied_permission_generic">缺少执行此操作的某些权限，请从系统设置中授予权限。</string>
@@ -2200,8 +2200,8 @@
     <string name="a11y_presence_unavailable">离开</string>
     <string name="a11y_presence_offline">离线</string>
     <string name="a11y_presence_online">在线</string>
-    <string name="login_error_homeserver_from_url_not_found_enter_manual">选择主服务器</string>
-    <string name="login_error_homeserver_from_url_not_found">无法访问 URL %s 上的主服务器。请检查你的链接或手动选择一个主服务器。</string>
+    <string name="login_error_homeserver_from_url_not_found_enter_manual">选择家服务器</string>
+    <string name="login_error_homeserver_from_url_not_found">无法访问 URL %s 上的家服务器。请检查你的链接或手动选择一个家服务器。</string>
     <string name="notification_listening_for_notifications">侦听通知</string>
     <plurals name="create_poll_not_enough_options_error">
         <item quantity="other">需要至少 %1$s 个选项</item>
@@ -2252,7 +2252,7 @@
     <string name="legals_third_party_notices">第三方库</string>
     <string name="legals_identity_server_title">你的身份服务器政策</string>
     <string name="analytics_opt_in_list_item_1">我们<b>不</b>记录任何账户数据或绘制任何账户数据的画像</string>
-    <string name="legals_home_server_title">你的主服务器政策</string>
+    <string name="legals_home_server_title">你的家服务器政策</string>
     <string name="legals_application_title">${app_name} 政策</string>
     <string name="analytics_opt_in_list_item_3">你可以随时在设置中关闭它</string>
     <string name="analytics_opt_in_list_item_2">我们<b>不</b>与第三方共享信息</string>
@@ -2419,7 +2419,7 @@
     <string name="ftue_auth_carousel_control_body">选择保存你的对话的位置，给予你控制权和独立性。通过 Matrix 连接。</string>
     <string name="ftue_auth_carousel_secure_body">安全且独立的通信，为你提供和在家中面对面对话同样等级的隐私。</string>
     <string name="ftue_auth_carousel_encrypted_title">安全传送消息。</string>
-    <string name="settings_troubleshoot_test_endpoint_registration_failed">向主服务器注册端点token失败：
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">向家服务器注册端点token失败：
 \n%1$s</string>
     <string name="threads_beta_enable_notice_message">消息列有助于使你的对话保持话题并易于跟踪。%s 创建消息列将刷新应用程序。对于某些账户，这可能需要更长的时间。</string>
     <string name="restart_the_application_to_apply_changes">重启应用以使更改生效。</string>
@@ -2444,7 +2444,7 @@
     <string name="a11y_presence_busy">忙</string>
     <string name="settings_security_pin_code_use_biometrics_error">无法启用生物特征识别。</string>
     <string name="auth_biometric_key_invalidated_message">生物特征识别被禁用，因为最近添加了新的生物特征识别方法。 你可以在“设置”中再次启用它。</string>
-    <string name="error_forbidden_digits_only_username">主服务器不接收仅有数字的用户名。</string>
+    <string name="error_forbidden_digits_only_username">家服务器不接收仅有数字的用户名。</string>
     <string name="send_your_first_msg_to_invite">发送你的第一条消息邀请%s聊天</string>
     <string name="encryption_misconfigured">加密配置错误</string>
     <string name="direct_room_encryption_enabled_tile_description_future">此聊天中的消息会端到端加密。</string>
@@ -2504,9 +2504,9 @@
 \n
 \n注意，此操作会重启应用并可能需要一些时间。</string>
     <string name="settings_autoplay_animated_images_title">自动播放动画图片</string>
-    <string name="settings_troubleshoot_test_endpoint_registration_success">端点成功注册到主服务器。</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">端点成功注册到家服务器。</string>
     <string name="settings_troubleshoot_test_endpoint_registration_title">端点注册</string>
-    <string name="threads_labs_enable_notice_message">你的主服务器当前不支持消息列，因此此功能可能不可靠。某些消息列的消息可能无法可靠地使用。 %s 你仍然要启用消息列吗？</string>
+    <string name="threads_labs_enable_notice_message">你的家服务器当前不支持消息列，因此此功能可能不可靠。某些消息列的消息可能无法可靠地使用。 %s 你仍然要启用消息列吗？</string>
     <string name="threads_notice_migration_title">Threads接近Beta了 🎉</string>
     <string name="search_thread_from_a_thread">来自消息列</string>
     <string name="thread_list_empty_notice">实用提示：长按消息并使用“%s”。</string>
@@ -2544,7 +2544,7 @@
     <string name="search_space_two_parents">%1$s 和 %2$s</string>
     <string name="auth_reset_password_error_unverified">电子邮件未验证，请检查你的收件箱</string>
     <string name="location_share_loading_map_error">无法加载地图
-\n此主服务器可能没有设置好显示地图。</string>
+\n此家服务器可能没有设置显示地图。</string>
     <string name="a11y_open_settings">打开设置</string>
     <string name="all_chats">全部聊天</string>
     <string name="device_manager_sessions_other_description">为获得最佳安全性，请验证你的会话，并从任何你不认识或不再使用的会话登出。</string>
@@ -2712,7 +2712,7 @@
     <string name="qr_code_login_new_device_instruction_3">选择“显示QR码”</string>
     <string name="qr_code_login_new_device_instruction_2">转到设置 -&gt; 安全和隐私</string>
     <string name="qr_code_login_new_device_instruction_1">在你的其它设备上打开应用程序</string>
-    <string name="qr_code_login_header_failed_homeserver_is_not_supported_description">主服务器不支持QR码登录。</string>
+    <string name="qr_code_login_header_failed_homeserver_is_not_supported_description">家服务器不支持QR码登录。</string>
     <string name="qr_code_login_header_failed_user_cancelled_description">登录已在另一台设备上取消。</string>
     <string name="qr_code_login_header_failed_invalid_qr_code_description">该QR码无效。</string>
     <string name="qr_code_login_header_failed_other_device_not_signed_in_description">另一台设备必须登录。</string>
@@ -2822,4 +2822,28 @@
     <string name="ended_poll_indicator">结束了投票。</string>
     <string name="settings_access_token_summary">你的访问令牌提供对你账户的完全访问权限。勿与任何人分享它。</string>
     <string name="settings_access_token">访问令牌</string>
+    <string name="action_proceed_to_reset">继续重设</string>
+    <string name="notice_display_name_changed_to">%1$s更改了其显示名称为%2$s</string>
+    <string name="settings_external_account_management_title">账户</string>
+    <string name="action_stop">是的，停止</string>
+    <string name="sign_out_failed_dialog_message">无法连接家服务器。若仍登出，此设备将不会从设备列表擦除，你或许想用另一个客户端移除它。</string>
+    <string name="sign_out_anyway">无论如何都要登出</string>
+    <string name="thread_list_not_available">你的家服务器还不支持列出消息列。</string>
+    <string name="avatar_of_space">空间%1$s的头像</string>
+    <string name="avatar_of_room">房间%1$s的头像</string>
+    <string name="avatar_of_user">用户%1$s的用户资料图片</string>
+    <string name="settings_acceptable_use_policy">可接受的使用政策</string>
+    <string name="direct_room_encryption_enabled_waiting_users">正在等待用户加入${app_name}</string>
+    <string name="verification_request_waiting_for_recovery">正从安全密钥或短语验证……</string>
+    <string name="room_profile_section_more_polls">投票历史</string>
+    <string name="crosssigning_verify_after_update">应用已更新</string>
+    <string name="verification_verify_identity">验证你的身份以访问加密消息并向他人证明你的身份。</string>
+    <string name="verification_profile_other_device_untrust_info">发送至和发送自此会话的消息带有警告标签，直至此用户信任此会话。</string>
+    <string name="settings_notification_error_on_update">更新你的通知偏好时出错。请再试一次。</string>
+    <string name="settings_external_account_management">你的账户详细信息于%1$s单独管理。</string>
+    <string name="settings_crypto_version">加密版本</string>
+    <string name="verification_verify_with_another_device">用另一设备验证</string>
+    <string name="direct_room_user_list_only_invite_one_email">你一次仅能邀请一个电子邮件</string>
+    <string name="started_a_voice_broadcast">开始语音广播</string>
+    <string name="_resume">继续</string>
 </resources>
