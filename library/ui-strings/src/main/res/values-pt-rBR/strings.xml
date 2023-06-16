@@ -2527,7 +2527,7 @@
     <string name="live_location_not_enough_permission_dialog_description">Você precisa ter as permissões certas a fim de compartilhar localização ao vivo nesta sala.</string>
     <string name="live_location_not_enough_permission_dialog_title">Você não tem permissão para compartilhar localização ao vivo</string>
     <string name="poll_undisclosed_not_ended">Resultados vão ser visíveis quando a sondagem estiver terminada</string>
-    <string name="labs_enable_msc3061_share_history_desc">Ao convidar alguém para uma uma sala criptografada que compartilha o histórico de texto, ele será visível mesmo sendo criptografado.</string>
+    <string name="labs_enable_msc3061_share_history_desc">Ao convidar alguém para uma sala criptografada que compartilha o histórico de texto, ele será visível mesmo sendo criptografado.</string>
     <string name="labs_enable_msc3061_share_history">MSC3061: Compartilhando chaves de sala para mensagens passadas</string>
     <string name="send_your_first_msg_to_invite">Envie sua primeira mensagem para convidar %s a fazer chat</string>
     <string name="direct_room_encryption_enabled_tile_description_future">Mensagens neste chat vão ser encriptadas ponta-a-ponta.</string>
