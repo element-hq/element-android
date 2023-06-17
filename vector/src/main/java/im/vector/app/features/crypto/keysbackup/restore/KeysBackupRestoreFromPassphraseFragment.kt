@@ -66,7 +66,7 @@ class KeysBackupRestoreFromPassphraseFragment :
     }
 
     private fun spannableStringForHelperText(): SpannableString {
-        val clickableText = getString(R.string.keys_backup_restore_use_recovery_key)
+        val clickableText = getString(R.string.keys_backup_restore_use_security_key)
         val helperText = getString(R.string.keys_backup_restore_with_passphrase_helper_with_link, clickableText)
 
         val spanString = SpannableString(helperText)

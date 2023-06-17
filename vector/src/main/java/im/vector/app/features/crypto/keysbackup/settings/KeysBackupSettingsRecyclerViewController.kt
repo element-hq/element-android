@@ -80,7 +80,7 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
                     style(ItemStyle.BIG_TEXT)
 
                     if (data.keysBackupVersionTrust()?.usable == false) {
-                        description(host.stringProvider.getString(R.string.keys_backup_settings_untrusted_backup).toEpoxyCharSequence())
+                        description(host.stringProvider.getString(R.string.keys_backup_settings_verify_device_now).toEpoxyCharSequence())
                     }
                 }
 
@@ -94,7 +94,7 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
                     title(host.stringProvider.getString(R.string.keys_backup_settings_status_ko).toEpoxyCharSequence())
                     style(ItemStyle.BIG_TEXT)
                     if (data.keysBackupVersionTrust()?.usable == false) {
-                        description(host.stringProvider.getString(R.string.keys_backup_settings_untrusted_backup).toEpoxyCharSequence())
+                        description(host.stringProvider.getString(R.string.keys_backup_settings_verify_device_now).toEpoxyCharSequence())
                     } else {
                         description(keyBackupState.toString().toEpoxyCharSequence())
                     }
@@ -109,7 +109,7 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
                     title(host.stringProvider.getString(R.string.keys_backup_settings_status_ok).toEpoxyCharSequence())
                     style(ItemStyle.BIG_TEXT)
                     if (data.keysBackupVersionTrust()?.usable == false) {
-                        description(host.stringProvider.getString(R.string.keys_backup_settings_untrusted_backup).toEpoxyCharSequence())
+                        description(host.stringProvider.getString(R.string.keys_backup_settings_verify_device_now).toEpoxyCharSequence())
                     } else {
                         description(host.stringProvider.getString(R.string.keys_backup_info_keys_all_backup_up).toEpoxyCharSequence())
                     }
@@ -129,7 +129,7 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
                     val remainingKeysToBackup = data.remainingKeysToBackup
 
                     if (data.keysBackupVersionTrust()?.usable == false) {
-                        description(host.stringProvider.getString(R.string.keys_backup_settings_untrusted_backup).toEpoxyCharSequence())
+                        description(host.stringProvider.getString(R.string.keys_backup_settings_verify_device_now).toEpoxyCharSequence())
                     } else {
                         description(
                                 host.stringProvider

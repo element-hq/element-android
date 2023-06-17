@@ -47,7 +47,7 @@ class KeysBackupRestoreFromKeyViewModel @Inject constructor(
                 val recoveryKey = BackupUtils.recoveryKeyFromBase58(recoveryCode.value!!)
                 sharedViewModel.recoverUsingBackupRecoveryKey(recoveryKey!!)
             } catch (failure: Throwable) {
-                recoveryCodeErrorText.postValue(stringProvider.getString(R.string.keys_backup_recovery_code_error_decrypt))
+                recoveryCodeErrorText.postValue(stringProvider.getString(R.string.keys_backup_security_key_error_decrypt))
             }
         }
     }

@@ -37,7 +37,7 @@
             android:inputType="textPassword"
             android:maxLines="3"
             android:singleLine="false"
-            tools:hint="@string/keys_backup_restore_key_enter_hint" />
+            tools:hint="@string/keys_backup_restore_security_key_enter_hint" />
 
         <Button
             android:id="@+id/bootstrapMigrateUseFile"

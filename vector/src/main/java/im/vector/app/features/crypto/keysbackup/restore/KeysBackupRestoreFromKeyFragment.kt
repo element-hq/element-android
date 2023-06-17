@@ -73,7 +73,7 @@ class KeysBackupRestoreFromKeyFragment :
     private fun onRestoreFromKey() {
         val value = viewModel.recoveryCode.value
         if (value.isNullOrBlank()) {
-            viewModel.recoveryCodeErrorText.value = context?.getString(R.string.keys_backup_recovery_code_empty_error_message)
+            viewModel.recoveryCodeErrorText.value = context?.getString(R.string.keys_backup_security_key_empty_error_message)
         } else {
             viewModel.recoverKeys(sharedViewModel)
         }

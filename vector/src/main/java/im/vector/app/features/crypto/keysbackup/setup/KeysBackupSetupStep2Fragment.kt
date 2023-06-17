@@ -175,7 +175,7 @@ class KeysBackupSetupStep2Fragment :
             }
             else -> {
                 // User has entered a passphrase but want to skip this step.
-                viewModel.passphraseError.value = context?.getString(R.string.keys_backup_passphrase_not_empty_error_message)
+                viewModel.passphraseError.value = context?.getString(R.string.keys_backup_security_passphrase_not_empty_error_message)
             }
         }
     }

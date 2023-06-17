@@ -105,9 +105,9 @@ class BootstrapSaveRecoveryKeyFragment :
         startSharePlainTextIntent(
                 requireContext(),
                 copyStartForActivityResult,
-                context?.getString(R.string.keys_backup_setup_step3_share_intent_chooser_title),
+                context?.getString(R.string.keys_backup_setup_step3_share_key_intent_chooser_title),
                 recoveryKey,
-                context?.getString(R.string.recovery_key)
+                context?.getString(R.string.security_key)
         )
     }
 

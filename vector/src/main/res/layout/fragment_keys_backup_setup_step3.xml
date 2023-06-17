@@ -62,7 +62,7 @@
             android:layout_marginEnd="@dimen/layout_horizontal_margin"
             android:textAlignment="center"
             android:textColor="?vctr_content_secondary"
-            tools:text="@string/keys_backup_setup_step3_text_line2" />
+            tools:text="@string/keys_backup_setup_step3_key_explanation" />
 
         <TextView
             android:id="@+id/keys_backup_setup_step3_recovery_key_text"
@@ -84,7 +84,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:maxWidth="@dimen/button_max_width"
-            android:text="@string/keys_backup_setup_step3_copy_button_title" />
+            android:text="@string/keys_backup_setup_step3_save_key_button_title" />
 
         <Button
             android:id="@+id/keys_backup_setup_step3_finish_button"

@@ -104,7 +104,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/use_recovery_key"
+            android:text="@string/use_security_key"
             app:icon="@drawable/ic_security_key_24dp"
             app:layout_constraintBottom_toTopOf="@id/ssss_passphrase_reset"
             app:layout_constraintEnd_toEndOf="parent"
