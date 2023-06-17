@@ -1581,6 +1581,7 @@
 
     <string name="keys_backup_restore_is_getting_backup_version">Fetching backup version…</string>
     <string name="keys_backup_restore_with_passphrase">Use your recovery passphrase to unlock your encrypted messages history</string>
+    <string name="keys_backup_restore_with_security_passphrase">Use your Security Passphrase to unlock your encrypted messages history</string>
     <string name="keys_backup_restore_use_recovery_key">use your recovery key</string>
     <string name="keys_backup_restore_use_security_key">use your Security Key</string>
     <!-- %s will be replaced by the keys_backup_restore_use_recovery_key key  -->
@@ -1596,6 +1597,7 @@
     <string name="keys_backup_restore_with_key_helper">Lost your recovery key? You can set up a new one in settings.</string>
     <string name="keys_backup_restore_with_security_key_helper">Lost your Security Key? You can set up a new one in settings.</string>
     <string name="keys_backup_passphrase_error_decrypt">Backup could not be decrypted with this passphrase: please verify that you entered the correct recovery passphrase.</string>
+    <string name="keys_backup_security_passphrase_error_decrypt">Backup could not be decrypted with this passphrase: please verify that you entered the correct Security Passphrase.</string>
 
     <string name="keys_backup_restoring_waiting_message">Restoring backup:</string>
     <string name="keys_backup_restoring_computing_key_waiting_message">Computing recovery key…</string>
@@ -2512,6 +2514,7 @@
     <string name="delete_account_data_warning">Delete the account data of type %1$s?\n\nUse with caution, it may lead to unexpected behavior.</string>
 
     <string name="verification_cannot_access_other_session">Use a Recovery Passphrase or Key</string>
+    <string name="verification_cannot_access_other_session_use_key">Use a Security Passphrase or Key</string>
     <string name="verification_use_passphrase">If you can’t access an existing session</string>
 
     <string name="enter_secret_storage_invalid">Cannot find secrets in storage</string>
@@ -2577,6 +2580,7 @@
     <string tools:ignore="UnusedResources" name="verification_cancelled">Verification Canceled</string>
 
     <string name="recovery_passphrase">Recovery Passphrase</string>
+    <string name="security_passphrase">Security Passphrase</string>
     <string name="message_key">Message Key</string>
 
     <!-- %s will be replaced by account_password -->
