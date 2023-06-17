@@ -2896,4 +2896,17 @@
     <string name="error_voice_broadcast_unable_to_play">Incapaz de reproduzir esse broadcast de voz.</string>
     <string name="error_voice_broadcast_unable_to_decrypt">Incapaz de decriptar esse broadcast de voz.</string>
     <string name="error_voice_broadcast_no_connection_recording">Erro de conexão - Gravação pausada</string>
+    <string name="crosssigning_verify_after_update">Aplicação actualizada</string>
+    <string name="settings_crypto_version">Versão criptográfica</string>
+    <string name="sign_out_failed_dialog_message">Não foi possível contactar o servidor doméstico. Se ainda assim terminar sessão, este dispositivo não será apagado da sua lista de dispositivos, poderá querer removê-lo utilizando outro cliente.</string>
+    <string name="avatar_of_user">Imagem de perfil do utilizador %1$s</string>
+    <string name="started_a_voice_broadcast">Iniciou uma emissão de voz</string>
+    <string name="room_profile_section_more_polls">Histórico da sondagem</string>
+    <string name="verification_verify_with_another_device">Verificar com outro dispositivo</string>
+    <string name="verification_verify_identity">Verifique a sua identidade para aceder a mensagens encriptadas e provar a sua identidade a outros.</string>
+    <string name="verification_request_was_sent">Foi enviado um pedido de verificação. Abra uma das suas outras sessões para aceitar e iniciar a verificação.</string>
+    <string name="direct_room_user_list_only_invite_one_email">Só é possível convidar um email de cada vez</string>
+    <string name="sign_out_anyway">Terminar sessão ainda assim</string>
+    <string name="verification_request_waiting_for_recovery">Verificação a partir de Chave ou Frase Segura…</string>
+    <string name="verification_profile_other_device_untrust_info">Até que este utilizador confie nesta sessão, as mensagens enviadas para e a partir dela são marcadas com avisos.</string>
 </resources>
