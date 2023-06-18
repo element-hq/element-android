@@ -573,7 +573,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
 
     private fun BackupToQuadSMigrationTask.Result.Failure.toHumanReadable(): String {
         return when (this) {
-            is BackupToQuadSMigrationTask.Result.InvalidRecoverySecret -> stringProvider.getString(R.string.keys_backup_passphrase_error_decrypt)
+            is BackupToQuadSMigrationTask.Result.InvalidRecoverySecret -> stringProvider.getString(R.string.keys_backup_security_passphrase_error_decrypt)
             is BackupToQuadSMigrationTask.Result.ErrorFailure -> errorFormatter.toHumanReadable(throwable)
             // is BackupToQuadSMigrationTask.Result.NoKeyBackupVersion,
             // is BackupToQuadSMigrationTask.Result.IllegalParams,

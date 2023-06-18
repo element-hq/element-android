@@ -55,7 +55,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            tools:text="@string/keys_backup_restore_with_passphrase_helper_with_link"
+            tools:text="@string/keys_backup_restore_with_security_passphrase_helper_with_link"
             tools:visibility="visible" />
 
     </com.google.android.material.textfield.TextInputLayout>

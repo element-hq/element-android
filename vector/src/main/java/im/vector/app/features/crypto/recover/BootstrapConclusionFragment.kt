@@ -54,11 +54,11 @@ class BootstrapConclusionFragment :
 
         views.bootstrapConclusionText.text = getString(
                 R.string.bootstrap_cross_signing_success,
-                getString(R.string.recovery_passphrase),
+                getString(R.string.security_passphrase),
                 getString(R.string.message_key)
         )
                 .toSpannable()
-                .colorizeMatchingText(getString(R.string.recovery_passphrase), colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
+                .colorizeMatchingText(getString(R.string.security_passphrase), colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
                 .colorizeMatchingText(getString(R.string.message_key), colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
         views.bootstrapConclusionText.giveAccessibilityFocusOnce()
     }

@@ -44,7 +44,7 @@ class KeysBackupRestoreFromPassphraseViewModel @Inject constructor(
             try {
                 sharedViewModel.recoverUsingBackupPass(passphrase.value!!)
             } catch (failure: Throwable) {
-                passphraseErrorText.postValue(stringProvider.getString(R.string.keys_backup_passphrase_error_decrypt))
+                passphraseErrorText.postValue(stringProvider.getString(R.string.keys_backup_security_passphrase_error_decrypt))
             }
         }
     }

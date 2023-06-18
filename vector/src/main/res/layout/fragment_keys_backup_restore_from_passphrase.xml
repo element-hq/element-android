@@ -27,12 +27,12 @@
             tools:ignore="MissingPrefix" />
 
         <TextView
-            android:id="@+id/keys_backup_restore_with_passphrase"
+            android:id="@+id/keys_backup_restore_with_security_passphrase"
             style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/keys_backup_restore_with_passphrase"
+            android:text="@string/keys_backup_restore_with_security_passphrase"
             android:textAlignment="center"
             android:textColor="?vctr_content_primary"
             android:textStyle="bold"
@@ -49,7 +49,7 @@
             app:errorEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/keys_backup_restore_with_passphrase">
+            app:layout_constraintTop_toBottomOf="@id/keys_backup_restore_with_security_passphrase">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/keys_backup_passphrase_enter_edittext"
@@ -73,7 +73,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/keys_backup_passphrase_enter_til"
-            tools:text="@string/keys_backup_restore_with_passphrase_helper_with_link" />
+            tools:text="@string/keys_backup_restore_with_security_passphrase_helper_with_link" />
 
         <Button
             android:id="@+id/keys_backup_restore_with_passphrase_submit"

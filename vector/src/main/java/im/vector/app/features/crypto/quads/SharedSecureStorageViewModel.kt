@@ -268,7 +268,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
             }, {
                 setState { copy(checkingSSSSAction = Fail(it)) }
                 _viewEvents.post(SharedSecureStorageViewEvent.HideModalLoading)
-                _viewEvents.post(SharedSecureStorageViewEvent.KeyInlineError(stringProvider.getString(R.string.keys_backup_passphrase_error_decrypt)))
+                _viewEvents.post(SharedSecureStorageViewEvent.KeyInlineError(stringProvider.getString(R.string.keys_backup_security_passphrase_error_decrypt)))
             })
         }
     }
@@ -364,7 +364,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
             }, {
                 setState { copy(checkingSSSSAction = Fail(it)) }
                 _viewEvents.post(SharedSecureStorageViewEvent.HideModalLoading)
-                _viewEvents.post(SharedSecureStorageViewEvent.InlineError(stringProvider.getString(R.string.keys_backup_passphrase_error_decrypt)))
+                _viewEvents.post(SharedSecureStorageViewEvent.InlineError(stringProvider.getString(R.string.keys_backup_security_passphrase_error_decrypt)))
             })
         }
     }
