@@ -1529,8 +1529,9 @@
 
     <!-- Key Backup -->
 
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="keys_backup_passphrase_not_empty_error_message">Please delete the passphrase if you want ${app_name} to generate a recovery key.</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="keys_backup_passphrase_not_empty_error_message">Please delete the passphrase if you want ${app_name} to generate a recovery key.</string>
     <string name="keys_backup_security_passphrase_not_empty_error_message">Please delete the passphrase if you want ${app_name} to generate a Security Key.</string>
 
     <string name="keys_backup_setup_step1_title">Never lose encrypted messages</string>
@@ -1543,23 +1544,29 @@
     <string name="keys_backup_setup_step2_text_description">We’ll store an encrypted copy of your keys on your homeserver. Protect your backup with a passphrase to keep it secure.\n\nFor maximum security, this should be different from your account password.</string>
     <string name="keys_backup_setup_step2_button_title">Set Passphrase</string>
     <string name="keys_backup_setup_creating_backup">Creating Backup</string>
-    <string name="keys_backup_setup_step1_recovery_key_alternative">Or, secure your backup with a Recovery Key, saving it somewhere safe.</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="keys_backup_setup_step1_recovery_key_alternative">Or, secure your backup with a Recovery Key, saving it somewhere safe.</string>
     <string name="keys_backup_setup_step1_security_key_alternative">Or, secure your backup with a Security Key, saving it somewhere safe.</string>
-    <string name="keys_backup_setup_step2_skip_button_title">(Advanced) Set up with Recovery Key</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="keys_backup_setup_step2_skip_button_title">(Advanced) Set up with Recovery Key</string>
     <string name="keys_backup_setup_step2_skip_passphrase_button_title">(Advanced) Set up with Security Key</string>
     <string name="keys_backup_setup_step3_success_title">Success !</string>
     <string name="keys_backup_setup_step3_text_line1">Your keys are being backed up.</string>
-    <string name="keys_backup_setup_step3_text_line2">Your recovery key is a safety net - you can use it to restore access to your encrypted messages if you forget your passphrase.\nKeep your recovery key somewhere very secure, like a password manager (or a safe)</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="keys_backup_setup_step3_text_line2">Your recovery key is a safety net - you can use it to restore access to your encrypted messages if you forget your passphrase.\nKeep your recovery key somewhere very secure, like a password manager (or a safe)</string>
     <string name="keys_backup_setup_step3_key_explanation">Your Security Key is a safety net - you can use it to restore access to your encrypted messages if you forget your passphrase.\nKeep your Security Key somewhere very secure, like a password manager (or a safe)</string>
-    <string name="keys_backup_setup_step3_text_line2_no_passphrase">Keep your recovery key somewhere very secure, like a password manager (or a safe)</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="keys_backup_setup_step3_text_line2_no_passphrase">Keep your recovery key somewhere very secure, like a password manager (or a safe)</string>
     <string name="keys_backup_setup_step3_key_explanation_no_passphrase">Keep your Security Key somewhere very secure, like a password manager (or a safe)</string>
     <string name="keys_backup_setup_step3_button_title">Done</string>
     <string name="keys_backup_setup_step3_button_title_no_passphrase">I’ve made a copy</string>
-    <string name="keys_backup_setup_step3_copy_button_title">Save Recovery Key</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="keys_backup_setup_step3_copy_button_title">Save Recovery Key</string>
     <string name="keys_backup_setup_step3_save_key_button_title">Save Security Key</string>
     <string name="keys_backup_setup_step3_share_recovery_file">Share</string>
     <string name="keys_backup_setup_step3_save_button_title">Save as File</string>
-    <string name="recovery_key_export_saved">The recovery key has been saved.</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="recovery_key_export_saved">The recovery key has been saved.</string>
     <string name="security_key_export_saved">The Security Key has been saved.</string>
 
     <string name="keys_backup_setup_override_backup_prompt_tile">A backup already exist on your homeserver</string>
@@ -1568,11 +1575,14 @@
     <string name="keys_backup_setup_override_stop">Stop</string>
 
     <string name="keys_backup_setup_step3_please_make_copy">Please make a copy</string>
-    <string name="keys_backup_setup_step3_share_intent_chooser_title">Share recovery key with…</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="keys_backup_setup_step3_share_intent_chooser_title">Share recovery key with…</string>
     <string name="keys_backup_setup_step3_share_key_intent_chooser_title">Share Security Key with…</string>
-    <string name="keys_backup_setup_step3_generating_key_status">Generating Recovery Key using passphrase, this process can take several seconds.</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="keys_backup_setup_step3_generating_key_status">Generating Recovery Key using passphrase, this process can take several seconds.</string>
     <string name="keys_backup_setup_step3_generating_security_key_status">Generating Security Key using passphrase, this process can take several seconds.</string>
-    <string name="recovery_key">Recovery Key</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="recovery_key">Recovery Key</string>
     <string name="security_key">Security Key</string>
     <string name="unexpected_error">Unexpected error</string>
 
@@ -1580,34 +1590,43 @@
     <string name="keys_backup_setup_skip_msg">You may lose access to your messages if you log out or lose this device.</string>
 
     <string name="keys_backup_restore_is_getting_backup_version">Fetching backup version…</string>
-    <string name="keys_backup_restore_with_passphrase">Use your recovery passphrase to unlock your encrypted messages history</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="keys_backup_restore_with_passphrase">Use your recovery passphrase to unlock your encrypted messages history</string>
     <string name="keys_backup_restore_with_security_passphrase">Use your Security Passphrase to unlock your encrypted messages history</string>
-    <string name="keys_backup_restore_use_recovery_key">use your recovery key</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="keys_backup_restore_use_recovery_key">use your recovery key</string>
     <string name="keys_backup_restore_use_security_key">use your Security Key</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="keys_backup_restore_with_passphrase_helper_with_link">Don’t know your recovery passphrase, you can %s.</string>
     <!-- %s will be replaced by the keys_backup_restore_use_recovery_key key  -->
-    <string name="keys_backup_restore_with_passphrase_helper_with_link">Don’t know your recovery passphrase, you can %s.</string>
     <string name="keys_backup_restore_with_security_passphrase_helper_with_link">Don’t know your Security Passphrase, you can %s.</string>
 
-    <string name="keys_backup_restore_with_recovery_key">Use your Recovery Key to unlock your encrypted messages history</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="keys_backup_restore_with_recovery_key">Use your Recovery Key to unlock your encrypted messages history</string>
     <string name="keys_backup_restore_with_security_key">Use your Security Key to unlock your encrypted messages history</string>
-    <string name="keys_backup_restore_key_enter_hint">Enter Recovery Key</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="keys_backup_restore_key_enter_hint">Enter Recovery Key</string>
     <string name="keys_backup_restore_security_key_enter_hint">Enter Security Key</string>
 
-    <!-- %s will be replaced by the keys_backup_restore_setup_recovery_key key  -->
-    <string name="keys_backup_restore_with_key_helper">Lost your recovery key? You can set up a new one in settings.</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="keys_backup_restore_with_key_helper">Lost your recovery key? You can set up a new one in settings.</string>
     <string name="keys_backup_restore_with_security_key_helper">Lost your Security Key? You can set up a new one in settings.</string>
-    <string name="keys_backup_passphrase_error_decrypt">Backup could not be decrypted with this passphrase: please verify that you entered the correct recovery passphrase.</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="keys_backup_passphrase_error_decrypt">Backup could not be decrypted with this passphrase: please verify that you entered the correct recovery passphrase.</string>
     <string name="keys_backup_security_passphrase_error_decrypt">Backup could not be decrypted with this passphrase: please verify that you entered the correct Security Passphrase.</string>
 
     <string name="keys_backup_restoring_waiting_message">Restoring backup:</string>
-    <string name="keys_backup_restoring_computing_key_waiting_message">Computing recovery key…</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="keys_backup_restoring_computing_key_waiting_message">Computing recovery key…</string>
     <string name="keys_backup_restoring_computing_security_key_waiting_message">Computing Security Key…</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">Downloading keys…</string>
     <string name="keys_backup_restoring_importing_keys_waiting_message">Importing keys…</string>
     <string name="keys_backup_unlock_button">Unlock History</string>
-    <string name="keys_backup_recovery_code_empty_error_message">Please enter a recovery key</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="keys_backup_recovery_code_empty_error_message">Please enter a recovery key</string>
     <string name="keys_backup_security_key_empty_error_message">Please enter a Security Key</string>
-    <string name="keys_backup_recovery_code_error_decrypt">Backup could not be decrypted with this recovery key: please verify that you entered the correct recovery key.</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="keys_backup_recovery_code_error_decrypt">Backup could not be decrypted with this recovery key: please verify that you entered the correct recovery key.</string>
     <string name="keys_backup_security_key_error_decrypt">Backup could not be decrypted with this Security Key: please verify that you entered the correct Security Key.</string>
 
     <!-- %s will be replaced by an emoji -->
@@ -1638,13 +1657,15 @@
     <string name="keys_backup_settings_invalid_signature_from_verified_device">Backup has a invalid signature from verified session %s</string>
     <string name="keys_backup_settings_invalid_signature_from_unverified_device">Backup has a invalid signature from unverified session %s</string>
 
-    <string name="keys_backup_settings_untrusted_backup">To use Key Backup on this session, restore with your passphrase or recovery key now.</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="keys_backup_settings_untrusted_backup">To use Key Backup on this session, restore with your passphrase or recovery key now.</string>
     <string name="keys_backup_settings_verify_device_now">To use Key Backup on this session, restore with your Security Passphrase or Key now.</string>
     <string name="keys_backup_settings_deleting_backup">Deleting backup…</string>
 
     <string name="keys_backup_settings_checking_backup_state">Checking backup state</string>
     <string name="keys_backup_settings_delete_confirm_title">Delete Backup</string>
-    <string name="keys_backup_settings_delete_confirm_message">Delete your backed up encryption keys from the server? You will no longer be able to use your recovery key to read encrypted message history.</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="keys_backup_settings_delete_confirm_message">Delete your backed up encryption keys from the server? You will no longer be able to use your recovery key to read encrypted message history.</string>
     <string name="keys_backup_settings_delete_keys_confirm_message">Delete your backed up encryption keys from the server? You will no longer be able to use your Security Key to read encrypted message history.</string>
 
     <!-- Keys backup banner -->
@@ -2513,7 +2534,8 @@
     <string name="settings_account_data">Account Data</string>
     <string name="delete_account_data_warning">Delete the account data of type %1$s?\n\nUse with caution, it may lead to unexpected behavior.</string>
 
-    <string name="verification_cannot_access_other_session">Use a Recovery Passphrase or Key</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="verification_cannot_access_other_session">Use a Recovery Passphrase or Key</string>
     <string name="verification_cannot_access_other_session_use_key">Use a Security Passphrase or Key</string>
     <string name="verification_use_passphrase">If you can’t access an existing session</string>
 
@@ -2579,7 +2601,8 @@
     <!-- TODO TO BE REMOVED -->
     <string tools:ignore="UnusedResources" name="verification_cancelled">Verification Canceled</string>
 
-    <string name="recovery_passphrase">Recovery Passphrase</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="recovery_passphrase">Recovery Passphrase</string>
     <string name="security_passphrase">Security Passphrase</string>
     <string name="message_key">Message Key</string>
 
@@ -2661,9 +2684,11 @@
     <string name="bootstrap_enter_recovery">Enter your %s to continue</string>
     <string name="use_file">Use File</string>
 
-    <string name="bootstrap_invalid_recovery_key">"It's not a valid recovery key"</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="bootstrap_invalid_recovery_key">"It's not a valid recovery key"</string>
     <string name="bootstrap_invalid_security_key">"It's not a valid Security Key"</string>
-    <string name="recovery_key_empty_error_message">Please enter a recovery key</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="recovery_key_empty_error_message">Please enter a recovery key</string>
     <string name="security_key_empty_error_message">Please enter a Security Key</string>
 
     <string name="bootstrap_progress_checking_backup">Checking backup Key</string>
@@ -2671,16 +2696,19 @@
     <string name="bootstrap_progress_compute_curve_key">Getting curve key</string>
     <string name="bootstrap_progress_generating_ssss">Generating SSSS key from passphrase</string>
     <string name="bootstrap_progress_generating_ssss_with_info">Generating SSSS key from passphrase (%s)</string>
-    <string name="bootstrap_progress_generating_ssss_recovery">Generating SSSS key from recovery key</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="bootstrap_progress_generating_ssss_recovery">Generating SSSS key from recovery key</string>
     <string name="bootstrap_progress_generating_ssss_from_key">Generating SSSS key from Security Key</string>
     <string name="bootstrap_progress_storing_in_sss">Storing keybackup secret in SSSS</string>
 
     <string name="bootstrap_migration_enter_backup_password">Enter your Key Backup Passphrase to continue.</string>
-    <string name="bootstrap_migration_use_recovery_key">use your Key Backup recovery key</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="bootstrap_migration_use_recovery_key">use your Key Backup recovery key</string>
     <string name="bootstrap_migration_use_security_key">use your Key Backup Security Key</string>
     <!-- %s will be replaced by the value of bootstrap_migration_use_recovery_key  -->
     <string name="bootstrap_migration_with_passphrase_helper_with_link">Don’t know your Key Backup Passphrase, you can %s.</string>
-    <string name="bootstrap_migration_backup_recovery_key">Key Backup recovery key</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="bootstrap_migration_backup_recovery_key">Key Backup recovery key</string>
     <string name="bootstrap_migration_backup_security_key">Key Backup Security Key</string>
 
     <string name="settings_security_prevent_screenshots_title">Prevent screenshots of the application</string>
@@ -2705,9 +2733,11 @@
     <string name="command_description_discard_session_not_handled">Only supported in encrypted rooms</string>
     <!-- first will be replaced by recovery_passphrase, second will be replaced by recovery_key-->
     <string name="enter_secret_storage_passphrase_or_key">Use your %1$s or use your %2$s to continue.</string>
-    <string name="use_recovery_key">Use Recovery Key</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="use_recovery_key">Use Recovery Key</string>
     <string name="use_security_key">Use Security Key</string>
-    <string name="enter_secret_storage_input_key">Select your Recovery Key, or input it manually by typing it or pasting from your clipboard</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="enter_secret_storage_input_key">Select your Recovery Key, or input it manually by typing it or pasting from your clipboard</string>
     <string name="enter_secret_storage_input_security_key">Select your Security Key, or input it manually by typing it or pasting from your clipboard</string>
     <string name="failed_to_access_secure_storage">Failed to access secure storage</string>
     <string name="bad_passphrase_key_reset_all_action">Forgot or lost all recovery options? Reset everything</string>
@@ -2853,7 +2883,8 @@
     <!-- TODO TO BE REMOVED -->
     <string tools:ignore="UnusedResources" name="disclaimer_positive_button">LEARN MORE</string>
 
-    <string name="save_recovery_key_chooser_hint">Save recovery key in</string>
+    <!-- TODO TO BE REMOVED -->
+    <string tools:ignore="UnusedResources" name="save_recovery_key_chooser_hint">Save recovery key in</string>
     <string name="save_security_key_chooser_hint">Save Security Key in</string>
 
     <string name="loading_contact_book">Retrieving your contacts…</string>
