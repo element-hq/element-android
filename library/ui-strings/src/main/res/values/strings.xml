@@ -1598,7 +1598,7 @@
     <string name="keys_backup_restore_use_security_key">use your Security Key</string>
     <!-- TODO TO BE REMOVED -->
     <string tools:ignore="UnusedResources" name="keys_backup_restore_with_passphrase_helper_with_link">Don’t know your recovery passphrase, you can %s.</string>
-    <!-- %s will be replaced by the keys_backup_restore_use_recovery_key key  -->
+    <!-- %s will be replaced by the keys_backup_restore_use_security_key key  -->
     <string name="keys_backup_restore_with_security_passphrase_helper_with_link">Don’t know your Security Passphrase, you can %s.</string>
 
     <!-- TODO TO BE REMOVED -->
@@ -2628,7 +2628,7 @@
     <string name="bootstrap_crosssigning_progress_key_backup">Setting Up Key Backup</string>
 
 
-    <!-- %1$s is replaced by message_key and %2$s by recovery_passphrase -->
+    <!-- %1$s is replaced by message_key and %2$s by security_passphrase -->
     <string name="bootstrap_cross_signing_success">Your %2$s &amp; %1$s are now set.\n\nKeep them safe! You’ll need them to unlock encrypted messages and secure information if you lose all of your active sessions.</string>
 
     <!-- the %s will be replaced by a check mark on screen-->
@@ -2680,7 +2680,7 @@
     <string name="upgrade_security">Encryption upgrade available</string>
     <string name="security_prompt_text">Verify yourself &amp; others to keep your chats safe</string>
 
-    <!-- %s will be replaced by recovery_key -->
+    <!-- %s will be replaced by security_key -->
     <string name="bootstrap_enter_recovery">Enter your %s to continue</string>
     <string name="use_file">Use File</string>
 
@@ -2705,7 +2705,7 @@
     <!-- TODO TO BE REMOVED -->
     <string tools:ignore="UnusedResources" name="bootstrap_migration_use_recovery_key">use your Key Backup recovery key</string>
     <string name="bootstrap_migration_use_security_key">use your Key Backup Security Key</string>
-    <!-- %s will be replaced by the value of bootstrap_migration_use_recovery_key  -->
+    <!-- %s will be replaced by the value of bootstrap_migration_use_security_key  -->
     <string name="bootstrap_migration_with_passphrase_helper_with_link">Don’t know your Key Backup Passphrase, you can %s.</string>
     <!-- TODO TO BE REMOVED -->
     <string tools:ignore="UnusedResources" name="bootstrap_migration_backup_recovery_key">Key Backup recovery key</string>
@@ -2731,7 +2731,7 @@
     <string name="use_latest_app">Use the latest ${app_name} on your other devices:</string>
     <string name="command_description_discard_session">Forces the current outbound group session in an encrypted room to be discarded</string>
     <string name="command_description_discard_session_not_handled">Only supported in encrypted rooms</string>
-    <!-- first will be replaced by recovery_passphrase, second will be replaced by recovery_key-->
+    <!-- first will be replaced by security_passphrase, second will be replaced by security_key-->
     <string name="enter_secret_storage_passphrase_or_key">Use your %1$s or use your %2$s to continue.</string>
     <!-- TODO TO BE REMOVED -->
     <string tools:ignore="UnusedResources" name="use_recovery_key">Use Recovery Key</string>
