@@ -64,4 +64,5 @@
     <string name="notice_placed_video_call">%s je začel video klic.</string>
     <string name="notice_made_future_direct_room_visibility">%1$s je omočil %2$s ogled prihodnjih sporočil</string>
     <string name="notice_made_future_direct_room_visibility_by_you">%1$s si omogočil ogled prihodnjih sporočil</string>
+    <string name="notice_room_visibility_invited">vsi člani sobe, od trenutka povabila.</string>
 </resources>
