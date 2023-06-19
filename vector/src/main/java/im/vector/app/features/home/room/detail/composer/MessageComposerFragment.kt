@@ -101,6 +101,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
+import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.util.MatrixItem
 import reactivecircus.flowbinding.android.view.focusChanges
 import reactivecircus.flowbinding.android.widget.textChanges
@@ -122,6 +123,9 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
     @Inject lateinit var buildMeta: BuildMeta
     @Inject lateinit var session: Session
     @Inject lateinit var errorTracker: ErrorTracker
+
+    private val permalinkService: PermalinkService
+        get() = session.permalinkService()
 
     private val roomId: String get() = withState(timelineViewModel) { it.roomId }
 
@@ -792,30 +796,37 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
         } else {
             val roomMember = timelineViewModel.getMember(userId)
             val displayName = sanitizeDisplayName(roomMember?.displayName ?: userId)
-            val pill = buildSpannedString {
-                append(displayName)
-                setSpan(
-                        PillImageSpan(
-                                glideRequests,
-                                avatarRenderer,
-                                requireContext(),
-                                MatrixItem.UserItem(userId, displayName, roomMember?.avatarUrl)
-                        )
-                                .also { it.bind(composer.editText) },
-                        0,
-                        displayName.length,
-                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                )
-                append(if (startToCompose) ": " else " ")
+            if ((composer as? RichTextComposerLayout)?.isTextFormattingEnabled == true) {
+                // Rich text editor is enabled so we need to use its APIs
+                permalinkService.createPermalink(userId)?.let { url ->
+                    (composer as RichTextComposerLayout).insertMention(url, displayName)
+                }
+            } else {
+                val pill = buildSpannedString {
+                    append(displayName)
+                    setSpan(
+                            PillImageSpan(
+                                    glideRequests,
+                                    avatarRenderer,
+                                    requireContext(),
+                                    MatrixItem.UserItem(userId, displayName, roomMember?.avatarUrl),
+                            )
+                                    .also { it.bind(composer.editText) },
+                            0,
+                            displayName.length,
+                            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+                    append(if (startToCompose) ": " else " ")
+                }
+                if (startToCompose && displayName.startsWith("/")) {
+                    // Ensure displayName will not be interpreted as a Slash command
+                    composer.editText.append("\\")
+                }
+                // Always use EditText.getText().insert for adding pills as TextView.append doesn't appear
+                // to upgrade to BufferType.Spannable as hinted at in the docs:
+                // https://developer.android.com/reference/android/widget/TextView#append(java.lang.CharSequence)
+                composer.editText.text.insert(composer.editText.selectionStart, pill)
             }
-            if (startToCompose && displayName.startsWith("/")) {
-                // Ensure displayName will not be interpreted as a Slash command
-                composer.editText.append("\\")
-            }
-            // Always use EditText.getText().insert for adding pills as TextView.append doesn't appear
-            // to upgrade to BufferType.Spannable as hinted at in the docs:
-            // https://developer.android.com/reference/android/widget/TextView#append(java.lang.CharSequence)
-            composer.editText.text.insert(composer.editText.selectionStart, pill)
         }
         focusComposerAndShowKeyboard()
     }
