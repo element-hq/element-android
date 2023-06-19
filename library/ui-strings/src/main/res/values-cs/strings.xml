@@ -380,7 +380,7 @@
     <string name="room_one_user_is_typing">%s píše…</string>
     <string name="room_two_users_are_typing">%1$s a %2$s píší…</string>
     <string name="room_many_users_are_typing">%1$s a %2$s a další píší…</string>
-    <string name="room_do_not_have_permission_to_post">Nemáte právo odesílat v této místnosti.</string>
+    <string name="room_do_not_have_permission_to_post">Nemáte oprávnění vkládat příspěvky do této místnosti.</string>
     <plurals name="room_new_messages_notification">
         <item quantity="one">%d nová zpráva</item>
         <item quantity="few">%d nové zprávy</item>
@@ -1512,7 +1512,7 @@
     <string name="identity_server_set_alternative_submit">Odeslat</string>
     <string name="action_play">Přehrát</string>
     <string name="action_dismiss">Odmítnout</string>
-    <string name="no_permissions_to_start_conf_call">Nemáte povolení zahájit konferenční hovor v této místnosti</string>
+    <string name="no_permissions_to_start_conf_call">Nemáte oprávnění zahájit konferenční hovor v této místnosti</string>
     <string name="video_meeting">Zahájit video schůzku</string>
     <string name="audio_meeting">Zahájit hlasovou schůzku</string>
     <string name="audio_video_meeting_description">Schůzky používají pravidla zabezpečení a přístupu Jitsi. Všichni lidé nyní v místnosti uvidí pozvánku k připojení, zatímco vaše schůzka probíhá.</string>
@@ -1795,7 +1795,7 @@
     <string name="this_is_the_beginning_of_room_no_name">Toto je počátek této konverzace.</string>
     <string name="this_is_the_beginning_of_room">Toto je počátek %s.</string>
     <string name="settings_export_trail">Exportovat audit</string>
-    <string name="room_settings_enable_encryption_no_permission">K zapnutí šifrování v této místnosti nemáte oprávnění.</string>
+    <string name="room_settings_enable_encryption_no_permission">Nemáte oprávnění povolit šifrování v této místnosti.</string>
     <string name="room_member_open_or_create_dm">Přímá zpráva</string>
     <string name="create_room_in_progress">Zakládám místnost…</string>
     <string name="create_room_alias_invalid">Některé znaky nejsou dovoleny</string>
