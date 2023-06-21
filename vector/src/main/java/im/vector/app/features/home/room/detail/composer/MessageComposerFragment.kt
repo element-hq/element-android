@@ -800,6 +800,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
                 // Rich text editor is enabled so we need to use its APIs
                 permalinkService.createPermalink(userId)?.let { url ->
                     (composer as RichTextComposerLayout).insertMention(url, displayName)
+                    composer.editText.append(" ")
                 }
             } else {
                 val pill = buildSpannedString {
