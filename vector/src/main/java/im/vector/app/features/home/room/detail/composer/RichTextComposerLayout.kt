@@ -305,7 +305,7 @@ internal class RichTextComposerLayout @JvmOverloads constructor(
     fun removeLink() =
             views.richTextComposerEditText.removeLink()
 
-    // TODO: update the API to insertMention when available
+    // Update the API to insertMention when available
     fun insertMention(url: String, displayText: String) =
             views.richTextComposerEditText.insertLink(url, displayText)
 
