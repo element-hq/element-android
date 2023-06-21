@@ -49,7 +49,11 @@ import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.databinding.ComposerRichTextLayoutBinding
 import im.vector.app.databinding.ViewRichTextMenuButtonBinding
 import im.vector.app.features.home.room.detail.composer.images.UriContentListener
+import im.vector.app.features.home.room.detail.composer.mentions.PillDisplayHandler
 import io.element.android.wysiwyg.EditorEditText
+import io.element.android.wysiwyg.display.KeywordDisplayHandler
+import io.element.android.wysiwyg.display.LinkDisplayHandler
+import io.element.android.wysiwyg.display.TextDisplay
 import io.element.android.wysiwyg.utils.RustErrorCollector
 import io.element.android.wysiwyg.view.models.InlineFormat
 import io.element.android.wysiwyg.view.models.LinkAction
@@ -101,6 +105,13 @@ internal class RichTextComposerLayout @JvmOverloads constructor(
         get() = views.sendButton
     override val attachmentButton: ImageButton
         get() = views.attachmentButton
+
+    val richTextEditText: EditText get() =
+        views.richTextComposerEditText
+    val plainTextEditText: EditText get() =
+        views.plainTextComposerEditText
+
+    var pillDisplayHandler: PillDisplayHandler? = null
 
     // Border of the EditText
     private val borderShapeDrawable: MaterialShapeDrawable by lazy {
@@ -227,6 +238,16 @@ internal class RichTextComposerLayout @JvmOverloads constructor(
         views.composerEditTextOuterBorder.background = borderShapeDrawable
 
         setupRichTextMenu()
+        views.richTextComposerEditText.linkDisplayHandler = LinkDisplayHandler { text, url ->
+            pillDisplayHandler?.resolveLinkDisplay(text, url) ?: TextDisplay.Plain
+        }
+        views.richTextComposerEditText.keywordDisplayHandler = object : KeywordDisplayHandler {
+            override val keywords: List<String>
+                get() = pillDisplayHandler?.keywords.orEmpty()
+
+            override fun resolveKeywordDisplay(text: String): TextDisplay =
+                pillDisplayHandler?.resolveKeywordDisplay(text) ?: TextDisplay.Plain
+        }
 
         updateTextFieldBorder(isFullScreen)
     }
@@ -283,6 +304,10 @@ internal class RichTextComposerLayout @JvmOverloads constructor(
 
     fun removeLink() =
             views.richTextComposerEditText.removeLink()
+
+    // Update the API to insertMention when available
+    fun insertMention(url: String, displayText: String) =
+            views.richTextComposerEditText.insertLink(url, displayText)
 
     @SuppressLint("ClickableViewAccessibility")
     private fun disallowParentInterceptTouchEvent(view: View) {

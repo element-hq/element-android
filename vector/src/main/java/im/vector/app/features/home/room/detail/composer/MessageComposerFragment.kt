@@ -83,6 +83,7 @@ import im.vector.app.features.home.room.detail.TimelineViewModel
 import im.vector.app.features.home.room.detail.composer.link.SetLinkFragment
 import im.vector.app.features.home.room.detail.composer.link.SetLinkSharedAction
 import im.vector.app.features.home.room.detail.composer.link.SetLinkSharedActionViewModel
+import im.vector.app.features.home.room.detail.composer.mentions.PillDisplayHandler
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView
 import im.vector.app.features.home.room.detail.timeline.action.MessageSharedActionViewModel
 import im.vector.app.features.home.room.detail.upgrade.MigrateRoomBottomSheet
@@ -100,6 +101,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
+import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.util.MatrixItem
 import reactivecircus.flowbinding.android.view.focusChanges
 import reactivecircus.flowbinding.android.widget.textChanges
@@ -122,11 +124,12 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
     @Inject lateinit var session: Session
     @Inject lateinit var errorTracker: ErrorTracker
 
+    private val permalinkService: PermalinkService
+        get() = session.permalinkService()
+
     private val roomId: String get() = withState(timelineViewModel) { it.roomId }
 
-    private val autoCompleter: AutoCompleter by lazy {
-        autoCompleterFactory.create(roomId, isThreadTimeLine())
-    }
+    private val autoCompleters: MutableMap<EditText, AutoCompleter> = hashMapOf()
 
     private val emojiPopup: EmojiPopup by lifecycleAwareLazy {
         createEmojiPopup()
@@ -261,9 +264,8 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
     override fun onDestroyView() {
         super.onDestroyView()
 
-        if (!vectorPreferences.isRichTextEditorEnabled()) {
-            autoCompleter.clear()
-        }
+        autoCompleters.values.forEach(AutoCompleter::clear)
+        autoCompleters.clear()
         messageComposerViewModel.endAllVoiceActions()
     }
 
@@ -274,7 +276,12 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
 
         (composer as? View)?.isVisible = messageComposerState.isComposerVisible
         composer.sendButton.isInvisible = !messageComposerState.isSendButtonVisible
-        (composer as? RichTextComposerLayout)?.isTextFormattingEnabled = attachmentState.isTextFormattingEnabled
+        (composer as? RichTextComposerLayout)?.also {
+            val isTextFormattingEnabled = attachmentState.isTextFormattingEnabled
+            it.isTextFormattingEnabled = isTextFormattingEnabled
+            autoCompleters[it.richTextEditText]?.setEnabled(isTextFormattingEnabled)
+            autoCompleters[it.plainTextEditText]?.setEnabled(!isTextFormattingEnabled)
+        }
     }
 
     private fun setupBottomSheet() {
@@ -315,8 +322,11 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
         val composerEditText = composer.editText
         composerEditText.setHint(R.string.room_message_placeholder)
 
-        if (!vectorPreferences.isRichTextEditorEnabled()) {
-            autoCompleter.setup(composerEditText)
+        (composer as? RichTextComposerLayout)?.let {
+            initAutoCompleter(it.richTextEditText)
+            initAutoCompleter(it.plainTextEditText)
+        } ?: run {
+            initAutoCompleter(composer.editText)
         }
 
         observerUserTyping()
@@ -404,6 +414,21 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
                 SetLinkFragment.show(isTextSupported, initialLink, childFragmentManager)
             }
         }
+        (composer as? RichTextComposerLayout)?.pillDisplayHandler = PillDisplayHandler(
+                roomId = roomId,
+                getRoom = timelineViewModel::getRoom,
+                getMember = timelineViewModel::getMember,
+        ) { matrixItem: MatrixItem ->
+            PillImageSpan(glideRequests, avatarRenderer, requireContext(), matrixItem)
+        }
+    }
+
+    private fun initAutoCompleter(editText: EditText) {
+        if (autoCompleters.containsKey(editText)) return
+
+        autoCompleters[editText] =
+                autoCompleterFactory.create(roomId, isThreadTimeLine())
+                        .also { it.setup(editText) }
     }
 
     private fun sendTextMessage(text: CharSequence, formattedText: String? = null) {
@@ -435,12 +460,12 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
     }
 
     private fun renderRegularMode(content: CharSequence) {
-        autoCompleter.exitSpecialMode()
+        autoCompleters.values.forEach(AutoCompleter::exitSpecialMode)
         composer.renderComposerMode(MessageComposerMode.Normal(content))
     }
 
     private fun renderSpecialMode(mode: MessageComposerMode.Special) {
-        autoCompleter.enterSpecialMode()
+        autoCompleters.values.forEach(AutoCompleter::enterSpecialMode)
         composer.renderComposerMode(mode)
     }
 
@@ -771,30 +796,37 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
         } else {
             val roomMember = timelineViewModel.getMember(userId)
             val displayName = sanitizeDisplayName(roomMember?.displayName ?: userId)
-            val pill = buildSpannedString {
-                append(displayName)
-                setSpan(
-                        PillImageSpan(
-                                glideRequests,
-                                avatarRenderer,
-                                requireContext(),
-                                MatrixItem.UserItem(userId, displayName, roomMember?.avatarUrl)
-                        )
-                                .also { it.bind(composer.editText) },
-                        0,
-                        displayName.length,
-                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                )
-                append(if (startToCompose) ": " else " ")
-            }
-            if (startToCompose) {
-                if (displayName.startsWith("/")) {
+            if ((composer as? RichTextComposerLayout)?.isTextFormattingEnabled == true) {
+                // Rich text editor is enabled so we need to use its APIs
+                permalinkService.createPermalink(userId)?.let { url ->
+                    (composer as RichTextComposerLayout).insertMention(url, displayName)
+                    composer.editText.append(" ")
+                }
+            } else {
+                val pill = buildSpannedString {
+                    append(displayName)
+                    setSpan(
+                            PillImageSpan(
+                                    glideRequests,
+                                    avatarRenderer,
+                                    requireContext(),
+                                    MatrixItem.UserItem(userId, displayName, roomMember?.avatarUrl),
+                            )
+                                    .also { it.bind(composer.editText) },
+                            0,
+                            displayName.length,
+                            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+                    append(if (startToCompose) ": " else " ")
+                }
+                if (startToCompose && displayName.startsWith("/")) {
                     // Ensure displayName will not be interpreted as a Slash command
                     composer.editText.append("\\")
                 }
-                composer.editText.append(pill)
-            } else {
-                composer.editText.text?.insert(composer.editText.selectionStart, pill)
+                // Always use EditText.getText().insert for adding pills as TextView.append doesn't appear
+                // to upgrade to BufferType.Spannable as hinted at in the docs:
+                // https://developer.android.com/reference/android/widget/TextView#append(java.lang.CharSequence)
+                composer.editText.text.insert(composer.editText.selectionStart, pill)
             }
         }
         focusComposerAndShowKeyboard()
