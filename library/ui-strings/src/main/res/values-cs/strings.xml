@@ -798,7 +798,7 @@
     <string name="notification_silent">Tiché</string>
     <string name="notification_noisy">Hlučné</string>
     <string name="create">Vytvořit</string>
-    <string name="group_details_home">Úvod</string>
+    <string name="group_details_home">Domov</string>
     <string name="rooms">Místnosti</string>
     <string name="invited">Pozvaní</string>
     <string name="has_been_removed">%2$s Vás vykopnul z %1$s</string>
@@ -2182,8 +2182,8 @@
     <string name="link_this_email_settings_link">Propojte tento e-mail se svým účtem</string>
     <string name="this_invite_to_this_room_was_sent">Pozvánka do této místnosti byla odeslána na adresu %s, která není spojena s vaším účtem</string>
     <string name="this_invite_to_this_space_was_sent">Pozvánka do tohoto prostoru byla odeslána na adresu %s, která není spojena s vaším účtem</string>
-    <string name="all_rooms_youre_in_will_be_shown_in_home">Všechny místnosti, ve kterých se nacházíte, se zobrazí v Úvodu.</string>
-    <string name="preference_show_all_rooms_in_home">Zobrazit všechny místnosti v Úvodu</string>
+    <string name="all_rooms_youre_in_will_be_shown_in_home">Všechny místnosti, ve kterých se nacházíte, se zobrazí v Domovu.</string>
+    <string name="preference_show_all_rooms_in_home">Zobrazit všechny místnosti v Domovu</string>
     <string name="call_slide_to_end_conference">Posunutím ukončíte hovor</string>
     <string name="call_tap_to_return">%1$s Klepněte pro návrat</string>
     <string name="call_one_active">Probíhající hovor (%1$s) ·</string>
