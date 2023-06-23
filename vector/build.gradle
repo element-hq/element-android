@@ -117,6 +117,7 @@ dependencies {
     implementation project(":library:external:jsonviewer")
     implementation project(":library:external:diff-match-patch")
     implementation project(":library:external:textdrawable")
+    implementation project(":library:external:autocomplete")
     implementation project(":library:ui-strings")
     implementation project(":library:ui-styles")
     implementation project(":library:core-utils")
@@ -209,8 +210,6 @@ dependencies {
 
     // Alerter
     implementation 'com.github.tapadoo:alerter:7.2.4'
-
-    implementation 'com.otaliastudios:autocomplete:1.1.0'
 
     // Shake detection
     implementation 'com.squareup:seismic:1.0.3'

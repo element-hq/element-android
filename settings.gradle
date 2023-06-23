@@ -12,6 +12,7 @@ include ':library:external:jsonviewer'
 include ':library:external:diff-match-patch'
 include ':library:external:dialpad'
 include ':library:external:textdrawable'
+include ':library:external:autocomplete'
 
 include ':library:rustCrypto'
 include ':matrix-sdk-android'

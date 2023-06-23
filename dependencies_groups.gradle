@@ -115,6 +115,7 @@ ext.groups = [
                         'com.linkedin.dexmaker',
                         'com.mapbox.mapboxsdk',
                         'com.nulab-inc',
+                        'com.otaliastudios',
                         'com.otaliastudios.opengl',
                         'com.parse.bolts',
                         'com.pinterest',
@@ -238,7 +239,6 @@ ext.groups = [
                 regex: [
                 ],
                 group: [
-                        'com.otaliastudios',
                         'com.yqritc',
                         // https://github.com/cmelchior/realmfieldnameshelper/issues/42
                         'dk.ilios',

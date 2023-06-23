@@ -23,7 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.otaliastudios.autocomplete.AutocompletePresenter
 
-abstract class RecyclerViewPresenter<T>(context: Context?) : AutocompletePresenter<T>(context) {
+abstract class RecyclerViewPresenter<T>(context: Context) : AutocompletePresenter<T>(context) {
 
     private var recyclerView: RecyclerView? = null
     private var clicks: ClickProvider<T>? = null
