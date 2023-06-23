@@ -239,7 +239,6 @@ ext.groups = [
                 regex: [
                 ],
                 group: [
-                        'im.dlg',
                         'me.dm7.barcodescanner',
                         'me.gujun.android',
                 ]
