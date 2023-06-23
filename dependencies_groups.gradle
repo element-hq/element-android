@@ -235,10 +235,4 @@ ext.groups = [
                         'xml-apis',
                 ]
         ],
-        jcenter       : [
-                regex: [
-                ],
-                group: [
-                ]
-        ]
 ]

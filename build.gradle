@@ -112,16 +112,6 @@ allprojects {
                 groups.google.group.each { includeGroup it }
             }
         }
-        //noinspection JcenterRepositoryObsolete
-        // Do not use `jcenter`, it prevents Dependabot from working properly
-        maven {
-            url 'https://jcenter.bintray.com'
-            content {
-                groups.jcenter.regex.each { includeGroupByRegex it }
-                groups.jcenter.group.each { includeGroup it }
-            }
-        }
-
         maven {
             url 'https://s01.oss.sonatype.org/content/repositories/snapshots'
             content {
@@ -129,7 +119,6 @@ allprojects {
                 groups.mavenSnapshots.group.each { includeGroup it }
             }
         }
-
     }
 
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
