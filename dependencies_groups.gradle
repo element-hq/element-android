@@ -240,7 +240,6 @@ ext.groups = [
                 ],
                 group: [
                         'me.dm7.barcodescanner',
-                        'me.gujun.android',
                 ]
         ]
 ]

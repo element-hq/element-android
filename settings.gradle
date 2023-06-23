@@ -14,6 +14,7 @@ include ':library:external:dialpad'
 include ':library:external:textdrawable'
 include ':library:external:autocomplete'
 include ':library:external:realmfieldnameshelper'
+include ':library:external:span'
 
 include ':library:rustCrypto'
 include ':matrix-sdk-android'

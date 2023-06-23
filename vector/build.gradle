@@ -187,9 +187,7 @@ dependencies {
 
     // UI
     implementation libs.google.material
-    api('me.gujun.android:span:1.7') {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    }
+    implementation project(":library:external:span")
     implementation libs.markwon.core
     implementation libs.markwon.extLatex
     implementation libs.markwon.imageGlide
