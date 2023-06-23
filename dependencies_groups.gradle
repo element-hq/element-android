@@ -238,7 +238,6 @@ ext.groups = [
                 regex: [
                 ],
                 group: [
-                        'com.amulyakhare',
                         'com.otaliastudios',
                         'com.yqritc',
                         // https://github.com/cmelchior/realmfieldnameshelper/issues/42

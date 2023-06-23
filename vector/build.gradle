@@ -116,6 +116,7 @@ dependencies {
     implementation project(":matrix-sdk-android-flow")
     implementation project(":library:external:jsonviewer")
     implementation project(":library:external:diff-match-patch")
+    implementation project(":library:external:textdrawable")
     implementation project(":library:ui-strings")
     implementation project(":library:ui-styles")
     implementation project(":library:core-utils")
@@ -184,7 +185,6 @@ dependencies {
     api libs.androidx.preferenceKtx
 
     // UI
-    implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
     implementation libs.google.material
     api('me.gujun.android:span:1.7') {
         exclude group: 'com.android.support', module: 'support-annotations'
