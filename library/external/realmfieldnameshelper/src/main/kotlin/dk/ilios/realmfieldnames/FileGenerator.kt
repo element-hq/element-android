@@ -3,9 +3,7 @@ package dk.ilios.realmfieldnames
 import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.TypeSpec
-
 import java.io.IOException
-
 import javax.annotation.processing.Filer
 import javax.lang.model.element.Modifier
 
@@ -32,12 +30,10 @@ class FileGenerator(private val filer: Filer) {
     }
 
     private fun generateFile(classData: ClassData, classPool: Set<ClassData>): Boolean {
-
         val fileBuilder = TypeSpec.classBuilder(classData.simpleClassName + "Fields")
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 .addJavadoc("This class enumerate all queryable fields in {@link \$L.\$L}\n",
                         classData.packageName, classData.simpleClassName)
-
 
         // Add a static field reference to each queryable field in the Realm model class
         classData.fields.forEach { fieldName, value ->
@@ -69,7 +65,6 @@ class FileGenerator(private val filer: Filer) {
             e.printStackTrace()
             return false
         }
-
     }
 
     private fun addField(fileBuilder: TypeSpec.Builder, fieldName: String, fieldNameValue: String) {

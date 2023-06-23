@@ -1,14 +1,17 @@
 package dk.ilios.realmfieldnames
 
-import java.util.*
-
 import javax.annotation.processing.AbstractProcessor
 import javax.annotation.processing.Messager
 import javax.annotation.processing.ProcessingEnvironment
 import javax.annotation.processing.RoundEnvironment
 import javax.annotation.processing.SupportedAnnotationTypes
 import javax.lang.model.SourceVersion
-import javax.lang.model.element.*
+import javax.lang.model.element.Element
+import javax.lang.model.element.ElementKind
+import javax.lang.model.element.Modifier
+import javax.lang.model.element.PackageElement
+import javax.lang.model.element.TypeElement
+import javax.lang.model.element.VariableElement
 import javax.lang.model.type.DeclaredType
 import javax.lang.model.type.TypeMirror
 import javax.lang.model.util.Elements
@@ -24,9 +27,9 @@ import javax.tools.Diagnostic
 class RealmFieldNamesProcessor : AbstractProcessor() {
 
     private val classes = HashSet<ClassData>()
-    lateinit private var typeUtils: Types
-    lateinit private var messager: Messager
-    lateinit private var elementUtils: Elements
+    private lateinit var typeUtils: Types
+    private lateinit var messager: Messager
+    private lateinit var elementUtils: Elements
     private var ignoreAnnotation: TypeMirror? = null
     private var realmClassAnnotation: TypeElement? = null
     private var realmModelInterface: TypeMirror? = null
@@ -35,7 +38,8 @@ class RealmFieldNamesProcessor : AbstractProcessor() {
     private var fileGenerator: FileGenerator? = null
     private var done = false
 
-    @Synchronized override fun init(processingEnv: ProcessingEnvironment) {
+    @Synchronized
+    override fun init(processingEnv: ProcessingEnvironment) {
         super.init(processingEnv)
         typeUtils = processingEnv.typeUtils!!
         messager = processingEnv.messager!!
@@ -51,10 +55,14 @@ class RealmFieldNamesProcessor : AbstractProcessor() {
             ignoreAnnotation = elementUtils.getTypeElement("io.realm.annotations.Ignore")?.asType()
             realmClassAnnotation = elementUtils.getTypeElement("io.realm.annotations.RealmClass")
             realmModelInterface = elementUtils.getTypeElement("io.realm.RealmModel")?.asType()
-            realmListClass = typeUtils.getDeclaredType(elementUtils.getTypeElement("io.realm.RealmList"),
-                    typeUtils.getWildcardType(null, null))
-            realmResultsClass = typeUtils.getDeclaredType(elementUtils.getTypeElement("io.realm.RealmResults"),
-                    typeUtils.getWildcardType(null, null))
+            realmListClass = typeUtils.getDeclaredType(
+                    elementUtils.getTypeElement("io.realm.RealmList"),
+                    typeUtils.getWildcardType(null, null)
+            )
+            realmResultsClass = typeUtils.getDeclaredType(
+                    elementUtils.getTypeElement("io.realm.RealmResults"),
+                    typeUtils.getWildcardType(null, null)
+            )
             fileGenerator = FileGenerator(processingEnv.filer)
         }
     }
@@ -83,8 +91,8 @@ class RealmFieldNamesProcessor : AbstractProcessor() {
         classes.forEach {
             it.fields.forEach { _, value ->
                 // Analyze the library class file the first time it is encountered.
-                if (value != null ) {
-                    if (classes.all{ it.qualifiedClassName != value } && !libraryClasses.containsKey(value)) {
+                if (value != null) {
+                    if (classes.all { it.qualifiedClassName != value } && !libraryClasses.containsKey(value)) {
                         libraryClasses.put(value, processLibraryClass(value))
                     }
                 }
@@ -172,8 +180,10 @@ class RealmFieldNamesProcessor : AbstractProcessor() {
         val enclosingElement = classElement.enclosingElement
 
         if (enclosingElement.kind != ElementKind.PACKAGE) {
-            messager.printMessage(Diagnostic.Kind.ERROR,
-                    "Could not determine the package name. Enclosing element was: " + enclosingElement.kind)
+            messager.printMessage(
+                    Diagnostic.Kind.ERROR,
+                    "Could not determine the package name. Enclosing element was: " + enclosingElement.kind
+            )
             return null
         }
 

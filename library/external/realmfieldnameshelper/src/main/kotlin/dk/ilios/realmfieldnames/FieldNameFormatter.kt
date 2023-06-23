@@ -14,7 +14,7 @@ class FieldNameFormatter {
         }
 
         // Normalize word separator chars
-        val normalizedFieldName : String = fieldName.replace('-', '_')
+        val normalizedFieldName: String = fieldName.replace('-', '_')
 
         // Iterate field name using the following rules
         // lowerCase m followed by upperCase anything is considered hungarian notation
@@ -39,7 +39,6 @@ class FieldNameFormatter {
                         // Hungarian notation starting with: mX
                         result.delete(0, 1)
                         result.appendCodePoint(currentCodepoint)
-
                     } else if (Character.isUpperCase(currentCodepoint) && Character.isUpperCase(previousCodepoint)) {
                         // InvalidCamelCase: XXYx (should have been xxYx)
                         if (offset + Character.charCount(currentCodepoint) < normalizedFieldName.length) {
@@ -49,11 +48,9 @@ class FieldNameFormatter {
                             }
                         }
                         result.appendCodePoint(currentCodepoint)
-
                     } else if (currentCodepoint === '-'.code as Int? || currentCodepoint === '_'.code as Int?) {
                         // Word-separator: x-x or x_x
                         result.append("_")
-
                     } else if (Character.isUpperCase(currentCodepoint) && !Character.isUpperCase(previousCodepoint) && Character.isLetterOrDigit(previousCodepoint)) {
                         // camelCase: xX
                         result.append("_")
