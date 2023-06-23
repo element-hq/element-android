@@ -239,7 +239,6 @@ ext.groups = [
                 regex: [
                 ],
                 group: [
-                        'me.dm7.barcodescanner',
                 ]
         ]
 ]

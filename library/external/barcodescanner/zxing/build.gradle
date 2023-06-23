@@ -1,0 +1,29 @@
+apply plugin: 'com.android.library'
+
+android {
+    namespace "me.dm7.barcodescanner.zxing"
+
+    compileSdk versions.compileSdk
+
+    defaultConfig {
+        minSdk versions.minSdk
+        targetSdk versions.targetSdk
+    }
+
+    compileOptions {
+        sourceCompatibility versions.sourceCompat
+        targetCompatibility versions.targetCompat
+    }
+}
+
+dependencies {
+    api project(":library:external:barcodescanner:core")
+    // Stick to 3.3.3 because of https://github.com/zxing/zxing/issues/1170
+    api 'com.google.zxing:core:3.3.3'
+}
+
+afterEvaluate {
+    tasks.findAll { it.name.startsWith("lint") }.each {
+        it.enabled = false
+    }
+}

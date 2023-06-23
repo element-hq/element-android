@@ -263,11 +263,7 @@ dependencies {
     // Stick to 3.3.3 because of https://github.com/zxing/zxing/issues/1170
     implementation 'com.google.zxing:core:3.3.3'
 
-    // Excludes the legacy support library annotation usages
-    // https://github.com/dm77/barcodescanner/blob/d036996c8a6f36a68843ffe539c834c28944b2d5/core/src/main/java/me/dm7/barcodescanner/core/CameraWrapper.java#L4
-    implementation ('me.dm7.barcodescanner:zxing:1.9.13') {
-        exclude group: 'com.android.support', module: 'support-v4'
-    }
+    implementation project(":library:external:barcodescanner:zxing")
 
     // Emoji Keyboard
     api libs.vanniktech.emojiMaterial
