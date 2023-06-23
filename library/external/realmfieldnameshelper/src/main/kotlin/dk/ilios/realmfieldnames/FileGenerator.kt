@@ -62,7 +62,7 @@ class FileGenerator(private val filer: Filer) {
             javaFile.writeTo(filer)
             return true
         } catch (e: IOException) {
-            e.printStackTrace()
+            // e.printStackTrace()
             return false
         }
     }

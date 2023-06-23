@@ -8,7 +8,8 @@ import java.util.Locale
  */
 class FieldNameFormatter {
 
-    @JvmOverloads fun format(fieldName: String?, locale: Locale = Locale.US): String {
+    @JvmOverloads
+    fun format(fieldName: String?, locale: Locale = Locale.US): String {
         if (fieldName == null || fieldName == "") {
             return ""
         }
@@ -35,7 +36,11 @@ class FieldNameFormatter {
                 currentCodepoint = normalizedFieldName.codePointAt(offset)
 
                 if (previousCodepoint != null) {
-                    if (Character.isUpperCase(currentCodepoint) && !Character.isUpperCase(previousCodepoint) && previousCodepoint === 'm'.code as Int? && result.length == 1) {
+                    if (Character.isUpperCase(currentCodepoint) &&
+                            !Character.isUpperCase(previousCodepoint) &&
+                            previousCodepoint === 'm'.code as Int? &&
+                            result.length == 1
+                    ) {
                         // Hungarian notation starting with: mX
                         result.delete(0, 1)
                         result.appendCodePoint(currentCodepoint)
@@ -51,7 +56,9 @@ class FieldNameFormatter {
                     } else if (currentCodepoint === '-'.code as Int? || currentCodepoint === '_'.code as Int?) {
                         // Word-separator: x-x or x_x
                         result.append("_")
-                    } else if (Character.isUpperCase(currentCodepoint) && !Character.isUpperCase(previousCodepoint) && Character.isLetterOrDigit(previousCodepoint)) {
+                    } else if (Character.isUpperCase(currentCodepoint) && !Character.isUpperCase(previousCodepoint) && Character.isLetterOrDigit(
+                                    previousCodepoint
+                            )) {
                         // camelCase: xX
                         result.append("_")
                         result.appendCodePoint(currentCodepoint)
