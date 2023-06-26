@@ -230,7 +230,7 @@ class SelfVerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSh
 
     companion object {
 
-        val TAG: String = "VERIF"
+        const val TAG: String = "VERIF"
 
         fun verifyOwnUntrustedDevice(): SelfVerificationBottomSheet {
             return SelfVerificationBottomSheet().apply {
