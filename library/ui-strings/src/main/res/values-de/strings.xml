@@ -11,7 +11,7 @@
     <string name="notice_room_ban">%1$s hat %2$s gebannt</string>
     <string name="notice_room_withdraw">%1$s hat die Einladung für %2$s zurückgezogen</string>
     <string name="notice_avatar_url_changed">%1$s hat das Profilbild geändert</string>
-    <string name="notice_display_name_set">%1$s hat den Anzeigenamen geändert in %2$s</string>
+    <string name="notice_display_name_set">%1$s hat den Anzeigenamen zu %2$s geändert</string>
     <string name="notice_display_name_changed_from">%1$s hat den Anzeigenamen von %2$s auf %3$s geändert</string>
     <string name="notice_display_name_removed">%1$s hat den Anzeigenamen gelöscht (war %2$s)</string>
     <string name="notice_room_topic_changed">%1$s hat das Raumthema geändert auf: %2$s</string>
@@ -2948,4 +2948,13 @@
     <string name="verification_request_waiting_for_recovery">Mit Sicherheitsschlüssel oder -phrase verifizieren …</string>
     <string name="settings_acceptable_use_policy">Nutzungsbedingungen</string>
     <string name="settings_crypto_version">Verschlüsselungsversion</string>
+    <string name="notice_display_name_changed_to">%1$s hat den Anzeigenamen zu %2$s geändert</string>
+    <string name="avatar_of_user">Benutzer-Profilbild von %1$s</string>
+    <string name="avatar_of_room">Raum-Avatar von %1$s</string>
+    <string name="avatar_of_space">Space-Avatar von %1$s</string>
+    <string name="confirm_your_identity_after_update">Verschlüsselte Kommunikation wurde mit der neuesten Aktualisierung verbessert. Bitte verifiziere deine Geräte erneut.</string>
+    <string name="verification_profile_other_device_untrust_info">Solange der Benutzer dieser Sitzung nicht vertraut, werden Nachrichten mit Warnungen versehen.</string>
+    <string name="crosssigning_verify_after_update">App aktualisiert</string>
+    <string name="sign_out_failed_dialog_message">Dein Heim-Server ist nicht erreichbar. Falls du dich dennoch abmeldest, wird dieses Gerät nicht von deiner Geräteliste entfernt, also müsstest du dies mit einer anderen Sitzung selbst machen.</string>
+    <string name="sign_out_anyway">Dennoch abmelden</string>
 </resources>
