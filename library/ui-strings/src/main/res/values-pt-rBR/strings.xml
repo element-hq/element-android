@@ -1045,7 +1045,7 @@
     <string name="message_view_edit_history">Visualizar Histórico de Edição</string>
     <string name="terms_of_service">Termos de Serviço</string>
     <string name="terms_description_for_identity_server">Ser descobertável por outras(os)</string>
-    <string name="terms_description_for_integration_manager">Usar Bots, bridges, widgets e pacotes de stickers</string>
+    <string name="terms_description_for_integration_manager">Usar bots, bridges, widgets e pacotes de stickers</string>
     <string name="identity_server">Servidor de identidade</string>
     <string name="disconnect_identity_server">Desconectar servidor de identidade</string>
     <string name="add_identity_server">Configurar servidor de identidade</string>
@@ -1352,7 +1352,7 @@
 \nA confirmação vai ser salvada localmente e compartilhada numa versão futura do app.</string>
     <string name="command_description_rainbow">Envia a dada mensagem colorida como um arco-íris</string>
     <string name="command_description_rainbow_emote">Envia o dado emote colorido como um arco-íris</string>
-    <string name="settings_category_timeline">Timeline</string>
+    <string name="settings_category_timeline">Linha do tempo</string>
     <string name="settings_category_composer">Editor de mensagem</string>
     <string name="room_settings_enable_encryption">Habilitar encriptação ponta-a-ponta…</string>
     <string name="room_settings_enable_encryption_dialog_title">Habilitar encriptação\?</string>
@@ -2292,8 +2292,8 @@
     <string name="preference_root_legals">Jurídicos</string>
     <string name="legals_no_policy_provided">Este servidor não provê nenhuma política.</string>
     <string name="legals_third_party_notices">Bibliotecas de terceiros</string>
-    <string name="legals_identity_server_title">A política de seu servidor de identidade</string>
-    <string name="legals_home_server_title">A política de seu servidorcasa</string>
+    <string name="legals_identity_server_title">A política do seu servidor de identidade</string>
+    <string name="legals_home_server_title">A política do seu servidor local</string>
     <string name="legals_application_title">Política de ${app_name}</string>
     <string name="analytics_opt_in_list_item_1">Nós <b>não</b> gravaremos nem criaremos um perfil dos dados de sua conta</string>
     <string name="analytics_opt_in_content">Ajude-nos a identificar problemas e melhorar ${app_name} ao compartilhar dados de uso anônimos. Para entender como pessoas usam seus múltiplos dispositivos, nós vamos gerar um identificador aleatório, compartilhado por seus dispositivos.
@@ -2527,7 +2527,7 @@
     <string name="live_location_not_enough_permission_dialog_description">Você precisa ter as permissões certas a fim de compartilhar localização ao vivo nesta sala.</string>
     <string name="live_location_not_enough_permission_dialog_title">Você não tem permissão para compartilhar localização ao vivo</string>
     <string name="poll_undisclosed_not_ended">Resultados vão ser visíveis quando a sondagem estiver terminada</string>
-    <string name="labs_enable_msc3061_share_history_desc">Quando convidando numa sala encriptada que está compartilhando histórico, histórico encriptada vai estar visível.</string>
+    <string name="labs_enable_msc3061_share_history_desc">Ao convidar alguém para uma sala criptografada que compartilha o histórico de texto, ele será visível mesmo sendo criptografado.</string>
     <string name="labs_enable_msc3061_share_history">MSC3061: Compartilhando chaves de sala para mensagens passadas</string>
     <string name="send_your_first_msg_to_invite">Envie sua primeira mensagem para convidar %s a fazer chat</string>
     <string name="direct_room_encryption_enabled_tile_description_future">Mensagens neste chat vão ser encriptadas ponta-a-ponta.</string>
@@ -2808,7 +2808,7 @@
     <string name="qr_code_login_header_failed_other_description">A requisição falhou.</string>
     <string name="labs_enable_voice_broadcast_summary">Seja capaz de gravar e enviar broadcast de voz em timeline de sala.</string>
     <string name="labs_enable_voice_broadcast_title">Broadcast de voz</string>
-    <string name="voice_broadcast_buffering">Buffering…</string>
+    <string name="voice_broadcast_buffering">Pré-carregando…</string>
     <string name="a11y_pause_voice_broadcast">Pausar broadcast de voz</string>
     <string name="a11y_play_voice_broadcast">Tocar ou retomar broadcast de voz</string>
     <string name="a11y_stop_voice_broadcast_record">Parar gravação de broadcast de voz</string>
@@ -2884,4 +2884,29 @@
     <string name="stop_voice_broadcast_content">Tem certeza que você quer parar seu broadcast ao vivo\? Isto vai terminar o broadcast e a gravação completa vai estar disponível na sala.</string>
     <string name="stop_voice_broadcast_dialog_title">Parar de fazer broadcasting ao vivo\?</string>
     <string name="action_stop">Sim, Parar</string>
+    <string name="avatar_of_room">Avatar da sala %1$s</string>
+    <string name="avatar_of_space">Avatar do espaço %1$s</string>
+    <string name="settings_external_account_management">Os detalhes da sua conta são gerenciados separadamente em %1$s.</string>
+    <string name="settings_external_account_management_title">Conta</string>
+    <string name="settings_acceptable_use_policy">Termos de Uso Aceitável</string>
+    <string name="settings_notification_error_on_update">Um erro ocorreu ao atualizar suas preferências de notificação. Por favor, tente novamente.</string>
+    <string name="thread_list_not_available">Seu servidorcasa ainda não suporta threads.</string>
+    <string name="action_proceed_to_reset">Continuar com o reset</string>
+    <string name="notice_display_name_changed_to">%1$s mudou seu nome de exibição para %2$s</string>
+    <string name="error_voice_broadcast_unable_to_play">Incapaz de reproduzir esse broadcast de voz.</string>
+    <string name="error_voice_broadcast_unable_to_decrypt">Incapaz de decriptar esse broadcast de voz.</string>
+    <string name="error_voice_broadcast_no_connection_recording">Erro de conexão - Gravação pausada</string>
+    <string name="crosssigning_verify_after_update">Aplicação actualizada</string>
+    <string name="settings_crypto_version">Versão criptográfica</string>
+    <string name="sign_out_failed_dialog_message">Não foi possível contactar o servidor doméstico. Se ainda assim terminar sessão, este dispositivo não será apagado da sua lista de dispositivos, poderá querer removê-lo utilizando outro cliente.</string>
+    <string name="avatar_of_user">Imagem de perfil do utilizador %1$s</string>
+    <string name="started_a_voice_broadcast">Iniciou uma emissão de voz</string>
+    <string name="room_profile_section_more_polls">Histórico da sondagem</string>
+    <string name="verification_verify_with_another_device">Verificar com outro dispositivo</string>
+    <string name="verification_verify_identity">Verifique a sua identidade para aceder a mensagens encriptadas e provar a sua identidade a outros.</string>
+    <string name="verification_request_was_sent">Foi enviado um pedido de verificação. Abra uma das suas outras sessões para aceitar e iniciar a verificação.</string>
+    <string name="direct_room_user_list_only_invite_one_email">Só é possível convidar um email de cada vez</string>
+    <string name="sign_out_anyway">Terminar sessão ainda assim</string>
+    <string name="verification_request_waiting_for_recovery">Verificação a partir de Chave ou Frase Segura…</string>
+    <string name="verification_profile_other_device_untrust_info">Até que este utilizador confie nesta sessão, as mensagens enviadas para e a partir dela são marcadas com avisos.</string>
 </resources>

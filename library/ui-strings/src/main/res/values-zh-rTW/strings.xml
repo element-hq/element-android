@@ -1301,9 +1301,9 @@
     <string name="delete_event_dialog_title">確認移除</string>
     <string name="delete_event_dialog_content">您確定要刪除此事件嗎？注意，如果您刪除聊天室名稱或主題的變更事件，該變更將被取消。</string>
     <string name="delete_event_dialog_reason_checkbox">包含理由</string>
-    <string name="delete_event_dialog_reason_hint">修改原因</string>
+    <string name="delete_event_dialog_reason_hint">刪除原因</string>
     <string name="event_redacted_by_user_reason_with_reason">使用者刪除事件，理由：%1$s</string>
-    <string name="event_redacted_by_admin_reason_with_reason">聊天室管理員管理了事件，理由：%1$s</string>
+    <string name="event_redacted_by_admin_reason_with_reason">聊天室管理員刪除了事件，理由：%1$s</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">金鑰已為最新！</string>
     <string name="login_default_session_public_name">${app_name} Android</string>
     <string name="settings_key_requests">金鑰請求</string>
@@ -2889,4 +2889,13 @@
     <string name="settings_acceptable_use_policy">可接受的使用政策</string>
     <string name="action_proceed_to_reset">繼續重設</string>
     <string name="settings_crypto_version">加密版本</string>
+    <string name="notice_display_name_changed_to">%1$s 變更了他們的顯示名稱為 %2$s</string>
+    <string name="avatar_of_user">使用者 %1$s 的個人資料照片</string>
+    <string name="avatar_of_room">聊天室 %1$s 的大頭貼</string>
+    <string name="avatar_of_space">聊天空間 %1$s 的大頭貼</string>
+    <string name="confirm_your_identity_after_update">最新更新改善了安全訊息傳遞。請重新驗證您的裝置。</string>
+    <string name="verification_profile_other_device_untrust_info">在該使用者信任該工作階段之前，發送到該工作階段與從該工作階段傳送的訊息都帶有警告標籤。</string>
+    <string name="crosssigning_verify_after_update">應用程式已更新</string>
+    <string name="sign_out_failed_dialog_message">無法連線至家伺服器。若您仍要登出，此裝置將不會從您的裝置清單中移除，您可能需要使用其他客戶端來移除。</string>
+    <string name="sign_out_anyway">仍要登出</string>
 </resources>
