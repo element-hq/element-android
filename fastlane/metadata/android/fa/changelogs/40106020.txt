@@ -1,0 +1,2 @@
+تغییرات عمده در این نگارش: المنت اندروید اکنون از SDK راست Crypto استفاده می‌کند.
+گزارش دگرگونی کامل: https://github.com/vector-im/element-android/releases
