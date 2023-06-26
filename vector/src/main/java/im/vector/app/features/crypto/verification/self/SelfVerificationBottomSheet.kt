@@ -156,7 +156,7 @@ class SelfVerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSh
                     )
                 }
                 is VerificationBottomSheetViewEvents.RequestNotFound -> {
-                   dismiss()
+                    dismiss()
                 }
                 is VerificationBottomSheetViewEvents.ConfirmCancel -> {
                     // TODO? applies to self?
@@ -229,6 +229,9 @@ class SelfVerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSh
     }
 
     companion object {
+
+        const val TAG: String = "VERIF"
+
         fun verifyOwnUntrustedDevice(): SelfVerificationBottomSheet {
             return SelfVerificationBottomSheet().apply {
                 setArguments(

@@ -164,7 +164,7 @@ class PopupAlertManager @Inject constructor(
             next = alertQueue.maxByOrNull { it.priority }
             // If next alert with highest priority is higher than the current one, we should display it
             // and add the current one to queue again.
-            if (next != null && next.priority > currentAlerter?.priority ?: Int.MIN_VALUE) {
+            if (next != null && next.priority > (currentAlerter?.priority ?: Int.MIN_VALUE)) {
                 alertQueue.remove(next)
                 currentAlerter?.also {
                     alertQueue.add(0, it)
