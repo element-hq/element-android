@@ -116,6 +116,8 @@ dependencies {
     implementation project(":matrix-sdk-android-flow")
     implementation project(":library:external:jsonviewer")
     implementation project(":library:external:diff-match-patch")
+    implementation project(":library:external:textdrawable")
+    implementation project(":library:external:autocomplete")
     implementation project(":library:ui-strings")
     implementation project(":library:ui-styles")
     implementation project(":library:core-utils")
@@ -184,11 +186,8 @@ dependencies {
     api libs.androidx.preferenceKtx
 
     // UI
-    implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
     implementation libs.google.material
-    api('me.gujun.android:span:1.7') {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    }
+    implementation project(":library:external:span")
     implementation libs.markwon.core
     implementation libs.markwon.extLatex
     implementation libs.markwon.imageGlide
@@ -209,8 +208,6 @@ dependencies {
 
     // Alerter
     implementation 'com.github.tapadoo:alerter:7.2.4'
-
-    implementation 'com.otaliastudios:autocomplete:1.1.0'
 
     // Shake detection
     implementation 'com.squareup:seismic:1.0.3'
@@ -266,11 +263,7 @@ dependencies {
     // Stick to 3.3.3 because of https://github.com/zxing/zxing/issues/1170
     implementation 'com.google.zxing:core:3.3.3'
 
-    // Excludes the legacy support library annotation usages
-    // https://github.com/dm77/barcodescanner/blob/d036996c8a6f36a68843ffe539c834c28944b2d5/core/src/main/java/me/dm7/barcodescanner/core/CameraWrapper.java#L4
-    implementation ('me.dm7.barcodescanner:zxing:1.9.13') {
-        exclude group: 'com.android.support', module: 'support-v4'
-    }
+    implementation project(":library:external:barcodescanner:zxing")
 
     // Emoji Keyboard
     api libs.vanniktech.emojiMaterial
