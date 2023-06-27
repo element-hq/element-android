@@ -1,3 +1,26 @@
+Changes in Element v1.6.3 (2023-06-27)
+======================================
+
+Features ✨
+----------
+ - **Element Android is now using the Crypto Rust SDK**. Migration of user's data should be done at first launch after application upgrade. ([#8390](https://github.com/vector-im/element-android/issues/8390))
+ - [Rich text editor] Add mentions and slash commands ([#8440](https://github.com/vector-im/element-android/issues/8440))
+
+Bugfixes 🐛
+----------
+ - Update rich text editor library to support pasting of images. ([#8270](https://github.com/vector-im/element-android/issues/8270))
+ - Fix | Got asked twice about verification #8353 (and other verification banners problems) ([#8353](https://github.com/vector-im/element-android/issues/8353))
+ - Prompt the user when the invited MatrixId is not recognized ([#8468](https://github.com/vector-im/element-android/issues/8468))
+ - The correct title and options are now displayed When a poll that was edited is ended. ([#8471](https://github.com/vector-im/element-android/issues/8471))
+ - In some conditions the room shield is not refreshed correctly ([#8507](https://github.com/vector-im/element-android/issues/8507))
+ - Fix crypto config fallback key sharing strategy ([#8541](https://github.com/vector-im/element-android/issues/8541))
+
+Other changes
+-------------
+ - MSC3987 implementation: the 'dont_notify' action for a push_rule is now deprecated and replaced by an empty action list. ([#8503](https://github.com/vector-im/element-android/issues/8503))
+ - Update crypto rust sdk version to 0.3.10 ([#8554](https://github.com/vector-im/element-android/issues/8554))
+
+
 Changes in Element v1.6.2 (2023-06-02)
 ======================================
 
