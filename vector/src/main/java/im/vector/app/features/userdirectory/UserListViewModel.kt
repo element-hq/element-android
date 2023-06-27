@@ -260,6 +260,7 @@ class UserListViewModel @AssistedInject constructor(
                         .sortedBy { it.toMatrixItem().firstLetterOfDisplayName() }
                 val userProfile = if (MatrixPatterns.isUserId(search)) {
                     val user = tryOrNull { session.profileService().getProfileAsUser(search) }
+                    setState { copy(unknownUserId = search.takeIf { user == null }) }
                     User(
                             userId = search,
                             displayName = user?.displayName,
@@ -284,6 +285,9 @@ class UserListViewModel @AssistedInject constructor(
                 (action.pendingSelection is PendingSelection.UserPendingSelection &&
                         state.pendingSelections.last() is PendingSelection.UserPendingSelection)
         if (canSelectUser) {
+            if (action.pendingSelection is PendingSelection.UserPendingSelection) {
+                action.pendingSelection.isUnknownUser = action.pendingSelection.getMxId() == state.unknownUserId
+            }
             val selections = state.pendingSelections.toggle(action.pendingSelection, singleElement = state.singleSelection)
             setState { copy(pendingSelections = selections) }
         }

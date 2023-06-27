@@ -286,7 +286,10 @@ class MessageItemFactory @Inject constructor(
         } else {
             null
         }
-        val pollContent = pollStartEvent?.root?.getClearContent()?.toModel<MessagePollContent>()
+
+        val editedContent = pollStartEvent?.annotations?.editSummary?.latestEdit?.getClearContent()?.toModel<MessagePollContent>()?.newContent
+        val latestContent = editedContent ?: pollStartEvent?.root?.getClearContent()
+        val pollContent = latestContent?.toModel<MessagePollContent>()
 
         return if (pollContent == null) {
             val title = stringProvider.getString(R.string.message_reply_to_ended_poll_preview).toEpoxyCharSequence()

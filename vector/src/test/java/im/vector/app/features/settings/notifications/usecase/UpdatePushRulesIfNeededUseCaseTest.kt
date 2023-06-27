@@ -54,12 +54,12 @@ internal class UpdatePushRulesIfNeededUseCaseTest {
         val firstParentActions = listOf(Action.Notify)
         val firstParent = givenARuleId(RuleIds.RULE_ID_ONE_TO_ONE_ROOM, firstParentEnabled, firstParentActions)
         val secondParentEnabled = false
-        val secondParentActions = listOf(Action.DoNotNotify)
+        val secondParentActions = emptyList<Action>()
         val secondParent = givenARuleId(RuleIds.RULE_ID_ALL_OTHER_MESSAGES_ROOMS, secondParentEnabled, secondParentActions)
         val rulesOnError = listOf(
                 // first set of related rules
                 firstParent,
-                givenARuleId(RuleIds.RULE_ID_POLL_START_ONE_TO_ONE, true, listOf(Action.DoNotNotify)), // diff
+                givenARuleId(RuleIds.RULE_ID_POLL_START_ONE_TO_ONE, true, emptyList()), // diff
                 givenARuleId(RuleIds.RULE_ID_POLL_START_ONE_TO_ONE_UNSTABLE, true, emptyList()), // diff
                 givenARuleId(RuleIds.RULE_ID_POLL_END_ONE_TO_ONE, false, listOf(Action.Notify)), // diff
                 // second set of related rules

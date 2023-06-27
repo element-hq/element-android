@@ -1,7 +1,7 @@
 # To get started with Dependabot version updates, you'll need to specify which
 # package ecosystems to update and where the package manifests are located.
 # Please see the documentation for all configuration options:
-# https://help.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
+# https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
 
 version: 2
 updates:
@@ -13,7 +13,7 @@ updates:
     reviewers:
       - "vector-im/element-android-reviewers"
     ignore:
-      - dependency-name: "*github-script*"
+      - dependency-name: "*"
   # Updates for Gradle dependencies used in the app
   - package-ecosystem: gradle
     directory: "/"
@@ -22,5 +22,6 @@ updates:
     open-pull-requests-limit: 200
     reviewers:
       - "vector-im/element-android-reviewers"
-    ignore:
-      - dependency-name: com.google.zxing:core
+    allow:
+      - dependency-name: "io.element.android:wysiwyg"
+      - dependency-name: "org.matrix.rustcomponents:crypto-android"

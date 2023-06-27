@@ -22,7 +22,7 @@ import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.toMatrixItem
 
 sealed class PendingSelection {
-    data class UserPendingSelection(val user: User) : PendingSelection()
+    data class UserPendingSelection(val user: User, var isUnknownUser: Boolean = false) : PendingSelection()
     data class ThreePidPendingSelection(val threePid: ThreePid) : PendingSelection()
 
     fun getBestName(): String {

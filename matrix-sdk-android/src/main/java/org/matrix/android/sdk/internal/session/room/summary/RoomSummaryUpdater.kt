@@ -168,6 +168,9 @@ internal class RoomSummaryUpdater @Inject constructor(
         val roomAliases = ContentMapper.map(lastAliasesEvent?.content).toModel<RoomAliasesContent>()?.aliases
                 .orEmpty()
         roomSummaryEntity.updateAliases(roomAliases)
+
+        val wasEncrypted = roomSummaryEntity.isEncrypted
+
         roomSummaryEntity.isEncrypted = encryptionEvent != null
 
         roomSummaryEntity.e2eAlgorithm = ContentMapper.map(encryptionEvent?.content)
@@ -197,17 +200,13 @@ internal class RoomSummaryUpdater @Inject constructor(
                 // better to use what we know
                 roomSummaryEntity.joinedMembersCount = otherRoomMembers.size + 1
             }
-            if (roomSummaryEntity.isEncrypted && otherRoomMembers.isNotEmpty()) {
-                if (aggregator == null) {
-                    // Do it now
-                    // mmm maybe we could only refresh shield instead of checking trust also?
-                    // XXX why doing this here? we don't show shield anymore and it will be refreshed
-                    // by the sdk
-                    // crossSigningService.checkTrustAndAffectedRoomShields(otherRoomMembers)
-                } else {
-                    // Schedule it
-                    aggregator.userIdsForCheckingTrustAndAffectedRoomShields.addAll(otherRoomMembers)
-                }
+        }
+
+        if (roomSummaryEntity.isEncrypted) {
+            if (!wasEncrypted || updateMembers || roomSummaryEntity.roomEncryptionTrustLevel == null) {
+                // trigger a shield update
+                // if users add devices/keys or signatures the device list manager will trigger a refresh
+                aggregator?.roomsWithMembershipChangesForShieldUpdate?.add(roomId)
             }
         }
     }
@@ -410,7 +409,7 @@ internal class RoomSummaryUpdater @Inject constructor(
                         val relatedSpaces = lookupMap.keys
                                 .filter { it.roomType == RoomType.SPACE }
                                 .filter {
-                                    dmRoom.otherMemberIds.toList().intersect(it.otherMemberIds.toList()).isNotEmpty()
+                                    dmRoom.otherMemberIds.toList().intersect(it.otherMemberIds.toSet()).isNotEmpty()
                                 }
                                 .map { it.roomId }
                                 .distinct()

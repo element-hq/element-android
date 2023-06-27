@@ -64,9 +64,15 @@ class DeactivateAccountTest : InstrumentedTest {
 
         // Test the error
         assertTrue(
+                "Unexpected deactivated error $throwable",
                 throwable is Failure.ServerError &&
-                        throwable.error.code == MatrixError.M_USER_DEACTIVATED &&
-                        throwable.error.message == "This account has been deactivated"
+                        (
+                                (throwable.error.code == MatrixError.M_USER_DEACTIVATED &&
+                                        throwable.error.message == "This account has been deactivated") ||
+                                        // Workaround for a breaking change on synapse to fix CI
+                                        // https://github.com/matrix-org/synapse/issues/15747
+                                        throwable.error.code == MatrixError.M_FORBIDDEN
+                                )
         )
 
         // Try to create an account with the deactivate account user id, it will fail (M_USER_IN_USE)

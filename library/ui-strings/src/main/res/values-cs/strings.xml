@@ -4,7 +4,7 @@
     <string name="notice_room_invite">%1$s pozval(a) %2$s</string>
     <string name="notice_room_invite_you">%1$s vás pozval(a)</string>
     <string name="notice_room_join">%1$s vstoupil(a) do místnosti</string>
-    <string name="notice_room_leave">Uživatel %1$s opustil místnost</string>
+    <string name="notice_room_leave">%1$s opustil(a) místnost</string>
     <string name="notice_room_reject">%1$s odmítl(a) pozvání</string>
     <string name="notice_room_remove">%1$s odebral(a) %2$s</string>
     <string name="notice_room_unban">%1$s zrušil(a) vykázání %2$s</string>
@@ -28,7 +28,7 @@
     <string name="notice_avatar_changed_too">(profilový obrázek byl také změněn)</string>
     <string name="notice_room_name_removed">%1$s odstranili název místnosti</string>
     <string name="notice_room_topic_removed">%1$s odstranili téma místnosti</string>
-    <string name="notice_room_third_party_invite">%1$s do této místnosti pozvali %2$s</string>
+    <string name="notice_room_third_party_invite">%1$s do této místnosti pozval(a) %2$s</string>
     <string name="notice_room_third_party_registered_invite">%1$s přijali pozvání pro %2$s</string>
     <string name="notice_crypto_unable_to_decrypt">** Nelze dešifrovat: %s **</string>
     <string name="notice_crypto_error_unknown_inbound_session_id">Odesílatelovo zařízení nám neposlalo klíče pro tuto zprávu.</string>
@@ -40,7 +40,7 @@
     <string name="room_displayname_two_members">%1$s a %2$s</string>
     <string name="room_displayname_empty_room">Prázdná místnost</string>
     <string name="notice_room_update">%s aktualizoval(a) tuto místnost.</string>
-    <string name="notice_room_third_party_revoked_invite">%1$s zrušili pozvánku do místnosti pro %2$s</string>
+    <string name="notice_room_third_party_revoked_invite">%1$s zrušil(a) pozvánku do místnosti pro %2$s</string>
     <string name="initial_sync_start_importing_account">Úvodní synchronizace:
 \nImportuji účet…</string>
     <string name="initial_sync_start_importing_account_crypto">Úvodní synchronizace:
@@ -91,8 +91,8 @@
     <string name="notice_room_topic_removed_by_you">Odstranili jste téma místnosti</string>
     <string name="notice_room_avatar_removed">%1$s odstranili obrázek místnosti</string>
     <string name="notice_room_avatar_removed_by_you">Odstranili jste obrázek místnosti</string>
-    <string name="notice_room_third_party_invite_by_you">Poslali jste %1$s pozvání ke vstupu do místnosti</string>
-    <string name="notice_room_third_party_revoked_invite_by_you">Zrušili jste pozvánku ke vstupu do místnosti pro %1$s</string>
+    <string name="notice_room_third_party_invite_by_you">Poslali jste %1$s pozvání do místnosti</string>
+    <string name="notice_room_third_party_revoked_invite_by_you">Zrušili jste pozvánku do místnosti pro %1$s</string>
     <string name="notice_room_third_party_registered_invite_by_you">Přijali jste pozvání pro %1$s</string>
     <string name="notice_widget_added">%1$s přidali widget %2$s</string>
     <string name="notice_widget_added_by_you">Přidali jste widget %1$s</string>
@@ -177,7 +177,7 @@
     <string name="notice_made_future_direct_room_visibility_by_you">Zpřístupnili jste budoucí zprávy pro %1$s</string>
     <string name="notice_made_future_direct_room_visibility">%1$s zpřístupnil(a) budoucí zprávy pro %2$s</string>
     <string name="notice_direct_room_leave_by_you">Odešli jste z místnosti</string>
-    <string name="notice_direct_room_leave">Uživatel %1$s odešel z místnosti</string>
+    <string name="notice_direct_room_leave">%1$s opustil(a) místnost</string>
     <string name="notice_direct_room_join_by_you">Vstoupili jste</string>
     <string name="notice_direct_room_join">%1$s vstoupil(a)</string>
     <string name="notice_direct_room_created_by_you">Založili jste diskusi</string>
@@ -278,8 +278,8 @@
     <string name="no_result_placeholder">Žádné výsledky</string>
     <string name="rooms_header">Místnosti</string>
     <string name="send_bug_report_include_logs">Odeslat záznamy</string>
-    <string name="send_bug_report_include_crash_logs">Odeslat záznamy zřícení</string>
-    <string name="send_bug_report_include_screenshot">Odeslat screenshot</string>
+    <string name="send_bug_report_include_crash_logs">Odeslat záznamy o selhání</string>
+    <string name="send_bug_report_include_screenshot">Odeslat snímek obrazovky</string>
     <string name="send_bug_report">Ohlásit chybu</string>
     <string name="send_bug_report_placeholder">Zde popište svůj problém</string>
     <string name="send_bug_report_logs_description">Za účelem diagnostiky problémů budou logy tohoto klienta odeslány s touto zprávou o chybě. Tato zpráva o chybě včetně logů a snímku obrazovky nebude veřejně viditelná. Pokud byste raději poslali pouze text výše, prosím odznačte:</string>
@@ -306,7 +306,7 @@
     <string name="auth_invalid_login_param">Nesprávné uživatelské jméno nebo heslo</string>
     <string name="auth_invalid_email">Zdá se, že toto není platná e-mailová adresa</string>
     <string name="auth_email_already_defined">Tato e-mailová adresa je již zadána.</string>
-    <string name="auth_forgot_password">Zapomenuté heslo?</string>
+    <string name="auth_forgot_password">Zapomněli jste heslo\?</string>
     <string name="auth_recaptcha_message">Tento domovský server by se rád přesvědčil, že nejste robot</string>
     <string name="auth_reset_password_error_unauthorized">E-mailovou adresu se nepodařilo ověřit. Přesvědčte se, že jste klepli na zaslaný odkaz</string>
     <string name="login_error_invalid_home_server">Prosím, zadejte platné URL</string>
@@ -317,7 +317,7 @@
     <string name="action_accept">Přijmout</string>
     <string name="dialog_title_error">Chyba</string>
     <string name="system_alerts_header">Systémová upozornění</string>
-    <string name="send_bug_report_description">Prosím, popište chybu. Co jste provedli\? Jaké bylo očekávané chování\? Co se ve skutečnosti stalo\?</string>
+    <string name="send_bug_report_description">Popište prosím chybu. Co jste udělali\? Co jste očekávali, že se stane\? Co se ve skutečnosti stalo\?</string>
     <string name="send_bug_report_description_in_english">Pokud je to možné, prosím, napište popis anglicky.</string>
     <string name="send_bug_report_rage_shake">Třesením oznámit chybu</string>
     <string name="option_send_voice">Odeslat hlasovou zprávu</string>
@@ -380,7 +380,7 @@
     <string name="room_one_user_is_typing">%s píše…</string>
     <string name="room_two_users_are_typing">%1$s a %2$s píší…</string>
     <string name="room_many_users_are_typing">%1$s a %2$s a další píší…</string>
-    <string name="room_do_not_have_permission_to_post">Nemáte právo odesílat v této místnosti.</string>
+    <string name="room_do_not_have_permission_to_post">Nemáte oprávnění zveřejňovat příspěvky v této místnosti.</string>
     <plurals name="room_new_messages_notification">
         <item quantity="one">%d nová zpráva</item>
         <item quantity="few">%d nové zprávy</item>
@@ -798,7 +798,7 @@
     <string name="notification_silent">Tiché</string>
     <string name="notification_noisy">Hlučné</string>
     <string name="create">Vytvořit</string>
-    <string name="group_details_home">Úvod</string>
+    <string name="group_details_home">Domov</string>
     <string name="rooms">Místnosti</string>
     <string name="invited">Pozvaní</string>
     <string name="has_been_removed">%2$s Vás vykopnul z %1$s</string>
@@ -1512,7 +1512,7 @@
     <string name="identity_server_set_alternative_submit">Odeslat</string>
     <string name="action_play">Přehrát</string>
     <string name="action_dismiss">Odmítnout</string>
-    <string name="no_permissions_to_start_conf_call">Nemáte povolení zahájit konferenční hovor v této místnosti</string>
+    <string name="no_permissions_to_start_conf_call">Nemáte oprávnění zahájit konferenční hovor v této místnosti</string>
     <string name="video_meeting">Zahájit video schůzku</string>
     <string name="audio_meeting">Zahájit hlasovou schůzku</string>
     <string name="audio_video_meeting_description">Schůzky používají pravidla zabezpečení a přístupu Jitsi. Všichni lidé nyní v místnosti uvidí pozvánku k připojení, zatímco vaše schůzka probíhá.</string>
@@ -1635,7 +1635,7 @@
     <string name="power_level_title">Role</string>
     <string name="a11y_open_chat">Otevřít chat</string>
     <string name="a11y_mute_microphone">Umlčet mikrofon</string>
-    <string name="a11y_unmute_microphone">Zrušit umlčení mikrofonu</string>
+    <string name="a11y_unmute_microphone">Zrušit ztlumení mikrofonu</string>
     <string name="a11y_stop_camera">Zastavit fotoaparát</string>
     <string name="a11y_start_camera">Spustit fotoaparát</string>
     <string name="bottom_sheet_setup_secure_backup_title">Bezpečná záloha</string>
@@ -1795,7 +1795,7 @@
     <string name="this_is_the_beginning_of_room_no_name">Toto je počátek této konverzace.</string>
     <string name="this_is_the_beginning_of_room">Toto je počátek %s.</string>
     <string name="settings_export_trail">Exportovat audit</string>
-    <string name="room_settings_enable_encryption_no_permission">K zapnutí šifrování v této místnosti nemáte oprávnění.</string>
+    <string name="room_settings_enable_encryption_no_permission">Nemáte oprávnění povolit šifrování v této místnosti.</string>
     <string name="room_member_open_or_create_dm">Přímá zpráva</string>
     <string name="create_room_in_progress">Zakládám místnost…</string>
     <string name="create_room_alias_invalid">Některé znaky nejsou dovoleny</string>
@@ -2182,8 +2182,8 @@
     <string name="link_this_email_settings_link">Propojte tento e-mail se svým účtem</string>
     <string name="this_invite_to_this_room_was_sent">Pozvánka do této místnosti byla odeslána na adresu %s, která není spojena s vaším účtem</string>
     <string name="this_invite_to_this_space_was_sent">Pozvánka do tohoto prostoru byla odeslána na adresu %s, která není spojena s vaším účtem</string>
-    <string name="all_rooms_youre_in_will_be_shown_in_home">Všechny místnosti, ve kterých se nacházíte, se zobrazí v Úvodu.</string>
-    <string name="preference_show_all_rooms_in_home">Zobrazit všechny místnosti v Úvodu</string>
+    <string name="all_rooms_youre_in_will_be_shown_in_home">Všechny místnosti, ve kterých se nacházíte, se zobrazí v Domovu.</string>
+    <string name="preference_show_all_rooms_in_home">Zobrazit všechny místnosti v Domovu</string>
     <string name="call_slide_to_end_conference">Posunutím ukončíte hovor</string>
     <string name="call_tap_to_return">%1$s Klepněte pro návrat</string>
     <string name="call_one_active">Probíhající hovor (%1$s) ·</string>
@@ -2942,8 +2942,8 @@
     <string name="rich_text_editor_link">Nastavit odkaz</string>
     <string name="settings_access_token_summary">Přístupový token umožňuje plný přístup k účtu. Nikomu ho nesdělujte.</string>
     <string name="settings_access_token">Přístupový token</string>
-    <string name="rich_text_editor_bullet_list">Přepnout na odrážky</string>
-    <string name="rich_text_editor_numbered_list">Přepnout na číslovaný seznam</string>
+    <string name="rich_text_editor_bullet_list">Přepnout seznam s odrážkami</string>
+    <string name="rich_text_editor_numbered_list">Přepnout číslovaný seznam</string>
     <string name="room_polls_ended_no_item">V této místnosti nejsou žádné předchozí hlasování</string>
     <string name="room_polls_ended">Předchozí hlasování</string>
     <string name="room_polls_active_no_item">V této místnosti nejsou žádné aktivní hlasování</string>
@@ -3009,4 +3009,21 @@
     <string name="settings_acceptable_use_policy">Zásady přijatelného používání</string>
     <string name="action_proceed_to_reset">Přejít k obnovení</string>
     <string name="settings_crypto_version">Verze šifrování</string>
+    <string name="notice_display_name_changed_to">%1$s změnil(a) své zobrazované jméno na %2$s</string>
+    <string name="avatar_of_user">Profilový obrázek uživatele %1$s</string>
+    <string name="avatar_of_room">Avatar místnosti %1$s</string>
+    <string name="avatar_of_space">Avatar prostoru %1$s</string>
+    <string name="confirm_your_identity_after_update">Nejnovější aktualizace vylepšila zabezpečené zasílání zpráv. Znovu ověřte své zařízení.</string>
+    <string name="verification_profile_other_device_untrust_info">Dokud tento uživatel této relaci nedůvěřuje, jsou zprávy odesílané do ní a z ní označeny varováním.</string>
+    <string name="crosssigning_verify_after_update">Aplikace aktualizována</string>
+    <string name="sign_out_anyway">Přesto se odhlásit</string>
+    <string name="sign_out_failed_dialog_message">Nelze se spojit s domovským serverem. Pokud se přesto odhlásíte, nebude toto zařízení vymazáno ze seznamu zařízení, můžete jej odstranit pomocí jiného klienta.</string>
+    <string name="create_room_unknown_users_dialog_submit">Přesto zahájit chat</string>
+    <string name="invite_unknown_users_dialog_submit">Přesto pozvat</string>
+    <string name="create_room_unknown_users_dialog_content">Nelze najít profily pro níže uvedené Matrix identifikátory. Chcete přesto zahájit chat\?
+\n
+\n%s</string>
+    <string name="invite_unknown_users_dialog_content">Nelze najít profily pro níže uvedené Matrix identifikátory. Chcete je přesto pozvat\?
+\n
+\n%s</string>
 </resources>

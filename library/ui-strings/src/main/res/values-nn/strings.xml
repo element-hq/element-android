@@ -38,7 +38,6 @@
     <string name="medium_phone_number">Telefonnummer</string>
     <string name="room_displayname_room_invite">Rominnbjoding</string>
     <string name="room_displayname_two_members">%1$s og %2$s</string>
-
     <string name="room_displayname_empty_room">Tomt rom</string>
     <string name="notice_room_update">%s oppgraderte rommet.</string>
     <string name="notice_room_leave_with_reason">%1$s forlot rommet. Grunn: %2$s</string>
@@ -67,7 +66,6 @@
     <string name="action_delete">Slett</string>
     <string name="action_rename">Gje nytt namn</string>
     <string name="report_content">Rapporter innhaldet</string>
-
     <string name="or">eller</string>
     <string name="action_invite">Inviter</string>
     <string name="action_sign_out">Logg av</string>
@@ -127,7 +125,6 @@
     <string name="auth_invalid_email">Dette ser ikkje ut som ei gyldig e-postadresse</string>
     <string name="auth_email_already_defined">Denne e-postadressa er allereie i bruk.</string>
     <string name="auth_forgot_password">Gløymt passord\?</string>
-
     <string name="auth_recaptcha_message">Heimtenaren ynskjer å stadfeste at du ikkje er ein robot</string>
     <string name="auth_reset_password_error_unauthorized">Fekk ikkje til å stadfesta e-postadressa: sjå til at du klikka på lenken i e-posten</string>
     <string name="login_error_invalid_home_server">Skriv inn ein gyldig URL</string>
@@ -152,14 +149,10 @@
     <string name="call_in_progress">Samtalen er i gang…</string>
     <string name="call_error_user_not_responding">Den andre parten tok ikkje samtalen.</string>
     <string name="permissions_rationale_popup_title">Info</string>
-
-
     <string name="permissions_rationale_msg_record_audio">${app_name} treng tilgang til mikrofonen din for å utføra talesamtalar.</string>
-
     <string name="permissions_rationale_msg_camera_and_audio">${app_name} treng tilgang til kameraet og mikrofonen din for å utføra videosamtalar.
 \n
 \nGjer vel og gjev tilgang på sprettvindauget som kjem for å utføra samtalen.</string>
-
     <string name="yes">JA</string>
     <string name="no">NEI</string>
     <string name="_continue">Gå fram</string>
@@ -168,8 +161,6 @@
     <string name="action_reject">Avvis</string>
     <string name="list_members">Medlemsoversikt</string>
     <string name="room_jump_to_first_unread">Hopp til første uleste melding.</string>
-
-
     <plurals name="room_title_members">
         <item quantity="one">%d medlem</item>
         <item quantity="other">%d medlem</item>
@@ -205,12 +196,9 @@
     <string name="ssl_unexpected_existing_expl">Sertifikatet har forandra seg frå det som var stolt på av mobilen din. Dette er SÆRS UVANLEG. Det er tilrådd å IKKJE GODKJENNA dette nye sertifikatet.</string>
     <string name="ssl_expected_existing_expl">Sertifikatet har endra seg frå eit som tidlegare var stole på, til eit som ikkje er det. Det kan henda at tenaren har fornya sertifikatet. Snakk med administrator for å få det forventa fingeravtrykket.</string>
     <string name="ssl_only_accept">Godkjenn BERRE sertifikatet viss tenaradministratoren har publisert eit fingeravtrykk som samsvarar med det over.</string>
-
     <string name="search_hint">Søk</string>
     <string name="search_members_hint">Filtrer rommedlemmar</string>
     <string name="search_no_results">Ingi treff</string>
-
-
     <string name="room_settings_all_messages">Alle meldingar</string>
     <string name="room_settings_add_homescreen_shortcut">Legg til på heimskjermen</string>
     <string name="settings_profile_picture">Profilbilete</string>
@@ -270,7 +258,6 @@
     <string name="devices_details_device_name">Oppdater offentleg namn</string>
     <string name="devices_details_last_seen_title">Sist sedd</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-
     <string name="devices_delete_dialog_title">Stadfesting</string>
     <string name="settings_logged_in">Logga inn som</string>
     <string name="settings_home_server">Heimtenar</string>
@@ -306,7 +293,6 @@
     <string name="room_settings_labs_warning_message">Desse funksjonane er under utprøving og uventa vanskar kan dukka opp. Bruk med omhug.</string>
     <string name="room_settings_set_main_address">Set som hovudadresse</string>
     <string name="room_settings_unset_main_address">Fjern som hovudadresse</string>
-
     <string name="settings_theme">Preg</string>
     <string name="encryption_information_decryption_error">Noko gjekk gale med dekrypteringa</string>
     <string name="encryption_information_device_name">Offentleg namn</string>
@@ -329,7 +315,6 @@
     <string name="encryption_information_verify">Godkjenn</string>
     <string name="encryption_information_verify_device_warning">For å godkjenna at denne sesjonen er til å stola på, ver venleg og snakk med eigaren på ein anna måte (t.d. ansikt til ansikt eller på telefon) og spør han om nøkkelen han ser i Brukarinnstillingane for denne sesjonen samsvarar med nøkkelen under:</string>
     <string name="encryption_information_verify_device_warning2">Viss det samsvarer, klikk Verifiser-knappen under. Viss det ikkje gjer det, avlyttar nokon andre denne sesjonen og du bør sannsynlegvis svarteliste den. I framtida vil denne verifikasjonsprosessen bli meir forbetra.</string>
-
     <string name="select_room_directory">Vel ein romkatalog</string>
     <string name="directory_server_placeholder">Heimtenar-URL</string>
     <string name="directory_server_all_rooms_on_server">Alle rom på %s-tenaren</string>
@@ -337,7 +322,6 @@
         <item quantity="one">%d ulest varsla melding</item>
         <item quantity="other">%d uleste varsla meldingar</item>
     </plurals>
-
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="one">%d rom</item>
         <item quantity="other">%d rom</item>
@@ -413,16 +397,10 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
     <string name="room_tombstone_continuation_description">Rommet er ein vidareføring av ei anna samtale</string>
     <string name="room_tombstone_predecessor_link">Klikk her for å sjå gamle meldingar</string>
     <string name="system_alerts_header">Systemvarsel</string>
-
-
-
-
     <plurals name="room_details_selected">
         <item quantity="one">%d valt</item>
         <item quantity="other">%d valde</item>
     </plurals>
-
-
     <string name="resource_limit_contact_admin">kontakt tenesteadministratoren din</string>
     <string name="resource_limit_soft_default">Heimtenaren har truffe ei av ressursgrensene sine so <b>nokre brukarar vil ikkje kunna logga inn</b>.</string>
     <string name="resource_limit_hard_default">Heimtenaren har forbigått ei av ressursgrensene sine.</string>
@@ -482,7 +460,6 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
     <string name="action_revoke">Trekk tilbake</string>
     <string name="action_disconnect">Koble frå</string>
     <string name="action_decline">Avvis</string>
-
     <string name="auth_login_sso">Logg inn med SSO (single sign-on)</string>
     <string name="login_error_no_homeserver_found">Dette er ikkje ei gyldig Matrix-tenaradresse</string>
     <string name="login_error_homeserver_not_found">Klarar ikkje å nå ein heimetenar på denne URL\'en, sjekk at den er korrekt</string>
@@ -503,7 +480,7 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
     <string name="keys_backup_info_title_version">Versjon</string>
     <string name="settings_sdk_version">Matrix SDK versjon</string>
     <string name="settings_preferences">Innstillingar</string>
-    <string name="settings_security_and_privacy">Sikkerheit og personvern</string>
+    <string name="settings_security_and_privacy">Tryggleik og personvern</string>
     <string name="preference_voice_and_video">Tale og video</string>
     <string name="preference_root_help_about">Hjelp og om</string>
     <string name="settings_labs_show_hidden_events_in_timeline">Vis skjulte hendelsar i historikken</string>

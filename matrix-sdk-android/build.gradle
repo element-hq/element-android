@@ -17,7 +17,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath "io.realm:realm-gradle-plugin:10.15.1"
+        classpath "io.realm:realm-gradle-plugin:10.16.0"
     }
 }
 
@@ -63,7 +63,7 @@ android {
         // that the app's state is completely cleared between tests.
         testInstrumentationRunnerArguments clearPackageData: 'true'
 
-        buildConfigField "String", "SDK_VERSION", "\"1.6.2\""
+        buildConfigField "String", "SDK_VERSION", "\"1.6.3\""
 
         buildConfigField "String", "GIT_SDK_REVISION", "\"${gitRevision()}\""
         buildConfigField "String", "GIT_SDK_REVISION_UNIX_DATE", "\"${gitRevisionUnixDate()}\""
@@ -216,7 +216,7 @@ dependencies {
 
     implementation libs.google.phonenumber
 
-    rustCryptoImplementation("org.matrix.rustcomponents:crypto-android:0.3.9")
+    rustCryptoImplementation("org.matrix.rustcomponents:crypto-android:0.3.10")
 //    rustCryptoApi project(":library:rustCrypto")
 
     testImplementation libs.tests.junit
