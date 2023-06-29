@@ -2549,6 +2549,6 @@
     <string name="thread_list_modal_my_threads_title">Các chủ đề của tôi</string>
     <string name="search_thread_from_a_thread">Từ một chủ đề</string>
     <string name="thread_list_empty_subtitle">\'\'Chủ đề\'\' giúp giữ cho các cuộc trò chuyện của bạn theo chủ đề và dễ theo dõi.</string>
-    <string name="thread_list_not_available">Máy chủ cục bộ của bạn chưa hỗ trợ cho việc liệt kê các chủ đề</string>
+    <string name="thread_list_not_available">Máy chủ nhà của bạn chưa hỗ trợ cho việc liệt kê các chủ đề.</string>
     <string name="threads_beta_enable_notice_message">\'\'Chủ đề\'\' giúp giữ cho các cuộc trò chuyện của bạn theo chủ đề và dễ theo dõi. %sBật chủ đề sẽ làm mới ứng dụng. Quá trình này có thể mất nhiều thời gian hơn đối với một số tài khoản.</string>
 </resources>
