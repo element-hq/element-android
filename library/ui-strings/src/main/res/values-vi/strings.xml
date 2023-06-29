@@ -2531,4 +2531,24 @@
     <string name="device_manager_other_sessions_hide_ip_address">Ẩn địa chỉ Internet (IP)</string>
     <string name="device_manager_learn_more_sessions_verified_title">Phiên đã xác thực</string>
     <string name="device_manager_session_details_device_operating_system">Hệ điều hành</string>
+    <string name="thread_list_modal_title">Bộ lọc</string>
+    <string name="room_threads_filter">Bộ lọc các chủ đề trong phòng</string>
+    <string name="action_thread_copy_link_to_thread">Sao chép liên kết vào cuộc trò chuyện</string>
+    <string name="thread_list_title">Các chủ đề</string>
+    <string name="threads_beta_enable_notice_title">Bản Beta của Chủ đề</string>
+    <string name="threads_labs_enable_notice_title">Bản Beta của Chủ đề</string>
+    <string name="threads_notice_migration_title">Các chủ đề đã chuyển sang Beta 🎉</string>
+    <string name="thread_list_modal_all_threads_subtitle">Hiển thị tất cả chủ đề trong phòng</string>
+    <string name="thread_list_modal_all_threads_title">Tất cả chủ đề</string>
+    <string name="thread_list_empty_title">Sắp xếp các cuộc thảo luận với các chủ đề</string>
+    <string name="thread_timeline_title">Chủ đề</string>
+    <string name="thread_list_modal_my_threads_subtitle">Hiển thị tất cả chủ đề bạn đã tham gia</string>
+    <string name="labs_enable_new_app_layout_summary">Element đã được đơn giản hóa với các mục tùy chọn</string>
+    <string name="labs_enable_deferred_dm_summary">Chỉ tạo cuộc trò chuyện riêng cho tin nhắn đầu tiên</string>
+    <string name="labs_enable_deferred_dm_title">Bật trì hoãn cho các tin nhắn riêng</string>
+    <string name="thread_list_modal_my_threads_title">Các chủ đề của tôi</string>
+    <string name="search_thread_from_a_thread">Từ một chủ đề</string>
+    <string name="thread_list_empty_subtitle">\'\'Chủ đề\'\' giúp giữ cho các cuộc trò chuyện của bạn theo chủ đề và dễ theo dõi.</string>
+    <string name="thread_list_not_available">Máy chủ cục bộ của bạn chưa hỗ trợ cho việc liệt kê các chủ đề</string>
+    <string name="threads_beta_enable_notice_message">\'\'Chủ đề\'\' giúp giữ cho các cuộc trò chuyện của bạn theo chủ đề và dễ theo dõi. %sBật chủ đề sẽ làm mới ứng dụng. Quá trình này có thể mất nhiều thời gian hơn đối với một số tài khoản.</string>
 </resources>
