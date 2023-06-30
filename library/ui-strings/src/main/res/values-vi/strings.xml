@@ -359,9 +359,9 @@
     <string name="encryption_import_e2e_room_keys">Nhập các mã khoá phòng E2E</string>
     <string name="encryption_settings_manage_message_recovery_summary">Quản lý bản sao lưu mã khoá</string>
     <string name="encryption_information_unknown_ip">ip không xác định</string>
-    <string name="encryption_information_verify_device_warning2">Nếu chúng không khớp, sự bảo mật của việc giao tiếp của bạn có thể bị can thiệp.</string>
-    <string name="encryption_information_verify_device_warning">Xác nhận bằng cách so sánh những điều sau đây với Cài đặt người dùng trong phiên làm việc kia của bạn:</string>
-    <string name="encryption_information_verify">Xác minh</string>
+    <string name="encryption_information_verify_device_warning2">Nếu chúng không khớp, bảo mật của việc giao tiếp của bạn có thể bị can thiệp.</string>
+    <string name="encryption_information_verify_device_warning">Xác thực bằng cách so sánh những thứ sau với Cài đặt người dùng trong phiên làm việc kia của bạn:</string>
+    <string name="encryption_information_verify">Xác thực</string>
     <string name="hs_url">URL máy chủ nhà</string>
     <string name="room_participants_leave_prompt_msg">Bạn có chắc bạn muốn rời khỏi phòng không\?</string>
     <string name="room_participants_leave_prompt_title">Rời khỏi phòng</string>
@@ -1027,7 +1027,7 @@
     <string name="room_permissions_notice">Chọn vai trò được yêu cầu để thay đổi thiết lập của phòng</string>
     <string name="room_permissions_title">Quyền hạn</string>
     <string name="ssl_cert_not_trust">Việc này có thể có nghĩa là ai đó đang can thiệp vào lưu lượng của bạn, hoặc điện thoại của bạn không tin cậy chứng chỉ được máy chủ trên mạng cung cấp.</string>
-    <string name="ssl_could_not_verify">Không thể xác minh danh tính của máy chủ trên mạng.</string>
+    <string name="ssl_could_not_verify">Không thể xác thực danh tính của máy chủ trên mạng.</string>
     <string name="ssl_fingerprint_hash">Mã kiểm tra (%s):</string>
     <string name="ssl_remain_offline">Bỏ qua</string>
     <string name="ssl_logout_account">Đăng xuất</string>
@@ -1148,7 +1148,7 @@
         <item quantity="other">Các lời mời đã gửi tới %1$s và %2$d người nữa</item>
     </plurals>
     <plurals name="secure_backup_reset_devices_you_can_verify">
-        <item quantity="other">Hiển thị %d thiết bị bạn có thể xác minh ngay bây giờ</item>
+        <item quantity="other">Hiển thị %d thiết bị bạn có thể xác thực ngay bây giờ</item>
     </plurals>
     <plurals name="settings_active_sessions_count">
         <item quantity="other">%d phiên đang hoạt động</item>
@@ -1466,11 +1466,11 @@
     <string name="error_empty_field_choose_user_name">Vui lòng chọn tên người dùng.</string>
     <string name="failed_to_initialize_cross_signing">Thất bại trong việc thiết lập Xác thực chéo</string>
     <string name="confirm_your_identity_quad_s">Xác nhận danh tính của bạn bằng cách xác minh đăng nhập này, cấp cho nó quyền truy cập vào các tin nhắn được mã hóa.</string>
-    <string name="confirm_your_identity">Xác nhận danh tính của bạn bằng cách xác minh đăng nhập này từ một trong các phiên khác của bạn, cấp cho nó quyền truy cập vào các tin nhắn được mã hóa.</string>
-    <string name="cross_signing_verify_by_emoji">Xác minh tương tác bằng Emoji</string>
+    <string name="confirm_your_identity">Xác thực danh tính của bạn bằng cách xác nhận đăng nhập này từ một trong các phiên khác của bạn, cấp cho nó quyền truy cập vào các tin nhắn được mã hóa.</string>
+    <string name="cross_signing_verify_by_emoji">Xác thực tương tác bằng Emoji</string>
     <string name="crosssigning_verify_session">Xác minh đăng nhập</string>
-    <string name="cross_signing_verify_by_text">Xác minh thủ công bằng Văn bản</string>
-    <string name="verify_this_session">Xác minh thông tin đăng nhập mới truy cập vào tài khoản của bạn: %1$s</string>
+    <string name="cross_signing_verify_by_text">Xác thực thủ công bằng Văn bản</string>
+    <string name="verify_this_session">Xác thực thông tin đăng nhập mới truy cập vào tài khoản của bạn: %1$s</string>
     <string name="encrypted_unverified">Được mã hóa bởi một thiết bị chưa được xác minh</string>
     <string name="unencrypted">Không được mã hóa</string>
     <string name="default_message_emote_snow">gửi tuyết rơi ❄️</string>
@@ -1479,7 +1479,7 @@
     <string name="command_confetti">Gửi tin nhắn đã cho với hoa giấy</string>
     <string name="secure_backup_reset_no_history">Bạn sẽ khởi động lại mà không có lịch sử, không có tin nhắn, thiết bị đáng tin cậy hoặc người dùng đáng tin cậy</string>
     <string name="secure_backup_reset_if_you_reset_all">Nếu bạn đặt lại mọi thứ</string>
-    <string name="secure_backup_reset_all_no_other_devices">Chỉ làm điều này nếu bạn không có thiết bị nào khác mà bạn có thể xác minh thiết bị này.</string>
+    <string name="secure_backup_reset_all_no_other_devices">Chỉ làm điều này nếu bạn không có thiết bị nào khác mà bạn có thể xác thực thiết bị này.</string>
     <string name="secure_backup_reset_all">Đặt lại mọi thứ</string>
     <string name="bad_passphrase_key_reset_all_action">Quên hoặc mất tất cả các tùy chọn phục hồi\? Đặt lại mọi thứ</string>
     <string name="failed_to_access_secure_storage">Không truy nhập được dung lượng lưu trữ an toàn</string>
@@ -1514,7 +1514,7 @@
     <string name="bootstrap_invalid_recovery_key">Nó không phải là một khóa phục hồi hợp lệ</string>
     <string name="use_file">Sử dụng Tệp</string>
     <string name="bootstrap_enter_recovery">Nhập %s của bạn để tiếp tục</string>
-    <string name="security_prompt_text">Xác minh bản thân và người khác để giữ an toàn cho cuộc trò chuyện của bạn</string>
+    <string name="security_prompt_text">Xác thực bản thân và người khác để giữ an toàn cho cuộc trò chuyện của bạn</string>
     <string name="upgrade_security">Nâng cấp mã hóa có sẵn</string>
     <string name="room_message_placeholder">Tin nhắn…</string>
     <string name="auth_invalid_login_deactivated_account">Tài khoản này đã bị vô hiệu hóa.</string>
@@ -1560,7 +1560,7 @@
     <string name="encryption_unknown_algorithm_tile_description">Mã hóa được sử dụng bởi phòng này không được hỗ trợ</string>
     <string name="encryption_not_enabled">Mã hóa không được bật</string>
     <string name="direct_room_encryption_enabled_tile_description">Tin nhắn trong phòng này được mã hóa đầu cuối.</string>
-    <string name="encryption_enabled_tile_description">Tin nhắn trong phòng này được mã hóa đầu cuối. Tìm hiểu thêm và xác minh người dùng trong hồ sơ của họ.</string>
+    <string name="encryption_enabled_tile_description">Tin nhắn trong phòng này được mã hóa đầu cuối. Tìm hiểu thêm và xác thực người dùng trong hồ sơ của họ.</string>
     <string name="encryption_enabled">Mã hóa được bật</string>
     <string name="bootstrap_cancel_text">Nếu bạn hủy ngay bây giờ, bạn có thể mất tin nhắn và dữ liệu được mã hóa nếu bạn mất quyền truy cập vào thông tin đăng nhập của mình.
 \n
@@ -1597,7 +1597,7 @@
     <string name="verification_code_notice">So sánh mã với mã được hiển thị trên màn hình của người dùng khác.</string>
     <string name="verification_emoji_notice">So sánh biểu tượng cảm xúc độc đáo, đảm bảo chúng xuất hiện theo cùng một thứ tự.</string>
     <string name="verification_request_start_notice">Để được an toàn, hãy làm điều này trực tiếp hoặc sử dụng một cách khác để giao tiếp.</string>
-    <string name="verification_request_notice">Để an toàn, hãy xác minh %s bằng cách kiểm tra mã một lần.</string>
+    <string name="verification_request_notice">Để an toàn, hãy xác thực %s bằng cách kiểm tra mã một lần.</string>
     <string name="room_settings_enable_encryption_dialog_submit">Bật mã hóa</string>
     <string name="room_settings_enable_encryption_dialog_content">Sau khi được bật, mã hóa cho một căn phòng không thể bị vô hiệu hóa. Tin nhắn được gửi trong một căn phòng được mã hóa không thể được nhìn thấy bởi máy chủ, chỉ bởi những người tham gia của căn phòng. Cho phép mã hóa có thể ngăn nhiều bot và cầu hoạt động chính xác.</string>
     <string name="room_settings_enable_encryption_dialog_title">Bật mã hóa\?</string>
@@ -1607,8 +1607,8 @@
     <string name="settings_category_timeline">Dòng thời gian</string>
     <string name="command_description_rainbow_emote">Gửi emote đã cho màu cầu vồng</string>
     <string name="command_description_rainbow">Gửi tin nhắn đã cho có màu cầu vồng</string>
-    <string name="verify_cannot_cross_sign">Phiên này không thể chia sẻ xác minh này với các phiên khác của bạn.
-\nViệc xác minh sẽ được lưu cục bộ và chia sẻ trong phiên bản tương lai của ứng dụng.</string>
+    <string name="verify_cannot_cross_sign">Phiên này không thể chia sẻ xác thực này với các phiên khác của bạn.
+\nViệc xác thực sẽ được lưu cục bộ và chia sẻ trong phiên bản tương lai của ứng dụng.</string>
     <string name="unignore">Hủy bỏ qua</string>
     <string name="rendering_event_error_exception">${app_name} gặp sự cố khi hiển thị nội dung sự kiện với id \'%1$s\'</string>
     <string name="rendering_event_error_type_of_event_not_handled">${app_name} không xử lý các sự kiện thuộc loại \'%1$s\'</string>
@@ -1644,16 +1644,16 @@
     <string name="room_profile_not_encrypted_subtitle">Tin nhắn trong phòng này không được mã hóa đầu cuối.</string>
     <string name="verification_request_waiting_for">Đang chờ %s…</string>
     <string name="verification_verified_user">Đã xác minh %s</string>
-    <string name="verification_verify_user">Xác minh %s</string>
-    <string name="verification_no_scan_emoji_title">Xác minh bằng cách so sánh biểu tượng cảm xúc</string>
-    <string name="verification_scan_self_emoji_subtitle">Thay vào đó, xác minh bằng cách so sánh biểu tượng cảm xúc</string>
+    <string name="verification_verify_user">Xác thực %s</string>
+    <string name="verification_no_scan_emoji_title">Xác thực bằng cách so sánh biểu tượng cảm xúc</string>
+    <string name="verification_scan_self_emoji_subtitle">Thay vào đó, xác thực bằng cách so sánh biểu tượng cảm xúc</string>
     <string name="verification_scan_emoji_subtitle">Nếu bạn không trực tiếp, hãy so sánh biểu tượng cảm xúc thay thế</string>
     <string name="verification_scan_emoji_title">Không thể quét</string>
     <string name="verification_scan_with_this_device">Quét bằng thiết bị này</string>
     <string name="verification_scan_their_code">Quét mã của họ</string>
     <string name="verification_scan_self_notice">Quét mã bằng thiết bị khác của bạn hoặc chuyển đổi và quét bằng thiết bị này</string>
-    <string name="verification_scan_notice">Quét mã bằng thiết bị của người dùng khác để xác minh lẫn nhau một cách an toàn</string>
-    <string name="verification_verify_device">Xác minh phiên này</string>
+    <string name="verification_scan_notice">Quét mã bằng thiết bị của người dùng khác để xác thực lẫn nhau một cách an toàn</string>
+    <string name="verification_verify_device">Xác thực phiên này</string>
     <string name="verification_request">Yêu cầu xác minh</string>
     <string name="verification_sent">Xác minh đã gửi</string>
     <string name="verification_request_you_accepted">Bạn đã chấp nhận</string>
@@ -1672,8 +1672,8 @@
     <string name="sent_a_video">Video.</string>
     <string name="verification_conclusion_compromised">Một trong những điều sau đây có thể bị xâm phạm:
 \n
-\n - Homeserver của bạn
-\n - Homeserver mà bạn đang xác minh được kết nối với
+\n - Máy chủ nhà của bạn
+\n - Máy chủ nhà mà bạn đang xác minh được kết nối với
 \n - Kết nối internet của bạn hoặc của người dùng khác
 \n - Thiết bị của bạn hoặc thiết bị của người dùng khác</string>
     <string name="verification_conclusion_not_secure">Không bảo mật</string>
@@ -1862,7 +1862,7 @@
     <string name="error_user_already_logged_in">Có vẻ như bạn đang cố gắng kết nối với một homeserver khác. Bạn có muốn đăng xuất không\?</string>
     <string name="identity_server_not_defined">Bạn không sử dụng bất kỳ máy chủ xác thực nào</string>
     <string name="sas_error_unknown">Lỗi không xác định</string>
-    <string name="sas_incoming_request_notif_content">%s muốn xác minh phiên của bạn</string>
+    <string name="sas_incoming_request_notif_content">%s muốn xác thực phiên của bạn</string>
     <string name="sas_incoming_request_notif_title">Yêu cầu xác minh</string>
     <string name="sas_got_it">Đã nhận được</string>
     <string name="sas_verified">Đã xác minh!</string>
@@ -1968,17 +1968,17 @@
     <string name="verify_not_me_self_verification">Một trong những điều sau đây có thể bị xâm phạm:
 \n
 \n- Mật khẩu của bạn
-\n- Người ở nhà của anh
-\n- Thiết bị này hoặc thiết bị khác
+\n- Máy chủ nhà của bạn
+\n- Thiết bị này hoặc thiết bị kia
 \n- Kết nối internet mà một trong hai thiết bị đang sử dụng
 \n
 \nChúng tôi khuyên bạn nên thay đổi mật khẩu và khóa khôi phục trong Cài đặt ngay lập tức.</string>
-    <string name="verify_cancel_other">Bạn sẽ không xác minh %1$s (%2$s) nếu bạn hủy ngay. Bắt đầu lại trong hồ sơ người dùng của họ.</string>
+    <string name="verify_cancel_other">Bạn sẽ không xác thực %1$s (%2$s) nếu bạn hủy ngay. Bắt đầu lại trong hồ sơ người dùng của họ.</string>
     <string name="verify_cancel_self_verification_from_trusted">Nếu bạn hủy, bạn sẽ không thể đọc tin nhắn được mã hóa trên thiết bị mới của mình và những người dùng khác sẽ không tin tưởng nó</string>
     <string name="verify_cancel_self_verification_from_untrusted">Nếu bạn hủy, bạn sẽ không thể đọc tin nhắn được mã hóa trên thiết bị này và những người dùng khác sẽ không tin tưởng nó</string>
     <string name="verify_new_session_compromized">Tài khoản của bạn có thể bị xâm phạm</string>
     <string name="verify_new_session_was_not_me">Không phải tôi</string>
-    <string name="verify_new_session_notice">Sử dụng phiên này để xác minh phiên mới của bạn, cấp cho nó quyền truy cập vào các tin nhắn được mã hóa.</string>
+    <string name="verify_new_session_notice">Sử dụng phiên này để xác thực phiên mới của bạn, cấp cho nó quyền truy cập vào các tin nhắn được mã hóa.</string>
     <string name="new_session">Đăng nhập mới. Đây có phải là bạn không\?</string>
     <string name="refresh">Làm tươi</string>
     <string name="e2e_use_keybackup">Mở khóa lịch sử tin nhắn được mã hóa</string>
@@ -2011,7 +2011,7 @@
     <string name="a11y_qr_code_for_verification">Mã QR</string>
     <string name="reset_cross_signing">Đặt lại khóa</string>
     <string name="initialize_cross_signing">Khởi tạo xác thực chéo</string>
-    <string name="verification_profile_device_untrust_info">Cho đến khi người dùng này tin tưởng phiên này, tin nhắn được gửi đến nó và từ nó đều mang nhãn cảnh báo. Ngoài ra, bạn có thể xác minh thủ công.</string>
+    <string name="verification_profile_device_untrust_info">Cho đến khi người dùng này tin tưởng phiên này, tin nhắn được gửi đến nó và từ nó đều mang nhãn cảnh báo. Ngoài ra, bạn có thể xác thực thủ công.</string>
     <string name="verification_profile_device_new_signing">%1$s (%2$s) đã đăng nhập bằng phiên mới:</string>
     <string name="verification_profile_device_verified_because">Phiên này được tin cậy để nhắn tin an toàn vì %1$s (%2$s) đã xác minh:</string>
     <string name="not_trusted">Không tin cậy</string>
@@ -2020,10 +2020,10 @@
     <string name="room_member_profile_failed_to_get_devices">Không nhận được phiên</string>
     <string name="verification_profile_warning">Cảnh báo</string>
     <string name="verification_profile_verified">Đã xác minh</string>
-    <string name="verification_profile_verify">Xác minh</string>
-    <string name="verification_open_other_to_verify">Sử dụng phiên hiện có để xác minh phiên này, cấp cho nó quyền truy cập vào các thư được mã hóa.</string>
-    <string name="crosssigning_verify_this_session">Xác minh đăng nhập này</string>
-    <string name="settings_active_sessions_unverified_device_desc">Xác minh phiên này để đánh dấu nó là đáng tin cậy và cấp cho nó quyền truy cập vào các thư được mã hóa. Nếu bạn không đăng nhập vào phiên này, tài khoản của bạn có thể bị xâm phạm:</string>
+    <string name="verification_profile_verify">Xác thực</string>
+    <string name="verification_open_other_to_verify">Sử dụng phiên hiện có để xác thực phiên này, cấp cho nó quyền truy cập vào các tin nhắn được mã hóa.</string>
+    <string name="crosssigning_verify_this_session">Xác thực thiết bị này</string>
+    <string name="settings_active_sessions_unverified_device_desc">Xác thực phiên này để đánh dấu nó là đáng tin cậy và cấp cho nó quyền truy cập vào các thư được mã hóa. Nếu bạn không đăng nhập vào phiên này, tài khoản của bạn có thể bị xâm phạm:</string>
     <string name="settings_active_sessions_verified_device_desc">Phiên này được tin cậy để nhắn tin an toàn vì bạn đã xác minh nó:</string>
     <string name="settings_failed_to_get_crypto_device_info">Không có thông tin mật mã sẵn dùng</string>
     <string name="settings_server_room_version_unstable">bất ổn định</string>
@@ -2463,7 +2463,7 @@
     <string name="ftue_auth_choose_server_title">Chọn máy chủ của bạn</string>
     <string name="ftue_auth_carousel_control_title">Bạn nắm quyền kiểm soát.</string>
     <string name="ftue_auth_choose_server_ems_title">Muốn chạy một máy chủ của mình\?</string>
-    <string name="ftue_auth_email_subtitle">%s cần xác nhận tài khoản của bạn</string>
+    <string name="ftue_auth_email_subtitle">%s cần xác thực tài khoản của bạn</string>
     <string name="ftue_personalize_lets_go">Đi thôi</string>
     <string name="ftue_auth_use_case_title">Bạn sẽ trò chuyện với ai nhiều nhất\?</string>
     <string name="ftue_auth_use_case_skip">Chưa chắc chắn\? %s</string>
@@ -2477,7 +2477,7 @@
     <string name="ftue_auth_terms_title">Chính sách máy chủ</string>
     <string name="ftue_auth_reset_password_email_subtitle">%s sẽ gửi bạn một liên kết xác nhận</string>
     <string name="ftue_auth_carousel_secure_title">Làm chủ cuộc trò chuyện.</string>
-    <string name="ftue_auth_phone_subtitle">%s cần xác nhận tài khoản của bạn</string>
+    <string name="ftue_auth_phone_subtitle">%s cần xác thực tài khoản của bạn</string>
     <string name="ftue_auth_welcome_back_title">Chào mừng trở lại!</string>
     <string name="ftue_auth_choose_server_sign_in_subtitle">Địa chỉ máy chủ của bạn là gì\?</string>
     <string name="ftue_auth_use_case_subtitle">Chúng tôi sẽ giúp bạn kết nối</string>
