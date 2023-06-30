@@ -477,9 +477,9 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="directory_server_all_rooms_on_server">Visas istabas %s serverī</string>
     <string name="directory_server_native_rooms">Visas vietējās %s istabas</string>
     <plurals name="notification_unread_notified_messages">
-        <item quantity="zero">%d nelasītu paziņotu ziņu</item>
-        <item quantity="one">%d nelasīta paziņota ziņa</item>
-        <item quantity="other">%d nelasītas paziņotas ziņu</item>
+        <item quantity="zero">%d paziņojumu par nelasītām ziņām</item>
+        <item quantity="one">%d paziņojums par nelasītām ziņām</item>
+        <item quantity="other">%d paziņojumi par nelasītām ziņām</item>
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="zero">%d istaba</item>

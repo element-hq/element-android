@@ -2957,4 +2957,12 @@
     <string name="crosssigning_verify_after_update">App aktualisiert</string>
     <string name="sign_out_failed_dialog_message">Dein Heim-Server ist nicht erreichbar. Falls du dich dennoch abmeldest, wird dieses Gerät nicht von deiner Geräteliste entfernt, also müsstest du dies mit einer anderen Sitzung selbst machen.</string>
     <string name="sign_out_anyway">Dennoch abmelden</string>
+    <string name="create_room_unknown_users_dialog_submit">Dennoch Unterhaltung beginnen</string>
+    <string name="create_room_unknown_users_dialog_content">Konnte keine Profile für die folgenden Matrix-IDs finden. Möchtest du dennoch eine Unterhaltung beginnen\?
+\n
+\n%s</string>
+    <string name="invite_unknown_users_dialog_content">Konnte keine Profile für die folgenden Matrix-IDs finden. Möchtest du sie dennoch einladen\?
+\n
+\n%s</string>
+    <string name="invite_unknown_users_dialog_submit">Dennoch einladen</string>
 </resources>
