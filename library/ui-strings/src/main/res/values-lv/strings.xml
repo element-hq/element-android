@@ -2067,4 +2067,10 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="two">2</string>
     <string name="one">1</string>
     <string name="onboarding_new_app_layout_button_try">Izmēģināt</string>
+    <plurals name="x_selected">
+        <item quantity="zero">%1$d atlasīti</item>
+        <item quantity="one">%1$d atlasīts</item>
+        <item quantity="other">%1$d atlasīti</item>
+    </plurals>
+    <string name="notice_display_name_changed_to">%1$s nomainīja attēlojamo vārdu uz %2$s</string>
 </resources>
