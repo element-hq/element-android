@@ -30,7 +30,7 @@ internal interface RedactEventTask : Task<RedactEventTask.Params, String> {
             val roomId: String,
             val eventId: String,
             val reason: String?,
-            val withRelations: List<String>?,
+            val withRelTypes: List<String>?,
     )
 }
 
@@ -41,9 +41,9 @@ internal class DefaultRedactEventTask @Inject constructor(
 ) : RedactEventTask {
 
     override suspend fun execute(params: RedactEventTask.Params): String {
-        val withRelations = if (homeServerCapabilitiesDataSource.getHomeServerCapabilities()?.canRedactEventWithRelations.orFalse() &&
-                !params.withRelations.isNullOrEmpty()) {
-            params.withRelations
+        val withRelTypes = if (homeServerCapabilitiesDataSource.getHomeServerCapabilities()?.canRedactRelatedEvents.orFalse() &&
+                !params.withRelTypes.isNullOrEmpty()) {
+            params.withRelTypes
         } else {
             null
         }
@@ -55,7 +55,7 @@ internal class DefaultRedactEventTask @Inject constructor(
                     eventId = params.eventId,
                     body = EventRedactBody(
                             reason = params.reason,
-                            withRelations = withRelations,
+                            unstableWithRelTypes = withRelTypes,
                     )
             )
         }

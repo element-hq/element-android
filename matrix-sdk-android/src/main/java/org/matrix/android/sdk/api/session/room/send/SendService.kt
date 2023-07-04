@@ -158,10 +158,10 @@ interface SendService {
      * Redact (delete) the given event.
      * @param event the event to redact
      * @param reason optional reason string
-     * @param withRelations the list of relation types to redact with this event
+     * @param withRelTypes the list of relation types to redact with this event
      * @param additionalContent additional content to put in the event content
      */
-    fun redactEvent(event: Event, reason: String?, withRelations: List<String>? = null, additionalContent: Content? = null): Cancelable
+    fun redactEvent(event: Event, reason: String?, withRelTypes: List<String>? = null, additionalContent: Content? = null): Cancelable
 
     /**
      * Schedule this message to be resent.
