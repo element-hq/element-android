@@ -477,9 +477,9 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="directory_server_all_rooms_on_server">Visas istabas %s serverī</string>
     <string name="directory_server_native_rooms">Visas vietējās %s istabas</string>
     <plurals name="notification_unread_notified_messages">
-        <item quantity="zero">%d nelasītu paziņotu ziņu</item>
-        <item quantity="one">%d nelasīta paziņota ziņa</item>
-        <item quantity="other">%d nelasītas paziņotas ziņu</item>
+        <item quantity="zero">%d paziņojumu par nelasītām ziņām</item>
+        <item quantity="one">%d paziņojums par nelasītām ziņām</item>
+        <item quantity="other">%d paziņojumi par nelasītām ziņām</item>
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="zero">%d istaba</item>
@@ -2067,4 +2067,10 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="two">2</string>
     <string name="one">1</string>
     <string name="onboarding_new_app_layout_button_try">Izmēģināt</string>
+    <plurals name="x_selected">
+        <item quantity="zero">%1$d atlasīti</item>
+        <item quantity="one">%1$d atlasīts</item>
+        <item quantity="other">%1$d atlasīti</item>
+    </plurals>
+    <string name="notice_display_name_changed_to">%1$s nomainīja attēlojamo vārdu uz %2$s</string>
 </resources>
