@@ -360,11 +360,11 @@
 \nΜε την απενεργοποίηση του λογαρισμού σας <b>δεν θα ξεχαστούν τα μηνύματά που έχετε στείλει</b>. Εάν θα θέλατε να ξεχαστούν, τότε δηλώστε το στο κουτί πιο κάτω.
 \n
 \nΗ ορατότητα μηνυμάτων δουλεύει σαν το ηλεκτρονικό ταχυδρομείο. Το να ξεχαστούν τα μηνύματα σημαίνει οτι μηνύματα τα οποία έχετε στείλει δεν θα σταλούν σε νέους ή μη-εγγεγραμμένους χρήστες, αλλα εγγεγραμμένοι χρήστες οι οποίοι έχουν ήδη πρόσβαση σε αυτά τα μηνύματα θα μπορούν ακόμα να τα δούν.</string>
-    <string name="room_tombstone_versioned_description">Αυτό το δωμάτιο έχει αντικατασταθεί και δεν είναι πια ενεργό</string>
+    <string name="room_tombstone_versioned_description">Αυτό το δωμάτιο έχει αντικατασταθεί και δεν είναι πια ενεργό.</string>
     <string name="ssl_remain_offline">Παράβλεψη</string>
     <string name="ssl_logout_account">Αποσύνδεση</string>
     <string name="ssl_do_not_trust">Δεν εμπιστεύομαι</string>
-    <string name="room_do_not_have_permission_to_post">Δεν έχετε εξουσιοδότηση να δημοσιεύσετε σε αυτό το δωμάτιο</string>
+    <string name="room_do_not_have_permission_to_post">Δεν έχετε εξουσιοδότηση να δημοσιεύσετε σε αυτό το δωμάτιο.</string>
     <string name="room_many_users_are_typing">%1$s &amp; %2$s &amp; άλλοι γράφουν…</string>
     <string name="room_one_user_is_typing">%s γράφει…</string>
     <string name="room_two_users_are_typing">%1$s &amp; %2$s γράφουν…</string>
@@ -461,4 +461,6 @@
     <string name="soft_logout_signin_title">Σύνδεση</string>
     <string name="soft_logout_clear_data_submit">Διαγρφή όλων των δεδομένων</string>
     <string name="settings">Ρυθμίσεις</string>
+    <string name="settings_general_title">Γενικά</string>
+    <string name="create_spaces_default_public_room_name">Γενικά</string>
 </resources>
