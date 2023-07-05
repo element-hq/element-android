@@ -11,4 +11,24 @@
         <item quantity="one">%1$d Iliyochaguliwa</item>
         <item quantity="other">%1$d Ziliyochaguliwa</item>
     </plurals>
+    <string name="notice_room_created">%1$s Andaa chumba</string>
+    <string name="notice_room_created_by_you">Umeandaa chumba</string>
+    <string name="notice_direct_room_created">%1$s anzisha mjadala</string>
+    <string name="notice_direct_room_created_by_you">Ulianzisha mjadala</string>
+    <string name="notice_room_invite">%1$s Walioalikwa %2$s</string>
+    <string name="notice_room_join">%1$s jiunge na mjadala</string>
+    <string name="notice_room_leave">%1$s Acha mjadala</string>
+    <string name="notice_room_leave_by_you">Umetoka kwenye mjadala</string>
+    <string name="notice_direct_room_leave">%1$s Acha mjadala</string>
+    <string name="notice_direct_room_leave_by_you">Umeacha mjadala</string>
+    <string name="notice_room_unban">%1$s hujazuiliwa %2$s</string>
+    <string name="notice_room_unban_by_you">Hujazuiliwa %1$s</string>
+    <string name="notice_room_ban">%1$s huruhusiwi %2$s</string>
+    <string name="notice_room_ban_by_you">Huruhusiwi %1$s</string>
+    <string name="notice_room_withdraw_by_you">Sitisha %1$s\'s mwaliko</string>
+    <string name="notice_room_invite_no_invitee">%s\'s Mwaliko</string>
+    <string name="notice_room_join_by_you">Umejiunga na mjadala</string>
+    <string name="notice_room_withdraw">%1$s sitisha %2$s\'s mmwaliko</string>
+    <string name="notice_room_invite_no_invitee_by_you">Mwaliko wako</string>
+    <string name="notice_room_invite_by_you">Umealika %1$s</string>
 </resources>
