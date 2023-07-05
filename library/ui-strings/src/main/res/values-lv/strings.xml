@@ -2073,4 +2073,18 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
         <item quantity="other">%1$d atlasīti</item>
     </plurals>
     <string name="notice_display_name_changed_to">%1$s nomainīja attēlojamo vārdu uz %2$s</string>
+    <string name="room_error_access_unauthorized">Nav ļauts pievienoties šai istabai</string>
+    <string name="change_space">Mainīt vietu</string>
+    <string name="initial_sync_request_title">Sākotnējais sinhronizēšanas pieprasījums</string>
+    <string name="all_chats">Visas tērzēšanas</string>
+    <string name="explore_rooms">Izpētīt istabas</string>
+    <string name="a11y_expand_space_children">Izvērst %s apakšvienumus</string>
+    <plurals name="notice_room_server_acl_changes">
+        <item quantity="zero">%d servera ACL izmaiņu</item>
+        <item quantity="one">%d servera ACL izmaiņa</item>
+        <item quantity="other">%d servera ACL izmaiņas</item>
+    </plurals>
+    <string name="a11y_collapse_space_children">Sakļaut %s apakšvienumus</string>
+    <string name="start_chat">Uzsākt tērzēšanu</string>
+    <string name="create_room">Izveidot istabu</string>
 </resources>
