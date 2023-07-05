@@ -59,7 +59,7 @@
     <string name="notice_room_created_by_you">Jūs izveidojāt istabu</string>
     <string name="notice_room_created">%1$s izveidoja istabu</string>
     <string name="notice_room_invite_no_invitee_by_you">Jūsu uzaicinājums</string>
-    <string name="notice_end_to_end_unknown_algorithm_by_you">Jūs ieslēdzāt pilnīgu šifrēšanu (neatpazīts algoritms %1$s).</string>
+    <string name="notice_end_to_end_unknown_algorithm_by_you">Ir ieslēgta pilnīga šifrēšana (neatpazīts algoritms %1$s).</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s ieslēdza pilnīgu šifrēšanu (neatpazīts algoritms %2$s).</string>
     <string name="notice_end_to_end_ok_by_you">Jūs ieslēdzāt pilnīgu šifrēšanu.</string>
     <string name="notice_end_to_end_ok">%1$s ieslēdza pilnīgu šifrēšanu.</string>
@@ -2087,4 +2087,9 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="a11y_collapse_space_children">Sakļaut %s apakšvienumus</string>
     <string name="start_chat">Uzsākt tērzēšanu</string>
     <string name="create_room">Izveidot istabu</string>
+    <string name="initial_sync_request_content">${app_name} ir nepieciešams veikt kešatmiņas tīrīšanu, lai būtu pašreizēja, šī iemesla dēļ:
+\n%s
+\n
+\nJāņem vērā, ka šī darbība pārsāknēs lietotni, un tas var aizņemt kādu laiku.</string>
+    <string name="initial_sync_request_reason_unignored_users">- atsevišķi lietotāji atkal tiek ņemti vērā</string>
 </resources>
