@@ -105,8 +105,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                     copy(
                             step = BootstrapStep.FirstForm(
                                     keyBackUpExist = false,
-                                    reset = session.sharedSecretStorageService().isRecoverySetup(),
-                                    methods = this.secureBackupMethod
+                                    reset = session.sharedSecretStorageService().isRecoverySetup()
                             )
                     )
                 }
@@ -130,7 +129,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                         // we just resume plain bootstrap
                         doesKeyBackupExist = false
                         setState {
-                            copy(step = BootstrapStep.FirstForm(keyBackUpExist = doesKeyBackupExist, methods = this.secureBackupMethod))
+                            copy(step = BootstrapStep.FirstForm(keyBackUpExist = doesKeyBackupExist))
                         }
                     } else {
                         // we need to get existing backup passphrase/key and convert to SSSS
@@ -144,7 +143,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                             doesKeyBackupExist = true
                             isBackupCreatedFromPassphrase = keyVersion.getAuthDataAsMegolmBackupAuthData()?.privateKeySalt != null
                             setState {
-                                copy(step = BootstrapStep.FirstForm(keyBackUpExist = doesKeyBackupExist, methods = this.secureBackupMethod))
+                                copy(step = BootstrapStep.FirstForm(keyBackUpExist = doesKeyBackupExist))
                             }
                         }
                     }
@@ -492,7 +491,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                 } else {
                     setState {
                         copy(
-                                step = BootstrapStep.FirstForm(keyBackUpExist = doesKeyBackupExist, methods = this.secureBackupMethod),
+                                step = BootstrapStep.FirstForm(keyBackUpExist = doesKeyBackupExist),
                                 // Also reset the passphrase
                                 passphrase = null,
                                 passphraseRepeat = null,
@@ -505,7 +504,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
             is BootstrapStep.SetupPassphrase -> {
                 setState {
                     copy(
-                            step = BootstrapStep.FirstForm(keyBackUpExist = doesKeyBackupExist, methods = this.secureBackupMethod),
+                            step = BootstrapStep.FirstForm(keyBackUpExist = doesKeyBackupExist),
                             // Also reset the passphrase
                             passphrase = null,
                             passphraseRepeat = null
@@ -526,7 +525,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                     // Go back to the first step
                     setState {
                         copy(
-                                step = BootstrapStep.FirstForm(keyBackUpExist = doesKeyBackupExist, methods = this.secureBackupMethod),
+                                step = BootstrapStep.FirstForm(keyBackUpExist = doesKeyBackupExist),
                                 // Also reset the passphrase
                                 passphrase = null,
                                 passphraseRepeat = null
@@ -559,7 +558,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
             is BootstrapStep.GetBackupSecretForMigration -> {
                 setState {
                     copy(
-                            step = BootstrapStep.FirstForm(keyBackUpExist = doesKeyBackupExist, methods = this.secureBackupMethod),
+                            step = BootstrapStep.FirstForm(keyBackUpExist = doesKeyBackupExist),
                             // Also reset the passphrase
                             passphrase = null,
                             passphraseRepeat = null,

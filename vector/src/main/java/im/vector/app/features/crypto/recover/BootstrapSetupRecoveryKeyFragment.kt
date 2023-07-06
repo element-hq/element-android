@@ -66,7 +66,7 @@ class BootstrapSetupRecoveryKeyFragment :
             views.bootstrapSetupSecureSubmit.isVisible = false
 
             // Choose between create a passphrase or use a recovery key
-            renderBackupMethodActions(firstFormStep.methods)
+            renderBackupMethodActions(state.secureBackupMethod)
         }
         views.bootstrapSetupSecureText.giveAccessibilityFocusOnce()
     }
