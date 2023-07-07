@@ -463,4 +463,22 @@
     <string name="settings">Ρυθμίσεις</string>
     <string name="settings_general_title">Γενικά</string>
     <string name="create_spaces_default_public_room_name">Γενικά</string>
+    <string name="notice_room_avatar_removed">%1$s Έχει αφαιρεθεί το avatar του δωματίου</string>
+    <string name="notice_room_avatar_removed_by_you">Έχεις αφαιρέσει το avatar του δωματίου</string>
+    <string name="notice_room_server_acl_updated_no_change">Καμία αλλαγή.</string>
+    <string name="notice_room_name_removed_by_you">Έχεις αφαίρεσει το όνομα του δωματίου</string>
+    <string name="notice_direct_room_third_party_invite">Ο χρήστης %1$s προσκάλεσε τον χρήστη %2$s</string>
+    <string name="notice_direct_room_third_party_invite_by_you">Προσκάλεσες τον χρήστη %1$s</string>
+    <string name="power_level_admin">Διαχειριστής</string>
+    <string name="power_level_moderator">Moderator</string>
+    <string name="notice_power_level_changed_by_you">Άλλαξες το power του level %1$s.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">Οι Servers που ταιριάζουν με %s έχουν αφαιρεθεί από την επιτρεπόμενη λίστα.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">Οι Servers που ταιριάζουν με το IP έχουν αποκλειστικοί.</string>
+    <string name="notice_room_topic_removed_by_you">Έχεις αφαιρέσει το θέμα του δωματίου</string>
+    <string name="notice_room_third_party_registered_invite_by_you">Αποδέχτηκες την πρόσκληση για το %1$s</string>
+    <string name="power_level_default">Προεπιλογή</string>
+    <string name="power_level_custom">Custom (%1$d)</string>
+    <string name="power_level_custom_no_value">Προσαρμοσμένο</string>
+    <string name="notice_room_server_acl_allow_is_empty">🎉Όλοι οι Servers έχουν αποκλειστεί από συμμετέχοντες!Το δωμάτιο αυτό δεν μπορεί πια να χρησιμοποιηθεί.</string>
+    <string name="notice_room_third_party_invite_by_you">Έστειλες μια πρόσκληση στο %1$s για να συνδεθείς στο δωμάτιο</string>
 </resources>
