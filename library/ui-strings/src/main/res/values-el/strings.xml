@@ -493,4 +493,5 @@
         <item quantity="one">%1$s, %2$s, %3$s και %4$d άλλος χρήστης</item>
         <item quantity="other">%1$s, %2$s, %3$s και %4$d άλλοι χρήστες</item>
     </plurals>
+    <string name="event_status_sending_message">Το μήνυμα στέλνεται…</string>
 </resources>
