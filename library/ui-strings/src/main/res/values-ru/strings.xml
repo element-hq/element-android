@@ -3020,7 +3020,7 @@
     <string name="error_voice_message_broadcast_in_progress">Не удалось записать голосовое сообщение</string>
     <string name="review_unverified_sessions_description">Убедиться что Ваш аккаунт в безопасности</string>
     <string name="settings_nightly_build_update">Получить последнюю сборку (у вас могут быть проблемы со входом)</string>
-    <string name="room_profile_section_more_polls">История опроса</string>
+    <string name="room_profile_section_more_polls">Опросы</string>
     <string name="started_a_voice_broadcast">Голосовая трансляция начата</string>
     <string name="thread_list_not_available">Ваш домашний сервер не поддерживает список обсуждений.</string>
     <string name="action_stop">Остановить</string>
