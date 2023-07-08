@@ -481,4 +481,16 @@
     <string name="power_level_custom_no_value">Προσαρμοσμένο</string>
     <string name="notice_room_server_acl_allow_is_empty">🎉Όλοι οι Servers έχουν αποκλειστεί από συμμετέχοντες!Το δωμάτιο αυτό δεν μπορεί πια να χρησιμοποιηθεί.</string>
     <string name="notice_room_third_party_invite_by_you">Έστειλες μια πρόσκληση στο %1$s για να συνδεθείς στο δωμάτιο</string>
+    <string name="event_status_sent_message">Το μήνυμα στάλθηκε</string>
+    <string name="create_room">Δημιουργώ ένα δωμάτιο</string>
+    <string name="room_error_access_unauthorized">Δεν επιτρέπεται να συνδεθείς σε αυτό το δωμάτιο</string>
+    <string name="room_displayname_3_members">%1$s,%2$s και %3$s</string>
+    <string name="change_space">Αλλάζω το Space</string>
+    <string name="room_displayname_4_members">%1$s, %2$s, %3$s και %4$s</string>
+    <string name="explore_rooms">Ερευνάω τα δωμάτια</string>
+    <string name="initial_sync_request_reason_unignored_users">-Κάποιοι χρήστες έχουν αγνοηθεί</string>
+    <plurals name="room_displayname_four_and_more_members">
+        <item quantity="one">%1$s, %2$s, %3$s και %4$d άλλος χρήστης</item>
+        <item quantity="other">%1$s, %2$s, %3$s και %4$d άλλοι χρήστες</item>
+    </plurals>
 </resources>
