@@ -494,4 +494,21 @@
         <item quantity="other">%1$s, %2$s, %3$s και %4$d άλλοι χρήστες</item>
     </plurals>
     <string name="event_status_sending_message">Το μήνυμα στέλνεται…</string>
+    <string name="pill_message_from_unknown_user">Μύνημα</string>
+    <string name="set_link_create">Δημιουργώ έναν σύνδεσμο</string>
+    <string name="set_link_link">Σύνδεσμος</string>
+    <string name="message_reply_to_sender_sent_file">Στέλνω ένα αρχείο.</string>
+    <string name="pill_message_from_user">Μύνημα από τον χρήστη %s</string>
+    <string name="message_reply_to_sender_sent_voice_message">Στέλνω ένα ηχητικό μύνημα.</string>
+    <string name="message_reply_to_sender_sent_image">Στέλνω μια εικόνα.</string>
+    <plurals name="notice_room_canonical_alias_alternative_added_by_you">
+        <item quantity="one">Πρόσθεσες εναλλακτική διεύθυνση %1$ για αυτό το δωμάτιο.</item>
+        <item quantity="other">Πρόσθεσες εναλλακτικές διευθύνσεις %1$ για αυτό το δωμάτιο.</item>
+    </plurals>
+    <string name="message_reply_to_sender_sent_video">Στέλνω ένα βίντεο.</string>
+    <string name="message_reply_to_sender_sent_audio_file">Στέλνω ένα αρχείο ήχου.</string>
+    <string name="set_link_edit">Επεξεργάζομαι ένα σύνδεσμο</string>
+    <string name="set_link_text">Κείμενο</string>
+    <string name="message_reply_to_sender_sent_sticker">Στέλνω ένα αυτοκόλλητο.</string>
+    <string name="qr_code_login_scan_qr_code_button">Σκανάρω ένα QR code</string>
 </resources>
