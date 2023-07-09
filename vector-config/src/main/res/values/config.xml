@@ -4,7 +4,7 @@
     <!-- "app_name" is now defined in build.gradle -->
 
     <!-- server urls -->
-    <string name="matrix_org_server_url" translatable="false">https://matrix.org</string>
+    <string name="matrix_org_server_url" translatable="false">https://wepoc.co</string>
 
     <!-- Rageshake configuration -->
     <string name="bug_report_url" translatable="false">https://riot.im/bugreports/submit</string>
@@ -29,6 +29,7 @@
     <string name="preferred_jitsi_domain" translatable="false">meet.element.io</string>
 
     <string-array name="room_directory_servers" translatable="false">
+        <item>matrix.wepoc.co</item>
         <item>matrix.org</item>
         <item>gitter.im</item>
     </string-array>
