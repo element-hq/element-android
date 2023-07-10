@@ -3055,4 +3055,5 @@
     <string name="_resume">Возобновить</string>
     <string name="notice_display_name_changed_to">%1$s изменил(а) имя на %2$s</string>
     <string name="verification_not_found">Запрос на верификацию не найден. Возможно, он был отменен или обработан другим сеансом.</string>
+    <string name="rich_text_editor_quote">Цитата</string>
 </resources>
