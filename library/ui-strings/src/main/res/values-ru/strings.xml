@@ -3056,4 +3056,8 @@
     <string name="notice_display_name_changed_to">%1$s изменил(а) имя на %2$s</string>
     <string name="verification_not_found">Запрос на верификацию не найден. Возможно, он был отменен или обработан другим сеансом.</string>
     <string name="rich_text_editor_quote">Цитата</string>
+    <string name="settings_crypto_version">Версия шифрования</string>
+    <string name="rich_text_editor_code_block">Блок кода</string>
+    <string name="rich_text_editor_indent">Подпункт</string>
+    <string name="rich_text_editor_unindent">Пункт</string>
 </resources>
