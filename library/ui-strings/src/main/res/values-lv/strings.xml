@@ -312,7 +312,7 @@
     <string name="action_reject">Noraidīt</string>
     <string name="room_jump_to_first_unread">Pāriet uz pirmo neizlasīto ziņu</string>
     <string name="room_participants_leave_prompt_title">Pamest istabu</string>
-    <string name="room_participants_leave_prompt_msg">Vai tiešām vēlies pamest istabu\?</string>
+    <string name="room_participants_leave_prompt_msg">Vai tiešām pamest istabu\?</string>
     <string name="room_participants_header_direct_chats">TIEŠIE ČATI</string>
     <string name="room_participants_action_invite">Uzaicināt</string>
     <string name="room_participants_action_ban">Nobanot</string>
@@ -342,7 +342,7 @@
     <string name="search_members_hint">Istabas dalībnieku filtrs</string>
     <string name="search_no_results">Rezultātu nav</string>
     <string name="room_settings_all_messages">Visas ziņas</string>
-    <string name="room_settings_add_homescreen_shortcut">Pievienot uz galvenā ekrāna</string>
+    <string name="room_settings_add_homescreen_shortcut">Pievienot sākumekrānam</string>
     <string name="settings_profile_picture">Profila attēls</string>
     <string name="settings_display_name">Attēlojamais vārds</string>
     <string name="settings_add_email_address">Pievienot epasta adresi</string>
@@ -585,10 +585,10 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="room_profile_section_security">Drošība</string>
     <string name="direct_room_profile_encrypted_subtitle">Ziņas šeit ir nodrošinātas ar pilnīgu šifrēšanu.
 \n
-\nJūsu ziņas tiek nodrošinātas ar slēdzenēm, un tikai jums un saņēmējam ir unikālas atslēgas, lai tās atbloķētu.</string>
+\nZiņas tiek nodrošinātas ar slēdzenēm, un tikai sūtītājam un saņēmējam ir neatkārtojamas atslēgas, lai tās atslēgtu.</string>
     <string name="room_profile_encrypted_subtitle">Ziņas šeit ir nodrošinātas ar pilnīgu šifrēšanu.
 \n
-\nJūsu ziņas tiek nodrošinātas ar slēdzenēm, un tikai jums un saņēmējam ir unikālas atslēgas, lai tās atbloķētu.</string>
+\nZiņas tiek nodrošinātas ar slēdzenēm, un tikai sūtītājam un saņēmējam ir neatkārtojamas atslēgas, lai tās atslēgtu.</string>
     <string name="direct_room_profile_not_encrypted_subtitle">Ziņas šeit nav nodrošinātas ar pilnīgu šifrēšanu.</string>
     <string name="room_profile_not_encrypted_subtitle">Ziņām šajā istabā netiek piemērota pilnīga šifrēšana.</string>
     <string name="verification_request_you_accepted">Jūs akceptējāt</string>
@@ -694,7 +694,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="deactivate_account_title">Deaktivizēt kontu</string>
     <string name="command_description_nick">Nomaina jūsu parādāmo vārdu</string>
     <string name="command_description_remove_user">Padzen lietotāju ar norādīto id</string>
-    <string name="command_description_part_room">Atstāj istabu</string>
+    <string name="command_description_part_room">Pamest istabu</string>
     <string name="command_description_invite_user">Uzaicina lietotāju ar norādīto id uz pašreizējo istabu</string>
     <string name="command_description_deop_user">Atceļ operatora statusu lietotājam ar norādīto Id</string>
     <string name="command_description_op_user">Definē lietotāja statusu</string>
@@ -751,7 +751,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="room_participants_power_level_demote_warning_prompt">Jūs nevarēsiet atcelt šīs izmaiņas pēc sava statusa pazemināšanas. Gadījumā, ja esat pēdējais priviliģētais lietotājs istabā, būs neiespējami atgūt šīs privilēģijas.</string>
     <string name="room_participants_action_remove">Padzīt</string>
     <string name="room_participants_action_cancel_invite">Atcelt uzaicinājumu</string>
-    <string name="room_participants_leave_private_warning">Šī istaba nav publiska un jūs nevarēsiet atkārtoti pievienoties bez uzaicinājuma.</string>
+    <string name="room_participants_leave_private_warning">Šī istaba nav publiska. Tai nebūs iespējams atkārtoti pievienoties bez uzaicinājuma.</string>
     <string name="permissions_denied_add_contact">Atļaujiet piekļuvi savām kontaktpersonām.</string>
     <string name="permissions_denied_qr_code">Lai skenētu QR kodu, jums jāatļauj piekļuve kamerai.</string>
     <string name="video_call_in_progress">Notiek video zvans…</string>
@@ -967,7 +967,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_category_room_directory">Istabu katalogs</string>
     <string name="dialog_edit_hint">Jaunā vērtība</string>
     <string name="action_switch">Pārslēgt</string>
-    <string name="cannot_call_yourself_with_invite">Jūs nevarat uzsākt zvanu ar sevi, pagaidiet, kamēr dalībnieki akceptēs uzaicinājumu</string>
+    <string name="cannot_call_yourself_with_invite">Nevar uzsākt zvanu ar sevi, jāpagaida, līdz dalībnieki apstiprinās uzaicinājumu</string>
     <string name="cannot_call_yourself">Jūs nevarat uzsākt zvanu ar sevi</string>
     <string name="title_activity_choose_sticker">Sūtīt uzlīmi</string>
     <string name="notice_crypto_unable_to_decrypt_friendly_desc">Sakarā ar pilnīgu šifrēšanu, jums var būt nepieciešams sagaidīt ziņu no kāda, jo šifrēšanas atslēgas netika pareizi nosūtītas jums.</string>
@@ -1007,7 +1007,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="verification_cannot_access_other_session">Izmantot atkopšanās frāzveida paroli vai atslēgu</string>
     <string name="verification_open_other_to_verify">Izmantojiet citu sesiju šis sesijas verifikācijai, tādējādi dodot piekļuvi šifrētām ziņām.</string>
     <string name="room_settings_enable_encryption_dialog_submit">Iespējot šifrēšanu</string>
-    <string name="room_settings_enable_encryption_dialog_content">Pēc iespējošanas šifrēšana istabai nevar tikt izslēgta. Šifrētā istabā sūtītas ziņas nav redzamas serverim, tikai istabas dalībniekiem. Šifrēšanas iespējošana var neļaut pareizi strādāt daudzus botiem un tiltiem.</string>
+    <string name="room_settings_enable_encryption_dialog_content">Tiklīdz iespējots, istabas šifrēšanu nevar atspējot. Šifrētā istabā sūtītas ziņas nav redzamas serverim, tikai istabas dalībniekiem. Šifrēšanas iespējošana var neļaut pareizi strādāt daudzām robotprogrammatūrām un tiltiem.</string>
     <string name="room_settings_enable_encryption_no_permission">Jums nav atļaujas, lai iespējotu šifrēšanu šajā istabā.</string>
     <plurals name="room_profile_section_more_member_list">
         <item quantity="zero">Viena persona</item>
@@ -1387,11 +1387,11 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="error_empty_field_your_password">Lūdzu ievadiet paroli.</string>
     <string name="error_empty_field_enter_user_name">Lūdzu ievadiet lietotājvārdu.</string>
     <string name="deactivate_account_delete_checkbox">Lūdzu aizmirst visas ziņas, ko esmu nosūtījis, kad mans konts ir deaktivizēts (Brīdinājums: šis nākotnes lietotājiem neļaus redzēt visu sarunu kontekstu)</string>
-    <string name="deactivate_account_content">Tas padarīs jūsu kontu nelietojamu. Jūs nevarēsiet ierakstīties, un neviens nevarēs atkārtoti reģistrēt to pašu lietotāja ID. Tas liks jūsu kontu atstāt visas istabas, kurās piedalās, un tas noņems jūsu konta datus no jūsu identitātes servera. <b> Šī darbība ir neatgriezeniska </b>.
+    <string name="deactivate_account_content">Tas padarīs kontu neizmantojamu. Nebūs iespējams pieteikties, un neviens nevarēs atkārtoti reģistrēties ar to pašu lietotāja identifikatoru. Tas liks kontam atstāt visas istabas, kurās piedalās, un tas noņems konta datus no identitātes servera. <b> Šī darbība ir neatgriezeniska </b>.
 \n
-\nDeaktivizējot savu kontu <b>, pēc noklusējuma, neliek mums aizmirst jūsu nosūtītās ziņas </b>. Ja jūs vēlētos, lai mēs aizmirstu jūsu ziņas, lūdzu, atzīmējiet zemāk redzamo lodziņu.
+\nKonta deaktivēšana <b> pēc noklusējuma neliek mums aizmirst nosūtītās ziņas </b>. Ja vēlme, lai mēs aizmirstu ziņas, lūgums atzīmēt zemāk esošo lodziņu.
 \n
-\nZiņu redzamība Matrix ir līdzīga e-pastam. Mums aizmirst jūsu ziņas nozīmē, ka ziņas, ko esat nosūtījis, netiks rādītas jauniem vai nereģistrētiem lietotājiem, bet reģistrētiem lietotājiem, kuriem jau ir piekļuve šīm ziņām, joprojām būs piekļuve to kopijai.</string>
+\nZiņu redzamība Matrix ir līdzīga e-pastam. Ziņu aizmiršana nozīmē, ka nosūtītās ziņas netiks rādītas jauniem vai nereģistrētiem lietotājiem, bet reģistrētiem lietotājiem, kuriem jau ir piekļuve šīm ziņām, joprojām būs piekļuve to kopijai.</string>
     <string name="key_share_request">Atslēgas Dalīšanās Pieprasījums</string>
     <string name="room_no_active_widgets">Nav aktīvu logrīku</string>
     <string name="room_widget_webview_access_microphone">Izmantot mikrofonu</string>
@@ -1399,7 +1399,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="room_widget_resource_decline_permission">Bloķēt Visu</string>
     <string name="room_widget_resource_grant_permission">Atļaut</string>
     <string name="room_widget_resource_permission_title">Šis logrīks vēlas izmantos tālāk norādītos resursus:</string>
-    <string name="jitsi_leave_conf_to_join_another_one_content">Iziet no pašreizējās konferences un pāriet uz citu\?</string>
+    <string name="jitsi_leave_conf_to_join_another_one_content">Pamest pašreizējo apspriedi un pārslēgties uz otru\?</string>
     <string name="error_jitsi_not_supported_on_old_device">Atvainojiet, konferences zvani ar Jitsi netiek atbalstīti vecās ierīces (ierīces ar Android OS zem 6.0)</string>
     <string name="room_widget_permission_room_id">Istabas ID</string>
     <string name="room_widget_permission_widget_id">Logrīka ID</string>
@@ -1661,7 +1661,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_preview_media_before_sending">Priekšskatīt failu pirms nosūtīšanas</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} sinhronizēsies fonā periodiski, precīzi, noteiktā laikā (konfigurējams).
 \nTas ietekmēs radio un akumulatora izmantošanu, tiks parādīts pastāvīgs paziņojums par to, ka ${app_name} klausās notikumus.</string>
-    <string name="settings_troubleshoot_test_battery_failed">Ja lietotājs kādu laiku atstāj ierīci atvienotu no tīkla un nekustīgu, ar izslēgtu ekrānu, ierīcē tiek ieslēgts dīkstāves režīms. Tas neļauj lietotnēm piekļūt tīklam un atliek to darbu izpildi, sinhronizāciju un standarta trauksmes signālus.</string>
+    <string name="settings_troubleshoot_test_battery_failed">Ja lietotājs kādu laiku atstāj ierīci atvienotu no tīkla un nekustīgu, ar izslēgtu ekrānu, ierīcē tiek ieslēgts dīkstāves režīms. Tas neļauj lietotnēm piekļūt tīklam un atliek to darbu izpildi, sinhronizāciju un standarta brīdinājumus.</string>
     <string name="settings_troubleshoot_test_service_boot_failed">Pakalpojums nesāksies, kad ierīce tiks restartēta, jūs nesaņemsiet paziņojumus, kamēr vismaz vienreiz nebūsiet atvēris ${app_name}.</string>
     <string name="settings_troubleshoot_test_notification_notice">Lūdzu, noklikšķiniet uz paziņojuma. Ja paziņojums nav redzams, pārbaudiet sistēmas iestatījumus.</string>
     <plurals name="room_details_selected">
@@ -2092,4 +2092,36 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
 \n
 \nJāņem vērā, ka šī darbība pārsāknēs lietotni, un tas var aizņemt kādu laiku.</string>
     <string name="initial_sync_request_reason_unignored_users">- atsevišķi lietotāji atkal tiek ņemti vērā</string>
+    <string name="action_not_now">Ne tagad</string>
+    <string name="action_view_threads">Skatīt pavedienus</string>
+    <string name="action_stop">Jā, apturēt</string>
+    <string name="leave_space">Pamest</string>
+    <string name="time_unit_hour_short">h</string>
+    <string name="action_next">Nākamais</string>
+    <string name="space_leave_radio_button_none">Nepamest neko</string>
+    <string name="action_try_it_out">Izmēģināt</string>
+    <string name="action_learn_more">Uzzināt vairāk</string>
+    <string name="action_thread_view_in_room">Skatīt istabā</string>
+    <string name="action_thread_copy_link_to_thread">Ievietot pavediena saiti starpliktuvē</string>
+    <string name="action_disable">Atspējot</string>
+    <string name="encryption_never_send_to_unverified_devices_in_room">Nekad nesūtīt šifrētas ziņas uz neapstiprinātām šīs istabas sesijām.</string>
+    <string name="home_layout_preferences">Izkārtojuma uzstādījumi</string>
+    <string name="home_layout_preferences_recents">Rādīt nesenos</string>
+    <string name="home_layout_preferences_sort_by">Kārtot pēc</string>
+    <string name="sign_out_anyway">Vienalga atteikties</string>
+    <string name="action_enable">Iespējot</string>
+    <string name="action_select_all">Atlasīt visu</string>
+    <string name="action_deselect_all">Noņemt visas atzīmes</string>
+    <string name="command_description_leave_room">Pamest istabu ar norādīto identifikatoru (vai pašreizējo istabu, ja tāda nav)</string>
+    <string name="space_leave_radio_button_all">Pamest visu</string>
+    <string name="space_leave_prompt_msg_with_name">Vai tiešām pamest %s\?</string>
+    <string name="sign_out_failed_dialog_message">Serveris nav sasniedzams. Ja vienalga tiks veikta atteikšanās, šī ierīce netiks izdzēsta no ierīču saraksta, tādēļ nepieciešamības gadījumā tā ir noņemama citā klientā.</string>
+    <string name="space_leave_prompt_msg_only_you">Tu šeit esi vienīgais cilvēks. Ja pametīsi, neviens vairs nevarēs pievienoties, ieskaitot Tevi.</string>
+    <string name="room_profile_section_more_polls">Aptauju vēsture</string>
+    <string name="time_unit_minute_short">min.</string>
+    <string name="time_unit_second_short">sek.</string>
+    <string name="action_proceed_to_reset">Turpināt, lai atiestatītu</string>
+    <string name="action_got_it">Skaidrs</string>
+    <string name="home_layout_preferences_filters">Rādīt atlasītājus</string>
+    <string name="home_layout_preferences_sort_activity">Darbība</string>
 </resources>
