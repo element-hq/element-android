@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="notice_room_remove_by_you">umeondoa %1$s</string>
     <string name="notice_room_remove">%1$s kuondolewa %2$s</string>
     <string name="notice_room_reject_by_you">Ulikataa mwaliko</string>
@@ -31,4 +31,14 @@
     <string name="notice_room_withdraw">%1$s sitisha %2$s\'s mmwaliko</string>
     <string name="notice_room_invite_no_invitee_by_you">Mwaliko wako</string>
     <string name="notice_room_invite_by_you">Umealika %1$s</string>
+    <string name="notice_avatar_url_changed">%1$s wamebadilisha avatar</string>
+    <string name="notice_avatar_url_changed_by_you">Umebadilisha avatar yako</string>
+    <string name="notice_display_name_set_by_you">Unaweka jina lako la kuonyesha %1$s</string>
+    <string name="notice_display_name_changed_from_by_you">ulibadilisha jina lako la kuonyesha kutoka %1$s kwenda %2$s</string>
+    <string name="notice_display_name_removed_by_you">Umeondoa jina lako la kuonyesha(lilikuwa %1$s)</string>
+    <string name="notice_room_topic_changed">%1$s alibadilisha mada kuwa: %2$s</string>
+    <string name="notice_display_name_set">%1$s weka jina lao la kuonyesha %2$s</string>
+    <string tools:ignore="UnusedResources" name="notice_display_name_changed_from">%1$s badilisha majina yao kuonyesha yalitoka %2$s kwenda %3$s</string>
+    <string name="notice_display_name_changed_to">%1$s badilisha majina yao kwenda %2$s</string>
+    <string name="notice_display_name_removed">%1$s wameondoa ma jina yao yaliyonyeshwa (yalikuwa %2$s)</string>
 </resources>
