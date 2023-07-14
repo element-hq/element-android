@@ -383,8 +383,8 @@
     <string name="settings_contacts_app_permission">Piekļuve kontaktiem</string>
     <string name="settings_contacts_phonebook_country">Kontaktu valsts</string>
     <string name="settings_home_display">Galvenais ekrāns</string>
-    <string name="settings_pin_missed_notifications">Piestiprināt istabas ar garām palaistiem paziņojumiem</string>
-    <string name="settings_pin_unread_messages">Piestiprināt istabas ar neizlasītām ziņām</string>
+    <string name="settings_pin_missed_notifications">Piespraust istabas ar izlaistiem paziņojumiem</string>
+    <string name="settings_pin_unread_messages">Piespraust istabas ar neizlasītām ziņām</string>
     <string name="settings_inline_url_preview">Iespējot URL priekšskatu pēc noklusējuma</string>
     <string name="settings_always_show_timestamps">Vienmēr rādīt ziņu laiku</string>
     <string name="settings_12_24_timestamps">Rādīt ziņu laiku 12 stundu formātā (piem. 12:12pm)</string>
@@ -474,7 +474,7 @@
 Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="select_room_directory">Izvēlies istabu katalogu</string>
     <string name="directory_server_placeholder">Mājasservera nosaukums</string>
-    <string name="directory_server_all_rooms_on_server">Visas istabas %s serverī</string>
+    <string name="directory_server_all_rooms_on_server">Visas servera %s istabas</string>
     <string name="directory_server_native_rooms">Visas vietējās %s istabas</string>
     <plurals name="notification_unread_notified_messages">
         <item quantity="zero">%d paziņojumu par nelasītām ziņām</item>
@@ -482,7 +482,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
         <item quantity="other">%d paziņojumi par nelasītām ziņām</item>
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-        <item quantity="zero">%d istaba</item>
+        <item quantity="zero">%d istabu</item>
         <item quantity="one">%d istabas</item>
         <item quantity="other">%d istabu</item>
     </plurals>
@@ -952,9 +952,9 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="room_participants_remove_title">Padzīt lietotāju</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Vai tiešām vēlaties atcelt uzaicinājumu šim lietotājam\?</string>
     <string name="room_participants_action_unignore_prompt_msg">Atceļot ši lietotāja ignorēšanu, visas lietotāja ziņas atkal būs redzamas.</string>
-    <string name="room_participants_action_ignore_prompt_msg">Ignorējot šo lietotāju noņems viņa ziņas istabās, kuras ir jums kopīgas.
+    <string name="room_participants_action_ignore_prompt_msg">Šī lietotāja neņemšana vērā kopīgajās istabās noņems viņa ziņas.
 \n
-\nJūs varat atcelt šo darbību jebkurā brīdī vispārīgajos iestatījumos.</string>
+\nŠo darbību var jebkurā brīdī atcelt vispārīgajos iestatījumos.</string>
     <string name="room_participants_power_level_demote">Pazemināt</string>
     <string name="room_participants_power_level_demote_warning_title">Pazemināt sevi\?</string>
     <string name="settings_call_category">Zvani</string>
@@ -1131,7 +1131,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
 \n%s</string>
     <string name="create_room_public_description">Jebkurš varēs pievienoties istabai</string>
     <string name="create_new_room">Izveidot jaunu istabu</string>
-    <string name="room_list_rooms_empty_body">Jūsu istabas parādīsies šeit. Pieskarieties + labajā apakšējā stūrī, lai atrastu esošās istabas vai izveidotu jaunu.</string>
+    <string name="room_list_rooms_empty_body">Šeit tiks attēlotas istabas. Jāpiesit + apakšējā labajā stūrī, lai atrastu esošas vai izveidotu kādu jaunu.</string>
     <string name="global_retry">Atkārtot</string>
     <string name="identity_server_not_defined">Jūs neizmantojat nevienu identitāšu serveri</string>
     <string name="keys_backup_recovery_code_error_decrypt">Rezerves kopiju nevarēja atšifrēt ar šo atkopšanās atslēgu: lūdzu, pārbaudiet, vai ievadījāt pareizo atkopšanās atslēgu.</string>
@@ -1241,7 +1241,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="labs_swipe_to_reply_in_timeline">Ieslēgt pavilkšanas žestu, lai atbildētu uz ziņu</string>
     <string name="no_message_edits_found">Netika atrasti rediģējumi</string>
     <string name="message_edits">Rediģētas Ziņas</string>
-    <string name="settings_labs_show_complete_history_in_encrypted_room">Rādīt pilnīgu vēsturi šifrētajās istabās</string>
+    <string name="settings_labs_show_complete_history_in_encrypted_room">Rādīt pilnu vēsturi šifrētajās istabās</string>
     <string name="import_e2e_keys_from_file">Importējiet E2E atslēgas no faila \"%1$s\".</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Kļūda radās vācot atslēgu dublējumu datus</string>
     <string name="keys_backup_unable_to_get_trust_info">Kļūda radās vācot uzticības informāciju</string>
@@ -1375,9 +1375,9 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="keys_backup_setup_step1_manual_export">Manuāli eksportēt atslēgas</string>
     <string name="keys_backup_setup_step1_advanced">(Advancēti)</string>
     <string name="keys_backup_setup">Sākt izmantot Atslēgu Dublēšanu</string>
-    <string name="keys_backup_setup_step1_description">Ziņojumi šifrētās istabās ir nodrošināti ar E2E šifrēšanu. Tikai jums un saņēmējam (-iem) ir atslēgas, lai izlasītu šos ziņojumus.
+    <string name="keys_backup_setup_step1_description">Ziņojumi šifrētās istabās ir nodrošināti ar pilnīgu šifrēšanu. Tikai sarunas dalībniekiem ir atslēgas, lai izlasītu šos ziņojumus.
 \n
-\nDroši dublējiet atslēgas, lai izvairītos no viņu zaudēšanas.</string>
+\nAtslēgas jātur drošībā, lai izvairītos no to pazaudēšanas.</string>
     <string name="keys_backup_setup_step1_title">Nekad nepazaudējiet šifrētās ziņas</string>
     <string name="resource_limit_hard_mau">Šis serveris ir sasniedzis savu ikmēneša aktīvo lietotāju limitu.</string>
     <string name="resource_limit_soft_mau"> Šis serveris ir sasniedzis savu ikmēneša aktīvo lietotāju limitu, tāpēc <b> daži lietotāji nevarēs pierakstīties </b>.</string>
@@ -1699,7 +1699,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="create_spaces_room_private_header">Pie kādām lietām strādājat\?</string>
     <string name="create_spaces_invite_public_header_desc">Nodrošiniet piekļuvi %s uzņēmumam pareizajiem cilvēkiem. Vēlāk varat uzaicināt vairāk.</string>
     <string name="create_spaces_invite_public_header">Kas ir jūsu komandas biedri\?</string>
-    <string name="create_spaces_room_public_header_desc">Mēs izveidosim tām istabas. Vēlāk varat pievienot arī citas.</string>
+    <string name="create_spaces_room_public_header_desc">Mēs izveidosim tām istabas. Vēlāk var pievienot arī citas.</string>
     <string name="create_spaces_room_public_header">Kādas ir dažas diskusijas, ko vēlaties apspriest %s\?</string>
     <string name="create_space_error_empty_field_space_name">Dodiet tam nosaukumu, lai turpinātu.</string>
     <string name="create_spaces_details_private_header">Pievienojiet sīkāku informāciju, lai palīdzētu cilvēkiem to identificēt. Tās var mainīt jebkurā brīdī.</string>
@@ -1713,7 +1713,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="create_spaces_me_and_teammates">Es un biedri</string>
     <string name="create_spaces_make_sure_access">Pārliecinieties, ka piekļuve %s ir pareizajiem cilvēkiem. To var mainīt vēlāk.</string>
     <string name="create_spaces_who_are_you_working_with">Ar ko jūs strādājat\?</string>
-    <string name="create_spaces_organise_rooms">Privāta telpa, kur sakārtot istabas</string>
+    <string name="create_spaces_organise_rooms">Privāta vieta, kur sakārtot istabas</string>
     <string name="create_spaces_just_me">Tikai es</string>
     <string name="create_spaces_join_info_help">Lai pievienotos esošai Telpai, ir nepieciešams ielūgums.</string>
     <string name="create_spaces_you_can_change_later">To var mainīt vēlāk</string>
@@ -1831,7 +1831,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="directory_add_a_new_server_error_already_added">Šis serveris jau ir iekļauts sarakstā</string>
     <string name="directory_add_a_new_server_error">Nevar atrast šo serveri vai tā istabu sarakstu</string>
     <string name="directory_add_a_new_server_prompt">Ievadiet jaunā servera nosaukumu, kuru vēlaties izpētīt.</string>
-    <string name="other_spaces_or_rooms_you_might_not_know">Citas Telpas vai istabas, par kurām jūs, iespējams, nezināt</string>
+    <string name="other_spaces_or_rooms_you_might_not_know">Citas vietas vai istabas, kuras varētu būt zināmas</string>
     <string name="space_you_know_that_contains_this_room">Telpa, kuru zināt, kas satur šo istabu</string>
     <string name="decide_who_can_find_and_join">Izlemiet, kurš var atrast šo istabu un pievienoties tai.</string>
     <string name="tap_to_edit_spaces">Pieskarieties, lai rediģētu Telpas</string>
@@ -1853,7 +1853,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="space_settings_alias_subtitle">Skatiet un pārvaldiet adreses šajā telpā.</string>
     <string name="room_settings_access_rules_pref_dialog_title">Kurš var piekļūt\?</string>
     <string name="room_settings_room_notifications_manage_notifications">Paziņojumus varat pārvaldīt sadaļā %1$s.</string>
-    <string name="room_settings_room_notifications_encryption_notice">Lūdzu, ņemiet vērā, ka atsauču un atslēgvārdu paziņojumi nav pieejami šifrētās istabās mobilajā ierīcē.</string>
+    <string name="room_settings_room_notifications_encryption_notice">Lūgums ņemt vērā, ka šifrētu istabu pieminēšanas un atslēgvārdu paziņojumi nav pieejami viedierīcēs.</string>
     <string name="command_description_nick_for_room">Maina jūsu parādīto segvārdu tikai šajā telpā.</string>
     <string name="command_description_room_name">Iestata istabas nosaukumu</string>
     <string name="directory_add_a_new_server">Pievienot jaunu serveri</string>
@@ -1955,7 +1955,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="create_new_space">Radīt jaunu Telpu</string>
     <string name="error_user_already_logged_in">Izskatās, ka mēģināt izveidot savienojumu ar citu mājasserveri. Vai vēlaties izrakstīties\?</string>
     <string name="room_settings_room_notifications_notify_me">Paziņot mani priekš</string>
-    <string name="settings_mentions_and_keywords_encryption_notice">Jūs nesaņemsiet paziņojumus par pieminējumiem un atslēgvārdiem šifrētās telpās mobilajās ierīcēs.</string>
+    <string name="settings_mentions_and_keywords_encryption_notice">Viedierīcēs netiks saņemti paziņojumi par pieminēšanu un atslēgvārdiem šifrētās istabās.</string>
     <string name="settings_room_upgrades">Istabu atjauninājumi</string>
     <string name="settings_messages_by_bot">Ziņas no bota</string>
     <string name="settings_room_invitations">Istabu ielūgumi</string>
@@ -1984,7 +1984,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="command_description_clear_scalar_token">Lai salabotu Matrix Apps vadību</string>
     <string name="command_description_avatar_for_room">Nomaina jūsu avatāru tikai šajā istabā</string>
     <string name="command_description_room_avatar">Nomaina šīs istabas avatāru</string>
-    <string name="settings_when_rooms_are_upgraded">Kad istabas ir atjaunotas</string>
+    <string name="settings_when_rooms_are_upgraded">Kad istabas ir jauninātas</string>
     <string name="settings_troubleshoot_test_bg_restricted_failed">Fona ierobežojumi ir ieslēgti lietotnei ${app_name}.
 \nDarbs, ko lietotne mēģina veikt, tiks agresīvi ierobežots, kamēr tā atrodas fonā, un tas var ietekmēt paziņojumus.
 \n%1$s</string>
@@ -2172,4 +2172,32 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="ftue_auth_use_case_title">Ar ko ir tērzēts visvairāk\?</string>
     <string name="labs_enable_rich_text_editor_title">Iespējot bagātinātu teksta rakstīšanu</string>
     <string name="auth_reset_password_error_unverified">E-pasta adrese nav apliecināta, jāpārbauda iesūtne</string>
+    <string name="space_explore_activity_title">Izpētīt istabas</string>
+    <string name="space_add_existing_rooms_only">Pievienot esošas istabas</string>
+    <string name="spaces_beta_welcome_to_spaces_desc">Vietas ir jauns veids kā apkopot istabas un cilvēkus.</string>
+    <string name="space_settings_manage_rooms">Pārvaldīt istabas</string>
+    <string name="space_add_existing_rooms">Pievienot esošas istabas un vietas</string>
+    <string name="this_space_has_no_rooms">Šajā vietā nav istabu</string>
+    <string name="threads_beta_enable_notice_title">Pavedieni Beta</string>
+    <string name="this_space_has_no_rooms_admin">Dažas istabas var būt paslēptas, jo tās ir privātas un ir nepieciešams uzaicinājums.</string>
+    <string name="all_rooms_youre_in_will_be_shown_in_home">Visas istabas, kurās ir dalība, tiks rādītas sākumsadaļā.</string>
+    <string name="room_settings_global_block_unverified_info_text">🔒 Drošības iestatījumos ir iespējota tikai apliecinātu sesiju šifrēšana visās istabās.</string>
+    <string name="threads_notice_migration_message">Mēs tuvojamies publiskai pavedienu Beta izlaišanai.
+\n
+\nTā kā mēs tam gatavojamies, mums ir jāveic dažas izmaiņas: pirms šī brīža izveidoti pavedieni tiks attēloti kā parastas atbildes.
+\n
+\nŠī būs tikai vienreizēja pāreja, jo pavedieni tagad ir Matrix specifikācijā.</string>
+    <string name="space_add_child_title">Pievienot istabas</string>
+    <string name="space_manage_rooms_and_spaces">Pārvaldīt istabas un vietas</string>
+    <string name="preference_show_all_rooms_in_home">Sākumsadaļā rādīt visas istabas</string>
+    <string name="this_space_has_no_rooms_not_admin">Dažas istabas var būt paslēptas, jo tās ir privātas un ir nepieciešams uzaicinājums.
+\nNav atļaujas pievienot istabas.</string>
+    <string name="device_manager_learn_more_sessions_encryption_not_supported">Šī sesija neatbalsta šifrēšana, tādēļ to nevar apliecināt.
+\n
+\nNebūs iespējams piedalīties istabās, kurās ir iespējota šifrēšana, kad tiks izmantota šī sesija.
+\n
+\nVislabākajai drošībai un privātumam ir ieteicams izmantot Matrix klientus, kas atbalsta šifrēšanu.</string>
+    <string name="home_empty_space_no_rooms_message">Vietas ir jauns veids, kā apkopot istabas un cilvēkus. Pievienot esošu istabu vai izveidot jaunu var ar apakšējā labajā stūrī esošo pogu.</string>
+    <string name="threads_beta_enable_notice_message">Pavedieni palīdz uzturēt sarunas par tēmu un ir viegli izsekojami. %sPavedienu iespējošana atsvaidzinās lietotni. Dažiem kontiem tas var aizņemt vairāk laika.</string>
+    <string name="threads_labs_enable_notice_title">Pavedieni Beta</string>
 </resources>
