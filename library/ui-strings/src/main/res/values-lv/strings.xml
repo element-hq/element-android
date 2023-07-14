@@ -724,7 +724,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">Iespējot</string>
     <string name="settings_remove_three_pid_confirmation_content">Dzēst %s\?</string>
     <string name="settings_phone_numbers">Tālruņa numuri</string>
-    <string name="settings_emails_empty">Jūsu kontam nav pievienota neviena epasta adrese</string>
+    <string name="settings_emails_empty">Kontam nav pievienota neviena e-pasta adrese</string>
     <string name="settings_emails">Epasta adreses</string>
     <string name="settings_phone_number_empty">Jūsu kontam nav pievienots neviens tālruņa numurs</string>
     <string name="room_permissions_change_topic">Mainīt tematu</string>
@@ -2010,7 +2010,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_notification_mentions_and_keywords">Atsauces un Atslēgvārdi</string>
     <string name="settings_notification_default">Noklusējuma Paziņojumi</string>
     <string name="settings_notification_emails_enable_for_email">Ieslēgt e-pasta paziņojumus priekš %s</string>
-    <string name="settings_notification_emails_no_emails">Lai saņemtu e-pastu ar paziņojumu, lūdzu, piesaistiet e-pastu savam Matrix kontam</string>
+    <string name="settings_notification_emails_no_emails">Lai saņemtu e-pasta paziņojumu, lūgums piesaistīt e-pasta adresi Matrix kontam</string>
     <string name="settings_notification_emails_category">E-pasta paziņojumi</string>
     <string name="room_settings_none">Nekas</string>
     <string name="room_settings_mention_and_keyword_only">Tikai Atsauces un Atslēgvārdi</string>
@@ -2200,4 +2200,29 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="home_empty_space_no_rooms_message">Vietas ir jauns veids, kā apkopot istabas un cilvēkus. Pievienot esošu istabu vai izveidot jaunu var ar apakšējā labajā stūrī esošo pogu.</string>
     <string name="threads_beta_enable_notice_message">Pavedieni palīdz uzturēt sarunas par tēmu un ir viegli izsekojami. %sPavedienu iespējošana atsvaidzinās lietotni. Dažiem kontiem tas var aizņemt vairāk laika.</string>
     <string name="threads_labs_enable_notice_title">Pavedieni Beta</string>
+    <string name="search_space_two_parents">%1$s un %2$s</string>
+    <string name="analytics_opt_in_title">Palīdzēt uzlabot ${app_name}</string>
+    <string name="settings_autoplay_animated_images_summary">Atskaņot kustīgos laikjoslas attēlus, tiklīdz tie ir redzami</string>
+    <string name="settings_troubleshoot_test_system_settings_permission_failed">${app_name} ir nepieciešama atļauja, lai parādītu paziņojumus.
+\nLūgums piešķirt atļauju.</string>
+    <plurals name="search_space_multiple_parents">
+        <item quantity="zero">%1$s un %2$d citu</item>
+        <item quantity="one">%1$s un %2$d cits</item>
+        <item quantity="other">%1$s un %2$d citi</item>
+    </plurals>
+    <string name="settings_enable_direct_share_title">Iespējot tiešo kopīgošanu</string>
+    <string name="shortcut_disabled_reason_room_left">Istaba ir pamesta.</string>
+    <string name="shortcut_disabled_reason_sign_out">Ir veikta izrakstīšanās no sesijas.</string>
+    <string name="settings_acceptable_use_policy">Pieņemamas izmantošanas nosacījums</string>
+    <string name="threads_labs_enable_notice_message">Serveris pagaidām nenodrošina pavedienus, tādēļ šī iespēja var nebūt uzticama. Dažas pavedienu ziņas var nebūt uzreiz pieejamas. %sVienalga iespējot pavedienus\?</string>
+    <string name="settings_external_account_management_title">Konts</string>
+    <string name="settings_autoplay_animated_images_title">Automātiski atskaņot kustīgos attēlus</string>
+    <string name="settings_notification_error_on_update">Atgadījās kļūda paziņojumu uzstādījumu atjaunošanā. Lūgums mēģināt vēlreiz.</string>
+    <string name="grant_permission">Piešķirt atļauju</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_title">Galapunkta reģistrācija</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">Galapunkts ir veiksmīgi reģistrēts serverī.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">Neizdevās serverī reģistrēt galapunkta pilnvaru:
+\n%1$s</string>
+    <string name="settings_crypto_version">Crypto laidiens</string>
+    <string name="settings_external_account_management">Konta informācija ir pārvaldāma atsevišķi %1$s.</string>
 </resources>
