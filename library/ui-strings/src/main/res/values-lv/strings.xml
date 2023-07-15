@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="notice_room_invite_no_invitee">Uzaicinājums no %s</string>
     <string name="notice_room_invite">%1$s uzaicināja %2$s</string>
     <string name="notice_room_invite_you">%1$s uzaicināja jūs</string>
@@ -422,7 +422,7 @@
     <string name="room_settings_room_read_history_rules_pref_title">Piekļuve istabas vēsturei</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Kas var lasīt vēsturi?</string>
     <string name="room_settings_read_history_entry_anyone">Jebkurš</string>
-    <string name="room_settings_read_history_entry_members_only_option_time_shared">Tikai dalībnieki (no šī parametra iespējošanas brīža)</string>
+    <string name="room_settings_read_history_entry_members_only_option_time_shared">Tikai dalībnieki (no šīs iespējas izvēlēšanās brīža)</string>
     <string name="room_settings_read_history_entry_members_only_invited">Tikai dalībnieki (kopš tie tika uzaicināti)</string>
     <string name="room_settings_read_history_entry_members_only_joined">Tikai dalībnieki (kopš tie pievienojušies)</string>
     <string name="room_settings_banned_users_title">Lietotāji, kuriem liegta pieeja</string>
@@ -982,7 +982,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="secure_backup_reset_if_you_reset_all">Ja jūs atiestatīsiet visu</string>
     <string name="secure_backup_reset_all_no_other_devices">Veiciet atiestatīšanu tikai tad, ja jums vairs nav nevienas citas ierīces, ar kuru verificēt šo ierīci.</string>
     <string name="secure_backup_reset_all">Pilna atiestatīšana</string>
-    <string name="bad_passphrase_key_reset_all_action">Aizmirsāt vai pazaudējāt visas atkopšanās iespējas\? Atiestatiet visu</string>
+    <string name="bad_passphrase_key_reset_all_action">Aizmirstas vai pazaudētas visas atkopšanas iespējas\? Viss jāatiestata</string>
     <string name="enter_secret_storage_passphrase_or_key">Izmantojiet savu %1$s vai savu %2$s, lai turpinātu.</string>
     <string name="use_latest_app">Izmantojiet jaunāko ${app_name} citās savās ierīcēs:</string>
     <string name="use_other_session_content_description">Izmantojiet jaunāko ${app_name} citās savās ierīcēs, ${app_name} Web, ${app_name} Desktop, ${app_name} iOS, ${app_name} Android, vai kādu citu Matrix lietotni ar cross-signing atbalstu</string>
@@ -1055,11 +1055,11 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="login_a11y_choose_matrix_org">Izvēlēties matrix.org</string>
     <string name="login_signup_cancel_confirmation_content">Jūsu konts vēl nav izveidots.. Vai pārtraukt reģistrēšanos\?</string>
     <string name="login_set_msisdn_notice2">Lūdzu, izmantojiet starptautisko formātu.</string>
-    <string name="login_set_msisdn_notice">Iestatiet tālruņa numuru,lai pēc izvēles ļaut jums zināmiem cilvēkiem atrast.</string>
+    <string name="login_set_msisdn_notice">Jānorāda tālruņa numurs, lai pēc izvēles ļauti sevi atklāt zināmiem cilvēkiem.</string>
     <string name="login_set_msisdn_title">Iestatiet tālruņa numuru</string>
     <string name="login_set_email_submit">Tālāk</string>
-    <string name="login_set_email_optional_hint">Epasts (izvēles)</string>
-    <string name="login_set_email_notice">Iestatiet epastu, lai atgūtu savu kontu. Vēlāk jūs varat pēc izvēles ļaut jums zināmiem cilvēkiem atrast sevi pēc epasta adreses.</string>
+    <string name="login_set_email_optional_hint">E-pasta adrese (izvēles)</string>
+    <string name="login_set_email_notice">Jānorāda e-pasta adrese, lai atkoptu kontu. Vēlāk pēc izvēles var ļaut sevi atklāt zināmiem cilvēkiem pēc šīs adreses.</string>
     <string name="login_set_email_title">Iestatīt epasta adresi</string>
     <string name="login_reset_password_cancel_confirmation_content">Jūsu parole vēl nav nomainīta.
 \n
@@ -1105,7 +1105,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="login_splash_text2">Paturiet saraksti privātu ar šifrēšanas palīdzību</string>
     <string name="login_splash_text1">Tērzēt ar cilvēkiem tieši vai grupās</string>
     <string name="login_splash_title">Tā ir jūsu sarakste. Tā pieder jums.</string>
-    <string name="help_long_click_on_room_for_more_options">Paturiet ilgāk uz istabas, lai redzētu vairāk iespēju</string>
+    <string name="help_long_click_on_room_for_more_options">Ilgs piespiediens uz istabas, lai redzētu vairāk iespēju</string>
     <string name="notice_member_no_changes_by_you">Jūs neveicāt nekādas izmaiņas</string>
     <string name="notice_member_no_changes">%1$s neveica nekādas izmaiņas</string>
     <string name="room_list_quick_actions_room_settings">Istabas iestatījumi</string>
@@ -1227,7 +1227,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="passphrase_empty_error_message">Lūgums ievadīt paroles vārdkopu</string>
     <string name="passphrase_passphrase_does_not_match">Paroles vārdkopa nesakrīt</string>
     <string name="room_settings_room_access_title">Piekļuve istabai</string>
-    <string name="settings_emails_and_phone_numbers_summary">Pārvaldiet epasta adreses un tālruņu numurus, kas saistīti ar jūsu Matrix kontu</string>
+    <string name="settings_emails_and_phone_numbers_summary">Pārvaldīt ar Matrix kontu saistītās e-pasta adreses un tālruņa numurus</string>
     <string name="settings_emails_and_phone_numbers_title">Epasti un tālruņa numuri</string>
     <string name="settings_fail_to_update_password_invalid_current_password">Parole nav derīga</string>
     <string name="settings_integration_manager">Integrācija pārvaldnieks</string>
@@ -1588,8 +1588,8 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_discovery_confirm_mail">Mēs nosūtījām jums apstiprinājuma e-pastu uz %s, pārbaudiet savu e-pastu un noklikšķiniet uz apstiprinājuma saites</string>
     <string name="settings_discovery_msisdn_title">Atrodamie tālruņa numuri</string>
     <string name="settings_discovery_disconnect_identity_server_info">Atvienošanās no identitātes servera nozīmē, ka citi lietotāji nevarēs jūs atrast, un jūs nevarēsiet uzaicināt citus lietotājus, izmantojot e-pastu vai tālruni.</string>
-    <string name="settings_discovery_no_msisdn">Pēc tālruņa numura pievienošanas tiks parādītas atklāšanas opcijas.</string>
-    <string name="settings_discovery_no_mails">Pēc e-pasta pievienošanas tiks parādītas atklāšanas opcijas.</string>
+    <string name="settings_discovery_no_msisdn">Atklāšanas iespējas parādīsies tiklīdz būs pievienots tālruņa numurs.</string>
+    <string name="settings_discovery_no_mails">Atklāšanas iespējas parādīsies tiklīdz būs pievienota e-pasta adrese.</string>
     <string name="settings_discovery_emails_title">Atklājamās e-pasta adreses</string>
     <string name="settings_discovery_identity_server_info_none">Pašlaik neizmantojat identitātes serveri. Lai atklātu esošos kontaktus un būtu atrodami jūsu zināmajiem kontaktiem, konfigurējiet šādu serveri.</string>
     <string name="settings_discovery_identity_server_info">Pašlaik izmantojat %1$s, lai atrastu un būtu atrodams esošajiem kontaktiem, kurus pazīstat.</string>
@@ -1945,10 +1945,10 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="send_feedback_space_title">Atsauksmes par Telpām</string>
     <string name="push_gateway_item_format">Format:</string>
     <string name="push_gateway_item_url">Url:</string>
-    <string name="push_gateway_item_device_name">session_name:</string>
-    <string name="push_gateway_item_app_display_name">app_display_name:</string>
-    <string name="push_gateway_item_push_key">push_key:</string>
-    <string name="push_gateway_item_app_id">app_id:</string>
+    <string name="push_gateway_item_device_name">Sesijas attēlojamais nosaukums:</string>
+    <string name="push_gateway_item_app_display_name">Lietotnes attēlojamais nosaukums:</string>
+    <string name="push_gateway_item_push_key">Iesūtīšanas atslēga:</string>
+    <string name="push_gateway_item_app_id">Lietotnes identifikators:</string>
     <string name="settings_push_gateway_no_pushers">Nav reģistrētu Palaišanas vārtu</string>
     <string name="settings_push_rules_no_rules">Nav iestatīti Palaišanas Noteikumi</string>
     <string name="settings_push_rules">Palaišanas Noteikumi</string>
@@ -2225,4 +2225,57 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
 \n%1$s</string>
     <string name="settings_crypto_version">Crypto laidiens</string>
     <string name="settings_external_account_management">Konta informācija ir pārvaldāma atsevišķi %1$s.</string>
+    <string name="avatar_of_space">Vietas %1$s attēls</string>
+    <string name="avatar_of_room">Istabas %1$s attēls</string>
+    <string name="avatar_of_user">Lietotāja %1$s profila attēls</string>
+    <string name="push_gateway_item_enabled">Iespējots:</string>
+    <string name="reply_in_thread">Atbildēt pavedienā</string>
+    <string name="push_gateway_item_device_id">Sesijas identifikators:</string>
+    <string name="keys_backup_settings_signature_from_this_user">Rezerves kopijai ir derīgs šī lietotāja paraksts.</string>
+    <string name="updating_your_data">Atjauno datus…</string>
+    <string name="error_check_network" tools:ignore="UnusedResources">Kaut kas nogāja greizi. Lūgums pārbaudīt tīkla savienojumu un mēģināt vēlreiz.</string>
+    <string name="settings_presence_user_always_appears_offline">Bezsaistē</string>
+    <string name="settings_presence">Klātbūtne</string>
+    <string name="analytics_opt_in_content_link">šeit</string>
+    <string name="timeline_error_room_not_found">Diemžēl šī istaba netika atrasta.
+\nLūgums vēlāk mēģināt vēl.%s</string>
+    <string name="command_not_supported_in_threads">Komanda \"%s\" tika atpazīta, bet to nevar izmantot pavedienos.</string>
+    <string name="create_room_action_go">Aiziet</string>
+    <string name="create_poll_add_option">PIEVIENOT IZVĒLES IESPĒJU</string>
+    <string name="navigate_to_thread_when_already_in_the_thread">Šis pavediens jau tiek skatīts.</string>
+    <string name="analytics_opt_in_content">Palīdzi mums atrast nepilnības un uzlabot ${app_name} daloties ar anonīmiem lietojuma datiem. Lai izprastu, kā cilvēki izmanto vairākas ierīces, mēs izveidosim nejaušu identifikatoru, ko kopīgo ierīces.
+\n
+\nVisus mūsu nosacījumus var izlasīt %s.</string>
+    <string name="analytics_opt_in_list_item_2">Mēs &lt;b&gt;nedalāmies&lt;/b&gt; ar informāciju ar trešajām pusēm</string>
+    <string name="analytics_opt_in_list_item_3">Šo jebkurā brīdī var izslēgt iestatījumos</string>
+    <string name="legals_home_server_title">Servera nosacījumi</string>
+    <string name="legals_identity_server_title">Identitātes servera nosacījumi</string>
+    <string name="settings_presence_user_always_appears_offline_summary">Ja iespējots, citiem lietotājiem konts būs redzams kā bezsaistē esošs pat tad, kad tiek izmantota lietotne.</string>
+    <string name="some_devices_will_not_be_able_to_decrypt">⚠ Šajā istabā ir neapliecinātas ierīces, tās nevarēs atšifrēt nosūtītās ziņas.</string>
+    <string name="font_size_title">Izvēlēties fonta izmēru</string>
+    <string name="font_size_section_auto">Iestatīt automātiski</string>
+    <string name="font_size_section_manually">Izvēlēties pašrocīgi</string>
+    <string name="command_description_devtools">Atvērt izstrādātāja rīku skatu</string>
+    <string name="view_in_room">Skatīt istabā</string>
+    <string name="room_list_filter_favourites">Izlasē</string>
+    <string name="room_list_filter_people">Cilvēki</string>
+    <string name="create_poll_options_title">Izveidot izvēles iespējas</string>
+    <string name="room_list_filter_all">Visas</string>
+    <string name="room_list_filter_unreads">Nelasītās</string>
+    <string name="analytics_opt_in_list_item_1">Mēs &lt;b&gt;neveicam&lt;/b&gt; nekādu konta datu ierakstīšanu un profilēšanu</string>
+    <string name="legals_application_title">${app_name} nosacījumi</string>
+    <string name="font_size_use_system">Izmantot ierīces noklusējumu</string>
+    <string name="legals_no_policy_provided">Šis serveris nesniedz nekādus nosacījumus.</string>
+    <string name="replying_to">Atbild uz %s</string>
+    <string name="quoting">Citē</string>
+    <string name="create_poll_options_hint">Izvēles iespēja %1$d</string>
+    <plurals name="create_poll_not_enough_options_error">
+        <item quantity="zero">Ir nepieciešamas vismaz %1$s izvēles iespēju</item>
+        <item quantity="one">Ir nepieciešama vismaz %1$s izvēles iespēja</item>
+        <item quantity="other">Ir nepieciešamas vismaz %1$s izvēles iespējas</item>
+    </plurals>
+    <string name="editing">Labo</string>
+    <string name="push_gateway_item_profile_tag">Profila birka:</string>
+    <string name="onboarding_new_app_layout_welcome_message">Lai vienkāršotu ${app_name}, cilnes tagad ir izvēles. Tās ir pārvaldāmas ar izvēlni augšējā labajā stūrī.</string>
+    <string name="legals_third_party_notices">Trešo pušu bibliotēkas</string>
 </resources>
