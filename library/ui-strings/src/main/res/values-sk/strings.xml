@@ -3018,4 +3018,12 @@
     <string name="crosssigning_verify_after_update">Aplikácia bola aktualizovaná</string>
     <string name="sign_out_anyway">Aj tak sa odhlásiť</string>
     <string name="sign_out_failed_dialog_message">Nie je možné sa spojiť s domovským serverom. Ak sa aj tak odhlásite, toto zariadenie nebude vymazané zo zoznamu zariadení, môžete ho odstrániť pomocou iného klienta.</string>
+    <string name="create_room_unknown_users_dialog_content">Nie je možné nájsť profily pre nižšie uvedené Matrix ID. Chceli by ste napriek tomu začať konverzáciu\?
+\n
+\n%s</string>
+    <string name="create_room_unknown_users_dialog_submit">Spustiť konverzáciu aj tak</string>
+    <string name="invite_unknown_users_dialog_content">Nie je možné nájsť profily pre nižšie uvedené Matrix ID. Chcete ich aj tak pozvať\?
+\n
+\n%s</string>
+    <string name="invite_unknown_users_dialog_submit">Napriek tomu pozvať</string>
 </resources>
