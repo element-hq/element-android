@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.session.sync.handler
 import androidx.work.BackoffPolicy
 import androidx.work.ExistingWorkPolicy
 import org.matrix.android.sdk.api.MatrixPatterns
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.internal.crypto.crosssigning.UpdateTrustWorker
 import org.matrix.android.sdk.internal.crypto.crosssigning.UpdateTrustWorkerDataRepository
 import org.matrix.android.sdk.internal.di.SessionId
@@ -81,7 +82,9 @@ internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
             }
         }
         if (hasUpdate) {
-            updateUserAccountDataTask.execute(UpdateUserAccountDataTask.DirectChatParams(directMessages = directChats))
+            tryOrNull("Unable to update user account data") {
+                updateUserAccountDataTask.execute(UpdateUserAccountDataTask.DirectChatParams(directMessages = directChats))
+            }
         }
     }
 

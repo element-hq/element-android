@@ -105,6 +105,8 @@ sealed class BootstrapStep {
     object Initializing : BootstrapStep()
     data class SaveRecoveryKey(val isSaved: Boolean) : BootstrapStep()
     object DoneSuccess : BootstrapStep()
+
+    data class Error(val error: Throwable) : BootstrapStep()
 }
 
 fun BootstrapStep.GetBackupSecretForMigration.useKey(): Boolean {
