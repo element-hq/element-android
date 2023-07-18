@@ -66,6 +66,6 @@
     <string name="notice_made_future_direct_room_visibility_by_you">%1$s si omogočil ogled prihodnjih sporočil</string>
     <string name="notice_room_visibility_invited">vsi člani sobe, od trenutka povabila.</string>
     <string name="notice_room_invite_no_invitee">Povabilo uporabnika %s</string>
-    <string name="notice_call_candidates">%s je poslal podatke za začetek klica.</string>
+    <string name="notice_call_candidates">%s je poslal(a) podatke za začetek klica.</string>
     <string name="notice_call_candidates_by_you">Poslal si podatke za začetek klica.</string>
 </resources>
