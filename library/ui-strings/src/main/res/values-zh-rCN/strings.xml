@@ -1734,7 +1734,7 @@
     <string name="settings_show_emoji_keyboard_summary">在消息框添加打开 emoji 键盘的按钮</string>
     <string name="settings_show_emoji_keyboard">显示 emoji 键盘</string>
     <string name="settings_chat_effects_description">使用 /confetti 命令或发送包含 ❄️ 或 🎉 的消息</string>
-    <string name="settings_chat_effects_title">显示聊天效果</string>
+    <string name="settings_chat_effects_title">显示聊天特效</string>
     <string name="room_permissions_change_topic">更改话题</string>
     <string name="room_permissions_upgrade_the_room">升级房间</string>
     <string name="room_permissions_send_m_room_server_acl_events">发送 m.room.server_acl 事件</string>
@@ -2846,4 +2846,23 @@
     <string name="direct_room_user_list_only_invite_one_email">你一次仅能邀请一个电子邮件</string>
     <string name="started_a_voice_broadcast">开始语音广播</string>
     <string name="_resume">继续</string>
+    <string name="message_reply_to_ended_poll_preview">已结束投票</string>
+    <string name="message_reply_to_poll_preview">投票</string>
+    <string name="room_polls_ended">过去的投票</string>
+    <string name="pill_message_from_unknown_user">消息</string>
+    <string name="room_polls_load_more">加载更多投票</string>
+    <string name="set_link_link">链接</string>
+    <string name="set_link_create">创建链接</string>
+    <string name="set_link_edit">编辑链接</string>
+    <string name="rich_text_editor_bullet_list">切换无序列表</string>
+    <string name="pill_message_unknown_room_or_space">房间/空间</string>
+    <string name="room_polls_active">进行中的投票</string>
+    <string name="rich_text_editor_unindent">取消缩进</string>
+    <string name="set_link_text">文本</string>
+    <string name="message_reply_to_sender_ended_poll">已结束投票。</string>
+    <string name="rich_text_editor_indent">缩进</string>
+    <string name="rich_text_editor_link">设置链接</string>
+    <string name="room_polls_wait_for_display">显示投票</string>
+    <string name="rich_text_editor_quote">切换引用</string>
+    <string name="rich_text_editor_numbered_list">切换有序列表</string>
 </resources>
