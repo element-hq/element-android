@@ -288,7 +288,7 @@
     <string name="login_error_bad_json">Bojāts JSON</string>
     <string name="login_error_not_json">Nav derīgs JSON</string>
     <string name="login_error_limit_exceeded">Nosūtīti par daudz pieprasījumi</string>
-    <string name="compression_opt_list_original">Oriģinālu</string>
+    <string name="compression_opt_list_original">Sākotnējais</string>
     <string name="compression_opt_list_large">Lielu</string>
     <string name="compression_opt_list_medium">Vidēju</string>
     <string name="compression_opt_list_small">Mazu</string>
@@ -1817,7 +1817,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="verify_cancel_other">%1$s netiks apliecināts (%2$s), ja tagad atcelsi. Lietotāja profilā jāsāk no jauna.</string>
     <string name="verify_cancel_self_verification_from_trusted">Ja to atcelsiet, jaunajā ierīcē nevarēsiet lasīt šifrētos ziņojumus</string>
     <string name="verify_cancel_self_verification_from_untrusted">Ja to atcelsiet, šajā ierīcē nevarēsiet lasīt šifrētus ziņojumus</string>
-    <string name="send_images_and_video_with_original_size">Nosūtīt multividi ar oriģinālo izmēru</string>
+    <string name="send_images_and_video_with_original_size">Nosūtīt multividi ar sākotnējo izmēru</string>
     <plurals name="settings_active_sessions_count">
         <item quantity="zero">%d aktīvu sesiju</item>
         <item quantity="one">%d aktīva sesiju</item>
@@ -1863,14 +1863,14 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="room_settings_space_access_title">Telpas piekļuve</string>
     <string name="room_settings_room_notifications_account_settings">Konta iestatījumi</string>
     <plurals name="send_videos_with_original_size">
-        <item quantity="zero">Sūtīt video ar sākotnējo izmēru</item>
-        <item quantity="one">Sūtīt video ar sākotnējo izmēru</item>
-        <item quantity="other">Sūtīt video ar sākotnējo izmēru</item>
+        <item quantity="zero">Nosūtīt video ar sākotnējo izmēru</item>
+        <item quantity="one">Nosūtīt video ar sākotnējo izmēru</item>
+        <item quantity="other">Nosūtīt video ar sākotnējo izmēru</item>
     </plurals>
     <plurals name="send_images_with_original_size">
-        <item quantity="zero">Sūtīt attēlu ar oriģinālo izmēru</item>
-        <item quantity="one">Sūtīt attēlu ar oriģinālo izmēru</item>
-        <item quantity="other">Sūtīt attēlus ar oriģinālo izmēru</item>
+        <item quantity="zero">Nosūtīt attēlus ar sākotnējo izmēru</item>
+        <item quantity="one">Nosūtīt attēlu ar sākotnējo izmēru</item>
+        <item quantity="other">Nosūtīt attēlus ar sākotnējo izmēru</item>
     </plurals>
     <string name="settings_server_room_version_unstable">nestabila</string>
     <string name="settings_server_room_version_stable">stabila</string>
@@ -2459,4 +2459,16 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_security_prevent_screenshots_summary">Šī iestatījuma iespējošana pievieno FLAG_SECURE visām darbībām. Jāpārsāknē lietotne, lai iedarbotos izmaiņas.</string>
     <string name="settings_security_incognito_keyboard_title">Slepenā tastatūra</string>
     <string name="error_forbidden_digits_only_username">Mājasserveris nepieņem lietotājvārdu, kas sastāv tikai no cipariem.</string>
+    <string name="secure_backup_reset_danger_warning">Lūgums turpināt tikai tad, ja ir pārliecība, ka ir pazaudētas visas citas ierīces un drošības atslēga.</string>
+    <string name="key_authenticity_not_guaranteed">Šīs šifrētās ziņas īstumu šajā ierīcē nevar nodrošināt.</string>
+    <string name="app_ios_android">${app_name} iOS
+\n${app_name} Android</string>
+    <string name="settings_security_incognito_keyboard_summary">Pieprasīt, lai tastatūra neatjauno nekādus personalizētos datus, piemēram, rakstīšanas vēsturi un vārdnīcu, vadoties pēc tā, kas ir rakstīts sarunās. Jāņem vērā, ka atsevišķas tastatūras šo iestatījumu var neievērot.</string>
+    <string name="app_desktop_web">${app_name} Web
+\n${app_name} Desktop</string>
+    <string name="failed_to_access_secure_storage">Neizdevās piekļūt drošajai krātuvei</string>
+    <string name="use_recovery_key">Izmantot atkopšanas atslēgu</string>
+    <string name="command_description_discard_session">Piespiež pašreizējās izejošās kopuma sesijas šifrētā istabā atmešanu</string>
+    <string name="enter_secret_storage_input_key">Jāatlasa sava atkopšanas atslēga vai jāievada tā pašrocīgi ierakstot vai ielīmējot no starpliktuves</string>
+    <string name="secure_backup_reset_all_no_other_devices_long">Apliecināšanas atslēgu atiestatīšana ir neatgriezeniska. Pēc atiestatīšanas nevarēs piekļūt iepriekšējām šifrētajām ziņā, un visi draugi, kuri iepriekš ir Tevi apliecinājuši, redzēs drošības brīdinājumus līdz atkārtotai apliecināšanai.</string>
 </resources>
