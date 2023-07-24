@@ -627,7 +627,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="login_set_email_mandatory_hint">Epasts</string>
     <string name="login_reset_password_cancel_confirmation_title">Brīdinājums</string>
     <string name="login_reset_password_success_submit">Atgriezties uz pierakstīšanos</string>
-    <string name="login_reset_password_success_notice_2">Tu esi izrakstījies no visām sesijām un vairs nesaņemsi paziņojumus. Lai atkārtoti iespējotu paziņojumus, vēlreiz jāpiesakās katrā ierīcē.</string>
+    <string name="login_reset_password_success_notice_2">Tu esi izrakstījies no visām sesijām un vairs nesaņemsi pašpiegādes paziņojumus. Lai atkārtoti iespējotu paziņojumus, vēlreiz jāpiesakās katrā ierīcē.</string>
     <string name="login_reset_password_success_notice">Parole tika atiestatīta.</string>
     <string name="login_reset_password_mail_confirmation_submit">Esmu verificējis(usi) savu epasta adresi</string>
     <string name="login_reset_password_warning_submit">Turpināt</string>
@@ -1289,7 +1289,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_troubleshoot_test_fcm_failed">FCM žetons netika saņemts:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_token_registration_title">Žetona Reģistrācija</string>
-    <string name="settings_troubleshoot_test_play_services_failed">${app_name} izmanto Google Play pakalpojumus, lai nodrošinātu ziņu pakalpojumu, bet tas nešķiet pareizi konfigurēts:
+    <string name="settings_troubleshoot_test_play_services_failed">${app_name} izmanto Google Play pakalpojumus, lai piegādātu pašpiegādes ziņas, bet tas nešķiet pareizi konfigurēts:
 \n%1$s</string>
     <string name="no_sticker_application_dialog_content">Jums pašlaik nav iespējotas uzlīmes.
 \n
@@ -1991,7 +1991,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_troubleshoot_test_push_loop_failed">Neizdevās saņemt palaišanu. Iespējams, vajag pārielādēt lietotni.</string>
     <string name="settings_troubleshoot_test_push_loop_success">Lietotne saņem Palaišanu</string>
     <string name="settings_troubleshoot_test_push_loop_waiting_for_push">Lietotne gaida Palaišanu</string>
-    <string name="settings_troubleshoot_test_push_loop_title">Testa Palaišana</string>
+    <string name="settings_troubleshoot_test_push_loop_title">Pārbaudīt pašpiegādi</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 \nŠī kļūda ir ārpus ${app_name} kontroles. Tālrunī nav Google konta. Lūdzu, atveriet kontu pārvaldnieku un pievienojiet Google kontu.</string>
     <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
@@ -2485,4 +2485,22 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="invite_users_to_room_failure">Mēs nevarējām uzaicināt lietotājus. Lūgums pārbaudīt uzaicināmos lietotājus un mēģināt vēlreiz.</string>
     <string name="identity_server_error_outdated_identity_server">Šis identitāšu serveris ir novecojis. ${app_name} nodrošina tikai API V2.</string>
     <string name="create_room_dm_failure">Mēs nevarējām izveidot tiešās saziņas istabu. Lūgums pārbaudīt uzaicināmos lietotājus un mēģināt vēlreiz.</string>
+    <string name="crypto_error_withheld_generic">Šai ziņai nevar piekļūt, jo sūtītājs ar nolūku nenosūtīja atslēgas</string>
+    <string name="identity_server_error_no_current_binding_error">Nav pašreizējas sasaistes ar šo identifikatoru.</string>
+    <string name="device_manager_push_notifications_title">Pašpiegādes paziņojumi</string>
+    <string name="device_manager_push_notifications_description">Saņemt pašpiegādes paziņojumus šajā sesijā.</string>
+    <string name="identity_server_user_consent_not_provided">Nav sniegta lietotāja piekrišana.</string>
+    <string name="member_banned_by">%1$s aizliedza piekļuvi</string>
+    <string name="empty_contact_book">Adrešu grāmata ir tukša</string>
+    <string name="bottom_sheet_setup_secure_backup_title">Drošā rezerves kopija</string>
+    <string name="bottom_sheet_setup_secure_backup_security_key_title">Izmantot drošības atslēgu</string>
+    <string name="bottom_sheet_setup_secure_backup_security_key_subtitle">Izveidot drošības atslēgu, ko glabāt kādā drošā vietā, piemēram, paroļu pārvaldniekā vai seifā.</string>
+    <string name="bottom_sheet_save_your_recovery_key_content">Sava drošības atslēga ir jāglabā kādā drošā vietā, piemēram, paroļu pārvaldniekā vai seifā.</string>
+    <string name="crypto_error_withheld_blacklisted">Šai ziņai nevar piekļūt, jo sūtītājs Tevi ir norobežojis</string>
+    <string name="crypto_error_withheld_unverified">Šai ziņai nevar piekļūt, jo sūtītājs neuzticas Tavai sesijai</string>
+    <string name="failed_to_unban">Neizdevās atsaukt lietotāja piekļuves aizliegumu</string>
+    <string name="alert_push_are_disabled_title">Pašpiegādes paziņojumi ir atspējoti</string>
+    <string name="alert_push_are_disabled_description">Jāpārskata iestatījumi, lai iespējotu pašpiegādes paziņojumus</string>
+    <string name="save_recovery_key_chooser_hint">Saglabāt atkopšanas atslēgu</string>
+    <string name="bottom_sheet_setup_secure_backup_submit">Uzstādīt</string>
 </resources>
