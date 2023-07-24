@@ -2471,4 +2471,18 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="command_description_discard_session">Piespiež pašreizējās izejošās kopuma sesijas šifrētā istabā atmešanu</string>
     <string name="enter_secret_storage_input_key">Jāatlasa sava atkopšanas atslēga vai jāievada tā pašrocīgi ierakstot vai ielīmējot no starpliktuves</string>
     <string name="secure_backup_reset_all_no_other_devices_long">Apliecināšanas atslēgu atiestatīšana ir neatgriezeniska. Pēc atiestatīšanas nevarēs piekļūt iepriekšējām šifrētajām ziņā, un visi draugi, kuri iepriekš ir Tevi apliecinājuši, redzēs drošības brīdinājumus līdz atkārtotai apliecināšanai.</string>
+    <string name="confirm_your_identity_after_update">Drošā ziņapmaiņa tika uzlabota jaunākajā atjauninājumā. Lūgums atkārtoti apliecināt ierīci.</string>
+    <string name="review_unverified_sessions_description">Tās ir jāpārskata, lai nodrošinātu, ka konts ir drošs</string>
+    <string name="review_unverified_sessions_title">Tev ir neapliecinātas sesijas</string>
+    <string name="failed_to_initialize_cross_signing">Neizdevās uzstādīt starpierīču parakstīšanu</string>
+    <string name="identity_server_error_binding_error">Sasaiste neizdevās.</string>
+    <string name="confirm_your_identity_quad_s">Jāapstiprina identitāte ar šīs pieteikšanās apliecināšanu, tādējādi nodrošinot piekļuvi šifrētajām ziņām.</string>
+    <plurals name="invitations_sent_to_one_and_more_users">
+        <item quantity="zero">Uzaicinājums tika nosūtīts %1$s</item>
+        <item quantity="one">Uzaicinājumi tika nosūtīti %1$s un vēl vienam</item>
+        <item quantity="other">Uzaicinājumi tika nosūtīti %1$s un vēl %2$d</item>
+    </plurals>
+    <string name="invite_users_to_room_failure">Mēs nevarējām uzaicināt lietotājus. Lūgums pārbaudīt uzaicināmos lietotājus un mēģināt vēlreiz.</string>
+    <string name="identity_server_error_outdated_identity_server">Šis identitāšu serveris ir novecojis. ${app_name} nodrošina tikai API V2.</string>
+    <string name="create_room_dm_failure">Mēs nevarējām izveidot tiešās saziņas istabu. Lūgums pārbaudīt uzaicināmos lietotājus un mēģināt vēlreiz.</string>
 </resources>
