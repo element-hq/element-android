@@ -1945,11 +1945,11 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="push_gateway_item_url">Url:</string>
     <string name="push_gateway_item_device_name">Sesijas attēlojamais nosaukums:</string>
     <string name="push_gateway_item_app_display_name">Lietotnes attēlojamais nosaukums:</string>
-    <string name="push_gateway_item_push_key">Iesūtīšanas atslēga:</string>
+    <string name="push_gateway_item_push_key">Pašpiegādes atslēga:</string>
     <string name="push_gateway_item_app_id">Lietotnes identifikators:</string>
-    <string name="settings_push_gateway_no_pushers">Nav reģistrētu Palaišanas vārtu</string>
-    <string name="settings_push_rules_no_rules">Nav iestatīti Palaišanas Noteikumi</string>
-    <string name="settings_push_rules">Palaišanas Noteikumi</string>
+    <string name="settings_push_gateway_no_pushers">Nav norādītas pašpiegādes vārtejas</string>
+    <string name="settings_push_rules_no_rules">Nav norādīti pašpiegādes nosacījumi</string>
+    <string name="settings_push_rules">Pašpiegādes nosacījumi</string>
     <string name="create_new_space">Radīt jaunu Telpu</string>
     <string name="error_user_already_logged_in">Izskatās, ka mēģini izveidot savienojumu ar citu mājasserveri. Vai atteikties\?</string>
     <string name="room_settings_room_notifications_notify_me">Paziņot mani priekš</string>
@@ -1988,9 +1988,9 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
 \n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_success">Fona ierobežojumi ir izslēgti priekš ${app_name}. Šis tests jāveic, izmantojot mobilos datus (bez WIFI).
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_push_loop_failed">Neizdevās saņemt palaišanu. Iespējams, vajag pārielādēt lietotni.</string>
-    <string name="settings_troubleshoot_test_push_loop_success">Lietotne saņem Palaišanu</string>
-    <string name="settings_troubleshoot_test_push_loop_waiting_for_push">Lietotne gaida Palaišanu</string>
+    <string name="settings_troubleshoot_test_push_loop_failed">Neizdevās saņemt pašpiegādi. Risinājums varētu būt atkārtota lietotnes uzstādīšana.</string>
+    <string name="settings_troubleshoot_test_push_loop_success">Lietotne saņem pašpiegādi</string>
+    <string name="settings_troubleshoot_test_push_loop_waiting_for_push">Lietotne gaida pašpiegādi</string>
     <string name="settings_troubleshoot_test_push_loop_title">Pārbaudīt pašpiegādi</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 \nŠī kļūda ir ārpus ${app_name} kontroles. Tālrunī nav Google konta. Lūdzu, atveriet kontu pārvaldnieku un pievienojiet Google kontu.</string>
@@ -2503,4 +2503,21 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="alert_push_are_disabled_description">Jāpārskata iestatījumi, lai iespējotu pašpiegādes paziņojumus</string>
     <string name="save_recovery_key_chooser_hint">Saglabāt atkopšanas atslēgu</string>
     <string name="bottom_sheet_setup_secure_backup_submit">Uzstādīt</string>
+    <plurals name="entries">
+        <item quantity="zero">%d ierakstu</item>
+        <item quantity="one">%d ieraksts</item>
+        <item quantity="other">%d ieraksti</item>
+    </plurals>
+    <string name="settings_security_application_protection_title">Aizsargāt piekļuvi</string>
+    <string name="settings_security_application_protection_screen_title">Iestatīt aizsardzību</string>
+    <string name="auth_pin_reset_content">Lai atiestatītu PIN, būs nepieciešams atkārtoti pieteikties un izveidot jaunu.</string>
+    <string name="create_pin_confirm_failure">Neizdevās apstiprināt PIN, lūgums ievadīt jaunu.</string>
+    <string name="auth_biometric_key_invalidated_message">Biometriskā autentificēšanās tika atspējota, jo nesen tika pievienots jauns biometriskās autentifikācijas veids. To var atkal iespējot iestatījumos.</string>
+    <string name="settings_security_application_protection_summary">Aizsargāt piekļuvi ar PIN un biometriju.</string>
+    <plurals name="wrong_pin_message_remaining_attempts">
+        <item quantity="zero">Nepareizs kods, atlikuši %d mēģinājumu</item>
+        <item quantity="one">Nepareizs kods, atlicis %d mēģinājums</item>
+        <item quantity="other">Nepareizs kods, atlikuši %d mēģinājumi</item>
+    </plurals>
+    <string name="too_many_pin_failures">Pārāk daudz kļūdu, tādēļ tiki izrakstīts</string>
 </resources>
