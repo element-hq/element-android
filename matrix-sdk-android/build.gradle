@@ -63,7 +63,7 @@ android {
         // that the app's state is completely cleared between tests.
         testInstrumentationRunnerArguments clearPackageData: 'true'
 
-        buildConfigField "String", "SDK_VERSION", "\"1.6.3\""
+        buildConfigField "String", "SDK_VERSION", "\"1.6.5\""
 
         buildConfigField "String", "GIT_SDK_REVISION", "\"${gitRevision()}\""
         buildConfigField "String", "GIT_SDK_REVISION_UNIX_DATE", "\"${gitRevisionUnixDate()}\""
@@ -189,7 +189,7 @@ dependencies {
     // Database
     implementation 'com.github.Zhuinden:realm-monarchy:0.7.1'
 
-    kapt 'dk.ilios:realmfieldnameshelper:2.0.0'
+    kapt project(":library:external:realmfieldnameshelper")
 
     // Shared Preferences
     implementation libs.androidx.preferenceKtx

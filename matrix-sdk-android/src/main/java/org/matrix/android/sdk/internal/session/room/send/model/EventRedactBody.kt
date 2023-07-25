@@ -25,5 +25,10 @@ internal data class EventRedactBody(
         val reason: String? = null,
 
         @Json(name = "org.matrix.msc3912.with_relations")
-        val withRelations: List<String>? = null,
-)
+        val unstableWithRelTypes: List<String>? = null,
+
+        @Json(name = "with_rel_types")
+        val withRelTypes: List<String>? = null,
+) {
+    fun getBestWithRelTypes() = withRelTypes ?: unstableWithRelTypes
+}

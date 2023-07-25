@@ -15,3 +15,11 @@ jobs:
           project: Issue triage
           column: Incoming
           repo-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+  triage-new-issues:
+      runs-on: ubuntu-latest
+      steps:
+          - uses: actions/add-to-project@main
+            with:
+                project-url: https://github.com/orgs/vector-im/projects/91
+                github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}

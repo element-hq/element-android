@@ -118,7 +118,7 @@ internal class QueueMemento @Inject constructor(
                                                         eventId = it.redacts,
                                                         roomId = it.roomId,
                                                         reason = body?.reason,
-                                                        withRelations = body?.withRelations,
+                                                        withRelTypes = body?.getBestWithRelTypes(),
                                                 )
                                         )
                                     }

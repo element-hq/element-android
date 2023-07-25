@@ -1,3 +1,16 @@
+Changes in Element v1.6.5 (2023-07-25)
+======================================
+
+Bugfixes 🐛
+----------
+ - Fix several crashes observed when the device cannot reach the homeserver ([#8578](https://github.com/vector-im/element-android/issues/8578))
+
+Other changes
+-------------
+ - Update MSC3912 implementation: Redaction of related events ([#8481](https://github.com/vector-im/element-android/issues/8481))
+ - Include some source code in our project to remove our dependency to artifact hosted by bintray (Jcenter). ([#8556](https://github.com/vector-im/element-android/issues/8556))
+
+
 Changes in Element v1.6.3 (2023-06-27)
 ======================================
 

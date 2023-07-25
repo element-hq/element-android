@@ -290,7 +290,7 @@
     <string name="send_bug_report_progress">Прогресс (%s%%)</string>
     <string name="send_bug_report_app_crashed">В прошлый раз приложение некорректно завершило работу. Хотите отправить отчёт о сбое\?</string>
     <string name="join_room">Войти в Комнату</string>
-    <string name="username">Имя пользователя</string>
+    <string name="username">Псевдоним</string>
     <string name="logout">Выйти</string>
     <string name="hs_url">URL домашнего сервера</string>
     <string name="search">Поиск</string>
@@ -300,7 +300,7 @@
     <string name="option_take_photo_video">Камера</string>
     <string name="auth_login">Вход</string>
     <string name="auth_submit">Подать</string>
-    <string name="auth_invalid_login_param">Неправильное имя пользователя и/или пароль</string>
+    <string name="auth_invalid_login_param">Неверный псевдоним и/или пароль</string>
     <string name="auth_invalid_email">Это не похоже на действительный адрес электронной почты</string>
     <string name="auth_email_already_defined">Этот адрес электронной почты уже используется.</string>
     <string name="auth_forgot_password">Забыли пароль?</string>
@@ -797,7 +797,7 @@
     <string name="backup">Создание резервной копии</string>
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">Сделайте резервную копию ваших ключей или потеряете доступ к вашим зашифрованным сообщениям.</string>
     <string name="action_sign_out_confirmation_simple">Уверены, что хотите выйти?</string>
-    <string name="error_empty_field_enter_user_name">Пожалуйста, введите имя пользователя.</string>
+    <string name="error_empty_field_enter_user_name">Пожалуйста, введите псевдоним.</string>
     <string name="keys_backup_setup_step1_advanced">(Расширенный)</string>
     <string name="keys_backup_setup_step1_manual_export">Ручной экспорт ключей</string>
     <string name="keys_backup_setup_creating_backup">Создание резервной копии</string>
@@ -1132,11 +1132,11 @@
     <string name="login_msisdn_error_not_international">Международные телефонные номера должны начинаться с \'+\'</string>
     <string name="login_msisdn_error_other">Номер телефона выглядит недействительным. Пожалуйста, проверьте его</string>
     <string name="login_signup_to">Зарегистрироваться в %1$s</string>
-    <string name="login_signin_username_hint">Имя пользователя или электронная почта</string>
-    <string name="login_signup_username_hint">Имя пользователя</string>
+    <string name="login_signin_username_hint">Псевдоним или электронная почта</string>
+    <string name="login_signup_username_hint">Псевдоним</string>
     <string name="login_signup_password_hint">Пароль</string>
     <string name="login_signup_submit">Далее</string>
-    <string name="login_signup_error_user_in_use">Это имя пользователя занято</string>
+    <string name="login_signup_error_user_in_use">Этот псевдоним уже занят</string>
     <string name="login_signup_cancel_confirmation_title">Предупреждение</string>
     <string name="login_signup_cancel_confirmation_content">Ваш аккаунт еще не создан. Остановить процесс регистрации\?</string>
     <string name="login_a11y_choose_matrix_org">Выбрать matrix.org</string>
@@ -1144,7 +1144,7 @@
     <string name="login_a11y_choose_other">Выбрать другой сервер</string>
     <string name="login_a11y_captcha_container">Пожалуйста, пройдите проверку капчей</string>
     <string name="login_terms_title">Примите условия для продолжения</string>
-    <string name="login_wait_for_email_title">Пожалуйста, проверьте ваш электронный почтовый ящик</string>
+    <string name="login_wait_for_email_title">Пожалуйста, проверьте свою электронную почту</string>
     <string name="login_wait_for_email_notice">Мы только что отправили письмо на %1$s.
 \nПожалуйста, нажмите на содержащуюся в нём ссылку, чтобы продолжить создание аккаунта.</string>
     <string name="login_error_outdated_homeserver_title">Домашний сервер устарел</string>
@@ -1191,7 +1191,7 @@
     <string name="verification_conclusion_warning">Недоверенный вход</string>
     <string name="room_profile_section_more_uploads">Вложения</string>
     <string name="cross_signing_verify_by_emoji">Интерактивная проверка со смайлами</string>
-    <string name="error_empty_field_choose_user_name">Пожалуйста, выберите имя пользователя.</string>
+    <string name="error_empty_field_choose_user_name">Пожалуйста, выберите псевдоним.</string>
     <string name="error_empty_field_choose_password">Пожалуйста, выберите пароль.</string>
     <string name="message_action_item_redact">Удалить…</string>
     <string name="seen_by">Просмотрено</string>
@@ -1549,7 +1549,7 @@
     <string name="settings_messages_in_e2e_group_chat">Зашифрованные сообщения в групповых чатах</string>
     <string name="settings_when_rooms_are_upgraded">При обновлении комнат</string>
     <string name="command_description_plain">Посылает сообщение в виде простого текста, не интерпретируя его как разметку</string>
-    <string name="auth_invalid_login_param_space_in_password">Неверное имя пользователя и/или пароль. Введенный пароль начинается или заканчивается пробелами, пожалуйста, проверьте.</string>
+    <string name="auth_invalid_login_param_space_in_password">Неверный псевдоним и/или пароль. Введённый пароль начинается или заканчивается пробелами, пожалуйста, проверьте его.</string>
     <string name="auth_invalid_login_deactivated_account">Эта учётная запись была деактивирована.</string>
     <string name="bootstrap_enter_recovery">Введите %s, чтобы продолжить</string>
     <string name="use_file">Использовать файл</string>
@@ -2195,7 +2195,7 @@
     <string name="settings_group_messages">Групповых сообщениях</string>
     <string name="settings_encrypted_direct_messages">Зашифрованных диалогах</string>
     <string name="settings_messages_direct_messages">Диалогах</string>
-    <string name="settings_messages_containing_username">Мое имя пользователя</string>
+    <string name="settings_messages_containing_username">Мой псевдоним</string>
     <string name="settings_messages_containing_display_name">Моё отображаемое имя</string>
     <string name="settings_notification_notify_me_for">Уведомлять меня о</string>
     <string name="settings_notification_other">Другое</string>
@@ -2537,7 +2537,7 @@
     <string name="settings_show_latest_profile">Последняя информация о пользователе</string>
     <string name="space_explore_filter_no_result_title">Не найдено</string>
     <string name="a11y_presence_busy">Занят</string>
-    <string name="error_forbidden_digits_only_username">Домашний сервер не принимает имя пользователя, состоящее только из цифр.</string>
+    <string name="error_forbidden_digits_only_username">Домашний сервер не принимает псевдонимы, состоящие только из цифр.</string>
     <string name="ftue_personalize_skip_this_step">Пропустить этот шаг</string>
     <string name="ftue_personalize_submit">Сохранить и продолжить</string>
     <string name="ftue_personalize_complete_subtitle">Ваши предпочтения были сохранены</string>
@@ -2633,7 +2633,7 @@
     <string name="ftue_auth_create_account_password_entry_footer">Должно быть 8 или более символов</string>
     <string name="crosssigning_cannot_verify_this_session">Не удалось заверить этот сеанс</string>
     <string name="permalink_unsupported_groups">Невозможно открыть эту ссылку: сообщества были заменены пространствами</string>
-    <string name="ftue_auth_login_username_entry">Имя пользователя / Почта / Телефон</string>
+    <string name="ftue_auth_login_username_entry">Псевдоним / Почта / Телефон</string>
     <string name="ftue_auth_password_reset_email_confirmation_subtitle">Следуйте инструкциям, отправленным на %s</string>
     <string name="ftue_auth_forgot_password">Забыли пароль</string>
     <string name="ftue_auth_email_verification_footer">Не получили письмо\?</string>
@@ -3020,7 +3020,7 @@
     <string name="error_voice_message_broadcast_in_progress">Не удалось записать голосовое сообщение</string>
     <string name="review_unverified_sessions_description">Убедиться что Ваш аккаунт в безопасности</string>
     <string name="settings_nightly_build_update">Получить последнюю сборку (у вас могут быть проблемы со входом)</string>
-    <string name="room_profile_section_more_polls">История опроса</string>
+    <string name="room_profile_section_more_polls">Опросы</string>
     <string name="started_a_voice_broadcast">Голосовая трансляция начата</string>
     <string name="thread_list_not_available">Ваш домашний сервер не поддерживает список обсуждений.</string>
     <string name="action_stop">Остановить</string>
@@ -3032,7 +3032,7 @@
     <string name="pill_message_in_room">Сообщение в %s</string>
     <string name="pill_message_in_unknown_room">Сообщение в комнате</string>
     <string name="pill_message_unknown_room_or_space">Комната/Пространство</string>
-    <string name="settings_external_account_management_title">Аккаунт</string>
+    <string name="settings_external_account_management_title">Учётная запись</string>
     <string name="avatar_of_user">Аватар профиля пользователя %1$s</string>
     <string name="secure_backup_reset_danger_warning">Продолжайте, только если вы уверены, что ваш ключ утерян, а доступ к другим активным устройствам отсустствует.</string>
     <string name="verification_profile_other_device_untrust_info">Пока пользователь не верифицировал эту сессию, отправленные и полученные сообщения отмечаются предупреждениями.</string>
@@ -3046,13 +3046,18 @@
     <string name="settings_notification_error_on_update">При изменении настроек уведомлений произошла ошибка. Попробуйте ещё раз.</string>
     <string name="direct_room_encryption_enabled_waiting_users_tile_description">Когда приглашенные пользователи присоединятся к ${app_name}, вы сможете писать им с использованием сквозного шифрования</string>
     <string name="secure_backup_reset_all_no_other_devices_long">Сброс ваших ключей верификации не может быть отменен. После сброса, вы не будете иметь доступа к старым зашифрованным сообщениям, а все ваши контакты, верифицировавшие вас ранее, увидят предупреждение о повторной верификации.</string>
-    <string name="encrypted_by_deleted">Зашифрованно неактивным устройством</string>
-    <string name="confirm_your_identity_after_update">Защищенный обмен сообщениями был обновлен. Пожалуйста, повторно верифицируйте ваше устройство.</string>
+    <string name="encrypted_by_deleted">Зашифровано прерванным сеансом</string>
+    <string name="confirm_your_identity_after_update">В последнем обновлении улучшили защищённую переписку. Пожалуйста, перезаверьте свой сеанс.</string>
     <string name="error_voice_broadcast_unable_to_decrypt">Не удается расшифровать голосовое сообщение.</string>
     <string name="room_poll_details_go_to_timeline">Обзор опроса во времени</string>
     <string name="pill_message_from_unknown_user">Сообщение</string>
-    <string name="verification_verify_with_another_device">Подтвердить с помощью активного устройства</string>
+    <string name="verification_verify_with_another_device">Сверить с другим сеансом</string>
     <string name="_resume">Возобновить</string>
-    <string name="notice_display_name_changed_to">%1$s изменил отображаемое имя на %2$s</string>
+    <string name="notice_display_name_changed_to">%1$s изменил(а) имя на %2$s</string>
     <string name="verification_not_found">Запрос на верификацию не найден. Возможно, он был отменен или обработан другим сеансом.</string>
+    <string name="rich_text_editor_quote">Цитата</string>
+    <string name="settings_crypto_version">Версия шифрования</string>
+    <string name="rich_text_editor_code_block">Блок кода</string>
+    <string name="rich_text_editor_indent">Подпункт</string>
+    <string name="rich_text_editor_unindent">Пункт</string>
 </resources>

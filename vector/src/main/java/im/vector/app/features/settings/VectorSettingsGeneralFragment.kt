@@ -71,6 +71,7 @@ import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerC
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
 import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
+import timber.log.Timber
 import java.io.File
 import java.net.URL
 import java.util.UUID
@@ -265,7 +266,17 @@ class VectorSettingsGeneralFragment :
                 // Disable it while updating the state, will be re-enabled by the account data listener.
                 it.isEnabled = false
                 lifecycleScope.launch {
-                    session.integrationManagerService().setIntegrationEnabled(newValue as Boolean)
+                    try {
+                        session.integrationManagerService().setIntegrationEnabled(newValue as Boolean)
+                    } catch (failure: Throwable) {
+                        Timber.e(failure, "Failed to update integration manager state")
+                        activity?.let { activity ->
+                            Toast.makeText(activity, errorFormatter.toHumanReadable(failure), Toast.LENGTH_SHORT).show()
+                        }
+                        // Restore the previous state
+                        it.isChecked = !it.isChecked
+                        it.isEnabled = true
+                    }
                 }
                 true
             }

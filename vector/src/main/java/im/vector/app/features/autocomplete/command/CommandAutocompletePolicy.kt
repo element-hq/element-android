@@ -32,16 +32,15 @@ class CommandAutocompletePolicy @Inject constructor() : AutocompletePolicy {
         return ""
     }
 
-    override fun onDismiss(text: Spannable?) {
+    override fun onDismiss(text: Spannable) {
     }
 
     // Only if text which starts with '/' and without space
-    override fun shouldShowPopup(text: Spannable?, cursorPos: Int): Boolean {
-        return enabled && text?.startsWith("/") == true &&
-                !text.contains(" ")
+    override fun shouldShowPopup(text: Spannable, cursorPos: Int): Boolean {
+        return enabled && text.startsWith("/") && !text.contains(" ")
     }
 
-    override fun shouldDismissPopup(text: Spannable?, cursorPos: Int): Boolean {
+    override fun shouldDismissPopup(text: Spannable, cursorPos: Int): Boolean {
         return !shouldShowPopup(text, cursorPos)
     }
 }

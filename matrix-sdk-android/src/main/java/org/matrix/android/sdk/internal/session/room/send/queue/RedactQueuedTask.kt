@@ -26,14 +26,14 @@ internal class RedactQueuedTask(
         val redactionLocalEchoId: String,
         private val roomId: String,
         private val reason: String?,
-        private val withRelations: List<String>?,
+        private val withRelTypes: List<String>?,
         private val redactEventTask: RedactEventTask,
         private val localEchoRepository: LocalEchoRepository,
         private val cancelSendTracker: CancelSendTracker
 ) : QueuedTask(queueIdentifier = roomId, taskIdentifier = redactionLocalEchoId) {
 
     override suspend fun doExecute() {
-        redactEventTask.execute(RedactEventTask.Params(redactionLocalEchoId, roomId, toRedactEventId, reason, withRelations))
+        redactEventTask.execute(RedactEventTask.Params(redactionLocalEchoId, roomId, toRedactEventId, reason, withRelTypes))
     }
 
     override fun onTaskFailed() {

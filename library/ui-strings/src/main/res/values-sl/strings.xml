@@ -6,7 +6,7 @@
     <string name="action_send">Pošlji</string>
     <string name="notice_room_join_by_you">Pridružil si se v sobi</string>
     <string name="notice_room_invite_you">%1$s te je povabil</string>
-    <string name="notice_answered_call_by_you">Odgovoril si na klic.</string>
+    <string name="notice_answered_call_by_you">Odgovorili ste na klic.</string>
     <string name="notice_answered_call">%s je odgovoril na klic.</string>
     <string name="notice_room_name_changed_by_you">Spremenil si ime sobe v: %1$s</string>
     <string name="notice_room_name_changed">%1$s je spremenil ime sobe v: %2$s</string>
@@ -40,11 +40,11 @@
     <string name="notice_room_avatar_changed_by_you">Spremenil si avatarja sobe</string>
     <string name="notice_placed_video_call_by_you">Začel si video klic.</string>
     <string name="notice_placed_voice_call">%s je začel video klic.</string>
-    <string name="notice_placed_voice_call_by_you">Začel si video klic.</string>
+    <string name="notice_placed_voice_call_by_you">Začeli ste video klic.</string>
     <string name="notice_ended_call">%s je končal klic.</string>
-    <string name="notice_ended_call_by_you">Končal si klic.</string>
+    <string name="notice_ended_call_by_you">Končali ste klic.</string>
     <string name="notice_made_future_room_visibility">%1$s je %2$s omogočil ogled prihodnje zgodovine sobe</string>
-    <string name="notice_made_future_room_visibility_by_you">Omogočil si ogled prihodnje zgodovine sobe %1$s</string>
+    <string name="notice_made_future_room_visibility_by_you">Omogočili ste ogled prihodnje zgodovine sobe %1$s</string>
     <plurals name="x_selected">
         <item quantity="one">%1$d izbran</item>
         <item quantity="two">%1$d izbrana</item>
@@ -62,7 +62,17 @@
     <string name="notice_display_name_removed_by_you">Odstranil si svoje prikazno ime (bilo je %1$s)</string>
     <string name="notice_room_topic_changed_by_you">Temo si spremenil v: %1$s</string>
     <string name="notice_placed_video_call">%s je začel video klic.</string>
-    <string name="notice_made_future_direct_room_visibility">%1$s je omočil %2$s ogled prihodnjih sporočil</string>
-    <string name="notice_made_future_direct_room_visibility_by_you">%1$s si omogočil ogled prihodnjih sporočil</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s je omogočil %2$s ogled prihodnjih sporočil</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">%1$s ste omogočili ogled prihodnjih sporočil</string>
     <string name="notice_room_visibility_invited">vsi člani sobe, od trenutka povabila.</string>
+    <string name="notice_room_invite_no_invitee">Povabilo uporabnika %s</string>
+    <string name="notice_call_candidates">%s je poslal(a) podatke za začetek klica.</string>
+    <string name="notice_call_candidates_by_you">Poslali ste podatke za začetek klica.</string>
+    <string name="notice_direct_room_update_by_you">Tu ste izvedli nadgradnjo.</string>
+    <string name="notice_room_visibility_joined">vsi člani te sobe od trenutka ko so se pridružili.</string>
+    <string name="notice_room_visibility_shared">vsi člani sobe.</string>
+    <string name="notice_room_visibility_world_readable">kdorkoli.</string>
+    <string name="notice_room_update">%s je nadgradil to sobo.</string>
+    <string name="notice_room_update_by_you">Vi ste nadgradili to sobo.</string>
+    <string name="notice_direct_room_update">%s je tu izvedel(a) nadgradnjo.</string>
 </resources>

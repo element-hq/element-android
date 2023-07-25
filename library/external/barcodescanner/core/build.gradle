@@ -1,0 +1,26 @@
+apply plugin: 'com.android.library'
+
+android {
+    namespace "me.dm7.barcodescanner.core"
+    compileSdk versions.compileSdk
+
+    defaultConfig {
+        minSdk versions.minSdk
+        targetSdk versions.targetSdk
+    }
+
+    compileOptions {
+        sourceCompatibility versions.sourceCompat
+        targetCompatibility versions.targetCompat
+    }
+}
+
+dependencies {
+    implementation 'androidx.annotation:annotation-jvm:1.6.0'
+}
+
+afterEvaluate {
+    tasks.findAll { it.name.startsWith("lint") }.each {
+        it.enabled = false
+    }
+}

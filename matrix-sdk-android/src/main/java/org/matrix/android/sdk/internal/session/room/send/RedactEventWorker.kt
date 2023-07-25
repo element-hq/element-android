@@ -43,7 +43,7 @@ internal class RedactEventWorker(context: Context, params: WorkerParameters, ses
             val roomId: String,
             val eventId: String,
             val reason: String?,
-            val withRelations: List<String>? = null,
+            val withRelTypes: List<String>? = null,
             override val lastFailureMessage: String? = null
     ) : SessionWorkerParams
 
@@ -63,7 +63,7 @@ internal class RedactEventWorker(context: Context, params: WorkerParameters, ses
                             roomId = params.roomId,
                             eventId = params.eventId,
                             reason = params.reason,
-                            withRelations = params.withRelations,
+                            withRelTypes = params.withRelTypes,
                     )
             )
         }.fold(

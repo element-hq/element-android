@@ -3077,4 +3077,12 @@
     <string name="crosssigning_verify_after_update">Zaktualizowano aplikację</string>
     <string name="sign_out_anyway">Wyloguj mimo to</string>
     <string name="sign_out_failed_dialog_message">Nie można skontaktować się z serwerem domowym. Jeśli mimo to się wylogujesz, urządzenie nie zostanie usunięte z listy urządzeń. Usuń je za pomocą innego klienta.</string>
+    <string name="create_room_unknown_users_dialog_content">Nie można znaleźć profili dla poniższych ID Matrix. Czy chcesz rozpocząć czat mimo to\?
+\n
+\n%s</string>
+    <string name="invite_unknown_users_dialog_submit">Zaproś mimo to</string>
+    <string name="create_room_unknown_users_dialog_submit">Rozpocznij czat mimo to</string>
+    <string name="invite_unknown_users_dialog_content">Nie można znaleźć profili dla poniższych ID Matrix. Czy chcesz zaprosić je mimo to\?
+\n
+\n%s</string>
 </resources>

@@ -1,0 +1,23 @@
+apply plugin: 'kotlin'
+apply plugin: 'java'
+
+sourceCompatibility = versions.sourceCompat
+targetCompatibility = versions.sourceCompat
+
+dependencies {
+    implementation 'com.squareup:javapoet:1.13.0'
+}
+
+task javadocJar(type: Jar, dependsOn: 'javadoc') {
+    from javadoc.destinationDir
+    classifier = 'javadoc'
+}
+task sourcesJar(type: Jar, dependsOn: 'classes') {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+sourceSets {
+    main.java.srcDirs += 'src/main/kotlin'
+}
+
