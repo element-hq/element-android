@@ -37,7 +37,7 @@ ext.versionMinor = 6
 // Note: even values are reserved for regular release, odd values for hotfix release.
 // When creating a hotfix, you should decrease the value, since the current value
 // is the value for the next regular release.
-ext.versionPatch = 5
+ext.versionPatch = 6
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
