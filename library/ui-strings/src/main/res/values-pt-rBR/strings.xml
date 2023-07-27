@@ -2909,4 +2909,53 @@
     <string name="sign_out_anyway">Terminar sessão ainda assim</string>
     <string name="verification_request_waiting_for_recovery">Verificação a partir de Chave ou Frase Segura…</string>
     <string name="verification_profile_other_device_untrust_info">Até que este utilizador confie nesta sessão, as mensagens enviadas para e a partir dela são marcadas com avisos.</string>
+    <string name="pill_message_in_unknown_room">Mensagem na sala</string>
+    <string name="rich_text_editor_numbered_list">Alternar lista numerada</string>
+    <string name="room_polls_active">Votações ativas</string>
+    <string name="room_poll_details_go_to_timeline">Ver votação na linha do tempo</string>
+    <string name="unable_to_decrypt_some_events_in_poll">Devido a erros de descriptografia, alguns votos podem não serem contados</string>
+    <string name="confirm_your_identity_after_update">A mensageria segura fora aprimorada com a atualização mais recente. Verifique novamente seu dispositivo.</string>
+    <string name="ended_poll_indicator">Votação encerrada.</string>
+    <string name="room_polls_ended">Votações anteriores</string>
+    <string name="rich_text_editor_bullet_list">Alternar lista de marcadores</string>
+    <string name="pill_message_unknown_room_or_space">Sala/Espaço</string>
+    <string name="direct_room_encryption_enabled_waiting_users">Aguardando os usuários entrarem no ${app_name}</string>
+    <string name="direct_room_encryption_enabled_waiting_users_tile_description">Assim que os usuários convidados entrarem no ${app_name}, vocês poderão conversar e a sala terá criptografia de ponta a ponta</string>
+    <string name="room_polls_active_no_item">Não há votação ativa nesta sala</string>
+    <string name="room_polls_ended_no_item">Não há votações anteriores nesta sala</string>
+    <string name="message_reply_to_ended_poll_preview">Votação encerrada</string>
+    <string name="secure_backup_reset_danger_warning">Prossiga apenas se você tem certeza que você perdeu todos os outros dispositivos e sua chave de segurança.</string>
+    <string name="encrypted_by_deleted">Criptografado por um dispositivo apagado</string>
+    <string name="rich_text_editor_unindent">Remover recuo</string>
+    <string name="rich_text_editor_quote">Alternar aspas</string>
+    <string name="rich_text_editor_inline_code">Aplicar formatação de código em linha</string>
+    <string name="_resume">Prosseguir</string>
+    <string name="verification_not_found">O pedido de verificação não foi encontrado. Ele pode ter sido cancelado ou tratado por outra sessão.</string>
+    <string name="rich_text_editor_indent">Recuar</string>
+    <string name="rich_text_editor_code_block">Alternar bloco de código</string>
+    <string name="message_reply_to_sender_ended_poll">terminou uma votação.</string>
+    <string name="message_reply_to_poll_preview">Votação</string>
+    <string name="settings_access_token">Token de acesso</string>
+    <string name="error_voice_message_broadcast_in_progress_message">Você não pode iniciar uma mensagem de voz porque está gravando uma transmissão ao vivo. Termine sua transmissão ao vivo para iniciar uma mensagem de voz</string>
+    <plurals name="room_polls_ended_no_item_for_loaded_period">
+        <item quantity="one">Não há votação anterior para antes de ontem.
+\nCarregue mais votações para ver as votações dos dias anteriores.</item>
+        <item quantity="other">Não há votação anterior para os últimos %1$d dias.
+\nCarregue mais votações para ver as votações dos dias anteriores.</item>
+    </plurals>
+    <plurals name="room_polls_active_no_item_for_loaded_period">
+        <item quantity="one">Não há votação ativa para antes de ontem.
+\nCarregue mais votações para ver as votações dos dias anteriores.</item>
+        <item quantity="other">Não há votação ativa para os últimos %1$d dias.
+\nCarregue mais votações para ver as votações dos dias anteriores.</item>
+    </plurals>
+    <string name="room_polls_load_more">Carregar mais votações</string>
+    <string name="room_polls_loading_error">Erro ao buscar votações.</string>
+    <string name="settings_access_token_summary">Seu token de acesso fornece acesso completo à sua conta. Não o compartilhe com outras pessoais.</string>
+    <string name="pill_message_from_user">Mensagem de %s</string>
+    <string name="secure_backup_reset_all_no_other_devices_long">A redefinição de suas chaves de verificação não pode ser desfeita. Após a redefinição, você não terá acesso às mensagens criptografadas antigas e todos os amigos que fizeram a verificação anteriormente verão avisos de segurança até que você faça a verificação novamente com eles.</string>
+    <string name="error_voice_message_broadcast_in_progress">Não foi possível iniciar a mensagem de voz</string>
+    <string name="room_polls_wait_for_display">Exibindo votações</string>
+    <string name="pill_message_from_unknown_user">Mensagem</string>
+    <string name="pill_message_in_room">Mensagem em %s</string>
 </resources>
