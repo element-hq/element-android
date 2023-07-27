@@ -1,0 +1,2 @@
+Principais mudanças nesta versão: Basicamente correção de bugs, em especial a correção da mensagem não aparecer na linha do tempo.
+Changelog completo: https://github.com/vector-im/element-android/releases
