@@ -2054,8 +2054,8 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="open_poll_option_title">Atvērt aptauju</string>
     <string name="onboarding_new_app_layout_feedback_title">Sniegt atgriezenisko saiti</string>
     <string name="onboarding_new_app_layout_feedback_message">Piesist augšējā labajā stūrī, lai redzētu iespēju sniegt atgriezenisko saiti.</string>
-    <string name="notice_voice_broadcast_ended_by_you">Tu beidzi balss pārraidi.</string>
-    <string name="notice_voice_broadcast_ended">%1$s izbeidza balss pārraidi.</string>
+    <string name="notice_voice_broadcast_ended_by_you">Tu beidzi balss apraidi.</string>
+    <string name="notice_voice_broadcast_ended">%1$s izbeidza balss apraidi.</string>
     <string name="qr_code_login_header_show_qr_code_new_device_description">Izmantot ierīci, kurā veikta pieteikšanās, lai nolasītu zemāk esošo kvadrātkodu:</string>
     <string name="qr_code_login_header_show_qr_code_link_a_device_description">Nolasīt zemāk esošo kvadrātkodu ar ierīci, kurā ir notikusi atteikšanās.</string>
     <string name="qr_code_login_header_show_qr_code_title">Pieteikties ar kvadrātkodu</string>
@@ -2341,7 +2341,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="contact_admin_to_restore_encryption">Lūgums sazināties ar pārvaldītāju, lai atjaunotu šifrēšanu derīgā stāvoklī.</string>
     <string name="ftue_auth_phone_confirmation_title">Apstiprināt tālruņa numuru</string>
     <string name="permalink_unsupported_groups">Šo saiti nevar atvērt: kopienas tika aizstātas ar vietām</string>
-    <string name="started_a_voice_broadcast">Uzsāka balss pārraidi</string>
+    <string name="started_a_voice_broadcast">Uzsāka balss apraidi</string>
     <string name="ftue_auth_use_case_skip_partial">Izlaist šo jautājumu</string>
     <string name="verification_request_waiting_for_recovery">Apliecina ar drošo atslēgu vai vārdkopu…</string>
     <string name="encryption_has_been_misconfigured">Šifrēšana ir kļūdaini uzstādīta.</string>
@@ -2569,7 +2569,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="a11y_resume_voice_broadcast_record">Atsākt balss apraides ierakstu</string>
     <string name="call_transfer_consulting_with">Konsultējas ar %1$s</string>
     <string name="voice_message_slide_to_cancel">Slidināt, lai atceltu</string>
-    <string name="a11y_stop_voice_broadcast_record">Pārtraukt balss pārraides ierakstu</string>
+    <string name="a11y_stop_voice_broadcast_record">Pārtraukt balss apraides ierakstu</string>
     <string name="call_transfer_title">Pārvirzīt</string>
     <string name="a11y_rule_notify_noisy">Paziņot ar skaņu</string>
     <string name="a11y_error_some_message_not_sent">Dažas ziņas netika nosūtītas</string>
@@ -2651,4 +2651,135 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="discovery_invite">Uzaicināt e-pastā, atrast kontaktus un vēl…</string>
     <string name="dev_tools_form_hint_state_key">Stāvokļa atslēga</string>
     <string name="space_leave_radio_buttons_title">Lietas šajā vietā</string>
+    <string name="location_share_external">Atvērt ar</string>
+    <string name="room_polls_wait_for_display">Attēlo aptaujas</string>
+    <string name="location_share_option_user_live">Kopīgot atrašanās vietu tiešraidē</string>
+    <string name="create_poll_question_title">Aptaujas jautājums vai temats</string>
+    <string name="a11y_location_share_option_pinned_icon">Kopīgot šo atrašanās vietu</string>
+    <string name="link_this_email_settings_link">Sasaistīt šo e-pasta adresi ar kontu</string>
+    <plurals name="poll_total_vote_count_before_ended_and_voted">
+        <item quantity="zero">Pamatojoties uz %1$d balsojumiem</item>
+        <item quantity="one">Pamatojoties uz %1$d balsojumu</item>
+        <item quantity="other">Pamatojoties uz %1$d balsojumiem</item>
+    </plurals>
+    <string name="create_poll_button">IZVEIDOT APTAUJU</string>
+    <string name="poll_no_votes_cast">Nav saņemti balsojumi</string>
+    <string name="end_poll_confirmation_title">Izbeigt šo aptauju\?</string>
+    <string name="error_voice_broadcast_unauthorized_title">Nevar uzsākt jaunu balss apraidi</string>
+    <string name="a11y_play_voice_broadcast">Atskaņot vai atsākt balss apraidi</string>
+    <string name="a11y_voice_broadcast_fast_backward">Ātri patīt 30 sekundes atpakaļ</string>
+    <string name="a11y_voice_broadcast_fast_forward">Ātri patīt 30 sekundes uz priekšu</string>
+    <string name="error_voice_broadcast_blocked_by_someone_else_message">Kāds cits jau ieraksta balss apraidi. Jāgaida, līdz tā beigsies, lai varētu uzsākt jaunu.</string>
+    <string name="stop_voice_broadcast_content">Vai tiešām pārtraukt tiešraides apraidi\? Tas izbeigs apraidi, un istabā būs pieejams viss ieraksts.</string>
+    <string name="this_invite_to_this_space_was_sent">Šis uzaicinājums uz šo vietu tika nosūtīts uz %s, kas nav saistīts ar Tavu kontu</string>
+    <string name="labs_enable_latex_maths">Iespējot LaTeX matemātiku</string>
+    <string name="create_poll_question_hint">Jautājums vai temats</string>
+    <string name="create_poll_empty_question_error">Jautājums nevar būt tukšs</string>
+    <plurals name="poll_total_vote_count_before_ended_and_not_voted">
+        <item quantity="zero">Saņemti %1$d balsojumu. Jābalso, lai redzētu iznākumu</item>
+        <item quantity="one">Saņemts %1$d balsojums. Jābalso, lai redzētu iznākumu</item>
+        <item quantity="other">Saņemti %1$d balsojumi. Jābalso, lai redzētu iznākumu</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_after_ended">
+        <item quantity="zero">Galīgais iznākums, pamatojoties uz %1$d balsojumiem</item>
+        <item quantity="one">Galīgais iznākums, pamatojoties uz %1$d balsojumu</item>
+        <item quantity="other">Galīgais iznākums, pamatojoties uz %1$d balsojumiem</item>
+    </plurals>
+    <string name="poll_end_room_list_preview">Aptauja izbeigta</string>
+    <string name="edit_poll_title">Labot aptauju</string>
+    <string name="ended_poll_indicator">Izbeidza aptauju.</string>
+    <string name="room_polls_load_more">Ielādēt vairāk aptauju</string>
+    <string name="room_polls_loading_error">Kļūda aptauju ieguvē.</string>
+    <string name="a11y_location_share_locate_button">Pietuvināt līdz pašreizējai atrašanās vietai</string>
+    <string name="location_share_live_select_duration_option_1">15 minūtes</string>
+    <string name="live_location_description">Atrašanās vietas tiešraide</string>
+    <string name="error_voice_broadcast_already_in_progress_message">Tu jau ieraksti balss apraidi. Lūgums pabeigt pašreizējo, lai uzsāktu jaunu.</string>
+    <string name="end_poll_confirmation_description">Tas vairs neļaus cilvēkiem balsot, un tiks attēlots aptaujas galīgais iznākums.</string>
+    <string name="poll_type_title">Aptaujas veids</string>
+    <string name="open_poll_option_description">Balsotāji redz iznākumu, tiklīdz viņi ir nobalsojuši</string>
+    <string name="location_share_live_enabled">Atrašanās vietas tiešraide iespējota</string>
+    <string name="location_share_live_ended">Atrašanās vietas tiešraide beidzās</string>
+    <string name="live_location_bottom_sheet_last_updated_at">Atjaunota pirms %1$s</string>
+    <string name="unable_to_decrypt_some_events_in_poll">Atšifrēšanas kļūdu dēļ daži balsojumi var netikt ieskaitīti</string>
+    <string name="location_share_option_pinned">Kopīgot šo atrašanās vietu</string>
+    <string name="a11y_location_share_pin_on_map">Piespraust atlasīto atrašanās vietu kartē</string>
+    <string name="location_share_live_view">Apskatīt atrašanās vietas tiešraidi</string>
+    <string name="tooltip_attachment_photo">Atvērt kameru</string>
+    <string name="tooltip_attachment_gallery">Nosūtīt attēlus un video</string>
+    <string name="location_share_live_until">Tiešraidē līdz %1$s</string>
+    <string name="a11y_static_map_image">Karte</string>
+    <string name="location_not_available_dialog_title">${app_name} nevarēja piekļūt atrašanās vietai</string>
+    <string name="a11y_pause_voice_broadcast">Apturēt balss apraidi</string>
+    <string name="poll_undisclosed_not_ended">Iznākums būs redzams, kad aptauja būs beigusies</string>
+    <string name="closed_poll_option_title">Aizvērta aptauja</string>
+    <string name="location_share_live_remaining_time">Atlicis %1$s</string>
+    <string name="labs_enable_msc3061_share_history">MSC3061: istabu atslēgu kopīgošana pagātnes ziņām</string>
+    <string name="poll_response_room_list_preview">Saņemtais balsojums</string>
+    <string name="delete_poll_dialog_title">Noņemt aptauju</string>
+    <string name="location_share_live_select_duration_option_3">8 stundas</string>
+    <string name="poll_end_action">Izbeigt aptauju</string>
+    <string name="location_share_live_stop">Pārtraukt</string>
+    <string name="stop_voice_broadcast_dialog_title">Pārtraukt tiešraides apraidi\?</string>
+    <string name="create_poll_title">Izveidot aptauju</string>
+    <string name="room_polls_ended_no_item">Šajā istabā nav noslēgto aptauju</string>
+    <string name="location_share_live_select_duration_option_2">1 stundu</string>
+    <string name="location_timeline_failed_to_load_map">Neizdevās ielādēt karti</string>
+    <string name="labs_enable_live_location">Iespējot atrašanās vietas tiešraides kopīgošanu</string>
+    <string name="end_poll_confirmation_approve_button">Izbeigt aptauju</string>
+    <string name="error_voice_broadcast_unable_to_decrypt">Nav iespējams atšifrēt šo balss apraidi.</string>
+    <string name="restart_the_application_to_apply_changes">Lietotne ir jāpārsāknē, lai izmaiņas stātos spēkā.</string>
+    <string name="delete_poll_dialog_content">Vai tiešām noņemt šo aptauju\? To pēc noņemšanas vairs nevarēs atgūt.</string>
+    <string name="room_polls_active_no_item">Šajā istabā nav notiekošu aptauju</string>
+    <string name="room_polls_ended">Noslēgušās aptaujas</string>
+    <string name="location_share_option_user_current">Kopīgot manu pašreizējo atrašanās vietu</string>
+    <string name="a11y_location_share_option_user_live_icon">Kopīgot atrašanās vietu tiešraidē</string>
+    <string name="live_location_not_enough_permission_dialog_description">Nepieciešamas atbilstošas atļaujas, lai šajā istabā varētu kopīgot atrašanās vietas tiešraidi.</string>
+    <string name="location_activity_title_preview">Atrašanās vieta</string>
+    <string name="a11y_location_share_option_user_current_icon">Kopīgot manu pašreizējo atrašanās vietu</string>
+    <string name="location_share_live_select_duration_title">Kopīgot atrašanās vietu tiešraidē</string>
+    <string name="location_share_loading_map_error">Nebija iespējams ielādēt karti
+\nŠis mājasserveris var nebūt iestatīts, lai attēlotu kartes.</string>
+    <string name="live_location_share_location_item_share">Kopīgot atrašanās vietu</string>
+    <string name="room_polls_active">Notiekošās aptaujas</string>
+    <plurals name="room_polls_ended_no_item_for_loaded_period">
+        <item quantity="zero">Iepriekšējās %1$d dienās nav noslēgto aptauju.
+\nJāielādē vairāk aptauju, lai apskatītu iepriekšējo dienu aptaujas.</item>
+        <item quantity="one">Iepriekšējā dienā nav noslēgto aptauju.
+\nJāielādē vairāk aptauju, lai apskatītu iepriekšējo dienu aptaujas.</item>
+        <item quantity="other">Iepriekšējās %1$d dienās nav noslēgto aptauju.
+\nJāielādē vairāk aptauju, lai apskatītu iepriekšējo dienu aptaujas.</item>
+    </plurals>
+    <string name="location_not_available_dialog_content">${app_name} nevarēja piekļūt atrašanās vietai. Lūgums vēlāk mēģināt vēlreiz.</string>
+    <string name="error_voice_broadcast_permission_denied_message">Nav nepieciešamo atļauju, lai uzsāktu balss apraidi šajā istabā. Jāsazinās ar istabas pārvaldītāju, lai paaugstinātu atļaujas.</string>
+    <plurals name="room_polls_active_no_item_for_loaded_period">
+        <item quantity="zero">Iepriekšējās %1$d dienās nav notiekošu aptauju.
+\nJāielādē vairāk aptauju, lai redzētu iepriekšējo dienu aptaujas.</item>
+        <item quantity="one">Iepriekšējā dienā nav notiekošu aptauju.
+\nJāielādē vairāk aptauju, lai redzētu iepriekšējo dienu aptaujas.</item>
+        <item quantity="other">Iepriekšējās %1$d nav notiekošu aptauju.
+\nJāielādē vairāk aptauju, lai redzētu iepriekšējo dienu aptaujas.</item>
+    </plurals>
+    <string name="room_poll_details_go_to_timeline">Apskatīt aptauju laika joslā</string>
+    <string name="location_share_live_started">Ielādē atrašanās vietas tiešraidi…</string>
+    <string name="error_voice_broadcast_unable_to_play">Nav iespējams atskaņot šo balss apraidi.</string>
+    <string name="location_activity_title_static_sharing">Kopīgot atrašanās vietu</string>
+    <string name="live_location_sharing_notification_title">${app_name} atrašanās vietas tiešraide</string>
+    <string name="error_voice_broadcast_no_connection_recording">Savienojuma kļūda - ierakstīšana apturēta</string>
+    <string name="live_location_sharing_notification_description">Notiek atrašanās vietas kopīgošana</string>
+    <string name="voice_broadcast_recording_time_left">Atlicis %1$s</string>
+    <string name="labs_enable_live_location_summary">Pagaidu īstenojums: atrašanās vietas ir paliekošas istabas vēsturē</string>
+    <string name="upgrade_room_for_restricted">Ikviens no %s varēs atrast šo istabu un pievienoties tai - nav nepieciešams pašrocīgi visus uzaicināt. To jebkurā laikā būs iespējams mainīt istabas iestatījumos.</string>
+    <string name="live_location_not_enough_permission_dialog_title">Nav atļaujas kopīgot atrašanās vietas tiešraidi</string>
+    <string name="upgrade_room_for_restricted_no_param">Ikviens vecākvietā varēs atrast šo istabu un pievienoties tai - nav nepieciešams pašrocīgi visus uzaicināt. To jebkurā laikā ir iespējams mainīt istabas iestatījumos.</string>
+    <string name="upgrade_room_for_restricted_note">Lūgums ņemt vērā, ka jaunināšana izveidos jaunu istabas versiju. Visas pašreizējās ziņas paliks šajā arhivētajā istabā.</string>
+    <string name="message_bubbles">Rādīt ziņu burbuļus</string>
+    <string name="this_invite_to_this_room_was_sent">Šis uzaicinājums uz šo istabu tika nosūtīts uz %s, kas nav saistīta ar Tavu kontu</string>
+    <string name="link_this_email_with_your_account">%s iestatījumos, lai saņemtu uzaicinājumus tieši ${app_name}.</string>
+    <string name="labs_enable_msc3061_share_history_desc">Kad uzaicina šifrētā istabā, kas kopīgo vēsturi, būs redzama šifrētā vēsture.</string>
+    <plurals name="poll_option_vote_count">
+        <item quantity="zero">%1$d balsojumu</item>
+        <item quantity="one">%1$d balsojums</item>
+        <item quantity="other">%1$d balsojumi</item>
+    </plurals>
+    <string name="closed_poll_option_description">Iznākums tiek atklāts tikai pēc aptaujas izbeigšanas</string>
 </resources>
