@@ -17,7 +17,6 @@
 package im.vector.app.features.settings
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
@@ -25,16 +24,12 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.dialogs.PhotoOrVideoDialog
-import im.vector.app.core.extensions.restart
-import im.vector.app.core.preference.VectorListPreference
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorSwitchPreference
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.analytics.plan.MobileScreen
-import im.vector.app.features.settings.font.FontScaleSettingActivity
-import im.vector.app.features.themes.ThemeUtils
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.presence.model.PresenceEnum
 import javax.inject.Inject
@@ -44,19 +39,12 @@ class VectorSettingsPreferencesFragment :
         VectorSettingsBaseFragment() {
 
     @Inject lateinit var vectorPreferences: VectorPreferences
-    @Inject lateinit var fontScalePreferences: FontScalePreferences
     @Inject lateinit var vectorFeatures: VectorFeatures
     @Inject lateinit var vectorLocale: VectorLocale
 
     override var titleRes = R.string.settings_preferences
     override val preferenceXmlRes = R.xml.vector_settings_preferences
 
-    private val selectedLanguagePreference by lazy {
-        findPreference<VectorPreference>(VectorPreferences.SETTINGS_INTERFACE_LANGUAGE_PREFERENCE_KEY)!!
-    }
-    private val textSizePreference by lazy {
-        findPreference<VectorPreference>(VectorPreferences.SETTINGS_INTERFACE_TEXT_SIZE_KEY)!!
-    }
     private val takePhotoOrVideoPreference by lazy {
         findPreference<VectorPreference>("SETTINGS_INTERFACE_TAKE_PHOTO_VIDEO")!!
     }
@@ -67,22 +55,6 @@ class VectorSettingsPreferencesFragment :
     }
 
     override fun bindPref() {
-        // user interface preferences
-        setUserInterfacePreferences()
-
-        // Themes
-        findPreference<VectorListPreference>(ThemeUtils.APPLICATION_THEME_KEY)!!
-                .onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-            if (newValue is String) {
-                ThemeUtils.setApplicationTheme(requireContext().applicationContext, newValue)
-                // Restart the Activity
-                activity?.restart()
-                true
-            } else {
-                false
-            }
-        }
-
         findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_PRESENCE_USER_ALWAYS_APPEARS_OFFLINE)!!.let { pref ->
             pref.isChecked = vectorPreferences.userAlwaysAppearsOffline()
             pref.setOnPreferenceChangeListener { _, newValue ->
@@ -191,22 +163,5 @@ class VectorSettingsPreferencesFragment :
                     else -> R.string.option_always_ask
                 }
         )
-    }
-
-    // ==============================================================================================================
-    // user interface management
-    // ==============================================================================================================
-
-    private fun setUserInterfacePreferences() {
-        // Selected language
-        selectedLanguagePreference.summary = vectorLocale.localeToLocalisedString(vectorLocale.applicationLocale)
-
-        // Text size
-        textSizePreference.summary = getString(fontScalePreferences.getResolvedFontScaleValue().nameResId)
-
-        textSizePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            startActivity(Intent(activity, FontScaleSettingActivity::class.java))
-            true
-        }
     }
 }
