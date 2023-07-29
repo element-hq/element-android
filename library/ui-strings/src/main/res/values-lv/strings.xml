@@ -659,7 +659,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="send_suggestion_content">Lūdzu, rakstiet savu ieteikumu zemāk.</string>
     <string name="send_suggestion">Ieteikumi</string>
     <string name="preference_root_help_about">Palīdzība un par lietotni</string>
-    <string name="settings_security_and_privacy">Drošība un konfidencialitāte</string>
+    <string name="settings_security_and_privacy">Drošība un privātums</string>
     <string name="settings_general_title">Vispārīgi</string>
     <string name="create_room_public_title">Publiska</string>
     <string name="create_room_settings_section">Istabas iestatījumi</string>
@@ -1236,7 +1236,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="initial_sync_start_server_computing">Sākotnējā sinhronizācija:
 \nGaida servera atbildi…</string>
     <string name="labs_show_unread_notifications_as_tab">Pievienojiet speciālu cilni priekš nelasītiem paziņojumiem galvenajā ekrānā.</string>
-    <string name="labs_swipe_to_reply_in_timeline">Ieslēgt pavilkšanas žestu, lai atbildētu uz ziņu</string>
+    <string name="labs_swipe_to_reply_in_timeline">Laika joslā iespējot atbildēšanu pavelkot</string>
     <string name="no_message_edits_found">Labojumi netika atrasti</string>
     <string name="message_edits">Ziņu labojumi</string>
     <string name="settings_labs_show_complete_history_in_encrypted_room">Rādīt pilnu vēsturi šifrētajās istabās</string>
@@ -1877,7 +1877,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_server_default_room_version">Noklusējuma versija</string>
     <string name="settings_server_room_versions">Istabu versijas 👓</string>
     <string name="settings_category_composer">Ziņu redaktors</string>
-    <string name="settings_category_timeline">Hronoloģija</string>
+    <string name="settings_category_timeline">Laika josla</string>
     <string name="verify_cannot_cross_sign">Šī sesija nevar kopīgot šo verifikāciju ar citām sesijām.
 \nVerifikācija tiks saglabāta lokāli un kopīgota kādā no nākamajām lietotnes versijām.</string>
     <string name="rendering_event_error_exception">${app_name} saskārās ar problēmu, atveidojot notikuma ar id \'%1$s\' saturu</string>
@@ -2200,7 +2200,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="threads_labs_enable_notice_title">Pavedieni Beta</string>
     <string name="search_space_two_parents">%1$s un %2$s</string>
     <string name="analytics_opt_in_title">Palīdzēt uzlabot ${app_name}</string>
-    <string name="settings_autoplay_animated_images_summary">Atskaņot kustīgos laikjoslas attēlus, tiklīdz tie ir redzami</string>
+    <string name="settings_autoplay_animated_images_summary">Atskaņot kustīgos laika joslas attēlus, tiklīdz tie ir redzami</string>
     <string name="settings_troubleshoot_test_system_settings_permission_failed">${app_name} ir nepieciešama atļauja, lai parādītu paziņojumus.
 \nLūgums piešķirt atļauju.</string>
     <plurals name="search_space_multiple_parents">
@@ -2664,7 +2664,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     </plurals>
     <string name="create_poll_button">IZVEIDOT APTAUJU</string>
     <string name="poll_no_votes_cast">Nav saņemti balsojumi</string>
-    <string name="end_poll_confirmation_title">Izbeigt šo aptauju\?</string>
+    <string name="end_poll_confirmation_title">Noslēgt šo aptauju\?</string>
     <string name="error_voice_broadcast_unauthorized_title">Nevar uzsākt jaunu balss apraidi</string>
     <string name="a11y_play_voice_broadcast">Atskaņot vai atsākt balss apraidi</string>
     <string name="a11y_voice_broadcast_fast_backward">Ātri patīt 30 sekundes atpakaļ</string>
@@ -2685,11 +2685,11 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
         <item quantity="one">Galīgais iznākums, pamatojoties uz %1$d balsojumu</item>
         <item quantity="other">Galīgais iznākums, pamatojoties uz %1$d balsojumiem</item>
     </plurals>
-    <string name="poll_end_room_list_preview">Aptauja izbeigta</string>
+    <string name="poll_end_room_list_preview">Aptauja noslēgta</string>
     <string name="edit_poll_title">Labot aptauju</string>
-    <string name="ended_poll_indicator">Izbeidza aptauju.</string>
+    <string name="ended_poll_indicator">Noslēdza aptauju.</string>
     <string name="room_polls_load_more">Ielādēt vairāk aptauju</string>
-    <string name="room_polls_loading_error">Kļūda aptauju ieguvē.</string>
+    <string name="room_polls_loading_error">Kļūda aptauju izgūšanā.</string>
     <string name="a11y_location_share_locate_button">Pietuvināt līdz pašreizējai atrašanās vietai</string>
     <string name="location_share_live_select_duration_option_1">15 minūtes</string>
     <string name="live_location_description">Atrašanās vietas tiešraide</string>
@@ -2717,7 +2717,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="poll_response_room_list_preview">Saņemtais balsojums</string>
     <string name="delete_poll_dialog_title">Noņemt aptauju</string>
     <string name="location_share_live_select_duration_option_3">8 stundas</string>
-    <string name="poll_end_action">Izbeigt aptauju</string>
+    <string name="poll_end_action">Noslēgt aptauju</string>
     <string name="location_share_live_stop">Pārtraukt</string>
     <string name="stop_voice_broadcast_dialog_title">Pārtraukt tiešraides apraidi\?</string>
     <string name="create_poll_title">Izveidot aptauju</string>
@@ -2725,7 +2725,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="location_share_live_select_duration_option_2">1 stundu</string>
     <string name="location_timeline_failed_to_load_map">Neizdevās ielādēt karti</string>
     <string name="labs_enable_live_location">Iespējot atrašanās vietas tiešraides kopīgošanu</string>
-    <string name="end_poll_confirmation_approve_button">Izbeigt aptauju</string>
+    <string name="end_poll_confirmation_approve_button">Noslēgt aptauju</string>
     <string name="error_voice_broadcast_unable_to_decrypt">Nav iespējams atšifrēt šo balss apraidi.</string>
     <string name="restart_the_application_to_apply_changes">Lietotne ir jāpārsāknē, lai izmaiņas stātos spēkā.</string>
     <string name="delete_poll_dialog_content">Vai tiešām noņemt šo aptauju\? To pēc noņemšanas vairs nevarēs atgūt.</string>
@@ -2781,7 +2781,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
         <item quantity="one">%1$d balsojums</item>
         <item quantity="other">%1$d balsojumi</item>
     </plurals>
-    <string name="closed_poll_option_description">Iznākums tiek atklāts tikai pēc aptaujas izbeigšanas</string>
+    <string name="closed_poll_option_description">Iznākums tiek atklāts tikai pēc aptaujas noslēgšanas</string>
     <string name="attachment_type_selector_poll">Aptaujas</string>
     <string name="attachment_type_selector_camera">Kamera</string>
     <string name="settings_troubleshoot_test_current_endpoint_title">Galamērķis</string>
@@ -2942,4 +2942,81 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="device_manager_learn_more_sessions_inactive">Neizmantotās sesijas ir sesijas, kas kādu laiku nav izmantotas, bet tās turpina saņemt šifrēšanas atslēgas.
 \n
 \nNeizmantotas sesijas noņemšana uzlabo drošību un veiktspēju un ir vieglāk noteikt, vai jauna sesija ir aizdomīga.</string>
+    <string name="pill_message_from_unknown_user">Ziņa</string>
+    <string name="qr_code_login_header_failed_other_device_not_signed_in_description">Otrā ierīcē ir jāpiesakās.</string>
+    <string name="rich_text_editor_link">Iestatīt saiti</string>
+    <string name="labs_enable_voice_broadcast_summary">Padara iespējamu ierakstīt un nosūtīt balss apraidi istabas laika joslā.</string>
+    <string name="home_empty_no_unreads_message">Šeit tiks parādītas nelasītās ziņas, kad tādas būs.</string>
+    <string name="qr_code_login_confirm_security_code">Apstiprināt</string>
+    <string name="pill_message_in_room">Ziņa %s</string>
+    <string name="home_empty_no_unreads_title">Nav nekā, par ko ziņot.</string>
+    <string name="qr_code_login_new_device_instruction_2">Jādodas uz Iestatījumi -&gt; Drošība un privātums</string>
+    <string name="qr_code_login_signing_in_a_mobile_device">Piesakies mobilajā ierīcē\?</string>
+    <string name="rich_text_editor_format_italic">Pielietot slīprakstu</string>
+    <string name="message_reply_to_sender_sent_video">nosūtīja video.</string>
+    <string name="qr_code_login_header_failed_device_is_not_supported_description">Sasaistīšana ar šo ierīci nav nodrošināta.</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_2">Jāatlasa \'Nolasīt kvadrātkodu\'</string>
+    <string name="message_reply_to_sender_created_poll">izveidoja aptauju.</string>
+    <string name="qr_code_login_header_connected_title">Izveidots drošs savienojums</string>
+    <string name="qr_code_login_header_failed_title">Neveiksmīgs savienojums</string>
+    <string name="qr_code_login_connecting_to_device">Savienojas ar ierīci</string>
+    <string name="qr_code_login_signing_in">Piesakās</string>
+    <string name="rich_text_editor_numbered_list">Pārslēgt numurētu sarakstu</string>
+    <string name="rich_text_editor_inline_code">Pielietot iekļautu kodu</string>
+    <string name="rich_text_editor_code_block">Pārslēgt koda bloku</string>
+    <string name="message_reply_to_sender_sent_audio_file">nosūtīja skaņas datni.</string>
+    <string name="settings_access_token_summary">Piekļuves pilnvara sniedz pilnu piekļuvi kontam. To nevajag kopīgot ne ar vienu.</string>
+    <string name="onboarding_new_app_layout_welcome_title">Laipni lūdzam jaunajā skatā!</string>
+    <string name="qr_code_login_new_device_instruction_3">Jāatlasa \'Parādīt kvadrātkodu\'</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_1">Jāsāk pieteikšanās skatā</string>
+    <string name="qr_code_login_show_qr_code_button">Rādīt kvadrātkodu šajā ierīcē</string>
+    <string name="qr_code_login_status_no_match">Nav atbilstības\?</string>
+    <string name="qr_code_login_try_again">Jāmēģina vēlreiz</string>
+    <string name="rich_text_editor_format_underline">Pielietot pasvītrojumu</string>
+    <string name="labs_enable_session_manager_title">Iespējot jauno sesiju pārvaldnieku</string>
+    <string name="home_empty_no_rooms_title">Laipni lūdzam ${app_name},
+\n%s!</string>
+    <string name="rich_text_editor_format_bold">Pielietot treknrakstu</string>
+    <string name="message_reply_to_sender_sent_image">nosūtīja attēlu.</string>
+    <string name="rich_text_editor_bullet_list">Pārslēgt vienkāršu sarakstu</string>
+    <string name="set_link_text">Teksts</string>
+    <string name="labs_enable_client_info_recording_title">Iespējot klienta informācijas ierakstīšanu</string>
+    <string name="onboarding_new_app_layout_spaces_title">Piekļūt vietām</string>
+    <string name="qr_code_login_header_failed_other_description">Pieprasījums neizdevās.</string>
+    <string name="rich_text_editor_full_screen_toggle">Pārslēgt pilnekrānu</string>
+    <string name="home_empty_space_no_rooms_title">%s
+\nizskatās mazliet tukša.</string>
+    <string name="qr_code_login_header_failed_timeout_description">Sasaistīšana netika pabeigta nepieciešamajā laikā.</string>
+    <string name="qr_code_login_new_device_instruction_1">Jāatver lietotne otrā ierīcē</string>
+    <string name="qr_code_login_link_a_device_show_qr_code_instruction_1">Jāsāk pieteikšanās skatā</string>
+    <string name="set_link_link">Saite</string>
+    <string name="set_link_edit">Labot saiti</string>
+    <string name="message_reply_to_sender_sent_voice_message">nosūtīja balss ziņu.</string>
+    <string name="message_reply_to_sender_ended_poll">noslēdza aptauju.</string>
+    <string name="message_reply_to_poll_preview">Aptauja</string>
+    <string name="pill_message_in_unknown_room">Ziņa istabā</string>
+    <string name="message_reply_to_ended_poll_preview">Noslēgtās aptaujas</string>
+    <string name="labs_enable_session_manager_summary">Iegūsti labāku pārredzamību un pārraudzību pār visām savām sesijām!</string>
+    <string name="labs_enable_voice_broadcast_title">Iespējot balss apraidi</string>
+    <string name="qr_code_login_header_failed_other_device_already_signed_in_description">Otrā ierīcē jau ir pieteikšanās.</string>
+    <string name="rich_text_editor_indent">Ievietot atkāpi</string>
+    <string name="rich_text_editor_unindent">Noņemt atkāpi</string>
+    <string name="rich_text_editor_quote">Pārslēgt citātu</string>
+    <string name="set_link_create">Izveidot saiti</string>
+    <string name="settings_access_token">Piekļuves pilnvara</string>
+    <string name="qr_code_login_header_failed_invalid_qr_code_description">Šis kvadrātkods ir nederīgs.</string>
+    <string name="qr_code_login_header_failed_user_cancelled_description">Pieteikšanās tika atcelta otrā ierīcē.</string>
+    <string name="qr_code_login_link_a_device_scan_qr_code_instruction_2">Jāatlasa \'Pieteikties ar kvadrātkodu\'</string>
+    <string name="rich_text_editor_format_strikethrough">Pielietot pārsvītrojumu</string>
+    <string name="message_reply_to_prefix">Atbildē uz</string>
+    <string name="message_reply_to_sender_sent_file">nosūtīja datni.</string>
+    <string name="message_reply_to_sender_sent_sticker">nosūtīja uzlīmi.</string>
+    <string name="pill_message_from_user">Ziņa no %s</string>
+    <string name="pill_message_unknown_room_or_space">Istaba/vieta</string>
+    <string name="labs_enable_client_info_recording_summary">Ierakstīt klienta nosaukumu, versiju un URL, lai sesiju pārvaldniekā vieglāk atpazītu sesijas.</string>
+    <string name="onboarding_new_app_layout_spaces_message">Piekļūsti savām vietām (apakšējā labajā stūrī) ātrāk un vienkāršāk kā jebkad iepriekš!</string>
+    <string name="qr_code_login_header_connected_description">Jāpārbauda ierīce, kurā esi pieteicies, tajā vajadzētu būt attēlotam zemāk redzamajam kodam. Jāapstiprina, ka zemāk esošais kods saskan ar to, kas ir ierīcē:</string>
+    <string name="qr_code_login_header_failed_denied_description">Pieprasījums tika atteikts otrā ierīcē.</string>
+    <string name="qr_code_login_scan_qr_code_button">Nolasīt kvadrātkodu</string>
+    <string name="qr_code_login_confirm_security_code_description">Lūgums nodrošināt, ka šī koda izcelsme ir zināma. Ar ierīču sasaistīšanu kādam tiks nodrošināta pilna piekļuve kontam.</string>
 </resources>
