@@ -2132,7 +2132,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="thread_list_modal_my_threads_subtitle">Rāda visus pavedienus, kuros ir notikusi iesaistīšanās</string>
     <string name="call_start_screen_sharing">Kopīgot ekrānu</string>
     <string name="labs_enable_deferred_dm_summary">Izveidot tiešo ziņu tikai pēc pirmās ziņas</string>
-    <string name="labs_enable_rich_text_editor_summary">Izmēģināt bagātinātu teksta rakstīšanu (vienkārša teksta ievade būs drīzumā)</string>
+    <string name="labs_enable_rich_text_editor_summary">Izmēģināt bagātinātu teksta rakstīšanu (vienkārša teksta ievade gaidāma drīzumā)</string>
     <string name="invites_empty_title">Nekā jauna.</string>
     <string name="room_notification_more_than_two_users_are_typing">%1$s, %2$s un citi</string>
     <string name="thread_list_modal_all_threads_title">Visi pavedieni</string>
@@ -2756,7 +2756,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
 \nJāielādē vairāk aptauju, lai redzētu iepriekšējo dienu aptaujas.</item>
         <item quantity="one">Iepriekšējā dienā nav notiekošu aptauju.
 \nJāielādē vairāk aptauju, lai redzētu iepriekšējo dienu aptaujas.</item>
-        <item quantity="other">Iepriekšējās %1$d nav notiekošu aptauju.
+        <item quantity="other">Iepriekšējās %1$d dienās nav notiekošu aptauju.
 \nJāielādē vairāk aptauju, lai redzētu iepriekšējo dienu aptaujas.</item>
     </plurals>
     <string name="room_poll_details_go_to_timeline">Apskatīt aptauju laika joslā</string>
