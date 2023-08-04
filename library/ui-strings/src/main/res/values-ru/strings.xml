@@ -3060,4 +3060,5 @@
     <string name="rich_text_editor_code_block">Блок кода</string>
     <string name="rich_text_editor_indent">Подпункт</string>
     <string name="rich_text_editor_unindent">Пункт</string>
+    <string name="settings_acceptable_use_policy">Политика пользования</string>
 </resources>
