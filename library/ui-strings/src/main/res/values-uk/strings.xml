@@ -495,7 +495,7 @@
     <string name="command_description_part_room">Вийти з кімнати</string>
     <string name="command_description_topic">Встановити тему кімнати</string>
     <string name="command_description_remove_user">Вилучити користувача із вказаним ID</string>
-    <string name="command_description_nick">Змінити Ваш псевдонім</string>
+    <string name="command_description_nick">Змінити ваше показуване ім\'я</string>
     <string name="command_description_markdown">Увімкнути/Вимкнути розмітку Markdown</string>
     <string name="command_description_clear_scalar_token">Для виправлення керування застосунками Matrix</string>
     <string name="create">Створити</string>
