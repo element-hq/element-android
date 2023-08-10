@@ -277,4 +277,18 @@
     <string name="pill_message_from_unknown_user">Mesaj</string>
     <string name="pill_message_from_user">%s-dan² mesaj</string>
     <string name="settings_access_token_summary">Giriş nişanəniz hesabınıza tam giriş imkanı verir.Bunu heç kimlə paylaşmayın.</string>
+    <plurals name="notice_room_canonical_alias_alternative_added_by_you">
+        <item quantity="one">Bu otaq üçün alternativ %1$s ünvanın əlavə etdiniz.</item>
+        <item quantity="other">Bu otaq üçün alternativ %1$s ünvanın əlavə etdiniz.</item>
+    </plurals>
+    <string name="notice_room_canonical_alias_alternative_changed">%1$s bu otaq üçün alternativ ünvanları dəyişdi.</string>
+    <plurals name="notice_room_canonical_alias_alternative_added">
+        <item quantity="one">%1$s bu otaq üçün %2$s alternativ ünvanın əlavə etdi.</item>
+        <item quantity="other">%1$s bu otaq üçün %2$s alternativ ünvanın əlavə etdi.</item>
+    </plurals>
+    <string name="notice_room_canonical_alias_alternative_changed_by_you">Bu otaq üçün alternativ ünvanları dəyişdiniz.</string>
+    <plurals name="notice_room_canonical_alias_alternative_removed">
+        <item quantity="one">%1$s bu otaq üçün %2$s alternativ ünvanın sildi.</item>
+        <item quantity="other">%1$s bu otaq üçün %2$s alternativ ünvanın sildi.</item>
+    </plurals>
 </resources>
