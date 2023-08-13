@@ -224,7 +224,7 @@
     <string name="notice_room_server_acl_set_title_by_you">Du hast die Server-ACL für diesen Raum gesetzt.</string>
     <string name="notice_room_server_acl_set_title">%s hat die Server-Zugriffssteuerungsliste (ACL) für diesen Raum gesetzt.</string>
     <string name="title_activity_settings">Einstellungen</string>
-    <string name="call_notification_answer">Akzeptiere</string>
+    <string name="call_notification_answer">Akzeptieren</string>
     <string name="call_notification_reject">Ablehnen</string>
     <string name="call_notification_hangup">Anruf beenden</string>
     <string name="ok">Ok</string>
@@ -263,7 +263,7 @@
     <string name="matrix_only_filter">Nur Matrix-Kontakte</string>
     <string name="no_result_placeholder">Keine Ergebnisse</string>
     <string name="rooms_header">Räume</string>
-    <string name="send_bug_report_include_logs">Sende Protokolle</string>
+    <string name="send_bug_report_include_logs">Protokolle senden</string>
     <string name="send_bug_report_include_crash_logs">Absturzberichte übermitteln</string>
     <string name="send_bug_report_include_screenshot">Bildschirmfoto übermitteln</string>
     <string name="send_bug_report">Problem melden</string>
@@ -1622,9 +1622,9 @@
     <string name="settings_call_show_confirmation_dialog_title">Versehentliche Anrufe verhindern</string>
     <string name="settings_call_show_confirmation_dialog_summary">Bitte um Bestätigung, bevor du einen Anruf tätigst</string>
     <string name="bottom_sheet_setup_secure_backup_submit">Einrichten</string>
-    <string name="no_permissions_to_start_conf_call">Dir fehlt die Berechtigung in diesem Raum eine Konferenz zu starten</string>
-    <string name="video_meeting">Beginne eine Videokonferenz</string>
-    <string name="audio_meeting">Beginne eine Audiokonferenz</string>
+    <string name="no_permissions_to_start_conf_call">Du bist nicht berechtigt, in diesem Raum ein Konferenzgespräch zu starten</string>
+    <string name="video_meeting">Videokonferenz starten</string>
+    <string name="audio_meeting">Audiokonferenz starten</string>
     <string name="audio_video_meeting_description">Konferenzen nutzen die Jitsi-Sicherheits- und Berechtigungsrichtlinien. Alle im Raum Anwesenden können während der Konferenz beitreten.</string>
     <string name="cannot_call_yourself">Du kannst dich nicht selbst anrufen</string>
     <string name="cannot_call_yourself_with_invite">Du kannst dich nicht selbst anrufen, warte bis Teilnehmer die Einladung annehmen</string>
@@ -1670,7 +1670,7 @@
     <string name="sent_a_poll">Umfrage</string>
     <string name="sent_a_reaction">Reagierte mit: %s</string>
     <string name="universal_link_malformed">Der Link war fehlerhaft</string>
-    <string name="no_permissions_to_start_webrtc_call">Du bist nicht berechtigt, einen Anruf in diesem Raum zu beginnen</string>
+    <string name="no_permissions_to_start_webrtc_call">Du bist nicht berechtigt, in diesem Raum einen Anruf zu beginnen</string>
     <string name="sent_verification_conclusion">Ergebnis der Überprüfung</string>
     <string name="delete_account_data_warning">Kontodaten vom Typ %1$s löschen\?
 \n
@@ -1681,8 +1681,8 @@
     <string name="settings_troubleshoot_test_push_loop_waiting_for_push">Die Applikation wartet auf den PUSH</string>
     <string name="settings_troubleshoot_test_push_loop_title">Push testen</string>
     <string name="search_banned_user_hint">Gebannte Nutzer filtern</string>
-    <string name="no_permissions_to_start_webrtc_call_in_direct_room">Du bist nicht berechtigt einen Anruf zu beginnen</string>
-    <string name="no_permissions_to_start_conf_call_in_direct_room">Du hast keine Berechtigung ein Konferenzgespräch zu starten</string>
+    <string name="no_permissions_to_start_webrtc_call_in_direct_room">Du bist nicht berechtigt, einen Anruf zu beginnen</string>
+    <string name="no_permissions_to_start_conf_call_in_direct_room">Du bist nicht berechtigt, ein Konferenzgespräch zu starten</string>
     <string name="settings_security_pin_code_notifications_summary_on">Details wie Raumnamen und Nachrichteninhalt zeigen.</string>
     <string name="settings_security_pin_code_notifications_title">Inhalt in Benachrichtigungen anzeigen</string>
     <string name="settings_security_pin_code_use_biometrics_summary_off">PIN-Code ist die einzige Möglichkeit ${app_name} zu entsperren.</string>
@@ -2128,9 +2128,9 @@
         <item quantity="other">%d verpasste Sprachanrufe</item>
     </plurals>
     <string name="hs_client_url">Heim-Server-API-Adresse</string>
-    <string name="denied_permission_voice_message">Um Sprachnachrichten zu senden, erlaube bitte Zugriff aufs Mikrofon.</string>
-    <string name="denied_permission_camera">Um fortzufahren, erlaube bitte in den Systemeinstellungen Zugriff auf die Kamera.</string>
-    <string name="denied_permission_generic">Für diese Aktion fehlen einige Berechtigungen, bitte erlaube diese in den Systemeinstellungen.</string>
+    <string name="denied_permission_voice_message">Um Sprachnachrichten zu senden, gewähre bitte den Zugriff aufs Mikrofon.</string>
+    <string name="denied_permission_camera">Um fortzufahren, gewähre bitte in den Systemeinstellungen den Zugriff auf die Kamera.</string>
+    <string name="denied_permission_generic">Für diese Aktion fehlen einige Berechtigungen, bitte gewähre diese in den Systemeinstellungen.</string>
     <string name="voice_message_slide_to_cancel">Wische zum Abbrechen</string>
     <string name="spaces_which_can_access">Spaces mit Zugriff auf</string>
     <string name="allow_space_member_to_find_and_access">Space-Mitgliedern Auffinden und Zugriff erlauben.</string>
@@ -2877,7 +2877,7 @@
     <string name="notice_voice_broadcast_ended">%1$s beendete eine Sprachübertragung.</string>
     <string name="stop_voice_broadcast_content">Möchtest du die Übertragung wirklich beenden\? Dies wird die Übertragung beenden und die vollständige Aufnahme im Raum bereitstellen.</string>
     <string name="stop_voice_broadcast_dialog_title">Live-Übertragung beenden\?</string>
-    <string name="action_stop">Ja, beende</string>
+    <string name="action_stop">Ja, beenden</string>
     <string name="rich_text_editor_link">Link setzen</string>
     <string name="set_link_edit">Link bearbeiten</string>
     <string name="set_link_create">Link erstellen</string>
