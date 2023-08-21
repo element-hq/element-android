@@ -101,6 +101,9 @@ class VectorSettingsGeneralFragment :
     private val mPasswordPreference by lazy {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY)!!
     }
+    private val mManage3pidsPreference by lazy {
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_EMAILS_AND_PHONE_NUMBERS_PREFERENCE_KEY)!!
+    }
     private val mIdentityServerPreference by lazy {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY)!!
     }
@@ -196,6 +199,10 @@ class VectorSettingsGeneralFragment :
         } else {
             mPasswordPreference.isVisible = false
         }
+
+        // Manage 3Pid
+        // Hide the preference if 3pids can not be updated
+        mManage3pidsPreference.isVisible = homeServerCapabilities.canChange3pid
 
         val openDiscoveryScreenPreferenceClickListener = Preference.OnPreferenceClickListener {
             (requireActivity() as VectorSettingsActivity).navigateTo(
