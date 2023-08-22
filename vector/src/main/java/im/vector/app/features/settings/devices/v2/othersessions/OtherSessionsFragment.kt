@@ -103,10 +103,15 @@ class OtherSessionsFragment :
             val nbDevices = viewState.devices()?.size ?: 0
             stringProvider.getQuantityString(R.plurals.device_manager_other_sessions_multi_signout_all, nbDevices, nbDevices)
         }
-        multiSignoutItem.isVisible = if (viewState.isSelectModeEnabled) {
-            viewState.devices.invoke()?.any { it.isSelected }.orFalse()
+        multiSignoutItem.isVisible = if (viewState.externalAccountManagementUrl != null) {
+            // Hide multi signout if we have an external account manager
+            false
         } else {
-            viewState.devices.invoke()?.isNotEmpty().orFalse()
+            if (viewState.isSelectModeEnabled) {
+                viewState.devices.invoke()?.any { it.isSelected }.orFalse()
+            } else {
+                viewState.devices.invoke()?.isNotEmpty().orFalse()
+            }
         }
         val showAsActionFlag = if (viewState.isSelectModeEnabled) MenuItem.SHOW_AS_ACTION_IF_ROOM else MenuItem.SHOW_AS_ACTION_NEVER
         multiSignoutItem.setShowAsAction(showAsActionFlag or MenuItem.SHOW_AS_ACTION_WITH_TEXT)

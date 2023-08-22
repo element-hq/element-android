@@ -41,7 +41,7 @@ import timber.log.Timber
 
 class OtherSessionsViewModel @AssistedInject constructor(
         @Assisted private val initialState: OtherSessionsViewState,
-        activeSessionHolder: ActiveSessionHolder,
+        private val activeSessionHolder: ActiveSessionHolder,
         private val getDeviceFullInfoListUseCase: GetDeviceFullInfoListUseCase,
         private val signoutSessionsUseCase: SignoutSessionsUseCase,
         private val pendingAuthHandler: PendingAuthHandler,
@@ -65,6 +65,18 @@ class OtherSessionsViewModel @AssistedInject constructor(
         observeDevices(initialState.currentFilter)
         refreshIpAddressVisibility()
         observePreferences()
+        initExternalAccountManagementUrl()
+    }
+
+    private fun initExternalAccountManagementUrl() {
+        setState {
+            copy(
+                    externalAccountManagementUrl = activeSessionHolder.getSafeActiveSession()
+                            ?.homeServerCapabilitiesService()
+                            ?.getHomeServerCapabilities()
+                            ?.externalAccountManagementUrl
+            )
+        }
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {

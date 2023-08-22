@@ -40,7 +40,7 @@ import timber.log.Timber
 
 class DevicesViewModel @AssistedInject constructor(
         @Assisted initialState: DevicesViewState,
-        activeSessionHolder: ActiveSessionHolder,
+        private val activeSessionHolder: ActiveSessionHolder,
         private val getCurrentSessionCrossSigningInfoUseCase: GetCurrentSessionCrossSigningInfoUseCase,
         private val getDeviceFullInfoListUseCase: GetDeviceFullInfoListUseCase,
         private val refreshDevicesOnCryptoDevicesChangeUseCase: RefreshDevicesOnCryptoDevicesChangeUseCase,
@@ -69,6 +69,18 @@ class DevicesViewModel @AssistedInject constructor(
         refreshDeviceList()
         refreshIpAddressVisibility()
         observePreferences()
+        initExternalAccountManagementUrl()
+    }
+
+    private fun initExternalAccountManagementUrl() {
+        setState {
+            copy(
+                    externalAccountManagementUrl = activeSessionHolder.getSafeActiveSession()
+                            ?.homeServerCapabilitiesService()
+                            ?.getHomeServerCapabilities()
+                            ?.externalAccountManagementUrl
+            )
+        }
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
