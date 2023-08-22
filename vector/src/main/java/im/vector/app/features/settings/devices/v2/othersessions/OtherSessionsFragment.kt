@@ -308,7 +308,10 @@ class OtherSessionsFragment :
                         )
                 )
                 views.otherSessionsNotFoundTextView.text = getString(R.string.device_manager_other_sessions_no_inactive_sessions_found)
-                updateSecurityLearnMoreButton(R.string.device_manager_learn_more_sessions_inactive_title, R.string.device_manager_learn_more_sessions_inactive)
+                updateSecurityLearnMoreButton(
+                        R.string.device_manager_learn_more_sessions_inactive_title,
+                        R.string.device_manager_learn_more_sessions_inactive
+                )
             }
             DeviceManagerFilterType.ALL_SESSIONS -> { /* NOOP. View is not visible */
             }
