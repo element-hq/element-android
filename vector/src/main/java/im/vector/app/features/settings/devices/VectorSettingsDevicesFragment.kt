@@ -35,6 +35,7 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.databinding.DialogBaseEditTextBinding
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.features.auth.ReAuthActivity
@@ -94,6 +95,9 @@ class VectorSettingsDevicesFragment :
                 }
                 is DevicesViewEvents.PromptResetSecrets -> {
                     navigator.open4SSetup(requireActivity(), SetupMode.PASSPHRASE_AND_NEEDED_SECRETS_RESET)
+                }
+                is DevicesViewEvents.OpenBrowser -> {
+                    openUrlInChromeCustomTab(requireContext(), null, it.url)
                 }
             }
         }
