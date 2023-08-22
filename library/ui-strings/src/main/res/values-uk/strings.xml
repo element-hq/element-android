@@ -57,7 +57,7 @@
     <string name="notice_room_name_changed_by_you">Ви змінили назву кімнати на: %1$s</string>
     <string name="notice_room_avatar_changed_by_you">Ви змінили аватар кімнати</string>
     <string name="notice_room_topic_changed_by_you">Ви змінили тему на: %1$s</string>
-    <string name="notice_display_name_changed_from_by_you">Ви змінили показуване ім\'я з %1$s на %2$s</string>
+    <string name="notice_display_name_changed_from_by_you">Ви змінили псевдонім з %1$s на %2$s</string>
     <string name="notice_avatar_url_changed_by_you">Ви змінили свій аватар</string>
     <plurals name="room_displayname_four_and_more_members">
         <item quantity="one">%1$s, %2$s, %3$s та %4$d інший</item>
@@ -85,7 +85,7 @@
     <string name="notice_placed_voice_call_by_you">Ви починаєте голосовий виклик.</string>
     <string name="notice_placed_video_call_by_you">Ви починаєте відеовиклик.</string>
     <string name="notice_room_avatar_changed">%1$s змінює аватар кімнати</string>
-    <string name="notice_display_name_removed_by_you">Ви прибрали показуване ім\'я (%1$s)</string>
+    <string name="notice_display_name_removed_by_you">Ви вилучили псевдонім (%1$s)</string>
     <string name="notice_room_remove_by_you">Ви вилучили %1$s</string>
     <string name="notice_direct_room_third_party_invite">%1$s запрошує %2$s</string>
     <string name="notice_room_reject_by_you">Ви відхилили запрошення</string>
@@ -137,7 +137,7 @@
     <string name="notice_answered_call_by_you">Ви відповіли на виклик.</string>
     <string name="notice_call_candidates_by_you">Ви надіслали дані для налаштування виклику.</string>
     <string name="notice_call_candidates">%s надсилає дані для налаштування виклику.</string>
-    <string name="notice_display_name_set_by_you">Ви встановили собі показуване ім\'я %1$s</string>
+    <string name="notice_display_name_set_by_you">Ви налаштували псевдонімом %1$s</string>
     <string name="notice_room_withdraw_by_you">Ви відкликали запрошення для %1$s</string>
     <string name="notice_room_ban_by_you">Ви заблокували %1$s</string>
     <string name="notice_room_unban_by_you">Ви заблокували %1$s</string>
@@ -268,7 +268,7 @@
     <string name="search_members_hint">Фільтр переліку користувачів</string>
     <string name="search_no_results">Тут порожньо</string>
     <string name="settings_profile_picture">Аватар</string>
-    <string name="settings_display_name">Показуване ім\'я</string>
+    <string name="settings_display_name">Псевдонім</string>
     <string name="settings_add_email_address">Додати адресу е-пошти</string>
     <string name="settings_add_phone_number">Додати номер телефону</string>
     <string name="settings_app_info_link_summary">Екран системної інформації застосунку.</string>
@@ -276,7 +276,7 @@
     <string name="settings_notification_ringtone">Тон сповіщення</string>
     <string name="settings_enable_all_notif">Увімкнути сповіщення для цього облікового запису</string>
     <string name="settings_enable_this_device">Увімкнути сповіщення для цього пристрою</string>
-    <string name="settings_containing_my_display_name">Повідомлення, що містять моє показуване ім\'я</string>
+    <string name="settings_containing_my_display_name">Повідомлення з моїм псевдонімом</string>
     <string name="settings_containing_my_user_name">Повідомлення, що містять моє ім\'я користувача</string>
     <string name="settings_messages_in_one_to_one">В особистих чатах</string>
     <string name="settings_messages_in_group_chat">У групових чатах</string>
@@ -495,7 +495,7 @@
     <string name="command_description_part_room">Вийти з кімнати</string>
     <string name="command_description_topic">Встановити тему кімнати</string>
     <string name="command_description_remove_user">Вилучити користувача із вказаним ID</string>
-    <string name="command_description_nick">Змінити Ваш псевдонім</string>
+    <string name="command_description_nick">Змінити псевдонім</string>
     <string name="command_description_markdown">Увімкнути/Вимкнути розмітку Markdown</string>
     <string name="command_description_clear_scalar_token">Для виправлення керування застосунками Matrix</string>
     <string name="create">Створити</string>
@@ -816,7 +816,7 @@
     <string name="room_widget_permission_theme">Ваша тема</string>
     <string name="room_widget_permission_user_id">Ваш ідентифікатор користувача</string>
     <string name="room_widget_permission_avatar_url">URL-адреса аватара</string>
-    <string name="room_widget_permission_display_name">Ваше показуване ім\'я</string>
+    <string name="room_widget_permission_display_name">Ваш псевдонім</string>
     <string name="room_widget_revoke_access">Скасувати доступ для мене</string>
     <string name="room_widget_open_in_browser">Відкрити у браузері</string>
     <string name="room_widget_reload">Перезавантажити віджет</string>
@@ -1564,7 +1564,7 @@
     <string name="settings_encrypted_group_messages">Зашифровані групові повідомлення</string>
     <string name="settings_group_messages">Групові повідомлення</string>
     <string name="settings_messages_containing_username">Моє користувацьке ім\'я</string>
-    <string name="settings_messages_containing_display_name">Моє показуване ім\'я</string>
+    <string name="settings_messages_containing_display_name">Мій псевдонім</string>
     <string name="settings_messages_at_room">Повідомлення, які містять @room</string>
     <string name="settings_when_rooms_are_upgraded">Коли кімнати оновлено</string>
     <string name="settings_messages_in_e2e_group_chat">Зашифровані повідомлення в групових бесідах</string>
@@ -2060,7 +2060,7 @@
     <string name="command_description_whois">Показує відомості про користувача</string>
     <string name="command_description_avatar_for_room">Змінює ваш аватар лише у поточній кімнаті</string>
     <string name="command_description_room_avatar">Змінює аватар поточної кімнати</string>
-    <string name="command_description_nick_for_room">Змінює ваше показуване ім\'я лише у поточній кімнаті</string>
+    <string name="command_description_nick_for_room">Змінює ваш псевдонім лише у поточній кімнаті</string>
     <string name="command_description_room_name">Установлює назву кімнати</string>
     <string name="settings_discovery_no_policy_provided">Сервер ідентифікації не надав жодних правил</string>
     <string name="spaces_feeling_experimental_subspace">Бажаєте поекспериментувати\?
@@ -2408,7 +2408,7 @@
     <string name="tooltip_attachment_photo">Відкрити камеру</string>
     <string name="labs_auto_report_uisi_desc">Ваша система автоматично надсилатиме журнали, коли виникне помилка неможливості розшифрування</string>
     <string name="labs_auto_report_uisi">Автозвіт про помилки шифрування.</string>
-    <string name="room_member_override_nick_color">Замінити колір показуваного імені</string>
+    <string name="room_member_override_nick_color">Замінити колір псевдоніма</string>
     <string name="login_splash_already_have_account">Я вже маю обліковий запис</string>
     <string name="ftue_auth_carousel_encrypted_title">Захищене спілкування.</string>
     <string name="ftue_auth_carousel_control_title">Ви контролюєте все.</string>
@@ -2517,8 +2517,8 @@
     <string name="ftue_profile_picture_subtitle">Час вказати ім’я</string>
     <string name="ftue_profile_picture_title">Додати зображення профілю</string>
     <string name="ftue_display_name_entry_footer">Ви можете змінити його пізніше</string>
-    <string name="ftue_display_name_entry_title">Показуване ім\'я</string>
-    <string name="ftue_display_name_title">Виберіть показуване ім\'я</string>
+    <string name="ftue_display_name_entry_title">Псевдонім</string>
+    <string name="ftue_display_name_title">Оберіть псевдонім</string>
     <string name="ftue_account_created_subtitle">Ваш обліковий запис %s створений</string>
     <string name="ftue_account_created_congratulations_title">Вітаємо!</string>
     <string name="ftue_account_created_take_me_home">На головну</string>
@@ -2562,7 +2562,7 @@
 \n
 \nЗауважте, що ця дія перезапустить застосунок, і це може тривати деякий час.</string>
     <string name="initial_sync_request_title">Початковий запит синхронізації</string>
-    <string name="settings_show_latest_profile_description">Показувати найновіші дані профілю (аватар і показуване ім\'я) для всіх повідомлень.</string>
+    <string name="settings_show_latest_profile_description">Показувати найновіші дані профілю (аватар і псевдонім) для всіх повідомлень.</string>
     <string name="settings_show_latest_profile">Показувати найновіші дані користувача</string>
     <string name="a11y_presence_busy">Зайнятий</string>
     <string name="keys_backup_settings_signature_from_this_user">Резервна копія має дійсний підпис від цього користувача.</string>

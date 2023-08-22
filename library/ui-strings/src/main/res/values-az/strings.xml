@@ -256,4 +256,39 @@
     </plurals>
     <string name="notice_room_server_acl_set_ip_literals_not_allowed">• IP literallarına uyğunlaşan serverlər qadağan edildi.</string>
     <string name="notice_room_server_acl_set_ip_literals_allowed">• IP literallarına uyğunlaşan serverlərə icazə verilir.</string>
+    <string name="pill_message_in_unknown_room">Otaqdakı mesaj</string>
+    <string name="set_link_link">Bağlantı</string>
+    <string name="set_link_create">Bağlantı yarat</string>
+    <string name="message_reply_to_poll_preview">Anket</string>
+    <string name="pill_message_unknown_room_or_space">Otaq / Məkan</string>
+    <string name="set_link_edit">Bağlantını redaktə et</string>
+    <string name="set_link_text">Mətn</string>
+    <string name="message_reply_to_sender_ended_poll">Anket başa çatıb.</string>
+    <string name="notice_display_name_changed_to">%1$s ekran adını %2$s olaraq dəyişdi</string>
+    <string name="rich_text_editor_inline_code">Daxili kod formatın işlət</string>
+    <string name="rich_text_editor_code_block">Kod blokun dəyiş</string>
+    <string name="notice_room_canonical_alias_set_by_you">Bu otaq üçün əsas ünvanı %1$s olaraq təyin etdiniz.</string>
+    <string name="pill_message_in_room">Mesaj %s</string>
+    <string name="notice_room_aliases_added_and_removed_by_you">Bu otaq üçün ünvan kimi %2$s-nı sildiniz və %1$s əlavə etdiniz.</string>
+    <string name="settings_access_token">Giriş Nişanəniz</string>
+    <string name="notice_room_canonical_alias_unset">%1$s bu otaq üçün əsas ünvanı sildi.</string>
+    <string name="message_reply_to_ended_poll_preview">Anket bitdi</string>
+    <string name="notice_room_canonical_alias_set">%1$s bu otaq üçün əsas ünvanı %2$s olaraq təyin etdi.</string>
+    <string name="pill_message_from_unknown_user">Mesaj</string>
+    <string name="pill_message_from_user">%s-dan² mesaj</string>
+    <string name="settings_access_token_summary">Giriş nişanəniz hesabınıza tam giriş imkanı verir.Bunu heç kimlə paylaşmayın.</string>
+    <plurals name="notice_room_canonical_alias_alternative_added_by_you">
+        <item quantity="one">Bu otaq üçün alternativ %1$s ünvanın əlavə etdiniz.</item>
+        <item quantity="other">Bu otaq üçün alternativ %1$s ünvanın əlavə etdiniz.</item>
+    </plurals>
+    <string name="notice_room_canonical_alias_alternative_changed">%1$s bu otaq üçün alternativ ünvanları dəyişdi.</string>
+    <plurals name="notice_room_canonical_alias_alternative_added">
+        <item quantity="one">%1$s bu otaq üçün %2$s alternativ ünvanın əlavə etdi.</item>
+        <item quantity="other">%1$s bu otaq üçün %2$s alternativ ünvanın əlavə etdi.</item>
+    </plurals>
+    <string name="notice_room_canonical_alias_alternative_changed_by_you">Bu otaq üçün alternativ ünvanları dəyişdiniz.</string>
+    <plurals name="notice_room_canonical_alias_alternative_removed">
+        <item quantity="one">%1$s bu otaq üçün %2$s alternativ ünvanın sildi.</item>
+        <item quantity="other">%1$s bu otaq üçün %2$s alternativ ünvanın sildi.</item>
+    </plurals>
 </resources>

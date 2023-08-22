@@ -1,0 +1,2 @@
+Principais mudanças nesta versão: Threads são agora habilitadas por padrão.
+Changelog completo: https://github.com/vector-im/element-android/releases

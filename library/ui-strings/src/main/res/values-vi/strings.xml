@@ -2554,4 +2554,6 @@
     <string name="device_manager_session_title">Phiên</string>
     <string name="device_manager_device_title">Thiết bị</string>
     <string name="device_manager_session_last_activity">Hoạt động cuối %1$s</string>
+    <string name="_resume">Tiếp tục</string>
+    <string name="a11y_presence_busy">Bận</string>
 </resources>

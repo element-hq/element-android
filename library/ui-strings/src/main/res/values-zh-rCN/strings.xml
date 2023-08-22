@@ -654,7 +654,7 @@
     <string name="settings_silent_notifications_preferences">设置静音通知</string>
     <string name="settings_system_preferences_summary">选择LED颜色、震动、铃声……</string>
     <string name="settings_cryptography_manage_keys">加密密钥管理</string>
-    <string name="encryption_message_recovery">恢复已加密消息</string>
+    <string name="encryption_message_recovery">已加密消息恢复</string>
     <string name="encryption_settings_manage_message_recovery_summary">管理密钥备份</string>
     <string name="notification_silent">静音</string>
     <string name="error_empty_field_enter_user_name">请输入一个用户名。</string>

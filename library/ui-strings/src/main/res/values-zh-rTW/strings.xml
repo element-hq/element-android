@@ -748,7 +748,7 @@
     <string name="backup">備份</string>
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">除非您在登出前備份好金鑰，否則將無法再存取所有加密訊息。</string>
     <string name="action_sign_out_confirmation_simple">您確定要登出嗎？</string>
-    <string name="encryption_message_recovery">還原加密訊息</string>
+    <string name="encryption_message_recovery">加密訊息還原</string>
     <string name="error_empty_field_enter_user_name">請輸入使用者名稱。</string>
     <string name="keys_backup_setup">開始使用金鑰備份</string>
     <string name="keys_backup_setup_step1_advanced">（進階）</string>
