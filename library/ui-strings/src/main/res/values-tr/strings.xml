@@ -1755,7 +1755,7 @@
         <item quantity="other">%1$d seçildi</item>
     </plurals>
     <string name="notice_display_name_changed_to">%1$s görünen adını %2$s olarak değiştirdi</string>
-    <string name="sign_out_failed_dialog_message">Ana sunucuya ulaşılamıyor. Yine de çıkış yaparsanız, bu cihaz cihaz listenizden silinmez, başka bir istemci kullanarak kaldırmak isteyebilirsiniz.</string>
+    <string name="sign_out_failed_dialog_message">Ana sunucuya ulaşılamıyor. Yine de çıkış yaparsanız, bu cihaz, cihaz listenizden silinmez, başka bir istemci kullanarak kaldırmak isteyebilirsiniz.</string>
     <plurals name="notice_room_server_acl_changes">
         <item quantity="one">%d sunucu ACL\'si değişti</item>
         <item quantity="other">%d sunucu ACL değişikliği</item>
