@@ -1734,4 +1734,32 @@
     <string name="action_view_threads">Konuları Görüntüle</string>
     <string name="initial_sync_request_title">Başlangıç eşitleme isteği</string>
     <string name="all_chats">Tüm Sohbetler</string>
+    <string name="start_chat">Sohbet Başlat</string>
+    <string name="notice_voice_broadcast_ended">%1$s bir ses yayınını sonlandırdı.</string>
+    <string name="notice_voice_broadcast_ended_by_you">Bir sesli yayını sonlandırdınız.</string>
+    <string name="create_room">Oda yarat</string>
+    <string name="explore_rooms">Odaları keşfedin</string>
+    <string name="initial_sync_request_content">${app_name}, aşağıdaki nedenden dolayı güncel olması için önbelleği temizlemelidir:
+\n %s
+\n
+\n Bu eylemin uygulamayı yeniden başlatacağını ve biraz zaman alabileceğini unutmayın.</string>
+    <string name="initial_sync_request_reason_unignored_users">- Bazı kullanıcılar göz ardı edildi</string>
+    <string name="a11y_expand_space_children">%s çocuğu genişlet</string>
+    <string name="time_unit_minute_short">dk.</string>
+    <string name="action_disable">Devre dışı bırak</string>
+    <string name="time_unit_hour_short">sa.</string>
+    <string name="change_space">Alanı Değiştir</string>
+    <string name="sign_out_anyway">Yine de oturumu kapat</string>
+    <plurals name="x_selected">
+        <item quantity="one">%1$d seçildi</item>
+        <item quantity="other">%1$d seçildi</item>
+    </plurals>
+    <string name="notice_display_name_changed_to">%1$s görünen adını %2$s olarak değiştirdi</string>
+    <string name="sign_out_failed_dialog_message">Ana sunucuya ulaşılamıyor. Yine de çıkış yaparsanız, bu cihaz, cihaz listenizden silinmez, başka bir istemci kullanarak kaldırmak isteyebilirsiniz.</string>
+    <plurals name="notice_room_server_acl_changes">
+        <item quantity="one">%d sunucu ACL\'si değişti</item>
+        <item quantity="other">%d sunucu ACL değişikliği</item>
+    </plurals>
+    <string name="time_unit_second_short">s.</string>
+    <string name="a11y_collapse_space_children">%s çocuğu daralt</string>
 </resources>

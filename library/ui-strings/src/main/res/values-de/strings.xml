@@ -224,7 +224,7 @@
     <string name="notice_room_server_acl_set_title_by_you">Du hast die Server-ACL für diesen Raum gesetzt.</string>
     <string name="notice_room_server_acl_set_title">%s hat die Server-Zugriffssteuerungsliste (ACL) für diesen Raum gesetzt.</string>
     <string name="title_activity_settings">Einstellungen</string>
-    <string name="call_notification_answer">Akzeptiere</string>
+    <string name="call_notification_answer">Akzeptieren</string>
     <string name="call_notification_reject">Ablehnen</string>
     <string name="call_notification_hangup">Anruf beenden</string>
     <string name="ok">Ok</string>
@@ -263,7 +263,7 @@
     <string name="matrix_only_filter">Nur Matrix-Kontakte</string>
     <string name="no_result_placeholder">Keine Ergebnisse</string>
     <string name="rooms_header">Räume</string>
-    <string name="send_bug_report_include_logs">Sende Protokolle</string>
+    <string name="send_bug_report_include_logs">Protokolle senden</string>
     <string name="send_bug_report_include_crash_logs">Absturzberichte übermitteln</string>
     <string name="send_bug_report_include_screenshot">Bildschirmfoto übermitteln</string>
     <string name="send_bug_report">Problem melden</string>
@@ -692,7 +692,7 @@
     <string name="settings_noisy_notifications_preferences">Laute Benachrichtigungen einstellen</string>
     <string name="settings_call_notifications_preferences">Anrufbenachrichtigung einstellen</string>
     <string name="settings_silent_notifications_preferences">Stumme Benachrichtigungen einstellen</string>
-    <string name="settings_system_preferences_summary">Wähle LED-Farbe, Vibration, Ton …</string>
+    <string name="settings_system_preferences_summary">LED-Farbe, Vibration, Ton auswählen …</string>
     <string name="notification_silent">Stumm</string>
     <string name="passphrase_empty_error_message">Bitte eine Passphrase eingeben</string>
     <string name="passphrase_passphrase_too_weak">Passphrase ist zu schwach</string>
@@ -712,7 +712,7 @@
     <string name="keys_backup_unlock_button">Historie entschlüsseln</string>
     <string name="keys_backup_settings_restore_backup_button">Von Sicherung wiederherstellen</string>
     <string name="keys_backup_settings_delete_backup_button">Lösche Sicherung</string>
-    <string name="keys_backup_settings_deleting_backup">Lösche Sicherung …</string>
+    <string name="keys_backup_settings_deleting_backup">Sicherung löschen …</string>
     <string name="keys_backup_settings_delete_confirm_title">Lösche Sicherung</string>
     <string name="settings_notification_by_event">Präferenz der Benachrichtigungen nach Ereignis</string>
     <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
@@ -728,7 +728,7 @@
 \nSichere deine Schlüssel, um sie nicht zu verlieren.</string>
     <string name="keys_backup_setup_step3_generating_key_status">Wiederherstellungsschlüssel aus Passphrase generieren. Dies kann mehrere Sekunden brauchen.</string>
     <string name="keys_backup_setup_skip_msg">Du verlierst möglicherweise den Zugang zu deinen Nachrichten, wenn du dich abmeldest oder das Gerät verlierst.</string>
-    <string name="keys_backup_restore_is_getting_backup_version">Rufe Sicherungsversion ab …</string>
+    <string name="keys_backup_restore_is_getting_backup_version">Sicherungsversion abrufen …</string>
     <string name="keys_backup_restore_with_passphrase">Nutze deine Wiederherstellungs-Passphrase, um deinen verschlüsselten Nachrichtenverlauf lesen zu können</string>
     <string name="keys_backup_restore_use_recovery_key">nutze deinen Wiederherstellungsschlüssel</string>
     <string name="keys_backup_restore_with_passphrase_helper_with_link">Wenn du deine Wiederherstellungspassphrase nicht weist, kannst du %s.</string>
@@ -793,15 +793,15 @@
     <string name="keys_backup_banner_in_progress">Sichere deine Schlüssel. Dies könnte einige Minuten dauern …</string>
     <string name="keys_backup_info_keys_all_backup_up">Alle Schlüssel sind gesichert</string>
     <plurals name="keys_backup_info_keys_backing_up">
-        <item quantity="one">Sichere einen Schlüssel …</item>
-        <item quantity="other">Sichere %d Schlüssel …</item>
+        <item quantity="one">Einen Schlüssel sichern …</item>
+        <item quantity="other">%d Schlüssel sichern …</item>
     </plurals>
     <string name="keys_backup_info_title_version">Version</string>
     <string name="keys_backup_info_title_algorithm">Algorithmus</string>
     <string name="keys_backup_info_title_signature">Signatur</string>
-    <string name="keys_backup_restoring_computing_key_waiting_message">Berechne Wiederherstellungsschlüssel …</string>
-    <string name="keys_backup_restoring_downloading_backup_waiting_message">Lade Schlüssel herunter …</string>
-    <string name="keys_backup_restoring_importing_keys_waiting_message">Importiere Schlüssel …</string>
+    <string name="keys_backup_restoring_computing_key_waiting_message">Wiederherstellungsschlüssel berechnen …</string>
+    <string name="keys_backup_restoring_downloading_backup_waiting_message">Schlüssel herunterladen …</string>
+    <string name="keys_backup_restoring_importing_keys_waiting_message">Schlüssel importieren …</string>
     <string name="action_ignore">Ignorieren</string>
     <string name="auth_login_sso">Mit Single-Sign-On anmelden</string>
     <string name="settings_send_message_with_enter">Nachricht mit Eingabetaste senden</string>
@@ -903,8 +903,8 @@
     <string name="settings_labs_show_hidden_events_in_timeline">Versteckte Ereignisse in der Zeitleiste anzeigen</string>
     <string name="bottom_action_people_x">Direktnachrichten</string>
     <string name="send_file_step_idle">Warten …</string>
-    <string name="send_file_step_encrypting_thumbnail">Vorschaubild wird verschlüsselt …</string>
-    <string name="send_file_step_encrypting_file">Verschlüssle Datei …</string>
+    <string name="send_file_step_encrypting_thumbnail">Vorschaubild verschlüsseln …</string>
+    <string name="send_file_step_encrypting_file">Datei verschlüsseln …</string>
     <string name="edited_suffix">(bearbeitet)</string>
     <string name="message_edits">Nachrichtenbearbeitung</string>
     <string name="no_message_edits_found">Keine Änderungen gefunden</string>
@@ -912,7 +912,7 @@
     <string name="room_filtering_footer_create_new_direct_message">Sende eine neue Direktnachricht</string>
     <string name="room_filtering_footer_open_room_directory">Das Raumverzeichnis anzeigen</string>
     <string name="link_copied_to_clipboard">Link in die Zwischenablage kopiert</string>
-    <string name="creating_direct_room">Erstelle Raum …</string>
+    <string name="creating_direct_room">Raum erstellen …</string>
     <string name="message_view_edit_history">Bearbeitungsverlauf anzeigen</string>
     <string name="import_e2e_keys_from_file">E2E-Schlüssel aus der Datei \"%1$s\" importieren.</string>
     <string name="send_suggestion_sent">Vielen Dank, der Vorschlag wurde erfolgreich gesendet</string>
@@ -1003,7 +1003,7 @@
     <string name="send_attachment">Anhang senden</string>
     <string name="a11y_open_drawer">Navigationsmenü öffnen</string>
     <string name="a11y_create_menu_open">Raumerstellungsmenü öffnen</string>
-    <string name="a11y_create_menu_close">Schließe das Raumerstellungsmenü …</string>
+    <string name="a11y_create_menu_close">Das Raumerstellungsmenü schließen …</string>
     <string name="a11y_create_direct_message">Erstelle eine neue Direktnachricht</string>
     <string name="a11y_create_room">Erstelle einen neuen Raum</string>
     <string name="a11y_close_keys_backup_banner">Schließe Key-Backup-Einblendung</string>
@@ -1030,15 +1030,15 @@
     <string name="content_reported_title">Inhalt gemeldet</string>
     <string name="content_reported_content">Dieser Inhalt wurde gemeldet.
 \n
-\nWenn du keine weiteren Inhalte dieser Person sehen möchtest, kannst sie ignorieren, um ihre Nachrichten auszublenden.</string>
+\nWenn du keine Inhalte mehr von dieser Person sehen möchtest, kannst du sie ignorieren, um ihre Nachrichten auszublenden.</string>
     <string name="content_reported_as_spam_title">Als Spam gemeldet</string>
     <string name="content_reported_as_spam_content">Dieser Inhalt wurde als Spam gemeldet.
 \n
-\nWenn du keine weiteren Inhalte dieser Person sehen möchtest, kannst sie ignorieren, um ihre Nachrichten auszublenden.</string>
+\nWenn du keine Inhalte mehr von dieser Person sehen möchtest, kannst du sie ignorieren, um ihre Nachrichten auszublenden.</string>
     <string name="content_reported_as_inappropriate_title">Als unangebracht gemeldet</string>
     <string name="content_reported_as_inappropriate_content">Dieser Inhalt wurde als unangebracht gemeldet.
 \n
-\nWenn du keine weiteren Inhalte dieser Person sehen möchtest, kannst sie ignorieren, um ihre Nachrichten auszublenden.</string>
+\nWenn du keine Inhalte mehr von dieser Person sehen möchtest, kannst du sie ignorieren, um ihre Nachrichten auszublenden.</string>
     <string name="message_ignore_user">Nutzer ignorieren</string>
     <string name="room_list_quick_actions_notifications_all_noisy">Alle Nachrichten (laut)</string>
     <string name="room_list_quick_actions_notifications_all">Alle Nachrichten</string>
@@ -1524,8 +1524,8 @@
     <string name="uploads_files_title">DATEIEN</string>
     <string name="uploads_files_subtitle">%1$s um %2$s</string>
     <string name="uploads_files_no_result">Es gibt in diesem Raum keine Dateien</string>
-    <string name="room_list_quick_actions_favorite_add">Füge zu Favoriten hinzu</string>
-    <string name="room_list_quick_actions_favorite_remove">Entferne von Favoriten</string>
+    <string name="room_list_quick_actions_favorite_add">Zu Favoriten hinzufügen</string>
+    <string name="room_list_quick_actions_favorite_remove">Aus Favoriten entfernen</string>
     <string name="notice_member_no_changes_by_you">Du hast keine Änderungen gemacht</string>
     <string name="room_join_rules_public_by_you">Du hast den Raum für alle, die den Link kennen, zugänglich gemacht.</string>
     <string name="room_join_rules_invite_by_you">Du hast den Raumbeitritt auf Einladungen beschränkt.</string>
@@ -1622,9 +1622,9 @@
     <string name="settings_call_show_confirmation_dialog_title">Versehentliche Anrufe verhindern</string>
     <string name="settings_call_show_confirmation_dialog_summary">Bitte um Bestätigung, bevor du einen Anruf tätigst</string>
     <string name="bottom_sheet_setup_secure_backup_submit">Einrichten</string>
-    <string name="no_permissions_to_start_conf_call">Dir fehlt die Berechtigung in diesem Raum eine Konferenz zu starten</string>
-    <string name="video_meeting">Beginne eine Videokonferenz</string>
-    <string name="audio_meeting">Beginne eine Audiokonferenz</string>
+    <string name="no_permissions_to_start_conf_call">Du bist nicht berechtigt, in diesem Raum ein Konferenzgespräch zu starten</string>
+    <string name="video_meeting">Videokonferenz starten</string>
+    <string name="audio_meeting">Audiokonferenz starten</string>
     <string name="audio_video_meeting_description">Konferenzen nutzen die Jitsi-Sicherheits- und Berechtigungsrichtlinien. Alle im Raum Anwesenden können während der Konferenz beitreten.</string>
     <string name="cannot_call_yourself">Du kannst dich nicht selbst anrufen</string>
     <string name="cannot_call_yourself_with_invite">Du kannst dich nicht selbst anrufen, warte bis Teilnehmer die Einladung annehmen</string>
@@ -1670,7 +1670,7 @@
     <string name="sent_a_poll">Umfrage</string>
     <string name="sent_a_reaction">Reagierte mit: %s</string>
     <string name="universal_link_malformed">Der Link war fehlerhaft</string>
-    <string name="no_permissions_to_start_webrtc_call">Du bist nicht berechtigt, einen Anruf in diesem Raum zu beginnen</string>
+    <string name="no_permissions_to_start_webrtc_call">Du bist nicht berechtigt, in diesem Raum einen Anruf zu beginnen</string>
     <string name="sent_verification_conclusion">Ergebnis der Überprüfung</string>
     <string name="delete_account_data_warning">Kontodaten vom Typ %1$s löschen\?
 \n
@@ -1681,8 +1681,8 @@
     <string name="settings_troubleshoot_test_push_loop_waiting_for_push">Die Applikation wartet auf den PUSH</string>
     <string name="settings_troubleshoot_test_push_loop_title">Push testen</string>
     <string name="search_banned_user_hint">Gebannte Nutzer filtern</string>
-    <string name="no_permissions_to_start_webrtc_call_in_direct_room">Du bist nicht berechtigt einen Anruf zu beginnen</string>
-    <string name="no_permissions_to_start_conf_call_in_direct_room">Du hast keine Berechtigung ein Konferenzgespräch zu starten</string>
+    <string name="no_permissions_to_start_webrtc_call_in_direct_room">Du bist nicht berechtigt, einen Anruf zu beginnen</string>
+    <string name="no_permissions_to_start_conf_call_in_direct_room">Du bist nicht berechtigt, ein Konferenzgespräch zu starten</string>
     <string name="settings_security_pin_code_notifications_summary_on">Details wie Raumnamen und Nachrichteninhalt zeigen.</string>
     <string name="settings_security_pin_code_notifications_title">Inhalt in Benachrichtigungen anzeigen</string>
     <string name="settings_security_pin_code_use_biometrics_summary_off">PIN-Code ist die einzige Möglichkeit ${app_name} zu entsperren.</string>
@@ -1729,11 +1729,11 @@
     <string name="settings_security_pin_code_notifications_summary_off">Nur die Anzahl ungelesener Nachrichten in der Benachrichtigung zeigen.</string>
     <string name="attachment_type_dialog_title">Füge Bild hinzu per</string>
     <string name="warning_room_not_created_yet">Der Raum ist noch nicht erstellt. Raumerstellung abbrechen\?</string>
-    <string name="room_list_quick_actions_low_priority_add">Zu niedrige Priorität hinzufügen</string>
+    <string name="room_list_quick_actions_low_priority_add">Zu niedriger Priorität hinzufügen</string>
     <string name="create_room_topic_hint">Thema</string>
     <string name="warning_unsaved_change_discard">Änderungen verwerfen</string>
     <string name="warning_unsaved_change">Es gibt ungespeicherte Änderungen. Änderungen verwerfen\?</string>
-    <string name="room_list_quick_actions_low_priority_remove">Von niedrige Priorität entfernen</string>
+    <string name="room_list_quick_actions_low_priority_remove">Aus niedriger Priorität entfernen</string>
     <string name="rotate_and_crop_screen_title">Rotieren und Zuschneiden</string>
     <string name="create_room_settings_section">Raumeinstellungen</string>
     <string name="create_room_topic_section">Raumthema (optional)</string>
@@ -2026,7 +2026,7 @@
     </plurals>
     <string name="error_file_too_big_simple">Die Datei ist zu groß.</string>
     <string name="send_file_step_compressing_video">Video wird komprimiert (%d%%)</string>
-    <string name="send_file_step_compressing_image">Komprimiere Bild …</string>
+    <string name="send_file_step_compressing_image">Bild komprimieren …</string>
     <string name="use_as_default_and_do_not_ask_again">Als Standard festsetzen und nicht mehr fragen</string>
     <string name="option_always_ask">Jedes Mal fragen</string>
     <string name="directory_add_a_new_server_prompt">Gib den Namen des neuen Servers ein, den du erkunden möchtest.</string>
@@ -2128,9 +2128,9 @@
         <item quantity="other">%d verpasste Sprachanrufe</item>
     </plurals>
     <string name="hs_client_url">Heim-Server-API-Adresse</string>
-    <string name="denied_permission_voice_message">Um Sprachnachrichten zu senden, erlaube bitte Zugriff aufs Mikrofon.</string>
-    <string name="denied_permission_camera">Um fortzufahren, erlaube bitte in den Systemeinstellungen Zugriff auf die Kamera.</string>
-    <string name="denied_permission_generic">Für diese Aktion fehlen einige Berechtigungen, bitte erlaube diese in den Systemeinstellungen.</string>
+    <string name="denied_permission_voice_message">Um Sprachnachrichten zu senden, gewähre bitte den Zugriff aufs Mikrofon.</string>
+    <string name="denied_permission_camera">Um fortzufahren, gewähre bitte in den Systemeinstellungen den Zugriff auf die Kamera.</string>
+    <string name="denied_permission_generic">Für diese Aktion fehlen einige Berechtigungen, bitte gewähre diese in den Systemeinstellungen.</string>
     <string name="voice_message_slide_to_cancel">Wische zum Abbrechen</string>
     <string name="spaces_which_can_access">Spaces mit Zugriff auf</string>
     <string name="allow_space_member_to_find_and_access">Space-Mitgliedern Auffinden und Zugriff erlauben.</string>
@@ -2877,7 +2877,7 @@
     <string name="notice_voice_broadcast_ended">%1$s beendete eine Sprachübertragung.</string>
     <string name="stop_voice_broadcast_content">Möchtest du die Übertragung wirklich beenden\? Dies wird die Übertragung beenden und die vollständige Aufnahme im Raum bereitstellen.</string>
     <string name="stop_voice_broadcast_dialog_title">Live-Übertragung beenden\?</string>
-    <string name="action_stop">Ja, beende</string>
+    <string name="action_stop">Ja, beenden</string>
     <string name="rich_text_editor_link">Link setzen</string>
     <string name="set_link_edit">Link bearbeiten</string>
     <string name="set_link_create">Link erstellen</string>

@@ -1,0 +1,2 @@
+Principais mudanças nesta versão: Basicamente melhorias no recurso de transmissão de voz.
+Changelog completo: https://github.com/vector-im/element-android/releases
