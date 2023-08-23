@@ -2958,4 +2958,12 @@
     <string name="crosssigning_verify_after_update">App uppdaterad</string>
     <string name="sign_out_failed_dialog_message">Kan inte nå hemservern. Om du ändå loggar ut kommer den här enheten inte att raderas från din enhetslista, du kanske vill ta bort den med en annan klient.</string>
     <string name="sign_out_anyway">Logga ut ändå</string>
+    <string name="create_room_unknown_users_dialog_content">Kunde in hitta profiler för Matrix-ID:n nedan. Vill du starta en chatt ändå\?
+\n
+\n%s</string>
+    <string name="create_room_unknown_users_dialog_submit">Starta chatt ändå</string>
+    <string name="invite_unknown_users_dialog_content">Kunde inte hitta profiler för Matrix-ID:n nedan. Vill du bjuda in dem ändå\?
+\n
+\n%s</string>
+    <string name="invite_unknown_users_dialog_submit">Bjud in ändå</string>
 </resources>

@@ -1,0 +1,2 @@
+تغغیرات عمده در این نگارش: ارائه تصحیحی.
+گزارش دگرگونی کامل: https://github.com/vector-im/element-android/releases
