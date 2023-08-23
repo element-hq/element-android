@@ -2958,4 +2958,12 @@
     <string name="crosssigning_verify_after_update">کاره به‌روز شد</string>
     <string name="sign_out_anyway">خروج به هر صورت</string>
     <string name="sign_out_failed_dialog_message">نمی‌توان به کارساز خانگی رسید. اگر همچنان خارج شوید این افزاره از سیاههٔ افزاره‌هایتان پاک نخواهد شد و باید از کارخواهس دیگر برش دارید.</string>
+    <string name="invite_unknown_users_dialog_content">ناتوان در یافتن نمایه‌ها برای شناسه‌های ماتریکس سیاهه شده. می‌خواهید به هر حال دعوتشان کنید؟
+\n
+\n%s</string>
+    <string name="create_room_unknown_users_dialog_content">ناتوان در یافتن نمایه‌ها برای شناسه‌های ماتریکس سیاهه شده. می‌خواهید به هر حال گپی بیاغازید؟
+\n
+\n%s</string>
+    <string name="create_room_unknown_users_dialog_submit">آغاز گپ به هر حال</string>
+    <string name="invite_unknown_users_dialog_submit">دعوت به هر حال</string>
 </resources>

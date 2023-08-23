@@ -2945,4 +2945,13 @@
     <string name="crosssigning_verify_after_update">Aplikacioni u përditësua</string>
     <string name="sign_out_anyway">Dil, sido qoftë</string>
     <string name="sign_out_failed_dialog_message">S’kapet dot shërbyesi Home. Nëse keni dalë, sido qoftë, kjo pajisje s’do të fshihet te lista e pajisjeve tuaja, mund të doni ta hiqni duke përdorur klient tjetër.</string>
+    <string name="create_room_unknown_users_dialog_content">S’arrihet të gjenden profile për ID-rat Matrix të radhitura më poshtë. Do të donit të fillohej një fjalosje, sido që të jetë\?
+\n
+\n%s</string>
+    <string name="settings_enable_direct_share_title">Aktivizo ndarje të drejtpërdrejtë me të tjerët</string>
+    <string name="create_room_unknown_users_dialog_submit">Fillo fjalosje, sido që të jetë</string>
+    <string name="invite_unknown_users_dialog_content">S’arrihet të gjenden profile për ID-rat Matrix të radhitura më poshtë. Do të donit të ftohen, sido qoftë\?
+\n
+\n%s</string>
+    <string name="invite_unknown_users_dialog_submit">Ftoji, sido qoftë</string>
 </resources>
