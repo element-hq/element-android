@@ -1321,7 +1321,7 @@
     <string name="verification_profile_warning">警告</string>
     <string name="room_member_profile_failed_to_get_devices">无法获取会话</string>
     <string name="room_member_profile_sessions_section_title">会话</string>
-    <string name="trusted">可信任</string>
+    <string name="trusted">已信任</string>
     <string name="not_trusted">未信任</string>
     <string name="verification_profile_device_verified_because">可信任此会话用于安全地收发消息，因为%1$s（%2$s）已验证了它：</string>
     <string name="verification_profile_device_new_signing">%1$s (%2$s) 使用新会话登录：</string>
@@ -1495,7 +1495,7 @@
     <string name="identity_server_error_no_current_binding_error">当前与此标识符没有关联。</string>
     <string name="identity_server_set_default_notice">你的家服务器（%1$s）建议使用 %2$s 作为你的身份服务器</string>
     <string name="identity_server_set_default_submit">使用 %1$s</string>
-    <string name="identity_server_set_alternative_notice">或者，你可以输入任何其它身份服务器网址</string>
+    <string name="identity_server_set_alternative_notice">或者，你可以输入任何其他身份服务器URL</string>
     <string name="identity_server_set_alternative_notice_no_default">输入身份服务器 URL</string>
     <string name="identity_server_set_alternative_submit">提交</string>
     <string name="power_level_edit_title">设置角色</string>
