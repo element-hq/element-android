@@ -590,7 +590,7 @@
     <string name="settings_troubleshoot_test_battery_title">电池优化</string>
     <string name="settings_inline_url_preview_summary">当家服务器支持此功能时，在聊天中预览链接。</string>
     <string name="settings_send_typing_notifs">发送正在输入通知</string>
-    <string name="settings_send_typing_notifs_summary">让房间中的其他用户知道你正在输入。</string>
+    <string name="settings_send_typing_notifs_summary">让其他用户知道你正在输入。</string>
     <string name="settings_send_markdown">Markdown 格式化</string>
     <string name="settings_send_markdown_summary">在消息发出之前使用 Markdown 语法格式化消息。这允许你使用高级的文字格式，例如使用星号显示斜体文字。</string>
     <string name="settings_show_read_receipts">显示已读回执</string>
@@ -1551,7 +1551,7 @@
     <string name="auth_pin_new_pin_action">新 PIN</string>
     <string name="auth_pin_reset_content">为重置你的 PIN，你将需要重新登录并创建新的。</string>
     <string name="settings_security_pin_code_title">启用 PIN</string>
-    <string name="settings_security_pin_code_summary">如果你想要重置你的 PIN，点按忘记 PIN 登出并重置。</string>
+    <string name="settings_security_pin_code_summary">如果你想要重置你的PIN，点按“忘记PIN”以登出并重置。</string>
     <string name="settings_call_show_confirmation_dialog_title">防止意外通话</string>
     <string name="settings_call_show_confirmation_dialog_summary">在开始通话之前要求确认</string>
     <string name="no_permissions_to_start_conf_call">你没有权限在此房间发起会议通话</string>
@@ -1605,7 +1605,7 @@
     <string name="universal_link_malformed">链接格式不正确</string>
     <string name="settings_security_pin_code_grace_period_summary_off">每次打开 ${app_name} 时都需要 PIN 码。</string>
     <string name="settings_security_pin_code_grace_period_summary_on">未使用 ${app_name} 2 分钟后需要 PIN 码。</string>
-    <string name="settings_security_pin_code_grace_period_title">2 分钟后需要 PIN 码</string>
+    <string name="settings_security_pin_code_grace_period_title">2分钟后需要PIN</string>
     <string name="settings_security_pin_code_notifications_summary_off">仅在一个简单的通知中显示未读消息的数量。</string>
     <string name="settings_security_pin_code_notifications_summary_on">显示详情，如房间名称和消息内容。</string>
     <string name="settings_security_pin_code_notifications_title">在通知中显示内容</string>
@@ -2515,7 +2515,7 @@
     <string name="thread_list_modal_my_threads_title">我的消息列</string>
     <string name="room_unsupported_e2e_algorithm_as_admin">加密被错误地配置了，所以你无法发送消息。点击以打开设置。</string>
     <string name="room_unsupported_e2e_algorithm">加密被错误地配置了，所以你无法发送消息。请联系管理员将加密还原到有效的状态。</string>
-    <string name="room_notification_more_than_two_users_are_typing">%1$s、%2$s 与其他人</string>
+    <string name="room_notification_more_than_two_users_are_typing">%1$s、%2$s与其他人</string>
     <string name="room_notification_two_users_are_typing">%1$s与%2$s</string>
     <string name="call_start_screen_sharing">共享屏幕</string>
     <string name="call_stop_screen_sharing">停止共享屏幕</string>
