@@ -2823,7 +2823,7 @@
     <string name="settings_access_token_summary">你的访问令牌提供对你账户的完全访问权限。勿与任何人分享它。</string>
     <string name="settings_access_token">访问令牌</string>
     <string name="action_proceed_to_reset">继续重设</string>
-    <string name="notice_display_name_changed_to">%1$s更改了其显示名称为%2$s</string>
+    <string name="notice_display_name_changed_to">%1$s将其显示名称改为%2$s</string>
     <string name="settings_external_account_management_title">账户</string>
     <string name="action_stop">是的，停止</string>
     <string name="sign_out_failed_dialog_message">无法连接家服务器。若仍登出，此设备将不会从设备列表擦除，你或许想用另一个客户端移除它。</string>
