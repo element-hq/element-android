@@ -2865,4 +2865,6 @@
     <string name="room_polls_wait_for_display">显示投票</string>
     <string name="rich_text_editor_quote">切换引用</string>
     <string name="rich_text_editor_numbered_list">切换有序列表</string>
+    <string name="verification_request_was_sent">已发送验证请求。打开一个你的其他会话以接受并开始验证。</string>
+    <string name="verification_not_found">未找到验证请求。它可能已取消，或由另一个会话处理了。</string>
 </resources>
