@@ -1176,9 +1176,9 @@
     <string name="signed_out_title">你已登出</string>
     <string name="signed_out_notice">这可能由于多种原因：
 \n
-\n• 你已在其它会话中更改了你的密码。
+\n• 你已在另一个会话中更改了你的密码。
 \n
-\n• 你已从其它会话删除了此会话。
+\n• 你已从另一个会话删除了此会话。
 \n
 \n• 你的服务器管理员出于安全原因已取消你的访问权限。</string>
     <string name="signed_out_submit">重新登录</string>
