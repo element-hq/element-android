@@ -2869,4 +2869,9 @@
     <string name="verification_not_found">未找到验证请求。它可能已取消，或由另一个会话处理了。</string>
     <string name="direct_room_encryption_enabled_waiting_users_tile_description">受邀用户一旦加入${app_name}，你们就能聊天，并且房间会端到端加密</string>
     <string name="secure_backup_reset_all_no_other_devices_long">重置你的验证密钥是无法撤销的。重置后，你将无法存取旧的加密消息，并且之前任何验证过你的朋友都会看到安全警告，直到你与他们重新验证。</string>
+    <string name="room_polls_active_no_item">此房间无正在进行的投票</string>
+    <string name="confirm_your_identity_after_update">最新更新改进了安全消息传递。 请重新验证你的设备。</string>
+    <string name="error_voice_broadcast_no_connection_recording">连接错误——录音已暂停</string>
+    <string name="secure_backup_reset_danger_warning">仅当你确定已丢失所有其他设备和安全密钥时，才请继续。</string>
+    <string name="encrypted_by_deleted">由已删除的设备加密</string>
 </resources>
