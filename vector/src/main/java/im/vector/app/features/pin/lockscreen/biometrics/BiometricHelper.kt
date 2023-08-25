@@ -41,7 +41,7 @@ import im.vector.app.features.pin.lockscreen.ui.fallbackprompt.FallbackBiometric
 import im.vector.app.features.pin.lockscreen.utils.DevicePromptCheck
 import im.vector.app.features.pin.lockscreen.utils.hasFlag
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.BufferOverflow
@@ -155,7 +155,7 @@ class BiometricHelper @AssistedInject constructor(
         return authenticate(activity)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+    @OptIn(DelicateCoroutinesApi::class)
     private fun authenticateInternal(
         activity: FragmentActivity,
         checkSystemKeyExists: Boolean,
