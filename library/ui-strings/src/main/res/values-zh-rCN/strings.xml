@@ -2874,4 +2874,5 @@
     <string name="error_voice_broadcast_no_connection_recording">连接错误——录音已暂停</string>
     <string name="secure_backup_reset_danger_warning">仅当你确定已丢失所有其他设备和安全密钥时，才请继续。</string>
     <string name="encrypted_by_deleted">由已删除的设备加密</string>
+    <string name="error_voice_broadcast_unable_to_decrypt">无法解密此语音广播。</string>
 </resources>
