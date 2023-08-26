@@ -1044,7 +1044,7 @@
     <string name="creating_direct_room">Criando sala…</string>
     <string name="message_view_edit_history">Visualizar Histórico de Edição</string>
     <string name="terms_of_service">Termos de Serviço</string>
-    <string name="terms_description_for_identity_server">Ser descobertável por outras(os)</string>
+    <string name="terms_description_for_identity_server">Se tornar achável a outras pessoas</string>
     <string name="terms_description_for_integration_manager">Usar bots, bridges, widgets e pacotes de stickers</string>
     <string name="identity_server">Servidor de identidade</string>
     <string name="disconnect_identity_server">Desconectar servidor de identidade</string>
