@@ -165,6 +165,7 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
                     Timber.v("Extracted integration config : $config")
                     realm.insertOrUpdate(config)
                 }
+                homeServerCapabilitiesEntity.authenticationIssuer = getWellknownResult.wellKnown.unstableDelegatedAuthConfig?.issuer
                 homeServerCapabilitiesEntity.externalAccountManagementUrl = getWellknownResult.wellKnown.unstableDelegatedAuthConfig?.accountManagementUrl
             }
 

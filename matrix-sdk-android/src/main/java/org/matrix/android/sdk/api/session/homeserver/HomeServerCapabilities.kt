@@ -85,6 +85,11 @@ data class HomeServerCapabilities(
          * External account management url for use with MSC3824 delegated OIDC, provided in Wellknown.
          */
         val externalAccountManagementUrl: String? = null,
+
+        /**
+         * Authentication issuer for use with MSC3824 delegated OIDC, provided in Wellknown.
+         */
+        val authenticationIssuer: String? = null,
 ) {
 
     enum class RoomCapabilitySupport {
