@@ -146,6 +146,8 @@ data class HomeServerCapabilities(
         return cap?.preferred ?: cap?.support?.lastOrNull()
     }
 
+    val delegatedOidcAuthEnabled: Boolean = authenticationIssuer != null
+
     companion object {
         const val MAX_UPLOAD_FILE_SIZE_UNKNOWN = -1L
         const val ROOM_CAP_KNOCK = "knock"

@@ -103,8 +103,8 @@ class OtherSessionsFragment :
             val nbDevices = viewState.devices()?.size ?: 0
             stringProvider.getQuantityString(R.plurals.device_manager_other_sessions_multi_signout_all, nbDevices, nbDevices)
         }
-        multiSignoutItem.isVisible = if (viewState.externalAccountManagementUrl != null) {
-            // Hide multi signout if we have an external account manager
+        multiSignoutItem.isVisible = if (viewState.delegatedOidcAuthEnabled) {
+            // Hide multi signout if the homeserver delegates the account management
             false
         } else {
             if (viewState.isSelectModeEnabled) {

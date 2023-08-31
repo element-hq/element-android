@@ -355,8 +355,8 @@ class VectorSettingsDevicesFragment :
             views.deviceListHeaderOtherSessions.isVisible = true
             val colorDestructive = colorProvider.getColorFromAttribute(R.attr.colorError)
             val multiSignoutItem = views.deviceListHeaderOtherSessions.menu.findItem(R.id.otherSessionsHeaderMultiSignout)
-            // Hide multi signout if we have an external account manager
-            multiSignoutItem.isVisible = state.externalAccountManagementUrl == null
+            // Hide multi signout if the homeserver delegates the account management
+            multiSignoutItem.isVisible = state.delegatedOidcAuthEnabled.not()
             val nbDevices = otherDevices.size
             multiSignoutItem.title = stringProvider.getQuantityString(R.plurals.device_manager_other_sessions_multi_signout_all, nbDevices, nbDevices)
             multiSignoutItem.setTextColor(colorDestructive)
@@ -396,8 +396,8 @@ class VectorSettingsDevicesFragment :
         signoutSessionItem.setTextColor(colorDestructive)
         val signoutOtherSessionsItem = views.deviceListHeaderCurrentSession.menu.findItem(R.id.currentSessionHeaderSignoutOtherSessions)
         signoutOtherSessionsItem.setTextColor(colorDestructive)
-        // Hide signout other sessions if we have an external account manager
-        signoutOtherSessionsItem.isVisible = hasOtherDevices && state.externalAccountManagementUrl == null
+        // Hide signout other sessions if the homeserver delegates the account management
+        signoutOtherSessionsItem.isVisible = hasOtherDevices && state.delegatedOidcAuthEnabled.not()
     }
 
     private fun renderCurrentSessionListView(currentDeviceInfo: DeviceFullInfo) {

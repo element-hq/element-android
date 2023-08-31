@@ -36,6 +36,7 @@ import im.vector.app.features.settings.devices.v2.signout.SignoutSessionsReAuthN
 import im.vector.app.features.settings.devices.v2.signout.SignoutSessionsUseCase
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
 import timber.log.Timber
 
@@ -65,16 +66,17 @@ class OtherSessionsViewModel @AssistedInject constructor(
         observeDevices(initialState.currentFilter)
         refreshIpAddressVisibility()
         observePreferences()
-        initExternalAccountManagementUrl()
+        initDelegatedOidcAuthEnabled()
     }
 
-    private fun initExternalAccountManagementUrl() {
+    private fun initDelegatedOidcAuthEnabled() {
         setState {
             copy(
-                    externalAccountManagementUrl = activeSessionHolder.getSafeActiveSession()
+                    delegatedOidcAuthEnabled = activeSessionHolder.getSafeActiveSession()
                             ?.homeServerCapabilitiesService()
                             ?.getHomeServerCapabilities()
-                            ?.externalAccountManagementUrl
+                            ?.delegatedOidcAuthEnabled
+                            .orFalse()
             )
         }
     }

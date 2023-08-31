@@ -35,6 +35,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
 import timber.log.Timber
 
@@ -69,16 +70,17 @@ class DevicesViewModel @AssistedInject constructor(
         refreshDeviceList()
         refreshIpAddressVisibility()
         observePreferences()
-        initExternalAccountManagementUrl()
+        initDelegatedOidcAuthEnabled()
     }
 
-    private fun initExternalAccountManagementUrl() {
+    private fun initDelegatedOidcAuthEnabled() {
         setState {
             copy(
-                    externalAccountManagementUrl = activeSessionHolder.getSafeActiveSession()
+                    delegatedOidcAuthEnabled = activeSessionHolder.getSafeActiveSession()
                             ?.homeServerCapabilitiesService()
                             ?.getHomeServerCapabilities()
-                            ?.externalAccountManagementUrl
+                            ?.delegatedOidcAuthEnabled
+                            .orFalse()
             )
         }
     }
