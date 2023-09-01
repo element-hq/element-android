@@ -209,11 +209,13 @@ class PlainTextComposerLayout @JvmOverloads constructor(
 
         avatarRenderer.render(event.senderInfo.toMatrixItem(), views.composerRelatedMessageAvatar)
 
-        val content = if (specialMode is MessageComposerMode.Edit) {
+        // hotfix of https://github.com/vector-im/element-android/issues/8602
+        //  the markdown (inclusively formatting marks as plain text) is applied now instead of the formatted markdown
+        val content = /*if (specialMode is MessageComposerMode.Edit) {
             formattedBody ?: defaultContent
-        } else {
-            defaultContent
-        }
+        } else {*/
+                defaultContent
+        //}
 
         views.composerEditText.setText(content)
 
