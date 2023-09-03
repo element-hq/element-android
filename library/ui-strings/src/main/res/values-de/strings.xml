@@ -11,7 +11,7 @@
     <string name="notice_room_ban">%1$s hat %2$s gebannt</string>
     <string name="notice_room_withdraw">%1$s hat die Einladung für %2$s zurückgezogen</string>
     <string name="notice_avatar_url_changed">%1$s hat das Profilbild geändert</string>
-    <string name="notice_display_name_set">%1$s hat den Anzeigenamen zu %2$s geändert</string>
+    <string name="notice_display_name_set">%1$s hat den Anzeigenamen in %2$s geändert</string>
     <string name="notice_display_name_changed_from">%1$s hat den Anzeigenamen von %2$s auf %3$s geändert</string>
     <string name="notice_display_name_removed">%1$s hat den Anzeigenamen gelöscht (war %2$s)</string>
     <string name="notice_room_topic_changed">%1$s hat das Raumthema geändert auf: %2$s</string>
@@ -40,9 +40,9 @@
     <string name="room_displayname_two_members">%1$s und %2$s</string>
     <string name="room_displayname_empty_room">Leerer Raum</string>
     <string name="notice_room_update">%s hat diesen Raum aufgewertet.</string>
-    <string name="event_status_sending_message">Sende eine Nachricht …</string>
+    <string name="event_status_sending_message">Nachricht senden …</string>
     <string name="initial_sync_start_importing_account">Erste Synchronisation:
-\nImportiere Konto …</string>
+\nKonto importieren …</string>
     <string name="initial_sync_start_importing_account_crypto">Erste Synchronisation:
 \nImportiere Kryptoschlüssel</string>
     <string name="initial_sync_start_importing_account_rooms">Erste Synchronisation:
@@ -290,7 +290,7 @@
     <string name="auth_invalid_email">Dies scheint keine gültige E-Mail-Adresse zu sein</string>
     <string name="auth_email_already_defined">Diese E-Mail-Adresse wird bereits verwendet.</string>
     <string name="auth_forgot_password">Passwort vergessen?</string>
-    <string name="auth_recaptcha_message">Dieser Homeserver möchte sicherstellen, dass du kein Roboter bist</string>
+    <string name="auth_recaptcha_message">Dieser Heim-Server möchte sicherstellen, dass du kein Roboter bist</string>
     <string name="auth_reset_password_error_unauthorized">Verifizierung der E-Mail-Adresse ist fehlgeschlagen. Stelle sicher, dass du den Link in der E-Mail geöffnet hast</string>
     <string name="login_error_invalid_home_server">Bitte eine gültige URL eingeben</string>
     <string name="login_error_bad_json">Fehlerhaftes JSON</string>
@@ -495,7 +495,7 @@
     <string name="notification_off">Aus</string>
     <string name="notification_noisy">Laut</string>
     <string name="encrypted_message">Verschlüsselte Nachricht</string>
-    <string name="loading">Lädt …</string>
+    <string name="loading">Laden …</string>
     <string name="start_voice_call_prompt_msg">Sicher, dass du einen Sprachanruf starten möchtest\?</string>
     <string name="start_video_call_prompt_msg">Sicher, dass du einen Videoanruf starten möchtest\?</string>
     <string name="room_participants_ban_prompt_msg">Die Verbannung einer Person entfernt sie aus diesem Raum und hindert sie am erneuten Beitritt.</string>
@@ -762,7 +762,7 @@
     <string name="sign_out_bottom_sheet_warning_backing_up">Schlüsselsicherung läuft. Wenn du dich jetzt abmeldest, verlierst du den Zugriff auf deine verschlüsselten Nachrichten.</string>
     <string name="sign_out_bottom_sheet_warning_backup_not_active">Schlüsselsicherung sollte bei allen Sitzungen aktiviert sein, um den Verlust verschlüsselter Nachrichten zu verhindern.</string>
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">Ich möchte meine verschlüsselten Nachrichten nicht</string>
-    <string name="sign_out_bottom_sheet_backing_up_keys">Sichere Schlüssel …</string>
+    <string name="sign_out_bottom_sheet_backing_up_keys">Schlüssel sichern …</string>
     <string name="are_you_sure">Bist du sicher\?</string>
     <string name="backup">Sicherung</string>
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">Alle verschlüsselten Nachrichten gehen verloren, wenn Du dich abmeldest ohne die Schlüssel gesichert zu haben.</string>
@@ -790,7 +790,7 @@
     <string name="keys_backup_banner_recover_line2">Benutze Schlüsselsicherung</string>
     <string name="keys_backup_banner_update_line1">Neue sichere Schlüssel für Nachrichten</string>
     <string name="keys_backup_banner_update_line2">Verwalte Schlüsselsicherung</string>
-    <string name="keys_backup_banner_in_progress">Sichere deine Schlüssel. Dies könnte einige Minuten dauern …</string>
+    <string name="keys_backup_banner_in_progress">Sichern deiner Schlüssel. Dies kann einige Minuten dauern …</string>
     <string name="keys_backup_info_keys_all_backup_up">Alle Schlüssel sind gesichert</string>
     <plurals name="keys_backup_info_keys_backing_up">
         <item quantity="one">Einen Schlüssel sichern …</item>
@@ -950,8 +950,8 @@
     <string name="settings_discovery_no_mails">Entdeckungsoptionen werden angezeigt, sobald du eine E-Mail-Adresse hinzugefügt hast.</string>
     <string name="settings_discovery_enter_identity_server">Gib eine Identitäts-Server-Adresse ein</string>
     <string name="settings_discovery_bad_identity_server">Konnte keine Verbindung zum Homeserver herstellen</string>
-    <string name="login_error_no_homeserver_found">Dies ist keine Adresse eines Matrixservers</string>
-    <string name="login_error_homeserver_not_found">Kann Homeserver nicht unter dieser URL erreichen. Bitte überprüfen</string>
+    <string name="login_error_no_homeserver_found">Dies ist keine gültige Adresse eines Matrix-Servers</string>
+    <string name="login_error_homeserver_not_found">Unter dieser URL wird kein Heim-Server erreicht. Bitte überprüfen</string>
     <string name="settings_background_fdroid_sync_mode">Hintergrund-Synchronisierungsmodus</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} wird sich im Hintergrund auf eine Art synchronisieren, die Ressourcen des Geräts (Akku) schont.
 \nAbhängig vom Ressourcen-Status deines Geräts kann dein System die Synchronisierung verschieben.</string>
@@ -1924,9 +1924,9 @@
     <string name="room_settings_room_version_title">Raum-Version</string>
     <string name="dialog_edit_hint">Neuer Wert</string>
     <string name="initial_sync_start_downloading">Erste Synchronisation:
-\nLade Daten herunter …</string>
+\nDaten herunterladen …</string>
     <string name="initial_sync_start_server_computing">Erste Synchronisation:
-\nWarte auf Antwort vom Server …</string>
+\nAuf Serverantwort warten …</string>
     <string name="event_status_a11y_sent">Gesendet</string>
     <string name="settings_category_room_directory">Raumverzeichnis</string>
     <string name="action_switch">Wechseln</string>
@@ -2596,7 +2596,7 @@
     <string name="verify_invalid_qr_notice">Dieser QR-Code ist fehlerhaft. Bitte versuche es mit einer anderen Methode.</string>
     <string name="crosssigning_cannot_verify_this_session_desc">Du wirst deinen verschlüsselten Nachrichtenverlauf nicht abrufen können. Um neu zu beginnen, setze deine Sicherung und Verifizierungsschlüssel zurück.</string>
     <string name="crosssigning_cannot_verify_this_session">Verifizierung dieses Gerätes nicht möglich</string>
-    <string name="updating_your_data">Aktualisiere deine Daten …</string>
+    <string name="updating_your_data">Aktualisierung deiner Daten …</string>
     <string name="live_location_share_location_item_share">Standort freigeben</string>
     <string name="live_location_not_enough_permission_dialog_description">Du benötigst die entsprechenden Berechtigungen, um deinen Echtzeit-Standort in diesem Raum freizugeben.</string>
     <string name="live_location_not_enough_permission_dialog_title">Dir fehlt die Berechtigung, deinen Echtzeit-Standort freigeben zu dürfen</string>
@@ -2642,7 +2642,7 @@
     <string name="ftue_auth_create_account_username_entry_footer">Andere können dich als %s finden</string>
     <string name="labs_enable_deferred_dm_summary">Erstelle Unterhaltungen mit der ersten Nachricht</string>
     <string name="labs_enable_deferred_dm_title">Verzögerte Direktnachrichten</string>
-    <string name="home_layout_preferences_recents">Historie anzeigen</string>
+    <string name="home_layout_preferences_recents">Verlauf anzeigen</string>
     <string name="onboarding_new_app_layout_button_try">Probiere es aus</string>
     <string name="onboarding_new_app_layout_feedback_message">Tippe oben rechts, um eine Rückmeldung zu senden.</string>
     <string name="onboarding_new_app_layout_feedback_title">Rückmeldung geben</string>
