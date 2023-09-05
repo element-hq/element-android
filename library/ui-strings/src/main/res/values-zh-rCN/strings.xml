@@ -2875,4 +2875,18 @@
     <string name="secure_backup_reset_danger_warning">仅当你确定已丢失所有其他设备和安全密钥时，才请继续。</string>
     <string name="encrypted_by_deleted">由已删除的设备加密</string>
     <string name="error_voice_broadcast_unable_to_decrypt">无法解密此语音广播。</string>
+    <string name="stop_voice_broadcast_content">确定停止实时广播吗？这将结束广播，并且完整的录制将在房间中提供。</string>
+    <plurals name="room_polls_ended_no_item_for_loaded_period">
+        <item quantity="other">过去%1$d天无投票。
+\n加载更多投票以查看更早天数的投票。</item>
+    </plurals>
+    <string name="unable_to_decrypt_some_events_in_poll">由于解密错误，一些投票可能不计入</string>
+    <string name="room_polls_ended_no_item">此房间无过去的投票</string>
+    <string name="device_manager_learn_more_sessions_encryption_not_supported">此会话不支持加密，所以无法验证。
+\n
+\n使用此会话时，你将无法加入启用了加密的房间。
+\n
+\n为了获得最佳的安全性和隐私性，建议使用支持加密的 Matrix 客户端。</string>
+    <string name="room_polls_loading_error">获取投票时出错。</string>
+    <string name="room_poll_details_go_to_timeline">在时间线中查看</string>
 </resources>
