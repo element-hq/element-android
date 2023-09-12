@@ -139,19 +139,19 @@ class ShortcutsHandler @Inject constructor(
     }
 
     private fun createShortcuts(rooms: List<RoomSummary>) {
-        if (hasPinCode.get()) {
-            // No shortcut in this case (privacy)
-            ShortcutManagerCompat.removeAllDynamicShortcuts(context)
-        } else {
-            val shortcuts = rooms
-                    .take(maxShortcutCountPerActivity)
-                    .mapIndexed { index, room ->
-                        shortcutCreator.create(room, index)
-                    }
+        ShortcutManagerCompat.removeAllDynamicShortcuts(context)
 
-            shortcuts.forEach { shortcut ->
-                ShortcutManagerCompat.pushDynamicShortcut(context, shortcut)
-            }
+        // No shortcut in this case (privacy)
+        if (hasPinCode.get()) return
+
+        val shortcuts = rooms
+                .take(maxShortcutCountPerActivity)
+                .mapIndexed { index, room ->
+                    shortcutCreator.create(room, index)
+                }
+
+        shortcuts.forEach { shortcut ->
+            ShortcutManagerCompat.pushDynamicShortcut(context, shortcut)
         }
     }
 
