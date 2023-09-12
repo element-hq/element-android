@@ -298,7 +298,7 @@ internal class DefaultAuthenticationService @Inject constructor(
         }
 
         // If an m.login.sso flow is present that is flagged as being for MSC3824 OIDC compatibility then we only return that flow
-        val oidcCompatibilityFlow = loginFlowResponse.flows.orEmpty().firstOrNull { it.type == "m.login.sso" && it.delegatedOidcCompatibilty == true }
+        val oidcCompatibilityFlow = loginFlowResponse.flows.orEmpty().firstOrNull { it.type == "m.login.sso" && it.delegatedOidcCompatibility == true }
         val flows = if (oidcCompatibilityFlow != null) listOf(oidcCompatibilityFlow) else loginFlowResponse.flows
 
         val supportsGetLoginTokenFlow = loginFlowResponse.flows.orEmpty().firstOrNull { it.type == "m.login.token" && it.getLoginToken == true } != null
