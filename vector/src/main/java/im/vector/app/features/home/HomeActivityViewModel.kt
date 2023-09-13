@@ -299,6 +299,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                 .onEach { status ->
                     when (status) {
                         is SyncRequestState.Idle -> {
+                            checkDeferredPermalink()
                             maybeVerifyOrBootstrapCrossSigning()
                         }
                         else -> Unit
@@ -376,6 +377,12 @@ class HomeActivityViewModel @AssistedInject constructor(
                     .let { user ->
                         _viewEvents.post(HomeActivityViewEvents.OnCrossSignedInvalidated(user))
                     }
+        }
+    }
+
+    private fun checkDeferredPermalink() {
+        activeSessionHolder.getActiveSession().deferredPermalinkService().getLinkFromClipBoard()?.let { roomPermalink ->
+            _viewEvents.post(HomeActivityViewEvents.NavigatePermalink(permalink = roomPermalink))
         }
     }
 

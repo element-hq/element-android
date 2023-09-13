@@ -38,6 +38,7 @@ import org.matrix.android.sdk.api.session.identity.IdentityService
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
 import org.matrix.android.sdk.api.session.media.MediaService
 import org.matrix.android.sdk.api.session.openid.OpenIdService
+import org.matrix.android.sdk.api.session.permalinks.DeferredPermalinkService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.presence.PresenceService
 import org.matrix.android.sdk.api.session.profile.ProfileService
@@ -241,6 +242,11 @@ interface Session {
      * Returns the permalink service associated with the session.
      */
     fun permalinkService(): PermalinkService
+
+    /**
+     * Returns the deferredPermalinkService service associated with the session.
+     */
+    fun deferredPermalinkService(): DeferredPermalinkService
 
     /**
      * Returns the search service associated with the session.

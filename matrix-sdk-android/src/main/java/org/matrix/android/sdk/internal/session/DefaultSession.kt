@@ -46,6 +46,7 @@ import org.matrix.android.sdk.api.session.identity.IdentityService
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
 import org.matrix.android.sdk.api.session.media.MediaService
 import org.matrix.android.sdk.api.session.openid.OpenIdService
+import org.matrix.android.sdk.api.session.permalinks.DeferredPermalinkService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.presence.PresenceService
 import org.matrix.android.sdk.api.session.profile.ProfileService
@@ -132,6 +133,7 @@ internal class DefaultSession @Inject constructor(
         @UnauthenticatedWithCertificate
         private val unauthenticatedWithCertificateOkHttpClient: Lazy<OkHttpClient>,
         private val sessionState: SessionState,
+        private val deferredPermalinkService: Lazy<DeferredPermalinkService>,
 ) : Session,
         GlobalErrorHandler.Listener {
 
@@ -218,6 +220,8 @@ internal class DefaultSession @Inject constructor(
     override fun eventStreamService(): EventStreamService = eventStreamService.get()
     override fun fileService(): FileService = defaultFileService.get()
     override fun permalinkService(): PermalinkService = permalinkService.get()
+    override fun deferredPermalinkService(): DeferredPermalinkService = deferredPermalinkService.get()
+
     override fun widgetService(): WidgetService = widgetService.get()
     override fun mediaService(): MediaService = mediaService.get()
     override fun integrationManagerService(): IntegrationManagerService = integrationManagerService.get()

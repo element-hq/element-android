@@ -265,6 +265,7 @@ class HomeActivity :
                 HomeActivityViewEvents.NotifyUserForThreadsMigration -> handleNotifyUserForThreadsMigration()
                 is HomeActivityViewEvents.MigrateThreads -> migrateThreadsIfNeeded(it.checkSession)
                 is HomeActivityViewEvents.AskUserForPushDistributor -> askUserToSelectPushDistributor()
+                is HomeActivityViewEvents.NavigatePermalink -> handleNavigatePermalink(it.permalink)
             }
         }
         homeActivityViewModel.onEach { renderState(it) }
@@ -275,6 +276,17 @@ class HomeActivity :
             handleIntent(intent)
         }
         homeActivityViewModel.handle(HomeActivityViewActions.ViewStarted)
+    }
+
+    private fun handleNavigatePermalink(permalink: String) {
+        lifecycleScope.launch {
+            permalinkHandler.launch(
+                    fragmentActivity = this@HomeActivity,
+                    deepLink = permalink,
+                    navigationInterceptor = this@HomeActivity,
+                    buildTask = true
+            )
+        }
     }
 
     private fun askUserToSelectPushDistributor() {
