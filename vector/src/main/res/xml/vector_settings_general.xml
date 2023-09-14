@@ -113,7 +113,9 @@
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
-    <im.vector.app.core.preference.VectorPreferenceCategory android:title="@string/settings_deactivate_account_section">
+    <im.vector.app.core.preference.VectorPreferenceCategory
+        android:key="SETTINGS_DEACTIVATE_ACCOUNT_CATEGORY_KEY"
+        android:title="@string/settings_deactivate_account_section">
 
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_DEACTIVATE_ACCOUNT_KEY"
