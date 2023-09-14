@@ -48,7 +48,7 @@ import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorSwitchPreference
 import im.vector.app.core.utils.TextUtils
 import im.vector.app.core.utils.getSizeOfFiles
-import im.vector.app.core.utils.openUrlInExternalBrowser
+import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.DialogChangePasswordBinding
 import im.vector.app.features.MainActivity
@@ -221,7 +221,7 @@ class VectorSettingsGeneralFragment :
         // Hide the preference if no URL is given by server
         if (homeServerCapabilities.externalAccountManagementUrl != null) {
             mExternalAccountManagementPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                openUrlInExternalBrowser(it.context, homeServerCapabilities.externalAccountManagementUrl)
+                openUrlInChromeCustomTab(it.context, null, homeServerCapabilities.externalAccountManagementUrl!!)
                 true
             }
 
