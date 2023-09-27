@@ -31,6 +31,7 @@ import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.api.crypto.MXCryptoConfig
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.logger.LoggerTag
@@ -536,7 +537,8 @@ internal class RustCryptoService @Inject constructor(
     }
 
     override suspend fun setDeviceVerification(trustLevel: DeviceTrustLevel, userId: String, deviceId: String) {
-        TODO("Not yet implemented")
+        Timber.w("Rust stack only support API to set local trust")
+        olmMachine.setDeviceLocalTrust(userId, deviceId, trustLevel.isLocallyVerified().orFalse())
     }
 
     /**

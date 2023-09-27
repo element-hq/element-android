@@ -34,10 +34,6 @@ import org.matrix.android.sdk.api.rendezvous.model.SecureRendezvousChannelAlgori
 import org.matrix.android.sdk.api.rendezvous.transports.SimpleHttpRendezvousTransport
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
-import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
-import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
-import org.matrix.android.sdk.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
-import org.matrix.android.sdk.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.util.MatrixJsonParser
 import timber.log.Timber
 
@@ -225,12 +221,7 @@ class Rendezvous(
             // request secrets from the verifying device
             Timber.tag(TAG).i("Requesting secrets from $verifyingDeviceId")
 
-            session.sharedSecretStorageService().let {
-                it.requestSecret(MASTER_KEY_SSSS_NAME, verifyingDeviceId)
-                it.requestSecret(SELF_SIGNING_KEY_SSSS_NAME, verifyingDeviceId)
-                it.requestSecret(USER_SIGNING_KEY_SSSS_NAME, verifyingDeviceId)
-                it.requestSecret(KEYBACKUP_SECRET_SSSS_NAME, verifyingDeviceId)
-            }
+            session.sharedSecretStorageService().requestMissingSecrets()
         } else {
             Timber.tag(TAG).i("Not doing verification")
         }

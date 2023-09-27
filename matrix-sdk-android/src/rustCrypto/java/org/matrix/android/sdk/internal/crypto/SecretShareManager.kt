@@ -16,15 +16,33 @@
 
 package org.matrix.android.sdk.internal.crypto
 
-import org.matrix.android.sdk.BuildConfig
+import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.internal.crypto.network.OutgoingRequestsProcessor
+import org.matrix.rustcomponents.sdk.crypto.Request
 import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Provider
 
-internal class SecretShareManager @Inject constructor() {
+internal class SecretShareManager @Inject constructor(
+        private val olmMachine: Provider<OlmMachine>,
+        private val outgoingRequestsProcessor: OutgoingRequestsProcessor) {
 
     suspend fun requestSecretTo(deviceId: String, secretName: String) {
-        // nop in rust?
-        if (BuildConfig.DEBUG) TODO("requestSecretTo Not implemented in Rust")
-        Timber.e("SecretShareManager Not supported in rust $deviceId, $secretName")
+        Timber.v("SecretShareManager requesting $deviceId, $secretName")
+        if (this.olmMachine.get().requestMissingSecretsFromOtherSessions()) {
+            // immediately send the requests
+            outgoingRequestsProcessor.processOutgoingRequests(this.olmMachine.get()) {
+                it is Request.ToDevice && it.eventType == EventType.REQUEST_SECRET
+            }
+        }
+    }
+
+    suspend fun requestMissingSecrets() {
+        this.olmMachine.get().requestMissingSecretsFromOtherSessions()
+
+        // immediately send the requests
+        outgoingRequestsProcessor.processOutgoingRequests(this.olmMachine.get()) {
+            it is Request.ToDevice && it.eventType == EventType.REQUEST_SECRET
+        }
     }
 }
