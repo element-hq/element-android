@@ -2889,4 +2889,13 @@
 \n为了获得最佳的安全性和隐私性，建议使用支持加密的 Matrix 客户端。</string>
     <string name="room_polls_loading_error">获取投票时出错。</string>
     <string name="room_poll_details_go_to_timeline">在时间线中查看</string>
+    <string name="pill_message_from_user">%s 的新消息</string>
+    <string name="pill_message_in_room">在 %s 的信息</string>
+    <string name="rich_text_editor_inline_code">应用内联代码格式</string>
+    <string name="pill_message_in_unknown_room">聊天室中的信息</string>
+    <plurals name="room_polls_active_no_item_for_loaded_period">
+        <item quantity="other">过去 %1$d 天没有进行中的投票。
+\n点击以查看更早的投票。</item>
+    </plurals>
+    <string name="rich_text_editor_code_block">切换代码块</string>
 </resources>
