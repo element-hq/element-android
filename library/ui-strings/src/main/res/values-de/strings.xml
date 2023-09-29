@@ -1121,7 +1121,7 @@
     <string name="login_wait_for_email_notice">Wir haben dir eine E-Mail an %1$s gesendet.
 \nBitte öffne den darin enthaltenen Link, um mit der Benutzerkontoerstellung fortzufahren.</string>
     <string name="login_validation_code_is_not_correct">Der eingegebene Code ist nicht korrekt. Bitte überprüfe deine Eingabe.</string>
-    <string name="reaction_search_type_hint">Schlüsselbegriffe eintippen, um eine Reaktion zu finden.</string>
+    <string name="reaction_search_type_hint">Stichworte eingeben, um eine Reaktion zu finden.</string>
     <string name="room_join_rules_invite">%1$s hat den Raum auf \"nur-einladen\" gestellt.</string>
     <string name="login_splash_title">Es ist deine Konversation. Mache sie dir zu eigen.</string>
     <string name="login_server_url_form_modular_text">Premium-Hosting für Organisationen</string>
