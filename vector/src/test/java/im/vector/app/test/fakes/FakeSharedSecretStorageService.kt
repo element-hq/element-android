@@ -79,6 +79,10 @@ class FakeSharedSecretStorageService : SharedSecretStorageService by mockk() {
         TODO("Not yet implemented")
     }
 
+    override suspend fun requestMissingSecrets() {
+        TODO("Not yet implemented")
+    }
+
     fun givenIsRecoverySetupReturns(isRecoverySetup: Boolean) {
         every { isRecoverySetup() } returns isRecoverySetup
     }
