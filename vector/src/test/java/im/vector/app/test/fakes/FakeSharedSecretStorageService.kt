@@ -75,6 +75,7 @@ class FakeSharedSecretStorageService : SharedSecretStorageService by mockk() {
 
     override fun checkShouldBeAbleToAccessSecrets(secretNames: List<String>, keyId: String?) = integrityResult
 
+    @Deprecated("Requesting custom secrets not yet support by rust stack, prefer requestMissingSecrets")
     override suspend fun requestSecret(name: String, myOtherDeviceId: String) {
         TODO("Not yet implemented")
     }
