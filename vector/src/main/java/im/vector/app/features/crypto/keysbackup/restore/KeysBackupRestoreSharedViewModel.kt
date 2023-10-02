@@ -226,7 +226,7 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
                     try {
                         val computedRecoveryKey = computeRecoveryKey(secret.fromBase64())
                         val backupRecoveryKey = BackupUtils.recoveryKeyFromBase58(computedRecoveryKey)
-                        recoverUsingBackupRecoveryKey(backupRecoveryKey!!)
+                        recoverUsingBackupRecoveryKey(backupRecoveryKey)
                     } catch (failure: Throwable) {
                         _navigateEvent.postValue(
                                 LiveEvent(NAVIGATE_FAILED_TO_LOAD_4S)

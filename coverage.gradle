@@ -87,11 +87,5 @@ task unitTestsWithCoverage(type: GradleBuild) {
 task instrumentationTestsWithCoverage(type: GradleBuild) {
     startParameter.projectProperties.coverage = "true"
     startParameter.projectProperties['android.testInstrumentationRunnerArguments.notPackage'] = 'im.vector.app.ui'
-    tasks = [':vector-app:connectedGplayKotlinCryptoDebugAndroidTest', ':vector:connectedKotlinCryptoDebugAndroidTest', 'matrix-sdk-android:connectedKotlinCryptoDebugAndroidTest']
-}
-
-task instrumentationTestsRustWithCoverage(type: GradleBuild) {
-    startParameter.projectProperties.coverage = "true"
-    startParameter.projectProperties['android.testInstrumentationRunnerArguments.notPackage'] = 'im.vector.app.ui'
-    tasks = [':vector-app:connectedGplayRustCryptoDebugAndroidTest', ':vector:connectedRustCryptoDebugAndroidTest', 'matrix-sdk-android:connectedRustCryptoDebugAndroidTest']
+    tasks = [':vector-app:connectedGplayDebugAndroidTest', ':vector:connectedDebugAndroidTest', 'matrix-sdk-android:connectedDebugAndroidTest']
 }

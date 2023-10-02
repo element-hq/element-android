@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,9 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.crypto.verification.qrcode
+package org.matrix.android.sdk.api.session.crypto.keysbackup
 
-import org.matrix.android.sdk.api.util.toBase64NoPadding
-import java.security.SecureRandom
-
-internal fun generateSharedSecretV2(): String {
-    val secureRandom = SecureRandom()
-
-    // 8 bytes long
-    val secretBytes = ByteArray(8)
-    secureRandom.nextBytes(secretBytes)
-    return secretBytes.toBase64NoPadding()
+object BackupUtils {
+    fun recoveryKeyFromBase58(key: String): IBackupRecoveryKey = BackupRecoveryKey.fromBase58(key)
+    fun recoveryKeyFromPassphrase(passphrase: String): IBackupRecoveryKey = BackupRecoveryKey.newFromPassphrase(passphrase)
 }

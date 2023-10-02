@@ -107,8 +107,6 @@ android {
     }
 }
 
-apply from: '../flavor.gradle'
-
 dependencies {
 
     implementation project(":vector-config")
