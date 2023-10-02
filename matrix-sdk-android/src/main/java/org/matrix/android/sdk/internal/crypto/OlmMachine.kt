@@ -251,6 +251,10 @@ internal class OlmMachine @Inject constructor(
      * sync.
      *
      * @param keyCounts The map of uploaded one-time key types and counts.
+     *
+     * @param deviceUnusedFallbackKeyTypes The key algorithms for which the server has an unused fallback key for the device.
+     *
+     * @return The handled events, decrypted if needed (secrets are zeroised).
      */
     @Throws(CryptoStoreException::class)
     suspend fun receiveSyncChanges(
@@ -312,7 +316,7 @@ internal class OlmMachine @Inject constructor(
     }
 
     /**
-     * Used for lazy migration of inboundGroupSession from EA to ER
+     * Used for lazy migration of inboundGroupSession from EA to ER.
      */
     suspend fun importRoomKey(inbound: MXInboundMegolmSessionWrapper): Result<Unit> {
         Timber.v("Migration:: Tentative lazy migration")
@@ -379,6 +383,8 @@ internal class OlmMachine @Inject constructor(
      *
      * @param users The list of users which are considered to be members of the room and should
      * receive the room key.
+     *
+     * @param settings The encryption settings for that room.
      *
      * @return The list of [Request.ToDevice] that need to be sent out.
      */
@@ -723,7 +729,7 @@ internal class OlmMachine @Inject constructor(
         ensureUsersKeys.invoke(userIds, forceDownload)
     }
 
-    fun getUserIdentityFlow(userId: String): Flow<Optional<MXCrossSigningInfo>> {
+    private fun getUserIdentityFlow(userId: String): Flow<Optional<MXCrossSigningInfo>> {
         return channelFlow {
             val userIdentityCollector = UserIdentityCollector(userId, this)
             val onClose = safeInvokeOnClose {
@@ -789,7 +795,8 @@ internal class OlmMachine @Inject constructor(
         runBlocking { inner.discardRoomKey(roomId) }
     }
 
-    /** Get all the verification requests we have with the given user
+    /**
+     *  Get all the verification requests we have with the given user.
      *
      * @param userId The ID of the user for which we would like to fetch the
      * verification requests
@@ -800,7 +807,7 @@ internal class OlmMachine @Inject constructor(
         return verificationsProvider.getVerificationRequests(userId)
     }
 
-    /** Get a verification request for the given user with the given flow ID */
+    /** Get a verification request for the given user with the given flow ID. */
     fun getVerificationRequest(userId: String, flowId: String): VerificationRequest? {
         return verificationsProvider.getVerificationRequest(userId, flowId)
     }

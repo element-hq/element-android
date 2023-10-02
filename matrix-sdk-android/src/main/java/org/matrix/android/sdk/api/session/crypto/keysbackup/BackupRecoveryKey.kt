@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,6 +48,10 @@ class BackupRecoveryKey internal constructor(internal val inner: InnerBackupReco
     override fun equals(other: Any?): Boolean {
         if (other !is BackupRecoveryKey) return false
         return this.toBase58() == other.toBase58()
+    }
+
+    override fun hashCode(): Int {
+        return toBase58().hashCode()
     }
 
     override fun toBase58() = inner.toBase58()

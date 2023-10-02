@@ -36,7 +36,7 @@ import org.matrix.rustcomponents.sdk.crypto.QrCode
 import org.matrix.rustcomponents.sdk.crypto.QrCodeState
 import timber.log.Timber
 
-/** Class representing a QR code based verification flow */
+/** Class representing a QR code based verification flow. */
 internal class QrCodeVerification @AssistedInject constructor(
         @Assisted private var inner: QrCode,
         private val olmMachine: OlmMachine,
@@ -86,12 +86,12 @@ internal class QrCodeVerification @AssistedInject constructor(
 //        dispatchTxUpdated()
 //    }
 
-    /** Confirm that the other side has indeed scanned the QR code we presented */
+    /** Confirm that the other side has indeed scanned the QR code we presented. */
     override suspend fun otherUserScannedMyQrCode() {
         confirm()
     }
 
-    /** Cancel the QR code verification, denying that the other side has scanned the QR code */
+    /** Cancel the QR code verification, denying that the other side has scanned the QR code. */
     override suspend fun otherUserDidNotScannedMyQrCode() {
         // TODO Is this code correct here? The old code seems to do this
         cancelHelper(CancelCode.MismatchedKeys)
@@ -115,26 +115,26 @@ internal class QrCodeVerification @AssistedInject constructor(
         }
     }
 
-    /** Get the unique id of this verification */
+    /** Get the unique id of this verification. */
     override val transactionId: String
         get() = inner.flowId()
 
-    /** Get the user id of the other user participating in this verification flow */
+    /** Get the user id of the other user participating in this verification flow. */
     override val otherUserId: String
         get() = inner.otherUserId()
 
-    /** Get the device id of the other user's device participating in this verification flow */
+    /** Get the device id of the other user's device participating in this verification flow. */
     override var otherDeviceId: String?
         get() = inner.otherDeviceId()
         @Suppress("UNUSED_PARAMETER")
         set(value) {
         }
 
-    /** Did the other side initiate this verification flow */
+    /** Did the other side initiate this verification flow. */
     override val isIncoming: Boolean
         get() = !inner.weStarted()
 
-    /** Cancel the verification flow
+    /** Cancel the verification flow.
      *
      * This will send out a m.key.verification.cancel event with the cancel
      * code set to m.user.
@@ -147,7 +147,7 @@ internal class QrCodeVerification @AssistedInject constructor(
         cancelHelper(CancelCode.User)
     }
 
-    /** Cancel the verification flow
+    /** Cancel the verification flow.
      *
      * This will send out a m.key.verification.cancel event with the cancel
      * code set to the given CancelCode.
@@ -162,12 +162,12 @@ internal class QrCodeVerification @AssistedInject constructor(
         cancelHelper(code)
     }
 
-    /** Is this verification happening over to-device messages */
+    /** Is this verification happening over to-device messages. */
     override fun isToDeviceTransport(): Boolean {
         return inner.roomId() == null
     }
 
-    /** Confirm the QR code verification
+    /** Confirm the QR code verification.
      *
      * This confirms that the other side has scanned our QR code and sends
      * out a m.key.verification.done event to the other side.
@@ -202,7 +202,7 @@ internal class QrCodeVerification @AssistedInject constructor(
         }
     }
 
-    /** Fetch fresh data from the Rust side for our verification flow */
+    /** Fetch fresh data from the Rust side for our verification flow. */
     private fun refreshData() {
         innerMachine.getVerification(inner.otherUserId(), inner.flowId())
                 ?.asQr()?.let {

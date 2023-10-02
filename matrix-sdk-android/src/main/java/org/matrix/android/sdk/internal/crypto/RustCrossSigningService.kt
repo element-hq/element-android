@@ -39,7 +39,7 @@ internal class RustCrossSigningService @Inject constructor(
 ) : CrossSigningService {
 
     /**
-     * Is our own identity trusted
+     * Is our own identity trusted.
      */
     override suspend fun isCrossSigningVerified(): Boolean {
         return when (val identity = olmMachine.getIdentity(olmMachine.userId())) {
@@ -104,7 +104,7 @@ internal class RustCrossSigningService @Inject constructor(
     }
 
     /**
-     * Get the public cross signing keys for the given user
+     * Get the public cross signing keys for the given user.
      *
      * @param otherUserId The ID of the user for which we would like to fetch the cross signing keys.
      */
@@ -131,7 +131,7 @@ internal class RustCrossSigningService @Inject constructor(
     }
 
     /**
-     * Can we sign our other devices or other users?
+     * Can we sign our other devices or other users.
      *
      * Returning true means that we have the private self-signing and user-signing keys at hand.
      */
@@ -165,7 +165,7 @@ internal class RustCrossSigningService @Inject constructor(
     }
 
     /**
-     * Sign one of your devices and upload the signature
+     * Sign one of your devices and upload the signature.
      */
     override suspend fun trustDevice(deviceId: String) {
         val device = olmMachine.getDevice(olmMachine.userId(), deviceId)
@@ -174,15 +174,15 @@ internal class RustCrossSigningService @Inject constructor(
             if (verified) {
                 return
             } else {
-                throw IllegalArgumentException("This device [$deviceId] is not known, or not yours")
+                require(false) { "This device [$deviceId] is not known, or not yours" }
             }
         } else {
-            throw IllegalArgumentException("This device [$deviceId] is not known")
+            require(false) { "This device [$deviceId] is not known" }
         }
     }
 
     /**
-     * Check if a device is trusted
+     * Check if a device is trusted.
      *
      * This will check that we have a valid trust chain from our own master key to a device, either
      * using the self-signing key for our own devices or using the user-signing key and the master

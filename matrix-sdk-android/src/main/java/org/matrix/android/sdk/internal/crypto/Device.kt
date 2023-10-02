@@ -68,7 +68,7 @@ internal class Device @AssistedInject constructor(
     }
 
     /**
-     * Request an interactive verification to begin
+     * Request an interactive verification to begin.
      *
      * This sends out a m.key.verification.request event over to-device messaging to
      * to this device.
@@ -97,7 +97,8 @@ internal class Device @AssistedInject constructor(
         }
     }
 
-    /** Start an interactive verification with this device
+    /**
+     * Start an interactive verification with this device.
      *
      * This sends out a m.key.verification.start event with the method set to
      * m.sas.v1 to this device using to-device messaging.
@@ -126,7 +127,7 @@ internal class Device @AssistedInject constructor(
     }
 
     /**
-     * Mark this device as locally trusted
+     * Mark this device as locally trusted.
      *
      * This won't upload any signatures, it will only mark the device as trusted
      * in the local database.
@@ -139,7 +140,7 @@ internal class Device @AssistedInject constructor(
     }
 
     /**
-     * Manually verify this device
+     * Manually verify this device.
      *
      * This will sign the device with our self-signing key and upload the signatures
      * to the server.
@@ -157,7 +158,7 @@ internal class Device @AssistedInject constructor(
     }
 
     /**
-     * Get the DeviceTrustLevel of this device
+     * Get the DeviceTrustLevel of this device.
      */
     @Throws(CryptoStoreException::class)
     suspend fun trustLevel(): DeviceTrustLevel {

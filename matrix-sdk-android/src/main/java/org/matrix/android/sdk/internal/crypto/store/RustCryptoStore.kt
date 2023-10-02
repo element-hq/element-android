@@ -70,7 +70,7 @@ private val loggerTag = LoggerTag("RealmCryptoStore", LoggerTag.CRYPTO)
 
 /**
  * In the transition phase, the rust SDK is still using parts to the realm crypto store,
- * this should be removed after full migration
+ * this should be removed after full migration.
  */
 @SessionScope
 internal class RustCryptoStore @Inject constructor(
@@ -118,6 +118,7 @@ internal class RustCryptoStore @Inject constructor(
     /**
      * Retrieve a device by its identity key.
      *
+     * @param userId The device owner userId.
      * @param identityKey the device identity key (`MXDeviceInfo.identityKey`)
      * @return the device or null if not found
      */
@@ -134,7 +135,7 @@ internal class RustCryptoStore @Inject constructor(
     }
 
     /**
-     * Needed for lazy migration of sessions from the legacy store
+     * Needed for lazy migration of sessions from the legacy store.
      */
     override fun getInboundGroupSession(sessionId: String, senderKey: String): MXInboundMegolmSessionWrapper? {
         val key = OlmInboundGroupSessionEntity.createPrimaryKey(sessionId, senderKey)

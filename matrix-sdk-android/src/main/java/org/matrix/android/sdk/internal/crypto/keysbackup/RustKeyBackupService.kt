@@ -855,7 +855,7 @@ internal class RustKeyBackupService @Inject constructor(
     }
 
     /**
-     * Do a backup if there are new keys, with a delay
+     * Do a backup if there are new keys, with a delay.
      */
     suspend fun maybeBackupKeys() {
         withContext(coroutineDispatchers.crypto) {
@@ -886,7 +886,7 @@ internal class RustKeyBackupService @Inject constructor(
     }
 
     /**
-     * Send a chunk of keys to backup
+     * Send a chunk of keys to backup.
      */
     private suspend fun backupKeys(forceRecheck: Boolean = false) {
         Timber.v("backupKeys")

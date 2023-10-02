@@ -35,7 +35,7 @@ import org.matrix.rustcomponents.sdk.crypto.Sas
 import org.matrix.rustcomponents.sdk.crypto.SasListener
 import org.matrix.rustcomponents.sdk.crypto.SasState
 
-/** Class representing a short auth string verification flow */
+/** Class representing a short auth string verification flow. */
 internal class SasVerification @AssistedInject constructor(
         @Assisted private var inner: Sas,
 //        private val olmMachine: OlmMachine,
@@ -56,14 +56,14 @@ internal class SasVerification @AssistedInject constructor(
         fun create(inner: Sas): SasVerification
     }
 
-    /** The user ID of the other user that is participating in this verification flow */
+    /** The user ID of the other user that is participating in this verification flow. */
     override val otherUserId: String = inner.otherUserId()
 
-    /** Get the device id of the other user's device participating in this verification flow */
+    /** Get the device id of the other user's device participating in this verification flow. */
     override val otherDeviceId: String
         get() = inner.otherDeviceId()
 
-    /** Did the other side initiate this verification flow */
+    /** Did the other side initiate this verification flow. */
     override val isIncoming: Boolean
         get() = !inner.weStarted()
 
@@ -85,11 +85,11 @@ internal class SasVerification @AssistedInject constructor(
         }
     }
 
-    /** Get the unique id of this verification */
+    /** Get the unique id of this verification. */
     override val transactionId: String
         get() = inner.flowId()
 
-    /** Cancel the verification flow
+    /** Cancel the verification flow.
      *
      * This will send out a m.key.verification.cancel event with the cancel
      * code set to m.user.
@@ -102,7 +102,7 @@ internal class SasVerification @AssistedInject constructor(
         cancelHelper(CancelCode.User)
     }
 
-    /** Cancel the verification flow
+    /** Cancel the verification flow.
      *
      * This will send out a m.key.verification.cancel event with the cancel
      * code set to the given CancelCode.
@@ -117,7 +117,7 @@ internal class SasVerification @AssistedInject constructor(
         cancelHelper(code)
     }
 
-    /** Cancel the verification flow
+    /** Cancel the verification flow.
      *
      * This will send out a m.key.verification.cancel event with the cancel
      * code set to the m.mismatched_sas cancel code.
@@ -141,7 +141,7 @@ internal class SasVerification @AssistedInject constructor(
 //        return inner.supportsEmoji()
 //    }
 
-    /** Confirm that the short authentication code matches on both sides
+    /** Confirm that the short authentication code matches on both sides.
      *
      * This sends a m.key.verification.mac event out, the verification isn't yet
      * done, we still need to receive such an event from the other side if we haven't
@@ -154,7 +154,7 @@ internal class SasVerification @AssistedInject constructor(
         confirm()
     }
 
-    /** Accept the verification flow, signaling the other side that we do want to verify
+    /** Accept the verification flow, signaling the other side that we do want to verify.
      *
      * This sends a m.key.verification.accept event out that is a response to a
      * m.key.verification.start event from the other side.
@@ -166,7 +166,7 @@ internal class SasVerification @AssistedInject constructor(
         accept()
     }
 
-    /** Get the decimal representation of the short auth string
+    /** Get the decimal representation of the short auth string.
      *
      * @return A string of three space delimited numbers that
      * represent the short auth string or an empty string if we're not yet
@@ -176,7 +176,7 @@ internal class SasVerification @AssistedInject constructor(
         return decimals?.joinToString(" ") ?: ""
     }
 
-    /** Get the emoji representation of the short auth string
+    /** Get the emoji representation of the short auth string.
      *
      * @return A list of 7 EmojiRepresentation objects that represent the
      * short auth string or an empty list if we're not yet in a presentable
