@@ -337,7 +337,7 @@ internal class RustCryptoService @Inject constructor(
     /**
      * Provides the device information for a user id and a device Id
      *
-     * @param userId   the user id
+     * @param userId the user id
      * @param deviceId the device id
      */
     override suspend fun getCryptoDeviceInfo(userId: String, deviceId: String?): CryptoDeviceInfo? {
@@ -386,9 +386,9 @@ internal class RustCryptoService @Inject constructor(
     /**
      * Configure a room to use encryption.
      *
-     * @param roomId             the room id to enable encryption in.
-     * @param algorithm          the encryption config for the room.
-     * @param membersId          list of members to start tracking their devices
+     * @param roomId the room id to enable encryption in.
+     * @param algorithm the encryption config for the room.
+     * @param membersId list of members to start tracking their devices
      * @return true if the operation succeeds.
      */
     private suspend fun setEncryptionInRoom(
@@ -470,8 +470,8 @@ internal class RustCryptoService @Inject constructor(
      * Encrypt an event content according to the configuration of the room.
      *
      * @param eventContent the content of the event.
-     * @param eventType    the type of the event.
-     * @param roomId       the room identifier the event will be sent.
+     * @param eventType the type of the event.
+     * @param roomId the room identifier the event will be sent.
      */
     override suspend fun encryptEventContent(
             eventContent: Content,
@@ -488,7 +488,7 @@ internal class RustCryptoService @Inject constructor(
     /**
      * Decrypt an event
      *
-     * @param event    the raw event.
+     * @param event the raw event.
      * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
      * @return the MXEventDecryptionResult data, or throw in case of error
      */
@@ -681,8 +681,8 @@ internal class RustCryptoService @Inject constructor(
     /**
      * Import the room keys
      *
-     * @param roomKeysAsArray  the room keys as array.
-     * @param password         the password
+     * @param roomKeysAsArray the room keys as array.
+     * @param password the password
      * @param progressListener the progress listener
      * @return the result ImportRoomKeysResult
      */
@@ -715,7 +715,7 @@ internal class RustCryptoService @Inject constructor(
      * If false, it can still be overridden per-room.
      * If true, it overrides the per-room settings.
      *
-     * @param block    true to unilaterally blacklist all
+     * @param block true to unilaterally blacklist all
      */
     override fun setGlobalBlacklistUnverifiedDevices(block: Boolean) {
         cryptoStore.setGlobalBlacklistUnverifiedDevices(block)
@@ -784,26 +784,6 @@ internal class RustCryptoService @Inject constructor(
     override fun getLiveBlockUnverifiedDevices(roomId: String): LiveData<Boolean> {
         return cryptoStore.getLiveBlockUnverifiedDevices(roomId)
     }
-
-//    /**
-//     * Manages the room black-listing for unverified devices.
-//     *
-//     * @param roomId   the room id
-//     * @param add      true to add the room id to the list, false to remove it.
-//     */
-//    private fun setRoomBlacklistUnverifiedDevices(roomId: String, add: Boolean) {
-//        val roomIds = cryptoStore.getRoomsListBlacklistUnverifiedDevices().toMutableList()
-//
-//        if (add) {
-//            if (roomId !in roomIds) {
-//                roomIds.add(roomId)
-//            }
-//        } else {
-//            roomIds.remove(roomId)
-//        }
-//
-//        cryptoStore.setRoomsListBlacklistUnverifiedDevices(roomIds)
-//    }
 
     /**
      * Re request the encryption keys required to decrypt an event.
