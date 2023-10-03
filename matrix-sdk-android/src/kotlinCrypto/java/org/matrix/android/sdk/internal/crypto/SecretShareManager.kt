@@ -136,7 +136,7 @@ internal class SecretShareManager @Inject constructor(
                             .w("handleSecretRequest() : malformed request norequestingDeviceId ")
                 }
 
-        if (request.requestingDeviceId == credentials.deviceId) {
+        if (deviceId == credentials.deviceId) {
             return Unit.also {
                 Timber.tag(loggerTag.value)
                         .v("handleSecretRequest() : Ignore request from self device")
