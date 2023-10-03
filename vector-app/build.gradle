@@ -309,7 +309,7 @@ android {
         }
     }
 
-    flavorDimensions "store", "crypto"
+    flavorDimensions = ["store", "crypto"]
 
     productFlavors {
         gplay {
