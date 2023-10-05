@@ -493,7 +493,7 @@
     <string name="settings_active_sessions_show_all">نمایش همه نشست‌ها</string>
     <string name="settings_active_sessions_manage">مدیریت نشست‌ها</string>
     <plurals name="settings_active_sessions_count">
-        <item quantity="one">۱ نشست فعّال</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">۱ نشست فعّال</item>
         <item quantity="other">%d نشست فعّال</item>
     </plurals>
     <string name="room_member_profile_failed_to_get_devices">شکست در گرفتن نشست‌ها</string>
@@ -884,7 +884,8 @@
     <string name="login_msisdn_notice">لطفاً از قالب بین‌المللی استفاده کنید (شماره تلفن باید با + شروع شود)</string>
     <string name="login_msisdn_error_not_international">شماره تلفن‌های بین‌المللی باید با + شروع شوند</string>
     <string name="login_signup_username_hint">نام کاربری</string>
-    <string name="login_signup_submit">بعدی</string>
+<!--    <string name="login_signup_submit">بعدی</string>-->
+    <string name="login_signup_submit">ورود</string>
     <string name="login_signup_error_user_in_use">نام کاربری گرفته شده</string>
     <string name="login_signup_cancel_confirmation_title">هشدار</string>
     <string name="login_connect_using_matrix_id_submit">ورود با شناسهٔ ماتریکس</string>
@@ -948,7 +949,7 @@
     <string name="room_profile_section_admin">کنش‌های مدیر</string>
     <string name="room_profile_section_more_settings">تنظمیات اتاق</string>
     <plurals name="room_profile_section_more_member_list">
-        <item quantity="one">۱ نفر</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">۱ نفر</item>
         <item quantity="other">%1$d نفر</item>
     </plurals>
     <string name="room_profile_section_more_uploads">بارگذاری‌ها</string>
@@ -997,7 +998,7 @@
     <string name="message_action_item_redact">برداشتن…</string>
     <string name="share_confirm_room">می‌خواهید این پیوست را به %1$s بفرستید؟</string>
     <plurals name="send_images_with_original_size">
-        <item quantity="one">فرستادن تصویر با اندازهٔ اصلی</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">فرستادن تصویر با اندازهٔ اصلی</item>
         <item quantity="other">فرستادن تصویرها با اندازهٔ اصلی</item>
     </plurals>
     <string name="delete_event_dialog_title">تأیید برداشت</string>
@@ -1238,7 +1239,7 @@
     <string name="search_no_results">نتیجه‌ای در پی نداشت</string>
     <string name="search_banned_user_hint">فیلترکردن کاربران مسدود شده</string>
     <plurals name="room_details_selected">
-        <item quantity="one">۱ مورد</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">۱ مورد</item>
         <item quantity="other">%d مورد</item>
     </plurals>
     <string name="ssl_only_accept">تنها اگر مدیر کارساز، اثرانگشتی منتشر کرده که با بالایی مطابق است، بپذیرید.</string>
@@ -1351,7 +1352,7 @@
 \n- کارساز خانگی کاربری که دارید تائیدش می‌کنید
 \n- اتّصال اینترنتی شما یا دیگر کاربران
 \n- افزارهٔ شما یا دیگر کاربران</string>
-    <string name="login_error_threepid_denied">دامنهٔ رایانامه‌تان مجاز به ثبت‌نام روی این کارساز نیست</string>
+    <string name="login_error_threepid_denied">دامنهٔ ایمیل مجاز به ثبت‌نام روی این کارساز نیست</string>
     <string name="command_description_shrug">¯\\\\_(ツ)_/¯ را به یک پیام متنی ساده تغییر می دهد</string>
     <string name="permalink_malformed">پیوند ‪matrix.to‬تان بدریخت است</string>
     <string name="soft_logout_sso_not_same_user_error">نشست فعلی مربوط به کاربر %1$s است و شما اطلاعات حساب کاربر %2$s را ارائه داده‌اید. این مورد توسط المنت پشتیبانی نمی‌شود .
@@ -1384,7 +1385,7 @@
     <string name="login_validation_code_is_not_correct">کد وارد شده صحیح نیست. لطفا بررسی فرمائید.</string>
     <string name="login_wait_for_email_notice">رایانامه‌ای به %1$s فرستادیم.
 \nلطفاً برای ادامهٔ ایجاد حساب، پیوند درونش را بزنید.</string>
-    <string name="login_wait_for_email_title">لطفاً رایانامه‌تان را بررسی کنید</string>
+    <string name="login_wait_for_email_title">لطفاً ایمیل را بررسی کنید</string>
     <string name="login_terms_title">برای ادامه، شرایط را قبول کنید</string>
     <string name="login_a11y_captcha_container">لطفا کپچا را حل کنید</string>
     <string name="login_a11y_choose_other">گزینش یک کارساز خانگی سفارشی</string>
@@ -1482,8 +1483,8 @@
     <string name="settings_discovery_please_enter_server">لطفاً نشانی کارساز هویت را وارد کنید</string>
     <string name="settings_discovery_bad_identity_server">نتوانست به کارساز هویت وصل شود</string>
     <string name="settings_discovery_enter_identity_server">یک نشانی کارساز هویت وارد کنید</string>
-    <string name="settings_discovery_confirm_mail_not_clicked">رایانامه‌ای به %s فرستادیم. لطفاً نخست رایانامه‌تان را بررسی کرده و روی پیوند تأیید کلیک کنید</string>
-    <string name="settings_discovery_confirm_mail">رایانامه‌ای به %s فرستادیم. رایانامه‌تان را بررسی کرده و روی پیوند تأیید کلیک کنید</string>
+    <string name="settings_discovery_confirm_mail_not_clicked">رایانامه‌ای به %s فرستادیم. لطفاً نخست ایمیل را بررسی کرده و روی پیوند تأیید کلیک کنید</string>
+    <string name="settings_discovery_confirm_mail">رایانامه‌ای به %s فرستادیم. ایمیل را بررسی کرده و روی پیوند تأیید کلیک کنید</string>
     <string name="settings_discovery_disconnect_identity_server_info">قطع شدن ازکارساز هویت به معنی قابل کشف نبودنتان به دست دیگر کابران است و نخواهید توانست دیگران را با رایانامه یا تلفن دعوت کنید.</string>
     <string name="settings_discovery_identity_server_info_none">در حال استفاده از کارساز هویتی نیستید. برای کشق و قابل کشف بودن به دست آشنایان موجودی که می‌شناسید، یک کارساز هویت در زیر پیکربندی کنید.</string>
     <string name="settings_discovery_identity_server_info">دارید برای کشف و قابل کشف بودن به دست آشنایان موجودی که می‌شناسید از %1$s استفاده می‌کنید.</string>
@@ -1657,7 +1658,7 @@
     <string name="settings_select_country">گزینش یک کشور</string>
     <string name="account_phone_number_already_used_error">این شماره تلفن قبلا استفاده شده‌است.</string>
     <string name="account_email_already_used_error">این نشانی رایانامه در حال استفاده است.</string>
-    <string name="account_email_validation_message">لطفاً رایانامه‌تان را بررسی کرده رو روی پیوند درونش بزنید. پس از این کار، ادامه را بزنید.</string>
+    <string name="account_email_validation_message">لطفاً ایمیل را بررسی کرده رو روی پیوند درونش بزنید. پس از این کار، ادامه را بزنید.</string>
     <string name="disabled_integration_dialog_content">برای انجام این کار اجازه‌ی یکپارچه‌سازی را در تنظیمات فعال کنید.</string>
     <string name="disabled_integration_dialog_title">یکپارچه‌سازی‌ها غیر فعال هستند</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
@@ -1742,7 +1743,7 @@
     <string name="confirm_your_identity_quad_s">هویت خود را تأیید کنید تا به پیام‌های رمز شده دسترسی پیدا کنید.</string>
     <string name="confirm_your_identity">هویت خود را با تأیید این ورود به سیستم از یکی دیگر از نشست‌های خود، تأیید کنید تا به پیام‌های رمز شده دسترسی پیدا کنید.</string>
     <plurals name="secure_backup_reset_devices_you_can_verify">
-        <item quantity="one">دستگاهی را که می‌توانید با استفاده از آن‌ها خود را تایید کنید نشان بده</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">دستگاهی را که می‌توانید با استفاده از آن‌ها خود را تایید کنید نشان بده</item>
         <item quantity="other">%d دستگاهی را که می‌توانید با استفاده از آن‌ها خود را تایید کنید نشان بده</item>
     </plurals>
     <string name="settings_discovery_consent_notice_on">رضاییتان را برای فرستادن نشانی‌های رایانامه و شماره‌های تلفن به این کارساز هویت به منظور کشف دیگر کاربران از آشنایانتان، داده‌اید.</string>
@@ -2021,7 +2022,7 @@
     <string name="a11y_public_room">اتاق عمومی</string>
     <string name="send_images_and_video_with_original_size">رسانه را با اندازه اصلی ارسال کن</string>
     <plurals name="send_videos_with_original_size">
-        <item quantity="one">ارسال فیلم با اندازه اصلی</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">ارسال فیلم با اندازه اصلی</item>
         <item quantity="other">ارسال فیلم‌ها با اندازه اصلی</item>
     </plurals>
     <string name="error_file_too_big_simple">پرونده برای بارگذاری بسیار بزرگ است.</string>
@@ -2114,11 +2115,11 @@
     <string name="room_create_member_of_space_name_can_join">اعضای فضای %s می‌توانند یافته، دیده و بپیوندند.</string>
     <string name="room_settings_room_access_private_invite_only_title">خصوصی (فقط با دعوت)</string>
     <plurals name="missed_video_call">
-        <item quantity="one">تماس تصویری بی‌پاسخ</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">تماس تصویری بی‌پاسخ</item>
         <item quantity="other">%d تماس تصویری بی‌پاسخ</item>
     </plurals>
     <plurals name="missed_audio_call">
-        <item quantity="one">تماس صوتی بی‌پاسخ</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">تماس صوتی بی‌پاسخ</item>
         <item quantity="other">%d تماس صوتی بی‌پاسخ</item>
     </plurals>
     <string name="denied_permission_voice_message">لطفاً برای فرستادن پیام صوتی، اجازهٔ میکروفون را اعطا کنید.</string>
@@ -2149,7 +2150,7 @@
     <string name="call_tap_to_return">%1$s برای بازگشت بزنید</string>
     <string name="call_one_active">تماس فعّال (%1$s) ·</string>
     <plurals name="call_active_status">
-        <item quantity="one">تماس فعّال ·</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">تماس فعّال ·</item>
         <item quantity="other">%1$d تماس فعّال ·</item>
     </plurals>
     <string name="call_tile_no_answer">بدون پاسخ</string>
@@ -2279,7 +2280,7 @@
         <item quantity="other">نتیجهٔ نهایی بر مبنای %1$d رأی</item>
     </plurals>
     <plurals name="poll_total_vote_count_before_ended_and_not_voted">
-        <item quantity="one">۱ رأی داده شده. برای دیدن نتیجه، رأی دهید</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">۱ رأی داده شده. برای دیدن نتیجه، رأی دهید</item>
         <item quantity="other">%1$d رأی داده شده. برای دیدن نتیجه، رأی دهید</item>
     </plurals>
     <plurals name="poll_total_vote_count_before_ended_and_voted">
@@ -2333,7 +2334,7 @@
     <string name="poll_no_votes_cast">رأیی داده نشده</string>
     <string name="room_profile_section_restore_security">بازیابی رمزنگاری</string>
     <string name="sent_location">مکانش را هم‌رسانی کرد</string>
-    <string name="login_splash_create_account">ایجاد حساب</string>
+    <string name="login_splash_create_account">شروع به پیام رسانی کنید</string>
     <string name="ftue_auth_carousel_workplace_title">پیام‌رسانی برای گروهتان.</string>
     <string name="attachment_type_location">مکان</string>
     <string name="location_not_available_dialog_content">${app_name} نتوانست به مکانتان دست یابد. لطفاً بعداً دوباره تلاش کنید.</string>
@@ -2358,11 +2359,17 @@
     <string name="ftue_auth_use_case_join_existing_server">دنبال پیوستن به کارسازهای موجودید؟</string>
     <string name="ftue_auth_use_case_skip_partial">پرش از این پرسش</string>
     <string name="ftue_auth_use_case_skip">هنوز اطمینان ندارید؟ %s</string>
-    <string name="ftue_auth_use_case_option_three">اجتماع‌ها</string>
-    <string name="ftue_auth_use_case_option_two">گروه‌ها</string>
-    <string name="ftue_auth_use_case_option_one">دوستان و خانواده</string>
-    <string name="ftue_auth_use_case_subtitle">کمکتان می‌کنیم وصل بمانید</string>
-    <string name="ftue_auth_use_case_title">بیش‌تر با چه‌کسی گپ می‌زنید؟</string>
+    <string name="ftue_auth_use_case_option_three">وزارت ارتباطات و اطلاعات</string>
+    <string name="ftue_auth_use_case_option_two">سازمان فناوری اطلاعات ایران</string>
+    <string name="ftue_auth_use_case_option_one">شرکت ارتباطات زیر ساخت</string>
+    <string name="ftue_auth_use_case_option_four" tools:ignore="ExtraTranslation">دوستان و خانواده</string>
+    <string name="ftue_auth_use_case_option_five" tools:ignore="ExtraTranslation">دوستان و خانواده</string>
+    <string name="ftue_auth_use_case_option_six" tools:ignore="ExtraTranslation">دوستان و خانواده</string>
+    <string name="ftue_auth_use_case_option_seven" tools:ignore="ExtraTranslation">دوستان و خانواده</string>
+<!--    <string name="ftue_auth_use_case_subtitle">کمکتان می‌کنیم وصل بمانید</string>-->
+    <string name="ftue_auth_use_case_subtitle">درست مانند ایمیل، حساب کاربری یک خانه دارند، اگرچه می توانید با هرکسی که دوست دارید، صحبت کنید</string>
+<!--    <string name="ftue_auth_use_case_title">بیش‌تر با چه‌کسی گپ می‌زنید؟</string>-->
+    <string name="ftue_auth_use_case_title">سازمان خود را انتخاب کنید</string>
     <string name="navigate_to_thread_when_already_in_the_thread">هم‌اکنون دارید این رشته را می‌بینید!</string>
     <string name="view_in_room">دیدن در اتاق</string>
     <string name="reply_in_thread">پاسخ در رشته</string>
@@ -2496,7 +2503,7 @@
     <string name="settings_troubleshoot_test_current_distributor">در حال استفاده از %s.</string>
     <string name="settings_troubleshoot_test_current_distributor_title">روش</string>
     <plurals name="settings_troubleshoot_test_distributors_many">
-        <item quantity="one">۱ روش پیدا شد.</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">۱ روش پیدا شد.</item>
         <item quantity="other">%d روش پیدا شد.</item>
     </plurals>
     <string name="settings_troubleshoot_test_distributors_fdroid">روشی جز همگام سازی پس‌زمینه پیدا نشد.</string>
@@ -2526,7 +2533,7 @@
     <string name="settings_troubleshoot_test_endpoint_registration_success">نقطهٔ پایانی با موفّقیت روی کارساز خانگی ثبت شد.</string>
     <string name="settings_troubleshoot_test_endpoint_registration_title">ثبت نقطهٔ پایانی</string>
     <plurals name="room_removed_messages">
-        <item quantity="one">۱ پیام برداشته شد</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">۱ پیام برداشته شد</item>
         <item quantity="other">%d پیام برداشته شد</item>
     </plurals>
     <string name="live_location_share_location_item_share">هم‌رسانی مکان</string>
@@ -2541,7 +2548,7 @@
     <string name="ftue_auth_email_resend_email">فرستادن دوبارهٔ رایانامه</string>
     <string name="ftue_auth_email_verification_footer">رایانامه‌ای نگرفتید؟</string>
     <string name="ftue_auth_email_verification_subtitle">دستورالعمل‌های فرستاده شده به %s را دنبال کنید</string>
-    <string name="ftue_auth_email_verification_title">رایانامه‌تان را تأیید کنید</string>
+    <string name="ftue_auth_email_verification_title">ایمیل را تأیید کنید</string>
     <string name="ftue_auth_phone_confirmation_resend_code">فرستادن دوبارهٔ رمز</string>
     <string name="ftue_auth_phone_confirmation_subtitle">رمزی به %s فرستاده خواهد شد</string>
     <string name="ftue_auth_phone_confirmation_title">شمارهٔ تلفنتان را تأیید کنید</string>
@@ -2550,7 +2557,7 @@
     <string name="ftue_auth_new_password_subtitle">مطمئن شوید ۸ نویسه یا بیش‌تر است.</string>
     <string name="ftue_auth_new_password_title">گذرواژه‌ای جدید برگزینید</string>
     <string name="ftue_auth_new_password_entry_title">گذرواژهٔ جدید</string>
-    <string name="ftue_auth_reset_password_breaker_title">رایانامه‌تان را بررسی کنید.</string>
+    <string name="ftue_auth_reset_password_breaker_title">ایمیل را بررسی کنید.</string>
     <string name="ftue_auth_reset_password_email_subtitle">%s برایتان پیوند تأییدی خواهد فرستاد</string>
     <string name="ftue_auth_phone_confirmation_entry_title">رمز تأیید</string>
     <string name="ftue_auth_phone_entry_title">شمارهٔ تلفن</string>
@@ -2558,7 +2565,7 @@
     <string name="ftue_auth_phone_title">شمارهٔ تلفنتان را وارد کنید</string>
     <string name="ftue_auth_email_entry_title">رایانامه</string>
     <string name="ftue_auth_email_subtitle">%s می‌خواهد حسابتان را تأیید کند</string>
-    <string name="ftue_auth_email_title">رایانامه‌تان را وارد کنید</string>
+    <string name="ftue_auth_email_title">ایمیل را وارد کنید</string>
     <string name="ftue_auth_terms_subtitle">لطفاً شرایط و سیاست‌های %s را بخوانید</string>
     <string name="ftue_auth_terms_title">سیاست‌های کارساز</string>
     <string name="ftue_auth_choose_server_ems_cta">در ارتباط بمانید</string>
@@ -2573,7 +2580,8 @@
     <string name="ftue_auth_create_account_choose_server_header">جایی که گفت‌وگوهایتان خواهند زیست</string>
     <string name="ftue_auth_create_account_password_entry_footer">باید ۸ نویسه یا بیش‌تر باشد</string>
     <string name="ftue_auth_create_account_username_entry_footer">دیگران می‌توانند بیابندتان %s</string>
-    <string name="ftue_auth_create_account_title">ایجاد حسابتان</string>
+<!--    <string name="ftue_auth_create_account_title">ایجاد حسابتان</string>-->
+    <string name="ftue_auth_create_account_title">ورود به حساب کاربری</string>
     <string name="font_size_use_system">استفاده از پیش‌گزیدهٔ سامانه</string>
     <string name="font_size_section_manually">گزینش دستی</string>
     <string name="font_size_section_auto">تنظیم خودکار</string>
@@ -2638,7 +2646,7 @@
     <string name="home_empty_space_no_rooms_title">%s
 \nکمی خالی به نظر می‌رسد.</string>
     <plurals name="device_manager_inactive_sessions_description">
-        <item quantity="one">در نظر گرفتن خروج از نشست‌های قدیمی (۱ روز یا بیش‌تر) که دیگر استفاده نمی‌کنید.</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">در نظر گرفتن خروج از نشست‌های قدیمی (۱ روز یا بیش‌تر) که دیگر استفاده نمی‌کنید.</item>
         <item quantity="other">در نظر گرفتن خروج از نشست‌های قدیمی (%1$d روز یا بیش‌تر) که دیگر استفاده نمی‌کنید.</item>
     </plurals>
     <string name="device_manager_unverified_sessions_description">تأیید یا خروج از نشست‌های تأییدنشده.</string>
@@ -2698,7 +2706,7 @@
     <string name="labs_enable_new_app_layout_title">به کار انداختن چینش جدید</string>
     <string name="device_manager_other_sessions_recommendation_description_unverified">تأیید نشست‌هایتان برای پیام‌رسانی امن بهبود یافته یا خروج از آن‌هایی که تشخیصشان نداده یا دیگر استفاده نمی‌کنید.</string>
     <plurals name="device_manager_filter_option_inactive_description">
-        <item quantity="one">غیرفعّال برای ۱ روز یا بیش‌تر</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">غیرفعّال برای ۱ روز یا بیش‌تر</item>
         <item quantity="other">غیرفعّال برای %1$d روز یا بیش‌تر</item>
     </plurals>
     <string name="device_manager_other_sessions_description_unverified_current_session">تأیید نشده · نشست کنونیتان</string>
@@ -2796,7 +2804,7 @@
     <string name="action_deselect_all">ناگزینش همه</string>
     <string name="action_select_all">گزینش همه</string>
     <plurals name="x_selected">
-        <item quantity="one">۱ گزیده</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">۱ گزیده</item>
         <item quantity="other">%1$d گزیده</item>
     </plurals>
     <string name="error_voice_broadcast_permission_denied_message">اجازه‌های لازم برای آغاز پخش صوتی در این اتاق را ندارید. برای ارتقای اجازه‌هایتان با یک مدیر اتاق تماس بگیرید.</string>
@@ -2808,7 +2816,7 @@
     <string name="labs_enable_client_info_recording_summary">ضبط نام کارخواه، نگارش و نشانی برای بازشناسی آسان‌تر نشست‌ها در مدیر نشست.</string>
     <string name="room_settings_global_block_unverified_info_text">🔒 رمزگذاری به نشست‌های تأیید شده را فقط برای تمامی اتاق‌ها در تنظیمات امنیت به کار انداخته‌اید.</string>
     <plurals name="device_manager_other_sessions_recommendation_description_inactive">
-        <item quantity="one">خارج شدن از نشست‌های قدیمی (۱ روز یا بیش‌تر) که دیگر استفاده نمی‌کنید را در نظر داشته باشید.</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">خارج شدن از نشست‌های قدیمی (۱ روز یا بیش‌تر) که دیگر استفاده نمی‌کنید را در نظر داشته باشید.</item>
         <item quantity="other">خارج شدن از نشست‌های قدیمی (%1$d روز یا بیش‌تر) که دیگر استفاده نمی‌کنید را در نظر داشته باشید.</item>
     </plurals>
     <string name="labs_enable_voice_broadcast_summary">توانایی ضبط و فرستادن پخش صدا در خط زمانی اتاق.</string>
@@ -2824,7 +2832,7 @@
     <string name="attachment_type_selector_text_formatting">قالب‌بندی متن</string>
     <string name="device_manager_other_sessions_multi_signout_selection">خروج</string>
     <plurals name="device_manager_other_sessions_multi_signout_all">
-        <item quantity="one">خروج از ۱ نشست</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">خروج از ۱ نشست</item>
         <item quantity="other">خروج از %1$d نشست</item>
     </plurals>
     <string name="voice_broadcast_recording_time_left">%1$s مانده</string>
@@ -2905,13 +2913,13 @@
     <string name="room_polls_load_more">بار کردن نظرسنجی‌های بیش‌تر</string>
     <string name="room_polls_wait_for_display">نشان دادن نظرسنجی‌ها</string>
     <plurals name="room_polls_ended_no_item_for_loaded_period">
-        <item quantity="one">نظرسنجی گذشته‌ای برای روز گذشته وجود ندارد.
+        <item quantity="one" tools:ignore="ImpliedQuantity">نظرسنجی گذشته‌ای برای روز گذشته وجود ندارد.
 \nبرای دیدن نظرسنجی‌های روزهای پیش، نظرسنجی‌های بیش‌تری بار کنید.</item>
         <item quantity="other">نظرسنجی گذشته‌ای برای %1$d روز گذشته وجود ندارد.
 \nبرای دیدن نظرسنجی‌های روزهای پیش، نظرسنجی‌های بیش‌تری بار کنید.</item>
     </plurals>
     <plurals name="room_polls_active_no_item_for_loaded_period">
-        <item quantity="one">نظرسنجی فعّالی برای روز گذشته وجود ندارد.
+        <item quantity="one" tools:ignore="ImpliedQuantity">نظرسنجی فعّالی برای روز گذشته وجود ندارد.
 \nبرای دیدن نظرسنجی‌های روزهای پیش، نظرسنجی‌های بیش‌تری بار کنید.</item>
         <item quantity="other">نظرسنجی فعّالی برای %1$d روز گذشته وجود ندارد.
 \nبرای دیدن نظرسنجی‌های روزهای پیش، نظرسنجی‌های بیش‌تری بار کنید.</item>

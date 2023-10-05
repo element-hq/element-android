@@ -18,6 +18,7 @@ package im.vector.app.features.onboarding.ftueauth
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -54,12 +55,13 @@ import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class FtueAuthCombinedLoginFragment :
+ class FtueAuthCombinedLoginFragment :
         AbstractSSOFtueAuthFragment<FragmentFtueCombinedLoginBinding>() {
 
     @Inject lateinit var loginFieldsValidation: LoginFieldsValidation
     @Inject lateinit var loginErrorParser: LoginErrorParser
     @Inject lateinit var vectorFeatures: VectorFeatures
+    var server =  arguments?.getString("server_fa_name")
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueCombinedLoginBinding {
         return FragmentFtueCombinedLoginBinding.inflate(inflater, container, false)
@@ -68,8 +70,10 @@ class FtueAuthCombinedLoginFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupSubmitButton()
+
+        views.selectedServerName.text = server
         views.loginRoot.realignPercentagesToParent()
-        views.editServerButton.debouncedClicks { viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.EditServerSelection)) }
+//        views.editServerButton.debouncedClicks { viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.EditServerSelection)) }
         views.loginPasswordInput.setOnImeDoneListener { submit() }
         views.loginInput.setOnFocusLostListener(viewLifecycleOwner) {
             viewModel.handle(OnboardingAction.UserNameEnteredAction.Login(views.loginInput.content()))
@@ -138,10 +142,10 @@ class FtueAuthCombinedLoginFragment :
     }
 
     override fun updateWithState(state: OnboardingViewState) {
-        setupUi(state)
+//        setupUi(state)
         setupAutoFill()
 
-        views.selectedServerName.text = state.selectedHomeserver.userFacingUrl.toReducedUrl()
+//        views.selectedServerName.text = state.selectedHomeserver.userFacingUrl.toReducedUrl()
 
         if (state.isLoading) {
             // Ensure password is hidden
@@ -149,40 +153,40 @@ class FtueAuthCombinedLoginFragment :
         }
     }
 
-    private fun setupUi(state: OnboardingViewState) {
-        when (state.selectedHomeserver.preferredLoginMode) {
-            is LoginMode.SsoAndPassword -> {
-                showUsernamePassword()
-                renderSsoProviders(state.deviceId, state.selectedHomeserver.preferredLoginMode)
-            }
-            is LoginMode.Sso -> {
-                hideUsernamePassword()
-                renderSsoProviders(state.deviceId, state.selectedHomeserver.preferredLoginMode)
-            }
-            else -> {
-                showUsernamePassword()
-                hideSsoProviders()
-            }
-        }
-    }
+//    private fun setupUi(state: OnboardingViewState) {
+//        when (state.selectedHomeserver.preferredLoginMode) {
+//            is LoginMode.SsoAndPassword -> {
+//                showUsernamePassword()
+//                renderSsoProviders(state.deviceId, state.selectedHomeserver.preferredLoginMode)
+//            }
+//            is LoginMode.Sso -> {
+//                hideUsernamePassword()
+//                renderSsoProviders(state.deviceId, state.selectedHomeserver.preferredLoginMode)
+//            }
+//            else -> {
+//                showUsernamePassword()
+//                hideSsoProviders()
+//            }
+//        }
+//    }
 
-    private fun renderSsoProviders(deviceId: String?, loginMode: LoginMode) {
-        views.ssoGroup.isVisible = true
-        views.ssoButtonsHeader.isVisible = isUsernameAndPasswordVisible()
-        views.ssoButtons.render(loginMode, SocialLoginButtonsView.Mode.MODE_CONTINUE) { id ->
-            viewModel.fetchSsoUrl(
-                    redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
-                    deviceId = deviceId,
-                    provider = id,
-                    action = SSOAction.LOGIN
-            )?.let { openInCustomTab(it) }
-        }
-    }
+//    private fun renderSsoProviders(deviceId: String?, loginMode: LoginMode) {
+//        views.ssoGroup.isVisible = true
+//        views.ssoButtonsHeader.isVisible = isUsernameAndPasswordVisible()
+//        views.ssoButtons.render(loginMode, SocialLoginButtonsView.Mode.MODE_CONTINUE) { id ->
+//            viewModel.fetchSsoUrl(
+//                    redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
+//                    deviceId = deviceId,
+//                    provider = id,
+//                    action = SSOAction.LOGIN
+//            )?.let { openInCustomTab(it) }
+//        }
+//    }
 
-    private fun hideSsoProviders() {
-        views.ssoGroup.isVisible = false
-        views.ssoButtons.ssoIdentityProviders = null
-    }
+//    private fun hideSsoProviders() {
+//        views.ssoGroup.isVisible = false
+//        views.ssoButtons.ssoIdentityProviders = null
+//    }
 
     private fun hideUsernamePassword() {
         views.loginEntryGroup.isVisible = false

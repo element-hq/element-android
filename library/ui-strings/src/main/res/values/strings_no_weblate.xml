@@ -5,11 +5,11 @@
 
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
-    <string name="resources_language">en</string>
-    <string name="resources_country_code">US</string>
+    <string name="resources_language">fa</string>
+    <string name="resources_country_code">IR</string>
     <!-- Value MUST have 4 letters and MUST be in this list: https://www.unicode.org/iso15924/iso15924-codes.html. Example:  "Arab", "Cyrl", "Latn", etc. -->
-    <string name="resources_script">Latn</string>
-
+    <string name="resources_script">Arab</string>
+    <string name="app_name">پرساد</string>
     <string name="lockscreen_num_0">0</string>
     <string name="lockscreen_num_1">1</string>
     <string name="lockscreen_num_2">2</string>

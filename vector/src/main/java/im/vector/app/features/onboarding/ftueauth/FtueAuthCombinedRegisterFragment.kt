@@ -76,7 +76,7 @@ class FtueAuthCombinedRegisterFragment :
         super.onViewCreated(view, savedInstanceState)
         setupSubmitButton()
         views.createAccountRoot.realignPercentagesToParent()
-        views.editServerButton.debouncedClicks { viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.EditServerSelection)) }
+//        views.editServerButton.debouncedClicks { viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.EditServerSelection)) }
         views.createAccountPasswordInput.setOnImeDoneListener {
             if (canSubmit(views.createAccountInput.content(), views.createAccountPasswordInput.content())) {
                 submit()
@@ -206,28 +206,28 @@ class FtueAuthCombinedRegisterFragment :
             else -> ""
         }
 
-        when (state.selectedHomeserver.preferredLoginMode) {
-            is LoginMode.SsoAndPassword -> renderSsoProviders(state.deviceId, state.selectedHomeserver.preferredLoginMode)
-            else -> hideSsoProviders()
-        }
+//        when (state.selectedHomeserver.preferredLoginMode) {
+//            is LoginMode.SsoAndPassword -> renderSsoProviders(state.deviceId, state.selectedHomeserver.preferredLoginMode)
+//            else -> hideSsoProviders()
+//        }
     }
 
-    private fun renderSsoProviders(deviceId: String?, loginMode: LoginMode) {
-        views.ssoGroup.isVisible = true
-        views.ssoButtons.render(loginMode, SocialLoginButtonsView.Mode.MODE_CONTINUE) { provider ->
-            viewModel.fetchSsoUrl(
-                    redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
-                    deviceId = deviceId,
-                    provider = provider,
-                    action = SSOAction.REGISTER
-            )?.let { openInCustomTab(it) }
-        }
-    }
+//    private fun renderSsoProviders(deviceId: String?, loginMode: LoginMode) {
+//        views.ssoGroup.isVisible = true
+//        views.ssoButtons.render(loginMode, SocialLoginButtonsView.Mode.MODE_CONTINUE) { provider ->
+//            viewModel.fetchSsoUrl(
+//                    redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
+//                    deviceId = deviceId,
+//                    provider = provider,
+//                    action = SSOAction.REGISTER
+//            )?.let { openInCustomTab(it) }
+//        }
+//    }
 
-    private fun hideSsoProviders() {
-        views.ssoGroup.isVisible = false
-        views.ssoButtons.ssoIdentityProviders = null
-    }
+//    private fun hideSsoProviders() {
+//        views.ssoGroup.isVisible = false
+//        views.ssoButtons.ssoIdentityProviders = null
+//    }
 
     private fun setupAutoFill() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

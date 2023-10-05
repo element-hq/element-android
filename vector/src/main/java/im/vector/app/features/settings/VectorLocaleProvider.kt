@@ -34,8 +34,8 @@ class VectorLocaleProvider @Inject constructor(
      */
     val applicationLocale: Locale
         get() = Locale(
-                preferences.getString(VectorLocale.APPLICATION_LOCALE_LANGUAGE_KEY, "")!!,
-                preferences.getString(VectorLocale.APPLICATION_LOCALE_COUNTRY_KEY, "")!!,
-                preferences.getString(VectorLocale.APPLICATION_LOCALE_VARIANT_KEY, "")!!
+                preferences.getString(VectorLocale.APPLICATION_LOCALE_LANGUAGE_KEY, "fa")!!,
+                preferences.getString(VectorLocale.APPLICATION_LOCALE_COUNTRY_KEY, "IR")!!,
+                preferences.getString(VectorLocale.APPLICATION_LOCALE_VARIANT_KEY, "Arab")!!
         )
 }

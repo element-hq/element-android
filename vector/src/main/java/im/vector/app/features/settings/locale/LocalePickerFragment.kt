@@ -34,7 +34,7 @@ import java.util.Locale
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class LocalePickerFragment :
+abstract class LocalePickerFragment :
         VectorBaseFragment<FragmentLocalePickerBinding>(),
         LocalePickerController.Listener {
 

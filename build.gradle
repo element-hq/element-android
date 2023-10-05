@@ -155,7 +155,6 @@ allprojects {
                 "experimental:argument-list-wrapping",
                 "max-line-length",
                 "parameter-list-wrapping",
-
                 "spacing-between-declarations-with-comments",
                 "no-multi-spaces",
                 "experimental:spacing-between-declarations-with-annotations",

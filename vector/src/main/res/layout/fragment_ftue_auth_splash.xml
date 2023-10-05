@@ -190,18 +190,18 @@
         app:layout_constraintTop_toBottomOf="@id/loginSplashSpace4"
         tools:text="@string/login_splash_create_account" />
 
-    <Button
-        android:id="@+id/loginSplashAlreadyHaveAccount"
-        style="@style/Widget.Vector.Button.Text.Login"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/login_splash_already_have_account"
-        android:textAllCaps="true"
-        android:transitionName="loginSubmitTransition"
-        app:layout_constraintBottom_toTopOf="@id/loginSplashSpace5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/loginSplashSubmit" />
+<!--    <Button-->
+<!--        android:id="@+id/loginSplashAlreadyHaveAccount"-->
+<!--        style="@style/Widget.Vector.Button.Text.Login"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/login_splash_already_have_account"-->
+<!--        android:textAllCaps="true"-->
+<!--        android:transitionName="loginSubmitTransition"-->
+<!--        app:layout_constraintBottom_toTopOf="@id/loginSplashSpace5"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/loginSplashSubmit" />-->
 
     <Space
         android:id="@+id/loginSplashSpace5"

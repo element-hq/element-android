@@ -86,10 +86,10 @@ class FtueAuthSplashCarouselFragment :
             setText(if (isAlreadyHaveAccountEnabled) R.string.login_splash_create_account else R.string.login_splash_submit)
             debouncedClicks { splashSubmit(isAlreadyHaveAccountEnabled) }
         }
-        views.loginSplashAlreadyHaveAccount.apply {
-            isVisible = isAlreadyHaveAccountEnabled
-            debouncedClicks { alreadyHaveAnAccount() }
-        }
+//        views.loginSplashAlreadyHaveAccount.apply {
+//            isVisible = isAlreadyHaveAccountEnabled
+//            debouncedClicks { alreadyHaveAnAccount() }
+//        }
 
         if (buildMeta.isDebug || vectorPreferences.developerMode()) {
             views.loginSplashVersion.isVisible = true
