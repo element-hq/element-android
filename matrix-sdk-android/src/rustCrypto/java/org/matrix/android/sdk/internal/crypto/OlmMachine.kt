@@ -76,6 +76,7 @@ import org.matrix.rustcomponents.sdk.crypto.DeviceLists
 import org.matrix.rustcomponents.sdk.crypto.EncryptionSettings
 import org.matrix.rustcomponents.sdk.crypto.KeyRequestPair
 import org.matrix.rustcomponents.sdk.crypto.KeysImportResult
+import org.matrix.rustcomponents.sdk.crypto.LocalTrust
 import org.matrix.rustcomponents.sdk.crypto.Logger
 import org.matrix.rustcomponents.sdk.crypto.MegolmV1BackupKey
 import org.matrix.rustcomponents.sdk.crypto.Request
@@ -869,6 +870,11 @@ internal class OlmMachine @Inject constructor(
         }
     }
 
+    suspend fun requestMissingSecretsFromOtherSessions(): Boolean {
+        return withContext(coroutineDispatchers.io) {
+            inner.queryMissingSecretsFromOtherSessions()
+        }
+    }
     @Throws(CryptoStoreException::class)
     suspend fun enableBackupV1(key: String, version: String) {
         return withContext(coroutineDispatchers.computation) {
@@ -932,6 +938,13 @@ internal class OlmMachine @Inject constructor(
             )
 
             inner.verifyBackup(serializedAuthData)
+        }
+    }
+
+    @Throws(CryptoStoreException::class)
+    suspend fun setDeviceLocalTrust(userId: String, deviceId: String, trusted: Boolean) {
+        withContext(coroutineDispatchers.io) {
+            inner.setLocalTrust(userId, deviceId, if (trusted) LocalTrust.VERIFIED else LocalTrust.UNSET)
         }
     }
 }

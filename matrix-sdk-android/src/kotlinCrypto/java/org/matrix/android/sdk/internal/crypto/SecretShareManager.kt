@@ -136,6 +136,13 @@ internal class SecretShareManager @Inject constructor(
                             .w("handleSecretRequest() : malformed request norequestingDeviceId ")
                 }
 
+        if (deviceId == credentials.deviceId) {
+            return Unit.also {
+                Timber.tag(loggerTag.value)
+                        .v("handleSecretRequest() : Ignore request from self device")
+            }
+        }
+
         val device = cryptoStore.getUserDevice(credentials.userId, deviceId)
                 ?: return Unit.also {
                     Timber.tag(loggerTag.value)
@@ -251,6 +258,37 @@ internal class SecretShareManager @Inject constructor(
         } catch (failure: Throwable) {
             Timber.tag(loggerTag.value)
                     .w("Failed to request secret $secretName to ${cryptoDeviceInfo.shortDebugString()}")
+        }
+    }
+
+    suspend fun requestMissingSecrets() {
+        // quick implementation for backward compatibility with rust, will request all secrets to all own devices
+        val secretNames = listOf(MASTER_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, KEYBACKUP_SECRET_SSSS_NAME)
+
+        secretNames.forEach { secretName ->
+            val toDeviceContent = SecretShareRequest(
+                    requestingDeviceId = credentials.deviceId,
+                    secretName = secretName,
+                    requestId = createUniqueTxnId()
+            )
+
+            val contentMap = MXUsersDevicesMap<Any>()
+            contentMap.setObject(credentials.userId, "*", toDeviceContent)
+
+            val params = SendToDeviceTask.Params(
+                    eventType = EventType.REQUEST_SECRET,
+                    contentMap = contentMap
+            )
+            try {
+                withContext(coroutineDispatchers.io) {
+                    sendToDeviceTask.execute(params)
+                }
+                Timber.tag(loggerTag.value)
+                        .d("Secret request sent for $secretName")
+            } catch (failure: Throwable) {
+                Timber.tag(loggerTag.value)
+                        .w("Failed to request secret $secretName")
+            }
         }
     }
 
