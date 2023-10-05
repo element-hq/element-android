@@ -32,7 +32,7 @@
     <string name="verification_emoji_cake">ケーキ</string>
     <string name="verification_emoji_heart">ハート</string>
     <string name="verification_emoji_smiley">スマイル</string>
-    <string name="verification_emoji_robot">ロボと</string>
+    <string name="verification_emoji_robot">ロボット</string>
     <string name="verification_emoji_hat">帽子</string>
     <string name="verification_emoji_glasses">めがね</string>
     <string name="verification_emoji_spanner">スパナ</string>
@@ -63,6 +63,6 @@
     <string name="verification_emoji_bell">ベル</string>
     <string name="verification_emoji_anchor">いかり</string>
     <string name="verification_emoji_headphones">ヘッドホン</string>
-    <string name="verification_emoji_folder">フォルダ</string>
+    <string name="verification_emoji_folder">フォルダー</string>
     <string name="verification_emoji_pin">ピン</string>
 </resources>

@@ -50,4 +50,6 @@ sealed class DevicesViewEvents : VectorViewEvents {
     data class ShowManuallyVerify(val cryptoDeviceInfo: CryptoDeviceInfo) : DevicesViewEvents()
 
     object PromptResetSecrets : DevicesViewEvents()
+
+    data class OpenBrowser(val url: String) : DevicesViewEvents()
 }

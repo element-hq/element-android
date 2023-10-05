@@ -49,6 +49,7 @@ internal object HomeServerCapabilitiesMapper {
                 canRemotelyTogglePushNotificationsOfDevices = entity.canRemotelyTogglePushNotificationsOfDevices,
                 canRedactRelatedEvents = entity.canRedactEventWithRelations,
                 externalAccountManagementUrl = entity.externalAccountManagementUrl,
+                authenticationIssuer = entity.authenticationIssuer,
         )
     }
 

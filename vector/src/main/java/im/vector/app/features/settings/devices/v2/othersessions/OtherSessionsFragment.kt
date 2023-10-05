@@ -103,10 +103,15 @@ class OtherSessionsFragment :
             val nbDevices = viewState.devices()?.size ?: 0
             stringProvider.getQuantityString(R.plurals.device_manager_other_sessions_multi_signout_all, nbDevices, nbDevices)
         }
-        multiSignoutItem.isVisible = if (viewState.isSelectModeEnabled) {
-            viewState.devices.invoke()?.any { it.isSelected }.orFalse()
+        multiSignoutItem.isVisible = if (viewState.delegatedOidcAuthEnabled) {
+            // Hide multi signout if the homeserver delegates the account management
+            false
         } else {
-            viewState.devices.invoke()?.isNotEmpty().orFalse()
+            if (viewState.isSelectModeEnabled) {
+                viewState.devices.invoke()?.any { it.isSelected }.orFalse()
+            } else {
+                viewState.devices.invoke()?.isNotEmpty().orFalse()
+            }
         }
         val showAsActionFlag = if (viewState.isSelectModeEnabled) MenuItem.SHOW_AS_ACTION_IF_ROOM else MenuItem.SHOW_AS_ACTION_NEVER
         multiSignoutItem.setShowAsAction(showAsActionFlag or MenuItem.SHOW_AS_ACTION_WITH_TEXT)
@@ -308,7 +313,10 @@ class OtherSessionsFragment :
                         )
                 )
                 views.otherSessionsNotFoundTextView.text = getString(R.string.device_manager_other_sessions_no_inactive_sessions_found)
-                updateSecurityLearnMoreButton(R.string.device_manager_learn_more_sessions_inactive_title, R.string.device_manager_learn_more_sessions_inactive)
+                updateSecurityLearnMoreButton(
+                        R.string.device_manager_learn_more_sessions_inactive_title,
+                        R.string.device_manager_learn_more_sessions_inactive
+                )
             }
             DeviceManagerFilterType.ALL_SESSIONS -> { /* NOOP. View is not visible */
             }

@@ -1,3 +1,21 @@
+Changes in Element v1.6.6 (2023-10-05)
+======================================
+
+Bugfixes 🐛
+----------
+ - Fixed JWT token for Jitsi openidtoken-jwt authentication ([#7758](https://github.com/vector-im/element-android/issues/7758))
+ - Fix crash when max shortcuts count is exceeded ([#8644](https://github.com/vector-im/element-android/issues/8644))
+ - Fix Login with QR code not working with rust crypto. ([#8653](https://github.com/vector-im/element-android/issues/8653))
+
+Other changes
+-------------
+ - Use 3PID capability to show / hide email UI in settings ([#8615](https://github.com/vector-im/element-android/issues/8615))
+ - If an external account manager is configured on the server, use it to delete other sessions and hide the multi session deletion. ([#8616](https://github.com/vector-im/element-android/issues/8616))
+ - Hide account deactivation UI for account managed externally. ([#8619](https://github.com/vector-im/element-android/issues/8619))
+ - Fix import of SAS Emoji string translations. ([#8623](https://github.com/vector-im/element-android/issues/8623))
+ - Open external account manager for delete other sessions using Chrome custom tabs. ([#8645](https://github.com/vector-im/element-android/issues/8645))
+
+
 Changes in Element v1.6.5 (2023-07-25)
 ======================================
 

@@ -45,10 +45,11 @@ import im.vector.app.core.intent.getFilenameFromUri
 import im.vector.app.core.platform.SimpleTextWatcher
 import im.vector.app.core.preference.UserAvatarPreference
 import im.vector.app.core.preference.VectorPreference
+import im.vector.app.core.preference.VectorPreferenceCategory
 import im.vector.app.core.preference.VectorSwitchPreference
 import im.vector.app.core.utils.TextUtils
 import im.vector.app.core.utils.getSizeOfFiles
-import im.vector.app.core.utils.openUrlInExternalBrowser
+import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.DialogChangePasswordBinding
 import im.vector.app.features.MainActivity
@@ -101,11 +102,17 @@ class VectorSettingsGeneralFragment :
     private val mPasswordPreference by lazy {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY)!!
     }
+    private val mManage3pidsPreference by lazy {
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_EMAILS_AND_PHONE_NUMBERS_PREFERENCE_KEY)!!
+    }
     private val mIdentityServerPreference by lazy {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY)!!
     }
     private val mExternalAccountManagementPreference by lazy {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_EXTERNAL_ACCOUNT_MANAGEMENT_KEY)!!
+    }
+    private val mDeactivateAccountCategory by lazy {
+        findPreference<VectorPreferenceCategory>("SETTINGS_DEACTIVATE_ACCOUNT_CATEGORY_KEY")!!
     }
 
     // Local contacts
@@ -197,6 +204,10 @@ class VectorSettingsGeneralFragment :
             mPasswordPreference.isVisible = false
         }
 
+        // Manage 3Pid
+        // Hide the preference if 3pids can not be updated
+        mManage3pidsPreference.isVisible = homeServerCapabilities.canChange3pid
+
         val openDiscoveryScreenPreferenceClickListener = Preference.OnPreferenceClickListener {
             (requireActivity() as VectorSettingsActivity).navigateTo(
                     DiscoverySettingsFragment::class.java,
@@ -214,7 +225,7 @@ class VectorSettingsGeneralFragment :
         // Hide the preference if no URL is given by server
         if (homeServerCapabilities.externalAccountManagementUrl != null) {
             mExternalAccountManagementPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                openUrlInExternalBrowser(it.context, homeServerCapabilities.externalAccountManagementUrl)
+                openUrlInChromeCustomTab(it.context, null, homeServerCapabilities.externalAccountManagementUrl!!)
                 true
             }
 
@@ -315,6 +326,8 @@ class VectorSettingsGeneralFragment :
 
             false
         }
+        // Account deactivation is visible only if account is not managed by an external URL.
+        mDeactivateAccountCategory.isVisible = homeServerCapabilities.delegatedOidcAuthEnabled.not()
     }
 
     private suspend fun getCacheSize(): Long = withContext(Dispatchers.IO) {

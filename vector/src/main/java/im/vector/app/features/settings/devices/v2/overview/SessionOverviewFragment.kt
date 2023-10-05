@@ -39,6 +39,7 @@ import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.databinding.FragmentSessionOverviewBinding
 import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.crypto.recover.SetupMode
@@ -135,10 +136,19 @@ class SessionOverviewFragment :
         activity?.let { SignOutUiWorker(it).perform() }
     }
 
-    private fun confirmSignoutOtherSession() {
-        activity?.let {
-            buildConfirmSignoutDialogUseCase.execute(it, this::signoutSession)
-                    .show()
+    private fun confirmSignoutOtherSession() = withState(viewModel) { state ->
+        if (state.externalAccountManagementUrl != null) {
+            // Manage in external account manager
+            openUrlInChromeCustomTab(
+                    requireContext(),
+                    null,
+                    state.externalAccountManagementUrl.removeSuffix("/") + "?action=session_end&device_id=${state.deviceId}"
+            )
+        } else {
+            activity?.let {
+                buildConfirmSignoutDialogUseCase.execute(it, this::signoutSession)
+                        .show()
+            }
         }
     }
 

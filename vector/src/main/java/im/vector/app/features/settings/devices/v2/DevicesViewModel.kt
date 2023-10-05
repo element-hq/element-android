@@ -35,12 +35,13 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
 import timber.log.Timber
 
 class DevicesViewModel @AssistedInject constructor(
         @Assisted initialState: DevicesViewState,
-        activeSessionHolder: ActiveSessionHolder,
+        private val activeSessionHolder: ActiveSessionHolder,
         private val getCurrentSessionCrossSigningInfoUseCase: GetCurrentSessionCrossSigningInfoUseCase,
         private val getDeviceFullInfoListUseCase: GetDeviceFullInfoListUseCase,
         private val refreshDevicesOnCryptoDevicesChangeUseCase: RefreshDevicesOnCryptoDevicesChangeUseCase,
@@ -69,6 +70,19 @@ class DevicesViewModel @AssistedInject constructor(
         refreshDeviceList()
         refreshIpAddressVisibility()
         observePreferences()
+        initDelegatedOidcAuthEnabled()
+    }
+
+    private fun initDelegatedOidcAuthEnabled() {
+        setState {
+            copy(
+                    delegatedOidcAuthEnabled = activeSessionHolder.getSafeActiveSession()
+                            ?.homeServerCapabilitiesService()
+                            ?.getHomeServerCapabilities()
+                            ?.delegatedOidcAuthEnabled
+                            .orFalse()
+            )
+        }
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {

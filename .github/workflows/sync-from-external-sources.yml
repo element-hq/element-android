@@ -1,5 +1,6 @@
 name: Sync Data From External Sources
 on:
+  workflow_dispatch:
   schedule:
     # At 00:00 on every Monday UTC
     - cron: '0 0 * * 1'

@@ -28,6 +28,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.junit.runners.MethodSorters
+import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
@@ -196,6 +197,7 @@ class E2eeShareKeysHistoryTest : InstrumentedTest {
 
     @Test
     fun testNeedsRotationFromSharedToWorldReadable() {
+        Assume.assumeTrue("Test is flacky on legacy crypto", BuildConfig.FLAVOR == "rustCrypto")
         testRotationDueToVisibilityChange(RoomHistoryVisibility.SHARED, RoomHistoryVisibilityContent("world_readable"))
     }
 

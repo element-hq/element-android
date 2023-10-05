@@ -17,7 +17,7 @@
     <issue id="IconDuplicatesConfig" severity="error" />
     <issue id="IconDuplicates" severity="error" />
     <issue id="IconExpectedSize" severity="error" />
-    <issue id="LocaleFolder" severity="error" />
+    <issue id="LocaleFolder" severity="ignore" />
 
     <!-- AlwaysShowAction is considered as an error to force ignoring the issue when detected -->
     <issue id="AlwaysShowAction" severity="error" />

@@ -1,0 +1,2 @@
+Ndryshime në këtë version: Element Android tanimë përdor Crypto Rust SDK.
+Regjistër i plotë ndryshimesh: https://github.com/vector-im/element-android/releases

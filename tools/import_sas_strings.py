@@ -35,7 +35,7 @@ if args.verbose:
     print("Argument:")
     print(args)
 
-base_url = "https://raw.githubusercontent.com/matrix-org/matrix-doc/master/data-definitions/sas-emoji.json"
+base_url = "https://raw.githubusercontent.com/matrix-org/matrix-spec/main/data-definitions/sas-emoji.json"
 
 print("Downloading " + base_url + "…")
 

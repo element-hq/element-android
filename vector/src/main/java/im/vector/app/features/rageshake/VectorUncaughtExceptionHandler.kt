@@ -20,6 +20,7 @@ import android.content.SharedPreferences
 import android.os.Build
 import androidx.core.content.edit
 import im.vector.app.core.di.DefaultPreferences
+import im.vector.app.core.resources.AppNameProvider
 import im.vector.app.core.resources.VersionCodeProvider
 import im.vector.app.features.version.VersionProvider
 import org.matrix.android.sdk.api.Matrix
@@ -36,6 +37,7 @@ class VectorUncaughtExceptionHandler @Inject constructor(
         private val bugReporter: BugReporter,
         private val versionProvider: VersionProvider,
         private val versionCodeProvider: VersionCodeProvider,
+        private val appNameProvider: AppNameProvider,
 ) : Thread.UncaughtExceptionHandler {
 
     // key to save the crash status
@@ -67,12 +69,12 @@ class VectorUncaughtExceptionHandler @Inject constructor(
             putBoolean(PREFS_CRASH_KEY, true)
         }
         val b = StringBuilder()
-        val appName = "Element" // TODO Matrix.getApplicationName()
+        val appName = appNameProvider.getAppName()
 
-        b.append(appName + " Build : " + versionCodeProvider.getVersionCode() + "\n")
+        b.append("$appName Build : ${versionCodeProvider.getVersionCode()}\n")
         b.append("$appName Version : ${versionProvider.getVersion(longFormat = true)}\n")
         b.append("SDK Version : ${Matrix.getSdkVersion()}\n")
-        b.append("Phone : " + Build.MODEL.trim() + " (" + Build.VERSION.INCREMENTAL + " " + Build.VERSION.RELEASE + " " + Build.VERSION.CODENAME + ")\n")
+        b.append("Phone : ${Build.MODEL.trim()} (${Build.VERSION.INCREMENTAL} ${Build.VERSION.RELEASE} ${Build.VERSION.CODENAME})\n")
 
         b.append("Memory statuses \n")
 

@@ -331,6 +331,10 @@ ext.initScreenshotTests = { project ->
     }
 }
 
+tasks.withType(Test) {
+    maxHeapSize = "2g"
+}
+
 // Workaround to have KSP generated Kotlin code available in the IDE (for code completion)
 // Ref: https://github.com/airbnb/epoxy/releases/tag/5.0.0beta02
 subprojects { project ->

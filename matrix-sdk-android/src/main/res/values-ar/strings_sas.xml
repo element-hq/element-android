@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Generated file, do not edit -->
-    <string name="verification_emoji_dog">كَلب</string>
+    <string name="verification_emoji_dog">كلب</string>
     <string name="verification_emoji_cat">هِرَّة</string>
     <string name="verification_emoji_lion">أَسَد</string>
     <string name="verification_emoji_horse">حِصَان</string>
-    <string name="verification_emoji_unicorn">حِصَانٌ بِقَرن</string>
+    <string name="verification_emoji_unicorn">حصان وحيد القرن</string>
     <string name="verification_emoji_pig">خِنزِير</string>
     <string name="verification_emoji_elephant">فِيل</string>
     <string name="verification_emoji_rabbit">أَرنَب</string>
     <string name="verification_emoji_panda">باندَا</string>
     <string name="verification_emoji_rooster">دِيك</string>
-    <string name="verification_emoji_penguin">بِطريق</string>
+    <string name="verification_emoji_penguin">بطريق</string>
     <string name="verification_emoji_turtle">سُلحفاة</string>
-    <string name="verification_emoji_fish">سَمَكَة</string>
+    <string name="verification_emoji_fish">سَمَكة</string>
     <string name="verification_emoji_octopus">أُخطُبُوط</string>
     <string name="verification_emoji_butterfly">فَرَاشَة</string>
     <string name="verification_emoji_flower">زَهرَة</string>

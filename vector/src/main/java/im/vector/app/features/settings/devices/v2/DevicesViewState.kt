@@ -26,6 +26,7 @@ data class DevicesViewState(
         val devices: Async<DeviceFullInfoList> = Uninitialized,
         val isLoading: Boolean = false,
         val isShowingIpAddress: Boolean = false,
+        val delegatedOidcAuthEnabled: Boolean = false,
 ) : MavericksState
 
 data class DeviceFullInfoList(
