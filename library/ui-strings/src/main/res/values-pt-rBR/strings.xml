@@ -22,13 +22,13 @@
     <string name="notice_ended_call">%s encerrou a chamada.</string>
     <string name="notice_made_future_room_visibility">%1$s tornou o histórico futuro da sala visível para %2$s</string>
     <string name="notice_room_visibility_invited">todos os membros da sala, a partir do ponto que foram convidados.</string>
-    <string name="notice_room_visibility_joined">todos os membros da sala, a partir do ponto que entraram.</string>
+    <string name="notice_room_visibility_joined">todos os membros da sala, a partir de quando entraram.</string>
     <string name="notice_room_visibility_shared">todos os membros da sala.</string>
     <string name="notice_room_visibility_world_readable">qualquer pessoa.</string>
     <string name="notice_avatar_changed_too">(avatar mudou também)</string>
     <string name="notice_room_name_removed">%1$s removeu o nome da sala</string>
     <string name="notice_room_topic_removed">%1$s removeu o tópico da sala</string>
-    <string name="notice_room_third_party_invite">%1$s enviou um convite para %2$s para se juntar à sala</string>
+    <string name="notice_room_third_party_invite">%1$s convidou %2$s para entrar na sala</string>
     <string name="notice_room_third_party_registered_invite">%1$s aceitou o convite para %2$s</string>
     <string name="notice_crypto_unable_to_decrypt">** Incapaz de decriptar: %s **</string>
     <string name="notice_crypto_error_unknown_inbound_session_id">O dispositivo do/da enviador(a) não nos enviou as chaves para esta mensagem.</string>
@@ -71,9 +71,9 @@
     <string name="notice_room_topic_removed_by_you">Você removeu o tópico da sala</string>
     <string name="notice_room_avatar_removed">%1$s removeu o avatar da sala</string>
     <string name="notice_room_avatar_removed_by_you">Você removeu o avatar da sala</string>
-    <string name="notice_room_third_party_invite_by_you">Você enviou um convite para %1$s para se juntar à sala</string>
-    <string name="notice_room_third_party_revoked_invite">%1$s revogou o convite para %2$s para se juntar à sala</string>
-    <string name="notice_room_third_party_revoked_invite_by_you">Você revogou o convite para %1$s para se juntar à sala</string>
+    <string name="notice_room_third_party_invite_by_you">Você convidou %1$s para entrar na sala</string>
+    <string name="notice_room_third_party_revoked_invite">%1$s desconvidou %2$s</string>
+    <string name="notice_room_third_party_revoked_invite_by_you">Você desconvidou %1$s</string>
     <string name="notice_room_third_party_registered_invite_by_you">Você aceitou o convite para %1$s</string>
     <string name="notice_widget_added">%1$s adicionou widget %2$s</string>
     <string name="notice_widget_added_by_you">Você adicionou widget %1$s</string>
@@ -97,9 +97,9 @@
 \nImportando salas</string>
     <string name="initial_sync_start_importing_account_joined_rooms">Sincronização inicial:
 \nCarregando suas conversas
-\nSe você entrou em muitas salas, isso pode demorar</string>
+\nSe você entrou em muitas salas, isso pode demorar um pouco</string>
     <string name="initial_sync_start_importing_account_invited_rooms">Sincronização inicial:
-\nImportando salas para as quais foi convidado</string>
+\nImportando salas a que foi convidado</string>
     <string name="initial_sync_start_importing_account_left_rooms">Sincronização inicial:
 \nImportando salas das quais saiu</string>
     <string name="initial_sync_start_importing_account_data">Sincronização inicial:
@@ -148,16 +148,16 @@
     <string name="notice_room_canonical_alias_set_by_you">Você definiu o endereço principal para esta sala para %1$s.</string>
     <string name="notice_room_canonical_alias_unset">%1$s removeu o endereço principal para esta sala.</string>
     <string name="notice_room_canonical_alias_unset_by_you">Você removeu o endereço principal para esta sala.</string>
-    <string name="notice_room_guest_access_can_join">%1$s tem permitido visitantes se juntarem à sala.</string>
-    <string name="notice_room_guest_access_can_join_by_you">Você tem permitido visitantes se juntarem à sala.</string>
-    <string name="notice_room_guest_access_forbidden">%1$s tem prevenido visitantes de se juntarem à sala.</string>
-    <string name="notice_room_guest_access_forbidden_by_you">Você tem prevenido visitantes de se juntarem à sala.</string>
+    <string name="notice_room_guest_access_can_join">%1$s permitiu que visitantes entrassem na sala.</string>
+    <string name="notice_room_guest_access_can_join_by_you">Você permitiu que visitantes entrassem na sala.</string>
+    <string name="notice_room_guest_access_forbidden">%1$s impediu que visitantes entrassem na sala.</string>
+    <string name="notice_room_guest_access_forbidden_by_you">Você impediu que visitantes entrassem na sala.</string>
     <string name="notice_end_to_end_ok">%1$s ativou encriptação ponta-a-ponta.</string>
     <string name="notice_end_to_end_ok_by_you">Você ativou encriptação ponta-a-ponta.</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s ativou encriptação ponta-a-ponta (algoritmo irreconhecido %2$s).</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">Você ativou encriptação ponta-a-ponta (algoritmo irreconhecido %1$s).</string>
-    <string name="notice_direct_room_guest_access_forbidden_by_you">Você tem prevenido visitantes de se juntarem à sala.</string>
-    <string name="notice_direct_room_guest_access_forbidden">%1$s tem prevenido visitantes de se juntarem à sala.</string>
+    <string name="notice_direct_room_guest_access_forbidden_by_you">Você impediu que visitantes entrassem na sala.</string>
+    <string name="notice_direct_room_guest_access_forbidden">%1$s impediu que visitantes entrassem na sala.</string>
     <string name="notice_direct_room_guest_access_can_join_by_you">Você tem permitido visitantes se juntarem aqui.</string>
     <string name="notice_direct_room_guest_access_can_join">%1$s tem permitido visitantes se juntarem aqui.</string>
     <string name="notice_direct_room_leave_with_reason_by_you">Você saiu. Motivo: %1$s</string>
@@ -1007,7 +1007,7 @@
     <string name="settings_push_rules">Regras de Push</string>
     <string name="settings_push_rules_no_rules">Nenhuma regra de push definida</string>
     <string name="settings_push_gateway_no_pushers">Nenhum gateway de push registrado</string>
-    <string name="push_gateway_item_app_id">ID do App:</string>
+    <string name="push_gateway_item_app_id">App ID:</string>
     <string name="push_gateway_item_push_key">Chave Push:</string>
     <string name="push_gateway_item_app_display_name">Nome de Exibição do App:</string>
     <string name="push_gateway_item_device_name">Nome de Exibição da Sessão:</string>
@@ -1044,18 +1044,18 @@
     <string name="creating_direct_room">Criando sala…</string>
     <string name="message_view_edit_history">Visualizar Histórico de Edição</string>
     <string name="terms_of_service">Termos de Serviço</string>
-    <string name="terms_description_for_identity_server">Ser descobertável por outras(os)</string>
+    <string name="terms_description_for_identity_server">Se tornar achável a outras pessoas</string>
     <string name="terms_description_for_integration_manager">Usar bots, bridges, widgets e pacotes de stickers</string>
     <string name="identity_server">Servidor de identidade</string>
     <string name="disconnect_identity_server">Desconectar servidor de identidade</string>
     <string name="add_identity_server">Configurar servidor de identidade</string>
     <string name="change_identity_server">Mudar servidor de identidade</string>
-    <string name="settings_discovery_identity_server_info">Você está atualmente usando %1$s para descobrir e ser descobertável por contatos existentes que você conhece.</string>
-    <string name="settings_discovery_identity_server_info_none">Você não está atualmente usando um servidor de identidade. Para descobrir e ser descobertável por contatos existentes que você conhece, configure um abaixo.</string>
+    <string name="settings_discovery_identity_server_info">Você está atualmente usando %1$s para descobrir e ser descoberto por contatos.</string>
+    <string name="settings_discovery_identity_server_info_none">Você não está atualmente usando um servidor de identidade. Para descobrir e ser descoberto por contatos conhecidos, configure um abaixo.</string>
     <string name="settings_discovery_emails_title">Endereços de email descobertáveis</string>
     <string name="settings_discovery_no_mails">Opções de descoberta vão aparecer uma vez que você tenha adicionado um endereço de email.</string>
     <string name="settings_discovery_no_msisdn">Opções de descoberta vão aparecer uma vez que você tenha adicionado um número de telefone.</string>
-    <string name="settings_discovery_disconnect_identity_server_info">Desconectar-se de seu servidor de identidade vai significar que você não vai ser descobertável por outras(os) usuárias(os) e você não vai ser capaz de convidar outras(os) por email ou telefone.</string>
+    <string name="settings_discovery_disconnect_identity_server_info">Ao se desconectar do servidor de identidade, você não poderá ser descoberto por outros usuários e não poderá convidar outras pessoas por e-mail ou telefone.</string>
     <string name="settings_discovery_msisdn_title">Números de telefone descobertáveis</string>
     <string name="settings_discovery_confirm_mail">Nós enviamos um email para %s, cheque seu email e clique no link de confirmação</string>
     <string name="settings_discovery_confirm_mail_not_clicked">Nós enviamos um email para %s, por favor primeiro cheque seu email e clique no link de confirmação</string>
@@ -1067,7 +1067,7 @@
     <string name="settings_text_message_sent">Uma mensagem de texto tem sido enviada para %s. Por favor entre o código de verificação que ela contém.</string>
     <string name="settings_text_message_sent_wrong_code">O código de verificação não está correto.</string>
     <string name="settings_discovery_disconnect_with_bound_pid">Você está atualmente compartilhando endereços de email ou números de telefone no servidor de identidade %1$s. Você vai precisar reconectar-se a %2$s para parar de os compartilhar.</string>
-    <string name="settings_agree_to_terms">Concorde com os Termos de Serviço do servidor de identidade (%s) para permitir você mesma(o) ser descobertável por endereço de email ou número de telefone.</string>
+    <string name="settings_agree_to_terms">Concorde com os Termos de Serviço do servidor de identidade (%s) para permitir que você seja descoberto por email ou pelo número do celular.</string>
     <string name="labs_allow_extended_logging">Habilitar verbose logs.</string>
     <string name="labs_allow_extended_logging_summary">Verbose logs vão ajudar desenvolvedoras(es) ao prover mais logs quando você enviar uma RageShake. Mesmo quando habilitado, o aplicativo não registra conteúdos de mensagem ou quaisquer outros dados privados.</string>
     <string name="error_terms_not_accepted">Por favor retente uma vez que você tenha aceitado os termos e condições de seu servidorcasa.</string>
@@ -1133,10 +1133,10 @@
     <string name="reaction_search_type_hint">Digite palavrachaves para encontrar uma reação.</string>
     <string name="no_ignored_users">Você não está ignorando nenhum(a) usuário(a)</string>
     <string name="help_long_click_on_room_for_more_options">Clique longo numa sala para ver mais opções</string>
-    <string name="room_join_rules_public">%1$s fez a sala pública para qualquer pessoa que sabe o link.</string>
-    <string name="room_join_rules_public_by_you">Você fez a sala pública para qualquer pessoa que sabe o link.</string>
-    <string name="room_join_rules_invite">%1$s fez a sala somente convite.</string>
-    <string name="room_join_rules_invite_by_you">Você fez a sala somente convite.</string>
+    <string name="room_join_rules_public">%1$s tornou a sala pública para qualquer pessoa que sabe o link.</string>
+    <string name="room_join_rules_public_by_you">Você tornou a sala pública para qualquer pessoa que sabe o link.</string>
+    <string name="room_join_rules_invite">%1$s tornou a sala apenas para convidados.</string>
+    <string name="room_join_rules_invite_by_you">Você tornou a sala apenas para convidados.</string>
     <string name="timeline_unread_messages">Mensagens não-lidas</string>
     <string name="login_splash_title">É sua conversa. Tome-a como sua.</string>
     <string name="login_splash_text1">Faça chat com pessoas diretamente ou em grupos</string>
@@ -1269,7 +1269,7 @@
 \nPor favor primeiro limpe dados, então faça signin de novo em uma outra conta.</string>
     <string name="permalink_malformed">Seu link matrix.to foi malformado</string>
     <string name="bug_report_error_too_short">A descrição é curta demais</string>
-    <string name="notification_initial_sync">Sinc Inicial…</string>
+    <string name="notification_initial_sync">Sincronização Inicial…</string>
     <string name="settings_advanced_settings">Configurações avançadas</string>
     <string name="settings_developer_mode">Modo desenvolvedor(a)</string>
     <string name="settings_developer_mode_summary">O modo desenvolvedor(a) ativa funcionalidades escondidas e também pode fazer o aplicativo menos estável. Para desenvolvedores(as) somente!</string>
@@ -1625,7 +1625,7 @@
     <string name="no_permissions_to_start_conf_call">Você não tem permissão para começar uma chamada de conferência nesta sala</string>
     <string name="video_meeting">Começar reunião de vídeo</string>
     <string name="audio_meeting">Começar reunião de áudio</string>
-    <string name="audio_video_meeting_description">Reuniões usam políticas de segurança e permissão de Jitsi. Todas as pessoas atualmente na sala vão ver um convite para se juntarem enquanto sua reunião estiver acontecendo.</string>
+    <string name="audio_video_meeting_description">Reuniões usam políticas de segurança e permissão de Jitsi. Todas as pessoas atualmente na sala vão ver um convite para participar enquanto sua reunião estiver acontecendo.</string>
     <string name="cannot_call_yourself">Você não pode começar uma chamada com você mesma(o)</string>
     <string name="cannot_call_yourself_with_invite">Você não pode começar uma chamada com você mesma(o), espere pelas(os) participantes aceitarem convite</string>
     <string name="failed_to_add_widget">Falha para adicionar widget</string>
@@ -1669,7 +1669,7 @@
     <string name="room_error_not_found">Não dá para encontrar esta sala. Assegure-se que ela existe.</string>
     <string name="universal_link_malformed">O link foi malformado</string>
     <string name="auth_msisdn_already_defined">Este número de telefone já está definido.</string>
-    <string name="sent_a_poll">Sondagem</string>
+    <string name="sent_a_poll">Enquete</string>
     <string name="sent_a_reaction">Reagiu com: %s</string>
     <string name="sent_verification_conclusion">Conclusão de Verificação</string>
     <string name="delete_account_data_warning">Deletar os dados de conta de tipo %1$s\?
@@ -1897,7 +1897,7 @@
     <string name="dialog_edit_hint">Novo valor</string>
     <string name="action_switch">Alterar</string>
     <string name="initial_sync_start_downloading">Sincronização inicial:
-\nFazendo download de dados…</string>
+\nBaixando dados…</string>
     <string name="initial_sync_start_server_computing">Sincronização inicial:
 \nEsperando pela resposta do servidor…</string>
     <string name="a11y_trust_level_trusted">Nível de confiança confiado</string>
@@ -1942,7 +1942,7 @@
     <string name="settings_server_upload_size_title">Limite de upload de arquivo do servidor</string>
     <string name="room_settings_room_access_restricted_description">Qualquer pessoa num espaço com esta sala pode achá-la e se juntar a ela. Somente admins desta sala podem adicioná-la a um espaço.</string>
     <string name="room_settings_room_access_restricted_title">Membros de espaço somente</string>
-    <string name="room_settings_room_access_public_description">Qualquer pessoa pode achar a sala e se juntar</string>
+    <string name="room_settings_room_access_public_description">Qualquer pessoa pode achar a sala e entrar</string>
     <string name="room_settings_room_access_public_title">Pública</string>
     <string name="room_settings_room_access_private_description">Somente pessoas convidadas podem achar e se juntar</string>
     <string name="room_settings_room_access_private_title">Privada</string>
@@ -2193,7 +2193,7 @@
     <string name="finish_setup">Terminar configuração</string>
     <string name="discovery_invite">Convidar por email, encontrar contatos e mais…</string>
     <string name="finish_setting_up_discovery">Termine de configurar descoberta.</string>
-    <string name="create_space_identity_server_info_none">Você não está atualmente usando um servidor de identidade. A fim de convidar colegas e ser descobertável por elas(es), configure um abaixo.</string>
+    <string name="create_space_identity_server_info_none">Você não está atualmente usando um servidor de identidade. Para que você possa convidar seus amigos e ser descoberto por eles, configure um abaixo.</string>
     <string name="invite_by_username_or_mail">Convidar por nome de usuária(o) ou mail</string>
     <string name="create_spaces_invite_public_header_desc">Assegure que as pessoas certas têm acesso a companhia %s. Você pode convidar outras mais tarde.</string>
     <string name="create_spaces_invite_public_header">Quem são suas/seus colegas\?</string>
@@ -2205,7 +2205,7 @@
     <string name="open_discovery_settings">Abrir Configurações de Descoberta</string>
     <string name="user_directory_search_hint_2">Pesquisar por nome, ID ou mail</string>
     <string name="create_new_space">Criar Novo Espaço</string>
-    <string name="room_settings_space_access_public_description">Qualquer pessoa pode achar o espaço e se juntar</string>
+    <string name="room_settings_space_access_public_description">Qualquer pessoa pode achar o espaço e entrar</string>
     <string name="room_settings_space_access_title">Acesso a espaço</string>
     <string name="room_settings_access_rules_pref_dialog_title">Quem pode acessar\?</string>
     <string name="settings_notification_emails_enable_for_email">Habilitar notificações de email para %s</string>
@@ -2247,15 +2247,15 @@
         <item quantity="one">Pelo menos %1$s opção é requerida</item>
         <item quantity="other">Pelo menos %1$s opções são requeridas</item>
     </plurals>
-    <string name="create_poll_empty_question_error">Pergunta não pode estar vazia</string>
-    <string name="create_poll_button">CRIAR SONDAGEM</string>
+    <string name="create_poll_empty_question_error">A pergunta não pode estar vazia</string>
+    <string name="create_poll_button">CRIAR ENQUETE</string>
     <string name="create_poll_add_option">ADICIONAR OPÇÃO</string>
     <string name="create_poll_options_hint">Opção %1$d</string>
     <string name="create_poll_options_title">Criar opções</string>
     <string name="create_poll_question_hint">Pergunta ou tópico</string>
-    <string name="create_poll_question_title">Sondar pergunta ou tópico</string>
-    <string name="create_poll_title">Criar Sondagem</string>
-    <string name="attachment_type_poll">Sondagem</string>
+    <string name="create_poll_question_title">Pesquisar pergunta ou tópico</string>
+    <string name="create_poll_title">Criar Enquete</string>
+    <string name="attachment_type_poll">Enquete</string>
     <string name="identity_server_consent_dialog_title_2">Enviar endereços de email e números de telefone para %s</string>
     <string name="settings_discovery_consent_notice_off_2">Seus contatos são privados. Para descobrir usuárias(os) de seus contatos, você precisa de permissão para enviar info de contato a seu servidor de identidade.</string>
     <string name="shortcut_disabled_reason_sign_out">O signout desta sessão tem sido feito!</string>
@@ -2263,21 +2263,21 @@
     <string name="identity_server_consent_dialog_content_question">Você concorda em enviar esta info\?</string>
     <string name="identity_server_consent_dialog_content_3">Para descobrir contatos existentes, você precisa enviar info de contato (endereços de email e números de telefone) para seu servidor de identidade. Nós hashamos seus dados antes de enviar por privacidade.</string>
     <string name="action_not_now">Não agora</string>
-    <string name="delete_poll_dialog_content">Você tem certeza que você quer remover esta sondagem\? Você não vai ser capaz de recuperá-la uma vez removida.</string>
-    <string name="delete_poll_dialog_title">Remover sondagem</string>
-    <string name="poll_end_room_list_preview">Sondagem terminada</string>
+    <string name="delete_poll_dialog_content">Você tem certeza que você quer remover esta enquete\? Você não vai ser capaz de recuperá-la uma vez removida.</string>
+    <string name="delete_poll_dialog_title">Remover enquete</string>
+    <string name="poll_end_room_list_preview">Enquete terminada</string>
     <string name="poll_response_room_list_preview">Voto lançado</string>
-    <string name="end_poll_confirmation_approve_button">Terminar sondagem</string>
-    <string name="end_poll_confirmation_description">Isto vai parar pessoas de serem capazes de votar e vai exibir os resultados finais da sondagem.</string>
-    <string name="end_poll_confirmation_title">Terminar esta sondagem\?</string>
-    <string name="poll_end_action">Terminar sondagem</string>
+    <string name="end_poll_confirmation_approve_button">Terminar enquete</string>
+    <string name="end_poll_confirmation_description">Isto vai parar as pessoas de poderem votar e vai exibir os resultados finais da enquete.</string>
+    <string name="end_poll_confirmation_title">Terminar esta enquete\?</string>
+    <string name="poll_end_action">Terminar enquete</string>
     <plurals name="poll_total_vote_count_after_ended">
         <item quantity="one">Resultado final baseado em %1$d voto</item>
         <item quantity="other">Resultado final baseado em %1$d votos</item>
     </plurals>
     <plurals name="poll_total_vote_count_before_ended_and_not_voted">
-        <item quantity="one">%1$d voto lançado. Vote para ver os resultados</item>
-        <item quantity="other">%1$d votos lançados. Vote para ver os resultados</item>
+        <item quantity="one">%1$d voto. Vote para ver os resultados</item>
+        <item quantity="other">%1$d votos. Vote para ver os resultados</item>
     </plurals>
     <plurals name="poll_total_vote_count_before_ended_and_voted">
         <item quantity="one">Baseado em %1$d voto</item>
@@ -2329,13 +2329,13 @@
     <string name="location_not_available_dialog_title">${app_name} não pôde acessar sua localização</string>
     <string name="location_activity_title_preview">Localização</string>
     <string name="location_activity_title_static_sharing">Compartilhar localização</string>
-    <string name="closed_poll_option_description">Resultados são somente revelados quando você termina a sondagem</string>
-    <string name="closed_poll_option_title">Sondagem fechada</string>
-    <string name="open_poll_option_description">Votantes veem resultados assim que elas(es) têm votado</string>
-    <string name="open_poll_option_title">Sondagem aberta</string>
-    <string name="poll_type_title">Tipo de sondagem</string>
-    <string name="edit_poll_title">Editar sondagem</string>
-    <string name="poll_no_votes_cast">Nenhum voto lançado</string>
+    <string name="closed_poll_option_description">Os resultados só são revelados quando você termina a enquete</string>
+    <string name="closed_poll_option_title">Enquete fechada</string>
+    <string name="open_poll_option_description">Votantes veem os resultados assim que votam</string>
+    <string name="open_poll_option_title">Enquete aberta</string>
+    <string name="poll_type_title">Tipo de enquete</string>
+    <string name="edit_poll_title">Editar enquete</string>
+    <string name="poll_no_votes_cast">Nenhum voto</string>
     <string name="encryption_misconfigured">Encriptação está malconfigurada</string>
     <string name="room_profile_section_restore_security">Restaurar Encriptação</string>
     <string name="contact_admin_to_restore_encryption">Por favor contacte um(a) admin para restaurar encriptação a um estado válido.</string>
@@ -2462,11 +2462,11 @@
     <string name="screen_sharing_notification_title">${app_name} Compartilhamento de Tela</string>
     <string name="call_stop_screen_sharing">Parar compartilhamento de tela</string>
     <string name="call_start_screen_sharing">Compartilhar tela</string>
-    <string name="initial_sync_request_reason_unignored_users">- Algumas(ns) usuárias(os) têm sido designoradas(os)</string>
-    <string name="initial_sync_request_content">${app_name} precisa performar uma limpa de cache para estar atualizado, pela seguinte razão:
+    <string name="initial_sync_request_reason_unignored_users">- Alguns usuários foram designorados</string>
+    <string name="initial_sync_request_content">${app_name} precisa realizar uma limpeza de cache para estar atualizado, pelo seguinte motivo:
 \n%s
 \n
-\nNote que esta ação vai recomeçar o app e pode levar algum tempo.</string>
+\nNote que esta ação vai reiniciar o app e pode levar algum tempo.</string>
     <string name="initial_sync_request_title">Requisição de sincronização inicial</string>
     <string name="settings_show_latest_profile_description">Mostrar a info de perfil mais recente (avatar e nome de exibição) para todas as mensagens.</string>
     <string name="settings_show_latest_profile">Mostrar info de usuária(o) mais recente</string>
@@ -2526,7 +2526,7 @@
     <string name="live_location_share_location_item_share">Compartilhar localização</string>
     <string name="live_location_not_enough_permission_dialog_description">Você precisa ter as permissões certas a fim de compartilhar localização ao vivo nesta sala.</string>
     <string name="live_location_not_enough_permission_dialog_title">Você não tem permissão para compartilhar localização ao vivo</string>
-    <string name="poll_undisclosed_not_ended">Resultados vão ser visíveis quando a sondagem estiver terminada</string>
+    <string name="poll_undisclosed_not_ended">Os resultados estarão visíveis quando a enquete terminar</string>
     <string name="labs_enable_msc3061_share_history_desc">Ao convidar alguém para uma sala criptografada que compartilha o histórico de texto, ele será visível mesmo sendo criptografado.</string>
     <string name="labs_enable_msc3061_share_history">MSC3061: Compartilhando chaves de sala para mensagens passadas</string>
     <string name="send_your_first_msg_to_invite">Envie sua primeira mensagem para convidar %s a fazer chat</string>
@@ -2901,7 +2901,7 @@
     <string name="sign_out_failed_dialog_message">Não foi possível contactar o servidor doméstico. Se ainda assim terminar sessão, este dispositivo não será apagado da sua lista de dispositivos, poderá querer removê-lo utilizando outro cliente.</string>
     <string name="avatar_of_user">Imagem de perfil do utilizador %1$s</string>
     <string name="started_a_voice_broadcast">Iniciou uma emissão de voz</string>
-    <string name="room_profile_section_more_polls">Histórico da sondagem</string>
+    <string name="room_profile_section_more_polls">Histórico de enquetes</string>
     <string name="verification_verify_with_another_device">Verificar com outro dispositivo</string>
     <string name="verification_verify_identity">Verifique a sua identidade para aceder a mensagens encriptadas e provar a sua identidade a outros.</string>
     <string name="verification_request_was_sent">Foi enviado um pedido de verificação. Abra uma das suas outras sessões para aceitar e iniciar a verificação.</string>
