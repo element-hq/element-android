@@ -55,6 +55,8 @@
                 "face-exhaling",
                 "lying-face",
                 "shaking-face",
+                "head-shaking-horizontally",
+                "head-shaking-vertically",
                 "relieved-face",
                 "pensive-face",
                 "sleepy-face",
@@ -419,24 +421,42 @@
                 "person-walking",
                 "man-walking",
                 "woman-walking",
+                "person-walking-facing-right",
+                "woman-walking-facing-right",
+                "man-walking-facing-right",
                 "person-standing",
                 "man-standing",
                 "woman-standing",
                 "person-kneeling",
                 "man-kneeling",
                 "woman-kneeling",
+                "person-kneeling-facing-right",
+                "woman-kneeling-facing-right",
+                "man-kneeling-facing-right",
                 "person-with-white-cane",
+                "person-with-white-cane-facing-right",
                 "man-with-white-cane",
+                "man-with-white-cane-facing-right",
                 "woman-with-white-cane",
+                "woman-with-white-cane-facing-right",
                 "person-in-motorized-wheelchair",
+                "person-in-motorized-wheelchair-facing-right",
                 "man-in-motorized-wheelchair",
+                "man-in-motorized-wheelchair-facing-right",
                 "woman-in-motorized-wheelchair",
+                "woman-in-motorized-wheelchair-facing-right",
                 "person-in-manual-wheelchair",
+                "person-in-manual-wheelchair-facing-right",
                 "man-in-manual-wheelchair",
+                "man-in-manual-wheelchair-facing-right",
                 "woman-in-manual-wheelchair",
+                "woman-in-manual-wheelchair-facing-right",
                 "person-running",
                 "man-running",
                 "woman-running",
+                "person-running-facing-right",
+                "woman-running-facing-right",
+                "man-running-facing-right",
                 "woman-dancing",
                 "man-dancing",
                 "person-in-suit-levitating",
@@ -509,7 +529,6 @@
                 "couple-with-heart-woman-man",
                 "couple-with-heart-man-man",
                 "couple-with-heart-woman-woman",
-                "family",
                 "family-man-woman-boy",
                 "family-man-woman-girl",
                 "family-man-woman-girl-boy",
@@ -539,6 +558,11 @@
                 "bust-in-silhouette",
                 "busts-in-silhouette",
                 "people-hugging",
+                "family",
+                "family-adult-adult-child",
+                "family-adult-adult-child-child",
+                "family-adult-child",
+                "family-adult-child-child",
                 "footprints"
             ]
         },
@@ -633,6 +657,7 @@
                 "wing",
                 "black-bird",
                 "goose",
+                "phoenix",
                 "frog",
                 "crocodile",
                 "turtle",
@@ -709,6 +734,7 @@
                 "watermelon",
                 "tangerine",
                 "lemon",
+                "lime",
                 "banana",
                 "pineapple",
                 "mango",
@@ -740,6 +766,7 @@
                 "chestnut",
                 "ginger-root",
                 "pea-pod",
+                "brown-mushroom",
                 "bread",
                 "croissant",
                 "baguette-bread",
@@ -1366,6 +1393,7 @@
                 "balance-scale",
                 "white-cane",
                 "link",
+                "broken-chain",
                 "chains",
                 "hook",
                 "toolbox",
@@ -1893,7 +1921,7 @@
                 "flag-turkmenistan",
                 "flag-tunisia",
                 "flag-tonga",
-                "flag-turkey",
+                "flag-trkiye",
                 "flag-trinidad--tobago",
                 "flag-tuvalu",
                 "flag-taiwan",
@@ -2432,6 +2460,7 @@
             "j": [
                 "face",
                 "mouth",
+                "zip",
                 "zipper",
                 "zipper-mouth face",
                 "zipper_mouth_face",
@@ -2450,7 +2479,8 @@
                 "mild surprise",
                 "scepticism",
                 "face",
-                "surprise"
+                "surprise",
+                "suspicious"
             ]
         },
         "neutral-face": {
@@ -2486,8 +2516,7 @@
                 "face",
                 "mouth",
                 "quiet",
-                "silent",
-                "hellokitty"
+                "silent"
             ]
         },
         "dotted-line-face": {
@@ -2544,6 +2573,7 @@
                 "unimpressed",
                 "skeptical",
                 "dubious",
+                "ugh",
                 "side_eye"
             ]
         },
@@ -2592,7 +2622,7 @@
             ]
         },
         "shaking-face": {
-            "a": "⊛ Shaking Face",
+            "a": "Shaking Face",
             "b": "1FAE8",
             "j": [
                 "earthquake",
@@ -2602,6 +2632,24 @@
                 "vibrate",
                 "dizzy",
                 "blurry"
+            ]
+        },
+        "head-shaking-horizontally": {
+            "a": "⊛ Head Shaking Horizontally",
+            "b": "1F642-200D-2194-FE0F",
+            "j": [
+                "head shaking horizontally",
+                "no",
+                "shake"
+            ]
+        },
+        "head-shaking-vertically": {
+            "a": "⊛ Head Shaking Vertically",
+            "b": "1F642-200D-2195-FE0F",
+            "j": [
+                "head shaking vertically",
+                "nod",
+                "yes"
             ]
         },
         "relieved-face": {
@@ -3117,6 +3165,7 @@
                 "sad",
                 "sob",
                 "tear",
+                "sobbing",
                 "tears",
                 "upset",
                 "depressed"
@@ -3795,7 +3844,7 @@
             ]
         },
         "pink-heart": {
-            "a": "⊛ Pink Heart",
+            "a": "Pink Heart",
             "b": "1FA77",
             "j": [
                 "cute",
@@ -3851,7 +3900,7 @@
             ]
         },
         "light-blue-heart": {
-            "a": "⊛ Light Blue Heart",
+            "a": "Light Blue Heart",
             "b": "1FA75",
             "j": [
                 "cyan",
@@ -3892,7 +3941,7 @@
             ]
         },
         "grey-heart": {
-            "a": "⊛ Grey Heart",
+            "a": "Grey Heart",
             "b": "1FA76",
             "j": [
                 "gray",
@@ -4197,7 +4246,7 @@
             ]
         },
         "leftwards-pushing-hand": {
-            "a": "⊛ Leftwards Pushing Hand",
+            "a": "Leftwards Pushing Hand",
             "b": "1FAF7",
             "j": [
                 "high five",
@@ -4211,7 +4260,7 @@
             ]
         },
         "rightwards-pushing-hand": {
-            "a": "⊛ Rightwards Pushing Hand",
+            "a": "Rightwards Pushing Hand",
             "b": "1FAF8",
             "j": [
                 "high five",
@@ -4611,9 +4660,11 @@
                 "manicure",
                 "nail",
                 "polish",
+                "nail_care",
                 "beauty",
                 "finger",
-                "fashion"
+                "fashion",
+                "slay"
             ]
         },
         "selfie": {
@@ -5561,6 +5612,7 @@
             "b": "1F9D1-200D-1F3EB",
             "j": [
                 "instructor",
+                "lecturer",
                 "professor"
             ]
         },
@@ -5569,6 +5621,7 @@
             "b": "1F468-200D-1F3EB",
             "j": [
                 "instructor",
+                "lecturer",
                 "man",
                 "professor",
                 "teacher",
@@ -5580,6 +5633,7 @@
             "b": "1F469-200D-1F3EB",
             "j": [
                 "instructor",
+                "lecturer",
                 "professor",
                 "teacher",
                 "woman",
@@ -5591,8 +5645,8 @@
             "b": "1F9D1-200D-2696-FE0F",
             "j": [
                 "justice",
-                "scales",
-                "law"
+                "law",
+                "scales"
             ]
         },
         "man-judge": {
@@ -5601,6 +5655,7 @@
             "j": [
                 "judge",
                 "justice",
+                "law",
                 "man",
                 "scales",
                 "court",
@@ -5613,6 +5668,7 @@
             "j": [
                 "judge",
                 "justice",
+                "law",
                 "scales",
                 "woman",
                 "court",
@@ -6006,8 +6062,8 @@
             "a": "Firefighter",
             "b": "1F9D1-200D-1F692",
             "j": [
-                "firetruck",
-                "fire"
+                "fire",
+                "firetruck"
             ]
         },
         "man-firefighter": {
@@ -6482,8 +6538,8 @@
             "a": "Mx Claus",
             "b": "1F9D1-200D-1F384",
             "j": [
-                "Claus, christmas",
-                "christmas"
+                "christmas",
+                "claus"
             ]
         },
         "superhero": {
@@ -6881,6 +6937,27 @@
                 "female"
             ]
         },
+        "person-walking-facing-right": {
+            "a": "⊛ Person Walking Facing Right",
+            "b": "1F6B6-200D-27A1-FE0F",
+            "j": [
+                ""
+            ]
+        },
+        "woman-walking-facing-right": {
+            "a": "⊛ Woman Walking Facing Right",
+            "b": "1F6B6-200D-2640-FE0F-200D-27A1-FE0F",
+            "j": [
+                ""
+            ]
+        },
+        "man-walking-facing-right": {
+            "a": "⊛ Man Walking Facing Right",
+            "b": "1F6B6-200D-2642-FE0F-200D-27A1-FE0F",
+            "j": [
+                ""
+            ]
+        },
         "person-standing": {
             "a": "Person Standing",
             "b": "1F9CD",
@@ -6938,6 +7015,27 @@
                 "pray"
             ]
         },
+        "person-kneeling-facing-right": {
+            "a": "⊛ Person Kneeling Facing Right",
+            "b": "1F9CE-200D-27A1-FE0F",
+            "j": [
+                ""
+            ]
+        },
+        "woman-kneeling-facing-right": {
+            "a": "⊛ Woman Kneeling Facing Right",
+            "b": "1F9CE-200D-2640-FE0F-200D-27A1-FE0F",
+            "j": [
+                ""
+            ]
+        },
+        "man-kneeling-facing-right": {
+            "a": "⊛ Man Kneeling Facing Right",
+            "b": "1F9CE-200D-2642-FE0F-200D-27A1-FE0F",
+            "j": [
+                ""
+            ]
+        },
         "person-with-white-cane": {
             "a": "Person with White Cane",
             "b": "1F9D1-200D-1F9AF",
@@ -6945,6 +7043,13 @@
                 "accessibility",
                 "blind",
                 "person_with_probing_cane"
+            ]
+        },
+        "person-with-white-cane-facing-right": {
+            "a": "⊛ Person with White Cane Facing Right",
+            "b": "1F9D1-200D-1F9AF-200D-27A1-FE0F",
+            "j": [
+                ""
             ]
         },
         "man-with-white-cane": {
@@ -6957,6 +7062,13 @@
                 "man_with_probing_cane"
             ]
         },
+        "man-with-white-cane-facing-right": {
+            "a": "⊛ Man with White Cane Facing Right",
+            "b": "1F468-200D-1F9AF-200D-27A1-FE0F",
+            "j": [
+                ""
+            ]
+        },
         "woman-with-white-cane": {
             "a": "Woman with White Cane",
             "b": "1F469-200D-1F9AF",
@@ -6967,6 +7079,13 @@
                 "woman_with_probing_cane"
             ]
         },
+        "woman-with-white-cane-facing-right": {
+            "a": "⊛ Woman with White Cane Facing Right",
+            "b": "1F469-200D-1F9AF-200D-27A1-FE0F",
+            "j": [
+                ""
+            ]
+        },
         "person-in-motorized-wheelchair": {
             "a": "Person in Motorized Wheelchair",
             "b": "1F9D1-200D-1F9BC",
@@ -6974,6 +7093,13 @@
                 "accessibility",
                 "wheelchair",
                 "disability"
+            ]
+        },
+        "person-in-motorized-wheelchair-facing-right": {
+            "a": "⊛ Person in Motorized Wheelchair Facing Right",
+            "b": "1F9D1-200D-1F9BC-200D-27A1-FE0F",
+            "j": [
+                ""
             ]
         },
         "man-in-motorized-wheelchair": {
@@ -6986,6 +7112,13 @@
                 "disability"
             ]
         },
+        "man-in-motorized-wheelchair-facing-right": {
+            "a": "⊛ Man in Motorized Wheelchair Facing Right",
+            "b": "1F468-200D-1F9BC-200D-27A1-FE0F",
+            "j": [
+                ""
+            ]
+        },
         "woman-in-motorized-wheelchair": {
             "a": "Woman in Motorized Wheelchair",
             "b": "1F469-200D-1F9BC",
@@ -6996,6 +7129,13 @@
                 "disability"
             ]
         },
+        "woman-in-motorized-wheelchair-facing-right": {
+            "a": "⊛ Woman in Motorized Wheelchair Facing Right",
+            "b": "1F469-200D-1F9BC-200D-27A1-FE0F",
+            "j": [
+                ""
+            ]
+        },
         "person-in-manual-wheelchair": {
             "a": "Person in Manual Wheelchair",
             "b": "1F9D1-200D-1F9BD",
@@ -7003,6 +7143,13 @@
                 "accessibility",
                 "wheelchair",
                 "disability"
+            ]
+        },
+        "person-in-manual-wheelchair-facing-right": {
+            "a": "⊛ Person in Manual Wheelchair Facing Right",
+            "b": "1F9D1-200D-1F9BD-200D-27A1-FE0F",
+            "j": [
+                ""
             ]
         },
         "man-in-manual-wheelchair": {
@@ -7015,6 +7162,13 @@
                 "disability"
             ]
         },
+        "man-in-manual-wheelchair-facing-right": {
+            "a": "⊛ Man in Manual Wheelchair Facing Right",
+            "b": "1F468-200D-1F9BD-200D-27A1-FE0F",
+            "j": [
+                ""
+            ]
+        },
         "woman-in-manual-wheelchair": {
             "a": "Woman in Manual Wheelchair",
             "b": "1F469-200D-1F9BD",
@@ -7023,6 +7177,13 @@
                 "wheelchair",
                 "woman",
                 "disability"
+            ]
+        },
+        "woman-in-manual-wheelchair-facing-right": {
+            "a": "⊛ Woman in Manual Wheelchair Facing Right",
+            "b": "1F469-200D-1F9BD-200D-27A1-FE0F",
+            "j": [
+                ""
             ]
         },
         "person-running": {
@@ -7059,6 +7220,27 @@
                 "exercise",
                 "race",
                 "female"
+            ]
+        },
+        "person-running-facing-right": {
+            "a": "⊛ Person Running Facing Right",
+            "b": "1F3C3-200D-27A1-FE0F",
+            "j": [
+                ""
+            ]
+        },
+        "woman-running-facing-right": {
+            "a": "⊛ Woman Running Facing Right",
+            "b": "1F3C3-200D-2640-FE0F-200D-27A1-FE0F",
+            "j": [
+                ""
+            ]
+        },
+        "man-running-facing-right": {
+            "a": "⊛ Man Running Facing Right",
+            "b": "1F3C3-200D-2642-FE0F-200D-27A1-FE0F",
+            "j": [
+                ""
             ]
         },
         "woman-dancing": {
@@ -7929,21 +8111,6 @@
                 "marriage"
             ]
         },
-        "family": {
-            "a": "Family",
-            "b": "1F46A-FE0F",
-            "j": [
-                "home",
-                "parents",
-                "child",
-                "mom",
-                "dad",
-                "father",
-                "mother",
-                "people",
-                "human"
-            ]
-        },
         "family-man-woman-boy": {
             "a": "Family: Man, Woman, Boy",
             "b": "1F468-200D-1F469-200D-1F466",
@@ -8352,6 +8519,49 @@
                 "care"
             ]
         },
+        "family": {
+            "a": "Family",
+            "b": "1F46A-FE0F",
+            "j": [
+                "home",
+                "parents",
+                "child",
+                "mom",
+                "dad",
+                "father",
+                "mother",
+                "people",
+                "human"
+            ]
+        },
+        "family-adult-adult-child": {
+            "a": "⊛ Family: Adult, Adult, Child",
+            "b": "1F9D1-200D-1F9D1-200D-1F9D2",
+            "j": [
+                "family: adult, adult, child"
+            ]
+        },
+        "family-adult-adult-child-child": {
+            "a": "⊛ Family: Adult, Adult, Child, Child",
+            "b": "1F9D1-200D-1F9D1-200D-1F9D2-200D-1F9D2",
+            "j": [
+                "family: adult, adult, child, child"
+            ]
+        },
+        "family-adult-child": {
+            "a": "⊛ Family: Adult, Child",
+            "b": "1F9D1-200D-1F9D2",
+            "j": [
+                "family: adult, child"
+            ]
+        },
+        "family-adult-child-child": {
+            "a": "⊛ Family: Adult, Child, Child",
+            "b": "1F9D1-200D-1F9D2-200D-1F9D2",
+            "j": [
+                "family: adult, child, child"
+            ]
+        },
         "footprints": {
             "a": "Footprints",
             "b": "1F463",
@@ -8620,7 +8830,7 @@
             ]
         },
         "moose": {
-            "a": "⊛ Moose",
+            "a": "Moose",
             "b": "1FACE",
             "j": [
                 "animal",
@@ -8635,7 +8845,7 @@
             ]
         },
         "donkey": {
-            "a": "⊛ Donkey",
+            "a": "Donkey",
             "b": "1FACF",
             "j": [
                 "animal",
@@ -9086,7 +9296,6 @@
             "a": "Kangaroo",
             "b": "1F998",
             "j": [
-                "Australia",
                 "joey",
                 "jump",
                 "marsupial",
@@ -9314,7 +9523,7 @@
             ]
         },
         "wing": {
-            "a": "⊛ Wing",
+            "a": "Wing",
             "b": "1FABD",
             "j": [
                 "angelic",
@@ -9327,7 +9536,7 @@
             ]
         },
         "black-bird": {
-            "a": "⊛ Black Bird",
+            "a": "Black Bird",
             "b": "1F426-200D-2B1B",
             "j": [
                 "bird",
@@ -9338,7 +9547,7 @@
             ]
         },
         "goose": {
-            "a": "⊛ Goose",
+            "a": "Goose",
             "b": "1FABF",
             "j": [
                 "bird",
@@ -9347,6 +9556,17 @@
                 "silly",
                 "jemima",
                 "goosebumps"
+            ]
+        },
+        "phoenix": {
+            "a": "⊛ Phoenix",
+            "b": "1F426-200D-1F525",
+            "j": [
+                "fantasy",
+                "firebird",
+                "phoenix",
+                "rebirth",
+                "reincarnation"
             ]
         },
         "frog": {
@@ -9588,7 +9808,7 @@
             ]
         },
         "jellyfish": {
-            "a": "⊛ Jellyfish",
+            "a": "Jellyfish",
             "b": "1FABC",
             "j": [
                 "burn",
@@ -9810,9 +10030,7 @@
                 "Buddhism",
                 "flower",
                 "Hinduism",
-                "India",
                 "purity",
-                "Vietnam",
                 "calm",
                 "meditation"
             ]
@@ -9894,7 +10112,7 @@
             ]
         },
         "hyacinth": {
-            "a": "⊛ Hyacinth",
+            "a": "Hyacinth",
             "b": "1FABB",
             "j": [
                 "bluebonnet",
@@ -10138,6 +10356,16 @@
                 "citrus",
                 "fruit",
                 "nature"
+            ]
+        },
+        "lime": {
+            "a": "⊛ Lime",
+            "b": "1F34B-200D-1F7E9",
+            "j": [
+                "citrus",
+                "fruit",
+                "lime",
+                "tropical"
             ]
         },
         "banana": {
@@ -10432,7 +10660,7 @@
             ]
         },
         "ginger-root": {
-            "a": "⊛ Ginger Root",
+            "a": "Ginger Root",
             "b": "1FADA",
             "j": [
                 "beer",
@@ -10444,7 +10672,7 @@
             ]
         },
         "pea-pod": {
-            "a": "⊛ Pea Pod",
+            "a": "Pea Pod",
             "b": "1FADB",
             "j": [
                 "beans",
@@ -10455,6 +10683,17 @@
                 "vegetable",
                 "cozy",
                 "green"
+            ]
+        },
+        "brown-mushroom": {
+            "a": "⊛ Brown Mushroom",
+            "b": "1F344-200D-1F7EB",
+            "j": [
+                "brown mushroom",
+                "food",
+                "fungus",
+                "nature",
+                "vegetable"
             ]
         },
         "bread": {
@@ -10863,7 +11102,8 @@
                 "rice",
                 "food",
                 "japanese",
-                "snack"
+                "snack",
+                "senbei"
             ]
         },
         "rice-ball": {
@@ -10874,7 +11114,9 @@
                 "Japanese",
                 "rice",
                 "food",
-                "japanese"
+                "japanese",
+                "onigiri",
+                "omusubi"
             ]
         },
         "cooked-rice": {
@@ -11251,7 +11493,8 @@
                 "dessert",
                 "pudding",
                 "sweet",
-                "food"
+                "food",
+                "flan"
             ]
         },
         "honey-pot": {
@@ -12302,6 +12545,7 @@
             "j": [
                 "amusement park",
                 "play",
+                "theme park",
                 "fun",
                 "park"
             ]
@@ -12312,6 +12556,7 @@
             "j": [
                 "amusement park",
                 "ferris",
+                "theme park",
                 "wheel",
                 "photo",
                 "carnival",
@@ -12325,6 +12570,7 @@
                 "amusement park",
                 "coaster",
                 "roller",
+                "theme park",
                 "carnival",
                 "playground",
                 "photo",
@@ -15543,7 +15789,7 @@
             ]
         },
         "folding-hand-fan": {
-            "a": "⊛ Folding Hand Fan",
+            "a": "Folding Hand Fan",
             "b": "1FAAD",
             "j": [
                 "cooling",
@@ -15730,7 +15976,7 @@
             ]
         },
         "hair-pick": {
-            "a": "⊛ Hair Pick",
+            "a": "Hair Pick",
             "b": "1FAAE",
             "j": [
                 "Afro",
@@ -16179,7 +16425,7 @@
             ]
         },
         "maracas": {
-            "a": "⊛ Maracas",
+            "a": "Maracas",
             "b": "1FA87",
             "j": [
                 "instrument",
@@ -16190,7 +16436,7 @@
             ]
         },
         "flute": {
-            "a": "⊛ Flute",
+            "a": "Flute",
             "b": "1FA88",
             "j": [
                 "fife",
@@ -17613,7 +17859,6 @@
             "a": "Boomerang",
             "b": "1FA83",
             "j": [
-                "australia",
                 "rebound",
                 "repercussion",
                 "weapon"
@@ -17733,6 +17978,18 @@
             "j": [
                 "rings",
                 "url"
+            ]
+        },
+        "broken-chain": {
+            "a": "⊛ Broken Chain",
+            "b": "26D3-FE0F-200D-1F4A5",
+            "j": [
+                "break",
+                "breaking",
+                "broken chain",
+                "chain",
+                "cuffs",
+                "freedom"
             ]
         },
         "chains": {
@@ -19053,7 +19310,7 @@
             ]
         },
         "khanda": {
-            "a": "⊛ Khanda",
+            "a": "Khanda",
             "b": "1FAAF",
             "j": [
                 "religion",
@@ -19474,12 +19731,13 @@
             ]
         },
         "wireless": {
-            "a": "⊛ Wireless",
+            "a": "Wireless",
             "b": "1F6DC",
             "j": [
                 "computer",
                 "internet",
                 "network",
+                "wi-fi",
                 "wifi",
                 "contactless",
                 "signal"
@@ -20019,7 +20277,8 @@
                 "0",
                 "numbers",
                 "blue-square",
-                "null"
+                "null",
+                "zero"
             ]
         },
         "keycap-1": {
@@ -20029,7 +20288,8 @@
                 "keycap",
                 "blue-square",
                 "numbers",
-                "1"
+                "1",
+                "one"
             ]
         },
         "keycap-2": {
@@ -20040,7 +20300,8 @@
                 "numbers",
                 "2",
                 "prime",
-                "blue-square"
+                "blue-square",
+                "two"
             ]
         },
         "keycap-3": {
@@ -20051,7 +20312,8 @@
                 "3",
                 "numbers",
                 "prime",
-                "blue-square"
+                "blue-square",
+                "three"
             ]
         },
         "keycap-4": {
@@ -20061,7 +20323,8 @@
                 "keycap",
                 "4",
                 "numbers",
-                "blue-square"
+                "blue-square",
+                "four"
             ]
         },
         "keycap-5": {
@@ -20072,7 +20335,8 @@
                 "5",
                 "numbers",
                 "blue-square",
-                "prime"
+                "prime",
+                "five"
             ]
         },
         "keycap-6": {
@@ -20082,7 +20346,8 @@
                 "keycap",
                 "6",
                 "numbers",
-                "blue-square"
+                "blue-square",
+                "six"
             ]
         },
         "keycap-7": {
@@ -20093,7 +20358,8 @@
                 "7",
                 "numbers",
                 "blue-square",
-                "prime"
+                "prime",
+                "seven"
             ]
         },
         "keycap-8": {
@@ -20103,7 +20369,8 @@
                 "keycap",
                 "8",
                 "blue-square",
-                "numbers"
+                "numbers",
+                "eight"
             ]
         },
         "keycap-9": {
@@ -20113,7 +20380,8 @@
                 "keycap",
                 "blue-square",
                 "numbers",
-                "9"
+                "9",
+                "nine"
             ]
         },
         "keycap-10": {
@@ -20123,7 +20391,8 @@
                 "keycap",
                 "numbers",
                 "10",
-                "blue-square"
+                "blue-square",
+                "ten"
             ]
         },
         "input-latin-uppercase": {
@@ -21091,12 +21360,10 @@
                 "flag",
                 "gay",
                 "lgbt",
-                "glbt",
                 "queer",
                 "homosexual",
                 "lesbian",
-                "bisexual",
-                "transgender"
+                "bisexual"
             ]
         },
         "transgender-flag": {
@@ -21108,6 +21375,7 @@
                 "pink",
                 "transgender",
                 "white",
+                "pride",
                 "lgbtq"
             ]
         },
@@ -23961,11 +24229,12 @@
                 "tonga"
             ]
         },
-        "flag-turkey": {
-            "a": "Flag: Turkey",
+        "flag-trkiye": {
+            "a": "Flag: Türkiye",
             "b": "1F1F9-1F1F7",
             "j": [
                 "flag",
+                "flag_turkey",
                 "turkey",
                 "nation",
                 "country",
