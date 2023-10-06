@@ -34,6 +34,8 @@ import im.vector.app.features.call.vectorCallService
 import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.logger.LoggerTag
@@ -384,6 +386,14 @@ class WebRtcCallManager @Inject constructor(
                 currentSession?.syncService()?.startAutomaticBackgroundSync(30, 0)
             } else {
                 // Maybe increase sync freq? but how to set back to default values?
+            }
+        }
+
+        // ensure the incoming call will not ring forever
+        sessionScope?.launch {
+            delay(2 * 60 * 1000 /* 2 minutes */)
+            if (mxCall.state is CallState.LocalRinging) {
+                onCallEnded(mxCall.callId, EndCallReason.INVITE_TIMEOUT, rejected = false)
             }
         }
     }
