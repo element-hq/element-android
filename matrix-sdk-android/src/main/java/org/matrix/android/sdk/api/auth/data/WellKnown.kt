@@ -61,4 +61,10 @@ data class WellKnown(
          */
         @Json(name = "org.matrix.msc2965.authentication")
         val unstableDelegatedAuthConfig: DelegatedAuthConfig? = null,
+
+        /**
+         * If set to true, the SDK will not use the network constraint when configuring Worker for the WorkManager.
+         */
+        @Json(name = "io.element.disable_network_constraint")
+        val disableNetworkConstraint: Boolean? = null,
 )
