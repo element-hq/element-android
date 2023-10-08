@@ -2334,7 +2334,7 @@
     <string name="poll_no_votes_cast">رأیی داده نشده</string>
     <string name="room_profile_section_restore_security">بازیابی رمزنگاری</string>
     <string name="sent_location">مکانش را هم‌رسانی کرد</string>
-    <string name="login_splash_create_account">شروع به پیام رسانی کنید</string>
+    <string name="login_splash_create_account">ثبت نام کنید</string>
     <string name="ftue_auth_carousel_workplace_title">پیام‌رسانی برای گروهتان.</string>
     <string name="attachment_type_location">مکان</string>
     <string name="location_not_available_dialog_content">${app_name} نتوانست به مکانتان دست یابد. لطفاً بعداً دوباره تلاش کنید.</string>
@@ -2359,17 +2359,11 @@
     <string name="ftue_auth_use_case_join_existing_server">دنبال پیوستن به کارسازهای موجودید؟</string>
     <string name="ftue_auth_use_case_skip_partial">پرش از این پرسش</string>
     <string name="ftue_auth_use_case_skip">هنوز اطمینان ندارید؟ %s</string>
-    <string name="ftue_auth_use_case_option_three">وزارت ارتباطات و اطلاعات</string>
-    <string name="ftue_auth_use_case_option_two">سازمان فناوری اطلاعات ایران</string>
-    <string name="ftue_auth_use_case_option_one">شرکت ارتباطات زیر ساخت</string>
-    <string name="ftue_auth_use_case_option_four" tools:ignore="ExtraTranslation">دوستان و خانواده</string>
-    <string name="ftue_auth_use_case_option_five" tools:ignore="ExtraTranslation">دوستان و خانواده</string>
-    <string name="ftue_auth_use_case_option_six" tools:ignore="ExtraTranslation">دوستان و خانواده</string>
-    <string name="ftue_auth_use_case_option_seven" tools:ignore="ExtraTranslation">دوستان و خانواده</string>
-<!--    <string name="ftue_auth_use_case_subtitle">کمکتان می‌کنیم وصل بمانید</string>-->
-    <string name="ftue_auth_use_case_subtitle">درست مانند ایمیل، حساب کاربری یک خانه دارند، اگرچه می توانید با هرکسی که دوست دارید، صحبت کنید</string>
-<!--    <string name="ftue_auth_use_case_title">بیش‌تر با چه‌کسی گپ می‌زنید؟</string>-->
-    <string name="ftue_auth_use_case_title">سازمان خود را انتخاب کنید</string>
+    <string name="ftue_auth_use_case_option_one">دوستان و خانواده</string>
+    <string name="ftue_auth_use_case_option_three">اجتماع‌ها</string>
+    <string name="ftue_auth_use_case_option_two">گروه‌ها</string>
+    <string name="ftue_auth_use_case_subtitle">کمکتان می‌کنیم وصل بمانید</string>
+    <string name="ftue_auth_use_case_title">بیش‌تر با چه‌کسی گپ می‌زنید؟</string>
     <string name="navigate_to_thread_when_already_in_the_thread">هم‌اکنون دارید این رشته را می‌بینید!</string>
     <string name="view_in_room">دیدن در اتاق</string>
     <string name="reply_in_thread">پاسخ در رشته</string>

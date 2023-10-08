@@ -73,7 +73,7 @@ import javax.inject.Inject
 
         views.selectedServerName.text = server
         views.loginRoot.realignPercentagesToParent()
-//        views.editServerButton.debouncedClicks { viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.EditServerSelection)) }
+        views.editServerButton.debouncedClicks { viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.EditServerSelection)) }
         views.loginPasswordInput.setOnImeDoneListener { submit() }
         views.loginInput.setOnFocusLostListener(viewLifecycleOwner) {
             viewModel.handle(OnboardingAction.UserNameEnteredAction.Login(views.loginInput.content()))
@@ -142,10 +142,10 @@ import javax.inject.Inject
     }
 
     override fun updateWithState(state: OnboardingViewState) {
-//        setupUi(state)
+        setupUi(state)
         setupAutoFill()
 
-//        views.selectedServerName.text = state.selectedHomeserver.userFacingUrl.toReducedUrl()
+        views.selectedServerName.text = state.selectedHomeserver.userFacingUrl.toReducedUrl()
 
         if (state.isLoading) {
             // Ensure password is hidden
@@ -153,40 +153,40 @@ import javax.inject.Inject
         }
     }
 
-//    private fun setupUi(state: OnboardingViewState) {
-//        when (state.selectedHomeserver.preferredLoginMode) {
-//            is LoginMode.SsoAndPassword -> {
-//                showUsernamePassword()
-//                renderSsoProviders(state.deviceId, state.selectedHomeserver.preferredLoginMode)
-//            }
-//            is LoginMode.Sso -> {
-//                hideUsernamePassword()
-//                renderSsoProviders(state.deviceId, state.selectedHomeserver.preferredLoginMode)
-//            }
-//            else -> {
-//                showUsernamePassword()
-//                hideSsoProviders()
-//            }
-//        }
-//    }
+    private fun setupUi(state: OnboardingViewState) {
+        when (state.selectedHomeserver.preferredLoginMode) {
+            is LoginMode.SsoAndPassword -> {
+                showUsernamePassword()
+                renderSsoProviders(state.deviceId, state.selectedHomeserver.preferredLoginMode)
+            }
+            is LoginMode.Sso -> {
+                hideUsernamePassword()
+                renderSsoProviders(state.deviceId, state.selectedHomeserver.preferredLoginMode)
+            }
+            else -> {
+                showUsernamePassword()
+                hideSsoProviders()
+            }
+        }
+    }
 
-//    private fun renderSsoProviders(deviceId: String?, loginMode: LoginMode) {
-//        views.ssoGroup.isVisible = true
-//        views.ssoButtonsHeader.isVisible = isUsernameAndPasswordVisible()
-//        views.ssoButtons.render(loginMode, SocialLoginButtonsView.Mode.MODE_CONTINUE) { id ->
-//            viewModel.fetchSsoUrl(
-//                    redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
-//                    deviceId = deviceId,
-//                    provider = id,
-//                    action = SSOAction.LOGIN
-//            )?.let { openInCustomTab(it) }
-//        }
-//    }
+    private fun renderSsoProviders(deviceId: String?, loginMode: LoginMode) {
+        views.ssoGroup.isVisible = true
+        views.ssoButtonsHeader.isVisible = isUsernameAndPasswordVisible()
+        views.ssoButtons.render(loginMode, SocialLoginButtonsView.Mode.MODE_CONTINUE) { id ->
+            viewModel.fetchSsoUrl(
+                    redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
+                    deviceId = deviceId,
+                    provider = id,
+                    action = SSOAction.LOGIN
+            )?.let { openInCustomTab(it) }
+        }
+    }
 
-//    private fun hideSsoProviders() {
-//        views.ssoGroup.isVisible = false
-//        views.ssoButtons.ssoIdentityProviders = null
-//    }
+    private fun hideSsoProviders() {
+        views.ssoGroup.isVisible = false
+        views.ssoButtons.ssoIdentityProviders = null
+    }
 
     private fun hideUsernamePassword() {
         views.loginEntryGroup.isVisible = false

@@ -20,7 +20,6 @@ import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,7 +29,6 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
-import androidx.fragment.app.setFragmentResult
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.getResTintedDrawable
@@ -42,7 +40,6 @@ import im.vector.app.features.VectorFeatures
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.onboarding.FtueUseCase
 import im.vector.app.features.onboarding.OnboardingAction
-import im.vector.app.features.onboarding.OnboardingFlow
 import im.vector.app.features.themes.ThemeProvider
 import javax.inject.Inject
 
@@ -55,8 +52,6 @@ class FtueAuthUseCaseFragment :
 
     @Inject lateinit var themeProvider: ThemeProvider
     @Inject lateinit var vectorFeatures: VectorFeatures
-    val fragment = FtueAuthCombinedLoginFragment()
-    val myBundle = Bundle()
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueAuthUseCaseBinding {
         return FragmentFtueAuthUseCaseBinding.inflate(inflater, container, false)
@@ -65,37 +60,11 @@ class FtueAuthUseCaseFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupViews()
-        views.useCaseOptionOne.setOnClickListener {
-            myBundle.putString("server_fa_name", views.useCaseOptionOne.text.toString())
-            fragment.arguments= myBundle
-            viewModel.handle(OnboardingAction.SplashAction.OnIAlreadyHaveAnAccount(onboardingFlow = OnboardingFlow.SignIn))
-
-        }
-
-        views.useCaseOptionTwo.setOnClickListener {
-            myBundle.putString("server_fa_name", views.useCaseOptionTwo.text.toString())
-            fragment.arguments= myBundle
-            viewModel.handle(OnboardingAction.SplashAction.OnIAlreadyHaveAnAccount(onboardingFlow = OnboardingFlow.SignIn))
-
-            viewModel.handle(OnboardingAction.HomeServerChange.EditHomeServer(homeServerUrl = "https://matrix.parsaad.ir")) // change server
-
-//            viewModel.handle(OnboardingAction.UpdateServerType(ServerType.Other))
-        }
-
-        views.useCaseOptionThree.setOnClickListener {
-            myBundle.putString("server_fa_name", views.useCaseOptionThree.text.toString())
-            fragment.arguments= myBundle
-            viewModel.handle(OnboardingAction.SplashAction.OnIAlreadyHaveAnAccount(onboardingFlow = OnboardingFlow.SignIn))
-
-
-            viewModel.handle(OnboardingAction.UpdateServerType(ServerType.Other))
-        }
     }
 
     private fun setupViews() {
         // Connect to server relies on https://github.com/vector-im/element-android/issues/5782
-//        views.useCaseConnectToServerGroup.isGone = vectorFeatures.isOnboardingCombinedRegisterEnabled()
-        views.useCaseConnectToServerGroup.isGone = vectorFeatures.isOnboardingAlreadyHaveAccountSplashEnabled()
+        views.useCaseConnectToServerGroup.isGone = vectorFeatures.isOnboardingCombinedRegisterEnabled()
 
         views.useCaseOptionOne.renderUseCase(
                 useCase = FtueUseCase.FRIENDS_FAMILY,
@@ -116,13 +85,17 @@ class FtueAuthUseCaseFragment :
                 tint = R.color.palette_azure
         )
 
-//        views.useCaseSkip.setTextWithColoredPart(
-//                fullTextRes = R.string.ftue_auth_use_case_skip,
-//                coloredTextRes = R.string.ftue_auth_use_case_skip_partial,
-//                underline = false,
-//                colorAttribute = R.attr.colorAccent,
-//                onClick = { viewModel.handle(OnboardingAction.UpdateUseCase(FtueUseCase.SKIP)) }
-//        )
+        views.useCaseSkip.setTextWithColoredPart(
+                fullTextRes = R.string.ftue_auth_use_case_skip,
+                coloredTextRes = R.string.ftue_auth_use_case_skip_partial,
+                underline = false,
+                colorAttribute = R.attr.colorAccent,
+                onClick = { viewModel.handle(OnboardingAction.UpdateUseCase(FtueUseCase.SKIP)) }
+        )
+
+        views.useCaseConnectToServer.setOnClickListener {
+            viewModel.handle(OnboardingAction.UpdateServerType(ServerType.Other))
+        }
     }
 
     override fun resetViewModel() {

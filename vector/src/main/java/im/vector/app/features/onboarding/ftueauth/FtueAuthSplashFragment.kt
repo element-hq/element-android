@@ -58,19 +58,19 @@ class FtueAuthSplashFragment :
             setText(if (isAlreadyHaveAccountEnabled) R.string.login_splash_create_account else R.string.login_splash_submit)
             debouncedClicks { splashSubmit(isAlreadyHaveAccountEnabled) }
         }
-//        views.loginSplashAlreadyHaveAccount.apply {
-//            isVisible = vectorFeatures.isOnboardingAlreadyHaveAccountSplashEnabled()
-//            debouncedClicks { alreadyHaveAnAccount() }
-//        }
+        views.loginSplashAlreadyHaveAccount.apply {
+            isVisible = vectorFeatures.isOnboardingAlreadyHaveAccountSplashEnabled()
+            debouncedClicks { alreadyHaveAnAccount() }
+        }
 
-//
-//        if (buildMeta.isDebug || vectorPreferences.developerMode()) {
-//            views.loginSplashVersion.isVisible = true
-//            @SuppressLint("SetTextI18n")
-//            views.loginSplashVersion.text = "Version : ${buildMeta.versionName}\n" +
-//                    "Branch: ${buildMeta.gitBranchName} ${buildMeta.gitRevision}"
-//            views.loginSplashVersion.debouncedClicks { navigator.openDebug(requireContext()) }
-//        }
+
+        if (buildMeta.isDebug || vectorPreferences.developerMode()) {
+            views.loginSplashVersion.isVisible = true
+            @SuppressLint("SetTextI18n")
+            views.loginSplashVersion.text = "Version : ${buildMeta.versionName}\n" +
+                    "Branch: ${buildMeta.gitBranchName} ${buildMeta.gitRevision}"
+            views.loginSplashVersion.debouncedClicks { navigator.openDebug(requireContext()) }
+        }
     }
 
     private fun splashSubmit(isAlreadyHaveAccountEnabled: Boolean) {

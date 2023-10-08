@@ -131,19 +131,19 @@
             app:layout_constraintTop_toBottomOf="@id/useCaseOptionTwo"
             tools:drawableStartCompat="@drawable/bg_feature_icon" />
 
-<!--        <TextView-->
-<!--            android:id="@+id/useCaseSkip"-->
-<!--            style="@style/Widget.Vector.TextView.Body"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:clickable="true"-->
-<!--            android:gravity="center"-->
-<!--            android:textColor="?vctr_content_secondary"-->
-<!--            app:layout_constraintBottom_toTopOf="@id/contentFooterSpacing"-->
-<!--            app:layout_constraintEnd_toEndOf="@id/useCaseGutterEnd"-->
-<!--            app:layout_constraintStart_toStartOf="@id/useCaseGutterStart"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/useCaseOptionThree"-->
-<!--            tools:text="Not sure yet? You can skip this question" />-->
+        <TextView
+            android:id="@+id/useCaseSkip"
+            style="@style/Widget.Vector.TextView.Body"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:gravity="center"
+            android:textColor="?vctr_content_secondary"
+            app:layout_constraintBottom_toTopOf="@id/contentFooterSpacing"
+            app:layout_constraintEnd_toEndOf="@id/useCaseGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/useCaseGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/useCaseOptionThree"
+            tools:text="Not sure yet? You can skip this question" />
 
         <Space
             android:id="@+id/contentFooterSpacing"
