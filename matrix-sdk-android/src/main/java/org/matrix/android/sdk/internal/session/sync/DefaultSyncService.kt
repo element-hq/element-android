@@ -20,6 +20,7 @@ import org.matrix.android.sdk.api.session.sync.SyncService
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.session.SessionState
+import org.matrix.android.sdk.internal.session.homeserver.HomeServerCapabilitiesDataSource
 import org.matrix.android.sdk.internal.session.sync.job.SyncThread
 import org.matrix.android.sdk.internal.session.sync.job.SyncWorker
 import timber.log.Timber
@@ -33,15 +34,26 @@ internal class DefaultSyncService @Inject constructor(
         private val syncTokenStore: SyncTokenStore,
         private val syncRequestStateTracker: SyncRequestStateTracker,
         private val sessionState: SessionState,
+        private val homeServerCapabilitiesDataSource: HomeServerCapabilitiesDataSource,
 ) : SyncService {
     private var syncThread: SyncThread? = null
 
     override fun requireBackgroundSync() {
-        SyncWorker.requireBackgroundSync(workManagerProvider, sessionId)
+        SyncWorker.requireBackgroundSync(
+                workManagerProvider = workManagerProvider,
+                sessionId = sessionId,
+                homeServerCapabilitiesDataSource = homeServerCapabilitiesDataSource,
+        )
     }
 
     override fun startAutomaticBackgroundSync(timeOutInSeconds: Long, repeatDelayInSeconds: Long) {
-        SyncWorker.automaticallyBackgroundSync(workManagerProvider, sessionId, timeOutInSeconds, repeatDelayInSeconds)
+        SyncWorker.automaticallyBackgroundSync(
+                workManagerProvider = workManagerProvider,
+                sessionId = sessionId,
+                homeServerCapabilitiesDataSource = homeServerCapabilitiesDataSource,
+                serverTimeoutInSeconds = timeOutInSeconds,
+                delayInSeconds = repeatDelayInSeconds,
+        )
     }
 
     override fun stopAnyBackgroundSync() {
