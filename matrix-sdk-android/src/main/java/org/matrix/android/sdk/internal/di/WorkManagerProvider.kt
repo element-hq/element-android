@@ -33,6 +33,7 @@ import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.homeserver.HomeServerCapabilitiesDataSource
 import org.matrix.android.sdk.internal.worker.MatrixWorkerFactory
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -109,7 +110,13 @@ internal class WorkManagerProvider @Inject constructor(
         ): Constraints {
             val withNetworkConstraint = homeServerCapabilitiesDataSource.getHomeServerCapabilities()?.disableNetworkConstraint.orFalse().not()
             return Constraints.Builder()
-                    .apply { if (withNetworkConstraint) setRequiredNetworkType(NetworkType.CONNECTED) }
+                    .apply {
+                        if (withNetworkConstraint) {
+                            setRequiredNetworkType(NetworkType.CONNECTED)
+                        } else {
+                            Timber.w("Network constraint is disabled")
+                        }
+                    }
                     .build()
         }
 
