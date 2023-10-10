@@ -21,6 +21,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.matrix.android.sdk.test.fakes.FakeAddPusherTask
 import org.matrix.android.sdk.test.fakes.FakeGetPushersTask
+import org.matrix.android.sdk.test.fakes.FakeHomeServerCapabilitiesDataSource
 import org.matrix.android.sdk.test.fakes.FakeMonarchy
 import org.matrix.android.sdk.test.fakes.FakeRemovePusherTask
 import org.matrix.android.sdk.test.fakes.FakeTaskExecutor
@@ -41,6 +42,7 @@ class DefaultPushersServiceTest {
     private val togglePusherTask = FakeTogglePusherTask()
     private val removePusherTask = FakeRemovePusherTask()
     private val taskExecutor = FakeTaskExecutor()
+    private val homeServerCapabilitiesDataSource = FakeHomeServerCapabilitiesDataSource()
 
     private val pushersService = DefaultPushersService(
             workManagerProvider.instance,
@@ -52,6 +54,7 @@ class DefaultPushersServiceTest {
             togglePusherTask,
             removePusherTask,
             taskExecutor.instance,
+            homeServerCapabilitiesDataSource.instance,
     )
 
     @Test
