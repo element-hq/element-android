@@ -218,8 +218,8 @@ class Rendezvous(
                 Timber.tag(TAG).i("No master key given by verifying device")
             }
 
-            // request secrets from the verifying device
-            Timber.tag(TAG).i("Requesting secrets from $verifyingDeviceId")
+            // request secrets from other sessions.
+            Timber.tag(TAG).i("Requesting secrets from other sessions")
 
             session.sharedSecretStorageService().requestMissingSecrets()
         } else {

@@ -28,13 +28,9 @@ internal class SecretShareManager @Inject constructor(
         private val outgoingRequestsProcessor: OutgoingRequestsProcessor) {
 
     suspend fun requestSecretTo(deviceId: String, secretName: String) {
-        Timber.v("SecretShareManager requesting $deviceId, $secretName")
-        if (this.olmMachine.get().requestMissingSecretsFromOtherSessions()) {
-            // immediately send the requests
-            outgoingRequestsProcessor.processOutgoingRequests(this.olmMachine.get()) {
-                it is Request.ToDevice && it.eventType == EventType.REQUEST_SECRET
-            }
-        }
+        Timber.w("SecretShareManager requesting custom secrets not supported $deviceId, $secretName")
+        // rust stack only support requesting secrets defined in the spec (not custom secret yet)
+        requestMissingSecrets()
     }
 
     suspend fun requestMissingSecrets() {
