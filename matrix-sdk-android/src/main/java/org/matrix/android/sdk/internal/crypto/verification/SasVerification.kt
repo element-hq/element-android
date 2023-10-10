@@ -133,7 +133,7 @@ internal class SasVerification @AssistedInject constructor(
     override val method: VerificationMethod
         get() = VerificationMethod.QR_CODE_SCAN
 
-    /** Is this verification happening over to-device messages */
+    /** Is this verification happening over to-device messages. */
     override fun isToDeviceTransport(): Boolean = inner.roomId() == null
 
 //    /** Does the verification flow support showing emojis as the short auth string */
@@ -223,19 +223,6 @@ internal class SasVerification @AssistedInject constructor(
         }
         verificationListenersHolder.dispatchTxUpdated(this@SasVerification)
     }
-
-    /** Fetch fresh data from the Rust side for our verification flow */
-//    private fun refreshData() {
-//        when (val verification = innerMachine.getVerification(inner.otherUserId, inner.flowId)) {
-//            is Verification.SasV1 -> {
-//                inner = verification.sas
-//            }
-//            else -> {
-//            }
-//        }
-//
-//        return
-//    }
 
     override fun onChange(state: SasState) {
         innerState = state

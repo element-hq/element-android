@@ -466,7 +466,7 @@ internal class RustKeyBackupService @Inject constructor(
 
     /**
      * Same method as [RoomKeysRestClient.getRoomKey] except that it accepts nullable
-     * parameters and always returns a KeysBackupData object through the Callback
+     * parameters and always returns a KeysBackupData object through the Callback.
      */
     private suspend fun getKeys(sessionId: String?, roomId: String?, version: String): KeysBackupData {
         return when {

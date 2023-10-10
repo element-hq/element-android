@@ -103,7 +103,7 @@ internal class VerificationRequest @AssistedInject constructor(
 
     fun innerState() = innerVerificationRequest.state()
 
-    /** The user ID of the other user that is participating in this verification flow */
+    /** The user ID of the other user that is participating in this verification flow. */
     internal fun otherUser(): String {
         return innerVerificationRequest.otherUserId()
     }
@@ -117,7 +117,7 @@ internal class VerificationRequest @AssistedInject constructor(
         return innerVerificationRequest.otherDeviceId()
     }
 
-    /** Did we initiate this verification flow */
+    /** Did we initiate this verification flow. */
     internal fun weStarted(): Boolean {
         return innerVerificationRequest.weStarted()
     }
@@ -140,7 +140,7 @@ internal class VerificationRequest @AssistedInject constructor(
 //        return innerVerificationRequest.isReady()
 //    }
 
-    /** Did we advertise that we're able to scan QR codes */
+    /** Did we advertise that we're able to scan QR codes. */
     internal fun canScanQrCodes(): Boolean {
         return innerVerificationRequest.ourSupportedMethods()?.contains(VERIFICATION_METHOD_QR_CODE_SCAN) ?: false
     }

@@ -23,7 +23,7 @@ import org.matrix.android.sdk.internal.util.database.RealmMigrator
 import java.io.File
 
 /**
- * This migration creates the rust database and migrates from legacy crypto
+ * This migration creates the rust database and migrates from legacy crypto.
  */
 internal class MigrateCryptoTo022(
         realm: DynamicRealm,

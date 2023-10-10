@@ -100,10 +100,10 @@ internal class PrepareToEncryptUseCase @Inject constructor(
         var sharedKey = false
 
         val info = cryptoStore.getRoomCryptoInfo(roomId)
-                ?: throw java.lang.IllegalArgumentException("Encryption not configured in this room")
+                ?: throw java.lang.UnsupportedOperationException("Encryption not configured in this room")
         // how to react if this is null??
         if (info.algorithm != MXCRYPTO_ALGORITHM_MEGOLM) {
-            throw java.lang.IllegalArgumentException("Unsupported algorithm ${info.algorithm}")
+            throw java.lang.UnsupportedOperationException("Unsupported algorithm ${info.algorithm}")
         }
         val settings = EncryptionSettings(
                 algorithm = EventEncryptionAlgorithm.MEGOLM_V1_AES_SHA2,

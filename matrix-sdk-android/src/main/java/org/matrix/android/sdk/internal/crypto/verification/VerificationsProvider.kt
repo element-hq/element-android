@@ -36,7 +36,7 @@ internal class VerificationsProvider @Inject constructor(
         return innerMachine.getVerificationRequests(userId).map(verificationRequestFactory::create)
     }
 
-    /** Get a verification request for the given user with the given flow ID */
+    /** Get a verification request for the given user with the given flow ID. */
     fun getVerificationRequest(userId: String, flowId: String): VerificationRequest? {
         return innerMachine.getVerificationRequest(userId, flowId)?.let { innerVerificationRequest ->
             verificationRequestFactory.create(innerVerificationRequest)

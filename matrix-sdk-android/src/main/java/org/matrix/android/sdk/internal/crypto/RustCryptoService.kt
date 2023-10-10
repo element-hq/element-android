@@ -225,7 +225,7 @@ internal class RustCryptoService @Inject constructor(
     }
 
     /**
-     * Tell if the MXCrypto is started
+     * Tell if the MXCrypto is started.
      *
      * @return true if the crypto is started
      */
@@ -288,7 +288,7 @@ internal class RustCryptoService @Inject constructor(
     }
 
     /**
-     * Close the crypto
+     * Close the crypto.
      */
     override fun close() {
         cryptoCoroutineScope.coroutineContext.cancelChildren(CancellationException("Closing crypto module"))
@@ -315,7 +315,7 @@ internal class RustCryptoService @Inject constructor(
     override fun crossSigningService() = crossSigningService
 
     /**
-     * A sync response has been received
+     * A sync response has been received.
      */
     override suspend fun onSyncCompleted(syncResponse: SyncResponse, cryptoStoreAggregator: CryptoStoreAggregator) {
         if (isStarted()) {
@@ -335,7 +335,7 @@ internal class RustCryptoService @Inject constructor(
     }
 
     /**
-     * Provides the device information for a user id and a device Id
+     * Provides the device information for a user id and a device Id.
      *
      * @param userId the user id
      * @param deviceId the device id
@@ -387,7 +387,7 @@ internal class RustCryptoService @Inject constructor(
      * Configure a room to use encryption.
      *
      * @param roomId the room id to enable encryption in.
-     * @param algorithm the encryption config for the room.
+     * @param info the encryption config for the room.
      * @param membersId list of members to start tracking their devices
      * @return true if the operation succeeds.
      */
@@ -430,7 +430,7 @@ internal class RustCryptoService @Inject constructor(
     }
 
     /**
-     * Tells if a room is encrypted with MXCRYPTO_ALGORITHM_MEGOLM
+     * Tells if a room is encrypted with MXCRYPTO_ALGORITHM_MEGOLM.
      *
      * @param roomId the room id
      * @return true if the room is encrypted with algorithm MXCRYPTO_ALGORITHM_MEGOLM
@@ -486,7 +486,7 @@ internal class RustCryptoService @Inject constructor(
     }
 
     /**
-     * Decrypt an event
+     * Decrypt an event.
      *
      * @param event the raw event.
      * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
@@ -500,6 +500,7 @@ internal class RustCryptoService @Inject constructor(
     /**
      * Handle an m.room.encryption event.
      *
+     * @param roomId the roomId.
      * @param event the encryption event.
      */
     private suspend fun onRoomEncryptionEvent(roomId: String, event: Event) {
@@ -544,6 +545,7 @@ internal class RustCryptoService @Inject constructor(
     /**
      * Handle a change in the membership state of a member of a room.
      *
+     * @param roomId the roomId
      * @param event the membership event causing the change
      */
     private suspend fun onRoomMembershipEvent(roomId: String, event: Event) {
@@ -622,7 +624,8 @@ internal class RustCryptoService @Inject constructor(
 
         // Notify the our listeners about room keys so decryption is retried.
         toDeviceEvents.events.orEmpty().forEach { event ->
-            Timber.tag(loggerTag.value).d("[${myUserId.take(7)}|${deviceId}] Processed ToDevice event msgid:${event.toDeviceTracingId()} id:${event.eventId} type:${event.type}")
+            Timber.tag(loggerTag.value)
+                    .d("[${myUserId.take(7)}|${deviceId}] Processed ToDevice event msgid:${event.toDeviceTracingId()} id:${event.eventId} type:${event.type}")
 
             if (event.getClearType() == EventType.ENCRYPTED) {
                 // rust failed to decrypt it
@@ -664,7 +667,7 @@ internal class RustCryptoService @Inject constructor(
     }
 
     /**
-     * Export the crypto keys
+     * Export the crypto keys.
      *
      * @param password the password
      * @return the exported keys
@@ -679,7 +682,7 @@ internal class RustCryptoService @Inject constructor(
     }
 
     /**
-     * Import the room keys
+     * Import the room keys.
      *
      * @param roomKeysAsArray the room keys as array.
      * @param password the password

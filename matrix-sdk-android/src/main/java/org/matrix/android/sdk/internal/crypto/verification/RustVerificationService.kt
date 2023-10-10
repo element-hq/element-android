@@ -134,7 +134,7 @@ internal class RustVerificationService @Inject constructor(
         }
     }
 
-    /** Dispatch updates after a verification event has been received */
+    /** Dispatch updates after a verification event has been received. */
     private suspend fun onUpdate(event: Event) {
         Timber.v("[${olmMachine.userId().take(6)}] Verification on event ${event.getClearType()}")
         val sender = event.senderId ?: return
@@ -320,7 +320,7 @@ internal class RustVerificationService @Inject constructor(
     override suspend fun startKeyVerification(method: VerificationMethod, otherUserId: String, requestId: String): String? {
         return if (method == VerificationMethod.SAS) {
             val request = olmMachine.getVerificationRequest(otherUserId, requestId)
-                    ?: throw IllegalArgumentException("Unknown request with id: $requestId")
+                    ?: throw UnsupportedOperationException("Unknown request with id: $requestId")
 
             val sas = request.startSasVerification()
 
@@ -335,7 +335,7 @@ internal class RustVerificationService @Inject constructor(
                 null
             }
         } else {
-            throw IllegalArgumentException("Unknown verification method")
+            throw UnsupportedOperationException("Unknown verification method")
         }
     }
 
