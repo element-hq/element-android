@@ -214,7 +214,6 @@ class DefaultVectorAnalytics @Inject constructor(
     private fun Map<String, Any?>.toPostHogUserProperties(): Properties {
         return Properties().apply {
             putAll(this@toPostHogUserProperties.filter { it.value != null })
-            put("crypto", "rust")
         }
     }
 
