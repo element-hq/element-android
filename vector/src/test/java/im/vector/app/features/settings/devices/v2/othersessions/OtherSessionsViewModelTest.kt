@@ -46,6 +46,7 @@ import org.junit.Before
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
+import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
 
 private const val A_DEVICE_ID_1 = "device-id-1"
@@ -87,8 +88,10 @@ class OtherSessionsViewModelTest {
         // Needed for internal usage of Flow<T>.throttleFirst() inside the ViewModel
         mockkStatic(SystemClock::class)
         every { SystemClock.elapsedRealtime() } returns 1234
-
-        givenVerificationService()
+        fakeActiveSessionHolder.fakeSession.fakeHomeServerCapabilitiesService.givenCapabilities(
+                HomeServerCapabilities()
+        )
+        givenVerificationService().givenEventFlow()
         fakeVectorPreferences.givenSessionManagerShowIpAddress(false)
     }
 

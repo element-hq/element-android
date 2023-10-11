@@ -52,6 +52,7 @@ import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
+import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
 
 private const val A_SESSION_ID_1 = "session-id-1"
@@ -101,6 +102,9 @@ class SessionOverviewViewModelTest {
         mockkStatic(SystemClock::class)
         every { SystemClock.elapsedRealtime() } returns 1234
 
+        fakeActiveSessionHolder.fakeSession.fakeHomeServerCapabilitiesService.givenCapabilities(
+                HomeServerCapabilities()
+        )
         givenVerificationService()
         fakeGetNotificationsStatusUseCase.givenExecuteReturns(
                 fakeActiveSessionHolder.fakeSession,
