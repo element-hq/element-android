@@ -261,7 +261,7 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
         return MegolmBackupCreationInfo(
                 algorithm = MXCRYPTO_ALGORITHM_MEGOLM_BACKUP,
                 authData = createFakeMegolmBackupAuthData(),
-                recoveryKey = BackupUtils.recoveryKeyFromPassphrase("3cnTdW")!!
+                recoveryKey = BackupUtils.recoveryKeyFromPassphrase("3cnTdW")
         )
     }
 

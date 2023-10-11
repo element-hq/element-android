@@ -542,7 +542,7 @@ class KeysBackupTest : InstrumentedTest {
         assertFails {
             testData.aliceSession2.cryptoService().keysBackupService().trustKeysBackupVersionWithRecoveryKey(
                     testData.aliceSession2.cryptoService().keysBackupService().keysBackupVersion!!,
-                    BackupUtils.recoveryKeyFromPassphrase("Bad recovery key")!!,
+                    BackupUtils.recoveryKeyFromPassphrase("Bad recovery key"),
             )
         }
 
@@ -680,7 +680,7 @@ class KeysBackupTest : InstrumentedTest {
         assertFailsWith<InvalidParameterException> {
             keysBackupService.restoreKeysWithRecoveryKey(
                     keysBackupService.keysBackupVersion!!,
-                    BackupUtils.recoveryKeyFromBase58("EsTc LW2K PGiF wKEA 3As5 g5c4 BXwk qeeJ ZJV8 Q9fu gUMN UE4d")!!,
+                    BackupUtils.recoveryKeyFromBase58("EsTc LW2K PGiF wKEA 3As5 g5c4 BXwk qeeJ ZJV8 Q9fu gUMN UE4d"),
                     null,
                     null,
                     null,
