@@ -197,7 +197,6 @@ class E2eeShareKeysHistoryTest : InstrumentedTest {
 
     @Test
     fun testNeedsRotationFromSharedToWorldReadable() {
-        Assume.assumeTrue("Test is flacky on legacy crypto", BuildConfig.FLAVOR == "rustCrypto")
         testRotationDueToVisibilityChange(RoomHistoryVisibility.SHARED, RoomHistoryVisibilityContent("world_readable"))
     }
 
