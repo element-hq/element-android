@@ -23,6 +23,7 @@ import org.matrix.android.sdk.internal.session.SessionState
 import org.matrix.android.sdk.internal.session.homeserver.HomeServerCapabilitiesDataSource
 import org.matrix.android.sdk.internal.session.sync.job.SyncThread
 import org.matrix.android.sdk.internal.session.sync.job.SyncWorker
+import org.matrix.android.sdk.internal.session.workmanager.WorkManagerConfig
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Provider
@@ -34,7 +35,7 @@ internal class DefaultSyncService @Inject constructor(
         private val syncTokenStore: SyncTokenStore,
         private val syncRequestStateTracker: SyncRequestStateTracker,
         private val sessionState: SessionState,
-        private val homeServerCapabilitiesDataSource: HomeServerCapabilitiesDataSource,
+        private val workManagerConfig: WorkManagerConfig,
 ) : SyncService {
     private var syncThread: SyncThread? = null
 
@@ -42,7 +43,7 @@ internal class DefaultSyncService @Inject constructor(
         SyncWorker.requireBackgroundSync(
                 workManagerProvider = workManagerProvider,
                 sessionId = sessionId,
-                homeServerCapabilitiesDataSource = homeServerCapabilitiesDataSource,
+                workManagerConfig = workManagerConfig,
         )
     }
 
@@ -50,7 +51,7 @@ internal class DefaultSyncService @Inject constructor(
         SyncWorker.automaticallyBackgroundSync(
                 workManagerProvider = workManagerProvider,
                 sessionId = sessionId,
-                homeServerCapabilitiesDataSource = homeServerCapabilitiesDataSource,
+                workManagerConfig = workManagerConfig,
                 serverTimeoutInSeconds = timeOutInSeconds,
                 delayInSeconds = repeatDelayInSeconds,
         )

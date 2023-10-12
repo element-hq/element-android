@@ -55,6 +55,7 @@ import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.session.content.UploadContentWorker
 import org.matrix.android.sdk.internal.session.homeserver.HomeServerCapabilitiesDataSource
 import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
+import org.matrix.android.sdk.internal.session.workmanager.WorkManagerConfig
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.util.CancelableWork
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
@@ -75,7 +76,7 @@ internal class DefaultSendService @AssistedInject constructor(
         private val localEchoRepository: LocalEchoRepository,
         private val eventSenderProcessor: EventSenderProcessor,
         private val cancelSendTracker: CancelSendTracker,
-        private val homeServerCapabilitiesDataSource: HomeServerCapabilitiesDataSource,
+        private val workManagerConfig: WorkManagerConfig,
 ) : SendService {
 
     @AssistedFactory
@@ -375,7 +376,7 @@ internal class DefaultSendService @AssistedInject constructor(
         val uploadWorkData = WorkerParamsFactory.toData(uploadMediaWorkerParams)
 
         return workManagerProvider.matrixOneTimeWorkRequestBuilder<UploadContentWorker>()
-                .setConstraints(WorkManagerProvider.getWorkConstraints(homeServerCapabilitiesDataSource))
+                .setConstraints(WorkManagerProvider.getWorkConstraints(workManagerConfig))
                 .startChain(true)
                 .setInputData(uploadWorkData)
                 .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)

@@ -28,6 +28,7 @@ import org.matrix.android.sdk.internal.session.SessionComponent
 import org.matrix.android.sdk.internal.session.homeserver.HomeServerCapabilitiesDataSource
 import org.matrix.android.sdk.internal.session.sync.SyncPresence
 import org.matrix.android.sdk.internal.session.sync.SyncTask
+import org.matrix.android.sdk.internal.session.workmanager.WorkManagerConfig
 import org.matrix.android.sdk.internal.worker.SessionSafeCoroutineWorker
 import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
@@ -60,7 +61,7 @@ internal class SyncWorker(context: Context, workerParameters: WorkerParameters, 
 
     @Inject lateinit var syncTask: SyncTask
     @Inject lateinit var workManagerProvider: WorkManagerProvider
-    @Inject lateinit var homeServerCapabilitiesDataSource: HomeServerCapabilitiesDataSource
+    @Inject lateinit var workManagerConfig: WorkManagerConfig
 
     override fun injectWith(injector: SessionComponent) {
         injector.inject(this)
@@ -79,7 +80,7 @@ internal class SyncWorker(context: Context, workerParameters: WorkerParameters, 
                             automaticallyBackgroundSync(
                                     workManagerProvider = workManagerProvider,
                                     sessionId = params.sessionId,
-                                    homeServerCapabilitiesDataSource = homeServerCapabilitiesDataSource,
+                                    workManagerConfig = workManagerConfig,
                                     serverTimeoutInSeconds = params.timeout,
                                     delayInSeconds = params.delay,
                                     forceImmediate = hasToDeviceEvents
@@ -89,7 +90,7 @@ internal class SyncWorker(context: Context, workerParameters: WorkerParameters, 
                             requireBackgroundSync(
                                     workManagerProvider = workManagerProvider,
                                     sessionId = params.sessionId,
-                                    homeServerCapabilitiesDataSource = homeServerCapabilitiesDataSource,
+                                    workManagerConfig = workManagerConfig,
                                     serverTimeoutInSeconds = 0
                             )
                         }
@@ -127,7 +128,7 @@ internal class SyncWorker(context: Context, workerParameters: WorkerParameters, 
         fun requireBackgroundSync(
                 workManagerProvider: WorkManagerProvider,
                 sessionId: String,
-                homeServerCapabilitiesDataSource: HomeServerCapabilitiesDataSource,
+                workManagerConfig: WorkManagerConfig,
                 serverTimeoutInSeconds: Long = 0
         ) {
             val data = WorkerParamsFactory.toData(
@@ -139,7 +140,7 @@ internal class SyncWorker(context: Context, workerParameters: WorkerParameters, 
                     )
             )
             val workRequest = workManagerProvider.matrixOneTimeWorkRequestBuilder<SyncWorker>()
-                    .setConstraints(WorkManagerProvider.getWorkConstraints(homeServerCapabilitiesDataSource))
+                    .setConstraints(WorkManagerProvider.getWorkConstraints(workManagerConfig))
                     .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
                     .setInputData(data)
                     .startChain(true)
@@ -151,7 +152,7 @@ internal class SyncWorker(context: Context, workerParameters: WorkerParameters, 
         fun automaticallyBackgroundSync(
                 workManagerProvider: WorkManagerProvider,
                 sessionId: String,
-                homeServerCapabilitiesDataSource: HomeServerCapabilitiesDataSource,
+                workManagerConfig: WorkManagerConfig,
                 serverTimeoutInSeconds: Long = 0,
                 delayInSeconds: Long = 30,
                 forceImmediate: Boolean = false
@@ -166,7 +167,7 @@ internal class SyncWorker(context: Context, workerParameters: WorkerParameters, 
                     )
             )
             val workRequest = workManagerProvider.matrixOneTimeWorkRequestBuilder<SyncWorker>()
-                    .setConstraints(WorkManagerProvider.getWorkConstraints(homeServerCapabilitiesDataSource))
+                    .setConstraints(WorkManagerProvider.getWorkConstraints(workManagerConfig))
                     .setInputData(data)
                     .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
                     .setInitialDelay(if (forceImmediate) 0 else delayInSeconds, TimeUnit.SECONDS)

@@ -29,9 +29,8 @@ import androidx.work.WorkRequest
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
-import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.internal.session.SessionScope
-import org.matrix.android.sdk.internal.session.homeserver.HomeServerCapabilitiesDataSource
+import org.matrix.android.sdk.internal.session.workmanager.WorkManagerConfig
 import org.matrix.android.sdk.internal.worker.MatrixWorkerFactory
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -106,12 +105,12 @@ internal class WorkManagerProvider @Inject constructor(
         private const val MATRIX_SDK_TAG_PREFIX = "MatrixSDK-"
 
         fun getWorkConstraints(
-                homeServerCapabilitiesDataSource: HomeServerCapabilitiesDataSource,
+                workManagerConfig: WorkManagerConfig,
         ): Constraints {
-            val withNetworkConstraint = homeServerCapabilitiesDataSource.getHomeServerCapabilities()?.disableNetworkConstraint.orFalse().not()
+            val widthNetworkConstraint = workManagerConfig.withNetworkConstraint()
             return Constraints.Builder()
                     .apply {
-                        if (withNetworkConstraint) {
+                        if (widthNetworkConstraint) {
                             setRequiredNetworkType(NetworkType.CONNECTED)
                         } else {
                             Timber.w("Network constraint is disabled")
