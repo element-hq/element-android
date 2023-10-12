@@ -48,7 +48,6 @@ import kotlinx.coroutines.flow.flowOf
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.After
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
@@ -129,34 +128,17 @@ class DevicesViewModelTest {
     }
 
     @Test
-    @Ignore
     fun `given the viewModel when initializing it then verification listener is added`() {
-//        // Given
-//        val fakeVerificationService = givenVerificationService()
-//
-//        // When
-//        val viewModel = createViewModel()
-//
-//        // Then
-//        verify {
-//            fakeVerificationService.addListener(viewModel)
-//        }
-    }
+        // Given
+        val fakeVerificationService = givenVerificationService()
 
-    @Test
-    @Ignore
-    fun `given the viewModel when clearing it then verification listener is removed`() {
-//        // Given
-//        val fakeVerificationService = givenVerificationService()
-//
-//        // When
-//        val viewModel = createViewModel()
-//        viewModel.onCleared()
-//
-//        // Then
-//        verify {
-//            fakeVerificationService.removeListener(viewModel)
-//        }
+        // When
+        createViewModel()
+
+        // Then
+        verify {
+            fakeVerificationService.requestEventFlow()
+        }
     }
 
     @Test

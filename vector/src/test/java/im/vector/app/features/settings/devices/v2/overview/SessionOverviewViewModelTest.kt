@@ -48,7 +48,6 @@ import kotlinx.coroutines.flow.flowOf
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.After
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
@@ -140,22 +139,6 @@ class SessionOverviewViewModelTest {
         verify {
             fakeVerificationService.requestEventFlow()
         }
-    }
-
-    @Test
-    @Ignore
-    fun `given the viewModel when clearing it then verification listener is removed`() {
-//        // Given
-//        val fakeVerificationService = givenVerificationService()
-//
-//        // When
-//        val viewModel = createViewModel()
-//        viewModel.onCleared()
-//
-//        // Then
-//        verify {
-//            fakeVerificationService.removeListener(viewModel)
-//        }
     }
 
     @Test
