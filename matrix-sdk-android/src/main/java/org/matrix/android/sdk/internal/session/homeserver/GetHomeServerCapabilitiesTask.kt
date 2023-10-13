@@ -20,7 +20,6 @@ import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.MatrixPatterns.getServerName
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.wellknown.WellknownResult
-import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 import org.matrix.android.sdk.internal.auth.version.Versions
@@ -168,7 +167,7 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
                 }
                 homeServerCapabilitiesEntity.authenticationIssuer = getWellknownResult.wellKnown.unstableDelegatedAuthConfig?.issuer
                 homeServerCapabilitiesEntity.externalAccountManagementUrl = getWellknownResult.wellKnown.unstableDelegatedAuthConfig?.accountManagementUrl
-                homeServerCapabilitiesEntity.disableNetworkConstraint = getWellknownResult.wellKnown.disableNetworkConstraint.orFalse()
+                homeServerCapabilitiesEntity.disableNetworkConstraint = getWellknownResult.wellKnown.disableNetworkConstraint
             }
 
             homeServerCapabilitiesEntity.canLoginWithQrCode = canLoginWithQrCode(getCapabilitiesResult, getVersionResult)
