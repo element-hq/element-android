@@ -17,19 +17,24 @@
 package org.matrix.android.sdk.internal.session.workmanager
 
 import org.matrix.android.sdk.api.auth.data.Credentials
-import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.internal.session.homeserver.HomeServerCapabilitiesDataSource
 import javax.inject.Inject
 
+@Suppress("RedundantIf")
 internal class DefaultWorkManagerConfig @Inject constructor(
         private val credentials: Credentials,
         private val homeServerCapabilitiesDataSource: HomeServerCapabilitiesDataSource,
 ) : WorkManagerConfig {
     override fun withNetworkConstraint(): Boolean {
         return if (credentials.discoveryInformation?.disableNetworkConstraint == true) {
+            // Boolean `io.element.disable_network_constraint` explicitly set to `true` in the login response
+            false
+        } else if (homeServerCapabilitiesDataSource.getHomeServerCapabilities()?.disableNetworkConstraint == true) {
+            // Boolean `io.element.disable_network_constraint` explicitly set to `true` in the .well-known file
             false
         } else {
-            homeServerCapabilitiesDataSource.getHomeServerCapabilities()?.disableNetworkConstraint.orFalse().not()
+            // Default, use the Network constraint
+            true
         }
     }
 }

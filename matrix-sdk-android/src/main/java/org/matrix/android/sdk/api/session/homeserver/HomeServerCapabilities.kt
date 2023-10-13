@@ -94,7 +94,7 @@ data class HomeServerCapabilities(
         /**
          * If set to true, the SDK will not use the network constraint when configuring Worker for the WorkManager, provided in Wellknown.
          */
-        val disableNetworkConstraint: Boolean = false,
+        val disableNetworkConstraint: Boolean? = null,
 ) {
 
     enum class RoomCapabilitySupport {

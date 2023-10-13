@@ -25,6 +25,7 @@ internal class MigrateSessionTo054(realm: DynamicRealm) : RealmMigrator(realm, 5
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.get("HomeServerCapabilitiesEntity")
                 ?.addField(HomeServerCapabilitiesEntityFields.DISABLE_NETWORK_CONSTRAINT, Boolean::class.java)
+                ?.setNullable(HomeServerCapabilitiesEntityFields.DISABLE_NETWORK_CONSTRAINT, true)
                 ?.forceRefreshOfHomeServerCapabilities()
     }
 }
