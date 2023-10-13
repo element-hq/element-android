@@ -26,13 +26,16 @@ internal class DefaultWorkManagerConfig @Inject constructor(
         private val homeServerCapabilitiesDataSource: HomeServerCapabilitiesDataSource,
 ) : WorkManagerConfig {
     override fun withNetworkConstraint(): Boolean {
-        return if (credentials.discoveryInformation?.disableNetworkConstraint == true) {
+        val disableNetworkConstraint = homeServerCapabilitiesDataSource.getHomeServerCapabilities()?.disableNetworkConstraint
+        return if (disableNetworkConstraint != null) {
+            // Boolean `io.element.disable_network_constraint` explicitly set in the .well-known file
+            disableNetworkConstraint.not()
+        }
+        else if (credentials.discoveryInformation?.disableNetworkConstraint == true) {
             // Boolean `io.element.disable_network_constraint` explicitly set to `true` in the login response
             false
-        } else if (homeServerCapabilitiesDataSource.getHomeServerCapabilities()?.disableNetworkConstraint == true) {
-            // Boolean `io.element.disable_network_constraint` explicitly set to `true` in the .well-known file
-            false
-        } else {
+        }
+        else {
             // Default, use the Network constraint
             true
         }
