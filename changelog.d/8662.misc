@@ -1,0 +1,1 @@
+Take into account boolean "io.element.disable_network_constraint" from the .well-known file.
