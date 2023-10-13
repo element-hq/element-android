@@ -30,12 +30,10 @@ internal class DefaultWorkManagerConfig @Inject constructor(
         return if (disableNetworkConstraint != null) {
             // Boolean `io.element.disable_network_constraint` explicitly set in the .well-known file
             disableNetworkConstraint.not()
-        }
-        else if (credentials.discoveryInformation?.disableNetworkConstraint == true) {
+        } else if (credentials.discoveryInformation?.disableNetworkConstraint == true) {
             // Boolean `io.element.disable_network_constraint` explicitly set to `true` in the login response
             false
-        }
-        else {
+        } else {
             // Default, use the Network constraint
             true
         }
