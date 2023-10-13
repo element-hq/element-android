@@ -20,7 +20,7 @@ import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.internal.session.homeserver.HomeServerCapabilitiesDataSource
 import javax.inject.Inject
 
-@Suppress("RedundantIf")
+@Suppress("RedundantIf", "IfThenToElvis")
 internal class DefaultWorkManagerConfig @Inject constructor(
         private val credentials: Credentials,
         private val homeServerCapabilitiesDataSource: HomeServerCapabilitiesDataSource,
