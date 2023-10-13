@@ -25,7 +25,6 @@ import org.matrix.android.sdk.api.failure.isTokenError
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.session.SessionComponent
-import org.matrix.android.sdk.internal.session.homeserver.HomeServerCapabilitiesDataSource
 import org.matrix.android.sdk.internal.session.sync.SyncPresence
 import org.matrix.android.sdk.internal.session.sync.SyncTask
 import org.matrix.android.sdk.internal.session.workmanager.WorkManagerConfig

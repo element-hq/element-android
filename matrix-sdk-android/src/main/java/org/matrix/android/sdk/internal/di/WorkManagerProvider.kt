@@ -107,10 +107,10 @@ internal class WorkManagerProvider @Inject constructor(
         fun getWorkConstraints(
                 workManagerConfig: WorkManagerConfig,
         ): Constraints {
-            val widthNetworkConstraint = workManagerConfig.withNetworkConstraint()
+            val withNetworkConstraint = workManagerConfig.withNetworkConstraint()
             return Constraints.Builder()
                     .apply {
-                        if (widthNetworkConstraint) {
+                        if (withNetworkConstraint) {
                             setRequiredNetworkType(NetworkType.CONNECTED)
                         } else {
                             Timber.w("Network constraint is disabled")
