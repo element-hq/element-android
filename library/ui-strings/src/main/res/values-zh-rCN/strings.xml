@@ -19,8 +19,8 @@
     <string name="notice_placed_voice_call">%s 发起了一次语音通话。</string>
     <string name="notice_answered_call">%s 已接听通话。</string>
     <string name="notice_ended_call">%s 已结束通话。</string>
-    <string name="notice_room_visibility_invited">所有房间成员，从他们被邀请开始。</string>
-    <string name="notice_room_visibility_joined">所有房间成员，从他们加入开始。</string>
+    <string name="notice_room_visibility_invited">所有房间成员，从他们被邀请的那一刻起。</string>
+    <string name="notice_room_visibility_joined">所有房间成员，从他们加入时起。</string>
     <string name="notice_room_visibility_shared">所有房间成员。</string>
     <string name="notice_room_visibility_world_readable">任何人。</string>
     <string name="notice_avatar_changed_too">（头像也被更改）</string>
@@ -32,7 +32,7 @@
     <string name="matrix_error">Matrix 错误</string>
     <string name="medium_email">电子邮件地址</string>
     <string name="medium_phone_number">手机号码</string>
-    <string name="notice_room_withdraw">%1$s 撤回了对 %2$s 的邀请</string>
+    <string name="notice_room_withdraw">%1$s撤回了%2$s的邀请</string>
     <string name="notice_made_future_room_visibility">%1$s 让未来的房间历史记录对 %2$s 可见</string>
     <string name="notice_room_third_party_invite">%1$s 向 %2$s 发送了加入房间的邀请</string>
     <string name="notice_room_third_party_registered_invite">%1$s 接受了 %2$s 的邀请</string>
@@ -91,7 +91,7 @@
     <string name="notice_room_remove_by_you">你移除了 %1$s</string>
     <string name="notice_room_unban_by_you">你解封了 %1$s</string>
     <string name="notice_room_ban_by_you">你封禁了 %1$s</string>
-    <string name="notice_room_withdraw_by_you">你撤回了对 %1$s 的邀请</string>
+    <string name="notice_room_withdraw_by_you">你撤回了%1$s的邀请</string>
     <string name="notice_avatar_url_changed_by_you">你更换了你的头像</string>
     <string name="notice_display_name_set_by_you">你将你的显示名称设置为 %1$s</string>
     <string name="notice_display_name_changed_from_by_you">你将显示名称从 %1$s 更改为 %2$s</string>
@@ -160,8 +160,8 @@
     <string name="notice_direct_room_third_party_revoked_invite">%1$s 撤回了对 %2$s 的邀请</string>
     <string name="notice_direct_room_third_party_invite_by_you">你邀请了 %1$s</string>
     <string name="notice_direct_room_third_party_invite">%1$s 邀请了 %2$s</string>
-    <string name="notice_direct_room_update_by_you">你在此处升级。</string>
-    <string name="notice_direct_room_update">%s 是升级后的房间。</string>
+    <string name="notice_direct_room_update_by_you">你升级了这里。</string>
+    <string name="notice_direct_room_update">%s升级了这里。</string>
     <string name="notice_made_future_direct_room_visibility_by_you">你使未来的消息对 %1$s 可见</string>
     <string name="notice_made_future_direct_room_visibility">%1$s 使未来的消息对 %2$s 可见</string>
     <string name="notice_direct_room_leave_by_you">你离开了房间</string>
@@ -1765,10 +1765,10 @@
     <string name="call_resume_action">继续</string>
     <string name="error_unauthorized">未验证，缺少有效验证凭证</string>
     <string name="system_theme">系统默认</string>
-    <string name="notice_room_server_acl_updated_banned">• 匹配 %s 的服务器现已被屏蔽。</string>
-    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• 已封禁匹配 IP 地址的服务器。</string>
-    <string name="notice_room_server_acl_set_ip_literals_allowed">• 已允许匹配 IP 地址的服务器。</string>
-    <string name="notice_room_server_acl_set_banned">• 匹配 %s 的服务器已被屏蔽。</string>
+    <string name="notice_room_server_acl_updated_banned">• 匹配%s的服务器现已封禁。</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• 封禁匹配IP文字的服务器。</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• 允许与IP文字匹配的服务器。</string>
+    <string name="notice_room_server_acl_set_banned">• 匹配%s的服务器已被封禁。</string>
     <string name="notice_room_server_acl_set_allowed">• 已允许匹配 %s 的服务器。</string>
     <string name="a11y_checked">已勾选</string>
     <string name="a11y_selected">已选中</string>
@@ -2143,7 +2143,7 @@
     <string name="call_ended_user_busy_title">用户忙</string>
     <string name="audio_call_with_participant">与 %s 音频通话</string>
     <string name="video_call_with_participant">和 %s 视频通话</string>
-    <string name="call_ringing">来电响铃中…</string>
+    <string name="call_ringing">通话正在响铃……</string>
     <string name="spaces">空间</string>
     <string name="space_add_space_to_any_space_you_manage">将一个空间添加到你管理的任何空间。</string>
     <string name="space_add_existing_spaces">添加现有空间</string>
@@ -2264,7 +2264,7 @@
     <string name="action_enable">启用</string>
     <string name="room_error_access_unauthorized">你不能加入这个房间</string>
     <plurals name="notice_room_server_acl_changes">
-        <item quantity="other">修改服务器 %d 的 ACLs</item>
+        <item quantity="other">服务器%d访问控制列表变更</item>
     </plurals>
     <string name="thread_list_empty_subtitle">消息列帮助你的对话不离题且易于跟踪。</string>
     <string name="thread_list_modal_all_threads_subtitle">显示当前房间的所有消息列</string>
