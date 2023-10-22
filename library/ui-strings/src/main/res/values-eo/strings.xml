@@ -1091,7 +1091,7 @@
     <string name="push_gateway_item_device_name">session_name:</string>
     <string name="push_gateway_item_app_display_name">app_display_name:</string>
     <string name="push_gateway_item_push_key">push_key:</string>
-    <string name="push_gateway_item_app_id">app_id:</string>
+    <string name="push_gateway_item_app_id">Aplika identigilo:</string>
     <string name="room_settings_unset_main_address">Malagordi kiel ĉefadreson</string>
     <string name="room_settings_set_main_address">Agordi kiel ĉefadreson</string>
     <string name="room_settings_labs_warning_message">Ĉi tiuj funkcioj estas eksperimentaj, kaj povas neatendite rompiĝi. Uzu nur zorge.</string>
