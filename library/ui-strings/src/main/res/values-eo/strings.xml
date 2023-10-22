@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="notice_room_invite_no_invitee">Invito de %s</string>
-    <string name="notice_room_invite">%1$s invitis uzanton %2$s</string>
+    <string name="notice_room_invite">%1$s invitis %2$s</string>
     <string name="notice_room_invite_you">%1$s invitis vin</string>
-    <string name="notice_room_join">%1$s envenis</string>
+    <string name="notice_room_join">%1$s aliĝis al la ĉambro</string>
     <string name="notice_room_leave">%1$s foriris de la ĉambro</string>
     <string name="notice_room_reject">%1$s rifuzis la inviton</string>
-    <string name="notice_room_remove">%1$s forpelis uzanton %2$s</string>
-    <string name="notice_room_unban">%1$s malforbaris uzanton %2$s</string>
-    <string name="notice_room_ban">%1$s forbaris uzanton %2$s</string>
+    <string name="notice_room_remove">%1$s forpelis %2$s</string>
+    <string name="notice_room_unban">%1$s malforbaris %2$s</string>
+    <string name="notice_room_ban">%1$s forbaris %2$s</string>
     <string name="notice_room_withdraw">%1$s nuligis inviton por %2$s</string>
-    <string name="notice_avatar_url_changed">%1$s ŝanĝis sian profilbildon</string>
+    <string name="notice_avatar_url_changed">%1$s ŝanĝis sian avataron</string>
     <string name="notice_crypto_unable_to_decrypt">** Ne eblas malĉifri: %s **</string>
     <string name="notice_crypto_error_unknown_inbound_session_id">La aparato de la sendinto ne sendis al ni la ŝlosilojn por tiu mesaĝo.</string>
     <string name="notice_display_name_set">%1$s ŝanĝis sian prezentan nomon al %2$s</string>
     <string name="notice_display_name_changed_from">%1$s ŝanĝis sian prezentan nomon de %2$s al %3$s</string>
-    <string name="notice_display_name_removed">%1$s forigis sian prezentan nomon (%2$s)</string>
+    <string name="notice_display_name_removed">%1$s forigis sian prezentan nomon (estis %2$s)</string>
     <string name="notice_room_topic_changed">%1$s ŝanĝis la temon al: %2$s</string>
     <string name="notice_room_name_changed">%1$s ŝanĝis nomon de la ĉambro al: %2$s</string>
-    <string name="notice_placed_video_call">%s vidvokis.</string>
+    <string name="notice_placed_video_call">%s videovokis.</string>
     <string name="notice_placed_voice_call">%s voĉvokis.</string>
     <string name="notice_answered_call">%s respondis la vokon.</string>
     <string name="notice_ended_call">%s finis la vokon.</string>
@@ -27,31 +27,31 @@
     <string name="notice_room_visibility_joined">ĉiuj ĉambranoj, ekde siaj aliĝoj.</string>
     <string name="notice_room_visibility_shared">ĉiuj ĉambranoj.</string>
     <string name="notice_room_visibility_world_readable">ĉiu ajn.</string>
-    <string name="notice_room_update">%s gradaltigis la ĉambron.</string>
+    <string name="notice_room_update">%s altgradigis la ĉambron.</string>
     <string name="notice_room_third_party_invite">%1$s sendis aliĝan inviton al %2$s</string>
     <string name="notice_room_third_party_revoked_invite">%1$s nuligis la aliĝan inviton por %2$s</string>
     <string name="notice_room_third_party_registered_invite">%1$s akceptis la inviton por %2$s</string>
-    <string name="unable_to_send_message">Ne povas sendi mesaĝon</string>
-    <string name="matrix_error">Matrix-eraro</string>
+    <string name="unable_to_send_message">Ne eblas sendi mesaĝon</string>
+    <string name="matrix_error">Eraro de Matrix</string>
     <string name="medium_email">Retpoŝtadreso</string>
     <string name="medium_phone_number">Telefonnumero</string>
     <string name="room_displayname_room_invite">Invito al ĉambro</string>
     <string name="room_displayname_two_members">%1$s kaj %2$s</string>
     <string name="room_displayname_empty_room">Malplena ĉambro</string>
-    <string name="initial_sync_start_importing_account">Komenca spegulado:
+    <string name="initial_sync_start_importing_account">Komenca sinkronigo:
 \nEnportante konton…</string>
-    <string name="initial_sync_start_importing_account_crypto">Komenca spegulado:
+    <string name="initial_sync_start_importing_account_crypto">Komenca sinkronigo:
 \nEnportante ĉifrilojn</string>
-    <string name="initial_sync_start_importing_account_rooms">Komenca spegulado:
+    <string name="initial_sync_start_importing_account_rooms">Komenca sinkronigo:
 \nEnportante ĉambrojn</string>
-    <string name="initial_sync_start_importing_account_joined_rooms">Komenca spegulado:
+    <string name="initial_sync_start_importing_account_joined_rooms">Komenca sinkronigo:
 \nEnportante viajn konversaciojn
 \nSe vi aliĝis tre multaj ĉambroj, tiu eble daŭras longe</string>
-    <string name="initial_sync_start_importing_account_invited_rooms">Komenca spegulado:
+    <string name="initial_sync_start_importing_account_invited_rooms">Komenca sinkronigo:
 \nEnportante ĉambrojn de invitoj</string>
-    <string name="initial_sync_start_importing_account_left_rooms">Komenca spegulado:
+    <string name="initial_sync_start_importing_account_left_rooms">Komenca sinkronigo:
 \nEnportante forlasitajn ĉambrojn</string>
-    <string name="initial_sync_start_importing_account_data">Komenca spegulado:
+    <string name="initial_sync_start_importing_account_data">Komenca sinkronigo:
 \nEnportante datumojn de konto</string>
     <string name="event_status_sending_message">Sendante mesaĝon…</string>
     <string name="notice_avatar_changed_too">(ankaŭ profilbildo ŝanĝiĝis)</string>
@@ -60,12 +60,12 @@
     <string name="notice_room_invite_no_invitee_with_reason">Invito de %1$s. Kialo: %2$s</string>
     <string name="notice_room_invite_with_reason">%1$s invitis uzanton %2$s. Kialo: %3$s</string>
     <string name="notice_room_invite_you_with_reason">%1$s invitis vin. Kialo: %2$s</string>
-    <string name="notice_room_join_with_reason">%1$s envenis. Kialo: %2$s</string>
+    <string name="notice_room_join_with_reason">%1$s aliĝis al la ĉambro. Kialo: %2$s</string>
     <string name="notice_room_leave_with_reason">%1$s foriris de la ĉambro. Kialo: %2$s</string>
     <string name="notice_room_reject_with_reason">%1$s rifuzis la inviton. Kialo: %2$s</string>
-    <string name="notice_room_remove_with_reason">%1$s forpelis uzanton %2$s. Kialo: %3$s</string>
-    <string name="notice_room_unban_with_reason">%1$s malforbaris uzanton %2$s. Kialo: %3$s</string>
-    <string name="notice_room_ban_with_reason">%1$s forbaris uzanton %2$s. Kialo: %3$s</string>
+    <string name="notice_room_remove_with_reason">%1$s forpelis %2$s. Kialo: %3$s</string>
+    <string name="notice_room_unban_with_reason">%1$s malforbaris %2$s. Kialo: %3$s</string>
+    <string name="notice_room_ban_with_reason">%1$s forbaris %2$s. Kialo: %3$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason">%1$s akceptis la inviton por %2$s. Kialo: %3$s</string>
     <string name="notice_room_withdraw_with_reason">%1$s nuligis la inviton por %2$s. Kialo: %3$s</string>
     <plurals name="notice_room_aliases_added">
@@ -79,20 +79,20 @@
     <string name="notice_room_aliases_added_and_removed">%1$s aldonis %2$s kaj forigis %3$s kiel adresojn por ĉi tiu ĉambro.</string>
     <string name="notice_room_canonical_alias_set">%1$s agordis la ĉefadreson de ĉi tiu ĉambro al %2$s.</string>
     <string name="notice_room_canonical_alias_unset">%1$s forigis la ĉefadreson de ĉi tiu ĉambro.</string>
-    <string name="notice_room_guest_access_can_join">%1$s permesis al gastoj enveni.</string>
-    <string name="notice_room_guest_access_forbidden">%1$s malpermesis al gastoj enveni.</string>
+    <string name="notice_room_guest_access_can_join">%1$s permesis gastojn aliĝi al la ĉambro.</string>
+    <string name="notice_room_guest_access_forbidden">%1$s malpermesis gastojn aliĝi al la ĉambro.</string>
     <string name="notice_end_to_end_ok">%1$s ŝaltis tutvojan ĉifradon.</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s ŝaltis tutvojan ĉifradon (kun nerekonita algoritmo %2$s).</string>
     <string name="notice_power_level_changed_by_you">Vi ŝanĝis la povnivelon de %1$s.</string>
     <string name="notice_power_level_changed">%1$s sanĝis la povnivelon de %2$s.</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">Vi ŝaltis tutvojan ĉifradon (kun nerekonita algoritmo %1$s).</string>
     <string name="notice_end_to_end_ok_by_you">Vi ŝaltis tutvojan ĉifradon.</string>
-    <string name="notice_direct_room_guest_access_forbidden_by_you">Vi malpermesis al gastoj aliĝi.</string>
-    <string name="notice_direct_room_guest_access_forbidden">%1$s malpermesis al gastoj aliĝi.</string>
-    <string name="notice_room_guest_access_forbidden_by_you">Vi malpermesis al gastoj enveni.</string>
-    <string name="notice_direct_room_guest_access_can_join_by_you">Vi permesis al gastoj aliĝi.</string>
-    <string name="notice_direct_room_guest_access_can_join">%1$s permesis al gastoj aliĝi.</string>
-    <string name="notice_room_guest_access_can_join_by_you">Vi permesis al gastoj enveni.</string>
+    <string name="notice_direct_room_guest_access_forbidden_by_you">Vi malpermesis gastojn aliĝi al la ĉambro.</string>
+    <string name="notice_direct_room_guest_access_forbidden">%1$s malpermesis gastojn aliĝi al la ĉambro.</string>
+    <string name="notice_room_guest_access_forbidden_by_you">Vi malpermesis gastojn aliĝi al la ĉambro.</string>
+    <string name="notice_direct_room_guest_access_can_join_by_you">Vi permesis gastojn aliĝi ĉi tie.</string>
+    <string name="notice_direct_room_guest_access_can_join">%1$s permesis gastojn aliĝi ĉi tie.</string>
+    <string name="notice_room_guest_access_can_join_by_you">Vi permesis gastojn aliĝi al la ĉambro.</string>
     <string name="notice_room_canonical_alias_unset_by_you">Vi forigis la ĉefadreson de ĉi tiu ĉambro.</string>
     <string name="notice_room_canonical_alias_set_by_you">Vi agordis al ĉefadreson de ĉi tiu ĉambro al %1$s.</string>
     <string name="notice_room_aliases_added_and_removed_by_you">Vi aldonis %1$s kaj forigis %2$s kiel adresojn por ĉi tiu ĉambro.</string>
@@ -106,24 +106,24 @@
     </plurals>
     <string name="notice_room_withdraw_with_reason_by_you">Vi nuligis la inviton por %1$s. Kialo: %2$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason_by_you">Vi akceptis la inviton por %1$s. Kialo: %2$s</string>
-    <string name="notice_room_ban_with_reason_by_you">Vi forbaris uzanton %1$s. Kialo: %2$s</string>
-    <string name="notice_room_unban_with_reason_by_you">Vi malforbaris uzanton %1$s. Kialo: %2$s</string>
-    <string name="notice_room_remove_with_reason_by_you">Vi forpelis uzanton %1$s. Kialo: %2$s</string>
+    <string name="notice_room_ban_with_reason_by_you">Vi forbaris %1$s. Kialo: %2$s</string>
+    <string name="notice_room_unban_with_reason_by_you">Vi malforbaris %1$s. Kialo: %2$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Vi forpelis %1$s. Kialo: %2$s</string>
     <string name="notice_room_reject_with_reason_by_you">Vi rifuzis la inviton. Kialo: %1$s</string>
     <string name="notice_direct_room_leave_with_reason_by_you">Vi foriris. Kialo: %1$s</string>
     <string name="notice_direct_room_leave_with_reason">%1$s foriris. Kialo: %2$s</string>
     <string name="notice_room_leave_with_reason_by_you">Vi foriris de la ĉambro. Kialo: %1$s</string>
-    <string name="notice_room_join_with_reason_by_you">Vi envenis. Kialo: %1$s</string>
+    <string name="notice_room_join_with_reason_by_you">Vi aliĝis al la ĉambro. Kialo: %1$s</string>
     <string name="notice_direct_room_join_with_reason_by_you">Vi aliĝis. Kialo: %1$s</string>
     <string name="notice_direct_room_join_with_reason">%1$s aliĝis. Kialo: %2$s</string>
     <string name="notice_room_invite_with_reason_by_you">Vi invitis uzanton %1$s. Kialo: %2$s</string>
     <string name="notice_room_invite_no_invitee_with_reason_by_you">Via invito. Kialo: %1$s</string>
     <string name="notice_power_level_diff">%1$s de %2$s al %3$s</string>
     <string name="power_level_custom_no_value">Propra</string>
-    <string name="power_level_default">Ordinara</string>
+    <string name="power_level_default">Defaŭlta</string>
     <string name="power_level_custom">Propra (%1$d)</string>
-    <string name="power_level_moderator">Reguligisto</string>
-    <string name="power_level_admin">Administranto</string>
+    <string name="power_level_moderator">Kontrolanto</string>
+    <string name="power_level_admin">Administristo</string>
     <string name="notice_widget_modified_by_you">Vi ŝanĝis la fenestraĵon %1$s</string>
     <string name="notice_widget_modified">%1$s ŝanĝis la fenestraĵon %2$s</string>
     <string name="notice_widget_removed_by_you">Vi forigis la fenestraĵon %1$s</string>
@@ -137,42 +137,42 @@
     <string name="notice_direct_room_third_party_invite_by_you">Vi invitis uzanton %1$s</string>
     <string name="notice_direct_room_third_party_invite">%1$s invitis uzanton %2$s</string>
     <string name="notice_room_third_party_invite_by_you">Vi sendis aliĝan inviton al %1$s</string>
-    <string name="notice_room_avatar_removed_by_you">Vi forigis bildon de la ĉambro</string>
-    <string name="notice_room_avatar_removed">%1$s forigis bildon de la ĉambro</string>
+    <string name="notice_room_avatar_removed_by_you">Vi forigis avataron de la ĉambro</string>
+    <string name="notice_room_avatar_removed">%1$s forigis avataron de la ĉambro</string>
     <string name="notice_room_topic_removed_by_you">Vi forigis temon de la ĉambro</string>
     <string name="notice_room_name_removed_by_you">Vi forigis nomon de la ĉambro</string>
-    <string name="notice_direct_room_update_by_you">Vi gradaltigis la interparolon.</string>
-    <string name="notice_direct_room_update">%s gradaltigis la interparolon.</string>
-    <string name="notice_room_update_by_you">Vi gradaltigis la ĉambron.</string>
-    <string name="notice_made_future_direct_room_visibility">%1$s videbligis al %2$s estontajn mesaĝojn</string>
-    <string name="notice_made_future_direct_room_visibility_by_you">Vi videbligis al %1$s estontajn mesaĝojn</string>
+    <string name="notice_direct_room_update_by_you">Vi altgradigis la interparolon.</string>
+    <string name="notice_direct_room_update">%s altgradigis la interparolon.</string>
+    <string name="notice_room_update_by_you">Vi altgradigis la ĉambron.</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s videbligis estontajn mesaĝojn al %2$s</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">Vi videbligis estontajn mesaĝojn al %1$s</string>
     <string name="notice_made_future_room_visibility_by_you">Vi videbligis estontan historion de ĉambro al %1$s</string>
     <string name="notice_ended_call_by_you">Vi finis la vokon.</string>
     <string name="notice_answered_call_by_you">Vi respondis la vokon.</string>
     <string name="notice_call_candidates_by_you">Vi sendis datumojn por prepari la vokon.</string>
     <string name="notice_call_candidates">%s sendis datumojn por prepari la vokon.</string>
     <string name="notice_placed_voice_call_by_you">Vi voĉvokis.</string>
-    <string name="notice_placed_video_call_by_you">Vi vidvokis.</string>
+    <string name="notice_placed_video_call_by_you">Vi videovokis.</string>
     <string name="notice_room_name_changed_by_you">Vi ŝanĝis la nomon de la ĉambro al: %1$s</string>
-    <string name="notice_room_avatar_changed_by_you">Vi ŝanĝis la bildon de la ĉambro</string>
-    <string name="notice_room_avatar_changed">%1$s ŝanĝis la bildon de la ĉambro</string>
+    <string name="notice_room_avatar_changed_by_you">Vi ŝanĝis la avataron de la ĉambro</string>
+    <string name="notice_room_avatar_changed">%1$s ŝanĝis la avataron de la ĉambro</string>
     <string name="notice_room_topic_changed_by_you">Vi ŝanĝis la temon al: %1$s</string>
-    <string name="notice_display_name_removed_by_you">Vi forigis vian prezentan nomon (%1$s)</string>
+    <string name="notice_display_name_removed_by_you">Vi forigis vian prezentan nomon (estis %1$s)</string>
     <string name="notice_display_name_changed_from_by_you">Vi ŝanĝis vian prezentan nomon de %1$s al %2$s</string>
     <string name="notice_display_name_set_by_you">Vi ŝanĝis vian prezentan nomon al %1$s</string>
-    <string name="notice_avatar_url_changed_by_you">Vi ŝanĝis vian profilbildon</string>
+    <string name="notice_avatar_url_changed_by_you">Vi ŝanĝis vian avataron</string>
     <string name="notice_room_withdraw_by_you">Vi nuligis inviton por %1$s</string>
-    <string name="notice_room_ban_by_you">Vi forbaris uzanton %1$s</string>
-    <string name="notice_room_unban_by_you">Vi malforbaris uzanton %1$s</string>
-    <string name="notice_room_remove_by_you">Vi forpelis uzanton %1$s</string>
+    <string name="notice_room_ban_by_you">Vi forbaris %1$s</string>
+    <string name="notice_room_unban_by_you">Vi malforbaris %1$s</string>
+    <string name="notice_room_remove_by_you">Vi forpelis %1$s</string>
     <string name="notice_room_reject_by_you">Vi rifuzis la inviton</string>
     <string name="notice_direct_room_leave_by_you">Vi foriris de la ĉambro</string>
     <string name="notice_direct_room_leave">%1$s foriris de la ĉambro</string>
     <string name="notice_room_leave_by_you">Vi foriris de la ĉambro</string>
-    <string name="notice_direct_room_join_by_you">Vi envenis</string>
-    <string name="notice_direct_room_join">%1$s envenis</string>
-    <string name="notice_room_join_by_you">Vi envenis</string>
-    <string name="notice_room_invite_by_you">Vi invitis uzanton %1$s</string>
+    <string name="notice_direct_room_join_by_you">Vi aliĝis</string>
+    <string name="notice_direct_room_join">%1$s aliĝis</string>
+    <string name="notice_room_join_by_you">Vi aliĝis al la ĉambro</string>
+    <string name="notice_room_invite_by_you">Vi invitis %1$s</string>
     <string name="notice_direct_room_created_by_you">Vi kreis la diskuton</string>
     <string name="notice_direct_room_created">%1$s kreis la diskuton</string>
     <string name="notice_room_created_by_you">Vi kreis la ĉambron</string>
@@ -1088,10 +1088,10 @@
     <string name="encryption_information_device_name">Publika nomo</string>
     <string name="encryption_information_decryption_error">Eraris malĉifrado</string>
     <string name="settings_theme">Haŭto</string>
-    <string name="push_gateway_item_device_name">session_name:</string>
-    <string name="push_gateway_item_app_display_name">app_display_name:</string>
-    <string name="push_gateway_item_push_key">push_key:</string>
-    <string name="push_gateway_item_app_id">Aplika identigilo:</string>
+    <string name="push_gateway_item_device_name">Sesia Afiŝa Nomo:</string>
+    <string name="push_gateway_item_app_display_name">Aplika Afiŝa Nomo:</string>
+    <string name="push_gateway_item_push_key">Puŝklavo:</string>
+    <string name="push_gateway_item_app_id">App ID:</string>
     <string name="room_settings_unset_main_address">Malagordi kiel ĉefadreson</string>
     <string name="room_settings_set_main_address">Agordi kiel ĉefadreson</string>
     <string name="room_settings_labs_warning_message">Ĉi tiuj funkcioj estas eksperimentaj, kaj povas neatendite rompiĝi. Uzu nur zorge.</string>
@@ -1698,7 +1698,7 @@
     <string name="action_unpublish">Malpublikigi</string>
     <string name="action_add">Aldoni</string>
     <string name="start_chatting">Ekbabili</string>
-    <string name="system_theme">Implicita de sistemo</string>
+    <string name="system_theme">Defaŭlta de sistemo</string>
     <string name="jitsi_leave_conf_to_join_another_one_content">Ĉu forlasi la nunan grupan vokon kaj iri al la alia\?</string>
     <string name="room_settings_room_version_title">Versio de ĉambro</string>
     <string name="room_alias_publish_to_directory_error">Ne povis akiri la nunan videblecon en la katalogo de ĉambroj (%1$s).</string>
@@ -1754,9 +1754,9 @@
         <item quantity="one">%1$s aldonis la alternativan adreson %2$s por ĉi tiu ĉambro.</item>
         <item quantity="other">%1$s aldonis la alternativajn adresojn %2$s por ĉi tiu ĉambro.</item>
     </plurals>
-    <string name="initial_sync_start_downloading">Komenca spegulado:
+    <string name="initial_sync_start_downloading">Komenca sinkronigo:
 \nElŝutante datumojn…</string>
-    <string name="initial_sync_start_server_computing">Komenca Spegulado:
+    <string name="initial_sync_start_server_computing">Komenca Sinkronigo:
 \nAtendante respondon de servilo…</string>
     <string name="room_displayname_empty_room_was">Malplena ĉambro (estis %s)</string>
     <plurals name="room_displayname_four_and_more_members">
@@ -1765,8 +1765,8 @@
     </plurals>
     <string name="room_displayname_4_members">%1$s, %2$s, %3$s kaj %4$s</string>
     <string name="room_displayname_3_members">%1$s, %2$s kaj %3$s</string>
-    <string name="notice_room_server_acl_allow_is_empty">🎉 Partoprenado de ĉiuj serviloj estas malpermesita! Ĉi tiu ĉambro ne plu uzeblas.</string>
-    <string name="notice_room_server_acl_updated_no_change">Senŝanĝe.</string>
+    <string name="notice_room_server_acl_allow_is_empty">🎉 Ĉiuj serviloj estas malpermesitaj partopreni! Ĉi tiu ĉambro ne plu uzeblas.</string>
+    <string name="notice_room_server_acl_updated_no_change">Neniu ŝanĝo.</string>
     <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Serviloj akordaj kun precizaj IP-adresoj nun estas forbaritaj.</string>
     <string name="notice_room_server_acl_updated_ip_literals_allowed">• Serviloj akordaj kun precizaj IP-adresoj nun estas permesitaj.</string>
     <string name="notice_room_server_acl_updated_was_banned">• Serviloj akordaj kun %s foriĝis de la listo de forbaritaj.</string>
@@ -1779,8 +1779,8 @@
     <string name="notice_room_server_acl_set_ip_literals_allowed">• Serviloj akordaj kun precizaj IP-adresoj estas permesitaj.</string>
     <string name="notice_room_server_acl_set_allowed">• Serviloj akordaj kun %s estas permesitaj.</string>
     <string name="notice_room_server_acl_set_banned">• Serviloj akordaj kun %s estas forbaritaj.</string>
-    <string name="notice_room_server_acl_set_title_by_you">Vi agordis la alirpermesojn por serviloj por ĉi tiu ĉambro.</string>
-    <string name="notice_room_server_acl_set_title">%s agordis la alirpermesojn por serviloj por ĉi tiu ĉambro.</string>
+    <string name="notice_room_server_acl_set_title_by_you">Vi agordis la alirpermesojn por serviloj (ACL) por ĉi tiu ĉambro.</string>
+    <string name="notice_room_server_acl_set_title">%s agordis la alirpermesojn por serviloj (ACL) por ĉi tiu ĉambro.</string>
     <string name="call_transfer_users_tab_title">Uzantoj</string>
     <string name="call_transfer_failure">Eraris transdonado de voko</string>
     <string name="call_transfer_title">Transdonu</string>
@@ -2198,4 +2198,37 @@
     <string name="spaces">Aroj</string>
     <string name="initial_sync_request_reason_unignored_users">- Iom uzantoj reatentita</string>
     <string name="settings_mentions_at_room">\@room</string>
+    <string name="all_chats">Ĉiuj Babilejoj</string>
+    <plurals name="x_selected">
+        <item quantity="one">%1$d elektita</item>
+        <item quantity="other">%1$d elektitaj</item>
+    </plurals>
+    <string name="action_view_threads">Vidi mesaĝarojn</string>
+    <string name="push_gateway_item_enabled">Ebligita:</string>
+    <string name="push_gateway_item_device_id">Identigilo de sesio:</string>
+    <string name="time_unit_minute_short">min</string>
+    <string name="initial_sync_request_title">Komenca sinkroniga peto</string>
+    <string name="notification_listening_for_notifications">Aŭskultante sciigojn</string>
+    <string name="change_space">Ŝanĝi Aron</string>
+    <string name="push_gateway_item_profile_tag">Etikedo de profila:</string>
+    <string name="sign_out_failed_dialog_message">Ne povas atingi la hejmservilon. Se vi elsalutas ĉiuokaze, ĉi tiu aparato ne estos forigita de listo de viaj aparatoj, vi eble volas forigi ĝin per alia kliento.</string>
+    <string name="sign_out_anyway">Tamen elsaluti</string>
+    <string name="time_unit_second_short">s</string>
+    <string name="a11y_expand_space_children">Etendi %s infanojn</string>
+    <string name="start_chat">Komenci Babiladon</string>
+    <string name="create_room">Krei Ĉambron</string>
+    <string name="explore_rooms">Esplori Ĉambrojn</string>
+    <plurals name="notice_room_server_acl_changes">
+        <item quantity="one">%d ŝanĝo de ACL de servilaj</item>
+        <item quantity="other">%d ŝanĝoj de ACL de servilaj</item>
+    </plurals>
+    <string name="notice_voice_broadcast_ended">%1$s finis voĉan elsendon.</string>
+    <string name="notice_voice_broadcast_ended_by_you">Vi finis voĉan elsendon.</string>
+    <string name="room_error_access_unauthorized">Vi ne rajtas aliĝi al ĉi tiu ĉambro</string>
+    <string name="a11y_collapse_space_children">Maletendi %s infanojn</string>
+    <string name="initial_sync_request_content">${app_name} devas fari klaran kaŝmemoron por esti ĝisdatigita, pro la sekva kialo:
+\n%s
+\n
+\nNotu, ke ĉi tiu ago rekomencos la apon kaj ĝi eble daŭros iom da tempo.</string>
+    <string name="time_unit_hour_short">h</string>
 </resources>
