@@ -1981,8 +1981,8 @@
     <string name="use_as_default_and_do_not_ask_again">设置为默认值，并不再询问</string>
     <string name="option_always_ask">总是询问</string>
     <string name="spaces_header">空间</string>
-    <string name="settings_room_directory_show_all_rooms_summary">显示房间目录中的所有房间，包括带有脏标的房间。</string>
-    <string name="settings_room_directory_show_all_rooms">显示带有脏标的房间</string>
+    <string name="settings_room_directory_show_all_rooms_summary">显示房间目录中的所有房间，包括带有露骨内容的房间。</string>
+    <string name="settings_room_directory_show_all_rooms">显示带有露骨内容的房间</string>
     <string name="settings_category_room_directory">房间目录</string>
     <string name="suggested_header">推荐的房间</string>
     <string name="dialog_edit_hint">新值</string>
