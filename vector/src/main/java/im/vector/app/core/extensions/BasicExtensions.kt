@@ -21,6 +21,7 @@ import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.extensions.ensurePrefix
+import org.matrix.android.sdk.api.extensions.isEmail
 
 fun Boolean.toOnOff() = if (this) "ON" else "OFF"
 
@@ -29,7 +30,7 @@ inline fun <T> T.ooi(block: (T) -> Unit): T = also(block)
 /**
  * Check if a CharSequence is an email.
  */
-fun CharSequence.isEmail() = Patterns.EMAIL_ADDRESS.matcher(this).matches()
+fun CharSequence.isEmail() = this.isEmail()
 
 fun CharSequence.isMatrixId() = MatrixPatterns.isUserId(this.toString())
 

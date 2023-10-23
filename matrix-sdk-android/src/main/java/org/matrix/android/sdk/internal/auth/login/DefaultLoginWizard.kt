@@ -16,11 +16,11 @@
 
 package org.matrix.android.sdk.internal.auth.login
 
-import android.util.Patterns
 import org.matrix.android.sdk.api.auth.LoginType
 import org.matrix.android.sdk.api.auth.login.LoginProfileInfo
 import org.matrix.android.sdk.api.auth.login.LoginWizard
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
+import org.matrix.android.sdk.api.extensions.isEmail
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.auth.AuthAPI
@@ -59,7 +59,7 @@ internal class DefaultLoginWizard(
             initialDeviceName: String,
             deviceId: String?
     ): Session {
-        val loginParams = if (Patterns.EMAIL_ADDRESS.matcher(login).matches()) {
+        val loginParams = if (login.isEmail()) {
             PasswordLoginParams.thirdPartyIdentifier(
                     medium = ThreePidMedium.EMAIL,
                     address = login,
