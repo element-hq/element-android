@@ -1,2 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="power_level_moderator">Модератор</string>
+    <string name="power_level_admin">Админ</string>
+</resources>
