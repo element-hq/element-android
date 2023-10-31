@@ -90,6 +90,11 @@ data class HomeServerCapabilities(
          * Authentication issuer for use with MSC3824 delegated OIDC, provided in Wellknown.
          */
         val authenticationIssuer: String? = null,
+
+        /**
+         * If set to true, the SDK will not use the network constraint when configuring Worker for the WorkManager, provided in Wellknown.
+         */
+        val disableNetworkConstraint: Boolean? = null,
 ) {
 
     enum class RoomCapabilitySupport {

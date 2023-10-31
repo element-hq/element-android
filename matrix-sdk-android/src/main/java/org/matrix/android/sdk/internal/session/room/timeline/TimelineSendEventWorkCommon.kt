@@ -22,6 +22,7 @@ import androidx.work.ListenableWorker
 import androidx.work.OneTimeWorkRequest
 import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
+import org.matrix.android.sdk.internal.session.workmanager.WorkManagerConfig
 import org.matrix.android.sdk.internal.util.CancelableWork
 import org.matrix.android.sdk.internal.worker.startChain
 import java.util.concurrent.TimeUnit
@@ -34,7 +35,8 @@ import javax.inject.Inject
  * if not the chain will be doomed in failed state.
  */
 internal class TimelineSendEventWorkCommon @Inject constructor(
-        private val workManagerProvider: WorkManagerProvider
+        private val workManagerProvider: WorkManagerProvider,
+        private val workManagerConfig: WorkManagerConfig,
 ) {
 
     fun postWork(roomId: String, workRequest: OneTimeWorkRequest, policy: ExistingWorkPolicy = ExistingWorkPolicy.APPEND_OR_REPLACE): Cancelable {
@@ -47,7 +49,7 @@ internal class TimelineSendEventWorkCommon @Inject constructor(
 
     inline fun <reified W : ListenableWorker> createWork(data: Data, startChain: Boolean): OneTimeWorkRequest {
         return workManagerProvider.matrixOneTimeWorkRequestBuilder<W>()
-                .setConstraints(WorkManagerProvider.workConstraints)
+                .setConstraints(WorkManagerProvider.getWorkConstraints(workManagerConfig))
                 .startChain(startChain)
                 .setInputData(data)
                 .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)

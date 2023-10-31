@@ -167,6 +167,7 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
                 }
                 homeServerCapabilitiesEntity.authenticationIssuer = getWellknownResult.wellKnown.unstableDelegatedAuthConfig?.issuer
                 homeServerCapabilitiesEntity.externalAccountManagementUrl = getWellknownResult.wellKnown.unstableDelegatedAuthConfig?.accountManagementUrl
+                homeServerCapabilitiesEntity.disableNetworkConstraint = getWellknownResult.wellKnown.disableNetworkConstraint
             }
 
             homeServerCapabilitiesEntity.canLoginWithQrCode = canLoginWithQrCode(getCapabilitiesResult, getVersionResult)
