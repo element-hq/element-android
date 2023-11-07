@@ -37,6 +37,7 @@ internal open class HomeServerCapabilitiesEntity(
         var canRedactEventWithRelations: Boolean = false,
         var externalAccountManagementUrl: String? = null,
         var authenticationIssuer: String? = null,
+        var disableNetworkConstraint: Boolean? = null,
 ) : RealmObject() {
 
     companion object

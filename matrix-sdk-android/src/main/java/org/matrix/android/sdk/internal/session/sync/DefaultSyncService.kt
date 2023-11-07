@@ -22,6 +22,7 @@ import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.session.SessionState
 import org.matrix.android.sdk.internal.session.sync.job.SyncThread
 import org.matrix.android.sdk.internal.session.sync.job.SyncWorker
+import org.matrix.android.sdk.internal.session.workmanager.WorkManagerConfig
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Provider
@@ -33,15 +34,26 @@ internal class DefaultSyncService @Inject constructor(
         private val syncTokenStore: SyncTokenStore,
         private val syncRequestStateTracker: SyncRequestStateTracker,
         private val sessionState: SessionState,
+        private val workManagerConfig: WorkManagerConfig,
 ) : SyncService {
     private var syncThread: SyncThread? = null
 
     override fun requireBackgroundSync() {
-        SyncWorker.requireBackgroundSync(workManagerProvider, sessionId)
+        SyncWorker.requireBackgroundSync(
+                workManagerProvider = workManagerProvider,
+                sessionId = sessionId,
+                workManagerConfig = workManagerConfig,
+        )
     }
 
     override fun startAutomaticBackgroundSync(timeOutInSeconds: Long, repeatDelayInSeconds: Long) {
-        SyncWorker.automaticallyBackgroundSync(workManagerProvider, sessionId, timeOutInSeconds, repeatDelayInSeconds)
+        SyncWorker.automaticallyBackgroundSync(
+                workManagerProvider = workManagerProvider,
+                sessionId = sessionId,
+                workManagerConfig = workManagerConfig,
+                serverTimeoutInSeconds = timeOutInSeconds,
+                delayInSeconds = repeatDelayInSeconds,
+        )
     }
 
     override fun stopAnyBackgroundSync() {
