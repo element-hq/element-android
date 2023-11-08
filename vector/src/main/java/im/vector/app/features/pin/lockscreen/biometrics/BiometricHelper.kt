@@ -157,9 +157,9 @@ class BiometricHelper @AssistedInject constructor(
 
     @OptIn(DelicateCoroutinesApi::class)
     private fun authenticateInternal(
-        activity: FragmentActivity,
-        checkSystemKeyExists: Boolean,
-        cryptoObject: BiometricPrompt.CryptoObject,
+            activity: FragmentActivity,
+            checkSystemKeyExists: Boolean,
+            cryptoObject: BiometricPrompt.CryptoObject,
     ): Flow<Boolean> {
         if (checkSystemKeyExists && !isSystemAuthEnabledAndValid) return flowOf(false)
 
@@ -195,9 +195,9 @@ class BiometricHelper @AssistedInject constructor(
 
     @VisibleForTesting(otherwise = PRIVATE)
     internal fun authenticateWithPromptInternal(
-        activity: FragmentActivity,
-        cryptoObject: BiometricPrompt.CryptoObject,
-        channel: Channel<Boolean>,
+            activity: FragmentActivity,
+            cryptoObject: BiometricPrompt.CryptoObject,
+            channel: Channel<Boolean>,
     ): BiometricPrompt {
         val executor = ContextCompat.getMainExecutor(context)
         val callback = createSuspendingAuthCallback(channel, executor.asCoroutineDispatcher())
@@ -314,9 +314,9 @@ class BiometricHelper @AssistedInject constructor(
             fallbackFragment.onDismiss = { cancelPrompt() }
             fallbackFragment.authenticationFlow = authenticationFLow
 
-            activity.supportFragmentManager.beginTransaction()
+            val transaction = activity.supportFragmentManager.beginTransaction()
                     .runOnCommit { scope.launch { showPrompt() } }
-                    .apply { fallbackFragment.show(this, FALLBACK_BIOMETRIC_FRAGMENT_TAG) }
+            fallbackFragment.show(transaction, FALLBACK_BIOMETRIC_FRAGMENT_TAG)
         } else {
             scope.launch { showPrompt() }
         }
