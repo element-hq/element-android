@@ -17,8 +17,7 @@
 package im.vector.app.features.home.room.detail.composer.mentions
 
 import android.text.style.ReplacementSpan
-import io.element.android.wysiwyg.display.KeywordDisplayHandler
-import io.element.android.wysiwyg.display.LinkDisplayHandler
+import io.element.android.wysiwyg.display.MentionDisplayHandler
 import io.element.android.wysiwyg.display.TextDisplay
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
@@ -30,16 +29,15 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.api.util.toRoomAliasMatrixItem
 
 /**
- * A rich text editor [LinkDisplayHandler] and [KeywordDisplayHandler]
- * that helps with replacing user and room links with pills.
+ * A rich text editor [MentionDisplayHandler] that helps with replacing user and room links with pills.
  */
 internal class PillDisplayHandler(
         private val roomId: String,
         private val getRoom: (roomId: String) -> RoomSummary?,
         private val getMember: (userId: String) -> RoomMemberSummary?,
         private val replacementSpanFactory: (matrixItem: MatrixItem) -> ReplacementSpan,
-) : LinkDisplayHandler, KeywordDisplayHandler {
-    override fun resolveLinkDisplay(text: String, url: String): TextDisplay {
+) : MentionDisplayHandler {
+    override fun resolveMentionDisplay(text: String, url: String): TextDisplay {
         val matrixItem = when (val permalink = PermalinkParser.parse(url)) {
             is PermalinkData.UserLink -> {
                 val userId = permalink.userId
@@ -65,16 +63,9 @@ internal class PillDisplayHandler(
         return TextDisplay.Custom(customSpan = replacement)
     }
 
-    override val keywords: List<String>
-        get() = listOf(MatrixItem.NOTIFY_EVERYONE)
-
-    override fun resolveKeywordDisplay(text: String): TextDisplay =
-            when (text) {
-                MatrixItem.NOTIFY_EVERYONE -> {
-                    val matrixItem = getRoom(roomId)?.toEveryoneInRoomMatrixItem()
-                            ?: MatrixItem.EveryoneInRoomItem(roomId)
-                    TextDisplay.Custom(replacementSpanFactory.invoke(matrixItem))
-                }
-                else -> TextDisplay.Plain
-            }
+    override fun resolveAtRoomMentionDisplay(): TextDisplay {
+        val matrixItem = getRoom(roomId)?.toEveryoneInRoomMatrixItem()
+                ?: MatrixItem.EveryoneInRoomItem(roomId)
+        return TextDisplay.Custom(replacementSpanFactory.invoke(matrixItem))
+    }
 }
