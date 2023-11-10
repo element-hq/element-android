@@ -174,10 +174,10 @@ internal class RustCrossSigningService @Inject constructor(
             if (verified) {
                 return
             } else {
-                require(false) { "This device [$deviceId] is not known, or not yours" }
+                error("This device [$deviceId] is not known, or not yours")
             }
         } else {
-            require(false) { "This device [$deviceId] is not known" }
+            error("This device [$deviceId] is not known")
         }
     }
 
