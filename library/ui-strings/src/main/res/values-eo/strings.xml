@@ -123,7 +123,7 @@
     <string name="power_level_default">Defaŭlta</string>
     <string name="power_level_custom">Propra (%1$d)</string>
     <string name="power_level_moderator">Kontrolanto</string>
-    <string name="power_level_admin">Administristo</string>
+    <string name="power_level_admin">Administranto</string>
     <string name="notice_widget_modified_by_you">Vi ŝanĝis la fenestraĵon %1$s</string>
     <string name="notice_widget_modified">%1$s ŝanĝis la fenestraĵon %2$s</string>
     <string name="notice_widget_removed_by_you">Vi forigis la fenestraĵon %1$s</string>
@@ -445,12 +445,12 @@
     <string name="room_member_jump_to_read_receipt">Salti al legokonfirmo</string>
     <string name="room_member_power_level_custom_in">Propra (%1$d) en %2$s</string>
     <string name="room_member_power_level_default_in">Ordinara en %1$s</string>
-    <string name="room_member_power_level_moderator_in">Reguligisto en %1$s</string>
+    <string name="room_member_power_level_moderator_in">Kontrolanto en %1$s</string>
     <string name="room_member_power_level_admin_in">Administranto en %1$s</string>
     <string name="room_member_power_level_users">Uzantoj</string>
     <string name="room_member_power_level_invites">Invitoj</string>
     <string name="room_member_power_level_custom">Propra</string>
-    <string name="room_member_power_level_moderators">Reguligistoj</string>
+    <string name="room_member_power_level_moderators">Kontrolantoj</string>
     <string name="room_member_power_level_admins">Administrantoj</string>
     <string name="room_profile_leaving_room">Forirante de ĉambro…</string>
     <string name="direct_room_profile_section_more_leave">Foriri</string>
