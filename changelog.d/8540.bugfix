@@ -1,0 +1,1 @@
+Respect isShareKeysOnInviteEnabled() flag when creating new outbound megolm sessions in rooms with history sharing enabled
