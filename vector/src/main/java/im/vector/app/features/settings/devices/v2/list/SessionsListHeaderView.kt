@@ -97,6 +97,7 @@ class SessionsListHeaderView @JvmOverloads constructor(
         }
     }
 
+    @Suppress("RestrictedApi")
     private fun setMenu(typedArray: TypedArray) {
         val menuResId = typedArray.getResourceId(R.styleable.SessionsListHeaderView_sessionsListHeaderMenu, -1)
         if (menuResId == -1) {

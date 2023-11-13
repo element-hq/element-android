@@ -80,7 +80,7 @@ internal class PillDisplayHandlerTest {
     fun `when resolve non-matrix link, then it returns plain text`() {
         val subject = createSubject()
 
-        val result = subject.resolveLinkDisplay("text", NON_MATRIX_URL)
+        val result = subject.resolveMentionDisplay("text", NON_MATRIX_URL)
 
         assertEquals(TextDisplay.Plain, result)
     }
@@ -89,7 +89,7 @@ internal class PillDisplayHandlerTest {
     fun `when resolve unknown user link, then it returns generic custom pill`() {
         val subject = createSubject()
 
-        val matrixItem = subject.resolveLinkDisplay("text", UNKNOWN_MATRIX_USER_URL)
+        val matrixItem = subject.resolveMentionDisplay("text", UNKNOWN_MATRIX_USER_URL)
                 .getMatrixItem()
 
         assertEquals(MatrixItem.UserItem(UNKNOWN_MATRIX_USER_ID, UNKNOWN_MATRIX_USER_ID, null), matrixItem)
@@ -99,7 +99,7 @@ internal class PillDisplayHandlerTest {
     fun `when resolve known user link, then it returns named custom pill`() {
         val subject = createSubject()
 
-        val matrixItem = subject.resolveLinkDisplay("text", KNOWN_MATRIX_USER_URL)
+        val matrixItem = subject.resolveMentionDisplay("text", KNOWN_MATRIX_USER_URL)
                 .getMatrixItem()
 
         assertEquals(MatrixItem.UserItem(KNOWN_MATRIX_USER_ID, KNOWN_MATRIX_USER_NAME, KNOWN_MATRIX_USER_AVATAR), matrixItem)
@@ -109,7 +109,7 @@ internal class PillDisplayHandlerTest {
     fun `when resolve unknown room link, then it returns generic custom pill`() {
         val subject = createSubject()
 
-        val matrixItem = subject.resolveLinkDisplay("text", UNKNOWN_MATRIX_ROOM_URL)
+        val matrixItem = subject.resolveMentionDisplay("text", UNKNOWN_MATRIX_ROOM_URL)
                 .getMatrixItem()
 
         assertEquals(MatrixItem.RoomItem(UNKNOWN_MATRIX_ROOM_ID, UNKNOWN_MATRIX_ROOM_ID, null), matrixItem)
@@ -119,7 +119,7 @@ internal class PillDisplayHandlerTest {
     fun `when resolve known room link, then it returns named custom pill`() {
         val subject = createSubject()
 
-        val matrixItem = subject.resolveLinkDisplay("text", KNOWN_MATRIX_ROOM_URL)
+        val matrixItem = subject.resolveMentionDisplay("text", KNOWN_MATRIX_ROOM_URL)
                 .getMatrixItem()
 
         assertEquals(MatrixItem.RoomItem(KNOWN_MATRIX_ROOM_ID, KNOWN_MATRIX_ROOM_NAME, KNOWN_MATRIX_ROOM_AVATAR), matrixItem)
@@ -129,7 +129,7 @@ internal class PillDisplayHandlerTest {
     fun `when resolve @room link, then it returns room notification custom pill`() {
         val subject = createSubject()
 
-        val matrixItem = subject.resolveLinkDisplay("@room", KNOWN_MATRIX_ROOM_URL)
+        val matrixItem = subject.resolveMentionDisplay("@room", KNOWN_MATRIX_ROOM_URL)
                 .getMatrixItem()
 
         assertEquals(MatrixItem.EveryoneInRoomItem(KNOWN_MATRIX_ROOM_ID, NOTIFY_EVERYONE, KNOWN_MATRIX_ROOM_AVATAR, KNOWN_MATRIX_ROOM_NAME), matrixItem)
@@ -139,7 +139,7 @@ internal class PillDisplayHandlerTest {
     fun `when resolve @room keyword, then it returns room notification custom pill`() {
         val subject = createSubject()
 
-        val matrixItem = subject.resolveKeywordDisplay("@room")
+        val matrixItem = subject.resolveAtRoomMentionDisplay()
                 .getMatrixItem()
 
         assertEquals(MatrixItem.EveryoneInRoomItem(ROOM_ID, NOTIFY_EVERYONE, KNOWN_MATRIX_ROOM_AVATAR, KNOWN_MATRIX_ROOM_NAME), matrixItem)
@@ -150,24 +150,17 @@ internal class PillDisplayHandlerTest {
         val subject = createSubject()
         every { mockGetRoom(ROOM_ID) } returns null
 
-        val matrixItem = subject.resolveKeywordDisplay("@room")
+        val matrixItem = subject.resolveAtRoomMentionDisplay()
                 .getMatrixItem()
 
         assertEquals(MatrixItem.EveryoneInRoomItem(ROOM_ID, NOTIFY_EVERYONE, null, null), matrixItem)
     }
 
     @Test
-    fun `when get keywords, then it returns @room`() {
-        val subject = createSubject()
-
-        assertEquals(listOf("@room"), subject.keywords)
-    }
-
-    @Test
     fun `when resolve known user for custom domain link, then it returns named custom pill`() {
         val subject = createSubject()
 
-        val matrixItem = subject.resolveLinkDisplay("text", CUSTOM_DOMAIN_MATRIX_USER_URL)
+        val matrixItem = subject.resolveMentionDisplay("text", CUSTOM_DOMAIN_MATRIX_USER_URL)
                 .getMatrixItem()
 
         assertEquals(MatrixItem.UserItem(KNOWN_MATRIX_USER_ID, KNOWN_MATRIX_USER_NAME, KNOWN_MATRIX_USER_AVATAR), matrixItem)
@@ -177,7 +170,7 @@ internal class PillDisplayHandlerTest {
     fun `when resolve known room for custom domain link, then it returns named custom pill`() {
         val subject = createSubject()
 
-        val matrixItem = subject.resolveLinkDisplay("text", CUSTOM_DOMAIN_MATRIX_ROOM_URL)
+        val matrixItem = subject.resolveMentionDisplay("text", CUSTOM_DOMAIN_MATRIX_ROOM_URL)
                 .getMatrixItem()
 
         assertEquals(MatrixItem.RoomItem(KNOWN_MATRIX_ROOM_ID, KNOWN_MATRIX_ROOM_NAME, KNOWN_MATRIX_ROOM_AVATAR), matrixItem)
@@ -187,13 +180,13 @@ internal class PillDisplayHandlerTest {
     fun `when resolve known room with alias link, then it returns named custom pill`() {
         val subject = createSubject()
 
-        val matrixItem = subject.resolveLinkDisplay("text", KNOWN_MATRIX_ROOM_ALIAS_URL)
+        val matrixItem = subject.resolveMentionDisplay("text", KNOWN_MATRIX_ROOM_ALIAS_URL)
                 .getMatrixItem()
 
         assertEquals(MatrixItem.RoomAliasItem(KNOWN_MATRIX_ROOM_ALIAS, KNOWN_MATRIX_ROOM_NAME, KNOWN_MATRIX_ROOM_AVATAR), matrixItem)
     }
 
-    private fun TextDisplay.getMatrixItem(): MatrixItem? {
+    private fun TextDisplay.getMatrixItem(): MatrixItem {
         val customSpan = this as? TextDisplay.Custom
         assertNotNull("The URL did not resolve to a custom link display method", customSpan)
 
