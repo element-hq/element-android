@@ -18,6 +18,9 @@ package im.vector.app.features.home
 
 import android.widget.ImageView
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.liveData
+import androidx.paging.PagedList
 import com.airbnb.mvrx.test.MavericksTestRule
 import im.vector.app.R
 import im.vector.app.core.platform.StateView
@@ -35,6 +38,7 @@ import im.vector.app.test.fakes.FakeStringProvider
 import im.vector.app.test.fixtures.RoomSummaryFixture.aRoomSummary
 import im.vector.app.test.test
 import io.mockk.every
+import io.mockk.mockk
 import io.mockk.mockkStatic
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -43,7 +47,12 @@ import org.junit.Rule
 import org.junit.Test
 import org.matrix.android.sdk.api.query.SpaceFilter
 import org.matrix.android.sdk.api.session.getUserOrDefault
+import org.matrix.android.sdk.api.session.room.ResultBoundaries
+import org.matrix.android.sdk.api.session.room.RoomSortOrder
+import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
+import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
 import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.flow.FlowSession
@@ -81,16 +90,31 @@ class RoomsListViewModelTest {
         val roomC = aRoomSummary("room_c")
         val allRooms = listOf(roomA, roomB, roomC)
 
+        val mockPagedList = mockk<PagedList<RoomSummary>>().apply {
+            every { get(any<Int>()) } answers {
+                allRooms[firstArg()]
+            }
+
+            every { loadedCount } returns allRooms.size
+        }
+
         every {
-            fakeFLowSession.liveRoomSummaries(
+            fakeSession.fakeRoomService.getFilteredPagedRoomSummariesLive(
                     match {
                         it.roomCategoryFilter == null &&
                                 it.roomTagQueryFilter == null &&
                                 it.memberships == listOf(Membership.JOIN) &&
                                 it.spaceFilter is SpaceFilter.NoFilter
-                    }, any()
+                    }, any(), any()
             )
-        } returns flowOf(allRooms)
+        } returns object : UpdatableLivePageResult {
+            override val livePagedList: LiveData<PagedList<RoomSummary>>
+                get() = liveData { emit(mockPagedList) }
+            override val liveBoundaries: LiveData<ResultBoundaries>
+                get() = liveData {  emit(ResultBoundaries(true, true, false)) }
+            override var queryParams = RoomSummaryQueryParams.Builder().build()
+            override var sortOrder = RoomSortOrder.ACTIVITY
+        }
 
         viewModelWith(initialState)
     }

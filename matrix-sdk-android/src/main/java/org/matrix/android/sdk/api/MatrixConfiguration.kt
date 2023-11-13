@@ -29,7 +29,6 @@ import java.net.Proxy
 data class MatrixConfiguration(
         val applicationFlavor: String = "Default-application-flavor",
         val cryptoConfig: MXCryptoConfig = MXCryptoConfig(),
-        val cryptoFlavor: String = "Default-crypto-flavor",
         val integrationUIUrl: String = "https://scalar.vector.im/",
         val integrationRestUrl: String = "https://scalar.vector.im/api",
         val integrationWidgetUrls: List<String> = listOf(

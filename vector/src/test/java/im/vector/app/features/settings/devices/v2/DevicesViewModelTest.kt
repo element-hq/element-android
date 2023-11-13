@@ -48,7 +48,6 @@ import kotlinx.coroutines.flow.flowOf
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.After
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
@@ -56,6 +55,7 @@ import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
+import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
 
 private const val A_CURRENT_DEVICE_ID = "current-device-id"
@@ -107,6 +107,9 @@ class DevicesViewModelTest {
         givenVerificationService()
         givenCurrentSessionCrossSigningInfo()
         givenDeviceFullInfoList(deviceId1 = A_DEVICE_ID_1, deviceId2 = A_DEVICE_ID_2)
+        fakeActiveSessionHolder.fakeSession.fakeHomeServerCapabilitiesService.givenCapabilities(
+                HomeServerCapabilities()
+        )
         fakeVectorPreferences.givenSessionManagerShowIpAddress(false)
     }
 
@@ -125,34 +128,17 @@ class DevicesViewModelTest {
     }
 
     @Test
-    @Ignore
     fun `given the viewModel when initializing it then verification listener is added`() {
-//        // Given
-//        val fakeVerificationService = givenVerificationService()
-//
-//        // When
-//        val viewModel = createViewModel()
-//
-//        // Then
-//        verify {
-//            fakeVerificationService.addListener(viewModel)
-//        }
-    }
+        // Given
+        val fakeVerificationService = givenVerificationService()
 
-    @Test
-    @Ignore
-    fun `given the viewModel when clearing it then verification listener is removed`() {
-//        // Given
-//        val fakeVerificationService = givenVerificationService()
-//
-//        // When
-//        val viewModel = createViewModel()
-//        viewModel.onCleared()
-//
-//        // Then
-//        verify {
-//            fakeVerificationService.removeListener(viewModel)
-//        }
+        // When
+        createViewModel()
+
+        // Then
+        verify {
+            fakeVerificationService.requestEventFlow()
+        }
     }
 
     @Test

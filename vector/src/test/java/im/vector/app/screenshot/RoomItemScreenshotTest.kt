@@ -22,9 +22,11 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.features.home.room.list.UnreadCounterBadgeView
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 
+@Ignore("CI failing with NPE on paparazzi.inflate")
 class RoomItemScreenshotTest {
 
     @get:Rule

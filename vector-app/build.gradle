@@ -67,10 +67,8 @@ def getVersionCode() {
 
 def getNightlyUniversalApkPath() {
     def taskNames = gradle.getStartParameter().taskNames.toString()
-    if(taskNames.contains("RustCryptoNightly")) {
-        return "vector-app/build/outputs/apk/gplayRustCrypto/nightly/vector-gplay-rustCrypto-universal-nightly.apk"
-    } else if (taskNames.contains("KotlinCryptoNightly")) {
-        return "vector-app/build/outputs/apk/gplayKotlinCrypto/nightly/vector-gplay-kotlinCrypto-universal-nightly.apk"
+    if(taskNames.contains("Nightly")) {
+        return "vector-app/build/outputs/apk/gplay/nightly/vector-gplay-universal-nightly.apk"
     } else {
         return ""
     }
@@ -309,7 +307,7 @@ android {
         }
     }
 
-    flavorDimensions = ["store", "crypto"]
+    flavorDimensions = ["store"]
 
     productFlavors {
         gplay {
@@ -332,23 +330,6 @@ android {
             buildConfigField "String", "FLAVOR_DESCRIPTION", "\"FDroid\""
         }
 
-        kotlinCrypto {
-            dimension "crypto"
-            // versionName "${versionMajor}.${versionMinor}.${versionPatch}${getFdroidVersionSuffix()}"
-            buildConfigField "String", "CRYPTO_FLAVOR_DESCRIPTION", "\"olm-crypto\""
-//            buildConfigField "String", "FLAVOR_DESCRIPTION", "\"KotlinCrypto\""
-        }
-        rustCrypto {
-            dimension "crypto"
-            isDefault = true
-            // applicationIdSuffix ".corroded"
-            // versionNameSuffix "-R"
-            // resValue "string", "app_name", "ER"
-
-//            // versionName "${versionMajor}.${versionMinor}.${versionPatch}${getFdroidVersionSuffix()}"
-            buildConfigField "String", "CRYPTO_FLAVOR_DESCRIPTION", "\"rust-crypto\""
-//            buildConfigField "String", "FLAVOR_DESCRIPTION", "\"RustCrypto\""
-        }
     }
 
     variantFilter { variant ->
