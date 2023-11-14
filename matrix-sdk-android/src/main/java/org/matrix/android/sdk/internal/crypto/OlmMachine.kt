@@ -253,6 +253,8 @@ internal class OlmMachine @Inject constructor(
      *
      * @param deviceUnusedFallbackKeyTypes The key algorithms for which the server has an unused fallback key for the device.
      *
+     * @param nextBatch The batch token to pass in the next sync request.
+     *
      * @return The handled events, decrypted if needed (secrets are zeroised).
      */
     @Throws(CryptoStoreException::class)
