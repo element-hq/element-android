@@ -30,7 +30,6 @@ import im.vector.app.core.extensions.clearErrorOnChange
 import im.vector.app.core.extensions.content
 import im.vector.app.core.extensions.editText
 import im.vector.app.core.extensions.hasContent
-import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.setOnImeDoneListener
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentFtueEmailInputBinding
@@ -39,6 +38,7 @@ import im.vector.app.features.onboarding.OnboardingViewState
 import im.vector.app.features.onboarding.RegisterAction
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
+import org.matrix.android.sdk.api.extensions.isEmail
 
 @Parcelize
 data class FtueAuthEmailEntryFragmentArgument(

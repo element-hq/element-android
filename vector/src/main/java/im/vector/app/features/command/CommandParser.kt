@@ -16,13 +16,13 @@
 
 package im.vector.app.features.command
 
-import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.isMsisdn
 import im.vector.app.core.extensions.orEmpty
 import im.vector.app.features.home.room.detail.ChatEffect
 import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.MatrixUrls.isMxcUrl
+import org.matrix.android.sdk.api.extensions.isEmail
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import timber.log.Timber
 import javax.inject.Inject
