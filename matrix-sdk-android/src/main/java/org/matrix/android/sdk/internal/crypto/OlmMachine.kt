@@ -287,7 +287,7 @@ internal class OlmMachine @Inject constructor(
 
             val outAdapter = moshi.adapter(Event::class.java)
 
-            // we don't need to use `roomKeyInfos` as we are for now we are
+            // we don't need to use `roomKeyInfos` as for now we are manually
             // checking the returned to devices to check for room keys.
             // XXX Anyhow there is now proper signaling we should soon stop parsing them manually
             receiveSyncChanges.toDeviceEvents.map {
