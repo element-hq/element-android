@@ -19,7 +19,6 @@ package org.matrix.android.sdk.internal.crypto
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import com.squareup.moshi.Moshi
-import com.squareup.moshi.Types
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.runBlocking
@@ -254,6 +253,8 @@ internal class OlmMachine @Inject constructor(
      *
      * @param deviceUnusedFallbackKeyTypes The key algorithms for which the server has an unused fallback key for the device.
      *
+     * @param nextBatch The batch token to pass in the next sync request.
+     *
      * @return The handled events, decrypted if needed (secrets are zeroised).
      */
     @Throws(CryptoStoreException::class)
@@ -262,6 +263,7 @@ internal class OlmMachine @Inject constructor(
             deviceChanges: DeviceListResponse?,
             keyCounts: DeviceOneTimeKeysCountSyncResponse?,
             deviceUnusedFallbackKeyTypes: List<String>?,
+            nextBatch: String?
     ): ToDeviceSyncResponse {
         val response = withContext(coroutineDispatchers.io) {
             val counts: MutableMap<String, Int> = mutableMapOf()
@@ -281,18 +283,16 @@ internal class OlmMachine @Inject constructor(
             val events = adapter.toJson(toDevice ?: ToDeviceSyncResponse())
 
             // field pass in the list of unused fallback keys here
-            val receiveSyncChanges = inner.receiveSyncChanges(events, devices, counts, deviceUnusedFallbackKeyTypes)
+            val receiveSyncChanges = inner.receiveSyncChanges(events, devices, counts, deviceUnusedFallbackKeyTypes, nextBatch ?: "")
 
-            val outAdapter = moshi.adapter<List<Event>>(
-                    Types.newParameterizedType(
-                            List::class.java,
-                            Event::class.java,
-                            String::class.java,
-                            Integer::class.java,
-                            Any::class.java,
-                    )
-            )
-            outAdapter.fromJson(receiveSyncChanges) ?: emptyList()
+            val outAdapter = moshi.adapter(Event::class.java)
+
+            // we don't need to use `roomKeyInfos` as for now we are manually
+            // checking the returned to devices to check for room keys.
+            // XXX Anyhow there is now proper signaling we should soon stop parsing them manually
+            receiveSyncChanges.toDeviceEvents.map {
+                        outAdapter.fromJson(it) ?: Event()
+            }
         }
 
         // We may get cross signing keys over a to-device event, update our listeners.
