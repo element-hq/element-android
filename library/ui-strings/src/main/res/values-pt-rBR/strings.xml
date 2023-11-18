@@ -2638,7 +2638,7 @@
     <string name="onboarding_new_app_layout_welcome_title">Boas-vindas a uma nova visão!</string>
     <string name="home_empty_no_unreads_message">Isto é onde suas mensagens não-lidas vão aparecer, quando você tiver algumas.</string>
     <string name="home_empty_no_unreads_title">Nada para reportar.</string>
-    <string name="home_empty_no_rooms_message">O app de chat seguro tudo-em-um para equipes, amigas(os) e organizações. Crie um chat, ou junte-se a uma sala existe, para começar.</string>
+    <string name="home_empty_no_rooms_message">O app de chat seguro tudo-em-um para equipes, amigas(os) e organizações. Crie um chat, ou junte-se a uma sala existente, para começar.</string>
     <string name="home_empty_no_rooms_title">Boas-vindas a ${app_name},
 \n%s.</string>
     <string name="home_empty_space_no_rooms_message">Espaços são uma nova maneira de agrupar salas e pessoas. Adicione uma sala existente, ou crie uma nova, usando o botão direito fundo.</string>
