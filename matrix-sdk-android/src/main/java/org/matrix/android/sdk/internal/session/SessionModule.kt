@@ -97,6 +97,8 @@ import org.matrix.android.sdk.internal.session.room.tombstone.RoomTombstoneEvent
 import org.matrix.android.sdk.internal.session.typing.DefaultTypingUsersTracker
 import org.matrix.android.sdk.internal.session.user.accountdata.DefaultSessionAccountDataService
 import org.matrix.android.sdk.internal.session.widgets.DefaultWidgetURLFormatter
+import org.matrix.android.sdk.internal.session.workmanager.DefaultWorkManagerConfig
+import org.matrix.android.sdk.internal.session.workmanager.WorkManagerConfig
 import retrofit2.Retrofit
 import java.io.File
 import javax.inject.Provider
@@ -422,4 +424,7 @@ internal abstract class SessionModule {
 
     @Binds
     abstract fun bindPollAggregationProcessor(processor: DefaultPollAggregationProcessor): PollAggregationProcessor
+
+    @Binds
+    abstract fun bindWorkManaerConfig(config: DefaultWorkManagerConfig): WorkManagerConfig
 }

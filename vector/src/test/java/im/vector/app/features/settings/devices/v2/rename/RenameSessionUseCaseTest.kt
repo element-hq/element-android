@@ -43,7 +43,7 @@ class RenameSessionUseCaseTest {
     fun `given a device id and a new name when no error during rename then the device is renamed with success`() = runTest {
         // Given
         fakeActiveSessionHolder.fakeSession.fakeCryptoService.givenSetDeviceNameSucceeds()
-        coVerify { refreshDevicesUseCase.execute() }
+        coEvery { refreshDevicesUseCase.execute() } returns Unit
 
         // When
         val result = renameSessionUseCase.execute(A_DEVICE_ID, A_DEVICE_NAME)

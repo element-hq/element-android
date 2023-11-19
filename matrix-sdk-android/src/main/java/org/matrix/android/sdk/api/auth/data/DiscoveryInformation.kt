@@ -36,5 +36,11 @@ data class DiscoveryInformation(
          * Note: matrix.org does not send this field
          */
         @Json(name = "m.identity_server")
-        val identityServer: WellKnownBaseConfig? = null
+        val identityServer: WellKnownBaseConfig? = null,
+
+        /**
+         * If set to true, the SDK will not use the network constraint when configuring Worker for the WorkManager.
+         */
+        @Json(name = "io.element.disable_network_constraint")
+        val disableNetworkConstraint: Boolean? = null,
 )

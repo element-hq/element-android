@@ -25,6 +25,7 @@ import org.matrix.android.sdk.test.fakes.FakeMonarchy
 import org.matrix.android.sdk.test.fakes.FakeRemovePusherTask
 import org.matrix.android.sdk.test.fakes.FakeTaskExecutor
 import org.matrix.android.sdk.test.fakes.FakeTogglePusherTask
+import org.matrix.android.sdk.test.fakes.FakeWorkManagerConfig
 import org.matrix.android.sdk.test.fakes.FakeWorkManagerProvider
 import org.matrix.android.sdk.test.fakes.internal.FakePushGatewayNotifyTask
 import org.matrix.android.sdk.test.fixtures.PusherFixture
@@ -41,6 +42,7 @@ class DefaultPushersServiceTest {
     private val togglePusherTask = FakeTogglePusherTask()
     private val removePusherTask = FakeRemovePusherTask()
     private val taskExecutor = FakeTaskExecutor()
+    private val fakeWorkManagerConfig = FakeWorkManagerConfig()
 
     private val pushersService = DefaultPushersService(
             workManagerProvider.instance,
@@ -52,6 +54,7 @@ class DefaultPushersServiceTest {
             togglePusherTask,
             removePusherTask,
             taskExecutor.instance,
+            fakeWorkManagerConfig,
     )
 
     @Test

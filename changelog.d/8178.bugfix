@@ -1,0 +1,1 @@
+Ensure the incoming call will not ring forever, in case the call is not ended by another way.

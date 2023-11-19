@@ -75,6 +75,18 @@ class SessionOverviewViewModel @AssistedInject constructor(
         observeNotificationsStatus(initialState.deviceId)
         refreshIpAddressVisibility()
         observePreferences()
+        initExternalAccountManagementUrl()
+    }
+
+    private fun initExternalAccountManagementUrl() {
+        setState {
+            copy(
+                    externalAccountManagementUrl = activeSessionHolder.getSafeActiveSession()
+                            ?.homeServerCapabilitiesService()
+                            ?.getHomeServerCapabilities()
+                            ?.externalAccountManagementUrl
+            )
+        }
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {

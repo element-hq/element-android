@@ -240,7 +240,8 @@ interface CryptoService {
             toDevice: ToDeviceSyncResponse?,
             deviceChanges: DeviceListResponse?,
             keyCounts: DeviceOneTimeKeysCountSyncResponse?,
-            deviceUnusedFallbackKeyTypes: List<String>?)
+            deviceUnusedFallbackKeyTypes: List<String>?,
+            nextBatch: String?)
 
     suspend fun onLiveEvent(roomId: String, event: Event, isInitialSync: Boolean, cryptoStoreAggregator: CryptoStoreAggregator?)
     suspend fun onStateEvent(roomId: String, event: Event, cryptoStoreAggregator: CryptoStoreAggregator?) {}

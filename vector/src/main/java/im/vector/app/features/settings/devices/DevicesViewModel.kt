@@ -346,6 +346,20 @@ class DevicesViewModel @AssistedInject constructor(
     private fun handleDelete(action: DevicesAction.Delete) {
         val deviceId = action.deviceId
 
+        val accountManagementUrl = session.homeServerCapabilitiesService().getHomeServerCapabilities().externalAccountManagementUrl
+        if (accountManagementUrl != null) {
+            // Open external browser to delete this session
+            _viewEvents.post(
+                    DevicesViewEvents.OpenBrowser(
+                            url = accountManagementUrl.removeSuffix("/") + "?action=session_end&device_id=$deviceId"
+                    )
+            )
+        } else {
+            doDelete(deviceId)
+        }
+    }
+
+    private fun doDelete(deviceId: String) {
         setState {
             copy(
                     request = Loading()

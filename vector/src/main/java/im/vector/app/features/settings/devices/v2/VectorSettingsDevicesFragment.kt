@@ -290,8 +290,8 @@ class VectorSettingsDevicesFragment :
             val unverifiedSessionsCount = deviceFullInfoList?.unverifiedSessionsCount ?: 0
 
             renderSecurityRecommendations(inactiveSessionsCount, unverifiedSessionsCount)
-            renderCurrentSessionView(currentDeviceInfo, hasOtherDevices = otherDevices?.isNotEmpty().orFalse())
-            renderOtherSessionsView(otherDevices, state.isShowingIpAddress)
+            renderCurrentSessionView(currentDeviceInfo, hasOtherDevices = otherDevices?.isNotEmpty().orFalse(), state)
+            renderOtherSessionsView(otherDevices, state)
         } else {
             hideSecurityRecommendations()
             hideCurrentSessionView()
@@ -347,13 +347,16 @@ class VectorSettingsDevicesFragment :
         hideInactiveSessionsRecommendation()
     }
 
-    private fun renderOtherSessionsView(otherDevices: List<DeviceFullInfo>?, isShowingIpAddress: Boolean) {
+    private fun renderOtherSessionsView(otherDevices: List<DeviceFullInfo>?, state: DevicesViewState) {
+        val isShowingIpAddress = state.isShowingIpAddress
         if (otherDevices.isNullOrEmpty()) {
             hideOtherSessionsView()
         } else {
             views.deviceListHeaderOtherSessions.isVisible = true
             val colorDestructive = colorProvider.getColorFromAttribute(R.attr.colorError)
             val multiSignoutItem = views.deviceListHeaderOtherSessions.menu.findItem(R.id.otherSessionsHeaderMultiSignout)
+            // Hide multi signout if the homeserver delegates the account management
+            multiSignoutItem.isVisible = state.delegatedOidcAuthEnabled.not()
             val nbDevices = otherDevices.size
             multiSignoutItem.title = stringProvider.getQuantityString(R.plurals.device_manager_other_sessions_multi_signout_all, nbDevices, nbDevices)
             multiSignoutItem.setTextColor(colorDestructive)
@@ -377,23 +380,24 @@ class VectorSettingsDevicesFragment :
         views.deviceListOtherSessions.isVisible = false
     }
 
-    private fun renderCurrentSessionView(currentDeviceInfo: DeviceFullInfo?, hasOtherDevices: Boolean) {
+    private fun renderCurrentSessionView(currentDeviceInfo: DeviceFullInfo?, hasOtherDevices: Boolean, state: DevicesViewState) {
         currentDeviceInfo?.let {
-            renderCurrentSessionHeaderView(hasOtherDevices)
+            renderCurrentSessionHeaderView(hasOtherDevices, state)
             renderCurrentSessionListView(it)
         } ?: run {
             hideCurrentSessionView()
         }
     }
 
-    private fun renderCurrentSessionHeaderView(hasOtherDevices: Boolean) {
+    private fun renderCurrentSessionHeaderView(hasOtherDevices: Boolean, state: DevicesViewState) {
         views.deviceListHeaderCurrentSession.isVisible = true
         val colorDestructive = colorProvider.getColorFromAttribute(R.attr.colorError)
         val signoutSessionItem = views.deviceListHeaderCurrentSession.menu.findItem(R.id.currentSessionHeaderSignout)
         signoutSessionItem.setTextColor(colorDestructive)
         val signoutOtherSessionsItem = views.deviceListHeaderCurrentSession.menu.findItem(R.id.currentSessionHeaderSignoutOtherSessions)
         signoutOtherSessionsItem.setTextColor(colorDestructive)
-        signoutOtherSessionsItem.isVisible = hasOtherDevices
+        // Hide signout other sessions if the homeserver delegates the account management
+        signoutOtherSessionsItem.isVisible = hasOtherDevices && state.delegatedOidcAuthEnabled.not()
     }
 
     private fun renderCurrentSessionListView(currentDeviceInfo: DeviceFullInfo) {
