@@ -189,11 +189,15 @@ class VectorApplication :
                 fcmHelper.onEnterBackground(activeSessionHolder)
 
                 if (stopBackgroundSync) {
-                    Timber.i("App entered background: stop any background sync")
-                    activeSessionHolder.getSafeActiveSessionAsync {
-                        it?.syncService()?.stopAnyBackgroundSync()
+                    if (webRtcCallManager.currentCall.get() == null) {
+                        Timber.i("App entered background: stop any background sync")
+                        activeSessionHolder.getSafeActiveSessionAsync {
+                            it?.syncService()?.stopAnyBackgroundSync()
+                        }
+                        stopBackgroundSync = false
+                    } else {
+                        Timber.i("App entered background: there is an active call do not stop background sync")
                     }
-                    stopBackgroundSync = false
                 }
             }
         })
