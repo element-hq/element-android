@@ -139,6 +139,7 @@ class WebRtcCallManager @Inject constructor(
     private val rootEglBase by lazy { EglUtils.rootEglBase }
 
     private var isInBackground: Boolean = true
+    private var syncStartedWhenInBackground: Boolean = false
 
     override fun onResume(owner: LifecycleOwner) {
         isInBackground = false
@@ -274,13 +275,15 @@ class WebRtcCallManager @Inject constructor(
             peerConnectionFactory = null
             audioManager.setMode(CallAudioManager.Mode.DEFAULT)
             // did we start background sync? so we should stop it
-            if (isInBackground) {
+            if (syncStartedWhenInBackground) {
                 if (!unifiedPushHelper.isBackgroundSync()) {
+                    Timber.tag(loggerTag.value).v("Sync started when in background, stop it")
                     currentSession?.syncService()?.stopAnyBackgroundSync()
                 } else {
                     // for fdroid we should not stop, it should continue syncing
                     // maybe we should restore default timeout/delay though?
                 }
+                syncStartedWhenInBackground = false
             }
         }
     }
@@ -383,6 +386,7 @@ class WebRtcCallManager @Inject constructor(
         if (isInBackground) {
             if (!unifiedPushHelper.isBackgroundSync()) {
                 // only for push version as fdroid version is already doing it?
+                syncStartedWhenInBackground = true
                 currentSession?.syncService()?.startAutomaticBackgroundSync(30, 0)
             } else {
                 // Maybe increase sync freq? but how to set back to default values?
