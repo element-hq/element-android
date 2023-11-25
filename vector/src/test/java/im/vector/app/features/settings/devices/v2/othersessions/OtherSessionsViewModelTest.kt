@@ -38,14 +38,15 @@ import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
+import io.mockk.verify
 import io.mockk.verifyAll
 import kotlinx.coroutines.flow.flowOf
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.After
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
+import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
 
 private const val A_DEVICE_ID_1 = "device-id-1"
@@ -87,8 +88,10 @@ class OtherSessionsViewModelTest {
         // Needed for internal usage of Flow<T>.throttleFirst() inside the ViewModel
         mockkStatic(SystemClock::class)
         every { SystemClock.elapsedRealtime() } returns 1234
-
-        givenVerificationService()
+        fakeActiveSessionHolder.fakeSession.fakeHomeServerCapabilitiesService.givenCapabilities(
+                HomeServerCapabilities()
+        )
+        givenVerificationService().givenEventFlow()
         fakeVectorPreferences.givenSessionManagerShowIpAddress(false)
     }
 
@@ -105,38 +108,20 @@ class OtherSessionsViewModelTest {
     }
 
     @Test
-    @Ignore
     fun `given the viewModel when initializing it then verification listener is added`() {
         // Given
-//        val fakeVerificationService = givenVerificationService()
-//        val devices = mockk<List<DeviceFullInfo>>()
-//        givenGetDeviceFullInfoListReturns(filterType = defaultArgs.defaultFilter, devices)
-//
-//        // When
-//        val viewModel = createViewModel()
+        val fakeVerificationService = givenVerificationService()
+                .also { it.givenEventFlow() }
+        val devices = mockk<List<DeviceFullInfo>>()
+        givenGetDeviceFullInfoListReturns(filterType = defaultArgs.defaultFilter, devices)
+
+        // When
+        createViewModel()
 
         // Then
-//        verify {
-//            fakeVerificationService.addListener(viewModel)
-//        }
-    }
-
-    @Test
-    @Ignore
-    fun `given the viewModel when clearing it then verification listener is removed`() {
-//        // Given
-//        val fakeVerificationService = givenVerificationService()
-//        val devices = mockk<List<DeviceFullInfo>>()
-//        givenGetDeviceFullInfoListReturns(filterType = defaultArgs.defaultFilter, devices)
-//
-//        // When
-//        val viewModel = createViewModel()
-//        viewModel.onCleared()
-//
-//        // Then
-//        verify {
-//            fakeVerificationService.removeListener(viewModel)
-//        }
+        verify {
+            fakeVerificationService.requestEventFlow()
+        }
     }
 
     @Test

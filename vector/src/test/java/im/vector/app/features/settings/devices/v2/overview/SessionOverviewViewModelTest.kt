@@ -48,10 +48,10 @@ import kotlinx.coroutines.flow.flowOf
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.After
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
+import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
 
 private const val A_SESSION_ID_1 = "session-id-1"
@@ -101,6 +101,9 @@ class SessionOverviewViewModelTest {
         mockkStatic(SystemClock::class)
         every { SystemClock.elapsedRealtime() } returns 1234
 
+        fakeActiveSessionHolder.fakeSession.fakeHomeServerCapabilitiesService.givenCapabilities(
+                HomeServerCapabilities()
+        )
         givenVerificationService()
         fakeGetNotificationsStatusUseCase.givenExecuteReturns(
                 fakeActiveSessionHolder.fakeSession,
@@ -136,22 +139,6 @@ class SessionOverviewViewModelTest {
         verify {
             fakeVerificationService.requestEventFlow()
         }
-    }
-
-    @Test
-    @Ignore
-    fun `given the viewModel when clearing it then verification listener is removed`() {
-//        // Given
-//        val fakeVerificationService = givenVerificationService()
-//
-//        // When
-//        val viewModel = createViewModel()
-//        viewModel.onCleared()
-//
-//        // Then
-//        verify {
-//            fakeVerificationService.removeListener(viewModel)
-//        }
     }
 
     @Test

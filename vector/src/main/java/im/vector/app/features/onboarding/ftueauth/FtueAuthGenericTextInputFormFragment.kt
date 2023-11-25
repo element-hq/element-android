@@ -32,7 +32,6 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
-import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.databinding.FragmentLoginGenericTextInputFormBinding
 import im.vector.app.features.login.TextInputFormFragmentMode
@@ -42,6 +41,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
+import org.matrix.android.sdk.api.extensions.isEmail
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.is401
 import reactivecircus.flowbinding.android.widget.textChanges

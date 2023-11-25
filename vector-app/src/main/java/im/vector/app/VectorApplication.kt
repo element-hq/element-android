@@ -108,6 +108,7 @@ class VectorApplication :
     @Inject lateinit var buildMeta: BuildMeta
     @Inject lateinit var leakDetector: LeakDetector
     @Inject lateinit var vectorLocale: VectorLocale
+    @Inject lateinit var webRtcCallManager: WebRtcCallManager
 
     // font thread handler
     private var fontThreadHandler: Handler? = null
@@ -167,20 +168,37 @@ class VectorApplication :
         notificationUtils.createNotificationChannels()
 
         ProcessLifecycleOwner.get().lifecycle.addObserver(object : DefaultLifecycleObserver {
+            private var stopBackgroundSync = false
+
             override fun onResume(owner: LifecycleOwner) {
                 Timber.i("App entered foreground")
                 fcmHelper.onEnterForeground(activeSessionHolder)
-                activeSessionHolder.getSafeActiveSessionAsync {
-                    it?.syncService()?.stopAnyBackgroundSync()
+                if (webRtcCallManager.currentCall.get() == null) {
+                    Timber.i("App entered foreground and no active call: stop any background sync")
+                    activeSessionHolder.getSafeActiveSessionAsync {
+                        it?.syncService()?.stopAnyBackgroundSync()
+                    }
+                } else {
+                    Timber.i("App entered foreground: there is an active call, set stopBackgroundSync to true")
+                    stopBackgroundSync = true
                 }
-//                activeSessionHolder.getSafeActiveSession()?.also {
-//                    it.syncService().stopAnyBackgroundSync()
-//                }
             }
 
             override fun onPause(owner: LifecycleOwner) {
                 Timber.i("App entered background")
                 fcmHelper.onEnterBackground(activeSessionHolder)
+
+                if (stopBackgroundSync) {
+                    if (webRtcCallManager.currentCall.get() == null) {
+                        Timber.i("App entered background: stop any background sync")
+                        activeSessionHolder.getSafeActiveSessionAsync {
+                            it?.syncService()?.stopAnyBackgroundSync()
+                        }
+                        stopBackgroundSync = false
+                    } else {
+                        Timber.i("App entered background: there is an active call do not stop background sync")
+                    }
+                }
             }
         })
         ProcessLifecycleOwner.get().lifecycle.addObserver(spaceStateHandler)

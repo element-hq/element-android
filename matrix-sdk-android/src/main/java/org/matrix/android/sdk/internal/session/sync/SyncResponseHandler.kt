@@ -184,7 +184,8 @@ internal class SyncResponseHandler @Inject constructor(
                         syncResponse.toDevice,
                         syncResponse.deviceLists,
                         syncResponse.deviceOneTimeKeysCount,
-                        syncResponse.deviceUnusedFallbackKeyTypes
+                        syncResponse.deviceUnusedFallbackKeyTypes,
+                        syncResponse.nextBatch
                 )
             }.also {
                 Timber.v("Finish handling toDevice in $it ms")
