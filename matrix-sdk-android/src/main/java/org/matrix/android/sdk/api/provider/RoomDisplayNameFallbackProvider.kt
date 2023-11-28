@@ -25,6 +25,10 @@ package org.matrix.android.sdk.api.provider
  * *Limitation*: if the locale of the device changes, the methods will not be called again.
  */
 interface RoomDisplayNameFallbackProvider {
+    /**
+     * Return the list of user ids to ignore when computing the room display name.
+     */
+    fun excludedUserIds(roomId: String): List<String>
     fun getNameForRoomInvite(): String
     fun getNameForEmptyRoom(isDirect: Boolean, leftMemberNames: List<String>): String
     fun getNameFor1member(name: String): String
