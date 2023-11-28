@@ -41,7 +41,6 @@ dokkaHtml {
         }
     }
 }
-apply from: '../flavor.gradle'
 
 android {
     namespace "org.matrix.android.sdk"
@@ -63,7 +62,7 @@ android {
         // that the app's state is completely cleared between tests.
         testInstrumentationRunnerArguments clearPackageData: 'true'
 
-        buildConfigField "String", "SDK_VERSION", "\"1.6.6\""
+        buildConfigField "String", "SDK_VERSION", "\"1.6.8\""
 
         buildConfigField "String", "GIT_SDK_REVISION", "\"${gitRevision()}\""
         buildConfigField "String", "GIT_SDK_REVISION_UNIX_DATE", "\"${gitRevisionUnixDate()}\""
@@ -158,7 +157,7 @@ dependencies {
  //   implementation libs.androidx.appCompat
     implementation libs.androidx.core
 
-    rustCryptoImplementation libs.androidx.lifecycleLivedata
+    implementation libs.androidx.lifecycleLivedata
 
     // Lifecycle
     implementation libs.androidx.lifecycleCommon
@@ -216,8 +215,8 @@ dependencies {
 
     implementation libs.google.phonenumber
 
-    rustCryptoImplementation("org.matrix.rustcomponents:crypto-android:0.3.15")
-//    rustCryptoApi project(":library:rustCrypto")
+    implementation("org.matrix.rustcomponents:crypto-android:0.3.16")
+//    api project(":library:rustCrypto")
 
     testImplementation libs.tests.junit
     // Note: version sticks to 1.9.2 due to https://github.com/mockk/mockk/issues/281

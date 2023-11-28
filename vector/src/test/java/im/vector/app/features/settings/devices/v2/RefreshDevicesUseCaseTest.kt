@@ -35,7 +35,7 @@ class RefreshDevicesUseCaseTest {
     fun `given current session when refreshing then devices list and keys are fetched`() {
         val session = fakeActiveSessionHolder.fakeSession
         coEvery { session.cryptoService().fetchDevicesList() } returns emptyList()
-        coEvery { session.cryptoService().downloadKeysIfNeeded(any()) } returns MXUsersDevicesMap()
+        coEvery { session.cryptoService().downloadKeysIfNeeded(any(), any()) } returns MXUsersDevicesMap()
 
         runBlocking {
             refreshDevicesUseCase.execute()

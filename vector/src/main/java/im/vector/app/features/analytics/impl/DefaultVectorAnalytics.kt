@@ -19,7 +19,6 @@ package im.vector.app.features.analytics.impl
 import com.posthog.android.Options
 import com.posthog.android.PostHog
 import com.posthog.android.Properties
-import im.vector.app.BuildConfig
 import im.vector.app.core.di.NamedGlobalScope
 import im.vector.app.features.analytics.AnalyticsConfig
 import im.vector.app.features.analytics.VectorAnalytics
@@ -215,9 +214,6 @@ class DefaultVectorAnalytics @Inject constructor(
     private fun Map<String, Any?>.toPostHogUserProperties(): Properties {
         return Properties().apply {
             putAll(this@toPostHogUserProperties.filter { it.value != null })
-            if (BuildConfig.FLAVOR == "rustCrypto") {
-                put("crypto", "rust")
-            }
         }
     }
 

@@ -3,7 +3,6 @@ plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
 }
-apply from: '../flavor.gradle'
 
 android {
     namespace "org.matrix.android.sdk.flow"

@@ -16,7 +16,6 @@
 
 package im.vector.app.features.analytics.metrics.sentry
 
-import im.vector.app.BuildConfig
 import io.sentry.Sentry
 import io.sentry.SentryEvent
 import io.sentry.protocol.Message
@@ -29,7 +28,7 @@ class SentryCryptoAnalytics @Inject constructor() : CryptoMetricPlugin() {
     override fun captureEvent(cryptoEvent: CryptoEvent) {
         if (!Sentry.isEnabled()) return
         val event = SentryEvent()
-        event.setTag("e2eFlavor", BuildConfig.FLAVOR)
+        event.setTag("e2eFlavor", "rustCrypto")
         event.setTag("e2eType", "crypto")
         when (cryptoEvent) {
             is CryptoEvent.FailedToDecryptToDevice -> {

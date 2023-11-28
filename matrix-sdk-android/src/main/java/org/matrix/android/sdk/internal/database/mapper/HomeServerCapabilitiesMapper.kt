@@ -50,6 +50,7 @@ internal object HomeServerCapabilitiesMapper {
                 canRedactRelatedEvents = entity.canRedactEventWithRelations,
                 externalAccountManagementUrl = entity.externalAccountManagementUrl,
                 authenticationIssuer = entity.authenticationIssuer,
+                disableNetworkConstraint = entity.disableNetworkConstraint,
         )
     }
 

@@ -30,7 +30,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.session.SessionScope
+import org.matrix.android.sdk.internal.session.workmanager.WorkManagerConfig
 import org.matrix.android.sdk.internal.worker.MatrixWorkerFactory
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -102,12 +104,20 @@ internal class WorkManagerProvider @Inject constructor(
     companion object {
         private const val MATRIX_SDK_TAG_PREFIX = "MatrixSDK-"
 
-        /**
-         * Default constraints: connected network.
-         */
-        val workConstraints = Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .build()
+        fun getWorkConstraints(
+                workManagerConfig: WorkManagerConfig,
+        ): Constraints {
+            val withNetworkConstraint = workManagerConfig.withNetworkConstraint()
+            return Constraints.Builder()
+                    .apply {
+                        if (withNetworkConstraint) {
+                            setRequiredNetworkType(NetworkType.CONNECTED)
+                        } else {
+                            Timber.w("Network constraint is disabled")
+                        }
+                    }
+                    .build()
+        }
 
         // Use min value, smaller value will be ignored
         const val BACKOFF_DELAY_MILLIS = WorkRequest.MIN_BACKOFF_MILLIS

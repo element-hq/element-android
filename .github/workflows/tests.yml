@@ -73,7 +73,7 @@ jobs:
           disable-animations: true
           # emulator-build: 7425822
           script: |
-            ./gradlew gatherGplayKotlinCryptoDebugStringTemplates $CI_GRADLE_ARG_PROPERTIES
+            ./gradlew gatherGplayDebugStringTemplates $CI_GRADLE_ARG_PROPERTIES
             ./gradlew unitTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
             ./gradlew instrumentationTestsWithCoverage $CI_GRADLE_ARG_PROPERTIES
             ./gradlew generateCoverageReport $CI_GRADLE_ARG_PROPERTIES
