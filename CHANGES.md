@@ -1,3 +1,21 @@
+Changes in Element v1.6.8 (2023-11-28)
+======================================
+
+Bugfixes 🐛
+----------
+ - Stop incoming call ringing if the call is cancelled or answered on another session. ([#4066](https://github.com/vector-im/element-android/issues/4066))
+ - Ensure the incoming call will not ring forever, in case the call is not ended by another way. ([#8178](https://github.com/vector-im/element-android/issues/8178))
+ - Unified Push: Ignore the potential SSL error when the custom gateway is testing locally ([#8683](https://github.com/vector-im/element-android/issues/8683))
+ - Fix issue with timeline message view reuse while rich text editor is enabled ([#8688](https://github.com/vector-im/element-android/issues/8688))
+
+Other changes
+-------------
+ - Remove unused WebRTC dependency ([#8658](https://github.com/vector-im/element-android/issues/8658))
+ - Take into account boolean "io.element.disable_network_constraint" from the .well-known file. ([#8662](https://github.com/vector-im/element-android/issues/8662))
+ - Update regex for email address to be aligned on RFC 5322 ([#8671](https://github.com/vector-im/element-android/issues/8671))
+ - Bump crypto sdk bindings to v0.3.16 ([#8679](https://github.com/vector-im/element-android/issues/8679))
+
+
 Changes in Element v1.6.6 (2023-10-05)
 ======================================
 
