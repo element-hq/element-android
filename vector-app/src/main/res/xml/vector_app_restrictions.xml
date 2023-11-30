@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<restrictions xmlns:android="http://schemas.android.com/apk/res/android">
+    <restriction
+        android:key="im.vector.app.serverConfigDefaultHomeserverUrlString"
+        android:restrictionType="string"
+        android:title="@string/restriction_default_homeserver_url_title" />
+
+    <restriction
+        android:key="im.vector.app.serverConfigSygnalAPIUrlString"
+        android:restrictionType="string"
+        android:title="@string/restriction_default_push_gateway_title" />
+
+    <restriction
+        android:key="im.vector.app.clientPermalinkBaseUrl"
+        android:restrictionType="string"
+        android:title="@string/restriction_permalink_base_url_title" />
+
+</restrictions>
