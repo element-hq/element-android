@@ -25,7 +25,9 @@ import androidx.core.content.getSystemService
 import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class DefaultMdmService @Inject constructor(
         @ApplicationContext applicationContext: Context
 ) : MdmService {

@@ -112,6 +112,9 @@ import javax.inject.Singleton
     abstract fun bindEmojiSpanify(emojiCompatWrapper: EmojiCompatWrapper): EmojiSpanify
 
     @Binds
+    abstract fun bindMdmService(service: DefaultMdmService): MdmService
+
+    @Binds
     abstract fun bindFontScale(fontScale: FontScalePreferencesImpl): FontScalePreferences
 
     @Binds
@@ -171,11 +174,6 @@ import javax.inject.Singleton
     @Singleton
     fun providesMatrix(context: Context, configuration: MatrixConfiguration): Matrix {
         return Matrix(context, configuration)
-    }
-
-    @Provides
-    fun providesMdmService(context: Context): MdmService {
-        return DefaultMdmService(context)
     }
 
     @Provides
