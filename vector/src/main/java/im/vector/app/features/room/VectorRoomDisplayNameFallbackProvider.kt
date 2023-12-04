@@ -32,10 +32,12 @@ class VectorRoomDisplayNameFallbackProvider @Inject constructor(
 
     override fun excludedUserIds(roomId: String): List<String> {
         if (!Config.SUPPORT_FUNCTIONAL_MEMBERS) return emptyList()
-        return activeSessionHolder.get().getSafeActiveSession()
-                ?.getRoom(roomId)?.let { room ->
-                    room.stateService().getFunctionalMembers()
-                }.orEmpty()
+        return activeSessionHolder.get()
+                .getSafeActiveSession()
+                ?.getRoom(roomId)
+                ?.stateService()
+                ?.getFunctionalMembers()
+                .orEmpty()
     }
 
     override fun getNameForRoomInvite(): String {

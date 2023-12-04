@@ -26,11 +26,13 @@ private const val FUNCTIONAL_MEMBERS_STATE_EVENT_TYPE = "io.element.functional_m
 
 @JsonClass(generateAdapter = true)
 data class FunctionalMembersContent(
-        @Json(name = "service_members") val userIds: List<String>
+        @Json(name = "service_members") val userIds: List<String>? = null
 )
 
 fun StateService.getFunctionalMembers(): List<String> {
-    return getStateEvent(FUNCTIONAL_MEMBERS_STATE_EVENT_TYPE, QueryStringValue.IsEmpty)?.let {
-        it.content.toModel<FunctionalMembersContent>()?.userIds
-    }.orEmpty()
+    return getStateEvent(FUNCTIONAL_MEMBERS_STATE_EVENT_TYPE, QueryStringValue.IsEmpty)
+            ?.content
+            ?.toModel<FunctionalMembersContent>()
+            ?.userIds
+            .orEmpty()
 }
