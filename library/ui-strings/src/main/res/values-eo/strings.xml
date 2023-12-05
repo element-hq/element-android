@@ -444,7 +444,7 @@
     <string name="rendering_event_error_type_of_event_not_handled">${app_name} ne traktas okazojn de speco «%1$s»</string>
     <string name="room_member_jump_to_read_receipt">Salti al legokonfirmo</string>
     <string name="room_member_power_level_custom_in">Propra (%1$d) en %2$s</string>
-    <string name="room_member_power_level_default_in">Ordinara en %1$s</string>
+    <string name="room_member_power_level_default_in">Defaŭlto en %1$s</string>
     <string name="room_member_power_level_moderator_in">Kontrolanto en %1$s</string>
     <string name="room_member_power_level_admin_in">Administranto en %1$s</string>
     <string name="room_member_power_level_users">Uzantoj</string>
@@ -1725,7 +1725,7 @@
     <string name="room_permissions_change_settings">Ŝanĝi agordojn</string>
     <string name="room_permissions_invite_users">Inviti uzantojn</string>
     <string name="room_permissions_send_messages">Sendi mesaĝon</string>
-    <string name="room_permissions_default_role">Ordinara rolo</string>
+    <string name="room_permissions_default_role">Defaŭlta rolo</string>
     <string name="room_settings_permissions_title">Permesoj en ĉambro</string>
     <string name="error_unauthorized">Nerajtigite, mankas validaj aŭtentikigiloj</string>
     <string name="settings_room_directory_show_all_rooms_summary">Montri ĉiujn ĉambrojn en la katalogo de ĉambro, inkluzive tiujn kun konsterna enhavo.</string>
@@ -2373,4 +2373,20 @@
     <string name="labs_auto_report_uisi_desc">Via sistemo aŭtomate sendos protokolojn kiam okazas nekapabla malĉifri eraro</string>
     <string name="upgrade_room_for_restricted_no_param">Ĉiu en gepatra spaco povos trovi kaj aliĝi al ĉi tiu ĉambro - ne necesas permane inviti ĉiujn. Vi povos ŝanĝi ĉi tion en la agordoj de la ĉambro iam ajn.</string>
     <string name="labs_enable_live_location">Ebligi Tujan Loko-kunhavigadon</string>
+    <string name="action_proceed_to_reset">Procedi por rekomencigi</string>
+    <string name="action_disable">Malebligi</string>
+    <string name="call_tap_to_return">%1$s Tuŝetu por reveni</string>
+    <string name="font_size_section_auto">Agordi aŭtomate</string>
+    <string name="action_learn_more">Lerni pli</string>
+    <string name="action_try_it_out">Provi ĝin</string>
+    <string name="call_slide_to_end_conference">Glitu por fini la vokon</string>
+    <string name="action_next">Poste</string>
+    <string name="action_enable">Ebligi</string>
+    <string name="action_not_now">Ne nun</string>
+    <string name="call_stop_screen_sharing">Ĉesi ekrankunhavigadon</string>
+    <string name="action_stop">Jes, Halti</string>
+    <string name="action_got_it">Atingis</string>
+    <string name="action_select_all">Elekti ĉiujn</string>
+    <string name="action_deselect_all">Malelekti ĉiujn</string>
+    <string name="call_start_screen_sharing">Kunhavigi ekranon</string>
 </resources>
