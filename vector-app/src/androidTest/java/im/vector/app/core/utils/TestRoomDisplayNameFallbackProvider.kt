@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.common
+package im.vector.app.core.utils
 
 import org.matrix.android.sdk.api.provider.RoomDisplayNameFallbackProvider
 
