@@ -1525,7 +1525,7 @@
     <string name="bootstrap_enter_recovery">Plenigu per via %s por daŭrigi</string>
     <string name="security_prompt_text">Kontrolu vin ⳤ aliajn por teni viajn interparolojn sekuraj</string>
     <string name="upgrade_security">Gradaltigo de ĉifrado estas disponebla</string>
-    <string name="room_message_placeholder">Mesaĝo…</string>
+    <string name="room_message_placeholder">Mesaĝi…</string>
     <string name="keep_it_safe">Tenu ĝin sekura</string>
     <string name="bootstrap_finish_title">Finite!</string>
     <string name="bootstrap_loading_title">Agordante rehavon.</string>
