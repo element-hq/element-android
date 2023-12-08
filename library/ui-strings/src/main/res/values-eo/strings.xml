@@ -1378,7 +1378,7 @@
     <string name="room_settings_add_homescreen_shortcut">Aldoni al hejmekrano</string>
     <string name="settings_call_ringtone_use_app_ringtone">Uzi implicitan sonoron de ${app_name} por envenaj vokoj</string>
     <string name="call_switch_camera">Baskuli filmilon</string>
-    <string name="auth_pin_forgot">Forgesita numero\?</string>
+    <string name="auth_pin_forgot">Ĉu vi forgesis PIN\?</string>
     <string name="universal_link_malformed">La ligilo estis misformita</string>
     <string name="room_error_not_found">Ne povas trovi ĉi tiun ĉambron. Certiĝu, ke ĝi ekzistas.</string>
     <string name="error_opening_banned_room">Ne povas malfermi ĉambron, de kiu vi forbariĝis.</string>
@@ -1391,7 +1391,7 @@
     <string name="settings_security_pin_code_use_biometrics_summary_off">La persona identiga numero estas la sola maniero malŝlosi ${app_name}.</string>
     <string name="settings_security_pin_code_use_biometrics_summary_on">Ŝalti vivaĵanalizojn de la aparato, kiel ekzemple rekonadon de fingrospuroj aŭ vizaĝo.</string>
     <string name="settings_security_pin_code_use_biometrics_title">Ŝalti vivaĵanalizojn</string>
-    <string name="settings_security_pin_code_summary">Se vi volas reagordi vian personan identigan numeron, tuŝetu sur «Forgesita PIN» por elsaluti kaj restarigi.</string>
+    <string name="settings_security_pin_code_summary">Se vi volas reagordi vian personan identigan numeron, tuŝetu sur «Ĉu vi forgesis PIN\?» por elsaluti kaj reagordi.</string>
     <string name="settings_security_pin_code_title">Ŝalti personan identigan numeron</string>
     <string name="settings_security_application_protection_screen_title">Agordi protekton</string>
     <string name="settings_security_application_protection_summary">Protekti aliron per persona identiga numero kaj vivaĵanalizoj.</string>
