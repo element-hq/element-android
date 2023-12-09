@@ -2389,4 +2389,6 @@
     <string name="action_select_all">Elekti ĉiujn</string>
     <string name="action_deselect_all">Malelekti ĉiujn</string>
     <string name="call_start_screen_sharing">Kunhavigi ekranon</string>
+    <string name="updating_your_data">Ĝisdatigante viajn datumojn…</string>
+    <string name="settings_notification_error_on_update">Okazis eraro dum la ĝisdatigo de viaj sciigaj preferoj. Bonvolu reprovi.</string>
 </resources>
