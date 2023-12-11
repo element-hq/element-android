@@ -24,6 +24,8 @@ import com.squareup.moshi.JsonClass
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.getApplicationLabel
+import im.vector.app.features.mdm.MdmData
+import im.vector.app.features.mdm.MdmService
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.cache.CacheStrategy
 import org.matrix.android.sdk.api.failure.Failure
@@ -40,6 +42,7 @@ class UnifiedPushHelper @Inject constructor(
         private val stringProvider: StringProvider,
         private val matrix: Matrix,
         private val fcmHelper: FcmHelper,
+        private val mdmService: MdmService,
 ) {
 
     @MainThread
@@ -99,7 +102,12 @@ class UnifiedPushHelper @Inject constructor(
         // register app_id type upfcm on sygnal
         // the pushkey if FCM key
         if (UnifiedPush.getDistributor(context) == context.packageName) {
-            unifiedPushStore.storePushGateway(stringProvider.getString(R.string.pusher_http_url))
+            unifiedPushStore.storePushGateway(
+                    gateway = mdmService.getData(
+                            mdmData = MdmData.DefaultPushGatewayUrl,
+                            defaultValue = stringProvider.getString(R.string.pusher_http_url),
+                    )
+            )
             onDoneRunnable?.run()
             return
         }
@@ -185,7 +193,13 @@ class UnifiedPushHelper @Inject constructor(
     }
 
     fun getPushGateway(): String? {
-        return if (isEmbeddedDistributor()) stringProvider.getString(R.string.pusher_http_url)
-        else unifiedPushStore.getPushGateway()
+        return if (isEmbeddedDistributor()) {
+            mdmService.getData(
+                    mdmData = MdmData.DefaultPushGatewayUrl,
+                    defaultValue = stringProvider.getString(R.string.pusher_http_url),
+            )
+        } else {
+            unifiedPushStore.getPushGateway()
+        }
     }
 }
