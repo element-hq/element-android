@@ -1,2 +1,2 @@
 Hauptänderungen: Sprachnachrichten in experimentellen Einstellungen
-Alle Änderungen: https://github.com/vector-im/element-android/releases/tag/v1.1.15
+Alle Änderungen: https://github.com/element-hq/element-android/releases/tag/v1.1.15

@@ -1,2 +1,2 @@
 このバージョンの主な変更点：ダイレクトメッセージのルームでプレゼンス（ステータス表示）のサポートを追加（注意：プレゼンスは matrix.org では無効です）。Android Autoのサポートを再追加。
-更新履歴：https://github.com/vector-im/element-android/releases/tag/v1.3.5
+更新履歴：https://github.com/element-hq/element-android/releases/tag/v1.3.5

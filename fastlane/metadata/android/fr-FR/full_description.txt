@@ -39,4 +39,4 @@ Messagerie instantannée, appels audio et vidéo, partage de fichier, partage d�
 Restez en contact où que vous soyez grâce à l’historique des messages synchronisé entre tous vos appareils et sur le web sur https://app.element.io
 
 <b>Open source</b>
-Element Adroid est un projet libre, hébergé par GitHub. Veuillez signaler tous les problèmes et / ou contribuer à son développement sur https://github.com/vector-im/element-android
+Element Adroid est un projet libre, hébergé par GitHub. Veuillez signaler tous les problèmes et / ou contribuer à son développement sur https://github.com/element-hq/element-android

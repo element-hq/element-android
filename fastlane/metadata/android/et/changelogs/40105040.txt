@@ -1,2 +1,2 @@
 Põhilised muutused selles versioonis: Uued võimalused katsete all: vormindatud teksti põhine toimeti, uus seadmehaldus, ringhäälingukõned (kõik on hetkel aktiivsel arendamisel).
-Kogu ingliskeelne muudatuste logi: https://github.com/vector-im/element-android/releases
+Kogu ingliskeelne muudatuste logi: https://github.com/element-hq/element-android/releases

@@ -1,2 +1,2 @@
 Legnagyobb változtatás ebben a verzióban: Fejlesztések a hang közvetítésben.
-Teljes változási napló: https://github.com/vector-im/element-android/releases
+Teljes változási napló: https://github.com/element-hq/element-android/releases

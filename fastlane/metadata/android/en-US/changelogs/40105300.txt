@@ -1,2 +1,2 @@
 Main changes in this version: permalinks to rooms, spaces, users and messages are now displayed as pills in the timeline. We also fixed some issues with custom stickers and the read marker getting stuck in the past.
-Full changelog: https://github.com/vector-im/element-android/releases
+Full changelog: https://github.com/element-hq/element-android/releases

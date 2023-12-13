@@ -39,4 +39,4 @@ Element 透过不同的方式让你掌控一切：
 无论你身在何处，都可以透过在你所有设备与网页 https://app.element.io 间完全同步的信息历史保持联络
 
 <b>开源</b>
- Element Android 是一个开源项目，由 GitHub 托管。 请在 https://github.com/vector-im/element-android 报告错误和/或为其开发做出贡献
+ Element Android 是一个开源项目，由 GitHub 托管。 请在 https://github.com/element-hq/element-android 报告错误和/或为其开发做出贡献

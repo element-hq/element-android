@@ -1,2 +1,2 @@
 Ова нова верзија углавном садржи побољшања корисничког искуства и сучеља. Сада можете позвати пријатеље и направити ћаскања веома брзо скенирањем КуЕр кодова.
-Дневник свих измена: https://github.com/vector-im/element-android/releases/tag/v1.0.11
+Дневник свих измена: https://github.com/element-hq/element-android/releases/tag/v1.0.11

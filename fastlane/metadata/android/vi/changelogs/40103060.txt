@@ -1,2 +1,2 @@
 Thay đổi chính trong phiên bản này: Hỗ trợ trạng thái, cho các phòng nhắn tin trực tiếp (ghi chú: trạng thái bị vô hiệu trên matrix.org). Hỗ trợ Android Auto trở lại.
-Toàn bộ nhật ký sửa đổi: https://github.com/vector-im/element-android/releases/tag/v1.3.6
+Toàn bộ nhật ký sửa đổi: https://github.com/element-hq/element-android/releases/tag/v1.3.6

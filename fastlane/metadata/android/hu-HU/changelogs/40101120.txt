@@ -1,2 +1,2 @@
 Főbb változtatások ebben a verzióban: kinézet és stílus frissítések és a videóhívás utáni összeomlás javítása
-Teljes változásnapló: https://github.com/vector-im/element-android/releases/tag/v1.1.12
+Teljes változásnapló: https://github.com/element-hq/element-android/releases/tag/v1.1.12

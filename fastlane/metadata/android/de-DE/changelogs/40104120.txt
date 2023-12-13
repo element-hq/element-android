@@ -1,2 +1,2 @@
 Hauptänderungen: Nutzer können ihren Status auf „Offline“ setzen, Gesendete Audiodateien können nun in der App abgespielt werden
-Alle Änderungen: https://github.com/vector-im/element-android/releases
+Alle Änderungen: https://github.com/element-hq/element-android/releases

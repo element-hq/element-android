@@ -1,2 +1,2 @@
 Den här nya versionen innehåller mest förbättringar för användargränssnittet och användarupplevelsen. Du kan nu bjuda in vänner och skapa direktmeddelanden väldigt snabbt genom att skanna QR-koder.
-Full ändringslogg: https://github.com/vector-im/element-android/releases/tag/v1.0.11
+Full ändringslogg: https://github.com/element-hq/element-android/releases/tag/v1.0.11

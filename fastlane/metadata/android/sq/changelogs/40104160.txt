@@ -1,2 +1,2 @@
 Ndryshimet kryesore në këtë version: Administrim më i mirë i mesazheve të fshehtëzuar. Ndreqje të metash dhe përmirësime të ndryshme qëndrueshmërie.
-Regjistër i plotë ndryshimesh: https://github.com/vector-im/element-android/releases
+Regjistër i plotë ndryshimesh: https://github.com/element-hq/element-android/releases

@@ -56,7 +56,7 @@ jobs:
       - uses: konradpabjan/move-labeled-or-milestoned-issue@219d384e03fa4b6460cd24f9f37d19eb033a4338
         with:
           action-token: "${{ secrets.ELEMENT_BOT_TOKEN }}"
-          project-url: "https://github.com/vector-im/element-android/projects/4"
+          project-url: "https://github.com/element-hq/element-android/projects/4"
           column-name: "Need info"
           label-name: "X-Needs-Info"
 

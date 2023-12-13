@@ -1,2 +1,2 @@
 ສະບັບໃຫມ່ນີ້ສ່ວນໃຫຍ່ແມ່ນມີການແກ້ໄຂແລະການປັບປຸງ bug. ຕອນນີ້ການສົ່ງຂໍ້ຄວາມແມ່ນໄວຂຶ້ນຫຼາຍ.
-ບັນທຶກການປ່ຽນແປງສະບັບເຕັມ: https://github.com/vector-im/element-android/releases/tag/v1.0.10
+ບັນທຶກການປ່ຽນແປງສະບັບເຕັມ: https://github.com/element-hq/element-android/releases/tag/v1.0.10

@@ -1,2 +1,2 @@
 Hlavní změny v této verzi: trvalé odkazy na místnosti, prostory, uživatele a zprávy se nyní na časové ose zobrazují jako pilulky. Opravili jsme také některé problémy s vlastními nálepkami a značkou přečtení, která se zasekla v minulosti.
-Úplný seznam změn: https://github.com/vector-im/element-android/releases
+Úplný seznam změn: https://github.com/element-hq/element-android/releases

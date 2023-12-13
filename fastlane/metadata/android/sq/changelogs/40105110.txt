@@ -1,2 +1,2 @@
 Ndryshimet kryesore në këtë version: Sendërtim i ri i mënyrë “Sa krejt ekrani” për Përpunuesin Tekst i Pasur, si dhe ndreqje të metash.
-Regjistër ndryshimesh: https://github.com/vector-im/element-android/releases
+Regjistër ndryshimesh: https://github.com/element-hq/element-android/releases

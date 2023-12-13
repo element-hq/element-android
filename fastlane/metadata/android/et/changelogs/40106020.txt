@@ -1,2 +1,2 @@
 Põhilised muutused selles versioonis: Element Android krüptoteekideks on nüüd Crypto Rust SDK.
-Kogu ingliskeelne muudatuste logi: https://github.com/vector-im/element-android/releases
+Kogu ingliskeelne muudatuste logi: https://github.com/element-hq/element-android/releases

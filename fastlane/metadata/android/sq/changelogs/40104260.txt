@@ -1,2 +1,2 @@
 Ndryshimet kryesore në këtë version: Përdorim i UnifiedPush dhe lejim i përdoruesve të kenë push pa FCM.
-Regjistër i plotë ndryshimesh: https://github.com/vector-im/element-android/releases
+Regjistër i plotë ndryshimesh: https://github.com/element-hq/element-android/releases

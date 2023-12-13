@@ -1,3 +1,3 @@
 Tata Letak Aplikasi Baru dapat diaktifkan di pengaturan Uji Coba. Cobalah!
 Perbariki masalah tentang notifikasi hilang, dan penyinkronan inkremental panjang.
-Catatan perubahan lanjutan: https://github.com/vector-im/element-android/releases
+Catatan perubahan lanjutan: https://github.com/element-hq/element-android/releases

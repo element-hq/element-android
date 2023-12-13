@@ -1,3 +1,3 @@
 Nový vzhled aplikace lze povolit v Experimentálních funkcích. Prosíme, vyzkoušejte ho!
 Oprava problémů s chybějícími oznámeními a dlouhou přírůstkovou synchronizací.
-Úplný seznam změn: https://github.com/vector-im/element-android/releases
+Úplný seznam změn: https://github.com/element-hq/element-android/releases

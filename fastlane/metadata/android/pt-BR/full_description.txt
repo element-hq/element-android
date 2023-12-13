@@ -39,4 +39,4 @@ Messageria, chamadas de voz e vídeo, compartilhamento de arquivo, compartilhame
 Fique em contato onde quer que você esteja com histórico de mensagem completamente sincronizado por todos os seus dispositivos e na web em https://app.element.io
 
 <b>Open source</b>
-Element Android é um projeto open source, hospedado por GitHub. Por favor reporte bugs e/ou contribua para seu desenvolvimento em https://github.com/vector-im/element-android
+Element Android é um projeto open source, hospedado por GitHub. Por favor reporte bugs e/ou contribua para seu desenvolvimento em https://github.com/element-hq/element-android

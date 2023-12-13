@@ -1,3 +1,3 @@
 La nouvelle présentation de l’application est disponibles dans les paramètres expérimentaux. Essayez-là !
 Correction de problèmes sur les notifications manquantes, et la synchronisation incrémentale lente.
-Intégralité des changements : https://github.com/vector-im/element-android/releases
+Intégralité des changements : https://github.com/element-hq/element-android/releases

@@ -1,2 +1,2 @@
 Main changes in this version: Thread timeline are now live and faster. Various bug fixes and stability improvements.
-Full changelog: https://github.com/vector-im/element-android/releases/tag/v1.4.6
+Full changelog: https://github.com/element-hq/element-android/releases/tag/v1.4.6

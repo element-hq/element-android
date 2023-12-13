@@ -1,2 +1,2 @@
 此版本中的主要變動：聊天室、空間、使用者與訊息的永久連結現在在時間軸中顯示為藥丸。我們還修復了自訂貼圖與讀取標記卡在過去的一些問題。
-完整的變更紀錄：https://github.com/vector-im/element-android/releases
+完整的變更紀錄：https://github.com/element-hq/element-android/releases

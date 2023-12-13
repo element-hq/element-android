@@ -12,9 +12,9 @@
 
 <!--- END -->
 
-Native Jitsi support has been added to Element Android by the PR [#1914](https://github.com/vector-im/element-android/pull/1914). The description of the PR contains some documentation about the behaviour in each possible room configuration.
+Native Jitsi support has been added to Element Android by the PR [#1914](https://github.com/element-hq/element-android/pull/1914). The description of the PR contains some documentation about the behaviour in each possible room configuration.
 
-Also, ensure to have a look on [the documentation from Element Web](https://github.com/vector-im/element-web/blob/develop/docs/jitsi.md)
+Also, ensure to have a look on [the documentation from Element Web](https://github.com/element-hq/element-web/blob/develop/docs/jitsi.md)
 
 The official documentation about how to integrate the Jitsi SDK in an Android app is available here: https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-android-sdk.
 
@@ -22,7 +22,7 @@ The official documentation about how to integrate the Jitsi SDK in an Android ap
 
 The Jitsi SDK is built by ourselves with the flag LIBRE_BUILD, to be able to be integrated on the F-Droid version of Element Android.
 
-The generated maven repository is then host in the project https://github.com/vector-im/jitsi_libre_maven
+The generated maven repository is then host in the project https://github.com/element-hq/jitsi_libre_maven
 
 ### How to build the Jitsi Meet SDK
 
@@ -49,7 +49,7 @@ It will build the Jitsi Meet Android library and put every generated files in th
 - Update the file `./build.gradle` to use the previously created local Maven repository. Currently we have this line:
 
 ```groovy
-url "https://github.com/vector-im/jitsi_libre_maven/raw/main/android-sdk-8.1.1"
+url "https://github.com/element-hq/jitsi_libre_maven/raw/main/android-sdk-8.1.1"
 ```
 
 You can uncomment and update the line starting with `// url "file://...` and comment the line starting with `url`, to test the library using the locally generated Maven repository.
@@ -81,14 +81,14 @@ In order to validate that the upgrade of the Jitsi and WebRTC dependency does no
 
 If all the tests are passed, you can export the generated Jitsi library to our Maven repository.
 
-- Clone the project https://github.com/vector-im/jitsi_libre_maven.
+- Clone the project https://github.com/element-hq/jitsi_libre_maven.
 - Create a new folder with the version name.
 - Copy every generated files form `/tmp/jitsi` to the folder you have just created.
-- Commit and push the change on https://github.com/vector-im/jitsi_libre_maven.
+- Commit and push the change on https://github.com/element-hq/jitsi_libre_maven.
 - Update the file `./build.gradle` to use the previously created Maven repository. Currently we have this line:
 
 ```groovy
-url "https://github.com/vector-im/jitsi_libre_maven/raw/main/android-sdk-8.1.1"
+url "https://github.com/element-hq/jitsi_libre_maven/raw/main/android-sdk-8.1.1"
 ```
 
 - Build the project and perform the sanity tests again.

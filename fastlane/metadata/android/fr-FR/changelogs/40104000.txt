@@ -1,2 +1,2 @@
 Principaux changements pour cette version : Implémentation initial des fils de discussion. Bulles de messages.
-Intégralité des changements : https://github.com/vector-im/element-android/releases/tag/v1.4.0
+Intégralité des changements : https://github.com/element-hq/element-android/releases/tag/v1.4.0

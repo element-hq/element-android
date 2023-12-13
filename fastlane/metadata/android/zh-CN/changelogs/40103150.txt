@@ -1,2 +1,2 @@
 此版本的主要变化：对新用户引导画面的首次更改，包括选择加入分析的功能。对添加在实验中带有数学的事件的支持。
-完整更改日志：https://github.com/vector-im/element-android/releases/tag/v1.3.15
+完整更改日志：https://github.com/element-hq/element-android/releases/tag/v1.3.15

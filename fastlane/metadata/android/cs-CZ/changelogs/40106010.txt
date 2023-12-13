@@ -1,2 +1,2 @@
 Hlavní změny v této verzi: Element Android nyní používá Crypto Rust SDK.
-Úplný seznam změn: https://github.com/vector-im/element-android/releases
+Úplný seznam změn: https://github.com/element-hq/element-android/releases

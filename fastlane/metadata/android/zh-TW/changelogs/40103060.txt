@@ -1,2 +1,2 @@
 此版本的主要變動：為私人訊息聊天室新增 Presence 支援（請注意：此功能在 matrix.org 上停用）。加回 Android Auto 支援。
-完整的變更紀錄：https://github.com/vector-im/element-android/releases/tag/v1.3.6
+完整的變更紀錄：https://github.com/element-hq/element-android/releases/tag/v1.3.6

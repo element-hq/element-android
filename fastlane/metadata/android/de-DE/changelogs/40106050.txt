@@ -1,2 +1,2 @@
 Die wichtigsten Änderungen in dieser Version: Fehlerbehebungen.
-Vollständiges Änderungsprotokoll: https://github.com/vector-im/element-android/releases
+Vollständiges Änderungsprotokoll: https://github.com/element-hq/element-android/releases
