@@ -2202,7 +2202,7 @@ Changes in Element v1.1.13 (2021-07-19)
 
 Features ✨
 ----------
- - Remove redundant mimetype (vector-im/element-web#2547) ([#3273](https://github.com/element-hq/element-android/issues/3273))
+ - Remove redundant mimetype (element-hq/element-web#2547) ([#3273](https://github.com/element-hq/element-android/issues/3273))
  - Room version capabilities and room upgrade support, better error feedback ([#3551](https://github.com/element-hq/element-android/issues/3551))
  - Add retry support in room addresses screen ([#3635](https://github.com/element-hq/element-android/issues/3635))
  - Better management of permission requests ([#3667](https://github.com/element-hq/element-android/issues/3667))

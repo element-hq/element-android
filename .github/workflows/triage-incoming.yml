@@ -8,7 +8,7 @@ jobs:
   automate-project-columns:
     runs-on: ubuntu-latest
     # Skip in forks
-    if: github.repository == 'vector-im/element-android'
+    if: github.repository == 'element-hq/element-android'
     steps:
       - uses: alex-page/github-project-automation-plus@7ffb872c64bd809d23563a130a0a97d01dfa8f43
         with:
@@ -21,5 +21,5 @@ jobs:
       steps:
           - uses: actions/add-to-project@main
             with:
-                project-url: https://github.com/orgs/vector-im/projects/91
+                project-url: https://github.com/orgs/element-hq/projects/91
                 github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
