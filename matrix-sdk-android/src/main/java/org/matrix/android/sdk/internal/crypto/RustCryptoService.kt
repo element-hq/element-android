@@ -500,8 +500,8 @@ internal class RustCryptoService @Inject constructor(
             olmMachine.decryptRoomEvent(event)
         } catch (mxCryptoError: MXCryptoError) {
             if (mxCryptoError is MXCryptoError.Base && (
-                            mxCryptoError.errorType == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID
-                                    || mxCryptoError.errorType == MXCryptoError.ErrorType.UNKNOWN_MESSAGE_INDEX)) {
+                            mxCryptoError.errorType == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID ||
+                                    mxCryptoError.errorType == MXCryptoError.ErrorType.UNKNOWN_MESSAGE_INDEX)) {
                 Timber.v("Try to perform a lazy migration from legacy store")
                 /**
                  * It's a bit hacky, check how this can be better integrated with rust?
