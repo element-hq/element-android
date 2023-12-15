@@ -43,6 +43,12 @@ object Config {
     const val LOCATION_MAP_TILER_KEY = "fU3vlMsMn4Jb6dnEIFsx"
 
     /**
+     * Whether to read the `io.element.functional_members` state event
+     * and exclude any service members when computing a room's name and avatar.
+     */
+    const val SUPPORT_FUNCTIONAL_MEMBERS = true
+
+    /**
      * The maximum length of voice messages in milliseconds.
      */
     const val VOICE_MESSAGE_LIMIT_MS = 120_000L

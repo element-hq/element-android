@@ -370,10 +370,6 @@ class MessageActionsViewModel @AssistedInject constructor(
                 add(EventSharedAction.ViewReactions(informationData))
             }
 
-            if (canQuote(timelineEvent, messageContent, actionPermissions)) {
-                add(EventSharedAction.Quote(eventId))
-            }
-
             if (timelineEvent.hasBeenEdited()) {
                 add(EventSharedAction.ViewEditHistory(informationData))
             }

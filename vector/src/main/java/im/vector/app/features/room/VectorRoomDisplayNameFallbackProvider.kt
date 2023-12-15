@@ -18,12 +18,27 @@ package im.vector.app.features.room
 
 import android.content.Context
 import im.vector.app.R
+import im.vector.app.config.Config
+import im.vector.app.core.di.ActiveSessionHolder
 import org.matrix.android.sdk.api.provider.RoomDisplayNameFallbackProvider
+import org.matrix.android.sdk.api.session.getRoom
 import javax.inject.Inject
+import javax.inject.Provider
 
 class VectorRoomDisplayNameFallbackProvider @Inject constructor(
-        private val context: Context
+        private val context: Context,
+        private val activeSessionHolder: Provider<ActiveSessionHolder>,
 ) : RoomDisplayNameFallbackProvider {
+
+    override fun excludedUserIds(roomId: String): List<String> {
+        if (!Config.SUPPORT_FUNCTIONAL_MEMBERS) return emptyList()
+        return activeSessionHolder.get()
+                .getSafeActiveSession()
+                ?.getRoom(roomId)
+                ?.stateService()
+                ?.getFunctionalMembers()
+                .orEmpty()
+    }
 
     override fun getNameForRoomInvite(): String {
         return context.getString(R.string.room_displayname_room_invite)
