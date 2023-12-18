@@ -205,7 +205,7 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
                         setServerURL(it)
                     }
                 }
-                // https://github.com/jitsi/jitsi-meet/blob/master/react/features/base/flags/constants.js
+                // https://github.com/jitsi/jitsi-meet/blob/master/react/features/base/flags/constants.ts
                 .setFeatureFlag("chat.enabled", false)
                 .setFeatureFlag("invite.enabled", false)
                 .setFeatureFlag("add-people.enabled", false)
