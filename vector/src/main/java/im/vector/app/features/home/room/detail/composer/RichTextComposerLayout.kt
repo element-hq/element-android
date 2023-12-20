@@ -105,10 +105,10 @@ internal class RichTextComposerLayout @JvmOverloads constructor(
     override val attachmentButton: ImageButton
         get() = views.attachmentButton
 
-    val richTextEditText: EditText get() =
-        views.richTextComposerEditText
-    val plainTextEditText: EditText get() =
-        views.plainTextComposerEditText
+    val richTextEditText: EditText
+        get() = views.richTextComposerEditText
+    val plainTextEditText: EditText
+        get() = views.plainTextComposerEditText
 
     var pillDisplayHandler: PillDisplayHandler? = null
 
@@ -237,14 +237,16 @@ internal class RichTextComposerLayout @JvmOverloads constructor(
         views.composerEditTextOuterBorder.background = borderShapeDrawable
 
         setupRichTextMenu()
-        views.richTextComposerEditText.mentionDisplayHandler = object : MentionDisplayHandler {
-            override fun resolveMentionDisplay(text: String, url: String): TextDisplay =
-                pillDisplayHandler?.resolveMentionDisplay(text, url) ?: TextDisplay.Plain
+        views.richTextComposerEditText.updateStyle(
+                styleConfig = views.richTextComposerEditText.styleConfig,
+                mentionDisplayHandler = object : MentionDisplayHandler {
+                    override fun resolveMentionDisplay(text: String, url: String): TextDisplay =
+                            pillDisplayHandler?.resolveMentionDisplay(text, url) ?: TextDisplay.Plain
 
-            override fun resolveAtRoomMentionDisplay(): TextDisplay =
-                pillDisplayHandler?.resolveAtRoomMentionDisplay() ?: TextDisplay.Plain
-        }
-
+                    override fun resolveAtRoomMentionDisplay(): TextDisplay =
+                            pillDisplayHandler?.resolveAtRoomMentionDisplay() ?: TextDisplay.Plain
+                }
+        )
         updateTextFieldBorder(isFullScreen)
     }
 
