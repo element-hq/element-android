@@ -131,6 +131,7 @@ internal class EventEditor @Inject constructor(
                     replyToEdit,
                     originalTimelineEvent,
                     newBodyText,
+                    newBodyFormattedText,
                     true,
                     MessageType.MSGTYPE_TEXT,
                     compatibilityBodyText
