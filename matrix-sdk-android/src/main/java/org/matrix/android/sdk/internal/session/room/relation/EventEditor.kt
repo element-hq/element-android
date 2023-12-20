@@ -106,7 +106,7 @@ internal class EventEditor @Inject constructor(
     fun editReply(
             replyToEdit: TimelineEvent,
             originalTimelineEvent: TimelineEvent,
-            newBodyText: String,
+            newBodyText: CharSequence,
             newBodyFormattedText: String?,
             compatibilityBodyText: String
     ): Cancelable {

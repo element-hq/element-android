@@ -312,7 +312,7 @@ internal class LocalEchoEventFactory @Inject constructor(
             roomId: String,
             eventReplaced: TimelineEvent,
             originalEvent: TimelineEvent,
-            newBodyText: String,
+            newBodyText: CharSequence,
             autoMarkdown: Boolean,
             msgType: String,
             compatibilityText: String,
@@ -336,7 +336,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         //
         // > <@alice:example.org> This is the original body
         //
-        val replyFallback = buildReplyFallback(body, originalEvent.root.senderId ?: "", newBodyText)
+        val replyFallback = buildReplyFallback(body, originalEvent.root.senderId ?: "", newBodyText.toString())
 
         return createMessageEvent(
                 roomId,
