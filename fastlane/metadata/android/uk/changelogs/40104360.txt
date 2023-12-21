@@ -1,3 +1,3 @@
 Новий макет програми можна увімкнути в налаштуваннях лабораторії. Спробуйте!
 Виправлено проблеми з відсутністю сповіщень та тривалою інкрементною синхронізацією.
-Список усіх змін: https://github.com/vector-im/element-android/releases
+Список усіх змін: https://github.com/element-hq/element-android/releases

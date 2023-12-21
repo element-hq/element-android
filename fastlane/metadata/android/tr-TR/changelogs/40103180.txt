@@ -1,2 +1,2 @@
 Bu sürümdeki ana değişiklikler: konumunuzu herhangi bir odaya gönderin. Anketi düzenleyin.
-Tam değişiklik günlüğü: https://github.com/vector-im/element-android/releases/tag/v1.3.18
+Tam değişiklik günlüğü: https://github.com/element-hq/element-android/releases/tag/v1.3.18

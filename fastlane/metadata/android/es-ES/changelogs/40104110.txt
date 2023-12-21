@@ -1,2 +1,2 @@
 Cambios principales en esta versión: Varias correciones de bugs y mejoras en la estabilidad
-Registro de cambios: https://github.com/vector-im/element-android/releases
+Registro de cambios: https://github.com/element-hq/element-android/releases

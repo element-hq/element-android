@@ -1,2 +1,2 @@
 このバージョンの主な変更点：UnifiedPushを採用し、FCMなしでプッシュ通知を送信する機能を追加。
-更新履歴：https://github.com/vector-im/element-android/releases
+更新履歴：https://github.com/element-hq/element-android/releases

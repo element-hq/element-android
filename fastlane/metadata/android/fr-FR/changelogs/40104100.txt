@@ -1,2 +1,2 @@
 Principaux changements pour cette version : Défilement dans les messages vocaux. Plusieurs corrections de bogues et d’améliorations de stabilité.
-Intégralité des changements : https://github.com/vector-im/element-android/releases
+Intégralité des changements : https://github.com/element-hq/element-android/releases

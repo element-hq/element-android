@@ -1,2 +1,2 @@
 ການປ່ຽນແປງຫຼັກໃນສະບັບນີ້: ແກ້ໄຂບັກຫຼາຍບ່ອນ ແລະ ປັບປຸງຄວາມສະຖຽນ.
-ບັນທຶກການປ່ຽນແປງສະບັບເຕັມ: https://github.com/vector-im/element-android/releases/tag/v1.4.7
+ບັນທຶກການປ່ຽນແປງສະບັບເຕັມ: https://github.com/element-hq/element-android/releases/tag/v1.4.7

@@ -1,3 +1,3 @@
 Az új alkalmazás megjelenés a Laborokban bekapcsolható. Próbáld ki!
 Hiányzó értesítések és hosszú inkrementális szinkronizáció javítása.
-Teljes változásnapló: https://github.com/vector-im/element-android/releases
+Teljes változásnapló: https://github.com/element-hq/element-android/releases

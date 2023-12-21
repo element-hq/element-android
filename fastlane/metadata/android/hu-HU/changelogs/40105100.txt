@@ -1,2 +1,2 @@
 Legnagyobb változtatás ebben a verzióban: A teljes képernyős mód új megvalósítása a Rich Text Editor számára és hibajavítások.
-Teljes változási napló: https://github.com/vector-im/element-android/releases
+Teljes változási napló: https://github.com/element-hq/element-android/releases

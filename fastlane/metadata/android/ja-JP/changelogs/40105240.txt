@@ -1,2 +1,2 @@
 このバージョンの主な変更点：バグの修正。特に、タイムラインにメッセージが表示されない不具合を修正。
-更新履歴：https://github.com/vector-im/element-android/releases
+更新履歴：https://github.com/element-hq/element-android/releases

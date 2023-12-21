@@ -1,2 +1,2 @@
 Les principaux changements de cette version : liens permanents vers les salons, les espaces, les utilisateurs et les messages sont maintenant affichés sous formes de badges dans l’historique. Nous avons également corrigé certains problèmes avec les autocollants personnalisés et le marqueur de messages lus coincé dans le passé.
-Historique complet : https://github.com/vector-im/element-android/releases
+Historique complet : https://github.com/element-hq/element-android/releases

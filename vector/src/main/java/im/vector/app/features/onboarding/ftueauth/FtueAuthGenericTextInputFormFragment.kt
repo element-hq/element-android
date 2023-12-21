@@ -178,7 +178,7 @@ class FtueAuthGenericTextInputFormFragment :
     }
 
     private fun getCountryCodeOrShowError(text: String): String? {
-        // We expect an international format for the moment (see https://github.com/vector-im/riotX-android/issues/693)
+        // We expect an international format for the moment (see https://github.com/element-hq/riotX-android/issues/693)
         if (text.startsWith("+")) {
             try {
                 val phoneNumber = PhoneNumberUtil.getInstance().parse(text, null)

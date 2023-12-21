@@ -63,7 +63,7 @@ class FtueAuthUseCaseFragment :
     }
 
     private fun setupViews() {
-        // Connect to server relies on https://github.com/vector-im/element-android/issues/5782
+        // Connect to server relies on https://github.com/element-hq/element-android/issues/5782
         views.useCaseConnectToServerGroup.isGone = vectorFeatures.isOnboardingCombinedRegisterEnabled()
 
         views.useCaseOptionOne.renderUseCase(

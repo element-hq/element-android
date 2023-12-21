@@ -1,2 +1,2 @@
 Principais mudanças nesta versão: Rolar em mensagem de voz. Vários consertos de bugs e melhorias de estabilidade.
-Changelog completo: https://github.com/vector-im/element-android/releases
+Changelog completo: https://github.com/element-hq/element-android/releases

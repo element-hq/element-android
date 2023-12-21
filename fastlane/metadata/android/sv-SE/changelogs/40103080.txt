@@ -1,2 +1,2 @@
 Huvudsakliga ändringar i den här versionen: Buggfixar!
-Full ändringslogg: https://github.com/vector-im/element-android/releases/tag/v1.3.8
+Full ändringslogg: https://github.com/element-hq/element-android/releases/tag/v1.3.8

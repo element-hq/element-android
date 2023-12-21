@@ -1,2 +1,2 @@
 Cambios principales en esta versión: Hacer la política de servidores de indentidad visible en los ajusted. Temporalmente quitar soporte para Android Auto.
-Registro de cambios: https://github.com/vector-im/element-android/releases/tag/v1.3.3
+Registro de cambios: https://github.com/element-hq/element-android/releases/tag/v1.3.3

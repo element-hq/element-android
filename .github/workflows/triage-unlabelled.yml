@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     # Skip in forks
     if: >
-      github.repository == 'vector-im/element-android' &&
+      github.repository == 'element-hq/element-android' &&
       !contains(github.event.issue.labels.*.name, 'X-Needs-Info')
     env:
       BOARD_NAME: "Issue triage"

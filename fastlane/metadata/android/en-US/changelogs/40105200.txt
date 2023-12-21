@@ -1,2 +1,2 @@
 Main changes in this version: Mainly bugfixing!
-Full changelog: https://github.com/vector-im/element-android/releases
+Full changelog: https://github.com/element-hq/element-android/releases

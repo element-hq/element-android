@@ -1,2 +1,2 @@
 此版本的主要變動：對於被加密的訊息有更好的管理方式。修復多個錯誤與改善穩定性。
-完整的變更紀錄：https://github.com/vector-im/element-android/releases
+完整的變更紀錄：https://github.com/element-hq/element-android/releases

@@ -1,2 +1,2 @@
 Principaux changements pour cette version : Création des conversations privées différée activée par défaut.
-Intégralité des changements : https://github.com/vector-im/element-android/releases
+Intégralité des changements : https://github.com/element-hq/element-android/releases

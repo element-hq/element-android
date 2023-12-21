@@ -40,4 +40,4 @@ Messaging, voice and video calls, file sharing, screen sharing and a whole bunch
 Stay in touch wherever you are with fully synchronised message history across all your devices and on the web at https://app.element.io
 
 <b>Open source</b>
-Element Android is an open source project, hosted by GitHub. Please report bugs and/or contribute to its development at https://github.com/vector-im/element-android
+Element Android is an open source project, hosted by GitHub. Please report bugs and/or contribute to its development at https://github.com/element-hq/element-android

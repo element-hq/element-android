@@ -1,2 +1,2 @@
 Legnagyobb változtatás ebben a verzióban: Új funkciók a laboratórium beállítások alatt: Gazdag szöveg kompózer, új eszköz kezelése, hangközvetítés. Még mindig aktív fejlesztés alatt!
-Teljes változási napló: https://github.com/vector-im/element-android/releases
+Teljes változási napló: https://github.com/element-hq/element-android/releases

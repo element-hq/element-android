@@ -39,4 +39,4 @@ Mensaxería, chamadas de voz e vídeo, compartición de ficheiros, compartición
 Sigue en contacto alá onde estés grazas ao historial sincronizado de mensaxería entre tódolos dispositivos e na web https://app.element.io
 
 <b>Código aberto</b>
-Element Android é un proxecto de código aberto, hospedado en GitHub. Informa de fallos e/ou contribúe ao seu desenvolvemento en https://github.com/vector-im/element-android
+Element Android é un proxecto de código aberto, hospedado en GitHub. Informa de fallos e/ou contribúe ao seu desenvolvemento en https://github.com/element-hq/element-android

@@ -65,7 +65,7 @@ if args.verbose:
     print(args)
 
 # Split the artifact URL to get information
-# Ex: https://github.com/vector-im/element-android/suites/9293388174/artifacts/435942121
+# Ex: https://github.com/element-hq/element-android/suites/9293388174/artifacts/435942121
 artifactUrl = args.artifactUrl
 if not artifactUrl.startswith('https://github.com/'):
     print("❌ Invalid parameter --artifactUrl %s. Must start with 'https://github.com/'" % artifactUrl)

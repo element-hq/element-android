@@ -1,2 +1,2 @@
 Основные изменения в этой версии: Обсуждения теперь включены по умолчанию.
-Перечень всех изменений: https://github.com/vector-im/element-android/releases
+Перечень всех изменений: https://github.com/element-hq/element-android/releases

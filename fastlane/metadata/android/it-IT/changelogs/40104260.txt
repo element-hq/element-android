@@ -1,2 +1,2 @@
 Modifiche principali in questa versione: utilizza UnifiedPush e consente all'utente di avere notifiche push senza FCM.
-Cronologia completa: https://github.com/vector-im/element-android/releases
+Cronologia completa: https://github.com/element-hq/element-android/releases
