@@ -25,5 +25,6 @@ fun MessageComposerViewState.toAnalyticsComposer(): Composer =
                 inThread = isInThreadTimeline(),
                 isEditing = sendMode is SendMode.Edit,
                 isReply = sendMode is SendMode.Reply,
-                startsThread = startsThread
+                messageType = Composer.MessageType.Text,
+                startsThread = startsThread,
         )

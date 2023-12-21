@@ -150,7 +150,7 @@ class MessageComposerViewModel @AssistedInject constructor(
     }
 
     private fun handleOnTextChanged(action: MessageComposerAction.OnTextChanged) {
-            val needsSendButtonVisibilityUpdate = currentComposerText.isBlank() != action.text.isBlank()
+        val needsSendButtonVisibilityUpdate = currentComposerText.isBlank() != action.text.isBlank()
         currentComposerText = SpannableString(action.text)
         if (needsSendButtonVisibilityUpdate) {
             updateIsSendButtonVisibility(true)
@@ -239,9 +239,8 @@ class MessageComposerViewModel @AssistedInject constructor(
 
     private fun handleSendMessage(room: Room, action: MessageComposerAction.SendMessage) {
         withState { state ->
-            analyticsTracker.capture(state.toAnalyticsComposer()).also {
-                setState { copy(startsThread = false) }
-            }
+            analyticsTracker.capture(state.toAnalyticsComposer())
+            setState { copy(startsThread = false) }
             when (state.sendMode) {
                 is SendMode.Regular -> {
                     when (val parsedCommand = commandParser.parseSlashCommand(
