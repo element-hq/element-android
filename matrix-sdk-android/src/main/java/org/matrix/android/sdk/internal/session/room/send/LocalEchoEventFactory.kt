@@ -326,7 +326,8 @@ internal class LocalEchoEventFactory @Inject constructor(
         // As we always supply formatted body for replies we should force the MarkdownParser to produce html.
         val newBodyFormatted = replyTextFormatted ?: markdownParser.parse(replyText, force = true, advanced = autoMarkdown).takeFormatted()
         // Body of the original message may not have formatted version, so may also have to convert to html.
-        val formattedBodyOfRepliedEvent = bodyOfRepliedEvent.formattedText ?: markdownParser.parse(bodyOfRepliedEvent.text, force = true, advanced = autoMarkdown).takeFormatted()
+        val formattedBodyOfRepliedEvent =
+                bodyOfRepliedEvent.formattedText ?: markdownParser.parse(text = bodyOfRepliedEvent.text, force = true, advanced = autoMarkdown).takeFormatted()
         val replyFormatted = buildFormattedReply(
                 permalink,
                 userLink,
