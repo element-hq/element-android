@@ -1843,7 +1843,7 @@
     <string name="login_social_sso">Einmalanmeldung</string>
     <string name="login_social_signin_with">Anmelden mit %s</string>
     <string name="login_social_signup_with">Registrieren mit %s</string>
-    <string name="login_social_continue_with">Weiter mit der Anmeldung</string>
+    <string name="login_social_continue_with">Weiter mit %s</string>
     <string name="settings_show_emoji_keyboard_summary">Knopf zum Nachrichteneditor hinzufügen, der die Emoji-Tastatur öffnet</string>
     <string name="settings_show_emoji_keyboard">Emoji-Tastatur anzeigen</string>
     <string name="settings_chat_effects_description">Nutze /confetti oder sende Nachrichten mit ❄️ oder 🎉</string>
