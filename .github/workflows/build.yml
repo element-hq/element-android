@@ -79,6 +79,7 @@ jobs:
       - name: Execute exodus-standalone
         uses: docker://exodusprivacy/exodus-standalone:latest
         with:
+          # Don't fail when finding trackers so they can be reported later
           args: /github/workspace/gplay/release/vector-gplay-universal-release-unsigned.apk -j -o /github/workspace/exodus.json -e 0
       - name: Upload exodus json report
         uses: actions/upload-artifact@v3
@@ -87,4 +88,9 @@ jobs:
           path: |
             exodus.json
       - name: Check for trackers
-        run: "jq -e '.trackers == []' exodus.json > /dev/null || { echo '::error static analysis identified user tracking library' ; exit 1; }"
+        env:
+          SENTRY_ID: 447
+        # Should only contain a Sentry item
+        run: |
+          TRACKER_IDS=$(jq ".trackers[] | .id" exodus.json)
+          [ $TRACKER_IDS = ${{ env.SENTRY_ID }} ] || { echo '::error static analysis identified user tracking library' ; exit 1; }
