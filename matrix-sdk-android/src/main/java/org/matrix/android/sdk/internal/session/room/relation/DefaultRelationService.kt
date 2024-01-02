@@ -115,7 +115,7 @@ internal class DefaultRelationService @AssistedInject constructor(
     override fun editReply(
             replyToEdit: TimelineEvent,
             originalTimelineEvent: TimelineEvent,
-            newBodyText: String,
+            newBodyText: CharSequence,
             newFormattedBodyText: String?,
             compatibilityBodyText: String
     ): Cancelable {

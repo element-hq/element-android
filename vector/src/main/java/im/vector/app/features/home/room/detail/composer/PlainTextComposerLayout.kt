@@ -48,6 +48,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageEndPollConte
 import org.matrix.android.sdk.api.session.room.model.message.MessageFormat
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
+import org.matrix.android.sdk.api.util.ContentUtils
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
@@ -188,7 +189,12 @@ class PlainTextComposerLayout @JvmOverloads constructor(
         var formattedBody: CharSequence? = null
         if (messageContent is MessageTextContent && messageContent.format == MessageFormat.FORMAT_MATRIX_HTML) {
             val parser = Parser.builder().build()
-            val document = parser.parse(messageContent.formattedBody ?: messageContent.body)
+
+            val bodyToParse = messageContent.formattedBody?.let {
+                ContentUtils.extractUsefulTextFromHtmlReply(it)
+            } ?: ContentUtils.extractUsefulTextFromReply(messageContent.body)
+
+            val document = parser.parse(bodyToParse)
             formattedBody = eventHtmlRenderer.render(document, pillsPostProcessor)
         }
         views.composerRelatedMessageContent.text = (formattedBody ?: nonFormattedBody)
