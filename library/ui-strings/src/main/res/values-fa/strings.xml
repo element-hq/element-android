@@ -602,7 +602,7 @@
     <string name="room_settings_add_homescreen_shortcut">افزودن به صفحهٔ خانگی</string>
     <string name="settings_notification_by_event">اهمّیت آگاهی بر حسب رویداد</string>
     <string name="settings_troubleshoot_test_system_settings_title">تنظیمات سامانه.</string>
-    <string name="open_settings">گشودن تنظیمات</string>
+    <string name="open_settings">باز کردن تنظیمات</string>
     <string name="settings_troubleshoot_test_account_settings_title">تنظیمات حساب.</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">به کار انداختن</string>
     <string name="settings_troubleshoot_test_device_settings_title">تنظیمات نشست.</string>
