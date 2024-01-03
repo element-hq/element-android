@@ -260,7 +260,7 @@
     <string name="send_bug_report_sent">گزارش اشکال با موفقیت ارسال شد</string>
     <string name="send_bug_report_failed">امکان ارسال گزارش اشکال وجود نداشت، دوباره تلاش کنید (%s)</string>
     <string name="send_bug_report_progress">پیشرفت (%s%%)</string>
-    <string name="hs_url">نشانی کارساز خانگی</string>
+    <string name="hs_url">نشانی آدرس خانگی</string>
     <string name="option_send_voice">ارسال صدا</string>
     <string name="start_voice_call_prompt_msg">آیا مطمئنید می‌خواهید که یک تماس صوتی را آغاز کنید؟</string>
     <string name="start_video_call_prompt_msg">آیا مطمئنید می‌خواهید که یک تماس صوتی را آغاز کنید؟</string>
