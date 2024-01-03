@@ -828,7 +828,7 @@
     <string name="labs_allow_extended_logging">به کار انداختن گزارش‌های پرگو.</string>
     <string name="labs_allow_extended_logging_summary">گزارش‌های پرگو با فراهم کردن گزارش‌های بیش‌تر هنگام تکان دادن محکم گوشی، به توسعه‌دهندگان کمک می‌کند. حتا هنگام به کار افتاده بودن هم برنامه، محتوای پیام یا هیچ دادهٔ خصوصی دیگری را گزارش نمی‌کند.</string>
     <string name="attachment_type_file">پرونده</string>
-    <string name="attachment_type_contact">آشنا</string>
+    <string name="attachment_type_contact">مخاطب</string>
     <string name="attachment_type_camera">دوربین</string>
     <string name="attachment_type_gallery">گالری</string>
     <string name="attachment_type_sticker">برچسب</string>
