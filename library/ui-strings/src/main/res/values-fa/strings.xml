@@ -770,7 +770,7 @@
     <string name="key_share_request">درخواست هم‌رسانی کلید</string>
     <string name="ignore_request_short_label">نادیده‌گرفتن</string>
     <string name="notification_off">خاموش</string>
-    <string name="notification_silent">خموش</string>
+    <string name="notification_silent">سکوت</string>
     <string name="notification_noisy">پرصدا</string>
     <string name="create">ایجاد</string>
     <string name="group_details_home">خانه</string>
