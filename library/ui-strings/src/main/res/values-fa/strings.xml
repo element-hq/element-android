@@ -385,7 +385,7 @@
     <string name="settings_integration_manager">مدیر یکپارچگی</string>
     <string name="settings_user_interface">رابط کاربری</string>
     <string name="settings_interface_language">زبان</string>
-    <string name="settings_select_language">گزینش زبان</string>
+    <string name="settings_select_language">انتخاب زبان</string>
     <string name="room_settings_banned_users_title">کاربران مسدود</string>
     <string name="room_settings_category_advanced_title">پیش‌رفته</string>
     <string name="room_settings_room_internal_id">شناسهٔ داخلی این اتاق</string>
