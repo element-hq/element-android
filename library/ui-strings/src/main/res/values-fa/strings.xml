@@ -369,7 +369,7 @@
     <string name="settings_contact">مخاطبین محلّی</string>
     <string name="settings_contacts_app_permission">اجازهٔ مخاطبین</string>
     <string name="settings_contacts_phonebook_country">کشور دفترچه تلفن</string>
-    <string name="settings_home_display">نمای حانه</string>
+    <string name="settings_home_display">نمای خانه</string>
     <string name="settings_pin_missed_notifications">سنجاق کردن اتاق‌هایی با آگاهی‌های بی‌پاسخ</string>
     <string name="settings_pin_unread_messages">سنجاق کردن اتاق‌هایی با پیام‌های نخوانده</string>
     <string name="settings_inline_url_preview">پیش‌نمایش نشانی نامعتبر</string>
