@@ -623,7 +623,7 @@
     <string name="settings_troubleshoot_test_battery_title">بهینه‌سازی باتری</string>
     <string name="settings_troubleshoot_test_battery_success">المنت تحت تأثیر بهینه‌سازی باتری نیست.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">نادیده‌گرفتن بهینه‌سازی</string>
-    <string name="settings_notification_ringtone">صدای آگاهی</string>
+    <string name="settings_notification_ringtone">صدای اعلانات</string>
     <string name="settings_system_preferences_summary">گزینش رنگ چراغ، لرزش، صدا و…</string>
     <string name="settings_containing_my_display_name">پیام‌های شامل نام نمایشی</string>
     <string name="settings_containing_my_user_name">پیام‌های شامل نام کاربری</string>
