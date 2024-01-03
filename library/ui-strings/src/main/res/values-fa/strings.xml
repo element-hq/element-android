@@ -652,7 +652,7 @@
     <string name="settings_secure_backup_setup">نصب پشتیبان امن</string>
     <string name="settings_secure_backup_reset">بازنشانی پشتیبان امن</string>
     <string name="settings_secure_backup_enter_to_setup">نصب روی این افزاره</string>
-    <string name="settings_secure_backup_section_info">سپرامنیتی در برابر از دست دادن دسترسی به داده‌ها و پیام‌های رمزشده با پشتیبان گیری از کلیدها روی کارسازتان.</string>
+    <string name="settings_secure_backup_section_info">سپرامنیتی در برابر از دست دادن دسترسی به داده‌ها و پیام‌های رمزشده با پشتیبان گیری از کلیدها روی سرور شما.</string>
     <string name="settings_deactivate_account_section">غیرفعّال‌سازی حساب</string>
     <string name="settings_deactivate_my_account">حسابم را غیرفعال کن</string>
     <string name="settings_discovery_category">کشف</string>
