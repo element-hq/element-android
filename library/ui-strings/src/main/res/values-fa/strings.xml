@@ -830,7 +830,7 @@
     <string name="attachment_type_file">پرونده</string>
     <string name="attachment_type_contact">آشنا</string>
     <string name="attachment_type_camera">دوربین</string>
-    <string name="attachment_type_gallery">جُنگ</string>
+    <string name="attachment_type_gallery">گالری</string>
     <string name="attachment_type_sticker">برچسب</string>
     <string name="uploads_media_title">رسانه</string>
     <string name="uploads_media_no_result">هیچ رسانه‌ای در این اتاق نیست</string>
