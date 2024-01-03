@@ -125,7 +125,7 @@
     <string name="notice_widget_modified_by_you">ابزارک %1$s را دستکاری کردید</string>
     <string name="power_level_admin">مدیر</string>
     <string name="power_level_moderator">ناظم</string>
-    <string name="power_level_default">پیش‌گزیده</string>
+    <string name="power_level_default">پیش‌فرض</string>
     <string name="power_level_custom">سفارشی (%1$d)</string>
     <string name="power_level_custom_no_value">سفارشی</string>
     <string name="notice_power_level_changed_by_you">سطح قدرت %1$s را تغییر دادید.</string>
