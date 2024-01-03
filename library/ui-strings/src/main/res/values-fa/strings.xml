@@ -379,8 +379,8 @@
     <string name="settings_show_read_receipts_summary">برای یک فهرست باجزیییات، روی رسیدهای خواندن کلیک کنید.</string>
     <string name="devices_delete_dialog_title">تأیید هویت</string>
     <string name="settings_logged_in">واردشده به عنوان</string>
-    <string name="settings_home_server">کارساز خانگی</string>
-    <string name="settings_identity_server">کارساز هویت</string>
+    <string name="settings_home_server">سرور خانگی</string>
+    <string name="settings_identity_server">سرور هویت</string>
     <string name="settings_integration_allow">اجازهٔ یک‌پارچگی‌ها</string>
     <string name="settings_integration_manager">مدیر یکپارچگی</string>
     <string name="settings_user_interface">رابط کاربری</string>
