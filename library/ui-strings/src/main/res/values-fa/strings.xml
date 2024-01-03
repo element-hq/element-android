@@ -1110,8 +1110,8 @@
     <string name="crosssigning_verify_session">تأیید ورود</string>
     <string name="unencrypted">رمزنشده</string>
     <string name="identity_server_set_default_submit">استفاده از %1$s</string>
-    <string name="a11y_unmute_microphone">ناخموش کردن میکروفون</string>
-    <string name="a11y_mute_microphone">خموش کردن میکروفون</string>
+    <string name="a11y_unmute_microphone">صدادار کردن میکروفون</string>
+    <string name="a11y_mute_microphone">بی صدا کردن میکروفون</string>
     <string name="a11y_open_chat">گشودن گپ</string>
     <string name="power_level_title">نقش</string>
     <string name="power_level_edit_title">تنظیم نقش</string>
