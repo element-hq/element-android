@@ -840,7 +840,7 @@
     <string name="room_list_quick_actions_notifications_all_noisy">تمام پیام‌ها (پرصدا)</string>
     <string name="room_list_quick_actions_notifications_all">تمام پیام‌ها</string>
     <string name="room_list_quick_actions_notifications_mentions">فقط اشاره‌ها</string>
-    <string name="room_list_quick_actions_notifications_mute">خموش</string>
+    <string name="room_list_quick_actions_notifications_mute">سکوت</string>
     <string name="room_list_quick_actions_favorite_add">افزودن به محبوب‌ها</string>
     <string name="room_list_quick_actions_favorite_remove">برداشتن از محبوب‌ها</string>
     <string name="room_list_quick_actions_leave">ترک اتاق</string>
