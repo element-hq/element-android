@@ -686,10 +686,10 @@
     <string name="encryption_export_export">دانلود</string>
     <string name="encryption_message_recovery">بازیابی پیام‌های رمزشده</string>
     <string name="encryption_settings_manage_message_recovery_summary">مدیریت پشتیبان کلید</string>
-    <string name="encryption_import_e2e_room_keys">درون‌ریزی کلید‌های اتاق‌های سرتاسری</string>
-    <string name="encryption_import_room_keys">درون‌ریزی کلیدهای اتاق‌ها</string>
-    <string name="encryption_import_room_keys_summary">درون‌ریزی کلیدها از یک پروندهٔ محلّی</string>
-    <string name="encryption_import_import">درون‌ریزی</string>
+    <string name="encryption_import_e2e_room_keys">وارد کردن کلید‌های اتاق‌های سرتاسری</string>
+    <string name="encryption_import_room_keys">وارد کردن کلیدهای اتاق‌ها</string>
+    <string name="encryption_import_room_keys_summary">وارد کردن کلیدها از یک پروندهٔ محلّی</string>
+    <string name="encryption_import_import">وارد کردن</string>
     <string name="encryption_never_send_to_unverified_devices_summary">هرگز پیام‌های رمزشده از این نشست به نشست‌های تأییدنشده فرستاده نشود.</string>
     <string name="encryption_information_not_verified">تأیید نشده</string>
     <string name="encryption_information_verified">تأیید‌شده</string>
