@@ -1,2 +1,2 @@
 Die wichtigsten Änderungen in dieser Version: Permalinks für Räume, Spaces, Benutzer und Nachrichten werden nun als Pillen im Verlauf angezeigt. Wir haben außerdem ein paar Probleme mit benutzerdefinierten Stickern und den feststeckenden Lesebenachrichtigungen behoben.
-Vollständiges Änderungsprotokoll: https://github.com/vector-im/element-android/releases
+Vollständiges Änderungsprotokoll: https://github.com/element-hq/element-android/releases

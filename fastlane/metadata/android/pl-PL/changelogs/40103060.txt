@@ -1,2 +1,2 @@
 Główne zmiany w tej wersji: Dodanie obsługi obecności, dla pokoju wiadomości bezpośrednich (uwaga: obecność jest wyłączona na matrix.org). Dodano ponownie obsługę Android Auto.
-Pełna lista zmian: https://github.com/vector-im/element-android/releases/tag/v1.3.6
+Pełna lista zmian: https://github.com/element-hq/element-android/releases/tag/v1.3.6

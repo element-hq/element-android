@@ -1,2 +1,2 @@
 此版本的主要變更：現在起，Element Android 使用 Crypto Rust SDK。
-完整的變更紀錄：https://github.com/vector-im/element-android/releases
+完整的變更紀錄：https://github.com/element-hq/element-android/releases

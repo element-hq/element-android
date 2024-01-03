@@ -1,2 +1,2 @@
 Principaux changements pour cette version : Principalement des corrections de bugs, notamment les messages non visibles dans l’historique
-Intégralité des changements : https://github.com/vector-im/element-android/releases
+Intégralité des changements : https://github.com/element-hq/element-android/releases

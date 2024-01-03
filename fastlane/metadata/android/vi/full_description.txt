@@ -39,4 +39,4 @@ Nhắn tin, gọi thoại và truyền hình, chia sẻ tệp, chia sẻ màn h�
 Giữ liên lạc mọi lúc mọi nơi với lịch sử tin nhắn được đồng bộ hóa hoàn toàn trên tất cả các thiết bị của bạn và trên web tại https://app.element.io
 
 <b>Mã nguồn mở</b>
-Element Android là một dự án mã nguồn mở, được lưu trữ trên GitHub. Vui lòng báo cáo lỗi và / hoặc đóng góp, phát triển tại https://github.com/vector-im/element-android
+Element Android là một dự án mã nguồn mở, được lưu trữ trên GitHub. Vui lòng báo cáo lỗi và / hoặc đóng góp, phát triển tại https://github.com/element-hq/element-android

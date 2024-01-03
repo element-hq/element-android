@@ -1,2 +1,2 @@
 Principais mudanças nesta versão: Permite usuárias(os) aparecer offline e adiciona um tocador de áudio para anexos de áudio
-Changelog completo: https://github.com/vector-im/element-android/releases
+Changelog completo: https://github.com/element-hq/element-android/releases

@@ -1,2 +1,2 @@
 此版本的主要变化：使用UnifiedPush，允许用户在没有FCM的情况下拥有推送。
-完整更新日志：https://github.com/vector-im/element-android/releases
+完整更新日志：https://github.com/element-hq/element-android/releases

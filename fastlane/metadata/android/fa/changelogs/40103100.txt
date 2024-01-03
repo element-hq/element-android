@@ -1,2 +1,2 @@
 تغییرات عمده در این نگارش:‌ افزودن پشتیبانی نظرسنجی‌ها (در آزمایشگاه‌ها). طرّاحی جدید پیش‌نمای نشانی.
-گزارش دگرگونی کامل: https://github.com/vector-im/element-android/releases/tag/v1.3.10
+گزارش دگرگونی کامل: https://github.com/element-hq/element-android/releases/tag/v1.3.10

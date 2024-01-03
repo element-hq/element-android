@@ -1,2 +1,2 @@
 ການປ່ຽນແປງຫຼັກໃນສະບັບນີ້: ປັບປຸງປະສິດທິພາບຂອງ VoIP (ໂທສຽງ ແລະໂທວີດີໂອໃນການສົນທະນາກົງ) ແລະແກ້ໄຂຂໍ້ຜິດພາດ!
-ບັນທຶກການປ່ຽນແປງສະບັບເຕັມ: https://github.com/vector-im/element-android/releases/tag/v1.1.0
+ບັນທຶກການປ່ຽນແປງສະບັບເຕັມ: https://github.com/element-hq/element-android/releases/tag/v1.1.0

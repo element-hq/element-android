@@ -1,2 +1,2 @@
 ການປ່ຽນແປງຫຼັກໃນສະບັບນີ້: ສົ່ງສະຖານທີ່ຂອງທ່ານໄປຫາຫ້ອງໃດກໍໄດ້. ແກ້ໄຂແບບສຳຫຼວດ.
-ບັນທຶກການປ່ຽນແປງສະບັບເຕັມ: https://github.com/vector-im/element-android/releases/tag/v1.3.16
+ບັນທຶກການປ່ຽນແປງສະບັບເຕັມ: https://github.com/element-hq/element-android/releases/tag/v1.3.16

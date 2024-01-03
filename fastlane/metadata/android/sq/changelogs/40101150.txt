@@ -1,2 +1,2 @@
 Ndryshimet kryesore në këtë version: sendërtim mesazhesh zanore, nën mjedis laboratori.
-Regjistër i plotë ndryshimesh: https://github.com/vector-im/element-android/releases/tag/v1.1.15
+Regjistër i plotë ndryshimesh: https://github.com/element-hq/element-android/releases/tag/v1.1.15

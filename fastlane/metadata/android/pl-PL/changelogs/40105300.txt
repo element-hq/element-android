@@ -1,2 +1,2 @@
 Główne zmiany w tej wersji: linki permanentne do pokoi, przestrzenie, wiadomości i użytkownicy są wyświetlani jako pigułki na osi czasu. Naprawiliśmy również niektóre problemy z własnymi naklejkami i markerem zablokowanym w przeszłości.
-Pełna lista zmian: https://github.com/vector-im/element-android/releases
+Pełna lista zmian: https://github.com/element-hq/element-android/releases

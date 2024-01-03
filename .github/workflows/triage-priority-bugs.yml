@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     # Skip in forks
     if: >
-      github.repository == 'vector-im/element-android' &&
+      github.repository == 'element-hq/element-android' &&
       (!contains(github.event.issue.labels.*.name, 'A-E2EE') &&
         !contains(github.event.issue.labels.*.name, 'A-E2EE-Cross-Signing') &&
         !contains(github.event.issue.labels.*.name, 'A-E2EE-Dehydration') &&
@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     # Skip in forks
     if: >
-      github.repository == 'vector-im/element-android' &&
+      github.repository == 'element-hq/element-android' &&
       (contains(github.event.issue.labels.*.name, 'Z-UISI') ||
         (contains(github.event.issue.labels.*.name, 'A-E2EE') ||
         contains(github.event.issue.labels.*.name, 'A-E2EE-Cross-Signing') ||

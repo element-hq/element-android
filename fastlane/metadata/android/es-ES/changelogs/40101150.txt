@@ -1,2 +1,2 @@
 Principales cambios en esta versión: implementación de mensajes de voz bajo los ajustes lab.
-Conjunto de cambios completo: https://github.com/vector-im/element-android/releases/tag/v1.1.15
+Conjunto de cambios completo: https://github.com/element-hq/element-android/releases/tag/v1.1.15

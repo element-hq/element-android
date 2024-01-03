@@ -1,2 +1,2 @@
 此版本的主要变化：启用改善的登录与注册流程。
-完整更改日志：https://github.com/vector-im/element-android/releases
+完整更改日志：https://github.com/element-hq/element-android/releases

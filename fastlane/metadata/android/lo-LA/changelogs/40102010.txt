@@ -1,2 +1,2 @@
 ການປ່ຽນແປງຫຼັກໃນສະບັບນີ້: ການປັບປຸງຫຼາຍຢ່າງກ່ຽວກັບ VoIP ແລະ Spaces (ຍັງຢູ່ໃນເບຕ້າ).
-ບັນທຶກການປ່ຽນແປງສະບັບເຕັມ: https://github.com/vector-im/element-android/releases/tag/v1.2.1
+ບັນທຶກການປ່ຽນແປງສະບັບເຕັມ: https://github.com/element-hq/element-android/releases/tag/v1.2.1

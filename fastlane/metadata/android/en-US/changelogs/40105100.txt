@@ -1,2 +1,2 @@
 Main changes in this version: New implementation of the full screen mode for the Rich Text Editor and bugfixes.
-Full changelog: https://github.com/vector-im/element-android/releases
+Full changelog: https://github.com/element-hq/element-android/releases

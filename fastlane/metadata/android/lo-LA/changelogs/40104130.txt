@@ -1,2 +1,2 @@
 ການປ່ຽນແປງຫຼັກໃນສະບັບນີ້: ໃຫ້ຜູ້ໃຊ້ສາມາດສະແດງຕົວເປັນ offline ແລະສາມາດຫຼິ້ນສຽງໄດ້ສຳລັບການແນບສຽງ
-ບັນທຶກການປ່ຽນແປງສະບັບເຕັມ: https://github.com/vector-im/element-android/releases
+ບັນທຶກການປ່ຽນແປງສະບັບເຕັມ: https://github.com/element-hq/element-android/releases

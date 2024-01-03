@@ -1,2 +1,2 @@
 Főbb változások ebben a verzióban: A figyelmen kívül hagyott felhasználók kezelésének javítása. Különböző hibajavítások és stabilitásjavítások.
-Teljes változásjegyzék: https://github.com/vector-im/element-android/releases
+Teljes változásjegyzék: https://github.com/element-hq/element-android/releases

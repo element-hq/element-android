@@ -1,2 +1,2 @@
 Główne zmiany w tej wersji: Pierwsza zmiana na ekranach rejestracji, w tym możliwość włączenia Analytics. Dodano obsługę dla wydarzeń z dodatkiem matematyki w laboratoriach.
-Pełna lista zmian: https://github.com/vector-im/element-android/releases/tag/v1.3.13
+Pełna lista zmian: https://github.com/element-hq/element-android/releases/tag/v1.3.13

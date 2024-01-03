@@ -1,2 +1,2 @@
 Perubahan utama dalam versi ini: Tata letak aplikasi baru diaktifkan secara bawaan!
-Catatan perubahan lanjutan: https://github.com/vector-im/element-android/releases
+Catatan perubahan lanjutan: https://github.com/element-hq/element-android/releases

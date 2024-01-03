@@ -39,4 +39,4 @@ Meddelanden, röst- och videosamtal, fildelning, skärmdelning och massa integra
 Håll kontakten vart du än är med fullt synkroniserad meddelandehistorik på alla dina enheter och på webben på https://app.element.io
 
 <b>Öppen källkod</b>
-Element Android är projekt baserat på öppen källkod, som ligger på GitHub. Vänligen rapportera buggar och/eller bidra till dess utveckling på https://github.com/vector-im/element-android
+Element Android är projekt baserat på öppen källkod, som ligger på GitHub. Vänligen rapportera buggar och/eller bidra till dess utveckling på https://github.com/element-hq/element-android

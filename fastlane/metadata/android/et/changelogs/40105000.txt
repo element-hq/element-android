@@ -1,2 +1,2 @@
 Põhilised muutused selles versioonis: ajastatud otsesõnumite saatmine on nüüd vaikimisi kasutusel.
-Kogu ingliskeelne muudatuste logi: https://github.com/vector-im/element-android/releases
+Kogu ingliskeelne muudatuste logi: https://github.com/element-hq/element-android/releases

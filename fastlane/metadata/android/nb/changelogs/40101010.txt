@@ -1,2 +1,2 @@
 Hovedendringene i denne versjonen: Forbedringer i ytelse og bugfikser!
-Full endringslogg: https://github.com/vector-im/element-android/releases/tag/v1.1.1
+Full endringslogg: https://github.com/element-hq/element-android/releases/tag/v1.1.1

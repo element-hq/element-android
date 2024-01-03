@@ -1,2 +1,2 @@
 Główne zmiany w tej wersji: Dodano nowe funkcje do przestrzeni i zaktualizowano motyw i styl aplikacji. (poprawki błędóœ dla wesji 1.1.10)
-Pełna lista zmian: https://github.com/vector-im/element-android/releases/tag/v1.1.11
+Pełna lista zmian: https://github.com/element-hq/element-android/releases/tag/v1.1.11

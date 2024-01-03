@@ -1,2 +1,2 @@
 Bu sürümdeki başlıca değişiklikler: URL ön izlemesi , yeni Emoji klavyesi, yeni oda ayarları ve Yılbaşı için kar!
-Tam değişiklik günlüğü: https://github.com/vector-im/element-android/releases/tag/v1.0.12
+Tam değişiklik günlüğü: https://github.com/element-hq/element-android/releases/tag/v1.0.12

@@ -1,2 +1,2 @@
 Modifiche principali in questa versione: i permalink per stanze, spazi, utenti e messaggi ora vengono mostrati come pillole nella linea temporale. Corretti alcuni problemi con adesivi personalizzati e la spunta di lettura che si bloccava nel passato.
-Cronologia completa: https://github.com/vector-im/element-android/releases
+Cronologia completa: https://github.com/element-hq/element-android/releases

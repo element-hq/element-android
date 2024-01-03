@@ -14,7 +14,7 @@ jobs:
       - name: Update Gradle Wrapper
         uses: gradle-update/update-gradle-wrapper-action@v1
         # Skip in forks
-        if: github.repository == 'vector-im/element-android'
+        if: github.repository == 'element-hq/element-android'
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           target-branch: develop

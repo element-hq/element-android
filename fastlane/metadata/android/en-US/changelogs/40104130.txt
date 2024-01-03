@@ -1,2 +1,2 @@
 Main changes in this version: Allows users to appear offline and adds an audio player for audio attachments
-Full changelog: https://github.com/vector-im/element-android/releases
+Full changelog: https://github.com/element-hq/element-android/releases

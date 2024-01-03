@@ -22,23 +22,17 @@ import dagger.Lazy
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
-import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupLastVersionResult
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersion
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersionResult
-import org.matrix.android.sdk.api.session.crypto.model.GossipingToDeviceObject
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.uia.UiaResult
 import org.matrix.android.sdk.internal.auth.registration.handleUIA
-import org.matrix.android.sdk.internal.crypto.OlmMachine
-import org.matrix.android.sdk.internal.crypto.PerSessionBackupQueryRateLimiter
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.BackupKeysResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.CreateKeysBackupVersionBody
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysBackupData
@@ -59,7 +53,6 @@ import org.matrix.android.sdk.internal.crypto.model.rest.KeysUploadBody
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysUploadResponse
 import org.matrix.android.sdk.internal.crypto.model.rest.RestKeyInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.SignatureUploadResponse
-import org.matrix.android.sdk.internal.crypto.store.IMXCommonCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.ClaimOneTimeKeysForUsersDeviceTask
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultSendVerificationMessageTask
 import org.matrix.android.sdk.internal.crypto.tasks.DownloadKeysForUsersTask
@@ -102,10 +95,7 @@ internal class RequestSender @Inject constructor(
         private val getRoomSessionDataTask: GetRoomSessionDataTask,
         private val moshi: Moshi,
         cryptoCoroutineScope: CoroutineScope,
-        private val rateLimiter: PerSessionBackupQueryRateLimiter,
-        private val cryptoStore: IMXCommonCryptoStore,
         private val localEchoRepository: LocalEchoRepository,
-        private val olmMachine: Lazy<OlmMachine>,
 ) {
 
     private val scope = CoroutineScope(
@@ -246,43 +236,8 @@ internal class RequestSender @Inject constructor(
                 .newBuilder()
                 .add(CheckNumberType.JSON_ADAPTER_FACTORY)
                 .build()
-                .adapter<Map<String, Map<String, Any>>>(Map::class.java)
+                .adapter<Map<String, HashMap<String, Any>>>(Map::class.java)
         val jsonBody = adapter.fromJson(body)!!
-
-        if (eventType == EventType.ROOM_KEY_REQUEST) {
-            scope.launch {
-                Timber.v("Intercepting key request, try backup")
-                /**
-                 * It's a bit hacky, check how this can be better integrated with rust?
-                 */
-                try {
-                    jsonBody.forEach { (_, deviceToContent) ->
-                        deviceToContent.forEach { (_, content) ->
-                            val hashMap = content as? Map<*, *>
-                            val action = hashMap?.get("action")?.toString()
-                            if (GossipingToDeviceObject.ACTION_SHARE_REQUEST == action) {
-                                val requestBody = hashMap["body"] as? Map<*, *>
-                                val roomId = requestBody?.get("room_id") as? String
-                                val sessionId = requestBody?.get("session_id") as? String
-                                val senderKey = requestBody?.get("sender_key") as? String
-                                if (roomId != null && sessionId != null) {
-                                    // try to perform a lazy migration from legacy store
-                                    val legacy = tryOrNull("Failed to access legacy crypto store") {
-                                        cryptoStore.getInboundGroupSession(sessionId, senderKey.orEmpty())
-                                    }
-                                    if (legacy == null || olmMachine.get().importRoomKey(legacy).isFailure) {
-                                        rateLimiter.tryFromBackupIfPossible(sessionId, roomId)
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    Timber.v("Intercepting key request, try backup")
-                } catch (failure: Throwable) {
-                    Timber.v(failure, "Failed to use backup")
-                }
-            }
-        }
 
         val userMap = MXUsersDevicesMap<Any>()
         userMap.join(jsonBody)

@@ -96,7 +96,7 @@ allprojects {
         }
         // Jitsi repo
         maven {
-            url "https://github.com/vector-im/jitsi_libre_maven/raw/main/android-sdk-8.1.1"
+            url "https://github.com/element-hq/jitsi_libre_maven/raw/main/android-sdk-8.1.1"
             // Note: to test Jitsi release you can use a local file like this:
             // url "file:///Users/bmarty/workspaces/jitsi_libre_maven/android-sdk-8.1.1"
             content {
@@ -211,10 +211,10 @@ sonar {
         property "sonar.host.url", "https://sonarcloud.io"
         property "sonar.projectVersion", project(":vector").android.defaultConfig.versionName
         property "sonar.sourceEncoding", "UTF-8"
-        property "sonar.links.homepage", "https://github.com/vector-im/element-android/"
-        property "sonar.links.ci", "https://github.com/vector-im/element-android/actions"
-        property "sonar.links.scm", "https://github.com/vector-im/element-android/"
-        property "sonar.links.issue", "https://github.com/vector-im/element-android/issues"
+        property "sonar.links.homepage", "https://github.com/element-hq/element-android/"
+        property "sonar.links.ci", "https://github.com/element-hq/element-android/actions"
+        property "sonar.links.scm", "https://github.com/element-hq/element-android/"
+        property "sonar.links.issue", "https://github.com/element-hq/element-android/issues"
         property "sonar.organization", "new_vector_ltd_organization"
         property "sonar.java.coveragePlugin", "jacoco"
         property "sonar.coverage.jacoco.xmlReportPaths", "${project.buildDir}/reports/jacoco/generateCoverageReport/generateCoverageReport.xml"

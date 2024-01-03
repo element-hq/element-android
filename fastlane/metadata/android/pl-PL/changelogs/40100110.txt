@@ -1,2 +1,2 @@
 Ta nowa wersja zawiera głównie ulepszenia interfejsu i doświadczenia użytkownika. Teraz możesz zapraszać znajomych i bardzo szybko tworzyć bezpośrednie rozmowy, skanując kody QR.
-Pełna lista zmian: https://github.com/vector-im/element-android/releases/tag/v1.0.11
+Pełna lista zmian: https://github.com/element-hq/element-android/releases/tag/v1.0.11

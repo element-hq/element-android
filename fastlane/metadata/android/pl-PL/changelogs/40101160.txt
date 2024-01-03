@@ -1,2 +1,2 @@
 Główne zmiany w tej wersji: Naprawiono błąd podczas wysyłania zaszyfrowanej wiadomości, jeśli ktoś w pokoju się wyloguje.
-Pełna lista zmian: https://github.com/vector-im/element-android/releases/tag/v1.1.16
+Pełna lista zmian: https://github.com/element-hq/element-android/releases/tag/v1.1.16

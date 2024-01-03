@@ -1,2 +1,2 @@
 Главные изменения в этой версии: Новый полноэкранный режим в улучшенном редакторе текста и исправления багов.
-Полный список: https://github.com/vector-im/element-android/releases
+Полный список: https://github.com/element-hq/element-android/releases

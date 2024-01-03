@@ -1,2 +1,2 @@
 Główne zmiany w tej wersji: Podgląd URL, nowa klawiatura Emoji, nowe możliwości ustawień pokoju i śnieg na Boże Narodzenie!
-Pełna lista zmian: https://github.com/vector-im/element-android/releases/tag/v1.0.13
+Pełna lista zmian: https://github.com/element-hq/element-android/releases/tag/v1.0.13

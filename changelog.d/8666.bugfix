@@ -1,0 +1,1 @@
+Fix crypto migration from kotlin to rust when an account has a single session and no backup.

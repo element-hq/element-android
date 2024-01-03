@@ -8,7 +8,7 @@ jobs:
     name: Move PRs asking for design review to the design board
     runs-on: ubuntu-latest
     # Skip in forks
-    if: github.repository == 'vector-im/element-android'
+    if: github.repository == 'element-hq/element-android'
     steps:
       - uses: octokit/graphql-action@v2.x
         id: find_team_members
@@ -16,7 +16,7 @@ jobs:
           headers: '{"GraphQL-Features": "projects_next_graphql"}'
           query: |
             query find_team_members($team: String!) {
-              organization(login: "vector-im") {
+              organization(login: "element-hq") {
                 team(slug: $team) {
                   members {
                     nodes {
@@ -77,7 +77,7 @@ jobs:
     name: Move PRs asking for product review to the product board
     runs-on: ubuntu-latest
     # Skip in forks
-    if: github.repository == 'vector-im/element-android'
+    if: github.repository == 'element-hq/element-android'
     steps:
       - uses: octokit/graphql-action@v2.x
         id: find_team_members
@@ -85,7 +85,7 @@ jobs:
           headers: '{"GraphQL-Features": "projects_next_graphql"}'
           query: |
             query find_team_members($team: String!) {
-              organization(login: "vector-im") {
+              organization(login: "element-hq") {
                 team(slug: $team) {
                   members {
                     nodes {

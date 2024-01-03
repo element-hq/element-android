@@ -1,2 +1,2 @@
 Änderungen: Fehlerbehebungen und Stabilitätsverbesserungen
-Alle Änderungen: https://github.com/vector-im/element-android/releases
+Alle Änderungen: https://github.com/element-hq/element-android/releases

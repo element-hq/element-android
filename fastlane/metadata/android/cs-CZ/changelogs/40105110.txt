@@ -1,2 +1,2 @@
 Hlavní změny v této verzi: Nová implementace celoobrazovkového režimu pro editor formátovaného textu a opravy chyb.
-Úplný seznam změn: https://github.com/vector-im/element-android/releases
+Úplný seznam změn: https://github.com/element-hq/element-android/releases

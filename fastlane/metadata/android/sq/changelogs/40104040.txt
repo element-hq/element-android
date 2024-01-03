@@ -1,2 +1,2 @@
 Ndryshimet kryesore në këtë version: përditësime UI treguesi shtypjeje. Ndreqje të metash të ndryshme dhe përmirësime qëndrueshmërie.
-Regjistër i plotë ndryshimesh: https://github.com/vector-im/element-android/releases/tag/v1.4.4
+Regjistër i plotë ndryshimesh: https://github.com/element-hq/element-android/releases/tag/v1.4.4

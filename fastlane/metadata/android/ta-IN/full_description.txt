@@ -39,4 +39,4 @@ You can chat with anyone on the Matrix network, whether they’re using Element,
 Stay in touch wherever you are with fully synchronised message history across all your devices and on the web at https://app.element.io
 
 <b>திறந்த மூலம்</b>
-Element Android ஒரு திறந்த மூல செயல் திட்டமாகும். இது GitHub இல் தொகுத்து வழங்கப்பட்டுள்ளது. வழுக்கள் ஏதேனும் கண்டறிந்தால் மற்றும்/அல்லது இதன் வளர்ச்சிக்கு பங்களிக்க விரும்பினால், https://github.com/vector-im/element-android என்னும் தளத்திற்கு வருகை தரவும்.
+Element Android ஒரு திறந்த மூல செயல் திட்டமாகும். இது GitHub இல் தொகுத்து வழங்கப்பட்டுள்ளது. வழுக்கள் ஏதேனும் கண்டறிந்தால் மற்றும்/அல்லது இதன் வளர்ச்சிக்கு பங்களிக்க விரும்பினால், https://github.com/element-hq/element-android என்னும் தளத்திற்கு வருகை தரவும்.

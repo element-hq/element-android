@@ -1,2 +1,2 @@
 Main changes in this version: New app layout enabled by default!
-Full changelog: https://github.com/vector-im/element-android/releases
+Full changelog: https://github.com/element-hq/element-android/releases

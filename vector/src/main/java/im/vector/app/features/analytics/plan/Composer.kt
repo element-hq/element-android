@@ -40,10 +40,41 @@ data class Composer(
          */
         val isReply: Boolean,
         /**
+         * The type of the message.
+         */
+        val messageType: MessageType,
+        /**
          * Whether this message begins a new thread or not.
          */
         val startsThread: Boolean? = null,
 ) : VectorAnalyticsEvent {
+
+    enum class MessageType {
+        /**
+         * A pin drop location message.
+         */
+        LocationPin,
+
+        /**
+         * A user current location message.
+         */
+        LocationUser,
+
+        /**
+         * A poll message.
+         */
+        Poll,
+
+        /**
+         * A text message.
+         */
+        Text,
+
+        /**
+         * A voice message.
+         */
+        VoiceMessage,
+    }
 
     override fun getName() = "Composer"
 
@@ -52,6 +83,7 @@ data class Composer(
             put("inThread", inThread)
             put("isEditing", isEditing)
             put("isReply", isReply)
+            put("messageType", messageType.name)
             startsThread?.let { put("startsThread", it) }
         }.takeIf { it.isNotEmpty() }
     }

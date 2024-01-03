@@ -1,2 +1,2 @@
 Suurimmat muutokset tässä versiossa: suorituskykyparannuksia ja bugikorjauksia!
-Täysi muutosloki: https://github.com/vector-im/element-android/releases/tag/v1.1.1
+Täysi muutosloki: https://github.com/element-hq/element-android/releases/tag/v1.1.1

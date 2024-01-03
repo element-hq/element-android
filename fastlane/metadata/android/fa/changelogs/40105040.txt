@@ -1,2 +1,2 @@
 تغییرات اصلی در این نگارش: قابلیت‌های جدید در تنظیمات آزمایشگاه‌ها: نگارندهٔ متن غنی، مدیریت افزارهٔ جدید، پخش صدا. هنوز زیر توسعهٔ فعّال!
-گزارش دگرگونی کامل: https://github.com/vector-im/element-android/releases
+گزارش دگرگونی کامل: https://github.com/element-hq/element-android/releases

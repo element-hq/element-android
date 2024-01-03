@@ -1,2 +1,2 @@
 此版本的主要變動：預設啟用新的應用程式佈局！
-完整的變更紀錄：https://github.com/vector-im/element-android/releases
+完整的變更紀錄：https://github.com/element-hq/element-android/releases

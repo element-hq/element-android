@@ -22,7 +22,7 @@ import org.matrix.android.sdk.api.util.JsonDict
 /**
  * Set of methods to be able to login to an existing account on a homeserver.
  *
- * More documentation can be found in the file https://github.com/vector-im/element-android/blob/main/docs/signin.md
+ * More documentation can be found in the file https://github.com/element-hq/element-android/blob/main/docs/signin.md
  */
 interface LoginWizard {
     /**

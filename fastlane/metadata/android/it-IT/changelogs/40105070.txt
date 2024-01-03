@@ -1,2 +1,2 @@
 Modifiche principali in questa versione: nuova interfaccia utente per selezionare un allegato.
-Cronologia completa: https://github.com/vector-im/element-android/releases
+Cronologia completa: https://github.com/element-hq/element-android/releases

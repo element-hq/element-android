@@ -1,2 +1,2 @@
 ການປ່ຽນແປງຫຼັກໃນສະບັບນີ້: ຈັດລະບຽບຫ້ອງຂອງທ່ານໂດຍໃຊ້ Spaces! v1.3.1 ກຳລັງແກ້ໄຂບັນແອັບໃຊ້ບໍ່ໄດ້ທີ່ສາມາດເກີດຂຶ້ນໃນ v1.3.0.
-ບັນທຶກການປ່ຽນແປງສະບັບເຕັມ: https://github.com/vector-im/element-android/releases/tag/v1.3.1
+ບັນທຶກການປ່ຽນແປງສະບັບເຕັມ: https://github.com/element-hq/element-android/releases/tag/v1.3.1

@@ -39,4 +39,4 @@ Tikras visapusis šifravimas (žinutes gali iššifruoti tik pokalbio dalyviai) 
 Palaikykite ryšį, kad ir kur būtumėte, naudodami visiškai sinchronizuotą žinučių istoriją visuose įrenginiuose ir internete adresu https://app.element.io
 
 <b>Atviras kodas</b>
-Element Android yra atvirojo kodo projektas, kurį talpina GitHub. Praneškite apie klaidas ir (arba) prisidėkite prie jo kūrimo adresu https://github.com/vector-im/element-android
+Element Android yra atvirojo kodo projektas, kurį talpina GitHub. Praneškite apie klaidas ir (arba) prisidėkite prie jo kūrimo adresu https://github.com/element-hq/element-android

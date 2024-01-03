@@ -1,2 +1,2 @@
 此版本的主要变化：新增对@room和未公开的投票的支持，还有许多其它小改动。
-完整更改日志：https://github.com/vector-im/element-android/releases/tag/v1.4.2
+完整更改日志：https://github.com/element-hq/element-android/releases/tag/v1.4.2

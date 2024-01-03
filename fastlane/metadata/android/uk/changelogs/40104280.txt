@@ -1,2 +1,2 @@
 Основні зміни в цій версії: Усунуто різні вади й поліпшено стабільність.
-Перелік усіх змін://github.com/vector-im/element-android/releases
+Перелік усіх https://github.com/element-hq/element-android/releases

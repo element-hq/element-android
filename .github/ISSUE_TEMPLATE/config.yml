@@ -1,7 +1,7 @@
 blank_issues_enabled: true
 contact_links:
   - name: Enhancement or feature request
-    url: https://github.com/vector-im/element-meta/discussions/categories/ideas
+    url: https://github.com/element-hq/element-meta/discussions/categories/ideas
     about: Do you have a suggestion or feature request?
   - name: Element Android Community Support
     url: https://matrix.to/#/#element-android:matrix.org

@@ -39,4 +39,4 @@ Sõnumid, hääl- ja videokõned, failide jagamine, ekraani jagamine ja terve hu
 Saad suhelda kõigis oma seadmetes ja ka veebis aadressil https://app.element.io ning sealjuures täielikult sünkroonitud sõnumite ajalooga.
 
 <b>Avatud lähtekoodiga tarkvara</b>
-Element Android on Github'is hallatud avatud lähtekoodiga tarkvaraprojekt. Palun teata vigadest ja/või osale arenduses https://github.com/vector-im/element-android lehel
+Element Android on Github'is hallatud avatud lähtekoodiga tarkvaraprojekt. Palun teata vigadest ja/või osale arenduses https://github.com/element-hq/element-android lehel

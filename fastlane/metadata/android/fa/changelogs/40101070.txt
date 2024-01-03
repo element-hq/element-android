@@ -1,2 +1,2 @@
 تغییرات اصلی در این نگارش: پشتیبانی آزمایشی برای فضاها. فشرده‌سازی ویدیو پیش از فرستادن.
-گزارش دگرگونی کامل: https://github.com/vector-im/element-android/releases/tag/v1.1.7
+گزارش دگرگونی کامل: https://github.com/element-hq/element-android/releases/tag/v1.1.7

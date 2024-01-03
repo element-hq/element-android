@@ -1,2 +1,2 @@
 Principaux changements pour cette version : Nouvelle disposition de l’application activée par défaut !
-Intégralité des changements : https://github.com/vector-im/element-android/releases
+Intégralité des changements : https://github.com/element-hq/element-android/releases

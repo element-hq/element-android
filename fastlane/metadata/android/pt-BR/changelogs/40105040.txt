@@ -1,2 +1,2 @@
 Principais mudanças nesta versão: Novas funcionalidades sob as configurações de labs: Compositor de texto rico, novo gerenciador de dispositivo, broadcast de voz. Ainda sob desenvolvimento ativo!
-Changelog completo: https://github.com/vector-im/element-android/releases
+Changelog completo: https://github.com/element-hq/element-android/releases

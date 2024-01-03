@@ -1,2 +1,2 @@
 Huvudsakliga ändringar i den här versionen: permalänkar till rum, utrymmen och meddelanden visas nu som piller i tidslinjen. Vi fixade också vissa problem med anpassade dekaler och att läsmarkören fastnar i historiken.
-Full ändringslogg: https://github.com/vector-im/element-android/releases
+Full ändringslogg: https://github.com/element-hq/element-android/releases

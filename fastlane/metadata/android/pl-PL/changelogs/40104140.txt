@@ -1,2 +1,2 @@
 Główne zmiany w tej wersji: Poprawa zarządzania ignorowanymi użytkownikami. Różne poprawki błędów i ulepszenia stabilności.
-Pełna lista zmian: https://github.com/vector-im/element-android/releases
+Pełna lista zmian: https://github.com/element-hq/element-android/releases

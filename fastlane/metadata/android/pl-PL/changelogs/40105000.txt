@@ -1,2 +1,2 @@
 Główne zmiany w tej wersji: Odroczone wiadomości prywatne włączone domyślnie.
-Pełna lista zmian: https://github.com/vector-im/element-android/releases
+Pełna lista zmian: https://github.com/element-hq/element-android/releases

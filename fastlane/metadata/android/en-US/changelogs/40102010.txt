@@ -1,2 +1,2 @@
 Main changes in this version: Many improvements on VoIP and Spaces (still in beta).
-Full changelog: https://github.com/vector-im/element-android/releases/tag/v1.2.1
+Full changelog: https://github.com/element-hq/element-android/releases/tag/v1.2.1

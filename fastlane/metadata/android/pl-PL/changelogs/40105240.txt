@@ -1,2 +1,2 @@
 Główne zmiany w tej wersji: Głównie poprawki błędów, w szczególności naprawiono wiadomość nie pojawiająca się na osi czasu.
-Pełna lista zmian: https://github.com/vector-im/element-android/releases
+Pełna lista zmian: https://github.com/element-hq/element-android/releases

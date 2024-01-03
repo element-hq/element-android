@@ -1,3 +1,3 @@
 Ny applayout kan aktiveras in experimentinställningarna. Ge det ett försök!
 Fixa problem med missade aviseringar, och long inkrementell synk.
-Full ändringslogg: https://github.com/vector-im/element-android/releases
+Full ändringslogg: https://github.com/element-hq/element-android/releases

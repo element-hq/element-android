@@ -1,2 +1,2 @@
 新版本主要包含使用者介面與使用者體驗改善。現在您可以邀請朋友，並透過掃描 QR 碼來快速建立直接訊息了。
-完整變更紀錄：https://github.com/vector-im/element-android/releases/tag/v1.0.11
+完整變更紀錄：https://github.com/element-hq/element-android/releases/tag/v1.0.11

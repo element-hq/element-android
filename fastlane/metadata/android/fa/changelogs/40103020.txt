@@ -1,2 +1,2 @@
 تغییرات اصلی در این نگارش: افزودن پشتیبانی از اندروید خودرو. کلّی رفع اشکال!
-گزارش دگرگونی کامل: https://github.com/vector-im/element-android/releases/tag/v1.3.2
+گزارش دگرگونی کامل: https://github.com/element-hq/element-android/releases/tag/v1.3.2

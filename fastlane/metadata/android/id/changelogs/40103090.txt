@@ -1,2 +1,2 @@
 Perubahan utama di versi ini: Tambahkan dukungan untuk draf pesan suara. Banyak perbaikan bug!
-Changelog lengkap: https://github.com/vector-im/element-android/releases/tag/v1.3.9
+Changelog lengkap: https://github.com/element-hq/element-android/releases/tag/v1.3.9

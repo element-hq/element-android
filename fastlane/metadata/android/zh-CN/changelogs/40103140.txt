@@ -1,2 +1,2 @@
 此版本的主要变化：First change in onboarding screens, including Analytics opt-in. 对添加在实验中带有数学的事件的支持。
-完整更改日志：https://github.com/vector-im/element-android/releases/tag/v1.3.14
+完整更改日志：https://github.com/element-hq/element-android/releases/tag/v1.3.14

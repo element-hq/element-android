@@ -1,2 +1,2 @@
 Główne zmiany w tej wersji: Włącza ulepszone podróże w logowaniu i przy rejestracji.
-Pełna lista zmian: https://github.com/vector-im/element-android/releases
+Pełna lista zmian: https://github.com/element-hq/element-android/releases

@@ -39,4 +39,4 @@ Perpesanan, panggilan suara dan video, pembagian berkas, pembagian layar dan ban
 Tetap terhubung di mana Anda berada, dengan riwayat pesan yang disinkronkan pada semua perangkat Anda dan pada web di https://app.element.io
 
 <b>Sumber terbuka</b>
-Element Android adalah proyek sumber terbuka, dilayani oleh GitHub. Silakan laporkan masalah yang Anda temukan, atau membuat kontribusi ke pengembangannya di https://github.com/vector-im/element-android
+Element Android adalah proyek sumber terbuka, dilayani oleh GitHub. Silakan laporkan masalah yang Anda temukan, atau membuat kontribusi ke pengembangannya di https://github.com/element-hq/element-android

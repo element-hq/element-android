@@ -63,7 +63,7 @@ bundle exec danger pr <PR_URL> --dangerfile=./tools/danger/dangerfile.js
 For instance:
 
 ```shell
-bundle exec danger pr https://github.com/vector-im/element-android/pull/6637 --dangerfile=./tools/danger/dangerfile.js
+bundle exec danger pr https://github.com/element-hq/element-android/pull/6637 --dangerfile=./tools/danger/dangerfile.js
 ```
 
 We may need to create a GitHub token to have less API rate limiting, and then set the env var:
@@ -84,7 +84,7 @@ bundle exec danger-kotlin pr <PR_URL> --dangerfile=./tools/danger/dangerfile.js
 To let Danger check all the PRs, including PRs form forks, a GitHub account have been created:
 - login: ElementBot
 - password: Stored on Passbolt
-- GitHub token: A token with limited access has been created and added to the repository https://github.com/vector-im/element-android as secret DANGER_GITHUB_API_TOKEN. This token is not saved anywhere else. In case of problem, just delete it and create a new one, then update the secret.
+- GitHub token: A token with limited access has been created and added to the repository https://github.com/element-hq/element-android as secret DANGER_GITHUB_API_TOKEN. This token is not saved anywhere else. In case of problem, just delete it and create a new one, then update the secret.
 
 PRs from forks do not always have access to the secret `secrets.DANGER_GITHUB_API_TOKEN`, so `secrets.GITHUB_TOKEN` is also provided to the job environment. If `secrets.DANGER_GITHUB_API_TOKEN` is available, it will be used, so user `ElementBot` will comment the PR. Else `secrets.GITHUB_TOKEN` will be used, and bot `github-actions` will comment the PR.
 

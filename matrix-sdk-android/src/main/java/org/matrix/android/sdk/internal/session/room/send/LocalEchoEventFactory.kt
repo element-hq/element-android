@@ -312,7 +312,8 @@ internal class LocalEchoEventFactory @Inject constructor(
             roomId: String,
             eventReplaced: TimelineEvent,
             originalEvent: TimelineEvent,
-            newBodyText: String,
+            replyText: CharSequence,
+            replyTextFormatted: String?,
             autoMarkdown: Boolean,
             msgType: String,
             compatibilityText: String,
@@ -321,22 +322,23 @@ internal class LocalEchoEventFactory @Inject constructor(
         val permalink = permalinkFactory.createPermalink(roomId, originalEvent.root.eventId ?: "", false)
         val userLink = originalEvent.root.senderId?.let { permalinkFactory.createPermalink(it, false) } ?: ""
 
-        val body = bodyForReply(timelineEvent = originalEvent)
+        val bodyOfRepliedEvent = bodyForReply(timelineEvent = originalEvent)
         // As we always supply formatted body for replies we should force the MarkdownParser to produce html.
-        val newBodyFormatted = markdownParser.parse(newBodyText, force = true, advanced = autoMarkdown).takeFormatted()
+        val newBodyFormatted = replyTextFormatted ?: markdownParser.parse(replyText, force = true, advanced = autoMarkdown).takeFormatted()
         // Body of the original message may not have formatted version, so may also have to convert to html.
-        val bodyFormatted = body.formattedText ?: markdownParser.parse(body.text, force = true, advanced = autoMarkdown).takeFormatted()
+        val formattedBodyOfRepliedEvent =
+                bodyOfRepliedEvent.formattedText ?: markdownParser.parse(text = bodyOfRepliedEvent.text, force = true, advanced = autoMarkdown).takeFormatted()
         val replyFormatted = buildFormattedReply(
                 permalink,
                 userLink,
                 originalEvent.senderInfo.disambiguatedDisplayName,
-                bodyFormatted,
+                formattedBodyOfRepliedEvent,
                 newBodyFormatted
         )
         //
         // > <@alice:example.org> This is the original body
         //
-        val replyFallback = buildReplyFallback(body, originalEvent.root.senderId ?: "", newBodyText)
+        val replyFallback = buildReplyFallback(bodyOfRepliedEvent, originalEvent.root.senderId ?: "", replyText.toString())
 
         return createMessageEvent(
                 roomId,

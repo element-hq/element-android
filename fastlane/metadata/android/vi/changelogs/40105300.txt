@@ -1,2 +1,2 @@
 Thay đổi chính trong phiên bản này: Liên kết cố định tới các phòng, spaces, người dùng và tin nhắn giờ được hiển thị hình viên thuốc. Chúng tôi cũng đã sửa một số vấn đề với những nhãn dãn (sticker) tùy chỉnh và thanh đánh dấu đã đọc bị kẹt ở quá khứ.
-Toàn bộ nhật ký sửa đổi: https://github.com/vector-im/element-android/releases
+Toàn bộ nhật ký sửa đổi: https://github.com/element-hq/element-android/releases

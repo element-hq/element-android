@@ -27,12 +27,12 @@ echo "Will install the application on device ${serialNumber} with arch ${arch}"
 
 # Artifact URL
 echo
-read -p "Artifact url (ex: https://github.com/vector-im/element-android/suites/9293388174/artifacts/435942121)? " artifactUrl
+read -p "Artifact url (ex: https://github.com/element-hq/element-android/suites/9293388174/artifacts/435942121)? " artifactUrl
 
 ## Example of default value for Gplay
-#artifactUrl=${artifactUrl:-https://github.com/vector-im/element-android/suites/9293388174/artifacts/435942121}
+#artifactUrl=${artifactUrl:-https://github.com/element-hq/element-android/suites/9293388174/artifacts/435942121}
 ## Example of default value for FDroid
-# artifactUrl=${artifactUrl:-https://github.com/vector-im/element-android/suites/9293388174/artifacts/435942119}
+# artifactUrl=${artifactUrl:-https://github.com/element-hq/element-android/suites/9293388174/artifacts/435942119}
 
 artifactId=$(echo ${artifactUrl} | rev | cut -d'/' -f1 | rev)
 

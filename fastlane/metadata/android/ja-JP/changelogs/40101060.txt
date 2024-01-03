@@ -1,2 +1,2 @@
 このバージョンの主な変更点：1.1.5のホットフィックス
-更新履歴：https://github.com/vector-im/element-android/releases/tag/v1.1.6
+更新履歴：https://github.com/element-hq/element-android/releases/tag/v1.1.6

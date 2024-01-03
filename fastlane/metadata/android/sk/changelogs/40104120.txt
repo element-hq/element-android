@@ -1,2 +1,2 @@
 Hlavné zmeny v tejto verzii: Umožňuje používateľom zobrazovať sa v režime offline a pridáva zvukový prehrávač pre zvukové prílohy
-Úplný zoznam zmien: https://github.com/vector-im/element-android/releases
+Úplný zoznam zmien: https://github.com/element-hq/element-android/releases

@@ -1,2 +1,2 @@
 Hlavní změny v této verzi: Odložené přímé zprávy jsou ve výchozím nastavení povoleny.
-Úplný seznam změn: https://github.com/vector-im/element-android/releases
+Úplný seznam změn: https://github.com/element-hq/element-android/releases

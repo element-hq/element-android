@@ -1,2 +1,2 @@
 此版本的主要变化：给任何房间发送你的位置。编辑投票。
-完整更改日志：https://github.com/vector-im/element-android/releases/tag/v1.3.18
+完整更改日志：https://github.com/element-hq/element-android/releases/tag/v1.3.18

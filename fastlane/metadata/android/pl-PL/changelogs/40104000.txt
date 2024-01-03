@@ -1,2 +1,2 @@
 Główne zmiany w tej wersji: Wstępna implementacja komunikatów wątków. Bąbelki wiadomości.
-Pełna lista zmian: https://github.com/vector-im/element-android/releases/tag/v1.4.0
+Pełna lista zmian: https://github.com/element-hq/element-android/releases/tag/v1.4.0

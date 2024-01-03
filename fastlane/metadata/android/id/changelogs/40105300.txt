@@ -1,2 +1,2 @@
 Perubahan utama dalam versi ini: tautan permanen ke ruangan, space, pengguna, dan pesan sekarang ditampilkan sebagai kapsul di lini masa. Kami juga telah memperbaiki masalah dengan stiker kustom dan tanda baca yang tidak selalu diperbarui di masa lalu.
-Catatan perubahan lanjutan: https://github.com/vector-im/element-android/releases
+Catatan perubahan lanjutan: https://github.com/element-hq/element-android/releases

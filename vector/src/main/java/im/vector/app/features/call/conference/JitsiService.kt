@@ -75,7 +75,7 @@ class JitsiService @Inject constructor(
         val confId = createConferenceId(roomId, jitsiAuth)
 
         // We use the default element wrapper for this widget
-        // https://github.com/vector-im/element-web/blob/develop/docs/jitsi-dev.md
+        // https://github.com/element-hq/element-web/blob/develop/docs/jitsi-dev.md
         // https://github.com/matrix-org/matrix-react-sdk/blob/develop/src/utils/WidgetUtils.ts#L469
         val url = buildString {
             append("https://app.element.io/jitsi.html")

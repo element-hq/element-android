@@ -1,2 +1,2 @@
 Änderungen in dieser Version: Unterstützung für Anwesenheitsstatus in Direktnachrichten (Momentan auf matrix.org deaktiviert), Android Auto funktioniert wieder.
-Änderungsliste: https://github.com/vector-im/element-android/releases/tag/v1.3.5
+Änderungsliste: https://github.com/element-hq/element-android/releases/tag/v1.3.5

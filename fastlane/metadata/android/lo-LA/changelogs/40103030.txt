@@ -1,2 +1,2 @@
 ການປ່ຽນແປງຫຼັກໃນສະບັບນີ້: ເຮັດໃຫ້ນະໂຍບາຍຂອງເຄື່ອງແມ່ຂ່າຍຢັ້ງຢືນຕົວຕົນ (ຫຼາຍໜ່ວຍ) ໃຫ້ເຫັນຢູ່ໃນການຕັ້ງຄ່າ. ລຶບການຮອງຮັບ Android Auto ອອກຊົ່ວຄາວ.
-ບັນທຶກການປ່ຽນແປງສະບັບເຕັມ: https://github.com/vector-im/element-android/releases/tag/v1.3.3
+ບັນທຶກການປ່ຽນແປງສະບັບເຕັມ: https://github.com/element-hq/element-android/releases/tag/v1.3.3

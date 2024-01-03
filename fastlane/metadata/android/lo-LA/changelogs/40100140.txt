@@ -1,2 +1,2 @@
 ການປ່ຽນແປງຫຼັກໃນສະບັບນີ້: ແກ້ໄຂການອະນຸຍາດຫ້ອງ, ຮູບແບບ ແຈ້ງ / ມືດອັດຕະໂນມັດ, ແລະການແກ້ໄຂບັນຫາຈຳນວນໜຶ່ງ.
-ບັນທຶກການປ່ຽນແປງສະບັບເຕັມ: https://github.com/vector-im/element-android/releases/tag/v1.0.14
+ບັນທຶກການປ່ຽນແປງສະບັບເຕັມ: https://github.com/element-hq/element-android/releases/tag/v1.0.14

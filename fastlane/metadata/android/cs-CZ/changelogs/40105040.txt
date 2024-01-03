@@ -1,2 +1,2 @@
 Hlavní změny v této verzi: Nové funkce v Experimentálních funkcích: Rozšířený editor zpráv, nová správa zařízení, hlasové vysílání. Stále v aktivním vývoji!
-Úplný seznam změn: https://github.com/vector-im/element-android/releases
+Úplný seznam změn: https://github.com/element-hq/element-android/releases

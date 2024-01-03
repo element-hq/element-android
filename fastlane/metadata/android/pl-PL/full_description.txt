@@ -39,4 +39,4 @@ Wiadomości, rozmowy głosowe i wideo, udostępnianie plików, ekranu, a nawet i
 Pozostań zawsze w kontakcie poprzez pełną synchornizację między urządzeniami oraz w sieci na https://app.element.io
 
 <b>Otwarto źródłowy</b>
-Element Android jest otwarto-źródłowym projektem, hostowanym na platformie GitHub. Prosimy o zgłaszanie wszelkich błędów i/lub wsparcie w tworzeniu naszego projektu na https://github.com/vector-im/element-android
+Element Android jest otwarto-źródłowym projektem, hostowanym na platformie GitHub. Prosimy o zgłaszanie wszelkich błędów i/lub wsparcie w tworzeniu naszego projektu na https://github.com/element-hq/element-android

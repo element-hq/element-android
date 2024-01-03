@@ -1,2 +1,2 @@
 Änderungen: Fehlerbehebungen
-Alle Änderungen: https://github.com/vector-im/element-android/releases/tag/v1.4.7
+Alle Änderungen: https://github.com/element-hq/element-android/releases/tag/v1.4.7

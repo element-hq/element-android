@@ -1,2 +1,2 @@
 Principais mudanças nesta versão: permalinks para salas, espaços, usuários e mensagens são agora exibidos como pílulas na linha do tempo. Também corrigimos alguns problemas com figurinhas personalizadas e o marcador de lido ficando travado no passado.
-Changelog completo: https://github.com/vector-im/element-android/releases
+Changelog completo: https://github.com/element-hq/element-android/releases

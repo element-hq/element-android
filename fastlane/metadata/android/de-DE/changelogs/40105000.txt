@@ -1,2 +1,2 @@
 Die wichtigste Änderung in dieser Version: Verzögerte Direktnachrichten standardmäßig aktiviert!
-Vollständiges Änderungsprotokoll: https://github.com/vector-im/element-android/releases
+Vollständiges Änderungsprotokoll: https://github.com/element-hq/element-android/releases

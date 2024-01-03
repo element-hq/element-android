@@ -39,4 +39,4 @@ Shkëmbim mesazhesh, thirrje me zë dhe me video, shkëmbim kartelash, tregim ek
 Jini në dijeni, kudo ku gjendeni, me historik plotësisht të njëkohësuar mesazhesh nëpër krejt pajisjet tuaja dhe në internet te https://app.element.io
 
 <b>Me burim të hapët</b>
-Element-i për Android është një projekt me burim të hapët, strehuar në GitHub. Ju lutemi, njoftoni të meta dhe/ose jepni ndihmesë në zhvillimin e tij te https://github.com/vector-im/element-android
+Element-i për Android është një projekt me burim të hapët, strehuar në GitHub. Ju lutemi, njoftoni të meta dhe/ose jepni ndihmesë në zhvillimin e tij te https://github.com/element-hq/element-android

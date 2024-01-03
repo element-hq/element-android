@@ -1,2 +1,2 @@
 ການປ່ຽນແປງຫຼັກໃນສະບັບນີ້: ປັບປຸງການບໍລິຫານການລະເວັ້ນຜູ້ໃຊ້. ປັບປຸງບັກ ແລະຄວາມສະຖຽນ.
-ບັນທຶກການປ່ຽນແປງສະບັບເຕັມ: https://github.com/vector-im/element-android/releases
+ບັນທຶກການປ່ຽນແປງສະບັບເຕັມ: https://github.com/element-hq/element-android/releases

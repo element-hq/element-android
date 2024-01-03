@@ -1,2 +1,2 @@
 Ndryshimet kryesore në këtë version: ndreqje e një problemi rreth mesazhesh të fshehtëzuar.
-Regjistër i plotë ndryshimesh: https://github.com/vector-im/element-android/releases/tag/v1.1.14
+Regjistër i plotë ndryshimesh: https://github.com/element-hq/element-android/releases/tag/v1.1.14

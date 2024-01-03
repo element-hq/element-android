@@ -1,2 +1,2 @@
 Bu sürümdeki ana değişiklikler: Sesli mesaj taslağı için destek ekleyin. Birçok hata düzeltmeleri!
-Tam değişiklik listesi: https://github.com/vector-im/element-android/releases/tag/v1.3.9
+Tam değişiklik listesi: https://github.com/element-hq/element-android/releases/tag/v1.3.9

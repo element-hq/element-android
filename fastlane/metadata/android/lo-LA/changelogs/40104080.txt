@@ -1,2 +1,2 @@
 ການປ່ຽນແປງຫຼັກໃນສະບັບນີ້: ເລື່ອນໃນຂໍ້ຄວາມສຽງ. ແກ້ໄຂບັກຫຼາຍບ່ອນ ແລະ ປັບປຸງຄວາມສະຖຽນ.
-ບັນທຶກການປ່ຽນແປງສະບັບເຕັມ: https://github.com/vector-im/element-android/releases
+ບັນທຶກການປ່ຽນແປງສະບັບເຕັມ: https://github.com/element-hq/element-android/releases

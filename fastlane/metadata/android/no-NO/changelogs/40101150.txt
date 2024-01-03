@@ -1,2 +1,2 @@
 Hovedendringer i denne versjonen: implementering av talemeldinger under laboratorieinnstillinger.
-Full endringslogg: https://github.com/vector-im/element-android/releases/tag/v1.1.15
+Full endringslogg: https://github.com/element-hq/element-android/releases/tag/v1.1.15

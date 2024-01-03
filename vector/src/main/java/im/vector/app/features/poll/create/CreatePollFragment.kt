@@ -75,7 +75,7 @@ class CreatePollFragment :
         }
 
         views.createPollRecyclerView.configureWith(controller, disableItemAnimation = true)
-        // workaround for https://github.com/vector-im/element-android/issues/4735
+        // workaround for https://github.com/element-hq/element-android/issues/4735
         views.createPollRecyclerView.setItemViewCacheSize(MAX_OPTIONS_COUNT + 6)
         controller.callback = this
 

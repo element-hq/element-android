@@ -39,4 +39,4 @@ Viestit, ääni- ja videopuhelut, tiedostojen jakaminen, näytön jakaminen ja k
 Täysin synkronoitu viestihistoria kaikkien laitteidesi välillä ja verkkoselaimessa: https://app.element.io
 
 <b>Avointa lähdekoodia</b>
-Element Android on avoimen lähdekoodin projekti GitHubissa. Ilmoita virheistä ja osallistu kehittämiseen osoitteessa https://github.com/vector-im/element-android
+Element Android on avoimen lähdekoodin projekti GitHubissa. Ilmoita virheistä ja osallistu kehittämiseen osoitteessa https://github.com/element-hq/element-android

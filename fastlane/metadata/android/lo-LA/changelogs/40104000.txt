@@ -1,2 +1,2 @@
 ການປ່ຽນແປງຫຼັກໃນສະບັບນີ້: ການປະຕິບັດເບື້ອງຕົ້ນຂອງຂໍ້ຄວາມແບບກະທູ້. ຂໍ້ຄວາມຮູບແບບປຸມເປົ້າ.
-ບັນທຶກການປ່ຽນແປງສະບັບເຕັມ: https://github.com/vector-im/element-android/releases/tag/v1.4.0
+ບັນທຶກການປ່ຽນແປງສະບັບເຕັມ: https://github.com/element-hq/element-android/releases/tag/v1.4.0

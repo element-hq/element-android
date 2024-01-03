@@ -58,7 +58,7 @@ class LoginFragment :
 
     private var isSignupMode = false
 
-    // Temporary patch for https://github.com/vector-im/riotX-android/issues/1410,
+    // Temporary patch for https://github.com/element-hq/riotX-android/issues/1410,
     // waiting for https://github.com/matrix-org/synapse/issues/7576
     private var isNumericOnlyUserIdForbidden = false
 

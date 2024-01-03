@@ -1,2 +1,2 @@
 Principaux changements pour cette version : Organisez vous salons à l’aide des Espaces !
-Intégralité des changements : https://github.com/vector-im/element-android/releases/tag/v1.3.0
+Intégralité des changements : https://github.com/element-hq/element-android/releases/tag/v1.3.0

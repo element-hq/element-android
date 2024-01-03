@@ -1,3 +1,3 @@
 Das neue App-Layout kann in den experimentellen Einstellungen aktiviert werden. Probier es gerne aus!
 Fehler bzgl. ausbleibender Benachrichtigungen und langwierigem inkrementellem Synchronisieren behoben.
-Vollständiges Änderungsprotokoll: https://github.com/vector-im/element-android/releases
+Vollständiges Änderungsprotokoll: https://github.com/element-hq/element-android/releases

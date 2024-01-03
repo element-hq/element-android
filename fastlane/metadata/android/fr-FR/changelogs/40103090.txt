@@ -1,2 +1,2 @@
 Principaux changements pour cette version : Ajout du support pour les brouillons de messages vocaux. Beaucoup de corrections de bugs !
-Intégralité des changements : https://github.com/vector-im/element-android/releases/tag/v1.3.9
+Intégralité des changements : https://github.com/element-hq/element-android/releases/tag/v1.3.9

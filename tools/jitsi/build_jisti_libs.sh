@@ -3,7 +3,7 @@
 ########
 # This script build the Jitsi library with LIBRE_BUILD flag.
 # Following instructions from here https://github.com/jitsi/jitsi-meet/tree/master/android#build-and-use-your-own-sdk-artifactsbinaries
-# It then export the library in a maven repository, that we host here https://github.com/vector-im/jitsi_libre_maven
+# It then export the library in a maven repository, that we host here https://github.com/element-hq/jitsi_libre_maven
 
 # exit on any error
 set -e

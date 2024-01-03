@@ -1,2 +1,2 @@
 Modifiche principali in questa versione: nuove funzioni nelle impostazioni Laboratori: compositore in rich text, nuova gestione dispositivi, trasmissione voce. Ancora in sviluppo attivo!
-Cronologia completa: https://github.com/vector-im/element-android/releases
+Cronologia completa: https://github.com/element-hq/element-android/releases

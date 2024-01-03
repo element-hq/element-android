@@ -1,2 +1,2 @@
 تغییرات عمده در این نگارش: پیاده‌سازی جدید حالت تمام‌صفحه برای ویرایشگر متن غنی و رفع اشکال‌ها.
-گزارش دگرگونی کامل: https://github.com/vector-im/element-android/releases
+گزارش دگرگونی کامل: https://github.com/element-hq/element-android/releases

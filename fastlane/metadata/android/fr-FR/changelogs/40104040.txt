@@ -1,2 +1,2 @@
 Principaux changements pour cette version : Mise-à-jour de l’interface de notification de rédaction en cours. Plusieurs corrections de bogues et d’améliorations de stabilité.
-Intégralité des changements : https://github.com/vector-im/element-android/releases/tag/v1.4.4
+Intégralité des changements : https://github.com/element-hq/element-android/releases/tag/v1.4.4
