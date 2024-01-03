@@ -210,7 +210,7 @@
     <string name="action_video_call">تماس تصویری</string>
     <string name="action_mark_all_as_read">همه را به عنوان خوانده شده علامت بزن</string>
     <string name="action_quick_reply">پاسخ سریع</string>
-    <string name="action_open">گشودن</string>
+    <string name="action_open">باز کردن</string>
     <string name="action_close">بستن</string>
     <string name="copied_to_clipboard">در کلیپ‌بورد کپی شد</string>
     <string name="dialog_title_warning">هشدار</string>
