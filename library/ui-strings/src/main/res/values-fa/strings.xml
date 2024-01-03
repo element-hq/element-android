@@ -683,7 +683,7 @@
     <string name="encryption_export_e2e_room_keys">برون‌ریزی کلید‌های اتاق‌های سرتاسری</string>
     <string name="encryption_export_room_keys">برون‌ریزی کلید‌های اتاق‌ها</string>
     <string name="encryption_export_room_keys_summary">برون‌ریزی کلیدها به یک پروندهٔ محلّی</string>
-    <string name="encryption_export_export">برون‌ریزی</string>
+    <string name="encryption_export_export">دانلود</string>
     <string name="encryption_message_recovery">بازیابی پیام‌های رمزشده</string>
     <string name="encryption_settings_manage_message_recovery_summary">مدیریت پشتیبان کلید</string>
     <string name="encryption_import_e2e_room_keys">درون‌ریزی کلید‌های اتاق‌های سرتاسری</string>
