@@ -1,2 +1,2 @@
 Основні зміни у цій версії: Дозволяє користувачам з’являтися в режимі офлайн та додає аудіопрогравач для аудіовкладень
-Вичерпний перелік змін: https://github.com/vector-im/element-android/releases
+Вичерпний перелік змін: https://github.com/element-hq/element-android/releases

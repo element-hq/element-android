@@ -1,2 +1,2 @@
 このバージョンの主な変更点：ラボの設定に新しい機能（リッチテキストエディター、端末の新しい管理画面、音声配信）を追加。開発中です！
-更新履歴：https://github.com/vector-im/element-android/releases
+更新履歴：https://github.com/element-hq/element-android/releases

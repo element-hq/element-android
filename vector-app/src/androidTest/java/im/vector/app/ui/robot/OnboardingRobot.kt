@@ -43,7 +43,7 @@ class OnboardingRobot {
 
     private fun crawlCreateAccount() {
         if (defaultVectorFeatures.isOnboardingCombinedRegisterEnabled()) {
-            // TODO https://github.com/vector-im/element-android/issues/6652
+            // TODO https://github.com/element-hq/element-android/issues/6652
         } else {
             clickOn(R.id.loginSplashSubmit)
             assertDisplayed(R.id.useCaseHeaderTitle, R.string.ftue_auth_use_case_title)
@@ -56,7 +56,7 @@ class OnboardingRobot {
 
     private fun crawlAlreadyHaveAccount() {
         if (defaultVectorFeatures.isOnboardingCombinedLoginEnabled()) {
-            // TODO https://github.com/vector-im/element-android/issues/6652
+            // TODO https://github.com/element-hq/element-android/issues/6652
         } else {
             clickOn(R.id.loginSplashAlreadyHaveAccount)
             OnboardingServersRobot().crawlSignIn()

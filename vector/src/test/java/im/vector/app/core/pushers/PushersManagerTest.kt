@@ -17,6 +17,7 @@
 package im.vector.app.core.pushers
 
 import im.vector.app.R
+import im.vector.app.features.mdm.NoOpMdmService
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakeAppNameProvider
 import im.vector.app.test.fakes.FakeGetDeviceInfoUseCase
@@ -54,6 +55,7 @@ class PushersManagerTest {
             stringProvider.instance,
             appNameProvider,
             getDeviceInfoUseCase,
+            NoOpMdmService(),
     )
 
     @Test

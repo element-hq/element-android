@@ -232,6 +232,7 @@ class AutoCompleter @AssistedInject constructor(
     private fun insertMatrixItemIntoRichTextEditor(editorEditText: EditorEditText, matrixItem: MatrixItem) {
         if (matrixItem is MatrixItem.EveryoneInRoomItem) {
             editorEditText.replaceTextSuggestion(matrixItem.displayName)
+            // Note: not using editorEditText.insertAtRoomMentionAtSuggestion() since we want to keep the existing look and feel of the mention for @room.
             return
         }
 
@@ -253,7 +254,7 @@ class AutoCompleter @AssistedInject constructor(
                 matrixItem.getBestName()
         }
 
-        editorEditText.setLinkSuggestion(url = permalink, text = linkText)
+        editorEditText.insertMentionAtSuggestion(url = permalink, text = linkText)
     }
 
     private fun insertMatrixItemIntoEditable(editText: EditText, editable: Editable, firstChar: Char, matrixItem: MatrixItem) {

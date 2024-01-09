@@ -86,13 +86,13 @@ Exceptions can occur:
 We use automatic assignment for PR reviews. **A PR is automatically routed by GitHub to one team member** using the round robin algorithm. Additional reviewers can be used for complex changes or when the first reviewer is not confident enough on the changes.
 The process is the following:
 
-- The PR creator selects the [element-android-reviewers](https://github.com/orgs/vector-im/teams/element-android-reviewers) team as a reviewer.
+- The PR creator selects the [element-android-reviewers](https://github.com/orgs/element-hq/teams/element-android-reviewers) team as a reviewer.
 - GitHub automatically assign the reviewer. If the reviewer is not available (holiday, etc.), remove them and set again the team, GitHub will select another reviewer.
 - Alternatively, the PR creator can directly assign specific people if they have another Android developer in their team or they think a specific reviewer should take a look at their PR.
 - Reviewers get a notification to make the review: they review the code following the good practice (see the rest of this document).
 - After making their own review, if they feel not confident enough, they can ask another person for a full review, or they can tag someone within a PR comment to check specific lines.
 
-For PRs coming from the community, the issue wrangler can assign either the team [element-android-reviewers](https://github.com/orgs/vector-im/teams/element-android-reviewers) or any member directly.
+For PRs coming from the community, the issue wrangler can assign either the team [element-android-reviewers](https://github.com/orgs/element-hq/teams/element-android-reviewers) or any member directly.
 
 ##### PR review time
 

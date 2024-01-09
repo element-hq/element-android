@@ -1,2 +1,2 @@
 Główne zmiany w tej wersji: Nowa implementacja trybu pełnego ekranu dla Bogatego edytora tekstu i poprawki błędów.
-Pełna lista zmian: https://github.com/vector-im/element-android/releases
+Pełna lista zmian: https://github.com/element-hq/element-android/releases

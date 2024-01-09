@@ -1,2 +1,2 @@
 このバージョンの主な変更点：スレッドのタイムラインの有効化と高速化。不具合の修正と安定性の改善。
-更新履歴：https://github.com/vector-im/element-android/releases/tag/v1.4.6
+更新履歴：https://github.com/element-hq/element-android/releases/tag/v1.4.6

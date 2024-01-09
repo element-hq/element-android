@@ -1,2 +1,2 @@
 此版本的主要變動：討論串時間軸現已上線，而且更快了。修復多個錯誤與改善穩定性。
-完整的變更紀錄：https://github.com/vector-im/element-android/releases/tag/v1.4.6
+完整的變更紀錄：https://github.com/element-hq/element-android/releases/tag/v1.4.6

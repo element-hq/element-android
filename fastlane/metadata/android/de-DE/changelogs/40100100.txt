@@ -1,2 +1,2 @@
 Diese neue Version enthält hauptsächlich Fehlerkorrekturen und Verbesserungen. Nachrichten verschicken geht jetzt viel schneller.
-Vollständige Versionshinweise: https://github.com/vector-im/element-android/releases/tag/v1.0.10
+Vollständige Versionshinweise: https://github.com/element-hq/element-android/releases/tag/v1.0.10

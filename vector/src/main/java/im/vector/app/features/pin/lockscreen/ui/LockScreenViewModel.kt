@@ -187,7 +187,7 @@ class LockScreenViewModel @AssistedInject constructor(
     /**
      * Wait until the device is unlocked. There seems to be a behavior change on Android 12 that makes [KeyguardManager.isDeviceLocked] return `false` even
      * after an Activity's `onResume` method. If we mix that with the system keys needing the device to be unlocked before they're used, we get crashes.
-     * See issue [#6768](https://github.com/vector-im/element-android/issues/6768).
+     * See issue [#6768](https://github.com/element-hq/element-android/issues/6768).
      */
     private suspend fun waitUntilKeyguardIsUnlocked() {
         if (versionProvider.isAtLeast(Build.VERSION_CODES.S)) {

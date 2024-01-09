@@ -26,6 +26,7 @@ import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.ReAuthHelper
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
+import im.vector.app.features.mdm.NoOpMdmService
 import im.vector.app.features.onboarding.RegistrationStateFixture.aRegistrationState
 import im.vector.app.features.onboarding.StartAuthenticationFlowUseCase.StartAuthenticationResult
 import im.vector.app.test.TestBuildVersionSdkIntProvider
@@ -1121,6 +1122,7 @@ class OnboardingViewModelTest {
                 fakeRegistrationActionHandler.instance,
                 TestBuildVersionSdkIntProvider().also { it.value = Build.VERSION_CODES.O },
                 fakeConfigureAndStartSessionUseCase,
+                NoOpMdmService()
         ).also {
             viewModel = it
             initialState = state

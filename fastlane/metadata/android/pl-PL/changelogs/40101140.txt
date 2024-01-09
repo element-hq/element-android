@@ -1,2 +1,2 @@
 Główne zmiany w tej wersji: naprawienie problemu z zaszyfrowanymi wiadomościami.
-Pełna lista zmian: https://github.com/vector-im/element-android/releases/tag/v1.1.14
+Pełna lista zmian: https://github.com/element-hq/element-android/releases/tag/v1.1.14

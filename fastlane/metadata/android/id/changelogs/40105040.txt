@@ -1,2 +1,2 @@
 Perubahan utama dalam versi ini: Fitur baru di belakang pengaturan uji coba: Komposer teks kaya, pengelolaan perangkat baru, siaran suara. Masih dalam pengembangan aktif!
-Catatan perubahan lanjutan: https://github.com/vector-im/element-android/releases
+Catatan perubahan lanjutan: https://github.com/element-hq/element-android/releases

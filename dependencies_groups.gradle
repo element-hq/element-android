@@ -5,12 +5,12 @@ ext.groups = [
                 group: [
                         'com.github.Armen101',
                         'com.github.chrisbanes',
+                        'com.github.element-hq',
                         'com.github.hyuwah',
                         'com.github.jetradarmobile',
                         'com.github.MatrixFrog',
                         'com.github.tapadoo',
                         'com.github.UnifiedPush',
-                        'com.github.vector-im',
                         'com.github.yalantis',
                         'com.github.Zhuinden',
                 ]

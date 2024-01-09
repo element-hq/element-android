@@ -1,2 +1,2 @@
 Änderungen: Verschiedene Fehler behoben
-Änderungsliste: https://github.com/vector-im/element-android/releases/tag/v1.3.8
+Änderungsliste: https://github.com/element-hq/element-android/releases/tag/v1.3.8

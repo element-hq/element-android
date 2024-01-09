@@ -1,2 +1,2 @@
 Ndryshimet kryesore në këtë version: shtim mbulimi për @room dhe për pyetësorë jopublikë, mes mjaft ndryshimesh të tjera të vockla.
-Regjistër i plotë ndryshimesh: https://github.com/vector-im/element-android/releases/tag/v1.4.2
+Regjistër i plotë ndryshimesh: https://github.com/element-hq/element-android/releases/tag/v1.4.2

@@ -1,2 +1,2 @@
 Perubahan utama dalam versi ini: Tingkatkan pengelolaan pengguna yang diabaikan. Beberapa perbaikan kutu dan stabilitas.
-Catatan perubahan lanjutan: https://github.com/vector-im/element-android/releases
+Catatan perubahan lanjutan: https://github.com/element-hq/element-android/releases

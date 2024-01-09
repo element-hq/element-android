@@ -1,2 +1,2 @@
 Fő változás ebben a verzióban: Szobák terekbe szervezése
-Teljes változásnapló: https://github.com/vector-im/element-android/releases/tag/v1.3.0
+Teljes változásnapló: https://github.com/element-hq/element-android/releases/tag/v1.3.0

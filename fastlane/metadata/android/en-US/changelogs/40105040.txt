@@ -1,2 +1,2 @@
 Main changes in this version: New features under the labs settings: Rich text composer, new device management, voice broadcast. Still under active development!
-Full changelog: https://github.com/vector-im/element-android/releases
+Full changelog: https://github.com/element-hq/element-android/releases

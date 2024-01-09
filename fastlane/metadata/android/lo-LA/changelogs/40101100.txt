@@ -1,2 +1,2 @@
 ການປ່ຽນແປງຫຼັກໃນສະບັບນີ້: ອັບເດດຮູບແບບສີສັນ ແລະຮູບແບບສີສັນ ແລະຄຸນສົມບັດໃໝ່ສຳລັບຊ່ອງຫວ່າງ.
-ບັນທຶກການປ່ຽນແປງສະບັບເຕັມ: https://github.com/vector-im/element-android/releases/tag/v1.1.10
+ບັນທຶກການປ່ຽນແປງສະບັບເຕັມ: https://github.com/element-hq/element-android/releases/tag/v1.1.10

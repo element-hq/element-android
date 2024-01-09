@@ -117,7 +117,7 @@ interface RelationService {
     fun editReply(
             replyToEdit: TimelineEvent,
             originalTimelineEvent: TimelineEvent,
-            newBodyText: String,
+            newBodyText: CharSequence,
             newFormattedBodyText: String? = null,
             compatibilityBodyText: String = "* $newBodyText"
     ): Cancelable

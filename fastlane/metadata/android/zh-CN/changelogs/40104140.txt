@@ -1,2 +1,2 @@
 此版本的主要变化：改进忽略用户的管理。多个bug修复及稳定性改进。
-完整更改日志：https://github.com/vector-im/element-android/releases
+完整更改日志：https://github.com/element-hq/element-android/releases

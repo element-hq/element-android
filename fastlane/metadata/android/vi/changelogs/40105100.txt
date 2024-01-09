@@ -1,2 +1,2 @@
 Thay đổi chính trong phiên bản này: Triển khai chế độ toàn màn hình mới cho trình soạn thảo văn bản phong phú và sửa lỗi.
-Toàn bộ nhật ký sửa đổi: https://github.com/vector-im/element-android/releases
+Toàn bộ nhật ký sửa đổi: https://github.com/element-hq/element-android/releases

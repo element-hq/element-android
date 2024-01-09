@@ -1,2 +1,2 @@
 ການປ່ຽນແປງຫຼັກໃນສະບັບນີ້: ເພີ່ມການສະຫນັບສະຫນູນກັບ @room ແລະແບບສໍາຫຼວດທີ່ບໍ່ເປີດເຜີຍໃນບັນດາການປ່ຽນແປງເລັກນ້ອຍອື່ນໆ.
-ບັນທຶກການປ່ຽນແປງສະບັບເຕັມ: https://github.com/vector-im/element-android/releases/tag/v1.4.2
+ບັນທຶກການປ່ຽນແປງສະບັບເຕັມ: https://github.com/element-hq/element-android/releases/tag/v1.4.2

@@ -92,18 +92,20 @@ internal class RoomDisplayNameResolver @Inject constructor(
                     }
                     ?: roomDisplayNameFallbackProvider.getNameForRoomInvite()
         } else if (roomEntity?.membership == Membership.JOIN) {
+            val excludedUserIds = roomDisplayNameFallbackProvider.excludedUserIds(roomId)
             val roomSummary = RoomSummaryEntity.where(realm, roomId).findFirst()
             val invitedCount = roomSummary?.invitedMembersCount ?: 0
             val joinedCount = roomSummary?.joinedMembersCount ?: 0
             val otherMembersSubset: List<RoomMemberSummaryEntity> = if (roomSummary?.heroes?.isNotEmpty() == true) {
                 roomSummary.heroes.mapNotNull { userId ->
                     roomMembers.getLastRoomMember(userId)?.takeIf {
-                        it.membership == Membership.INVITE || it.membership == Membership.JOIN
+                        (it.membership == Membership.INVITE || it.membership == Membership.JOIN) && !excludedUserIds.contains(it.userId)
                     }
                 }
             } else {
                 activeMembers.where()
                         .notEqualTo(RoomMemberSummaryEntityFields.USER_ID, userId)
+                        .not().`in`(RoomMemberSummaryEntityFields.USER_ID, excludedUserIds.toTypedArray())
                         .limit(5)
                         .findAll()
                         .createSnapshot()
@@ -113,6 +115,7 @@ internal class RoomDisplayNameResolver @Inject constructor(
                 0 -> {
                     // Get left members if any
                     val leftMembersNames = roomMembers.queryLeftRoomMembersEvent()
+                            .not().`in`(RoomMemberSummaryEntityFields.USER_ID, excludedUserIds.toTypedArray())
                             .findAll()
                             .map { displayNameResolver.getBestName(it.toMatrixItem()) }
                     val directUserId = roomSummary?.directUserId

@@ -1,2 +1,2 @@
 تغییرات اصلی در این نگارش: افزودن پشتیبانی برای شبکهٔ gitter.im.
-گزارش دگرگونی کامل: https://github.com/vector-im/element-android/releases/tag/v1.1.9
+گزارش دگرگونی کامل: https://github.com/element-hq/element-android/releases/tag/v1.1.9

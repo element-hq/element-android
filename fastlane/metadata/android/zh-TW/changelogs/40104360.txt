@@ -1,3 +1,3 @@
 新的應用程式佈局可在「實驗室」設定中啟用。請試試看！
 修復關於遺失通知的問題，以及增量同步需要長時間的問題。
-完整的變更紀錄：https://github.com/vector-im/element-android/releases
+完整的變更紀錄：https://github.com/element-hq/element-android/releases

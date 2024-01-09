@@ -39,4 +39,4 @@ Elementでは、どのサーバーを使うかをご自身で決めることが�
 メッセージの履歴は、全ての端末とウェブ https://app.element.io で完全に同期されるので、どこからでも連絡を取り合うことができます。
 
 <b>オープンソース</b>
-Element Androidは、GitHubで開発されているオープンソースのプロジェクトです。 不具合の報告や開発への貢献は https://github.com/vector-im/element-android にて受け付けています。
+Element Androidは、GitHubで開発されているオープンソースのプロジェクトです。 不具合の報告や開発への貢献は https://github.com/element-hq/element-android にて受け付けています。

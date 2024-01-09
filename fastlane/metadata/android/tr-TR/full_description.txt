@@ -39,4 +39,4 @@ Element, hem güvenli bir haberci hem de uzaktan çalışırken grup sohbetleri 
  https://app.element.io adresinde tüm cihazlarınızda ve web'de tamamen senkronize edilmiş mesaj geçmişiyle nerede olursanız olun bağlantıda kalın
 
  <b>Açık kaynak</b>
- Element Android, GitHub tarafından barındırılan açık kaynaklı bir projedir. Lütfen https://github.com/vector-im/element-android adresinde hataları bildirin ve/veya gelişimine katkıda bulunun.
+ Element Android, GitHub tarafından barındırılan açık kaynaklı bir projedir. Lütfen https://github.com/element-hq/element-android adresinde hataları bildirin ve/veya gelişimine katkıda bulunun.

@@ -1,2 +1,2 @@
 此版本的主要变化：Various bug fixes and stability improvements.
-完整更新日志：https://github.com/vector-im/element-android/releases
+完整更新日志：https://github.com/element-hq/element-android/releases

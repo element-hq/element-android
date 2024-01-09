@@ -1,2 +1,2 @@
 此版本的主要變動：主要關於通知的錯誤修復。
-完整的變更紀錄：https://github.com/vector-im/element-android/releases/tag/v1.3.7-RC2
+完整的變更紀錄：https://github.com/element-hq/element-android/releases/tag/v1.3.7-RC2

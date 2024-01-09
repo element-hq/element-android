@@ -20,6 +20,8 @@ import org.matrix.android.sdk.api.provider.RoomDisplayNameFallbackProvider
 
 class TestRoomDisplayNameFallbackProvider : RoomDisplayNameFallbackProvider {
 
+    override fun excludedUserIds(roomId: String) = emptyList<String>()
+
     override fun getNameForRoomInvite() =
             "Room invite"
 

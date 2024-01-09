@@ -1,2 +1,2 @@
 此版本的主要变化：Thread timeline are now live and faster. 多个bug修复及稳定性改进。
-完整更改日志：https://github.com/vector-im/element-android/releases/tag/v1.4.6
+完整更改日志：https://github.com/element-hq/element-android/releases/tag/v1.4.6

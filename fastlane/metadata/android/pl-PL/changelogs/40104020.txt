@@ -1,2 +1,2 @@
 Główne zmiany w tej wersji: dodanie obsługi @room i nieujawnionych ankiet, i wiele innych drobnych zmian.
-Pełna lista zmian: https://github.com/vector-im/element-android/releases/tag/v1.4.2
+Pełna lista zmian: https://github.com/element-hq/element-android/releases/tag/v1.4.2

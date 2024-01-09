@@ -39,4 +39,4 @@ Správy, hlasové a video hovory, zdieľanie súborov, zdieľanie obrazovky a ce
 Buďte v kontakte, nech ste kdekoľvek, vďaka plne synchronizovanej histórii správ vo všetkých zariadeniach a na webe na adrese https://app.element.io.
 
 <b>Otvorený zdroj</b>
-Element Android je projekt s otvoreným zdrojovým kódom, ktorého hostiteľom je GitHub. Nahláste prosím chyby a/alebo prispejte k jeho vývoju na https://github.com/vector-im/element-android
+Element Android je projekt s otvoreným zdrojovým kódom, ktorého hostiteľom je GitHub. Nahláste prosím chyby a/alebo prispejte k jeho vývoju na https://github.com/element-hq/element-android

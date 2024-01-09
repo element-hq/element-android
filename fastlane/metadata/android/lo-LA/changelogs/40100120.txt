@@ -1,2 +1,2 @@
 ການປ່ຽນແປງຫຼັກໃນສະບັບນີ້: ຕົວຢ່າງ URL, ແປ້ນພິມ Emoji ໃໝ່, ຄວາມສາມາດໃນການຕັ້ງຄ່າຫ້ອງໃໝ່, ແລະຫິມະສຳລັບວັນຄຣິດສະມາດ!
-ບັນທຶກການປ່ຽນແປງສະບັບເຕັມ: https://github.com/vector-im/element-android/releases/tag/v1.0.12
+ບັນທຶກການປ່ຽນແປງສະບັບເຕັມ: https://github.com/element-hq/element-android/releases/tag/v1.0.12

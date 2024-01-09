@@ -50,6 +50,9 @@ import im.vector.app.features.analytics.metrics.VectorPlugins
 import im.vector.app.features.configuration.VectorCustomEventTypesProvider
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.invite.CompileTimeAutoAcceptInvites
+import im.vector.app.features.mdm.DefaultMdmService
+import im.vector.app.features.mdm.MdmData
+import im.vector.app.features.mdm.MdmService
 import im.vector.app.features.navigation.DefaultNavigator
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.pin.PinCodeStore
@@ -109,6 +112,9 @@ import javax.inject.Singleton
     abstract fun bindEmojiSpanify(emojiCompatWrapper: EmojiCompatWrapper): EmojiSpanify
 
     @Binds
+    abstract fun bindMdmService(service: DefaultMdmService): MdmService
+
+    @Binds
     abstract fun bindFontScale(fontScale: FontScalePreferencesImpl): FontScalePreferences
 
     @Binds
@@ -145,6 +151,7 @@ import javax.inject.Singleton
             flipperProxy: FlipperProxy,
             vectorPlugins: VectorPlugins,
             vectorCustomEventTypesProvider: VectorCustomEventTypesProvider,
+            mdmService: MdmService,
     ): MatrixConfiguration {
         return MatrixConfiguration(
                 applicationFlavor = BuildConfig.FLAVOR_DESCRIPTION,
@@ -156,6 +163,7 @@ import javax.inject.Singleton
                 metricPlugins = vectorPlugins.plugins(),
                 cryptoAnalyticsPlugin = vectorPlugins.cryptoMetricPlugin,
                 customEventTypesProvider = vectorCustomEventTypesProvider,
+                clientPermalinkBaseUrl = mdmService.getData(MdmData.PermalinkBaseUrl),
                 syncConfig = SyncConfig(
                         syncFilterParams = SyncFilterParams(lazyLoadMembersForStateEvents = true, useThreadNotifications = true)
                 )

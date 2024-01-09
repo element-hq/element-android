@@ -1,2 +1,2 @@
 Główne zmiany w tej wersji: Poprawki błędów dotyczące głównie powiadomień.
-Pełna lista zmian: https://github.com/vector-im/element-android/releases/tag/v1.3.7-RC2
+Pełna lista zmian: https://github.com/element-hq/element-android/releases/tag/v1.3.7-RC2

@@ -1,2 +1,2 @@
 Ова нова верзија углавном садржи поправке грешака и побољшања. Слање порука сада је много брже.
-Дневник свих измена: https://github.com/vector-im/element-android/releases/tag/v1.0.10
+Дневник свих измена: https://github.com/element-hq/element-android/releases/tag/v1.0.10

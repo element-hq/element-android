@@ -1,2 +1,2 @@
 Die wichtigsten Änderungen in dieser Version: Element Android nutzt nun das Crypto-Rust-SDK.
-Vollständiges Änderungsprotokoll: https://github.com/vector-im/element-android/releases
+Vollständiges Änderungsprotokoll: https://github.com/element-hq/element-android/releases

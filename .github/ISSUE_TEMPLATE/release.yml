@@ -19,7 +19,7 @@ body:
         - [ ] Check the update of the store descriptions (using Google Translate if necessary) to ensure that the changes are acceptable to be published to the stores.
         - [ ] While Weblate is locked, and after the PR from Weblate has been merged, handle all the TODOs in the main `strings.xml` file
         - [ ] Run the script `./tools/release/pushPlayStoreMetaData.sh`. You can check in the GooglePlay console the Activity log to check the effect.
-        - [ ] Ensure all [the required PRs](https://github.com/vector-im/element-android/pulls?q=is%3Aopen+is%3Apr+label%3AZ-NextRelease) have been merged
+        - [ ] Ensure all [the required PRs](https://github.com/element-hq/element-android/pulls?q=is%3Aopen+is%3Apr+label%3AZ-NextRelease) have been merged
 
         ### Do the release
 
