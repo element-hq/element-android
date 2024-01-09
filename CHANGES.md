@@ -1,3 +1,21 @@
+Changes in Element v1.6.10 (2024-01-09)
+=======================================
+
+Features ✨
+----------
+ - Add support for Mobile Device Management.
+  The keys are:
+  - default homeserver URL `im.vector.app.serverConfigDefaultHomeserverUrlString`
+  - push gateway URL `im.vector.app.serverConfigSygnalAPIUrlString`
+  - permalink base URL `im.vector.app.clientPermalinkBaseUrl` ([#8698](https://github.com/element-hq/element-android/issues/8698))
+ - Support Functional members (https://github.com/element-hq/element-meta/blob/develop/spec/functional_members.md) ([#3736](https://github.com/element-hq/element-android/issues/3736))
+
+Bugfixes 🐛
+----------
+ - Fix some issues related to edition and reply of events. ([#5969](https://github.com/element-hq/element-android/issues/5969))
+ - Fix crypto migration from kotlin to rust when an account has a single session and no backup. ([#8666](https://github.com/element-hq/element-android/issues/8666))
+
+
 Changes in Element v1.6.8 (2023-11-28)
 ======================================
 
