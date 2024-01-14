@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * Ref: https://github.com/vector-im/element-meta/discussions/632
+ * Ref: https://github.com/element-hq/element-meta/discussions/632
  */
 @JsonClass(generateAdapter = false)
 enum class VoiceBroadcastState(val value: String) {

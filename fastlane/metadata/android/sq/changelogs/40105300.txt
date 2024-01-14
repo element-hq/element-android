@@ -1,2 +1,2 @@
 Ndryshime kryesore në këtë version: permalidhjet për te dhoma, hapësira, përdorues dhe mesazhe tani shfaqen si toptha në rrjedhën kohore. Ndreqëm gjithashtu disa probleme me ngjitës vetjakë dhe ngecjen në të kaluarën të mekanizmit të vënies shenjë si i lexuar.
-Regjistër i plotë ndryshimesh: https://github.com/vector-im/element-android/releases
+Regjistër i plotë ndryshimesh: https://github.com/element-hq/element-android/releases

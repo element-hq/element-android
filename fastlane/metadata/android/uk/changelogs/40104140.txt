@@ -1,2 +1,2 @@
 Основні зміни у цій версії: Удосконалено керування нехтуваними користувачами. Різні виправлення помилок та поліпшення стабільності.
-Вичерпний журнал змін: https://github.com/vector-im/element-android/releases
+Вичерпний журнал змін: https://github.com/element-hq/element-android/releases

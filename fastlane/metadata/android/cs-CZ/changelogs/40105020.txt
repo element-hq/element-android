@@ -1,2 +1,2 @@
 Hlavní změny v této verzi: Nové rozvržení aplikace je povoleno ve výchozím nastavení!
-Úplný seznam změn: https://github.com/vector-im/element-android/releases
+Úplný seznam změn: https://github.com/element-hq/element-android/releases

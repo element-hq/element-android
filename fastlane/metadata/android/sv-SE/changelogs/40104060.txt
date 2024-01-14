@@ -1,2 +1,2 @@
 Huvudsakliga ändringar i den här versionen: Trådtidslinje är nu live och snabbare. Diverse buggfixar och stabilitetsförbättringar.
-Full ändringslogg: https://github.com/vector-im/element-android/releases/tag/v1.4.6
+Full ändringslogg: https://github.com/element-hq/element-android/releases/tag/v1.4.6

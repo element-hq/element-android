@@ -1,2 +1,2 @@
 Główne zmiany w tej wersji: Dodano obsługę wersji roboczej wiadomości głosowych. Wiele poprawek!
-Pełna lista zmian: https://github.com/vector-im/element-android/releases/tag/v1.3.9
+Pełna lista zmian: https://github.com/element-hq/element-android/releases/tag/v1.3.9

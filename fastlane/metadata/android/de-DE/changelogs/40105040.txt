@@ -1,2 +1,2 @@
 Die wichtigste Änderung in dieser Version: Neue Funktionen in den Labor-Einstellungen: Textverarbeitungs-Editor, neue Geräteverwaltung, Sprachübertragung. Noch in aktiver Entwicklung!
-Vollständiges Änderungsprotokoll: https://github.com/vector-im/element-android/releases
+Vollständiges Änderungsprotokoll: https://github.com/element-hq/element-android/releases

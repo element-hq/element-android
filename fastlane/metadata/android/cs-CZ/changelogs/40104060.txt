@@ -1,2 +1,2 @@
 Hlavní změny v této verzi: Časová osa vláken je nyní živá a rychlejší. Opravy různých chyb a vylepšení stability.
-Úplný seznam změn: https://github.com/vector-im/element-android/releases/tag/v1.4.6
+Úplný seznam změn: https://github.com/element-hq/element-android/releases/tag/v1.4.6

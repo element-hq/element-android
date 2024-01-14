@@ -1,2 +1,2 @@
 Główne zmiany w tej wersji: Dodano obsługę ankiet (w laboratoriach). Nowy projekt podglądu adresu URL.
-Pełna lista zmian: https://github.com/vector-im/element-android/releases/tag/v1.3.10
+Pełna lista zmian: https://github.com/element-hq/element-android/releases/tag/v1.3.10

@@ -24,7 +24,7 @@
 
 ### Main change for developers
 
-- Read migration guide: https://github.com/vector-im/element-android/pull/3459/files#diff-f0e52729d5e4f6eccbcf72246807aa34ed19c4ef5625ca669df998cd1022874b
+- Read migration guide: https://github.com/element-hq/element-android/pull/3459/files#diff-f0e52729d5e4f6eccbcf72246807aa34ed19c4ef5625ca669df998cd1022874b
 - Use MaterialAlertDialogBuilder instead of AlertDialog.Builder
 - some Epoxy Item included a divider. This has been removed. Use a `dividerItem` or `bottomSheetDividerItem` Epoxy items to add a divider
 - RecyclerView.configureWith now take a divider drawable instead of a divider color

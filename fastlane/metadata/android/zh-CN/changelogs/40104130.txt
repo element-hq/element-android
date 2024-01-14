@@ -1,2 +1,2 @@
 此版本的主要变化：允许用户显示为离线并为音频附件添加音频播放器
-完整更改日志：https://github.com/vector-im/element-android/releases
+完整更改日志：https://github.com/element-hq/element-android/releases

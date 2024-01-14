@@ -1,2 +1,2 @@
 Principaux changements pour cette version : Nouvelles fonctionnalités expérimentales : éditeur de texte formaté, nouveau gestionnaire d’appareils, diffusion audio. C’est toujours en cours de développement !
-Intégralité des changements : https://github.com/vector-im/element-android/releases
+Intégralité des changements : https://github.com/element-hq/element-android/releases

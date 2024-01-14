@@ -1,2 +1,2 @@
 Põhilised muudatused selles versioonis: beeta-versioon kogukonnakeskustest ja videofailide pakkimine enne üleslaadimist.
-Kogu ingliskeelne muudatuste logi: https://github.com/vector-im/element-android/releases/tag/v1.1.7
+Kogu ingliskeelne muudatuste logi: https://github.com/element-hq/element-android/releases/tag/v1.1.7

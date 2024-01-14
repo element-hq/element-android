@@ -1,2 +1,2 @@
 Principais mudanças nesta versão: principalmente atualização de estabilidade e consertos de bug.
-Changelog completo: https://github.com/vector-im/element-android/releases/tag/v1.1.13
+Changelog completo: https://github.com/element-hq/element-android/releases/tag/v1.1.13

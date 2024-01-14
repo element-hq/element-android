@@ -1,2 +1,2 @@
 Tämä versio sisältää pääosin käyttöliittymä- ja käyttökokemusparannuksia. Voit nyt kutsua kavereita ja luoda yksityisviestejä nopeasti QR-koodeja lukemalla.
-Täysi muutosloki: https://github.com/vector-im/element-android/releases/tag/v1.0.11
+Täysi muutosloki: https://github.com/element-hq/element-android/releases/tag/v1.0.11

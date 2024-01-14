@@ -1,2 +1,2 @@
 Die wichtigsten Änderungen in dieser Version: Der Vollbildmodus des Textverarbeitungseditors wurde neu umgesetzt und es wurden diverse Fehler behoben.
-Vollständiges Änderungsprotokoll: https://github.com/vector-im/element-android/releases
+Vollständiges Änderungsprotokoll: https://github.com/element-hq/element-android/releases

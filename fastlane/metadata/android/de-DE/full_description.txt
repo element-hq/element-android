@@ -39,4 +39,4 @@ Kurznachrichten, Sprach- und Videoanrufe, Dateifreigaben, Bildschirmübertragung
 Bleiben Sie in Kontakt, egal wo Sie sind, mit vollständig synchronisiertem Nachrichtenverlauf quer über all Ihre Geräte und im Netz auf https://app.element.io
 
 <b>Open source</b>
-Element ist ein Open-Source-Projekt und wird auf GitHub gehostet. Solltest du Fehler in Element finden, melde diese bitte hier: https://github.com/vector-im/element-android
+Element ist ein Open-Source-Projekt und wird auf GitHub gehostet. Solltest du Fehler in Element finden, melde diese bitte hier: https://github.com/element-hq/element-android

@@ -1,2 +1,2 @@
 Main changes in this version: Bug fixes!
-Full changelog: https://github.com/vector-im/element-android/releases/tag/v1.3.8
+Full changelog: https://github.com/element-hq/element-android/releases/tag/v1.3.8

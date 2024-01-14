@@ -1,2 +1,2 @@
 新版本主要包含錯誤修復與改善。傳送訊息更快了。
-完整變更紀錄：https://github.com/vector-im/element-android/releases/tag/v1.0.10
+完整變更紀錄：https://github.com/element-hq/element-android/releases/tag/v1.0.10

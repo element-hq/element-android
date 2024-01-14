@@ -76,6 +76,7 @@ import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.configuration.VectorConfiguration
 import im.vector.app.features.consent.ConsentNotGivenHelper
+import im.vector.app.features.mdm.MdmService
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.pin.PinLocker
 import im.vector.app.features.pin.PinMode
@@ -171,6 +172,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var errorFormatter: ErrorFormatter
+    @Inject lateinit var mdmService: MdmService
 
     // For debug only
     @Inject lateinit var debugReceiver: DebugReceiver
@@ -412,6 +414,10 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
             rageShake.start()
         }
         debugReceiver.register(this)
+        mdmService.registerListener(this) {
+            // Just log that a change occurred.
+            Timber.w("MDM data has been updated")
+        }
     }
 
     private val postResumeScheduledActions = mutableListOf<() -> Unit>()
@@ -442,6 +448,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
 
         rageShake.stop()
         debugReceiver.unregister(this)
+        mdmService.unregisterListener(this)
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {

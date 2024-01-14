@@ -1,2 +1,2 @@
 Modifiche principali in questa versione: miglioramenti nella funzionalità di trasmissione vocale.
-Cronologia completa: https://github.com/vector-im/element-android/releases
+Cronologia completa: https://github.com/element-hq/element-android/releases

@@ -1,2 +1,2 @@
 Thay đổi chính trong phiên bản này: Chức năng chủ đề được bật theo mặc định.
-Toàn bộ nhật ký sửa đổi: https://github.com/vector-im/element-android/releases
+Toàn bộ nhật ký sửa đổi: https://github.com/element-hq/element-android/releases

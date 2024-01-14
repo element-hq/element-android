@@ -1,2 +1,2 @@
 تغییرات عمده در این نگارش: اجازه به کاربران برای برون‌خط ظاهر شدن و افزودن یک پخش‌کنندهٔ صدا برای پیوست‌های صوتی
-گزارش دگرگونی کامل: https://github.com/vector-im/element-android/releases
+گزارش دگرگونی کامل: https://github.com/element-hq/element-android/releases

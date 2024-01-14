@@ -1,2 +1,2 @@
 Legnagyobb változtatás ebben a verzióban: bugfixek és javítások
-Teljes változási napló: https://github.com/vector-im/element-android/releases
+Teljes változási napló: https://github.com/element-hq/element-android/releases

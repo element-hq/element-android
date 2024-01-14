@@ -1,2 +1,2 @@
 Основные изменения в этой версии: Различные исправления ошибок и улучшения стабильности.
-Полный список изменений: https://github.com/vector-im/element-android/releases/tag/v1.4.7
+Полный список изменений: https://github.com/element-hq/element-android/releases/tag/v1.4.7

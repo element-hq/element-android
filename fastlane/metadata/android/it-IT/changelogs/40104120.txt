@@ -1,2 +1,2 @@
 Modifiche principali in questa versione: consente agli utenti di apparire offline e aggiunge un player audio per gli allegati audio
-Cronologia completa: https://github.com/vector-im/element-android/releases
+Cronologia completa: https://github.com/element-hq/element-android/releases

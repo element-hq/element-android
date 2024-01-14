@@ -1,2 +1,2 @@
 Ndryshimet kryesore në këtë version: ndreqje të metash dhe përmirësime.
-Regjistër i plotë ndryshimesh: https://github.com/vector-im/element-android/releases
+Regjistër i plotë ndryshimesh: https://github.com/element-hq/element-android/releases

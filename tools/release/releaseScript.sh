@@ -160,11 +160,11 @@ adb -e uninstall im.vector.app.debug.test
 
 printf "\n================================================================================\n"
 printf "Running the integration test UiAllScreensSanityTest.allScreensTest()...\n"
-./gradlew connectedGplayRustCryptoDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=im.vector.app.ui.UiAllScreensSanityTest
+./gradlew connectedGplayDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=im.vector.app.ui.UiAllScreensSanityTest
 
 printf "\n================================================================================\n"
 printf "Building the app...\n"
-./gradlew assembleGplayRustCryptoDebug
+./gradlew assembleGplayDebug
 
 printf "\n================================================================================\n"
 printf "Uninstalling previous debug app if any...\n"
@@ -172,7 +172,7 @@ adb -e uninstall im.vector.app.debug
 
 printf "\n================================================================================\n"
 printf "Installing the app...\n"
-adb -e install ./vector-app/build/outputs/apk/gplayRustCrypto/debug/vector-gplay-rustCrypto-arm64-v8a-debug.apk
+adb -e install ./vector-app/build/outputs/apk/gplay/debug/vector-gplay-arm64-v8a-debug.apk
 
 printf "\n================================================================================\n"
 printf "Running the app...\n"
@@ -204,7 +204,7 @@ printf -v versionMinor2Digits "%02d" ${versionMinor}
 printf -v versionPatch2Digits "%02d" ${versionPatch}
 fastlaneFile="4${versionMajor2Digits}${versionMinor2Digits}${versionPatch2Digits}0.txt"
 fastlanePathFile="./fastlane/metadata/android/en-US/changelogs/${fastlaneFile}"
-printf "Main changes in this version: TODO.\nFull changelog: https://github.com/vector-im/element-android/releases" > ${fastlanePathFile}
+printf "Main changes in this version: TODO.\nFull changelog: https://github.com/element-hq/element-android/releases" > ${fastlanePathFile}
 
 read -p "I have created the file ${fastlanePathFile}, please edit it and press enter when it's done."
 git add ${fastlanePathFile}
@@ -266,7 +266,7 @@ else
 fi
 
 printf "\n================================================================================\n"
-printf "Wait for the GitHub action https://github.com/vector-im/element-android/actions/workflows/build.yml?query=branch%%3Amain to build the 'main' branch.\n"
+printf "Wait for the GitHub action https://github.com/element-hq/element-android/actions/workflows/build.yml?query=branch%%3Amain to build the 'main' branch.\n"
 read -p "After GHA is finished, please enter the artifact URL (for 'vector-gplay-release-unsigned'): " artifactUrl
 
 printf "\n================================================================================\n"
@@ -293,73 +293,73 @@ printf "Unzipping the artifact...\n"
 unzip ${targetPath}/vector-gplay-release-unsigned.zip -d ${targetPath}
 
 # Flatten folder hierarchy
-mv ${targetPath}/gplayRustCrypto/release/* ${targetPath}
+mv ${targetPath}/gplay/release/* ${targetPath}
 rm -rf ${targetPath}/gplay
 
 printf "\n================================================================================\n"
 printf "Signing the APKs...\n"
 
-cp ${targetPath}/vector-gplay-rustCrypto-arm64-v8a-release-unsigned.apk \
-   ${targetPath}/vector-gplay-rustCrypto-arm64-v8a-release-signed.apk
+cp ${targetPath}/vector-gplay-arm64-v8a-release-unsigned.apk \
+   ${targetPath}/vector-gplay-arm64-v8a-release-signed.apk
 ./tools/release/sign_apk_unsafe.sh \
     ${keyStorePath} \
-    ${targetPath}/vector-gplay-rustCrypto-arm64-v8a-release-signed.apk \
+    ${targetPath}/vector-gplay-arm64-v8a-release-signed.apk \
     ${keyStorePassword} \
     ${keyPassword}
 
-cp ${targetPath}/vector-gplay-rustCrypto-armeabi-v7a-release-unsigned.apk \
-   ${targetPath}/vector-gplay-rustCrypto-armeabi-v7a-release-signed.apk
+cp ${targetPath}/vector-gplay-armeabi-v7a-release-unsigned.apk \
+   ${targetPath}/vector-gplay-armeabi-v7a-release-signed.apk
 ./tools/release/sign_apk_unsafe.sh \
     ${keyStorePath} \
-    ${targetPath}/vector-gplay-rustCrypto-armeabi-v7a-release-signed.apk \
+    ${targetPath}/vector-gplay-armeabi-v7a-release-signed.apk \
     ${keyStorePassword} \
     ${keyPassword}
 
-cp ${targetPath}/vector-gplay-rustCrypto-x86-release-unsigned.apk \
-   ${targetPath}/vector-gplay-rustCrypto-x86-release-signed.apk
+cp ${targetPath}/vector-gplay-x86-release-unsigned.apk \
+   ${targetPath}/vector-gplay-x86-release-signed.apk
 ./tools/release/sign_apk_unsafe.sh \
     ${keyStorePath} \
-    ${targetPath}/vector-gplay-rustCrypto-x86-release-signed.apk \
+    ${targetPath}/vector-gplay-x86-release-signed.apk \
     ${keyStorePassword} \
     ${keyPassword}
 
-cp ${targetPath}/vector-gplay-rustCrypto-x86_64-release-unsigned.apk \
-   ${targetPath}/vector-gplay-rustCrypto-x86_64-release-signed.apk
+cp ${targetPath}/vector-gplay-x86_64-release-unsigned.apk \
+   ${targetPath}/vector-gplay-x86_64-release-signed.apk
 ./tools/release/sign_apk_unsafe.sh \
     ${keyStorePath} \
-    ${targetPath}/vector-gplay-rustCrypto-x86_64-release-signed.apk \
+    ${targetPath}/vector-gplay-x86_64-release-signed.apk \
     ${keyStorePassword} \
     ${keyPassword}
 
 # Ref: https://docs.fastlane.tools/getting-started/android/beta-deployment/#uploading-your-app
-# set SUPPLY_APK_PATHS="${targetPath}/vector-gplay-rustCrypto-arm64-v8a-release-unsigned.apk,${targetPath}/vector-gplay-rustCrypto-armeabi-v7a-release-unsigned.apk,${targetPath}/vector-gplay-rustCrypto-x86-release-unsigned.apk,${targetPath}/vector-gplay-rustCrypto-x86_64-release-unsigned.apk"
+# set SUPPLY_APK_PATHS="${targetPath}/vector-gplay-arm64-v8a-release-unsigned.apk,${targetPath}/vector-gplay-armeabi-v7a-release-unsigned.apk,${targetPath}/vector-gplay-x86-release-unsigned.apk,${targetPath}/vector-gplay-x86_64-release-unsigned.apk"
 #
 # ./fastlane beta
 
 printf "\n================================================================================\n"
 printf "Please check the information below:\n"
 
-printf "File vector-gplay-rustCrypto-arm64-v8a-release-signed.apk:\n"
-${buildToolsPath}/aapt dump badging ${targetPath}/vector-gplay-rustCrypto-arm64-v8a-release-signed.apk | grep package
-printf "File vector-gplay-rustCrypto-armeabi-v7a-release-signed.apk:\n"
-${buildToolsPath}/aapt dump badging ${targetPath}/vector-gplay-rustCrypto-armeabi-v7a-release-signed.apk | grep package
-printf "File vector-gplay-rustCrypto-x86-release-signed.apk:\n"
-${buildToolsPath}/aapt dump badging ${targetPath}/vector-gplay-rustCrypto-x86-release-signed.apk | grep package
-printf "File vector-gplay-rustCrypto-x86_64-release-signed.apk:\n"
-${buildToolsPath}/aapt dump badging ${targetPath}/vector-gplay-rustCrypto-x86_64-release-signed.apk | grep package
+printf "File vector-gplay-arm64-v8a-release-signed.apk:\n"
+${buildToolsPath}/aapt dump badging ${targetPath}/vector-gplay-arm64-v8a-release-signed.apk | grep package
+printf "File vector-gplay-armeabi-v7a-release-signed.apk:\n"
+${buildToolsPath}/aapt dump badging ${targetPath}/vector-gplay-armeabi-v7a-release-signed.apk | grep package
+printf "File vector-gplay-x86-release-signed.apk:\n"
+${buildToolsPath}/aapt dump badging ${targetPath}/vector-gplay-x86-release-signed.apk | grep package
+printf "File vector-gplay-x86_64-release-signed.apk:\n"
+${buildToolsPath}/aapt dump badging ${targetPath}/vector-gplay-x86_64-release-signed.apk | grep package
 
 printf "\n"
 read -p "Does it look correct? Press enter when it's done."
 
 printf "\n================================================================================\n"
 read -p "Installing apk on a real device, press enter when a real device is connected. "
-apkPath="${targetPath}/vector-gplay-rustCrypto-arm64-v8a-release-signed.apk"
+apkPath="${targetPath}/vector-gplay-arm64-v8a-release-signed.apk"
 adb -d install ${apkPath}
 
 read -p "Please run the APK on your phone to check that the upgrade went well (no init sync, etc.). Press enter when it's done."
 
 printf "\n================================================================================\n"
-githubCreateReleaseLink="https://github.com/vector-im/element-android/releases/new?tag=v${version}&title=Element%20Android%20v${version}&body=${changelogUrlEncoded}"
+githubCreateReleaseLink="https://github.com/element-hq/element-android/releases/new?tag=v${version}&title=Element%20Android%20v${version}&body=${changelogUrlEncoded}"
 printf "Creating the release on gitHub.\n"
 printf -- "Open this link: %s\n" ${githubCreateReleaseLink}
 printf "Then\n"
@@ -369,7 +369,7 @@ read -p ". Press enter when it's done. "
 
 printf "\n================================================================================\n"
 printf "Message for the Android internal room:\n\n"
-message="@room Element Android ${version} is ready to be tested. You can get it from https://github.com/vector-im/element-android/releases/tag/v${version}. Please report any feedback here. Thanks!"
+message="@room Element Android ${version} is ready to be tested. You can get it from https://github.com/element-hq/element-android/releases/tag/v${version}. Please report any feedback here. Thanks!"
 printf "${message}\n\n"
 
 if [[ -z "${elementBotToken}" ]]; then

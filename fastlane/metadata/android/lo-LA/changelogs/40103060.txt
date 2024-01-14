@@ -1,2 +1,2 @@
 ການປ່ຽນແປງຫຼັກໃນສະບັບນີ້: ເພີ່ມການຮອງຮັບການມີຢູ່, ສໍາລັບຫ້ອງຂໍ້ຄວາມໂດຍກົງ (ໝາຍເຫດ: ການມີຢູ່ຖືກປິດການໃຊ້ງານຢູ່ໃນ matrix.org). ເພີ່ມການຮອງຮັບ Android Auto ອີກຄັ້ງ.
-ບັນທຶກການປ່ຽນແປງສະບັບເຕັມ: https://github.com/vector-im/element-android/releases/tag/v1.3.6
+ບັນທຶກການປ່ຽນແປງສະບັບເຕັມ: https://github.com/element-hq/element-android/releases/tag/v1.3.6

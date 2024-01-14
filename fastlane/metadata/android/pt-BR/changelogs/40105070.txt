@@ -1,2 +1,2 @@
 Principais mudanças nesta versão: novo UI para selecionar um anexo.
-Changelog completo: https://github.com/vector-im/element-android/releases
+Changelog completo: https://github.com/element-hq/element-android/releases

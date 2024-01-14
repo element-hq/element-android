@@ -1,2 +1,2 @@
 Thay đổi chính trong phiên bản này: Element Android giờ dùng công cụ phát triển phần mềm Rust cho mã hóa
-Toàn bộ nhật ký sửa đổi: https://github.com/vector-im/element-android/releases
+Toàn bộ nhật ký sửa đổi: https://github.com/element-hq/element-android/releases

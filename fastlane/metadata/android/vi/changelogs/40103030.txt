@@ -1,2 +1,2 @@
 Thay đổi chính trong phiên bản này: Hiển thị (các) chính sách máy chủ định danh trong phần cài đặt. Tạm thời bỏ hỗ trợ Android Auto.
-Toàn bộ nhật ký sửa đổi: https://github.com/vector-im/element-android/releases/tag/v1.3.3
+Toàn bộ nhật ký sửa đổi: https://github.com/element-hq/element-android/releases/tag/v1.3.3

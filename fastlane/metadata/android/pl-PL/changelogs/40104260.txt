@@ -1,2 +1,2 @@
 Główne zmiany w tej wersji: Dodanie UnifiedPush aby umożliwić działanie powiadomień push bez FCM.
-Pełna lista zmian: https://github.com/vector-im/element-android/releases
+Pełna lista zmian: https://github.com/element-hq/element-android/releases

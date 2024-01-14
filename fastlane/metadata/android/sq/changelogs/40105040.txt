@@ -1,2 +1,2 @@
 Ndryshimet kryesore në këtë version: Veçori të reja nën rregullimet Labs: hartues teksti të pasur, administrim i ri pajisjesh, transmetim zanor. Ende nën zhvillim aktivt!
-Regjistër i plotë ndryshimesh: https://github.com/vector-im/element-android/releases
+Regjistër i plotë ndryshimesh: https://github.com/element-hq/element-android/releases

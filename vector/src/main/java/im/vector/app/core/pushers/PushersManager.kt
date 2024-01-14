@@ -22,6 +22,8 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.AppNameProvider
 import im.vector.app.core.resources.LocaleProvider
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.mdm.MdmData
+import im.vector.app.features.mdm.MdmService
 import org.matrix.android.sdk.api.session.pushers.HttpPusher
 import org.matrix.android.sdk.api.session.pushers.Pusher
 import java.util.UUID
@@ -37,6 +39,7 @@ class PushersManager @Inject constructor(
         private val stringProvider: StringProvider,
         private val appNameProvider: AppNameProvider,
         private val getDeviceInfoUseCase: GetDeviceInfoUseCase,
+        private val mdmService: MdmService,
 ) {
     suspend fun testPush() {
         val currentSession = activeSessionHolder.getActiveSession()
@@ -50,7 +53,10 @@ class PushersManager @Inject constructor(
     }
 
     suspend fun enqueueRegisterPusherWithFcmKey(pushKey: String): UUID {
-        return enqueueRegisterPusher(pushKey, stringProvider.getString(R.string.pusher_http_url))
+        return enqueueRegisterPusher(
+                pushKey = pushKey,
+                gateway = mdmService.getData(MdmData.DefaultPushGatewayUrl, stringProvider.getString(R.string.pusher_http_url))
+        )
     }
 
     suspend fun enqueueRegisterPusher(

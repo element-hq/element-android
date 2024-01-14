@@ -538,7 +538,7 @@ class VectorPreferences @Inject constructor(
                 if (value.startsWith("file://")) {
                     // it should never happen
                     // else android.os.FileUriExposedException will be triggered.
-                    // see https://github.com/vector-im/riot-android/issues/1725
+                    // see https://github.com/element-hq/riot-android/issues/1725
                     return
                 }
             }
@@ -562,7 +562,7 @@ class VectorPreferences @Inject constructor(
 
         var uri: Uri? = null
 
-        // https://github.com/vector-im/riot-android/issues/1725
+        // https://github.com/element-hq/riot-android/issues/1725
         if (null != url && !url.startsWith("file://")) {
             try {
                 uri = Uri.parse(url)
