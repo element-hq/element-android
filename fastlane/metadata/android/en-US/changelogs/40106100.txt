@@ -1,2 +1,2 @@
-Main changes in this version: add Mobile Device Managament and functional members support.
+Main changes in this version: add Mobile Device Management and functional members support.
 Full changelog: https://github.com/element-hq/element-android/releases
