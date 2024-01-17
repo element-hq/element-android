@@ -1,5 +1,5 @@
 # Reporting a Vulnerability
 
-**If you've found a security vulnerability, please report it to security@matrix.org**
+**If you've found a security vulnerability in Element software, please report it to security@element.io.**
 
-For more information on our security disclosure policy, visit https://www.matrix.org/security-disclosure-policy/
+For more information on our security disclosure policy, visit https://element.io/security/security-disclosure-policy.
