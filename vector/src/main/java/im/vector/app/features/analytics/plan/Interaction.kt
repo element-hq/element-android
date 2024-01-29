@@ -409,6 +409,18 @@ data class Interaction(
         WebThreadViewBackButton,
 
         /**
+         * User clicked on the Threads Activity Centre button of Element
+         * Web/Desktop.
+         */
+        WebThreadsActivityCentreButton,
+
+        /**
+         * User clicked on a room in the Threads Activity Centre of Element
+         * Web/Desktop.
+         */
+        WebThreadsActivityCentreRoomItem,
+
+        /**
          * User selected a thread in the Threads panel in Element Web/Desktop.
          */
         WebThreadsPanelThreadItem,
