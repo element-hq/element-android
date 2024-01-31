@@ -404,7 +404,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
             }
 
             override fun onTextChanged(text: CharSequence) {
-                messageComposerViewModel.handle(MessageComposerAction.OnTextChanged(text))
+                messageComposerViewModel.handle(MessageComposerAction.OnTextChanged(composer.formattedText ?: text))
             }
 
             override fun onFullScreenModeChanged() = withState(messageComposerViewModel) { state ->
