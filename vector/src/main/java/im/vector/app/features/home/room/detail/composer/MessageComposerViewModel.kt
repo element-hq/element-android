@@ -16,7 +16,6 @@
 
 package im.vector.app.features.home.room.detail.composer
 
-import android.text.SpannableString
 import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.withState
