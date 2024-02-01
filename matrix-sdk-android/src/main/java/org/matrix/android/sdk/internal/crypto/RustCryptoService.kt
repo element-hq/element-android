@@ -664,7 +664,7 @@ internal class RustCryptoService @Inject constructor(
             when (event.type) {
                 EventType.ROOM_KEY -> {
                     val content = event.getClearContent().toModel<RoomKeyContent>() ?: return@forEach
-                    content.sessionKey
+
                     val roomId = content.sessionId ?: return@forEach
                     val sessionId = content.sessionId
 
