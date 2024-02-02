@@ -1,0 +1,1 @@
+Improve `Event.getClearContent()` and fix assignment issue that may help to decrypt last Event in the room list.
