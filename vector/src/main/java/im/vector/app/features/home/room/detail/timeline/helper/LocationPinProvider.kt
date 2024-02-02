@@ -19,7 +19,7 @@ package im.vector.app.features.home.room.detail.timeline.helper
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
-import androidx.annotation.ColorInt
+import android.util.LruCache
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import com.bumptech.glide.request.target.CustomTarget
@@ -30,10 +30,16 @@ import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.session.getUserOrDefault
+import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
+
+private data class CachedDrawable(
+        val drawable: Drawable,
+        val isError: Boolean,
+)
 
 @Singleton
 class LocationPinProvider @Inject constructor(
@@ -43,7 +49,7 @@ class LocationPinProvider @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
         private val matrixItemColorProvider: MatrixItemColorProvider
 ) {
-    private val cache = mutableMapOf<String, Drawable>()
+    private val cache = LruCache<MatrixItem.UserItem, CachedDrawable>(32)
 
     private val glideRequests by lazy {
         GlideApp.with(context)
@@ -60,23 +66,16 @@ class LocationPinProvider @Inject constructor(
             return
         }
 
-        if (cache.contains(userId)) {
-            callback(cache[userId]!!)
-            return
-        }
-
         activeSessionHolder
                 .getActiveSession()
                 .getUserOrDefault(userId)
                 .toMatrixItem()
                 .let { userItem ->
                     val size = dimensionConverter.dpToPx(44)
-                    val bgTintColor = matrixItemColorProvider.getColor(userItem)
                     avatarRenderer.render(glideRequests, userItem, object : CustomTarget<Drawable>(size, size) {
                         override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
                             Timber.d("## Location: onResourceReady")
-                            val pinDrawable = createPinDrawable(resource, bgTintColor)
-                            cache[userId] = pinDrawable
+                            val pinDrawable = createPinDrawable(userItem, resource, isError = false)
                             callback(pinDrawable)
                         }
 
@@ -87,17 +86,29 @@ class LocationPinProvider @Inject constructor(
                         }
 
                         override fun onLoadFailed(errorDrawable: Drawable?) {
+                            // Note: `onLoadFailed` is also called when the user has no avatarUrl
+                            // and the errorDrawable is actually the placeholder.
                             Timber.w("## Location: onLoadFailed")
                             errorDrawable ?: return
-                            val pinDrawable = createPinDrawable(errorDrawable, bgTintColor)
-                            cache[userId] = pinDrawable
+                            val pinDrawable = createPinDrawable(userItem, errorDrawable, isError = true)
                             callback(pinDrawable)
                         }
                     })
                 }
     }
 
-    private fun createPinDrawable(drawable: Drawable, @ColorInt bgTintColor: Int): Drawable {
+    private fun createPinDrawable(
+            userItem: MatrixItem.UserItem,
+            drawable: Drawable,
+            isError: Boolean,
+    ): Drawable {
+        val fromCache = cache.get(userItem)
+        // Return the cached drawable only if it is valid, or the new drawable is again an error
+        if (fromCache != null && (!fromCache.isError || isError)) {
+            return fromCache.drawable
+        }
+
+        val bgTintColor = matrixItemColorProvider.getColor(userItem)
         val bgUserPin = ContextCompat.getDrawable(context, R.drawable.bg_map_user_pin)!!
         // use mutate on drawable to avoid sharing the color when we have multiple different user pins
         DrawableCompat.setTint(bgUserPin.mutate(), bgTintColor)
@@ -106,6 +117,7 @@ class LocationPinProvider @Inject constructor(
         val topInset = dimensionConverter.dpToPx(4)
         val bottomInset = dimensionConverter.dpToPx(8)
         layerDrawable.setLayerInset(1, horizontalInset, topInset, horizontalInset, bottomInset)
+        cache.put(userItem, CachedDrawable(layerDrawable, isError))
         return layerDrawable
     }
 }
