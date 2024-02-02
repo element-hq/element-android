@@ -104,9 +104,8 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
                     .into(holder.staticMapImageView)
 
             safeLocationUiData.locationPinProvider.create(safeLocationUiData.locationOwnerId) { pinDrawable ->
-                GlideApp.with(holder.staticMapPinImageView)
-                        .load(pinDrawable)
-                        .into(holder.staticMapPinImageView)
+                // we are not using Glide since it does not display it correctly when there is no user photo
+                holder.staticMapPinImageView.setImageDrawable(pinDrawable)
             }
         }
     }
