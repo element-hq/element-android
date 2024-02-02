@@ -23,6 +23,7 @@ import im.vector.app.features.location.LocationSharingArgs
 
 data class LocationPreviewViewState(
         val pinLocationData: LocationData? = null,
+        val roomId: String? = null,
         val pinUserId: String? = null,
         val pinDrawable: Drawable? = null,
         val loadingMapHasFailed: Boolean = false,
@@ -32,6 +33,7 @@ data class LocationPreviewViewState(
 
     constructor(args: LocationSharingArgs) : this(
             pinLocationData = args.initialLocationData,
+            roomId = args.roomId,
             pinUserId = args.locationOwnerId,
     )
 }

@@ -28,6 +28,7 @@ internal class LiveLocationShareAggregatedSummaryMapper @Inject constructor() :
 
     override fun map(entity: LiveLocationShareAggregatedSummaryEntity): LiveLocationShareAggregatedSummary {
         return LiveLocationShareAggregatedSummary(
+                roomId = entity.roomId,
                 userId = entity.userId,
                 isActive = entity.isActive,
                 endOfLiveTimestampMillis = entity.endOfLiveTimestampMillis,

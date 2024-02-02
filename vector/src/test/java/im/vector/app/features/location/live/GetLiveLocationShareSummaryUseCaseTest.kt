@@ -54,6 +54,7 @@ class GetLiveLocationShareSummaryUseCaseTest {
     @Test
     fun `given a room id and event id when calling use case then flow on summary is returned`() = runTest {
         val summary = LiveLocationShareAggregatedSummary(
+                roomId = A_ROOM_ID,
                 userId = "userId",
                 isActive = true,
                 endOfLiveTimestampMillis = 123,

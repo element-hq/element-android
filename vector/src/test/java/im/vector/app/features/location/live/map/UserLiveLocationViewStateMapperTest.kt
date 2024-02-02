@@ -72,6 +72,7 @@ class UserLiveLocationViewStateMapperTest {
     @Test
     fun `given a summary with invalid data then result is null`() = runTest {
         val summary1 = LiveLocationShareAggregatedSummary(
+                roomId = null,
                 userId = null,
                 isActive = true,
                 endOfLiveTimestampMillis = null,
@@ -98,17 +99,19 @@ class UserLiveLocationViewStateMapperTest {
                 unstableTimestampMillis = A_LOCATION_TIMESTAMP
         )
         val summary = LiveLocationShareAggregatedSummary(
+                roomId = null,
                 userId = A_USER_ID,
                 isActive = A_IS_ACTIVE,
                 endOfLiveTimestampMillis = A_END_OF_LIVE_TIMESTAMP,
                 lastLocationDataContent = locationDataContent,
         )
-        locationPinProvider.givenCreateForUserId(A_USER_ID, pinDrawable)
+        val matrixItem = MatrixItem.UserItem(id = A_USER_ID, displayName = A_USER_DISPLAY_NAME, avatarUrl = "")
+        locationPinProvider.givenCreateForMatrixItem(matrixItem, pinDrawable)
 
         val viewState = userLiveLocationViewStateMapper.map(summary)
 
         val expectedViewState = UserLiveLocationViewState(
-                matrixItem = MatrixItem.UserItem(id = A_USER_ID, displayName = A_USER_DISPLAY_NAME, avatarUrl = ""),
+                matrixItem = matrixItem,
                 pinDrawable = pinDrawable,
                 locationData = LocationData(
                         latitude = A_LATITUDE,
