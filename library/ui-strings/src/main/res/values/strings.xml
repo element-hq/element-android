@@ -2095,6 +2095,7 @@
     <string name="login_splash_text2">Keep conversations private with encryption</string>
     <string name="login_splash_text3">Extend &amp; customize your experience</string>
     <string name="login_splash_submit">Get started</string>
+    <string name="login_splash_sign_in">Sign In</string>
     <string name="login_splash_create_account">Create account</string>
     <string name="login_splash_already_have_account">I already have an account</string>
 
