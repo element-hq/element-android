@@ -2961,4 +2961,8 @@
     <string name="invite_unknown_users_dialog_content">Impossible de trouver les profils pour les identifiants Matrix listés ci-dessous. Voulez-vous quand même les inviter \?</string>
     <string name="invite_unknown_users_dialog_submit">Inviter quand même</string>
     <string name="login_splash_sign_in">Se connecter</string>
+    <string name="create_room_unknown_users_dialog_content">Impossible de trouver des profils pour les ID Matrix listés ci-dessous. Voulez-vous tout de même débuter une nouvelle conversation \?
+\n
+\n%s</string>
+    <string name="create_room_unknown_users_dialog_submit">Commencer la conversation quand même</string>
 </resources>
