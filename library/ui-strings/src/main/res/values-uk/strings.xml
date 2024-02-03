@@ -3078,4 +3078,13 @@
     <string name="crosssigning_verify_after_update">Застосунок оновлено</string>
     <string name="sign_out_anyway">Усе одно вийти</string>
     <string name="sign_out_failed_dialog_message">Не вдалося зв\'язатися з домашнім сервером. Якщо ви все одно вийдете з системи, цей пристрій не буде видалено з вашого списку пристроїв, можливо, ви захочете видалити його за допомогою іншого клієнта.</string>
+    <string name="create_room_unknown_users_dialog_submit">Усе одно розпочати бесіду</string>
+    <string name="login_splash_sign_in">Увійти</string>
+    <string name="invite_unknown_users_dialog_submit">Усе одно запросити</string>
+    <string name="create_room_unknown_users_dialog_content">Не вдалося знайти профілі для вказаних нижче Matrix ID. Усе одно розпочати бесіду\?
+\n
+\n%s</string>
+    <string name="invite_unknown_users_dialog_content">Не вдалося знайти профілі для вказаних нижче Matrix ID. Усе одно запросити їх\?
+\n
+\n%s</string>
 </resources>
