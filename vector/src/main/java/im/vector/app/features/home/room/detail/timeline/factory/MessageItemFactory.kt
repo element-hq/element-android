@@ -233,14 +233,14 @@ class MessageItemFactory @Inject constructor(
             urlMapProvider.buildStaticMapUrl(it, INITIAL_MAP_ZOOM_IN_TIMELINE, width, height)
         }
 
-        val locationUserId = if (locationContent.isSelfLocation()) informationData.senderId else null
+        val pinMatrixItem = if (locationContent.isSelfLocation()) informationData.matrixItem else null
 
         return MessageLocationItem_()
                 .attributes(attributes)
                 .locationUrl(locationUrl)
                 .mapWidth(width)
                 .mapHeight(height)
-                .locationUserId(locationUserId)
+                .pinMatrixItem(pinMatrixItem)
                 .locationPinProvider(locationPinProvider)
                 .highlighted(highlight)
                 .leftGuideline(avatarSizeProvider.leftGuideline)

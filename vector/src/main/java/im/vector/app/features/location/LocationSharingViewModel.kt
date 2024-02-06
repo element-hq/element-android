@@ -106,11 +106,13 @@ class LocationSharingViewModel @AssistedInject constructor(
 
     private fun updatePin(isUserPin: Boolean? = true) {
         if (isUserPin.orFalse()) {
-            locationPinProvider.create(userId = session.myUserId) {
+            val matrixItem = room.membershipService().getRoomMember(session.myUserId)?.toMatrixItem()
+                    ?: session.getUserOrDefault(session.myUserId).toMatrixItem()
+            locationPinProvider.create(matrixItem) {
                 updatePinDrawableInState(it)
             }
         } else {
-            locationPinProvider.create(userId = null) {
+            locationPinProvider.create(null) {
                 updatePinDrawableInState(it)
             }
         }

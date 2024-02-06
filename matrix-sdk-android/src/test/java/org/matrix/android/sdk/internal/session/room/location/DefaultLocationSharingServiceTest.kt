@@ -229,6 +229,7 @@ internal class DefaultLocationSharingServiceTest {
     fun `livedata of live summaries is correctly computed`() {
         val entity = LiveLocationShareAggregatedSummaryEntity()
         val summary = LiveLocationShareAggregatedSummary(
+                roomId = A_ROOM_ID,
                 userId = "",
                 isActive = true,
                 endOfLiveTimestampMillis = 123,
@@ -255,6 +256,7 @@ internal class DefaultLocationSharingServiceTest {
     fun `given an event id when getting livedata on corresponding live summary then it is correctly computed`() {
         val entity = LiveLocationShareAggregatedSummaryEntity()
         val summary = LiveLocationShareAggregatedSummary(
+                roomId = A_ROOM_ID,
                 userId = "",
                 isActive = true,
                 endOfLiveTimestampMillis = 123,

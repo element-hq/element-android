@@ -114,7 +114,7 @@ class LiveLocationShareMessageItemFactory @Inject constructor(
                 .locationUrl(locationUrl)
                 .mapWidth(width)
                 .mapHeight(height)
-                .locationUserId(attributes.informationData.senderId)
+                .pinMatrixItem(attributes.informationData.matrixItem)
                 .locationPinProvider(locationPinProvider)
                 .highlighted(highlight)
                 .leftGuideline(avatarSizeProvider.leftGuideline)

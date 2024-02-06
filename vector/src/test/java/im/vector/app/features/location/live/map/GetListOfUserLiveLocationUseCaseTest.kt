@@ -59,18 +59,21 @@ class GetListOfUserLiveLocationUseCaseTest {
     @Test
     fun `given a room id then the correct flow of view states list is collected`() = runTest {
         val summary1 = LiveLocationShareAggregatedSummary(
+                roomId = A_ROOM_ID,
                 userId = "userId1",
                 isActive = true,
                 endOfLiveTimestampMillis = 123,
                 lastLocationDataContent = MessageBeaconLocationDataContent()
         )
         val summary2 = LiveLocationShareAggregatedSummary(
+                roomId = A_ROOM_ID,
                 userId = "userId2",
                 isActive = true,
                 endOfLiveTimestampMillis = 1234,
                 lastLocationDataContent = MessageBeaconLocationDataContent()
         )
         val summary3 = LiveLocationShareAggregatedSummary(
+                roomId = A_ROOM_ID,
                 userId = "userId3",
                 isActive = true,
                 endOfLiveTimestampMillis = 1234,
