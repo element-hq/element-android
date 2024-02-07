@@ -1,0 +1,2 @@
+Huvudsakliga ändringar i den här versionen: lägg till mobil enhetshantering och stöd för funktionella medlemmar.
+Full ändringslogg: https://github.com/element-hq/element-android/releases

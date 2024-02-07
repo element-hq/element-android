@@ -2966,4 +2966,5 @@
     <string name="invite_unknown_users_dialog_content">Allpool loetletud Matrix\'i kasutajatunnustele ei leidunud profiile. Kas sa ikkagi tahaksid neile kutse saata\?
 \n
 \n%s</string>
+    <string name="login_splash_sign_in">Logi sisse</string>
 </resources>
