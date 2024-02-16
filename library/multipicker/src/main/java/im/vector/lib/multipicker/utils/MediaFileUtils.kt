@@ -24,7 +24,7 @@ import java.util.Locale
 
 internal fun createTemporaryMediaFile(context: Context, mediaType: MediaType): File {
     val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-    val storageDir: File = context.filesDir.also { it.mkdirs() }
+    val storageDir: File = File(context.filesDir, "media").also { it.mkdirs() }
     val fileSuffix = when (mediaType) {
         MediaType.IMAGE -> ".jpg"
         MediaType.VIDEO -> ".mp4"
