@@ -89,7 +89,7 @@ class ValidDecryptedEventTest {
                 ).toContent()
         )
 
-        val unValidatedContent = mixedEvent.getClearContent().toModel<MessageTextContent>()
+        val unValidatedContent = mixedEvent.content.toModel<MessageTextContent>()
         unValidatedContent?.body shouldBe "some message"
 
         mixedEvent.toValidDecryptedEvent()?.clearContent?.toModel<MessageTextContent>() shouldBe null

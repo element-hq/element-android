@@ -103,10 +103,10 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
                     .apply(RequestOptions.centerCropTransform())
                     .into(holder.staticMapImageView)
 
-            safeLocationUiData.locationPinProvider.create(safeLocationUiData.locationOwnerId) { pinDrawable ->
-                GlideApp.with(holder.staticMapPinImageView)
-                        .load(pinDrawable)
-                        .into(holder.staticMapPinImageView)
+            val pinMatrixItem = matrixItem.takeIf { safeLocationUiData.locationOwnerId != null }
+            safeLocationUiData.locationPinProvider.create(pinMatrixItem) { pinDrawable ->
+                // we are not using Glide since it does not display it correctly when there is no user photo
+                holder.staticMapPinImageView.setImageDrawable(pinDrawable)
             }
         }
     }

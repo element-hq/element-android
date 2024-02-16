@@ -20,8 +20,10 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
 import im.vector.app.features.location.toLocationData
 import kotlinx.coroutines.suspendCancellableCoroutine
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.getUserOrDefault
 import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationShareAggregatedSummary
+import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
@@ -43,11 +45,21 @@ class UserLiveLocationViewStateMapper @Inject constructor(
                         // do nothing on cancellation
                     }
                     else -> {
-                        locationPinProvider.create(userId) { pinDrawable ->
-                            val session = activeSessionHolder.getActiveSession()
+                        val session = activeSessionHolder.getActiveSession()
+                        val roomId = liveLocationShareAggregatedSummary.roomId
+                        val matrixItem = if (roomId != null) {
+                            session.getRoom(roomId)
+                                    ?.membershipService()
+                                    ?.getRoomMember(userId)
+                                    ?.toMatrixItem()
+                                    ?: MatrixItem.UserItem(userId)
+                        } else {
+                            session.getUserOrDefault(userId).toMatrixItem()
+                        }
+                        locationPinProvider.create(matrixItem) { pinDrawable ->
                             val locationTimestampMillis = liveLocationShareAggregatedSummary.lastLocationDataContent?.getBestTimestampMillis()
                             val viewState = UserLiveLocationViewState(
-                                    matrixItem = session.getUserOrDefault(userId).toMatrixItem(),
+                                    matrixItem = matrixItem,
                                     pinDrawable = pinDrawable,
                                     locationData = locationData,
                                     endOfLiveTimestampMillis = liveLocationShareAggregatedSummary.endOfLiveTimestampMillis,

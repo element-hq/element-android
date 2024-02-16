@@ -24,6 +24,7 @@ import org.matrix.android.sdk.api.session.room.model.message.LocationInfo
 import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent
 import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntity
 
+private const val ANY_ROOM_ID = "a-room-id"
 private const val ANY_USER_ID = "a-user-id"
 private const val ANY_ACTIVE_STATE = true
 private const val ANY_TIMEOUT = 123L
@@ -40,6 +41,7 @@ class LiveLocationShareAggregatedSummaryMapperTest {
         val summary = mapper.map(entity)
 
         summary shouldBeEqualTo LiveLocationShareAggregatedSummary(
+                roomId = ANY_ROOM_ID,
                 userId = ANY_USER_ID,
                 isActive = ANY_ACTIVE_STATE,
                 endOfLiveTimestampMillis = ANY_TIMEOUT,
@@ -48,6 +50,7 @@ class LiveLocationShareAggregatedSummaryMapperTest {
     }
 
     private fun anEntity(content: MessageBeaconLocationDataContent) = LiveLocationShareAggregatedSummaryEntity(
+            roomId = ANY_ROOM_ID,
             userId = ANY_USER_ID,
             isActive = ANY_ACTIVE_STATE,
             endOfLiveTimestampMillis = ANY_TIMEOUT,

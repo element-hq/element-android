@@ -21,12 +21,13 @@ import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvid
 import io.mockk.every
 import io.mockk.invoke
 import io.mockk.mockk
+import org.matrix.android.sdk.api.util.MatrixItem
 
 class FakeLocationPinProvider {
 
     val instance = mockk<LocationPinProvider>(relaxed = true)
 
-    fun givenCreateForUserId(userId: String, expectedDrawable: Drawable) {
-        every { instance.create(userId, captureLambda()) } answers { lambda<(Drawable) -> Unit>().invoke(expectedDrawable) }
+    fun givenCreateForMatrixItem(matrixItem: MatrixItem, expectedDrawable: Drawable) {
+        every { instance.create(matrixItem, captureLambda()) } answers { lambda<(Drawable) -> Unit>().invoke(expectedDrawable) }
     }
 }

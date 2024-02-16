@@ -49,7 +49,7 @@ abstract class MessageLiveLocationItem : AbsMessageLocationItem<MessageLiveLocat
 
     private fun bindLiveLocationBanner(holder: Holder) {
         // TODO in a future PR add check on device id to confirm that is the one that sent the beacon
-        val isEmitter = currentUserId != null && currentUserId == locationUserId
+        val isEmitter = currentUserId != null && currentUserId == pinMatrixItem?.id
         val messageLayout = attributes.informationData.messageLayout
         val viewState = buildViewState(holder, messageLayout, isEmitter)
         holder.liveLocationRunningBanner.isVisible = true

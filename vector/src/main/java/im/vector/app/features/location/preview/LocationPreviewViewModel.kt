@@ -30,6 +30,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.util.MatrixItem
+import org.matrix.android.sdk.api.util.toMatrixItem
 
 class LocationPreviewViewModel @AssistedInject constructor(
         @Assisted private val initialState: LocationPreviewViewState,
@@ -46,12 +48,23 @@ class LocationPreviewViewModel @AssistedInject constructor(
     companion object : MavericksViewModelFactory<LocationPreviewViewModel, LocationPreviewViewState> by hiltMavericksViewModelFactory()
 
     init {
-        initPin(initialState.pinUserId)
+        val matrixItem = if (initialState.roomId != null && initialState.pinUserId != null) {
+            session
+                    .roomService()
+                    .getRoom(initialState.roomId)
+                    ?.membershipService()
+                    ?.getRoomMember(initialState.pinUserId)
+                    ?.toMatrixItem()
+                    ?: MatrixItem.UserItem(initialState.pinUserId)
+        } else {
+            null
+        }
+        initPin(matrixItem)
         initLocationTracking()
     }
 
-    private fun initPin(userId: String?) {
-        locationPinProvider.create(userId) { pinDrawable ->
+    private fun initPin(matrixItem: MatrixItem?) {
+        locationPinProvider.create(matrixItem) { pinDrawable ->
             setState { copy(pinDrawable = pinDrawable) }
         }
     }

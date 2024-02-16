@@ -219,10 +219,16 @@ data class Event(
     }
 
     /**
-     * @return the event content
+     * @return the event content.
+     * If the content is encrypted, it will return the decrypted content, or null if the content is not
+     * decrypted.
      */
     fun getClearContent(): Content? {
-        return getDecryptedContent() ?: content
+        return if (isEncrypted()) {
+            getDecryptedContent()
+        } else {
+            content
+        }
     }
 
     /**

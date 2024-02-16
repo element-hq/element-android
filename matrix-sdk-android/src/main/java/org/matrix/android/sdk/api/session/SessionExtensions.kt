@@ -19,6 +19,7 @@ package org.matrix.android.sdk.api.session
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.user.model.User
+import timber.log.Timber
 
 /**
  * Get a room using the RoomService of a Session.
@@ -41,4 +42,5 @@ fun Session.getUser(userId: String): User? = userService().getUser(userId)
 /**
  * Similar to [getUser], but fallback to a User without details if the User is not known by the SDK, or if Session is null.
  */
-fun Session?.getUserOrDefault(userId: String): User = this?.userService()?.getUser(userId) ?: User(userId)
+fun Session?.getUserOrDefault(userId: String): User = this?.userService()?.getUser(userId)
+        ?: User(userId).also { Timber.w("User $userId not found in local cache, fallback to default") }

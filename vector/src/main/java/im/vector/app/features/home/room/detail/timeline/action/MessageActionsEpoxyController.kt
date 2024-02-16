@@ -238,7 +238,7 @@ class MessageActionsEpoxyController @Inject constructor(
         val locationUrl = locationContent.toLocationData()
                 ?.let { urlMapProvider.buildStaticMapUrl(it, INITIAL_MAP_ZOOM_IN_TIMELINE, 1200, 800) }
                 ?: return null
-        val locationOwnerId = if (locationContent.isSelfLocation()) state.informationData.matrixItem.id else null
+        val locationOwnerId = if (locationContent.isSelfLocation()) state.informationData.senderId else null
 
         return LocationUiData(
                 locationUrl = locationUrl,

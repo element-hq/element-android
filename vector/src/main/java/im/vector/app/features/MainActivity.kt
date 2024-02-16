@@ -39,6 +39,9 @@ import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.home.ShortcutsHandler
+import im.vector.app.features.home.room.detail.RoomDetailActivity
+import im.vector.app.features.home.room.threads.ThreadsActivity
+import im.vector.app.features.location.live.map.LiveLocationMapViewActivity
 import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.pin.UnlockedActivity
 import im.vector.app.features.pin.lockscreen.crypto.LockScreenKeyRepository
@@ -115,6 +118,14 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                 putExtra(EXTRA_ROOM_ID, roomId)
             }
         }
+
+        val allowList = listOf(
+                HomeActivity::class.java.name,
+                MainActivity::class.java.name,
+                RoomDetailActivity::class.java.name,
+                ThreadsActivity::class.java.name,
+                LiveLocationMapViewActivity::class.java.name,
+        )
     }
 
     private val startAppViewModel: StartAppViewModel by viewModel()
@@ -186,6 +197,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
             // Start the next Activity
             startSyncing()
             val nextIntent = intent.getParcelableExtraCompat<Intent>(EXTRA_NEXT_INTENT)
+                    ?.takeIf { it.isValid() }
             startIntentAndFinish(nextIntent)
         } else if (intent.hasExtra(EXTRA_INIT_SESSION)) {
             startSyncing()
@@ -379,5 +391,12 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
     private fun startIntentAndFinish(intent: Intent?) {
         intent?.let { startActivity(it) }
         finish()
+    }
+
+    private fun Intent.isValid(): Boolean {
+        val componentName = resolveActivity(packageManager) ?: return false
+        val packageName = componentName.packageName
+        val className = componentName.className
+        return packageName == buildMeta.applicationId && className in allowList
     }
 }

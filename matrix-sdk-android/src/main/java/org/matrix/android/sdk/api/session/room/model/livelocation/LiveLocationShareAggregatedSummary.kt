@@ -22,6 +22,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocati
  * Aggregation info concerning a live location share.
  */
 data class LiveLocationShareAggregatedSummary(
+        val roomId: String?,
         val userId: String?,
         /**
          * Indicate whether the live is currently running.

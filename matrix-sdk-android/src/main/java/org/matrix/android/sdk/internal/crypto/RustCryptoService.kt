@@ -627,7 +627,7 @@ internal class RustCryptoService @Inject constructor(
     }
 
     private fun notifyRoomKeyReceived(
-            roomId: String,
+            roomId: String?,
             sessionId: String,
     ) {
         megolmSessionImportManager.dispatchNewSession(roomId, sessionId)
@@ -664,9 +664,9 @@ internal class RustCryptoService @Inject constructor(
             when (event.type) {
                 EventType.ROOM_KEY -> {
                     val content = event.getClearContent().toModel<RoomKeyContent>() ?: return@forEach
-                    content.sessionKey
-                    val roomId = content.sessionId ?: return@forEach
-                    val sessionId = content.sessionId
+
+                    val roomId = content.roomId
+                    val sessionId = content.sessionId ?: return@forEach
 
                     notifyRoomKeyReceived(roomId, sessionId)
                     matrixConfiguration.cryptoAnalyticsPlugin?.onRoomKeyImported(sessionId, EventType.ROOM_KEY)
@@ -674,8 +674,8 @@ internal class RustCryptoService @Inject constructor(
                 EventType.FORWARDED_ROOM_KEY -> {
                     val content = event.getClearContent().toModel<ForwardedRoomKeyContent>() ?: return@forEach
 
-                    val roomId = content.sessionId ?: return@forEach
-                    val sessionId = content.sessionId
+                    val roomId = content.roomId
+                    val sessionId = content.sessionId ?: return@forEach
 
                     notifyRoomKeyReceived(roomId, sessionId)
                     matrixConfiguration.cryptoAnalyticsPlugin?.onRoomKeyImported(sessionId, EventType.FORWARDED_ROOM_KEY)
