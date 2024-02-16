@@ -1,3 +1,20 @@
+Changes in Element v1.6.12 (2024-02-16)
+=======================================
+
+This update provides important security fixes, please update now.
+
+Security fixes 🔐
+-----------------
+ - Add a check on incoming intent. ([#1506 internal](https://github.com/matrix-org/internal-config/issues/1506))
+ - Store temporary files created for Camera in the media folder. ([#1505 internal](https://github.com/matrix-org/internal-config/issues/1505))
+
+Bugfixes 🐛
+----------
+ - Switch the position and styles of the 'already have an account' and 'create account' buttons in the login splash screen. Also changes the 'already have an account one' to just say 'sign in'. ([#+update-login-splash-screen](https://github.com/element-hq/element-android/issues/+update-login-splash-screen))
+ - Improve `Event.getClearContent()` and fix assignment issue that may help to decrypt last Event in the room list. ([#8744](https://github.com/element-hq/element-android/issues/8744))
+ - Fix issues about location Event avatar rendering. ([#8749](https://github.com/element-hq/element-android/issues/8749))
+
+
 Changes in Element v1.6.10 (2024-01-09)
 =======================================
 
