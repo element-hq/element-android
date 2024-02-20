@@ -96,7 +96,7 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
                     loadingEvent.postValue(
                             WaitingViewData(
                                     stringProvider.getString(R.string.keys_backup_restoring_waiting_message) +
-                                            "\n" + stringProvider.getString(R.string.keys_backup_restoring_computing_key_waiting_message),
+                                            "\n" + stringProvider.getString(R.string.keys_backup_restoring_computing_security_key_waiting_message),
                                     step.progress,
                                     step.total
                             )

@@ -189,7 +189,7 @@ abstract class VerificationTestBase {
 
         // 4S is not setup so passphrase option should be hidden
         Espresso.onView(ViewMatchers.withId(R.id.bottomSheetVerificationRecyclerView))
-                .check(ViewAssertions.matches(CoreMatchers.not(ViewMatchers.hasDescendant(ViewMatchers.withText(R.string.verification_cannot_access_other_session)))))
+                .check(ViewAssertions.matches(CoreMatchers.not(ViewMatchers.hasDescendant(ViewMatchers.withText(R.string.verification_cannot_access_other_session_use_key)))))
 
         Espresso.onView(ViewMatchers.withId(R.id.bottomSheetVerificationRecyclerView))
                 .check(ViewAssertions.matches(ViewMatchers.hasDescendant(ViewMatchers.withText(R.string.verification_verify_with_another_device))))

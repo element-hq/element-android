@@ -243,15 +243,15 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
                 _viewEvents.post(
                         SharedSecureStorageViewEvent.UpdateLoadingState(
                                 WaitingViewData(
-                                        message = stringProvider.getString(R.string.keys_backup_restoring_computing_key_waiting_message),
+                                        message = stringProvider.getString(R.string.keys_backup_restoring_computing_security_key_waiting_message),
                                         isIndeterminate = true
                                 )
                         )
                 )
                 val keySpec = RawBytesKeySpec.fromRecoveryKey(recoveryKey) ?: return@launch Unit.also {
-                    _viewEvents.post(SharedSecureStorageViewEvent.KeyInlineError(stringProvider.getString(R.string.bootstrap_invalid_recovery_key)))
+                    _viewEvents.post(SharedSecureStorageViewEvent.KeyInlineError(stringProvider.getString(R.string.bootstrap_invalid_security_key)))
                     _viewEvents.post(SharedSecureStorageViewEvent.HideModalLoading)
-                    setState { copy(checkingSSSSAction = Fail(IllegalArgumentException(stringProvider.getString(R.string.bootstrap_invalid_recovery_key)))) }
+                    setState { copy(checkingSSSSAction = Fail(IllegalArgumentException(stringProvider.getString(R.string.bootstrap_invalid_security_key)))) }
                 }
                 withContext(Dispatchers.IO) {
                     performRequest(keyInfo, keySpec, decryptedSecretMap)
@@ -268,7 +268,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
             }, {
                 setState { copy(checkingSSSSAction = Fail(it)) }
                 _viewEvents.post(SharedSecureStorageViewEvent.HideModalLoading)
-                _viewEvents.post(SharedSecureStorageViewEvent.KeyInlineError(stringProvider.getString(R.string.keys_backup_passphrase_error_decrypt)))
+                _viewEvents.post(SharedSecureStorageViewEvent.KeyInlineError(stringProvider.getString(R.string.keys_backup_security_phrase_error_decrypt)))
             })
         }
     }
@@ -322,7 +322,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
                 _viewEvents.post(
                         SharedSecureStorageViewEvent.UpdateLoadingState(
                                 WaitingViewData(
-                                        message = stringProvider.getString(R.string.keys_backup_restoring_computing_key_waiting_message),
+                                        message = stringProvider.getString(R.string.keys_backup_restoring_computing_security_key_waiting_message),
                                         isIndeterminate = true
                                 )
                         )
@@ -336,7 +336,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
                                 _viewEvents.post(
                                         SharedSecureStorageViewEvent.UpdateLoadingState(
                                                 WaitingViewData(
-                                                        message = stringProvider.getString(R.string.keys_backup_restoring_computing_key_waiting_message),
+                                                        message = stringProvider.getString(R.string.keys_backup_restoring_computing_security_key_waiting_message),
                                                         isIndeterminate = false,
                                                         progress = progress,
                                                         progressTotal = total
@@ -364,7 +364,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
             }, {
                 setState { copy(checkingSSSSAction = Fail(it)) }
                 _viewEvents.post(SharedSecureStorageViewEvent.HideModalLoading)
-                _viewEvents.post(SharedSecureStorageViewEvent.InlineError(stringProvider.getString(R.string.keys_backup_passphrase_error_decrypt)))
+                _viewEvents.post(SharedSecureStorageViewEvent.InlineError(stringProvider.getString(R.string.keys_backup_security_phrase_error_decrypt)))
             })
         }
     }

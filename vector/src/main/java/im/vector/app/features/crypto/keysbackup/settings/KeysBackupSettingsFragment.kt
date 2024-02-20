@@ -74,7 +74,7 @@ class KeysBackupSettingsFragment :
         activity?.let {
             MaterialAlertDialogBuilder(it)
                     .setTitle(R.string.keys_backup_settings_delete_confirm_title)
-                    .setMessage(R.string.keys_backup_settings_delete_confirm_message)
+                    .setMessage(R.string.keys_backup_settings_delete_keys_confirm_message)
                     .setCancelable(false)
                     .setPositiveButton(R.string.keys_backup_settings_delete_confirm_title) { _, _ ->
                         viewModel.handle(KeyBackupSettingsAction.DeleteKeyBackup)

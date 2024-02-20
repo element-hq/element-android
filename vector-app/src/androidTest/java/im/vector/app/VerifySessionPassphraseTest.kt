@@ -153,12 +153,12 @@ class VerifySessionPassphraseTest : VerificationTestBase() {
 
         // 4S is  setup so passphrase option should be visible
         onView(withId(R.id.bottomSheetVerificationRecyclerView))
-                .check(matches((hasDescendant(withText(R.string.verification_cannot_access_other_session)))))
+                .check(matches((hasDescendant(withText(R.string.verification_cannot_access_other_session_use_key)))))
 
         onView(withId(R.id.bottomSheetVerificationRecyclerView))
                 .perform(
                         actionOnItem<RecyclerView.ViewHolder>(
-                                hasDescendant(withText(R.string.verification_cannot_access_other_session)),
+                                hasDescendant(withText(R.string.verification_cannot_access_other_session_use_key)),
                                 click()
                         )
                 )

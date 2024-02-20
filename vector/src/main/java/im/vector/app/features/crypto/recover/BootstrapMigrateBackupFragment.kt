@@ -97,10 +97,10 @@ class BootstrapMigrateBackupFragment :
 
         val secret = views.bootstrapMigrateEditText.text?.toString()
         if (secret.isNullOrEmpty()) {
-            val errRes = if (isEnteringKey) R.string.recovery_key_empty_error_message else R.string.passphrase_empty_error_message
+            val errRes = if (isEnteringKey) R.string.security_key_empty_error_message else R.string.passphrase_empty_error_message
             views.bootstrapRecoveryKeyEnterTil.error = getString(errRes)
         } else if (isEnteringKey && !isValidRecoveryKey(secret)) {
-            views.bootstrapRecoveryKeyEnterTil.error = getString(R.string.bootstrap_invalid_recovery_key)
+            views.bootstrapRecoveryKeyEnterTil.error = getString(R.string.bootstrap_invalid_security_key)
         } else {
             view?.hideKeyboard()
             if (isEnteringKey) {
@@ -119,7 +119,7 @@ class BootstrapMigrateBackupFragment :
         if (isEnteringKey) {
             views.bootstrapMigrateEditText.inputType = TYPE_CLASS_TEXT or TYPE_TEXT_VARIATION_VISIBLE_PASSWORD or TYPE_TEXT_FLAG_MULTI_LINE
 
-            val recKey = getString(R.string.bootstrap_migration_backup_recovery_key)
+            val recKey = getString(R.string.bootstrap_migration_backup_security_key)
             views.bootstrapDescriptionText.text = getString(R.string.enter_account_password, recKey)
 
             views.bootstrapMigrateEditText.hint = recKey
@@ -134,7 +134,7 @@ class BootstrapMigrateBackupFragment :
 
             views.bootstrapMigrateForgotPassphrase.isVisible = true
 
-            val recKey = getString(R.string.bootstrap_migration_use_recovery_key)
+            val recKey = getString(R.string.bootstrap_migration_use_security_key)
             views.bootstrapMigrateForgotPassphrase.text = getString(R.string.bootstrap_migration_with_passphrase_helper_with_link, recKey)
                     .toSpannable()
                     .colorizeMatchingText(recKey, colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
