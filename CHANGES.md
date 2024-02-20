@@ -5,8 +5,8 @@ This update provides important security fixes, please update now.
 
 Security fixes 🔐
 -----------------
- - Add a check on incoming intent. ([#1506 internal](https://github.com/matrix-org/internal-config/issues/1506))
- - Store temporary files created for Camera in the media folder. ([#1505 internal](https://github.com/matrix-org/internal-config/issues/1505))
+ - Add a check on incoming intent. [CVE-2024-26131](https://www.cve.org/CVERecord?id=CVE-2024-26131) / [GHSA-j6pr-fpc8-q9vm](https://github.com/element-hq/element-android/security/advisories/GHSA-j6pr-fpc8-q9vm)
+ - Store temporary files created for Camera in a dedicated media folder. [CVE-2024-26132](https://www.cve.org/CVERecord?id=CVE-2024-26132) / [GHSA-8wj9-cx7h-pvm4](https://github.com/element-hq/element-android/security/advisories/GHSA-8wj9-cx7h-pvm4)
 
 Bugfixes 🐛
 ----------
