@@ -161,7 +161,13 @@ interface Navigator {
             screen: String?
     )
 
-    fun openRoomWidget(context: Context, roomId: String, widget: Widget, options: Map<String, Any>? = null)
+    fun openRoomWidget(
+            context: Context,
+            activityResultLauncher: ActivityResultLauncher<Intent>?,
+            roomId: String,
+            widget: Widget,
+            options: Map<String, Any>? = null
+    )
 
     fun openMediaViewer(
             activity: Activity,
