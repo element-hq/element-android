@@ -40,8 +40,8 @@ private data class DecryptionFailure(
 )
 private typealias DetailedErrorName = Pair<String, Error.Name>
 
-private const val GRACE_PERIOD_MILLIS = 30_000
-private const val CHECK_INTERVAL = 40_000L
+private const val GRACE_PERIOD_MILLIS = 4_000
+private const val CHECK_INTERVAL = 2_000L
 
 /**
  * Tracks decryption errors that are visible to the user.
