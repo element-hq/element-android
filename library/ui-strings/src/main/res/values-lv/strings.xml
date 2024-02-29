@@ -1817,7 +1817,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="verify_cancel_other">%1$s netiks apliecināts (%2$s), ja tagad atcelsi. Lietotāja profilā jāsāk no jauna.</string>
     <string name="verify_cancel_self_verification_from_trusted">Ja to atcelsiet, jaunajā ierīcē nevarēsiet lasīt šifrētos ziņojumus</string>
     <string name="verify_cancel_self_verification_from_untrusted">Ja to atcelsiet, šajā ierīcē nevarēsiet lasīt šifrētus ziņojumus</string>
-    <string name="send_images_and_video_with_original_size">Nosūtīt multividi ar sākotnējo izmēru</string>
+    <string name="send_images_and_video_with_original_size">Nosūtīt informācijas nesēju sākotnējā izmērā</string>
     <plurals name="settings_active_sessions_count">
         <item quantity="zero">%d aktīvu sesiju</item>
         <item quantity="one">%d aktīva sesiju</item>
@@ -1863,14 +1863,14 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="room_settings_space_access_title">Telpas piekļuve</string>
     <string name="room_settings_room_notifications_account_settings">Konta iestatījumi</string>
     <plurals name="send_videos_with_original_size">
-        <item quantity="zero">Nosūtīt video ar sākotnējo izmēru</item>
-        <item quantity="one">Nosūtīt video ar sākotnējo izmēru</item>
-        <item quantity="other">Nosūtīt video ar sākotnējo izmēru</item>
+        <item quantity="zero">Nosūtīt video sākotnējā izmērā</item>
+        <item quantity="one">Nosūtīt video sākotnējā izmērā</item>
+        <item quantity="other">Nosūtīt video sākotnējā izmērā</item>
     </plurals>
     <plurals name="send_images_with_original_size">
-        <item quantity="zero">Nosūtīt attēlus ar sākotnējo izmēru</item>
-        <item quantity="one">Nosūtīt attēlu ar sākotnējo izmēru</item>
-        <item quantity="other">Nosūtīt attēlus ar sākotnējo izmēru</item>
+        <item quantity="zero">Nosūtīt attēlus sākotnējā izmērā</item>
+        <item quantity="one">Nosūtīt attēlu sākotnējā izmērā</item>
+        <item quantity="other">Nosūtīt attēlus sākotnējā izmērā</item>
     </plurals>
     <string name="settings_server_room_version_unstable">nestabila</string>
     <string name="settings_server_room_version_stable">stabila</string>
@@ -3019,4 +3019,13 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="qr_code_login_header_failed_denied_description">Pieprasījums tika atteikts otrā ierīcē.</string>
     <string name="qr_code_login_scan_qr_code_button">Nolasīt kvadrātkodu</string>
     <string name="qr_code_login_confirm_security_code_description">Lūgums nodrošināt, ka šī koda izcelsme ir zināma. Ar ierīču sasaistīšanu kādam tiks nodrošināta pilna piekļuve kontam.</string>
+    <string name="create_room_unknown_users_dialog_submit">Vienalga uzsākt tērzēšanu</string>
+    <string name="login_splash_sign_in">Pieteikties</string>
+    <string name="invite_unknown_users_dialog_content">Nebija iespējams atrast profilus zemāk uzskaitītajiem Matrix identifikatoriem. Vai vienalga tos uzaicināt\?
+\n
+\n%s</string>
+    <string name="invite_unknown_users_dialog_submit">Vienalga uzaicināt</string>
+    <string name="create_room_unknown_users_dialog_content">Nebija iespējams atrast profilus zemāk uzskaitītajiem Matrix identifikatoriem. Vai vienalga uzsākt tērzēšanu\?
+\n
+\n%s</string>
 </resources>
