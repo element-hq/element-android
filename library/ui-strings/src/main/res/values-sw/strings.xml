@@ -41,4 +41,34 @@
     <string tools:ignore="UnusedResources" name="notice_display_name_changed_from">%1$s badilisha majina yao kuonyesha yalitoka %2$s kwenda %3$s</string>
     <string name="notice_display_name_changed_to">%1$s badilisha majina yao kwenda %2$s</string>
     <string name="notice_display_name_removed">%1$s wameondoa ma jina yao yaliyonyeshwa (yalikuwa %2$s)</string>
+    <string name="notice_room_topic_changed_by_you">Umebadilisha mada kuwa: %1$s</string>
+    <string name="notice_room_avatar_changed">%1$s alibadilisha avatar ya chumba</string>
+    <string name="notice_room_name_changed_by_you">Umebadilisha jina la chumba kuwa: %1$s</string>
+    <string name="notice_placed_video_call">%s alipiga simu ya video</string>
+    <string name="notice_placed_video_call_by_you">Ulipiga simu ya video.</string>
+    <string name="notice_placed_voice_call">%s alipiga simu</string>
+    <string name="notice_placed_voice_call_by_you">Ulipiga simu.</string>
+    <string name="notice_call_candidates_by_you">Ulituma takwimu ili kusanidi simu.</string>
+    <string name="notice_ended_call_by_you">Ulikata simu.</string>
+    <string name="notice_made_future_room_visibility_by_you">Ulifanya historia ya baadaye ya nafasi ionekane kwa %1$s</string>
+    <string name="notice_room_visibility_invited">Ulifanya ujumbe wa siku zijazo uonekane kwa.</string>
+    <string name="notice_room_visibility_shared">wanachama wote wa chumba.</string>
+    <string name="notice_room_visibility_world_readable">yeyote.</string>
+    <string name="notice_room_update">%s hakijaboreshwa chumba hiki.</string>
+    <string name="notice_direct_room_update">%s imeboreshwa hapa.</string>
+    <string name="notice_direct_room_update_by_you">imeboreshwa hapa.</string>
+    <string name="notice_room_name_changed">%1$s alibadilisha jina la chumba kuwa: %2$s</string>
+    <string name="notice_call_candidates">%s ilituma takwimu ili kusanidi simu.</string>
+    <string name="notice_made_future_room_visibility">%1$s ilifanya historia ya baadaye ya chumba ionekane kwa %2$s</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">Ulifanya ujumbe wa siku zijazo uonekane kwa %1$s</string>
+    <string name="notice_room_visibility_joined">wanachama wote wa chumba, kutoka siku waliojiunga.</string>
+    <string name="notice_room_server_acl_set_title">%s weka ACL za seva za chumba hiki.</string>
+    <string name="notice_room_update_by_you">Umeboresha chamba hiki.</string>
+    <string name="notice_room_server_acl_set_title_by_you">Umeweka ACL za seva za chumba hiki.</string>
+    <string name="notice_room_server_acl_set_banned">• Seva zinazolingana %s zimeungua.</string>
+    <string name="notice_room_avatar_changed_by_you">Ulibadilisha avatar ya chumba</string>
+    <string name="notice_answered_call">%s alijibu simu.</string>
+    <string name="notice_answered_call_by_you">Ulijibu simu.</string>
+    <string name="notice_ended_call">%s alikata simu.</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s ilifanya ujumbe wa siku zijazo kuonekana kwa %2$s</string>
 </resources>
