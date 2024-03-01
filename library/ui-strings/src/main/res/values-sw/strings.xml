@@ -101,4 +101,7 @@
     <string name="notice_room_server_acl_updated_ip_literals_allowed">• Seva zinazolingana maandishi ya IP sasa zinaruhusiwa.</string>
     <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Seva zinazolingana maandishi ya IP sasa zimepigwa marufuku.</string>
     <string name="notice_direct_room_third_party_invite">%1$swalioalikwa%2$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite">%1$s kubatilisha mwaliko wa %2$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite_by_you">Ulibatilisha mwaliko wa %1$s</string>
+    <string name="notice_room_third_party_registered_invite">%1$s alikubali mwaliko wa %2$s</string>
 </resources>
