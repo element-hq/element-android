@@ -104,4 +104,53 @@
     <string name="notice_direct_room_third_party_revoked_invite">%1$s kubatilisha mwaliko wa %2$s</string>
     <string name="notice_direct_room_third_party_revoked_invite_by_you">Ulibatilisha mwaliko wa %1$s</string>
     <string name="notice_room_third_party_registered_invite">%1$s alikubali mwaliko wa %2$s</string>
+    <string name="start_chat">Anzisha Soga</string>
+    <string name="notice_widget_added">%1$s aliongeza %2$s wijeti</string>
+    <string name="notice_widget_added_by_you">Umeongeza %1$s wijeti</string>
+    <string name="notice_widget_removed">%1$s kuondolewa %2$s wijeti</string>
+    <string name="notice_widget_removed_by_you">Umeondoa %1$s wijeti</string>
+    <string name="notice_widget_modified">%1$s imebadilishwa%2$s wijeti</string>
+    <string name="notice_widget_modified_by_you">Umerekebisha %1$s wijeti</string>
+    <string name="power_level_custom">Desturi (%1$d)</string>
+    <string name="power_level_custom_no_value">Desturi</string>
+    <string name="notice_power_level_changed">%1$s ilibadilisha kiwango cha nguvu %2$s.</string>
+    <string name="notice_power_level_diff">%1$s kutoka %2$s kwa %3$s</string>
+    <string name="notice_crypto_unable_to_decrypt">** Imeshindwa kusimbua: %s **</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">Kifaa cha mtumaji hakijatutumia funguo za ujumbe huu.</string>
+    <string name="notice_voice_broadcast_ended">%1$s alimaliza tangazo la sauti.</string>
+    <string name="notice_voice_broadcast_ended_by_you">Umemaliza utangazaji wa sauti.</string>
+    <string name="unable_to_send_message">Imeshindwa kutuma ujumbe</string>
+    <string name="matrix_error">Hitilafu ya matrix</string>
+    <string name="all_chats">Soga zote</string>
+    <string name="create_room">Unda Chumba</string>
+    <string name="change_space">Badilisha Nafasi</string>
+    <string name="explore_rooms">Chunguza Vyumba</string>
+    <string name="a11y_expand_space_children">Panua %s watoto</string>
+    <string name="a11y_collapse_space_children">Kunja %s Matawi</string>
+    <string name="room_error_access_unauthorized">Huruhusiwi kujiunga na chumba hiki</string>
+    <string name="medium_email">Barua pepe</string>
+    <string name="medium_phone_number">Nambari ya simu</string>
+    <string name="room_displayname_room_invite">Mwaliko wa Chumba</string>
+    <string name="room_displayname_two_members">%1$s na %2$s</string>
+    <string name="room_displayname_empty_room">Chumba tupu</string>
+    <string name="room_displayname_empty_room_was">Chumba tupu (Kilikuwa %s)</string>
+    <string name="initial_sync_start_server_computing">Usawazishaji wa awali:
+\nInasubiri jibu la seva…</string>
+    <string name="initial_sync_start_downloading">Usawazishaji wa awali:
+\nInapakua data…</string>
+    <string name="initial_sync_start_importing_account">Usawazishaji wa awali:
+\nInaingiza akaunti…</string>
+    <string name="initial_sync_start_importing_account_crypto">Usawazishaji wa awali:
+\nInaleta crypto</string>
+    <string name="notice_room_third_party_registered_invite_by_you">Ulikubali mwaliko wa %1$s</string>
+    <string name="power_level_admin">Msimamizi</string>
+    <string name="power_level_moderator">Mpatanishi</string>
+    <string name="power_level_default">Chaguomsingi</string>
+    <string name="notice_power_level_changed_by_you">Umebadilisha kiwango cha nguvu cha%1$s.</string>
+    <string name="room_displayname_3_members">%1$s, %2$s na %3$s</string>
+    <string name="room_displayname_4_members">%1$s, %2$s, %3$s na %4$s</string>
+    <plurals name="room_displayname_four_and_more_members">
+        <item quantity="one">%1$s, %2$s, %3$s na %4$d mwingine</item>
+        <item quantity="other">%1$s, %2$s, %3$s na %4$d wengine</item>
+    </plurals>
 </resources>
