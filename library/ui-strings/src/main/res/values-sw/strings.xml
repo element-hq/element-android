@@ -71,4 +71,7 @@
     <string name="notice_answered_call_by_you">Ulijibu simu.</string>
     <string name="notice_ended_call">%s alikata simu.</string>
     <string name="notice_made_future_direct_room_visibility">%1$s ilifanya ujumbe wa siku zijazo kuonekana kwa %2$s</string>
+    <string name="notice_room_server_acl_set_allowed">"•Seva zinazolingana %s  zinaruhusiwa."</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">"• Seva zinazolingana  maandishi ya IP zinaruhusiwa."</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Seva zinazolingana maandishi ya IP haziruhusiwi.</string>
 </resources>
