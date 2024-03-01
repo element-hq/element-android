@@ -74,4 +74,31 @@
     <string name="notice_room_server_acl_set_allowed">"•Seva zinazolingana %s  zinaruhusiwa."</string>
     <string name="notice_room_server_acl_set_ip_literals_allowed">"• Seva zinazolingana  maandishi ya IP zinaruhusiwa."</string>
     <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Seva zinazolingana maandishi ya IP haziruhusiwi.</string>
+    <string name="notice_room_server_acl_updated_title_by_you">Ulibadilisha ACL za seva za chumba hiki.</string>
+    <string name="notice_room_server_acl_updated_banned">• Seva zinazolingana %s sasa zimezuiliwa.</string>
+    <string name="notice_room_server_acl_allow_is_empty">🎉 Seva zote zimepigwa marufuku kushiriki! Chumba hiki hakiwezi kutumika tena.</string>
+    <string name="notice_avatar_changed_too">((avatar pia ilibadilishwa)</string>
+    <string name="notice_room_name_removed">%1$s limeondolewa jina la chumba</string>
+    <string name="notice_room_name_removed_by_you">Umeondoa jina la chumba</string>
+    <string name="notice_room_topic_removed">%1$s iliondolewa mada ya chumba</string>
+    <string name="notice_room_topic_removed_by_you">Umeondoa mada ya chumba</string>
+    <string name="notice_room_avatar_removed">%1$s iliondolewa avatar ya chumba</string>
+    <string name="notice_room_avatar_removed_by_you">Umeondoa avatar ya chumba</string>
+    <string name="notice_room_third_party_invite">%1$s alituma mwaliko kwa %2$s kujiunga na chumba</string>
+    <string name="notice_room_third_party_invite_by_you">Ulituma mwaliko kwa %1$s kujiunga na chumba</string>
+    <string name="notice_direct_room_third_party_invite_by_you">Umealika %1$s</string>
+    <string name="notice_room_third_party_revoked_invite">%1$s kubatilisha mwaliko wa %2$s kujiunga na chumba</string>
+    <string name="notice_room_third_party_revoked_invite_by_you">Ulibatilisha mwaliko wa %1$s kujiunga na chumba</string>
+    <string name="notice_room_server_acl_updated_title">%s alibadilisha ACL za seva za chumba hiki.</string>
+    <string name="notice_room_server_acl_updated_no_change">Hakuna mabadiliko.</string>
+    <plurals name="notice_room_server_acl_changes">
+        <item quantity="one">%d seva ACLs hubadilika</item>
+        <item quantity="other">%d seva ACLs zabadilika</item>
+    </plurals>
+    <string name="notice_room_server_acl_updated_was_banned">• Seva zinazolingana %s zimeondolewa kwenye orodha ya marufuku.</string>
+    <string name="notice_room_server_acl_updated_allowed">• Seva zinazolingana %s sasa zinaruhusiwa.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• Seva zinazolingana %s ziliondolewa kwenye orodha ya zilizoruhusiwa.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• Seva zinazolingana maandishi ya IP sasa zinaruhusiwa.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Seva zinazolingana maandishi ya IP sasa zimepigwa marufuku.</string>
+    <string name="notice_direct_room_third_party_invite">%1$swalioalikwa%2$s</string>
 </resources>
