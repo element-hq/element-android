@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/layout_vertical_margin"
+    android:layoutDirection="ltr"
     tools:viewBindingIgnore="true">
 
     <include
