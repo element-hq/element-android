@@ -1235,4 +1235,19 @@
     <string name="preference_root_help_about">المساعدة &amp; حول</string>
     <string name="invite_friends">دعوة الأصدقاء</string>
     <string name="settings_discovery_manage">إدارة إعدادات الاستكشاف.</string>
+    <string name="labs_enable_new_app_layout_summary">Element مبسط مع نوافذ تبويب اختيارية</string>
+    <string name="call_format_turn_hd_off">الغاء تشغيل HD</string>
+    <plurals name="notice_room_canonical_alias_alternative_removed_by_you">
+        <item quantity="zero">قد حذفت العنوان الثنائي %1$s لهذه الغرفة.</item>
+        <item quantity="one">قد حذفت العنوان الثنائي %1$s لهذه الغرفة.</item>
+        <item quantity="two">قد حذفت العنوان الثنائي %1$s لهذه الغرفة.</item>
+        <item quantity="few">قد حذفت العنوان الثنائي %1$s لهذه الغرفة.</item>
+        <item quantity="many">قد حذفت العنوان الثنائي %1$s لهذه الغرفة.</item>
+        <item quantity="other">قد حذفت العنوان الثنائي %1$s لهذه الغرفة.</item>
+    </plurals>
+    <string name="audio_video_meeting_description">الأجتماعات تستخدم امن Jitsi و سياسات السماح، جميع الأشخاص في الغرفة سيرون دعوة دخول في منتصف اجتماعك.</string>
+    <string name="sound_device_wireless_headset">سماعة لاسلكية</string>
+    <string name="call_format_turn_hd_on">تشغيل HD</string>
+    <string name="login_error_ssl_peer_unverified">خطأ SSL: لم يتم تأكيد هوية الجهه الأخرى.</string>
+    <string name="labs_enable_rich_text_editor_title">تشغيل محرر النصوص</string>
 </resources>
