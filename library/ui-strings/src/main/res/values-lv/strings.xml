@@ -244,7 +244,7 @@
     <string name="no_result_placeholder">Nav rezultātu</string>
     <string name="rooms_header">Istabas</string>
     <string name="send_bug_report_include_logs">Nosūtīt logfailus</string>
-    <string name="send_bug_report_include_crash_logs">Nosūtīt sistēmas avārijas logfailus</string>
+    <string name="send_bug_report_include_crash_logs">Nosūtīt avāriju žurnālus</string>
     <string name="send_bug_report_include_screenshot">Nosūtīt ekrānattēlu</string>
     <string name="send_bug_report">Ziņot par kļūdu</string>
     <string name="send_bug_report_description">Lūdzu apraksti kļūdu. Kāda darbība tika veikta? Kāds bija gaidāmais rezultāts? Kas tieši notika?</string>
@@ -266,9 +266,9 @@
     <string name="option_take_photo_video">Uzņemt foto vai video</string>
     <string name="auth_login">Pierakstīties</string>
     <string name="auth_submit">Iesniegt</string>
-    <string name="light_theme">Gaiša tēma</string>
-    <string name="dark_theme">Tumša tēma</string>
-    <string name="black_theme">Melna tēma</string>
+    <string name="light_theme">Gaišs izskats</string>
+    <string name="dark_theme">Tumšs izskats</string>
+    <string name="black_theme">Melns izskats</string>
     <string name="notification_listening_for_events">Uztver notikumus</string>
     <string name="notification_noisy_notifications">Skaņas paziņojumi</string>
     <string name="notification_silent_notifications">Klusi paziņojumi</string>
@@ -447,7 +447,7 @@
     </plurals>
     <string name="room_settings_set_main_address">Iestatīt kā galveno adresi</string>
     <string name="room_settings_unset_main_address">Atiestatīt kā galveno adresi</string>
-    <string name="settings_theme">Tēma</string>
+    <string name="settings_theme">Izskats</string>
     <string name="encryption_information_decryption_error">Atšifrēšanas kļūda</string>
     <string name="encryption_information_device_name">Ierīces nosaukums</string>
     <string name="device_manager_session_details_session_id">Sesijas ID</string>
@@ -1217,7 +1217,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="refresh">Atsvaidzināt</string>
     <string name="share_confirm_room">Vai vēlaties sūtīt šo pielikumu %1$s\?</string>
     <string name="settings_account_data">Konta dati</string>
-    <string name="no_connectivity_to_the_server_indicator_airplane">Lidmašīnas režīms ir ieslēgts</string>
+    <string name="no_connectivity_to_the_server_indicator_airplane">Ir ieslēgts lidmašīnas režīms</string>
     <string name="no_connectivity_to_the_server_indicator">Savienojums ar serveri ir zaudēts</string>
     <string name="qr_code_scanned_by_other_notice">Gandrīz galā! Vai %s redzams tas pats vairogs\?</string>
     <string name="verification_profile_device_untrust_info">Kamēr šis lietotājs nav padarījis šo sesiju uzticamu, ziņas uz un no tās ir iezīmētas ar brīdinājumiem. To var apliecināt arī pašrocīgi.</string>
@@ -1334,7 +1334,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="notice_room_server_acl_set_title">%s iestatīja servera ACL šai istabai.</string>
     <string name="notice_direct_room_update_by_you">Tu atjaunināji šeit.</string>
     <string name="notice_direct_room_update">%s atjaunināti šeit.</string>
-    <string name="system_alerts_header">Sistēmas Brīdinājumi</string>
+    <string name="system_alerts_header">Sistēmas brīdinājumi</string>
     <string name="action_unpublish">Nepublicēt</string>
     <string name="call_notification_hangup">Nolikt</string>
     <string name="failed_to_remove_widget">Neizdevās noņemt logrīku</string>
@@ -1450,8 +1450,8 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Salabot Play Servisus</string>
     <string name="error_threepid_auth_failed">Pārliecinieties, ka esat nospiedis uz saites e-pasta ziņojumā, ko esam nosūtījuši jums.</string>
     <string name="settings_background_fdroid_sync_mode_battery">Optimizēts akumulatoram</string>
-    <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} sinhronizēsies fonā, tā lai ietaupītu telefona bateriju.
-\nAtkarībā no ierīces baterijas stāvokļa, sinhronizāciju var atcelt operētājsistēma.</string>
+    <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} sinhronizēsies fonā tā, lai saudzētu ierīces ierobežotos resursus (bateriju).
+\nAtkarībā no ierīces resursu stāvokļa, operētājsistēma var atlikt sinhronizāciju.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignorēt optimizāciju</string>
     <string name="settings_troubleshoot_test_battery_success">${app_name} neietekmē akumulatora optimizācija.</string>
     <string name="settings_troubleshoot_test_battery_title">Akumulatora Optimizācija</string>
@@ -1469,7 +1469,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Konta paziņojumi ir ieslēgti.</string>
     <string name="settings_troubleshoot_test_account_settings_title">Konta iestatījumi.</string>
     <string name="settings_troubleshoot_test_system_settings_failed">Paziņojumi ir izslēgti sistēmas iestatījumos.
-\nLūdzu, pārbaudiet sistēmas iestatījumus.</string>
+\nLūgums pārbaudīt sistēmas iestatījumus.</string>
     <string name="settings_troubleshoot_test_system_settings_success">Paziņojumi ir ieslēgti sistēmas iestatījumos.</string>
     <string name="settings_troubleshoot_test_system_settings_title">Sistēmas iestatījumi.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Viens vai vairāki testi nav izdevušies, lūdzu, iesniedziet kļūdu ziņojumu, lai palīdzētu mums izmeklēt.</string>
@@ -1627,7 +1627,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="keys_backup_setup_step3_share_intent_chooser_title">Kopīgojiet atkopšanas atslēgu ar…</string>
     <string name="resource_limit_hard_contact">Lūdzu, %s, lai turpinātu izmantot šo pakalpojumu.</string>
     <string name="resource_limit_soft_contact">Lūdzu, %s, lai palielinātu šo limitu.</string>
-    <string name="settings_labs_native_camera_summary">Palaidiet sistēmas kameru, nevis pielāgotās kameras ekrānu.</string>
+    <string name="settings_labs_native_camera_summary">Jāsāknē sistēmas kamera, nevis pielāgotas kameras ekrāns.</string>
     <string name="room_widget_webview_read_protected_media">Lasīt DRM aizsargātu multividi</string>
     <string name="room_widget_permission_shared_info_title">Izmantojot to, var kopīgot datus ar %s:</string>
     <string name="room_widget_permission_webview_shared_info_title">Izmantojot to, var iestatīt sīkfailus un kopīgot datus ar %s:</string>
@@ -1661,7 +1661,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
 \nTas ietekmēs radio un akumulatora izmantošanu, tiks parādīts pastāvīgs paziņojums par to, ka ${app_name} klausās notikumus.</string>
     <string name="settings_troubleshoot_test_battery_failed">Ja lietotājs kādu laiku atstāj ierīci atvienotu no tīkla un nekustīgu, ar izslēgtu ekrānu, ierīcē tiek ieslēgts dīkstāves režīms. Tas neļauj lietotnēm piekļūt tīklam un atliek to darbu izpildi, sinhronizāciju un standarta brīdinājumus.</string>
     <string name="settings_troubleshoot_test_service_boot_failed">Pakalpojums nesāksies, kad ierīce tiks pārsāknēta, kamēr ${app_name} netiks atvērta vismaz vienreiz, netiks saņemti paziņojumi.</string>
-    <string name="settings_troubleshoot_test_notification_notice">Lūdzu, noklikšķiniet uz paziņojuma. Ja paziņojums nav redzams, pārbaudiet sistēmas iestatījumus.</string>
+    <string name="settings_troubleshoot_test_notification_notice">Lūgums noklikšķināt uz paziņojuma. Ja paziņojums nav redzams, lūgums pārbaudīt sistēmas iestatījumus.</string>
     <plurals name="room_details_selected">
         <item quantity="zero">%d izvēlēti</item>
         <item quantity="one">%d izvēlēts</item>
@@ -1669,8 +1669,8 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     </plurals>
     <string name="room_permissions_modify_widgets">Modificēt logrīku</string>
     <string name="missing_permissions_title">Trūkst atļauju</string>
-    <string name="denied_permission_camera">Lai veiktu šo darbību, lūdzu, piešķiriet kamerai atļauju sistēmas iestatījumos.</string>
-    <string name="denied_permission_generic">Lai veiktu šo darbību, trūkst dažu atļauju. Lūdzu, sistēmas Iestatījumos piešķiriet atļaujas.</string>
+    <string name="denied_permission_camera">Lai veiktu šo darbību, lūgums nodrošināt kameras atļauju sistēmas iestatījumos.</string>
+    <string name="denied_permission_generic">Trūkst dažu atļauju, lai veiktu šo darbību. Lūgums tās nodrošināt sistēmas iestatījumos.</string>
     <string name="spaces_header">Vietnes</string>
     <string name="suggested_header">Ieteiktās istabas</string>
     <string name="join_anyway">Pievienoties tāpat</string>
@@ -1817,7 +1817,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="verify_cancel_other">%1$s netiks apliecināts (%2$s), ja tagad atcelsi. Lietotāja profilā jāsāk no jauna.</string>
     <string name="verify_cancel_self_verification_from_trusted">Ja to atcelsiet, jaunajā ierīcē nevarēsiet lasīt šifrētos ziņojumus</string>
     <string name="verify_cancel_self_verification_from_untrusted">Ja to atcelsiet, šajā ierīcē nevarēsiet lasīt šifrētus ziņojumus</string>
-    <string name="send_images_and_video_with_original_size">Nosūtīt multividi ar sākotnējo izmēru</string>
+    <string name="send_images_and_video_with_original_size">Nosūtīt informācijas nesēju sākotnējā izmērā</string>
     <plurals name="settings_active_sessions_count">
         <item quantity="zero">%d aktīvu sesiju</item>
         <item quantity="one">%d aktīva sesiju</item>
@@ -1863,14 +1863,14 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="room_settings_space_access_title">Telpas piekļuve</string>
     <string name="room_settings_room_notifications_account_settings">Konta iestatījumi</string>
     <plurals name="send_videos_with_original_size">
-        <item quantity="zero">Nosūtīt video ar sākotnējo izmēru</item>
-        <item quantity="one">Nosūtīt video ar sākotnējo izmēru</item>
-        <item quantity="other">Nosūtīt video ar sākotnējo izmēru</item>
+        <item quantity="zero">Nosūtīt video sākotnējā izmērā</item>
+        <item quantity="one">Nosūtīt video sākotnējā izmērā</item>
+        <item quantity="other">Nosūtīt video sākotnējā izmērā</item>
     </plurals>
     <plurals name="send_images_with_original_size">
-        <item quantity="zero">Nosūtīt attēlus ar sākotnējo izmēru</item>
-        <item quantity="one">Nosūtīt attēlu ar sākotnējo izmēru</item>
-        <item quantity="other">Nosūtīt attēlus ar sākotnējo izmēru</item>
+        <item quantity="zero">Nosūtīt attēlus sākotnējā izmērā</item>
+        <item quantity="one">Nosūtīt attēlu sākotnējā izmērā</item>
+        <item quantity="other">Nosūtīt attēlus sākotnējā izmērā</item>
     </plurals>
     <string name="settings_server_room_version_unstable">nestabila</string>
     <string name="settings_server_room_version_stable">stabila</string>
@@ -1938,7 +1938,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="feedback_failed">Atsauksmi neizdevās nosūtīt (%s)</string>
     <string name="feedback_sent">Paldies, atsauksme tika veiksmīgi nosūtīta</string>
     <string name="you_may_contact_me">Ja jums ir kādi papildjautājumi, varat sazināties ar mani</string>
-    <string name="send_feedback_space_info">Tu izmanto vietu beta laidienu. Atsauksmes palīdzēs uzlabot nākamos laidienus. Izmantotā sistēma un lietotājvārds tiks pierakstīts, lai mēs varētu pēc iespējas labāk izmantot atsauksmes.</string>
+    <string name="send_feedback_space_info">Tiek izmantota vietu beta versija. Atsauksmes palīdzēs uzlabot nākamās versijas. Izmantotā sistēma un lietotājvārds tiks pierakstīts, lai mēs varētu pēc iespējas labāk izmantot atsauksmes.</string>
     <string name="feedback">Atsauksmes</string>
     <string name="send_feedback_space_title">Atsauksmes par Telpām</string>
     <string name="push_gateway_item_format">Format:</string>
@@ -1995,7 +1995,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 \nŠī kļūda ir ārpus ${app_name} kontroles. Tālrunī nav Google konta. Lūdzu, atveriet kontu pārvaldnieku un pievienojiet Google kontu.</string>
     <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
-\nŠī kļūda ir ārpus ${app_name} kontroles. Tā var rasties vairāku iemeslu dēļ. Iespējams, tā darbosies, ja vēlāk mēģināsiet vēlreiz, varat arī pārbaudīt, vai sistēmas iestatījumos nav ierobežota Google Play pakalpojuma datu izmantošana, vai ierīces pulkstenis ir pareizs, vai arī tā var notikt uz atsevišķām sistēmām.</string>
+\nŠī kļūda ir ārpus ${app_name} ietekmes. Tā var rasties vairāku iemeslu dēļ. Iespējams, tā darbosies, ja vēlāk tiks mēģināts vēlreiz, var arī pārbaudīt, vai sistēmas iestatījumos nav ierobežota Google Play pakalpojuma datu izmantošana, vai ierīces pulkstenis ir pareizs, vai arī tā var notikt pielāgotās sistēmās.</string>
     <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
 \nŠī kļūda nav kontrolējama ar ${app_name}, un saskaņā ar Google datiem šī kļūda norāda, ka ierīcē ir pārāk daudz lietotņu, kas reģistrētas FCM. Kļūda rodas tikai gadījumos, kad ir ārkārtīgi liels lietotņu skaits, tāpēc šim nevajadzētu ietekmēt parastu lietotāju.</string>
     <string name="settings_troubleshoot_diagnostic_running_status">Izpilda… (%1$d of %2$d)</string>
@@ -2478,7 +2478,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="identity_server_error_binding_error">Sasaiste neizdevās.</string>
     <string name="confirm_your_identity_quad_s">Jāapstiprina identitāte ar šīs pieteikšanās apliecināšanu, tādējādi nodrošinot piekļuvi šifrētajām ziņām.</string>
     <plurals name="invitations_sent_to_one_and_more_users">
-        <item quantity="zero">Uzaicinājums tika nosūtīts %1$s</item>
+        <item quantity="zero">Uzaicinājumi tika nosūtīti %1$s</item>
         <item quantity="one">Uzaicinājumi tika nosūtīti %1$s un vēl vienam</item>
         <item quantity="other">Uzaicinājumi tika nosūtīti %1$s un vēl %2$d</item>
     </plurals>
@@ -2606,7 +2606,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="space_leave_prompt_msg_private">Nebūs iespējams atkārtoti pievienoties bez uzaicinājuma.</string>
     <string name="space_explore_filter_no_result_title">Nekas netika atrasts</string>
     <string name="labs_auto_report_uisi">Automātiski ziņot par atšifrēšanas kļūdām.</string>
-    <string name="labs_auto_report_uisi_desc">Sistēma automātiski nosūtīts žurnāla ierakstus, kad notiks kļūda \"nav iespējams atšifrēt\"</string>
+    <string name="labs_auto_report_uisi_desc">Sistēma automātiski nosūtīts žurnāla ierakstus, kad atgadīsies kļūda \"nav iespējams atšifrēt\"</string>
     <string name="settings_security_pin_code_use_biometrics_summary_on">Iespējot no ierīces atkarīgu biometriju, piemēram, pirkstu nospiedumus un sejas atpazīšanu.</string>
     <string name="settings_security_pin_code_grace_period_summary_on">PIN kods tiks pieprasīts pēc 2 minūšu ${app_name} neizmantošanas.</string>
     <string name="settings_security_pin_code_grace_period_summary_off">PIN kods tiek pieprasīts katrā ${app_name} atvēršanas reizē.</string>
@@ -2742,11 +2742,11 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="live_location_share_location_item_share">Kopīgot atrašanās vietu</string>
     <string name="room_polls_active">Notiekošās aptaujas</string>
     <plurals name="room_polls_ended_no_item_for_loaded_period">
-        <item quantity="zero">Iepriekšējās %1$d dienās nav noslēgto aptauju.
+        <item quantity="zero">Iepriekšējās %1$d dienās nav noslēgtu aptauju.
 \nJāielādē vairāk aptauju, lai apskatītu iepriekšējo dienu aptaujas.</item>
-        <item quantity="one">Iepriekšējā dienā nav noslēgto aptauju.
+        <item quantity="one">Iepriekšējā dienā nav noslēgtu aptauju.
 \nJāielādē vairāk aptauju, lai apskatītu iepriekšējo dienu aptaujas.</item>
-        <item quantity="other">Iepriekšējās %1$d dienās nav noslēgto aptauju.
+        <item quantity="other">Iepriekšējās %1$d dienās nav noslēgtu aptauju.
 \nJāielādē vairāk aptauju, lai apskatītu iepriekšējo dienu aptaujas.</item>
     </plurals>
     <string name="location_not_available_dialog_content">${app_name} nevarēja piekļūt atrašanās vietai. Lūgums vēlāk mēģināt vēlreiz.</string>
@@ -3019,4 +3019,13 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="qr_code_login_header_failed_denied_description">Pieprasījums tika atteikts otrā ierīcē.</string>
     <string name="qr_code_login_scan_qr_code_button">Nolasīt kvadrātkodu</string>
     <string name="qr_code_login_confirm_security_code_description">Lūgums nodrošināt, ka šī koda izcelsme ir zināma. Ar ierīču sasaistīšanu kādam tiks nodrošināta pilna piekļuve kontam.</string>
+    <string name="create_room_unknown_users_dialog_submit">Vienalga uzsākt tērzēšanu</string>
+    <string name="login_splash_sign_in">Pieteikties</string>
+    <string name="invite_unknown_users_dialog_content">Nebija iespējams atrast profilus zemāk uzskaitītajiem Matrix identifikatoriem. Vai vienalga tos uzaicināt\?
+\n
+\n%s</string>
+    <string name="invite_unknown_users_dialog_submit">Vienalga uzaicināt</string>
+    <string name="create_room_unknown_users_dialog_content">Nebija iespējams atrast profilus zemāk uzskaitītajiem Matrix identifikatoriem. Vai vienalga uzsākt tērzēšanu\?
+\n
+\n%s</string>
 </resources>
