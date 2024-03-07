@@ -1671,7 +1671,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="missing_permissions_title">Trūkst atļauju</string>
     <string name="denied_permission_camera">Lai veiktu šo darbību, lūgums nodrošināt kameras atļauju sistēmas iestatījumos.</string>
     <string name="denied_permission_generic">Trūkst dažu atļauju, lai veiktu šo darbību. Lūgums tās nodrošināt sistēmas iestatījumos.</string>
-    <string name="spaces_header">Vietnes</string>
+    <string name="spaces_header">Vietas</string>
     <string name="suggested_header">Ieteiktās istabas</string>
     <string name="join_anyway">Pievienoties tāpat</string>
     <string name="join_space">Pievienoties Telpai</string>
