@@ -672,8 +672,8 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="fab_menu_create_room">Istabas</string>
     <string name="room_preview_no_preview">Šo istabu nevar priekšskatīt</string>
     <string name="event_redacted">Ziņa ir dzēsta</string>
-    <string name="reactions">Reaģēšana</string>
-    <string name="title_activity_emoji_reaction_picker">Reaģēšana</string>
+    <string name="reactions">Reakcijas</string>
+    <string name="title_activity_emoji_reaction_picker">Reakcijas</string>
     <string name="room_list_rooms_empty_title">Istabas</string>
     <string name="room_list_people_empty_title">Sarunas</string>
     <string name="reply">Atbildēt</string>
@@ -1027,7 +1027,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="verification_request_you_cancelled">Tu atcēli</string>
     <string name="verification_request_other_cancelled">%s atcēla</string>
     <string name="verification_request_waiting">Gaida…</string>
-    <string name="sent_a_reaction">Reaģēja ar %s</string>
+    <string name="sent_a_reaction">Atsaucās ar %s</string>
     <string name="create_room_disable_federation_title">Bloķēt pievienošanos šai istabai ikvienam, kas nav daļa no %s</string>
     <string name="create_room_encryption_title">Iespējot šifrēšanu</string>
     <string name="notification_initial_sync">Sākotnējā sinhronizācija…</string>
@@ -1250,8 +1250,8 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="event_redacted_by_user_reason">Lietotājs izdzēsa notikumu</string>
     <string name="settings_show_redacted_summary">Rādīt vietu priekš izdzēstām ziņām</string>
     <string name="settings_show_redacted">Rādīt izdzēstās ziņas</string>
-    <string name="message_view_reaction">Apskatīt Reakcijas</string>
-    <string name="message_add_reaction">Pievienot Reakciju</string>
+    <string name="message_view_reaction">Apskatīt reakcijas</string>
+    <string name="message_add_reaction">Pievienot reakciju</string>
     <string name="action_agree">Piekrist</string>
     <string name="room_list_people_empty_body">Šeit tiks attēlotas tiešās saziņas sarunas. Jāpiesit + apakšējā labajā stūrī, lai uzsāktu sarunu.</string>
     <string name="room_list_catchup_empty_title">Viss panākts!</string>
@@ -1548,7 +1548,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
         <item quantity="one">Ir nosūtīts pārāk daudz pieprasījumu. Pēc %1$d sekundes var mēģināt vēlreiz…</item>
         <item quantity="other">Ir nosūtīts pārāk daudz pieprasījumu. Pēc %1$d sekundēm var mēģināt vēlreiz…</item>
     </plurals>
-    <string name="reaction_search_type_hint">Ievadiet atslēgvārdus, lai atrastu reakciju.</string>
+    <string name="reaction_search_type_hint">Jāievada atslēgvārdi, lai atrastu reakciju.</string>
     <string name="spoiler">Spoileris</string>
     <string name="content_reported_as_inappropriate_content">Par šo saturu tika ziņots kā par nepiemērotu.
 \n
