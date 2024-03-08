@@ -159,7 +159,7 @@ class TimelineItemFactory @Inject constructor(
                     }
                 }.also {
                     if (it != null && event.isEncrypted()) {
-                        decryptionFailureTracker.e2eEventDisplayedInTimeline(event)
+                        decryptionFailureTracker.e2eEventDisplayedInTimeline(event, session)
                     }
                 }
             }

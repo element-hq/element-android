@@ -20,6 +20,7 @@ import com.posthog.android.Options
 import com.posthog.android.PostHog
 import com.posthog.android.Properties
 import im.vector.app.core.di.NamedGlobalScope
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.features.analytics.AnalyticsConfig
 import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
@@ -46,6 +47,7 @@ class DefaultVectorAnalytics @Inject constructor(
         private val analyticsConfig: AnalyticsConfig,
         private val analyticsStore: AnalyticsStore,
         private val lateInitUserPropertiesFactory: LateInitUserPropertiesFactory,
+        private val buildMeta: BuildMeta,
         @NamedGlobalScope private val globalScope: CoroutineScope
 ) : VectorAnalytics {
 
@@ -68,9 +70,28 @@ class DefaultVectorAnalytics @Inject constructor(
     // Cache for the properties to send
     private var pendingUserProperties: UserProperties? = null
 
+    /**
+     * Super Properties are properties associated with events that are set once and then sent with every capture call.
+     */
+    private var superProperties: MutableMap<String, String> = HashMap()
+
     override fun init() {
         observeUserConsent()
         observeAnalyticsId()
+
+        initSuperProperties()
+    }
+
+    /**
+     * Init the super properties that will be captured with all events.
+     */
+    private fun initSuperProperties() {
+        // Put the appVersion (e.g 1.6.12).
+        superProperties["appVersion"] = buildMeta.versionName
+        // The appId (im.vector.app)
+        superProperties["applicationId"] = buildMeta.applicationId
+        // Parity with other platforms
+        superProperties["cryptoSDK"] = "Rust"
     }
 
     override fun getUserConsent(): Flow<Boolean> {
@@ -171,18 +192,23 @@ class DefaultVectorAnalytics @Inject constructor(
         }
     }
 
-    override fun capture(event: VectorAnalyticsEvent) {
+    override fun capture(event: VectorAnalyticsEvent, extraProperties: Map<String, String>?) {
         Timber.tag(analyticsTag.value).d("capture($event)")
         posthog
                 ?.takeIf { userConsent == true }
-                ?.capture(event.getName(), event.getProperties()?.toPostHogProperties())
+                ?.capture(
+                        event.getName(),
+                        (this.superProperties + event.getProperties().orEmpty() + extraProperties.orEmpty()).toPostHogProperties()
+                .toPostHogProperties())
     }
 
     override fun screen(screen: VectorAnalyticsScreen) {
         Timber.tag(analyticsTag.value).d("screen($screen)")
         posthog
                 ?.takeIf { userConsent == true }
-                ?.screen(screen.getName(), screen.getProperties()?.toPostHogProperties())
+                ?.screen(screen.getName(),
+                        (this.superProperties + screen.getProperties().orEmpty()).toPostHogProperties()
+                )
     }
 
     override fun updateUserProperties(userProperties: UserProperties) {
