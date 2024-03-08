@@ -169,4 +169,27 @@
 \n%s
 \n
 \nKumbuka kuwa kitendo hiki kitaanzisha upya programu na inaweza kuchukua muda.</string>
+    <string name="initial_sync_request_reason_unignored_users">- Baadhi ya watumiaji wamepuuzwa</string>
+    <string name="event_status_sent_message">Ujumbe umetumwa</string>
+    <string name="notice_room_invite_no_invitee_with_reason">%1$s\'s mwaliko. sababu: %2$s</string>
+    <string name="notice_room_invite_with_reason_by_you">Umealika %1$s. Sababu: %2$s</string>
+    <string name="notice_room_invite_you_with_reason">%1$s amekualika. Sababu: %2$s</string>
+    <string name="notice_room_join_with_reason">%1$salijiunga na chumba. Sababu: %2$s</string>
+    <string name="notice_room_join_with_reason_by_you">Ulijunga na chumba. Sababu: %1$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$s alijiunga. Sababu: %2$s</string>
+    <string name="notice_direct_room_join_with_reason_by_you">Ulijiunga. Sababu: %1$s</string>
+    <string name="notice_room_leave_with_reason">%1$s kaondoka chumbani. Sababu: %2$s</string>
+    <string name="notice_room_leave_with_reason_by_you">Uliondoka chumbani. Sababu: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason">%1$s Ondoka. Sababu: %2$s</string>
+    <string name="notice_direct_room_leave_with_reason_by_you">Uliondoka. Sababu: %1$s</string>
+    <string name="notice_room_remove_with_reason">%1$s kuondolewa %2$s. Sababu: %3$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Umeondoa %1$s. Sababu: %2$s</string>
+    <string name="notice_room_unban_with_reason">%1$s haijazuiriwa %2$s. Sababu: %3$s</string>
+    <string name="notice_room_unban_with_reason_by_you">Haujazuiriwa %1$s. Sababu: %2$s</string>
+    <string name="notice_room_ban_with_reason">%1$s marufuku %2$s. Sababu: %3$s</string>
+    <string name="event_status_sending_message">Ujumbe unatumwa…</string>
+    <string name="notice_room_invite_no_invitee_with_reason_by_you">Mwaliko wako. Sababu: %1$s</string>
+    <string name="notice_room_invite_with_reason">%1$s Walioalikwa %2$s. Sababu: %3$s</string>
+    <string name="notice_room_reject_with_reason">%1$s alikataa mwaliko. Sababu: %2$s</string>
+    <string name="notice_room_reject_with_reason_by_you">Ulikataa mwaliko. Sababu: %1$s</string>
 </resources>
