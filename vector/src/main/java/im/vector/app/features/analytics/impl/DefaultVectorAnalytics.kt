@@ -90,6 +90,8 @@ class DefaultVectorAnalytics @Inject constructor(
         superProperties["appVersion"] = buildMeta.versionName
         // The appId (im.vector.app)
         superProperties["applicationId"] = buildMeta.applicationId
+        // The app flavor (GooglePlay, FDroid)
+        superProperties["appFlavor"] = buildMeta.flavorDescription
         // Parity with other platforms
         superProperties["cryptoSDK"] = "Rust"
     }
