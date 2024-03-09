@@ -2588,7 +2588,7 @@
 \nSee koduserver ei pruugi olla seadistatud kuvama kaarte.</string>
     <string name="a11y_open_settings">Ava seadistused</string>
     <string name="all_chats">Kõik vestlused</string>
-    <string name="device_manager_sessions_other_description">Parima turvalisuse nimel verifitseeri kõik oma sessioonid ning logi välja neist, mida sa enam ei kasuta.</string>
+    <string name="device_manager_sessions_other_description">Parima turvalisuse nimel verifitseeri kõik oma sessioonid ning logi välja neist, mida sa enam ei kasuta või ei tunne ära.</string>
     <string name="device_manager_sessions_other_title">Muud sessioonid</string>
     <string name="settings_sessions_list">Sessioonid</string>
     <string name="a11y_open_spaces">Ava kogukondade loend</string>
