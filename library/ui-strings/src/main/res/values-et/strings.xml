@@ -2569,7 +2569,7 @@
     <string name="font_size_section_manually">Vali ise</string>
     <string name="font_size_section_auto">Määra automaatselt</string>
     <string name="font_size_title">Vali kirjatüübi suurus</string>
-    <string name="labs_enable_element_call_permission_shortcuts_summary">Automaatsel luba kasutada Element\'i põhiste kõnede vidinaid ning luba ligipääs kaamerale ja mikrofonile</string>
+    <string name="labs_enable_element_call_permission_shortcuts_summary">Luba automaatselt kasutada Element\'i põhiste kõnede vidinaid ning kinnita ligipääs kaamerale ja mikrofonile</string>
     <string name="labs_enable_element_call_permission_shortcuts">Võta kasutsele Element\'i põhiste kõnede õiguste kiirnupud</string>
     <string name="live_location_description">Asukoht reaalajas</string>
     <string name="verify_invalid_qr_notice">See QR-kood tundub olema vigane. Palun proovi verifitseerimist mõne muu meetodiga.</string>
@@ -2588,7 +2588,7 @@
 \nSee koduserver ei pruugi olla seadistatud kuvama kaarte.</string>
     <string name="a11y_open_settings">Ava seadistused</string>
     <string name="all_chats">Kõik vestlused</string>
-    <string name="device_manager_sessions_other_description">Parima turvalisuse nimel verifitseeri kõik oma sessioonid ning logi välja neist, mida sa enam ei kasuta.</string>
+    <string name="device_manager_sessions_other_description">Parima turvalisuse nimel verifitseeri kõik oma sessioonid ning logi välja neist, mida sa enam ei kasuta või ei tunne ära.</string>
     <string name="device_manager_sessions_other_title">Muud sessioonid</string>
     <string name="settings_sessions_list">Sessioonid</string>
     <string name="a11y_open_spaces">Ava kogukondade loend</string>
@@ -2966,4 +2966,5 @@
     <string name="invite_unknown_users_dialog_content">Allpool loetletud Matrix\'i kasutajatunnustele ei leidunud profiile. Kas sa ikkagi tahaksid neile kutse saata\?
 \n
 \n%s</string>
+    <string name="login_splash_sign_in">Logi sisse</string>
 </resources>
