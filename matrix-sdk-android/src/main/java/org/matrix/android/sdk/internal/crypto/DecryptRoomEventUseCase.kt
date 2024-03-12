@@ -22,10 +22,12 @@ import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.Event
 import javax.inject.Inject
 
-internal class DecryptRoomEventUseCase @Inject constructor(private val olmMachine: OlmMachine) {
+internal class DecryptRoomEventUseCase @Inject constructor(
+        private val cryptoService: RustCryptoService
+) {
 
     suspend operator fun invoke(event: Event): MXEventDecryptionResult {
-        return olmMachine.decryptRoomEvent(event)
+        return cryptoService.decryptEvent(event, "")
     }
 
     suspend fun decryptAndSaveResult(event: Event) {
