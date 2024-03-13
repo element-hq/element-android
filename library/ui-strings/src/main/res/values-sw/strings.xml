@@ -192,4 +192,21 @@
     <string name="notice_room_invite_with_reason">%1$s Walioalikwa %2$s. Sababu: %3$s</string>
     <string name="notice_room_reject_with_reason">%1$s alikataa mwaliko. Sababu: %2$s</string>
     <string name="notice_room_reject_with_reason_by_you">Ulikataa mwaliko. Sababu: %1$s</string>
+    <string name="notice_room_ban_with_reason_by_you">Ulipiga marufuku %1$s. Sababu: %2$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason">%1$s alikubali mwaliko wa %2$s. Sababu: %3$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason_by_you">Ulikubali mwaliko wa %1$s. Sababu: %2$s</string>
+    <string name="notice_room_withdraw_with_reason">%1$salikataa %2$s\'s mwaliko. Sababu: %3$s</string>
+    <string name="notice_room_withdraw_with_reason_by_you">Ulijiondoa %1$s\'s mwaliko. Sababu: %2$s</string>
+    <plurals name="notice_room_aliases_added">
+        <item quantity="one">%1$s aliongeza %2$s kama anwani ya chumba hiki.</item>
+        <item quantity="other">%1$s aliongeza %2$s kama anwani za chumba hiki.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_added_by_you">
+        <item quantity="one">Uliongeza %1$s kama answani ya chumba hiki.</item>
+        <item quantity="other">You added %1$s kama anwani za chumba hiki.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_removed">
+        <item quantity="one">%1$s Uliondoa %2$s kama anwani ya chumba hiki.</item>
+        <item quantity="other">%1$s uliondoa %2$s kama anwani za chumba hiki.</item>
+    </plurals>
 </resources>
