@@ -171,11 +171,15 @@ class DefaultVectorAnalytics @Inject constructor(
         }
     }
 
-    override fun capture(event: VectorAnalyticsEvent) {
+    override fun capture(event: VectorAnalyticsEvent, customProperties: Map<String, Any>?) {
         Timber.tag(analyticsTag.value).d("capture($event)")
         posthog
                 ?.takeIf { userConsent == true }
-                ?.capture(event.getName(), event.getProperties()?.toPostHogProperties())
+                ?.capture(
+                        event.getName(),
+                        (customProperties.orEmpty() +
+                                event.getProperties().orEmpty()).toPostHogProperties()
+                )
     }
 
     override fun screen(screen: VectorAnalyticsScreen) {

@@ -23,8 +23,10 @@ import im.vector.app.features.analytics.plan.UserProperties
 interface AnalyticsTracker {
     /**
      * Capture an Event.
+     *
+     * @param customProperties Some custom properties to attach to the event.
      */
-    fun capture(event: VectorAnalyticsEvent)
+    fun capture(event: VectorAnalyticsEvent, customProperties: Map<String, Any>? = null)
 
     /**
      * Track a displayed screen.
