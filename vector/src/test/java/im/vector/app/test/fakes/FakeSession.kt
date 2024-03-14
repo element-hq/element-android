@@ -53,7 +53,10 @@ class FakeSession(
         mockkStatic("im.vector.app.core.extensions.SessionKt")
     }
 
-    override val myUserId: String = "@fake:server.fake"
+    var fakeUserId = "@fake:server.fake"
+
+    override val myUserId: String
+        get() = fakeUserId
 
     override val coroutineDispatchers = testCoroutineDispatchers
 
