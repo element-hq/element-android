@@ -26,7 +26,8 @@ data class DecryptionFailure(
         val error: MXCryptoError,
         val wasVisibleOnScreen: Boolean,
         val ownIdentityTrustedAtTimeOfDecryptionFailure: Boolean,
-        // If this is set, it means that the event was decrypted but late
+        // If this is set, it means that the event was decrypted but late. Will be -1 if
+        // the event was not decrypted after the maximum wait time.
         val timeToDecryptMillis: Long? = null,
         val isMatrixDotOrg: Boolean,
         val isFederated: Boolean? = null,
