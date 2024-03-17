@@ -8,7 +8,7 @@
     <string name="notice_room_reject">%1$s lükkas tagasi kutse</string>
     <string name="notice_room_remove">%1$s müksas kasutajat %2$s</string>
     <string name="notice_room_withdraw">%1$s võttis tagasi kutse kasutajale %2$s</string>
-    <string name="notice_avatar_url_changed">%1$s muutis oma avatari</string>
+    <string name="notice_avatar_url_changed">%1$s muutis oma tunnuspilti</string>
     <string name="notice_display_name_set">%1$s määras oma kuvatavaks nimeks %2$s</string>
     <string name="notice_display_name_changed_from">%1$s muutis senise kuvatava nime %2$s uueks nimeks %3$s</string>
     <string name="notice_display_name_removed">%1$s eemaldas oma kuvatava nime (%2$s)</string>
@@ -24,7 +24,7 @@
     <string name="notice_room_visibility_shared">kõikidele jututoa liikmetele.</string>
     <string name="notice_room_visibility_world_readable">kõikidele.</string>
     <string name="notice_room_update">%s uuendas seda jututuba.</string>
-    <string name="notice_avatar_changed_too">(samuti sai avatar muudetud)</string>
+    <string name="notice_avatar_changed_too">(samuti sai tunnuspilt muudetud)</string>
     <string name="notice_room_name_removed">%1$s eemaldas jututoa nime</string>
     <string name="notice_room_topic_removed">%1$s eemaldas jututoa teema</string>
     <string name="notice_room_third_party_invite">%1$s saatis jututoaga liitumiseks kutse kasutajale %2$s</string>
@@ -467,7 +467,7 @@
     <string name="room_widget_open_in_browser">Ava veebibrauseris</string>
     <string name="room_widget_revoke_access">Eemalda minu ligipääsuõigused</string>
     <string name="room_widget_permission_display_name">Sinu kuvatav nimi</string>
-    <string name="room_widget_permission_avatar_url">Sinu avatari aadress</string>
+    <string name="room_widget_permission_avatar_url">Sinu tunnuspildi aadress</string>
     <string name="room_widget_permission_user_id">Sinu kasutajatunnus</string>
     <string name="room_widget_permission_theme">Sinu teema</string>
     <string name="room_widget_permission_widget_id">Vidina tunnus</string>
