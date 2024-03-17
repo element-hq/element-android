@@ -209,4 +209,38 @@
         <item quantity="one">%1$s Uliondoa %2$s kama anwani ya chumba hiki.</item>
         <item quantity="other">%1$s uliondoa %2$s kama anwani za chumba hiki.</item>
     </plurals>
+    <string name="notice_room_aliases_added_and_removed_by_you">Umeongeza %1$s na kuondoa %2$s kama anwani za chumba hiki.</string>
+    <string name="notice_room_canonical_alias_unset">%1$s Umeondoa anwani kuu ya chumba hiki.</string>
+    <string name="notice_room_canonical_alias_unset_by_you">Umeondoa anwani kuu ya chumba hiki.</string>
+    <string name="notice_room_canonical_alias_no_change">%1$s Alibadilisha anwani za chumba hiki.</string>
+    <string name="notice_room_aliases_added_and_removed">%1$s aliongeza %2$s na kuondolewa %3$s kama anwani za chumba hiki.</string>
+    <string name="notice_room_canonical_alias_set_by_you">Umeweka anwani kuu ya chumba hiki %1$s.</string>
+    <string name="notice_room_canonical_alias_alternative_changed">%1$s ulibadilisha anwani mbadala za chumba hiki.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed">%1$s ilibadilisha anwani kuu na mbadala za chumba hiki.</string>
+    <string name="notice_room_guest_access_can_join">%1$s imewaruhusu wageni kujiunga na chumba.</string>
+    <string name="notice_room_guest_access_can_join_by_you">Umeruhusu wageni kujiunga na chumba.</string>
+    <string name="notice_room_canonical_alias_set">%1$s weka anwani kuu ya chumba hiki %2$s.</string>
+    <plurals name="notice_room_canonical_alias_alternative_removed">
+        <item quantity="one">%1$s umeondoa anwani mbadala %2$s kwa chumba hiki.</item>
+        <item quantity="other">%1$s iliondoa anwani mbadala %2$s kwa chumba hiki.</item>
+    </plurals>
+    <string name="notice_room_canonical_alias_alternative_changed_by_you">Ulibadilisha anwani mbadala za chumba hiki.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">Alibadilisha anwani kuu na mbadala za chumba hiki.</string>
+    <string name="notice_room_canonical_alias_no_change_by_you">Ulibadilisha anwani za chumba hiki.</string>
+    <plurals name="notice_room_canonical_alias_alternative_added_by_you">
+        <item quantity="one">Umeongeza anwani mbadala%1$s kwa chumba hiki.</item>
+        <item quantity="other">Umeongeza anwani mbadala %1$s kwa chumba hiki.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added">
+        <item quantity="one">%1$s aliongeza anwani mbadala%2$s kwa chumba hiki.</item>
+        <item quantity="other">%1$s aliongeza anwani mbadala %2$s kwa chumba hiki.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_removed_by_you">
+        <item quantity="one">Umeondoa anwani mbadala %1$s kwa chumba hiki.</item>
+        <item quantity="other">Umeziondoa anwani mbadala %1$s kwa chumba hiki.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_removed_by_you">
+        <item quantity="one">Umeondoa %1$s kama anwani ya chumba hiki.</item>
+        <item quantity="other">You removed %1$s kama anwani za chumba hiki.</item>
+    </plurals>
 </resources>
