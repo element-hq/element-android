@@ -230,7 +230,7 @@
     <string name="action_quick_reply">Ātrā atbilde</string>
     <string name="action_open">Atvērt</string>
     <string name="action_close">Aizvērt</string>
-    <string name="copied_to_clipboard">Nokopēts starpliktuvē</string>
+    <string name="copied_to_clipboard">Ievietots starpliktuvē</string>
     <string name="dialog_title_confirmation">Apstiprinājums</string>
     <string name="dialog_title_warning">Brīdinājums</string>
     <string name="bottom_action_favourites">Izlase</string>
@@ -763,7 +763,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="dialog_title_success">Izdevās</string>
     <string name="dialog_title_error">Kļūda</string>
     <string name="action_add">Pievienot</string>
-    <string name="action_copy">Kopēt</string>
+    <string name="action_copy">Ievietot starpliktuvē</string>
     <string name="action_mark_room_read">Atzīmēt kā izlasītu</string>
     <string name="action_sign_out_confirmation_simple">Vai tiešām vēlies izrakstīties\?</string>
     <string name="call_notification_reject">Noraidīt</string>
@@ -865,7 +865,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="direct_room_user_list_suggestions_title">Ieteikumi</string>
     <string name="creating_direct_room">Izveido istabu…</string>
     <string name="add_by_qr_code">Pievienot ar QR kodu</string>
-    <string name="link_copied_to_clipboard">Saite nokopēta starpliktuvē</string>
+    <string name="link_copied_to_clipboard">Saite ievietota starpliktuvē</string>
     <string name="edited_suffix">(labots)</string>
     <string name="downloaded_file">Fails %1$s ir lejupielādēts!</string>
     <string name="send_file_step_sending_file">Sūta failu (%1$s / %2$s)</string>
