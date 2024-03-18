@@ -14,7 +14,7 @@
     <bool name="settings_root_preferences_visible">true</bool>
     <bool name="settings_root_voice_video_visible">true</bool>
     <bool name="settings_root_security_privacy_visible">true</bool>
-    <bool name="settings_root_labs_visible">true</bool>
+    <bool name="settings_root_labs_visible">false</bool>
     <bool name="settings_root_advanced_visible">true</bool>
     <bool name="settings_root_help_about_visible">true</bool>
     <bool name="settings_root_legals_visible">true</bool>
@@ -27,7 +27,7 @@
 
     <bool name="settings_interface_bubble_visible">true</bool>
     <bool name="settings_interface_bubble_default">false</bool>
-    <bool name="settings_presence_visible">false</bool>
+    <bool name="settings_presence_visible">true</bool>
     <bool name="settings_presence_user_always_appears_offline_default">false</bool>
 
     <!-- Level 1: Voice and video -->
@@ -37,8 +37,8 @@
     <bool name="settings_ignored_users_visible">true</bool>
 
     <!-- Level 1: Labs -->
-    <bool name="settings_labs_deferred_dm_visible">true</bool>
-    <bool name="settings_labs_deferred_dm_default">true</bool>
+    <bool name="settings_labs_deferred_dm_visible">false</bool>
+    <bool name="settings_labs_deferred_dm_default">false</bool>
     <bool name="settings_labs_thread_messages_default">true</bool>
     <bool name="settings_labs_new_app_layout_default">true</bool>
     <bool name="settings_labs_new_session_manager_default">false</bool>
