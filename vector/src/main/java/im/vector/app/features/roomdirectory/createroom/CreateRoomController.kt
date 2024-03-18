@@ -154,29 +154,6 @@ class CreateRoomController @Inject constructor(
                     host.listener?.setAliasLocalPart(value)
                 }
             }
-        } else {
-            dividerItem {
-                id("divider0")
-            }
-            // Room encryption for private room
-            formSwitchItem {
-                id("encryption")
-                enabled(enableFormElement)
-                title(host.stringProvider.getString(R.string.create_room_encryption_title))
-                summary(
-                        if (viewState.hsAdminHasDisabledE2E) {
-                            host.stringProvider.getString(R.string.settings_hs_admin_e2e_disabled)
-                        } else {
-                            host.stringProvider.getString(R.string.create_room_encryption_description)
-                        }
-                )
-
-                switchChecked(viewState.isEncrypted ?: viewState.defaultEncrypted[viewState.roomJoinRules].orFalse())
-
-                listener { value ->
-                    host.listener?.setIsEncrypted(value)
-                }
-            }
         }
 
 //        dividerItem {
