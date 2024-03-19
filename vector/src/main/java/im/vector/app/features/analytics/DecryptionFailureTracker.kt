@@ -27,6 +27,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import javax.inject.Inject
@@ -36,7 +37,9 @@ private data class DecryptionFailure(
         val timeStamp: Long,
         val roomId: String,
         val failedEventId: String,
-        val error: MXCryptoError.ErrorType
+        val error: MXCryptoError.ErrorType,
+        // Was the current session cross signed verified at the time of the error
+        val isCrossSignedVerified: Boolean = false,
 )
 private typealias DetailedErrorName = Pair<String, Error.Name>
 
@@ -75,11 +78,14 @@ class DecryptionFailureTracker @Inject constructor(
         scope.cancel()
     }
 
-    fun e2eEventDisplayedInTimeline(event: TimelineEvent) {
+    fun e2eEventDisplayedInTimeline(event: TimelineEvent, session: Session) {
         scope.launch(Dispatchers.Default) {
             val mCryptoError = event.root.mCryptoError
             if (mCryptoError != null) {
-                addDecryptionFailure(DecryptionFailure(clock.epochMillis(), event.roomId, event.eventId, mCryptoError))
+                val isVerified = session.cryptoService().crossSigningService().isCrossSigningVerified()
+                addDecryptionFailure(
+                        DecryptionFailure(clock.epochMillis(), event.roomId, event.eventId, mCryptoError, isVerified)
+                )
             } else {
                 removeFailureForEventId(event.eventId)
             }
@@ -115,7 +121,7 @@ class DecryptionFailureTracker @Inject constructor(
 
     private fun checkFailures() {
         val now = clock.epochMillis()
-        val aggregatedErrors: Map<DetailedErrorName, List<String>>
+        val aggregatedErrors: Map<DetailedErrorName, List<DecryptionFailure>>
         synchronized(failures) {
             val toReport = mutableListOf<DecryptionFailure>()
             failures.removeAll { failure ->
@@ -129,7 +135,7 @@ class DecryptionFailureTracker @Inject constructor(
             aggregatedErrors = toReport
                     .groupBy { it.error.toAnalyticsErrorName() }
                     .mapValues {
-                        it.value.map { it.failedEventId }
+                        it.value
                     }
         }
 
@@ -137,15 +143,18 @@ class DecryptionFailureTracker @Inject constructor(
             // there is now way to send the total/sum in posthog, so iterating
             aggregation.value
                     // for now we ignore events already reported even if displayed again?
-                    .filter { alreadyReported.contains(it).not() }
-                    .forEach { failedEventId ->
-                        analyticsTracker.capture(Error(
-                                context = aggregation.key.first,
-                                domain = Error.Domain.E2EE,
-                                name = aggregation.key.second,
-                                cryptoModule = currentModule
-                        ))
-                        alreadyReported.add(failedEventId)
+                    .filter { alreadyReported.contains(it.failedEventId).not() }
+                    .forEach { failure ->
+                        analyticsTracker.capture(
+                                event = Error(
+                                        context = aggregation.key.first,
+                                        domain = Error.Domain.E2EE,
+                                        name = aggregation.key.second,
+                                        cryptoModule = currentModule,
+                                ),
+                                extraProperties = mapOf("is_cross_signed_verified" to failure.isCrossSignedVerified.toString())
+                        )
+                        alreadyReported.add(failure.failedEventId)
                     }
         }
     }
