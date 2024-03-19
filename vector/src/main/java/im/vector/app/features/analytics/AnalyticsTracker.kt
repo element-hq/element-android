@@ -24,6 +24,7 @@ interface AnalyticsTracker {
     /**
      * Capture an Event.
      *
+     * @param event The event to capture.
      * @param extraProperties Some extra properties to attach to the event, that are not part of the events definition
      * (https://github.com/matrix-org/matrix-analytics-events/) and specific to this platform.
      */

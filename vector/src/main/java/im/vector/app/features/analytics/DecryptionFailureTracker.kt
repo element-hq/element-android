@@ -39,7 +39,7 @@ private data class DecryptionFailure(
         val failedEventId: String,
         val error: MXCryptoError.ErrorType,
         // Was the current session cross signed verified at the time of the error
-        val isCrossSignedVerified: Boolean = false
+        val isCrossSignedVerified: Boolean = false,
 )
 private typealias DetailedErrorName = Pair<String, Error.Name>
 
@@ -146,12 +146,13 @@ class DecryptionFailureTracker @Inject constructor(
                     .filter { alreadyReported.contains(it.failedEventId).not() }
                     .forEach { failure ->
                         analyticsTracker.capture(
-                                Error(
+                                event = Error(
                                         context = aggregation.key.first,
                                         domain = Error.Domain.E2EE,
                                         name = aggregation.key.second,
                                         cryptoModule = currentModule,
-                                ), mapOf("is_cross_signed_verified" to failure.isCrossSignedVerified.toString())
+                                ),
+                                extraProperties = mapOf("is_cross_signed_verified" to failure.isCrossSignedVerified.toString())
                         )
                         alreadyReported.add(failure.failedEventId)
                     }

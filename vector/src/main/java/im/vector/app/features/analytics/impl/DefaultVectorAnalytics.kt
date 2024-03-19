@@ -47,8 +47,8 @@ class DefaultVectorAnalytics @Inject constructor(
         private val analyticsConfig: AnalyticsConfig,
         private val analyticsStore: AnalyticsStore,
         private val lateInitUserPropertiesFactory: LateInitUserPropertiesFactory,
-        private val buildMeta: BuildMeta,
-        @NamedGlobalScope private val globalScope: CoroutineScope
+        @NamedGlobalScope private val globalScope: CoroutineScope,
+        buildMeta: BuildMeta,
 ) : VectorAnalytics {
 
     private var posthog: PostHog? = null
@@ -73,27 +73,20 @@ class DefaultVectorAnalytics @Inject constructor(
     /**
      * Super Properties are properties associated with events that are set once and then sent with every capture call.
      */
-    private var superProperties: MutableMap<String, String> = HashMap()
+    private val superProperties: Map<String, String> = mapOf(
+            // Put the appVersion (e.g 1.6.12).
+            "appVersion" to buildMeta.versionName,
+            // The appId (im.vector.app)
+            "applicationId" to buildMeta.applicationId,
+            // The app flavor (GooglePlay, FDroid)
+            "appFlavor" to buildMeta.flavorDescription,
+            // Parity with other platforms
+            "cryptoSDK" to "Rust",
+    )
 
     override fun init() {
         observeUserConsent()
         observeAnalyticsId()
-
-        initSuperProperties()
-    }
-
-    /**
-     * Init the super properties that will be captured with all events.
-     */
-    private fun initSuperProperties() {
-        // Put the appVersion (e.g 1.6.12).
-        superProperties["appVersion"] = buildMeta.versionName
-        // The appId (im.vector.app)
-        superProperties["applicationId"] = buildMeta.applicationId
-        // The app flavor (GooglePlay, FDroid)
-        superProperties["appFlavor"] = buildMeta.flavorDescription
-        // Parity with other platforms
-        superProperties["cryptoSDK"] = "Rust"
     }
 
     override fun getUserConsent(): Flow<Boolean> {
@@ -200,16 +193,17 @@ class DefaultVectorAnalytics @Inject constructor(
                 ?.takeIf { userConsent == true }
                 ?.capture(
                         event.getName(),
-                        (this.superProperties + event.getProperties().orEmpty() + extraProperties.orEmpty()).toPostHogProperties()
-                .toPostHogProperties())
+                        (superProperties + event.getProperties().orEmpty() + extraProperties.orEmpty()).toPostHogProperties()
+                )
     }
 
     override fun screen(screen: VectorAnalyticsScreen) {
         Timber.tag(analyticsTag.value).d("screen($screen)")
         posthog
                 ?.takeIf { userConsent == true }
-                ?.screen(screen.getName(),
-                        (this.superProperties + screen.getProperties().orEmpty()).toPostHogProperties()
+                ?.screen(
+                        screen.getName(),
+                        (superProperties + screen.getProperties().orEmpty()).toPostHogProperties()
                 )
     }
 
