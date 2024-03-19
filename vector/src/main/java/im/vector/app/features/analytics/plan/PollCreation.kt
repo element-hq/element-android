@@ -41,12 +41,12 @@ data class PollCreation(
 
     enum class Action {
         /**
-         * Newly created poll
+         * Newly created poll.
          */
         Create,
 
         /**
-         * Edit of an existing poll
+         * Edit of an existing poll.
          */
         Edit,
     }
