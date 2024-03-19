@@ -21,6 +21,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModelProvider
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,6 +44,12 @@ class BootstrapReAuthFragment :
 
         views.bootstrapRetryButton.debouncedClicks { submit() }
         views.bootstrapCancelButton.debouncedClicks { cancel() }
+
+        val viewModel = ViewModelProvider(this).get(BootstrapReAuthViewModel::class.java)
+        if (!viewModel.isFirstSubmitDone) {
+            viewModel.isFirstSubmitDone = true
+            submit()
+        }
     }
 
     private fun submit() = withState(sharedViewModel) { state ->
