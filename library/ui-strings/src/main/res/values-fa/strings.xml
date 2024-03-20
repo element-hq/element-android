@@ -2966,4 +2966,5 @@
 \n%s</string>
     <string name="create_room_unknown_users_dialog_submit">آغاز گپ به هر حال</string>
     <string name="invite_unknown_users_dialog_submit">دعوت به هر حال</string>
+    <string name="login_splash_sign_in">ورود</string>
 </resources>
