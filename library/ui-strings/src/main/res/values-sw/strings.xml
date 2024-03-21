@@ -243,4 +243,30 @@
         <item quantity="one">Umeondoa %1$s kama anwani ya chumba hiki.</item>
         <item quantity="other">You removed %1$s kama anwani za chumba hiki.</item>
     </plurals>
+    <string name="notice_direct_room_guest_access_can_join">%1$s imeruhusu wageni kujiunga hapa.</string>
+    <string name="notice_direct_room_guest_access_can_join_by_you">Umeruhusu wageni kujiunga hapa.</string>
+    <string name="notice_end_to_end_ok">%1$s umewasha usimbaji fiche kutoka mwanzo hadi mwisho.</string>
+    <string name="dark_theme">Mandhari ya Giza</string>
+    <string name="black_theme">Mandhari Nyeusi</string>
+    <string name="notification_listening_for_notifications">Sikiliza arifa</string>
+    <string name="notification_noisy_notifications">Arifa za kelele</string>
+    <string name="notification_silent_notifications">Arifa za kimya</string>
+    <string name="title_activity_settings">Mipangilio</string>
+    <string name="title_activity_bug_report">Ripoti ya hitilafu</string>
+    <string name="title_activity_choose_sticker">Tuma kibandiko</string>
+    <string name="title_activity_keys_backup_setup">Hifadhi Nakala muhimu</string>
+    <string name="title_activity_keys_backup_restore">Tumia Nakala Muhimu Ulizohifadhi</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Hifadhi Nakala ya Ufunguo Salama inapaswa kutumika kwenye vipindi vyako vyote ili kuepuka kupoteza ufikiaji wa ujumbe wako uliosimbwa.</string>
+    <string name="sign_out_bottom_sheet_warning_no_backup">Utapoteza ujumbe wako uliosimbwa kwa njia fiche ukiondoka kwenye akaunti sasa</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">Uhifadhi wa ufunguo unaendelea. Ukiondoka kwenye akaunti sasa utapoteza ufikiaji wa barua pepe zako zilizosimbwa.</string>
+    <string name="notice_room_guest_access_forbidden">%1$s imewazuia wageni kujiunga na chumba.</string>
+    <string name="notice_room_guest_access_forbidden_by_you">Umewazuia wageni kujiunga na chumba.</string>
+    <string name="notice_direct_room_guest_access_forbidden">%1$s imewazuia wageni kujiunga na chumba.</string>
+    <string name="notice_direct_room_guest_access_forbidden_by_you">Umewazuia wageni kujiunga na chumba.</string>
+    <string name="notice_end_to_end_ok_by_you">Umewasha usimbaji fiche kutoka mwanzo hadi mwisho.</string>
+    <string name="notice_end_to_end_unknown_algorithm">%1$s umewasha usimbaji fiche kutoka mwanzo hadi mwisho (algorithm isiyotambulika %2$s).</string>
+    <string name="notice_end_to_end_unknown_algorithm_by_you">Umewasha usimbaji fiche kutoka mwanzo hadi mwisho (algorithm isiyotambulika %1$s).</string>
+    <string name="system_theme">Chaguomsingi ya Mfumo</string>
+    <string name="light_theme">Mandhari Nyepesi</string>
+    <string name="notification_listening_for_events">Kusikiliza matukio</string>
 </resources>
