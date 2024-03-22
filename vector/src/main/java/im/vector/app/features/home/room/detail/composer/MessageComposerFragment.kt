@@ -47,6 +47,7 @@ import com.vanniktech.emoji.EmojiPopup
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.error.fatalError
+import im.vector.app.core.extensions.orEmpty
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.showKeyboard
 import im.vector.app.core.glide.GlideApp
@@ -255,7 +256,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
                 it.isRecordingVoiceBroadcast && !requireActivity().isChangingConfigurations -> timelineViewModel.handle(VoiceBroadcastAction.Recording.Pause)
                 else -> {
                     timelineViewModel.handle(VoiceBroadcastAction.Listening.Pause)
-                    messageComposerViewModel.handle(MessageComposerAction.OnEntersBackground(composer.text.toString()))
+                    messageComposerViewModel.handle(MessageComposerAction.OnEntersBackground(composer.formattedText ?: composer.text.orEmpty().toString()))
                 }
             }
         }
@@ -403,7 +404,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
             }
 
             override fun onTextChanged(text: CharSequence) {
-                messageComposerViewModel.handle(MessageComposerAction.OnTextChanged(text))
+                messageComposerViewModel.handle(MessageComposerAction.OnTextChanged(composer.formattedText ?: text))
             }
 
             override fun onFullScreenModeChanged() = withState(messageComposerViewModel) { state ->
