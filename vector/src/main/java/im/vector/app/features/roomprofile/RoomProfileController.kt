@@ -353,7 +353,7 @@ class RoomProfileController @Inject constructor(
     }
 
     private fun buildEncryptionAction(actionPermissions: RoomProfileViewState.ActionPermissions, roomSummary: RoomSummary) {
-        if (false) {
+        if (false && !roomSummary.isEncrypted) {
         // if (!roomSummary.isEncrypted) {
             if (actionPermissions.canEnableEncryption) {
                 buildProfileAction(
