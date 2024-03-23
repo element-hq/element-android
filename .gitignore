@@ -3,6 +3,7 @@
 /local.properties
 # idea files: exclude everything except dictionnaries
 .idea/caches
+.idea/copilot
 .idea/libraries
 .idea/inspectionProfiles
 .idea/sonarlint
