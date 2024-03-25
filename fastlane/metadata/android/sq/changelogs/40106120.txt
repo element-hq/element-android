@@ -1,0 +1,2 @@
+Ndryshimet kryesore në këtë version: Hedhje në qarkullim për sigurinë.
+Regjistër i plotë ndryshimesh: https://github.com/element-hq/element-android/releases
