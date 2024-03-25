@@ -30,11 +30,21 @@ data class Error(
          */
         val context: String? = null,
         /**
-         * Which crypto module is the client currently using.
+         * DEPRECATED: Which crypto module is the client currently using.
          */
         val cryptoModule: CryptoModule? = null,
+        /**
+         * Which crypto backend is the client currently using.
+         */
+        val cryptoSDK: CryptoSDK? = null,
         val domain: Domain,
         val name: Name,
+        /**
+         * UTDs can be permanent or temporary. If temporary, this field will
+         * contain the time it took to decrypt the message in milliseconds. If
+         * permanent should be -1
+         */
+        val timeToDecryptMillis: Int? = null,
 ) : VectorAnalyticsEvent {
 
     enum class Domain {
@@ -56,6 +66,19 @@ data class Error(
         VoipUserMediaFailed,
     }
 
+    enum class CryptoSDK {
+
+        /**
+         * Legacy crypto backend specific to each platform.
+         */
+        Legacy,
+
+        /**
+         * Cross-platform crypto backend written in Rust.
+         */
+        Rust,
+    }
+
     enum class CryptoModule {
 
         /**
@@ -75,8 +98,10 @@ data class Error(
         return mutableMapOf<String, Any>().apply {
             context?.let { put("context", it) }
             cryptoModule?.let { put("cryptoModule", it.name) }
+            cryptoSDK?.let { put("cryptoSDK", it.name) }
             put("domain", domain.name)
             put("name", name.name)
+            timeToDecryptMillis?.let { put("timeToDecryptMillis", it) }
         }.takeIf { it.isNotEmpty() }
     }
 }
