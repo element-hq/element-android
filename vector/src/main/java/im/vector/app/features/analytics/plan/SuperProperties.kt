@@ -16,48 +16,46 @@
 
 package im.vector.app.features.analytics.plan
 
-import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
-
 // GENERATED FILE, DO NOT EDIT. FOR MORE INFORMATION VISIT
 // https://github.com/matrix-org/matrix-analytics-events/
 
 /**
- * Triggered when a poll is created or edited.
+ * Super Properties are properties associated with events that are sent with
+ * every capture call, be it a $pageview, an autocaptured button click, or
+ * anything else.
  */
-data class PollCreation(
+data class SuperProperties(
         /**
-         * Whether this poll has been created or edited.
+         * Used by web to identify the platform (Web Platform/Electron Platform)
          */
-        val action: Action,
+        val appPlatform: String? = null,
         /**
-         * Whether this poll is undisclosed.
+         * Which crypto backend is the client currently using.
          */
-        val isUndisclosed: Boolean,
+        val cryptoSDK: CryptoSDK? = null,
         /**
-         * Number of answers in the poll.
+         * Version of the crypto backend.
          */
-        val numberOfAnswers: Int,
-) : VectorAnalyticsEvent {
+        val cryptoSDKVersion: String? = null,
+) {
 
-    enum class Action {
+    enum class CryptoSDK {
         /**
-         * Newly created poll
+         * Legacy crypto backend specific to each platform.
          */
-        Create,
+        Legacy,
 
         /**
-         * Edit of an existing poll
+         * Cross-platform crypto backend written in Rust.
          */
-        Edit,
+        Rust,
     }
 
-    override fun getName() = "PollCreation"
-
-    override fun getProperties(): Map<String, Any>? {
+    fun getProperties(): Map<String, Any>? {
         return mutableMapOf<String, Any>().apply {
-            put("action", action.name)
-            put("isUndisclosed", isUndisclosed)
-            put("numberOfAnswers", numberOfAnswers)
+            appPlatform?.let { put("appPlatform", it) }
+            cryptoSDK?.let { put("cryptoSDK", it.name) }
+            cryptoSDKVersion?.let { put("cryptoSDKVersion", it) }
         }.takeIf { it.isNotEmpty() }
     }
 }

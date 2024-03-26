@@ -120,6 +120,12 @@ data class MobileScreen(
         MyGroups,
 
         /**
+         * The screen containing tests to help user to fix issues around
+         * notifications.
+         */
+        NotificationTroubleshoot,
+
+        /**
          * The People tab on mobile that lists all the DM rooms you have joined.
          */
         People,

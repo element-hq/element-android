@@ -27,7 +27,7 @@ import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 data class PollVote(
         /**
          * Do not use this. Remove this property when the kotlin type generator
-         * can properly generate types without proprties other than the event
+         * can properly generate types without properties other than the event
          * name.
          */
         val doNotUse: Boolean? = null,
