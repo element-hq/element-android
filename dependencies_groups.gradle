@@ -9,6 +9,7 @@ ext.groups = [
                         'com.github.hyuwah',
                         'com.github.jetradarmobile',
                         'com.github.MatrixFrog',
+                        'com.github.matrix-org',
                         'com.github.tapadoo',
                         'com.github.UnifiedPush',
                         'com.github.yalantis',
