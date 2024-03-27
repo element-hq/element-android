@@ -189,18 +189,21 @@ internal class OlmMachine @Inject constructor(
             is OwnUserIdentity -> ownIdentity.trustsOurOwnDevice()
             else -> false
         }
+        val ownDevice = inner.getDevice(userId(), deviceId, 0u)!!
+        val creationTime = ownDevice.firstTimeSeenTs.toLong()
 
         return CryptoDeviceInfo(
                 deviceId(),
                 userId(),
-                // TODO pass the algorithms here.
-                listOf(),
+                ownDevice.algorithms,
                 keys,
                 mapOf(),
-                UnsignedDeviceInfo(),
+                UnsignedDeviceInfo(
+                        deviceDisplayName = ownDevice.displayName
+                ),
                 DeviceTrustLevel(crossSigningVerified, locallyVerified = true),
                 false,
-                null
+                creationTime
         )
     }
 
@@ -291,7 +294,7 @@ internal class OlmMachine @Inject constructor(
             // checking the returned to devices to check for room keys.
             // XXX Anyhow there is now proper signaling we should soon stop parsing them manually
             receiveSyncChanges.toDeviceEvents.map {
-                        outAdapter.fromJson(it) ?: Event()
+                outAdapter.fromJson(it) ?: Event()
             }
         }
 
@@ -882,6 +885,7 @@ internal class OlmMachine @Inject constructor(
             inner.queryMissingSecretsFromOtherSessions()
         }
     }
+
     @Throws(CryptoStoreException::class)
     suspend fun enableBackupV1(key: String, version: String) {
         return withContext(coroutineDispatchers.computation) {

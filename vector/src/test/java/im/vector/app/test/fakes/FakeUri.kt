@@ -28,6 +28,7 @@ class FakeUri(contentEquals: String? = null) {
         contentEquals?.let {
             givenEquals(it)
             every { instance.toString() } returns it
+            every { instance.scheme } returns contentEquals.substring(0, contentEquals.indexOf(':'))
         }
     }
 

@@ -18,6 +18,7 @@ package im.vector.app
 
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.LiveEventListener
+import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -84,7 +85,7 @@ class UISIDetector(private val timeoutMillis: Long = 30_000L) : LiveEventListene
         }
     }
 
-    override fun onEventDecryptionError(event: Event, throwable: Throwable) {
+    override fun onEventDecryptionError(event: Event, cryptoError: MXCryptoError) {
         val eventId = event.eventId
         val roomId = event.roomId
         if (!enabled || eventId == null || roomId == null) return

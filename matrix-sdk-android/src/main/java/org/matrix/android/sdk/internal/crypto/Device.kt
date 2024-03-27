@@ -172,8 +172,6 @@ internal class Device @AssistedInject constructor(
      * This will not fetch out fresh data from the Rust side.
      **/
     internal fun toCryptoDeviceInfo(): CryptoDeviceInfo {
-//        val keys = innerDevice.keys.map { (keyId, key) -> keyId to key }.toMap()
-
         return CryptoDeviceInfo(
                 deviceId = innerDevice.deviceId,
                 userId = innerDevice.userId,

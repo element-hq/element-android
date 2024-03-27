@@ -158,8 +158,8 @@ class TimelineItemFactory @Inject constructor(
                         defaultItemFactory.create(params)
                     }
                 }.also {
-                    if (it != null && event.isEncrypted()) {
-                        decryptionFailureTracker.e2eEventDisplayedInTimeline(event)
+                    if (it != null && event.isEncrypted() && event.root.mCryptoError != null) {
+                        decryptionFailureTracker.utdDisplayedInTimeline(event)
                     }
                 }
             }
