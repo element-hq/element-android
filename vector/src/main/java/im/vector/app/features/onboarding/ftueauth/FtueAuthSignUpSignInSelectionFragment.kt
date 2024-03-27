@@ -63,7 +63,7 @@ class FtueAuthSignUpSignInSelectionFragment :
     private fun render(state: OnboardingViewState) {
         when (state.serverType) {
             ServerType.MatrixOrg -> renderServerInformation(
-                    icon = R.drawable.ic_logo_matrix_org,
+                    icon = null,
                     title = getString(R.string.login_connect_to, state.selectedHomeserver.userFacingUrl.toReducedUrl()),
                     subtitle = getString(R.string.login_server_matrix_org_text)
             )

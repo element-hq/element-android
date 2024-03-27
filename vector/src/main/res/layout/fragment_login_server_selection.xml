@@ -63,7 +63,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:importantForAccessibility="no"
-                    android:src="@drawable/ic_logo_matrix_org"
+                    android:src="@mipmap/ic_launcher"
                     app:layout_constraintBottom_toTopOf="@id/loginServerChoiceMatrixOrgText"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"

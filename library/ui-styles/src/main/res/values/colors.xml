@@ -24,6 +24,7 @@
     <!-- Emoji text has to use a black text color -->
     <color name="emoji_color">@android:color/black</color>
     <color name="join_conference_animated_color">#0BAC7E</color>
+    <color name="ic_launcher_background">#000000</color>
 
     <color name="half_transparent_status_bar">#80000000</color>
 

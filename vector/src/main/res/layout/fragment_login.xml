@@ -22,7 +22,7 @@
                 android:importantForAccessibility="no"
                 app:tint="?vctr_content_primary"
                 tools:ignore="MissingPrefix"
-                tools:src="@drawable/ic_logo_matrix_org" />
+                tools:src="@mipmap/ic_launcher" />
 
             <TextView
                 android:id="@+id/loginTitle"
