@@ -35,6 +35,7 @@ import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
+import org.amshove.kluent.shouldNotBeEqualTo
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -546,6 +547,142 @@ class DecryptionFailureTrackerTest {
         (eventSlot.captured as Error).eventLocalAgeMillis shouldBeEqualTo 60 * 1000
 
         verify(exactly = 2) { fakeAnalyticsTracker.capture(any()) }
+
+        decryptionFailureTracker.stop()
+    }
+
+    @Test
+    fun `should report historical UTDs as an expected UTD if not verified`() = runTest {
+        val fakeSession = fakeMxOrgTestSession
+
+        val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        val historicalEventTimestamp = formatter.parse("2024-03-08 09:24:11")!!.time
+        val sessionCreationTime = formatter.parse("2024-03-09 10:00:00")!!.time
+
+        val eventSlot = slot<VectorAnalyticsEvent>()
+
+        every {
+            fakeAnalyticsTracker.capture(event = capture(eventSlot))
+        } just runs
+
+        fakeSession.fakeCryptoService.cryptoDeviceInfo = CryptoDeviceInfo(
+                deviceId = "ABCDEFGHT",
+                userId = "@alice:matrix.org",
+                firstTimeSeenLocalTs = sessionCreationTime
+        )
+
+        var currentFakeTime = 100_000L
+        fakeClock.givenEpoch(currentFakeTime)
+        fakeActiveSessionDataSource.setActiveSession(fakeSession)
+        decryptionFailureTracker.start(CoroutineScope(coroutineContext))
+        runCurrent()
+
+        // historical event and session not verified
+        fakeSession.fakeCryptoService.fakeCrossSigningService.givenIsCrossSigningVerifiedReturns(false)
+        val event = aFakeBobMxOrgEvent.copy(
+                originServerTs = historicalEventTimestamp
+        )
+        decryptionFailureTracker.onEventDecryptionError(event, aUISIError)
+        runCurrent()
+
+        // advance time to be ahead of the permanent UTD period
+        currentFakeTime += 70_000
+        fakeClock.givenEpoch(currentFakeTime)
+        advanceTimeBy(70_000)
+        runCurrent()
+
+        (eventSlot.captured as Error).name shouldBeEqualTo Error.Name.HistoricalMessage
+
+        decryptionFailureTracker.stop()
+    }
+
+    @Test
+    fun `should not report historical UTDs as an expected UTD if verified`() = runTest {
+        val fakeSession = fakeMxOrgTestSession
+
+        val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        val historicalEventTimestamp = formatter.parse("2024-03-08 09:24:11")!!.time
+        val sessionCreationTime = formatter.parse("2024-03-09 10:00:00")!!.time
+
+        val eventSlot = slot<VectorAnalyticsEvent>()
+
+        every {
+            fakeAnalyticsTracker.capture(event = capture(eventSlot))
+        } just runs
+
+        fakeSession.fakeCryptoService.cryptoDeviceInfo = CryptoDeviceInfo(
+                deviceId = "ABCDEFGHT",
+                userId = "@alice:matrix.org",
+                firstTimeSeenLocalTs = sessionCreationTime
+        )
+
+        var currentFakeTime = 100_000L
+        fakeClock.givenEpoch(currentFakeTime)
+        fakeActiveSessionDataSource.setActiveSession(fakeSession)
+        decryptionFailureTracker.start(CoroutineScope(coroutineContext))
+        runCurrent()
+
+        // historical event and session not verified
+        fakeSession.fakeCryptoService.fakeCrossSigningService.givenIsCrossSigningVerifiedReturns(true)
+        val event = aFakeBobMxOrgEvent.copy(
+                originServerTs = historicalEventTimestamp
+        )
+        decryptionFailureTracker.onEventDecryptionError(event, aUISIError)
+        runCurrent()
+
+        // advance time to be ahead of the permanent UTD period
+        currentFakeTime += 70_000
+        fakeClock.givenEpoch(currentFakeTime)
+        advanceTimeBy(70_000)
+        runCurrent()
+
+        (eventSlot.captured as Error).name shouldNotBeEqualTo Error.Name.HistoricalMessage
+
+        decryptionFailureTracker.stop()
+    }
+
+    @Test
+    fun `should not report live UTDs as an expected UTD even if not verified`() = runTest {
+        val fakeSession = fakeMxOrgTestSession
+
+        val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        val sessionCreationTime = formatter.parse("2024-03-09 10:00:00")!!.time
+        // 1mn after creation
+        val liveEventTimestamp = formatter.parse("2024-03-09 10:01:00")!!.time
+
+        val eventSlot = slot<VectorAnalyticsEvent>()
+
+        every {
+            fakeAnalyticsTracker.capture(event = capture(eventSlot))
+        } just runs
+
+        fakeSession.fakeCryptoService.cryptoDeviceInfo = CryptoDeviceInfo(
+                deviceId = "ABCDEFGHT",
+                userId = "@alice:matrix.org",
+                firstTimeSeenLocalTs = sessionCreationTime
+        )
+
+        var currentFakeTime = 100_000L
+        fakeClock.givenEpoch(currentFakeTime)
+        fakeActiveSessionDataSource.setActiveSession(fakeSession)
+        decryptionFailureTracker.start(CoroutineScope(coroutineContext))
+        runCurrent()
+
+        // historical event and session not verified
+        fakeSession.fakeCryptoService.fakeCrossSigningService.givenIsCrossSigningVerifiedReturns(false)
+        val event = aFakeBobMxOrgEvent.copy(
+                originServerTs = liveEventTimestamp
+        )
+        decryptionFailureTracker.onEventDecryptionError(event, aUISIError)
+        runCurrent()
+
+        // advance time to be ahead of the permanent UTD period
+        currentFakeTime += 70_000
+        fakeClock.givenEpoch(currentFakeTime)
+        advanceTimeBy(70_000)
+        runCurrent()
+
+        (eventSlot.captured as Error).name shouldNotBeEqualTo Error.Name.HistoricalMessage
 
         decryptionFailureTracker.stop()
     }

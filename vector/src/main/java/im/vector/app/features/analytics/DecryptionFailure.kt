@@ -39,7 +39,7 @@ fun DecryptionFailure.toAnalyticsEvent(): Error {
     return Error(
             context = "mxc_crypto_error_type|${errorMsg}",
             domain = Error.Domain.E2EE,
-            name = this.error.toAnalyticsErrorName(),
+            name = this.toAnalyticsErrorName(),
             // this is deprecated keep for backward compatibility
             cryptoModule = Error.CryptoModule.Rust,
             cryptoSDK = Error.CryptoSDK.Rust,
@@ -52,9 +52,10 @@ fun DecryptionFailure.toAnalyticsEvent(): Error {
     )
 }
 
-private fun MXCryptoError.toAnalyticsErrorName(): Error.Name {
-    return if (this is MXCryptoError.Base) {
-        when (errorType) {
+private fun DecryptionFailure.toAnalyticsErrorName(): Error.Name {
+    val error = this.error
+    val name = if (error is MXCryptoError.Base) {
+        when (error.errorType) {
             MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID,
             MXCryptoError.ErrorType.KEYS_WITHHELD         -> Error.Name.OlmKeysNotSentError
             MXCryptoError.ErrorType.OLM                   -> Error.Name.OlmUnspecifiedError
@@ -64,4 +65,12 @@ private fun MXCryptoError.toAnalyticsErrorName(): Error.Name {
     } else {
         Error.Name.UnknownError
     }
+    // check if it's an expected UTD!
+    val localAge = this.eventLocalAgeAtDecryptionFailure
+    val isHistorical = localAge != null && localAge < 0
+    if (isHistorical && !this.ownIdentityTrustedAtTimeOfDecryptionFailure) {
+        return Error.Name.HistoricalMessage
+    }
+
+    return name
 }
