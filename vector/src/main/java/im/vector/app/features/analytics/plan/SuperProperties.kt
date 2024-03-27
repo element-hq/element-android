@@ -26,7 +26,7 @@ package im.vector.app.features.analytics.plan
  */
 data class SuperProperties(
         /**
-         * Used by web to identify the platform (Web Platform/Electron Platform)
+         * Used by web to identify the platform (Web Platform/Electron Platform).
          */
         val appPlatform: String? = null,
         /**

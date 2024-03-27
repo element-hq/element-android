@@ -49,14 +49,14 @@ data class Error(
          */
         val isFederated: Boolean? = null,
         /**
-         * true if the current user is using matrix.org
+         * true if the current user is using matrix.org.
          */
         val isMatrixDotOrg: Boolean? = null,
         val name: Name,
         /**
          * UTDs can be permanent or temporary. If temporary, this field will
          * contain the time it took to decrypt the message in milliseconds. If
-         * permanent should be -1
+         * permanent should be -1.
          */
         val timeToDecryptMillis: Int? = null,
         /**
@@ -65,7 +65,7 @@ data class Error(
          */
         val userTrustsOwnIdentity: Boolean? = null,
         /**
-         * true if that unable to decrypt error was visible to the user
+         * true if that unable to decrypt error was visible to the user.
          */
         val wasVisibleToUser: Boolean? = null,
 ) : VectorAnalyticsEvent {
