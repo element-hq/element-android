@@ -89,7 +89,7 @@ class DecryptionFailureTracker @Inject constructor(
     private var currentTicker: Job? = null
 
     /**
-     * Start the tracker
+     * Start the tracker.
      *
      * @param scope The coroutine scope to use, exposed for tests. If null, it will use the default one
      */
