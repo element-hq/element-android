@@ -3026,4 +3026,5 @@
     <string name="invite_unknown_users_dialog_content">Nelze najít profily pro níže uvedené Matrix identifikátory. Chcete je přesto pozvat\?
 \n
 \n%s</string>
+    <string name="login_splash_sign_in">Přihlásit se</string>
 </resources>
