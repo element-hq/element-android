@@ -253,6 +253,12 @@ data class ViewRoom(
         WebSpacePanelNotificationBadge,
 
         /**
+         * Room accessed via interacting with the Threads Activity Centre in
+         * Element Web/Desktop.
+         */
+        WebThreadsActivityCentre,
+
+        /**
          * Room accessed via Element Web/Desktop's Unified Search modal.
          */
         WebUnifiedSearch,
