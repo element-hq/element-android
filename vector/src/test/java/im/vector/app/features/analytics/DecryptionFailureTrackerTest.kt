@@ -16,6 +16,7 @@
 
 package im.vector.app.features.analytics
 
+import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 import im.vector.app.features.analytics.plan.Error
 import im.vector.app.test.fakes.FakeActiveSessionDataSource
 import im.vector.app.test.fakes.FakeAnalyticsTracker
@@ -107,7 +108,7 @@ class DecryptionFailureTrackerTest {
         val fakeSession = fakeMxOrgTestSession
 
         every {
-            fakeAnalyticsTracker.capture(any(), any())
+            fakeAnalyticsTracker.capture(any())
         } just runs
 
         fakeClock.givenEpoch(100_000)
@@ -129,17 +130,22 @@ class DecryptionFailureTrackerTest {
         runCurrent()
 
         // it should report
-        verify(exactly = 1) { fakeAnalyticsTracker.capture(any(), any()) }
+        verify(exactly = 1) { fakeAnalyticsTracker.capture(any()) }
 
         verify {
             fakeAnalyticsTracker.capture(
-                    Error(
+                    im.vector.app.features.analytics.plan.Error(
                             "mxc_crypto_error_type|",
-                            Error.CryptoModule.Rust,
-                            Error.Domain.E2EE,
-                            Error.Name.OlmKeysNotSentError
+                            cryptoModule = Error.CryptoModule.Rust,
+                            domain = Error.Domain.E2EE,
+                            name = Error.Name.OlmKeysNotSentError,
+                            cryptoSDK = Error.CryptoSDK.Rust,
+                            timeToDecryptMillis = 5000,
+                            isFederated = false,
+                            isMatrixDotOrg = true,
+                            userTrustsOwnIdentity = true,
+                            wasVisibleToUser = false
                     ),
-                    any()
             )
         }
 
@@ -177,7 +183,7 @@ class DecryptionFailureTrackerTest {
         runCurrent()
 
         // it should not have reported it
-        verify(exactly = 0) { fakeAnalyticsTracker.capture(any(), any()) }
+        verify(exactly = 0) { fakeAnalyticsTracker.capture(any()) }
 
         decryptionFailureTracker.stop()
     }
@@ -186,10 +192,10 @@ class DecryptionFailureTrackerTest {
     fun `should report time to decrypt for late decryption`() = runTest {
         val fakeSession = fakeMxOrgTestSession
 
-        val propertiesSlot = slot<Map<String, Any>>()
+        val eventSlot = slot<VectorAnalyticsEvent>()
 
         every {
-            fakeAnalyticsTracker.capture(any(), customProperties = capture(propertiesSlot))
+            fakeAnalyticsTracker.capture(event = capture(eventSlot))
         } just runs
 
         var currentFakeTime = 100_000L
@@ -217,10 +223,10 @@ class DecryptionFailureTrackerTest {
         runCurrent()
 
         // it should report
-        verify(exactly = 1) { fakeAnalyticsTracker.capture(any(), any()) }
+        verify(exactly = 1) { fakeAnalyticsTracker.capture(any()) }
 
-        val properties = propertiesSlot.captured
-        properties["timeToDecryptMillis"] shouldBeEqualTo 7000L
+        val error = eventSlot.captured as Error
+        error.timeToDecryptMillis shouldBeEqualTo 7000
 
         decryptionFailureTracker.stop()
     }
@@ -229,10 +235,10 @@ class DecryptionFailureTrackerTest {
     fun `should report isMatrixDotOrg`() = runTest {
         val fakeSession = fakeMxOrgTestSession
 
-        val propertiesSlot = slot<Map<String, Any>>()
+        val eventSlot = slot<VectorAnalyticsEvent>()
 
         every {
-            fakeAnalyticsTracker.capture(any(), customProperties = capture(propertiesSlot))
+            fakeAnalyticsTracker.capture(event = capture(eventSlot))
         } just runs
 
         var currentFakeTime = 100_000L
@@ -254,7 +260,8 @@ class DecryptionFailureTrackerTest {
         decryptionFailureTracker.onEventDecrypted(event, emptyMap())
         runCurrent()
 
-        propertiesSlot.captured["isMatrixDotOrg"] shouldBeEqualTo true
+        val error = eventSlot.captured as Error
+        error.isMatrixDotOrg shouldBeEqualTo true
 
         val otherSession = FakeSession().apply {
             givenSessionParams(
@@ -285,7 +292,7 @@ class DecryptionFailureTrackerTest {
         decryptionFailureTracker.onEventDecrypted(event2, emptyMap())
         runCurrent()
 
-        propertiesSlot.captured["isMatrixDotOrg"] shouldBeEqualTo false
+        (eventSlot.captured as Error).isMatrixDotOrg shouldBeEqualTo false
 
         decryptionFailureTracker.stop()
     }
@@ -294,10 +301,10 @@ class DecryptionFailureTrackerTest {
     fun `should report if user trusted it's identity at time of decryption`() = runTest {
         val fakeSession = fakeMxOrgTestSession
 
-        val propertiesSlot = slot<Map<String, Any>>()
+        val eventSlot = slot<VectorAnalyticsEvent>()
 
         every {
-            fakeAnalyticsTracker.capture(any(), customProperties = capture(propertiesSlot))
+            fakeAnalyticsTracker.capture(event = capture(eventSlot))
         } just runs
 
         var currentFakeTime = 100_000L
@@ -325,14 +332,14 @@ class DecryptionFailureTrackerTest {
         decryptionFailureTracker.onEventDecrypted(event, emptyMap())
         runCurrent()
 
-        propertiesSlot.captured["userTrustsOwnIdentity"] shouldBeEqualTo false
+        (eventSlot.captured as Error).userTrustsOwnIdentity shouldBeEqualTo false
 
         decryptionFailureTracker.onEventDecrypted(event2, emptyMap())
         runCurrent()
 
-        propertiesSlot.captured["userTrustsOwnIdentity"] shouldBeEqualTo true
+        (eventSlot.captured as Error).userTrustsOwnIdentity shouldBeEqualTo true
 
-        verify(exactly = 2) { fakeAnalyticsTracker.capture(any(), any()) }
+        verify(exactly = 2) { fakeAnalyticsTracker.capture(any()) }
 
         decryptionFailureTracker.stop()
     }
@@ -342,7 +349,7 @@ class DecryptionFailureTrackerTest {
         val fakeSession = fakeMxOrgTestSession
 
         every {
-            fakeAnalyticsTracker.capture(any(), any())
+            fakeAnalyticsTracker.capture(any())
         } just runs
 
         var currentFakeTime = 100_000L
@@ -365,7 +372,7 @@ class DecryptionFailureTrackerTest {
         decryptionFailureTracker.onEventDecrypted(event, emptyMap())
         runCurrent()
 
-        verify(exactly = 1) { fakeAnalyticsTracker.capture(any(), any()) }
+        verify(exactly = 1) { fakeAnalyticsTracker.capture(any()) }
 
         decryptionFailureTracker.onEventDecryptionError(event, aUISIError)
 
@@ -374,7 +381,7 @@ class DecryptionFailureTrackerTest {
         decryptionFailureTracker.onEventDecrypted(event, emptyMap())
         runCurrent()
 
-        verify(exactly = 1) { fakeAnalyticsTracker.capture(any(), any()) }
+        verify(exactly = 1) { fakeAnalyticsTracker.capture(any()) }
 
         decryptionFailureTracker.stop()
     }
@@ -383,10 +390,10 @@ class DecryptionFailureTrackerTest {
     fun `should report if isFedrated`() = runTest {
         val fakeSession = fakeMxOrgTestSession
 
-        val propertiesSlot = slot<Map<String, Any>>()
+        val eventSlot = slot<VectorAnalyticsEvent>()
 
         every {
-            fakeAnalyticsTracker.capture(any(), customProperties = capture(propertiesSlot))
+            fakeAnalyticsTracker.capture(event = capture(eventSlot))
         } just runs
 
         var currentFakeTime = 100_000L
@@ -415,14 +422,14 @@ class DecryptionFailureTrackerTest {
         decryptionFailureTracker.onEventDecrypted(event, emptyMap())
         runCurrent()
 
-        propertiesSlot.captured["isFederated"] shouldBeEqualTo false
+        (eventSlot.captured as Error).isFederated shouldBeEqualTo false
 
         decryptionFailureTracker.onEventDecrypted(event2, emptyMap())
         runCurrent()
 
-        propertiesSlot.captured["isFederated"] shouldBeEqualTo true
+        (eventSlot.captured as Error).isFederated shouldBeEqualTo true
 
-        verify(exactly = 2) { fakeAnalyticsTracker.capture(any(), any()) }
+        verify(exactly = 2) { fakeAnalyticsTracker.capture(any()) }
 
         decryptionFailureTracker.stop()
     }
@@ -430,13 +437,11 @@ class DecryptionFailureTrackerTest {
     @Test
     fun `should report if wasVisibleToUser`() = runTest {
         val fakeSession = fakeMxOrgTestSession
-
-        val propertiesSlot = slot<Map<String, Any>>()
+        val eventSlot = slot<VectorAnalyticsEvent>()
 
         every {
-            fakeAnalyticsTracker.capture(any(), customProperties = capture(propertiesSlot))
+            fakeAnalyticsTracker.capture(event = capture(eventSlot))
         } just runs
-
         var currentFakeTime = 100_000L
         fakeClock.givenEpoch(currentFakeTime)
         fakeActiveSessionDataSource.setActiveSession(fakeSession)
@@ -470,14 +475,14 @@ class DecryptionFailureTrackerTest {
         decryptionFailureTracker.onEventDecrypted(event, emptyMap())
         runCurrent()
 
-        propertiesSlot.captured["wasVisibleToUser"] shouldBeEqualTo false
+        (eventSlot.captured as Error).wasVisibleToUser shouldBeEqualTo false
 
         decryptionFailureTracker.onEventDecrypted(event2, emptyMap())
         runCurrent()
 
-        propertiesSlot.captured["wasVisibleToUser"] shouldBeEqualTo true
+        (eventSlot.captured as Error).wasVisibleToUser shouldBeEqualTo true
 
-        verify(exactly = 2) { fakeAnalyticsTracker.capture(any(), any()) }
+        verify(exactly = 2) { fakeAnalyticsTracker.capture(any()) }
 
         decryptionFailureTracker.stop()
     }
@@ -486,16 +491,16 @@ class DecryptionFailureTrackerTest {
     fun `should report if event relative age to session`() = runTest {
         val fakeSession = fakeMxOrgTestSession
 
-        val propertiesSlot = slot<Map<String, Any>>()
-
         val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         val historicalEventTimestamp = formatter.parse("2024-03-08 09:24:11")!!.time
         val sessionCreationTime = formatter.parse("2024-03-09 10:00:00")!!.time
         // 1mn after creation
         val liveEventTimestamp = formatter.parse("2024-03-09 10:01:00")!!.time
 
+        val eventSlot = slot<VectorAnalyticsEvent>()
+
         every {
-            fakeAnalyticsTracker.capture(any(), customProperties = capture(propertiesSlot))
+            fakeAnalyticsTracker.capture(event = capture(eventSlot))
         } just runs
 
         fakeSession.fakeCryptoService.cryptoDeviceInfo = CryptoDeviceInfo(
@@ -532,15 +537,15 @@ class DecryptionFailureTrackerTest {
         decryptionFailureTracker.onEventDecrypted(event, emptyMap())
         runCurrent()
 
-        propertiesSlot.captured["eventLocalAgeAtDecryptionFailure"] shouldBeEqualTo (historicalEventTimestamp - sessionCreationTime)
+        (eventSlot.captured as Error).eventLocalAgeMillis shouldBeEqualTo (historicalEventTimestamp - sessionCreationTime).toInt()
 
         decryptionFailureTracker.onEventDecrypted(liveEvent, emptyMap())
         runCurrent()
 
-        propertiesSlot.captured["eventLocalAgeAtDecryptionFailure"] shouldBeEqualTo (liveEventTimestamp - sessionCreationTime)
-        propertiesSlot.captured["eventLocalAgeAtDecryptionFailure"] shouldBeEqualTo 60 * 1000L
+        (eventSlot.captured as Error).eventLocalAgeMillis shouldBeEqualTo (liveEventTimestamp - sessionCreationTime).toInt()
+        (eventSlot.captured as Error).eventLocalAgeMillis shouldBeEqualTo 60 * 1000
 
-        verify(exactly = 2) { fakeAnalyticsTracker.capture(any(), any()) }
+        verify(exactly = 2) { fakeAnalyticsTracker.capture(any()) }
 
         decryptionFailureTracker.stop()
     }
@@ -549,10 +554,10 @@ class DecryptionFailureTrackerTest {
     fun `should report if permanent UTD`() = runTest {
         val fakeSession = fakeMxOrgTestSession
 
-        val propertiesSlot = slot<Map<String, Any>>()
+        val eventSlot = slot<VectorAnalyticsEvent>()
 
         every {
-            fakeAnalyticsTracker.capture(any(), customProperties = capture(propertiesSlot))
+            fakeAnalyticsTracker.capture(event = capture(eventSlot))
         } just runs
 
         var currentFakeTime = 100_000L
@@ -571,9 +576,9 @@ class DecryptionFailureTrackerTest {
         advanceTimeBy(70_000)
         runCurrent()
 
-        verify(exactly = 1) { fakeAnalyticsTracker.capture(any(), any()) }
+        verify(exactly = 1) { fakeAnalyticsTracker.capture(any()) }
 
-        propertiesSlot.captured["timeToDecryptMillis"] shouldBeEqualTo -1L
+        (eventSlot.captured as Error).timeToDecryptMillis shouldBeEqualTo -1
         decryptionFailureTracker.stop()
     }
 
@@ -581,10 +586,8 @@ class DecryptionFailureTrackerTest {
     fun `with multiple UTD`() = runTest {
         val fakeSession = fakeMxOrgTestSession
 
-        val propertiesSlot = slot<Map<String, Any>>()
-
         every {
-            fakeAnalyticsTracker.capture(any(), customProperties = capture(propertiesSlot))
+            fakeAnalyticsTracker.capture(any())
         } just runs
 
         var currentFakeTime = 100_000L
@@ -610,7 +613,7 @@ class DecryptionFailureTrackerTest {
         advanceTimeBy(70_000)
         runCurrent()
 
-        verify(exactly = 11) { fakeAnalyticsTracker.capture(any(), any()) }
+        verify(exactly = 11) { fakeAnalyticsTracker.capture(any()) }
 
         decryptionFailureTracker.stop()
     }

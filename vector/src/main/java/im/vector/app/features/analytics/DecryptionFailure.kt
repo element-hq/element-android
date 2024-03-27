@@ -41,27 +41,15 @@ fun DecryptionFailure.toAnalyticsEvent(): Error {
             domain = Error.Domain.E2EE,
             name = this.error.toAnalyticsErrorName(),
             // this is deprecated keep for backward compatibility
-            cryptoModule = Error.CryptoModule.Rust
+            cryptoModule = Error.CryptoModule.Rust,
+            cryptoSDK = Error.CryptoSDK.Rust,
+            eventLocalAgeMillis = eventLocalAgeAtDecryptionFailure?.toInt(),
+            isFederated = isFederated,
+            isMatrixDotOrg = isMatrixDotOrg,
+            timeToDecryptMillis = timeToDecryptMillis?.toInt() ?: -1,
+            wasVisibleToUser = wasVisibleOnScreen,
+            userTrustsOwnIdentity = ownIdentityTrustedAtTimeOfDecryptionFailure,
     )
-}
-
-fun DecryptionFailure.toCustomProperties(): Map<String, Any> {
-    val properties = mutableMapOf<String, Any>()
-    if (timeToDecryptMillis != null) {
-        properties["timeToDecryptMillis"] = timeToDecryptMillis
-    } else {
-        properties["timeToDecryptMillis"] = -1
-    }
-    isFederated?.let {
-        properties["isFederated"] = it
-    }
-    properties["isMatrixDotOrg"] = isMatrixDotOrg
-    properties["wasVisibleToUser"] = wasVisibleOnScreen
-    properties["userTrustsOwnIdentity"] = ownIdentityTrustedAtTimeOfDecryptionFailure
-    eventLocalAgeAtDecryptionFailure?.let {
-        properties["eventLocalAgeAtDecryptionFailure"] = it
-    }
-    return properties
 }
 
 private fun MXCryptoError.toAnalyticsErrorName(): Error.Name {

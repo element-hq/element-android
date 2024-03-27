@@ -268,10 +268,8 @@ class DecryptionFailureTracker @Inject constructor(
     private fun reportFailure(decryptionFailure: DecryptionFailure) {
         Timber.v("Report failure for event ${decryptionFailure.failedEventId}")
         val error = decryptionFailure.toAnalyticsEvent()
-        val properties = decryptionFailure.toCustomProperties()
 
-        Timber.v("capture error $error with properties $properties")
-        analyticsTracker.capture(error, properties)
+        analyticsTracker.capture(error)
 
         // now remove from tracked
         trackedEventsMap.remove(decryptionFailure.failedEventId)
