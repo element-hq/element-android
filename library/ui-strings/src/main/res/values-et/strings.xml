@@ -2,7 +2,7 @@
 <resources>
     <string name="notice_room_invite_no_invitee">Kasutaja %s kutse</string>
     <string name="notice_room_invite">%1$s saatis kutse kasutajale %2$s</string>
-    <string name="notice_room_invite_you">%1$s kutsus sind</string>
+    <string name="notice_room_invite_you">%1$s saatis sulle kutse</string>
     <string name="notice_room_join">%1$s liitus jututoaga</string>
     <string name="notice_room_leave">%1$s lahkus jututoast</string>
     <string name="notice_room_reject">%1$s lükkas tagasi kutse</string>
@@ -57,7 +57,7 @@
     <string name="event_status_sending_message">Saadan sõnumit…</string>
     <string name="notice_room_invite_no_invitee_with_reason">Kasutaja %1$s kutse. Põhjus: %2$s</string>
     <string name="notice_room_invite_with_reason">%1$s saatis kutse kasutajale %2$s. Põhjus: %3$s</string>
-    <string name="notice_room_invite_you_with_reason">%1$s kutsus sind. Põhjus: %2$s</string>
+    <string name="notice_room_invite_you_with_reason">%1$s saatis sulle kutse. Põhjus: %2$s</string>
     <string name="notice_room_join_with_reason">%1$s liitus jututoaga. Põhjus: %2$s</string>
     <string name="notice_room_leave_with_reason">%1$s lahkus jututoast. Põhjus: %2$s</string>
     <string name="notice_room_reject_with_reason">%1$s lükkas kutse tagasi. Põhjus: %2$s</string>
@@ -82,7 +82,7 @@
     <string name="notice_room_created">Kasutaja %1$s lõi jututoa</string>
     <string name="notice_room_invite_no_invitee_by_you">Sinu kutse</string>
     <string name="notice_room_created_by_you">Sa lõid jututoa</string>
-    <string name="notice_room_invite_by_you">Sina kutsusid kasutajat %1$s</string>
+    <string name="notice_room_invite_by_you">Sina saatsid kutse kasutajale %1$s</string>
     <string name="notice_room_join_by_you">Sina liitusid jututoaga</string>
     <string name="notice_room_leave_by_you">Sina lahkusid jututoast</string>
     <string name="notice_room_reject_by_you">Sina lükkasid kutse tagasi</string>
@@ -130,7 +130,7 @@
     <string name="notice_power_level_changed">%1$s muutis kasutaja %2$s õigusi.</string>
     <string name="notice_power_level_diff">%1$s õiguste muutus %2$s -&gt; %3$s</string>
     <string name="notice_room_invite_no_invitee_with_reason_by_you">Sinu kutse. Põhjus %1$s</string>
-    <string name="notice_room_invite_with_reason_by_you">Sina kutsusid kasutajat %1$s. Põhjus: %2$s</string>
+    <string name="notice_room_invite_with_reason_by_you">Sina saatsid kutse kasutajale %1$s. Põhjus: %2$s</string>
     <string name="notice_room_join_with_reason_by_you">Sina liitusid jututoaga. Põhjus: %1$s</string>
     <string name="notice_room_leave_with_reason_by_you">Sina lahkusid jututoast. Põhjus: %1$s</string>
     <string name="notice_room_reject_with_reason_by_you">Sina lükkasid kutse tagasi. Põhjus: %1$s</string>
@@ -166,7 +166,7 @@
     <string name="notice_direct_room_join_with_reason">%1$s liitus jututoaga. Põhjus: %2$s</string>
     <string name="notice_direct_room_third_party_revoked_invite_by_you">Sina võtsid tagasi jututoaga liitumise kutse kasutajalt %1$s</string>
     <string name="notice_direct_room_third_party_revoked_invite">%1$s võttis tagasi jututoaga liitumise kutse kasutajalt %2$s</string>
-    <string name="notice_direct_room_third_party_invite_by_you">Sina kutsusid kasutajat %1$s</string>
+    <string name="notice_direct_room_third_party_invite_by_you">Sina saatsid kutse kasutajale %1$s</string>
     <string name="notice_direct_room_third_party_invite">%1$s saatis kutse kasutajale %2$s</string>
     <string name="notice_direct_room_update_by_you">Sa uuendasid seda jututuba.</string>
     <string name="notice_direct_room_update">%s uuendas seda jututuba.</string>
@@ -1140,7 +1140,7 @@
     <string name="reply">Vasta</string>
     <string name="global_retry">Proovi uuesti</string>
     <string name="send_you_invite">Saatis sulle kutse</string>
-    <string name="invited_by">%s kutsus</string>
+    <string name="invited_by">%s saatis kutse</string>
     <string name="room_list_catchup_empty_title">Ei tea… kõik vist on nüüd tehtud!</string>
     <string name="room_list_catchup_empty_body">Sul ei ole rohkem lugemata sõnumeid</string>
     <string name="room_list_people_empty_title">Vestlused</string>
@@ -2017,7 +2017,7 @@
     <string name="space_suggested">Soovitatud</string>
     <string name="space_settings_manage_rooms">Halda jututubasid</string>
     <string name="looking_for_someone_not_in_space">Kas sa otsid kedagi, kes ei leidu %s kogukonnas\?</string>
-    <string name="user_invites_you">%s kutsus sind</string>
+    <string name="user_invites_you">%s saatis sulle kutse</string>
     <string name="a11y_public_room">Avalik jututuba</string>
     <string name="send_images_and_video_with_original_size">Saada meedia algses suuruses</string>
     <plurals name="send_videos_with_original_size">
