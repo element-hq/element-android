@@ -1,3 +1,17 @@
+Changes in Element v1.6.14 (2024-04-02)
+=======================================
+
+Bugfixes 🐛
+----------
+ - Fix send button blinking once for each character you are typing in RTE. ([#send_button_blinking](https://github.com/element-hq/element-android/issues/send_button_blinking))
+ - Fix infinite loading on secure backup setup ("Re-Authentication needed" bottom sheet). ([#8786](https://github.com/element-hq/element-android/issues/8786))
+
+Other changes
+-------------
+ - Improve UTD reporting by adding additional fields to the report. ([#8780](https://github.com/element-hq/element-android/issues/8780))
+ - Add a report user action in the message bottom sheet and on the user profile page. ([#8796](https://github.com/element-hq/element-android/issues/8796))
+
+
 Changes in Element v1.6.12 (2024-02-16)
 =======================================
 
