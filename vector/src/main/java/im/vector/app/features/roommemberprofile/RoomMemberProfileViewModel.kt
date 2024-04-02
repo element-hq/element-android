@@ -174,15 +174,20 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
     }
 
     private fun handleReportAction() {
+        room ?: return
         viewModelScope.launch {
             val event = try {
-                // The API need an Event, use the latest Event.
-                val latestEventId = room?.roomSummary()?.latestPreviewableEvent?.eventId ?: return@launch
+                // The API needs an Event, use user state event if available (it should always be available)
+                val userStateEventId = room.stateService()
+                        .getStateEvent(EventType.STATE_ROOM_MEMBER, QueryStringValue.Equals(initialState.userId))
+                        ?.eventId
+                // If not found fallback to the latest event
+                val eventId = (userStateEventId ?: room.roomSummary()?.latestPreviewableEvent?.eventId) ?: return@launch
                 room.reportingService()
                         .reportContent(
-                                eventId = latestEventId,
+                                eventId = eventId,
                                 score = -100,
-                                reason = "Reporting user ${initialState.userId} (eventId is not relevant)"
+                                reason = "Reporting user ${initialState.userId}"
                         )
                 RoomMemberProfileViewEvents.OnReportActionSuccess
             } catch (failure: Throwable) {
