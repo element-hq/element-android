@@ -177,7 +177,7 @@ class DefaultVectorAnalytics @Inject constructor(
                 ?.takeIf { userConsent == true }
                 ?.capture(
                         event.getName(),
-                        event.getProperties().orEmpty().toPostHogProperties()
+                        event.getProperties()?.toPostHogProperties()
                 )
     }
 
