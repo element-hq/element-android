@@ -30,11 +30,44 @@ data class Error(
          */
         val context: String? = null,
         /**
-         * Which crypto module is the client currently using.
+         * DEPRECATED: Which crypto module is the client currently using.
          */
         val cryptoModule: CryptoModule? = null,
+        /**
+         * Which crypto backend is the client currently using.
+         */
+        val cryptoSDK: CryptoSDK? = null,
         val domain: Domain,
+        /**
+         * An heuristic based on event origin_server_ts and the current device
+         * creation time (origin_server_ts - device_ts). This would be used to
+         * get the source of the event scroll-back/live/initialSync.
+         */
+        val eventLocalAgeMillis: Int? = null,
+        /**
+         * true if userDomain != senderDomain.
+         */
+        val isFederated: Boolean? = null,
+        /**
+         * true if the current user is using matrix.org.
+         */
+        val isMatrixDotOrg: Boolean? = null,
         val name: Name,
+        /**
+         * UTDs can be permanent or temporary. If temporary, this field will
+         * contain the time it took to decrypt the message in milliseconds. If
+         * permanent should be -1.
+         */
+        val timeToDecryptMillis: Int? = null,
+        /**
+         * true if the current user trusts their own identity (verified session)
+         * at time of decryption.
+         */
+        val userTrustsOwnIdentity: Boolean? = null,
+        /**
+         * true if that unable to decrypt error was visible to the user.
+         */
+        val wasVisibleToUser: Boolean? = null,
 ) : VectorAnalyticsEvent {
 
     enum class Domain {
@@ -44,16 +77,77 @@ data class Error(
     }
 
     enum class Name {
+
+        /**
+         * E2EE domain error. Decryption failed for a message sent before the
+         * device logged in, and key backup is not enabled.
+         */
+        HistoricalMessage,
+
+        /**
+         * E2EE domain error. The room key is known but is ratcheted (index >
+         * 0).
+         */
         OlmIndexError,
+
+        /**
+         * E2EE domain error. Generic unknown inbound group session error.
+         */
         OlmKeysNotSentError,
+
+        /**
+         * E2EE domain error. Any other decryption error (missing field, format
+         * errors...).
+         */
         OlmUnspecifiedError,
+
+        /**
+         * TO_DEVICE domain error. The to-device message failed to decrypt.
+         */
         ToDeviceFailedToDecrypt,
+
+        /**
+         * E2EE domain error. Decryption failed due to unknown error.
+         */
         UnknownError,
+
+        /**
+         * VOIP domain error. ICE negotiation failed.
+         */
         VoipIceFailed,
+
+        /**
+         * VOIP domain error. ICE negotiation timed out.
+         */
         VoipIceTimeout,
+
+        /**
+         * VOIP domain error. The call invite timed out.
+         */
         VoipInviteTimeout,
+
+        /**
+         * VOIP domain error. The user hung up the call.
+         */
         VoipUserHangup,
+
+        /**
+         * VOIP domain error. The user's media failed to start.
+         */
         VoipUserMediaFailed,
+    }
+
+    enum class CryptoSDK {
+
+        /**
+         * Legacy crypto backend specific to each platform.
+         */
+        Legacy,
+
+        /**
+         * Cross-platform crypto backend written in Rust.
+         */
+        Rust,
     }
 
     enum class CryptoModule {
@@ -75,8 +169,15 @@ data class Error(
         return mutableMapOf<String, Any>().apply {
             context?.let { put("context", it) }
             cryptoModule?.let { put("cryptoModule", it.name) }
+            cryptoSDK?.let { put("cryptoSDK", it.name) }
             put("domain", domain.name)
+            eventLocalAgeMillis?.let { put("eventLocalAgeMillis", it) }
+            isFederated?.let { put("isFederated", it) }
+            isMatrixDotOrg?.let { put("isMatrixDotOrg", it) }
             put("name", name.name)
+            timeToDecryptMillis?.let { put("timeToDecryptMillis", it) }
+            userTrustsOwnIdentity?.let { put("userTrustsOwnIdentity", it) }
+            wasVisibleToUser?.let { put("wasVisibleToUser", it) }
         }.takeIf { it.isNotEmpty() }
     }
 }

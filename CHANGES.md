@@ -1,3 +1,17 @@
+Changes in Element v1.6.14 (2024-04-02)
+=======================================
+
+Bugfixes 🐛
+----------
+ - Fix send button blinking once for each character you are typing in RTE. ([#send_button_blinking](https://github.com/element-hq/element-android/issues/send_button_blinking))
+ - Fix infinite loading on secure backup setup ("Re-Authentication needed" bottom sheet). ([#8786](https://github.com/element-hq/element-android/issues/8786))
+
+Other changes
+-------------
+ - Improve UTD reporting by adding additional fields to the report. ([#8780](https://github.com/element-hq/element-android/issues/8780))
+ - Add a report user action in the message bottom sheet and on the user profile page. ([#8796](https://github.com/element-hq/element-android/issues/8796))
+
+
 Changes in Element v1.6.12 (2024-02-16)
 =======================================
 
@@ -5,8 +19,8 @@ This update provides important security fixes, please update now.
 
 Security fixes 🔐
 -----------------
- - Add a check on incoming intent. ([#1506 internal](https://github.com/matrix-org/internal-config/issues/1506))
- - Store temporary files created for Camera in the media folder. ([#1505 internal](https://github.com/matrix-org/internal-config/issues/1505))
+ - Add a check on incoming intent. [CVE-2024-26131](https://www.cve.org/CVERecord?id=CVE-2024-26131) / [GHSA-j6pr-fpc8-q9vm](https://github.com/element-hq/element-android/security/advisories/GHSA-j6pr-fpc8-q9vm)
+ - Store temporary files created for Camera in a dedicated media folder. [CVE-2024-26132](https://www.cve.org/CVERecord?id=CVE-2024-26132) / [GHSA-8wj9-cx7h-pvm4](https://github.com/element-hq/element-android/security/advisories/GHSA-8wj9-cx7h-pvm4)
 
 Bugfixes 🐛
 ----------

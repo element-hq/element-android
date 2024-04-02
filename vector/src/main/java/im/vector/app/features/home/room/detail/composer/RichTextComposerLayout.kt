@@ -45,7 +45,9 @@ import com.google.android.material.shape.MaterialShapeDrawable
 import im.vector.app.R
 import im.vector.app.core.extensions.setTextIfDifferent
 import im.vector.app.core.extensions.showKeyboard
+import im.vector.app.core.utils.Debouncer
 import im.vector.app.core.utils.DimensionConverter
+import im.vector.app.core.utils.createUIHandler
 import im.vector.app.databinding.ComposerRichTextLayoutBinding
 import im.vector.app.databinding.ViewRichTextMenuButtonBinding
 import im.vector.app.features.home.room.detail.composer.images.UriContentListener
@@ -195,10 +197,16 @@ internal class RichTextComposerLayout @JvmOverloads constructor(
         renderComposerMode(MessageComposerMode.Normal(null))
 
         views.richTextComposerEditText.addTextChangedListener(
-                TextChangeListener({ callback?.onTextChanged(it) }, { updateTextFieldBorder(isFullScreen) })
+                TextChangeListener(
+                        onTextChanged = {
+                            callback?.onTextChanged(it)
+                        },
+                        onExpandedChanged = { updateTextFieldBorder(isFullScreen) })
         )
         views.plainTextComposerEditText.addTextChangedListener(
-                TextChangeListener({ callback?.onTextChanged(it) }, { updateTextFieldBorder(isFullScreen) })
+                TextChangeListener({
+                    callback?.onTextChanged(it)
+                }, { updateTextFieldBorder(isFullScreen) })
         )
         ViewCompat.setOnReceiveContentListener(
                 views.richTextComposerEditText,
@@ -516,18 +524,21 @@ internal class RichTextComposerLayout @JvmOverloads constructor(
             private val onTextChanged: (s: Editable) -> Unit,
             private val onExpandedChanged: (isExpanded: Boolean) -> Unit,
     ) : TextWatcher {
+
+        private val debouncer = Debouncer(createUIHandler())
         private var previousTextWasExpanded = false
 
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         override fun afterTextChanged(s: Editable) {
-            onTextChanged.invoke(s)
-
-            val isExpanded = s.lines().count() > 1
-            if (previousTextWasExpanded != isExpanded) {
-                onExpandedChanged(isExpanded)
+            debouncer.debounce("afterTextChanged", 50L) {
+                onTextChanged.invoke(s)
+                val isExpanded = s.lines().count() > 1
+                if (previousTextWasExpanded != isExpanded) {
+                    onExpandedChanged(isExpanded)
+                }
+                previousTextWasExpanded = isExpanded
             }
-            previousTextWasExpanded = isExpanded
         }
     }
 }

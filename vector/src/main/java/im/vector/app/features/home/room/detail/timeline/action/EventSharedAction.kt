@@ -98,6 +98,9 @@ sealed class EventSharedAction(
     data class IgnoreUser(val senderId: String?) :
             EventSharedAction(R.string.message_ignore_user, R.drawable.ic_alert_triangle, true)
 
+    data class ReportUser(val eventId: String, val senderId: String?) :
+            EventSharedAction(R.string.message_report_user, R.drawable.ic_flag, true)
+
     data class QuickReact(val eventId: String, val clickedOn: String, val add: Boolean) :
             EventSharedAction(0, 0)
 

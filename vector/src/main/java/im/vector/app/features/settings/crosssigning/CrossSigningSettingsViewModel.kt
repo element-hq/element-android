@@ -27,6 +27,7 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.auth.PendingAuthHandler
 import im.vector.app.features.login.ReAuthHelper
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -51,6 +52,8 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
         private val stringProvider: StringProvider,
         private val pendingAuthHandler: PendingAuthHandler,
 ) : VectorViewModel<CrossSigningSettingsViewState, CrossSigningSettingsAction, CrossSigningSettingsViewEvents>(initialState) {
+
+    private var observeCrossSigningJob: Job? = null
 
     init {
         observeCrossSigning()
@@ -90,6 +93,8 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
                                         }
                                     }
                                 })
+                        // Force a fast refresh of the data
+                        observeCrossSigning()
                     } catch (failure: Throwable) {
                         handleInitializeXSigningError(failure)
                     } finally {
@@ -114,7 +119,8 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
 //        ) { myDevicesInfo, mxCrossSigningInfo ->
 //            myDevicesInfo to mxCrossSigningInfo
 //        }
-        session.flow().liveCrossSigningInfo(session.myUserId)
+        observeCrossSigningJob?.cancel()
+        observeCrossSigningJob = session.flow().liveCrossSigningInfo(session.myUserId)
                 .onEach { data ->
                     val crossSigningKeys = data.getOrNull()
                     val xSigningIsEnableInAccount = crossSigningKeys != null
@@ -128,7 +134,8 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
                                 xSigningKeyCanSign = xSigningKeyCanSign
                         )
                     }
-                }.launchIn(viewModelScope)
+                }
+                .launchIn(viewModelScope)
     }
 
     private fun handleInitializeXSigningError(failure: Throwable) {

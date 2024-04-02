@@ -22,22 +22,20 @@ import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 // https://github.com/matrix-org/matrix-analytics-events/
 
 /**
- * Triggered when a poll has been ended.
+ * Triggered when the user runs the troubleshoot notification test suite.
  */
-data class PollEnd(
+data class NotificationTroubleshoot(
         /**
-         * Do not use this. Remove this property when the kotlin type generator
-         * can properly generate types without properties other than the event
-         * name.
+         * Whether one or more tests are in error.
          */
-        val doNotUse: Boolean? = null,
+        val hasError: Boolean,
 ) : VectorAnalyticsEvent {
 
-    override fun getName() = "PollEnd"
+    override fun getName() = "NotificationTroubleshoot"
 
     override fun getProperties(): Map<String, Any>? {
         return mutableMapOf<String, Any>().apply {
-            doNotUse?.let { put("doNotUse", it) }
+            put("hasError", hasError)
         }.takeIf { it.isNotEmpty() }
     }
 }

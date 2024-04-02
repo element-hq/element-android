@@ -497,8 +497,11 @@ internal class RustCryptoService @Inject constructor(
     @Throws(MXCryptoError::class)
     override suspend fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
         return try {
-            olmMachine.decryptRoomEvent(event)
+            olmMachine.decryptRoomEvent(event).also {
+                liveEventManager.get().dispatchLiveEventDecrypted(event, it)
+            }
         } catch (mxCryptoError: MXCryptoError) {
+            liveEventManager.get().dispatchLiveEventDecryptionFailed(event, mxCryptoError)
             if (mxCryptoError is MXCryptoError.Base && (
                             mxCryptoError.errorType == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID ||
                                     mxCryptoError.errorType == MXCryptoError.ErrorType.UNKNOWN_MESSAGE_INDEX)) {

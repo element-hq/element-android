@@ -86,9 +86,26 @@ data class Interaction(
         MobileRoomAddHome,
 
         /**
+         * User switched the favourite toggle on Room Details screen.
+         */
+        MobileRoomFavouriteToggle,
+
+        /**
          * User tapped on Leave Room button on Room Details screen.
          */
         MobileRoomLeave,
+
+        /**
+         * User adjusted their favourite rooms using the context menu on a room
+         * in the room list.
+         */
+        MobileRoomListRoomContextMenuFavouriteToggle,
+
+        /**
+         * User adjusted their unread rooms using the context menu on a room in
+         * the room list.
+         */
+        MobileRoomListRoomContextMenuUnreadToggle,
 
         /**
          * User tapped on Threads button on Room screen.
@@ -307,6 +324,18 @@ data class Interaction(
         WebRoomListRoomTileContextMenuLeaveItem,
 
         /**
+         * User marked a message as read using the context menu on a room tile
+         * in the room list in Element Web/Desktop.
+         */
+        WebRoomListRoomTileContextMenuMarkRead,
+
+        /**
+         * User marked a room as unread using the context menu on a room tile in
+         * the room list in Element Web/Desktop.
+         */
+        WebRoomListRoomTileContextMenuMarkUnread,
+
+        /**
          * User accessed room settings using the context menu on a room tile in
          * the room list in Element Web/Desktop.
          */
@@ -407,6 +436,18 @@ data class Interaction(
          * Threads Panel of Element Web/Desktop.
          */
         WebThreadViewBackButton,
+
+        /**
+         * User clicked on the Threads Activity Centre button of Element
+         * Web/Desktop.
+         */
+        WebThreadsActivityCentreButton,
+
+        /**
+         * User clicked on a room in the Threads Activity Centre of Element
+         * Web/Desktop.
+         */
+        WebThreadsActivityCentreRoomItem,
 
         /**
          * User selected a thread in the Threads panel in Element Web/Desktop.

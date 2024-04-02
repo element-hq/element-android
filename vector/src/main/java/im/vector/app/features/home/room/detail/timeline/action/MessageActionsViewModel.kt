@@ -430,6 +430,12 @@ class MessageActionsViewModel @AssistedInject constructor(
 
             add(EventSharedAction.Separator)
             add(EventSharedAction.IgnoreUser(timelineEvent.root.senderId))
+            add(
+                    EventSharedAction.ReportUser(
+                            eventId = eventId,
+                            senderId = timelineEvent.root.senderId,
+                    )
+            )
         }
     }
 

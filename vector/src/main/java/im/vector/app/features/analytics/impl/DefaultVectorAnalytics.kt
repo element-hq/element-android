@@ -175,7 +175,10 @@ class DefaultVectorAnalytics @Inject constructor(
         Timber.tag(analyticsTag.value).d("capture($event)")
         posthog
                 ?.takeIf { userConsent == true }
-                ?.capture(event.getName(), event.getProperties()?.toPostHogProperties())
+                ?.capture(
+                        event.getName(),
+                        event.getProperties()?.toPostHogProperties()
+                )
     }
 
     override fun screen(screen: VectorAnalyticsScreen) {
