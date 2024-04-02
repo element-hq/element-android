@@ -376,8 +376,11 @@ class DecryptionFailureTrackerTest {
         verify(exactly = 1) { fakeAnalyticsTracker.capture(any()) }
 
         decryptionFailureTracker.onEventDecryptionError(event, aUISIError)
-
         runCurrent()
+
+        // advance time by 7 seconds, to be ahead of the grace period
+        currentFakeTime += 7_000
+        fakeClock.givenEpoch(currentFakeTime)
 
         decryptionFailureTracker.onEventDecrypted(event, emptyMap())
         runCurrent()

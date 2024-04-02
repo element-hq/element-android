@@ -201,6 +201,10 @@ class DecryptionFailureTracker @Inject constructor(
             // already tracked
             return
         }
+        if (alreadyReported.contains(eventId)) {
+            // already reported
+            return
+        }
         val isOwnIdentityTrusted = session.cryptoService().crossSigningService().isCrossSigningVerified()
         val userHS = MatrixPatterns.extractServerNameFromId(session.myUserId)
         val messageSenderHs = event.senderId?.let {  MatrixPatterns.extractServerNameFromId(it) }
