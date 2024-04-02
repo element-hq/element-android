@@ -61,7 +61,8 @@ sealed class RoomDetailAction : VectorViewModelAction {
             val senderId: String?,
             val reason: String,
             val spam: Boolean = false,
-            val inappropriate: Boolean = false
+            val inappropriate: Boolean = false,
+            val user: Boolean = false,
     ) : RoomDetailAction()
 
     data class IgnoreUser(val userId: String?) : RoomDetailAction()

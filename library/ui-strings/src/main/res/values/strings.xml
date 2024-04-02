@@ -1953,8 +1953,11 @@
     <string name="content_reported_as_spam_content">"This content was reported as spam.\n\nIf you don't want to see any more content from this user, you can ignore them to hide their messages."</string>
     <string name="content_reported_as_inappropriate_title">"Reported as inappropriate"</string>
     <string name="content_reported_as_inappropriate_content">"This content was reported as inappropriate.\n\nIf you don't want to see any more content from this user, you can ignore them to hide their messages."</string>
+    <string name="user_reported_as_inappropriate_title">"Reported user"</string>
+    <string name="user_reported_as_inappropriate_content">"The user has been reported.\n\nIf you don't want to see any more content from this user, you can ignore them to hide their messages."</string>
 
     <string name="message_ignore_user">Ignore user</string>
+    <string name="message_report_user">Report user</string>
 
     <string name="room_list_quick_actions_notifications_all_noisy">"All messages (noisy)"</string>
     <string name="room_list_quick_actions_notifications_all">"All messages"</string>
