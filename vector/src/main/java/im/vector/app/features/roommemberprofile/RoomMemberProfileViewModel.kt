@@ -161,6 +161,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
         when (action) {
             is RoomMemberProfileAction.RetryFetchingInfo -> handleRetryFetchProfileInfo()
             is RoomMemberProfileAction.IgnoreUser -> handleIgnoreAction()
+            is RoomMemberProfileAction.ReportUser -> handleReportAction()
             is RoomMemberProfileAction.VerifyUser -> prepareVerification()
             is RoomMemberProfileAction.ShareRoomMemberProfile -> handleShareRoomMemberProfile()
             is RoomMemberProfileAction.SetPowerLevel -> handleSetPowerLevel(action)
@@ -169,6 +170,25 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
             RoomMemberProfileAction.InviteUser -> handleInviteAction()
             is RoomMemberProfileAction.SetUserColorOverride -> handleSetUserColorOverride(action)
             is RoomMemberProfileAction.OpenOrCreateDm -> handleOpenOrCreateDm(action)
+        }
+    }
+
+    private fun handleReportAction() {
+        viewModelScope.launch {
+            val event = try {
+                // The API need an Event, use the latest Event.
+                val latestEventId = room?.roomSummary()?.latestPreviewableEvent?.eventId ?: return@launch
+                room.reportingService()
+                        .reportContent(
+                                eventId = latestEventId,
+                                score = -100,
+                                reason = "Reporting user ${initialState.userId} (eventId is not relevant)"
+                        )
+                RoomMemberProfileViewEvents.OnReportActionSuccess
+            } catch (failure: Throwable) {
+                RoomMemberProfileViewEvents.Failure(failure)
+            }
+            _viewEvents.post(event)
         }
     }
 

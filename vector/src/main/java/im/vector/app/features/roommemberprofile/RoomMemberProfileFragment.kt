@@ -140,9 +140,18 @@ class RoomMemberProfileFragment :
                 is RoomMemberProfileViewEvents.OnIgnoreActionSuccess -> Unit
                 is RoomMemberProfileViewEvents.OnInviteActionSuccess -> Unit
                 RoomMemberProfileViewEvents.GoBack -> handleGoBack()
+                RoomMemberProfileViewEvents.OnReportActionSuccess -> handleReportSuccess()
             }
         }
         setupLongClicks()
+    }
+
+    private fun handleReportSuccess() {
+        MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.user_reported_as_inappropriate_title)
+                .setMessage(R.string.user_reported_as_inappropriate_content)
+                .setPositiveButton(R.string.ok, null)
+                .show()
     }
 
     private fun setupLongClicks() {
@@ -299,6 +308,10 @@ class RoomMemberProfileFragment :
                 ) {
                     viewModel.handle(RoomMemberProfileAction.IgnoreUser)
                 }
+    }
+
+    override fun onReportClicked() {
+        viewModel.handle(RoomMemberProfileAction.ReportUser)
     }
 
     override fun onTapVerify() {
