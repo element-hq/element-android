@@ -2966,4 +2966,5 @@
 \n
 \n%s</string>
     <string name="invite_unknown_users_dialog_submit">Bjud in ändå</string>
+    <string name="login_splash_sign_in">Logga in</string>
 </resources>
