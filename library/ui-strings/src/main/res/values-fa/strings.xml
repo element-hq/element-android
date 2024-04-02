@@ -2967,4 +2967,9 @@
     <string name="create_room_unknown_users_dialog_submit">آغاز گپ به هر حال</string>
     <string name="invite_unknown_users_dialog_submit">دعوت به هر حال</string>
     <string name="login_splash_sign_in">ورود</string>
+    <string name="message_report_user">گزارش کاربر</string>
+    <string name="user_reported_as_inappropriate_title">کاربر گزارش شده</string>
+    <string name="user_reported_as_inappropriate_content">کاربر گزارش شد.
+\n
+\nاگر دیگر نمی‌خواهید محتوایی از این کاربر ببینید، می‌توانید برای نهفتن پیام‌هایش نادیده‌اش بگیرید.</string>
 </resources>
