@@ -2955,4 +2955,9 @@
 \n%s</string>
     <string name="invite_unknown_users_dialog_submit">Ftoji, sido qoftë</string>
     <string name="login_splash_sign_in">Hyni</string>
+    <string name="user_reported_as_inappropriate_title">Përdorues i raportuar</string>
+    <string name="message_report_user">Raportojeni përdoruesin</string>
+    <string name="user_reported_as_inappropriate_content">Përdoruesi është raportuar.
+\n
+\nNëse s’doni të shihni më lëndë nga ky përdorues, mund ta shpërfillni, që mesazhet e tij të jenë të fshehura.</string>
 </resources>
