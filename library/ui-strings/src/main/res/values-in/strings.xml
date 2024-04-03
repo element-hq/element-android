@@ -2909,4 +2909,9 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
 \n%s</string>
     <string name="invite_unknown_users_dialog_submit">Tetap undang</string>
     <string name="login_splash_sign_in">Masuk</string>
+    <string name="user_reported_as_inappropriate_title">Pengguna dilaporkan</string>
+    <string name="message_report_user">Laporkan pengguna</string>
+    <string name="user_reported_as_inappropriate_content">Pengguna ini telah dilaporkan.
+\n
+\nJika Anda tidak ingin melihat konten lagi dari pengguna ini, Anda dapat mengabaikan untuk menyembunyikan pesannya.</string>
 </resources>
