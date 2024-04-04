@@ -2967,4 +2967,9 @@
 \n
 \n%s</string>
     <string name="login_splash_sign_in">Logi sisse</string>
+    <string name="user_reported_as_inappropriate_title">Haldajale teada antud kasutaja</string>
+    <string name="message_report_user">Teata kasutajast haldajale</string>
+    <string name="user_reported_as_inappropriate_content">Selle kasutaja tegevusest on haldajale teada antud.
+\n
+\nKui sa ei soovi tema loodud sisu enam näha, siis kasuta eiramise võimalust.</string>
 </resources>
