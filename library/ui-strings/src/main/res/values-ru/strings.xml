@@ -3067,4 +3067,7 @@
 \n
 \n%s</string>
     <string name="user_reported_as_inappropriate_title">Пользовователь на которого поступила жалоба</string>
+    <string name="user_reported_as_inappropriate_content">Жалоба на пользователя отправлена.
+\n
+\nЕсли вы больше не хотите видеть от этого пользователя ничего, вы можете его игнорировать его чтобы скрыть его сообщения.</string>
 </resources>
