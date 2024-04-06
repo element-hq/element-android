@@ -3072,4 +3072,7 @@
 \nЕсли вы больше не хотите видеть от этого пользователя ничего, вы можете его игнорировать его чтобы скрыть его сообщения.</string>
     <string name="message_report_user">Пожаловаться на пользователя</string>
     <string name="login_splash_sign_in">Войти</string>
+    <string name="invite_unknown_users_dialog_content">Не удалось найти профили для перечисленных ниже Matrix ID. Вы всё равно хотите их пригласить\?
+\n
+\n%s</string>
 </resources>
