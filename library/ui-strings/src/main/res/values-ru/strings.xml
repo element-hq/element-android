@@ -3070,4 +3070,6 @@
     <string name="user_reported_as_inappropriate_content">Жалоба на пользователя отправлена.
 \n
 \nЕсли вы больше не хотите видеть от этого пользователя ничего, вы можете его игнорировать его чтобы скрыть его сообщения.</string>
+    <string name="message_report_user">Пожаловаться на пользователя</string>
+    <string name="login_splash_sign_in">Войти</string>
 </resources>
