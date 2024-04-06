@@ -3063,5 +3063,7 @@
     <string name="settings_acceptable_use_policy">Политика пользования</string>
     <string name="settings_external_account_management">Детали вашей учетной записи управляются отдельно на %1$s.</string>
     <string name="rich_text_editor_inline_code">Применение формата встроенного кода</string>
-    <string name="create_room_unknown_users_dialog_content">Не удалось найти профили для перечисленных ниже Matrix ID. Вы всё равно хотите их пригласить\?</string>
+    <string name="create_room_unknown_users_dialog_content">Не удалось найти профили для перечисленных ниже Matrix ID. Вы всё равно хотите их пригласить\?
+\n
+\n%s</string>
 </resources>
