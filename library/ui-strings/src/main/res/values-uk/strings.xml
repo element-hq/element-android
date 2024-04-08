@@ -3087,4 +3087,9 @@
     <string name="invite_unknown_users_dialog_content">Не вдалося знайти профілі для вказаних нижче Matrix ID. Усе одно запросити їх\?
 \n
 \n%s</string>
+    <string name="user_reported_as_inappropriate_title">Користувач, на якого подано скаргу</string>
+    <string name="message_report_user">Поскаржитися на користувача</string>
+    <string name="user_reported_as_inappropriate_content">Скаргу на користувача надіслано.
+\n
+\nЯкщо ви більше хочете нічого не бачити від нього, ви можете ігнорувати його, щоб сховати його повідомлення.</string>
 </resources>
