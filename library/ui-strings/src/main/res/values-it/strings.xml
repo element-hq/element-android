@@ -2958,4 +2958,9 @@
     <string name="invite_unknown_users_dialog_content">Impossibile trovare profili per gli ID Matrix elencati sotto. Vuoi comunque invitarli\?
 \n
 \n%s</string>
+    <string name="user_reported_as_inappropriate_title">Utente segnalato</string>
+    <string name="user_reported_as_inappropriate_content">L\'utente è stato segnalato.
+\n
+\nSe non vuoi più vedere contenuti da questo utente, puoi ignorarlo per nascondere i suoi messaggi.</string>
+    <string name="message_report_user">Segnala utente</string>
 </resources>
