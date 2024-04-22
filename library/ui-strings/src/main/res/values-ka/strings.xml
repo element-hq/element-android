@@ -1,2 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="notice_room_invite_no_invitee">%s-ის მიწვევა</string>
+    <string name="notice_room_invite_no_invitee_by_you">თქვენი მიწვევა</string>
+    <plurals name="x_selected">
+        <item quantity="one">%1$d არჩეული</item>
+        <item quantity="other">%1$d არჩეული</item>
+    </plurals>
+</resources>
