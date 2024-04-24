@@ -2939,7 +2939,7 @@
     <string name="pill_message_from_user">Nachricht von %s</string>
     <string name="encrypted_by_deleted">Von einem gelöschten Gerät verschlüsselt</string>
     <string name="secure_backup_reset_danger_warning">Bitte fahre nur fort, wenn du sicher bist, dass du alle anderen Geräte und deinen Sicherheitsschlüssel verloren hast.</string>
-    <string name="secure_backup_reset_all_no_other_devices_long">Das Zurücksetzen deiner Sicherheitsschlüssel kann nicht rückgängig gemacht werden. Nach dem Zurücksetzen wirst du alte Nachrichten nicht mehr lesen können un Freunde, die dich vorher verifiziert haben werden Sicherheitswarnungen bekommen, bis du dich erneut mit ihnen verifizierst.</string>
+    <string name="secure_backup_reset_all_no_other_devices_long">Das Zurücksetzen deiner Sicherheitsschlüssel kann nicht rückgängig gemacht werden. Nach dem Zurücksetzen wirst du alte Nachrichten nicht mehr lesen können und Freunde, die dich vorher verifiziert haben werden Sicherheitswarnungen bekommen, bis du dich erneut mit ihnen verifizierst.</string>
     <string name="verification_not_found">Die Verifizierungsanfrage wurde nicht gefunden. Sie wurde eventuell abgebrochen oder mit einer anderen Sitzung abgeschlossen.</string>
     <string name="_resume">Fortsetzen</string>
     <string name="verification_request_was_sent">Eine Verifizierungsanfrage wurde gesendet. Öffne eine deiner anderen Sitzungen, um sie zu akzeptieren und mit der Verifizierung zu beginnen.</string>
