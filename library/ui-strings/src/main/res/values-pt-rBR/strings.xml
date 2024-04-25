@@ -330,8 +330,8 @@
     <string name="room_participants_power_level_prompt">Você não poderá desfazer esta mudança já que você está promovendo o usuário para ter o mesmo nível de poder que você.
 \nVocê tem certeza\?</string>
     <string name="room_one_user_is_typing">%s está digitando…</string>
-    <string name="room_two_users_are_typing">%1$s &amp; %2$s estão digitando…</string>
-    <string name="room_many_users_are_typing">%1$s &amp; %2$s &amp; outros(as) estão digitando…</string>
+    <string name="room_two_users_are_typing">%1$s e %2$s estão digitando…</string>
+    <string name="room_many_users_are_typing">%1$s e %2$s e outros estão digitando…</string>
     <string name="room_do_not_have_permission_to_post">Você não tem permissão para postar nesta sala.</string>
     <string name="ssl_trust">Confiar</string>
     <string name="ssl_do_not_trust">Não confiar</string>
@@ -431,7 +431,7 @@
     <string name="encryption_import_room_keys_summary">Importar as chaves de um arquivo local</string>
     <string name="encryption_import_import">Importar</string>
     <string name="encryption_never_send_to_unverified_devices_title">Encriptar para sessões confirmadas somente</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">Nunca enviar mensagens encriptadas para sessões não-verificadas desta sessão.</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Nunca enviar mensagens criptografadas para sessões não-verificadas por esta sessão.</string>
     <string name="encryption_information_not_verified">Não Verificada</string>
     <string name="encryption_information_verified">Verificada</string>
     <string name="encryption_information_verify">Verificar</string>
@@ -502,7 +502,7 @@
     <string name="unrecognized_command">Comando irreconhecido: %s</string>
     <string name="notification_off">Desativada</string>
     <string name="notification_noisy">Barulhenta</string>
-    <string name="encrypted_message">Mensagem encriptada</string>
+    <string name="encrypted_message">Mensagem criptografada</string>
     <string name="create">Criar</string>
     <string name="group_details_home">Home</string>
     <string name="rooms">Salas</string>
@@ -682,14 +682,14 @@
     <string name="video_call_in_progress">Chamada de Vídeo em Progresso…</string>
     <string name="title_activity_keys_backup_setup">Backup de Chave</string>
     <string name="title_activity_keys_backup_restore">Usar Backup de Chave</string>
-    <string name="sign_out_bottom_sheet_warning_no_backup">Você vai perder suas mensagens encriptadas se fizer signout agora</string>
-    <string name="sign_out_bottom_sheet_warning_backing_up">Backup de chave em progresso. Se você fizer signout agora você vai perder acesso a suas mensagens encriptadas.</string>
-    <string name="sign_out_bottom_sheet_warning_backup_not_active">Backup de Chave Seguro devia estar ativo em todas as suas sessões para evitar perder o acesso a suas mensagens encriptadas.</string>
-    <string name="sign_out_bottom_sheet_dont_want_secure_messages">Eu não quero minhas mensagens encriptadas</string>
+    <string name="sign_out_bottom_sheet_warning_no_backup">Você vai perder suas mensagens criptografadas se sair agora</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">Backup de chave em progresso. Se você sair agora você vai perder acesso a suas mensagens criptografadas.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Backup de Chave seguro deve estar ativo em todas as suas sessões para evitar perder o acesso a suas mensagens criptografadas.</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">Eu não quero minhas mensagens criptografadas</string>
     <string name="sign_out_bottom_sheet_backing_up_keys">Fazendo backup de chaves…</string>
     <string name="are_you_sure">Você tem certeza\?</string>
     <string name="backup">Fazer backup</string>
-    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Você vai perder acesso a suas mensagens encriptadas a menos que faça backup de suas chaves antes de fazer signout.</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Você vai perder acesso a suas mensagens criptografadas a menos que faça backup de suas chaves antes de fazer sair.</string>
     <string name="keys_backup_info_title_signature">Assinatura</string>
     <string name="action_skip">Pular</string>
     <string name="done">Feito</string>
@@ -779,7 +779,7 @@
     <string name="settings_secure_backup_setup">Configurar Backup Seguro</string>
     <string name="settings_secure_backup_reset">Resettar Backup Seguro</string>
     <string name="settings_secure_backup_enter_to_setup">Configurar neste dispositivo</string>
-    <string name="settings_secure_backup_section_info">Proteja-se contra perda de acesso a mensagens &amp; dados encriptados ao fazer backup de chaves de encriptação em seu servidor.</string>
+    <string name="settings_secure_backup_section_info">Proteja-se contra perda de acesso a mensagens e dados criptografados fazendo backup de chaves de criptografia em seu servidor.</string>
     <string name="reset_secure_backup_title">Gere uma nova Chave de Segurança ou defina uma nova Frase de Segurança para seu backup existente.</string>
     <string name="reset_secure_backup_warning">Isto vai substituir sua Chave ou Frase atual.</string>
     <string name="settings_discovery_category">Descoberta</string>
@@ -800,7 +800,7 @@
         <item quantity="other">%d usuários banidos</item>
     </plurals>
     <string name="encryption_exported_successfully">Chaves exportadas com sucesso</string>
-    <string name="encryption_message_recovery">Recuperação de Mensagens Encriptadas</string>
+    <string name="encryption_message_recovery">Recuperação de Mensagens Criptografadas</string>
     <string name="encryption_settings_manage_message_recovery_summary">Gerenciar Backup de Chave</string>
     <string name="encryption_information_unknown_ip">ip desconhecido</string>
     <plurals name="notification_compat_summary_line_for_room">
@@ -861,24 +861,24 @@
     <string name="passphrase_empty_error_message">Por favor digite sua frase-passe</string>
     <string name="passphrase_passphrase_too_weak">Frase-passe é fraca demais</string>
     <string name="keys_backup_passphrase_not_empty_error_message">Por favor delete a frase-passe se quiser que ${app_name} gere uma chave de recuperação.</string>
-    <string name="keys_backup_setup_step1_title">Nunca perca mensagens encriptadas</string>
-    <string name="keys_backup_setup_step1_description">Mensagens em salas encriptadas são asseguradas com encriptação ponta-a-ponta. Somente você e a(s)/o(s) recipiente(s) têm as chaves para ler estas mensagens.
+    <string name="keys_backup_setup_step1_title">Nunca perca mensagens criptografadas</string>
+    <string name="keys_backup_setup_step1_description">Mensagens em salas criptografadas são asseguradas com criptografia de ponta-a-ponta. Somente você e o destinatário têm as chaves para ler estas mensagens.
 \n
-\nFaça seguramente backup de suas chaves para evitar perdê-las.</string>
+\nFaça backup de suas chaves de forma segura para evitar perdê-las.</string>
     <string name="keys_backup_setup">Começar a usar Backup de Chave</string>
     <string name="keys_backup_setup_step1_advanced">(Avançada)</string>
     <string name="keys_backup_setup_step1_manual_export">Exportar chaves manualmente</string>
     <string name="keys_backup_setup_step2_text_title">Assegure seu backup com uma Frase-passe.</string>
-    <string name="keys_backup_setup_step2_text_description">Nós vamos armazenar uma cópia encriptada de suas chaves em seu servidorcasa. Proteja seu backup com uma frase-passe para mantê-lo seguro.
+    <string name="keys_backup_setup_step2_text_description">Nós armazenaremos uma cópia criptografada de suas chaves em seu servidorcasa. Proteja seu backup com uma frase-passe para mantê-lo seguro.
 \n
-\nPara segurança máxima, esta deve ser diferente da senha de sua conta.</string>
+\nPara segurança máxima, a frase-passe deve ser diferente da senha de sua conta.</string>
     <string name="keys_backup_setup_step2_button_title">Definir Frase-passe</string>
     <string name="keys_backup_setup_creating_backup">Criando Backup</string>
     <string name="keys_backup_setup_step1_recovery_key_alternative">Ou, assegure seu backup com uma Chave de Recuperação, salvando-a em algum lugar seguro.</string>
     <string name="keys_backup_setup_step2_skip_button_title">(Avançada) Configurar com Chave de Recuperação</string>
     <string name="keys_backup_setup_step3_success_title">Sucesso !</string>
     <string name="keys_backup_setup_step3_text_line1">Backup de suas chaves está sendo feito.</string>
-    <string name="keys_backup_setup_step3_text_line2">Sua chave de recuperação é uma rede de segurança - você pode usá-la para restaurar acesso a suas mensagens encriptadas se você esquecer sua frase-passe.
+    <string name="keys_backup_setup_step3_text_line2">Sua chave de recuperação é uma rede de segurança - você pode usá-la para restaurar acesso a suas mensagens criptografadas se você esquecer sua frase-passe.
 \nMantenha sua chave de recuperação em algum lugar muito seguro, como um gerenciador de senhas (ou um cofre)</string>
     <string name="keys_backup_setup_step3_text_line2_no_passphrase">Mantenha sua chave de recuperação em algum lugar muito seguro, como um gerenciador de senhas (ou um cofre)</string>
     <string name="keys_backup_setup_step3_button_title">Feito</string>
@@ -899,10 +899,10 @@
     <string name="keys_backup_setup_skip_title">Você tem certeza\?</string>
     <string name="keys_backup_setup_skip_msg">Você pode perder acesso a suas mensagens se você deslogar ou perder este dispositivo.</string>
     <string name="keys_backup_restore_is_getting_backup_version">Obtendo versão de backup…</string>
-    <string name="keys_backup_restore_with_passphrase">Use sua frase-passe de recuperação para destrancar seu histórico de mensagens encriptadas</string>
+    <string name="keys_backup_restore_with_passphrase">Use sua frase-passe de recuperação para destrancar seu histórico de mensagens criptografadas</string>
     <string name="keys_backup_restore_use_recovery_key">use sua chave de recuperação</string>
     <string name="keys_backup_restore_with_passphrase_helper_with_link">Não sabe sua frase-passe de recuperação, você pode %s.</string>
-    <string name="keys_backup_restore_with_recovery_key">Use a sua Chave de Recuperação para destrancar seu histórico de mensagens encriptadas</string>
+    <string name="keys_backup_restore_with_recovery_key">Use a sua Chave de Recuperação para destrancar seu histórico de mensagens criptografadas</string>
     <string name="keys_backup_restore_key_enter_hint">Entar Chave de Recuperação</string>
     <string name="keys_backup_restore_with_key_helper">Perdeu sua chave de recuperação\? Você pode configurar uma nova em configurações.</string>
     <string name="keys_backup_passphrase_error_decrypt">O backup não pôde ser decriptado com esta frase-passe: por favor verifique que você digitou a frase-passe de recuperação correta.</string>
@@ -938,10 +938,10 @@
     <string name="keys_backup_settings_deleting_backup">Deletando backup…</string>
     <string name="keys_backup_settings_checking_backup_state">Checando estado de backup</string>
     <string name="keys_backup_settings_delete_confirm_title">Deletar Backup</string>
-    <string name="keys_backup_settings_delete_confirm_message">Deletar suas chaves de encriptação, das quais foi feito backup, do servidor\? Você não vai ser mais capaz de usar sua chave de recuperação para ler histórico de mensagens encriptadas.</string>
+    <string name="keys_backup_settings_delete_confirm_message">Deletar suas chaves de criptografia, presentes no backup, do servidor\? Você não poderá mais usar sua chave de recuperação para ler histórico de mensagens criptografadas.</string>
     <string name="secure_backup_banner_setup_line1">Backup Seguro</string>
-    <string name="secure_backup_banner_setup_line2">Proteger contra perda de acesso a mensagens &amp; dados encriptados</string>
-    <string name="keys_backup_banner_recover_line1">Nunca perca mensagens encriptadas</string>
+    <string name="secure_backup_banner_setup_line2">Proteger contra perda de acesso a mensagens e dados criptografados</string>
+    <string name="keys_backup_banner_recover_line1">Nunca perca mensagens criptografadas</string>
     <string name="keys_backup_banner_recover_line2">Usar Backup de Chave</string>
     <string name="keys_backup_banner_update_line1">Novas chaves de mensagens seguras</string>
     <string name="keys_backup_banner_update_line2">Gerenciar em Backup de Chave</string>
@@ -1178,7 +1178,7 @@
     <string name="login_reset_password_email_hint">Email</string>
     <string name="login_reset_password_password_hint">Nova senha</string>
     <string name="login_reset_password_warning_title">Aviso!</string>
-    <string name="login_reset_password_warning_content">Mudar sua senha vai resettar quaisquer chaves de encriptação ponta-a-ponta em todas as suas sessões, fazendo histórico de chat encriptado ilegível. Configure Backup de Chave ou exporte suas chaves de sala de uma outra sessão antes de resettar sua senha.</string>
+    <string name="login_reset_password_warning_content">Mudar sua senha vai resettar quaisquer chaves de criptografia de ponta-a-ponta em todas as suas sessões, tornando o histórico de conversas criptografadas ilegível. Configure o Backup de Chave ou exporte suas chaves de sala de uma outra sessão antes de resettar sua senha.</string>
     <string name="login_reset_password_warning_submit">Continuar</string>
     <string name="login_reset_password_error_not_found">Este endereço de email não está linkado a nenhuma conta</string>
     <string name="login_reset_password_mail_confirmation_title">Cheque sua inbox</string>
@@ -1318,7 +1318,7 @@
     <string name="verification_verify_user">Verificar %s</string>
     <string name="verification_verified_user">Verificou %s</string>
     <string name="verification_request_waiting_for">Esperando por %s…</string>
-    <string name="room_profile_not_encrypted_subtitle">Mensagens nesta sala não são encriptadas ponta-a-ponta.</string>
+    <string name="room_profile_not_encrypted_subtitle">As mensagens nesta sala não são criptografadas de ponta-a-ponta.</string>
     <string name="room_profile_encrypted_subtitle">Mensagens nesta sala são encriptadas ponta-a-ponta.
 \n
 \nSuas mensagens são asseguradas com cadeados e somente você e a/o recipente têm as chaves únicas para as destrancar.</string>
@@ -1486,8 +1486,8 @@
     <string name="qr_code_scanned_verif_waiting_notice">Quase lá! Esperando por confirmação…</string>
     <string name="error_failed_to_import_keys">Falha para importar chaves</string>
     <string name="settings_messages_at_room">Mensagens contendo @room</string>
-    <string name="settings_messages_in_e2e_one_to_one">Mensagens encriptadas em conversas um-a-um</string>
-    <string name="settings_messages_in_e2e_group_chat">Mensagens encriptadas em chats de grupo</string>
+    <string name="settings_messages_in_e2e_one_to_one">Mensagens criptografadas em conversas privadas</string>
+    <string name="settings_messages_in_e2e_group_chat">Mensagens criptografadas em conversas em grupo</string>
     <string name="settings_when_rooms_are_upgraded">Quando é feito upgrade de salas</string>
     <string name="command_description_plain">Envia uma mensagem como texto puro, sem interpretá-la como markdown</string>
     <string name="auth_invalid_login_param_space_in_password">Nome de usuário e/ou senha incorretos. A senha digitada começa ou termina com espaços, por favor verifique-a.</string>
@@ -1703,9 +1703,9 @@
     <string name="direct_room_profile_encrypted_subtitle">Mensagens aqui são encriptadas ponta-a-ponta.
 \n
 \nSuas mensagens são asseguradas com cadeados e somente você e a/o recipiente têm as chaves únicas para as destrancar.</string>
-    <string name="direct_room_profile_not_encrypted_subtitle">Mensagens aqui não são encriptadas ponta-a-ponta.</string>
+    <string name="direct_room_profile_not_encrypted_subtitle">As mensagens aqui não são criptografadas de ponta-a-ponta.</string>
     <string name="login_error_outdated_homeserver_warning_content">Este servidorcasa está rodando uma versão antiga. Peça ao administrador de seu servidorcasa para fazer upgrade. Você pode continuar, mas algumas funcionalidades podem não funcionar corretamente.</string>
-    <string name="settings_labs_show_complete_history_in_encrypted_room">Mostrar histórico completo em salas encriptadas</string>
+    <string name="settings_labs_show_complete_history_in_encrypted_room">Mostrar histórico completo em salas criptografadas</string>
     <string name="notification_unread_notified_messages_and_invitation">%1$s e %2$s</string>
     <string name="notification_unread_notified_messages_in_room_and_invitation">%1$s em %2$s e %3$s</string>
     <string name="settings_troubleshoot_test_notification_notification_clicked">A notificação tem sido clicada!</string>
@@ -2130,9 +2130,9 @@
     <string name="settings_room_upgrades">Upgrades de sala</string>
     <string name="settings_messages_by_bot">Mensagens por bot</string>
     <string name="settings_room_invitations">Convites de sala</string>
-    <string name="settings_encrypted_group_messages">Mensagens de grupo encriptadas</string>
+    <string name="settings_encrypted_group_messages">Mensagens em grupo criptografadas</string>
     <string name="settings_group_messages">Mensagens de grupo</string>
-    <string name="settings_encrypted_direct_messages">Mensagens diretas encriptadas</string>
+    <string name="settings_encrypted_direct_messages">Mensagens diretas criptografadas</string>
     <string name="settings_messages_direct_messages">Mensagens diretas</string>
     <string name="settings_messages_containing_username">Meu nome de usuário</string>
     <string name="settings_messages_containing_display_name">Meu nome de exibição</string>
@@ -2166,9 +2166,9 @@
     <string name="call_tile_you_declined_this_call">Você declinou esta chamada</string>
     <string name="room_settings_room_notifications_account_settings">Configurações de conta</string>
     <string name="room_settings_room_notifications_manage_notifications">Você pode gerenciar notificações em %1$s.</string>
-    <string name="room_settings_room_notifications_encryption_notice">Por favor note que notificações de menções &amp; palavrachave não estão disponíveis em salas encriptadas no celular.</string>
+    <string name="room_settings_room_notifications_encryption_notice">Por favor observe que notificações de menções e palavras-chave não estão disponíveis em salas criptografadas no celular.</string>
     <string name="room_settings_room_notifications_notify_me">Notifique-me para</string>
-    <string name="settings_mentions_and_keywords_encryption_notice">Você não vai ter notificações para menções &amp; palavrachaves em salas encriptadas no celular.</string>
+    <string name="settings_mentions_and_keywords_encryption_notice">Você não receberá notificações para menções e palavras-chave em salas criptografadas no celular.</string>
     <string name="settings_messages_containing_keywords">Palavrachaves</string>
     <string name="settings_mentions_at_room">\@room</string>
     <string name="settings_notification_keyword_contains_invalid_character">Palavrachaves não podem conter \'%s\'</string>
@@ -2176,7 +2176,7 @@
     <string name="settings_notification_new_keyword">Adicionar nova palavrachave</string>
     <string name="settings_notification_your_keywords">Suas palavachaves</string>
     <string name="room_settings_none">Nenhuma</string>
-    <string name="room_settings_mention_and_keyword_only">Menções &amp; Palavrachaves somente</string>
+    <string name="room_settings_mention_and_keyword_only">Menções e Palavras-chave apenas</string>
     <string name="call_remove_jitsi_widget_progress">Terminando chamada…</string>
     <string name="call_ended_invite_timeout_title">Sem resposta</string>
     <string name="call_ended_user_busy_description">O usuário que você chamou está ocupado.</string>
@@ -2320,7 +2320,7 @@
     <string name="labs_auto_report_uisi">Auto Reportar Erros de Decriptação.</string>
     <string name="room_member_override_nick_color">Sobrepor cor de nome de exibição</string>
     <string name="login_splash_already_have_account">Eu já tenho uma conta</string>
-    <string name="ftue_auth_carousel_encrypted_title">Mensageria segura.</string>
+    <string name="ftue_auth_carousel_encrypted_title">Comunicação segura.</string>
     <string name="ftue_auth_carousel_control_title">Você está em controle.</string>
     <string name="ftue_auth_carousel_secure_title">Tenha posse de suas conversas.</string>
     <string name="tooltip_attachment_location">Compartilhar localização</string>
@@ -2344,7 +2344,7 @@
     <string name="encryption_has_been_misconfigured">Encriptação tem sido malconfigurada.</string>
     <string name="login_splash_create_account">Criar conta</string>
     <string name="ftue_auth_carousel_workplace_title">Mensageria para seu time.</string>
-    <string name="ftue_auth_carousel_encrypted_body">Encriptado ponta-a-ponta e nenhum número de telefone requerido. Sem publicidade ou datamining.</string>
+    <string name="ftue_auth_carousel_encrypted_body">Criptografado de ponta-a-ponta e sem obrigatoriedade de número de telefone. Sem publicidade ou datamining.</string>
     <string name="ftue_auth_carousel_control_body">Escolha onde suas conversas são mantidas, dando-lhe controle e independência. Conectado via Matrix.</string>
     <string name="ftue_auth_carousel_secure_body">Comunicação segura e independente que lhe dá o mesmo nível de privacidade que conversa face-a-face em sua própria casa.</string>
     <string name="room_unsupported_e2e_algorithm_as_admin">Encriptação tem sido malconfigurada então você não pode enviar mensagens. Clique para abrir configurações.</string>
@@ -2734,7 +2734,7 @@
     <string name="command_description_devtools">Abrir a tela de ferramentas de desenvolvedor</string>
     <string name="room_settings_global_block_unverified_info_text">🔒 Você tem habilitado encriptar para sessões verificadas somente para todas as salas em Configurações de Segurança.</string>
     <string name="some_devices_will_not_be_able_to_decrypt">⚠ Existem dispositivos não-verificados nesta sala, eles não vão ser capazes de decriptar mensagens que você enviar.</string>
-    <string name="encryption_never_send_to_unverified_devices_in_room">Nunca enviar mensagens encriptadas a sessões não-verificadas nesta sala.</string>
+    <string name="encryption_never_send_to_unverified_devices_in_room">Nunca enviar mensagens criptografadas a sessões não-verificadas nesta sala.</string>
     <string name="action_got_it">Entendido</string>
     <string name="rich_text_editor_format_strikethrough">Aplicar formato tachar</string>
     <string name="rich_text_editor_format_underline">Aplicar formato sublinhar</string>
