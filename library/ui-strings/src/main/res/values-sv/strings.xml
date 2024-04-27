@@ -2967,4 +2967,9 @@
 \n%s</string>
     <string name="invite_unknown_users_dialog_submit">Bjud in ändå</string>
     <string name="login_splash_sign_in">Logga in</string>
+    <string name="user_reported_as_inappropriate_title">Rapporterade användare</string>
+    <string name="message_report_user">Rapportera användare</string>
+    <string name="user_reported_as_inappropriate_content">Användaren har rapporterats.
+\n
+\nOm du inte vill se något mer innehåll från den här användaren så kan du ignorera denne för att dölja dennes meddelanden.</string>
 </resources>
