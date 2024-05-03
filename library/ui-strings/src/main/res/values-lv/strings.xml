@@ -535,8 +535,8 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="identity_server_set_alternative_submit">Iesniegt</string>
     <string name="invite_friends">Uzaicināt draugus</string>
     <string name="invite_users_to_room_title">Uzaicināt lietotājus</string>
-    <string name="confirm_your_identity">Apstipriniet savu identitāti, verificējot šo pierakstīšanos no kādas citas savas sesijas, tādējādi ļaujot piekļūt šifrētajām ziņām.</string>
-    <string name="cross_signing_verify_by_text">Manuāli verificēt ar tekstu</string>
+    <string name="confirm_your_identity">Apstiprināt savu identitāti ar šīs pieteikšanās apliecināšanu kādā citā savā sesijā, tādējādi nodrošinot piekļuvi šifrētajām ziņām.</string>
+    <string name="cross_signing_verify_by_text">Pašrocīgi apliecināt ar tekstu</string>
     <string name="unencrypted">Nešifrēts</string>
     <string name="or_other_mx_capable_client">vai kādu citu Matrix lietotni ar cross-signing atbalstu</string>
     <string name="auth_invalid_login_deactivated_account">Šis konts ir deaktivizēts.</string>
@@ -557,9 +557,9 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="room_member_profile_sessions_section_title">Sesijas</string>
     <string name="room_member_profile_failed_to_get_devices">Neizdevās iegūt sesijas</string>
     <string name="verification_profile_warning">Brīdinājums</string>
-    <string name="verification_profile_verified">Verificēta</string>
+    <string name="verification_profile_verified">Apliecināts</string>
     <string name="verification_profile_verify">Apstiprināt</string>
-    <string name="crosssigning_verify_this_session">Verificējiet šo sesiju</string>
+    <string name="crosssigning_verify_this_session">Apliecināt šo ierīci</string>
     <string name="settings_hs_admin_e2e_disabled">Servera pārvaldītājs uzstādījis pilnīgas šifrēšanas atspējošanu privātās istabās un tiešajās ziņās kā noklusējumu.</string>
     <string name="verification_conclusion_ok_self_notice">Jaunā sesija tagad ir apliecināta. Tai ir piekļuve šifrētajām ziņām, un citi lietotāji redzēs to kā uzticamu.</string>
     <string name="verification_conclusion_ok_notice">Saziņa ar šo lietotāju ir pilnībā šifrēta un trešās puses to nevar nolasīt.</string>
@@ -629,7 +629,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="login_reset_password_success_submit">Atgriezties uz pierakstīšanos</string>
     <string name="login_reset_password_success_notice_2">Tu esi izrakstījies no visām sesijām un vairs nesaņemsi pašpiegādes paziņojumus. Lai atkārtoti iespējotu paziņojumus, vēlreiz jāpiesakās katrā ierīcē.</string>
     <string name="login_reset_password_success_notice">Parole tika atiestatīta.</string>
-    <string name="login_reset_password_mail_confirmation_submit">Esmu verificējis(usi) savu epasta adresi</string>
+    <string name="login_reset_password_mail_confirmation_submit">Es apliecināju savu e-pasta adresi</string>
     <string name="login_reset_password_warning_submit">Turpināt</string>
     <string name="login_reset_password_warning_content">Paroles mainīšana atiestatīs visas pilnīgas šifrēšanas atslēgas visās sesijās, padarot šifrēto tērzēšanu vēsturi nelasāmu. Pirms paroles atiestatīšanas jāuzstāda atslēgu dublēšana vai jāizgūst istabu atslēgas no citas sesijas.</string>
     <string name="login_reset_password_warning_title">Uzmanību!</string>
@@ -679,7 +679,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="reply">Atbildēt</string>
     <string name="edit">Labot</string>
     <string name="sas_got_it">Sapratu</string>
-    <string name="sas_verified">Verificēts!</string>
+    <string name="sas_verified">Apliecināta.</string>
     <string name="keys_backup_info_title_algorithm">Algoritms</string>
     <string name="keys_backup_info_title_version">Versija</string>
     <string name="secure_backup_banner_setup_line1">Droša rezerves kopija</string>
@@ -801,7 +801,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
         <item quantity="one">%d sekundes</item>
         <item quantity="other">%d sekundes</item>
     </plurals>
-    <string name="verification_profile_device_verified_because">Šī sesija ir uzticama drošai ziņojumapmaiņai, jo %1$s (%2$s) to verificēja:</string>
+    <string name="verification_profile_device_verified_because">Šī sesija ir uzticama drošai ziņojumapmaiņai, jo %1$s (%2$s) to apliecināja:</string>
     <string name="settings_active_sessions_unverified_device_desc">Jāapliecina šī sesija, lai atzīmētu to kā uzticamu un piešķirtu piekļuvi šifrētām ziņām. Ja netika veikta pieteikšanās šajā sesijā, konts varētu būt iesaistīts drošības pārkāpumā:</string>
     <string name="settings_active_sessions_verified_device_desc">Šī sesija ir uzticama drošai ziņapmaiņai, jo Tu to apliecināji:</string>
     <string name="settings_active_sessions_signout_device">Atteikties no šīs sesijas</string>
@@ -811,7 +811,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="verification_code_notice">Salīdziniet kodu ar to, kas parādīts otra lietotāja ekrānā.</string>
     <string name="verification_emoji_notice">Salīdziniet unikālās emocijzīmes, pārliecinoties tās ir vienādā secībā.</string>
     <string name="verification_request_start_notice">Lai būtu droši, dariet to klātienē vai izmantojiet citu komunikācijas veidu.</string>
-    <string name="verification_request_notice">Lai būtu droši, verificējiet %s ar vienreizēja koda palīdzību.</string>
+    <string name="verification_request_notice">Lai būtu droši, jāapliecina %s ar vienreizēja koda palīdzību.</string>
     <string name="sent_verification_conclusion">Verifikācijas slēdziens</string>
     <string name="sent_a_poll">Aptauja</string>
     <string name="send_a_sticker">Uzlīme</string>
@@ -899,10 +899,10 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="dialog_user_consent_submit">Pārskatīt tagad</string>
     <string name="dialog_user_consent_content">Lai turpinātu izmantot mājasserveri %1$s, ir jāpārskata un jāpiekrīt noteikumiem un nosacījumiem.</string>
     <string name="notification_silent">Kluss</string>
-    <string name="your_unverified_device_requesting_with_info">Neverificēta sesija pieprasa šifrēšanas atslēgas.
+    <string name="your_unverified_device_requesting_with_info">Neapliecināta sesija pieprasa šifrēšanas atslēgas.
 \nSesijas nosaukums: %1$s
-\nRedzēta pēdējo reizi: %2$s
-\nJa neesat pierakstījies citā sesijā, ignorējiet šo pieprasījumu.</string>
+\nPēdējā darbība: %2$s
+\nJa nepieteicies citā sesijā, šis pieprasījums nav jāņem vērā.</string>
     <string name="you_added_a_new_device_with_info">Jauna sesija pieprasa šifrēšanas atslēgas.
 \nSesijas nosaukums: %1$s
 \nRedzēta pēdējo reizi: %2$s
@@ -993,7 +993,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="room_created_summary_item_by_you">Tu izveidoji un uzstādīji istabu.</string>
     <string name="room_created_summary_item">%s izveidoja un sakonfigurēja istabu.</string>
     <string name="encryption_unknown_algorithm_tile_description">Šajā istabā izmantotā šifrēšana netiek atbalstīta</string>
-    <string name="encryption_enabled_tile_description">Ziņas šajā istabā ir aizsargātas ar pilnīgu šifrēšanu. Uzziniet vairāk un verificējiet lietotājus viņu profilā.</string>
+    <string name="encryption_enabled_tile_description">Ziņas šajā istabā ir aizsargātas ar pilnīgu šifrēšanu. Uzzināt vairāk un apliecināt lietotājus var viņu profilā.</string>
     <string name="verification_cancelled">Apliecināšana atcelta</string>
     <string name="verify_new_session_compromized">Konts varētu būt iesaistīts drošības pārkāpumā</string>
     <string name="verify_new_session_was_not_me">Tas nebiju es</string>
@@ -1013,14 +1013,14 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
         <item quantity="other">%1$d cilvēki</item>
     </plurals>
     <string name="verification_request_waiting_for">Gaida %s…</string>
-    <string name="verification_verified_user">Verificēts %s</string>
-    <string name="verification_verify_user">Verificē %s</string>
+    <string name="verification_verified_user">%s apliecināts</string>
+    <string name="verification_verify_user">Apliecina %s</string>
     <string name="verification_no_scan_emoji_title">Verifikācija, izmantojot emocijzīmju salīdzināšanu</string>
     <string name="verification_scan_emoji_subtitle">Ja neesi klātienē, jāsalīdzina emocijzīmes</string>
     <string name="verification_scan_emoji_title">Nevar skenēt</string>
     <string name="verification_scan_their_code">Skenēt viņu kodu</string>
-    <string name="verification_scan_notice">Skenējiet kodu ar otra lietotāja ierīci, lai droši verificētu viens otru</string>
-    <string name="verification_verify_device">Verificējiet šo sesiju</string>
+    <string name="verification_scan_notice">Jānolasa kods ar otra lietotāja ierīci, lai droši apliecinātu viens otru</string>
+    <string name="verification_verify_device">Apliecināt šo sesiju</string>
     <string name="verification_request">Apliecinājuma pieprasījums</string>
     <string name="verification_sent">Verifikācija nosūtīta</string>
     <string name="verification_request_other_accepted">%s akceptēja</string>
@@ -1189,10 +1189,10 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
 \n
 \nVai tiešām vēlaties turpināt\?</string>
     <string name="external_link_confirmation_title">Pārbaudiet šo saiti</string>
-    <string name="cross_signing_verify_by_emoji">Interaktīvi verificēt ar emocijzīmēm</string>
-    <string name="crosssigning_verify_session">Verificējiet sesiju</string>
-    <string name="verify_this_session">Verificējiet jauno pierakstīšanos no sava konta: %1$s</string>
-    <string name="encrypted_unverified">Šifrēts ar neverificētu sesiju</string>
+    <string name="cross_signing_verify_by_emoji">Mijiedarbojoties apliecināt ar emocijzīmēm</string>
+    <string name="crosssigning_verify_session">Apliecināt sesiju</string>
+    <string name="verify_this_session">Apliecini jauno pieteikšanos Tavam kontam: %1$s</string>
+    <string name="encrypted_unverified">Šifrēts ar neapliecinātu ierīci</string>
     <string name="default_message_emote_snow">sūta sniegu ❄️</string>
     <string name="default_message_emote_confetti">sūta konfeti 🎉</string>
     <string name="upgrade_security">Pieejams šifrēšanas atjauninājums</string>
