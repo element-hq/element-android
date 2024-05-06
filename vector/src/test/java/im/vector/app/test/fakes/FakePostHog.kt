@@ -17,8 +17,7 @@
 package im.vector.app.test.fakes
 
 import android.os.Looper
-import com.posthog.android.PostHog
-import com.posthog.android.Properties
+import com.posthog.PostHogInterface
 import im.vector.app.features.analytics.plan.UserProperties
 import io.mockk.every
 import io.mockk.mockk
@@ -36,16 +35,19 @@ class FakePostHog {
         every { Looper.getMainLooper() } returns looper
     }
 
-    val instance = mockk<PostHog>(relaxed = true)
+    val instance = mockk<PostHogInterface>(relaxed = true)
 
     fun verifyOptOutStatus(optedOut: Boolean) {
-        verify { instance.optOut(optedOut) }
+        if (optedOut) {
+            verify { instance.optOut() }
+        } else {
+            verify { instance.optIn() }
+        }
     }
 
     fun verifyIdentifies(analyticsId: String, userProperties: UserProperties?) {
         verify {
             val postHogProperties = userProperties?.getProperties()
-                    ?.let { rawProperties -> Properties().also { it.putAll(rawProperties) } }
                     ?.takeIf { it.isNotEmpty() }
             instance.identify(analyticsId, postHogProperties, null)
         }
@@ -55,7 +57,7 @@ class FakePostHog {
         verify { instance.reset() }
     }
 
-    fun verifyScreenTracked(name: String, properties: Properties?) {
+    fun verifyScreenTracked(name: String, properties: Map<String, Any>?) {
         verify { instance.screen(name, properties) }
     }
 
@@ -63,12 +65,11 @@ class FakePostHog {
         verify(exactly = 0) {
             instance.screen(any())
             instance.screen(any(), any())
-            instance.screen(any(), any(), any())
         }
     }
 
-    fun verifyEventTracked(name: String, properties: Properties?) {
-        verify { instance.capture(name, properties) }
+    fun verifyEventTracked(name: String, properties: Map<String, Any>?) {
+        verify { instance.capture(name, null, properties) }
     }
 
     fun verifyNoEventTracking() {
