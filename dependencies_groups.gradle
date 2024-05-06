@@ -120,7 +120,7 @@ ext.groups = [
                         'com.parse.bolts',
                         'com.pinterest',
                         'com.pinterest.ktlint',
-                        'com.posthog.android',
+                        'com.posthog',
                         'com.squareup',
                         'com.squareup.curtains',
                         'com.squareup.duktape',
