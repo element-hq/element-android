@@ -1760,7 +1760,7 @@
     <string name="not_a_valid_qr_code">Não é um QR code matrix válido</string>
     <string name="invite_friends_rich_title">🔐️ Junte-se a mim em ${app_name}</string>
     <string name="invite_friends_text">Hey, fale comigo em ${app_name}: %s</string>
-    <string name="invite_friends">Convidar amigas(os)</string>
+    <string name="invite_friends">Convidar amigos</string>
     <string name="add_people">Adicionar pessoas</string>
     <string name="topic_prefix">"Tópico: "</string>
     <string name="add_a_topic_link_text">Adicionar um tópico</string>
@@ -2360,7 +2360,7 @@
     <string name="ftue_auth_use_case_skip">Não tem certeza ainda\? %s</string>
     <string name="ftue_auth_use_case_option_three">Comunidades</string>
     <string name="ftue_auth_use_case_option_two">Times</string>
-    <string name="ftue_auth_use_case_option_one">Amigas(os) e família</string>
+    <string name="ftue_auth_use_case_option_one">Amigos e família</string>
     <string name="ftue_auth_use_case_subtitle">Nós vamos ajudá-la(o) a ficar conectada(o)</string>
     <string name="ftue_auth_use_case_title">Com quem você vai fazer chat mais\?</string>
     <string name="navigate_to_thread_when_already_in_the_thread">Você já está visualizando esta thread!</string>
@@ -2971,4 +2971,5 @@
 \n
 \n%s</string>
     <string name="message_report_user">Reportar usuário</string>
+    <string name="login_splash_sign_in">Fazer Login</string>
 </resources>
