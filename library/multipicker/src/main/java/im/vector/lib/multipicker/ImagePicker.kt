@@ -31,7 +31,7 @@ class ImagePicker : Picker<MultiPickerImageType>() {
      * Returns selected image files or empty list if user did not select any files.
      */
     override fun getSelectedFiles(context: Context, data: Intent?): List<MultiPickerImageType> {
-        return getSelectedUriList(data).mapNotNull { selectedUri ->
+        return getSelectedUriList(context, data).mapNotNull { selectedUri ->
             selectedUri.toMultiPickerImageType(context)
         }
     }

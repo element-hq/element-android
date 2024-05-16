@@ -65,6 +65,10 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
             val mimeType: String?
     ) : RoomDetailViewEvents()
 
+    data class RevokeFilePermission(
+            val uri: Uri
+    ) : RoomDetailViewEvents()
+
     data class DisplayAndAcceptCall(val call: WebRtcCall) : RoomDetailViewEvents()
 
     object DisplayPromptForIntegrationManager : RoomDetailViewEvents()
