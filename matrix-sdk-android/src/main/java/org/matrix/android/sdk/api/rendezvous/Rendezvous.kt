@@ -39,7 +39,7 @@ import timber.log.Timber
 
 // n.b MSC3886/MSC3903/MSC3906 that this is based on are now closed.
 // However, we want to keep this implementation around for some time.
-// TODO: define an end-of-life date for this implementation.
+// TODO define an end-of-life date for this implementation.
 
 /**
  * Implementation of MSC3906 to sign in + E2EE set up using a QR code.
