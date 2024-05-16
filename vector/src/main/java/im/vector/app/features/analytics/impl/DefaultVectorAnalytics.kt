@@ -16,9 +16,7 @@
 
 package im.vector.app.features.analytics.impl
 
-import com.posthog.android.Options
-import com.posthog.android.PostHog
-import com.posthog.android.Properties
+import com.posthog.PostHogInterface
 import im.vector.app.core.di.NamedGlobalScope
 import im.vector.app.features.analytics.AnalyticsConfig
 import im.vector.app.features.analytics.VectorAnalytics
@@ -36,9 +34,6 @@ import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
-private val REUSE_EXISTING_ID: String? = null
-private val IGNORED_OPTIONS: Options? = null
-
 @Singleton
 class DefaultVectorAnalytics @Inject constructor(
         private val postHogFactory: PostHogFactory,
@@ -49,9 +44,9 @@ class DefaultVectorAnalytics @Inject constructor(
         @NamedGlobalScope private val globalScope: CoroutineScope
 ) : VectorAnalytics {
 
-    private var posthog: PostHog? = null
+    private var posthog: PostHogInterface? = null
 
-    private fun createPosthog(): PostHog? {
+    private fun createPosthog(): PostHogInterface? {
         return when {
             analyticsConfig.isEnabled -> postHogFactory.createPosthog()
             else -> {
@@ -126,7 +121,7 @@ class DefaultVectorAnalytics @Inject constructor(
             posthog?.reset()
         } else {
             Timber.tag(analyticsTag.value).d("identify")
-            posthog?.identify(id, lateInitUserPropertiesFactory.createUserProperties()?.getProperties()?.toPostHogUserProperties(), IGNORED_OPTIONS)
+            posthog?.identify(id, lateInitUserPropertiesFactory.createUserProperties()?.getProperties()?.toPostHogUserProperties())
         }
     }
 
@@ -155,7 +150,7 @@ class DefaultVectorAnalytics @Inject constructor(
             when (_userConsent) {
                 true -> {
                     posthog = createPosthog()
-                    posthog?.optOut(false)
+                    posthog?.optIn()
                     identifyPostHog()
                     pendingUserProperties?.let { doUpdateUserProperties(it) }
                     pendingUserProperties = null
@@ -163,8 +158,8 @@ class DefaultVectorAnalytics @Inject constructor(
                 false -> {
                     // When opting out, ensure that the queue is flushed first, or it will be flushed later (after user has revoked consent)
                     posthog?.flush()
-                    posthog?.optOut(true)
-                    posthog?.shutdown()
+                    posthog?.optOut()
+                    posthog?.close()
                     posthog = null
                 }
             }
@@ -177,6 +172,7 @@ class DefaultVectorAnalytics @Inject constructor(
                 ?.takeIf { userConsent == true }
                 ?.capture(
                         event.getName(),
+                        analyticsId,
                         event.getProperties()?.toPostHogProperties()
                 )
     }
@@ -197,27 +193,37 @@ class DefaultVectorAnalytics @Inject constructor(
     }
 
     private fun doUpdateUserProperties(userProperties: UserProperties) {
+        // we need a distinct id to set user properties
+        val distinctId = analyticsId ?: return
         posthog
                 ?.takeIf { userConsent == true }
-                ?.identify(REUSE_EXISTING_ID, userProperties.getProperties()?.toPostHogUserProperties(), IGNORED_OPTIONS)
+                ?.identify(distinctId, userProperties.getProperties())
     }
 
-    private fun Map<String, Any?>?.toPostHogProperties(): Properties? {
+    private fun Map<String, Any?>?.toPostHogProperties(): Map<String, Any>? {
         if (this == null) return null
 
-        return Properties().apply {
-            putAll(this@toPostHogProperties)
+        val nonNulls = HashMap<String, Any>()
+        this.forEach { (key, value) ->
+            if (value != null) {
+                nonNulls[key] = value
+            }
         }
+        return nonNulls
     }
 
     /**
      * We avoid sending nulls as part of the UserProperties as this will reset the values across all devices.
      * The UserProperties event has nullable properties to allow for clients to opt in.
      */
-    private fun Map<String, Any?>.toPostHogUserProperties(): Properties {
-        return Properties().apply {
-            putAll(this@toPostHogUserProperties.filter { it.value != null })
+    private fun Map<String, Any?>.toPostHogUserProperties(): Map<String, Any> {
+        val nonNulls = HashMap<String, Any>()
+        this.forEach { (key, value) ->
+            if (value != null) {
+                nonNulls[key] = value
+            }
         }
+        return nonNulls
     }
 
     override fun trackError(throwable: Throwable) {

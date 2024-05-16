@@ -234,9 +234,7 @@ dependencies {
     kapt libs.dagger.hiltCompiler
 
     // Analytics
-    implementation('com.posthog.android:posthog:2.0.3') {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    }
+    implementation 'com.posthog:posthog-android:3.2.0'
     implementation libs.sentry.sentryAndroid
 
     // UnifiedPush

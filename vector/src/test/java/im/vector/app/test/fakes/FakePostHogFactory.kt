@@ -16,12 +16,12 @@
 
 package im.vector.app.test.fakes
 
-import com.posthog.android.PostHog
+import com.posthog.PostHogInterface
 import im.vector.app.features.analytics.impl.PostHogFactory
 import io.mockk.every
 import io.mockk.mockk
 
-class FakePostHogFactory(postHog: PostHog) {
+class FakePostHogFactory(postHog: PostHogInterface) {
     val instance = mockk<PostHogFactory>().also {
         every { it.createPosthog() } returns postHog
     }
