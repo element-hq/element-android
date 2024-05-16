@@ -17,7 +17,7 @@ We ask for the user to give consent before sending any analytics data.
 
 The analytics plan is shared between all Element clients. To add an Event, please open a PR to this project: https://github.com/matrix-org/matrix-analytics-events
 
-Then, once the PR has been merged, you can run the tool `import_analytic_plan.sh` to import the plan to Element, and then you can use the new Event. Note that this tool is run by Github action once a week.
+Then, once the PR has been merged, and the library is release, you can update the version of the library in the `build.gradle` file.
 
 ## Forks of Element
 
