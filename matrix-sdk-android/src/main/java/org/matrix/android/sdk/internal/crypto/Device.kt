@@ -31,8 +31,8 @@ import org.matrix.android.sdk.internal.crypto.verification.SasVerification
 import org.matrix.android.sdk.internal.crypto.verification.VerificationRequest
 import org.matrix.android.sdk.internal.crypto.verification.prepareMethods
 import org.matrix.rustcomponents.sdk.crypto.CryptoStoreException
-import org.matrix.rustcomponents.sdk.crypto.LocalTrust
 import org.matrix.rustcomponents.sdk.crypto.SignatureException
+import uniffi.matrix_sdk_crypto.LocalTrust
 import org.matrix.rustcomponents.sdk.crypto.Device as InnerDevice
 
 /** Class representing a device that supports E2EE in the Matrix world
