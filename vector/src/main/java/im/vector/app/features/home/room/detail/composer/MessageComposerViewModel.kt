@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail.composer
 
+import android.text.SpannableString
 import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.withState
@@ -150,7 +151,7 @@ class MessageComposerViewModel @AssistedInject constructor(
 
     private fun handleOnTextChanged(action: MessageComposerAction.OnTextChanged) {
         val needsSendButtonVisibilityUpdate = currentComposerText.isBlank() != action.text.isBlank()
-        currentComposerText = action.text
+        currentComposerText = SpannableString(action.text)
         if (needsSendButtonVisibilityUpdate) {
             updateIsSendButtonVisibility(true)
         }
