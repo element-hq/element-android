@@ -75,7 +75,6 @@ import org.matrix.rustcomponents.sdk.crypto.DeviceLists
 import org.matrix.rustcomponents.sdk.crypto.EncryptionSettings
 import org.matrix.rustcomponents.sdk.crypto.KeyRequestPair
 import org.matrix.rustcomponents.sdk.crypto.KeysImportResult
-import org.matrix.rustcomponents.sdk.crypto.LocalTrust
 import org.matrix.rustcomponents.sdk.crypto.Logger
 import org.matrix.rustcomponents.sdk.crypto.MegolmV1BackupKey
 import org.matrix.rustcomponents.sdk.crypto.Request
@@ -86,6 +85,7 @@ import org.matrix.rustcomponents.sdk.crypto.ShieldState
 import org.matrix.rustcomponents.sdk.crypto.SignatureVerification
 import org.matrix.rustcomponents.sdk.crypto.setLogger
 import timber.log.Timber
+import uniffi.matrix_sdk_crypto.LocalTrust
 import java.io.File
 import java.nio.charset.Charset
 import javax.inject.Inject
@@ -828,8 +828,14 @@ internal class OlmMachine @Inject constructor(
         val requests = withContext(coroutineDispatchers.io) {
             inner.bootstrapCrossSigning()
         }
+        (requests.uploadKeysRequest)?.let {
+            when (it) {
+                is Request.KeysUpload -> requestSender.uploadKeys(it)
+                else -> {}
+            }
+        }
         requestSender.uploadCrossSigningKeys(requests.uploadSigningKeysRequest, uiaInterceptor)
-        requestSender.sendSignatureUpload(requests.signatureRequest)
+        requestSender.sendSignatureUpload(requests.uploadSignatureRequest)
     }
 
     /**
