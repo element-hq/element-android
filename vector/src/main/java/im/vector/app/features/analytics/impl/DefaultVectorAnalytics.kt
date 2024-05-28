@@ -23,6 +23,7 @@ import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
 import im.vector.app.features.analytics.log.analyticsTag
+import im.vector.app.features.analytics.plan.SuperProperties
 import im.vector.app.features.analytics.plan.UserProperties
 import im.vector.app.features.analytics.store.AnalyticsStore
 import kotlinx.coroutines.CoroutineScope
@@ -62,6 +63,8 @@ class DefaultVectorAnalytics @Inject constructor(
 
     // Cache for the properties to send
     private var pendingUserProperties: UserProperties? = null
+
+    private var superProperties: SuperProperties? = null
 
     override fun init() {
         observeUserConsent()
@@ -173,7 +176,7 @@ class DefaultVectorAnalytics @Inject constructor(
                 ?.capture(
                         event.getName(),
                         analyticsId,
-                        event.getProperties()?.toPostHogProperties()
+                        event.getProperties()?.toPostHogProperties().orEmpty().withSuperProperties()
                 )
     }
 
@@ -181,7 +184,7 @@ class DefaultVectorAnalytics @Inject constructor(
         Timber.tag(analyticsTag.value).d("screen($screen)")
         posthog
                 ?.takeIf { userConsent == true }
-                ?.screen(screen.getName(), screen.getProperties()?.toPostHogProperties())
+                ?.screen(screen.getName(), screen.getProperties()?.toPostHogProperties().orEmpty().withSuperProperties())
     }
 
     override fun updateUserProperties(userProperties: UserProperties) {
@@ -226,9 +229,38 @@ class DefaultVectorAnalytics @Inject constructor(
         return nonNulls
     }
 
+    /**
+     * Adds super properties to the actual property set.
+     * If a property of the same name is already on the reported event it will not be overwritten.
+     */
+    private fun Map<String, Any>.withSuperProperties(): Map<String, Any> {
+        val withSuperProperties = this.toMutableMap()
+        val superProperties = this@DefaultVectorAnalytics.superProperties?.getProperties()
+        superProperties?.forEach {
+            if (!withSuperProperties.containsKey(it.key)) {
+                withSuperProperties[it.key] = it.value
+            }
+        }
+        return withSuperProperties
+    }
+
     override fun trackError(throwable: Throwable) {
         sentryAnalytics
                 .takeIf { userConsent == true }
                 ?.trackError(throwable)
+    }
+
+    override fun updateSuperProperties(updatedProperties: SuperProperties) {
+        if (this.superProperties == null) {
+            this.superProperties = updatedProperties
+            return
+        }
+
+        this.superProperties = SuperProperties(
+                platformCodeName = updatedProperties.platformCodeName ?: this.superProperties?.platformCodeName,
+                cryptoSDK = updatedProperties.cryptoSDK ?: this.superProperties?.cryptoSDK,
+                appPlatform = updatedProperties.appPlatform ?: this.superProperties?.appPlatform,
+                cryptoSDKVersion = updatedProperties.cryptoSDKVersion ?: superProperties?.cryptoSDKVersion
+        )
     }
 }
