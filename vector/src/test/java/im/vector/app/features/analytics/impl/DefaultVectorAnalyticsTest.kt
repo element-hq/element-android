@@ -26,9 +26,12 @@ import im.vector.app.test.fixtures.AnalyticsConfigFixture.anAnalyticsConfig
 import im.vector.app.test.fixtures.aUserProperties
 import im.vector.app.test.fixtures.aVectorAnalyticsEvent
 import im.vector.app.test.fixtures.aVectorAnalyticsScreen
+import io.mockk.every
+import io.mockk.mockk
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
@@ -45,6 +48,9 @@ class DefaultVectorAnalyticsTest {
     private val fakeAnalyticsStore = FakeAnalyticsStore()
     private val fakeLateInitUserPropertiesFactory = FakeLateInitUserPropertiesFactory()
     private val fakeSentryAnalytics = FakeSentryAnalytics()
+    private val mockAutoSuperPropertiesFlowProvider = mockk<AutoSuperPropertiesFlowProvider>().also {
+        every { it.superPropertiesFlow } returns flowOf(SuperProperties())
+    }
 
     private val defaultVectorAnalytics = DefaultVectorAnalytics(
             postHogFactory = FakePostHogFactory(fakePostHog.instance).instance,
@@ -52,7 +58,8 @@ class DefaultVectorAnalyticsTest {
             analyticsStore = fakeAnalyticsStore.instance,
             globalScope = CoroutineScope(Dispatchers.Unconfined),
             analyticsConfig = anAnalyticsConfig(isEnabled = true),
-            lateInitUserPropertiesFactory = fakeLateInitUserPropertiesFactory.instance
+            lateInitUserPropertiesFactory = fakeLateInitUserPropertiesFactory.instance,
+            autoSuperPropertiesFlowProvider = mockAutoSuperPropertiesFlowProvider,
     )
 
     @Before
@@ -180,7 +187,7 @@ class DefaultVectorAnalyticsTest {
         fakeAnalyticsStore.givenUserContent(consent = true)
 
         val updatedProperties = SuperProperties(
-                platformCodeName = SuperProperties.PlatformCodeName.EA,
+                appPlatform = SuperProperties.AppPlatform.EA,
                 cryptoSDKVersion = "0.0",
                 cryptoSDK = SuperProperties.CryptoSDK.Rust
         )
@@ -214,7 +221,7 @@ class DefaultVectorAnalyticsTest {
         fakeAnalyticsStore.givenUserContent(consent = true)
 
         val superProperties = SuperProperties(
-                platformCodeName = SuperProperties.PlatformCodeName.EA,
+                appPlatform = SuperProperties.AppPlatform.EA,
                 cryptoSDKVersion = "0.0",
                 cryptoSDK = SuperProperties.CryptoSDK.Rust
         )

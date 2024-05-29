@@ -160,7 +160,7 @@ dependencies {
     api 'com.facebook.stetho:stetho:1.6.0'
 
     // Analytics
-    api 'com.github.matrix-org:matrix-analytics-events:0.22.0'
+    api 'com.github.matrix-org:matrix-analytics-events:0.23.0'
 
     api libs.google.phonenumber
 

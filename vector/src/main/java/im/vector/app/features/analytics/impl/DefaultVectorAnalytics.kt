@@ -42,6 +42,7 @@ class DefaultVectorAnalytics @Inject constructor(
         private val analyticsConfig: AnalyticsConfig,
         private val analyticsStore: AnalyticsStore,
         private val lateInitUserPropertiesFactory: LateInitUserPropertiesFactory,
+        private val autoSuperPropertiesFlowProvider: AutoSuperPropertiesFlowProvider,
         @NamedGlobalScope private val globalScope: CoroutineScope
 ) : VectorAnalytics {
 
@@ -69,6 +70,7 @@ class DefaultVectorAnalytics @Inject constructor(
     override fun init() {
         observeUserConsent()
         observeAnalyticsId()
+        observeAutoSuperProperties()
     }
 
     override fun getUserConsent(): Flow<Boolean> {
@@ -114,6 +116,12 @@ class DefaultVectorAnalytics @Inject constructor(
                     identifyPostHog()
                 }
                 .launchIn(globalScope)
+    }
+
+    private fun observeAutoSuperProperties() {
+        autoSuperPropertiesFlowProvider.superPropertiesFlow.onEach {
+            updateSuperProperties(it)
+        }.launchIn(globalScope)
     }
 
     private suspend fun identifyPostHog() {
@@ -171,20 +179,14 @@ class DefaultVectorAnalytics @Inject constructor(
 
     override fun capture(event: VectorAnalyticsEvent) {
         Timber.tag(analyticsTag.value).d("capture($event)")
-        posthog
-                ?.takeIf { userConsent == true }
-                ?.capture(
-                        event.getName(),
-                        analyticsId,
-                        event.getProperties()?.toPostHogProperties().orEmpty().withSuperProperties()
+        posthog?.takeIf { userConsent == true }?.capture(
+                        event.getName(), analyticsId, event.getProperties()?.toPostHogProperties().orEmpty().withSuperProperties()
                 )
     }
 
     override fun screen(screen: VectorAnalyticsScreen) {
         Timber.tag(analyticsTag.value).d("screen($screen)")
-        posthog
-                ?.takeIf { userConsent == true }
-                ?.screen(screen.getName(), screen.getProperties()?.toPostHogProperties().orEmpty().withSuperProperties())
+        posthog?.takeIf { userConsent == true }?.screen(screen.getName(), screen.getProperties()?.toPostHogProperties().orEmpty().withSuperProperties())
     }
 
     override fun updateUserProperties(userProperties: UserProperties) {
@@ -198,9 +200,7 @@ class DefaultVectorAnalytics @Inject constructor(
     private fun doUpdateUserProperties(userProperties: UserProperties) {
         // we need a distinct id to set user properties
         val distinctId = analyticsId ?: return
-        posthog
-                ?.takeIf { userConsent == true }
-                ?.identify(distinctId, userProperties.getProperties())
+        posthog?.takeIf { userConsent == true }?.identify(distinctId, userProperties.getProperties())
     }
 
     private fun Map<String, Any?>?.toPostHogProperties(): Map<String, Any>? {
@@ -233,7 +233,7 @@ class DefaultVectorAnalytics @Inject constructor(
      * Adds super properties to the actual property set.
      * If a property of the same name is already on the reported event it will not be overwritten.
      */
-    private fun Map<String, Any>.withSuperProperties(): Map<String, Any> {
+    private fun Map<String, Any>.withSuperProperties(): Map<String, Any>? {
         val withSuperProperties = this.toMutableMap()
         val superProperties = this@DefaultVectorAnalytics.superProperties?.getProperties()
         superProperties?.forEach {
@@ -241,7 +241,7 @@ class DefaultVectorAnalytics @Inject constructor(
                 withSuperProperties[it.key] = it.value
             }
         }
-        return withSuperProperties
+        return withSuperProperties.takeIf { it.isEmpty().not() }
     }
 
     override fun trackError(throwable: Throwable) {
@@ -251,13 +251,7 @@ class DefaultVectorAnalytics @Inject constructor(
     }
 
     override fun updateSuperProperties(updatedProperties: SuperProperties) {
-        if (this.superProperties == null) {
-            this.superProperties = updatedProperties
-            return
-        }
-
         this.superProperties = SuperProperties(
-                platformCodeName = updatedProperties.platformCodeName ?: this.superProperties?.platformCodeName,
                 cryptoSDK = updatedProperties.cryptoSDK ?: this.superProperties?.cryptoSDK,
                 appPlatform = updatedProperties.appPlatform ?: this.superProperties?.appPlatform,
                 cryptoSDKVersion = updatedProperties.cryptoSDKVersion ?: superProperties?.cryptoSDKVersion
