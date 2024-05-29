@@ -1,3 +1,18 @@
+Changes in Element v1.6.16 (2024-05-29)
+=======================================
+
+Bugfixes 🐛
+----------
+ - Fix crash when accessing a local file and permission is revoked. ([#3616](https://github.com/element-hq/element-android/issues/3616))
+ - Fixes Element on Android 12+ being ineligible for URL deeplinks ([#5748](https://github.com/element-hq/element-android/issues/5748))
+ - Restore formatting when restoring a draft. Also keep formatting when switching composer mode. ([#7466](https://github.com/element-hq/element-android/issues/7466))
+
+Other changes
+-------------
+ - Update posthog sdk to 3.2.0 ([#8820](https://github.com/element-hq/element-android/issues/8820))
+ - Update Rust crypto SDK to version 0.4.1 ([#8838](https://github.com/element-hq/element-android/issues/8838))
+
+
 Changes in Element v1.6.14 (2024-04-02)
 =======================================
 

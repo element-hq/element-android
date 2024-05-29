@@ -159,6 +159,9 @@ dependencies {
     // Debug
     api 'com.facebook.stetho:stetho:1.6.0'
 
+    // Analytics
+    api 'com.github.matrix-org:matrix-analytics-events:0.15.0'
+
     api libs.google.phonenumber
 
     // FlowBinding
@@ -231,9 +234,7 @@ dependencies {
     kapt libs.dagger.hiltCompiler
 
     // Analytics
-    implementation('com.posthog.android:posthog:2.0.3') {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    }
+    implementation 'com.posthog:posthog-android:3.2.0'
     implementation libs.sentry.sentryAndroid
 
     // UnifiedPush

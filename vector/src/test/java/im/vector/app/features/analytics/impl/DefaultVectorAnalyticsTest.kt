@@ -16,9 +16,6 @@
 
 package im.vector.app.features.analytics.impl
 
-import com.posthog.android.Properties
-import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
-import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
 import im.vector.app.test.fakes.FakeAnalyticsStore
 import im.vector.app.test.fakes.FakeLateInitUserPropertiesFactory
 import im.vector.app.test.fakes.FakePostHog
@@ -128,7 +125,7 @@ class DefaultVectorAnalyticsTest {
 
         defaultVectorAnalytics.screen(A_SCREEN_EVENT)
 
-        fakePostHog.verifyScreenTracked(A_SCREEN_EVENT.getName(), A_SCREEN_EVENT.toPostHogProperties())
+        fakePostHog.verifyScreenTracked(A_SCREEN_EVENT.getName(), A_SCREEN_EVENT.getProperties())
     }
 
     @Test
@@ -146,7 +143,7 @@ class DefaultVectorAnalyticsTest {
 
         defaultVectorAnalytics.capture(AN_EVENT)
 
-        fakePostHog.verifyEventTracked(AN_EVENT.getName(), AN_EVENT.toPostHogProperties())
+        fakePostHog.verifyEventTracked(AN_EVENT.getName(), AN_EVENT.getProperties().clearNulls())
     }
 
     @Test
@@ -176,16 +173,16 @@ class DefaultVectorAnalyticsTest {
 
         fakeSentryAnalytics.verifyNoErrorTracking()
     }
-}
 
-private fun VectorAnalyticsScreen.toPostHogProperties(): Properties? {
-    return getProperties()?.let { properties ->
-        Properties().also { it.putAll(properties) }
-    }
-}
+    private fun Map<String, Any?>?.clearNulls(): Map<String, Any>? {
+        if (this == null) return null
 
-private fun VectorAnalyticsEvent.toPostHogProperties(): Properties? {
-    return getProperties()?.let { properties ->
-        Properties().also { it.putAll(properties) }
+        val nonNulls = HashMap<String, Any>()
+        this.forEach { (key, value) ->
+            if (value != null) {
+                nonNulls[key] = value
+            }
+        }
+        return nonNulls
     }
 }

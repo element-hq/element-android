@@ -23,6 +23,7 @@ import im.vector.app.test.fakes.FakeAnalyticsTracker
 import im.vector.app.test.fakes.FakeClock
 import im.vector.app.test.fakes.FakeSession
 import im.vector.app.test.shared.createTimberTestRule
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -60,9 +61,24 @@ class DecryptionFailureTrackerTest {
 
     private val fakeClock = FakeClock()
 
+    val reportedEvents = mutableSetOf<String>()
+
+    private val fakePersistence = mockk<ReportedDecryptionFailurePersistence> {
+
+        coEvery { load() } just runs
+        coEvery { persist() } just runs
+        coEvery { markAsReported(any()) } coAnswers  {
+            reportedEvents.add(firstArg())
+        }
+        every { hasBeenReported(any()) } answers  {
+            reportedEvents.contains(firstArg())
+        }
+    }
+
     private val decryptionFailureTracker = DecryptionFailureTracker(
             fakeAnalyticsTracker,
             fakeActiveSessionDataSource.instance,
+            fakePersistence,
             fakeClock
     )
 
@@ -101,6 +117,7 @@ class DecryptionFailureTrackerTest {
 
     @Before
     fun setupTest() {
+        reportedEvents.clear()
         fakeMxOrgTestSession.fakeCryptoService.fakeCrossSigningService.givenIsCrossSigningVerifiedReturns(false)
     }
 

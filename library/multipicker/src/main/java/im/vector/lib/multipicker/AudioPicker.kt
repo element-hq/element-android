@@ -31,7 +31,7 @@ class AudioPicker : Picker<MultiPickerAudioType>() {
      * Returns selected audio files or empty list if user did not select any files.
      */
     override fun getSelectedFiles(context: Context, data: Intent?): List<MultiPickerAudioType> {
-        return getSelectedUriList(data).mapNotNull { selectedUri ->
+        return getSelectedUriList(context, data).mapNotNull { selectedUri ->
             selectedUri.toMultiPickerAudioType(context)
         }
     }
