@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.internal.crypto
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import androidx.paging.PagedList
@@ -184,7 +183,7 @@ internal class RustCryptoService @Inject constructor(
         deleteDevices(listOf(deviceId), userInteractiveAuthInterceptor)
     }
 
-    override fun getCryptoVersion(context: Context, longFormat: Boolean): String {
+    override fun getCryptoVersion(longFormat: Boolean): String {
         val version = org.matrix.rustcomponents.sdk.crypto.version()
         val gitHash = org.matrix.rustcomponents.sdk.crypto.versionInfo().gitSha
         val vodozemac = org.matrix.rustcomponents.sdk.crypto.vodozemacVersion()

@@ -265,7 +265,7 @@ class BugReporter @Inject constructor(
                 activeSessionHolder.getSafeActiveSession()?.let { session ->
                     userId = session.myUserId
                     deviceId = session.sessionParams.deviceId
-                    olmVersion = session.cryptoService().getCryptoVersion(context, true)
+                    olmVersion = session.cryptoService().getCryptoVersion(true)
                 }
 
                 if (!mIsCancelled) {
