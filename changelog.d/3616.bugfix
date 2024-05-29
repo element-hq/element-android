@@ -1,1 +1,0 @@
-Fix crash when accessing a local file and permission is revoked.
