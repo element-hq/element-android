@@ -60,8 +60,6 @@ interface CryptoService {
 
     suspend fun deleteDevices(@Size(min = 1) deviceIds: List<String>, userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor)
 
-    fun getCryptoVersion(longFormat: Boolean): String
-
     fun isCryptoEnabled(): Boolean
 
     fun isRoomBlacklistUnverifiedDevices(roomId: String?): Boolean

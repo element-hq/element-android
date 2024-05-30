@@ -183,13 +183,6 @@ internal class RustCryptoService @Inject constructor(
         deleteDevices(listOf(deviceId), userInteractiveAuthInterceptor)
     }
 
-    override fun getCryptoVersion(longFormat: Boolean): String {
-        val version = org.matrix.rustcomponents.sdk.crypto.version()
-        val gitHash = org.matrix.rustcomponents.sdk.crypto.versionInfo().gitSha
-        val vodozemac = org.matrix.rustcomponents.sdk.crypto.vodozemacVersion()
-        return if (longFormat) "Rust SDK $version ($gitHash), Vodozemac $vodozemac" else version
-    }
-
     override suspend fun getMyCryptoDevice(): CryptoDeviceInfo = withContext(coroutineDispatchers.io) {
         olmMachine.ownDevice()
     }

@@ -42,7 +42,6 @@ class DefaultVectorAnalytics @Inject constructor(
         private val analyticsConfig: AnalyticsConfig,
         private val analyticsStore: AnalyticsStore,
         private val lateInitUserPropertiesFactory: LateInitUserPropertiesFactory,
-        private val autoSuperPropertiesFlowProvider: AutoSuperPropertiesFlowProvider,
         @NamedGlobalScope private val globalScope: CoroutineScope
 ) : VectorAnalytics {
 
@@ -70,7 +69,6 @@ class DefaultVectorAnalytics @Inject constructor(
     override fun init() {
         observeUserConsent()
         observeAnalyticsId()
-        observeAutoSuperProperties()
     }
 
     override fun getUserConsent(): Flow<Boolean> {
@@ -116,12 +114,6 @@ class DefaultVectorAnalytics @Inject constructor(
                     identifyPostHog()
                 }
                 .launchIn(globalScope)
-    }
-
-    private fun observeAutoSuperProperties() {
-        autoSuperPropertiesFlowProvider.superPropertiesFlow.onEach {
-            updateSuperProperties(it)
-        }.launchIn(globalScope)
     }
 
     private suspend fun identifyPostHog() {

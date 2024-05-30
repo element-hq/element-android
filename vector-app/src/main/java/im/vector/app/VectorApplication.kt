@@ -135,6 +135,7 @@ class VectorApplication :
                 SuperProperties(
                         appPlatform = SuperProperties.AppPlatform.EA,
                         cryptoSDK = SuperProperties.CryptoSDK.Rust,
+                        cryptoSDKVersion = Matrix.getCryptoVersion(longFormat = false)
                 )
         )
         invitesAcceptor.initialize()

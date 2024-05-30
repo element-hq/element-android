@@ -18,7 +18,6 @@ package im.vector.app.features.analytics.impl
 
 import im.vector.app.features.analytics.plan.SuperProperties
 import im.vector.app.test.fakes.FakeAnalyticsStore
-import im.vector.app.test.fakes.FakeAutoSuperPropertiesFlowProvider
 import im.vector.app.test.fakes.FakeLateInitUserPropertiesFactory
 import im.vector.app.test.fakes.FakePostHog
 import im.vector.app.test.fakes.FakePostHogFactory
@@ -46,7 +45,6 @@ class DefaultVectorAnalyticsTest {
     private val fakeAnalyticsStore = FakeAnalyticsStore()
     private val fakeLateInitUserPropertiesFactory = FakeLateInitUserPropertiesFactory()
     private val fakeSentryAnalytics = FakeSentryAnalytics()
-    private val fakeAutoSuperPropertiesFlowProvider = FakeAutoSuperPropertiesFlowProvider()
 
     private val defaultVectorAnalytics = DefaultVectorAnalytics(
             postHogFactory = FakePostHogFactory(fakePostHog.instance).instance,
@@ -55,7 +53,6 @@ class DefaultVectorAnalyticsTest {
             globalScope = CoroutineScope(Dispatchers.Unconfined),
             analyticsConfig = anAnalyticsConfig(isEnabled = true),
             lateInitUserPropertiesFactory = fakeLateInitUserPropertiesFactory.instance,
-            autoSuperPropertiesFlowProvider = fakeAutoSuperPropertiesFlowProvider.instance,
     )
 
     @Before
@@ -285,40 +282,6 @@ class DefaultVectorAnalyticsTest {
                 "THE_NAME",
                 mapOf(
                         "cryptoSDKVersion" to "0.0"
-                )
-        )
-    }
-
-    @Test
-    fun `Update super properties from flow`() = runTest {
-        fakeAnalyticsStore.givenUserContent(consent = true)
-
-        fakeAutoSuperPropertiesFlowProvider.postSuperProperty(
-                SuperProperties(
-                cryptoSDKVersion = "0"
-        )
-        )
-
-        val fakeEvent = aVectorAnalyticsEvent("THE_NAME", null)
-        defaultVectorAnalytics.capture(fakeEvent)
-
-        fakePostHog.verifyEventTracked(
-                "THE_NAME",
-                mapOf(
-                        "cryptoSDKVersion" to "0"
-                )
-        )
-
-        fakeAutoSuperPropertiesFlowProvider.postSuperProperty(SuperProperties(
-                cryptoSDKVersion = "1"
-        ))
-
-        defaultVectorAnalytics.capture(fakeEvent)
-
-        fakePostHog.verifyEventTracked(
-                "THE_NAME",
-                mapOf(
-                        "cryptoSDKVersion" to "1"
                 )
         )
     }
