@@ -1780,7 +1780,6 @@ $dokka.location:org.matrix.android.sdk.api.session.crypto/CryptoService/fetchDev
 $dokka.location:org.matrix.android.sdk.api.session.crypto/CryptoService/getCryptoDeviceInfo/#kotlin.String#kotlin.String?/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto/-crypto-service/get-crypto-device-info.html
 $dokka.location:org.matrix.android.sdk.api.session.crypto/CryptoService/getCryptoDeviceInfo/#kotlin.String/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto/-crypto-service/get-crypto-device-info.html
 $dokka.location:org.matrix.android.sdk.api.session.crypto/CryptoService/getCryptoDeviceInfoList/#kotlin.String/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto/-crypto-service/get-crypto-device-info-list.html
-$dokka.location:org.matrix.android.sdk.api.session.crypto/CryptoService/getCryptoVersion/#android.content.Context#kotlin.Boolean/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto/-crypto-service/get-crypto-version.html
 $dokka.location:org.matrix.android.sdk.api.session.crypto/CryptoService/getEncryptionAlgorithm/#kotlin.String/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto/-crypto-service/get-encryption-algorithm.html
 $dokka.location:org.matrix.android.sdk.api.session.crypto/CryptoService/getGlobalBlacklistUnverifiedDevices/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto/-crypto-service/get-global-blacklist-unverified-devices.html
 $dokka.location:org.matrix.android.sdk.api.session.crypto/CryptoService/getGossipingEvents/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.session.crypto/-crypto-service/get-gossiping-events.html
@@ -5043,6 +5042,7 @@ $dokka.location:org.matrix.android.sdk.api.util/TextContent/takeFormatted/#/Poin
 $dokka.location:org.matrix.android.sdk.api.util/TextContent/text/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api.util/-text-content/text.html
 $dokka.location:org.matrix.android.sdk.api////PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api/index.html
 $dokka.location:org.matrix.android.sdk.api/Matrix.Companion///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api/-matrix/-companion/index.html
+$dokka.location:org.matrix.android.sdk.api/Matrix.Companion/getCryptoVersion/#kotlin.Boolean/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api/-matrix/-companion/get-crypto-version.html
 $dokka.location:org.matrix.android.sdk.api/Matrix.Companion/getSdkVersion/#/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api/-matrix/-companion/get-sdk-version.html
 $dokka.location:org.matrix.android.sdk.api/Matrix///PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api/-matrix/index.html
 $dokka.location:org.matrix.android.sdk.api/Matrix/Matrix/#android.content.Context#org.matrix.android.sdk.api.MatrixConfiguration/PointingToDeclaration/matrix-sdk-android/org.matrix.android.sdk.api/-matrix/-matrix.html
