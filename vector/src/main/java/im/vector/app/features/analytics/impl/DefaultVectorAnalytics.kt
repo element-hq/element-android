@@ -23,6 +23,7 @@ import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
 import im.vector.app.features.analytics.log.analyticsTag
+import im.vector.app.features.analytics.plan.SuperProperties
 import im.vector.app.features.analytics.plan.UserProperties
 import im.vector.app.features.analytics.store.AnalyticsStore
 import kotlinx.coroutines.CoroutineScope
@@ -62,6 +63,8 @@ class DefaultVectorAnalytics @Inject constructor(
 
     // Cache for the properties to send
     private var pendingUserProperties: UserProperties? = null
+
+    private var superProperties: SuperProperties? = null
 
     override fun init() {
         observeUserConsent()
@@ -168,20 +171,14 @@ class DefaultVectorAnalytics @Inject constructor(
 
     override fun capture(event: VectorAnalyticsEvent) {
         Timber.tag(analyticsTag.value).d("capture($event)")
-        posthog
-                ?.takeIf { userConsent == true }
-                ?.capture(
-                        event.getName(),
-                        analyticsId,
-                        event.getProperties()?.toPostHogProperties()
+        posthog?.takeIf { userConsent == true }?.capture(
+                        event.getName(), analyticsId, event.getProperties()?.toPostHogProperties().orEmpty().withSuperProperties()
                 )
     }
 
     override fun screen(screen: VectorAnalyticsScreen) {
         Timber.tag(analyticsTag.value).d("screen($screen)")
-        posthog
-                ?.takeIf { userConsent == true }
-                ?.screen(screen.getName(), screen.getProperties()?.toPostHogProperties())
+        posthog?.takeIf { userConsent == true }?.screen(screen.getName(), screen.getProperties()?.toPostHogProperties().orEmpty().withSuperProperties())
     }
 
     override fun updateUserProperties(userProperties: UserProperties) {
@@ -195,9 +192,7 @@ class DefaultVectorAnalytics @Inject constructor(
     private fun doUpdateUserProperties(userProperties: UserProperties) {
         // we need a distinct id to set user properties
         val distinctId = analyticsId ?: return
-        posthog
-                ?.takeIf { userConsent == true }
-                ?.identify(distinctId, userProperties.getProperties())
+        posthog?.takeIf { userConsent == true }?.identify(distinctId, userProperties.getProperties())
     }
 
     private fun Map<String, Any?>?.toPostHogProperties(): Map<String, Any>? {
@@ -226,9 +221,32 @@ class DefaultVectorAnalytics @Inject constructor(
         return nonNulls
     }
 
+    /**
+     * Adds super properties to the actual property set.
+     * If a property of the same name is already on the reported event it will not be overwritten.
+     */
+    private fun Map<String, Any>.withSuperProperties(): Map<String, Any>? {
+        val withSuperProperties = this.toMutableMap()
+        val superProperties = this@DefaultVectorAnalytics.superProperties?.getProperties()
+        superProperties?.forEach {
+            if (!withSuperProperties.containsKey(it.key)) {
+                withSuperProperties[it.key] = it.value
+            }
+        }
+        return withSuperProperties.takeIf { it.isEmpty().not() }
+    }
+
     override fun trackError(throwable: Throwable) {
         sentryAnalytics
                 .takeIf { userConsent == true }
                 ?.trackError(throwable)
+    }
+
+    override fun updateSuperProperties(updatedProperties: SuperProperties) {
+        this.superProperties = SuperProperties(
+                cryptoSDK = updatedProperties.cryptoSDK ?: this.superProperties?.cryptoSDK,
+                appPlatform = updatedProperties.appPlatform ?: this.superProperties?.appPlatform,
+                cryptoSDKVersion = updatedProperties.cryptoSDKVersion ?: superProperties?.cryptoSDKVersion
+        )
     }
 }
