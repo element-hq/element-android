@@ -1,2 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="notice_room_invite_no_invitee_by_you">آپکا دعوت نامہ</string>
+    <string name="notice_direct_room_join_by_you">آپ شامل ہوگئے</string>
+    <string name="notice_direct_room_leave_by_you">آپ نے کمرہ چھوڑدیا</string>
+    <string name="notice_room_reject_by_you">آپ نے دعوت نامے کو مسترد کر دیا</string>
+    <string name="yes">ہاں</string>
+    <string name="invited">مدعو</string>
+    <string name="ftue_auth_terms_title">سرور پالیسیاں</string>
+    <string name="ftue_auth_phone_entry_title">فون نمبر</string>
+    <string name="ftue_auth_reset_password_breaker_title">اپنا ای میل چیک کریں۔</string>
+    <string name="no">نہیں</string>
+    <string name="group_details_home">گھر</string>
+    <string name="ftue_auth_reset_password_email_subtitle">%s آپ کو تصدیقی لنک بھیجے گا</string>
+    <string name="ftue_auth_choose_server_title">سرور منتخب کریں</string>
+    <string name="create">تخلیق کریں</string>
+    <string name="ftue_auth_create_account_edit_server_selection">ترمیم</string>
+    <string name="ftue_auth_welcome_back_title">خوش آمدید!</string>
+    <string name="ftue_auth_phone_confirmation_entry_title">تصدیقی کوڈ</string>
+    <string name="ftue_auth_create_account_sso_section_header">یا</string>
+    <string name="rooms">کمرے</string>
+</resources>
