@@ -2907,4 +2907,9 @@
     <string name="invite_unknown_users_dialog_content">找不到下面列出的 Matrix ID 的個人檔案。您是否仍想邀請他們？
 \n
 \n%s</string>
+    <string name="user_reported_as_inappropriate_title">已回報使用者</string>
+    <string name="user_reported_as_inappropriate_content">已回報使用者。
+\n
+\n若您不想要看到來自此使用者的任何內容，您可以忽略他們以隱藏他們的訊息。</string>
+    <string name="message_report_user">回報使用者</string>
 </resources>
