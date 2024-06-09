@@ -313,7 +313,7 @@ class MessageActionsViewModel @AssistedInject constructor(
     private fun ArrayList<EventSharedAction>.addActionsForSendingState(timelineEvent: TimelineEvent) {
         // TODO is uploading attachment?
         if (canCancel(timelineEvent)) {
-            add(EventSharedAction.Cancel(timelineEvent.eventId, false))
+            add(EventSharedAction.Cancel(timelineEvent, false))
         }
     }
 
@@ -321,7 +321,7 @@ class MessageActionsViewModel @AssistedInject constructor(
         // If sent but not synced (synapse stuck at bottom bug)
         // Still offer action to cancel (will only remove local echo)
         timelineEvent.root.eventId?.let {
-            add(EventSharedAction.Cancel(it, true))
+            add(EventSharedAction.Cancel(timelineEvent, true))
         }
 
         // TODO Can be redacted
@@ -430,6 +430,12 @@ class MessageActionsViewModel @AssistedInject constructor(
 
             add(EventSharedAction.Separator)
             add(EventSharedAction.IgnoreUser(timelineEvent.root.senderId))
+            add(
+                    EventSharedAction.ReportUser(
+                            eventId = eventId,
+                            senderId = timelineEvent.root.senderId,
+                    )
+            )
         }
     }
 

@@ -84,7 +84,7 @@ class MergedHeaderItemFactory @Inject constructor(
                 buildRoomCreationMergedSummary(currentPosition, items, partialState, event, eventIdToHighlight, requestModelBuild, callback)
             isStartOfSameTypeEventsSummary(event, nextEvent, addDaySeparator) ->
                 buildSameTypeEventsMergedSummary(currentPosition, items, partialState, event, eventIdToHighlight, requestModelBuild, callback)
-            isStartOfRedactedEventsSummary(event, items, currentPosition, addDaySeparator) ->
+            isStartOfRedactedEventsSummary(event, items, currentPosition, partialState, addDaySeparator) ->
                 buildRedactedEventsMergedSummary(currentPosition, items, partialState, event, eventIdToHighlight, requestModelBuild, callback)
             else -> null
         }
@@ -122,19 +122,25 @@ class MergedHeaderItemFactory @Inject constructor(
      * @param event the main timeline event
      * @param items all known items, sorted from newer event to oldest event
      * @param currentPosition the current position
+     * @param partialState partial state data
      * @param addDaySeparator true to add a day separator
      */
     private fun isStartOfRedactedEventsSummary(
             event: TimelineEvent,
             items: List<TimelineEvent>,
             currentPosition: Int,
+            partialState: TimelineEventController.PartialState,
             addDaySeparator: Boolean,
     ): Boolean {
-        val nextNonRedactionEvent = items
-                .subList(fromIndex = currentPosition + 1, toIndex = items.size)
-                .find { it.root.getClearType() != EventType.REDACTION }
-        return event.root.isRedacted() &&
-                (!nextNonRedactionEvent?.root?.isRedacted().orFalse() || addDaySeparator)
+        val nextDisplayableEvent = items.subList(currentPosition + 1, items.size).firstOrNull {
+            timelineEventVisibilityHelper.shouldShowEvent(
+                    timelineEvent = it,
+                    highlightedEventId = partialState.highlightedEventId,
+                    isFromThreadTimeline = partialState.isFromThreadTimeline(),
+                    rootThreadEventId = partialState.rootThreadEventId
+            )
+        }
+        return event.root.isRedacted() && (nextDisplayableEvent?.root?.isRedacted() == false || addDaySeparator)
     }
 
     private fun buildSameTypeEventsMergedSummary(

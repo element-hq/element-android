@@ -1,3 +1,32 @@
+Changes in Element v1.6.16 (2024-05-29)
+=======================================
+
+Bugfixes 🐛
+----------
+ - Fix crash when accessing a local file and permission is revoked. ([#3616](https://github.com/element-hq/element-android/issues/3616))
+ - Fixes Element on Android 12+ being ineligible for URL deeplinks ([#5748](https://github.com/element-hq/element-android/issues/5748))
+ - Restore formatting when restoring a draft. Also keep formatting when switching composer mode. ([#7466](https://github.com/element-hq/element-android/issues/7466))
+
+Other changes
+-------------
+ - Update posthog sdk to 3.2.0 ([#8820](https://github.com/element-hq/element-android/issues/8820))
+ - Update Rust crypto SDK to version 0.4.1 ([#8838](https://github.com/element-hq/element-android/issues/8838))
+
+
+Changes in Element v1.6.14 (2024-04-02)
+=======================================
+
+Bugfixes 🐛
+----------
+ - Fix send button blinking once for each character you are typing in RTE. ([#send_button_blinking](https://github.com/element-hq/element-android/issues/send_button_blinking))
+ - Fix infinite loading on secure backup setup ("Re-Authentication needed" bottom sheet). ([#8786](https://github.com/element-hq/element-android/issues/8786))
+
+Other changes
+-------------
+ - Improve UTD reporting by adding additional fields to the report. ([#8780](https://github.com/element-hq/element-android/issues/8780))
+ - Add a report user action in the message bottom sheet and on the user profile page. ([#8796](https://github.com/element-hq/element-android/issues/8796))
+
+
 Changes in Element v1.6.12 (2024-02-16)
 =======================================
 

@@ -22,8 +22,6 @@ import im.vector.app.core.dispatchers.CoroutineDispatchers
 import im.vector.app.core.pushers.UnregisterUnifiedPushUseCase
 import im.vector.app.core.services.GuardServiceStarter
 import im.vector.app.core.session.ConfigureAndStartSessionUseCase
-import im.vector.app.features.analytics.DecryptionFailureTracker
-import im.vector.app.features.analytics.plan.Error
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.crypto.keysrequest.KeyRequestHandler
 import im.vector.app.features.crypto.verification.IncomingVerificationRequestHandler
@@ -58,7 +56,6 @@ class ActiveSessionHolder @Inject constructor(
         private val unregisterUnifiedPushUseCase: UnregisterUnifiedPushUseCase,
         private val applicationCoroutineScope: CoroutineScope,
         private val coroutineDispatchers: CoroutineDispatchers,
-        private val decryptionFailureTracker: DecryptionFailureTracker,
 ) {
 
     private var activeSessionReference: AtomicReference<Session?> = AtomicReference()
@@ -75,11 +72,6 @@ class ActiveSessionHolder @Inject constructor(
         session.callSignalingService().addCallListener(callManager)
         imageManager.onSessionStarted(session)
         guardServiceStarter.start()
-        decryptionFailureTracker.currentModule = if (session.cryptoService().name() == "rust-sdk") {
-            Error.CryptoModule.Rust
-        } else {
-            Error.CryptoModule.Native
-        }
     }
 
     suspend fun clearActiveSession() {

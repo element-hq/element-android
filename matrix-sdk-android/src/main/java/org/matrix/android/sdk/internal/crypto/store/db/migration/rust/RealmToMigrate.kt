@@ -100,7 +100,7 @@ fun RealmToMigrate.getPickledAccount(pickleKey: ByteArray): MigrationData {
             )
             MigrationData(
                     account = pickledAccount,
-                    pickleKey = pickleKey.map { it.toUByte() },
+                    pickleKey = pickleKey,
                     crossSigning = CrossSigningKeyExport(
                             masterKey = masterKey,
                             selfSigningKey = selfSignedKey,
@@ -153,7 +153,7 @@ fun RealmToMigrate.getPickledAccount(pickleKey: ByteArray): MigrationData {
 
                 migrationData = MigrationData(
                         account = pickledAccount,
-                        pickleKey = pickleKey.map { it.toUByte() },
+                        pickleKey = pickleKey,
                         crossSigning = CrossSigningKeyExport(
                                 masterKey = masterKey,
                                 selfSigningKey = selfSignedKey,
@@ -222,8 +222,10 @@ fun RealmToMigrate.pickledOlmSessions(pickleKey: ByteArray, chunkSize: Int, onCh
                         pickle = pickle,
                         senderKey = deviceKey,
                         createdUsingFallbackKey = false,
-                        creationTime = lastReceivedMessageTs.toString(),
-                        lastUseTime = lastReceivedMessageTs.toString()
+                        // / Unix timestamp (in seconds) when the session was created.
+                        creationTime = (lastReceivedMessageTs / 1000).toULong(),
+                        // / Unix timestamp (in seconds) when the session was last used.
+                        lastUseTime = (lastReceivedMessageTs / 1000).toULong(),
                 )
                 // should we check the tracking status?
                 pickledSessions.add(pickledSession)
@@ -323,8 +325,10 @@ private fun OlmSessionEntity.toPickledSession(pickleKey: ByteArray): PickledSess
             pickle = pickledOlmSession,
             senderKey = deviceKey,
             createdUsingFallbackKey = false,
-            creationTime = lastReceivedMessageTs.toString(),
-            lastUseTime = lastReceivedMessageTs.toString()
+            // Rust expect in seconds
+            creationTime = (lastReceivedMessageTs / 1000).toULong(),
+            // Rust expect in seconds
+            lastUseTime = (lastReceivedMessageTs / 1000).toULong(),
     )
 }
 

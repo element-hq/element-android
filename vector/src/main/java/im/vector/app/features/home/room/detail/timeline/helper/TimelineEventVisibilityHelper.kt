@@ -151,16 +151,20 @@ class TimelineEventVisibilityHelper @Inject constructor(
             rootThreadEventId: String?,
             isFromThreadTimeline: Boolean
     ): List<TimelineEvent> {
-        val prevSub = timelineEvents
-                .subList(0, index + 1)
-                // Ensure to not take the REDACTION events into account
-                .filter { it.root.getClearType() != EventType.REDACTION }
-        return prevSub
+        val prevDisplayableEvents = timelineEvents.subList(0, index + 1)
+                .filter {
+                    shouldShowEvent(
+                            timelineEvent = it,
+                            highlightedEventId = eventIdToHighlight,
+                            isFromThreadTimeline = isFromThreadTimeline,
+                            rootThreadEventId = rootThreadEventId)
+                }
+        return prevDisplayableEvents
                 .reversed()
                 .let {
                     nextEventsUntil(it, 0, minSize, eventIdToHighlight, rootThreadEventId, isFromThreadTimeline, object : PredicateToStopSearch {
                         override fun shouldStopSearch(oldEvent: Event, newEvent: Event): Boolean {
-                            return oldEvent.isRedacted() && !newEvent.isRedacted()
+                            return !newEvent.isRedacted()
                         }
                     })
                 }

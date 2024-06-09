@@ -23,6 +23,7 @@ import im.vector.app.core.platform.VectorSharedAction
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachmentContent
+import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 
 sealed class EventSharedAction(
         @StringRes val titleRes: Int,
@@ -71,7 +72,7 @@ sealed class EventSharedAction(
     data class Redact(val eventId: String, val askForReason: Boolean, val dialogTitleRes: Int, val dialogDescriptionRes: Int) :
             EventSharedAction(R.string.message_action_item_redact, R.drawable.ic_delete, true)
 
-    data class Cancel(val eventId: String, val force: Boolean) :
+    data class Cancel(val event: TimelineEvent, val force: Boolean) :
             EventSharedAction(R.string.action_cancel, R.drawable.ic_close_round)
 
     data class ViewSource(val content: String) :
@@ -97,6 +98,9 @@ sealed class EventSharedAction(
 
     data class IgnoreUser(val senderId: String?) :
             EventSharedAction(R.string.message_ignore_user, R.drawable.ic_alert_triangle, true)
+
+    data class ReportUser(val eventId: String, val senderId: String?) :
+            EventSharedAction(R.string.message_report_user, R.drawable.ic_flag, true)
 
     data class QuickReact(val eventId: String, val clickedOn: String, val add: Boolean) :
             EventSharedAction(0, 0)

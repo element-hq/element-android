@@ -68,9 +68,9 @@ import org.matrix.android.sdk.internal.util.JsonCanonicalizer
 import org.matrix.olm.OlmException
 import org.matrix.rustcomponents.sdk.crypto.Request
 import org.matrix.rustcomponents.sdk.crypto.RequestType
-import org.matrix.rustcomponents.sdk.crypto.SignatureState
 import org.matrix.rustcomponents.sdk.crypto.SignatureVerification
 import timber.log.Timber
+import uniffi.matrix_sdk_crypto.SignatureState
 import java.security.InvalidParameterException
 import javax.inject.Inject
 import kotlin.random.Random

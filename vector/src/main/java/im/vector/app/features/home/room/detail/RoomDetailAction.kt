@@ -52,7 +52,7 @@ sealed class RoomDetailAction : VectorViewModelAction {
 
     data class ResendMessage(val eventId: String) : RoomDetailAction()
     data class RemoveFailedEcho(val eventId: String) : RoomDetailAction()
-    data class CancelSend(val eventId: String, val force: Boolean) : RoomDetailAction()
+    data class CancelSend(val event: TimelineEvent, val force: Boolean) : RoomDetailAction()
 
     data class VoteToPoll(val eventId: String, val optionKey: String) : RoomDetailAction()
 
@@ -61,7 +61,8 @@ sealed class RoomDetailAction : VectorViewModelAction {
             val senderId: String?,
             val reason: String,
             val spam: Boolean = false,
-            val inappropriate: Boolean = false
+            val inappropriate: Boolean = false,
+            val user: Boolean = false,
     ) : RoomDetailAction()
 
     data class IgnoreUser(val userId: String?) : RoomDetailAction()

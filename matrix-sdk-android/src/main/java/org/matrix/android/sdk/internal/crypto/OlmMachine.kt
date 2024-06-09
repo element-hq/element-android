@@ -75,7 +75,6 @@ import org.matrix.rustcomponents.sdk.crypto.DeviceLists
 import org.matrix.rustcomponents.sdk.crypto.EncryptionSettings
 import org.matrix.rustcomponents.sdk.crypto.KeyRequestPair
 import org.matrix.rustcomponents.sdk.crypto.KeysImportResult
-import org.matrix.rustcomponents.sdk.crypto.LocalTrust
 import org.matrix.rustcomponents.sdk.crypto.Logger
 import org.matrix.rustcomponents.sdk.crypto.MegolmV1BackupKey
 import org.matrix.rustcomponents.sdk.crypto.Request
@@ -86,6 +85,7 @@ import org.matrix.rustcomponents.sdk.crypto.ShieldState
 import org.matrix.rustcomponents.sdk.crypto.SignatureVerification
 import org.matrix.rustcomponents.sdk.crypto.setLogger
 import timber.log.Timber
+import uniffi.matrix_sdk_crypto.LocalTrust
 import java.io.File
 import java.nio.charset.Charset
 import javax.inject.Inject
@@ -189,18 +189,21 @@ internal class OlmMachine @Inject constructor(
             is OwnUserIdentity -> ownIdentity.trustsOurOwnDevice()
             else -> false
         }
+        val ownDevice = inner.getDevice(userId(), deviceId, 0u)!!
+        val creationTime = ownDevice.firstTimeSeenTs.toLong()
 
         return CryptoDeviceInfo(
                 deviceId(),
                 userId(),
-                // TODO pass the algorithms here.
-                listOf(),
+                ownDevice.algorithms,
                 keys,
                 mapOf(),
-                UnsignedDeviceInfo(),
+                UnsignedDeviceInfo(
+                        deviceDisplayName = ownDevice.displayName
+                ),
                 DeviceTrustLevel(crossSigningVerified, locallyVerified = true),
                 false,
-                null
+                creationTime
         )
     }
 
@@ -291,7 +294,7 @@ internal class OlmMachine @Inject constructor(
             // checking the returned to devices to check for room keys.
             // XXX Anyhow there is now proper signaling we should soon stop parsing them manually
             receiveSyncChanges.toDeviceEvents.map {
-                        outAdapter.fromJson(it) ?: Event()
+                outAdapter.fromJson(it) ?: Event()
             }
         }
 
@@ -825,8 +828,14 @@ internal class OlmMachine @Inject constructor(
         val requests = withContext(coroutineDispatchers.io) {
             inner.bootstrapCrossSigning()
         }
+        (requests.uploadKeysRequest)?.let {
+            when (it) {
+                is Request.KeysUpload -> requestSender.uploadKeys(it)
+                else -> {}
+            }
+        }
         requestSender.uploadCrossSigningKeys(requests.uploadSigningKeysRequest, uiaInterceptor)
-        requestSender.sendSignatureUpload(requests.signatureRequest)
+        requestSender.sendSignatureUpload(requests.uploadSignatureRequest)
     }
 
     /**
@@ -882,6 +891,7 @@ internal class OlmMachine @Inject constructor(
             inner.queryMissingSecretsFromOtherSessions()
         }
     }
+
     @Throws(CryptoStoreException::class)
     suspend fun enableBackupV1(key: String, version: String) {
         return withContext(coroutineDispatchers.computation) {

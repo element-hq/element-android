@@ -414,6 +414,7 @@ class TimelineFragment :
                 RoomDetailViewEvents.RoomReplacementStarted -> handleRoomReplacement()
                 RoomDetailViewEvents.OpenElementCallWidget -> handleOpenElementCallWidget()
                 RoomDetailViewEvents.DisplayPromptToStopVoiceBroadcast -> displayPromptToStopVoiceBroadcast()
+                is RoomDetailViewEvents.RevokeFilePermission -> revokeFilePermission(it)
             }
         }
 
@@ -1345,6 +1346,16 @@ class TimelineFragment :
                                 }
                                 .show()
                     }
+                    data.user -> {
+                        MaterialAlertDialogBuilder(requireActivity(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_NegativeDestructive)
+                                .setTitle(R.string.user_reported_as_inappropriate_title)
+                                .setMessage(R.string.user_reported_as_inappropriate_content)
+                                .setPositiveButton(R.string.ok, null)
+                                .setNegativeButton(R.string.block_user) { _, _ ->
+                                    timelineViewModel.handle(RoomDetailAction.IgnoreUser(data.senderId))
+                                }
+                                .show()
+                    }
                     else -> {
                         MaterialAlertDialogBuilder(requireActivity(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_NegativeDestructive)
                                 .setTitle(R.string.content_reported_title)
@@ -1561,14 +1572,14 @@ class TimelineFragment :
 
     private fun handleCancelSend(action: EventSharedAction.Cancel) {
         if (action.force) {
-            timelineViewModel.handle(RoomDetailAction.CancelSend(action.eventId, true))
+            timelineViewModel.handle(RoomDetailAction.CancelSend(action.event, true))
         } else {
             MaterialAlertDialogBuilder(requireContext())
                     .setTitle(R.string.dialog_title_confirmation)
                     .setMessage(getString(R.string.event_status_cancel_sending_dialog_message))
                     .setNegativeButton(R.string.no, null)
                     .setPositiveButton(R.string.yes) { _, _ ->
-                        timelineViewModel.handle(RoomDetailAction.CancelSend(action.eventId, false))
+                        timelineViewModel.handle(RoomDetailAction.CancelSend(action.event, false))
                     }
                     .show()
         }
@@ -1857,6 +1868,13 @@ class TimelineFragment :
             is EventSharedAction.IgnoreUser -> {
                 action.senderId?.let { askConfirmationToIgnoreUser(it) }
             }
+            is EventSharedAction.ReportUser -> {
+                timelineViewModel.handle(
+                        RoomDetailAction.ReportContent(
+                                action.eventId, action.senderId, "Reporting user ${action.senderId}", user = true
+                        )
+                )
+            }
             is EventSharedAction.OnUrlClicked -> {
                 onUrlClicked(action.url, action.title)
             }
@@ -2032,6 +2050,21 @@ class TimelineFragment :
                 ) {
                     timelineViewModel.handle(RoomDetailAction.VoiceBroadcastAction.Recording.StopConfirmed)
                 }
+    }
+
+    private fun revokeFilePermission(revokeFilePermission: RoomDetailViewEvents.RevokeFilePermission) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            requireContext().revokeUriPermission(
+                    requireContext().applicationContext.packageName,
+                    revokeFilePermission.uri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
+        } else {
+            requireContext().revokeUriPermission(
+                    revokeFilePermission.uri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
+        }
     }
 
     override fun onTapToReturnToCall() {

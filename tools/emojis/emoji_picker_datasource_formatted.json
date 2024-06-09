@@ -2638,18 +2638,20 @@
             "a": "⊛ Head Shaking Horizontally",
             "b": "1F642-200D-2194-FE0F",
             "j": [
-                "head shaking horizontally",
                 "no",
-                "shake"
+                "shake",
+                "disapprove",
+                "indiffernt",
+                "left"
             ]
         },
         "head-shaking-vertically": {
             "a": "⊛ Head Shaking Vertically",
             "b": "1F642-200D-2195-FE0F",
             "j": [
-                "head shaking vertically",
                 "nod",
-                "yes"
+                "yes",
+                "down"
             ]
         },
         "relieved-face": {
@@ -6941,21 +6943,27 @@
             "a": "⊛ Person Walking Facing Right",
             "b": "1F6B6-200D-27A1-FE0F",
             "j": [
-                ""
+                "",
+                "peerson",
+                "exercise"
             ]
         },
         "woman-walking-facing-right": {
             "a": "⊛ Woman Walking Facing Right",
             "b": "1F6B6-200D-2640-FE0F-200D-27A1-FE0F",
             "j": [
-                ""
+                "",
+                "person",
+                "exercise"
             ]
         },
         "man-walking-facing-right": {
             "a": "⊛ Man Walking Facing Right",
             "b": "1F6B6-200D-2642-FE0F-200D-27A1-FE0F",
             "j": [
-                ""
+                "",
+                "person",
+                "exercise"
             ]
         },
         "person-standing": {
@@ -7019,21 +7027,26 @@
             "a": "⊛ Person Kneeling Facing Right",
             "b": "1F9CE-200D-27A1-FE0F",
             "j": [
-                ""
+                "",
+                "pray"
             ]
         },
         "woman-kneeling-facing-right": {
             "a": "⊛ Woman Kneeling Facing Right",
             "b": "1F9CE-200D-2640-FE0F-200D-27A1-FE0F",
             "j": [
-                ""
+                "",
+                "pray",
+                "worship"
             ]
         },
         "man-kneeling-facing-right": {
             "a": "⊛ Man Kneeling Facing Right",
             "b": "1F9CE-200D-2642-FE0F-200D-27A1-FE0F",
             "j": [
-                ""
+                "",
+                "pray",
+                "worship"
             ]
         },
         "person-with-white-cane": {
@@ -7049,7 +7062,10 @@
             "a": "⊛ Person with White Cane Facing Right",
             "b": "1F9D1-200D-1F9AF-200D-27A1-FE0F",
             "j": [
-                ""
+                "",
+                "walk",
+                "visually impaired",
+                "blind"
             ]
         },
         "man-with-white-cane": {
@@ -7066,7 +7082,11 @@
             "a": "⊛ Man with White Cane Facing Right",
             "b": "1F468-200D-1F9AF-200D-27A1-FE0F",
             "j": [
-                ""
+                "",
+                "visually impaired",
+                "blind",
+                "walk",
+                "stick"
             ]
         },
         "woman-with-white-cane": {
@@ -7083,7 +7103,10 @@
             "a": "⊛ Woman with White Cane Facing Right",
             "b": "1F469-200D-1F9AF-200D-27A1-FE0F",
             "j": [
-                ""
+                "",
+                "stick",
+                "visually impaired",
+                "blind"
             ]
         },
         "person-in-motorized-wheelchair": {
@@ -7099,7 +7122,9 @@
             "a": "⊛ Person in Motorized Wheelchair Facing Right",
             "b": "1F9D1-200D-1F9BC-200D-27A1-FE0F",
             "j": [
-                ""
+                "",
+                "accessibility",
+                "disability"
             ]
         },
         "man-in-motorized-wheelchair": {
@@ -7116,7 +7141,10 @@
             "a": "⊛ Man in Motorized Wheelchair Facing Right",
             "b": "1F468-200D-1F9BC-200D-27A1-FE0F",
             "j": [
-                ""
+                "",
+                "disability",
+                "accessibility",
+                "mobility"
             ]
         },
         "woman-in-motorized-wheelchair": {
@@ -7133,7 +7161,10 @@
             "a": "⊛ Woman in Motorized Wheelchair Facing Right",
             "b": "1F469-200D-1F9BC-200D-27A1-FE0F",
             "j": [
-                ""
+                "",
+                "mobility",
+                "accessibility",
+                "disability"
             ]
         },
         "person-in-manual-wheelchair": {
@@ -7149,7 +7180,10 @@
             "a": "⊛ Person in Manual Wheelchair Facing Right",
             "b": "1F9D1-200D-1F9BD-200D-27A1-FE0F",
             "j": [
-                ""
+                "",
+                "mobility",
+                "accessibility",
+                "disability"
             ]
         },
         "man-in-manual-wheelchair": {
@@ -7166,7 +7200,10 @@
             "a": "⊛ Man in Manual Wheelchair Facing Right",
             "b": "1F468-200D-1F9BD-200D-27A1-FE0F",
             "j": [
-                ""
+                "",
+                "mobility",
+                "accessibility",
+                "disability"
             ]
         },
         "woman-in-manual-wheelchair": {
@@ -7183,7 +7220,10 @@
             "a": "⊛ Woman in Manual Wheelchair Facing Right",
             "b": "1F469-200D-1F9BD-200D-27A1-FE0F",
             "j": [
-                ""
+                "",
+                "disability",
+                "mobility",
+                "accessibility"
             ]
         },
         "person-running": {
@@ -7226,21 +7266,27 @@
             "a": "⊛ Person Running Facing Right",
             "b": "1F3C3-200D-27A1-FE0F",
             "j": [
-                ""
+                "",
+                "exercise",
+                "jog"
             ]
         },
         "woman-running-facing-right": {
             "a": "⊛ Woman Running Facing Right",
             "b": "1F3C3-200D-2640-FE0F-200D-27A1-FE0F",
             "j": [
-                ""
+                "",
+                "exercise",
+                "jog"
             ]
         },
         "man-running-facing-right": {
             "a": "⊛ Man Running Facing Right",
             "b": "1F3C3-200D-2642-FE0F-200D-27A1-FE0F",
             "j": [
-                ""
+                "",
+                "jog",
+                "exercise"
             ]
         },
         "woman-dancing": {
@@ -8538,28 +8584,40 @@
             "a": "⊛ Family: Adult, Adult, Child",
             "b": "1F9D1-200D-1F9D1-200D-1F9D2",
             "j": [
-                "family: adult, adult, child"
+                "family: adult, adult, child",
+                "family adult, adult, child",
+                "kid",
+                "parents"
             ]
         },
         "family-adult-adult-child-child": {
             "a": "⊛ Family: Adult, Adult, Child, Child",
             "b": "1F9D1-200D-1F9D1-200D-1F9D2-200D-1F9D2",
             "j": [
-                "family: adult, adult, child, child"
+                "family: adult, adult, child, child",
+                "family adult, adult, child, child",
+                "children",
+                "parents"
             ]
         },
         "family-adult-child": {
             "a": "⊛ Family: Adult, Child",
             "b": "1F9D1-200D-1F9D2",
             "j": [
-                "family: adult, child"
+                "family: adult, child",
+                "family adult, child",
+                "parent",
+                "kid"
             ]
         },
         "family-adult-child-child": {
             "a": "⊛ Family: Adult, Child, Child",
             "b": "1F9D1-200D-1F9D2-200D-1F9D2",
             "j": [
-                "family: adult, child, child"
+                "family: adult, child, child",
+                "family adult, child, child",
+                "parent",
+                "children"
             ]
         },
         "footprints": {
@@ -9564,9 +9622,12 @@
             "j": [
                 "fantasy",
                 "firebird",
-                "phoenix",
                 "rebirth",
-                "reincarnation"
+                "reincarnation",
+                "immortal",
+                "bird",
+                "mythtical",
+                "reborn"
             ]
         },
         "frog": {
@@ -10364,8 +10425,9 @@
             "j": [
                 "citrus",
                 "fruit",
-                "lime",
-                "tropical"
+                "tropical",
+                "acidic",
+                "citric"
             ]
         },
         "banana": {
@@ -10689,11 +10751,11 @@
             "a": "⊛ Brown Mushroom",
             "b": "1F344-200D-1F7EB",
             "j": [
-                "brown mushroom",
                 "food",
                 "fungus",
                 "nature",
-                "vegetable"
+                "vegetable",
+                "toadstool"
             ]
         },
         "bread": {
@@ -17986,10 +18048,10 @@
             "j": [
                 "break",
                 "breaking",
-                "broken chain",
                 "chain",
                 "cuffs",
-                "freedom"
+                "freedom",
+                "constraint"
             ]
         },
         "chains": {

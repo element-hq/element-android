@@ -161,6 +161,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
         when (action) {
             is RoomMemberProfileAction.RetryFetchingInfo -> handleRetryFetchProfileInfo()
             is RoomMemberProfileAction.IgnoreUser -> handleIgnoreAction()
+            is RoomMemberProfileAction.ReportUser -> handleReportAction()
             is RoomMemberProfileAction.VerifyUser -> prepareVerification()
             is RoomMemberProfileAction.ShareRoomMemberProfile -> handleShareRoomMemberProfile()
             is RoomMemberProfileAction.SetPowerLevel -> handleSetPowerLevel(action)
@@ -169,6 +170,30 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
             RoomMemberProfileAction.InviteUser -> handleInviteAction()
             is RoomMemberProfileAction.SetUserColorOverride -> handleSetUserColorOverride(action)
             is RoomMemberProfileAction.OpenOrCreateDm -> handleOpenOrCreateDm(action)
+        }
+    }
+
+    private fun handleReportAction() {
+        room ?: return
+        viewModelScope.launch {
+            val event = try {
+                // The API needs an Event, use user state event if available (it should always be available)
+                val userStateEventId = room.stateService()
+                        .getStateEvent(EventType.STATE_ROOM_MEMBER, QueryStringValue.Equals(initialState.userId))
+                        ?.eventId
+                // If not found fallback to the latest event
+                val eventId = (userStateEventId ?: room.roomSummary()?.latestPreviewableEvent?.eventId) ?: return@launch
+                room.reportingService()
+                        .reportContent(
+                                eventId = eventId,
+                                score = -100,
+                                reason = "Reporting user ${initialState.userId}"
+                        )
+                RoomMemberProfileViewEvents.OnReportActionSuccess
+            } catch (failure: Throwable) {
+                RoomMemberProfileViewEvents.Failure(failure)
+            }
+            _viewEvents.post(event)
         }
     }
 

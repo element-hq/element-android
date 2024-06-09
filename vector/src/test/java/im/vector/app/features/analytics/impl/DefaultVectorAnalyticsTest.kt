@@ -16,9 +16,7 @@
 
 package im.vector.app.features.analytics.impl
 
-import com.posthog.android.Properties
-import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
-import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
+import im.vector.app.features.analytics.plan.SuperProperties
 import im.vector.app.test.fakes.FakeAnalyticsStore
 import im.vector.app.test.fakes.FakeLateInitUserPropertiesFactory
 import im.vector.app.test.fakes.FakePostHog
@@ -54,7 +52,7 @@ class DefaultVectorAnalyticsTest {
             analyticsStore = fakeAnalyticsStore.instance,
             globalScope = CoroutineScope(Dispatchers.Unconfined),
             analyticsConfig = anAnalyticsConfig(isEnabled = true),
-            lateInitUserPropertiesFactory = fakeLateInitUserPropertiesFactory.instance
+            lateInitUserPropertiesFactory = fakeLateInitUserPropertiesFactory.instance,
     )
 
     @Before
@@ -128,7 +126,7 @@ class DefaultVectorAnalyticsTest {
 
         defaultVectorAnalytics.screen(A_SCREEN_EVENT)
 
-        fakePostHog.verifyScreenTracked(A_SCREEN_EVENT.getName(), A_SCREEN_EVENT.toPostHogProperties())
+        fakePostHog.verifyScreenTracked(A_SCREEN_EVENT.getName(), A_SCREEN_EVENT.getProperties())
     }
 
     @Test
@@ -146,7 +144,7 @@ class DefaultVectorAnalyticsTest {
 
         defaultVectorAnalytics.capture(AN_EVENT)
 
-        fakePostHog.verifyEventTracked(AN_EVENT.getName(), AN_EVENT.toPostHogProperties())
+        fakePostHog.verifyEventTracked(AN_EVENT.getName(), AN_EVENT.getProperties().clearNulls())
     }
 
     @Test
@@ -176,16 +174,127 @@ class DefaultVectorAnalyticsTest {
 
         fakeSentryAnalytics.verifyNoErrorTracking()
     }
-}
 
-private fun VectorAnalyticsScreen.toPostHogProperties(): Properties? {
-    return getProperties()?.let { properties ->
-        Properties().also { it.putAll(properties) }
+    @Test
+    fun `Super properties should be added to all captured events`() = runTest {
+        fakeAnalyticsStore.givenUserContent(consent = true)
+
+        val updatedProperties = SuperProperties(
+                appPlatform = SuperProperties.AppPlatform.EA,
+                cryptoSDKVersion = "0.0",
+                cryptoSDK = SuperProperties.CryptoSDK.Rust
+        )
+
+        defaultVectorAnalytics.updateSuperProperties(updatedProperties)
+
+        val fakeEvent = aVectorAnalyticsEvent("THE_NAME", mutableMapOf("foo" to "bar"))
+        defaultVectorAnalytics.capture(fakeEvent)
+
+        fakePostHog.verifyEventTracked(
+                "THE_NAME",
+                fakeEvent.getProperties().clearNulls()?.toMutableMap()?.apply {
+                    updatedProperties.getProperties()?.let { putAll(it) }
+                }
+        )
+
+        // Check with a screen event
+        val fakeScreen = aVectorAnalyticsScreen("Screen", mutableMapOf("foo" to "bar"))
+        defaultVectorAnalytics.screen(fakeScreen)
+
+        fakePostHog.verifyScreenTracked(
+                "Screen",
+                fakeScreen.getProperties().clearNulls()?.toMutableMap()?.apply {
+                    updatedProperties.getProperties()?.let { putAll(it) }
+                }
+        )
     }
-}
 
-private fun VectorAnalyticsEvent.toPostHogProperties(): Properties? {
-    return getProperties()?.let { properties ->
-        Properties().also { it.putAll(properties) }
+    @Test
+    fun `Super properties can be updated`() = runTest {
+        fakeAnalyticsStore.givenUserContent(consent = true)
+
+        val superProperties = SuperProperties(
+                appPlatform = SuperProperties.AppPlatform.EA,
+                cryptoSDKVersion = "0.0",
+                cryptoSDK = SuperProperties.CryptoSDK.Rust
+        )
+
+        defaultVectorAnalytics.updateSuperProperties(superProperties)
+
+        val fakeEvent = aVectorAnalyticsEvent("THE_NAME", mutableMapOf("foo" to "bar"))
+        defaultVectorAnalytics.capture(fakeEvent)
+
+        fakePostHog.verifyEventTracked(
+                "THE_NAME",
+                fakeEvent.getProperties().clearNulls()?.toMutableMap()?.apply {
+                    superProperties.getProperties()?.let { putAll(it) }
+                }
+        )
+
+        val superPropertiesUpdate = superProperties.copy(cryptoSDKVersion = "1.0")
+        defaultVectorAnalytics.updateSuperProperties(superPropertiesUpdate)
+
+        defaultVectorAnalytics.capture(fakeEvent)
+
+        fakePostHog.verifyEventTracked(
+                "THE_NAME",
+                fakeEvent.getProperties().clearNulls()?.toMutableMap()?.apply {
+                    superPropertiesUpdate.getProperties()?.let { putAll(it) }
+                }
+        )
+    }
+
+    @Test
+    fun `Super properties should not override event property`() = runTest {
+        fakeAnalyticsStore.givenUserContent(consent = true)
+
+        val superProperties = SuperProperties(
+                cryptoSDKVersion = "0.0",
+        )
+
+        defaultVectorAnalytics.updateSuperProperties(superProperties)
+
+        val fakeEvent = aVectorAnalyticsEvent("THE_NAME", mutableMapOf("cryptoSDKVersion" to "XXX"))
+        defaultVectorAnalytics.capture(fakeEvent)
+
+        fakePostHog.verifyEventTracked(
+                "THE_NAME",
+                mapOf(
+                        "cryptoSDKVersion" to "XXX"
+                )
+        )
+    }
+
+    @Test
+    fun `Super properties should be added to event with no properties`() = runTest {
+        fakeAnalyticsStore.givenUserContent(consent = true)
+
+        val superProperties = SuperProperties(
+                cryptoSDKVersion = "0.0",
+        )
+
+        defaultVectorAnalytics.updateSuperProperties(superProperties)
+
+        val fakeEvent = aVectorAnalyticsEvent("THE_NAME", null)
+        defaultVectorAnalytics.capture(fakeEvent)
+
+        fakePostHog.verifyEventTracked(
+                "THE_NAME",
+                mapOf(
+                        "cryptoSDKVersion" to "0.0"
+                )
+        )
+    }
+
+    private fun Map<String, Any?>?.clearNulls(): Map<String, Any>? {
+        if (this == null) return null
+
+        val nonNulls = HashMap<String, Any>()
+        this.forEach { (key, value) ->
+            if (value != null) {
+                nonNulls[key] = value
+            }
+        }
+        return nonNulls
     }
 }
