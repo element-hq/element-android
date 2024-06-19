@@ -19,7 +19,6 @@ import android.text.SpannableString
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.room.send.MatrixItemSpan
 import org.matrix.android.sdk.api.util.MatrixItem
-import org.matrix.android.sdk.internal.session.displayname.DisplayNameResolver
 import java.util.Collections
 import javax.inject.Inject
 
@@ -29,7 +28,6 @@ import javax.inject.Inject
  */
 internal class TextPillsUtils @Inject constructor(
         private val mentionLinkSpecComparator: MentionLinkSpecComparator,
-        private val displayNameResolver: DisplayNameResolver,
         private val permalinkService: PermalinkService
 ) {
 
@@ -70,7 +68,7 @@ internal class TextPillsUtils @Inject constructor(
                 // append text before pill
                 append(text, currIndex, start)
                 // append the pill
-                append(String.format(template, urlSpan.matrixItem.id, displayNameResolver.getBestName(urlSpan.matrixItem)))
+                append(String.format(template, urlSpan.matrixItem.id, urlSpan.matrixItem.id))
                 currIndex = end
             }
             // append text after the last pill
