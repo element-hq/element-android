@@ -246,10 +246,10 @@ class AutoCompleter @AssistedInject constructor(
         val linkText = when (matrixItem) {
             is MatrixItem.RoomAliasItem,
             is MatrixItem.RoomItem,
-            is MatrixItem.SpaceItem ->
+            is MatrixItem.SpaceItem,
+            is MatrixItem.UserItem ->
                 matrixItem.id
             is MatrixItem.EveryoneInRoomItem,
-            is MatrixItem.UserItem,
             is MatrixItem.EventItem ->
                 matrixItem.getBestName()
         }
