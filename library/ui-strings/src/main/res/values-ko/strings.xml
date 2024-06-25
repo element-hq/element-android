@@ -202,7 +202,7 @@
     <string name="action_join">참가</string>
     <string name="action_reject">받지 않기</string>
     <string name="list_members">구성원 목록</string>
-    <string name="room_jump_to_first_unread">읽지 않은 첫 부분으로 이동하기.</string>
+    <string name="room_jump_to_first_unread">읽지 않은 첫 부분으로 이동하기</string>
     <plurals name="room_title_members">
         <item quantity="other">%d명의 구성원</item>
     </plurals>
@@ -218,11 +218,11 @@
     <string name="room_participants_action_mention">언급</string>
     <string name="room_participants_power_level_prompt">사용자를 자신과 동일한 권한 등급으로 승격시키는 것은 취소할 수 없습니다.
 \n확신합니까\?</string>
-    <string name="room_participants_ban_prompt_msg">이 사용자를 이 대화에서 출입 금지하겠습니까\?</string>
+    <string name="room_participants_ban_prompt_msg">차단된 사용자는 이 방에서 제거하고 다시 참여할 수 없게 됩니다.</string>
     <string name="room_one_user_is_typing">%s님이 입력 중…</string>
     <string name="room_two_users_are_typing">%1$s님과 %2$s님이 입력 중…</string>
     <string name="room_many_users_are_typing">%1$s님과 %2$s님 외 여러 명이 입력 중…</string>
-    <string name="room_do_not_have_permission_to_post">이 방에 글을 올릴 권한이 없습니다</string>
+    <string name="room_do_not_have_permission_to_post">이 방에 글을 올릴 권한이 없습니다.</string>
     <plurals name="room_new_messages_notification">
         <item quantity="other">%d개의 새 메시지</item>
     </plurals>
@@ -557,7 +557,7 @@
     <string name="deactivate_account_submit">계정 비활성화</string>
     <string name="error_empty_field_enter_user_name">사용자 이름을 입력하세요.</string>
     <string name="error_empty_field_your_password">비밀번호를 입력하세요.</string>
-    <string name="room_tombstone_versioned_description">이 방은 교체되었으며 더 이상 활동하지 않습니다</string>
+    <string name="room_tombstone_versioned_description">이 방은 교체되었으며 더 이상 활동하지 않습니다.</string>
     <string name="room_tombstone_continuation_link">대화는 여기서 계속됩니다</string>
     <string name="room_tombstone_continuation_description">이 방은 다른 대화의 연장선입니다</string>
     <string name="room_tombstone_predecessor_link">오래된 메시지를 보려면 여기를 클릭</string>
@@ -677,7 +677,7 @@
     <string name="reply">답장</string>
     <string name="global_retry">다시 시도</string>
     <string name="send_you_invite">초대장을 보냈습니다</string>
-    <string name="invited_by">%1$s 님이 초대했습니다</string>
+    <string name="invited_by">%s 님이 초대했습니다</string>
     <string name="room_list_catchup_empty_title">모두 읽었습니다!</string>
     <string name="room_list_catchup_empty_body">더 이상 읽지 않은 메시지가 없습니다</string>
     <string name="room_list_people_empty_title">대화</string>
