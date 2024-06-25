@@ -184,7 +184,13 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="https" />
-                <data android:host="*.element.io" />
+                <!-- Note: we can't use "*.element.io" here because it'll intercept the "mas.element.io" domain too. -->
+                <!-- Matching asset file: https://app.element.io/.well-known/assetlinks.json -->
+                <data android:host="app.element.io" />
+                <!-- Matching asset file: https://develop.element.io/.well-known/assetlinks.json -->
+                <data android:host="develop.element.io" />
+                <!-- Matching asset file: https://staging.element.io/.well-known/assetlinks.json -->
+                <data android:host="staging.element.io" />
             </intent-filter>
         </activity>
 
