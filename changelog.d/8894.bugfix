@@ -1,1 +1,0 @@
-Intercept only links from `element.io` well known hosts. The previous behaviour broke OIDC login in Element X.
