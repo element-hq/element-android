@@ -1,0 +1,2 @@
+Hlavní změny v této verzi: především opravy chyb.
+Úplný seznam změn: https://github.com/element-hq/element-android/releases
