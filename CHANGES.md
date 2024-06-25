@@ -1,3 +1,17 @@
+Changes in Element v1.6.18 (2024-06-25)
+=======================================
+
+Bugfixes 🐛
+----------
+ - Fix redacted events not grouped correctly when hidden events are inserted between. ([#8840](https://github.com/element-hq/element-android/issues/8840))
+ - Element-Android session doesn't encrypt for a dehydrated device ([#8842](https://github.com/element-hq/element-android/issues/8842))
+ - Intercept only links from `element.io` well known hosts. The previous behaviour broke OIDC login in Element X. ([#8894](https://github.com/element-hq/element-android/issues/8894))
+
+Other changes
+-------------
+ - Posthog | report platform code for EA ([#8839](https://github.com/element-hq/element-android/issues/8839))
+
+
 Changes in Element v1.6.16 (2024-05-29)
 =======================================
 
