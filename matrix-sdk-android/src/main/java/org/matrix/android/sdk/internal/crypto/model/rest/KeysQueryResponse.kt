@@ -34,7 +34,7 @@ internal data class KeysQueryResponse(
          * For each device, the information returned will be the same as uploaded via /keys/upload, with the addition of an unsigned property.
          */
         @Json(name = "device_keys")
-        val deviceKeys: Map<String, Map<String, DeviceKeysWithUnsigned>>? = null,
+        val deviceKeys: Map<String, Map<String, Map<String, Any>>>? = null,
 
         /**
          * If any remote homeservers could not be reached, they are recorded here. The names of the

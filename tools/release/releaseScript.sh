@@ -66,7 +66,7 @@ if [ ${envError} == 1 ]; then
   exit 1
 fi
 
-buildToolsVersion="30.0.2"
+buildToolsVersion="35.0.0"
 buildToolsPath="${androidHome}/build-tools/${buildToolsVersion}"
 
 if [[ ! -d ${buildToolsPath} ]]; then
