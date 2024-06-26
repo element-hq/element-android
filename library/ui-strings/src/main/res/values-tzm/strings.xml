@@ -26,7 +26,6 @@
     <string name="media_source_choose">Dɣer</string>
     <string name="compression_opt_list_choose">Dɣer</string>
     <string name="search_hint">Rzu</string>
-
     <string name="action_reject">Agy</string>
     <string name="action_join">Lkem</string>
     <string name="no">UHU</string>
@@ -62,5 +61,5 @@
     <string name="notice_room_ban_by_you">Tegdeld %1$s</string>
     <string name="notice_room_ban">igdel %1$s %2$s</string>
     <string name="notice_room_invite_by_you">Teɣrid-d i %1$s</string>
-    <string name="notice_room_invite">iɣra-d %1$s i %2$s</string>
+    <string name="notice_room_invite">%1$s invited %2$s</string>
 </resources>

@@ -3085,4 +3085,5 @@
     <string name="invite_unknown_users_dialog_content">Nie można znaleźć profili dla poniższych ID Matrix. Czy chcesz zaprosić je mimo to\?
 \n
 \n%s</string>
+    <string name="login_splash_sign_in">Zaloguj się</string>
 </resources>
