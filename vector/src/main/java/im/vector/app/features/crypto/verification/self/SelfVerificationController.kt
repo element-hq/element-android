@@ -294,7 +294,7 @@ class SelfVerificationController @Inject constructor(
         if (state.quadSContainsSecrets) {
             bottomSheetVerificationActionItem {
                 id("passphrase")
-                title(host.stringProvider.getString(R.string.verification_cannot_access_other_session))
+                title(host.stringProvider.getString(R.string.verification_cannot_access_other_session_use_key))
                 titleColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
                 subTitle(host.stringProvider.getString(R.string.verification_use_passphrase))
                 iconRes(R.drawable.ic_arrow_right)

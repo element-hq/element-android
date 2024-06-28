@@ -64,7 +64,7 @@ class KeysBackupSetupStep3Fragment :
         viewModel.passphrase.observe(viewLifecycleOwner) {
             if (it.isNullOrBlank()) {
                 // Recovery was generated, so show key and options to save
-                views.keysBackupSetupStep3Label2.text = getString(R.string.keys_backup_setup_step3_text_line2_no_passphrase)
+                views.keysBackupSetupStep3Label2.text = getString(R.string.keys_backup_setup_step3_key_explanation_no_passphrase)
                 views.keysBackupSetupStep3FinishButton.text = getString(R.string.keys_backup_setup_step3_button_title_no_passphrase)
 
                 views.keysBackupSetupStep3RecoveryKeyText.text = viewModel.recoveryKey.value!!.toBase58()
@@ -77,7 +77,7 @@ class KeysBackupSetupStep3Fragment :
                         }
                 views.keysBackupSetupStep3RecoveryKeyText.isVisible = true
             } else {
-                views.keysBackupSetupStep3Label2.text = getString(R.string.keys_backup_setup_step3_text_line2)
+                views.keysBackupSetupStep3Label2.text = getString(R.string.keys_backup_setup_step3_key_explanation)
                 views.keysBackupSetupStep3FinishButton.text = getString(R.string.keys_backup_setup_step3_button_title)
                 views.keysBackupSetupStep3RecoveryKeyText.isVisible = false
             }
@@ -137,7 +137,7 @@ class KeysBackupSetupStep3Fragment :
                     activity = requireActivity(),
                     activityResultLauncher = saveRecoveryActivityResultLauncher,
                     defaultFileName = "recovery-key-$userId-${timestamp}.txt",
-                    chooserHint = getString(R.string.save_recovery_key_chooser_hint)
+                    chooserHint = getString(R.string.save_security_key_chooser_hint)
             )
             dialog.dismiss()
         }
@@ -146,9 +146,9 @@ class KeysBackupSetupStep3Fragment :
             startSharePlainTextIntent(
                     context = requireContext(),
                     activityResultLauncher = null,
-                    chooserTitle = context?.getString(R.string.keys_backup_setup_step3_share_intent_chooser_title),
+                    chooserTitle = context?.getString(R.string.keys_backup_setup_step3_share_key_intent_chooser_title),
                     text = recoveryKey.toBase58(),
-                    subject = context?.getString(R.string.recovery_key)
+                    subject = context?.getString(R.string.security_key)
             )
             viewModel.copyHasBeenMade = true
             dialog.dismiss()
@@ -180,7 +180,7 @@ class KeysBackupSetupStep3Fragment :
                 activity?.let {
                     MaterialAlertDialogBuilder(it)
                             .setTitle(R.string.dialog_title_success)
-                            .setMessage(R.string.recovery_key_export_saved)
+                            .setMessage(R.string.security_key_export_saved)
                 }
             } catch (throwable: Throwable) {
                 activity?.let {

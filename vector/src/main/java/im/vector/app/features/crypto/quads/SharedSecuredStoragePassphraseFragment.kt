@@ -48,8 +48,8 @@ class SharedSecuredStoragePassphraseFragment :
         super.onViewCreated(view, savedInstanceState)
 
         // If has passphrase
-        val pass = getString(R.string.recovery_passphrase)
-        val key = getString(R.string.recovery_key)
+        val pass = getString(R.string.security_phrase)
+        val key = getString(R.string.security_key)
         views.ssssRestoreWithPassphraseWarningText.text = getString(
                 R.string.enter_secret_storage_passphrase_or_key,
                 pass,

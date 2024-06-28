@@ -49,7 +49,7 @@ class SharedSecuredStorageKeyFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        views.ssssRestoreWithKeyText.text = getString(R.string.enter_secret_storage_input_key)
+        views.ssssRestoreWithKeyText.text = getString(R.string.enter_secret_storage_input_security_key)
 
         views.ssssKeyEnterEdittext.editorActionEvents()
                 .throttleFirst(300)

@@ -31,7 +31,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="36dp"
             android:layout_marginEnd="16dp"
-            android:text="@string/recovery_key"
+            android:text="@string/security_key"
             android:textColor="?vctr_content_primary"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -48,7 +48,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ssss_restore_with_key"
-            tools:text="@string/enter_secret_storage_input_key" />
+            tools:text="@string/enter_secret_storage_input_security_key" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/ssss_key_enter_til"
@@ -66,7 +66,7 @@
                 android:id="@+id/ssss_key_enter_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/recovery_key"
+                android:hint="@string/security_key"
                 android:imeOptions="actionDone"
                 android:maxLines="3"
                 android:singleLine="false"

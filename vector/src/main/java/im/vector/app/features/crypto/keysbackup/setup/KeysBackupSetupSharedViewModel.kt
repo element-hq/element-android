@@ -104,7 +104,7 @@ class KeysBackupSetupSharedViewModel @Inject constructor(
 
                 loadingStatus.postValue(
                         WaitingViewData(
-                                context.getString(R.string.keys_backup_setup_step3_generating_key_status),
+                                context.getString(R.string.keys_backup_setup_step3_generating_security_key_status),
                                 progress,
                                 total
                         )
