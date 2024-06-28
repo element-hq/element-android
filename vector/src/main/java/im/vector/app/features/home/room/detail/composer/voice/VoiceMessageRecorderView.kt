@@ -205,7 +205,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
             post {
                 callback.onRecordingLimitReached()
             }
-        } else if (timeDiffToRecordingLimit in 10_000..10_999) {
+        } else if (timeDiffToRecordingLimit in 30_000..30_999) {
             post {
                 val secondsRemaining = floor(timeDiffToRecordingLimit / 1000f).toInt()
                 voiceMessageViews.renderToast(context.getString(R.string.voice_message_n_seconds_warning_toast, secondsRemaining))
