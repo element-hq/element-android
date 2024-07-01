@@ -2949,4 +2949,18 @@
     <string name="avatar_of_space">Avatar dello spazio %1$s</string>
     <string name="sign_out_anyway">Disconnetti comunque</string>
     <string name="sign_out_failed_dialog_message">Impossibile contattare l\'homeserver. Se ti disconnetti comunque, questo dispositivo non verrà cancellato dalla tua lista, meglio se lo rimuovi da un altro client.</string>
+    <string name="create_room_unknown_users_dialog_submit">Inizia chat comunque</string>
+    <string name="invite_unknown_users_dialog_submit">Invitali comunque</string>
+    <string name="create_room_unknown_users_dialog_content">Impossibile trovare profili per gli ID Matrix elencati sotto. Vuoi comunque iniziare una chat\?
+\n
+\n%s</string>
+    <string name="login_splash_sign_in">Accedi</string>
+    <string name="invite_unknown_users_dialog_content">Impossibile trovare profili per gli ID Matrix elencati sotto. Vuoi comunque invitarli\?
+\n
+\n%s</string>
+    <string name="user_reported_as_inappropriate_title">Utente segnalato</string>
+    <string name="user_reported_as_inappropriate_content">L\'utente è stato segnalato.
+\n
+\nSe non vuoi più vedere contenuti da questo utente, puoi ignorarlo per nascondere i suoi messaggi.</string>
+    <string name="message_report_user">Segnala utente</string>
 </resources>

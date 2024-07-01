@@ -1,0 +1,2 @@
+Principaux changements pour cette version : Element Android utilise désormais le SDK cryptographique en Rust.
+Intégralité des changements : https://github.com/element-hq/element-android/releases

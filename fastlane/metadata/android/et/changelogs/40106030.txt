@@ -1,0 +1,2 @@
+Põhilised muutused selles versioonis: Element Android kasutab nüüd Crypto Rust SDK krüptoteeki.
+Kogu ingliskeelne muudatuste logi: https://github.com/element-hq/element-android/releases

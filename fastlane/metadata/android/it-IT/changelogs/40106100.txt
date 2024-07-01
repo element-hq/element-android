@@ -1,0 +1,2 @@
+Modifiche principali in questa versione: aggiunta gestione di dispositivi mobili e supporto a membri funzionali.
+Cronologia completa: https://github.com/element-hq/element-android/releases

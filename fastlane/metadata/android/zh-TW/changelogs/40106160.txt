@@ -1,0 +1,2 @@
+此版本中的主要變動：臭蟲修復。
+完整的變更紀錄：https://github.com/element-hq/element-android/releases

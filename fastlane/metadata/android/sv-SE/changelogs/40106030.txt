@@ -1,0 +1,2 @@
+Huvudsakliga ändringar i den här versionen: Element Android använder nu Rust-krypto-SDK:t
+Full ändringslogg: https://github.com/element-hq/element-android/releases
