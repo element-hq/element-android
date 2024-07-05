@@ -23,6 +23,7 @@ import org.matrix.android.sdk.api.auth.wellknown.WellknownResult
 import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 import org.matrix.android.sdk.internal.auth.version.Versions
+import org.matrix.android.sdk.internal.auth.version.doesServerSupportAuthenticatedMedia
 import org.matrix.android.sdk.internal.auth.version.doesServerSupportLogoutDevices
 import org.matrix.android.sdk.internal.auth.version.doesServerSupportQrCodeLogin
 import org.matrix.android.sdk.internal.auth.version.doesServerSupportRedactionOfRelatedEvents
@@ -155,6 +156,8 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
                         getVersionResult.doesServerSupportRemoteToggleOfPushNotifications()
                 homeServerCapabilitiesEntity.canRedactEventWithRelations =
                         getVersionResult.doesServerSupportRedactionOfRelatedEvents()
+                homeServerCapabilitiesEntity.canUseAuthenticatedMedia =
+                        getVersionResult.doesServerSupportAuthenticatedMedia()
             }
 
             if (getWellknownResult != null && getWellknownResult is WellknownResult.Prompt) {
