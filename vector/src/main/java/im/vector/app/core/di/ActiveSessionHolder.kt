@@ -50,7 +50,6 @@ class ActiveSessionHolder @Inject constructor(
         private val imageManager: ImageManager,
         private val guardServiceStarter: GuardServiceStarter,
         private val sessionInitializer: SessionInitializer,
-        private val applicationContext: Context,
         private val authenticationService: AuthenticationService,
         private val configureAndStartSessionUseCase: ConfigureAndStartSessionUseCase,
         private val unregisterUnifiedPushUseCase: UnregisterUnifiedPushUseCase,

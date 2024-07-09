@@ -40,7 +40,8 @@ import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.integrationmanager.IntegrationManagerConfigExtractor
 import org.matrix.android.sdk.internal.session.media.GetMediaConfigResult
-import org.matrix.android.sdk.internal.session.media.MediaAPI
+import org.matrix.android.sdk.internal.session.media.MediaAPIProvider
+import org.matrix.android.sdk.internal.session.media.UnauthenticatedMediaAPI
 import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.awaitTransaction
 import org.matrix.android.sdk.internal.wellknown.GetWellknownTask
@@ -56,7 +57,7 @@ internal interface GetHomeServerCapabilitiesTask : Task<GetHomeServerCapabilitie
 
 internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
         private val capabilitiesAPI: CapabilitiesAPI,
-        private val mediaAPI: MediaAPI,
+        private val mediaAPIProvider: MediaAPIProvider,
         @SessionDatabase private val monarchy: Monarchy,
         private val globalErrorReceiver: GlobalErrorReceiver,
         private val getWellknownTask: GetWellknownTask,
@@ -71,7 +72,6 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
         if (!doRequest) {
             monarchy.awaitTransaction { realm ->
                 val homeServerCapabilitiesEntity = HomeServerCapabilitiesEntity.getOrCreate(realm)
-
                 doRequest = homeServerCapabilitiesEntity.lastUpdatedTimestamp + MIN_DELAY_BETWEEN_TWO_REQUEST_MILLIS < Date().time
             }
         }
@@ -88,7 +88,7 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
 
         val mediaConfig = runCatching {
             executeRequest(globalErrorReceiver) {
-                mediaAPI.getMediaConfig()
+                mediaAPIProvider.getMediaAPI().getMediaConfig()
             }
         }.getOrNull()
 

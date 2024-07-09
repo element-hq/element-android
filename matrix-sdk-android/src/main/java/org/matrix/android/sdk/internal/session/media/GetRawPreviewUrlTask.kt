@@ -30,7 +30,7 @@ internal interface GetRawPreviewUrlTask : Task<GetRawPreviewUrlTask.Params, Json
 }
 
 internal class DefaultGetRawPreviewUrlTask @Inject constructor(
-        private val mediaAPI: MediaAPI,
+        private val mediaAPI: UnauthenticatedMediaAPI,
         private val globalErrorReceiver: GlobalErrorReceiver
 ) : GetRawPreviewUrlTask {
 

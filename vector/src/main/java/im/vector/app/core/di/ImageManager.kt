@@ -21,8 +21,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.model.GlideUrl
 import com.github.piasy.biv.BigImageViewer
 import com.github.piasy.biv.loader.glide.GlideImageLoader
-import im.vector.app.ActiveSessionDataSource
-import im.vector.app.core.glide.FactoryUrl
+import im.vector.app.core.glide.AuthenticatedGlideUrlLoaderFactory
 import org.matrix.android.sdk.api.session.Session
 import java.io.InputStream
 import javax.inject.Inject
@@ -32,16 +31,16 @@ import javax.inject.Inject
  */
 class ImageManager @Inject constructor(
         private val context: Context,
-        private val activeSessionDataSource: ActiveSessionDataSource
 ) {
 
     fun onSessionStarted(session: Session) {
         // Do this call first
-        BigImageViewer.initialize(GlideImageLoader.with(context, session.getOkHttpClient()))
+        val glideImageLoader = GlideImageLoader.with(context, session.getOkHttpClient())
+        BigImageViewer.initialize(glideImageLoader)
 
         val glide = Glide.get(context)
 
-        // And this one. FIXME But are losing what BigImageViewer has done to add a Progress listener
-        glide.registry.replace(GlideUrl::class.java, InputStream::class.java, FactoryUrl(activeSessionDataSource))
+        // And this one. It'll be tried first, otherwise it'll use the one initialised by GlideImageLoader.
+        glide.registry.prepend(GlideUrl::class.java, InputStream::class.java, AuthenticatedGlideUrlLoaderFactory(context))
     }
 }

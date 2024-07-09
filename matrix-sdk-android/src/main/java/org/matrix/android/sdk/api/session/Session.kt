@@ -297,6 +297,11 @@ interface Session {
     fun getOkHttpClient(): OkHttpClient
 
     /**
+     * Same as [getOkHttpClient] but will add the access token to the request.
+     */
+    fun getAuthenticatedOkHttpClient(): OkHttpClient
+
+    /**
      * A global session listener to get notified for some events.
      */
     interface Listener : StatisticsListener, SessionLifecycleObserver {
