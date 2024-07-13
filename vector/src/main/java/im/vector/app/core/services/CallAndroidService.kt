@@ -131,6 +131,13 @@ class CallAndroidService : VectorAndroidService() {
             ACTION_CALL_TERMINATED -> {
                 handleCallTerminated(intent)
             }
+            ACTION_OUTGOING_JITSI_RINGING_CALL -> {
+                mediaSession?.isActive = true
+                callRingPlayerOutgoing?.start()
+            }
+            ACTION_JITSI_CALL_TERMINATED -> {
+                callRingPlayerOutgoing?.stop()
+            }
             else -> {
                 handleUnexpectedState(null)
             }
@@ -316,8 +323,10 @@ class CallAndroidService : VectorAndroidService() {
 
         private const val ACTION_INCOMING_RINGING_CALL = "im.vector.app.core.services.CallService.ACTION_INCOMING_RINGING_CALL"
         private const val ACTION_OUTGOING_RINGING_CALL = "im.vector.app.core.services.CallService.ACTION_OUTGOING_RINGING_CALL"
+        private const val ACTION_OUTGOING_JITSI_RINGING_CALL = "im.vector.app.core.services.CallService.ACTION_OUTGOING_JITSI_RINGING_CALL"
         private const val ACTION_ONGOING_CALL = "im.vector.app.core.services.CallService.ACTION_ONGOING_CALL"
         private const val ACTION_CALL_TERMINATED = "im.vector.app.core.services.CallService.ACTION_CALL_TERMINATED"
+        private const val ACTION_JITSI_CALL_TERMINATED = "im.vector.app.core.services.CallService.ACTION_JITSI_CALL_TERMINATED"
 
         private const val EXTRA_CALL_ID = "EXTRA_CALL_ID"
         private const val EXTRA_IS_IN_BG = "EXTRA_IS_IN_BG"
@@ -374,6 +383,26 @@ class CallAndroidService : VectorAndroidService() {
                         putExtra(EXTRA_CALL_ID, callId)
                         putExtra(EXTRA_END_CALL_REASON, endCallReason)
                         putExtra(EXTRA_END_CALL_REJECTED, rejected)
+                    }
+            context.startService(intent)
+        }
+
+        fun onOutgoingJitsiCallRinging(
+                context: Context,
+        ) {
+            val intent = Intent(context, CallAndroidService::class.java)
+                    .apply {
+                        action = ACTION_OUTGOING_JITSI_RINGING_CALL
+                    }
+            ContextCompat.startForegroundService(context, intent)
+        }
+
+        fun onCancelJitsiCallRinging(
+                context: Context,
+        ) {
+            val intent = Intent(context, CallAndroidService::class.java)
+                    .apply {
+                        action = ACTION_JITSI_CALL_TERMINATED
                     }
             context.startService(intent)
         }
