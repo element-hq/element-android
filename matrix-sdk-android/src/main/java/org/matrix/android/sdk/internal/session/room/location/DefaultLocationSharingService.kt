@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.internal.session.room.location
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.map
 import com.zhuinden.monarchy.Monarchy
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -119,13 +119,13 @@ internal class DefaultLocationSharingService @AssistedInject constructor(
     }
 
     override fun getLiveLocationShareSummary(beaconInfoEventId: String): LiveData<Optional<LiveLocationShareAggregatedSummary>> {
-        return Transformations.map(
-                monarchy.findAllMappedWithChanges(
+        return monarchy
+                .findAllMappedWithChanges(
                         { LiveLocationShareAggregatedSummaryEntity.where(it, roomId = roomId, eventId = beaconInfoEventId) },
                         liveLocationShareAggregatedSummaryMapper
                 )
-        ) {
-            it.firstOrNull().toOptional()
-        }
+                .map {
+                    it.firstOrNull().toOptional()
+                }
     }
 }

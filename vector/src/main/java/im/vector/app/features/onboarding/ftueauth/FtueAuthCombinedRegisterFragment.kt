@@ -28,7 +28,6 @@ import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.clearErrorOnChange
 import im.vector.app.core.extensions.content
 import im.vector.app.core.extensions.editText
@@ -50,6 +49,7 @@ import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingAction.AuthenticateAction
 import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewState
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import org.matrix.android.sdk.api.auth.SSOAction
@@ -85,7 +85,7 @@ class FtueAuthCombinedRegisterFragment :
 
         views.createAccountInput.onTextChange(viewLifecycleOwner) {
             viewModel.handle(OnboardingAction.ResetSelectedRegistrationUserName)
-            views.createAccountEntryFooter.text = ""
+            views.createAccountEntryFooter.text = null
         }
 
         views.createAccountInput.setOnFocusLostListener(viewLifecycleOwner) {
@@ -119,20 +119,20 @@ class FtueAuthCombinedRegisterFragment :
             // This can be called by the IME action, so deal with empty cases
             var error = 0
             if (login.isEmpty()) {
-                views.createAccountInput.error = getString(R.string.error_empty_field_choose_user_name)
+                views.createAccountInput.error = getString(CommonStrings.error_empty_field_choose_user_name)
                 error++
             }
             if (state.isNumericOnlyUserIdForbidden() && login.isDigitsOnly()) {
-                views.createAccountInput.error = getString(R.string.error_forbidden_digits_only_username)
+                views.createAccountInput.error = getString(CommonStrings.error_forbidden_digits_only_username)
                 error++
             }
             if (password.isEmpty()) {
-                views.createAccountPasswordInput.error = getString(R.string.error_empty_field_choose_password)
+                views.createAccountPasswordInput.error = getString(CommonStrings.error_empty_field_choose_password)
                 error++
             }
 
             if (error == 0) {
-                val initialDeviceName = getString(R.string.login_default_session_public_name)
+                val initialDeviceName = getString(CommonStrings.login_default_session_public_name)
                 val registerAction = when {
                     login.isMatrixId() -> AuthenticateAction.RegisterWithMatrixId(login, password, initialDeviceName)
                     else -> AuthenticateAction.Register(login, password, initialDeviceName)
@@ -160,22 +160,22 @@ class FtueAuthCombinedRegisterFragment :
                 views.createAccountInput.error = errorFormatter.toHumanReadable(throwable)
             }
             throwable.isLoginEmailUnknown() -> {
-                views.createAccountInput.error = getString(R.string.login_login_with_email_error)
+                views.createAccountInput.error = getString(CommonStrings.login_login_with_email_error)
             }
             throwable.isInvalidPassword() && views.createAccountPasswordInput.hasSurroundingSpaces() -> {
-                views.createAccountPasswordInput.error = getString(R.string.auth_invalid_login_param_space_in_password)
+                views.createAccountPasswordInput.error = getString(CommonStrings.auth_invalid_login_param_space_in_password)
             }
             throwable.isWeakPassword() || throwable.isInvalidPassword() -> {
                 views.createAccountPasswordInput.error = errorFormatter.toHumanReadable(throwable)
             }
             throwable.isHomeserverUnavailable() -> {
-                views.createAccountInput.error = getString(R.string.login_error_homeserver_not_found)
+                views.createAccountInput.error = getString(CommonStrings.login_error_homeserver_not_found)
             }
             throwable.isRegistrationDisabled() -> {
                 MaterialAlertDialogBuilder(requireActivity())
-                        .setTitle(R.string.dialog_title_error)
-                        .setMessage(getString(R.string.login_registration_disabled))
-                        .setPositiveButton(R.string.ok, null)
+                        .setTitle(CommonStrings.dialog_title_error)
+                        .setMessage(getString(CommonStrings.login_registration_disabled))
+                        .setPositiveButton(CommonStrings.ok, null)
                         .show()
             }
             else -> {
@@ -199,7 +199,7 @@ class FtueAuthCombinedRegisterFragment :
 
         views.createAccountEntryFooter.text = when {
             state.registrationState.isUserNameAvailable -> getString(
-                    R.string.ftue_auth_create_account_username_entry_footer,
+                    CommonStrings.ftue_auth_create_account_username_entry_footer,
                     state.registrationState.selectedMatrixId
             )
 
@@ -236,5 +236,6 @@ class FtueAuthCombinedRegisterFragment :
         }
     }
 
-    private fun OnboardingViewState.isNumericOnlyUserIdForbidden() = selectedHomeserver.userFacingUrl == getString(R.string.matrix_org_server_url)
+    private fun OnboardingViewState.isNumericOnlyUserIdForbidden() =
+            selectedHomeserver.userFacingUrl == getString(im.vector.app.config.R.string.matrix_org_server_url)
 }

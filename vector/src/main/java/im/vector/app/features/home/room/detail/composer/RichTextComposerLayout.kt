@@ -52,6 +52,7 @@ import im.vector.app.databinding.ComposerRichTextLayoutBinding
 import im.vector.app.databinding.ViewRichTextMenuButtonBinding
 import im.vector.app.features.home.room.detail.composer.images.UriContentListener
 import im.vector.app.features.home.room.detail.composer.mentions.PillDisplayHandler
+import im.vector.lib.strings.CommonStrings
 import io.element.android.wysiwyg.EditorEditText
 import io.element.android.wysiwyg.display.MentionDisplayHandler
 import io.element.android.wysiwyg.display.TextDisplay
@@ -118,12 +119,13 @@ internal class RichTextComposerLayout @JvmOverloads constructor(
     private val borderShapeDrawable: MaterialShapeDrawable by lazy {
         MaterialShapeDrawable().apply {
             val typedData = TypedValue()
-            val lineColor = context.theme.obtainStyledAttributes(typedData.data, intArrayOf(R.attr.vctr_content_quaternary))
+            val lineColor = context.theme.obtainStyledAttributes(typedData.data, intArrayOf(im.vector.lib.ui.styles.R.attr.vctr_content_quaternary))
                     .getColor(0, 0)
             strokeColor = ColorStateList.valueOf(lineColor)
+            @Suppress("DEPRECATION")
             strokeWidth = 1 * resources.displayMetrics.scaledDensity
             fillColor = ColorStateList.valueOf(Color.TRANSPARENT)
-            val cornerSize = resources.getDimensionPixelSize(R.dimen.rich_text_composer_corner_radius_single_line)
+            val cornerSize = resources.getDimensionPixelSize(im.vector.lib.ui.styles.R.dimen.rich_text_composer_corner_radius_single_line)
             setCornerSize(cornerSize.toFloat())
         }
     }
@@ -162,10 +164,10 @@ internal class RichTextComposerLayout @JvmOverloads constructor(
         // Calculate a new shape for the border according to the position in screen
         val isSingleLine = editText.lineCount == 1
         val cornerSize = if (!isSingleLine || hasRelatedMessage) {
-            resources.getDimensionPixelSize(R.dimen.rich_text_composer_corner_radius_expanded).toFloat()
+            resources.getDimensionPixelSize(im.vector.lib.ui.styles.R.dimen.rich_text_composer_corner_radius_expanded).toFloat()
         } else {
-            val multilineCornerSize = resources.getDimensionPixelSize(R.dimen.rich_text_composer_corner_radius_expanded)
-            val singleLineCornerSize = resources.getDimensionPixelSize(R.dimen.rich_text_composer_corner_radius_single_line)
+            val multilineCornerSize = resources.getDimensionPixelSize(im.vector.lib.ui.styles.R.dimen.rich_text_composer_corner_radius_expanded)
+            val singleLineCornerSize = resources.getDimensionPixelSize(im.vector.lib.ui.styles.R.dimen.rich_text_composer_corner_radius_single_line)
             val diff = singleLineCornerSize - multilineCornerSize
             multilineCornerSize + diff * (1 - percentage)
         }
@@ -259,40 +261,40 @@ internal class RichTextComposerLayout @JvmOverloads constructor(
     }
 
     private fun setupRichTextMenu() {
-        addRichTextMenuItem(R.drawable.ic_composer_bold, R.string.rich_text_editor_format_bold, ComposerAction.BOLD) {
+        addRichTextMenuItem(R.drawable.ic_composer_bold, CommonStrings.rich_text_editor_format_bold, ComposerAction.BOLD) {
             views.richTextComposerEditText.toggleInlineFormat(InlineFormat.Bold)
         }
-        addRichTextMenuItem(R.drawable.ic_composer_italic, R.string.rich_text_editor_format_italic, ComposerAction.ITALIC) {
+        addRichTextMenuItem(R.drawable.ic_composer_italic, CommonStrings.rich_text_editor_format_italic, ComposerAction.ITALIC) {
             views.richTextComposerEditText.toggleInlineFormat(InlineFormat.Italic)
         }
-        addRichTextMenuItem(R.drawable.ic_composer_underlined, R.string.rich_text_editor_format_underline, ComposerAction.UNDERLINE) {
+        addRichTextMenuItem(R.drawable.ic_composer_underlined, CommonStrings.rich_text_editor_format_underline, ComposerAction.UNDERLINE) {
             views.richTextComposerEditText.toggleInlineFormat(InlineFormat.Underline)
         }
-        addRichTextMenuItem(R.drawable.ic_composer_strikethrough, R.string.rich_text_editor_format_strikethrough, ComposerAction.STRIKE_THROUGH) {
+        addRichTextMenuItem(R.drawable.ic_composer_strikethrough, CommonStrings.rich_text_editor_format_strikethrough, ComposerAction.STRIKE_THROUGH) {
             views.richTextComposerEditText.toggleInlineFormat(InlineFormat.StrikeThrough)
         }
-        addRichTextMenuItem(R.drawable.ic_composer_bullet_list, R.string.rich_text_editor_bullet_list, ComposerAction.UNORDERED_LIST) {
+        addRichTextMenuItem(R.drawable.ic_composer_bullet_list, CommonStrings.rich_text_editor_bullet_list, ComposerAction.UNORDERED_LIST) {
             views.richTextComposerEditText.toggleList(ordered = false)
         }
-        addRichTextMenuItem(R.drawable.ic_composer_numbered_list, R.string.rich_text_editor_numbered_list, ComposerAction.ORDERED_LIST) {
+        addRichTextMenuItem(R.drawable.ic_composer_numbered_list, CommonStrings.rich_text_editor_numbered_list, ComposerAction.ORDERED_LIST) {
             views.richTextComposerEditText.toggleList(ordered = true)
         }
-        addRichTextMenuItem(R.drawable.ic_composer_indent, R.string.rich_text_editor_indent, ComposerAction.INDENT) {
+        addRichTextMenuItem(R.drawable.ic_composer_indent, CommonStrings.rich_text_editor_indent, ComposerAction.INDENT) {
             views.richTextComposerEditText.indent()
         }
-        addRichTextMenuItem(R.drawable.ic_composer_unindent, R.string.rich_text_editor_unindent, ComposerAction.UNINDENT) {
+        addRichTextMenuItem(R.drawable.ic_composer_unindent, CommonStrings.rich_text_editor_unindent, ComposerAction.UNINDENT) {
             views.richTextComposerEditText.unindent()
         }
-        addRichTextMenuItem(R.drawable.ic_composer_quote, R.string.rich_text_editor_quote, ComposerAction.QUOTE) {
+        addRichTextMenuItem(R.drawable.ic_composer_quote, CommonStrings.rich_text_editor_quote, ComposerAction.QUOTE) {
             views.richTextComposerEditText.toggleQuote()
         }
-        addRichTextMenuItem(R.drawable.ic_composer_inline_code, R.string.rich_text_editor_inline_code, ComposerAction.INLINE_CODE) {
+        addRichTextMenuItem(R.drawable.ic_composer_inline_code, CommonStrings.rich_text_editor_inline_code, ComposerAction.INLINE_CODE) {
             views.richTextComposerEditText.toggleInlineFormat(InlineFormat.InlineCode)
         }
-        addRichTextMenuItem(R.drawable.ic_composer_code_block, R.string.rich_text_editor_code_block, ComposerAction.CODE_BLOCK) {
+        addRichTextMenuItem(R.drawable.ic_composer_code_block, CommonStrings.rich_text_editor_code_block, ComposerAction.CODE_BLOCK) {
             views.richTextComposerEditText.toggleCodeBlock()
         }
-        addRichTextMenuItem(R.drawable.ic_composer_link, R.string.rich_text_editor_link, ComposerAction.LINK) {
+        addRichTextMenuItem(R.drawable.ic_composer_link, CommonStrings.rich_text_editor_link, ComposerAction.LINK) {
             views.richTextComposerEditText.getLinkAction()?.let {
                 when (it) {
                     LinkAction.InsertLink -> callback?.onSetLink(isTextSupported = true, initialLink = null)
@@ -438,9 +440,9 @@ internal class RichTextComposerLayout @JvmOverloads constructor(
     private fun updateTextFieldBorder(isFullScreen: Boolean) {
         val isMultiline = editText.editableText.lines().count() > 1 || isFullScreen || hasRelatedMessage
         val cornerSize = if (isMultiline) {
-            resources.getDimensionPixelSize(R.dimen.rich_text_composer_corner_radius_expanded)
+            resources.getDimensionPixelSize(im.vector.lib.ui.styles.R.dimen.rich_text_composer_corner_radius_expanded)
         } else {
-            resources.getDimensionPixelSize(R.dimen.rich_text_composer_corner_radius_single_line)
+            resources.getDimensionPixelSize(im.vector.lib.ui.styles.R.dimen.rich_text_composer_corner_radius_single_line)
         }.toFloat()
         borderShapeDrawable.setCornerSize(cornerSize)
     }
@@ -493,27 +495,27 @@ internal class RichTextComposerLayout @JvmOverloads constructor(
 
         views.sendButton.apply {
             if (mode is MessageComposerMode.Edit) {
-                contentDescription = resources.getString(R.string.action_save)
+                contentDescription = resources.getString(CommonStrings.action_save)
                 setImageResource(R.drawable.ic_composer_rich_text_save)
             } else {
-                contentDescription = resources.getString(R.string.action_send)
+                contentDescription = resources.getString(CommonStrings.action_send)
                 setImageResource(R.drawable.ic_rich_composer_send)
             }
         }
 
         when (mode) {
             is MessageComposerMode.Edit -> {
-                views.composerModeTitleView.setText(R.string.editing)
+                views.composerModeTitleView.setText(CommonStrings.editing)
                 views.composerModeIconView.setImageResource(R.drawable.ic_composer_rich_text_editor_edit)
             }
             is MessageComposerMode.Quote -> {
-                views.composerModeTitleView.setText(R.string.quoting)
+                views.composerModeTitleView.setText(CommonStrings.quoting)
                 views.composerModeIconView.setImageResource(R.drawable.ic_quote)
             }
             is MessageComposerMode.Reply -> {
                 val senderInfo = mode.event.senderInfo
                 val userName = senderInfo.displayName ?: senderInfo.disambiguatedDisplayName
-                views.composerModeTitleView.text = resources.getString(R.string.replying_to, userName)
+                views.composerModeTitleView.text = resources.getString(CommonStrings.replying_to, userName)
                 views.composerModeIconView.setImageResource(R.drawable.ic_reply)
             }
             else -> Unit

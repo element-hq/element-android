@@ -26,12 +26,12 @@ import androidx.fragment.app.FragmentManager
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.BottomSheetSpaceInviteBinding
 import im.vector.app.features.invite.InviteUsersToRoomActivity
+import im.vector.lib.strings.CommonStrings
 import kotlinx.parcelize.Parcelize
 
 @AndroidEntryPoint
@@ -58,10 +58,10 @@ class ShareSpaceBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetSpa
         val spaceName = summary?.name
 
         if (state.postCreation) {
-            views.headerText.text = getString(R.string.invite_people_to_your_space)
-            views.descriptionText.setTextOrHide(getString(R.string.invite_people_to_your_space_desc, spaceName))
+            views.headerText.text = getString(CommonStrings.invite_people_to_your_space)
+            views.descriptionText.setTextOrHide(getString(CommonStrings.invite_people_to_your_space_desc, spaceName))
         } else {
-            views.headerText.text = getString(R.string.invite_to_space, spaceName)
+            views.headerText.text = getString(CommonStrings.invite_to_space, spaceName)
             views.descriptionText.setTextOrHide(null)
         }
 
@@ -91,9 +91,9 @@ class ShareSpaceBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetSpa
                     startSharePlainTextIntent(
                             context = requireContext(),
                             activityResultLauncher = null,
-                            chooserTitle = getString(R.string.share_by_text),
-                            text = getString(R.string.share_space_link_message, event.spaceName, event.permalink),
-                            extraTitle = getString(R.string.share_space_link_message, event.spaceName, event.permalink)
+                            chooserTitle = getString(CommonStrings.share_by_text),
+                            text = getString(CommonStrings.share_space_link_message, event.spaceName, event.permalink),
+                            extraTitle = getString(CommonStrings.share_space_link_message, event.spaceName, event.permalink)
                     )
                     dismissAllowingStateLoss()
                 }

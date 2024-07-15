@@ -59,8 +59,8 @@ class MessageBubbleView @JvmOverloads constructor(
 
     init {
         inflate(context, R.layout.view_message_bubble, this)
-        context.withStyledAttributes(attrs, R.styleable.MessageBubble) {
-            isIncoming = getBoolean(R.styleable.MessageBubble_incoming_style, false)
+        context.withStyledAttributes(attrs, im.vector.lib.ui.styles.R.styleable.MessageBubble) {
+            isIncoming = getBoolean(im.vector.lib.ui.styles.R.styleable.MessageBubble_incoming_style, false)
         }
     }
 
@@ -89,7 +89,8 @@ class MessageBubbleView @JvmOverloads constructor(
             outlineProvider = ViewOutlineProvider.BACKGROUND
             clipToOutline = true
             background = RippleDrawable(
-                    ContextCompat.getColorStateList(context, R.color.mtrl_btn_ripple_color) ?: ColorStateList.valueOf(Color.TRANSPARENT),
+                    ContextCompat.getColorStateList(context, com.google.android.material.R.color.mtrl_btn_ripple_color)
+                            ?: ColorStateList.valueOf(Color.TRANSPARENT),
                     bubbleDrawable,
                     rippleMaskDrawable
             )
@@ -114,7 +115,12 @@ class MessageBubbleView @JvmOverloads constructor(
             this.fillColor = if (isPseudoBubble) {
                 ColorStateList.valueOf(Color.TRANSPARENT)
             } else {
-                val backgroundColorAttr = if (isIncoming) R.attr.vctr_message_bubble_inbound else R.attr.vctr_message_bubble_outbound
+                val backgroundColorAttr =
+                        if (isIncoming) {
+                            im.vector.lib.ui.styles.R.attr.vctr_message_bubble_inbound
+                        } else {
+                            im.vector.lib.ui.styles.R.attr.vctr_message_bubble_outbound
+                        }
                 val backgroundColor = ThemeUtils.getColor(context, backgroundColorAttr)
                 ColorStateList.valueOf(backgroundColor)
             }
@@ -127,7 +133,7 @@ class MessageBubbleView @JvmOverloads constructor(
             clone(views.bubbleView)
             clear(R.id.viewStubContainer, ConstraintSet.END)
             if (timestampInsideMessage) {
-                connect(R.id.viewStubContainer, ConstraintSet.END, R.id.parent, ConstraintSet.END, 0)
+                connect(R.id.viewStubContainer, ConstraintSet.END, com.google.android.material.R.id.parent, ConstraintSet.END, 0)
             } else {
                 connect(R.id.viewStubContainer, ConstraintSet.END, R.id.messageTimeView, ConstraintSet.START, 0)
             }
@@ -137,12 +143,12 @@ class MessageBubbleView @JvmOverloads constructor(
 
     private fun TimelineMessageLayout.Bubble.toggleMessageOverlay() = apply {
         if (addMessageOverlay) {
-            val timeColor = ContextCompat.getColor(context, R.color.palette_white)
+            val timeColor = ContextCompat.getColor(context, im.vector.lib.ui.styles.R.color.palette_white)
             views.messageTimeView.setTextColor(timeColor)
             views.messageOverlayView.isVisible = true
             (views.messageOverlayView.background as? GradientDrawable)?.cornerRadii = cornersRadius.toFloatArray()
         } else {
-            val timeColor = ThemeUtils.getColor(context, R.attr.vctr_content_tertiary)
+            val timeColor = ThemeUtils.getColor(context, im.vector.lib.ui.styles.R.attr.vctr_content_tertiary)
             views.messageTimeView.setTextColor(timeColor)
             views.messageOverlayView.isVisible = false
         }
@@ -159,17 +165,17 @@ class MessageBubbleView @JvmOverloads constructor(
     private fun TimelineMessageLayout.Bubble.setMargins() = apply {
         if (isIncoming) {
             views.messageEndGuideline.updateLayoutParams<LayoutParams> {
-                marginEnd = resources.getDimensionPixelSize(R.dimen.chat_bubble_margin_end)
+                marginEnd = resources.getDimensionPixelSize(im.vector.lib.ui.styles.R.dimen.chat_bubble_margin_end)
             }
             views.messageStartGuideline.updateLayoutParams<LayoutParams> {
-                marginStart = resources.getDimensionPixelSize(R.dimen.chat_bubble_margin_start)
+                marginStart = resources.getDimensionPixelSize(im.vector.lib.ui.styles.R.dimen.chat_bubble_margin_start)
             }
         } else {
             views.messageEndGuideline.updateLayoutParams<LayoutParams> {
-                marginEnd = resources.getDimensionPixelSize(R.dimen.chat_bubble_margin_start)
+                marginEnd = resources.getDimensionPixelSize(im.vector.lib.ui.styles.R.dimen.chat_bubble_margin_start)
             }
             views.messageStartGuideline.updateLayoutParams<LayoutParams> {
-                marginStart = resources.getDimensionPixelSize(R.dimen.chat_bubble_margin_end)
+                marginStart = resources.getDimensionPixelSize(im.vector.lib.ui.styles.R.dimen.chat_bubble_margin_end)
             }
         }
     }

@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.internal.session.room.draft
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.map
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
 import io.realm.kotlin.createObject
@@ -72,7 +72,7 @@ internal class DraftRepository @Inject constructor(
                     }
                 }
         )
-        return Transformations.map(liveData) {
+        return liveData.map {
             it.firstOrNull()?.firstOrNull().toOptional()
         }
     }

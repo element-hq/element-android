@@ -16,6 +16,7 @@
 
 package im.vector.app.features.call.conference
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -37,10 +38,10 @@ import com.airbnb.mvrx.viewModel
 import com.facebook.react.modules.core.PermissionListener
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityJitsiBinding
 import im.vector.lib.core.utils.compat.getParcelableExtraCompat
+import im.vector.lib.strings.CommonStrings
 import kotlinx.parcelize.Parcelize
 import org.jitsi.meet.sdk.BroadcastIntentHelper
 import org.jitsi.meet.sdk.JitsiMeet
@@ -130,12 +131,15 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
 
     // Activity lifecycle methods
     //
+    @Suppress("OVERRIDE_DEPRECATION")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         @Suppress("DEPRECATION")
         super.onActivityResult(requestCode, resultCode, data)
         JitsiMeetActivityDelegate.onActivityResult(this, requestCode, resultCode, data)
     }
 
+    @Suppress("OVERRIDE_DEPRECATION")
+    @SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
         JitsiMeetActivityDelegate.onBackPressed()
     }
@@ -154,12 +158,12 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
 
     private fun handleConfirmSwitching(action: JitsiCallViewEvents.ConfirmSwitchingConference) {
         MaterialAlertDialogBuilder(this)
-                .setTitle(R.string.dialog_title_warning)
-                .setMessage(R.string.jitsi_leave_conf_to_join_another_one_content)
-                .setPositiveButton(R.string.action_switch) { _, _ ->
+                .setTitle(CommonStrings.dialog_title_warning)
+                .setMessage(CommonStrings.jitsi_leave_conf_to_join_another_one_content)
+                .setPositiveButton(CommonStrings.action_switch) { _, _ ->
                     jitsiViewModel.handle(JitsiCallViewActions.SwitchTo(action.args, false))
                 }
-                .setNegativeButton(R.string.action_cancel, null)
+                .setNegativeButton(CommonStrings.action_cancel, null)
                 .show()
     }
 
@@ -191,7 +195,7 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
     }
 
     private fun handleFailJoining() {
-        Toast.makeText(this, getString(R.string.error_jitsi_join_conf), Toast.LENGTH_LONG).show()
+        Toast.makeText(this, getString(CommonStrings.error_jitsi_join_conf), Toast.LENGTH_LONG).show()
         finish()
     }
 
@@ -217,11 +221,11 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
         jitsiMeetView?.join(jitsiMeetConferenceOptions)
     }
 
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         JitsiMeetActivityDelegate.onNewIntent(intent)
 
         // Is it a switch to another conf?
-        intent?.takeIf { it.hasExtra(Mavericks.KEY_ARG) }
+        intent.takeIf { it.hasExtra(Mavericks.KEY_ARG) }
                 ?.let { intent.getParcelableExtraCompat<Args>(Mavericks.KEY_ARG) }
                 ?.let {
                     jitsiViewModel.handle(JitsiCallViewActions.SwitchTo(it, true))

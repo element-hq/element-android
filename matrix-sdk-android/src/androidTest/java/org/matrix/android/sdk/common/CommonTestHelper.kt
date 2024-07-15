@@ -23,7 +23,6 @@ import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
@@ -58,6 +57,7 @@ import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
+import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * This class exposes methods to be used in common cases
@@ -67,10 +67,9 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
 
     companion object {
 
-        @OptIn(ExperimentalCoroutinesApi::class)
         internal fun runSessionTest(context: Context, cryptoConfig: MXCryptoConfig? = null, autoSignoutOnClose: Boolean = true, block: suspend CoroutineScope.(CommonTestHelper) -> Unit) {
             val testHelper = CommonTestHelper(context, cryptoConfig)
-            return runTest(dispatchTimeoutMs = TestConstants.timeOutMillis) {
+            return runTest(timeout = TestConstants.timeOutMillis.milliseconds) {
                 try {
                     withContext(Dispatchers.Default) {
                         block(testHelper)
@@ -83,11 +82,10 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
             }
         }
 
-        @OptIn(ExperimentalCoroutinesApi::class)
         internal fun runCryptoTest(context: Context, cryptoConfig: MXCryptoConfig? = null, autoSignoutOnClose: Boolean = true, block: suspend CoroutineScope.(CryptoTestHelper, CommonTestHelper) -> Unit) {
             val testHelper = CommonTestHelper(context, cryptoConfig)
             val cryptoTestHelper = CryptoTestHelper(testHelper)
-            return runTest(dispatchTimeoutMs = TestConstants.timeOutMillis) {
+            return runTest(timeout = TestConstants.timeOutMillis.milliseconds) {
                 try {
                     withContext(Dispatchers.Default) {
                         block(cryptoTestHelper, testHelper)
@@ -100,11 +98,10 @@ class CommonTestHelper internal constructor(context: Context, val cryptoConfig: 
             }
         }
 
-        @OptIn(ExperimentalCoroutinesApi::class)
         internal fun runLongCryptoTest(context: Context, cryptoConfig: MXCryptoConfig? = null, autoSignoutOnClose: Boolean = true, block: suspend CoroutineScope.(CryptoTestHelper, CommonTestHelper) -> Unit) {
             val testHelper = CommonTestHelper(context, cryptoConfig)
             val cryptoTestHelper = CryptoTestHelper(testHelper)
-            return runTest(dispatchTimeoutMs = TestConstants.timeOutMillis * 4) {
+            return runTest(timeout = (TestConstants.timeOutMillis * 4).milliseconds) {
                 try {
                     withContext(Dispatchers.Default) {
                         block(cryptoTestHelper, testHelper)

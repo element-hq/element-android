@@ -25,11 +25,11 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentRoomPollDetailBinding
+import im.vector.lib.strings.CommonStrings
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -77,8 +77,8 @@ class RoomPollDetailFragment :
 
     private fun setupToolbar(isEnded: Boolean) {
         val title = when (isEnded) {
-            true -> getString(R.string.room_polls_ended)
-            false -> getString(R.string.room_polls_active)
+            true -> getString(CommonStrings.room_polls_ended)
+            false -> getString(CommonStrings.room_polls_active)
         }
 
         setupToolbar(views.roomPollDetailToolbar)

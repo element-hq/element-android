@@ -21,6 +21,7 @@ import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.view.isVisible
 import im.vector.app.R
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.presence.model.PresenceEnum
 import org.matrix.android.sdk.api.session.presence.model.UserPresence
 
@@ -39,19 +40,19 @@ class PresenceStateImageView @JvmOverloads constructor(
         when (userPresence?.presence) {
             PresenceEnum.ONLINE -> {
                 setImageResource(R.drawable.ic_presence_online)
-                contentDescription = context.getString(R.string.a11y_presence_online)
+                contentDescription = context.getString(CommonStrings.a11y_presence_online)
             }
             PresenceEnum.UNAVAILABLE -> {
                 setImageResource(R.drawable.ic_presence_away)
-                contentDescription = context.getString(R.string.a11y_presence_unavailable)
+                contentDescription = context.getString(CommonStrings.a11y_presence_unavailable)
             }
             PresenceEnum.OFFLINE -> {
                 setImageResource(R.drawable.ic_presence_offline)
-                contentDescription = context.getString(R.string.a11y_presence_offline)
+                contentDescription = context.getString(CommonStrings.a11y_presence_offline)
             }
             PresenceEnum.BUSY -> {
                 setImageResource(R.drawable.ic_presence_busy)
-                contentDescription = context.getString(R.string.a11y_presence_busy)
+                contentDescription = context.getString(CommonStrings.a11y_presence_busy)
             }
             null -> Unit
         }

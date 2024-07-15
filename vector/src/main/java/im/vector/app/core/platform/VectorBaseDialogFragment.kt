@@ -30,7 +30,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewbinding.ViewBinding
 import com.airbnb.mvrx.MavericksView
 import dagger.hilt.android.EntryPointAccessors
-import im.vector.app.R
 import im.vector.app.core.di.ActivityEntryPoint
 import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.extensions.toMvRxBundle
@@ -126,7 +125,7 @@ abstract class VectorBaseDialogFragment<VB : ViewBinding> : DialogFragment(), Ma
         // This ensures that invalidate() is called for static screens that don't
         // subscribe to a ViewModel.
         postInvalidate()
-        requireDialog().window?.setWindowAnimations(R.style.Animation_AppCompat_Dialog)
+        requireDialog().window?.setWindowAnimations(androidx.appcompat.R.style.Animation_AppCompat_Dialog)
     }
 
     protected fun setArguments(args: Parcelable? = null) {

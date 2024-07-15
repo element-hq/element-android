@@ -30,6 +30,7 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.databinding.ViewOtherSessionsBinding
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
+import im.vector.lib.strings.CommonStrings
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -89,7 +90,7 @@ class OtherSessionsView @JvmOverloads constructor(
     fun render(devices: List<DeviceFullInfo>, totalNumberOfDevices: Int, showViewAll: Boolean) {
         if (showViewAll) {
             views.otherSessionsViewAllButton.isVisible = true
-            views.otherSessionsViewAllButton.text = context.getString(R.string.device_manager_other_sessions_view_all, totalNumberOfDevices)
+            views.otherSessionsViewAllButton.text = context.getString(CommonStrings.device_manager_other_sessions_view_all, totalNumberOfDevices)
         } else {
             views.otherSessionsViewAllButton.isVisible = false
         }

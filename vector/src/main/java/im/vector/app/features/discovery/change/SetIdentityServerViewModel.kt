@@ -21,13 +21,13 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.EntryPoints
-import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.SingletonEntryPoint
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.ensureProtocol
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
@@ -61,7 +61,7 @@ class SetIdentityServerViewModel @AssistedInject constructor(
     var currentWantedUrl: String? = null
         private set
 
-    private val userLanguage = stringProvider.getString(R.string.resources_language)
+    private val userLanguage = stringProvider.getString(CommonStrings.resources_language)
 
     override fun handle(action: SetIdentityServerAction) {
         when (action) {
@@ -80,7 +80,7 @@ class SetIdentityServerViewModel @AssistedInject constructor(
 
     private fun doChangeIdentityServerUrl(url: String, isDefault: Boolean) {
         if (url.isEmpty()) {
-            _viewEvents.post(SetIdentityServerViewEvents.Failure(R.string.settings_discovery_please_enter_server, isDefault))
+            _viewEvents.post(SetIdentityServerViewEvents.Failure(CommonStrings.settings_discovery_please_enter_server, isDefault))
             return
         }
         val baseUrl = url.ensureProtocol().also { currentWantedUrl = it }
@@ -96,9 +96,9 @@ class SetIdentityServerViewModel @AssistedInject constructor(
             } catch (failure: Throwable) {
                 when {
                     failure is IdentityServiceError.OutdatedIdentityServer ->
-                        _viewEvents.post(SetIdentityServerViewEvents.Failure(R.string.identity_server_error_outdated_identity_server, isDefault))
+                        _viewEvents.post(SetIdentityServerViewEvents.Failure(CommonStrings.identity_server_error_outdated_identity_server, isDefault))
                     failure is Failure.NetworkConnection && failure.ioException is UnknownHostException ->
-                        _viewEvents.post(SetIdentityServerViewEvents.Failure(R.string.settings_discovery_bad_identity_server, isDefault))
+                        _viewEvents.post(SetIdentityServerViewEvents.Failure(CommonStrings.settings_discovery_bad_identity_server, isDefault))
                     else ->
                         _viewEvents.post(SetIdentityServerViewEvents.OtherFailure(failure))
                 }

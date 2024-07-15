@@ -19,11 +19,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import im.vector.app.R
 import im.vector.app.core.platform.WaitingViewData
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.LiveEvent
 import im.vector.app.features.session.coroutineScope
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -95,8 +95,8 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
                 is StepProgressListener.Step.ComputingKey -> {
                     loadingEvent.postValue(
                             WaitingViewData(
-                                    stringProvider.getString(R.string.keys_backup_restoring_waiting_message) +
-                                            "\n" + stringProvider.getString(R.string.keys_backup_restoring_computing_key_waiting_message),
+                                    stringProvider.getString(CommonStrings.keys_backup_restoring_waiting_message) +
+                                            "\n" + stringProvider.getString(CommonStrings.keys_backup_restoring_computing_key_waiting_message),
                                     step.progress,
                                     step.total
                             )
@@ -105,8 +105,8 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
                 is StepProgressListener.Step.DownloadingKey -> {
                     loadingEvent.postValue(
                             WaitingViewData(
-                                    stringProvider.getString(R.string.keys_backup_restoring_waiting_message) +
-                                            "\n" + stringProvider.getString(R.string.keys_backup_restoring_downloading_backup_waiting_message),
+                                    stringProvider.getString(CommonStrings.keys_backup_restoring_waiting_message) +
+                                            "\n" + stringProvider.getString(CommonStrings.keys_backup_restoring_downloading_backup_waiting_message),
                                     isIndeterminate = true
                             )
                     )
@@ -117,16 +117,16 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
                     if (step.progress == 0) {
                         loadingEvent.postValue(
                                 WaitingViewData(
-                                        stringProvider.getString(R.string.keys_backup_restoring_waiting_message) +
-                                                "\n" + stringProvider.getString(R.string.keys_backup_restoring_importing_keys_waiting_message),
+                                        stringProvider.getString(CommonStrings.keys_backup_restoring_waiting_message) +
+                                                "\n" + stringProvider.getString(CommonStrings.keys_backup_restoring_importing_keys_waiting_message),
                                         isIndeterminate = true
                                 )
                         )
                     } else {
                         loadingEvent.postValue(
                                 WaitingViewData(
-                                        stringProvider.getString(R.string.keys_backup_restoring_waiting_message) +
-                                                "\n" + stringProvider.getString(R.string.keys_backup_restoring_importing_keys_waiting_message),
+                                        stringProvider.getString(CommonStrings.keys_backup_restoring_waiting_message) +
+                                                "\n" + stringProvider.getString(CommonStrings.keys_backup_restoring_importing_keys_waiting_message),
                                         step.progress,
                                         step.total
                                 )
@@ -137,16 +137,16 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
                     if (step.progress == 0) {
                         loadingEvent.postValue(
                                 WaitingViewData(
-                                        stringProvider.getString(R.string.keys_backup_restoring_waiting_message) +
-                                                "\n" + stringProvider.getString(R.string.keys_backup_restoring_importing_keys_waiting_message),
+                                        stringProvider.getString(CommonStrings.keys_backup_restoring_waiting_message) +
+                                                "\n" + stringProvider.getString(CommonStrings.keys_backup_restoring_importing_keys_waiting_message),
                                         isIndeterminate = true
                                 )
                         )
                     } else {
                         loadingEvent.postValue(
                                 WaitingViewData(
-                                        stringProvider.getString(R.string.keys_backup_restoring_waiting_message) +
-                                                "\n" + stringProvider.getString(R.string.keys_backup_restoring_importing_keys_waiting_message),
+                                        stringProvider.getString(CommonStrings.keys_backup_restoring_waiting_message) +
+                                                "\n" + stringProvider.getString(CommonStrings.keys_backup_restoring_importing_keys_waiting_message),
                                         step.progress,
                                         step.total
                                 )
@@ -160,13 +160,13 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
     private suspend fun getLatestVersion() {
         val keysBackup = session.cryptoService().keysBackupService()
 
-        loadingEvent.postValue(WaitingViewData(stringProvider.getString(R.string.keys_backup_restore_is_getting_backup_version)))
+        loadingEvent.postValue(WaitingViewData(stringProvider.getString(CommonStrings.keys_backup_restore_is_getting_backup_version)))
 
         try {
             val version = keysBackup.getCurrentVersion()?.toKeysVersionResult()
             if (version?.version == null) {
                 loadingEvent.postValue(null)
-                _keyVersionResultError.postValue(LiveEvent(stringProvider.getString(R.string.keys_backup_get_version_error, "")))
+                _keyVersionResultError.postValue(LiveEvent(stringProvider.getString(CommonStrings.keys_backup_get_version_error, "")))
                 return
             }
 
@@ -205,7 +205,7 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
             loadingEvent.postValue(null)
         } catch (failure: Throwable) {
             loadingEvent.postValue(null)
-            _keyVersionResultError.postValue(LiveEvent(stringProvider.getString(R.string.keys_backup_get_version_error, failure.localizedMessage)))
+            _keyVersionResultError.postValue(LiveEvent(stringProvider.getString(CommonStrings.keys_backup_get_version_error, failure.localizedMessage)))
         }
     }
 
@@ -220,7 +220,7 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
                     )
                     return
                 }
-                loadingEvent.postValue(WaitingViewData(stringProvider.getString(R.string.keys_backup_restore_is_getting_backup_version)))
+                loadingEvent.postValue(WaitingViewData(stringProvider.getString(CommonStrings.keys_backup_restore_is_getting_backup_version)))
 
                 viewModelScope.launch(Dispatchers.IO) {
                     try {
@@ -245,7 +245,7 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
         val keysBackup = session.cryptoService().keysBackupService()
         val keyVersion = keyVersionResult.value ?: return
 
-        loadingEvent.postValue(WaitingViewData(stringProvider.getString(R.string.loading)))
+        loadingEvent.postValue(WaitingViewData(stringProvider.getString(CommonStrings.loading)))
 
         try {
             val result = keysBackup.restoreKeyBackupWithPassword(
@@ -269,7 +269,7 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
         // This is badddddd
         val version = keyVersion ?: keyVersionResult.value ?: return
 
-        loadingEvent.postValue(WaitingViewData(stringProvider.getString(R.string.loading)))
+        loadingEvent.postValue(WaitingViewData(stringProvider.getString(CommonStrings.loading)))
 
         try {
             val result = keysBackup.restoreKeysWithRecoveryKey(

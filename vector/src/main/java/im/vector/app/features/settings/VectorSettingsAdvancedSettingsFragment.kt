@@ -29,13 +29,14 @@ import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.home.NightlyProxy
 import im.vector.app.features.rageshake.RageShake
+import im.vector.lib.strings.CommonStrings
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class VectorSettingsAdvancedSettingsFragment :
         VectorSettingsBaseFragment() {
 
-    override var titleRes = R.string.settings_advanced_settings
+    override var titleRes = CommonStrings.settings_advanced_settings
     override val preferenceXmlRes = R.xml.vector_settings_advanced_settings
 
     @Inject lateinit var nightlyProxy: NightlyProxy
@@ -52,7 +53,7 @@ class VectorSettingsAdvancedSettingsFragment :
 
         rageshake = (activity as? VectorBaseActivity<*>)?.rageShake
         rageshake?.interceptor = {
-            (activity as? VectorBaseActivity<*>)?.showSnackbar(getString(R.string.rageshake_detected))
+            (activity as? VectorBaseActivity<*>)?.showSnackbar(getString(CommonStrings.rageshake_detected))
         }
     }
 

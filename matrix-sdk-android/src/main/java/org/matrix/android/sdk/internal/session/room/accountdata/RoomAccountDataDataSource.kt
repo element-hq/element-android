@@ -18,7 +18,7 @@ package org.matrix.android.sdk.internal.session.room.accountdata
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.map
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
 import io.realm.RealmQuery
@@ -44,7 +44,7 @@ internal class RoomAccountDataDataSource @Inject constructor(
     }
 
     fun getLiveAccountDataEvent(roomId: String, type: String): LiveData<Optional<RoomAccountDataEvent>> {
-        return Transformations.map(getLiveAccountDataEvents(roomId, setOf(type))) {
+        return getLiveAccountDataEvents(roomId, setOf(type)).map {
             it.firstOrNull().toOptional()
         }
     }

@@ -28,6 +28,7 @@ import im.vector.app.databinding.ViewVoiceMessageRecorderBinding
 import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import im.vector.lib.core.utils.timer.Clock
 import im.vector.lib.core.utils.timer.CountUpTimer
+import im.vector.lib.strings.CommonStrings
 import javax.inject.Inject
 import kotlin.math.floor
 
@@ -138,7 +139,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
             }
             is RecordingUiState.Recording -> {
                 startRecordingTicker(startFromLocked = false, startAt = recordingState.recordingStartTimestamp)
-                voiceMessageViews.renderToast(context.getString(R.string.voice_message_release_to_send_toast))
+                voiceMessageViews.renderToast(context.getString(CommonStrings.voice_message_release_to_send_toast))
                 voiceMessageViews.showRecordingViews()
                 dragState = DraggingState.Ready
             }
@@ -208,7 +209,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         } else if (timeDiffToRecordingLimit in 10_000..10_999) {
             post {
                 val secondsRemaining = floor(timeDiffToRecordingLimit / 1000f).toInt()
-                voiceMessageViews.renderToast(context.getString(R.string.voice_message_n_seconds_warning_toast, secondsRemaining))
+                voiceMessageViews.renderToast(context.getString(CommonStrings.voice_message_n_seconds_warning_toast, secondsRemaining))
                 vibrate(context)
             }
         }

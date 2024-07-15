@@ -24,7 +24,6 @@ import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.hideKeyboard
@@ -33,6 +32,7 @@ import im.vector.app.features.login.AbstractLoginFragment
 import im.vector.app.features.login.LoginAction
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.LoginViewEvents
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.extensions.orFalse
 import javax.inject.Inject
 
@@ -132,16 +132,16 @@ class SoftLogoutFragment :
             cleanupUi()
 
             val messageResId = if (state.hasUnsavedKeys().orFalse()) {
-                R.string.soft_logout_clear_data_dialog_e2e_warning_content
+                CommonStrings.soft_logout_clear_data_dialog_e2e_warning_content
             } else {
-                R.string.soft_logout_clear_data_dialog_content
+                CommonStrings.soft_logout_clear_data_dialog_content
             }
 
-            MaterialAlertDialogBuilder(requireActivity(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive)
-                    .setTitle(R.string.soft_logout_clear_data_dialog_title)
+            MaterialAlertDialogBuilder(requireActivity(), im.vector.lib.ui.styles.R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive)
+                    .setTitle(CommonStrings.soft_logout_clear_data_dialog_title)
                     .setMessage(messageResId)
-                    .setNegativeButton(R.string.action_cancel, null)
-                    .setPositiveButton(R.string.soft_logout_clear_data_submit) { _, _ ->
+                    .setNegativeButton(CommonStrings.action_cancel, null)
+                    .setPositiveButton(CommonStrings.soft_logout_clear_data_submit) { _, _ ->
                         softLogoutViewModel.handle(SoftLogoutAction.ClearData)
                     }
                     .show()

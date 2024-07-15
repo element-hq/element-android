@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.internal.crypto.store
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.map
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
 import io.realm.RealmConfiguration
@@ -280,7 +280,7 @@ internal class RustCryptoStore @Inject constructor(
                 { entity -> myDeviceLastSeenInfoEntityMapper.map(entity) }
         )
 
-        return Transformations.map(liveData) {
+        return liveData.map {
             it.firstOrNull().toOptional()
         }
     }
@@ -351,7 +351,7 @@ internal class RustCryptoStore @Inject constructor(
                     )
                 }
         )
-        return Transformations.map(liveData) {
+        return liveData.map {
             it.firstOrNull() ?: GlobalCryptoConfig(false, false, false)
         }
     }
@@ -372,7 +372,7 @@ internal class RustCryptoStore @Inject constructor(
                     it.blacklistUnverifiedDevices
                 }
         )
-        return Transformations.map(liveData) {
+        return liveData.map {
             it.firstOrNull() ?: false
         }
     }

@@ -16,7 +16,6 @@
 
 package im.vector.app.features.onboarding
 
-import im.vector.app.R
 import im.vector.app.test.fakes.FakeAuthenticationService
 import im.vector.app.test.fakes.FakeRegistrationWizardActionDelegate
 import im.vector.app.test.fakes.FakeSession
@@ -39,7 +38,7 @@ class RegistrationActionHandlerTest {
     private val vectorOverrides = FakeVectorOverrides()
     private val vectorFeatures = FakeVectorFeatures()
     private val fakeStringProvider = FakeStringProvider().also {
-        it.given(R.string.matrix_org_server_url, "https://matrix.org")
+        it.given(im.vector.app.config.R.string.matrix_org_server_url, "https://matrix.org")
     }
 
     private val registrationActionHandler = RegistrationActionHandler(

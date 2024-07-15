@@ -26,6 +26,7 @@ import androidx.test.filters.LargeTest
 import com.adevinta.android.barista.internal.viewaction.SleepViewAction
 import im.vector.app.features.MainActivity
 import im.vector.app.ui.robot.ElementRobot
+import im.vector.lib.strings.CommonStrings
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -61,7 +62,7 @@ class CantVerifyTest {
 
         val activity = EspressoHelper.getCurrentActivity()!!
         Espresso.onView(ViewMatchers.isRoot())
-                .perform(waitForView(ViewMatchers.withText(R.string.crosssigning_cannot_verify_this_session)))
+                .perform(waitForView(ViewMatchers.withText(CommonStrings.crosssigning_cannot_verify_this_session)))
 
         // check that the text is correct
         val popup = activity.findViewById<View>(com.tapadoo.alerter.R.id.llAlertBackground)!!
@@ -73,7 +74,7 @@ class CantVerifyTest {
 
         Espresso.onView(ViewMatchers.isRoot()).perform(SleepViewAction.sleep(2000))
 
-        Espresso.onView(ViewMatchers.withText(R.string.bottom_sheet_setup_secure_backup_title))
+        Espresso.onView(ViewMatchers.withText(CommonStrings.bottom_sheet_setup_secure_backup_title))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
 }

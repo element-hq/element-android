@@ -41,6 +41,8 @@ import im.vector.app.features.pin.lockscreen.ui.AuthMethod
 import im.vector.app.features.pin.lockscreen.ui.LockScreenFragment
 import im.vector.app.features.pin.lockscreen.ui.LockScreenListener
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.lib.strings.CommonPlurals
+import im.vector.lib.strings.CommonStrings
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import javax.inject.Inject
@@ -77,7 +79,7 @@ class PinFragment :
         val createFragment = LockScreenFragment()
         createFragment.lockScreenListener = object : LockScreenListener {
             override fun onNewCodeValidationFailed() {
-                Toast.makeText(requireContext(), getString(R.string.create_pin_confirm_failure), Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(CommonStrings.create_pin_confirm_failure), Toast.LENGTH_SHORT).show()
             }
 
             override fun onPinCodeCreated() {
@@ -87,9 +89,9 @@ class PinFragment :
         }
         createFragment.arguments = defaultConfiguration.copy(
                 mode = LockScreenMode.CREATE,
-                title = getString(R.string.create_pin_title),
+                title = getString(CommonStrings.create_pin_title),
                 needsNewCodeValidation = true,
-                newCodeConfirmationTitle = getString(R.string.create_pin_confirm_title),
+                newCodeConfirmationTitle = getString(CommonStrings.create_pin_confirm_title),
         ).asMavericksArgs()
         replaceFragment(R.id.pinFragmentContainer, createFragment)
     }
@@ -128,15 +130,15 @@ class PinFragment :
                 vectorPreferences.setUseBiometricToUnlock(false)
 
                 MaterialAlertDialogBuilder(requireContext())
-                        .setMessage(R.string.auth_biometric_key_invalidated_message)
-                        .setPositiveButton(R.string.ok, null)
+                        .setMessage(CommonStrings.auth_biometric_key_invalidated_message)
+                        .setPositiveButton(CommonStrings.ok, null)
                         .show()
             }
         }
         authFragment.arguments = defaultConfiguration.copy(
                 mode = LockScreenMode.VERIFY,
-                title = getString(R.string.auth_pin_title),
-                leftButtonTitle = getString(R.string.auth_pin_forgot),
+                title = getString(CommonStrings.auth_pin_title),
+                leftButtonTitle = getString(CommonStrings.auth_pin_forgot),
                 clearCodeOnError = true,
         ).asMavericksArgs()
         replaceFragment(R.id.pinFragmentContainer, authFragment)
@@ -146,11 +148,11 @@ class PinFragment :
         val remainingAttempts = pinCodeStore.onWrongPin()
         when {
             remainingAttempts > 1 ->
-                requireActivity().toast(resources.getQuantityString(R.plurals.wrong_pin_message_remaining_attempts, remainingAttempts, remainingAttempts))
+                requireActivity().toast(resources.getQuantityString(CommonPlurals.wrong_pin_message_remaining_attempts, remainingAttempts, remainingAttempts))
             remainingAttempts == 1 ->
-                requireActivity().toast(R.string.wrong_pin_message_last_remaining_attempt)
+                requireActivity().toast(CommonStrings.wrong_pin_message_last_remaining_attempt)
             else -> {
-                requireActivity().toast(R.string.too_many_pin_failures)
+                requireActivity().toast(CommonStrings.too_many_pin_failures)
                 // Logout
                 launchResetPinFlow()
             }
@@ -159,12 +161,12 @@ class PinFragment :
 
     private fun displayForgotPinWarningDialog() {
         MaterialAlertDialogBuilder(requireContext())
-                .setTitle(getString(R.string.auth_pin_reset_title))
-                .setMessage(getString(R.string.auth_pin_reset_content))
-                .setPositiveButton(getString(R.string.auth_pin_new_pin_action)) { _, _ ->
+                .setTitle(getString(CommonStrings.auth_pin_reset_title))
+                .setMessage(getString(CommonStrings.auth_pin_reset_content))
+                .setPositiveButton(getString(CommonStrings.auth_pin_new_pin_action)) { _, _ ->
                     launchResetPinFlow()
                 }
-                .setNegativeButton(R.string.action_cancel, null)
+                .setNegativeButton(CommonStrings.action_cancel, null)
                 .show()
     }
 

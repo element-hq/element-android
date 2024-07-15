@@ -26,12 +26,12 @@ import com.airbnb.mvrx.Uninitialized
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.WaitingViewData
 import im.vector.app.core.resources.StringProvider
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
@@ -108,7 +108,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
             if (integrityResult !is IntegrityResult.Success) {
                 _viewEvents.post(
                         SharedSecureStorageViewEvent.Error(
-                                stringProvider.getString(R.string.enter_secret_storage_invalid),
+                                stringProvider.getString(CommonStrings.enter_secret_storage_invalid),
                                 true
                         )
                 )
@@ -235,7 +235,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
                 val keyInfoResult = session.sharedSecretStorageService().getDefaultKey()
                 if (!keyInfoResult.isSuccess()) {
                     _viewEvents.post(SharedSecureStorageViewEvent.HideModalLoading)
-                    _viewEvents.post(SharedSecureStorageViewEvent.Error(stringProvider.getString(R.string.failed_to_access_secure_storage)))
+                    _viewEvents.post(SharedSecureStorageViewEvent.Error(stringProvider.getString(CommonStrings.failed_to_access_secure_storage)))
                     return@launch
                 }
                 val keyInfo = (keyInfoResult as KeyInfoResult.Success).keyInfo
@@ -243,15 +243,17 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
                 _viewEvents.post(
                         SharedSecureStorageViewEvent.UpdateLoadingState(
                                 WaitingViewData(
-                                        message = stringProvider.getString(R.string.keys_backup_restoring_computing_key_waiting_message),
+                                        message = stringProvider.getString(CommonStrings.keys_backup_restoring_computing_key_waiting_message),
                                         isIndeterminate = true
                                 )
                         )
                 )
                 val keySpec = RawBytesKeySpec.fromRecoveryKey(recoveryKey) ?: return@launch Unit.also {
-                    _viewEvents.post(SharedSecureStorageViewEvent.KeyInlineError(stringProvider.getString(R.string.bootstrap_invalid_recovery_key)))
+                    _viewEvents.post(SharedSecureStorageViewEvent.KeyInlineError(stringProvider.getString(CommonStrings.bootstrap_invalid_recovery_key)))
                     _viewEvents.post(SharedSecureStorageViewEvent.HideModalLoading)
-                    setState { copy(checkingSSSSAction = Fail(IllegalArgumentException(stringProvider.getString(R.string.bootstrap_invalid_recovery_key)))) }
+                    setState {
+                        copy(checkingSSSSAction = Fail(IllegalArgumentException(stringProvider.getString(CommonStrings.bootstrap_invalid_recovery_key))))
+                    }
                 }
                 withContext(Dispatchers.IO) {
                     performRequest(keyInfo, keySpec, decryptedSecretMap)
@@ -268,7 +270,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
             }, {
                 setState { copy(checkingSSSSAction = Fail(it)) }
                 _viewEvents.post(SharedSecureStorageViewEvent.HideModalLoading)
-                _viewEvents.post(SharedSecureStorageViewEvent.KeyInlineError(stringProvider.getString(R.string.keys_backup_passphrase_error_decrypt)))
+                _viewEvents.post(SharedSecureStorageViewEvent.KeyInlineError(stringProvider.getString(CommonStrings.keys_backup_passphrase_error_decrypt)))
             })
         }
     }
@@ -322,7 +324,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
                 _viewEvents.post(
                         SharedSecureStorageViewEvent.UpdateLoadingState(
                                 WaitingViewData(
-                                        message = stringProvider.getString(R.string.keys_backup_restoring_computing_key_waiting_message),
+                                        message = stringProvider.getString(CommonStrings.keys_backup_restoring_computing_key_waiting_message),
                                         isIndeterminate = true
                                 )
                         )
@@ -336,7 +338,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
                                 _viewEvents.post(
                                         SharedSecureStorageViewEvent.UpdateLoadingState(
                                                 WaitingViewData(
-                                                        message = stringProvider.getString(R.string.keys_backup_restoring_computing_key_waiting_message),
+                                                        message = stringProvider.getString(CommonStrings.keys_backup_restoring_computing_key_waiting_message),
                                                         isIndeterminate = false,
                                                         progress = progress,
                                                         progressTotal = total
@@ -364,7 +366,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
             }, {
                 setState { copy(checkingSSSSAction = Fail(it)) }
                 _viewEvents.post(SharedSecureStorageViewEvent.HideModalLoading)
-                _viewEvents.post(SharedSecureStorageViewEvent.InlineError(stringProvider.getString(R.string.keys_backup_passphrase_error_decrypt)))
+                _viewEvents.post(SharedSecureStorageViewEvent.InlineError(stringProvider.getString(CommonStrings.keys_backup_passphrase_error_decrypt)))
             })
         }
     }

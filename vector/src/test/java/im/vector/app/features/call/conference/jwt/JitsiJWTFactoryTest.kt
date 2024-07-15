@@ -27,7 +27,6 @@ import org.junit.Test
 import org.matrix.android.sdk.api.session.openid.OpenIdToken
 import java.lang.reflect.ParameterizedType
 import java.util.Base64
-import kotlin.streams.toList
 
 class JitsiJWTFactoryTest {
     private val base64Decoder = Base64.getUrlDecoder()

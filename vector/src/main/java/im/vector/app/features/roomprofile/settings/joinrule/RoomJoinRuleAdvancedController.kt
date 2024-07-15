@@ -17,7 +17,6 @@
 package im.vector.app.features.roomprofile.settings.joinrule
 
 import com.airbnb.epoxy.TypedEpoxyController
-import im.vector.app.R
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.ItemStyle
@@ -26,6 +25,7 @@ import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roomprofile.settings.joinrule.advanced.RoomJoinRuleChooseRestrictedState
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import timber.log.Timber
 import javax.inject.Inject
@@ -50,23 +50,23 @@ class RoomJoinRuleAdvancedController @Inject constructor(
 
         genericFooterItem {
             id("header")
-            text(host.stringProvider.getString(R.string.room_settings_room_access_title).toEpoxyCharSequence())
+            text(host.stringProvider.getString(CommonStrings.room_settings_room_access_title).toEpoxyCharSequence())
             centered(false)
             style(ItemStyle.TITLE)
-            textColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
+            textColor(host.colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_primary))
         }
 
         genericFooterItem {
             id("desc")
-            text(host.stringProvider.getString(R.string.decide_who_can_find_and_join).toEpoxyCharSequence())
+            text(host.stringProvider.getString(CommonStrings.decide_who_can_find_and_join).toEpoxyCharSequence())
             centered(false)
         }
 
         // invite only
         RoomJoinRuleRadioAction(
                 roomJoinRule = RoomJoinRules.INVITE,
-                description = stringProvider.getString(R.string.room_settings_room_access_private_description),
-                title = stringProvider.getString(R.string.room_settings_room_access_private_invite_only_title),
+                description = stringProvider.getString(CommonStrings.room_settings_room_access_private_description),
+                title = stringProvider.getString(CommonStrings.room_settings_room_access_private_invite_only_title),
                 isSelected = state.currentRoomJoinRules == RoomJoinRules.INVITE
         ).toRadioBottomSheetItem().let {
             it.listener {
@@ -92,8 +92,8 @@ class RoomJoinRuleAdvancedController @Inject constructor(
         // Public
         RoomJoinRuleRadioAction(
                 roomJoinRule = RoomJoinRules.PUBLIC,
-                description = stringProvider.getString(R.string.room_settings_room_access_public_description),
-                title = stringProvider.getString(R.string.room_settings_room_access_public_title),
+                description = stringProvider.getString(CommonStrings.room_settings_room_access_public_description),
+                title = stringProvider.getString(CommonStrings.room_settings_room_access_public_title),
                 isSelected = state.currentRoomJoinRules == RoomJoinRules.PUBLIC
         ).toRadioBottomSheetItem().let {
             it.listener {

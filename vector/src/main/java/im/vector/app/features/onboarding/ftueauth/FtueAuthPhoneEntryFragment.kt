@@ -22,7 +22,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.associateContentStateWith
 import im.vector.app.core.extensions.autofillPhoneNumber
 import im.vector.app.core.extensions.content
@@ -33,6 +32,7 @@ import im.vector.app.databinding.FragmentFtuePhoneInputBinding
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewState
 import im.vector.app.features.onboarding.RegisterAction
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
@@ -73,8 +73,9 @@ class FtueAuthPhoneEntryFragment :
         val number = views.phoneEntryInput.content()
 
         when (val result = phoneNumberParser.parseInternationalNumber(number)) {
-            PhoneNumberParser.Result.ErrorInvalidNumber -> views.phoneEntryInput.error = getString(R.string.login_msisdn_error_other)
-            PhoneNumberParser.Result.ErrorMissingInternationalCode -> views.phoneEntryInput.error = getString(R.string.login_msisdn_error_not_international)
+            PhoneNumberParser.Result.ErrorInvalidNumber -> views.phoneEntryInput.error = getString(CommonStrings.login_msisdn_error_other)
+            PhoneNumberParser.Result.ErrorMissingInternationalCode ->
+                views.phoneEntryInput.error = getString(CommonStrings.login_msisdn_error_not_international)
             is PhoneNumberParser.Result.Success -> {
                 val (countryCode, phoneNumber) = result
                 viewModel.handle(OnboardingAction.PostRegisterAction(RegisterAction.AddThreePid(RegisterThreePid.Msisdn(phoneNumber, countryCode))))
@@ -83,7 +84,7 @@ class FtueAuthPhoneEntryFragment :
     }
 
     override fun updateWithState(state: OnboardingViewState) {
-        views.phoneEntryHeaderSubtitle.text = getString(R.string.ftue_auth_phone_subtitle, state.selectedHomeserver.userFacingUrl.toReducedUrl())
+        views.phoneEntryHeaderSubtitle.text = getString(CommonStrings.ftue_auth_phone_subtitle, state.selectedHomeserver.userFacingUrl.toReducedUrl())
     }
 
     override fun onError(throwable: Throwable) {

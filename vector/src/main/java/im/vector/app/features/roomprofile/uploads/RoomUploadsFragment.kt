@@ -28,7 +28,6 @@ import com.airbnb.mvrx.withState
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.intent.getMimeTypeFromUri
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.saveMedia
@@ -39,6 +38,7 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.roomprofile.RoomProfileArgs
 import im.vector.lib.core.utils.timer.Clock
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
@@ -72,8 +72,8 @@ class RoomUploadsFragment :
 
         TabLayoutMediator(views.roomUploadsTabs, views.roomUploadsViewPager) { tab, position ->
             when (position) {
-                0 -> tab.text = getString(R.string.uploads_media_title)
-                1 -> tab.text = getString(R.string.uploads_files_title)
+                0 -> tab.text = getString(CommonStrings.uploads_media_title)
+                1 -> tab.text = getString(CommonStrings.uploads_files_title)
             }
         }.attach()
 

@@ -25,10 +25,10 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import com.airbnb.mvrx.args
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetSpaceInviteChooserBinding
+import im.vector.lib.strings.CommonStrings
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -64,16 +64,16 @@ class InviteRoomSpaceChooserBottomSheet : VectorBaseBottomSheetDialogFragment<Bo
         val spaceName = summary?.name
 
         views.inviteToSpaceButton.isVisible = true
-        views.inviteToSpaceButton.title = getString(R.string.invite_to_space_with_name, spaceName)
-        views.inviteToSpaceButton.subTitle = getString(R.string.invite_to_space_with_name_desc, spaceName)
+        views.inviteToSpaceButton.title = getString(CommonStrings.invite_to_space_with_name, spaceName)
+        views.inviteToSpaceButton.subTitle = getString(CommonStrings.invite_to_space_with_name_desc, spaceName)
         views.inviteToSpaceButton.debouncedClicks {
             dismiss()
             onItemSelected?.invoke(inviteArgs.spaceId)
         }
 
         views.inviteToRoomOnly.isVisible = true
-        views.inviteToRoomOnly.title = getString(R.string.invite_just_to_this_room)
-        views.inviteToRoomOnly.subTitle = getString(R.string.invite_just_to_this_room_desc, spaceName)
+        views.inviteToRoomOnly.title = getString(CommonStrings.invite_just_to_this_room)
+        views.inviteToRoomOnly.subTitle = getString(CommonStrings.invite_just_to_this_room_desc, spaceName)
         views.inviteToRoomOnly.debouncedClicks {
             dismiss()
             onItemSelected?.invoke(inviteArgs.roomId)

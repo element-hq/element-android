@@ -27,6 +27,7 @@ import im.vector.app.core.ui.list.genericWithValueItem
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.settings.devices.TrustUtils
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
+import im.vector.lib.strings.CommonStrings
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
@@ -68,20 +69,20 @@ class DeviceTrustInfoEpoxyController @Inject constructor(
                 titleIconResourceId(shield)
                 title(
                         host.stringProvider
-                                .getString(if (isVerified) R.string.verification_profile_verified else R.string.verification_profile_warning)
+                                .getString(if (isVerified) CommonStrings.verification_profile_verified else CommonStrings.verification_profile_warning)
                                 .toEpoxyCharSequence()
                 )
             }
             genericFooterItem {
                 id("desc")
                 centered(false)
-                textColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
+                textColor(host.colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_primary))
                 apply {
                     if (isVerified) {
                         // TODO FORMAT
                         text(
                                 host.stringProvider.getString(
-                                        R.string.verification_profile_device_verified_because,
+                                        CommonStrings.verification_profile_device_verified_because,
                                         data.userItem?.displayName ?: "",
                                         data.userItem?.id ?: ""
                                 ).toEpoxyCharSequence()
@@ -90,14 +91,14 @@ class DeviceTrustInfoEpoxyController @Inject constructor(
                         // TODO what if mine
                         text(
                                 host.stringProvider.getString(
-                                        R.string.verification_profile_device_new_signing,
+                                        CommonStrings.verification_profile_device_new_signing,
                                         data.userItem?.displayName ?: "",
                                         data.userItem?.id ?: ""
                                 ).toEpoxyCharSequence()
                         )
                     }
                 }
-//                    text(stringProvider.getString(R.string.verification_profile_device_untrust_info))
+//                    text(stringProvider.getString(CommonStrings.verification_profile_device_untrust_info))
             }
 
             genericWithValueItem {
@@ -108,7 +109,7 @@ class DeviceTrustInfoEpoxyController @Inject constructor(
                             +(cryptoDeviceInfo.displayName() ?: "")
                             span {
                                 text = " (${cryptoDeviceInfo.deviceId})"
-                                textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
+                                textColor = host.colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_secondary)
                                 textSize = host.dimensionConverter.spToPx(14)
                             }
                         }.toEpoxyCharSequence()
@@ -119,8 +120,8 @@ class DeviceTrustInfoEpoxyController @Inject constructor(
                 genericFooterItem {
                     id("warn")
                     centered(false)
-                    textColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
-                    text(host.stringProvider.getString(R.string.verification_profile_other_device_untrust_info).toEpoxyCharSequence())
+                    textColor(host.colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_primary))
+                    text(host.stringProvider.getString(CommonStrings.verification_profile_other_device_untrust_info).toEpoxyCharSequence())
                 }
             }
         }

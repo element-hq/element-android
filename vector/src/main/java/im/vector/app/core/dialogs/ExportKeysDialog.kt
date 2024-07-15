@@ -22,6 +22,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.platform.SimpleTextWatcher
 import im.vector.app.databinding.DialogExportE2eKeysBinding
+import im.vector.lib.strings.CommonStrings
 
 class ExportKeysDialog {
 
@@ -29,7 +30,7 @@ class ExportKeysDialog {
         val dialogLayout = activity.layoutInflater.inflate(R.layout.dialog_export_e2e_keys, null)
         val views = DialogExportE2eKeysBinding.bind(dialogLayout)
         val builder = MaterialAlertDialogBuilder(activity)
-                .setTitle(R.string.encryption_export_room_keys)
+                .setTitle(CommonStrings.encryption_export_room_keys)
                 .setView(dialogLayout)
 
         val textWatcher = object : SimpleTextWatcher() {
@@ -45,7 +46,7 @@ class ExportKeysDialog {
                     }
                     else -> {
                         views.exportDialogSubmit.isEnabled = false
-                        views.exportDialogTilConfirm.error = activity.getString(R.string.passphrase_passphrase_does_not_match)
+                        views.exportDialogTilConfirm.error = activity.getString(CommonStrings.passphrase_passphrase_does_not_match)
                     }
                 }
             }

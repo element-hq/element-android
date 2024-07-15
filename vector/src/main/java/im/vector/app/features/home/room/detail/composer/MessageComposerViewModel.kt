@@ -23,7 +23,6 @@ import com.airbnb.mvrx.withState
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.getVectorLastMessageContent
@@ -52,6 +51,7 @@ import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import im.vector.app.features.voicebroadcast.usecase.GetVoiceBroadcastStateEventLiveUseCase
 import im.vector.app.features.voicebroadcast.voiceBroadcastId
 import im.vector.lib.core.utils.timer.Clock
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
@@ -409,7 +409,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                             popDraft(room)
                         }
                         is ParsedCommand.SendSpoiler -> {
-                            val text = "[${stringProvider.getString(R.string.spoiler)}](${parsedCommand.message})"
+                            val text = "[${stringProvider.getString(CommonStrings.spoiler)}](${parsedCommand.message})"
                             val formattedText = "<span data-mx-spoiler>${parsedCommand.message}</span>"
                             if (state.rootThreadEventId != null) {
                                 room.relationService().replyInThread(
@@ -475,7 +475,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                                 _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
                                 _viewEvents.post(
                                         MessageComposerViewEvents
-                                                .ShowMessage(stringProvider.getString(R.string.command_description_discard_session_not_handled))
+                                                .ShowMessage(stringProvider.getString(CommonStrings.command_description_discard_session_not_handled))
                                 )
                             }
                         }
@@ -706,8 +706,8 @@ class MessageComposerViewModel @AssistedInject constructor(
         if (sendChatEffect.message.isBlank()) {
             val defaultMessage = stringProvider.getString(
                     when (sendChatEffect.chatEffect) {
-                        ChatEffect.CONFETTI -> R.string.default_message_emote_confetti
-                        ChatEffect.SNOWFALL -> R.string.default_message_emote_snow
+                        ChatEffect.CONFETTI -> CommonStrings.default_message_emote_confetti
+                        ChatEffect.SNOWFALL -> CommonStrings.default_message_emote_snow
                     }
             )
             room.sendService().sendTextMessage(defaultMessage, MessageType.MSGTYPE_EMOTE)

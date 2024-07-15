@@ -24,12 +24,11 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import androidx.annotation.DrawableRes
-import im.vector.app.R
 import im.vector.app.core.platform.SimpleTextWatcher
 
 fun EditText.setupAsSearch(
-        @DrawableRes searchIconRes: Int = R.drawable.ic_home_search,
-        @DrawableRes clearIconRes: Int = R.drawable.ic_x_gray
+        @DrawableRes searchIconRes: Int = im.vector.lib.ui.styles.R.drawable.ic_home_search,
+        @DrawableRes clearIconRes: Int = im.vector.lib.ui.styles.R.drawable.ic_x_gray
 ) {
     addTextChangedListener(object : SimpleTextWatcher() {
         override fun afterTextChanged(s: Editable) {

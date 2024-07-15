@@ -23,12 +23,12 @@ import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentKeysBackupSettingsBinding
 import im.vector.app.features.crypto.keysbackup.restore.KeysBackupRestoreActivity
+import im.vector.lib.strings.CommonStrings
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -73,13 +73,13 @@ class KeysBackupSettingsFragment :
     override fun didSelectDeleteSetupMessageRecovery() {
         activity?.let {
             MaterialAlertDialogBuilder(it)
-                    .setTitle(R.string.keys_backup_settings_delete_confirm_title)
-                    .setMessage(R.string.keys_backup_settings_delete_confirm_message)
+                    .setTitle(CommonStrings.keys_backup_settings_delete_confirm_title)
+                    .setMessage(CommonStrings.keys_backup_settings_delete_confirm_message)
                     .setCancelable(false)
-                    .setPositiveButton(R.string.keys_backup_settings_delete_confirm_title) { _, _ ->
+                    .setPositiveButton(CommonStrings.keys_backup_settings_delete_confirm_title) { _, _ ->
                         viewModel.handle(KeyBackupSettingsAction.DeleteKeyBackup)
                     }
-                    .setNegativeButton(R.string.action_cancel, null)
+                    .setNegativeButton(CommonStrings.action_cancel, null)
                     .setCancelable(true)
                     .show()
         }

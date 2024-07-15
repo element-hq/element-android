@@ -31,6 +31,7 @@ import androidx.test.filters.LargeTest
 import im.vector.app.features.MainActivity
 import im.vector.app.features.analytics.ui.consent.AnalyticsOptInActivity
 import im.vector.app.features.home.HomeActivity
+import im.vector.lib.strings.CommonStrings
 import org.hamcrest.CoreMatchers.not
 import org.junit.Ignore
 import org.junit.Rule
@@ -55,7 +56,7 @@ class RegistrationTest {
         // Check splashscreen is there
         onView(withId(R.id.loginSplashSubmit))
                 .check(matches(isDisplayed()))
-                .check(matches(withText(R.string.login_splash_submit)))
+                .check(matches(withText(CommonStrings.login_splash_submit)))
 
         // Click on get started
         onView(withId(R.id.loginSplashSubmit))
@@ -64,7 +65,7 @@ class RegistrationTest {
         // Check that homeserver options are shown
         onView(withId(R.id.loginServerTitle))
                 .check(matches(isDisplayed()))
-                .check(matches(withText(R.string.login_server_title)))
+                .check(matches(withText(CommonStrings.login_server_title)))
 
         // Chose custom server
         onView(withId(R.id.loginServerChoiceOther))

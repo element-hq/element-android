@@ -17,7 +17,6 @@
 package im.vector.app.features.roomprofile.banned
 
 import com.airbnb.epoxy.TypedEpoxyController
-import im.vector.app.R
 import im.vector.app.core.epoxy.dividerItem
 import im.vector.app.core.epoxy.profiles.buildProfileSection
 import im.vector.app.core.epoxy.profiles.profileMatrixItemWithProgress
@@ -27,6 +26,8 @@ import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roomprofile.members.RoomMemberSummaryFilter
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
+import im.vector.lib.strings.CommonPlurals
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
@@ -47,10 +48,10 @@ class RoomBannedMemberListController @Inject constructor(
         val bannedList = data?.bannedMemberSummaries?.invoke() ?: return
         val host = this
 
-        val quantityString = stringProvider.getQuantityString(R.plurals.room_settings_banned_users_count, bannedList.size, bannedList.size)
+        val quantityString = stringProvider.getQuantityString(CommonPlurals.room_settings_banned_users_count, bannedList.size, bannedList.size)
 
         if (bannedList.isEmpty()) {
-            buildProfileSection(stringProvider.getString(R.string.room_settings_banned_users_title))
+            buildProfileSection(stringProvider.getString(CommonStrings.room_settings_banned_users_title))
 
             genericFooterItem {
                 id("footer")

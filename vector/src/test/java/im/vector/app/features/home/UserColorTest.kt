@@ -16,8 +16,8 @@
 
 package im.vector.app.features.home
 
-import im.vector.app.R
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider.Companion.getColorFromUserId
+import im.vector.lib.ui.styles.R
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

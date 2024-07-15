@@ -16,7 +16,6 @@
 
 package im.vector.app.features.home.room.detail.timeline.factory
 
-import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
@@ -25,6 +24,7 @@ import im.vector.app.features.home.room.detail.timeline.helper.MessageInformatio
 import im.vector.app.features.home.room.detail.timeline.item.DefaultItem
 import im.vector.app.features.home.room.detail.timeline.item.DefaultItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
+import im.vector.lib.strings.CommonStrings
 import javax.inject.Inject
 
 class DefaultItemFactory @Inject constructor(
@@ -57,9 +57,9 @@ class DefaultItemFactory @Inject constructor(
     fun create(params: TimelineItemFactoryParams, throwable: Throwable? = null): DefaultItem {
         val event = params.event
         val text = if (throwable == null) {
-            stringProvider.getString(R.string.rendering_event_error_type_of_event_not_handled, event.root.getClearType())
+            stringProvider.getString(CommonStrings.rendering_event_error_type_of_event_not_handled, event.root.getClearType())
         } else {
-            stringProvider.getString(R.string.rendering_event_error_exception, event.root.eventId)
+            stringProvider.getString(CommonStrings.rendering_event_error_exception, event.root.eventId)
         }
         val informationData = informationDataFactory.create(params)
         return create(text, informationData, params.isHighlighted, params.callback)

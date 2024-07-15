@@ -20,8 +20,8 @@ import android.graphics.Color
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.VisibleForTesting
-import im.vector.app.R
 import im.vector.app.core.resources.ColorProvider
+import im.vector.lib.ui.styles.R
 import org.matrix.android.sdk.api.util.MatrixItem
 import timber.log.Timber
 import javax.inject.Inject

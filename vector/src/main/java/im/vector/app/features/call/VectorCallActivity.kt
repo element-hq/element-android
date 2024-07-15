@@ -70,6 +70,7 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.arguments.TimelineArgs
 import im.vector.lib.core.utils.compat.getParcelableExtraCompat
+import im.vector.lib.strings.CommonStrings
 import io.github.hyuwah.draggableviewlib.DraggableView
 import io.github.hyuwah.draggableviewlib.setupDraggable
 import kotlinx.parcelize.Parcelize
@@ -162,11 +163,11 @@ class VectorCallActivity :
 
         callViewModel.onEach(VectorCallViewState::callId, VectorCallViewState::isVideoCall) { _, isVideoCall ->
             if (isVideoCall) {
-                if (checkPermissions(PERMISSIONS_FOR_VIDEO_IP_CALL, this, permissionCameraLauncher, R.string.permissions_rationale_msg_camera_and_audio)) {
+                if (checkPermissions(PERMISSIONS_FOR_VIDEO_IP_CALL, this, permissionCameraLauncher, CommonStrings.permissions_rationale_msg_camera_and_audio)) {
                     setupRenderersIfNeeded()
                 }
             } else {
-                if (checkPermissions(PERMISSIONS_FOR_AUDIO_IP_CALL, this, permissionCameraLauncher, R.string.permissions_rationale_msg_record_audio)) {
+                if (checkPermissions(PERMISSIONS_FOR_AUDIO_IP_CALL, this, permissionCameraLauncher, CommonStrings.permissions_rationale_msg_record_audio)) {
                     setupRenderersIfNeeded()
                 }
             }
@@ -176,9 +177,9 @@ class VectorCallActivity :
         bindToScreenCaptureService()
     }
 
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        intent?.takeIf { it.hasExtra(Mavericks.KEY_ARG) }
+        intent.takeIf { it.hasExtra(Mavericks.KEY_ARG) }
                 ?.let { intent.getParcelableExtraCompat<CallArgs>(Mavericks.KEY_ARG) }
                 ?.let {
                     callViewModel.handle(VectorCallViewActions.SwitchCall(it))
@@ -189,12 +190,13 @@ class VectorCallActivity :
     override fun getMenuRes() = R.menu.vector_call
 
     override fun onUserLeaveHint() {
+        super.onUserLeaveHint()
         enterPictureInPictureIfRequired()
     }
 
+    @Suppress("OVERRIDE_DEPRECATION")
     override fun onBackPressed() {
         if (!enterPictureInPictureIfRequired()) {
-            @Suppress("DEPRECATION")
             super.onBackPressed()
         }
     }
@@ -203,7 +205,10 @@ class VectorCallActivity :
         if (!it.isVideoCall) {
             false
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val aspectRatio = Rational(resources.getDimensionPixelSize(R.dimen.call_pip_width), resources.getDimensionPixelSize(R.dimen.call_pip_height))
+            val aspectRatio = Rational(
+                    resources.getDimensionPixelSize(im.vector.lib.ui.styles.R.dimen.call_pip_width),
+                    resources.getDimensionPixelSize(im.vector.lib.ui.styles.R.dimen.call_pip_height)
+            )
             val params = PictureInPictureParams.Builder()
                     .setAspectRatio(aspectRatio)
                     .build()
@@ -287,14 +292,14 @@ class VectorCallActivity :
                 views.fullscreenRenderer.isVisible = false
                 views.pipRendererWrapper.isVisible = false
                 views.callInfoGroup.isVisible = true
-                toolbar?.setSubtitle(R.string.call_ringing)
+                toolbar?.setSubtitle(CommonStrings.call_ringing)
                 configureCallInfo(state)
             }
             is CallState.Answering -> {
                 views.fullscreenRenderer.isVisible = false
                 views.pipRendererWrapper.isVisible = false
                 views.callInfoGroup.isVisible = true
-                toolbar?.setSubtitle(R.string.call_connecting)
+                toolbar?.setSubtitle(CommonStrings.call_connecting)
                 configureCallInfo(state)
             }
             is CallState.Connected -> {
@@ -307,23 +312,23 @@ class VectorCallActivity :
                         views.callInfoGroup.isVisible = true
                         configureCallInfo(state, blurAvatar = true)
                         if (state.isRemoteOnHold) {
-                            views.callActionText.setText(R.string.call_resume_action)
+                            views.callActionText.setText(CommonStrings.call_resume_action)
                             views.callActionText.isVisible = true
                             views.callActionText.setOnClickListener { callViewModel.handle(VectorCallViewActions.ToggleHoldResume) }
-                            toolbar?.setSubtitle(R.string.call_held_by_you)
+                            toolbar?.setSubtitle(CommonStrings.call_held_by_you)
                         } else {
                             views.callActionText.isInvisible = true
                             state.callInfo?.opponentUserItem?.let {
-                                toolbar?.subtitle = getString(R.string.call_held_by_user, it.getBestName())
+                                toolbar?.subtitle = getString(CommonStrings.call_held_by_user, it.getBestName())
                             }
                         }
                     } else if (state.transferee !is VectorCallViewState.TransfereeState.NoTransferee) {
                         val transfereeName = if (state.transferee is VectorCallViewState.TransfereeState.KnownTransferee) {
                             state.transferee.name
                         } else {
-                            getString(R.string.call_transfer_unknown_person)
+                            getString(CommonStrings.call_transfer_unknown_person)
                         }
-                        views.callActionText.text = getString(R.string.call_transfer_transfer_to_title, transfereeName)
+                        views.callActionText.text = getString(CommonStrings.call_transfer_transfer_to_title, transfereeName)
                         views.callActionText.isVisible = true
                         views.callActionText.setOnClickListener { callViewModel.handle(VectorCallViewActions.TransferCall) }
                         configureCallInfo(state)
@@ -346,14 +351,14 @@ class VectorCallActivity :
                     views.pipRendererWrapper.isVisible = false
                     views.callInfoGroup.isVisible = true
                     configureCallInfo(state)
-                    toolbar?.setSubtitle(R.string.call_connecting)
+                    toolbar?.setSubtitle(CommonStrings.call_connecting)
                 }
             }
             is CallState.Ended -> {
                 views.fullscreenRenderer.isVisible = false
                 views.pipRendererWrapper.isVisible = false
                 views.callInfoGroup.isVisible = true
-                toolbar?.setSubtitle(R.string.call_ended)
+                toolbar?.setSubtitle(CommonStrings.call_ended)
                 configureCallInfo(state)
             }
             else -> {
@@ -412,10 +417,10 @@ class VectorCallActivity :
         }
         when (callState.reason) {
             EndCallReason.USER_BUSY -> {
-                showEndCallDialog(R.string.call_ended_user_busy_title, R.string.call_ended_user_busy_description)
+                showEndCallDialog(CommonStrings.call_ended_user_busy_title, CommonStrings.call_ended_user_busy_description)
             }
             EndCallReason.INVITE_TIMEOUT -> {
-                showEndCallDialog(R.string.call_ended_invite_timeout_title, R.string.call_error_user_not_responding)
+                showEndCallDialog(CommonStrings.call_ended_invite_timeout_title, CommonStrings.call_error_user_not_responding)
             }
             else -> {
                 finish()
@@ -427,7 +432,7 @@ class VectorCallActivity :
         MaterialAlertDialogBuilder(this)
                 .setTitle(title)
                 .setMessage(description)
-                .setNegativeButton(R.string.ok, null)
+                .setNegativeButton(CommonStrings.ok, null)
                 .setOnDismissListener {
                     finish()
                 }
@@ -436,17 +441,17 @@ class VectorCallActivity :
 
     private fun configureCallInfo(state: VectorCallViewState, blurAvatar: Boolean = false) {
         state.callInfo?.opponentUserItem?.let {
-            val colorFilter = ContextCompat.getColor(this, R.color.bg_call_screen_blur)
+            val colorFilter = ContextCompat.getColor(this, im.vector.lib.ui.styles.R.color.bg_call_screen_blur)
             avatarRenderer.renderBlur(it, views.bgCallView, sampling = 20, rounded = false, colorFilter = colorFilter, addPlaceholder = false)
             if (state.transferee is VectorCallViewState.TransfereeState.NoTransferee) {
                 views.participantNameText.setTextOrHide(null)
                 toolbar?.title = if (state.isVideoCall) {
-                    getString(R.string.video_call_with_participant, it.getBestName())
+                    getString(CommonStrings.video_call_with_participant, it.getBestName())
                 } else {
-                    getString(R.string.audio_call_with_participant, it.getBestName())
+                    getString(CommonStrings.audio_call_with_participant, it.getBestName())
                 }
             } else {
-                views.participantNameText.setTextOrHide(getString(R.string.call_transfer_consulting_with, it.getBestName()))
+                views.participantNameText.setTextOrHide(getString(CommonStrings.call_transfer_consulting_with, it.getBestName()))
             }
             if (blurAvatar) {
                 avatarRenderer.renderBlur(it, views.otherMemberAvatar, sampling = 2, rounded = true, colorFilter = colorFilter, addPlaceholder = true)
@@ -458,7 +463,7 @@ class VectorCallActivity :
             views.otherKnownCallLayout.isVisible = false
         } else {
             val otherCall = callManager.getCallById(state.otherKnownCallInfo.callId)
-            val colorFilter = ContextCompat.getColor(this, R.color.bg_call_screen_blur)
+            val colorFilter = ContextCompat.getColor(this, im.vector.lib.ui.styles.R.color.bg_call_screen_blur)
             avatarRenderer.renderBlur(
                     matrixItem = state.otherKnownCallInfo.opponentUserItem,
                     imageView = views.otherKnownCallAvatarView,
@@ -550,7 +555,7 @@ class VectorCallActivity :
                 val callId = withState(callViewModel) { it.callId }
                 navigator.openCallTransfer(this, callTransferActivityResultLauncher, callId)
             }
-            is VectorCallViewEvents.FailToTransfer -> showSnackbar(getString(R.string.call_transfer_failure))
+            is VectorCallViewEvents.FailToTransfer -> showSnackbar(getString(CommonStrings.call_transfer_failure))
             is VectorCallViewEvents.ShowScreenSharingPermissionDialog -> handleShowScreenSharingPermissionDialog()
             is VectorCallViewEvents.StopScreenSharingService -> handleStopScreenSharingService()
             else -> Unit
@@ -573,9 +578,9 @@ class VectorCallActivity :
         Timber.tag(loggerTag.value).d("onErrorTimoutConnect $turn")
         // TODO ask to use default stun, etc...
         MaterialAlertDialogBuilder(this)
-                .setTitle(R.string.call_failed_no_connection)
-                .setMessage(R.string.call_failed_no_connection_description)
-                .setNegativeButton(R.string.ok) { _, _ ->
+                .setTitle(CommonStrings.call_failed_no_connection)
+                .setMessage(CommonStrings.call_failed_no_connection_description)
+                .setNegativeButton(CommonStrings.ok) { _, _ ->
                     callViewModel.handle(VectorCallViewActions.EndCall)
                 }
                 .show()

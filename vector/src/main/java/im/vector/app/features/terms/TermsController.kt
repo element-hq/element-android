@@ -20,11 +20,11 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import im.vector.app.R
 import im.vector.app.core.epoxy.errorWithRetryItem
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.features.discovery.settingsSectionTitleItem
+import im.vector.lib.strings.CommonStrings
 import javax.inject.Inject
 
 class TermsController @Inject constructor(
@@ -60,7 +60,7 @@ class TermsController @Inject constructor(
         val host = this
         settingsSectionTitleItem {
             id("header")
-            titleResId(R.string.widget_integration_review_terms)
+            titleResId(CommonStrings.widget_integration_review_terms)
         }
         termsList.forEach { term ->
             termItem {

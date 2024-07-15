@@ -32,7 +32,6 @@ import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.FragmentActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import im.vector.app.R
 import im.vector.app.SpaceStateHandler
 import im.vector.app.config.OnboardingVariant
 import im.vector.app.core.debug.DebugNavigator
@@ -107,6 +106,7 @@ import im.vector.app.features.spaces.people.SpacePeopleActivity
 import im.vector.app.features.terms.ReviewTermsActivity
 import im.vector.app.features.widgets.WidgetActivity
 import im.vector.app.features.widgets.WidgetArgsBuilder
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -398,7 +398,7 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun showGroupsUnsupportedWarning(context: Context) {
-        Toast.makeText(context, context.getString(R.string.permalink_unsupported_groups), Toast.LENGTH_LONG).show()
+        Toast.makeText(context, context.getString(CommonStrings.permalink_unsupported_groups), Toast.LENGTH_LONG).show()
     }
 
     override fun openRoomProfile(context: Context, roomId: String, directAccess: Int?) {
@@ -460,9 +460,9 @@ class DefaultNavigator @Inject constructor(
             // Jitsi SDK is now for API 24+
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
                 MaterialAlertDialogBuilder(context)
-                        .setTitle(R.string.dialog_title_error)
-                        .setMessage(R.string.error_jitsi_not_supported_on_old_device)
-                        .setPositiveButton(R.string.ok, null)
+                        .setTitle(CommonStrings.dialog_title_error)
+                        .setMessage(CommonStrings.error_jitsi_not_supported_on_old_device)
+                        .setPositiveButton(CommonStrings.ok, null)
                         .show()
             } else {
                 val enableVideo = options?.get(JitsiCallViewModel.ENABLE_VIDEO_OPTION) == true

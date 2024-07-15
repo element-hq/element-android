@@ -17,18 +17,19 @@
 package im.vector.app.features.roomprofile.polls.ended
 
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.features.roomprofile.polls.RoomPollsType
 import im.vector.app.features.roomprofile.polls.list.ui.RoomPollsListFragment
+import im.vector.lib.strings.CommonPlurals
+import im.vector.lib.strings.CommonStrings
 
 @AndroidEntryPoint
 class RoomEndedPollsFragment : RoomPollsListFragment() {
 
     override fun getEmptyListTitle(canLoadMore: Boolean, nbLoadedDays: Int): String {
         return if (canLoadMore) {
-            stringProvider.getQuantityString(R.plurals.room_polls_ended_no_item_for_loaded_period, nbLoadedDays, nbLoadedDays)
+            stringProvider.getQuantityString(CommonPlurals.room_polls_ended_no_item_for_loaded_period, nbLoadedDays, nbLoadedDays)
         } else {
-            getString(R.string.room_polls_ended_no_item)
+            getString(CommonStrings.room_polls_ended_no_item)
         }
     }
 

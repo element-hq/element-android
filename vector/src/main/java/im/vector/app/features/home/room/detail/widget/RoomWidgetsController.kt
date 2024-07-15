@@ -17,12 +17,12 @@
 package im.vector.app.features.home.room.detail.widget
 
 import com.airbnb.epoxy.TypedEpoxyController
-import im.vector.app.R
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericButtonItem
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import javax.inject.Inject
 
@@ -42,7 +42,7 @@ class RoomWidgetsController @Inject constructor(
         if (widgets.isEmpty()) {
             genericFooterItem {
                 id("empty")
-                text(host.stringProvider.getString(R.string.room_no_active_widgets).toEpoxyCharSequence())
+                text(host.stringProvider.getString(CommonStrings.room_no_active_widgets).toEpoxyCharSequence())
             }
         } else {
             widgets.forEach { widget ->
@@ -55,8 +55,8 @@ class RoomWidgetsController @Inject constructor(
         }
         genericButtonItem {
             id("addIntegration")
-            text(host.stringProvider.getString(R.string.room_manage_integrations))
-            textColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+            text(host.stringProvider.getString(CommonStrings.room_manage_integrations))
+            textColor(host.colorProvider.getColorFromAttribute(com.google.android.material.R.attr.colorPrimary))
             buttonClickAction { host.listener?.didSelectManageWidgets() }
         }
     }

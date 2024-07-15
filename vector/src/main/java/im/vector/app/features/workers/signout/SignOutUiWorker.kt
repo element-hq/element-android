@@ -19,11 +19,11 @@ package im.vector.app.features.workers.signout
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import im.vector.app.R
 import im.vector.app.core.extensions.cannotLogoutSafely
 import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
@@ -46,12 +46,12 @@ class SignOutUiWorker(private val activity: FragmentActivity) {
         } else {
             // Display a simple confirmation dialog
             MaterialAlertDialogBuilder(activity)
-                    .setTitle(R.string.action_sign_out)
-                    .setMessage(R.string.action_sign_out_confirmation_simple)
-                    .setPositiveButton(R.string.action_sign_out) { _, _ ->
+                    .setTitle(CommonStrings.action_sign_out)
+                    .setMessage(CommonStrings.action_sign_out_confirmation_simple)
+                    .setPositiveButton(CommonStrings.action_sign_out) { _, _ ->
                         doSignOut()
                     }
-                    .setNegativeButton(R.string.action_cancel, null)
+                    .setNegativeButton(CommonStrings.action_cancel, null)
                     .show()
         }
     }

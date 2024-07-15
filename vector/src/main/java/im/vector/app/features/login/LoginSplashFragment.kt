@@ -24,11 +24,11 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.resources.BuildMeta
 import im.vector.app.databinding.FragmentLoginSplashBinding
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.failure.Failure
 import java.net.UnknownHostException
 import javax.inject.Inject
@@ -84,12 +84,12 @@ class LoginSplashFragment :
             // Invalid homeserver from URL config
             val url = loginViewModel.getInitialHomeServerUrl().orEmpty()
             MaterialAlertDialogBuilder(requireActivity())
-                    .setTitle(R.string.dialog_title_error)
-                    .setMessage(getString(R.string.login_error_homeserver_from_url_not_found, url))
-                    .setPositiveButton(R.string.login_error_homeserver_from_url_not_found_enter_manual) { _, _ ->
+                    .setTitle(CommonStrings.dialog_title_error)
+                    .setMessage(getString(CommonStrings.login_error_homeserver_from_url_not_found, url))
+                    .setPositiveButton(CommonStrings.login_error_homeserver_from_url_not_found_enter_manual) { _, _ ->
                         loginViewModel.handle(LoginAction.OnGetStarted(resetLoginConfig = true))
                     }
-                    .setNegativeButton(R.string.action_cancel, null)
+                    .setNegativeButton(CommonStrings.action_cancel, null)
                     .show()
         } else {
             super.onError(throwable)

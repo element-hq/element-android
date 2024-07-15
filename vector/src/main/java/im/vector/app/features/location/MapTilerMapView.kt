@@ -37,6 +37,7 @@ import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
 import com.mapbox.mapboxsdk.style.layers.Property
 import im.vector.app.R
 import im.vector.app.core.utils.DimensionConverter
+import im.vector.lib.strings.CommonStrings
 import timber.log.Timber
 
 private const val USER_PIN_ID = "user-pin-id"
@@ -67,7 +68,7 @@ class MapTilerMapView @JvmOverloads constructor(
     init {
         context.obtainStyledAttributes(
                 attrs,
-                R.styleable.MapTilerMapView,
+                im.vector.lib.ui.styles.R.styleable.MapTilerMapView,
                 0,
                 0
         ).use {
@@ -77,7 +78,7 @@ class MapTilerMapView @JvmOverloads constructor(
     }
 
     private fun setLocateButtonVisibility(typedArray: TypedArray) {
-        showLocationButton = typedArray.getBoolean(R.styleable.MapTilerMapView_showLocateButton, false)
+        showLocationButton = typedArray.getBoolean(im.vector.lib.ui.styles.R.styleable.MapTilerMapView_showLocateButton, false)
     }
 
     override fun onDestroy() {
@@ -126,11 +127,13 @@ class MapTilerMapView @JvmOverloads constructor(
     private fun createLocateButton(): ImageView =
             ImageView(context).apply {
                 setImageDrawable(ContextCompat.getDrawable(context, R.drawable.btn_locate))
-                contentDescription = context.getString(R.string.a11y_location_share_locate_button)
+                contentDescription = context.getString(CommonStrings.a11y_location_share_locate_button)
                 layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
                 updateLayoutParams<MarginLayoutParams> {
-                    val marginHorizontal = context.resources.getDimensionPixelOffset(R.dimen.location_sharing_locate_button_margin_horizontal)
-                    val marginVertical = context.resources.getDimensionPixelOffset(R.dimen.location_sharing_locate_button_margin_vertical)
+                    val marginHorizontal =
+                            context.resources.getDimensionPixelOffset(im.vector.lib.ui.styles.R.dimen.location_sharing_locate_button_margin_horizontal)
+                    val marginVertical =
+                            context.resources.getDimensionPixelOffset(im.vector.lib.ui.styles.R.dimen.location_sharing_locate_button_margin_vertical)
                     setMargins(marginHorizontal, marginVertical, marginHorizontal, marginVertical)
                 }
                 updateLayoutParams<LayoutParams> {
@@ -141,7 +144,7 @@ class MapTilerMapView @JvmOverloads constructor(
     private fun adjustCompassButton(map: MapboxMap) {
         locateButton.post {
             val marginTop = locateButton.height + locateButton.marginTop + locateButton.marginBottom
-            val marginRight = context.resources.getDimensionPixelOffset(R.dimen.location_sharing_compass_button_margin_horizontal)
+            val marginRight = context.resources.getDimensionPixelOffset(im.vector.lib.ui.styles.R.dimen.location_sharing_compass_button_margin_horizontal)
             map.uiSettings.setCompassMargins(0, marginTop, marginRight, 0)
         }
     }

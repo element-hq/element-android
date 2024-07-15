@@ -18,12 +18,12 @@ package im.vector.app.features.share
 
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Incomplete
-import im.vector.app.R
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.epoxy.noResultItem
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.list.RoomSummaryItemFactory
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 
@@ -51,7 +51,7 @@ class IncomingShareController @Inject constructor(
         if (roomSummaries.isNullOrEmpty()) {
             noResultItem {
                 id("no_result")
-                text(host.stringProvider.getString(R.string.no_result_placeholder))
+                text(host.stringProvider.getString(CommonStrings.no_result_placeholder))
             }
         } else {
             roomSummaries.forEach { roomSummary ->

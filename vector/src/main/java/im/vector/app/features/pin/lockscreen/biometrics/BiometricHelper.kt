@@ -34,7 +34,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.qualifiers.ApplicationContext
-import im.vector.app.R
 import im.vector.app.features.pin.lockscreen.configuration.LockScreenConfiguration
 import im.vector.app.features.pin.lockscreen.crypto.LockScreenKeyRepository
 import im.vector.app.features.pin.lockscreen.ui.fallbackprompt.FallbackBiometricDialogFragment
@@ -203,9 +202,9 @@ class BiometricHelper @AssistedInject constructor(
         val callback = createSuspendingAuthCallback(channel, executor.asCoroutineDispatcher())
         val authenticators = getAvailableAuthenticators()
         val isUsingDeviceCredentialAuthenticator = authenticators.hasFlag(DEVICE_CREDENTIAL)
-        val cancelButtonTitle = configuration.biometricCancelButtonTitle ?: context.getString(R.string.lockscreen_cancel)
+        val cancelButtonTitle = configuration.biometricCancelButtonTitle ?: context.getString(im.vector.lib.ui.styles.R.string.lockscreen_cancel)
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
-                .setTitle(configuration.biometricTitle ?: context.getString(R.string.lockscreen_sign_in))
+                .setTitle(configuration.biometricTitle ?: context.getString(im.vector.lib.ui.styles.R.string.lockscreen_sign_in))
                 .apply {
                     configuration.biometricSubtitle?.let {
                         setSubtitle(it)

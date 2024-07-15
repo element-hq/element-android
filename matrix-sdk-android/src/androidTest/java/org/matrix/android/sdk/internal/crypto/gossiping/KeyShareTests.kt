@@ -21,7 +21,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
-import junit.framework.TestCase.assertTrue
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Assert
 import org.junit.Assert.assertNull

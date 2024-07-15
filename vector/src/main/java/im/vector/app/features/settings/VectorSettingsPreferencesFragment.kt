@@ -35,6 +35,7 @@ import im.vector.app.features.VectorFeatures
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.settings.font.FontScaleSettingActivity
 import im.vector.app.features.themes.ThemeUtils
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.presence.model.PresenceEnum
 import javax.inject.Inject
@@ -48,7 +49,7 @@ class VectorSettingsPreferencesFragment :
     @Inject lateinit var vectorFeatures: VectorFeatures
     @Inject lateinit var vectorLocale: VectorLocale
 
-    override var titleRes = R.string.settings_preferences
+    override var titleRes = CommonStrings.settings_preferences
     override val preferenceXmlRes = R.xml.vector_settings_preferences
 
     private val selectedLanguagePreference by lazy {
@@ -155,7 +156,7 @@ class VectorSettingsPreferencesFragment :
                 context?.let { context: Context ->
                     MaterialAlertDialogBuilder(context)
                             .setSingleChoiceItems(
-                                    R.array.media_saving_choice,
+                                    im.vector.lib.strings.R.array.media_saving_choice,
                                     vectorPreferences.getSelectedMediasSavingPeriod()
                             ) { d, n ->
                                 vectorPreferences.setSelectedMediasSavingPeriod(n)
@@ -185,10 +186,10 @@ class VectorSettingsPreferencesFragment :
     private fun updateTakePhotoOrVideoPreferenceSummary() {
         takePhotoOrVideoPreference.summary = getString(
                 when (vectorPreferences.getTakePhotoVideoMode()) {
-                    VectorPreferences.TAKE_PHOTO_VIDEO_MODE_PHOTO -> R.string.option_take_photo
-                    VectorPreferences.TAKE_PHOTO_VIDEO_MODE_VIDEO -> R.string.option_take_video
+                    VectorPreferences.TAKE_PHOTO_VIDEO_MODE_PHOTO -> CommonStrings.option_take_photo
+                    VectorPreferences.TAKE_PHOTO_VIDEO_MODE_VIDEO -> CommonStrings.option_take_video
                     /* VectorPreferences.TAKE_PHOTO_VIDEO_MODE_ALWAYS_ASK */
-                    else -> R.string.option_always_ask
+                    else -> CommonStrings.option_always_ask
                 }
         )
     }

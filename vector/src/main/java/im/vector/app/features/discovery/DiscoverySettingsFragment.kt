@@ -26,7 +26,6 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.observeEvent
@@ -39,6 +38,7 @@ import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.features.discovery.change.SetIdentityServerFragment
 import im.vector.app.features.navigation.SettingsActivityPayload
 import im.vector.app.features.settings.VectorSettingsActivity
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.identity.SharedState
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.terms.TermsService
@@ -99,7 +99,7 @@ class DiscoverySettingsFragment :
 
     override fun onResume() {
         super.onResume()
-        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(R.string.settings_discovery_category)
+        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(CommonStrings.settings_discovery_category)
 
         // If some 3pids are pending, we can try to check if they have been verified here
         viewModel.handle(DiscoverySettingsAction.Refresh)
@@ -153,10 +153,10 @@ class DiscoverySettingsFragment :
         if (hasBoundIds) {
             // we should prompt
             MaterialAlertDialogBuilder(requireActivity())
-                    .setTitle(R.string.change_identity_server)
-                    .setMessage(getString(R.string.settings_discovery_disconnect_with_bound_pid, state.identityServer(), state.identityServer()))
-                    .setPositiveButton(R.string._continue) { _, _ -> navigateToChangeIdentityServerFragment() }
-                    .setNegativeButton(R.string.action_cancel, null)
+                    .setTitle(CommonStrings.change_identity_server)
+                    .setMessage(getString(CommonStrings.settings_discovery_disconnect_with_bound_pid, state.identityServer(), state.identityServer()))
+                    .setPositiveButton(CommonStrings._continue) { _, _ -> navigateToChangeIdentityServerFragment() }
+                    .setNegativeButton(CommonStrings.action_cancel, null)
                     .show()
             Unit
         } else {
@@ -172,16 +172,16 @@ class DiscoverySettingsFragment :
 
             val serverUrl = state.identityServer()?.serverUrl.orEmpty()
             val message = if (hasBoundIds) {
-                getString(R.string.settings_discovery_disconnect_with_bound_pid, serverUrl, serverUrl)
+                getString(CommonStrings.settings_discovery_disconnect_with_bound_pid, serverUrl, serverUrl)
             } else {
-                getString(R.string.disconnect_identity_server_dialog_content, serverUrl)
+                getString(CommonStrings.disconnect_identity_server_dialog_content, serverUrl)
             }
 
             MaterialAlertDialogBuilder(requireActivity())
-                    .setTitle(R.string.disconnect_identity_server)
+                    .setTitle(CommonStrings.disconnect_identity_server)
                     .setMessage(message)
-                    .setPositiveButton(R.string.action_disconnect) { _, _ -> viewModel.handle(DiscoverySettingsAction.DisconnectIdentityServer) }
-                    .setNegativeButton(R.string.action_cancel, null)
+                    .setPositiveButton(CommonStrings.action_disconnect) { _, _ -> viewModel.handle(DiscoverySettingsAction.DisconnectIdentityServer) }
+                    .setNegativeButton(CommonStrings.action_cancel, null)
                     .show()
         }
     }

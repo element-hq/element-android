@@ -17,10 +17,10 @@
 package im.vector.app.features.settings.push
 
 import com.airbnb.epoxy.TypedEpoxyController
-import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
+import im.vector.lib.strings.CommonStrings
 import javax.inject.Inject
 
 class PushGateWayController @Inject constructor(
@@ -35,7 +35,7 @@ class PushGateWayController @Inject constructor(
             if (pushers.isEmpty()) {
                 genericFooterItem {
                     id("footer")
-                    text(host.stringProvider.getString(R.string.settings_push_gateway_no_pushers).toEpoxyCharSequence())
+                    text(host.stringProvider.getString(CommonStrings.settings_push_gateway_no_pushers).toEpoxyCharSequence())
                 }
             } else {
                 pushers.forEach {
@@ -51,7 +51,7 @@ class PushGateWayController @Inject constructor(
         } ?: run {
             genericFooterItem {
                 id("loading")
-                text(host.stringProvider.getString(R.string.loading).toEpoxyCharSequence())
+                text(host.stringProvider.getString(CommonStrings.loading).toEpoxyCharSequence())
             }
         }
     }

@@ -23,7 +23,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.args
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
@@ -31,6 +30,7 @@ import im.vector.app.databinding.BottomSheetGenericListWithTitleBinding
 import im.vector.app.features.home.room.detail.timeline.action.EventSharedAction
 import im.vector.app.features.home.room.detail.timeline.action.MessageSharedActionViewModel
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
+import im.vector.lib.strings.CommonStrings
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -61,7 +61,7 @@ class DisplayReadReceiptsBottomSheet :
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(MessageSharedActionViewModel::class.java)
         views.bottomSheetRecyclerView.configureWith(epoxyController, hasFixedSize = false)
-        views.bottomSheetTitle.text = getString(R.string.seen_by)
+        views.bottomSheetTitle.text = getString(CommonStrings.seen_by)
         epoxyController.listener = this
         epoxyController.setData(displayReadReceiptArgs.readReceipts)
     }

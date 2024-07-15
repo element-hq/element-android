@@ -27,10 +27,10 @@ import androidx.appcompat.widget.ActionMenuView.OnMenuItemClickListener
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.use
 import androidx.core.view.isVisible
-import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.extensions.setTextWithColoredPart
 import im.vector.app.databinding.ViewSessionsListHeaderBinding
+import im.vector.lib.strings.CommonStrings
 
 class SessionsListHeaderView @JvmOverloads constructor(
         context: Context,
@@ -49,7 +49,7 @@ class SessionsListHeaderView @JvmOverloads constructor(
     init {
         context.obtainStyledAttributes(
                 attrs,
-                R.styleable.SessionsListHeaderView,
+                im.vector.lib.ui.styles.R.styleable.SessionsListHeaderView,
                 0,
                 0
         ).use {
@@ -60,18 +60,18 @@ class SessionsListHeaderView @JvmOverloads constructor(
     }
 
     private fun setTitle(typedArray: TypedArray) {
-        val title = typedArray.getString(R.styleable.SessionsListHeaderView_sessionsListHeaderTitle)
+        val title = typedArray.getString(im.vector.lib.ui.styles.R.styleable.SessionsListHeaderView_sessionsListHeaderTitle)
         binding.sessionsListHeaderTitle.setTextOrHide(title)
     }
 
     private fun setDescription(typedArray: TypedArray) {
-        val description = typedArray.getString(R.styleable.SessionsListHeaderView_sessionsListHeaderDescription)
+        val description = typedArray.getString(im.vector.lib.ui.styles.R.styleable.SessionsListHeaderView_sessionsListHeaderDescription)
         if (description.isNullOrEmpty()) {
             binding.sessionsListHeaderDescription.isVisible = false
             return
         }
 
-        val hasLearnMoreLink = typedArray.getBoolean(R.styleable.SessionsListHeaderView_sessionsListHeaderHasLearnMoreLink, true)
+        val hasLearnMoreLink = typedArray.getBoolean(im.vector.lib.ui.styles.R.styleable.SessionsListHeaderView_sessionsListHeaderHasLearnMoreLink, true)
         if (hasLearnMoreLink) {
             setDescriptionWithLearnMore(description)
         } else {
@@ -82,7 +82,7 @@ class SessionsListHeaderView @JvmOverloads constructor(
     }
 
     private fun setDescriptionWithLearnMore(description: String) {
-        val learnMore = context.getString(R.string.action_learn_more)
+        val learnMore = context.getString(CommonStrings.action_learn_more)
         val fullDescription = buildString {
             append(description)
             append(" ")
@@ -99,7 +99,7 @@ class SessionsListHeaderView @JvmOverloads constructor(
 
     @Suppress("RestrictedApi")
     private fun setMenu(typedArray: TypedArray) {
-        val menuResId = typedArray.getResourceId(R.styleable.SessionsListHeaderView_sessionsListHeaderMenu, -1)
+        val menuResId = typedArray.getResourceId(im.vector.lib.ui.styles.R.styleable.SessionsListHeaderView_sessionsListHeaderMenu, -1)
         if (menuResId == -1) {
             binding.sessionsListHeaderMenu.isVisible = false
         } else {

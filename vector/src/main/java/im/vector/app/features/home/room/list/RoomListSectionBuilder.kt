@@ -23,12 +23,12 @@ import androidx.lifecycle.asFlow
 import androidx.lifecycle.liveData
 import androidx.paging.PagedList
 import com.airbnb.mvrx.Async
-import im.vector.app.R
 import im.vector.app.SpaceStateHandler
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.invite.showInvites
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -115,7 +115,7 @@ class RoomListSectionBuilder(
             addSection(
                     sections = sections,
                     activeSpaceUpdaters = activeSpaceAwareQueries,
-                    nameRes = R.string.invitations_header,
+                    nameRes = CommonStrings.invitations_header,
                     notifyOfLocalEcho = true,
                     spaceFilterStrategy = RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL,
                     countRoomAsNotif = true
@@ -128,7 +128,7 @@ class RoomListSectionBuilder(
         addSection(
                 sections,
                 activeSpaceAwareQueries,
-                R.string.bottom_action_favourites,
+                CommonStrings.bottom_action_favourites,
                 false,
                 RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL
         ) {
@@ -140,7 +140,7 @@ class RoomListSectionBuilder(
         addSection(
                 sections = sections,
                 activeSpaceUpdaters = activeSpaceAwareQueries,
-                nameRes = R.string.bottom_action_rooms,
+                nameRes = CommonStrings.bottom_action_rooms,
                 notifyOfLocalEcho = false,
                 spaceFilterStrategy = if (onlyOrphansInHome) {
                     RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL
@@ -156,7 +156,7 @@ class RoomListSectionBuilder(
         addSection(
                 sections = sections,
                 activeSpaceUpdaters = activeSpaceAwareQueries,
-                nameRes = R.string.low_priority_header,
+                nameRes = CommonStrings.low_priority_header,
                 notifyOfLocalEcho = false,
                 spaceFilterStrategy = if (onlyOrphansInHome) {
                     RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL
@@ -172,7 +172,7 @@ class RoomListSectionBuilder(
         addSection(
                 sections = sections,
                 activeSpaceUpdaters = activeSpaceAwareQueries,
-                nameRes = R.string.system_alerts_header,
+                nameRes = CommonStrings.system_alerts_header,
                 notifyOfLocalEcho = false,
                 spaceFilterStrategy = if (onlyOrphansInHome) {
                     RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL
@@ -224,7 +224,7 @@ class RoomListSectionBuilder(
 
         sections.add(
                 RoomsSection(
-                        sectionName = stringProvider.getString(R.string.suggested_header),
+                        sectionName = stringProvider.getString(CommonStrings.suggested_header),
                         liveSuggested = liveSuggestedRooms,
                         notifyOfLocalEcho = false,
                         itemCount = suggestedRoomsFlow.map { suggestions -> suggestions.size }
@@ -240,7 +240,7 @@ class RoomListSectionBuilder(
             addSection(
                     sections = sections,
                     activeSpaceUpdaters = activeSpaceAwareQueries,
-                    nameRes = R.string.invitations_header,
+                    nameRes = CommonStrings.invitations_header,
                     notifyOfLocalEcho = true,
                     spaceFilterStrategy = RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL,
                     countRoomAsNotif = true
@@ -253,7 +253,7 @@ class RoomListSectionBuilder(
         addSection(
                 sections,
                 activeSpaceAwareQueries,
-                R.string.bottom_action_favourites,
+                CommonStrings.bottom_action_favourites,
                 false,
                 RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL
         ) {
@@ -265,7 +265,7 @@ class RoomListSectionBuilder(
         addSection(
                 sections,
                 activeSpaceAwareQueries,
-                R.string.bottom_action_people_x,
+                CommonStrings.bottom_action_people_x,
                 false,
                 RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL
         ) {
@@ -277,7 +277,7 @@ class RoomListSectionBuilder(
         addSection(
                 sections,
                 activeSpaceAwareQueries,
-                R.string.low_priority_header,
+                CommonStrings.low_priority_header,
                 false,
                 RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL
         ) {
@@ -295,7 +295,7 @@ class RoomListSectionBuilder(
             addSection(
                     sections = sections,
                     activeSpaceUpdaters = activeSpaceAwareQueries,
-                    nameRes = R.string.invitations_header,
+                    nameRes = CommonStrings.invitations_header,
                     notifyOfLocalEcho = true,
                     spaceFilterStrategy = if (onlyOrphansInHome) {
                         RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL
@@ -311,7 +311,7 @@ class RoomListSectionBuilder(
         addSection(
                 sections = sections,
                 activeSpaceUpdaters = activeSpaceAwareQueries,
-                nameRes = R.string.bottom_action_rooms,
+                nameRes = CommonStrings.bottom_action_rooms,
                 notifyOfLocalEcho = false,
                 spaceFilterStrategy = if (onlyOrphansInHome) {
                     RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL
@@ -331,7 +331,7 @@ class RoomListSectionBuilder(
                     it.memberships = Membership.activeMemberships()
                 },
                 { queryParams ->
-                    val name = stringProvider.getString(R.string.bottom_action_rooms)
+                    val name = stringProvider.getString(CommonStrings.bottom_action_rooms)
                     val updatableFilterLivePageResult = session.roomService().getFilteredPagedRoomSummariesLive(queryParams)
                     onUpdatable(updatableFilterLivePageResult)
 

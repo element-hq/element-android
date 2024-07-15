@@ -23,7 +23,6 @@ import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.LayoutRes
-import im.vector.app.R
 import java.lang.ref.WeakReference
 
 interface VectorAlert {
@@ -94,7 +93,7 @@ open class DefaultVectorAlert(
     override var expirationTimestamp: Long? = null
 
     @LayoutRes
-    override val layoutRes = R.layout.alerter_alert_default_layout
+    override val layoutRes = com.tapadoo.alerter.R.layout.alerter_alert_default_layout
 
     override val dismissOnClick: Boolean = true
 

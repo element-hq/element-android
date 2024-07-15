@@ -28,6 +28,7 @@ import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetCallControlsBinding
 import im.vector.app.features.VectorFeatures
+import im.vector.lib.strings.CommonStrings
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -80,15 +81,15 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetC
 
     private fun renderState(state: VectorCallViewState) {
         views.callControlsSwitchCamera.isVisible = state.isVideoCall && state.canSwitchCamera
-        views.callControlsSwitchCamera.subTitle = getString(if (state.isFrontCamera) R.string.call_camera_front else R.string.call_camera_back)
+        views.callControlsSwitchCamera.subTitle = getString(if (state.isFrontCamera) CommonStrings.call_camera_front else CommonStrings.call_camera_back)
         if (state.isVideoCall) {
             views.callControlsToggleSDHD.isVisible = true
             if (state.isHD) {
-                views.callControlsToggleSDHD.title = getString(R.string.call_format_turn_hd_off)
+                views.callControlsToggleSDHD.title = getString(CommonStrings.call_format_turn_hd_off)
                 views.callControlsToggleSDHD.subTitle = null
                 views.callControlsToggleSDHD.leftIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_hd_disabled)
             } else {
-                views.callControlsToggleSDHD.title = getString(R.string.call_format_turn_hd_on)
+                views.callControlsToggleSDHD.title = getString(CommonStrings.call_format_turn_hd_on)
                 views.callControlsToggleSDHD.subTitle = null
                 views.callControlsToggleSDHD.leftIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_hd)
             }
@@ -96,15 +97,17 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetC
             views.callControlsToggleSDHD.isVisible = false
         }
         if (state.isRemoteOnHold) {
-            views.callControlsToggleHoldResume.title = getString(R.string.call_resume_action)
+            views.callControlsToggleHoldResume.title = getString(CommonStrings.call_resume_action)
             views.callControlsToggleHoldResume.subTitle = null
             views.callControlsToggleHoldResume.leftIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_call_resume_action)
         } else {
-            views.callControlsToggleHoldResume.title = getString(R.string.call_hold_action)
+            views.callControlsToggleHoldResume.title = getString(CommonStrings.call_hold_action)
             views.callControlsToggleHoldResume.subTitle = null
             views.callControlsToggleHoldResume.leftIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_call_hold_action)
         }
         views.callControlsTransfer.isVisible = state.canOpponentBeTransferred
-        views.callControlsShareScreen.title = getString(if (state.isSharingScreen) R.string.call_stop_screen_sharing else R.string.call_start_screen_sharing)
+        views.callControlsShareScreen.title = getString(
+                if (state.isSharingScreen) CommonStrings.call_stop_screen_sharing else CommonStrings.call_start_screen_sharing
+        )
     }
 }

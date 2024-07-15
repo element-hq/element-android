@@ -35,7 +35,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.DrawableImageViewTarget
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.signature.ObjectKey
-import im.vector.app.R
 import im.vector.app.core.contacts.MappedContact
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.glide.AvatarPlaceholder
@@ -46,6 +45,7 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
+import im.vector.lib.strings.CommonStrings
 import jp.wasabeef.glide.transformations.BlurTransformation
 import jp.wasabeef.glide.transformations.ColorFilterTransformation
 import org.matrix.android.sdk.api.auth.login.LoginProfileInfo
@@ -311,14 +311,14 @@ class AvatarRenderer @Inject constructor(
         if (isImportantForAccessibility.not()) return
         when (matrixItem) {
             is MatrixItem.SpaceItem -> {
-                contentDescription = stringProvider.getString(R.string.avatar_of_space, matrixItem.getBestName())
+                contentDescription = stringProvider.getString(CommonStrings.avatar_of_space, matrixItem.getBestName())
             }
             is MatrixItem.RoomAliasItem,
             is MatrixItem.RoomItem -> {
-                contentDescription = stringProvider.getString(R.string.avatar_of_room, matrixItem.getBestName())
+                contentDescription = stringProvider.getString(CommonStrings.avatar_of_room, matrixItem.getBestName())
             }
             is MatrixItem.UserItem -> {
-                contentDescription = stringProvider.getString(R.string.avatar_of_user, matrixItem.getBestName())
+                contentDescription = stringProvider.getString(CommonStrings.avatar_of_user, matrixItem.getBestName())
             }
             is MatrixItem.EveryoneInRoomItem,
             is MatrixItem.EventItem -> {

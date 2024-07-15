@@ -29,7 +29,6 @@ import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.OnBackPressed
@@ -37,6 +36,8 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentRecyclerviewWithSearchBinding
 import im.vector.app.features.roomprofile.members.RoomMemberListAction
 import im.vector.app.features.roomprofile.members.RoomMemberListViewModel
+import im.vector.lib.strings.CommonPlurals
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -68,7 +69,7 @@ class SpacePeopleFragment :
         views.progressBar.isGone = memberListState.areAllMembersLoaded
         val memberCount = (memberListState.roomSummary.invoke()?.otherMemberIds?.size ?: 0) + 1
 
-        toolbar?.subtitle = resources.getQuantityString(R.plurals.room_title_members, memberCount, memberCount)
+        toolbar?.subtitle = resources.getQuantityString(CommonPlurals.room_title_members, memberCount, memberCount)
 //        views.listBuildingProgress.isVisible = true
         epoxyController.setData(memberListState)
     }
@@ -114,7 +115,7 @@ class SpacePeopleFragment :
     }
 
     private fun setupSearchView() {
-        views.memberNameFilter.queryHint = getString(R.string.search_members_hint)
+        views.memberNameFilter.queryHint = getString(CommonStrings.search_members_hint)
         views.memberNameFilter.queryTextChanges()
                 .debounce(100)
                 .onEach {

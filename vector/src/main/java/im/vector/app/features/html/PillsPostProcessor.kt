@@ -22,7 +22,6 @@ import android.text.Spanned
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.features.home.AvatarRenderer
@@ -107,7 +106,7 @@ class PillsPostProcessor @AssistedInject constructor(
             PillImageSpan(GlideApp.with(context), avatarRenderer, context, matrixItem)
 
     private fun LinkSpan.createPillSpan(): PillImageSpan? {
-        val supportedHosts = context.resources.getStringArray(R.array.permalink_supported_hosts)
+        val supportedHosts = context.resources.getStringArray(im.vector.app.config.R.array.permalink_supported_hosts)
         val isPermalinkSupported = sessionHolder.getSafeActiveSession()?.permalinkService()?.isPermalinkSupported(supportedHosts, url).orFalse()
         if (isPermalinkSupported) {
             val matrixItem = when (val permalinkData = PermalinkParser.parse(url)) {

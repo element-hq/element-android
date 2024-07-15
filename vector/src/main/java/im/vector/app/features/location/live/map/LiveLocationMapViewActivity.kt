@@ -20,12 +20,12 @@ import android.content.Context
 import android.content.Intent
 import android.os.Parcelable
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityLocationSharingBinding
 import im.vector.app.features.MainActivity
 import im.vector.lib.core.utils.compat.getParcelableCompat
+import im.vector.lib.strings.CommonStrings
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -45,7 +45,7 @@ class LiveLocationMapViewActivity : VectorBaseActivity<ActivityLocationSharingBi
             return
         }
         setupToolbar(views.toolbar)
-                .setTitle(getString(R.string.location_activity_title_preview))
+                .setTitle(getString(CommonStrings.location_activity_title_preview))
                 .allowBack()
 
         if (isFirstCreation()) {

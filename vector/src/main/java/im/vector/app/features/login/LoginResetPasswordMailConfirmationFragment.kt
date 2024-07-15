@@ -23,8 +23,8 @@ import android.view.ViewGroup
 import com.airbnb.mvrx.Fail
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.databinding.FragmentLoginResetPasswordMailConfirmationBinding
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.failure.is401
 
 /**
@@ -45,7 +45,7 @@ class LoginResetPasswordMailConfirmationFragment :
     }
 
     private fun setupUi(state: LoginViewState) {
-        views.resetPasswordMailConfirmationNotice.text = getString(R.string.login_reset_password_mail_confirmation_notice, state.resetPasswordEmail)
+        views.resetPasswordMailConfirmationNotice.text = getString(CommonStrings.login_reset_password_mail_confirmation_notice, state.resetPasswordEmail)
     }
 
     private fun submit() {
@@ -63,15 +63,15 @@ class LoginResetPasswordMailConfirmationFragment :
             is Fail -> {
                 // Link in email not yet clicked ?
                 val message = if (state.asyncResetMailConfirmed.error.is401()) {
-                    getString(R.string.auth_reset_password_error_unauthorized)
+                    getString(CommonStrings.auth_reset_password_error_unauthorized)
                 } else {
                     errorFormatter.toHumanReadable(state.asyncResetMailConfirmed.error)
                 }
 
                 MaterialAlertDialogBuilder(requireActivity())
-                        .setTitle(R.string.dialog_title_error)
+                        .setTitle(CommonStrings.dialog_title_error)
                         .setMessage(message)
-                        .setPositiveButton(R.string.ok, null)
+                        .setPositiveButton(CommonStrings.ok, null)
                         .show()
             }
             else -> Unit

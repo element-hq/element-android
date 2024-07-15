@@ -22,6 +22,7 @@ import android.widget.FrameLayout
 import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.databinding.ViewCallControlsBinding
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
 
@@ -77,17 +78,17 @@ class CallControlsView @JvmOverloads constructor(
         val callState = state.callState.invoke()
         if (state.isAudioMuted) {
             views.muteIcon.setImageResource(R.drawable.ic_mic_off)
-            views.muteIcon.contentDescription = resources.getString(R.string.a11y_unmute_microphone)
+            views.muteIcon.contentDescription = resources.getString(CommonStrings.a11y_unmute_microphone)
         } else {
             views.muteIcon.setImageResource(R.drawable.ic_mic_on)
-            views.muteIcon.contentDescription = resources.getString(R.string.a11y_mute_microphone)
+            views.muteIcon.contentDescription = resources.getString(CommonStrings.a11y_mute_microphone)
         }
         if (state.isVideoEnabled) {
             views.videoToggleIcon.setImageResource(R.drawable.ic_video)
-            views.videoToggleIcon.contentDescription = resources.getString(R.string.a11y_stop_camera)
+            views.videoToggleIcon.contentDescription = resources.getString(CommonStrings.a11y_stop_camera)
         } else {
             views.videoToggleIcon.setImageResource(R.drawable.ic_video_off)
-            views.videoToggleIcon.contentDescription = resources.getString(R.string.a11y_start_camera)
+            views.videoToggleIcon.contentDescription = resources.getString(CommonStrings.a11y_start_camera)
         }
         views.videoToggleIcon.isEnabled = !state.isSharingScreen
         views.videoToggleIcon.alpha = if (state.isSharingScreen) 0.5f else 1f

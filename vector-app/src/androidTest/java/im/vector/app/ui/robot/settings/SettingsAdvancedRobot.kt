@@ -19,31 +19,31 @@ package im.vector.app.ui.robot.settings
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
-import im.vector.app.R
 import im.vector.app.espresso.tools.clickOnPreference
 import im.vector.app.espresso.tools.waitUntilViewVisible
+import im.vector.lib.strings.CommonStrings
 
 class SettingsAdvancedRobot {
 
     fun crawl() {
-        clickOnPreference(R.string.settings_notifications_targets)
+        clickOnPreference(CommonStrings.settings_notifications_targets)
         pressBack()
 
-        clickOnPreference(R.string.settings_push_rules)
+        clickOnPreference(CommonStrings.settings_push_rules)
         pressBack()
     }
 
     fun toggleDeveloperMode() {
-        clickOn(R.string.settings_developer_mode_summary)
+        clickOn(CommonStrings.settings_developer_mode_summary)
     }
 
     fun crawlDeveloperOptions() {
-        clickOnPreference(R.string.settings_account_data)
+        clickOnPreference(CommonStrings.settings_account_data)
         waitUntilViewVisible(withText("m.push_rules"))
         clickOn("m.push_rules")
         pressBack()
         pressBack()
-        clickOnPreference(R.string.settings_key_requests)
+        clickOnPreference(CommonStrings.settings_key_requests)
         pressBack()
     }
 }

@@ -20,7 +20,6 @@ import android.graphics.Color
 import android.net.Uri
 import com.yalantis.ucrop.UCrop
 import com.yalantis.ucrop.UCropActivity
-import im.vector.app.R
 import im.vector.app.core.resources.ColorProvider
 
 fun createUCropWithDefaultSettings(
@@ -42,12 +41,12 @@ fun createUCropWithDefaultSettings(
                                 setFreeStyleCropEnabled(true)
                                 // Color used for toolbar icon and text
                                 setToolbarColor(colorProvider.getColorFromAttribute(android.R.attr.colorBackground))
-                                setToolbarWidgetColor(colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
+                                setToolbarWidgetColor(colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_primary))
                                 // Background
                                 setRootViewBackgroundColor(colorProvider.getColorFromAttribute(android.R.attr.colorBackground))
                                 // Status bar color (pb in dark mode, icon of the status bar are dark)
-                                setStatusBarColor(colorProvider.getColor(R.color.android_status_bar_background_light))
-                                setActiveControlsWidgetColor(colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+                                setStatusBarColor(colorProvider.getColor(im.vector.lib.ui.styles.R.color.android_status_bar_background_light))
+                                setActiveControlsWidgetColor(colorProvider.getColorFromAttribute(com.google.android.material.R.attr.colorPrimary))
                                 // Hide the logo (does not work)
                                 setLogoColor(Color.TRANSPARENT)
                             }

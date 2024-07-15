@@ -17,27 +17,27 @@
 package im.vector.app.ui.robot.settings
 
 import androidx.test.espresso.Espresso
-import im.vector.app.R
 import im.vector.app.espresso.tools.clickOnPreference
+import im.vector.lib.strings.CommonStrings
 
 class SettingsSecurityRobot {
 
     fun crawl() {
-        clickOnPreference(R.string.settings_active_sessions_show_all)
+        clickOnPreference(CommonStrings.settings_active_sessions_show_all)
         Espresso.pressBack()
 
-        clickOnPreference(R.string.encryption_message_recovery)
+        clickOnPreference(CommonStrings.encryption_message_recovery)
         // TODO go deeper here
         Espresso.pressBack()
         /* Cannot exit
-        clickOnPreference(R.string.encryption_export_e2e_room_keys)
+        clickOnPreference(CommonStrings.encryption_export_e2e_room_keys)
         pressBack()
          */
 
-        clickOnPreference(R.string.settings_opt_in_of_analytics)
+        clickOnPreference(CommonStrings.settings_opt_in_of_analytics)
         Espresso.pressBack()
 
-        clickOnPreference(R.string.settings_ignored_users)
+        clickOnPreference(CommonStrings.settings_ignored_users)
         Espresso.pressBack()
     }
 }

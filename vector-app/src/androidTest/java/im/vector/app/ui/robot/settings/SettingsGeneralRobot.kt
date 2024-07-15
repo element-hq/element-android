@@ -20,32 +20,32 @@ import androidx.test.espresso.Espresso.pressBack
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogNegativeButton
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton
-import im.vector.app.R
 import im.vector.app.espresso.tools.clickOnPreference
+import im.vector.lib.strings.CommonStrings
 
 class SettingsGeneralRobot {
 
     fun crawl() {
-        clickOn(R.string.settings_profile_picture)
+        clickOn(CommonStrings.settings_profile_picture)
         clickDialogPositiveButton()
-        clickOn(R.string.settings_display_name)
+        clickOn(CommonStrings.settings_display_name)
         clickDialogNegativeButton()
-        clickOn(R.string.settings_password)
+        clickOn(CommonStrings.settings_password)
         clickDialogNegativeButton()
-        clickOn(R.string.settings_emails_and_phone_numbers_title)
+        clickOn(CommonStrings.settings_emails_and_phone_numbers_title)
         pressBack()
-        clickOn(R.string.settings_discovery_manage)
-        clickOn(R.string.add_identity_server)
+        clickOn(CommonStrings.settings_discovery_manage)
+        clickOn(CommonStrings.add_identity_server)
         pressBack()
         pressBack()
         // Homeserver
-        clickOnPreference(R.string.settings_home_server)
+        clickOnPreference(CommonStrings.settings_home_server)
         pressBack()
         // Identity server
-        clickOnPreference(R.string.settings_identity_server)
+        clickOnPreference(CommonStrings.settings_identity_server)
         pressBack()
         // Deactivate account
-        clickOnPreference(R.string.settings_deactivate_my_account)
+        clickOnPreference(CommonStrings.settings_deactivate_my_account)
         pressBack()
     }
 }

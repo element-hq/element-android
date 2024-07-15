@@ -27,6 +27,7 @@ import im.vector.app.espresso.tools.waitUntilViewVisible
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.ui.robot.AnalyticsRobot
 import im.vector.app.ui.robot.OnboardingRobot
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -184,18 +185,18 @@ abstract class VerificationTestBase {
         Espresso.onView(ViewMatchers.isRoot())
                 .perform(waitForView(ViewMatchers.withId(R.id.bottomSheetFragmentContainer)))
 
-        Espresso.onView(ViewMatchers.withText(R.string.verification_verify_identity))
+        Espresso.onView(ViewMatchers.withText(CommonStrings.verification_verify_identity))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
 
         // 4S is not setup so passphrase option should be hidden
         Espresso.onView(ViewMatchers.withId(R.id.bottomSheetVerificationRecyclerView))
-                .check(ViewAssertions.matches(CoreMatchers.not(ViewMatchers.hasDescendant(ViewMatchers.withText(R.string.verification_cannot_access_other_session)))))
+                .check(ViewAssertions.matches(CoreMatchers.not(ViewMatchers.hasDescendant(ViewMatchers.withText(CommonStrings.verification_cannot_access_other_session)))))
 
         Espresso.onView(ViewMatchers.withId(R.id.bottomSheetVerificationRecyclerView))
-                .check(ViewAssertions.matches(ViewMatchers.hasDescendant(ViewMatchers.withText(R.string.verification_verify_with_another_device))))
+                .check(ViewAssertions.matches(ViewMatchers.hasDescendant(ViewMatchers.withText(CommonStrings.verification_verify_with_another_device))))
 
         Espresso.onView(ViewMatchers.withId(R.id.bottomSheetVerificationRecyclerView))
-                .check(ViewAssertions.matches(ViewMatchers.hasDescendant(ViewMatchers.withText(R.string.bad_passphrase_key_reset_all_action))))
+                .check(ViewAssertions.matches(ViewMatchers.hasDescendant(ViewMatchers.withText(CommonStrings.bad_passphrase_key_reset_all_action))))
 
         return uiSession
     }

@@ -48,6 +48,7 @@ import im.vector.app.core.platform.SimpleTextWatcher
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorPreferenceCategory
 import im.vector.app.core.preference.VectorSwitchPreference
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.openFileSelection
 import im.vector.app.core.utils.toast
@@ -68,6 +69,8 @@ import im.vector.app.features.pin.PinMode
 import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.raw.wellknown.isE2EByDefault
 import im.vector.app.features.themes.ThemeUtils
+import im.vector.lib.strings.CommonPlurals
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -93,8 +96,9 @@ class VectorSettingsSecurityPrivacyFragment :
     @Inject lateinit var navigator: Navigator
     @Inject lateinit var analyticsConfig: AnalyticsConfig
     @Inject lateinit var vectorPreferences: VectorPreferences
+    @Inject lateinit var buildMeta: BuildMeta
 
-    override var titleRes = R.string.settings_security_and_privacy
+    override var titleRes = CommonStrings.settings_security_and_privacy
     override val preferenceXmlRes = R.xml.vector_settings_security_privacy
 
     private val analyticsConsentViewModel: AnalyticsConsentViewModel by fragmentViewModel()
@@ -221,7 +225,7 @@ class VectorSettingsSecurityPrivacyFragment :
                 if (info.isCrossSigningEnabled && info.allPrivateKeysKnown) {
                     // You can setup recovery!
                     secureBackupCategory.isVisible = true
-                    secureBackupPreference.title = getString(R.string.settings_secure_backup_setup)
+                    secureBackupPreference.title = getString(CommonStrings.settings_secure_backup_setup)
                     secureBackupPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                         BootstrapBottomSheet.show(parentFragmentManager, SetupMode.NORMAL)
                         true
@@ -240,7 +244,7 @@ class VectorSettingsSecurityPrivacyFragment :
                         // Only option here is to create a new backup if you want?
                         // aka reset
                         secureBackupCategory.isVisible = true
-                        secureBackupPreference.title = getString(R.string.settings_secure_backup_reset)
+                        secureBackupPreference.title = getString(CommonStrings.settings_secure_backup_reset)
                         secureBackupPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                             BootstrapBottomSheet.show(parentFragmentManager, SetupMode.PASSPHRASE_RESET)
                             true
@@ -249,7 +253,7 @@ class VectorSettingsSecurityPrivacyFragment :
                         // megolm backup is available but we don't have key
                         // you could try to synchronize to get missing megolm key ?
                         secureBackupCategory.isVisible = true
-                        secureBackupPreference.title = getString(R.string.settings_secure_backup_enter_to_setup)
+                        secureBackupPreference.title = getString(CommonStrings.settings_secure_backup_enter_to_setup)
                         secureBackupPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                             vectorActivity.let {
                                 it.navigator.requestSelfSessionVerification(it)
@@ -263,7 +267,7 @@ class VectorSettingsSecurityPrivacyFragment :
                     // there is a backup, but this session is not trusted, or is missing some secrets
                     // you should enter passphrase to get them or verify against another session
                     secureBackupCategory.isVisible = true
-                    secureBackupPreference.title = getString(R.string.settings_secure_backup_enter_to_setup)
+                    secureBackupPreference.title = getString(CommonStrings.settings_secure_backup_enter_to_setup)
                     secureBackupPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                         vectorActivity.let {
                             it.navigator.requestSelfSessionVerification(it)
@@ -294,25 +298,25 @@ class VectorSettingsSecurityPrivacyFragment :
         secureBackupPreference.icon = activity?.let {
             ThemeUtils.tintDrawable(
                     it,
-                    ContextCompat.getDrawable(it, R.drawable.ic_secure_backup)!!, R.attr.vctr_content_primary
+                    ContextCompat.getDrawable(it, R.drawable.ic_secure_backup)!!, im.vector.lib.ui.styles.R.attr.vctr_content_primary
             )
         }
 
         ignoredUsersPreference.icon = activity?.let {
             ThemeUtils.tintDrawable(
                     it,
-                    ContextCompat.getDrawable(it, R.drawable.ic_settings_root_ignored_users)!!, R.attr.vctr_content_primary
+                    ContextCompat.getDrawable(it, R.drawable.ic_settings_root_ignored_users)!!, im.vector.lib.ui.styles.R.attr.vctr_content_primary
             )
         }
 
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT)?.let {
             it.icon = ThemeUtils.tintDrawableWithColor(
                     ContextCompat.getDrawable(requireContext(), R.drawable.ic_notification_privacy_warning)!!,
-                    ThemeUtils.getColor(requireContext(), R.attr.colorError)
+                    ThemeUtils.getColor(requireContext(), com.google.android.material.R.attr.colorError)
             )
             it.summary = span {
-                text = getString(R.string.settings_hs_admin_e2e_disabled)
-                textColor = ThemeUtils.getColor(requireContext(), R.attr.colorError)
+                text = getString(CommonStrings.settings_hs_admin_e2e_disabled)
+                textColor = ThemeUtils.getColor(requireContext(), com.google.android.material.R.attr.colorError)
             }
         }
     }
@@ -360,19 +364,19 @@ class VectorSettingsSecurityPrivacyFragment :
             when {
                 xSigningKeyCanSign -> {
                     mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_trusted)
-                    mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_complete)
+                    mCrossSigningStatePreference.summary = getString(CommonStrings.encryption_information_dg_xsigning_complete)
                 }
                 xSigningKeysAreTrusted -> {
                     mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_custom)
-                    mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_trusted)
+                    mCrossSigningStatePreference.summary = getString(CommonStrings.encryption_information_dg_xsigning_trusted)
                 }
                 xSigningIsEnableInAccount -> {
                     mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_black)
-                    mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_not_trusted)
+                    mCrossSigningStatePreference.summary = getString(CommonStrings.encryption_information_dg_xsigning_not_trusted)
                 }
                 else -> {
                     mCrossSigningStatePreference.setIcon(android.R.color.transparent)
-                    mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_disabled)
+                    mCrossSigningStatePreference.summary = getString(CommonStrings.encryption_information_dg_xsigning_disabled)
                 }
             }
             mCrossSigningStatePreference.isVisible = true
@@ -396,7 +400,7 @@ class VectorSettingsSecurityPrivacyFragment :
         lifecycleScope.launch {
             try {
                 keysExporter.export(passphrase, uri)
-                requireActivity().toast(getString(R.string.encryption_exported_successfully))
+                requireActivity().toast(getString(CommonStrings.encryption_exported_successfully))
             } catch (failure: Throwable) {
                 requireActivity().toast(errorFormatter.toHumanReadable(failure))
             }
@@ -451,7 +455,11 @@ class VectorSettingsSecurityPrivacyFragment :
         }
 
         exportPref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            queryExportKeys(activeSessionHolder.getSafeActiveSession()?.myUserId ?: "", saveMegolmStartForActivityResult)
+            queryExportKeys(
+                    userId = activeSessionHolder.getSafeActiveSession()?.myUserId ?: "",
+                    applicationName = buildMeta.applicationName,
+                    activityResultLauncher = saveMegolmStartForActivityResult,
+            )
             true
         }
 
@@ -511,11 +519,11 @@ class VectorSettingsSecurityPrivacyFragment :
                 views.dialogE2eKeysPassphraseFilename.isVisible = false
             } else {
                 views.dialogE2eKeysPassphraseFilename.isVisible = true
-                views.dialogE2eKeysPassphraseFilename.text = getString(R.string.import_e2e_keys_from_file, filename)
+                views.dialogE2eKeysPassphraseFilename.text = getString(CommonStrings.import_e2e_keys_from_file, filename)
             }
 
             val builder = MaterialAlertDialogBuilder(thisActivity)
-                    .setTitle(R.string.encryption_import_room_keys)
+                    .setTitle(CommonStrings.encryption_import_room_keys)
                     .setView(dialogLayout)
 
             views.dialogE2eKeysPassphraseEditText.addTextChangedListener(object : SimpleTextWatcher() {
@@ -544,13 +552,13 @@ class VectorSettingsSecurityPrivacyFragment :
                         MaterialAlertDialogBuilder(thisActivity)
                                 .setMessage(
                                         resources.getQuantityString(
-                                                R.plurals.encryption_import_room_keys_success,
+                                                CommonPlurals.encryption_import_room_keys_success,
                                                 data.successfullyNumberOfImportedKeys,
                                                 data.successfullyNumberOfImportedKeys,
                                                 data.totalNumberOfKeys
                                         )
                                 )
-                                .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
+                                .setPositiveButton(CommonStrings.ok) { dialog, _ -> dialog.dismiss() }
                                 .show()
                     }
                 }
@@ -569,11 +577,11 @@ class VectorSettingsSecurityPrivacyFragment :
     private suspend fun refreshCryptographyPreference(devices: List<DeviceInfo>) {
         showDeviceListPref.isVisible = !vectorPreferences.isNewSessionManagerEnabled()
         showDeviceListPref.isEnabled = devices.isNotEmpty()
-        showDeviceListPref.summary = resources.getQuantityString(R.plurals.settings_active_sessions_count, devices.size, devices.size)
+        showDeviceListPref.summary = resources.getQuantityString(CommonPlurals.settings_active_sessions_count, devices.size, devices.size)
 
         showDevicesListV2Pref.isVisible = vectorPreferences.isNewSessionManagerEnabled()
         showDevicesListV2Pref.isEnabled = devices.isNotEmpty()
-        showDevicesListV2Pref.summary = resources.getQuantityString(R.plurals.settings_active_sessions_count, devices.size, devices.size)
+        showDevicesListV2Pref.summary = resources.getQuantityString(CommonPlurals.settings_active_sessions_count, devices.size, devices.size)
 
         val userId = session.myUserId
         val deviceId = session.sessionParams.deviceId

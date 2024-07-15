@@ -32,6 +32,7 @@ import im.vector.app.features.home.room.detail.timeline.action.EventSharedAction
 import im.vector.app.features.home.room.detail.timeline.action.MessageSharedActionViewModel
 import im.vector.app.features.home.room.detail.timeline.action.TimelineEventFragmentArgs
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
+import im.vector.lib.strings.CommonStrings
 import javax.inject.Inject
 
 /**
@@ -60,7 +61,7 @@ class ViewReactionsBottomSheet :
                 hasFixedSize = false,
                 dividerDrawable = R.drawable.divider_horizontal_on_secondary
         )
-        views.bottomSheetTitle.text = context?.getString(R.string.reactions)
+        views.bottomSheetTitle.text = context?.getString(CommonStrings.reactions)
         epoxyController.listener = this
     }
 

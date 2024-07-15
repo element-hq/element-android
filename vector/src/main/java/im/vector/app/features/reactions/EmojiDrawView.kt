@@ -43,16 +43,16 @@ class EmojiDrawView @JvmOverloads constructor(
 
     var emoji: String? = null
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         Trace.beginSection("EmojiDrawView.onDraw")
         super.onDraw(canvas)
-        canvas?.save()
+        canvas.save()
         val space = abs((width - emojiSize) / 2f)
         if (mLayout != null) {
-            canvas?.translate(space, space)
+            canvas.translate(space, space)
             mLayout!!.draw(canvas)
         }
-        canvas?.restore()
+        canvas.restore()
         Trace.endSection()
     }
 

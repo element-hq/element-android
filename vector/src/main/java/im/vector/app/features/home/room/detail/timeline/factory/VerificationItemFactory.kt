@@ -15,7 +15,6 @@
  */
 package im.vector.app.features.home.room.detail.timeline.factory
 
-import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.resources.UserPreferencesProvider
@@ -25,6 +24,7 @@ import im.vector.app.features.home.room.detail.timeline.helper.MessageInformatio
 import im.vector.app.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
 import im.vector.app.features.home.room.detail.timeline.item.StatusTileTimelineItem
 import im.vector.app.features.home.room.detail.timeline.item.StatusTileTimelineItem_
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationState
@@ -92,7 +92,7 @@ class VerificationItemFactory @Inject constructor(
                         return StatusTileTimelineItem_()
                                 .attributes(
                                         StatusTileTimelineItem.Attributes(
-                                                title = stringProvider.getString(R.string.verification_conclusion_warning),
+                                                title = stringProvider.getString(CommonStrings.verification_conclusion_warning),
                                                 description = "${informationData.memberName} (${informationData.senderId})",
                                                 shieldUIState = StatusTileTimelineItem.ShieldUIState.RED,
                                                 informationData = informationData,
@@ -126,7 +126,7 @@ class VerificationItemFactory @Inject constructor(
                 return StatusTileTimelineItem_()
                         .attributes(
                                 StatusTileTimelineItem.Attributes(
-                                        title = stringProvider.getString(R.string.sas_verified),
+                                        title = stringProvider.getString(CommonStrings.sas_verified),
                                         description = "${informationData.memberName} (${informationData.senderId})",
                                         shieldUIState = StatusTileTimelineItem.ShieldUIState.GREEN,
                                         informationData = informationData,

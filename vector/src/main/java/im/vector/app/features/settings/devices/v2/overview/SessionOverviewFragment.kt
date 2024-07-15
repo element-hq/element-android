@@ -48,6 +48,7 @@ import im.vector.app.features.settings.devices.v2.more.SessionLearnMoreBottomShe
 import im.vector.app.features.settings.devices.v2.notification.NotificationsStatus
 import im.vector.app.features.settings.devices.v2.signout.BuildConfirmSignoutDialogUseCase
 import im.vector.app.features.workers.signout.SignOutUiWorker
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
@@ -170,9 +171,9 @@ class SessionOverviewFragment :
     override fun handlePrepareMenu(menu: Menu) {
         withState(viewModel) { state ->
             menu.findItem(R.id.sessionOverviewToggleIpAddress).title = if (state.isShowingIpAddress) {
-                getString(R.string.device_manager_other_sessions_hide_ip_address)
+                getString(CommonStrings.device_manager_other_sessions_hide_ip_address)
             } else {
-                getString(R.string.device_manager_other_sessions_show_ip_address)
+                getString(CommonStrings.device_manager_other_sessions_show_ip_address)
             }
         }
     }
@@ -209,8 +210,11 @@ class SessionOverviewFragment :
 
     private fun updateToolbar(viewState: SessionOverviewViewState) {
         if (viewState.deviceInfo is Success) {
-            val titleResId =
-                    if (viewState.deviceInfo.invoke().isCurrentDevice) R.string.device_manager_current_session_title else R.string.device_manager_session_title
+            val titleResId = if (viewState.deviceInfo.invoke().isCurrentDevice) {
+                CommonStrings.device_manager_current_session_title
+            } else {
+                CommonStrings.device_manager_session_title
+            }
             (activity as? AppCompatActivity)
                     ?.supportActionBar
                     ?.setTitle(titleResId)
@@ -297,7 +301,7 @@ class SessionOverviewFragment :
                 requireContext(),
                 reAuthReq.registrationFlowResponse,
                 reAuthReq.lastErrorCode,
-                getString(R.string.devices_delete_dialog_title)
+                getString(CommonStrings.devices_delete_dialog_title)
         ).let { intent ->
             reAuthActivityResultLauncher.launch(intent)
         }
@@ -308,20 +312,20 @@ class SessionOverviewFragment :
             null -> {
                 // encryption not supported
                 SessionLearnMoreBottomSheet.Args(
-                        title = getString(R.string.device_manager_verification_status_unverified),
-                        description = getString(R.string.device_manager_learn_more_sessions_encryption_not_supported),
+                        title = getString(CommonStrings.device_manager_verification_status_unverified),
+                        description = getString(CommonStrings.device_manager_learn_more_sessions_encryption_not_supported),
                 )
             }
             RoomEncryptionTrustLevel.Trusted -> {
                 SessionLearnMoreBottomSheet.Args(
-                        title = getString(R.string.device_manager_verification_status_verified),
-                        description = getString(R.string.device_manager_learn_more_sessions_verified_description),
+                        title = getString(CommonStrings.device_manager_verification_status_verified),
+                        description = getString(CommonStrings.device_manager_learn_more_sessions_verified_description),
                 )
             }
             else -> {
                 SessionLearnMoreBottomSheet.Args(
-                        title = getString(R.string.device_manager_verification_status_unverified),
-                        description = getString(R.string.device_manager_learn_more_sessions_unverified),
+                        title = getString(CommonStrings.device_manager_verification_status_unverified),
+                        description = getString(CommonStrings.device_manager_learn_more_sessions_unverified),
                 )
             }
         }

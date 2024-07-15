@@ -22,7 +22,6 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
-import im.vector.app.R
 import kotlin.math.max
 import kotlin.random.Random
 
@@ -66,19 +65,21 @@ class AudioWaveformView @JvmOverloads constructor(
                     .theme
                     .obtainStyledAttributes(
                             attrs,
-                            R.styleable.AudioWaveformView,
+                            im.vector.lib.ui.styles.R.styleable.AudioWaveformView,
                             0,
                             0
                     )
                     .apply {
-                        alignment = Alignment.values().find { it.value == getInt(R.styleable.AudioWaveformView_alignment, alignment.value) }!!
-                        flow = Flow.values().find { it.value == getInt(R.styleable.AudioWaveformView_flow, alignment.value) }!!
-                        verticalPadding = getDimension(R.styleable.AudioWaveformView_verticalPadding, verticalPadding)
-                        horizontalPadding = getDimension(R.styleable.AudioWaveformView_horizontalPadding, horizontalPadding)
-                        barWidth = getDimension(R.styleable.AudioWaveformView_barWidth, barWidth)
-                        barSpace = getDimension(R.styleable.AudioWaveformView_barSpace, barSpace)
-                        barMinHeight = getDimension(R.styleable.AudioWaveformView_barMinHeight, barMinHeight)
-                        isBarRounded = getBoolean(R.styleable.AudioWaveformView_isBarRounded, isBarRounded)
+                        alignment = Alignment.values().find {
+                            it.value == getInt(im.vector.lib.ui.styles.R.styleable.AudioWaveformView_alignment, alignment.value)
+                        }!!
+                        flow = Flow.values().find { it.value == getInt(im.vector.lib.ui.styles.R.styleable.AudioWaveformView_flow, alignment.value) }!!
+                        verticalPadding = getDimension(im.vector.lib.ui.styles.R.styleable.AudioWaveformView_verticalPadding, verticalPadding)
+                        horizontalPadding = getDimension(im.vector.lib.ui.styles.R.styleable.AudioWaveformView_horizontalPadding, horizontalPadding)
+                        barWidth = getDimension(im.vector.lib.ui.styles.R.styleable.AudioWaveformView_barWidth, barWidth)
+                        barSpace = getDimension(im.vector.lib.ui.styles.R.styleable.AudioWaveformView_barSpace, barSpace)
+                        barMinHeight = getDimension(im.vector.lib.ui.styles.R.styleable.AudioWaveformView_barMinHeight, barMinHeight)
+                        isBarRounded = getBoolean(im.vector.lib.ui.styles.R.styleable.AudioWaveformView_isBarRounded, isBarRounded)
                         setWillNotDraw(false)
                         barPaint.isAntiAlias = true
                     }

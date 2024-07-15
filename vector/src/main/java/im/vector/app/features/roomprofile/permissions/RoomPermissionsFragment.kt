@@ -25,7 +25,6 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
@@ -35,6 +34,7 @@ import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roommemberprofile.powerlevel.EditPowerLevelDialogs
 import im.vector.app.features.roomprofile.RoomProfileArgs
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
@@ -67,7 +67,7 @@ class RoomPermissionsFragment :
         setupToolbar(views.roomSettingsToolbar)
                 .allowBack()
         views.roomSettingsRecyclerView.configureWith(controller, hasFixedSize = true)
-        views.waitingView.waitingStatusText.setText(R.string.please_wait)
+        views.waitingView.waitingStatusText.setText(CommonStrings.please_wait)
         views.waitingView.waitingStatusText.isVisible = true
 
         viewModel.observeViewEvents {
@@ -79,7 +79,7 @@ class RoomPermissionsFragment :
     }
 
     private fun showSuccess() {
-        activity?.toast(R.string.room_settings_save_success)
+        activity?.toast(CommonStrings.room_settings_save_success)
     }
 
     override fun onDestroyView() {

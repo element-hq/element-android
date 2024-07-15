@@ -31,6 +31,7 @@ import im.vector.app.espresso.tools.waitUntilViewVisible
 import im.vector.app.features.DefaultVectorFeatures
 import im.vector.app.features.VectorFeatures
 import im.vector.app.ui.robot.settings.labs.LabFeaturesPreferences
+import im.vector.lib.strings.CommonStrings
 import org.hamcrest.Matchers
 
 class SpaceRobot(private val labsPreferences: LabFeaturesPreferences) {
@@ -54,7 +55,7 @@ class SpaceRobot(private val labsPreferences: LabFeaturesPreferences) {
             }
         } else {
             openDrawer()
-            clickOn(R.string.create_space)
+            clickOn(CommonStrings.create_space)
         }
         block(SpaceCreateRobot())
     }

@@ -30,10 +30,10 @@ import com.airbnb.mvrx.args
 import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.databinding.FragmentLoginGenericTextInputFormBinding
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
@@ -107,35 +107,35 @@ class LoginGenericTextInputFormFragment :
     private fun setupUi() {
         when (params.mode) {
             TextInputFormFragmentMode.SetEmail -> {
-                views.loginGenericTextInputFormTitle.text = getString(R.string.login_set_email_title)
-                views.loginGenericTextInputFormNotice.text = getString(R.string.login_set_email_notice)
+                views.loginGenericTextInputFormTitle.text = getString(CommonStrings.login_set_email_title)
+                views.loginGenericTextInputFormNotice.text = getString(CommonStrings.login_set_email_notice)
                 views.loginGenericTextInputFormNotice2.setTextOrHide(null)
                 views.loginGenericTextInputFormTil.hint =
-                        getString(if (params.mandatory) R.string.login_set_email_mandatory_hint else R.string.login_set_email_optional_hint)
+                        getString(if (params.mandatory) CommonStrings.login_set_email_mandatory_hint else CommonStrings.login_set_email_optional_hint)
                 views.loginGenericTextInputFormTextInput.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
                 views.loginGenericTextInputFormOtherButton.isVisible = false
-                views.loginGenericTextInputFormSubmit.text = getString(R.string.login_set_email_submit)
+                views.loginGenericTextInputFormSubmit.text = getString(CommonStrings.login_set_email_submit)
             }
             TextInputFormFragmentMode.SetMsisdn -> {
-                views.loginGenericTextInputFormTitle.text = getString(R.string.login_set_msisdn_title)
-                views.loginGenericTextInputFormNotice.text = getString(R.string.login_set_msisdn_notice)
-                views.loginGenericTextInputFormNotice2.setTextOrHide(getString(R.string.login_set_msisdn_notice2))
+                views.loginGenericTextInputFormTitle.text = getString(CommonStrings.login_set_msisdn_title)
+                views.loginGenericTextInputFormNotice.text = getString(CommonStrings.login_set_msisdn_notice)
+                views.loginGenericTextInputFormNotice2.setTextOrHide(getString(CommonStrings.login_set_msisdn_notice2))
                 views.loginGenericTextInputFormTil.hint =
-                        getString(if (params.mandatory) R.string.login_set_msisdn_mandatory_hint else R.string.login_set_msisdn_optional_hint)
+                        getString(if (params.mandatory) CommonStrings.login_set_msisdn_mandatory_hint else CommonStrings.login_set_msisdn_optional_hint)
                 views.loginGenericTextInputFormTextInput.inputType = InputType.TYPE_CLASS_PHONE
                 views.loginGenericTextInputFormOtherButton.isVisible = false
-                views.loginGenericTextInputFormSubmit.text = getString(R.string.login_set_msisdn_submit)
+                views.loginGenericTextInputFormSubmit.text = getString(CommonStrings.login_set_msisdn_submit)
             }
             TextInputFormFragmentMode.ConfirmMsisdn -> {
-                views.loginGenericTextInputFormTitle.text = getString(R.string.login_msisdn_confirm_title)
-                views.loginGenericTextInputFormNotice.text = getString(R.string.login_msisdn_confirm_notice, params.extra)
+                views.loginGenericTextInputFormTitle.text = getString(CommonStrings.login_msisdn_confirm_title)
+                views.loginGenericTextInputFormNotice.text = getString(CommonStrings.login_msisdn_confirm_notice, params.extra)
                 views.loginGenericTextInputFormNotice2.setTextOrHide(null)
                 views.loginGenericTextInputFormTil.hint =
-                        getString(R.string.login_msisdn_confirm_hint)
+                        getString(CommonStrings.login_msisdn_confirm_hint)
                 views.loginGenericTextInputFormTextInput.inputType = InputType.TYPE_CLASS_NUMBER
                 views.loginGenericTextInputFormOtherButton.isVisible = true
-                views.loginGenericTextInputFormOtherButton.text = getString(R.string.login_msisdn_confirm_send_again)
-                views.loginGenericTextInputFormSubmit.text = getString(R.string.login_msisdn_confirm_submit)
+                views.loginGenericTextInputFormOtherButton.text = getString(CommonStrings.login_msisdn_confirm_send_again)
+                views.loginGenericTextInputFormSubmit.text = getString(CommonStrings.login_msisdn_confirm_submit)
             }
         }
     }
@@ -187,10 +187,10 @@ class LoginGenericTextInputFormFragment :
                 val phoneNumber = PhoneNumberUtil.getInstance().parse(text, null)
                 return PhoneNumberUtil.getInstance().getRegionCodeForCountryCode(phoneNumber.countryCode)
             } catch (e: NumberParseException) {
-                views.loginGenericTextInputFormTil.error = getString(R.string.login_msisdn_error_other)
+                views.loginGenericTextInputFormTil.error = getString(CommonStrings.login_msisdn_error_other)
             }
         } else {
-            views.loginGenericTextInputFormTil.error = getString(R.string.login_msisdn_error_not_international)
+            views.loginGenericTextInputFormTil.error = getString(CommonStrings.login_msisdn_error_not_international)
         }
 
         // Error
@@ -246,7 +246,7 @@ class LoginGenericTextInputFormFragment :
                 when {
                     throwable is Failure.SuccessError ->
                         // The entered code is not correct
-                        views.loginGenericTextInputFormTil.error = getString(R.string.login_validation_code_is_not_correct)
+                        views.loginGenericTextInputFormTil.error = getString(CommonStrings.login_validation_code_is_not_correct)
                     throwable.is401() ->
                         // It can happen if user request again the 3pid
                         Unit

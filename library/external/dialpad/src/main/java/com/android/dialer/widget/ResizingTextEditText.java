@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.widget.EditText;
+
 import com.android.dialer.dialpadview.R;
 import com.android.dialer.util.ViewUtil;
 

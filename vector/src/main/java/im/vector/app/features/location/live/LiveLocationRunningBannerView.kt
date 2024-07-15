@@ -33,6 +33,7 @@ import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.utils.TextUtils
 import im.vector.app.databinding.ViewLiveLocationRunningBannerBinding
 import im.vector.app.features.themes.ThemeUtils
+import im.vector.lib.strings.CommonStrings
 import org.threeten.bp.Duration
 
 private const val REMAINING_TIME_COUNTER_INTERVAL_IN_MS = 1000L
@@ -77,7 +78,7 @@ class LiveLocationRunningBannerView @JvmOverloads constructor(
 
     private fun renderEmitter(viewState: LiveLocationMessageBannerViewState.Emitter) {
         stopButton.isVisible = true
-        title.text = context.getString(R.string.location_share_live_enabled)
+        title.text = context.getString(CommonStrings.location_share_live_enabled)
 
         countDownTimer?.cancel()
         viewState.remainingTimeInMillis
@@ -87,14 +88,14 @@ class LiveLocationRunningBannerView @JvmOverloads constructor(
                         override fun onTick(millisUntilFinished: Long) {
                             val duration = Duration.ofMillis(millisUntilFinished.coerceAtLeast(0L))
                             subTitle.text = context.getString(
-                                    R.string.location_share_live_remaining_time,
+                                    CommonStrings.location_share_live_remaining_time,
                                     TextUtils.formatDurationWithUnits(context, duration)
                             )
                         }
 
                         override fun onFinish() {
                             subTitle.text = context.getString(
-                                    R.string.location_share_live_remaining_time,
+                                    CommonStrings.location_share_live_remaining_time,
                                     TextUtils.formatDurationWithUnits(context, Duration.ofMillis(0L))
                             )
                         }
@@ -125,8 +126,8 @@ class LiveLocationRunningBannerView @JvmOverloads constructor(
 
     private fun renderWatcher(viewState: LiveLocationMessageBannerViewState.Watcher) {
         stopButton.isVisible = false
-        title.text = context.getString(R.string.location_share_live_view)
-        subTitle.text = context.getString(R.string.location_share_live_until, viewState.formattedLocalTimeOfEndOfLive)
+        title.text = context.getString(CommonStrings.location_share_live_view)
+        subTitle.text = context.getString(CommonStrings.location_share_live_until, viewState.formattedLocalTimeOfEndOfLive)
     }
 
     override fun onDetachedFromWindow() {

@@ -16,8 +16,8 @@
 
 package im.vector.app.features.home.room.detail.timeline.format
 
-import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import javax.inject.Inject
 
@@ -27,10 +27,10 @@ class RoomHistoryVisibilityFormatter @Inject constructor(
     fun getNoticeSuffix(roomHistoryVisibility: RoomHistoryVisibility): String {
         return stringProvider.getString(
                 when (roomHistoryVisibility) {
-                    RoomHistoryVisibility.WORLD_READABLE -> R.string.notice_room_visibility_world_readable
-                    RoomHistoryVisibility.SHARED -> R.string.notice_room_visibility_shared
-                    RoomHistoryVisibility.INVITED -> R.string.notice_room_visibility_invited
-                    RoomHistoryVisibility.JOINED -> R.string.notice_room_visibility_joined
+                    RoomHistoryVisibility.WORLD_READABLE -> CommonStrings.notice_room_visibility_world_readable
+                    RoomHistoryVisibility.SHARED -> CommonStrings.notice_room_visibility_shared
+                    RoomHistoryVisibility.INVITED -> CommonStrings.notice_room_visibility_invited
+                    RoomHistoryVisibility.JOINED -> CommonStrings.notice_room_visibility_joined
                 }
         )
     }
@@ -38,10 +38,10 @@ class RoomHistoryVisibilityFormatter @Inject constructor(
     fun getSetting(roomHistoryVisibility: RoomHistoryVisibility): String {
         return stringProvider.getString(
                 when (roomHistoryVisibility) {
-                    RoomHistoryVisibility.WORLD_READABLE -> R.string.room_settings_read_history_entry_anyone
-                    RoomHistoryVisibility.SHARED -> R.string.room_settings_read_history_entry_members_only_option_time_shared
-                    RoomHistoryVisibility.INVITED -> R.string.room_settings_read_history_entry_members_only_invited
-                    RoomHistoryVisibility.JOINED -> R.string.room_settings_read_history_entry_members_only_joined
+                    RoomHistoryVisibility.WORLD_READABLE -> CommonStrings.room_settings_read_history_entry_anyone
+                    RoomHistoryVisibility.SHARED -> CommonStrings.room_settings_read_history_entry_members_only_option_time_shared
+                    RoomHistoryVisibility.INVITED -> CommonStrings.room_settings_read_history_entry_members_only_invited
+                    RoomHistoryVisibility.JOINED -> CommonStrings.room_settings_read_history_entry_members_only_joined
                 }
         )
     }

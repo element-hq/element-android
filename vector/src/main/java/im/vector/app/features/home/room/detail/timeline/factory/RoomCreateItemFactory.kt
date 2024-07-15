@@ -16,12 +16,12 @@
 
 package im.vector.app.features.home.room.detail.timeline.factory
 
-import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.features.home.room.detail.timeline.item.RoomCreateItem_
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
+import im.vector.lib.strings.CommonStrings
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -41,9 +41,9 @@ class RoomCreateItemFactory @Inject constructor(
         val predecessorId = createRoomContent.predecessor?.roomId ?: return defaultRendering(params)
         val roomLink = session.permalinkService().createRoomPermalink(predecessorId) ?: return null
         val text = span {
-            +stringProvider.getString(R.string.room_tombstone_continuation_description)
+            +stringProvider.getString(CommonStrings.room_tombstone_continuation_description)
             +"\n"
-            span(stringProvider.getString(R.string.room_tombstone_predecessor_link)) {
+            span(stringProvider.getString(CommonStrings.room_tombstone_predecessor_link)) {
                 textDecorationLine = "underline"
                 onClick = { params.callback?.onRoomCreateLinkClicked(roomLink) }
             }

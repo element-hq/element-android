@@ -37,10 +37,10 @@ suspend fun <T> LiveData<T>.first(timeout: Long = TestConstants.timeOutMillis, p
         withContext(Dispatchers.Main) {
             suspendCancellableCoroutine { continuation ->
                 val observer = object : Observer<T> {
-                    override fun onChanged(data: T) {
-                        if (predicate(data)) {
+                    override fun onChanged(value: T) {
+                        if (predicate(value)) {
                             removeObserver(this)
-                            continuation.resume(data)
+                            continuation.resume(value)
                         }
                     }
                 }

@@ -22,6 +22,7 @@ import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.databinding.DialogBackgroundSyncModeBinding
+import im.vector.lib.strings.CommonStrings
 
 class BackgroundSyncModeChooserDialog : DialogFragment() {
 
@@ -33,9 +34,9 @@ class BackgroundSyncModeChooserDialog : DialogFragment() {
         val view = requireActivity().layoutInflater.inflate(R.layout.dialog_background_sync_mode, null)
         val views = DialogBackgroundSyncModeBinding.bind(view)
         val dialog = MaterialAlertDialogBuilder(requireActivity())
-                .setTitle(R.string.settings_background_fdroid_sync_mode)
+                .setTitle(CommonStrings.settings_background_fdroid_sync_mode)
                 .setView(view)
-                .setPositiveButton(R.string.action_cancel, null)
+                .setPositiveButton(CommonStrings.action_cancel, null)
                 .create()
 
         views.backgroundSyncModeBattery.setOnClickListener {

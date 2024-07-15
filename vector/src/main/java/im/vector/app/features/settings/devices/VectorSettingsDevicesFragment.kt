@@ -40,6 +40,7 @@ import im.vector.app.databinding.DialogBaseEditTextBinding
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.crypto.recover.SetupMode
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import javax.inject.Inject
@@ -67,7 +68,7 @@ class VectorSettingsDevicesFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        views.waitingView.waitingStatusText.setText(R.string.please_wait)
+        views.waitingView.waitingStatusText.setText(CommonStrings.please_wait)
         views.waitingView.waitingStatusText.isVisible = true
         devicesController.callback = this
         views.genericRecyclerView.configureWith(devicesController, dividerDrawable = R.drawable.divider_horizontal)
@@ -111,7 +112,7 @@ class VectorSettingsDevicesFragment :
 
     override fun onResume() {
         super.onResume()
-        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(R.string.settings_active_sessions_manage)
+        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(CommonStrings.settings_active_sessions_manage)
         viewModel.handle(DevicesAction.Refresh)
     }
 
@@ -138,14 +139,14 @@ class VectorSettingsDevicesFragment :
         views.editText.setText(deviceInfo.displayName)
 
         MaterialAlertDialogBuilder(requireActivity())
-                .setTitle(R.string.devices_details_device_name)
+                .setTitle(CommonStrings.devices_details_device_name)
                 .setView(layout)
-                .setPositiveButton(R.string.ok) { _, _ ->
+                .setPositiveButton(CommonStrings.ok) { _, _ ->
                     val newName = views.editText.text.toString()
 
                     viewModel.handle(DevicesAction.Rename(deviceInfo.deviceId!!, newName))
                 }
-                .setNegativeButton(R.string.action_cancel, null)
+                .setNegativeButton(CommonStrings.action_cancel, null)
                 .show()
     }
 
@@ -176,7 +177,7 @@ class VectorSettingsDevicesFragment :
                 requireContext(),
                 reAuthReq.registrationFlowResponse,
                 reAuthReq.lastErrorCode,
-                getString(R.string.devices_delete_dialog_title)
+                getString(CommonStrings.devices_delete_dialog_title)
         ).let { intent ->
             reAuthActivityResultLauncher.launch(intent)
         }

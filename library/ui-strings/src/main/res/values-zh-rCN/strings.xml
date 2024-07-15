@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="notice_room_invite_no_invitee">%s 的邀请</string>
     <string name="notice_room_invite">%1$s 邀请了 %2$s</string>
     <string name="notice_room_invite_you">%1$s 邀请了你</string>

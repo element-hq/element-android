@@ -30,7 +30,6 @@ import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
@@ -39,6 +38,7 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.spaces.SpacePreviewSharedAction
 import im.vector.app.features.spaces.SpacePreviewSharedActionViewModel
 import im.vector.lib.core.utils.flow.throttleFirst
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
@@ -139,7 +139,7 @@ class SpacePreviewFragment :
             }
             is SpacePreviewViewEvents.JoinFailure -> {
                 sharedActionViewModel.post(SpacePreviewSharedAction.HideModalLoading)
-                sharedActionViewModel.post(SpacePreviewSharedAction.ShowErrorMessage(viewEvents.message ?: getString(R.string.matrix_error)))
+                sharedActionViewModel.post(SpacePreviewSharedAction.ShowErrorMessage(viewEvents.message ?: getString(CommonStrings.matrix_error)))
             }
         }
     }

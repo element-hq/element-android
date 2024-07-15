@@ -31,13 +31,13 @@ import androidx.work.WorkRequest
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.startForegroundCompat
 import im.vector.app.core.platform.PendingIntentCompat
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.settings.BackgroundSyncMode
 import im.vector.lib.core.utils.timer.Clock
 import im.vector.lib.core.utils.timer.DefaultClock
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.session.sync.job.SyncAndroidService
 import timber.log.Timber
@@ -94,9 +94,9 @@ class VectorSyncAndroidService : SyncAndroidService() {
 
     override fun onStart(isInitialSync: Boolean) {
         val notificationSubtitleRes = if (isInitialSync) {
-            R.string.notification_initial_sync
+            CommonStrings.notification_initial_sync
         } else {
-            R.string.notification_listening_for_notifications
+            CommonStrings.notification_listening_for_notifications
         }
         val notification = notificationUtils.buildForegroundServiceNotification(notificationSubtitleRes, false)
         startForegroundCompat(NotificationUtils.NOTIFICATION_ID_FOREGROUND_SERVICE, notification)

@@ -32,6 +32,7 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.pushers.Pusher
 import javax.inject.Inject
 
@@ -63,7 +64,7 @@ class PushGatewaysFragment :
 
     override fun onResume() {
         super.onResume()
-        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(R.string.settings_notifications_targets)
+        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(CommonStrings.settings_notifications_targets)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -76,7 +77,7 @@ class PushGatewaysFragment :
             when (it) {
                 is PushGatewayViewEvents.RemovePusherFailed -> {
                     MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(R.string.dialog_title_error)
+                            .setTitle(CommonStrings.dialog_title_error)
                             .setMessage(errorFormatter.toHumanReadable(it.cause))
                             .setPositiveButton(android.R.string.ok, null)
                             .show()

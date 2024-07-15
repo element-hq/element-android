@@ -29,6 +29,7 @@ import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.platform.CheckableConstraintLayout
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.list.UnreadCounterBadgeView
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.util.MatrixItem
 
 @EpoxyModelClass
@@ -59,7 +60,7 @@ abstract class NewSpaceSummaryItem : VectorEpoxyModel<NewSpaceSummaryItem.Holder
         holder.chevron.isVisible = hasChildren
         holder.chevron.setImageResource(if (expanded) R.drawable.ic_expand_more else R.drawable.ic_arrow_right)
         holder.chevron.contentDescription = context.getString(
-                if (expanded) R.string.a11y_collapse_space_children else R.string.a11y_expand_space_children,
+                if (expanded) CommonStrings.a11y_collapse_space_children else CommonStrings.a11y_expand_space_children,
                 matrixItem.displayName,
         )
 

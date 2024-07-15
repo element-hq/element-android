@@ -30,6 +30,7 @@ import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.features.notifications.toNotificationAction
 import im.vector.app.features.themes.ThemeUtils
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.pushrules.getActions
 import org.matrix.android.sdk.api.session.pushrules.rest.PushRule
 
@@ -48,7 +49,7 @@ abstract class PushRuleItem : VectorEpoxyModel<PushRuleItem.Holder>(R.layout.ite
             holder.view.setBackgroundColor(Color.TRANSPARENT)
             holder.ruleId.text = pushRule.ruleId
         } else {
-            holder.view.setBackgroundColor(ThemeUtils.getColor(context, R.attr.vctr_header_background))
+            holder.view.setBackgroundColor(ThemeUtils.getColor(context, im.vector.lib.ui.styles.R.attr.vctr_header_background))
             holder.ruleId.text = "[Disabled] ${pushRule.ruleId}"
         }
         val actions = pushRule.getActions()
@@ -60,13 +61,13 @@ abstract class PushRuleItem : VectorEpoxyModel<PushRuleItem.Holder>(R.layout.ite
 
             if (notifAction.shouldNotify && !notifAction.soundName.isNullOrBlank()) {
                 holder.actionIcon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_action_notify_noisy))
-                holder.actionIcon.contentDescription = context.getString(R.string.a11y_rule_notify_noisy)
+                holder.actionIcon.contentDescription = context.getString(CommonStrings.a11y_rule_notify_noisy)
             } else if (notifAction.shouldNotify) {
                 holder.actionIcon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_action_notify_silent))
-                holder.actionIcon.contentDescription = context.getString(R.string.a11y_rule_notify_silent)
+                holder.actionIcon.contentDescription = context.getString(CommonStrings.a11y_rule_notify_silent)
             } else {
                 holder.actionIcon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_action_dont_notify))
-                holder.actionIcon.contentDescription = context.getString(R.string.a11y_rule_notify_off)
+                holder.actionIcon.contentDescription = context.getString(CommonStrings.a11y_rule_notify_off)
             }
 
             val description = StringBuffer()

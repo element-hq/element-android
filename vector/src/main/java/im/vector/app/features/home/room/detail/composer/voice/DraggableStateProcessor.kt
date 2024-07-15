@@ -18,7 +18,6 @@ package im.vector.app.features.home.room.detail.composer.voice
 
 import android.content.res.Resources
 import android.view.MotionEvent
-import im.vector.app.R
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView.DraggingState
 import kotlin.math.absoluteValue
@@ -30,7 +29,7 @@ class DraggableStateProcessor(
 
     private val distanceToLock = dimensionConverter.dpToPx(48).toFloat()
     private val distanceToCancel = dimensionConverter.dpToPx(120).toFloat()
-    private val rtlXMultiplier = resources.getInteger(R.integer.rtl_x_multiplier)
+    private val rtlXMultiplier = resources.getInteger(im.vector.lib.ui.styles.R.integer.rtl_x_multiplier)
 
     private var firstX: Float = 0f
     private var firstY: Float = 0f

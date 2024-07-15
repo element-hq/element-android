@@ -59,6 +59,8 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsBaseFragment
 import im.vector.app.features.settings.VectorSettingsFragmentInteractionListener
 import im.vector.lib.core.utils.compat.getParcelableExtraCompat
+import im.vector.lib.strings.CommonPlurals
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -85,7 +87,7 @@ class VectorSettingsNotificationFragment :
     @Inject lateinit var notificationPermissionManager: NotificationPermissionManager
     @Inject lateinit var ensureFcmTokenIsRetrievedUseCase: EnsureFcmTokenIsRetrievedUseCase
 
-    override var titleRes: Int = R.string.settings_notifications
+    override var titleRes: Int = CommonStrings.settings_notifications
     override val preferenceXmlRes = R.xml.vector_settings_notifications
 
     private var interactionListener: VectorSettingsFragmentInteractionListener? = null
@@ -259,7 +261,7 @@ class VectorSettingsNotificationFragment :
             category.removeAll()
             if (emails.isEmpty()) {
                 val vectorPreference = VectorPreference(requireContext())
-                vectorPreference.title = resources.getString(R.string.settings_notification_emails_no_emails)
+                vectorPreference.title = resources.getString(CommonStrings.settings_notification_emails_no_emails)
                 category.addPreference(vectorPreference)
                 vectorPreference.setOnPreferenceClickListener {
                     interactionListener?.navigateToEmailAndPhoneNumbers()
@@ -268,7 +270,7 @@ class VectorSettingsNotificationFragment :
             } else {
                 emails.forEach { (emailPid, isEnabled) ->
                     val pref = VectorSwitchPreference(requireContext())
-                    pref.title = resources.getString(R.string.settings_notification_emails_enable_for_email, emailPid.email)
+                    pref.title = resources.getString(CommonStrings.settings_notification_emails_enable_for_email, emailPid.email)
                     pref.isChecked = isEnabled
                     pref.setTransactionalSwitchChangeListener(lifecycleScope) { isChecked ->
                         if (isChecked) {
@@ -305,9 +307,9 @@ class VectorSettingsNotificationFragment :
     private fun refreshBackgroundSyncPrefs() {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_FDROID_BACKGROUND_SYNC_MODE)?.let {
             it.summary = when (vectorPreferences.getFdroidSyncBackgroundMode()) {
-                BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY -> getString(R.string.settings_background_fdroid_sync_mode_battery)
-                BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME -> getString(R.string.settings_background_fdroid_sync_mode_real_time)
-                BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_DISABLED -> getString(R.string.settings_background_fdroid_sync_mode_disabled)
+                BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY -> getString(CommonStrings.settings_background_fdroid_sync_mode_battery)
+                BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME -> getString(CommonStrings.settings_background_fdroid_sync_mode_real_time)
+                BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_DISABLED -> getString(CommonStrings.settings_background_fdroid_sync_mode_disabled)
             }
         }
 
@@ -337,7 +339,7 @@ class VectorSettingsNotificationFragment :
      * @return the text
      */
     private fun secondsToText(seconds: Int): String {
-        return resources.getQuantityString(R.plurals.seconds, seconds, seconds)
+        return resources.getQuantityString(CommonPlurals.seconds, seconds, seconds)
     }
 
     private fun handleSystemPreference() {
@@ -476,7 +478,7 @@ class VectorSettingsNotificationFragment :
 
                             // revert the check box
                             switchPref.isChecked = !switchPref.isChecked
-                            Toast.makeText(activity, R.string.unknown_error, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(activity, CommonStrings.unknown_error, Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
@@ -492,7 +494,7 @@ private fun SwitchPreference.setTransactionalSwitchChangeListener(scope: Corouti
                 transaction(isChecked as Boolean)
             } catch (failure: Throwable) {
                 switchPreference.isChecked = originalState
-                Toast.makeText(switchPreference.context, R.string.unknown_error, Toast.LENGTH_SHORT).show()
+                Toast.makeText(switchPreference.context, CommonStrings.unknown_error, Toast.LENGTH_SHORT).show()
             }
         }
         true

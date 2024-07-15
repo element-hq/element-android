@@ -19,7 +19,6 @@ package im.vector.app.push.fcm
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.pushers.FcmHelper
 import im.vector.app.core.pushers.PushParser
@@ -70,7 +69,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
                         pushKey = token,
                         gateway = mdmService.getData(
                                 mdmData = MdmData.DefaultPushGatewayUrl,
-                                defaultValue = getString(R.string.pusher_http_url),
+                                defaultValue = getString(im.vector.app.config.R.string.pusher_http_url),
                         ),
                 )
             }

@@ -38,6 +38,7 @@ import im.vector.app.features.login.EMS_LINK
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewState
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.failure.Failure
@@ -93,19 +94,19 @@ class FtueAuthServerUrlFormFragment :
         when (state.serverType) {
             ServerType.EMS -> {
                 views.loginServerUrlFormIcon.isVisible = true
-                views.loginServerUrlFormTitle.text = getString(R.string.login_connect_to_modular)
-                views.loginServerUrlFormText.text = getString(R.string.login_server_url_form_modular_text)
+                views.loginServerUrlFormTitle.text = getString(CommonStrings.login_connect_to_modular)
+                views.loginServerUrlFormText.text = getString(CommonStrings.login_server_url_form_modular_text)
                 views.loginServerUrlFormLearnMore.isVisible = true
-                views.loginServerUrlFormHomeServerUrlTil.hint = getText(R.string.login_server_url_form_modular_hint)
-                views.loginServerUrlFormNotice.text = getString(R.string.login_server_url_form_modular_notice)
+                views.loginServerUrlFormHomeServerUrlTil.hint = getText(CommonStrings.login_server_url_form_modular_hint)
+                views.loginServerUrlFormNotice.text = getString(CommonStrings.login_server_url_form_modular_notice)
             }
             else -> {
                 views.loginServerUrlFormIcon.isVisible = false
-                views.loginServerUrlFormTitle.text = getString(R.string.login_server_other_title)
-                views.loginServerUrlFormText.text = getString(R.string.login_connect_to_a_custom_server)
+                views.loginServerUrlFormTitle.text = getString(CommonStrings.login_server_other_title)
+                views.loginServerUrlFormText.text = getString(CommonStrings.login_connect_to_a_custom_server)
                 views.loginServerUrlFormLearnMore.isVisible = false
-                views.loginServerUrlFormHomeServerUrlTil.hint = getText(R.string.login_server_url_form_other_hint)
-                views.loginServerUrlFormNotice.text = getString(R.string.login_server_url_form_common_notice)
+                views.loginServerUrlFormHomeServerUrlTil.hint = getText(CommonStrings.login_server_url_form_other_hint)
+                views.loginServerUrlFormNotice.text = getString(CommonStrings.login_server_url_form_common_notice)
             }
         }
         val completions = state.knownCustomHomeServersUrls + if (buildMeta.isDebug) listOf("http://10.0.2.2:8080") else emptyList()
@@ -142,7 +143,7 @@ class FtueAuthServerUrlFormFragment :
 
         when {
             serverUrl.isBlank() -> {
-                views.loginServerUrlFormHomeServerUrlTil.error = getString(R.string.login_error_invalid_home_server)
+                views.loginServerUrlFormHomeServerUrlTil.error = getString(CommonStrings.login_error_invalid_home_server)
             }
             else -> {
                 views.loginServerUrlFormHomeServerUrl.setText(serverUrl, false /* to avoid completion dialog flicker*/)
@@ -160,7 +161,7 @@ class FtueAuthServerUrlFormFragment :
         views.loginServerUrlFormHomeServerUrlTil.error = if (throwable is Failure.NetworkConnection &&
                 throwable.ioException is UnknownHostException) {
             // Invalid homeserver?
-            getString(R.string.login_error_homeserver_not_found)
+            getString(CommonStrings.login_error_homeserver_not_found)
         } else {
             errorFormatter.toHumanReadable(throwable)
         }

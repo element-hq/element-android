@@ -26,6 +26,8 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.tools.createLinkMovementMethod
 import im.vector.app.features.home.room.detail.timeline.tools.linkify
+import im.vector.lib.strings.CommonPlurals
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.session.user.model.User
@@ -56,18 +58,18 @@ class SpaceCardRenderer @Inject constructor(
             inCard.matrixToCardAliasText.setTextOrHide(spaceSummary.canonicalAlias)
             inCard.matrixToCardDescText.setTextOrHide(spaceSummary.topic.linkify(matrixLinkCallback))
             if (spaceSummary.isPublic) {
-                inCard.matrixToAccessText.setTextOrHide(stringProvider.getString(R.string.public_space))
+                inCard.matrixToAccessText.setTextOrHide(stringProvider.getString(CommonStrings.public_space))
                 inCard.matrixToAccessImage.isVisible = true
                 inCard.matrixToAccessImage.setImageResource(R.drawable.ic_public_room)
             } else {
-                inCard.matrixToAccessText.setTextOrHide(stringProvider.getString(R.string.private_space))
+                inCard.matrixToAccessText.setTextOrHide(stringProvider.getString(CommonStrings.private_space))
                 inCard.matrixToAccessImage.isVisible = true
                 inCard.matrixToAccessImage.setImageResource(R.drawable.ic_room_private)
             }
             val memberCount = spaceSummary.joinedMembersCount ?: 0
             if (memberCount != 0) {
                 inCard.matrixToMemberPills.isVisible = true
-                inCard.spaceChildMemberCountText.text = stringProvider.getQuantityString(R.plurals.room_title_members, memberCount, memberCount)
+                inCard.spaceChildMemberCountText.text = stringProvider.getQuantityString(CommonPlurals.room_title_members, memberCount, memberCount)
             } else {
                 // hide the pill
                 inCard.matrixToMemberPills.isVisible = false
@@ -106,18 +108,18 @@ class SpaceCardRenderer @Inject constructor(
             inCard.matrixToCardAliasText.setTextOrHide(spaceChildInfo.canonicalAlias)
             inCard.matrixToCardDescText.setTextOrHide(spaceChildInfo.topic?.linkify(matrixLinkCallback))
             if (spaceChildInfo.worldReadable) {
-                inCard.matrixToAccessText.setTextOrHide(stringProvider.getString(R.string.public_space))
+                inCard.matrixToAccessText.setTextOrHide(stringProvider.getString(CommonStrings.public_space))
                 inCard.matrixToAccessImage.isVisible = true
                 inCard.matrixToAccessImage.setImageResource(R.drawable.ic_public_room)
             } else {
-                inCard.matrixToAccessText.setTextOrHide(stringProvider.getString(R.string.private_space))
+                inCard.matrixToAccessText.setTextOrHide(stringProvider.getString(CommonStrings.private_space))
                 inCard.matrixToAccessImage.isVisible = true
                 inCard.matrixToAccessImage.setImageResource(R.drawable.ic_room_private)
             }
             val memberCount = spaceChildInfo.activeMemberCount ?: 0
             if (memberCount != 0) {
                 inCard.matrixToMemberPills.isVisible = true
-                inCard.spaceChildMemberCountText.text = stringProvider.getQuantityString(R.plurals.room_title_members, memberCount, memberCount)
+                inCard.spaceChildMemberCountText.text = stringProvider.getQuantityString(CommonPlurals.room_title_members, memberCount, memberCount)
             } else {
                 // hide the pill
                 inCard.matrixToMemberPills.isVisible = false
@@ -145,7 +147,7 @@ class SpaceCardRenderer @Inject constructor(
             }
             inCard.peopleYouMayKnowText.setTextOrHide(
                     stringProvider.getQuantityString(
-                            R.plurals.space_people_you_know,
+                            CommonPlurals.space_people_you_know,
                             peopleYouKnow.count(),
                             peopleYouKnow.count()
                     )

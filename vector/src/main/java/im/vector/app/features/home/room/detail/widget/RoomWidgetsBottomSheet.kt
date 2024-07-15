@@ -23,7 +23,6 @@ import android.view.ViewGroup
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
@@ -33,6 +32,7 @@ import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.RoomDetailViewState
 import im.vector.app.features.home.room.detail.TimelineViewModel
 import im.vector.app.features.navigation.Navigator
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import javax.inject.Inject
 
@@ -57,9 +57,9 @@ class RoomWidgetsBottomSheet :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         views.bottomSheetRecyclerView.configureWith(epoxyController, hasFixedSize = false)
-        views.bottomSheetTitle.text = getString(R.string.active_widgets_title)
+        views.bottomSheetTitle.text = getString(CommonStrings.active_widgets_title)
         views.bottomSheetTitle.textSize = 20f
-        views.bottomSheetTitle.setTextColor(colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
+        views.bottomSheetTitle.setTextColor(colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_primary))
         epoxyController.listener = this
         timelineViewModel.onAsync(RoomDetailViewState::activeRoomWidgets) {
             epoxyController.setData(it)

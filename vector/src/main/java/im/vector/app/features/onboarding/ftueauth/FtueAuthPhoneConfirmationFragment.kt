@@ -23,7 +23,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.args
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.associateContentStateWith
 import im.vector.app.core.extensions.clearErrorOnChange
 import im.vector.app.core.extensions.content
@@ -31,6 +30,7 @@ import im.vector.app.core.extensions.setOnImeDoneListener
 import im.vector.app.databinding.FragmentFtuePhoneConfirmationBinding
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.RegisterAction
+import im.vector.lib.strings.CommonStrings
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.failure.Failure
 
@@ -55,7 +55,7 @@ class FtueAuthPhoneConfirmationFragment :
     }
 
     private fun setupViews() {
-        views.phoneConfirmationHeaderSubtitle.text = getString(R.string.ftue_auth_phone_confirmation_subtitle, params.msisdn)
+        views.phoneConfirmationHeaderSubtitle.text = getString(CommonStrings.ftue_auth_phone_confirmation_subtitle, params.msisdn)
         views.phoneConfirmationInput.associateContentStateWith(button = views.phoneConfirmationSubmit)
         views.phoneConfirmationInput.setOnImeDoneListener { submitConfirmationCode() }
         views.phoneConfirmationInput.clearErrorOnChange(viewLifecycleOwner)
@@ -71,7 +71,7 @@ class FtueAuthPhoneConfirmationFragment :
     override fun onError(throwable: Throwable) {
         views.phoneConfirmationInput.error = when (throwable) {
             // The entered code is not correct
-            is Failure.SuccessError -> getString(R.string.login_validation_code_is_not_correct)
+            is Failure.SuccessError -> getString(CommonStrings.login_validation_code_is_not_correct)
             else -> errorFormatter.toHumanReadable(throwable)
         }
     }

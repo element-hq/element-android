@@ -36,6 +36,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentGenericStateViewRecyclerBinding
 import im.vector.app.features.roomprofile.uploads.RoomUploadsAction
 import im.vector.app.features.roomprofile.uploads.RoomUploadsViewModel
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.room.uploads.UploadEvent
 import javax.inject.Inject
 
@@ -106,7 +107,7 @@ class RoomUploadsFilesFragment :
                         loadMore()
                     } else {
                         views.genericStateViewListStateView.state = StateView.State.Empty(
-                                title = getString(R.string.uploads_files_no_result),
+                                title = getString(CommonStrings.uploads_files_no_result),
                                 image = ContextCompat.getDrawable(requireContext(), R.drawable.ic_file)
                         )
                     }

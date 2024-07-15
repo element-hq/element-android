@@ -24,11 +24,11 @@ import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
+import im.vector.lib.strings.CommonStrings
 import javax.inject.Inject
 
 /**
@@ -62,7 +62,7 @@ class HomeserverSettingsFragment :
 
     override fun onResume() {
         super.onResume()
-        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(R.string.settings_home_server)
+        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(CommonStrings.settings_home_server)
     }
 
     override fun retry() {

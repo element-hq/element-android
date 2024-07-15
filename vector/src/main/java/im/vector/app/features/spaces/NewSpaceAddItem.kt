@@ -36,7 +36,7 @@ abstract class NewSpaceAddItem : VectorEpoxyModel<NewSpaceAddItem.Holder>(R.layo
         super.bind(holder)
         holder.view.onClick(listener)
 
-        holder.plus.imageTintList = ColorStateList.valueOf(ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_primary))
+        holder.plus.imageTintList = ColorStateList.valueOf(ThemeUtils.getColor(holder.view.context, im.vector.lib.ui.styles.R.attr.vctr_content_primary))
     }
 
     class Holder : VectorEpoxyHolder() {

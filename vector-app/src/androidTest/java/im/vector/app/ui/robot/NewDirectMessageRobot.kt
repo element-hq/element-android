@@ -20,16 +20,17 @@ import androidx.test.espresso.Espresso
 import androidx.test.espresso.matcher.ViewMatchers
 import im.vector.app.R
 import im.vector.app.waitForView
+import im.vector.lib.strings.CommonStrings
 
 class NewDirectMessageRobot {
 
     fun verifyQrCodeButton() {
         Espresso.onView(ViewMatchers.withId(R.id.userListRecyclerView))
-                .perform(waitForView(ViewMatchers.withText(R.string.qr_code)))
+                .perform(waitForView(ViewMatchers.withText(CommonStrings.qr_code)))
     }
 
     fun verifyInviteFriendsButton() {
         Espresso.onView(ViewMatchers.withId(R.id.userListRecyclerView))
-                .perform(waitForView(ViewMatchers.withText(R.string.invite_friends)))
+                .perform(waitForView(ViewMatchers.withText(CommonStrings.invite_friends)))
     }
 }

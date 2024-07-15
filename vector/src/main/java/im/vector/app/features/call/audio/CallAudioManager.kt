@@ -23,6 +23,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.content.getSystemService
 import im.vector.app.R
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.extensions.orFalse
 import timber.log.Timber
 import java.util.concurrent.Executors
@@ -34,10 +35,10 @@ class CallAudioManager(private val context: Context, val configChange: (() -> Un
     private var audioDeviceRouter: AudioDeviceRouter? = null
 
     sealed class Device(@StringRes val titleRes: Int, @DrawableRes val drawableRes: Int) {
-        object Phone : Device(R.string.sound_device_phone, R.drawable.ic_sound_device_phone)
-        object Speaker : Device(R.string.sound_device_speaker, R.drawable.ic_sound_device_speaker)
-        object Headset : Device(R.string.sound_device_headset, R.drawable.ic_sound_device_headphone)
-        data class WirelessHeadset(val name: String?) : Device(R.string.sound_device_wireless_headset, R.drawable.ic_sound_device_wireless)
+        object Phone : Device(CommonStrings.sound_device_phone, R.drawable.ic_sound_device_phone)
+        object Speaker : Device(CommonStrings.sound_device_speaker, R.drawable.ic_sound_device_speaker)
+        object Headset : Device(CommonStrings.sound_device_headset, R.drawable.ic_sound_device_headphone)
+        data class WirelessHeadset(val name: String?) : Device(CommonStrings.sound_device_wireless_headset, R.drawable.ic_sound_device_wireless)
     }
 
     enum class Mode {

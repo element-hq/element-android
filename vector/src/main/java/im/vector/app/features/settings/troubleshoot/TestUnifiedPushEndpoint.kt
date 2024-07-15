@@ -16,23 +16,23 @@
 
 package im.vector.app.features.settings.troubleshoot
 
-import im.vector.app.R
 import im.vector.app.core.pushers.UnifiedPushHelper
 import im.vector.app.core.resources.StringProvider
+import im.vector.lib.strings.CommonStrings
 import javax.inject.Inject
 
 class TestUnifiedPushEndpoint @Inject constructor(
         private val stringProvider: StringProvider,
         private val unifiedPushHelper: UnifiedPushHelper,
-) : TroubleshootTest(R.string.settings_troubleshoot_test_current_endpoint_title) {
+) : TroubleshootTest(CommonStrings.settings_troubleshoot_test_current_endpoint_title) {
 
     override fun perform(testParameters: TestParameters) {
         val endpoint = unifiedPushHelper.getPrivacyFriendlyUpEndpoint()
         if (endpoint != null) {
-            description = stringProvider.getString(R.string.settings_troubleshoot_test_current_endpoint_success, endpoint)
+            description = stringProvider.getString(CommonStrings.settings_troubleshoot_test_current_endpoint_success, endpoint)
             status = TestStatus.SUCCESS
         } else {
-            description = stringProvider.getString(R.string.settings_troubleshoot_test_current_endpoint_failed)
+            description = stringProvider.getString(CommonStrings.settings_troubleshoot_test_current_endpoint_failed)
             status = TestStatus.FAILED
         }
     }

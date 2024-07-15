@@ -17,8 +17,8 @@
 package im.vector.app.ui.robot.settings
 
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
-import im.vector.app.R
 import im.vector.app.clickOnAndGoBack
+import im.vector.lib.strings.CommonStrings
 
 class SettingsRobot {
 
@@ -29,45 +29,45 @@ class SettingsRobot {
     }
 
     fun general(block: SettingsGeneralRobot.() -> Unit) {
-        clickOnAndGoBack(R.string.settings_general_title) { block(SettingsGeneralRobot()) }
+        clickOnAndGoBack(CommonStrings.settings_general_title) { block(SettingsGeneralRobot()) }
     }
 
     fun notifications(block: SettingsNotificationsRobot.() -> Unit) {
-        clickOnAndGoBack(R.string.settings_notifications) { block(SettingsNotificationsRobot()) }
+        clickOnAndGoBack(CommonStrings.settings_notifications) { block(SettingsNotificationsRobot()) }
     }
 
     fun preferences(block: SettingsPreferencesRobot.() -> Unit) {
-        clickOnAndGoBack(R.string.settings_preferences) { block(SettingsPreferencesRobot()) }
+        clickOnAndGoBack(CommonStrings.settings_preferences) { block(SettingsPreferencesRobot()) }
     }
 
     fun voiceAndVideo(block: () -> Unit = {}) {
-        clickOnAndGoBack(R.string.preference_voice_and_video) { block() }
+        clickOnAndGoBack(CommonStrings.preference_voice_and_video) { block() }
     }
 
     fun securityAndPrivacy(block: SettingsSecurityRobot.() -> Unit) {
-        clickOnAndGoBack(R.string.settings_security_and_privacy) { block(SettingsSecurityRobot()) }
+        clickOnAndGoBack(CommonStrings.settings_security_and_privacy) { block(SettingsSecurityRobot()) }
     }
 
     fun labs(shouldGoBack: Boolean = true, block: () -> Unit = {}) {
         if (shouldGoBack) {
-            clickOnAndGoBack(R.string.room_settings_labs_pref_title) { block() }
+            clickOnAndGoBack(CommonStrings.room_settings_labs_pref_title) { block() }
         } else {
-            clickOn(R.string.room_settings_labs_pref_title)
+            clickOn(CommonStrings.room_settings_labs_pref_title)
             block()
         }
     }
 
     fun advancedSettings(block: SettingsAdvancedRobot.() -> Unit) {
-        clickOnAndGoBack(R.string.settings_advanced_settings) {
+        clickOnAndGoBack(CommonStrings.settings_advanced_settings) {
             block(SettingsAdvancedRobot())
         }
     }
 
     fun helpAndAbout(block: SettingsHelpRobot.() -> Unit) {
-        clickOnAndGoBack(R.string.preference_root_help_about) { block(SettingsHelpRobot()) }
+        clickOnAndGoBack(CommonStrings.preference_root_help_about) { block(SettingsHelpRobot()) }
     }
 
     fun legals(block: SettingsLegalsRobot.() -> Unit) {
-        clickOnAndGoBack(R.string.preference_root_legals) { block(SettingsLegalsRobot()) }
+        clickOnAndGoBack(CommonStrings.preference_root_legals) { block(SettingsLegalsRobot()) }
     }
 }

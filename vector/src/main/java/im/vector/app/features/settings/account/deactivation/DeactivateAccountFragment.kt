@@ -25,7 +25,6 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.mvrx.fragmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentDeactivateAccountBinding
@@ -34,6 +33,7 @@ import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.settings.VectorSettingsActivity
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.session.uia.exceptions.UiaCancelledException
 
@@ -73,7 +73,7 @@ class DeactivateAccountFragment :
 
     override fun onResume() {
         super.onResume()
-        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(R.string.deactivate_account_title)
+        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(CommonStrings.deactivate_account_title)
     }
 
     private var settingsActivity: VectorSettingsActivity? = null
@@ -131,7 +131,7 @@ class DeactivateAccountFragment :
                             requireContext(),
                             it.registrationFlowResponse,
                             it.lastErrorCode,
-                            getString(R.string.deactivate_account_title)
+                            getString(CommonStrings.deactivate_account_title)
                     ).let { intent ->
                         reAuthActivityResultLauncher.launch(intent)
                     }

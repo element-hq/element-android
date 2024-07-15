@@ -20,14 +20,14 @@ class SettingsHelpRobot {
 
     fun crawl() {
         /*
-        clickOn(R.string.settings_app_info_link_title)
+        clickOn(CommonStrings.settings_app_info_link_title)
         Cannot go back...
         pressBack()
-        clickOn(R.string.settings_copyright)
+        clickOn(CommonStrings.settings_copyright)
         pressBack()
-        clickOn(R.string.settings_app_term_conditions)
+        clickOn(CommonStrings.settings_app_term_conditions)
         pressBack()
-        clickOn(R.string.settings_privacy_policy)
+        clickOn(CommonStrings.settings_privacy_policy)
         pressBack()
          */
     }

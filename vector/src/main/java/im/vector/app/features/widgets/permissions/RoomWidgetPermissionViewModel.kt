@@ -19,10 +19,10 @@ import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -60,8 +60,8 @@ class RoomWidgetPermissionViewModel @AssistedInject constructor(
                     // For now put all
                     if (widget.type == WidgetType.Jitsi) {
                         val infoShared = listOf(
-                                R.string.room_widget_permission_display_name,
-                                R.string.room_widget_permission_avatar_url
+                                CommonStrings.room_widget_permission_display_name,
+                                CommonStrings.room_widget_permission_avatar_url
                         )
                         RoomWidgetPermissionViewState.WidgetPermissionData(
                                 widget = widget,
@@ -71,12 +71,12 @@ class RoomWidgetPermissionViewModel @AssistedInject constructor(
                         )
                     } else {
                         val infoShared = listOf(
-                                R.string.room_widget_permission_display_name,
-                                R.string.room_widget_permission_avatar_url,
-                                R.string.room_widget_permission_user_id,
-                                R.string.room_widget_permission_theme,
-                                R.string.room_widget_permission_widget_id,
-                                R.string.room_widget_permission_room_id
+                                CommonStrings.room_widget_permission_display_name,
+                                CommonStrings.room_widget_permission_avatar_url,
+                                CommonStrings.room_widget_permission_user_id,
+                                CommonStrings.room_widget_permission_theme,
+                                CommonStrings.room_widget_permission_widget_id,
+                                CommonStrings.room_widget_permission_room_id
                         )
                         RoomWidgetPermissionViewState.WidgetPermissionData(
                                 widget = widget,

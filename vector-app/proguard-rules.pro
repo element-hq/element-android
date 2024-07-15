@@ -80,3 +80,16 @@
 # JNA
 -keep class com.sun.jna.** { *; }
 -keep class * implements com.sun.jna.** { *; }
+
+# New
+-dontwarn com.google.appengine.api.urlfetch.**
+-dontwarn com.google.common.io.LimitInputStream
+-dontwarn com.google.firebase.analytics.connector.AnalyticsConnector
+-dontwarn com.google.javascript.jscomp.**
+-dontwarn com.likethesalad.android.templates.provider.api.TemplatesProvider
+-dontwarn com.yahoo.platform.yui.compressor.**
+-dontwarn java.awt.**
+-dontwarn org.apache.velocity.**
+-dontwarn org.commonmark.ext.gfm.strikethrough.Strikethrough
+-dontwarn org.mozilla.javascript.**
+-dontwarn org.slf4j.**

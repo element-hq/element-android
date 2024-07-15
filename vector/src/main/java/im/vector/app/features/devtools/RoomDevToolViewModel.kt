@@ -24,12 +24,12 @@ import com.squareup.moshi.Types
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import org.matrix.android.sdk.api.query.QueryStringValue
@@ -168,19 +168,19 @@ class RoomDevToolViewModel @AssistedInject constructor(
         viewModelScope.launch {
             try {
                 val room = session.getRoom(initialState.roomId)
-                        ?: throw IllegalArgumentException(stringProvider.getString(R.string.room_error_not_found))
+                        ?: throw IllegalArgumentException(stringProvider.getString(CommonStrings.room_error_not_found))
 
                 val adapter = MatrixJsonParser.getMoshi()
                         .adapter<JsonDict>(Types.newParameterizedType(Map::class.java, String::class.java, Any::class.java))
                 val json = adapter.fromJson(state.editedContent ?: "")
-                        ?: throw IllegalArgumentException(stringProvider.getString(R.string.dev_tools_error_no_content))
+                        ?: throw IllegalArgumentException(stringProvider.getString(CommonStrings.dev_tools_error_no_content))
 
                 room.stateService().sendStateEvent(
                         state.selectedEvent?.type.orEmpty(),
                         state.selectedEvent?.stateKey.orEmpty(),
                         json
                 )
-                _viewEvents.post(DevToolsViewEvents.ShowSnackMessage(stringProvider.getString(R.string.dev_tools_success_state_event)))
+                _viewEvents.post(DevToolsViewEvents.ShowSnackMessage(stringProvider.getString(CommonStrings.dev_tools_success_state_event)))
                 setState {
                     copy(
                             modalLoading = Success(Unit),
@@ -201,15 +201,15 @@ class RoomDevToolViewModel @AssistedInject constructor(
         viewModelScope.launch {
             try {
                 val room = session.getRoom(initialState.roomId)
-                        ?: throw IllegalArgumentException(stringProvider.getString(R.string.room_error_not_found))
+                        ?: throw IllegalArgumentException(stringProvider.getString(CommonStrings.room_error_not_found))
 
                 val adapter = MatrixJsonParser.getMoshi()
                         .adapter<JsonDict>(Types.newParameterizedType(Map::class.java, String::class.java, Any::class.java))
                 val json = adapter.fromJson(state.sendEventDraft?.content ?: "")
-                        ?: throw IllegalArgumentException(stringProvider.getString(R.string.dev_tools_error_no_content))
+                        ?: throw IllegalArgumentException(stringProvider.getString(CommonStrings.dev_tools_error_no_content))
 
                 val eventType = state.sendEventDraft?.type
-                        ?: throw IllegalArgumentException(stringProvider.getString(R.string.dev_tools_error_no_message_type))
+                        ?: throw IllegalArgumentException(stringProvider.getString(CommonStrings.dev_tools_error_no_message_type))
 
                 if (isState) {
                     room.stateService().sendStateEvent(
@@ -221,14 +221,14 @@ class RoomDevToolViewModel @AssistedInject constructor(
                     // can we try to do some validation??
                     // val validParse = MoshiProvider.providesMoshi().adapter(MessageContent::class.java).fromJson(it.sendEventDraft.content ?: "")
                     json.toModel<MessageContent>(catchError = false)
-                            ?: throw IllegalArgumentException(stringProvider.getString(R.string.dev_tools_error_malformed_event))
+                            ?: throw IllegalArgumentException(stringProvider.getString(CommonStrings.dev_tools_error_malformed_event))
                     room.sendService().sendEvent(
                             eventType,
                             json
                     )
                 }
 
-                _viewEvents.post(DevToolsViewEvents.ShowSnackMessage(stringProvider.getString(R.string.dev_tools_success_event)))
+                _viewEvents.post(DevToolsViewEvents.ShowSnackMessage(stringProvider.getString(CommonStrings.dev_tools_success_event)))
                 setState {
                     copy(
                             modalLoading = Success(Unit),

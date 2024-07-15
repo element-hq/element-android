@@ -46,6 +46,7 @@ import im.vector.app.features.login.terms.LoginTermsFragmentArgument
 import im.vector.app.features.onboarding.AuthenticationDescription
 import im.vector.app.features.pin.UnlockedActivity
 import im.vector.lib.core.utils.compat.getParcelableExtraCompat
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.auth.SSOAction
 import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.Stage
@@ -75,7 +76,7 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
                 // Find findViewById does not work, I do not know why
                 // findViewById<View?>(R.id.loginLogo)
                 ?.children
-                ?.firstOrNull { it.id == R.id.loginLogo }
+                ?.firstOrNull { it.id == im.vector.lib.ui.styles.R.id.loginLogo }
                 ?.let { ft.addSharedElement(it, ViewCompat.getTransitionName(it) ?: "") }
         ft.setCustomAnimations(enterAnim, exitAnim, popEnterAnim, popExitAnim)
     }
@@ -134,9 +135,9 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
             }
             is LoginViewEvents.OutdatedHomeserver -> {
                 MaterialAlertDialogBuilder(this)
-                        .setTitle(R.string.login_error_outdated_homeserver_title)
-                        .setMessage(R.string.login_error_outdated_homeserver_warning_content)
-                        .setPositiveButton(R.string.ok, null)
+                        .setTitle(CommonStrings.login_error_outdated_homeserver_title)
+                        .setMessage(CommonStrings.login_error_outdated_homeserver_warning_content)
+                        .setPositiveButton(CommonStrings.ok, null)
                         .show()
                 Unit
             }
@@ -246,9 +247,9 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
 
         // And inform the user
         MaterialAlertDialogBuilder(this)
-                .setTitle(R.string.dialog_title_error)
-                .setMessage(getString(R.string.login_sso_error_message, onWebLoginError.description, onWebLoginError.errorCode))
-                .setPositiveButton(R.string.ok, null)
+                .setTitle(CommonStrings.dialog_title_error)
+                .setMessage(getString(CommonStrings.login_sso_error_message, onWebLoginError.description, onWebLoginError.errorCode))
+                .setPositiveButton(CommonStrings.ok, null)
                 .show()
     }
 
@@ -310,48 +311,48 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
     /**
      * Handle the SSO redirection here.
      */
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
 
-        intent?.data
+        intent.data
                 ?.let { tryOrNull { it.getQueryParameter("loginToken") } }
                 ?.let { loginViewModel.handle(LoginAction.LoginWithToken(it)) }
     }
 
+    @Suppress("OVERRIDE_DEPRECATION")
     override fun onBackPressed() {
         validateBackPressed {
-            @Suppress("DEPRECATION")
             super.onBackPressed()
         }
     }
 
     private fun onRegistrationStageNotSupported() {
         MaterialAlertDialogBuilder(this)
-                .setTitle(R.string.app_name)
-                .setMessage(getString(R.string.login_registration_not_supported))
-                .setPositiveButton(R.string.yes) { _, _ ->
+                .setTitle(buildMeta.applicationName)
+                .setMessage(getString(CommonStrings.login_registration_not_supported))
+                .setPositiveButton(CommonStrings.yes) { _, _ ->
                     addFragmentToBackstack(
                             views.loginFragmentContainer,
                             LoginWebFragment::class.java,
                             option = commonOption
                     )
                 }
-                .setNegativeButton(R.string.no, null)
+                .setNegativeButton(CommonStrings.no, null)
                 .show()
     }
 
     private fun onLoginModeNotSupported(supportedTypes: List<String>) {
         MaterialAlertDialogBuilder(this)
-                .setTitle(R.string.app_name)
-                .setMessage(getString(R.string.login_mode_not_supported, supportedTypes.joinToString { "'$it'" }))
-                .setPositiveButton(R.string.yes) { _, _ ->
+                .setTitle(buildMeta.applicationName)
+                .setMessage(getString(CommonStrings.login_mode_not_supported, supportedTypes.joinToString { "'$it'" }))
+                .setPositiveButton(CommonStrings.yes) { _, _ ->
                     addFragmentToBackstack(
                             views.loginFragmentContainer,
                             LoginWebFragment::class.java,
                             option = commonOption
                     )
                 }
-                .setNegativeButton(R.string.no, null)
+                .setNegativeButton(CommonStrings.no, null)
                 .show()
     }
 
@@ -401,7 +402,7 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
             is Stage.Terms -> addFragmentToBackstack(
                     views.loginFragmentContainer,
                     LoginTermsFragment::class.java,
-                    LoginTermsFragmentArgument(stage.policies.toLocalizedLoginTerms(getString(R.string.resources_language))),
+                    LoginTermsFragmentArgument(stage.policies.toLocalizedLoginTerms(getString(CommonStrings.resources_language))),
                     tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                     option = commonOption
             )

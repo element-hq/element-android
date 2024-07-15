@@ -20,7 +20,7 @@ import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
 import android.content.res.Resources
 import androidx.appcompat.app.AppCompatActivity
-import im.vector.app.R
+import im.vector.lib.ui.styles.R
 import javax.inject.Inject
 
 class ScreenOrientationLocker @Inject constructor(
