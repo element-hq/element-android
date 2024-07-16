@@ -106,6 +106,12 @@ android {
         viewBinding true
         buildConfig true
     }
+
+    packaging {
+        pickFirsts.add("META-INF/LICENSE.md")
+        pickFirsts.add("META-INF/LICENSE-notice.md")
+        pickFirsts.add("MANIFEST.MF")
+    }
 }
 
 dependencies {
