@@ -21,10 +21,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nulabinc.zxcvbn.Strength
-import im.vector.app.R
 import im.vector.app.core.platform.WaitingViewData
 import im.vector.app.core.utils.LiveEvent
 import im.vector.lib.core.utils.timer.Clock
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.Session
@@ -104,7 +104,7 @@ class KeysBackupSetupSharedViewModel @Inject constructor(
 
                 loadingStatus.postValue(
                         WaitingViewData(
-                                context.getString(R.string.keys_backup_setup_step3_generating_key_status),
+                                context.getString(CommonStrings.keys_backup_setup_step3_generating_key_status),
                                 progress,
                                 total
                         )
@@ -152,7 +152,7 @@ class KeysBackupSetupSharedViewModel @Inject constructor(
     }
 
     private fun createKeysBackup(context: Context, keysBackup: KeysBackupService, forceOverride: Boolean = false) {
-        loadingStatus.value = WaitingViewData(context.getString(R.string.keys_backup_setup_creating_backup), isIndeterminate = true)
+        loadingStatus.value = WaitingViewData(context.getString(CommonStrings.keys_backup_setup_creating_backup), isIndeterminate = true)
 
         creatingBackupError.value = null
 

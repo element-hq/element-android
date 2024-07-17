@@ -16,9 +16,9 @@
 
 package im.vector.app.test.fakes
 
-import im.vector.app.R
 import im.vector.app.features.settings.FontScalePreferences
 import im.vector.app.features.settings.FontScaleValue
+import im.vector.lib.strings.CommonStrings
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -26,13 +26,13 @@ import io.mockk.verify
 class FakeFontScalePreferences : FontScalePreferences by mockk(relaxUnitFun = true) {
 
     private val fontScaleValues = listOf(
-            FontScaleValue(0, "FONT_SCALE_TINY", 0.70f, R.string.tiny),
-            FontScaleValue(1, "FONT_SCALE_SMALL", 0.85f, R.string.small),
-            FontScaleValue(2, "FONT_SCALE_NORMAL", 1.00f, R.string.normal),
-            FontScaleValue(3, "FONT_SCALE_LARGE", 1.15f, R.string.large),
-            FontScaleValue(4, "FONT_SCALE_LARGER", 1.30f, R.string.larger),
-            FontScaleValue(5, "FONT_SCALE_LARGEST", 1.45f, R.string.largest),
-            FontScaleValue(6, "FONT_SCALE_HUGE", 1.60f, R.string.huge)
+            FontScaleValue(0, "FONT_SCALE_TINY", 0.70f, CommonStrings.tiny),
+            FontScaleValue(1, "FONT_SCALE_SMALL", 0.85f, CommonStrings.small),
+            FontScaleValue(2, "FONT_SCALE_NORMAL", 1.00f, CommonStrings.normal),
+            FontScaleValue(3, "FONT_SCALE_LARGE", 1.15f, CommonStrings.large),
+            FontScaleValue(4, "FONT_SCALE_LARGER", 1.30f, CommonStrings.larger),
+            FontScaleValue(5, "FONT_SCALE_LARGEST", 1.45f, CommonStrings.largest),
+            FontScaleValue(6, "FONT_SCALE_HUGE", 1.60f, CommonStrings.huge)
     )
 
     init {

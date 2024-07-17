@@ -23,7 +23,6 @@ import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.toast
@@ -33,6 +32,7 @@ import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.permalink.PermalinkHandler
 import im.vector.app.features.start.StartAppViewModel
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import timber.log.Timber
@@ -73,7 +73,7 @@ class LinkHandlerActivity : VectorBaseActivity<ActivityProgressBinding>() {
         }
     }
 
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         handleIntent()
     }
@@ -89,10 +89,10 @@ class LinkHandlerActivity : VectorBaseActivity<ActivityProgressBinding>() {
             uri.getQueryParameter(LoginConfig.CONFIG_HS_PARAMETER) != null -> handleConfigUrl(uri)
             uri.toString().startsWith(PermalinkService.MATRIX_TO_URL_BASE) -> handleSupportedHostUrl()
             uri.toString().startsWith(PermalinkHandler.MATRIX_TO_CUSTOM_SCHEME_URL_BASE) -> handleSupportedHostUrl()
-            resources.getStringArray(R.array.permalink_supported_hosts).contains(uri.host) -> handleSupportedHostUrl()
+            resources.getStringArray(im.vector.app.config.R.array.permalink_supported_hosts).contains(uri.host) -> handleSupportedHostUrl()
             else -> {
                 // Other links are not yet handled, but should not come here (manifest configuration error?)
-                toast(R.string.universal_link_malformed)
+                toast(CommonStrings.universal_link_malformed)
                 finish()
             }
         }
@@ -139,11 +139,11 @@ class LinkHandlerActivity : VectorBaseActivity<ActivityProgressBinding>() {
      */
     private fun displayAlreadyLoginPopup(uri: Uri) {
         MaterialAlertDialogBuilder(this)
-                .setTitle(R.string.dialog_title_warning)
-                .setMessage(R.string.error_user_already_logged_in)
+                .setTitle(CommonStrings.dialog_title_warning)
+                .setMessage(CommonStrings.error_user_already_logged_in)
                 .setCancelable(false)
-                .setPositiveButton(R.string.logout) { _, _ -> safeSignout(uri) }
-                .setNegativeButton(R.string.action_cancel) { _, _ -> finish() }
+                .setPositiveButton(CommonStrings.logout) { _, _ -> safeSignout(uri) }
+                .setNegativeButton(CommonStrings.action_cancel) { _, _ -> finish() }
                 .show()
     }
 
@@ -168,10 +168,10 @@ class LinkHandlerActivity : VectorBaseActivity<ActivityProgressBinding>() {
 
     private fun displayError(failure: Throwable) {
         MaterialAlertDialogBuilder(this)
-                .setTitle(R.string.dialog_title_error)
+                .setTitle(CommonStrings.dialog_title_error)
                 .setMessage(errorFormatter.toHumanReadable(failure))
                 .setCancelable(false)
-                .setPositiveButton(R.string.ok) { _, _ -> finish() }
+                .setPositiveButton(CommonStrings.ok) { _, _ -> finish() }
                 .show()
     }
 }

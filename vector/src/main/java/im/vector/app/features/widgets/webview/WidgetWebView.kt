@@ -22,7 +22,6 @@ import android.webkit.CookieManager
 import android.webkit.PermissionRequest
 import android.webkit.WebChromeClient
 import android.webkit.WebView
-import im.vector.app.R
 import im.vector.app.core.utils.CheckWebViewPermissionsUseCase
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.webview.VectorWebViewClient
@@ -33,7 +32,7 @@ fun WebView.setupForWidget(activity: Activity,
                            eventListener: WebEventListener,
 ) {
     // xml value seems ignored
-    setBackgroundColor(ThemeUtils.getColor(context, R.attr.colorSurface))
+    setBackgroundColor(ThemeUtils.getColor(context, com.google.android.material.R.attr.colorSurface))
 
     // clear caches
     clearHistory()

@@ -28,6 +28,7 @@ import im.vector.app.features.home.room.detail.timeline.item.MessageTextItem_
 import im.vector.app.features.home.room.detail.timeline.tools.createLinkMovementMethod
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
+import im.vector.lib.strings.CommonStrings
 import me.gujun.android.span.image
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
@@ -58,22 +59,22 @@ class EncryptedItemFactory @Inject constructor(
                 val spannableStr = if (vectorPreferences.developerMode()) {
                     val errorDescription =
                             if (cryptoError == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID) {
-                                stringProvider.getString(R.string.notice_crypto_error_unknown_inbound_session_id)
+                                stringProvider.getString(CommonStrings.notice_crypto_error_unknown_inbound_session_id)
                             } else {
                                 // TODO i18n
                                 cryptoError?.name
                             }
 
-                    val message = stringProvider.getString(R.string.encrypted_message).takeIf { cryptoError == null }
-                            ?: stringProvider.getString(R.string.notice_crypto_unable_to_decrypt, errorDescription)
+                    val message = stringProvider.getString(CommonStrings.encrypted_message).takeIf { cryptoError == null }
+                            ?: stringProvider.getString(CommonStrings.notice_crypto_unable_to_decrypt, errorDescription)
                     span(message) {
                         textStyle = "italic"
-                        textColor = colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
+                        textColor = colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_secondary)
                     }
                 } else {
-                    val colorFromAttribute = colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
+                    val colorFromAttribute = colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_secondary)
                     if (cryptoError == null) {
-                        span(stringProvider.getString(R.string.encrypted_message)) {
+                        span(stringProvider.getString(CommonStrings.encrypted_message)) {
                             textStyle = "italic"
                             textColor = colorFromAttribute
                         }
@@ -85,7 +86,7 @@ class EncryptedItemFactory @Inject constructor(
                                         image(it, "baseline")
                                         +" "
                                     }
-                                    span(stringProvider.getString(R.string.notice_crypto_unable_to_decrypt_final)) {
+                                    span(stringProvider.getString(CommonStrings.notice_crypto_unable_to_decrypt_final)) {
                                         textStyle = "italic"
                                         textColor = colorFromAttribute
                                     }
@@ -97,7 +98,7 @@ class EncryptedItemFactory @Inject constructor(
                                         image(it, "baseline")
                                         +" "
                                     }
-                                    span(stringProvider.getString(R.string.notice_crypto_unable_to_decrypt_friendly)) {
+                                    span(stringProvider.getString(CommonStrings.notice_crypto_unable_to_decrypt_friendly)) {
                                         textStyle = "italic"
                                         textColor = colorFromAttribute
                                     }

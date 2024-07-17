@@ -24,11 +24,11 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.login.LoginActivity
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.failure.GlobalError
 import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
@@ -66,7 +66,7 @@ class SoftLogoutActivity : LoginActivity() {
                 // And inform the user
                 showError(
                         getString(
-                                R.string.soft_logout_sso_not_same_user_error,
+                                CommonStrings.soft_logout_sso_not_same_user_error,
                                 softLogoutViewEvents.currentUserId,
                                 softLogoutViewEvents.newUserId
                         )
@@ -80,9 +80,9 @@ class SoftLogoutActivity : LoginActivity() {
 
     private fun showError(message: String) {
         MaterialAlertDialogBuilder(this)
-                .setTitle(R.string.dialog_title_error)
+                .setTitle(CommonStrings.dialog_title_error)
                 .setMessage(message)
-                .setPositiveButton(R.string.ok, null)
+                .setPositiveButton(CommonStrings.ok, null)
                 .show()
     }
 

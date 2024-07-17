@@ -25,7 +25,6 @@ import androidx.fragment.app.FragmentManager
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseActivity
@@ -41,13 +40,14 @@ import im.vector.app.features.spaces.explore.SpaceDirectoryViewAction
 import im.vector.app.features.spaces.explore.SpaceDirectoryViewEvents
 import im.vector.app.features.spaces.explore.SpaceDirectoryViewModel
 import im.vector.lib.core.utils.compat.getParcelableExtraCompat
+import im.vector.lib.strings.CommonStrings
 
 @AndroidEntryPoint
 class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>(), MatrixToBottomSheet.InteractionListener {
 
     override fun getBinding(): ActivitySimpleBinding = ActivitySimpleBinding.inflate(layoutInflater)
 
-    override fun getTitleRes(): Int = R.string.space_explore_activity_title
+    override fun getTitleRes(): Int = CommonStrings.space_explore_activity_title
 
     val sharedViewModel: SpaceDirectoryViewModel by viewModel()
 

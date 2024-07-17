@@ -26,6 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.setTextWithColoredPart
 import im.vector.app.databinding.ViewOtherSessionSecurityRecommendationBinding
+import im.vector.lib.strings.CommonStrings
 
 @AndroidEntryPoint
 class OtherSessionsSecurityRecommendationView @JvmOverloads constructor(
@@ -43,7 +44,7 @@ class OtherSessionsSecurityRecommendationView @JvmOverloads constructor(
 
         context.obtainStyledAttributes(
                 attrs,
-                R.styleable.OtherSessionsSecurityRecommendationView,
+                im.vector.lib.ui.styles.R.styleable.OtherSessionsSecurityRecommendationView,
                 0,
                 0
         ).use {
@@ -54,7 +55,7 @@ class OtherSessionsSecurityRecommendationView @JvmOverloads constructor(
     }
 
     private fun setTitle(typedArray: TypedArray) {
-        val title = typedArray.getString(R.styleable.OtherSessionsSecurityRecommendationView_otherSessionsRecommendationTitle)
+        val title = typedArray.getString(im.vector.lib.ui.styles.R.styleable.OtherSessionsSecurityRecommendationView_otherSessionsRecommendationTitle)
         setTitle(title)
     }
 
@@ -63,13 +64,18 @@ class OtherSessionsSecurityRecommendationView @JvmOverloads constructor(
     }
 
     private fun setDescription(typedArray: TypedArray) {
-        val description = typedArray.getString(R.styleable.OtherSessionsSecurityRecommendationView_otherSessionsRecommendationDescription)
+        val description =
+                typedArray.getString(im.vector.lib.ui.styles.R.styleable.OtherSessionsSecurityRecommendationView_otherSessionsRecommendationDescription)
         setDescription(description)
     }
 
     private fun setImage(typedArray: TypedArray) {
-        val imageResource = typedArray.getResourceId(R.styleable.OtherSessionsSecurityRecommendationView_otherSessionsRecommendationImageResource, 0)
-        val backgroundTint = typedArray.getColor(R.styleable.OtherSessionsSecurityRecommendationView_otherSessionsRecommendationImageBackgroundTint, 0)
+        val imageResource = typedArray.getResourceId(
+                im.vector.lib.ui.styles.R.styleable.OtherSessionsSecurityRecommendationView_otherSessionsRecommendationImageResource, 0
+        )
+        val backgroundTint = typedArray.getColor(
+                im.vector.lib.ui.styles.R.styleable.OtherSessionsSecurityRecommendationView_otherSessionsRecommendationImageBackgroundTint, 0
+        )
         setImageResource(imageResource)
         setImageBackgroundTint(backgroundTint)
     }
@@ -83,7 +89,7 @@ class OtherSessionsSecurityRecommendationView @JvmOverloads constructor(
     }
 
     private fun setDescription(description: String?) {
-        val learnMore = context.getString(R.string.action_learn_more)
+        val learnMore = context.getString(CommonStrings.action_learn_more)
         val formattedDescription = buildString {
             append(description)
             append(" ")

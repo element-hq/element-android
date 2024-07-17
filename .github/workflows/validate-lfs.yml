@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Validate
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           lfs: 'true'
 

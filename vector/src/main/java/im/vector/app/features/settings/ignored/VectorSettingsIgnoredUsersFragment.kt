@@ -26,12 +26,12 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.features.analytics.plan.MobileScreen
+import im.vector.lib.strings.CommonStrings
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -55,7 +55,7 @@ class VectorSettingsIgnoredUsersFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        views.waitingView.waitingStatusText.setText(R.string.please_wait)
+        views.waitingView.waitingStatusText.setText(CommonStrings.please_wait)
         views.waitingView.waitingStatusText.isVisible = true
         ignoredUsersController.callback = this
         views.genericRecyclerView.configureWith(ignoredUsersController)
@@ -77,17 +77,17 @@ class VectorSettingsIgnoredUsersFragment :
     override fun onResume() {
         super.onResume()
 
-        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(R.string.settings_ignored_users)
+        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(CommonStrings.settings_ignored_users)
     }
 
     override fun onUserIdClicked(userId: String) {
         MaterialAlertDialogBuilder(requireActivity())
-                .setTitle(R.string.room_participants_action_unignore_title)
-                .setMessage(getString(R.string.settings_unignore_user, userId))
-                .setPositiveButton(R.string.unignore) { _, _ ->
+                .setTitle(CommonStrings.room_participants_action_unignore_title)
+                .setMessage(getString(CommonStrings.settings_unignore_user, userId))
+                .setPositiveButton(CommonStrings.unignore) { _, _ ->
                     viewModel.handle(IgnoredUsersAction.UnIgnore(userId))
                 }
-                .setNegativeButton(R.string.action_cancel, null)
+                .setNegativeButton(CommonStrings.action_cancel, null)
                 .show()
     }
 

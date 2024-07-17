@@ -23,13 +23,13 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
-import im.vector.app.R
 import im.vector.app.espresso.tools.ScreenshotFailureRule
 import im.vector.app.features.MainActivity
 import im.vector.app.getString
 import im.vector.app.ui.robot.ElementRobot
 import im.vector.app.ui.robot.settings.labs.LabFeaturesPreferences
 import im.vector.app.ui.robot.withDeveloperMode
+import im.vector.lib.strings.CommonStrings
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -55,7 +55,7 @@ class UiAllScreensSanityTest {
                     InstrumentationRegistry.getInstrumentation()
                             .targetContext
                             .resources
-                            .getBoolean(R.bool.settings_labs_new_app_layout_default)
+                            .getBoolean(im.vector.app.config.R.bool.settings_labs_new_app_layout_default)
             )
     )
 
@@ -151,7 +151,7 @@ class UiAllScreensSanityTest {
                 advancedSettings { crawlDeveloperOptions() }
             }
             roomList {
-                openRoom(getString(R.string.room_displayname_empty_room)) {
+                openRoom(getString(CommonStrings.room_displayname_empty_room)) {
                     val message = "Test view source"
                     postMessage(message)
                     openMessageMenu(message) {

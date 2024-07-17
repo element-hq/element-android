@@ -19,13 +19,13 @@ import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.auth.PendingAuthHandler
 import im.vector.app.features.login.ReAuthHelper
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
@@ -140,7 +140,7 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
 
     private fun handleInitializeXSigningError(failure: Throwable) {
         Timber.e(failure, "## CrossSigning - Failed to initialize cross signing")
-        _viewEvents.post(CrossSigningSettingsViewEvents.Failure(Exception(stringProvider.getString(R.string.failed_to_initialize_cross_signing))))
+        _viewEvents.post(CrossSigningSettingsViewEvents.Failure(Exception(stringProvider.getString(CommonStrings.failed_to_initialize_cross_signing))))
     }
 
     companion object : MavericksViewModelFactory<CrossSigningSettingsViewModel, CrossSigningSettingsViewState> by hiltMavericksViewModelFactory()

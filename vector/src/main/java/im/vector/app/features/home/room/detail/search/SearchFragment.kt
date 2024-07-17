@@ -40,6 +40,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSearchBinding
 import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
+import im.vector.lib.strings.CommonStrings
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.getRootThreadEventId
@@ -99,7 +100,7 @@ class SearchFragment :
                 }
                 is Success -> {
                     views.stateView.state = StateView.State.Empty(
-                            title = getString(R.string.search_no_results),
+                            title = getString(CommonStrings.search_no_results),
                             image = ContextCompat.getDrawable(requireContext(), R.drawable.ic_search_no_results)
                     )
                 }

@@ -16,7 +16,6 @@
 
 package im.vector.app.features.call.conference
 
-import im.vector.app.R
 import im.vector.app.core.network.await
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.ensureProtocol
@@ -57,7 +56,7 @@ class JitsiService @Inject constructor(
     }
 
     private val jitsiWidgetDataFactory by lazy {
-        JitsiWidgetDataFactory(stringProvider.getString(R.string.preferred_jitsi_domain)) { widget ->
+        JitsiWidgetDataFactory(stringProvider.getString(im.vector.app.config.R.string.preferred_jitsi_domain)) { widget ->
             session.widgetService().getWidgetComputedUrl(widget, themeProvider.isLightTheme())
         }
     }
@@ -70,7 +69,7 @@ class JitsiService @Inject constructor(
                     ?.jitsiServer
                     ?.preferredDomain
         }
-        val jitsiDomain = preferredJitsiDomain ?: stringProvider.getString(R.string.preferred_jitsi_domain)
+        val jitsiDomain = preferredJitsiDomain ?: stringProvider.getString(im.vector.app.config.R.string.preferred_jitsi_domain)
         val jitsiAuth = getJitsiAuth(jitsiDomain)
         val confId = createConferenceId(roomId, jitsiAuth)
 

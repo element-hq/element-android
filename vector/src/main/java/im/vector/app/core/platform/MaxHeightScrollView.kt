@@ -20,7 +20,6 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.core.content.withStyledAttributes
 import androidx.core.widget.NestedScrollView
-import im.vector.app.R
 
 private const val DEFAULT_MAX_HEIGHT = 200
 
@@ -35,8 +34,8 @@ class MaxHeightScrollView @JvmOverloads constructor(context: Context, attrs: Att
 
     init {
         if (attrs != null) {
-            context.withStyledAttributes(attrs, R.styleable.MaxHeightScrollView) {
-                maxHeight = getDimensionPixelSize(R.styleable.MaxHeightScrollView_maxHeight, DEFAULT_MAX_HEIGHT)
+            context.withStyledAttributes(attrs, im.vector.lib.ui.styles.R.styleable.MaxHeightScrollView) {
+                maxHeight = getDimensionPixelSize(im.vector.lib.ui.styles.R.styleable.MaxHeightScrollView_maxHeight, DEFAULT_MAX_HEIGHT)
             }
         }
     }

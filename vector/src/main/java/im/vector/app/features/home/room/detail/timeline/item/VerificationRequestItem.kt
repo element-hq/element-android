@@ -36,6 +36,7 @@ import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.lib.core.utils.timer.Clock
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationState
 
@@ -65,9 +66,9 @@ abstract class VerificationRequestItem : AbsBaseMessageItem<VerificationRequestI
         }
 
         holder.titleView.text = if (attributes.informationData.sentByMe) {
-            holder.view.context.getString(R.string.verification_sent)
+            holder.view.context.getString(CommonStrings.verification_sent)
         } else {
-            holder.view.context.getString(R.string.verification_request)
+            holder.view.context.getString(CommonStrings.verification_request)
         }
 
         holder.descriptionView.text = if (!attributes.informationData.sentByMe) {
@@ -86,25 +87,25 @@ abstract class VerificationRequestItem : AbsBaseMessageItem<VerificationRequestI
             VerificationState.CANCELED_BY_OTHER -> {
                 holder.buttonBar.isVisible = false
                 holder.statusTextView.text = holder.view.context
-                        .getString(R.string.verification_request_other_cancelled, attributes.informationData.memberName)
+                        .getString(CommonStrings.verification_request_other_cancelled, attributes.informationData.memberName)
                 holder.statusTextView.isVisible = true
             }
             VerificationState.CANCELED_BY_ME -> {
                 holder.buttonBar.isVisible = false
-                holder.statusTextView.text = holder.view.context.getString(R.string.verification_request_you_cancelled)
+                holder.statusTextView.text = holder.view.context.getString(CommonStrings.verification_request_you_cancelled)
                 holder.statusTextView.isVisible = true
             }
             VerificationState.WAITING -> {
                 holder.buttonBar.isVisible = false
-                holder.statusTextView.text = holder.view.context.getString(R.string.verification_request_waiting)
+                holder.statusTextView.text = holder.view.context.getString(CommonStrings.verification_request_waiting)
                 holder.statusTextView.isVisible = true
             }
             VerificationState.DONE -> {
                 holder.buttonBar.isVisible = false
                 holder.statusTextView.text = if (attributes.informationData.sentByMe) {
-                    holder.view.context.getString(R.string.verification_request_other_accepted, attributes.otherUserName)
+                    holder.view.context.getString(CommonStrings.verification_request_other_accepted, attributes.otherUserName)
                 } else {
-                    holder.view.context.getString(R.string.verification_request_you_accepted)
+                    holder.view.context.getString(CommonStrings.verification_request_you_accepted)
                 }
                 holder.statusTextView.isVisible = true
             }

@@ -110,18 +110,21 @@ class BottomSheetActionButton @JvmOverloads constructor(
         inflate(context, R.layout.view_bottom_sheet_action_button, this)
         views = ViewBottomSheetActionButtonBinding.bind(this)
 
-        context.withStyledAttributes(attrs, R.styleable.BottomSheetActionButton) {
-            title = getString(R.styleable.BottomSheetActionButton_actionTitle) ?: ""
-            subTitle = getString(R.styleable.BottomSheetActionButton_actionDescription) ?: ""
-            forceStartPadding = getBoolean(R.styleable.BottomSheetActionButton_forceStartPadding, false)
-            leftIcon = getDrawable(R.styleable.BottomSheetActionButton_leftIcon)
+        context.withStyledAttributes(attrs, im.vector.lib.ui.styles.R.styleable.BottomSheetActionButton) {
+            title = getString(im.vector.lib.ui.styles.R.styleable.BottomSheetActionButton_actionTitle) ?: ""
+            subTitle = getString(im.vector.lib.ui.styles.R.styleable.BottomSheetActionButton_actionDescription) ?: ""
+            forceStartPadding = getBoolean(im.vector.lib.ui.styles.R.styleable.BottomSheetActionButton_forceStartPadding, false)
+            leftIcon = getDrawable(im.vector.lib.ui.styles.R.styleable.BottomSheetActionButton_leftIcon)
 
-            rightIcon = getDrawable(R.styleable.BottomSheetActionButton_rightIcon)
+            rightIcon = getDrawable(im.vector.lib.ui.styles.R.styleable.BottomSheetActionButton_rightIcon)
 
-            tint = getColor(R.styleable.BottomSheetActionButton_tint, ThemeUtils.getColor(context, android.R.attr.textColor))
-            titleTextColor = getColor(R.styleable.BottomSheetActionButton_titleTextColor, ThemeUtils.getColor(context, R.attr.colorPrimary))
+            tint = getColor(im.vector.lib.ui.styles.R.styleable.BottomSheetActionButton_tint, ThemeUtils.getColor(context, android.R.attr.textColor))
+            titleTextColor = getColor(
+                    im.vector.lib.ui.styles.R.styleable.BottomSheetActionButton_titleTextColor,
+                    ThemeUtils.getColor(context, com.google.android.material.R.attr.colorPrimary)
+            )
 
-            isBetaAction = getBoolean(R.styleable.BottomSheetActionButton_betaAction, false)
+            isBetaAction = getBoolean(im.vector.lib.ui.styles.R.styleable.BottomSheetActionButton_betaAction, false)
         }
     }
 }

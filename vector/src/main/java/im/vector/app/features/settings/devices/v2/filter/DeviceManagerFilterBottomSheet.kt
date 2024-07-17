@@ -28,6 +28,7 @@ import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment.ResultListener.Companion.RESULT_OK
 import im.vector.app.databinding.BottomSheetDeviceManagerFilterBinding
 import im.vector.app.features.settings.devices.v2.list.SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS
+import im.vector.lib.strings.CommonPlurals
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -51,7 +52,7 @@ class DeviceManagerFilterBottomSheet : VectorBaseBottomSheetDialogFragment<Botto
 
     private fun initFilterRadioGroup() {
         views.filterOptionInactiveTextView.text = resources.getQuantityString(
-                R.plurals.device_manager_filter_option_inactive_description,
+                CommonPlurals.device_manager_filter_option_inactive_description,
                 SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS,
                 SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS
         )

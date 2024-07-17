@@ -53,6 +53,7 @@ import im.vector.app.features.userdirectory.UserListFragment
 import im.vector.app.features.userdirectory.UserListFragmentArgs
 import im.vector.app.features.userdirectory.UserListSharedAction
 import im.vector.app.features.userdirectory.UserListSharedActionViewModel
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.failure.Failure
@@ -91,7 +92,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                     views.container,
                     UserListFragment::class.java,
                     UserListFragmentArgs(
-                            title = getString(R.string.fab_menu_create_chat),
+                            title = getString(CommonStrings.fab_menu_create_chat),
                             menuResId = R.menu.vector_create_direct_room,
                             submitMenuItemId = R.id.action_create_direct_room,
                             single3pidSelection = true,
@@ -105,11 +106,11 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
         viewModel.observeViewEvents {
             when (it) {
                 CreateDirectRoomViewEvents.InvalidCode -> {
-                    Toast.makeText(this, R.string.invalid_qr_code_uri, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, CommonStrings.invalid_qr_code_uri, Toast.LENGTH_SHORT).show()
                     finish()
                 }
                 CreateDirectRoomViewEvents.DmSelf -> {
-                    Toast.makeText(this, R.string.cannot_dm_self, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, CommonStrings.cannot_dm_self, Toast.LENGTH_SHORT).show()
                     finish()
                 }
             }
@@ -121,7 +122,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                     viewModel.handle(CreateDirectRoomAction.QrScannedAction(it.result))
                 }
                 is QrCodeScannerEvents.ParseFailed -> {
-                    Toast.makeText(this, R.string.qr_code_not_scanned, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, CommonStrings.qr_code_not_scanned, Toast.LENGTH_SHORT).show()
                     finish()
                 }
                 else -> Unit
@@ -131,7 +132,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
 
     private fun openAddByQrCode() {
         if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, permissionCameraLauncher)) {
-            val args = QrScannerArgs(showExtraButtons = false, R.string.add_by_qr_code)
+            val args = QrScannerArgs(showExtraButtons = false, CommonStrings.add_by_qr_code)
             addFragment(views.container, QrCodeScannerFragment::class.java, args)
         }
     }
@@ -147,16 +148,16 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
         if (allGranted) {
             doOnPostResume { addFragmentToBackstack(views.container, ContactsBookFragment::class.java) }
         } else if (deniedPermanently) {
-            onPermissionDeniedSnackbar(R.string.permissions_denied_add_contact)
+            onPermissionDeniedSnackbar(CommonStrings.permissions_denied_add_contact)
         }
     }
 
     private val permissionCameraLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
         if (allGranted) {
-            val args = QrScannerArgs(showExtraButtons = false, R.string.add_by_qr_code)
+            val args = QrScannerArgs(showExtraButtons = false, CommonStrings.add_by_qr_code)
             addFragment(views.container, QrCodeScannerFragment::class.java, args)
         } else if (deniedPermanently) {
-            onPermissionDeniedSnackbar(R.string.permissions_denied_qr_code)
+            onPermissionDeniedSnackbar(CommonStrings.permissions_denied_qr_code)
         }
     }
 
@@ -166,12 +167,12 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
             viewModel.handle(CreateDirectRoomAction.PrepareRoomWithSelectedUsers(action.selections))
         } else {
             MaterialAlertDialogBuilder(this)
-                    .setTitle(R.string.dialog_title_confirmation)
-                    .setMessage(getString(R.string.create_room_unknown_users_dialog_content, unknownUsers.joinToString("\n • ", " • ") { it.getMxId() }))
-                    .setPositiveButton(R.string.create_room_unknown_users_dialog_submit) { _, _ ->
+                    .setTitle(CommonStrings.dialog_title_confirmation)
+                    .setMessage(getString(CommonStrings.create_room_unknown_users_dialog_content, unknownUsers.joinToString("\n • ", " • ") { it.getMxId() }))
+                    .setPositiveButton(CommonStrings.create_room_unknown_users_dialog_submit) { _, _ ->
                         viewModel.handle(CreateDirectRoomAction.PrepareRoomWithSelectedUsers(action.selections))
                     }
-                    .setNegativeButton(R.string.action_cancel, null)
+                    .setNegativeButton(CommonStrings.action_cancel, null)
                     .show()
         }
     }
@@ -186,7 +187,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
     }
 
     private fun renderCreationLoading() {
-        updateWaitingView(WaitingViewData(getString(R.string.creating_direct_room)))
+        updateWaitingView(WaitingViewData(getString(CommonStrings.creating_direct_room)))
     }
 
     private fun renderCreationFailure(error: Throwable) {
@@ -197,21 +198,21 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
             }
             is CreateRoomFailure.CreatedWithFederationFailure -> {
                 MaterialAlertDialogBuilder(this)
-                        .setMessage(getString(R.string.create_room_federation_error, error.matrixError.message))
+                        .setMessage(getString(CommonStrings.create_room_federation_error, error.matrixError.message))
                         .setCancelable(false)
-                        .setPositiveButton(R.string.ok) { _, _ -> finish() }
+                        .setPositiveButton(CommonStrings.ok) { _, _ -> finish() }
                         .show()
             }
             else -> {
                 val message = if (error is Failure.ServerError && error.httpCode == HttpURLConnection.HTTP_INTERNAL_ERROR /*500*/) {
                     // This error happen if the invited userId does not exist.
-                    getString(R.string.create_room_dm_failure)
+                    getString(CommonStrings.create_room_dm_failure)
                 } else {
                     errorFormatter.toHumanReadable(error)
                 }
                 MaterialAlertDialogBuilder(this)
                         .setMessage(message)
-                        .setPositiveButton(R.string.ok, null)
+                        .setPositiveButton(CommonStrings.ok, null)
                         .show()
             }
         }

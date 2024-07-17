@@ -23,7 +23,6 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.use
-import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.databinding.ViewQrCodeLoginHeaderBinding
 
@@ -41,7 +40,7 @@ class QrCodeLoginHeaderView @JvmOverloads constructor(
     init {
         context.obtainStyledAttributes(
                 attrs,
-                R.styleable.QrCodeLoginHeaderView,
+                im.vector.lib.ui.styles.R.styleable.QrCodeLoginHeaderView,
                 0,
                 0
         ).use {
@@ -52,18 +51,18 @@ class QrCodeLoginHeaderView @JvmOverloads constructor(
     }
 
     private fun setTitle(typedArray: TypedArray) {
-        val title = typedArray.getString(R.styleable.QrCodeLoginHeaderView_qrCodeLoginHeaderTitle)
+        val title = typedArray.getString(im.vector.lib.ui.styles.R.styleable.QrCodeLoginHeaderView_qrCodeLoginHeaderTitle)
         setTitle(title)
     }
 
     private fun setDescription(typedArray: TypedArray) {
-        val description = typedArray.getString(R.styleable.QrCodeLoginHeaderView_qrCodeLoginHeaderDescription)
+        val description = typedArray.getString(im.vector.lib.ui.styles.R.styleable.QrCodeLoginHeaderView_qrCodeLoginHeaderDescription)
         setDescription(description)
     }
 
     private fun setImage(typedArray: TypedArray) {
-        val imageResource = typedArray.getResourceId(R.styleable.QrCodeLoginHeaderView_qrCodeLoginHeaderImageResource, 0)
-        val backgroundTint = typedArray.getColor(R.styleable.QrCodeLoginHeaderView_qrCodeLoginHeaderImageBackgroundTint, 0)
+        val imageResource = typedArray.getResourceId(im.vector.lib.ui.styles.R.styleable.QrCodeLoginHeaderView_qrCodeLoginHeaderImageResource, 0)
+        val backgroundTint = typedArray.getColor(im.vector.lib.ui.styles.R.styleable.QrCodeLoginHeaderView_qrCodeLoginHeaderImageBackgroundTint, 0)
         setImage(imageResource, backgroundTint)
     }
 

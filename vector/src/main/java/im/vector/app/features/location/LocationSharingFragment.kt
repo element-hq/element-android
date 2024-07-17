@@ -32,7 +32,6 @@ import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mapbox.mapboxsdk.maps.MapView
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.PERMISSIONS_FOR_FOREGROUND_LOCATION_SHARING
@@ -47,6 +46,7 @@ import im.vector.app.features.location.live.duration.ChooseLiveDurationBottomShe
 import im.vector.app.features.location.live.tracking.LocationSharingAndroidService
 import im.vector.app.features.location.option.LocationSharingOption
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.util.MatrixItem
 import java.lang.ref.WeakReference
@@ -182,9 +182,9 @@ class LocationSharingFragment :
 
     private fun handleLiveLocationSharingNotEnoughPermission() {
         MaterialAlertDialogBuilder(requireActivity())
-                .setTitle(R.string.live_location_not_enough_permission_dialog_title)
-                .setMessage(R.string.live_location_not_enough_permission_dialog_description)
-                .setPositiveButton(R.string.ok, null)
+                .setTitle(CommonStrings.live_location_not_enough_permission_dialog_title)
+                .setMessage(CommonStrings.live_location_not_enough_permission_dialog_description)
+                .setPositiveButton(CommonStrings.ok, null)
                 .show()
     }
 
@@ -245,7 +245,7 @@ class LocationSharingFragment :
         if (allGranted) {
             startLiveLocationSharing()
         } else if (deniedPermanently) {
-            activity?.onPermissionDeniedDialog(R.string.denied_permission_generic)
+            activity?.onPermissionDeniedDialog(CommonStrings.denied_permission_generic)
         }
     }
 

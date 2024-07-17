@@ -30,6 +30,7 @@ import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
 import im.vector.app.core.epoxy.addTextChangedListenerOnce
 import im.vector.app.core.platform.SimpleTextWatcher
+import im.vector.lib.strings.CommonStrings
 
 class KeywordPreference : VectorPreference {
 
@@ -131,13 +132,13 @@ class KeywordPreference : VectorPreference {
             val keyword = s.toString().trim()
             val errorMessage = when {
                 keyword.startsWith(".") -> {
-                    context.getString(R.string.settings_notification_keyword_contains_dot)
+                    context.getString(CommonStrings.settings_notification_keyword_contains_dot)
                 }
                 keyword.contains("\\") -> {
-                    context.getString(R.string.settings_notification_keyword_contains_invalid_character, "\\")
+                    context.getString(CommonStrings.settings_notification_keyword_contains_invalid_character, "\\")
                 }
                 keyword.contains("/") -> {
-                    context.getString(R.string.settings_notification_keyword_contains_invalid_character, "/")
+                    context.getString(CommonStrings.settings_notification_keyword_contains_invalid_character, "/")
                 }
                 else -> null
             }
@@ -151,7 +152,7 @@ class KeywordPreference : VectorPreference {
     }
 
     private fun addChipToGroup(keyword: String, chipGroup: ChipGroup) {
-        val chip = Chip(context, null, R.attr.vctr_keyword_style)
+        val chip = Chip(context, null, im.vector.lib.ui.styles.R.attr.vctr_keyword_style)
         chip.text = keyword
         chipGroup.addView(chip)
 

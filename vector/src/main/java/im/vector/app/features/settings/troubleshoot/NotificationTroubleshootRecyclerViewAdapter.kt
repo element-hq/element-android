@@ -47,12 +47,12 @@ class NotificationTroubleshootRecyclerViewAdapter(val tests: ArrayList<Troublesh
 
         fun bind(test: TroubleshootTest) {
             val context = itemView.context
-            views.troubleshootTestTitle.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_content_primary))
-            views.troubleshootTestDescription.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_content_secondary))
+            views.troubleshootTestTitle.setTextColor(ThemeUtils.getColor(context, im.vector.lib.ui.styles.R.attr.vctr_content_primary))
+            views.troubleshootTestDescription.setTextColor(ThemeUtils.getColor(context, im.vector.lib.ui.styles.R.attr.vctr_content_secondary))
 
             when (test.status) {
                 TroubleshootTest.TestStatus.NOT_STARTED -> {
-                    views.troubleshootTestTitle.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_content_secondary))
+                    views.troubleshootTestTitle.setTextColor(ThemeUtils.getColor(context, im.vector.lib.ui.styles.R.attr.vctr_content_secondary))
 
                     views.troubleshootProgressBar.visibility = View.INVISIBLE
                     views.troubleshootStatusIcon.visibility = View.VISIBLE
@@ -61,7 +61,7 @@ class NotificationTroubleshootRecyclerViewAdapter(val tests: ArrayList<Troublesh
                 TroubleshootTest.TestStatus.WAITING_FOR_USER -> {
                     views.troubleshootProgressBar.visibility = View.INVISIBLE
                     views.troubleshootStatusIcon.visibility = View.VISIBLE
-                    val infoColor = ContextCompat.getColor(context, R.color.vector_info_color)
+                    val infoColor = ContextCompat.getColor(context, im.vector.lib.ui.styles.R.color.vector_info_color)
                     val drawable = ContextCompat.getDrawable(itemView.context, R.drawable.ic_notification_privacy_warning)?.apply {
                         ThemeUtils.tintDrawableWithColor(this, infoColor)
                     }
@@ -77,7 +77,7 @@ class NotificationTroubleshootRecyclerViewAdapter(val tests: ArrayList<Troublesh
                     views.troubleshootStatusIcon.visibility = View.VISIBLE
                     views.troubleshootStatusIcon.setImageResource(R.drawable.unit_test_ko)
                     views.troubleshootStatusIcon.imageTintList = null
-                    views.troubleshootTestDescription.setTextColor(ThemeUtils.getColor(context, R.attr.colorError))
+                    views.troubleshootTestDescription.setTextColor(ThemeUtils.getColor(context, com.google.android.material.R.attr.colorError))
                 }
                 TroubleshootTest.TestStatus.SUCCESS -> {
                     views.troubleshootProgressBar.visibility = View.INVISIBLE

@@ -57,10 +57,10 @@ abstract class SettingsButtonItem : VectorEpoxyModel<SettingsButtonItem.Holder>(
 
         when (buttonStyle) {
             ButtonStyle.POSITIVE -> {
-                holder.button.setTextColor(colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+                holder.button.setTextColor(colorProvider.getColorFromAttribute(com.google.android.material.R.attr.colorPrimary))
             }
             ButtonStyle.DESTRUCTIVE -> {
-                holder.button.setTextColor(colorProvider.getColorFromAttribute(R.attr.colorError))
+                holder.button.setTextColor(colorProvider.getColorFromAttribute(com.google.android.material.R.attr.colorError))
             }
         }
 

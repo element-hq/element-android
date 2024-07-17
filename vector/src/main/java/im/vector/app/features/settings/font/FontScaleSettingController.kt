@@ -17,12 +17,12 @@
 package im.vector.app.features.settings.font
 
 import com.airbnb.epoxy.TypedEpoxyController
-import im.vector.app.R
 import im.vector.app.core.epoxy.fontScaleItem
 import im.vector.app.core.epoxy.fontScaleSectionItem
 import im.vector.app.core.epoxy.fontScaleUseSystemSettingsItem
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.settings.FontScaleValue
+import im.vector.lib.strings.CommonStrings
 import javax.inject.Inject
 
 class FontScaleSettingController @Inject constructor(
@@ -42,7 +42,7 @@ class FontScaleSettingController @Inject constructor(
         val host = this
         fontScaleSectionItem {
             id("section_automatically")
-            sectionName(host.stringProvider.getString(R.string.font_size_section_auto))
+            sectionName(host.stringProvider.getString(CommonStrings.font_size_section_auto))
         }
 
         fontScaleUseSystemSettingsItem {
@@ -58,7 +58,7 @@ class FontScaleSettingController @Inject constructor(
         val host = this
         fontScaleSectionItem {
             id("section_manually")
-            sectionName(host.stringProvider.getString(R.string.font_size_section_manually))
+            sectionName(host.stringProvider.getString(CommonStrings.font_size_section_manually))
         }
 
         scales.forEachIndexed { index, scaleItem ->

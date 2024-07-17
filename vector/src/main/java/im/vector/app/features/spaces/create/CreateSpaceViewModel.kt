@@ -25,7 +25,6 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.error.ErrorFormatter
@@ -33,6 +32,7 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.plan.Interaction
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixPatterns
@@ -99,8 +99,8 @@ class CreateSpaceViewModel @AssistedInject constructor(
         override fun initialState(viewModelContext: ViewModelContext): CreateSpaceState {
             return CreateSpaceState(
                     defaultRooms = mapOf(
-                            0 to viewModelContext.activity.getString(R.string.create_spaces_default_public_room_name),
-                            1 to viewModelContext.activity.getString(R.string.create_spaces_default_public_random_room_name)
+                            0 to viewModelContext.activity.getString(CommonStrings.create_spaces_default_public_room_name),
+                            1 to viewModelContext.activity.getString(CommonStrings.create_spaces_default_public_random_room_name)
                     )
             )
         }
@@ -298,7 +298,7 @@ class CreateSpaceViewModel @AssistedInject constructor(
         if (state.name.isNullOrBlank()) {
             setState {
                 copy(
-                        nameInlineError = stringProvider.getString(R.string.create_space_error_empty_field_space_name)
+                        nameInlineError = stringProvider.getString(CommonStrings.create_space_error_empty_field_space_name)
                 )
             }
         } else {

@@ -20,6 +20,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import im.vector.app.R
 import im.vector.app.core.platform.VectorSharedAction
+import im.vector.lib.strings.CommonStrings
 
 sealed class RoomAliasBottomSheetSharedAction(
         @StringRes val titleRes: Int,
@@ -29,29 +30,29 @@ sealed class RoomAliasBottomSheetSharedAction(
         VectorSharedAction {
 
     data class ShareAlias(val matrixTo: String) : RoomAliasBottomSheetSharedAction(
-            R.string.action_share,
+            CommonStrings.action_share,
             R.drawable.ic_material_share
     )
 
     data class PublishAlias(val alias: String) : RoomAliasBottomSheetSharedAction(
-            R.string.room_alias_action_publish
+            CommonStrings.room_alias_action_publish
     )
 
     data class UnPublishAlias(val alias: String) : RoomAliasBottomSheetSharedAction(
-            R.string.room_alias_action_unpublish
+            CommonStrings.room_alias_action_unpublish
     )
 
     data class DeleteAlias(val alias: String) : RoomAliasBottomSheetSharedAction(
-            R.string.action_delete,
+            CommonStrings.action_delete,
             R.drawable.ic_trash_24,
             true
     )
 
     data class SetMainAlias(val alias: String) : RoomAliasBottomSheetSharedAction(
-            R.string.room_settings_set_main_address
+            CommonStrings.room_settings_set_main_address
     )
 
     object UnsetMainAlias : RoomAliasBottomSheetSharedAction(
-            R.string.room_settings_unset_main_address
+            CommonStrings.room_settings_unset_main_address
     )
 }

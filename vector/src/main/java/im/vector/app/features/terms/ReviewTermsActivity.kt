@@ -21,10 +21,10 @@ import android.content.Intent
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.lib.core.utils.compat.getParcelableExtraCompat
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.terms.TermsService
 
 @AndroidEntryPoint
@@ -47,7 +47,7 @@ class ReviewTermsActivity : SimpleFragmentActivity() {
                 is ReviewTermsViewEvents.Failure -> {
                     MaterialAlertDialogBuilder(this)
                             .setMessage(errorFormatter.toHumanReadable(it.throwable))
-                            .setPositiveButton(R.string.ok) { _, _ ->
+                            .setPositiveButton(CommonStrings.ok) { _, _ ->
                                 if (it.finish) {
                                     finish()
                                 }

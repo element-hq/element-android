@@ -12,7 +12,7 @@ jobs:
     if: github.repository == 'element-hq/element-android'
     # No concurrency required, runs every time on a schedule.
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Python 3.8
         uses: actions/setup-python@v4
         with:
@@ -39,7 +39,7 @@ jobs:
     if: github.repository == 'element-hq/element-android'
     # No concurrency required, runs every time on a schedule.
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Python 3.8
         uses: actions/setup-python@v4
         with:

@@ -36,6 +36,7 @@ import im.vector.app.features.login.render
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingFlow
 import im.vector.app.features.onboarding.OnboardingViewState
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.auth.SSOAction
 
 /**
@@ -64,18 +65,18 @@ class FtueAuthSignUpSignInSelectionFragment :
         when (state.serverType) {
             ServerType.MatrixOrg -> renderServerInformation(
                     icon = R.drawable.ic_logo_matrix_org,
-                    title = getString(R.string.login_connect_to, state.selectedHomeserver.userFacingUrl.toReducedUrl()),
-                    subtitle = getString(R.string.login_server_matrix_org_text)
+                    title = getString(CommonStrings.login_connect_to, state.selectedHomeserver.userFacingUrl.toReducedUrl()),
+                    subtitle = getString(CommonStrings.login_server_matrix_org_text)
             )
             ServerType.EMS -> renderServerInformation(
                     icon = R.drawable.ic_logo_element_matrix_services,
-                    title = getString(R.string.login_connect_to_modular),
+                    title = getString(CommonStrings.login_connect_to_modular),
                     subtitle = state.selectedHomeserver.userFacingUrl.toReducedUrl()
             )
             ServerType.Other -> renderServerInformation(
                     icon = null,
-                    title = getString(R.string.login_server_other_title),
-                    subtitle = getString(R.string.login_connect_to, state.selectedHomeserver.userFacingUrl.toReducedUrl())
+                    title = getString(CommonStrings.login_server_other_title),
+                    subtitle = getString(CommonStrings.login_connect_to, state.selectedHomeserver.userFacingUrl.toReducedUrl())
             )
             ServerType.Unknown -> Unit /* Should not happen */
         }
@@ -114,11 +115,11 @@ class FtueAuthSignUpSignInSelectionFragment :
             is LoginMode.Sso -> {
                 // change to only one button that is sign in with sso
                 views.loginSignupSigninSubmit.text =
-                        if (state.selectedHomeserver.hasOidcCompatibilityFlow) getString(R.string.login_continue) else getString(R.string.login_signin_sso)
+                        getString(if (state.selectedHomeserver.hasOidcCompatibilityFlow) CommonStrings.login_continue else CommonStrings.login_signin_sso)
                 views.loginSignupSigninSignIn.isVisible = false
             }
             else -> {
-                views.loginSignupSigninSubmit.text = getString(R.string.login_signup)
+                views.loginSignupSigninSubmit.text = getString(CommonStrings.login_signup)
                 views.loginSignupSigninSignIn.isVisible = true
             }
         }

@@ -23,12 +23,12 @@ import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.squareup.seismic.ShakeDetector
-import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.hardware.vibrate
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
+import im.vector.lib.strings.CommonStrings
 import javax.inject.Inject
 
 class RageShake @Inject constructor(
@@ -77,17 +77,17 @@ class RageShake @Inject constructor(
             dialogDisplayed = true
 
             MaterialAlertDialogBuilder(activity)
-                    .setMessage(R.string.send_bug_report_alert_message)
-                    .setPositiveButton(R.string.yes) { _, _ -> openBugReportScreen() }
+                    .setMessage(CommonStrings.send_bug_report_alert_message)
+                    .setPositiveButton(CommonStrings.yes) { _, _ -> openBugReportScreen() }
                     .also {
                         if (sessionHolder.hasActiveSession()) {
-                            it.setNeutralButton(R.string.settings) { _, _ -> openSettings() }
+                            it.setNeutralButton(CommonStrings.settings) { _, _ -> openSettings() }
                         } else {
-                            it.setNeutralButton(R.string.action_disable) { _, _ -> disableRageShake() }
+                            it.setNeutralButton(CommonStrings.action_disable) { _, _ -> disableRageShake() }
                         }
                     }
                     .setOnDismissListener { dialogDisplayed = false }
-                    .setNegativeButton(R.string.no, null)
+                    .setNegativeButton(CommonStrings.no, null)
                     .show()
         }
     }

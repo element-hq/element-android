@@ -28,8 +28,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.lib.strings.CommonStrings
 
 // Permissions sets
 val PERMISSIONS_EMPTY = emptyList<String>()
@@ -119,13 +119,13 @@ fun checkPermissions(
             // display the dialog with the info text. Do not do it if no system dialog will
             // be displayed
             MaterialAlertDialogBuilder(activity)
-                    .setTitle(R.string.permissions_rationale_popup_title)
+                    .setTitle(CommonStrings.permissions_rationale_popup_title)
                     .setMessage(rationaleMessage)
                     .setCancelable(false)
-                    .setPositiveButton(R.string.ok) { _, _ ->
+                    .setPositiveButton(CommonStrings.ok) { _, _ ->
                         activityResultLauncher.launch(missingPermissions.toTypedArray())
                     }
-                    .setNegativeButton(R.string.action_not_now, null)
+                    .setNegativeButton(CommonStrings.action_not_now, null)
                     .show()
         } else {
             // some permissions are not granted, ask permissions
@@ -162,18 +162,18 @@ private fun permissionsDeniedPermanently(
 }
 
 fun VectorBaseActivity<*>.onPermissionDeniedSnackbar(@StringRes rationaleMessage: Int) {
-    showSnackbar(getString(rationaleMessage), R.string.settings) {
+    showSnackbar(getString(rationaleMessage), CommonStrings.settings) {
         openAppSettingsPage(this)
     }
 }
 
 fun FragmentActivity.onPermissionDeniedDialog(@StringRes rationaleMessage: Int) {
     MaterialAlertDialogBuilder(this)
-            .setTitle(R.string.missing_permissions_title)
+            .setTitle(CommonStrings.missing_permissions_title)
             .setMessage(rationaleMessage)
-            .setPositiveButton(R.string.open_settings) { _, _ ->
+            .setPositiveButton(CommonStrings.open_settings) { _, _ ->
                 openAppSettingsPage(this)
             }
-            .setNegativeButton(R.string.action_cancel, null)
+            .setNegativeButton(CommonStrings.action_cancel, null)
             .show()
 }

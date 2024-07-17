@@ -35,6 +35,7 @@ import im.vector.app.features.pin.PinActivity
 import im.vector.app.features.signout.hard.SignedOutActivity
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.lib.core.utils.timer.Clock
+import im.vector.lib.strings.CommonStrings
 import timber.log.Timber
 import java.lang.ref.WeakReference
 import javax.inject.Inject
@@ -251,7 +252,7 @@ class PopupAlertManager @Inject constructor(
                         setIcon(it)
                     }
                     alert.actions.forEach { action ->
-                        addButton(action.title, R.style.Widget_Vector_Button_Text_Alerter) {
+                        addButton(action.title, im.vector.lib.ui.styles.R.style.Widget_Vector_Button_Text_Alerter) {
                             if (action.autoClose) {
                                 currentIsDismissed()
                                 Alerter.hide()
@@ -297,7 +298,7 @@ class PopupAlertManager @Inject constructor(
                     } else if (alert.colorAttribute != null) {
                         setBackgroundColorInt(ThemeUtils.getColor(activity, alert.colorAttribute!!))
                     } else {
-                        setBackgroundColorRes(alert.colorRes ?: R.color.notification_accent_color)
+                        setBackgroundColorRes(alert.colorRes ?: im.vector.lib.ui.styles.R.color.notification_accent_color)
                     }
                 }
                 .enableIconPulse(!noAnimation)
@@ -306,14 +307,14 @@ class PopupAlertManager @Inject constructor(
 
     /* a11y */
     private fun handleAccessibility(activity: Activity, giveFocus: Boolean) {
-        activity.window.decorView.findViewById<View>(R.id.llAlertBackground)?.let { alertView ->
+        activity.window.decorView.findViewById<View>(com.tapadoo.alerter.R.id.llAlertBackground)?.let { alertView ->
             alertView.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
 
             // Add close action for a11y (same action than swipe). User can select the action by swiping on the screen vertically,
             // and double tap to perform the action
             ViewCompat.addAccessibilityAction(
                     alertView,
-                    stringProvider.getString(R.string.action_close)
+                    stringProvider.getString(CommonStrings.action_close)
             ) { _, _ ->
                 currentIsDismissed()
                 Alerter.hide()

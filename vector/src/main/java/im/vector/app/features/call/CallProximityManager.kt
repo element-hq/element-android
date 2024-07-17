@@ -23,8 +23,7 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.PowerManager
 import androidx.core.content.getSystemService
-import im.vector.app.R
-import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.resources.BuildMeta
 import javax.inject.Inject
 
 /**
@@ -32,7 +31,7 @@ import javax.inject.Inject
  */
 class CallProximityManager @Inject constructor(
         context: Context,
-        private val stringProvider: StringProvider
+        private val buildMeta: BuildMeta,
 ) : SensorEventListener {
 
     companion object {
@@ -87,7 +86,7 @@ class CallProximityManager @Inject constructor(
     /**
      * Recommending naming convention for WakeLock tags is "app:tag".
      */
-    private fun generateWakeLockTag() = "${stringProvider.getString(R.string.app_name)}:$PROXIMITY_WAKE_LOCK_TAG"
+    private fun generateWakeLockTag() = "${buildMeta.applicationName}:$PROXIMITY_WAKE_LOCK_TAG"
 
     private fun onProximityNear() {
         if (wakeLock == null) {

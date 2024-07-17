@@ -20,9 +20,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import androidx.core.content.edit
-import im.vector.app.R
 import im.vector.app.core.di.DefaultPreferences
 import im.vector.app.core.resources.BuildMeta
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -76,8 +76,8 @@ class VectorLocale @Inject constructor(
             applicationLocale = Locale.getDefault()
 
             // detect if the default language is used
-            val defaultStringValue = getString(context, defaultLocale, R.string.resources_country_code)
-            if (defaultStringValue == getString(context, applicationLocale, R.string.resources_country_code)) {
+            val defaultStringValue = getString(context, defaultLocale, CommonStrings.resources_country_code)
+            if (defaultStringValue == getString(context, applicationLocale, CommonStrings.resources_country_code)) {
                 applicationLocale = defaultLocale
             }
 
@@ -154,9 +154,9 @@ class VectorLocale @Inject constructor(
             for (locale in availableLocales) {
                 knownLocalesSet.add(
                         Triple(
-                                getString(context, locale, R.string.resources_language),
-                                getString(context, locale, R.string.resources_country_code),
-                                getString(context, locale, R.string.resources_script)
+                                getString(context, locale, CommonStrings.resources_language),
+                                getString(context, locale, CommonStrings.resources_country_code),
+                                getString(context, locale, CommonStrings.resources_script)
                         )
                 )
             }
@@ -164,9 +164,9 @@ class VectorLocale @Inject constructor(
             Timber.e(e, "## getApplicationLocales() : failed")
             knownLocalesSet.add(
                     Triple(
-                            context.getString(R.string.resources_language),
-                            context.getString(R.string.resources_country_code),
-                            context.getString(R.string.resources_script)
+                            context.getString(CommonStrings.resources_language),
+                            context.getString(CommonStrings.resources_country_code),
+                            context.getString(CommonStrings.resources_script)
                     )
             )
         }

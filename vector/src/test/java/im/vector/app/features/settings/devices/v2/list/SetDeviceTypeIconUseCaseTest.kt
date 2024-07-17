@@ -21,6 +21,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import im.vector.app.R
 import im.vector.app.test.fakes.FakeStringProvider
+import im.vector.lib.strings.CommonStrings
 import io.mockk.mockk
 import io.mockk.verifyAll
 import org.junit.Test
@@ -38,25 +39,25 @@ class SetDeviceTypeIconUseCaseTest {
         testType(
                 deviceType = DeviceType.UNKNOWN,
                 drawableResId = R.drawable.ic_device_type_unknown,
-                descriptionResId = R.string.a11y_device_manager_device_type_unknown
+                descriptionResId = CommonStrings.a11y_device_manager_device_type_unknown
         )
 
         testType(
                 deviceType = DeviceType.MOBILE,
                 drawableResId = R.drawable.ic_device_type_mobile,
-                descriptionResId = R.string.a11y_device_manager_device_type_mobile
+                descriptionResId = CommonStrings.a11y_device_manager_device_type_mobile
         )
 
         testType(
                 deviceType = DeviceType.WEB,
                 drawableResId = R.drawable.ic_device_type_web,
-                descriptionResId = R.string.a11y_device_manager_device_type_web
+                descriptionResId = CommonStrings.a11y_device_manager_device_type_web
         )
 
         testType(
                 deviceType = DeviceType.DESKTOP,
                 drawableResId = R.drawable.ic_device_type_desktop,
-                descriptionResId = R.string.a11y_device_manager_device_type_desktop
+                descriptionResId = CommonStrings.a11y_device_manager_device_type_desktop
         )
     }
 

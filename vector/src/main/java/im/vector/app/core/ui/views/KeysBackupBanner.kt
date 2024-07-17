@@ -24,6 +24,7 @@ import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.databinding.ViewKeysBackupBannerBinding
 import im.vector.app.features.workers.signout.BannerState
+import im.vector.lib.strings.CommonStrings
 import timber.log.Timber
 
 /**
@@ -113,9 +114,9 @@ class KeysBackupBanner @JvmOverloads constructor(
         } else {
             isVisible = true
 
-            views.viewKeysBackupBannerText1.setText(R.string.secure_backup_banner_setup_line1)
+            views.viewKeysBackupBannerText1.setText(CommonStrings.secure_backup_banner_setup_line1)
             views.viewKeysBackupBannerText2.isVisible = true
-            views.viewKeysBackupBannerText2.setText(R.string.secure_backup_banner_setup_line2)
+            views.viewKeysBackupBannerText2.setText(CommonStrings.secure_backup_banner_setup_line2)
             views.viewKeysBackupBannerCloseGroup.isVisible = true
         }
     }
@@ -126,9 +127,9 @@ class KeysBackupBanner @JvmOverloads constructor(
         } else {
             isVisible = true
 
-            views.viewKeysBackupBannerText1.setText(R.string.keys_backup_banner_recover_line1)
+            views.viewKeysBackupBannerText1.setText(CommonStrings.keys_backup_banner_recover_line1)
             views.viewKeysBackupBannerText2.isVisible = true
-            views.viewKeysBackupBannerText2.setText(R.string.keys_backup_banner_recover_line2)
+            views.viewKeysBackupBannerText2.setText(CommonStrings.keys_backup_banner_recover_line2)
             views.viewKeysBackupBannerCloseGroup.isVisible = true
         }
     }
@@ -139,18 +140,18 @@ class KeysBackupBanner @JvmOverloads constructor(
         } else {
             isVisible = true
 
-            views.viewKeysBackupBannerText1.setText(R.string.keys_backup_banner_update_line1)
+            views.viewKeysBackupBannerText1.setText(CommonStrings.keys_backup_banner_update_line1)
             views.viewKeysBackupBannerText2.isVisible = true
-            views.viewKeysBackupBannerText2.setText(R.string.keys_backup_banner_update_line2)
+            views.viewKeysBackupBannerText2.setText(CommonStrings.keys_backup_banner_update_line2)
             views.viewKeysBackupBannerCloseGroup.isVisible = true
         }
     }
 
     private fun renderBackingUp() {
         isVisible = true
-        views.viewKeysBackupBannerText1.setText(R.string.secure_backup_banner_setup_line1)
+        views.viewKeysBackupBannerText1.setText(CommonStrings.secure_backup_banner_setup_line1)
         views.viewKeysBackupBannerText2.isVisible = true
-        views.viewKeysBackupBannerText2.setText(R.string.keys_backup_banner_in_progress)
+        views.viewKeysBackupBannerText2.setText(CommonStrings.keys_backup_banner_in_progress)
         views.viewKeysBackupBannerLoading.isVisible = true
     }
 

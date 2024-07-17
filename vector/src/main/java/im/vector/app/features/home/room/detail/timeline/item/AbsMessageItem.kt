@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail.timeline.item
 
+import android.annotation.SuppressLint
 import android.graphics.Typeface
 import android.view.View
 import android.widget.ImageView
@@ -69,6 +70,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder>(
         }
     }
 
+    @SuppressLint("SetTextI18n")
     override fun bind(holder: H) {
         super.bind(holder)
         if (attributes.informationData.messageLayout.showAvatar) {
@@ -112,7 +114,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder>(
             holder.threadSummaryConstraintLayout.onClick(_threadClickListener)
             attributes.threadDetails?.let { threadDetails ->
                 holder.threadSummaryConstraintLayout.isVisible = threadDetails.isRootThread
-                holder.threadSummaryCounterTextView.text = threadDetails.numberOfThreads.toString()
+                holder.threadSummaryCounterTextView.text = "${threadDetails.numberOfThreads}"
                 holder.threadSummaryInfoTextView.text = attributes.threadSummaryFormatted ?: attributes.decryptionErrorMessage
 
                 val userId = threadDetails.threadSummarySenderInfo?.userId ?: return@let

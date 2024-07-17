@@ -16,6 +16,7 @@
 
 package im.vector.app.features.crypto.quads
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -29,11 +30,11 @@ import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.features.crypto.recover.SetupMode
+import im.vector.lib.strings.CommonStrings
 import kotlinx.parcelize.Parcelize
 import kotlin.reflect.KClass
 
@@ -70,6 +71,8 @@ class SharedSecureStorageActivity :
         supportFragmentManager.removeFragmentOnAttachListener(this)
     }
 
+    @Suppress("OVERRIDE_DEPRECATION")
+    @SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
         viewModel.handle(SharedSecureStorageAction.Back)
     }
@@ -93,10 +96,10 @@ class SharedSecureStorageActivity :
             }
             is SharedSecureStorageViewEvent.Error -> {
                 MaterialAlertDialogBuilder(this)
-                        .setTitle(getString(R.string.dialog_title_error))
+                        .setTitle(getString(CommonStrings.dialog_title_error))
                         .setMessage(it.message)
                         .setCancelable(false)
-                        .setPositiveButton(R.string.ok) { _, _ ->
+                        .setPositiveButton(CommonStrings.ok) { _, _ ->
                             if (it.dismiss) {
                                 finish()
                             }

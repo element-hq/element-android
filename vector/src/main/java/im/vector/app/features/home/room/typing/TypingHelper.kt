@@ -16,8 +16,8 @@
 
 package im.vector.app.features.home.room.typing
 
-import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.room.sender.SenderInfo
 import javax.inject.Inject
 
@@ -31,16 +31,16 @@ class TypingHelper @Inject constructor(private val stringProvider: StringProvide
             typingUsers.isEmpty() ->
                 ""
             typingUsers.size == 1 ->
-                stringProvider.getString(R.string.room_one_user_is_typing, typingUsers[0].disambiguatedDisplayName)
+                stringProvider.getString(CommonStrings.room_one_user_is_typing, typingUsers[0].disambiguatedDisplayName)
             typingUsers.size == 2 ->
                 stringProvider.getString(
-                        R.string.room_two_users_are_typing,
+                        CommonStrings.room_two_users_are_typing,
                         typingUsers[0].disambiguatedDisplayName,
                         typingUsers[1].disambiguatedDisplayName
                 )
             else ->
                 stringProvider.getString(
-                        R.string.room_many_users_are_typing,
+                        CommonStrings.room_many_users_are_typing,
                         typingUsers[0].disambiguatedDisplayName,
                         typingUsers[1].disambiguatedDisplayName
                 )
@@ -52,11 +52,11 @@ class TypingHelper @Inject constructor(private val stringProvider: StringProvide
             typingUsers.isEmpty() -> ""
             typingUsers.size == 1 -> typingUsers[0].disambiguatedDisplayName
             typingUsers.size == 2 -> stringProvider.getString(
-                    R.string.room_notification_two_users_are_typing,
+                    CommonStrings.room_notification_two_users_are_typing,
                     typingUsers[0].disambiguatedDisplayName, typingUsers[1].disambiguatedDisplayName
             )
             else -> stringProvider.getString(
-                    R.string.room_notification_more_than_two_users_are_typing,
+                    CommonStrings.room_notification_more_than_two_users_are_typing,
                     typingUsers[0].disambiguatedDisplayName, typingUsers[1].disambiguatedDisplayName
             )
         }

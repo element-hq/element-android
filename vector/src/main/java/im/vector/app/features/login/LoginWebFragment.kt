@@ -33,11 +33,11 @@ import android.webkit.WebViewClient
 import com.airbnb.mvrx.activityViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.utils.AssetReader
 import im.vector.app.databinding.FragmentLoginWebBinding
 import im.vector.app.features.signout.soft.SoftLogoutAction
 import im.vector.app.features.signout.soft.SoftLogoutViewModel
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.util.MatrixJsonParser
 import timber.log.Timber
@@ -83,8 +83,8 @@ class LoginWebFragment :
 
     private fun setupTitle(state: LoginViewState) {
         toolbar?.title = when (state.signMode) {
-            SignMode.SignIn -> getString(R.string.login_signin)
-            else -> getString(R.string.login_signup)
+            SignMode.SignIn -> getString(CommonStrings.login_signin)
+            else -> getString(CommonStrings.login_signup)
         }
     }
 
@@ -131,9 +131,9 @@ class LoginWebFragment :
                     error: SslError
             ) {
                 MaterialAlertDialogBuilder(requireActivity())
-                        .setMessage(R.string.ssl_could_not_verify)
-                        .setPositiveButton(R.string.ssl_trust) { _, _ -> handler.proceed() }
-                        .setNegativeButton(R.string.ssl_do_not_trust) { _, _ -> handler.cancel() }
+                        .setMessage(CommonStrings.ssl_could_not_verify)
+                        .setPositiveButton(CommonStrings.ssl_trust) { _, _ -> handler.proceed() }
+                        .setNegativeButton(CommonStrings.ssl_do_not_trust) { _, _ -> handler.cancel() }
                         .setOnKeyListener(DialogInterface.OnKeyListener { dialog, keyCode, event ->
                             if (event.action == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                                 handler.cancel()

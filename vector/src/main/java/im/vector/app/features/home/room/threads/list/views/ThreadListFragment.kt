@@ -48,6 +48,7 @@ import im.vector.app.features.home.room.threads.list.viewmodel.ThreadListViewMod
 import im.vector.app.features.home.room.threads.list.viewmodel.ThreadListViewState
 import im.vector.app.features.rageshake.BugReporter
 import im.vector.app.features.rageshake.ReportType
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.failure.is400
 import org.matrix.android.sdk.api.failure.is404
 import org.matrix.android.sdk.api.session.room.threads.model.ThreadSummary
@@ -145,20 +146,20 @@ class ThreadListFragment :
     private fun handleShowError(event: ThreadListViewEvents.ShowError) {
         val error = event.throwable
         MaterialAlertDialogBuilder(requireActivity())
-                .setTitle(R.string.dialog_title_error)
+                .setTitle(CommonStrings.dialog_title_error)
                 .also {
                     if (error.is400() || error.is404()) {
                         // Outdated Homeserver
-                        it.setMessage(R.string.thread_list_not_available)
-                        it.setPositiveButton(R.string.ok) { _, _ ->
+                        it.setMessage(CommonStrings.thread_list_not_available)
+                        it.setPositiveButton(CommonStrings.ok) { _, _ ->
                             requireActivity().finish()
                         }
                     } else {
                         // Other error, can retry
                         // (Can happen on first request or on pagination request)
                         it.setMessage(errorFormatter.toHumanReadable(error))
-                        it.setPositiveButton(R.string.ok, null)
-                        it.setNegativeButton(R.string.global_retry) { _, _ ->
+                        it.setPositiveButton(CommonStrings.ok, null)
+                        it.setNegativeButton(CommonStrings.global_retry) { _, _ ->
                             threadListViewModel.handle(ThreadListViewActions.TryAgain)
                         }
                     }
@@ -180,14 +181,14 @@ class ThreadListFragment :
 
     private fun initTextConstants() {
         views.threadListEmptyNoticeTextView.text = String.format(
-                resources.getString(R.string.thread_list_empty_notice),
-                resources.getString(R.string.reply_in_thread)
+                resources.getString(CommonStrings.thread_list_empty_notice),
+                resources.getString(CommonStrings.reply_in_thread)
         )
     }
 
     private fun initBetaFeedback() {
-        views.threadsFeedBackConstraintLayout.isVisible = resources.getBoolean(R.bool.feature_threads_beta_feedback_enabled)
-        views.threadFeedbackDivider.isVisible = resources.getBoolean(R.bool.feature_threads_beta_feedback_enabled)
+        views.threadsFeedBackConstraintLayout.isVisible = resources.getBoolean(im.vector.app.config.R.bool.feature_threads_beta_feedback_enabled)
+        views.threadFeedbackDivider.isVisible = resources.getBoolean(im.vector.app.config.R.bool.feature_threads_beta_feedback_enabled)
         views.threadsFeedBackConstraintLayout.debouncedClicks {
             bugReporter.openBugReportScreen(requireActivity(), reportType = ReportType.THREADS_BETA_FEEDBACK)
         }
@@ -211,7 +212,7 @@ class ThreadListFragment :
         val matrixItem = MatrixItem.RoomItem(threadListArgs.roomId, threadListArgs.displayName, threadListArgs.avatarUrl)
         avatarRenderer.render(matrixItem, views.includeThreadListToolbar.roomToolbarThreadImageView)
         views.includeThreadListToolbar.roomToolbarThreadShieldImageView.render(threadListArgs.roomEncryptionTrustLevel)
-        views.includeThreadListToolbar.roomToolbarThreadTitleTextView.text = resources.getText(R.string.thread_list_title)
+        views.includeThreadListToolbar.roomToolbarThreadTitleTextView.text = resources.getText(CommonStrings.thread_list_title)
         views.includeThreadListToolbar.roomToolbarThreadSubtitleTextView.text = threadListArgs.displayName
     }
 

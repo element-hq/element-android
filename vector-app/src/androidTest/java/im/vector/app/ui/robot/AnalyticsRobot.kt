@@ -23,6 +23,7 @@ import im.vector.app.R
 import im.vector.app.espresso.tools.waitUntilActivityVisible
 import im.vector.app.espresso.tools.waitUntilViewVisible
 import im.vector.app.features.analytics.ui.consent.AnalyticsOptInActivity
+import im.vector.lib.strings.CommonStrings
 
 class AnalyticsRobot {
 
@@ -38,7 +39,7 @@ class AnalyticsRobot {
         waitUntilActivityVisible<AnalyticsOptInActivity> {
             waitUntilViewVisible(withId(R.id.title))
         }
-        assertDisplayed(R.id.title, R.string.analytics_opt_in_title)
+        assertDisplayed(R.id.title, CommonStrings.analytics_opt_in_title)
         if (optIn) {
             clickOn(R.id.submit)
         } else {

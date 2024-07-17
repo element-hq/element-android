@@ -29,6 +29,7 @@ import im.vector.app.espresso.tools.waitUntilViewVisible
 import im.vector.app.features.home.room.detail.timeline.edithistory.ViewEditHistoryBottomSheet
 import im.vector.app.features.reactions.EmojiReactionPickerActivity
 import im.vector.app.interactWithSheet
+import im.vector.lib.strings.CommonStrings
 import java.lang.Thread.sleep
 
 class MessageMenuRobot(
@@ -36,7 +37,7 @@ class MessageMenuRobot(
 ) {
 
     fun viewSource() {
-        clickOn(R.string.view_source)
+        clickOn(CommonStrings.view_source)
         // wait for library
         sleep(1000)
         pressBack()
@@ -44,8 +45,8 @@ class MessageMenuRobot(
     }
 
     fun editHistory() {
-        clickOn(R.string.message_view_edit_history)
-        interactWithSheet<ViewEditHistoryBottomSheet>(withText(R.string.message_edits), openState = BottomSheetBehavior.STATE_COLLAPSED) {
+        clickOn(CommonStrings.message_view_edit_history)
+        interactWithSheet<ViewEditHistoryBottomSheet>(withText(CommonStrings.message_edits), openState = BottomSheetBehavior.STATE_COLLAPSED) {
             pressBack()
         }
         autoClosed = true
@@ -57,7 +58,7 @@ class MessageMenuRobot(
     }
 
     fun addReactionFromEmojiPicker() {
-        clickOn(R.string.message_add_reaction)
+        clickOn(CommonStrings.message_add_reaction)
         // Wait for emoji to load, it's async now
         waitUntilActivityVisible<EmojiReactionPickerActivity> {
             closeSoftKeyboard()
@@ -69,17 +70,17 @@ class MessageMenuRobot(
     }
 
     fun edit() {
-        clickOn(R.string.edit)
+        clickOn(CommonStrings.edit)
         autoClosed = true
     }
 
     fun replyInThread() {
-        clickOn(R.string.reply_in_thread)
+        clickOn(CommonStrings.reply_in_thread)
         autoClosed = true
     }
 
     fun viewInRoom() {
-        clickOn(R.string.view_in_room)
+        clickOn(CommonStrings.view_in_room)
         autoClosed = true
     }
 }

@@ -22,10 +22,10 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.databinding.FragmentLoginResetPasswordMailConfirmationBinding
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewState
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.failure.is401
 
 /**
@@ -46,7 +46,7 @@ class FtueAuthResetPasswordMailConfirmationFragment :
     }
 
     private fun setupUi(state: OnboardingViewState) {
-        views.resetPasswordMailConfirmationNotice.text = getString(R.string.login_reset_password_mail_confirmation_notice, state.resetState.email)
+        views.resetPasswordMailConfirmationNotice.text = getString(CommonStrings.login_reset_password_mail_confirmation_notice, state.resetState.email)
     }
 
     private fun submit() {
@@ -64,15 +64,15 @@ class FtueAuthResetPasswordMailConfirmationFragment :
     override fun onError(throwable: Throwable) {
         // Link in email not yet clicked ?
         val message = if (throwable.is401()) {
-            getString(R.string.auth_reset_password_error_unauthorized)
+            getString(CommonStrings.auth_reset_password_error_unauthorized)
         } else {
             errorFormatter.toHumanReadable(throwable)
         }
 
         MaterialAlertDialogBuilder(requireActivity())
-                .setTitle(R.string.dialog_title_error)
+                .setTitle(CommonStrings.dialog_title_error)
                 .setMessage(message)
-                .setPositiveButton(R.string.ok, null)
+                .setPositiveButton(CommonStrings.ok, null)
                 .show()
     }
 }

@@ -72,6 +72,7 @@ import im.vector.app.features.settings.VectorDataStore
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.voicebroadcast.VoiceBroadcastHelper
 import im.vector.lib.core.utils.flow.chunk
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.combine
@@ -684,7 +685,7 @@ class TimelineViewModel @AssistedInject constructor(
                 val widget = jitsiService.createJitsiWidget(initialState.roomId, action.withVideo)
                 _viewEvents.post(RoomDetailViewEvents.JoinJitsiConference(widget, action.withVideo))
             } catch (failure: Throwable) {
-                _viewEvents.post(RoomDetailViewEvents.ShowMessage(stringProvider.getString(R.string.failed_to_add_widget)))
+                _viewEvents.post(RoomDetailViewEvents.ShowMessage(stringProvider.getString(CommonStrings.failed_to_add_widget)))
             } finally {
                 _viewEvents.post(RoomDetailViewEvents.HideWaitingView)
             }
@@ -713,7 +714,7 @@ class TimelineViewModel @AssistedInject constructor(
                     )
                 }
             } catch (failure: Throwable) {
-                _viewEvents.post(RoomDetailViewEvents.ShowMessage(stringProvider.getString(R.string.failed_to_remove_widget)))
+                _viewEvents.post(RoomDetailViewEvents.ShowMessage(stringProvider.getString(CommonStrings.failed_to_remove_widget)))
             } finally {
                 if (isJitsiWidget) {
                     setState { copy(jitsiState = jitsiState.copy(deleteWidgetInProgress = false)) }
@@ -1244,7 +1245,7 @@ class TimelineViewModel @AssistedInject constructor(
             // Check if this request is still active and handled by me
             room.getTimelineEvent(action.eventId)?.let {
                 session.cryptoService().reRequestRoomKeyForEvent(it.root)
-                _viewEvents.post(RoomDetailViewEvents.ShowMessage(stringProvider.getString(R.string.e2e_re_request_encryption_key_dialog_content)))
+                _viewEvents.post(RoomDetailViewEvents.ShowMessage(stringProvider.getString(CommonStrings.e2e_re_request_encryption_key_dialog_content)))
             }
         }
     }
@@ -1329,7 +1330,7 @@ class TimelineViewModel @AssistedInject constructor(
                         when (creationState) {
                             LocalRoomCreationState.NOT_CREATED -> Unit
                             LocalRoomCreationState.CREATING ->
-                                _viewEvents.post(RoomDetailViewEvents.ShowWaitingView(stringProvider.getString(R.string.creating_direct_room)))
+                                _viewEvents.post(RoomDetailViewEvents.ShowWaitingView(stringProvider.getString(CommonStrings.creating_direct_room)))
                             LocalRoomCreationState.FAILURE -> {
                                 _viewEvents.post(RoomDetailViewEvents.HideWaitingView)
                             }

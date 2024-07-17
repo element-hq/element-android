@@ -80,7 +80,7 @@ class FallbackBiometricDialogFragmentTests {
             fragmentScenario.moveToState(Lifecycle.State.RESUMED)
             // Espresso wasn't fast enough to catch this value
             authFlow.tryEmit(true)
-            fragment.requireView().statusText() shouldBeEqualTo context.getString(R.string.lockscreen_fingerprint_success)
+            fragment.requireView().statusText() shouldBeEqualTo context.getString(im.vector.lib.ui.styles.R.string.lockscreen_fingerprint_success)
         }
         latch.await()
     }
@@ -95,7 +95,7 @@ class FallbackBiometricDialogFragmentTests {
             fragment.authenticationFlow = authFlow
             fragmentScenario.moveToState(Lifecycle.State.RESUMED)
             authFlow.tryEmit(false)
-            fragment.requireView().statusText() shouldBeEqualTo context.getString(R.string.lockscreen_fingerprint_not_recognized)
+            fragment.requireView().statusText() shouldBeEqualTo context.getString(im.vector.lib.ui.styles.R.string.lockscreen_fingerprint_not_recognized)
             latch.countDown()
         }
         latch.await()

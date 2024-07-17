@@ -23,6 +23,7 @@ import android.widget.RadioGroup
 import androidx.preference.PreferenceViewHolder
 import im.vector.app.R
 import im.vector.app.features.settings.notifications.NotificationIndex
+import im.vector.lib.strings.CommonStrings
 
 class PushRulePreference : VectorPreference {
 
@@ -58,9 +59,9 @@ class PushRulePreference : VectorPreference {
     private fun refreshSummary() {
         summary = context.getString(
                 when (index) {
-                    NotificationIndex.OFF -> R.string.notification_off
-                    NotificationIndex.SILENT -> R.string.notification_silent
-                    NotificationIndex.NOISY, null -> R.string.notification_noisy
+                    NotificationIndex.OFF -> CommonStrings.notification_off
+                    NotificationIndex.SILENT -> CommonStrings.notification_silent
+                    NotificationIndex.NOISY, null -> CommonStrings.notification_noisy
                 }
         )
     }

@@ -34,6 +34,7 @@ import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentLoginBinding
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -120,30 +121,30 @@ class LoginFragment :
         if (login.isEmpty()) {
             views.loginFieldTil.error = getString(
                     if (isSignupMode) {
-                        R.string.error_empty_field_choose_user_name
+                        CommonStrings.error_empty_field_choose_user_name
                     } else {
-                        R.string.error_empty_field_enter_user_name
+                        CommonStrings.error_empty_field_enter_user_name
                     }
             )
             error++
         }
         if (isSignupMode && isNumericOnlyUserIdForbidden && login.isDigitsOnly()) {
-            views.loginFieldTil.error = getString(R.string.error_forbidden_digits_only_username)
+            views.loginFieldTil.error = getString(CommonStrings.error_forbidden_digits_only_username)
             error++
         }
         if (password.isEmpty()) {
             views.passwordFieldTil.error = getString(
                     if (isSignupMode) {
-                        R.string.error_empty_field_choose_password
+                        CommonStrings.error_empty_field_choose_password
                     } else {
-                        R.string.error_empty_field_your_password
+                        CommonStrings.error_empty_field_your_password
                     }
             )
             error++
         }
 
         if (error == 0) {
-            loginViewModel.handle(LoginAction.LoginOrRegister(login, password, getString(R.string.login_default_session_public_name)))
+            loginViewModel.handle(LoginAction.LoginOrRegister(login, password, getString(CommonStrings.login_default_session_public_name)))
         }
     }
 
@@ -157,24 +158,24 @@ class LoginFragment :
         views.loginFieldTil.hint = getString(
                 when (state.signMode) {
                     SignMode.Unknown -> error("developer error")
-                    SignMode.SignUp -> R.string.login_signup_username_hint
-                    SignMode.SignIn -> R.string.login_signin_username_hint
-                    SignMode.SignInWithMatrixId -> R.string.login_signin_matrix_id_hint
+                    SignMode.SignUp -> CommonStrings.login_signup_username_hint
+                    SignMode.SignIn -> CommonStrings.login_signin_username_hint
+                    SignMode.SignInWithMatrixId -> CommonStrings.login_signin_matrix_id_hint
                 }
         )
 
         // Handle direct signin first
         if (state.signMode == SignMode.SignInWithMatrixId) {
             views.loginServerIcon.isVisible = false
-            views.loginTitle.text = getString(R.string.login_signin_matrix_id_title)
-            views.loginNotice.text = getString(R.string.login_signin_matrix_id_notice)
+            views.loginTitle.text = getString(CommonStrings.login_signin_matrix_id_title)
+            views.loginNotice.text = getString(CommonStrings.login_signin_matrix_id_notice)
             views.loginPasswordNotice.isVisible = true
         } else {
             val resId = when (state.signMode) {
                 SignMode.Unknown -> error("developer error")
-                SignMode.SignUp -> R.string.login_signup_to
-                SignMode.SignIn -> R.string.login_connect_to
-                SignMode.SignInWithMatrixId -> R.string.login_connect_to
+                SignMode.SignUp -> CommonStrings.login_signup_to
+                SignMode.SignIn -> CommonStrings.login_connect_to
+                SignMode.SignInWithMatrixId -> CommonStrings.login_connect_to
             }
 
             when (state.serverType) {
@@ -182,18 +183,18 @@ class LoginFragment :
                     views.loginServerIcon.isVisible = true
                     views.loginServerIcon.setImageResource(R.drawable.ic_logo_matrix_org)
                     views.loginTitle.text = getString(resId, state.homeServerUrlFromUser.toReducedUrl())
-                    views.loginNotice.text = getString(R.string.login_server_matrix_org_text)
+                    views.loginNotice.text = getString(CommonStrings.login_server_matrix_org_text)
                 }
                 ServerType.EMS -> {
                     views.loginServerIcon.isVisible = true
                     views.loginServerIcon.setImageResource(R.drawable.ic_logo_element_matrix_services)
                     views.loginTitle.text = getString(resId, "Element Matrix Services")
-                    views.loginNotice.text = getString(R.string.login_server_modular_text)
+                    views.loginNotice.text = getString(CommonStrings.login_server_modular_text)
                 }
                 ServerType.Other -> {
                     views.loginServerIcon.isVisible = false
                     views.loginTitle.text = getString(resId, state.homeServerUrlFromUser.toReducedUrl())
-                    views.loginNotice.text = getString(R.string.login_server_other_text)
+                    views.loginNotice.text = getString(CommonStrings.login_server_other_text)
                 }
                 ServerType.Unknown -> Unit /* Should not happen */
             }
@@ -223,9 +224,9 @@ class LoginFragment :
         views.loginSubmit.text = getString(
                 when (state.signMode) {
                     SignMode.Unknown -> error("developer error")
-                    SignMode.SignUp -> R.string.login_signup_submit
+                    SignMode.SignUp -> CommonStrings.login_signup_submit
                     SignMode.SignIn,
-                    SignMode.SignInWithMatrixId -> R.string.login_signin
+                    SignMode.SignInWithMatrixId -> CommonStrings.login_signin
                 }
         )
     }
@@ -283,12 +284,12 @@ class LoginFragment :
                         error.error.code == MatrixError.M_FORBIDDEN &&
                         error.error.message.isEmpty()) {
                     // Login with email, but email unknown
-                    views.loginFieldTil.error = getString(R.string.login_login_with_email_error)
+                    views.loginFieldTil.error = getString(CommonStrings.login_login_with_email_error)
                 } else {
                     // Trick to display the error without text.
                     views.loginFieldTil.error = " "
                     if (error.isInvalidPassword() && spaceInPassword()) {
-                        views.passwordFieldTil.error = getString(R.string.auth_invalid_login_param_space_in_password)
+                        views.passwordFieldTil.error = getString(CommonStrings.auth_invalid_login_param_space_in_password)
                     } else {
                         views.passwordFieldTil.error = errorFormatter.toHumanReadable(error)
                     }

@@ -21,9 +21,9 @@ import androidx.recyclerview.widget.RecyclerView
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.R
 import im.vector.app.features.autocomplete.AutocompleteClickListener
 import im.vector.app.features.autocomplete.RecyclerViewPresenter
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -124,7 +124,7 @@ class AutocompleteMemberPresenter @AssistedInject constructor(
     private fun createMembersHeader() =
             AutocompleteMemberItem.Header(
                     ID_HEADER_MEMBERS,
-                    context.getString(R.string.room_message_autocomplete_users)
+                    context.getString(CommonStrings.room_message_autocomplete_users)
             )
 
     private fun createMemberItems(queryParams: RoomMemberQueryParams) =
@@ -139,7 +139,7 @@ class AutocompleteMemberPresenter @AssistedInject constructor(
     private fun createEveryoneHeader() =
             AutocompleteMemberItem.Header(
                     ID_HEADER_EVERYONE,
-                    context.getString(R.string.room_message_autocomplete_notification)
+                    context.getString(CommonStrings.room_message_autocomplete_notification)
             )
 
     private fun createEveryoneItem(query: CharSequence?) =

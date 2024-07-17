@@ -29,7 +29,6 @@ import com.airbnb.mvrx.viewModel
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.startSyncing
 import im.vector.app.core.extensions.vectorStore
 import im.vector.app.core.platform.VectorBaseActivity
@@ -57,6 +56,7 @@ import im.vector.app.features.start.StartAppViewState
 import im.vector.app.features.themes.ActivityOtherThemes
 import im.vector.app.features.ui.UiStateRepository
 import im.vector.lib.core.utils.compat.getParcelableExtraCompat
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -161,7 +161,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
 
     private fun renderState(state: StartAppViewState) {
         if (state.mayBeLongToProcess) {
-            views.status.setText(R.string.updating_your_data)
+            views.status.setText(CommonStrings.updating_your_data)
         }
         views.status.isVisible = state.mayBeLongToProcess
     }
@@ -338,15 +338,15 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
     ) {
         if (lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
             MaterialAlertDialogBuilder(this)
-                    .setTitle(R.string.dialog_title_error)
-                    .setMessage(R.string.sign_out_failed_dialog_message)
-                    .setPositiveButton(R.string.sign_out_anyway) { _, _ ->
+                    .setTitle(CommonStrings.dialog_title_error)
+                    .setMessage(CommonStrings.sign_out_failed_dialog_message)
+                    .setPositiveButton(CommonStrings.sign_out_anyway) { _, _ ->
                         signout(session, onboardingStore, ignoreServerError = true)
                     }
-                    .setNeutralButton(R.string.global_retry) { _, _ ->
+                    .setNeutralButton(CommonStrings.global_retry) { _, _ ->
                         signout(session, onboardingStore, ignoreServerError = false)
                     }
-                    .setNegativeButton(R.string.action_cancel) { _, _ -> startNextActivityAndFinish(ignoreClearCredentials = true) }
+                    .setNegativeButton(CommonStrings.action_cancel) { _, _ -> startNextActivityAndFinish(ignoreClearCredentials = true) }
                     .setCancelable(false)
                     .show()
         }

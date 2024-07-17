@@ -58,6 +58,7 @@ import im.vector.app.features.home.room.detail.RoomDetailPendingActionStore
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
 import im.vector.app.features.roommemberprofile.devices.DeviceListBottomSheet
 import im.vector.app.features.roommemberprofile.powerlevel.EditPowerLevelDialogs
+import im.vector.lib.strings.CommonStrings
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.crypto.model.UserVerificationLevel
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
@@ -148,9 +149,9 @@ class RoomMemberProfileFragment :
 
     private fun handleReportSuccess() {
         MaterialAlertDialogBuilder(requireContext())
-                .setTitle(R.string.user_reported_as_inappropriate_title)
-                .setMessage(R.string.user_reported_as_inappropriate_content)
-                .setPositiveButton(R.string.ok, null)
+                .setTitle(CommonStrings.user_reported_as_inappropriate_title)
+                .setMessage(CommonStrings.user_reported_as_inappropriate_content)
+                .setPositiveButton(CommonStrings.ok, null)
                 .show()
     }
 
@@ -192,14 +193,14 @@ class RoomMemberProfileFragment :
                     .show(parentFragmentManager, "VERIF")
         } else {
             MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(R.string.dialog_title_warning)
-                    .setMessage(R.string.verify_cannot_cross_sign)
-                    .setPositiveButton(R.string.verification_profile_verify) { _, _ ->
+                    .setTitle(CommonStrings.dialog_title_warning)
+                    .setMessage(CommonStrings.verify_cannot_cross_sign)
+                    .setPositiveButton(CommonStrings.verification_profile_verify) { _, _ ->
                         UserVerificationBottomSheet
                                 .verifyUser(otherUserId = startVerification.userId)
                                 .show(parentFragmentManager, "VERIF")
                     }
-                    .setNegativeButton(R.string.action_cancel, null)
+                    .setNegativeButton(CommonStrings.action_cancel, null)
                     .show()
         }
     }
@@ -289,13 +290,13 @@ class RoomMemberProfileFragment :
         val positiveButtonRes: Int
         val confirmationRes: Int
         if (isIgnored) {
-            confirmationRes = R.string.room_participants_action_unignore_prompt_msg
-            titleRes = R.string.room_participants_action_unignore_title
-            positiveButtonRes = R.string.room_participants_action_unignore
+            confirmationRes = CommonStrings.room_participants_action_unignore_prompt_msg
+            titleRes = CommonStrings.room_participants_action_unignore_title
+            positiveButtonRes = CommonStrings.room_participants_action_unignore
         } else {
-            confirmationRes = R.string.room_participants_action_ignore_prompt_msg
-            titleRes = R.string.room_participants_action_ignore_title
-            positiveButtonRes = R.string.room_participants_action_ignore
+            confirmationRes = CommonStrings.room_participants_action_ignore_prompt_msg
+            titleRes = CommonStrings.room_participants_action_ignore_title
+            positiveButtonRes = CommonStrings.room_participants_action_ignore
         }
         ConfirmationDialogBuilder
                 .show(
@@ -351,8 +352,8 @@ class RoomMemberProfileFragment :
         views.itemShareQrCodeImage.setData(permalink)
         MaterialAlertDialogBuilder(requireContext())
                 .setView(view)
-                .setNeutralButton(R.string.ok, null)
-                .setPositiveButton(R.string.share_by_text) { _, _ ->
+                .setNeutralButton(CommonStrings.ok, null)
+                .setPositiveButton(CommonStrings.share_by_text) { _, _ ->
                     startSharePlainTextIntent(
                             context = requireContext(),
                             activityResultLauncher = null,
@@ -374,20 +375,20 @@ class RoomMemberProfileFragment :
         views.editText.hint = "#000000"
 
         MaterialAlertDialogBuilder(requireContext())
-                .setTitle(R.string.room_member_override_nick_color)
+                .setTitle(CommonStrings.room_member_override_nick_color)
                 .setView(layout)
-                .setPositiveButton(R.string.ok) { _, _ ->
+                .setPositiveButton(CommonStrings.ok) { _, _ ->
                     val newColor = views.editText.text.toString()
                     if (newColor != state.userColorOverride) {
                         viewModel.handle(RoomMemberProfileAction.SetUserColorOverride(newColor))
                     }
                 }
-                .setNegativeButton(R.string.action_cancel, null)
+                .setNegativeButton(CommonStrings.action_cancel, null)
                 .show()
     }
 
     override fun onEditPowerLevel(currentRole: Role) {
-        EditPowerLevelDialogs.showChoice(requireActivity(), R.string.power_level_edit_title, currentRole) { newPowerLevel ->
+        EditPowerLevelDialogs.showChoice(requireActivity(), CommonStrings.power_level_edit_title, currentRole) { newPowerLevel ->
             viewModel.handle(RoomMemberProfileAction.SetPowerLevel(currentRole.value, newPowerLevel, true))
         }
     }
@@ -397,11 +398,11 @@ class RoomMemberProfileFragment :
                 .show(
                         activity = requireActivity(),
                         askForReason = true,
-                        confirmationRes = if (isSpace) R.string.space_participants_remove_prompt_msg
-                        else R.string.room_participants_remove_prompt_msg,
-                        positiveRes = R.string.room_participants_action_remove,
-                        reasonHintRes = R.string.room_participants_remove_reason,
-                        titleRes = R.string.room_participants_remove_title
+                        confirmationRes = if (isSpace) CommonStrings.space_participants_remove_prompt_msg
+                        else CommonStrings.room_participants_remove_prompt_msg,
+                        positiveRes = CommonStrings.room_participants_action_remove,
+                        reasonHintRes = CommonStrings.room_participants_remove_reason,
+                        titleRes = CommonStrings.room_participants_remove_title
                 ) { reason ->
                     viewModel.handle(RoomMemberProfileAction.KickUser(reason))
                 }
@@ -412,15 +413,15 @@ class RoomMemberProfileFragment :
         val positiveButtonRes: Int
         val confirmationRes: Int
         if (isUserBanned) {
-            confirmationRes = if (isSpace) R.string.space_participants_unban_prompt_msg
-            else R.string.room_participants_unban_prompt_msg
-            titleRes = R.string.room_participants_unban_title
-            positiveButtonRes = R.string.room_participants_action_unban
+            confirmationRes = if (isSpace) CommonStrings.space_participants_unban_prompt_msg
+            else CommonStrings.room_participants_unban_prompt_msg
+            titleRes = CommonStrings.room_participants_unban_title
+            positiveButtonRes = CommonStrings.room_participants_action_unban
         } else {
-            confirmationRes = if (isSpace) R.string.space_participants_ban_prompt_msg
-            else R.string.room_participants_ban_prompt_msg
-            titleRes = R.string.room_participants_ban_title
-            positiveButtonRes = R.string.room_participants_action_ban
+            confirmationRes = if (isSpace) CommonStrings.space_participants_ban_prompt_msg
+            else CommonStrings.room_participants_ban_prompt_msg
+            titleRes = CommonStrings.room_participants_ban_title
+            positiveButtonRes = CommonStrings.room_participants_action_ban
         }
         ConfirmationDialogBuilder
                 .show(
@@ -428,7 +429,7 @@ class RoomMemberProfileFragment :
                         askForReason = !isUserBanned,
                         confirmationRes = confirmationRes,
                         positiveRes = positiveButtonRes,
-                        reasonHintRes = R.string.room_participants_ban_reason,
+                        reasonHintRes = CommonStrings.room_participants_ban_reason,
                         titleRes = titleRes
                 ) { reason ->
                     viewModel.handle(RoomMemberProfileAction.BanOrUnbanUser(reason))
@@ -440,10 +441,10 @@ class RoomMemberProfileFragment :
                 .show(
                         activity = requireActivity(),
                         askForReason = false,
-                        confirmationRes = R.string.room_participants_action_cancel_invite_prompt_msg,
-                        positiveRes = R.string.room_participants_action_cancel_invite,
+                        confirmationRes = CommonStrings.room_participants_action_cancel_invite_prompt_msg,
+                        positiveRes = CommonStrings.room_participants_action_cancel_invite,
                         reasonHintRes = 0,
-                        titleRes = R.string.room_participants_action_cancel_invite_title
+                        titleRes = CommonStrings.room_participants_action_cancel_invite_title
                 ) {
                     viewModel.handle(RoomMemberProfileAction.KickUser(null))
                 }

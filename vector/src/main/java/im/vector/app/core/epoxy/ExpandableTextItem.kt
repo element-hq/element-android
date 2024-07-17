@@ -27,6 +27,7 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.extensions.copyOnLongClick
+import im.vector.lib.strings.CommonStrings
 
 @EpoxyModelClass
 abstract class ExpandableTextItem : VectorEpoxyModel<ExpandableTextItem.Holder>(R.layout.item_expandable_textview) {
@@ -76,7 +77,7 @@ abstract class ExpandableTextItem : VectorEpoxyModel<ExpandableTextItem.Holder>(
 
         holder.content.ellipsize = null
         holder.arrow.setImageResource(R.drawable.ic_expand_less)
-        holder.arrow.contentDescription = holder.view.context.getString(R.string.merged_events_collapse)
+        holder.arrow.contentDescription = holder.view.context.getString(CommonStrings.merged_events_collapse)
         isExpanded = true
     }
 
@@ -88,7 +89,7 @@ abstract class ExpandableTextItem : VectorEpoxyModel<ExpandableTextItem.Holder>(
 
         holder.content.ellipsize = TextUtils.TruncateAt.END
         holder.arrow.setImageResource(R.drawable.ic_expand_more)
-        holder.arrow.contentDescription = holder.view.context.getString(R.string.merged_events_expand)
+        holder.arrow.contentDescription = holder.view.context.getString(CommonStrings.merged_events_expand)
         isExpanded = false
     }
 

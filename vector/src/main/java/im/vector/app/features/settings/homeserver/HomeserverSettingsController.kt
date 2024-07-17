@@ -32,6 +32,7 @@ import im.vector.app.features.discovery.settingsInfoItem
 import im.vector.app.features.discovery.settingsSectionTitleItem
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.federation.FederationVersion
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 import org.matrix.android.sdk.api.session.homeserver.RoomVersionStatus
@@ -79,7 +80,7 @@ class HomeserverSettingsController @Inject constructor(
         }
         settingsSectionTitleItem {
             id("urlTitle")
-            titleResId(R.string.hs_url)
+            titleResId(CommonStrings.hs_url)
         }
         settingsInfoItem {
             id("urlValue")
@@ -88,7 +89,7 @@ class HomeserverSettingsController @Inject constructor(
         if (vectorPreferences.developerMode()) {
             settingsSectionTitleItem {
                 id("urlApiTitle")
-                titleResId(R.string.hs_client_url)
+                titleResId(CommonStrings.hs_client_url)
             }
             settingsInfoItem {
                 id("urlApiValue")
@@ -100,7 +101,7 @@ class HomeserverSettingsController @Inject constructor(
     private fun buildFederationVersion(federationVersion: FederationVersion) {
         settingsSectionTitleItem {
             id("nameTitle")
-            titleResId(R.string.settings_server_name)
+            titleResId(CommonStrings.settings_server_name)
         }
         settingsInfoItem {
             id("nameValue")
@@ -108,7 +109,7 @@ class HomeserverSettingsController @Inject constructor(
         }
         settingsSectionTitleItem {
             id("versionTitle")
-            titleResId(R.string.settings_server_version)
+            titleResId(CommonStrings.settings_server_version)
         }
         settingsInfoItem {
             id("versionValue")
@@ -120,7 +121,7 @@ class HomeserverSettingsController @Inject constructor(
         val host = this
         settingsSectionTitleItem {
             id("uploadTitle")
-            titleResId(R.string.settings_server_upload_size_title)
+            titleResId(CommonStrings.settings_server_upload_size_title)
         }
 
         val limit = data.homeServerCapabilities.maxUploadFileSize
@@ -128,9 +129,9 @@ class HomeserverSettingsController @Inject constructor(
         settingsInfoItem {
             id("uploadValue")
             if (limit == HomeServerCapabilities.MAX_UPLOAD_FILE_SIZE_UNKNOWN) {
-                helperTextResId(R.string.settings_server_upload_size_unknown)
+                helperTextResId(CommonStrings.settings_server_upload_size_unknown)
             } else {
-                helperText(host.stringProvider.getString(R.string.settings_server_upload_size_content, "${limit / 1048576L} MB"))
+                helperText(host.stringProvider.getString(CommonStrings.settings_server_upload_size_content, "${limit / 1048576L} MB"))
             }
         }
 
@@ -139,12 +140,12 @@ class HomeserverSettingsController @Inject constructor(
             if (roomCapabilities != null) {
                 settingsSectionTitleItem {
                     id("room_versions")
-                    titleResId(R.string.settings_server_room_versions)
+                    titleResId(CommonStrings.settings_server_room_versions)
                 }
 
                 genericWithValueItem {
                     id("room_version_default")
-                    title(host.stringProvider.getString(R.string.settings_server_default_room_version).toEpoxyCharSequence())
+                    title(host.stringProvider.getString(CommonStrings.settings_server_default_room_version).toEpoxyCharSequence())
                     value(roomCapabilities.defaultRoomVersion)
                 }
 
@@ -155,8 +156,8 @@ class HomeserverSettingsController @Inject constructor(
                         value(
                                 host.stringProvider.getString(
                                         when (it.status) {
-                                            RoomVersionStatus.STABLE -> R.string.settings_server_room_version_stable
-                                            RoomVersionStatus.UNSTABLE -> R.string.settings_server_room_version_unstable
+                                            RoomVersionStatus.STABLE -> CommonStrings.settings_server_room_version_stable
+                                            RoomVersionStatus.UNSTABLE -> CommonStrings.settings_server_room_version_unstable
                                         }
                                 )
                         )

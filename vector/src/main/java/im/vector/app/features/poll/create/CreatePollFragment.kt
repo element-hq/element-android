@@ -26,12 +26,13 @@ import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentCreatePollBinding
 import im.vector.app.features.poll.PollMode
 import im.vector.app.features.poll.create.CreatePollViewModel.Companion.MAX_OPTIONS_COUNT
+import im.vector.lib.strings.CommonPlurals
+import im.vector.lib.strings.CommonStrings
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.room.model.message.PollType
 import javax.inject.Inject
@@ -65,12 +66,12 @@ class CreatePollFragment :
 
         when (args.mode) {
             PollMode.CREATE -> {
-                views.createPollToolbar.title = getString(R.string.create_poll_title)
-                views.createPollButton.text = getString(R.string.create_poll_title)
+                views.createPollToolbar.title = getString(CommonStrings.create_poll_title)
+                views.createPollButton.text = getString(CommonStrings.create_poll_title)
             }
             PollMode.EDIT -> {
-                views.createPollToolbar.title = getString(R.string.edit_poll_title)
-                views.createPollButton.text = getString(R.string.edit_poll_title)
+                views.createPollToolbar.title = getString(CommonStrings.edit_poll_title)
+                views.createPollButton.text = getString(CommonStrings.edit_poll_title)
             }
         }
 
@@ -131,13 +132,13 @@ class CreatePollFragment :
     }
 
     private fun handleEmptyQuestionError() {
-        renderToast(getString(R.string.create_poll_empty_question_error))
+        renderToast(getString(CommonStrings.create_poll_empty_question_error))
     }
 
     private fun handleNotEnoughOptionsError(requiredOptionsCount: Int) {
         renderToast(
                 resources.getQuantityString(
-                        R.plurals.create_poll_not_enough_options_error,
+                        CommonPlurals.create_poll_not_enough_options_error,
                         requiredOptionsCount,
                         requiredOptionsCount
                 )

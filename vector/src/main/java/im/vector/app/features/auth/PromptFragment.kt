@@ -23,9 +23,9 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
-import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentReauthConfirmBinding
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 
 class PromptFragment : VectorBaseFragment<FragmentReauthConfirmBinding>() {
@@ -51,7 +51,7 @@ class PromptFragment : VectorBaseFragment<FragmentReauthConfirmBinding>() {
                 val password = views.passwordField.text.toString()
                 if (password.isBlank()) {
                     // Prompt to enter something
-                    views.passwordFieldTil.error = getString(R.string.error_empty_field_your_password)
+                    views.passwordFieldTil.error = getString(CommonStrings.error_empty_field_your_password)
                 } else {
                     views.passwordFieldTil.error = null
                     viewModel.handle(ReAuthActions.ReAuthWithPass(password))
@@ -67,11 +67,11 @@ class PromptFragment : VectorBaseFragment<FragmentReauthConfirmBinding>() {
         when (it.flowType) {
             LoginFlowTypes.SSO -> {
                 views.passwordFieldTil.isVisible = false
-                views.reAuthConfirmButton.text = getString(R.string.auth_login_sso)
+                views.reAuthConfirmButton.text = getString(CommonStrings.auth_login_sso)
             }
             LoginFlowTypes.PASSWORD -> {
                 views.passwordFieldTil.isVisible = true
-                views.reAuthConfirmButton.text = getString(R.string._continue)
+                views.reAuthConfirmButton.text = getString(CommonStrings._continue)
             }
             else -> {
                 // This login flow is not supported, you should use web?
@@ -82,10 +82,10 @@ class PromptFragment : VectorBaseFragment<FragmentReauthConfirmBinding>() {
             when (it.flowType) {
                 LoginFlowTypes.SSO -> {
                     views.genericErrorText.isVisible = true
-                    views.genericErrorText.text = getString(R.string.authentication_error)
+                    views.genericErrorText.text = getString(CommonStrings.authentication_error)
                 }
                 LoginFlowTypes.PASSWORD -> {
-                    views.passwordFieldTil.error = getString(R.string.authentication_error)
+                    views.passwordFieldTil.error = getString(CommonStrings.authentication_error)
                 }
                 else -> {
                     // nop

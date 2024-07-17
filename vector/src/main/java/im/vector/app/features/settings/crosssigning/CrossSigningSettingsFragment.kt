@@ -26,7 +26,6 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.registerStartForActivityResult
@@ -34,6 +33,7 @@ import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.features.auth.ReAuthActivity
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import javax.inject.Inject
 
@@ -81,9 +81,9 @@ class CrossSigningSettingsFragment :
             when (event) {
                 is CrossSigningSettingsViewEvents.Failure -> {
                     MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(R.string.dialog_title_error)
+                            .setTitle(CommonStrings.dialog_title_error)
                             .setMessage(errorFormatter.toHumanReadable(event.throwable))
-                            .setPositiveButton(R.string.ok, null)
+                            .setPositiveButton(CommonStrings.ok, null)
                             .show()
                     Unit
                 }
@@ -92,7 +92,7 @@ class CrossSigningSettingsFragment :
                             requireContext(),
                             event.registrationFlowResponse,
                             event.lastErrorCode,
-                            getString(R.string.initialize_cross_signing)
+                            getString(CommonStrings.initialize_cross_signing)
                     ).let { intent ->
                         reAuthActivityResultLauncher.launch(intent)
                     }
@@ -110,7 +110,7 @@ class CrossSigningSettingsFragment :
 
     override fun onResume() {
         super.onResume()
-        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(R.string.encryption_information_cross_signing_state)
+        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(CommonStrings.encryption_information_cross_signing_state)
     }
 
     override fun invalidate() = withState(viewModel) { state ->

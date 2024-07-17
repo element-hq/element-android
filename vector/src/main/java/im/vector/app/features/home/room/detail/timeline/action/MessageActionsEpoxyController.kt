@@ -45,6 +45,7 @@ import im.vector.app.features.location.toLocationData
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.events.model.isLocationMessage
@@ -103,7 +104,7 @@ class MessageActionsEpoxyController @Inject constructor(
             // Get more details about the error
             val errorMessage = state.timelineEvent()?.root?.sendStateError()
                     ?.let { errorFormatter.toHumanReadable(Failure.ServerError(it, 0)) }
-                    ?: stringProvider.getString(R.string.unable_to_send_message)
+                    ?: stringProvider.getString(CommonStrings.unable_to_send_message)
             bottomSheetSendStateItem {
                 id("send_state")
                 showProgress(false)
@@ -114,14 +115,14 @@ class MessageActionsEpoxyController @Inject constructor(
             bottomSheetSendStateItem {
                 id("send_state")
                 showProgress(true)
-                text(host.stringProvider.getString(R.string.event_status_sending_message))
+                text(host.stringProvider.getString(CommonStrings.event_status_sending_message))
             }
         } else if (sendState == SendState.SENT) {
             bottomSheetSendStateItem {
                 id("send_state")
                 showProgress(false)
                 drawableStart(R.drawable.ic_message_sent)
-                text(host.stringProvider.getString(R.string.event_status_sent_message))
+                text(host.stringProvider.getString(CommonStrings.event_status_sent_message))
             }
         }
 
@@ -130,7 +131,7 @@ class MessageActionsEpoxyController @Inject constructor(
                 bottomSheetSendStateItem {
                     id("e2e_clear")
                     showProgress(false)
-                    text(host.stringProvider.getString(R.string.unencrypted))
+                    text(host.stringProvider.getString(CommonStrings.unencrypted))
                     drawableStart(R.drawable.ic_shield_warning_small)
                 }
             }
@@ -139,7 +140,7 @@ class MessageActionsEpoxyController @Inject constructor(
                 bottomSheetSendStateItem {
                     id("e2e_unverified")
                     showProgress(false)
-                    text(host.stringProvider.getString(R.string.encrypted_unverified))
+                    text(host.stringProvider.getString(CommonStrings.encrypted_unverified))
                     drawableStart(R.drawable.ic_shield_warning_small)
                 }
             }
@@ -147,7 +148,7 @@ class MessageActionsEpoxyController @Inject constructor(
                 bottomSheetSendStateItem {
                     id("e2e_unsafe")
                     showProgress(false)
-                    text(host.stringProvider.getString(R.string.key_authenticity_not_guaranteed))
+                    text(host.stringProvider.getString(CommonStrings.key_authenticity_not_guaranteed))
                     drawableStart(R.drawable.ic_shield_gray)
                 }
             }
@@ -155,7 +156,7 @@ class MessageActionsEpoxyController @Inject constructor(
                 bottomSheetSendStateItem {
                     id("e2e_deleted")
                     showProgress(false)
-                    text(host.stringProvider.getString(R.string.encrypted_by_deleted))
+                    text(host.stringProvider.getString(CommonStrings.encrypted_by_deleted))
                     drawableStart(R.drawable.ic_shield_warning_small)
                 }
             }

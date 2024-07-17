@@ -17,12 +17,13 @@
 package im.vector.app.features.devtools
 
 import com.airbnb.epoxy.TypedEpoxyController
-import im.vector.app.R
 import im.vector.app.core.epoxy.noResultItem
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericItem
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
+import im.vector.lib.strings.CommonPlurals
+import im.vector.lib.strings.CommonStrings
 import me.gujun.android.span.span
 import org.json.JSONObject
 import javax.inject.Inject
@@ -43,14 +44,14 @@ class RoomStateListController @Inject constructor(
                 if (stateEventsGroups.isEmpty()) {
                     noResultItem {
                         id("no state events")
-                        text(host.stringProvider.getString(R.string.no_result_placeholder))
+                        text(host.stringProvider.getString(CommonStrings.no_result_placeholder))
                     }
                 } else {
                     stateEventsGroups.forEach { entry ->
                         genericItem {
                             id(entry.key)
                             title(entry.key.toEpoxyCharSequence())
-                            description(host.stringProvider.getQuantityString(R.plurals.entries, entry.value.size, entry.value.size).toEpoxyCharSequence())
+                            description(host.stringProvider.getQuantityString(CommonPlurals.entries, entry.value.size, entry.value.size).toEpoxyCharSequence())
                             itemClickAction {
                                 host.interactionListener?.processAction(RoomDevToolAction.ShowStateEventType(entry.key))
                             }
@@ -63,7 +64,7 @@ class RoomStateListController @Inject constructor(
                 if (stateEvents.isEmpty()) {
                     noResultItem {
                         id("no state events")
-                        text(host.stringProvider.getString(R.string.no_result_placeholder))
+                        text(host.stringProvider.getString(CommonStrings.no_result_placeholder))
                     }
                 } else {
                     stateEvents.forEach { stateEvent ->
@@ -79,13 +80,13 @@ class RoomStateListController @Inject constructor(
                             title(span {
                                 +"Type: "
                                 span {
-                                    textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
+                                    textColor = host.colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_secondary)
                                     text = "\"${stateEvent.type}\""
                                     textStyle = "normal"
                                 }
                                 +"\nState Key: "
                                 span {
-                                    textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
+                                    textColor = host.colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_secondary)
                                     text = stateEvent.stateKey.let { "\"$it\"" }
                                     textStyle = "normal"
                                 }

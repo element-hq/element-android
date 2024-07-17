@@ -23,16 +23,17 @@ import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogNegativeButton
 import im.vector.app.R
 import im.vector.app.espresso.tools.waitUntilViewVisible
+import im.vector.lib.strings.CommonStrings
 
 class SettingsPreferencesRobot {
 
     fun crawl() {
-        clickOn(R.string.settings_interface_language)
+        clickOn(CommonStrings.settings_interface_language)
         waitUntilViewVisible(withText("Dansk (Danmark)"))
         pressBack()
-        clickOn(R.string.settings_theme)
+        clickOn(CommonStrings.settings_theme)
         clickDialogNegativeButton()
-        clickOn(R.string.font_size)
+        clickOn(CommonStrings.font_size)
         waitUntilViewVisible(withId(R.id.fons_scale_recycler))
         pressBack()
     }

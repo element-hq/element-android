@@ -28,6 +28,7 @@ import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.platform.CheckableConstraintLayout
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.list.UnreadCounterBadgeView
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.util.MatrixItem
 
 @EpoxyModelClass
@@ -47,7 +48,7 @@ abstract class SpaceInviteItem : VectorEpoxyModel<SpaceInviteItem.Holder>(R.layo
         holder.root.onClick(onInviteSelectedListener)
         holder.root.setOnLongClickListener { onLongClickListener?.invoke(holder.root).let { true } }
         holder.name.text = matrixItem.displayName
-        holder.invitedBy.text = context.getString(R.string.invited_by, inviter)
+        holder.invitedBy.text = context.getString(CommonStrings.invited_by, inviter)
 
         avatarRenderer.render(matrixItem, holder.avatar)
         holder.notificationBadge.render(UnreadCounterBadgeView.State.Text("!", true))

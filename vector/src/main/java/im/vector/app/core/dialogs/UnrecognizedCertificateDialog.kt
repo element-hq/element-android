@@ -21,6 +21,7 @@ import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.databinding.DialogSslFingerprintBinding
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.network.ssl.Fingerprint
 import timber.log.Timber
 import javax.inject.Inject
@@ -121,37 +122,37 @@ class UnrecognizedCertificateDialog @Inject constructor(
         val inflater = activity.layoutInflater
         val layout = inflater.inflate(R.layout.dialog_ssl_fingerprint, null)
         val views = DialogSslFingerprintBinding.bind(layout)
-        views.sslFingerprintTitle.text = stringProvider.getString(R.string.ssl_fingerprint_hash, unrecognizedFingerprint.hashType.toString())
+        views.sslFingerprintTitle.text = stringProvider.getString(CommonStrings.ssl_fingerprint_hash, unrecognizedFingerprint.hashType.toString())
         views.sslFingerprint.text = unrecognizedFingerprint.displayableHexRepr
         if (userId != null) {
             views.sslUserId.text = stringProvider.getString(
-                    R.string.generic_label_and_value,
-                    stringProvider.getString(R.string.username),
+                    CommonStrings.generic_label_and_value,
+                    stringProvider.getString(CommonStrings.username),
                     userId
             )
         } else {
             views.sslUserId.text = stringProvider.getString(
-                    R.string.generic_label_and_value,
-                    stringProvider.getString(R.string.hs_url),
+                    CommonStrings.generic_label_and_value,
+                    stringProvider.getString(CommonStrings.hs_url),
                     homeServerUrl
             )
         }
         if (existing) {
             if (homeServerConnectionConfigHasFingerprints) {
-                views.sslExplanation.text = stringProvider.getString(R.string.ssl_expected_existing_expl)
+                views.sslExplanation.text = stringProvider.getString(CommonStrings.ssl_expected_existing_expl)
             } else {
-                views.sslExplanation.text = stringProvider.getString(R.string.ssl_unexpected_existing_expl)
+                views.sslExplanation.text = stringProvider.getString(CommonStrings.ssl_unexpected_existing_expl)
             }
         } else {
-            views.sslExplanation.text = stringProvider.getString(R.string.ssl_cert_new_account_expl)
+            views.sslExplanation.text = stringProvider.getString(CommonStrings.ssl_cert_new_account_expl)
         }
         builder.setView(layout)
-        builder.setTitle(R.string.ssl_could_not_verify)
-        builder.setPositiveButton(R.string.ssl_trust) { _, _ ->
+        builder.setTitle(CommonStrings.ssl_could_not_verify)
+        builder.setPositiveButton(CommonStrings.ssl_trust) { _, _ ->
             callback.onAccept()
         }
         if (existing) {
-            builder.setNegativeButton(R.string.ssl_remain_offline) { _, _ ->
+            builder.setNegativeButton(CommonStrings.ssl_remain_offline) { _, _ ->
                 if (userId != null) {
                     var f = ignoredFingerprints[userId]
                     if (f == null) {
@@ -162,9 +163,9 @@ class UnrecognizedCertificateDialog @Inject constructor(
                 }
                 callback.onIgnore()
             }
-            builder.setNeutralButton(R.string.ssl_logout_account) { _, _ -> callback.onReject() }
+            builder.setNeutralButton(CommonStrings.ssl_logout_account) { _, _ -> callback.onReject() }
         } else {
-            builder.setNegativeButton(R.string.action_cancel) { _, _ -> callback.onReject() }
+            builder.setNegativeButton(CommonStrings.action_cancel) { _, _ -> callback.onReject() }
         }
 
         builder.setOnDismissListener {

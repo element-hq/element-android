@@ -83,6 +83,7 @@ import im.vector.app.features.voicebroadcast.isVoiceBroadcast
 import im.vector.app.features.voicebroadcast.model.MessageVoiceBroadcastInfoContent
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.lib.core.utils.timer.Clock
+import im.vector.lib.strings.CommonStrings
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.MatrixUrls.isMxcUrl
 import org.matrix.android.sdk.api.session.Session
@@ -179,7 +180,7 @@ class MessageItemFactory @Inject constructor(
 
         val messageContent = event.getVectorLastMessageContent()
         if (messageContent == null) {
-            val malformedText = stringProvider.getString(R.string.malformed_message)
+            val malformedText = stringProvider.getString(CommonStrings.malformed_message)
             return defaultItemFactory.create(malformedText, informationData, highlight, callback)
         }
         if (messageContent.relatesTo?.type == RelationType.REPLACE ||
@@ -292,7 +293,7 @@ class MessageItemFactory @Inject constructor(
         val pollContent = latestContent?.toModel<MessagePollContent>()
 
         return if (pollContent == null) {
-            val title = stringProvider.getString(R.string.message_reply_to_ended_poll_preview).toEpoxyCharSequence()
+            val title = stringProvider.getString(CommonStrings.message_reply_to_ended_poll_preview).toEpoxyCharSequence()
             PollItem_()
                     .attributes(attributes)
                     .eventId(informationData.eventId)
@@ -681,9 +682,9 @@ class MessageItemFactory @Inject constructor(
     ): Spannable {
         val spannable = SpannableStringBuilder()
         spannable.append(linkifiedBody)
-        val editedSuffix = stringProvider.getString(R.string.edited_suffix)
+        val editedSuffix = stringProvider.getString(CommonStrings.edited_suffix)
         spannable.append(" ").append(editedSuffix)
-        val color = colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
+        val color = colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_secondary)
         val editStart = spannable.lastIndexOf(editedSuffix)
         val editEnd = editStart + editedSuffix.length
         spannable.setSpan(
@@ -729,7 +730,7 @@ class MessageItemFactory @Inject constructor(
         val htmlBody = messageContent.getHtmlBody()
         val formattedBody = span {
             text = htmlBody
-            textColor = colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
+            textColor = colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_secondary)
             textStyle = "italic"
         }
 

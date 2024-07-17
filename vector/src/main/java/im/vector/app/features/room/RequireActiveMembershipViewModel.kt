@@ -20,11 +20,11 @@ import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
@@ -100,19 +100,19 @@ class RequireActiveMembershipViewModel @AssistedInject constructor(
         val viewEvent = when (roomSummary.membership) {
             Membership.LEAVE -> {
                 val message = senderDisplayName?.let {
-                    stringProvider.getString(R.string.has_been_removed, roomSummary.displayName, it)
+                    stringProvider.getString(CommonStrings.has_been_removed, roomSummary.displayName, it)
                 }
                 RequireActiveMembershipViewEvents.RoomLeft(message)
             }
             Membership.KNOCK -> {
                 val message = senderDisplayName?.let {
-                    stringProvider.getString(R.string.has_been_removed, roomSummary.displayName, it)
+                    stringProvider.getString(CommonStrings.has_been_removed, roomSummary.displayName, it)
                 }
                 RequireActiveMembershipViewEvents.RoomLeft(message)
             }
             Membership.BAN -> {
                 val message = senderDisplayName?.let {
-                    stringProvider.getString(R.string.has_been_banned, roomSummary.displayName, it)
+                    stringProvider.getString(CommonStrings.has_been_banned, roomSummary.displayName, it)
                 }
                 RequireActiveMembershipViewEvents.RoomLeft(message)
             }

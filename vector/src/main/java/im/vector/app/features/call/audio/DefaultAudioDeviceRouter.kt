@@ -32,6 +32,7 @@ class DefaultAudioDeviceRouter(
     private var focusRequestCompat: AudioFocusRequestCompat? = null
 
     override fun setAudioRoute(device: CallAudioManager.Device) {
+        @Suppress("DEPRECATION")
         audioManager.isSpeakerphoneOn = device is CallAudioManager.Device.Speaker
         setBluetoothAudioRoute(device is CallAudioManager.Device.WirelessHeadset)
     }
@@ -44,6 +45,7 @@ class DefaultAudioDeviceRouter(
                 AudioManagerCompat.abandonAudioFocusRequest(audioManager, it)
             }
             focusRequestCompat = null
+            @Suppress("DEPRECATION")
             audioManager.isSpeakerphoneOn = false
             setBluetoothAudioRoute(false)
             return true
@@ -79,10 +81,12 @@ class DefaultAudioDeviceRouter(
      */
     private fun setBluetoothAudioRoute(enabled: Boolean) {
         if (enabled) {
+            @Suppress("DEPRECATION")
             audioManager.startBluetoothSco()
             audioManager.isBluetoothScoOn = true
         } else {
             audioManager.isBluetoothScoOn = false
+            @Suppress("DEPRECATION")
             audioManager.stopBluetoothSco()
         }
     }

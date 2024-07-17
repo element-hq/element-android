@@ -29,6 +29,7 @@ import im.vector.app.R
 import im.vector.app.espresso.tools.waitUntilActivityVisible
 import im.vector.app.espresso.tools.waitUntilViewVisible
 import im.vector.app.features.home.room.detail.RoomDetailActivity
+import im.vector.lib.strings.CommonStrings
 import org.hamcrest.CoreMatchers.allOf
 
 class CreateNewRoomRobot(
@@ -39,7 +40,7 @@ class CreateNewRoomRobot(
         createdRoom = true
         BaristaListAssertions.assertListItemCount(R.id.createRoomForm, 12)
         roomName?.let {
-            onView(allOf(withId(R.id.formTextInputTextInputEditText), withHint(R.string.create_room_name_hint)))
+            onView(allOf(withId(R.id.formTextInputTextInputEditText), withHint(CommonStrings.create_room_name_hint)))
                     .perform(replaceText(roomName))
             closeSoftKeyboard()
         }
@@ -53,7 +54,7 @@ class CreateNewRoomRobot(
 
     fun crawl() {
         // Room access bottom sheet
-        BaristaClickInteractions.clickOn(R.string.room_settings_room_access_private_title)
+        BaristaClickInteractions.clickOn(CommonStrings.room_settings_room_access_private_title)
         pressBack()
     }
 }

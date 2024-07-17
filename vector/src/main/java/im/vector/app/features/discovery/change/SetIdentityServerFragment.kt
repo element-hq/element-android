@@ -29,7 +29,6 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.core.platform.VectorBaseFragment
@@ -37,6 +36,7 @@ import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.colorizeMatchingText
 import im.vector.app.databinding.FragmentSetIdentityServerBinding
 import im.vector.app.features.discovery.DiscoverySharedViewModel
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.terms.TermsService
@@ -62,23 +62,24 @@ class SetIdentityServerFragment :
             // No default
             views.identityServerSetDefaultNotice.isVisible = false
             views.identityServerSetDefaultSubmit.isVisible = false
-            views.identityServerSetDefaultAlternative.setText(R.string.identity_server_set_alternative_notice_no_default)
+            views.identityServerSetDefaultAlternative.setText(CommonStrings.identity_server_set_alternative_notice_no_default)
         } else {
             views.identityServerSetDefaultNotice.text = getString(
-                    R.string.identity_server_set_default_notice,
+                    CommonStrings.identity_server_set_default_notice,
                     state.homeServerUrl.toReducedUrl(),
                     state.defaultIdentityServerUrl.toReducedUrl()
             )
                     .toSpannable()
                     .colorizeMatchingText(
                             state.defaultIdentityServerUrl.toReducedUrl(),
-                            colorProvider.getColorFromAttribute(R.attr.vctr_content_tertiary)
+                            colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_tertiary)
                     )
 
             views.identityServerSetDefaultNotice.isVisible = true
             views.identityServerSetDefaultSubmit.isVisible = true
-            views.identityServerSetDefaultSubmit.text = getString(R.string.identity_server_set_default_submit, state.defaultIdentityServerUrl.toReducedUrl())
-            views.identityServerSetDefaultAlternative.setText(R.string.identity_server_set_alternative_notice)
+            views.identityServerSetDefaultSubmit.text =
+                    getString(CommonStrings.identity_server_set_default_submit, state.defaultIdentityServerUrl.toReducedUrl())
+            views.identityServerSetDefaultAlternative.setText(CommonStrings.identity_server_set_alternative_notice)
         }
     }
 
@@ -118,12 +119,12 @@ class SetIdentityServerFragment :
                 is SetIdentityServerViewEvents.OtherFailure -> showFailure(it.failure)
                 is SetIdentityServerViewEvents.NoTerms -> {
                     MaterialAlertDialogBuilder(requireActivity())
-                            .setTitle(R.string.settings_discovery_no_terms_title)
-                            .setMessage(R.string.settings_discovery_no_terms)
-                            .setPositiveButton(R.string._continue) { _, _ ->
+                            .setTitle(CommonStrings.settings_discovery_no_terms_title)
+                            .setMessage(CommonStrings.settings_discovery_no_terms)
+                            .setPositiveButton(CommonStrings._continue) { _, _ ->
                                 processIdentityServerChange()
                             }
-                            .setNegativeButton(R.string.action_cancel, null)
+                            .setNegativeButton(CommonStrings.action_cancel, null)
                             .show()
                     Unit
                 }
@@ -146,9 +147,9 @@ class SetIdentityServerFragment :
         if (failure.forDefault) {
             // Display the error in a dialog
             MaterialAlertDialogBuilder(requireActivity())
-                    .setTitle(R.string.dialog_title_error)
+                    .setTitle(CommonStrings.dialog_title_error)
                     .setMessage(message)
-                    .setPositiveButton(R.string.ok, null)
+                    .setPositiveButton(CommonStrings.ok, null)
                     .show()
         } else {
             // Display the error inlined
@@ -158,7 +159,7 @@ class SetIdentityServerFragment :
 
     override fun onResume() {
         super.onResume()
-        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(R.string.identity_server)
+        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(CommonStrings.identity_server)
     }
 
     private val termsActivityResultLauncher = registerStartForActivityResult {

@@ -28,6 +28,7 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
+import im.vector.lib.strings.CommonStrings
 import javax.inject.Inject
 
 // Referenced in vector_settings_notifications.xml
@@ -45,7 +46,7 @@ class PushRulesFragment :
 
     override fun onResume() {
         super.onResume()
-        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(R.string.settings_push_rules)
+        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(CommonStrings.settings_push_rules)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

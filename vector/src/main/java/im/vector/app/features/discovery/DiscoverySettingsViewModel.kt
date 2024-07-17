@@ -24,11 +24,11 @@ import com.airbnb.mvrx.Uninitialized
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -393,7 +393,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
             }
         }
         viewModelScope.launch {
-            runCatching { session.fetchIdentityServerWithTerms(stringProvider.getString(R.string.resources_language)) }.fold(
+            runCatching { session.fetchIdentityServerWithTerms(stringProvider.getString(CommonStrings.resources_language)) }.fold(
                     onSuccess = { setState { copy(identityServer = Success(it)) } },
                     onFailure = { _viewEvents.post(DiscoverySettingsViewEvents.Failure(it)) }
             )
@@ -401,6 +401,6 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
     }
 
     private suspend fun fetchIdentityServerWithTerms(): ServerAndPolicies? {
-        return session.fetchIdentityServerWithTerms(stringProvider.getString(R.string.resources_language))
+        return session.fetchIdentityServerWithTerms(stringProvider.getString(CommonStrings.resources_language))
     }
 }

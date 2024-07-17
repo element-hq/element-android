@@ -34,9 +34,9 @@ import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.utils.AssetReader
 import im.vector.app.databinding.FragmentLoginCaptchaBinding
+import im.vector.lib.strings.CommonStrings
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.util.MatrixJsonParser
 import timber.log.Timber
@@ -111,12 +111,12 @@ class LoginCaptchaFragment :
                 }
 
                 MaterialAlertDialogBuilder(requireActivity())
-                        .setMessage(R.string.ssl_could_not_verify)
-                        .setPositiveButton(R.string.ssl_trust) { _, _ ->
+                        .setMessage(CommonStrings.ssl_could_not_verify)
+                        .setPositiveButton(CommonStrings.ssl_trust) { _, _ ->
                             Timber.d("## onReceivedSslError() : the user trusted")
                             handler.proceed()
                         }
-                        .setNegativeButton(R.string.ssl_do_not_trust) { _, _ ->
+                        .setNegativeButton(CommonStrings.ssl_do_not_trust) { _, _ ->
                             Timber.d("## onReceivedSslError() : the user did not trust")
                             handler.cancel()
                         }

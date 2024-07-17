@@ -29,7 +29,6 @@ import org.junit.Test
 import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.util.getApplicationInfoCompat
 import org.matrix.android.sdk.api.util.getPackageInfoCompat
-import java.lang.Exception
 
 private const val A_PACKAGE_NAME = "org.matrix.sdk"
 private const val AN_APP_NAME = "Element"

@@ -30,10 +30,10 @@ import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.core.utils.openUrlInChromeCustomTab
+import im.vector.lib.strings.CommonStrings
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
@@ -63,12 +63,12 @@ class ReAuthActivity : SimpleFragmentActivity() {
 
     private val sharedViewModel: ReAuthViewModel by viewModel()
 
-    // override fun getTitleRes() = R.string.re_authentication_activity_title
+    // override fun getTitleRes() = CommonStrings.re_authentication_activity_title
 
     override fun initUiAndData() {
         super.initUiAndData()
 
-        val title = intent.extras?.getString(EXTRA_REASON_TITLE) ?: getString(R.string.re_authentication_activity_title)
+        val title = intent.extras?.getString(EXTRA_REASON_TITLE) ?: getString(CommonStrings.re_authentication_activity_title)
         supportActionBar?.setTitle(title) ?: run { setTitle(title) }
 
 //        val authArgs = intent.getParcelableExtra<Args>(Mavericks.KEY_ARG)

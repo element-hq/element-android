@@ -19,7 +19,6 @@ package im.vector.app.features.roomdirectory.createroom
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
-import im.vector.app.R
 import im.vector.app.core.epoxy.dividerItem
 import im.vector.app.core.epoxy.profiles.buildProfileAction
 import im.vector.app.core.resources.StringProvider
@@ -29,6 +28,7 @@ import im.vector.app.features.form.formEditTextItem
 import im.vector.app.features.form.formEditableAvatarItem
 import im.vector.app.features.form.formSubmitButtonItem
 import im.vector.app.features.form.formSwitchItem
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.MatrixConstants
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
@@ -60,13 +60,13 @@ class CreateRoomController @Inject constructor(
         }
         settingsSectionTitleItem {
             id("nameSection")
-            titleResId(R.string.create_room_name_section)
+            titleResId(CommonStrings.create_room_name_section)
         }
         formEditTextItem {
             id("name")
             enabled(enableFormElement)
             value(viewState.roomName)
-            hint(host.stringProvider.getString(R.string.create_room_name_hint))
+            hint(host.stringProvider.getString(CommonStrings.create_room_name_hint))
             autoCapitalize(true)
 
             onTextChange { text ->
@@ -75,14 +75,14 @@ class CreateRoomController @Inject constructor(
         }
         settingsSectionTitleItem {
             id("topicSection")
-            titleResId(R.string.create_room_topic_section)
+            titleResId(CommonStrings.create_room_topic_section)
         }
         formEditTextItem {
             id("topic")
             enabled(enableFormElement)
             value(viewState.roomTopic)
             singleLine(false)
-            hint(host.stringProvider.getString(R.string.create_room_topic_hint))
+            hint(host.stringProvider.getString(CommonStrings.create_room_topic_hint))
 
             onTextChange { text ->
                 host.listener?.onTopicChange(text)
@@ -91,15 +91,15 @@ class CreateRoomController @Inject constructor(
 
         settingsSectionTitleItem {
             id("visibility")
-            titleResId(R.string.room_settings_room_access_title)
+            titleResId(CommonStrings.room_settings_room_access_title)
         }
 
         when (viewState.roomJoinRules) {
             RoomJoinRules.INVITE -> {
                 buildProfileAction(
                         id = "joinRule",
-                        title = stringProvider.getString(R.string.room_settings_room_access_private_title),
-                        subtitle = stringProvider.getString(R.string.room_settings_room_access_private_description),
+                        title = stringProvider.getString(CommonStrings.room_settings_room_access_private_title),
+                        subtitle = stringProvider.getString(CommonStrings.room_settings_room_access_private_description),
                         divider = false,
                         editable = true,
                         action = { host.listener?.selectVisibility() }
@@ -108,8 +108,8 @@ class CreateRoomController @Inject constructor(
             RoomJoinRules.PUBLIC -> {
                 buildProfileAction(
                         id = "joinRule",
-                        title = stringProvider.getString(R.string.room_settings_room_access_public_title),
-                        subtitle = stringProvider.getString(R.string.room_settings_room_access_public_description),
+                        title = stringProvider.getString(CommonStrings.room_settings_room_access_public_title),
+                        subtitle = stringProvider.getString(CommonStrings.room_settings_room_access_public_description),
                         divider = false,
                         editable = true,
                         action = { host.listener?.selectVisibility() }
@@ -118,8 +118,8 @@ class CreateRoomController @Inject constructor(
             RoomJoinRules.RESTRICTED -> {
                 buildProfileAction(
                         id = "joinRule",
-                        title = stringProvider.getString(R.string.room_settings_room_access_restricted_title),
-                        subtitle = stringProvider.getString(R.string.room_create_member_of_space_name_can_join, viewState.parentSpaceSummary?.displayName),
+                        title = stringProvider.getString(CommonStrings.room_settings_room_access_restricted_title),
+                        subtitle = stringProvider.getString(CommonStrings.room_create_member_of_space_name_can_join, viewState.parentSpaceSummary?.displayName),
                         divider = false,
                         editable = true,
                         action = { host.listener?.selectVisibility() }
@@ -132,7 +132,7 @@ class CreateRoomController @Inject constructor(
 
         settingsSectionTitleItem {
             id("settingsSection")
-            titleResId(R.string.create_room_settings_section)
+            titleResId(CommonStrings.create_room_settings_section)
         }
 
         if (viewState.roomJoinRules == RoomJoinRules.PUBLIC) {
@@ -144,7 +144,7 @@ class CreateRoomController @Inject constructor(
                 suffixText(":" + viewState.homeServerName)
                 prefixText("#")
                 maxLength(MatrixConstants.maxAliasLocalPartLength(viewState.homeServerName))
-                hint(host.stringProvider.getString(R.string.room_alias_address_hint))
+                hint(host.stringProvider.getString(CommonStrings.room_alias_address_hint))
                 errorMessage(
                         host.roomAliasErrorFormatter.format(
                                 (((viewState.asyncCreateRoomRequest as? Fail)?.error) as? CreateRoomFailure.AliasError)?.aliasError
@@ -162,12 +162,12 @@ class CreateRoomController @Inject constructor(
             formSwitchItem {
                 id("encryption")
                 enabled(enableFormElement)
-                title(host.stringProvider.getString(R.string.create_room_encryption_title))
+                title(host.stringProvider.getString(CommonStrings.create_room_encryption_title))
                 summary(
                         if (viewState.hsAdminHasDisabledE2E) {
-                            host.stringProvider.getString(R.string.settings_hs_admin_e2e_disabled)
+                            host.stringProvider.getString(CommonStrings.settings_hs_admin_e2e_disabled)
                         } else {
-                            host.stringProvider.getString(R.string.create_room_encryption_description)
+                            host.stringProvider.getString(CommonStrings.create_room_encryption_description)
                         }
                 )
 
@@ -184,7 +184,7 @@ class CreateRoomController @Inject constructor(
 //        }
         formAdvancedToggleItem {
             id("showAdvanced")
-            title(host.stringProvider.getString(if (viewState.showAdvanced) R.string.hide_advanced else R.string.show_advanced))
+            title(host.stringProvider.getString(if (viewState.showAdvanced) CommonStrings.hide_advanced else CommonStrings.show_advanced))
             expanded(!viewState.showAdvanced)
             listener { host.listener?.toggleShowAdvanced() }
         }
@@ -192,8 +192,8 @@ class CreateRoomController @Inject constructor(
             formSwitchItem {
                 id("federation")
                 enabled(enableFormElement)
-                title(host.stringProvider.getString(R.string.create_room_disable_federation_title, viewState.homeServerName))
-                summary(host.stringProvider.getString(R.string.create_room_disable_federation_description))
+                title(host.stringProvider.getString(CommonStrings.create_room_disable_federation_title, viewState.homeServerName))
+                summary(host.stringProvider.getString(CommonStrings.create_room_disable_federation_description))
                 switchChecked(viewState.disableFederation)
                 listener { value -> host.listener?.setDisableFederation(value) }
             }
@@ -201,7 +201,7 @@ class CreateRoomController @Inject constructor(
         formSubmitButtonItem {
             id("submit")
             enabled(enableFormElement)
-            buttonTitleId(R.string.create_room_action_create)
+            buttonTitleId(CommonStrings.create_room_action_create)
             buttonClickListener { host.listener?.submit() }
         }
     }

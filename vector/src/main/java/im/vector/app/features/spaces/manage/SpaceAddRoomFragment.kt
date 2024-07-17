@@ -39,6 +39,7 @@ import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.databinding.FragmentSpaceAddRoomsBinding
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
@@ -86,7 +87,7 @@ class SpaceAddRoomFragment :
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
 
-        spaceEpoxyController.subHeaderText = getString(R.string.spaces_feeling_experimental_subspace)
+        spaceEpoxyController.subHeaderText = getString(CommonStrings.spaces_feeling_experimental_subspace)
         viewModel.selectionListLiveData.observe(viewLifecycleOwner) {
             spaceEpoxyController.selectedItems = it
             roomEpoxyController.selectedItems = it
@@ -120,8 +121,8 @@ class SpaceAddRoomFragment :
         viewModel.onEach(SpaceAddRoomsState::onlyShowSpaces) {
             spaceEpoxyController.disabled = !it
             roomEpoxyController.disabled = it
-            views.createNewRoom.text = if (it) getString(R.string.create_space) else getString(R.string.create_new_room)
-            toolbar?.setTitle(if (it) R.string.space_add_existing_spaces else R.string.space_add_existing_rooms_only)
+            views.createNewRoom.text = if (it) getString(CommonStrings.create_space) else getString(CommonStrings.create_new_room)
+            toolbar?.setTitle(if (it) CommonStrings.space_add_existing_spaces else CommonStrings.space_add_existing_rooms_only)
         }
 
         views.createNewRoom.debouncedClicks {
@@ -138,12 +139,12 @@ class SpaceAddRoomFragment :
             when (it) {
                 SpaceAddRoomsViewEvents.WarnUnsavedChanged -> {
                     MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(R.string.dialog_title_warning)
-                            .setMessage(R.string.warning_unsaved_change)
-                            .setPositiveButton(R.string.warning_unsaved_change_discard) { _, _ ->
+                            .setTitle(CommonStrings.dialog_title_warning)
+                            .setMessage(CommonStrings.warning_unsaved_change)
+                            .setPositiveButton(CommonStrings.warning_unsaved_change_discard) { _, _ ->
                                 sharedViewModel.handle(SpaceManagedSharedAction.HandleBack)
                             }
-                            .setNegativeButton(R.string.action_cancel, null)
+                            .setNegativeButton(CommonStrings.action_cancel, null)
                             .show()
                 }
                 is SpaceAddRoomsViewEvents.SaveFailed -> {
@@ -192,7 +193,7 @@ class SpaceAddRoomFragment :
     }
 
     private fun setupSpaceSection() {
-        spaceEpoxyController.sectionName = getString(R.string.spaces_header)
+        spaceEpoxyController.sectionName = getString(CommonStrings.spaces_header)
         spaceEpoxyController.listener = this
         viewModel.spaceUpdatableLivePageResult.liveBoundaries.observe(viewLifecycleOwner) {
             spaceEpoxyController.boundaryChange(it)
@@ -204,7 +205,7 @@ class SpaceAddRoomFragment :
     }
 
     private fun setupRoomSection() {
-        roomEpoxyController.sectionName = getString(R.string.rooms_header)
+        roomEpoxyController.sectionName = getString(CommonStrings.rooms_header)
         roomEpoxyController.listener = this
 
         viewModel.roomUpdatableLivePageResult.liveBoundaries.observe(viewLifecycleOwner) {
@@ -220,7 +221,7 @@ class SpaceAddRoomFragment :
 
     private fun setupDmSection() {
         // This controller can be disabled depending on the space type (public or not)
-        dmEpoxyController.sectionName = getString(R.string.direct_chats_header)
+        dmEpoxyController.sectionName = getString(CommonStrings.direct_chats_header)
         dmEpoxyController.listener = this
         viewModel.dmUpdatableLivePageResult.liveBoundaries.observe(viewLifecycleOwner) {
             dmEpoxyController.boundaryChange(it)

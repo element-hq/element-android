@@ -28,7 +28,6 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.extensions.setTextOrHide
@@ -36,6 +35,7 @@ import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleLoadingBinding
 import im.vector.app.features.spaces.SpaceBottomSheetSettingsArgs
 import im.vector.lib.core.utils.compat.getParcelableExtraCompat
+import im.vector.lib.strings.CommonStrings
 
 @AndroidEntryPoint
 class SpaceLeaveAdvancedActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>() {
@@ -86,9 +86,9 @@ class SpaceLeaveAdvancedActivity : VectorBaseActivity<ActivitySimpleLoadingBindi
                 is Fail -> {
                     hideWaitingView()
                     MaterialAlertDialogBuilder(this)
-                            .setTitle(R.string.dialog_title_error)
+                            .setTitle(CommonStrings.dialog_title_error)
                             .setMessage(errorFormatter.toHumanReadable(state.leaveState.error))
-                            .setPositiveButton(R.string.ok) { _, _ ->
+                            .setPositiveButton(CommonStrings.ok) { _, _ ->
                                 leaveViewModel.handle(SpaceLeaveAdvanceViewAction.ClearError)
                             }
                             .show()

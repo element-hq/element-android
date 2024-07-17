@@ -20,12 +20,13 @@ import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.userdirectory.PendingSelection
+import im.vector.lib.strings.CommonPlurals
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
@@ -68,16 +69,16 @@ class InviteUsersToRoomViewModel @AssistedInject constructor(
 
                     val successMessage = when (selections.size) {
                         1 -> stringProvider.getString(
-                                R.string.invitation_sent_to_one_user,
+                                CommonStrings.invitation_sent_to_one_user,
                                 selections.first().getBestName()
                         )
                         2 -> stringProvider.getString(
-                                R.string.invitations_sent_to_two_users,
+                                CommonStrings.invitations_sent_to_two_users,
                                 selections.first().getBestName(),
                                 selections.last().getBestName()
                         )
                         else -> stringProvider.getQuantityString(
-                                R.plurals.invitations_sent_to_one_and_more_users,
+                                CommonPlurals.invitations_sent_to_one_and_more_users,
                                 selections.size - 1,
                                 selections.first().getBestName(),
                                 selections.size - 1

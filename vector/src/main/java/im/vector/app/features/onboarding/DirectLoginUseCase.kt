@@ -16,10 +16,10 @@
 
 package im.vector.app.features.onboarding
 
-import im.vector.app.R
 import im.vector.app.core.extensions.andThen
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.onboarding.OnboardingAction.AuthenticateAction.LoginDirect
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.MatrixPatterns.getServerName
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
@@ -80,5 +80,5 @@ class DirectLoginUseCase @Inject constructor(
             identityServerUri = wellKnownPrompt.identityServerUrl?.let { uriFactory.parse(it) }
     )
 
-    private fun onWellKnownError() = Result.failure<Session>(Exception(stringProvider.getString(R.string.autodiscover_well_known_error)))
+    private fun onWellKnownError() = Result.failure<Session>(Exception(stringProvider.getString(CommonStrings.autodiscover_well_known_error)))
 }

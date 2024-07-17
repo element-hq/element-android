@@ -29,9 +29,9 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseDialogFragment
 import im.vector.app.databinding.FragmentSetLinkBinding
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
@@ -101,9 +101,9 @@ class SetLinkFragment :
     override fun invalidate() = withState(viewModel) { viewState ->
         views.toolbar.title = getString(
                 if (viewState.initialLink != null) {
-                    R.string.set_link_edit
+                    CommonStrings.set_link_edit
                 } else {
-                    R.string.set_link_create
+                    CommonStrings.set_link_create
                 }
         )
 

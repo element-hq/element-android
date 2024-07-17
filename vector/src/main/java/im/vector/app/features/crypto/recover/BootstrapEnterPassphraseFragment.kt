@@ -25,11 +25,11 @@ import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentBootstrapEnterPassphraseBinding
 import im.vector.app.features.settings.VectorLocaleProvider
 import im.vector.lib.core.utils.flow.throttleFirst
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import reactivecircus.flowbinding.android.widget.editorActionEvents
@@ -51,8 +51,8 @@ class BootstrapEnterPassphraseFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        views.bootstrapDescriptionText.text = getString(R.string.set_a_security_phrase_notice)
-        views.ssssPassphraseEnterEdittext.hint = getString(R.string.set_a_security_phrase_hint)
+        views.bootstrapDescriptionText.text = getString(CommonStrings.set_a_security_phrase_notice)
+        views.ssssPassphraseEnterEdittext.hint = getString(CommonStrings.set_a_security_phrase_hint)
 
         withState(sharedViewModel) {
             // set initial value (useful when coming back)
@@ -93,9 +93,9 @@ class BootstrapEnterPassphraseFragment :
         val score = state.passphraseStrength.invoke()?.score
         val passphrase = views.ssssPassphraseEnterEdittext.text?.toString()
         if (passphrase.isNullOrBlank()) {
-            views.ssssPassphraseEnterTil.error = getString(R.string.passphrase_empty_error_message)
+            views.ssssPassphraseEnterTil.error = getString(CommonStrings.passphrase_empty_error_message)
         } else if (score != 4) {
-            views.ssssPassphraseEnterTil.error = getString(R.string.passphrase_passphrase_too_weak)
+            views.ssssPassphraseEnterTil.error = getString(CommonStrings.passphrase_passphrase_too_weak)
         } else {
             sharedViewModel.handle(BootstrapActions.GoToConfirmPassphrase(passphrase))
         }

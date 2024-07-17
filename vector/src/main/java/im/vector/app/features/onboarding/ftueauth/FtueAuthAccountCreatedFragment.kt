@@ -24,7 +24,6 @@ import android.view.ViewGroup
 import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.animations.play
 import im.vector.app.core.utils.isAnimationEnabled
 import im.vector.app.core.utils.styleMatchingText
@@ -32,6 +31,7 @@ import im.vector.app.databinding.FragmentFtueAccountCreatedBinding
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewState
+import im.vector.lib.strings.CommonStrings
 
 @AndroidEntryPoint
 class FtueAuthAccountCreatedFragment :
@@ -56,7 +56,7 @@ class FtueAuthAccountCreatedFragment :
 
     override fun updateWithState(state: OnboardingViewState) {
         val userId = state.personalizationState.userId
-        val subtitle = getString(R.string.ftue_account_created_subtitle, userId).toSpannable().styleMatchingText(userId, Typeface.BOLD)
+        val subtitle = getString(CommonStrings.ftue_account_created_subtitle, userId).toSpannable().styleMatchingText(userId, Typeface.BOLD)
         views.accountCreatedSubtitle.text = subtitle
         val canPersonalize = state.personalizationState.supportsPersonalization()
         views.personalizeButtonGroup.isVisible = canPersonalize

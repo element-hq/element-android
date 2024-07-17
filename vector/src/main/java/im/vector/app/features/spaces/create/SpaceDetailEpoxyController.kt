@@ -18,7 +18,6 @@ package im.vector.app.features.spaces.create
 
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
-import im.vector.app.R
 import im.vector.app.core.epoxy.TextListener
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
@@ -28,6 +27,7 @@ import im.vector.app.features.form.formMultiLineEditTextItem
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roomdirectory.createroom.RoomAliasErrorFormatter
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.MatrixConstants
 import org.matrix.android.sdk.api.session.room.alias.RoomAliasError
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -59,9 +59,9 @@ class SpaceDetailEpoxyController @Inject constructor(
             id("info_help")
             text(
                     if (data?.spaceType == SpaceType.Public) {
-                        host.stringProvider.getString(R.string.create_spaces_details_public_header)
+                        host.stringProvider.getString(CommonStrings.create_spaces_details_public_header)
                     } else {
-                        host.stringProvider.getString(R.string.create_spaces_details_private_header)
+                        host.stringProvider.getString(CommonStrings.create_spaces_details_private_header)
                     }.toEpoxyCharSequence()
             )
         }
@@ -80,7 +80,7 @@ class SpaceDetailEpoxyController @Inject constructor(
             id("name")
             enabled(true)
             value(data?.name)
-            hint(host.stringProvider.getString(R.string.create_room_name_hint))
+            hint(host.stringProvider.getString(CommonStrings.create_room_name_hint))
             errorMessage(data?.nameInlineError)
             onTextChange { text ->
                 host.listener?.onNameChange(text)
@@ -93,7 +93,7 @@ class SpaceDetailEpoxyController @Inject constructor(
                 enabled(true)
                 forceUpdateValue(!data.aliasManuallyModified)
                 value(data.aliasLocalPart)
-                hint(host.stringProvider.getString(R.string.create_space_alias_hint))
+                hint(host.stringProvider.getString(CommonStrings.create_space_alias_hint))
                 suffixText(":" + data.homeServerName)
                 prefixText("#")
                 maxLength(MatrixConstants.maxAliasLocalPartLength(data.homeServerName))
@@ -113,7 +113,7 @@ class SpaceDetailEpoxyController @Inject constructor(
             id("topic")
             enabled(true)
             value(data?.topic)
-            hint(host.stringProvider.getString(R.string.create_space_topic_hint))
+            hint(host.stringProvider.getString(CommonStrings.create_space_topic_hint))
             textSizeSp(16)
             onTextChange { text ->
                 host.listener?.onTopicChange(text)

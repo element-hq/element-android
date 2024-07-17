@@ -34,6 +34,7 @@ import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.themes.ThemeUtils
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.util.MatrixItem
 
 /**
@@ -82,7 +83,7 @@ abstract class BottomSheetRoomPreviewItem : VectorEpoxyModel<BottomSheetRoomPrev
         }
         holder.roomSettings.apply {
             onClick(settingsClickListener)
-            TooltipCompat.setTooltipText(this, stringProvider.getString(R.string.room_list_quick_actions_room_settings))
+            TooltipCompat.setTooltipText(this, stringProvider.getString(CommonStrings.room_list_quick_actions_room_settings))
         }
     }
 
@@ -90,11 +91,11 @@ abstract class BottomSheetRoomPreviewItem : VectorEpoxyModel<BottomSheetRoomPrev
         val description: String
         val tintColor: Int
         if (isLowPriority) {
-            description = stringProvider.getString(R.string.room_list_quick_actions_low_priority_remove)
-            tintColor = colorProvider.getColorFromAttribute(R.attr.colorPrimary)
+            description = stringProvider.getString(CommonStrings.room_list_quick_actions_low_priority_remove)
+            tintColor = colorProvider.getColorFromAttribute(com.google.android.material.R.attr.colorPrimary)
         } else {
-            description = stringProvider.getString(R.string.room_list_quick_actions_low_priority_add)
-            tintColor = ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_secondary)
+            description = stringProvider.getString(CommonStrings.room_list_quick_actions_low_priority_add)
+            tintColor = ThemeUtils.getColor(holder.view.context, im.vector.lib.ui.styles.R.attr.vctr_content_secondary)
         }
         holder.roomLowPriority.apply {
             contentDescription = description
@@ -107,13 +108,13 @@ abstract class BottomSheetRoomPreviewItem : VectorEpoxyModel<BottomSheetRoomPrev
         val description: String
         val tintColor: Int
         if (isFavorite) {
-            description = stringProvider.getString(R.string.room_list_quick_actions_favorite_remove)
+            description = stringProvider.getString(CommonStrings.room_list_quick_actions_favorite_remove)
             holder.roomFavorite.setImageResource(R.drawable.ic_star_green_24dp)
-            tintColor = colorProvider.getColorFromAttribute(R.attr.colorPrimary)
+            tintColor = colorProvider.getColorFromAttribute(com.google.android.material.R.attr.colorPrimary)
         } else {
-            description = stringProvider.getString(R.string.room_list_quick_actions_favorite_add)
+            description = stringProvider.getString(CommonStrings.room_list_quick_actions_favorite_add)
             holder.roomFavorite.setImageResource(R.drawable.ic_star_24dp)
-            tintColor = ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_secondary)
+            tintColor = ThemeUtils.getColor(holder.view.context, im.vector.lib.ui.styles.R.attr.vctr_content_secondary)
         }
         holder.roomFavorite.apply {
             contentDescription = description

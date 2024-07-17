@@ -44,7 +44,7 @@ abstract class GenericHeaderItem : VectorEpoxyModel<GenericHeaderItem.Holder>(R.
         if (textColor != null) {
             holder.text.setTextColor(textColor!!)
         } else {
-            holder.text.setTextColor(ThemeUtils.getColor(holder.view.context, R.attr.vctr_notice_text_color))
+            holder.text.setTextColor(ThemeUtils.getColor(holder.view.context, im.vector.lib.ui.styles.R.attr.vctr_notice_text_color))
         }
     }
 

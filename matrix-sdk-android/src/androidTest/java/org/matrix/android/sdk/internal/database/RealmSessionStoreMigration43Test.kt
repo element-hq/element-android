@@ -56,7 +56,7 @@ class RealmSessionStoreMigration43Test {
     }
 
     @Test
-    fun migrationShouldBeNeeed() {
+    fun migrationShouldBeNeeded() {
         val realmName = "session_42.realm"
         val realmConfiguration = configurationFactory.createConfiguration(
                 realmName,

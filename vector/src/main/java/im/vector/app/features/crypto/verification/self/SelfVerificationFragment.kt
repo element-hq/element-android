@@ -29,7 +29,6 @@ import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.giveAccessibilityFocus
@@ -42,6 +41,7 @@ import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.databinding.BottomSheetVerificationChildFragmentBinding
 import im.vector.app.features.crypto.verification.VerificationAction
 import im.vector.app.features.qrcode.QrCodeScannerActivity
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.crypto.verification.EVerificationState
 import timber.log.Timber
 import javax.inject.Inject
@@ -142,7 +142,7 @@ class SelfVerificationFragment : VectorBaseFragment<BottomSheetVerificationChild
         if (allGranted) {
             doOpenQRCodeScanner()
         } else if (deniedPermanently) {
-            activity?.onPermissionDeniedDialog(R.string.denied_permission_camera)
+            activity?.onPermissionDeniedDialog(CommonStrings.denied_permission_camera)
         }
     }
 

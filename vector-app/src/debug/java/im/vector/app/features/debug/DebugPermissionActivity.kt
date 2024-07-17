@@ -31,6 +31,7 @@ import im.vector.app.core.utils.onPermissionDeniedSnackbar
 import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.application.R
 import im.vector.application.databinding.ActivityDebugPermissionBinding
+import im.vector.lib.strings.CommonStrings
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -111,9 +112,9 @@ class DebugPermissionActivity : VectorBaseActivity<ActivityDebugPermissionBindin
             if (deniedPermanently) {
                 dialogOrSnackbar = !dialogOrSnackbar
                 if (dialogOrSnackbar) {
-                    onPermissionDeniedDialog(R.string.denied_permission_generic)
+                    onPermissionDeniedDialog(CommonStrings.denied_permission_generic)
                 } else {
-                    onPermissionDeniedSnackbar(R.string.denied_permission_generic)
+                    onPermissionDeniedSnackbar(CommonStrings.denied_permission_generic)
                 }
             } else {
                 Toast.makeText(this, "Denied", Toast.LENGTH_SHORT).show()

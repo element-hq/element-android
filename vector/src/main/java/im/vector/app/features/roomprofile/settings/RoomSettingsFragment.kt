@@ -49,6 +49,7 @@ import im.vector.app.features.roomprofile.settings.historyvisibility.RoomHistory
 import im.vector.app.features.roomprofile.settings.historyvisibility.RoomHistoryVisibilitySharedActionViewModel
 import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleActivity
 import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleSharedActionViewModel
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.room.model.GuestAccess
@@ -97,7 +98,7 @@ class RoomSettingsFragment :
         setupToolbar(views.roomSettingsToolbar)
                 .allowBack()
         views.roomSettingsRecyclerView.configureWith(controller, hasFixedSize = true)
-        views.waitingView.waitingStatusText.setText(R.string.please_wait)
+        views.waitingView.waitingStatusText.setText(CommonStrings.please_wait)
         views.waitingView.waitingStatusText.isVisible = true
 
         viewModel.observeViewEvents {
@@ -134,7 +135,7 @@ class RoomSettingsFragment :
     }
 
     private fun showSuccess() {
-        activity?.toast(R.string.room_settings_save_success)
+        activity?.toast(CommonStrings.room_settings_save_success)
     }
 
     override fun onDestroyView() {
@@ -241,12 +242,12 @@ class RoomSettingsFragment :
         return withState(viewModel) {
             return@withState if (it.showSaveAction) {
                 MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(R.string.dialog_title_warning)
-                        .setMessage(R.string.warning_unsaved_change)
-                        .setPositiveButton(R.string.warning_unsaved_change_discard) { _, _ ->
+                        .setTitle(CommonStrings.dialog_title_warning)
+                        .setMessage(CommonStrings.warning_unsaved_change)
+                        .setPositiveButton(CommonStrings.warning_unsaved_change_discard) { _, _ ->
                             viewModel.handle(RoomSettingsAction.Cancel)
                         }
-                        .setNegativeButton(R.string.action_cancel, null)
+                        .setNegativeButton(CommonStrings.action_cancel, null)
                         .show()
                 true
             } else {

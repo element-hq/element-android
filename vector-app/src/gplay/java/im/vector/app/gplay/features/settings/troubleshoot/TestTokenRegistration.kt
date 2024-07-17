@@ -20,12 +20,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
-import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.pushers.FcmHelper
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.settings.troubleshoot.TroubleshootTest
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.pushers.PusherState
@@ -41,7 +41,7 @@ class TestTokenRegistration @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
         private val fcmHelper: FcmHelper,
 ) :
-        TroubleshootTest(R.string.settings_troubleshoot_test_token_registration_title) {
+        TroubleshootTest(CommonStrings.settings_troubleshoot_test_token_registration_title) {
 
     override fun perform(testParameters: TestParameters) {
         // Check if we have a registered pusher for this token
@@ -58,10 +58,10 @@ class TestTokenRegistration @Inject constructor(
         }
         if (pushers.isEmpty()) {
             description = stringProvider.getString(
-                    R.string.settings_troubleshoot_test_token_registration_failed,
-                    stringProvider.getString(R.string.sas_error_unknown)
+                    CommonStrings.settings_troubleshoot_test_token_registration_failed,
+                    stringProvider.getString(CommonStrings.sas_error_unknown)
             )
-            quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_token_registration_quick_fix) {
+            quickFix = object : TroubleshootQuickFix(CommonStrings.settings_troubleshoot_test_token_registration_quick_fix) {
                 override fun doFix() {
                     context.lifecycleScope.launch(Dispatchers.IO) {
                         val workId = pushersManager.enqueueRegisterPusherWithFcmKey(fcmToken)
@@ -80,7 +80,7 @@ class TestTokenRegistration @Inject constructor(
 
             status = TestStatus.FAILED
         } else {
-            description = stringProvider.getString(R.string.settings_troubleshoot_test_token_registration_success)
+            description = stringProvider.getString(CommonStrings.settings_troubleshoot_test_token_registration_success)
             status = TestStatus.SUCCESS
         }
     }

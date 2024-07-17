@@ -17,8 +17,8 @@
 package im.vector.app.features.home.room.detail.timeline.format
 
 import android.content.Context
-import im.vector.app.R
 import im.vector.app.core.utils.TextUtils
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.isAudioMessage
 import org.matrix.android.sdk.api.session.events.model.isFileMessage
@@ -60,9 +60,9 @@ class EventDetailsFormatter @Inject constructor(
         }
     }
 
-    private fun formatPollMessage() = context.getString(R.string.message_reply_to_poll_preview)
+    private fun formatPollMessage() = context.getString(CommonStrings.message_reply_to_poll_preview)
 
-    private fun formatPollEndMessage() = context.getString(R.string.message_reply_to_ended_poll_preview)
+    private fun formatPollEndMessage() = context.getString(CommonStrings.message_reply_to_ended_poll_preview)
 
     /**
      * Example: "1024 x 720 - 670 kB".

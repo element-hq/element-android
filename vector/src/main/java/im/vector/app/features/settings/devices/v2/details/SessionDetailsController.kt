@@ -19,7 +19,6 @@ package im.vector.app.features.settings.devices.v2.details
 import android.view.View
 import androidx.annotation.StringRes
 import com.airbnb.epoxy.TypedEpoxyController
-import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.resources.StringProvider
@@ -27,6 +26,7 @@ import im.vector.app.core.session.clientinfo.MatrixClientInfoContent
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
 import im.vector.app.features.settings.devices.v2.list.DeviceType
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import javax.inject.Inject
 
@@ -98,20 +98,20 @@ class SessionDetailsController @Inject constructor(
         val sessionId = data.deviceId.orEmpty()
         val sessionLastSeenTs = data.lastSeenTs ?: -1
 
-        buildHeaderItem(R.string.device_manager_session_title)
+        buildHeaderItem(CommonStrings.device_manager_session_title)
 
         if (sessionName.isNotEmpty()) {
             val hasDivider = sessionId.isNotEmpty() || sessionLastSeenTs > 0
-            buildContentItem(R.string.device_manager_session_details_session_name, sessionName, hasDivider)
+            buildContentItem(CommonStrings.device_manager_session_details_session_name, sessionName, hasDivider)
         }
         if (sessionId.isNotEmpty()) {
             val hasDivider = sessionLastSeenTs > 0
-            buildContentItem(R.string.device_manager_session_details_session_id, sessionId, hasDivider)
+            buildContentItem(CommonStrings.device_manager_session_details_session_id, sessionId, hasDivider)
         }
         if (sessionLastSeenTs > 0) {
             val formattedDate = dateFormatter.format(sessionLastSeenTs, DateFormatKind.MESSAGE_DETAIL)
             val hasDivider = false
-            buildContentItem(R.string.device_manager_session_details_session_last_activity, formattedDate, hasDivider)
+            buildContentItem(CommonStrings.device_manager_session_details_session_last_activity, formattedDate, hasDivider)
         }
     }
 
@@ -124,19 +124,19 @@ class SessionDetailsController @Inject constructor(
         val version = matrixClientInfoContent.version.orEmpty()
         val url = matrixClientInfoContent.url.orEmpty()
 
-        buildHeaderItem(R.string.device_manager_session_details_application, addExtraTopMargin)
+        buildHeaderItem(CommonStrings.device_manager_session_details_application, addExtraTopMargin)
 
         if (name.isNotEmpty()) {
             val hasDivider = version.isNotEmpty() || url.isNotEmpty()
-            buildContentItem(R.string.device_manager_session_details_application_name, name, hasDivider)
+            buildContentItem(CommonStrings.device_manager_session_details_application_name, name, hasDivider)
         }
         if (version.isNotEmpty()) {
             val hasDivider = url.isNotEmpty()
-            buildContentItem(R.string.device_manager_session_details_application_version, version, hasDivider)
+            buildContentItem(CommonStrings.device_manager_session_details_application_version, version, hasDivider)
         }
         if (url.isNotEmpty()) {
             val hasDivider = false
-            buildContentItem(R.string.device_manager_session_details_application_url, url, hasDivider)
+            buildContentItem(CommonStrings.device_manager_session_details_application_url, url, hasDivider)
         }
     }
 
@@ -145,7 +145,7 @@ class SessionDetailsController @Inject constructor(
     }
 
     private fun buildSectionDevice(data: DeviceFullInfo, addExtraTopMargin: Boolean) {
-        buildHeaderItem(R.string.device_manager_device_title, addExtraTopMargin)
+        buildHeaderItem(CommonStrings.device_manager_device_title, addExtraTopMargin)
 
         when (data.deviceExtendedInfo.deviceType) {
             DeviceType.MOBILE -> buildSectionDeviceMobile(data)
@@ -164,12 +164,12 @@ class SessionDetailsController @Inject constructor(
 
         if (browser.isNotEmpty()) {
             val hasDivider = operatingSystem.isNotEmpty() || lastSeenIp.isNotEmpty()
-            buildContentItem(R.string.device_manager_session_details_device_browser, browser, hasDivider)
+            buildContentItem(CommonStrings.device_manager_session_details_device_browser, browser, hasDivider)
         }
 
         if (operatingSystem.isNotEmpty()) {
             val hasDivider = lastSeenIp.isNotEmpty()
-            buildContentItem(R.string.device_manager_session_details_device_operating_system, operatingSystem, hasDivider)
+            buildContentItem(CommonStrings.device_manager_session_details_device_operating_system, operatingSystem, hasDivider)
         }
 
         buildIpAddressContentItem(lastSeenIp)
@@ -181,7 +181,7 @@ class SessionDetailsController @Inject constructor(
 
         if (operatingSystem.isNotEmpty()) {
             val hasDivider = lastSeenIp.isNotEmpty()
-            buildContentItem(R.string.device_manager_session_details_device_operating_system, operatingSystem, hasDivider)
+            buildContentItem(CommonStrings.device_manager_session_details_device_operating_system, operatingSystem, hasDivider)
         }
 
         buildIpAddressContentItem(lastSeenIp)
@@ -194,12 +194,12 @@ class SessionDetailsController @Inject constructor(
 
         if (model.isNotEmpty()) {
             val hasDivider = operatingSystem.isNotEmpty() || lastSeenIp.isNotEmpty()
-            buildContentItem(R.string.device_manager_session_details_device_model, model, hasDivider)
+            buildContentItem(CommonStrings.device_manager_session_details_device_model, model, hasDivider)
         }
 
         if (operatingSystem.isNotEmpty()) {
             val hasDivider = lastSeenIp.isNotEmpty()
-            buildContentItem(R.string.device_manager_session_details_device_operating_system, operatingSystem, hasDivider)
+            buildContentItem(CommonStrings.device_manager_session_details_device_operating_system, operatingSystem, hasDivider)
         }
 
         buildIpAddressContentItem(lastSeenIp)
@@ -213,7 +213,7 @@ class SessionDetailsController @Inject constructor(
     private fun buildIpAddressContentItem(lastSeenIp: String) {
         if (lastSeenIp.isNotEmpty()) {
             val hasDivider = false
-            buildContentItem(R.string.device_manager_session_details_device_ip_address, lastSeenIp, hasDivider)
+            buildContentItem(CommonStrings.device_manager_session_details_device_ip_address, lastSeenIp, hasDivider)
         }
     }
 }

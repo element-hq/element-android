@@ -31,6 +31,7 @@ import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setAttributeTintedImageResource
 import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.util.MatrixItem
 
 @EpoxyModelClass
@@ -58,11 +59,11 @@ abstract class SpaceJoinRuleItem : VectorEpoxyModel<SpaceJoinRuleItem.Holder>(R.
         holder.upgradeRequiredButton.setOnClickListener(DebouncedClickListener(listener))
 
         if (selected) {
-            holder.radioImage.setAttributeTintedImageResource(R.drawable.ic_radio_on, R.attr.colorPrimary)
-            holder.radioImage.contentDescription = holder.view.context.getString(R.string.a11y_checked)
+            holder.radioImage.setAttributeTintedImageResource(R.drawable.ic_radio_on, com.google.android.material.R.attr.colorPrimary)
+            holder.radioImage.contentDescription = holder.view.context.getString(CommonStrings.a11y_checked)
         } else {
             holder.radioImage.setImageDrawable(ContextCompat.getDrawable(holder.view.context, R.drawable.ic_radio_off))
-            holder.radioImage.contentDescription = holder.view.context.getString(R.string.a11y_unchecked)
+            holder.radioImage.contentDescription = holder.view.context.getString(CommonStrings.a11y_unchecked)
         }
 
         holder.upgradeRequiredButton.isVisible = needUpgrade

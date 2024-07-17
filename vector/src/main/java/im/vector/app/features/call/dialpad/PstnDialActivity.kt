@@ -22,11 +22,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.createdirect.DirectRoomHelper
+import im.vector.lib.strings.CommonStrings
 import im.vector.lib.ui.styles.dialogs.MaterialProgressDialog
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
@@ -41,7 +41,7 @@ class PstnDialActivity : SimpleFragmentActivity() {
 
     private var progress: AppCompatDialog? = null
 
-    override fun getTitleRes(): Int = R.string.call
+    override fun getTitleRes(): Int = CommonStrings.call
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,7 +89,7 @@ class PstnDialActivity : SimpleFragmentActivity() {
     private fun showLoadingDialog() {
         progress?.dismiss()
         progress = MaterialProgressDialog(this)
-                .show(getString(R.string.please_wait))
+                .show(getString(CommonStrings.please_wait))
     }
 
     private fun dismissLoadingDialog() {
@@ -98,9 +98,9 @@ class PstnDialActivity : SimpleFragmentActivity() {
 
     private fun displayErrorDialog(throwable: Throwable) {
         MaterialAlertDialogBuilder(this)
-                .setTitle(R.string.dialog_title_error)
+                .setTitle(CommonStrings.dialog_title_error)
                 .setMessage(errorFormatter.toHumanReadable(throwable))
-                .setPositiveButton(R.string.ok, null)
+                .setPositiveButton(CommonStrings.ok, null)
                 .show()
     }
 }

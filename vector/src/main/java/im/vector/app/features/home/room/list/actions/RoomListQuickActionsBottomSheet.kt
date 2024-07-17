@@ -27,7 +27,6 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -37,6 +36,7 @@ import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.roomprofile.notifications.RoomNotificationSettingsAction
 import im.vector.app.features.roomprofile.notifications.RoomNotificationSettingsViewEvents
 import im.vector.app.features.roomprofile.notifications.RoomNotificationSettingsViewModel
+import im.vector.lib.strings.CommonStrings
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 import javax.inject.Inject
@@ -126,9 +126,9 @@ class RoomListQuickActionsBottomSheet :
 
     private fun displayErrorDialog(throwable: Throwable) {
         MaterialAlertDialogBuilder(requireActivity())
-                .setTitle(R.string.dialog_title_error)
+                .setTitle(CommonStrings.dialog_title_error)
                 .setMessage(errorFormatter.toHumanReadable(throwable))
-                .setPositiveButton(R.string.ok, null)
+                .setPositiveButton(CommonStrings.ok, null)
                 .show()
     }
 }

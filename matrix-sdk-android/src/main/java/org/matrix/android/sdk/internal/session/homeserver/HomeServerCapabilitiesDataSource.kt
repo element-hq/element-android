@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.internal.session.homeserver
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.map
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
 import io.realm.kotlin.where
@@ -46,7 +46,7 @@ internal class HomeServerCapabilitiesDataSource @Inject constructor(
                 { realm: Realm -> realm.where<HomeServerCapabilitiesEntity>() },
                 { HomeServerCapabilitiesMapper.map(it) }
         )
-        return Transformations.map(liveData) {
+        return liveData.map {
             it.firstOrNull().toOptional()
         }
     }

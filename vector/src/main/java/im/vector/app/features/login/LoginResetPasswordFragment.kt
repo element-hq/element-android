@@ -25,12 +25,12 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentLoginResetPasswordBinding
 import im.vector.app.features.analytics.plan.MobileScreen
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -64,7 +64,7 @@ class LoginResetPasswordFragment :
     }
 
     private fun setupUi(state: LoginViewState) {
-        views.resetPasswordTitle.text = getString(R.string.login_reset_password_on, state.homeServerUrlFromUser.toReducedUrl())
+        views.resetPasswordTitle.text = getString(CommonStrings.login_reset_password_on, state.homeServerUrlFromUser.toReducedUrl())
     }
 
     private fun setupSubmitButton() {
@@ -90,12 +90,12 @@ class LoginResetPasswordFragment :
             showWarning = false
             // Display a warning as Riot-Web does first
             MaterialAlertDialogBuilder(requireActivity())
-                    .setTitle(R.string.login_reset_password_warning_title)
-                    .setMessage(R.string.login_reset_password_warning_content)
-                    .setPositiveButton(R.string.login_reset_password_warning_submit) { _, _ ->
+                    .setTitle(CommonStrings.login_reset_password_warning_title)
+                    .setMessage(CommonStrings.login_reset_password_warning_content)
+                    .setPositiveButton(CommonStrings.login_reset_password_warning_submit) { _, _ ->
                         doSubmit()
                     }
-                    .setNegativeButton(R.string.action_cancel, null)
+                    .setNegativeButton(CommonStrings.action_cancel, null)
                     .show()
         } else {
             doSubmit()

@@ -25,12 +25,12 @@ import android.view.inputmethod.EditorInfo
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.startImportTextFromFileIntent
 import im.vector.app.databinding.FragmentSsssAccessFromKeyBinding
 import im.vector.lib.core.utils.flow.throttleFirst
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -49,7 +49,7 @@ class SharedSecuredStorageKeyFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        views.ssssRestoreWithKeyText.text = getString(R.string.enter_secret_storage_input_key)
+        views.ssssRestoreWithKeyText.text = getString(CommonStrings.enter_secret_storage_input_key)
 
         views.ssssKeyEnterEdittext.editorActionEvents()
                 .throttleFirst(300)

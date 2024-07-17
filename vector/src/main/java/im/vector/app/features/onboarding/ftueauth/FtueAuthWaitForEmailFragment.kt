@@ -24,13 +24,13 @@ import android.view.ViewGroup
 import androidx.core.view.isInvisible
 import com.airbnb.mvrx.args
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.utils.colorTerminatingFullStop
 import im.vector.app.databinding.FragmentFtueWaitForEmailVerificationBinding
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.RegisterAction
 import im.vector.app.features.themes.ThemeProvider
 import im.vector.app.features.themes.ThemeUtils
+import im.vector.lib.strings.CommonStrings
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -65,9 +65,9 @@ class FtueAuthWaitForEmailFragment :
 
     private fun setupUi() {
         views.emailVerificationGradientContainer.setBackgroundResource(themeProvider.ftueBreakerBackground())
-        views.emailVerificationTitle.text = getString(R.string.ftue_auth_email_verification_title)
-                .colorTerminatingFullStop(ThemeUtils.getColor(requireContext(), R.attr.colorSecondary))
-        views.emailVerificationSubtitle.text = getString(R.string.ftue_auth_email_verification_subtitle, params.email)
+        views.emailVerificationTitle.text = getString(CommonStrings.ftue_auth_email_verification_title)
+                .colorTerminatingFullStop(ThemeUtils.getColor(requireContext(), com.google.android.material.R.attr.colorSecondary))
+        views.emailVerificationSubtitle.text = getString(CommonStrings.ftue_auth_email_verification_subtitle, params.email)
         views.emailVerificationResendEmail.debouncedClicks {
             hideWaitingForVerificationLoading()
             viewModel.handle(OnboardingAction.PostRegisterAction(RegisterAction.SendAgainThreePid))

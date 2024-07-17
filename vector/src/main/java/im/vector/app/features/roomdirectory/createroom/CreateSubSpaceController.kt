@@ -29,6 +29,7 @@ import im.vector.app.features.form.formEditableSquareAvatarItem
 import im.vector.app.features.form.formMultiLineEditTextItem
 import im.vector.app.features.form.formSubmitButtonItem
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.MatrixConstants
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
@@ -53,7 +54,7 @@ class CreateSubSpaceController @Inject constructor(
             id("beta")
             imageRes(R.drawable.ic_beta_pill)
             tintIcon(false)
-            text(host.stringProvider.getString(R.string.space_add_space_to_any_space_you_manage).toEpoxyCharSequence())
+            text(host.stringProvider.getString(CommonStrings.space_add_space_to_any_space_you_manage).toEpoxyCharSequence())
         }
 
         formEditableSquareAvatarItem {
@@ -69,7 +70,7 @@ class CreateSubSpaceController @Inject constructor(
             enabled(enableFormElement)
             enabled(true)
             value(data.roomName)
-            hint(host.stringProvider.getString(R.string.create_room_name_hint))
+            hint(host.stringProvider.getString(CommonStrings.create_room_name_hint))
             onTextChange { text ->
                 host.listener?.onNameChange(text)
             }
@@ -80,7 +81,7 @@ class CreateSubSpaceController @Inject constructor(
                 id("alias")
                 enabled(enableFormElement)
                 value(data.aliasLocalPart)
-                hint(host.stringProvider.getString(R.string.create_space_alias_hint))
+                hint(host.stringProvider.getString(CommonStrings.create_space_alias_hint))
                 suffixText(":" + data.homeServerName)
                 prefixText("#")
                 maxLength(MatrixConstants.maxAliasLocalPartLength(data.homeServerName))
@@ -99,7 +100,7 @@ class CreateSubSpaceController @Inject constructor(
             id("topic")
             enabled(enableFormElement)
             value(data.roomTopic)
-            hint(host.stringProvider.getString(R.string.create_space_topic_hint))
+            hint(host.stringProvider.getString(CommonStrings.create_space_topic_hint))
             textSizeSp(16)
             onTextChange { text ->
                 host.listener?.onTopicChange(text)
@@ -108,15 +109,15 @@ class CreateSubSpaceController @Inject constructor(
 
         settingsSectionTitleItem {
             id("visibility")
-            titleResId(R.string.room_settings_space_access_title)
+            titleResId(CommonStrings.room_settings_space_access_title)
         }
 
         when (data.roomJoinRules) {
             RoomJoinRules.INVITE -> {
                 buildProfileAction(
                         id = "joinRule",
-                        title = stringProvider.getString(R.string.room_settings_room_access_private_title),
-                        subtitle = stringProvider.getString(R.string.room_settings_room_access_private_description),
+                        title = stringProvider.getString(CommonStrings.room_settings_room_access_private_title),
+                        subtitle = stringProvider.getString(CommonStrings.room_settings_room_access_private_description),
                         divider = false,
                         editable = true,
                         action = { host.listener?.selectVisibility() }
@@ -125,8 +126,8 @@ class CreateSubSpaceController @Inject constructor(
             RoomJoinRules.PUBLIC -> {
                 buildProfileAction(
                         id = "joinRule",
-                        title = stringProvider.getString(R.string.room_settings_room_access_public_title),
-                        subtitle = stringProvider.getString(R.string.room_settings_room_access_public_description),
+                        title = stringProvider.getString(CommonStrings.room_settings_room_access_public_title),
+                        subtitle = stringProvider.getString(CommonStrings.room_settings_room_access_public_description),
                         divider = false,
                         editable = true,
                         action = { host.listener?.selectVisibility() }
@@ -135,8 +136,8 @@ class CreateSubSpaceController @Inject constructor(
             RoomJoinRules.RESTRICTED -> {
                 buildProfileAction(
                         id = "joinRule",
-                        title = stringProvider.getString(R.string.room_settings_room_access_restricted_title),
-                        subtitle = stringProvider.getString(R.string.room_create_member_of_space_name_can_join, data.parentSpaceSummary?.displayName),
+                        title = stringProvider.getString(CommonStrings.room_settings_room_access_restricted_title),
+                        subtitle = stringProvider.getString(CommonStrings.room_create_member_of_space_name_can_join, data.parentSpaceSummary?.displayName),
                         divider = false,
                         editable = true,
                         action = { host.listener?.selectVisibility() }
@@ -150,7 +151,7 @@ class CreateSubSpaceController @Inject constructor(
         formSubmitButtonItem {
             id("submit")
             enabled(enableFormElement && data.roomName.isNullOrBlank().not())
-            buttonTitleId(R.string.create_room_action_create)
+            buttonTitleId(CommonStrings.create_room_action_create)
             buttonClickListener { host.listener?.submit() }
         }
     }

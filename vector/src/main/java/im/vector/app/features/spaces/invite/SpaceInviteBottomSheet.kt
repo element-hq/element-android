@@ -31,7 +31,6 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.platform.ButtonStateView
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.core.utils.toast
@@ -39,6 +38,7 @@ import im.vector.app.databinding.BottomSheetInvitedToSpaceBinding
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.matrixto.SpaceCardRenderer
+import im.vector.lib.strings.CommonStrings
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
@@ -110,7 +110,7 @@ class SpaceInviteBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetIn
             views.inviterText.isVisible = true
             views.inviterMxid.isVisible = true
             avatarRenderer.render(inviter, views.inviterAvatarImage)
-            views.inviterText.text = getString(R.string.user_invites_you, inviter.getBestName())
+            views.inviterText.text = getString(CommonStrings.user_invites_you, inviter.getBestName())
             views.inviterMxid.text = inviter.id
         } else {
             views.inviterAvatarImage.isVisible = false
@@ -120,8 +120,8 @@ class SpaceInviteBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetIn
 
         spaceCardRenderer.render(summary, state.peopleYouKnow.invoke().orEmpty(), null, views.spaceCard, showDescription = true)
 
-        views.spaceCard.matrixToCardMainButton.button.text = getString(R.string.action_accept)
-        views.spaceCard.matrixToCardSecondaryButton.button.text = getString(R.string.action_decline)
+        views.spaceCard.matrixToCardMainButton.button.text = getString(CommonStrings.action_accept)
+        views.spaceCard.matrixToCardSecondaryButton.button.text = getString(CommonStrings.action_decline)
 
         when (state.joinActionState) {
             Uninitialized -> {

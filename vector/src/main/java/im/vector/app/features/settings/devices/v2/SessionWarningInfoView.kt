@@ -22,9 +22,9 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.use
-import im.vector.app.R
 import im.vector.app.core.extensions.setTextWithColoredPart
 import im.vector.app.databinding.ViewSessionWarningInfoBinding
+import im.vector.lib.strings.CommonStrings
 
 class SessionWarningInfoView @JvmOverloads constructor(
         context: Context,
@@ -42,7 +42,7 @@ class SessionWarningInfoView @JvmOverloads constructor(
     init {
         context.obtainStyledAttributes(
                 attrs,
-                R.styleable.SessionWarningInfoView,
+                im.vector.lib.ui.styles.R.styleable.SessionWarningInfoView,
                 0,
                 0
         ).use {
@@ -51,10 +51,10 @@ class SessionWarningInfoView @JvmOverloads constructor(
     }
 
     private fun setDescription(typedArray: TypedArray) {
-        val description = typedArray.getString(R.styleable.SessionWarningInfoView_sessionsWarningInfoDescription)
-        val hasLearnMore = typedArray.getBoolean(R.styleable.SessionWarningInfoView_sessionsWarningInfoHasLearnMore, false)
+        val description = typedArray.getString(im.vector.lib.ui.styles.R.styleable.SessionWarningInfoView_sessionsWarningInfoDescription)
+        val hasLearnMore = typedArray.getBoolean(im.vector.lib.ui.styles.R.styleable.SessionWarningInfoView_sessionsWarningInfoHasLearnMore, false)
         if (hasLearnMore) {
-            val learnMore = context.getString(R.string.action_learn_more)
+            val learnMore = context.getString(CommonStrings.action_learn_more)
             val fullDescription = buildString {
                 append(description)
                 append(" ")

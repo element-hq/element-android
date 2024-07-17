@@ -18,10 +18,10 @@
 import argparse
 import json
 import os
-# Run `pip3 install requests` if not installed yet
-import requests
 # Run `pip3 install re` if not installed yet
 import re
+# Run `pip3 install requests` if not installed yet
+import requests
 
 # This script downloads artifacts from GitHub.
 # Ref: https://docs.github.com/en/rest/actions/artifacts#get-an-artifact

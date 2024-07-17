@@ -15,10 +15,10 @@
  */
 package im.vector.app.features.settings.troubleshoot
 
-import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.session.coroutineScope
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -34,7 +34,7 @@ class TestAccountSettings @Inject constructor(
         private val stringProvider: StringProvider,
         private val activeSessionHolder: ActiveSessionHolder
 ) :
-        TroubleshootTest(R.string.settings_troubleshoot_test_account_settings_title) {
+        TroubleshootTest(CommonStrings.settings_troubleshoot_test_account_settings_title) {
 
     override fun perform(testParameters: TestParameters) {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
@@ -43,12 +43,12 @@ class TestAccountSettings @Inject constructor(
 
         if (defaultRule != null) {
             if (!defaultRule.enabled) {
-                description = stringProvider.getString(R.string.settings_troubleshoot_test_account_settings_success)
+                description = stringProvider.getString(CommonStrings.settings_troubleshoot_test_account_settings_success)
                 quickFix = null
                 status = TestStatus.SUCCESS
             } else {
-                description = stringProvider.getString(R.string.settings_troubleshoot_test_account_settings_failed)
-                quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_account_settings_quickfix) {
+                description = stringProvider.getString(CommonStrings.settings_troubleshoot_test_account_settings_failed)
+                quickFix = object : TroubleshootQuickFix(CommonStrings.settings_troubleshoot_test_account_settings_quickfix) {
                     override fun doFix() {
                         if (manager?.diagStatus == TestStatus.RUNNING) return // wait before all is finished
 

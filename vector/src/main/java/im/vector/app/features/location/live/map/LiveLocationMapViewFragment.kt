@@ -61,6 +61,7 @@ import im.vector.app.features.location.UrlMapProvider
 import im.vector.app.features.location.showUserLocationNotAvailableErrorDialog
 import im.vector.app.features.location.zoomToBounds
 import im.vector.app.features.location.zoomToLocation
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.lang.ref.WeakReference
@@ -186,7 +187,7 @@ class LiveLocationMapViewFragment :
         if (allGranted) {
             zoomToUserLocation()
         } else if (deniedPermanently) {
-            activity?.onPermissionDeniedDialog(R.string.denied_permission_generic)
+            activity?.onPermissionDeniedDialog(CommonStrings.denied_permission_generic)
         }
     }
 
@@ -294,7 +295,8 @@ class LiveLocationMapViewFragment :
         val locateButton = views.liveLocationMapLocateButton
         locateButton.post {
             val marginTop = locateButton.height + locateButton.marginTop + locateButton.marginBottom
-            val marginRight = locateButton.context.resources.getDimensionPixelOffset(R.dimen.location_sharing_compass_button_margin_horizontal)
+            val marginRight =
+                    locateButton.context.resources.getDimensionPixelOffset(im.vector.lib.ui.styles.R.dimen.location_sharing_compass_button_margin_horizontal)
             mapboxMap?.get()?.uiSettings?.setCompassMargins(0, marginTop, marginRight, 0)
         }
     }

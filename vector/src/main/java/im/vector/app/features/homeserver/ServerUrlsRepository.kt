@@ -18,7 +18,6 @@ package im.vector.app.features.homeserver
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import im.vector.app.R
 import im.vector.app.core.di.DefaultPreferences
 import im.vector.app.core.resources.StringProvider
 import javax.inject.Inject
@@ -90,5 +89,5 @@ class ServerUrlsRepository @Inject constructor(
     /**
      * Return default homeserver url from resources.
      */
-    private fun getDefaultHomeServerUrl() = stringProvider.getString(R.string.matrix_org_server_url)
+    private fun getDefaultHomeServerUrl() = stringProvider.getString(im.vector.app.config.R.string.matrix_org_server_url)
 }

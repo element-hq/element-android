@@ -28,12 +28,12 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetMatrixToCardBinding
 import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.lib.strings.CommonStrings
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import javax.inject.Inject
@@ -112,7 +112,7 @@ class MatrixToBottomSheet :
                 is MatrixToViewEvents.ShowModalError -> {
                     MaterialAlertDialogBuilder(requireContext())
                             .setMessage(it.error)
-                            .setPositiveButton(getString(R.string.ok), null)
+                            .setPositiveButton(getString(CommonStrings.ok), null)
                             .show()
                 }
             }

@@ -41,6 +41,7 @@ import im.vector.app.features.login.ServerType
 import im.vector.app.features.onboarding.FtueUseCase
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.themes.ThemeProvider
+import im.vector.lib.strings.CommonStrings
 import javax.inject.Inject
 
 private const val DARK_MODE_ICON_BACKGROUND_ALPHA = 0.30f
@@ -68,28 +69,28 @@ class FtueAuthUseCaseFragment :
 
         views.useCaseOptionOne.renderUseCase(
                 useCase = FtueUseCase.FRIENDS_FAMILY,
-                label = R.string.ftue_auth_use_case_option_one,
+                label = CommonStrings.ftue_auth_use_case_option_one,
                 icon = R.drawable.ic_use_case_friends,
-                tint = R.color.palette_grape
+                tint = im.vector.lib.ui.styles.R.color.palette_grape
         )
         views.useCaseOptionTwo.renderUseCase(
                 useCase = FtueUseCase.TEAMS,
-                label = R.string.ftue_auth_use_case_option_two,
+                label = CommonStrings.ftue_auth_use_case_option_two,
                 icon = R.drawable.ic_use_case_teams,
-                tint = R.color.palette_element_green
+                tint = im.vector.lib.ui.styles.R.color.palette_element_green
         )
         views.useCaseOptionThree.renderUseCase(
                 useCase = FtueUseCase.COMMUNITIES,
-                label = R.string.ftue_auth_use_case_option_three,
+                label = CommonStrings.ftue_auth_use_case_option_three,
                 icon = R.drawable.ic_use_case_communities,
-                tint = R.color.palette_azure
+                tint = im.vector.lib.ui.styles.R.color.palette_azure
         )
 
         views.useCaseSkip.setTextWithColoredPart(
-                fullTextRes = R.string.ftue_auth_use_case_skip,
-                coloredTextRes = R.string.ftue_auth_use_case_skip_partial,
+                fullTextRes = CommonStrings.ftue_auth_use_case_skip,
+                coloredTextRes = CommonStrings.ftue_auth_use_case_skip_partial,
                 underline = false,
-                colorAttribute = R.attr.colorAccent,
+                colorAttribute = com.google.android.material.R.attr.colorAccent,
                 onClick = { viewModel.handle(OnboardingAction.UpdateUseCase(FtueUseCase.SKIP)) }
         )
 

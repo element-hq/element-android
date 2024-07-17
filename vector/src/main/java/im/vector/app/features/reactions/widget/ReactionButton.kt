@@ -38,7 +38,7 @@ class ReactionButton @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0,
-        defStyleRes: Int = R.style.TimelineReactionView
+        defStyleRes: Int = im.vector.lib.ui.styles.R.style.TimelineReactionView
 ) :
         LinearLayout(context, attrs, defStyleAttr, defStyleRes), View.OnClickListener, View.OnLongClickListener {
 
@@ -72,14 +72,14 @@ class ReactionButton @JvmOverloads constructor(
         layoutDirection = View.LAYOUT_DIRECTION_LOCALE
         views = ReactionButtonBinding.bind(this)
         views.reactionCount.text = TextUtils.formatCountToShortDecimal(reactionCount)
-        context.withStyledAttributes(attrs, R.styleable.ReactionButton, defStyleAttr) {
+        context.withStyledAttributes(attrs, im.vector.lib.ui.styles.R.styleable.ReactionButton, defStyleAttr) {
             onDrawable = ContextCompat.getDrawable(context, R.drawable.reaction_rounded_rect_shape)
             offDrawable = ContextCompat.getDrawable(context, R.drawable.reaction_rounded_rect_shape_off)
-            getString(R.styleable.ReactionButton_emoji)?.let {
+            getString(im.vector.lib.ui.styles.R.styleable.ReactionButton_emoji)?.let {
                 reactionString = it
             }
-            reactionCount = getInt(R.styleable.ReactionButton_reaction_count, 0)
-            val status = getBoolean(R.styleable.ReactionButton_toggled, false)
+            reactionCount = getInt(im.vector.lib.ui.styles.R.styleable.ReactionButton_reaction_count, 0)
+            val status = getBoolean(im.vector.lib.ui.styles.R.styleable.ReactionButton_toggled, false)
             setChecked(status)
         }
 

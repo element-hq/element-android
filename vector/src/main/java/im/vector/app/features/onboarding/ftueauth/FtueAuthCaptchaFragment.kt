@@ -25,13 +25,13 @@ import android.view.ViewStub
 import com.airbnb.mvrx.args
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.crawlCausesFor
 import im.vector.app.databinding.FragmentFtueLoginCaptchaBinding
 import im.vector.app.databinding.ViewStubWebviewBinding
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewState
 import im.vector.app.features.onboarding.RegisterAction
+import im.vector.lib.strings.CommonStrings
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.extensions.orFalse
 import javax.inject.Inject
@@ -70,9 +70,9 @@ class FtueAuthCaptchaFragment :
     private fun inflateWebViewOrShowError() {
         views.loginCaptchaWebViewStub.inflateWebView(onError = {
             MaterialAlertDialogBuilder(requireActivity())
-                    .setTitle(R.string.dialog_title_error)
+                    .setTitle(CommonStrings.dialog_title_error)
                     .setMessage(it.localizedMessage)
-                    .setPositiveButton(R.string.ok) { _, _ ->
+                    .setPositiveButton(CommonStrings.ok) { _, _ ->
                         requireActivity().recreate()
                     }
                     .show()

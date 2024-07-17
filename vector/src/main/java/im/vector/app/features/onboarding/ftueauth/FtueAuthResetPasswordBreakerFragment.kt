@@ -23,13 +23,13 @@ import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.args
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.utils.colorTerminatingFullStop
 import im.vector.app.databinding.FragmentFtueResetPasswordBreakerBinding
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.themes.ThemeProvider
 import im.vector.app.features.themes.ThemeUtils
+import im.vector.lib.strings.CommonStrings
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -56,9 +56,9 @@ class FtueAuthResetPasswordBreakerFragment :
 
     private fun setupUi() {
         views.resetPasswordBreakerGradientContainer.setBackgroundResource(themeProvider.ftueBreakerBackground())
-        views.resetPasswordBreakerTitle.text = getString(R.string.ftue_auth_reset_password_breaker_title)
-                .colorTerminatingFullStop(ThemeUtils.getColor(requireContext(), R.attr.colorSecondary))
-        views.resetPasswordBreakerSubtitle.text = getString(R.string.ftue_auth_password_reset_email_confirmation_subtitle, params.email)
+        views.resetPasswordBreakerTitle.text = getString(CommonStrings.ftue_auth_reset_password_breaker_title)
+                .colorTerminatingFullStop(ThemeUtils.getColor(requireContext(), com.google.android.material.R.attr.colorSecondary))
+        views.resetPasswordBreakerSubtitle.text = getString(CommonStrings.ftue_auth_password_reset_email_confirmation_subtitle, params.email)
         views.resetPasswordBreakerResendEmail.debouncedClicks { viewModel.handle(OnboardingAction.ResendResetPassword) }
         views.resetPasswordBreakerFooter.debouncedClicks {
             viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnResetPasswordBreakerConfirmed))

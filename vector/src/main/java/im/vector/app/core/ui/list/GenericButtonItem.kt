@@ -62,7 +62,7 @@ abstract class GenericButtonItem : VectorEpoxyModel<GenericButtonItem.Holder>(R.
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.button.text = text
-        val textColor = textColor ?: ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_primary)
+        val textColor = textColor ?: ThemeUtils.getColor(holder.view.context, im.vector.lib.ui.styles.R.attr.vctr_content_primary)
         holder.button.setTextColor(textColor)
         if (iconRes != null) {
             holder.button.setIconResource(iconRes!!)
@@ -75,7 +75,7 @@ abstract class GenericButtonItem : VectorEpoxyModel<GenericButtonItem.Holder>(R.
         holder.button.setTypeface(null, textStyle)
 
         holder.button.rippleColor = if (highlight) {
-            ContextCompat.getColorStateList(holder.view.context, R.color.mtrl_btn_text_btn_ripple_color)
+            ContextCompat.getColorStateList(holder.view.context, com.google.android.material.R.color.mtrl_btn_text_btn_ripple_color)
         } else {
             null
         }
