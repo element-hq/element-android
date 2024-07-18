@@ -18,28 +18,44 @@ package org.matrix.android.sdk.internal.session.media
 
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
+import io.realm.RealmResults
+import org.matrix.android.sdk.internal.database.RealmLiveEntityObserver
 import org.matrix.android.sdk.internal.database.model.HomeServerCapabilitiesEntity
-import org.matrix.android.sdk.internal.database.query.get
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.SessionScope
+import timber.log.Timber
 import javax.inject.Inject
 
 @SessionScope
-class DefaultIsAuthenticatedMediaSupported @Inject constructor(
+internal class DefaultIsAuthenticatedMediaSupported @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
-) : IsAuthenticatedMediaSupported {
-
-    private val canUseAuthenticatedMedia: Boolean by lazy {
-        canUseAuthenticatedMedia()
-    }
+) :
+        IsAuthenticatedMediaSupported,
+        RealmLiveEntityObserver<HomeServerCapabilitiesEntity>(monarchy.realmConfiguration) {
 
     override fun invoke(): Boolean {
         return canUseAuthenticatedMedia
     }
 
-    private fun canUseAuthenticatedMedia(): Boolean {
+    override val query = Monarchy.Query {
+        it.where(HomeServerCapabilitiesEntity::class.java)
+    }
+
+    override fun onChange(results: RealmResults<HomeServerCapabilitiesEntity>) {
+        Timber.d("HomeServerCapabilitiesEntity updated.")
+        canUseAuthenticatedMedia = results.canUseAuthenticatedMedia()
+        Timber.d("canUseAuthenticatedMedia: $canUseAuthenticatedMedia")
+    }
+
+    private var canUseAuthenticatedMedia = getInitialValue()
+
+    private fun getInitialValue(): Boolean {
         return Realm.getInstance(monarchy.realmConfiguration).use { realm ->
-            HomeServerCapabilitiesEntity.get(realm)?.canUseAuthenticatedMedia ?: false
+            query.createQuery(realm).findAll().canUseAuthenticatedMedia()
         }
+    }
+
+    private fun RealmResults<HomeServerCapabilitiesEntity>.canUseAuthenticatedMedia(): Boolean {
+        return firstOrNull()?.canUseAuthenticatedMedia ?: false
     }
 }
