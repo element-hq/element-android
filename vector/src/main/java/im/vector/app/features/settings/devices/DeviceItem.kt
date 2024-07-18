@@ -30,6 +30,7 @@ import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.ui.views.ShieldImageView
 import im.vector.app.core.utils.DimensionConverter
+import im.vector.lib.strings.CommonStrings
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
@@ -108,7 +109,7 @@ abstract class DeviceItem : VectorEpoxyModel<DeviceItem.Holder>(R.layout.item_de
 
             val lastSeenTime = lastSeenFormatted ?: "-"
 
-            holder.deviceLastSeenText.text = holder.root.context.getString(R.string.devices_details_last_seen_format, lastSeenIp, lastSeenTime)
+            holder.deviceLastSeenText.text = holder.root.context.getString(CommonStrings.devices_details_last_seen_format, lastSeenIp, lastSeenTime)
 
             detailedModeLabels.map {
                 it.isVisible = true
@@ -125,7 +126,7 @@ abstract class DeviceItem : VectorEpoxyModel<DeviceItem.Holder>(R.layout.item_de
                                 span {
                                     text = "${deviceInfo.deviceId}"
                                     apply {
-                                        colorProvider?.getColorFromAttribute(R.attr.vctr_content_secondary)?.let {
+                                        colorProvider?.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_secondary)?.let {
                                             textColor = it
                                         }
                                         dimensionConverter?.spToPx(12)?.let {

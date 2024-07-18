@@ -17,7 +17,6 @@
 package im.vector.app.features.home.room.detail.timeline.style
 
 import android.content.res.Resources
-import im.vector.app.R
 import im.vector.app.core.extensions.getVectorLastMessageContent
 import im.vector.app.core.extensions.localDateTime
 import im.vector.app.core.resources.LocaleProvider
@@ -79,7 +78,7 @@ class TimelineMessageLayoutFactory @Inject constructor(
     }
 
     private val cornerRadius: Float by lazy {
-        resources.getDimensionPixelSize(R.dimen.chat_bubble_corner_radius).toFloat()
+        resources.getDimensionPixelSize(im.vector.lib.ui.styles.R.dimen.chat_bubble_corner_radius).toFloat()
     }
 
     private val isRTL: Boolean by lazy {

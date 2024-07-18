@@ -24,10 +24,10 @@ import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityCallTransferBinding
 import im.vector.lib.core.utils.compat.getParcelableCompat
+import im.vector.lib.strings.CommonStrings
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -61,8 +61,8 @@ class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>() {
 
         TabLayoutMediator(views.callTransferTabLayout, views.callTransferViewPager) { tab, position ->
             when (position) {
-                CallTransferPagerAdapter.USER_LIST_INDEX -> tab.text = getString(R.string.call_transfer_users_tab_title)
-                CallTransferPagerAdapter.DIAL_PAD_INDEX -> tab.text = getString(R.string.call_dial_pad_title)
+                CallTransferPagerAdapter.USER_LIST_INDEX -> tab.text = getString(CommonStrings.call_transfer_users_tab_title)
+                CallTransferPagerAdapter.DIAL_PAD_INDEX -> tab.text = getString(CommonStrings.call_dial_pad_title)
             }
         }.attach()
         setupToolbar(views.callTransferToolbar)

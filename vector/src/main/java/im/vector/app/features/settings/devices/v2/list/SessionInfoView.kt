@@ -31,6 +31,8 @@ import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.databinding.ViewSessionInfoBinding
 import im.vector.app.features.themes.ThemeUtils
+import im.vector.lib.strings.CommonPlurals
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 
@@ -105,7 +107,7 @@ class SessionInfoView @JvmOverloads constructor(
 
     private fun appendLearnMoreToVerificationStatus() {
         val status = views.sessionInfoVerificationStatusDetailTextView.text
-        val learnMore = context.getString(R.string.action_learn_more)
+        val learnMore = context.getString(CommonStrings.action_learn_more)
         val statusText = buildString {
             append(status)
             append(" ")
@@ -122,40 +124,42 @@ class SessionInfoView @JvmOverloads constructor(
     }
 
     private fun renderCrossSigningVerified(isCurrentSession: Boolean) {
-        views.sessionInfoVerificationStatusTextView.text = context.getString(R.string.device_manager_verification_status_verified)
-        views.sessionInfoVerificationStatusTextView.setTextColor(ThemeUtils.getColor(context, R.attr.colorPrimary))
+        views.sessionInfoVerificationStatusTextView.text = context.getString(CommonStrings.device_manager_verification_status_verified)
+        views.sessionInfoVerificationStatusTextView.setTextColor(ThemeUtils.getColor(context, com.google.android.material.R.attr.colorPrimary))
         val statusResId = if (isCurrentSession) {
-            R.string.device_manager_verification_status_detail_current_session_verified
+            CommonStrings.device_manager_verification_status_detail_current_session_verified
         } else {
-            R.string.device_manager_verification_status_detail_other_session_verified
+            CommonStrings.device_manager_verification_status_detail_other_session_verified
         }
         views.sessionInfoVerificationStatusDetailTextView.text = context.getString(statusResId)
         views.sessionInfoVerifySessionButton.isVisible = false
     }
 
     private fun renderCrossSigningUnverified(isCurrentSession: Boolean, isVerifyButtonVisible: Boolean) {
-        views.sessionInfoVerificationStatusTextView.text = context.getString(R.string.device_manager_verification_status_unverified)
-        views.sessionInfoVerificationStatusTextView.setTextColor(ThemeUtils.getColor(context, R.attr.colorError))
+        views.sessionInfoVerificationStatusTextView.text = context.getString(CommonStrings.device_manager_verification_status_unverified)
+        views.sessionInfoVerificationStatusTextView.setTextColor(ThemeUtils.getColor(context, com.google.android.material.R.attr.colorError))
         val statusResId = if (isCurrentSession) {
-            R.string.device_manager_verification_status_detail_current_session_unverified
+            CommonStrings.device_manager_verification_status_detail_current_session_unverified
         } else {
-            R.string.device_manager_verification_status_detail_other_session_unverified
+            CommonStrings.device_manager_verification_status_detail_other_session_unverified
         }
         views.sessionInfoVerificationStatusDetailTextView.text = context.getString(statusResId)
         views.sessionInfoVerifySessionButton.isVisible = isVerifyButtonVisible
     }
 
     private fun renderCrossSigningUnknown() {
-        views.sessionInfoVerificationStatusTextView.text = context.getString(R.string.device_manager_verification_status_unknown)
-        views.sessionInfoVerificationStatusDetailTextView.text = context.getString(R.string.device_manager_verification_status_detail_other_session_unknown)
+        views.sessionInfoVerificationStatusTextView.text = context.getString(CommonStrings.device_manager_verification_status_unknown)
+        views.sessionInfoVerificationStatusDetailTextView.text = context.getString(
+                CommonStrings.device_manager_verification_status_detail_other_session_unknown
+        )
         views.sessionInfoVerifySessionButton.isVisible = false
     }
 
     private fun renderCrossSigningEncryptionNotSupported() {
-        views.sessionInfoVerificationStatusTextView.text = context.getString(R.string.device_manager_verification_status_unverified)
-        views.sessionInfoVerificationStatusTextView.setTextColor(ThemeUtils.getColor(context, R.attr.colorError))
+        views.sessionInfoVerificationStatusTextView.text = context.getString(CommonStrings.device_manager_verification_status_unverified)
+        views.sessionInfoVerificationStatusTextView.setTextColor(ThemeUtils.getColor(context, com.google.android.material.R.attr.colorError))
         views.sessionInfoVerificationStatusDetailTextView.text =
-                context.getString(R.string.device_manager_verification_status_detail_session_encryption_not_supported)
+                context.getString(CommonStrings.device_manager_verification_status_detail_session_encryption_not_supported)
         views.sessionInfoVerifySessionButton.isVisible = false
     }
 
@@ -179,17 +183,17 @@ class SessionInfoView @JvmOverloads constructor(
             views.sessionInfoLastActivityTextView.text = if (isInactive) {
                 val formattedTs = dateFormatter.format(timestamp, DateFormatKind.TIMELINE_DAY_DIVIDER)
                 context.resources.getQuantityString(
-                        R.plurals.device_manager_other_sessions_description_inactive,
+                        CommonPlurals.device_manager_other_sessions_description_inactive,
                         SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS,
                         SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS,
                         formattedTs
                 )
             } else {
                 val formattedTs = dateFormatter.format(timestamp, DateFormatKind.DEFAULT_DATE_AND_TIME)
-                context.getString(R.string.device_manager_session_last_activity, formattedTs)
+                context.getString(CommonStrings.device_manager_session_last_activity, formattedTs)
             }
             val drawable = if (isInactive) {
-                val drawableColor = colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
+                val drawableColor = colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_secondary)
                 drawableProvider.getDrawable(R.drawable.ic_inactive_sessions, drawableColor)
             } else {
                 null

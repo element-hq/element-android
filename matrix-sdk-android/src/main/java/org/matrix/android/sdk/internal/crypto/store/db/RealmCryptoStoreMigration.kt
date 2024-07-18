@@ -39,6 +39,7 @@ import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo
 import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo020
 import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo021
 import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo022
+import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo023
 import org.matrix.android.sdk.internal.util.database.MatrixRealmMigration
 import org.matrix.android.sdk.internal.util.time.Clock
 import javax.inject.Inject
@@ -54,7 +55,7 @@ internal class RealmCryptoStoreMigration @Inject constructor(
         private val rustMigrationInfoProvider: RustMigrationInfoProvider,
 ) : MatrixRealmMigration(
         dbName = "Crypto",
-        schemaVersion = 22L,
+        schemaVersion = 23L,
 ) {
     /**
      * Forces all RealmCryptoStoreMigration instances to be equal.
@@ -91,5 +92,6 @@ internal class RealmCryptoStoreMigration @Inject constructor(
                 rustMigrationInfoProvider.rustEncryptionConfiguration,
                 rustMigrationInfoProvider.migrateMegolmGroupSessions
         ).perform()
+        if (oldVersion < 23) MigrateCryptoTo023(realm).perform()
     }
 }

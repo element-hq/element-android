@@ -79,11 +79,11 @@ class WizardButtonView @JvmOverloads constructor(context: Context, attrs: Attrib
             subTitle = "This is doing something"
         }
 
-        context.withStyledAttributes(attrs, R.styleable.WizardButtonView) {
-            title = getString(R.styleable.WizardButtonView_title)
-            subTitle = getString(R.styleable.WizardButtonView_subTitle)
-            icon = getDrawable(R.styleable.WizardButtonView_icon)
-            tint = getColor(R.styleable.WizardButtonView_iconTint, -1)
+        context.withStyledAttributes(attrs, im.vector.lib.ui.styles.R.styleable.WizardButtonView) {
+            title = getString(im.vector.lib.ui.styles.R.styleable.WizardButtonView_title)
+            subTitle = getString(im.vector.lib.ui.styles.R.styleable.WizardButtonView_subTitle)
+            icon = getDrawable(im.vector.lib.ui.styles.R.styleable.WizardButtonView_icon)
+            tint = getColor(im.vector.lib.ui.styles.R.styleable.WizardButtonView_iconTint, -1)
                     .takeIf { it != -1 }
         }
 

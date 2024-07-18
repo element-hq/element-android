@@ -19,7 +19,6 @@ package im.vector.app.features.spaces.create
 import android.text.InputType
 import com.airbnb.epoxy.TypedEpoxyController
 import com.google.android.material.textfield.TextInputLayout
-import im.vector.app.R
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.ItemStyle
@@ -28,6 +27,7 @@ import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.core.ui.list.genericPillItem
 import im.vector.app.features.form.formEditTextItem
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
+import im.vector.lib.strings.CommonStrings
 import javax.inject.Inject
 
 class SpaceAdd3pidEpoxyController @Inject constructor(
@@ -43,13 +43,13 @@ class SpaceAdd3pidEpoxyController @Inject constructor(
         genericFooterItem {
             id("info_help_header")
             style(ItemStyle.TITLE)
-            text(host.stringProvider.getString(R.string.create_spaces_invite_public_header).toEpoxyCharSequence())
-            textColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
+            text(host.stringProvider.getString(CommonStrings.create_spaces_invite_public_header).toEpoxyCharSequence())
+            textColor(host.colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_primary))
         }
         genericFooterItem {
             id("info_help_desc")
-            text(host.stringProvider.getString(R.string.create_spaces_invite_public_header_desc, data.name ?: "").toEpoxyCharSequence())
-            textColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary))
+            text(host.stringProvider.getString(CommonStrings.create_spaces_invite_public_header_desc, data.name ?: "").toEpoxyCharSequence())
+            textColor(host.colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_secondary))
         }
 
         if (data.canInviteByMail) {
@@ -57,13 +57,13 @@ class SpaceAdd3pidEpoxyController @Inject constructor(
         } else {
             genericPillItem {
                 id("no_IDS")
-                imageRes(R.drawable.ic_baseline_perm_contact_calendar_24)
-                text(host.stringProvider.getString(R.string.create_space_identity_server_info_none).toEpoxyCharSequence())
+                imageRes(im.vector.app.R.drawable.ic_baseline_perm_contact_calendar_24)
+                text(host.stringProvider.getString(CommonStrings.create_space_identity_server_info_none).toEpoxyCharSequence())
             }
             genericButtonItem {
                 id("Discover_Settings")
-                text(host.stringProvider.getString(R.string.open_discovery_settings))
-                textColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+                text(host.stringProvider.getString(CommonStrings.open_discovery_settings))
+                textColor(host.colorProvider.getColorFromAttribute(com.google.android.material.R.attr.colorPrimary))
                 buttonClickAction {
                     host.listener?.onNoIdentityServer()
                 }
@@ -78,12 +78,12 @@ class SpaceAdd3pidEpoxyController @Inject constructor(
                 id("3pid$index")
                 enabled(true)
                 value(mail)
-                hint(host.stringProvider.getString(R.string.medium_email))
+                hint(host.stringProvider.getString(CommonStrings.medium_email))
                 inputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS)
                 endIconMode(TextInputLayout.END_ICON_CLEAR_TEXT)
                 errorMessage(
                         if (data.emailValidationResult?.get(index) == false) {
-                            host.stringProvider.getString(R.string.does_not_look_like_valid_email)
+                            host.stringProvider.getString(CommonStrings.does_not_look_like_valid_email)
                         } else null
                 )
                 onTextChange { text ->

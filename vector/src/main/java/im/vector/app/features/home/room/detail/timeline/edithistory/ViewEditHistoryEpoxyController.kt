@@ -21,7 +21,6 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.resources.ColorProvider
@@ -33,6 +32,7 @@ import im.vector.app.core.ui.list.genericLoaderItem
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.lib.core.utils.timer.Clock
+import im.vector.lib.strings.CommonStrings
 import me.gujun.android.span.span
 import name.fraser.neil.plaintext.diff_match_patch
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -66,7 +66,7 @@ class ViewEditHistoryEpoxyController @Inject constructor(
             is Fail -> {
                 genericFooterItem {
                     id("failure")
-                    text(host.stringProvider.getString(R.string.unknown_error).toEpoxyCharSequence())
+                    text(host.stringProvider.getString(CommonStrings.unknown_error).toEpoxyCharSequence())
                 }
             }
             is Success -> {
@@ -80,7 +80,7 @@ class ViewEditHistoryEpoxyController @Inject constructor(
         if (sourceEvents.isEmpty()) {
             genericItem {
                 id("footer")
-                title(host.stringProvider.getString(R.string.no_message_edits_found).toEpoxyCharSequence())
+                title(host.stringProvider.getString(CommonStrings.no_message_edits_found).toEpoxyCharSequence())
             }
         } else {
             var lastDate: Calendar? = null
@@ -117,14 +117,14 @@ class ViewEditHistoryEpoxyController @Inject constructor(
                                 diff_match_patch.Operation.DELETE -> {
                                     span {
                                         text = it.text.replace("\n", " ")
-                                        textColor = colorProvider.getColorFromAttribute(R.attr.colorError)
+                                        textColor = colorProvider.getColorFromAttribute(com.google.android.material.R.attr.colorError)
                                         textDecorationLine = "line-through"
                                     }
                                 }
                                 diff_match_patch.Operation.INSERT -> {
                                     span {
                                         text = it.text
-                                        textColor = colorProvider.getColor(R.color.palette_element_green)
+                                        textColor = colorProvider.getColor(im.vector.lib.ui.styles.R.color.palette_element_green)
                                     }
                                 }
                                 else -> {

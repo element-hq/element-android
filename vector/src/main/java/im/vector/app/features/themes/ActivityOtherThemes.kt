@@ -17,7 +17,7 @@
 package im.vector.app.features.themes
 
 import androidx.annotation.StyleRes
-import im.vector.app.R
+import im.vector.lib.ui.styles.R
 
 /**
  * Class to manage Activity other possible themes.

@@ -24,6 +24,7 @@ import im.vector.app.core.glide.GlideApp
 import im.vector.app.databinding.AlerterIncomingCallLayoutBinding
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.util.MatrixItem
 
 class IncomingCallAlert(
@@ -33,7 +34,7 @@ class IncomingCallAlert(
 
     override val priority = PopupAlertManager.INCOMING_CALL_PRIORITY
     override val layoutRes = R.layout.alerter_incoming_call_layout
-    override var colorAttribute: Int? = R.attr.colorSurface
+    override var colorAttribute: Int? = com.google.android.material.R.attr.colorSurface
     override val dismissOnClick: Boolean = false
     override val isLight: Boolean = true
 
@@ -48,9 +49,9 @@ class IncomingCallAlert(
         override fun bind(view: View) {
             val views = AlerterIncomingCallLayoutBinding.bind(view)
             val (callKindText, callKindIcon, callKindActionIcon) = if (isVideoCall) {
-                Triple(R.string.action_video_call, R.drawable.ic_call_video_small, R.drawable.ic_call_answer_video)
+                Triple(CommonStrings.action_video_call, R.drawable.ic_call_video_small, R.drawable.ic_call_answer_video)
             } else {
-                Triple(R.string.action_voice_call, R.drawable.ic_call_audio_small, R.drawable.ic_call_answer)
+                Triple(CommonStrings.action_voice_call, R.drawable.ic_call_audio_small, R.drawable.ic_call_answer)
             }
             views.incomingCallKindView.setText(callKindText)
             views.incomingCallKindView.setLeftDrawable(callKindIcon)

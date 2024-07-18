@@ -31,7 +31,6 @@ import android.view.WindowManager
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.GestureDetectorCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
@@ -39,6 +38,7 @@ import androidx.core.view.updatePadding
 import androidx.transition.TransitionManager
 import androidx.viewpager2.widget.ViewPager2
 import im.vector.lib.attachmentviewer.databinding.ActivityAttachmentViewerBinding
+import im.vector.lib.ui.styles.R
 import java.lang.ref.WeakReference
 import kotlin.math.abs
 
@@ -71,7 +71,7 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
     private lateinit var swipeDismissHandler: SwipeToDismissHandler
     private lateinit var directionDetector: SwipeDirectionDetector
     private lateinit var scaleDetector: ScaleGestureDetector
-    private lateinit var gestureDetector: GestureDetectorCompat
+    private lateinit var gestureDetector: GestureDetector
 
     var currentPosition = 0
         private set
@@ -309,7 +309,7 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
             ScaleGestureDetector(this, ScaleGestureDetector.SimpleOnScaleGestureListener())
 
     private fun createGestureDetector() =
-            GestureDetectorCompat(this, object : GestureDetector.SimpleOnGestureListener() {
+            GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
                 override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
                     if (isImagePagerIdle) {
                         handleSingleTap(e, isOverlayWasClicked)

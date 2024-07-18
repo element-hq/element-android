@@ -31,6 +31,7 @@ import im.vector.app.features.pin.PinMode
 import im.vector.app.features.pin.lockscreen.biometrics.BiometricHelper
 import im.vector.app.features.pin.lockscreen.configuration.LockScreenConfiguration
 import im.vector.app.features.pin.lockscreen.configuration.LockScreenMode
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -47,7 +48,7 @@ class VectorSettingsPinFragment :
     @Inject lateinit var biometricHelperFactory: BiometricHelper.BiometricHelperFactory
     @Inject lateinit var defaultLockScreenConfiguration: LockScreenConfiguration
 
-    override var titleRes = R.string.settings_security_application_protection_screen_title
+    override var titleRes = CommonStrings.settings_security_application_protection_screen_title
     override val preferenceXmlRes = R.xml.vector_settings_pin
 
     private val biometricHelper by lazy {
@@ -160,7 +161,7 @@ class VectorSettingsPinFragment :
     }
 
     private fun showEnableBiometricErrorMessage() {
-        context?.toast(R.string.settings_security_pin_code_use_biometrics_error)
+        context?.toast(CommonStrings.settings_security_pin_code_use_biometrics_error)
     }
 
     private val pinActivityResultLauncher = registerStartForActivityResult {

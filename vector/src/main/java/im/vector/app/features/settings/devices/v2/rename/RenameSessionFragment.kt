@@ -25,11 +25,11 @@ import androidx.core.widget.doOnTextChanged
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.showKeyboard
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSessionRenameBinding
 import im.vector.app.features.settings.devices.v2.more.SessionLearnMoreBottomSheet
+import im.vector.lib.strings.CommonStrings
 import javax.inject.Inject
 
 /**
@@ -99,8 +99,8 @@ class RenameSessionFragment :
 
     private fun showLearnMoreInfo() {
         val args = SessionLearnMoreBottomSheet.Args(
-                title = getString(R.string.device_manager_learn_more_session_rename_title),
-                description = getString(R.string.device_manager_learn_more_session_rename),
+                title = getString(CommonStrings.device_manager_learn_more_session_rename_title),
+                description = getString(CommonStrings.device_manager_learn_more_session_rename),
         )
         SessionLearnMoreBottomSheet
                 .show(childFragmentManager, args)

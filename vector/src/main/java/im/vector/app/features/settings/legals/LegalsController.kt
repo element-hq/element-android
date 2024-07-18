@@ -22,7 +22,6 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import im.vector.app.R
 import im.vector.app.core.epoxy.errorWithRetryItem
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.error.ErrorFormatter
@@ -32,6 +31,7 @@ import im.vector.app.features.discovery.ServerPolicy
 import im.vector.app.features.discovery.discoveryPolicyItem
 import im.vector.app.features.discovery.settingsInfoItem
 import im.vector.app.features.discovery.settingsSectionTitleItem
+import im.vector.lib.strings.CommonStrings
 import javax.inject.Inject
 
 class LegalsController @Inject constructor(
@@ -54,7 +54,7 @@ class LegalsController @Inject constructor(
     private fun buildAppSection() {
         settingsSectionTitleItem {
             id("appTitle")
-            titleResId(R.string.legals_application_title)
+            titleResId(CommonStrings.legals_application_title)
         }
 
         buildPolicies("el", elementLegals.getData())
@@ -63,7 +63,7 @@ class LegalsController @Inject constructor(
     private fun buildHomeserverSection(data: LegalsState) {
         settingsSectionTitleItem {
             id("hsServerTitle")
-            titleResId(R.string.legals_home_server_title)
+            titleResId(CommonStrings.legals_home_server_title)
         }
 
         buildPolicyAsync("hs", data.homeServer)
@@ -73,7 +73,7 @@ class LegalsController @Inject constructor(
         if (data.hasIdentityServer) {
             settingsSectionTitleItem {
                 id("idServerTitle")
-                titleResId(R.string.legals_identity_server_title)
+                titleResId(CommonStrings.legals_identity_server_title)
             }
 
             buildPolicyAsync("is", data.identityServer)
@@ -93,7 +93,7 @@ class LegalsController @Inject constructor(
                 if (policies.isNullOrEmpty()) {
                     settingsInfoItem {
                         id("emptyPolicy")
-                        helperText(host.stringProvider.getString(R.string.legals_no_policy_provided))
+                        helperText(host.stringProvider.getString(CommonStrings.legals_no_policy_provided))
                     }
                 } else {
                     buildPolicies(tag, policies)
@@ -126,19 +126,19 @@ class LegalsController @Inject constructor(
         val host = this
         settingsSectionTitleItem {
             id("thirdTitle")
-            titleResId(R.string.legals_third_party_notices)
+            titleResId(CommonStrings.legals_third_party_notices)
         }
 
         discoveryPolicyItem {
             id("eltpn1")
-            name(host.stringProvider.getString(R.string.settings_third_party_notices))
+            name(host.stringProvider.getString(CommonStrings.settings_third_party_notices))
             clickListener { host.listener?.openThirdPartyNotice() }
         }
         // Only on Gplay
         if (flavorLegals.hasThirdPartyNotices()) {
             discoveryPolicyItem {
                 id("eltpn2")
-                name(host.stringProvider.getString(R.string.settings_other_third_party_notices))
+                name(host.stringProvider.getString(CommonStrings.settings_other_third_party_notices))
                 clickListener { host.listener?.openThirdPartyNoticeGplay() }
             }
         }

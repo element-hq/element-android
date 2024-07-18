@@ -25,13 +25,14 @@ import im.vector.app.R
 import im.vector.app.espresso.tools.waitUntilActivityVisible
 import im.vector.app.espresso.tools.waitUntilViewVisible
 import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleActivity
+import im.vector.lib.strings.CommonStrings
 
 class SpaceSettingsRobot {
     fun crawl() {
         Espresso.onView(ViewMatchers.withId(R.id.roomSettingsRecyclerView))
                 .perform(
                         RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
-                                ViewMatchers.hasDescendant(ViewMatchers.withText(R.string.room_settings_space_access_title)),
+                                ViewMatchers.hasDescendant(ViewMatchers.withText(CommonStrings.room_settings_space_access_title)),
                                 ViewActions.click()
                         )
                 )
@@ -45,7 +46,7 @@ class SpaceSettingsRobot {
         Espresso.onView(ViewMatchers.withId(R.id.roomSettingsRecyclerView))
                 .perform(
                         RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
-                                ViewMatchers.hasDescendant(ViewMatchers.withText(R.string.space_settings_manage_rooms)),
+                                ViewMatchers.hasDescendant(ViewMatchers.withText(CommonStrings.space_settings_manage_rooms)),
                                 ViewActions.click()
                         )
                 )
@@ -56,7 +57,7 @@ class SpaceSettingsRobot {
         Espresso.onView(ViewMatchers.withId(R.id.roomSettingsRecyclerView))
                 .perform(
                         RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
-                                ViewMatchers.hasDescendant(ViewMatchers.withText(R.string.space_settings_permissions_title)),
+                                ViewMatchers.hasDescendant(ViewMatchers.withText(CommonStrings.space_settings_permissions_title)),
                                 ViewActions.click()
                         )
                 )

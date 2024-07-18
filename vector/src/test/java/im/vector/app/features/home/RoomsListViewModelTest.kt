@@ -37,6 +37,7 @@ import im.vector.app.test.fakes.FakeSpaceStateHandler
 import im.vector.app.test.fakes.FakeStringProvider
 import im.vector.app.test.fixtures.RoomSummaryFixture.aRoomSummary
 import im.vector.app.test.test
+import im.vector.lib.strings.CommonStrings
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -135,8 +136,8 @@ class RoomsListViewModelTest {
 
         val userName = fakeSession.getUserOrDefault(fakeSession.myUserId).toMatrixItem().getBestName()
         val allEmptyState = StateView.State.Empty(
-                title = fakeStringProvider.instance.getString(R.string.home_empty_no_rooms_title, userName),
-                message = fakeStringProvider.instance.getString(R.string.home_empty_no_rooms_message),
+                title = fakeStringProvider.instance.getString(CommonStrings.home_empty_no_rooms_title, userName),
+                message = fakeStringProvider.instance.getString(CommonStrings.home_empty_no_rooms_message),
                 image = fakeDrawableProvider.instance.getDrawable(R.drawable.ill_empty_all_chats),
                 isBigImage = true
         )
@@ -159,8 +160,8 @@ class RoomsListViewModelTest {
 
         val userName = fakeSession.getUserOrDefault(fakeSession.myUserId).toMatrixItem().getBestName()
         val allEmptyState = StateView.State.Empty(
-                title = fakeStringProvider.instance.getString(R.string.home_empty_no_rooms_title, userName),
-                message = fakeStringProvider.instance.getString(R.string.home_empty_no_rooms_message),
+                title = fakeStringProvider.instance.getString(CommonStrings.home_empty_no_rooms_title, userName),
+                message = fakeStringProvider.instance.getString(CommonStrings.home_empty_no_rooms_message),
                 image = fakeDrawableProvider.instance.getDrawable(R.drawable.ill_empty_all_chats),
                 isBigImage = true
         )
@@ -178,8 +179,8 @@ class RoomsListViewModelTest {
         viewModel.handle(HomeRoomListAction.ChangeRoomFilter(filter = aFilter))
 
         val unreadsEmptyState = StateView.State.Empty(
-                title = fakeStringProvider.instance.getString(R.string.home_empty_no_unreads_title),
-                message = fakeStringProvider.instance.getString(R.string.home_empty_no_unreads_message),
+                title = fakeStringProvider.instance.getString(CommonStrings.home_empty_no_unreads_title),
+                message = fakeStringProvider.instance.getString(CommonStrings.home_empty_no_unreads_message),
                 image = fakeDrawableProvider.instance.getDrawable(R.drawable.ill_empty_unreads),
                 isBigImage = true,
                 imageScaleType = ImageView.ScaleType.CENTER_INSIDE

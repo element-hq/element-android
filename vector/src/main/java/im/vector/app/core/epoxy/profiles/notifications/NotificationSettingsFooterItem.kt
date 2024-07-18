@@ -24,6 +24,7 @@ import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.extensions.setTextWithColoredPart
+import im.vector.lib.strings.CommonStrings
 
 @EpoxyModelClass
 abstract class NotificationSettingsFooterItem : VectorEpoxyModel<NotificationSettingsFooterItem.Holder>(R.layout.item_notifications_footer) {
@@ -36,14 +37,14 @@ abstract class NotificationSettingsFooterItem : VectorEpoxyModel<NotificationSet
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        val accountSettingsString = holder.view.context.getString(R.string.room_settings_room_notifications_account_settings)
+        val accountSettingsString = holder.view.context.getString(CommonStrings.room_settings_room_notifications_account_settings)
         val manageNotificationsString = holder.view.context.getString(
-                R.string.room_settings_room_notifications_manage_notifications,
+                CommonStrings.room_settings_room_notifications_manage_notifications,
                 accountSettingsString
         )
         val manageNotificationsBuilder = StringBuilder(manageNotificationsString)
         if (encrypted) {
-            val encryptionNotice = holder.view.context.getString(R.string.room_settings_room_notifications_encryption_notice)
+            val encryptionNotice = holder.view.context.getString(CommonStrings.room_settings_room_notifications_encryption_notice)
             manageNotificationsBuilder.appendLine().append(encryptionNotice)
         }
 

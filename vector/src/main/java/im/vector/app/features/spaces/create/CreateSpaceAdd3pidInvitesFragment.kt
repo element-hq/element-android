@@ -22,7 +22,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.activityViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.hideKeyboard
@@ -30,6 +29,7 @@ import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSpaceCreateGenericEpoxyFormBinding
 import im.vector.app.features.settings.VectorSettingsActivity
+import im.vector.lib.strings.CommonStrings
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -57,7 +57,7 @@ class CreateSpaceAdd3pidInvitesFragment :
             invalidateState(it)
         }
 
-        views.nextButton.setText(R.string.action_next)
+        views.nextButton.setText(CommonStrings.action_next)
         views.nextButton.debouncedClicks {
             view.hideKeyboard()
             sharedViewModel.handle(CreateSpaceAction.NextFromAdd3pid)
@@ -68,9 +68,9 @@ class CreateSpaceAdd3pidInvitesFragment :
         epoxyController.setData(it)
         val noEmails = it.default3pidInvite?.all { it.value.isNullOrBlank() } ?: true
         views.nextButton.text = if (noEmails) {
-            getString(R.string.skip_for_now)
+            getString(CommonStrings.skip_for_now)
         } else {
-            getString(R.string.action_next)
+            getString(CommonStrings.action_next)
         }
     }
 

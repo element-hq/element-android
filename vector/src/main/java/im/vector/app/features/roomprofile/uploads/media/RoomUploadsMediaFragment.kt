@@ -47,6 +47,7 @@ import im.vector.app.features.roomprofile.uploads.RoomUploadsAction
 import im.vector.app.features.roomprofile.uploads.RoomUploadsFragment
 import im.vector.app.features.roomprofile.uploads.RoomUploadsViewModel
 import im.vector.app.features.roomprofile.uploads.RoomUploadsViewState
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.crypto.attachments.toElementToDecrypt
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
@@ -206,7 +207,7 @@ class RoomUploadsMediaFragment :
                         loadMore()
                     } else {
                         views.genericStateViewListStateView.state = StateView.State.Empty(
-                                title = getString(R.string.uploads_media_no_result),
+                                title = getString(CommonStrings.uploads_media_no_result),
                                 image = ContextCompat.getDrawable(requireContext(), R.drawable.ic_image)
                         )
                     }

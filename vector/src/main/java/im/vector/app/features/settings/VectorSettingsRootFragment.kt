@@ -21,12 +21,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.features.analytics.plan.MobileScreen
+import im.vector.lib.strings.CommonStrings
 
 @AndroidEntryPoint
 class VectorSettingsRootFragment :
         VectorSettingsBaseFragment() {
 
-    override var titleRes: Int = R.string.title_activity_settings
+    override var titleRes: Int = CommonStrings.title_activity_settings
     override val preferenceXmlRes = R.xml.vector_settings_root
 
     override fun onCreate(savedInstanceState: Bundle?) {

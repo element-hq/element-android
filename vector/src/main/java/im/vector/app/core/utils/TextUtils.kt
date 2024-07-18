@@ -16,11 +16,12 @@
 
 package im.vector.app.core.utils
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.text.format.Formatter
-import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
+import im.vector.lib.strings.CommonStrings
 import org.threeten.bp.Duration
 import java.util.TreeMap
 
@@ -75,6 +76,7 @@ object TextUtils {
         }
     }
 
+    @SuppressLint("DefaultLocale")
     fun formatDuration(duration: Duration): String {
         val hours = getHours(duration)
         val minutes = getMinutes(duration)
@@ -135,17 +137,17 @@ object TextUtils {
 
     private fun appendHours(getString: ((Int) -> String), builder: StringBuilder, hours: Int) {
         builder.append(hours)
-        builder.append(getString(R.string.time_unit_hour_short))
+        builder.append(getString(CommonStrings.time_unit_hour_short))
     }
 
     private fun appendMinutes(getString: ((Int) -> String), builder: StringBuilder, minutes: Int) {
         builder.append(minutes)
-        builder.append(getString(R.string.time_unit_minute_short))
+        builder.append(getString(CommonStrings.time_unit_minute_short))
     }
 
     private fun appendSeconds(getString: ((Int) -> String), builder: StringBuilder, seconds: Int) {
         builder.append(seconds)
-        builder.append(getString(R.string.time_unit_second_short))
+        builder.append(getString(CommonStrings.time_unit_second_short))
     }
 
     private fun getHours(duration: Duration): Int = duration.toHours().toInt()

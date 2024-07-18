@@ -11,6 +11,9 @@
     -->
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
+    <!-- For GuardAndroidService -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+
     <application>
 
         <receiver
@@ -30,6 +33,7 @@
         <service
             android:name="im.vector.app.fdroid.service.GuardAndroidService"
             android:exported="false"
+            android:foregroundServiceType="dataSync"
             tools:ignore="Instantiatable" />
 
     </application>

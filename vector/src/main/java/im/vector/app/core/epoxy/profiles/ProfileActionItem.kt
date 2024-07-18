@@ -77,14 +77,14 @@ abstract class ProfileActionItem : VectorEpoxyModel<ProfileActionItem.Holder>(R.
         }
         holder.title.text = title
         val titleTintColor = if (destructive) {
-            ThemeUtils.getColor(holder.view.context, R.attr.colorError)
+            ThemeUtils.getColor(holder.view.context, com.google.android.material.R.attr.colorError)
         } else {
-            ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_primary)
+            ThemeUtils.getColor(holder.view.context, im.vector.lib.ui.styles.R.attr.vctr_content_primary)
         }
         val iconTintColor = if (destructive) {
-            ThemeUtils.getColor(holder.view.context, R.attr.colorError)
+            ThemeUtils.getColor(holder.view.context, com.google.android.material.R.attr.colorError)
         } else {
-            ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_secondary)
+            ThemeUtils.getColor(holder.view.context, im.vector.lib.ui.styles.R.attr.vctr_content_secondary)
         }
         holder.title.setTextColor(titleTintColor)
         holder.subtitle.setTextOrHide(subtitle)
@@ -118,7 +118,7 @@ abstract class ProfileActionItem : VectorEpoxyModel<ProfileActionItem.Holder>(R.
             val tintColorSecondary = if (destructive) {
                 titleTintColor
             } else {
-                ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_secondary)
+                ThemeUtils.getColor(holder.view.context, im.vector.lib.ui.styles.R.attr.vctr_content_secondary)
             }
             holder.editable.setImageResource(editableRes)
             ImageViewCompat.setImageTintList(holder.editable, ColorStateList.valueOf(tintColorSecondary))

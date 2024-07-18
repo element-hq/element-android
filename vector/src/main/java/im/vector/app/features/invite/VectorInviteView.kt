@@ -25,6 +25,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.databinding.VectorInviteViewBinding
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -62,13 +63,13 @@ class VectorInviteView @JvmOverloads constructor(context: Context, attrs: Attrib
             avatarRenderer.render(sender.toMatrixItem(), views.inviteAvatarView)
             views.inviteIdentifierView.text = sender.userId
             views.inviteNameView.text = sender.displayName
-            views.inviteLabelView.text = context.getString(R.string.send_you_invite)
+            views.inviteLabelView.text = context.getString(CommonStrings.send_you_invite)
         } else {
             updateLayoutParams { height = LayoutParams.WRAP_CONTENT }
             views.inviteAvatarView.visibility = View.GONE
             views.inviteIdentifierView.visibility = View.GONE
             views.inviteNameView.visibility = View.GONE
-            views.inviteLabelView.text = context.getString(R.string.invited_by, sender.userId)
+            views.inviteLabelView.text = context.getString(CommonStrings.invited_by, sender.userId)
         }
         InviteButtonStateBinder.bind(views.inviteAcceptView, views.inviteRejectView, changeMembershipState)
     }

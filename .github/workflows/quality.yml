@@ -7,7 +7,7 @@ on:
 
 # Enrich gradle.properties for CI/CD
 env:
-  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3072m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -XX:MaxPermSize=512m -Dkotlin.daemon.jvm.options="-Xmx2g" -Dkotlin.incremental=false
+  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3072m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError -XX:MaxMetaspaceSize=1g" -Dkotlin.daemon.jvm.options="-Xmx2560m" -Dkotlin.incremental=false
   CI_GRADLE_ARG_PROPERTIES: --stacktrace -PpreDexEnable=false --max-workers 2 --no-daemon
 
 jobs:
@@ -15,7 +15,7 @@ jobs:
     name: Project Check Suite
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Run code quality check suite
         run: ./tools/check/check_code_quality.sh
 
@@ -24,7 +24,16 @@ jobs:
     name: Knit
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+      - name: Use JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '17'
+      - name: Configure gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
       - name: Run knit
         run: |
           ./gradlew knitCheck $CI_GRADLE_ARG_PROPERTIES
@@ -38,7 +47,16 @@ jobs:
       group: ${{ github.ref == 'refs/heads/main' && format('lint-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('lint-develop-{0}', github.sha) || format('lint-{0}', github.ref) }}
       cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+      - name: Use JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '17'
+      - name: Configure gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
       - name: Run ktlint
         run: |
           ./gradlew ktlintCheck $CI_GRADLE_ARG_PROPERTIES --continue
@@ -83,7 +101,16 @@ jobs:
       group: ${{ github.ref == 'refs/heads/main' && format('dep-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('dep-develop-{0}', github.sha) || format('dep-{0}', github.ref) }}
       cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+      - name: Use JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '17'
+      - name: Configure gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
       - name: Dependency analysis
         run: ./gradlew dependencyCheckAnalyze $CI_GRADLE_ARG_PROPERTIES
       - name: Upload dependency analysis

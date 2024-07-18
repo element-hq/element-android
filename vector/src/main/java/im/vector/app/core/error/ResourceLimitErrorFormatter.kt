@@ -19,7 +19,7 @@ package im.vector.app.core.error
 import android.content.Context
 import androidx.annotation.StringRes
 import androidx.core.text.HtmlCompat
-import im.vector.app.R
+import im.vector.lib.strings.CommonStrings
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.failure.MatrixError
 
@@ -28,10 +28,10 @@ class ResourceLimitErrorFormatter(private val context: Context) {
     // 'hard' if the logged in user has been locked out, 'soft' if they haven't
     sealed class Mode(@StringRes val mauErrorRes: Int, @StringRes val defaultErrorRes: Int, @StringRes val contactRes: Int) {
         // User can still send message (will be used in a near future)
-        object Soft : Mode(R.string.resource_limit_soft_mau, R.string.resource_limit_soft_default, R.string.resource_limit_soft_contact)
+        object Soft : Mode(CommonStrings.resource_limit_soft_mau, CommonStrings.resource_limit_soft_default, CommonStrings.resource_limit_soft_contact)
 
         // User cannot send message anymore
-        object Hard : Mode(R.string.resource_limit_hard_mau, R.string.resource_limit_hard_default, R.string.resource_limit_hard_contact)
+        object Hard : Mode(CommonStrings.resource_limit_hard_mau, CommonStrings.resource_limit_hard_default, CommonStrings.resource_limit_hard_contact)
     }
 
     fun format(
@@ -50,7 +50,7 @@ class ResourceLimitErrorFormatter(private val context: Context) {
             val contactFullString = context.getString(mode.contactRes, contactSubString)
             HtmlCompat.fromHtml(contactFullString, HtmlCompat.FROM_HTML_MODE_LEGACY)
         } else {
-            val contactSubString = context.getString(R.string.resource_limit_contact_admin)
+            val contactSubString = context.getString(CommonStrings.resource_limit_contact_admin)
             context.getString(mode.contactRes, contactSubString)
         }
         return span {
@@ -64,7 +64,7 @@ class ResourceLimitErrorFormatter(private val context: Context) {
      * Create a HTML link with a uri.
      */
     private fun uriAsLink(uri: String): String {
-        val contactStr = context.getString(R.string.resource_limit_contact_admin)
+        val contactStr = context.getString(CommonStrings.resource_limit_contact_admin)
         return "<a href=\"$uri\">$contactStr</a>"
     }
 }

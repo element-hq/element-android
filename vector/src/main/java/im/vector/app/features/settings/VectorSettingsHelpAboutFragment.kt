@@ -29,6 +29,7 @@ import im.vector.app.core.utils.openAppSettingsPage
 import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.version.VersionProvider
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.Matrix
 import javax.inject.Inject
 
@@ -39,7 +40,7 @@ class VectorSettingsHelpAboutFragment :
     @Inject lateinit var versionProvider: VersionProvider
     @Inject lateinit var buildMeta: BuildMeta
 
-    override var titleRes = R.string.preference_root_help_about
+    override var titleRes = CommonStrings.preference_root_help_about
     override val preferenceXmlRes = R.xml.vector_settings_help_about
 
     private val firstThrottler = FirstThrottler(1000)

@@ -24,12 +24,12 @@ import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.restart
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentLocalePickerBinding
+import im.vector.lib.strings.CommonStrings
 import java.util.Locale
 import javax.inject.Inject
 
@@ -81,6 +81,6 @@ class LocalePickerFragment :
 
     override fun onResume() {
         super.onResume()
-        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(R.string.settings_select_language)
+        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(CommonStrings.settings_select_language)
     }
 }

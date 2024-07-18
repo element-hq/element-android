@@ -34,6 +34,7 @@ import im.vector.app.features.voicebroadcast.listening.VoiceBroadcastPlayer
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.views.VoiceBroadcastBufferingView
 import im.vector.app.features.voicebroadcast.views.VoiceBroadcastMetadataView
+import im.vector.lib.strings.CommonStrings
 
 @EpoxyModelClass
 abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem<MessageVoiceBroadcastListeningItem.Holder>() {
@@ -121,13 +122,13 @@ abstract class MessageVoiceBroadcastListeningItem : AbsMessageVoiceBroadcastItem
                 VoiceBroadcastPlayer.State.Playing,
                 VoiceBroadcastPlayer.State.Buffering -> {
                     playPauseButton.setImageResource(R.drawable.ic_play_pause_pause)
-                    playPauseButton.contentDescription = view.resources.getString(R.string.a11y_pause_voice_broadcast)
+                    playPauseButton.contentDescription = view.resources.getString(CommonStrings.a11y_pause_voice_broadcast)
                 }
                 is VoiceBroadcastPlayer.State.Error,
                 VoiceBroadcastPlayer.State.Idle,
                 VoiceBroadcastPlayer.State.Paused -> {
                     playPauseButton.setImageResource(R.drawable.ic_play_pause_play)
-                    playPauseButton.contentDescription = view.resources.getString(R.string.a11y_play_voice_broadcast)
+                    playPauseButton.contentDescription = view.resources.getString(CommonStrings.a11y_play_voice_broadcast)
                 }
             }
 

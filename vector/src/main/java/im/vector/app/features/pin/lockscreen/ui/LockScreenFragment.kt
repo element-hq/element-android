@@ -144,9 +144,9 @@ class LockScreenFragment :
 
     private fun setupTitleView(titleView: TextView, isConfirmation: Boolean, configuration: LockScreenConfiguration) = with(titleView) {
         text = if (isConfirmation) {
-            configuration.newCodeConfirmationTitle ?: getString(R.string.lockscreen_confirm_pin)
+            configuration.newCodeConfirmationTitle ?: getString(im.vector.lib.ui.styles.R.string.lockscreen_confirm_pin)
         } else {
-            configuration.title ?: getString(R.string.lockscreen_title)
+            configuration.title ?: getString(im.vector.lib.ui.styles.R.string.lockscreen_title)
         }
     }
 

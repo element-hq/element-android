@@ -35,6 +35,7 @@ import im.vector.app.features.analytics.extensions.toTrackingValue
 import im.vector.app.features.analytics.plan.UserProperties
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.room.list.home.header.HomeRoomFilter
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -284,24 +285,24 @@ class HomeRoomListViewModel @AssistedInject constructor(
             HomeRoomFilter.ALL ->
                 if (selectedSpace != null) {
                     StateView.State.Empty(
-                            title = stringProvider.getString(R.string.home_empty_space_no_rooms_title, selectedSpace.displayName),
-                            message = stringProvider.getString(R.string.home_empty_space_no_rooms_message),
+                            title = stringProvider.getString(CommonStrings.home_empty_space_no_rooms_title, selectedSpace.displayName),
+                            message = stringProvider.getString(CommonStrings.home_empty_space_no_rooms_message),
                             image = drawableProvider.getDrawable(R.drawable.ill_empty_space),
                             isBigImage = true
                     )
                 } else {
                     val userName = session.getUserOrDefault(session.myUserId).toMatrixItem().getBestName()
                     StateView.State.Empty(
-                            title = stringProvider.getString(R.string.home_empty_no_rooms_title, userName),
-                            message = stringProvider.getString(R.string.home_empty_no_rooms_message),
+                            title = stringProvider.getString(CommonStrings.home_empty_no_rooms_title, userName),
+                            message = stringProvider.getString(CommonStrings.home_empty_no_rooms_message),
                             image = drawableProvider.getDrawable(R.drawable.ill_empty_all_chats),
                             isBigImage = true
                     )
                 }
             HomeRoomFilter.UNREADS ->
                 StateView.State.Empty(
-                        title = stringProvider.getString(R.string.home_empty_no_unreads_title),
-                        message = stringProvider.getString(R.string.home_empty_no_unreads_message),
+                        title = stringProvider.getString(CommonStrings.home_empty_no_unreads_title),
+                        message = stringProvider.getString(CommonStrings.home_empty_no_unreads_message),
                         image = drawableProvider.getDrawable(R.drawable.ill_empty_unreads),
                         isBigImage = true,
                         imageScaleType = ImageView.ScaleType.CENTER_INSIDE

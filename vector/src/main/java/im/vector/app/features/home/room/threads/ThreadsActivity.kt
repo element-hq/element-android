@@ -21,7 +21,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.FragmentTransaction
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseActivity
@@ -100,10 +99,10 @@ class ThreadsActivity : VectorBaseActivity<ActivityThreadsBinding>() {
         analyticsTracker.capture(Interaction.Name.MobileThreadListThreadItem.toAnalyticsInteraction())
         val commonOption: (FragmentTransaction) -> Unit = {
             it.setCustomAnimations(
-                    R.anim.animation_slide_in_right,
-                    R.anim.animation_slide_out_left,
-                    R.anim.animation_slide_in_left,
-                    R.anim.animation_slide_out_right
+                    im.vector.lib.ui.styles.R.anim.animation_slide_in_right,
+                    im.vector.lib.ui.styles.R.anim.animation_slide_out_left,
+                    im.vector.lib.ui.styles.R.anim.animation_slide_in_left,
+                    im.vector.lib.ui.styles.R.anim.animation_slide_out_right
             )
         }
         addFragmentToBackstack(

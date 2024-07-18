@@ -26,7 +26,6 @@ import org.junit.runners.JUnit4
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
-import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.common.CommonTestHelper.Companion.runCryptoTest
 

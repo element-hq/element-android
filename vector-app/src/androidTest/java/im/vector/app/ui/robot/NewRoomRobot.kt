@@ -24,6 +24,7 @@ import im.vector.app.espresso.tools.waitUntilViewVisible
 import im.vector.app.features.DefaultVectorFeatures
 import im.vector.app.features.VectorFeatures
 import im.vector.app.ui.robot.settings.labs.LabFeaturesPreferences
+import im.vector.lib.strings.CommonStrings
 
 class NewRoomRobot(
         var createdRoom: Boolean = false,
@@ -32,7 +33,7 @@ class NewRoomRobot(
     private val features: VectorFeatures = DefaultVectorFeatures()
 
     fun createNewRoom(block: CreateNewRoomRobot.() -> Unit) {
-        clickOn(R.string.create_new_room)
+        clickOn(CommonStrings.create_new_room)
         waitUntilViewVisible(withId(R.id.createRoomForm))
         val createNewRoomRobot = CreateNewRoomRobot()
         block(createNewRoomRobot)

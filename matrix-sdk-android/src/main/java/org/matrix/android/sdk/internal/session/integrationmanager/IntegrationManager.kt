@@ -64,7 +64,10 @@ internal class IntegrationManager @Inject constructor(
         SessionLifecycleObserver {
 
     private val currentConfigs = ArrayList<IntegrationManagerConfig>()
-    private val lifecycleOwner: LifecycleOwner = LifecycleOwner { lifecycleRegistry }
+    private val lifecycleOwner: LifecycleOwner = object : LifecycleOwner {
+        override val lifecycle: Lifecycle
+            get() = lifecycleRegistry
+    }
     private val lifecycleRegistry: LifecycleRegistry = LifecycleRegistry(lifecycleOwner)
 
     private val listeners = HashSet<IntegrationManagerService.Listener>()

@@ -77,7 +77,7 @@ abstract class GenericWithValueItem : VectorEpoxyModel<GenericWithValueItem.Hold
         if (valueColorInt != null) {
             holder.valueText.setTextColor(valueColorInt!!)
         } else {
-            holder.valueText.setTextColor(ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_primary))
+            holder.valueText.setTextColor(ThemeUtils.getColor(holder.view.context, im.vector.lib.ui.styles.R.attr.vctr_content_primary))
         }
 
         holder.view.onClick(itemClickAction)

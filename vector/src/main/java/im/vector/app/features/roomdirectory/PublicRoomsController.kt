@@ -21,13 +21,13 @@ import com.airbnb.epoxy.VisibilityState
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Success
-import im.vector.app.R
 import im.vector.app.core.epoxy.errorWithRetryItem
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.epoxy.noResultItem
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
@@ -54,7 +54,7 @@ class PublicRoomsController @Inject constructor(
             // No result
             noResultItem {
                 id("noResult")
-                text(host.stringProvider.getString(R.string.no_result_placeholder))
+                text(host.stringProvider.getString(CommonStrings.no_result_placeholder))
             }
         } else {
             publicRooms.forEach {

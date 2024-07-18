@@ -52,6 +52,8 @@ import im.vector.app.features.settings.devices.v2.list.SecurityRecommendationVie
 import im.vector.app.features.settings.devices.v2.list.SessionInfoViewState
 import im.vector.app.features.settings.devices.v2.signout.BuildConfirmSignoutDialogUseCase
 import im.vector.app.features.workers.signout.SignOutUiWorker
+import im.vector.lib.strings.CommonPlurals
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.extensions.orFalse
 import javax.inject.Inject
@@ -92,7 +94,7 @@ class VectorSettingsDevicesFragment :
     private fun initToolbar() {
         (activity as? AppCompatActivity)
                 ?.supportActionBar
-                ?.setTitle(R.string.settings_sessions_list)
+                ?.setTitle(CommonStrings.settings_sessions_list)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -138,7 +140,7 @@ class VectorSettingsDevicesFragment :
     }
 
     private fun initWaitingView() {
-        views.waitingView.waitingStatusText.setText(R.string.please_wait)
+        views.waitingView.waitingStatusText.setText(CommonStrings.please_wait)
         views.waitingView.waitingStatusText.isVisible = true
     }
 
@@ -316,13 +318,13 @@ class VectorSettingsDevicesFragment :
             views.deviceListUnverifiedSessionsRecommendation.isVisible = isUnverifiedSectionVisible
             views.deviceListInactiveSessionsRecommendation.isVisible = isInactiveSectionVisible
             val unverifiedSessionsViewState = SecurityRecommendationViewState(
-                    description = getString(R.string.device_manager_unverified_sessions_description),
+                    description = getString(CommonStrings.device_manager_unverified_sessions_description),
                     sessionsCount = unverifiedSessionsCount,
             )
             views.deviceListUnverifiedSessionsRecommendation.render(unverifiedSessionsViewState)
             val inactiveSessionsViewState = SecurityRecommendationViewState(
                     description = resources.getQuantityString(
-                            R.plurals.device_manager_inactive_sessions_description,
+                            CommonPlurals.device_manager_inactive_sessions_description,
                             SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS,
                             SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS
                     ),
@@ -353,12 +355,12 @@ class VectorSettingsDevicesFragment :
             hideOtherSessionsView()
         } else {
             views.deviceListHeaderOtherSessions.isVisible = true
-            val colorDestructive = colorProvider.getColorFromAttribute(R.attr.colorError)
+            val colorDestructive = colorProvider.getColorFromAttribute(com.google.android.material.R.attr.colorError)
             val multiSignoutItem = views.deviceListHeaderOtherSessions.menu.findItem(R.id.otherSessionsHeaderMultiSignout)
             // Hide multi signout if the homeserver delegates the account management
             multiSignoutItem.isVisible = state.delegatedOidcAuthEnabled.not()
             val nbDevices = otherDevices.size
-            multiSignoutItem.title = stringProvider.getQuantityString(R.plurals.device_manager_other_sessions_multi_signout_all, nbDevices, nbDevices)
+            multiSignoutItem.title = stringProvider.getQuantityString(CommonPlurals.device_manager_other_sessions_multi_signout_all, nbDevices, nbDevices)
             multiSignoutItem.setTextColor(colorDestructive)
             views.deviceListOtherSessions.isVisible = true
             val devices = if (isShowingIpAddress) otherDevices else otherDevices.map { it.copy(deviceInfo = it.deviceInfo.copy(lastSeenIp = null)) }
@@ -368,9 +370,9 @@ class VectorSettingsDevicesFragment :
                     showViewAll = devices.size > NUMBER_OF_OTHER_DEVICES_TO_RENDER
             )
             views.deviceListHeaderOtherSessions.menu.findItem(R.id.otherSessionsHeaderToggleIpAddress).title = if (isShowingIpAddress) {
-                stringProvider.getString(R.string.device_manager_other_sessions_hide_ip_address)
+                stringProvider.getString(CommonStrings.device_manager_other_sessions_hide_ip_address)
             } else {
-                stringProvider.getString(R.string.device_manager_other_sessions_show_ip_address)
+                stringProvider.getString(CommonStrings.device_manager_other_sessions_show_ip_address)
             }
         }
     }
@@ -391,7 +393,7 @@ class VectorSettingsDevicesFragment :
 
     private fun renderCurrentSessionHeaderView(hasOtherDevices: Boolean, state: DevicesViewState) {
         views.deviceListHeaderCurrentSession.isVisible = true
-        val colorDestructive = colorProvider.getColorFromAttribute(R.attr.colorError)
+        val colorDestructive = colorProvider.getColorFromAttribute(com.google.android.material.R.attr.colorError)
         val signoutSessionItem = views.deviceListHeaderCurrentSession.menu.findItem(R.id.currentSessionHeaderSignout)
         signoutSessionItem.setTextColor(colorDestructive)
         val signoutOtherSessionsItem = views.deviceListHeaderCurrentSession.menu.findItem(R.id.currentSessionHeaderSignoutOtherSessions)
@@ -481,7 +483,7 @@ class VectorSettingsDevicesFragment :
                 requireContext(),
                 reAuthReq.registrationFlowResponse,
                 reAuthReq.lastErrorCode,
-                getString(R.string.devices_delete_dialog_title)
+                getString(CommonStrings.devices_delete_dialog_title)
         ).let { intent ->
             reAuthActivityResultLauncher.launch(intent)
         }

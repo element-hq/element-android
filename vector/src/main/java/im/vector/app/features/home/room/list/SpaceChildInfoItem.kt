@@ -36,6 +36,7 @@ import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.themes.ThemeUtils
+import im.vector.lib.strings.CommonStrings
 import me.gujun.android.span.image
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -67,13 +68,13 @@ abstract class SpaceChildInfoItem : VectorEpoxyModel<SpaceChildInfoItem.Holder>(
             it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
             itemLongClickListener?.onLongClick(it) ?: false
         }
-        holder.titleView.text = matrixItem.displayName ?: holder.rootView.context.getString(R.string.unnamed_room)
+        holder.titleView.text = matrixItem.displayName ?: holder.rootView.context.getString(CommonStrings.unnamed_room)
         avatarRenderer.render(matrixItem, holder.avatarImageView)
 
         holder.descriptionText.text = span {
             span {
                 apply {
-                    val tintColor = ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_secondary)
+                    val tintColor = ThemeUtils.getColor(holder.view.context, im.vector.lib.ui.styles.R.attr.vctr_content_secondary)
                     ContextCompat.getDrawable(holder.view.context, R.drawable.ic_member_small)
                             ?.apply {
                                 ThemeUtils.tintDrawableWithColor(this, tintColor)

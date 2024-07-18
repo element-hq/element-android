@@ -28,11 +28,11 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetRoomUpgradeBinding
+import im.vector.lib.strings.CommonStrings
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -60,14 +60,14 @@ class MigrateRoomBottomSheet :
     val viewModel: MigrateRoomViewModel by fragmentViewModel()
 
     override fun invalidate() = withState(viewModel) { state ->
-        views.headerText.setText(if (state.isPublic) R.string.upgrade_public_room else R.string.upgrade_private_room)
+        views.headerText.setText(if (state.isPublic) CommonStrings.upgrade_public_room else CommonStrings.upgrade_private_room)
 
         if (state.migrationReason == MigrationReason.MANUAL) {
-            views.descriptionText.text = getString(R.string.upgrade_room_warning)
-            views.upgradeFromTo.text = getString(R.string.upgrade_public_room_from_to, state.currentVersion, state.newVersion)
+            views.descriptionText.text = getString(CommonStrings.upgrade_room_warning)
+            views.upgradeFromTo.text = getString(CommonStrings.upgrade_public_room_from_to, state.currentVersion, state.newVersion)
         } else if (state.migrationReason == MigrationReason.FOR_RESTRICTED) {
             views.descriptionText.setTextOrHide(state.customDescription)
-            views.upgradeFromTo.text = getString(R.string.upgrade_room_for_restricted_note)
+            views.upgradeFromTo.text = getString(CommonStrings.upgrade_room_for_restricted_note)
         }
 
         if (state.autoMigrateMembersAndParents) {
@@ -94,10 +94,10 @@ class MigrateRoomBottomSheet :
                         val errorText = when (result) {
                             is UpgradeRoomViewModelTask.Result.UnknownRoom -> {
                                 // should not happen
-                                getString(R.string.unknown_error)
+                                getString(CommonStrings.unknown_error)
                             }
                             is UpgradeRoomViewModelTask.Result.NotAllowed -> {
-                                getString(R.string.upgrade_room_no_power_to_manage)
+                                getString(CommonStrings.upgrade_room_no_power_to_manage)
                             }
                             is UpgradeRoomViewModelTask.Result.ErrorFailure -> {
                                 errorFormatter.toHumanReadable(result.throwable)
@@ -106,7 +106,7 @@ class MigrateRoomBottomSheet :
                         }
                         views.inlineError.setTextOrHide(errorText)
                         views.button.isVisible = true
-                        views.button.text = getString(R.string.global_retry)
+                        views.button.text = getString(CommonStrings.global_retry)
                     }
                     is UpgradeRoomViewModelTask.Result.Success -> {
                         setFragmentResult(REQUEST_KEY, Bundle().apply {
@@ -118,7 +118,7 @@ class MigrateRoomBottomSheet :
             }
             else -> {
                 views.button.isVisible = true
-                views.button.text = getString(R.string.upgrade)
+                views.button.text = getString(CommonStrings.upgrade)
             }
         }
 

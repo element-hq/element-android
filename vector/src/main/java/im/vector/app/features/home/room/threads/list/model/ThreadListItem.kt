@@ -34,6 +34,7 @@ import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.themes.ThemeUtils
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.threads.ThreadNotificationState
 import org.matrix.android.sdk.api.util.MatrixItem
 
@@ -60,12 +61,12 @@ abstract class ThreadListItem : VectorEpoxyModel<ThreadListItem.Holder>(R.layout
         holder.titleTextView.text = title
         holder.dateTextView.text = date
         if (rootMessageDeleted) {
-            holder.rootMessageTextView.text = holder.view.context.getString(R.string.event_redacted)
-            holder.rootMessageTextView.setTextColor(ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_secondary))
-            holder.rootMessageTextView.setLeftDrawable(R.drawable.ic_trash_16, R.attr.vctr_content_tertiary)
+            holder.rootMessageTextView.text = holder.view.context.getString(CommonStrings.event_redacted)
+            holder.rootMessageTextView.setTextColor(ThemeUtils.getColor(holder.view.context, im.vector.lib.ui.styles.R.attr.vctr_content_secondary))
+            holder.rootMessageTextView.setLeftDrawable(R.drawable.ic_trash_16, im.vector.lib.ui.styles.R.attr.vctr_content_tertiary)
             holder.rootMessageTextView.compoundDrawablePadding = DimensionConverter(holder.view.context.resources).dpToPx(10)
         } else {
-            holder.rootMessageTextView.setTextColor(ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_primary))
+            holder.rootMessageTextView.setTextColor(ThemeUtils.getColor(holder.view.context, im.vector.lib.ui.styles.R.attr.vctr_content_primary))
             holder.rootMessageTextView.text = rootMessage
             holder.rootMessageTextView.clearDrawables()
         }
@@ -83,11 +84,11 @@ abstract class ThreadListItem : VectorEpoxyModel<ThreadListItem.Holder>(R.layout
         when (threadNotificationState) {
             ThreadNotificationState.NEW_MESSAGE -> {
                 holder.unreadImageView.isVisible = true
-                holder.unreadImageView.setColorFilter(ContextCompat.getColor(holder.view.context, R.color.palette_gray_200))
+                holder.unreadImageView.setColorFilter(ContextCompat.getColor(holder.view.context, im.vector.lib.ui.styles.R.color.palette_gray_200))
             }
             ThreadNotificationState.NEW_HIGHLIGHTED_MESSAGE -> {
                 holder.unreadImageView.isVisible = true
-                holder.unreadImageView.setColorFilter(ContextCompat.getColor(holder.view.context, R.color.palette_vermilion))
+                holder.unreadImageView.setColorFilter(ContextCompat.getColor(holder.view.context, im.vector.lib.ui.styles.R.color.palette_vermilion))
             }
             else -> {
                 holder.unreadImageView.isVisible = false

@@ -64,7 +64,7 @@ class NotificationDrawerManager @Inject constructor(
      * Lazily initializes the NotificationState as we rely on having a current session in order to fetch the persisted queue of events.
      */
     private val notificationState by lazy { createInitialNotificationState() }
-    private val avatarSize = context.resources.getDimensionPixelSize(R.dimen.profile_avatar_size)
+    private val avatarSize = context.resources.getDimensionPixelSize(im.vector.lib.ui.styles.R.dimen.profile_avatar_size)
     private var currentRoomId: String? = null
     private var currentThreadId: String? = null
     private val firstThrottler = FirstThrottler(200)

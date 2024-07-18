@@ -85,7 +85,7 @@ class RoomDirectoryListCreator @Inject constructor(
         )
 
         // Add custom directory servers, form the config file, excluding the current user homeserver
-        stringArrayProvider.getStringArray(R.array.room_directory_servers)
+        stringArrayProvider.getStringArray(im.vector.app.config.R.array.room_directory_servers)
                 .filter { it != userHsName }
                 .forEach {
                     // Use the server name as a default display name

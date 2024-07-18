@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.internal.session.room
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.map
 import androidx.paging.PagedList
 import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -242,7 +242,7 @@ internal class DefaultRoomService @Inject constructor(
                 },
                 { it.asDomain() }
         )
-        return Transformations.map(liveData) { results ->
+        return liveData.map { results ->
             results.firstOrNull().toOptional()
         }
     }

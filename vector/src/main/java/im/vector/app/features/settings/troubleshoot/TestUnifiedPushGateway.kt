@@ -16,19 +16,19 @@
 
 package im.vector.app.features.settings.troubleshoot
 
-import im.vector.app.R
 import im.vector.app.core.pushers.UnifiedPushHelper
 import im.vector.app.core.resources.StringProvider
+import im.vector.lib.strings.CommonStrings
 import javax.inject.Inject
 
 class TestUnifiedPushGateway @Inject constructor(
         private val unifiedPushHelper: UnifiedPushHelper,
         private val stringProvider: StringProvider
-) : TroubleshootTest(R.string.settings_troubleshoot_test_current_gateway_title) {
+) : TroubleshootTest(CommonStrings.settings_troubleshoot_test_current_gateway_title) {
 
     override fun perform(testParameters: TestParameters) {
         description = stringProvider.getString(
-                R.string.settings_troubleshoot_test_current_gateway,
+                CommonStrings.settings_troubleshoot_test_current_gateway,
                 unifiedPushHelper.getPushGateway()
         )
         status = TestStatus.SUCCESS

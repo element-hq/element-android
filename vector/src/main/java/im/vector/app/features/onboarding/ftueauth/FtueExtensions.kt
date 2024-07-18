@@ -16,10 +16,10 @@
 
 package im.vector.app.features.onboarding.ftueauth
 
-import im.vector.app.R
 import im.vector.app.features.login.SignMode
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.themes.ThemeProvider
+import im.vector.lib.ui.styles.R
 
 fun SignMode.toAuthenticateAction(login: String, password: String, initialDeviceName: String): OnboardingAction.AuthenticateAction {
     return when (this) {

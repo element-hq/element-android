@@ -23,11 +23,11 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.core.widget.doOnTextChanged
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.startImportTextFromFileIntent
 import im.vector.app.databinding.FragmentKeysBackupRestoreFromKeyBinding
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.extensions.tryOrNull
 
 @AndroidEntryPoint
@@ -73,7 +73,7 @@ class KeysBackupRestoreFromKeyFragment :
     private fun onRestoreFromKey() {
         val value = viewModel.recoveryCode.value
         if (value.isNullOrBlank()) {
-            viewModel.recoveryCodeErrorText.value = context?.getString(R.string.keys_backup_recovery_code_empty_error_message)
+            viewModel.recoveryCodeErrorText.value = context?.getString(CommonStrings.keys_backup_recovery_code_empty_error_message)
         } else {
             viewModel.recoverKeys(sharedViewModel)
         }

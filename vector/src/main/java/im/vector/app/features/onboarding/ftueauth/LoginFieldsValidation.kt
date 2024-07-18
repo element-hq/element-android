@@ -16,8 +16,8 @@
 
 package im.vector.app.features.onboarding.ftueauth
 
-import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
+import im.vector.lib.strings.CommonStrings
 import javax.inject.Inject
 
 class LoginFieldsValidation @Inject constructor(
@@ -30,7 +30,7 @@ class LoginFieldsValidation @Inject constructor(
 
     private fun validateUsernameOrId(usernameOrId: String): String? {
         val accountError = when {
-            usernameOrId.isEmpty() -> stringProvider.getString(R.string.error_empty_field_enter_user_name)
+            usernameOrId.isEmpty() -> stringProvider.getString(CommonStrings.error_empty_field_enter_user_name)
             else -> null
         }
         return accountError
@@ -38,7 +38,7 @@ class LoginFieldsValidation @Inject constructor(
 
     private fun validatePassword(password: String): String? {
         val passwordError = when {
-            password.isEmpty() -> stringProvider.getString(R.string.error_empty_field_your_password)
+            password.isEmpty() -> stringProvider.getString(CommonStrings.error_empty_field_your_password)
             else -> null
         }
         return passwordError

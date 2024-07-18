@@ -22,7 +22,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
-import im.vector.app.R
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.session.room.sender.SenderInfo
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -38,7 +37,7 @@ class TypingMessageAvatar @JvmOverloads constructor(
     }
 
     private val typingAvatarSize by lazy(LazyThreadSafetyMode.NONE) {
-        context.resources.getDimension(R.dimen.typing_avatar_size).toInt()
+        context.resources.getDimension(im.vector.lib.ui.styles.R.dimen.typing_avatar_size).toInt()
     }
 
     fun render(typingUsers: List<SenderInfo>, avatarRenderer: AvatarRenderer) {

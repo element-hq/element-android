@@ -28,13 +28,13 @@ import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.safeOpenOutputStream
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.FragmentBootstrapSaveKeyBinding
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -69,9 +69,9 @@ class BootstrapSaveRecoveryKeyFragment :
 
         try {
             sharedViewModel.handle(BootstrapActions.SaveReqQueryStarted)
-            saveStartForActivityResult.launch(Intent.createChooser(intent, getString(R.string.keys_backup_setup_step3_please_make_copy)))
+            saveStartForActivityResult.launch(Intent.createChooser(intent, getString(CommonStrings.keys_backup_setup_step3_please_make_copy)))
         } catch (activityNotFoundException: ActivityNotFoundException) {
-            requireActivity().toast(R.string.error_no_external_application_found)
+            requireActivity().toast(CommonStrings.error_no_external_application_found)
             sharedViewModel.handle(BootstrapActions.SaveReqFailed)
         }
     }
@@ -105,9 +105,9 @@ class BootstrapSaveRecoveryKeyFragment :
         startSharePlainTextIntent(
                 requireContext(),
                 copyStartForActivityResult,
-                context?.getString(R.string.keys_backup_setup_step3_share_intent_chooser_title),
+                context?.getString(CommonStrings.keys_backup_setup_step3_share_intent_chooser_title),
                 recoveryKey,
-                context?.getString(R.string.recovery_key)
+                context?.getString(CommonStrings.recovery_key)
         )
     }
 

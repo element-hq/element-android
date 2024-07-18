@@ -18,13 +18,13 @@ package im.vector.app.features.roomprofile.permissions
 
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Success
-import im.vector.app.R
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.epoxy.profiles.buildProfileAction
 import im.vector.app.core.epoxy.profiles.buildProfileSection
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.discovery.settingsInfoItem
 import im.vector.app.features.form.formAdvancedToggleItem
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.model.banOrDefault
@@ -111,7 +111,7 @@ class RoomPermissionsController @Inject constructor(
     override fun buildModels(data: RoomPermissionsViewState?) {
         val host = this
         buildProfileSection(
-                stringProvider.getString(R.string.room_permissions_title)
+                stringProvider.getString(CommonStrings.room_permissions_title)
         )
 
         when (val content = data?.currentPowerLevelsContent) {
@@ -119,7 +119,7 @@ class RoomPermissionsController @Inject constructor(
             else -> {
                 loadingItem {
                     id("loading")
-                    loadingText(host.stringProvider.getString(R.string.loading))
+                    loadingText(host.stringProvider.getString(CommonStrings.loading))
                 }
             }
         }
@@ -135,9 +135,9 @@ class RoomPermissionsController @Inject constructor(
             helperText(
                     host.stringProvider.getString(
                             if (editable) {
-                                if (isSpace) R.string.space_permissions_notice else R.string.room_permissions_notice
+                                if (isSpace) CommonStrings.space_permissions_notice else CommonStrings.room_permissions_notice
                             } else {
-                                if (isSpace) R.string.space_permissions_notice_read_only else R.string.room_permissions_notice_read_only
+                                if (isSpace) CommonStrings.space_permissions_notice_read_only else CommonStrings.room_permissions_notice_read_only
                             }
                     )
             )
@@ -153,7 +153,7 @@ class RoomPermissionsController @Inject constructor(
         // Toggle
         formAdvancedToggleItem {
             id("showAdvanced")
-            title(host.stringProvider.getString(if (data.showAdvancedPermissions) R.string.hide_advanced else R.string.show_advanced))
+            title(host.stringProvider.getString(if (data.showAdvancedPermissions) CommonStrings.hide_advanced else CommonStrings.show_advanced))
             expanded(!data.showAdvancedPermissions)
             listener { host.callback?.toggleShowAllPermissions() }
         }

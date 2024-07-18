@@ -49,6 +49,7 @@ import im.vector.app.ui.robot.settings.labs.LabFeature
 import im.vector.app.ui.robot.settings.labs.LabFeaturesPreferences
 import im.vector.app.ui.robot.space.SpaceRobot
 import im.vector.app.withIdlingResource
+import im.vector.lib.strings.CommonStrings
 import timber.log.Timber
 
 class ElementRobot(
@@ -100,7 +101,7 @@ class ElementRobot(
         openActionBarOverflowOrOptionsMenu(
                 ApplicationProvider.getApplicationContext()
         )
-        clickOn(R.string.home_layout_preferences)
+        clickOn(CommonStrings.home_layout_preferences)
         waitUntilDialogVisible(withId(R.id.home_layout_settings_recents))
 
         block(LayoutPreferencesRobot())
@@ -149,7 +150,7 @@ class ElementRobot(
             LabFeature.THREAD_MESSAGES -> {
                 settings(shouldGoBack = false) {
                     labs(shouldGoBack = false) {
-                        onView(withText(R.string.labs_enable_thread_messages))
+                        onView(withText(CommonStrings.labs_enable_thread_messages))
                                 .check(ViewAssertions.matches(isDisplayed()))
                                 .perform(ViewActions.closeSoftKeyboard(), click())
                     }
@@ -185,9 +186,9 @@ class ElementRobot(
             onView(withId((R.id.avatar)))
                     .perform(click())
             waitUntilActivityVisible<VectorSettingsActivity> {
-                clickOn(R.string.settings_general_title)
+                clickOn(CommonStrings.settings_general_title)
             }
-            clickOnPreference(R.string.action_sign_out)
+            clickOnPreference(CommonStrings.action_sign_out)
         } else {
             clickOn(R.id.groupToolbarAvatarImageView)
             clickOn(R.id.homeDrawerHeaderSignoutView)

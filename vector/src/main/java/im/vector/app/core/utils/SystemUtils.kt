@@ -32,8 +32,8 @@ import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
-import im.vector.app.R
 import im.vector.app.features.notifications.NotificationUtils
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.util.getApplicationInfoCompat
 
 /**
@@ -98,7 +98,7 @@ fun requestDisablingBatteryOptimization(activity: Activity, activityResultLaunch
  * @param showToast true to also show a Toast to the user
  * @param toastMessage content of the toast message as a String resource
  */
-fun copyToClipboard(context: Context, text: CharSequence, showToast: Boolean = true, @StringRes toastMessage: Int = R.string.copied_to_clipboard) {
+fun copyToClipboard(context: Context, text: CharSequence, showToast: Boolean = true, @StringRes toastMessage: Int = CommonStrings.copied_to_clipboard) {
     CopyToClipboardUseCase(context).execute(text)
     if (showToast) {
         context.toast(toastMessage)
@@ -141,7 +141,7 @@ fun startAddGoogleAccountIntent(context: Context, activityResultLauncher: Activi
     try {
         activityResultLauncher.launch(intent)
     } catch (activityNotFoundException: ActivityNotFoundException) {
-        context.toast(R.string.error_no_external_application_found)
+        context.toast(CommonStrings.error_no_external_application_found)
     }
 }
 
@@ -152,7 +152,7 @@ fun startInstallFromSourceIntent(context: Context, activityResultLauncher: Activ
     try {
         activityResultLauncher.launch(intent)
     } catch (activityNotFoundException: ActivityNotFoundException) {
-        context.toast(R.string.error_no_external_application_found)
+        context.toast(CommonStrings.error_no_external_application_found)
     }
 }
 
@@ -183,7 +183,7 @@ fun startSharePlainTextIntent(
             context.startActivity(intent)
         }
     } catch (activityNotFoundException: ActivityNotFoundException) {
-        context.toast(R.string.error_no_external_application_found)
+        context.toast(CommonStrings.error_no_external_application_found)
     }
 }
 
@@ -194,7 +194,7 @@ fun startImportTextFromFileIntent(context: Context, activityResultLauncher: Acti
     try {
         activityResultLauncher.launch(intent)
     } catch (activityNotFoundException: ActivityNotFoundException) {
-        context.toast(R.string.error_no_external_application_found)
+        context.toast(CommonStrings.error_no_external_application_found)
     }
 }
 

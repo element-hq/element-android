@@ -31,6 +31,7 @@ import im.vector.app.core.utils.TextUtils
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.lib.core.utils.timer.Clock
 import im.vector.lib.core.utils.timer.CountUpTimer
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.threeten.bp.Duration
 
@@ -103,7 +104,7 @@ abstract class LiveLocationUserItem : VectorEpoxyModel<LiveLocationUserItem.Hold
         val elapsedTime = clock.epochMillis() - locationUpdateTimeMillis
         val duration = Duration.ofMillis(elapsedTime.coerceAtLeast(0L))
         val formattedDuration = TextUtils.formatDurationWithUnits(stringProvider, duration, appendSeconds = false)
-        return stringProvider.getString(R.string.live_location_bottom_sheet_last_updated_at, formattedDuration)
+        return stringProvider.getString(CommonStrings.live_location_bottom_sheet_last_updated_at, formattedDuration)
     }
 
     class Holder : VectorEpoxyHolder() {

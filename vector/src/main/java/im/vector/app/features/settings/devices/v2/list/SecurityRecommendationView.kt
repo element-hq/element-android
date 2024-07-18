@@ -24,6 +24,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.use
 import im.vector.app.R
 import im.vector.app.databinding.ViewSecurityRecommendationBinding
+import im.vector.lib.strings.CommonStrings
 
 class SecurityRecommendationView @JvmOverloads constructor(
         context: Context,
@@ -44,7 +45,7 @@ class SecurityRecommendationView @JvmOverloads constructor(
 
         context.obtainStyledAttributes(
                 attrs,
-                R.styleable.SecurityRecommendationView,
+                im.vector.lib.ui.styles.R.styleable.SecurityRecommendationView,
                 0,
                 0
         ).use {
@@ -62,18 +63,18 @@ class SecurityRecommendationView @JvmOverloads constructor(
     }
 
     private fun setTitle(typedArray: TypedArray) {
-        val title = typedArray.getString(R.styleable.SecurityRecommendationView_recommendationTitle)
+        val title = typedArray.getString(im.vector.lib.ui.styles.R.styleable.SecurityRecommendationView_recommendationTitle)
         views.recommendationTitleTextView.text = title
     }
 
     private fun setDescription(typedArray: TypedArray) {
-        val description = typedArray.getString(R.styleable.SecurityRecommendationView_recommendationDescription)
+        val description = typedArray.getString(im.vector.lib.ui.styles.R.styleable.SecurityRecommendationView_recommendationDescription)
         setDescription(description)
     }
 
     private fun setImage(typedArray: TypedArray) {
-        val imageResource = typedArray.getResourceId(R.styleable.SecurityRecommendationView_recommendationImageResource, 0)
-        val backgroundTint = typedArray.getColor(R.styleable.SecurityRecommendationView_recommendationImageBackgroundTint, 0)
+        val imageResource = typedArray.getResourceId(im.vector.lib.ui.styles.R.styleable.SecurityRecommendationView_recommendationImageResource, 0)
+        val backgroundTint = typedArray.getColor(im.vector.lib.ui.styles.R.styleable.SecurityRecommendationView_recommendationImageBackgroundTint, 0)
         views.recommendationShieldImageView.setImageResource(imageResource)
         views.recommendationShieldImageView.backgroundTintList = ColorStateList.valueOf(backgroundTint)
     }
@@ -83,7 +84,7 @@ class SecurityRecommendationView @JvmOverloads constructor(
     }
 
     private fun setCount(sessionsCount: Int) {
-        views.recommendationViewAllButton.text = context.getString(R.string.device_manager_other_sessions_view_all, sessionsCount)
+        views.recommendationViewAllButton.text = context.getString(CommonStrings.device_manager_other_sessions_view_all, sessionsCount)
     }
 
     fun render(viewState: SecurityRecommendationViewState) {

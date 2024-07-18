@@ -25,7 +25,6 @@ import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
-import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.DefaultPreferences
 import im.vector.app.core.dispatchers.CoroutineDispatchers
@@ -34,6 +33,7 @@ import im.vector.app.features.MainActivity
 import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.pin.PinCodeStore
 import im.vector.app.features.pin.PinCodeStoreListener
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.flowOn
@@ -131,7 +131,7 @@ class ShortcutsHandler @Inject constructor(
                     ShortcutManagerCompat.disableShortcuts(
                             context,
                             deadShortcutIds,
-                            stringProvider.getString(R.string.shortcut_disabled_reason_room_left)
+                            stringProvider.getString(CommonStrings.shortcut_disabled_reason_room_left)
                     )
                 }
             }
@@ -178,7 +178,7 @@ class ShortcutsHandler @Inject constructor(
                             ShortcutManagerCompat.disableShortcuts(
                                     context,
                                     shortcutIdsToDisable,
-                                    stringProvider.getString(R.string.shortcut_disabled_reason_sign_out)
+                                    stringProvider.getString(CommonStrings.shortcut_disabled_reason_sign_out)
                             )
                         }
             }

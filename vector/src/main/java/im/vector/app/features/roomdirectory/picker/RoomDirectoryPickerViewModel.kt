@@ -24,13 +24,13 @@ import com.airbnb.mvrx.Uninitialized
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.ui.UiStateRepository
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsParams
@@ -142,7 +142,7 @@ class RoomDirectoryPickerViewModel @AssistedInject constructor(
 
         if (enteredServer in existingServerList) {
             setState {
-                copy(addServerAsync = Fail(Throwable(stringProvider.getString(R.string.directory_add_a_new_server_error_already_added))))
+                copy(addServerAsync = Fail(Throwable(stringProvider.getString(CommonStrings.directory_add_a_new_server_error_already_added))))
             }
             return@withState
         }

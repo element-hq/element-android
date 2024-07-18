@@ -19,13 +19,13 @@ package im.vector.app.features.location
 import android.graphics.drawable.Drawable
 import androidx.annotation.StringRes
 import com.airbnb.mvrx.MavericksState
-import im.vector.app.R
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.util.MatrixItem
 
 enum class LocationSharingMode(@StringRes val titleRes: Int) {
-    STATIC_SHARING(R.string.location_activity_title_static_sharing),
-    PREVIEW(R.string.location_activity_title_preview)
+    STATIC_SHARING(CommonStrings.location_activity_title_static_sharing),
+    PREVIEW(CommonStrings.location_activity_title_preview)
 }
 
 data class LocationSharingViewState(

@@ -23,7 +23,6 @@ import android.widget.ImageView
 import androidx.core.view.isVisible
 import com.bumptech.glide.request.target.CustomViewTarget
 import com.bumptech.glide.request.transition.Transition
-import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.resources.StringProvider
@@ -31,6 +30,7 @@ import im.vector.lib.attachmentviewer.AttachmentInfo
 import im.vector.lib.attachmentviewer.AttachmentSourceProvider
 import im.vector.lib.attachmentviewer.ImageLoaderTarget
 import im.vector.lib.attachmentviewer.VideoLoaderTarget
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -68,7 +68,7 @@ abstract class BaseAttachmentProvider<Type>(
         if (timelineEvent != null) {
             val dateString = dateFormatter.format(timelineEvent.root.originServerTs, DateFormatKind.DEFAULT_DATE_AND_TIME)
             overlayView?.updateWith(
-                    counter = stringProvider.getString(R.string.attachment_viewer_item_x_of_y, position + 1, getItemCount()),
+                    counter = stringProvider.getString(CommonStrings.attachment_viewer_item_x_of_y, position + 1, getItemCount()),
                     senderInfo = "${timelineEvent.senderInfo.disambiguatedDisplayName} $dateString"
             )
             overlayView?.views?.overlayVideoControlsGroup?.isVisible = timelineEvent.root.isVideoMessage()

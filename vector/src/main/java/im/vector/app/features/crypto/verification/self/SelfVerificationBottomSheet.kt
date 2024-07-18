@@ -41,6 +41,7 @@ import im.vector.app.features.crypto.quads.SharedSecureStorageViewState
 import im.vector.app.features.crypto.verification.VerificationAction
 import im.vector.app.features.crypto.verification.VerificationBottomSheetViewEvents
 import im.vector.app.features.settings.VectorSettingsActivity
+import im.vector.lib.strings.CommonStrings
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
@@ -142,10 +143,10 @@ class SelfVerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSh
                 }
                 is VerificationBottomSheetViewEvents.ModalError -> {
                     MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(getString(R.string.dialog_title_error))
+                            .setTitle(getString(CommonStrings.dialog_title_error))
                             .setMessage(event.errorMessage)
                             .setCancelable(false)
-                            .setPositiveButton(R.string.ok, null)
+                            .setPositiveButton(CommonStrings.ok, null)
                             .show()
                 }
                 VerificationBottomSheetViewEvents.DismissAndOpenDeviceSettings -> {
@@ -180,10 +181,10 @@ class SelfVerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSh
 //                }
 //                is VerificationBottomSheetViewEvents.ModalError -> {
 //                    MaterialAlertDialogBuilder(requireContext())
-//                            .setTitle(getString(R.string.dialog_title_error))
+//                            .setTitle(getString(CommonStrings.dialog_title_error))
 //                            .setMessage(it.errorMessage)
 //                            .setCancelable(false)
-//                            .setPositiveButton(R.string.ok, null)
+//                            .setPositiveButton(CommonStrings.ok, null)
 //                            .show()
 //                    Unit
 //                }
@@ -204,12 +205,12 @@ class SelfVerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSh
             views.otherUserAvatarImageView.setImageResource(
                     R.drawable.ic_shield_trusted
             )
-            views.otherUserNameText.text = getString(R.string.verification_profile_verify)
+            views.otherUserNameText.text = getString(CommonStrings.verification_profile_verify)
         } else {
             views.otherUserAvatarImageView.setImageResource(
                     R.drawable.ic_shield_black
             )
-            views.otherUserNameText.text = getString(R.string.crosssigning_verify_this_session)
+            views.otherUserNameText.text = getString(CommonStrings.crosssigning_verify_this_session)
         }
 
         super.invalidate()

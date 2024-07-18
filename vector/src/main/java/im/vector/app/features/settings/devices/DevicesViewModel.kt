@@ -26,7 +26,6 @@ import com.airbnb.mvrx.Uninitialized
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
@@ -38,6 +37,7 @@ import im.vector.app.features.login.ReAuthHelper
 import im.vector.app.features.settings.devices.v2.list.CheckIfSessionIsInactiveUseCase
 import im.vector.app.features.settings.devices.v2.verification.GetEncryptionTrustLevelForDeviceUseCase
 import im.vector.lib.core.utils.flow.throttleFirst
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
@@ -394,9 +394,9 @@ class DevicesViewModel @AssistedInject constructor(
                     copy(request = Fail(failure))
                 }
                 if (failure is Failure.OtherServerError && failure.httpCode == HttpsURLConnection.HTTP_UNAUTHORIZED) {
-                    _viewEvents.post(DevicesViewEvents.Failure(Exception(stringProvider.getString(R.string.authentication_error))))
+                    _viewEvents.post(DevicesViewEvents.Failure(Exception(stringProvider.getString(CommonStrings.authentication_error))))
                 } else {
-                    _viewEvents.post(DevicesViewEvents.Failure(Exception(stringProvider.getString(R.string.matrix_error))))
+                    _viewEvents.post(DevicesViewEvents.Failure(Exception(stringProvider.getString(CommonStrings.matrix_error))))
                 }
                 // ...
                 Timber.e(failure, "failed to delete session")

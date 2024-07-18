@@ -179,7 +179,7 @@ class SettingsRobot {
     }
 
     fun advancedSettings(block: SettingsAdvancedRobot.() -> Unit) {
-        clickOn(R.string.settings_advanced_settings)
+        clickOn(CommonStrings.settings_advanced_settings)
         block(SettingsAdvancedRobot())
         pressBack()
     }
@@ -187,7 +187,7 @@ class SettingsRobot {
 
 class SettingsAdvancedRobot {
     fun toggleDeveloperMode() {
-        clickOn(R.string.settings_developer_mode_summary)
+        clickOn(CommonStrings.settings_developer_mode_summary)
     }
 }
 ```

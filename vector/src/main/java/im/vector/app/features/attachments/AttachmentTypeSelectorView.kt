@@ -37,6 +37,7 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.databinding.ViewAttachmentTypeSelectorBinding
 import im.vector.app.features.attachments.AttachmentTypeSelectorView.Callback
+import im.vector.lib.strings.CommonStrings
 import kotlin.math.max
 
 private const val ANIMATION_DURATION = 250
@@ -214,14 +215,14 @@ class AttachmentTypeSelectorView(
     private companion object {
         private val attachmentTooltipLabels: Map<AttachmentType, Int> = AttachmentType.values().associateWith {
             when (it) {
-                AttachmentType.CAMERA -> R.string.tooltip_attachment_photo
-                AttachmentType.GALLERY -> R.string.tooltip_attachment_gallery
-                AttachmentType.FILE -> R.string.tooltip_attachment_file
-                AttachmentType.STICKER -> R.string.tooltip_attachment_sticker
-                AttachmentType.CONTACT -> R.string.tooltip_attachment_contact
-                AttachmentType.POLL -> R.string.tooltip_attachment_poll
-                AttachmentType.LOCATION -> R.string.tooltip_attachment_location
-                AttachmentType.VOICE_BROADCAST -> R.string.tooltip_attachment_voice_broadcast
+                AttachmentType.CAMERA -> CommonStrings.tooltip_attachment_photo
+                AttachmentType.GALLERY -> CommonStrings.tooltip_attachment_gallery
+                AttachmentType.FILE -> CommonStrings.tooltip_attachment_file
+                AttachmentType.STICKER -> CommonStrings.tooltip_attachment_sticker
+                AttachmentType.CONTACT -> CommonStrings.tooltip_attachment_contact
+                AttachmentType.POLL -> CommonStrings.tooltip_attachment_poll
+                AttachmentType.LOCATION -> CommonStrings.tooltip_attachment_location
+                AttachmentType.VOICE_BROADCAST -> CommonStrings.tooltip_attachment_voice_broadcast
             }
         }
     }

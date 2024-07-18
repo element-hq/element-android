@@ -41,14 +41,14 @@ abstract class RoomCategoryItem : VectorEpoxyModel<RoomCategoryItem.Holder>(R.la
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        val tintColor = ThemeUtils.getColor(holder.rootView.context, R.attr.vctr_content_secondary)
+        val tintColor = ThemeUtils.getColor(holder.rootView.context, im.vector.lib.ui.styles.R.attr.vctr_content_secondary)
         val expandedArrowDrawableRes = if (expanded) R.drawable.ic_expand_more else R.drawable.ic_expand_less
         val expandedArrowDrawable = ContextCompat.getDrawable(holder.rootView.context, expandedArrowDrawableRes)?.also {
             DrawableCompat.setTint(it, tintColor)
         }
         holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State.Count(unreadNotificationCount, showHighlighted))
         holder.titleView.text = title
-        holder.counterView.text = itemCount.takeIf { it > 0 }?.toString().orEmpty()
+        holder.counterView.text = if (itemCount > 0) "$itemCount" else null
         holder.counterView.setCompoundDrawablesWithIntrinsicBounds(null, null, expandedArrowDrawable, null)
         holder.rootView.onClick(listener)
     }

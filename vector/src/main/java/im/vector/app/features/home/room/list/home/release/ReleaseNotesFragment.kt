@@ -30,6 +30,7 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.BottomSheetReleaseNotesBinding
+import im.vector.lib.strings.CommonStrings
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -92,18 +93,18 @@ class ReleaseNotesFragment : VectorBaseFragment<BottomSheetReleaseNotesBinding>(
         return ReleaseCarouselData(
                 listOf(
                         ReleaseCarouselData.Item(
-                                R.string.onboarding_new_app_layout_welcome_title,
-                                R.string.onboarding_new_app_layout_welcome_message,
+                                CommonStrings.onboarding_new_app_layout_welcome_title,
+                                CommonStrings.onboarding_new_app_layout_welcome_message,
                                 R.drawable.ill_app_layout_onboarding_rooms
                         ),
                         ReleaseCarouselData.Item(
-                                R.string.onboarding_new_app_layout_spaces_title,
-                                R.string.onboarding_new_app_layout_spaces_message,
+                                CommonStrings.onboarding_new_app_layout_spaces_title,
+                                CommonStrings.onboarding_new_app_layout_spaces_message,
                                 R.drawable.ill_app_layout_onboarding_spaces
                         ),
                         ReleaseCarouselData.Item(
-                                R.string.onboarding_new_app_layout_feedback_title,
-                                R.string.onboarding_new_app_layout_feedback_message,
+                                CommonStrings.onboarding_new_app_layout_feedback_title,
+                                CommonStrings.onboarding_new_app_layout_feedback_message,
                                 R.drawable.ill_app_layout_onboarding_rooms
                         ),
                 )
@@ -122,9 +123,9 @@ class ReleaseNotesFragment : VectorBaseFragment<BottomSheetReleaseNotesBinding>(
     private fun updateButtonText(selectedIndex: Int) {
         val isLastItem = selectedIndex == views.releaseNotesCarouselIndicator.tabCount - 1
         if (isLastItem) {
-            views.releaseNotesButtonNext.setText(R.string.onboarding_new_app_layout_button_try)
+            views.releaseNotesButtonNext.setText(CommonStrings.onboarding_new_app_layout_button_try)
         } else {
-            views.releaseNotesButtonNext.setText(R.string.action_next)
+            views.releaseNotesButtonNext.setText(CommonStrings.action_next)
         }
     }
 

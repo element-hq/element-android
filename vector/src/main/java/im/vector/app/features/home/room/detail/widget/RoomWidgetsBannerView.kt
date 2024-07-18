@@ -22,6 +22,7 @@ import android.view.View
 import android.widget.RelativeLayout
 import im.vector.app.R
 import im.vector.app.databinding.ViewRoomWidgetsBannerBinding
+import im.vector.lib.strings.CommonPlurals
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 
 class RoomWidgetsBannerView @JvmOverloads constructor(
@@ -56,7 +57,7 @@ class RoomWidgetsBannerView @JvmOverloads constructor(
             visibility = View.GONE
         } else {
             visibility = View.VISIBLE
-            views.activeWidgetsLabel.text = context.resources.getQuantityString(R.plurals.active_widgets, widgets.size, widgets.size)
+            views.activeWidgetsLabel.text = context.resources.getQuantityString(CommonPlurals.active_widgets, widgets.size, widgets.size)
         }
     }
 }

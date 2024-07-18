@@ -32,10 +32,10 @@ import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.isVisible
-import im.vector.app.R
 import im.vector.app.core.platform.showOptimizedSnackbar
 import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.features.themes.ThemeUtils
+import im.vector.lib.strings.CommonStrings
 
 /**
  * Set a text in the TextView, or set visibility to GONE if the text is null.
@@ -63,7 +63,7 @@ fun TextView.setTextOrHide(newText: CharSequence?, hideWhenBlank: Boolean = true
 fun TextView.setTextWithColoredPart(
         @StringRes fullTextRes: Int,
         @StringRes coloredTextRes: Int,
-        @AttrRes colorAttribute: Int = R.attr.colorPrimary,
+        @AttrRes colorAttribute: Int = com.google.android.material.R.attr.colorPrimary,
         underline: Boolean = false,
         onClick: (() -> Unit)? = null
 ) {
@@ -85,7 +85,7 @@ fun TextView.setTextWithColoredPart(
 fun TextView.setTextWithColoredPart(
         fullText: String,
         coloredPart: String,
-        @AttrRes colorAttribute: Int = R.attr.colorPrimary,
+        @AttrRes colorAttribute: Int = com.google.android.material.R.attr.colorPrimary,
         underline: Boolean = true,
         onClick: (() -> Unit)? = null
 ) {
@@ -146,7 +146,7 @@ fun TextView.copyOnLongClick() {
                 ?.text
                 ?.let { text ->
                     copyToClipboard(view.context, text, false)
-                    view.showOptimizedSnackbar(view.resources.getString(R.string.copied_to_clipboard))
+                    view.showOptimizedSnackbar(view.resources.getString(CommonStrings.copied_to_clipboard))
                 }
         true
     }

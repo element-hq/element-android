@@ -21,7 +21,6 @@ import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
-import im.vector.app.R
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.epoxy.noResultItem
 import im.vector.app.core.error.ErrorFormatter
@@ -37,6 +36,7 @@ import im.vector.app.features.discovery.settingsInfoItem
 import im.vector.app.features.discovery.settingsInformationItem
 import im.vector.app.features.discovery.settingsSectionTitleItem
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.session.identity.ThreePid
@@ -80,7 +80,7 @@ class ThreePidsSettingsController @Inject constructor(
             is Loading -> {
                 loadingItem {
                     id("loading")
-                    loadingText(host.stringProvider.getString(R.string.loading))
+                    loadingText(host.stringProvider.getString(CommonStrings.loading))
                 }
             }
             is Fail -> {
@@ -105,7 +105,7 @@ class ThreePidsSettingsController @Inject constructor(
 
         settingsSectionTitleItem {
             id("email")
-            title(host.stringProvider.getString(R.string.settings_emails))
+            title(host.stringProvider.getString(CommonStrings.settings_emails))
         }
 
         emails.forEach { buildThreePid("email ", it) }
@@ -118,7 +118,7 @@ class ThreePidsSettingsController @Inject constructor(
                     if (pendingList.isEmpty() && emails.isEmpty()) {
                         noResultItem {
                             id("noEmail")
-                            text(host.stringProvider.getString(R.string.settings_emails_empty))
+                            text(host.stringProvider.getString(CommonStrings.settings_emails_empty))
                         }
                     }
 
@@ -129,15 +129,15 @@ class ThreePidsSettingsController @Inject constructor(
             ThreePidsSettingsUiState.Idle ->
                 genericButtonItem {
                     id("addEmail")
-                    text(host.stringProvider.getString(R.string.settings_add_email_address))
-                    textColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+                    text(host.stringProvider.getString(CommonStrings.settings_add_email_address))
+                    textColor(host.colorProvider.getColorFromAttribute(com.google.android.material.R.attr.colorPrimary))
                     buttonClickAction { host.interactionListener?.addEmail() }
                 }
             is ThreePidsSettingsUiState.AddingEmail -> {
                 settingsEditTextItem {
                     id("addingEmail")
                     inputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS)
-                    hint(host.stringProvider.getString(R.string.medium_email))
+                    hint(host.stringProvider.getString(CommonStrings.medium_email))
                     if (data.editTextReinitiator.isTrue()) {
                         value("")
                         requestFocus(true)
@@ -164,7 +164,7 @@ class ThreePidsSettingsController @Inject constructor(
 
         settingsSectionTitleItem {
             id("msisdn")
-            title(host.stringProvider.getString(R.string.settings_phone_numbers))
+            title(host.stringProvider.getString(CommonStrings.settings_phone_numbers))
         }
 
         msisdn.forEach { buildThreePid("msisdn ", it) }
@@ -177,7 +177,7 @@ class ThreePidsSettingsController @Inject constructor(
                     if (pendingList.isEmpty() && msisdn.isEmpty()) {
                         noResultItem {
                             id("noMsisdn")
-                            text(host.stringProvider.getString(R.string.settings_phone_number_empty))
+                            text(host.stringProvider.getString(CommonStrings.settings_phone_number_empty))
                         }
                     }
 
@@ -188,20 +188,20 @@ class ThreePidsSettingsController @Inject constructor(
             ThreePidsSettingsUiState.Idle ->
                 genericButtonItem {
                     id("addMsisdn")
-                    text(host.stringProvider.getString(R.string.settings_add_phone_number))
-                    textColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+                    text(host.stringProvider.getString(CommonStrings.settings_add_phone_number))
+                    textColor(host.colorProvider.getColorFromAttribute(com.google.android.material.R.attr.colorPrimary))
                     buttonClickAction { host.interactionListener?.addMsisdn() }
                 }
             is ThreePidsSettingsUiState.AddingEmail -> Unit
             is ThreePidsSettingsUiState.AddingPhoneNumber -> {
                 settingsInfoItem {
                     id("addingMsisdnInfo")
-                    helperText(host.stringProvider.getString(R.string.login_msisdn_notice))
+                    helperText(host.stringProvider.getString(CommonStrings.login_msisdn_notice))
                 }
                 settingsEditTextItem {
                     id("addingMsisdn")
                     inputType(InputType.TYPE_CLASS_PHONE)
-                    hint(host.stringProvider.getString(R.string.medium_phone_number))
+                    hint(host.stringProvider.getString(CommonStrings.medium_phone_number))
                     if (data.editTextReinitiator.isTrue()) {
                         value("")
                         requestFocus(true)
@@ -250,8 +250,8 @@ class ThreePidsSettingsController @Inject constructor(
             is ThreePid.Email -> {
                 settingsInformationItem {
                     id("info" + idPrefix + threePid.value)
-                    message(host.stringProvider.getString(R.string.account_email_validation_message))
-                    textColor(host.colorProvider.getColor(R.color.vector_info_color))
+                    message(host.stringProvider.getString(CommonStrings.account_email_validation_message))
+                    textColor(host.colorProvider.getColor(im.vector.lib.ui.styles.R.color.vector_info_color))
                 }
                 settingsContinueCancelItem {
                     id("cont" + idPrefix + threePid.value)
@@ -262,13 +262,13 @@ class ThreePidsSettingsController @Inject constructor(
             is ThreePid.Msisdn -> {
                 settingsInformationItem {
                     id("info" + idPrefix + threePid.value)
-                    message(host.stringProvider.getString(R.string.settings_text_message_sent, threePid.getFormattedValue()))
-                    textColor(host.colorProvider.getColor(R.color.vector_info_color))
+                    message(host.stringProvider.getString(CommonStrings.settings_text_message_sent, threePid.getFormattedValue()))
+                    textColor(host.colorProvider.getColor(im.vector.lib.ui.styles.R.color.vector_info_color))
                 }
                 settingsEditTextItem {
                     id("msisdnVerification${threePid.value}")
                     inputType(InputType.TYPE_CLASS_NUMBER)
-                    hint(host.stringProvider.getString(R.string.settings_text_message_sent_hint))
+                    hint(host.stringProvider.getString(CommonStrings.settings_text_message_sent_hint))
                     if (data.msisdnValidationReinitiator[threePid]?.isTrue() == true) {
                         value("")
                     }
@@ -299,7 +299,7 @@ class ThreePidsSettingsController @Inject constructor(
         return if (failure is Failure.ServerError &&
                 failure.httpCode == 400 &&
                 failure.error.code == MatrixError.M_UNKNOWN) {
-            stringProvider.getString(R.string.settings_text_message_sent_wrong_code)
+            stringProvider.getString(CommonStrings.settings_text_message_sent_wrong_code)
         } else {
             errorFormatter.toHumanReadable(failure)
         }

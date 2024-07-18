@@ -17,11 +17,11 @@
 package im.vector.app.features.spaces
 
 import com.airbnb.epoxy.EpoxyController
-import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.grouplist.newHomeSpaceSummaryItem
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.list.UnreadCounterBadgeView
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -69,7 +69,7 @@ class NewSpaceSummaryController @Inject constructor(
         val host = this
         newHomeSpaceSummaryItem {
             id("space_home")
-            text(host.stringProvider.getString(R.string.all_chats))
+            text(host.stringProvider.getString(CommonStrings.all_chats))
             selected(selected)
             countState(UnreadCounterBadgeView.State.Count(homeCount.totalCount, homeCount.isHighlight))
             listener { host.callback?.onSpaceSelected(null, isSubSpace = false) }

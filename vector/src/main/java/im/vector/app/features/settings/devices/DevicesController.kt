@@ -21,7 +21,6 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.epoxy.errorWithRetryItem
@@ -32,6 +31,7 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericHeaderItem
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import javax.inject.Inject
@@ -92,7 +92,7 @@ class DevicesController @Inject constructor(
                     // Current device
                     genericHeaderItem {
                         id("current")
-                        text(host.stringProvider.getString(R.string.devices_current_device))
+                        text(host.stringProvider.getString(CommonStrings.devices_current_device))
                     }
 
                     deviceItem {
@@ -116,7 +116,7 @@ class DevicesController @Inject constructor(
 //                        genericButtonItem {
 //                            id("complete_security")
 //                            iconRes(R.drawable.ic_shield_warning)
-//                            text(stringProvider.getString(R.string.complete_security))
+//                            text(stringProvider.getString(CommonStrings.complete_security))
 //                            buttonClickAction(DebouncedClickListener(View.OnClickListener { _ ->
 //                                callback?.completeSecurity()
 //                            }))
@@ -128,7 +128,7 @@ class DevicesController @Inject constructor(
         if (devices.size > 1) {
             genericHeaderItem {
                 id("others")
-                text(host.stringProvider.getString(R.string.devices_other_devices))
+                text(host.stringProvider.getString(CommonStrings.devices_other_devices))
             }
 
             devices

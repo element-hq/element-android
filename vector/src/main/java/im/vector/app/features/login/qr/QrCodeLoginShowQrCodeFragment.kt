@@ -23,9 +23,9 @@ import android.view.ViewGroup
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentQrCodeLoginShowQrCodeBinding
+import im.vector.lib.strings.CommonStrings
 
 @AndroidEntryPoint
 class QrCodeLoginShowQrCodeFragment : VectorBaseFragment<FragmentQrCodeLoginShowQrCodeBinding>() {
@@ -50,20 +50,20 @@ class QrCodeLoginShowQrCodeFragment : VectorBaseFragment<FragmentQrCodeLoginShow
 
     private fun setInstructions(loginType: QrCodeLoginType) {
         if (loginType == QrCodeLoginType.LOGIN) {
-            views.qrCodeLoginShowQrCodeHeaderView.setDescription(getString(R.string.qr_code_login_header_show_qr_code_new_device_description))
+            views.qrCodeLoginShowQrCodeHeaderView.setDescription(getString(CommonStrings.qr_code_login_header_show_qr_code_new_device_description))
             views.qrCodeLoginShowQrCodeInstructionsView.setInstructions(
                     listOf(
-                            getString(R.string.qr_code_login_new_device_instruction_1),
-                            getString(R.string.qr_code_login_new_device_instruction_2),
-                            getString(R.string.qr_code_login_new_device_instruction_3),
+                            getString(CommonStrings.qr_code_login_new_device_instruction_1),
+                            getString(CommonStrings.qr_code_login_new_device_instruction_2),
+                            getString(CommonStrings.qr_code_login_new_device_instruction_3),
                     )
             )
         } else {
-            views.qrCodeLoginShowQrCodeHeaderView.setDescription(getString(R.string.qr_code_login_header_show_qr_code_link_a_device_description))
+            views.qrCodeLoginShowQrCodeHeaderView.setDescription(getString(CommonStrings.qr_code_login_header_show_qr_code_link_a_device_description))
             views.qrCodeLoginShowQrCodeInstructionsView.setInstructions(
                     listOf(
-                            getString(R.string.qr_code_login_link_a_device_show_qr_code_instruction_1),
-                            getString(R.string.qr_code_login_link_a_device_show_qr_code_instruction_2),
+                            getString(CommonStrings.qr_code_login_link_a_device_show_qr_code_instruction_1),
+                            getString(CommonStrings.qr_code_login_link_a_device_show_qr_code_instruction_2),
                     )
             )
         }

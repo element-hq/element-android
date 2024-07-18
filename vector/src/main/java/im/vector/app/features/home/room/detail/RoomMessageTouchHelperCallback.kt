@@ -32,7 +32,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.EpoxyTouchHelperCallback
 import com.airbnb.epoxy.EpoxyViewHolder
-import im.vector.app.R
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.lib.core.utils.timer.Clock
 import timber.log.Timber
@@ -66,7 +65,7 @@ class RoomMessageTouchHelperCallback(
     init {
         DrawableCompat.setTint(
                 imageDrawable,
-                ThemeUtils.getColor(context, R.attr.vctr_content_primary)
+                ThemeUtils.getColor(context, im.vector.lib.ui.styles.R.attr.vctr_content_primary)
         )
     }
 

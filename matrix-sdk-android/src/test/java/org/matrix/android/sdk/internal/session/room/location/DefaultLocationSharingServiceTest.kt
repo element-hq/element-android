@@ -16,17 +16,12 @@
 
 package org.matrix.android.sdk.internal.session.room.location
 
-import androidx.arch.core.util.Function
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.runs
-import io.mockk.slot
 import io.mockk.unmockkAll
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -37,7 +32,6 @@ import org.junit.Test
 import org.matrix.android.sdk.api.session.room.location.UpdateLiveLocationShareResult
 import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationShareAggregatedSummary
 import org.matrix.android.sdk.api.util.Cancelable
-import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.database.mapper.LiveLocationShareAggregatedSummaryMapper
 import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntity
@@ -262,25 +256,14 @@ internal class DefaultLocationSharingServiceTest {
                 endOfLiveTimestampMillis = 123,
                 lastLocationDataContent = null
         )
-
         fakeMonarchy.givenWhere<LiveLocationShareAggregatedSummaryEntity>()
                 .givenEqualTo(LiveLocationShareAggregatedSummaryEntityFields.ROOM_ID, A_ROOM_ID)
                 .givenEqualTo(LiveLocationShareAggregatedSummaryEntityFields.EVENT_ID, AN_EVENT_ID)
-        val liveData = fakeMonarchy.givenFindAllMappedWithChangesReturns(
+        fakeMonarchy.givenFindAllMappedWithChangesReturns(
                 realmEntities = listOf(entity),
                 mappedResult = listOf(summary),
                 fakeLiveLocationShareAggregatedSummaryMapper
         )
-        val mapper = slot<Function<List<LiveLocationShareAggregatedSummary>, Optional<LiveLocationShareAggregatedSummary>>>()
-        every {
-            Transformations.map(
-                    liveData,
-                    capture(mapper)
-            )
-        } answers {
-            val value = secondArg<Function<List<LiveLocationShareAggregatedSummary>, Optional<LiveLocationShareAggregatedSummary>>>().apply(listOf(summary))
-            MutableLiveData(value)
-        }
 
         val result = defaultLocationSharingService.getLiveLocationShareSummary(AN_EVENT_ID).value
 

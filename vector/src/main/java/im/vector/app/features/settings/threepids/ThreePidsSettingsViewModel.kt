@@ -22,13 +22,13 @@ import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.ReadOnceTrue
 import im.vector.app.features.auth.PendingAuthHandler
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
@@ -185,8 +185,8 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
                                 IllegalArgumentException(
                                         stringProvider.getString(
                                                 when (action.threePid) {
-                                                    is ThreePid.Email -> R.string.auth_email_already_defined
-                                                    is ThreePid.Msisdn -> R.string.auth_msisdn_already_defined
+                                                    is ThreePid.Email -> CommonStrings.auth_email_already_defined
+                                                    is ThreePid.Msisdn -> CommonStrings.auth_msisdn_already_defined
                                                 }
                                         )
                                 )

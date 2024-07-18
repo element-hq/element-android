@@ -24,11 +24,11 @@ import android.util.Patterns
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.html.PillImageSpan
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.getUserOrDefault
@@ -99,7 +99,7 @@ class EventTextRenderer @AssistedInject constructor(
     private fun addPermalinksSpans(text: Spannable) {
         for (match in Patterns.WEB_URL.toRegex().findAll(text)) {
             val url = text.substring(match.range)
-            val supportedHosts = context.resources.getStringArray(R.array.permalink_supported_hosts)
+            val supportedHosts = context.resources.getStringArray(im.vector.app.config.R.array.permalink_supported_hosts)
             val isPermalinkSupported = sessionHolder.getSafeActiveSession()?.permalinkService()?.isPermalinkSupported(supportedHosts, url).orFalse()
             val matrixItem = if (isPermalinkSupported) {
                 when (val permalinkData = PermalinkParser.parse(url)) {
@@ -136,7 +136,7 @@ class EventTextRenderer @AssistedInject constructor(
                 val room: RoomSummary? = sessionHolder.getSafeActiveSession()?.getRoomSummary(roomIdOrAlias)
                 when {
                     isRoomAlias -> MatrixItem.RoomAliasItem(roomIdOrAlias, room?.displayName, room?.avatarUrl)
-                    room == null -> MatrixItem.RoomItem(roomIdOrAlias, context.getString(R.string.pill_message_unknown_room_or_space))
+                    room == null -> MatrixItem.RoomItem(roomIdOrAlias, context.getString(CommonStrings.pill_message_unknown_room_or_space))
                     room.roomType == RoomType.SPACE -> MatrixItem.SpaceItem(roomIdOrAlias, room.displayName, room.avatarUrl)
                     else -> MatrixItem.RoomItem(roomIdOrAlias, room.displayName, room.avatarUrl)
                 }
@@ -146,25 +146,25 @@ class EventTextRenderer @AssistedInject constructor(
                     val event = session?.eventService()?.getEventFromCache(roomId, eventId!!)
                     val user = event?.senderId?.let { session.roomService().getRoomMember(it, roomId) }
                     val text = user?.let {
-                        context.getString(R.string.pill_message_from_user, user.displayName)
-                    } ?: context.getString(R.string.pill_message_from_unknown_user)
+                        context.getString(CommonStrings.pill_message_from_user, user.displayName)
+                    } ?: context.getString(CommonStrings.pill_message_from_unknown_user)
                     MatrixItem.RoomItem(roomIdOrAlias, text, user?.avatarUrl, user?.displayName)
                 } else {
                     val room: RoomSummary? = sessionHolder.getSafeActiveSession()?.getRoomSummary(roomIdOrAlias)
                     when {
                         isRoomAlias -> MatrixItem.RoomAliasItem(
                                 roomIdOrAlias,
-                                context.getString(R.string.pill_message_in_room, room?.displayName ?: roomIdOrAlias),
+                                context.getString(CommonStrings.pill_message_in_room, room?.displayName ?: roomIdOrAlias),
                                 room?.avatarUrl,
                                 room?.displayName
                         )
                         room != null -> MatrixItem.RoomItem(
                                 roomIdOrAlias,
-                                context.getString(R.string.pill_message_in_room, room.displayName),
+                                context.getString(CommonStrings.pill_message_in_room, room.displayName),
                                 room.avatarUrl,
                                 room.displayName
                         )
-                        else -> MatrixItem.RoomItem(roomIdOrAlias, context.getString(R.string.pill_message_in_unknown_room))
+                        else -> MatrixItem.RoomItem(roomIdOrAlias, context.getString(CommonStrings.pill_message_in_unknown_room))
                     }
                 }
             }

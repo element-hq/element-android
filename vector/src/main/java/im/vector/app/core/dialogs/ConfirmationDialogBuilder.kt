@@ -22,6 +22,7 @@ import androidx.core.view.isVisible
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.databinding.DialogConfirmationWithReasonBinding
+import im.vector.lib.strings.CommonStrings
 
 object ConfirmationDialogBuilder {
 
@@ -58,7 +59,7 @@ object ConfirmationDialogBuilder {
                             ?.takeIf { it.isNotBlank() }
                     confirmation(reason)
                 }
-                .setNegativeButton(R.string.action_cancel, null)
+                .setNegativeButton(CommonStrings.action_cancel, null)
                 .show()
     }
 }

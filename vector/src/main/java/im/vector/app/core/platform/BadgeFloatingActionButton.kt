@@ -28,7 +28,6 @@ import android.text.TextPaint
 import android.util.AttributeSet
 import androidx.core.content.res.use
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import im.vector.app.R
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.max
@@ -135,11 +134,11 @@ class BadgeFloatingActionButton @JvmOverloads constructor(
 
     @SuppressWarnings("Recycle")
     private fun initAttrs(attrs: AttributeSet) {
-        context.obtainStyledAttributes(attrs, R.styleable.BadgeFloatingActionButton).use {
-            counterBackgroundColor = it.getColor(R.styleable.BadgeFloatingActionButton_badgeBackgroundColor, 0)
-            counterTextPadding = it.getDimension(R.styleable.BadgeFloatingActionButton_badgeTextPadding, 0f)
-            counterTextSize = it.getDimension(R.styleable.BadgeFloatingActionButton_badgeTextSize, 14f)
-            counterTextColor = it.getColor(R.styleable.BadgeFloatingActionButton_badgeTextColor, Color.WHITE)
+        context.obtainStyledAttributes(attrs, im.vector.lib.ui.styles.R.styleable.BadgeFloatingActionButton).use {
+            counterBackgroundColor = it.getColor(im.vector.lib.ui.styles.R.styleable.BadgeFloatingActionButton_badgeBackgroundColor, 0)
+            counterTextPadding = it.getDimension(im.vector.lib.ui.styles.R.styleable.BadgeFloatingActionButton_badgeTextPadding, 0f)
+            counterTextSize = it.getDimension(im.vector.lib.ui.styles.R.styleable.BadgeFloatingActionButton_badgeTextSize, 14f)
+            counterTextColor = it.getColor(im.vector.lib.ui.styles.R.styleable.BadgeFloatingActionButton_badgeTextColor, Color.WHITE)
         }
     }
 

@@ -27,6 +27,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentLoginSignupSigninSelectionBinding
 import im.vector.app.features.login.SocialLoginButtonsView.Mode
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.auth.SSOAction
 
 /**
@@ -56,19 +57,19 @@ class LoginSignUpSignInSelectionFragment :
             ServerType.MatrixOrg -> {
                 views.loginSignupSigninServerIcon.setImageResource(R.drawable.ic_logo_matrix_org)
                 views.loginSignupSigninServerIcon.isVisible = true
-                views.loginSignupSigninTitle.text = getString(R.string.login_connect_to, state.homeServerUrlFromUser.toReducedUrl())
-                views.loginSignupSigninText.text = getString(R.string.login_server_matrix_org_text)
+                views.loginSignupSigninTitle.text = getString(CommonStrings.login_connect_to, state.homeServerUrlFromUser.toReducedUrl())
+                views.loginSignupSigninText.text = getString(CommonStrings.login_server_matrix_org_text)
             }
             ServerType.EMS -> {
                 views.loginSignupSigninServerIcon.setImageResource(R.drawable.ic_logo_element_matrix_services)
                 views.loginSignupSigninServerIcon.isVisible = true
-                views.loginSignupSigninTitle.text = getString(R.string.login_connect_to_modular)
+                views.loginSignupSigninTitle.text = getString(CommonStrings.login_connect_to_modular)
                 views.loginSignupSigninText.text = state.homeServerUrlFromUser.toReducedUrl()
             }
             ServerType.Other -> {
                 views.loginSignupSigninServerIcon.isVisible = false
-                views.loginSignupSigninTitle.text = getString(R.string.login_server_other_title)
-                views.loginSignupSigninText.text = getString(R.string.login_connect_to, state.homeServerUrlFromUser.toReducedUrl())
+                views.loginSignupSigninTitle.text = getString(CommonStrings.login_server_other_title)
+                views.loginSignupSigninText.text = getString(CommonStrings.login_connect_to, state.homeServerUrlFromUser.toReducedUrl())
             }
             ServerType.Unknown -> Unit /* Should not happen */
         }
@@ -98,11 +99,11 @@ class LoginSignUpSignInSelectionFragment :
         when (state.loginMode) {
             is LoginMode.Sso -> {
                 // change to only one button that is sign in with sso
-                views.loginSignupSigninSubmit.text = getString(R.string.login_signin_sso)
+                views.loginSignupSigninSubmit.text = getString(CommonStrings.login_signin_sso)
                 views.loginSignupSigninSignIn.isVisible = false
             }
             else -> {
-                views.loginSignupSigninSubmit.text = getString(R.string.login_signup)
+                views.loginSignupSigninSubmit.text = getString(CommonStrings.login_signup)
                 views.loginSignupSigninSignIn.isVisible = true
             }
         }

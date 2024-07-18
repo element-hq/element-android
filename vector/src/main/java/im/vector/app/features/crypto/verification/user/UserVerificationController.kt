@@ -33,6 +33,7 @@ import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationW
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.EVerificationState
 import javax.inject.Inject
@@ -87,9 +88,9 @@ class UserVerificationController @Inject constructor(
         when (state.pendingRequest) {
             Uninitialized -> {
                 // let's add option to start one
-                val styledText = stringProvider.getString(R.string.verification_request_notice, state.otherUserId)
+                val styledText = stringProvider.getString(CommonStrings.verification_request_notice, state.otherUserId)
                         .toSpannable()
-                        .colorizeMatchingText(state.otherUserId, colorProvider.getColorFromAttribute(R.attr.vctr_notice_text_color))
+                        .colorizeMatchingText(state.otherUserId, colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_notice_text_color))
 
                 bottomSheetVerificationNoticeItem {
                     id("notice")
@@ -101,18 +102,18 @@ class UserVerificationController @Inject constructor(
                 }
                 bottomSheetVerificationActionItem {
                     id("start")
-                    title(host.stringProvider.getString(R.string.start_verification))
-                    titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
-                    subTitle(host.stringProvider.getString(R.string.verification_request_start_notice))
+                    title(host.stringProvider.getString(CommonStrings.start_verification))
+                    titleColor(host.colorProvider.getColorFromAttribute(com.google.android.material.R.attr.colorPrimary))
+                    subTitle(host.stringProvider.getString(CommonStrings.verification_request_start_notice))
                     iconRes(R.drawable.ic_arrow_right)
-                    iconColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
+                    iconColor(host.colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_primary))
                     listener { host.listener?.onClickOnVerificationStart() }
                 }
             }
             is Loading -> {
                 bottomSheetVerificationWaitingItem {
                     id("waiting")
-                    title(host.stringProvider.getString(R.string.verification_request_waiting_for, state.otherUserMxItem.getBestName()))
+                    title(host.stringProvider.getString(CommonStrings.verification_request_waiting_for, state.otherUserMxItem.getBestName()))
                 }
             }
             is Success -> {
@@ -121,7 +122,7 @@ class UserVerificationController @Inject constructor(
                     EVerificationState.WaitingForReady -> {
                         bottomSheetVerificationWaitingItem {
                             id("waiting")
-                            title(host.stringProvider.getString(R.string.verification_request_waiting_for, state.otherUserMxItem.getBestName()))
+                            title(host.stringProvider.getString(CommonStrings.verification_request_waiting_for, state.otherUserMxItem.getBestName()))
                         }
                     }
                     EVerificationState.Requested -> {
@@ -161,10 +162,10 @@ class UserVerificationController @Inject constructor(
     }
 
 //    private fun renderStartTransactionOptions(request: PendingVerificationRequest) {
-//        val scanCodeInstructions = stringProvider.getString(R.string.verification_scan_notice)
+//        val scanCodeInstructions = stringProvider.getString(CommonStrings.verification_scan_notice)
 //        val host = this
-//        val scanOtherCodeTitle = stringProvider.getString(R.string.verification_scan_their_code)
-//        val compareEmojiSubtitle = stringProvider.getString(R.string.verification_scan_emoji_subtitle)
+//        val scanOtherCodeTitle = stringProvider.getString(CommonStrings.verification_scan_their_code)
+//        val compareEmojiSubtitle = stringProvider.getString(CommonStrings.verification_scan_emoji_subtitle)
 //
 //        bottomSheetVerificationNoticeItem {
 //            id("notice")
@@ -186,9 +187,9 @@ class UserVerificationController @Inject constructor(
 //            bottomSheetVerificationActionItem {
 //                id("openCamera")
 //                title(scanOtherCodeTitle)
-//                titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+//                titleColor(host.colorProvider.getColorFromAttribute(com.google.android.material.R.attr.colorPrimary))
 //                iconRes(R.drawable.ic_camera)
-//                iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+//                iconColor(host.colorProvider.getColorFromAttribute(com.google.android.material.R.attr.colorPrimary))
 //                listener { host.listener?.openCamera() }
 //            }
 //
@@ -198,20 +199,20 @@ class UserVerificationController @Inject constructor(
 //
 //            bottomSheetVerificationActionItem {
 //                id("openEmoji")
-//                title(host.stringProvider.getString(R.string.verification_scan_emoji_title))
-//                titleColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
+//                title(host.stringProvider.getString(CommonStrings.verification_scan_emoji_title))
+//                titleColor(host.colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_primary))
 //                subTitle(compareEmojiSubtitle)
 //                iconRes(R.drawable.ic_arrow_right)
-//                iconColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
+//                iconColor(host.colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_primary))
 //                listener { host.listener?.doVerifyBySas() }
 //            }
 //        } else if (request.isSasSupported) {
 //            bottomSheetVerificationActionItem {
 //                id("openEmoji")
-//                title(host.stringProvider.getString(R.string.verification_no_scan_emoji_title))
-//                titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+//                title(host.stringProvider.getString(CommonStrings.verification_no_scan_emoji_title))
+//                titleColor(host.colorProvider.getColorFromAttribute(com.google.android.material.R.attr.colorPrimary))
 //                iconRes(R.drawable.ic_arrow_right)
-//                iconColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
+//                iconColor(host.colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_primary))
 //                listener { host.listener?.doVerifyBySas() }
 //            }
 //        } else {
@@ -227,7 +228,7 @@ class UserVerificationController @Inject constructor(
                 // Loading => We are starting a transaction
                 bottomSheetVerificationWaitingItem {
                     id("waiting")
-                    title(host.stringProvider.getString(R.string.please_wait))
+                    title(host.stringProvider.getString(CommonStrings.please_wait))
                 }
             }
             is Success -> {
@@ -261,10 +262,10 @@ class UserVerificationController @Inject constructor(
 
         bottomSheetVerificationActionItem {
             id("done")
-            title(host.stringProvider.getString(R.string.done))
-            titleColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
+            title(host.stringProvider.getString(CommonStrings.done))
+            titleColor(host.colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_primary))
             iconRes(R.drawable.ic_arrow_right)
-            iconColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
+            iconColor(host.colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_primary))
             listener { host.listener?.onDone(true) }
         }
     }

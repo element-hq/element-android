@@ -17,9 +17,9 @@
 package im.vector.app.features.home.room.detail.timeline.render
 
 import androidx.annotation.StringRes
-import im.vector.app.R
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakeStringProvider
+import im.vector.lib.strings.CommonStrings
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -112,7 +112,7 @@ class ProcessBodyOfReplyToEventUseCaseTest {
     fun `given a replied event of type file message when process the formatted body then content is replaced by correct string`() {
         // Given
         givenTypeOfRepliedEvent(isFileMessage = true)
-        givenContentForId(R.string.message_reply_to_sender_sent_file, content = A_NEW_CONTENT)
+        givenContentForId(CommonStrings.message_reply_to_sender_sent_file, content = A_NEW_CONTENT)
 
         executeAndAssertResult()
     }
@@ -121,7 +121,7 @@ class ProcessBodyOfReplyToEventUseCaseTest {
     fun `given a replied event of type voice message when process the formatted body then content is replaced by correct string`() {
         // Given
         givenTypeOfRepliedEvent(isVoiceMessage = true)
-        givenContentForId(R.string.message_reply_to_sender_sent_voice_message, content = A_NEW_CONTENT)
+        givenContentForId(CommonStrings.message_reply_to_sender_sent_voice_message, content = A_NEW_CONTENT)
 
         executeAndAssertResult()
     }
@@ -130,7 +130,7 @@ class ProcessBodyOfReplyToEventUseCaseTest {
     fun `given a replied event of type audio message when process the formatted body then content is replaced by correct string`() {
         // Given
         givenTypeOfRepliedEvent(isAudioMessage = true)
-        givenContentForId(R.string.message_reply_to_sender_sent_audio_file, content = A_NEW_CONTENT)
+        givenContentForId(CommonStrings.message_reply_to_sender_sent_audio_file, content = A_NEW_CONTENT)
 
         executeAndAssertResult()
     }
@@ -139,7 +139,7 @@ class ProcessBodyOfReplyToEventUseCaseTest {
     fun `given a replied event of type image message when process the formatted body then content is replaced by correct string`() {
         // Given
         givenTypeOfRepliedEvent(isImageMessage = true)
-        givenContentForId(R.string.message_reply_to_sender_sent_image, content = A_NEW_CONTENT)
+        givenContentForId(CommonStrings.message_reply_to_sender_sent_image, content = A_NEW_CONTENT)
 
         executeAndAssertResult()
     }
@@ -148,7 +148,7 @@ class ProcessBodyOfReplyToEventUseCaseTest {
     fun `given a replied event of type video message when process the formatted body then content is replaced by correct string`() {
         // Given
         givenTypeOfRepliedEvent(isVideoMessage = true)
-        givenContentForId(R.string.message_reply_to_sender_sent_video, content = A_NEW_CONTENT)
+        givenContentForId(CommonStrings.message_reply_to_sender_sent_video, content = A_NEW_CONTENT)
 
         executeAndAssertResult()
     }
@@ -157,7 +157,7 @@ class ProcessBodyOfReplyToEventUseCaseTest {
     fun `given a replied event of type sticker message when process the formatted body then content is replaced by correct string`() {
         // Given
         givenTypeOfRepliedEvent(isStickerMessage = true)
-        givenContentForId(R.string.message_reply_to_sender_sent_sticker, content = A_NEW_CONTENT)
+        givenContentForId(CommonStrings.message_reply_to_sender_sent_sticker, content = A_NEW_CONTENT)
 
         executeAndAssertResult()
     }
@@ -166,7 +166,7 @@ class ProcessBodyOfReplyToEventUseCaseTest {
     fun `given a replied event of type poll start message with null question when process the formatted body then content is replaced by correct string`() {
         // Given
         givenTypeOfRepliedEvent(isPollStartMessage = true)
-        givenContentForId(R.string.message_reply_to_sender_created_poll, content = A_NEW_CONTENT)
+        givenContentForId(CommonStrings.message_reply_to_sender_created_poll, content = A_NEW_CONTENT)
         every { fakeRepliedEvent.getPollQuestion() } returns null
 
         executeAndAssertResult()
@@ -176,7 +176,7 @@ class ProcessBodyOfReplyToEventUseCaseTest {
     fun `given a replied event of type poll start message with existing question when process the formatted body then content is replaced by correct string`() {
         // Given
         givenTypeOfRepliedEvent(isPollStartMessage = true)
-        givenContentForId(R.string.message_reply_to_sender_created_poll, content = "")
+        givenContentForId(CommonStrings.message_reply_to_sender_created_poll, content = "")
         every { fakeRepliedEvent.getPollQuestion() } returns A_NEW_CONTENT
 
         executeAndAssertResult()
@@ -186,7 +186,7 @@ class ProcessBodyOfReplyToEventUseCaseTest {
     fun `given a replied event of type poll end message with null question when process the formatted body then content is replaced by correct string`() {
         // Given
         givenTypeOfRepliedEvent(isPollEndMessage = true)
-        givenContentForId(R.string.message_reply_to_sender_ended_poll, content = A_NEW_CONTENT)
+        givenContentForId(CommonStrings.message_reply_to_sender_ended_poll, content = A_NEW_CONTENT)
         givenPollQuestionReturns(fakeRepliedEvent, null)
         every { fakeRepliedEvent.getPollQuestion() } returns null
 
@@ -197,7 +197,7 @@ class ProcessBodyOfReplyToEventUseCaseTest {
     fun `given a replied event of type poll end message with existing question when process the formatted body then content is replaced by correct string`() {
         // Given
         givenTypeOfRepliedEvent(isPollEndMessage = true)
-        givenContentForId(R.string.message_reply_to_sender_ended_poll, content = "")
+        givenContentForId(CommonStrings.message_reply_to_sender_ended_poll, content = "")
         every { fakeRepliedEvent.getClearType() } returns EventType.POLL_END.unstable
         givenPollQuestionReturns(fakeRepliedEvent, A_NEW_CONTENT)
 
@@ -208,7 +208,7 @@ class ProcessBodyOfReplyToEventUseCaseTest {
     fun `given a replied event of type live location message when process the formatted body then content is replaced by correct string`() {
         // Given
         givenTypeOfRepliedEvent(isLiveLocationMessage = true)
-        givenContentForId(R.string.live_location_description, content = A_NEW_CONTENT)
+        givenContentForId(CommonStrings.live_location_description, content = A_NEW_CONTENT)
 
         executeAndAssertResult()
     }
@@ -295,7 +295,7 @@ class ProcessBodyOfReplyToEventUseCaseTest {
     }
 
     private fun givenNewPrefix() {
-        fakeStringProvider.given(R.string.message_reply_to_prefix, A_NEW_PREFIX)
+        fakeStringProvider.given(CommonStrings.message_reply_to_prefix, A_NEW_PREFIX)
     }
 
     private fun givenContentForId(@StringRes resId: Int, content: String) {

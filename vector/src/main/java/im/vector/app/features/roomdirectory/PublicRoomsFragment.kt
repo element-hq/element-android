@@ -39,6 +39,7 @@ import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.permalink.NavigationInterceptor
 import im.vector.app.features.permalink.PermalinkFactory
 import im.vector.app.features.permalink.PermalinkHandler
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -138,7 +139,7 @@ class PublicRoomsFragment :
                     })
 
             if (!isHandled) {
-                requireContext().toast(R.string.room_error_not_found)
+                requireContext().toast(CommonStrings.room_error_not_found)
             }
         }
     }

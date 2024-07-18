@@ -38,6 +38,7 @@ import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.spaces.SpaceListFragment
 import im.vector.app.features.usercode.UserCodeActivity
 import im.vector.app.features.workers.signout.SignOutUiWorker
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
@@ -105,14 +106,14 @@ class HomeDrawerFragment :
         views.homeDrawerInviteFriendButton.debouncedClicks {
             permalinkFactory.createPermalinkOfCurrentUser()?.let { permalink ->
                 analyticsTracker.screen(MobileScreen(screenName = MobileScreen.ScreenName.InviteFriends))
-                val text = getString(R.string.invite_friends_text, permalink)
+                val text = getString(CommonStrings.invite_friends_text, permalink)
 
                 startSharePlainTextIntent(
                         context = requireContext(),
                         activityResultLauncher = null,
-                        chooserTitle = getString(R.string.invite_friends),
+                        chooserTitle = getString(CommonStrings.invite_friends),
                         text = text,
-                        extraTitle = getString(R.string.invite_friends_rich_title)
+                        extraTitle = getString(CommonStrings.invite_friends_rich_title)
                 )
             }
         }

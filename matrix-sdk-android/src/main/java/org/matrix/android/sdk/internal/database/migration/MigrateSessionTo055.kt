@@ -17,14 +17,41 @@
 package org.matrix.android.sdk.internal.database.migration
 
 import io.realm.DynamicRealm
-import org.matrix.android.sdk.internal.database.model.HomeServerCapabilitiesEntityFields
-import org.matrix.android.sdk.internal.extensions.forceRefreshOfHomeServerCapabilities
+import org.matrix.android.sdk.internal.database.model.EventEntityFields
+import org.matrix.android.sdk.internal.database.model.EventInsertEntityFields
+import org.matrix.android.sdk.internal.database.model.LocalRoomSummaryEntityFields
+import org.matrix.android.sdk.internal.database.model.PushRulesEntityFields
+import org.matrix.android.sdk.internal.database.model.PusherEntityFields
+import org.matrix.android.sdk.internal.database.model.RoomEntityFields
+import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntityFields
+import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
+import org.matrix.android.sdk.internal.database.model.presence.UserPresenceEntityFields
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
-internal class MigrateSessionTo055(realm: DynamicRealm) : RealmMigrator(realm, 54) {
+// Some fields are now required due to upgrade of Kotlin version.
+// See https://github.com/realm/realm-java/issues/7810 for more details.
+internal class MigrateSessionTo055(realm: DynamicRealm) : RealmMigrator(realm, 55) {
     override fun doMigrate(realm: DynamicRealm) {
-        realm.schema.get("HomeServerCapabilitiesEntity")
-                ?.addField(HomeServerCapabilitiesEntityFields.CAN_USE_AUTHENTICATED_MEDIA, Boolean::class.java)
-                ?.forceRefreshOfHomeServerCapabilities()
+        realm.schema.get("EventEntity")
+                ?.setRequired(EventEntityFields.SEND_STATE_STR, true)
+                ?.setRequired(EventEntityFields.THREAD_NOTIFICATION_STATE_STR, true)
+        realm.schema.get("EventInsertEntity")
+                ?.setRequired(EventInsertEntityFields.INSERT_TYPE_STR, true)
+        realm.schema.get("LocalRoomSummaryEntity")
+                ?.setRequired(LocalRoomSummaryEntityFields.STATE_STR, true)
+        realm.schema.get("PushRulesEntity")
+                ?.setRequired(PushRulesEntityFields.KIND_STR, true)
+        realm.schema.get("PusherEntity")
+                ?.setRequired(PusherEntityFields.STATE_STR, true)
+        realm.schema.get("RoomEntity")
+                ?.setRequired(RoomEntityFields.MEMBERSHIP_STR, true)
+                ?.setRequired(RoomEntityFields.MEMBERS_LOAD_STATUS_STR, true)
+        realm.schema.get("RoomMemberSummaryEntity")
+                ?.setRequired(RoomMemberSummaryEntityFields.MEMBERSHIP_STR, true)
+        realm.schema.get("RoomSummaryEntity")
+                ?.setRequired(RoomSummaryEntityFields.MEMBERSHIP_STR, true)
+                ?.setRequired(RoomSummaryEntityFields.VERSIONING_STATE_STR, true)
+        realm.schema.get("UserPresenceEntity")
+                ?.setRequired(UserPresenceEntityFields.PRESENCE_STR, true)
     }
 }

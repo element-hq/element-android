@@ -22,11 +22,11 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.EmojiSpanify
-import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.core.ui.list.genericLoaderItem
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
+import im.vector.lib.strings.CommonStrings
 import javax.inject.Inject
 
 /**
@@ -52,7 +52,7 @@ class ViewReactionsEpoxyController @Inject constructor(
             is Fail -> {
                 genericFooterItem {
                     id("failure")
-                    text(host.stringProvider.getString(R.string.unknown_error).toEpoxyCharSequence())
+                    text(host.stringProvider.getString(CommonStrings.unknown_error).toEpoxyCharSequence())
                 }
             }
             is Success -> {

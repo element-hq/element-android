@@ -23,10 +23,10 @@ import android.util.AttributeSet
 import android.widget.FrameLayout
 import androidx.core.content.withStyledAttributes
 import androidx.core.view.isVisible
-import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.databinding.ViewSignOutBottomSheetActionButtonBinding
 import im.vector.app.features.themes.ThemeUtils
+import im.vector.lib.ui.styles.R
 
 class SignOutBottomSheetActionButton @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -67,7 +67,7 @@ class SignOutBottomSheetActionButton @JvmOverloads constructor(
         }
 
     init {
-        inflate(context, R.layout.view_sign_out_bottom_sheet_action_button, this)
+        inflate(context, im.vector.app.R.layout.view_sign_out_bottom_sheet_action_button, this)
         views = ViewSignOutBottomSheetActionButtonBinding.bind(this)
 
         context.withStyledAttributes(attrs, R.styleable.SignOutBottomSheetActionButton) {

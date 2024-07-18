@@ -23,7 +23,6 @@ import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.use
 import androidx.core.view.updateLayoutParams
-import im.vector.app.R
 import im.vector.app.databinding.ViewLiveLocationEndedBannerBinding
 
 private const val BACKGROUND_ALPHA = 0.75f
@@ -42,7 +41,7 @@ class LiveLocationEndedBannerView @JvmOverloads constructor(
     init {
         context.obtainStyledAttributes(
                 attrs,
-                R.styleable.LiveLocationEndedBannerView,
+                im.vector.lib.ui.styles.R.styleable.LiveLocationEndedBannerView,
                 0,
                 0
         ).use {
@@ -52,12 +51,12 @@ class LiveLocationEndedBannerView @JvmOverloads constructor(
     }
 
     private fun setBackgroundAlpha(typedArray: TypedArray) {
-        val withAlpha = typedArray.getBoolean(R.styleable.LiveLocationEndedBannerView_locLiveEndedBkgWithAlpha, false)
+        val withAlpha = typedArray.getBoolean(im.vector.lib.ui.styles.R.styleable.LiveLocationEndedBannerView_locLiveEndedBkgWithAlpha, false)
         binding.liveLocationEndedBannerBackground.alpha = if (withAlpha) BACKGROUND_ALPHA else 1f
     }
 
     private fun setIconMarginStart(typedArray: TypedArray) {
-        val margin = typedArray.getDimensionPixelOffset(R.styleable.LiveLocationEndedBannerView_locLiveEndedIconMarginStart, 0)
+        val margin = typedArray.getDimensionPixelOffset(im.vector.lib.ui.styles.R.styleable.LiveLocationEndedBannerView_locLiveEndedIconMarginStart, 0)
         binding.liveLocationEndedBannerIcon.updateLayoutParams<MarginLayoutParams> {
             marginStart = margin
         }

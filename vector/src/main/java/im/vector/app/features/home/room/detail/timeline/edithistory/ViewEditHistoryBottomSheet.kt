@@ -29,6 +29,7 @@ import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetGenericListWithTitleBinding
 import im.vector.app.features.home.room.detail.timeline.action.TimelineEventFragmentArgs
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
+import im.vector.lib.strings.CommonStrings
 import javax.inject.Inject
 
 /**
@@ -53,7 +54,7 @@ class ViewEditHistoryBottomSheet :
                 dividerDrawable = R.drawable.divider_horizontal_on_secondary,
                 hasFixedSize = false
         )
-        views.bottomSheetTitle.text = context?.getString(R.string.message_edits)
+        views.bottomSheetTitle.text = context?.getString(CommonStrings.message_edits)
     }
 
     override fun onDestroyView() {

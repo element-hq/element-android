@@ -39,6 +39,7 @@ import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.utils.selectTxtFileToWrite
 import im.vector.app.databinding.FragmentDevtoolKeyrequestsBinding
 import im.vector.lib.core.utils.timer.Clock
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import javax.inject.Inject
 
@@ -55,7 +56,7 @@ class KeyRequestsFragment :
 
     override fun onResume() {
         super.onResume()
-        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(R.string.key_share_request)
+        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(CommonStrings.key_share_request)
     }
 
     private var mPagerAdapter: KeyReqPagerAdapter? = null

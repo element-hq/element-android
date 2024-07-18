@@ -32,6 +32,7 @@ import im.vector.app.espresso.tools.waitUntilViewVisible
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.spaces.manage.SpaceManageActivity
+import im.vector.lib.strings.CommonStrings
 
 class SpaceCreateRobot {
 
@@ -39,7 +40,7 @@ class SpaceCreateRobot {
         // public
         clickOn(R.id.publicButton)
         waitUntilViewVisible(withId(R.id.recyclerView))
-        onView(ViewMatchers.withHint(R.string.create_room_name_hint)).perform(ViewActions.replaceText(name))
+        onView(ViewMatchers.withHint(CommonStrings.create_room_name_hint)).perform(ViewActions.replaceText(name))
         clickOn(R.id.nextButton)
         waitUntilViewVisible(withId(R.id.recyclerView))
         pressBack()
@@ -68,7 +69,7 @@ class SpaceCreateRobot {
         onView(withId(R.id.roomList))
                 .perform(
                         RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
-                                ViewMatchers.hasDescendant(withText(R.string.room_displayname_empty_room)),
+                                ViewMatchers.hasDescendant(withText(CommonStrings.room_displayname_empty_room)),
                                 click()
                         ).atPosition(0)
                 )
@@ -81,7 +82,7 @@ class SpaceCreateRobot {
     fun createPublicSpace(spaceName: String) {
         clickOn(R.id.publicButton)
         waitUntilViewVisible(withId(R.id.recyclerView))
-        onView(ViewMatchers.withHint(R.string.create_room_name_hint)).perform(ViewActions.replaceText(spaceName))
+        onView(ViewMatchers.withHint(CommonStrings.create_room_name_hint)).perform(ViewActions.replaceText(spaceName))
         clickOn(R.id.nextButton)
         waitUntilViewVisible(withId(R.id.recyclerView))
         clickOn(R.id.nextButton)

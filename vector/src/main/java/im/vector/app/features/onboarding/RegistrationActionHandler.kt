@@ -16,7 +16,6 @@
 
 package im.vector.app.features.onboarding
 
-import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.ensureTrailingSlash
 import im.vector.app.features.VectorFeatures
@@ -39,7 +38,7 @@ class RegistrationActionHandler @Inject constructor(
         stringProvider: StringProvider
 ) {
 
-    private val matrixOrgUrl = stringProvider.getString(R.string.matrix_org_server_url).ensureTrailingSlash()
+    private val matrixOrgUrl = stringProvider.getString(im.vector.app.config.R.string.matrix_org_server_url).ensureTrailingSlash()
 
     suspend fun processAction(state: SelectedHomeserverState, action: RegisterAction): Result {
         val result = registrationWizardActionDelegate.executeAction(action)

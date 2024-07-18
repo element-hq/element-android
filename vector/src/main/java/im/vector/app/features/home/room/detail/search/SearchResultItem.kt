@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail.search
 
+import android.annotation.SuppressLint
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -48,6 +49,7 @@ abstract class SearchResultItem : VectorEpoxyModel<SearchResultItem.Holder>(R.la
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var listener: ClickListener? = null
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var threadSummaryListener: ClickListener? = null
 
+    @SuppressLint("SetTextI18n")
     override fun bind(holder: Holder) {
         super.bind(holder)
 
@@ -61,7 +63,7 @@ abstract class SearchResultItem : VectorEpoxyModel<SearchResultItem.Holder>(R.la
             threadDetails?.let {
                 if (it.isRootThread) {
                     showThreadSummary(holder)
-                    holder.threadSummaryCounterTextView.text = it.numberOfThreads.toString()
+                    holder.threadSummaryCounterTextView.text = "${it.numberOfThreads}"
                     holder.threadSummaryInfoTextView.text = threadSummaryFormatted.orEmpty()
                     val userId = it.threadSummarySenderInfo?.userId ?: return@let
                     val displayName = it.threadSummarySenderInfo?.displayName

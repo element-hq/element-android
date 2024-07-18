@@ -17,11 +17,11 @@
 package im.vector.app.features.home.room.list.home.header
 
 import androidx.annotation.StringRes
-import im.vector.app.R
+import im.vector.lib.strings.CommonStrings
 
 enum class HomeRoomFilter(@StringRes val titleRes: Int) {
-    ALL(R.string.room_list_filter_all),
-    UNREADS(R.string.room_list_filter_unreads),
-    FAVOURITES(R.string.room_list_filter_favourites),
-    PEOPlE(R.string.room_list_filter_people),
+    ALL(CommonStrings.room_list_filter_all),
+    UNREADS(CommonStrings.room_list_filter_unreads),
+    FAVOURITES(CommonStrings.room_list_filter_favourites),
+    PEOPlE(CommonStrings.room_list_filter_people),
 }

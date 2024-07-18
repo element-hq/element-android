@@ -64,6 +64,7 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.ui.SharedPreferencesUiStateRepository
 import im.vector.app.features.ui.UiStateRepository
 import im.vector.application.BuildConfig
+import im.vector.application.R
 import im.vector.lib.core.utils.timer.Clock
 import im.vector.lib.core.utils.timer.DefaultClock
 import kotlinx.coroutines.CoroutineScope
@@ -225,9 +226,10 @@ import javax.inject.Singleton
 
     @Provides
     @Singleton
-    fun providesBuildMeta() = BuildMeta(
+    fun providesBuildMeta(context: Context) = BuildMeta(
             isDebug = BuildConfig.DEBUG,
             applicationId = BuildConfig.APPLICATION_ID,
+            applicationName = context.getString(R.string.app_name),
             lowPrivacyLoggingEnabled = Config.LOW_PRIVACY_LOG_ENABLE,
             versionName = BuildConfig.VERSION_NAME,
             gitRevision = BuildConfig.GIT_REVISION,

@@ -21,13 +21,13 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.RemoteInput
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.extensions.toAnalyticsJoinedRoom
 import im.vector.app.features.analytics.plan.JoinedRoom
 import im.vector.app.features.session.coroutineScope
 import im.vector.lib.core.utils.timer.Clock
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
@@ -151,7 +151,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                 noisy = false,
                 timestamp = clock.epochMillis(),
                 senderName = session.roomService().getRoomMember(session.myUserId, room.roomId)?.displayName
-                        ?: context?.getString(R.string.notification_sender_me),
+                        ?: context?.getString(CommonStrings.notification_sender_me),
                 senderId = session.myUserId,
                 body = message,
                 imageUriString = null,
@@ -203,7 +203,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                         false,
                         clock.epochMillis(),
                         session.myUser?.displayname
-                                ?: context?.getString(R.string.notification_sender_me),
+                                ?: context?.getString(CommonStrings.notification_sender_me),
                         session.myUserId,
                         message,
                         roomId,

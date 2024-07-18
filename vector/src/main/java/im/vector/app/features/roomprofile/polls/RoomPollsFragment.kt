@@ -24,10 +24,10 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentRoomPollsBinding
 import im.vector.app.features.roomprofile.RoomProfileArgs
+import im.vector.lib.strings.CommonStrings
 
 @AndroidEntryPoint
 class RoomPollsFragment : VectorBaseFragment<FragmentRoomPollsBinding>() {
@@ -66,8 +66,8 @@ class RoomPollsFragment : VectorBaseFragment<FragmentRoomPollsBinding>() {
 
         tabLayoutMediator = TabLayoutMediator(views.roomPollsTabs, views.roomPollsViewPager) { tab, position ->
             when (position) {
-                RoomPollsType.ACTIVE.ordinal -> tab.text = getString(R.string.room_polls_active)
-                RoomPollsType.ENDED.ordinal -> tab.text = getString(R.string.room_polls_ended)
+                RoomPollsType.ACTIVE.ordinal -> tab.text = getString(CommonStrings.room_polls_active)
+                RoomPollsType.ENDED.ordinal -> tab.text = getString(CommonStrings.room_polls_ended)
             }
         }.also { it.attach() }
     }

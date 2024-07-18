@@ -16,6 +16,7 @@
 
 package im.vector.app.features.devtools
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Parcelable
@@ -38,6 +39,7 @@ import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.createJSonViewerStyleProvider
+import im.vector.lib.strings.CommonStrings
 import kotlinx.parcelize.Parcelize
 import org.billcarsonfr.jsonviewer.JSonViewerFragment
 import javax.inject.Inject
@@ -53,7 +55,7 @@ class RoomDevToolActivity :
     //    private lateinit var viewModel: RoomDevToolViewModel
     private val viewModel: RoomDevToolViewModel by viewModel()
 
-    override fun getTitleRes() = R.string.dev_tools_menu_name
+    override fun getTitleRes() = CommonStrings.dev_tools_menu_name
 
     override fun getMenuRes() = R.menu.menu_devtools
 
@@ -76,7 +78,7 @@ class RoomDevToolActivity :
                 is DevToolsViewEvents.ShowAlertMessage -> {
                     MaterialAlertDialogBuilder(this)
                             .setMessage(it.message)
-                            .setPositiveButton(R.string.ok, null)
+                            .setPositiveButton(CommonStrings.ok, null)
                             .show()
                     Unit
                 }
@@ -150,6 +152,8 @@ class RoomDevToolActivity :
         }
     }
 
+    @SuppressLint("MissingSuperCall")
+    @Suppress("OVERRIDE_DEPRECATION")
     override fun onBackPressed() {
         viewModel.handle(RoomDevToolAction.OnBackPressed)
     }
@@ -206,21 +210,21 @@ class RoomDevToolActivity :
                 getString(getTitleRes())
             }
             RoomDevToolViewState.Mode.StateEventList -> {
-                getString(R.string.dev_tools_state_event)
+                getString(CommonStrings.dev_tools_state_event)
             }
             RoomDevToolViewState.Mode.StateEventDetail -> {
                 state.selectedEvent?.type
             }
             RoomDevToolViewState.Mode.EditEventContent -> {
-                getString(R.string.dev_tools_edit_content)
+                getString(CommonStrings.dev_tools_edit_content)
             }
             RoomDevToolViewState.Mode.StateEventListByType -> {
                 state.currentStateType ?: ""
             }
             is RoomDevToolViewState.Mode.SendEventForm -> {
                 getString(
-                        if (state.displayMode.isState) R.string.dev_tools_send_custom_state_event
-                        else R.string.dev_tools_send_custom_event
+                        if (state.displayMode.isState) CommonStrings.dev_tools_send_custom_state_event
+                        else CommonStrings.dev_tools_send_custom_event
                 )
             }
         }

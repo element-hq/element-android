@@ -25,10 +25,10 @@ import androidx.core.text.toSpannable
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSsssAccessFromPassphraseBinding
 import im.vector.lib.core.utils.flow.throttleFirst
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import reactivecircus.flowbinding.android.widget.editorActionEvents
@@ -48,10 +48,10 @@ class SharedSecuredStoragePassphraseFragment :
         super.onViewCreated(view, savedInstanceState)
 
         // If has passphrase
-        val pass = getString(R.string.recovery_passphrase)
-        val key = getString(R.string.recovery_key)
+        val pass = getString(CommonStrings.recovery_passphrase)
+        val key = getString(CommonStrings.recovery_key)
         views.ssssRestoreWithPassphraseWarningText.text = getString(
-                R.string.enter_secret_storage_passphrase_or_key,
+                CommonStrings.enter_secret_storage_passphrase_or_key,
                 pass,
                 key
         )

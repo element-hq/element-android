@@ -23,13 +23,13 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.core.platform.WaitingViewData
 import im.vector.app.features.crypto.keysbackup.setup.KeysBackupSetupActivity
 import im.vector.app.features.crypto.quads.SharedSecureStorageActivity
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 
 @AndroidEntryPoint
@@ -42,7 +42,7 @@ class KeysBackupManageActivity : SimpleFragmentActivity() {
         }
     }
 
-    override fun getTitleRes() = R.string.encryption_message_recovery
+    override fun getTitleRes() = CommonStrings.encryption_message_recovery
 
     private val viewModel: KeysBackupSettingsViewModel by viewModel()
 
@@ -75,14 +75,14 @@ class KeysBackupManageActivity : SimpleFragmentActivity() {
                     updateWaitingView(null)
 
                     MaterialAlertDialogBuilder(this)
-                            .setTitle(R.string.unknown_error)
-                            .setMessage(getString(R.string.keys_backup_get_version_error, asyncDelete.error.localizedMessage))
+                            .setTitle(CommonStrings.unknown_error)
+                            .setMessage(getString(CommonStrings.keys_backup_get_version_error, asyncDelete.error.localizedMessage))
                             .setCancelable(false)
-                            .setPositiveButton(R.string.ok, null)
+                            .setPositiveButton(CommonStrings.ok, null)
                             .show()
                 }
                 is Loading -> {
-                    updateWaitingView(WaitingViewData(getString(R.string.keys_backup_settings_deleting_backup)))
+                    updateWaitingView(WaitingViewData(getString(CommonStrings.keys_backup_settings_deleting_backup)))
                 }
                 else -> {
                     updateWaitingView(null)
@@ -107,6 +107,7 @@ class KeysBackupManageActivity : SimpleFragmentActivity() {
         }
     }
 
+    @Suppress("OVERRIDE_DEPRECATION")
     override fun onBackPressed() {
         // When there is no network we could get stuck in infinite loading
         // because backup state will stay in CheckingBackUpOnHomeserver

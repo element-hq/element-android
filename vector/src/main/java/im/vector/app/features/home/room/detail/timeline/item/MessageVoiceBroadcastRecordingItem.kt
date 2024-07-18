@@ -28,6 +28,7 @@ import im.vector.app.features.home.room.detail.RoomDetailAction.VoiceBroadcastAc
 import im.vector.app.features.voicebroadcast.model.VoiceBroadcastState
 import im.vector.app.features.voicebroadcast.recording.VoiceBroadcastRecorder
 import im.vector.app.features.voicebroadcast.views.VoiceBroadcastMetadataView
+import im.vector.lib.strings.CommonStrings
 import org.threeten.bp.Duration
 
 @EpoxyModelClass
@@ -75,7 +76,7 @@ abstract class MessageVoiceBroadcastRecordingItem : AbsMessageVoiceBroadcastItem
                     holder.view.context,
                     Duration.ofSeconds(remainingTime.coerceAtLeast(0L))
             )
-            holder.remainingTimeMetadata.value = holder.view.resources.getString(R.string.voice_broadcast_recording_time_left, formattedDuration)
+            holder.remainingTimeMetadata.value = holder.view.resources.getString(CommonStrings.voice_broadcast_recording_time_left, formattedDuration)
             holder.remainingTimeMetadata.isVisible = true
         } else {
             holder.remainingTimeMetadata.isVisible = false
@@ -107,10 +108,10 @@ abstract class MessageVoiceBroadcastRecordingItem : AbsMessageVoiceBroadcastItem
         recordButton.isEnabled = true
         renderErrorState(holder, false)
 
-        val drawableColor = colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
+        val drawableColor = colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_secondary)
         val drawable = drawableProvider.getDrawable(R.drawable.ic_play_pause_pause, drawableColor)
         recordButton.setImageDrawable(drawable)
-        recordButton.contentDescription = holder.view.resources.getString(R.string.a11y_pause_voice_broadcast_record)
+        recordButton.contentDescription = holder.view.resources.getString(CommonStrings.a11y_pause_voice_broadcast_record)
         recordButton.onClick { callback?.onTimelineItemAction(VoiceBroadcastAction.Recording.Pause) }
         stopRecordButton.onClick { callback?.onTimelineItemAction(VoiceBroadcastAction.Recording.Stop) }
     }
@@ -121,7 +122,7 @@ abstract class MessageVoiceBroadcastRecordingItem : AbsMessageVoiceBroadcastItem
         renderErrorState(holder, false)
 
         recordButton.setImageResource(R.drawable.ic_recording_dot)
-        recordButton.contentDescription = holder.view.resources.getString(R.string.a11y_resume_voice_broadcast_record)
+        recordButton.contentDescription = holder.view.resources.getString(CommonStrings.a11y_resume_voice_broadcast_record)
         recordButton.onClick { callback?.onTimelineItemAction(VoiceBroadcastAction.Recording.Resume) }
         stopRecordButton.onClick { callback?.onTimelineItemAction(VoiceBroadcastAction.Recording.Stop) }
     }

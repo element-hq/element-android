@@ -37,6 +37,7 @@ import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.selectTxtFileToWrite
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.FragmentKeysBackupSetupStep3Binding
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -64,8 +65,8 @@ class KeysBackupSetupStep3Fragment :
         viewModel.passphrase.observe(viewLifecycleOwner) {
             if (it.isNullOrBlank()) {
                 // Recovery was generated, so show key and options to save
-                views.keysBackupSetupStep3Label2.text = getString(R.string.keys_backup_setup_step3_text_line2_no_passphrase)
-                views.keysBackupSetupStep3FinishButton.text = getString(R.string.keys_backup_setup_step3_button_title_no_passphrase)
+                views.keysBackupSetupStep3Label2.text = getString(CommonStrings.keys_backup_setup_step3_text_line2_no_passphrase)
+                views.keysBackupSetupStep3FinishButton.text = getString(CommonStrings.keys_backup_setup_step3_button_title_no_passphrase)
 
                 views.keysBackupSetupStep3RecoveryKeyText.text = viewModel.recoveryKey.value!!.toBase58()
                         .replace(" ", "")
@@ -77,8 +78,8 @@ class KeysBackupSetupStep3Fragment :
                         }
                 views.keysBackupSetupStep3RecoveryKeyText.isVisible = true
             } else {
-                views.keysBackupSetupStep3Label2.text = getString(R.string.keys_backup_setup_step3_text_line2)
-                views.keysBackupSetupStep3FinishButton.text = getString(R.string.keys_backup_setup_step3_button_title)
+                views.keysBackupSetupStep3Label2.text = getString(CommonStrings.keys_backup_setup_step3_text_line2)
+                views.keysBackupSetupStep3FinishButton.text = getString(CommonStrings.keys_backup_setup_step3_button_title)
                 views.keysBackupSetupStep3RecoveryKeyText.isVisible = false
             }
         }
@@ -97,7 +98,7 @@ class KeysBackupSetupStep3Fragment :
             // nothing
         } else {
             if (viewModel.passphrase.value.isNullOrBlank() && !viewModel.copyHasBeenMade) {
-                Toast.makeText(context, R.string.keys_backup_setup_step3_please_make_copy, Toast.LENGTH_LONG).show()
+                Toast.makeText(context, CommonStrings.keys_backup_setup_step3_please_make_copy, Toast.LENGTH_LONG).show()
             } else {
                 viewModel.navigateEvent.value = LiveEvent(KeysBackupSetupSharedViewModel.NAVIGATE_FINISH)
             }
@@ -137,7 +138,7 @@ class KeysBackupSetupStep3Fragment :
                     activity = requireActivity(),
                     activityResultLauncher = saveRecoveryActivityResultLauncher,
                     defaultFileName = "recovery-key-$userId-${timestamp}.txt",
-                    chooserHint = getString(R.string.save_recovery_key_chooser_hint)
+                    chooserHint = getString(CommonStrings.save_recovery_key_chooser_hint)
             )
             dialog.dismiss()
         }
@@ -146,9 +147,9 @@ class KeysBackupSetupStep3Fragment :
             startSharePlainTextIntent(
                     context = requireContext(),
                     activityResultLauncher = null,
-                    chooserTitle = context?.getString(R.string.keys_backup_setup_step3_share_intent_chooser_title),
+                    chooserTitle = context?.getString(CommonStrings.keys_backup_setup_step3_share_intent_chooser_title),
                     text = recoveryKey.toBase58(),
-                    subject = context?.getString(R.string.recovery_key)
+                    subject = context?.getString(CommonStrings.recovery_key)
             )
             viewModel.copyHasBeenMade = true
             dialog.dismiss()
@@ -179,18 +180,18 @@ class KeysBackupSetupStep3Fragment :
                 viewModel.copyHasBeenMade = true
                 activity?.let {
                     MaterialAlertDialogBuilder(it)
-                            .setTitle(R.string.dialog_title_success)
-                            .setMessage(R.string.recovery_key_export_saved)
+                            .setTitle(CommonStrings.dialog_title_success)
+                            .setMessage(CommonStrings.recovery_key_export_saved)
                 }
             } catch (throwable: Throwable) {
                 activity?.let {
                     MaterialAlertDialogBuilder(it)
-                            .setTitle(R.string.dialog_title_error)
+                            .setTitle(CommonStrings.dialog_title_error)
                             .setMessage(errorFormatter.toHumanReadable(throwable))
                 }
             }
                     ?.setCancelable(false)
-                    ?.setPositiveButton(R.string.ok, null)
+                    ?.setPositiveButton(CommonStrings.ok, null)
                     ?.show()
         }
     }

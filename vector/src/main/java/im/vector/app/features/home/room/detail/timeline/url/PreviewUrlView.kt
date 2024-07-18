@@ -49,7 +49,7 @@ class PreviewUrlView @JvmOverloads constructor(
 
     init {
         setupView()
-        radius = resources.getDimensionPixelSize(R.dimen.preview_url_view_corner_radius).toFloat()
+        radius = resources.getDimensionPixelSize(im.vector.lib.ui.styles.R.dimen.preview_url_view_corner_radius).toFloat()
         cardElevation = 0f
     }
 
@@ -86,7 +86,7 @@ class PreviewUrlView @JvmOverloads constructor(
     override fun renderMessageLayout(messageLayout: TimelineMessageLayout) {
         when (messageLayout) {
             is TimelineMessageLayout.Default -> {
-                val backgroundColor = ThemeUtils.getColor(context, R.attr.vctr_system)
+                val backgroundColor = ThemeUtils.getColor(context, im.vector.lib.ui.styles.R.attr.vctr_system)
                 setCardBackgroundColor(backgroundColor)
                 val guidelineBegin = DimensionConverter(resources).dpToPx(8)
                 views.urlPreviewStartGuideline.setGuidelineBegin(guidelineBegin)

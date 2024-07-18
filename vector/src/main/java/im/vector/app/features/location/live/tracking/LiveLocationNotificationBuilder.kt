@@ -34,6 +34,7 @@ import im.vector.app.features.notifications.NotificationActionIds
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.lib.core.utils.timer.Clock
+import im.vector.lib.strings.CommonStrings
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -51,8 +52,8 @@ class LiveLocationNotificationBuilder @Inject constructor(
      */
     fun buildLiveLocationSharingNotification(roomId: String): Notification {
         return NotificationCompat.Builder(context, NotificationUtils.SILENT_NOTIFICATION_CHANNEL_ID)
-                .setContentTitle(stringProvider.getString(R.string.live_location_sharing_notification_title))
-                .setContentText(stringProvider.getString(R.string.live_location_sharing_notification_description))
+                .setContentTitle(stringProvider.getString(CommonStrings.live_location_sharing_notification_title))
+                .setContentText(stringProvider.getString(CommonStrings.live_location_sharing_notification_description))
                 .setSmallIcon(R.drawable.ic_attachment_live_location_white)
                 .setColor(ThemeUtils.getColor(context, android.R.attr.colorPrimary))
                 .setCategory(NotificationCompat.CATEGORY_LOCATION_SHARING)

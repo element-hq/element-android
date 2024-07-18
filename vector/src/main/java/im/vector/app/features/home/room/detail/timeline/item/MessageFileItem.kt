@@ -87,7 +87,7 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
         val backgroundTint = if (attributes.informationData.messageLayout is TimelineMessageLayout.Bubble) {
             Color.TRANSPARENT
         } else {
-            ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_quinary)
+            ThemeUtils.getColor(holder.view.context, im.vector.lib.ui.styles.R.attr.vctr_content_quinary)
         }
         holder.mainLayout.backgroundTintList = ColorStateList.valueOf(backgroundTint)
         holder.filenameView.onClick(attributes.itemClickListener)

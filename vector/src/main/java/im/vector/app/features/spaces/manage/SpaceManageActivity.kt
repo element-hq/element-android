@@ -27,7 +27,6 @@ import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.replaceFragment
@@ -41,6 +40,7 @@ import im.vector.app.features.roomprofile.RoomProfileArgs
 import im.vector.app.features.roomprofile.alias.RoomAliasFragment
 import im.vector.app.features.roomprofile.permissions.RoomPermissionsFragment
 import im.vector.lib.core.utils.compat.getParcelableExtraCompat
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
@@ -58,7 +58,7 @@ class SpaceManageActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>() {
 
     override fun getBinding(): ActivitySimpleLoadingBinding = ActivitySimpleLoadingBinding.inflate(layoutInflater)
 
-    override fun getTitleRes(): Int = R.string.space_add_existing_rooms
+    override fun getTitleRes(): Int = CommonStrings.space_add_existing_rooms
 
     val sharedViewModel: SpaceManageSharedViewModel by viewModel()
 

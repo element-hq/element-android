@@ -45,7 +45,7 @@ class VoiceBroadcastMetadataView @JvmOverloads constructor(
     init {
         context.obtainStyledAttributes(
                 attrs,
-                R.styleable.VoiceBroadcastMetadataView,
+                im.vector.lib.ui.styles.R.styleable.VoiceBroadcastMetadataView,
                 0,
                 0
         ).use {
@@ -55,12 +55,12 @@ class VoiceBroadcastMetadataView @JvmOverloads constructor(
     }
 
     private fun setIcon(typedArray: TypedArray) {
-        val icon = typedArray.getDrawable(R.styleable.VoiceBroadcastMetadataView_metadataIcon)
+        val icon = typedArray.getDrawable(im.vector.lib.ui.styles.R.styleable.VoiceBroadcastMetadataView_metadataIcon)
         views.metadataIcon.setImageDrawable(icon)
     }
 
     private fun setValue(typedArray: TypedArray) {
-        val value = typedArray.getString(R.styleable.VoiceBroadcastMetadataView_metadataValue)
+        val value = typedArray.getString(im.vector.lib.ui.styles.R.styleable.VoiceBroadcastMetadataView_metadataValue)
         views.metadataText.text = value
     }
 }

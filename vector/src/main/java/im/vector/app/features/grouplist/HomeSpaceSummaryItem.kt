@@ -33,6 +33,7 @@ import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.platform.CheckableConstraintLayout
 import im.vector.app.features.home.room.list.UnreadCounterBadgeView
 import im.vector.app.features.themes.ThemeUtils
+import im.vector.lib.strings.CommonStrings
 
 @EpoxyModelClass
 abstract class HomeSpaceSummaryItem : VectorEpoxyModel<HomeSpaceSummaryItem.Holder>(R.layout.item_space) {
@@ -51,12 +52,14 @@ abstract class HomeSpaceSummaryItem : VectorEpoxyModel<HomeSpaceSummaryItem.Hold
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.rootView.onClick(listener)
-        holder.groupNameView.text = holder.view.context.getString(R.string.group_details_home)
+        holder.groupNameView.text = holder.view.context.getString(CommonStrings.group_details_home)
         holder.rootView.isChecked = selected
         holder.rootView.context.resources
         holder.avatarImageView.background = ContextCompat.getDrawable(holder.view.context, R.drawable.space_home_background)
         holder.avatarImageView.setImageResource(R.drawable.ic_space_home)
-        holder.avatarImageView.imageTintList = ColorStateList.valueOf(ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_primary))
+        holder.avatarImageView.imageTintList = ColorStateList.valueOf(
+                ThemeUtils.getColor(holder.view.context, im.vector.lib.ui.styles.R.attr.vctr_content_primary)
+        )
         holder.avatarImageView.scaleType = ImageView.ScaleType.CENTER_INSIDE
         holder.leaveView.isVisible = false
 

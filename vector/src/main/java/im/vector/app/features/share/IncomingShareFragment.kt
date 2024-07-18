@@ -30,7 +30,6 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.registerStartForActivityResult
@@ -40,6 +39,7 @@ import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.attachments.ShareIntentHandler
 import im.vector.app.features.attachments.preview.AttachmentsPreviewActivity
 import im.vector.app.features.attachments.preview.AttachmentsPreviewArgs
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 
@@ -90,7 +90,7 @@ class IncomingShareFragment :
         }
 
         if (!isShareManaged) {
-            cannotManageShare(R.string.error_handling_incoming_share)
+            cannotManageShare(CommonStrings.error_handling_incoming_share)
         }
 
         views.incomingShareSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -176,12 +176,12 @@ class IncomingShareFragment :
 
     private fun showConfirmationDialog(roomSummary: RoomSummary, sharedData: SharedData) {
         MaterialAlertDialogBuilder(requireActivity())
-                .setTitle(R.string.send_attachment)
-                .setMessage(getString(R.string.share_confirm_room, roomSummary.displayName))
-                .setPositiveButton(R.string.action_send) { _, _ ->
+                .setTitle(CommonStrings.send_attachment)
+                .setMessage(getString(CommonStrings.share_confirm_room, roomSummary.displayName))
+                .setPositiveButton(CommonStrings.action_send) { _, _ ->
                     navigator.openRoomForSharingAndFinish(requireActivity(), roomSummary.roomId, sharedData)
                 }
-                .setNegativeButton(R.string.action_cancel, null)
+                .setNegativeButton(CommonStrings.action_cancel, null)
                 .show()
     }
 

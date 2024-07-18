@@ -17,7 +17,6 @@
 package im.vector.app.features.spaces.manage
 
 import com.airbnb.epoxy.TypedEpoxyController
-import im.vector.app.R
 import im.vector.app.core.epoxy.dividerItem
 import im.vector.app.core.epoxy.profiles.buildProfileAction
 import im.vector.app.core.epoxy.profiles.buildProfileSection
@@ -28,6 +27,7 @@ import im.vector.app.features.form.formMultiLineEditTextItem
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roomprofile.settings.RoomSettingsViewState
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
@@ -81,14 +81,14 @@ class SpaceSettingsController @Inject constructor(
         }
 
         buildProfileSection(
-                stringProvider.getString(R.string.settings)
+                stringProvider.getString(CommonStrings.settings)
         )
 
         formEditTextItem {
             id("name")
             enabled(data.actionPermissions.canChangeName)
             value(data.newName ?: roomSummary.displayName)
-            hint(host.stringProvider.getString(R.string.create_room_name_hint))
+            hint(host.stringProvider.getString(CommonStrings.create_room_name_hint))
             onTextChange { text ->
                 host.callback?.onNameChanged(text)
             }
@@ -98,7 +98,7 @@ class SpaceSettingsController @Inject constructor(
             id("topic")
             enabled(data.actionPermissions.canChangeTopic)
             value(data.newTopic ?: roomSummary.topic)
-            hint(host.stringProvider.getString(R.string.create_space_topic_hint))
+            hint(host.stringProvider.getString(CommonStrings.create_space_topic_hint))
             onTextChange { text ->
                 host.callback?.onTopicChanged(text)
             }
@@ -107,7 +107,7 @@ class SpaceSettingsController @Inject constructor(
         val isPublic = (data.newRoomJoinRules.newJoinRules ?: data.currentRoomJoinRules) == RoomJoinRules.PUBLIC
         buildProfileAction(
                 id = "joinRule",
-                title = stringProvider.getString(R.string.room_settings_space_access_title),
+                title = stringProvider.getString(CommonStrings.room_settings_space_access_title),
                 subtitle = data.getJoinRuleWording(stringProvider),
                 divider = true,
                 editable = data.actionPermissions.canChangeJoinRule,
@@ -116,7 +116,7 @@ class SpaceSettingsController @Inject constructor(
 //        if (vectorPreferences.labsUseExperimentalRestricted()) {
 //            buildProfileAction(
 //                    id = "joinRule",
-//                    title = stringProvider.getString(R.string.room_settings_room_access_title),
+//                    title = stringProvider.getString(CommonStrings.room_settings_room_access_title),
 //                    subtitle = data.getJoinRuleWording(stringProvider),
 //                    divider = false,
 //                    editable = data.actionPermissions.canChangeJoinRule,
@@ -126,7 +126,7 @@ class SpaceSettingsController @Inject constructor(
 //            formSwitchItem {
 //                id("isPublic")
 //                enabled(data.actionPermissions.canChangeJoinRule)
-//                title(host.stringProvider.getString(R.string.make_this_space_public))
+//                title(host.stringProvider.getString(CommonStrings.make_this_space_public))
 //                switchChecked(isPublic)
 //
 //                listener { value ->
@@ -140,7 +140,7 @@ class SpaceSettingsController @Inject constructor(
 
         buildProfileAction(
                 id = "manage_rooms",
-                title = stringProvider.getString(R.string.space_settings_manage_rooms),
+                title = stringProvider.getString(CommonStrings.space_settings_manage_rooms),
                 // subtitle = data.getJoinRuleWording(stringProvider),
                 divider = true,
                 editable = data.actionPermissions.canAddChildren,
@@ -152,8 +152,8 @@ class SpaceSettingsController @Inject constructor(
         if (isPublic) {
             buildProfileAction(
                     id = "alias",
-                    title = stringProvider.getString(R.string.space_settings_alias_title),
-                    subtitle = stringProvider.getString(R.string.space_settings_alias_subtitle),
+                    title = stringProvider.getString(CommonStrings.space_settings_alias_title),
+                    subtitle = stringProvider.getString(CommonStrings.space_settings_alias_subtitle),
                     divider = true,
                     editable = true,
                     action = { callback?.onRoomAliasesClicked() }
@@ -162,8 +162,8 @@ class SpaceSettingsController @Inject constructor(
 
         buildProfileAction(
                 id = "permissions",
-                title = stringProvider.getString(R.string.space_settings_permissions_title),
-                subtitle = stringProvider.getString(R.string.space_settings_permissions_subtitle),
+                title = stringProvider.getString(CommonStrings.space_settings_permissions_title),
+                subtitle = stringProvider.getString(CommonStrings.space_settings_permissions_subtitle),
                 divider = vectorPreferences.developerMode(),
                 editable = true,
                 action = { callback?.onRoomPermissionsClicked() }
@@ -172,8 +172,8 @@ class SpaceSettingsController @Inject constructor(
         if (vectorPreferences.developerMode()) {
             buildProfileAction(
                     id = "dev_tools",
-                    title = stringProvider.getString(R.string.settings_dev_tools),
-                    icon = R.drawable.ic_verification_glasses,
+                    title = stringProvider.getString(CommonStrings.settings_dev_tools),
+                    icon = org.matrix.android.sdk.R.drawable.ic_verification_glasses,
                     tintIcon = false,
                     divider = true,
                     action = {
@@ -183,8 +183,8 @@ class SpaceSettingsController @Inject constructor(
 
             buildProfileAction(
                     id = "room_tools",
-                    title = stringProvider.getString(R.string.room_list_quick_actions_room_settings),
-                    icon = R.drawable.ic_verification_glasses,
+                    title = stringProvider.getString(CommonStrings.room_list_quick_actions_room_settings),
+                    icon = org.matrix.android.sdk.R.drawable.ic_verification_glasses,
                     tintIcon = false,
                     divider = false,
                     action = {

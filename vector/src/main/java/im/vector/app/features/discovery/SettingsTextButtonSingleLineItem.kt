@@ -116,10 +116,10 @@ abstract class SettingsTextButtonSingleLineItem : VectorEpoxyModel<SettingsTextB
                     holder.switchButton.isVisible = false
                     when (buttonStyle) {
                         ButtonStyle.POSITIVE -> {
-                            holder.mainButton.setTextColor(colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+                            holder.mainButton.setTextColor(colorProvider.getColorFromAttribute(com.google.android.material.R.attr.colorPrimary))
                         }
                         ButtonStyle.DESTRUCTIVE -> {
-                            holder.mainButton.setTextColor(colorProvider.getColorFromAttribute(R.attr.colorError))
+                            holder.mainButton.setTextColor(colorProvider.getColorFromAttribute(com.google.android.material.R.attr.colorError))
                         }
                     }
                     holder.mainButton.onClick(buttonClickListener)
@@ -140,14 +140,14 @@ abstract class SettingsTextButtonSingleLineItem : VectorEpoxyModel<SettingsTextB
                 holder.textView.setCompoundDrawables(null, null, null, null)
             }
             IconMode.INFO -> {
-                val errorColor = colorProvider.getColor(R.color.notification_accent_color)
+                val errorColor = colorProvider.getColor(im.vector.lib.ui.styles.R.color.notification_accent_color)
                 ContextCompat.getDrawable(holder.view.context, R.drawable.ic_notification_privacy_warning)?.apply {
                     ThemeUtils.tintDrawableWithColor(this, errorColor)
                     holder.textView.setCompoundDrawablesWithIntrinsicBounds(this, null, null, null)
                 }
             }
             IconMode.ERROR -> {
-                val errorColor = colorProvider.getColorFromAttribute(R.attr.colorError)
+                val errorColor = colorProvider.getColorFromAttribute(com.google.android.material.R.attr.colorError)
                 ContextCompat.getDrawable(holder.view.context, R.drawable.ic_notification_privacy_warning)?.apply {
                     ThemeUtils.tintDrawableWithColor(this, errorColor)
                     holder.textView.setCompoundDrawablesWithIntrinsicBounds(this, null, null, null)

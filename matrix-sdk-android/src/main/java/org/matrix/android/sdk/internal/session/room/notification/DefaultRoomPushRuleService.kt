@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.internal.session.room.notification
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.map
 import com.zhuinden.monarchy.Monarchy
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -42,7 +42,7 @@ internal class DefaultRoomPushRuleService @AssistedInject constructor(
     }
 
     override fun getLiveRoomNotificationState(): LiveData<RoomNotificationState> {
-        return Transformations.map(getPushRuleForRoom()) {
+        return getPushRuleForRoom().map {
             it?.toRoomNotificationState() ?: RoomNotificationState.ALL_MESSAGES
         }
     }
@@ -60,7 +60,7 @@ internal class DefaultRoomPushRuleService @AssistedInject constructor(
                     result.toRoomPushRule()
                 }
         )
-        return Transformations.map(liveData) { results ->
+        return liveData.map { results ->
             results.firstOrNull()
         }
     }

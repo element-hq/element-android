@@ -23,7 +23,6 @@ import android.text.style.StyleSpan
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.epoxy.VisibilityState
-import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.epoxy.loadingItem
@@ -35,6 +34,7 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.format.DisplayableEventFormatter
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.lib.core.utils.timer.Clock
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -83,12 +83,12 @@ class SearchResultController @Inject constructor(
                 // All returned results by the server has been filtered out and there is no more result
                 noResultItem {
                     id("noResult")
-                    text(host.stringProvider.getString(R.string.no_result_placeholder))
+                    text(host.stringProvider.getString(CommonStrings.no_result_placeholder))
                 }
             } else {
                 noResultItem {
                     id("noMoreResult")
-                    text(host.stringProvider.getString(R.string.no_more_results))
+                    text(host.stringProvider.getString(CommonStrings.no_more_results))
                 }
             }
         }

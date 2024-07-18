@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
-from collections import OrderedDict
-
-import requests
 import json
-import re
 import os
+import re
+import requests
 from bs4 import BeautifulSoup
+from collections import OrderedDict
 
 # A list of words to not capitalize in emoji-names
 capitalization_exclude = {'with', 'a', 'at', 'of', 'for', 'and', 'over', 'the', 'off', 'on', 'out', 'in', 'but', 'or'}

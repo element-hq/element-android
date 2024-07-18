@@ -36,6 +36,7 @@ import im.vector.app.features.home.room.list.home.header.HomeRoomFilter
 import im.vector.app.features.roomdirectory.RoomDirectoryActivity
 import im.vector.app.ui.robot.settings.labs.LabFeaturesPreferences
 import im.vector.app.waitForView
+import im.vector.lib.strings.CommonStrings
 
 class RoomListRobot(private val labsPreferences: LabFeaturesPreferences) {
 
@@ -55,7 +56,7 @@ class RoomListRobot(private val labsPreferences: LabFeaturesPreferences) {
         onView(withId(R.id.roomListView))
                 .perform(
                         RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
-                                hasDescendant(withText(R.string.room_displayname_empty_room)),
+                                hasDescendant(withText(CommonStrings.room_displayname_empty_room)),
                                 ViewActions.longClick()
                         )
                 )

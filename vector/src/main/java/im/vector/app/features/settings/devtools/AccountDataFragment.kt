@@ -32,6 +32,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.createJSonViewerStyleProvider
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
+import im.vector.lib.strings.CommonStrings
 import org.billcarsonfr.jsonviewer.JSonViewerDialog
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
 import org.matrix.android.sdk.api.util.MatrixJsonParser
@@ -53,7 +54,7 @@ class AccountDataFragment :
 
     override fun onResume() {
         super.onResume()
-        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(R.string.settings_account_data)
+        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(CommonStrings.settings_account_data)
     }
 
     override fun invalidate() = withState(viewModel) { state ->
@@ -84,11 +85,11 @@ class AccountDataFragment :
     }
 
     override fun didLongTap(data: UserAccountDataEvent) {
-        MaterialAlertDialogBuilder(requireActivity(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive)
-                .setTitle(R.string.action_delete)
-                .setMessage(getString(R.string.delete_account_data_warning, data.type))
-                .setNegativeButton(R.string.action_cancel, null)
-                .setPositiveButton(R.string.action_delete) { _, _ ->
+        MaterialAlertDialogBuilder(requireActivity(), im.vector.lib.ui.styles.R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive)
+                .setTitle(CommonStrings.action_delete)
+                .setMessage(getString(CommonStrings.delete_account_data_warning, data.type))
+                .setNegativeButton(CommonStrings.action_cancel, null)
+                .setPositiveButton(CommonStrings.action_delete) { _, _ ->
                     viewModel.handle(AccountDataAction.DeleteAccountData(data.type))
                 }
                 .show()

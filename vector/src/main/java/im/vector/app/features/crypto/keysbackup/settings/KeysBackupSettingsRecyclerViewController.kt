@@ -29,6 +29,8 @@ import im.vector.app.core.ui.list.ItemStyle
 import im.vector.app.core.ui.list.genericItem
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
+import im.vector.lib.strings.CommonPlurals
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
@@ -60,7 +62,7 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
             KeysBackupState.Unknown -> {
                 errorWithRetryItem {
                     id("summary")
-                    text(host.stringProvider.getString(R.string.keys_backup_unable_to_get_keys_backup_data))
+                    text(host.stringProvider.getString(CommonStrings.keys_backup_unable_to_get_keys_backup_data))
                     listener { host.listener?.loadKeysBackupState() }
                 }
 
@@ -70,17 +72,17 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
             KeysBackupState.CheckingBackUpOnHomeserver -> {
                 loadingItem {
                     id("summary")
-                    loadingText(host.stringProvider.getString(R.string.keys_backup_settings_checking_backup_state))
+                    loadingText(host.stringProvider.getString(CommonStrings.keys_backup_settings_checking_backup_state))
                 }
             }
             KeysBackupState.Disabled -> {
                 genericItem {
                     id("summary")
-                    title(host.stringProvider.getString(R.string.keys_backup_settings_status_not_setup).toEpoxyCharSequence())
+                    title(host.stringProvider.getString(CommonStrings.keys_backup_settings_status_not_setup).toEpoxyCharSequence())
                     style(ItemStyle.BIG_TEXT)
 
                     if (data.keysBackupVersionTrust()?.usable == false) {
-                        description(host.stringProvider.getString(R.string.keys_backup_settings_untrusted_backup).toEpoxyCharSequence())
+                        description(host.stringProvider.getString(CommonStrings.keys_backup_settings_untrusted_backup).toEpoxyCharSequence())
                     }
                 }
 
@@ -91,10 +93,10 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
             KeysBackupState.Enabling -> {
                 genericItem {
                     id("summary")
-                    title(host.stringProvider.getString(R.string.keys_backup_settings_status_ko).toEpoxyCharSequence())
+                    title(host.stringProvider.getString(CommonStrings.keys_backup_settings_status_ko).toEpoxyCharSequence())
                     style(ItemStyle.BIG_TEXT)
                     if (data.keysBackupVersionTrust()?.usable == false) {
-                        description(host.stringProvider.getString(R.string.keys_backup_settings_untrusted_backup).toEpoxyCharSequence())
+                        description(host.stringProvider.getString(CommonStrings.keys_backup_settings_untrusted_backup).toEpoxyCharSequence())
                     } else {
                         description(keyBackupState.toString().toEpoxyCharSequence())
                     }
@@ -106,12 +108,12 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
             KeysBackupState.ReadyToBackUp -> {
                 genericItem {
                     id("summary")
-                    title(host.stringProvider.getString(R.string.keys_backup_settings_status_ok).toEpoxyCharSequence())
+                    title(host.stringProvider.getString(CommonStrings.keys_backup_settings_status_ok).toEpoxyCharSequence())
                     style(ItemStyle.BIG_TEXT)
                     if (data.keysBackupVersionTrust()?.usable == false) {
-                        description(host.stringProvider.getString(R.string.keys_backup_settings_untrusted_backup).toEpoxyCharSequence())
+                        description(host.stringProvider.getString(CommonStrings.keys_backup_settings_untrusted_backup).toEpoxyCharSequence())
                     } else {
-                        description(host.stringProvider.getString(R.string.keys_backup_info_keys_all_backup_up).toEpoxyCharSequence())
+                        description(host.stringProvider.getString(CommonStrings.keys_backup_info_keys_all_backup_up).toEpoxyCharSequence())
                     }
                     endIconResourceId(R.drawable.unit_test_ok)
                 }
@@ -122,18 +124,18 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
             KeysBackupState.BackingUp -> {
                 genericItem {
                     id("summary")
-                    title(host.stringProvider.getString(R.string.keys_backup_settings_status_ok).toEpoxyCharSequence())
+                    title(host.stringProvider.getString(CommonStrings.keys_backup_settings_status_ok).toEpoxyCharSequence())
                     style(ItemStyle.BIG_TEXT)
                     hasIndeterminateProcess(true)
 
                     val remainingKeysToBackup = data.remainingKeysToBackup
 
                     if (data.keysBackupVersionTrust()?.usable == false) {
-                        description(host.stringProvider.getString(R.string.keys_backup_settings_untrusted_backup).toEpoxyCharSequence())
+                        description(host.stringProvider.getString(CommonStrings.keys_backup_settings_untrusted_backup).toEpoxyCharSequence())
                     } else {
                         description(
                                 host.stringProvider
-                                        .getQuantityString(R.plurals.keys_backup_info_keys_backing_up, remainingKeysToBackup, remainingKeysToBackup)
+                                        .getQuantityString(CommonPlurals.keys_backup_info_keys_backing_up, remainingKeysToBackup, remainingKeysToBackup)
                                         .toEpoxyCharSequence()
                         )
                     }
@@ -148,13 +150,13 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
             // Add infos
             genericItem {
                 id("version")
-                title(host.stringProvider.getString(R.string.keys_backup_info_title_version).toEpoxyCharSequence())
+                title(host.stringProvider.getString(CommonStrings.keys_backup_info_title_version).toEpoxyCharSequence())
                 description(keyVersionResult?.version.orEmpty().toEpoxyCharSequence())
             }
 
             genericItem {
                 id("algorithm")
-                title(host.stringProvider.getString(R.string.keys_backup_info_title_algorithm).toEpoxyCharSequence())
+                title(host.stringProvider.getString(CommonStrings.keys_backup_info_title_algorithm).toEpoxyCharSequence())
                 description(keyVersionResult?.algorithm.orEmpty().toEpoxyCharSequence())
             }
 
@@ -168,13 +170,13 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
             id("footer")
 
             if (isBackupAlreadySetup) {
-                textButton1(host.stringProvider.getString(R.string.keys_backup_settings_restore_backup_button))
+                textButton1(host.stringProvider.getString(CommonStrings.keys_backup_settings_restore_backup_button))
                 clickOnButton1 { host.listener?.didSelectRestoreMessageRecovery() }
 
-                textButton2(host.stringProvider.getString(R.string.keys_backup_settings_delete_backup_button))
+                textButton2(host.stringProvider.getString(CommonStrings.keys_backup_settings_delete_backup_button))
                 clickOnButton2 { host.listener?.didSelectDeleteSetupMessageRecovery() }
             } else {
-                textButton1(host.stringProvider.getString(R.string.keys_backup_setup))
+                textButton1(host.stringProvider.getString(CommonStrings.keys_backup_setup))
                 clickOnButton1 { host.listener?.didSelectSetupMessageRecovery() }
             }
         }
@@ -200,10 +202,10 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
                             if (userId == session.sessionParams.userId && isSignatureValid && isUserVerified) {
                                 genericItem {
                                     id(UUID.randomUUID().toString())
-                                    title(host.stringProvider.getString(R.string.keys_backup_info_title_signature).toEpoxyCharSequence())
+                                    title(host.stringProvider.getString(CommonStrings.keys_backup_info_title_signature).toEpoxyCharSequence())
                                     description(
                                             host.stringProvider
-                                                    .getString(R.string.keys_backup_settings_signature_from_this_user)
+                                                    .getString(CommonStrings.keys_backup_settings_signature_from_this_user)
                                                     .toEpoxyCharSequence()
                                     )
                                     endIconResourceId(R.drawable.e2e_verified)
@@ -217,7 +219,7 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
                         .forEach {
                             genericItem {
                                 id(UUID.randomUUID().toString())
-                                title(host.stringProvider.getString(R.string.keys_backup_info_title_signature).toEpoxyCharSequence())
+                                title(host.stringProvider.getString(CommonStrings.keys_backup_info_title_signature).toEpoxyCharSequence())
 
                                 val isDeviceKnown = it.device != null
                                 val isDeviceVerified = it.device?.isVerified ?: false
@@ -227,7 +229,7 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
                                 if (!isDeviceKnown) {
                                     description(
                                             host.stringProvider
-                                                    .getString(R.string.keys_backup_settings_signature_from_unknown_device, deviceId)
+                                                    .getString(CommonStrings.keys_backup_settings_signature_from_unknown_device, deviceId)
                                                     .toEpoxyCharSequence()
                                     )
                                     endIconResourceId(R.drawable.e2e_warning)
@@ -236,7 +238,7 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
                                         if (host.session.sessionParams.deviceId == it.deviceId) {
                                             description(
                                                     host.stringProvider
-                                                            .getString(R.string.keys_backup_settings_valid_signature_from_this_device)
+                                                            .getString(CommonStrings.keys_backup_settings_valid_signature_from_this_device)
                                                             .toEpoxyCharSequence()
                                             )
                                             endIconResourceId(R.drawable.e2e_verified)
@@ -245,7 +247,7 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
                                                 description(
                                                         host.stringProvider
                                                                 .getString(
-                                                                        R.string.keys_backup_settings_valid_signature_from_verified_device,
+                                                                        CommonStrings.keys_backup_settings_valid_signature_from_verified_device,
                                                                         deviceId
                                                                 )
                                                                 .toEpoxyCharSequence()
@@ -255,7 +257,7 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
                                                 description(
                                                         host.stringProvider
                                                                 .getString(
-                                                                        R.string.keys_backup_settings_valid_signature_from_unverified_device,
+                                                                        CommonStrings.keys_backup_settings_valid_signature_from_unverified_device,
                                                                         deviceId
                                                                 )
                                                                 .toEpoxyCharSequence()
@@ -270,7 +272,7 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
                                             description(
                                                     host.stringProvider
                                                             .getString(
-                                                                    R.string.keys_backup_settings_invalid_signature_from_verified_device,
+                                                                    CommonStrings.keys_backup_settings_invalid_signature_from_verified_device,
                                                                     deviceId
                                                             )
                                                             .toEpoxyCharSequence()
@@ -279,7 +281,7 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
                                             description(
                                                     host.stringProvider
                                                             .getString(
-                                                                    R.string.keys_backup_settings_invalid_signature_from_unverified_device,
+                                                                    CommonStrings.keys_backup_settings_invalid_signature_from_unverified_device,
                                                                     deviceId
                                                             )
                                                             .toEpoxyCharSequence()
@@ -293,7 +295,7 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
             is Fail -> {
                 errorWithRetryItem {
                     id("trust")
-                    text(host.stringProvider.getString(R.string.keys_backup_unable_to_get_trust_info))
+                    text(host.stringProvider.getString(CommonStrings.keys_backup_unable_to_get_trust_info))
                     listener { host.listener?.loadTrustData() }
                 }
             }

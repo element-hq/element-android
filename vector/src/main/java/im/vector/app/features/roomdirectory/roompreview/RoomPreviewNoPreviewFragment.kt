@@ -45,6 +45,7 @@ import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.roomdirectory.JoinState
 import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.themes.ThemeUtils
+import im.vector.lib.strings.CommonStrings
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -131,11 +132,11 @@ class RoomPreviewNoPreviewFragment :
                             views.roomPreviewNoPreviewLabel.text =
                                     span {
                                         span {
-                                            textColor = ThemeUtils.getColor(requireContext(), R.attr.vctr_content_primary)
+                                            textColor = ThemeUtils.getColor(requireContext(), im.vector.lib.ui.styles.R.attr.vctr_content_primary)
                                             text = if (state.roomType == RoomType.SPACE) {
-                                                getString(R.string.this_invite_to_this_space_was_sent, state.fromEmailInvite.email)
+                                                getString(CommonStrings.this_invite_to_this_space_was_sent, state.fromEmailInvite.email)
                                             } else {
-                                                getString(R.string.this_invite_to_this_room_was_sent, state.fromEmailInvite.email)
+                                                getString(CommonStrings.this_invite_to_this_room_was_sent, state.fromEmailInvite.email)
                                             }
                                                     .toSpannable()
                                                     .styleMatchingText(state.fromEmailInvite.email, Typeface.BOLD)
@@ -143,11 +144,11 @@ class RoomPreviewNoPreviewFragment :
                                         +"\n"
                                         span {
                                             text = getString(
-                                                    R.string.link_this_email_with_your_account,
-                                                    getString(R.string.link_this_email_settings_link)
+                                                    CommonStrings.link_this_email_with_your_account,
+                                                    getString(CommonStrings.link_this_email_settings_link)
                                             )
                                                     .toSpannable()
-                                                    .tappableMatchingText(getString(R.string.link_this_email_settings_link), object : ClickableSpan() {
+                                                    .tappableMatchingText(getString(CommonStrings.link_this_email_settings_link), object : ClickableSpan() {
                                                         override fun onClick(widget: View) {
                                                             navigator.openSettings(
                                                                     requireContext(),
@@ -166,13 +167,13 @@ class RoomPreviewNoPreviewFragment :
                     PeekingState.NO_ACCESS -> {
                         views.roomPreviewNoPreviewJoin.isVisible = true
                         views.roomPreviewNoPreviewLabel.isVisible = true
-                        views.roomPreviewNoPreviewLabel.setText(R.string.room_preview_no_preview_join)
+                        views.roomPreviewNoPreviewLabel.setText(CommonStrings.room_preview_no_preview_join)
                         renderState(bestName, state.matrixItem().takeIf { state.roomAlias != null }, state.roomTopic)
                     }
                     else -> {
                         views.roomPreviewNoPreviewJoin.isVisible = false
                         views.roomPreviewNoPreviewLabel.isVisible = true
-                        views.roomPreviewNoPreviewLabel.setText(R.string.room_preview_not_found)
+                        views.roomPreviewNoPreviewLabel.setText(CommonStrings.room_preview_not_found)
                         renderState(bestName, null, state.roomTopic)
                     }
                 }

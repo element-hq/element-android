@@ -16,7 +16,6 @@
 
 package im.vector.app.features.home.room.detail.timeline.factory
 
-import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.prevOrNull
 import im.vector.app.features.home.AvatarRenderer
@@ -31,6 +30,7 @@ import im.vector.app.features.home.room.detail.timeline.item.MergedRoomCreationI
 import im.vector.app.features.home.room.detail.timeline.item.MergedSimilarEventsItem
 import im.vector.app.features.home.room.detail.timeline.item.MergedSimilarEventsItem_
 import im.vector.app.features.home.room.detail.timeline.tools.createLinkMovementMethod
+import im.vector.lib.strings.CommonPlurals
 import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.query.QueryStringValue
@@ -250,9 +250,9 @@ class MergedHeaderItemFactory @Inject constructor(
     private fun getSummaryTitleResId(event: Event): Int? {
         val type = event.getClearType()
         return when {
-            type == EventType.STATE_ROOM_MEMBER -> R.plurals.membership_changes
-            type == EventType.STATE_ROOM_SERVER_ACL -> R.plurals.notice_room_server_acl_changes
-            event.isRedacted() -> R.plurals.room_removed_messages
+            type == EventType.STATE_ROOM_MEMBER -> CommonPlurals.membership_changes
+            type == EventType.STATE_ROOM_SERVER_ACL -> CommonPlurals.notice_room_server_acl_changes
+            event.isRedacted() -> CommonPlurals.room_removed_messages
             else -> null
         }
     }

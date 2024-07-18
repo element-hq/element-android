@@ -36,6 +36,7 @@ import im.vector.app.core.extensions.popBackstack
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.ScreenOrientationLocker
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.databinding.ActivityLoginBinding
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.home.HomeActivity
@@ -55,6 +56,7 @@ import im.vector.app.features.onboarding.ftueauth.terms.FtueAuthLegacyStyleTerms
 import im.vector.app.features.onboarding.ftueauth.terms.FtueAuthTermsFragment
 import im.vector.app.features.onboarding.ftueauth.terms.FtueAuthTermsLegacyStyleFragmentArgument
 import im.vector.lib.core.utils.compat.getParcelableExtraCompat
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.auth.registration.Stage
 import org.matrix.android.sdk.api.auth.toLocalizedLoginTerms
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -70,6 +72,7 @@ class FtueAuthVariant(
         private val supportFragmentManager: FragmentManager,
         private val vectorFeatures: VectorFeatures,
         private val orientationLocker: ScreenOrientationLocker,
+        private val buildMeta: BuildMeta,
 ) : OnboardingVariant {
 
     private val enterAnim = R.anim.enter_fade_in
@@ -89,7 +92,7 @@ class FtueAuthVariant(
                 // Find findViewById does not work, I do not know why
                 // findViewById<View?>(R.id.loginLogo)
                 ?.children
-                ?.firstOrNull { it.id == R.id.loginLogo }
+                ?.firstOrNull { it.id == im.vector.lib.ui.styles.R.id.loginLogo }
                 ?.let { ft.addSharedElement(it, ViewCompat.getTransitionName(it) ?: "") }
         ft.setCustomAnimations(enterAnim, exitAnim, popEnterAnim, popExitAnim)
     }
@@ -133,9 +136,9 @@ class FtueAuthVariant(
         when (viewEvents) {
             is OnboardingViewEvents.OutdatedHomeserver -> {
                 MaterialAlertDialogBuilder(activity)
-                        .setTitle(R.string.login_error_outdated_homeserver_title)
-                        .setMessage(R.string.login_error_outdated_homeserver_warning_content)
-                        .setPositiveButton(R.string.ok, null)
+                        .setTitle(CommonStrings.login_error_outdated_homeserver_title)
+                        .setMessage(CommonStrings.login_error_outdated_homeserver_warning_content)
+                        .setPositiveButton(CommonStrings.ok, null)
                         .show()
                 Unit
             }
@@ -194,7 +197,7 @@ class FtueAuthVariant(
                 addLoginStageFragmentToBackstack(FtueAuthResetPasswordSuccessFragment::class.java)
             }
             OnboardingViewEvents.OnResetPasswordComplete -> {
-                Toast.makeText(activity, R.string.ftue_auth_password_reset_confirmation, Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, CommonStrings.ftue_auth_password_reset_confirmation, Toast.LENGTH_SHORT).show()
                 activity.popBackstack()
             }
             is OnboardingViewEvents.OnSendEmailSuccess -> {
@@ -277,16 +280,16 @@ class FtueAuthVariant(
 
     private fun displayFallbackWebDialog() {
         MaterialAlertDialogBuilder(activity)
-                .setTitle(R.string.app_name)
-                .setMessage(activity.getString(R.string.login_registration_not_supported))
-                .setPositiveButton(R.string.yes) { _, _ ->
+                .setTitle(buildMeta.applicationName)
+                .setMessage(activity.getString(CommonStrings.login_registration_not_supported))
+                .setPositiveButton(CommonStrings.yes) { _, _ ->
                     activity.addFragmentToBackstack(
                             views.loginFragmentContainer,
                             FtueAuthWebFragment::class.java,
                             option = commonOption
                     )
                 }
-                .setNegativeButton(R.string.no, null)
+                .setNegativeButton(CommonStrings.no, null)
                 .show()
     }
 
@@ -296,9 +299,9 @@ class FtueAuthVariant(
 
         // And inform the user
         MaterialAlertDialogBuilder(activity)
-                .setTitle(R.string.dialog_title_error)
-                .setMessage(activity.getString(R.string.login_sso_error_message, onWebLoginError.description, onWebLoginError.errorCode))
-                .setPositiveButton(R.string.ok, null)
+                .setTitle(CommonStrings.dialog_title_error)
+                .setMessage(activity.getString(CommonStrings.login_sso_error_message, onWebLoginError.description, onWebLoginError.errorCode))
+                .setPositiveButton(CommonStrings.ok, null)
                 .show()
     }
 
@@ -352,10 +355,10 @@ class FtueAuthVariant(
 
     private fun onLoginModeNotSupported(supportedTypes: List<String>) {
         MaterialAlertDialogBuilder(activity)
-                .setTitle(R.string.app_name)
-                .setMessage(activity.getString(R.string.login_mode_not_supported, supportedTypes.joinToString { "'$it'" }))
-                .setPositiveButton(R.string.yes) { _, _ -> openAuthWebFragment() }
-                .setNegativeButton(R.string.no, null)
+                .setTitle(buildMeta.applicationName)
+                .setMessage(activity.getString(CommonStrings.login_mode_not_supported, supportedTypes.joinToString { "'$it'" }))
+                .setPositiveButton(CommonStrings.yes) { _, _ -> openAuthWebFragment() }
+                .setNegativeButton(CommonStrings.no, null)
                 .show()
     }
 
@@ -456,11 +459,11 @@ class FtueAuthVariant(
         when {
             vectorFeatures.isOnboardingCombinedRegisterEnabled() -> addRegistrationStageFragmentToBackstack(
                     FtueAuthTermsFragment::class.java,
-                    FtueAuthTermsLegacyStyleFragmentArgument(stage.policies.toLocalizedLoginTerms(activity.getString(R.string.resources_language))),
+                    FtueAuthTermsLegacyStyleFragmentArgument(stage.policies.toLocalizedLoginTerms(activity.getString(CommonStrings.resources_language))),
             )
             else -> addRegistrationStageFragmentToBackstack(
                     FtueAuthLegacyStyleTermsFragment::class.java,
-                    FtueAuthTermsLegacyStyleFragmentArgument(stage.policies.toLocalizedLoginTerms(activity.getString(R.string.resources_language))),
+                    FtueAuthTermsLegacyStyleFragmentArgument(stage.policies.toLocalizedLoginTerms(activity.getString(CommonStrings.resources_language))),
             )
         }
     }

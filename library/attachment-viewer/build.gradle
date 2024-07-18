@@ -38,7 +38,7 @@ android {
         targetCompatibility versions.targetCompat
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = versions.jvmTarget
     }
 
     buildFeatures {

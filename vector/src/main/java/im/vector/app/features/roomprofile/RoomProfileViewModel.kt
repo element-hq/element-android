@@ -22,7 +22,6 @@ import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
@@ -32,6 +31,7 @@ import im.vector.app.features.analytics.plan.Interaction
 import im.vector.app.features.home.ShortcutCreator
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.session.coroutineScope
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
@@ -232,7 +232,7 @@ class RoomProfileViewModel @AssistedInject constructor(
     }
 
     private fun handleLeaveRoom() {
-        _viewEvents.post(RoomProfileViewEvents.Loading(stringProvider.getString(R.string.room_profile_leaving_room)))
+        _viewEvents.post(RoomProfileViewEvents.Loading(stringProvider.getString(CommonStrings.room_profile_leaving_room)))
         viewModelScope.launch {
             try {
                 session.roomService().leaveRoom(room.roomId)

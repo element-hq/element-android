@@ -21,11 +21,11 @@ import android.view.ViewGroup
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentBootstrapErrorBinding
+import im.vector.lib.strings.CommonStrings
 
 @AndroidEntryPoint
 class BootstrapErrorFragment :
@@ -44,7 +44,7 @@ class BootstrapErrorFragment :
             }
             else -> {
                 // Should not happen, show a generic error
-                views.bootstrapDescriptionText.setTextOrHide(getString(R.string.unknown_error))
+                views.bootstrapDescriptionText.setTextOrHide(getString(CommonStrings.unknown_error))
             }
         }
         views.bootstrapRetryButton.onClick {

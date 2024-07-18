@@ -21,7 +21,6 @@ import android.content.Intent
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.observeEvent
 import im.vector.app.core.extensions.registerStartForActivityResult
@@ -30,6 +29,7 @@ import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.features.crypto.quads.SharedSecureStorageActivity
 import im.vector.app.features.workers.signout.ServerBackupStatusAction
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 
 @AndroidEntryPoint
@@ -43,11 +43,12 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
         }
     }
 
-    override fun getTitleRes() = R.string.title_activity_keys_backup_restore
+    override fun getTitleRes() = CommonStrings.title_activity_keys_backup_restore
 
     private lateinit var viewModel: KeysBackupRestoreSharedViewModel
     private val serverBackupStatusViewModel: ServerBackupStatusViewModel by viewModel()
 
+    @Suppress("OVERRIDE_DEPRECATION")
     override fun onBackPressed() {
         hideWaitingView()
         @Suppress("DEPRECATION")
@@ -73,10 +74,10 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
 
         viewModel.keyVersionResultError.observeEvent(this) { message ->
             MaterialAlertDialogBuilder(this)
-                    .setTitle(R.string.unknown_error)
+                    .setTitle(CommonStrings.unknown_error)
                     .setMessage(message)
                     .setCancelable(false)
-                    .setPositiveButton(R.string.ok) { _, _ ->
+                    .setPositiveButton(CommonStrings.ok) { _, _ ->
                         // nop
                         finish()
                     }
@@ -100,10 +101,10 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
                 }
                 KeysBackupRestoreSharedViewModel.NAVIGATE_FAILED_TO_LOAD_4S -> {
                     MaterialAlertDialogBuilder(this)
-                            .setTitle(R.string.unknown_error)
-                            .setMessage(R.string.error_failed_to_import_keys)
+                            .setTitle(CommonStrings.unknown_error)
+                            .setMessage(CommonStrings.error_failed_to_import_keys)
                             .setCancelable(false)
-                            .setPositiveButton(R.string.ok) { _, _ ->
+                            .setPositiveButton(CommonStrings.ok) { _, _ ->
                                 // nop
                                 launch4SActivity()
                             }

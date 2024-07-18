@@ -36,6 +36,7 @@ import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.databinding.ActivityEmojiReactionPickerBinding
 import im.vector.app.features.reactions.data.EmojiDataSource
 import im.vector.lib.core.utils.flow.throttleFirst
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -63,7 +64,7 @@ class EmojiReactionPickerActivity :
 
     override fun getCoordinatorLayout() = views.coordinatorLayout
 
-    override fun getTitleRes() = R.string.title_activity_emoji_reaction_picker
+    override fun getTitleRes() = CommonStrings.title_activity_emoji_reaction_picker
 
     @Inject lateinit var emojiCompatFontProvider: EmojiCompatFontProvider
     @Inject lateinit var emojiDataSource: EmojiDataSource
@@ -182,7 +183,7 @@ class EmojiReactionPickerActivity :
     private fun getActionBarSize(): Int {
         return try {
             val typedValue = TypedValue()
-            theme.resolveAttribute(R.attr.actionBarSize, typedValue, true)
+            theme.resolveAttribute(com.google.android.material.R.attr.actionBarSize, typedValue, true)
             TypedValue.complexToDimensionPixelSize(typedValue.data, resources.displayMetrics)
         } catch (e: Exception) {
             // Timber.e(e, "Unable to get color")

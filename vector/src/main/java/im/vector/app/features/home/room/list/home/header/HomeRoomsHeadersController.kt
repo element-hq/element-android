@@ -25,7 +25,6 @@ import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.carousel
 import com.google.android.material.color.MaterialColors
-import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.FirstItemUpdatedObserver
 import im.vector.app.features.analytics.AnalyticsTracker
@@ -108,7 +107,7 @@ class HomeRoomsHeadersController @Inject constructor(
                 host.unsubscribeAdapterObserver()
                 host.subscribeAdapterObserver()
 
-                val colorSurface = MaterialColors.getColor(view, R.attr.vctr_toolbar_background)
+                val colorSurface = MaterialColors.getColor(view, im.vector.lib.ui.styles.R.attr.vctr_toolbar_background)
                 view.setBackgroundColor(colorSurface)
             }
 

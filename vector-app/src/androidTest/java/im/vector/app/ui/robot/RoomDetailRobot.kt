@@ -39,6 +39,7 @@ import im.vector.app.features.home.room.detail.timeline.reactions.ViewReactionsB
 import im.vector.app.features.reactions.data.EmojiDataSource
 import im.vector.app.interactWithSheet
 import im.vector.app.withRetry
+import im.vector.lib.strings.CommonStrings
 import java.lang.Thread.sleep
 
 class RoomDetailRobot {
@@ -93,7 +94,7 @@ class RoomDetailRobot {
         // Open reactions
         longClickReaction(quickReaction)
         // wait for bottom sheet
-        interactWithSheet<ViewReactionsBottomSheet>(withText(R.string.reactions), openState = BottomSheetBehavior.STATE_COLLAPSED) {
+        interactWithSheet<ViewReactionsBottomSheet>(withText(CommonStrings.reactions), openState = BottomSheetBehavior.STATE_COLLAPSED) {
             pressBack()
         }
         println("Room Detail Robot: Open reaction from emoji picker")
