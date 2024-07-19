@@ -16,12 +16,6 @@
 
 package org.matrix.android.sdk.internal.session.media
 
-import org.matrix.android.sdk.api.util.JsonDict
-
-/**
- * This defines some method to interact with the media repository.
- */
-internal interface MediaAPI {
-    suspend fun getMediaConfig(): GetMediaConfigResult
-    suspend fun getPreviewUrlData(url: String, ts: Long?): JsonDict
+interface IsAuthenticatedMediaSupported {
+    operator fun invoke(): Boolean
 }

@@ -399,7 +399,7 @@ dependencies {
         exclude group: 'com.facebook.fbjni', module: 'fbjni'
     }
     debugImplementation 'com.facebook.soloader:soloader:0.10.5'
-    debugImplementation "com.kgurgul.flipper:flipper-realm-android:2.2.0"
+    debugImplementation "com.kgurgul.flipper:flipper-realm-android:2.3.0"
 
     gplayImplementation "com.google.android.gms:play-services-location:21.3.0"
     // UnifiedPush gplay flavor only

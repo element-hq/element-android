@@ -25,16 +25,18 @@ import org.matrix.android.sdk.api.session.crypto.attachments.ElementToDecrypt
 import org.matrix.android.sdk.internal.network.NetworkConstants
 import org.matrix.android.sdk.internal.session.contentscanner.ScanEncryptorUtils
 import org.matrix.android.sdk.internal.session.contentscanner.model.toJson
+import org.matrix.android.sdk.internal.session.media.IsAuthenticatedMediaSupported
 import org.matrix.android.sdk.internal.util.ensureTrailingSlash
 import javax.inject.Inject
 
 internal class DefaultContentUrlResolver @Inject constructor(
         homeServerConnectionConfig: HomeServerConnectionConfig,
-        private val scannerService: ContentScannerService
+        private val scannerService: ContentScannerService,
+        private val isAuthenticatedMediaSupported: IsAuthenticatedMediaSupported,
 ) : ContentUrlResolver {
 
     private val baseUrl = homeServerConnectionConfig.homeServerUriBase.toString().ensureTrailingSlash()
-
+    private val authenticatedMediaApiPath = baseUrl + NetworkConstants.URI_API_PREFIX_PATH_V1 + "media/"
     override val uploadUrl = baseUrl + NetworkConstants.URI_API_MEDIA_PREFIX_PATH_R0 + "upload"
 
     override fun resolveForDownload(contentUrl: String?, elementToDecrypt: ElementToDecrypt?): ContentUrlResolver.ResolvedMethod? {
@@ -80,15 +82,20 @@ internal class DefaultContentUrlResolver @Inject constructor(
                 }
     }
 
+    override fun requiresAuthentication(resolvedUrl: String): Boolean {
+        return resolvedUrl.startsWith(authenticatedMediaApiPath)
+    }
+
     private fun resolve(
             contentUrl: String,
             toThumbnail: Boolean,
             params: String = ""
     ): String {
         var serverAndMediaId = contentUrl.removeMxcPrefix()
-
         val apiPath = if (scannerService.isScannerEnabled()) {
             NetworkConstants.URI_API_PREFIX_PATH_MEDIA_PROXY_UNSTABLE
+        } else if (isAuthenticatedMediaSupported()) {
+            NetworkConstants.URI_API_PREFIX_PATH_V1 + "media/"
         } else {
             NetworkConstants.URI_API_MEDIA_PREFIX_PATH_R0
         }

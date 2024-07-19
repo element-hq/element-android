@@ -30,13 +30,13 @@ internal interface GetRawPreviewUrlTask : Task<GetRawPreviewUrlTask.Params, Json
 }
 
 internal class DefaultGetRawPreviewUrlTask @Inject constructor(
-        private val mediaAPI: MediaAPI,
+        private val mediaAPIProvider: MediaAPIProvider,
         private val globalErrorReceiver: GlobalErrorReceiver
 ) : GetRawPreviewUrlTask {
 
     override suspend fun execute(params: GetRawPreviewUrlTask.Params): JsonDict {
         return executeRequest(globalErrorReceiver) {
-            mediaAPI.getPreviewUrlData(params.url, params.timestamp)
+            mediaAPIProvider.getMediaAPI().getPreviewUrlData(params.url, params.timestamp)
         }
     }
 }

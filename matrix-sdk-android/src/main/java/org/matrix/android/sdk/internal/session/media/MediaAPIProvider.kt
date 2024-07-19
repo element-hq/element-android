@@ -16,12 +16,19 @@
 
 package org.matrix.android.sdk.internal.session.media
 
-import org.matrix.android.sdk.api.util.JsonDict
+import javax.inject.Inject
 
-/**
- * This defines some method to interact with the media repository.
- */
-internal interface MediaAPI {
-    suspend fun getMediaConfig(): GetMediaConfigResult
-    suspend fun getPreviewUrlData(url: String, ts: Long?): JsonDict
+internal class MediaAPIProvider @Inject constructor(
+        private val isAuthenticatedMediaSupported: IsAuthenticatedMediaSupported,
+        private val authenticatedMediaAPI: AuthenticatedMediaAPI,
+        private val unauthenticatedMediaAPI: UnauthenticatedMediaAPI,
+) {
+
+    fun getMediaAPI(): MediaAPI {
+        return if (isAuthenticatedMediaSupported()) {
+            authenticatedMediaAPI
+        } else {
+            unauthenticatedMediaAPI
+        }
+    }
 }

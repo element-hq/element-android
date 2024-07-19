@@ -17,9 +17,11 @@
 package org.matrix.android.sdk.internal.network.httpclient
 
 import okhttp3.OkHttpClient
+import okhttp3.Request
 import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.internal.network.AccessTokenInterceptor
+import org.matrix.android.sdk.internal.network.HttpHeaders
 import org.matrix.android.sdk.internal.network.interceptors.CurlLoggingInterceptor
 import org.matrix.android.sdk.internal.network.ssl.CertUtil
 import org.matrix.android.sdk.internal.network.token.AccessTokenProvider
@@ -64,5 +66,12 @@ internal fun OkHttpClient.Builder.applyMatrixConfiguration(matrixConfiguration: 
         addInterceptor(it)
     }
 
+    return this
+}
+
+fun Request.Builder.addAuthenticationHeader(accessToken: String?): Request.Builder {
+    if (accessToken != null) {
+        header(HttpHeaders.Authorization, "Bearer $accessToken")
+    }
     return this
 }

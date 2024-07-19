@@ -51,6 +51,7 @@ internal object HomeServerCapabilitiesMapper {
                 externalAccountManagementUrl = entity.externalAccountManagementUrl,
                 authenticationIssuer = entity.authenticationIssuer,
                 disableNetworkConstraint = entity.disableNetworkConstraint,
+                canUseAuthenticatedMedia = entity.canUseAuthenticatedMedia,
         )
     }
 

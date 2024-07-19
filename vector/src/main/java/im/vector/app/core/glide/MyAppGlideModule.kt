@@ -38,7 +38,7 @@ class MyAppGlideModule : AppGlideModule() {
         registry.append(
                 ImageContentRenderer.Data::class.java,
                 InputStream::class.java,
-                VectorGlideModelLoaderFactory(context)
+                ImageContentRendererDataLoaderFactory(context)
         )
         registry.append(
                 AvatarPlaceholder::class.java,

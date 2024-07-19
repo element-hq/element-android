@@ -35,6 +35,7 @@ import org.matrix.android.sdk.internal.auth.registration.RegisterAddThreePidTask
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.content.DefaultContentUrlResolver
 import org.matrix.android.sdk.internal.session.contentscanner.DisabledContentScannerService
+import org.matrix.android.sdk.internal.session.media.IsAuthenticatedMediaSupported
 
 internal class DefaultLoginWizard(
         private val authAPI: AuthAPI,
@@ -45,8 +46,14 @@ internal class DefaultLoginWizard(
     private var pendingSessionData: PendingSessionData = pendingSessionStore.getPendingSessionData() ?: error("Pending session data should exist here")
 
     private val getProfileTask: GetProfileTask = DefaultGetProfileTask(
-            authAPI,
-            DefaultContentUrlResolver(pendingSessionData.homeServerConnectionConfig, DisabledContentScannerService())
+            authAPI = authAPI,
+            contentUrlResolver = DefaultContentUrlResolver(
+                    homeServerConnectionConfig = pendingSessionData.homeServerConnectionConfig,
+                    scannerService = DisabledContentScannerService(),
+                    isAuthenticatedMediaSupported = object : IsAuthenticatedMediaSupported {
+                        override fun invoke() = false
+                    }
+            )
     )
 
     override suspend fun getProfileInfo(matrixId: String): LoginProfileInfo {

@@ -54,6 +54,7 @@ private const val FEATURE_ID_ACCESS_TOKEN = "m.id_access_token"
 private const val FEATURE_SEPARATE_ADD_AND_BIND = "m.separate_add_and_bind"
 private const val FEATURE_THREADS_MSC3440 = "org.matrix.msc3440"
 private const val FEATURE_THREADS_MSC3440_STABLE = "org.matrix.msc3440.stable"
+
 @Deprecated("The availability of stable get_login_token is now exposed as a capability and part of login flow")
 private const val FEATURE_QR_CODE_LOGIN = "org.matrix.msc3882"
 private const val FEATURE_THREADS_MSC3771 = "org.matrix.msc3771"
@@ -140,6 +141,15 @@ private fun Versions.doesServerSeparatesAddAndBind(): Boolean {
  */
 internal fun Versions.doesServerSupportLogoutDevices(): Boolean {
     return getMaxVersion() >= HomeServerVersion.r0_6_1
+}
+
+/**
+ * Indicate if the server supports MSC3916 : https://github.com/matrix-org/matrix-spec-proposals/pull/3916
+ *
+ * @return true if authenticated media is supported
+ */
+internal fun Versions.doesServerSupportAuthenticatedMedia(): Boolean {
+    return getMaxVersion() >= HomeServerVersion.v1_11_0
 }
 
 private fun Versions.getMaxVersion(): HomeServerVersion {

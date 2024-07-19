@@ -41,7 +41,7 @@ internal interface GetPreviewUrlTask : Task<GetPreviewUrlTask.Params, PreviewUrl
 }
 
 internal class DefaultGetPreviewUrlTask @Inject constructor(
-        private val mediaAPI: MediaAPI,
+        private val mediaAPIProvider: MediaAPIProvider,
         private val globalErrorReceiver: GlobalErrorReceiver,
         @SessionDatabase private val monarchy: Monarchy
 ) : GetPreviewUrlTask {
@@ -66,7 +66,7 @@ internal class DefaultGetPreviewUrlTask @Inject constructor(
 
     private suspend fun doRequest(url: String, timestamp: Long?): PreviewUrlData {
         return executeRequest(globalErrorReceiver) {
-            mediaAPI.getPreviewUrlData(url, timestamp)
+            mediaAPIProvider.getMediaAPI().getPreviewUrlData(url, timestamp)
         }
                 .toPreviewUrlData(url)
     }
