@@ -41,7 +41,6 @@ import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.integrationmanager.IntegrationManagerConfigExtractor
 import org.matrix.android.sdk.internal.session.media.GetMediaConfigResult
 import org.matrix.android.sdk.internal.session.media.MediaAPIProvider
-import org.matrix.android.sdk.internal.session.media.UnauthenticatedMediaAPI
 import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.awaitTransaction
 import org.matrix.android.sdk.internal.wellknown.GetWellknownTask

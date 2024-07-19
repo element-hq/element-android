@@ -16,7 +16,6 @@
 
 package im.vector.app.core.di
 
-import android.content.Context
 import im.vector.app.ActiveSessionDataSource
 import im.vector.app.core.dispatchers.CoroutineDispatchers
 import im.vector.app.core.pushers.UnregisterUnifiedPushUseCase

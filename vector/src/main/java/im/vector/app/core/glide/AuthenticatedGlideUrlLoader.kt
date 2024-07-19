@@ -65,4 +65,3 @@ class AuthenticatedGlideUrlLoader(
         return ModelLoader.LoadData(model, fetcher)
     }
 }
-
