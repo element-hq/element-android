@@ -42,7 +42,6 @@ internal class DefaultIsAuthenticatedMediaSupported @Inject constructor(
     }
 
     override fun onChange(results: RealmResults<HomeServerCapabilitiesEntity>) {
-        Timber.d("HomeServerCapabilitiesEntity updated.")
         canUseAuthenticatedMedia = results.canUseAuthenticatedMedia()
         Timber.d("canUseAuthenticatedMedia: $canUseAuthenticatedMedia")
     }
