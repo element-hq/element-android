@@ -31,6 +31,7 @@ import android.os.Build
 import android.util.Rational
 import androidx.annotation.RequiresApi
 import androidx.core.app.PictureInPictureModeChangedInfo
+import androidx.core.content.ContextCompat
 import androidx.core.util.Consumer
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Mavericks
@@ -201,11 +202,12 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
                     }
                 }
             }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                registerReceiver(hangupBroadcastReceiver, IntentFilter(ACTION_MEDIA_CONTROL), RECEIVER_NOT_EXPORTED)
-            } else {
-                registerReceiver(hangupBroadcastReceiver, IntentFilter(ACTION_MEDIA_CONTROL))
-            }
+            ContextCompat.registerReceiver(
+                    this,
+                    hangupBroadcastReceiver,
+                    IntentFilter(ACTION_MEDIA_CONTROL),
+                    ContextCompat.RECEIVER_NOT_EXPORTED,
+            )
         } else {
             unregisterReceiver(hangupBroadcastReceiver)
         }
