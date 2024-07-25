@@ -1,3 +1,11 @@
+Changes in Element v1.6.20 (2024-07-25)
+=======================================
+
+Other changes
+-------------
+- Bump compile and target SDK to 34 ([#8860](https://github.com/element-hq/element-android/pull/8860)
+- Supports Authenticated media apis ([#8868](https://github.com/element-hq/element-android/pull/8868)
+
 Changes in Element v1.6.18 (2024-06-25)
 =======================================
 
