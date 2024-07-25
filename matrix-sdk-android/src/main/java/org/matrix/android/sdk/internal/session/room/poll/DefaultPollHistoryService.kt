@@ -17,7 +17,8 @@
 package org.matrix.android.sdk.internal.session.room.poll
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.map
+import androidx.lifecycle.switchMap
 import com.zhuinden.monarchy.Monarchy
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -112,7 +113,7 @@ internal class DefaultPollHistoryService @AssistedInject constructor(
     override fun getPollEvents(): LiveData<List<TimelineEvent>> {
         val pollHistoryStatusLiveData = getPollHistoryStatus()
 
-        return Transformations.switchMap(pollHistoryStatusLiveData) { results ->
+        return pollHistoryStatusLiveData.switchMap { results ->
             val oldestTimestamp = results.firstOrNull()?.oldestTimestampTargetReachedMs ?: clock.epochMillis()
             getPollStartEventsAfter(oldestTimestamp)
         }
@@ -132,7 +133,7 @@ internal class DefaultPollHistoryService @AssistedInject constructor(
                 }
         )
 
-        return Transformations.map(eventsLiveData) { events ->
+        return eventsLiveData.map { events ->
             events.filter { it.root.getClearType() in EventType.POLL_START.values }
                     .distinctBy { it.eventId }
         }

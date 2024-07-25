@@ -27,7 +27,6 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
@@ -35,6 +34,7 @@ import im.vector.app.core.utils.toast
 import im.vector.app.databinding.FragmentRoomSettingGenericBinding
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roomprofile.RoomProfileArgs
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
@@ -71,12 +71,12 @@ class RoomBannedMemberListFragment :
                 is RoomBannedMemberListViewEvents.ShowBannedInfo -> {
                     val canBan = withState(viewModel) { state -> state.canUserBan }
                     MaterialAlertDialogBuilder(requireActivity())
-                            .setTitle(getString(R.string.member_banned_by, it.bannedByUserId))
-                            .setMessage(getString(R.string.reason_colon, it.banReason))
-                            .setPositiveButton(R.string.ok, null)
+                            .setTitle(getString(CommonStrings.member_banned_by, it.bannedByUserId))
+                            .setMessage(getString(CommonStrings.reason_colon, it.banReason))
+                            .setPositiveButton(CommonStrings.ok, null)
                             .apply {
                                 if (canBan) {
-                                    setNegativeButton(R.string.room_participants_action_unban) { _, _ ->
+                                    setNegativeButton(CommonStrings.room_participants_action_unban) { _, _ ->
                                         viewModel.handle(RoomBannedMemberListAction.UnBanUser(it.roomMemberSummary))
                                     }
                                 }
@@ -97,7 +97,7 @@ class RoomBannedMemberListFragment :
 
     private fun setupSearchView() {
         views.searchViewAppBarLayout.isVisible = true
-        views.searchView.queryHint = getString(R.string.search_banned_user_hint)
+        views.searchView.queryHint = getString(CommonStrings.search_banned_user_hint)
         views.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 return true

@@ -73,7 +73,7 @@ abstract class GenericPillItem : VectorEpoxyModel<GenericPillItem.Holder>(R.layo
             holder.imageView.isVisible = false
         }
         if (tintIcon) {
-            val iconTintColor = ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_secondary)
+            val iconTintColor = ThemeUtils.getColor(holder.view.context, im.vector.lib.ui.styles.R.attr.vctr_content_secondary)
             ImageViewCompat.setImageTintList(holder.imageView, ColorStateList.valueOf(iconTintColor))
         } else {
             ImageViewCompat.setImageTintList(holder.imageView, null)

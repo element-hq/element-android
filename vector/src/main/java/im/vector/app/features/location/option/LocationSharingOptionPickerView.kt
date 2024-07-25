@@ -24,7 +24,6 @@ import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import im.vector.app.R
 import im.vector.app.databinding.ViewLocationSharingOptionPickerBinding
 
 /**
@@ -74,7 +73,7 @@ class LocationSharingOptionPickerView @JvmOverloads constructor(
     private fun applyBackground() {
         val outValue = TypedValue()
         context.theme.resolveAttribute(
-                R.attr.colorSurface,
+                com.google.android.material.R.attr.colorSurface,
                 outValue,
                 true
         )

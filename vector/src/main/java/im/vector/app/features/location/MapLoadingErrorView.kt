@@ -23,10 +23,10 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.use
-import im.vector.app.R
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.databinding.ViewMapLoadingErrorBinding
 import im.vector.app.features.themes.ThemeUtils
+import im.vector.lib.strings.CommonStrings
 
 /**
  * Custom view to display an error when map fails to load.
@@ -43,7 +43,7 @@ class MapLoadingErrorView @JvmOverloads constructor(
     init {
         context.obtainStyledAttributes(
                 attrs,
-                R.styleable.MapLoadingErrorView,
+                im.vector.lib.ui.styles.R.styleable.MapLoadingErrorView,
                 0,
                 0
         ).use {
@@ -52,9 +52,9 @@ class MapLoadingErrorView @JvmOverloads constructor(
     }
 
     private fun setErrorDescription(typedArray: TypedArray) {
-        val description = typedArray.getString(R.styleable.MapLoadingErrorView_mapErrorDescription)
+        val description = typedArray.getString(im.vector.lib.ui.styles.R.styleable.MapLoadingErrorView_mapErrorDescription)
         if (description.isNullOrEmpty()) {
-            binding.mapLoadingErrorDescription.setText(R.string.location_share_loading_map_error)
+            binding.mapLoadingErrorDescription.setText(CommonStrings.location_share_loading_map_error)
         } else {
             binding.mapLoadingErrorDescription.text = description
         }
@@ -62,7 +62,7 @@ class MapLoadingErrorView @JvmOverloads constructor(
 
     fun render(mapLoadingErrorViewState: MapLoadingErrorViewState) {
         GlideApp.with(binding.mapLoadingErrorBackground)
-                .load(ColorDrawable(ThemeUtils.getColor(context, R.attr.vctr_system)))
+                .load(ColorDrawable(ThemeUtils.getColor(context, im.vector.lib.ui.styles.R.attr.vctr_system)))
                 .transform(mapLoadingErrorViewState.backgroundTransformation)
                 .into(binding.mapLoadingErrorBackground)
     }

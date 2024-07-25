@@ -18,10 +18,10 @@ package im.vector.app.features.roomprofile.notifications
 
 import androidx.annotation.StringRes
 import com.airbnb.epoxy.TypedEpoxyController
-import im.vector.app.R
 import im.vector.app.core.epoxy.profiles.notifications.notificationSettingsFooterItem
 import im.vector.app.core.epoxy.profiles.notifications.radioButtonItem
 import im.vector.app.core.epoxy.profiles.notifications.textHeaderItem
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 import javax.inject.Inject
 
@@ -40,7 +40,7 @@ class RoomNotificationSettingsController @Inject constructor() : TypedEpoxyContr
 
         textHeaderItem {
             id("roomNotificationSettingsHeader")
-            textRes(R.string.room_settings_room_notifications_notify_me)
+            textRes(CommonStrings.room_settings_room_notifications_notify_me)
         }
         data.notificationOptions.forEach { notificationState ->
             val title = titleForNotificationState(notificationState)
@@ -64,9 +64,9 @@ class RoomNotificationSettingsController @Inject constructor() : TypedEpoxyContr
 
     @StringRes
     private fun titleForNotificationState(notificationState: RoomNotificationState): Int? = when (notificationState) {
-        RoomNotificationState.ALL_MESSAGES_NOISY -> R.string.room_settings_all_messages
-        RoomNotificationState.MENTIONS_ONLY -> R.string.room_settings_mention_and_keyword_only
-        RoomNotificationState.MUTE -> R.string.room_settings_none
+        RoomNotificationState.ALL_MESSAGES_NOISY -> CommonStrings.room_settings_all_messages
+        RoomNotificationState.MENTIONS_ONLY -> CommonStrings.room_settings_mention_and_keyword_only
+        RoomNotificationState.MUTE -> CommonStrings.room_settings_none
         else -> null
     }
 }

@@ -26,7 +26,6 @@ import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.OnBackPressed
@@ -35,6 +34,7 @@ import im.vector.app.databinding.FragmentJoinRulesRecyclerBinding
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roomprofile.settings.joinrule.advanced.RoomJoinRuleChooseRestrictedActions
 import im.vector.app.features.roomprofile.settings.joinrule.advanced.RoomJoinRuleChooseRestrictedViewModel
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import javax.inject.Inject
 
@@ -59,12 +59,12 @@ class RoomJoinRuleFragment :
             requireActivity().finish()
         } else {
             MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(R.string.dialog_title_warning)
-                    .setMessage(R.string.warning_unsaved_change)
-                    .setPositiveButton(R.string.warning_unsaved_change_discard) { _, _ ->
+                    .setTitle(CommonStrings.dialog_title_warning)
+                    .setMessage(CommonStrings.warning_unsaved_change)
+                    .setPositiveButton(CommonStrings.warning_unsaved_change_discard) { _, _ ->
                         requireActivity().finish()
                     }
-                    .setNegativeButton(R.string.action_cancel, null)
+                    .setNegativeButton(CommonStrings.action_cancel, null)
                     .show()
             return true
         }
@@ -77,16 +77,16 @@ class RoomJoinRuleFragment :
         if (state.hasUnsavedChanges) {
             // show discard and save
             views.cancelButton.isVisible = true
-            views.positiveButton.text = getString(R.string.warning_unsaved_change_discard)
+            views.positiveButton.text = getString(CommonStrings.warning_unsaved_change_discard)
             views.positiveButton.isVisible = true
-            views.positiveButton.text = getString(R.string.action_save)
+            views.positiveButton.text = getString(CommonStrings.action_save)
             views.positiveButton.debouncedClicks {
                 viewModel.handle(RoomJoinRuleChooseRestrictedActions.DoUpdateJoinRules)
             }
         } else {
             views.cancelButton.isVisible = false
             views.positiveButton.isVisible = true
-            views.positiveButton.text = getString(R.string.ok)
+            views.positiveButton.text = getString(CommonStrings.ok)
             views.positiveButton.debouncedClicks { requireActivity().finish() }
         }
     }

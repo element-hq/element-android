@@ -82,9 +82,9 @@ abstract class BottomSheetActionItem : VectorEpoxyModel<BottomSheetActionItem.Ho
         holder.view.onClick(listener)
         holder.startSpace.isVisible = subMenuItem
         val tintColor = if (destructive) {
-            ThemeUtils.getColor(holder.view.context, R.attr.colorError)
+            ThemeUtils.getColor(holder.view.context, com.google.android.material.R.attr.colorError)
         } else {
-            ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_secondary)
+            ThemeUtils.getColor(holder.view.context, im.vector.lib.ui.styles.R.attr.vctr_content_secondary)
         }
         holder.icon.isVisible = showIcon
         holder.icon.setImageResource(iconRes)

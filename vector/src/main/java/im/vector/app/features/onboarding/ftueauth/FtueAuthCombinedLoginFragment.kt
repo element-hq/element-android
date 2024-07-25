@@ -26,7 +26,6 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.clearErrorOnChange
 import im.vector.app.core.extensions.content
 import im.vector.app.core.extensions.editText
@@ -47,6 +46,7 @@ import im.vector.app.features.login.render
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewState
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import org.matrix.android.sdk.api.auth.SSOAction
@@ -113,7 +113,7 @@ class FtueAuthCombinedLoginFragment :
                 .onUsernameOrIdError { views.loginInput.error = it }
                 .onPasswordError { views.loginPasswordInput.error = it }
                 .onValid { usernameOrId, password ->
-                    val initialDeviceName = getString(R.string.login_default_session_public_name)
+                    val initialDeviceName = getString(CommonStrings.login_default_session_public_name)
                     viewModel.handle(OnboardingAction.AuthenticateAction.Login(usernameOrId, password, initialDeviceName))
                 }
     }

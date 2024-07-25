@@ -24,10 +24,10 @@ import androidx.core.view.isVisible
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentBootstrapSetupRecoveryBinding
 import im.vector.app.features.raw.wellknown.SecureBackupMethod
+import im.vector.lib.strings.CommonStrings
 
 @AndroidEntryPoint
 class BootstrapSetupRecoveryKeyFragment :
@@ -82,9 +82,9 @@ class BootstrapSetupRecoveryKeyFragment :
 
     private fun renderSetupHeader(needsReset: Boolean) = with(views) {
         bootstrapSetupSecureText.text = if (needsReset) {
-            getString(R.string.reset_secure_backup_title)
+            getString(CommonStrings.reset_secure_backup_title)
         } else {
-            getString(R.string.bottom_sheet_setup_secure_backup_subtitle)
+            getString(CommonStrings.bottom_sheet_setup_secure_backup_subtitle)
         }
         bootstrapSetupWarningTextView.isVisible = needsReset
     }

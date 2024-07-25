@@ -17,11 +17,11 @@
 package im.vector.app.features.roomprofile.polls.list.ui
 
 import com.airbnb.epoxy.TypedEpoxyController
-import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.roomprofile.polls.RoomPollsViewState
+import im.vector.lib.strings.CommonPlurals
 import java.util.UUID
 import javax.inject.Inject
 
@@ -74,7 +74,7 @@ class RoomPollsController @Inject constructor(
             formattedDate(host.dateFormatter.format(poll.creationTimestamp, DateFormatKind.TIMELINE_DAY_DIVIDER))
             title(poll.title)
             winnerOptions(poll.winnerOptions)
-            totalVotesStatus(host.stringProvider.getQuantityString(R.plurals.poll_total_vote_count_after_ended, poll.totalVotes, poll.totalVotes))
+            totalVotesStatus(host.stringProvider.getQuantityString(CommonPlurals.poll_total_vote_count_after_ended, poll.totalVotes, poll.totalVotes))
             clickListener {
                 host.listener?.onPollClicked(poll.id)
             }

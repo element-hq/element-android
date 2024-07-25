@@ -15,10 +15,10 @@
  */
 package im.vector.app.features.settings.troubleshoot
 
-import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.notifications.toNotificationAction
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.pushrules.RuleIds
 import org.matrix.android.sdk.api.session.pushrules.getActions
 import javax.inject.Inject
@@ -27,7 +27,7 @@ class TestPushRulesSettings @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
         private val stringProvider: StringProvider
 ) :
-        TroubleshootTest(R.string.settings_troubleshoot_test_bing_settings_title) {
+        TroubleshootTest(CommonStrings.settings_troubleshoot_test_bing_settings_title) {
 
     private val testedRules =
             listOf(
@@ -59,9 +59,9 @@ class TestPushRulesSettings @Inject constructor(
         }
 
         if (oneOrMoreRuleIsOff) {
-            description = stringProvider.getString(R.string.settings_troubleshoot_test_bing_settings_failed)
+            description = stringProvider.getString(CommonStrings.settings_troubleshoot_test_bing_settings_failed)
             // TODO
-//                quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_bing_settings_quickfix) {
+//                quickFix = object : TroubleshootQuickFix(CommonStrings.settings_troubleshoot_test_bing_settings_quickfix) {
 //                    override fun doFix() {
 //                        val activity = fragment.activity
 //                        if (activity is VectorSettingsFragmentInteractionListener) {
@@ -73,7 +73,7 @@ class TestPushRulesSettings @Inject constructor(
             status = TestStatus.FAILED
         } else {
             description = if (oneOrMoreRuleAreSilent) {
-                stringProvider.getString(R.string.settings_troubleshoot_test_bing_settings_success_with_warn)
+                stringProvider.getString(CommonStrings.settings_troubleshoot_test_bing_settings_success_with_warn)
             } else {
                 null
             }

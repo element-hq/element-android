@@ -16,8 +16,8 @@
 
 package im.vector.app.features.home
 
-import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.sync.InitialSyncStep
 import javax.inject.Inject
 
@@ -27,15 +27,15 @@ class InitSyncStepFormatter @Inject constructor(
     fun format(initialSyncStep: InitialSyncStep): String {
         return stringProvider.getString(
                 when (initialSyncStep) {
-                    InitialSyncStep.ServerComputing -> R.string.initial_sync_start_server_computing
-                    InitialSyncStep.Downloading -> R.string.initial_sync_start_downloading
-                    InitialSyncStep.ImportingAccount -> R.string.initial_sync_start_importing_account
-                    InitialSyncStep.ImportingAccountCrypto -> R.string.initial_sync_start_importing_account_crypto
-                    InitialSyncStep.ImportingAccountRoom -> R.string.initial_sync_start_importing_account_rooms
-                    InitialSyncStep.ImportingAccountData -> R.string.initial_sync_start_importing_account_data
-                    InitialSyncStep.ImportingAccountJoinedRooms -> R.string.initial_sync_start_importing_account_joined_rooms
-                    InitialSyncStep.ImportingAccountInvitedRooms -> R.string.initial_sync_start_importing_account_invited_rooms
-                    InitialSyncStep.ImportingAccountLeftRooms -> R.string.initial_sync_start_importing_account_left_rooms
+                    InitialSyncStep.ServerComputing -> CommonStrings.initial_sync_start_server_computing
+                    InitialSyncStep.Downloading -> CommonStrings.initial_sync_start_downloading
+                    InitialSyncStep.ImportingAccount -> CommonStrings.initial_sync_start_importing_account
+                    InitialSyncStep.ImportingAccountCrypto -> CommonStrings.initial_sync_start_importing_account_crypto
+                    InitialSyncStep.ImportingAccountRoom -> CommonStrings.initial_sync_start_importing_account_rooms
+                    InitialSyncStep.ImportingAccountData -> CommonStrings.initial_sync_start_importing_account_data
+                    InitialSyncStep.ImportingAccountJoinedRooms -> CommonStrings.initial_sync_start_importing_account_joined_rooms
+                    InitialSyncStep.ImportingAccountInvitedRooms -> CommonStrings.initial_sync_start_importing_account_invited_rooms
+                    InitialSyncStep.ImportingAccountLeftRooms -> CommonStrings.initial_sync_start_importing_account_left_rooms
                 }
         )
     }

@@ -23,6 +23,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import androidx.core.content.ContextCompat
 import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 import java.lang.ref.WeakReference
 
@@ -83,7 +84,12 @@ class BluetoothHeadsetReceiver : BroadcastReceiver() {
         fun createAndRegister(context: Context, listener: EventListener): BluetoothHeadsetReceiver {
             val receiver = BluetoothHeadsetReceiver()
             receiver.delegate = WeakReference(listener)
-            context.registerReceiver(receiver, IntentFilter(BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED))
+            ContextCompat.registerReceiver(
+                    context,
+                    receiver,
+                    IntentFilter(BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED),
+                    ContextCompat.RECEIVER_NOT_EXPORTED,
+            )
             return receiver
         }
 

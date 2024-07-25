@@ -42,6 +42,7 @@ import im.vector.app.features.location.LocationSharingArgs
 import im.vector.app.features.location.MapState
 import im.vector.app.features.location.UrlMapProvider
 import im.vector.app.features.location.showUserLocationNotAvailableErrorDialog
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.launch
 import java.lang.ref.WeakReference
 import javax.inject.Inject
@@ -202,7 +203,7 @@ class LocationPreviewFragment :
         if (allGranted) {
             zoomToUserLocation()
         } else if (deniedPermanently) {
-            activity?.onPermissionDeniedDialog(R.string.denied_permission_generic)
+            activity?.onPermissionDeniedDialog(CommonStrings.denied_permission_generic)
         }
     }
 }

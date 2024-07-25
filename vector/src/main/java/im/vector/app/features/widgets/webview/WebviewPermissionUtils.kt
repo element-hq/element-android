@@ -23,10 +23,10 @@ import androidx.annotation.StringRes
 import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.FragmentActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import im.vector.app.R
 import im.vector.app.core.error.fatalError
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.lib.strings.CommonStrings
 import javax.inject.Inject
 
 class WebviewPermissionUtils @Inject constructor(
@@ -64,13 +64,13 @@ class WebviewPermissionUtils @Inject constructor(
                 ) { _, which, isChecked ->
                     allowedPermissions[which] = allowedPermissions[which].first to isChecked
                 }
-                .setPositiveButton(R.string.room_widget_resource_grant_permission) { _, _ ->
+                .setPositiveButton(CommonStrings.room_widget_resource_grant_permission) { _, _ ->
                     val permissions = allowedPermissions.mapNotNull { perm ->
                         perm.first.takeIf { perm.second }
                     }
                     onPermissionsSelected(permissions, request, activity, activityResultLauncher)
                 }
-                .setNegativeButton(R.string.room_widget_resource_decline_permission) { _, _ ->
+                .setNegativeButton(CommonStrings.room_widget_resource_decline_permission) { _, _ ->
                     request.deny()
                 }
                 .show()
@@ -131,9 +131,9 @@ class WebviewPermissionUtils @Inject constructor(
 
     private fun webPermissionToHumanReadable(permission: String, context: Context): String {
         return when (permission) {
-            PermissionRequest.RESOURCE_AUDIO_CAPTURE -> context.getString(R.string.room_widget_webview_access_microphone)
-            PermissionRequest.RESOURCE_VIDEO_CAPTURE -> context.getString(R.string.room_widget_webview_access_camera)
-            PermissionRequest.RESOURCE_PROTECTED_MEDIA_ID -> context.getString(R.string.room_widget_webview_read_protected_media)
+            PermissionRequest.RESOURCE_AUDIO_CAPTURE -> context.getString(CommonStrings.room_widget_webview_access_microphone)
+            PermissionRequest.RESOURCE_VIDEO_CAPTURE -> context.getString(CommonStrings.room_widget_webview_access_camera)
+            PermissionRequest.RESOURCE_PROTECTED_MEDIA_ID -> context.getString(CommonStrings.room_widget_webview_read_protected_media)
             else -> permission
         }
     }

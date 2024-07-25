@@ -38,6 +38,7 @@ import im.vector.app.core.glide.GlideRequests
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.themes.ThemeUtils
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.session.room.send.MatrixItemSpan
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -124,16 +125,16 @@ class PillImageSpan(
     // Private methods *****************************************************************************
 
     private fun createChipDrawable(): ChipDrawable {
-        val textPadding = context.resources.getDimension(R.dimen.pill_text_padding)
+        val textPadding = context.resources.getDimension(im.vector.lib.ui.styles.R.dimen.pill_text_padding)
         val icon = when {
             matrixItem is MatrixItem.RoomAliasItem && matrixItem.avatarUrl.isNullOrEmpty() &&
-                    matrixItem.displayName == context.getString(R.string.pill_message_in_room, matrixItem.id) -> {
+                    matrixItem.displayName == context.getString(CommonStrings.pill_message_in_room, matrixItem.id) -> {
                 ContextCompat.getDrawable(context, R.drawable.ic_permalink_round)
             }
             matrixItem is MatrixItem.RoomItem && matrixItem.avatarUrl.isNullOrEmpty() && (
-                    matrixItem.displayName == context.getString(R.string.pill_message_in_unknown_room) ||
-                            matrixItem.displayName == context.getString(R.string.pill_message_unknown_room_or_space) ||
-                            matrixItem.displayName == context.getString(R.string.pill_message_from_unknown_user)
+                    matrixItem.displayName == context.getString(CommonStrings.pill_message_in_unknown_room) ||
+                            matrixItem.displayName == context.getString(CommonStrings.pill_message_unknown_room_or_space) ||
+                            matrixItem.displayName == context.getString(CommonStrings.pill_message_from_unknown_user)
                     ) -> {
                 ContextCompat.getDrawable(context, R.drawable.ic_permalink_round)
             }
@@ -153,13 +154,13 @@ class PillImageSpan(
             text = matrixItem.getBestName()
             textEndPadding = textPadding
             textStartPadding = textPadding
-            setChipMinHeightResource(R.dimen.pill_min_height)
-            setChipIconSizeResource(R.dimen.pill_avatar_size)
+            setChipMinHeightResource(im.vector.lib.ui.styles.R.dimen.pill_min_height)
+            setChipIconSizeResource(im.vector.lib.ui.styles.R.dimen.pill_avatar_size)
             chipIcon = icon
             if (matrixItem is MatrixItem.EveryoneInRoomItem) {
-                chipBackgroundColor = ColorStateList.valueOf(ThemeUtils.getColor(context, R.attr.colorError))
+                chipBackgroundColor = ColorStateList.valueOf(ThemeUtils.getColor(context, com.google.android.material.R.attr.colorError))
                 // setTextColor API does not exist right now for ChipDrawable, use textAppearance
-                setTextAppearanceResource(R.style.TextAppearance_Vector_Body_OnError)
+                setTextAppearanceResource(im.vector.lib.ui.styles.R.style.TextAppearance_Vector_Body_OnError)
             }
             setBounds(0, 0, intrinsicWidth, intrinsicHeight)
         }

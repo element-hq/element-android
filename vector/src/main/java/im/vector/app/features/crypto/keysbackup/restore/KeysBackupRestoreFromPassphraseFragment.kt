@@ -25,9 +25,9 @@ import android.view.inputmethod.EditorInfo
 import androidx.core.text.set
 import androidx.core.widget.doOnTextChanged
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentKeysBackupRestoreFromPassphraseBinding
+import im.vector.lib.strings.CommonStrings
 
 @AndroidEntryPoint
 class KeysBackupRestoreFromPassphraseFragment :
@@ -66,8 +66,8 @@ class KeysBackupRestoreFromPassphraseFragment :
     }
 
     private fun spannableStringForHelperText(): SpannableString {
-        val clickableText = getString(R.string.keys_backup_restore_use_recovery_key)
-        val helperText = getString(R.string.keys_backup_restore_with_passphrase_helper_with_link, clickableText)
+        val clickableText = getString(CommonStrings.keys_backup_restore_use_recovery_key)
+        val helperText = getString(CommonStrings.keys_backup_restore_with_passphrase_helper_with_link, clickableText)
 
         val spanString = SpannableString(helperText)
 
@@ -92,7 +92,7 @@ class KeysBackupRestoreFromPassphraseFragment :
     private fun onRestoreBackup() {
         val value = viewModel.passphrase.value
         if (value.isNullOrBlank()) {
-            viewModel.passphraseErrorText.value = getString(R.string.passphrase_empty_error_message)
+            viewModel.passphraseErrorText.value = getString(CommonStrings.passphrase_empty_error_message)
         } else {
             viewModel.recoverKeys(sharedViewModel)
         }

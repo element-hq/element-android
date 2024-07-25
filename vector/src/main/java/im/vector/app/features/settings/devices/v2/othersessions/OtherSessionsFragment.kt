@@ -51,6 +51,8 @@ import im.vector.app.features.settings.devices.v2.list.SESSION_IS_MARKED_AS_INAC
 import im.vector.app.features.settings.devices.v2.more.SessionLearnMoreBottomSheet
 import im.vector.app.features.settings.devices.v2.signout.BuildConfirmSignoutDialogUseCase
 import im.vector.app.features.themes.ThemeUtils
+import im.vector.lib.strings.CommonPlurals
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.extensions.orFalse
 import javax.inject.Inject
@@ -87,9 +89,9 @@ class OtherSessionsFragment :
             menu.findItem(R.id.otherSessionsSelect).isVisible = !isSelectModeEnabled && state.devices()?.isNotEmpty().orFalse()
             menu.findItem(R.id.otherSessionsToggleIpAddress).isVisible = !isSelectModeEnabled
             menu.findItem(R.id.otherSessionsToggleIpAddress).title = if (state.isShowingIpAddress) {
-                getString(R.string.device_manager_other_sessions_hide_ip_address)
+                getString(CommonStrings.device_manager_other_sessions_hide_ip_address)
             } else {
-                getString(R.string.device_manager_other_sessions_show_ip_address)
+                getString(CommonStrings.device_manager_other_sessions_show_ip_address)
             }
             updateMultiSignoutMenuItem(menu, state)
         }
@@ -98,10 +100,10 @@ class OtherSessionsFragment :
     private fun updateMultiSignoutMenuItem(menu: Menu, viewState: OtherSessionsViewState) {
         val multiSignoutItem = menu.findItem(R.id.otherSessionsMultiSignout)
         multiSignoutItem.title = if (viewState.isSelectModeEnabled) {
-            getString(R.string.device_manager_other_sessions_multi_signout_selection).uppercase()
+            getString(CommonStrings.device_manager_other_sessions_multi_signout_selection).uppercase()
         } else {
             val nbDevices = viewState.devices()?.size ?: 0
-            stringProvider.getQuantityString(R.plurals.device_manager_other_sessions_multi_signout_all, nbDevices, nbDevices)
+            stringProvider.getQuantityString(CommonPlurals.device_manager_other_sessions_multi_signout_all, nbDevices, nbDevices)
         }
         multiSignoutItem.isVisible = if (viewState.delegatedOidcAuthEnabled) {
             // Hide multi signout if the homeserver delegates the account management
@@ -119,7 +121,7 @@ class OtherSessionsFragment :
     }
 
     private fun changeTextColorOfDestructiveAction(menuItem: MenuItem) {
-        val titleColor = colorProvider.getColorFromAttribute(R.attr.colorError)
+        val titleColor = colorProvider.getColorFromAttribute(com.google.android.material.R.attr.colorError)
         menuItem.setTextColor(titleColor)
     }
 
@@ -188,7 +190,7 @@ class OtherSessionsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupToolbar(views.otherSessionsToolbar)
-                .setTitle(R.string.device_manager_sessions_other_title)
+                .setTitle(CommonStrings.device_manager_sessions_other_title)
                 .allowBack()
         observeViewEvents()
         initFilterView()
@@ -256,9 +258,9 @@ class OtherSessionsFragment :
         invalidateOptionsMenu()
         val title = if (isSelectModeEnabled) {
             val selection = devices.count { it.isSelected }
-            stringProvider.getQuantityString(R.plurals.x_selected, selection, selection)
+            stringProvider.getQuantityString(CommonPlurals.x_selected, selection, selection)
         } else {
-            getString(R.string.device_manager_sessions_other_title)
+            getString(CommonStrings.device_manager_sessions_other_title)
         }
         toolbar?.title = title
     }
@@ -272,50 +274,50 @@ class OtherSessionsFragment :
             DeviceManagerFilterType.VERIFIED -> {
                 views.otherSessionsSecurityRecommendationView.render(
                         OtherSessionsSecurityRecommendationViewState(
-                                title = getString(R.string.device_manager_other_sessions_recommendation_title_verified),
-                                description = getString(R.string.device_manager_other_sessions_recommendation_description_verified),
+                                title = getString(CommonStrings.device_manager_other_sessions_recommendation_title_verified),
+                                description = getString(CommonStrings.device_manager_other_sessions_recommendation_description_verified),
                                 imageResourceId = R.drawable.ic_shield_trusted_no_border,
-                                imageTintColorResourceId = colorProvider.getColor(R.color.shield_color_trust_background)
+                                imageTintColorResourceId = colorProvider.getColor(im.vector.lib.ui.styles.R.color.shield_color_trust_background)
                         )
                 )
-                views.otherSessionsNotFoundTextView.text = getString(R.string.device_manager_other_sessions_no_verified_sessions_found)
+                views.otherSessionsNotFoundTextView.text = getString(CommonStrings.device_manager_other_sessions_no_verified_sessions_found)
                 updateSecurityLearnMoreButton(
-                        R.string.device_manager_learn_more_sessions_verified_title,
-                        R.string.device_manager_learn_more_sessions_verified_description
+                        CommonStrings.device_manager_learn_more_sessions_verified_title,
+                        CommonStrings.device_manager_learn_more_sessions_verified_description
                 )
             }
             DeviceManagerFilterType.UNVERIFIED -> {
                 views.otherSessionsSecurityRecommendationView.render(
                         OtherSessionsSecurityRecommendationViewState(
-                                title = getString(R.string.device_manager_other_sessions_recommendation_title_unverified),
-                                description = getString(R.string.device_manager_other_sessions_recommendation_description_unverified),
+                                title = getString(CommonStrings.device_manager_other_sessions_recommendation_title_unverified),
+                                description = getString(CommonStrings.device_manager_other_sessions_recommendation_description_unverified),
                                 imageResourceId = R.drawable.ic_shield_warning_no_border,
-                                imageTintColorResourceId = colorProvider.getColor(R.color.shield_color_warning_background)
+                                imageTintColorResourceId = colorProvider.getColor(im.vector.lib.ui.styles.R.color.shield_color_warning_background)
                         )
                 )
-                views.otherSessionsNotFoundTextView.text = getString(R.string.device_manager_other_sessions_no_unverified_sessions_found)
+                views.otherSessionsNotFoundTextView.text = getString(CommonStrings.device_manager_other_sessions_no_unverified_sessions_found)
                 updateSecurityLearnMoreButton(
-                        R.string.device_manager_learn_more_sessions_unverified_title,
-                        R.string.device_manager_learn_more_sessions_unverified
+                        CommonStrings.device_manager_learn_more_sessions_unverified_title,
+                        CommonStrings.device_manager_learn_more_sessions_unverified
                 )
             }
             DeviceManagerFilterType.INACTIVE -> {
                 views.otherSessionsSecurityRecommendationView.render(
                         OtherSessionsSecurityRecommendationViewState(
-                                title = getString(R.string.device_manager_other_sessions_recommendation_title_inactive),
+                                title = getString(CommonStrings.device_manager_other_sessions_recommendation_title_inactive),
                                 description = resources.getQuantityString(
-                                        R.plurals.device_manager_other_sessions_recommendation_description_inactive,
+                                        CommonPlurals.device_manager_other_sessions_recommendation_description_inactive,
                                         SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS,
                                         SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS
                                 ),
                                 imageResourceId = R.drawable.ic_inactive_sessions,
-                                imageTintColorResourceId = ThemeUtils.getColor(requireContext(), R.attr.vctr_system)
+                                imageTintColorResourceId = ThemeUtils.getColor(requireContext(), im.vector.lib.ui.styles.R.attr.vctr_system)
                         )
                 )
-                views.otherSessionsNotFoundTextView.text = getString(R.string.device_manager_other_sessions_no_inactive_sessions_found)
+                views.otherSessionsNotFoundTextView.text = getString(CommonStrings.device_manager_other_sessions_no_inactive_sessions_found)
                 updateSecurityLearnMoreButton(
-                        R.string.device_manager_learn_more_sessions_inactive_title,
-                        R.string.device_manager_learn_more_sessions_inactive
+                        CommonStrings.device_manager_learn_more_sessions_inactive_title,
+                        CommonStrings.device_manager_learn_more_sessions_inactive
                 )
             }
             DeviceManagerFilterType.ALL_SESSIONS -> { /* NOOP. View is not visible */
@@ -403,7 +405,7 @@ class OtherSessionsFragment :
                 requireContext(),
                 reAuthReq.registrationFlowResponse,
                 reAuthReq.lastErrorCode,
-                getString(R.string.devices_delete_dialog_title)
+                getString(CommonStrings.devices_delete_dialog_title)
         ).let { intent ->
             reAuthActivityResultLauncher.launch(intent)
         }

@@ -22,12 +22,12 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import im.vector.app.R
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.epoxy.noResultItem
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.spaces.manage.roomSelectionItem
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -61,7 +61,7 @@ class SelectChildrenController @Inject constructor(
                 if (roomList.isEmpty()) {
                     noResultItem {
                         id("empty")
-                        text(host.stringProvider.getString(R.string.no_result_placeholder))
+                        text(host.stringProvider.getString(CommonStrings.no_result_placeholder))
                     }
                 } else {
                     roomList.forEach { item ->

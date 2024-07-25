@@ -65,7 +65,7 @@ abstract class GenericFooterItem : VectorEpoxyModel<GenericFooterItem.Holder>(R.
         if (textColor != null) {
             holder.text.setTextColor(textColor!!)
         } else {
-            holder.text.setTextColor(ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_secondary))
+            holder.text.setTextColor(ThemeUtils.getColor(holder.view.context, im.vector.lib.ui.styles.R.attr.vctr_content_secondary))
         }
 
         holder.view.onClick(itemClickAction)

@@ -23,6 +23,7 @@ import androidx.core.content.ContextCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.databinding.DialogRecoveryKeySavedInfoBinding
+import im.vector.lib.strings.CommonStrings
 import me.gujun.android.span.image
 import me.gujun.android.span.span
 
@@ -36,24 +37,24 @@ class KeepItSafeDialog {
             span {
                 image(ContextCompat.getDrawable(activity, R.drawable.ic_check_on)!!)
                 +" "
-                +activity.getString(R.string.bootstrap_crosssigning_print_it)
+                +activity.getString(CommonStrings.bootstrap_crosssigning_print_it)
                 +"\n\n"
                 image(ContextCompat.getDrawable(activity, R.drawable.ic_check_on)!!)
                 +" "
-                +activity.getString(R.string.bootstrap_crosssigning_save_usb)
+                +activity.getString(CommonStrings.bootstrap_crosssigning_save_usb)
                 +"\n\n"
                 image(ContextCompat.getDrawable(activity, R.drawable.ic_check_on)!!)
                 +" "
-                +activity.getString(R.string.bootstrap_crosssigning_save_cloud)
+                +activity.getString(CommonStrings.bootstrap_crosssigning_save_cloud)
                 +"\n\n"
             }
         }
 
         MaterialAlertDialogBuilder(activity)
 //                .setIcon(android.R.drawable.ic_dialog_alert)
-//                .setTitle(R.string.devices_delete_dialog_title)
+//                .setTitle(CommonStrings.devices_delete_dialog_title)
                 .setView(dialogLayout)
-                .setPositiveButton(R.string.ok, null)
+                .setPositiveButton(CommonStrings.ok, null)
                 .setOnKeyListener(DialogInterface.OnKeyListener { dialog, keyCode, event ->
                     if (event.action == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                         dialog.cancel()

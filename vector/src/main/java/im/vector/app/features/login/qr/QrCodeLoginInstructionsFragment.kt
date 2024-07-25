@@ -24,11 +24,11 @@ import android.view.ViewGroup
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentQrCodeLoginInstructionsBinding
 import im.vector.app.features.qrcode.QrCodeScannerActivity
+import im.vector.lib.strings.CommonStrings
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -88,16 +88,16 @@ class QrCodeLoginInstructionsFragment : VectorBaseFragment<FragmentQrCodeLoginIn
         if (state.loginType == QrCodeLoginType.LOGIN) {
             views.qrCodeLoginInstructionsView.setInstructions(
                     listOf(
-                            getString(R.string.qr_code_login_new_device_instruction_1),
-                            getString(R.string.qr_code_login_new_device_instruction_2),
-                            getString(R.string.qr_code_login_new_device_instruction_3),
+                            getString(CommonStrings.qr_code_login_new_device_instruction_1),
+                            getString(CommonStrings.qr_code_login_new_device_instruction_2),
+                            getString(CommonStrings.qr_code_login_new_device_instruction_3),
                     )
             )
         } else {
             views.qrCodeLoginInstructionsView.setInstructions(
                     listOf(
-                            getString(R.string.qr_code_login_link_a_device_scan_qr_code_instruction_1),
-                            getString(R.string.qr_code_login_link_a_device_scan_qr_code_instruction_2),
+                            getString(CommonStrings.qr_code_login_link_a_device_scan_qr_code_instruction_1),
+                            getString(CommonStrings.qr_code_login_link_a_device_scan_qr_code_instruction_2),
                     )
             )
         }

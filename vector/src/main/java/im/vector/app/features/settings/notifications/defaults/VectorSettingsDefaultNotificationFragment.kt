@@ -21,12 +21,13 @@ import im.vector.app.R
 import im.vector.app.core.preference.VectorPreferenceCategory
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.settings.notifications.VectorSettingsPushRuleNotificationFragment
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.pushrules.RuleIds
 
 class VectorSettingsDefaultNotificationFragment :
         VectorSettingsPushRuleNotificationFragment() {
 
-    override var titleRes: Int = R.string.settings_notification_default
+    override var titleRes: Int = CommonStrings.settings_notification_default
 
     override val preferenceXmlRes = R.xml.vector_settings_notification_default
 

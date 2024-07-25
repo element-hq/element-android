@@ -69,7 +69,7 @@ android {
     buildTypes {
         debug {
             if (project.hasProperty("coverage")) {
-                testCoverageEnabled = coverage == "true"
+                testCoverageEnabled = project.properties["coverage"] == "true"
             }
         }
     }
@@ -80,7 +80,7 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = versions.jvmTarget
         freeCompilerArgs += [
                 "-opt-in=kotlin.RequiresOptIn",
                 // Fixes false positive "This is an internal Mavericks API. It is not intended for external use."
@@ -104,6 +104,13 @@ android {
 
     buildFeatures {
         viewBinding true
+        buildConfig true
+    }
+
+    packaging {
+        pickFirsts.add("META-INF/LICENSE.md")
+        pickFirsts.add("META-INF/LICENSE-notice.md")
+        pickFirsts.add("MANIFEST.MF")
     }
 }
 

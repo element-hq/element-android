@@ -16,7 +16,6 @@
 
 package im.vector.app.core.pushers
 
-import im.vector.app.R
 import im.vector.app.features.mdm.NoOpMdmService
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakeAppNameProvider
@@ -65,7 +64,7 @@ class PushersManagerTest {
         val pusherAppId = "app-id"
         val appName = "element"
         val deviceDisplayName = "iPhone Lollipop"
-        stringProvider.given(R.string.pusher_app_id, pusherAppId)
+        stringProvider.given(im.vector.app.config.R.string.pusher_app_id, pusherAppId)
         localeProvider.givenCurrent(Locale.UK)
         appNameProvider.givenAppName(appName)
         getDeviceInfoUseCase.givenDeviceInfo(aCryptoDeviceInfo(unsigned = UnsignedDeviceInfo(deviceDisplayName)))

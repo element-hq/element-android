@@ -53,6 +53,8 @@ import im.vector.app.core.utils.attachSnapHelperWithListener
 import im.vector.app.databinding.FragmentAttachmentsPreviewBinding
 import im.vector.app.features.media.createUCropWithDefaultSettings
 import im.vector.lib.core.utils.timer.Clock
+import im.vector.lib.strings.CommonPlurals
+import im.vector.lib.strings.CommonStrings
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
@@ -152,9 +154,9 @@ class AttachmentsPreviewFragment :
         val nbImages = state.attachments.count { it.type == ContentAttachmentData.Type.IMAGE }
         val nbVideos = state.attachments.count { it.type == ContentAttachmentData.Type.VIDEO }
         return when {
-            nbVideos == 0 -> resources.getQuantityString(R.plurals.send_images_with_original_size, nbImages)
-            nbImages == 0 -> resources.getQuantityString(R.plurals.send_videos_with_original_size, nbVideos)
-            else -> getString(R.string.send_images_and_video_with_original_size)
+            nbVideos == 0 -> resources.getQuantityString(CommonPlurals.send_images_with_original_size, nbImages)
+            nbImages == 0 -> resources.getQuantityString(CommonPlurals.send_videos_with_original_size, nbVideos)
+            else -> getString(CommonStrings.send_images_and_video_with_original_size)
         }
     }
 

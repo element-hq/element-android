@@ -19,12 +19,13 @@ package im.vector.app.features.spaces.preview
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
-import im.vector.app.R
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericHeaderItem
 import im.vector.app.core.utils.TextUtils
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.lib.strings.CommonPlurals
+import im.vector.lib.strings.CommonStrings
 import javax.inject.Inject
 
 class SpacePreviewController @Inject constructor(
@@ -42,7 +43,7 @@ class SpacePreviewController @Inject constructor(
 
         spaceTopSummaryItem {
             id("info")
-            formattedMemberCount(host.stringProvider.getQuantityString(R.plurals.room_title_members, memberCount, memberCount))
+            formattedMemberCount(host.stringProvider.getQuantityString(CommonPlurals.room_title_members, memberCount, memberCount))
             topic(data?.spaceInfo?.invoke()?.topic ?: data?.topic ?: "")
         }
 
@@ -50,7 +51,7 @@ class SpacePreviewController @Inject constructor(
         if (result.isNotEmpty()) {
             genericHeaderItem {
                 id("header_rooms")
-                text(host.stringProvider.getString(R.string.rooms))
+                text(host.stringProvider.getString(CommonStrings.rooms))
             }
 
             buildChildren(result, 0)

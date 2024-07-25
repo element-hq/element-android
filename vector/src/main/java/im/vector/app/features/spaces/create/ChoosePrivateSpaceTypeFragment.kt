@@ -22,12 +22,12 @@ import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.activityViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.databinding.FragmentSpaceCreateChoosePrivateModelBinding
+import im.vector.lib.strings.CommonStrings
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -54,7 +54,7 @@ class ChoosePrivateSpaceTypeFragment :
         }
 
         sharedViewModel.onEach { state ->
-            views.accessInfoHelpText.text = stringProvider.getString(R.string.create_spaces_make_sure_access, state.name ?: "")
+            views.accessInfoHelpText.text = stringProvider.getString(CommonStrings.create_spaces_make_sure_access, state.name ?: "")
         }
     }
 

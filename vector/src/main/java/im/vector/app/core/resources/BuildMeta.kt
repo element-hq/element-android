@@ -19,6 +19,7 @@ package im.vector.app.core.resources
 data class BuildMeta(
         val isDebug: Boolean,
         val applicationId: String,
+        val applicationName: String,
         val lowPrivacyLoggingEnabled: Boolean,
         val versionName: String,
         val gitRevision: String,

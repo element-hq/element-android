@@ -20,7 +20,7 @@ import androidx.annotation.StringRes
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
-import im.vector.app.R
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 
@@ -31,8 +31,8 @@ enum class WidgetStatus {
 }
 
 enum class WidgetKind(@StringRes val nameRes: Int, val screenId: String?) {
-    ROOM(R.string.room_widget_activity_title, null),
-    STICKER_PICKER(R.string.title_activity_choose_sticker, WidgetType.StickerPicker.preferred),
+    ROOM(CommonStrings.room_widget_activity_title, null),
+    STICKER_PICKER(CommonStrings.title_activity_choose_sticker, WidgetType.StickerPicker.preferred),
     INTEGRATION_MANAGER(0, null),
     ELEMENT_CALL(0, null);
 

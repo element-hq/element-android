@@ -28,6 +28,7 @@ import im.vector.app.features.popup.VerificationVectorAlert
 import im.vector.app.features.session.coroutineScope
 import im.vector.lib.core.utils.compat.getParcelableCompat
 import im.vector.lib.core.utils.timer.Clock
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
@@ -99,8 +100,8 @@ class IncomingVerificationRequestHandler @Inject constructor(
 //                val name = user.getBestName()
 //                val alert = VerificationVectorAlert(
 //                        uid,
-//                        context.getString(R.string.sas_incoming_request_notif_title),
-//                        context.getString(R.string.sas_incoming_request_notif_content, name),
+//                        context.getString(CommonStrings.sas_incoming_request_notif_title),
+//                        context.getString(CommonStrings.sas_incoming_request_notif_content, name),
 //                        R.drawable.ic_shield_black,
 //                        shouldBeDisplayedIn = { activity ->
 //                            if (activity is VectorBaseActivity<*>) {
@@ -124,13 +125,13 @@ class IncomingVerificationRequestHandler @Inject constructor(
 //                                tx.cancel()
 //                            }
 //                            addButton(
-//                                    context.getString(R.string.action_ignore),
+//                                    context.getString(CommonStrings.action_ignore),
 //                                    LaunchCoroutineRunnable(coroutineScope) {
 //                                        tx.cancel()
 //                                    }
 //                            )
 //                            addButton(
-//                                    context.getString(R.string.action_open),
+//                                    context.getString(CommonStrings.action_open),
 //                                    {
 //                                        (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let {
 //                                            it.navigator.performDeviceVerification(it, tx.otherUserId, tx.transactionId)
@@ -168,7 +169,7 @@ class IncomingVerificationRequestHandler @Inject constructor(
 
             val alert = VerificationVectorAlert(
                     uid = uniqueIdForVerificationRequest(pr),
-                    title = context.getString(R.string.sas_incoming_request_notif_title),
+                    title = context.getString(CommonStrings.sas_incoming_request_notif_title),
                     description = description,
                     iconId = R.drawable.ic_shield_black,
                     priority = PopupAlertManager.INCOMING_VERIFICATION_REQUEST_PRIORITY,
@@ -206,7 +207,7 @@ class IncomingVerificationRequestHandler @Inject constructor(
                                     pr.transactionId,
                             )
                         }
-                        colorAttribute = R.attr.vctr_notice_secondary
+                        colorAttribute = im.vector.lib.ui.styles.R.attr.vctr_notice_secondary
                         // 5mn expiration
                         expirationTimestamp = clock.epochMillis() + (5 * 60 * 1000L)
                     }

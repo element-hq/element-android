@@ -16,7 +16,7 @@
 package org.matrix.android.sdk.internal.session.pushrules
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.map
 import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.pushrules.Action
@@ -160,7 +160,7 @@ internal class DefaultPushRuleService @Inject constructor(
                     result.pushRules.map(PushRuleEntity::ruleId).filter { !it.startsWith(".") }
                 }
         )
-        return Transformations.map(liveData) { results ->
+        return liveData.map { results ->
             results.firstOrNull().orEmpty().toSet()
         }
     }

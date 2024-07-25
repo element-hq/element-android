@@ -32,21 +32,25 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.dialogs.ExportKeysDialog
 import im.vector.app.core.extensions.queryExportKeys
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.databinding.BottomSheetLogoutAndBackupBinding
 import im.vector.app.features.crypto.keysbackup.setup.KeysBackupSetupActivity
 import im.vector.app.features.crypto.recover.BootstrapBottomSheet
 import im.vector.app.features.crypto.recover.SetupMode
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
+import javax.inject.Inject
 
 // TODO this needs to be refactored to current standard and remove legacy
 @AndroidEntryPoint
 class SignOutBottomSheetDialogFragment :
         VectorBaseBottomSheetDialogFragment<BottomSheetLogoutAndBackupBinding>() {
+
+    @Inject lateinit var buildMeta: BuildMeta
 
     var onSignOut: Runnable? = null
 
@@ -75,10 +79,10 @@ class SignOutBottomSheetDialogFragment :
         views.exitAnywayButton.action = {
             context?.let {
                 MaterialAlertDialogBuilder(it)
-                        .setTitle(R.string.are_you_sure)
-                        .setMessage(R.string.sign_out_bottom_sheet_will_lose_secure_messages)
-                        .setPositiveButton(R.string.backup, null)
-                        .setNegativeButton(R.string.action_sign_out) { _, _ ->
+                        .setTitle(CommonStrings.are_you_sure)
+                        .setMessage(CommonStrings.sign_out_bottom_sheet_will_lose_secure_messages)
+                        .setPositiveButton(CommonStrings.backup, null)
+                        .setNegativeButton(CommonStrings.action_sign_out) { _, _ ->
                             onSignOut?.run()
                         }
                         .show()
@@ -91,7 +95,11 @@ class SignOutBottomSheetDialogFragment :
 
         views.exportManuallyButton.action = {
             withState(viewModel) { state ->
-                queryExportKeys(state.userId, manualExportKeysActivityResultLauncher)
+                queryExportKeys(
+                        userId = state.userId,
+                        applicationName = buildMeta.applicationName,
+                        activityResultLauncher = manualExportKeysActivityResultLauncher,
+                )
             }
         }
 
@@ -103,7 +111,7 @@ class SignOutBottomSheetDialogFragment :
     override fun invalidate() = withState(viewModel) { state ->
         views.signoutExportingLoading.isVisible = false
         if (state.crossSigningSetupAllKeysKnown && !state.backupIsSetup) {
-            views.bottomSheetSignoutWarningText.text = getString(R.string.sign_out_bottom_sheet_warning_no_backup)
+            views.bottomSheetSignoutWarningText.text = getString(CommonStrings.sign_out_bottom_sheet_warning_no_backup)
             views.backingUpStatusGroup.isVisible = false
             // we should show option to setup 4S
             views.setupRecoveryButton.isVisible = true
@@ -113,7 +121,7 @@ class SignOutBottomSheetDialogFragment :
             views.exitAnywayButton.isVisible = true
             views.signOutButton.isVisible = false
         } else if (state.keysBackupState == KeysBackupState.Unknown || state.keysBackupState == KeysBackupState.Disabled) {
-            views.bottomSheetSignoutWarningText.text = getString(R.string.sign_out_bottom_sheet_warning_no_backup)
+            views.bottomSheetSignoutWarningText.text = getString(CommonStrings.sign_out_bottom_sheet_warning_no_backup)
             views.backingUpStatusGroup.isVisible = false
             // no key backup and cannot setup full 4S
             // we propose to setup
@@ -131,13 +139,13 @@ class SignOutBottomSheetDialogFragment :
 
             when (state.keysBackupState) {
                 KeysBackupState.ReadyToBackUp -> {
-                    views.bottomSheetSignoutWarningText.text = getString(R.string.action_sign_out_confirmation_simple)
+                    views.bottomSheetSignoutWarningText.text = getString(CommonStrings.action_sign_out_confirmation_simple)
 
                     // Ok all keys are backedUp
                     views.backingUpStatusGroup.isVisible = true
                     views.backupProgress.isVisible = false
                     views.backupCompleteImage.isVisible = true
-                    views.backupStatusText.text = getString(R.string.keys_backup_info_keys_all_backup_up)
+                    views.backupStatusText.text = getString(CommonStrings.keys_backup_info_keys_all_backup_up)
 
                     views.setupMegolmBackupButton.isVisible = false
                     views.exportManuallyButton.isVisible = false
@@ -147,13 +155,13 @@ class SignOutBottomSheetDialogFragment :
                 }
                 KeysBackupState.WillBackUp,
                 KeysBackupState.BackingUp -> {
-                    views.bottomSheetSignoutWarningText.text = getString(R.string.sign_out_bottom_sheet_warning_backing_up)
+                    views.bottomSheetSignoutWarningText.text = getString(CommonStrings.sign_out_bottom_sheet_warning_backing_up)
 
                     // save in progress
                     views.backingUpStatusGroup.isVisible = true
                     views.backupProgress.isVisible = true
                     views.backupCompleteImage.isVisible = false
-                    views.backupStatusText.text = getString(R.string.sign_out_bottom_sheet_backing_up_keys)
+                    views.backupStatusText.text = getString(CommonStrings.sign_out_bottom_sheet_backing_up_keys)
 
                     views.setupMegolmBackupButton.isVisible = false
                     views.exportManuallyButton.isVisible = false
@@ -161,7 +169,7 @@ class SignOutBottomSheetDialogFragment :
                     views.signOutButton.isVisible = false
                 }
                 KeysBackupState.NotTrusted -> {
-                    views.bottomSheetSignoutWarningText.text = getString(R.string.sign_out_bottom_sheet_warning_backup_not_active)
+                    views.bottomSheetSignoutWarningText.text = getString(CommonStrings.sign_out_bottom_sheet_warning_backup_not_active)
                     // It's not trusted and we know there are unsaved keys..
                     views.backingUpStatusGroup.isVisible = false
 
@@ -193,7 +201,7 @@ class SignOutBottomSheetDialogFragment :
             }
             is Success -> {
                 if (state.hasBeenExportedToFile.invoke()) {
-                    views.bottomSheetSignoutWarningText.text = getString(R.string.action_sign_out_confirmation_simple)
+                    views.bottomSheetSignoutWarningText.text = getString(CommonStrings.action_sign_out_confirmation_simple)
                     views.backingUpStatusGroup.isVisible = false
 
                     views.setupRecoveryButton.isVisible = false

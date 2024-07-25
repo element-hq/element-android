@@ -54,6 +54,7 @@ import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedA
 import im.vector.app.features.home.room.list.widget.NotifsFabMenuView
 import im.vector.app.features.matrixto.OriginOfMatrixTo
 import im.vector.app.features.notifications.NotificationDrawerManager
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -462,19 +463,22 @@ class RoomListFragment :
     private fun promptLeaveRoom(roomId: String) {
         val isPublicRoom = roomListViewModel.isPublicRoom(roomId)
         val message = buildString {
-            append(getString(R.string.room_participants_leave_prompt_msg))
+            append(getString(CommonStrings.room_participants_leave_prompt_msg))
             if (!isPublicRoom) {
                 append("\n\n")
-                append(getString(R.string.room_participants_leave_private_warning))
+                append(getString(CommonStrings.room_participants_leave_private_warning))
             }
         }
-        MaterialAlertDialogBuilder(requireContext(), if (isPublicRoom) 0 else R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive)
-                .setTitle(R.string.room_participants_leave_prompt_title)
+        MaterialAlertDialogBuilder(
+                requireContext(),
+                if (isPublicRoom) 0 else im.vector.lib.ui.styles.R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive
+        )
+                .setTitle(CommonStrings.room_participants_leave_prompt_title)
                 .setMessage(message)
-                .setPositiveButton(R.string.action_leave) { _, _ ->
+                .setPositiveButton(CommonStrings.action_leave) { _, _ ->
                     roomListViewModel.handle(RoomListAction.LeaveRoom(roomId))
                 }
-                .setNegativeButton(R.string.action_cancel, null)
+                .setNegativeButton(CommonStrings.action_cancel, null)
                 .show()
     }
 
@@ -489,24 +493,24 @@ class RoomListFragment :
             val emptyState = when (roomListParams.displayMode) {
                 RoomListDisplayMode.NOTIFICATIONS -> {
                     StateView.State.Empty(
-                            title = getString(R.string.room_list_catchup_empty_title),
+                            title = getString(CommonStrings.room_list_catchup_empty_title),
                             image = ContextCompat.getDrawable(requireContext(), R.drawable.ic_noun_party_popper),
-                            message = getString(R.string.room_list_catchup_empty_body)
+                            message = getString(CommonStrings.room_list_catchup_empty_body)
                     )
                 }
                 RoomListDisplayMode.PEOPLE ->
                     StateView.State.Empty(
-                            title = getString(R.string.room_list_people_empty_title),
+                            title = getString(CommonStrings.room_list_people_empty_title),
                             image = ContextCompat.getDrawable(requireContext(), R.drawable.empty_state_dm),
                             isBigImage = true,
-                            message = getString(R.string.room_list_people_empty_body)
+                            message = getString(CommonStrings.room_list_people_empty_body)
                     )
                 RoomListDisplayMode.ROOMS ->
                     StateView.State.Empty(
-                            title = getString(R.string.room_list_rooms_empty_title),
+                            title = getString(CommonStrings.room_list_rooms_empty_title),
                             image = ContextCompat.getDrawable(requireContext(), R.drawable.empty_state_room),
                             isBigImage = true,
-                            message = getString(R.string.room_list_rooms_empty_body)
+                            message = getString(CommonStrings.room_list_rooms_empty_body)
                     )
                 RoomListDisplayMode.FILTERED ->
                     // Always display the content in this mode, because if the footer

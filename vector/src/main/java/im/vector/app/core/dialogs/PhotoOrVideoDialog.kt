@@ -22,6 +22,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.databinding.DialogPhotoOrVideoBinding
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.lib.strings.CommonStrings
 
 class PhotoOrVideoDialog(
         private val activity: Activity,
@@ -52,12 +53,12 @@ class PhotoOrVideoDialog(
                 views.dialogPhotoOrVideoPhoto.isChecked = true
 
                 MaterialAlertDialogBuilder(activity)
-                        .setTitle(R.string.option_take_photo_video)
+                        .setTitle(CommonStrings.option_take_photo_video)
                         .setView(dialogLayout)
-                        .setPositiveButton(R.string._continue) { _, _ ->
+                        .setPositiveButton(CommonStrings._continue) { _, _ ->
                             submit(views, vectorPreferences, listener)
                         }
-                        .setNegativeButton(R.string.action_cancel, null)
+                        .setNegativeButton(CommonStrings.action_cancel, null)
                         .show()
             }
         }
@@ -98,13 +99,13 @@ class PhotoOrVideoDialog(
         views.dialogPhotoOrVideoAlwaysAsk.isChecked = currentMode == VectorPreferences.TAKE_PHOTO_VIDEO_MODE_ALWAYS_ASK
 
         MaterialAlertDialogBuilder(activity)
-                .setTitle(R.string.option_take_photo_video)
+                .setTitle(CommonStrings.option_take_photo_video)
                 .setView(dialogLayout)
-                .setPositiveButton(R.string.action_save) { _, _ ->
+                .setPositiveButton(CommonStrings.action_save) { _, _ ->
                     submitSettings(views)
                     listener.onUpdated()
                 }
-                .setNegativeButton(R.string.action_cancel, null)
+                .setNegativeButton(CommonStrings.action_cancel, null)
                 .show()
     }
 

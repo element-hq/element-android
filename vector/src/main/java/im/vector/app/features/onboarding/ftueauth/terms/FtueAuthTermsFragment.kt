@@ -37,6 +37,7 @@ import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewState
 import im.vector.app.features.onboarding.RegisterAction
 import im.vector.app.features.onboarding.ftueauth.AbstractFtueAuthFragment
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.auth.data.LocalizedFlowDataLoginTerms
 import javax.inject.Inject
 import kotlin.math.roundToInt
@@ -118,7 +119,7 @@ class FtueAuthTermsFragment :
 
     override fun updateWithState(state: OnboardingViewState) {
         val homeserverName = state.selectedHomeserver.userFacingUrl.toReducedUrl()
-        views.termsHeaderSubtitle.text = getString(R.string.ftue_auth_terms_subtitle, homeserverName)
+        views.termsHeaderSubtitle.text = getString(CommonStrings.ftue_auth_terms_subtitle, homeserverName)
         policyController.homeServer = homeserverName
         renderState()
     }

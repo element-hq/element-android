@@ -21,6 +21,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
+import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import im.vector.app.core.debug.DebugReceiver
 import im.vector.app.core.di.DefaultPreferences
@@ -37,7 +38,12 @@ class VectorDebugReceiver @Inject constructor(
 ) : BroadcastReceiver(), DebugReceiver {
 
     override fun register(context: Context) {
-        context.registerReceiver(this, getIntentFilter(context))
+        ContextCompat.registerReceiver(
+                context,
+                this,
+                getIntentFilter(context),
+                ContextCompat.RECEIVER_NOT_EXPORTED,
+        )
     }
 
     override fun unregister(context: Context) {

@@ -31,10 +31,20 @@ internal abstract class MediaModule {
         @Provides
         @JvmStatic
         @SessionScope
-        fun providesMediaAPI(retrofit: Retrofit): MediaAPI {
-            return retrofit.create(MediaAPI::class.java)
+        fun providesUnauthenticatedMediaAPI(retrofit: Retrofit): UnauthenticatedMediaAPI {
+            return retrofit.create(UnauthenticatedMediaAPI::class.java)
+        }
+
+        @Provides
+        @JvmStatic
+        @SessionScope
+        fun providesAuthenticatedMediaAPI(retrofit: Retrofit): AuthenticatedMediaAPI {
+            return retrofit.create(AuthenticatedMediaAPI::class.java)
         }
     }
+
+    @Binds
+    abstract fun bindIsAuthenticatedMediaSupported(isAuthenticatedMediaSupported: DefaultIsAuthenticatedMediaSupported): IsAuthenticatedMediaSupported
 
     @Binds
     abstract fun bindMediaService(service: DefaultMediaService): MediaService

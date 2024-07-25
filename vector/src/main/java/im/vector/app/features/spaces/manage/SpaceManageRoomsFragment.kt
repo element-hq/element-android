@@ -40,6 +40,8 @@ import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.FragmentSpaceAddRoomsBinding
+import im.vector.lib.strings.CommonPlurals
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -71,7 +73,7 @@ class SpaceManageRoomsFragment :
         super.onViewCreated(view, savedInstanceState)
 
         setupToolbar(views.addRoomToSpaceToolbar)
-                .setTitle(R.string.space_manage_rooms_and_spaces)
+                .setTitle(CommonStrings.space_manage_rooms_and_spaces)
                 .allowBack()
 
         views.createNewRoom.isVisible = false
@@ -125,7 +127,7 @@ class SpaceManageRoomsFragment :
                 views.addRoomToSpaceToolbar.isVisible = true
                 vectorBaseActivity.startSupportActionMode(this)
             } else {
-                toolbar?.title = resources.getQuantityString(R.plurals.room_details_selected, state.selectedRooms.size, state.selectedRooms.size)
+                toolbar?.title = resources.getQuantityString(CommonPlurals.room_details_selected, state.selectedRooms.size, state.selectedRooms.size)
             }
 //            views.addRoomToSpaceToolbar.isVisible = false
 //            views.addRoomToSpaceToolbar.startActionMode(this)
@@ -153,7 +155,7 @@ class SpaceManageRoomsFragment :
         val inflater = mode?.menuInflater
         inflater?.inflate(R.menu.menu_manage_space, menu)
         withState(viewModel) {
-            mode?.title = resources.getQuantityString(R.plurals.room_details_selected, it.selectedRooms.size, it.selectedRooms.size)
+            mode?.title = resources.getQuantityString(CommonPlurals.room_details_selected, it.selectedRooms.size, it.selectedRooms.size)
         }
         currentActionMode = mode
         views.addRoomToSpaceToolbar.isVisible = false

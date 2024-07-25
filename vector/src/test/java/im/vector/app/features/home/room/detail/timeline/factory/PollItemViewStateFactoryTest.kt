@@ -16,7 +16,6 @@
 
 package im.vector.app.features.home.room.detail.timeline.factory
 
-import im.vector.app.R
 import im.vector.app.features.home.room.detail.timeline.item.PollOptionViewState
 import im.vector.app.features.home.room.detail.timeline.item.PollVoteSummaryData
 import im.vector.app.features.poll.PollItemViewState
@@ -24,6 +23,8 @@ import im.vector.app.test.fakes.FakeStringProvider
 import im.vector.app.test.fixtures.PollFixture.A_POLL_CONTENT
 import im.vector.app.test.fixtures.PollFixture.A_POLL_OPTION_IDS
 import im.vector.app.test.fixtures.PollFixture.A_POLL_RESPONSE_DATA
+import im.vector.lib.strings.CommonPlurals
+import im.vector.lib.strings.CommonStrings
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -57,7 +58,7 @@ class PollItemViewStateFactoryTest {
         // Then
         pollViewState shouldBeEqualTo PollItemViewState(
                 question = A_POLL_CONTENT.getBestPollCreationInfo()?.question?.getBestQuestion() ?: "",
-                votesStatus = fakeStringProvider.instance.getString(R.string.poll_no_votes_cast),
+                votesStatus = fakeStringProvider.instance.getString(CommonStrings.poll_no_votes_cast),
                 canVote = false,
                 optionViewStates = optionViewStates,
         )
@@ -90,7 +91,7 @@ class PollItemViewStateFactoryTest {
         // Then
         pollViewState shouldBeEqualTo PollItemViewState(
                 question = A_POLL_CONTENT.getBestPollCreationInfo()?.question?.getBestQuestion() ?: "",
-                votesStatus = fakeStringProvider.instance.getQuantityString(R.plurals.poll_total_vote_count_after_ended, 0, 0),
+                votesStatus = fakeStringProvider.instance.getQuantityString(CommonPlurals.poll_total_vote_count_after_ended, 0, 0),
                 canVote = false,
                 optionViewStates = optionViewStates,
         )
@@ -126,7 +127,7 @@ class PollItemViewStateFactoryTest {
         )
 
         // Then
-        pollViewState.votesStatus shouldBeEqualTo fakeStringProvider.instance.getString(R.string.unable_to_decrypt_some_events_in_poll)
+        pollViewState.votesStatus shouldBeEqualTo fakeStringProvider.instance.getString(CommonStrings.unable_to_decrypt_some_events_in_poll)
     }
 
     @Test
@@ -157,7 +158,7 @@ class PollItemViewStateFactoryTest {
         // Then
         pollViewState shouldBeEqualTo PollItemViewState(
                 question = A_POLL_CONTENT.getBestPollCreationInfo()?.question?.getBestQuestion() ?: "",
-                votesStatus = fakeStringProvider.instance.getString(R.string.poll_undisclosed_not_ended),
+                votesStatus = fakeStringProvider.instance.getString(CommonStrings.poll_undisclosed_not_ended),
                 canVote = true,
                 optionViewStates = optionViewStates,
         )
@@ -206,7 +207,7 @@ class PollItemViewStateFactoryTest {
         // Then
         pollViewState shouldBeEqualTo PollItemViewState(
                 question = A_POLL_CONTENT.getBestPollCreationInfo()?.question?.getBestQuestion() ?: "",
-                votesStatus = fakeStringProvider.instance.getQuantityString(R.plurals.poll_total_vote_count_before_ended_and_voted, 1, 1),
+                votesStatus = fakeStringProvider.instance.getQuantityString(CommonPlurals.poll_total_vote_count_before_ended_and_voted, 1, 1),
                 canVote = true,
                 optionViewStates = optionViewStates,
         )
@@ -256,7 +257,7 @@ class PollItemViewStateFactoryTest {
         )
 
         // Then
-        pollViewState.votesStatus shouldBeEqualTo fakeStringProvider.instance.getString(R.string.unable_to_decrypt_some_events_in_poll)
+        pollViewState.votesStatus shouldBeEqualTo fakeStringProvider.instance.getString(CommonStrings.unable_to_decrypt_some_events_in_poll)
     }
 
     @Test
@@ -290,7 +291,7 @@ class PollItemViewStateFactoryTest {
         // Then
         pollViewState shouldBeEqualTo PollItemViewState(
                 question = A_POLL_CONTENT.getBestPollCreationInfo()?.question?.getBestQuestion() ?: "",
-                votesStatus = fakeStringProvider.instance.getString(R.string.poll_no_votes_cast),
+                votesStatus = fakeStringProvider.instance.getString(CommonStrings.poll_no_votes_cast),
                 canVote = true,
                 optionViewStates = optionViewStates,
         )

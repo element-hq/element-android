@@ -20,8 +20,8 @@ import android.util.AttributeSet
 import android.widget.LinearLayout
 import androidx.annotation.IntRange
 import androidx.core.content.ContextCompat
-import im.vector.app.R
 import im.vector.app.databinding.ViewPasswordStrengthBarBinding
+import im.vector.lib.ui.styles.R
 
 /**
  * A password strength bar custom widget.
@@ -87,7 +87,7 @@ class PasswordStrengthBar @JvmOverloads constructor(
         }
 
     init {
-        inflate(context, R.layout.view_password_strength_bar, this)
+        inflate(context, im.vector.app.R.layout.view_password_strength_bar, this)
         views = ViewPasswordStrengthBarBinding.bind(this)
         orientation = HORIZONTAL
         strength = 0

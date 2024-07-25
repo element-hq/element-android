@@ -20,12 +20,12 @@ import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.QueryStringValue
@@ -120,7 +120,7 @@ class RoomBannedMemberListViewModel @AssistedInject constructor(
             try {
                 room.membershipService().unban(roomMemberSummary.userId, null)
             } catch (failure: Throwable) {
-                _viewEvents.post(RoomBannedMemberListViewEvents.ToastError(stringProvider.getString(R.string.failed_to_unban)))
+                _viewEvents.post(RoomBannedMemberListViewEvents.ToastError(stringProvider.getString(CommonStrings.failed_to_unban)))
             } finally {
                 setState {
                     copy(

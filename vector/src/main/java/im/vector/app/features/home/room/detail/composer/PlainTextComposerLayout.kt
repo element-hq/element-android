@@ -40,6 +40,7 @@ import im.vector.app.features.home.room.detail.timeline.image.buildImageContentR
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.PillsPostProcessor
 import im.vector.app.features.media.ImageContentRenderer
+import im.vector.lib.strings.CommonStrings
 import org.commonmark.parser.Parser
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoContent
@@ -151,10 +152,10 @@ class PlainTextComposerLayout @JvmOverloads constructor(
 
         views.sendButton.apply {
             if (mode is MessageComposerMode.Edit) {
-                contentDescription = resources.getString(R.string.action_save)
+                contentDescription = resources.getString(CommonStrings.action_save)
                 setImageResource(R.drawable.ic_composer_rich_text_save)
             } else {
-                contentDescription = resources.getString(R.string.action_send)
+                contentDescription = resources.getString(CommonStrings.action_send)
                 setImageResource(R.drawable.ic_rich_composer_send)
             }
         }
@@ -182,8 +183,8 @@ class PlainTextComposerLayout @JvmOverloads constructor(
         val nonFormattedBody = when (messageContent) {
             is MessageAudioContent -> getAudioContentBodyText(messageContent)
             is MessagePollContent -> messageContent.getBestPollCreationInfo()?.question?.getBestQuestion()
-            is MessageBeaconInfoContent -> resources.getString(R.string.live_location_description)
-            is MessageEndPollContent -> resources.getString(R.string.message_reply_to_ended_poll_preview)
+            is MessageBeaconInfoContent -> resources.getString(CommonStrings.live_location_description)
+            is MessageEndPollContent -> resources.getString(CommonStrings.message_reply_to_ended_poll_preview)
             else -> messageContent?.body.orEmpty()
         }
         var formattedBody: CharSequence? = null
@@ -235,9 +236,9 @@ class PlainTextComposerLayout @JvmOverloads constructor(
     private fun getAudioContentBodyText(messageContent: MessageAudioContent): String {
         val formattedDuration = DateUtils.formatElapsedTime(((messageContent.audioInfo?.duration ?: 0) / 1000).toLong())
         return if (messageContent.voiceMessageIndicator != null) {
-            resources.getString(R.string.voice_message_reply_content, formattedDuration)
+            resources.getString(CommonStrings.voice_message_reply_content, formattedDuration)
         } else {
-            resources.getString(R.string.audio_message_reply_content, messageContent.body, formattedDuration)
+            resources.getString(CommonStrings.audio_message_reply_content, messageContent.body, formattedDuration)
         }
     }
 }

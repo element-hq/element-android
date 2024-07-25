@@ -75,14 +75,14 @@ abstract class AbsMessageVoiceBroadcastItem<H : AbsMessageVoiceBroadcastItem.Hol
 
     protected fun renderPlayingLiveIndicator(holder: H) {
         with(holder) {
-            liveIndicator.tintBackground(colorProvider.getColorFromAttribute(R.attr.colorError))
+            liveIndicator.tintBackground(colorProvider.getColorFromAttribute(com.google.android.material.R.attr.colorError))
             liveIndicator.isVisible = true
         }
     }
 
     protected fun renderPausedLiveIndicator(holder: H) {
         with(holder) {
-            liveIndicator.tintBackground(colorProvider.getColorFromAttribute(R.attr.vctr_content_quaternary))
+            liveIndicator.tintBackground(colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_quaternary))
             liveIndicator.isVisible = true
         }
     }

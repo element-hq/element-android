@@ -27,36 +27,16 @@ import android.widget.ImageView
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
-import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
-import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.transition.ChangeBounds
 import androidx.transition.Fade
 import androidx.transition.Transition
 import androidx.transition.TransitionManager
 import androidx.transition.TransitionSet
-import im.vector.app.R
 import im.vector.app.core.animations.SimpleTransitionListener
 import im.vector.app.features.themes.ThemeUtils
-
-/**
- * Remove left margin of a SearchView.
- */
-fun SearchView.withoutLeftMargin() {
-    (findViewById<View>(R.id.search_edit_frame))?.let {
-        val searchEditFrameParams = it.layoutParams as ViewGroup.MarginLayoutParams
-        searchEditFrameParams.leftMargin = 0
-        it.layoutParams = searchEditFrameParams
-    }
-
-    (findViewById<View>(R.id.search_mag_icon))?.let {
-        val searchIconParams = it.layoutParams as ViewGroup.MarginLayoutParams
-        searchIconParams.leftMargin = 0
-        it.layoutParams = searchIconParams
-    }
-}
 
 fun EditText.hidePassword() {
     inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
@@ -104,7 +84,7 @@ fun View.setAttributeBackground(@AttrRes attributeId: Int) {
  * Inspired from https://stackoverflow.com/a/64597532/1472514. Safer to call the 2 available API.
  */
 fun View.giveAccessibilityFocus() {
-    ViewCompat.performAccessibilityAction(this, AccessibilityNodeInfo.ACTION_ACCESSIBILITY_FOCUS, null)
+    performAccessibilityAction(AccessibilityNodeInfo.ACTION_ACCESSIBILITY_FOCUS, null)
     sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_SELECTED)
 }
 

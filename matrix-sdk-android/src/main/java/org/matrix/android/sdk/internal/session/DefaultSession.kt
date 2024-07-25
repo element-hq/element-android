@@ -67,6 +67,7 @@ import org.matrix.android.sdk.api.util.appendParamToUrl
 import org.matrix.android.sdk.internal.auth.SSO_UIA_FALLBACK_PATH
 import org.matrix.android.sdk.internal.auth.SessionParamsStore
 import org.matrix.android.sdk.internal.database.tools.RealmDebugTools
+import org.matrix.android.sdk.internal.di.Authenticated
 import org.matrix.android.sdk.internal.di.ContentScannerDatabase
 import org.matrix.android.sdk.internal.di.CryptoDatabase
 import org.matrix.android.sdk.internal.di.IdentityDatabase
@@ -131,6 +132,8 @@ internal class DefaultSession @Inject constructor(
         private val eventStreamService: Lazy<EventStreamService>,
         @UnauthenticatedWithCertificate
         private val unauthenticatedWithCertificateOkHttpClient: Lazy<OkHttpClient>,
+        @Authenticated
+        private val authenticatedOkHttpClient: Lazy<OkHttpClient>,
         private val sessionState: SessionState,
 ) : Session,
         GlobalErrorHandler.Listener {
@@ -232,6 +235,10 @@ internal class DefaultSession @Inject constructor(
 
     override fun getOkHttpClient(): OkHttpClient {
         return unauthenticatedWithCertificateOkHttpClient.get()
+    }
+
+    override fun getAuthenticatedOkHttpClient(): OkHttpClient {
+        return authenticatedOkHttpClient.get()
     }
 
     override fun addListener(listener: Session.Listener) {

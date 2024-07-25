@@ -21,11 +21,11 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.VideoView
 import androidx.core.view.isVisible
-import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.files.LocalFilesHelper
 import im.vector.app.features.session.coroutineScope
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -73,7 +73,7 @@ class VideoContentRenderer @Inject constructor(
             if (data.url == null) {
                 loadingView.isVisible = false
                 errorView.isVisible = true
-                errorView.setText(R.string.unknown_error)
+                errorView.setText(CommonStrings.unknown_error)
             } else if (localFilesHelper.isLocalFile(data.url) && data.allowNonMxcUrls) {
                 thumbnailView.isVisible = false
                 loadingView.isVisible = false
@@ -121,7 +121,7 @@ class VideoContentRenderer @Inject constructor(
                 thumbnailView.isVisible = false
                 loadingView.isVisible = false
                 errorView.isVisible = true
-                errorView.setText(R.string.unknown_error)
+                errorView.setText(CommonStrings.unknown_error)
             } else {
                 // Temporary code, some remote videos are not played by videoview setVideoUri
                 // So for now we download them then play

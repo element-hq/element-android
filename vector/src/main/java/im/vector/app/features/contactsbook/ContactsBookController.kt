@@ -21,7 +21,6 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import im.vector.app.R
 import im.vector.app.core.contacts.MappedContact
 import im.vector.app.core.epoxy.errorWithRetryItem
 import im.vector.app.core.epoxy.loadingItem
@@ -29,6 +28,7 @@ import im.vector.app.core.epoxy.noResultItem
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import javax.inject.Inject
 
@@ -61,7 +61,7 @@ class ContactsBookController @Inject constructor(
         val host = this
         loadingItem {
             id("loading")
-            loadingText(host.stringProvider.getString(R.string.loading_contact_book))
+            loadingText(host.stringProvider.getString(CommonStrings.loading_contact_book))
         }
     }
 
@@ -131,9 +131,9 @@ class ContactsBookController @Inject constructor(
     private fun renderEmptyState(hasSearch: Boolean) {
         val host = this
         val noResultRes = if (hasSearch) {
-            R.string.no_result_placeholder
+            CommonStrings.no_result_placeholder
         } else {
-            R.string.empty_contact_book
+            CommonStrings.empty_contact_book
         }
         noResultItem {
             id("noResult")

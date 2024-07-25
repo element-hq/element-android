@@ -16,10 +16,10 @@
 
 package im.vector.app.features.onboarding.ftueauth
 
-import im.vector.app.R
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.onboarding.ftueauth.LoginErrorParser.LoginErrorResult
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.failure.isHomeserverUnavailable
 import org.matrix.android.sdk.api.failure.isInvalidPassword
 import org.matrix.android.sdk.api.failure.isInvalidUsername
@@ -36,13 +36,13 @@ class LoginErrorParser @Inject constructor(
                 LoginErrorResult(throwable, usernameOrIdError = errorFormatter.toHumanReadable(throwable))
             }
             throwable.isLoginEmailUnknown() -> {
-                LoginErrorResult(throwable, usernameOrIdError = stringProvider.getString(R.string.login_login_with_email_error))
+                LoginErrorResult(throwable, usernameOrIdError = stringProvider.getString(CommonStrings.login_login_with_email_error))
             }
             throwable.isInvalidPassword() && password.hasSurroundingSpaces() -> {
-                LoginErrorResult(throwable, passwordError = stringProvider.getString(R.string.auth_invalid_login_param_space_in_password))
+                LoginErrorResult(throwable, passwordError = stringProvider.getString(CommonStrings.auth_invalid_login_param_space_in_password))
             }
             throwable.isHomeserverUnavailable() -> {
-                LoginErrorResult(throwable, usernameOrIdError = stringProvider.getString(R.string.login_error_homeserver_not_found))
+                LoginErrorResult(throwable, usernameOrIdError = stringProvider.getString(CommonStrings.login_error_homeserver_not_found))
             }
             else -> {
                 LoginErrorResult(throwable)

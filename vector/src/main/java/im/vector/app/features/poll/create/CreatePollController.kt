@@ -28,6 +28,7 @@ import im.vector.app.core.ui.list.genericItem
 import im.vector.app.features.form.formEditTextItem
 import im.vector.app.features.form.formEditTextWithDeleteItem
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.room.model.message.PollType
 import javax.inject.Inject
 
@@ -51,7 +52,7 @@ class CreatePollController @Inject constructor(
         genericItem {
             id("poll_type_title")
             style(ItemStyle.BIG_TEXT)
-            title(host.stringProvider.getString(R.string.poll_type_title).toEpoxyCharSequence())
+            title(host.stringProvider.getString(CommonStrings.poll_type_title).toEpoxyCharSequence())
         }
 
         pollTypeSelectionItem {
@@ -71,7 +72,7 @@ class CreatePollController @Inject constructor(
         genericItem {
             id("question_title")
             style(ItemStyle.BIG_TEXT)
-            title(host.stringProvider.getString(R.string.create_poll_question_title).toEpoxyCharSequence())
+            title(host.stringProvider.getString(CommonStrings.create_poll_question_title).toEpoxyCharSequence())
         }
 
         val questionImeAction = if (currentState.options.isEmpty()) EditorInfo.IME_ACTION_DONE else EditorInfo.IME_ACTION_NEXT
@@ -79,7 +80,7 @@ class CreatePollController @Inject constructor(
         formEditTextItem {
             id("question")
             value(currentState.question)
-            hint(host.stringProvider.getString(R.string.create_poll_question_hint))
+            hint(host.stringProvider.getString(CommonStrings.create_poll_question_hint))
             singleLine(true)
             imeOptions(questionImeAction)
             maxLength(340)
@@ -91,7 +92,7 @@ class CreatePollController @Inject constructor(
         genericItem {
             id("options_title")
             style(ItemStyle.BIG_TEXT)
-            title(host.stringProvider.getString(R.string.create_poll_options_title).toEpoxyCharSequence())
+            title(host.stringProvider.getString(CommonStrings.create_poll_options_title).toEpoxyCharSequence())
         }
 
         currentState.options.forEachIndexed { index, option ->
@@ -99,7 +100,7 @@ class CreatePollController @Inject constructor(
             formEditTextWithDeleteItem {
                 id("option_$index")
                 value(option)
-                hint(host.stringProvider.getString(R.string.create_poll_options_hint, (index + 1)))
+                hint(host.stringProvider.getString(CommonStrings.create_poll_options_hint, (index + 1)))
                 singleLine(true)
                 imeOptions(imeOptions)
                 maxLength(340)
@@ -115,8 +116,8 @@ class CreatePollController @Inject constructor(
         if (currentState.canAddMoreOptions) {
             genericButtonItem {
                 id("add_option")
-                text(host.stringProvider.getString(R.string.create_poll_add_option))
-                textColor(host.colorProvider.getColor(R.color.palette_element_green))
+                text(host.stringProvider.getString(CommonStrings.create_poll_add_option))
+                textColor(host.colorProvider.getColor(im.vector.lib.ui.styles.R.color.palette_element_green))
                 gravity(Gravity.START)
                 bold(true)
                 highlight(false)

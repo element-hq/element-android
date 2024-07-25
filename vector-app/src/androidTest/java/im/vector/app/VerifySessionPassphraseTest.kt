@@ -43,6 +43,7 @@ import im.vector.app.features.crypto.recover.Params
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.ui.robot.AnalyticsRobot
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Ignore
@@ -148,17 +149,17 @@ class VerifySessionPassphraseTest : VerificationTestBase() {
         onView(isRoot())
                 .perform(waitForView(withId(R.id.bottomSheetFragmentContainer)))
 
-        onView(withText(R.string.verification_verify_identity))
+        onView(withText(CommonStrings.verification_verify_identity))
                 .check(matches(isDisplayed()))
 
         // 4S is  setup so passphrase option should be visible
         onView(withId(R.id.bottomSheetVerificationRecyclerView))
-                .check(matches((hasDescendant(withText(R.string.verification_cannot_access_other_session)))))
+                .check(matches((hasDescendant(withText(CommonStrings.verification_cannot_access_other_session)))))
 
         onView(withId(R.id.bottomSheetVerificationRecyclerView))
                 .perform(
                         actionOnItem<RecyclerView.ViewHolder>(
-                                hasDescendant(withText(R.string.verification_cannot_access_other_session)),
+                                hasDescendant(withText(CommonStrings.verification_cannot_access_other_session)),
                                 click()
                         )
                 )
@@ -178,14 +179,14 @@ class VerifySessionPassphraseTest : VerificationTestBase() {
         withIdlingResource(activityIdlingResource(HomeActivity::class.java)) {
             System.out.println("*** passphrase 1.1")
             onView(withId(R.id.bottomSheetVerificationRecyclerView))
-                    .perform(waitForView(hasDescendant(withText(R.string.verification_conclusion_ok_notice))))
+                    .perform(waitForView(hasDescendant(withText(CommonStrings.verification_conclusion_ok_notice))))
         }
 
         // click on done
         onView(withId(R.id.bottomSheetVerificationRecyclerView))
                 .perform(
                         actionOnItem<RecyclerView.ViewHolder>(
-                                hasDescendant(withText(R.string.done)),
+                                hasDescendant(withText(CommonStrings.done)),
                                 click()
                         )
                 )

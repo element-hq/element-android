@@ -36,6 +36,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.VectorMenuProvider
 import im.vector.app.core.utils.ToggleableAppBarLayoutBehavior
 import im.vector.app.databinding.FragmentSpaceLeaveAdvancedBinding
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 
@@ -68,9 +69,9 @@ class SpaceLeaveAdvancedFragment :
 
             state.spaceSummary?.let { summary ->
                 val warningMessage: CharSequence? = when {
-                    summary.otherMemberIds.isEmpty() -> getString(R.string.space_leave_prompt_msg_only_you)
-                    state.isLastAdmin -> getString(R.string.space_leave_prompt_msg_as_admin)
-                    !summary.isPublic -> getString(R.string.space_leave_prompt_msg_private)
+                    summary.otherMemberIds.isEmpty() -> getString(CommonStrings.space_leave_prompt_msg_only_you)
+                    state.isLastAdmin -> getString(CommonStrings.space_leave_prompt_msg_as_admin)
+                    !summary.isPublic -> getString(CommonStrings.space_leave_prompt_msg_private)
                     else -> null
                 }
 
@@ -78,7 +79,7 @@ class SpaceLeaveAdvancedFragment :
                 views.spaceLeavePromptDescription.text = warningMessage
             }
 
-            views.spaceLeavePromptTitle.text = getString(R.string.space_leave_prompt_msg_with_name, state.spaceSummary?.name ?: "")
+            views.spaceLeavePromptTitle.text = getString(CommonStrings.space_leave_prompt_msg_with_name, state.spaceSummary?.name ?: "")
         }
 
         views.roomList.configureWith(controller)

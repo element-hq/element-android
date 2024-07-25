@@ -19,9 +19,9 @@ package im.vector.app.features.settings
 import android.content.SharedPreferences
 import androidx.annotation.StringRes
 import androidx.core.content.edit
-import im.vector.app.R
 import im.vector.app.core.di.DefaultPreferences
 import im.vector.app.core.utils.SystemSettingsProvider
+import im.vector.lib.strings.CommonStrings
 import javax.inject.Inject
 
 /**
@@ -83,13 +83,13 @@ class FontScalePreferencesImpl @Inject constructor(
     }
 
     private val fontScaleValues = listOf(
-            FontScaleValue(0, "FONT_SCALE_TINY", FontScalePreferences.SCALE_TINY, R.string.tiny),
-            FontScaleValue(1, "FONT_SCALE_SMALL", FontScalePreferences.SCALE_SMALL, R.string.small),
-            FontScaleValue(2, "FONT_SCALE_NORMAL", FontScalePreferences.SCALE_NORMAL, R.string.normal),
-            FontScaleValue(3, "FONT_SCALE_LARGE", FontScalePreferences.SCALE_LARGE, R.string.large),
-            FontScaleValue(4, "FONT_SCALE_LARGER", FontScalePreferences.SCALE_LARGER, R.string.larger),
-            FontScaleValue(5, "FONT_SCALE_LARGEST", FontScalePreferences.SCALE_LARGEST, R.string.largest),
-            FontScaleValue(6, "FONT_SCALE_HUGE", FontScalePreferences.SCALE_HUGE, R.string.huge)
+            FontScaleValue(0, "FONT_SCALE_TINY", FontScalePreferences.SCALE_TINY, CommonStrings.tiny),
+            FontScaleValue(1, "FONT_SCALE_SMALL", FontScalePreferences.SCALE_SMALL, CommonStrings.small),
+            FontScaleValue(2, "FONT_SCALE_NORMAL", FontScalePreferences.SCALE_NORMAL, CommonStrings.normal),
+            FontScaleValue(3, "FONT_SCALE_LARGE", FontScalePreferences.SCALE_LARGE, CommonStrings.large),
+            FontScaleValue(4, "FONT_SCALE_LARGER", FontScalePreferences.SCALE_LARGER, CommonStrings.larger),
+            FontScaleValue(5, "FONT_SCALE_LARGEST", FontScalePreferences.SCALE_LARGEST, CommonStrings.largest),
+            FontScaleValue(6, "FONT_SCALE_HUGE", FontScalePreferences.SCALE_HUGE, CommonStrings.huge)
     )
 
     private val normalFontScaleValue = fontScaleValues[2]

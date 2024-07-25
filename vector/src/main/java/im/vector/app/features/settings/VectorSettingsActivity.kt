@@ -35,6 +35,7 @@ import im.vector.app.features.settings.devices.VectorSettingsDevicesFragment
 import im.vector.app.features.settings.notifications.VectorSettingsNotificationFragment
 import im.vector.app.features.settings.threepids.ThreePidsSettingsFragment
 import im.vector.lib.core.utils.compat.getParcelableExtraCompat
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.failure.GlobalError
 import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
@@ -55,7 +56,7 @@ class VectorSettingsActivity : VectorBaseActivity<ActivityVectorSettingsBinding>
 
     override fun getCoordinatorLayout() = views.coordinatorLayout
 
-    override fun getTitleRes() = R.string.title_activity_settings
+    override fun getTitleRes() = CommonStrings.title_activity_settings
 
     private var keyToHighlight: String? = null
 
@@ -122,7 +123,7 @@ class VectorSettingsActivity : VectorBaseActivity<ActivityVectorSettingsBinding>
                 supportFragmentManager.fragmentFactory.instantiate(classLoader, it)
             }
         } catch (e: Throwable) {
-            showSnackbar(getString(R.string.not_implemented))
+            showSnackbar(getString(CommonStrings.not_implemented))
             Timber.e(e)
             null
         }

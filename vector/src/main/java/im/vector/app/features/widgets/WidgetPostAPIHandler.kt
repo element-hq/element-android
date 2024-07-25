@@ -20,9 +20,9 @@ import android.text.TextUtils
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.session.coroutineScope
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.QueryStringValue
@@ -146,7 +146,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(
         }
         Timber.d("Received request canSendEvent in room $roomId")
         if (room.roomSummary()?.membership != Membership.JOIN) {
-            widgetPostAPIMediator.sendError(stringProvider.getString(R.string.widget_integration_must_be_in_room), eventData)
+            widgetPostAPIMediator.sendError(stringProvider.getString(CommonStrings.widget_integration_must_be_in_room), eventData)
             return
         }
 
@@ -167,7 +167,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(
             widgetPostAPIMediator.sendBoolResponse(true, eventData)
         } else {
             Timber.d("## canSendEvent() returns widget_integration_no_permission_in_room")
-            widgetPostAPIMediator.sendError(stringProvider.getString(R.string.widget_integration_no_permission_in_room), eventData)
+            widgetPostAPIMediator.sendError(stringProvider.getString(CommonStrings.widget_integration_no_permission_in_room), eventData)
         }
     }
 
@@ -187,7 +187,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(
         if (roomMemberStateEvent != null) {
             widgetPostAPIMediator.sendObjectResponse(Map::class.java, roomMemberStateEvent.content, eventData)
         } else {
-            widgetPostAPIMediator.sendError(stringProvider.getString(R.string.widget_integration_failed_to_send_request), eventData)
+            widgetPostAPIMediator.sendError(stringProvider.getString(CommonStrings.widget_integration_failed_to_send_request), eventData)
         }
     }
 
@@ -206,7 +206,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(
         if (joinedEvents.isNotEmpty()) {
             widgetPostAPIMediator.sendObjectResponse(Event::class.java, joinedEvents.last(), eventData)
         } else {
-            widgetPostAPIMediator.sendError(stringProvider.getString(R.string.widget_integration_failed_to_send_request), eventData)
+            widgetPostAPIMediator.sendError(stringProvider.getString(CommonStrings.widget_integration_failed_to_send_request), eventData)
         }
     }
 
@@ -256,7 +256,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(
         // optional
         val widgetData = eventData["data"]
         if (widgetId == null) {
-            widgetPostAPIMediator.sendError(stringProvider.getString(R.string.widget_integration_unable_to_create), eventData)
+            widgetPostAPIMediator.sendError(stringProvider.getString(CommonStrings.widget_integration_unable_to_create), eventData)
             return
         }
 
@@ -264,7 +264,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(
 
         if (null != widgetUrl) {
             if (null == widgetType) {
-                widgetPostAPIMediator.sendError(stringProvider.getString(R.string.widget_integration_unable_to_create), eventData)
+                widgetPostAPIMediator.sendError(stringProvider.getString(CommonStrings.widget_integration_unable_to_create), eventData)
                 return
             }
 
@@ -378,7 +378,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(
             // room.updateUserPowerLevels(userId, level, WidgetApiCallback(eventData, description))
         } else {
             Timber.e("## setBotPower() : Power level must be positive integer.")
-            widgetPostAPIMediator.sendError(stringProvider.getString(R.string.widget_integration_positive_power_level), eventData)
+            widgetPostAPIMediator.sendError(stringProvider.getString(CommonStrings.widget_integration_positive_power_level), eventData)
         }
     }
 
@@ -424,12 +424,12 @@ class WidgetPostAPIHandler @AssistedInject constructor(
         Timber.d("Received request send sticker")
         val data = eventData["data"]
         if (data == null) {
-            widgetPostAPIMediator.sendError(stringProvider.getString(R.string.widget_integration_missing_parameter), eventData)
+            widgetPostAPIMediator.sendError(stringProvider.getString(CommonStrings.widget_integration_missing_parameter), eventData)
             return
         }
         val content = (data as? JsonDict)?.get("content") as? Content
         if (content == null) {
-            widgetPostAPIMediator.sendError(stringProvider.getString(R.string.widget_integration_missing_parameter), eventData)
+            widgetPostAPIMediator.sendError(stringProvider.getString(CommonStrings.widget_integration_missing_parameter), eventData)
             return
         }
         widgetPostAPIMediator.sendSuccess(eventData)
@@ -446,12 +446,12 @@ class WidgetPostAPIHandler @AssistedInject constructor(
         val roomIdInEvent = eventData["room_id"] as String?
         // Check if param is present
         if (null == roomIdInEvent) {
-            widgetPostAPIMediator.sendError(stringProvider.getString(R.string.widget_integration_missing_room_id), eventData)
+            widgetPostAPIMediator.sendError(stringProvider.getString(CommonStrings.widget_integration_missing_room_id), eventData)
             return true
         }
 
         if (!TextUtils.equals(roomIdInEvent, roomId)) {
-            widgetPostAPIMediator.sendError(stringProvider.getString(R.string.widget_integration_room_not_visible), eventData)
+            widgetPostAPIMediator.sendError(stringProvider.getString(CommonStrings.widget_integration_room_not_visible), eventData)
             return true
         }
 
@@ -469,7 +469,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(
         val userIdInEvent = eventData["user_id"] as String?
         // Check if param is present
         if (null == userIdInEvent) {
-            widgetPostAPIMediator.sendError(stringProvider.getString(R.string.widget_integration_missing_user_id), eventData)
+            widgetPostAPIMediator.sendError(stringProvider.getString(CommonStrings.widget_integration_missing_user_id), eventData)
             return true
         }
         // OK
@@ -486,7 +486,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(
                         widgetPostAPIMediator.sendSuccess(eventData)
                     },
                     onFailure = {
-                        widgetPostAPIMediator.sendError(stringProvider.getString(R.string.widget_integration_failed_to_send_request), eventData)
+                        widgetPostAPIMediator.sendError(stringProvider.getString(CommonStrings.widget_integration_failed_to_send_request), eventData)
                     }
             )
         }

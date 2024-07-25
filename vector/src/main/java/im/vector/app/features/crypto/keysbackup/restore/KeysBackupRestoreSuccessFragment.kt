@@ -21,10 +21,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.LiveEvent
 import im.vector.app.databinding.FragmentKeysBackupRestoreSuccessBinding
+import im.vector.lib.strings.CommonPlurals
+import im.vector.lib.strings.CommonStrings
 
 @AndroidEntryPoint
 class KeysBackupRestoreSuccessFragment :
@@ -43,19 +44,19 @@ class KeysBackupRestoreSuccessFragment :
         if (compareValues(sharedViewModel.importKeyResult?.totalNumberOfKeys, 0) > 0) {
             sharedViewModel.importKeyResult?.let {
                 val part1 = resources.getQuantityString(
-                        R.plurals.keys_backup_restore_success_description_part1,
+                        CommonPlurals.keys_backup_restore_success_description_part1,
                         it.totalNumberOfKeys, it.totalNumberOfKeys
                 )
                 val part2 = resources.getQuantityString(
-                        R.plurals.keys_backup_restore_success_description_part2,
+                        CommonPlurals.keys_backup_restore_success_description_part2,
                         it.successfullyNumberOfImportedKeys, it.successfullyNumberOfImportedKeys
                 )
                 views.successDetailsText.text = String.format("%s\n%s", part1, part2)
             }
             // We don't put emoji in string xml as it will crash on old devices
-            views.successText.text = context?.getString(R.string.keys_backup_restore_success_title, "🎉")
+            views.successText.text = context?.getString(CommonStrings.keys_backup_restore_success_title, "🎉")
         } else {
-            views.successText.text = context?.getString(R.string.keys_backup_restore_success_title_already_up_to_date)
+            views.successText.text = context?.getString(CommonStrings.keys_backup_restore_success_title_already_up_to_date)
             views.successDetailsText.isVisible = false
         }
         views.keysBackupSetupDoneButton.debouncedClicks { onDone() }

@@ -95,6 +95,10 @@ data class HomeServerCapabilities(
          * If set to true, the SDK will not use the network constraint when configuring Worker for the WorkManager, provided in Wellknown.
          */
         val disableNetworkConstraint: Boolean? = null,
+        /**
+         * True if the home server supports authenticated media.
+         */
+        val canUseAuthenticatedMedia: Boolean = false,
 ) {
 
     enum class RoomCapabilitySupport {

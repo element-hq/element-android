@@ -22,7 +22,6 @@ import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.yalantis.ucrop.UCrop
-import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper.Listener
 import im.vector.app.core.extensions.insertBeforeLast
 import im.vector.app.core.extensions.registerStartForActivityResult
@@ -35,6 +34,7 @@ import im.vector.app.features.media.createUCropWithDefaultSettings
 import im.vector.lib.core.utils.timer.Clock
 import im.vector.lib.multipicker.MultiPicker
 import im.vector.lib.multipicker.entity.MultiPickerImageType
+import im.vector.lib.strings.CommonStrings
 import java.io.File
 
 /**
@@ -62,7 +62,7 @@ class GalleryOrCameraDialogHelper(
         if (allGranted) {
             doOpenCamera()
         } else if (deniedPermanently) {
-            activity.onPermissionDeniedDialog(R.string.denied_permission_camera)
+            activity.onPermissionDeniedDialog(CommonStrings.denied_permission_camera)
         }
     }
 
@@ -95,7 +95,7 @@ class GalleryOrCameraDialogHelper(
     private fun startUCrop(image: MultiPickerImageType) {
         val destinationFile = File(activity.cacheDir, image.displayName.insertBeforeLast("_e_${clock.epochMillis()}"))
         val uri = image.contentUri
-        createUCropWithDefaultSettings(colorProvider, uri, destinationFile.toUri(), fragment.getString(R.string.rotate_and_crop_screen_title))
+        createUCropWithDefaultSettings(colorProvider, uri, destinationFile.toUri(), fragment.getString(CommonStrings.rotate_and_crop_screen_title))
                 .withAspectRatio(1f, 1f)
                 .getIntent(activity)
                 .let { uCropActivityResultLauncher.launch(it) }
@@ -108,16 +108,16 @@ class GalleryOrCameraDialogHelper(
 
     fun show() {
         MaterialAlertDialogBuilder(activity)
-                .setTitle(R.string.attachment_type_dialog_title)
+                .setTitle(CommonStrings.attachment_type_dialog_title)
                 .setItems(
                         arrayOf(
-                                fragment.getString(R.string.attachment_type_camera),
-                                fragment.getString(R.string.attachment_type_gallery)
+                                fragment.getString(CommonStrings.attachment_type_camera),
+                                fragment.getString(CommonStrings.attachment_type_gallery)
                         )
                 ) { _, which ->
                     onAvatarTypeSelected(if (which == 0) Type.Camera else Type.Gallery)
                 }
-                .setPositiveButton(R.string.action_cancel, null)
+                .setPositiveButton(CommonStrings.action_cancel, null)
                 .show()
     }
 

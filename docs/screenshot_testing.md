@@ -62,7 +62,7 @@ class PaparazziExampleScreenshotTest {
         val view = paparazzi.inflate<ConstraintLayout>(R.layout.item_radio)
 
         // Bind data to the view
-        view.findViewById<TextView>(R.id.actionTitle).text = paparazzi.resources.getString(R.string.room_settings_all_messages)
+        view.findViewById<TextView>(R.id.actionTitle).text = paparazzi.resources.getString(CommonStrings.room_settings_all_messages)
         view.findViewById<ImageView>(R.id.radioIcon).setImageResource(R.drawable.ic_radio_on)
 
         // Record the bound view

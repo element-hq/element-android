@@ -17,9 +17,10 @@
 package im.vector.app.features.room
 
 import android.content.Context
-import im.vector.app.R
 import im.vector.app.config.Config
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.lib.strings.CommonPlurals
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.provider.RoomDisplayNameFallbackProvider
 import org.matrix.android.sdk.api.session.getRoom
 import javax.inject.Inject
@@ -41,12 +42,12 @@ class VectorRoomDisplayNameFallbackProvider @Inject constructor(
     }
 
     override fun getNameForRoomInvite(): String {
-        return context.getString(R.string.room_displayname_room_invite)
+        return context.getString(CommonStrings.room_displayname_room_invite)
     }
 
     override fun getNameForEmptyRoom(isDirect: Boolean, leftMemberNames: List<String>): String {
         return if (leftMemberNames.isEmpty()) {
-            context.getString(R.string.room_displayname_empty_room)
+            context.getString(CommonStrings.room_displayname_empty_room)
         } else {
             val was = when (val size = leftMemberNames.size) {
                 1 -> getNameFor1member(leftMemberNames[0])
@@ -55,27 +56,27 @@ class VectorRoomDisplayNameFallbackProvider @Inject constructor(
                 4 -> getNameFor4members(leftMemberNames[0], leftMemberNames[1], leftMemberNames[2], leftMemberNames[3])
                 else -> getNameFor4membersAndMore(leftMemberNames[0], leftMemberNames[1], leftMemberNames[2], size - 3)
             }
-            context.getString(R.string.room_displayname_empty_room_was, was)
+            context.getString(CommonStrings.room_displayname_empty_room_was, was)
         }
     }
 
     override fun getNameFor1member(name: String) = name
 
     override fun getNameFor2members(name1: String, name2: String): String {
-        return context.getString(R.string.room_displayname_two_members, name1, name2)
+        return context.getString(CommonStrings.room_displayname_two_members, name1, name2)
     }
 
     override fun getNameFor3members(name1: String, name2: String, name3: String): String {
-        return context.getString(R.string.room_displayname_3_members, name1, name2, name3)
+        return context.getString(CommonStrings.room_displayname_3_members, name1, name2, name3)
     }
 
     override fun getNameFor4members(name1: String, name2: String, name3: String, name4: String): String {
-        return context.getString(R.string.room_displayname_4_members, name1, name2, name3, name4)
+        return context.getString(CommonStrings.room_displayname_4_members, name1, name2, name3, name4)
     }
 
     override fun getNameFor4membersAndMore(name1: String, name2: String, name3: String, remainingCount: Int): String {
         return context.resources.getQuantityString(
-                R.plurals.room_displayname_four_and_more_members,
+                CommonPlurals.room_displayname_four_and_more_members,
                 remainingCount,
                 name1,
                 name2,

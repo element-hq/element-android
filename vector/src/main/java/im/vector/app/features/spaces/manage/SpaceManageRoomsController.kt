@@ -20,7 +20,6 @@ import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.epoxy.VisibilityState
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
-import im.vector.app.R
 import im.vector.app.core.epoxy.errorWithRetryItem
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.error.ErrorFormatter
@@ -28,6 +27,7 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
@@ -75,7 +75,7 @@ class SpaceManageRoomsController @Inject constructor(
         if (filteredResult.isEmpty()) {
             genericFooterItem {
                 id("empty_result")
-                text(host.stringProvider.getString(R.string.no_result_placeholder).toEpoxyCharSequence())
+                text(host.stringProvider.getString(CommonStrings.no_result_placeholder).toEpoxyCharSequence())
             }
         } else {
             filteredResult.forEach { childInfo ->

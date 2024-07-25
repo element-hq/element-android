@@ -27,11 +27,9 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
-import java.lang.IllegalStateException
 import java.util.Collections
 import java.util.Locale
 import java.util.concurrent.ConcurrentHashMap
-import kotlin.Throws
 
 /**
  * Based on https://github.com/realm/realm-java/blob/master/realm/realm-library/src/testUtils/java/io/realm/TestRealmConfigurationFactory.java

@@ -18,6 +18,7 @@ package im.vector.app.features.onboarding
 
 import im.vector.app.config.OnboardingVariant
 import im.vector.app.core.platform.ScreenOrientationLocker
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.databinding.ActivityLoginBinding
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.onboarding.ftueauth.FtueAuthVariant
@@ -26,6 +27,7 @@ import javax.inject.Inject
 class OnboardingVariantFactory @Inject constructor(
         private val vectorFeatures: VectorFeatures,
         private val orientationLocker: ScreenOrientationLocker,
+        private val buildMeta: BuildMeta,
 ) {
 
     fun create(
@@ -40,7 +42,8 @@ class OnboardingVariantFactory @Inject constructor(
                 activity = activity,
                 supportFragmentManager = activity.supportFragmentManager,
                 vectorFeatures = vectorFeatures,
-                orientationLocker = orientationLocker
+                orientationLocker = orientationLocker,
+                buildMeta = buildMeta,
         )
     }
 }

@@ -23,11 +23,11 @@ import android.view.ViewGroup
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSsssResetAllBinding
 import im.vector.app.features.roommemberprofile.devices.DeviceListBottomSheet
+import im.vector.lib.strings.CommonPlurals
 
 @AndroidEntryPoint
 class SharedSecuredStorageResetAllFragment :
@@ -60,7 +60,7 @@ class SharedSecuredStorageResetAllFragment :
             views.ssssResetOtherDevices.setTextOrHide(
                     state.activeDeviceCount
                             .takeIf { it > 0 }
-                            ?.let { resources.getQuantityString(R.plurals.secure_backup_reset_devices_you_can_verify, it, it) }
+                            ?.let { resources.getQuantityString(CommonPlurals.secure_backup_reset_devices_you_can_verify, it, it) }
             )
         }
     }

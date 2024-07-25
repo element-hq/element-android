@@ -42,14 +42,14 @@ class OnboardingActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
 
     override fun getCoordinatorLayout() = views.coordinatorLayout
 
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         onboardingVariant.onNewIntent(intent)
     }
 
+    @Suppress("OVERRIDE_DEPRECATION")
     override fun onBackPressed() {
         validateBackPressed {
-            @Suppress("DEPRECATION")
             super.onBackPressed()
         }
     }

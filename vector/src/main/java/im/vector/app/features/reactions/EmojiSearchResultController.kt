@@ -19,10 +19,10 @@ import android.graphics.Typeface
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.EmojiCompatFontProvider
-import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
+import im.vector.lib.strings.CommonStrings
 import javax.inject.Inject
 
 class EmojiSearchResultController @Inject constructor(
@@ -53,13 +53,13 @@ class EmojiSearchResultController @Inject constructor(
                 // display 'Type something to find'
                 genericFooterItem {
                     id("type.query.item")
-                    text(host.stringProvider.getString(R.string.reaction_search_type_hint).toEpoxyCharSequence())
+                    text(host.stringProvider.getString(CommonStrings.reaction_search_type_hint).toEpoxyCharSequence())
                 }
             } else {
                 // Display no search Results
                 genericFooterItem {
                     id("no.results.item")
-                    text(host.stringProvider.getString(R.string.no_result_placeholder).toEpoxyCharSequence())
+                    text(host.stringProvider.getString(CommonStrings.no_result_placeholder).toEpoxyCharSequence())
                 }
             }
         } else {

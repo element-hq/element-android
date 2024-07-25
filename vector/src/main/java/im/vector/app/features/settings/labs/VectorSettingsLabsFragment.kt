@@ -35,6 +35,7 @@ import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.home.room.threads.ThreadsManager
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsBaseFragment
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import javax.inject.Inject
 
@@ -49,7 +50,7 @@ class VectorSettingsLabsFragment :
     @Inject lateinit var threadsManager: ThreadsManager
     @Inject lateinit var vectorFeatures: VectorFeatures
 
-    override var titleRes = R.string.room_settings_labs_pref_title
+    override var titleRes = CommonStrings.room_settings_labs_pref_title
     override val preferenceXmlRes = R.xml.vector_settings_labs
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -120,13 +121,13 @@ class VectorSettingsLabsFragment :
         if (!session.homeServerCapabilitiesService().getHomeServerCapabilities().canUseThreading && userEnabledThreads) {
             activity?.let {
                 MaterialAlertDialogBuilder(it)
-                        .setTitle(R.string.threads_labs_enable_notice_title)
+                        .setTitle(CommonStrings.threads_labs_enable_notice_title)
                         .setMessage(threadsManager.getLabsEnableThreadsMessage())
                         .setCancelable(true)
-                        .setNegativeButton(R.string.action_not_now) { _, _ ->
+                        .setNegativeButton(CommonStrings.action_not_now) { _, _ ->
                             vectorSwitchPreference.isChecked = false
                         }
-                        .setPositiveButton(R.string.action_try_it_out) { _, _ ->
+                        .setPositiveButton(CommonStrings.action_try_it_out) { _, _ ->
                             onThreadsPreferenceClicked()
                         }
                         .show()

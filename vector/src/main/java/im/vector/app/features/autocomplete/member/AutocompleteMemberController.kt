@@ -18,11 +18,11 @@ package im.vector.app.features.autocomplete.member
 
 import android.content.Context
 import com.airbnb.epoxy.TypedEpoxyController
-import im.vector.app.R
 import im.vector.app.features.autocomplete.AutocompleteClickListener
 import im.vector.app.features.autocomplete.autocompleteHeaderItem
 import im.vector.app.features.autocomplete.autocompleteMatrixItem
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.util.toEveryoneInRoomMatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
@@ -89,7 +89,7 @@ class AutocompleteMemberController @Inject constructor(private val context: Cont
             everyone.roomSummary.let { room ->
                 id(room.roomId)
                 matrixItem(room.toEveryoneInRoomMatrixItem())
-                subName(host.context.getString(R.string.room_message_notify_everyone))
+                subName(host.context.getString(CommonStrings.room_message_notify_everyone))
                 avatarRenderer(host.avatarRenderer)
                 clickListener { host.listener?.onItemClick(everyone) }
             }

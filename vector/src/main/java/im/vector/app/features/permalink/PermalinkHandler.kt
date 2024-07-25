@@ -19,7 +19,6 @@ package im.vector.app.features.permalink
 import android.content.Context
 import android.net.Uri
 import androidx.fragment.app.FragmentActivity
-import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.isIgnored
 import im.vector.app.core.resources.UserPreferencesProvider
@@ -28,6 +27,7 @@ import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
 import im.vector.app.features.matrixto.OriginOfMatrixTo
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.roomdirectory.roompreview.RoomPreviewData
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -66,7 +66,7 @@ class PermalinkHandler @Inject constructor(
             navigationInterceptor: NavigationInterceptor? = null,
             buildTask: Boolean = false
     ): Boolean {
-        val supportedHosts = fragmentActivity.resources.getStringArray(R.array.permalink_supported_hosts)
+        val supportedHosts = fragmentActivity.resources.getStringArray(im.vector.app.config.R.array.permalink_supported_hosts)
         return when {
             deepLink == null -> false
             deepLink.isIgnored() -> true
@@ -198,7 +198,7 @@ class PermalinkHandler @Inject constructor(
     ) {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
         if (roomId == null) {
-            fragmentActivity.toast(R.string.room_error_not_found)
+            fragmentActivity.toast(CommonStrings.room_error_not_found)
             return
         }
         val roomSummary = session.getRoomSummary(roomId)
@@ -207,7 +207,7 @@ class PermalinkHandler @Inject constructor(
 //        val roomAlias = permalinkData.getRoomAliasOrNull()
         val isSpace = roomSummary?.roomType == RoomType.SPACE
         return when {
-            membership == Membership.BAN -> fragmentActivity.toast(R.string.error_opening_banned_room)
+            membership == Membership.BAN -> fragmentActivity.toast(CommonStrings.error_opening_banned_room)
             membership?.isActive().orFalse() -> {
                 if (!isSpace && membership == Membership.JOIN) {
                     // If it's a room you're in, let's just open it, you can tap back if needed

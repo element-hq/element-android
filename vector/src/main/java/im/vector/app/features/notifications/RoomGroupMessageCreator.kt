@@ -19,8 +19,9 @@ package im.vector.app.features.notifications
 import android.graphics.Bitmap
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
-import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
+import im.vector.lib.strings.CommonPlurals
+import im.vector.lib.strings.CommonStrings
 import me.gujun.android.span.Span
 import me.gujun.android.span.span
 import timber.log.Timber
@@ -49,9 +50,9 @@ class RoomGroupMessageCreator @Inject constructor(
         }
 
         val tickerText = if (roomIsGroup) {
-            stringProvider.getString(R.string.notification_ticker_text_group, roomName, events.last().senderName, events.last().description)
+            stringProvider.getString(CommonStrings.notification_ticker_text_group, roomName, events.last().senderName, events.last().description)
         } else {
-            stringProvider.getString(R.string.notification_ticker_text_dm, events.last().senderName, events.last().description)
+            stringProvider.getString(CommonStrings.notification_ticker_text_dm, events.last().senderName, events.last().description)
         }
 
         val largeBitmap = getRoomBitmap(events)
@@ -97,7 +98,7 @@ class RoomGroupMessageCreator @Inject constructor(
                         .build()
             }
             when {
-                event.isSmartReplyError() -> addMessage(stringProvider.getString(R.string.notification_inline_reply_failed), event.timestamp, senderPerson)
+                event.isSmartReplyError() -> addMessage(stringProvider.getString(CommonStrings.notification_inline_reply_failed), event.timestamp, senderPerson)
                 else -> {
                     val message = NotificationCompat.MessagingStyle.Message(event.body, event.timestamp, senderPerson).also { message ->
                         event.imageUri?.let {
@@ -116,7 +117,7 @@ class RoomGroupMessageCreator @Inject constructor(
                 1 -> createFirstMessageSummaryLine(events.first(), roomName, roomIsDirect)
                 else -> {
                     stringProvider.getQuantityString(
-                            R.plurals.notification_compat_summary_line_for_room,
+                            CommonPlurals.notification_compat_summary_line_for_room,
                             events.size,
                             roomName,
                             events.size

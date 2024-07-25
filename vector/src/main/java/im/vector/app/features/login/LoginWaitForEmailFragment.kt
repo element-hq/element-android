@@ -23,8 +23,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.args
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.databinding.FragmentLoginWaitForEmailBinding
+import im.vector.lib.strings.CommonStrings
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.failure.is401
 
@@ -65,7 +65,7 @@ class LoginWaitForEmailFragment :
     }
 
     private fun setupUi() {
-        views.loginWaitForEmailNotice.text = getString(R.string.login_wait_for_email_notice, params.email)
+        views.loginWaitForEmailNotice.text = getString(CommonStrings.login_wait_for_email_notice, params.email)
     }
 
     override fun onError(throwable: Throwable) {

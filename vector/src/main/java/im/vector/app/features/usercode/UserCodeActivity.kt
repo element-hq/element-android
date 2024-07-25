@@ -29,7 +29,6 @@ import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.onPermissionDeniedSnackbar
@@ -41,6 +40,7 @@ import im.vector.app.features.qrcode.QrCodeScannerEvents
 import im.vector.app.features.qrcode.QrCodeScannerFragment
 import im.vector.app.features.qrcode.QrCodeScannerViewModel
 import im.vector.app.features.qrcode.QrScannerArgs
+import im.vector.lib.strings.CommonStrings
 import kotlinx.parcelize.Parcelize
 import kotlin.reflect.KClass
 
@@ -89,7 +89,7 @@ class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
             when (mode) {
                 UserCodeState.Mode.SHOW -> showFragment(ShowUserCodeFragment::class)
                 UserCodeState.Mode.SCAN -> {
-                    val args = QrScannerArgs(showExtraButtons = true, R.string.user_code_scan)
+                    val args = QrScannerArgs(showExtraButtons = true, CommonStrings.user_code_scan)
                     showFragment(QrCodeScannerFragment::class, args)
                 }
                 is UserCodeState.Mode.RESULT -> {
@@ -108,7 +108,7 @@ class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
                 is UserCodeShareViewEvents.NavigateToRoom -> navigator.openRoom(this, it.roomId)
                 is UserCodeShareViewEvents.CameraPermissionNotGranted -> {
                     if (it.deniedPermanently) {
-                        onPermissionDeniedSnackbar(R.string.permissions_denied_qr_code)
+                        onPermissionDeniedSnackbar(CommonStrings.permissions_denied_qr_code)
                     }
                 }
                 else -> {
@@ -125,7 +125,7 @@ class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
                     sharedViewModel.handle(UserCodeActions.SwitchMode(UserCodeState.Mode.SHOW))
                 }
                 is QrCodeScannerEvents.ParseFailed -> {
-                    Toast.makeText(this, R.string.qr_code_not_scanned, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, CommonStrings.qr_code_not_scanned, Toast.LENGTH_SHORT).show()
                     finish()
                 }
             }
@@ -149,6 +149,7 @@ class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
 
     override fun mxToBottomSheetSwitchToSpace(spaceId: String) {}
 
+    @Suppress("OVERRIDE_DEPRECATION")
     override fun onBackPressed() = withState(sharedViewModel) {
         when (it.mode) {
             UserCodeState.Mode.SHOW -> {

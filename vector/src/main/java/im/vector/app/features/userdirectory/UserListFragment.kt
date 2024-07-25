@@ -43,6 +43,7 @@ import im.vector.app.core.utils.showIdentityServerConsentDialog
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.FragmentUserListBinding
 import im.vector.app.features.settings.VectorSettingsActivity
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
@@ -96,13 +97,13 @@ class UserListFragment :
         viewModel.observeViewEvents {
             when (it) {
                 is UserListViewEvents.OpenShareMatrixToLink -> {
-                    val text = getString(R.string.invite_friends_text, it.link)
+                    val text = getString(CommonStrings.invite_friends_text, it.link)
                     startSharePlainTextIntent(
                             context = requireContext(),
                             activityResultLauncher = null,
-                            chooserTitle = getString(R.string.invite_friends),
+                            chooserTitle = getString(CommonStrings.invite_friends),
                             text = text,
-                            extraTitle = getString(R.string.invite_friends_rich_title)
+                            extraTitle = getString(CommonStrings.invite_friends_rich_title)
                     )
                 }
                 is UserListViewEvents.Failure -> showFailure(it.throwable)

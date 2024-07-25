@@ -26,11 +26,11 @@ import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentBootstrapEnterPassphraseBinding
 import im.vector.lib.core.utils.flow.throttleFirst
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import reactivecircus.flowbinding.android.widget.editorActionEvents
@@ -51,9 +51,9 @@ class BootstrapConfirmPassphraseFragment :
 
         views.ssssPassphraseSecurityProgress.isGone = true
 
-        views.bootstrapDescriptionText.text = getString(R.string.set_a_security_phrase_again_notice)
+        views.bootstrapDescriptionText.text = getString(CommonStrings.set_a_security_phrase_again_notice)
         views.bootstrapDescriptionText.giveAccessibilityFocusOnce()
-        views.ssssPassphraseEnterEdittext.hint = getString(R.string.set_a_security_phrase_hint)
+        views.ssssPassphraseEnterEdittext.hint = getString(CommonStrings.set_a_security_phrase_hint)
 
         withState(sharedViewModel) {
             // set initial value (useful when coming back)
@@ -95,9 +95,9 @@ class BootstrapConfirmPassphraseFragment :
         val passphrase = views.ssssPassphraseEnterEdittext.text?.toString()
         when {
             passphrase.isNullOrBlank() ->
-                views.ssssPassphraseEnterTil.error = getString(R.string.passphrase_empty_error_message)
+                views.ssssPassphraseEnterTil.error = getString(CommonStrings.passphrase_empty_error_message)
             passphrase != state.passphrase ->
-                views.ssssPassphraseEnterTil.error = getString(R.string.passphrase_passphrase_does_not_match)
+                views.ssssPassphraseEnterTil.error = getString(CommonStrings.passphrase_passphrase_does_not_match)
             else -> {
                 view?.hideKeyboard()
                 sharedViewModel.handle(BootstrapActions.DoInitialize(passphrase))

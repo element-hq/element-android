@@ -23,12 +23,12 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.qualifiers.ApplicationContext
-import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.DefaultPreferences
 import im.vector.app.core.dispatchers.CoroutineDispatchers
 import im.vector.app.core.pushers.FcmHelper
 import im.vector.app.core.pushers.PushersManager
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -84,7 +84,7 @@ class GoogleFcmHelper @Inject constructor(
                 Timber.e(e, "## ensureFcmTokenIsRetrieved() : failed")
             }
         } else {
-            Toast.makeText(context, R.string.no_valid_google_play_services_apk, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, CommonStrings.no_valid_google_play_services_apk, Toast.LENGTH_SHORT).show()
             Timber.e("No valid Google Play Services found. Cannot use FCM.")
         }
     }

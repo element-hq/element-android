@@ -73,7 +73,7 @@ class LockScreenCodeView @JvmOverloads constructor(
         repeat(codeLength) { index ->
             val checkBox = inflater.inflate(R.layout.view_code_checkbox, null) as CheckBox
             val params = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
-            val margin = resources.getDimensionPixelSize(R.dimen.lockscreen_code_margin)
+            val margin = resources.getDimensionPixelSize(im.vector.lib.ui.styles.R.dimen.lockscreen_code_margin)
             params.setMargins(margin)
             checkBox.layoutParams = params
             checkBox.isChecked = code.size > index

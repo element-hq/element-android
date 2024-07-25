@@ -24,11 +24,11 @@ import androidx.core.text.toSpannable
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.colorizeMatchingText
 import im.vector.app.databinding.FragmentBootstrapConclusionBinding
+import im.vector.lib.strings.CommonStrings
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -53,13 +53,13 @@ class BootstrapConclusionFragment :
         if (state.step !is BootstrapStep.DoneSuccess) return@withState
 
         views.bootstrapConclusionText.text = getString(
-                R.string.bootstrap_cross_signing_success,
-                getString(R.string.recovery_passphrase),
-                getString(R.string.message_key)
+                CommonStrings.bootstrap_cross_signing_success,
+                getString(CommonStrings.recovery_passphrase),
+                getString(CommonStrings.message_key)
         )
                 .toSpannable()
-                .colorizeMatchingText(getString(R.string.recovery_passphrase), colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
-                .colorizeMatchingText(getString(R.string.message_key), colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
+                .colorizeMatchingText(getString(CommonStrings.recovery_passphrase), colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
+                .colorizeMatchingText(getString(CommonStrings.message_key), colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
         views.bootstrapConclusionText.giveAccessibilityFocusOnce()
     }
 }

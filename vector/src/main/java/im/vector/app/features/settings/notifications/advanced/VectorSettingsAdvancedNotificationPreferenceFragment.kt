@@ -27,6 +27,7 @@ import im.vector.app.features.settings.notifications.NotificationIndex
 import im.vector.app.features.settings.notifications.StandardActions
 import im.vector.app.features.settings.notifications.getStandardAction
 import im.vector.app.features.settings.notifications.notificationIndex
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.pushrules.RuleIds
 import org.matrix.android.sdk.api.session.pushrules.rest.PushRuleAndKind
@@ -36,7 +37,7 @@ import org.matrix.android.sdk.api.session.pushrules.rest.PushRuleAndKind
 class VectorSettingsAdvancedNotificationPreferenceFragment :
         VectorSettingsBaseFragment() {
 
-    override var titleRes: Int = R.string.settings_notification_advanced
+    override var titleRes: Int = CommonStrings.settings_notification_advanced
 
     override val preferenceXmlRes = R.xml.vector_settings_notification_advanced_preferences
 

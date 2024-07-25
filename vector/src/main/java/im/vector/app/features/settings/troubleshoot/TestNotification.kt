@@ -16,10 +16,10 @@
 package im.vector.app.features.settings.troubleshoot
 
 import android.content.Context
-import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.startNotificationSettingsIntent
 import im.vector.app.features.notifications.NotificationUtils
+import im.vector.lib.strings.CommonStrings
 import javax.inject.Inject
 
 /**
@@ -30,14 +30,14 @@ class TestNotification @Inject constructor(
         private val notificationUtils: NotificationUtils,
         private val stringProvider: StringProvider
 ) :
-        TroubleshootTest(R.string.settings_troubleshoot_test_notification_title) {
+        TroubleshootTest(CommonStrings.settings_troubleshoot_test_notification_title) {
 
     override fun perform(testParameters: TestParameters) {
         // Display the notification right now
         notificationUtils.displayDiagnosticNotification()
-        description = stringProvider.getString(R.string.settings_troubleshoot_test_notification_notice)
+        description = stringProvider.getString(CommonStrings.settings_troubleshoot_test_notification_notice)
 
-        quickFix = object : TroubleshootQuickFix(R.string.open_settings) {
+        quickFix = object : TroubleshootQuickFix(CommonStrings.open_settings) {
             override fun doFix() {
                 startNotificationSettingsIntent(context, testParameters.activityResultLauncher)
             }
@@ -47,7 +47,7 @@ class TestNotification @Inject constructor(
     }
 
     override fun onNotificationClicked() {
-        description = stringProvider.getString(R.string.settings_troubleshoot_test_notification_notification_clicked)
+        description = stringProvider.getString(CommonStrings.settings_troubleshoot_test_notification_notification_clicked)
         quickFix = null
         status = TestStatus.SUCCESS
     }

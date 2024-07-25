@@ -58,6 +58,7 @@ import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.BannerState
 import im.vector.app.features.workers.signout.ServerBackupStatusAction
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
@@ -227,12 +228,12 @@ class HomeDetailFragment :
         alertManager.postVectorAlert(
                 VerificationVectorAlert(
                         uid = uid,
-                        title = getString(R.string.new_session),
-                        description = getString(R.string.verify_this_session, newest.displayName ?: newest.deviceId ?: ""),
+                        title = getString(CommonStrings.new_session),
+                        description = getString(CommonStrings.verify_this_session, newest.displayName ?: newest.deviceId ?: ""),
                         iconId = R.drawable.ic_shield_warning
                 ).apply {
                     viewBinder = VerificationVectorAlert.ViewBinder(user, avatarRenderer)
-                    colorInt = colorProvider.getColorFromAttribute(R.attr.colorPrimary)
+                    colorInt = colorProvider.getColorFromAttribute(com.google.android.material.R.attr.colorPrimary)
                     contentAction = Runnable {
                         (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let { vectorBaseActivity ->
                             vectorBaseActivity.navigator
@@ -256,12 +257,12 @@ class HomeDetailFragment :
         alertManager.postVectorAlert(
                 VerificationVectorAlert(
                         uid = uid,
-                        title = getString(R.string.review_unverified_sessions_title),
-                        description = getString(R.string.review_unverified_sessions_description),
+                        title = getString(CommonStrings.review_unverified_sessions_title),
+                        description = getString(CommonStrings.review_unverified_sessions_description),
                         iconId = R.drawable.ic_shield_warning
                 ).apply {
                     viewBinder = VerificationVectorAlert.ViewBinder(user, avatarRenderer)
-                    colorInt = colorProvider.getColorFromAttribute(R.attr.colorPrimary)
+                    colorInt = colorProvider.getColorFromAttribute(com.google.android.material.R.attr.colorPrimary)
                     contentAction = Runnable {
                         (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let { activity ->
                             // mark as ignored to avoid showing it again
@@ -435,11 +436,11 @@ class HomeDetailFragment :
         isVisible = count > 0
         number = count
         maxCharacterCount = 3
-        badgeTextColor = ThemeUtils.getColor(requireContext(), R.attr.colorOnPrimary)
+        badgeTextColor = ThemeUtils.getColor(requireContext(), com.google.android.material.R.attr.colorOnPrimary)
         backgroundColor = if (highlight) {
-            ThemeUtils.getColor(requireContext(), R.attr.colorError)
+            ThemeUtils.getColor(requireContext(), com.google.android.material.R.attr.colorError)
         } else {
-            ThemeUtils.getColor(requireContext(), R.attr.vctr_unread_background)
+            ThemeUtils.getColor(requireContext(), im.vector.lib.ui.styles.R.attr.vctr_unread_background)
         }
     }
 

@@ -42,6 +42,7 @@ import im.vector.app.features.crypto.verification.user.renderStartTransactionOpt
 import im.vector.app.features.crypto.verification.user.verifiedSuccessTile
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.EVerificationState
 import javax.inject.Inject
@@ -108,12 +109,12 @@ class SelfVerificationController @Inject constructor(
         if (state.currentDeviceCanCrossSign) {
             bottomSheetVerificationNoticeItem {
                 id("notice")
-                notice(host.stringProvider.getString(R.string.verify_cancel_self_verification_from_trusted).toEpoxyCharSequence())
+                notice(host.stringProvider.getString(CommonStrings.verify_cancel_self_verification_from_trusted).toEpoxyCharSequence())
             }
         } else {
             bottomSheetVerificationNoticeItem {
                 id("notice")
-                notice(host.stringProvider.getString(R.string.verify_cancel_self_verification_from_untrusted).toEpoxyCharSequence())
+                notice(host.stringProvider.getString(CommonStrings.verify_cancel_self_verification_from_untrusted).toEpoxyCharSequence())
             }
         }
         bottomSheetDividerItem {
@@ -122,10 +123,10 @@ class SelfVerificationController @Inject constructor(
 
         bottomSheetVerificationActionItem {
             id("cancel")
-            title(host.stringProvider.getString(R.string.action_skip))
-            titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
+            title(host.stringProvider.getString(CommonStrings.action_skip))
+            titleColor(host.colorProvider.getColorFromAttribute(com.google.android.material.R.attr.colorError))
             iconRes(R.drawable.ic_arrow_right)
-            iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
+            iconColor(host.colorProvider.getColorFromAttribute(com.google.android.material.R.attr.colorError))
             listener {
 //                host.listener?.confirmCancelRequest(true)
             }
@@ -137,10 +138,10 @@ class SelfVerificationController @Inject constructor(
 
         bottomSheetVerificationActionItem {
             id("continue")
-            title(host.stringProvider.getString(R.string._continue))
-            titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+            title(host.stringProvider.getString(CommonStrings._continue))
+            titleColor(host.colorProvider.getColorFromAttribute(com.google.android.material.R.attr.colorPrimary))
             iconRes(R.drawable.ic_arrow_right)
-            iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+            iconColor(host.colorProvider.getColorFromAttribute(com.google.android.material.R.attr.colorPrimary))
             listener {
 //                host.listener?.confirmCancelRequest(false)
             }
@@ -160,7 +161,7 @@ class SelfVerificationController @Inject constructor(
         when (state.pendingRequest) {
             Uninitialized -> {
                 // let's add option to start one
-                val styledText = stringProvider.getString(R.string.verify_new_session_notice)
+                val styledText = stringProvider.getString(CommonStrings.verify_new_session_notice)
 
                 bottomSheetVerificationNoticeItem {
                     id("notice")
@@ -172,11 +173,11 @@ class SelfVerificationController @Inject constructor(
                 }
                 bottomSheetVerificationActionItem {
                     id("start")
-                    title(host.stringProvider.getString(R.string.start_verification))
-                    titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
-                    // subTitle(host.stringProvider.getString(R.string.verification_request_start_notice))
+                    title(host.stringProvider.getString(CommonStrings.start_verification))
+                    titleColor(host.colorProvider.getColorFromAttribute(com.google.android.material.R.attr.colorPrimary))
+                    // subTitle(host.stringProvider.getString(CommonStrings.verification_request_start_notice))
                     iconRes(R.drawable.ic_arrow_right)
-                    iconColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
+                    iconColor(host.colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_primary))
                     listener { host.listener?.onClickOnVerificationStart() }
                 }
             }
@@ -186,7 +187,7 @@ class SelfVerificationController @Inject constructor(
                 }
 //                bottomSheetVerificationWaitingItem {
 //                    id("waiting_pr_loading")
-//                    // title(host.stringProvider.getString(R.string.verification_request_waiting_for, state.otherUserMxItem.getBestName()))
+//                    // title(host.stringProvider.getString(CommonStrings.verification_request_waiting_for, state.otherUserMxItem.getBestName()))
 //                }
             }
             is Success -> {
@@ -197,9 +198,9 @@ class SelfVerificationController @Inject constructor(
                             id("open_other")
                             style(ItemStyle.NORMAL_TEXT)
                             text(
-                                    host.stringProvider.getString(R.string.verification_request_was_sent).toEpoxyCharSequence()
+                                    host.stringProvider.getString(CommonStrings.verification_request_was_sent).toEpoxyCharSequence()
                             )
-                            textColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
+                            textColor(host.colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_primary))
                         }
 
                         bottomSheetSelfWaitItem {
@@ -212,10 +213,10 @@ class SelfVerificationController @Inject constructor(
                         if (state.isThisSessionVerified) {
                             bottomSheetVerificationActionItem {
                                 id("not me")
-                                title(host.stringProvider.getString(R.string.verify_new_session_was_not_me))
-                                titleColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
+                                title(host.stringProvider.getString(CommonStrings.verify_new_session_was_not_me))
+                                titleColor(host.colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_primary))
                                 iconRes(R.drawable.ic_arrow_right)
-                                iconColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
+                                iconColor(host.colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_primary))
                                 listener {
                                     host.selfVerificationListener?.wasNotMe()
                                 }
@@ -256,7 +257,7 @@ class SelfVerificationController @Inject constructor(
             is Fail -> {
                 bottomSheetVerificationNoticeItem {
                     id("request_fail")
-                    notice(host.stringProvider.getString(R.string.verification_not_found).toEpoxyCharSequence())
+                    notice(host.stringProvider.getString(CommonStrings.verification_not_found).toEpoxyCharSequence())
                 }
                 gotIt {
                     listener?.onDone(false)
@@ -269,7 +270,7 @@ class SelfVerificationController @Inject constructor(
         val host = this
         bottomSheetVerificationNoticeItem {
             id("notice")
-            notice(host.stringProvider.getString(R.string.verification_verify_identity).toEpoxyCharSequence())
+            notice(host.stringProvider.getString(CommonStrings.verification_verify_identity).toEpoxyCharSequence())
         }
         bottomSheetDividerItem {
             id("notice_div")
@@ -278,11 +279,11 @@ class SelfVerificationController @Inject constructor(
         if (state.hasAnyOtherSession.invoke() == true) {
             bottomSheetVerificationActionItem {
                 id("start")
-                title(host.stringProvider.getString(R.string.verification_verify_with_another_device))
-                titleColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
-                //                    subTitle(host.stringProvider.getString(R.string.verification_request_start_notice))
+                title(host.stringProvider.getString(CommonStrings.verification_verify_with_another_device))
+                titleColor(host.colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_primary))
+                //                    subTitle(host.stringProvider.getString(CommonStrings.verification_request_start_notice))
                 iconRes(R.drawable.ic_arrow_right)
-                iconColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
+                iconColor(host.colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_primary))
                 listener { host.selfVerificationListener?.onClickOnVerificationStart() }
             }
 
@@ -294,11 +295,11 @@ class SelfVerificationController @Inject constructor(
         if (state.quadSContainsSecrets) {
             bottomSheetVerificationActionItem {
                 id("passphrase")
-                title(host.stringProvider.getString(R.string.verification_cannot_access_other_session))
-                titleColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
-                subTitle(host.stringProvider.getString(R.string.verification_use_passphrase))
+                title(host.stringProvider.getString(CommonStrings.verification_cannot_access_other_session))
+                titleColor(host.colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_primary))
+                subTitle(host.stringProvider.getString(CommonStrings.verification_use_passphrase))
                 iconRes(R.drawable.ic_arrow_right)
-                iconColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
+                iconColor(host.colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_primary))
                 listener { host.selfVerificationListener?.onClickRecoverFromPassphrase() }
             }
 
@@ -310,11 +311,11 @@ class SelfVerificationController @Inject constructor(
         // option to reset all
         bottomSheetVerificationActionItem {
             id("reset")
-            title(host.stringProvider.getString(R.string.bad_passphrase_key_reset_all_action))
-            titleColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
-            subTitle(host.stringProvider.getString(R.string.secure_backup_reset_all_no_other_devices))
+            title(host.stringProvider.getString(CommonStrings.bad_passphrase_key_reset_all_action))
+            titleColor(host.colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_primary))
+            subTitle(host.stringProvider.getString(CommonStrings.secure_backup_reset_all_no_other_devices))
             iconRes(R.drawable.ic_arrow_right)
-            iconColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
+            iconColor(host.colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_primary))
             listener { host.selfVerificationListener?.onClickResetSecurity() }
         }
 
@@ -325,10 +326,10 @@ class SelfVerificationController @Inject constructor(
 
             bottomSheetVerificationActionItem {
                 id("skip")
-                title(host.stringProvider.getString(R.string.action_skip))
-                titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
+                title(host.stringProvider.getString(CommonStrings.action_skip))
+                titleColor(host.colorProvider.getColorFromAttribute(com.google.android.material.R.attr.colorError))
                 iconRes(R.drawable.ic_arrow_right)
-                iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
+                iconColor(host.colorProvider.getColorFromAttribute(com.google.android.material.R.attr.colorError))
                 listener { host.selfVerificationListener?.onClickSkip() }
             }
         }
@@ -342,7 +343,7 @@ class SelfVerificationController @Inject constructor(
             is Loading -> {
                 bottomSheetVerificationWaitingItem {
                     id("waiting")
-                    title(host.stringProvider.getString(R.string.verification_request_waiting_for_recovery))
+                    title(host.stringProvider.getString(CommonStrings.verification_request_waiting_for_recovery))
                 }
             }
             is Success -> {
@@ -355,7 +356,7 @@ class SelfVerificationController @Inject constructor(
                         id("notice_4s_failed'")
                         notice(
                                 host.stringProvider.getString(
-                                        R.string.error_failed_to_import_keys
+                                        CommonStrings.error_failed_to_import_keys
                                 )
                                         .toEpoxyCharSequence()
                         )
@@ -377,7 +378,7 @@ class SelfVerificationController @Inject constructor(
                 // Loading => We are starting a transaction
                 bottomSheetVerificationWaitingItem {
                     id("waiting")
-                    title(host.stringProvider.getString(R.string.please_wait))
+                    title(host.stringProvider.getString(CommonStrings.please_wait))
                 }
             }
             is Success -> {

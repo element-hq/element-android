@@ -30,6 +30,7 @@ import im.vector.app.features.settings.notifications.NotificationIndex
 import im.vector.app.features.settings.notifications.StandardActions
 import im.vector.app.features.settings.notifications.VectorSettingsPushRuleNotificationFragment
 import im.vector.app.features.settings.notifications.getStandardAction
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -41,7 +42,7 @@ import org.matrix.android.sdk.api.session.pushrules.toJson
 class VectorSettingsKeywordAndMentionsNotificationFragment :
         VectorSettingsPushRuleNotificationFragment() {
 
-    override var titleRes: Int = R.string.settings_notification_mentions_and_keywords
+    override var titleRes: Int = CommonStrings.settings_notification_mentions_and_keywords
 
     override val preferenceXmlRes = R.xml.vector_settings_notification_mentions_and_keywords
 

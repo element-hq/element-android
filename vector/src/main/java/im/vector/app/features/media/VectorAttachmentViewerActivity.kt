@@ -35,7 +35,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.transition.Transition
 import com.airbnb.mvrx.viewModel
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.intent.getMimeTypeFromUri
@@ -51,6 +50,7 @@ import im.vector.lib.attachmentviewer.AttachmentCommands
 import im.vector.lib.attachmentviewer.AttachmentViewerActivity
 import im.vector.lib.core.utils.compat.getParcelableArrayListExtraCompat
 import im.vector.lib.core.utils.compat.getParcelableExtraCompat
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -84,7 +84,7 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
                 viewModel.handle(it)
             }
         } else if (deniedPermanently) {
-            onPermissionDeniedDialog(R.string.denied_permission_generic)
+            onPermissionDeniedDialog(CommonStrings.denied_permission_generic)
         }
         viewModel.pendingAction = null
     }
@@ -147,8 +147,8 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
             }
         }
 
-        window.statusBarColor = ContextCompat.getColor(this, R.color.black_alpha)
-        window.navigationBarColor = ContextCompat.getColor(this, R.color.black_alpha)
+        window.statusBarColor = ContextCompat.getColor(this, im.vector.lib.ui.styles.R.color.black_alpha)
+        window.navigationBarColor = ContextCompat.getColor(this, im.vector.lib.ui.styles.R.color.black_alpha)
 
         observeViewEvents()
     }
@@ -163,6 +163,7 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
         Timber.i("onPause Activity ${javaClass.simpleName}")
     }
 
+    @Suppress("OVERRIDE_DEPRECATION")
     override fun onBackPressed() {
         if (currentPosition == initialIndex) {
             // show back the transition view

@@ -42,6 +42,7 @@ import im.vector.app.core.utils.getMatrixInstance
 import im.vector.app.features.MainActivity
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.home.HomeActivity
+import im.vector.lib.strings.CommonStrings
 import org.hamcrest.CoreMatchers.not
 import org.junit.Before
 import org.junit.Ignore
@@ -109,7 +110,7 @@ class SecurityBootstrapTest : VerificationTestBase() {
                 .perform(click())
 
         onView(isRoot())
-                .perform(waitForView(withText(R.string.bootstrap_info_text_2)))
+                .perform(waitForView(withText(CommonStrings.bootstrap_info_text_2)))
 
         // test back
         onView(isRoot()).perform(pressBack())
@@ -124,7 +125,7 @@ class SecurityBootstrapTest : VerificationTestBase() {
                 .perform(click())
 
         onView(isRoot())
-                .perform(waitForView(withText(R.string.bootstrap_info_text_2)))
+                .perform(waitForView(withText(CommonStrings.bootstrap_info_text_2)))
 
         onView(withId(R.id.ssss_passphrase_enter_edittext))
                 .perform(typeText("person woman man camera tv"))
@@ -139,7 +140,7 @@ class SecurityBootstrapTest : VerificationTestBase() {
         onView(withId(R.id.bootstrapSubmit))
                 .perform(closeSoftKeyboard(), click())
 
-        onView(withText(R.string.passphrase_passphrase_does_not_match)).check(matches(isDisplayed()))
+        onView(withText(CommonStrings.passphrase_passphrase_does_not_match)).check(matches(isDisplayed()))
 
         onView(withId(R.id.ssss_passphrase_enter_edittext))
                 .perform(replaceText("person woman man camera tv"))
@@ -148,7 +149,7 @@ class SecurityBootstrapTest : VerificationTestBase() {
                 .perform(closeSoftKeyboard(), click())
 
         onView(withId(R.id.bottomSheetScrollView))
-                .perform(waitForView(withText(R.string.bottom_sheet_save_your_recovery_key_content)))
+                .perform(waitForView(withText(CommonStrings.bottom_sheet_save_your_recovery_key_content)))
 
         intending(hasAction(Intent.ACTION_SEND)).respondWith(ActivityResult(Activity.RESULT_OK, null))
 
@@ -156,12 +157,12 @@ class SecurityBootstrapTest : VerificationTestBase() {
                 .perform(click())
 
         // Dismiss dialog
-        onView(withText(R.string.ok)).inRoot(RootMatchers.isDialog()).perform(click())
+        onView(withText(CommonStrings.ok)).inRoot(RootMatchers.isDialog()).perform(click())
 
         onView(withId(R.id.bottomSheetScrollView))
-                .perform(waitForView(withText(R.string.bottom_sheet_save_your_recovery_key_content)))
+                .perform(waitForView(withText(CommonStrings.bottom_sheet_save_your_recovery_key_content)))
 
-        onView(withText(R.string._continue)).perform(click())
+        onView(withText(CommonStrings._continue)).perform(click())
 
         // Assert that all is configured
         val crossSigningInitialized = runBlockingTest {

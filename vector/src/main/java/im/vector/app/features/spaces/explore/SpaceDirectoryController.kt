@@ -37,6 +37,7 @@ import im.vector.app.features.home.room.list.spaceChildInfoItem
 import im.vector.app.features.home.room.list.spaceDirectoryFilterNoResultsItem
 import im.vector.app.features.spaces.manage.SpaceChildInfoMatchFilter
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
+import im.vector.lib.strings.CommonStrings
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.failure.Failure
@@ -85,13 +86,13 @@ class SpaceDirectoryController @Inject constructor(
                     tintIcon(false)
                     text(
                             span {
-                                span(host.stringProvider.getString(R.string.spaces_no_server_support_title)) {
+                                span(host.stringProvider.getString(CommonStrings.spaces_no_server_support_title)) {
                                     textStyle = "bold"
-                                    textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary)
+                                    textColor = host.colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_primary)
                                 }
                                 +"\n\n"
-                                span(host.stringProvider.getString(R.string.spaces_no_server_support_description)) {
-                                    textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
+                                span(host.stringProvider.getString(CommonStrings.spaces_no_server_support_description)) {
+                                    textColor = host.colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_secondary)
                                 }
                             }.toEpoxyCharSequence()
                     )
@@ -116,15 +117,15 @@ class SpaceDirectoryController @Inject constructor(
             if (flattenChildInfo.isEmpty()) {
                 genericEmptyWithActionItem {
                     id("empty_res")
-                    title(host.stringProvider.getString(R.string.this_space_has_no_rooms))
+                    title(host.stringProvider.getString(CommonStrings.this_space_has_no_rooms))
                     iconRes(R.drawable.ic_empty_icon_room)
-                    iconTint(host.colorProvider.getColorFromAttribute(R.attr.vctr_reaction_background_on))
+                    iconTint(host.colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_reaction_background_on))
                     apply {
                         if (data?.canAddRooms == true) {
-                            description(host.stringProvider.getString(R.string.this_space_has_no_rooms_admin))
+                            description(host.stringProvider.getString(CommonStrings.this_space_has_no_rooms_admin))
                             buttonAction(
                                     Action(
-                                            title = host.stringProvider.getString(R.string.space_add_existing_rooms),
+                                            title = host.stringProvider.getString(CommonStrings.space_add_existing_rooms),
                                             listener = object : ClickListener {
                                                 override fun invoke(p1: View) {
                                                     host.listener?.addExistingRooms(data.spaceId)
@@ -132,7 +133,7 @@ class SpaceDirectoryController @Inject constructor(
                                             }
                                     ))
                         } else {
-                            description(host.stringProvider.getString(R.string.this_space_has_no_rooms_not_admin))
+                            description(host.stringProvider.getString(CommonStrings.this_space_has_no_rooms_not_admin))
                         }
                     }
                 }
@@ -162,16 +163,16 @@ class SpaceDirectoryController @Inject constructor(
                             suggested(info.suggested.orFalse())
                             errorLabel(
                                     error?.let {
-                                        host.stringProvider.getString(R.string.error_failed_to_join_room, host.errorFormatter.toHumanReadable(it))
+                                        host.stringProvider.getString(CommonStrings.error_failed_to_join_room, host.errorFormatter.toHumanReadable(it))
                                     }
                             )
                             memberCount(info.activeMemberCount ?: 0)
                             loading(isLoading)
                             buttonLabel(
                                     when {
-                                        error != null -> host.stringProvider.getString(R.string.global_retry)
-                                        isJoined -> host.stringProvider.getString(R.string.action_open)
-                                        else -> host.stringProvider.getString(R.string.action_join)
+                                        error != null -> host.stringProvider.getString(CommonStrings.global_retry)
+                                        isJoined -> host.stringProvider.getString(CommonStrings.action_open)
+                                        else -> host.stringProvider.getString(CommonStrings.action_join)
                                     }
                             )
                             apply {

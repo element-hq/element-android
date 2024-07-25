@@ -23,10 +23,10 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import com.airbnb.mvrx.viewModel
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
+import im.vector.lib.strings.CommonStrings
 
 @AndroidEntryPoint
 class QrCodeScannerActivity : VectorBaseActivity<ActivitySimpleBinding>() {
@@ -46,7 +46,7 @@ class QrCodeScannerActivity : VectorBaseActivity<ActivitySimpleBinding>() {
                     setResultAndFinish(it.result, it.isQrCode)
                 }
                 is QrCodeScannerEvents.ParseFailed -> {
-                    Toast.makeText(this, R.string.qr_code_not_scanned, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, CommonStrings.qr_code_not_scanned, Toast.LENGTH_SHORT).show()
                     finish()
                 }
                 else -> Unit
@@ -54,7 +54,7 @@ class QrCodeScannerActivity : VectorBaseActivity<ActivitySimpleBinding>() {
         }
 
         if (isFirstCreation()) {
-            val args = QrScannerArgs(showExtraButtons = false, R.string.verification_scan_their_code)
+            val args = QrScannerArgs(showExtraButtons = false, CommonStrings.verification_scan_their_code)
             replaceFragment(views.simpleFragmentContainer, QrCodeScannerFragment::class.java, args)
         }
     }

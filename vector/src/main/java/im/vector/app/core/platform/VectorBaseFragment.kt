@@ -41,7 +41,6 @@ import com.bumptech.glide.util.Util.assertMainThread
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.EntryPointAccessors
-import im.vector.app.R
 import im.vector.app.core.di.ActivityEntryPoint
 import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.error.ErrorFormatter
@@ -52,6 +51,7 @@ import im.vector.app.core.utils.ToolbarConfig
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.navigation.Navigator
+import im.vector.lib.strings.CommonStrings
 import im.vector.lib.ui.styles.dialogs.MaterialProgressDialog
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -251,7 +251,7 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
     protected fun showLoadingDialog(message: CharSequence? = null) {
         progress?.dismiss()
         progress = MaterialProgressDialog(requireContext())
-                .show(message ?: getString(R.string.please_wait))
+                .show(message ?: getString(CommonStrings.please_wait))
     }
 
     protected fun dismissLoadingDialog() {
@@ -314,9 +314,9 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
 
     protected fun displayErrorDialog(throwable: Throwable) {
         MaterialAlertDialogBuilder(requireActivity())
-                .setTitle(R.string.dialog_title_error)
+                .setTitle(CommonStrings.dialog_title_error)
                 .setMessage(errorFormatter.toHumanReadable(throwable))
-                .setPositiveButton(R.string.ok, null)
+                .setPositiveButton(CommonStrings.ok, null)
                 .show()
     }
 

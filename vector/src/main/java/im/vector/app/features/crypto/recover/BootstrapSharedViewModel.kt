@@ -25,7 +25,6 @@ import com.nulabinc.zxcvbn.Zxcvbn
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.error.ErrorFormatter
@@ -37,6 +36,7 @@ import im.vector.app.features.raw.wellknown.SecureBackupMethod
 import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.raw.wellknown.isSecureBackupRequired
 import im.vector.app.features.raw.wellknown.secureBackupMethod
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.auth.UIABaseAuth
@@ -216,7 +216,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                 } else {
                     setState {
                         copy(
-                                passphraseConfirmMatch = Fail(Throwable(stringProvider.getString(R.string.passphrase_passphrase_does_not_match)))
+                                passphraseConfirmMatch = Fail(Throwable(stringProvider.getString(CommonStrings.passphrase_passphrase_does_not_match)))
                         )
                     }
                 }
@@ -277,7 +277,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
             BootstrapActions.ReAuthCancelled -> {
                 pendingAuthHandler.reAuthCancelled()
                 setState {
-                    copy(step = BootstrapStep.AccountReAuth(stringProvider.getString(R.string.authentication_error)))
+                    copy(step = BootstrapStep.AccountReAuth(stringProvider.getString(CommonStrings.authentication_error)))
                 }
             }
             BootstrapActions.Retry -> {
@@ -464,7 +464,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                         // it's a bad password / auth
                         setState {
                             copy(
-                                    step = BootstrapStep.AccountReAuth(stringProvider.getString(R.string.auth_invalid_login_param))
+                                    step = BootstrapStep.AccountReAuth(stringProvider.getString(CommonStrings.auth_invalid_login_param))
                             )
                         }
                     }
@@ -474,7 +474,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                                 bootstrapResult.failure.httpCode == 401) {
                             // Ignore this error
                         } else {
-                            _viewEvents.post(BootstrapViewEvents.ModalError(bootstrapResult.error ?: stringProvider.getString(R.string.matrix_error)))
+                            _viewEvents.post(BootstrapViewEvents.ModalError(bootstrapResult.error ?: stringProvider.getString(CommonStrings.matrix_error)))
                             // Not sure
                             setState {
                                 copy(
@@ -594,11 +594,11 @@ class BootstrapSharedViewModel @AssistedInject constructor(
 
     private fun BackupToQuadSMigrationTask.Result.Failure.toHumanReadable(): String {
         return when (this) {
-            is BackupToQuadSMigrationTask.Result.InvalidRecoverySecret -> stringProvider.getString(R.string.keys_backup_passphrase_error_decrypt)
+            is BackupToQuadSMigrationTask.Result.InvalidRecoverySecret -> stringProvider.getString(CommonStrings.keys_backup_passphrase_error_decrypt)
             is BackupToQuadSMigrationTask.Result.ErrorFailure -> errorFormatter.toHumanReadable(throwable)
             // is BackupToQuadSMigrationTask.Result.NoKeyBackupVersion,
             // is BackupToQuadSMigrationTask.Result.IllegalParams,
-            else -> stringProvider.getString(R.string.unexpected_error)
+            else -> stringProvider.getString(CommonStrings.unexpected_error)
         }
     }
 }

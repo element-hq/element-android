@@ -17,10 +17,10 @@
 package im.vector.app.features.settings.ignored
 
 import com.airbnb.epoxy.EpoxyController
-import im.vector.app.R
 import im.vector.app.core.epoxy.noResultItem
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
@@ -48,7 +48,7 @@ class IgnoredUsersController @Inject constructor(
         if (users.isEmpty()) {
             noResultItem {
                 id("empty")
-                text(host.stringProvider.getString(R.string.no_ignored_users))
+                text(host.stringProvider.getString(CommonStrings.no_ignored_users))
             }
         } else {
             users.forEach { user ->

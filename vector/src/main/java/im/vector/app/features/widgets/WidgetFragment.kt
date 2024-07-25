@@ -53,6 +53,7 @@ import im.vector.app.features.widgets.webview.WebviewPermissionUtils
 import im.vector.app.features.widgets.webview.clearAfterWidget
 import im.vector.app.features.widgets.webview.setupForWidget
 import im.vector.lib.core.utils.compat.resolveActivityCompat
+import im.vector.lib.strings.CommonStrings
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.terms.TermsService
 import timber.log.Timber
@@ -306,7 +307,7 @@ class WidgetFragment :
 
     override fun onPermissionRequest(request: PermissionRequest) {
         permissionUtils.promptForPermissions(
-                title = R.string.room_widget_resource_permission_title,
+                title = CommonStrings.room_widget_resource_permission_title,
                 request = request,
                 context = requireContext(),
                 activity = requireActivity(),
@@ -342,7 +343,7 @@ class WidgetFragment :
             views.widgetProgressBar.isVisible = false
             views.widgetErrorLayout.isVisible = true
             views.widgetWebView.isInvisible = true
-            views.widgetErrorText.text = getString(R.string.room_widget_failed_to_load, message)
+            views.widgetErrorText.text = getString(CommonStrings.room_widget_failed_to_load, message)
         }
     }
 
@@ -358,11 +359,11 @@ class WidgetFragment :
 
     private fun deleteWidget() {
         MaterialAlertDialogBuilder(requireContext())
-                .setMessage(R.string.widget_delete_message_confirmation)
-                .setPositiveButton(R.string.action_remove) { _, _ ->
+                .setMessage(CommonStrings.widget_delete_message_confirmation)
+                .setPositiveButton(CommonStrings.action_remove) { _, _ ->
                     viewModel.handle(WidgetAction.DeleteWidget)
                 }
-                .setNegativeButton(R.string.action_cancel, null)
+                .setNegativeButton(CommonStrings.action_cancel, null)
                 .show()
     }
 

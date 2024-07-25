@@ -24,7 +24,6 @@ import androidx.viewbinding.ViewBinding
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import im.vector.app.R
 import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
@@ -32,6 +31,7 @@ import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewModel
 import im.vector.app.features.onboarding.OnboardingViewState
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.CancellationException
 
 /**
@@ -119,14 +119,14 @@ abstract class AbstractFtueAuthFragment<VB : ViewBinding> : VectorBaseFragment<V
             displayCancelDialog && viewModel.isRegistrationStarted && backIsHardExit() -> {
                 // Ask for confirmation before cancelling the registration
                 MaterialAlertDialogBuilder(requireActivity())
-                        .setTitle(R.string.login_signup_cancel_confirmation_title)
-                        .setMessage(R.string.login_signup_cancel_confirmation_content)
-                        .setPositiveButton(R.string.yes) { _, _ ->
+                        .setTitle(CommonStrings.login_signup_cancel_confirmation_title)
+                        .setMessage(CommonStrings.login_signup_cancel_confirmation_content)
+                        .setPositiveButton(CommonStrings.yes) { _, _ ->
                             displayCancelDialog = false
                             @Suppress("DEPRECATION")
                             vectorBaseActivity.onBackPressed()
                         }
-                        .setNegativeButton(R.string.no, null)
+                        .setNegativeButton(CommonStrings.no, null)
                         .show()
 
                 true
@@ -134,14 +134,14 @@ abstract class AbstractFtueAuthFragment<VB : ViewBinding> : VectorBaseFragment<V
             displayCancelDialog && isResetPasswordStarted -> {
                 // Ask for confirmation before cancelling the reset password
                 MaterialAlertDialogBuilder(requireActivity())
-                        .setTitle(R.string.login_reset_password_cancel_confirmation_title)
-                        .setMessage(R.string.login_reset_password_cancel_confirmation_content)
-                        .setPositiveButton(R.string.yes) { _, _ ->
+                        .setTitle(CommonStrings.login_reset_password_cancel_confirmation_title)
+                        .setMessage(CommonStrings.login_reset_password_cancel_confirmation_content)
+                        .setPositiveButton(CommonStrings.yes) { _, _ ->
                             displayCancelDialog = false
                             @Suppress("DEPRECATION")
                             vectorBaseActivity.onBackPressed()
                         }
-                        .setNegativeButton(R.string.no, null)
+                        .setNegativeButton(CommonStrings.no, null)
                         .show()
 
                 true

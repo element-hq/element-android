@@ -31,6 +31,7 @@ import im.vector.app.espresso.tools.waitUntilViewVisible
 import im.vector.app.features.MainActivity
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.ui.robot.ElementRobot
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
@@ -102,13 +103,13 @@ class VerifySessionNavigationTest : VerificationTestBase() {
         Espresso.onView(ViewMatchers.withId(R.id.bottomSheetVerificationRecyclerView))
                 .perform(
                         RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
-                                ViewMatchers.hasDescendant(ViewMatchers.withText(R.string.verification_verify_with_another_device)),
+                                ViewMatchers.hasDescendant(ViewMatchers.withText(CommonStrings.verification_verify_with_another_device)),
                                 ViewActions.click()
                         )
                 )
 
         Espresso.onView(ViewMatchers.withId(R.id.bottomSheetVerificationRecyclerView))
-                .check(ViewAssertions.matches(ViewMatchers.hasDescendant(ViewMatchers.withText(R.string.verification_request_was_sent))))
+                .check(ViewAssertions.matches(ViewMatchers.hasDescendant(ViewMatchers.withText(CommonStrings.verification_request_was_sent))))
 
         val txId = runBlockingTest {
             otherRequest.await().transactionId
@@ -127,7 +128,7 @@ class VerifySessionNavigationTest : VerificationTestBase() {
                 .perform(waitForView(ViewMatchers.withId(R.id.bottomSheetFragmentContainer)))
 
         Espresso.onView(ViewMatchers.withId(R.id.bottomSheetVerificationRecyclerView))
-                .check(ViewAssertions.matches(ViewMatchers.hasDescendant(ViewMatchers.withText(R.string.verification_verify_with_another_device))))
+                .check(ViewAssertions.matches(ViewMatchers.hasDescendant(ViewMatchers.withText(CommonStrings.verification_verify_with_another_device))))
 
         runBlockingTest {
             otherGetCancelledRequest.await()

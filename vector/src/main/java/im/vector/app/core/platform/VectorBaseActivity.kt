@@ -16,6 +16,7 @@
 
 package im.vector.app.core.platform
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.os.Build
@@ -91,6 +92,7 @@ import im.vector.app.features.settings.VectorLocaleProvider
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.themes.ActivityOtherThemes
 import im.vector.app.features.themes.ThemeUtils
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -253,7 +255,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
 
         if (vectorPreferences.isNewAppLayoutEnabled()) {
             tryOrNull { // Add to XML theme when feature flag is removed
-                val toolbarBackground = MaterialColors.getColor(views.root, R.attr.vctr_toolbar_background)
+                val toolbarBackground = MaterialColors.getColor(views.root, im.vector.lib.ui.styles.R.attr.vctr_toolbar_background)
                 window.statusBarColor = toolbarBackground
                 window.navigationBarColor = toolbarBackground
             }
@@ -321,20 +323,20 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
 
     private fun handleInitialSyncRequest(initialSyncRequest: GlobalError.InitialSyncRequest) {
         MaterialAlertDialogBuilder(this)
-                .setTitle(R.string.initial_sync_request_title)
+                .setTitle(CommonStrings.initial_sync_request_title)
                 .setMessage(
                         getString(
-                                R.string.initial_sync_request_content, getString(
+                                CommonStrings.initial_sync_request_content, getString(
                                 when (initialSyncRequest.reason) {
-                                    InitialSyncRequestReason.IGNORED_USERS_LIST_CHANGE -> R.string.initial_sync_request_reason_unignored_users
+                                    InitialSyncRequestReason.IGNORED_USERS_LIST_CHANGE -> CommonStrings.initial_sync_request_reason_unignored_users
                                 }
                         )
                         )
                 )
-                .setPositiveButton(R.string.ok) { _, _ ->
+                .setPositiveButton(CommonStrings.ok) { _, _ ->
                     MainActivity.restartApp(this, MainActivityArgs(clearCache = true))
                 }
-                .setNegativeButton(R.string.later, null)
+                .setNegativeButton(CommonStrings.later, null)
                 .show()
     }
 
@@ -478,9 +480,9 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
             // New API instead of SYSTEM_UI_FLAG_IMMERSIVE
             window.decorView.windowInsetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
             // New API instead of FLAG_TRANSLUCENT_STATUS
-            window.statusBarColor = ContextCompat.getColor(this, im.vector.lib.attachmentviewer.R.color.half_transparent_status_bar)
+            window.statusBarColor = ContextCompat.getColor(this, im.vector.lib.ui.styles.R.color.half_transparent_status_bar)
             // New API instead of FLAG_TRANSLUCENT_NAVIGATION
-            window.navigationBarColor = ContextCompat.getColor(this, im.vector.lib.attachmentviewer.R.color.half_transparent_status_bar)
+            window.navigationBarColor = ContextCompat.getColor(this, im.vector.lib.ui.styles.R.color.half_transparent_status_bar)
         } else {
             @Suppress("DEPRECATION")
             window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -502,6 +504,8 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
         }
     }
 
+    @SuppressLint("MissingSuperCall")
+    @Suppress("OVERRIDE_DEPRECATION")
     override fun onBackPressed() {
         onBackPressed(false)
     }
@@ -646,9 +650,9 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
 
     fun notImplemented(message: String = "") {
         if (message.isNotBlank()) {
-            toast(getString(R.string.not_implemented) + ": $message")
+            toast(getString(CommonStrings.not_implemented) + ": $message")
         } else {
-            toast(getString(R.string.not_implemented))
+            toast(getString(CommonStrings.not_implemented))
         }
     }
 

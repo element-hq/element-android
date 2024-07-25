@@ -112,7 +112,7 @@ abstract class RoomSummaryCenteredItem : VectorEpoxyModel<RoomSummaryCenteredIte
     private fun renderSelection(holder: Holder, isSelected: Boolean) {
         if (isSelected) {
             holder.avatarCheckedImageView.visibility = View.VISIBLE
-            val backgroundColor = ThemeUtils.getColor(holder.view.context, R.attr.colorPrimary)
+            val backgroundColor = ThemeUtils.getColor(holder.view.context, com.google.android.material.R.attr.colorPrimary)
             val backgroundDrawable = TextDrawable.builder().buildRound("", backgroundColor)
             holder.avatarImageView.setImageDrawable(backgroundDrawable)
         } else {

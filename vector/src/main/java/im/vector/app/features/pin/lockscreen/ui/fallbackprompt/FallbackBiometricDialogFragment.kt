@@ -71,7 +71,7 @@ class FallbackBiometricDialogFragment : DialogFragment(R.layout.fragment_biometr
             parsedArgs.description?.let { fingerprintDescription.text = it }
         }
 
-        requireDialog().setTitle(parsedArgs.title ?: getString(R.string.lockscreen_sign_in))
+        requireDialog().setTitle(parsedArgs.title ?: getString(im.vector.lib.ui.styles.R.string.lockscreen_sign_in))
     }
 
     override fun onResume() {
@@ -95,8 +95,8 @@ class FallbackBiometricDialogFragment : DialogFragment(R.layout.fragment_biometr
         val contentBinding = binding ?: return
         contentBinding.fingerprintIcon.setImageResource(R.drawable.ic_fingerprint_success_lockscreen)
         contentBinding.fingerprintStatus.apply {
-            setTextColor(ResourcesCompat.getColor(resources, R.color.lockscreen_success_color, null))
-            setText(R.string.lockscreen_fingerprint_success)
+            setTextColor(ResourcesCompat.getColor(resources, im.vector.lib.ui.styles.R.color.lockscreen_success_color, null))
+            setText(im.vector.lib.ui.styles.R.string.lockscreen_fingerprint_success)
         }
         viewLifecycleOwner.lifecycleScope.launch {
             delay(200L)
@@ -108,8 +108,8 @@ class FallbackBiometricDialogFragment : DialogFragment(R.layout.fragment_biometr
         val contentBinding = binding ?: return
         contentBinding.fingerprintIcon.setImageResource(R.drawable.ic_fingerprint_error_lockscreen)
         contentBinding.fingerprintStatus.apply {
-            setTextColor(ResourcesCompat.getColor(resources, R.color.lockscreen_warning_color, null))
-            setText(R.string.lockscreen_fingerprint_not_recognized)
+            setTextColor(ResourcesCompat.getColor(resources, im.vector.lib.ui.styles.R.color.lockscreen_warning_color, null))
+            setText(im.vector.lib.ui.styles.R.string.lockscreen_fingerprint_not_recognized)
         }
         viewLifecycleOwner.lifecycleScope.launch {
             delay(1500L)
@@ -121,8 +121,8 @@ class FallbackBiometricDialogFragment : DialogFragment(R.layout.fragment_biometr
         val contentBinding = binding ?: return
         contentBinding.fingerprintIcon.setImageResource(R.drawable.lockscreen_fingerprint_40)
         contentBinding.fingerprintStatus.apply {
-            setTextColor(ResourcesCompat.getColor(resources, R.color.lockscreen_hint_color, null))
-            setText(R.string.lockscreen_fingerprint_hint)
+            setTextColor(ResourcesCompat.getColor(resources, im.vector.lib.ui.styles.R.color.lockscreen_hint_color, null))
+            setText(im.vector.lib.ui.styles.R.string.lockscreen_fingerprint_hint)
         }
     }
 

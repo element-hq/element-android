@@ -26,6 +26,8 @@ import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
+import im.vector.lib.strings.CommonPlurals
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import javax.inject.Inject
 
@@ -49,7 +51,7 @@ class OtherSessionsController @Inject constructor(
         if (data.isNullOrEmpty()) {
             noResultItem {
                 id("empty")
-                text(host.stringProvider.getString(R.string.no_result_placeholder))
+                text(host.stringProvider.getString(CommonStrings.no_result_placeholder))
             }
         } else {
             data.forEach { device ->
@@ -57,11 +59,11 @@ class OtherSessionsController @Inject constructor(
                 val formattedLastActivityDate = host.dateFormatter.format(device.deviceInfo.lastSeenTs, dateFormatKind)
                 val description = buildDescription(device, formattedLastActivityDate)
                 val descriptionColor = if (device.isCurrentDevice) {
-                    host.colorProvider.getColorFromAttribute(R.attr.colorError)
+                    host.colorProvider.getColorFromAttribute(com.google.android.material.R.attr.colorError)
                 } else {
-                    host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
+                    host.colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_secondary)
                 }
-                val drawableColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
+                val drawableColor = host.colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_secondary)
                 val descriptionDrawable = if (device.isInactive) host.drawableProvider.getDrawable(R.drawable.ic_inactive_sessions, drawableColor) else null
                 val sessionName = device.deviceInfo.displayName ?: device.deviceInfo.deviceId
 
@@ -92,23 +94,23 @@ class OtherSessionsController @Inject constructor(
         return when {
             device.isInactive -> {
                 stringProvider.getQuantityString(
-                        R.plurals.device_manager_other_sessions_description_inactive,
+                        CommonPlurals.device_manager_other_sessions_description_inactive,
                         SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS,
                         SESSION_IS_MARKED_AS_INACTIVE_AFTER_DAYS,
                         formattedLastActivityDate
                 )
             }
             device.roomEncryptionTrustLevel == RoomEncryptionTrustLevel.Trusted -> {
-                stringProvider.getString(R.string.device_manager_other_sessions_description_verified, formattedLastActivityDate)
+                stringProvider.getString(CommonStrings.device_manager_other_sessions_description_verified, formattedLastActivityDate)
             }
             device.isCurrentDevice -> {
-                stringProvider.getString(R.string.device_manager_other_sessions_description_unverified_current_session)
+                stringProvider.getString(CommonStrings.device_manager_other_sessions_description_unverified_current_session)
             }
             device.roomEncryptionTrustLevel == RoomEncryptionTrustLevel.Default -> {
-                stringProvider.getString(R.string.device_manager_session_last_activity, formattedLastActivityDate)
+                stringProvider.getString(CommonStrings.device_manager_session_last_activity, formattedLastActivityDate)
             }
             else -> {
-                stringProvider.getString(R.string.device_manager_other_sessions_description_unverified, formattedLastActivityDate)
+                stringProvider.getString(CommonStrings.device_manager_other_sessions_description_unverified, formattedLastActivityDate)
             }
         }
     }

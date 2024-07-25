@@ -61,12 +61,12 @@ class ButtonStateView @JvmOverloads constructor(context: Context, attrs: Attribu
         // Read attributes
         context.theme.obtainStyledAttributes(
                 attrs,
-                R.styleable.ButtonStateView,
+                im.vector.lib.ui.styles.R.styleable.ButtonStateView,
                 0, 0
         )
                 .apply {
                     try {
-                        if (getBoolean(R.styleable.ButtonStateView_bsv_use_flat_button, true)) {
+                        if (getBoolean(im.vector.lib.ui.styles.R.styleable.ButtonStateView_bsv_use_flat_button, true)) {
                             button = views.buttonStateButtonFlat
                             views.buttonStateButtonBig.isVisible = false
                         } else {
@@ -74,8 +74,8 @@ class ButtonStateView @JvmOverloads constructor(context: Context, attrs: Attribu
                             views.buttonStateButtonFlat.isVisible = false
                         }
 
-                        button.text = getString(R.styleable.ButtonStateView_bsv_button_text)
-                        views.buttonStateLoaded.setImageDrawable(getDrawable(R.styleable.ButtonStateView_bsv_loaded_image_src))
+                        button.text = getString(im.vector.lib.ui.styles.R.styleable.ButtonStateView_bsv_button_text)
+                        views.buttonStateLoaded.setImageDrawable(getDrawable(im.vector.lib.ui.styles.R.styleable.ButtonStateView_bsv_loaded_image_src))
                     } finally {
                         recycle()
                     }

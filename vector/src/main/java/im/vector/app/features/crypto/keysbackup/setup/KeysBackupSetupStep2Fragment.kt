@@ -25,11 +25,11 @@ import androidx.lifecycle.viewModelScope
 import androidx.transition.TransitionManager
 import com.nulabinc.zxcvbn.Zxcvbn
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.hidePassword
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentKeysBackupSetupStep2Binding
 import im.vector.app.features.settings.VectorLocaleProvider
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -143,13 +143,13 @@ class KeysBackupSetupStep2Fragment :
     private fun doNext() {
         when {
             viewModel.passphrase.value.isNullOrEmpty() -> {
-                viewModel.passphraseError.value = context?.getString(R.string.passphrase_empty_error_message)
+                viewModel.passphraseError.value = context?.getString(CommonStrings.passphrase_empty_error_message)
             }
             viewModel.passphrase.value != viewModel.confirmPassphrase.value -> {
-                viewModel.confirmPassphraseError.value = context?.getString(R.string.passphrase_passphrase_does_not_match)
+                viewModel.confirmPassphraseError.value = context?.getString(CommonStrings.passphrase_passphrase_does_not_match)
             }
             viewModel.passwordStrength.value?.score ?: 0 < 4 -> {
-                viewModel.passphraseError.value = context?.getString(R.string.passphrase_passphrase_too_weak)
+                viewModel.passphraseError.value = context?.getString(CommonStrings.passphrase_passphrase_too_weak)
             }
             else -> {
                 viewModel.megolmBackupCreationInfo = null
@@ -175,7 +175,7 @@ class KeysBackupSetupStep2Fragment :
             }
             else -> {
                 // User has entered a passphrase but want to skip this step.
-                viewModel.passphraseError.value = context?.getString(R.string.keys_backup_passphrase_not_empty_error_message)
+                viewModel.passphraseError.value = context?.getString(CommonStrings.keys_backup_passphrase_not_empty_error_message)
             }
         }
     }

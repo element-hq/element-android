@@ -24,6 +24,7 @@ import androidx.core.view.isInvisible
 import im.vector.app.R
 import im.vector.app.features.home.room.detail.timeline.item.SendStateDecoration
 import im.vector.app.features.themes.ThemeUtils
+import im.vector.lib.strings.CommonStrings
 
 class SendStateImageView @JvmOverloads constructor(
         context: Context,
@@ -41,20 +42,20 @@ class SendStateImageView @JvmOverloads constructor(
         isInvisible = when (sendState) {
             SendStateDecoration.SENDING_NON_MEDIA -> {
                 setImageResource(R.drawable.ic_sending_message)
-                imageTintList = ColorStateList.valueOf(ThemeUtils.getColor(context, R.attr.vctr_content_tertiary))
-                contentDescription = context.getString(R.string.event_status_a11y_sending)
+                imageTintList = ColorStateList.valueOf(ThemeUtils.getColor(context, im.vector.lib.ui.styles.R.attr.vctr_content_tertiary))
+                contentDescription = context.getString(CommonStrings.event_status_a11y_sending)
                 false
             }
             SendStateDecoration.SENT -> {
                 setImageResource(R.drawable.ic_message_sent)
-                imageTintList = ColorStateList.valueOf(ThemeUtils.getColor(context, R.attr.vctr_content_tertiary))
-                contentDescription = context.getString(R.string.event_status_a11y_sent)
+                imageTintList = ColorStateList.valueOf(ThemeUtils.getColor(context, im.vector.lib.ui.styles.R.attr.vctr_content_tertiary))
+                contentDescription = context.getString(CommonStrings.event_status_a11y_sent)
                 false
             }
             SendStateDecoration.FAILED -> {
                 setImageResource(R.drawable.ic_sending_message_failed)
                 imageTintList = null
-                contentDescription = context.getString(R.string.event_status_a11y_failed)
+                contentDescription = context.getString(CommonStrings.event_status_a11y_failed)
                 false
             }
             SendStateDecoration.SENDING_MEDIA,

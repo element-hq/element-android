@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.internal.session.room
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.map
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -48,7 +48,7 @@ internal class RoomDataSource @Inject constructor(
                 }
         )
 
-        return Transformations.map(liveData) { results ->
+        return liveData.map { results ->
             results.firstOrNull().orFalse()
         }
     }

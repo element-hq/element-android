@@ -17,7 +17,6 @@
 package im.vector.app.features.roomprofile.members
 
 import com.airbnb.epoxy.TypedEpoxyController
-import im.vector.app.R
 import im.vector.app.core.epoxy.dividerItem
 import im.vector.app.core.epoxy.profiles.buildProfileSection
 import im.vector.app.core.epoxy.profiles.profileMatrixItem
@@ -139,7 +138,7 @@ class RoomMemberListController @Inject constructor(
             powerLevelLabel(
                     span {
                         span(powerLabel) {
-                            textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
+                            textColor = host.colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_secondary)
                         }
                     }
             )

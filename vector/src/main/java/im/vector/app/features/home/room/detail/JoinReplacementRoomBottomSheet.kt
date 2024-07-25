@@ -26,12 +26,12 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.parentFragmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.platform.ButtonStateView
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetTombstoneJoinBinding
+import im.vector.lib.strings.CommonStrings
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -64,7 +64,7 @@ class JoinReplacementRoomBottomSheet :
                 Uninitialized,
                 is Loading -> {
                     views.roomUpgradeButton.render(ButtonStateView.State.Loading)
-                    views.descriptionText.setText(R.string.it_may_take_some_time)
+                    views.descriptionText.setText(CommonStrings.it_may_take_some_time)
                 }
                 is Success -> {
                     views.roomUpgradeButton.render(ButtonStateView.State.Loaded)

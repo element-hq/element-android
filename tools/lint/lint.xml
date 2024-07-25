@@ -11,7 +11,7 @@
     <issue id="TypographyEllipsis" severity="error" />
     <issue id="ImpliedQuantity" severity="warning" />
     <issue id="MissingQuantity" severity="warning" />
-    <issue id="UnusedQuantity" severity="error" />
+    <issue id="UnusedQuantity" severity="warning" />
     <issue id="IconXmlAndPng" severity="error" />
     <issue id="IconDipSize" severity="error" />
     <issue id="IconDuplicatesConfig" severity="error" />

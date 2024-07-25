@@ -22,13 +22,13 @@ import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.activityViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.setTextWithColoredPart
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.databinding.FragmentAnalyticsOptinBinding
 import im.vector.app.features.analytics.AnalyticsConfig
+import im.vector.lib.strings.CommonStrings
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -63,8 +63,8 @@ class AnalyticsOptInFragment :
 
     private fun setupLink() {
         views.subtitle.setTextWithColoredPart(
-                fullTextRes = R.string.analytics_opt_in_content,
-                coloredTextRes = R.string.analytics_opt_in_content_link,
+                fullTextRes = CommonStrings.analytics_opt_in_content,
+                coloredTextRes = CommonStrings.analytics_opt_in_content_link,
                 onClick = {
                     openUrlInChromeCustomTab(requireContext(), null, analyticsConfig.policyLink)
                 }

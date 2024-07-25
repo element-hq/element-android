@@ -27,13 +27,13 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.showOptimizedSnackbar
 import im.vector.app.databinding.FragmentSessionDetailsBinding
 import im.vector.app.features.settings.devices.v2.DeviceFullInfo
+import im.vector.lib.strings.CommonStrings
 import javax.inject.Inject
 
 /**
@@ -61,7 +61,7 @@ class SessionDetailsFragment :
     private fun initToolbar() {
         (activity as? AppCompatActivity)
                 ?.supportActionBar
-                ?.setTitle(R.string.device_manager_session_details_title)
+                ?.setTitle(CommonStrings.device_manager_session_details_title)
     }
 
     private fun initSessionDetails() {
@@ -76,7 +76,7 @@ class SessionDetailsFragment :
     private fun observeViewEvents() {
         viewModel.observeViewEvents { viewEvent ->
             when (viewEvent) {
-                SessionDetailsViewEvent.ContentCopiedToClipboard -> view?.showOptimizedSnackbar(getString(R.string.copied_to_clipboard))
+                SessionDetailsViewEvent.ContentCopiedToClipboard -> view?.showOptimizedSnackbar(getString(CommonStrings.copied_to_clipboard))
             }
         }
     }

@@ -28,6 +28,7 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.utils.TextUtils
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.content.ContentUploadStateTracker
 import org.matrix.android.sdk.api.session.room.send.SendState
 import javax.inject.Inject
@@ -100,7 +101,7 @@ private class ContentMediaProgressUpdater(
             progressBar.isVisible = true
             progressBar.isIndeterminate = true
             progressBar.progress = 0
-            progressTextView.text = progressLayout.context.getString(R.string.send_file_step_idle)
+            progressTextView.text = progressLayout.context.getString(CommonStrings.send_file_step_idle)
             progressTextView.setTextColor(messageColorProvider.getMessageTextColor(SendState.UNSENT))
         } else {
             progressLayout.isVisible = false
@@ -108,19 +109,19 @@ private class ContentMediaProgressUpdater(
     }
 
     private fun handleEncryptingThumbnail() {
-        doHandleEncrypting(R.string.send_file_step_encrypting_thumbnail, 0, 0)
+        doHandleEncrypting(CommonStrings.send_file_step_encrypting_thumbnail, 0, 0)
     }
 
     private fun handleProgressThumbnail(state: ContentUploadStateTracker.State.UploadingThumbnail) {
-        doHandleProgress(R.string.send_file_step_sending_thumbnail, state.current, state.total)
+        doHandleProgress(CommonStrings.send_file_step_sending_thumbnail, state.current, state.total)
     }
 
     private fun handleEncrypting(state: ContentUploadStateTracker.State.Encrypting) {
-        doHandleEncrypting(R.string.send_file_step_encrypting_file, state.current, state.total)
+        doHandleEncrypting(CommonStrings.send_file_step_encrypting_file, state.current, state.total)
     }
 
     private fun handleProgress(state: ContentUploadStateTracker.State.Uploading) {
-        doHandleProgress(R.string.send_file_step_sending_file, state.current, state.total)
+        doHandleProgress(CommonStrings.send_file_step_sending_file, state.current, state.total)
     }
 
     private fun handleCompressingImage() {
@@ -128,7 +129,7 @@ private class ContentMediaProgressUpdater(
         progressBar.isVisible = true
         progressBar.isIndeterminate = true
         progressTextView.isVisible = true
-        progressTextView.text = progressLayout.context.getString(R.string.send_file_step_compressing_image)
+        progressTextView.text = progressLayout.context.getString(CommonStrings.send_file_step_compressing_image)
         progressTextView.setTextColor(messageColorProvider.getMessageTextColor(SendState.SENDING))
     }
 
@@ -141,7 +142,7 @@ private class ContentMediaProgressUpdater(
         progressBar.progress = state.percent.toInt()
         progressTextView.isVisible = true
         // False positive is here...
-        progressTextView.text = progressLayout.context.getString(R.string.send_file_step_compressing_video, state.percent.toInt())
+        progressTextView.text = progressLayout.context.getString(CommonStrings.send_file_step_compressing_video, state.percent.toInt())
         progressTextView.setTextColor(messageColorProvider.getMessageTextColor(SendState.SENDING))
     }
 

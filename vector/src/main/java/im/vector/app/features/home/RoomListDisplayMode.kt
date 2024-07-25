@@ -17,11 +17,11 @@
 package im.vector.app.features.home
 
 import androidx.annotation.StringRes
-import im.vector.app.R
+import im.vector.lib.strings.CommonStrings
 
 enum class RoomListDisplayMode(@StringRes val titleRes: Int) {
-    NOTIFICATIONS(R.string.bottom_action_notification),
-    PEOPLE(R.string.bottom_action_people_x),
-    ROOMS(R.string.bottom_action_rooms),
+    NOTIFICATIONS(CommonStrings.bottom_action_notification),
+    PEOPLE(CommonStrings.bottom_action_people_x),
+    ROOMS(CommonStrings.bottom_action_rooms),
     FILTERED(/* Not used */ 0)
 }

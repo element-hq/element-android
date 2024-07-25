@@ -31,10 +31,10 @@ import android.webkit.WebViewClient
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import im.vector.app.R
 import im.vector.app.core.utils.AssetReader
 import im.vector.app.features.login.JavascriptResponse
 import im.vector.app.features.onboarding.OnboardingViewState
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.util.MatrixJsonParser
 import timber.log.Timber
 import java.net.URLDecoder
@@ -135,12 +135,12 @@ class CaptchaWebview @Inject constructor(
 
     private fun showSslErrorDialog(container: Fragment, handler: SslErrorHandler) {
         MaterialAlertDialogBuilder(container.requireActivity())
-                .setMessage(R.string.ssl_could_not_verify)
-                .setPositiveButton(R.string.ssl_trust) { _, _ ->
+                .setMessage(CommonStrings.ssl_could_not_verify)
+                .setPositiveButton(CommonStrings.ssl_trust) { _, _ ->
                     Timber.d("## onReceivedSslError() : the user trusted")
                     handler.proceed()
                 }
-                .setNegativeButton(R.string.ssl_do_not_trust) { _, _ ->
+                .setNegativeButton(CommonStrings.ssl_do_not_trust) { _, _ ->
                     Timber.d("## onReceivedSslError() : the user did not trust")
                     handler.cancel()
                 }

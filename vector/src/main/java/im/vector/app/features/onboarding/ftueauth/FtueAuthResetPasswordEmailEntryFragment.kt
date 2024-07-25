@@ -21,7 +21,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.associateContentStateWith
 import im.vector.app.core.extensions.clearErrorOnChange
 import im.vector.app.core.extensions.content
@@ -30,6 +29,7 @@ import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentFtueResetPasswordEmailInputBinding
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewState
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.extensions.isEmail
 
 @AndroidEntryPoint
@@ -59,7 +59,7 @@ class FtueAuthResetPasswordEmailEntryFragment :
 
     override fun updateWithState(state: OnboardingViewState) {
         views.emailEntryHeaderSubtitle.text = getString(
-                R.string.ftue_auth_reset_password_email_subtitle,
+                CommonStrings.ftue_auth_reset_password_email_subtitle,
                 state.selectedHomeserver.userFacingUrl.toReducedUrl()
         )
     }

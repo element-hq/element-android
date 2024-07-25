@@ -61,6 +61,8 @@ interface ContentUrlResolver {
      */
     fun resolveThumbnail(contentUrl: String?, width: Int, height: Int, method: ThumbnailMethod): String?
 
+    fun requiresAuthentication(resolvedUrl: String): Boolean
+
     sealed class ResolvedMethod {
         data class GET(val url: String) : ResolvedMethod()
         data class POST(val url: String, val jsonBody: String) : ResolvedMethod()

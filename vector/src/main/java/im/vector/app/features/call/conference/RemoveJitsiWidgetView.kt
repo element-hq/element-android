@@ -152,11 +152,11 @@ import kotlin.math.absoluteValue
         val iconTintColor: Int
         val bgColor: Int
         if (activated) {
-            bgColor = ContextCompat.getColor(context, R.color.palette_vermilion)
-            iconTintColor = ContextCompat.getColor(context, R.color.palette_white)
+            bgColor = ContextCompat.getColor(context, im.vector.lib.ui.styles.R.color.palette_vermilion)
+            iconTintColor = ContextCompat.getColor(context, im.vector.lib.ui.styles.R.color.palette_white)
         } else {
             bgColor = ContextCompat.getColor(context, android.R.color.transparent)
-            iconTintColor = ContextCompat.getColor(context, R.color.palette_vermilion)
+            iconTintColor = ContextCompat.getColor(context, im.vector.lib.ui.styles.R.color.palette_vermilion)
         }
         removeJitsiHangupContainer.setBackgroundColor(bgColor)
         ImageViewCompat.setImageTintList(removeJitsiHangupIcon, ColorStateList.valueOf(iconTintColor))

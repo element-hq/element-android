@@ -20,9 +20,9 @@ import androidx.annotation.StringRes
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
-import im.vector.app.R
 import im.vector.app.core.platform.GenericIdArgs
 import im.vector.app.features.roomprofile.RoomProfileArgs
+import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.crypto.model.UserVerificationLevel
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
@@ -53,9 +53,9 @@ data class ActionPermissions(
 typealias RoomMemberSummaries = List<Pair<RoomMemberListCategories, List<RoomMemberSummary>>>
 
 enum class RoomMemberListCategories(@StringRes val titleRes: Int) {
-    ADMIN(R.string.room_member_power_level_admins),
-    MODERATOR(R.string.room_member_power_level_moderators),
-    CUSTOM(R.string.room_member_power_level_custom),
-    INVITE(R.string.room_member_power_level_invites),
-    USER(R.string.room_member_power_level_users)
+    ADMIN(CommonStrings.room_member_power_level_admins),
+    MODERATOR(CommonStrings.room_member_power_level_moderators),
+    CUSTOM(CommonStrings.room_member_power_level_custom),
+    INVITE(CommonStrings.room_member_power_level_invites),
+    USER(CommonStrings.room_member_power_level_users)
 }

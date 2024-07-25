@@ -23,6 +23,7 @@ import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.features.popup.DefaultVectorAlert
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.session.coroutineScope
+import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -185,45 +186,45 @@ class KeyRequestHandler @Inject constructor(
 
         if (moreInfo != null) {
             val lastSeenIp = if (moreInfo.lastSeenIp.isNullOrBlank()) {
-                context.getString(R.string.encryption_information_unknown_ip)
+                context.getString(CommonStrings.encryption_information_unknown_ip)
             } else {
                 moreInfo.lastSeenIp
             }
 
             val lastSeenTime = dateFormatter.format(moreInfo.lastSeenTs, DateFormatKind.DEFAULT_DATE_AND_TIME)
-            val lastSeenInfo = context.getString(R.string.devices_details_last_seen_format, lastSeenIp, lastSeenTime)
+            val lastSeenInfo = context.getString(CommonStrings.devices_details_last_seen_format, lastSeenIp, lastSeenTime)
             dialogText = if (wasNewDevice) {
-                context.getString(R.string.you_added_a_new_device_with_info, deviceName, lastSeenInfo)
+                context.getString(CommonStrings.you_added_a_new_device_with_info, deviceName, lastSeenInfo)
             } else {
-                context.getString(R.string.your_unverified_device_requesting_with_info, deviceName, lastSeenInfo)
+                context.getString(CommonStrings.your_unverified_device_requesting_with_info, deviceName, lastSeenInfo)
             }
         } else {
             dialogText = if (wasNewDevice) {
-                context.getString(R.string.you_added_a_new_device, deviceName)
+                context.getString(CommonStrings.you_added_a_new_device, deviceName)
             } else {
-                context.getString(R.string.your_unverified_device_requesting, deviceName)
+                context.getString(CommonStrings.your_unverified_device_requesting, deviceName)
             }
         }
 
         val alert = DefaultVectorAlert(
                 alertManagerId(userId, deviceId),
-                context.getString(R.string.key_share_request),
+                context.getString(CommonStrings.key_share_request),
                 dialogText,
                 R.drawable.key_small
         )
 
-        alert.colorRes = R.color.key_share_req_accent_color
+        alert.colorRes = im.vector.lib.ui.styles.R.color.key_share_req_accent_color
 
         val mappingKey = keyForMap(userId, deviceId)
         alert.dismissedAction = Runnable {
             denyAllRequests(mappingKey)
         }
 
-        alert.addButton(context.getString(R.string.share_without_verifying_short_label), {
+        alert.addButton(context.getString(CommonStrings.share_without_verifying_short_label), {
             shareAllSessions(mappingKey)
         })
 
-        alert.addButton(context.getString(R.string.ignore_request_short_label), {
+        alert.addButton(context.getString(CommonStrings.ignore_request_short_label), {
             denyAllRequests(mappingKey)
         })
 

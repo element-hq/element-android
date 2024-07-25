@@ -25,7 +25,6 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.use
 import androidx.core.view.isVisible
-import im.vector.app.R
 import im.vector.app.databinding.ViewQrCodeLoginInstructionsBinding
 
 class QrCodeLoginInstructionsView @JvmOverloads constructor(
@@ -42,7 +41,7 @@ class QrCodeLoginInstructionsView @JvmOverloads constructor(
     init {
         context.obtainStyledAttributes(
                 attrs,
-                R.styleable.QrCodeLoginInstructionsView,
+                im.vector.lib.ui.styles.R.styleable.QrCodeLoginInstructionsView,
                 0,
                 0
         ).use {
@@ -51,9 +50,9 @@ class QrCodeLoginInstructionsView @JvmOverloads constructor(
     }
 
     private fun setInstructions(typedArray: TypedArray) {
-        val instruction1 = typedArray.getString(R.styleable.QrCodeLoginInstructionsView_qrCodeLoginInstruction1)
-        val instruction2 = typedArray.getString(R.styleable.QrCodeLoginInstructionsView_qrCodeLoginInstruction2)
-        val instruction3 = typedArray.getString(R.styleable.QrCodeLoginInstructionsView_qrCodeLoginInstruction3)
+        val instruction1 = typedArray.getString(im.vector.lib.ui.styles.R.styleable.QrCodeLoginInstructionsView_qrCodeLoginInstruction1)
+        val instruction2 = typedArray.getString(im.vector.lib.ui.styles.R.styleable.QrCodeLoginInstructionsView_qrCodeLoginInstruction2)
+        val instruction3 = typedArray.getString(im.vector.lib.ui.styles.R.styleable.QrCodeLoginInstructionsView_qrCodeLoginInstruction3)
         setInstructions(
                 listOf(
                         instruction1,
