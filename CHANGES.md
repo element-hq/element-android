@@ -13,7 +13,7 @@ Bugfixes 🐛
 ----------
  - Fix redacted events not grouped correctly when hidden events are inserted between. ([#8840](https://github.com/element-hq/element-android/issues/8840))
  - Element-Android session doesn't encrypt for a dehydrated device ([#8842](https://github.com/element-hq/element-android/issues/8842))
- - Intercept only links from `element.io` well known hosts. The previous behaviour broke OIDC login in Element X. ([#8894](https://github.com/element-hq/element-android/issues/8894))
+ - Intercept only links from `element.io` well known hosts. The previous behaviour broke OIDC login in Element X. ([#8849](https://github.com/element-hq/element-android/issues/8849))
 
 Other changes
 -------------
