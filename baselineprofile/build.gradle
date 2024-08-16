@@ -1,0 +1,75 @@
+import com.android.build.api.dsl.ManagedVirtualDevice
+
+plugins {
+    id 'com.android.test'
+    id 'org.jetbrains.kotlin.android'
+    id 'androidx.baselineprofile'
+}
+
+android {
+    namespace 'im.vector.app.baselineprofile'
+    compileSdk versions.compileSdk
+
+    compileOptions {
+        sourceCompatibility versions.sourceCompat
+        targetCompatibility versions.targetCompat
+    }
+
+    kotlinOptions {
+        jvmTarget = versions.jvmTarget
+    }
+
+    defaultConfig {
+        minSdk 28
+        targetSdk versions.targetSdk
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    targetProjectPath = ":vector-app"
+
+    flavorDimensions += ["store"]
+    productFlavors {
+        gplay { dimension = "store" }
+        fdroid { dimension = "store" }
+    }
+
+    // This code creates the gradle managed device used to generate baseline profiles.
+    // To use GMD please invoke generation through the command line:
+    // ./gradlew :vector-app:generateBaselineProfile
+    testOptions.managedDevices.devices {
+        pixel6Api34(ManagedVirtualDevice) {
+            device = "Pixel 6"
+            apiLevel = versions.targetSdk
+            // Since play services are used for gplay build, using a google image
+            systemImageSource = "google"
+        }
+    }
+}
+
+// This is the configuration block for the Baseline Profile plugin.
+// You can specify to run the generators on a managed devices or connected devices.
+baselineProfile {
+    // Option 1: A Gradle Managed Device for profile generating
+    managedDevices += "pixel6Api34"
+    useConnectedDevices = false
+    // Option 2: For benchmarking the app with and without the profiles applied on a real device
+//    useConnectedDevices = true
+}
+
+dependencies {
+    implementation libs.androidx.junit
+    implementation libs.androidx.testRunner
+    implementation libs.androidx.testUiAutomator
+    implementation libs.androidx.benchmarkMacroJunit
+}
+
+androidComponents {
+    onVariants(selector().all()) { v ->
+        def artifactsLoader = v.artifacts.getBuiltArtifactsLoader()
+        v.instrumentationRunnerArguments.put(
+                "targetAppId",
+                v.testedApks.map { artifactsLoader.load(it)?.applicationId }
+        )
+    }
+}
