@@ -16,6 +16,8 @@
 
 package im.vector.app.features.notifications
 
+import android.content.Context
+import im.vector.app.core.services.CallAndroidService
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -32,7 +34,8 @@ import javax.inject.Singleton
 @Singleton
 class PushRuleTriggerListener @Inject constructor(
         private val resolver: NotifiableEventResolver,
-        private val notificationDrawerManager: NotificationDrawerManager
+        private val notificationDrawerManager: NotificationDrawerManager,
+        private val context: Context,
 ) : PushRuleService.PushRuleListener {
 
     private var session: Session? = null
@@ -42,9 +45,24 @@ class PushRuleTriggerListener @Inject constructor(
         scope.launch {
             session?.let { session ->
                 val notifiableEvents = createNotifiableEvents(pushEvents, session)
+                val jitsiRingingCallEvent = notifiableEvents.firstOrNull { it is NotifiableMessageEvent }
+
+                jitsiRingingCallEvent?.let {
+                    val event = it as NotifiableMessageEvent
+                    CallAndroidService.onIncomingJitsiCallRinging(
+                            context = context,
+                            callId = event.eventId,
+                            signalingRoomId = event.roomId,
+                            otherUserId = event.matrixID.orEmpty(),
+                            isInBackground = true,
+                    )
+                }
+
                 notificationDrawerManager.updateEvents { queuedEvents ->
                     notifiableEvents.forEach { notifiableEvent ->
-                        queuedEvents.onNotifiableEventReceived(notifiableEvent)
+                        if (notifiableEvent.eventId != jitsiRingingCallEvent?.eventId) {
+                            queuedEvents.onNotifiableEventReceived(notifiableEvent)
+                        }
                     }
                     queuedEvents.syncRoomEvents(roomsLeft = pushEvents.roomsLeft, roomsJoined = pushEvents.roomsJoined)
                     queuedEvents.markRedacted(pushEvents.redactedEventIds)

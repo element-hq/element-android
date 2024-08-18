@@ -88,10 +88,10 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
 
         jitsiViewModel.observeViewEvents {
             when (it) {
-                is JitsiCallViewEvents.JoinConference -> handleJoinConference(it)
+                is JitsiCallViewEvents.JoinConference -> configureJitsiView(it)
                 is JitsiCallViewEvents.ConfirmSwitchingConference -> handleConfirmSwitching(it)
                 JitsiCallViewEvents.FailJoiningConference -> handleFailJoining()
-                JitsiCallViewEvents.Finish -> handleFinish()
+                JitsiCallViewEvents.Finish -> finish()
                 JitsiCallViewEvents.LeaveConference -> handleLeaveConference()
             }
         }
@@ -151,17 +151,6 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
     private fun handleLeaveConference() {
         val leaveBroadcastIntent = BroadcastIntentHelper.buildHangUpIntent()
         LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(leaveBroadcastIntent)
-        CallAndroidService.onCancelJitsiCallRinging(applicationContext)
-    }
-
-    private fun handleJoinConference(joinConference: JitsiCallViewEvents.JoinConference) {
-        configureJitsiView(joinConference)
-        CallAndroidService.onOutgoingJitsiCallRinging(applicationContext)
-    }
-
-    private fun handleFinish() {
-        CallAndroidService.onCancelJitsiCallRinging(applicationContext)
-        finish()
     }
 
     private fun handleConfirmSwitching(action: JitsiCallViewEvents.ConfirmSwitchingConference) {
@@ -173,8 +162,6 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
                 }
                 .setNegativeButton(R.string.action_cancel, null)
                 .show()
-
-        CallAndroidService.onCancelJitsiCallRinging(applicationContext)
     }
 
     private val pictureInPictureModeChangedInfoConsumer = Consumer<PictureInPictureModeChangedInfo> {
@@ -206,7 +193,6 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
 
     private fun handleFailJoining() {
         Toast.makeText(this, getString(R.string.error_jitsi_join_conf), Toast.LENGTH_LONG).show()
-        CallAndroidService.onCancelJitsiCallRinging(applicationContext)
         finish()
     }
 
