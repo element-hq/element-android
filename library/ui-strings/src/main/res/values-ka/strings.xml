@@ -6,4 +6,6 @@
         <item quantity="one">%1$d არჩეული</item>
         <item quantity="other">%1$d არჩეული</item>
     </plurals>
+    <string name="notice_room_created_by_you">თქვენ შექმენით ოთახი</string>
+    <string name="notice_direct_room_created"></string>
 </resources>
