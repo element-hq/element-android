@@ -23,7 +23,6 @@ import org.matrix.android.sdk.api.session.crypto.model.CryptoRoomInfo
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.api.session.events.model.content.EncryptionEventContent
 import org.matrix.android.sdk.api.util.Optional
-import org.matrix.android.sdk.internal.crypto.model.MXInboundMegolmSessionWrapper
 import org.matrix.android.sdk.internal.crypto.store.db.CryptoStoreAggregator
 
 /**
@@ -143,14 +142,4 @@ interface IMXCommonCryptoStore {
      * @return the device or null if not found
      */
     fun deviceWithIdentityKey(userId: String, identityKey: String): CryptoDeviceInfo?
-
-    /**
-     * Retrieve an inbound group session.
-     * Used in rust for lazy migration
-     *
-     * @param sessionId the session identifier.
-     * @param senderKey the base64-encoded curve25519 key of the sender.
-     * @return an inbound group session.
-     */
-    fun getInboundGroupSession(sessionId: String, senderKey: String): MXInboundMegolmSessionWrapper?
 }

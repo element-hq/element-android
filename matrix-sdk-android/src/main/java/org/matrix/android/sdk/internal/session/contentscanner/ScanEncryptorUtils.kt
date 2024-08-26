@@ -44,9 +44,11 @@ internal object ScanEncryptorUtils {
         )
         return if (publicServerKey != null) {
             // We should encrypt
-            withOlmEncryption { olm ->
+            withOlmEncryption { //olm ->
+                // TODO BMA
+                error("Not supported anymore")
+                /*
                 olm.setRecipientKey(publicServerKey)
-
                 val olmResult = olm.encrypt(DownloadBody(encryptedInfo).toCanonicalJson())
                 DownloadBody(
                         encryptedBody = EncryptedBody(
@@ -55,6 +57,7 @@ internal object ScanEncryptorUtils {
                                 mac = olmResult.mMac
                         )
                 )
+                 */
             }
         } else {
             DownloadBody(encryptedInfo)

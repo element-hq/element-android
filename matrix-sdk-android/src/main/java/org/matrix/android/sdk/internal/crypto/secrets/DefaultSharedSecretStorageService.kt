@@ -44,9 +44,7 @@ import org.matrix.android.sdk.api.util.toBase64NoPadding
 import org.matrix.android.sdk.internal.crypto.SecretShareManager
 import org.matrix.android.sdk.internal.crypto.keysbackup.generatePrivateKeyWithPassword
 import org.matrix.android.sdk.internal.crypto.tools.HkdfSha256
-import org.matrix.android.sdk.internal.crypto.tools.withOlmDecryption
 import org.matrix.android.sdk.internal.di.UserId
-import org.matrix.olm.OlmPkMessage
 import java.security.SecureRandom
 import javax.crypto.Cipher
 import javax.crypto.Mac
@@ -322,9 +320,13 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
 
         val algorithm = key.keyInfo.content
         if (SSSS_ALGORITHM_CURVE25519_AES_SHA2 == algorithm.algorithm) {
-            val keySpec = secretKey as? RawBytesKeySpec ?: throw SharedSecretStorageError.BadKeyFormat
+            // TODO BMA
+            // val keySpec = secretKey as? RawBytesKeySpec ?: throw SharedSecretStorageError.BadKeyFormat
             return withContext(cryptoCoroutineScope.coroutineContext + coroutineDispatchers.computation) {
                 // decrypt from recovery key
+                "TODO"
+                // TODO BMA
+                /*
                 withOlmDecryption { olmPkDecryption ->
                     olmPkDecryption.setPrivateKey(keySpec.privateKey)
                     olmPkDecryption.decrypt(OlmPkMessage()
@@ -335,6 +337,7 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
                             }
                     )
                 }
+                 */
             }
         } else if (SSSS_ALGORITHM_AES_HMAC_SHA2 == algorithm.algorithm) {
             val keySpec = secretKey as? RawBytesKeySpec ?: throw SharedSecretStorageError.BadKeyFormat

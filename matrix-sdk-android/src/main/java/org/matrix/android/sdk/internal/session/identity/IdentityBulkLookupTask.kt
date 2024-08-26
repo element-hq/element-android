@@ -22,7 +22,6 @@ import org.matrix.android.sdk.api.session.identity.FoundThreePid
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.identity.toMedium
-import org.matrix.android.sdk.internal.crypto.tools.withOlmUtility
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.identity.data.IdentityStore
@@ -31,6 +30,7 @@ import org.matrix.android.sdk.internal.session.identity.model.IdentityLookUpPara
 import org.matrix.android.sdk.internal.session.identity.model.IdentityLookUpResponse
 import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.base64ToBase64Url
+import java.security.MessageDigest
 import java.util.Locale
 import javax.inject.Inject
 
@@ -118,15 +118,10 @@ internal class DefaultIdentityBulkLookupTask @Inject constructor(
     }
 
     private fun getHashedAddresses(threePids: List<ThreePid>, pepper: String): List<String> {
-        return withOlmUtility { olmUtility ->
-            threePids.map { threePid ->
-                base64ToBase64Url(
-                        olmUtility.sha256(
-                                threePid.value.lowercase(Locale.ROOT) +
-                                        " " + threePid.toMedium() + " " + pepper
-                        )
-                )
-            }
+        return threePids.map { threePid ->
+            base64ToBase64Url(
+                    (threePid.value.lowercase(Locale.ROOT) + " " + threePid.toMedium() + " " + pepper).toSha256()
+            )
         }
     }
 
@@ -143,5 +138,12 @@ internal class DefaultIdentityBulkLookupTask @Inject constructor(
                     lookupData.identityLookUpResponse.mappings[hashedAddress] ?: error("")
             )
         }
+    }
+
+    private val sha256 by lazy { MessageDigest.getInstance("SHA-256") }
+
+    @OptIn(ExperimentalStdlibApi::class)
+    private fun String.toSha256(): String {
+        return sha256.digest(toByteArray()).toHexString()
     }
 }

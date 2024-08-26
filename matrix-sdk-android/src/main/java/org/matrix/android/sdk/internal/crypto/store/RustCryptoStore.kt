@@ -35,7 +35,6 @@ import org.matrix.android.sdk.api.session.events.model.content.EncryptionEventCo
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.crypto.OlmMachine
-import org.matrix.android.sdk.internal.crypto.model.MXInboundMegolmSessionWrapper
 import org.matrix.android.sdk.internal.crypto.store.db.CryptoStoreAggregator
 import org.matrix.android.sdk.internal.crypto.store.db.doRealmTransaction
 import org.matrix.android.sdk.internal.crypto.store.db.doRealmTransactionAsync
@@ -49,11 +48,8 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoRoomEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoRoomEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.MyDeviceLastSeenInfoEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.MyDeviceLastSeenInfoEntityFields
-import org.matrix.android.sdk.internal.crypto.store.db.model.OlmInboundGroupSessionEntity
-import org.matrix.android.sdk.internal.crypto.store.db.model.OlmInboundGroupSessionEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.OutgoingKeyRequestEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.OutgoingKeyRequestEntityFields
-import org.matrix.android.sdk.internal.crypto.store.db.model.createPrimaryKey
 import org.matrix.android.sdk.internal.crypto.store.db.query.getById
 import org.matrix.android.sdk.internal.crypto.store.db.query.getOrCreate
 import org.matrix.android.sdk.internal.di.CryptoDatabase
@@ -70,7 +66,7 @@ private val loggerTag = LoggerTag("RealmCryptoStore", LoggerTag.CRYPTO)
 
 /**
  * In the transition phase, the rust SDK is still using parts to the realm crypto store,
- * this should be removed after full migration.
+ * this should be removed after full migration. TODO BMA
  */
 @SessionScope
 internal class RustCryptoStore @Inject constructor(
@@ -86,6 +82,7 @@ internal class RustCryptoStore @Inject constructor(
     // still needed on rust due to the global crypto settings
     init {
         // Ensure CryptoMetadataEntity is inserted in DB
+        // TODO BMA
         doRealmTransaction("init", realmConfiguration) { realm ->
             var currentMetadata = realm.where<CryptoMetadataEntity>().findFirst()
 
@@ -132,20 +129,6 @@ internal class RustCryptoStore @Inject constructor(
                 .firstOrNull {
                     it.identityKey() == identityKey
                 }
-    }
-
-    /**
-     * Needed for lazy migration of sessions from the legacy store.
-     */
-    override fun getInboundGroupSession(sessionId: String, senderKey: String): MXInboundMegolmSessionWrapper? {
-        val key = OlmInboundGroupSessionEntity.createPrimaryKey(sessionId, senderKey)
-
-        return doWithRealm(realmConfiguration) { realm ->
-            realm.where<OlmInboundGroupSessionEntity>()
-                    .equalTo(OlmInboundGroupSessionEntityFields.PRIMARY_KEY, key)
-                    .findFirst()
-                    ?.toModel()
-        }
     }
 
     // ================================================

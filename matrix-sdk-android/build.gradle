@@ -205,9 +205,6 @@ dependencies {
     // Work
     implementation libs.androidx.work
 
-    // olm lib is now hosted in MavenCentral
-    implementation 'org.matrix.android:olm-sdk:3.2.12'
-
     // DI
     implementation libs.dagger.dagger
     kapt libs.dagger.daggerCompiler

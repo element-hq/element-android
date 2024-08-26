@@ -65,7 +65,6 @@ import org.matrix.android.sdk.internal.crypto.network.RequestSender
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.util.JsonCanonicalizer
-import org.matrix.olm.OlmException
 import org.matrix.rustcomponents.sdk.crypto.Request
 import org.matrix.rustcomponents.sdk.crypto.RequestType
 import org.matrix.rustcomponents.sdk.crypto.SignatureVerification
@@ -840,8 +839,8 @@ internal class RustKeyBackupService @Inject constructor(
             try {
                 olmMachine.enableBackupV1(retrievedMegolmBackupAuthData.publicKey, keysVersionResult.version)
                 keysBackupVersion = keysVersionResult
-            } catch (e: OlmException) {
-                Timber.e(e, "OlmException")
+            } catch (e: Exception) {
+                Timber.e(e, "Exception")
                 keysBackupStateManager.state = KeysBackupState.Disabled
                 return
             }

@@ -19,12 +19,7 @@ package org.matrix.android.sdk.internal.crypto.store.db.model
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import org.matrix.android.sdk.internal.crypto.model.InboundGroupSessionData
-import org.matrix.android.sdk.internal.crypto.model.MXInboundMegolmSessionWrapper
-import org.matrix.android.sdk.internal.crypto.store.db.deserializeFromRealm
-import org.matrix.android.sdk.internal.crypto.store.db.serializeForRealm
 import org.matrix.android.sdk.internal.di.MoshiProvider
-import org.matrix.olm.OlmInboundGroupSession
-import timber.log.Timber
 
 internal fun OlmInboundGroupSessionEntity.Companion.createPrimaryKey(sessionId: String?, senderKey: String?) = "$sessionId|$senderKey"
 
@@ -56,14 +51,6 @@ internal open class OlmInboundGroupSessionEntity(
 ) :
         RealmObject() {
 
-    fun store(wrapper: MXInboundMegolmSessionWrapper) {
-        this.serializedOlmInboundGroupSession = serializeForRealm(wrapper.session)
-        this.inboundGroupSessionDataJson = adapter.toJson(wrapper.sessionData)
-        this.roomId = wrapper.sessionData.roomId
-        this.senderKey = wrapper.sessionData.senderKey
-        this.sessionId = wrapper.session.sessionIdentifier()
-        this.sharedHistory = wrapper.sessionData.sharedHistory
-    }
 //    fun getInboundGroupSession(): OlmInboundGroupSessionWrapper2? {
 //        return try {
 //            deserializeFromRealm<OlmInboundGroupSessionWrapper2?>(olmInboundGroupSessionData)
@@ -76,35 +63,6 @@ internal open class OlmInboundGroupSessionEntity(
 //    fun putInboundGroupSession(olmInboundGroupSessionWrapper: OlmInboundGroupSessionWrapper2?) {
 //        olmInboundGroupSessionData = serializeForRealm(olmInboundGroupSessionWrapper)
 //    }
-
-    fun getOlmGroupSession(): OlmInboundGroupSession? {
-        return try {
-            deserializeFromRealm(serializedOlmInboundGroupSession)
-        } catch (failure: Throwable) {
-            Timber.e(failure, "## Deserialization failure")
-            return null
-        }
-    }
-
-    fun getData(): InboundGroupSessionData? {
-        return try {
-            inboundGroupSessionDataJson?.let {
-                adapter.fromJson(it)
-            }
-        } catch (failure: Throwable) {
-            Timber.e(failure, "## Deserialization failure")
-            return null
-        }
-    }
-
-    fun toModel(): MXInboundMegolmSessionWrapper? {
-        val data = getData() ?: return null
-        val session = getOlmGroupSession() ?: return null
-        return MXInboundMegolmSessionWrapper(
-                session = session,
-                sessionData = data
-        )
-    }
 
     companion object {
         private val adapter = MoshiProvider.providesMoshi()
