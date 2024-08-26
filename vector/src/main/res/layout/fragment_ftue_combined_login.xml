@@ -252,7 +252,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/loginGutterEnd"
             app:layout_constraintStart_toStartOf="@id/loginGutterStart"
-            app:layout_constraintTop_toBottomOf="@id/ssoButtons"
+            app:layout_constraintTop_toBottomOf="@id/ssoButtonsHeader"
             tools:signMode="signup" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
