@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="notice_room_invite_no_invitee">%s-ის მიწვევა</string>
+    <string name="notice_room_invite_no_invitee_by_you">თქვენი მიწვევა</string>
+    <plurals name="x_selected">
+        <item quantity="one">%1$d არჩეული</item>
+        <item quantity="other">%1$d არჩეული</item>
+    </plurals>
+    <string name="notice_room_created_by_you">თქვენ შექმენით ოთახი</string>
+    <string name="notice_direct_room_created"/>
+    <string name="notice_direct_room_leave_by_you">თქვენ დატოვეთ ოთახი</string>
+    <string name="notice_room_reject">%1$s უარყო მიწვევა</string>
+    <string name="notice_room_reject_by_you">თქვენ უარყეთ მიწვევა</string>
+    <string name="notice_room_remove_by_you">თქვენ ამოიღეთ %1$s</string>
+    <string name="notice_room_unban">%1$s მოხსნა აკრძალვა %2$s-ზე</string>
+    <string name="notice_room_ban">%1$s დაბლოკა %2$s</string>
+    <string name="notice_room_ban_by_you">თქვენ დაბლოკეთ %1$s</string>
+    <string name="notice_room_withdraw">%1$s გააუქმა %2$s-ის მიწვევა</string>
+    <string name="notice_avatar_url_changed">%1$s შეცვალა თავისი ავატარი</string>
+    <string name="notice_avatar_url_changed_by_you">თქვენ შეცვალეთ თქვენი ავატარი</string>
+    <string name="notice_display_name_set_by_you">თქვენ დააყენეთ თქვენი სახელი %1$s-ზე</string>
+    <string name="notice_display_name_changed_to">%1$s შეცვალა სახელი %2$s-ზე</string>
+    <string name="notice_display_name_changed_from_by_you">თქვენ შეცვალეთ თქვენი სახელი %1$s-დან %2$s-ზე</string>
+    <string name="notice_display_name_removed">%1$s წაშალა თავისი სახელი (ეს იყო %2$s)</string>
+    <string name="notice_room_topic_changed">%1$s შეცვალა თემა: %2$s</string>
+    <string name="notice_room_topic_changed_by_you">თქვენ შეცვალეთ თემა: %1$s</string>
+    <string name="notice_room_avatar_changed">%1$s შეცვალა ოთახის ავატარი</string>
+    <string name="notice_room_name_changed">%1$s შეცვალა ოთახის სახელი: %2$s</string>
+    <string name="notice_room_name_changed_by_you">თქვენ შეცვალეთ ოთახის სახელი: %1$s</string>
+    <string name="notice_placed_video_call_by_you">თქვენ დაიწყეთ ვიდეო ზარი.</string>
+    <string name="notice_placed_voice_call">%s დაიწყო ხმოვანი ზარი.</string>
+    <string name="notice_call_candidates_by_you">თქვენ გაგზავნეთ მონაცემები ზარის დასაყენებლად.</string>
+    <string name="notice_answered_call">%s უპასუხა ზარს.</string>
+    <string name="notice_answered_call_by_you">თქვენ უპასუხეთ ზარს.</string>
+    <string name="notice_ended_call">%s დაასრულა ზარი.</string>
+    <string name="notice_ended_call_by_you">თქვენ დაასრულეთ ზარი.</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s გახადა სამომავლო შეტყობინებები ხილული %2$s-სთვის</string>
+    <string name="notice_room_visibility_invited">ყველა ოთახის წევრი, მათი მიწვევის მომენტიდან.</string>
+    <string name="notice_room_visibility_joined">ყველა ოთახის წევრი, მათი შეუერთების მომენტიდან..</string>
+    <string name="notice_room_visibility_shared">ყველა ოთახის წევრი.</string>
+    <string name="notice_room_visibility_world_readable">ნებისმიერს.</string>
+    <string name="notice_room_update_by_you">თქვენ გააუმჯობესეთ ეს ოთახი.</string>
+    <string name="notice_direct_room_update">%s გააუმჯობესა აქ.</string>
+    <string name="notice_room_server_acl_set_title">%s დააყენა სერვერის ACL-ები ამ ოთახისთვის.</string>
+    <string name="notice_room_server_acl_set_banned">• სერვერები, რომლებიც ემთხვევა %s, აკრძალულია.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• სერვერები, რომლებიც ემთხვევა IP-ს ლიტერალს, დაშვებულია.</string>
+    <string name="notice_room_server_acl_updated_title">%s შეცვალა სერვერის ACL-ები ამ ოთახისთვის.</string>
+    <string name="notice_room_server_acl_updated_title_by_you">თქვენ შეცვალეთ სერვერის ACL-ები ამ ოთახისთვის.</string>
+    <string name="notice_room_server_acl_updated_banned">• სერვერები, რომლებიც ემთხვევა %s, ახლა აკრძალულია.</string>
+    <string name="notice_room_server_acl_updated_allowed">• სერვერები, რომლებიც ემთხვევა %s, ახლა დაშვებულია.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• სერვერები, რომლებიც ემთხვევა IP-ს ლიტერალს, ახლა დაშვებულია.</string>
+    <string name="notice_room_server_acl_updated_no_change">ცვლილება არ არის.</string>
+    <string name="notice_room_server_acl_allow_is_empty">🎉 ყველა სერვერს ეკრძალება მონაწილეობა! ეს ოთახი ვეღარ იქნება გამოყენებული.</string>
+    <string name="notice_avatar_changed_too">(ავატარიც შეიცვალა)</string>
+    <string name="notice_room_name_removed_by_you">თქვენ წაშალეთ ოთახის სახელი</string>
+    <string name="notice_room_topic_removed">%1$s წაშალა ოთახის თემა</string>
+    <string name="notice_room_avatar_removed">%1$s წაშალა ოთახის ავატარი</string>
+    <string name="notice_room_avatar_removed_by_you">თქვენ წაშალეთ ოთახის ავატარი</string>
+    <string name="notice_room_third_party_invite_by_you">თქვენ გაგზავნეთ მიწვევა %1$s-სთვის, რომ შეუერთდეს ოთახს</string>
+    <string name="notice_direct_room_third_party_invite">%1$s მოიწვია %2$s</string>
+    <string name="notice_room_third_party_revoked_invite">%1$s გააუქმა %2$s-ს მიწვევა, რომ შეუერთდეს ოთახს</string>
+    <string name="notice_direct_room_third_party_revoked_invite">%1$s გააუქმა %2$s-ის მიწვევა</string>
+    <string name="notice_direct_room_third_party_revoked_invite_by_you">თქვენ გააუქმეთ %1$s-ის მიწვევა</string>
+    <string name="notice_room_third_party_registered_invite">%1$s მიიღო მიწვევა %2$s-სთვის</string>
+    <string name="notice_widget_added">%1$s დაამატა %2$s ვიჯეტი</string>
+    <string name="notice_widget_removed">%1$s ამოიღო %2$s ვიჯეტი</string>
+    <string name="notice_widget_removed_by_you">თქვენ ამოიღეთ %1$s ვიჯეტი</string>
+    <string name="notice_widget_modified">%1$s შეცვალა %2$s ვიჯეტი</string>
+    <string name="power_level_admin">ადმინისტრატორი</string>
+    <string name="power_level_moderator">მოდერატორი</string>
+    <string name="power_level_default">ნაგულისხმევი</string>
+    <string name="power_level_custom">მორგებული (%1$d)</string>
+    <string name="notice_power_level_changed">%1$s შეცვალა %2$s-ის ძალაუფლების დონე.</string>
+    <string name="notice_power_level_diff">%1$s %2$s-დან %3$s-მდე</string>
+    <string name="notice_crypto_unable_to_decrypt">** ვერ ხერხდება დეშიფრაცია: %s **</string>
+    <string name="notice_voice_broadcast_ended">%1$s დაასრულა ხმოვანი მაუწყებლობა.</string>
+    <string name="notice_voice_broadcast_ended_by_you">თქვენ დაასრულეთ ხმოვანი მაუწყებლობა.</string>
+    <string name="matrix_error">Matrix-ის შეცდომა</string>
+    <string name="all_chats">ყველა ჩატი</string>
+    <string name="start_chat">დაწყება ჩატის</string>
+    <string name="create_room">შექმენით ოთახი</string>
+    <string name="change_space">შეცვალეთ სივრცე</string>
+    <string name="explore_rooms">ოთახების შესწავლა</string>
+    <string name="a11y_collapse_space_children">შეკუმშეთ %s შვილობილი</string>
+    <string name="room_error_access_unauthorized">თქვენ არ გაქვთ უფლებას, შეუერთდეთ ამ ოთახს</string>
+    <string name="medium_phone_number">ტელეფონის ნომერი</string>
+    <string name="room_displayname_room_invite">ოთახის მოწვევა</string>
+    <string name="room_displayname_3_members">%1$s, %2$s და %3$s</string>
+    <string name="room_displayname_4_members">%1$s, %2$s, %3$s და %4$s</string>
+    <string name="room_displayname_empty_room">ცარიელი ოთახი</string>
+    <string name="room_displayname_empty_room_was">ცარიელი ოთახი (იყო %s)</string>
+    <string name="initial_sync_start_server_computing">საწყისი სინქრონიზაცია:
+\n ველოდებით სერვერის პასუხს…</string>
+    <string name="initial_sync_start_downloading">საწყისი სინქრონიზაცია:
+\nმონაცემების გადმოწერა…</string>
+    <string name="initial_sync_start_importing_account_crypto">საწყისი სინქრონიზაცია: 
+\nკრიპტოს იმპორტი</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">საწყისი სინქრონიზაცია: 
+\nმიწვეული ოთახების იმპორტი</string>
+    <string name="initial_sync_start_importing_account_left_rooms">საწყისი სინქრონიზაცია: 
+\nდატოვებული ოთახების იმპორტი</string>
+    <string name="initial_sync_start_importing_account_data">საწყისი სინქრონიზაცია: 
+\nანგარიშის მონაცემების იმპორტი</string>
+    <string name="initial_sync_request_title">საწყისი სინქრონიზაციის მოთხოვნა</string>
+    <string name="initial_sync_request_reason_unignored_users">- ზოგიერთი მომხმარებელი კვლავ გათვალისწინებულია</string>
+    <string name="notice_room_invite_no_invitee_with_reason">%1$s-ის მოწვევა. მიზეზი: %2$s</string>
+    <string name="notice_room_invite_no_invitee_with_reason_by_you">თქვენი მოწვევა. მიზეზი: %1$s</string>
+    <string name="notice_room_invite_with_reason_by_you">თქვენ მოიწვიეთ %1$s. მიზეზი: %2$s</string>
+    <string name="notice_room_invite_you_with_reason">%1$s-მ მიგიწვიათ. მიზეზი: %2$s</string>
+    <string name="notice_room_join_with_reason_by_you">თქვენ შეუერთდით ოთახს. მიზეზი: %1$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$s შეუერთდა. მიზეზი: %2$s</string>
+    <string name="notice_room_leave_with_reason">%1$s დატოვა ოთახი. მიზეზი: %2$s</string>
+    <string name="notice_room_leave_with_reason_by_you">თქვენ დატოვეთ ოთახი. მიზეზი: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason">%1$s წავიდა. მიზეზი: %2$s</string>
+    <string name="notice_room_reject_with_reason">%1$s-მ უარყო მიწვევა. მიზეზი: %2$s</string>
+    <string name="notice_room_remove_with_reason">%1$s ამოიღო %2$s. მიზეზი: %3$s</string>
+    <string name="notice_room_remove_with_reason_by_you">თქვენ ამოიღეთ %1$s. მიზეზი: %2$s</string>
+    <string name="notice_room_unban_with_reason">%1$s-მ მოხსნა აკრძალვა %2$s-ზე. მიზეზი: %3$s</string>
+    <string name="notice_room_ban_with_reason">%1$s-მ დაბლოკა %2$s. მიზეზი: %3$s</string>
+    <string name="notice_room_ban_with_reason_by_you">თქვენ დაბლოკეთ %1$s. მიზეზი: %2$s</string>
+    <string name="notice_room_withdraw_with_reason">%1$s-მ გააუქმა %2$s-ის მიწვევა. მიზეზი: %3$s</string>
+    <string name="notice_room_withdraw_with_reason_by_you">თქვენ გააუქმეთ %1$s-ის მიწვევა. მიზეზი: %2$s</string>
+    <plurals name="notice_room_aliases_removed_by_you">
+        <item quantity="one">თქვენ ამოიღეთ %1$s, როგორც ამ ოთახის მისამართი.</item>
+        <item quantity="other">თქვენ ამოიღეთ %1$s, როგორც ამ ოთახის მისამართი.</item>
+    </plurals>
+    <string name="notice_room_aliases_added_and_removed">%1$s-მ დაამატა %2$s და ამოიღო %3$s, როგორც ამ ოთახის მისამართები.</string>
+    <string name="notice_room_aliases_added_and_removed_by_you">თქვენ დაამატეთ %1$s და ამოიღეთ %2$s, როგორც ამ ოთახის მისამართები.</string>
+    <string name="notice_room_canonical_alias_set">%1$s-მ დააყენა ოთახის ძირითადი მისამართი %2$s-ზე.</string>
+    <string name="notice_room_canonical_alias_unset">%1$s-მ ამოიღო ოთახის ძირითადი მისამართი.</string>
+    <plurals name="notice_room_canonical_alias_alternative_removed">
+        <item quantity="one">%1$s-მ ამოიღო ალტერნატიული მისამართი %2$s ამ ოთახისთვის.</item>
+        <item quantity="other">%1$s-მ ამოიღო ალტერნატიული მისამართი %2$s ამ ოთახისთვის.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_removed_by_you">
+        <item quantity="one">თქვენ ამოიღეთ ალტერნატიული მისამართი %1$s ამ ოთახისთვის.</item>
+        <item quantity="other">თქვენ ამოიღეთ ალტერნატიული მისამართი %1$s ამ ოთახისთვის.</item>
+    </plurals>
+    <string name="notice_room_canonical_alias_alternative_changed">%1$s-მ შეცვალა ამ ოთახის ალტერნატიული მისამართები.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">თქვენ შეცვალეთ ოთახის ძირითადი და ალტერნატიული მისამართები.</string>
+    <string name="notice_room_canonical_alias_no_change">%1$s შეცვალა ოთახის მისამართები.</string>
+    <string name="notice_room_guest_access_can_join">%1$s-მ მისცა სტუმრებს უფლება შეუერთდნენ ოთახს.</string>
+    <string name="notice_room_guest_access_can_join_by_you">თქვენ მისცით სტუმრებს უფლება შეუერთდნენ ოთახს.</string>
+    <string name="notice_direct_room_guest_access_can_join_by_you">თქვენ მისცით სტუმრებს უფლება შეუერთდნენ აქ.</string>
+    <string name="notice_room_guest_access_forbidden">%1$s-მ აუკრძალა სტუმრებს ოთახში შესვლა.</string>
+    <string name="notice_direct_room_guest_access_forbidden">%1$s-მ აუკრძალა სტუმრებს ოთახში შესვლა.</string>
+    <string name="notice_end_to_end_ok">%1$s-მ ჩართო დაბოლოებამდე დაშიფვრა.</string>
+    <string name="notice_room_leave_by_you">თქვენ დატოვეთ ოთახი</string>
+    <string name="notice_widget_modified_by_you">თქვენ შეცვალეთ %1$s ვიჯეტი</string>
+    <string name="notice_direct_room_leave">%1$s დატოვა ოთახი</string>
+    <string name="power_level_custom_no_value">მორგებული</string>
+    <string name="notice_room_remove">%1$s ამოიღო %2$s</string>
+    <string name="notice_power_level_changed_by_you">თქვენ შეცვალეთ %1$s-ის ძალაუფლების დონე.</string>
+    <string name="notice_room_unban_by_you">თქვენ მოხსენით აკრძალვა %1$s-ზე</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">გამგზავნის მოწყობილობამ არ გამოგვიგზავნა ამ შეტყობინების გასაღებები.</string>
+    <string name="notice_room_withdraw_by_you">თქვენ გააუქმეთ %1$s-ის მიწვევა</string>
+    <string name="unable_to_send_message">შეტყობინების გაგზავნა შეუძლებელია</string>
+    <string name="notice_display_name_set">%1$s დააყენა თავისი სახელი %2$s-ზე</string>
+    <string name="a11y_expand_space_children">გააფართოვეთ %s შვილობილი</string>
+    <string tools:ignore="UnusedResources" name="notice_display_name_changed_from">%1$s შეცვალა სახელი %2$s-დან %3$s-ზე</string>
+    <string name="medium_email">ელფოსტის მისამართი</string>
+    <string name="notice_display_name_removed_by_you">თქვენ წაშალეთ თქვენი სახელი (ეს იყო %1$s)</string>
+    <string name="room_displayname_two_members">%1$s და %2$s</string>
+    <string name="notice_room_avatar_changed_by_you">თქვენ შეცვალეთ ოთახის ავატარი</string>
+    <plurals name="room_displayname_four_and_more_members">
+        <item quantity="one">%1$s, %2$s, %3$s და %4$d სხვა</item>
+        <item quantity="other">%1$s, %2$s, %3$s და %4$d სხვა</item>
+    </plurals>
+    <string name="notice_placed_video_call">%s დაიწყო ვიდეო ზარი.</string>
+    <string name="initial_sync_start_importing_account">საწყისი სინქრონიზაცია: 
+\nანგარიშის იმპორტი…</string>
+    <string name="notice_placed_voice_call_by_you">თქვენ დაიწყეთ ხმოვანი ზარი.</string>
+    <string name="initial_sync_start_importing_account_rooms">საწყისი სინქრონიზაცია:
+\nოთახების იმპორტი</string>
+    <string name="notice_call_candidates">%s გააგზავნა მონაცემები ზარის დასაყენებლად.</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">საწყისი სინქრონიზაცია: 
+\nთქვენი საუბრების ჩატვირთვა. 
+\nთუ ბევრი ოთახი გაქვთ, ამას შეიძლება დრო დასჭირდეს</string>
+    <string name="notice_made_future_room_visibility">%1$s გახადა სამომავლო ოთახის ისტორია ხილული %2$s-სთვის</string>
+    <string name="initial_sync_request_content">${app_name} საჭიროებს ქეშის გასუფთავებას, რომ იყოს განახლებული, შემდეგი მიზეზის გამო:
+\n%s 
+\n
+\nგაითვალისწინეთ, რომ ეს მოქმედება გადატვირთავს აპლიკაციას და შესაძლოა ამას დრო დასჭირდეს.</string>
+    <string name="notice_made_future_room_visibility_by_you">თქვენ გახადეთ სამომავლო ოთახის ისტორია ხილული %1$s-სთვის</string>
+    <string name="event_status_sent_message">შეტყობინება გაიგზავნა</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">თქვენ გახადეთ სამომავლო შეტყობინებები ხილული %1$s-სთვის</string>
+    <string name="event_status_sending_message">შეტყობინების გაგზავნა…</string>
+    <string name="notice_room_update">%s გააუმჯობესა ეს ოთახი.</string>
+    <string name="notice_room_invite_with_reason">%1$s-მ მოიწვია %2$s. მიზეზი: %3$s</string>
+    <string name="notice_direct_room_update_by_you">თქვენ გააუმჯობესეთ აქ.</string>
+    <string name="notice_room_join_with_reason">%1$s შემოუერთდა ოთახს. მიზეზი: %2$s</string>
+    <string name="notice_room_server_acl_set_title_by_you">თქვენ დააყენეთ სერვერის ACL-ები ამ ოთახისთვის.</string>
+    <string name="notice_direct_room_join_with_reason_by_you">თქვენ შეუერთდით. მიზეზი: %1$s</string>
+    <string name="notice_room_server_acl_set_allowed">• სერვერები, რომლებიც ემთხვევა %s, დაშვებულია.</string>
+    <string name="notice_direct_room_leave_with_reason_by_you">თქვენ წავედით. მიზეზი: %1$s</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• სერვერები, რომლებიც ემთხვევა IP-ს ლიტერალს, აკრძალულია.</string>
+    <string name="notice_room_reject_with_reason_by_you">თქვენ უარყავით მიწვევა. მიზეზი: %1$s</string>
+    <plurals name="notice_room_server_acl_changes">
+        <item quantity="one">%d სერვერის ACL-ების ცვლილება</item>
+        <item quantity="other">%d სერვერის ACL-ების ცვლილება</item>
+    </plurals>
+    <string name="notice_room_unban_with_reason_by_you">თქვენ მოხსენით აკრძალვა %1$s-ზე. მიზეზი: %2$s</string>
+    <string name="notice_room_server_acl_updated_was_banned">• სერვერები, რომლებიც ემთხვევა %s, ამოღებულია აკრძალვის სიიდან.</string>
+    <string name="notice_room_third_party_registered_invite_with_reason">%1$s-მ მიიღო მიწვევა %2$s-სთვის. მიზეზი: %3$s</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• სერვერები, რომლებიც ემთხვევა %s, ამოღებულია ნებადართულთა სიიდან.</string>
+    <string name="notice_room_third_party_registered_invite_with_reason_by_you">თქვენ მიიღეთ მიწვევა %1$s-ისთვის. მიზეზი: %2$s</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• სერვერები, რომლებიც ემთხვევა IP-ს ლიტერალს, ახლა აკრძალულია.</string>
+    <plurals name="notice_room_aliases_added">
+        <item quantity="one">%1$s-მ დაამატა %2$s, როგორც ამ ოთახის მისამართი.</item>
+        <item quantity="other">%1$s-მ დაამატა %2$s, როგორც ამ ოთახის მისამართი.</item>
+    </plurals>
+    <string name="notice_room_name_removed">%1$s წაშალა ოთახის სახელი</string>
+    <plurals name="notice_room_aliases_added_by_you">
+        <item quantity="one">თქვენ დაამატეთ %1$s, როგორც ამ ოთახის მისამართი.</item>
+        <item quantity="other">თქვენ დაამატეთ %1$s, როგორც ამ ოთახის მისამართი.</item>
+    </plurals>
+    <string name="notice_room_topic_removed_by_you">თქვენ წაშალეთ ოთახის თემა</string>
+    <plurals name="notice_room_aliases_removed">
+        <item quantity="one">%1$s-მ ამოიღო %2$s, როგორც ამ ოთახის მისამართი.</item>
+        <item quantity="other">%1$s-მ ამოიღო %2$s, როგორც ამ ოთახის მისამართი.</item>
+    </plurals>
+    <string name="notice_room_third_party_invite">%1$s გაგზავნა მიწვევა %2$s-სთვის, რომ შეუერთდეს ოთახს</string>
+    <string name="notice_room_canonical_alias_set_by_you">თქვენ დააყენეთ ოთახის ძირითადი მისამართი %1$s-ზე.</string>
+    <string name="notice_direct_room_third_party_invite_by_you">თქვენ მოიწვიეთ %1$s</string>
+    <string name="notice_room_canonical_alias_unset_by_you">თქვენ ამოიღეთ ოთახის ძირითადი მისამართი.</string>
+    <string name="notice_room_third_party_revoked_invite_by_you">თქვენ გააუქმეთ %1$s-ის მიწვევა, რომ შეუერთდეს ოთახს</string>
+    <plurals name="notice_room_canonical_alias_alternative_added">
+        <item quantity="one">%1$s-მ დაამატა ალტერნატიული მისამართი %2$s ამ ოთახისთვის.</item>
+        <item quantity="other">%1$s-მ დაამატა ალტერნატიული მისამართი %2$s ამ ოთახისთვის.</item>
+    </plurals>
+    <string name="notice_room_third_party_registered_invite_by_you">თქვენ მიიღეთ მიწვევა %1$s-ისთვის</string>
+    <plurals name="notice_room_canonical_alias_alternative_added_by_you">
+        <item quantity="one">თქვენ დაამატეთ ალტერნატიული მისამართი %1$s ამ ოთახისთვის.</item>
+        <item quantity="other">თქვენ დაამატეთ ალტერნატიული მისამართი %1$s ამ ოთახისთვის.</item>
+    </plurals>
+    <string name="notice_widget_added_by_you">თქვენ დაამატეთ %1$s ვიჯეტი</string>
+    <string name="notice_room_canonical_alias_alternative_changed_by_you">თქვენ შეცვალეთ ამ ოთახის ალტერნატიული მისამართები.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed">%1$s-მ შეცვალა ოთახის ძირითადი და ალტერნატიული მისამართები.</string>
+    <string name="notice_room_canonical_alias_no_change_by_you">თქვენ შეცვალეთ ოთახის მისამართები.</string>
+    <string name="notice_direct_room_guest_access_can_join">%1$s-მ მისცა სტუმრებს უფლება შეუერთდნენ აქ.</string>
+    <string name="notice_room_guest_access_forbidden_by_you">თქვენ აუკრძალეთ სტუმრებს ოთახში შესვლა.</string>
+    <string name="notice_direct_room_guest_access_forbidden_by_you">თქვენ აუკრძალეთ სტუმრებს ოთახში შესვლა.</string>
+</resources>
