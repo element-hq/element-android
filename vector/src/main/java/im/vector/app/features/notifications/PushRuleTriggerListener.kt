@@ -45,24 +45,10 @@ class PushRuleTriggerListener @Inject constructor(
         scope.launch {
             session?.let { session ->
                 val notifiableEvents = createNotifiableEvents(pushEvents, session)
-                val jitsiRingingCallEvent = notifiableEvents.firstOrNull { it is NotifiableMessageEvent }
-
-                jitsiRingingCallEvent?.let {
-                    val event = it as NotifiableMessageEvent
-                    CallAndroidService.onIncomingJitsiCallRinging(
-                            context = context,
-                            callId = event.eventId,
-                            signalingRoomId = event.roomId,
-                            otherUserId = event.matrixID.orEmpty(),
-                            isInBackground = true,
-                    )
-                }
 
                 notificationDrawerManager.updateEvents { queuedEvents ->
                     notifiableEvents.forEach { notifiableEvent ->
-                        if (notifiableEvent.eventId != jitsiRingingCallEvent?.eventId) {
-                            queuedEvents.onNotifiableEventReceived(notifiableEvent)
-                        }
+                        queuedEvents.onNotifiableEventReceived(notifiableEvent)
                     }
                     queuedEvents.syncRoomEvents(roomsLeft = pushEvents.roomsLeft, roomsJoined = pushEvents.roomsJoined)
                     queuedEvents.markRedacted(pushEvents.redactedEventIds)

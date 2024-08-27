@@ -498,8 +498,10 @@ fun Event.getPollContent(): MessagePollContent? {
     return getClearContent().toModel<MessagePollContent>()
 }
 
+fun Event.isJitsiEvent() = this.getClearType() == EventType.STATE_ROOM_WIDGET_LEGACY
+
 fun Event.supportsNotification() =
-        this.getClearType() in EventType.STATE_ROOM_WIDGET_LEGACY + EventType.MESSAGE + EventType.POLL_START.values + EventType.POLL_END.values + EventType.STATE_ROOM_BEACON_INFO.values
+        this.getClearType() in EventType.MESSAGE + EventType.POLL_START.values + EventType.POLL_END.values + EventType.STATE_ROOM_BEACON_INFO.values
 
 fun Event.isContentReportable() =
         this.getClearType() in EventType.MESSAGE + EventType.STATE_ROOM_BEACON_INFO.values

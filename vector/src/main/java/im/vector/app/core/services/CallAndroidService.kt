@@ -23,12 +23,14 @@ import android.os.Binder
 import android.support.v4.media.session.MediaSessionCompat
 import android.view.KeyEvent
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.app.ServiceCompat
 import androidx.core.content.ContextCompat
 import androidx.media.session.MediaButtonReceiver
 import com.airbnb.mvrx.Mavericks
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.extensions.startForegroundCompat
+import im.vector.app.features.MainActivity
 import im.vector.app.features.call.CallArgs
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.telecom.CallConnection
@@ -227,11 +229,11 @@ class CallAndroidService : VectorAndroidService() {
                     matrixItem = matrixItem,
                     avatarRenderer = avatarRenderer,
                     isVideoCall = isVideoCall,
-                    onAccept = {  },
+                    onAccept = { showJitsiCallScreen(callId, signalingRoomId) },
                     onReject = { onJitsiCallTerminated(applicationContext, callId) }
             )
             dismissedAction = Runnable { onJitsiCallTerminated(applicationContext, callId) }
-            contentAction = Runnable {  }
+            contentAction = Runnable { showJitsiCallScreen(callId, signalingRoomId) }
         }
         alertManager.postVectorAlert(incomingCallAlert)
         val notification = notificationUtils.buildIncomingJitsiCallNotification(
@@ -275,24 +277,10 @@ class CallAndroidService : VectorAndroidService() {
     }
 
     private fun handleJitsiCallTerminated(intent: Intent) {
-        val callId = intent.getStringExtra(EXTRA_CALL_ID) ?: ""
-//        val endCallReason = intent.getSerializableExtraCompat<EndCallReason>(EXTRA_END_CALL_REASON)
-//        val rejected = intent.getBooleanExtra(EXTRA_END_CALL_REJECTED, false)
+        val callId = intent.getStringExtra(EXTRA_CALL_ID).orEmpty()
         alertManager.cancelAlert(callId)
-
-        val notification = notificationUtils.buildCallEndedNotification(true)
-        val notificationId = callId.hashCode()
-        startForegroundCompat(notificationId, notification)
-        Timber.tag(loggerTag.value).v("No more call, stop the service")
-        stopForegroundCompat()
         mediaSession?.isActive = false
         myStopSelf()
-
-//        val wasConnected = connectedCallIds.remove(callId)
-//        if (!wasConnected && !terminatedCall.isOutgoing && !rejected && endCallReason != EndCallReason.ANSWERED_ELSEWHERE) {
-//            val missedCallNotification = notificationUtils.buildCallMissedNotification(terminatedCall)
-//            notificationManager.notify(MISSED_CALL_TAG, terminatedCall.nativeRoomId.hashCode(), missedCallNotification)
-//        }
     }
 
 
@@ -303,6 +291,17 @@ class CallAndroidService : VectorAndroidService() {
                 mode = mode
         )
         startActivity(intent)
+    }
+
+    private fun showJitsiCallScreen(callId: String, roomId: String) {
+        val intent = MainActivity.jitsiCallIntent(
+                context = this,
+                roomId = roomId,
+                callId = callId,
+        )
+        startActivity(intent)
+        stopSelf()
+        stopForegroundCompat()
     }
 
     private fun displayOutgoingRingingCallNotification(intent: Intent) {

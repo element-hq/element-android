@@ -386,31 +386,20 @@ class NotificationUtils @Inject constructor(
         val builder = NotificationCompat.Builder(context, notificationChannel)
                 .setContentTitle(ensureTitleNotEmpty(title))
                 .apply {
-                    if (true) {
-                        setContentText(stringProvider.getString(R.string.incoming_video_call))
-                        setSmallIcon(R.drawable.ic_call_answer_video)
-                    } else {
-                        setContentText(stringProvider.getString(R.string.incoming_voice_call))
-                        setSmallIcon(R.drawable.ic_call_answer)
-                    }
+                    setContentText(stringProvider.getString(R.string.incoming_video_call))
+                    setSmallIcon(R.drawable.ic_call_answer_video)
                 }
                 .setCategory(NotificationCompat.CATEGORY_CALL)
                 .setColor(ThemeUtils.getColor(context, android.R.attr.colorPrimary))
                 .setLights(accentColor, 500, 500)
                 .setOngoing(true)
 
-        val contentIntent = VectorCallActivity.newIntent(
+        val contentIntent = MainActivity.jitsiCallIntent(
                 context = context,
+                roomId = signalingRoomId,
                 callId = callId,
-                signalingRoomId = signalingRoomId,
-                isIncomingCall = isIncomingCall,
-                isVideoCall = isVideoCall,
-                otherUserId = otherUserId,
-                mode = VectorCallActivity.INCOMING_RINGING
-        ).apply {
-            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-            data = createIgnoredUri(callId)
-        }
+        )
+
         val contentPendingIntent = PendingIntent.getActivity(
                 context,
                 clock.epochMillis().toInt(),
@@ -420,6 +409,7 @@ class NotificationUtils @Inject constructor(
 
         val answerCallPendingIntent = TaskStackBuilder.create(context)
                 .addNextIntentWithParentStack(HomeActivity.newIntent(context, firstStartMainActivity = false))
+                .addNextIntent(contentIntent)
                 .getPendingIntent(clock.epochMillis().toInt(), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE)
 
         val rejectCallPendingIntent = buildRejectCallPendingIntent(callId)

@@ -36,6 +36,7 @@ data class NotificationEventQueue(
                     is InviteNotifiableEvent -> it.copy(isRedacted = true)
                     is NotifiableMessageEvent -> it.copy(isRedacted = true)
                     is SimpleNotifiableEvent -> it.copy(isRedacted = true)
+                    is NotifiableJitsiEvent -> it.copy(isRedacted = true)
                 }
             }
         }
@@ -117,6 +118,7 @@ data class NotificationEventQueue(
                     is InviteNotifiableEvent -> with.copy(isUpdated = true)
                     is NotifiableMessageEvent -> with.copy(isUpdated = true)
                     is SimpleNotifiableEvent -> with.copy(isUpdated = true)
+                    is NotifiableJitsiEvent -> with.copy(isUpdated = true)
                 }
         )
     }
