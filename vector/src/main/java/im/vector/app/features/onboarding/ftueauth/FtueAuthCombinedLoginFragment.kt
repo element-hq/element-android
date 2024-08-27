@@ -40,8 +40,6 @@ import im.vector.app.features.VectorFeatures
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.SSORedirectRouterActivity
 import im.vector.app.features.login.SocialLoginButtonsView
-import im.vector.app.features.login.qr.QrCodeLoginArgs
-import im.vector.app.features.login.qr.QrCodeLoginType
 import im.vector.app.features.login.render
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewEvents
@@ -75,26 +73,6 @@ class FtueAuthCombinedLoginFragment :
             viewModel.handle(OnboardingAction.UserNameEnteredAction.Login(views.loginInput.content()))
         }
         views.loginForgotPassword.debouncedClicks { viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnForgetPasswordClicked)) }
-
-        viewModel.onEach(OnboardingViewState::canLoginWithQrCode) {
-            configureQrCodeLoginButtonVisibility(it)
-        }
-    }
-
-    private fun configureQrCodeLoginButtonVisibility(canLoginWithQrCode: Boolean) {
-        views.loginWithQrCode.isVisible = canLoginWithQrCode
-        if (canLoginWithQrCode) {
-            views.loginWithQrCode.debouncedClicks {
-                navigator
-                        .openLoginWithQrCode(
-                                requireActivity(),
-                                QrCodeLoginArgs(
-                                        loginType = QrCodeLoginType.LOGIN,
-                                        showQrCodeImmediately = false,
-                                )
-                        )
-            }
-        }
     }
 
     private fun setupSubmitButton() {

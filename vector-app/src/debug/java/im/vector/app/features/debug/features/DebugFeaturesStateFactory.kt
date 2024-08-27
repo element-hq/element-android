@@ -86,21 +86,6 @@ class DebugFeaturesStateFactory @Inject constructor(
                                 factory = VectorFeatures::isNewAppLayoutFeatureEnabled
                         ),
                         createBooleanFeature(
-                                label = "Enable QR Code Login",
-                                key = DebugFeatureKeys.qrCodeLoginEnabled,
-                                factory = VectorFeatures::isQrCodeLoginEnabled
-                        ),
-                        createBooleanFeature(
-                                label = "Allow QR Code Login for all servers",
-                                key = DebugFeatureKeys.qrCodeLoginForAllServers,
-                                factory = VectorFeatures::isQrCodeLoginForAllServers
-                        ),
-                        createBooleanFeature(
-                                label = "Show QR Code Login in Device Manager",
-                                key = DebugFeatureKeys.reciprocateQrCodeLogin,
-                                factory = VectorFeatures::isReciprocateQrCodeLogin
-                        ),
-                        createBooleanFeature(
                                 label = "Enable Voice Broadcast",
                                 key = DebugFeatureKeys.voiceBroadcastEnabled,
                                 factory = VectorFeatures::isVoiceBroadcastEnabled
