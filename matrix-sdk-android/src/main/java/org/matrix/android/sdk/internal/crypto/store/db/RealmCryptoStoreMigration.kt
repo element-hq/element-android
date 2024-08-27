@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.crypto.store.db
 
 import io.realm.DynamicRealm
+import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo024
 import org.matrix.android.sdk.internal.util.database.MatrixRealmMigration
 import javax.inject.Inject
 
@@ -25,6 +26,7 @@ import javax.inject.Inject
  *  0, 1, 2: legacy Riot-Android;
  *  3: migrate to RiotX schema;
  *  4, 5, 6, 7, 8, 9: migrations from RiotX (which was previously 1, 2, 3, 4, 5, 6).
+ *  24: Delete nearly all the crypto DB
  */
 internal class RealmCryptoStoreMigration @Inject constructor(
 ) : MatrixRealmMigration(
@@ -39,8 +41,6 @@ internal class RealmCryptoStoreMigration @Inject constructor(
     override fun hashCode() = 5000
 
     override fun doMigrate(realm: DynamicRealm, oldVersion: Long) {
-        // Delete the whole DB
-        // TODO BMA
-        realm.deleteAll()
+        if (oldVersion < 24) MigrateCryptoTo024(realm).perform()
     }
 }
