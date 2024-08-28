@@ -764,4 +764,172 @@
     <string name="settings_troubleshoot_test_bg_restricted_failed">ფონის შეზღუდვები ჩართულია ${app_name}-ისთვის. 
 \nაპლიკაცია, რომელიც აპლიკაცია ცდილობს გააკეთოს, აგრესიულად შეიზღუდება ფონის რეჟიმში ყოფნისას და ეს შეიძლება გავლენა იქონიოს შეტყობინებებზე.
 \n%1$s</string>
+    <string name="room_widget_webview_access_microphone">მიკროფონის გამოყენება</string>
+    <string name="widget_integration_unable_to_create">ვიჯეტის შექმნა ვერ მოხერხდა</string>
+    <string name="widget_integration_must_be_in_room">თქვენ არ ხართ ამ ოთახში.</string>
+    <string name="widget_integration_missing_user_id">მოთხოვნაში აკლია user_id.</string>
+    <string name="widget_integration_missing_parameter">საჭირო პარამეტრი აკლია.</string>
+    <string name="room_manage_integrations">ინტეგრაციების მართვა</string>
+    <string name="room_no_active_widgets">აქტიური ვიჯეტები არ არის</string>
+    <string name="settings_labs_native_camera">მშობლიური კამერის გამოყენება</string>
+    <string name="your_unverified_device_requesting">თქვენი არავერიფიცირებული სესია \'%s\' ითხოვს დაშიფვრის გასაღებებს.</string>
+    <string name="start_verification">დაიწყეთ ვერიფიცირება</string>
+    <string name="share_without_verifying_short_label">გაზიარება</string>
+    <string name="ignore_request_short_label">იგნორირება</string>
+    <string name="unrecognized_command">ვერ აღიარებული ბრძანება: %s</string>
+    <string name="command_description_emote">ქმედების ჩვენება</string>
+    <string name="command_description_unban_user">მომხმარებლის განბლოკვა მოცემული ID-ით</string>
+    <string name="command_description_op_user">მომხმარებლის ძალაუფლების დონის განსაზღვრა</string>
+    <string name="command_description_room_name">ოთახის სახელის დაყენება</string>
+    <string name="command_description_invite_user">მომხმარებლის მოწვევა მოცემული ID-ით მიმდინარე ოთახში</string>
+    <string name="command_description_part_room">ოთახის დატოვება</string>
+    <string name="command_description_nick">თქვენი ეკრანის მეტსახელის შეცვლა</string>
+    <string name="command_description_room_avatar">მიმდინარე ოთახის ავატარის შეცვლა</string>
+    <string name="command_description_avatar_for_room">თქვენი ავატარის შეცვლა მხოლოდ ამჟამინდელ ოთახში</string>
+    <string name="command_description_markdown">Markdown-ის ჩართვა/გამორთვა</string>
+    <string name="command_description_devtools">გახსენით დეველოპერის ხელსაწყოების ეკრანი</string>
+    <string name="markdown_has_been_enabled">მარკდაუნი ჩართულია.</string>
+    <string name="markdown_has_been_disabled">მარკდაუნი გამორთულია.</string>
+    <string name="notification_silent">ჩუმი</string>
+    <string name="encrypted_message">დაშიფრული შეტყობინება</string>
+    <string name="create">შექმნა</string>
+    <string name="invited">მოწვეული</string>
+    <string name="reason_colon">მიზეზი: %1$s</string>
+    <string name="avatar">ავატარი</string>
+    <string name="avatar_of_user">მომხმარებლის %1$s პროფილის სურათი</string>
+    <string name="dialog_user_consent_submit">ახლა გადახედეთ</string>
+    <string name="deactivate_account_title">ანგარიშის დეაქტივაცია</string>
+    <string name="deactivate_account_submit">ანგარიშის დეაქტივაცია</string>
+    <string name="error_empty_field_enter_user_name">გთხოვთ, შეიყვანოთ მომხმარებლის სახელი.</string>
+    <string name="error_empty_field_your_password">გთხოვთ, შეიყვანოთ პაროლი.</string>
+    <string name="room_tombstone_versioned_description">ეს ოთახი ჩანაცვლებულია და აღარ არის აქტიური.</string>
+    <string name="room_tombstone_continuation_description">ეს ოთახი არის სხვა საუბრის გაგრძელება</string>
+    <string name="resource_limit_contact_admin">დაუკავშირდით თქვენს სერვისის ადმინისტრატორს</string>
+    <string name="resource_limit_hard_default">ეს ჰომესერვერი გადააჭარბა მის რესურსების ლიმიტს.</string>
+    <string name="resource_limit_soft_mau">" ეს ჰომესერვერი გადააჭარბა მის თვიური აქტიური მომხმარებლის ლიმიტს, ამიტომ &lt;b&gt;ზოგიერთ მომხმარებელს ვერ ექნება შესვლა&lt;/b&gt;."</string>
+    <string name="resource_limit_soft_contact">გთხოვთ %s, რომ ეს ლიმიტი გაიზარდოს.</string>
+    <string name="unknown_error">ბოდიში, მოხდა შეცდომა</string>
+    <string name="merged_events_expand">გაფართოება</string>
+    <string name="merged_events_collapse">კოლაფსი</string>
+    <string name="generic_label_and_value">%1$s: %2$s</string>
+    <string name="x_plus">+%d</string>
+    <string name="no_valid_google_play_services_apk">არ ვალიდური Google Play სერვისების APK ნაპოვნი. შეტყობინებები შეიძლება არ იმუშაოს სწორად.</string>
+    <string name="passphrase_create_passphrase">პაროლფრაზის შექმნა</string>
+    <string name="passphrase_confirm_passphrase">პაროლფრაზის დადასტურება</string>
+    <string name="passphrase_enter_passphrase">პაროლფრაზის შეყვანა</string>
+    <string name="passphrase_passphrase_does_not_match">პაროლფრაზა არ ემთხვევა</string>
+    <string name="passphrase_empty_error_message">გთხოვთ, შეიყვანოთ პაროლფრაზა</string>
+    <string name="passphrase_passphrase_too_weak">პაროლფრაზა ძალიან სუსტია</string>
+    <string name="keys_backup_setup_step1_title">დაშიფრული შეტყობინებების არასდროს დაკარგვა</string>
+    <string name="keys_backup_setup">სარეზერვო გასაღების გამოყენების დაწყება</string>
+    <string name="keys_backup_setup_step1_advanced">(გაფართოებული)</string>
+    <string name="keys_backup_setup_step1_manual_export">გასაღებების ხელით ექსპორტი</string>
+    <string name="keys_backup_setup_step2_text_title">დაზღვევა თქვენი სარეზერვო ასლის პაროლფრაზით.</string>
+    <string name="keys_backup_setup_step2_button_title">პაროლფრაზის დაყენება</string>
+    <string name="keys_backup_setup_creating_backup">სარეზერვო ასლის შექმნა</string>
+    <string name="keys_backup_setup_step2_skip_button_title">(გაფართოებული) დაყენება აღდგენის გასაღებით</string>
+    <string name="keys_backup_setup_step3_success_title">წარმატება!</string>
+    <string name="keys_backup_setup_step3_text_line1">თქვენი გასაღებები სარეზერვო ასლშია.</string>
+    <string name="keys_backup_setup_step3_text_line2_no_passphrase">შეინახეთ თქვენი აღდგენის გასაღები უსაფრთხო ადგილას, მაგალითად, პაროლების მენეჯერში (ან სეიფში)</string>
+    <string name="keys_backup_setup_step3_button_title">შესრულებულია</string>
+    <string name="keys_backup_setup_step3_button_title_no_passphrase">მე გავაკეთე ასლი</string>
+    <string name="keys_backup_setup_step3_save_button_title">შენახვა ფაილად</string>
+    <string name="keys_backup_setup_override_backup_prompt_tile">სარეზერვო ასლი უკვე არსებობს თქვენს ჰომესერვერზე</string>
+    <string name="keys_backup_setup_override_stop">შეჩერება</string>
+    <string name="recovery_key">აღდგენის გასაღები</string>
+    <string name="unexpected_error">მოულოდნელი შეცდომა</string>
+    <string name="keys_backup_setup_skip_title">დარწმუნებული ხართ\?</string>
+    <string name="keys_backup_restore_with_recovery_key">გამოიყენეთ თქვენი აღდგენის გასაღები, რომ განბლოკოთ თქვენი დაშიფრული შეტყობინებების ისტორია</string>
+    <string name="keys_backup_restore_key_enter_hint">შეიყვანეთ აღდგენის გასაღები</string>
+    <string name="keys_backup_restoring_waiting_message">სარეზერვო ასლის აღდგენა:</string>
+    <string name="keys_backup_restoring_importing_keys_waiting_message">გასაღებების იმპორტი…</string>
+    <string name="keys_backup_unlock_button">ისტორიის განბლოკვა</string>
+    <string name="keys_backup_restore_success_title">სარეზერვო ასლი აღდგენილია %s !</string>
+    <string name="room_widget_webview_access_camera">გამოიყენეთ კამერა</string>
+    <string name="room_widget_webview_read_protected_media">DRM დაცული მედიის წაკითხვა</string>
+    <string name="widget_integration_failed_to_send_request">მოთხოვნის გაგზავნა ვერ მოხერხდა.</string>
+    <string name="widget_integration_positive_power_level">ძალაუფლების დონე უნდა იყოს დადებითი მთელი რიცხვი.</string>
+    <string name="widget_integration_no_permission_in_room">თქვენ არ გაქვთ ამის ნებართვა ამ ოთახში.</string>
+    <string name="widget_integration_missing_room_id">მოთხოვნაში აკლია room_id.</string>
+    <string name="widget_integration_room_not_visible">ოთახი %s არ არის ხილული.</string>
+    <string name="command_description_nick_for_room">თქვენი ეკრანის მეტსახელის შეცვლა მხოლოდ ამჟამინდელ ოთახში</string>
+    <string name="room_add_matrix_apps">Matrix აპლიკაციების დამატება</string>
+    <string name="settings_labs_native_camera_summary">დაიწყეთ სისტემის კამერა ნაცვლად მორგებული კამერის ეკრანისა.</string>
+    <string name="widget_integration_review_terms">გაგრძელებისთვის უნდა მიიღოთ ამ სერვისის პირობები.</string>
+    <string name="command_description_clear_scalar_token">Matrix აპლიკაციების მართვის გასწორება</string>
+    <string name="timeline_error_room_not_found">უკაცრავად, ეს ოთახი არ მოიძებნა.
+\nგთხოვთ, სცადოთ ხელახლა მოგვიანებით.%s</string>
+    <string name="you_added_a_new_device">თქვენ დაამატეთ ახალი სესია \'%s\', რომელიც ითხოვს დაშიფვრის გასაღებებს.</string>
+    <string name="command_description_whois">მომხმარებლის შესახებ ინფორმაციის ჩვენება</string>
+    <string name="you_added_a_new_device_with_info">ახალი სესია ითხოვს დაშიფვრის გასაღებებს.
+\nსესიის სახელი: %1$s
+\nბოლოს ნანახი: %2$s
+\nთუ არ შეხვედით სხვა სესიაზე, იგნორირება.</string>
+    <string name="your_unverified_device_requesting_with_info">არავერიფიცირებული სესია ითხოვს დაშიფვრის გასაღებებს.
+\nსესიის სახელი: %1$s
+\nბოლოს ნანახი: %2$s
+\nთუ არ შეხვედით სხვა სესიაზე, იგნორირება.</string>
+    <string name="notification_off">გამორთული</string>
+    <string name="key_share_request">გასაღებების გაზიარების მოთხოვნა</string>
+    <string name="notification_noisy">ხმაურიანი</string>
+    <string name="command_error">ბრძანების შეცდომა</string>
+    <string name="command_problem_with_parameters">ბრძანება \"%s\"-ს სჭირდება მეტი პარამეტრი, ან ზოგიერთი პარამეტრი არასწორია.</string>
+    <string name="group_details_home">მთავარი</string>
+    <string name="command_not_supported_in_threads">ბრძანება \"%s\" აღიარებულია, მაგრამ არ არის მხარდაჭერილი თემებში.</string>
+    <string name="rooms">ოთახები</string>
+    <string name="command_description_ban_user">მომხმარებლის დაბლოკვა მოცემული ID-ით</string>
+    <string name="command_description_ignore_user">მომხმარებლის იგნორირება, მათი შეტყობინებების დამალვა</string>
+    <string name="has_been_removed">თქვენ ამოიშალეთ %1$s-დან %2$s-ის მიერ</string>
+    <string name="command_description_unignore_user">მომხმარებლის იგნორირების შეწყვეტა, მათი შეტყობინებების ჩვენება მომავალი შეტყობინებებისთვის</string>
+    <string name="has_been_banned">თქვენ დაიბლოკეთ %1$s-დან %2$s-ის მიერ</string>
+    <string name="command_description_deop_user">მომხმარებლის უფლებების შეზღუდვა მოცემული ID-ით</string>
+    <string name="avatar_of_space">სივრცის %1$s-ის ავატარი</string>
+    <string name="command_description_join_room">შეერთება ოთახში მოცემული მისამართით</string>
+    <string name="avatar_of_room">ოთახის %1$s-ის ავატარი</string>
+    <string name="command_description_topic">ოთახის თემის დაყენება</string>
+    <string name="dialog_user_consent_content">გაგრძელებისთვის უნდა გადახედოთ და დაეთანხმოთ %1$s ჰომესერვერის პირობებს.</string>
+    <string name="command_description_remove_user">მომხმარებლის ამოღება მოცემული ID-ით ამ ოთახიდან</string>
+    <string name="deactivate_account_content">ეს თქვენი ანგარიში მუდმივად გამოუსადეგარს გახდის. თქვენ ვერ შეძლებთ შესვლას, და ვერავინ შეძლებს იგივე მომხმარებლის ID-ის რეგისტრაციას. ეს გამოიწვევს თქვენი ანგარიშის ყველა ოთახიდან გამოსვლას, რომელშიც მონაწილეობდით, და თქვენი ანგარიშის დეტალები წაიშლება თქვენი იდენტობის სერვერიდან. &lt;b&gt;
+\n
+\nეს ქმედება შეუქცევადია&lt;/b&gt;. თქვენი ანგარიშის დეაქტივაცია &lt;b&gt;ნაგულისხმევად არ იწვევს ჩვენ მიერ გაგზავნილი შეტყობინებების დავიწყებას&lt;/b&gt;. თუ გსურთ, რომ ჩვენ დავივიწყოთ თქვენი შეტყობინებები, გთხოვთ მონიშნოთ ქვემოთ მოცემული ყუთი.
+\n
+\nMatrix-ში შეტყობინებების ხილვადობა მსგავსია ელფოსტაზე. ჩვენი მიერ თქვენი შეტყობინებების დავიწყება ნიშნავს, რომ გაგზავნილი შეტყობინებები აღარ იქნება გაზიარებული ახალ ან არარეგისტრირებულ მომხმარებლებთან, მაგრამ რეგისტრირებულ მომხმარებლებს, რომლებმაც უკვე მიიღეს წვდომა ამ შეტყობინებებზე, მაინც ექნებათ წვდომა მათ ასლებზე.</string>
+    <string name="deactivate_account_delete_checkbox">გთხოვთ, დაივიწყოთ ყველა შეტყობინება, რომელიც გავგზავნე, როდესაც ჩემი ანგარიში დეაქტივირდება (გაფრთხილება: ეს გამოიწვევს, რომ მომავალი მომხმარებლები დაინახავენ საუბრის არასრული ხედვას)</string>
+    <string name="room_tombstone_continuation_link">საუბარი გრძელდება აქ</string>
+    <string name="room_tombstone_predecessor_link">დააწკაპუნეთ აქ ძველი შეტყობინებების სანახავად</string>
+    <string name="resource_limit_soft_default">ეს ჰომესერვერი გადააჭარბა მის რესურსების ლიმიტს, ამიტომ &lt;b&gt;ზოგიერთ მომხმარებელს ვერ ექნება შესვლა&lt;/b&gt;.</string>
+    <string name="resource_limit_hard_mau">ეს ჰომესერვერი გადააჭარბა მის თვიური აქტიური მომხმარებლის ლიმიტს.</string>
+    <string name="resource_limit_hard_contact">გთხოვთ %s, რომ გააგრძელოთ ამ სერვისის გამოყენება.</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">გთხოვთ წაშალოთ პაროლფრაზა, თუ გსურთ, რომ ${app_name}-მა შექმნას აღდგენის გასაღები.</string>
+    <string name="keys_backup_setup_step1_description">შეტყობინებები დაშიფრულ ოთახებში დაცულია ბოლომდე დაშიფვრის მეშვეობით. მხოლოდ თქვენ და მიმღებს(ებს) გაქვთ გასაღებები ამ შეტყობინებების წასაკითხად.
+\n
+\nსარეზერვო ასლის დაცვა თქვენი გასაღებების, რომ არ დაკარგოთ ისინი.</string>
+    <string name="keys_backup_setup_step2_text_description">ჩვენ შევინახავთ დაშიფრულ ასლს თქვენი გასაღებების თქვენს ჰომესერვერზე. დაიცავით თქვენი სარეზერვო ასლი პაროლფრაზით, რომ იყოს უსაფრთხო.
+\n
+\nმაქსიმალური უსაფრთხოებისთვის, ეს უნდა იყოს განსხვავებული თქვენი ანგარიშის პაროლიდან.</string>
+    <string name="keys_backup_setup_step1_recovery_key_alternative">ან, დაზღვრეთ თქვენი სარეზერვო ასლი აღდგენის გასაღებით, შეინახეთ სადმე უსაფრთხო.</string>
+    <string name="keys_backup_setup_step3_text_line2">თქვენი აღდგენის გასაღები არის უსაფრთხოების ბადე - შეგიძლიათ გამოიყენოთ იგი დაშიფრული შეტყობინებების წვდომის აღსადგენად, თუ დაგავიწყდებათ პაროლფრაზა. შეინახეთ თქვენი აღ</string>
+    <string name="keys_backup_setup_step3_copy_button_title">აღდგენის გასაღების შენახვა</string>
+    <string name="keys_backup_setup_step3_share_recovery_file">გაზიარება</string>
+    <string name="recovery_key_export_saved">აღდგენის გასაღები შენახულია.</string>
+    <string name="keys_backup_setup_override_backup_prompt_description">როგორც ჩანს, თქვენ უკვე დაყენებული გაქვთ გასაღების სარეზერვო ასლი სხვა სესიიდან. გსურთ მისი შეცვლა ახლად შექმნილი გასაღებით\?</string>
+    <string name="keys_backup_setup_override_replace">შეცვლა</string>
+    <string name="keys_backup_setup_step3_please_make_copy">გთხოვთ, გააკეთოთ ასლი</string>
+    <string name="keys_backup_setup_step3_share_intent_chooser_title">აღდგენის გასაღების გაზიარება…</string>
+    <string name="keys_backup_setup_step3_generating_key_status">აღდგენის გასაღების გენერირება პაროლფრაზის გამოყენებით, ამ პროცესს შესაძლოა რამდენიმე წამი დასჭირდეს.</string>
+    <string name="keys_backup_setup_skip_msg">შეიძლება დაკარგოთ თქვენი შეტყობინებების წვდომა, თუ სისტემიდან გამოხვალთ ან დაკარგავთ ამ მოწყობილობას.</string>
+    <string name="keys_backup_restore_is_getting_backup_version">სარეზერვო ვერსიის ჩამოტვირთვა…</string>
+    <string name="keys_backup_restore_with_passphrase">გამოიყენეთ თქვენი აღდგენის პაროლფრაზა, რომ განბლოკოთ თქვენი დაშიფრული შეტყობინებების ისტორია</string>
+    <string name="keys_backup_restore_use_recovery_key">გამოიყენეთ თქვენი აღდგენის გასაღები</string>
+    <string name="keys_backup_restore_with_passphrase_helper_with_link">არ იცით თქვენი აღდგენის პაროლფრაზა\? შეგიძლიათ %s.</string>
+    <string name="keys_backup_restore_with_key_helper">დაკარგეთ თქვენი აღდგენის გასაღები\? შეგიძლიათ ახალი შექმნათ პარამეტრებში.</string>
+    <string name="keys_backup_passphrase_error_decrypt">სარეზერვო ასლის დეშიფრაცია ვერ მოხერხდა ამ პაროლფრაზით: გთხოვთ, გადაამოწმოთ, რომ შეიყვანეთ სწორი აღდგენის პაროლფრაზა.</string>
+    <string name="keys_backup_restoring_computing_key_waiting_message">აღდგენის გასაღების გამოთვლა…</string>
+    <string name="keys_backup_restoring_downloading_backup_waiting_message">გასაღებების ჩამოტვირთვა…</string>
+    <string name="keys_backup_recovery_code_empty_error_message">გთხოვთ, შეიყვანოთ აღდგენის გასაღები</string>
+    <string name="keys_backup_recovery_code_error_decrypt">სარეზერვო ასლის დეშიფრაცია ვერ მოხერხდა ამ აღდგენის გასაღებით: გთხოვთ, გადაამოწმოთ, რომ შეიყვანეთ სწორი აღდგენის გასაღები.</string>
+    <plurals name="keys_backup_restore_success_description_part1">
+        <item quantity="one">სარეზერვო ასლი აღდგენილია %d გასაღებით.</item>
+        <item quantity="other"></item>
+    </plurals>
 </resources>
