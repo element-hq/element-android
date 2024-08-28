@@ -647,4 +647,121 @@
 \n
 \nეს იქნება ერთჯერადი გადასვლა, რადგან თემები ახლა Matrix-ის სპეციფიკაციის ნაწილია.</string>
     <string name="threads_beta_enable_notice_message">თემები ეხმარება საუბრის კონტექსტში შენარჩუნებას და მარტივად მოსდევან მათ. %sთემების ჩართვა განაახლებს აპლიკაციას. ეს შეიძლება უფრო მეტ დროს მიიღებს ზოგიერთ ანგარიშზე.</string>
+    <string name="threads_labs_enable_notice_title">თემების ბეტა</string>
+    <string name="threads_labs_enable_notice_message">თქვენი ჰომესერვერი ამჟამად არ უჭერს მხარს თემებს, ამიტომ ეს ფუნქცია შეიძლება არასაიმედო იყოს. ზოგიერთი თემატური შეტყობინება შეიძლება არ იყოს საიმედოდ ხელმისაწვდომი. %sმაინც გსურთ თემების ჩართვა\?</string>
+    <string name="search_hint">ძიება</string>
+    <string name="search_members_hint">ოთახის წევრების გაფილტვრა</string>
+    <string name="search_banned_user_hint">გაფილტვრა დაბლოკილი მომხმარებლების</string>
+    <string name="search_no_results">შედეგები არ არის</string>
+    <string name="room_settings_all_messages">ყველა შეტყობინება</string>
+    <string name="room_settings_none">არაფერი</string>
+    <string name="room_settings_add_homescreen_shortcut">მთავარ ეკრანზე დამატება</string>
+    <string name="shortcut_disabled_reason_room_left">ოთახი დატოვებულია!</string>
+    <string name="shortcut_disabled_reason_sign_out">სესია გასულია!</string>
+    <string name="settings_profile_picture">პროფილის სურათი</string>
+    <string name="settings_display_name">სახელი</string>
+    <string name="settings_add_phone_number">ტელეფონის ნომრის დამატება</string>
+    <string name="settings_app_info_link_title">აპლიკაციის ინფორმაცია</string>
+    <string name="settings_emails">ელფოსტის მისამართები</string>
+    <string name="settings_emails_empty">თქვენს ანგარიშზე არ არის დამატებული ელფოსტის მისამართი</string>
+    <string name="settings_phone_numbers">ტელეფონის ნომრები</string>
+    <string name="settings_remove_three_pid_confirmation_content">წაშლა %s\?</string>
+    <string name="settings_notification_advanced">გაფართოებული შეტყობინებების პარამეტრები</string>
+    <string name="settings_notification_emails_category">ელფოსტის შეტყობინება</string>
+    <string name="settings_notification_emails_enable_for_email">გააქტიურეთ ელფოსტის შეტყობინებები %s-ისთვის</string>
+    <string name="settings_notification_default">ნაგულისხმევი შეტყობინებები</string>
+    <string name="settings_notification_mentions_and_keywords">მოხსენიებები და საკვანძო სიტყვები</string>
+    <string name="settings_notification_other">სხვა</string>
+    <string name="settings_notification_your_keywords">თქვენი საკვანძო სიტყვები</string>
+    <string name="settings_notification_new_keyword">ახალი საკვანძო სიტყვის დამატება</string>
+    <string name="settings_notification_keyword_contains_invalid_character">საკვანძო სიტყვები არ შეიძლება შეიცავდეს \'%s\'-ს</string>
+    <string name="settings_notification_troubleshoot">შეტყობინებების დიაგნოსტიკა</string>
+    <string name="settings_troubleshoot_diagnostic">პრობლემების დიაგნოსტიკა</string>
+    <string name="settings_troubleshoot_diagnostic_run_button_title">ტესტების გაშვება</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">გაშვება... (%1$d %2$d-დან)</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">ერთი ან მეტი ტესტი ჩაიშალა, სცადეთ შემოთავაზებული გამოსწორება(ებ)ი.</string>
+    <string name="settings_troubleshoot_test_system_settings_title">სისტემის პარამეტრები.</string>
+    <string name="settings_troubleshoot_test_system_settings_success">შეტყობინებები ჩართულია სისტემის პარამეტრებში.</string>
+    <string name="open_settings">პარამეტრების გახსნა</string>
+    <string name="grant_permission">ნებართვის მიცემა</string>
+    <string name="settings_troubleshoot_test_account_settings_title">ანგარიშის პარამეტრები.</string>
+    <string name="settings_troubleshoot_test_account_settings_success">შეტყობინებები ჩართულია თქვენი ანგარიშისთვის.</string>
+    <string name="settings_troubleshoot_test_account_settings_quickfix">ჩართვა</string>
+    <string name="settings_troubleshoot_test_device_settings_title">სესიის პარამეტრები.</string>
+    <string name="settings_troubleshoot_test_device_settings_success">შეტყობინებები ჩართულია ამ სესიისთვის.</string>
+    <string name="settings_troubleshoot_test_device_settings_quickfix">ჩართვა</string>
+    <string name="settings_troubleshoot_test_bing_settings_title">მორგებული პარამეტრები.</string>
+    <string name="settings_troubleshoot_test_bing_settings_success_with_warn">გაითვალისწინეთ, რომ ზოგიერთი შეტყობინების ტიპი ჩუმადაა (შექმნის შეტყობინებას ხმის გარეშე).</string>
+    <string name="settings_troubleshoot_test_play_services_title">პლაი სერვისების შემოწმება</string>
+    <string name="settings_troubleshoot_test_play_services_success">Google Play სერვისების APK ხელმისაწვდომია და განახლებულია.</string>
+    <string name="settings_troubleshoot_test_play_services_quickfix">პლაი სერვისების გამოსწორება</string>
+    <string name="settings_troubleshoot_test_fcm_title">Firebase-ის ტოკენი</string>
+    <string name="settings_troubleshoot_test_fcm_success">FCM ტოკენი წარმატებით მიღებულია:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_failed">FCM ტოკენის მიღება ვერ მოხერხდა:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+\nეს შეცდომა ${app_name}-ის კონტროლიდან არის გამოსული. ტელეფონზე არ არის Google ანგარიში. გთხოვთ, გახსნათ ანგარიშის მენეჯერი და დაამატოთ Google ანგარიში.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">ანგარიშის დამატება</string>
+    <string name="settings_troubleshoot_test_token_registration_title">ტოკენის რეგისტრაცია</string>
+    <string name="settings_troubleshoot_test_token_registration_success">FCM ტოკენი წარმატებით დარეგისტრირდა ჰომესერვერზე.</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">FCM ტოკენის რეგისტრაცია ვერ მოხერხდა ჰომესერვერზე:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_title">Endpoint რეგისტრაცია</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">Endpoint წარმატებით დარეგისტრირდა ჰომესერვერზე.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">Endpoint ტოკენის რეგისტრაცია ვერ მოხერხდა ჰომესერვერზე:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_push_loop_title">Push ტესტი</string>
+    <string name="settings_troubleshoot_test_push_loop_waiting_for_push">აპლიკაცია ელოდება PUSH</string>
+    <string name="settings_troubleshoot_test_push_loop_success">აპლიკაცია იღებს PUSH</string>
+    <string name="settings_troubleshoot_test_push_notification_content">თქვენ უყურებთ შეტყობინებას! დააჭირეთ მე!</string>
+    <string name="settings_troubleshoot_test_notification_notification_clicked">შეტყობინებაზე დაჭერილია!</string>
+    <string name="settings_troubleshoot_test_service_boot_title">ჩართვა ჩატვირთვაზე</string>
+    <string name="settings_troubleshoot_test_service_boot_success">სერვისი დაიწყება, როდესაც მოწყობილობა გადაიტვირთება.</string>
+    <string name="settings_troubleshoot_test_service_boot_quickfix">ჩართვა ჩატვირთვაზე</string>
+    <string name="settings_troubleshoot_test_bg_restricted_title">ფონის შეზღუდვების შემოწმება</string>
+    <string name="settings_troubleshoot_test_bg_restricted_quickfix">შეზღუდვების გამორთვა</string>
+    <string name="settings_troubleshoot_test_battery_title">ბატარეის ოპტიმიზაცია</string>
+    <string name="settings_troubleshoot_test_battery_success">${app_name} არ მოქმედებს ბატარეის ოპტიმიზაციით</string>
+    <plurals name="search_space_multiple_parents">
+        <item quantity="one">%1$s და %2$d სხვა</item>
+        <item quantity="other">%1$s და %2$d სხვა</item>
+    </plurals>
+    <string name="search_space_two_parents">%1$s და %2$s</string>
+    <string name="room_settings_mention_and_keyword_only">მოხსენიებები და საკვანძო სიტყვები მხოლოდ</string>
+    <string name="settings_add_email_address">დაამატეთ ელფოსტის მისამართი</string>
+    <string name="settings_phone_number_empty">თქვენს ანგარიშზე არ არის დამატებული ტელეფონის ნომერი</string>
+    <string name="settings_app_info_link_summary">აჩვენეთ აპლიკაციის ინფორმაცია სისტემის პარამეტრებში.</string>
+    <string name="error_threepid_auth_failed">დარწმუნდით, რომ დააწკაპუნეთ ბმულზე, რომელიც გამოგიგზავნეთ ელფოსტაში.</string>
+    <string name="settings_notification_by_event">შეტყობინების მნიშვნელობა მოვლენების მიხედვით</string>
+    <string name="settings_notification_emails_no_emails">ელფოსტის შეტყობინების მისაღებად, გთხოვთ, დაამატოთ ელფოსტის მისამართი თქვენს Matrix-ის ანგარიშზე</string>
+    <string name="settings_notification_notify_me_for">გამომიწერეთ</string>
+    <string name="settings_notification_keyword_contains_dot">საკვანძო სიტყვები არ შეიძლება დაიწყოს \'.\'</string>
+    <string name="settings_notification_error_on_update">შეტყობინებების პარამეტრების განახლებისას მოხდა შეცდომა. გთხოვთ, სცადოთ თავიდან.</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">ძირითადი დიაგნოსტიკა ნორმალურია. თუ ჯერ კიდევ არ იღებთ შეტყობინებებს, გთხოვთ, გაგზავნოთ შეცდომის მოხსენება, რომ დაგვეხმაროთ გამოძიებაში.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">ერთი ან მეტი ტესტი ჩაიშალა, გთხოვთ, გაგზავნოთ შეცდომის მოხსენება, რომ დაგვეხმაროთ გამოძიებაში.</string>
+    <string name="settings_troubleshoot_test_system_settings_failed">შეტყობინებები გამორთულია სისტემის პარამეტრებში. 
+\nგთხოვთ, შეამოწმოთ სისტემის პარამეტრები.</string>
+    <string name="settings_troubleshoot_test_system_settings_permission_failed">${app_name} საჭიროებს ნებართვას შეტყობინებების ჩვენებისთვის. 
+\nგთხოვთ, მიაწოდოთ ნებართვა.</string>
+    <string name="settings_troubleshoot_test_account_settings_failed">შეტყობინებები გამორთულია თქვენი ანგარიშისთვის. 
+\nგთხოვთ, შეამოწმოთ ანგარიშის პარამეტრები.</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">შეტყობინებები არ არის ჩართული ამ სესიისთვის. 
+\nგთხოვთ, შეამოწმოთ ${app_name} პარამეტრები.</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed">ზოგიერთი შეტყობინება გამორთულია თქვენს მორგებულ პარამეტრებში.</string>
+    <string name="settings_troubleshoot_test_play_services_failed">${app_name} იყენებს Google Play სერვისებს შეტყობინებების მიწოდებისთვის, მაგრამ როგორც ჩანს არასწორად არის კონფიგურირებული:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+\nეს შეცდომა ${app_name}-ის კონტროლიდან არის გამოსული და Google-ის მიხედვით, ეს შეცდომა მიუთითებს, რომ მოწყობილობას აქვს ძალიან ბევრი აპლიკაცია რეგისტრირებული FCM-თან. შეცდომა მხოლოდ მაშინ ხდება, როდესაც აპლიკაციების რაოდენობა ძალიან დიდია, ამიტომ ეს არ უნდა იმოქმედოს საშუალო მომხმარებელზე.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
+\nეს შეცდომა ${app_name}-ის კონტროლიდან არის გამოსული. ეს შეიძლება მოხდეს რამდენიმე მიზეზის გამო. შესაძლოა იმუშავოს, თუ ხელახლა სცადავთ მოგვიანებით, შეგიძლიათ ასევე შეამოწმოთ, რომ Google Play სერვისი არ არის შეზღუდული მონაცემთა გამოყენებაში სისტემის პარამეტრებში, ან რომ თქვენი მოწყობილობის საათი სწორია, ან ეს შეიძლება მოხდეს მორგებულ ROM-ზე.</string>
+    <string name="settings_troubleshoot_test_push_loop_failed">Push ვერ იქნა მიღებული. გამოსავალი შეიძლება იყოს აპლიკაციის ხელახლა ინსტალაცია.</string>
+    <string name="settings_troubleshoot_test_notification_title">შეტყობინების ჩვენება</string>
+    <string name="settings_troubleshoot_test_notification_notice">გთხოვთ, დააწკაპუნოთ შეტყობინებაზე. თუ ვერ ხედავთ შეტყობინებას, გთხოვთ, შეამოწმოთ სისტემის პარამეტრები.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">სერვისი არ დაიწყება, როდესაც მოწყობილობა გადაიტვირთება, თქვენ არ მიიღებთ შეტყობინებებს, სანამ ${app_name} ერთხელ არ გაიხსნება.</string>
+    <string name="settings_troubleshoot_test_bg_restricted_success">ფონის შეზღუდვები გამორთულია ${app_name}-ისთვის. ეს ტესტი უნდა ჩატარდეს მობილური მონაცემების გამოყენებით (WIFI-ის გარეშე).
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_failed">ფონის შეზღუდვები ჩართულია ${app_name}-ისთვის. 
+\nაპლიკაცია, რომელიც აპლიკაცია ცდილობს გააკეთოს, აგრესიულად შეიზღუდება ფონის რეჟიმში ყოფნისას და ეს შეიძლება გავლენა იქონიოს შეტყობინებებზე.
+\n%1$s</string>
 </resources>
