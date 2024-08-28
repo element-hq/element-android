@@ -1,0 +1,1 @@
+Fix crash when joining a conference call on Android 14. ([#8885](https://github.com/element-hq/element-android/issues/8885))
