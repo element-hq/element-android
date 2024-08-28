@@ -722,7 +722,7 @@
     <string name="settings_troubleshoot_test_bg_restricted_title">ფონის შეზღუდვების შემოწმება</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">შეზღუდვების გამორთვა</string>
     <string name="settings_troubleshoot_test_battery_title">ბატარეის ოპტიმიზაცია</string>
-    <string name="settings_troubleshoot_test_battery_success">${app_name} არ მოქმედებს ბატარეის ოპტიმიზაციით</string>
+    <string name="settings_troubleshoot_test_battery_success">${app_name} არ მოქმედებს ბატარეის ოპტიმიზაციით.</string>
     <plurals name="search_space_multiple_parents">
         <item quantity="one">%1$s და %2$d სხვა</item>
         <item quantity="other">%1$s და %2$d სხვა</item>
@@ -930,6 +930,31 @@
     <string name="keys_backup_recovery_code_error_decrypt">სარეზერვო ასლის დეშიფრაცია ვერ მოხერხდა ამ აღდგენის გასაღებით: გთხოვთ, გადაამოწმოთ, რომ შეიყვანეთ სწორი აღდგენის გასაღები.</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">სარეზერვო ასლი აღდგენილია %d გასაღებით.</item>
-        <item quantity="other"></item>
+        <item quantity="other"/>
     </plurals>
+    <string name="settings_troubleshoot_test_battery_failed">თუ მომხმარებელი ტოვებს მოწყობილობას უტვირტი და უძრავად გარკვეული პერიოდის განმავლობაში, ეკრანის გათიშვით, მოწყობილობა შედის Doze რეჟიმში. ეს ხელს უშლის აპლიკაციებს ქსელთან წვდომაზე და აყოვნებს მათ დავალებებს, სინქრონიზაციებსა და სტანდარტულ სიგნალებს.</string>
+    <string name="settings_troubleshoot_test_battery_quickfix">ოპტიმიზაციის იგნორირება</string>
+    <string name="settings_enable_this_device">შეტყობინებების ჩართვა ამ სესიისთვის</string>
+    <string name="settings_noisy_notifications_preferences">ხმაურიანი შეტყობინებების კონფიგურაცია</string>
+    <string name="settings_silent_notifications_preferences">ჩუმი შეტყობინებების კონფიგურაცია</string>
+    <string name="settings_system_preferences_summary">აირჩიეთ LED ფერი, ვიბრაცია, ხმა…</string>
+    <string name="settings_messages_in_e2e_group_chat">დაშიფრული შეტყობინებები ჯგუფურ ჩატებში</string>
+    <string name="settings_when_rooms_are_upgraded">როდესაც ოთახები განახლებულია</string>
+    <string name="settings_containing_my_user_name">შეტყობინებები, რომლებიც შეიცავს ჩემს მომხმარებლის სახელს</string>
+    <string name="settings_messages_in_group_chat">შეტყობინებები ჯგუფურ ჩატებში</string>
+    <string name="settings_invited_to_room">როდესაც მოწვეული ვარ ოთახში</string>
+    <string name="settings_messages_containing_display_name">ჩემი ეკრანის სახელი</string>
+    <string name="settings_messages_containing_username">ჩემი მომხმარებლის სახელი</string>
+    <string name="settings_encrypted_direct_messages">დაშიფრული პირდაპირი შეტყობინებები</string>
+    <string name="settings_group_messages">ჯგუფური შეტყობინებები</string>
+    <string name="settings_notification_ringtone">შეტყობინების ხმა</string>
+    <string name="settings_enable_all_notif">შეტყობინებების ჩართვა ამ ანგარიშისთვის</string>
+    <string name="settings_call_notifications_preferences">ზარის შეტყობინებების კონფიგურაცია</string>
+    <string name="settings_messages_in_e2e_one_to_one">დაშიფრული შეტყობინებები ერთ-ერთ ჩატებში</string>
+    <string name="settings_containing_my_display_name">შეტყობინებები, რომლებიც შეიცავს ჩემს ეკრანის სახელს</string>
+    <string name="settings_messages_in_one_to_one">შეტყობინებები ერთ-ერთ ჩატებში</string>
+    <string name="settings_messages_sent_by_bot">ბოტის მიერ გაგზავნილი შეტყობინებები</string>
+    <string name="settings_messages_at_room">შეტყობინებები, რომლებიც შეიცავს @room</string>
+    <string name="settings_messages_direct_messages">პირდაპირი შეტყობინებები</string>
+    <string name="settings_encrypted_group_messages">დაშიფრული ჯგუფური შეტყობინებები</string>
 </resources>
