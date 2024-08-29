@@ -1154,5 +1154,14 @@
     <string name="change_identity_server">იდენტობის სერვერის შეცვლა</string>
     <string name="settings_discovery_show_identity_server_policy_title">იდენტობის სერვერის პოლიტიკის ჩვენება</string>
     <string name="settings_discovery_identity_server_info">თქვენ ამჟამად იყენებთ %1$s-ის სერვისს, რათა აღმოაჩინოთ და აღმოაჩინოთ არსებული კონტაქტები.</string>
-    <string name="settings_discovery_identity_server_info_none">თქვენ ამჟამად იყენებთ %1$s-ის სერვისს, რათა აღმოაჩინოთ და აღმოაჩინოთ არსებული კონტაქტები.</string>
+    <string name="settings_discovery_identity_server_info_none">თქვენ ამჟამად არ იყენებთ იდენტობის სერვერს. თუ გსურთ არსებული კონტაქტების მოძიება, კონფიგურაცია გააკეთეთ ქვემოთ.</string>
+    <string name="settings_discovery_emails_title">აღმოჩენილი ელფოსტის მისამართები</string>
+    <string name="settings_discovery_msisdn_title">აღმოჩენილი ტელეფონის ნომრები</string>
+    <string name="settings_discovery_confirm_mail">ჩვენ ელფოსტა გავუგზავნეთ %s-ს, შეამოწმეთ თქვენი ელფოსტა და დააჭირეთ დამადასტურებელ ბმულს</string>
+    <string name="settings_discovery_no_mails">აღმოჩენის პარამეტრები გამოჩნდება, როდესაც დაამატებთ ელფოსტის მისამართს.</string>
+    <string name="settings_discovery_no_msisdn">აღმოჩენის პარამეტრები გამოჩნდება, როდესაც დაამატებთ ტელეფონის ნომერს.</string>
+    <string name="settings_discovery_disconnect_identity_server_info">იდენტობის სერვერიდან გათიშვა ნიშნავს, რომ ვერ აღმოაჩენენ სხვები და ვეღარ მოიწვევთ სხვებს ელფოსტით ან ტელეფონით.</string>
+    <string name="settings_discovery_confirm_mail_not_clicked">ჩვენ ელფოსტა გავუგზავნეთ %s-ს, გთხოვთ, ჯერ შეამოწმოთ თქვენი ელფოსტა და დააჭირეთ დამადასტურებელ ბმულს</string>
+    <string name="settings_discovery_consent_title">ელფოსტებისა და ტელეფონის ნომრების გაგზავნა</string>
+    <string name="settings_discovery_consent_notice_on">თქვენ მიეცით თანხმობა, რომ გააგზავნოთ ელფოსტები და ტელეფონის ნომრები ამ იდენტობის სერვერზე, რათა აღმოაჩინოთ სხვა მომხმარებლები თქვენი კონტაქტებიდან.</string>
 </resources>
