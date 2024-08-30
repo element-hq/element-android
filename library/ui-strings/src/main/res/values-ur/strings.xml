@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="notice_room_invite_no_invitee_by_you">آپکا دعوت نامہ</string>
     <string name="notice_direct_room_join_by_you">آپ شامل ہوگئے</string>
     <string name="notice_direct_room_leave_by_you">آپ نے کمرہ چھوڑدیا</string>
@@ -48,4 +48,9 @@
     <string name="notice_room_withdraw_by_you">آپنے %1$s کی دعوت واپس لے لی</string>
     <string name="notice_avatar_url_changed">%1$s نے اپنا اوتار بدل لیا</string>
     <string name="notice_avatar_url_changed_by_you">آپنے اپنا اوتار بدل لیا</string>
+    <string name="notice_display_name_set">%1$s نے اپنا نمائشی نام کو %2$s پر مقرر کیا</string>
+    <string name="notice_display_name_set_by_you">آپنے اپنا نمائشی نام %1$s پر مقرر کیا</string>
+    <string tools:ignore="UnusedResources" name="notice_display_name_changed_from">%1$s نے اپنا نمائشی نام %2$s سے %3$s پر بدلا</string>
+    <string name="notice_display_name_changed_from_by_you">آپنے اپنا نمائشی نام %1$s سے %2$s پر بدلا ہے</string>
+    <string name="notice_display_name_changed_to">%1$s نے اپنا نمائشی نام %2$s پر بدلا</string>
 </resources>
