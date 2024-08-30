@@ -1164,4 +1164,16 @@
     <string name="settings_discovery_confirm_mail_not_clicked">ჩვენ ელფოსტა გავუგზავნეთ %s-ს, გთხოვთ, ჯერ შეამოწმოთ თქვენი ელფოსტა და დააჭირეთ დამადასტურებელ ბმულს</string>
     <string name="settings_discovery_consent_title">ელფოსტებისა და ტელეფონის ნომრების გაგზავნა</string>
     <string name="settings_discovery_consent_notice_on">თქვენ მიეცით თანხმობა, რომ გააგზავნოთ ელფოსტები და ტელეფონის ნომრები ამ იდენტობის სერვერზე, რათა აღმოაჩინოთ სხვა მომხმარებლები თქვენი კონტაქტებიდან.</string>
+    <string name="settings_logged_in">შესული როგორც</string>
+    <string name="settings_home_server">ჰომესერვერი</string>
+    <string name="settings_integration_allow">ინტეგრაციების ნებართვა</string>
+    <string name="legals_home_server_title">თქვენი ჰომესერვერის პოლიტიკა</string>
+    <string name="disabled_integration_dialog_title">ინტეგრაციები გამორთულია</string>
+    <string name="devices_delete_dialog_title">ავტორიზაცია</string>
+    <string name="settings_identity_server">იდენტობის სერვერი</string>
+    <string name="settings_integration_manager">ინტეგრაციის მენეჯერი</string>
+    <string name="legals_application_title">${app_name} პოლიტიკა</string>
+    <string name="legals_identity_server_title">თქვენი იდენტობის სერვერის პოლიტიკა</string>
+    <string name="legals_third_party_notices">მესამე მხარის ბიბლიოთეკები</string>
+    <string name="legals_no_policy_provided">ეს სერვერი არ უზრუნველყოფს პოლიტიკას.</string>
 </resources>
