@@ -124,4 +124,10 @@
         android:title="@string/labs_enable_voice_broadcast_title"
         app:isPreferenceVisible="@bool/settings_labs_enable_voice_broadcast_visible" />
 
+    <im.vector.app.core.preference.VectorSwitchPreference
+        android:defaultValue="@bool/settings_labs_enable_jitsi_call_notifications_default"
+        android:key="SETTINGS_LABS_JITSI_CALL_NOTIFICATION_KEY"
+        android:title="@string/labs_enable_jitsi_call_notifications_summary"
+        app:isPreferenceVisible="@bool/settings_labs_enable_voice_broadcast_visible" />
+
 </androidx.preference.PreferenceScreen>

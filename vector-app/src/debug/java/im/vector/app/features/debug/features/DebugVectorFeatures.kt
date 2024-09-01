@@ -79,6 +79,9 @@ class DebugVectorFeatures(
     override fun isVoiceBroadcastEnabled(): Boolean = read(DebugFeatureKeys.voiceBroadcastEnabled)
             ?: vectorFeatures.isVoiceBroadcastEnabled()
 
+    override fun isJitsiCallNotificationEnabled(): Boolean = read(DebugFeatureKeys.jitsiCallNotificationsEnabled)
+            ?: vectorFeatures.isJitsiCallNotificationEnabled()
+
     override fun isUnverifiedSessionsAlertEnabled(): Boolean = read(DebugFeatureKeys.unverifiedSessionsAlertEnabled)
             ?: vectorFeatures.isUnverifiedSessionsAlertEnabled()
 
@@ -143,4 +146,5 @@ object DebugFeatureKeys {
     val newAppLayoutEnabled = booleanPreferencesKey("new-app-layout-enabled")
     val voiceBroadcastEnabled = booleanPreferencesKey("voice-broadcast-enabled")
     val unverifiedSessionsAlertEnabled = booleanPreferencesKey("unverified-sessions-alert-enabled")
+    val jitsiCallNotificationsEnabled = booleanPreferencesKey("jitsi-call-notifications-enabled")
 }

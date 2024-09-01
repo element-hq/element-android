@@ -41,6 +41,7 @@ interface VectorFeatures {
      */
     fun isNewAppLayoutFeatureEnabled(): Boolean
     fun isVoiceBroadcastEnabled(): Boolean
+    fun isJitsiCallNotificationEnabled(): Boolean
     fun isUnverifiedSessionsAlertEnabled(): Boolean
 }
 
@@ -58,5 +59,6 @@ class DefaultVectorFeatures : VectorFeatures {
     override fun forceUsageOfOpusEncoder(): Boolean = false
     override fun isNewAppLayoutFeatureEnabled(): Boolean = true
     override fun isVoiceBroadcastEnabled(): Boolean = true
+    override fun isJitsiCallNotificationEnabled(): Boolean = true
     override fun isUnverifiedSessionsAlertEnabled(): Boolean = true
 }
