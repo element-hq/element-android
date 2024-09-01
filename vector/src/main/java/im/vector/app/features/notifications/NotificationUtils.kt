@@ -364,10 +364,11 @@ class NotificationUtils @Inject constructor(
     }
 
     /**
-     * Build an incoming call notification.
+     * Build an incoming jitsi call notification.
      * This notification starts the VectorHomeActivity which is in charge of centralizing the incoming call flow.
      *
-     * @param call information about the call
+     * @param callId id of the jitsi call
+     * @param signalingRoomId id of the room
      * @param title title of the notification
      * @param fromBg true if the app is in background when posting the notification
      * @return the call notification.
@@ -375,9 +376,6 @@ class NotificationUtils @Inject constructor(
     fun buildIncomingJitsiCallNotification(
             callId: String,
             signalingRoomId: String,
-            otherUserId: String,
-            isIncomingCall: Boolean,
-            isVideoCall: Boolean,
             title: String,
             fromBg: Boolean,
     ): Notification {
@@ -426,7 +424,7 @@ class NotificationUtils @Inject constructor(
         builder.addAction(
                 NotificationCompat.Action(
                         R.drawable.ic_call_answer,
-                        getActionText(R.string.call_notification_answer, R.attr.colorPrimary),
+                        getActionText(R.string.call_notification_open_app, R.attr.colorPrimary),
                         answerCallPendingIntent
                 )
         )

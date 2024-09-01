@@ -72,29 +72,19 @@ class NotificationRenderer @Inject constructor(
             }
 
             Timber.d("Jitsi call notifications count = ${jitsiNotifications.size}")
-            jitsiNotifications.forEach { wrapper ->
-                when (wrapper) {
-                    is JitsiNotification.IncomingCall -> {
-                        Timber.d("Updating jitsi call notification ${wrapper.roomId} for room ${wrapper.roomName}")
-                        if (wrapper.eventId.isNotEmpty() || wrapper.roomId.isNotEmpty()) {
-                            val tag = wrapper.eventId.ifEmpty { wrapper.roomId }
-                            notificationDisplayer.showNotificationMessage(tag, JITSI_CALL_NOTIFICATION_ID, wrapper.notification)
+            if (vectorPreferences.isJitsiCallNotificationEnabled()) {
+                jitsiNotifications.forEach { wrapper ->
+                    when (wrapper) {
+                        is JitsiNotification.IncomingCall -> {
+                            Timber.d("Updating jitsi call notification ${wrapper.roomId} for room ${wrapper.roomName}")
+                            if (wrapper.eventId.isNotEmpty() || wrapper.roomId.isNotEmpty()) {
+                                val tag = wrapper.eventId.ifEmpty { wrapper.roomId }
+                                notificationDisplayer.showNotificationMessage(tag, JITSI_CALL_NOTIFICATION_ID, wrapper.notification)
+                            }
                         }
                     }
                 }
             }
-//            if (vectorPreferences.isJitsiCallNotificationEnabled()) {
-//                jitsiNotifications.forEach { wrapper ->
-//                    when (wrapper) {
-//                        is JitsiNotification.IncomingCall -> {
-//                            Timber.d("Updating jitsi call notification ${wrapper.roomId} for room ${wrapper.roomName}")
-//                            if (wrapper.eventId.isNotEmpty()) {
-//                                notificationDisplayer.showNotificationMessage(wrapper.eventId, JITSI_CALL_NOTIFICATION_ID, wrapper.notification)
-//                            }
-//                        }
-//                    }
-//                }
-//            }
 
             invitationNotifications.forEach { wrapper ->
                 when (wrapper) {

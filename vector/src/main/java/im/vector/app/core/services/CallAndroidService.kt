@@ -136,12 +136,6 @@ class CallAndroidService : VectorAndroidService() {
             ACTION_JITSI_CALL_TERMINATED -> {
                 handleJitsiCallTerminated(intent)
             }
-            ACTION_INCOMING_JITSI_RINGING_CALL -> {
-                mediaSession?.isActive = true
-                val fromBg = intent.getBooleanExtra(EXTRA_IS_IN_BG, false)
-                callRingPlayerIncoming?.start(fromBg)
-                displayIncomingJitsiCallNotification(intent)
-            }
             else -> {
                 handleUnexpectedState(null)
             }
@@ -198,55 +192,6 @@ class CallAndroidService : VectorAndroidService() {
             notificationManager.notify(callId.hashCode(), notification)
         }
         knownCalls[callId] = callInformation
-    }
-
-    /**
-     * Display a permanent notification when there is an incoming call.
-     *
-     */
-    private fun displayIncomingJitsiCallNotification(intent: Intent) {
-        Timber.tag(loggerTag.value).v("displayIncomingJitsiCallNotification $intent")
-        val callId = intent.getStringExtra(EXTRA_CALL_ID).orEmpty()
-        val signalingRoomId = intent.getStringExtra(EXTRA_SIGNALING_ROOM_ID).orEmpty()
-        val otherUserId = intent.getStringExtra(EXTRA_OTHER_USER_ID).orEmpty()
-
-        val matrixItem = MatrixItem.RoomItem(
-            id = signalingRoomId,
-            displayName = otherUserId,
-        )
-
-        val isVideoCall = true
-        val fromBg = intent.getBooleanExtra(EXTRA_IS_IN_BG, false)
-        Timber.tag(loggerTag.value).v("displayIncomingJitsiCallNotification : display the dedicated notification")
-        val incomingCallAlert = IncomingCallAlert(callId,
-                shouldBeDisplayedIn = { activity ->
-                    if (activity is VectorCallActivity) {
-                        activity.intent.getParcelableExtraCompat<CallArgs>(Mavericks.KEY_ARG)?.callId != callId
-                    } else true
-                }
-        ).apply {
-            viewBinder = IncomingCallAlert.ViewBinder(
-                    matrixItem = matrixItem,
-                    avatarRenderer = avatarRenderer,
-                    isVideoCall = isVideoCall,
-                    onAccept = { showJitsiCallScreen(callId, signalingRoomId) },
-                    onReject = { onJitsiCallTerminated(applicationContext, callId) }
-            )
-            dismissedAction = Runnable { onJitsiCallTerminated(applicationContext, callId) }
-            contentAction = Runnable { showJitsiCallScreen(callId, signalingRoomId) }
-        }
-        alertManager.postVectorAlert(incomingCallAlert)
-        val notification = notificationUtils.buildIncomingJitsiCallNotification(
-                callId = callId,
-                signalingRoomId = signalingRoomId,
-                isIncomingCall = true,
-                isVideoCall = isVideoCall,
-                otherUserId = otherUserId,
-                title = otherUserId,
-                fromBg = fromBg,
-        )
-
-        startForegroundCompat(callId.hashCode(), notification)
     }
 
     private fun handleCallTerminated(intent: Intent) {
@@ -395,7 +340,6 @@ class CallAndroidService : VectorAndroidService() {
 
         private const val ACTION_INCOMING_RINGING_CALL = "im.vector.app.core.services.CallService.ACTION_INCOMING_RINGING_CALL"
         private const val ACTION_OUTGOING_RINGING_CALL = "im.vector.app.core.services.CallService.ACTION_OUTGOING_RINGING_CALL"
-        private const val ACTION_INCOMING_JITSI_RINGING_CALL = "im.vector.app.core.services.CallService.ACTION_INCOMING_JITSI_RINGING_CALL"
         private const val ACTION_ONGOING_CALL = "im.vector.app.core.services.CallService.ACTION_ONGOING_CALL"
         private const val ACTION_CALL_TERMINATED = "im.vector.app.core.services.CallService.ACTION_CALL_TERMINATED"
         private const val ACTION_JITSI_CALL_TERMINATED = "im.vector.app.core.services.CallService.ACTION_JITSI_CALL_TERMINATED"
@@ -416,24 +360,6 @@ class CallAndroidService : VectorAndroidService() {
                     .apply {
                         action = ACTION_INCOMING_RINGING_CALL
                         putExtra(EXTRA_CALL_ID, callId)
-                        putExtra(EXTRA_IS_IN_BG, isInBackground)
-                    }
-            ContextCompat.startForegroundService(context, intent)
-        }
-
-        fun onIncomingJitsiCallRinging(
-                context: Context,
-                callId: String,
-                signalingRoomId: String,
-                otherUserId: String,
-                isInBackground: Boolean
-        ) {
-            val intent = Intent(context, CallAndroidService::class.java)
-                    .apply {
-                        action = ACTION_INCOMING_JITSI_RINGING_CALL
-                        putExtra(EXTRA_CALL_ID, callId)
-                        putExtra(EXTRA_SIGNALING_ROOM_ID, signalingRoomId)
-                        putExtra(EXTRA_OTHER_USER_ID, otherUserId)
                         putExtra(EXTRA_IS_IN_BG, isInBackground)
                     }
             ContextCompat.startForegroundService(context, intent)

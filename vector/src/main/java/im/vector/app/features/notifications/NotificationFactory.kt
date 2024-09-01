@@ -37,9 +37,6 @@ class NotificationFactory @Inject constructor(
                     notification = notificationUtils.buildIncomingJitsiCallNotification(
                             callId = events.firstOrNull()?.event?.eventId.orEmpty().ifEmpty { roomId },
                             signalingRoomId = roomId,
-                            otherUserId = events.firstOrNull()?.event?.matrixID.orEmpty(),
-                            isIncomingCall = true,
-                            isVideoCall = true,
                             title = events.firstOrNull()?.event?.roomName.orEmpty(),
                             fromBg = true,
                     )
