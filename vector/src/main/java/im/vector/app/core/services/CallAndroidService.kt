@@ -133,9 +133,6 @@ class CallAndroidService : VectorAndroidService() {
             ACTION_CALL_TERMINATED -> {
                 handleCallTerminated(intent)
             }
-            ACTION_JITSI_CALL_TERMINATED -> {
-                handleJitsiCallTerminated(intent)
-            }
             else -> {
                 handleUnexpectedState(null)
             }
@@ -238,17 +235,6 @@ class CallAndroidService : VectorAndroidService() {
         startActivity(intent)
     }
 
-    private fun showJitsiCallScreen(callId: String, roomId: String) {
-        val intent = MainActivity.jitsiCallIntent(
-                context = this,
-                roomId = roomId,
-                callId = callId,
-        )
-        startActivity(intent)
-        stopSelf()
-        stopForegroundCompat()
-    }
-
     private fun displayOutgoingRingingCallNotification(intent: Intent) {
         val callId = intent.getStringExtra(EXTRA_CALL_ID) ?: ""
         val call = callManager.getCallById(callId) ?: return Unit.also {
@@ -342,11 +328,8 @@ class CallAndroidService : VectorAndroidService() {
         private const val ACTION_OUTGOING_RINGING_CALL = "im.vector.app.core.services.CallService.ACTION_OUTGOING_RINGING_CALL"
         private const val ACTION_ONGOING_CALL = "im.vector.app.core.services.CallService.ACTION_ONGOING_CALL"
         private const val ACTION_CALL_TERMINATED = "im.vector.app.core.services.CallService.ACTION_CALL_TERMINATED"
-        private const val ACTION_JITSI_CALL_TERMINATED = "im.vector.app.core.services.CallService.ACTION_JITSI_CALL_TERMINATED"
 
         private const val EXTRA_CALL_ID = "EXTRA_CALL_ID"
-        private const val EXTRA_SIGNALING_ROOM_ID = "EXTRA_SIGNALING_ROOM_ID"
-        private const val EXTRA_OTHER_USER_ID = "EXTRA_OTHER_USER_ID"
         private const val EXTRA_IS_IN_BG = "EXTRA_IS_IN_BG"
         private const val EXTRA_END_CALL_REJECTED = "EXTRA_END_CALL_REJECTED"
         private const val EXTRA_END_CALL_REASON = "EXTRA_END_CALL_REASON"
@@ -401,18 +384,6 @@ class CallAndroidService : VectorAndroidService() {
                         putExtra(EXTRA_CALL_ID, callId)
                         putExtra(EXTRA_END_CALL_REASON, endCallReason)
                         putExtra(EXTRA_END_CALL_REJECTED, rejected)
-                    }
-            context.startService(intent)
-        }
-
-        fun onJitsiCallTerminated(
-                context: Context,
-                callId: String,
-        ) {
-            val intent = Intent(context, CallAndroidService::class.java)
-                    .apply {
-                        action = ACTION_JITSI_CALL_TERMINATED
-                        putExtra(EXTRA_CALL_ID, callId)
                     }
             context.startService(intent)
         }
