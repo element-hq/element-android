@@ -115,18 +115,9 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
         }
 
         // Shortcuts can't have intents with parcelables
-        fun shortcutIntent(
-                context: Context,
-                roomId: String,
-                intentFlags: Int? = null,
-        ): Intent {
+        fun shortcutIntent(context: Context, roomId: String): Intent {
             return Intent(context, MainActivity::class.java).apply {
                 action = ACTION_ROOM_DETAILS_FROM_SHORTCUT
-
-                intentFlags?.let {
-                    flags = it
-                }
-
                 putExtra(EXTRA_ROOM_ID, roomId)
             }
         }

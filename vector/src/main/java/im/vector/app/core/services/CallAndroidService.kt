@@ -23,14 +23,12 @@ import android.os.Binder
 import android.support.v4.media.session.MediaSessionCompat
 import android.view.KeyEvent
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.app.ServiceCompat
 import androidx.core.content.ContextCompat
 import androidx.media.session.MediaButtonReceiver
 import com.airbnb.mvrx.Mavericks
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.extensions.startForegroundCompat
-import im.vector.app.features.MainActivity
 import im.vector.app.features.call.CallArgs
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.telecom.CallConnection
@@ -217,14 +215,6 @@ class CallAndroidService : VectorAndroidService() {
             notificationManager.notify(MISSED_CALL_TAG, terminatedCall.nativeRoomId.hashCode(), missedCallNotification)
         }
     }
-
-    private fun handleJitsiCallTerminated(intent: Intent) {
-        val callId = intent.getStringExtra(EXTRA_CALL_ID).orEmpty()
-        alertManager.cancelAlert(callId)
-        mediaSession?.isActive = false
-        myStopSelf()
-    }
-
 
     private fun showCallScreen(call: WebRtcCall, mode: String) {
         val intent = VectorCallActivity.newIntent(

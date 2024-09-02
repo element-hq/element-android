@@ -39,7 +39,6 @@ import com.facebook.react.modules.core.PermissionListener
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.platform.VectorBaseActivity
-import im.vector.app.core.services.CallAndroidService
 import im.vector.app.databinding.ActivityJitsiBinding
 import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 import im.vector.lib.strings.CommonStrings
