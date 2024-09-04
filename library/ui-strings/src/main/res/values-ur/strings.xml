@@ -180,4 +180,28 @@
         <item quantity="one">%d خادم کے ف۔ت۔ر (ACL) تبدیلی</item>
         <item quantity="other">%d خادم کے ف۔ت۔ر (ACL) تبدیلیاں</item>
     </plurals>
+    <string name="initial_sync_request_reason_unignored_users">- کچھ صارفین کو غیر نظر انداز کردیا ہے</string>
+    <string name="event_status_sending_message">پیغام بھیج رہا ہے…</string>
+    <string name="notice_room_invite_no_invitee_with_reason_by_you">آپکی دعوت۔ وجہ: %1$s</string>
+    <string name="notice_room_leave_with_reason_by_you">آپ کمرے سے رخصت ہوئے۔ وجہ: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason_by_you">آپ رخصت ہوئے۔ وجہ: %1$s</string>
+    <string name="notice_room_remove_with_reason">%1$s نے %2$s کو ہٹایا۔ وجہ: %3$s</string>
+    <string name="notice_room_invite_no_invitee_with_reason">%1$s کی دعوت۔ وجہ: %2$s</string>
+    <string name="notice_room_invite_with_reason_by_you">آپنے %1$s کو مدعو کیا۔ وجہ: %2$s</string>
+    <string name="notice_room_join_with_reason_by_you">آپ کمرے میں شامل ہوئے۔ وجہ: %1$s</string>
+    <string name="initial_sync_request_content">${app_name} کو صاف کیسہ کرنے کی ضرورت ہے، مندرجہ ذیل وجہ کے سبب:
+\n%s
+\n
+\nغور کریں کہ یہ عمل اطلاقیے کا آغاز نو کریگا اور کچھ وقت لے سکتا ہے۔</string>
+    <string name="event_status_sent_message">پیغام بھیج دیا</string>
+    <string name="notice_room_leave_with_reason">%1$s کمرے سے رخصت ہوئے۔ وجہ: %2$s</string>
+    <string name="notice_direct_room_leave_with_reason">%1$s رخصت ہوئے۔ وجہ: %2$s</string>
+    <string name="notice_room_reject_with_reason_by_you">آپ نے دعوت مسترد کی۔ وجہ: %1$s</string>
+    <string name="notice_room_invite_you_with_reason">%1$s نے آپکو مدعو کیا۔ وجہ: %2$s</string>
+    <string name="notice_room_join_with_reason">%1$s کمرے میں شامل ہوا۔ وجہ: %2$s</string>
+    <string name="notice_room_reject_with_reason">%1$s نے دعوت مسترد کی۔ وجہ: %2$s</string>
+    <string name="notice_room_remove_with_reason_by_you">آپنے %1$s کو ہٹایا۔ وجہ: %2$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$s شامل ہوئے۔ وجہ: %2$s</string>
+    <string name="notice_direct_room_join_with_reason_by_you">آپ شامل ہوئے۔ وجہ: %1$s</string>
+    <string name="notice_room_invite_with_reason">%1$s نے %2$s کو مدعو کیا۔ وجہ: %3$s</string>
 </resources>
