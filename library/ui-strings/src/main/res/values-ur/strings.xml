@@ -210,23 +210,36 @@
     <string name="notice_room_ban_with_reason">%1$s نے %2$s پر پابندی لگا دی۔ وجہ: %3$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason">%1$s نے %2$s کیلئے دعوت قبول کی۔ وجہ: %3$s</string>
     <string name="notice_room_withdraw_with_reason">%1$s نے %2$s کی دعوت واپس لے لی۔ وجہ: %3$s</string>
-    <string name="notice_room_aliases_added_and_removed">%1$s نے %2$s کو شامل اور %3$s کو ہٹا دیا، اس کمرے کے پتوں کے بطور۔</string>
+    <string name="notice_room_aliases_added_and_removed">%1$s نے %2$s کو شامل اور %3$s کو ہٹا دیا، اس کمرے کیلئے پتوں کے بطور۔</string>
     <plurals name="notice_room_aliases_added">
-        <item quantity="one">%1$s نے %2$s کو اس کمرے کے پتے کے طور پر شامل کیا۔</item>
-        <item quantity="other">%1$s نے %2$s کو اس کمرے کے پتوں کے طور پر شامل کیا۔</item>
+        <item quantity="one">%1$s نے %2$s کو اس کمرے کیلئے پتے کے طور پر شامل کیا۔</item>
+        <item quantity="other">%1$s نے %2$s کو اس کمرے کیلئے پتوں کے طور پر شامل کیا۔</item>
     </plurals>
     <string name="notice_room_ban_with_reason_by_you">آپنے %1$s پر پابندی لگا دی۔ وجہ: %2$s</string>
     <plurals name="notice_room_aliases_added_by_you">
-        <item quantity="one">آپنے %1$sکو اس کمرے کے پتے کے طور پر شامل کیا۔</item>
-        <item quantity="other">آپنے %1$sکو اس کمرے کے پتوں کے طور پر شامل کیا۔</item>
+        <item quantity="one">آپنے %1$sکو اس کمرے کیلئے پتے کے طور پر شامل کیا۔</item>
+        <item quantity="other">آپنے %1$sکو اس کمرے کیلئے پتوں کے طور پر شامل کیا۔</item>
     </plurals>
     <string name="notice_room_withdraw_with_reason_by_you">آپنے %1$s کی دعوت واپس لے لی۔ وجہ: %2$s</string>
     <plurals name="notice_room_aliases_removed">
-        <item quantity="one">%1$s نے %2$s کو اس کمرے کے پتے کے بطور ہٹا دیا کیا۔</item>
-        <item quantity="other">%1$s نے %2$s کو اس کمرے کے پتوں کے بطور ہٹا دیا کیا۔</item>
+        <item quantity="one">%1$s نے %2$s کو اس کمرے کیلئے پتے کے بطور ہٹا دیا کیا۔</item>
+        <item quantity="other">%1$s نے %2$s کو اس کمرے کیلئے پتوں کے بطور ہٹا دیا کیا۔</item>
     </plurals>
     <plurals name="notice_room_aliases_removed_by_you">
-        <item quantity="one">آپنے %1$s کو اس کمرے کے پتے کے بطور ہٹا دیا کیا۔</item>
-        <item quantity="other">آپنے %1$s کو اس کمرے کے پتوں کے بطور ہٹا دیا کیا۔</item>
+        <item quantity="one">آپنے %1$s کو اس کمرے کے پتے کیلئے بطور ہٹا دیا کیا۔</item>
+        <item quantity="other">آپنے %1$s کو اس کمرے کے پتوں کیلئے بطور ہٹا دیا کیا۔</item>
+    </plurals>
+    <string name="notice_room_canonical_alias_unset">%1$s نے کمرے کیلئے بنیادی پتہ ہٹا دیا۔</string>
+    <string name="notice_room_canonical_alias_set_by_you">آپنے کمرے کیلئے بنیادی پتہ %1$s معین دیا ہے۔</string>
+    <string name="notice_room_aliases_added_and_removed_by_you">آپنے %1$s کو شامل اور %2$s کو ہٹا دیا، اس کمرے کیلئے پتوں کے بطور۔</string>
+    <string name="notice_room_canonical_alias_unset_by_you">آپنے کمرے کیلئے بنیادی پتہ ہٹا دیا۔</string>
+    <string name="notice_room_canonical_alias_set">%1$s نے کمرے کیلئے بنیادی پتہ %2$s معین دیا ہے۔</string>
+    <plurals name="notice_room_canonical_alias_alternative_added">
+        <item quantity="one">%1$s نے اس کمرے کیلئے متبادل پتہ %2$s شامل کیا۔</item>
+        <item quantity="other">%1$s نے اس کمرے کیلئے متبادل پتے %2$s شامل کیا۔</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added_by_you">
+        <item quantity="one">آپنے اس کمرے کیلئے متبادل پتہ %1$s شامل کیا۔</item>
+        <item quantity="other">آپنے اس کمرے کیلئے متبادل پتے %1$s شامل کیا۔</item>
     </plurals>
 </resources>
