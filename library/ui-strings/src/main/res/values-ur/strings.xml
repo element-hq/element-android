@@ -204,4 +204,29 @@
     <string name="notice_direct_room_join_with_reason">%1$s شامل ہوئے۔ وجہ: %2$s</string>
     <string name="notice_direct_room_join_with_reason_by_you">آپ شامل ہوئے۔ وجہ: %1$s</string>
     <string name="notice_room_invite_with_reason">%1$s نے %2$s کو مدعو کیا۔ وجہ: %3$s</string>
+    <string name="notice_room_unban_with_reason">%1$s نے %2$s پر پابندی ختم کی۔ وجہ: %3$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason_by_you">آپنے %1$s کیلئے دعوت قبول کی۔ وجہ: %2$s</string>
+    <string name="notice_room_unban_with_reason_by_you">آپنے %1$s پر پابندی ختم کی۔ وجہ: %2$s</string>
+    <string name="notice_room_ban_with_reason">%1$s نے %2$s پر پابندی لگا دی۔ وجہ: %3$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason">%1$s نے %2$s کیلئے دعوت قبول کی۔ وجہ: %3$s</string>
+    <string name="notice_room_withdraw_with_reason">%1$s نے %2$s کی دعوت واپس لے لی۔ وجہ: %3$s</string>
+    <string name="notice_room_aliases_added_and_removed">%1$s نے %2$s کو شامل اور %3$s کو ہٹا دیا، اس کمرے کے پتوں کے بطور۔</string>
+    <plurals name="notice_room_aliases_added">
+        <item quantity="one">%1$s نے %2$s کو اس کمرے کے پتے کے طور پر شامل کیا۔</item>
+        <item quantity="other">%1$s نے %2$s کو اس کمرے کے پتوں کے طور پر شامل کیا۔</item>
+    </plurals>
+    <string name="notice_room_ban_with_reason_by_you">آپنے %1$s پر پابندی لگا دی۔ وجہ: %2$s</string>
+    <plurals name="notice_room_aliases_added_by_you">
+        <item quantity="one">آپنے %1$sکو اس کمرے کے پتے کے طور پر شامل کیا۔</item>
+        <item quantity="other">آپنے %1$sکو اس کمرے کے پتوں کے طور پر شامل کیا۔</item>
+    </plurals>
+    <string name="notice_room_withdraw_with_reason_by_you">آپنے %1$s کی دعوت واپس لے لی۔ وجہ: %2$s</string>
+    <plurals name="notice_room_aliases_removed">
+        <item quantity="one">%1$s نے %2$s کو اس کمرے کے پتے کے بطور ہٹا دیا کیا۔</item>
+        <item quantity="other">%1$s نے %2$s کو اس کمرے کے پتوں کے بطور ہٹا دیا کیا۔</item>
+    </plurals>
+    <plurals name="notice_room_aliases_removed_by_you">
+        <item quantity="one">آپنے %1$s کو اس کمرے کے پتے کے بطور ہٹا دیا کیا۔</item>
+        <item quantity="other">آپنے %1$s کو اس کمرے کے پتوں کے بطور ہٹا دیا کیا۔</item>
+    </plurals>
 </resources>
