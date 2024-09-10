@@ -52,7 +52,6 @@ import org.matrix.android.sdk.internal.di.CryptoDatabase
 import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.SessionScope
-import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -62,12 +61,11 @@ private val loggerTag = LoggerTag("RealmCryptoStore", LoggerTag.CRYPTO)
 
 /**
  * In the transition phase, the rust SDK is still using parts to the realm crypto store,
- * this should be removed after full migration. TODO BMA
+ * this should be removed after full migration.
  */
 @SessionScope
 internal class RustCryptoStore @Inject constructor(
         @CryptoDatabase private val realmConfiguration: RealmConfiguration,
-        private val clock: Clock,
         @UserId private val userId: String,
         @DeviceId private val deviceId: String,
         private val myDeviceLastSeenInfoEntityMapper: MyDeviceLastSeenInfoEntityMapper,
