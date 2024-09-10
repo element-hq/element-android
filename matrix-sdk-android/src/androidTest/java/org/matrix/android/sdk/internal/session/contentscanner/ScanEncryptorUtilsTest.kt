@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 New Vector Ltd
+ * Copyright (c) 2024 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,9 @@
 package org.matrix.android.sdk.internal.session.contentscanner
 
 import okio.ByteString.Companion.decodeBase64
+import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldBeEqualTo
+import org.amshove.kluent.shouldNotBe
 import org.junit.Test
 import org.matrix.android.sdk.api.session.crypto.attachments.ElementToDecrypt
 import org.matrix.android.sdk.api.session.crypto.model.EncryptedFileInfo
@@ -35,6 +37,7 @@ class ScanEncryptorUtilsTest {
             iv = "iv",
             sha256 = "sha256"
     )
+    private val aPublicKey = "6n3l15JqsNhpM1OwRIoDCL/3c1B5idcwvy07Y5qFRyw="
     private val aPrivateKey = "CLYwNaeA9d0KHE0DniO1bxGgmNsPJ/pyanF4b4tcK1M="
 
     @Test
@@ -63,6 +66,19 @@ class ScanEncryptorUtilsTest {
     }
 
     @Test
+    fun whenServerKeyIsProvidedTheContentIsEncrypted() {
+        System.loadLibrary("olm")
+        val result = ScanEncryptorUtils.getDownloadBodyAndEncryptIfNeeded(
+                publicServerKey = aPublicKey,
+                mxcUrl = anMxcUrl,
+                elementToDecrypt = anElementToDecrypt
+        )
+        result.file shouldBe null
+        // Note: we cannot check the members of EncryptedBody because they change on each call.
+        result.encryptedBody shouldNotBe null
+    }
+
+    @Test
     fun checkThatTheCodeIsAbleToDecryptContent() {
         System.loadLibrary("olm")
         val clearInfo = ScanEncryptorUtils.getDownloadBodyAndEncryptIfNeeded(
@@ -71,7 +87,6 @@ class ScanEncryptorUtilsTest {
                 elementToDecrypt = anElementToDecrypt
         )
         // Uncomment to get a new encrypted body
-        // val aPublicKey = "6n3l15JqsNhpM1OwRIoDCL/3c1B5idcwvy07Y5qFRyw="
         // val encryptedBody = ScanEncryptorUtils.getDownloadBodyAndEncryptIfNeeded(
         //         publicServerKey = aPublicKey,
         //         mxcUrl = anMxcUrl,
