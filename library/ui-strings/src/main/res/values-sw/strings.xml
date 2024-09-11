@@ -41,4 +41,232 @@
     <string tools:ignore="UnusedResources" name="notice_display_name_changed_from">%1$s badilisha majina yao kuonyesha yalitoka %2$s kwenda %3$s</string>
     <string name="notice_display_name_changed_to">%1$s badilisha majina yao kwenda %2$s</string>
     <string name="notice_display_name_removed">%1$s wameondoa ma jina yao yaliyonyeshwa (yalikuwa %2$s)</string>
+    <string name="notice_room_topic_changed_by_you">Umebadilisha mada kuwa: %1$s</string>
+    <string name="notice_room_avatar_changed">%1$s alibadilisha avatar ya chumba</string>
+    <string name="notice_room_name_changed_by_you">Umebadilisha jina la chumba kuwa: %1$s</string>
+    <string name="notice_placed_video_call">%s alipiga simu ya video.</string>
+    <string name="notice_placed_video_call_by_you">Ulipiga simu ya video.</string>
+    <string name="notice_placed_voice_call">%s alipiga simu</string>
+    <string name="notice_placed_voice_call_by_you">Ulipiga simu.</string>
+    <string name="notice_call_candidates_by_you">Ulituma takwimu ili kusanidi simu.</string>
+    <string name="notice_ended_call_by_you">Ulikata simu.</string>
+    <string name="notice_made_future_room_visibility_by_you">Ulifanya historia ya baadaye ya nafasi ionekane kwa %1$s</string>
+    <string name="notice_room_visibility_invited">Ulifanya ujumbe wa siku zijazo uonekane kwa.</string>
+    <string name="notice_room_visibility_shared">wanachama wote wa chumba.</string>
+    <string name="notice_room_visibility_world_readable">yeyote.</string>
+    <string name="notice_room_update">%s hakijaboreshwa chumba hiki.</string>
+    <string name="notice_direct_room_update">%s imeboreshwa hapa.</string>
+    <string name="notice_direct_room_update_by_you">imeboreshwa hapa.</string>
+    <string name="notice_room_name_changed">%1$s alibadilisha jina la chumba kuwa: %2$s</string>
+    <string name="notice_call_candidates">%s ilituma takwimu ili kusanidi simu.</string>
+    <string name="notice_made_future_room_visibility">%1$s ilifanya historia ya baadaye ya chumba ionekane kwa %2$s</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">Ulifanya ujumbe wa siku zijazo uonekane kwa %1$s</string>
+    <string name="notice_room_visibility_joined">wanachama wote wa chumba, kutoka siku waliojiunga.</string>
+    <string name="notice_room_server_acl_set_title">%s weka ACL za seva za chumba hiki.</string>
+    <string name="notice_room_update_by_you">Umeboresha chamba hiki.</string>
+    <string name="notice_room_server_acl_set_title_by_you">Umeweka ACL za seva za chumba hiki.</string>
+    <string name="notice_room_server_acl_set_banned">• Seva zinazolingana %s zimeungua.</string>
+    <string name="notice_room_avatar_changed_by_you">Ulibadilisha avatar ya chumba</string>
+    <string name="notice_answered_call">%s alijibu simu.</string>
+    <string name="notice_answered_call_by_you">Ulijibu simu.</string>
+    <string name="notice_ended_call">%s alikata simu.</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s ilifanya ujumbe wa siku zijazo kuonekana kwa %2$s</string>
+    <string name="notice_room_server_acl_set_allowed">"•Seva zinazolingana %s  zinaruhusiwa."</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">"• Seva zinazolingana  maandishi ya IP zinaruhusiwa."</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Seva zinazolingana maandishi ya IP haziruhusiwi.</string>
+    <string name="notice_room_server_acl_updated_title_by_you">Ulibadilisha ACL za seva za chumba hiki.</string>
+    <string name="notice_room_server_acl_updated_banned">• Seva zinazolingana %s sasa zimezuiliwa.</string>
+    <string name="notice_room_server_acl_allow_is_empty">🎉 Seva zote zimepigwa marufuku kushiriki! Chumba hiki hakiwezi kutumika tena.</string>
+    <string name="notice_avatar_changed_too">((avatar pia ilibadilishwa)</string>
+    <string name="notice_room_name_removed">%1$s limeondolewa jina la chumba</string>
+    <string name="notice_room_name_removed_by_you">Umeondoa jina la chumba</string>
+    <string name="notice_room_topic_removed">%1$s iliondolewa mada ya chumba</string>
+    <string name="notice_room_topic_removed_by_you">Umeondoa mada ya chumba</string>
+    <string name="notice_room_avatar_removed">%1$s iliondolewa avatar ya chumba</string>
+    <string name="notice_room_avatar_removed_by_you">Umeondoa avatar ya chumba</string>
+    <string name="notice_room_third_party_invite">%1$s alituma mwaliko kwa %2$s kujiunga na chumba</string>
+    <string name="notice_room_third_party_invite_by_you">Ulituma mwaliko kwa %1$s kujiunga na chumba</string>
+    <string name="notice_direct_room_third_party_invite_by_you">Umealika %1$s</string>
+    <string name="notice_room_third_party_revoked_invite">%1$s kubatilisha mwaliko wa %2$s kujiunga na chumba</string>
+    <string name="notice_room_third_party_revoked_invite_by_you">Ulibatilisha mwaliko wa %1$s kujiunga na chumba</string>
+    <string name="notice_room_server_acl_updated_title">%s alibadilisha ACL za seva za chumba hiki.</string>
+    <string name="notice_room_server_acl_updated_no_change">Hakuna mabadiliko.</string>
+    <plurals name="notice_room_server_acl_changes">
+        <item quantity="one">%d seva ACLs hubadilika</item>
+        <item quantity="other">%d seva ACLs zabadilika</item>
+    </plurals>
+    <string name="notice_room_server_acl_updated_was_banned">• Seva zinazolingana %s zimeondolewa kwenye orodha ya marufuku.</string>
+    <string name="notice_room_server_acl_updated_allowed">• Seva zinazolingana %s sasa zinaruhusiwa.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• Seva zinazolingana %s ziliondolewa kwenye orodha ya zilizoruhusiwa.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• Seva zinazolingana maandishi ya IP sasa zinaruhusiwa.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Seva zinazolingana maandishi ya IP sasa zimepigwa marufuku.</string>
+    <string name="notice_direct_room_third_party_invite">%1$swalioalikwa%2$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite">%1$s kubatilisha mwaliko wa %2$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite_by_you">Ulibatilisha mwaliko wa %1$s</string>
+    <string name="notice_room_third_party_registered_invite">%1$s alikubali mwaliko wa %2$s</string>
+    <string name="start_chat">Anzisha Soga</string>
+    <string name="notice_widget_added">%1$s aliongeza %2$s wijeti</string>
+    <string name="notice_widget_added_by_you">Umeongeza %1$s wijeti</string>
+    <string name="notice_widget_removed">%1$s kuondolewa %2$s wijeti</string>
+    <string name="notice_widget_removed_by_you">Umeondoa %1$s wijeti</string>
+    <string name="notice_widget_modified">%1$s imebadilishwa%2$s wijeti</string>
+    <string name="notice_widget_modified_by_you">Umerekebisha %1$s wijeti</string>
+    <string name="power_level_custom">Desturi (%1$d)</string>
+    <string name="power_level_custom_no_value">Desturi</string>
+    <string name="notice_power_level_changed">%1$s ilibadilisha kiwango cha nguvu %2$s.</string>
+    <string name="notice_power_level_diff">%1$s kutoka %2$s kwa %3$s</string>
+    <string name="notice_crypto_unable_to_decrypt">** Imeshindwa kusimbua: %s **</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">Kifaa cha mtumaji hakijatutumia funguo za ujumbe huu.</string>
+    <string name="notice_voice_broadcast_ended">%1$s alimaliza tangazo la sauti.</string>
+    <string name="notice_voice_broadcast_ended_by_you">Umemaliza utangazaji wa sauti.</string>
+    <string name="unable_to_send_message">Imeshindwa kutuma ujumbe</string>
+    <string name="matrix_error">Hitilafu ya matrix</string>
+    <string name="all_chats">Soga zote</string>
+    <string name="create_room">Unda Chumba</string>
+    <string name="change_space">Badilisha Nafasi</string>
+    <string name="explore_rooms">Chunguza Vyumba</string>
+    <string name="a11y_expand_space_children">Panua %s watoto</string>
+    <string name="a11y_collapse_space_children">Kunja %s Matawi</string>
+    <string name="room_error_access_unauthorized">Huruhusiwi kujiunga na chumba hiki</string>
+    <string name="medium_email">Barua pepe</string>
+    <string name="medium_phone_number">Nambari ya simu</string>
+    <string name="room_displayname_room_invite">Mwaliko wa Chumba</string>
+    <string name="room_displayname_two_members">%1$s na %2$s</string>
+    <string name="room_displayname_empty_room">Chumba tupu</string>
+    <string name="room_displayname_empty_room_was">Chumba tupu (Kilikuwa %s)</string>
+    <string name="initial_sync_start_server_computing">Usawazishaji wa awali:
+\nInasubiri jibu la seva…</string>
+    <string name="initial_sync_start_downloading">Usawazishaji wa awali:
+\nInapakua data…</string>
+    <string name="initial_sync_start_importing_account">Usawazishaji wa awali:
+\nInaingiza akaunti…</string>
+    <string name="initial_sync_start_importing_account_crypto">Usawazishaji wa awali:
+\nInaleta crypto</string>
+    <string name="notice_room_third_party_registered_invite_by_you">Ulikubali mwaliko wa %1$s</string>
+    <string name="power_level_admin">Msimamizi</string>
+    <string name="power_level_moderator">Mpatanishi</string>
+    <string name="power_level_default">Chaguomsingi</string>
+    <string name="notice_power_level_changed_by_you">Umebadilisha kiwango cha nguvu cha%1$s.</string>
+    <string name="room_displayname_3_members">%1$s, %2$s na %3$s</string>
+    <string name="room_displayname_4_members">%1$s, %2$s, %3$s na %4$s</string>
+    <plurals name="room_displayname_four_and_more_members">
+        <item quantity="one">%1$s, %2$s, %3$s na %4$d mwingine</item>
+        <item quantity="other">%1$s, %2$s, %3$s na %4$d wengine</item>
+    </plurals>
+    <string name="initial_sync_start_importing_account_rooms">Usawazishaji wa awali:
+\nKuagiza vyumba</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">Usawazishaji wa awali:
+\nInapakia mazungumzo yako
+\nIkiwa umejiunga na vyumba vingi, hii inaweza kuchukua muda</string>
+    <string name="initial_sync_start_importing_account_left_rooms">Usawazishaji wa awali:
+\nInaingiza vyumba vilivyobaki</string>
+    <string name="initial_sync_start_importing_account_data">Usawazishaji wa awali:
+\nInaleta taarifa za akaunti</string>
+    <string name="initial_sync_request_title">Ombi la awali la usawazishaji</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Usawazishaji wa awali:
+\nInaleta vyumba vilivyoalikwa</string>
+    <string name="initial_sync_request_content">${app_name} inahitaji kuondoa kachese ili ziendane na wakati, kwa sababu ifuatayo:
+\n%s
+\n
+\nKumbuka kuwa kitendo hiki kitaanzisha upya programu na inaweza kuchukua muda.</string>
+    <string name="initial_sync_request_reason_unignored_users">- Baadhi ya watumiaji wamepuuzwa</string>
+    <string name="event_status_sent_message">Ujumbe umetumwa</string>
+    <string name="notice_room_invite_no_invitee_with_reason">%1$s\'s mwaliko. sababu: %2$s</string>
+    <string name="notice_room_invite_with_reason_by_you">Umealika %1$s. Sababu: %2$s</string>
+    <string name="notice_room_invite_you_with_reason">%1$s amekualika. Sababu: %2$s</string>
+    <string name="notice_room_join_with_reason">%1$salijiunga na chumba. Sababu: %2$s</string>
+    <string name="notice_room_join_with_reason_by_you">Ulijunga na chumba. Sababu: %1$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$s alijiunga. Sababu: %2$s</string>
+    <string name="notice_direct_room_join_with_reason_by_you">Ulijiunga. Sababu: %1$s</string>
+    <string name="notice_room_leave_with_reason">%1$s kaondoka chumbani. Sababu: %2$s</string>
+    <string name="notice_room_leave_with_reason_by_you">Uliondoka chumbani. Sababu: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason">%1$s Ondoka. Sababu: %2$s</string>
+    <string name="notice_direct_room_leave_with_reason_by_you">Uliondoka. Sababu: %1$s</string>
+    <string name="notice_room_remove_with_reason">%1$s kuondolewa %2$s. Sababu: %3$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Umeondoa %1$s. Sababu: %2$s</string>
+    <string name="notice_room_unban_with_reason">%1$s haijazuiriwa %2$s. Sababu: %3$s</string>
+    <string name="notice_room_unban_with_reason_by_you">Haujazuiriwa %1$s. Sababu: %2$s</string>
+    <string name="notice_room_ban_with_reason">%1$s marufuku %2$s. Sababu: %3$s</string>
+    <string name="event_status_sending_message">Ujumbe unatumwa…</string>
+    <string name="notice_room_invite_no_invitee_with_reason_by_you">Mwaliko wako. Sababu: %1$s</string>
+    <string name="notice_room_invite_with_reason">%1$s Walioalikwa %2$s. Sababu: %3$s</string>
+    <string name="notice_room_reject_with_reason">%1$s alikataa mwaliko. Sababu: %2$s</string>
+    <string name="notice_room_reject_with_reason_by_you">Ulikataa mwaliko. Sababu: %1$s</string>
+    <string name="notice_room_ban_with_reason_by_you">Ulipiga marufuku %1$s. Sababu: %2$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason">%1$s alikubali mwaliko wa %2$s. Sababu: %3$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason_by_you">Ulikubali mwaliko wa %1$s. Sababu: %2$s</string>
+    <string name="notice_room_withdraw_with_reason">%1$salikataa %2$s\'s mwaliko. Sababu: %3$s</string>
+    <string name="notice_room_withdraw_with_reason_by_you">Ulijiondoa %1$s\'s mwaliko. Sababu: %2$s</string>
+    <plurals name="notice_room_aliases_added">
+        <item quantity="one">%1$s aliongeza %2$s kama anwani ya chumba hiki.</item>
+        <item quantity="other">%1$s aliongeza %2$s kama anwani za chumba hiki.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_added_by_you">
+        <item quantity="one">Uliongeza %1$s kama answani ya chumba hiki.</item>
+        <item quantity="other">You added %1$s kama anwani za chumba hiki.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_removed">
+        <item quantity="one">%1$s Uliondoa %2$s kama anwani ya chumba hiki.%1$s uliondoa %2$s kama anwani za chumba hiki.</item>
+        <item quantity="other">%1$s Uliondoa %2$s kama anwani ya chumba hiki.%1$s uliondoa %2$s kama anwani za chumba hiki.</item>
+    </plurals>
+    <string name="notice_room_aliases_added_and_removed_by_you">Umeongeza %1$s na kuondoa %2$s kama anwani za chumba hiki.</string>
+    <string name="notice_room_canonical_alias_unset">%1$s Umeondoa anwani kuu ya chumba hiki.</string>
+    <string name="notice_room_canonical_alias_unset_by_you">Umeondoa anwani kuu ya chumba hiki.</string>
+    <string name="notice_room_canonical_alias_no_change">%1$s Alibadilisha anwani za chumba hiki.</string>
+    <string name="notice_room_aliases_added_and_removed">%1$s aliongeza %2$s na kuondolewa %3$s kama anwani za chumba hiki.</string>
+    <string name="notice_room_canonical_alias_set_by_you">Umeweka anwani kuu ya chumba hiki %1$s.</string>
+    <string name="notice_room_canonical_alias_alternative_changed">%1$s ulibadilisha anwani mbadala za chumba hiki.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed">%1$s ilibadilisha anwani kuu na mbadala za chumba hiki.</string>
+    <string name="notice_room_guest_access_can_join">%1$s imewaruhusu wageni kujiunga na chumba.</string>
+    <string name="notice_room_guest_access_can_join_by_you">Umeruhusu wageni kujiunga na chumba.</string>
+    <string name="notice_room_canonical_alias_set">%1$s weka anwani kuu ya chumba hiki %2$s.</string>
+    <plurals name="notice_room_canonical_alias_alternative_removed">
+        <item quantity="one">%1$s umeondoa anwani mbadala %2$s kwa chumba hiki.</item>
+        <item quantity="other">%1$s iliondoa anwani mbadala %2$s kwa chumba hiki.</item>
+    </plurals>
+    <string name="notice_room_canonical_alias_alternative_changed_by_you">Ulibadilisha anwani mbadala za chumba hiki.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">Alibadilisha anwani kuu na mbadala za chumba hiki.</string>
+    <string name="notice_room_canonical_alias_no_change_by_you">Ulibadilisha anwani za chumba hiki.</string>
+    <plurals name="notice_room_canonical_alias_alternative_added_by_you">
+        <item quantity="one">Umeongeza anwani mbadala%1$s kwa chumba hiki.</item>
+        <item quantity="other">Umeongeza anwani mbadala %1$s kwa chumba hiki.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added">
+        <item quantity="one">%1$s aliongeza anwani mbadala%2$s kwa chumba hiki.</item>
+        <item quantity="other">%1$s aliongeza anwani mbadala %2$s kwa chumba hiki.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_removed_by_you">
+        <item quantity="one">Umeondoa anwani mbadala %1$s kwa chumba hiki.</item>
+        <item quantity="other">Umeziondoa anwani mbadala %1$s kwa chumba hiki.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_removed_by_you">
+        <item quantity="one">Umeondoa %1$s kama anwani ya chumba hiki.</item>
+        <item quantity="other">You removed %1$s kama anwani za chumba hiki.</item>
+    </plurals>
+    <string name="notice_direct_room_guest_access_can_join">%1$s imeruhusu wageni kujiunga hapa.</string>
+    <string name="notice_direct_room_guest_access_can_join_by_you">Umeruhusu wageni kujiunga hapa.</string>
+    <string name="notice_end_to_end_ok">%1$s umewasha usimbaji fiche kutoka mwanzo hadi mwisho.</string>
+    <string name="dark_theme">Mandhari ya Giza</string>
+    <string name="black_theme">Mandhari Nyeusi</string>
+    <string name="notification_listening_for_notifications">Sikiliza arifa</string>
+    <string name="notification_noisy_notifications">Arifa za kelele</string>
+    <string name="notification_silent_notifications">Arifa za kimya</string>
+    <string name="title_activity_settings">Mipangilio</string>
+    <string name="title_activity_bug_report">Ripoti ya hitilafu</string>
+    <string name="title_activity_choose_sticker">Tuma kibandiko</string>
+    <string name="title_activity_keys_backup_setup">Hifadhi Nakala muhimu</string>
+    <string name="title_activity_keys_backup_restore">Tumia Nakala Muhimu Ulizohifadhi</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Hifadhi Nakala ya Ufunguo Salama inapaswa kutumika kwenye vipindi vyako vyote ili kuepuka kupoteza ufikiaji wa ujumbe wako uliosimbwa.</string>
+    <string name="sign_out_bottom_sheet_warning_no_backup">Utapoteza ujumbe wako uliosimbwa kwa njia fiche ukiondoka kwenye akaunti sasa</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">Uhifadhi wa ufunguo unaendelea. Ukiondoka kwenye akaunti sasa utapoteza ufikiaji wa barua pepe zako zilizosimbwa.</string>
+    <string name="notice_room_guest_access_forbidden">%1$s imewazuia wageni kujiunga na chumba.</string>
+    <string name="notice_room_guest_access_forbidden_by_you">Umewazuia wageni kujiunga na chumba.</string>
+    <string name="notice_direct_room_guest_access_forbidden">%1$s imewazuia wageni kujiunga na chumba.</string>
+    <string name="notice_direct_room_guest_access_forbidden_by_you">Umewazuia wageni kujiunga na chumba.</string>
+    <string name="notice_end_to_end_ok_by_you">Umewasha usimbaji fiche kutoka mwanzo hadi mwisho.</string>
+    <string name="notice_end_to_end_unknown_algorithm">%1$s umewasha usimbaji fiche kutoka mwanzo hadi mwisho (algorithm isiyotambulika %2$s).</string>
+    <string name="notice_end_to_end_unknown_algorithm_by_you">Umewasha usimbaji fiche kutoka mwanzo hadi mwisho (algorithm isiyotambulika %1$s).</string>
+    <string name="system_theme">Chaguomsingi ya Mfumo</string>
+    <string name="light_theme">Mandhari Nyepesi</string>
+    <string name="notification_listening_for_events">Kusikiliza matukio</string>
 </resources>

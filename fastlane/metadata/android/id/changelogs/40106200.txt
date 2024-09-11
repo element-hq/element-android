@@ -1,0 +1,2 @@
+Perubahan utama dalam versi ini: duluna media terautentikasi.
+Catatan perubahan lanjutan: https://github.com/element-hq/element-android/releases
