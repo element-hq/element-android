@@ -121,7 +121,8 @@ internal class PrepareToEncryptUseCase @Inject constructor(
                     HistoryVisibility.INVITED
                 } else {
                     HistoryVisibility.JOINED
-                }
+                },
+                errorOnVerifiedUserProblem = false,
         )
         measureTimeMillis {
             keyShareLock.withLock {
