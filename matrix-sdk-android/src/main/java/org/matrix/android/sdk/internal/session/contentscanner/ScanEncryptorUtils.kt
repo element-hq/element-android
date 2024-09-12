@@ -26,6 +26,7 @@ import org.matrix.rustcomponents.sdk.crypto.PkEncryption
 
 internal object ScanEncryptorUtils {
 
+    @Throws
     fun getDownloadBodyAndEncryptIfNeeded(publicServerKey: String?, mxcUrl: String, elementToDecrypt: ElementToDecrypt): DownloadBody {
         // TODO, upstream refactoring changed the object model here...
         // it's bad we have to recreate and use hardcoded values
@@ -43,6 +44,7 @@ internal object ScanEncryptorUtils {
                 v = "v2"
         )
         return if (publicServerKey != null) {
+            // Note: fromBase64 can throw Exception
             val pkEncryption = PkEncryption.fromBase64(key = publicServerKey)
             val pkMessage = pkEncryption.encrypt(DownloadBody(encryptedInfo).toCanonicalJson())
             DownloadBody(

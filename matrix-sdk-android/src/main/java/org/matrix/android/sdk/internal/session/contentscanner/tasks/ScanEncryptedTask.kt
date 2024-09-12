@@ -42,12 +42,12 @@ internal class DefaultScanEncryptedTask @Inject constructor(
 
     override suspend fun execute(params: ScanEncryptedTask.Params): ScanResponse {
         val mxcUrl = params.mxcUrl
-        val dlBody = ScanEncryptorUtils.getDownloadBodyAndEncryptIfNeeded(params.publicServerKey, params.mxcUrl, params.encryptedInfo)
 
         val scannerUrl = contentScannerStore.getScannerUrl()
         contentScannerStore.updateStateForContent(params.mxcUrl, ScanState.IN_PROGRESS, scannerUrl)
 
         try {
+            val dlBody = ScanEncryptorUtils.getDownloadBodyAndEncryptIfNeeded(params.publicServerKey, params.mxcUrl, params.encryptedInfo)
             val api = contentScannerApiProvider.contentScannerApi ?: throw IllegalArgumentException()
             val executeRequest = executeRequest<ScanResponse>(null) {
                 api.scanFile(dlBody)
