@@ -21,7 +21,8 @@ import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
 internal class MigrateCryptoTo024(realm: DynamicRealm) : RealmMigrator(realm, 24) {
     /**
-     * Delete the whole DB, except tables that are still used to store data:
+     * Delete the whole DB, except tables that are still used to store data.
+     * Keep:
      * - CryptoMetadataEntity
      * - MyDeviceLastSeenInfoEntity
      * - CryptoRoomEntity (but remove unused member 'outboundSessionInfo: OutboundGroupSessionInfoEntity')

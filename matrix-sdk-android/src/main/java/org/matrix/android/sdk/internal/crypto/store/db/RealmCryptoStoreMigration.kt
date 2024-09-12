@@ -28,8 +28,7 @@ import javax.inject.Inject
  *  4, 5, 6, 7, 8, 9: migrations from RiotX (which was previously 1, 2, 3, 4, 5, 6).
  *  24: Delete nearly all the crypto DB
  */
-internal class RealmCryptoStoreMigration @Inject constructor(
-) : MatrixRealmMigration(
+internal class RealmCryptoStoreMigration @Inject constructor() : MatrixRealmMigration(
         dbName = "Crypto",
         schemaVersion = 24L,
 ) {
