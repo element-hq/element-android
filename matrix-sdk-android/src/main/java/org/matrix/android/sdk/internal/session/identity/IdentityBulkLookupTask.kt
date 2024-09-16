@@ -30,7 +30,6 @@ import org.matrix.android.sdk.internal.session.identity.model.IdentityLookUpPara
 import org.matrix.android.sdk.internal.session.identity.model.IdentityLookUpResponse
 import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.base64ToBase64Url
-import java.security.MessageDigest
 import java.util.Locale
 import javax.inject.Inject
 
@@ -43,7 +42,8 @@ internal interface IdentityBulkLookupTask : Task<IdentityBulkLookupTask.Params, 
 internal class DefaultIdentityBulkLookupTask @Inject constructor(
         private val identityApiProvider: IdentityApiProvider,
         private val identityStore: IdentityStore,
-        @UserId private val userId: String
+        @UserId private val userId: String,
+        private val sha256Converter: Sha256Converter,
 ) : IdentityBulkLookupTask {
 
     override suspend fun execute(params: IdentityBulkLookupTask.Params): List<FoundThreePid> {
@@ -120,7 +120,9 @@ internal class DefaultIdentityBulkLookupTask @Inject constructor(
     private fun getHashedAddresses(threePids: List<ThreePid>, pepper: String): List<String> {
         return threePids.map { threePid ->
             base64ToBase64Url(
-                    (threePid.value.lowercase(Locale.ROOT) + " " + threePid.toMedium() + " " + pepper).toSha256()
+                    sha256Converter.convertToSha256(
+                            str = threePid.value.lowercase(Locale.ROOT) + " " + threePid.toMedium() + " " + pepper
+                    )
             )
         }
     }
@@ -138,12 +140,5 @@ internal class DefaultIdentityBulkLookupTask @Inject constructor(
                     lookupData.identityLookUpResponse.mappings[hashedAddress] ?: error("")
             )
         }
-    }
-
-    private val sha256 by lazy { MessageDigest.getInstance("SHA-256") }
-
-    @OptIn(ExperimentalStdlibApi::class)
-    private fun String.toSha256(): String {
-        return sha256.digest(toByteArray()).toHexString()
     }
 }

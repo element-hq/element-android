@@ -233,6 +233,7 @@ dependencies {
     testImplementation 'net.lachlanmckee:timber-junit-rule:1.0.1'
     // Transitively required for mocking realm as monarchy doesn't expose Rx
     testImplementation libs.rx.rxKotlin
+    testImplementation libs.tests.robolectric
 
     kaptAndroidTest libs.dagger.daggerCompiler
     androidTestImplementation libs.androidx.testCore
