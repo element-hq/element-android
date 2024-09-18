@@ -447,4 +447,34 @@
     <string name="username">صارف نام</string>
     <string name="call_select_sound_device">آلۂ آواز منتخب کریں</string>
     <string name="sound_device_phone">ہاتف</string>
+    <string name="sound_device_wireless_headset">لاسلکی سماعہ</string>
+    <string name="call_switch_camera">تصویرگر بدلیں</string>
+    <string name="option_send_files">مسلیں بھیجیں</string>
+    <string name="call_camera_front">سامنے</string>
+    <string name="option_take_photo_video">تصویر یا ویڈیو لیں</string>
+    <string name="auth_invalid_email">یہ برقی ڈاک پتہ درست نہیں لگ رہا</string>
+    <string name="auth_forgot_password">رمز عبور بھول گئے؟</string>
+    <string name="auth_login">داخل ہوں</string>
+    <string name="auth_submit">جمع کرائیں</string>
+    <string name="sound_device_headset">سماعہ</string>
+    <string name="call_camera_back">پچھلا</string>
+    <string name="auth_email_already_defined">یہ برقی ڈاک پتہ پہلے سے ہی معرف ہے۔</string>
+    <string name="auth_msisdn_already_defined">یہ رقم ہاتف پہلے سے ہی معرف ہے۔</string>
+    <string name="option_send_sticker">برچسب کریں</string>
+    <string name="no_sticker_application_dialog_content">آپ کے پاس کوئی بستۂ برچسب فعال نہیں ہے۔
+\n
+\nاب کچھ شامل کریں؟</string>
+    <string name="error_no_external_application_found">معذرت، اس عمل کو مکمل کرنے کیلئے کوئی بیرونی اطلاقیہ۔</string>
+    <string name="call_format_turn_hd_off">HD بند کریں</string>
+    <string name="call_format_turn_hd_on">HD چالو کریں</string>
+    <string name="call_stop_screen_sharing">اشتراک نمائش روکیں</string>
+    <string name="use_as_default_and_do_not_ask_again">بطور معین استعمال کریں اور دوبارہ نہ پوچھیں</string>
+    <string name="option_take_video">ویڈیو لیں</string>
+    <string name="option_always_ask">ہمیشہ پوچھیں</string>
+    <string name="auth_invalid_login_param">غلط صارف نام اور/یا رمز عبور</string>
+    <string name="sound_device_speaker">مکبر صوت</string>
+    <string name="call_start_screen_sharing">نمائش اشتراک کریں</string>
+    <string name="auth_login_sso">یکباری دخول سے داخل ہوئیں</string>
+    <string name="option_take_photo">تصویر لیں</string>
+    <string name="auth_recaptcha_message">یہ منزلی خادم یقینی بنانا چاہے گا کہ آپ روبہ نہیں ہیں</string>
 </resources>
