@@ -28,7 +28,7 @@ The generated maven repository is then host in the project https://github.com/el
 
 #### Jitsi version
 
-Update the script `./tools/jitsi/build_jisti_libs.sh` with the tag of the project `https://github.com/jitsi/jitsi-meet`.
+Update the script `./tools/jitsi/build_jitsi_libs.sh` with the tag of the project `https://github.com/jitsi/jitsi-meet`.
 
 Latest tag can be found from this page: https://github.com/jitsi/jitsi-meet-release-notes/blob/master/CHANGELOG-MOBILE-SDKS.md
 
@@ -39,7 +39,7 @@ Currently we are building the version with the tag `mobile-sdk-10.2.0`.
 At the root of the Element Android, run the following script:
 
 ```shell script
-./tools/jitsi/build_jisti_libs.sh
+./tools/jitsi/build_jitsi_libs.sh
 ```
 
 It will build the Jitsi Meet Android library and put every generated files in the folder `/tmp/jitsi`
