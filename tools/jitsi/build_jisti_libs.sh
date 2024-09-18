@@ -26,7 +26,7 @@ export LIBRE_BUILD=true
 cd jitsi-meet
 
 # Get the latest version from the changelog: https://github.com/jitsi/jitsi-meet-release-notes/blob/master/CHANGELOG-MOBILE-SDKS.md
-git checkout android-sdk-8.1.1
+git checkout mobile-sdk-10.2.0
 
 echo
 echo "##################################################"
