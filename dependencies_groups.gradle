@@ -72,6 +72,7 @@ ext.groups = [
                         'com.facebook.flipper',
                         'com.facebook.fresco',
                         'com.facebook.infer.annotation',
+                        'com.facebook.react',
                         'com.facebook.soloader',
                         'com.facebook.stetho',
                         'com.facebook.yoga',
