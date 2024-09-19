@@ -1,0 +1,2 @@
+Modifiche principali in questa versione: supporto per media autenticati.
+Cronologia completa: https://github.com/element-hq/element-android/releases
