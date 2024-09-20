@@ -539,6 +539,19 @@ class NotificationUtils @Inject constructor(
     }
 
     /**
+     * Creates a notification indicating that the microphone is currently being accessed by the application.
+     */
+    fun buildMicrophoneAccessNotification(): Notification {
+        return NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
+                .setContentTitle(stringProvider.getString(CommonStrings.microphone_in_use_title))
+                .setSmallIcon(R.drawable.ic_call_answer)
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setColor(ThemeUtils.getColor(context, android.R.attr.colorPrimary))
+                .setCategory(NotificationCompat.CATEGORY_CALL)
+                .build()
+    }
+
+    /**
      * Creates a notification that indicates the application is initializing.
      */
     fun buildStartAppNotification(): Notification {

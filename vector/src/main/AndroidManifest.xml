@@ -395,6 +395,13 @@
             android:foregroundServiceType="mediaProjection"
             tools:targetApi="Q" />
 
+        <service
+            android:name=".features.call.audio.MicrophoneAccessService"
+            android:exported="false"
+            android:foregroundServiceType="microphone"
+            android:permission="android.permission.FOREGROUND_SERVICE_MICROPHONE">
+        </service>
+
         <!-- Receivers -->
 
         <receiver

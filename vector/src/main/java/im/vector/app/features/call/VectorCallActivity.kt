@@ -22,6 +22,7 @@ import android.app.PictureInPictureParams
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
@@ -57,6 +58,7 @@ import im.vector.app.core.utils.PERMISSIONS_FOR_VIDEO_IP_CALL
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.databinding.ActivityCallBinding
+import im.vector.app.features.call.audio.MicrophoneAccessService
 import im.vector.app.features.call.dialpad.CallDialPadBottomSheet
 import im.vector.app.features.call.dialpad.DialPadFragment
 import im.vector.app.features.call.transfer.CallTransferActivity
@@ -243,6 +245,33 @@ class VectorCallActivity :
             }
             else -> false
         }
+    }
+
+    private fun startMicrophoneService() {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, android.Manifest.permission.FOREGROUND_SERVICE_MICROPHONE) == PackageManager.PERMISSION_GRANTED) {
+            Timber.tag(loggerTag.value).d("Starting MicrophoneAccessService.")
+            val intent = Intent(this, MicrophoneAccessService::class.java)
+            ContextCompat.startForegroundService(this, intent)
+        } else {
+            Timber.tag(loggerTag.value).w("Permissions not granted. Cannot start MicrophoneAccessService.")
+        }
+    }
+
+    private fun stopMicrophoneService() {
+        Timber.tag(loggerTag.value).d("Stopping MicrophoneAccessService (if needed).")
+        val intent = Intent(this, MicrophoneAccessService::class.java)
+        stopService(intent)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        startMicrophoneService()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        stopMicrophoneService()
     }
 
     override fun onDestroy() {
