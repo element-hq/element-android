@@ -1175,9 +1175,9 @@
 
     <!-- room settings : alias -->
     <string name="room_settings_alias_title">Room addresses</string>
-    <string name="room_settings_alias_subtitle">See and managed addresses of this room, and its visibility in the room directory.</string>
+    <string name="room_settings_alias_subtitle">See and manage addresses of this room, and its visibility in the room directory.</string>
     <string name="space_settings_alias_title">Space addresses</string>
-    <string name="space_settings_alias_subtitle">See and managed addresses of this space.</string>
+    <string name="space_settings_alias_subtitle">See and manage addresses of this space.</string>
 
     <string name="room_alias_published_alias_title">Published Addresses</string>
     <string name="room_alias_published_alias_subtitle">Published addresses can be used by anyone on any server to join your room. To publish an address, it needs to be set as a local address first.</string>
