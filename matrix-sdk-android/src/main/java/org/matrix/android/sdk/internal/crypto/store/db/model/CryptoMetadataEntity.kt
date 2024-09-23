@@ -18,9 +18,6 @@ package org.matrix.android.sdk.internal.crypto.store.db.model
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
-import org.matrix.android.sdk.internal.crypto.store.db.deserializeFromRealm
-import org.matrix.android.sdk.internal.crypto.store.db.serializeForRealm
-import org.matrix.olm.OlmAccount
 
 internal open class CryptoMetadataEntity(
         // The current user id.
@@ -53,15 +50,4 @@ internal open class CryptoMetadataEntity(
         var keyBackupRecoveryKeyVersion: String? = null
 
 //        var crossSigningInfoEntity: CrossSigningInfoEntity? = null
-) : RealmObject() {
-
-    // Deserialize data
-    fun getOlmAccount(): OlmAccount? {
-        return deserializeFromRealm(olmAccountData)
-    }
-
-    // Serialize data
-    fun putOlmAccount(olmAccount: OlmAccount?) {
-        olmAccountData = serializeForRealm(olmAccount)
-    }
-}
+) : RealmObject()

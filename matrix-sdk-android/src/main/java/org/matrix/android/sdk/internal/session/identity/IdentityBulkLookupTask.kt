@@ -22,7 +22,6 @@ import org.matrix.android.sdk.api.session.identity.FoundThreePid
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.identity.toMedium
-import org.matrix.android.sdk.internal.crypto.tools.withOlmUtility
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.identity.data.IdentityStore
@@ -43,7 +42,8 @@ internal interface IdentityBulkLookupTask : Task<IdentityBulkLookupTask.Params, 
 internal class DefaultIdentityBulkLookupTask @Inject constructor(
         private val identityApiProvider: IdentityApiProvider,
         private val identityStore: IdentityStore,
-        @UserId private val userId: String
+        @UserId private val userId: String,
+        private val sha256Converter: Sha256Converter,
 ) : IdentityBulkLookupTask {
 
     override suspend fun execute(params: IdentityBulkLookupTask.Params): List<FoundThreePid> {
@@ -118,15 +118,12 @@ internal class DefaultIdentityBulkLookupTask @Inject constructor(
     }
 
     private fun getHashedAddresses(threePids: List<ThreePid>, pepper: String): List<String> {
-        return withOlmUtility { olmUtility ->
-            threePids.map { threePid ->
-                base64ToBase64Url(
-                        olmUtility.sha256(
-                                threePid.value.lowercase(Locale.ROOT) +
-                                        " " + threePid.toMedium() + " " + pepper
-                        )
-                )
-            }
+        return threePids.map { threePid ->
+            base64ToBase64Url(
+                    sha256Converter.convertToSha256(
+                            str = threePid.value.lowercase(Locale.ROOT) + " " + threePid.toMedium() + " " + pepper
+                    )
+            )
         }
     }
 

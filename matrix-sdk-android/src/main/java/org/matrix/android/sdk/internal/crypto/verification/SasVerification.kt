@@ -34,6 +34,7 @@ import org.matrix.rustcomponents.sdk.crypto.CryptoStoreException
 import org.matrix.rustcomponents.sdk.crypto.Sas
 import org.matrix.rustcomponents.sdk.crypto.SasListener
 import org.matrix.rustcomponents.sdk.crypto.SasState
+import timber.log.Timber
 
 /** Class representing a short auth string verification flow. */
 internal class SasVerification @AssistedInject constructor(
@@ -72,6 +73,11 @@ internal class SasVerification @AssistedInject constructor(
 
     override fun state(): SasTransactionState {
         return when (val state = innerState) {
+            SasState.Created -> {
+                // Note: this does not seem to be used, but emit a warning just in case.
+                Timber.w("SasState.Created received")
+                SasTransactionState.None
+            }
             SasState.Started -> SasTransactionState.SasStarted
             SasState.Accepted -> SasTransactionState.SasAccepted
             is SasState.KeysExchanged -> {

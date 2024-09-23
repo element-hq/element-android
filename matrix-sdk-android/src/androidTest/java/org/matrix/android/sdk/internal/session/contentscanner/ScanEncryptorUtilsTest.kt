@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.internal.session.contentscanner
 
-import okio.ByteString.Companion.decodeBase64
 import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldNotBe
@@ -24,11 +23,7 @@ import org.junit.Test
 import org.matrix.android.sdk.api.session.crypto.attachments.ElementToDecrypt
 import org.matrix.android.sdk.api.session.crypto.model.EncryptedFileInfo
 import org.matrix.android.sdk.api.session.crypto.model.EncryptedFileKey
-import org.matrix.android.sdk.internal.crypto.tools.withOlmDecryption
-import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.session.contentscanner.model.DownloadBody
-import org.matrix.android.sdk.internal.session.contentscanner.model.EncryptedBody
-import org.matrix.olm.OlmPkMessage
 
 class ScanEncryptorUtilsTest {
     private val anMxcUrl = "mxc://matrix.org/123456"
@@ -67,7 +62,6 @@ class ScanEncryptorUtilsTest {
 
     @Test
     fun whenServerKeyIsProvidedTheContentIsEncrypted() {
-        System.loadLibrary("olm")
         val result = ScanEncryptorUtils.getDownloadBodyAndEncryptIfNeeded(
                 publicServerKey = aPublicKey,
                 mxcUrl = anMxcUrl,
@@ -78,6 +72,8 @@ class ScanEncryptorUtilsTest {
         result.encryptedBody shouldNotBe null
     }
 
+    // Note: PkDecryption is not exposed in the FFI layer, so we cannot use this test.
+    /*
     @Test
     fun checkThatTheCodeIsAbleToDecryptContent() {
         System.loadLibrary("olm")
@@ -121,4 +117,5 @@ class ScanEncryptorUtilsTest {
                 .fromJson(result)
         parseResult shouldBeEqualTo clearInfo
     }
+     */
 }

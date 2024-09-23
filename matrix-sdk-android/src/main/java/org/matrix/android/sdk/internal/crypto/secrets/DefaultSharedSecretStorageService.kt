@@ -20,7 +20,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.crypto.SSSS_ALGORITHM_AES_HMAC_SHA2
-import org.matrix.android.sdk.api.crypto.SSSS_ALGORITHM_CURVE25519_AES_SHA2
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.accountdata.SessionAccountDataService
@@ -44,9 +43,7 @@ import org.matrix.android.sdk.api.util.toBase64NoPadding
 import org.matrix.android.sdk.internal.crypto.SecretShareManager
 import org.matrix.android.sdk.internal.crypto.keysbackup.generatePrivateKeyWithPassword
 import org.matrix.android.sdk.internal.crypto.tools.HkdfSha256
-import org.matrix.android.sdk.internal.crypto.tools.withOlmDecryption
 import org.matrix.android.sdk.internal.di.UserId
-import org.matrix.olm.OlmPkMessage
 import java.security.SecureRandom
 import javax.crypto.Cipher
 import javax.crypto.Mac
@@ -321,22 +318,7 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
                 ?: throw SharedSecretStorageError.ParsingError
 
         val algorithm = key.keyInfo.content
-        if (SSSS_ALGORITHM_CURVE25519_AES_SHA2 == algorithm.algorithm) {
-            val keySpec = secretKey as? RawBytesKeySpec ?: throw SharedSecretStorageError.BadKeyFormat
-            return withContext(cryptoCoroutineScope.coroutineContext + coroutineDispatchers.computation) {
-                // decrypt from recovery key
-                withOlmDecryption { olmPkDecryption ->
-                    olmPkDecryption.setPrivateKey(keySpec.privateKey)
-                    olmPkDecryption.decrypt(OlmPkMessage()
-                            .apply {
-                                mCipherText = secretContent.ciphertext
-                                mEphemeralKey = secretContent.ephemeral
-                                mMac = secretContent.mac
-                            }
-                    )
-                }
-            }
-        } else if (SSSS_ALGORITHM_AES_HMAC_SHA2 == algorithm.algorithm) {
+        if (SSSS_ALGORITHM_AES_HMAC_SHA2 == algorithm.algorithm) {
             val keySpec = secretKey as? RawBytesKeySpec ?: throw SharedSecretStorageError.BadKeyFormat
             return withContext(cryptoCoroutineScope.coroutineContext + coroutineDispatchers.computation) {
                 decryptAesHmacSha2(keySpec, name, secretContent)
@@ -366,8 +348,7 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
         val keyInfo = (keyInfoResult as? KeyInfoResult.Success)?.keyInfo
                 ?: return IntegrityResult.Error(SharedSecretStorageError.UnknownKey(keyId ?: ""))
 
-        if (keyInfo.content.algorithm != SSSS_ALGORITHM_AES_HMAC_SHA2 &&
-                keyInfo.content.algorithm != SSSS_ALGORITHM_CURVE25519_AES_SHA2) {
+        if (keyInfo.content.algorithm != SSSS_ALGORITHM_AES_HMAC_SHA2) {
             // Unsupported algorithm
             return IntegrityResult.Error(
                     SharedSecretStorageError.UnsupportedAlgorithm(keyInfo.content.algorithm ?: "")

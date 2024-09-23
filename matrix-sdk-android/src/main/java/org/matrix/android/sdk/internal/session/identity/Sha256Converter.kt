@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2024 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.crypto.store.db.model
+package org.matrix.android.sdk.internal.session.identity
 
-import io.realm.RealmObject
-import io.realm.annotations.Index
+import org.matrix.android.sdk.api.util.toBase64NoPadding
+import java.security.MessageDigest
+import javax.inject.Inject
 
-internal open class AuditTrailEntity(
-        var ageLocalTs: Long? = null,
-        @Index var type: String? = null,
-        var contentJson: String? = null
-) : RealmObject() {
-    companion object
+class Sha256Converter @Inject constructor() {
+    private val sha256 by lazy { MessageDigest.getInstance("SHA-256") }
+
+    fun convertToSha256(str: String): String {
+        return sha256.digest(str.toByteArray()).toBase64NoPadding()
+    }
 }

@@ -504,15 +504,8 @@ internal class RustCryptoService @Inject constructor(
                 val content = event.content?.toModel<EncryptedEventContent>() ?: throw mxCryptoError
                 val roomId = event.roomId
                 val sessionId = content.sessionId
-                val senderKey = content.senderKey
                 if (roomId != null && sessionId != null) {
-                    // try to perform a lazy migration from legacy store
-                    val legacy = tryOrNull("Failed to access legacy crypto store") {
-                        cryptoStore.getInboundGroupSession(sessionId, senderKey.orEmpty())
-                    }
-                    if (legacy == null || olmMachine.importRoomKey(legacy).isFailure) {
-                        perSessionBackupQueryRateLimiter.tryFromBackupIfPossible(sessionId, roomId)
-                    }
+                    perSessionBackupQueryRateLimiter.tryFromBackupIfPossible(sessionId, roomId)
                 }
             }
             throw mxCryptoError
@@ -851,9 +844,9 @@ internal class RustCryptoService @Inject constructor(
     override fun removeSessionListener(listener: NewSessionListener) {
         megolmSessionImportManager.removeListener(listener)
     }
-/* ==========================================================================================
- * DEBUG INFO
- * ========================================================================================== */
+    /* ==========================================================================================
+     * DEBUG INFO
+     * ========================================================================================== */
 
     override fun toString(): String {
         return "DefaultCryptoService of $myUserId ($deviceId)"
