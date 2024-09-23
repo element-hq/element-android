@@ -1,0 +1,2 @@
+Main changes in this version: crypto sdk upgrade.
+Full changelog: https://github.com/element-hq/element-android/releases

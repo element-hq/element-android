@@ -18,7 +18,6 @@ package org.matrix.android.sdk.api.session.crypto
 
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
-import org.matrix.olm.OlmException
 
 /**
  * Represents a crypto error response.
@@ -33,8 +32,6 @@ sealed class MXCryptoError : Throwable() {
              */
             val detailedErrorDescription: String? = null
     ) : MXCryptoError()
-
-    data class OlmError(val olmException: OlmException) : MXCryptoError()
 
     data class UnknownDevice(val deviceList: MXUsersDevicesMap<CryptoDeviceInfo>) : MXCryptoError()
 

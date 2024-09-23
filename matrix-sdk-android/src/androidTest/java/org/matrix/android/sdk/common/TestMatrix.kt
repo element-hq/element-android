@@ -36,7 +36,6 @@ import org.matrix.android.sdk.internal.network.ApiInterceptor
 import org.matrix.android.sdk.internal.network.UserAgentHolder
 import org.matrix.android.sdk.internal.util.BackgroundDetectionObserver
 import org.matrix.android.sdk.internal.worker.MatrixWorkerFactory
-import org.matrix.olm.OlmManager
 import java.util.concurrent.Executors
 import javax.inject.Inject
 
@@ -49,7 +48,6 @@ internal class TestMatrix(context: Context, matrixConfiguration: MatrixConfigura
     @Inject internal lateinit var rawService: RawService
     @Inject internal lateinit var userAgentHolder: UserAgentHolder
     @Inject internal lateinit var backgroundDetectionObserver: BackgroundDetectionObserver
-    @Inject internal lateinit var olmManager: OlmManager
     @Inject internal lateinit var sessionManager: SessionManager
     @Inject internal lateinit var homeServerHistoryService: HomeServerHistoryService
     @Inject internal lateinit var apiInterceptor: ApiInterceptor

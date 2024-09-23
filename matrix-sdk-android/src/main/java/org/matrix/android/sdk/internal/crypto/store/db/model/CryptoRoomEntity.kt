@@ -26,10 +26,6 @@ internal open class CryptoRoomEntity(
         var blacklistUnverifiedDevices: Boolean = false,
         // Determines whether or not room history should be shared on new member invites
         var shouldShareHistory: Boolean = false,
-        // Store the current outbound session for this room,
-        // to avoid re-create and re-share at each startup (if rotation not needed..)
-        // This is specific to megolm but not sure how to model it better
-        var outboundSessionInfo: OutboundGroupSessionInfoEntity? = null,
         // a security to ensure that a room will never revert to not encrypted
         // even if a new state event with empty encryption, or state is reset somehow
         var wasEncryptedOnce: Boolean? = false,

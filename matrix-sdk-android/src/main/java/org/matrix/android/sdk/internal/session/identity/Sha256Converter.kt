@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2024 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.login.qr
+package org.matrix.android.sdk.internal.session.identity
 
-import com.airbnb.mvrx.MavericksState
+import org.matrix.android.sdk.api.util.toBase64NoPadding
+import java.security.MessageDigest
+import javax.inject.Inject
 
-data class QrCodeLoginViewState(
-    val loginType: QrCodeLoginType,
-    val connectionStatus: QrCodeLoginConnectionStatus? = null,
-    val generatedQrCodeData: String? = null,
-) : MavericksState {
+class Sha256Converter @Inject constructor() {
+    private val sha256 by lazy { MessageDigest.getInstance("SHA-256") }
 
-    constructor(args: QrCodeLoginArgs) : this(
-            loginType = args.loginType,
-    )
+    fun convertToSha256(str: String): String {
+        return sha256.digest(str.toByteArray()).toBase64NoPadding()
+    }
 }

@@ -1,3 +1,15 @@
+Changes in Element v1.6.22 (2024-09-23)
+=======================================
+
+Important: this version removes the dependency of the deprecated libolm library.
+Application installations that have not been updated to the first version with the migration (1.6.3 release at 2023-06-27) will not be able to migrate the account.
+More details in ([#8901](https://github.com/element-hq/element-android/issues/8901))
+
+Other changes
+-------------
+ - Remove legacy QR code login. ([#8889](https://github.com/element-hq/element-android/issues/8889))
+
+
 Changes in Element v1.6.20 (2024-07-25)
 =======================================
 
@@ -13,7 +25,7 @@ Bugfixes 🐛
 ----------
  - Fix redacted events not grouped correctly when hidden events are inserted between. ([#8840](https://github.com/element-hq/element-android/issues/8840))
  - Element-Android session doesn't encrypt for a dehydrated device ([#8842](https://github.com/element-hq/element-android/issues/8842))
- - Intercept only links from `element.io` well known hosts. The previous behaviour broke OIDC login in Element X. ([#8894](https://github.com/element-hq/element-android/issues/8894))
+ - Intercept only links from `element.io` well known hosts. The previous behaviour broke OIDC login in Element X. ([#8849](https://github.com/element-hq/element-android/issues/8849))
 
 Other changes
 -------------

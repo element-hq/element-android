@@ -19,13 +19,14 @@ package org.matrix.android.sdk.internal.session.contentscanner
 import org.matrix.android.sdk.api.session.crypto.attachments.ElementToDecrypt
 import org.matrix.android.sdk.api.session.crypto.model.EncryptedFileInfo
 import org.matrix.android.sdk.api.session.crypto.model.EncryptedFileKey
-import org.matrix.android.sdk.internal.crypto.tools.withOlmEncryption
 import org.matrix.android.sdk.internal.session.contentscanner.model.DownloadBody
 import org.matrix.android.sdk.internal.session.contentscanner.model.EncryptedBody
 import org.matrix.android.sdk.internal.session.contentscanner.model.toCanonicalJson
+import org.matrix.rustcomponents.sdk.crypto.PkEncryption
 
 internal object ScanEncryptorUtils {
 
+    @Throws
     fun getDownloadBodyAndEncryptIfNeeded(publicServerKey: String?, mxcUrl: String, elementToDecrypt: ElementToDecrypt): DownloadBody {
         // TODO, upstream refactoring changed the object model here...
         // it's bad we have to recreate and use hardcoded values
@@ -43,19 +44,18 @@ internal object ScanEncryptorUtils {
                 v = "v2"
         )
         return if (publicServerKey != null) {
-            // We should encrypt
-            withOlmEncryption { olm ->
-                olm.setRecipientKey(publicServerKey)
-
-                val olmResult = olm.encrypt(DownloadBody(encryptedInfo).toCanonicalJson())
-                DownloadBody(
-                        encryptedBody = EncryptedBody(
-                                cipherText = olmResult.mCipherText,
-                                ephemeral = olmResult.mEphemeralKey,
-                                mac = olmResult.mMac
-                        )
-                )
+            // Note: fromBase64 can throw Exception
+            val pkEncryption = PkEncryption.fromBase64(key = publicServerKey)
+            val pkMessage = pkEncryption.use {
+                pkEncryption.encrypt(DownloadBody(encryptedInfo).toCanonicalJson())
             }
+            DownloadBody(
+                    encryptedBody = EncryptedBody(
+                            cipherText = pkMessage.ciphertext,
+                            ephemeral = pkMessage.ephemeralKey,
+                            mac = pkMessage.mac
+                    )
+            )
         } else {
             DownloadBody(encryptedInfo)
         }

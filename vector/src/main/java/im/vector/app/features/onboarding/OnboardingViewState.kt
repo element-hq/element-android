@@ -59,8 +59,6 @@ data class OnboardingViewState(
 
         @PersistState
         val personalizationState: PersonalizationState = PersonalizationState(),
-
-        val canLoginWithQrCode: Boolean = false,
 ) : MavericksState
 
 enum class OnboardingFlow {

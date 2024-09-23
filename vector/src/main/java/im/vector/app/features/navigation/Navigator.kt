@@ -31,7 +31,6 @@ import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
 import im.vector.app.features.location.LocationData
 import im.vector.app.features.location.LocationSharingMode
 import im.vector.app.features.login.LoginConfig
-import im.vector.app.features.login.qr.QrCodeLoginArgs
 import im.vector.app.features.matrixto.OriginOfMatrixTo
 import im.vector.app.features.media.AttachmentData
 import im.vector.app.features.pin.PinMode
@@ -201,10 +200,5 @@ interface Navigator {
     fun openScreenSharingPermissionDialog(
             screenCaptureIntent: Intent,
             activityResultLauncher: ActivityResultLauncher<Intent>
-    )
-
-    fun openLoginWithQrCode(
-            context: Context,
-            qrCodeLoginArgs: QrCodeLoginArgs,
     )
 }

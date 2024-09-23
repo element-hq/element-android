@@ -62,7 +62,7 @@ android {
         // that the app's state is completely cleared between tests.
         testInstrumentationRunnerArguments clearPackageData: 'true'
 
-        buildConfigField "String", "SDK_VERSION", "\"1.6.20\""
+        buildConfigField "String", "SDK_VERSION", "\"1.6.22\""
 
         buildConfigField "String", "GIT_SDK_REVISION", "\"${gitRevision()}\""
         buildConfigField "String", "GIT_SDK_REVISION_UNIX_DATE", "\"${gitRevisionUnixDate()}\""
@@ -205,9 +205,6 @@ dependencies {
     // Work
     implementation libs.androidx.work
 
-    // olm lib is now hosted in MavenCentral
-    implementation 'org.matrix.android:olm-sdk:3.2.12'
-
     // DI
     implementation libs.dagger.dagger
     kapt libs.dagger.daggerCompiler
@@ -224,7 +221,7 @@ dependencies {
 
     implementation libs.google.phonenumber
 
-    implementation("org.matrix.rustcomponents:crypto-android:0.4.1")
+    implementation("org.matrix.rustcomponents:crypto-android:0.4.3")
 //    api project(":library:rustCrypto")
 
     testImplementation libs.tests.junit
@@ -236,6 +233,7 @@ dependencies {
     testImplementation 'net.lachlanmckee:timber-junit-rule:1.0.1'
     // Transitively required for mocking realm as monarchy doesn't expose Rx
     testImplementation libs.rx.rxKotlin
+    testImplementation libs.tests.robolectric
 
     kaptAndroidTest libs.dagger.daggerCompiler
     androidTestImplementation libs.androidx.testCore

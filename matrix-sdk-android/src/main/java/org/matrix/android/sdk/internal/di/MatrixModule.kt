@@ -25,7 +25,6 @@ import kotlinx.coroutines.android.asCoroutineDispatcher
 import kotlinx.coroutines.asCoroutineDispatcher
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.util.createBackgroundHandler
-import org.matrix.olm.OlmManager
 import java.io.File
 import java.util.concurrent.Executors
 
@@ -56,12 +55,5 @@ internal object MatrixModule {
     @CacheDirectory
     fun providesCacheDir(context: Context): File {
         return context.cacheDir
-    }
-
-    @JvmStatic
-    @Provides
-    @MatrixScope
-    fun providesOlmManager(): OlmManager {
-        return OlmManager()
     }
 }

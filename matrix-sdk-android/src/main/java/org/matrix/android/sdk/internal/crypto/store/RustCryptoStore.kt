@@ -35,32 +35,23 @@ import org.matrix.android.sdk.api.session.events.model.content.EncryptionEventCo
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.crypto.OlmMachine
-import org.matrix.android.sdk.internal.crypto.model.MXInboundMegolmSessionWrapper
 import org.matrix.android.sdk.internal.crypto.store.db.CryptoStoreAggregator
 import org.matrix.android.sdk.internal.crypto.store.db.doRealmTransaction
 import org.matrix.android.sdk.internal.crypto.store.db.doRealmTransactionAsync
 import org.matrix.android.sdk.internal.crypto.store.db.doWithRealm
 import org.matrix.android.sdk.internal.crypto.store.db.mapper.CryptoRoomInfoMapper
 import org.matrix.android.sdk.internal.crypto.store.db.mapper.MyDeviceLastSeenInfoEntityMapper
-import org.matrix.android.sdk.internal.crypto.store.db.model.AuditTrailEntity
-import org.matrix.android.sdk.internal.crypto.store.db.model.AuditTrailEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoMetadataEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoRoomEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoRoomEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.MyDeviceLastSeenInfoEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.MyDeviceLastSeenInfoEntityFields
-import org.matrix.android.sdk.internal.crypto.store.db.model.OlmInboundGroupSessionEntity
-import org.matrix.android.sdk.internal.crypto.store.db.model.OlmInboundGroupSessionEntityFields
-import org.matrix.android.sdk.internal.crypto.store.db.model.OutgoingKeyRequestEntity
-import org.matrix.android.sdk.internal.crypto.store.db.model.OutgoingKeyRequestEntityFields
-import org.matrix.android.sdk.internal.crypto.store.db.model.createPrimaryKey
 import org.matrix.android.sdk.internal.crypto.store.db.query.getById
 import org.matrix.android.sdk.internal.crypto.store.db.query.getOrCreate
 import org.matrix.android.sdk.internal.di.CryptoDatabase
 import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.SessionScope
-import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -75,7 +66,6 @@ private val loggerTag = LoggerTag("RealmCryptoStore", LoggerTag.CRYPTO)
 @SessionScope
 internal class RustCryptoStore @Inject constructor(
         @CryptoDatabase private val realmConfiguration: RealmConfiguration,
-        private val clock: Clock,
         @UserId private val userId: String,
         @DeviceId private val deviceId: String,
         private val myDeviceLastSeenInfoEntityMapper: MyDeviceLastSeenInfoEntityMapper,
@@ -134,20 +124,6 @@ internal class RustCryptoStore @Inject constructor(
                 }
     }
 
-    /**
-     * Needed for lazy migration of sessions from the legacy store.
-     */
-    override fun getInboundGroupSession(sessionId: String, senderKey: String): MXInboundMegolmSessionWrapper? {
-        val key = OlmInboundGroupSessionEntity.createPrimaryKey(sessionId, senderKey)
-
-        return doWithRealm(realmConfiguration) { realm ->
-            realm.where<OlmInboundGroupSessionEntity>()
-                    .equalTo(OlmInboundGroupSessionEntityFields.PRIMARY_KEY, key)
-                    .findFirst()
-                    ?.toModel()
-        }
-    }
-
     // ================================================
     // Things that should be migrated to another store than realm
     // ================================================
@@ -163,30 +139,7 @@ internal class RustCryptoStore @Inject constructor(
         // nop
     }
 
-    override fun tidyUpDataBase() {
-        // These entities are not used in rust actually, but as they are not yet cleaned up, this will do it with time
-        val prevWeekTs = clock.epochMillis() - 7 * 24 * 60 * 60 * 1_000
-        doRealmTransaction("tidyUpDataBase", realmConfiguration) { realm ->
-
-            // Clean the old ones?
-            realm.where<OutgoingKeyRequestEntity>()
-                    .lessThan(OutgoingKeyRequestEntityFields.CREATION_TIME_STAMP, prevWeekTs)
-                    .findAll()
-                    .also { Timber.i("## Crypto Clean up ${it.size} OutgoingKeyRequestEntity") }
-                    .deleteAllFromRealm()
-
-            // Only keep one month history
-
-            val prevMonthTs = clock.epochMillis() - 4 * 7 * 24 * 60 * 60 * 1_000L
-            realm.where<AuditTrailEntity>()
-                    .lessThan(AuditTrailEntityFields.AGE_LOCAL_TS, prevMonthTs)
-                    .findAll()
-                    .also { Timber.i("## Crypto Clean up ${it.size} AuditTrailEntity") }
-                    .deleteAllFromRealm()
-
-            // Can we do something for WithHeldSessionEntity?
-        }
-    }
+    override fun tidyUpDataBase() = Unit
 
     override fun close() {
         val tasks = monarchyWriteAsyncExecutor.shutdownNow()
