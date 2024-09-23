@@ -46,7 +46,9 @@ internal object ScanEncryptorUtils {
         return if (publicServerKey != null) {
             // Note: fromBase64 can throw Exception
             val pkEncryption = PkEncryption.fromBase64(key = publicServerKey)
-            val pkMessage = pkEncryption.encrypt(DownloadBody(encryptedInfo).toCanonicalJson())
+            val pkMessage = pkEncryption.use {
+                pkEncryption.encrypt(DownloadBody(encryptedInfo).toCanonicalJson())
+            }
             DownloadBody(
                     encryptedBody = EncryptedBody(
                             cipherText = pkMessage.ciphertext,
