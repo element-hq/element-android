@@ -892,7 +892,7 @@
     <string name="room_alias_published_alias_main">Це основна адреса</string>
     <string name="room_alias_published_alias_subtitle">Загальнодоступні адреси може використовувати будь-хто на будь-якому сервері для приєднання до вашої кімнати. Щоб опублікувати адресу спочатку вкажіть її локальною адресою.</string>
     <string name="room_alias_published_alias_title">Загальнодоступні адреси</string>
-    <string name="room_settings_alias_subtitle">Переглядайте й керуйте адресами цієї кімнати та їхньою видимістю в каталозі кімнат.</string>
+    <string name="room_settings_alias_subtitle">Переглянути й керувати адресами цієї кімнати та її видимістю в каталозі кімнат.</string>
     <string name="room_settings_alias_title">Адреси кімнат</string>
     <string name="room_settings_room_access_title">Доступ до кімнати</string>
     <string name="room_settings_room_read_history_dialog_subtitle">Зміни щодо тих, хто може читати історію, стосуватимуться лише майбутніх повідомлень у цій кімнаті. Видимість наявної історії залишиться незмінною.</string>
