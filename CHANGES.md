@@ -2,7 +2,7 @@ Changes in Element v1.6.22 (2024-09-23)
 =======================================
 
 Important: this version removes the dependency of the deprecated libolm library.
-Application installations that have not been updated to the first version with the migration (1.6.3 release at 2023-06-27) will not be able to migrate the account.
+Application installations that have not been updated to the first version with the migration (v1.6.0 released at 2023-05-17) will not be able to migrate the account.
 More details in ([#8901](https://github.com/element-hq/element-android/issues/8901))
 
 Other changes
