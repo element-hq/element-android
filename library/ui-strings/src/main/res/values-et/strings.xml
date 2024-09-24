@@ -2062,7 +2062,7 @@
     <string name="directory_your_server">Sinu server</string>
     <string name="error_failed_to_join_room">Vabandust, liitumisel tekkis viga: %s</string>
     <string name="create_space_alias_hint">Kogukonnakeskuse aadressid</string>
-    <string name="space_settings_alias_subtitle">Selle kogukonna hallatud ja nähtavad aadressid.</string>
+    <string name="space_settings_alias_subtitle">Vaata ja halda selle kogukonna aadresse.</string>
     <string name="space_settings_alias_title">Kogukondade aadressid</string>
     <string name="settings_server_room_version_unstable">ebapüsiv</string>
     <string name="settings_server_room_version_stable">stabiilne</string>
