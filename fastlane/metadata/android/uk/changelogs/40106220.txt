@@ -1,0 +1,2 @@
+Основні зміни в цій версії: поліпшення crypto sdk.
+Список усіх змін: https://github.com/element-hq/element-android/releases
