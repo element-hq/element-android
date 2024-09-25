@@ -2,7 +2,7 @@ apply plugin: 'kotlin'
 apply plugin: 'java'
 
 sourceCompatibility = versions.sourceCompat
-targetCompatibility = versions.sourceCompat
+targetCompatibility = versions.targetCompat
 
 dependencies {
     implementation 'com.squareup:javapoet:1.13.0'
@@ -21,3 +21,8 @@ sourceSets {
     main.java.srcDirs += 'src/main/kotlin'
 }
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(versions.jvmTarget)
+    }
+}

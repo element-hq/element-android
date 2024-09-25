@@ -21,3 +21,5 @@ include ':library:external:barcodescanner:zxing'
 include ':library:rustCrypto'
 include ':matrix-sdk-android'
 include ':matrix-sdk-android-flow'
+
+include ':baselineprofile'
