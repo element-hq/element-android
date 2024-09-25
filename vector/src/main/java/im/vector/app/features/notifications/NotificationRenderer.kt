@@ -6,19 +6,20 @@
  */
 package im.vector.app.features.notifications
 
-import android.content.Context
 import androidx.annotation.WorkerThread
+import im.vector.app.features.notifications.NotificationDrawerManager.Companion.JITSI_CALL_NOTIFICATION_ID
 import im.vector.app.features.notifications.NotificationDrawerManager.Companion.ROOM_EVENT_NOTIFICATION_ID
 import im.vector.app.features.notifications.NotificationDrawerManager.Companion.ROOM_INVITATION_NOTIFICATION_ID
 import im.vector.app.features.notifications.NotificationDrawerManager.Companion.ROOM_MESSAGES_NOTIFICATION_ID
 import im.vector.app.features.notifications.NotificationDrawerManager.Companion.SUMMARY_NOTIFICATION_ID
+import im.vector.app.features.settings.VectorPreferences
 import timber.log.Timber
 import javax.inject.Inject
 
 class NotificationRenderer @Inject constructor(
         private val notificationDisplayer: NotificationDisplayer,
         private val notificationFactory: NotificationFactory,
-        private val appContext: Context
+        private val vectorPreferences: VectorPreferences,
 ) {
 
     @WorkerThread
@@ -29,9 +30,10 @@ class NotificationRenderer @Inject constructor(
             useCompleteNotificationFormat: Boolean,
             eventsToProcess: List<ProcessedEvent<NotifiableEvent>>
     ) {
-        val (roomEvents, simpleEvents, invitationEvents) = eventsToProcess.groupByType()
+        val (roomEvents, simpleEvents, invitationEvents, jitsiEvents) = eventsToProcess.groupByType()
         with(notificationFactory) {
             val roomNotifications = roomEvents.toNotifications(myUserDisplayName, myUserAvatarUrl)
+            val jitsiNotifications = jitsiEvents.toNotifications()
             val invitationNotifications = invitationEvents.toNotifications(myUserId)
             val simpleNotifications = simpleEvents.toNotifications(myUserId)
             val summaryNotification = createSummaryNotification(
@@ -56,6 +58,21 @@ class NotificationRenderer @Inject constructor(
                     is RoomNotification.Message -> if (useCompleteNotificationFormat) {
                         Timber.d("Updating room messages notification ${wrapper.meta.roomId}")
                         notificationDisplayer.showNotificationMessage(wrapper.meta.roomId, ROOM_MESSAGES_NOTIFICATION_ID, wrapper.notification)
+                    }
+                }
+            }
+
+            Timber.d("Jitsi call notifications count = ${jitsiNotifications.size}")
+            if (vectorPreferences.isJitsiCallNotificationEnabled()) {
+                jitsiNotifications.forEach { wrapper ->
+                    when (wrapper) {
+                        is JitsiNotification.IncomingCall -> {
+                            Timber.d("Updating jitsi call notification ${wrapper.roomId} for room ${wrapper.roomName}")
+                            if (wrapper.eventId.isNotEmpty() || wrapper.roomId.isNotEmpty()) {
+                                val tag = wrapper.eventId.ifEmpty { wrapper.roomId }
+                                notificationDisplayer.showNotificationMessage(tag, JITSI_CALL_NOTIFICATION_ID, wrapper.notification)
+                            }
+                        }
                     }
                 }
             }
@@ -99,6 +116,7 @@ private fun List<ProcessedEvent<NotifiableEvent>>.groupByType(): GroupedNotifica
     val roomIdToEventMap: MutableMap<String, MutableList<ProcessedEvent<NotifiableMessageEvent>>> = LinkedHashMap()
     val simpleEvents: MutableList<ProcessedEvent<SimpleNotifiableEvent>> = ArrayList()
     val invitationEvents: MutableList<ProcessedEvent<InviteNotifiableEvent>> = ArrayList()
+    val roomIdToJitsiEventMap: MutableMap<String, MutableList<ProcessedEvent<NotifiableJitsiEvent>>> = LinkedHashMap()
     forEach {
         when (val event = it.event) {
             is InviteNotifiableEvent -> invitationEvents.add(it.castedToEventType())
@@ -106,10 +124,17 @@ private fun List<ProcessedEvent<NotifiableEvent>>.groupByType(): GroupedNotifica
                 val roomEvents = roomIdToEventMap.getOrPut(event.roomId) { ArrayList() }
                 roomEvents.add(it.castedToEventType())
             }
+            is NotifiableJitsiEvent -> {
+                val jitsiEvents = roomIdToJitsiEventMap.getOrPut(event.roomId) { ArrayList() }
+                val diffInMillis = System.currentTimeMillis() - (it.event as NotifiableJitsiEvent).timestamp
+                if (diffInMillis < 10000) {
+                    jitsiEvents.add(it.castedToEventType())
+                }
+            }
             is SimpleNotifiableEvent -> simpleEvents.add(it.castedToEventType())
         }
     }
-    return GroupedNotificationEvents(roomIdToEventMap, simpleEvents, invitationEvents)
+    return GroupedNotificationEvents(roomIdToEventMap, simpleEvents, invitationEvents, roomIdToJitsiEventMap)
 }
 
 @Suppress("UNCHECKED_CAST")
@@ -118,5 +143,6 @@ private fun <T : NotifiableEvent> ProcessedEvent<NotifiableEvent>.castedToEventT
 data class GroupedNotificationEvents(
         val roomEvents: Map<String, List<ProcessedEvent<NotifiableMessageEvent>>>,
         val simpleEvents: List<ProcessedEvent<SimpleNotifiableEvent>>,
-        val invitationEvents: List<ProcessedEvent<InviteNotifiableEvent>>
+        val invitationEvents: List<ProcessedEvent<InviteNotifiableEvent>>,
+        val jitsiEvents: Map<String, List<ProcessedEvent<NotifiableJitsiEvent>>>,
 )

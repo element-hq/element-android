@@ -11,12 +11,29 @@ import android.app.Notification
 import javax.inject.Inject
 
 private typealias ProcessedMessageEvents = List<ProcessedEvent<NotifiableMessageEvent>>
+private typealias ProcessedJitsiEvents = List<ProcessedEvent<NotifiableJitsiEvent>>
 
 class NotificationFactory @Inject constructor(
         private val notificationUtils: NotificationUtils,
         private val roomGroupMessageCreator: RoomGroupMessageCreator,
         private val summaryGroupMessageCreator: SummaryGroupMessageCreator
 ) {
+
+    fun Map<String, ProcessedJitsiEvents>.toNotifications(): List<JitsiNotification> {
+        return map { (roomId, events) ->
+            JitsiNotification.IncomingCall(
+                    roomId = roomId,
+                    eventId = events.firstOrNull()?.event?.eventId.orEmpty(),
+                    roomName = events.firstOrNull()?.event?.roomName.orEmpty(),
+                    notification = notificationUtils.buildIncomingJitsiCallNotification(
+                            callId = events.firstOrNull()?.event?.eventId.orEmpty().ifEmpty { roomId },
+                            signalingRoomId = roomId,
+                            title = events.firstOrNull()?.event?.roomName.orEmpty(),
+                            fromBg = true,
+                    )
+            )
+        }
+    }
 
     fun Map<String, ProcessedMessageEvents>.toNotifications(myUserDisplayName: String, myUserAvatarUrl: String?): List<RoomNotification> {
         return map { (roomId, events) ->
@@ -106,6 +123,15 @@ sealed interface RoomNotification {
                 val shouldBing: Boolean
         )
     }
+}
+
+sealed interface JitsiNotification {
+    data class IncomingCall(
+            val roomId: String,
+            val eventId: String,
+            val roomName: String,
+            val notification: Notification,
+    ) : JitsiNotification
 }
 
 sealed interface OneShotNotification {
