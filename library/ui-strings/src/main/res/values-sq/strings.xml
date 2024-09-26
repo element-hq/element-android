@@ -1798,7 +1798,7 @@
     <string name="room_alias_published_alias_main">Kjo është adresa kryesore</string>
     <string name="room_alias_published_alias_subtitle">Adresat e publikuara mund të përdoren nga cilido, në cilindo shërbyes, për të hyrë në dhomën tuaj. Që të bëni publike një adresë, lypset të ujdiset së pari si një adresë vendore.</string>
     <string name="room_alias_published_alias_title">Adresa të Publikuara</string>
-    <string name="room_settings_alias_subtitle">Shihni dhe administroni adresa të kësaj dhome, dhe dukshmërinë e saj te lista e dhomave.</string>
+    <string name="room_settings_alias_subtitle">Shihni dhe administroni adresa të kësaj dhome dhe dukshmërinë e saj te lista e dhomave.</string>
     <string name="room_settings_alias_title">Adresa dhome</string>
     <string name="room_settings_room_access_title">Leje mbi dhomën</string>
     <string name="room_settings_room_read_history_dialog_subtitle">Ndryshimet se cili mund të lexojë historikun do të aplikohen vetëm për mesazhe të ardhshëm në këtë dhomë. Dukshmëria e historikut ekzistues do të mbesë e pandryshuar.</string>
