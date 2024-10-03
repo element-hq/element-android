@@ -2965,4 +2965,10 @@
 \n
 \n%s</string>
     <string name="invite_unknown_users_dialog_submit">Dennoch einladen</string>
+    <string name="login_splash_sign_in">Anmelden</string>
+    <string name="user_reported_as_inappropriate_title">Benutzer gemeldet</string>
+    <string name="message_report_user">Benutzer melden</string>
+    <string name="user_reported_as_inappropriate_content">Dieser Benutzer ist gemeldet worden.
+\n
+\nWenn du keine Inhalte mehr von dieser Person sehen möchtest, kannst du sie ignorieren, um ihre Nachrichten auszublenden.</string>
 </resources>
