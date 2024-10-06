@@ -148,15 +148,15 @@
     <string name="notice_room_server_acl_allow_is_empty">🎉 Minden kiszolgáló ki lett tiltva a szobából! Ez a szoba többé nem használható.</string>
     <string name="notice_room_server_acl_updated_no_change">Nincs változás.</string>
     <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Mostantól IP-címet kiszolgálónévként használó kiszolgálók tiltva vannak.</string>
-    <string name="notice_room_server_acl_updated_ip_literals_allowed">• Mostantól az IP címet kiszolgálónévként használó kiszolgálók engedélyezve vannak.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• Mostantól az IP-címet kiszolgálónévként használó kiszolgálók engedélyezve vannak.</string>
     <string name="notice_room_server_acl_updated_was_allowed">• El lettek távolítva a tiltólistából az erre illeszkedő kiszolgálók: %s</string>
     <string name="notice_room_server_acl_updated_allowed">• Mostantól engedélyezve vannak az erre illeszkedő kiszolgálók: %s.</string>
     <string name="notice_room_server_acl_updated_was_banned">• Mostantól el vannak távolítva a tiltólistából az erre illeszkedő kiszolgálók: %s.</string>
     <string name="notice_room_server_acl_updated_banned">• Mostantól tiltva vannak az erre a kifejezésre illeszkedő kiszolgálók: %s</string>
     <string name="notice_room_server_acl_updated_title_by_you">Megváltoztatta a kiszolgáló-jogosultságokat ehhez a szobához.</string>
     <string name="notice_room_server_acl_updated_title">%s megváltoztatta a kiszolgáló-jogosultságokat ehhez a szobához.</string>
-    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Mostantól az IP-címet kiszolgálónévként használó kiszolgálók tiltva vannak.</string>
-    <string name="notice_room_server_acl_set_ip_literals_allowed">• Mostantól az IP-címet kiszolgálónévként használó kiszolgálók engedélyezve vannak.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Az IP-címet kiszolgálónévként használó kiszolgálók tiltva vannak.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• Az IP-címet kiszolgálónévként használó kiszolgálók engedélyezve vannak.</string>
     <string name="notice_room_server_acl_set_allowed">• Engedélyezve vannak azok a kiszolgálók, amelyek illeszkednek erre: %s.</string>
     <string name="notice_room_server_acl_set_banned">• Tiltva vannak azok a kiszolgálók, amelyek illeszkednek erre: %s.</string>
     <string name="notice_room_server_acl_set_title_by_you">Beállította a kiszolgáló-jogosultságokat ehhez a szobához.</string>
@@ -226,7 +226,7 @@
     <string name="auth_email_already_defined">Ez az e-mail cím már használatban van.</string>
     <string name="auth_forgot_password">Elfelejtetted a jelszavad?</string>
     <string name="auth_recaptcha_message">A Matrix-kiszolgáló szeretné ellenőrizni, hogy nem vagy robot</string>
-    <string name="auth_reset_password_error_unauthorized">Az e-mail-címed ellenőrzés sikertelen: győződj meg róla, hogy rákattintottál az e-mailben található hivatkozásra</string>
+    <string name="auth_reset_password_error_unauthorized">Az e-mail-cím hitelesítése sikertelen: győződjön meg róla, hogy rákattintott az e-mailben található hivatkozásra</string>
     <string name="login_error_invalid_home_server">Adj meg egy érvényes URL-t</string>
     <string name="login_error_bad_json">Hibás JSON</string>
     <string name="login_error_not_json">Nem tartalmazott érvényes JSON-t</string>
@@ -273,7 +273,7 @@
     <string name="ssl_logout_account">Kijelentkezés</string>
     <string name="ssl_remain_offline">Mellőz</string>
     <string name="ssl_fingerprint_hash">Ujjlenyomat (%s):</string>
-    <string name="ssl_could_not_verify">Nem sikerült ellenőrizni a távoli szerver azonosságát.</string>
+    <string name="ssl_could_not_verify">Nem sikerült hitelesíteni a távoli kiszolgáló azonosságát.</string>
     <string name="ssl_cert_not_trust">Ez jelentheti azt is, hogy valaki rossz szándékkal lehallgatja a forgalmadat, vagy azt, hogy a telefonod nem bízik meg a távoli szervertől kapott tanúsítványban.</string>
     <string name="ssl_cert_new_account_expl">Ha a szerver adminisztrátora szerint ez várható volt, akkor bizonyosodj meg róla, hogy az alábbi ujjlenyomat megegyezik a tőle kapottal.</string>
     <string name="ssl_unexpected_existing_expl">A tanúsítvány eltér attól, amit a telefonoddal megbízhatónak jelöltél. Ez RENDKÍVÜL SZOKATLAN. Javasoljuk, hogy NE FOGADD EL ezt az új tanúsítványt.</string>
@@ -364,12 +364,12 @@
     <string name="encryption_import_room_keys_summary">Kulcsok importálás helyi fájlból</string>
     <string name="encryption_import_import">Importálás</string>
     <string name="encryption_never_send_to_unverified_devices_title">Csak hitelesített munkameneteknek titkosít</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">Sose küldj titkosított üzenetet nem hitelesített munkamenetekre erről a munkamenetről.</string>
-    <string name="encryption_information_not_verified">NEM hitelesített</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Sose küldjön titkosított üzenetet nem hitelesített munkamenetekre erről a munkamenetről.</string>
+    <string name="encryption_information_not_verified">Nem hitelesített</string>
     <string name="encryption_information_verified">Hitelesített</string>
     <string name="encryption_information_verify">Hitelesítés</string>
-    <string name="encryption_information_verify_device_warning">Hogy ellenőrizni lehessen, hogy ez a munkamenet megbízható, kérlek használj más kommunikáció módot a tulajdonossal (pl.: személyesen vagy telefonon keresztül) és kérdezd meg hogy a kulcs amit lát a Felhasználói Beállítások alatt megegyezik-e az alábbi kulccsal:</string>
-    <string name="encryption_information_verify_device_warning2">Ha nem egyeznek, akkor a kommunikáció biztonsága kompromittálva lehet. A jövőben ez a hitelesítési mód kényelmesebbé lesz téve.</string>
+    <string name="encryption_information_verify_device_warning">Erősítse meg a következőket a másik munkamenet felhasználói beállításaival való összehasonlítással:</string>
+    <string name="encryption_information_verify_device_warning2">Ha nem egyeznek, akkor a kommunikáció biztonsága kompromittálva lehet.</string>
     <string name="select_room_directory">Válassz egy szoba könyvtárat</string>
     <string name="directory_server_placeholder">Szerver neve</string>
     <string name="directory_server_all_rooms_on_server">Összes szoba a %s szerveren</string>
@@ -416,8 +416,8 @@
     <string name="settings_containing_my_display_name">Profilnevemet tartalmazó üzenetek</string>
     <string name="settings_containing_my_user_name">Felhasználónevemet tartalmazó üzenetek</string>
     <string name="you_added_a_new_device">Hozzá adtál egy új munkamenetet \'%s\', mely titkosító kulcsot kér.</string>
-    <string name="your_unverified_device_requesting">Nem ellenőrzött munkameneted \'%s\' titkosító kulcsokat kér.</string>
-    <string name="start_verification">Ellenőrzés elindítása</string>
+    <string name="your_unverified_device_requesting">Nem hitelesített munkamenet „%s” titkosító kulcsokat kér.</string>
+    <string name="start_verification">Hitelesítés elindítása</string>
     <string name="notification_noisy_notifications">Hangos értesítések</string>
     <string name="notification_silent_notifications">Csendes értesítések</string>
     <string name="option_take_photo">Fényképezés</string>
@@ -662,11 +662,11 @@ Helyezd biztonságba a kulcsokat, hogy ne vesszenek el.</string>
     <string name="keys_backup_restore_with_recovery_key">Használd a Visszaállítási Kulcsot, hogy hozzáférj a régi titkosított üzeneteidhez</string>
     <string name="keys_backup_restore_key_enter_hint">Visszaállítási Kulcs megadása</string>
     <string name="keys_backup_restore_with_key_helper">Elvesztetted a visszaállítási kulcsod? Készíts újat a beállításokban.</string>
-    <string name="keys_backup_passphrase_error_decrypt">A mentést nem lehet visszafejteni ezzel a jelmondattal: kérlek ellenőrizd, hogy helyesen adtad-e meg a visszaállítási jelmondatot.</string>
+    <string name="keys_backup_passphrase_error_decrypt">A biztonsági mentést nem lehet visszafejteni ezzel a jelmondattal: kérlek ellenőrizd, hogy helyesen adtad-e meg a visszaállítási jelmondatot.</string>
     <string name="keys_backup_restoring_waiting_message">Mentés visszaállítás:</string>
     <string name="keys_backup_unlock_button">Hozzáférés a régi üzenetekhez</string>
     <string name="keys_backup_recovery_code_empty_error_message">Kérlek add meg a visszaállítási kulcsot</string>
-    <string name="keys_backup_recovery_code_error_decrypt">A mentést nem lehet visszafejteni ezzel a visszaállítási kulccsal: kérlek ellenőrizd, hogy helyes visszaállítási kulcsot adtad-e meg.</string>
+    <string name="keys_backup_recovery_code_error_decrypt">A biztonsági mentést nem lehet visszafejteni ezzel a visszaállítási kulccsal: ellenőrizze, hogy a helyes visszaállítási kulcsot adta-e meg.</string>
     <string name="keys_backup_restore_success_title">Mentés visszaállítva %s!</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Mentés visszaállítva %d kulccsal.</item>
@@ -684,10 +684,10 @@ Helyezd biztonságba a kulcsokat, hogy ne vesszenek el.</string>
     <string name="keys_backup_settings_status_not_setup">A kulcsaid erről a munkamenetről nem lesznek elmentve.</string>
     <string name="keys_backup_settings_signature_from_unknown_device">A mentésnek ismeretlen munkamenetről származó aláírása van: %s.</string>
     <string name="keys_backup_settings_valid_signature_from_this_device">A mentésnek érvényes aláírása van ettől a munkamenettől.</string>
-    <string name="keys_backup_settings_valid_signature_from_verified_device">Mentésnek érvényes aláírása van ellenőrzött munkamenetektől: %s.</string>
-    <string name="keys_backup_settings_valid_signature_from_unverified_device">Mentésnek érvényes aláírása van ellenőrizetlen munkamenetektől: %s</string>
-    <string name="keys_backup_settings_invalid_signature_from_verified_device">Mentésnek érvénytelen aláírása van ellenőrzött munkamenetektől: %s</string>
-    <string name="keys_backup_settings_invalid_signature_from_unverified_device">Mentésnek érvénytelen aláírása van egy ellenőrizetlen munkamenetektől: %s</string>
+    <string name="keys_backup_settings_valid_signature_from_verified_device">A biztonsági mentésnek érvényes aláírása van egy hitelesített munkamenettől: %s.</string>
+    <string name="keys_backup_settings_valid_signature_from_unverified_device">A biztonsági mentésnek érvényes aláírása van egy nem hitelesített munkamenettől: %s</string>
+    <string name="keys_backup_settings_invalid_signature_from_verified_device">A biztonsági mentésnek érvénytelen aláírása van egy hitelesített munkamenettől: %s</string>
+    <string name="keys_backup_settings_invalid_signature_from_unverified_device">A biztonsági mentésnek érvénytelen aláírása van egy nem hitelesített munkamenettől: %s</string>
     <string name="keys_backup_settings_deleting_backup">Mentés törlése…</string>
     <string name="keys_backup_settings_delete_confirm_title">Mentés törlése</string>
     <string name="keys_backup_settings_delete_confirm_message">Törlöd a titkosítási kulcsaidat a szerverről? Utána a titkosított üzenetek visszaállítására már nem fogod tudni a visszaállítási kulcsot használni.</string>
@@ -768,17 +768,17 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 \nMunkamenet neve: %1$s 
 \nUtoljára látszott: %2$s 
 \nHa nem jelentkeztél be másik munkameneten, hagyd figyelmen kívül a kérést.</string>
-    <string name="your_unverified_device_requesting_with_info">Ellenőrizetlen munkamenet kér titkosítási kulcsokat. 
-\nMunkamenet neve: %1$s 
-\nUtoljára látszott: %2$s 
-\nHa nem jelentkeztél be másik munkamenettel, hagyd figyelmen kívül ezt a kérést.</string>
-    <string name="share_without_verifying_short_label">Megoszt</string>
+    <string name="your_unverified_device_requesting_with_info">Nem hitelesített munkamenet kér titkosítási kulcsokat.
+\nMunkamenet neve: %1$s
+\nUtoljára látszott: %2$s
+\nHa nem jelentkezett be másik munkamenettel, hagyja figyelmen kívül ezt a kérést.</string>
+    <string name="share_without_verifying_short_label">Megosztás</string>
     <string name="key_share_request">Kulcs Megosztási Kérés</string>
     <string name="ignore_request_short_label">Mellőz</string>
-    <string name="sas_verified">Ellenőrizve!</string>
+    <string name="sas_verified">Hitelesítve!</string>
     <string name="sas_got_it">Értem</string>
-    <string name="sas_incoming_request_notif_title">Ellenőrzési kérés</string>
-    <string name="sas_incoming_request_notif_content">%s szeretné ellenőrizni a munkamenetedet</string>
+    <string name="sas_incoming_request_notif_title">Hitelesítési kérelem</string>
+    <string name="sas_incoming_request_notif_content">%s szeretné hitelesíteni az Ön munkamenetét</string>
     <string name="sas_error_unknown">Ismeretlen Hiba</string>
     <string name="keys_backup_setup_override_backup_prompt_tile">Mentés már létezik a Matrix szervereden</string>
     <string name="keys_backup_setup_override_backup_prompt_description">Úgy látszik már rendelkezel kulcs mentéssel egy másik munkameneten. Lecseréled azzal amit most készítesz\?</string>
@@ -903,7 +903,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="settings_discovery_please_enter_server">Kérlek add meg az azonosítási szerver url-jét</string>
     <string name="settings_discovery_no_terms_title">Az azonosítási szervernek nincsen felhasználási feltétele</string>
     <string name="settings_discovery_no_terms">Az általad választott azonosítási szervernek nincs felhasználási feltétele. Csak akkor lépj tovább ha megbízol a szolgáltatás tulajdonosában</string>
-    <string name="settings_text_message_sent">Szöveges üzenetet küldtünk ide: %s. Kérlek add meg az ellenőrző kódot amit az üzenet tartalmaz.</string>
+    <string name="settings_text_message_sent">Szöveges üzenetet küldtünk ide: %s. Adja meg az ellenőrző kódot amit az üzenet tartalmaz.</string>
     <string name="settings_discovery_disconnect_with_bound_pid">Az azonosítási szerverrel (%1$s) megosztod az e-mail címeket és telefonszámokat. Újra kell csatlakoznod ehhez: %2$s, hogy megállítsd a megosztást.</string>
     <string name="settings_agree_to_terms">Egyetértek az azonosítási szerver (%s) Felhasználási feltételeivel ahhoz, hogy megtalálható legyek e-mail címmel vagy telefonszámmal.</string>
     <string name="labs_allow_extended_logging">Kibővített naplózás engedélyezése.</string>
@@ -1022,7 +1022,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="login_registration_disabled">Ne haragudj, ez a szerver nem fogad új fiókokat.</string>
     <string name="login_login_with_email_error">Ez az e-mail cím egyik fiókhoz sincs társítva.</string>
     <string name="login_reset_password_on">Jelszó visszaállítása itt: %1$s</string>
-    <string name="login_reset_password_notice">Egy ellenőrző e-mail lesz elküldve a címedre, hogy megerősíthesd az új jelszó beállításodat.</string>
+    <string name="login_reset_password_notice">Egy hitelesítő levél lesz elküldve az e-mail-címére, hogy megerősíthesse az új jelszót.</string>
     <string name="login_reset_password_submit">Következő</string>
     <string name="login_reset_password_email_hint">E-mail</string>
     <string name="login_reset_password_password_hint">Új jelszó</string>
@@ -1031,8 +1031,8 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="login_reset_password_warning_submit">Folytatás</string>
     <string name="login_reset_password_error_not_found">Ez az e-mail cím egyik fiókhoz sincs társítva</string>
     <string name="login_reset_password_mail_confirmation_title">Nézd meg a bejövő e-mailjeidet</string>
-    <string name="login_reset_password_mail_confirmation_notice">Az ellenőrző e-mail ide küldtük: %1$s.</string>
-    <string name="login_reset_password_mail_confirmation_submit">Ellenőriztem az e-mail címemet</string>
+    <string name="login_reset_password_mail_confirmation_notice">Az hitelesítő e-mailt ide küldtük: %1$s.</string>
+    <string name="login_reset_password_mail_confirmation_submit">Hitelesítettem az e-mail-címemet</string>
     <string name="login_reset_password_success_title">Sikerült!</string>
     <string name="login_reset_password_success_notice">A jelszavad újra beállításra került.</string>
     <string name="login_reset_password_success_notice_2">Minden munkamenetedből ki vagy jelentkeztetve és „push” értesítéseket sem fogsz kapni. Az értesítések újbóli engedélyezéséhez újra be kell jelentkezned minden eszközön.</string>
@@ -1052,7 +1052,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="login_set_msisdn_optional_hint">Telefonszám (nem kötelező)</string>
     <string name="login_set_msisdn_submit">Következő</string>
     <string name="login_msisdn_confirm_title">Telefonszám ellenőrzése</string>
-    <string name="login_msisdn_confirm_notice">Elküldtük a kódot ide: %1$s. Add meg itt alul amivel ellenőrizhetjük, hogy te vagy.</string>
+    <string name="login_msisdn_confirm_notice">Elküldtük a kódot ide: %1$s. Adja meg lentebb az ellenőrzéshez, hogy valóban Ön az.</string>
     <string name="login_msisdn_confirm_hint">Kód megadása</string>
     <string name="login_msisdn_confirm_send_again">Küld újra</string>
     <string name="login_msisdn_confirm_submit">Következő</string>
@@ -1140,29 +1140,29 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="verification_conclusion_not_secure">Nem biztonságos</string>
     <string name="verification_conclusion_compromised">Valamelyiket lehet hogy feltörték:
 \n
-\n - A matrix szerveredet
-\n - A matrix szervert amihez az ellenőrizni kívánt felhasználó csatlakozik
-\n - A te vagy a másik felhasználó Internet hozzáférését
-\n - A te vagy a másik felhasználó készülékét</string>
+\n - A mátrix-kiszolgálódat
+\n - A mátrix-kiszolgálót, amihez az ellenőrizni kívánt felhasználó csatlakozik
+\n - Az Ön vagy a másik felhasználó Internet hozzáférését
+\n - Az Ön vagy a másik felhasználó készülékét</string>
     <string name="sent_a_video">Videó.</string>
     <string name="sent_an_image">Kép.</string>
     <string name="sent_an_audio_file">Hang</string>
     <string name="sent_a_file">Fájl</string>
-    <string name="verification_request_waiting">Várakozik…</string>
+    <string name="verification_request_waiting">Várakozás…</string>
     <string name="verification_request_other_cancelled">%s megszakította</string>
-    <string name="verification_request_you_cancelled">Megszakítottad</string>
+    <string name="verification_request_you_cancelled">Megszakította</string>
     <string name="verification_request_other_accepted">%s elfogadta</string>
-    <string name="verification_request_you_accepted">Elfogadtad</string>
-    <string name="verification_sent">Ellenőrzés kérése elküldve</string>
-    <string name="verification_request">Ellenőrzési kérés</string>
-    <string name="verification_verify_device">Munkamenet ellenőrzése</string>
-    <string name="verification_scan_notice">Olvasd be a kódot a másik felhasználó eszközével, hogy biztonságosan ellenőrizhessétek egymást</string>
+    <string name="verification_request_you_accepted">Elfogadta</string>
+    <string name="verification_sent">Hitelesítés-kérés elküldve</string>
+    <string name="verification_request">Hitelesítés-kérés</string>
+    <string name="verification_verify_device">Munkamenet hitelesítése</string>
+    <string name="verification_scan_notice">Olvassa be a kódot a másik felhasználó eszközével, hogy biztonságosan hitelesíthessék egymást</string>
     <string name="verification_scan_their_code">Kód beolvasása</string>
     <string name="verification_scan_emoji_title">Nem lehet beolvasni</string>
-    <string name="verification_scan_emoji_subtitle">Ha nem vagy ott személyesen akkor inkább hasonlítsd össze az emodzsikat</string>
-    <string name="verification_no_scan_emoji_title">Ellenőrzés emojik összehasonlításával</string>
-    <string name="verification_verify_user">Ellenőrzés: %s</string>
-    <string name="verification_verified_user">Ellenőrizve: %s</string>
+    <string name="verification_scan_emoji_subtitle">Ha nincs ott személyesen akkor inkább hasonlítsa össze a hangulatjeleket</string>
+    <string name="verification_no_scan_emoji_title">Ellenőrzés hangulatjelek összehasonlításával</string>
+    <string name="verification_verify_user">Hitelesítés: %s</string>
+    <string name="verification_verified_user">Hitelesítve: %s</string>
     <string name="verification_request_waiting_for">Várakozás %s felhasználóra…</string>
     <string name="room_profile_not_encrypted_subtitle">Az üzenetek a szobában nincsenek végponttól végpontig titkosítva.</string>
     <string name="room_profile_encrypted_subtitle">A szobában az üzenetek végponttól végpontig titkosítva vannak. 
@@ -1192,8 +1192,8 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="rendering_event_error_type_of_event_not_handled">${app_name} nem kezeli ezt az eseményt: \'%1$s\'</string>
     <string name="rendering_event_error_exception">${app_name} problémába ütközött az esemény (azon: %1$s) megjelenítésekor</string>
     <string name="unignore">Figyelembe vesz</string>
-    <string name="verify_cannot_cross_sign">Ez a munkamenet nem tudja megosztani ezt az ellenőrzést a másik munkameneteddel.
-\nAz ellenőrzés helyileg elmentésre kerül és az alkalmazás jövőbeli verziójával meg lesz osztva.</string>
+    <string name="verify_cannot_cross_sign">Ez a munkamenet nem tudja megosztani ezt a hitelesítést a másik munkamenettel.
+\nA hitelesítés helyileg elmentésre került és az alkalmazás jövőbeli verziójával meg lesz osztva.</string>
     <string name="command_description_rainbow">A megadott üzenetet szivárvány színben küldi el</string>
     <string name="command_description_rainbow_emote">A megadott hangulatjelet szivárvány színben küldi el</string>
     <string name="settings_category_timeline">Idővonal</string>
@@ -1202,10 +1202,10 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="room_settings_enable_encryption_dialog_title">Titkosítás engedélyezése\?</string>
     <string name="room_settings_enable_encryption_dialog_content">Ha egyszer engedélyezve lett, a szoba titkosítását nem lehet kikapcsolni. A titkosított szobákban küldött üzenetek a szerver számára nem, csak a szoba tagjai számára láthatók. A titkosítás bekapcsolása megakadályoz sok botot és hidat a megfelelő működésben.</string>
     <string name="room_settings_enable_encryption_dialog_submit">Titkosítás engedélyezése</string>
-    <string name="verification_request_notice">A biztonság érdekében ellenőrizd ezt: %s az egyszeri kód összehasonlításával.</string>
-    <string name="verification_request_start_notice">A biztonság érdekében ezt végezd el személyesen vagy egy megbízható kommunikációs csatornán.</string>
-    <string name="verification_emoji_notice">Hasonlítsd össze ezeket az egyedi emodzsikat és győződj meg arról, hogy ugyanabban a sorrendben jelentek meg.</string>
-    <string name="verification_code_notice">Hasonlítsd össze ezt a kódot a másik felhasználó eszközén megjelent kóddal.</string>
+    <string name="verification_request_notice">A biztonsága érdekében ellenőrizze ezt: %s az egyszeri kód összehasonlításával.</string>
+    <string name="verification_request_start_notice">A biztonsága érdekében ezt végezze el személyesen vagy egy megbízható kommunikációs csatornán.</string>
+    <string name="verification_emoji_notice">Hasonlítsa össze ezeket az egyedi hangulatjeleket és győződjön meg arról, hogy ugyanabban a sorrendben jelentek-e meg.</string>
+    <string name="verification_code_notice">Hasonlítsa össze ezt a kódot a másik felhasználó eszközén megjelent kóddal.</string>
     <string name="verification_conclusion_ok_notice">Az üzenetek ezzel a felhasználóval a végpontok között titkosítva vannak és más nem tudja elolvasni.</string>
     <string name="verification_conclusion_ok_self_notice">Ez a munkameneted hitelesítve van. A titkosított üzenetekhez hozzáférése van és más felhasználók megbízhatónak látják.</string>
     <string name="encryption_information_cross_signing_state">Eszközök közti hitelesítés</string>
@@ -1463,7 +1463,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="call_failed_no_connection">${app_name} hívás sikertelen</string>
     <string name="call_failed_no_connection_description">Nem sikerült felépíteni a valós idejű kapcsolatot.
 \nKérd meg a Matrix-kiszolgálód rendszergazdáját, hogy állítson be egy TURN-kiszolgálót, hogy a hívások megbízhatóan működjenek.</string>
-    <string name="login_error_ssl_peer_unverified">SSL hiba: a partner személyazonossága nem lett megerősítve.</string>
+    <string name="login_error_ssl_peer_unverified">SSL hiba: a partner személyazonossága nem lett hitelesítve.</string>
     <string name="settings_call_show_confirmation_dialog_title">Véletlen hívás megakadályozása</string>
     <string name="room_participants_action_cancel_invite">Meghívás visszavonása</string>
     <string name="room_participants_power_level_demote_warning_title">Lefokozza magát\?</string>
@@ -2082,9 +2082,9 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="settings_server_room_version_stable">stabil</string>
     <string name="settings_server_default_room_version">Alapértelmezett verzió</string>
     <string name="settings_server_room_versions">Szoba verziók 👓</string>
-    <string name="verification_scan_self_emoji_subtitle">Ellenőrzés inkább emodzsik összehasonlításával</string>
+    <string name="verification_scan_self_emoji_subtitle">Hitelesítés inkább hangulatjelek összehasonlításával</string>
     <string name="verification_scan_with_this_device">Beolvasás ezzel az eszközzel</string>
-    <string name="verification_scan_self_notice">Olvasd be a kódot egy másik eszközöddel vagy válts és olvasd be ezzel az eszközzel</string>
+    <string name="verification_scan_self_notice">Olvassa be a kódot egy másik eszközzel vagy váltson és olvassa be ezzel az eszközzel</string>
     <string name="hs_client_url">Matrix szerver API URL</string>
     <string name="missing_permissions_title">Hiányzó engedélyek</string>
     <string name="denied_permission_camera">A művelethez a rendszer beállításokban engedélyezni kell a kamera használatát.</string>
@@ -2531,9 +2531,9 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="ftue_auth_password_reset_confirmation">Jelszó visszaállítás</string>
     <string name="ftue_auth_forgot_password">Elfelejtett jelszó</string>
     <string name="ftue_auth_email_resend_email">E-mail újraküldése</string>
-    <string name="ftue_auth_email_verification_footer">Nem kaptad meg az e-mailt\?</string>
-    <string name="ftue_auth_email_verification_subtitle">Kövesd az útmutatást, amit ide küldtünk: %s</string>
-    <string name="ftue_auth_email_verification_title">E-mail ellenőrzése</string>
+    <string name="ftue_auth_email_verification_footer">Nem kapta meg az e-mailt\?</string>
+    <string name="ftue_auth_email_verification_subtitle">Kövese az útmutatót, amelyet ide küldtünk: %s</string>
+    <string name="ftue_auth_email_verification_title">E-mail-cím hitelesítése</string>
     <string name="ftue_auth_phone_confirmation_resend_code">Kód újraküldése</string>
     <string name="ftue_auth_phone_confirmation_subtitle">Egy kódot küldtünk ide: %s</string>
     <string name="ftue_auth_phone_confirmation_title">Telefonszám megerősítése</string>
@@ -2542,10 +2542,10 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="ftue_auth_new_password_subtitle">Bizonyosodj meg róla, hogy minimum 8 karakter hosszú.</string>
     <string name="ftue_auth_phone_confirmation_entry_title">Megerősítő kód</string>
     <string name="ftue_auth_phone_entry_title">Telefonszám</string>
-    <string name="ftue_auth_phone_subtitle">A %s szervernek ellenőriznie kell a fiókod</string>
+    <string name="ftue_auth_phone_subtitle">A %s kiszolgálónak hitelesítenie kell az Ön fiókját</string>
     <string name="ftue_auth_phone_title">Add meg a telefonszámod</string>
     <string name="ftue_auth_email_entry_title">E-mail</string>
-    <string name="ftue_auth_email_subtitle">A %s szervernek ellenőriznie kell a fiókod</string>
+    <string name="ftue_auth_email_subtitle">A %s kiszolgálónak hitelesítenie kell az Ön fiókját</string>
     <string name="ftue_auth_email_title">Add meg az e-mail címed</string>
     <string name="ftue_auth_terms_subtitle">Kérünk, olvasd el a %s szerver felhasználási feltételeit</string>
     <string name="ftue_auth_terms_title">Szerver szabályok</string>
@@ -2564,7 +2564,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="ftue_auth_create_account_title">Fiók létrehozása</string>
     <string name="ftue_auth_create_account_choose_server_header">Itt lesznek tárolva a beszélgetéseid</string>
     <string name="ftue_auth_choose_server_subtitle">Mi a szervered címe\? Itt lesz tárolva az összes üzeneted</string>
-    <string name="auth_reset_password_error_unverified">Az email cím nem lett ellenőrizve, kérlek nézd meg a beérkező email-jeidet</string>
+    <string name="auth_reset_password_error_unverified">Az e-mail-cím nem lett hitelesítve, nézze meg a beérkező leveleit</string>
     <string name="labs_enable_element_call_permission_shortcuts_summary">Element Call kisalkalmazás kamera és mikrofon használatának automatikus engedélyezése</string>
     <string name="labs_enable_element_call_permission_shortcuts">Element Call jogosultságok engedélyezése</string>
     <plurals name="room_removed_messages">
@@ -2585,7 +2585,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="ftue_auth_new_password_title">Válassz jelszót</string>
     <string name="ftue_auth_new_password_entry_title">Új jelszó</string>
     <string name="ftue_auth_reset_password_breaker_title">Ellenőrizd az e-mailed.</string>
-    <string name="ftue_auth_reset_password_email_subtitle">%s ellenőrző hivatkozást fog küldeni</string>
+    <string name="ftue_auth_reset_password_email_subtitle">%s ellenőrző-hivatkozást fog küldeni</string>
     <string name="updating_your_data">Adatok frissítése…</string>
     <string name="font_size_use_system">Rendszerbeállítás használata</string>
     <string name="font_size_section_manually">Kézi beállítás</string>
@@ -2754,9 +2754,9 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="push_gateway_item_device_id">Munkamenet azon.:</string>
     <string name="error_check_network">Valami nem sikerült. Kérlek ellenőrizd a hálózati kapcsolatot és próbáld újra.</string>
     <string name="command_description_devtools">A fejlesztői eszközök képernyő megnyitása</string>
-    <string name="room_settings_global_block_unverified_info_text">🔒 Bekapcsoltad a Biztonsági beállításoknál, hogy csak ellenőrzött munkamenetek számára legyen titkosítva az üzenet bármely szobában.</string>
-    <string name="some_devices_will_not_be_able_to_decrypt">⚠ Ellenőrizetlen eszközök vannak a szobában, ezek nem fogják tudni visszafejteni az általad küldött üzeneteket.</string>
-    <string name="encryption_never_send_to_unverified_devices_in_room">Sose küldj titkosított üzenetet ellenőrizetlen munkamenetbe ebből a munkamenetből ebben a szobában.</string>
+    <string name="room_settings_global_block_unverified_info_text">🔒 A Biztonsági beállításokban engedélyezte a titkosítást csak ellenőrzött munkamenetekre az összes szoba számára.</string>
+    <string name="some_devices_will_not_be_able_to_decrypt">⚠ Nem hitelesített eszközök vannak a szobában, ezek nem fogják tudni visszafejteni az Ön által küldött üzeneteket.</string>
+    <string name="encryption_never_send_to_unverified_devices_in_room">Sose küldjön titkosított üzenetet nem hitelesített munkamenetekre ebbe a szobába.</string>
     <string name="grant_permission">Engedély megadása</string>
     <string name="settings_troubleshoot_test_system_settings_permission_failed">${app_name} alkalmazásnak értesítések megjelenítéséhez engedélyre van szüksége.
 \nKérjük, adj rá engedélyt.</string>
