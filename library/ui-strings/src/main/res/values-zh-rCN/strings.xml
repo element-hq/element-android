@@ -2898,4 +2898,18 @@
 \n点击以查看更早的投票。</item>
     </plurals>
     <string name="rich_text_editor_code_block">切换代码块</string>
+    <string name="user_reported_as_inappropriate_content">该用户已被举报。
+\n
+\n如果您不想再看到来自该用户的任何内容，您可以忽略他们以隐藏他们的消息。</string>
+    <string name="message_report_user">举报用户</string>
+    <string name="login_splash_sign_in">登录</string>
+    <string name="user_reported_as_inappropriate_title">已举报用户</string>
+    <string name="create_room_unknown_users_dialog_content">找不到下面列出的Matrix ID的个人资料。您是否仍想开始聊天？
+\n
+\n%s</string>
+    <string name="create_room_unknown_users_dialog_submit">无论如何都开始聊天</string>
+    <string name="invite_unknown_users_dialog_content">找不到下面列出的Matrix ID的个人资料。您是否仍想邀请他们？
+\n
+\n%s</string>
+    <string name="invite_unknown_users_dialog_submit">无论如何都邀请</string>
 </resources>
