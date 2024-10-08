@@ -16,6 +16,7 @@
 
 package im.vector.app.features.call
 
+import android.Manifest
 import android.app.Activity
 import android.app.KeyguardManager
 import android.app.PictureInPictureParams
@@ -41,6 +42,8 @@ import androidx.core.content.getSystemService
 import androidx.core.util.Consumer
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ProcessLifecycleOwner
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
@@ -248,16 +251,26 @@ class VectorCallActivity :
     }
 
     private fun startMicrophoneService() {
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this, android.Manifest.permission.FOREGROUND_SERVICE_MICROPHONE) == PackageManager.PERMISSION_GRANTED) {
-            Timber.tag(loggerTag.value).d("Starting MicrophoneAccessService.")
-            val intent = Intent(this, MicrophoneAccessService::class.java)
-            ContextCompat.startForegroundService(this, intent)
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+                == PackageManager.PERMISSION_GRANTED) {
+
+            // Only start the service if the app is in the foreground
+            if (isAppInForeground()) {
+                Timber.tag(loggerTag.value).v("Starting microphone foreground service")
+                val intent = Intent(this, MicrophoneAccessService::class.java)
+                ContextCompat.startForegroundService(this, intent)
+            } else {
+                Timber.tag(loggerTag.value).v("App is not in foreground; cannot start microphone service")
+            }
         } else {
-            Timber.tag(loggerTag.value).w("Permissions not granted. Cannot start MicrophoneAccessService.")
+            Timber.tag(loggerTag.value).v("Microphone permission not granted; cannot start service")
         }
     }
 
+    private fun isAppInForeground(): Boolean {
+        val appProcess = ProcessLifecycleOwner.get().lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)
+        return appProcess
+    }
     private fun stopMicrophoneService() {
         Timber.tag(loggerTag.value).d("Stopping MicrophoneAccessService (if needed).")
         val intent = Intent(this, MicrophoneAccessService::class.java)
