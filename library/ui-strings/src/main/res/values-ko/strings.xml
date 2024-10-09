@@ -202,7 +202,7 @@
     <string name="action_join">참가</string>
     <string name="action_reject">받지 않기</string>
     <string name="list_members">구성원 목록</string>
-    <string name="room_jump_to_first_unread">읽지 않은 첫 부분으로 이동하기.</string>
+    <string name="room_jump_to_first_unread">읽지 않은 첫 부분으로 이동하기</string>
     <plurals name="room_title_members">
         <item quantity="other">%d명의 구성원</item>
     </plurals>
@@ -218,11 +218,11 @@
     <string name="room_participants_action_mention">언급</string>
     <string name="room_participants_power_level_prompt">사용자를 자신과 동일한 권한 등급으로 승격시키는 것은 취소할 수 없습니다.
 \n확신합니까\?</string>
-    <string name="room_participants_ban_prompt_msg">이 사용자를 이 대화에서 출입 금지하겠습니까\?</string>
+    <string name="room_participants_ban_prompt_msg">차단된 사용자는 이 방에서 제거하고 다시 참여할 수 없게 됩니다.</string>
     <string name="room_one_user_is_typing">%s님이 입력 중…</string>
     <string name="room_two_users_are_typing">%1$s님과 %2$s님이 입력 중…</string>
     <string name="room_many_users_are_typing">%1$s님과 %2$s님 외 여러 명이 입력 중…</string>
-    <string name="room_do_not_have_permission_to_post">이 방에 글을 올릴 권한이 없습니다</string>
+    <string name="room_do_not_have_permission_to_post">이 방에 글을 올릴 권한이 없습니다.</string>
     <plurals name="room_new_messages_notification">
         <item quantity="other">%d개의 새 메시지</item>
     </plurals>
@@ -557,7 +557,7 @@
     <string name="deactivate_account_submit">계정 비활성화</string>
     <string name="error_empty_field_enter_user_name">사용자 이름을 입력하세요.</string>
     <string name="error_empty_field_your_password">비밀번호를 입력하세요.</string>
-    <string name="room_tombstone_versioned_description">이 방은 교체되었으며 더 이상 활동하지 않습니다</string>
+    <string name="room_tombstone_versioned_description">이 방은 교체되었으며 더 이상 활동하지 않습니다.</string>
     <string name="room_tombstone_continuation_link">대화는 여기서 계속됩니다</string>
     <string name="room_tombstone_continuation_description">이 방은 다른 대화의 연장선입니다</string>
     <string name="room_tombstone_predecessor_link">오래된 메시지를 보려면 여기를 클릭</string>
@@ -677,13 +677,13 @@
     <string name="reply">답장</string>
     <string name="global_retry">다시 시도</string>
     <string name="send_you_invite">초대장을 보냈습니다</string>
-    <string name="invited_by">%1$s 님이 초대했습니다</string>
+    <string name="invited_by">%s 님이 초대했습니다</string>
     <string name="room_list_catchup_empty_title">모두 읽었습니다!</string>
     <string name="room_list_catchup_empty_body">더 이상 읽지 않은 메시지가 없습니다</string>
     <string name="room_list_people_empty_title">대화</string>
-    <string name="room_list_people_empty_body">다이렉트 메시지 대화가 여기에 표시됩니다</string>
+    <string name="room_list_people_empty_body">다이렉트 메시지 대화가 여기에 표시됩니다.</string>
     <string name="room_list_rooms_empty_title">방</string>
-    <string name="room_list_rooms_empty_body">방이 여기 표시됩니다</string>
+    <string name="room_list_rooms_empty_body">방이 여기 표시됩니다.</string>
     <string name="title_activity_emoji_reaction_picker">리액션</string>
     <string name="action_agree">동의</string>
     <string name="message_add_reaction">리액션 추가</string>
@@ -819,7 +819,7 @@
     <string name="error_handling_incoming_share">공유 데이터를 처리할 수 없음</string>
     <string name="report_content_spam">스팸 문자입니다</string>
     <string name="report_content_inappropriate">부적절한 문자입니다</string>
-    <string name="report_content_custom">맞춤 신고</string>
+    <string name="report_content_custom">맞춤 신고…</string>
     <string name="report_content_custom_title">이 내용 신고하기</string>
     <string name="report_content_custom_hint">이 내용을 신고하는 이유</string>
     <string name="report_content_custom_submit">신고</string>
@@ -858,7 +858,7 @@
     <string name="settings_emails">이메일 주소</string>
     <string name="settings_emails_and_phone_numbers_summary">Matrix 계정에 연결된 이메일과 전화번호를 관리합니다</string>
     <string name="settings_emails_and_phone_numbers_title">이메일과 전화번호</string>
-    <string name="settings_show_emoji_keyboard_summary">메시지 입력란에 이모지 키보드 버튼을 추가합니다.</string>
+    <string name="settings_show_emoji_keyboard_summary">메시지 입력란에 이모지 키보드 버튼을 추가합니다</string>
     <string name="settings_show_emoji_keyboard">이모지 키보드 표시</string>
     <string name="settings_show_redacted_summary">삭제된 메시지를 대화에 표시합니다</string>
     <string name="settings_show_redacted">삭제된 메시지 표시</string>
@@ -994,4 +994,20 @@
     <string name="notice_room_avatar_removed">%1$s님이 방 아바타를 삭제했습니다</string>
     <string name="notice_room_topic_removed_by_you">방 주제를 삭제했습니다</string>
     <string name="notice_room_name_removed_by_you">방 이름을 삭제했습니다</string>
+    <string name="notice_room_remove_with_reason">%1$s 님이 %2$s 님을 제거했습니다. 사유: %3$s</string>
+    <string name="notice_room_remove_with_reason_by_you">%1$s 님을 제거했습니다. 사유: %2$s</string>
+    <string name="you_are_invited">초대되었습니다</string>
+    <string name="notice_room_server_acl_updated_no_change">변경 사항 없음.</string>
+    <string name="notice_room_server_acl_allow_is_empty">🎉 모든 서버의 참여가 금지되었습니다! 이 방은 더 이상 사용할 수 없습니다.</string>
+    <string name="notice_room_server_acl_set_banned">• %s 와 일치하는 서버는 금지되었습니다.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• IP 리터럴(literals)과 일치하는 서버는 차단됩니다.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• 이제 IP 리터럴(literals)과 일치하는 서버는 금지됩니다.</string>
+    <string name="notice_room_unban_with_reason">%1$s 님이 %2$s 의 금지를 해제했습니다. 사유: %3$s</string>
+    <string name="labs_auto_report_uisi">복호화 오류 자동 보고.</string>
+    <string name="notice_display_name_changed_to">%1$s 님이 표시 이름을 %2$s 로 변경했습니다</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• IP 리터럴(literals)과 일치하는 서버는 허용됩니다.</string>
+    <plurals name="x_selected">
+        <item quantity="other">%1$d 선택됨</item>
+    </plurals>
+    <string name="notice_room_server_acl_set_allowed">• %s 와 일치하는 서버가 허용되었습니다.</string>
 </resources>

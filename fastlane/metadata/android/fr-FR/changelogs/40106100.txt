@@ -1,0 +1,2 @@
+Principaux changements pour cette version : Ajout de la Gestion des Appareils Mobiles et prise en charge des membres fonctionnels.
+Intégralité des changements : https://github.com/element-hq/element-android/releases

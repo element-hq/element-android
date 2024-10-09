@@ -1,0 +1,2 @@
+تغییرات عمده در این نگارش: رفع اشکال‌ها و بهبود.
+گزارش دگرگونی کامل: https://github.com/element-hq/element-android/releases
