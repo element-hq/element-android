@@ -27,12 +27,10 @@ import timber.log.Timber
 fun safeFileName(fileName: String?, mimeType: String?): String {
     return buildString {
         // filename has to be safe for the Android System
-        Timber.i("ISSUE: FileService: original fileName $fileName")
         val result = fileName
                 ?.replace("[\\\\?%*:|\"<>\\s]".toRegex(), "_")
                 ?.takeIf { it.isNotEmpty() }
                 ?: DEFAULT_FILENAME
-        Timber.i("ISSUE: FileService: safeFileName $result")
         append(result)
         // Check that the extension is correct regarding the mimeType
         val extensionFromMime = mimeType?.let { MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType) }
