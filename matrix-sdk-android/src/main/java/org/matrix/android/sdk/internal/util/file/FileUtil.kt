@@ -29,7 +29,7 @@ fun safeFileName(fileName: String?, mimeType: String?): String {
         // filename has to be safe for the Android System
         Timber.i("ISSUE: FileService: original fileName $fileName")
         val result = fileName
-                ?.replace("[^\\p{sc=Cyrillic}\\p{sc=Han}a-z A-Z0-9\\\\.\\-]".toRegex(), "_")
+                ?.replace("[\\\\?%*:|\"<>\\s]".toRegex(), "_")
                 ?.takeIf { it.isNotEmpty() }
                 ?: DEFAULT_FILENAME
         Timber.i("ISSUE: FileService: safeFileName $result")

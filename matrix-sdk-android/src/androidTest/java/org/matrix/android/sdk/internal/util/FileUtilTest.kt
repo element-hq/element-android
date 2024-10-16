@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,23 @@
 
 package org.matrix.android.sdk.internal.util
 
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.internal.session.DefaultFileService.Companion.DEFAULT_FILENAME
 import org.matrix.android.sdk.internal.util.file.safeFileName
 
-class FileUtilTest {
+/**
+ * These tests are run on an Android device because they need to use the static
+ * MimeTypeMap#getSingleton() method, which was failing in the unit test directory.
+ */
+@RunWith(AndroidJUnit4::class)
+class FileUtilTest : InstrumentedTest {
 
     @Test
-    fun `should return original filename when valid characters are used`() {
+    fun shouldReturnOriginalFilenameWhenValidCharactersAreUsed() {
         val fileName = "validFileName.txt"
         val mimeType = "text/plain"
         val result = safeFileName(fileName, mimeType)
@@ -32,15 +40,15 @@ class FileUtilTest {
     }
 
     @Test
-    fun `should replace invalid characters with underscores`() {
+    fun shouldReplaceInvalidCharactersWithUnderscores() {
         val fileName = "invalid/filename:with*chars?.txt"
         val mimeType = "text/plain"
         val result = safeFileName(fileName, mimeType)
-        assertEquals("invalid_filename_with_chars_.txt", result)
+        assertEquals("invalid/filename_with_chars_.txt", result)
     }
 
     @Test
-    fun `should allow Cyrillic characters in the filename`() {
+    fun shouldAllowCyrillicCharactersInTheFilename() {
         val fileName = "тестовыйФайл.txt"
         val mimeType = "text/plain"
         val result = safeFileName(fileName, mimeType)
@@ -48,7 +56,7 @@ class FileUtilTest {
     }
 
     @Test
-    fun `should allow Han characters in the filename`() {
+    fun shouldAllowHanCharactersInTheFilename() {
         val fileName = "测试文件.txt"
         val mimeType = "text/plain"
         val result = safeFileName(fileName, mimeType)
@@ -56,15 +64,15 @@ class FileUtilTest {
     }
 
     @Test
-    fun `should return default filename when input is null`() {
+    fun shouldReturnDefaultFilenameWhenInputIsNull() {
         val fileName = null
         val mimeType = "text/plain"
         val result = safeFileName(fileName, mimeType)
-        assertEquals(DEFAULT_FILENAME, result)
+        assertEquals("$DEFAULT_FILENAME.txt", result)
     }
 
     @Test
-    fun `should add the correct extension when missing`() {
+    fun shouldAddTheCorrectExtensionWhenMissing() {
         val fileName = "myDocument"
         val mimeType = "application/pdf"
         val result = safeFileName(fileName, mimeType)
@@ -72,15 +80,15 @@ class FileUtilTest {
     }
 
     @Test
-    fun `should replace invalid characters and add the correct extension`() {
+    fun shouldReplaceInvalidCharactersAndAddTheCorrectExtension() {
         val fileName = "my*docu/ment"
         val mimeType = "application/pdf"
         val result = safeFileName(fileName, mimeType)
-        assertEquals("my_docu_ment.pdf", result)
+        assertEquals("my_docu/ment.pdf", result)
     }
 
     @Test
-    fun `should not modify the extension if it matches the mimeType`() {
+    fun shouldNotModifyTheExtensionIfItMatchesTheMimeType() {
         val fileName = "report.pdf"
         val mimeType = "application/pdf"
         val result = safeFileName(fileName, mimeType)
@@ -88,7 +96,7 @@ class FileUtilTest {
     }
 
     @Test
-    fun `should replace spaces with underscores`() {
+    fun shouldReplaceSpacesWithUnderscores() {
         val fileName = "my report.doc"
         val mimeType = "application/msword"
         val result = safeFileName(fileName, mimeType)
@@ -96,7 +104,7 @@ class FileUtilTest {
     }
 
     @Test
-    fun `should append extension if file name has none and mimeType is valid`() {
+    fun shouldAppendExtensionIfFileNameHasNoneAndMimeTypeIsValid() {
         val fileName = "newfile"
         val mimeType = "image/jpeg"
         val result = safeFileName(fileName, mimeType)
@@ -104,10 +112,10 @@ class FileUtilTest {
     }
 
     @Test
-    fun `should keep hyphenated names intact`() {
+    fun shouldKeepHyphenatedNamesIntact() {
         val fileName = "my-file-name"
         val mimeType = "application/octet-stream"
         val result = safeFileName(fileName, mimeType)
-        assertEquals("my-file-name", result)
+        assertEquals("my-file-name.bin", result)
     }
 }
