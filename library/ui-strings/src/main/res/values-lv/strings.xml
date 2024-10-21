@@ -925,7 +925,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="room_alias_local_address_add">Pievienot lokālo adresi</string>
     <string name="room_alias_local_address_subtitle">Iestati šīs istabas adreses, lai lietotāji var atrast šo istabu caur Tavu mājasserveri (%1$s)</string>
     <string name="room_alias_delete_confirmation">Izdzēst adresi \"%1$s\"\?</string>
-    <string name="room_settings_alias_subtitle">Skatiet un pārvaldiet šīs istabas adreses un tās redzamību istabu katalogā.</string>
+    <string name="room_settings_alias_subtitle">Skati un pārvaldi šīs istabas adreses un tās redzamību istabu katalogā.</string>
     <string name="room_settings_alias_title">Istabas adreses</string>
     <string name="settings_play_shutter_sound">Atskaņot aizvara skaņu</string>
     <string name="media_source_choose">Izvēlēties</string>
@@ -1848,7 +1848,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="room_settings_room_access_entry_unknown">Nav zināmi piekļuves iestatījumi (%s)</string>
     <string name="room_settings_room_access_entry_knock">Ikviens var pieklauvēt istabai, dalībnieki var tad pieņemt vai noraidīt</string>
     <string name="room_alias_publish_to_directory_error">Nav iespējams iegūt pašreizējās telpas direktorija redzamību (%1$s).</string>
-    <string name="space_settings_alias_subtitle">Skatiet un pārvaldiet adreses šajā telpā.</string>
+    <string name="space_settings_alias_subtitle">Skati un pārvaldi adreses šajā vietā.</string>
     <string name="room_settings_access_rules_pref_dialog_title">Kurš var piekļūt\?</string>
     <string name="room_settings_room_notifications_manage_notifications">Paziņojumus varat pārvaldīt sadaļā %1$s.</string>
     <string name="room_settings_room_notifications_encryption_notice">Lūgums ņemt vērā, ka šifrētu istabu pieminēšanas un atslēgvārdu paziņojumi nav pieejami viedierīcēs.</string>
@@ -2165,7 +2165,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="room_unsupported_e2e_algorithm">Šifrēšanas konfigurācijā ir kļūmes, tādēļ nevar nosūtīt ziņas. Lūgums sazināties ar pārvaldītāju, lai atjaunotu šifrēšanu derīgā stāvoklī.</string>
     <string name="thread_list_modal_title">Atlasīt</string>
     <string name="call_stop_screen_sharing">Apturēt ekrāna kopīgošanu</string>
-    <string name="security_prompt_text">Jāpārbauda sevi un citus, lai uzturētu drošas tērzēšanas</string>
+    <string name="security_prompt_text">Jāpārbauda sevi un citus, lai uzturētu tērzēšanas drošas</string>
     <string name="a11y_open_chat">Atvērt tērzēšanu</string>
     <string name="ftue_auth_use_case_title">Ar ko ir tērzēts visvairāk\?</string>
     <string name="labs_enable_rich_text_editor_title">Iespējot bagātinātu teksta rakstīšanu</string>
@@ -2478,7 +2478,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="identity_server_error_binding_error">Sasaiste neizdevās.</string>
     <string name="confirm_your_identity_quad_s">Jāapstiprina identitāte ar šīs pieteikšanās apliecināšanu, tādējādi nodrošinot piekļuvi šifrētajām ziņām.</string>
     <plurals name="invitations_sent_to_one_and_more_users">
-        <item quantity="zero">Uzaicinājumi tika nosūtīti %1$s</item>
+        <item quantity="zero">Uzaicinājums nosūtīts %1$s</item>
         <item quantity="one">Uzaicinājumi tika nosūtīti %1$s un vēl vienam</item>
         <item quantity="other">Uzaicinājumi tika nosūtīti %1$s un vēl %2$d</item>
     </plurals>
