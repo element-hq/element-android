@@ -85,6 +85,7 @@ internal class OwnUserIdentity(
         private val requestSender: RequestSender,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val verificationRequestFactory: VerificationRequest.Factory,
+        private val hasVerificationViolation: Boolean
 ) : UserIdentities() {
     /**
      * Our own user id.
@@ -157,8 +158,7 @@ internal class OwnUserIdentity(
         userSigningKey.trustLevel = trustLevel
 
         val crossSigningKeys = listOf(masterKey, selfSigningKey, userSigningKey)
-        // TODO https://github.com/matrix-org/matrix-rust-sdk/issues/1129
-        return MXCrossSigningInfo(userId, crossSigningKeys, false)
+        return MXCrossSigningInfo(userId, crossSigningKeys, hasVerificationViolation)
     }
 }
 
@@ -175,6 +175,7 @@ internal class UserIdentity(
         private val requestSender: RequestSender,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val verificationRequestFactory: VerificationRequest.Factory,
+        private val hasVerificationViolation: Boolean
 ) : UserIdentities() {
     /**
      * The unique ID of the user that this identity belongs to.
@@ -256,8 +257,7 @@ internal class UserIdentity(
                         masterKey.also { it.trustLevel = trustLevel },
                         selfSigningKey.also { it.trustLevel = trustLevel },
                 ),
-                // TODO https://github.com/matrix-org/matrix-rust-sdk/issues/1129
-                wasTrustedOnce = false
+                wasTrustedOnce = hasVerificationViolation
         )
     }
 }

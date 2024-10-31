@@ -24,7 +24,6 @@ import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Assert.fail
-import org.junit.Assume
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -201,9 +200,6 @@ class XSigningTest : InstrumentedTest {
 
         val aliceSession = cryptoTestData.firstSession
         val bobSession = cryptoTestData.secondSession
-
-        // Remove when https://github.com/matrix-org/matrix-rust-sdk/issues/1129
-        Assume.assumeTrue("Not yet supported by rust", aliceSession.cryptoService().name() != "rust-sdk")
 
         val aliceAuthParams = UserPasswordAuth(
                 user = aliceSession.myUserId,

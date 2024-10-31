@@ -58,7 +58,7 @@ internal class RustCrossSigningService @Inject constructor(
      * Checks that my trusted user key has signed the other user UserKey
      */
     override suspend fun checkUserTrust(otherUserId: String): UserTrustResult {
-        val identity = olmMachine.getIdentity(olmMachine.userId())
+        val identity = olmMachine.getIdentity(otherUserId)
 
         // While UserTrustResult has many different states, they are by the callers
         // converted to a boolean value immediately, thus we don't need to support
