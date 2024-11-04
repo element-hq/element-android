@@ -54,7 +54,7 @@ jobs:
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
       - name: Start synapse server
-        uses: michaelkaye/setup-matrix-synapse@v1.0.4
+        uses: michaelkaye/setup-matrix-synapse@v1.0.5
         with:
           uploadLogs: true
           httpPort: 8080
