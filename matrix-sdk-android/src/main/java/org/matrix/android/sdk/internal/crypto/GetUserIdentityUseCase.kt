@@ -66,7 +66,8 @@ internal class GetUserIdentityUseCase @Inject constructor(
                         innerMachine = innerMachine,
                         requestSender = requestSender,
                         coroutineDispatchers = coroutineDispatchers,
-                        verificationRequestFactory = verificationRequestFactory
+                        verificationRequestFactory = verificationRequestFactory,
+                        hasVerificationViolation = identity.hasVerificationViolation
                 )
             }
             is InnerUserIdentity.Own -> {
@@ -89,7 +90,8 @@ internal class GetUserIdentityUseCase @Inject constructor(
                         innerMachine = innerMachine,
                         requestSender = requestSender,
                         coroutineDispatchers = coroutineDispatchers,
-                        verificationRequestFactory = verificationRequestFactory
+                        verificationRequestFactory = verificationRequestFactory,
+                        hasVerificationViolation = identity.hasVerificationViolation
                 )
             }
             null                             -> null

@@ -84,7 +84,9 @@ import org.matrix.rustcomponents.sdk.crypto.ShieldState
 import org.matrix.rustcomponents.sdk.crypto.SignatureVerification
 import org.matrix.rustcomponents.sdk.crypto.setLogger
 import timber.log.Timber
+import uniffi.matrix_sdk_crypto.DecryptionSettings
 import uniffi.matrix_sdk_crypto.LocalTrust
+import uniffi.matrix_sdk_crypto.TrustRequirement
 import java.io.File
 import java.nio.charset.Charset
 import javax.inject.Inject
@@ -450,7 +452,12 @@ internal class OlmMachine @Inject constructor(
                     }
 
                     val serializedEvent = adapter.toJson(event)
-                    val decrypted = inner.decryptRoomEvent(serializedEvent, event.roomId, false, false)
+                    val decrypted = inner.decryptRoomEvent(
+                            serializedEvent, event.roomId,
+                            handleVerificationEvents = false,
+                            strictShields = false,
+                            decryptionSettings = DecryptionSettings(TrustRequirement.UNTRUSTED)
+                    )
 
                     val deserializationAdapter =
                             moshi.adapter<JsonDict>(Map::class.java)
