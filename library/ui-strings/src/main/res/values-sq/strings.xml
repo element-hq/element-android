@@ -2960,4 +2960,6 @@
     <string name="user_reported_as_inappropriate_content">Përdoruesi është raportuar.
 \n
 \nNëse s’doni të shihni më lëndë nga ky përdorues, mund ta shpërfillni, që mesazhet e tij të jenë të fshehura.</string>
+    <string name="microphone_in_use_title">Mikrofon në përdorim</string>
+    <string name="call_unsupported_matrix_rtc_call">Thirrje që s’mbulohet. Për të marrë pjesë në këtë thirrje lypset aplikacioni i ri Element X.</string>
 </resources>
