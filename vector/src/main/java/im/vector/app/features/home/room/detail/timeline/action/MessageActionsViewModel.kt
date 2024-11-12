@@ -214,6 +214,9 @@ class MessageActionsViewModel @AssistedInject constructor(
                     in EventType.POLL_END.values -> {
                         stringProvider.getString(CommonStrings.message_reply_to_ended_poll_preview)
                     }
+                    in EventType.ELEMENT_CALL_NOTIFY.values -> {
+                        stringProvider.getString(CommonStrings.call_unsupported)
+                    }
                     else -> null
                 }
             }

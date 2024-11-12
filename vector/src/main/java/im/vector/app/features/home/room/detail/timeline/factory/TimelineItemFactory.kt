@@ -32,6 +32,7 @@ class TimelineItemFactory @Inject constructor(
         private val widgetItemFactory: WidgetItemFactory,
         private val verificationConclusionItemFactory: VerificationItemFactory,
         private val callItemFactory: CallItemFactory,
+        private val elementCallItemFactory: ElementCallItemFactory,
         private val decryptionFailureTracker: DecryptionFailureTracker,
         private val timelineEventVisibilityHelper: TimelineEventVisibilityHelper,
         private val session: Session,
@@ -119,6 +120,8 @@ class TimelineItemFactory @Inject constructor(
                             noticeItemFactory.create(params)
                         }
                     }
+                    // Element Call
+                    in EventType.ELEMENT_CALL_NOTIFY.values -> elementCallItemFactory.create(params)
                     // Calls
                     EventType.CALL_INVITE,
                     EventType.CALL_HANGUP,

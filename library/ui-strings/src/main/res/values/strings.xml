@@ -2939,6 +2939,9 @@
 
     <string name="call_slide_to_end_conference">Slide to end the call</string>
 
+    <string name="call_unsupported">Unsupported call</string>
+    <string name="call_unsupported_matrix_rtc_call">Unsupported call. The new Element X app is needed to join this call.</string>
+
     <string name="re_authentication_activity_title">Re-Authentication Needed</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
     <string name="re_authentication_default_confirm_text">${app_name} requires you to enter your credentials to perform this action.</string>

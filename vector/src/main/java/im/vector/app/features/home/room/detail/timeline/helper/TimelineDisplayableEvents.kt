@@ -47,6 +47,7 @@ object TimelineDisplayableEvents {
     ) +
             EventType.POLL_START.values +
             EventType.POLL_END.values +
+            EventType.ELEMENT_CALL_NOTIFY.values +
             EventType.STATE_ROOM_BEACON_INFO.values +
             EventType.BEACON_LOCATION_DATA.values
 }
