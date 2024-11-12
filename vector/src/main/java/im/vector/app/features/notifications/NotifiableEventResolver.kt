@@ -34,7 +34,9 @@ import org.matrix.android.sdk.api.session.getUserOrDefault
 import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
+import org.matrix.android.sdk.api.session.room.model.message.ElementCallNotifyContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachmentContent
+import org.matrix.android.sdk.api.session.room.model.message.isUserMentioned
 import org.matrix.android.sdk.api.session.room.sender.SenderInfo
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getEditedEventId
@@ -149,9 +151,11 @@ class NotifiableEventResolver @Inject constructor(
             )
         } else {
             event.attemptToDecryptIfNeeded(session)
-            // only convert encrypted messages to NotifiableMessageEvents
+            // For incoming Element Call, check that the user is mentioned
+            val isIncomingElementCall = event.root.getClearType() in EventType.ELEMENT_CALL_NOTIFY.values &&
+                    event.root.getClearContent()?.toModel<ElementCallNotifyContent>()?.isUserMentioned(session.myUserId) == true
             when {
-                event.root.supportsNotification() -> {
+                isIncomingElementCall || event.root.supportsNotification() -> {
                     val body = displayableEventFormatter.format(event, isDm = room.roomSummary()?.isDirect.orFalse(), appendAuthor = false).toString()
                     val roomName = room.roomSummary()?.displayName ?: ""
                     val senderDisplayName = event.senderInfo.disambiguatedDisplayName

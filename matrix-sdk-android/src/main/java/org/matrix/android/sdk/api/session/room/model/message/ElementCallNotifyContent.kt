@@ -32,3 +32,8 @@ data class Mentions(
         @Json(name = "room") val room: Boolean? = null,
         @Json(name = "user_ids") val userIds: List<String>? = null,
 )
+
+fun ElementCallNotifyContent.isUserMentioned(userId: String): Boolean {
+    return mentions?.room == true ||
+            mentions?.userIds?.contains(userId) == true
+}

@@ -142,6 +142,9 @@ class DisplayableEventFormatter @Inject constructor(
             in EventType.STATE_ROOM_BEACON_INFO.values -> {
                 simpleFormat(senderName, stringProvider.getString(CommonStrings.sent_live_location), appendAuthor)
             }
+            in EventType.ELEMENT_CALL_NOTIFY.values -> {
+                simpleFormat(senderName, stringProvider.getString(CommonStrings.call_unsupported), appendAuthor)
+            }
             VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO -> {
                 formatVoiceBroadcastEvent(timelineEvent.root, isDm, senderName)
             }
@@ -242,6 +245,9 @@ class DisplayableEventFormatter @Inject constructor(
             }
             in EventType.STATE_ROOM_BEACON_INFO.values -> {
                 stringProvider.getString(CommonStrings.sent_live_location)
+            }
+            in EventType.ELEMENT_CALL_NOTIFY.values -> {
+                stringProvider.getString(CommonStrings.call_unsupported)
             }
             else -> {
                 span {
