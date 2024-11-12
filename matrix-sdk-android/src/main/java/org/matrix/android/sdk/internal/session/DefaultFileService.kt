@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.session
 
 import android.content.Context
 import android.net.Uri
-import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.completeWith

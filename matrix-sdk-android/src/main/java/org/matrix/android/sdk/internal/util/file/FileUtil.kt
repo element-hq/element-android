@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.util.file
 
 import android.webkit.MimeTypeMap
 import org.matrix.android.sdk.internal.session.DefaultFileService.Companion.DEFAULT_FILENAME
-import timber.log.Timber
 
 /**
  * Remove any characters from the file name that are not supported by the Android OS,
