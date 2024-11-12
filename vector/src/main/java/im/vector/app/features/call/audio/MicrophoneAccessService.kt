@@ -23,12 +23,14 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.startForegroundCompat
 import im.vector.app.core.services.VectorAndroidService
 import im.vector.app.features.notifications.NotificationUtils
+import im.vector.lib.core.utils.timer.Clock
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MicrophoneAccessService : VectorAndroidService() {
 
     @Inject lateinit var notificationUtils: NotificationUtils
+    @Inject lateinit var clock: Clock
     private val binder = LocalBinder()
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -38,7 +40,7 @@ class MicrophoneAccessService : VectorAndroidService() {
     }
 
     private fun showMicrophoneAccessNotification() {
-        val notificationId = System.currentTimeMillis().toInt()
+        val notificationId = clock.epochMillis().toInt()
         val notification = notificationUtils.buildMicrophoneAccessNotification()
         startForegroundCompat(notificationId, notification)
     }
