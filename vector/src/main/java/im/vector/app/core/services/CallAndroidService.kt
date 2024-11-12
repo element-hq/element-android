@@ -22,6 +22,7 @@ import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.extensions.startForegroundCompat
 import im.vector.app.features.call.CallArgs
 import im.vector.app.features.call.VectorCallActivity
+import im.vector.app.features.call.audio.MicrophoneAccessService
 import im.vector.app.features.call.telecom.CallConnection
 import im.vector.app.features.call.webrtc.WebRtcCall
 import im.vector.app.features.call.webrtc.WebRtcCallManager
@@ -199,6 +200,9 @@ class CallAndroidService : VectorAndroidService() {
             stopForegroundCompat()
             mediaSession?.isActive = false
             myStopSelf()
+
+            // Also stop the microphone service if it is running
+            stopService(Intent(this, MicrophoneAccessService::class.java))
         }
         val wasConnected = connectedCallIds.remove(callId)
         if (!wasConnected && !terminatedCall.isOutgoing && !rejected && endCallReason != EndCallReason.ANSWERED_ELSEWHERE) {

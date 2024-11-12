@@ -25,6 +25,8 @@ style:
     active: false
   UseCheckOrError:
     active: false
+  UnusedPrivateProperty:
+    active: false
 
 empty-blocks:
   EmptyFunctionBlock:
@@ -75,6 +77,8 @@ naming:
 performance:
   SpreadOperator:
     active: false
+  ForEachOnRange:
+    active: false
 
 # Note: all rules for `comments` are disabled by default, but I put them here to be aware of their existence
 comments:
@@ -91,7 +95,7 @@ comments:
   EndOfSentenceFormat:
     active: true
   OutdatedDocumentation:
-    active: true
+    active: false
   UndocumentedPublicClass:
     active: false
   UndocumentedPublicFunction:
