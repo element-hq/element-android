@@ -665,12 +665,12 @@
     <string name="call_remove_jitsi_widget_progress">Kết thúc cuộc gọi…</string>
     <string name="call_ended_invite_timeout_title">Không trả lời</string>
     <string name="call_ended_user_busy_description">Người dùng bạn vừa gọi đang bận.</string>
-    <string name="call_ended_user_busy_title">Người dụng bận</string>
+    <string name="call_ended_user_busy_title">Người dùng bận</string>
     <string name="room_list_rooms_empty_body">Phòng chat của bạn được hiển thị ở đây. Bạn có thể tạo mới phòng chat hoặc tham gia các phòng cộng đồng hiện có.</string>
     <string name="login_server_title">Chọn một máy chủ</string>
     <string name="login_splash_submit">Hãy bắt đầu</string>
     <string name="login_splash_text3">Mở rộng và tùy chỉnh trải nghiệm của bạn</string>
-    <string name="login_splash_text2">Giữ cho hội thoải riêng tư với bảo mật đầu cuối</string>
+    <string name="login_splash_text2">Cuộc hội thoại được bảo mật bằng mã hóa</string>
     <string name="login_splash_text1">Chat với một người hoặc chat nhóm</string>
     <string name="login_splash_title">Đây là hội thoại của bạn. Bạn sở hữu nó.</string>
     <string name="timeline_unread_messages">Tin nhắn chưa đọc</string>
