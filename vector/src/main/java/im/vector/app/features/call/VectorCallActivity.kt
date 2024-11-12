@@ -244,7 +244,6 @@ class VectorCallActivity :
     private fun startMicrophoneService() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
                 == PackageManager.PERMISSION_GRANTED) {
-
             // Only start the service if the app is in the foreground
             if (isAppInForeground()) {
                 Timber.tag(loggerTag.value).v("Starting microphone foreground service")
