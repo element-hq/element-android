@@ -2,9 +2,9 @@ ext.versions = [
         'minSdk'            : 21,
         'compileSdk'        : 34,
         'targetSdk'         : 34,
-        'sourceCompat'      : JavaVersion.VERSION_17,
-        'targetCompat'      : JavaVersion.VERSION_17,
-        'jvmTarget'         : "17",
+        'sourceCompat'      : JavaVersion.VERSION_21,
+        'targetCompat'      : JavaVersion.VERSION_21,
+        'jvmTarget'         : "21",
 ]
 
 def gradle = "8.4.2"
