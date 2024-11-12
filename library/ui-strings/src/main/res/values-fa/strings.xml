@@ -1822,10 +1822,10 @@
     <string name="call_transfer_failure">هنگام انتقال تماس خطایی روی داد</string>
     <string name="call_transfer_title">انتقال</string>
     <string name="call_transfer_connect_action">متصل شوید</string>
-    <string name="call_only_active">تماس فعال (%1$s)</string>
-    <string name="call_dial_pad_lookup_error">هنگام جستجوی شماره تلفن خطایی روی داد</string>
-    <string name="call_dial_pad_title">‬پد شماره گیری</string>
-    <string name="call_tile_call_back">تماس بگیرید</string>
+    <string name="call_only_active">تماس فعّال (%1$s)</string>
+    <string name="call_dial_pad_lookup_error">خطایی در یافتن شماره تلفن رخ داد</string>
+    <string name="call_dial_pad_title">صفحهٔ شماره گیری</string>
+    <string name="call_tile_call_back">پاسخ تماس</string>
     <string name="call_tile_ended">این تماس پایان یافته است</string>
     <string name="call_tile_other_declined">%1$s تماس را رد کرد</string>
     <string name="failed_to_initialize_cross_signing">خطا در تنظیم امضای متقابل</string>
@@ -2972,4 +2972,7 @@
     <string name="user_reported_as_inappropriate_content">کاربر گزارش شد.
 \n
 \nاگر دیگر نمی‌خواهید محتوایی از این کاربر ببینید، می‌توانید برای نهفتن پیام‌هایش نادیده‌اش بگیرید.</string>
+    <string name="call_unsupported_matrix_rtc_call">تماس پشتیبانی نشده. برای پیوستن به این تماس نیاز به کارهٔ جدید المنت اکس است.</string>
+    <string name="microphone_in_use_title">صدابَر در حال استفاده</string>
+    <string name="call_unsupported">تماس پشتیبانی نشده</string>
 </resources>
