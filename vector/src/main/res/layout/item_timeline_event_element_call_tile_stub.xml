@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:viewBindingIgnore="true">
+
+    <ImageView
+        android:id="@+id/itemCallCreatorAvatar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center_horizontal"
+        android:importantForAccessibility="no"
+        tools:src="@sample/user_round_avatars" />
+
+    <TextView
+        android:id="@+id/itemCallCreatorNameTextView"
+        style="@style/Widget.Vector.TextView.Subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp"
+        android:drawablePadding="6dp"
+        android:gravity="center"
+        android:textColor="?vctr_content_primary"
+        android:textStyle="bold"
+        tools:text="@sample/users.json/data/displayName" />
+
+    <TextView
+        android:id="@+id/itemCallStatusTextView"
+        style="@style/Widget.Vector.TextView.Body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:drawablePadding="8dp"
+        android:gravity="start"
+        android:maxLines="3"
+        android:text="@string/call_unsupported_matrix_rtc_call"
+        android:textColor="?vctr_content_secondary"
+        app:drawableStartCompat="@drawable/ic_call_audio_small" />
+
+</LinearLayout>

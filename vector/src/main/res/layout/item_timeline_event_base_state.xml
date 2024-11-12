@@ -52,21 +52,28 @@
             android:id="@+id/messageVerificationRequestStub"
             style="@style/TimelineContentStubBaseParams"
             android:layout="@layout/item_timeline_event_verification_stub"
-            tools:layout_marginTop="250dp"
+            tools:layout_marginTop="200dp"
             tools:visibility="visible" />
 
         <ViewStub
             android:id="@+id/messageVerificationDoneStub"
             style="@style/TimelineContentStubBaseParams"
             android:layout="@layout/item_timeline_event_status_tile_stub"
-            tools:layout_marginTop="450dp"
+            tools:layout_marginTop="360dp"
             tools:visibility="visible" />
 
         <ViewStub
             android:id="@+id/messageWidgetStub"
             style="@style/TimelineContentStubBaseParams"
             android:layout="@layout/item_timeline_event_widget_stub"
-            tools:layout_marginTop="280dp"
+            tools:layout_marginTop="440dp"
+            tools:visibility="visible" />
+
+        <ViewStub
+            android:id="@+id/messageElementCallStub"
+            style="@style/TimelineContentStubBaseParams"
+            android:layout="@layout/item_timeline_event_element_call_tile_stub"
+            tools:layout_marginTop="520dp"
             tools:visibility="visible" />
 
     </FrameLayout>
