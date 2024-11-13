@@ -2972,4 +2972,7 @@
     <string name="user_reported_as_inappropriate_content">Ce contenu a été signalé.
 \n
 \nSi vous ne voulez plus voir de contenu de cet utilisateur, vous pouvez l’ignorer pour masquer ses messages.</string>
+    <string name="call_unsupported">Appel non pris en charge</string>
+    <string name="call_unsupported_matrix_rtc_call">Appel non pris en charge. La nouvelle application Element X est nécessaire pour rejoindre cet appel.</string>
+    <string name="microphone_in_use_title">Microphone en service</string>
 </resources>
