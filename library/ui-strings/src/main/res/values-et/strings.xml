@@ -2972,4 +2972,7 @@
     <string name="user_reported_as_inappropriate_content">Selle kasutaja tegevusest on haldajale teada antud.
 \n
 \nKui sa ei soovi tema loodud sisu enam näha, siis kasuta eiramise võimalust.</string>
+    <string name="microphone_in_use_title">Mikrofon on kasutusel</string>
+    <string name="call_unsupported">See kõne pole toetatud</string>
+    <string name="call_unsupported_matrix_rtc_call">See kõne pole toetatud. Kõnega liitumiseks palun kasuta uut Element X rakendust.</string>
 </resources>
