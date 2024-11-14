@@ -2914,4 +2914,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="user_reported_as_inappropriate_content">Pengguna ini telah dilaporkan.
 \n
 \nJika Anda tidak ingin melihat konten lagi dari pengguna ini, Anda dapat mengabaikan untuk menyembunyikan pesannya.</string>
+    <string name="microphone_in_use_title">Mikrofon digunakan</string>
+    <string name="call_unsupported">Panggilan tidak didukung</string>
+    <string name="call_unsupported_matrix_rtc_call">Panggilan tidak didukung. Aplikasi Element X yang baru diperlukan untuk bergabung ke panggilan ini.</string>
 </resources>
