@@ -3032,4 +3032,7 @@
     <string name="user_reported_as_inappropriate_content">Uživatel byl nahlášen.
 \n
 \nPokud nechcete vidět další obsah od tohoto uživatele, můžete ho ignorovat a skrýt jeho zprávy.</string>
+    <string name="call_unsupported">Nepodporované volání</string>
+    <string name="call_unsupported_matrix_rtc_call">Nepodporované volání. Pro připojení k tomuto volání je nutná nová aplikace Element X.</string>
+    <string name="microphone_in_use_title">Mikrofon se používá</string>
 </resources>
