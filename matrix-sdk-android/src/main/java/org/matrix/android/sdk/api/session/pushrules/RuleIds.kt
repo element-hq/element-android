@@ -57,6 +57,9 @@ object RuleIds {
     const val RULE_ID_POLL_END = ".m.rule.poll_end"
     const val RULE_ID_POLL_END_UNSTABLE = ".org.matrix.msc3930.rule.poll_end"
 
+    const val RULE_ID_ELEMENT_CALL_NOTIFY = ".m.call.notify"
+    const val RULE_ID_ELEMENT_CALL_NOTIFY_UNSTABLE = ".org.matrix.msc4075.call.notify"
+
     // Not documented
     const val RULE_ID_FALLBACK = ".m.rule.fallback"
 
