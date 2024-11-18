@@ -66,6 +66,7 @@ class VectorPreferences @Inject constructor(
         const val SETTINGS_LABS_NEW_SESSION_MANAGER_KEY = "SETTINGS_LABS_NEW_SESSION_MANAGER_KEY"
         const val SETTINGS_LABS_CLIENT_INFO_RECORDING_KEY = "SETTINGS_LABS_CLIENT_INFO_RECORDING_KEY"
         const val SETTINGS_LABS_VOICE_BROADCAST_KEY = "SETTINGS_LABS_VOICE_BROADCAST_KEY"
+        const val SETTINGS_LABS_JITSI_CALL_NOTIFICATION_KEY = "SETTINGS_LABS_JITSI_CALL_NOTIFICATION_KEY"
         const val SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY = "SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY"
         const val SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY = "SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY"
         const val SETTINGS_CRYPTOGRAPHY_MANAGE_PREFERENCE_KEY = "SETTINGS_CRYPTOGRAPHY_MANAGE_PREFERENCE_KEY"
@@ -1254,6 +1255,11 @@ class VectorPreferences @Inject constructor(
                         SETTINGS_LABS_VOICE_BROADCAST_KEY,
                         getDefault(im.vector.app.config.R.bool.settings_labs_enable_voice_broadcast_default)
                 )
+    }
+
+    fun isJitsiCallNotificationEnabled(): Boolean {
+        return vectorFeatures.isJitsiCallNotificationEnabled() &&
+                defaultPrefs.getBoolean(SETTINGS_LABS_JITSI_CALL_NOTIFICATION_KEY, getDefault(R.bool.settings_labs_enable_jitsi_call_notifications_default))
     }
 
     fun showIpAddressInSessionManagerScreens(): Boolean {

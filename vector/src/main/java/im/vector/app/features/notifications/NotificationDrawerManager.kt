@@ -231,5 +231,6 @@ class NotificationDrawerManager @Inject constructor(
         const val ROOM_MESSAGES_NOTIFICATION_ID = 1
         const val ROOM_EVENT_NOTIFICATION_ID = 2
         const val ROOM_INVITATION_NOTIFICATION_ID = 3
+        const val JITSI_CALL_NOTIFICATION_ID = 4
     }
 }

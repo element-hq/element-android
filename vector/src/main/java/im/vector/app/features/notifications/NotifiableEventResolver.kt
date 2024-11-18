@@ -26,6 +26,7 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.getRootThreadEventId
 import org.matrix.android.sdk.api.session.events.model.isEdition
 import org.matrix.android.sdk.api.session.events.model.isImageMessage
+import org.matrix.android.sdk.api.session.events.model.isJitsiEvent
 import org.matrix.android.sdk.api.session.events.model.supportsNotification
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
@@ -69,6 +70,9 @@ class NotifiableEventResolver @Inject constructor(
         return when {
             event.supportsNotification() || event.type == EventType.ENCRYPTED -> {
                 resolveMessageEvent(timelineEvent, session, canBeReplaced = false, isNoisy = isNoisy)
+            }
+            event.isJitsiEvent() -> {
+                resolveJitsiEvent(timelineEvent, session, canBeReplaced = false, isNoisy = isNoisy)
             }
             else -> {
                 // If the event can be displayed, display it as is
@@ -119,6 +123,50 @@ class NotifiableEventResolver @Inject constructor(
             resolveMessageEvent(timelineEvent, session, canBeReplaced = canBeReplaced, isNoisy = !notificationAction.soundName.isNullOrBlank())
         } else {
             Timber.d("Matched push rule is set to not notify")
+            null
+        }
+    }
+
+    private fun resolveJitsiEvent(event: TimelineEvent, session: Session, canBeReplaced: Boolean, isNoisy: Boolean): NotifiableJitsiEvent?{
+        // The event only contains an eventId, and roomId (type is m.room.*) , we need to get the displayable content (names, avatar, text, etc...)
+        val room = session.getRoom(event.root.roomId!! /*roomID cannot be null*/)
+
+        return if (room != null) {
+            val body = displayableEventFormatter.format(event, isDm = room.roomSummary()?.isDirect.orFalse(), appendAuthor = false).toString()
+            val roomName = room.roomSummary()?.displayName.orEmpty()
+            val senderDisplayName = event.senderInfo.disambiguatedDisplayName
+
+            NotifiableJitsiEvent(
+                    eventId = event.root.eventId.orEmpty(),
+                    editedEventId = event.getEditedEventId(),
+                    canBeReplaced = canBeReplaced,
+                    timestamp = event.root.originServerTs ?: 0,
+                    noisy = isNoisy,
+                    senderName = senderDisplayName,
+                    senderId = event.root.senderId,
+                    body = body,
+                    roomId = event.root.roomId!!,
+                    threadId = event.root.getRootThreadEventId(),
+                    roomName = roomName,
+                    roomIsDirect = room.roomSummary()?.isDirect ?: false,
+                    roomAvatarPath = session.contentUrlResolver()
+                            .resolveThumbnail(
+                                    room.roomSummary()?.avatarUrl,
+                                    250,
+                                    250,
+                                    ContentUrlResolver.ThumbnailMethod.SCALE
+                            ),
+                    senderAvatarPath = session.contentUrlResolver()
+                            .resolveThumbnail(
+                                    event.senderInfo.avatarUrl,
+                                    250,
+                                    250,
+                                    ContentUrlResolver.ThumbnailMethod.SCALE
+                            ),
+                    matrixID = session.myUserId,
+                    soundName = null
+            )
+        } else {
             null
         }
     }

@@ -358,6 +358,79 @@ class NotificationUtils @Inject constructor(
         return builder.build()
     }
 
+    /**
+     * Build an incoming jitsi call notification.
+     * This notification starts the VectorHomeActivity which is in charge of centralizing the incoming call flow.
+     *
+     * @param callId id of the jitsi call
+     * @param signalingRoomId id of the room
+     * @param title title of the notification
+     * @param fromBg true if the app is in background when posting the notification
+     * @return the call notification.
+     */
+    fun buildIncomingJitsiCallNotification(
+            callId: String,
+            signalingRoomId: String,
+            title: String,
+            fromBg: Boolean,
+    ): Notification {
+        val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
+        val notificationChannel = if (fromBg) CALL_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID
+        val builder = NotificationCompat.Builder(context, notificationChannel)
+                .setContentTitle(ensureTitleNotEmpty(title))
+                .apply {
+                    setContentText(stringProvider.getString(R.string.incoming_video_call))
+                    setSmallIcon(R.drawable.ic_call_answer_video)
+                }
+                .setCategory(NotificationCompat.CATEGORY_CALL)
+                .setColor(ThemeUtils.getColor(context, android.R.attr.colorPrimary))
+                .setLights(accentColor, 500, 500)
+                .setOngoing(true)
+
+        val contentIntent = MainActivity.jitsiCallIntent(
+                context = context,
+                roomId = signalingRoomId,
+                callId = callId,
+        )
+
+        val contentPendingIntent = PendingIntent.getActivity(
+                context,
+                clock.epochMillis().toInt(),
+                contentIntent,
+                PendingIntentCompat.FLAG_IMMUTABLE
+        )
+
+        val answerCallPendingIntent = TaskStackBuilder.create(context)
+                .addNextIntentWithParentStack(HomeActivity.newIntent(context, firstStartMainActivity = false))
+                .addNextIntent(contentIntent)
+                .getPendingIntent(clock.epochMillis().toInt(), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE)
+
+        val rejectCallPendingIntent = buildRejectCallPendingIntent(callId)
+
+        builder.addAction(
+                NotificationCompat.Action(
+                        IconCompat.createWithResource(context, R.drawable.ic_call_hangup)
+                                .setTint(ThemeUtils.getColor(context, R.attr.colorError)),
+                        getActionText(R.string.call_notification_reject, R.attr.colorError),
+                        rejectCallPendingIntent
+                )
+        )
+
+        builder.addAction(
+                NotificationCompat.Action(
+                        R.drawable.ic_call_answer,
+                        getActionText(R.string.call_notification_open_app, R.attr.colorPrimary),
+                        answerCallPendingIntent
+                )
+        )
+        if (fromBg) {
+            // Compat: Display the incoming call notification on the lock screen
+            builder.priority = NotificationCompat.PRIORITY_HIGH
+            builder.setFullScreenIntent(contentPendingIntent, true)
+        }
+        return builder.build()
+    }
+
     fun buildOutgoingRingingCallNotification(
             call: WebRtcCall,
             title: String

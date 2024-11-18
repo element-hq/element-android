@@ -65,6 +65,7 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
                 EventType.MESSAGE,
                 EventType.REDACTION,
                 EventType.ENCRYPTED,
+                EventType.STATE_ROOM_WIDGET_LEGACY,
                 EventType.STATE_ROOM_MEMBER -> true
                 else -> false
             }

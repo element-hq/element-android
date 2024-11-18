@@ -239,6 +239,7 @@
     </plurals>
     <string name="title_activity_settings">Настройки</string>
     <string name="call_notification_answer">Принять</string>
+    <string name="call_notification_open_app">Открыть приложение</string>
     <string name="call_notification_reject">Отклонить</string>
     <string name="call_notification_hangup">Завершить звонок</string>
     <string name="ok">OK</string>
@@ -2875,6 +2876,7 @@
     <string name="home_empty_no_rooms_message">Универсальное безопасное приложение для переписок с командами, друзьями и организациями. Создайте переписку или присоеденитесь к уже существующей, чтобы начать.</string>
     <string name="home_empty_space_no_rooms_message">Пространства — новый способ групировать комнаты и людей. Добавьте существующую комнату или создайте новую, используя кнопку слева снизу.</string>
     <string name="labs_enable_voice_broadcast_summary">Возможность записывать и отправлять голосовые трансляции в ленту комнаты.</string>
+    <string name="labs_enable_jitsi_call_notifications_summary">Включить уведомление для групповых звонков</string>
     <string name="labs_enable_session_manager_summary">Получите лучший надзор и контроль над всеми вашими сессиями.</string>
     <string name="device_manager_learn_more_sessions_verified_description">Заверенные сеансы есть везде, где вы используете эту учётную запись после ввода своей мнемонической фразы или подтверждения своей личности с помощью другого заверенного сеанса.
 \n
