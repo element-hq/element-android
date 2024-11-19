@@ -132,6 +132,7 @@ ext.groups = [
                         'com.squareup.okhttp3',
                         'com.squareup.okio',
                         'com.squareup.retrofit2',
+                        'com.squareup.wire',
                         'com.sun.activation',
                         'com.sun.istack',
                         'com.sun.xml.bind',

@@ -21,3 +21,8 @@ sourceSets {
     main.java.srcDirs += 'src/main/kotlin'
 }
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(versions.jvmTarget)
+    }
+}

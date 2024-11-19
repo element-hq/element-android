@@ -7,7 +7,7 @@ ext.versions = [
         'jvmTarget'         : "21",
 ]
 
-def gradle = "8.4.2"
+def gradle = "8.7.1"
 // Ref: https://kotlinlang.org/releases.html
 def kotlin = "1.9.24"
 def kotlinCoroutines = "1.8.1"
@@ -32,6 +32,8 @@ def fragment = "1.8.1"
 def mockk = "1.13.11"
 def espresso = "3.6.1"
 def androidxTest = "1.6.1"
+def benchmark = "1.3.3"
+def uiAutomator = "2.3.0"
 def androidxOrchestrator = "1.5.0"
 def paparazzi = "1.3.4"
 
@@ -39,7 +41,8 @@ ext.libs = [
         gradle      : [
                 'gradlePlugin'            : "com.android.tools.build:gradle:$gradle",
                 'kotlinPlugin'            : "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin",
-                'hiltPlugin'              : "com.google.dagger:hilt-android-gradle-plugin:$dagger"
+                'hiltPlugin'              : "com.google.dagger:hilt-android-gradle-plugin:$dagger",
+                'baselineProfilePlugin'   : "androidx.baselineprofile:androidx.baselineprofile.gradle.plugin:$benchmark"
         ],
         jetbrains   : [
                 'coroutinesCore'          : "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutines",
@@ -49,6 +52,7 @@ ext.libs = [
         androidx    : [
                 'activity'                : "androidx.activity:activity-ktx:1.9.0",
                 'appCompat'               : "androidx.appcompat:appcompat:1.7.0",
+                'benchmarkMacroJunit'     : "androidx.benchmark:benchmark-macro-junit4:$benchmark",
                 'biometric'               : "androidx.biometric:biometric:1.1.0",
                 'core'                    : "androidx.core:core-ktx:1.10.1",
                 'recyclerview'            : "androidx.recyclerview:recyclerview:1.3.0",
@@ -68,11 +72,13 @@ ext.libs = [
                 'datastore'               : "androidx.datastore:datastore:1.0.0",
                 'datastorepreferences'    : "androidx.datastore:datastore-preferences:1.0.0",
                 'pagingRuntimeKtx'        : "androidx.paging:paging-runtime-ktx:2.1.2",
+                'profileinstaller'        : "androidx.profileinstaller:profileinstaller:1.4.1",
                 'coreTesting'             : "androidx.arch.core:core-testing:2.2.0",
                 'testCore'                : "androidx.test:core:$androidxTest",
                 'orchestrator'            : "androidx.test:orchestrator:$androidxOrchestrator",
                 'testRunner'              : "androidx.test:runner:$androidxTest",
                 'testRules'               : "androidx.test:rules:$androidxTest",
+                'testUiAutomator'         : "androidx.test.uiautomator:uiautomator:$uiAutomator",
                 'espressoCore'            : "androidx.test.espresso:espresso-core:$espresso",
                 'espressoContrib'         : "androidx.test.espresso:espresso-contrib:$espresso",
                 'espressoIntents'         : "androidx.test.espresso:espresso-intents:$espresso",
@@ -175,5 +181,3 @@ ext.libs = [
                 'robolectric'            : "org.robolectric:robolectric:4.13",
         ]
 ]
-
-
