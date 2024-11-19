@@ -2889,7 +2889,7 @@
 \n为了获得最佳的安全性和隐私性，建议使用支持加密的 Matrix 客户端。</string>
     <string name="room_polls_loading_error">获取投票时出错。</string>
     <string name="room_poll_details_go_to_timeline">在时间线中查看</string>
-    <string name="pill_message_from_user">%s 的新消息</string>
+    <string name="pill_message_from_user">来自%s的消息</string>
     <string name="pill_message_in_room">在%s的消息</string>
     <string name="rich_text_editor_inline_code">应用内联代码格式</string>
     <string name="pill_message_in_unknown_room">房间中的消息</string>
@@ -2912,4 +2912,7 @@
 \n
 \n%s</string>
     <string name="invite_unknown_users_dialog_submit">无论如何都邀请</string>
+    <string name="microphone_in_use_title">麦克风正在使用</string>
+    <string name="call_unsupported">不支持的通话</string>
+    <string name="call_unsupported_matrix_rtc_call">不支持的通话。需要新的Element X应用来加入此通话。</string>
 </resources>
