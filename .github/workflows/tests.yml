@@ -29,11 +29,11 @@ jobs:
         with:
           lfs: true
           fetch-depth: 0
-      - name: Use JDK 17
+      - name: Use JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
-          java-version: '17'
+          java-version: '21'
       - name: Configure gradle
         uses: gradle/actions/setup-gradle@v3
         with:
@@ -55,7 +55,7 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: 3.8
-      - uses: michaelkaye/setup-matrix-synapse@v1.0.4
+      - uses: michaelkaye/setup-matrix-synapse@v1.0.5
         with:
           uploadLogs: true
           httpPort: 8080
@@ -139,11 +139,11 @@ jobs:
 #      cancel-in-progress: true
 #    steps:
 #      - uses: actions/checkout@v4
-#      - name: Use JDK 17
+#      - name: Use JDK 21
 #        uses: actions/setup-java@v4
 #        with:
 #          distribution: 'temurin' # See 'Supported distributions' for available options
-#          java-version: '17'
+#          java-version: '21'
 #      - name: Configure gradle
 #        uses: gradle/actions/setup-gradle@v3
 #        with:

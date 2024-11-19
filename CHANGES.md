@@ -1,8 +1,22 @@
+Changes in Element v1.6.24 (2024-11-19)
+=======================================
+
+Bugfixes 🐛
+----------
+ - Extended file name support to include characters from multiple languages, including Cyrillic and Han scripts. ([#6449](https://github.com/element-hq/element-android/issues/6449)) ([#6449](https://github.com/element-hq/element-android/issues/6449))
+ - Intercept mobile.element.io links with Element app ([#8904](https://github.com/element-hq/element-android/issues/8904))
+ - Show a notice when a previously verified user is not anymore ([#8933](https://github.com/element-hq/element-android/issues/8933))
+
+Other changes
+-------------
+ - Indicate when calls are unsupported in the timeline/notifications ([#8938](https://github.com/element-hq/element-android/issues/8938))
+
+
 Changes in Element v1.6.22 (2024-09-23)
 =======================================
 
 Important: this version removes the dependency of the deprecated libolm library.
-Application installations that have not been updated to the first version with the migration (1.6.3 release at 2023-06-27) will not be able to migrate the account.
+Application installations that have not been updated to the first version with the migration (v1.6.0 released at 2023-05-17) will not be able to migrate the account.
 More details in ([#8901](https://github.com/element-hq/element-android/issues/8901))
 
 Other changes

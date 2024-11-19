@@ -652,6 +652,8 @@
 
     <string name="call_remove_jitsi_widget_progress">Ending call…</string>
 
+    <string name="microphone_in_use_title">Microphone in use</string>
+
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">Information</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
@@ -2936,6 +2938,9 @@
     <string name="call_transfer_unknown_person">Unknown person</string>
 
     <string name="call_slide_to_end_conference">Slide to end the call</string>
+
+    <string name="call_unsupported">Unsupported call</string>
+    <string name="call_unsupported_matrix_rtc_call">Unsupported call. The new Element X app is needed to join this call.</string>
 
     <string name="re_authentication_activity_title">Re-Authentication Needed</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->

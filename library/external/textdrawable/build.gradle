@@ -1,7 +1,5 @@
 apply plugin: 'com.android.library'
 
-apply plugin: 'com.android.library'
-
 android {
     namespace "com.amulyakhare.textdrawable"
 

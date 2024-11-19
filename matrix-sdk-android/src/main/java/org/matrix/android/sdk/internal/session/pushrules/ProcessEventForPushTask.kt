@@ -61,6 +61,7 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
                 in EventType.POLL_START.values,
                 in EventType.POLL_END.values,
                 in EventType.STATE_ROOM_BEACON_INFO.values,
+                in EventType.ELEMENT_CALL_NOTIFY.values,
                 EventType.MESSAGE,
                 EventType.REDACTION,
                 EventType.ENCRYPTED,

@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.session
 
 import android.content.Context
 import android.net.Uri
-import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.completeWith
@@ -41,6 +40,7 @@ import org.matrix.android.sdk.internal.network.httpclient.addAuthenticationHeade
 import org.matrix.android.sdk.internal.network.token.AccessTokenProvider
 import org.matrix.android.sdk.internal.session.download.DownloadProgressInterceptor.Companion.DOWNLOAD_PROGRESS_INTERCEPTOR_HEADER
 import org.matrix.android.sdk.internal.util.file.AtomicFileCreator
+import org.matrix.android.sdk.internal.util.file.safeFileName
 import org.matrix.android.sdk.internal.util.time.Clock
 import org.matrix.android.sdk.internal.util.writeToFile
 import timber.log.Timber
@@ -247,28 +247,6 @@ internal class DefaultFileService @Inject constructor(
         }
     }
 
-    private fun safeFileName(fileName: String?, mimeType: String?): String {
-        return buildString {
-            // filename has to be safe for the Android System
-            val result = fileName
-                    ?.replace("[^a-z A-Z0-9\\\\.\\-]".toRegex(), "_")
-                    ?.takeIf { it.isNotEmpty() }
-                    ?: DEFAULT_FILENAME
-            append(result)
-            // Check that the extension is correct regarding the mimeType
-            val extensionFromMime = mimeType?.let { MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType) }
-            if (extensionFromMime != null) {
-                // Compare
-                val fileExtension = result.substringAfterLast(delimiter = ".", missingDelimiterValue = "")
-                if (fileExtension.isEmpty() || fileExtension != extensionFromMime) {
-                    // Missing extension, or diff in extension, add the one provided by the mimetype
-                    append(".")
-                    append(extensionFromMime)
-                }
-            }
-        }
-    }
-
     override fun isFileInCache(
             mxcUrl: String?,
             fileName: String,
@@ -368,6 +346,6 @@ internal class DefaultFileService @Inject constructor(
         private const val ENCRYPTED_FILENAME = "encrypted.bin"
 
         // The extension would be added from the mimetype
-        private const val DEFAULT_FILENAME = "file"
+        const val DEFAULT_FILENAME = "file"
     }
 }

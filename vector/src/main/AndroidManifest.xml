@@ -56,6 +56,9 @@
     <!-- Jitsi SDK is now API23+ -->
     <uses-sdk tools:overrideLibrary="com.swmansion.gesturehandler,org.jitsi.meet.sdk,com.oney.WebRTCModule,com.learnium.RNDeviceInfo,com.reactnativecommunity.asyncstorage,com.ocetnik.timer,com.calendarevents,com.reactnativecommunity.netinfo,com.kevinresol.react_native_default_preference,com.rnimmersive,com.rnimmersivemode,com.corbt.keepawake,com.BV.LinearGradient,com.horcrux.svg,com.oblador.performance,com.reactnativecommunity.slider,com.brentvatne.react,com.reactnativecommunity.clipboard,com.swmansion.gesturehandler.react,org.linusu,org.reactnative.maskedview,com.reactnativepagerview,com.swmansion.reanimated,com.th3rdwave.safeareacontext,com.swmansion.rnscreens,org.devio.rn.splashscreen,com.reactnativecommunity.webview,org.wonday.orientation" />
 
+    <!-- For MicrophoneAccessService -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
+
     <!-- Adding CAMERA permission prevents Chromebooks to see the application on the PlayStore -->
     <!-- Tell that the Camera is not mandatory to install the application -->
     <uses-feature
@@ -203,6 +206,8 @@
                 <data android:host="develop.element.io" />
                 <!-- Matching asset file: https://staging.element.io/.well-known/assetlinks.json -->
                 <data android:host="staging.element.io" />
+                <!-- Fix it https://github.com/element-hq/element-android/issues/8904 -->
+                <data android:host="mobile.element.io" />
             </intent-filter>
         </activity>
 
@@ -394,6 +399,13 @@
             android:exported="false"
             android:foregroundServiceType="mediaProjection"
             tools:targetApi="Q" />
+
+        <service
+            android:name=".features.call.audio.MicrophoneAccessService"
+            android:exported="false"
+            android:foregroundServiceType="microphone"
+            android:permission="android.permission.FOREGROUND_SERVICE_MICROPHONE">
+        </service>
 
         <!-- Receivers -->
 

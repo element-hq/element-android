@@ -29,7 +29,10 @@ internal class ComputeShieldForGroupUseCase @Inject constructor(
         val myIdentity = olmMachine.getIdentity(myUserId)
         val allTrustedUserIds = userIds
                 .filter { userId ->
-                    olmMachine.getIdentity(userId)?.verified() == true
+                    val identity = olmMachine.getIdentity(userId)?.toMxCrossSigningInfo()
+                    identity?.isTrusted() == true ||
+                            // Always take into account users that was previously verified but are not anymore
+                            identity?.wasTrustedOnce == true
                 }
 
         return if (allTrustedUserIds.isEmpty()) {
