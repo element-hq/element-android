@@ -1,3 +1,17 @@
+Changes in Element v1.6.24 (2024-11-19)
+=======================================
+
+Bugfixes 🐛
+----------
+ - Extended file name support to include characters from multiple languages, including Cyrillic and Han scripts. ([#6449](https://github.com/element-hq/element-android/issues/6449)) ([#6449](https://github.com/element-hq/element-android/issues/6449))
+ - Intercept mobile.element.io links with Element app ([#8904](https://github.com/element-hq/element-android/issues/8904))
+ - Show a notice when a previously verified user is not anymore ([#8933](https://github.com/element-hq/element-android/issues/8933))
+
+Other changes
+-------------
+ - Indicate when calls are unsupported in the timeline/notifications ([#8938](https://github.com/element-hq/element-android/issues/8938))
+
+
 Changes in Element v1.6.22 (2024-09-23)
 =======================================
 
