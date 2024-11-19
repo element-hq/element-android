@@ -1,0 +1,2 @@
+Huvudsakliga ändringar i den här versionen: Krypto-SDK-uppgradering
+Full ändringslogg: https://github.com/element-hq/element-android/releases
