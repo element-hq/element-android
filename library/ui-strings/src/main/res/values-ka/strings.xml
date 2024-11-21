@@ -1238,8 +1238,8 @@
     <string name="settings_opt_in_of_analytics">ანალიტიკის მონაცემების გაგზავნა</string>
     <string name="analytics_opt_in_title">დაეხმარეთ ${app_name}-ს გაუმჯობესებაში</string>
     <string name="analytics_opt_in_content_link">აქ</string>
-    <string name="analytics_opt_in_list_item_1">ჩვენ არ ვწერთ ან ვაპროფილებთ ანგარიშის მონაცემებს</string>
-    <string name="analytics_opt_in_list_item_2">ჩვენ არ ვუზიარებთ ინფორმაციას მესამე მხარეებს</string>
+    <string name="analytics_opt_in_list_item_1">ჩვენ &lt;b&gt;არ&lt;/b&gt; ვწერთ ან ვქმნით პროფილს ანგარიშის ნებისმიერ მონაცემზე</string>
+    <string name="analytics_opt_in_list_item_2">ჩვენ &lt;b&gt;არ&lt;/b&gt; ვაზიარებთ ინფორმაციას მესამე მხარეებთან</string>
     <string name="analytics_opt_in_list_item_3">ამას ნებისმიერ დროს შეგიძლიათ გამორთოთ პარამეტრებში</string>
     <string name="devices_details_id_title">ID</string>
     <string name="devices_details_name_title">საზოგადოებრივი სახელი</string>
@@ -1310,7 +1310,7 @@
     <string name="directory_add_a_new_server_error_already_added">ეს სერვერი უკვე არის სიაში</string>
     <plurals name="notification_unread_notified_messages">
         <item quantity="one">%d წაუკითხავი შეტყობინება</item>
-        <item quantity="other">%d წაუკითხავი შეტყობინება</item>
+        <item quantity="other">%d წაუკითხავი შეტყობინებები</item>
     </plurals>
     <string name="notification_unread_notified_messages_in_room_and_invitation">%1$s %2$s-ში და %3$s-ში</string>
     <string name="notification_unread_notified_messages_and_invitation">%1$s და %2$s</string>
@@ -1768,15 +1768,15 @@
     </plurals>
     <plurals name="notification_invitations">
         <item quantity="one">%d მოწვევა</item>
-        <item quantity="other">%d მოწვევა</item>
+        <item quantity="other">%d მოწვევები</item>
     </plurals>
     <plurals name="notification_compat_summary_line_for_room">
         <item quantity="one">%1$s: %2$d შეტყობინება</item>
-        <item quantity="other">%1$s: %2$d შეტყობინება</item>
+        <item quantity="other">%1$s: %2$d შეტყობინებები</item>
     </plurals>
     <plurals name="notification_compat_summary_title">
         <item quantity="one">%d შეტყობინება</item>
-        <item quantity="other">%d შეტყობინება</item>
+        <item quantity="other">%d შეტყობინებები</item>
     </plurals>
     <plurals name="active_widgets">
         <item quantity="one">%d აქტიური ვიჯეტი</item>
