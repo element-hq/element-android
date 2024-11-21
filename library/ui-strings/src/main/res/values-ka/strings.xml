@@ -725,7 +725,7 @@
     <string name="settings_troubleshoot_test_battery_success">${app_name} არ მოქმედებს ბატარეის ოპტიმიზაციით.</string>
     <plurals name="search_space_multiple_parents">
         <item quantity="one">%1$s და %2$d სხვა</item>
-        <item quantity="other">%1$s და %2$d სხვა</item>
+        <item quantity="other">%1$s და %2$d სხვები</item>
     </plurals>
     <string name="search_space_two_parents">%1$s და %2$s</string>
     <string name="room_settings_mention_and_keyword_only">მოხსენიებები და საკვანძო სიტყვები მხოლოდ</string>
