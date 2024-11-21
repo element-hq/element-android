@@ -230,8 +230,8 @@
     </plurals>
     <string name="notice_room_third_party_registered_invite_by_you">თქვენ მიიღეთ მიწვევა %1$s-ისთვის</string>
     <plurals name="notice_room_canonical_alias_alternative_added_by_you">
-        <item quantity="one">%1$s დაამატა ალტერნატიული მისამართი %2$s ამ ოთახისთვის.</item>
-        <item quantity="other">%1$s დაამატა ალტერნატიული მისამართები %2$s ამ ოთახისთვის.</item>
+        <item quantity="one">თქვენ დაამატეთ ალტერნატიული მისამართი %1$s ამ ოთახისთვის.</item>
+        <item quantity="other">თქვენ დაამატეთ ალტერნატიული მისამართები %1$s ამ ოთახისთვის.</item>
     </plurals>
     <string name="notice_widget_added_by_you">თქვენ დაამატეთ %1$s ვიჯეტი</string>
     <string name="notice_room_canonical_alias_alternative_changed_by_you">თქვენ შეცვალეთ ამ ოთახის ალტერნატიული მისამართები.</string>
@@ -2825,7 +2825,7 @@
     <string name="voice_broadcast_recording_time_left">%1$s დარჩა</string>
     <string name="stop_voice_broadcast_content">დარწმუნებული ხართ, რომ გსურთ თქვენი პირდაპირი გადაცემის შეჩერება\? ეს დაასრულებს გადაცემას და სრული ჩანაწერი ხელმისაწვდომი იქნება ოთახში.</string>
     <string name="upgrade_room_for_restricted">ნებისმიერ %s-ში მყოფ ადამიანს შეეძლება ამ ოთახის პოვნა და შეუერთდეს მას - ყველას ხელით მიწვევის საჭიროება არ არის. ამის შეცვლა ოთახის პარამეტრებში ნებისმიერ დროს შეგიძლიათ.</string>
-    <string name="upgrade_room_for_restricted_no_param">ნებისმიერ %s-ში მყოფ ადამიანს შეეძლება ამ ოთახის პოვნა და შეუერთდეს მას - ყველას ხელით მიწვევის საჭიროება არ არის. ამის შეცვლა ოთახის პარამეტრებში ნებისმიერ დროს შეგიძლიათ.</string>
+    <string name="upgrade_room_for_restricted_no_param">მშობელი სივრცის ნებისმიერ წევრს შეეძლება ამ ოთახის პოვნა და შეუერთება – ყველას ხელით მოწვევა საჭირო არ არის. ამის შეცვლა ნებისმიერ დროს შეგიძლიათ ოთახის პარამეტრებში.</string>
     <string name="labs_enable_msc3061_share_history">MSC3061: ოთახის გასაღებების გაზიარება წარსული შეტყობინებებისთვის</string>
     <string name="labs_enable_msc3061_share_history_desc">როცა იწვევთ დაშიფრულ ოთახში, რომელიც იზიარებს ისტორიას, დაშიფრული ისტორია ხილული იქნება.</string>
     <plurals name="create_poll_not_enough_options_error">
@@ -2971,4 +2971,5 @@
     <string name="ftue_personalize_lets_go">წავიდეთ</string>
     <string name="call_unsupported">მხარდაუჭერი ზარი</string>
     <string name="call_unsupported_matrix_rtc_call">მხარდაუჭერი ზარი. ამ ზარში შესაერთებლად საჭიროა ახალი აპლიკაცია Element X.</string>
+    <string name="pill_message_unknown_room_or_space">ოთახი/სივრცე</string>
 </resources>
