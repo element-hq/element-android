@@ -2552,7 +2552,7 @@
     <string name="live_location_labs_promotion_switch_title">ადგილმდებარეობის გაზიარების ჩართვა</string>
     <plurals name="room_removed_messages">
         <item quantity="one">%d შეტყობინება წაშლილია</item>
-        <item quantity="other">%d შეტყობინება წაშლილია</item>
+        <item quantity="other">%d შეტყობინებები წაშლილია</item>
     </plurals>
     <string name="device_manager_sessions_other_title">სხვა სესიები</string>
     <string name="a11y_device_manager_device_type_mobile">მობილური</string>
@@ -2894,8 +2894,8 @@
     <string name="device_manager_other_sessions_description_verified">დამოწმებულია · ბოლო აქტივობა %1$s</string>
     <string name="device_manager_header_section_security_recommendations_description">გაუმჯობესეთ თქვენი ანგარიშის უსაფრთხოება ამ რეკომენდაციების მიყოლით.</string>
     <plurals name="device_manager_inactive_sessions_description">
-        <item quantity="one">მოიფიქრეთ გამოსვლაზე ძველი სესიებიდან (%1$d დღე ან მეტი), რომლებსაც აღარ იყენებთ.</item>
-        <item quantity="other">მოიფიქრეთ გამოსვლაზე ძველი სესიებიდან (%1$d დღე ან მეტი), რომლებსაც აღარ იყენებთ.</item>
+        <item quantity="one">განიხილეთ ძველი სესიებიდან გამოსვლა (%1$d დღე ან მეტი), რომლებსაც აღარ იყენებთ.</item>
+        <item quantity="other">განიხილეთ ძველი სესიებიდან გამოსვლა (%1$d დღე ან მეტი), რომლებსაც აღარ იყენებთ.</item>
     </plurals>
     <string name="device_manager_filter_option_unverified_description">არ არის მზად უსაფრთხო შეტყობინებებისთვის</string>
     <plurals name="device_manager_filter_option_inactive_description">
