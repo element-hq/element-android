@@ -2882,8 +2882,8 @@
     <string name="unifiedpush_distributor_background_sync">ფონის სინქრონიზაცია</string>
     <string name="settings_troubleshoot_test_distributors_gplay">არ მოიძებნა სხვა მეთოდი Google Play სერვისის გარდა.</string>
     <plurals name="settings_troubleshoot_test_distributors_many">
-        <item quantity="one">მოიძებნა %d მეთოდი.</item>
-        <item quantity="other">მოიძებნა %d მეთოდი.</item>
+        <item quantity="one">ნაპოვნია %d მეთოდი.</item>
+        <item quantity="other">ნაპოვნია %d მეთოდი.</item>
     </plurals>
     <string name="settings_troubleshoot_test_current_endpoint_title">ბოლო წერტილი</string>
     <string name="live_location_labs_promotion_description">გთხოვთ გაითვალისწინოთ: ეს არის ლაბორატორიული ფუნქცია, რომელიც იყენებს დროებით განხორციელებას. ეს ნიშნავს, რომ თქვენ ვერ შეძლებთ თქვენი ადგილმდებარეობის ისტორიის წაშლას და მოწინავე მომხმარებლები შეძლებენ თქვენი ადგილმდებარეობის ისტორიის ნახვას, თუნდაც ცოცხალი ადგილმდებარეობის გაზიარების შეჩერების შემდეგ.</string>
