@@ -7,7 +7,7 @@
         <item quantity="other">%1$d არჩეული</item>
     </plurals>
     <string name="notice_room_created_by_you">თქვენ შექმენით ოთახი</string>
-    <string name="notice_direct_room_created"/>
+    <string name="notice_direct_room_created">%1$s შექმნა განხილვა</string>
     <string name="notice_direct_room_leave_by_you">თქვენ დატოვეთ ოთახი</string>
     <string name="notice_room_reject">%1$s უარყო მიწვევა</string>
     <string name="notice_room_reject_by_you">თქვენ უარყეთ მიწვევა</string>
@@ -121,20 +121,20 @@
     <string name="notice_room_withdraw_with_reason">%1$s-მ გააუქმა %2$s-ის მიწვევა. მიზეზი: %3$s</string>
     <string name="notice_room_withdraw_with_reason_by_you">თქვენ გააუქმეთ %1$s-ის მიწვევა. მიზეზი: %2$s</string>
     <plurals name="notice_room_aliases_removed_by_you">
-        <item quantity="one">თქვენ ამოიღეთ %1$s, როგორც ამ ოთახის მისამართი.</item>
-        <item quantity="other">თქვენ ამოიღეთ %1$s, როგორც ამ ოთახის მისამართი.</item>
+        <item quantity="one">თქვენ ამოიღეთ %1$s როგორც ამ ოთახის მისამართი.</item>
+        <item quantity="other">თქვენ ამოიღეთ %1$s როგორც ამ ოთახის მისამართები.</item>
     </plurals>
     <string name="notice_room_aliases_added_and_removed">%1$s-მ დაამატა %2$s და ამოიღო %3$s, როგორც ამ ოთახის მისამართები.</string>
     <string name="notice_room_aliases_added_and_removed_by_you">თქვენ დაამატეთ %1$s და ამოიღეთ %2$s, როგორც ამ ოთახის მისამართები.</string>
     <string name="notice_room_canonical_alias_set">%1$s-მ დააყენა ოთახის ძირითადი მისამართი %2$s-ზე.</string>
     <string name="notice_room_canonical_alias_unset">%1$s-მ ამოიღო ოთახის ძირითადი მისამართი.</string>
     <plurals name="notice_room_canonical_alias_alternative_removed">
-        <item quantity="one">%1$s-მ ამოიღო ალტერნატიული მისამართი %2$s ამ ოთახისთვის.</item>
-        <item quantity="other">%1$s-მ ამოიღო ალტერნატიული მისამართი %2$s ამ ოთახისთვის.</item>
+        <item quantity="one">%1$s ამოიღო ალტერნატიული მისამართი %2$s ამ ოთახისთვის.</item>
+        <item quantity="other">%1$s ამოიღო ალტერნატიული მისამართები %2$s ამ ოთახისთვის.</item>
     </plurals>
     <plurals name="notice_room_canonical_alias_alternative_removed_by_you">
         <item quantity="one">თქვენ ამოიღეთ ალტერნატიული მისამართი %1$s ამ ოთახისთვის.</item>
-        <item quantity="other">თქვენ ამოიღეთ ალტერნატიული მისამართი %1$s ამ ოთახისთვის.</item>
+        <item quantity="other">თქვენ ამოიღეთ ალტერნატიული მისამართები %1$s ამ ოთახისთვის.</item>
     </plurals>
     <string name="notice_room_canonical_alias_alternative_changed">%1$s-მ შეცვალა ამ ოთახის ალტერნატიული მისამართები.</string>
     <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">თქვენ შეცვალეთ ოთახის ძირითადი და ალტერნატიული მისამართები.</string>
@@ -164,7 +164,7 @@
     <string name="notice_room_avatar_changed_by_you">თქვენ შეცვალეთ ოთახის ავატარი</string>
     <plurals name="room_displayname_four_and_more_members">
         <item quantity="one">%1$s, %2$s, %3$s და %4$d სხვა</item>
-        <item quantity="other">%1$s, %2$s, %3$s და %4$d სხვა</item>
+        <item quantity="other">%1$s, %2$s, %3$s და %4$d სხვაები</item>
     </plurals>
     <string name="notice_placed_video_call">%s დაიწყო ვიდეო ზარი.</string>
     <string name="initial_sync_start_importing_account">საწყისი სინქრონიზაცია: 
@@ -197,7 +197,7 @@
     <string name="notice_room_reject_with_reason_by_you">თქვენ უარყავით მიწვევა. მიზეზი: %1$s</string>
     <plurals name="notice_room_server_acl_changes">
         <item quantity="one">%d სერვერის ACL-ების ცვლილება</item>
-        <item quantity="other">%d სერვერის ACL-ების ცვლილება</item>
+        <item quantity="other">%d სერვერის ACL-ის ცვლილებები</item>
     </plurals>
     <string name="notice_room_unban_with_reason_by_you">თქვენ მოხსენით აკრძალვა %1$s-ზე. მიზეზი: %2$s</string>
     <string name="notice_room_server_acl_updated_was_banned">• სერვერები, რომლებიც ემთხვევა %s, ამოღებულია აკრძალვის სიიდან.</string>
@@ -207,17 +207,17 @@
     <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• სერვერები, რომლებიც ემთხვევა IP-ს ლიტერალს, ახლა აკრძალულია.</string>
     <plurals name="notice_room_aliases_added">
         <item quantity="one">%1$s-მ დაამატა %2$s, როგორც ამ ოთახის მისამართი.</item>
-        <item quantity="other">%1$s-მ დაამატა %2$s, როგორც ამ ოთახის მისამართი.</item>
+        <item quantity="other">%1$s დაამატა %2$s როგორც ამ ოთახის მისამართები.</item>
     </plurals>
     <string name="notice_room_name_removed">%1$s წაშალა ოთახის სახელი</string>
     <plurals name="notice_room_aliases_added_by_you">
         <item quantity="one">თქვენ დაამატეთ %1$s, როგორც ამ ოთახის მისამართი.</item>
-        <item quantity="other">თქვენ დაამატეთ %1$s, როგორც ამ ოთახის მისამართი.</item>
+        <item quantity="other">თქვენ დაამატეთ %1$s როგორც ამ ოთახის მისამართები.</item>
     </plurals>
     <string name="notice_room_topic_removed_by_you">თქვენ წაშალეთ ოთახის თემა</string>
     <plurals name="notice_room_aliases_removed">
-        <item quantity="one">%1$s-მ ამოიღო %2$s, როგორც ამ ოთახის მისამართი.</item>
-        <item quantity="other">%1$s-მ ამოიღო %2$s, როგორც ამ ოთახის მისამართი.</item>
+        <item quantity="one">%1$s ამოიღო %2$s როგორც ამ ოთახის მისამართი.</item>
+        <item quantity="other">%1$s ამოიღო %2$s როგორც ამ ოთახის მისამართები.</item>
     </plurals>
     <string name="notice_room_third_party_invite">%1$s გაგზავნა მიწვევა %2$s-სთვის, რომ შეუერთდეს ოთახს</string>
     <string name="notice_room_canonical_alias_set_by_you">თქვენ დააყენეთ ოთახის ძირითადი მისამართი %1$s-ზე.</string>
@@ -225,13 +225,13 @@
     <string name="notice_room_canonical_alias_unset_by_you">თქვენ ამოიღეთ ოთახის ძირითადი მისამართი.</string>
     <string name="notice_room_third_party_revoked_invite_by_you">თქვენ გააუქმეთ %1$s-ის მიწვევა, რომ შეუერთდეს ოთახს</string>
     <plurals name="notice_room_canonical_alias_alternative_added">
-        <item quantity="one">%1$s-მ დაამატა ალტერნატიული მისამართი %2$s ამ ოთახისთვის.</item>
-        <item quantity="other">%1$s-მ დაამატა ალტერნატიული მისამართი %2$s ამ ოთახისთვის.</item>
+        <item quantity="one">%1$s დაამატა ალტერნატიული მისამართი %2$s ამ ოთახისთვის.</item>
+        <item quantity="other">%1$s დაამატა ალტერნატიული მისამართები %2$s ამ ოთახისთვის.</item>
     </plurals>
     <string name="notice_room_third_party_registered_invite_by_you">თქვენ მიიღეთ მიწვევა %1$s-ისთვის</string>
     <plurals name="notice_room_canonical_alias_alternative_added_by_you">
-        <item quantity="one">თქვენ დაამატეთ ალტერნატიული მისამართი %1$s ამ ოთახისთვის.</item>
-        <item quantity="other">თქვენ დაამატეთ ალტერნატიული მისამართი %1$s ამ ოთახისთვის.</item>
+        <item quantity="one">%1$s დაამატა ალტერნატიული მისამართი %2$s ამ ოთახისთვის.</item>
+        <item quantity="other">%1$s დაამატა ალტერნატიული მისამართები %2$s ამ ოთახისთვის.</item>
     </plurals>
     <string name="notice_widget_added_by_you">თქვენ დაამატეთ %1$s ვიჯეტი</string>
     <string name="notice_room_canonical_alias_alternative_changed_by_you">თქვენ შეცვალეთ ამ ოთახის ალტერნატიული მისამართები.</string>
@@ -596,15 +596,15 @@
     <string name="room_participants_action_remove">ჩატის დატოვება</string>
     <plurals name="membership_changes">
         <item quantity="one">%d წევრობის ცვლილება</item>
-        <item quantity="other">%d წევრობის ცვლილება</item>
+        <item quantity="other">%d წევრობის ცვლილებები</item>
     </plurals>
     <string name="room_participants_power_level_prompt">ვერ შეძლებთ ამ ცვლილების გაუქმებას, რადგან მომხმარებელს დააწინაურებთ თქვენს დონეზე. 
 \nდარწმუნებული ხართ\?</string>
     <string name="settings_call_ringtone_use_app_ringtone">გამოიყენეთ ${app_name} ნაგულისხმევი ზარის რინგტონი შემომავალი ზარებისთვის</string>
     <string name="room_participants_power_level_demote_warning_prompt">ვერ შეძლებთ ამ ცვლილების გაუქმებას, რადგან თქვენ თავს დაიმცირებთ, თუ თქვენ ხართ ბოლო პრივილეგირებული მომხმარებელი ოთახში, პრივილეგიების აღდგენა შეუძლებელი იქნება.</string>
     <plurals name="missed_audio_call">
-        <item quantity="one">გამოტოვებული აუდიო ზარი</item>
-        <item quantity="other">გამოტოვებული აუდიო ზარი</item>
+        <item quantity="one">გამორჩენილი აუდიოზარი</item>
+        <item quantity="other">%d გამორჩენილი აუდიოზარი</item>
     </plurals>
     <string name="room_participants_action_unignore_prompt_msg">მომხმარებლის იგნორირების მოხსნა აჩვენებს ყველა შეტყობინებას, რაც მას ჰქონდა.</string>
     <string name="call_held_by_user">%s დააყოვნა ზარი</string>
@@ -621,7 +621,7 @@
     <string name="room_unsupported_e2e_algorithm">დაშიფვრა არასწორად არის კონფიგურირებული, რის გამოც ვერ გზავნით შეტყობინებებს. გთხოვთ, დაუკავშირდეთ ადმინისტრატორს, რათა აღადგინოს დაშიფვრის ვალიდური მდგომარეობა.</string>
     <plurals name="room_new_messages_notification">
         <item quantity="one">%d ახალი შეტყობინება</item>
-        <item quantity="other">%d ახალი შეტყობინება</item>
+        <item quantity="other">%d ახალი შეტყობინებები</item>
     </plurals>
     <string name="ssl_could_not_verify">ვერ მოხერხდა დისტანციური სერვერის იდენტობის დადასტურება.</string>
     <string name="ssl_cert_not_trust">ეს შეიძლება ნიშნავდეს, რომ ვიღაცა ბოროტად ჩარევს თქვენს ტრაფიკს, ან რომ თქვენს ტელეფონს არ ენდობა დისტანციური სერვერის მიერ მოწოდებულ სერთიფიკატს.</string>
@@ -2951,4 +2951,20 @@
     <string name="settings_access_token_summary">თქვენი წვდომის ტოკენი გაძლევთ სრულ წვდომას თქვენს ანგარიშზე. არ გაუზიაროთ ის არავის.</string>
     <string name="pill_message_in_room">შეტყობინება %s-ში</string>
     <string name="pill_message_in_unknown_room">შეტყობინება ოთახში</string>
+    <string name="notice_direct_room_created_by_you">თქვენ შექმენით განხილვა</string>
+    <string name="notice_room_invite">%1$s მოიწვია %2$s</string>
+    <string name="notice_room_invite_by_you">თქვენ მოიწვიეთ %1$s</string>
+    <string name="notice_room_invite_you">%1$s მოგიწვიათ თქვენ</string>
+    <string name="notice_room_join">%1$s შეუერთდა ოთახს</string>
+    <string name="notice_room_join_by_you">თქვენ შეუერთდით ოთახს</string>
+    <string name="notice_direct_room_join">%1$s შეუერთდა</string>
+    <string name="notice_direct_room_join_by_you">თქვენ შეუერთდით</string>
+    <string name="notice_room_leave">%1$s გავიდა ოთახიდან</string>
+    <string name="microphone_in_use_title">მიკროფონი გამოიყენება</string>
+    <string name="notice_room_created">%1$s შექმნა ოთახი</string>
+    <string name="direct_room_join_rules_invite">%1$s გახადა ეს მხოლოდ მოწვევისთვის.</string>
+    <string name="settings_discovery_consent_notice_off_2">თქვენი კონტაქტები კერძოა. კონტაქტებიდან მომხმარებლების აღმოსაჩენად, საჭიროა თქვენი ნებართვა, რომ კონტაქტების ინფორმაცია გაგზავნოთ თქვენი იდენტობის სერვერზე.</string>
+    <string name="ftue_personalize_lets_go">წავიდეთ</string>
+    <string name="call_unsupported">მხარდაუჭერი ზარი</string>
+    <string name="call_unsupported_matrix_rtc_call">მხარდაუჭერი ზარი. ამ ზარში შესაერთებლად საჭიროა ახალი აპლიკაცია Element X.</string>
 </resources>
