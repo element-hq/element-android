@@ -908,7 +908,8 @@
 \n
 \nმაქსიმალური უსაფრთხოებისთვის, ეს უნდა იყოს განსხვავებული თქვენი ანგარიშის პაროლიდან.</string>
     <string name="keys_backup_setup_step1_recovery_key_alternative">ან, დაზღვრეთ თქვენი სარეზერვო ასლი აღდგენის გასაღებით, შეინახეთ სადმე უსაფრთხო.</string>
-    <string name="keys_backup_setup_step3_text_line2">თქვენი აღდგენის გასაღები არის უსაფრთხოების ბადე - შეგიძლიათ გამოიყენოთ იგი დაშიფრული შეტყობინებების წვდომის აღსადგენად, თუ დაგავიწყდებათ პაროლფრაზა. შეინახეთ თქვენი აღ</string>
+    <string name="keys_backup_setup_step3_text_line2">თქვენი აღდგენის გასაღები არის უსაფრთხოების ბადე - შეგიძლიათ გამოიყენოთ იგი დაშიფრული შეტყობინებების წვდომის აღსადგენად, თუ დაგავიწყდებათ პაროლფრაზა. 
+\nშეინახეთ თქვენი აღ</string>
     <string name="keys_backup_setup_step3_copy_button_title">აღდგენის გასაღების შენახვა</string>
     <string name="keys_backup_setup_step3_share_recovery_file">გაზიარება</string>
     <string name="recovery_key_export_saved">აღდგენის გასაღები შენახულია.</string>
@@ -1176,7 +1177,7 @@
     <string name="legals_identity_server_title">თქვენი იდენტობის სერვერის პოლიტიკა</string>
     <string name="legals_third_party_notices">მესამე მხარის ბიბლიოთეკები</string>
     <string name="legals_no_policy_provided">ეს სერვერი არ უზრუნველყოფს პოლიტიკას.</string>
-    <string name="settings_mentions_at_room">\@room</string>
+    <string name="settings_mentions_at_room">\@ოთახი</string>
     <string name="settings_messages_containing_keywords">საკვანძო სიტყვები</string>
     <string name="settings_room_invitations">ოთახის მოწვევები</string>
     <string name="settings_call_invitations">ზარის მოწვევები</string>
@@ -1505,13 +1506,13 @@
     <string name="notification_initial_sync">თავდაპირველი სინქრონიზაცია…</string>
     <string name="settings_advanced_settings">გაფართოებული პარამეტრები</string>
     <string name="settings_developer_mode">დეველოპერის რეჟიმი</string>
-    <string name="settings_rageshake">Rageshake</string>
+    <string name="settings_rageshake">რეიჯშეიკი</string>
     <string name="settings_rageshake_detection_threshold">დეტექციის ზღვარი</string>
     <string name="settings_rageshake_detection_threshold_summary">გადატრიალეთ თქვენი ტელეფონი დეტექციის ზღვრის გამოსაცდელად</string>
     <string name="rageshake_detected">გადატრიალება დაფიქსირდა!</string>
     <string name="settings">პარამეტრები</string>
     <string name="devices_other_devices">სხვა სესიები</string>
-    <string name="settings_developer_mode_fail_fast_title">Fail-fast</string>
+    <string name="settings_developer_mode_fail_fast_title">სწრაფი შეცდომის აღმოჩენა</string>
     <string name="settings_developer_mode_show_info_on_screen_title">აჩვენე დებაგის ინფორმაცია ეკრანზე</string>
     <string name="settings_developer_mode_show_info_on_screen_summary">აჩვენე სასარგებლო ინფორმაცია აპლიკაციის დებაგის პროცესის გასამარტივებლად</string>
     <string name="command_description_shrug">აწერს ¯_(ツ)_/¯ უბრალო ტექსტურ მესიჯს</string>
