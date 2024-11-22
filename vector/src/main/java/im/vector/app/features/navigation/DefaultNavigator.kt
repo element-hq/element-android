@@ -444,7 +444,13 @@ class DefaultNavigator @Inject constructor(
         activityResultLauncher.launch(intent)
     }
 
-    override fun openRoomWidget(context: Context, roomId: String, widget: Widget, options: Map<String, Any>?) {
+    override fun openRoomWidget(
+            context: Context,
+            activityResultLauncher: ActivityResultLauncher<Intent>?,
+            roomId: String,
+            widget: Widget,
+            options: Map<String, Any>?
+    ) {
         if (widget.type is WidgetType.Jitsi) {
             // Jitsi SDK is now for API 24+
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
@@ -462,7 +468,12 @@ class DefaultNavigator @Inject constructor(
             context.startActivity(WidgetActivity.newIntent(context, widgetArgs))
         } else {
             val widgetArgs = widgetArgsBuilder.buildRoomWidgetArgs(roomId, widget)
-            context.startActivity(WidgetActivity.newIntent(context, widgetArgs))
+            val intent = WidgetActivity.newIntent(context, widgetArgs)
+            activityResultLauncher?.let {
+                it.launch(intent)
+            } ?: run {
+                context.startActivity(intent)
+            }
         }
     }
 
