@@ -709,6 +709,11 @@
     <string name="room_participants_action_unignore_prompt_msg">Unignoring this user will show all messages from them again.</string>
     <string name="room_participants_action_unignore">Unignore</string>
 
+    <string name="room_participants_action_report_title">Report user</string>
+    <string name="room_participants_action_report_prompt_msg">Reporting this user will report this user to the server administrators and room moderators.</string>
+    <string name="room_participants_action_report">Report</string>
+    <string name="room_participants_action_report_reason">Reporting user %1$s</string>
+
     <string name="room_participants_action_cancel_invite_title">Cancel invite</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Are you sure you want to cancel the invite for this user?</string>
     <string name="room_participants_remove_title">Remove user</string>
