@@ -1,0 +1,2 @@
+Principaux changements pour cette version : Mise-à-jour du SDK cryptographique.
+Intégralité des changements : https://github.com/element-hq/element-android/releases

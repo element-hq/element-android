@@ -1483,7 +1483,7 @@
     <string name="room_alias_published_alias_main">To jest główny adres</string>
     <string name="room_alias_published_alias_subtitle">Opublikowane adresy mogą zostać wykorzystane przez kogokolwiek na dowolnym serwerze do dołączenia do Twojego pokoju. Żeby opublikować adres musi być on najpierw ustawiony jako adres lokalny.</string>
     <string name="room_alias_published_alias_title">Opublikowane adresy</string>
-    <string name="room_settings_alias_subtitle">Obejrzyj i zarządzaj adresami tego pokoju oraz jego widocznością w katalogu pokojów.</string>
+    <string name="room_settings_alias_subtitle">Zobacz i zarządzaj adresami tego pokoju oraz jego widocznością w katalogu pokojów.</string>
     <string name="room_settings_alias_title">Adres pokoju</string>
     <string name="room_settings_room_access_title">Dostęp do pokoju</string>
     <string name="room_settings_room_read_history_dialog_subtitle">Zmiany dotyczące tego kto może czytać historię zostaną zastosowane wyłącznie do przyszłych wiadomości w tym pokoju. Widoczności już istniejącej historii pozostanie niezmieniona.</string>
@@ -1723,7 +1723,7 @@
     <string name="room_settings_room_access_private_title">Prywatny</string>
     <string name="room_settings_room_access_entry_unknown">Nieznane ustawienie dostępu (%s)</string>
     <string name="room_settings_room_access_entry_knock">Każdy może zapukać do pokoju, członkowie mogą akceptować lub odrzucić</string>
-    <string name="space_settings_alias_subtitle">Przeglądaj i zarządzaj adresami tej Przestrzeni.</string>
+    <string name="space_settings_alias_subtitle">Zobacz i zarządzaj adresami tej przestrzeni.</string>
     <string name="space_settings_alias_title">Adresy Przestrzeni</string>
     <string name="room_settings_guest_access_title">Zezwalaj gościom na dołączanie</string>
     <string name="room_settings_space_access_title">Dostęp do Przestrzeni</string>
@@ -3085,4 +3085,10 @@
     <string name="invite_unknown_users_dialog_content">Nie można znaleźć profili dla poniższych ID Matrix. Czy chcesz zaprosić je mimo to\?
 \n
 \n%s</string>
+    <string name="login_splash_sign_in">Zaloguj się</string>
+    <string name="user_reported_as_inappropriate_title">Zgłoszony użytkownik</string>
+    <string name="message_report_user">Zgłoś użytkownika</string>
+    <string name="user_reported_as_inappropriate_content">Użytkownik został zgłoszony.
+\n
+\nJeśli nie chcesz widzieć więcej treści od tego użytkownika, możesz go zignorować i ukryć jego wiadomości.</string>
 </resources>
