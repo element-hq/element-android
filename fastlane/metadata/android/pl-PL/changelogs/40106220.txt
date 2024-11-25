@@ -1,0 +1,2 @@
+Główne zmiany w tej wersji: aktualizacja crypto SDK.
+Pełny dziennik zmian: https://github.com/element-hq/element-android/releases

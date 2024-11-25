@@ -46,7 +46,7 @@
 \nPo importohet kriptografi</string>
     <string name="initial_sync_start_importing_account_rooms">Njëkohësimi fillestar:
 \nPo importohen Dhoma</string>
-    <string name="initial_sync_start_importing_account_joined_rooms">Njëkohësimi Fillestar:
+    <string name="initial_sync_start_importing_account_joined_rooms">Njëkohësimi fillestar:
 \nPo ngarkohen bisedat tuaja
 \nNëse keni hyrë në shumë dhoma, kjo mund të zgjasë ca</string>
     <string name="initial_sync_start_importing_account_invited_rooms">Njëkohësimi fillestar:
@@ -418,7 +418,7 @@
     <string name="media_saving_period_1_month">1 muaj</string>
     <string name="media_saving_period_forever">Përgjithmonë</string>
     <string name="room_settings_topic">Temë</string>
-    <string name="room_settings_room_read_history_rules_pref_title">Lexueshmëri Historiku Dhomr</string>
+    <string name="room_settings_room_read_history_rules_pref_title">Lexueshmëri Historiku Dhome</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Kush mund të lexojë historikun?</string>
     <string name="room_settings_read_history_entry_anyone">Cilido</string>
     <string name="room_settings_read_history_entry_members_only_invited">Vetëm anëtarë (ngaqë qenë ftuar)</string>
@@ -457,7 +457,7 @@
     <string name="tiny">E vockël</string>
     <string name="small">Të vogla</string>
     <string name="normal">Normale</string>
-    <string name="large">Të mëdhaja</string>
+    <string name="large">Të mëdha</string>
     <string name="larger">Më të mëdha</string>
     <string name="largest">Më të mëdhatë</string>
     <string name="huge">Të stërmëdha</string>
@@ -647,7 +647,7 @@
     <string name="settings_troubleshoot_test_fcm_title">Token Firebase</string>
     <string name="settings_troubleshoot_test_fcm_success">U mor me sukses token FCM:
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_fcm_failed">S’u arrit të merreh token FCM:
+    <string name="settings_troubleshoot_test_fcm_failed">S’u arrit të merret token FCM:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_token_registration_title">Regjistrim Token-i</string>
     <string name="settings_troubleshoot_test_token_registration_success">Token-i FCM u regjistrua me sukses te shërbyesi Home.</string>
@@ -766,7 +766,7 @@
 \n
 \nPër maksimumin e sigurisë, ky duhet të jetë i ndryshëm nga fjalëkalimi juaj për llogarinë.</string>
     <string name="keys_backup_setup_creating_backup">Po Krijohet Kopjeruajtje</string>
-    <string name="keys_backup_setup_step1_recovery_key_alternative">Ose, sigurojeni kopjeruajtjen tuaj me një Kyç Rimarrjesh, duke e ruajtur këtë diku të parrezikuar.</string>
+    <string name="keys_backup_setup_step1_recovery_key_alternative">Ose, sigurojeni kopjeruajtjen tuaj me një Kyç Rimarrjesh, duke e ruajtur këtë diku të parrezik.</string>
     <string name="keys_backup_setup_step2_skip_button_title">(Të mëtejshme) Rregullojeni me një Kyç Rimarrjesh</string>
     <string name="keys_backup_setup_step3_success_title">Sukses!</string>
     <string name="keys_backup_setup_step3_text_line1">Kyçet tuaj po kopjeruhen.</string>
@@ -918,7 +918,7 @@
     <string name="link_copied_to_clipboard">Lidhja u kopjua në të papastër</string>
     <string name="creating_direct_room">Po krijohet dhomë…</string>
     <string name="message_view_edit_history">Shihni Historik Përpunimesh</string>
-    <string name="action_decline">Hidhe poshtw</string>
+    <string name="action_decline">Hidhe poshtë</string>
     <string name="widget_integration_review_terms">Që të vazhdohet, lypset të pranoni Kushtet e këtij shërbimi.</string>
     <string name="terms_of_service">Kushte Shërbimi</string>
     <string name="terms_description_for_identity_server">Jini i zbulueshëm nga të tjerët</string>
@@ -968,7 +968,7 @@
     <string name="send_attachment">Dërgo bashkëngjitje</string>
     <string name="a11y_open_drawer">Hapni zonën e lëvizjeve</string>
     <string name="a11y_create_menu_open">Hapni menunë e krijimit të dhomave</string>
-    <string name="a11y_create_menu_close">Mbylleni menunë e krijmit të dhomave…</string>
+    <string name="a11y_create_menu_close">Mbylleni menunë e krijimit të dhomave…</string>
     <string name="a11y_create_direct_message">Krijoni një bisedë të re të drejtpërdrejtë</string>
     <string name="a11y_create_room">Krijoni një dhomë të re</string>
     <string name="a11y_jump_to_bottom">Hidhu në fund</string>
@@ -1066,7 +1066,7 @@
     <string name="login_signup">Regjistrohuni</string>
     <string name="login_signin">Hyni</string>
     <string name="login_signin_sso">Vazhdoni me SSO</string>
-    <string name="login_server_url_form_modular_hint">Adresë Element Matrix Services i</string>
+    <string name="login_server_url_form_modular_hint">Adresë Element Matrix Services</string>
     <string name="login_server_url_form_other_hint">Adresë</string>
     <string name="login_server_url_form_modular_text">Strehim me pagesë për ente</string>
     <string name="login_server_url_form_modular_notice">Jepni adresën e Modular Element-it ose Shërbyesit që doni të përdoret</string>
@@ -1106,7 +1106,7 @@
     <string name="login_set_email_optional_hint">Email (në daçi)</string>
     <string name="login_set_email_submit">Pasuesi</string>
     <string name="login_set_msisdn_title">Caktoni numër telefoni</string>
-    <string name="login_set_msisdn_notice">Caktoni një numër telefoni për t’i lejuar, në daçi, nejrëzit t’ju gjejnë.</string>
+    <string name="login_set_msisdn_notice">Caktoni një numër telefoni për t’i lejuar, në daçi, njerëzit t’ju gjejnë.</string>
     <string name="login_set_msisdn_notice2">Ju lutemi, përdorni formatin ndërkombëtar.</string>
     <string name="login_set_msisdn_mandatory_hint">Numër telefoni</string>
     <string name="login_set_msisdn_optional_hint">Numër telefoni (opsionale)</string>
@@ -1116,7 +1116,7 @@
     <string name="login_msisdn_confirm_hint">Jepni kod</string>
     <string name="login_msisdn_confirm_send_again">Ridërgoje</string>
     <string name="login_msisdn_confirm_submit">Pasuesi</string>
-    <string name="login_msisdn_error_not_international">Numrat e telefonave ndëkombëtarë duhet të fillojnë me \'+\'</string>
+    <string name="login_msisdn_error_not_international">Numrat e telefonave ndërkombëtarë duhet të fillojnë me \'+\'</string>
     <string name="login_msisdn_error_other">Numri i telefonit duket se është i vlefshëm. Ju lutemi, kontrollojeni</string>
     <string name="login_signup_to">Regjistrohuni te %1$s</string>
     <string name="login_signin_username_hint">Emër përdoruesi ose email</string>
@@ -1357,7 +1357,7 @@
     <string name="bootstrap_crosssigning_progress_key_backup">Po Ujdiset Kopjeruajtje Kyçesh</string>
     <string name="bootstrap_cross_signing_success">%2$s &amp; %1$s tani janë ujdisur.
 \n
-\nMbajini të parrezikuar! Do t’ju duhen për të shkyçur mesazhe të fshehtëzuar dhe informacione të sigurta, nëse humbni krejt sesionet tuaja aktive.</string>
+\nMbajini të parrezik! Do t’ju duhen për të shkyçur mesazhe të fshehtëzuar dhe informacione të sigurta, nëse humbni krejt sesionet tuaja aktive.</string>
     <string name="bootstrap_crosssigning_print_it">Shtypeni dhe ruajeni diku në një vend të parrezik</string>
     <string name="bootstrap_crosssigning_save_usb">Ruajeni në një diskth USB ose pajisje kopjeruajtjesh</string>
     <string name="bootstrap_crosssigning_save_cloud">Kopjojeni te depozita juaj personale në re</string>
@@ -1561,7 +1561,7 @@
     <string name="room_manage_integrations">Administroni Integrime</string>
     <string name="room_no_active_widgets">S’ka widget-e aktivë</string>
     <string name="recovery_key_export_saved">Kyçi i rikthimeve u ruajt.</string>
-    <string name="secure_backup_banner_setup_line1">Kopjeruajtje e Sigur</string>
+    <string name="secure_backup_banner_setup_line1">Kopjeruajtje e Sigurt</string>
     <string name="secure_backup_banner_setup_line2">Ruhuni nga humbja e hyrjes në mesazhe &amp; të dhëna të fshehtëzuara</string>
     <string name="secure_backup_setup">Ujdisni Kopjeruajtje të Sigurt</string>
     <string name="create_room_federation_error">Dhoma është krijuar, por disa ftesa s’janë dërguar, për arsyen vijuese:
@@ -1683,7 +1683,7 @@
     <string name="secure_backup_reset_if_you_reset_all">Nëse riktheni gjithçka te parazgjedhjet</string>
     <string name="secure_backup_reset_all_no_other_devices">Bëjeni këtë vetëm nëse s’keni pajisje tjetër me të cilën të verifikoni këtë pajisje.</string>
     <string name="secure_backup_reset_all">Rikthe gjithçka te parazgjedhjet</string>
-    <string name="bad_passphrase_key_reset_all_action">Harruat ose humbët krejt mundësitë e rimarrjes\? Riujdisni gjihçka</string>
+    <string name="bad_passphrase_key_reset_all_action">Harruat ose humbët krejt mundësitë e rimarrjes\? Riujdisni gjithçka</string>
     <string name="command_description_discard_session">E detyron të hidhet tej sesionin e tanishëm outbound në një dhomë të fshehtëzuar</string>
     <string name="direct_room_created_summary_item_by_you">Erdhët.</string>
     <string name="direct_room_created_summary_item">%s erdhi.</string>
@@ -1770,7 +1770,7 @@
     <string name="qr_code">Kod QR</string>
     <string name="add_by_qr_code">Shtoni përmes kodi QR</string>
     <string name="permissions_denied_qr_code">Që të skanoni një kod QR, lypset të lejoni përdorim kamere.</string>
-    <string name="start_chatting">Filloni të Llafoseni</string>
+    <string name="start_chatting">Filloni të Bisedoni</string>
     <string name="permissions_denied_add_contact">Jepni leje për hyrje te kontaktet tuaja.</string>
     <string name="sound_device_wireless_headset">Kufje dhe mikrofon pa fill</string>
     <string name="sound_device_headset">Kufje dhe mikrofon</string>
@@ -1798,7 +1798,7 @@
     <string name="room_alias_published_alias_main">Kjo është adresa kryesore</string>
     <string name="room_alias_published_alias_subtitle">Adresat e publikuara mund të përdoren nga cilido, në cilindo shërbyes, për të hyrë në dhomën tuaj. Që të bëni publike një adresë, lypset të ujdiset së pari si një adresë vendore.</string>
     <string name="room_alias_published_alias_title">Adresa të Publikuara</string>
-    <string name="room_settings_alias_subtitle">Shihni dhe administroni adresa të kësaj dhome, dhe dukshmërinë e saj te lista e dhomave.</string>
+    <string name="room_settings_alias_subtitle">Shihni dhe administroni adresa të kësaj dhome dhe dukshmërinë e saj te lista e dhomave.</string>
     <string name="room_settings_alias_title">Adresa dhome</string>
     <string name="room_settings_room_access_title">Leje mbi dhomën</string>
     <string name="room_settings_room_read_history_dialog_subtitle">Ndryshimet se cili mund të lexojë historikun do të aplikohen vetëm për mesazhe të ardhshëm në këtë dhomë. Dukshmëria e historikut ekzistues do të mbesë e pandryshuar.</string>
@@ -1956,7 +1956,7 @@
     <string name="invite_people_menu">Ftoni njerëz</string>
     <string name="invite_people_to_your_space">Ftoni njerëz te ekipi juaj</string>
     <string name="create_space_topic_hint">Përshkrim</string>
-    <string name="create_spaces_loading_message">Po krijohe Hapësirë…</string>
+    <string name="create_spaces_loading_message">Po krijohet Hapësirë…</string>
     <string name="create_spaces_default_public_random_room_name">Kuturu</string>
     <string name="create_spaces_default_public_room_name">Të Përgjithshme</string>
     <string name="create_spaces_room_private_header_desc">Le të krijojmë një dhomë për secilën prej tyre. Mund të shtoni të tjera më vonë, përfshi ato ekzistuese tashmë.</string>
@@ -2014,8 +2014,8 @@
         <item quantity="other">Dërgoji videot në madhësinë origjinale</item>
     </plurals>
     <string name="error_file_too_big_simple">Kartela është shumë e madhe për t’u ngarkuar.</string>
-    <string name="send_file_step_compressing_video">Po ngjeshet video %d%%</string>
-    <string name="send_file_step_compressing_image">Po ngjeshet figurë…</string>
+    <string name="send_file_step_compressing_video">Po ngjishet video %d%%</string>
+    <string name="send_file_step_compressing_image">Po ngjishet figurë…</string>
     <string name="use_as_default_and_do_not_ask_again">Përdore si parazgjedhje dhe mos pyet sërish</string>
     <string name="option_always_ask">Pyet përherë</string>
     <string name="this_space_has_no_rooms_admin">Disa dhoma mund të jenë të fshehura, ngaqë janë private dhe mund t’ju duhet një ftesë.</string>
@@ -2454,7 +2454,7 @@
     <string name="device_manager_session_last_activity">Veprimtaria e fundit më %1$s</string>
     <string name="rich_text_editor_format_underline">Apliko format me të nënvizuara</string>
     <string name="rich_text_editor_format_strikethrough">Apliko format me të hequravije</string>
-    <string name="rich_text_editor_format_italic">Apliko format me të pjerrta</string>
+    <string name="rich_text_editor_format_italic">Apliko format me të pjerrëta</string>
     <string name="rich_text_editor_format_bold">Apliko format me të trasha</string>
     <string name="qr_code_login_confirm_security_code_description">Ju lutemi, sigurohuni se e dini origjinën e këtij kodi. Duke lidhur pajisje, do t’i jepni dikujt hyrje të plotë në llogarinë tuaj.</string>
     <string name="qr_code_login_confirm_security_code">Ripohojeni</string>
@@ -2531,7 +2531,7 @@
     <string name="device_manager_session_details_device_browser">Shfletues</string>
     <string name="device_manager_session_details_application_url">URL</string>
     <string name="device_manager_session_details_application_version">Version</string>
-    <string name="device_manager_session_details_application_name">Ëmër</string>
+    <string name="device_manager_session_details_application_name">Emër</string>
     <string name="device_manager_session_details_application">Aplikacion</string>
     <string name="device_manager_session_details_session_last_activity">Veprimtaria e fundit</string>
     <string name="device_manager_session_details_session_name">Emër sesioni</string>
@@ -2810,13 +2810,13 @@
     <string name="qr_code_login_header_show_qr_code_link_a_device_description">Skanoni kodin QR më poshtë me pajisjen tuaj prej nga është dalë nga llogaria.</string>
     <string name="qr_code_login_header_show_qr_code_new_device_description">Përdorni pajisjen tuaj ku jeni brenda llogarisë që të skanoni kodin QR më poshtë:</string>
     <string name="qr_code_login_header_scan_qr_code_description">Përdorni kamerën në këtë pajisje që të skanoni kodin QR të shfaqur në pajisjen tuaj tjetër:</string>
-    <string name="labs_enable_element_call_permission_shortcuts_summary">Mirato vetvetiu widget-e Thirrjesh Element Call dhe akordo përdorim kamere / mikfrofoni</string>
+    <string name="labs_enable_element_call_permission_shortcuts_summary">Mirato vetvetiu widget-e Thirrjesh Element dhe akordo përdorim kamere / mikrofoni</string>
     <string name="labs_enable_msc3061_share_history">MSC3061: Po jepen kyçe dhome për mesazhe të dikurshëm</string>
     <string name="settings_show_latest_profile_description">Shfaq hollësitë më të reja të profileve (avatar dhe emër në ekran) për krejt mesazhet.</string>
     <string name="settings_security_incognito_keyboard_summary">Kërko doemos që tastiera të mos përditësojë ndonjë të dhënë të personalizuar, bie fjala, historik shtypjeje në të dhe fjalor bazuar në ç’keni shtypur në biseda. Kini parasysh se disa tastiera mund të mos e respektojnë këtë rregullim.</string>
     <string name="verify_invalid_qr_notice">Ky kod QR duket i formuar keq. Ju lutemi, provoni ta verifikoni me tjetër metodë.</string>
-    <string name="room_settings_global_block_unverified_info_text">🔒 Keni aktivizuar fshehtëzim për sesionie të verifikuar vetëm për krejt dhomat, që nga Rregullime Sigurie.</string>
-    <string name="settings_autoplay_animated_images_summary">Luaj figura të animuara te rrjedha kohora sapo zënë të duken</string>
+    <string name="room_settings_global_block_unverified_info_text">🔒 Keni aktivizuar fshehtëzim për sesione të verifikuar vetëm për krejt dhomat, që nga Rregullime Sigurie.</string>
+    <string name="settings_autoplay_animated_images_summary">Luaj figura të animuara te rrjedha kohore sapo zënë të duken</string>
     <string name="message_reply_to_sender_created_poll">krijoi një pyetësor.</string>
     <string name="message_reply_to_sender_sent_sticker">dërgoi një ngjitës.</string>
     <string name="message_reply_to_sender_sent_video">dërgoi një video.</string>
@@ -2954,4 +2954,13 @@
 \n
 \n%s</string>
     <string name="invite_unknown_users_dialog_submit">Ftoji, sido qoftë</string>
+    <string name="login_splash_sign_in">Hyni</string>
+    <string name="user_reported_as_inappropriate_title">Përdorues i raportuar</string>
+    <string name="message_report_user">Raportojeni përdoruesin</string>
+    <string name="user_reported_as_inappropriate_content">Përdoruesi është raportuar.
+\n
+\nNëse s’doni të shihni më lëndë nga ky përdorues, mund ta shpërfillni, që mesazhet e tij të jenë të fshehura.</string>
+    <string name="microphone_in_use_title">Mikrofon në përdorim</string>
+    <string name="call_unsupported_matrix_rtc_call">Thirrje që s’mbulohet. Për të marrë pjesë në këtë thirrje lypset aplikacioni i ri Element X.</string>
+    <string name="call_unsupported">Thirrje që s’mbulohet</string>
 </resources>

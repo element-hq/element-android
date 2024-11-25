@@ -2900,4 +2900,21 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="crosssigning_verify_after_update">Aplikasi diperbarui</string>
     <string name="sign_out_failed_dialog_message">Tidak dapat mencapai homeserver. Jika Anda tetap keluar, perangkat ini tidak akan dihapus dari daftar perangkat. Anda dapat menghapusnya menggunakan klien lain.</string>
     <string name="sign_out_anyway">Tetap keluar</string>
+    <string name="create_room_unknown_users_dialog_content">Tidak dapat menemukan profil untuk ID Matrix yang dicantumkan di bawah. Apakah Anda ingin memulai percakapan saja\?
+\n
+\n%s</string>
+    <string name="create_room_unknown_users_dialog_submit">Mulai percakapan saja</string>
+    <string name="invite_unknown_users_dialog_content">Tidak dapat menemukan profil untuk ID Matrix yang dicantumkan di bawah. Apakah Anda ingin mengundang mereka saja\?
+\n
+\n%s</string>
+    <string name="invite_unknown_users_dialog_submit">Tetap undang</string>
+    <string name="login_splash_sign_in">Masuk</string>
+    <string name="user_reported_as_inappropriate_title">Pengguna dilaporkan</string>
+    <string name="message_report_user">Laporkan pengguna</string>
+    <string name="user_reported_as_inappropriate_content">Pengguna ini telah dilaporkan.
+\n
+\nJika Anda tidak ingin melihat konten lagi dari pengguna ini, Anda dapat mengabaikan untuk menyembunyikan pesannya.</string>
+    <string name="microphone_in_use_title">Mikrofon digunakan</string>
+    <string name="call_unsupported">Panggilan tidak didukung</string>
+    <string name="call_unsupported_matrix_rtc_call">Panggilan tidak didukung. Aplikasi Element X yang baru diperlukan untuk bergabung ke panggilan ini.</string>
 </resources>

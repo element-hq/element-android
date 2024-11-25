@@ -1,0 +1,2 @@
+Основні зміни в цій версії: переважно усунення вад
+Перелік усіх змін: https://github.com/element-hq/element-android/releases
