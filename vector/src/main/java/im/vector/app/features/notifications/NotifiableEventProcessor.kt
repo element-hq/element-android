@@ -32,6 +32,7 @@ class NotifiableEventProcessor @Inject constructor(
                             .also { Timber.d("notification message removed due to being read") }
                     else -> KEEP
                 }
+                is NotifiableJitsiEvent -> KEEP
                 is SimpleNotifiableEvent -> when (it.type) {
                     EventType.REDACTION -> REMOVE
                     else -> KEEP

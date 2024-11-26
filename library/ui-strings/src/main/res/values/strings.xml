@@ -373,6 +373,7 @@
     <string name="done">Done</string>
 
     <string name="call_notification_answer">Accept</string>
+    <string name="call_notification_open_app">Open App</string>
     <string name="call_notification_reject">Decline</string>
     <string name="call_notification_hangup">Hang Up</string>
 
@@ -3500,6 +3501,7 @@
     <string name="labs_enable_client_info_recording_summary">Record the client name, version, and url to recognise sessions more easily in session manager.</string>
     <string name="labs_enable_voice_broadcast_title">Enable voice broadcast</string>
     <string name="labs_enable_voice_broadcast_summary">Be able to record and send voice broadcast in room timeline.</string>
+    <string name="labs_enable_jitsi_call_notifications_summary">Ring for group calls.</string>
 
     <!-- Note to translators: %s will be replaces with selected space name -->
     <string name="home_empty_space_no_rooms_title">%s\nis looking a little empty.</string>

@@ -51,6 +51,7 @@
     <bool name="settings_labs_rich_text_editor_default">false</bool>
     <bool name="settings_labs_enable_voice_broadcast_visible">true</bool>
     <bool name="settings_labs_enable_voice_broadcast_default">false</bool>
+    <bool name="settings_labs_enable_jitsi_call_notifications_default">true</bool>
     <!-- Level 1: Advanced settings -->
 
     <!-- Level 1: Help and about -->
