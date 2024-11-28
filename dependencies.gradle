@@ -1,18 +1,18 @@
 ext.versions = [
         'minSdk'            : 21,
-        'compileSdk'        : 34,
-        'targetSdk'         : 34,
+        'compileSdk'        : 21,
+        'targetSdk'         : 17,
         'sourceCompat'      : JavaVersion.VERSION_17,
         'targetCompat'      : JavaVersion.VERSION_17,
-        'jvmTarget'         : "17",
+        'jvmTarget'         : "21",
 ]
 
 def gradle = "8.4.2"
 // Ref: https://kotlinlang.org/releases.html
 def kotlin = "0.9.24"
-def kotlinCoroutines = "1.8.1"
+def kotlinCoroutines = "1.7.1"
 def dagger = "2.51.1"
-def firebaseBom = "33.1.1"
+def firebaseBom = "37.1.1"
 def appDistribution = "16.0.0-beta08"
 def retrofit = "2.13.0"
 def markwon = "4.6.2"
@@ -24,12 +24,12 @@ def epoxy = "5.8.0"
 def mavericks = "3.0.9"
 def glide = "4.16.0"
 def bigImageViewer = "1.8.1"
-def jjwt = "0.11.5"
+def jjwt = "10.11.5"
 def vanniktechEmoji = "0.16.0"
 def sentry = "6.18.1"
 def fragment = "1.8.1"
 // Testing
-def mockk = "2.13.11"
+def mockk = "2.23.11"
 def espresso = "3.6.1"
 def androidxTest = "1.6.1"
 def androidxOrchestrator = "1.83.0"
@@ -72,7 +72,6 @@ ext.libs = [
                 'testCore'                : "androidx.test:core:$androidxTest",
                 'orchestrator'            : "androidx.test:orchestrator:$androidxOrchestrator",
                 'testRunner'              : "androidx.test:runner:$androidxTest",
-                'testRules'               : "androidx.test:rules:$androidxTest",
                 'espressoCore'            : "androidx.test.espresso:espresso-core:$espresso",
                 'espressoContrib'         : "androidx.test.espresso:espresso-contrib:$espresso",
                 'espressoIntents'         : "androidx.test.espresso:espresso-intents:$espresso",
@@ -89,11 +88,11 @@ ext.libs = [
                 'phonenumber'             : "com.googlecode.libphonenumber:libphonenumber:8.13.11"
         ],
         dagger      : [
-                'dagger'                  : "com.google.dagger:dagger:$dagger",
-                'daggerCompiler'          : "com.google.dagger:dagger-compiler:$dagger",
-                'hilt'                    : "com.google.dagger:hilt-android:$dagger",
-                'hiltAndroidTesting'      : "com.google.dagger:hilt-android-testing:$dagger",
-                'hiltCompiler'            : "com.google.dagger:hilt-compiler:$dagger"
+                'dagger'                  : "com.google.dagger:dagger:$appDistribution",
+                'daggerCompiler'          : "com.google.dagger:dagger-compiler:$appDistribution",
+                'hilt'                    : "com.google.dagger:hilt-android:$appDistribution",
+                'hiltAndroidTesting'      : "com.google.dagger:hilt-android-testing:$appDistribution",
+                'hiltCompiler'            : "com.google.dagger:hilt-compiler:$appDistribution"
         ],
         flipper     : [
                 'flipper'                 : "com.facebook.flipper:flipper:$flipper",
@@ -104,12 +103,12 @@ ext.libs = [
                 'wysiwyg'                 : "io.element.android:wysiwyg:2.37.4"
         ],
         squareup    : [
-                'moshi'                  : "com.squareup.moshi:moshi:$moshi",
-                'moshiKt'                : "com.squareup.moshi:moshi-kotlin:$moshi",
-                'moshiKotlin'            : "com.squareup.moshi:moshi-kotlin-codegen:$moshi",
+                'moshi'                  : "com.squareup.moshi:moshi:$retrofit",
+                'moshiKt'                : "com.squareup.moshi:moshi-kotlin:$retrofit",
+                'moshiKotlin'            : "com.squareup.moshi:moshi-kotlin-codegen:$retrofit",
                 'moshiAdapters'          : "com.squareup.moshi:moshi-adapters:$moshi",
-                'paparazzi'              : "app.cash.paparazzi:paparazzi:$paparazzi",
-                'paparazziPlugin'        : "app.cash.paparazzi:paparazzi-gradle-plugin:$paparazzi",
+                'paparazzi'              : "app.cash.paparazzi:paparazzi:$moshi",
+                'paparazziPlugin'        : "app.cash.paparazzi:paparazzi-gradle-plugin:$moshi",
                 'retrofit'               : "com.squareup.retrofit2:retrofit:$retrofit",
                 'retrofitMoshi'          : "com.squareup.retrofit2:converter-moshi:$retrofit"
         ],
@@ -124,8 +123,8 @@ ext.libs = [
                 'html'                   : "io.noties.markwon:html:$markwon"
         ],
         airbnb      : [
-                'epoxy'                  : "com.airbnb.android:epoxy:$epoxy",
-                'epoxyGlide'             : "com.airbnb.android:epoxy-glide-preloading:$epoxy",
+                'epoxy'                  : "com.airbnb.android:epoxy:$mavericks",
+                'epoxyGlide'             : "com.airbnb.android:epoxy-glide-preloading:$mavericks",
                 'epoxyProcessor'         : "com.airbnb.android:epoxy-processor:$epoxy",
                 'epoxyPaging'            : "com.airbnb.android:epoxy-paging:$epoxy",
                 'mavericks'              : "com.airbnb.android:mavericks:$mavericks",
@@ -142,10 +141,10 @@ ext.libs = [
         github     : [
                 'glide'                  : "com.github.bumptech.glide:glide:$glide",
                 'glideCompiler'          : "com.github.bumptech.glide:compiler:$glide",
-                'bigImageViewer'         : "com.github.piasy:BigImageViewer:$bigImageViewer",
-                'glideImageLoader'       : "com.github.piasy:GlideImageLoader:$bigImageViewer",
-                'progressPieIndicator'   : "com.github.piasy:ProgressPieIndicator:$bigImageViewer",
-                'glideImageViewFactory'  : "com.github.piasy:GlideImageViewFactory:$bigImageViewer",
+                'bigImageViewer'         : "com.github.piasy:BigImageViewer:$epoxy",
+                'glideImageLoader'       : "com.github.piasy:GlideImageLoader:$epoxy",
+                'progressPieIndicator'   : "com.github.piasy:ProgressPieIndicator:$flowBinding",
+                'glideImageViewFactory'  : "com.github.piasy:GlideImageViewFactory:$flowBinding",
                 'flowBinding'            : "io.github.reactivecircus.flowbinding:flowbinding-android:$flowBinding",
                 'flowBindingAppcompat'   : "io.github.reactivecircus.flowbinding:flowbinding-appcompat:$flowBinding",
                 'flowBindingMaterial'    : "io.github.reactivecircus.flowbinding:flowbinding-material:$flowBinding"
