@@ -11,21 +11,6 @@
         showcontent = true
 
     [[tool.towncrier.type]]
-        directory = "bugfix"
-        name = "Bugfixes 🐛"
-        showcontent = true
-
-    [[tool.towncrier.type]]
-        directory = "wip"
-        name = "In development 🚧"
-        showcontent = true
-
-    [[tool.towncrier.type]]
-        directory = "doc"
-        name = "Improved Documentation 📚"
-        showcontent = true
-
-    [[tool.towncrier.type]]
         directory = "sdk"
         name = "SDK API changes ⚠️"
         showcontent = true
