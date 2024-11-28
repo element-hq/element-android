@@ -22,14 +22,4 @@ enum class KeySharingStrategy {
      * This is handled by the Matrix SDK so there's no need to do it in Vector.
      */
     WhenSendingEvent,
-
-    /**
-     * Keys will be sent for the first time when the timeline displayed.
-     */
-    WhenEnteringRoom,
-
-    /**
-     * Keys will be sent for the first time when a typing started.
-     */
-    WhenTyping
 }
