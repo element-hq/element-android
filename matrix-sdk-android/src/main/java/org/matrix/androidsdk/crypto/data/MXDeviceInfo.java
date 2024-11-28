@@ -26,18 +26,6 @@ import java.util.Map;
 public class MXDeviceInfo implements Serializable {
     private static final long serialVersionUID = 20129670646382964L;
 
-    // This device is a new device and the user was not warned it has been added.
-    public static final int DEVICE_VERIFICATION_UNKNOWN = -1;
-
-    // The user has not yet verified this device.
-    public static final int DEVICE_VERIFICATION_UNVERIFIED = 0;
-
-    // The user has verified this device.
-    public static final int DEVICE_VERIFICATION_VERIFIED = 1;
-
-    // The user has blocked this device.
-    public static final int DEVICE_VERIFICATION_BLOCKED = 2;
-
     /**
      * The id of this device.
      */
