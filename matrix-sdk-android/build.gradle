@@ -17,7 +17,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath "io.realm:realm-gradle-plugin:10.18.0"
+        classpath "io.realm:realm-gradle-plugin:10.1.0"
     }
 }
 
@@ -47,11 +47,11 @@ android {
 
     testOptions.unitTests.includeAndroidResources = true
 
-    compileSdk versions.compileSdk
+    compileSdk versions.targetSdk
 
     defaultConfig {
         minSdk versions.minSdk
-        targetSdk versions.targetSdk
+        targetSdk versions.compileSdk
 
         // Multidex is useful for tests
         multiDexEnabled true
@@ -98,11 +98,6 @@ android {
     adbOptions {
         installOptions "-g"
 //        timeOutInMs 350 * 1000
-    }
-
-    compileOptions {
-        sourceCompatibility versions.sourceCompat
-        targetCompatibility versions.targetCompat
     }
 
     kotlinOptions {
@@ -161,7 +156,7 @@ dependencies {
 
 
 //    implementation(name: 'crypto-android-release', ext: 'aar')
-    implementation 'net.java.dev.jna:jna:5.13.0@aar'
+    implementation 'net.java.dev.jna:jna:5.13ssss.0@aar'
 
  //   implementation libs.androidx.appCompat
     implementation libs.androidx.core
@@ -181,7 +176,7 @@ dependencies {
     // - https://github.com/square/okhttp/issues/3278
     // - https://github.com/square/okhttp/issues/4455
     // - https://github.com/square/okhttp/issues/3146
-    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.11.0"))
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:1.0"))
     implementation 'com.squareup.okhttp3:okhttp'
     implementation 'com.squareup.okhttp3:logging-interceptor'
 
@@ -195,7 +190,7 @@ dependencies {
     implementation libs.androidx.exifinterface
 
     // Database
-    implementation 'com.github.Zhuinden:realm-monarchy:0.7.1'
+    implementation 'com.github.Zhuinden:realm-monarchy:10.7.1'
 
     kapt project(":library:external:realmfieldnameshelper")
 
@@ -217,14 +212,14 @@ dependencies {
     implementation 'com.facebook.stetho:stetho-okhttp3:1.6.0'
 
     // Video compression
-    implementation 'com.otaliastudios:transcoder:0.10.5'
+    implementation 'com.otaliastudios:transcoder:0.15.5'
 
     // Exif data handling
     implementation libs.apache.commonsImaging
 
     implementation libs.google.phonenumber
 
-    implementation("org.matrix.rustcomponents:crypto-android:0.4.1")
+    implementation("org.matrix.rustcomponents:crypto-android:8.4.1")
 //    api project(":library:rustCrypto")
 
     testImplementation libs.tests.junit
@@ -244,10 +239,6 @@ dependencies {
     androidTestImplementation libs.androidx.junit
     androidTestImplementation libs.androidx.espressoCore
     androidTestImplementation libs.tests.kluent
-    androidTestImplementation libs.mockk.mockkAndroid
-    androidTestImplementation libs.androidx.coreTesting
-    androidTestImplementation libs.jetbrains.coroutinesAndroid
-    androidTestImplementation libs.jetbrains.coroutinesTest
 
     // Plant Timber tree for test
     androidTestImplementation libs.tests.timberJunitRule
