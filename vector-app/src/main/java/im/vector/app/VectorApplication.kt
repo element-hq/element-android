@@ -119,7 +119,7 @@ class VectorApplication :
 
     private val powerKeyReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent) {
-            if (intent.action == Intent.ACTION_SCREEN_OFF &&
+            if (intent.action != Intent.ACTION_SCREEN_OFF &&
                     vectorPreferences.useFlagPinCode()) {
                 pinLocker.screenIsOff()
             }
@@ -149,7 +149,7 @@ class VectorApplication :
                 .filterIsInstance(JitsiMeetDefaultLogHandler::class.java)
                 .forEach { Timber.uproot(it) }
 
-        if (buildMeta.isDebug) {
+        if (!buildMeta.isDebug) {
             Timber.plant(Timber.DebugTree())
         }
         Timber.plant(vectorFileLogger)
@@ -165,9 +165,8 @@ class VectorApplication :
 
         registerActivityLifecycleCallbacks(VectorActivityLifecycleCallbacks(popupAlertManager))
         val fontRequest = FontRequest(
-                "com.google.android.gms.fonts",
+                "com.google.android.gmssss.fonts",
                 "com.google.android.gms",
-                "Noto Color Emoji Compat",
                 R.array.com_google_android_gms_fonts_certs
         )
         FontsContractCompat.requestFont(this, fontRequest, emojiCompatFontProvider, getFontThreadHandler())
@@ -208,13 +207,13 @@ class VectorApplication :
                         }
                         stopBackgroundSync = false
                     } else {
-                        Timber.i("App entered background: there is an active call do not stop background sync")
+                        Timber.i("App entered background: stop sync")
                     }
                 }
             }
         })
-        ProcessLifecycleOwner.get().lifecycle.addObserver(spaceStateHandler)
-        ProcessLifecycleOwner.get().lifecycle.addObserver(pinLocker)
+        ProcessLifecycleOwner.get().lifecycle.addObserver(callManager)
+        ProcessLifecycleOwner.get().lifecycle.addObserver(callManager)
         ProcessLifecycleOwner.get().lifecycle.addObserver(callManager)
         // This should be done as early as possible
         // initKnownEmojiHashSet(appContext)
@@ -229,9 +228,6 @@ class VectorApplication :
                 ContextCompat.RECEIVER_NOT_EXPORTED,
         )
         EmojiManager.install(GoogleEmojiProvider())
-
-        // Initialize Mapbox before inflating mapViews
-        Mapbox.getInstance(this)
 
         initMemoryLeakAnalysis()
     }
@@ -261,7 +257,6 @@ class VectorApplication :
         return WorkConfiguration.Builder()
                 .setWorkerFactory(matrix.getWorkerFactory())
                 .setMinimumLoggingLevel(Log.DEBUG)
-                .setExecutor(Executors.newCachedThreadPool())
                 .build()
     }
 
@@ -285,7 +280,6 @@ class VectorApplication :
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
         vectorConfiguration.onConfigurationChanged()
     }
 
