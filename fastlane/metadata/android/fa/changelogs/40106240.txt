@@ -1,0 +1,2 @@
+تغییرات عمده در این نگارش: آگاهی کاربر از تماس پشیتبانی نشدهٔ المنتی.
+گزارش دگرگونی کامل: https://github.com/element-hq/element-android/releases

@@ -78,4 +78,12 @@
     <string name="notice_room_server_acl_updated_was_allowed">• %s உடன் பொருந்தக்கூடிய சேவையகங்கள் அனுமதிக்கப்பட்ட பட்டியலில் இருந்து நீக்கப்பட்டுள்ளது.</string>
     <string name="notice_room_server_acl_updated_allowed">• %s உடன் பொருந்தக்கூடிய சேவையகங்கள் இப்போது அனுமதிக்கப்பட்டுள்ளன.</string>
     <string name="notice_room_server_acl_updated_was_banned">• %s உடன் பொருந்தக்கூடிய சேவையகங்கள் தடை பட்டியலில் இருந்து நீக்கப்பட்டுள்ளது.</string>
+    <string name="notice_display_name_changed_to">%1$s தங்கள் காட்சிப் பெயரை %2$s என மாற்றியுள்ளனர்</string>
+    <string name="notice_room_reject">%1$s அழைப்பை நிராகரித்தார்</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• ஐபி எழுத்துகளுடன் பொருந்தக்கூடிய சேவையகங்கள் இப்போது அனுமதிக்கப்படுகின்றன.</string>
+    <plurals name="x_selected">
+        <item quantity="one">%1$d தேர்ந்தெடுக்கப்பட்டது</item>
+        <item quantity="other">%1$d தேர்ந்தெடுக்கப்பட்டுள்ளன</item>
+    </plurals>
+    <string name="notice_room_reject_by_you">நீங்கள் அழைப்பை நிராகரித்தீர்கள்</string>
 </resources>

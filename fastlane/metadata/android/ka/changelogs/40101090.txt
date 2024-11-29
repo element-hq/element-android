@@ -1,0 +1,2 @@
+ამ ვერსიის ძირითადი ცვლილებები: დაემატა gitter.im ქსელის მხარდაჭერა.
+სრული ცვლილებათა ჟურნალი: https://github.com/element-hq/element-android/releases/tag/v1.1.9

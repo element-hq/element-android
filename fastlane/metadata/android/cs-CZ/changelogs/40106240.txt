@@ -1,0 +1,2 @@
+Hlavní změny v této verzi: upozornění uživatele na nepodporovaný Element Call.
+Úplný seznam změn: https://github.com/element-hq/element-android/releases
