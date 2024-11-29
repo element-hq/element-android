@@ -33,7 +33,7 @@
     <string name="medium_email">电子邮件地址</string>
     <string name="medium_phone_number">手机号码</string>
     <string name="notice_room_withdraw">%1$s撤回了%2$s的邀请</string>
-    <string name="notice_made_future_room_visibility">%1$s 让未来的房间历史记录对 %2$s 可见</string>
+    <string name="notice_made_future_room_visibility">%1$s让未来的房间历史对%2$s可见</string>
     <string name="notice_room_third_party_invite">%1$s 向 %2$s 发送了加入房间的邀请</string>
     <string name="notice_room_third_party_registered_invite">%1$s 接受了 %2$s 的邀请</string>
     <string name="room_displayname_empty_room">空房间</string>
