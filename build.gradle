@@ -207,7 +207,7 @@ apply plugin: 'org.sonarqube'
 sonar {
     properties {
         property "sonar.projectName", "element-android"
-        property "sonar.projectKey", "vector-im_element-android"
+        property "sonar.projectKey", "element-android"
         property "sonar.host.url", "https://sonarcloud.io"
         property "sonar.projectVersion", project(":vector").android.defaultConfig.versionName
         property "sonar.sourceEncoding", "UTF-8"
@@ -215,7 +215,7 @@ sonar {
         property "sonar.links.ci", "https://github.com/element-hq/element-android/actions"
         property "sonar.links.scm", "https://github.com/element-hq/element-android/"
         property "sonar.links.issue", "https://github.com/element-hq/element-android/issues"
-        property "sonar.organization", "new_vector_ltd_organization"
+        property "sonar.organization", "element-hq"
         property "sonar.java.coveragePlugin", "jacoco"
         property "sonar.coverage.jacoco.xmlReportPaths", "${project.buildDir}/reports/jacoco/generateCoverageReport/generateCoverageReport.xml"
         property "sonar.login", project.hasProperty("SONAR_LOGIN") ? SONAR_LOGIN : "invalid"
