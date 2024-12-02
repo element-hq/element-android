@@ -81,7 +81,7 @@ jobs:
     steps:
       - name: Obtain apk from artifact
         id: download
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4.1.7
         with:
           name: vector-gplay-release-unsigned
       - name: Show apks in artifact
