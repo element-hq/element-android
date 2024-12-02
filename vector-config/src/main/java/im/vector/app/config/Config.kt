@@ -42,7 +42,7 @@ object Config {
     /**
      * The maximum length of voice messages in milliseconds.
      */
-    const val VOICE_MESSAGE_LIMIT_MS = 120_000L
+    const val VOICE_MESSAGE_LIMIT_MS = 900_000L
 
     /**
      * The strategy for sharing device keys.
