@@ -17,6 +17,7 @@ import androidx.activity.result.ActivityResultLauncher
 import im.vector.lib.core.utils.compat.getParcelableArrayListExtraCompat
 import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 import im.vector.lib.core.utils.compat.queryIntentActivitiesCompat
+import timber.log.Timber
 
 /**
  * Abstract class to provide all types of Pickers.
@@ -106,6 +107,14 @@ abstract class Picker<T> {
                 }
             }
         }
-        return selectedUriList.onEach { context.grantUriPermission(context.applicationContext.packageName, it, Intent.FLAG_GRANT_READ_URI_PERMISSION) }
+        selectedUriList.forEach { uri ->
+            try {
+                context.grantUriPermission(context.applicationContext.packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            } catch (e: SecurityException) {
+                // Handle the exception, e.g., log it or notify the user
+                Timber.w("Picker", "Failed to grant URI permission for $uri: ${e.message}")
+            }
+        }
+        return selectedUriList
     }
 }
