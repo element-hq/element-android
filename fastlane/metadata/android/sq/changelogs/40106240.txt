@@ -1,0 +1,2 @@
+Ndryshimet kryesore në këtë version: njofto përdoruesin mbi Thirrje Element që s’mbulohet.
+Regjistër i plotë ndryshimesh: https://github.com/element-hq/element-android/releases

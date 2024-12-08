@@ -1,0 +1,2 @@
+Ndryshimet kryesore në këtë version: shtim Administrimi Pajisjesh Celulare dhe mbulim funksional për anëtarë.
+Regjistër i plotë ndryshimesh: https://github.com/element-hq/element-android/releases
