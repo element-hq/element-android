@@ -2971,4 +2971,7 @@
     <string name="user_reported_as_inappropriate_content">Dieser Benutzer ist gemeldet worden.
 \n
 \nWenn du keine Inhalte mehr von dieser Person sehen möchtest, kannst du sie ignorieren, um ihre Nachrichten auszublenden.</string>
+    <string name="microphone_in_use_title">Mikrofon wird benutzt</string>
+    <string name="call_unsupported">Nicht unterstützter Anruf</string>
+    <string name="call_unsupported_matrix_rtc_call">Nicht unterstützter Anruf. Die neue Element X-App wird benötigt, um diesem Anruf beizutreten.</string>
 </resources>
