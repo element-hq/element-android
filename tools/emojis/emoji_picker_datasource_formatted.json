@@ -3553,7 +3553,9 @@
                 "monocle",
                 "rich",
                 "stuffy",
-                "wealthy"
+                "wealthy",
+                "exploration",
+                "inspection"
             ]
         },
         "confused-face": {
@@ -4311,7 +4313,9 @@
                 "crap",
                 "dirt",
                 "dog",
-                "smiling"
+                "smiling",
+                "bad",
+                "needs_improvement"
             ]
         },
         "clown-face": {
@@ -4319,7 +4323,8 @@
             "b": "1F921",
             "j": [
                 "clown",
-                "face"
+                "face",
+                "mock"
             ]
         },
         "ogre": {
@@ -4409,7 +4414,8 @@
                 "paul",
                 "weird",
                 "outer_space",
-                "et"
+                "et",
+                "external"
             ]
         },
         "alien-monster": {
@@ -4685,7 +4691,8 @@
                 "iwazaru",
                 "mouth",
                 "mute",
-                "no speaking"
+                "no speaking",
+                "ignore"
             ]
         },
         "love-letter": {
@@ -5213,7 +5220,8 @@
                 "impact",
                 "red",
                 "spark",
-                "symbol"
+                "symbol",
+                "break"
             ]
         },
         "dizzy": {
@@ -5229,7 +5237,9 @@
                 "shoot",
                 "magic",
                 "circle",
-                "symbol"
+                "symbol",
+                "animations",
+                "transitions"
             ]
         },
         "sweat-droplets": {
@@ -5304,7 +5314,8 @@
                 "words",
                 "chatting",
                 "chat",
-                "comment"
+                "comment",
+                "literals"
             ]
         },
         "eye-in-speech-bubble": {
@@ -8543,7 +8554,9 @@
                 "face",
                 "hard",
                 "helmet",
-                "safety"
+                "safety",
+                "add_ci",
+                "update_ci"
             ]
         },
         "man-construction-worker": {
@@ -12397,7 +12410,8 @@
                 "shadows",
                 "silhouettes",
                 "two",
-                "users"
+                "users",
+                "contributors"
             ]
         },
         "people-hugging": {
@@ -14463,7 +14477,8 @@
                 "grass",
                 "lawn",
                 "spring",
-                "sprouting"
+                "sprouting",
+                "seed"
             ]
         },
         "potted-plant": {
@@ -15534,7 +15549,8 @@
             "j": [
                 "breakfast",
                 "food",
-                "chicken"
+                "chicken",
+                "easter_egg"
             ]
         },
         "cooking": {
@@ -15684,7 +15700,8 @@
                 "box",
                 "food",
                 "japanese",
-                "lunch"
+                "lunch",
+                "assets"
             ]
         },
         "rice-cracker": {
@@ -16662,7 +16679,9 @@
                 "i18n",
                 "global",
                 "wide",
-                "www"
+                "www",
+                "internationalization",
+                "localization"
             ]
         },
         "world-map": {
@@ -16837,7 +16856,8 @@
                 "crane",
                 "wip",
                 "working",
-                "progress"
+                "progress",
+                "architectural"
             ]
         },
         "brick": {
@@ -16848,7 +16868,8 @@
                 "clay",
                 "mortar",
                 "wall",
-                "construction"
+                "construction",
+                "infrastructure"
             ]
         },
         "rock": {
@@ -17912,7 +17933,8 @@
                 "truck",
                 "vehicle",
                 "cars",
-                "transportation"
+                "transportation",
+                "resources"
             ]
         },
         "articulated-lorry": {
@@ -18159,7 +18181,8 @@
                 "emergency light",
                 "flashing",
                 "rotating",
-                "vehicle"
+                "vehicle",
+                "warning"
             ]
         },
         "horizontal-traffic-light": {
@@ -18215,7 +18238,8 @@
                 "roadwork",
                 "sign",
                 "striped",
-                "yellow"
+                "yellow",
+                "work_in_progress"
             ]
         },
         "anchor": {
@@ -18515,7 +18539,8 @@
                 "outer_space",
                 "fly",
                 "shuttle",
-                "vehicle"
+                "vehicle",
+                "deploy"
             ]
         },
         "flying-saucer": {
@@ -19825,7 +19850,8 @@
                 "weather",
                 "lightning bolt",
                 "fast",
-                "sign"
+                "sign",
+                "speed"
             ]
         },
         "snowflake": {
@@ -19897,7 +19923,8 @@
                 "litaf",
                 "tool",
                 "cook",
-                "snapstreak"
+                "snapstreak",
+                "remove"
             ]
         },
         "droplet": {
@@ -20624,7 +20651,8 @@
             "j": [
                 "goal",
                 "net",
-                "sports"
+                "sports",
+                "catch"
             ]
         },
         "flag-in-hole": {
@@ -21156,7 +21184,8 @@
                 "paint",
                 "draw",
                 "colors",
-                "activity"
+                "activity",
+                "improve"
             ]
         },
         "thread": {
@@ -21936,7 +21965,8 @@
                 "fashion",
                 "woman",
                 "gloss",
-                "lip"
+                "lip",
+                "style"
             ]
         },
         "ring": {
@@ -22440,7 +22470,8 @@
                 "gadgets",
                 "dial",
                 "iphone",
-                "smartphone"
+                "smartphone",
+                "responsive_design"
             ]
         },
         "mobile-phone-with-arrow": {
@@ -22796,7 +22827,8 @@
                 "video",
                 "photography",
                 "gadgets",
-                "photo"
+                "photo",
+                "snapshots"
             ]
         },
         "video-camera": {
@@ -22871,7 +22903,8 @@
                 "icon",
                 "mag",
                 "magnifier",
-                "pointing"
+                "pointing",
+                "seo"
             ]
         },
         "candle": {
@@ -23097,7 +23130,8 @@
                 "documents",
                 "office",
                 "curled",
-                "curly page"
+                "curly page",
+                "license"
             ]
         },
         "scroll": {
@@ -23503,7 +23537,8 @@
                 "mail",
                 "gift",
                 "cardboard",
-                "moving"
+                "moving",
+                "container"
             ]
         },
         "closed-mailbox-with-raised-flag": {
@@ -23601,7 +23636,8 @@
                 "school",
                 "study",
                 "lead",
-                "pencil2"
+                "pencil2",
+                "typos"
             ]
         },
         "black-nib": {
@@ -23691,7 +23727,8 @@
                 "compose",
                 "document",
                 "memorandum",
-                "note"
+                "note",
+                "documentation"
             ]
         },
         "briefcase": {
@@ -23835,7 +23872,8 @@
                 "metrics",
                 "pointing",
                 "positive chart",
-                "upwards"
+                "upwards",
+                "analytics"
             ]
         },
         "chart-decreasing": {
@@ -23996,7 +24034,8 @@
                 "card",
                 "file",
                 "business",
-                "stationery"
+                "stationery",
+                "database"
             ]
         },
         "file-cabinet": {
@@ -24035,7 +24074,8 @@
                 "private",
                 "security",
                 "password",
-                "padlock"
+                "padlock",
+                "privacy"
             ]
         },
         "unlocked": {
@@ -24078,7 +24118,8 @@
                 "locked",
                 "secure",
                 "security",
-                "privacy"
+                "privacy",
+                "secret"
             ]
         },
         "key": {
@@ -24636,7 +24677,8 @@
                 "doctor",
                 "heart",
                 "medicine",
-                "health"
+                "health",
+                "healthcheck"
             ]
         },
         "xray": {
@@ -24961,7 +25003,8 @@
                 "cemetery",
                 "casket",
                 "funeral",
-                "box"
+                "box",
+                "remove"
             ]
         },
         "headstone": {
@@ -25243,7 +25286,10 @@
                 "passport",
                 "custom",
                 "blue-square",
-                "border"
+                "border",
+                "permissions",
+                "authorization",
+                "roles"
             ]
         },
         "customs": {
@@ -25324,7 +25370,9 @@
                 "sign",
                 "driving",
                 "yellow-diamond",
-                "kids"
+                "kids",
+                "experience",
+                "usability"
             ]
         },
         "no-entry": {
@@ -25541,7 +25589,8 @@
                 "top",
                 "black",
                 "pointing",
-                "upwards"
+                "upwards",
+                "upgrade"
             ]
         },
         "upright-arrow": {
@@ -25611,7 +25660,8 @@
                 "black",
                 "downwards",
                 "down arrow",
-                "pointing"
+                "pointing",
+                "downgrade"
             ]
         },
         "downleft-arrow": {
@@ -26255,7 +26305,8 @@
                 "arrows",
                 "rightwards",
                 "symbol",
-                "twisted"
+                "twisted",
+                "merge"
             ]
         },
         "repeat-button": {
@@ -26415,7 +26466,8 @@
                 "left",
                 "pointing",
                 "symbol",
-                "triangle"
+                "triangle",
+                "revert"
             ]
         },
         "last-track-button": {
@@ -26753,7 +26805,8 @@
                 "more",
                 "increase",
                 "heavy",
-                "symbol"
+                "symbol",
+                "add"
             ]
         },
         "minus": {
@@ -26769,7 +26822,8 @@
                 "calculation",
                 "subtract",
                 "less",
-                "symbol"
+                "symbol",
+                "remove"
             ]
         },
         "divide": {
@@ -26995,7 +27049,8 @@
                 "black",
                 "green",
                 "logo",
-                "universal"
+                "universal",
+                "reuse"
             ]
         },
         "fleurdelis": {
@@ -27097,7 +27152,8 @@
                 "green",
                 "heavy",
                 "symbol",
-                "white"
+                "white",
+                "pass_tests"
             ]
         },
         "check-box-with-check": {
