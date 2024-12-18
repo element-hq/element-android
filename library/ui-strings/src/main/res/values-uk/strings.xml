@@ -3092,4 +3092,7 @@
     <string name="user_reported_as_inappropriate_content">Скаргу на користувача надіслано.
 \n
 \nЯкщо ви більше хочете нічого не бачити від нього, ви можете ігнорувати його, щоб сховати його повідомлення.</string>
+    <string name="microphone_in_use_title">Мікрофон використовується</string>
+    <string name="call_unsupported">Непідтримуваний виклик</string>
+    <string name="call_unsupported_matrix_rtc_call">Непідтримуваний виклик. Потрібен застосунок Element X, щоб приєднатися до цього виклику.</string>
 </resources>
