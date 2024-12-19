@@ -1,0 +1,2 @@
+更新日志：现在默认启用对话串。
+查看完整更新日志： https://github.com/element-hq/element-android/releases

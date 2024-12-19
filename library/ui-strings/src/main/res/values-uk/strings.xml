@@ -690,7 +690,7 @@
     <string name="settings_troubleshoot_test_play_services_success">APK служб Google Play доступні та оновлені.</string>
     <string name="settings_troubleshoot_test_play_services_title">Перевірка служб Play</string>
     <string name="settings_troubleshoot_test_bing_settings_failed">Деякі сповіщення вимкнено у ваших власних налаштуваннях.</string>
-    <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Зверніть увагу, що для деяких типів повідомлень встановлено беззвучність (беззвучні сповіщення).</string>
+    <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Зауважте, що для деяких типів повідомлень встановлено беззвучність (беззвучні сповіщення).</string>
     <string name="settings_troubleshoot_test_bing_settings_title">Власні налаштування.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Увімкнути</string>
     <string name="settings_troubleshoot_test_device_settings_failed">Сповіщення не ввімкнено для цього сеансу.
@@ -892,7 +892,7 @@
     <string name="room_alias_published_alias_main">Це основна адреса</string>
     <string name="room_alias_published_alias_subtitle">Загальнодоступні адреси може використовувати будь-хто на будь-якому сервері для приєднання до вашої кімнати. Щоб опублікувати адресу спочатку вкажіть її локальною адресою.</string>
     <string name="room_alias_published_alias_title">Загальнодоступні адреси</string>
-    <string name="room_settings_alias_subtitle">Переглядайте й керуйте адресами цієї кімнати та їхньою видимістю в каталозі кімнат.</string>
+    <string name="room_settings_alias_subtitle">Переглянути й керувати адресами цієї кімнати та її видимістю в каталозі кімнат.</string>
     <string name="room_settings_alias_title">Адреси кімнат</string>
     <string name="room_settings_room_access_title">Доступ до кімнати</string>
     <string name="room_settings_room_read_history_dialog_subtitle">Зміни щодо тих, хто може читати історію, стосуватимуться лише майбутніх повідомлень у цій кімнаті. Видимість наявної історії залишиться незмінною.</string>
@@ -2584,7 +2584,7 @@
     <string name="time_unit_minute_short">хв</string>
     <string name="time_unit_hour_short">г</string>
     <string name="live_location_labs_promotion_switch_title">Увімкнути надсилання місцеперебування</string>
-    <string name="live_location_labs_promotion_description">Зверніть увагу: це експериментальна функція, яка використовує тимчасову імплементацію. Це означає, що ви не зможете видалити свою історію місцеперебування, а досвідчені користувачі зможуть переглядати вашу історію місцеперебування, навіть якщо ви припините ділитися ним із цією кімнатою.</string>
+    <string name="live_location_labs_promotion_description">Зауважте: це експериментальна функція, яка використовує тимчасову імплементацію. Це означає, що ви не зможете видалити свою історію перебувань, а досвідчені користувачі зможуть переглядати вашу історію перебувань, навіть якщо ви припините ділитися ним із цією кімнатою.</string>
     <string name="live_location_labs_promotion_title">Надсилання місцеперебування наживо</string>
     <string name="settings_troubleshoot_test_current_gateway">Поточний шлюз: %s</string>
     <string name="settings_troubleshoot_test_current_gateway_title">Шлюз</string>
@@ -2835,7 +2835,7 @@
     <string name="device_manager_other_sessions_description_unverified_current_session">Не звірений - Ваш поточний сеанс</string>
     <string name="tooltip_attachment_voice_broadcast">Розпочати голосову трансляцію</string>
     <string name="key_authenticity_not_guaranteed">Справжність цього зашифрованого повідомлення не може бути гарантована на цьому пристрої.</string>
-    <string name="settings_security_incognito_keyboard_summary">Заборонити клавіатурі оновлювати будь-які персоналізовані дані, як-от історію набору тексту та словник, на основі того, що ви набрали в розмовах. Зверніть увагу, що деякі клавіатури можуть не дотримуватися цього налаштування.</string>
+    <string name="settings_security_incognito_keyboard_summary">Заборонити клавіатурі оновлювати будь-які персоналізовані дані, як-от історію набору тексту та словник, на основі того, що ви набрали в розмовах. Зауважте, що деякі клавіатури можуть не дотримуватися цього налаштування.</string>
     <string name="settings_security_incognito_keyboard_title">Клавіатура інкогніто</string>
     <string name="command_description_table_flip">Надсилає (╯°□°）╯︵ ┻━┻ на початку текстового повідомлення</string>
     <string name="attachment_type_voice_broadcast">Голосові трансляції</string>
@@ -3078,4 +3078,21 @@
     <string name="crosssigning_verify_after_update">Застосунок оновлено</string>
     <string name="sign_out_anyway">Усе одно вийти</string>
     <string name="sign_out_failed_dialog_message">Не вдалося зв\'язатися з домашнім сервером. Якщо ви все одно вийдете з системи, цей пристрій не буде видалено з вашого списку пристроїв, можливо, ви захочете видалити його за допомогою іншого клієнта.</string>
+    <string name="create_room_unknown_users_dialog_submit">Усе одно розпочати бесіду</string>
+    <string name="login_splash_sign_in">Увійти</string>
+    <string name="invite_unknown_users_dialog_submit">Усе одно запросити</string>
+    <string name="create_room_unknown_users_dialog_content">Не вдалося знайти профілі для вказаних нижче Matrix ID. Усе одно розпочати бесіду\?
+\n
+\n%s</string>
+    <string name="invite_unknown_users_dialog_content">Не вдалося знайти профілі для вказаних нижче Matrix ID. Усе одно запросити їх\?
+\n
+\n%s</string>
+    <string name="user_reported_as_inappropriate_title">Користувач, на якого подано скаргу</string>
+    <string name="message_report_user">Поскаржитися на користувача</string>
+    <string name="user_reported_as_inappropriate_content">Скаргу на користувача надіслано.
+\n
+\nЯкщо ви більше хочете нічого не бачити від нього, ви можете ігнорувати його, щоб сховати його повідомлення.</string>
+    <string name="microphone_in_use_title">Мікрофон використовується</string>
+    <string name="call_unsupported">Непідтримуваний виклик</string>
+    <string name="call_unsupported_matrix_rtc_call">Непідтримуваний виклик. Потрібен застосунок Element X, щоб приєднатися до цього виклику.</string>
 </resources>

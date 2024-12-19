@@ -1771,7 +1771,7 @@
     <string name="room_alias_address_empty_can_add">هنوز نشانی دیگری منتشر نشده است، یکی را در زیر بیفزایید.</string>
     <string name="room_alias_unpublish_confirmation">انتشار نشانی \"%1$s\" لغو شود؟</string>
     <string name="room_alias_published_alias_subtitle">نشانی‌های منتشرشده را می‌توان در هر کارساز برای پیوستن به اتاق شما استفاده کرد. برای انتشار نشانی، نخست باید به عنوان نشانی محلی تنظیم شود.</string>
-    <string name="room_settings_alias_subtitle">نشانی‌های این اتاق و قابلیت مشاهده آن را در فهرست اتاق مشاهده و مدیریت کنید.</string>
+    <string name="room_settings_alias_subtitle">دیدن و مدیریت نشانی‌های این اتاق و نمایانیش در شاخهٔ اتاق.</string>
     <string name="room_settings_room_read_history_dialog_subtitle">تغییرات برای افرادی که می توانند تاریخچه را بخوانند فقط برای پیام های بعدی این اتاق اعمال می شود. پدیداری تاریخچه موجود بدون تغییر خواهد بود.</string>
     <string name="room_alias_publish_to_directory_error">ناتوان در گرفتن نمایانی شاخهٔ اتاق کنونی (%1$s).</string>
     <string name="room_alias_publish_to_directory">انتشار این اتاق برای عموم در شاخهٔ اتاق %1$s؟</string>
@@ -1822,10 +1822,10 @@
     <string name="call_transfer_failure">هنگام انتقال تماس خطایی روی داد</string>
     <string name="call_transfer_title">انتقال</string>
     <string name="call_transfer_connect_action">متصل شوید</string>
-    <string name="call_only_active">تماس فعال (%1$s)</string>
-    <string name="call_dial_pad_lookup_error">هنگام جستجوی شماره تلفن خطایی روی داد</string>
-    <string name="call_dial_pad_title">‬پد شماره گیری</string>
-    <string name="call_tile_call_back">تماس بگیرید</string>
+    <string name="call_only_active">تماس فعّال (%1$s)</string>
+    <string name="call_dial_pad_lookup_error">خطایی در یافتن شماره تلفن رخ داد</string>
+    <string name="call_dial_pad_title">صفحهٔ شماره گیری</string>
+    <string name="call_tile_call_back">پاسخ تماس</string>
     <string name="call_tile_ended">این تماس پایان یافته است</string>
     <string name="call_tile_other_declined">%1$s تماس را رد کرد</string>
     <string name="failed_to_initialize_cross_signing">خطا در تنظیم امضای متقابل</string>
@@ -2966,4 +2966,13 @@
 \n%s</string>
     <string name="create_room_unknown_users_dialog_submit">آغاز گپ به هر حال</string>
     <string name="invite_unknown_users_dialog_submit">دعوت به هر حال</string>
+    <string name="login_splash_sign_in">ورود</string>
+    <string name="message_report_user">گزارش کاربر</string>
+    <string name="user_reported_as_inappropriate_title">کاربر گزارش شده</string>
+    <string name="user_reported_as_inappropriate_content">کاربر گزارش شد.
+\n
+\nاگر دیگر نمی‌خواهید محتوایی از این کاربر ببینید، می‌توانید برای نهفتن پیام‌هایش نادیده‌اش بگیرید.</string>
+    <string name="call_unsupported_matrix_rtc_call">تماس پشتیبانی نشده. برای پیوستن به این تماس نیاز به کارهٔ جدید المنت اکس است.</string>
+    <string name="microphone_in_use_title">صدابَر در حال استفاده</string>
+    <string name="call_unsupported">تماس پشتیبانی نشده</string>
 </resources>

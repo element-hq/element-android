@@ -1,0 +1,2 @@
+Perubahan utama dalam versi ini: peningkatan sdk enkripsi. 
+Catatan perubahan lanjutan: https://github.com/element-hq/element-android/releases

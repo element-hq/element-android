@@ -1,0 +1,2 @@
+更新日志：房间、空间、用户和消息的永久链接现在在时间轴中显示为丸状。我们还修复了自定义贴纸和已读标记停留在过去的一些问题。
+查看完整更新日志： https://github.com/element-hq/element-android/releases

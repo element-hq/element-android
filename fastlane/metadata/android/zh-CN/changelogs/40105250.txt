@@ -1,0 +1,2 @@
+更新日志：修复了一些问题，着重修复了时间轴上不出现信息的问题。
+查看完整变更纪录：https://github.com/element-hq/element-android/releases

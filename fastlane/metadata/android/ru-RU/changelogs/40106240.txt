@@ -1,0 +1,2 @@
+Главные изменения в этой версии: оповещение пользователя о неподдерживаемом звонке Element.
+Полный список изменений: https://github.com/element-hq/element-android/releases

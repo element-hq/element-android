@@ -1,0 +1,2 @@
+更新日志：实验室开放新功能：富文本编辑器、新设备管理、语音广播，还有更多。
+查看完整更新日志： https://github.com/element-hq/element-android/releases
