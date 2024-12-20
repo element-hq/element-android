@@ -59,7 +59,7 @@ internal class UpdatedReplyDecorator(
         val isRedactedEvent = timelineEventEntity.root?.asDomain()?.isRedacted() ?: false
 
         val replyText = localEchoEventFactory
-                .bodyForReply(currentTimelineEvent.getLastMessageContent(), true).formattedText ?: ""
+                .bodyForReply(currentTimelineEvent.getLastMessageContent(), true).takeFormatted()
 
         val newContent = localEchoEventFactory.createReplyTextContent(
                 timelineEventMapper.map(timelineEventEntity),
