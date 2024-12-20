@@ -1,0 +1,2 @@
+Ndryshimet kryesore në këtë version: përmirësim i SDK-së për fshehtëzimet.
+Regjistër i plotë ndryshimesh: https://github.com/element-hq/element-android/releases
