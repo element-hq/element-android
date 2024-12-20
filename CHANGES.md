@@ -1,3 +1,11 @@
+Changes in Element v1.6.26 (2024-12-20)
+=======================================
+
+Other changes
+-------------
+ - Bump org.matrix.rustcomponents:crypto-android from 0.5.0 to 0.6.0 based on matrix-sdk-crypto-0.9.0 ([#8960](https://github.com/element-hq/element-android/issues/8960))
+
+
 Changes in Element v1.6.24 (2024-11-19)
 =======================================
 

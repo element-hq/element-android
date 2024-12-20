@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.crypto.store.db.migration
 
 import io.realm.DynamicRealm
+import org.matrix.android.sdk.internal.extensions.safeRemove
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
 internal class MigrateCryptoTo024(realm: DynamicRealm) : RealmMigrator(realm, 24) {
@@ -32,20 +33,20 @@ internal class MigrateCryptoTo024(realm: DynamicRealm) : RealmMigrator(realm, 24
             get("CryptoRoomEntity")?.removeField("outboundSessionInfo")
 
             // Warning: order is important, first remove classes that depends on others.
-            remove("UserEntity")
-            remove("DeviceInfoEntity")
-            remove("CrossSigningInfoEntity")
-            remove("KeyInfoEntity")
-            remove("TrustLevelEntity")
-            remove("KeysBackupDataEntity")
-            remove("OlmInboundGroupSessionEntity")
-            remove("OlmSessionEntity")
-            remove("AuditTrailEntity")
-            remove("OutgoingKeyRequestEntity")
-            remove("KeyRequestReplyEntity")
-            remove("WithHeldSessionEntity")
-            remove("SharedSessionEntity")
-            remove("OutboundGroupSessionInfoEntity")
+            safeRemove("UserEntity")
+            safeRemove("DeviceInfoEntity")
+            safeRemove("CrossSigningInfoEntity")
+            safeRemove("KeyInfoEntity")
+            safeRemove("TrustLevelEntity")
+            safeRemove("KeysBackupDataEntity")
+            safeRemove("OlmInboundGroupSessionEntity")
+            safeRemove("OlmSessionEntity")
+            safeRemove("AuditTrailEntity")
+            safeRemove("OutgoingKeyRequestEntity")
+            safeRemove("KeyRequestReplyEntity")
+            safeRemove("WithHeldSessionEntity")
+            safeRemove("SharedSessionEntity")
+            safeRemove("OutboundGroupSessionInfoEntity")
         }
     }
 }

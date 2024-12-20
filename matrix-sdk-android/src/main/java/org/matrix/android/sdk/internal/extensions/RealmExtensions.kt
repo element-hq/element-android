@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.extensions
 import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.RealmObjectSchema
+import io.realm.RealmSchema
 import org.matrix.android.sdk.internal.database.model.HomeServerCapabilitiesEntityFields
 import org.matrix.android.sdk.internal.util.fatalError
 
@@ -50,5 +51,11 @@ internal fun <T> RealmList<T>.clearWith(delete: (T) -> Unit) {
 internal fun RealmObjectSchema?.forceRefreshOfHomeServerCapabilities(): RealmObjectSchema? {
     return this?.transform { obj ->
         obj.setLong(HomeServerCapabilitiesEntityFields.LAST_UPDATED_TIMESTAMP, 0)
+    }
+}
+
+internal fun RealmSchema.safeRemove(className: String) {
+    if (get(className) != null) {
+        remove(className)
     }
 }
