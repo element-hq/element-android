@@ -1,0 +1,2 @@
+更新日志：通知用户不支持的 Element 通话。
+查看完整更新日志：https://github.com/element-hq/element-android/releases

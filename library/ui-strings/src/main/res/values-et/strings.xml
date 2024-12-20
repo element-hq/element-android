@@ -2,13 +2,13 @@
 <resources>
     <string name="notice_room_invite_no_invitee">Kasutaja %s kutse</string>
     <string name="notice_room_invite">%1$s saatis kutse kasutajale %2$s</string>
-    <string name="notice_room_invite_you">%1$s kutsus sind</string>
+    <string name="notice_room_invite_you">%1$s saatis sulle kutse</string>
     <string name="notice_room_join">%1$s liitus jututoaga</string>
     <string name="notice_room_leave">%1$s lahkus jututoast</string>
     <string name="notice_room_reject">%1$s lükkas tagasi kutse</string>
     <string name="notice_room_remove">%1$s müksas kasutajat %2$s</string>
     <string name="notice_room_withdraw">%1$s võttis tagasi kutse kasutajale %2$s</string>
-    <string name="notice_avatar_url_changed">%1$s muutis oma avatari</string>
+    <string name="notice_avatar_url_changed">%1$s muutis oma tunnuspilti</string>
     <string name="notice_display_name_set">%1$s määras oma kuvatavaks nimeks %2$s</string>
     <string name="notice_display_name_changed_from">%1$s muutis senise kuvatava nime %2$s uueks nimeks %3$s</string>
     <string name="notice_display_name_removed">%1$s eemaldas oma kuvatava nime (%2$s)</string>
@@ -24,7 +24,7 @@
     <string name="notice_room_visibility_shared">kõikidele jututoa liikmetele.</string>
     <string name="notice_room_visibility_world_readable">kõikidele.</string>
     <string name="notice_room_update">%s uuendas seda jututuba.</string>
-    <string name="notice_avatar_changed_too">(samuti sai avatar muudetud)</string>
+    <string name="notice_avatar_changed_too">(samuti sai tunnuspilt muudetud)</string>
     <string name="notice_room_name_removed">%1$s eemaldas jututoa nime</string>
     <string name="notice_room_topic_removed">%1$s eemaldas jututoa teema</string>
     <string name="notice_room_third_party_invite">%1$s saatis jututoaga liitumiseks kutse kasutajale %2$s</string>
@@ -57,7 +57,7 @@
     <string name="event_status_sending_message">Saadan sõnumit…</string>
     <string name="notice_room_invite_no_invitee_with_reason">Kasutaja %1$s kutse. Põhjus: %2$s</string>
     <string name="notice_room_invite_with_reason">%1$s saatis kutse kasutajale %2$s. Põhjus: %3$s</string>
-    <string name="notice_room_invite_you_with_reason">%1$s kutsus sind. Põhjus: %2$s</string>
+    <string name="notice_room_invite_you_with_reason">%1$s saatis sulle kutse. Põhjus: %2$s</string>
     <string name="notice_room_join_with_reason">%1$s liitus jututoaga. Põhjus: %2$s</string>
     <string name="notice_room_leave_with_reason">%1$s lahkus jututoast. Põhjus: %2$s</string>
     <string name="notice_room_reject_with_reason">%1$s lükkas kutse tagasi. Põhjus: %2$s</string>
@@ -82,7 +82,7 @@
     <string name="notice_room_created">Kasutaja %1$s lõi jututoa</string>
     <string name="notice_room_invite_no_invitee_by_you">Sinu kutse</string>
     <string name="notice_room_created_by_you">Sa lõid jututoa</string>
-    <string name="notice_room_invite_by_you">Sina kutsusid kasutajat %1$s</string>
+    <string name="notice_room_invite_by_you">Sina saatsid kutse kasutajale %1$s</string>
     <string name="notice_room_join_by_you">Sina liitusid jututoaga</string>
     <string name="notice_room_leave_by_you">Sina lahkusid jututoast</string>
     <string name="notice_room_reject_by_you">Sina lükkasid kutse tagasi</string>
@@ -130,7 +130,7 @@
     <string name="notice_power_level_changed">%1$s muutis kasutaja %2$s õigusi.</string>
     <string name="notice_power_level_diff">%1$s õiguste muutus %2$s -&gt; %3$s</string>
     <string name="notice_room_invite_no_invitee_with_reason_by_you">Sinu kutse. Põhjus %1$s</string>
-    <string name="notice_room_invite_with_reason_by_you">Sina kutsusid kasutajat %1$s. Põhjus: %2$s</string>
+    <string name="notice_room_invite_with_reason_by_you">Sina saatsid kutse kasutajale %1$s. Põhjus: %2$s</string>
     <string name="notice_room_join_with_reason_by_you">Sina liitusid jututoaga. Põhjus: %1$s</string>
     <string name="notice_room_leave_with_reason_by_you">Sina lahkusid jututoast. Põhjus: %1$s</string>
     <string name="notice_room_reject_with_reason_by_you">Sina lükkasid kutse tagasi. Põhjus: %1$s</string>
@@ -166,7 +166,7 @@
     <string name="notice_direct_room_join_with_reason">%1$s liitus jututoaga. Põhjus: %2$s</string>
     <string name="notice_direct_room_third_party_revoked_invite_by_you">Sina võtsid tagasi jututoaga liitumise kutse kasutajalt %1$s</string>
     <string name="notice_direct_room_third_party_revoked_invite">%1$s võttis tagasi jututoaga liitumise kutse kasutajalt %2$s</string>
-    <string name="notice_direct_room_third_party_invite_by_you">Sina kutsusid kasutajat %1$s</string>
+    <string name="notice_direct_room_third_party_invite_by_you">Sina saatsid kutse kasutajale %1$s</string>
     <string name="notice_direct_room_third_party_invite">%1$s saatis kutse kasutajale %2$s</string>
     <string name="notice_direct_room_update_by_you">Sa uuendasid seda jututuba.</string>
     <string name="notice_direct_room_update">%s uuendas seda jututuba.</string>
@@ -467,7 +467,7 @@
     <string name="room_widget_open_in_browser">Ava veebibrauseris</string>
     <string name="room_widget_revoke_access">Eemalda minu ligipääsuõigused</string>
     <string name="room_widget_permission_display_name">Sinu kuvatav nimi</string>
-    <string name="room_widget_permission_avatar_url">Sinu avatari aadress</string>
+    <string name="room_widget_permission_avatar_url">Sinu tunnuspildi aadress</string>
     <string name="room_widget_permission_user_id">Sinu kasutajatunnus</string>
     <string name="room_widget_permission_theme">Sinu teema</string>
     <string name="room_widget_permission_widget_id">Vidina tunnus</string>
@@ -1140,7 +1140,7 @@
     <string name="reply">Vasta</string>
     <string name="global_retry">Proovi uuesti</string>
     <string name="send_you_invite">Saatis sulle kutse</string>
-    <string name="invited_by">%s kutsus</string>
+    <string name="invited_by">%s saatis kutse</string>
     <string name="room_list_catchup_empty_title">Ei tea… kõik vist on nüüd tehtud!</string>
     <string name="room_list_catchup_empty_body">Sul ei ole rohkem lugemata sõnumeid</string>
     <string name="room_list_people_empty_title">Vestlused</string>
@@ -1942,7 +1942,7 @@
     <string name="settings_category_room_directory">Jututubade kataloog</string>
     <string name="event_status_sent_message">Sõnum on saadetud</string>
     <string name="you_are_invited">Sa oled saanud kutse</string>
-    <string name="spaces_beta_welcome_to_spaces_desc">Kogukonnakeskused on uus võimalus siduda jututubasid ja inimesi.</string>
+    <string name="spaces_beta_welcome_to_spaces_desc">Kogukonnad on uus võimalus siduda jututubasid ja inimesi.</string>
     <string name="space_add_existing_rooms">Lisa olemasolevaid jututubasid ja kogukonnakeskuseid</string>
     <string name="leave_space">Lahku kogukonnast</string>
     <string name="space_add_child_title">Lisa jututube</string>
@@ -2000,7 +2000,7 @@
     <string name="command_description_create_space">Loo kogukonnakeskus</string>
     <string name="a11y_unchecked">Pole kontrollitud</string>
     <string name="search_hint_room_name">Otsi nime alusel</string>
-    <string name="room_settings_room_access_restricted_description">Kõik sellise kogukonnakeskuse liikmed, kuhu see jututuba kuulub, võivad seda leida ja temaga liituda. Ainult selle jututoa haldajad võivad teda kogukonnakeskusesse liita.</string>
+    <string name="room_settings_room_access_restricted_description">Kõik sellise kogukonna liikmed, kuhu see jututuba kuulub, võivad seda leida ja temaga liituda. Ainult selle jututoa haldajad võivad teda kogukonnaga liita.</string>
     <string name="room_settings_room_access_restricted_title">Vaid kogukonna liikmetele</string>
     <string name="room_settings_room_access_public_description">Kõik võivad jututuba leida ja sellega liituda</string>
     <string name="room_settings_room_access_public_title">Avalik</string>
@@ -2009,15 +2009,15 @@
     <string name="room_settings_room_access_entry_unknown">Tundmatu seadistus ligipääsuks (%s)</string>
     <string name="room_settings_room_access_entry_knock">Kõik võivad jututoa uksele koputada ning senised liikmed saavad uut liitumist lubada või keelata</string>
     <string name="room_settings_guest_access_title">Luba külalistel liituda</string>
-    <string name="spaces_header">Kogukonnakeskused</string>
+    <string name="spaces_header">Kogukonnad</string>
     <string name="suggested_header">Soovitatud jututoad</string>
-    <string name="space_manage_rooms_and_spaces">Halda jututubasid ja kogukonnakeskuseid</string>
+    <string name="space_manage_rooms_and_spaces">Halda jututubasid ja kogukondi</string>
     <string name="space_mark_as_not_suggested">Eemalda soovitus</string>
     <string name="space_mark_as_suggested">Märgi soovituseks</string>
     <string name="space_suggested">Soovitatud</string>
     <string name="space_settings_manage_rooms">Halda jututubasid</string>
     <string name="looking_for_someone_not_in_space">Kas sa otsid kedagi, kes ei leidu %s kogukonnas\?</string>
-    <string name="user_invites_you">%s kutsus sind</string>
+    <string name="user_invites_you">%s saatis sulle kutse</string>
     <string name="a11y_public_room">Avalik jututuba</string>
     <string name="send_images_and_video_with_original_size">Saada meedia algses suuruses</string>
     <plurals name="send_videos_with_original_size">
@@ -2034,9 +2034,9 @@
 \nUue jututubade lisamiseks sul õigused puuduvad.</string>
     <string name="this_space_has_no_rooms">Selles kogukonnakeskuses pole jututube</string>
     <string name="spaces_no_server_support_description">Lisateavet saad oma koduserveri haldajalt</string>
-    <string name="spaces_no_server_support_title">Tundub, et sinu koduserver veel ei võimalda kogukonnakeskuste kasutamist</string>
+    <string name="spaces_no_server_support_title">Tundub, et sinu koduserver veel ei võimalda kogukondade kasutamist</string>
     <string name="spaces_feeling_experimental_subspace">Kas sa tahad katsetada\?
-\nSa võid kogukonnakeskusele lisada ka teisi kogukonnakeskuseid.</string>
+\nSa võid kogukonnale lisada ka teisi kogukondi.</string>
     <string name="space_leave_prompt_msg_as_admin">Sa oled selle kogukonna ainus haldaja. Kui lahkud, siis ei leidu enam kedagi, kellel oleks seal haldusõigusi.</string>
     <string name="space_leave_prompt_msg_private">Ilma uue kutseta sa ei saa uuesti liituda.</string>
     <string name="space_leave_prompt_msg_only_you">Sa oled siin viimane osaleja. Kui sa nüüd lahkud, siis mitte keegi, kaasa arvatud sa ise, ei saa hiljem enam liituda.</string>
@@ -2047,7 +2047,7 @@
     <string name="you_may_contact_me">Kui sul on lisaküsimusi, siis vastan neile hea meelega</string>
     <string name="send_feedback_space_info">Sa kasutad kogukonnakeskuste beetaversiooni. Sinu saadetud teabe alusel saame teha parandusi selle järgmistes versioonides. Saadetud info parimaks kasutamiseks lisame sinna ka sinu kasutatava operatsioonisüsteemi nime ja sinu kasutajanime.</string>
     <string name="feedback">Tagasiside</string>
-    <string name="send_feedback_space_title">Tagasiside kogukonnakeskuste kohta</string>
+    <string name="send_feedback_space_title">Tagasiside kogukonna kohta</string>
     <string name="error_jitsi_join_conf">Vabandust, rühmakõnega liitumisel tekkis viga</string>
     <string name="unnamed_room">Nimetu jututuba</string>
     <string name="private_space">Privaatne kogukonnakeskus</string>
@@ -2062,8 +2062,8 @@
     <string name="directory_your_server">Sinu server</string>
     <string name="error_failed_to_join_room">Vabandust, liitumisel tekkis viga: %s</string>
     <string name="create_space_alias_hint">Kogukonnakeskuse aadressid</string>
-    <string name="space_settings_alias_subtitle">Selle kogukonnakeskuse hallatud ja nähtavad aadressid.</string>
-    <string name="space_settings_alias_title">Kogukonnakeskuse aadressid</string>
+    <string name="space_settings_alias_subtitle">Vaata ja halda selle kogukonna aadresse.</string>
+    <string name="space_settings_alias_title">Kogukondade aadressid</string>
     <string name="settings_server_room_version_unstable">ebapüsiv</string>
     <string name="settings_server_room_version_stable">stabiilne</string>
     <string name="room_upgrade_to_recommended_version">Uuenda see jututoa versioon soovitatud versioonini</string>
@@ -2184,7 +2184,7 @@
     <string name="room_settings_mention_and_keyword_only">Vaid mainimised ja märksõnad</string>
     <string name="call_ended_user_busy_description">Kasutaja, kellele sa helistasid, on hõivatud.</string>
     <string name="call_ended_user_busy_title">Kasutaja on hõivatud</string>
-    <string name="spaces">Kogukonnakeskused</string>
+    <string name="spaces">Kogukonnad</string>
     <string name="space_add_space_to_any_space_you_manage">Lisa kogukond ükspuha millisesse kogukonda, mida sa juba haldad.</string>
     <string name="space_add_existing_spaces">Lisa olemasolevaid kogukondi</string>
     <string name="space_add_existing_rooms_only">Lisa olemasolevaid jututubasid</string>
@@ -2204,7 +2204,7 @@
     <string name="does_not_look_like_valid_email">See ei tundu olema e-posti aadressi moodi</string>
     <string name="open_discovery_settings">Ava leitavuse seadistused</string>
     <string name="user_directory_search_hint_2">Otsi nime, Matrixi kasutajatunnuse või e-posti aadressi alusel</string>
-    <string name="create_new_space">Loo kogukonnakeskus</string>
+    <string name="create_new_space">Loo kogukond</string>
     <string name="room_settings_space_access_public_description">Kõik võivad kogukonda leida ja sellega liituda</string>
     <string name="room_settings_space_access_title">Ligipääs siia kogukonda</string>
     <string name="room_settings_access_rules_pref_dialog_title">Kes pääsevad ligi siia jututuppa\?</string>
@@ -2218,8 +2218,8 @@
     <string name="room_permissions_change_space_avatar">Muuda kogukonna tunnuspilti</string>
     <string name="space_permissions_notice_read_only">Sul pole õigust uuenda rolle, mis on vajalikud kogukonna eri osade muutmiseks</string>
     <string name="space_permissions_notice">Vali rollid, mis on vajalikud kogukonna eri osade muutmiseks</string>
-    <string name="space_settings_permissions_subtitle">Vaata ja uuenda rolle, mis on vajalikud kogukonnakeskuse eri osade muutmiseks.</string>
-    <string name="space_settings_permissions_title">Õigused kogukonnakeskuses</string>
+    <string name="space_settings_permissions_subtitle">Vaata ja uuenda rolle, mis on vajalikud kogukondade eri osade muutmiseks.</string>
+    <string name="space_settings_permissions_title">Õigused kogukondades</string>
     <string name="space_participants_unban_prompt_msg">Suhtluskeelu eemaldamine võimaldab kogukonnaga uuesti liituda.</string>
     <string name="space_participants_ban_prompt_msg">Sellele kasutajale suhtluskeelu seadmine tõstab ta kogukonnast välja ning ei võimalda uuesti liitumist.</string>
     <string name="space_participants_remove_prompt_msg">kogukonnast välja müksamine eemaldab ta praeguseks sellest kogukonnast.
@@ -2569,7 +2569,7 @@
     <string name="font_size_section_manually">Vali ise</string>
     <string name="font_size_section_auto">Määra automaatselt</string>
     <string name="font_size_title">Vali kirjatüübi suurus</string>
-    <string name="labs_enable_element_call_permission_shortcuts_summary">Automaatsel luba kasutada Element\'i põhiste kõnede vidinaid ning luba ligipääs kaamerale ja mikrofonile</string>
+    <string name="labs_enable_element_call_permission_shortcuts_summary">Luba automaatselt kasutada Element\'i põhiste kõnede vidinaid ning kinnita ligipääs kaamerale ja mikrofonile</string>
     <string name="labs_enable_element_call_permission_shortcuts">Võta kasutsele Element\'i põhiste kõnede õiguste kiirnupud</string>
     <string name="live_location_description">Asukoht reaalajas</string>
     <string name="verify_invalid_qr_notice">See QR-kood tundub olema vigane. Palun proovi verifitseerimist mõne muu meetodiga.</string>
@@ -2588,7 +2588,7 @@
 \nSee koduserver ei pruugi olla seadistatud kuvama kaarte.</string>
     <string name="a11y_open_settings">Ava seadistused</string>
     <string name="all_chats">Kõik vestlused</string>
-    <string name="device_manager_sessions_other_description">Parima turvalisuse nimel verifitseeri kõik oma sessioonid ning logi välja neist, mida sa enam ei kasuta.</string>
+    <string name="device_manager_sessions_other_description">Parima turvalisuse nimel verifitseeri kõik oma sessioonid ning logi välja neist, mida sa enam ei kasuta või ei tunne ära.</string>
     <string name="device_manager_sessions_other_title">Muud sessioonid</string>
     <string name="settings_sessions_list">Sessioonid</string>
     <string name="a11y_open_spaces">Ava kogukondade loend</string>
@@ -2966,4 +2966,13 @@
     <string name="invite_unknown_users_dialog_content">Allpool loetletud Matrix\'i kasutajatunnustele ei leidunud profiile. Kas sa ikkagi tahaksid neile kutse saata\?
 \n
 \n%s</string>
+    <string name="login_splash_sign_in">Logi sisse</string>
+    <string name="user_reported_as_inappropriate_title">Haldajale teada antud kasutaja</string>
+    <string name="message_report_user">Teata kasutajast haldajale</string>
+    <string name="user_reported_as_inappropriate_content">Selle kasutaja tegevusest on haldajale teada antud.
+\n
+\nKui sa ei soovi tema loodud sisu enam näha, siis kasuta eiramise võimalust.</string>
+    <string name="microphone_in_use_title">Mikrofon on kasutusel</string>
+    <string name="call_unsupported">See kõne pole toetatud</string>
+    <string name="call_unsupported_matrix_rtc_call">See kõne pole toetatud. Kõnega liitumiseks palun kasuta uut Element X rakendust.</string>
 </resources>
