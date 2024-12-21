@@ -6,6 +6,7 @@
 .idea/copilot
 .idea/libraries
 .idea/inspectionProfiles
+.idea/runConfigurations
 .idea/sonarlint
 .idea/*.xml
 .DS_Store

@@ -10,6 +10,7 @@ apply plugin: 'com.google.devtools.ksp'
 apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: 'kotlinx-knit'
 apply plugin: 'com.likethesalad.stem'
+apply plugin: 'androidx.baselineprofile'
 
 if (project.hasProperty("coverage")) {
     apply plugin: 'jacoco'
@@ -299,6 +300,22 @@ android {
                 appId = "${getFirebaseAppId()}"
             }
         }
+
+        // Used for baseline and startup profile generating.
+        nonMinifiedRelease {
+            // The google-services.json is copied from debug build type
+            applicationIdSuffix ".debug"
+            signingConfig = signingConfigs.debug
+            resValue "string", "app_name", "Element - nmr"
+        }
+
+        // Used for measuring the performance of the app with and without baseline profiles applied
+        benchmarkRelease {
+            // The google-services.json is copied from debug build type
+            applicationIdSuffix ".debug"
+            signingConfig = signingConfigs.debug
+            resValue "string", "app_name", "Element - br"
+        }
     }
 
     sourceSets {
@@ -390,6 +407,9 @@ dependencies {
     implementation libs.dagger.hilt
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation "androidx.sharetarget:sharetarget:1.2.0"
+
+    baselineProfile project(':baselineprofile')
+    implementation libs.androidx.profileinstaller
 
     // Flipper, debug builds only
     debugImplementation(libs.flipper.flipper) {
