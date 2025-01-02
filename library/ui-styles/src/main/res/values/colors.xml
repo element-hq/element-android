@@ -158,4 +158,25 @@
     <color name="vctr_rich_text_editor_menu_button_background_light">#EEF8F4</color>
     <color name="vctr_rich_text_editor_menu_button_background_dark">#1D292A</color>
 
+    <!-- Other colors -->
+    <attr name="vctr_bg_critical_subtle" format="color" />
+    <color name="vctr_bg_critical_subtle_light">#FFF7F6</color>
+    <color name="vctr_bg_critical_subtle_dark">#3E0000</color>
+
+    <attr name="vctr_border_critical_subtle" format="color" />
+    <color name="vctr_border_critical_subtle_light">#FFC5BC</color>
+    <color name="vctr_border_critical_subtle_dark">#710000</color>
+
+    <attr name= "vctr_icon_critical_primary" format="color" />
+    <color name="vctr_icon_critical_primary_light">#D51928</color>
+    <color name="vctr_icon_critical_primary_dark">#FD3E3C</color>
+
+    <attr name= "vctr_text_critical_primary" format="color" />
+    <color name="vctr_text_critical_primary_light">#D51928</color>
+    <color name="vctr_text_critical_primary_dark">#FD3E3C</color>
+
+    <attr name= "vctr_text_primary" format="color" />
+    <color name="vctr_text_primary_light">#1B1D22</color>
+    <color name="vctr_text_primary_dark">#EBEEF2</color>
+
 </resources>

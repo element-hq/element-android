@@ -97,4 +97,16 @@ object Config {
     val ER_DEBUG_ANALYTICS_CONFIG = DEBUG_ANALYTICS_CONFIG.copy(sentryEnvironment = "element-r")
 
     val SHOW_UNVERIFIED_SESSIONS_ALERT_AFTER_MILLIS = 7.days.inWholeMilliseconds // 1 Week
+
+    /**
+     * Sunsetting the application.
+     * Fork maintainers can use this to inform users about their new application if any. Note that you probably also want
+     * to replace the resource `replacement_app_icon` too.
+     */
+    val sunsetConfig: SunsetConfig = SunsetConfig.Enabled(
+            // TODO: update this URL.
+            learnMoreLink = "https://element.io/",
+            replacementApplicationName = "Element X",
+            replacementApplicationId = "io.element.android.x",
+    )
 }

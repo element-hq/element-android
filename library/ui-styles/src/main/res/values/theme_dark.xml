@@ -55,6 +55,13 @@
         <item name="vctr_list_separator_on_surface">?vctr_system</item>
         <item name="vctr_unread_background">?vctr_notice_secondary</item>
 
+        <!-- Other colors -->
+        <item name="vctr_bg_critical_subtle" >@color/vctr_bg_critical_subtle_dark</item>
+        <item name="vctr_border_critical_subtle" >@color/vctr_border_critical_subtle_dark</item>
+        <item name= "vctr_icon_critical_primary" >@color/vctr_icon_critical_primary_dark</item>
+        <item name= "vctr_text_critical_primary" >@color/vctr_text_critical_primary_dark</item>
+        <item name= "vctr_text_primary" >@color/vctr_text_primary_dark</item>
+
         <!-- Material color -->
         <item name="colorPrimary">@color/element_accent_dark</item>
         <item name="colorPrimaryVariant">@color/element_accent_dark</item>
