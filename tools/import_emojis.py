@@ -3,6 +3,10 @@ import json
 import os
 import re
 import requests
+import pandas as pd
+import matplotlib
+import numpy as np
+import scipy
 from bs4 import BeautifulSoup
 from collections import OrderedDict
 
