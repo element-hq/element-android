@@ -143,7 +143,7 @@
             app:layout_constraintBottom_toTopOf="@id/chooseServerCardDownloadReplacementApp"
             app:layout_constraintEnd_toEndOf="@id/createAccountGutterEnd"
             app:layout_constraintStart_toStartOf="@id/createAccountGutterStart"
-            app:layout_constraintTop_toBottomOf="@+id/serverSelectionSpacing"
+            app:layout_constraintTop_toBottomOf="@id/serverSelectionSpacing"
             tools:visibility="visible">
 
             <include
@@ -160,10 +160,10 @@
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/createAccountInput"
+            app:layout_constraintBottom_toTopOf="@id/createAccountInput"
             app:layout_constraintEnd_toEndOf="@id/createAccountGutterEnd"
             app:layout_constraintStart_toStartOf="@id/createAccountGutterStart"
-            app:layout_constraintTop_toBottomOf="@+id/chooseServerCardErrorMas"
+            app:layout_constraintTop_toBottomOf="@id/chooseServerCardErrorMas"
             tools:visibility="visible">
 
             <include

@@ -98,7 +98,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="@string/ftue_auth_choose_server_entry_hint"
-            app:layout_constraintBottom_toTopOf="@+id/chooseServerCardErrorMas"
+            app:layout_constraintBottom_toTopOf="@id/chooseServerCardErrorMas"
             app:layout_constraintEnd_toEndOf="@id/chooseServerGutterEnd"
             app:layout_constraintStart_toStartOf="@id/chooseServerGutterStart"
             app:layout_constraintTop_toBottomOf="@id/titleContentSpacing">
@@ -121,7 +121,7 @@
             app:layout_constraintBottom_toTopOf="@id/chooseServerCardDownloadReplacementApp"
             app:layout_constraintEnd_toEndOf="@id/chooseServerGutterEnd"
             app:layout_constraintStart_toStartOf="@id/chooseServerGutterStart"
-            app:layout_constraintTop_toBottomOf="@+id/chooseServerInput"
+            app:layout_constraintTop_toBottomOf="@id/chooseServerInput"
             tools:visibility="visible">
 
             <include
@@ -137,10 +137,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/actionSpacing"
+            app:layout_constraintBottom_toTopOf="@id/actionSpacing"
             app:layout_constraintEnd_toEndOf="@id/chooseServerGutterEnd"
             app:layout_constraintStart_toStartOf="@id/chooseServerGutterStart"
-            app:layout_constraintTop_toBottomOf="@+id/chooseServerCardErrorMas"
+            app:layout_constraintTop_toBottomOf="@id/chooseServerCardErrorMas"
             tools:visibility="visible">
 
             <include
@@ -156,7 +156,7 @@
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@id/chooseServerSubmit"
             app:layout_constraintHeight_percent="0.03"
-            app:layout_constraintTop_toBottomOf="@+id/chooseServerCardDownloadReplacementApp" />
+            app:layout_constraintTop_toBottomOf="@id/chooseServerCardDownloadReplacementApp" />
 
         <Button
             android:id="@+id/chooseServerSubmit"
