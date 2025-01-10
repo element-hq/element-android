@@ -764,9 +764,9 @@ class OnboardingViewModel @AssistedInject constructor(
                 OnboardingFlow.SignUp -> {
                     updateSignMode(SignMode.SignUp)
                     if (authResult.selectedHomeserver.hasOidcCompatibilityFlow && Config.sunsetConfig is SunsetConfig.Enabled) {
-                        // An error is displayed now
+                        // Navigate to the screen to create an account, it will show the error
                         setState { copy(isLoading = false) }
-                        _viewEvents.post(OnboardingViewEvents.Failure(MasSupportRequiredException()))
+                        _viewEvents.post(OnboardingViewEvents.OpenCombinedRegister)
                     } else {
                         internalRegisterAction(RegisterAction.StartRegistration)
                     }
@@ -940,7 +940,10 @@ private fun LoginMode.supportsSignModeScreen(): Boolean {
     return when (this) {
         LoginMode.Password,
         is LoginMode.SsoAndPassword -> true
-        is LoginMode.Sso,
+        is LoginMode.Sso -> {
+            // In this case, an error will be displayed in the next screen
+            hasOidcCompatibilityFlow
+        }
         LoginMode.Unknown,
         LoginMode.Unsupported -> false
     }
