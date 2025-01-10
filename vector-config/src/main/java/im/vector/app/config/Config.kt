@@ -104,8 +104,7 @@ object Config {
      * to replace the resource `replacement_app_icon` too.
      */
     val sunsetConfig: SunsetConfig = SunsetConfig.Enabled(
-            // TODO: update this URL.
-            learnMoreLink = "https://element.io/",
+            learnMoreLink = "https://element.io/app-for-productivity",
             replacementApplicationName = "Element X",
             replacementApplicationId = "io.element.android.x",
     )
