@@ -1620,7 +1620,7 @@
     <string name="settings_security_pin_code_title">Aktiviere PIN</string>
     <string name="settings_security_pin_code_summary">Wenn du deine PIN zurücksetzen möchtest, tippe auf „PIN vergessen“, um dich abzumelden und sie zurückzusetzen.</string>
     <string name="settings_call_show_confirmation_dialog_title">Versehentliche Anrufe verhindern</string>
-    <string name="settings_call_show_confirmation_dialog_summary">Bitte um Bestätigung, bevor du einen Anruf tätigst</string>
+    <string name="settings_call_show_confirmation_dialog_summary">Vor einem Anruf um Bestätigung bitten</string>
     <string name="bottom_sheet_setup_secure_backup_submit">Einrichten</string>
     <string name="no_permissions_to_start_conf_call">Du bist nicht berechtigt, in diesem Raum ein Konferenzgespräch zu starten</string>
     <string name="video_meeting">Videokonferenz starten</string>
@@ -2849,12 +2849,12 @@
     <string name="quoting">Zitieren</string>
     <string name="editing">Bearbeiten</string>
     <string name="message_reply_to_sender_created_poll">erstellte eine Umfrage.</string>
-    <string name="message_reply_to_sender_sent_sticker">sandte einen Sticker.</string>
-    <string name="message_reply_to_sender_sent_video">sandte ein Video.</string>
-    <string name="message_reply_to_sender_sent_image">sandte ein Bild.</string>
-    <string name="message_reply_to_sender_sent_voice_message">sandte eine Sprachnachricht.</string>
-    <string name="message_reply_to_sender_sent_audio_file">sandte eine Audiodatei.</string>
-    <string name="message_reply_to_sender_sent_file">sandte eine Datei.</string>
+    <string name="message_reply_to_sender_sent_sticker">sendete einen Sticker.</string>
+    <string name="message_reply_to_sender_sent_video">sendete ein Video.</string>
+    <string name="message_reply_to_sender_sent_image">sendete ein Bild.</string>
+    <string name="message_reply_to_sender_sent_voice_message">sendete eine Sprachnachricht.</string>
+    <string name="message_reply_to_sender_sent_audio_file">sendete eine Audiodatei.</string>
+    <string name="message_reply_to_sender_sent_file">sendete eine Datei.</string>
     <string name="message_reply_to_prefix">Als Antwort auf</string>
     <string name="replying_to">%s antworten</string>
     <string name="device_manager_other_sessions_hide_ip_address">IP-Adresse ausblenden</string>
