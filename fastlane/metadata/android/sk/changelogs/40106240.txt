@@ -1,0 +1,2 @@
+Hlavné zmeny v tejto verzii: upozornenie používateľa na nepodporovaný Element hovor.
+Úplný zoznam zmien: https://github.com/element-hq/element-android/releases

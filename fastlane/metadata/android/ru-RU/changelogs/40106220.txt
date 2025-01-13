@@ -1,0 +1,2 @@
+Главные обновления в этой версии: обновление SDK криптографии.
+Полный список изменений: https://github.com/element-hq/element-android/releases

@@ -1,0 +1,2 @@
+更新日志：默认启用延迟私信。
+查看完整更新日志： https://github.com/element-hq/element-android/releases

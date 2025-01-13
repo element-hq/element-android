@@ -1,0 +1,2 @@
+ამ ვერსიაში მთავარი ცვლილებები: შეცდომების გამოსწორება.
+სრული ცვლილებების ჟურნალი: https://github.com/element-hq/element-android/releases
