@@ -3641,4 +3641,10 @@
     <string name="pill_message_in_room">Message in %s</string>
     <string name="pill_message_in_unknown_room">Message in room</string>
     <string name="pill_message_unknown_room_or_space">Room/Space</string>
+
+    <string name="error_mas_not_supported_title">You can no longer create an account with %1$s using this app</string>
+    <string name="error_mas_not_supported_subtitle">Download %1$s to use %2$s for your account or choose a different homeserver.</string>
+    <string name="view_download_replacement_app_title">Download %1$s</string>
+    <string name="view_download_replacement_app_subtitle">Faster, more secure, and packed with powerful collaboration tools.</string>
+
 </resources>

@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.autofill.HintConstants
 import androidx.core.text.isDigitsOnly
 import androidx.core.view.isVisible
@@ -19,6 +20,9 @@ import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.R
+import im.vector.app.config.Config
+import im.vector.app.config.SunsetConfig
 import im.vector.app.core.extensions.clearErrorOnChange
 import im.vector.app.core.extensions.content
 import im.vector.app.core.extensions.editText
@@ -31,6 +35,9 @@ import im.vector.app.core.extensions.realignPercentagesToParent
 import im.vector.app.core.extensions.setOnFocusLostListener
 import im.vector.app.core.extensions.setOnImeDoneListener
 import im.vector.app.core.extensions.toReducedUrl
+import im.vector.app.core.resources.BuildMeta
+import im.vector.app.core.utils.openApplicationStore
+import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.databinding.FragmentFtueCombinedRegisterBinding
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.SSORedirectRouterActivity
@@ -52,12 +59,14 @@ import org.matrix.android.sdk.api.failure.isRegistrationDisabled
 import org.matrix.android.sdk.api.failure.isUsernameInUse
 import org.matrix.android.sdk.api.failure.isWeakPassword
 import reactivecircus.flowbinding.android.widget.textChanges
+import javax.inject.Inject
 
 private const val MINIMUM_PASSWORD_LENGTH = 8
 
 @AndroidEntryPoint
 class FtueAuthCombinedRegisterFragment :
         AbstractSSOFtueAuthFragment<FragmentFtueCombinedRegisterBinding>() {
+    @Inject lateinit var buildMeta: BuildMeta
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueCombinedRegisterBinding {
         return FragmentFtueCombinedRegisterBinding.inflate(inflater, container, false)
@@ -181,7 +190,8 @@ class FtueAuthCombinedRegisterFragment :
     }
 
     private fun setupUi(state: OnboardingViewState) {
-        views.selectedServerName.text = state.selectedHomeserver.userFacingUrl.toReducedUrl()
+        val serverName = state.selectedHomeserver.userFacingUrl.toReducedUrl()
+        views.selectedServerName.text = serverName
 
         if (state.isLoading) {
             // Ensure password is hidden
@@ -200,6 +210,47 @@ class FtueAuthCombinedRegisterFragment :
         when (state.selectedHomeserver.preferredLoginMode) {
             is LoginMode.SsoAndPassword -> renderSsoProviders(state.deviceId, state.selectedHomeserver.preferredLoginMode)
             else -> hideSsoProviders()
+        }
+
+        (Config.sunsetConfig as? SunsetConfig.Enabled)?.let { config ->
+            val isMasSupportRequired = state.selectedHomeserver.hasOidcCompatibilityFlow
+            views.serverSelectionSpacing.isVisible = !isMasSupportRequired
+            views.serverSelectionDivider.isVisible = !isMasSupportRequired
+            views.chooseServerCardErrorMas.isVisible = isMasSupportRequired
+            views.chooseServerCardDownloadReplacementApp.isVisible = isMasSupportRequired
+
+            if (isMasSupportRequired) {
+                views.chooseServerCardErrorMas.findViewById<TextView>(R.id.view_card_error_title).text =
+                        getString(CommonStrings.error_mas_not_supported_title, serverName)
+                views.chooseServerCardErrorMas.findViewById<TextView>(R.id.view_card_error_subtitle).text =
+                        getString(
+                                CommonStrings.error_mas_not_supported_subtitle,
+                                config.replacementApplicationName,
+                                serverName,
+                        )
+                views.chooseServerCardDownloadReplacementApp.findViewById<TextView>(R.id.view_download_replacement_app_title).text =
+                        getString(CommonStrings.view_download_replacement_app_title, config.replacementApplicationName)
+
+                views.chooseServerCardDownloadReplacementApp.debouncedClicks {
+                    openApplicationStore(
+                            activity = requireActivity(),
+                            buildMeta = buildMeta,
+                            appId = config.replacementApplicationId,
+                    )
+                }
+                views.chooseServerCardDownloadReplacementApp.findViewById<View>(R.id.view_download_replacement_app_learn_more)?.debouncedClicks {
+                    openUrlInChromeCustomTab(
+                            context = requireContext(),
+                            session = null,
+                            url = config.learnMoreLink,
+                    )
+                }
+
+                // Disable form
+                views.createAccountInput.isEnabled = false
+                views.createAccountPasswordInput.isEnabled = false
+                views.createAccountSubmit.isEnabled = false
+            }
         }
     }
 
