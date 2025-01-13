@@ -143,7 +143,7 @@
     <string name="notice_display_name_set_by_you">Ön beállította a saját megjelenítendő nevét erre: %1$s</string>
     <string name="notice_room_invite_no_invitee_by_you">Az Ön meghívója</string>
     <string name="notice_power_level_diff">%1$s hozzáférési szintjét erről: %2$s, erre: %3$s</string>
-    <string name="notice_power_level_changed">%1$s megváltoztatta %1$s hozzáférési szintjét.</string>
+    <string name="notice_power_level_changed">%1$s megváltoztatta %2$s hozzáférési szintjét.</string>
     <string name="notice_power_level_changed_by_you">Ön megváltoztatta %1$s hozzáférési szintjét.</string>
     <string name="notice_room_server_acl_allow_is_empty">🎉 Minden kiszolgáló ki lett tiltva a szobából! Ez a szoba többé nem használható.</string>
     <string name="notice_room_server_acl_updated_no_change">Nincs változás.</string>
@@ -1658,7 +1658,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
         <item quantity="other">%1$s hozzáadta a szobához a következő alternatív szobacímeket: %2$s</item>
     </plurals>
     <string name="notice_room_canonical_alias_unset_by_you">Ön eltávolította a szoba elsődleges címét.</string>
-    <string name="notice_room_canonical_alias_set_by_you">Ön beállította a szoba elsődleges címét erre: %2$s.</string>
+    <string name="notice_room_canonical_alias_set_by_you">Ön beállította a szoba elsődleges címét erre: %1$s.</string>
     <string name="notice_room_aliases_added_and_removed_by_you">Ön hozzáadta a szobához a következő címeket:%1$s, és eltávolította a következő szobacímeket: %2$s.</string>
     <plurals name="notice_room_aliases_removed_by_you">
         <item quantity="one">Ön eltávolította ezt a szobacímet: %1$s</item>
@@ -1741,7 +1741,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="suggested_header">Javasolt szobák</string>
     <string name="dialog_edit_hint">Új érték</string>
     <string name="action_switch">Cserél</string>
-    <string name="notice_end_to_end_unknown_algorithm_by_you">Ön bekapcsolta a végpontok közötti titkosítást (ismeretlen algoritmus %2$s).</string>
+    <string name="notice_end_to_end_unknown_algorithm_by_you">Ön bekapcsolta a végpontok közötti titkosítást (ismeretlen algoritmus %1$s).</string>
     <string name="notice_end_to_end_ok_by_you">Ön bekapcsolta a végpontok közötti titkosítást.</string>
     <string name="notice_direct_room_guest_access_forbidden_by_you">Ön megtiltotta a vendégeknek, hogy csatlakozzanak ebbe a szobába.</string>
     <string name="notice_direct_room_guest_access_forbidden">%1$s megtiltotta a vendégeknek, hogy csatlakozzanak ebbe a szobába.</string>

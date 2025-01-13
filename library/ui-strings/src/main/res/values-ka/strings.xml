@@ -678,7 +678,7 @@
     <string name="settings_notification_troubleshoot">შეტყობინებების დიაგნოსტიკა</string>
     <string name="settings_troubleshoot_diagnostic">პრობლემების დიაგნოსტიკა</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">ტესტების გაშვება</string>
-    <string name="settings_troubleshoot_diagnostic_running_status">გაშვება... (%1$d %2$d-დან)</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">გაშვება… (%1$d %2$d-დან)</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">ერთი ან მეტი ტესტი ჩაიშალა, სცადეთ შემოთავაზებული გამოსწორება(ებ)ი.</string>
     <string name="settings_troubleshoot_test_system_settings_title">სისტემის პარამეტრები.</string>
     <string name="settings_troubleshoot_test_system_settings_success">შეტყობინებები ჩართულია სისტემის პარამეტრებში.</string>
