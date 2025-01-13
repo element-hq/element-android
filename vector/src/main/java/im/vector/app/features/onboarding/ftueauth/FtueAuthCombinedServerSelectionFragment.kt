@@ -11,7 +11,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.core.view.isVisible
 import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.R
+import im.vector.app.config.Config
+import im.vector.app.config.SunsetConfig
 import im.vector.app.core.extensions.associateContentStateWith
 import im.vector.app.core.extensions.clearErrorOnChange
 import im.vector.app.core.extensions.content
@@ -20,20 +25,26 @@ import im.vector.app.core.extensions.realignPercentagesToParent
 import im.vector.app.core.extensions.setOnImeDoneListener
 import im.vector.app.core.extensions.showKeyboard
 import im.vector.app.core.extensions.toReducedUrl
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.utils.ensureProtocol
 import im.vector.app.core.utils.ensureTrailingSlash
+import im.vector.app.core.utils.openApplicationStore
+import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.core.utils.openUrlInExternalBrowser
 import im.vector.app.databinding.FragmentFtueServerSelectionCombinedBinding
+import im.vector.app.features.onboarding.MasSupportRequiredException
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingFlow
 import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewState
 import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.failure.isHomeserverUnavailable
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class FtueAuthCombinedServerSelectionFragment :
         AbstractFtueAuthFragment<FragmentFtueServerSelectionCombinedBinding>() {
+    @Inject lateinit var buildMeta: BuildMeta
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueServerSelectionCombinedBinding {
         return FragmentFtueServerSelectionCombinedBinding.inflate(inflater, container, false)
@@ -57,6 +68,22 @@ class FtueAuthCombinedServerSelectionFragment :
         }
         views.chooseServerGetInTouch.debouncedClicks { openUrlInExternalBrowser(requireContext(), getString(im.vector.app.config.R.string.ftue_ems_url)) }
         views.chooseServerSubmit.debouncedClicks { updateServerUrl() }
+        (Config.sunsetConfig as? SunsetConfig.Enabled)?.let { config ->
+            views.chooseServerCardDownloadReplacementApp.debouncedClicks {
+                openApplicationStore(
+                        activity = requireActivity(),
+                        buildMeta = buildMeta,
+                        appId = config.replacementApplicationId,
+                )
+            }
+            views.chooseServerCardDownloadReplacementApp.findViewById<View>(R.id.view_download_replacement_app_learn_more)?.debouncedClicks {
+                openUrlInChromeCustomTab(
+                        context = requireContext(),
+                        session = null,
+                        url = config.learnMoreLink,
+                )
+            }
+        }
         views.chooseServerInput.clearErrorOnChange(viewLifecycleOwner)
     }
 
@@ -89,9 +116,29 @@ class FtueAuthCombinedServerSelectionFragment :
     }
 
     override fun onError(throwable: Throwable) {
+        val isMasSupportRequiredException = throwable is MasSupportRequiredException
         views.chooseServerInput.error = when {
             throwable.isHomeserverUnavailable() -> getString(CommonStrings.login_error_homeserver_not_found)
+            isMasSupportRequiredException -> " "
             else -> errorFormatter.toHumanReadable(throwable)
+        }
+        views.chooseServerCardErrorMas.isVisible = isMasSupportRequiredException
+        views.chooseServerCardDownloadReplacementApp.isVisible = isMasSupportRequiredException
+        if (isMasSupportRequiredException) {
+            views.chooseServerSubmit.isEnabled = false
+        }
+        val config = Config.sunsetConfig
+        if (throwable is MasSupportRequiredException && config is SunsetConfig.Enabled) {
+            views.chooseServerCardErrorMas.findViewById<TextView>(R.id.view_card_error_title).text =
+                    getString(CommonStrings.error_mas_not_supported_title, views.chooseServerInput.content())
+            views.chooseServerCardErrorMas.findViewById<TextView>(R.id.view_card_error_subtitle).text =
+                    getString(
+                            CommonStrings.error_mas_not_supported_subtitle,
+                            config.replacementApplicationName,
+                            views.chooseServerInput.content(),
+                    )
+            views.chooseServerCardDownloadReplacementApp.findViewById<TextView>(R.id.view_download_replacement_app_title).text =
+                    getString(CommonStrings.view_download_replacement_app_title, config.replacementApplicationName)
         }
     }
 

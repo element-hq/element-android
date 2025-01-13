@@ -938,8 +938,8 @@
     <string name="settings_push_rules">Reglas Push</string>
     <string name="settings_push_rules_no_rules">No hay reglas push definidas</string>
     <string name="settings_push_gateway_no_pushers">No hay salidas push registradas</string>
-    <string name="push_gateway_item_app_id">app_id:</string>
-    <string name="push_gateway_item_push_key">push_key:</string>
+    <string name="push_gateway_item_app_id">App ID:</string>
+    <string name="push_gateway_item_push_key">Clave Push:</string>
     <string name="push_gateway_item_app_display_name">app_display_name:</string>
     <string name="push_gateway_item_url">Url:</string>
     <string name="push_gateway_item_format">Formato:</string>
@@ -2685,4 +2685,10 @@
     <string name="settings_enable_direct_share_summary">Mostrar chats recientes en el menú de compartir sistema</string>
     <string name="encryption_never_send_to_unverified_devices_in_room">No enviar nunca mensajes cifrados a sesiones sin verificar en esta sala.</string>
     <string name="voice_broadcast_recording_time_left">Restan %1$s</string>
+    <string name="avatar_of_space">Avatar del espacio %1$s</string>
+    <string name="avatar_of_room">Avatar de la sala %1$s</string>
+    <string name="settings_crypto_version">Versión de criptografía</string>
+    <string name="notice_display_name_changed_to">%1$s cambió su nombre público a %2$s</string>
+    <string name="settings_external_account_management_title">Cuenta</string>
+    <string name="avatar_of_user">Foto de perfil del usuario %1$s</string>
 </resources>

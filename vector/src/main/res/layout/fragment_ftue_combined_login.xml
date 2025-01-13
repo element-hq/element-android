@@ -83,7 +83,8 @@
             app:layout_constraintBottom_toTopOf="@id/selectedServerDescription"
             app:layout_constraintEnd_toStartOf="@id/editServerButton"
             app:layout_constraintStart_toStartOf="@id/loginGutterStart"
-            app:layout_constraintTop_toBottomOf="@id/chooseYourServerHeader" />
+            app:layout_constraintTop_toBottomOf="@id/chooseYourServerHeader"
+            tools:text="server.org" />
 
         <TextView
             android:id="@+id/selectedServerDescription"

@@ -2898,4 +2898,18 @@
     <string name="crosssigning_verify_after_update">應用程式已更新</string>
     <string name="sign_out_failed_dialog_message">無法連線至家伺服器。若您仍要登出，此裝置將不會從您的裝置清單中移除，您可能需要使用其他客戶端來移除。</string>
     <string name="sign_out_anyway">仍要登出</string>
+    <string name="create_room_unknown_users_dialog_submit">無論如何都要開始聊天</string>
+    <string name="login_splash_sign_in">登入</string>
+    <string name="invite_unknown_users_dialog_submit">無論如何都要邀請</string>
+    <string name="create_room_unknown_users_dialog_content">找不到下面列出的 Matrix ID 的個人檔案。您是否仍想開始聊天？
+\n
+\n%s</string>
+    <string name="invite_unknown_users_dialog_content">找不到下面列出的 Matrix ID 的個人檔案。您是否仍想邀請他們？
+\n
+\n%s</string>
+    <string name="user_reported_as_inappropriate_title">已回報使用者</string>
+    <string name="user_reported_as_inappropriate_content">已回報使用者。
+\n
+\n若您不想要看到來自此使用者的任何內容，您可以忽略他們以隱藏他們的訊息。</string>
+    <string name="message_report_user">回報使用者</string>
 </resources>

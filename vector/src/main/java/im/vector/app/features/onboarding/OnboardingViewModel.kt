@@ -12,6 +12,8 @@ import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.config.Config
+import im.vector.app.config.SunsetConfig
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
@@ -761,7 +763,13 @@ class OnboardingViewModel @AssistedInject constructor(
                 }
                 OnboardingFlow.SignUp -> {
                     updateSignMode(SignMode.SignUp)
-                    internalRegisterAction(RegisterAction.StartRegistration)
+                    if (authResult.selectedHomeserver.hasOidcCompatibilityFlow && Config.sunsetConfig is SunsetConfig.Enabled) {
+                        // Navigate to the screen to create an account, it will show the error
+                        setState { copy(isLoading = false) }
+                        _viewEvents.post(OnboardingViewEvents.OpenCombinedRegister)
+                    } else {
+                        internalRegisterAction(RegisterAction.StartRegistration)
+                    }
                 }
                 OnboardingFlow.SignInSignUp,
                 null -> {
@@ -775,9 +783,17 @@ class OnboardingViewModel @AssistedInject constructor(
 
     private suspend fun onHomeServerEdited(config: HomeServerConnectionConfig, serverTypeOverride: ServerType?, authResult: StartAuthenticationResult) {
         when (awaitState().onboardingFlow) {
-            OnboardingFlow.SignUp -> internalRegisterAction(RegisterAction.StartRegistration) {
-                updateServerSelection(config, serverTypeOverride, authResult)
-                _viewEvents.post(OnboardingViewEvents.OnHomeserverEdited)
+            OnboardingFlow.SignUp -> {
+                if (authResult.selectedHomeserver.hasOidcCompatibilityFlow && Config.sunsetConfig is SunsetConfig.Enabled) {
+                    // An error is displayed now
+                    setState { copy(isLoading = false) }
+                    _viewEvents.post(OnboardingViewEvents.Failure(MasSupportRequiredException()))
+                } else {
+                    internalRegisterAction(RegisterAction.StartRegistration) {
+                        updateServerSelection(config, serverTypeOverride, authResult)
+                        _viewEvents.post(OnboardingViewEvents.OnHomeserverEdited)
+                    }
+                }
             }
             OnboardingFlow.SignIn -> {
                 updateServerSelection(config, serverTypeOverride, authResult)
@@ -924,7 +940,10 @@ private fun LoginMode.supportsSignModeScreen(): Boolean {
     return when (this) {
         LoginMode.Password,
         is LoginMode.SsoAndPassword -> true
-        is LoginMode.Sso,
+        is LoginMode.Sso -> {
+            // In this case, an error will be displayed in the next screen
+            hasOidcCompatibilityFlow
+        }
         LoginMode.Unknown,
         LoginMode.Unsupported -> false
     }

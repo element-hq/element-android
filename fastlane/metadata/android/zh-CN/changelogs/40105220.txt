@@ -1,0 +1,2 @@
+更新日志：主要改进了语音广播功能。
+查看完整更新日志： https://github.com/element-hq/element-android/releases

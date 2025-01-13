@@ -34,8 +34,8 @@
             android:layout_height="52dp"
             app:layout_constraintBottom_toTopOf="@id/createAccountHeaderIcon"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed"
-            app:layout_constraintVertical_bias="0" />
+            app:layout_constraintVertical_bias="0"
+            app:layout_constraintVertical_chainStyle="packed" />
 
         <ImageView
             android:id="@+id/createAccountHeaderIcon"
@@ -120,11 +120,12 @@
             android:id="@+id/serverSelectionSpacing"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@id/createAccountInput"
+            app:layout_constraintBottom_toTopOf="@id/chooseServerCardErrorMas"
             app:layout_constraintHeight_percent="0.05"
             app:layout_constraintTop_toBottomOf="@id/selectedServerName" />
 
         <View
+            android:id="@+id/serverSelectionDivider"
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:background="?vctr_content_quaternary"
@@ -132,6 +133,45 @@
             app:layout_constraintEnd_toEndOf="@id/createAccountGutterEnd"
             app:layout_constraintStart_toStartOf="@id/createAccountGutterStart"
             app:layout_constraintTop_toTopOf="@id/serverSelectionSpacing" />
+
+        <FrameLayout
+            android:id="@+id/chooseServerCardErrorMas"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/chooseServerCardDownloadReplacementApp"
+            app:layout_constraintEnd_toEndOf="@id/createAccountGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/createAccountGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/serverSelectionSpacing"
+            tools:visibility="visible">
+
+            <include
+                layout="@layout/view_error_registration_with_mas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/chooseServerCardDownloadReplacementApp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/createAccountInput"
+            app:layout_constraintEnd_toEndOf="@id/createAccountGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/createAccountGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/chooseServerCardErrorMas"
+            tools:visibility="visible">
+
+            <include
+                layout="@layout/view_download_replacement_app"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </FrameLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/createAccountInput"
@@ -142,16 +182,16 @@
             app:layout_constraintBottom_toTopOf="@id/createAccountEntryFooter"
             app:layout_constraintEnd_toEndOf="@id/createAccountGutterEnd"
             app:layout_constraintStart_toStartOf="@id/createAccountGutterStart"
-            app:layout_constraintTop_toBottomOf="@id/serverSelectionSpacing">
+            app:layout_constraintTop_toBottomOf="@id/chooseServerCardDownloadReplacementApp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/createAccountEditText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:imeOptions="actionNext"
-                android:nextFocusForward="@id/createAccountPasswordInput"
                 android:inputType="textNoSuggestions"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:nextFocusForward="@id/createAccountPasswordInput" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
