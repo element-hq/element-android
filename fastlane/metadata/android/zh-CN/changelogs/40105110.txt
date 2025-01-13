@@ -1,0 +1,2 @@
+更新日志：全新的富文本编辑器全屏模式和错误修复。
+查看完整更新日志： https://github.com/element-hq/element-android/releases

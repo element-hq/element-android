@@ -1,2 +1,2 @@
-此版本的主要变化：消息列时间线 are now live and faster. 多个bug修复及稳定性改进。
-完整更改日志：https://github.com/vector-im/element-android/releases
+更新日志：对话串时间轴现已上线，速度更快，增加了稳定性。
+查看完整更新日志： https://github.com/element-hq/element-android/releases
