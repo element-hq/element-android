@@ -1,0 +1,2 @@
+更新日志：修复了一些问题，优化了稳定性。
+查看完整变更纪录：https://github.com/element-hq/element-android/releases
