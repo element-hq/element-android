@@ -1,0 +1,2 @@
+ამ ვერსიაში მთავარი ცვლილებები: crypto SDK-ის განახლება.
+სრული ცვლილებების ჟურნალი: https://github.com/element-hq/element-android/releases

@@ -183,7 +183,7 @@
     <string name="a11y_trust_level_default">Cấp độ tin tưởng mặc định</string>
     <string name="a11y_selected">Đã chọn</string>
     <string name="dev_tools_send_custom_event">Gửi sự kiện tuỳ chỉnh</string>
-    <string name="dev_tools_explore_room_state">Khám phá trạng thái phòng</string>
+    <string name="dev_tools_explore_room_state">Xem trạng thái phòng</string>
     <string name="dev_tools_menu_name">Công cụ phát triển</string>
     <string name="a11y_view_read_receipts">Xem xác nhận đã đọc</string>
     <string name="a11y_rule_notify_off">Không thông báo</string>
@@ -665,12 +665,12 @@
     <string name="call_remove_jitsi_widget_progress">Kết thúc cuộc gọi…</string>
     <string name="call_ended_invite_timeout_title">Không trả lời</string>
     <string name="call_ended_user_busy_description">Người dùng bạn vừa gọi đang bận.</string>
-    <string name="call_ended_user_busy_title">Người dụng bận</string>
+    <string name="call_ended_user_busy_title">Người dùng bận</string>
     <string name="room_list_rooms_empty_body">Phòng chat của bạn được hiển thị ở đây. Bạn có thể tạo mới phòng chat hoặc tham gia các phòng cộng đồng hiện có.</string>
     <string name="login_server_title">Chọn một máy chủ</string>
     <string name="login_splash_submit">Hãy bắt đầu</string>
     <string name="login_splash_text3">Mở rộng và tùy chỉnh trải nghiệm của bạn</string>
-    <string name="login_splash_text2">Giữ cho hội thoải riêng tư với bảo mật đầu cuối</string>
+    <string name="login_splash_text2">Cuộc hội thoại được bảo mật bằng mã hóa</string>
     <string name="login_splash_text1">Chat với một người hoặc chat nhóm</string>
     <string name="login_splash_title">Đây là hội thoại của bạn. Bạn sở hữu nó.</string>
     <string name="timeline_unread_messages">Tin nhắn chưa đọc</string>
@@ -722,7 +722,7 @@
     <string name="uploads_files_subtitle">%1$s vào lúc %2$s</string>
     <string name="uploads_files_title">Tệp</string>
     <string name="uploads_media_no_result">Không có media nào trong phòng này</string>
-    <string name="uploads_media_title">MEDIA</string>
+    <string name="uploads_media_title">ĐA PHƯƠNG TIỆN</string>
     <string name="attachment_viewer_item_x_of_y">%1$d của %2$d</string>
     <string name="error_handling_incoming_share">Không thể xử lý dữ liệu chia sẻ</string>
     <string name="rotate_and_crop_screen_title">Xoay chiều và cắt bớt</string>
@@ -787,7 +787,7 @@
     <string name="settings_default_media_source">Nguồn media mặc định</string>
     <string name="compression_opt_list_choose">Chọn</string>
     <string name="settings_default_compression">Nén dữ liệu mặc định</string>
-    <string name="settings_media">Media</string>
+    <string name="settings_media">Đa phương tiện</string>
     <string name="settings_select_country">Chọn quốc gia</string>
     <string name="settings_emails_and_phone_numbers_summary">Quản lý địa chỉ thư điện tử và số điện thoại liên kết với tài khoản Matrix</string>
     <string name="settings_emails_and_phone_numbers_title">Địa chỉ thư điện tử và số điện thoại</string>
@@ -864,9 +864,9 @@
     <string name="settings_ignored_users">Người dùng bị bỏ qua</string>
     <string name="settings_notifications">Thông báo</string>
     <string name="settings_user_settings">Thiết lập người dùng</string>
-    <string name="settings_clear_media_cache">Xóa media cache</string>
+    <string name="settings_clear_media_cache">Xóa bộ đệm đa phương tiện</string>
     <string name="settings_clear_cache">Xóa cache</string>
-    <string name="settings_keep_media">Giữ media</string>
+    <string name="settings_keep_media">Giữ tập tin đa phương tiện</string>
     <string name="settings_privacy_policy">Điều khoản riêng tư</string>
     <string name="settings_copyright">Bản quyền</string>
     <string name="settings_third_party_notices">Lưu ý bên thứ 3</string>
@@ -1496,7 +1496,7 @@
 \n${app_name} Desktop</string>
     <string name="use_other_session_content_description">Sử dụng ${app_name} mới nhất trên các thiết bị khác của bạn, Web ${app_name}, Máy tính để bàn ${app_name}, iOS ${app_name}, Android ${app_name} hoặc một máy khách Matrix khác có khả năng xác thực chéo</string>
     <string name="change_password_summary">Đặt mật khẩu tài khoản mới…</string>
-    <string name="error_saving_media_file">Không thể lưu tệp Media</string>
+    <string name="error_saving_media_file">Không thể lưu tập tin đa phương tiện</string>
     <string name="settings_security_prevent_screenshots_summary">Bật thiết đặt này thêm FLAG_SECURE cho tất cả các Hoạt động. Khởi động lại ứng dụng để thay đổi có hiệu lực.</string>
     <string name="settings_security_prevent_screenshots_title">Ngăn ảnh chụp màn hình của ứng dụng</string>
     <string name="bootstrap_migration_backup_recovery_key">Khóa khôi phục Sao lưu Chính</string>
@@ -1965,7 +1965,7 @@
     <string name="recovery_passphrase">Cụm mật khẩu phục hồi</string>
     <string name="verification_cancelled">Xác thực đã bị hủy bỏ</string>
     <string name="verify_cancelled_notice">Xác thực đã bị hủy bỏ. Bạn có thể bắt đầu xác thực lại.</string>
-    <string name="verify_not_me_self_verification">Một trong những điều sau đây có thể bị xâm phạm:
+    <string name="verify_not_me_self_verification">Một trong số thông tin sau đã bị xâm phạm:
 \n
 \n- Mật khẩu của bạn
 \n- Máy chủ nhà của bạn
@@ -2496,7 +2496,7 @@
     <string name="verification_profile_other_device_untrust_info">Trước khi người dùng này tin tưởng phiên này, các tin nhắn gửi đến phiên và từ phiên đều mang nhãn cảnh báo.</string>
     <string name="verification_verify_identity">Xác thực danh tính để truy cập vào các tin nhắn được mã hóa và chứng minh danh tính của bạn với những người khác.</string>
     <string name="settings_nightly_build_update">Tải bản dựng mới nhất (ghi chú: bạn có thể gặp vấn đề khi đăng nhập)</string>
-    <string name="verification_request_was_sent"/>
+    <string name="verification_request_was_sent">Yêu cầu xác thực đã được gửi. Mở một phiên đăng nhập khác để chấp nhận và bắt đầu xác thực.</string>
     <string name="review_unverified_sessions_description">Xem lại để chắc chắn rằng tài khoản bạn an toàn</string>
     <string name="a11y_audio_playback_duration" tools:ignore="PluralsCandidate">%1$d phút %2$d giây</string>
     <string name="device_manager_session_details_session_last_activity">Hoạt động lần cuối</string>
@@ -2556,4 +2556,40 @@
     <string name="device_manager_session_last_activity">Hoạt động cuối %1$s</string>
     <string name="_resume">Tiếp tục</string>
     <string name="a11y_presence_busy">Bận</string>
+    <string name="microphone_in_use_title">Micro đang được sử dụng</string>
+    <string name="invite_unknown_users_dialog_submit">Cứ mời cho tôi</string>
+    <string name="call_unsupported">Cuộc gọi không được hỗ trợ</string>
+    <string name="call_unsupported_matrix_rtc_call">Cuộc gọi này chỉ được ứng dụng Element X hỗ trợ.</string>
+    <string name="login_splash_sign_in">Đăng nhập</string>
+    <string name="error_audio_message_unable_to_play">Không thể phát %1$s</string>
+    <string name="settings_troubleshoot_test_system_settings_permission_failed">${app_name} cần quyền để hiển thị thông báo.
+\nVui lòng trao quyền.</string>
+    <string name="message_report_user">Tố cáo người dùng</string>
+    <string name="settings_security_pin_code_use_biometrics_error">Không thể bật xác thực sinh trắc học.</string>
+    <string name="threads_labs_enable_notice_message">Máy chủ của bạn hiện không hỗ trợ thớt, nên tính năng này có thể sẽ không ổn định. Có thể sẽ không tìm được một sộ thớt. %sBạn vẫn muốn bật tính năng thớt chứ\?</string>
+    <string name="restart_the_application_to_apply_changes">Khởi động lại ứng dụng để áp dụng thay đổi.</string>
+    <string name="space_explore_filter_no_result_title">Không có kết quả</string>
+    <string name="labs_enable_thread_messages_desc">Lưu ý: ứng dụng sẽ khởi động lại</string>
+    <string name="settings_acceptable_use_policy">Chính sách sử dụng</string>
+    <string tools:ignore="UnusedResources" name="verify_invalid_qr_notice">Không thể đọc mã QR này. Hãy thử xác thực bằng cách khác.</string>
+    <string name="a11y_play_audio_message">Phát %1$s</string>
+    <string name="a11y_voice_broadcast_fast_backward">Tua ngược 30 giây</string>
+    <string name="voice_broadcast_recording_time_left">%1$s rời</string>
+    <string name="settings_notification_error_on_update">Có lỗi xảy ra khi cập nhật cài đặt thông báo của bạn. Hãy thử lại.</string>
+    <string name="settings_autoplay_animated_images_summary">Phát ảnh động ngay sau khi nhận được</string>
+    <string name="ftue_auth_terms_subtitle">Vui lòng đọc điều khoản và chính sách của %s</string>
+    <string name="direct_room_encryption_enabled_tile_description_future">Tin nhắn trong cuộc trò truyện này sẽ được mã hóa đầu cuối.</string>
+    <string name="confirm_your_identity_after_update">Tin nhắn mã hóa đã được cải thiện ở bản cập nhật trước. Bạn cần xác thực lại thiết bị.</string>
+    <string name="auth_biometric_key_invalidated_message">Xác thực sinh trắc học bị tắt vì một phương pháp xác thực sinh trắc học khác mới được thêm vào. Bạn có thể mở lại trong Cài đặt.</string>
+    <string name="settings_show_latest_profile">Hiện thông tin mới nhất của người dùng</string>
+    <string name="error_voice_message_broadcast_in_progress">Không thể bắt đầu tin nhắn thoại</string>
+    <string name="error_forbidden_digits_only_username">Máy chủ không chấp nhận tên người dùng mà chỉ có số.</string>
+    <string name="verification_not_found">Không thấy yêu cầu xác thực. Có thể yêu cầu đã bị hủy, hoặc phiên khác đã xử lý yêu cầu này rồi.</string>
+    <string name="audio_message_reply_content">%1$s (%2$s)</string>
+    <string name="audio_message_file_size">(%1$s)</string>
+    <string name="a11y_open_settings">Mở cài đặt</string>
+    <string name="ftue_auth_choose_server_ems_subtitle">Dịch vụ Matrix của Element (EMS) là một dịch vụ lưu trữ trò truyện thời gian thực nhanh và bảo mật. Thông tin thêm tại &lt;a href=\"${ftue_ems_url}\"&gt;element.io/ems&lt;/a&gt;</string>
+    <string name="a11y_pause_audio_message">Tạm dừng %1$s</string>
+    <string name="voice_broadcast_live">Trực tiếp</string>
+    <string name="reply_in_thread">Trả lời trong thớt</string>
 </resources>

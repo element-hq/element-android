@@ -1,0 +1,2 @@
+Perubahan utama dalam versi ini: beri tahu pengguna tentang Element Call yang tidak didukung. 
+Catatan perubahan lanjutan: https://github.com/element-hq/element-android/releases

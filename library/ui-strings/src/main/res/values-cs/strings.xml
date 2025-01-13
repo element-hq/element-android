@@ -3026,4 +3026,13 @@
     <string name="invite_unknown_users_dialog_content">Nelze najít profily pro níže uvedené Matrix identifikátory. Chcete je přesto pozvat\?
 \n
 \n%s</string>
+    <string name="login_splash_sign_in">Přihlásit se</string>
+    <string name="message_report_user">Nahlásit uživatele</string>
+    <string name="user_reported_as_inappropriate_title">Nahlášený uživatel</string>
+    <string name="user_reported_as_inappropriate_content">Uživatel byl nahlášen.
+\n
+\nPokud nechcete vidět další obsah od tohoto uživatele, můžete ho ignorovat a skrýt jeho zprávy.</string>
+    <string name="call_unsupported">Nepodporované volání</string>
+    <string name="call_unsupported_matrix_rtc_call">Nepodporované volání. Pro připojení k tomuto volání je nutná nová aplikace Element X.</string>
+    <string name="microphone_in_use_title">Mikrofon se používá</string>
 </resources>
