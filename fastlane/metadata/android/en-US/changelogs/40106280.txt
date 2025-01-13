@@ -1,0 +1,2 @@
+Main changes in this version: Redirect user to Element X when they want to create accounts on server with MAS support.
+Full changelog: https://github.com/element-hq/element-android/releases
