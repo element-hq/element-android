@@ -246,9 +246,16 @@ class VectorCallActivity :
                 == PackageManager.PERMISSION_GRANTED) {
             // Only start the service if the app is in the foreground
             if (isAppInForeground()) {
-                Timber.tag(loggerTag.value).v("Starting microphone foreground service")
-                val intent = Intent(this, MicrophoneAccessService::class.java)
-                ContextCompat.startForegroundService(this, intent)
+                // Starting in Android 14, you can't create a microphone foreground service while your app is in
+                // the background. If we call startForegroundService the app will crash.
+                // https://github.com/element-hq/element-android/issues/8964
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                    Timber.tag(loggerTag.value).v("Starting microphone foreground service")
+                    val intent = Intent(this, MicrophoneAccessService::class.java)
+                    ContextCompat.startForegroundService(this, intent)
+                } else {
+                    Timber.tag(loggerTag.value).v("App is in running Android 14+; cannot start microphone service")
+                }
             } else {
                 Timber.tag(loggerTag.value).v("App is not in foreground; cannot start microphone service")
             }
