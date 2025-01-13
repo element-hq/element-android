@@ -1,0 +1,2 @@
+更新日志：重写了选择附件的UI。
+查看完整更新日志： https://github.com/element-hq/element-android/releases

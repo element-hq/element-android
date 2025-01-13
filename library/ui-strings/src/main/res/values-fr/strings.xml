@@ -2931,7 +2931,7 @@
     <string name="settings_notification_error_on_update">Nous avons rencontré une erreur lors de la mise-à-jour de vos préférences de notification. Veuillez réessayer.</string>
     <string name="direct_room_encryption_enabled_waiting_users_tile_description">Une fois que les utilisateurs invités seront connectés sur ${app_name}, vous pourrez discuter et le salon sera chiffré de bout en bout</string>
     <string name="direct_room_encryption_enabled_waiting_users">En attente de la connexion des utilisateurs sur ${app_name}</string>
-    <string name="direct_room_user_list_only_invite_one_email">Vous ne pouvez envoyer qu’une seule invitation par e-mail à la fois</string>
+    <string name="direct_room_user_list_only_invite_one_email">Vous ne pouvez envoyer qu’une seule invitation par courriel à la fois</string>
     <string name="pill_message_unknown_room_or_space">Salon/Espace</string>
     <string name="pill_message_in_unknown_room">Message dans le salon</string>
     <string name="pill_message_in_room">Message dans %s</string>
@@ -2958,4 +2958,21 @@
     <string name="crosssigning_verify_after_update">Application mise-à-jour</string>
     <string name="sign_out_anyway">Se déconnecter malgré tout</string>
     <string name="sign_out_failed_dialog_message">Impossible de joindre le serveur d’accueil. Si vous vous déconnectez malgré tout, cet appareil ne sera pas effacé de la liste de vos appareils, vous pourrez l’enlever en utilisant un autre client.</string>
+    <string name="invite_unknown_users_dialog_content">Impossible de trouver les profils pour les identifiants Matrix listés ci-dessous. Voulez-vous quand même les inviter \?
+\n
+\n%s</string>
+    <string name="invite_unknown_users_dialog_submit">Inviter quand même</string>
+    <string name="login_splash_sign_in">Se connecter</string>
+    <string name="create_room_unknown_users_dialog_content">Impossible de trouver des profils pour les ID Matrix listés ci-dessous. Voulez-vous tout de même débuter une nouvelle conversation \?
+\n
+\n%s</string>
+    <string name="create_room_unknown_users_dialog_submit">Commencer la conversation quand même</string>
+    <string name="user_reported_as_inappropriate_title">Utilisateur signalé</string>
+    <string name="message_report_user">Signaler l’utilisateur</string>
+    <string name="user_reported_as_inappropriate_content">Ce contenu a été signalé.
+\n
+\nSi vous ne voulez plus voir de contenu de cet utilisateur, vous pouvez l’ignorer pour masquer ses messages.</string>
+    <string name="call_unsupported">Appel non pris en charge</string>
+    <string name="call_unsupported_matrix_rtc_call">Appel non pris en charge. La nouvelle application Element X est nécessaire pour rejoindre cet appel.</string>
+    <string name="microphone_in_use_title">Microphone en service</string>
 </resources>

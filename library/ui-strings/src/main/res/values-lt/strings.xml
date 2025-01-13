@@ -140,7 +140,7 @@
     <string name="home_filter_placeholder_home">Filtruoti kambarių pavadinimus</string>
     <string name="bottom_action_rooms">Kambariai</string>
     <string name="bottom_action_people">Žmonės</string>
-    <string name="bottom_action_favourites">Parankiniai</string>
+    <string name="bottom_action_favourites">Favoritai</string>
     <string name="bottom_action_notification">Pranešimai</string>
     <string name="dialog_edit_hint">Nauja reikšmė</string>
     <string name="dialog_title_success">Sėkmė</string>
@@ -240,8 +240,8 @@
     <string name="dark_theme">Tamsi tema</string>
     <string name="light_theme">Šviesi tema</string>
     <string name="system_theme">Sistemos numatytoji</string>
-    <string name="notice_end_to_end_unknown_algorithm_by_you">Įjungėte visapusį šifravimą (neatpažintas algoritmas %1$s).</string>
-    <string name="notice_end_to_end_unknown_algorithm">%1$s įjungė visapusį šifravimą (neatpažintas algoritmas %2$s).</string>
+    <string name="notice_end_to_end_unknown_algorithm_by_you">Įjungėte abipusį šifravimą (neatpažintas algoritmas %1$s).</string>
+    <string name="notice_end_to_end_unknown_algorithm">%1$s įjungė abipusį šifravimą (neatpažintas algoritmas %2$s).</string>
     <string name="notice_end_to_end_ok_by_you">Įjungėte visapusį šifravimą.</string>
     <string name="notice_end_to_end_ok">%1$s įjungė visapusį šifravimą.</string>
     <string name="notice_direct_room_guest_access_forbidden_by_you">Uždraudėte svečiams patekti į kambarį.</string>
@@ -1245,7 +1245,7 @@
     <string name="settings_notification_mentions_and_keywords">Paminėjimai ir raktažodžiai</string>
     <string name="settings_notification_default">Numatyti pranešimai</string>
     <string name="settings_notification_emails_enable_for_email">Įjungti pranešimus el. paštu %s</string>
-    <string name="settings_notification_emails_no_emails">Norėdami gauti pranešimą el. paštu, susiekite el. paštą su savo Matrix paskyra</string>
+    <string name="settings_notification_emails_no_emails">Norėdami gauti pranešimus el. paštu, susiekite el. paštą su savo Matrix paskyra</string>
     <string name="settings_notification_emails_category">Pranešimas el. paštu</string>
     <string name="settings_notification_by_event">Pranešimo svarba pagal įvykį</string>
     <string name="settings_notification_advanced">Išplėstiniai pranešimų nustatymai</string>
@@ -2182,4 +2182,50 @@
     <string name="labs_enable_deferred_dm_title">Įjungti atidėtas AŽ</string>
     <string name="labs_enable_new_app_layout_summary">Supaprastintas Element su nebūtinais skirtukais</string>
     <string name="labs_enable_new_app_layout_title">Įjungti naują išdėstymą</string>
+    <string name="thread_list_not_available">Jūsų namų serveris dar nepalaiko temų sąrašo.</string>
+    <string name="settings_notification_error_on_update">Atnaujinant pranešimų nuostatas įvyko klaida. Bandykite dar kartą.</string>
+    <string name="action_stop">Taip, Stop</string>
+    <string name="notice_voice_broadcast_ended">%1$s baigė balso transliaciją.</string>
+    <string name="notice_voice_broadcast_ended_by_you">Jūs pabaigėte balso transliaciją.</string>
+    <string name="a11y_expand_space_children">Išskleisti %s vaikų</string>
+    <string name="threads_labs_enable_notice_title">Temos Beta</string>
+    <string name="threads_beta_enable_notice_title">Temos Beta</string>
+    <plurals name="x_selected">
+        <item quantity="one">%1$d pasirinktas</item>
+        <item quantity="few">%1$d pasirinkti</item>
+        <item quantity="other">%1$d pasirinkta</item>
+    </plurals>
+    <string name="notice_display_name_changed_to">%1$s pakeitė savo rodomą vardą į %2$s</string>
+    <string name="a11y_collapse_space_children">SUskleisti %s vaikų</string>
+    <string name="action_proceed_to_reset">Tęsti nustatymą iš naujo</string>
+    <string name="action_got_it">Supratau</string>
+    <string name="settings_troubleshoot_test_play_services_failed">${app_name} naudoja Google Play Services, kad pateiktų push pranešimus, bet atrodo, kad tai netinkamai sukonfigūruota:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_title">Firebase Tokenas</string>
+    <string name="settings_troubleshoot_test_fcm_failed">Nepavyko nuskaityti FCM tokeno:
+\n%1$s</string>
+    <string name="labs_enable_rich_text_editor_summary">Išbandykite raiškiojo teksto redaktorių (greitai pasirodys paprastojo teksto režimas)</string>
+    <string name="threads_labs_enable_notice_message">Jūsų namų serveris šiuo metu nepalaiko temų, todėl ši funkcija gali veikti nekorektiškai. Kai kurie temų pranešimai gali būti nepasiekiami. %sAr vis tiek norite įjungti temas\?</string>
+    <string name="sign_out_failed_dialog_message">Nepavyksta pasiekti namų serverio. Jei vis tiek atsijungsite, šis įrenginys nebus ištrintas iš įrenginių sąrašo. Galbūt norėsite jį pašalinti naudodami kitą klientą.</string>
+    <string name="sign_out_anyway">Vistiek atsijungti</string>
+    <string name="action_select_all">Pasirinkti viską</string>
+    <string name="action_deselect_all">Panaikinti pasirinkimą</string>
+    <string name="permissions_rationale_msg_notification">${app_name} reikia leidimo rodyti pranešimus. Pranešimuose gali būti rodomi jūsų pranešimai, kvietimai ir kt.
+\n
+\nLeiskite prieigą kituose languose, kad galėtumėte peržiūrėti pranešimą.</string>
+    <string name="threads_notice_migration_message">Artėjame prie viešosios Temų beta versijos išleidimo..
+\n
+\nKai ruošiamės tam, turime atlikti kai kuriuos pakeitimus: iki šio taško sukurtos temos bus rodomos kaip įprasti atsakymai.
+\n
+\nTai bus vienkartinis perėjimas, nes dabar Temos yra Matrix specifikacijos dalis.</string>
+    <string name="settings_troubleshoot_test_system_settings_permission_failed">${app_name} reikia leidimo rodyti pranešimus.
+\nSuteikite leidimą.</string>
+    <string name="grant_permission">Suteikti Leidimą</string>
+    <string name="threads_beta_enable_notice_message">Temos padeda išlaikyti jūsų pokalbių temą ir lengvai ją stebėti. %sĮjungus temas programa bus atnaujinta. Kai kuriose paskyrose tai gali užtrukti ilgiau.</string>
+    <string name="settings_troubleshoot_test_play_services_quickfix">Sutvarkyti Play Services</string>
+    <string name="labs_enable_rich_text_editor_title">Aktyvuoti raiškiojo teksto redaktorių</string>
+    <string name="settings_troubleshoot_test_fcm_success">FCM tokenas sėkmingai nuskaitytas:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_play_services_title">Play Paslaugų Patikrinimas</string>
+    <string name="settings_troubleshoot_test_play_services_success">Google Play APK yra prieinamas ir atnaujintas.</string>
 </resources>

@@ -1,0 +1,2 @@
+更新日志：增加移动设备管理和功能性成员支持。
+查看完整更新日志：https://github.com/element-hq/element-android/releases

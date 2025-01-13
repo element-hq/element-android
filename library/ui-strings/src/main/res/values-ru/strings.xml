@@ -3061,4 +3061,23 @@
     <string name="rich_text_editor_indent">Подпункт</string>
     <string name="rich_text_editor_unindent">Пункт</string>
     <string name="settings_acceptable_use_policy">Политика пользования</string>
+    <string name="settings_external_account_management">Детали вашей учетной записи управляются отдельно на %1$s.</string>
+    <string name="rich_text_editor_inline_code">Применение формата встроенного кода</string>
+    <string name="create_room_unknown_users_dialog_content">Не удалось найти профили для перечисленных ниже Matrix ID. Вы всё равно хотите их пригласить\?
+\n
+\n%s</string>
+    <string name="user_reported_as_inappropriate_title">Пользовователь на которого поступила жалоба</string>
+    <string name="user_reported_as_inappropriate_content">Жалоба на пользователя отправлена.
+\n
+\nЕсли вы больше не хотите видеть от этого пользователя ничего, вы можете его игнорировать его чтобы скрыть его сообщения.</string>
+    <string name="message_report_user">Пожаловаться на пользователя</string>
+    <string name="login_splash_sign_in">Войти</string>
+    <string name="invite_unknown_users_dialog_content">Не удалось найти профили для перечисленных ниже Matrix ID. Вы всё равно хотите их пригласить\?
+\n
+\n%s</string>
+    <string name="invite_unknown_users_dialog_submit">Всё равно пригласить</string>
+    <string name="create_room_unknown_users_dialog_submit">Всё равно начать беседу</string>
+    <string name="microphone_in_use_title">Используется микрофон</string>
+    <string name="call_unsupported">Неподдерживаемый вызов</string>
+    <string name="call_unsupported_matrix_rtc_call">Вызов не поддерживается. Для подключения к этому вызову необходимо новое приложение Element X.</string>
 </resources>

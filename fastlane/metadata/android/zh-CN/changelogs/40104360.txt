@@ -1,0 +1,3 @@
+你可以在实验室中启用新应用程序布局。
+修复有关通知丢失和增量同步时间过长的问题。
+查看完整更新日志： https://github.com/element-hq/element-android/releases
