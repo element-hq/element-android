@@ -2975,4 +2975,8 @@
     <string name="call_unsupported">Appel non pris en charge</string>
     <string name="call_unsupported_matrix_rtc_call">Appel non pris en charge. La nouvelle application Element X est nécessaire pour rejoindre cet appel.</string>
     <string name="microphone_in_use_title">Microphone en service</string>
+    <string name="error_mas_not_supported_title">Vous ne pouvez plus créer de compte sur %1$s avec cette application</string>
+    <string name="error_mas_not_supported_subtitle">Téléchargez %1$s pour utiliser %2$s avec votre compte, ou choisissez un autre serveur d’accueil.</string>
+    <string name="view_download_replacement_app_title">Télécharger %1$s</string>
+    <string name="view_download_replacement_app_subtitle">Plus rapide, plus sécurisé et fourni avec des outils de collaboration efficaces.</string>
 </resources>

@@ -1,0 +1,2 @@
+此版本中的主要變動：當使用者想要在有 MAS 支援的伺服器上建立帳號時，將使用者重新導向到 Element X。
+完整的變更紀錄：https://github.com/element-hq/element-android/releases
