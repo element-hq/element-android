@@ -1,0 +1,2 @@
+此版本中的主要變動：通知使用者不支援 Element Call。
+完整的變更紀錄：https://github.com/element-hq/element-android/releases

@@ -1,0 +1,2 @@
+Põhilised muutused selles versioonis: kui kasutaja soovib lisada kontot MASi toega serverisse, siis suuname ta Element Xi juurde.
+Kogu ingliskeelne muudatuste logi: https://github.com/element-hq/element-android/releases

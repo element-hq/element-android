@@ -1,0 +1,2 @@
+Perubahan utama dalam versi ini: Alihkan pengguna ke Element X ketika ingin membuat akun di server dengan dukungan MAS.
+Catatan perubahan lanjutan: https://github.com/element-hq/element-android/releases
