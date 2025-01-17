@@ -343,7 +343,11 @@ read -p "Does it look correct? Press enter when it's done."
 printf "\n================================================================================\n"
 read -p "Installing apk on a real device, press enter when a real device is connected. "
 apkPath="${targetPath}/vector-gplay-arm64-v8a-release-signed.apk"
+# Ignore error
+set +e
 adb -d install ${apkPath}
+# Do not ignore error
+set -e
 
 read -p "Please run the APK on your phone to check that the upgrade went well (no init sync, etc.). Press enter when it's done."
 
