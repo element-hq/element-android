@@ -17,6 +17,7 @@ import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationSh
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
+import kotlin.coroutines.resume
 
 class UserLiveLocationViewStateMapper @Inject constructor(
         private val locationPinProvider: LocationPinProvider,
@@ -32,9 +33,7 @@ class UserLiveLocationViewStateMapper @Inject constructor(
                         .toLocationData()
 
                 when {
-                    userId.isNullOrEmpty() || locationData == null -> continuation.resume(null) {
-                        // do nothing on cancellation
-                    }
+                    userId.isNullOrEmpty() || locationData == null -> continuation.resume(null)
                     else -> {
                         val session = activeSessionHolder.getActiveSession()
                         val roomId = liveLocationShareAggregatedSummary.roomId
@@ -57,9 +56,7 @@ class UserLiveLocationViewStateMapper @Inject constructor(
                                     locationTimestampMillis = locationTimestampMillis,
                                     showStopSharingButton = userId == session.myUserId
                             )
-                            continuation.resume(viewState) {
-                                // do nothing on cancellation
-                            }
+                            continuation.resume(viewState)
                         }
                     }
                 }
