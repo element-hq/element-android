@@ -2917,4 +2917,8 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="microphone_in_use_title">Mikrofon digunakan</string>
     <string name="call_unsupported">Panggilan tidak didukung</string>
     <string name="call_unsupported_matrix_rtc_call">Panggilan tidak didukung. Aplikasi Element X yang baru diperlukan untuk bergabung ke panggilan ini.</string>
+    <string name="view_download_replacement_app_title">Unduh %1$s</string>
+    <string name="view_download_replacement_app_subtitle">Lebih cepat, lebih aman, dan lengkap dengan peralatan kolaborasi yang lebih berdaya.</string>
+    <string name="error_mas_not_supported_title">Anda sudah tidak bisa lagi membuat akun dengan %1$s menggunakan aplikasi ini</string>
+    <string name="error_mas_not_supported_subtitle">Unduh %1$s untuk menggunakan %2$s untuk Akun Anda atau pilih homeserver yang lain.</string>
 </resources>
