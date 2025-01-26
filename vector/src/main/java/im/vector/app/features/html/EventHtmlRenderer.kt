@@ -169,7 +169,11 @@ class EventHtmlRenderer @Inject constructor(
                     .plus(text.getSpans(0, length, HtmlCodeSpan::class.java).filter { !it.isBlock }.toTypedArray())
                     .flatten()
 
-            if (spans.isEmpty()) return
+            if (spans.isEmpty()){
+                val normalText = textView.text.replace(Regex("""^.*?\n\n""")) { matchResult -> matchResult.value.replace("\n\n", "\n") }
+                textView.text = normalText
+                return
+            }
 
             spans.forEach { span ->
                 val start = text.getSpanStart(span)
