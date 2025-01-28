@@ -253,7 +253,7 @@ class VectorCallActivity :
                     // already been answered before starting the MicrophoneAccessService
                     // https://github.com/element-hq/element-android/issues/8964
                     val callState = it.callState.invoke()
-                    if (callState !is CallState.LocalRinging && callState !is CallState.Ended) {
+                    if (callState !is CallState.LocalRinging && callState !is CallState.Ended && callState != null) {
                         Timber.tag(loggerTag.value).v("Starting microphone foreground service")
                         val intent = Intent(this, MicrophoneAccessService::class.java)
                         ContextCompat.startForegroundService(this, intent)
