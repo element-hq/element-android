@@ -1,3 +1,13 @@
+Changes in Element v1.6.30 (2025-02-04)
+=======================================
+
+Dual licensing: AGPL + Element Commercial  ([#8990](https://github.com/element-hq/element-android/issues/8990))
+
+Bugfixes 🐛
+----------
+ - Fix incoming call crash on Android 14+. ([#8964](https://github.com/element-hq/element-android/issues/8964))
+
+
 Changes in Element v1.6.28 (2025-01-13)
 =======================================
 

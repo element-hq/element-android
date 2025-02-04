@@ -1,0 +1,2 @@
+Main changes in this version: Fix incoming call crash on Android 14+.
+Full changelog: https://github.com/element-hq/element-android/releases
