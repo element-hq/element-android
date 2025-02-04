@@ -93,3 +93,4 @@
 -dontwarn org.commonmark.ext.gfm.strikethrough.Strikethrough
 -dontwarn org.mozilla.javascript.**
 -dontwarn org.slf4j.**
+-dontwarn org.jspecify.annotations.NullMarked
