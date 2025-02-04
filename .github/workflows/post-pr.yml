@@ -77,7 +77,7 @@ jobs:
             adb logcat >> emulator.log &
             ./gradlew $CI_GRADLE_ARG_PROPERTIES connectedGplayDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=im.vector.app.ui.UiAllScreensSanityTest || (adb pull storage/emulated/0/Pictures/failure_screenshots && exit 1 )
       - name: Upload Test Report Log
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: uitest-error-results

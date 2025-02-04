@@ -45,7 +45,7 @@ jobs:
 
       - name: Archive Screenshot Results on Error
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: screenshot-results
           path: |
@@ -98,7 +98,7 @@ jobs:
       ###       ./gradlew generateCoverageReport $CI_GRADLE_ARG_PROPERTIES
 
       - name: Upload Integration Test Report Log
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: integration-test-error-results
