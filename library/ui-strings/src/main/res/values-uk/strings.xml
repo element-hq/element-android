@@ -3095,4 +3095,8 @@
     <string name="microphone_in_use_title">Мікрофон використовується</string>
     <string name="call_unsupported">Непідтримуваний виклик</string>
     <string name="call_unsupported_matrix_rtc_call">Непідтримуваний виклик. Потрібен застосунок Element X, щоб приєднатися до цього виклику.</string>
+    <string name="error_mas_not_supported_title">Ви більше не можете створити обліковий запис з %1$s за допомогою цього застосунку</string>
+    <string name="error_mas_not_supported_subtitle">Завантажте %1$s, щоб використовувати %2$s для свого облікового запису або виберіть інший домашній сервер.</string>
+    <string name="view_download_replacement_app_title">Завантажити %1$s</string>
+    <string name="view_download_replacement_app_subtitle">Швидший, безпечніший і з потужними інструментами для спільної роботи.</string>
 </resources>

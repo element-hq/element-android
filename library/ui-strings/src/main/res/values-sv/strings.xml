@@ -2975,4 +2975,8 @@
     <string name="microphone_in_use_title">Mikrofon används</string>
     <string name="call_unsupported">Samtal stöds inte</string>
     <string name="call_unsupported_matrix_rtc_call">Samtal stöds inte. Nya Element X-appen behövs för att gå med i det här samtalet.</string>
+    <string name="view_download_replacement_app_title">Ladda ner %1$s</string>
+    <string name="view_download_replacement_app_subtitle">Snabbare, säkrare och fullproppad med kraftfulla samarbetsverktyg.</string>
+    <string name="error_mas_not_supported_title">Du kan inte längre skapa ett konto med %1$s med den här appen</string>
+    <string name="error_mas_not_supported_subtitle">Ladda ner %1$s för att använda %2$s för ditt konto eller välj en annan hemserver.</string>
 </resources>
