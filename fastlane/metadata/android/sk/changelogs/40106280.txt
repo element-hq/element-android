@@ -1,0 +1,2 @@
+Hlavné zmeny v tejto verzii: Presmerovanie používateľa na Element X, keď chce vytvoriť účty na serveri s podporou MAS.
+Úplný zoznam zmien: https://github.com/element-hq/element-android/releases

@@ -1,0 +1,2 @@
+Huvudsakliga ändringar i den här versionen: Omdirigera användare till Element X när de vill skapa konton på server med MAS-stöd.
+Full ändringslogg: https://github.com/element-hq/element-android/releases

@@ -3035,4 +3035,8 @@
     <string name="call_unsupported">Nepodporované volání</string>
     <string name="call_unsupported_matrix_rtc_call">Nepodporované volání. Pro připojení k tomuto volání je nutná nová aplikace Element X.</string>
     <string name="microphone_in_use_title">Mikrofon se používá</string>
+    <string name="error_mas_not_supported_subtitle">Stáhněte si %1$s a používejte %2$s se svým účetem nebo si vyberte jiný domovský server.</string>
+    <string name="view_download_replacement_app_title">Stáhnout %1$s</string>
+    <string name="error_mas_not_supported_title">Pomocí této aplikace již nelze vytvořit účet na %1$s</string>
+    <string name="view_download_replacement_app_subtitle">Rychlejší, bezpečnější a s výkonnými nástroji pro spolupráci.</string>
 </resources>
