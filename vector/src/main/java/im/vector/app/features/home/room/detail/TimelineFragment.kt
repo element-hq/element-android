@@ -1877,11 +1877,7 @@ class TimelineFragment :
                 action.senderId?.let { askConfirmationToIgnoreUser(it) }
             }
             is EventSharedAction.ReportUser -> {
-                timelineViewModel.handle(
-                        RoomDetailAction.ReportContent(
-                                action.eventId, action.senderId, "Reporting user ${action.senderId}", user = true
-                        )
-                )
+                askConfirmationToReportUser(action.eventId, action.senderId)
             }
             is EventSharedAction.OnUrlClicked -> {
                 onUrlClicked(action.url, action.title)
@@ -1927,6 +1923,19 @@ class TimelineFragment :
                 .setNegativeButton(CommonStrings.action_cancel, null)
                 .setPositiveButton(CommonStrings.room_participants_action_ignore) { _, _ ->
                     timelineViewModel.handle(RoomDetailAction.IgnoreUser(senderId))
+                }
+                .show()
+    }
+
+    private fun askConfirmationToReportUser(eventId: String, senderId: String?) {
+        MaterialAlertDialogBuilder(requireContext(), im.vector.lib.ui.styles.R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive)
+                .setTitle(CommonStrings.room_participants_action_report_title)
+                .setMessage(CommonStrings.room_participants_action_report_prompt_msg)
+                .setNegativeButton(CommonStrings.action_cancel, null)
+                .setPositiveButton(CommonStrings.room_participants_action_report) { _, _ ->
+                    timelineViewModel.handle(RoomDetailAction.ReportContent(
+                            eventId, senderId, getString(CommonStrings.room_participants_action_report_reason, senderId ), user = true
+                    ))
                 }
                 .show()
     }
