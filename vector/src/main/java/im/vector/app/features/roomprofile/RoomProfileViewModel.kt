@@ -184,17 +184,7 @@ class RoomProfileViewModel @AssistedInject constructor(
         _viewEvents.post(RoomProfileViewEvents.Loading())
         session.coroutineScope.launch {
             try {
-                // When reporting a user, use the user state event if available (it should always be available)
-                val createStateEventId = room.stateService()
-                        .getStateEvent(EventType.STATE_ROOM_CREATE, QueryStringValue.IsEmpty)
-                        ?.eventId
-                        ?: throw IllegalStateException("Failure: m.room.create event not found.")
-                room.reportingService()
-                        .reportContent(
-                                eventId = createStateEventId,
-                                score = -100,
-                                reason = reason,
-                        )
+                room.reportingService().reportRoom(reason = reason)
                 _viewEvents.post(
                         RoomProfileViewEvents.Success(
                                 stringProvider.getString(CommonStrings.room_profile_section_more_report_success_content)
