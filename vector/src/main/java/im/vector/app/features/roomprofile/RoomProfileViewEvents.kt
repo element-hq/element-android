@@ -17,6 +17,7 @@ sealed class RoomProfileViewEvents : VectorViewEvents {
     data class Loading(val message: CharSequence? = null) : RoomProfileViewEvents()
     object DismissLoading : RoomProfileViewEvents()
     data class Failure(val throwable: Throwable) : RoomProfileViewEvents()
+    data class Success(val message: CharSequence) : RoomProfileViewEvents()
 
     data class ShareRoomProfile(val permalink: String) : RoomProfileViewEvents()
     data class OnShortcutReady(val shortcutInfo: ShortcutInfoCompat) : RoomProfileViewEvents()

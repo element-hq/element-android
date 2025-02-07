@@ -114,7 +114,9 @@ import org.matrix.android.sdk.internal.session.room.relation.threads.DefaultFetc
 import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadSummariesTask
 import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadTimelineTask
 import org.matrix.android.sdk.internal.session.room.reporting.DefaultReportContentTask
+import org.matrix.android.sdk.internal.session.room.reporting.DefaultReportRoomTask
 import org.matrix.android.sdk.internal.session.room.reporting.ReportContentTask
+import org.matrix.android.sdk.internal.session.room.reporting.ReportRoomTask
 import org.matrix.android.sdk.internal.session.room.state.DefaultSendStateTask
 import org.matrix.android.sdk.internal.session.room.state.SendStateTask
 import org.matrix.android.sdk.internal.session.room.tags.AddTagToRoomTask
@@ -280,6 +282,9 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindReportContentTask(task: DefaultReportContentTask): ReportContentTask
+
+    @Binds
+    abstract fun bindReportRoomTask(task: DefaultReportRoomTask): ReportRoomTask
 
     @Binds
     abstract fun bindGetContextOfEventTask(task: DefaultGetContextOfEventTask): GetContextOfEventTask

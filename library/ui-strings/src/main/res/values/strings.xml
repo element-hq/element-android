@@ -2369,6 +2369,8 @@
     </plurals>
     <string name="room_profile_section_more_polls">Poll history</string>
     <string name="room_profile_section_more_uploads">Uploads</string>
+    <string name="room_profile_section_more_report">Report Room</string>
+    <string name="room_profile_section_more_report_success_content">The room has been successfully reported.</string>
     <string name="room_profile_section_more_leave">Leave Room</string>
     <string name="direct_room_profile_section_more_leave">Leave</string>
     <string name="room_profile_leaving_room">"Leaving the room…"</string>

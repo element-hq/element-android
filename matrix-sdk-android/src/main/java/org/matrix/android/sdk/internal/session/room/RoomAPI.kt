@@ -36,6 +36,7 @@ import org.matrix.android.sdk.internal.session.room.read.ReadBody
 import org.matrix.android.sdk.internal.session.room.relation.RelationsResponse
 import org.matrix.android.sdk.internal.session.room.relation.threads.ThreadSummariesResponse
 import org.matrix.android.sdk.internal.session.room.reporting.ReportContentBody
+import org.matrix.android.sdk.internal.session.room.reporting.ReportRoomBody
 import org.matrix.android.sdk.internal.session.room.send.SendResponse
 import org.matrix.android.sdk.internal.session.room.send.model.EventRedactBody
 import org.matrix.android.sdk.internal.session.room.tags.TagBody
@@ -373,6 +374,18 @@ internal interface RoomAPI {
             @Path("roomId") roomId: String,
             @Path("eventId") eventId: String,
             @Body body: ReportContentBody,
+    )
+
+    /**
+     * Reports a room as inappropriate to the server, which may then notify the appropriate people.
+     *
+     * @param roomId the room id
+     * @param body body containing the reason
+     */
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_V3 + "rooms/{roomId}/report")
+    suspend fun reportRoom(
+            @Path("roomId") roomId: String,
+            @Body body: ReportRoomBody,
     )
 
     /**
