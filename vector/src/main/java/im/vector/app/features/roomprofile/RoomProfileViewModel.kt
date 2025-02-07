@@ -176,6 +176,36 @@ class RoomProfileViewModel @AssistedInject constructor(
             RoomProfileAction.CreateShortcut -> handleCreateShortcut()
             RoomProfileAction.RestoreEncryptionState -> restoreEncryptionState()
             is RoomProfileAction.SetEncryptToVerifiedDeviceOnly -> setEncryptToVerifiedDeviceOnly(action.enabled)
+            is RoomProfileAction.ReportRoom -> handleReportRoom(action.reason)
+        }
+    }
+
+    private fun handleReportRoom(reason: String) {
+        _viewEvents.post(RoomProfileViewEvents.Loading())
+        session.coroutineScope.launch {
+            try {
+                // When reporting a user, use the user state event if available (it should always be available)
+                val createStateEventId = room.stateService()
+                        .getStateEvent(EventType.STATE_ROOM_CREATE, QueryStringValue.IsEmpty)
+                        ?.eventId
+                        ?: throw IllegalStateException("Failure: m.room.create event not found.")
+                room.reportingService()
+                        .reportContent(
+                                eventId = createStateEventId,
+                                score = -100,
+                                reason = reason,
+                        )
+                _viewEvents.post(
+                        RoomProfileViewEvents.Success(
+                                stringProvider.getString(CommonStrings.room_profile_section_more_report_success_content)
+                        )
+                )
+            } catch (failure: Throwable) {
+                Timber.e(failure, "Failed to report room ${room.roomId}")
+                _viewEvents.post(RoomProfileViewEvents.Failure(failure))
+            } finally {
+                _viewEvents.post(RoomProfileViewEvents.DismissLoading)
+            }
         }
     }
 
