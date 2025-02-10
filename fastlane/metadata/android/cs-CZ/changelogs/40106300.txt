@@ -1,0 +1,2 @@
+Hlavní změny v této verzi: Oprava pádu příchozího hovoru na Androidu 14+.
+Úplný seznam změn: https://github.com/element-hq/element-android/releases

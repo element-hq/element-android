@@ -1889,7 +1889,7 @@
     <string name="skip_for_now">暂且略过</string>
     <string name="share_space_link_message">加入我的空间 %1$s %2$s</string>
     <string name="invite_just_to_this_room_desc">他们不会成为 %s 的一部分</string>
-    <string name="invite_just_to_this_room">刚到此房间</string>
+    <string name="invite_just_to_this_room">仅到此房间</string>
     <string name="invite_to_space_with_name_desc">他们将可以探索 %s</string>
     <string name="invite_to_space_with_name">邀请至 %s</string>
     <string name="invite_by_link">共享链接</string>
@@ -2915,4 +2915,8 @@
     <string name="microphone_in_use_title">麦克风正在使用</string>
     <string name="call_unsupported">不支持的通话</string>
     <string name="call_unsupported_matrix_rtc_call">不支持的通话。需要新的Element X应用来加入此通话。</string>
+    <string name="view_download_replacement_app_title">下载%1$s</string>
+    <string name="view_download_replacement_app_subtitle">更快、更安全，并配备了强大的协作工具。</string>
+    <string name="error_mas_not_supported_subtitle">下载%1$s以将%2$s用于您的帐户或选择不同的主服务器。</string>
+    <string name="error_mas_not_supported_title">您无法再使用此应用程序创建%1$s的帐户</string>
 </resources>
