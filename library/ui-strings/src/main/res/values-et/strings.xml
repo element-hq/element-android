@@ -2979,4 +2979,6 @@
     <string name="view_download_replacement_app_subtitle">Kiirem, turvalisem ja sisaldab palju võimsaid ühistöövahendeid.</string>
     <string name="error_mas_not_supported_title">Selle rakendusega enam ei saa luua kasutajakontot teenuses %1$s</string>
     <string name="error_mas_not_supported_subtitle">%2$s teenuse kasutamiseks võta kasutusele %1$s või vali mõni muu koduserver.</string>
+    <string name="room_profile_section_more_report">Teata jututoast</string>
+    <string name="room_profile_section_more_report_success_content">Jututoast teatamine õnnestus.</string>
 </resources>
