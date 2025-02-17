@@ -18,4 +18,5 @@ sealed class RoomProfileAction : VectorViewModelAction {
     object CreateShortcut : RoomProfileAction()
     object RestoreEncryptionState : RoomProfileAction()
     data class SetEncryptToVerifiedDeviceOnly(val enabled: Boolean) : RoomProfileAction()
+    data class ReportRoom(val reason: String) : RoomProfileAction()
 }

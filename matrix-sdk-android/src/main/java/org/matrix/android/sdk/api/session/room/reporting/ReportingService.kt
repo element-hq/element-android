@@ -26,4 +26,9 @@ interface ReportingService {
      * Ref: https://matrix.org/docs/spec/client_server/latest#post-matrix-client-r0-rooms-roomid-report-eventid
      */
     suspend fun reportContent(eventId: String, score: Int, reason: String)
+
+    /**
+     * Report a room.
+     */
+    suspend fun reportRoom(reason: String)
 }
