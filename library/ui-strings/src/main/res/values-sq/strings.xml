@@ -2967,4 +2967,6 @@
     <string name="view_download_replacement_app_title">Shkarko %1$s</string>
     <string name="error_mas_not_supported_title">S’mund të krijoni më një llogari te %1$s duke përdorur këtë aplikacion</string>
     <string name="view_download_replacement_app_subtitle">I shpejtë, më i siguruar dhe plot mjete të fuqishme bashkëpunimi.</string>
+    <string name="room_profile_section_more_report">Raportojeni Dhomën</string>
+    <string name="room_profile_section_more_report_success_content">Dhoma u raportua me sukses.</string>
 </resources>
