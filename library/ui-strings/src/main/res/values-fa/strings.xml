@@ -2979,4 +2979,6 @@
     <string name="view_download_replacement_app_title">بارگیری %1$s</string>
     <string name="error_mas_not_supported_title">دیگر نمی‌توانید با این کاره حسابی روی %1$s بسازید</string>
     <string name="view_download_replacement_app_subtitle">سریع‌تر، امن‌تر و دارای ابزارهای همکاری قدرتمند.</string>
+    <string name="room_profile_section_more_report">گزارش اتاق</string>
+    <string name="room_profile_section_more_report_success_content">اتاق با موفّقیت گزارش شد.</string>
 </resources>
