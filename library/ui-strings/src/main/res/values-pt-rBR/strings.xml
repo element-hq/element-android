@@ -1430,7 +1430,7 @@
     <string name="new_session">Novo login. Foi você\?</string>
     <string name="verify_new_session_notice">Use esta sessão para verificar sua nova, concedendo-lhe acesso a mensagens encriptadas.</string>
     <string name="verify_new_session_was_not_me">Não foi eu</string>
-    <string name="verify_new_session_compromized">I</string>
+    <string name="verify_new_session_compromized">Sua conta pode estar comprometida</string>
     <string name="verify_cancel_self_verification_from_untrusted">Se você cancelar, você não vai ser capaz de ler mensagens encriptadas neste dispositivo, e outras(os) usuárias(os) não vão confiar nele</string>
     <string name="verify_cancel_self_verification_from_trusted">Se você cancelar, você não vai ser capaz de ler mensagens encriptadas em seu novo dispositivo, e outras(os) usuárias(os) não vão confiar nele</string>
     <string name="verify_cancel_other">Você não vai verificar %1$s (%2$s) se cancelar agora. Comece de novo no perfil de usuária(o) dela(e).</string>
