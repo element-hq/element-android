@@ -2919,4 +2919,6 @@
     <string name="error_mas_not_supported_title">您無法再使用此應用程式建立 %1$s 的帳號</string>
     <string name="error_mas_not_supported_subtitle">下載 %1$s 以將 %2$s 用於您的帳號或選擇其他家伺服器。</string>
     <string name="view_download_replacement_app_subtitle">更快、更安全，並配備了強大的協作工具。</string>
+    <string name="room_profile_section_more_report">回報聊天室</string>
+    <string name="room_profile_section_more_report_success_content">已成功回報聊天室。</string>
 </resources>
