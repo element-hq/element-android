@@ -1,0 +1,2 @@
+Main changes in this version: Add action to report room.
+Full changelog: https://github.com/element-hq/element-android/releases
