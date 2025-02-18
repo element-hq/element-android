@@ -2975,4 +2975,10 @@
     <string name="call_unsupported_matrix_rtc_call">تماس پشتیبانی نشده. برای پیوستن به این تماس نیاز به کارهٔ جدید المنت اکس است.</string>
     <string name="microphone_in_use_title">صدابَر در حال استفاده</string>
     <string name="call_unsupported">تماس پشتیبانی نشده</string>
+    <string name="error_mas_not_supported_subtitle">برای استفاده از %2$s برای حسابتان %1$s را گرفته یا کارساز خانگی دیگری را برگزینید.</string>
+    <string name="view_download_replacement_app_title">بارگیری %1$s</string>
+    <string name="error_mas_not_supported_title">دیگر نمی‌توانید با این کاره حسابی روی %1$s بسازید</string>
+    <string name="view_download_replacement_app_subtitle">سریع‌تر، امن‌تر و دارای ابزارهای همکاری قدرتمند.</string>
+    <string name="room_profile_section_more_report">گزارش اتاق</string>
+    <string name="room_profile_section_more_report_success_content">اتاق با موفّقیت گزارش شد.</string>
 </resources>

@@ -1,0 +1,2 @@
+此版本中的主要變動：修復 Android 14 或更新版本上的來電當機問題。
+完整的變更紀錄：https://github.com/element-hq/element-android/releases
