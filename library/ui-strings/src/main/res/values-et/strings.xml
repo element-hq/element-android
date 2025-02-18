@@ -2975,4 +2975,10 @@
     <string name="microphone_in_use_title">Mikrofon on kasutusel</string>
     <string name="call_unsupported">See kõne pole toetatud</string>
     <string name="call_unsupported_matrix_rtc_call">See kõne pole toetatud. Kõnega liitumiseks palun kasuta uut Element X rakendust.</string>
+    <string name="view_download_replacement_app_title">Laadi alla %1$s</string>
+    <string name="view_download_replacement_app_subtitle">Kiirem, turvalisem ja sisaldab palju võimsaid ühistöövahendeid.</string>
+    <string name="error_mas_not_supported_title">Selle rakendusega enam ei saa luua kasutajakontot teenuses %1$s</string>
+    <string name="error_mas_not_supported_subtitle">%2$s teenuse kasutamiseks võta kasutusele %1$s või vali mõni muu koduserver.</string>
+    <string name="room_profile_section_more_report">Teata jututoast</string>
+    <string name="room_profile_section_more_report_success_content">Jututoast teatamine õnnestus.</string>
 </resources>

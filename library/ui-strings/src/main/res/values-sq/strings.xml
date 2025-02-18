@@ -2963,4 +2963,10 @@
     <string name="microphone_in_use_title">Mikrofon në përdorim</string>
     <string name="call_unsupported_matrix_rtc_call">Thirrje që s’mbulohet. Për të marrë pjesë në këtë thirrje lypset aplikacioni i ri Element X.</string>
     <string name="call_unsupported">Thirrje që s’mbulohet</string>
+    <string name="error_mas_not_supported_subtitle">Shkarkoni %1$s, që të përdorni %2$s për llogarinë tuaj, ose zgjidhni një tjetër shërbyes Home.</string>
+    <string name="view_download_replacement_app_title">Shkarko %1$s</string>
+    <string name="error_mas_not_supported_title">S’mund të krijoni më një llogari te %1$s duke përdorur këtë aplikacion</string>
+    <string name="view_download_replacement_app_subtitle">I shpejtë, më i siguruar dhe plot mjete të fuqishme bashkëpunimi.</string>
+    <string name="room_profile_section_more_report">Raportojeni Dhomën</string>
+    <string name="room_profile_section_more_report_success_content">Dhoma u raportua me sukses.</string>
 </resources>

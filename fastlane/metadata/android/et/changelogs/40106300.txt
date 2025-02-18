@@ -1,0 +1,2 @@
+Põhilised muutused selles versioonis: vastuvõetava kõne kokkujooksmine Androidi versioonis 14 ja uuemas.
+Kogu ingliskeelne muudatuste logi: https://github.com/element-hq/element-android/releases

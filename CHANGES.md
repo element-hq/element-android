@@ -1,3 +1,11 @@
+Changes in Element v1.6.32 (2025-02-18)
+=======================================
+
+Other changes
+-------------
+ - Add action to report room. ([#8998](https://github.com/element-hq/element-android/issues/8998))
+
+
 Changes in Element v1.6.30 (2025-02-04)
 =======================================
 

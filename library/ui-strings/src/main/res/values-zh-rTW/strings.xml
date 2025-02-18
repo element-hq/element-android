@@ -2912,4 +2912,13 @@
 \n
 \n若您不想要看到來自此使用者的任何內容，您可以忽略他們以隱藏他們的訊息。</string>
     <string name="message_report_user">回報使用者</string>
+    <string name="view_download_replacement_app_title">下載 %1$s</string>
+    <string name="microphone_in_use_title">麥克風使用中</string>
+    <string name="call_unsupported_matrix_rtc_call">不支援的通話。需要新的 Element X 應用程式才能加入此通話。</string>
+    <string name="call_unsupported">不支援的通話</string>
+    <string name="error_mas_not_supported_title">您無法再使用此應用程式建立 %1$s 的帳號</string>
+    <string name="error_mas_not_supported_subtitle">下載 %1$s 以將 %2$s 用於您的帳號或選擇其他家伺服器。</string>
+    <string name="view_download_replacement_app_subtitle">更快、更安全，並配備了強大的協作工具。</string>
+    <string name="room_profile_section_more_report">回報聊天室</string>
+    <string name="room_profile_section_more_report_success_content">已成功回報聊天室。</string>
 </resources>

@@ -1,0 +1,2 @@
+Huvudsakliga ändringar i den här versionen: Fixa crash vid inkommande samtal på Android 14+
+Full ändringslogg: https://github.com/element-hq/element-android/releases
