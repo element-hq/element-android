@@ -1,0 +1,2 @@
+Hlavní změny v této verzi: Přidání akce pro nahlášení místnosti.
+Úplný seznam změn: https://github.com/element-hq/element-android/releases
