@@ -2979,4 +2979,6 @@
     <string name="view_download_replacement_app_subtitle">Snabbare, säkrare och fullproppad med kraftfulla samarbetsverktyg.</string>
     <string name="error_mas_not_supported_title">Du kan inte längre skapa ett konto med %1$s med den här appen</string>
     <string name="error_mas_not_supported_subtitle">Ladda ner %1$s för att använda %2$s för ditt konto eller välj en annan hemserver.</string>
+    <string name="room_profile_section_more_report">Rapportera rum</string>
+    <string name="room_profile_section_more_report_success_content">Det här rummet har rapporterats framgångsrikt.</string>
 </resources>

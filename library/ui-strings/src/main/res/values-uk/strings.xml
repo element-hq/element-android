@@ -3099,4 +3099,6 @@
     <string name="error_mas_not_supported_subtitle">Завантажте %1$s, щоб використовувати %2$s для свого облікового запису або виберіть інший домашній сервер.</string>
     <string name="view_download_replacement_app_title">Завантажити %1$s</string>
     <string name="view_download_replacement_app_subtitle">Швидший, безпечніший і з потужними інструментами для спільної роботи.</string>
+    <string name="room_profile_section_more_report_success_content">Скаргу на кімнату надіслано.</string>
+    <string name="room_profile_section_more_report">Поскаржитися на кімнату</string>
 </resources>
