@@ -61,6 +61,7 @@ import javax.inject.Inject
 data class MainActivityArgs(
         val clearCache: Boolean = false,
         val clearCredentials: Boolean = false,
+        val ignoreLogoutServerError: Boolean = false,
         val isUserLoggedOut: Boolean = false,
         val isAccountDeactivated: Boolean = false,
         val isSoftLogout: Boolean = false
@@ -238,6 +239,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
         return MainActivityArgs(
                 clearCache = argsFromIntent?.clearCache ?: false,
                 clearCredentials = argsFromIntent?.clearCredentials ?: false,
+                ignoreLogoutServerError = argsFromIntent?.ignoreLogoutServerError ?: false,
                 isUserLoggedOut = argsFromIntent?.isUserLoggedOut ?: false,
                 isAccountDeactivated = argsFromIntent?.isAccountDeactivated ?: false,
                 isSoftLogout = argsFromIntent?.isSoftLogout ?: false
@@ -263,7 +265,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                 }
             }
             args.clearCredentials -> {
-                signout(session, onboardingStore, ignoreServerError = false)
+                signout(session, onboardingStore, ignoreServerError = args.ignoreLogoutServerError)
             }
             args.clearCache -> {
                 lifecycleScope.launch {
