@@ -1,0 +1,2 @@
+Principaux changements pour cette version : Ajout d’une action pour signaler un salon.
+Intégralité des changements : https://github.com/element-hq/element-android/releases
