@@ -2423,4 +2423,41 @@
     <string name="a11y_location_share_option_user_live_icon">Canlı konum paylaş</string>
     <string name="settings_failed_to_get_crypto_device_info">Herhangi bir kriptografik bilgi bulunmamaktadır</string>
     <string name="settings_active_sessions_unverified_device_desc">Bu oturumu doğrulayarak güvenilir olarak işaretleyin ve şifreli mesajlara erişim izni verin. Eğer bu oturumu siz açmadıysanız, hesabınız tehlikede olabilir:</string>
+    <string name="a11y_device_manager_device_type_desktop">Masaüstü</string>
+    <string name="set_link_create">Bağlantı oluştur</string>
+    <string name="set_link_edit">Bağlantıyı düzenle</string>
+    <string name="message_reply_to_prefix">Yanıt olarak</string>
+    <string name="labs_enable_element_call_permission_shortcuts">Element Arama izin kısayollarını etkinleştir</string>
+    <string name="device_manager_verification_status_verified">Doğrulanmış oturum</string>
+    <string name="rich_text_editor_numbered_list">Numaralandırılmış listeyi değiştir</string>
+    <string name="rich_text_editor_unindent">Girintisiz</string>
+    <string name="rich_text_editor_full_screen_toggle">Tam ekran moduna geç</string>
+    <string name="a11y_device_manager_device_type_unknown">Bilinmeyen cihaz türü</string>
+    <string name="rich_text_editor_format_strikethrough">Üstü çizili biçimi uygula</string>
+    <string name="rich_text_editor_indent">Girinti</string>
+    <string name="rich_text_editor_link">Bağlantı ayarla</string>
+    <string name="set_link_link">Bağlantı</string>
+    <string name="a11y_device_manager_device_type_mobile">Mobil</string>
+    <string name="labs_enable_element_call_permission_shortcuts_summary">Element Arama widget\'larını otomatik onayla ve kamera / mikrofon erişimi ver</string>
+    <string name="device_manager_sessions_other_title">Diğer oturumlar</string>
+    <string name="a11y_device_manager_device_type_web">Web</string>
+    <string name="rich_text_editor_format_italic">İtalik biçimi uygula</string>
+    <string name="rich_text_editor_quote">Alıntıyı değiştir</string>
+    <string name="message_reply_to_sender_sent_audio_file">bir ses dosyası gönderildi.</string>
+    <string name="message_reply_to_sender_sent_voice_message">bir sesli mesaj gönderildi.</string>
+    <string tools:ignore="UnusedResources" name="qr_code_login_try_again">Tekrar deneyin</string>
+    <string tools:ignore="UnusedResources" name="qr_code_login_confirm_security_code">Onayla</string>
+    <string name="rich_text_editor_bullet_list">Madde işaretli listeyi değiştir</string>
+    <string name="message_reply_to_sender_sent_file">bir dosya gönderildi.</string>
+    <string name="message_reply_to_sender_sent_image">bir görsel gönderildi.</string>
+    <string name="rich_text_editor_format_underline">Alt çizgi biçimi uygula</string>
+    <string name="set_link_text">Metin</string>
+    <plurals name="room_removed_messages">
+        <item quantity="one">%d mesajı kaldırıldı</item>
+        <item quantity="other">%d mesajları kaldırıldı</item>
+    </plurals>
+    <string name="message_reply_to_sender_sent_video">bir video gönderildi.</string>
+    <string name="rich_text_editor_format_bold">Kalın biçimi uygula</string>
+    <string name="rich_text_editor_inline_code">Satır içi kod biçimlendirmesi uygula</string>
+    <string name="rich_text_editor_code_block">Kod bloğunu değiştir</string>
 </resources>
