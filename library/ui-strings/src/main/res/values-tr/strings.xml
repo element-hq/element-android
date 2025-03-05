@@ -1974,4 +1974,6 @@
     <string name="call_tile_ended">Bu arama sona erdi</string>
     <string name="call_tile_call_back">Geri ara</string>
     <string name="room_error_not_found">Bu oda bulunamadı. Mevcut olduğundan emin olun.</string>
+    <string name="ftue_auth_reset_password">Şifreyi sıfırla</string>
+    <string name="ftue_auth_new_password_subtitle">8 karakter veya daha uzun olduğundan emin olun.</string>
 </resources>
