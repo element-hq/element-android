@@ -2543,4 +2543,9 @@
     <string name="settings_server_room_version_unstable">Kararsız</string>
     <string name="you_are_invited">Davet edildiniz</string>
     <string name="spaces_beta_welcome_to_spaces_desc">Alanlar, odaları ve insanları gruplandırmanın yeni bir yoludur.</string>
+    <plurals name="invitations_sent_to_one_and_more_users">
+        <item quantity="one">Davetiyeler %1$s ve bir kişiye daha gönderildi</item>
+        <item quantity="other">Davetiyeler %1$s ve %2$d kişiye daha gönderildi</item>
+    </plurals>
+    <string name="invite_users_to_room_failure">Kullanıcıları davet edemedik. Lütfen davet etmek istediğiniz kullanıcıları kontrol edip tekrar deneyin.</string>
 </resources>
