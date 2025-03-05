@@ -2548,4 +2548,13 @@
         <item quantity="other">Davetiyeler %1$s ve %2$d kişiye daha gönderildi</item>
     </plurals>
     <string name="invite_users_to_room_failure">Kullanıcıları davet edemedik. Lütfen davet etmek istediğiniz kullanıcıları kontrol edip tekrar deneyin.</string>
+    <string name="invite_unknown_users_dialog_submit">Yine de davet et</string>
+    <string name="invite_unknown_users_dialog_content">Aşağıda listelenen Matrix kimlikleri için profiller bulunamadı. Yine de onları davet etmek ister misiniz\?
+\n
+\n%s</string>
+    <string name="user_code_scan">QR kodunu tarayın</string>
+    <string name="choose_locale_current_locale_title">Mevcut dil</string>
+    <string name="user_code_info_text">Bu kodu insanlarla paylaşarak seni eklemelerini ve sohbet başlatmalarını sağlayabilirsin.</string>
+    <string name="user_code_share">Kodumu paylaş</string>
+    <string name="user_code_my_code">Benim kodum</string>
 </resources>
