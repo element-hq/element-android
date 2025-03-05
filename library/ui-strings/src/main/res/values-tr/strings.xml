@@ -2654,4 +2654,76 @@
     <string name="create_pin_title">Güvenlik için bir PIN seçin</string>
     <string name="wrong_pin_message_last_remaining_attempt">Uyarı! Oturumu kapatmadan önce kalan son deneme!</string>
     <string name="too_many_pin_failures">Çok fazla hata, oturumunuz kapatıldı</string>
+    <string name="space_mark_as_not_suggested">Önerilmedi olarak işaretle</string>
+    <string name="audio_message_reply_content">%1$s (%2$s)</string>
+    <string name="a11y_audio_message_item">%1$s,%2$s,%3$s</string>
+    <string name="device_manager_other_sessions_clear_filter">Filtre temizle</string>
+    <string name="a11y_pause_audio_message">Durdur %1$s</string>
+    <string name="voice_message_reply_content">Sesli Mesaj (%1$s)</string>
+    <string name="device_manager_session_details_title">Oturum ayrıntıları</string>
+    <string tools:ignore="UnusedResources" name="qr_code_login_header_failed_device_is_not_supported_description">Bu cihazla bağlantı desteklenmemektedir.</string>
+    <string name="voice_message_tap_to_stop_toast">Kaydınızı durdurmak veya dinlemek için dokunun</string>
+    <string name="device_manager_other_sessions_multi_signout_selection">Çıkış yap</string>
+    <string tools:ignore="UnusedResources" name="qr_code_login_header_failed_denied_description">İstek diğer cihazda reddedildi.</string>
+    <string name="event_status_a11y_delete_all">Tüm başarısız mesajları sil</string>
+    <string name="event_status_delete_all_failed_dialog_message">Bu odadaki tüm gönderilmemiş mesajları silmek istediğinizden emin misiniz\?</string>
+    <string name="device_manager_session_overview_signout">Bu oturumdan çıkış yap</string>
+    <string name="error_voice_message_cannot_reply_or_edit">Sesli mesaj aktifken yanıt veremez veya düzenleyemezsiniz</string>
+    <string name="voice_message_release_to_send_toast">Kaydetmek için basılı tutun, göndermek için bırakın</string>
+    <string name="error_voice_message_unable_to_play">Bu sesli mesaj oynatılamıyor</string>
+    <string name="a11y_voice_broadcast_fast_forward">30 saniye ileri sar</string>
+    <string name="error_voice_message_unable_to_record">Sesli mesaj kaydedilemiyor</string>
+    <string name="error_voice_broadcast_unable_to_decrypt">Bu ses yayınının şifresi çözülemiyor.</string>
+    <string tools:ignore="UnusedResources" name="qr_code_login_header_failed_other_device_already_signed_in_description">Diğer cihaz zaten oturum açmış durumda.</string>
+    <string name="voice_message_n_seconds_warning_toast">%1$d ayrıldı</string>
+    <string name="device_manager_other_sessions_no_inactive_sessions_found">Aktif olmayan oturum bulunamadı.</string>
+    <plurals name="device_manager_other_sessions_multi_signout_all">
+        <item quantity="one">%1$d oturumdan çıkış yap</item>
+        <item quantity="other">%1$d oturumlarından çıkış yap</item>
+    </plurals>
+    <string name="device_manager_learn_more_sessions_inactive_title">Aktif olmayan oturumlar</string>
+    <string name="device_manager_other_sessions_select">Oturum seç</string>
+    <string name="device_manager_session_details_session_name">Oturum adı</string>
+    <string tools:ignore="UnusedResources" name="qr_code_login_header_failed_title">Başarısız bağlantı</string>
+    <string tools:ignore="UnusedResources" name="qr_code_login_link_a_device_show_qr_code_instruction_1">Oturum açma ekranından başlayın</string>
+    <string name="event_status_a11y_sending">Gönderiliyor</string>
+    <string name="audio_message_file_size">(%1$s)</string>
+    <string name="event_status_a11y_failed">Başarısız</string>
+    <string name="event_status_cancel_sending_dialog_message">Mesaj göndermeyi iptal etmek istiyor musunuz\?</string>
+    <string name="all_rooms_youre_in_will_be_shown_in_home">Bulunduğunuz tüm odalar Ana Sayfa\'da gösterilecektir.</string>
+    <string name="a11y_audio_playback_duration" tools:ignore="PluralsCandidate">%1$d dakika %2$d saniye</string>
+    <string name="error_audio_message_unable_to_play">%1$s oynatılamıyor</string>
+    <plurals name="device_manager_other_sessions_recommendation_description_inactive">
+        <item quantity="one">Artık kullanmadığınız eski oturumlardan (%1$d gün veya daha fazla) çıkış yapmayı düşünün.</item>
+        <item quantity="other">Artık kullanmadığınız eski oturumlardan (%1$d günler veya daha fazla) çıkış yapmayı düşünün.</item>
+    </plurals>
+    <string name="device_manager_other_sessions_hide_ip_address">IP adresini gizle</string>
+    <string tools:ignore="UnusedResources" name="qr_code_login_header_failed_other_description">İstek başarısız oldu.</string>
+    <string tools:ignore="UnusedResources" name="qr_code_login_header_connected_description">Oturum açtığınız cihazı kontrol edin, aşağıdaki kodun görüntülenmesi gerekiyor. Kodun o cihazla eşleştiğini doğrulayın:</string>
+    <string tools:ignore="UnusedResources" name="qr_code_login_header_failed_other_device_not_signed_in_description">Diğer cihazda oturum açılmış olmalıdır.</string>
+    <string tools:ignore="UnusedResources" name="qr_code_login_header_failed_invalid_qr_code_description">Bu QR kodu geçersiz.</string>
+    <string tools:ignore="UnusedResources" name="qr_code_login_header_failed_user_cancelled_description">Oturum açma işlemi diğer cihazda iptal edildi.</string>
+    <string name="device_manager_session_details_description">Uygulama, cihaz ve etkinlik bilgileri.</string>
+    <string name="device_manager_session_details_session_last_activity">Son etkinlik</string>
+    <string name="event_status_failed_messages_warning">Mesajlar gönderilemedi</string>
+    <string name="event_status_delete_all_failed_dialog_title">Gönderilmemiş mesajları sil</string>
+    <string name="device_manager_other_sessions_no_verified_sessions_found">Doğrulanmış oturum bulunamadı.</string>
+    <string tools:ignore="UnusedResources" name="qr_code_login_header_failed_timeout_description">Bağlantı gerekli sürede tamamlanmadı.</string>
+    <string name="event_status_a11y_sent">Gönderildi</string>
+    <string name="unnamed_room">İsimsiz Oda</string>
+    <string name="error_voice_message_broadcast_in_progress">Sesli mesaj başlatılamıyor</string>
+    <string name="a11y_voice_broadcast_fast_backward">30 saniye geri sar</string>
+    <string name="device_manager_session_details_application_name">İsim</string>
+    <string tools:ignore="UnusedResources" name="device_manager_sessions_sign_in_with_qr_code_title">QR Kodu ile Oturum Açın</string>
+    <string tools:ignore="UnusedResources" name="device_manager_sessions_sign_in_with_qr_code_description">Bu cihazı kullanarak bir mobil veya web cihazına QR kod ile oturum açabilirsiniz. Bunu yapmanın iki yolu vardır:</string>
+    <string tools:ignore="UnusedResources" name="qr_code_login_link_a_device_scan_qr_code_instruction_1">Oturum açma ekranından başlayın</string>
+    <string tools:ignore="UnusedResources" name="qr_code_login_link_a_device_scan_qr_code_instruction_2">\'QR kodu ile oturum aç\'ı seçin</string>
+    <string name="error_voice_message_broadcast_in_progress_message">Şu anda canlı yayın kaydettiğiniz için sesli mesaj başlatamazsınız. Bir sesli mesaj kaydetmeye başlamadan önce canlı yayınızı sonlandırın</string>
+    <string name="a11y_play_audio_message">Oynat %1$s</string>
+    <string name="device_manager_other_sessions_no_unverified_sessions_found">Doğrulanmamış oturum bulunamadı.</string>
+    <string name="device_manager_signout_all_other_sessions">Diğer tüm oturumlardan çıkış yapın</string>
+    <string name="device_manager_other_sessions_show_ip_address">IP adresini göster</string>
+    <string name="device_manager_push_notifications_description">Bu oturumla ilgili anlık bildirimler alın.</string>
+    <string name="device_manager_session_details_application">Uygulama</string>
+    <string tools:ignore="UnusedResources" name="qr_code_login_header_failed_e2ee_security_issue_description">Güvenli mesajlaşma kurulurken bir güvenlik sorunu tespit edildi. Aşağıdakilerden biri tehlikeye girmiş olabilir:Ana sunucunuz;İnternet bağlantınız;Cihazlarınız;</string>
 </resources>
