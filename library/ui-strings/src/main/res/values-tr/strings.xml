@@ -1982,7 +1982,7 @@
     <string name="ftue_auth_email_verification_title">E-postanızı doğrulayın</string>
     <string name="ftue_auth_phone_confirmation_resend_code">Kodu yeniden gönder.</string>
     <string name="view_download_replacement_app_subtitle">Daha hızlı, daha güvenli ve güçlü iş birliği araçlarıyla dolu.</string>
-    <string name="ftue_auth_email_verification_subtitle">%s adresine gönderilen talimatları takip edin.</string>
+    <string name="ftue_auth_email_verification_subtitle">%s adresine gönderilen talimatları takip edin</string>
     <string name="invite_users_to_room_action_invite">DAVET ET</string>
     <string name="bootstrap_migration_backup_recovery_key">Anahtar Yedeği kurtarma anahtarı</string>
     <string name="error_failed_to_import_keys">Anahtarlar içe aktarılamadı</string>
@@ -2189,4 +2189,103 @@
     <string name="bootstrap_progress_checking_backup">Yedek Anahtar kontrol ediliyor</string>
     <string name="failed_to_access_secure_storage">Güvenli depolamaya erişilemedi</string>
     <string name="cross_signing_verify_by_emoji">Emojilerle Etkileşimli Doğrulama</string>
+    <string name="room_profile_section_more_report_success_content">Oda başarılı bir şekilde şikayet edildi.</string>
+    <string name="login_splash_sign_in">Giriş Yap</string>
+    <string name="room_profile_leaving_room">Odadan ayrılınıyor…</string>
+    <string name="view_download_replacement_app_title">İndir %1$s</string>
+    <string name="room_profile_section_more_report">Odayı Şikayet Et</string>
+    <string name="ftue_display_name_entry_title">Görünen İsim</string>
+    <string name="sent_live_location">Canlı konumlarını paylaştılar</string>
+    <string name="room_member_power_level_custom">Özel</string>
+    <string name="room_settings_enable_encryption_dialog_submit">Şifrelemeyi etkinleştir</string>
+    <string name="settings_server_name">Sunucu adı</string>
+    <string name="ftue_profile_picture_subtitle">İsme bir yüz ekleyin</string>
+    <string name="room_profile_section_security_learn_more">Daha fazlasını öğren</string>
+    <string name="direct_room_profile_section_more_settings">Ayarlar</string>
+    <string name="settings_sessions_list">Oturumlar</string>
+    <string name="ftue_auth_forgot_password">Şifremi unuttum</string>
+    <string name="room_member_power_level_invites">Davetler</string>
+    <string name="settings_server_upload_size_title">Sunucuya dosya yükleme sınırı</string>
+    <string name="ftue_auth_captcha_title">Bir insan mısınız\?</string>
+    <string name="ftue_profile_picture_title">Profil resmi ekleyin</string>
+    <string name="ftue_personalize_complete_title">Güzel görünüyor!</string>
+    <string name="ftue_personalize_submit">Kaydet ve devam et</string>
+    <string name="ftue_personalize_skip_this_step">Bu adımı atla</string>
+    <string name="room_member_power_level_admin_in">%1$s\'deki Yönetici</string>
+    <string name="verification_request_waiting_for_recovery">Güvenli Anahtar veya Kelimeden doğrulama yapılıyor…</string>
+    <string name="settings_category_composer">Mesaj düzenleyici</string>
+    <string name="encryption_information_cross_signing_state">Çapraz İmzalama</string>
+    <string name="encryption_information_dg_xsigning_complete">Çapraz İmzalama etkinleştirildi
+\nCihazdaki Özel Anahtarlar.</string>
+    <string name="settings_active_sessions_list">Aktif Oturumlar</string>
+    <string name="settings_server_version">Sunucu versiyonu</string>
+    <string name="ftue_auth_password_reset_confirmation">Şifre sıfırlama</string>
+    <string name="settings_category_timeline">Zaman Akışı</string>
+    <string name="ftue_auth_login_username_entry">Kullanıcı Adı / E-posta / Telefon</string>
+    <string name="ftue_display_name_title">Görünen isminizi seçin</string>
+    <string name="ftue_display_name_entry_footer">Bunu daha sonra değiştirebilirsiniz</string>
+    <string name="ftue_personalize_lets_go">Hadi gidelim</string>
+    <string name="ftue_personalize_complete_subtitle">Profilinizi güncellemek için istediğiniz zaman ayarlara gidebilirsiniz</string>
+    <string name="command_description_table_flip">Bir düz metin mesajına (╯°□°）╯︵ ┻━┻ ekler</string>
+    <string name="direct_room_profile_encrypted_subtitle">Buradaki mesajlar uçtan uca şifrelenmiştir. 
+\n
+\nMesajlarınız kilitlerle korunur ve sadece siz ve alıcı, onları açacak benzersiz anahtarlara sahipsiniz.</string>
+    <string name="verify_cannot_cross_sign">Bu oturum, bu doğrulamayı diğer oturumlarınızla paylaşamıyor. 
+\nDoğrulama yerel olarak kaydedilecek ve uygulamanın gelecekteki bir sürümünde paylaşılacaktır.</string>
+    <string name="room_profile_section_more_leave">Odadan Ayrıl</string>
+    <string name="direct_room_profile_section_more_leave">Ayrıl</string>
+    <string name="settings_active_sessions_manage">Oturumları Yönet</string>
+    <string name="started_a_voice_broadcast">Sesli yayın başlattı</string>
+    <string name="encryption_has_been_misconfigured">Şifreleme yanlış yapılandırılmış.</string>
+    <string name="room_member_power_level_custom_in">%2$s\'de Özel (%1$d)</string>
+    <plurals name="room_profile_section_more_member_list">
+        <item quantity="one">Bir kişi</item>
+        <item quantity="other">%1$d kişi</item>
+    </plurals>
+    <string name="room_member_override_nick_color">Görünen isim rengini geçersiz kıl</string>
+    <string name="rendering_event_error_exception">${app_name}, \'%1$s\' ID\'li etkinliğin içeriğini işlerken bir sorunla karşılaştı</string>
+    <string name="verification_request_start_notice">Güvende olmak için bunu şahsen yapın veya iletişim kurmak için başka bir yol kullanın.</string>
+    <string name="room_member_open_or_create_dm">Direk Mesaj</string>
+    <string name="room_member_jump_to_read_receipt">Okuma onayına atla</string>
+    <string name="room_member_power_level_users">Kullanıcılar</string>
+    <string name="room_member_power_level_moderators">Moderatörler</string>
+    <string name="room_profile_section_more_uploads">Yüklemeler</string>
+    <string name="room_profile_section_security">Güvenlik</string>
+    <string tools:ignore="UnusedResources" name="login_scan_qr_code">Qr kodu tara</string>
+    <string name="permalink_unsupported_groups">Bu bağlantı açılamaz: Topluluklar, alanlarla değiştirildi</string>
+    <string name="contact_admin_to_restore_encryption">Şifrelemeyi geçerli bir duruma getirebilmek için lütfen bir yöneticiyle iletişime geçin.</string>
+    <string name="room_profile_section_restore_security">Şifrelemeyi Geri Yükle</string>
+    <string name="room_profile_section_more">Daha fazla</string>
+    <string name="room_profile_section_admin">Yönetici Hareketleri</string>
+    <string name="room_profile_section_more_settings">Oda Ayarları</string>
+    <string name="room_profile_section_more_polls">Anket Geçmişi</string>
+    <string name="room_settings_enable_encryption_dialog_content">Etkinleştirildikten sonra, bir odada şifreleme devre dışı bırakılamaz. Şifreli bir odada gönderilen mesajlar, yalnızca oda katılımcıları tarafından görülebilir, sunucu tarafından görülemez. Şifrelemeyi etkinleştirmek, birçok bot ve köprünün doğru çalışmasını engelleyebilir.</string>
+    <string name="settings_active_sessions_show_all">Bütün Oturumları Göster</string>
+    <string name="settings_hs_admin_e2e_disabled">Sunucu yöneticiniz, özel odalarda ve Direkt Mesajlarda uçtan uca şifrelemeyi varsayılan olarak devre dışı bırakmıştır.</string>
+    <string name="encryption_information_dg_xsigning_not_trusted">Çapraz İmzalama etkinleştirildi.
+\nAnahtarlara güvenilmiyor</string>
+    <string tools:ignore="UnusedResources" name="verification_conclusion_ok_self_notice">Yeni oturumunuz artık doğrulanmıştır. Şifrelenmiş mesajlarınıza erişimi vardır ve diğer kullanıcılar onu güvenilir olarak görecektir.</string>
+    <string name="verification_emoji_notice">Aynı sırada göründüklerinden emin olarak benzersiz emojileri karşılaştırın.</string>
+    <string name="room_settings_enable_encryption_dialog_title">Şifrelemeyi etkinleştirsin mi\?</string>
+    <string name="room_settings_enable_encryption_no_permission">Bu odada şifrelemeyi etkinleştirme izniniz yok.</string>
+    <string name="ftue_auth_email_verification_footer">E-posta almadınız mı\?</string>
+    <string name="ftue_auth_email_resend_email">E-postayı tekrar gönder</string>
+    <string name="ftue_auth_password_reset_email_confirmation_subtitle">%s adresine gönderilen talimatları izleyin</string>
+    <string name="room_member_power_level_default_in">%1$s\'de Varsayılan</string>
+    <string name="rendering_event_error_type_of_event_not_handled">${app_name}, \'%1$s\' türündeki olayları yönetemez</string>
+    <string name="unignore">Engellemeyi kaldır</string>
+    <string name="room_profile_section_more_notifications">Bildirimler</string>
+    <string name="room_member_power_level_admins">Yöneticiler</string>
+    <string name="room_member_power_level_moderator_in">%1$s\'deki Moderatör</string>
+    <string name="command_description_rainbow">Verilen mesajı gökkuşağı renklerinde gönderir</string>
+    <string name="command_description_rainbow_emote">Verilen emojiyi gökkuşağı renklerinde gönderir</string>
+    <string name="room_settings_enable_encryption">Uçtan uca şifrelemeyi etkinleştir…</string>
+    <string name="verification_request_notice">Güvenliğiniz için, %s\'yi tek kullanımlık bir kod ile doğrulayın.</string>
+    <string tools:ignore="UnusedResources" name="verification_code_notice">Kodu diğer kullanıcının ekranında görüntülenen kodla karşılaştırın.</string>
+    <string name="verification_conclusion_ok_notice">Bu kullanıcıyla olan mesajlar uçtan uca şifrelenir ve üçüncü taraflarca okunamaz.</string>
+    <string name="encryption_information_dg_xsigning_trusted">Çapraz İmzalama etkinleştirildi
+\nAnahtarlar güvenilirdir.
+\nÖzel anahtarlar bilinmiyor</string>
+    <string name="encryption_information_dg_xsigning_disabled">Çapraz İmzalama etkinleştirilmemiştir</string>
+    <string name="settings_active_sessions_signout_device">Bu oturumdan çıkış yap</string>
 </resources>
