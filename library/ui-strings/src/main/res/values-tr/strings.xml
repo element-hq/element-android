@@ -1814,4 +1814,5 @@
 \nBildirimleri görüntüleyebilmek için sonraki açılan pencerelerde erişime izin verin.</string>
     <string name="threads_labs_enable_notice_message">Ana sunucunuz şu anda konuları desteklemiyor, bu nedenle bu özellik güvenilir olmayabilir. Bazı konu başlıklarına sahip mesajlar düzgün görüntülenmeyebilir. %sYine de konuları etkinleştirmek istiyor musunuz\?</string>
     <string name="thread_list_not_available">Ana sunucunuz henüz konu başlıklarını listelemeyi desteklemiyor.</string>
+    <string name="settings_notification_error_on_update">Bildirim tercihlerinizi güncellerken bir hata oluştu. Lütfen tekrar deneyin.</string>
 </resources>
