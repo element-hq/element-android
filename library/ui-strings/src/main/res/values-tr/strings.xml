@@ -1819,4 +1819,5 @@
     <string name="settings_troubleshoot_test_endpoint_registration_title">Uç Nokta Kaydı</string>
     <string name="settings_troubleshoot_test_endpoint_registration_success">Uç nokta ana sunucuya başarıyla kaydedildi.</string>
     <string name="grant_permission">İzin Ver</string>
+    <string name="settings_external_account_management_title">Hesap</string>
 </resources>
