@@ -1768,4 +1768,19 @@
     <string name="action_proceed_to_reset">Sıfırlamaya devam et</string>
     <string name="action_next">İleri</string>
     <string name="action_try_it_out">Şimdi Deneyin</string>
+    <string name="labs_enable_new_app_layout_title">Yeni Düzeni Etkinleştir</string>
+    <string name="labs_enable_deferred_dm_title">Ertelenmiş DM\'leri Etkinleştir</string>
+    <string name="home_layout_preferences_sort_by">Sırala</string>
+    <string name="labs_enable_rich_text_editor_summary">Zengin metin düzenleyicisini deneyin (Düz metin modu yakında geliyor)</string>
+    <string name="action_deselect_all">Tümünü Kaldır</string>
+    <string name="labs_enable_deferred_dm_summary">Özel Sohbeti Yalnızca İlk Mesaj Gönderildiğinde Oluştur</string>
+    <string name="action_stop">Evet, Durdur</string>
+    <string name="home_layout_preferences_sort_activity">Aktivite</string>
+    <string name="space_list_empty_title">Henüz bir alan oluşturulmadı.</string>
+    <string name="home_layout_preferences_sort_name">A-Z</string>
+    <string name="home_layout_preferences_filters">Filtreleri Görüntüle</string>
+    <string name="labs_enable_new_app_layout_summary">İsteğe Bağlı Sekmelerle Basitleştirilmiş Element</string>
+    <string name="home_layout_preferences_recents">Son Öğeleri Göster</string>
+    <string name="home_layout_preferences">Görünüm Tercihleri</string>
+    <string name="labs_enable_rich_text_editor_title">Zengin Metin Düzenleyicisini Etkinleştir</string>
 </resources>
