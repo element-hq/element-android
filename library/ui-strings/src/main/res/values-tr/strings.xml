@@ -1765,4 +1765,7 @@
     <string name="action_got_it">Anladım</string>
     <string name="action_select_all">Tümünü seç</string>
     <string name="action_learn_more">Daha fazla bilgi edinin</string>
+    <string name="action_proceed_to_reset">Sıfırlamaya devam et</string>
+    <string name="action_next">İleri</string>
+    <string name="action_try_it_out">Şimdi Deneyin</string>
 </resources>
