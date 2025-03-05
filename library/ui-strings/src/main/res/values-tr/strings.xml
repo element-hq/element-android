@@ -2488,7 +2488,7 @@
     <string name="device_manager_verification_status_detail_current_session_unverified">Gelişmiş güvenli mesajlaşma için mevcut oturumunuzu doğrulayın.</string>
     <string name="device_manager_verification_status_detail_other_session_unknown">Bu oturumun doğrulama durumunu görmek için mevcut oturumunuzu doğrulayın.</string>
     <string name="device_manager_other_sessions_description_unverified">Doğrulanmadı · Son etkinlik %1$s</string>
-    <string name="message_reply_to_sender_sent_sticker">bir çıkartma gönderdi.</string>
+    <string name="message_reply_to_sender_sent_sticker">bir çıkartma gönderildi.</string>
     <string name="message_reply_to_poll_preview">Anket</string>
     <string name="settings_server_upload_size_unknown">Sınır bilinmiyor.</string>
     <string name="device_manager_verification_status_detail_other_session_unverified">En iyi güvenlik ve güvenilirlik için bu oturumu doğrulayın veya oturumu kapatın.</string>
@@ -2524,4 +2524,20 @@
         <item quantity="other">%1$d gün veya daha uzun süredir aktif değil</item>
     </plurals>
     <string name="invite_users_to_room_title">Kullanıcıları Davet Et</string>
+    <string name="space_add_existing_rooms_only">Mevcut odaları ekle</string>
+    <string name="space_explore_filter_no_result_title">Sonuç bulunamadı</string>
+    <string name="space_add_space_to_any_space_you_manage">Yönettiğiniz herhangi bir alana bir alan ekle.</string>
+    <string name="space_add_existing_rooms">Mevcut odaları ve alanı ekle</string>
+    <string name="space_leave_radio_buttons_title">Bu alandaki şeyler</string>
+    <string name="space_leave_prompt_msg_with_name">%s\'den ayrılmak istediğinize emin misiniz\?</string>
+    <string name="space_leave_radio_button_all">Tümünden ayrıl</string>
+    <string name="leave_space">Ayrıl</string>
+    <string name="space_leave_prompt_msg_as_admin">Bu alanın tek yöneticisi sizsiniz. Burayı terk etmeniz, kimsenin burayı kontrol edemeyeceği anlamına gelir.</string>
+    <string name="space_explore_activity_title">Odaları keşfet</string>
+    <string name="space_add_child_title">Oda ekle</string>
+    <string name="space_leave_radio_button_none">Hiçbirinden ayrılma</string>
+    <string name="space_leave_prompt_msg_only_you">Buradaki tek kişi sizsiniz. Eğer ayrılırsanız, siz de dahil olmak üzere gelecekte kimse katılamayacak.</string>
+    <string name="space_leave_prompt_msg_private">Yeniden davet edilmediğiniz sürece tekrar katılamazsınız.</string>
+    <string name="space_add_existing_spaces">Mevcut alanları ekle</string>
+    <string name="space_explore_filter_no_result_description">Bazı sonuçlar gizli olabilir çünkü bunlar özeldir ve davetiye almanız gerekir.</string>
 </resources>
