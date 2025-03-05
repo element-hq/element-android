@@ -1762,4 +1762,7 @@
     </plurals>
     <string name="time_unit_second_short">s.</string>
     <string name="a11y_collapse_space_children">%s çocuğu daralt</string>
+    <string name="action_got_it">Anladım</string>
+    <string name="action_select_all">Tümünü seç</string>
+    <string name="action_learn_more">Daha fazla bilgi edinin</string>
 </resources>
