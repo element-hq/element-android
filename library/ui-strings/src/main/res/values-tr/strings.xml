@@ -2726,4 +2726,50 @@
     <string name="device_manager_push_notifications_description">Bu oturumla ilgili anlık bildirimler alın.</string>
     <string name="device_manager_session_details_application">Uygulama</string>
     <string tools:ignore="UnusedResources" name="qr_code_login_header_failed_e2ee_security_issue_description">Güvenli mesajlaşma kurulurken bir güvenlik sorunu tespit edildi. Aşağıdakilerden biri tehlikeye girmiş olabilir:Ana sunucunuz;İnternet bağlantınız;Cihazlarınız;</string>
+    <string name="dev_tools_success_state_event">Durum etkinliği gönderildi!</string>
+    <string name="dev_tools_menu_name">Geliştirici Araçları</string>
+    <string name="dev_tools_error_no_content">İçerik Yok</string>
+    <string name="dev_tools_error_malformed_event">Yanlış biçimlendirilmiş etkinlik</string>
+    <string name="dev_tools_event_content_hint">Etkinlik içeriği</string>
+    <string name="a11y_view_read_receipts">Okuma onaylarını görüntüle</string>
+    <string name="a11y_checked">Seçildi</string>
+    <string name="a11y_rule_notify_noisy">Sesli bildirim</string>
+    <string name="a11y_error_message_not_sent">Mesaj hata nedeniyle gönderilemedi</string>
+    <string name="a11y_rule_notify_silent">Sessiz bildirim</string>
+    <string name="dev_tools_send_custom_state_event">Özel Durum Etkinliği Gönder</string>
+    <string name="dev_tools_send_custom_event">Özel Etkinlik Gönder</string>
+    <string name="contacts_book_title">Rehber</string>
+    <string name="dev_tools_send_state_event">Durum Etkinliği Gönder</string>
+    <string name="a11y_unsent_draft">gönderilmemiş taslağı var</string>
+    <string name="failed_to_unban">Kullanıcının yasağını kaldırmak başarısız oldu</string>
+    <string name="settings_security_application_protection_summary">Erişimi PIN ve biyometrik verilerle koruyun.</string>
+    <plurals name="entries">
+        <item quantity="one">%d giriş</item>
+        <item quantity="other">%d giriş</item>
+    </plurals>
+    <string name="identity_server_error_outdated_identity_server">Bu kimlik sunucusu eski. ${app_name} yalnızca API V2\'yi destekliyor.</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_on">Cihaza özgü biyometrikleri, parmak izi ve yüz tanıma gibi özellikleri etkinleştir.</string>
+    <string name="dev_tools_state_event">Durum Etkinlikleri</string>
+    <string name="member_banned_by">%1$s tarafından uzaklaştırıldı</string>
+    <string name="a11y_close_emoji_picker">Emoji seçiciyi kapat</string>
+    <string name="dev_tools_explore_room_state">Oda Durumunu Keşfet</string>
+    <string name="dev_tools_form_hint_event_content">Etkinlik İçeriği</string>
+    <string name="dev_tools_error_no_message_type">Kayıp mesaj türü</string>
+    <string name="dev_tools_edit_content">İçeriği Düzenle</string>
+    <string name="dev_tools_form_hint_state_key">Durum Anahtarı</string>
+    <string name="settings_security_pin_code_use_biometrics_title">Biyometrik verileri etkinleştir</string>
+    <string name="settings_security_pin_code_summary">PIN\'inizi sıfırlamak istiyorsanız, çıkış yapıp sıfırlamak için \'PIN\'i Unuttum\' seçeneğine dokunun.</string>
+    <string name="settings_security_application_protection_title">Erişimi koru</string>
+    <plurals name="wrong_pin_message_remaining_attempts">
+        <item quantity="one">Hatalı kod, %d kalan deneme</item>
+        <item quantity="other">Hatalı kod, %d kalan deneme hakkı</item>
+    </plurals>
+    <string name="three_pid_revoke_invite_dialog_title">Davetiyeyi iptal et</string>
+    <string name="phone_book_perform_lookup">Matrix üzerinde kişiler arayın</string>
+    <string name="identity_server_user_consent_not_provided">Kullanıcı onayı sağlanmamıştır.</string>
+    <string name="dev_tools_form_hint_type">Tür</string>
+    <string name="dev_tools_success_event">Etkinlik gönderildi!</string>
+    <string name="settings_security_application_protection_screen_title">Koruma yapılandırması</string>
+    <string name="a11y_rule_notify_off">Bildirim gönderme</string>
+    <string name="three_pid_revoke_invite_dialog_content">1$s davetiyesi iptal edilsin mi\?</string>
 </resources>
