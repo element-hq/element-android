@@ -1976,6 +1976,7 @@
     <string name="room_error_not_found">Bu oda bulunamadı. Mevcut olduğundan emin olun.</string>
     <string name="ftue_auth_reset_password">Şifreyi sıfırla</string>
     <string name="ftue_auth_new_password_subtitle">8 karakter veya daha uzun olduğundan emin olun.</string>
-    <string name="ftue_auth_sign_out_all_devices">Tüm cihazlardan çıkış yap.</string>
+    <string name="ftue_auth_sign_out_all_devices">Tüm cihazlardan çıkış yap</string>
     <string name="ftue_auth_phone_confirmation_subtitle">%s adresine bir kod gönderildi.</string>
+    <string name="ftue_auth_phone_confirmation_title">Telefon numaranızı doğrulayın</string>
 </resources>
