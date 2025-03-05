@@ -2562,4 +2562,8 @@
     <string name="settings_show_latest_profile">Son kullanıcı bilgilerini göster</string>
     <string name="alert_push_are_disabled_title">Anlık bildirimler devre dışı</string>
     <string name="alert_push_are_disabled_description">Anlık bildirimleri etkinleştirmek için ayarlarınızı gözden geçirin</string>
+    <string name="choose_locale_other_locales_title">Mevcut diğer diller</string>
+    <string name="choose_locale_loading_locales">Kullanılabilir diller yükleniyor…</string>
+    <string name="disconnect_identity_server_dialog_content">Kimlik sunucusu %s ile bağlantı kesilsin mi\?</string>
+    <string name="open_terms_of">Açık %s şartları</string>
 </resources>
