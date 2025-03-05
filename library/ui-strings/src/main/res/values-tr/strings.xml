@@ -1820,4 +1820,11 @@
     <string name="settings_troubleshoot_test_endpoint_registration_success">Uç nokta ana sunucuya başarıyla kaydedildi.</string>
     <string name="grant_permission">İzin Ver</string>
     <string name="settings_external_account_management_title">Hesap</string>
+    <string name="settings_crypto_version">Kripto sürümü</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">Uç nokta belirteci ana sunucuya kaydedilemedi: %1$s</string>
+    <string name="settings_autoplay_animated_images_title">Animasyonlu görselleri otomatik oynat</string>
+    <string name="settings_enable_direct_share_title">Doğrudan paylaşımı etkinleştir</string>
+    <string name="settings_enable_direct_share_summary">Sistem paylaşım menüsünde son sohbetleri göster</string>
+    <string name="settings_autoplay_animated_images_summary">Animasyonlu görselleri zaman akışında göründüklerinde otomatik oynat</string>
+    <string name="settings_acceptable_use_policy">Kabul Edilebilir Kullanım Politikası</string>
 </resources>
