@@ -2375,4 +2375,52 @@
     <string name="tooltip_attachment_poll">Anket oluştur</string>
     <string name="unifiedpush_distributor_background_sync">Arka plan senkronizasyonu</string>
     <string name="live_location_description">Canlı konum</string>
+    <string name="location_share_external">Birlikte aç</string>
+    <string name="device_manager_session_details_application_version">Sürüm</string>
+    <string name="a11y_pause_voice_broadcast">Ses yayınını duraklat</string>
+    <string name="looking_for_someone_not_in_space">%s\'de olmayan birini mi arıyorsunuz\?</string>
+    <string name="space_suggested">Önerilen</string>
+    <string name="device_manager_session_rename_edit_hint">Oturum adı</string>
+    <string name="device_manager_session_rename_description">Özel oturum adları, cihazlarınızı daha kolay tanımanıza yardımcı olabilir.</string>
+    <string tools:ignore="UnusedResources" name="qr_code_login_new_device_instruction_3">QR kodunu göster\' seçeneğini seçin</string>
+    <string name="space_mark_as_suggested">Önerilen olarak işaretle</string>
+    <string name="spaces_no_server_support_description">Daha fazla bilgi için lütfen ana sunucu yöneticinizle iletişime geçin</string>
+    <string name="this_space_has_no_rooms_not_admin">Bazı odalar özel olduğu için gizlenmiş olabilir ve katılmak için davet almanız gerekebilir.
+\nOda ekleme izniniz yok.</string>
+    <string name="location_share_live_select_duration_option_1">15 minutes</string>
+    <string name="location_share_live_select_duration_option_2">1 saat</string>
+    <string tools:ignore="UnusedResources" name="qr_code_login_new_device_instruction_2">Ayarlar -&gt; Güvenlik ve Gizlilik</string>
+    <string name="location_not_available_dialog_content">${app_name} konumunuza erişemedi. Lütfen daha sonra tekrar deneyin.</string>
+    <string name="space_settings_manage_rooms">Odaları yönet</string>
+    <string name="device_manager_session_details_application_url">URL</string>
+    <string name="user_invites_you">%s sizi davet ediyor</string>
+    <string name="voice_broadcast_live">Canlı</string>
+    <string name="a11y_resume_voice_broadcast_record">Ses yayını kaydını sürdür</string>
+    <string name="location_share_option_user_live">Canlı konum paylaş</string>
+    <string name="location_share_live_select_duration_option_3">8 saat</string>
+    <string name="location_timeline_failed_to_load_map">Harita yüklenemedi</string>
+    <string name="location_share_live_enabled">Canlı konum etkinleştirildi</string>
+    <string name="device_manager_session_details_device_operating_system">İşletim sistemi</string>
+    <string name="device_manager_session_details_device_ip_address">IP adresi</string>
+    <string tools:ignore="UnusedResources" name="qr_code_login_new_device_instruction_1">Diğer cihazınızda uygulamayı açın</string>
+    <string name="device_manager_session_rename">Oturumu yeniden adlandır</string>
+    <string name="device_manager_session_rename_warning">Lütfen oturum adlarının iletişim kurduğunuz kişiler tarafından da görülebileceğini unutmayın.</string>
+    <string name="upgrade">Yükselt</string>
+    <string tools:ignore="UnusedResources" name="qr_code_login_header_failed_homeserver_is_not_supported_description">Ana sunucu QR kod ile oturum açmayı desteklemiyor.</string>
+    <string name="a11y_pause_voice_broadcast_record">Ses yayını kaydını duraklat</string>
+    <string name="a11y_stop_voice_broadcast_record">Ses yayını kaydını durdur</string>
+    <string name="error_voice_broadcast_blocked_by_someone_else_message">Başka biri zaten bir ses yayını kaydediyor. Yeni bir ses yayını başlatmak için onların yayınının bitmesini bekleyin.</string>
+    <string name="device_manager_session_details_device_browser">Tarayıcı</string>
+    <string name="a11y_play_voice_broadcast">Ses yayınını oynat veya devam ettir</string>
+    <string name="location_not_available_dialog_title">${app_name} konumunuza erişemedi</string>
+    <string name="location_share_loading_map_error">Harita yüklenemedi
+\nBu ana sunucu, haritaları görüntülemek için yapılandırılmamış olabilir.</string>
+    <string name="device_manager_session_details_device_model">Model</string>
+    <string name="crosssigning_verify_this_session">Bu cihazı doğrula</string>
+    <string name="it_may_take_some_time">Lütfen sabırlı olun, bu biraz zaman alabilir.</string>
+    <string name="upgrade_required">Yükseltme Gerekli</string>
+    <string name="upgrade_room_auto_invite">Otomatik olarak kullanıcıları davet et</string>
+    <string name="a11y_location_share_option_user_live_icon">Canlı konum paylaş</string>
+    <string name="settings_failed_to_get_crypto_device_info">Herhangi bir kriptografik bilgi bulunmamaktadır</string>
+    <string name="settings_active_sessions_unverified_device_desc">Bu oturumu doğrulayarak güvenilir olarak işaretleyin ve şifreli mesajlara erişim izni verin. Eğer bu oturumu siz açmadıysanız, hesabınız tehlikede olabilir:</string>
 </resources>
