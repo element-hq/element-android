@@ -1831,4 +1831,7 @@
     <string name="settings_presence_user_always_appears_offline_summary">Bu özellik etkinleştirildiğinde, uygulamayı kullanıyor olsanız bile diğer kullanıcılara her zaman çevrimdışı görüneceksiniz.</string>
     <string name="settings_presence">Durum</string>
     <string name="settings_presence_user_always_appears_offline">Çevrimdışı modu</string>
+    <string name="some_devices_will_not_be_able_to_decrypt">⚠ Bu odada doğrulanmamış cihazlar var, gönderdiğiniz mesajları şifrelerini çözemeyecekler.</string>
+    <string name="encryption_never_send_to_unverified_devices_in_room">Bu odada doğrulanmamış oturumlara asla şifreli mesaj gönderme.</string>
+    <string name="room_settings_global_block_unverified_info_text">🔒 Güvenlik Ayarlarında, tüm odalar için yalnızca doğrulanmış oturumlara şifreleme özelliğini etkinleştirdiniz</string>
 </resources>
