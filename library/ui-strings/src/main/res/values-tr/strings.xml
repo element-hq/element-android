@@ -1783,4 +1783,8 @@
     <string name="home_layout_preferences_recents">Son Öğeleri Göster</string>
     <string name="home_layout_preferences">Görünüm Tercihleri</string>
     <string name="labs_enable_rich_text_editor_title">Zengin Metin Düzenleyicisini Etkinleştir</string>
+    <string name="invites_empty_title">Yeni bir şey yok.</string>
+    <string name="space_list_empty_message">Alanlar, odaları ve kişileri gruplamanın yeni bir yoludur. Başlamak için bir alan oluşturun.</string>
+    <string name="invites_title">Davetler</string>
+    <string name="call_start_screen_sharing">Ekran paylaş</string>
 </resources>
