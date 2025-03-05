@@ -1832,8 +1832,8 @@
     <string name="settings_presence">Durum</string>
     <string name="settings_presence_user_always_appears_offline">Çevrimdışı modu</string>
     <string name="some_devices_will_not_be_able_to_decrypt">⚠ Bu odada doğrulanmamış cihazlar var, gönderdiğiniz mesajları şifrelerini çözemeyecekler.</string>
-    <string name="encryption_never_send_to_unverified_devices_in_room">Bu odada doğrulanmamış oturumlara asla şifreli mesaj gönderme.</string>
-    <string name="room_settings_global_block_unverified_info_text">🔒 Güvenlik Ayarlarında, tüm odalar için yalnızca doğrulanmış oturumlara şifreleme özelliğini etkinleştirdiniz</string>
+    <string name="encryption_never_send_to_unverified_devices_in_room">Bu odada doğrulanmamış oturumlara asla şifreli mesaj göndermeyin.</string>
+    <string name="room_settings_global_block_unverified_info_text">🔒 Güvenlik Ayarlarında, tüm odalar için yalnızca doğrulanmış oturumlara şifreleme göndermeyi etkinleştirdiniz.</string>
     <string name="user_reported_as_inappropriate_title">Şikayet edilen kullanıcı</string>
     <string name="user_reported_as_inappropriate_content">Kullanıcı şikayet edildi. 
 \n
@@ -1909,4 +1909,26 @@
     <string name="quoting">Alıntılama</string>
     <string name="room_list_filter_unreads">Okunmamışlar</string>
     <string name="ftue_auth_terms_subtitle">%s\'nin şartlarını ve politikalarını lütfen gözden geçirin</string>
+    <string name="room_polls_ended">Geçmiş anketler</string>
+    <string name="error_voice_broadcast_permission_denied_message">Bu odada ses yayını başlatmak için gerekli izinlere sahip değilsiniz. Gerekli izinleri almak için bir oda yöneticisiyle iletişime geçin.</string>
+    <string name="restart_the_application_to_apply_changes">Değişikliğin uygulanması için uygulamayı yeniden başlatın.</string>
+    <string name="end_poll_confirmation_title">Bu anketi sonlandırmak istiyor musunuz\?</string>
+    <string name="end_poll_confirmation_approve_button">Anketi sonlandır</string>
+    <string name="voice_broadcast_buffering">Yükleniyor…</string>
+    <string name="room_polls_ended_no_item">Bu odada geçmiş anket bulunmuyor</string>
+    <string name="link_this_email_settings_link">Bu e-posta adresini hesabınızla ilişkilendirin</string>
+    <string name="open_poll_option_description">Oy kullananlar, oy verdikten hemen sonra sonuçları görebilir</string>
+    <string name="room_polls_active_no_item">Bu odada aktif anket bulunmuyor</string>
+    <string name="labs_enable_msc3061_share_history_desc">Geçmişi paylaşan şifreli bir odaya birini davet ettiğinizde, şifrelenmiş geçmiş mesajlar görülebilir.</string>
+    <string name="poll_end_room_list_preview">Anket sona erdi</string>
+    <string name="edit_poll_title">Anketi düzenle</string>
+    <string name="voice_broadcast_live_broadcast">Canlı yayın</string>
+    <string name="error_voice_broadcast_unauthorized_title">Yeni bir ses yayını başlatılamıyor</string>
+    <string name="error_voice_broadcast_already_in_progress_message">Zaten bir ses yayını kaydediyorsunuz. Yeni bir ses yayını başlatmak için lütfen mevcut ses yayınınızı sonlandırın.</string>
+    <string name="error_voice_broadcast_unable_to_play">Bu ses yayını oynatılamıyor.</string>
+    <string name="stop_voice_broadcast_content">Canlı yayını durdurmak istediğinizden emin misiniz\? Bu işlem yayını sonlandıracak ve tam kayıt odada erişilebilir olacak.</string>
+    <string name="poll_type_title">Anket türü</string>
+    <string name="error_voice_broadcast_no_connection_recording">Bağlantı hatası - Kayıt duraklatıldı</string>
+    <string name="stop_voice_broadcast_dialog_title">Canlı yayını durdurmak istiyor musunuz\?</string>
+    <string name="closed_poll_option_description">Sonuçlar yalnızca anketi sonlandırdığınızda gösterilir.</string>
 </resources>
