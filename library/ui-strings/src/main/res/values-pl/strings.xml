@@ -3091,4 +3091,13 @@
     <string name="user_reported_as_inappropriate_content">Użytkownik został zgłoszony.
 \n
 \nJeśli nie chcesz widzieć więcej treści od tego użytkownika, możesz go zignorować i ukryć jego wiadomości.</string>
+    <string name="microphone_in_use_title">Mikrofon w użyciu</string>
+    <string name="room_profile_section_more_report">Pokój raportów</string>
+    <string name="room_profile_section_more_report_success_content">Pokój został pomyślnie zgłoszony.</string>
+    <string name="call_unsupported">Nieobsługiwane połączenie</string>
+    <string name="error_mas_not_supported_subtitle">Pobierz %1$s, aby używać %2$s na swoim koncie lub wybierz inny serwer domowy.</string>
+    <string name="error_mas_not_supported_title">Nie możesz już utworzyć konta %1$s za pomocą tej aplikacji</string>
+    <string name="view_download_replacement_app_title">Pobierz %1$s</string>
+    <string name="view_download_replacement_app_subtitle">Szybciej, bezpieczniej i z wieloma skutecznymi narzędziami do współpracy.</string>
+    <string name="call_unsupported_matrix_rtc_call">Nieobsługiwane połączenie. Nowa aplikacja Element X jest potrzebna, aby dołączyć do tego połączenia.</string>
 </resources>
