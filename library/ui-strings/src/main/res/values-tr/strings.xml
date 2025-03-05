@@ -1829,4 +1829,6 @@
     <string name="settings_acceptable_use_policy">Kabul Edilebilir Kullanım Politikası</string>
     <string name="settings_external_account_management">Hesap bilgileriniz %1$s üzerinde ayrı olarak yönetilmektedir.</string>
     <string name="settings_presence_user_always_appears_offline_summary">Bu özellik etkinleştirildiğinde, uygulamayı kullanıyor olsanız bile diğer kullanıcılara her zaman çevrimdışı görüneceksiniz.</string>
+    <string name="settings_presence">Durum</string>
+    <string name="settings_presence_user_always_appears_offline">Çevrimdışı modu</string>
 </resources>
