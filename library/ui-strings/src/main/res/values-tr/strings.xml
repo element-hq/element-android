@@ -1666,7 +1666,7 @@
     <string name="preference_help_title">Yardım ve Destek</string>
     <string name="preference_help">Yardım</string>
     <string name="preference_root_legals">Yasal</string>
-    <string name="push_gateway_item_app_id">app_id:</string>
+    <string name="push_gateway_item_app_id">Uygulama ID:</string>
     <string name="import_e2e_keys_from_file">\"%1$s\" dosyasından e2e anahtarlarını içe aktarın.</string>
     <string name="create_new_space">Yeni Alan Yarat</string>
     <string name="command_description_whois">Bir kullanıcı hakkında bilgi görüntüler</string>
@@ -2642,4 +2642,16 @@
     <string name="identity_server_set_alternative_notice">Alternatif olarak, başka bir kimlik sunucusu URL\'si girebilirsiniz</string>
     <string name="bottom_sheet_setup_secure_backup_title">Güvenli yedekleme</string>
     <string name="bottom_sheet_setup_secure_backup_security_phrase_title">Güvenlik Kelimesi Kullanın</string>
+    <string name="auth_pin_new_pin_action">Yeni PIN</string>
+    <string name="settings_security_pin_code_title">PIN\'i Etkinleştir</string>
+    <string name="room_settings_set_avatar">Avatarı ayarla</string>
+    <string name="auth_pin_reset_title">PIN\'i Sıfırla</string>
+    <string name="auth_pin_reset_content">PIN\'i sıfırlamak için yeniden giriş yapmanız ve yeni bir PIN oluşturmanız gerekir.</string>
+    <string name="auth_pin_forgot">PIN\'inizi unuttunuz mu\?</string>
+    <string name="auth_pin_title">PIN\'inizi girin</string>
+    <string name="create_pin_confirm_failure">PIN doğrulanamadı, lütfen yeni bir PIN girin.</string>
+    <string name="create_pin_confirm_title">PIN\'i onayla</string>
+    <string name="create_pin_title">Güvenlik için bir PIN seçin</string>
+    <string name="wrong_pin_message_last_remaining_attempt">Uyarı! Oturumu kapatmadan önce kalan son deneme!</string>
+    <string name="too_many_pin_failures">Çok fazla hata, oturumunuz kapatıldı</string>
 </resources>
