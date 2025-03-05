@@ -895,7 +895,7 @@
     <string name="room_settings_alias_subtitle">Bu odanın adreslerini ve oda dizinindeki görünürlüğünü inceleyin.</string>
     <string name="room_settings_room_read_history_dialog_subtitle">Geçmişi okuyabilenlerle ilgili değişiklikler, yalnızca bu odadaki gelecekteki mesajlar için geçerli olacaktır. Mevcut geçmişin görünürlüğü değişmeyecek.</string>
     <string name="room_settings_alias_title">Oda ayarları</string>
-    <string name="settings_emails_and_phone_numbers_summary">Matrix hesabınıza bağlanan e-postaları ve telefon numaralarını yönetin</string>
+    <string name="settings_emails_and_phone_numbers_summary">Matrix hesabınıza bağlı e-posta adreslerini ve telefon numaralarını yönetin.</string>
     <string name="settings_emails_and_phone_numbers_title">E-postalar ve telefon numaraları</string>
     <string name="settings_show_emoji_keyboard_summary">Emoji klavyesini açmak için mesaj oluşturucuya bir düğme ekleyin</string>
     <string name="settings_chat_effects_description">/confetti komutunu kullanın veya ❄️ veya 🎉 içeren bir mesaj gönderin</string>
