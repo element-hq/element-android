@@ -2540,4 +2540,5 @@
     <string name="space_leave_prompt_msg_private">Yeniden davet edilmediğiniz sürece tekrar katılamazsınız.</string>
     <string name="space_add_existing_spaces">Mevcut alanları ekle</string>
     <string name="space_explore_filter_no_result_description">Bazı sonuçlar gizli olabilir çünkü bunlar özeldir ve davetiye almanız gerekir.</string>
+    <string name="settings_server_room_version_unstable">Kararsız</string>
 </resources>
