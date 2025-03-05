@@ -2772,4 +2772,12 @@
     <string name="settings_security_application_protection_screen_title">Koruma yapılandırması</string>
     <string name="a11y_rule_notify_off">Bildirim gönderme</string>
     <string name="three_pid_revoke_invite_dialog_content">1$s davetiyesi iptal edilsin mi\?</string>
+    <string tools:ignore="UnusedResources" name="qr_code_login_link_a_device_show_qr_code_instruction_2">\'QR kodu tara\'yı seç</string>
+    <string tools:ignore="UnusedResources" name="qr_code_login_signing_in">Girişiniz yapılıyor</string>
+    <string tools:ignore="UnusedResources" name="qr_code_login_connecting_to_device">Cihaza bağlanılıyor</string>
+    <string tools:ignore="UnusedResources" name="qr_code_login_status_no_match">Eşleşme yok mu\?</string>
+    <string tools:ignore="UnusedResources" name="qr_code_login_signing_in_a_mobile_device">Mobil cihazda oturum mu açıyorsunuz\?</string>
+    <string tools:ignore="UnusedResources" name="qr_code_login_scan_qr_code_button">QR kodu tara</string>
+    <string name="pill_message_unknown_room_or_space">Oda/Alan</string>
+    <string tools:ignore="UnusedResources" name="qr_code_login_show_qr_code_button">Bu cihazda QR kodunu göster</string>
 </resources>
