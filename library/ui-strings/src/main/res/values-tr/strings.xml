@@ -1786,7 +1786,32 @@
     <string name="invites_empty_title">Yeni bir şey yok.</string>
     <string name="space_list_empty_message">Alanlar, odaları ve kişileri gruplamanın yeni bir yoludur. Başlamak için bir alan oluşturun.</string>
     <string name="invites_title">Davetler</string>
-    <string name="call_start_screen_sharing">Ekran paylaş</string>
+    <string name="call_start_screen_sharing">Ekran Paylaşımı</string>
     <string name="auth_reset_password_error_unverified">E-posta doğrulanmadı, gelen kutunuzu kontrol edin</string>
     <string name="call_stop_screen_sharing">Ekran paylaşımını durdur</string>
+    <string name="microphone_in_use_title">Mikrofon Kullanılıyor</string>
+    <string name="search_space_two_parents">%1$s ve %2$s</string>
+    <string name="threads_notice_migration_title">Konular Beta Aşamasına Yaklaşıyor 🎉</string>
+    <string name="thread_list_empty_title">Sohbetleri konu başlıklarıyla düzenli tutun</string>
+    <string name="threads_notice_migration_message">Konular için Genel Beta Sürümüne Yaklaşıyoruz.\"
+\n
+\nBu sürece hazırlanırken bazı değişiklikler yapmamız gerekiyor: Bu noktadan önce oluşturulan konular, normal yanıtlar olarak görüntülenecek.
+\n
+\nBu, tek seferlik bir geçiş olacak, çünkü Konular artık Matrix standardının bir parçası.</string>
+    <string name="threads_beta_enable_notice_message">Konular, sohbetlerinizi konuyla alakalı ve takip edilmesi kolay hale getirir. %sKonuları etkinleştirmek uygulamayı yenileyecektir. Bazı hesaplar için bu işlem daha uzun sürebilir.</string>
+    <string name="room_notification_two_users_are_typing">%1$s ve %2$s</string>
+    <string name="invites_empty_message">Yeni istekleriniz ve davetleriniz burada görünecek.</string>
+    <string name="room_notification_more_than_two_users_are_typing">%1$s, %2$s ve diğerleri</string>
+    <string name="threads_beta_enable_notice_title">Konular Beta</string>
+    <string name="threads_labs_enable_notice_title">Konular Beta</string>
+    <string name="thread_list_empty_subtitle">Konu başlıkları, sohbetlerinizi konuyla alakalı ve takip edilmesi kolay hale getirir.</string>
+    <plurals name="search_space_multiple_parents">
+        <item quantity="one">"%1$s  ve %2$d diğeri"</item>
+        <item quantity="other">%1$s ve %2$d diğerleri</item>
+    </plurals>
+    <string name="permissions_rationale_msg_notification">\"${app_name}\", bildirimleri göstermek için izninize ihtiyaç duyuyor. Bildirimler, mesajlarınızı, davetlerinizi ve diğer önemli bilgileri gösterebilir.
+\n
+\nBildirimleri görüntüleyebilmek için sonraki açılan pencerelerde erişime izin verin.</string>
+    <string name="threads_labs_enable_notice_message">Ana sunucunuz şu anda konuları desteklemiyor, bu nedenle bu özellik güvenilir olmayabilir. Bazı konu başlıklarına sahip mesajlar düzgün görüntülenmeyebilir. %sYine de konuları etkinleştirmek istiyor musunuz\?</string>
+    <string name="thread_list_not_available">Ana sunucunuz henüz konu başlıklarını listelemeyi desteklemiyor.</string>
 </resources>
