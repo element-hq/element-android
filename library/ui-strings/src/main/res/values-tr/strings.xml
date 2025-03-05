@@ -1981,4 +1981,6 @@
     <string name="ftue_auth_phone_confirmation_title">Telefon numaranızı doğrulayın</string>
     <string name="ftue_auth_email_verification_title">E-postanızı doğrulayın.</string>
     <string name="ftue_auth_phone_confirmation_resend_code">Kodu yeniden gönder.</string>
+    <string name="view_download_replacement_app_subtitle">Daha hızlı, daha güvenli ve güçlü iş birliği araçlarıyla dolu.</string>
+    <string name="ftue_auth_email_verification_subtitle">%s adresine gönderilen talimatları takip edin.</string>
 </resources>
