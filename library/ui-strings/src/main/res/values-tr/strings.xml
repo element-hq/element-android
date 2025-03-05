@@ -1983,4 +1983,210 @@
     <string name="ftue_auth_phone_confirmation_resend_code">Kodu yeniden gönder.</string>
     <string name="view_download_replacement_app_subtitle">Daha hızlı, daha güvenli ve güçlü iş birliği araçlarıyla dolu.</string>
     <string name="ftue_auth_email_verification_subtitle">%s adresine gönderilen talimatları takip edin.</string>
+    <string name="invite_users_to_room_action_invite">DAVET ET</string>
+    <string name="bootstrap_migration_backup_recovery_key">Anahtar Yedeği kurtarma anahtarı</string>
+    <string name="error_failed_to_import_keys">Anahtarlar içe aktarılamadı</string>
+    <string name="bootstrap_info_text_2">Sunucunuzdaki gizli verileri güvence altına almak için yalnızca sizin bildiğiniz bir güvenlik ifadesi girin.</string>
+    <string name="verification_verify_with_another_device">Başka bir cihaz ile doğrulayın</string>
+    <string name="send_images_and_video_with_original_size">Medyayı orijinal boyutuyla gönder</string>
+    <string name="new_session">Yeni giriş. Bu siz miydiniz\?</string>
+    <string name="_resume">Devam et</string>
+    <string name="verification_not_found">Doğrulama isteği bulunamadı. İptal edilmiş veya başka bir oturum tarafından işlenmiş olabilir.</string>
+    <string name="keep_it_safe">Güvende tutun</string>
+    <string name="direct_room_encryption_enabled_waiting_users">Kullanıcıların ${app_name}’a katılmasını bekliyor</string>
+    <string name="bootstrap_crosssigning_progress_default_key">SSSS varsayılan Anahtarı tanımlanıyor</string>
+    <string name="direct_room_created_summary_item">%s katıldı.</string>
+    <string name="use_latest_app">Diğer cihazlarınızda en son ${app_name} kullanın:</string>
+    <string name="encrypted_by_deleted">Silinmiş bir cihaz tarafından şifrelenmiş</string>
+    <string name="secure_backup_reset_all">Her şeyi sıfırla</string>
+    <string name="encryption_unknown_algorithm_tile_description">Bu oda tarafından kullanılan şifreleme desteklenmiyor</string>
+    <string name="use_file">Dosya Kullan</string>
+    <string name="settings_security_incognito_keyboard_summary">Klavye, sohbetlerde yazdıklarınıza dayanarak kişiselleştirilmiş verileri (yazma geçmişi ve sözlük gibi) güncellememesi talebinde bulunun. Bazı klavyelerin bu ayarı dikkate almayabileceğini unutmayın.</string>
+    <string name="inviting_users_to_room">Kullanıcılar davet ediliyor…</string>
+    <string name="command_snow">Verilen mesajı kar yağışı ile gönderiyor</string>
+    <string name="command_description_plain">Mesajı düz metin olarak gönder, markdown olarak yorumlamadan</string>
+    <string name="encrypted_unverified">Doğrulanmamış bir cihaz tarafından şifrelenmiş</string>
+    <string name="failed_to_initialize_cross_signing">Çapraz İmza (Cross Signing) kurulumu başarısız oldu</string>
+    <string name="settings_dev_tools">Geliştirici Araçları</string>
+    <string tools:ignore="UnusedResources" name="verification_open_other_to_verify">Bu oturumu doğrulamak ve şifreli mesajlara erişim sağlamak için mevcut bir oturumu kullanın.</string>
+    <string name="reset_cross_signing">Anahtarları Sıfırla</string>
+    <string name="bootstrap_loading_title">Kurtarma ayarlanıyor.</string>
+    <string name="bootstrap_migration_use_recovery_key">Anahtar Yedeği kurtarma anahtarınızı kullanın</string>
+    <string name="key_authenticity_not_guaranteed">Bu şifreli mesajın doğruluğu, bu cihazda garanti edilemez.</string>
+    <string tools:ignore="UnusedResources" name="crosssigning_verify_session">Girişi Doğrula</string>
+    <string name="direct_room_encryption_enabled_tile_description_future">Bu sohbetteki mesajlar uçtan uca şifreli olacak.</string>
+    <string name="verify_this_session">Hesabınıza erişerek yeni girişi doğrulayın: %1$s</string>
+    <string name="this_is_the_beginning_of_room">Bu, %s\'nin başlangıcıdır.</string>
+    <string name="delete_event_dialog_reason_checkbox">Bir sebep ekleyin</string>
+    <string name="confirm_your_identity_quad_s">Kimliğinizi doğrulamak için bu girişi doğrulayın ve şifreli mesajlara erişim izni verin.</string>
+    <string name="room_member_profile_sessions_section_title">Oturumlar</string>
+    <string name="no_connectivity_to_the_server_indicator_airplane">Uçak modu açık</string>
+    <string name="verification_cannot_access_other_session">Bir Kurtarma Parolası veya Anahtarı kullanın</string>
+    <string name="verify_new_session_was_not_me">Bu ben değildim</string>
+    <string name="bootstrap_loading_text">Bu birkaç saniye sürebilir, lütfen sabırlı olun.</string>
+    <string name="bootstrap_finish_title">Tamamlandı!</string>
+    <string name="qr_code_scanned_verif_waiting">%s bekleniyor…</string>
+    <string name="bootstrap_progress_generating_ssss">Passphrase\'den SSSS anahtarı oluşturuluyor</string>
+    <string name="external_link_confirmation_message">%1$s bağlantısı sizi başka bir siteye yönlendiriyor: %2$s.
+\n
+\nDevam etmek istediğinizden emin misiniz\?</string>
+    <string name="verification_profile_device_verified_because">Bu oturum, güvenli mesajlaşma için güvenilir olarak işaretlendi çünkü %1$s (%2$s) bunu doğruladı:</string>
+    <string name="settings_account_data">Hesap Verileri</string>
+    <string name="this_is_the_beginning_of_room_no_name">Bu, bu sohbetin başlangıcıdır.</string>
+    <string name="send_your_first_msg_to_invite">İlk mesajınızı gönderin ve %s\'yi sohbete davet edin</string>
+    <string name="settings_security_incognito_keyboard_title">Gizli klavye</string>
+    <string name="qr_code_scanned_self_verif_notice">Neredeyse bitti! Diğer cihazda bir tik işareti görünüyor mu\?</string>
+    <string name="error_saving_media_file">Medya dosyası kaydedilemedi</string>
+    <string name="confirm_your_identity">Kimliğinizi doğrulamak için diğer oturumlarınızdan birinden bu girişi doğrulayın ve şifreli mesajlara erişim izni verin.</string>
+    <string name="error_forbidden_digits_only_username">Ana sunucu yalnızca rakamlardan oluşan kullanıcı adlarını kabul etmez.</string>
+    <string name="bootstrap_progress_checking_backup_with_info">Yedek Anahtar (%s) kontrol ediliyor</string>
+    <plurals name="secure_backup_reset_devices_you_can_verify">
+        <item quantity="one">Şu anda doğrulama yapabileceğiniz cihazı göster</item>
+        <item quantity="other">Şu anda doğrulama yapabileceğiniz %d cihazı göster</item>
+    </plurals>
+    <string name="delete_event_dialog_reason_hint">Düzeltme sebebi</string>
+    <string name="bootstrap_progress_generating_ssss_recovery">Kurtarma anahtarından SSSS anahtarı oluşturuluyor</string>
+    <string name="bootstrap_migration_enter_backup_password">Devam etmek için Anahtar Yedeği Parolasını girin.</string>
+    <string name="not_trusted">Güvenilir Değil</string>
+    <string name="bootstrap_migration_with_passphrase_helper_with_link">Anahtar Yedeği Parolanızı bilmiyorsanız, %s yapabilirsiniz.</string>
+    <string name="secure_backup_reset_all_no_other_devices">Bunu yalnızca bu cihazı doğrulayabileceğiniz başka bir cihazınız yoksa yapın.</string>
+    <string name="crosssigning_verify_after_update">Uygulama güncellendi</string>
+    <string name="verification_profile_other_device_untrust_info">Bu kullanıcı bu oturuma güvenene kadar, gönderilen ve alınan mesajlar uyarılarla etiketlenir.</string>
+    <string name="delete_event_dialog_content">Bu etkinliği kaldırmak (silmek) istediğinizden emin misiniz\? Bir oda adı veya konu değişikliğini silerseniz, değişiklik geri alınabilir.</string>
+    <string name="login_default_session_public_name">${app_name} Android</string>
+    <string name="settings_export_trail">Denetimi Dışa Aktar</string>
+    <string name="settings_nightly_build">Gece sürümü</string>
+    <string name="settings_nightly_build_update">En son sürümü edinin (not: giriş yaparken sorun yaşayabilirsiniz)</string>
+    <string tools:ignore="UnusedResources" name="verify_invalid_qr_notice">Bu QR kodu hatalı görünüyor. Lütfen başka bir doğrulama yöntemi deneyin.</string>
+    <string name="finish">Tamamla</string>
+    <string name="bootstrap_crosssigning_progress_initializing">Oluşturulan kimlik anahtarları yayınlanıyor</string>
+    <string name="encryption_enabled_tile_description">Bu odadaki mesajlar uçtan uca şifrelenmiştir. Daha fazla bilgi edinin ve kullanıcıları profillerinden doğrulayın.</string>
+    <string name="room_created_summary_item_by_you">Odayı oluşturdu ve yapılandırdınız.</string>
+    <string name="settings_notification_configuration">Bildirim yapılandırması</string>
+    <string name="upgrade_security">Şifreleme yükseltmesi mevcut</string>
+    <string name="recovery_key_empty_error_message">Lütfen bir kurtarma anahtarı girin</string>
+    <string name="settings_security_prevent_screenshots_title">Uygulamanın ekran görüntülerinin alınmasını engelle</string>
+    <string name="use_other_session_content_description">Diğer cihazlarınızda en son ${app_name} kullanın, ${app_name} Web, ${app_name} Desktop, ${app_name} iOS, ${app_name} for Android veya başka bir çapraz imzalama destekleyen Matrix istemcisi</string>
+    <string name="enter_secret_storage_passphrase_or_key">Devam etmek için %1$s kullanın veya %2$s kullanın.</string>
+    <string name="default_message_emote_snow">Kar yağışı gönderiyor ❄️</string>
+    <string name="review_unverified_sessions_title">Doğrulanmamış oturumlarınız var</string>
+    <string name="command_confetti">Verilen mesajı konfeti ile gönderiyor</string>
+    <string name="review_unverified_sessions_description">Hesabınızın güvende olduğunu doğrulamak için inceleyin</string>
+    <string name="confirm_your_identity_after_update">Güvenli mesajlaşma, son güncellemeyle geliştirildi. Lütfen cihazınızı tekrar doğrulayın.</string>
+    <string name="error_empty_field_choose_password">Lütfen bir şifre seçin.</string>
+    <string name="verification_verify_identity">Şifreli mesajlara erişmek ve kimliğinizi başkalarına kanıtlamak için kimliğinizi doğrulayın.</string>
+    <string name="trusted">Güvenilir</string>
+    <string name="verification_request_was_sent">Bir doğrulama isteği gönderildi. Kabul etmek ve doğrulamayı başlatmak için diğer oturumlarınızdan birini açın.</string>
+    <string tools:ignore="UnusedResources" name="verify_new_session_compromized">Hesabınız tehlikeye girmiş olabilir</string>
+    <string tools:ignore="UnusedResources" name="verify_not_me_self_verification">Aşağıdakilerden biri tehlikeye girmiş olabilir:
+\n
+\n- Şifreniz
+\n- Ana sunucunuz
+\n- Bu cihaz veya diğer cihaz
+\n- Herhangi bir cihazın kullandığı internet bağlantısı
+\nAyarlar\'dan şifrenizi ve kurtarma anahtarınızı hemen değiştirmenizi öneririz.</string>
+    <string name="bootstrap_cross_signing_success">%2$s ve %1$s artık ayarlandı. 
+\nOnları güvende tutun! Tüm aktif oturumlarınızı kaybederseniz, şifreli mesajları ve güvenli bilgileri açmak için bunlara ihtiyacınız olacak.</string>
+    <string name="direct_room_encryption_enabled_waiting_users_tile_description">Davet edilen kullanıcılar ${app_name}\'a katıldığında, sohbet edebilecek ve oda uçtan uca şifrelenmiş olacaktır</string>
+    <string name="room_created_summary_no_topic_creation_text">%s, bu odanın ne hakkında olduğunu insanlara bildirmek için.</string>
+    <string name="bootstrap_enter_recovery">Devam etmek için %s girin</string>
+    <string name="secure_backup_reset_danger_warning">Lütfen yalnızca tüm diğer cihazlarınızı ve güvenlik anahtarınızı kaybettiğinizden emin olduğunuzda devam edin.</string>
+    <string name="add_members_to_room">Üye ekleyin</string>
+    <string name="add_people">İnsan ekleyin</string>
+    <string name="error_empty_field_choose_user_name">Lütfen bir kullanıcı adı seçin.</string>
+    <string name="unencrypted">Şifrelenmemiş</string>
+    <string name="default_message_emote_confetti">Konfeti gönderiyor 🎉</string>
+    <string tools:ignore="UnusedResources" name="secure_backup_reset_no_history">Geçmiş, mesajlar, güvenilen cihazlar veya güvenilen kullanıcılar olmadan yeniden başlarsınız</string>
+    <string name="use_recovery_key">Kurtarma Anahtarını Kullan</string>
+    <string name="settings_security_prevent_screenshots_summary">Bu ayarı etkinleştirmek, tüm Aktivitelere FLAG_SECURE ekler. Değişikliğin etkili olması için uygulamayı yeniden başlatın.</string>
+    <string name="bootstrap_progress_compute_curve_key">Eğri anahtarı alınıyor</string>
+    <string name="bootstrap_invalid_recovery_key">Geçerli bir kurtarma anahtarı değil</string>
+    <string name="room_message_placeholder">Mesaj…</string>
+    <string name="qr_code_scanned_verif_waiting_notice">Neredeyse bitti! Onay bekleniyor…</string>
+    <string name="topic_prefix">"Konu: "</string>
+    <string name="add_a_topic_link_text">Bir konu ekleyin</string>
+    <string name="this_is_the_beginning_of_dm">Bu, %s ile olan doğrudan mesaj geçmişinizin başlangıcıdır.</string>
+    <string name="direct_room_created_summary_item_by_you">Siz katıldınız.</string>
+    <string name="encryption_not_enabled">Şifreleme etkinleştirilmemiş</string>
+    <string name="direct_room_encryption_enabled_tile_description">Bu sohbetteki mesajlar uçtan uca şifrelenmiştir.</string>
+    <string name="bootstrap_crosssigning_progress_save_msk">Anahtar senkronize ediliyor</string>
+    <string name="bootstrap_crosssigning_progress_pbkdf2">Paroladan güvenli anahtar oluşturuluyor</string>
+    <string name="message_key">Mesaj Anahtarı</string>
+    <string name="verify_cancelled_notice">Doğrulama iptal edildi. Doğrulamayı tekrar başlatabilirsiniz.</string>
+    <string name="verify_cancel_other">Şu anda iptal ederseniz %1$s (%2$s) doğrulanmayacak. Kullanıcı profillerinden yeniden başlayın.</string>
+    <string name="verify_cancel_self_verification_from_trusted">İptal ederseniz, yeni cihazınızda şifreli mesajları okuyamazsınız ve diğer kullanıcılar cihaza güvenmez</string>
+    <string name="refresh">Yenile</string>
+    <string name="e2e_use_keybackup">Şifreli mesaj geçmişinin kilidini aç</string>
+    <string name="event_redacted_by_user_reason_with_reason">Etkinlik kullanıcı tarafından silindi, sebep: %1$s</string>
+    <string name="delete_event_dialog_title">Kaldırmayı Onayla</string>
+    <plurals name="send_images_with_original_size">
+        <item quantity="one">Görüntüyü orijinal boyutuyla gönder</item>
+        <item quantity="other">Görüntüleri orijinal boyutlarıyla gönder</item>
+    </plurals>
+    <string name="message_action_item_redact">Kaldır…</string>
+    <string name="enter_secret_storage_invalid">Depoda gizli veriler bulunamadı</string>
+    <string name="qr_code_scanned_by_other_no">Hayır</string>
+    <string name="qr_code_scanned_by_other_yes">Evet</string>
+    <string name="a11y_qr_code_for_verification">QR kod</string>
+    <string tools:ignore="UnusedResources" name="verification_profile_device_untrust_info">Bu kullanıcı bu oturuma güvenene kadar, gönderilen ve alınan mesajlar uyarılarla etiketlenir. Alternatif olarak, manuel olarak doğrulayabilirsiniz.</string>
+    <string name="verification_profile_verified">Doğrulandı</string>
+    <string name="crosssigning_cannot_verify_this_session">Bu cihaz doğrulanamıyor</string>
+    <string name="verification_profile_warning">Uyarı</string>
+    <string name="room_created_summary_item">%s oda oluşturdu ve yapılandırdı.</string>
+    <string name="verification_profile_device_new_signing">%1$s (%2$s) yeni bir oturum kullanarak giriş yaptı:</string>
+    <plurals name="send_videos_with_original_size">
+        <item quantity="one">Videoyu orijinal boyutuyla gönder</item>
+        <item quantity="other">Videoları orijinal boyutlarıyla gönder</item>
+    </plurals>
+    <string name="verify_cancel_self_verification_from_untrusted">İptal ederseniz, bu cihazda şifreli mesajları okuyamazsınız ve diğer kullanıcılar cihaza güvenmez</string>
+    <string name="enter_account_password">Devam etmek için %s girin.</string>
+    <string name="bootstrap_crosssigning_save_usb">Bunu bir USB anahtarına veya yedekleme sürücüsüne kaydedin</string>
+    <string name="encryption_misconfigured">Şifreleme yanlış yapılandırılmış</string>
+    <string name="security_prompt_text">Kendinizi ve diğerlerini doğrulayarak sohbetlerinizi güvende tutun</string>
+    <string name="bootstrap_progress_generating_ssss_with_info">Passphrase\'den SSSS anahtarı oluşturuluyor (%s)</string>
+    <string name="bootstrap_progress_storing_in_sss">Anahtar yedeği sırrı SSSS\'ye kaydediliyor</string>
+    <string name="change_password_summary">Yeni bir hesap şifresi belirleyin…</string>
+    <string name="app_desktop_web">${app_name} Web
+\n${app_name} Masaüstü</string>
+    <string name="app_ios_android">${app_name} iOS
+\n${app_name} Android</string>
+    <string name="or_other_mx_capable_client">ya da başka bir çapraz imzalama destekleyen Matrix istemcisi</string>
+    <string name="command_description_discard_session_not_handled">Yalnızca şifreli odalarda desteklenir</string>
+    <string name="enter_secret_storage_input_key">Kurtarma Anahtarınızı seçin veya manuel olarak yazarak veya panodan yapıştırarak girin</string>
+    <string name="bad_passphrase_key_reset_all_action">Tüm kurtarma seçeneklerini unuttunuz veya kaybettiniz mi\? Her şeyi sıfırlayın</string>
+    <string name="secure_backup_reset_all_no_other_devices_long">Doğrulama anahtarlarınızı sıfırlamak geri alınamaz. Sıfırladıktan sonra eski şifreli mesajlara erişiminiz olmayacak ve daha önce sizi doğrulamış olan arkadaşlarınız, sizinle yeniden doğrulama yapana kadar güvenlik uyarıları görecek.</string>
+    <string tools:ignore="UnusedResources" name="secure_backup_reset_if_you_reset_all">Eğer her şeyi sıfırlarsanız</string>
+    <string name="cross_signing_verify_by_text">Metin ile Manuel Doğrulama</string>
+    <string name="external_link_confirmation_title">Bu bağlantıyı tekrar kontrol edin</string>
+    <string name="bootstrap_crosssigning_save_cloud">Bunu kişisel bulut depolamanıza kopyalayın</string>
+    <string name="crosssigning_cannot_verify_this_session_desc">Şifreli mesaj geçmişine erişemeyeceksiniz. Sıfırdan başlamak için Güvenli Mesaj Yedeğinizi ve doğrulama anahtarlarınızı sıfırlayın.</string>
+    <string name="verification_use_passphrase">Mevcut bir oturuma erişemiyorsanız</string>
+    <string name="bootstrap_crosssigning_progress_key_backup">Anahtar Yedeği Kuruluyor</string>
+    <string name="bootstrap_crosssigning_progress_save_ssk">Kendi Kendine İmza Anahtarı senkronize ediliyor</string>
+    <string name="command_description_discard_session">Şu anki çıkış grup oturumunun, şifreli odada iptal edilmesini zorlar</string>
+    <string name="delete_account_data_warning">%1$s türündeki hesap verilerini silmek istiyor musunuz\?
+\n
+\nDikkatli kullanın, beklenmeyen davranışlara yol açabilir.</string>
+    <string name="verification_profile_verify">Doğrula</string>
+    <string name="room_member_profile_failed_to_get_devices">Oturumlar alınamadı</string>
+    <string name="initialize_cross_signing">Çapraz İmzalamayı Başlat</string>
+    <string name="qr_code_scanned_by_other_notice">Neredeyse bitti! %s bir tik işareti gösteriyor mu\?</string>
+    <string name="no_connectivity_to_the_server_indicator">Sunucu ile bağlantı kaybedildi</string>
+    <string name="share_confirm_room">Bu eki %1$s adresine göndermek istiyor musunuz\?</string>
+    <string name="keys_backup_restore_success_title_already_up_to_date">Anahtarlar zaten güncel!</string>
+    <string name="settings_key_requests">Anahtar Talepleri</string>
+    <string name="event_redacted_by_admin_reason_with_reason">Etkinlik oda yöneticisi tarafından yönetildi, sebep: %1$s</string>
+    <string name="verify_new_session_notice">Bu oturumu kullanarak yeni oturumunuzu doğrulayın ve şifreli mesajlara erişim izni verin.</string>
+    <string tools:ignore="UnusedResources" name="verification_cancelled">Doğrulama İptal Edildi</string>
+    <string name="recovery_passphrase">Kurtarma Parolası</string>
+    <string name="bootstrap_dont_reuse_pwd">Hesap şifrenizi kullanmayın.</string>
+    <string name="bootstrap_crosssigning_progress_save_usk">Kullanıcı anahtarı senkronize ediliyor</string>
+    <string name="bootstrap_crosssigning_print_it">Yazdırın ve güvenli bir yerde saklayın</string>
+    <string name="encryption_enabled">Şifreleme etkinleştirildi</string>
+    <string name="settings_troubleshoot_title">Sorun giderme</string>
+    <string name="auth_invalid_login_param_space_in_password">Hatalı kullanıcı adı ve/veya şifre. Girilen şifre boşluklarla başlıyor veya bitiyor, lütfen kontrol edin.</string>
+    <string name="auth_invalid_login_deactivated_account">Bu hesap devre dışı bırakılmıştır.</string>
+    <string name="bootstrap_progress_checking_backup">Yedek Anahtar kontrol ediliyor</string>
+    <string name="failed_to_access_secure_storage">Güvenli depolamaya erişilemedi</string>
+    <string name="cross_signing_verify_by_emoji">Emojilerle Etkileşimli Doğrulama</string>
 </resources>
