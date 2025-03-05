@@ -2541,4 +2541,6 @@
     <string name="space_add_existing_spaces">Mevcut alanları ekle</string>
     <string name="space_explore_filter_no_result_description">Bazı sonuçlar gizli olabilir çünkü bunlar özeldir ve davetiye almanız gerekir.</string>
     <string name="settings_server_room_version_unstable">Kararsız</string>
+    <string name="you_are_invited">Davet edildiniz</string>
+    <string name="spaces_beta_welcome_to_spaces_desc">Alanlar, odaları ve insanları gruplandırmanın yeni bir yoludur.</string>
 </resources>
