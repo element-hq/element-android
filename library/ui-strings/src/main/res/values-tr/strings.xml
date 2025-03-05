@@ -773,7 +773,7 @@
     <string name="settings_troubleshoot_test_push_notification_content">Bildirimi görüntülüyorsunuz! Buraya tıkla!</string>
     <string name="error_threepid_auth_failed">Size gönderdiğimiz e-postadaki bağlantıya tıkladığınıza emin olun.</string>
     <string name="settings_phone_numbers">Telefon numaraları</string>
-    <string name="settings_emails_empty">Hesabınıza e-posta adresi eklenmemiş</string>
+    <string name="settings_emails_empty">Hesabınıza kayıtlı bir e-posta adresi yok.</string>
     <string name="settings_emails">E-posta hesapları</string>
     <string name="settings_phone_number_empty">Hesabınıza hiçbir telefon numarası eklenmedi</string>
     <string name="search_banned_user_hint">Banlanan kullanıcıları filtrele</string>
