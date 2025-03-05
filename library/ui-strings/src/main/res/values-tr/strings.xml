@@ -2497,4 +2497,31 @@
     <string name="message_reply_to_sender_created_poll">bir anket oluşturdu.</string>
     <string name="message_reply_to_sender_ended_poll">bir anketi sonlandırdı.</string>
     <string name="message_reply_to_ended_poll_preview">Anket sona erdi</string>
+    <string name="invite_friends_rich_title">🔐️ ${app_name} üzerinde bana katıl</string>
+    <string name="a11y_device_manager_filter">Filtre</string>
+    <string name="device_manager_filter_option_inactive">Aktif değil</string>
+    <string name="device_manager_session_title">Oturum</string>
+    <string name="device_manager_filter_option_verified">Doğrulandı</string>
+    <string name="device_manager_filter_option_verified_description">Güvenli mesajlaşma için hazır</string>
+    <string name="invitation_sent_to_one_user">Davetiye %1$s\'ye gönderildi</string>
+    <string name="create_room_dm_failure">DM oluşturulamadı. Lütfen davet etmek istediğiniz kullanıcıları kontrol edip tekrar deneyin.</string>
+    <string name="device_manager_session_last_activity">Son etkinlik %1$s</string>
+    <string name="device_manager_device_title">Cihaz</string>
+    <string name="device_manager_filter_option_unverified_description">Güvenli mesajlaşma için hazır değil</string>
+    <string name="device_manager_filter_bottom_sheet_title">Filtre</string>
+    <string name="device_manager_filter_option_all_sessions">Tüm oturumlar</string>
+    <string name="not_a_valid_qr_code">Geçerli bir Matrix QR kodu değil</string>
+    <string name="invitations_sent_to_two_users">Davetiyeler %1$s ve %2$s\'ye gönderildi</string>
+    <string name="invite_friends">Arkadaşlarını davet et</string>
+    <string name="invite_friends_text">Hey, benimle ${app_name} üzerinden konuş: %s</string>
+    <string name="device_manager_current_session_title">Mevcut oturum</string>
+    <plurals name="settings_active_sessions_count">
+        <item quantity="one">%d aktif oturum</item>
+        <item quantity="other">%d aktif oturumlar</item>
+    </plurals>
+    <plurals name="device_manager_filter_option_inactive_description">
+        <item quantity="one">%1$d gün veya daha uzun süredir aktif değil</item>
+        <item quantity="other">%1$d gün veya daha uzun süredir aktif değil</item>
+    </plurals>
+    <string name="invite_users_to_room_title">Kullanıcıları Davet Et</string>
 </resources>
