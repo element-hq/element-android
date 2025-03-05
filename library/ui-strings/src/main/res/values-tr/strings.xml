@@ -1787,4 +1787,6 @@
     <string name="space_list_empty_message">Alanlar, odaları ve kişileri gruplamanın yeni bir yoludur. Başlamak için bir alan oluşturun.</string>
     <string name="invites_title">Davetler</string>
     <string name="call_start_screen_sharing">Ekran paylaş</string>
+    <string name="auth_reset_password_error_unverified">E-posta doğrulanmadı, gelen kutunuzu kontrol edin</string>
+    <string name="call_stop_screen_sharing">Ekran paylaşımını durdur</string>
 </resources>
