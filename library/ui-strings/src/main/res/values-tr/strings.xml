@@ -2780,4 +2780,175 @@
     <string tools:ignore="UnusedResources" name="qr_code_login_scan_qr_code_button">QR kodu tara</string>
     <string name="pill_message_unknown_room_or_space">Oda/Alan</string>
     <string tools:ignore="UnusedResources" name="qr_code_login_show_qr_code_button">Bu cihazda QR kodunu göster</string>
+    <string name="a11y_pause_voice_message">Sesli Mesajı Duraklat</string>
+    <string name="finish_setting_up_discovery">Keşif ayarlarını tamamlayın.</string>
+    <string name="preference_show_all_rooms_in_home">Ana Sayfada tüm odaları göster</string>
+    <string tools:ignore="UnusedResources" name="disclaimer_positive_button">DAHA FAZLA BİLGİ AL</string>
+    <string name="command_description_create_space">Bir Alan Oluştur</string>
+    <string name="create_spaces_room_public_header">%s içinde yapmak istediğiniz bazı tartışmalar nelerdir?</string>
+    <string name="pill_message_in_room">%s\'ye mesaj</string>
+    <string name="room_polls_wait_for_display">Anketler görüntüleniyor</string>
+    <string name="labs_enable_voice_broadcast_title">Sesli yayın etkinleştir</string>
+    <string name="auth_biometric_key_invalidated_message">Biyometrik kimlik doğrulama devre dışı bırakıldı çünkü yakın zamanda yeni bir biyometrik kimlik doğrulama yöntemi eklendi. Ayarlar\'dan tekrar etkinleştirebilirsiniz.</string>
+    <string name="share_space_link_message">Benim alanıma katıl %1$s %2$s</string>
+    <string name="labs_enable_latex_maths">LaTeX matematiksel ifadelerini etkinleştir</string>
+    <string name="poll_response_room_list_preview">Oy kullanıldı</string>
+    <string name="location_share_option_pinned">Bu konumu paylaş</string>
+    <string name="labs_enable_session_manager_title">Yeni oturum yöneticisini etkinleştir</string>
+    <string name="invite_people_to_your_space_desc">Şu anda sadece siz varsınız. %s, başkalarıyla birlikte çok daha iyi olacak.</string>
+    <string name="room_polls_loading_error">Anketler alınırken hata oluştu.</string>
+    <string name="a11y_location_share_option_pinned_icon">Bu konumu paylaş</string>
+    <string name="onboarding_new_app_layout_feedback_title">Geri Bildirim Ver</string>
+    <string name="a11y_presence_busy">Meşgul</string>
+    <string name="invite_to_space_with_name_desc">Onlar %s\'yi keşfedebilecekler</string>
+    <string name="a11y_presence_online">Çevrimiçi</string>
+    <string name="this_space_has_no_rooms_admin">Bazı odalar gizlenmiş olabilir çünkü özel olup davetiyeye ihtiyaç duyulmaktadır.</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">Gizliliğiniz için, ${app_name} yalnızca karma (hashlenmiş) kullanıcı e-posta adreslerini ve telefon numaralarını göndermeyi destekler.</string>
+    <string name="command_description_add_to_space">Verilen Alana Ekle</string>
+    <string name="command_description_upgrade_room">Bir odayı yeni bir sürüme yükseltir</string>
+    <string name="create_spaces_join_info_help">Mevcut bir alana katılmak için bir davetiyeye ihtiyacınız var.</string>
+    <string name="closed_poll_option_title">Kapalı anket</string>
+    <string name="room_poll_details_go_to_timeline">Anketi zaman çizelgesinde görüntüle</string>
+    <string name="device_manager_other_sessions_recommendation_title_inactive">Hareketsiz</string>
+    <string name="onboarding_new_app_layout_button_try">Deneyin</string>
+    <string name="your_private_space">Senin özel alanın</string>
+    <plurals name="create_poll_not_enough_options_error">
+        <item quantity="one">En az %1$s seçenek gereklidir</item>
+        <item quantity="other">En az %1$s seçenekler gereklidir</item>
+    </plurals>
+    <string name="command_description_leave_room">Belirtilen kimlikteki odadan ayrıl (veya kimlik yoksa mevcut odadan)</string>
+    <string name="create_spaces_make_sure_access">Doğru kişilerin %s erişimine sahip olduğundan emin olun.</string>
+    <string name="upgrade_room_update_parent_space">Alan ana bilgisini otomatik olarak güncelle</string>
+    <string name="device_manager_learn_more_session_rename">Doğrudan mesajlar ve katıldığınız odalardaki diğer kullanıcılar, oturumlarınızın tam listesini görebilir.\n\nBu, onlara gerçekten sizinle konuştuklarına dair güven verir, ancak aynı zamanda burada girdiğiniz oturum adını da görmelerine yol açar.</string>
+    <string name="labs_enable_session_manager_summary">Tüm oturumlarınız üzerinde daha fazla görünürlük ve kontrol sahibi olun.</string>
+    <string tools:ignore="UnusedResources" name="disclaimer_content">Adımızı değiştirdiğimizi duyurmaktan heyecan duyuyoruz! Uygulamanız güncel ve hesabınıza giriş yapmış durumdasınız.</string>
+    <string name="public_space">Herkese açık alan</string>
+    <string name="create_spaces_private_teammates">Sizin ve ekip arkadaşlarınız için özel bir alan</string>
+    <string name="upgrade_public_room_from_to">Bu odayı %1$s\'den %2$s\'ye yükselteceksiniz.</string>
+    <string name="voice_message_slide_to_cancel">İptal etmek için kaydırın</string>
+    <string name="a11y_delete_recorded_voice_message">Kaydı Sil</string>
+    <string name="device_manager_other_sessions_recommendation_title_unverified">Doğrulanmamış</string>
+    <string name="device_manager_learn_more_sessions_verified_title">Doğrulanmış oturumlar</string>
+    <string name="home_empty_no_unreads_title">Rapor edilecek bir şey yok.</string>
+    <string name="open_poll_option_title">Anketi aç</string>
+    <string name="room_polls_active">Açık anketler</string>
+    <string name="home_empty_space_no_rooms_title">%s\nbiraz boş görünüyor.</string>
+    <string name="home_empty_no_unreads_message">Bu, okunmamış mesajlarınızın görüneceği yerdir, eğer varsa.</string>
+    <string tools:ignore="UnusedResources" name="qr_code_login_header_scan_qr_code_description">Diğer cihazınızdaki QR kodunu taramak için bu cihazın kamerasını kullanın:</string>
+    <string name="settings_security_pin_code_grace_period_summary_off">${app_name} her açıldığında PIN kodu gereklidir.</string>
+    <string name="invite_to_space_with_name">%s\'ye davet et</string>
+    <string name="discovery_invite">E-posta ile davet et, kişileri bul ve daha fazlası…</string>
+    <string name="joining_replacement_room">Yerine geçecek odaya katıl</string>
+    <string name="device_manager_other_sessions_recommendation_title_verified">Doğrulanmış</string>
+    <string name="device_manager_learn_more_sessions_unverified_title">Doğrulanmamış oturumlar</string>
+    <string name="create_spaces_choose_type_label">Ne tür bir alan oluşturmak istiyorsunuz?</string>
+    <string name="labs_auto_report_uisi_desc">Sistemin, şifre çözülemeyen bir hata oluştuğunda otomatik olarak günlükleri gönderecektir</string>
+    <string name="location_activity_title_static_sharing">Konum paylaş</string>
+    <string name="device_manager_learn_more_session_rename_title">Oturumları yeniden adlandırma</string>
+    <string name="a11y_unchecked">Seçili değil</string>
+    <string name="settings_security_pin_code_grace_period_summary_on">${app_name} kullanılmadığında 2 dakika sonra PIN kodu gereklidir.</string>
+    <string name="a11y_presence_unavailable">Uzakta</string>
+    <string name="create_spaces_organise_rooms">Odalarınızı düzenlemek için özel bir alan</string>
+    <string name="create_spaces_details_private_header">İnsanların tanıyabilmesi için bazı detaylar ekleyin. Bunları dilediğiniz zaman değiştirebilirsiniz.</string>
+    <string name="create_spaces_room_public_header_desc">Onlar için odalar oluşturacağız. Daha sonra da ekleyebilirsiniz.</string>
+    <string name="create_spaces_room_private_header">Üzerinde çalıştığınız konular nelerdir?</string>
+    <string name="create_space_identity_server_info_none">Şu anda bir kimlik sunucusu kullanmıyorsunuz. Ekip arkadaşlarınızı davet edebilmek ve onlar tarafından bulunabilir olmak için aşağıdan bir kimlik sunucusu yapılandırın.</string>
+    <string name="discovery_section">Keşif (%s)</string>
+    <plurals name="space_people_you_know">
+        <item quantity="one">%d tanıdığınız kişi zaten katıldı</item>
+        <item quantity="other">%d tanıdığınız kişiler zaten katıldı</item>
+    </plurals>
+    <string name="space_manage_rooms_and_spaces">Odaları ve alanları yönet</string>
+    <string name="upgrade_room_no_power_to_manage">Bir odayı yükseltmek için izin gereklidir</string>
+    <string name="a11y_stop_voice_message">Kaydı Durdur</string>
+    <string name="a11y_recording_voice_message">Sesli mesaj kaydediliyor</string>
+    <string name="upgrade_room_for_restricted_no_param">Bir ana alandaki herkes, bu odayı bulup katılabilecek – herkesi manuel olarak davet etmenize gerek yok. Bunu oda ayarlarında istediğiniz zaman değiştirebilirsiniz.</string>
+    <plurals name="poll_total_vote_count_after_ended">
+        <item quantity="one">Sonuç, %1$d oya dayalıdır</item>
+        <item quantity="other">Sonuç %1$d oya dayalıdır</item>
+    </plurals>
+    <plurals name="room_polls_ended_no_item_for_loaded_period">
+        <item quantity="one">Son 24 saat için geçmiş anket yok.\nÖnceki günlere ait anketleri görüntülemek için daha fazla anket yükleyin.</item>
+        <item quantity="other">Son %1$d gün için geçmiş anket yok.\nÖnceki günlere ait anketleri görüntülemek için daha fazla anket yükleyin.</item>
+    </plurals>
+    <string name="ended_poll_indicator">Anket sonlandırıldı.</string>
+    <string name="unable_to_decrypt_some_events_in_poll">Şifre çözme hataları nedeniyle bazı oylar sayılmamış olabilir</string>
+    <string name="location_activity_title_preview">Konum</string>
+    <string name="a11y_location_share_pin_on_map">Haritada seçilen konumun pini</string>
+    <string name="a11y_location_share_locate_button">Mevcut konuma yakınlaştır</string>
+    <string name="a11y_location_share_option_user_current_icon">Mevcut konumumu paylaş</string>
+    <string name="location_share_live_select_duration_title">Canlı konumunuzu paylaşın</string>
+    <plurals name="device_manager_inactive_sessions_description">
+        <item quantity="one">Artık kullanmadığınız eski oturumlardan (%1$d gün veya daha fazla) çıkış yapmayı düşünün.</item>
+        <item quantity="other">Artık kullanmadığınız eski oturumlardan (%1$d gün veya daha fazla) çıkış yapmayı düşünün.</item>
+    </plurals>
+    <string name="device_manager_push_notifications_title">Push bildirimleri</string>
+    <string name="device_manager_learn_more_sessions_encryption_not_supported">Bu oturum şifrelemeyi desteklemediği için doğrulanamaz.\n\nBu oturumu kullanarak şifrelemenin etkin olduğu odalara katılamazsınız.\n\nEn iyi güvenlik ve gizlilik için, şifrelemeyi destekleyen Matrix istemcileri kullanmanız önerilir.</string>
+    <string name="home_empty_space_no_rooms_message">Alanlar, odaları ve kişileri gruplaymanın yeni bir yoludur. Mevcut bir odayı ekleyin veya yeni bir oda oluşturun, sol alt köşedeki butonu kullanarak.</string>
+    <string name="onboarding_new_app_layout_spaces_message">Alanlarınıza (sol alt köşe) daha hızlı ve kolay bir şekilde erişin.</string>
+    <string name="onboarding_new_app_layout_feedback_message">Geri bildirim seçeneğini görmek için sol üst köşeye dokunun.</string>
+    <string tools:ignore="UnusedResources" name="qr_code_login_header_show_qr_code_new_device_description">Aşağıdaki QR kodunu taramak için giriş yaptığınız cihazı kullanın:</string>
+    <string tools:ignore="UnusedResources" name="qr_code_login_confirm_security_code_description">Lütfen bu kodun kaynağını bildiğinizden emin olun. Cihazları bağlayarak, birine hesabınıza tam erişim sağlamış olacaksınız.</string>
+    <string name="settings_access_token">Erişim Jetonu</string>
+    <string name="location_share_option_user_current">Mevcut konumumu paylaş</string>
+    <string name="device_manager_filter_option_unverified">Doğrulanmamış</string>
+    <string name="settings_security_pin_code_use_biometrics_error">Biyometrik kimlik doğrulama etkinleştirilemedi.</string>
+    <string name="command_description_join_space">Belirtilen kimlik ile Alana katıl</string>
+    <string name="private_space">Özel alan</string>
+    <string name="add_space">Alan ekle</string>
+    <string name="your_public_space">Senin herkese açık alanın</string>
+    <string name="create_spaces_room_private_header_desc">Her biri için bir oda oluşturalım. Daha sonra mevcut olanlar da dahil olmak üzere daha fazla ekleyebilirsiniz.</string>
+    <string name="finish_setup">Kurulumu tamamla</string>
+    <string name="labs_auto_report_uisi">Şifre çözme hatalarını otomatik olarak raporla.</string>
+    <string name="labs_enable_thread_messages">İplikli mesajları etkinleştir</string>
+    <string name="spaces_feeling_experimental_subspace">Deneysel bir ruh hali mi var?\nMevcut alanları bir alana ekleyebilirsiniz.</string>
+    <string name="spaces_no_server_support_title">Görünüşe göre, ev sunucunuz henüz Alanları desteklemiyor</string>
+    <string name="room_using_unstable_room_version">Bu oda, ev sunucusunun kararsız olarak işaretlediği %s sürümünü kullanıyor.</string>
+    <string name="error_failed_to_join_room">Üzgünüm, katılmaya çalışırken bir hata oluştu: %s</string>
+    <string name="room_polls_load_more">Daha fazla anket yükle</string>
+    <string name="a11y_static_map_image">Harita</string>
+    <plurals name="device_manager_other_sessions_description_inactive">
+        <item quantity="one">%1$d+ gün boyunca hareketsiz (%2$s)</item>
+        <item quantity="other">%1$d+ gün boyunca hareketsiz (%2$s)</item>
+    </plurals>
+    <string name="device_manager_other_sessions_recommendation_description_verified">En iyi güvenlik için, tanımadığınız veya artık kullanmadığınız oturumlardan çıkış yapın.</string>
+    <string name="labs_enable_client_info_recording_summary">Oturum yöneticisinde oturumları daha kolay tanımak için istemci adı, sürümü ve URL\'sini kaydedin.</string>
+    <string name="labs_enable_voice_broadcast_summary">Oda zaman çizelgesinde sesli yayın kaydedip gönderebilme özelliğine sahip olun.</string>
+    <string name="home_empty_no_rooms_title">Hoş geldiniz ${app_name},\n%s.</string>
+    <string name="home_empty_no_rooms_message">Takımlar, arkadaşlar ve organizasyonlar için hepsi bir arada güvenli sohbet uygulaması. Başlamak için bir sohbet oluşturun veya mevcut bir odaya katılın.</string>
+    <string tools:ignore="UnusedResources" name="qr_code_login_header_scan_qr_code_title">QR kodu tara</string>
+    <string tools:ignore="UnusedResources" name="qr_code_login_header_show_qr_code_link_a_device_description">Aşağıdaki QR kodunu, çıkış yaptığınız cihazla tarayın.</string>
+    <string name="settings_access_token_summary">Erişim jetonunuz, hesabınıza tam erişim sağlar. Onunla kimseyle paylaşmayın.</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_off">PIN kodu, ${app_name} uygulamasını açmanın tek yoludur.</string>
+    <string name="a11y_public_room">Herkese açık oda</string>
+    <string name="create_spaces_invite_public_header_desc">Doğru kişilerin %s şirketine erişimi olduğundan emin olun. Daha sonra daha fazla kişi davet edebilirsiniz.</string>
+    <string name="room_alias_preview_not_found">Bu takma ad şu anda erişilebilir değil.\nDaha sonra tekrar deneyin veya bir oda yöneticisinden erişiminizi kontrol etmesini isteyin.</string>
+    <string name="this_space_has_no_rooms">Bu alanın odası yok</string>
+    <string name="upgrade_public_room">Herkese açık odayı yükselt</string>
+    <string name="upgrade_room_warning">Bir odayı yükseltmek, gelişmiş bir işlemdir ve genellikle bir oda hatalar, eksik özellikler veya güvenlik açıkları nedeniyle kararsız olduğunda önerilir.\nBu işlem genellikle odanın sunucuda nasıl işlendiğini etkiler.</string>
+    <string name="a11y_play_voice_message">Sesli Mesajı Çal</string>
+    <string name="onboarding_new_app_layout_spaces_title">Alanlara Eriş</string>
+    <string name="device_manager_learn_more_sessions_inactive">Hareketsiz oturumlar, bir süredir kullanmadığınız oturumlardır, ancak yine de şifreleme anahtarlarını almaya devam ederler.\n\nHareketsiz oturumları kaldırmak, güvenliği ve performansı iyileştirir ve yeni bir oturumun şüpheli olup olmadığını tespit etmeyi kolaylaştırır.</string>
+    <string name="device_manager_learn_more_sessions_unverified">Doğrulanmamış oturumlar, kimlik bilgilerinizi kullanarak giriş yapmış ancak çapraz doğrulama yapılmamış oturumlardır.\n\nBu oturumları özellikle tanıdığınızdan emin olmalısınız, çünkü bunlar hesabınızın yetkisiz kullanımını temsil ediyor olabilir.</string>
+    <string name="labs_enable_client_info_recording_title">İstemci bilgi kaydını etkinleştir</string>
+    <string name="onboarding_new_app_layout_welcome_title">Yeni görünümünüze hoş geldiniz!</string>
+    <string tools:ignore="UnusedResources" name="qr_code_login_header_show_qr_code_title">QR kodu ile giriş yap</string>
+    <string tools:ignore="UnusedResources" name="qr_code_login_header_connected_title">Güvenli bağlantı kuruldu</string>
+    <string name="a11y_presence_offline">Çevrimdışı</string>
+    <string tools:ignore="UnusedResources" name="disclaimer_title">Riot artık Element oldu!</string>
+    <string tools:ignore="UnusedResources" name="disclaimer_negative_button">ANLADIM</string>
+    <string name="create_spaces_you_can_change_later">Bunu daha sonra değiştirebilirsiniz</string>
+    <string name="create_spaces_details_public_header">Öne çıkmasına yardımcı olacak bazı detaylar ekleyin. Bunları dilediğiniz zaman değiştirebilirsiniz.</string>
+    <string name="create_space_error_empty_field_space_name">Devam etmek için bir ad verin.</string>
+    <string name="upgrade_private_room">Özel odayı yükselt</string>
+    <string name="room_upgrade_to_recommended_version">Önerilen oda sürümüne yükselt</string>
+    <string name="a11y_start_voice_message">Sesli Mesaj Kaydet</string>
+    <plurals name="room_polls_active_no_item_for_loaded_period">
+        <item quantity="one">Son 24 saat için açık anket yok.\nÖnceki günlere ait anketleri görüntülemek için daha fazla anket yükleyin.</item>
+        <item quantity="other">Son %1$d gün için açık anket yok.\nÖnceki günlere ait anketleri görüntülemek için daha fazla anket yükleyin.</item>
+    </plurals>
+    <string name="device_manager_other_sessions_recommendation_description_unverified">Gelişmiş güvenli mesajlaşma için oturumlarınızı doğrulayın veya tanımadığınız ya da artık kullanmadığınız oturumlardan çıkış yapın.</string>
+    <string name="device_manager_learn_more_sessions_verified_description">Doğrulanmış oturumlar, şifre kelimenizi girerek veya başka bir doğrulanmış oturumla kimliğinizi onaylayarak bu hesabı kullandığınız her yerdir.\n\nBu, şifreli mesajlarınızı açmak için gereken tüm anahtarlara sahip olduğunuz ve diğer kullanıcılara bu oturumu güvenilir olarak onayladığınız anlamına gelir.</string>
+    <string name="onboarding_new_app_layout_welcome_message">${app_name} uygulamanızı basitleştirmek için, sekmeler artık isteğe bağlıdır. Bunları sol üst köşedeki menüyü kullanarak yönetebilirsiniz.</string>
+    <string name="invite_just_to_this_room_desc">Onlar %s\'nin bir parçası olmayacaklar</string>
 </resources>
