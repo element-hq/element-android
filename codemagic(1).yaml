@@ -1,0 +1,26 @@
+workflows:
+  android:
+    name: Build Android APK
+    instance_type: mac_mini_m1   # Use 'mac_mini' or 'mac_m1' for the build environment
+    max_build_duration: 60  # Set the maximum build duration in minutes
+    
+steps:
+      - checkout: true # Fetches your code from GitHub
+      - run:
+          name: Set up JDK
+          command: echo "Setting up JDK 8"
+      - run:
+          name: Set up Android SDK
+          command: |
+            echo "Setting up Android SDK"
+            yes | sdkmanager "platforms;android-29"
+            yes | sdkmanager "build-tools;29.0.2"
+            yes | sdkmanager "platform-tools"
+      - run:
+          name: Build APK
+          command: |
+            echo "Building APK"
+            ./gradlew clean assembleRelease # Builds the release APK, use 'assembleDebug' for debug build
+      - upload-artifact:
+          path: build/outputs/apk/release/app-release.apk  # Correct path to the generated APK
+          name: app-release.apk
