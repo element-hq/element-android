@@ -12,7 +12,7 @@
     <string name="ok">Tamam</string>
     <string name="action_cancel">İptal</string>
     <string name="action_save">Kaydet</string>
-    <string name="room_jump_to_first_unread">Okunmamış ilk mesaja git.</string>
+    <string name="room_jump_to_first_unread">Okunmamış ilk mesaja git</string>
     <string name="title_activity_choose_sticker">Çıkartma gönder</string>
     <string name="action_leave">Ayrıl</string>
     <string name="action_send">Gönder</string>
@@ -177,7 +177,7 @@
     <string name="room_do_not_have_permission_to_post">Bu odaya mesaj gönderme izniniz yok.</string>
     <plurals name="room_new_messages_notification">
         <item quantity="one">%d yeni mesaj</item>
-        <item quantity="other">%d yeni mesaj</item>
+        <item quantity="other">%d yeni mesajlar</item>
     </plurals>
     <string name="ssl_trust">Güven</string>
     <string name="ssl_do_not_trust">Güvenme</string>
@@ -224,12 +224,12 @@
     <string name="settings_troubleshoot_test_account_settings_failed">Bildirimler hesabın için etkin durumda değil.
 \nLütfen hesap ayarlarınızı gözden geçirin.</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">Etkinleştir</string>
-    <string name="settings_troubleshoot_test_device_settings_title">Oturum Ayarları</string>
+    <string name="settings_troubleshoot_test_device_settings_title">Oturum Ayarları.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Bildirimler bu oturum için etkinleştirilmiş.</string>
     <string name="settings_troubleshoot_test_device_settings_failed">Bildirimler bu oturum için etkin değil.
 \nLütfen ${app_name} ayarlarını gözden geçirin.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Etkinleştir</string>
-    <string name="settings_troubleshoot_test_bing_settings_title">Özel Ayarlar</string>
+    <string name="settings_troubleshoot_test_bing_settings_title">Özel Ayarlar.</string>
     <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Bazı mesajların türü sessize ayarlanmıştır (sessiz bir bildirim gönderecektir).</string>
     <string name="settings_troubleshoot_test_bing_settings_failed">Bazı bildirimler özel ayarlarınızda devre dışı durumda.</string>
     <string name="settings_troubleshoot_test_play_services_title">Play Hizmetlerini Gözden Geçir</string>
@@ -351,9 +351,7 @@
     <string name="settings_new_password">Yeni şifre</string>
     <string name="settings_fail_to_update_password">Şifreyi güncellerken hata oluştu</string>
     <string name="settings_password_updated">Şifren güncellendi</string>
-    <string name="settings_unignore_user">%s den/dan tüm mesajlar gösterilsin mi\?
-\n
-\nNot bu eylem uygulamayı yeniden başlatacak ve biraz zaman alabilir.</string>
+    <string name="settings_unignore_user">%s \'den gelen tüm mesajları göster?</string>
     <string name="settings_select_country">Ülke seç</string>
     <string name="media_saving_period_3_days">3 gün</string>
     <string name="media_saving_period_1_week">1 hafta</string>
@@ -773,7 +771,7 @@
     <string name="settings_troubleshoot_test_push_notification_content">Bildirimi görüntülüyorsunuz! Buraya tıkla!</string>
     <string name="error_threepid_auth_failed">Size gönderdiğimiz e-postadaki bağlantıya tıkladığınıza emin olun.</string>
     <string name="settings_phone_numbers">Telefon numaraları</string>
-    <string name="settings_emails_empty">Hesabınıza kayıtlı bir e-posta adresi yok.</string>
+    <string name="settings_emails_empty">Hesabınıza kayıtlı bir e-posta adresi yok</string>
     <string name="settings_emails">E-posta hesapları</string>
     <string name="settings_phone_number_empty">Hesabınıza hiçbir telefon numarası eklenmedi</string>
     <string name="search_banned_user_hint">Banlanan kullanıcıları filtrele</string>
@@ -961,7 +959,7 @@
         <item quantity="other">%d davetiye</item>
     </plurals>
     <string name="room_alias_publish_to_directory_error">Mevcut oda dizini görünürlüğü alınamıyor Hata: (%1$s).</string>
-    <string name="room_alias_publish_to_directory">Bu odayı %1$s</string>
+    <string name="room_alias_publish_to_directory">Bu odayı %1$s\'in oda dizininde herkese açık olarak yayınlansın mı?</string>
     <string name="login_signup">Kayıt ol</string>
     <string name="login_signin_to">%1$s sunucusuna giriş yap</string>
     <string name="login_connect_to_a_custom_server">Özel bir sunucuya bağlan</string>
@@ -1014,7 +1012,7 @@
     <string name="a11y_jump_to_bottom">Aşağıya git</string>
     <string name="a11y_create_room">Yeni bir oda oluşturun</string>
     <string name="a11y_create_direct_message">Yeni bir direkt sohbet oluşturun</string>
-    <string name="a11y_create_menu_close">Oda oluşturma menüsünü kapatın..</string>
+    <string name="a11y_create_menu_close">Oda oluşturma menüsünü kapatın…</string>
     <string name="a11y_create_menu_open">Oda oluşturma menüsünü açın</string>
     <string name="a11y_open_drawer">Gezinme menüsünü açın</string>
     <string name="send_attachment">Ek gönder</string>
@@ -1080,7 +1078,7 @@
     <string name="login_reset_password_success_submit">Tekrar giriş yapın</string>
     <string name="login_reset_password_success_notice">Parolanız sıfırlandı.</string>
     <string name="login_reset_password_mail_confirmation_submit">E-posta adresimi onayladım</string>
-    <string name="login_reset_password_mail_confirmation_notice_2">"Yeni parolanızı onaylamak için bağlantıya tıklayın.  İçerdiği bağlantıyı takip ettikten sonra aşağıyı tıklayın."</string>
+    <string name="login_reset_password_mail_confirmation_notice_2">Yeni parolanızı onaylamak için bağlantıya tıklayınız. İçerdiği bağlantıyı takip ettikten sonra aşağıya tıklayınız.</string>
     <string name="login_reset_password_mail_confirmation_notice">%1$s adresine e-posta gönderildi.</string>
     <string name="login_reset_password_mail_confirmation_title">Gelen kutunuzu kontrol edin</string>
     <string name="login_reset_password_error_not_found">Bu e-posta herhangi bir hesapla ilişkili değil</string>
@@ -1203,8 +1201,8 @@
     <string name="notice_widget_removed">%1$s %2$s widgetını kaldırdı</string>
     <string name="notice_direct_room_update">%s burada yükseltildi.</string>
     <string name="notice_room_visibility_world_readable">birisi.</string>
-    <string name="notice_made_future_direct_room_visibility_by_you">Gelecek mesajları %1$s için görünür yaptınız.</string>
-    <string name="notice_made_future_direct_room_visibility">%1$s, gelecek mesajları %2$s için görünür hale getirdi.</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">Gelecek mesajları %1$s için görünür yaptınız</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s, gelecek mesajları %2$s için görünür hale getirdi</string>
     <string name="notice_made_future_room_visibility_by_you">Oda geçmişini %1$s için görünür yaptınız.</string>
     <string name="notice_made_future_room_visibility">%1$s oda geçmişini %2$s \'ye görünür yaptı.</string>
     <string name="notice_call_candidates_by_you">Çağrı kurulumu için verileri gönderdiniz.</string>
@@ -1656,7 +1654,7 @@
     <string name="feedback_failed">Geri bildirim gönderilemedi (%s)</string>
     <string name="feedback_sent">Teşekkürler, geri bildiriminiz başarıyla gönderildi</string>
     <string name="you_may_contact_me">Herhangi bir takip sorunuz varsa benimle iletişime geçebilirsiniz</string>
-    <string name="send_feedback_space_info">"Alanların beta sürümünü kullanıyorsunuz. Geri bildiriminiz sonraki sürümleri bilgilendirmeye yardımcı olacaktır.  Platformunuz ve kullanıcı adınız, geri bildiriminizi elimizden geldiğince kullanmamıza yardımcı olmak için not edilecektir."</string>
+    <string name="send_feedback_space_info">Alanların beta sürümünü kullanıyorsunuz. Geri bildiriminiz sonraki sürümleri bilgilendirmeye yardımcı olacaktır. Platformunuz ve kullanıcı adınız, geri bildiriminizi elimizden geldiğince kullanmamıza yardımcı olmak için not edilecektir.</string>
     <string name="feedback">Geri bildirim</string>
     <string name="send_feedback_space_title">Alan geri bildirimi</string>
     <string name="settings_troubleshoot_test_token_registration_quick_fix">Kayıt belirteci</string>
@@ -1716,7 +1714,7 @@
     <string name="ftue_auth_use_case_option_three">Topluluklar</string>
     <string name="ftue_auth_use_case_option_two">Takımlar</string>
     <string name="ftue_auth_use_case_option_one">Arkadaşlar ve aile</string>
-    <string name="ftue_auth_use_case_subtitle">Bağlanmanıza yardımcı olacağız.</string>
+    <string name="ftue_auth_use_case_subtitle">Bağlanmanıza yardımcı olacağız</string>
     <string name="navigate_to_thread_when_already_in_the_thread">Bu konuyu zaten görüntülüyorsun!</string>
     <string name="view_in_room">Odada Görüntüle</string>
     <string name="search_thread_from_a_thread">Bir Konudan</string>
@@ -1806,7 +1804,7 @@
     <string name="threads_labs_enable_notice_title">Konular Beta</string>
     <string name="thread_list_empty_subtitle">Konu başlıkları, sohbetlerinizi konuyla alakalı ve takip edilmesi kolay hale getirir.</string>
     <plurals name="search_space_multiple_parents">
-        <item quantity="one">"%1$s  ve %2$d diğeri"</item>
+        <item quantity="one">%1$s ve %2$d diğeri</item>
         <item quantity="other">%1$s ve %2$d diğerleri</item>
     </plurals>
     <string name="permissions_rationale_msg_notification">\"${app_name}\", bildirimleri göstermek için izninize ihtiyaç duyuyor. Bildirimler, mesajlarınızı, davetlerinizi ve diğer önemli bilgileri gösterebilir.
@@ -1815,13 +1813,13 @@
     <string name="threads_labs_enable_notice_message">Ana sunucunuz şu anda konuları desteklemiyor, bu nedenle bu özellik güvenilir olmayabilir. Bazı konu başlıklarına sahip mesajlar düzgün görüntülenmeyebilir. %sYine de konuları etkinleştirmek istiyor musunuz\?</string>
     <string name="thread_list_not_available">Ana sunucunuz henüz konu başlıklarını listelemeyi desteklemiyor.</string>
     <string name="settings_notification_error_on_update">Bildirim tercihlerinizi güncellerken bir hata oluştu. Lütfen tekrar deneyin.</string>
-    <string name="settings_troubleshoot_test_system_settings_permission_failed">${app_name}\", bildirimleri göstermek için izninize ihtiyaç duyuyor. Lütfen izin verin.</string>
+    <string name="settings_troubleshoot_test_system_settings_permission_failed">${app_name}\", bildirimleri göstermek için izninize ihtiyaç duyuyor.\nLütfen izin verin.</string>
     <string name="settings_troubleshoot_test_endpoint_registration_title">Uç Nokta Kaydı</string>
     <string name="settings_troubleshoot_test_endpoint_registration_success">Uç nokta ana sunucuya başarıyla kaydedildi.</string>
     <string name="grant_permission">İzin Ver</string>
     <string name="settings_external_account_management_title">Hesap</string>
     <string name="settings_crypto_version">Kripto sürümü</string>
-    <string name="settings_troubleshoot_test_endpoint_registration_failed">Uç nokta belirteci ana sunucuya kaydedilemedi: %1$s</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">Uç nokta belirteci ana sunucuya kaydedilemedi:\n%1$s</string>
     <string name="settings_autoplay_animated_images_title">Animasyonlu görselleri otomatik oynat</string>
     <string name="settings_enable_direct_share_title">Doğrudan paylaşımı etkinleştir</string>
     <string name="settings_enable_direct_share_summary">Sistem paylaşım menüsünde son sohbetleri göster</string>
@@ -1846,8 +1844,8 @@
     <string name="font_size_title">Yazı tipi boyutunu seç</string>
     <string name="command_description_devtools">Geliştirici araçları ekranını aç</string>
     <string name="reply_in_thread">Konuda yanıtla</string>
-    <string name="create_room_unknown_users_dialog_content">Aşağıda listelenen Matrix ID\'leri için profiller bulunamadı. Yine de bir sohbet başlatmak ister misiniz\? %s</string>
-    <string name="timeline_error_room_not_found">Üzgünüz, bu oda bulunamadı. Lütfen daha sonra tekrar deneyin.%s</string>
+    <string name="create_room_unknown_users_dialog_content">Aşağıda listelenen Matrix ID\'leri için profiller bulunamadı. Yine de bir sohbet başlatmak ister misiniz?\n\n%s</string>
+    <string name="timeline_error_room_not_found">Üzgünüz, bu oda bulunamadı.\nLütfen daha sonra tekrar deneyin.%s</string>
     <string name="command_not_supported_in_threads">%s\" komutu tanınıyor ancak konularda desteklenmiyor.</string>
     <string name="create_room_action_go">Git</string>
     <string name="push_gateway_item_profile_tag">Profil etiketi:</string>
@@ -1930,7 +1928,7 @@
     <string name="poll_type_title">Anket türü</string>
     <string name="error_voice_broadcast_no_connection_recording">Bağlantı hatası - Kayıt duraklatıldı</string>
     <string name="stop_voice_broadcast_dialog_title">Canlı yayını durdurmak istiyor musunuz?</string>
-    <string name="closed_poll_option_description">Sonuçlar yalnızca anketi sonlandırdığınızda gösterilir.</string>
+    <string name="closed_poll_option_description">Sonuçlar yalnızca anketi sonlandırdığınızda gösterilir</string>
     <string name="call_tile_voice_active">Aktif sesli arama</string>
     <string name="call_tile_video_call_has_ended">Görüntülü arama sona erdi • %1$s</string>
     <string name="qr_code_not_scanned">QR kodu taranmadı!</string>
@@ -1980,7 +1978,7 @@
     <string name="ftue_auth_phone_confirmation_subtitle">%s adresine bir kod gönderildi.</string>
     <string name="ftue_auth_phone_confirmation_title">Telefon numaranızı doğrulayın</string>
     <string name="ftue_auth_email_verification_title">E-postanızı doğrulayın</string>
-    <string name="ftue_auth_phone_confirmation_resend_code">Kodu yeniden gönder.</string>
+    <string name="ftue_auth_phone_confirmation_resend_code">Kodu yeniden gönder</string>
     <string name="view_download_replacement_app_subtitle">Daha hızlı, daha güvenli ve güçlü iş birliği araçlarıyla dolu.</string>
     <string name="ftue_auth_email_verification_subtitle">%s adresine gönderilen talimatları takip edin</string>
     <string name="invite_users_to_room_action_invite">DAVET ET</string>
@@ -2078,15 +2076,8 @@
     <string name="trusted">Güvenilir</string>
     <string name="verification_request_was_sent">Bir doğrulama isteği gönderildi. Kabul etmek ve doğrulamayı başlatmak için diğer oturumlarınızdan birini açın.</string>
     <string tools:ignore="UnusedResources" name="verify_new_session_compromized">Hesabınız tehlikeye girmiş olabilir</string>
-    <string tools:ignore="UnusedResources" name="verify_not_me_self_verification">Aşağıdakilerden biri tehlikeye girmiş olabilir:
-\n
-\n- Şifreniz
-\n- Ana sunucunuz
-\n- Bu cihaz veya diğer cihaz
-\n- Herhangi bir cihazın kullandığı internet bağlantısı
-\nAyarlar\'dan şifrenizi ve kurtarma anahtarınızı hemen değiştirmenizi öneririz.</string>
-    <string name="bootstrap_cross_signing_success">%2$s ve %1$s artık ayarlandı. 
-\nOnları güvende tutun! Tüm aktif oturumlarınızı kaybederseniz, şifreli mesajları ve güvenli bilgileri açmak için bunlara ihtiyacınız olacak.</string>
+    <string tools:ignore="UnusedResources" name="verify_not_me_self_verification">Aşağıdakilerden biri tehlikeye girmiş olabilir:\n\n- Şifreniz\n- Ana sunucunuz\n- Bu cihaz veya diğer cihaz\n- Herhangi bir cihazın kullandığı internet bağlantısı\n\nAyarlar\'dan şifrenizi ve kurtarma anahtarınızı hemen değiştirmenizi öneririz.</string>
+    <string name="bootstrap_cross_signing_success">%2$s ve %1$s artık ayarlandı.\n\nOnları güvende tutun! Tüm aktif oturumlarınızı kaybederseniz, şifreli mesajları ve güvenli bilgileri açmak için bunlara ihtiyacınız olacak.</string>
     <string name="direct_room_encryption_enabled_waiting_users_tile_description">Davet edilen kullanıcılar ${app_name}\'a katıldığında, sohbet edebilecek ve oda uçtan uca şifrelenmiş olacaktır</string>
     <string name="room_created_summary_no_topic_creation_text">%s, bu odanın ne hakkında olduğunu insanlara bildirmek için.</string>
     <string name="bootstrap_enter_recovery">Devam etmek için %s girin</string>
@@ -2344,7 +2335,7 @@
     <string name="attachment_type_selector_file">Ekler</string>
     <string name="call_transfer_failure">Çağrı aktarılırken bir hata oluştu</string>
     <string name="a11y_selected">Seçili</string>
-    <string name="a11y_trust_level_trusted">Güvenilir güven seviyesi</string>
+    <string name="a11y_trust_level_trusted">Güven seviyesinde güvenilir statü</string>
     <string name="location_share_live_until">%1$s\'ye kadar aktif</string>
     <string name="live_location_sharing_notification_description">Konum paylaşımı devam ediyor</string>
     <string name="live_location_bottom_sheet_last_updated_at">%1$s önce güncellendi</string>
@@ -2591,7 +2582,7 @@
     <string name="upgrade_room_for_restricted">%s içindeki herkes bu odayı bulup katılabilir – herkesi manuel olarak davet etmenize gerek yok. Bu ayarı dilediğiniz zaman oda ayarlarından değiştirebilirsiniz.</string>
     <string name="create_poll_options_title">Seçenekler oluşturun</string>
     <string name="labs_enable_msc3061_share_history">MSC3061: Geçmiş mesajlar için oda anahtarlarını paylaşma</string>
-    <string name="this_invite_to_this_space_was_sent">Bu alan daveti, hesabınızla ilişkilendirilmemiş olan %s adresine gönderildi.</string>
+    <string name="this_invite_to_this_space_was_sent">Bu alan daveti, hesabınızla ilişkilendirilmemiş olan %s adresine gönderildi</string>
     <string name="create_poll_add_option">SEÇENEK EKLE</string>
     <string name="end_poll_confirmation_description">Bu işlem, oy verme işlemini durduracak ve anketin kesin sonuçlarını gösterecektir.</string>
     <string name="delete_poll_dialog_title">Anketi kaldır</string>
