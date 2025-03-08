@@ -1,0 +1,2 @@
+Bu sürümdeki ana değişiklikler: Mobil Cihaz Yönetimi ve fonksiyonel üye desteği eklendi.
+Tam değişiklik günlüğü: https://github.com/element-hq/element-android/releases
