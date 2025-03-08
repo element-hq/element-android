@@ -895,7 +895,7 @@
     <string name="room_settings_alias_subtitle">Bu odanın adreslerini ve oda dizinindeki görünürlüğünü inceleyin.</string>
     <string name="room_settings_room_read_history_dialog_subtitle">Geçmişi okuyabilenlerle ilgili değişiklikler, yalnızca bu odadaki gelecekteki mesajlar için geçerli olacaktır. Mevcut geçmişin görünürlüğü değişmeyecek.</string>
     <string name="room_settings_alias_title">Oda ayarları</string>
-    <string name="settings_emails_and_phone_numbers_summary">Matrix hesabınıza bağlı e-posta adreslerini ve telefon numaralarını yönetin.</string>
+    <string name="settings_emails_and_phone_numbers_summary">Matrix hesabınıza bağlı e-posta adreslerini ve telefon numaralarını yönetin</string>
     <string name="settings_emails_and_phone_numbers_title">E-postalar ve telefon numaraları</string>
     <string name="settings_show_emoji_keyboard_summary">Emoji klavyesini açmak için mesaj oluşturucuya bir düğme ekleyin</string>
     <string name="settings_chat_effects_description">/confetti komutunu kullanın veya ❄️ veya 🎉 içeren bir mesaj gönderin</string>
@@ -914,7 +914,7 @@
     <string name="send_suggestion_failed">Öneri gönderilemedi (%s)</string>
     <string name="send_suggestion_content">Önerilerinizi aşağıya yazınız.</string>
     <string name="push_gateway_item_device_name">Oturum Görüntü Adı:</string>
-    <string name="push_gateway_item_push_key">push_anahtarı:</string>
+    <string name="push_gateway_item_push_key">Tuşa Bas:</string>
     <string name="room_settings_room_access_title">Oda erişimi</string>
     <string name="settings_show_emoji_keyboard">Emoji klavyesini göster</string>
     <string name="terms_description_for_identity_server">Başkaları tarafından görünür olun</string>
@@ -942,7 +942,7 @@
     <string name="send_suggestion">Öneri yap</string>
     <string name="preference_root_help_about">Yardım ve Hakkında</string>
     <string name="preference_voice_and_video">Ses ve görüntü</string>
-    <string name="push_gateway_item_app_display_name">uygulama_görüntüleme_ismi:</string>
+    <string name="push_gateway_item_app_display_name">Uygulama Görünen Adı:</string>
     <string name="settings_push_rules_no_rules">Tanımlanan push kuralı yok</string>
     <string name="settings_push_rules">Push kuralları</string>
     <string name="settings_security_and_privacy">Güvenlik ve Gizlilik</string>
@@ -1101,7 +1101,7 @@
     <string name="block_user">KULLANICIYI YOKSAY</string>
     <string name="settings_discovery_bad_identity_server">Kimlik sunucusuna bağlanılamadı</string>
     <string name="settings_discovery_enter_identity_server">Kimlik sunucusu URLsi girin</string>
-    <string name="settings_discovery_consent_notice_on">Rehberinizden diğer kişileri keşfetmek için bu kimlik sunucusuna e-posta ve telefon numaralarını göndermeye izin verdiniz.</string>
+    <string name="settings_discovery_consent_notice_on">Kişilerinizden diğer kullanıcıları keşfetmek için e-posta adreslerini ve telefon numaralarını bu kimlik sunucusuna göndermek için onay verdiniz.</string>
     <string name="settings_discovery_consent_action_revoke">İznimi iptal et</string>
     <string name="settings_discovery_consent_action_give_consent">İzin ver</string>
     <string name="settings_discovery_consent_title">E-postaları ve telefon numaralarını gönder</string>
@@ -1495,7 +1495,7 @@
     <string name="verification_sent">Doğrulama Gönderildi</string>
     <string name="verification_request_you_accepted">kabul ettin</string>
     <string name="verification_request_other_accepted">%s kabul edildi</string>
-    <string name="verification_request_you_cancelled">iptal ettin</string>
+    <string name="verification_request_you_cancelled">İptal ettiniz</string>
     <string name="verification_request_other_cancelled">%s iptal edildi</string>
     <string name="verification_request_waiting">Bekleyiniz…</string>
     <string name="sent_location">Konumlarını paylaştı</string>
@@ -1632,11 +1632,11 @@
     <string name="settings_discovery_no_terms_title">Kimlik sunucusunun hizmet şartı yok</string>
     <string name="settings_discovery_please_enter_server">Lütfen kimlik sunucusu url\'sini girin</string>
     <string name="identity_server_consent_dialog_content_question">Bu bilgiyi göndermeyi kabul ediyor musunuz\?</string>
-    <string name="identity_server_consent_dialog_content_3">Mevcut kişileri keşfetmek için, iletişim bilgilerini (e-postalar ve telefon numaraları) kimlik sunucunuza göndermeniz gerekir. Gizlilik için göndermeden önce verilerinizi hash ederiz.</string>
+    <string name="identity_server_consent_dialog_content_3">Mevcut kişileri keşfedebilmek için, kimlik sunucunuza e-posta adresleri ve telefon numaraları gibi iletişim bilgilerinizi göndermeniz gerekir. Gizliliği korumak adına, bu bilgileri göndermeden önce özet (hash) değerlerine dönüştürüyoruz.</string>
     <string name="identity_server_consent_dialog_title_2">%s\'e e-posta ve telefon numarası gönder</string>
     <string name="settings_discovery_consent_notice_off_2">Kişileriniz özeldir. Kişilerinizden kullanıcıları keşfetmek için, kimlik sunucunuza iletişim bilgilerini göndermek için izninize ihtiyacımız var.</string>
-    <string name="settings_discovery_confirm_mail_not_clicked">Size %s adresine bir onay e-postası gönderdik, lütfen önce e-postanızı kontrol edin ve onay bağlantısını tıklayın</string>
-    <string name="settings_discovery_confirm_mail">Size %s adresine bir onay e-postası gönderdik, e-postanızı kontrol edin ve onay bağlantısını tıklayın</string>
+    <string name="settings_discovery_confirm_mail_not_clicked">%s adresine bir onay e-postası gönderdik, lütfen önce e-postanızı kontrol edin ve onay bağlantısını tıklayın</string>
+    <string name="settings_discovery_confirm_mail">%s adresine bir onay e-postası gönderdik, e-postanızı kontrol edin ve onay bağlantısını tıklayın</string>
     <string name="settings_discovery_msisdn_title">Keşfedilebilir telefon numaraları</string>
     <string name="settings_discovery_no_msisdn">Bir telefon numarası ekledikten sonra keşif seçenekleri görünecektir.</string>
     <string name="settings_discovery_no_mails">Bir e-posta ekledikten sonra keşif seçenekleri görünecektir.</string>
@@ -1744,7 +1744,7 @@
 \n
 \n Bu eylemin uygulamayı yeniden başlatacağını ve biraz zaman alabileceğini unutmayın.</string>
     <string name="initial_sync_request_reason_unignored_users">- Bazı kullanıcılar göz ardı edildi</string>
-    <string name="a11y_expand_space_children">%s çocuğu genişlet</string>
+    <string name="a11y_expand_space_children">%s öğeyi genişlet</string>
     <string name="time_unit_minute_short">dk.</string>
     <string name="action_disable">Devre dışı bırak</string>
     <string name="time_unit_hour_short">sa.</string>
@@ -1912,7 +1912,7 @@
     <string name="room_polls_ended">Geçmiş anketler</string>
     <string name="error_voice_broadcast_permission_denied_message">Bu odada ses yayını başlatmak için gerekli izinlere sahip değilsiniz. Gerekli izinleri almak için bir oda yöneticisiyle iletişime geçin.</string>
     <string name="restart_the_application_to_apply_changes">Değişikliğin uygulanması için uygulamayı yeniden başlatın.</string>
-    <string name="end_poll_confirmation_title">Bu anketi sonlandırmak istiyor musunuz\?</string>
+    <string name="end_poll_confirmation_title">Bu anketi sonlandırmak istiyor musunuz?</string>
     <string name="end_poll_confirmation_approve_button">Anketi sonlandır</string>
     <string name="voice_broadcast_buffering">Yükleniyor…</string>
     <string name="room_polls_ended_no_item">Bu odada geçmiş anket bulunmuyor</string>
@@ -1926,10 +1926,10 @@
     <string name="error_voice_broadcast_unauthorized_title">Yeni bir ses yayını başlatılamıyor</string>
     <string name="error_voice_broadcast_already_in_progress_message">Zaten bir ses yayını kaydediyorsunuz. Yeni bir ses yayını başlatmak için lütfen mevcut ses yayınınızı sonlandırın.</string>
     <string name="error_voice_broadcast_unable_to_play">Bu ses yayını oynatılamıyor.</string>
-    <string name="stop_voice_broadcast_content">Canlı yayını durdurmak istediğinizden emin misiniz\? Bu işlem yayını sonlandıracak ve tam kayıt odada erişilebilir olacak.</string>
+    <string name="stop_voice_broadcast_content">Canlı yayını durdurmak istediğinizden emin misiniz? Bu işlem yayını sonlandıracak ve tam kayıt odada erişilebilir olacak.</string>
     <string name="poll_type_title">Anket türü</string>
     <string name="error_voice_broadcast_no_connection_recording">Bağlantı hatası - Kayıt duraklatıldı</string>
-    <string name="stop_voice_broadcast_dialog_title">Canlı yayını durdurmak istiyor musunuz\?</string>
+    <string name="stop_voice_broadcast_dialog_title">Canlı yayını durdurmak istiyor musunuz?</string>
     <string name="closed_poll_option_description">Sonuçlar yalnızca anketi sonlandırdığınızda gösterilir.</string>
     <string name="call_tile_voice_active">Aktif sesli arama</string>
     <string name="call_tile_video_call_has_ended">Görüntülü arama sona erdi • %1$s</string>
@@ -1946,7 +1946,7 @@
         <item quantity="one">Aktif arama ·</item>
         <item quantity="other">%1$d aktif aramalar ·</item>
     </plurals>
-    <string name="settings_security_pin_code_grace_period_title">2 dakika sonra PIN iste</string>
+    <string name="settings_security_pin_code_grace_period_title">2 dakika sonra PIN kodu iste</string>
     <string name="call_transfer_connect_action">Bağlan</string>
     <string name="call_tile_other_declined">%1$s bu aramayı reddetti</string>
     <string name="call_tile_voice_declined">Sesli arama reddedildi</string>
@@ -1963,7 +1963,7 @@
     <string name="warning_unsaved_change_discard">Değişiklikleri iptal et</string>
     <string name="warning_room_not_created_yet">Oda henüz oluşturulmadı. Oda oluşturma iptal edilsin mi\?</string>
     <string name="invalid_qr_code_uri">Geçersiz QR kodu (Geçersiz URI)!</string>
-    <string name="share_by_text">Metin ile paylaş</string>
+    <string name="share_by_text">Mesajla paylaş</string>
     <string name="error_opening_banned_room">Yasaklı olduğunuz bir odayı açamazsınız.</string>
     <string name="settings_security_pin_code_notifications_title">Bildirimlerde içeriği göster</string>
     <string name="settings_security_pin_code_notifications_summary_on">Oda adları ve mesaj içeriği gibi detayları göster.</string>
@@ -2199,7 +2199,7 @@
     <string name="room_member_power_level_custom">Özel</string>
     <string name="room_settings_enable_encryption_dialog_submit">Şifrelemeyi etkinleştir</string>
     <string name="settings_server_name">Sunucu adı</string>
-    <string name="ftue_profile_picture_subtitle">İsme bir yüz ekleyin</string>
+    <string name="ftue_profile_picture_subtitle">Artık isme bir yüz eklemenin zamanı geldi</string>
     <string name="room_profile_section_security_learn_more">Daha fazlasını öğren</string>
     <string name="direct_room_profile_section_more_settings">Ayarlar</string>
     <string name="settings_sessions_list">Oturumlar</string>
@@ -2771,7 +2771,7 @@
     <string name="dev_tools_success_event">Etkinlik gönderildi!</string>
     <string name="settings_security_application_protection_screen_title">Koruma yapılandırması</string>
     <string name="a11y_rule_notify_off">Bildirim gönderme</string>
-    <string name="three_pid_revoke_invite_dialog_content">1$s davetiyesi iptal edilsin mi\?</string>
+    <string name="three_pid_revoke_invite_dialog_content">%1$s davetiyesi iptal edilsin mi?</string>
     <string tools:ignore="UnusedResources" name="qr_code_login_link_a_device_show_qr_code_instruction_2">\'QR kodu tara\'yı seç</string>
     <string tools:ignore="UnusedResources" name="qr_code_login_signing_in">Girişiniz yapılıyor</string>
     <string tools:ignore="UnusedResources" name="qr_code_login_connecting_to_device">Cihaza bağlanılıyor</string>
