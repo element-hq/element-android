@@ -1,0 +1,2 @@
+Bu sürümdeki ana değişiklikler: Başlıca hata düzeltmeleri yapıldı, özellikle mesajların zaman akışında görünmemesi sorunu giderildi.
+Tam değişiklik günlüğü: https://github.com/element-hq/element-android/releases
