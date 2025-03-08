@@ -2951,4 +2951,7 @@
     <string name="device_manager_learn_more_sessions_verified_description">Doğrulanmış oturumlar, şifre kelimenizi girerek veya başka bir doğrulanmış oturumla kimliğinizi onaylayarak bu hesabı kullandığınız her yerdir.\n\nBu, şifreli mesajlarınızı açmak için gereken tüm anahtarlara sahip olduğunuz ve diğer kullanıcılara bu oturumu güvenilir olarak onayladığınız anlamına gelir.</string>
     <string name="onboarding_new_app_layout_welcome_message">${app_name} uygulamanızı basitleştirmek için, sekmeler artık isteğe bağlıdır. Bunları sol üst köşedeki menüyü kullanarak yönetebilirsiniz.</string>
     <string name="invite_just_to_this_room_desc">Onlar %s\'nin bir parçası olmayacaklar</string>
+    <string tools:ignore="UnusedResources" name="one">1</string>
+    <string tools:ignore="UnusedResources" name="three">3</string>
+    <string tools:ignore="UnusedResources" name="two">2</string>
 </resources>
