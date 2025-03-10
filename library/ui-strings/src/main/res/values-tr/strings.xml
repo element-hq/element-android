@@ -1107,7 +1107,7 @@
     <string name="notification_unread_notified_messages_and_invitation">%1$s ve %2$s</string>
     <plurals name="encryption_import_room_keys_success">
         <item quantity="one">%1$d/%2$d anahtar başarıyla içe aktarıldı.</item>
-        <item quantity="other">%1$d/%2$d anahtar başarıyla içe aktarıldı.</item>
+        <item quantity="other">"%1$d/%2$d anahtarlar  başarıyla içe aktarıldı."</item>
     </plurals>
     <string name="call_held_by_you">Aramayı beklettiniz</string>
     <string name="call_held_by_user">%s aramayı bekletti</string>
@@ -2735,7 +2735,7 @@
     <string name="failed_to_unban">Kullanıcının yasağını kaldırmak başarısız oldu</string>
     <string name="settings_security_application_protection_summary">Erişimi PIN ve biyometrik verilerle koruyun.</string>
     <plurals name="entries">
-        <item quantity="one">%d giriş</item>
+        <item quantity="one">%d kayıtlar</item>
         <item quantity="other">%d giriş</item>
     </plurals>
     <string name="identity_server_error_outdated_identity_server">Bu kimlik sunucusu eski. ${app_name} yalnızca API V2\'yi destekliyor.</string>
@@ -2899,8 +2899,8 @@
     <string name="room_polls_load_more">Daha fazla anket yükle</string>
     <string name="a11y_static_map_image">Harita</string>
     <plurals name="device_manager_other_sessions_description_inactive">
-        <item quantity="one">%1$d+ gün boyunca hareketsiz (%2$s)</item>
-        <item quantity="other">%1$d+ gün boyunca hareketsiz (%2$s)</item>
+        <item quantity="one">%1$d+ gündür etkin değil (%2$s)</item>
+        <item quantity="other">%1$d+ gündür etkin değil (%2$s)</item>
     </plurals>
     <string name="device_manager_other_sessions_recommendation_description_verified">En iyi güvenlik için, tanımadığınız veya artık kullanmadığınız oturumlardan çıkış yapın.</string>
     <string name="labs_enable_client_info_recording_summary">Oturum yöneticisinde oturumları daha kolay tanımak için istemci adı, sürümü ve URL\'sini kaydedin.</string>
