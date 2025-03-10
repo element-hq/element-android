@@ -1762,9 +1762,9 @@
     <string name="a11y_collapse_space_children">%s çocuğu daralt</string>
     <string name="action_got_it">Anladım</string>
     <string name="action_select_all">Tümünü seç</string>
-    <string name="action_learn_more">Daha fazla bilgi edinin</string>
+    <string name="action_learn_more">Daha fazlasını öğrenin</string>
     <string name="action_proceed_to_reset">Sıfırlamaya devam et</string>
-    <string name="action_next">İleri</string>
+    <string name="action_next">Sonraki</string>
     <string name="action_try_it_out">Şimdi Deneyin</string>
     <string name="labs_enable_new_app_layout_title">Yeni Düzeni Etkinleştir</string>
     <string name="labs_enable_deferred_dm_title">Ertelenmiş DM\'leri Etkinleştir</string>
