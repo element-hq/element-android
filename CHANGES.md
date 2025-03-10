@@ -1,9 +1,9 @@
 Changes in Element v1.6.34 (2025-03-07)
 =======================================
 
-Other changes
--------------
-- Fix security issue.
+Security fixes 🔐
+-----------------
+- Fix for [GHSA-632v-9pm3-m8ch](https://github.com/element-hq/element-android/security/advisories/GHSA-632v-9pm3-m8ch) / CVE-2025-27606
 
 Changes in Element v1.6.32 (2025-02-18)
 =======================================
