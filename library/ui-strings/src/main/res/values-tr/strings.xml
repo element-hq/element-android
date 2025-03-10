@@ -1106,7 +1106,7 @@
     <string name="settings_push_gateway_no_pushers">Kayıtlı push ağ geçidi yok</string>
     <string name="notification_unread_notified_messages_and_invitation">%1$s ve %2$s</string>
     <plurals name="encryption_import_room_keys_success">
-        <item quantity="one">%1$d/%2$d anahtar başarıyla içe aktarıldı.</item>
+        <item quantity="one">%1$d/%2$d anahtarlar başarıyla içe aktarıldı.</item>
         <item quantity="other">"%1$d/%2$d anahtarlar  başarıyla içe aktarıldı."</item>
     </plurals>
     <string name="call_held_by_you">Aramayı beklettiniz</string>
@@ -1769,8 +1769,8 @@
     <string name="labs_enable_new_app_layout_title">Yeni Düzeni Etkinleştir</string>
     <string name="labs_enable_deferred_dm_title">Ertelenmiş DM\'leri Etkinleştir</string>
     <string name="home_layout_preferences_sort_by">Sırala</string>
-    <string name="labs_enable_rich_text_editor_summary">Zengin metin düzenleyicisini deneyin (Düz metin modu yakında geliyor)</string>
-    <string name="action_deselect_all">Tümünü Kaldır</string>
+    <string name="labs_enable_rich_text_editor_summary">Zengin metin düzenleyicisini deneyin (düz metin modu yakında geliyor)</string>
+    <string name="action_deselect_all">Tümünü Seçimi Kaldır</string>
     <string name="labs_enable_deferred_dm_summary">Özel Sohbeti Yalnızca İlk Mesaj Gönderildiğinde Oluştur</string>
     <string name="action_stop">Evet, Durdur</string>
     <string name="home_layout_preferences_sort_activity">Aktivite</string>
@@ -1798,7 +1798,7 @@
 \nBu, tek seferlik bir geçiş olacak, çünkü Konular artık Matrix standardının bir parçası.</string>
     <string name="threads_beta_enable_notice_message">Konular, sohbetlerinizi konuyla alakalı ve takip edilmesi kolay hale getirir. %sKonuları etkinleştirmek uygulamayı yenileyecektir. Bazı hesaplar için bu işlem daha uzun sürebilir.</string>
     <string name="room_notification_two_users_are_typing">%1$s ve %2$s</string>
-    <string name="invites_empty_message">Yeni istekleriniz ve davetleriniz burada görünecek.</string>
+    <string name="invites_empty_message">Yeni istek ve davetleriniz burada olacak.</string>
     <string name="room_notification_more_than_two_users_are_typing">%1$s, %2$s ve diğerleri</string>
     <string name="threads_beta_enable_notice_title">Konular Beta</string>
     <string name="threads_labs_enable_notice_title">Konular Beta</string>
