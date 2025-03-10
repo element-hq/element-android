@@ -2560,7 +2560,7 @@
     <string name="create_poll_empty_question_error">Soru boş olamaz</string>
     <string name="upgrade_room_for_restricted_note">Lütfen unutmayın, yükseltme işlemi odanın yeni bir sürümünü oluşturacaktır. Mevcut tüm mesajlar bu arşivlenmiş odada kalacaktır.</string>
     <string name="poll_no_votes_cast">Hiç oy kullanılmadı</string>
-    <string name="poll_undisclosed_not_ended">Sonuçlar anket sona erdiğinde görüntülenebilir</string>
+    <string name="poll_undisclosed_not_ended">Anket sona erdiğinde sonuçlar görünür olacaktır</string>
     <string name="delete_poll_dialog_content">Bu anketi kaldırmak istediğinizden emin misiniz\? Kaldırıldıktan sonra geri alınamaz.</string>
     <string name="poll_end_action">Anketi sonlandır</string>
     <string name="create_poll_question_hint">Soru veya konu</string>
