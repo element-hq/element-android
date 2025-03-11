@@ -1749,7 +1749,7 @@
     <string name="change_space">Alanı Değiştir</string>
     <string name="sign_out_anyway">Yine de oturumu kapat</string>
     <plurals name="x_selected">
-        <item quantity="one">%1$d seçildi</item>
+        <item quantity="one">%1$d Seçili</item>
         <item quantity="other">%1$d seçildi</item>
     </plurals>
     <string name="notice_display_name_changed_to">%1$s görünen adını %2$s olarak değiştirdi</string>
@@ -1801,7 +1801,7 @@
     <string name="invites_empty_message">Yeni istek ve davetleriniz buraya gelecek.</string>
     <string name="room_notification_more_than_two_users_are_typing">%1$s, %2$s ve diğerleri</string>
     <string name="threads_beta_enable_notice_title">Beta Konuları</string>
-    <string name="threads_labs_enable_notice_title">Beta Konuları</string>
+    <string name="threads_labs_enable_notice_title">Konular Beta</string>
     <string name="thread_list_empty_subtitle">Konu başlıkları, sohbetlerinizi konuyla alakalı ve takip edilmesi kolay hale getirir.</string>
     <plurals name="search_space_multiple_parents">
         <item quantity="one">%1$s ve %2$d diğeri</item>
