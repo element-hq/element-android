@@ -1,0 +1,2 @@
+Põhilised muutused selles versioonis: lisasime võimaluse jututoast haldajale teatamiseks.
+Kogu ingliskeelne muudatuste logi: https://github.com/element-hq/element-android/releases
