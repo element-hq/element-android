@@ -1103,7 +1103,7 @@
         <item quantity="other">Запрошення надіслано для %1$s та ще %2$d осіб</item>
     </plurals>
     <plurals name="room_profile_section_more_member_list">
-        <item quantity="one">Одна особа</item>
+        <item quantity="one">%1$d особа</item>
         <item quantity="few">%1$d особи</item>
         <item quantity="many">%1$d осіб</item>
         <item quantity="other">%1$d осіб</item>
@@ -1180,7 +1180,7 @@
     <string name="command_snow">Надсилає вказане повідомлення зі снігопадом</string>
     <string name="command_confetti">Надсилає вказане повідомлення з конфетті</string>
     <plurals name="secure_backup_reset_devices_you_can_verify">
-        <item quantity="one">Показати пристрій, з якого ви можете звірити цей сеанс просто зараз</item>
+        <item quantity="one">Показати %d пристрій, з якого ви можете звірити цей сеанс просто зараз</item>
         <item quantity="few">Показати %d пристрої, з яких ви можете звірити цей сеанс просто зараз</item>
         <item quantity="many">Показати %d пристроїв, з яких ви можете звірити цей сеанс просто зараз</item>
         <item quantity="other">Показати %d пристроїв, з яких ви можете звірити цей сеанс просто зараз</item>
@@ -1544,7 +1544,7 @@
     <string name="call_tap_to_return">%1$s торкніться, щоб повернутися</string>
     <string name="call_one_active">Активний виклик (%1$s) ·</string>
     <plurals name="call_active_status">
-        <item quantity="one">Активний виклик ·</item>
+        <item quantity="one">%1$d активний виклик ·</item>
         <item quantity="few">%1$d активні виклики ·</item>
         <item quantity="many">%1$d активних викликів ·</item>
         <item quantity="other">%1$d активних викликів ·</item>
@@ -1597,16 +1597,16 @@
     <string name="audio_call_with_participant">Аудіовиклик з %s</string>
     <string name="video_call_with_participant">Відеовиклик з %s</string>
     <plurals name="missed_video_call">
-        <item quantity="one">Пропущений відеовиклик</item>
-        <item quantity="few">%d пропущені відеовиклики</item>
-        <item quantity="many">%d пропущених відеовикликів</item>
-        <item quantity="other">%d пропущених відеовикликів</item>
+        <item quantity="one">Пропущено %d відеовиклик</item>
+        <item quantity="few">Пропущено %d відеовиклики</item>
+        <item quantity="many">Пропущено %d відеовикликів</item>
+        <item quantity="other">Пропущено %d відеовикликів</item>
     </plurals>
     <plurals name="missed_audio_call">
-        <item quantity="one">Пропущено аудіовиклик</item>
-        <item quantity="few">%d пропущених аудіовиклики</item>
-        <item quantity="many">%d пропущених аудіовикликів</item>
-        <item quantity="other">%d пропущених аудіовикликів</item>
+        <item quantity="one">Пропущено %d аудіовиклик</item>
+        <item quantity="few">Пропущено %d аудіовиклики</item>
+        <item quantity="many">Пропущено %d аудіовикликів</item>
+        <item quantity="other">Пропущено %d аудіовикликів</item>
     </plurals>
     <string name="call_ringing">Викликається…</string>
     <string name="error_unauthorized">Не авторизовано, відсутні дійсні облікові дані для автентифікації</string>
@@ -2150,8 +2150,8 @@
     <string name="a11y_presence_offline">Не в мережі</string>
     <string name="a11y_presence_online">У мережі</string>
     <string name="a11y_view_read_receipts">Перегляд підтвердження прочитання</string>
-    <string name="a11y_unchecked">Не перевірено</string>
-    <string name="a11y_checked">Перевірено</string>
+    <string name="a11y_unchecked">Не обрано</string>
+    <string name="a11y_checked">Обрано</string>
     <string name="call_transfer_consulting_with">Консультація з %1$s</string>
     <string name="call_transfer_consult_first">Спочатку порадьтеся</string>
     <string name="warning_unsaved_change">Є незбережені зміни. Відкинути зміни\?</string>
@@ -2390,7 +2390,7 @@
     <string name="legals_application_title">Політика ${app_name}</string>
     <string name="analytics_opt_in_list_item_3">Можете вимкнути це коли завгодно в налаштуваннях</string>
     <string name="analytics_opt_in_list_item_2">Ми <b>не</b> передаємо даних стороннім особам</string>
-    <string name="analytics_opt_in_list_item_1">Ми <b>не</b> записуємо й <b>не</b> аналізуємо жодних даних облікового запису</string>
+    <string name="analytics_opt_in_list_item_1">Ми <b>не</b> записуємо чи аналізуємо жодних даних облікового запису</string>
     <string name="analytics_opt_in_content_link">тут</string>
     <string name="analytics_opt_in_content">Допомагайте нам визначати проблеми й удосконалювати ${app_name}, надсилаючи анонімні дані про використання. Щоб розуміти, як люди використовують кілька пристроїв, ми створимо спільний для ваших пристроїв випадковий ідентифікатор.
 \n
