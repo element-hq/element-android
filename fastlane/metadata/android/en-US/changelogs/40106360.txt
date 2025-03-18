@@ -1,0 +1,2 @@
+Main changes in this version: no significant change.
+Full changelog: https://github.com/element-hq/element-android/releases
