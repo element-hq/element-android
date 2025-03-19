@@ -1,0 +1,2 @@
+Cambiamenti principali di questa versione: notificare l'utente riguardo alle chiamate di Element non supportate.
+Changelog completo: https://github.com/element-hq/element-android/releases

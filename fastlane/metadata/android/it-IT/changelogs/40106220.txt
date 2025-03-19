@@ -1,0 +1,2 @@
+Cambiamenti principali in questa versione: Aggiornamento crypto sdk.
+Changelog completo: https://github.com/element-hq/element-android/releases
