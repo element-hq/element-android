@@ -1,2 +1,2 @@
-Fő változás ebben a verzióban: sebesség javítás és hibajavítás
+Fő változás ebben a verzióban: sebességbeli fejlesztés és hibajavítások.
 Teljes változásnapló: https://github.com/element-hq/element-android/releases/tag/v1.1.4
