@@ -1448,7 +1448,7 @@
     <string name="uploads_files_subtitle">%1$s %2$s</string>
     <string name="uploads_files_no_result">V této místnosti nejsou žádné soubory</string>
     <string name="login_connect_using_matrix_id_submit">Přihlásit se identifikátorem Matrixu</string>
-    <string name="login_signin_matrix_id_title">Přihlásit se</string>
+    <string name="login_signin_matrix_id_title">Přihlásit se pomocí Matrix ID</string>
     <string name="login_signin_matrix_id_notice">Pokud založíte účet na domovském serveru, použijte své Matrix ID (např. @user:domain.com) a heslo níže.</string>
     <string name="login_signin_matrix_id_hint">Identifikátor uživatele</string>
     <string name="login_signin_matrix_id_error_invalid_matrix_id">To není platný identifikátor uživatele. Platný formát: \'@uživatel:homeserver.org\'</string>
