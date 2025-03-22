@@ -1250,4 +1250,121 @@
     <string name="call_format_turn_hd_on">تشغيل HD</string>
     <string name="login_error_ssl_peer_unverified">خطأ SSL: لم يتم تأكيد هوية الجهه الأخرى.</string>
     <string name="labs_enable_rich_text_editor_title">تشغيل محرر النصوص</string>
+    <string name="labs_enable_deferred_dm_title">تمكين الرسائل المباشرة المؤجلة</string>
+    <string name="call_failed_no_connection_description">تعذّر إنشاء اتصال فوري.\nيرجى طلب تكوين خادم TURN من مسؤول خادمك المنزلي لضمان عمل المكالمات بكفاءة.</string>
+    <string name="settings_troubleshoot_test_bing_settings_title">الإعدادات المخصصة.</string>
+    <string name="settings_troubleshoot_test_push_loop_waiting_for_push">التطبيق ينتظر PUSH</string>
+    <string name="error_unauthorized">بيانات اعتماد مصادقة غير مصرح بها أو مفقودة</string>
+    <string name="space_permissions_notice_read_only">ليس لديك الإذن لتحديث الأدوار المطلوبة لتغيير أجزاء مختلفة من هذه المساحة</string>
+    <string name="settings_notification_your_keywords">كلماتك الرئيسية</string>
+    <string name="threads_beta_enable_notice_message">تُساعدك المواضيع على إبقاء محادثاتك مُرتبطة بالموضوع، مما يُسهّل تتبّعها. %sسيؤدي تفعيل المواضيع إلى تحديث التطبيق. قد يستغرق هذا وقتًا أطول في بعض الحسابات.</string>
+    <string name="settings_troubleshoot_test_account_settings_title">إعدادات الحساب.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]\nهذا الخطأ خارج عن سيطرة ${app_name}، ووفقًا لجوجل، يشير هذا الخطأ إلى وجود عدد كبير جدًا من التطبيقات المسجلة في FCM على الجهاز. يحدث هذا الخطأ فقط في الحالات التي يكون فيها عدد التطبيقات كبيرًا جدًا، لذا لا يُفترض أن يؤثر على المستخدم العادي.</string>
+    <string name="threads_labs_enable_notice_title">خيوط بيتا</string>
+    <string name="search_banned_user_hint">تصفية المستخدمين المحظورين</string>
+    <string name="error_threepid_auth_failed">تأكد من أنك قمت بالنقر فوق الرابط الموجود في البريد الإلكتروني الذي أرسلناه إليك.</string>
+    <string name="settings_troubleshoot_test_system_settings_failed">الإشعارات مُعطّلة في إعدادات النظام.\nيرجى التحقق من إعدادات النظام.</string>
+    <string name="settings_notification_emails_enable_for_email">تمكين إشعارات البريد الإلكتروني لـ %s</string>
+    <string name="settings_troubleshoot_test_system_settings_success">تم تفعيل الإشعارات في إعدادات النظام.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]\nهذا الخطأ خارج عن سيطرة ${app_name}. لا يوجد حساب جوجل على الهاتف. يُرجى فتح مدير الحساب وإضافة حساب جوجل.</string>
+    <string name="settings_troubleshoot_test_bg_restricted_success">تم تعطيل قيود الخلفية لـ ${app_name}. يجب إجراء هذا الاختبار باستخدام بيانات الجوال (بدون اتصال واي فاي).\n%1$s</string>
+    <string name="settings_acceptable_use_policy">سياسة الاستخدام المقبول</string>
+    <string name="settings_background_fdroid_sync_mode_battery_description">سيُزامن تطبيق ${app_name} في الخلفية مع الحفاظ على موارد الجهاز المحدودة (البطارية).\nقد يُؤجّل نظام التشغيل المزامنة بناءً على حالة موارد جهازك.</string>
+    <string name="settings_background_fdroid_sync_mode_disabled_description">لن يتم إعلامك بالرسائل الواردة عندما يكون التطبيق في الخلفية.</string>
+    <string name="settings_background_fdroid_sync_mode_real_time_description">سيُزامن ${app_name} في الخلفية دوريًا في وقت محدد (قابل للتخصيص).\nسيؤثر هذا على استهلاك الراديو والبطارية، وسيظهر إشعار دائم يُفيد بأن ${app_name} يستمع للأحداث.</string>
+    <string name="microphone_in_use_title">الميكروفون قيد الاستخدام</string>
+    <string name="action_proceed_to_reset">انتقل إلى إعادة الضبط</string>
+    <string name="room_unsupported_e2e_algorithm">تم إعداد التشفير بشكل خاطئ، لذا لا يمكنك إرسال الرسائل. يُرجى التواصل مع أحد المشرفين لاستعادة التشفير إلى حالة صالحة.</string>
+    <string name="room_settings_permissions_subtitle">عرض وتحديث الأدوار المطلوبة لتغيير أجزاء مختلفة من الغرفة.</string>
+    <string name="room_settings_none">لا أحد</string>
+    <string name="settings_notification_default">الإشعارات الافتراضية</string>
+    <string name="settings_troubleshoot_diagnostic">تشخيص استكشاف الأخطاء وإصلاحها</string>
+    <string name="settings_troubleshoot_test_system_settings_title">إعدادات النظام.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">تم تسجيل نقطة النهاية بنجاح في الخادم الرئيسي.</string>
+    <string name="settings_crypto_version">نسخة التشفير</string>
+    <string name="room_settings_mention_and_keyword_only">الإشارات والكلمات الرئيسية فقط</string>
+    <string name="settings_notification_keyword_contains_invalid_character">لا يمكن للكلمات الرئيسية أن تحتوي على \'%s\'</string>
+    <string name="grant_permission">منح الإذن</string>
+    <string name="settings_troubleshoot_test_fcm_failed">فشل استرداد رمز FCM:\n%1$s</string>
+    <string name="settings_encrypted_group_messages">رسائل المجموعة المشفرة</string>
+    <string name="settings_inline_url_preview_summary">معاينة الروابط داخل الدردشة عندما يدعم الخادم الرئيسي الخاص بك هذه الميزة.</string>
+    <string name="hs_client_url">عنوان URL لواجهة برمجة تطبيقات الخادم الرئيسي</string>
+    <string name="thread_list_empty_notice">نصيحة: اضغط مطولاً على الرسالة واستخدم \"%s\".</string>
+    <string name="search_space_two_parents">%1$s و%2$s</string>
+    <string name="settings_notification_mentions_and_keywords">الإشارات والكلمات الرئيسية</string>
+    <string name="settings_notification_other">آخر</string>
+    <string name="settings_troubleshoot_test_fcm_success">تم استرداد رمز fcm بنجاح:\n%1$s</string>
+    <string name="thread_timeline_title">خيط</string>
+    <string name="thread_list_modal_my_threads_subtitle">يعرض جميع المواضيع التي شاركت فيها</string>
+    <string name="shortcut_disabled_reason_sign_out">تم تسجيل الخروج من الجلسة!</string>
+    <string name="settings_notification_emails_category">إشعار البريد الإلكتروني</string>
+    <string name="settings_notification_keyword_contains_dot">لا يمكن للكلمات الرئيسية أن تبدأ بـ \'.\'</string>
+    <string name="auth_reset_password_error_unverified">لم يتم التحقق من البريد الإلكتروني، تحقق من صندوق الوارد الخاص بك</string>
+    <string name="space_permissions_notice">حدد الأدوار المطلوبة لتغيير أجزاء مختلفة من هذه المساحة</string>
+    <string name="settings_troubleshoot_test_push_loop_success">التطبيق يستقبل PUSH</string>
+    <string name="login_error_homeserver_from_url_not_found">تعذّر الوصول إلى خادم رئيسي على عنوان URL %s. يُرجى التحقق من رابطك أو اختيار خادم رئيسي يدويًا.</string>
+    <string name="space_settings_permissions_subtitle">عرض وتحديث الأدوار المطلوبة لتغيير أجزاء مختلفة من المساحة.</string>
+    <string name="settings_notification_notify_me_for">أعلمني بذلك</string>
+    <string name="settings_notification_error_on_update">حدث خطأ أثناء تحديث تفضيلات الإشعارات. يُرجى المحاولة مرة أخرى.</string>
+    <string name="settings_troubleshoot_test_system_settings_permission_failed">يحتاج تطبيق ${app_name} إلى إذن لعرض الإشعارات.\nيرجى منح الإذن.</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">الإشعارات غير مُفعّلة لهذه الجلسة.\nيرجى التحقق من إعدادات ${app_name}.</string>
+    <string name="settings_troubleshoot_test_fcm_title">رمز Firebase</string>
+    <string name="settings_troubleshoot_test_token_registration_title">تسجيل الرمز المميز</string>
+    <string name="settings_troubleshoot_test_push_loop_failed">تعذّر استلام الدفعة. قد يكون الحل إعادة تثبيت التطبيق.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">لن تبدأ الخدمة عند إعادة تشغيل الجهاز، ولن تتلقى إشعارات حتى يتم فتح ${app_name} مرة واحدة.</string>
+    <string name="threads_notice_migration_title">المواضيع تقترب من الإصدار التجريبي 🎉</string>
+    <string name="labs_enable_rich_text_editor_summary">جرب محرر النص الغني (سيتم توفير وضع النص العادي قريبًا)</string>
+    <string name="auth_login_sso">تسجيل الدخول باستخدام تسجيل الدخول الفردي</string>
+    <string name="login_error_homeserver_not_found">لا يمكن الوصول إلى خادم رئيسي على هذا الرابط، يرجى التحقق منه</string>
+    <string name="room_permissions_change_history_visibility">رؤية سجل التغييرات</string>
+    <string name="room_permissions_upgrade_the_space">ترقية المساحة</string>
+    <string name="thread_list_modal_title">فلتر</string>
+    <string name="thread_list_empty_title">حافظ على تنظيم المناقشات باستخدام المواضيع</string>
+    <string name="settings_emails_empty">لم تتم إضافة عنوان البريد الإلكتروني إلى حسابك</string>
+    <string name="settings_phone_numbers">أرقام الهواتف</string>
+    <string name="settings_notification_emails_no_emails">لتلقي رسائل البريد الإلكتروني مع الإشعارات، يرجى ربط عنوان البريد الإلكتروني بحساب Matrix الخاص بك</string>
+    <string name="settings_notification_new_keyword">إضافة كلمة رئيسية جديدة</string>
+    <string name="settings_troubleshoot_diagnostic_run_button_title">تشغيل الاختبارات</string>
+    <string name="settings_troubleshoot_test_bing_settings_success_with_warn">لاحظ أن بعض أنواع الرسائل تم ضبطها لتكون صامتة (ستنتج إشعارًا بدون صوت).</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed">تم تعطيل بعض الإشعارات في إعداداتك المخصصة.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]\nهذا الخطأ خارج عن سيطرة ${app_name}. قد يحدث لعدة أسباب. قد يعمل إذا أعدت المحاولة لاحقًا، ويمكنك أيضًا التحقق من عدم تقييد استخدام بيانات خدمة Google Play في إعدادات النظام، أو من صحة ساعة جهازك، أو قد يحدث في ذاكرة القراءة فقط (ROM) المخصصة.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">فشل تسجيل رمز نقطة النهاية على الخادم الرئيسي:\n%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_failed">تم تفعيل قيود الخلفية لتطبيق ${app_name}.\nسيتم تقييد العمل الذي يحاول التطبيق القيام به بشدة أثناء عمله في الخلفية، وقد يؤثر ذلك على الإشعارات.\n%1$s</string>
+    <string name="settings_troubleshoot_test_battery_failed">إذا ترك المستخدم جهازه مفصولاً عن الشبكة وثابتاً لفترة من الوقت، مع إطفاء الشاشة، يدخل الجهاز في وضع السكون. هذا يمنع التطبيقات من الوصول إلى الشبكة ويؤجل مهامها ومزامناتها وتنبيهاتها الاعتيادية.</string>
+    <string name="permissions_rationale_msg_notification">يحتاج تطبيق ${app_name} إلى إذن لعرض الإشعارات. يمكن للإشعارات عرض رسائلك ودعواتك وما إلى ذلك.\n\nيرجى منح الإذن لعرض الإشعارات المنبثقة التالية.</string>
+    <string name="room_permissions_notice">حدد الأدوار المطلوبة لتغيير أجزاء مختلفة من الغرفة</string>
+    <string name="room_permissions_send_m_room_server_acl_events">إرسال أحداث m.room.server_acl</string>
+    <string name="shortcut_disabled_reason_room_left">لقد تم ترك الغرفة!</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">التشخيص الأساسي سليم. إذا لم تتلقَّ إشعارات، يُرجى إرسال تقرير خطأ لمساعدتنا في التحقيق.</string>
+    <string name="settings_troubleshoot_test_play_services_failed">يستخدم تطبيق ${app_name} خدمات Google Play لإرسال رسائل الدفع، ولكن يبدو أنه لم يتم إعداده بشكل صحيح:\n%1$s</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">فشل تسجيل رمز FCM على الخادم الرئيسي:\n%1$s</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_title">تسجيل نقطة النهاية</string>
+    <string name="settings_noisy_notifications_preferences">تكوين الإشعارات الصاخبة</string>
+    <string name="settings_background_fdroid_sync_mode_real_time">مُحسّن للوقت الحقيقي</string>
+    <string name="labs_enable_deferred_dm_summary">إنشاء رسالة مباشرة فقط في الرسالة الأولى</string>
+    <string name="room_participants_action_unignore_prompt_msg">عدم تجاهل هذا المستخدم سيؤدي إلى إظهار جميع الرسائل منه مرة أخرى.</string>
+    <string name="settings_phone_number_empty">لم يتم إضافة رقم الهاتف إلى حسابك</string>
+    <string name="settings_remove_three_pid_confirmation_content">إزالة %s؟</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">جاري… (%1$d من %2$d)</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">لقد فشل اختبار واحد أو أكثر، يرجى إرسال تقرير عن الخطأ لمساعدتنا في التحقيق.</string>
+    <string name="settings_troubleshoot_test_device_settings_title">إعدادات الجلسة.</string>
+    <string name="settings_troubleshoot_test_device_settings_success">تم تفعيل الإشعارات لهذه الجلسة.</string>
+    <string name="settings_group_messages">رسائل المجموعة</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">لقد فشل اختبار واحد أو أكثر، حاول إجراء الإصلاحات المقترحة.</string>
+    <string name="settings_troubleshoot_test_device_settings_quickfix">تمكين</string>
+    <string name="settings_troubleshoot_test_account_settings_quickfix">تمكين</string>
+    <string name="settings_troubleshoot_test_account_settings_failed">تم تعطيل الإشعارات في حسابك.\nيرجى التحقق من إعدادات الحساب.</string>
+    <string name="open_settings">افتح الإعدادات</string>
+    <string name="settings_notification_by_event">أهمية الإشعار حسب الحدث</string>
+    <string name="settings_emails">بريد إلكتروني</string>
+    <string name="room_permissions_upgrade_the_room">ترقية الغرفة</string>
+    <string name="room_permissions_default_role">الدور الافتراضي</string>
+    <string name="room_permissions_notice_read_only">ليس لديك الإذن لتحديث الأدوار المطلوبة لتغيير أجزاء مختلفة من الغرفة</string>
+    <string name="settings_troubleshoot_test_bg_restricted_title">التحقق من قيود الخلفية</string>
+    <string name="settings_troubleshoot_test_token_registration_success">تم تسجيل رمز FCM المميز بنجاح في الخادم الرئيسي.</string>
+    <string name="settings_troubleshoot_test_play_services_quickfix">إصلاح خدمات اللعب</string>
+    <string name="settings_troubleshoot_test_play_services_success">يتوفر تطبيق Google Play Services APK ويتم تحديثه باستمرار.</string>
+    <string name="settings_troubleshoot_test_play_services_title">التحقق من خدمات التشغيل</string>
+    <string name="settings_notification_troubleshoot">استكشاف أخطاء الإشعارات وإصلاحها</string>
+    <string name="settings_troubleshoot_test_account_settings_success">تم تفعيل الإشعارات لحسابك.</string>
 </resources>
