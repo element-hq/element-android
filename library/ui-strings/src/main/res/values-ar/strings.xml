@@ -1712,4 +1712,6 @@
     <string name="settings_active_sessions_show_all">عرض جميع الجلسات</string>
     <string tools:ignore="UnusedResources" name="verification_cancelled">تم إلغاء التحقق</string>
     <string name="enter_account_password">أدخل %s الخاص بك للمتابعة.</string>
+    <string name="bootstrap_invalid_recovery_key">إنه ليس مفتاح استرداد صالحًا</string>
+    <string name="use_file">استخدم الملف</string>
 </resources>
