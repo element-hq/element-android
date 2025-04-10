@@ -2173,4 +2173,224 @@
     <string name="message_reply_to_sender_sent_voice_message">أرسل رسالة صوتية.</string>
     <string name="message_reply_to_sender_sent_image">أرسل صورة.</string>
     <string name="message_reply_to_poll_preview">استطلاع رأي</string>
+    <string name="settings_chat_effects_description">استخدم الأمر /confetti أو أرسل رسالة تحتوي على ❄️ أو 🎉</string>
+    <string name="settings_secure_backup_section_title">النسخ الاحتياطي الآمن</string>
+    <string name="settings_external_account_management_title">حساب</string>
+    <string name="settings_send_message_with_enter">إرسال رسالة مع إدخال</string>
+    <string name="settings_send_message_with_enter_summary">سيؤدي زر الإدخال في لوحة المفاتيح الناعمة إلى إرسال رسالة بدلاً من إضافة فاصل للسطر</string>
+    <string name="settings_show_emoji_keyboard_summary">أضف زرًا إلى مُنشئ الرسائل لفتح لوحة مفاتيح الرموز التعبيرية</string>
+    <string name="analytics_opt_in_content">ساعدنا في تحديد المشاكل وتحسين ${app_name} من خلال مشاركة بيانات الاستخدام المجهولة. لفهم كيفية استخدام الأشخاص لأجهزة متعددة، سنُنشئ مُعرّفًا عشوائيًا، تُشاركه أجهزتك.\n\nيمكنك قراءة جميع شروطنا %s.</string>
+    <string name="disabled_integration_dialog_title">تم تعطيل التكاملات</string>
+    <string name="room_alias_address_empty_can_add">لا توجد عناوين أخرى منشورة حتى الآن، أضف عنوانًا أدناه.</string>
+    <string name="create_room_unknown_users_dialog_content">تعذر العثور على ملفات تعريف لمعرفات المصفوفة المدرجة أدناه. هل ترغب في بدء محادثة على أي حال؟\n\n%s</string>
+    <string name="decide_which_spaces_can_access">حدد المساحات التي يمكنها الوصول إلى هذه الغرفة. عند تحديد مساحة، سيتمكن أعضاؤها من العثور على اسم الغرفة والانضمام إليها.</string>
+    <string name="other_spaces_or_rooms_you_might_not_know">مساحات أو غرف أخرى قد لا تعرفها</string>
+    <string name="room_settings_room_version_title">اصدار الغرفة</string>
+    <string name="room_settings_global_block_unverified_info_text">🔒 لقد قمت بتمكين تشفير الجلسات التي تم التحقق منها فقط لجميع الغرف في إعدادات الأمان.</string>
+    <string name="directory_add_a_new_server_prompt">أدخل اسم الخادم الجديد الذي تريد استكشافه.</string>
+    <string name="jitsi_leave_conf_to_join_another_one_content">مغادرة المؤتمر الحالي والتبديل إلى المؤتمر الآخر؟</string>
+    <string name="room_widget_permission_shared_info_title">قد يؤدي استخدامه إلى مشاركة البيانات مع %s:</string>
+    <string name="malformed_message">حدث مشوه، لا يمكن عرضه</string>
+    <string name="settings_labs_native_camera_summary">قم بتشغيل كاميرا النظام بدلاً من شاشة الكاميرا المخصصة.</string>
+    <string name="settings_labs_show_complete_history_in_encrypted_room">إظهار التاريخ الكامل في الغرف المشفرة</string>
+    <string name="no_message_edits_found">لم يتم العثور على أي تعديلات</string>
+    <string name="send_file_step_idle">منتظر…</string>
+    <string name="downloaded_file">تم تنزيل الملف %1$s!</string>
+    <string name="message_edits">تعديلات الرسائل</string>
+    <string name="room_filtering_footer_create_new_direct_message">إرسال رسالة مباشرة جديدة</string>
+    <string name="creating_direct_room">إنشاء غرفة…</string>
+    <string name="identity_server">خادم الهوية</string>
+    <string name="create_room_action_go">يذهب</string>
+    <string name="you_may_contact_me">يمكنك الاتصال بي إذا كان لديك أي أسئلة متابعة</string>
+    <string name="settings_enable_direct_share_summary">إظهار الدردشات الأخيرة في قائمة مشاركة النظام</string>
+    <string name="settings_secure_backup_setup">إعداد النسخ الاحتياطي الآمن</string>
+    <string name="settings_default_compression">الضغط الافتراضي</string>
+    <string name="directory_add_a_new_server_error">لا يمكن العثور على هذا الخادم أو قائمة غرفه</string>
+    <string name="notification_ticker_text_dm">%1$s: %2$s</string>
+    <string name="error_jitsi_not_supported_on_old_device">عذراً، لا يتم دعم المكالمات الجماعية باستخدام Jitsi على الأجهزة القديمة (الأجهزة التي تعمل بنظام تشغيل Android أقل من 6.0)</string>
+    <string name="you_added_a_new_device_with_info">جلسة جديدة تطلب مفاتيح تشفير.\nاسم الجلسة: %1$s\nآخر ظهور: %2$s\nإذا لم تُسجّل دخولك في جلسة أخرى، فتجاهل هذا الطلب.</string>
+    <string name="command_not_supported_in_threads">تم التعرف على الأمر \"%s\" ولكن لا يتم دعمه في الخيوط.</string>
+    <string name="send_file_step_sending_thumbnail">إرسال الصورة المصغرة (%1$s / %2$s)</string>
+    <string name="terms_description_for_integration_manager">استخدم الروبوتات والجسور والودجات وحزم الملصقات</string>
+    <string name="send_file_step_compressing_video">ضغط الفيديو %d%%</string>
+    <string name="markdown_has_been_disabled">تم تعطيل Markdown.</string>
+    <string name="settings_autoplay_animated_images_title">تشغيل الصور المتحركة تلقائيًا</string>
+    <string name="settings_enable_direct_share_title">تمكين المشاركة المباشرة</string>
+    <string name="space_you_know_that_contains_this_room">المساحة التي تعرفها تحتوي على هذه الغرفة</string>
+    <string name="encryption_never_send_to_unverified_devices_in_room">لا ترسل أبدًا رسائل مشفرة إلى جلسات غير موثقة في هذه الغرفة.</string>
+    <string name="font_size_section_auto">تعيين تلقائيا</string>
+    <string name="notification_inline_reply_failed">** فشل الإرسال - يرجى فتح الغرفة</string>
+    <string name="command_description_nick_for_room">تغيير اسم العرض الخاص بك في الغرفة الحالية فقط</string>
+    <string name="settings_secure_backup_reset">إعادة تعيين النسخ الاحتياطي الآمن</string>
+    <string name="settings_secure_backup_enter_to_setup">تم الإعداد على هذا الجهاز</string>
+    <string name="analytics_opt_in_content_link">هنا</string>
+    <string name="reset_secure_backup_warning">سيؤدي هذا إلى استبدال المفتاح أو العبارة الحالية لديك.</string>
+    <string name="edited_suffix">(تم التعديل)</string>
+    <string name="settings_show_emoji_keyboard">إظهار لوحة مفاتيح الرموز التعبيرية</string>
+    <string name="room_widget_reload">إعادة تحميل الودجت</string>
+    <string name="command_description_ignore_user">يتجاهل المستخدم، ويخفي رسائله عنك</string>
+    <string name="settings_chat_effects_title">إظهار تأثيرات الدردشة</string>
+    <string name="settings_show_avatar_display_name_changes_messages">إظهار أحداث الحساب</string>
+    <plurals name="notification_invitations">
+        <item quantity="zero">%d دعوة</item>
+        <item quantity="one">%d دعوة</item>
+        <item quantity="two">%d دعوتان</item>
+        <item quantity="few">%d دعوات</item>
+        <item quantity="many">%d دعوات</item>
+        <item quantity="other">%d دعوة</item>
+    </plurals>
+    <string name="notification_new_invitation">دعوة جديدة</string>
+    <string name="font_size_title">اختر حجم الخط</string>
+    <plurals name="notification_compat_summary_line_for_room">
+        <item quantity="zero">%1$s: %2$d رسالة</item>
+        <item quantity="one">%1$s: %2$d رسالة</item>
+        <item quantity="two">%1$s: %2$d رسالتان</item>
+        <item quantity="few">%1$s: %2$d رسائل</item>
+        <item quantity="many">%1$s: %2$d رسائل</item>
+        <item quantity="other">%1$s: %2$d رسالة</item>
+    </plurals>
+    <plurals name="keys_backup_info_keys_backing_up">
+        <item quantity="zero">جاري النسخ الاحتياطي لمفتاح %d…</item>
+        <item quantity="one">جاري النسخ الاحتياطي لمفتاح %d…</item>
+        <item quantity="two">جاري النسخ الاحتياطي للمفتاحان %d…</item>
+        <item quantity="few">جاري النسخ الاحتياطي للمفاتيح %d…</item>
+        <item quantity="many">جاري النسخ الاحتياطي للمفاتيح %d…</item>
+        <item quantity="other">جاري النسخ الاحتياطي لمفتاح %d…</item>
+    </plurals>
+    <string name="settings_sdk_version">إصدار Matrix SDK</string>
+    <string name="settings_labs_show_hidden_events_in_timeline">إظهار الأحداث المخفية في الجدول الزمني</string>
+    <string name="search_hint_room_name">اسم البحث</string>
+    <string name="labs_show_unread_notifications_as_tab">أضف علامة تبويب مخصصة للإشعارات غير المقروءة على الشاشة الرئيسية.</string>
+    <string name="qr_code">رمز الاستجابة السريعة</string>
+    <string name="push_gateway_item_format">شكل:</string>
+    <string name="room_filtering_filter_hint">تصفية المحادثات…</string>
+    <string name="message_view_edit_history">عرض سجل التحرير</string>
+    <string name="terms_description_for_identity_server">أن تكون قابل للاكتشاف من قبل الآخرين</string>
+    <string name="room_alias_publish_to_directory_error">غير قادر على استرداد رؤية دليل الغرفة الحالية (%1$s).</string>
+    <string name="allow_space_member_to_find_and_access">السماح لأعضاء المساحة بالعثور والوصول.</string>
+    <plurals name="notification_compat_summary_title">
+        <item quantity="zero">إشعار %d</item>
+        <item quantity="one">إشعار %d</item>
+        <item quantity="two">إشعاران%d</item>
+        <item quantity="few">إشعارات %d</item>
+        <item quantity="many">إشعارات %d</item>
+        <item quantity="other">إشعار %d</item>
+    </plurals>
+    <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
+    <string name="font_size_section_manually">اختر يدويا</string>
+    <string name="room_widget_permission_added_by">تمت إضافة هذا الودجت بواسطة:</string>
+    <string name="error_jitsi_join_conf">عذراً، حدث خطأ أثناء محاولة الانضمام إلى المؤتمر</string>
+    <string name="settings_push_gateway_no_pushers">لا توجد بوابات دفع مسجلة</string>
+    <string name="send_feedback_space_title">ردود الفعل على المساحات</string>
+    <string name="bottom_action_people_x">الرسائل المباشرة</string>
+    <string name="direct_room_user_list_suggestions_title">اقتراحات</string>
+    <string name="legals_identity_server_title">سياسة خادم الهوية الخاص بك</string>
+    <string name="legals_third_party_notices">مكتبات الطرف الثالث</string>
+    <string name="analytics_opt_in_list_item_2">نحن<b> لا نشارك</b> المعلومات مع أطراف ثالثة</string>
+    <string name="room_alias_address_empty">لا يوجد عناوين أخرى منشورة حتى الآن.</string>
+    <string name="settings_push_rules_no_rules">لم يتم تعريف قواعد الدفع</string>
+    <string name="push_gateway_item_push_key">مفتاح الدفع:</string>
+    <string name="room_alias_published_other">عناوين أخرى منشورة:</string>
+    <string name="settings_show_read_receipts">إظهار إيصالات القراءة</string>
+    <string name="settings_show_avatar_display_name_changes_messages_summary">يتضمن تغييرات الصورة الرمزية واسم العرض.</string>
+    <string name="settings_external_account_management">سيتم إدارة تفاصيل حسابك بشكل منفصل في %1$s.</string>
+    <string name="analytics_opt_in_list_item_3">يمكنك إيقاف تشغيل هذا في أي وقت في الإعدادات</string>
+    <string name="legals_no_policy_provided">لا يوفر هذا الخادم أي سياسة.</string>
+    <string name="settings_play_shutter_sound">تشغيل صوت الغالق</string>
+    <string name="settings_presence_user_always_appears_offline">الوضع غير المتصل بالإنترنت</string>
+    <string name="settings_presence_user_always_appears_offline_summary">إذا تم تمكين ذلك، فستظهر دائمًا وكأنك غير متصل بالإنترنت للمستخدمين الآخرين، حتى عند استخدام التطبيق.</string>
+    <string name="room_settings_room_read_history_dialog_subtitle">ستُطبق تغييرات تحديد من يمكنه قراءة السجل على الرسائل المستقبلية في هذه الغرفة فقط. ولن يطرأ أي تغيير على إمكانية رؤية السجل الحالي.</string>
+    <string name="room_alias_published_alias_subtitle">يمكن لأي شخص على أي خادم استخدام العناوين المنشورة للانضمام إلى غرفتك. لنشر عنوان، يجب تعيينه كعنوان محلي أولًا.</string>
+    <string name="room_settings_room_access_restricted_description">يمكن لأي شخص في مساحة هذه الغرفة العثور عليها والانضمام إليها. فقط مسؤولو هذه الغرفة يستطيعون إضافتها إلى مساحة.</string>
+    <plurals name="encryption_import_room_keys_success">
+        <item quantity="zero">تم استيراد المفتاح %1$d/%2$d بنجاح.</item>
+        <item quantity="one">تم استيراد المفتاح %1$d/%2$d بنجاح.</item>
+        <item quantity="two">تم استيراد المفتاحان %1$d/%2$d بنجاح.</item>
+        <item quantity="few">تم استيراد المفاتيح %1$d/%2$d بنجاح.</item>
+        <item quantity="many">تم استيراد المفاتيح %1$d/%2$d بنجاح.</item>
+        <item quantity="other">تم استيراد المفتاح %1$d/%2$d بنجاح.</item>
+    </plurals>
+    <string name="font_size_use_system">استخدم النظام الافتراضي</string>
+    <string name="active_widgets_title">الودجات النشطة</string>
+    <string name="room_widget_permission_webview_shared_info_title">قد يؤدي استخدامه إلى تعيين ملفات تعريف الارتباط ومشاركة البيانات مع %s:</string>
+    <string name="room_widget_failed_to_load">فشل تحميل الودجت.\n%s</string>
+    <string name="command_problem_with_parameters">يحتاج الأمر \"%s\" إلى مزيد من المعلمات، أو أن بعض المعاملات غير صحيحة.</string>
+    <string name="analytics_opt_in_title">ساعد في تحسين ${app_name}</string>
+    <string name="legals_application_title">سياسة ${app_name}</string>
+    <string name="notification_unknown_new_event">حدث جديد</string>
+    <string name="settings_autoplay_animated_images_summary">تشغيل الصور المتحركة في الجدول الزمني بمجرد ظهورها</string>
+    <string name="reset_secure_backup_title">قم بإنشاء مفتاح أمان جديد أو قم بتعيين عبارة أمان جديدة للنسخة الاحتياطية الحالية لديك.</string>
+    <string name="analytics_opt_in_list_item_1">نحن&lt;b&gt; لانسجل&lt;b&gt; أو ننشئ أي بيانات حساب</string>
+    <string name="legals_home_server_title">سياسة الخادم الرئيسي الخاص بك</string>
+    <string name="room_settings_room_notifications_encryption_notice">يرجى ملاحظة أن الإشارات وإشعارات الكلمات الرئيسية غير متوفرة في الغرف المشفرة على الهاتف المحمول.</string>
+    <string name="space_settings_alias_subtitle">مشاهدة وإدارة عناوين هذه المساحة.</string>
+    <string name="room_alias_published_alias_add_manually">نشر عنوان جديد يدويًا</string>
+    <string name="room_alias_address_hint">عنوان منشور جديد (على سبيل المثال #alias:server)</string>
+    <string name="spaces_which_can_access">المساحات التي يمكن الوصول إليها</string>
+    <plurals name="room_settings_banned_users_count">
+        <item quantity="zero">تم حظر %d مستخدم</item>
+        <item quantity="one">تم حظر %d مستخدم</item>
+        <item quantity="two">تم حظر %d مستخدمان</item>
+        <item quantity="few">تم حظر %d مستخدم</item>
+        <item quantity="many">تم حظر %d مستخدم</item>
+        <item quantity="other">تم حظر %d مستخدم</item>
+    </plurals>
+    <string name="encryption_export_notice">يرجى إنشاء كلمة مرور لتشفير المفاتيح المُصدَّرة. ستحتاج إلى إدخال كلمة المرور نفسها لتتمكن من استيراد المفاتيح.</string>
+    <string name="directory_add_a_new_server_error_already_added">هذا الخادم موجود بالفعل في القائمة</string>
+    <string name="room_widget_revoke_access">إلغاء الوصول بالنسبة لي</string>
+    <string name="markdown_has_been_enabled">تم تفعيل Markdown.</string>
+    <string name="some_devices_will_not_be_able_to_decrypt">⚠ توجد أجهزة غير مُتحققة في هذه الغرفة، ولن تتمكن من فك تشفير الرسائل التي ترسلها.</string>
+    <string name="notification_sender_me">أنا</string>
+    <string name="room_manage_integrations">إدارة التكاملات</string>
+    <string name="command_description_room_name">تعيين اسم الغرفة</string>
+    <string name="settings_show_redacted_summary">إظهار عنصر نائب للرسائل المحذوفة</string>
+    <string name="send_feedback_threads_title">ردود الفعل على النسخة التجريبية من الخيوط</string>
+    <string name="send_file_step_encrypting_thumbnail">تشفير الصورة المصغرة…</string>
+    <string name="feedback_failed">فشل إرسال التعليقات (%s)</string>
+    <string name="send_file_step_compressing_image">ضغط الصورة…</string>
+    <string name="room_filtering_footer_title">هل لم تتمكن من العثور على ما تبحث عنه؟</string>
+    <string name="labs_swipe_to_reply_in_timeline">تمكين التمرير للرد في الجدول الزمني</string>
+    <string name="disconnect_identity_server">قطع اتصال خادم الهوية</string>
+    <string name="settings_send_markdown_summary">تنسيق الرسائل باستخدام صيغة ترميز Markdown قبل إرسالها. يتيح هذا تنسيقًا متقدمًا، مثل استخدام علامات النجمة لعرض النص المائل.</string>
+    <string name="room_settings_alias_subtitle">رؤية وإدارة عناوين هذه الغرفة، وإمكانية رؤيتها في دليل الغرفة.</string>
+    <string name="room_widget_resource_permission_title">تريد هذه الأداة استخدام الموارد التالية:</string>
+    <string name="room_widget_webview_read_protected_media">قراءة الوسائط المحمية بنظام إدارة الحقوق الرقمية</string>
+    <string name="timeline_error_room_not_found">عذرًا، لم يتم العثور على هذه الغرفة.\nيرجى المحاولة لاحقًا.%s</string>
+    <string name="your_unverified_device_requesting_with_info">جلسة غير مُوثَّقة تطلب مفاتيح تشفير.\nاسم الجلسة: %1$s\nآخر ظهور: %2$s\nإذا لم تُسجِّل دخولك في جلسة أخرى، فتجاهل هذا الطلب.</string>
+    <string name="command_description_room_avatar">تغيير الصورة الرمزية للغرفة الحالية</string>
+    <string name="send_feedback_space_info">أنت تستخدم إصدارًا تجريبيًا من المساحات. ستساعد ملاحظاتك في تطوير الإصدارات القادمة. سيتم تسجيل منصتك واسم المستخدم الخاصين بك لمساعدتنا على الاستفادة القصوى من ملاحظاتك.</string>
+    <string name="send_feedback_threads_info">المواضيع قيد التطوير، وتتضمن ميزات جديدة ومثيرة، مثل تحسين الإشعارات. يسعدنا سماع ملاحظاتكم!</string>
+    <string name="room_filtering_footer_create_new_room">إنشاء غرفة جديدة</string>
+    <string name="room_directory_search_hint">الاسم أو المعرف (#example:matrix.org)</string>
+    <string name="room_filtering_footer_open_room_directory">عرض دليل الغرف</string>
+    <string name="direct_room_user_list_only_invite_one_email">لا يمكنك دعوة سوى بريد إلكتروني واحد في كل مرة</string>
+    <string name="disabled_integration_dialog_content">قم بتمكين \"السماح بالتكاملات\" في الإعدادات للقيام بذلك.</string>
+    <string name="room_alias_local_address_subtitle">تعيين عناوين لهذه الغرفة حتى يتمكن المستخدمون من العثور على هذه الغرفة من خلال خادمك الرئيسي (%1$s)</string>
+    <string name="command_description_unignore_user">يتوقف عن تجاهل المستخدم، ويعرض رسائله في المستقبل</string>
+    <string name="feedback_sent">شكرًا لك، لقد تم إرسال تعليقك بنجاح</string>
+    <string name="send_file_step_encrypting_file">جاري تشفير الملف…</string>
+    <string name="link_copied_to_clipboard">تم نسخ الرابط إلى الحافظة</string>
+    <string name="terms_of_service">شروط الخدمة</string>
+    <string name="direct_room_user_list_known_title">المستخدمون المعروفون</string>
+    <string name="send_file_step_sending_file">إرسال الملف (%1$s / %2$s)</string>
+    <string name="settings_push_rules">قواعد الدفع</string>
+    <string name="ignore_request_short_label">تجاهل</string>
+    <string name="share_without_verifying_short_label">مشاركه</string>
+    <plurals name="keys_backup_restore_success_description_part1">
+        <item quantity="zero">تمت استعادة النسخة الاحتياطية باستخدام مفتاح %d.</item>
+        <item quantity="one">تمت استعادة النسخة الاحتياطية باستخدام مفتاح %d.</item>
+        <item quantity="two">تمت استعادة النسخة الاحتياطية باستخدام المفتاحان %d.</item>
+        <item quantity="few">تمت استعادة النسخة الاحتياطية باستخدام المفاتيح %d.</item>
+        <item quantity="many">تمت استعادة النسخة الاحتياطية باستخدام المفاتيح %d.</item>
+        <item quantity="other">تمت استعادة النسخة الاحتياطية باستخدام مفتاح %d.</item>
+    </plurals>
+    <string name="widget_integration_review_terms">للمتابعة، يجب عليك قبول شروط هذه الخدمة.</string>
+    <string name="settings_integration_manager">مدير التكامل</string>
+    <string name="settings_integration_allow">السماح بالتكاملات</string>
+    <string name="settings_show_read_receipts_summary">انقر على إيصالات القراءة للحصول على قائمة مفصلة.</string>
+    <string name="settings_show_join_leave_messages_summary">لا تتأثر الدعوات والإزالة والحظر.</string>
+    <string name="settings_secure_backup_section_info">قم بحماية نفسك من فقدان الوصول إلى الرسائل والبيانات المشفرة عن طريق عمل نسخة احتياطية لمفاتيح التشفير على الخادم الخاص بك.</string>
+    <string name="active_widget_view_action">عرض</string>
+    <string name="key_share_request">طلب مشاركة المفتاح</string>
+    <string name="merged_events_collapse">انهيار</string>
 </resources>
