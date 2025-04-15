@@ -353,7 +353,7 @@
     <string name="settings_messages_sent_by_bot">Ziņas no bota</string>
     <string name="settings_start_on_boot">Startēt pie ierīces ielādes</string>
     <string name="settings_background_sync">Sinhronizēšana fonā</string>
-    <string name="settings_set_sync_timeout">Sinhronizācijas pieprasījuma noildze</string>
+    <string name="settings_set_sync_timeout">Sinhronizēšanas pieprasījuma noildze</string>
     <string name="settings_set_sync_delay">Intervāls starp sinhronizācijām</string>
     <string name="settings_version">Versija</string>
     <string name="settings_olm_version">olm versija</string>
@@ -1289,9 +1289,9 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_integrations_summary">Izmanto iekļaušanas pārvaldnieku, lai pārvaldītu robotprogrammatūru, tiltus, logrīkus un uzlīmju pakas.
 \nIekļaušanas pārvaldnieks saņem konfigurācijas datus un var pārveidot logrīkus, sūtīt istabu uzaicinājumus un iestatīt spēka līmeņus Tavā vārdā.</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">Par ienākošajiem ziņojumiem netiks paziņots, kad lietotne darbojas fonā.</string>
-    <string name="settings_background_fdroid_sync_mode_disabled">Bez fona sinhronizācijas</string>
+    <string name="settings_background_fdroid_sync_mode_disabled">Bez sinhronizēšanas fonā</string>
     <string name="settings_background_fdroid_sync_mode_real_time">Optimizēts reālajam laikam</string>
-    <string name="settings_background_fdroid_sync_mode">Fona Sinhronizācijas Režīms</string>
+    <string name="settings_background_fdroid_sync_mode">Fona sinhronizēšanas režīms</string>
     <string name="settings_system_preferences_summary">Izvēlaites LED krāsu, vibrāciju, skaņu…</string>
     <string name="settings_silent_notifications_preferences">Uzstādīt klusos paziņojumus</string>
     <string name="settings_call_notifications_preferences">Uzstādīt zvanu paziņojumus</string>
@@ -1440,8 +1440,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Salabot Play Servisus</string>
     <string name="error_threepid_auth_failed">Jāpārliecinās, ka ir atvērta saite e-pasta ziņojumā, ko mēs nosūtījām.</string>
     <string name="settings_background_fdroid_sync_mode_battery">Optimizēts akumulatoram</string>
-    <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} sinhronizēsies fonā tā, lai saudzētu ierīces ierobežotos resursus (bateriju).
-\nAtkarībā no ierīces resursu stāvokļa, operētājsistēma var atlikt sinhronizāciju.</string>
+    <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} sinhronizēsies fonā tā, lai saudzētu ierīces ierobežotos resursus (akumulatoru).\nAtkarībā no ierīces resursu stāvokļa, operētājsistēma var atlikt sinhronizēšanu.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignorēt optimizāciju</string>
     <string name="settings_troubleshoot_test_battery_success">${app_name} neietekmē akumulatora optimizācija.</string>
     <string name="settings_troubleshoot_test_battery_title">Akumulatora Optimizācija</string>
