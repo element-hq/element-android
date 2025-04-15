@@ -149,21 +149,13 @@
     <string name="notice_room_invite_no_invitee_with_reason_by_you">Tavs uzaicinājums. Iemesls: %1$s</string>
     <string name="notice_room_invite_no_invitee_with_reason">%1$s uzaicinājums. Iemesls: %2$s</string>
     <string name="event_status_sending_message">Sūta ziņu…</string>
-    <string name="initial_sync_start_importing_account_data">Sākotnējā sinhronizācija:
-\nImportē konta datus</string>
-    <string name="initial_sync_start_importing_account_left_rooms">Sākotnējā sinhronizācija:
-\nIegūst pamestās istabas</string>
-    <string name="initial_sync_start_importing_account_invited_rooms">Sākotnējā sinhronizācija:
-\nIegūst istabas, uz kurām uzaicināts</string>
-    <string name="initial_sync_start_importing_account_joined_rooms">Sākotnējā sinhronizācija:
-\nIelādē sarunas
-\nJa ir dalība daudzās istabās, tas var aizņemt kādu laiku</string>
-    <string name="initial_sync_start_importing_account_rooms">Sākotnējā sinhronizācija:
-\nIegūst istabas</string>
-    <string name="initial_sync_start_importing_account_crypto">Sākotnējā sinhronizācija:
-\nImportē kriptogrāfiju</string>
-    <string name="initial_sync_start_importing_account">Sākotnējā sinhronizācija:
-\nImportē kontu…</string>
+    <string name="initial_sync_start_importing_account_data">Sākotnējā sinhronizēšana:\nIegūst konta datus</string>
+    <string name="initial_sync_start_importing_account_left_rooms">Sākotnējā sinhronizēšana:\nIegūst pamestās istabas</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Sākotnējā sinhronizēšana:\nIegūst istabas, no kurām ir uzaicinājums</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">Sākotnējā sinhronizēšana:\nIelādē sarunas\nJa ir dalība daudzās istabās, tas var aizņemt kādu laiku</string>
+    <string name="initial_sync_start_importing_account_rooms">Sākotnējā sinhronizēšana:\nIegūst istabas</string>
+    <string name="initial_sync_start_importing_account_crypto">Sākotnējā sinhronizēšana:\nIevieto kriptogrāfiju</string>
+    <string name="initial_sync_start_importing_account">Sākotnējā sinhronizēšana:\nIevieto kontu…</string>
     <string name="room_displayname_empty_room_was">Tukša istaba (bija %s)</string>
     <plurals name="room_displayname_four_and_more_members">
         <item quantity="zero">%1$s, %2$s, %3$s un %4$d citi</item>
@@ -360,7 +352,7 @@
     <string name="settings_call_invitations">Uzaicinājumi ar zvanu</string>
     <string name="settings_messages_sent_by_bot">Ziņas no bota</string>
     <string name="settings_start_on_boot">Startēt pie ierīces ielādes</string>
-    <string name="settings_background_sync">Sinhronizācija</string>
+    <string name="settings_background_sync">Sinhronizēšana fonā</string>
     <string name="settings_set_sync_timeout">Sinhronizācijas pieprasījuma noildze</string>
     <string name="settings_set_sync_delay">Intervāls starp sinhronizācijām</string>
     <string name="settings_version">Versija</string>
@@ -562,7 +554,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="crosssigning_verify_this_session">Apliecināt šo ierīci</string>
     <string name="settings_hs_admin_e2e_disabled">Servera pārvaldītājs uzstādījis pilnīgas šifrēšanas atspējošanu privātās istabās un tiešajās ziņās kā noklusējumu.</string>
     <string name="verification_conclusion_ok_self_notice">Jaunā sesija tagad ir apliecināta. Tai ir piekļuve šifrētajām ziņām, un citi lietotāji redzēs to kā uzticamu.</string>
-    <string name="verification_conclusion_ok_notice">Saziņa ar šo lietotāju ir pilnībā šifrēta un trešās puses to nevar nolasīt.</string>
+    <string name="verification_conclusion_ok_notice">Saziņa ar šo lietotāju ir pilnībā šifrēta, un trešās puses to nevar nolasīt.</string>
     <string name="room_settings_enable_encryption_dialog_title">Iespējot šifrēšanu\?</string>
     <string name="room_settings_enable_encryption">Iespējot pilnīgu šifrēšanu…</string>
     <string name="unignore">Pārstāt ignorēt</string>
@@ -1231,10 +1223,8 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_integration_manager">Integrācija pārvaldnieks</string>
     <string name="settings_integration_allow">Atļaut integrācijas</string>
     <string name="settings_deactivate_my_account">Deaktivizēt manu kontu</string>
-    <string name="initial_sync_start_downloading">Sākotnējā sinhronizācija:
-\nLejupielādē datus…</string>
-    <string name="initial_sync_start_server_computing">Sākotnējā sinhronizācija:
-\nGaida servera atbildi…</string>
+    <string name="initial_sync_start_downloading">Sākotnējā sinhronizēšana:\nLejupielādē datus…</string>
+    <string name="initial_sync_start_server_computing">Sākotnējā sinhronizēšana:\nGaida servera atbildi…</string>
     <string name="labs_show_unread_notifications_as_tab">Pievienojiet speciālu cilni priekš nelasītiem paziņojumiem galvenajā ekrānā.</string>
     <string name="labs_swipe_to_reply_in_timeline">Laika joslā iespējot atbildēšanu pavelkot</string>
     <string name="no_message_edits_found">Labojumi netika atrasti</string>
@@ -1659,7 +1649,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_preview_media_before_sending">Priekšskatīt failu pirms nosūtīšanas</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} ik brīdi sinhronizēsies fonā noteiktā laikā (pielāgojams).
 \nTas ietekmēs radio un baterijas izmantošanu, tiks attēlots pastāvīgs paziņojums, kas norādīs, ka ${app_name} klausās notikumus.</string>
-    <string name="settings_troubleshoot_test_battery_failed">Ja lietotājs kādu laiku atstāj ierīci atvienotu no tīkla un nekustīgu, ar izslēgtu ekrānu, ierīcē tiek ieslēgts dīkstāves režīms. Tas neļauj lietotnēm piekļūt tīklam un atliek to darbu izpildi, sinhronizāciju un standarta brīdinājumus.</string>
+    <string name="settings_troubleshoot_test_battery_failed">Ja lietotājs kādu laiku atstāj ierīci atvienotu no tīkla un nekustīgu un ar izslēgtu ekrānu, ierīcē pāriet dīkstāvē. Tas neļauj lietotnēm piekļūt tīklam un atliek to darbu izpildi, sinhronizēšanu un standarta brīdinājumus.</string>
     <string name="settings_troubleshoot_test_service_boot_failed">Pakalpojums nesāks darboties, kad ierīce tiks pārsāknēta. Kamēr ${app_name} netiks atvērta vismaz vienreiz, netiks saņemti paziņojumi.</string>
     <string name="settings_troubleshoot_test_notification_notice">Lūgums noklikšķināt uz paziņojuma. Ja paziņojums nav redzams, lūgums pārbaudīt sistēmas iestatījumus.</string>
     <plurals name="room_details_selected">
@@ -2742,22 +2732,16 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="live_location_share_location_item_share">Kopīgot atrašanās vietu</string>
     <string name="room_polls_active">Notiekošās aptaujas</string>
     <plurals name="room_polls_ended_no_item_for_loaded_period">
-        <item quantity="zero">Iepriekšējās %1$d dienās nav noslēgtu aptauju.
-\nJāielādē vairāk aptauju, lai apskatītu iepriekšējo dienu aptaujas.</item>
-        <item quantity="one">Iepriekšējā dienā nav noslēgtu aptauju.
-\nJāielādē vairāk aptauju, lai apskatītu iepriekšējo dienu aptaujas.</item>
-        <item quantity="other">Iepriekšējās %1$d dienās nav noslēgtu aptauju.
-\nJāielādē vairāk aptauju, lai apskatītu iepriekšējo dienu aptaujas.</item>
+        <item quantity="zero">Iepriekšējās %1$d dienās nav noslēgtu aptauju.\nJāielādē vairāk aptauju, lai apskatītu iepriekšējo dienu aptaujas.</item>
+        <item quantity="one">Iepriekšējā dienā nav noslēgtu aptauju.\nJāielādē vairāk aptauju, lai apskatītu iepriekšējo dienu aptaujas.</item>
+        <item quantity="other">Iepriekšējās %1$d dienās nav noslēgtu aptauju.\nJāielādē vairāk aptauju, lai apskatītu iepriekšējo dienu aptaujas.</item>
     </plurals>
     <string name="location_not_available_dialog_content">${app_name} nevarēja piekļūt atrašanās vietai. Lūgums vēlāk mēģināt vēlreiz.</string>
     <string name="error_voice_broadcast_permission_denied_message">Nav nepieciešamo atļauju, lai uzsāktu balss apraidi šajā istabā. Jāsazinās ar istabas pārvaldītāju, lai paaugstinātu atļaujas.</string>
     <plurals name="room_polls_active_no_item_for_loaded_period">
-        <item quantity="zero">Iepriekšējās %1$d dienās nav notiekošu aptauju.
-\nJāielādē vairāk aptauju, lai redzētu iepriekšējo dienu aptaujas.</item>
-        <item quantity="one">Iepriekšējā dienā nav notiekošu aptauju.
-\nJāielādē vairāk aptauju, lai redzētu iepriekšējo dienu aptaujas.</item>
-        <item quantity="other">Iepriekšējās %1$d dienās nav notiekošu aptauju.
-\nJāielādē vairāk aptauju, lai redzētu iepriekšējo dienu aptaujas.</item>
+        <item quantity="zero">Iepriekšējās %1$d dienās nav notiekošu aptauju.\nJāielādē vairāk aptauju, lai redzētu iepriekšējo dienu aptaujas.</item>
+        <item quantity="one">Iepriekšējā dienā nav notiekošu aptauju.\nJāielādē vairāk aptauju, lai redzētu iepriekšējo dienu aptaujas.</item>
+        <item quantity="other">Iepriekšējās %1$d dienās nav notiekošu aptauju.\nJāielādē vairāk aptauju, lai redzētu iepriekšējo dienu aptaujas.</item>
     </plurals>
     <string name="room_poll_details_go_to_timeline">Apskatīt aptauju laika joslā</string>
     <string name="location_share_live_started">Ielādē atrašanās vietas tiešraidi…</string>
@@ -3033,4 +3017,13 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="user_reported_as_inappropriate_content">Par lietotāju tika ziņots.
 \n
 \nJa nevēlies vairs redzēt saturu no šī lietotāja, to var neņemt vērā, lai paslēptu ziņas.</string>
+    <string name="room_profile_section_more_report">Ziņot par istabu</string>
+    <string name="room_profile_section_more_report_success_content">Par istabu ir sekmīgi ziņots.</string>
+    <string name="call_unsupported_matrix_rtc_call">Neatbalstīts zvans. Ir nepieciešama jaunā Element X lietotne, lai pievienotos šim zvanam.</string>
+    <string name="error_mas_not_supported_subtitle">Jālejupielādē %1$s, lai savā kontā izmantotu %2$s, vai jāizvēlas cits mājasserveris.</string>
+    <string name="view_download_replacement_app_title">Lejupielādēt %1$s</string>
+    <string name="error_mas_not_supported_title">Šajā lietotnē vairs nevar izveidot kontu ar %1$s</string>
+    <string name="view_download_replacement_app_subtitle">Ātrāks, drošāks un papildināts ar jaudīgiem līdzdarbošanās rīkiem.</string>
+    <string name="microphone_in_use_title">Tiek izmantots mirkofons</string>
+    <string name="call_unsupported">Neatbalstīts zvans</string>
 </resources>
