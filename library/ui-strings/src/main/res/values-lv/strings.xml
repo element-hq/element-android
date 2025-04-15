@@ -254,7 +254,7 @@
     <string name="search">Meklēt</string>
     <string name="start_voice_call">Sākt audio zvanu</string>
     <string name="start_video_call">Sākt video zvanu</string>
-    <string name="option_send_files">Sūtīt failus</string>
+    <string name="option_send_files">Sūtīt datnes</string>
     <string name="option_take_photo_video">Uzņemt foto vai video</string>
     <string name="auth_login">Pierakstīties</string>
     <string name="auth_submit">Iesniegt</string>
@@ -354,7 +354,7 @@
     <string name="settings_start_on_boot">Startēt pie ierīces ielādes</string>
     <string name="settings_background_sync">Sinhronizēšana fonā</string>
     <string name="settings_set_sync_timeout">Sinhronizēšanas pieprasījuma noildze</string>
-    <string name="settings_set_sync_delay">Intervāls starp sinhronizācijām</string>
+    <string name="settings_set_sync_delay">Aizture starp sinhronizēšanas reizēm</string>
     <string name="settings_version">Versija</string>
     <string name="settings_olm_version">olm versija</string>
     <string name="settings_app_term_conditions">Lietošanas noteikumi</string>
@@ -446,13 +446,13 @@
     <string name="encryption_information_device_key">Sesijas atslēga</string>
     <string name="encryption_export_e2e_room_keys">Eksportēt istabas šifrēšanas atslēgas</string>
     <string name="encryption_export_room_keys">Eksportēt istabas atslēgas</string>
-    <string name="encryption_export_room_keys_summary">Eksportēt atslēgas vietējā failā</string>
+    <string name="encryption_export_room_keys_summary">Izgūt atslēgas vietējā datnē</string>
     <string name="encryption_export_export">Eksportēt</string>
     <string name="passphrase_enter_passphrase">Ievadīt paroles vārdkopu</string>
     <string name="passphrase_confirm_passphrase">Apstiprināt paroles vārdkopu</string>
-    <string name="encryption_import_e2e_room_keys">Importēt E2E istabas atslēgas</string>
-    <string name="encryption_import_room_keys">Importēt istabas atslēgas</string>
-    <string name="encryption_import_room_keys_summary">Importēt atslēgas no vietējā faila</string>
+    <string name="encryption_import_e2e_room_keys">Ievietot E2E istabas atslēgas</string>
+    <string name="encryption_import_room_keys">Ievietot istabas atslēgas</string>
+    <string name="encryption_import_room_keys_summary">Ievietot atslēgas no vietējas datnes</string>
     <string name="encryption_import_import">Importēt</string>
     <string name="encryption_never_send_to_unverified_devices_title">Šifrēt vienīgi uz pārbaudītām ierīcēm</string>
     <string name="encryption_never_send_to_unverified_devices_summary">Nekad nesūtīt šifrētas ziņas uz nepārbaudītām ierīcēm no šīs ierīces.</string>
@@ -582,7 +582,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="direct_room_profile_not_encrypted_subtitle">Ziņas šeit nav nodrošinātas ar pilnīgu šifrēšanu.</string>
     <string name="room_profile_not_encrypted_subtitle">Ziņām šajā istabā netiek piemērota pilnīga šifrēšana.</string>
     <string name="verification_request_you_accepted">Tu apstiprināji</string>
-    <string name="sent_a_file">Fails</string>
+    <string name="sent_a_file">Datne</string>
     <string name="sent_an_audio_file">Audio</string>
     <string name="sent_an_image">Attēls.</string>
     <string name="sent_a_video">Video.</string>
@@ -639,7 +639,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="room_list_quick_actions_notifications_all">Visas ziņas</string>
     <string name="room_list_quick_actions_notifications_all_noisy">Visas ziņas (ar skaņu)</string>
     <string name="report_content_custom_hint">Iemesls ziņojumam par šo saturu</string>
-    <string name="uploads_files_title">FAILI</string>
+    <string name="uploads_files_title">DATNES</string>
     <string name="attachment_type_camera">Kamera</string>
     <string name="settings_text_message_sent_hint">Kods</string>
     <string name="direct_room_user_list_known_title">Zināmie lietotāji</string>
@@ -841,7 +841,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="report_content_custom">Pielāgots ziņojums…</string>
     <string name="report_content_inappropriate">Nepiemērots saturs</string>
     <string name="report_content_spam">Tas ir spams</string>
-    <string name="uploads_files_no_result">Šajā istabā nav neviena faila</string>
+    <string name="uploads_files_no_result">Šajā istabā nav nevienas datnes</string>
     <string name="attachment_viewer_item_x_of_y">%1$d no %2$d</string>
     <string name="one_user_read">%s izlasīja</string>
     <string name="two_users_read">%1$s un %2$s izlasīja</string>
@@ -859,9 +859,9 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="add_by_qr_code">Pievienot ar QR kodu</string>
     <string name="link_copied_to_clipboard">Saite ievietota starpliktuvē</string>
     <string name="edited_suffix">(labots)</string>
-    <string name="downloaded_file">Fails %1$s ir lejupielādēts!</string>
-    <string name="send_file_step_sending_file">Sūta failu (%1$s / %2$s)</string>
-    <string name="send_file_step_encrypting_file">Šifrē failu…</string>
+    <string name="downloaded_file">Datne %1$s tika lejupielādēta.</string>
+    <string name="send_file_step_sending_file">Sūta datni (%1$s / %2$s)</string>
+    <string name="send_file_step_encrypting_file">Šifrē datni…</string>
     <string name="send_file_step_sending_thumbnail">Sūta sīktēlu (%1$s / %2$s)</string>
     <string name="send_file_step_encrypting_thumbnail">Šifrē sīktēlu…</string>
     <string name="preference_voice_and_video">Balss un video</string>
@@ -1022,7 +1022,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="sent_a_reaction">Atsaucās ar %s</string>
     <string name="create_room_disable_federation_title">Bloķēt pievienošanos šai istabai ikvienam, kas nav daļa no %s</string>
     <string name="create_room_encryption_title">Iespējot šifrēšanu</string>
-    <string name="notification_initial_sync">Sākotnējā sinhronizācija…</string>
+    <string name="notification_initial_sync">Sākotnējā sinhronizēšana…</string>
     <string name="soft_logout_title">Tu esi atteicies</string>
     <string name="signed_out_submit">Pierakstīties vēlreiz</string>
     <string name="signed_out_title">Tu esi atteicies</string>
@@ -1107,7 +1107,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="attachment_type_sticker">Uzlīme</string>
     <string name="attachment_type_gallery">Galerija</string>
     <string name="attachment_type_contact">Kontakts</string>
-    <string name="attachment_type_file">Fails</string>
+    <string name="attachment_type_file">Datne</string>
     <string name="attachment_type_dialog_title">Pievienot attēlu no</string>
     <string name="qr_code">QR kods</string>
     <string name="room_directory_search_hint">Nosaukums vai ID (#piemers:matrix.org)</string>
@@ -1230,7 +1230,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="no_message_edits_found">Labojumi netika atrasti</string>
     <string name="message_edits">Ziņu labojumi</string>
     <string name="settings_labs_show_complete_history_in_encrypted_room">Rādīt pilnu vēsturi šifrētajās istabās</string>
-    <string name="import_e2e_keys_from_file">Importējiet E2E atslēgas no faila \"%1$s\".</string>
+    <string name="import_e2e_keys_from_file">Ievietot E2E atslēgas no datnes \"%1$s\".</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Kļūda radās vācot atslēgu dublējumu datus</string>
     <string name="keys_backup_unable_to_get_trust_info">Kļūda radās vācot uzticības informāciju</string>
     <string name="change_room_directory_network">Mainīt tīklu</string>
@@ -1619,7 +1619,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_labs_native_camera_summary">Jāsāknē sistēmas kamera, nevis pielāgotas kameras ekrāns.</string>
     <string name="room_widget_webview_read_protected_media">Lasīt DRM aizsargātu multividi</string>
     <string name="room_widget_permission_shared_info_title">Izmantojot to, var kopīgot datus ar %s:</string>
-    <string name="room_widget_permission_webview_shared_info_title">Izmantojot to, var iestatīt sīkfailus un kopīgot datus ar %s:</string>
+    <string name="room_widget_permission_webview_shared_info_title">Tā izmantošana var iestatīt sīkdatnes un kopīgot datus ar %s:</string>
     <string name="active_widget_view_action">SKATĪT</string>
     <plurals name="notification_compat_summary_title">
         <item quantity="zero">%d paziņojumu</item>
@@ -1645,7 +1645,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_media">Mediji</string>
     <string name="settings_discovery_manage">Pārvaldiet atklāšanas iestatījumus.</string>
     <string name="settings_discovery_category">Atklāšana</string>
-    <string name="settings_preview_media_before_sending">Priekšskatīt failu pirms nosūtīšanas</string>
+    <string name="settings_preview_media_before_sending">Pirms nosūtīšanas priekšskatīt informācijas nesējus</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} ik brīdi sinhronizēsies fonā noteiktā laikā (pielāgojams).
 \nTas ietekmēs radio un baterijas izmantošanu, tiks attēlots pastāvīgs paziņojums, kas norādīs, ka ${app_name} klausās notikumus.</string>
     <string name="settings_troubleshoot_test_battery_failed">Ja lietotājs kādu laiku atstāj ierīci atvienotu no tīkla un nekustīgu un ar izslēgtu ekrānu, ierīcē pāriet dīkstāvē. Tas neļauj lietotnēm piekļūt tīklam un atliek to darbu izpildi, sinhronizēšanu un standarta brīdinājumus.</string>
@@ -1784,9 +1784,9 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="invite_friends_text">Hei, sazinies ar mani ${app_name}: %s</string>
     <string name="error_empty_field_choose_password">Lūgums izvēlēties paroli.</string>
     <string name="error_empty_field_choose_user_name">Lūgums izvēlēties lietotājvārdu.</string>
-    <string name="error_saving_media_file">Nevarēja saglabāt multivides failu</string>
+    <string name="error_saving_media_file">Nevarēja saglabāt informācijas nesēja datni</string>
     <string name="settings_security_prevent_screenshots_title">Neatļaut ekrānšāviņus lietotnē</string>
-    <string name="use_file">Izmantot failu</string>
+    <string name="use_file">Izmantot datni</string>
     <string name="bootstrap_enter_recovery">Ievadiet savu %s, lai turpinātu</string>
     <string name="settings_notification_configuration">Paziņojumu uzstādīšana</string>
     <string name="error_failed_to_import_keys">Neizdevās importēt atslēgas</string>
@@ -1904,7 +1904,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="uploads_media_no_result">Šajā istabā nav multivides</string>
     <string name="uploads_media_title">Multivide</string>
     <string name="error_handling_incoming_share">Nevarēja apstrādāt kopīgošanas datus</string>
-    <string name="error_file_too_big_simple">Fails ir pārāk liels, lai tos augšupielādētu.</string>
+    <string name="error_file_too_big_simple">Datne ir pārāk liela, lai to augšupielādētu.</string>
     <plurals name="two_and_some_others_read">
         <item quantity="zero">%1$s, %2$s un %3$d citi izlasīja</item>
         <item quantity="one">%1$s, %2$s un %3$d citi izlasīja</item>
