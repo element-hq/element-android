@@ -21,9 +21,9 @@
     <string name="notice_answered_call">%s atbildēja uz zvanu.</string>
     <string name="notice_ended_call">%s beidza zvanu.</string>
     <string name="notice_made_future_room_visibility">%1$s padarīja istabas turpmāko ziņu vēsturi redzamu %2$s</string>
-    <string name="notice_room_visibility_invited">visi istabas biedri no brīža, kad tika uzaicināti.</string>
-    <string name="notice_room_visibility_joined">visi istabas biedri no brīža, kad tika pievienojušies.</string>
-    <string name="notice_room_visibility_shared">visi istabas biedri.</string>
+    <string name="notice_room_visibility_invited">visi istabas dalībnieki no brīža, kad tika uzaicināti.</string>
+    <string name="notice_room_visibility_joined">visi istabas dalībnieki no brīža, kad pievienojās.</string>
+    <string name="notice_room_visibility_shared">visi istabas dalībnieki.</string>
     <string name="notice_room_visibility_world_readable">ikviens.</string>
     <string name="notice_avatar_changed_too">(arī avatars tika nomainīts)</string>
     <string name="notice_room_name_removed">%1$s dzēsa istabas nosaukumu</string>
@@ -422,15 +422,15 @@
     <string name="room_settings_labs_warning_message">Šīs ir eksperimentālas funkcijas, kuras var radīt pārsteidzošus rezultātus! Lietot ar piesardzību.</string>
     <string name="send_bug_report_rage_shake">Sparīgi kratīt ierīci, lai ziņotu par kļūdu</string>
     <plurals name="membership_changes">
-        <item quantity="zero">%d biedru izmaiņu</item>
-        <item quantity="one">%d biedru izmaiņa</item>
-        <item quantity="other">%d biedru izmaiņas</item>
+        <item quantity="zero">%d dalībnieku izmaiņu</item>
+        <item quantity="one">%d dalībnieku izmaiņa</item>
+        <item quantity="other">%d dalībnieku izmaiņas</item>
     </plurals>
-    <string name="list_members">Biedru katalogs</string>
+    <string name="list_members">Dalībnieki</string>
     <plurals name="room_title_members">
-        <item quantity="zero">%d biedri</item>
-        <item quantity="one">%d biedrs</item>
-        <item quantity="other">%d biedri</item>
+        <item quantity="zero">%d dalībnieku</item>
+        <item quantity="one">%d dalībnieks</item>
+        <item quantity="other">%d dalībnieki</item>
     </plurals>
     <plurals name="room_new_messages_notification">
         <item quantity="zero">%d jaunu ziņu</item>
@@ -494,7 +494,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="widget_integration_unable_to_create">Neizdevās uzstādīt vidžetu.</string>
     <string name="widget_integration_failed_to_send_request">Neizdevās nosūtīt pieprasījumu.</string>
     <string name="widget_integration_positive_power_level">Pieejas līmenim jābūt lielākam par 0.</string>
-    <string name="widget_integration_must_be_in_room">Tu neesi šīs istabas iemītnieks (biedrs).</string>
+    <string name="widget_integration_must_be_in_room">Tu neesi šajā istabā.</string>
     <string name="widget_integration_no_permission_in_room">Tev nepietiek tiesību to darīt šajā istabā.</string>
     <string name="widget_integration_missing_room_id">Pieprasījumā iztrūkst room_id.</string>
     <string name="widget_integration_missing_user_id">Pieprasījumā iztrūkst user_id.</string>
@@ -1000,8 +1000,8 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="room_settings_enable_encryption_dialog_content">Tiklīdz iespējots, istabas šifrēšanu nevar atspējot. Šifrētā istabā sūtītas ziņas nav redzamas serverim, tikai istabas dalībniekiem. Šifrēšanas iespējošana var neļaut pareizi strādāt daudzām robotprogrammatūrām un tiltiem.</string>
     <string name="room_settings_enable_encryption_no_permission">Nav atļaujas, lai iespējotu šifrēšanu šajā istabā.</string>
     <plurals name="room_profile_section_more_member_list">
-        <item quantity="zero">Viena persona</item>
-        <item quantity="one">%1$d cilvēki</item>
+        <item quantity="zero">%1$d cilvēku</item>
+        <item quantity="one">%1$d cilvēks</item>
         <item quantity="other">%1$d cilvēki</item>
     </plurals>
     <string name="verification_request_waiting_for">Gaida %s…</string>
@@ -1057,20 +1057,20 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="login_reset_password_success_title">Gatavs!</string>
     <string name="login_reset_password_mail_confirmation_notice_2">Jāpiesit saitei, lai apstiprinātu savu jauno paroli. Tiklīdz ir atvērta saite, jāklikšķina zemāk.</string>
     <string name="login_reset_password_mail_confirmation_notice">Apstiprinājuma epasts tika nosūtīts uz %1$s.</string>
-    <string name="login_reset_password_mail_confirmation_title">Pārbaudiet ienākošos epastus</string>
+    <string name="login_reset_password_mail_confirmation_title">Jāpārbauda sava iesūtne</string>
     <string name="login_reset_password_error_not_found">Šī e-pasta adrese nav piesaistīta nevienam kontam</string>
     <string name="login_reset_password_on">Atiestatīt paroli uz %1$s</string>
     <string name="login_login_with_email_error">Šī e-pasta adrese nav piesaistīta nevienam kontam.</string>
     <string name="login_registration_not_supported">Lietotnei neizdodas izveidot kontu šajā mājasserverī.
 \n
 \nVai reģistrēties ar tīmekļa klientu\?</string>
-    <string name="login_registration_disabled">Atvainojiet, šis serveris nepieņem jaunus kontus.</string>
+    <string name="login_registration_disabled">Atvainojamies, šis serveris nepieņem jaunus kontus.</string>
     <string name="login_mode_not_supported">Lietotnei neizdodas pieteikties šajā mājasserverī. Mājasserveris atbalsta šo(s) pieteikšanās veidu(s): %1$s.
 \n
 \nVai pieteikties tīmekļa klientā\?</string>
     <string name="login_sso_error_message">Radās kļūda, ielādējot lapu: %1$s (%2$d)</string>
-    <string name="login_server_url_form_common_notice">Ievadiet servera adresi, kuru vēlaties izmantot</string>
-    <string name="login_server_url_form_modular_notice">Ievadiet Modular Element vai servera adresi, kuru vēlaties izmantot</string>
+    <string name="login_server_url_form_common_notice">Jāievada servera, kuru vēlies izmantot, adrese</string>
+    <string name="login_server_url_form_modular_notice">Jāievada Modular Element vai servera, kuru vēlies izmantot, adrese</string>
     <string name="login_server_url_form_modular_text">Premium hostings organizācijām</string>
     <string name="login_server_url_form_other_hint">Adrese</string>
     <string name="login_server_url_form_modular_hint">Element Matrix Services adrese</string>
@@ -1087,7 +1087,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="login_server_other_text">Pielāgoti un papildu iestatījumi</string>
     <string name="login_server_modular_learn_more">Uzzināt vairāk</string>
     <string name="login_server_modular_text">Premium hostings organizācijām</string>
-    <string name="login_server_matrix_org_text">Pievienojieties bez maksas miljoniem lietotāju lielākajā publiskajā serverī</string>
+    <string name="login_server_matrix_org_text">Bez maksas pievienojies miljoniem lietotāju lielākajā publiskajā serverī</string>
     <string name="login_server_text">Tāpat kā ar e-pastu, kontiem ir sava mājvieta, lai gan var sarunāties ar ikvienu</string>
     <string name="login_server_title">Izvēlieties serveri</string>
     <string name="login_splash_submit">Uzsākt</string>
@@ -1565,7 +1565,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_discovery_no_terms">Izvēlētajam identitātes serverim nav pakalpojumu sniegšanas noteikumu. Turpināt ir ieteicams tikai tad, ja ir uzticēšanās pakalpojuma īpašniekam</string>
     <string name="settings_discovery_no_terms_title">Identitātes serverim nav pakalpojumu sniegšanas noteikumu</string>
     <string name="settings_discovery_please_enter_server">Lūgums ievadīt identitātes servera URL</string>
-    <string name="settings_discovery_enter_identity_server">Ievadiet identitātes servera URL</string>
+    <string name="settings_discovery_enter_identity_server">Ievadīt identitātes servera URL</string>
     <string name="settings_discovery_consent_action_give_consent">Sniegt piekrišanu</string>
     <string name="settings_discovery_consent_action_revoke">Atsaukt manu piekrišanu</string>
     <string name="settings_discovery_consent_notice_on">Ir dota piekrišana sūtīt e-pasta adreses un tālruņa numurus uz šo identitātes serveri, lai atklātu citus lietotājus no kontaktiem.</string>
@@ -1581,7 +1581,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_discovery_identity_server_info">Pašlaik izmantojat %1$s, lai atrastu un būtu atrodams esošajiem kontaktiem, kurus pazīstat.</string>
     <string name="change_identity_server">Mainīt identitātes serveri</string>
     <string name="terms_description_for_integration_manager">Izmanto robotprogrammatūru, tiltus, logrīkus un uzlīmju pakas</string>
-    <string name="terms_description_for_identity_server">Esiet atrodams citiem</string>
+    <string name="terms_description_for_identity_server">Esi citiem atklājams/a</string>
     <string name="terms_of_service">Pakalpojumu sniegšanas noteikumi</string>
     <string name="message_view_edit_history">Skatīt labošanas vēsturi</string>
     <string name="settings_labs_show_hidden_events_in_timeline">Rādīt slēptos notikumus laika joslā</string>
@@ -1696,7 +1696,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="space_type_private">Privāta</string>
     <string name="space_type_public">Publiska</string>
     <string name="create_spaces_private_teammates">Privāta vieta Tev un Taviem komandas biedriem</string>
-    <string name="create_spaces_me_and_teammates">Es un biedri</string>
+    <string name="create_spaces_me_and_teammates">Es un komandas biedri</string>
     <string name="create_spaces_make_sure_access">Jāpārliecinās, ka pareizajiem cilvēkiem ir piekļuve %s.</string>
     <string name="create_spaces_who_are_you_working_with">Ar ko Tu strādā\?</string>
     <string name="create_spaces_organise_rooms">Privāta vieta, kur sakārtot istabas</string>
@@ -1870,9 +1870,9 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
 \nVerifikācija tiks saglabāta lokāli un kopīgota kādā no nākamajām lietotnes versijām.</string>
     <string name="rendering_event_error_exception">${app_name} saskārās ar problēmu, atveidojot notikuma ar id \'%1$s\' saturu</string>
     <string name="rendering_event_error_type_of_event_not_handled">${app_name} neapstrādā \'%1$s\' tipa notikumus</string>
-    <string name="verification_scan_self_emoji_subtitle">Tā vietā pārbaudiet, salīdzinot emocijzīmes</string>
+    <string name="verification_scan_self_emoji_subtitle">Tā vietā apliecināt ar emocijzīmju salīdzināšanu</string>
     <string name="verification_scan_with_this_device">Noskenēt ar šo ierīci</string>
-    <string name="verification_scan_self_notice">Noskenējiet kodu ar citu ierīci vai pārslēdziet un skenējiet ar šo ierīci</string>
+    <string name="verification_scan_self_notice">Kods jānolasa ar citu ierīci vai jāpārslēdzas un jānolasa ar šo ierīci</string>
     <string name="sent_a_voice_message">Balss</string>
     <string name="login_error_threepid_denied">Šādam e-pasta domēnam nav ļauta reģistrēšanās šajā serverī</string>
     <string name="create_space_in_progress">Izveido Telpu…</string>
@@ -2590,7 +2590,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="dev_tools_state_event">Stāvokļa notikumi</string>
     <string name="room_alias_preview_not_found">Pašlaik šis aizstājvārds nav pieejams.
 \nVēlāk jāmēģina vēlreiz vai jāvaicā istabas pārvaldītājam, lai pārbauda, vai Tev ir piekļuve.</string>
-    <string name="create_space_identity_server_info_none">Pašlaik netiek izmantots identitātes serveris. Lai varētu uzaicināt komandas biedrus un būtu tiem atklājams, jāiestata tāds zemāk.</string>
+    <string name="create_space_identity_server_info_none">Pašlaik netiek izmantots identitāšu serveris. Lai varētu uzaicināt komandas biedrus un būtu tiem atklājams, jāiestata tāds zemāk.</string>
     <string name="space_leave_prompt_msg_private">Nebūs iespējams atkārtoti pievienoties bez uzaicinājuma.</string>
     <string name="space_explore_filter_no_result_title">Nekas netika atrasts</string>
     <string name="labs_auto_report_uisi">Automātiski ziņot par atšifrēšanas kļūdām.</string>
@@ -2731,14 +2731,14 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="room_polls_active">Notiekošās aptaujas</string>
     <plurals name="room_polls_ended_no_item_for_loaded_period">
         <item quantity="zero">Iepriekšējās %1$d dienās nav noslēgtu aptauju.\nJāielādē vairāk aptauju, lai apskatītu iepriekšējo dienu aptaujas.</item>
-        <item quantity="one">Iepriekšējā dienā nav noslēgtu aptauju.\nJāielādē vairāk aptauju, lai apskatītu iepriekšējo dienu aptaujas.</item>
+        <item quantity="one">Iepriekšējā %1$d dienā nav noslēgtu aptauju.\nJāielādē vairāk aptauju, lai apskatītu iepriekšējo dienu aptaujas.</item>
         <item quantity="other">Iepriekšējās %1$d dienās nav noslēgtu aptauju.\nJāielādē vairāk aptauju, lai apskatītu iepriekšējo dienu aptaujas.</item>
     </plurals>
     <string name="location_not_available_dialog_content">${app_name} nevarēja piekļūt atrašanās vietai. Lūgums vēlāk mēģināt vēlreiz.</string>
     <string name="error_voice_broadcast_permission_denied_message">Nav nepieciešamo atļauju, lai uzsāktu balss apraidi šajā istabā. Jāsazinās ar istabas pārvaldītāju, lai paaugstinātu atļaujas.</string>
     <plurals name="room_polls_active_no_item_for_loaded_period">
         <item quantity="zero">Iepriekšējās %1$d dienās nav notiekošu aptauju.\nJāielādē vairāk aptauju, lai redzētu iepriekšējo dienu aptaujas.</item>
-        <item quantity="one">Iepriekšējā dienā nav notiekošu aptauju.\nJāielādē vairāk aptauju, lai redzētu iepriekšējo dienu aptaujas.</item>
+        <item quantity="one">Iepriekšējā %1$d dienā nav notiekošu aptauju.\nJāielādē vairāk aptauju, lai redzētu iepriekšējo dienu aptaujas.</item>
         <item quantity="other">Iepriekšējās %1$d dienās nav notiekošu aptauju.\nJāielādē vairāk aptauju, lai redzētu iepriekšējo dienu aptaujas.</item>
     </plurals>
     <string name="room_poll_details_go_to_timeline">Apskatīt aptauju laika joslā</string>
