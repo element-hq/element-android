@@ -2452,8 +2452,7 @@
     <string name="create_room">ルームを作成</string>
     <string name="start_chat">会話を開始</string>
     <string name="all_chats">全ての会話</string>
-    <string name="home_empty_no_rooms_title">${app_name}にようこそ、
-\n%s。</string>
+    <string name="home_empty_no_rooms_title">${app_name}にようこそ、\n%sさん。</string>
     <string name="device_manager_learn_more_sessions_verified_title">認証済のセッション</string>
     <string name="device_manager_sessions_sign_in_with_qr_code_title">QRコードでサインイン</string>
     <string name="labs_enable_session_manager_title">新しいセッションマネージャーを有効にする</string>
@@ -2868,4 +2867,20 @@
     <string name="room_poll_details_go_to_timeline">アンケートをタイムラインに表示</string>
     <string name="error_voice_broadcast_unable_to_decrypt">この音声配信を復号化できません。</string>
     <string name="settings_external_account_management_title">アカウント</string>
+    <string name="settings_crypto_version">暗号化バージョン</string>
+    <string name="user_reported_as_inappropriate_title">報告されたユーザー</string>
+    <string name="message_report_user">ユーザーを報告する</string>
+    <string name="sign_out_failed_dialog_message">ホームサーバーにアクセスできません。それでもサインアウトする場合、このデバイスはあなたのデバイスリストから消去されませんので、他のクライアントを使って削除してください。</string>
+    <string name="user_reported_as_inappropriate_content">このユーザーは報告されました。\n\nこのユーザーからのコンテンツをもう見たくない場合は、無視してメッセージを非表示にすることができます。</string>
+    <string name="login_splash_sign_in">サインイン</string>
+    <string name="notice_display_name_changed_to">%1$sが表示名を%2$sに変更しました</string>
+    <string name="sign_out_anyway">とにかくサインアウトする</string>
+    <string name="room_profile_section_more_report">ルームを報告する</string>
+    <string name="direct_room_user_list_only_invite_one_email">一度に招待できるメールは1つだけです</string>
+    <string name="settings_acceptable_use_policy">利用規約</string>
+    <string name="avatar_of_space">スペース%1$sのアバター</string>
+    <string name="avatar_of_room">ルーム%1$sのアバター</string>
+    <string name="avatar_of_user">ユーザー%1$sのプロフィール画像</string>
+    <string name="settings_notification_error_on_update">通知設定の更新時にエラーが発生しました。もう一度お試しください。</string>
+    <string name="create_room_unknown_users_dialog_submit">とにかくチャットを開始する</string>
 </resources>
