@@ -664,7 +664,7 @@
     <string name="login_error_no_homeserver_found">有効なMatrixサーバーのアドレスではありません</string>
     <string name="auth_msisdn_already_defined">この電話番号は既に登録されています。</string>
     <string name="auth_login_sso">シングルサインオンを使用してサインイン</string>
-    <string name="call_format_turn_hd_on">HDを使用する</string>
+    <string name="call_format_turn_hd_on">HDを使用</string>
     <string name="call_format_turn_hd_off">HDを使用しない</string>
     <string name="call_camera_back">背面</string>
     <string name="call_camera_front">前面</string>
@@ -947,7 +947,7 @@
     <string name="settings_show_join_leave_messages_summary">招待、追放、ブロックは影響を受けません。</string>
     <string name="settings_show_join_leave_messages">参加・退出イベントを表示</string>
     <string name="settings_chat_effects_description">/confettiコマンドを使用すると、❄️または🎉を含むメッセージを送信</string>
-    <string name="settings_chat_effects_title">チャットでエフェクトを表示</string>
+    <string name="settings_chat_effects_title">チャットエフェクトを表示</string>
     <string name="settings_inline_url_preview_summary">ホームサーバーがこの機能をサポートしている場合は、チャット内のリンクをプレビューします。</string>
     <string name="settings_integrations_summary">インテグレーションマネージャーを使用すると、ボット、ブリッジ、ウィジェット、ステッカーパックを管理できます。
 \n設定データを受信し、ユーザーに代わってウィジェットの変更、ルームへの招待の送信、権限レベルの設定を行うことができます。</string>
@@ -1355,7 +1355,7 @@
     <string name="settings_messages_containing_username">自分のユーザー名</string>
     <string name="settings_messages_containing_display_name">自分の表示名</string>
     <string name="settings_messages_in_e2e_group_chat">グループチャットでの暗号化されたメッセージ</string>
-    <string name="settings_messages_in_e2e_one_to_one">1対1のチャットでの暗号化されたメッセージ</string>
+    <string name="settings_messages_in_e2e_one_to_one">1対1の会話での暗号化されたメッセージ</string>
     <string name="settings_notification_notify_me_for">以下の場合に通知</string>
     <string name="settings_notification_other">その他</string>
     <string name="settings_notification_mentions_and_keywords">メンションとキーワード</string>
@@ -1407,7 +1407,7 @@
     <string name="room_filtering_footer_title">お探しのものが見つかりませんか？</string>
     <string name="send_suggestion_report_placeholder">提案をここに書いてください</string>
     <string name="send_suggestion_content">意見・感想を聞かせてください。</string>
-    <string name="send_suggestion">提案する</string>
+    <string name="send_suggestion">提案</string>
     <string name="push_gateway_item_format">フォーマット：</string>
     <string name="push_gateway_item_url">URL：</string>
     <string name="push_gateway_item_device_name">セッションの表示名：</string>
@@ -2311,7 +2311,7 @@
     <string name="settings_active_sessions_unverified_device_desc">このセッションを信頼済として認証すると、暗号化されたメッセージにアクセスすることができます。このアカウントにサインインしなかった場合は、あなたのアカウントのセキュリティーが破られている可能性があります：</string>
     <string name="verify_new_session_compromized">アカウントのセキュリティーが破られている可能性があります</string>
     <string name="command_description_add_to_space">選択したスペースに追加</string>
-    <string name="use_latest_app">最新の${app_name}は他のデバイスでも使用できます：</string>
+    <string name="use_latest_app">最新の${app_name}は他の端末でも使用できます：</string>
     <string name="call_tile_voice_call_has_ended">音声通話が終了しました・%1$s</string>
     <string name="call_tile_video_call_has_ended">ビデオ通話が終了しました・%1$s</string>
     <string name="discovery_invite">メールアドレスで招待したり、連絡先を検索したりできます…</string>
@@ -2743,7 +2743,7 @@
     <string name="auth_biometric_key_invalidated_message">新しい生体認証の方法が最近追加されたため、生体認証は無効になりました。設定から再び有効にできます。</string>
     <string name="identity_server_error_no_current_binding_error">このIDとの連携は現在ありません。</string>
     <string name="error_forbidden_digits_only_username">このホームサーバーは数字だけからなるユーザー名を承諾しません。</string>
-    <string name="send_your_first_msg_to_invite">最初のメッセージを送信すると、%sを会話に招待</string>
+    <string name="send_your_first_msg_to_invite">最初のメッセージを送信して%sを会話に招待</string>
     <string name="settings_nightly_build">Nightly build</string>
     <string name="verification_scan_self_notice">あなたの他の端末でコードをスキャンするか、もしくは反対に、この端末でスキャンしてください</string>
     <string name="ftue_auth_choose_server_ems_subtitle">Element Matrix Services（EMS）は、高速、安全でリアルタイムのコミュニケーション向きの、堅牢で安定したホスティングサービスです。&lt;a href=\"${ftue_ems_url}\"&gt;element.io/ems&lt;/a&gt;で方法を調べましょう。</string>
@@ -2790,7 +2790,7 @@
     <string name="qr_code_login_new_device_instruction_2">設定から「セキュリティーとプライバシー」を開いてください</string>
     <string name="qr_code_login_new_device_instruction_1">他の端末でアプリを開いてください</string>
     <string name="qr_code_login_header_failed_user_cancelled_description">もう一方の端末のサインインはキャンセルされました。</string>
-    <string name="qr_code_login_header_failed_other_device_already_signed_in_description">もう一方のデバイスは既にサインインしています。</string>
+    <string name="qr_code_login_header_failed_other_device_already_signed_in_description">もう一方の端末は既にサインインしています。</string>
     <string name="qr_code_login_header_failed_denied_description">リクエストはもう一方の端末で拒否されました。</string>
     <string name="qr_code_login_header_failed_timeout_description">時間内にリンクが完了しませんでした。</string>
     <string name="qr_code_login_header_failed_device_is_not_supported_description">この端末とのリンクはサポートしていません。</string>
@@ -2869,18 +2869,18 @@
     <string name="settings_external_account_management_title">アカウント</string>
     <string name="settings_crypto_version">暗号化バージョン</string>
     <string name="user_reported_as_inappropriate_title">報告されたユーザー</string>
-    <string name="message_report_user">ユーザーを報告する</string>
-    <string name="sign_out_failed_dialog_message">ホームサーバーにアクセスできません。それでもサインアウトする場合、このデバイスはあなたのデバイスリストから消去されませんので、他のクライアントを使って削除してください。</string>
+    <string name="message_report_user">ユーザーを報告</string>
+    <string name="sign_out_failed_dialog_message">ホームサーバーにアクセスできません。インアウトしても、この端末はあなたの端末リストから消去されませんので、他のクライアントを使って削除してください。</string>
     <string name="user_reported_as_inappropriate_content">このユーザーは報告されました。\n\nこのユーザーからのコンテンツをもう見たくない場合は、無視してメッセージを非表示にすることができます。</string>
     <string name="login_splash_sign_in">サインイン</string>
     <string name="notice_display_name_changed_to">%1$sが表示名を%2$sに変更しました</string>
-    <string name="sign_out_anyway">とにかくサインアウトする</string>
-    <string name="room_profile_section_more_report">ルームを報告する</string>
+    <string name="sign_out_anyway">とにかくサインアウト</string>
+    <string name="room_profile_section_more_report">ルームを報告</string>
     <string name="direct_room_user_list_only_invite_one_email">一度に招待できるメールは1つだけです</string>
     <string name="settings_acceptable_use_policy">利用規約</string>
     <string name="avatar_of_space">スペース%1$sのアバター</string>
     <string name="avatar_of_room">ルーム%1$sのアバター</string>
     <string name="avatar_of_user">ユーザー%1$sのプロフィール画像</string>
     <string name="settings_notification_error_on_update">通知設定の更新時にエラーが発生しました。もう一度お試しください。</string>
-    <string name="create_room_unknown_users_dialog_submit">とにかくチャットを開始する</string>
+    <string name="create_room_unknown_users_dialog_submit">とにかくチャットを開始</string>
 </resources>
