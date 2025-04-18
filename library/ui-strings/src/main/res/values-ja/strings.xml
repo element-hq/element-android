@@ -1355,7 +1355,7 @@
     <string name="settings_messages_containing_username">自分のユーザー名</string>
     <string name="settings_messages_containing_display_name">自分の表示名</string>
     <string name="settings_messages_in_e2e_group_chat">グループチャットでの暗号化されたメッセージ</string>
-    <string name="settings_messages_in_e2e_one_to_one">1対1の会話での暗号化されたメッセージ</string>
+    <string name="settings_messages_in_e2e_one_to_one">1対1のチャットでの暗号化されたメッセージ</string>
     <string name="settings_notification_notify_me_for">以下の場合に通知</string>
     <string name="settings_notification_other">その他</string>
     <string name="settings_notification_mentions_and_keywords">メンションとキーワード</string>
