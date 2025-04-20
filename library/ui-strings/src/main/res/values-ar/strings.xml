@@ -961,11 +961,11 @@
     <string name="room_settings_room_notifications_account_settings">إعدادات الحساب</string>
     <string name="room_settings_room_notifications_manage_notifications">يمكنك إدارة الإخطارات في %1$s.</string>
     <string name="room_settings_room_notifications_notify_me">أخطرني بـ</string>
-    <string name="verify_new_session_was_not_me">لم أكن أنا</string>
+    <string name="verify_new_session_was_not_me">هذا لم يكن انا</string>
     <string name="verify_new_session_notice">استعمل هذه الجلسة لاستيثاق جلسة جديدة، مما يمنحها نفاذًا للرسائل المعماة.</string>
-    <string name="new_session">ولوج جديد، أنت من قمت به؟</string>
+    <string name="new_session">تسجيل دخول جديد. هل هذا أنت؟</string>
     <string name="refresh">أنعش</string>
-    <string name="e2e_use_keybackup">فك قفل تأريخ الرسائل المعماة</string>
+    <string name="e2e_use_keybackup">فتح سجل الرسائل المشفرة</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">المفاتيح محدثة سلفًا!</string>
     <string name="encryption_settings_manage_message_recovery_summary">أدر النسخ الاحتياكي للمفاتيح</string>
     <string name="encryption_message_recovery">استعادة الرسائل المعماة</string>
@@ -1162,20 +1162,20 @@
     <string name="login_reset_password_password_hint">كلمة السر الجديدة</string>
     <string name="login_reset_password_submit">التالي</string>
     <plurals name="x_selected">
-        <item quantity="zero">لم تحدد</item>
-        <item quantity="one">واحد محدد</item>
-        <item quantity="two">اثنان محددان</item>
-        <item quantity="few">%1$d محددة</item>
-        <item quantity="many">%1$d محددة</item>
-        <item quantity="other">%1$d محددة</item>
+        <item quantity="zero">تم تحديد %1$d</item>
+        <item quantity="one">تم تحديد %1$d</item>
+        <item quantity="two">تم تحديد %1$d</item>
+        <item quantity="few">تم تحديد %1$d</item>
+        <item quantity="many">تم تحديد %1$d</item>
+        <item quantity="other">تم تحديد %1$d</item>
     </plurals>
     <plurals name="notice_room_canonical_alias_alternative_removed">
-        <item quantity="zero">صفر</item>
-        <item quantity="one">واحد</item>
-        <item quantity="two">اثنان</item>
-        <item quantity="few">القليل</item>
-        <item quantity="many">العديد</item>
-        <item quantity="other">أخرى</item>
+        <item quantity="zero">قام %1$s بإزالة العنوان البديل %2$s لهذه الغرفة.</item>
+        <item quantity="one">قام %1$s بإزالة العنوان البديل %2$s لهذه الغرفة.</item>
+        <item quantity="two">قام %1$s بإزالة العنوانين البديلين %2$s لهذه الغرفة.</item>
+        <item quantity="few">قام %1$s بإزالة العناوين البديلة %2$s لهذه الغرفة.</item>
+        <item quantity="many">قام %1$s بإزالة العناوين البديلة %2$s لهذه الغرفة.</item>
+        <item quantity="other">قام %1$s بإزالة العناوين البديلة %2$s لهذه الغرفة.</item>
     </plurals>
     <string name="initial_sync_request_content">${app_name} يحتاج إلى حذف ذاكرة التخزين المؤقت حتى تكون مستحدثة، من أجل هذه الأسباب:
 \n%s
@@ -1188,12 +1188,12 @@
     <string name="all_chats">كل المحادثات</string>
     <string name="notice_voice_broadcast_ended_by_you">أنت الذي انهيت البث الصوتي.</string>
     <plurals name="notice_room_server_acl_changes">
-        <item quantity="zero">صفر</item>
-        <item quantity="one">واحد</item>
-        <item quantity="two">اثنان</item>
-        <item quantity="few">القليل</item>
-        <item quantity="many">العديد</item>
-        <item quantity="other">أخرى</item>
+        <item quantity="zero">تغيير %d قوائم التحكم بالوصول إلى الخادم</item>
+        <item quantity="one">تغيير %d قوائم التحكم بالوصول إلى الخادم</item>
+        <item quantity="two">تغييران %d قوائم التحكم بالوصول إلى الخادم</item>
+        <item quantity="few">تغييرات %d قوائم التحكم بالوصول إلى الخادم</item>
+        <item quantity="many">تغييرات %d قوائم التحكم بالوصول إلى الخادم</item>
+        <item quantity="other">تغيير %d قوائم التحكم بالوصول إلى الخادم</item>
     </plurals>
     <string name="labs_enable_new_app_layout_title">فعّل التخطيط الجديد</string>
     <string name="home_layout_preferences_sort_name">A - Z</string>
@@ -2597,4 +2597,499 @@
     <string name="login_signup_error_user_in_use">تم أخذ اسم المستخدم هذا</string>
     <string name="autodiscover_well_known_error">تعذر العثور على خادم رئيسي صالح. يُرجى التحقق من مُعرّفك</string>
     <string name="settings_developer_mode_fail_fast_title">الفشل السريع</string>
+    <plurals name="poll_total_vote_count_before_ended_and_not_voted">
+        <item quantity="zero">تم الإدلاء بـ %1$d صوت. صوّت لرؤية النتائج</item>
+        <item quantity="one">تم الإدلاء بـ %1$d صوت. صوّت لرؤية النتائج</item>
+        <item quantity="two">تم الإدلاء بـ %1$d صوتان. صوّت لرؤية النتائج</item>
+        <item quantity="few">تم الإدلاء بـ %1$d أصوات. صوّت لرؤية النتائج</item>
+        <item quantity="many">تم الإدلاء بـ %1$d أصوات. صوّت لرؤية النتائج</item>
+        <item quantity="other">تم الإدلاء بـ %1$d صوت. صوّت لرؤية النتائج</item>
+    </plurals>
+    <string name="create_spaces_default_public_random_room_name">عشوائي</string>
+    <string name="crosssigning_verify_after_update">تم تحديث التطبيق</string>
+    <string name="verification_verify_identity">قم بالتحقق من هويتك للوصول إلى الرسائل المشفرة وإثبات هويتك للآخرين.</string>
+    <string tools:ignore="UnusedResources" name="verification_open_other_to_verify">استخدم جلسة موجودة للتحقق من هذه الجلسة، ومنحها حق الوصول إلى الرسائل المشفرة.</string>
+    <string name="qr_code_scanned_by_other_no">لا</string>
+    <string name="use_latest_app">استخدم أحدث إصدار من ${app_name} على أجهزتك الأخرى:</string>
+    <string name="secure_backup_reset_danger_warning">يرجى المتابعة فقط إذا كنت متأكدًا من أنك فقدت جميع أجهزتك الأخرى ومفتاح الأمان الخاص بك.</string>
+    <string name="error_forbidden_digits_only_username">لا يقبل الخادم الرئيسي اسم المستخدم الذي يحتوي على أرقام فقط.</string>
+    <string tools:ignore="UnusedResources" name="disclaimer_title">الشغب أصبح الآن عنصرًا!</string>
+    <string name="alert_push_are_disabled_description">قم بمراجعة إعداداتك لتمكين إشعارات الدفع</string>
+    <string name="call_one_active">مكالمة نشطة (%1$s) ·</string>
+    <string name="call_tap_to_return">%1$s انقر للرجوع</string>
+    <string name="a11y_close_emoji_picker">إغلاق أداة اختيار الرموز التعبيرية</string>
+    <string name="warning_unsaved_change_discard">تجاهل التغييرات</string>
+    <string name="re_authentication_default_confirm_text">يتطلب ${app_name} منك إدخال بيانات الاعتماد الخاصة بك لأداء هذا الإجراء.</string>
+    <string name="dev_tools_success_state_event">تم إرسال حدث الحالة!</string>
+    <string name="create_spaces_organise_rooms">مساحة خاصة لتنظيم غرفك</string>
+    <string name="invite_by_username_or_mail">دعوة عن طريق اسم المستخدم أو البريد</string>
+    <string name="upgrade_room_warning">ترقية الغرفة إجراء متقدم، ويُنصح به عادةً عند عدم استقرارها بسبب أخطاء أو ميزات مفقودة أو ثغرات أمنية.\nيؤثر هذا عادةً فقط على كيفية معالجة الغرفة على الخادم.</string>
+    <string name="create_space_identity_server_info_none">أنت لا تستخدم خادم هوية حاليًا. لدعوة زملائك في الفريق وتمكينهم من اكتشافك، قم بتكوين خادم أدناه.</string>
+    <string name="upgrade_room_update_parent_space">تحديث المساحة الأصل تلقائيًا</string>
+    <plurals name="device_manager_other_sessions_description_inactive">
+        <item quantity="zero">غير نشط لمدة %1$d+ يوم (%2$s)</item>
+        <item quantity="one">غير نشط لمدة %1$d+ يوم (%2$s)</item>
+        <item quantity="two">غير نشط لمدة %1$d+ يومان (%2$s)</item>
+        <item quantity="few">غير نشط لمدة %1$d+ أيام (%2$s)</item>
+        <item quantity="many">غير نشط لمدة %1$d+ أيام (%2$s)</item>
+        <item quantity="other">غير نشط لمدة %1$d+ أيام (%2$s)</item>
+    </plurals>
+    <plurals name="device_manager_inactive_sessions_description">
+        <item quantity="zero">فكر في تسجيل الخروج من الجلسات القديمة (%1$d يوم أو أكثر) التي لم تعد تستخدمها.</item>
+        <item quantity="one">فكر في تسجيل الخروج من الجلسات القديمة (%1$d يوم أو أكثر) التي لم تعد تستخدمها.</item>
+        <item quantity="two">فكر في تسجيل الخروج من الجلسات القديمة (%1$d يومان أو أكثر) التي لم تعد تستخدمها.</item>
+        <item quantity="few">فكر في تسجيل الخروج من الجلسات القديمة (%1$d أيام أو أكثر) التي لم تعد تستخدمها.</item>
+        <item quantity="many">فكر في تسجيل الخروج من الجلسات القديمة (%1$d أيام أو أكثر) التي لم تعد تستخدمها.</item>
+        <item quantity="other">فكر في تسجيل الخروج من الجلسات القديمة (%1$d يوم أو أكثر) التي لم تعد تستخدمها.</item>
+    </plurals>
+    <string name="no_connectivity_to_the_server_indicator">لقد تم فقدان الاتصال بالخادم</string>
+    <plurals name="device_manager_filter_option_inactive_description">
+        <item quantity="zero">غير نشط لمدة %1$d يوم أو أكثر</item>
+        <item quantity="one">غير نشط لمدة %1$d يوم أو أكثر</item>
+        <item quantity="two">غير نشط لمدة %1$d يومان أو أكثر</item>
+        <item quantity="few">غير نشط لمدة %1$d أيام أو أكثر</item>
+        <item quantity="many">غير نشط لمدة %1$d أيام أو أكثر</item>
+        <item quantity="other">غير نشط لمدة %1$d يوم أو أكثر</item>
+    </plurals>
+    <string name="not_trusted">غير موثوق به</string>
+    <string name="create_room_alias_already_in_use">هذا العنوان قيد الاستخدام بالفعل</string>
+    <string name="create_room_disable_federation_description">يمكنك تفعيل هذا الخيار إذا كانت الغرفة ستُستخدم فقط للتعاون مع الفرق الداخلية على خادمك الرئيسي. لا يمكن تغيير هذا الخيار لاحقًا.</string>
+    <string name="sent_verification_conclusion">استنتاج التحقق</string>
+    <string name="settings_category_timeline">الجدول الزمني</string>
+    <string name="settings_failed_to_get_crypto_device_info">لا توجد معلومات تشفيرية متاحة</string>
+    <string name="delete_event_dialog_content">هل أنت متأكد من رغبتك في إزالة هذا الحدث؟ يُرجى العلم أنه في حال حذف اسم الغرفة أو تغيير موضوعها، قد يؤدي ذلك إلى التراجع عن هذا التغيير.</string>
+    <string name="bootstrap_progress_generating_ssss_recovery">إنشاء مفتاح SSSS من مفتاح الاسترداد</string>
+    <string name="call_only_active">مكالمة نشطة (%1$s)</string>
+    <string name="settings_nightly_build_update">احصل على أحدث إصدار (ملاحظة: قد تواجه مشكلة في تسجيل الدخول)</string>
+    <string name="topic_prefix">"موضوع: "</string>
+    <string name="call_unsupported">مكالمة غير مدعومة</string>
+    <string name="call_unsupported_matrix_rtc_call">مكالمة غير مدعومة. يلزم استخدام تطبيق Element X الجديد للانضمام إلى هذه المكالمة.</string>
+    <string name="a11y_change_avatar">تغيير الصورة الرمزية</string>
+    <string name="bootstrap_migration_enter_backup_password">أدخل عبارة المرور الاحتياطية الرئيسية الخاصة بك للمتابعة.</string>
+    <string name="settings_security_incognito_keyboard_summary">اطلب من لوحة المفاتيح عدم تحديث أي بيانات شخصية، مثل سجل الكتابة والقاموس، بناءً على ما كتبته في المحادثات. يُرجى العلم أن بعض لوحات المفاتيح قد لا تتوافق مع هذا الإعداد.</string>
+    <string name="secure_backup_reset_all_no_other_devices_long">لا يمكن التراجع عن إعادة تعيين مفاتيح التحقق. بعد إعادة التعيين، لن تتمكن من الوصول إلى الرسائل المشفرة القديمة، وسيظهر تحذير أمني لأي صديق سبق أن تحقق من هويتك حتى تعيد التحقق باستخدامهم.</string>
+    <string tools:ignore="UnusedResources" name="qr_code_login_status_no_match">لا يتطابق؟</string>
+    <string name="settings_security_pin_code_notifications_summary_on">إظهار التفاصيل مثل أسماء الغرف ومحتوى الرسالة.</string>
+    <string name="threads_labs_enable_notice_message">خادمك الرئيسي لا يدعم حاليًا الخيوط، لذا قد لا تكون هذه الميزة موثوقة. قد لا تتوفر بعض الرسائل المترابطة بشكل موثوق. %sهل ترغب في تفعيل الخيوط على أي حال؟</string>
+    <string name="settings_rageshake">هزة الغضب</string>
+    <string name="create_room_alias_invalid">بعض الحروف غير مسموح بها</string>
+    <string name="command_description_discard_session_not_handled">مدعوم فقط في الغرف المشفرة</string>
+    <string name="use_recovery_key">استخدم مفتاح الاسترداد</string>
+    <string name="upgrade_room_no_power_to_manage">تحتاج إلى إذن لترقية الغرفة</string>
+    <string name="room_settings_topic_hint">موضوع</string>
+    <string name="call_tile_no_answer">لا يوجد جواب</string>
+    <string name="settings_active_sessions_unverified_device_desc">تحقق من هذه الجلسة لتمييزها كموثوقة ومنحها صلاحية الوصول إلى الرسائل المشفرة. إذا لم تسجل دخولك إلى هذه الجلسة، فقد يكون حسابك مخترقًا:</string>
+    <string name="verification_profile_device_verified_because">تم الوثوق بهذه الجلسة للمراسلة الآمنة لأن %1$s (%2$s) قام بالتحقق منها:</string>
+    <string name="verification_profile_other_device_untrust_info">حتى يثق هذا المستخدم بهذه الجلسة، سيتم تصنيف الرسائل المرسلة إليها ومنها بتحذيرات.</string>
+    <plurals name="send_videos_with_original_size">
+        <item quantity="zero">إرسال الفيديو بالحجم الأصلي</item>
+        <item quantity="one">إرسال الفيديو بالحجم الأصلي</item>
+        <item quantity="two">إرسال مقطعي الفيديو بالحجم الأصلي</item>
+        <item quantity="few">إرسال الفيديوهات بالحجم الأصلي</item>
+        <item quantity="many">إرسال الفيديوهات بالحجم الأصلي</item>
+        <item quantity="other">إرسال الفيديو بالحجم الأصلي</item>
+    </plurals>
+    <string name="event_redacted_by_admin_reason_with_reason">تم تعديل الحدث بواسطة مسؤول الغرفة، السبب: %1$s</string>
+    <string name="enter_secret_storage_passphrase_or_key">استخدم %1$s أو استخدم %2$s للمتابعة.</string>
+    <string tools:ignore="UnusedResources" name="secure_backup_reset_no_history">سيتم إعادة التشغيل بدون سجل أو رسائل أو أجهزة موثوقة أو مستخدمين موثوق بهم</string>
+    <string name="default_message_emote_confetti">يرسل قصاصات ورقية 🎉</string>
+    <string name="review_unverified_sessions_title">لديك جلسات غير موثقة</string>
+    <string name="confirm_your_identity_after_update">‌تم تحسين المراسلة الآمنة مع آخر تحديث. يُرجى إعادة التحقق من جهازك.</string>
+    <string name="create_room_dm_failure">لم نتمكن من إنشاء رسالتك المباشرة. يُرجى تحديد المستخدمين الذين ترغب بدعوتهم والمحاولة مرة أخرى.</string>
+    <string name="universal_link_malformed">لقد كان الرابط مشوهًا</string>
+    <string name="call_tile_voice_declined">تم رفض المكالمة الصوتية</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_on">تمكين القياسات الحيوية الخاصة بالجهاز، مثل بصمات الأصابع والتعرف على الوجه.</string>
+    <string name="settings_security_pin_code_notifications_title">إظهار المحتوى في الإشعارات</string>
+    <string name="settings_security_pin_code_grace_period_title">يتطلب إدخال رقم التعريف الشخصي (PIN) بعد دقيقتين</string>
+    <string name="settings_security_pin_code_change_pin_summary">تغيير رقم التعريف الشخصي (PIN) الحالي الخاص بك</string>
+    <string name="open_terms_of">الشروط المفتوحة %s</string>
+    <plurals name="wrong_pin_message_remaining_attempts">
+        <item quantity="zero">الكود خاطئ، هناك %d محاولة متبقية</item>
+        <item quantity="one">الكود خاطئ، هناك %d محاولة متبقية</item>
+        <item quantity="two">الكود خاطئ، هناك %d محاولتان متبقية</item>
+        <item quantity="few">الكود خاطئ، هناك %d محاولات متبقية</item>
+        <item quantity="many">الكود خاطئ، هناك %d محاولات متبقية</item>
+        <item quantity="other">الكود خاطئ، هناك %d محاولات متبقية</item>
+    </plurals>
+    <string name="call_tile_video_declined">تم رفض مكالمة الفيديو</string>
+    <string name="call_transfer_failure">حدث خطأ أثناء تحويل المكالمة</string>
+    <string name="a11y_open_settings">افتح الإعدادات</string>
+    <string name="a11y_import_key_from_file">استيراد المفتاح من الملف</string>
+    <string name="create_spaces_who_are_you_working_with">مع من تعمل؟</string>
+    <string name="create_spaces_make_sure_access">تأكد من أن الأشخاص المناسبين لديهم إمكانية الوصول إلى %s.</string>
+    <string name="create_space_topic_hint">وصف</string>
+    <string name="upgrade_private_room">ترقية الغرفة الخاصة</string>
+    <string name="a11y_stop_voice_message">إيقاف التسجيل</string>
+    <string name="a11y_recording_voice_message">تسجيل رسالة صوتية</string>
+    <plurals name="create_poll_not_enough_options_error">
+        <item quantity="zero">مطلوب خيار %1$s على الأقل</item>
+        <item quantity="one">مطلوب خيار %1$s على الأقل</item>
+        <item quantity="two">مطلوب خياران %1$s على الأقل</item>
+        <item quantity="few">مطلوب خيارات %1$s على الأقل</item>
+        <item quantity="many">مطلوب خيارات %1$s على الأقل</item>
+        <item quantity="other">مطلوب خيار %1$s على الأقل</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_voted">
+        <item quantity="zero">بناءً على %1$d تصويت</item>
+        <item quantity="one">بناءً على %1$d تصويت</item>
+        <item quantity="two">بناءً على %1$d تصويتان</item>
+        <item quantity="few">بناءً على %1$d تصويت</item>
+        <item quantity="many">بناءً على %1$d تصويت</item>
+        <item quantity="other">بناءً على %1$d تصويت</item>
+    </plurals>
+    <plurals name="room_polls_ended_no_item_for_loaded_period">
+        <item quantity="zero">لا توجد استطلاعات رأي سابقة لليوم الماضي.\nحمّل المزيد من الاستطلاعات لعرض استطلاعات الأيام السابقة.</item>
+        <item quantity="one">لا توجد استطلاعات رأي سابقة لليوم الماضي.\nحمّل المزيد من الاستطلاعات لعرض استطلاعات الأيام السابقة.</item>
+        <item quantity="two">لا توجد استطلاعات رأي سابقة خلال الأيام الـ %1$d الماضية.\nحمّل المزيد من الاستطلاعات لعرض استطلاعات الأيام السابقة.</item>
+        <item quantity="few">لا توجد استطلاعات رأي سابقة خلال الأيام الـ %1$d الماضية.\nحمّل المزيد من الاستطلاعات لعرض استطلاعات الأيام السابقة.</item>
+        <item quantity="many">لا توجد استطلاعات رأي سابقة خلال الأيام الـ %1$d الماضية.\nحمّل المزيد من الاستطلاعات لعرض استطلاعات الأيام السابقة.</item>
+        <item quantity="other">لا توجد استطلاعات رأي سابقة خلال الأيام الـ %1$d الماضية.\nحمّل المزيد من الاستطلاعات لعرض استطلاعات الأيام السابقة.</item>
+    </plurals>
+    <string name="room_poll_details_go_to_timeline">عرض الاستطلاع في الجدول الزمني</string>
+    <string name="location_share_live_until">مباشر حتى %1$s</string>
+    <plurals name="settings_troubleshoot_test_distributors_many">
+        <item quantity="zero">تم العثور على طريقة %d.</item>
+        <item quantity="one">تم العثور على طريقة %d.</item>
+        <item quantity="two">تم العثور على %d طريقتان.</item>
+        <item quantity="few">تم العثور على %d طرق.</item>
+        <item quantity="many">تم العثور على %d طرق.</item>
+        <item quantity="other">تم العثور على %d طرق.</item>
+    </plurals>
+    <string name="thread_list_title">برامج</string>
+    <plurals name="poll_total_vote_count_after_ended">
+        <item quantity="zero">النتيجة النهائية بناءً على %1$d تصويت</item>
+        <item quantity="one">النتيجة النهائية بناءً على %1$d تصويت</item>
+        <item quantity="two">النتيجة النهائية بناءً على %1$d تصويتان</item>
+        <item quantity="few">النتيجة النهائية بناءً على %1$d تصويت</item>
+        <item quantity="many">النتيجة النهائية بناءً على %1$d تصويت</item>
+        <item quantity="other">النتيجة النهائية بناءً على %1$d تصويت</item>
+    </plurals>
+    <string name="send_images_and_video_with_original_size">إرسال الوسائط بالحجم الأصلي</string>
+    <string name="command_confetti">يرسل الرسالة المحددة مع قطع من الورق الملون</string>
+    <string name="settings_security_pin_code_use_biometrics_title">تمكين القياسات الحيوية</string>
+    <string name="a11y_delete_avatar">حذف الصورة الرمزية</string>
+    <string name="a11y_error_message_not_sent">لم يتم إرسال الرسالة بسبب خطأ</string>
+    <string name="invite_to_space_with_name_desc">سيكونون قادرين على استكشاف %s</string>
+    <string name="a11y_open_emoji_picker">فتح أداة اختيار الرموز التعبيرية</string>
+    <string name="secure_backup_reset_all">إعادة تعيين كل شيء</string>
+    <string name="invite_people_to_your_space">دعوة الأشخاص إلى مساحتك</string>
+    <string name="settings_server_version">إصدار الخادم</string>
+    <string tools:ignore="UnusedResources" name="secure_backup_reset_if_you_reset_all">إذا قمت بإعادة ضبط كل شيء</string>
+    <string name="error_opening_banned_room">لا يمكنك فتح الغرفة التي تم حظرك منها.</string>
+    <string name="call_tile_other_declined">رفض %1$s هذه المكالمة</string>
+    <string name="call_tile_video_call_has_ended">انتهت مكالمة الفيديو • %1$s</string>
+    <string name="settings_dev_tools">أدوات التطوير</string>
+    <string name="login_error_threepid_denied">لا يُسمح لنطاق البريد الإلكتروني الخاص بك بالتسجيل على هذا الخادم</string>
+    <string name="verification_request_waiting_for_recovery">التحقق من خلال المفتاح أو العبارة الآمنة…</string>
+    <string name="settings_server_name">اسم الخادم</string>
+    <string name="settings_active_sessions_verified_device_desc">تمت الوثوق بهذه الجلسة للمراسلة الآمنة لأنك قمت بالتحقق منها:</string>
+    <string name="verification_use_passphrase">إذا لم تتمكن من الوصول إلى جلسة موجودة</string>
+    <string name="verification_request_was_sent">تم إرسال طلب تحقق. افتح إحدى جلساتك الأخرى لقبول عملية التحقق وبدءها.</string>
+    <string name="encrypted_by_deleted">مشفر بواسطة جهاز محذوف</string>
+    <string name="external_link_confirmation_message">الرابط %1$s ينقلك إلى موقع آخر: %2$s.\n\nهل أنت متأكد من رغبتك في المتابعة؟</string>
+    <string name="warning_unsaved_change">هناك تغييرات غير محفوظة. هل تريد تجاهلها؟</string>
+    <string name="call_transfer_transfer_to_title">نقل إلى %1$s</string>
+    <string name="a11y_error_some_message_not_sent">بعض الرسائل لم يتم إرسالها</string>
+    <string name="a11y_unsent_draft">لديه مسودة غير مرسلة</string>
+    <string name="dev_tools_state_event">فعاليات الحالة</string>
+    <string name="space_type_public_desc">مفتوح للجميع، الأفضل للمجتمعات</string>
+    <string name="create_spaces_invite_public_header_desc">تأكد من أن الأشخاص المناسبين لديهم حق الوصول إلى شركة %s. يمكنك دعوة المزيد لاحقًا.</string>
+    <string name="a11y_pause_voice_message">إيقاف الرسالة الصوتية مؤقتًا</string>
+    <string name="settings_nightly_build">بناء ليلي</string>
+    <string name="verify_this_session">التحقق من تسجيل الدخول الجديد للوصول إلى حسابك: %1$s</string>
+    <string name="add_members_to_room">إضافة أعضاء</string>
+    <string name="call_tile_ended">لقد انتهت هذه المكالمة</string>
+    <string tools:ignore="UnusedResources" name="crosssigning_verify_session">التحقق من تسجيل الدخول</string>
+    <string name="event_redacted_by_user_reason_with_reason">تم حذف الحدث بواسطة المستخدم، السبب: %1$s</string>
+    <plurals name="invitations_sent_to_one_and_more_users">
+        <item quantity="zero">تم إرسال الدعوات إلى %1$s وواحد آخر</item>
+        <item quantity="one">تم إرسال الدعوات إلى %1$s وواحد آخر</item>
+        <item quantity="two">تم إرسال الدعوتين إلى %1$s و%2$d آخرين</item>
+        <item quantity="few">تم إرسال الدعوات إلى %1$s و%2$d آخرين</item>
+        <item quantity="many">تم إرسال الدعوات إلى %1$s و%2$d آخرين</item>
+        <item quantity="other">تم إرسال الدعوات إلى %1$s و%2$d آخرين</item>
+    </plurals>
+    <string name="crosssigning_verify_this_session">التحقق من هذا الجهاز</string>
+    <string name="crosssigning_cannot_verify_this_session">غير قادر على التحقق من هذا الجهاز</string>
+    <string name="verification_verify_with_another_device">التحقق باستخدام جهاز آخر</string>
+    <string name="a11y_rule_notify_noisy">الإخطار بالصوت</string>
+    <string name="settings_security_pin_code_grace_period_summary_off">يجب إدخال رمز PIN في كل مرة تفتح فيها ${app_name}.</string>
+    <string name="create_spaces_me_and_teammates">أنا وزملائي في الفريق</string>
+    <plurals name="device_manager_other_sessions_recommendation_description_inactive">
+        <item quantity="zero">فكر في تسجيل الخروج من الجلسات القديمة (%1$d يوم أو أكثر) التي لم تعد تستخدمها.</item>
+        <item quantity="one">فكر في تسجيل الخروج من الجلسات القديمة (%1$d يوم أو أكثر) التي لم تعد تستخدمها.</item>
+        <item quantity="two">فكر في تسجيل الخروج من الجلسات القديمة (%1$d يومان أو أكثر) التي لم تعد تستخدمها.</item>
+        <item quantity="few">فكر في تسجيل الخروج من الجلسات القديمة (%1$d أيام أو أكثر) التي لم تعد تستخدمها.</item>
+        <item quantity="many">فكر في تسجيل الخروج من الجلسات القديمة (%1$d أيام أو أكثر) التي لم تعد تستخدمها.</item>
+        <item quantity="other">فكر في تسجيل الخروج من الجلسات القديمة (%1$d يوم أو أكثر) التي لم تعد تستخدمها.</item>
+    </plurals>
+    <plurals name="device_manager_other_sessions_multi_signout_all">
+        <item quantity="zero">تسجيل الخروج من جلسة %1$d</item>
+        <item quantity="one">تسجيل الخروج من جلسة %1$d</item>
+        <item quantity="two">تسجيل الخروج من %1$d جلستان</item>
+        <item quantity="few">تسجيل الخروج من %1$d جلسات</item>
+        <item quantity="many">تسجيل الخروج من %1$d جلسات</item>
+        <item quantity="other">تسجيل الخروج من %1$d جلسات</item>
+    </plurals>
+    <string name="call_tile_video_incoming">مكالمة فيديو واردة</string>
+    <string name="call_transfer_consulting_with">الاستشارة مع %1$s</string>
+    <string name="bootstrap_progress_compute_curve_key">الحصول على مفتاح المنحنى</string>
+    <string name="encrypted_unverified">تم تشفيره بواسطة جهاز غير مُتحقق</string>
+    <string name="attachment_type_selector_contact">اتصال</string>
+    <plurals name="message_reaction_show_more">
+        <item quantity="zero">%1$d أكثر</item>
+        <item quantity="one">%1$d أكثر</item>
+        <item quantity="two">%1$d أكثر</item>
+        <item quantity="few">%1$d أكثر</item>
+        <item quantity="many">%1$d أكثر</item>
+        <item quantity="other">%1$d أكثر</item>
+    </plurals>
+    <string name="settings_server_upload_size_content">يقبل الخادم الرئيسي الخاص بك المرفقات (الملفات والوسائط وما إلى ذلك) بحجم يصل إلى %s.</string>
+    <string name="delete_account_data_warning">هل تريد حذف بيانات الحساب من النوع %1$s؟ \n\nاستخدم بحذر، فقد يؤدي ذلك إلى سلوك غير متوقع.</string>
+    <string name="bad_passphrase_key_reset_all_action">هل نسيت أو فقدت جميع خيارات الاسترداد؟ أعد ضبط كل شيء</string>
+    <string name="cross_signing_verify_by_emoji">التحقق تفاعليًا باستخدام الرموز التعبيرية</string>
+    <string name="settings_security_pin_code_change_pin_title">تغيير رقم التعريف الشخصي (PIN)</string>
+    <string name="qr_code_not_scanned">لم يتم مسح رمز الاستجابة السريعة!</string>
+    <string name="a11y_screenshot">لقطة شاشة</string>
+    <string name="a11y_selected">مُختار</string>
+    <string name="create_spaces_join_info_help">للانضمام إلى مساحة موجودة، تحتاج إلى دعوة.</string>
+    <string name="invite_people_to_your_space_desc">إنه أنت فقط في الوقت الحالي. %s سيكون أفضل مع الآخرين.</string>
+    <string name="discovery_invite">قم بالدعوة عبر البريد الإلكتروني، وابحث عن جهات الاتصال والمزيد…</string>
+    <string name="upgrade">ترقية</string>
+    <string name="room_using_unstable_room_version">تعمل هذه الغرفة بإصدار الغرفة %s، والذي تم وضع علامة عليه على الخادم الرئيسي بأنه غير مستقر.</string>
+    <plurals name="poll_option_vote_count">
+        <item quantity="zero">%1$d صوتًا</item>
+        <item quantity="one">%1$d صوتًا</item>
+        <item quantity="two">%1$d صوتان</item>
+        <item quantity="few">%1$d أصوات</item>
+        <item quantity="many">%1$d أصوات</item>
+        <item quantity="other">%1$d صوتًا</item>
+    </plurals>
+    <string name="settings_server_default_room_version">الإصدار الافتراضي</string>
+    <string name="verification_profile_verified">تم التحقق</string>
+    <string name="verification_profile_warning">تحذير</string>
+    <string name="verification_profile_device_new_signing">قام %1$s (%2$s) بتسجيل الدخول باستخدام جلسة جديدة:</string>
+    <string name="a11y_qr_code_for_verification">رمز الاستجابة السريعة</string>
+    <string name="settings_key_requests">الطلبات الرئيسية</string>
+    <string name="settings_security_incognito_keyboard_title">لوحة مفاتيح متخفية</string>
+    <string name="enter_secret_storage_input_key">حدد مفتاح الاسترداد الخاص بك، أو أدخله يدويًا عن طريق كتابته أو لصقه من الحافظة الخاصة بك</string>
+    <string name="invite_users_to_room_title">دعوة المستخدمين</string>
+    <string name="settings_security_pin_code_use_biometrics_error">لم يتم تمكين المصادقة البيومترية.</string>
+    <string name="settings_security_pin_code_grace_period_summary_on">يجب إدخال رمز PIN بعد دقيقتين من عدم استخدام ${app_name}.</string>
+    <string name="invalid_qr_code_uri">رمز الاستجابة السريعة غير صالح (URI غير صالح)!</string>
+    <string name="warning_room_not_created_yet">لم يتم إنشاء الغرفة بعد. هل تريد إلغاء إنشاء الغرفة؟</string>
+    <plurals name="call_active_status">
+        <item quantity="zero">مكالمة نشطة ·</item>
+        <item quantity="one">مكالمة نشطة ·</item>
+        <item quantity="two">%1$d مكالمتان نشطتان ·</item>
+        <item quantity="few">%1$d مكالمات نشطة ·</item>
+        <item quantity="many">%1$d مكالمات نشطة ·</item>
+        <item quantity="other">%1$d مكالمات نشطة ·</item>
+    </plurals>
+    <string name="call_transfer_consult_first">استشر أولاً</string>
+    <string name="call_slide_to_end_conference">اسحب لإنهاء المكالمة</string>
+    <string name="create_spaces_details_public_header">أضف بعض التفاصيل لإبرازها. يمكنك تغييرها في أي وقت.</string>
+    <string name="upgrade_public_room_from_to">سيتم ترقية هذه الغرفة من %1$s إلى %2$s.</string>
+    <string name="upgrade_room_auto_invite">دعوة المستخدمين تلقائيًا</string>
+    <string name="bottom_sheet_setup_secure_backup_submit">إعداد</string>
+    <string name="unencrypted">غير مشفر</string>
+    <string name="create_room_alias_empty">يرجى تقديم عنوان الغرفة</string>
+    <string name="error_empty_field_choose_user_name">الرجاء اختيار اسم المستخدم.</string>
+    <string name="room_error_not_found">لم أتمكن من العثور على هذه الغرفة. تأكد من وجودها.</string>
+    <string name="a11y_checked">تم فحصه</string>
+    <string name="a11y_unchecked">لم يتم فحصه</string>
+    <string name="settings_sessions_list">الجلسات</string>
+    <string name="command_snow">يرسل الرسالة المحددة مع تساقط الثلوج</string>
+    <string name="device_manager_session_details_application">طلب</string>
+    <string name="call_tile_video_missed">مكالمة فيديو فائتة</string>
+    <string name="create_spaces_private_teammates">مساحة خاصة لك ولزملائك في الفريق</string>
+    <string name="upgrade_required">الترقية مطلوبة</string>
+    <string name="threads_beta_enable_notice_title">خيوط تجريبي</string>
+    <string name="room_member_profile_sessions_section_title">الجلسات</string>
+    <string name="no_connectivity_to_the_server_indicator_airplane">وضع الطيران قيد التشغيل</string>
+    <string name="delete_event_dialog_reason_hint">سبب التحرير</string>
+    <string name="bootstrap_progress_generating_ssss_with_info">إنشاء مفتاح SSSS من عبارة المرور (%s)</string>
+    <string name="bootstrap_migration_with_passphrase_helper_with_link">إذا كنت لا تعرف عبارة المرور الاحتياطية الرئيسية الخاصة بك، يمكنك %s.</string>
+    <string name="settings_security_prevent_screenshots_summary">يؤدي تفعيل هذا الإعداد إلى إضافة FLAG_SECURE إلى جميع الأنشطة. أعد تشغيل التطبيق ليُفعّل التغيير.</string>
+    <string name="or_other_mx_capable_client">أو عميل Matrix آخر قادر على التوقيع المتبادل</string>
+    <string name="key_authenticity_not_guaranteed">لا يمكن ضمان صحة هذه الرسالة المشفرة على هذا الجهاز.</string>
+    <string name="failed_to_initialize_cross_signing">فشل في إعداد التوقيع المتقاطع</string>
+    <plurals name="entries">
+        <item quantity="zero">%d إدخال</item>
+        <item quantity="one">‌%d إدخال</item>
+        <item quantity="two">%d إدخالان</item>
+        <item quantity="few">%d إدخالات</item>
+        <item quantity="many">%d إدخالات</item>
+        <item quantity="other">%d إدخالات</item>
+    </plurals>
+    <string name="share_by_text">المشاركة عن طريق النص</string>
+    <string name="auth_biometric_key_invalidated_message">تم تعطيل المصادقة البيومترية نظرًا لإضافة طريقة مصادقة بيومترية جديدة مؤخرًا. يمكنك تفعيلها مجددًا من الإعدادات.</string>
+    <string name="call_tile_you_declined_this_call">لقد رفضت هذه المكالمة</string>
+    <string name="call_tile_call_back">أتصل مرة أخرى</string>
+    <string name="call_tile_voice_incoming">مكالمة صوتية واردة</string>
+    <string name="call_tile_voice_call_has_ended">انتهت المكالمة الصوتية • %1$s</string>
+    <string name="call_dial_pad_title">لوحة الاتصال</string>
+    <string name="call_transfer_connect_action">يتصل</string>
+    <string name="call_transfer_title">تحويل</string>
+    <string name="authentication_error">فشل في المصادقة</string>
+    <string name="a11y_trust_level_default">مستوى الثقة الافتراضي</string>
+    <string name="a11y_trust_level_warning">مستوى الثقة التحذيري</string>
+    <string name="create_space_error_empty_field_space_name">أعطه اسمًا للاستمرار.</string>
+    <string name="create_spaces_default_public_room_name">عام</string>
+    <string name="invite_people_menu">دعوة الناس</string>
+    <string name="invite_by_email">دعوة عبر البريد الإلكتروني</string>
+    <string name="it_may_take_some_time">يرجى التحلي بالصبر، فقد يستغرق الأمر بعض الوقت.</string>
+    <string name="a11y_start_voice_message">تسجيل رسالة صوتية</string>
+    <plurals name="room_removed_messages">
+        <item quantity="zero">تمت إزالة %d رسالة</item>
+        <item quantity="one">تمت إزالة %d رسالة</item>
+        <item quantity="two">تمت إزالة %d رسالتان</item>
+        <item quantity="few">تمت إزالة %d رسالة</item>
+        <item quantity="many">تمت إزالة %d رسالة</item>
+        <item quantity="other">تمت إزالة %d رسالة</item>
+    </plurals>
+    <string name="settings_server_upload_size_unknown">الحد غير معروف.</string>
+    <string name="failed_to_access_secure_storage">فشل في الوصول إلى التخزين الآمن</string>
+    <string name="call_tile_video_active">مكالمة فيديو نشطة</string>
+    <string name="dev_tools_send_custom_state_event">إرسال حدث الحالة المخصص</string>
+    <string name="create_spaces_room_public_header">ما هي بعض المناقشات التي تريد أن تجري في %s؟</string>
+    <string name="create_room_in_progress">إنشاء غرفة…</string>
+    <string name="settings_account_data">بيانات الحساب</string>
+    <string name="message_action_item_redact">يزيل…</string>
+    <string name="login_default_session_public_name">${app_name} أندرويد</string>
+    <string name="recovery_key_empty_error_message">الرجاء إدخال مفتاح الاسترداد</string>
+    <string name="bootstrap_progress_storing_in_sss">تخزين سر النسخ الاحتياطي للمفتاح في SSSS</string>
+    <string name="command_description_discard_session">يفرض تجاهل جلسة المجموعة الصادرة الحالية في غرفة مشفرة</string>
+    <string name="default_message_emote_snow">يرسل تساقط الثلوج ❄️</string>
+    <string name="cross_signing_verify_by_text">التحقق يدويًا عن طريق النص</string>
+    <string name="invite_users_to_room_action_invite">دعوة</string>
+    <string name="settings_security_pin_code_summary">إذا كنت تريد إعادة تعيين رقم التعريف الشخصي (PIN)، فانقر فوق \"نسيت رقم التعريف الشخصي\" لتسجيل الخروج وإعادة التعيين.</string>
+    <string name="call_dial_pad_lookup_error">حدث خطأ أثناء البحث عن رقم الهاتف</string>
+    <string name="call_transfer_unknown_person">شخص مجهول</string>
+    <string name="a11y_rule_notify_silent">إعلام بدون صوت</string>
+    <string name="create_spaces_you_can_change_later">يمكنك تغيير هذا لاحقًا</string>
+    <string name="create_spaces_loading_message">إنشاء مساحة…</string>
+    <string name="invite_by_link">مشاركة الرابط</string>
+    <string name="invite_to_space_with_name">دعوة إلى %s</string>
+    <string name="voice_message_slide_to_cancel">اسحب للإلغاء</string>
+    <plurals name="room_polls_active_no_item_for_loaded_period">
+        <item quantity="zero">لا توجد استطلاعات رأي نشطة خلال اليوم الماضي.\nحمّل المزيد من الاستطلاعات لعرض استطلاعات الأيام السابقة.</item>
+        <item quantity="one">لا توجد استطلاعات رأي نشطة خلال اليوم الماضي.\nحمّل المزيد من الاستطلاعات لعرض استطلاعات الأيام السابقة.</item>
+        <item quantity="two">لا توجد استطلاعات رأي نشطة خلال الأيام الـ %1$d الماضية.\nحمّل المزيد من الاستطلاعات لعرض استطلاعات الأيام السابقة.</item>
+        <item quantity="few">لا توجد استطلاعات رأي نشطة خلال الأيام الـ %1$d الماضية.\nحمّل المزيد من الاستطلاعات لعرض استطلاعات الأيام السابقة.</item>
+        <item quantity="many">لا توجد استطلاعات رأي نشطة خلال الأيام الـ %1$d الماضية.\nحمّل المزيد من الاستطلاعات لعرض استطلاعات الأيام السابقة.</item>
+        <item quantity="other">لا توجد استطلاعات رأي نشطة خلال الأيام الـ %1$d الماضية.\nحمّل المزيد من الاستطلاعات لعرض استطلاعات الأيام السابقة.</item>
+    </plurals>
+    <string name="settings_export_trail">تدقيق الصادرات</string>
+    <string tools:ignore="UnusedResources" name="verify_not_me_self_verification">قد يكون أحد العناصر التالية معرضًا للخطر:\n\n- كلمة مرورك\n- خادمك الرئيسي\n- هذا الجهاز، أو الجهاز الآخر\n- اتصال الإنترنت الذي يستخدمه أي من الجهازين\n\nننصحك بتغيير كلمة مرورك ومفتاح الاسترداد من الإعدادات فورًا.</string>
+    <string name="app_desktop_web">${app_name} ويب\n${app_name} سطح مكتب</string>
+    <string name="secure_backup_reset_all_no_other_devices">قم بذلك فقط إذا لم يكن لديك جهاز آخر يمكنك التحقق من هذا الجهاز من خلاله.</string>
+    <string name="error_empty_field_choose_password">الرجاء اختيار كلمة المرور.</string>
+    <string name="external_link_confirmation_title">تأكد من هذا الرابط</string>
+    <string name="re_authentication_activity_title">مطلوب إعادة المصادقة</string>
+    <string name="a11y_image">صورة</string>
+    <string name="dev_tools_form_hint_state_key">مفتاح الحالة</string>
+    <string name="joining_replacement_room">انضم إلى غرفة الاستبدال</string>
+    <string name="upgrade_public_room">ترقية الغرفة العامة</string>
+    <string name="a11y_play_voice_message">تشغيل رسالة صوتية</string>
+    <string name="room_member_profile_failed_to_get_devices">فشل في الحصول على الجلسات</string>
+    <string name="bootstrap_progress_checking_backup">التحقق من مفتاح النسخ الاحتياطي</string>
+    <string name="bootstrap_progress_checking_backup_with_info">التحقق من مفتاح النسخ الاحتياطي (%s)</string>
+    <string name="error_saving_media_file">لم يتمكن من حفظ ملف الوسائط</string>
+    <plurals name="secure_backup_reset_devices_you_can_verify">
+        <item quantity="zero">أظهر الجهاز الذي يمكنك التحقق منه الآن</item>
+        <item quantity="one">أظهر الجهاز الذي يمكنك التحقق منه الآن</item>
+        <item quantity="two">إظهار %d جهازين التي يمكنك التحقق منهما الآن</item>
+        <item quantity="few">إظهار %d من الأجهزة التي يمكنك التحقق منها الآن</item>
+        <item quantity="many">إظهار %d من الأجهزة التي يمكنك التحقق منها الآن</item>
+        <item quantity="other">إظهار %d من الأجهزة التي يمكنك التحقق منها الآن</item>
+    </plurals>
+    <string name="confirm_your_identity">قم بتأكيد هويتك من خلال التحقق من تسجيل الدخول هذا من إحدى جلساتك الأخرى، ومنحه حق الوصول إلى الرسائل المشفرة.</string>
+    <string name="a11y_open_widget">فتح الودجات</string>
+    <string name="activity_create_space_title">إنشاء مساحة</string>
+    <string name="room_upgrade_to_recommended_version">الترقية إلى إصدار الغرفة الموصى به</string>
+    <string name="settings_troubleshoot_test_push_loop_title">دفع الإختبار</string>
+    <string name="create_space_alias_hint">عنوان المساحة</string>
+    <string name="settings_server_upload_size_title">حد تحميل الملفات على الخادم</string>
+    <string name="settings_server_room_versions">إصدارات الغرف 👓</string>
+    <string name="settings_server_room_version_stable">مستقر</string>
+    <string name="settings_server_room_version_unstable">غير مستقر</string>
+    <string name="verification_profile_verify">يتحقق</string>
+    <string name="trusted">موثوق به</string>
+    <string tools:ignore="UnusedResources" name="verification_profile_device_untrust_info">حتى يثق هذا المستخدم بهذه الجلسة، تُعلَّم الرسائل المرسلة إليها ومنها بتحذيرات. يمكنك أيضًا التحقق منها يدويًا.</string>
+    <string name="qr_code_scanned_by_other_yes">نعم</string>
+    <string name="enter_secret_storage_invalid">لا يمكن العثور على الأسرار في التخزين</string>
+    <string name="delete_event_dialog_reason_checkbox">تضمين سبب</string>
+    <string name="bootstrap_progress_generating_ssss">إنشاء مفتاح SSSS من عبارة المرور</string>
+    <string name="bootstrap_migration_backup_recovery_key">مفتاح استرداد النسخ الاحتياطي</string>
+    <string name="use_other_session_content_description">استخدم أحدث إصدار من ${app_name} على أجهزتك الأخرى، أو ${app_name} على الويب، أو ${app_name} لسطح المكتب، أو ${app_name} لنظام iOS، أو ${app_name} لنظام Android، أو أي عميل Matrix آخر قادر على التوقيع المتبادل</string>
+    <string name="review_unverified_sessions_description">قم بالمراجعة للتأكد من أن حسابك آمن</string>
+    <string name="add_people">إضافة أشخاص</string>
+    <string name="alert_push_are_disabled_title">تم تعطيل الإشعارات الفورية</string>
+    <string name="settings_security_application_protection_summary">حماية الوصول باستخدام رقم التعريف الشخصي (PIN) والبيانات الحيوية.</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_off">رمز PIN هو الطريقة الوحيدة لإلغاء قفل ${app_name}.</string>
+    <string name="call_tile_voice_active">مكالمة صوتية نشطة</string>
+    <string name="settings_security_pin_code_notifications_summary_off">عرض عدد الرسائل غير المقروءة فقط في إشعار بسيط.</string>
+    <string name="cannot_dm_self">لا يمكنك إدارة اللعبة بنفسك!</string>
+    <string name="call_tile_voice_missed">مكالمة صوتية فائتة</string>
+    <string name="create_spaces_just_me">أنا فقط</string>
+    <string name="space_type_private">خاص</string>
+    <string name="create_spaces_details_private_header">أضف بعض التفاصيل لمساعدة الآخرين على التعرّف عليها. يمكنك تغييرها في أي وقت.</string>
+    <string name="create_spaces_room_private_header">ما هي الأشياء التي تعمل عليها؟</string>
+    <string name="error_failed_to_join_room">عذراً، حدث خطأ أثناء محاولة الانضمام: %s</string>
+    <string name="a11y_device_manager_device_type_mobile">متحرك</string>
+    <string name="verification_sas_match">إنهم يتطابقون</string>
+    <string name="crosssigning_cannot_verify_this_session_desc">لن تتمكن من الوصول إلى سجل الرسائل المشفرة. أعد ضبط نسخة احتياطية آمنة للرسائل ومفاتيح التحقق للبدء من جديد.</string>
+    <string name="create_spaces_room_public_header_desc">سنُنشئ لهم غرفًا. يُمكنك إضافة المزيد لاحقًا.</string>
+    <string name="invite_to_space">دعوة إلى %s</string>
+    <string name="thread_list_modal_all_threads_title">كل الخيوط</string>
+    <string name="create_room_disable_federation_title">منع أي شخص ليس جزءًا من %s من الانضمام إلى هذه الغرفة</string>
+    <string name="sent_live_location">شاركوا موقعهم المباشر</string>
+    <string name="reset_cross_signing">إعادة تعيين المفاتيح</string>
+    <string name="share_confirm_room">هل تريد إرسال هذا المرفق إلى %1$s؟</string>
+    <string name="delete_event_dialog_title">تأكيد الإزالة</string>
+    <string name="app_ios_android">${app_name} iOS\n${app_name} أندرويد</string>
+    <string name="settings_security_pin_code_title">تمكين رقم التعريف الشخصي (PIN)</string>
+    <string name="a11y_trust_level_trusted">مستوى الثقة الموثوق به</string>
+    <string name="event_status_failed_messages_warning">فشلت الرسائل في الإرسال</string>
+    <string name="create_spaces_invite_public_header">من هم زملاؤك في الفريق؟</string>
+    <string name="create_spaces_room_private_header_desc">لنُنشئ غرفةً لكلٍّ منها. يُمكنك إضافة المزيد لاحقًا، بما في ذلك الغرف الموجودة بالفعل.</string>
+    <plurals name="settings_active_sessions_count">
+        <item quantity="zero">%d جلسة نشطة</item>
+        <item quantity="one">%d جلسة نشطة</item>
+        <item quantity="two">%d جلستان نشطتان</item>
+        <item quantity="few">%d جلسات نشطة</item>
+        <item quantity="many">%d جلسات نشطة</item>
+        <item quantity="other">%d جلسات نشطة</item>
+    </plurals>
+    <string name="call_transfer_users_tab_title">المستخدمون</string>
+    <string name="space_type_public">عام</string>
+    <string name="space_type_private_desc">للدعوة فقط، الأفضل لك أو لفريقك</string>
+    <string name="confirm_your_identity_quad_s">قم بتأكيد هويتك من خلال التحقق من تسجيل الدخول هذا، ومنحه حق الوصول إلى الرسائل المشفرة.</string>
+    <string name="verification_conclusion_warning">تسجيل دخول غير موثوق به</string>
+    <plurals name="room_profile_section_more_member_list">
+        <item quantity="zero">شخص واحد</item>
+        <item quantity="one">شخص واحد</item>
+        <item quantity="two">%1$d شخصان</item>
+        <item quantity="few">%1$d اشخاص</item>
+        <item quantity="many">%1$d اشخاص</item>
+        <item quantity="other">%1$d شخص</item>
+    </plurals>
+    <string name="encryption_information_cross_signing_state">التوقيع المتبادل</string>
+    <string name="encryption_information_dg_xsigning_complete">تم تفعيل التوقيع المتبادل.\nالمفاتيح الخاصة على الجهاز.</string>
+    <string name="initialize_cross_signing">تهيئة التوقيع المتقاطع</string>
+    <string name="qr_code_scanned_by_other_notice">لقد اقتربنا! هل %s يظهر علامة صح؟</string>
+    <string name="verification_cannot_access_other_session">استخدم عبارة مرور أو مفتاح استرداد</string>
+    <plurals name="send_images_with_original_size">
+        <item quantity="zero">أرسل الصورة بالحجم الأصلي</item>
+        <item quantity="one">أرسل الصورة بالحجم الأصلي</item>
+        <item quantity="two">أرسل الصورتان بالحجم الأصلي</item>
+        <item quantity="few">أرسل الصور بالحجم الأصلي</item>
+        <item quantity="many">أرسل الصور بالحجم الأصلي</item>
+        <item quantity="other">أرسل الصورة بالحجم الأصلي</item>
+    </plurals>
+    <string name="bootstrap_migration_use_recovery_key">استخدم مفتاح استرداد النسخة الاحتياطية الرئيسية الخاص بك</string>
+    <string name="settings_security_prevent_screenshots_title">منع التقاط لقطات الشاشة للتطبيق</string>
+    <string name="inviting_users_to_room">دعوة المستخدمين…</string>
+    <string name="auth_pin_forgot">هل نسيت رقم التعريف الشخصي؟</string>
 </resources>
