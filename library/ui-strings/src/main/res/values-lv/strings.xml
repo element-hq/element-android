@@ -550,7 +550,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="room_member_profile_failed_to_get_devices">Neizdevās iegūt sesijas</string>
     <string name="verification_profile_warning">Brīdinājums</string>
     <string name="verification_profile_verified">Apliecināts</string>
-    <string name="verification_profile_verify">Apstiprināt</string>
+    <string name="verification_profile_verify">Apliecināt</string>
     <string name="crosssigning_verify_this_session">Apliecināt šo ierīci</string>
     <string name="settings_hs_admin_e2e_disabled">Servera pārvaldītājs uzstādījis pilnīgas šifrēšanas atspējošanu privātās istabās un tiešajās ziņās kā noklusējumu.</string>
     <string name="verification_conclusion_ok_self_notice">Jaunā sesija tagad ir apliecināta. Tai ir piekļuve šifrētajām ziņām, un citi lietotāji redzēs to kā uzticamu.</string>
@@ -961,15 +961,15 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="notice_crypto_unable_to_decrypt_friendly">Gaida šo ziņu, tas var aizņemt ilgāku laiku</string>
     <string name="notice_crypto_unable_to_decrypt_final">Tu nevari piekļūt šai ziņai</string>
     <plurals name="secure_backup_reset_devices_you_can_verify">
-        <item quantity="zero">Jāparāda %d ierīces, ar kurām šobrīd var veikt apliecināšanu</item>
-        <item quantity="one">Jāparāda %d ierīce, ar kuru šobrīd var veikt apliecināšanu</item>
-        <item quantity="other">Jāparāda %d ierīces, ar kurām šobrīd var veikt apliecināšanu</item>
+        <item quantity="zero">Parādīt %d ierīču, ar kurām šobrīd var veikt apliecināšanu</item>
+        <item quantity="one">Parādīt %d ierīci, ar kuru šobrīd var veikt apliecināšanu</item>
+        <item quantity="other">Parādīt %d ierīces, ar kurām šobrīd var veikt apliecināšanu</item>
     </plurals>
     <string name="secure_backup_reset_no_history">Tiks atsākts bez vēstures, ziņām, uzticamām ierīcēm un uzticamiem lietotājiem</string>
     <string name="secure_backup_reset_if_you_reset_all">Ja viss tiek atiestatīts</string>
     <string name="secure_backup_reset_all_no_other_devices">Tas ir jādara tikai tad, ja nav citas ierīces, ar ko apliecināt šo ierīci.</string>
     <string name="secure_backup_reset_all">Pilna atiestatīšana</string>
-    <string name="bad_passphrase_key_reset_all_action">Aizmirstas vai pazaudētas visas atkopšanas iespējas\? Viss jāatiestata</string>
+    <string name="bad_passphrase_key_reset_all_action">Aizmirstas vai pazaudētas visas atkopes iespējas? Viss jāatiestata</string>
     <string name="enter_secret_storage_passphrase_or_key">Izmantojiet savu %1$s vai savu %2$s, lai turpinātu.</string>
     <string name="use_latest_app">Izmantojiet jaunāko ${app_name} citās savās ierīcēs:</string>
     <string name="use_other_session_content_description">Izmantojiet jaunāko ${app_name} citās savās ierīcēs, ${app_name} Web, ${app_name} Desktop, ${app_name} iOS, ${app_name} Android, vai kādu citu Matrix lietotni ar cross-signing atbalstu</string>
@@ -986,12 +986,12 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="verification_cancelled">Apliecināšana atcelta</string>
     <string name="verify_new_session_compromized">Konts varētu būt iesaistīts drošības pārkāpumā</string>
     <string name="verify_new_session_was_not_me">Tas nebiju es</string>
-    <string name="verify_new_session_notice">Izmanto šo sesiju savas jaunās sesijas apliecināšanai, piešķirot piekļuvi šifrētām ziņām.</string>
+    <string name="verify_new_session_notice">Šī sesija ir izmantojama savas jaunās sesijas apliecināšanai, piešķirot piekļuvi šifrētām ziņām.</string>
     <string name="delete_event_dialog_reason_hint">Labošanas iemesls</string>
     <string name="delete_event_dialog_reason_checkbox">Iekļaut iemeslu</string>
     <string name="message_action_item_redact">Dzēst…</string>
     <string name="verification_use_passphrase">Ja nevar piekļūt esošai sesijai</string>
-    <string name="verification_cannot_access_other_session">Izmantot atkopšanas paroles vārdkopu vai atslēgu</string>
+    <string name="verification_cannot_access_other_session">Izmantot atkopes paroles vārdkopu vai atslēgu</string>
     <string name="verification_open_other_to_verify">Izmanto esošu sesiju šis sesijas apliecināšanai, piešķirot tai piekļuvi šifrētajām ziņām.</string>
     <string name="room_settings_enable_encryption_dialog_submit">Iespējot šifrēšanu</string>
     <string name="room_settings_enable_encryption_dialog_content">Tiklīdz iespējots, istabas šifrēšanu nevar atspējot. Šifrētā istabā sūtītas ziņas nav redzamas serverim, tikai istabas dalībniekiem. Šifrēšanas iespējošana var neļaut pareizi strādāt daudzām robotprogrammatūrām un tiltiem.</string>
@@ -1003,8 +1003,8 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     </plurals>
     <string name="verification_request_waiting_for">Gaida %s…</string>
     <string name="verification_verified_user">%s apliecināts</string>
-    <string name="verification_verify_user">Apliecina %s</string>
-    <string name="verification_no_scan_emoji_title">Verifikācija, izmantojot emocijzīmju salīdzināšanu</string>
+    <string name="verification_verify_user">Apliecināt %s</string>
+    <string name="verification_no_scan_emoji_title">Apliecināšana ar emocijzīmju salīdzināšanu</string>
     <string name="verification_scan_emoji_subtitle">Ja neesi klātienē, jāsalīdzina emocijzīmes</string>
     <string name="verification_scan_emoji_title">Nevar skenēt</string>
     <string name="verification_scan_their_code">Skenēt viņu kodu</string>
@@ -1121,7 +1121,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="room_list_rooms_empty_body">Šeit tiks attēlotas istabas. Jāpiesit + apakšējā labajā stūrī, lai atrastu esošas vai izveidotu kādu jaunu.</string>
     <string name="global_retry">Atkārtot</string>
     <string name="identity_server_not_defined">Tu neizmanto nevienu identitāšu serveri</string>
-    <string name="keys_backup_recovery_code_error_decrypt">Rezerves kopiju nevarēja atšifrēt ar šo atkopšanās atslēgu: lūgums pārliecināties, ka ir ievadīta pareizā atkopšanas atslēga.</string>
+    <string name="keys_backup_recovery_code_error_decrypt">Rezerves kopiju nevarēja atšifrēt ar šo atkopes atslēgu: lūgums pārliecināties, ka ir ievadīta pareiza atkopes atslēga.</string>
     <string name="keys_backup_restoring_computing_key_waiting_message">Aprēķina atkopes atslēgu…</string>
     <string name="passphrase_passphrase_too_weak">Paroles vārdkopa ir pārāk vāja</string>
     <string name="command_snow">Nosūta doto ziņu ar sniegu</string>
@@ -1179,8 +1179,8 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
 \nVai tiešām vēlaties turpināt\?</string>
     <string name="external_link_confirmation_title">Pārbaudiet šo saiti</string>
     <string name="cross_signing_verify_by_emoji">Mijiedarbojoties apliecināt ar emocijzīmēm</string>
-    <string name="crosssigning_verify_session">Apliecināt sesiju</string>
-    <string name="verify_this_session">Apliecini jauno pieteikšanos Tavam kontam: %1$s</string>
+    <string name="crosssigning_verify_session">Apliecināt pieteikšanos</string>
+    <string name="verify_this_session">Apliecini jauno pieteikšanos Tavā kontā: %1$s</string>
     <string name="encrypted_unverified">Šifrēts ar neapliecinātu ierīci</string>
     <string name="default_message_emote_snow">sūta sniegu ❄️</string>
     <string name="default_message_emote_confetti">sūta konfeti 🎉</string>
@@ -1195,14 +1195,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="finish">Pabeigt</string>
     <string name="enter_account_password">Jāievada sava %s, lai turpinātu.</string>
     <string name="verify_cancelled_notice">Apliecināšana tika atcelta. To var uzsākt atkārtoti.</string>
-    <string name="verify_not_me_self_verification">Kaut kas no uzskaitītā var būt iesaistīts drošības pārkāpumā:
-\n
-\n- parole
-\n- mājasserveris
-\n- šī vai cita ierīce
-\n- interneta savienojums kādā no izmantotajām ierīcēm
-\n
-\nMēs iesakām iestatījumos nekavējoties nomainīt paroli un atkopšanas atslēgu.</string>
+    <string name="verify_not_me_self_verification">Kaut kas no uzskaitītā var būt iesaistīts drošības pārkāpumā:\n\n- parole\n- mājasserveris\n- šī vai cita ierīce\n- interneta savienojums kādā no izmantotajām ierīcēm\n\nMēs iesakām iestatījumos nekavējoties nomainīt paroli un atkopes atslēgu.</string>
     <string name="refresh">Atsvaidzināt</string>
     <string name="share_confirm_room">Vai vēlaties sūtīt šo pielikumu %1$s\?</string>
     <string name="settings_account_data">Konta dati</string>
@@ -1252,7 +1245,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="keys_backup_banner_update_line1">Jauna šifrēto ziņu atslēga</string>
     <string name="keys_backup_banner_recover_line2">Izmantot Atslēgu Dublēšanu</string>
     <string name="keys_backup_banner_recover_line1">Nekad nezaudē šifrētās ziņas</string>
-    <string name="keys_backup_settings_delete_confirm_message">Izdzēst no servera savu šifrēšanas atslēgu rezerves kopiju\? Vairs nevarēs izmantot atkopšanas atslēgu, lai lasītu šifrēto ziņu vēsturi.</string>
+    <string name="keys_backup_settings_delete_confirm_message">Izdzēst no servera savu šifrēšanas atslēgu rezerves kopiju? Vairs nevarēs izmantot atkpes atslēgu, lai lasītu šifrēto ziņu vēsturi.</string>
     <string name="keys_backup_settings_delete_confirm_title">Izdzēst rezerves kopiju</string>
     <string name="keys_backup_settings_checking_backup_state">Pārbauda dublējuma statusu</string>
     <string name="keys_backup_settings_deleting_backup">Izdzēš dublējumu…</string>
@@ -1501,7 +1494,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="title_activity_keys_backup_setup">Atslēgu rezerves kopija</string>
     <string name="notice_room_update_by_you">Tu atjaunināji šo istabu.</string>
     <string name="notice_room_update">%s atjaunināja šo istabu.</string>
-    <string name="recovery_passphrase">Atkopšanas paroles vārdkopa</string>
+    <string name="recovery_passphrase">Atkopes paroles vārdkopa</string>
     <string name="e2e_use_keybackup">Atbloķēt šifrēto ziņu vēsturi</string>
     <string name="login_default_session_public_name">${app_name} Android</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">Atslēgas jau ir atjauninātas!</string>
@@ -1581,7 +1574,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
         <item quantity="one">Dublē %d atslēgu…</item>
         <item quantity="other">Dublē %d atslēgas…</item>
     </plurals>
-    <string name="keys_backup_settings_untrusted_backup">Lai šajā sesijā izmantotu atslēgu rezerves kopēšanu, tagad jāatjauno ar savu paroles vārdkopu vai atkopšanas atslēgu.</string>
+    <string name="keys_backup_settings_untrusted_backup">Lai šajā sesijā izmantotu atslēgu rezerves kopēšanu, tagad jāatjauno ar savu paroles vārdkopu vai atkopes atslēgu.</string>
     <string name="keys_backup_settings_invalid_signature_from_unverified_device">Rezerves kopijai ir nederīgs paraksts no nepārbaudītas sesijas %s</string>
     <string name="keys_backup_settings_invalid_signature_from_verified_device">Rezerves kopijai ir nederīgs paraksts no pārbaudītas sesijas %s</string>
     <string name="keys_backup_settings_valid_signature_from_unverified_device">Rezerves kopijai ir derīgs paraksts no nepārbaudītas sesijas %s</string>
@@ -1597,7 +1590,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
         <item quantity="one">Atjaunota rezerves kopija ar %d atslēgu.</item>
         <item quantity="other">Atjaunota rezerves kopija ar %d atslēgām.</item>
     </plurals>
-    <string name="keys_backup_recovery_code_empty_error_message">Lūgums ievadīt atkpes atslēgu</string>
+    <string name="keys_backup_recovery_code_empty_error_message">Lūgums ievadīt atkopes atslēgu</string>
     <string name="keys_backup_restoring_waiting_message">Rezerves kopijas atjaunošana:</string>
     <string name="keys_backup_passphrase_error_decrypt">Rezerves kopiju nevarēja atšifrēt ar šo paroles vārdkopu: lūgums pārbaudīt, vai ir ievadīta pareiza atkopes paroles vārdkopa.</string>
     <string name="keys_backup_restore_with_key_helper">Pazaudēta sava atkopes atslēga? Iestatījumos var iestatīt jaunu.</string>
@@ -2379,7 +2372,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="verification_profile_other_device_untrust_info">Kamēr lietotājs neuzticas šai sesijai, tajā nosūtītās ziņas tiks iezīmētas ar brīdinājumiem.</string>
     <string tools:ignore="UnusedResources" name="verify_invalid_qr_notice">Šis kvadrātkods izskatās bojāts. Lūgums mēģināt apliecināt citā veidā.</string>
     <string name="direct_room_encryption_enabled_waiting_users">Gaida lietotājus pievienojamies ${app_name}</string>
-    <string name="bootstrap_progress_generating_ssss_recovery">Izveido SSSS atslēgu no atkopšanas atslēgas</string>
+    <string name="bootstrap_progress_generating_ssss_recovery">Izveido SSSS atslēgu no atkopes atslēgas</string>
     <string name="bootstrap_progress_storing_in_sss">Glabā atslēgas rezerves kopēšanas atslēgu SSSS</string>
     <string name="set_a_security_phrase_notice">Jāievada tikai sev zināma drošības vārdkopa, kas tiek izmantota, lai noslēpumus serverī padarītu drošus.</string>
     <string name="bootstrap_crosssigning_progress_initializing">Publicēt izveidotās identitātes atslēgas</string>
@@ -2416,12 +2409,12 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="spaces_no_server_support_title">Izskatās, ka Tavs mājasserveris vēl nenodrošina vietas</string>
     <string name="a11y_delete_recorded_voice_message">Izdzēst ierakstu</string>
     <string name="enter_secret_storage_invalid">Krātuvē nevar atrast noslēpumus</string>
-    <string name="bootstrap_migration_backup_recovery_key">Atslēgas rezerves kopēšanas atkopšanas atslēga</string>
-    <string name="bootstrap_migration_use_recovery_key">jāizmanto atslēgas rezerves kopēšanas atkopšanas atslēga</string>
+    <string name="bootstrap_migration_backup_recovery_key">Atslēgas rezerves kopēšanas atkopes atslēga</string>
+    <string name="bootstrap_migration_use_recovery_key">jāizmanto atslēgas rezerves kopēšanas atkopes atslēga</string>
     <string name="bootstrap_migration_enter_backup_password">Jāievada atslēgas rezerves kopēšanas paroles vārdkopa, lai turpinātu.</string>
     <string name="bootstrap_progress_generating_ssss">Izveido SSSS atslēgu no paroles vārdkopas</string>
-    <string name="recovery_key_empty_error_message">Lūgums ievadīt atkopšanas atslēgu</string>
-    <string name="bootstrap_invalid_recovery_key">Tā nav derīga atkopšanas atslēga</string>
+    <string name="recovery_key_empty_error_message">Lūgums ievadīt atkopes atslēgu</string>
+    <string name="bootstrap_invalid_recovery_key">Tā nav derīga atkopes atslēga</string>
     <string name="settings_troubleshoot_title">Atkļūdot</string>
     <string name="bootstrap_crosssigning_progress_key_backup">Iestata atslēgu rezerves kopēšanu</string>
     <string name="bootstrap_crosssigning_progress_save_usk">Sinhronizē lietotāja atslēgu</string>
@@ -2445,9 +2438,9 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="app_desktop_web">${app_name} Web
 \n${app_name} Desktop</string>
     <string name="failed_to_access_secure_storage">Neizdevās piekļūt drošajai krātuvei</string>
-    <string name="use_recovery_key">Izmantot atkopšanas atslēgu</string>
+    <string name="use_recovery_key">Izmantot atkopes atslēgu</string>
     <string name="command_description_discard_session">Piespiež pašreizējās izejošās kopuma sesijas šifrētā istabā atmešanu</string>
-    <string name="enter_secret_storage_input_key">Jāatlasa sava atkopšanas atslēga vai jāievada tā pašrocīgi ierakstot vai ielīmējot no starpliktuves</string>
+    <string name="enter_secret_storage_input_key">Jāatlasa sava atkopes atslēga vai jāievada tā pašrocīgi ierakstot vai ielīmējot no starpliktuves</string>
     <string name="secure_backup_reset_all_no_other_devices_long">Apliecināšanas atslēgu atiestatīšana ir neatgriezeniska. Pēc atiestatīšanas nevarēs piekļūt iepriekšējām šifrētajām ziņā, un visi draugi, kuri iepriekš ir Tevi apliecinājuši, redzēs drošības brīdinājumus līdz atkārtotai apliecināšanai.</string>
     <string name="confirm_your_identity_after_update">Drošā ziņapmaiņa tika uzlabota jaunākajā atjauninājumā. Lūgums atkārtoti apliecināt ierīci.</string>
     <string name="review_unverified_sessions_description">Tās ir jāpārskata, lai nodrošinātu, ka konts ir drošs</string>
@@ -2456,9 +2449,9 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="identity_server_error_binding_error">Sasaiste neizdevās.</string>
     <string name="confirm_your_identity_quad_s">Jāapstiprina identitāte ar šīs pieteikšanās apliecināšanu, tādējādi nodrošinot piekļuvi šifrētajām ziņām.</string>
     <plurals name="invitations_sent_to_one_and_more_users">
-        <item quantity="zero">Uzaicinājums nosūtīts %1$s</item>
-        <item quantity="one">Uzaicinājumi tika nosūtīti %1$s un vēl vienam</item>
-        <item quantity="other">Uzaicinājumi tika nosūtīti %1$s un vēl %2$d</item>
+        <item quantity="zero">Uzaicinājums nosūtīts %1$s un vēl %2$d</item>
+        <item quantity="one">Uzaicinājums nosūtīts %1$s un vēl %2$d</item>
+        <item quantity="other">Uzaicinājums nosūtīts %1$s un vēl %2$d</item>
     </plurals>
     <string name="invite_users_to_room_failure">Mēs nevarējām uzaicināt lietotājus. Lūgums pārbaudīt uzaicināmos lietotājus un mēģināt vēlreiz.</string>
     <string name="identity_server_error_outdated_identity_server">Šis identitāšu serveris ir novecojis. ${app_name} nodrošina tikai API V2.</string>
@@ -2479,7 +2472,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="failed_to_unban">Neizdevās atsaukt lietotāja piekļuves aizliegumu</string>
     <string name="alert_push_are_disabled_title">Pašpiegādes paziņojumi ir atspējoti</string>
     <string name="alert_push_are_disabled_description">Jāpārskata iestatījumi, lai iespējotu pašpiegādes paziņojumus</string>
-    <string name="save_recovery_key_chooser_hint">Saglabāt atkopšanas atslēgu</string>
+    <string name="save_recovery_key_chooser_hint">Saglabāt atkopes atslēgu</string>
     <string name="bottom_sheet_setup_secure_backup_submit">Uzstādīt</string>
     <plurals name="entries">
         <item quantity="zero">%d ierakstu</item>
@@ -2786,7 +2779,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_troubleshoot_test_current_gateway_title">Vārteja</string>
     <string name="device_manager_verification_status_unknown">Nezināms apliecinājuma stāvoklis</string>
     <string name="device_manager_other_sessions_view_all">Apskatīt visas (%1$d)</string>
-    <string name="device_manager_unverified_sessions_description">Jāapliecina vai jāatsakās no neapliecinātām sesijām.</string>
+    <string name="device_manager_unverified_sessions_description">Apliecināt vai atteikteis no neapliecinātām sesijām.</string>
     <string name="device_manager_filter_option_verified_description">Gatavas drošai ziņapmaiņai</string>
     <string name="device_manager_filter_option_unverified_description">Nav gatavas drošai ziņapmaiņai</string>
     <string name="device_manager_other_sessions_recommendation_description_verified">Vislabākajai drošībai jāatsakās no jebkuras neatpazīstamas vai vairs neizmantotas sesijas.</string>
