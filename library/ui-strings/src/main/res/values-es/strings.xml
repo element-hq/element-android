@@ -1943,7 +1943,7 @@
     <string name="send_feedback_space_title">Feedback de espacios</string>
     <string name="room_settings_room_version_title">Versión de sala</string>
     <string name="room_settings_room_access_restricted_title">Solo miembros del espacio</string>
-    <string name="room_settings_room_access_public_description">Cualquiera puede encontrar y unirse a esta sala</string>
+    <string name="room_settings_room_access_public_description">Cualquiera puede encontrar y unirse a la sala</string>
     <string name="room_settings_room_access_public_title">Publico</string>
     <string name="room_settings_room_access_private_title">Privada</string>
     <string name="room_alias_action_publish">Publicar esta dirección</string>
@@ -1975,7 +1975,7 @@
     <string name="allow_space_member_to_find_and_access">Permite a los miembros del espacio encontrar y acceder.</string>
     <string name="room_create_member_of_space_name_can_join">Miembros del Espacio %s pueden encontrar, previsualizar y unirse.</string>
     <string name="room_settings_room_access_restricted_description">Cualquiera dentro de un espacio con esta sala puede encontrarla y unirse a ella. Únicamente los administradores de la sala pueden añadirla a un espacio.</string>
-    <string name="room_settings_room_access_private_description">Solo la gente invitada puede encontrar y unirse a l sala</string>
+    <string name="room_settings_room_access_private_description">Solo la gente invitada puede encontrar y unirse a la sala</string>
     <string name="room_settings_room_access_private_invite_only_title">Privada (solo mediante invitación)</string>
     <string name="room_settings_room_access_entry_knock">Cualquiera puede solicitar entrar en la sala, serán los miembros quienes decidan aceptar o rechazar la solicitud</string>
     <string name="room_alias_local_address_subtitle">Configurar las direcciones para esta sala de forma que otros usuarios puedan encontrarla mediante tu servidor doméstico (%1$s)</string>
