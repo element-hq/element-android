@@ -299,7 +299,7 @@
     <string name="yes">JĀ</string>
     <string name="no">NĒ</string>
     <string name="_continue">Turpināt</string>
-    <string name="action_remove">Dzēst</string>
+    <string name="action_remove">Noņemt</string>
     <string name="action_join">Pievienoties</string>
     <string name="action_reject">Noraidīt</string>
     <string name="room_jump_to_first_unread">Pāriet uz pirmo neizlasīto ziņu</string>
@@ -592,7 +592,7 @@
     <string name="show_advanced">Rādīt papildu iestatījumus</string>
     <string name="create_room_encryption_description">Šifrēšana nevar tikt atspējota, ja reiz tikusi iespējota.</string>
     <string name="settings">Iestatījumi</string>
-    <string name="soft_logout_clear_data_title">Dzēst personas datus</string>
+    <string name="soft_logout_clear_data_title">Notīrīt personīgos datus</string>
     <string name="soft_logout_signin_password_hint">Parole</string>
     <string name="soft_logout_signin_submit">Pierakstīties</string>
     <string name="soft_logout_signin_title">Pierakstīties</string>
@@ -662,7 +662,7 @@
     <string name="fab_menu_create_chat">Tiešās ziņas</string>
     <string name="fab_menu_create_room">Istabas</string>
     <string name="room_preview_no_preview">Šo istabu nevar priekšskatīt</string>
-    <string name="event_redacted">Ziņa ir dzēsta</string>
+    <string name="event_redacted">Ziņa noņemta</string>
     <string name="reactions">Reakcijas</string>
     <string name="title_activity_emoji_reaction_picker">Reakcijas</string>
     <string name="room_list_rooms_empty_title">Istabas</string>
@@ -711,7 +711,7 @@
     <string name="settings_troubleshoot_test_service_boot_title">Startēt pie ierīces ielādes</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Iespējot</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">Iespējot</string>
-    <string name="settings_remove_three_pid_confirmation_content">Dzēst %s\?</string>
+    <string name="settings_remove_three_pid_confirmation_content">Noņemt %s?</string>
     <string name="settings_phone_numbers">Tālruņa numuri</string>
     <string name="settings_emails_empty">Kontam nav pievienota neviena e-pasta adrese</string>
     <string name="settings_emails">Epasta adreses</string>
@@ -724,7 +724,7 @@
     <string name="room_permissions_change_main_address_for_the_room">Mainīt istabas galveno adresi</string>
     <string name="room_permissions_change_room_avatar">Mainīt istabas avataru</string>
     <string name="room_permissions_notify_everyone">Apziņot visus</string>
-    <string name="room_permissions_remove_messages_sent_by_others">Dzēst citu sūtītas ziņas</string>
+    <string name="room_permissions_remove_messages_sent_by_others">Noņemt citu sūtītās ziņas</string>
     <string name="room_permissions_ban_users">Liegt pieeju lietotājiem</string>
     <string name="room_permissions_remove_users">Padzīt lietotājus</string>
     <string name="room_permissions_change_settings">Mainīt iestatījumus</string>
@@ -823,8 +823,8 @@
     <string name="devices_current_device">Pašreizējā sesija</string>
     <string name="settings_advanced_settings">Papildu iestatījumi</string>
     <string name="permalink_malformed">matrix.to saite ir nepareizi veidota</string>
-    <string name="soft_logout_clear_data_dialog_title">Dzēst datus</string>
-    <string name="soft_logout_clear_data_submit">Dzēst visus datus</string>
+    <string name="soft_logout_clear_data_dialog_title">Notīrīt datus</string>
+    <string name="soft_logout_clear_data_submit">Notīrīt visus datus</string>
     <string name="login_social_continue">Vai</string>
     <string name="timeline_unread_messages">Nelasītas ziņas</string>
     <string name="direct_room_join_rules_invite_by_you">Tu padarīji šo pieejamu tikai ar ielūgumiem.</string>
@@ -988,7 +988,7 @@
     <string name="verify_new_session_notice">Šī sesija ir izmantojama savas jaunās sesijas apliecināšanai, piešķirot piekļuvi šifrētām ziņām.</string>
     <string name="delete_event_dialog_reason_hint">Labošanas iemesls</string>
     <string name="delete_event_dialog_reason_checkbox">Iekļaut iemeslu</string>
-    <string name="message_action_item_redact">Dzēst…</string>
+    <string name="message_action_item_redact">Noņemt…</string>
     <string name="verification_use_passphrase">Ja nevar piekļūt esošai sesijai</string>
     <string name="verification_cannot_access_other_session">Izmantot atkopes paroles vārdkopu vai atslēgu</string>
     <string name="verification_open_other_to_verify">Izmanto esošu sesiju šis sesijas apliecināšanai, piešķirot tai piekļuvi šifrētajām ziņām.</string>
