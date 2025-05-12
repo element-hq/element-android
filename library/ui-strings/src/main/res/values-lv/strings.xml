@@ -228,12 +228,12 @@
     <string name="bottom_action_favourites">Izlase</string>
     <string name="bottom_action_people">Cilvēki</string>
     <string name="bottom_action_rooms">Istabas</string>
-    <string name="home_filter_placeholder_home">Filtrēt istabu nosaukumus</string>
+    <string name="home_filter_placeholder_home">Atlasīt istabu nosaukumus</string>
     <string name="invitations_header">Uzaicinājumi</string>
     <string name="low_priority_header">Zema prioritāte</string>
     <string name="direct_chats_header">Sarunas</string>
     <string name="matrix_only_filter">Vienīgi Matrix kontakti</string>
-    <string name="no_result_placeholder">Nav rezultātu</string>
+    <string name="no_result_placeholder">Nav iznākuma</string>
     <string name="rooms_header">Istabas</string>
     <string name="send_bug_report_include_logs">Nosūtīt žurnālus</string>
     <string name="send_bug_report_include_crash_logs">Nosūtīt avāriju žurnālus</string>
@@ -331,8 +331,8 @@
     <string name="ssl_expected_existing_expl">Sertifikāts ir mainījies no iepriekš uzticama uz neuzticamu. Servera sertifikāts varētu būt atjaunots. Jāsazinās ar servera pārvaldītāju, lai saņemtu sagaidāmo pirkstu nospiedumu.</string>
     <string name="ssl_only_accept">Akceptē sertifikātu TIKAI tad, kad servera administrators publicējis sertifikāta nospiedumu, kurš atbilst augstāk redzamajam.</string>
     <string name="search_hint">Meklēšana</string>
-    <string name="search_members_hint">Istabas dalībnieku filtrs</string>
-    <string name="search_no_results">Rezultātu nav</string>
+    <string name="search_members_hint">Atlasīt istabas dalībniekus</string>
+    <string name="search_no_results">Nav iznākuma</string>
     <string name="room_settings_all_messages">Visas ziņas</string>
     <string name="room_settings_add_homescreen_shortcut">Pievienot sākumekrānam</string>
     <string name="settings_profile_picture">Profila attēls</string>
@@ -682,12 +682,12 @@
     <string name="deactivate_account_submit">Deaktivizēt kontu</string>
     <string name="deactivate_account_title">Deaktivizēt kontu</string>
     <string name="command_description_nick">Nomaina Tavu attēlojamo segvārdu</string>
-    <string name="command_description_remove_user">Padzen lietotāju ar norādīto id</string>
+    <string name="command_description_remove_user">Noņem no šīs istabas lietotāju ar norādīto id</string>
     <string name="command_description_part_room">Pamest istabu</string>
-    <string name="command_description_invite_user">Uzaicina lietotāju ar norādīto id uz pašreizējo istabu</string>
-    <string name="command_description_deop_user">Atceļ operatora statusu lietotājam ar norādīto Id</string>
-    <string name="command_description_op_user">Definē lietotāja statusu</string>
-    <string name="command_description_ban_user">Liedz pieeju lietotājam ar norādīto id</string>
+    <string name="command_description_invite_user">Uzaicina lietotāju ar norādīto Id uz pašreizējo istabu</string>
+    <string name="command_description_deop_user">Atceļ operatora stāvokli lietotājam ar norādīto Id</string>
+    <string name="command_description_op_user">Norāda lietotāja ietekmes līmeni</string>
+    <string name="command_description_ban_user">Liedz piekļuvi lietotājam ar norādīto Id</string>
     <string name="command_description_emote">Parāda darbību</string>
     <string name="ignore_request_short_label">Nerādīt nevienu šī dalībnieka ziņu</string>
     <string name="share_without_verifying_short_label">Dalīties</string>
@@ -704,7 +704,7 @@
     <string name="disabled_integration_dialog_title">Integrācijas ir atspējotas</string>
     <string name="settings_opt_in_of_analytics">Sūtīt analītikas datus</string>
     <string name="settings_deactivate_account_section">Deaktivizēt kontu</string>
-    <string name="settings_secure_backup_section_info">Jāndrošinās pret piekļuves šifrētām ziņām un datiem zaudēšanu ar šifrēšanas atslēgas rezerves kopēšanu savā serverī.</string>
+    <string name="settings_secure_backup_section_info">Jānodrošinās pret piekļuves šifrētām ziņām un datiem zaudēšanu ar šifrēšanas atslēgas rezerves kopēšanu savā serverī.</string>
     <string name="settings_secure_backup_setup">Iestatīt drošu rezerves dublēšanu</string>
     <string name="settings_secure_backup_section_title">Droša rezerves kopija</string>
     <string name="settings_send_typing_notifs">Sūtīt paziņojumus par rakstīšanu</string>
@@ -749,7 +749,7 @@
     <string name="sound_device_phone">Tālrunis</string>
     <string name="option_send_voice">Sūtīt balsi</string>
     <string name="send_bug_report_description_in_english">Ja iespējams, lūgums rakstīt angļu valodā.</string>
-    <string name="no_more_results">Vairāk nekādu rezultātu nav</string>
+    <string name="no_more_results">Vairs nav nekāda iznākuma</string>
     <string name="bottom_action_notification">Paziņojumi</string>
     <string name="dialog_title_success">Izdevās</string>
     <string name="dialog_title_error">Kļūda</string>
@@ -818,7 +818,7 @@
     <string name="verification_conclusion_warning">Neuzticama pieteikšanās</string>
     <string name="create_room_in_progress">Izveido istabu…</string>
     <string name="create_room_alias_invalid">Dažas rakstzīmes nav atļautas</string>
-    <string name="autocomplete_limited_results">Rāda tikai pirmos rezultātus, jāieraksta vairāk burtu…</string>
+    <string name="autocomplete_limited_results">Rāda tikai pirmos iznākuma vienumus, jāieraksta vairāk burtu…</string>
     <string name="devices_other_devices">Citas sesijas</string>
     <string name="devices_current_device">Pašreizējā sesija</string>
     <string name="settings_advanced_settings">Papildu iestatījumi</string>
@@ -1111,7 +1111,7 @@
     <string name="room_filtering_footer_create_new_direct_message">Sūtīt jaunu tiešo ziņu</string>
     <string name="room_filtering_footer_create_new_room">Izveidot jaunu istabu</string>
     <string name="room_filtering_footer_title">Nevarat atrast meklēto\?</string>
-    <string name="room_filtering_filter_hint">Filtrēt sarakstes…</string>
+    <string name="room_filtering_filter_hint">Atlasīt sarakstes…</string>
     <string name="create_room_federation_error">Istaba ir izveidota, bet daži ielūgumi nav nosūtīti šāda iemesla dēļ:
 \n
 \n%s</string>
@@ -1123,17 +1123,17 @@
     <string name="keys_backup_recovery_code_error_decrypt">Rezerves kopiju nevarēja atšifrēt ar šo atkopes atslēgu: lūgums pārliecināties, ka ir ievadīta pareiza atkopes atslēga.</string>
     <string name="keys_backup_restoring_computing_key_waiting_message">Aprēķina atkopes atslēgu…</string>
     <string name="passphrase_passphrase_too_weak">Paroles vārdkopa ir pārāk vāja</string>
-    <string name="command_snow">Nosūta doto ziņu ar sniegu</string>
-    <string name="command_confetti">Nosūta doto ziņu ar konfeti</string>
+    <string name="command_snow">Nosūta ziņu ar snigšanu</string>
+    <string name="command_confetti">Nosūta ziņu ar konfeti</string>
     <string name="command_description_discard_session_not_handled">Atbastīta tikai šifrētās istabās</string>
-    <string name="command_description_plain">Nosūta ziņu vienkāršā tekstā, nepielietojot markdown</string>
-    <string name="command_description_rainbow_emote">Nosūta doto ziņu uzsvērti izkrāsotu varavīksnes krāsās</string>
-    <string name="command_description_rainbow">Nosūta doto ziņu izkrāsotu varavīksnes krāsās</string>
+    <string name="command_description_plain">Nosūta ziņu vienkāršā tekstā, neapstrādājot to kā Markdown</string>
+    <string name="command_description_rainbow_emote">Nosūta sajūtu izrādīšanu varavīksnes krāsās</string>
+    <string name="command_description_rainbow">Nosūta ziņu varavīksnes krāsās</string>
     <string name="command_description_shrug">Pievieno ¯\\_(ツ)_/¯ vienkārša teksta ziņas sākumā</string>
-    <string name="command_description_markdown">Iespējo/atspējo markdown</string>
+    <string name="command_description_markdown">Ieslēdz/izslēdz Markdown</string>
     <string name="command_description_topic">Iestata istabas tematu</string>
     <string name="command_description_join_room">Pievienojas istabai ar norādīto adresi</string>
-    <string name="command_description_unban_user">Atceļ pieejas liegumu lietotājam ar norādīto id</string>
+    <string name="command_description_unban_user">Atceļ piekļuves liegumu lietotājam ar norādīto Id</string>
     <string name="command_problem_with_parameters">Komandai \"%s\" nepieciešami vairāk parametri vai arī kāds no parametriem ir nepareizs.</string>
     <string name="event_status_delete_all_failed_dialog_message">Vai tiešām izdzēst visas nenosūtītas ziņas šajā istabā\?</string>
     <string name="event_status_delete_all_failed_dialog_title">Izdzēst nenosūtītās ziņas</string>
@@ -1246,7 +1246,7 @@
     <string name="keys_backup_banner_recover_line1">Nekad nezaudē šifrētās ziņas</string>
     <string name="keys_backup_settings_delete_confirm_message">Izdzēst no servera savu šifrēšanas atslēgu rezerves kopiju? Vairs nevarēs izmantot atkpes atslēgu, lai lasītu šifrēto ziņu vēsturi.</string>
     <string name="keys_backup_settings_delete_confirm_title">Izdzēst rezerves kopiju</string>
-    <string name="keys_backup_settings_checking_backup_state">Pārbauda dublējuma statusu</string>
+    <string name="keys_backup_settings_checking_backup_state">Pārbauda rezerves kopijas stāvokli</string>
     <string name="keys_backup_settings_deleting_backup">Izdzēš dublējumu…</string>
     <string name="keys_backup_settings_delete_backup_button">Izdzēst rezerves kopiju</string>
     <string name="keys_backup_restore_success_title">Atjaunots no rezerves kopijas %s.</string>
@@ -1286,7 +1286,7 @@
     <string name="settings_troubleshoot_test_service_boot_success">Pakalpojums sāks darboties, kad ierīce tiks pārsāknēta.</string>
     <string name="settings_troubleshoot_test_notification_title">Paziņojumu attēlošana</string>
     <string name="settings_troubleshoot_test_play_services_success">Google Play Servisu APK ir pieejams un atjaunināts.</string>
-    <string name="search_banned_user_hint">Filtrēt aizliegtos lietotājus</string>
+    <string name="search_banned_user_hint">Atlasīt liegtos lietotājus</string>
     <string name="e2e_re_request_encryption_key_dialog_content">Lūgums palaist ${app_name} citā ierīcē, kas var atšifrēt ziņu, lai tā varētu nosūtīt šīs sesijas atslēgas.</string>
     <string name="error_unauthorized">Neautorizēts, trūkstošas autentifikācijas apliecības</string>
     <string name="error_no_external_application_found">Atvainojamies, netika atrasta neviena ārēja lietotne, lai pabeigtu šo darbību.</string>
@@ -1525,7 +1525,7 @@
         <item quantity="other">Ir nosūtīts pārāk daudz pieprasījumu. Pēc %1$d sekundēm var mēģināt vēlreiz…</item>
     </plurals>
     <string name="reaction_search_type_hint">Jāievada atslēgvārdi, lai atrastu reakciju.</string>
-    <string name="spoiler">Spoileris</string>
+    <string name="spoiler">Aizsegts saturs</string>
     <string name="content_reported_as_inappropriate_content">Par šo saturu tika ziņots kā par nepiemērotu.\n\nJa nav vēlēšanās redzēt jebkādu citu šī lietotāja saturu, viņu var neņemt vērā, lai paslēptu viņa ziņas.</string>
     <string name="content_reported_as_inappropriate_title">Ziņots kā nepiemērots</string>
     <string name="content_reported_as_spam_content">Par šo saturu tika ziņots kā par mēstuli.\n\nJa nav vēlēšanās redzēt jebkādu citu šī lietotāja saturu, viņu var neņemt vērā, lai paslēptu viņa ziņas.</string>
@@ -1691,7 +1691,7 @@
     <string name="add_space">Pievienot Telpu</string>
     <string name="private_space">Privāta Telpa</string>
     <string name="public_space">Publiska Telpa</string>
-    <string name="command_description_join_space">Pievienoties Telpai ar doto ID</string>
+    <string name="command_description_join_space">Pievienoties vietai ar norādīto Id</string>
     <string name="command_description_add_to_space">Pievienot dotajai Telpai</string>
     <string name="command_description_create_space">Izveidot Telpu</string>
     <string name="dev_tools_form_hint_type">Tips</string>
@@ -1879,7 +1879,7 @@
 \n
 \n• Servera pārvaldītājs piekļuvi ir padarījis par spēkā neesošu drošības apsvērumu dēļ.</string>
     <string name="does_not_look_like_valid_email">Neizskatās pēc derīgas e-pasta adreses</string>
-    <string name="command_description_spoiler">Nosūta doto ziņojumu kā pārsteigumu</string>
+    <string name="command_description_spoiler">Nosūta ziņu ar aizsegtu saturu</string>
     <string name="uploads_files_subtitle">%1$s pie %2$s</string>
     <string name="uploads_media_no_result">Šajā istabā nav multivides</string>
     <string name="uploads_media_title">Multivide</string>
@@ -2078,7 +2078,7 @@
     <string name="action_enable">Iespējot</string>
     <string name="action_select_all">Atlasīt visu</string>
     <string name="action_deselect_all">Noņemt visas atzīmes</string>
-    <string name="command_description_leave_room">Pamest istabu ar norādīto identifikatoru (vai pašreizējo istabu, ja tāda nav)</string>
+    <string name="command_description_leave_room">Pamest istabu ar norādīto Id (vai pašreizējo istabu, ja nav norādīts)</string>
     <string name="space_leave_radio_button_all">Pamest visu</string>
     <string name="space_leave_prompt_msg_with_name">Vai tiešām pamest %s\?</string>
     <string name="sign_out_failed_dialog_message">Mājasserveris nav sasniedzams. Ja vienalga tiks veikta atteikšanās, šī ierīce netiks izdzēsta no ierīču saraksta, tādēļ nepieciešamības gadījumā tā ir noņemama citā klientā.</string>
@@ -2386,7 +2386,7 @@
     <string name="bootstrap_crosssigning_progress_save_ssk">Sinhronizē pašparakstīšanas atslēgu</string>
     <string name="event_status_a11y_delete_all">Izdzēst visas kļūdainās ziņas</string>
     <string name="encryption_misconfigured">Šifrēšana ir nepareizi uzstādīta</string>
-    <string name="crosssigning_cannot_verify_this_session_desc">Nebūs iespējams piekļūt šifrēto ziņu vēsturei. Jāatiestata Drošo ziņu rezerves kopēšana un apliecinājuma atslēgas, lai sāktu no jauna.</string>
+    <string name="crosssigning_cannot_verify_this_session_desc">Nebūs iespējams piekļūt šifrēto ziņu vēsturei. Jāatiestata drošo ziņu rezerves kopēšana un apliecinājuma atslēgas, lai sāktu no jauna.</string>
     <string name="settings_nightly_build_update">Iegūt jaunāko būvējumu (piezīme: var būt sarežģījumi ar pieteikšanos)</string>
     <string name="live_location_labs_promotion_description">Lūgums ņemt vērā: šī ir izmēģinājuma iespēja, kas izmanto pagaidu īstenojumu. Tas nozīmē, ka nebūs iespējams izdzēst atrašanās vietu vēsturi, un prasmīgi lietotāji varēs redzēt to pat tad, kad tiks pārtraukta atrašanās vietas tiešraides kopīgošana ar šo istabu.</string>
     <string name="room_using_unstable_room_version">Šī istaba darbojas ar istabu laidienu %s, ko šis mājasserveris ir atzīmējis kā nepastāvīgu.</string>
@@ -2436,7 +2436,7 @@
 \n${app_name} Desktop</string>
     <string name="failed_to_access_secure_storage">Neizdevās piekļūt drošajai krātuvei</string>
     <string name="use_recovery_key">Izmantot atkopes atslēgu</string>
-    <string name="command_description_discard_session">Piespiež pašreizējās izejošās kopuma sesijas šifrētā istabā atmešanu</string>
+    <string name="command_description_discard_session">Piespiež pašreizējās izejošās kopas sesijas šifrētā istabā atmešanu</string>
     <string name="enter_secret_storage_input_key">Jāatlasa sava atkopes atslēga vai jāievada tā pašrocīgi ierakstot vai ielīmējot no starpliktuves</string>
     <string name="secure_backup_reset_all_no_other_devices_long">Apliecināšanas atslēgu atiestatīšana ir neatgriezeniska. Pēc atiestatīšanas nevarēs piekļūt iepriekšējām šifrētajām ziņā, un visi draugi, kuri iepriekš ir Tevi apliecinājuši, redzēs drošības brīdinājumus līdz atkārtotai apliecināšanai.</string>
     <string name="confirm_your_identity_after_update">Drošā ziņapmaiņa tika uzlabota jaunākajā atjauninājumā. Lūgums atkārtoti apliecināt ierīci.</string>
