@@ -1280,7 +1280,7 @@
     <string name="settings_background_fdroid_sync_mode_disabled">Bez sinhronizēšanas fonā</string>
     <string name="settings_background_fdroid_sync_mode_real_time">Optimizēts reālajam laikam</string>
     <string name="settings_background_fdroid_sync_mode">Fona sinhronizēšanas režīms</string>
-    <string name="settings_system_preferences_summary">Izvēlaites LED krāsu, vibrāciju, skaņu…</string>
+    <string name="settings_system_preferences_summary">Izvēlēties LED krāsu, trīcēšanu, skaņu…</string>
     <string name="settings_silent_notifications_preferences">Uzstādīt klusos paziņojumus</string>
     <string name="settings_call_notifications_preferences">Uzstādīt zvanu paziņojumus</string>
     <string name="settings_troubleshoot_test_service_boot_success">Pakalpojums sāks darboties, kad ierīce tiks pārsāknēta.</string>
@@ -1971,7 +1971,7 @@
     <string name="settings_notification_keyword_contains_dot">Atslēgvārds nevar sākties ar \'.\'</string>
     <string name="settings_notification_new_keyword">Pievienot jaunu atslēgvārdu</string>
     <string name="settings_notification_your_keywords">Tavi atslēgvārdi</string>
-    <string name="settings_notification_notify_me_for">Paziņot mani par</string>
+    <string name="settings_notification_notify_me_for">Paziņot man par</string>
     <string name="settings_notification_other">Cits</string>
     <string name="settings_notification_mentions_and_keywords">Pieminēšanas un atslēgvārdi</string>
     <string name="settings_notification_default">Noklusējuma paziņojumi</string>
