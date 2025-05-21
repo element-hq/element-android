@@ -1,0 +1,1 @@
+Filter mobile links: only open links which have an explicit empty path like `https://mobile.element.io/?hs_url=...`
