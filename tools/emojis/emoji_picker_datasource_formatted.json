@@ -3021,14 +3021,8 @@
                 "smile",
                 "smiling",
                 "teeth",
-                "#1 best",
                 "eek",
-                "foot",
-                "friend",
-                "mouth",
-                "mutual",
-                "nervous",
-                "snapchat"
+                "nervous"
             ]
         },
         "face-exhaling": {
@@ -4347,7 +4341,8 @@
                 "creepy",
                 "demon",
                 "japanese_ogre",
-                "oni"
+                "oni",
+                "shrek"
             ]
         },
         "goblin": {
@@ -8470,7 +8465,6 @@
                 "palace",
                 "protect",
                 "british",
-                "foot",
                 "guardsman"
             ]
         },
@@ -9530,7 +9524,8 @@
                 "monster",
                 "tale",
                 "trolling",
-                "mystical"
+                "mystical",
+                "shrek"
             ]
         },
         "person-getting-massage": {
@@ -12528,7 +12523,6 @@
                 "clue",
                 "crime",
                 "detective",
-                "fingerprint",
                 "forensics",
                 "identity",
                 "mystery",
@@ -12860,7 +12854,6 @@
                 "antlers",
                 "elk",
                 "mammal",
-                "shrek",
                 "canada",
                 "sweden",
                 "sven",
@@ -22449,7 +22442,6 @@
             "b": "1FA89",
             "j": [
                 "cupid",
-                "harp",
                 "instrument",
                 "love",
                 "music",
@@ -24482,9 +24474,9 @@
                 "hole",
                 "plant",
                 "scoop",
-                "shovel",
                 "snow",
-                "spade"
+                "spade",
+                "tool"
             ]
         },
         "alembic": {
@@ -27369,7 +27361,6 @@
                 "mess",
                 "paint",
                 "spill",
-                "splatter",
                 "stain"
             ]
         },
@@ -29526,7 +29517,9 @@
             "a": "⊛ Flag: Sark",
             "b": "1F1E8-1F1F6",
             "j": [
-                "flag"
+                "flag",
+                "cq",
+                "banner"
             ]
         },
         "flag-costa-rica": {
