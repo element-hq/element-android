@@ -1,0 +1,2 @@
+Main changes in this version: Filter mobile links: only open links which have an explicit empty path.
+Full changelog: https://github.com/element-hq/element-android/releases
