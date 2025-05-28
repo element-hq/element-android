@@ -68,12 +68,12 @@ class WidgetViewModel @AssistedInject constructor(
 
     init {
         integrationManagerService.addListener(this)
-        if (initialState.widgetKind.isAdmin()) {
-            widgetPostAPIHandler = widgetPostAPIHandlerFactory.create(initialState.roomId).apply {
-                navigationCallback = this@WidgetViewModel
-            }
-            postAPIMediator.setHandler(widgetPostAPIHandler)
+        // WidgetStatus is still unknown
+        // Nevertheless, we can create the Handler without using it later
+        widgetPostAPIHandler = widgetPostAPIHandlerFactory.create(initialState.roomId).apply {
+            navigationCallback = this@WidgetViewModel
         }
+        postAPIMediator.setHandler(widgetPostAPIHandler)
         if (!integrationManagerService.isIntegrationEnabled()) {
             _viewEvents.post(WidgetViewEvents.Close(null))
         }
@@ -239,8 +239,10 @@ class WidgetViewModel @AssistedInject constructor(
     }
 
     private fun handleWebViewLoadingSuccess(action: WidgetAction.OnWebViewLoadingSuccess) {
-        if (initialState.widgetKind.isAdmin()) {
-            postAPIMediator.injectAPI()
+        withState { state ->
+            if (state.status == WidgetStatus.WIDGET_ALLOWED) {
+                postAPIMediator.injectAPI()
+            }
         }
         setState { copy(webviewLoadedUrl = Success(action.url)) }
     }
