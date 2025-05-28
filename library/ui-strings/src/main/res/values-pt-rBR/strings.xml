@@ -9,7 +9,7 @@
     <string name="notice_room_remove">%1$s removeu %2$s</string>
     <string name="notice_room_unban">%1$s desbaniu %2$s</string>
     <string name="notice_room_ban">%1$s baniu %2$s</string>
-    <string name="notice_room_withdraw">%1$s desfez o convite para %2$s</string>
+    <string name="notice_room_withdraw">%1$s desfez o convite de %2$s</string>
     <string name="notice_avatar_url_changed">%1$s mudou seu avatar</string>
     <string name="notice_display_name_set">%1$s definiu seu nome de exibição para %2$s</string>
     <string name="notice_display_name_changed_from">%1$s mudou seu nome de exibição de %2$s para %3$s</string>
@@ -49,7 +49,7 @@
     <string name="notice_room_remove_by_you">Você removeu %1$s</string>
     <string name="notice_room_unban_by_you">Você desbaniu %1$s</string>
     <string name="notice_room_ban_by_you">Você baniu %1$s</string>
-    <string name="notice_room_withdraw_by_you">Você desfez o convite para %1$s</string>
+    <string name="notice_room_withdraw_by_you">Você desfez o convite de %1$s</string>
     <string name="notice_avatar_url_changed_by_you">Você mudou seu avatar</string>
     <string name="notice_display_name_set_by_you">Você definiu seu nome de exibição para %1$s</string>
     <string name="notice_display_name_changed_from_by_you">Você mudou seu nome de exibição de %1$s para %2$s</string>
@@ -65,8 +65,8 @@
     <string name="notice_answered_call_by_you">Você atendeu a chamada.</string>
     <string name="notice_ended_call_by_you">Você encerrou a chamada.</string>
     <string name="notice_made_future_room_visibility_by_you">Você tornou o histórico futuro da sala visível para %1$s</string>
-    <string name="notice_room_update">%s fez o upgrade desta sala.</string>
-    <string name="notice_room_update_by_you">Você fez o upgrade desta sala.</string>
+    <string name="notice_room_update">%s atualizou esta sala.</string>
+    <string name="notice_room_update_by_you">Você atualizou esta sala.</string>
     <string name="notice_room_name_removed_by_you">Você removeu o nome da sala</string>
     <string name="notice_room_topic_removed_by_you">Você removeu o tópico da sala</string>
     <string name="notice_room_avatar_removed">%1$s removeu o avatar da sala</string>
@@ -168,8 +168,8 @@
     <string name="notice_direct_room_third_party_revoked_invite">%1$s revogou o convite para %2$s</string>
     <string name="notice_direct_room_third_party_invite_by_you">Você convidou %1$s</string>
     <string name="notice_direct_room_third_party_invite">%1$s convidou %2$s</string>
-    <string name="notice_direct_room_update_by_you">Você fez o upgrade aqui.</string>
-    <string name="notice_direct_room_update">%s fez o upgrade aqui.</string>
+    <string name="notice_direct_room_update_by_you">Você atualizou aqui.</string>
+    <string name="notice_direct_room_update">%s atualizou aqui.</string>
     <string name="notice_made_future_direct_room_visibility_by_you">Você tornou as mensagens futuras visíveis para %1$s</string>
     <string name="notice_made_future_direct_room_visibility">%1$s tornou as mensagens futuras visíveis para %2$s</string>
     <string name="notice_direct_room_leave_by_you">Você saiu da sala</string>
@@ -194,13 +194,13 @@
     <string name="notice_room_server_acl_updated_was_banned">• Servidores correspondendo com %s foram removidos da lista de banimento.</string>
     <string name="notice_room_server_acl_updated_banned">• Servidores correspondendo com %s estão agora banidos.</string>
     <string name="notice_room_server_acl_updated_title_by_you">Você mudou as LCAs do servidor para esta sala.</string>
-    <string name="notice_room_server_acl_updated_title">%s mudou as LCAs do servidor para esta sala.</string>
-    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Servidores correspondendo com literais de IP estão banidos.</string>
-    <string name="notice_room_server_acl_set_ip_literals_allowed">• Servidores correspondendo com literais de IP estão permitidos.</string>
+    <string name="notice_room_server_acl_updated_title">%s mudou as LCAs do servidor desta sala.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Servidores correspondendo com IP literais estão banidos.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• Servidores correspondendo com IP literais estão permitidos.</string>
     <string name="notice_room_server_acl_set_allowed">• Servidores correspondendo com %s estão permitidos.</string>
     <string name="notice_room_server_acl_set_banned">• Servidores correspondendo com %s estão banidos.</string>
-    <string name="notice_room_server_acl_set_title_by_you">Você definiu as LCAs do servidor para esta sala.</string>
-    <string name="notice_room_server_acl_set_title">%s definiu as LCAs do servidor para esta sala.</string>
+    <string name="notice_room_server_acl_set_title_by_you">Você definiu as LCAs do servidor desta sala.</string>
+    <string name="notice_room_server_acl_set_title">%s definiu as LCAs do servidor desta sala.</string>
     <string name="notice_room_canonical_alias_alternative_changed_by_you">Você mudou os endereços alternativos para esta sala.</string>
     <string name="notice_room_canonical_alias_alternative_changed">%1$s mudou os endereços alternativos para esta sala.</string>
     <plurals name="notice_room_canonical_alias_alternative_removed_by_you">
@@ -1796,7 +1796,7 @@
     <string name="room_alias_published_alias_main">Este é o endereço principal</string>
     <string name="room_alias_published_alias_subtitle">Endereços publicados podem ser usados por qualquer pessoa em qualquer servidor para entrar na sua sala. Para publicar um endereço, ele precisa ser definido como um endereço local primeiro.</string>
     <string name="room_alias_published_alias_title">Endereços Publicados</string>
-    <string name="room_settings_alias_subtitle">Ver e gerenciar endereços desta sala, e sua visibilidade no diretório de salas.</string>
+    <string name="room_settings_alias_subtitle">Visualize e gerencie os endereços desta sala, e sua visibilidade no diretório de salas.</string>
     <string name="room_settings_alias_title">Endereços de sala</string>
     <string name="action_add">Adicionar</string>
     <string name="settings_security_pin_code_change_pin_summary">Mudar seu PIN atual</string>
@@ -2062,7 +2062,7 @@
     </plurals>
     <string name="error_failed_to_join_room">Desculpe, um erro ocorreu enquanto tentava entrar: %s</string>
     <string name="create_space_alias_hint">Endereço de espaço</string>
-    <string name="space_settings_alias_subtitle">Ver e gerenciar endereços deste espaço.</string>
+    <string name="space_settings_alias_subtitle">Visualize e gerencie endereços deste espaço.</string>
     <string name="space_settings_alias_title">Endereços de espaço</string>
     <string name="room_upgrade_to_recommended_version">Fazer upgrade para a versão de sala recomendada</string>
     <string name="room_using_unstable_room_version">Esta sala está rodando versão de sala %s, que este servidorcasa marcou como instável.</string>
@@ -2827,8 +2827,9 @@
     <string name="action_deselect_all">Desselecionar todos(as)</string>
     <string name="action_select_all">Selecionar todos(as)</string>
     <plurals name="x_selected">
-        <item quantity="one">%1$d selecionado(a)</item>
-        <item quantity="other">%1$d selecionados(as)</item>
+        <item quantity="one">%1$d selecionado</item>
+        <item quantity="many">%1$d selecionados</item>
+        <item quantity="other"></item>
     </plurals>
     <string name="error_voice_broadcast_blocked_by_someone_else_message">Alguma outra pessoa já está gravando um broadcast de voz. Espere que o broadcast de voz dela termine para começar um novo.</string>
     <string name="rich_text_editor_full_screen_toggle">Alternar modo de tela cheia</string>
@@ -2972,4 +2973,13 @@
 \n%s</string>
     <string name="message_report_user">Reportar usuário</string>
     <string name="login_splash_sign_in">Fazer Login</string>
+    <string name="microphone_in_use_title">O microfone está em uso</string>
+    <string name="room_profile_section_more_report">Denunciar sala</string>
+    <string name="room_profile_section_more_report_success_content">Essa sala foi denunciada com sucesso.</string>
+    <string name="view_download_replacement_app_title">Baixar %1$s</string>
+    <string name="error_mas_not_supported_title">Você não pode mais criar uma conta com %1$s usando esse app</string>
+    <string name="call_unsupported">Chamada não suportada</string>
+    <string name="call_unsupported_matrix_rtc_call">Chamada não suportada. O novo app Element X é necessário para entrar nessa chamada.</string>
+    <string name="error_mas_not_supported_subtitle">Baixe %1$s para usar %2$s para a sua conta, ou escolha um servidor-casa diferente.</string>
+    <string name="view_download_replacement_app_subtitle">Mais rápido, mais seguro, e cheio de ferramentas poderosas de colaboração.</string>
 </resources>
