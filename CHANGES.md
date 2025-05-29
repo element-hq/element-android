@@ -1,3 +1,11 @@
+Changes in Element v1.6.38 (2025-05-27)
+=======================================
+
+Other changes
+-------------
+ - Filter mobile links: only open links which have an explicit empty path like `https://mobile.element.io/?hs_url=...` ([#9033](https://github.com/element-hq/element-android/issues/9033))
+
+
 Changes in Element v1.6.36 (2025-03-14)
 =======================================
 
