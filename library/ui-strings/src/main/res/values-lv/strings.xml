@@ -217,7 +217,7 @@
     <string name="action_invite">Uzaicināt</string>
     <string name="action_sign_out">Atteikties</string>
     <string name="action_voice_call">Balss zvans</string>
-    <string name="action_video_call">Video zvans</string>
+    <string name="action_video_call">Videozvans</string>
     <string name="action_mark_all_as_read">Atzīmēt visas ziņas, kā lasītas</string>
     <string name="action_quick_reply">Ātrā atbilde</string>
     <string name="action_open">Atvērt</string>
@@ -262,7 +262,7 @@
     <string name="dark_theme">Tumšs izskats</string>
     <string name="black_theme">Melns izskats</string>
     <string name="notification_listening_for_events">Uztver notikumus</string>
-    <string name="notification_noisy_notifications">Skaņas paziņojumi</string>
+    <string name="notification_noisy_notifications">Skaļi paziņojumi</string>
     <string name="notification_silent_notifications">Klusi paziņojumi</string>
     <string name="title_activity_bug_report">Ziņojums par kļūdu</string>
     <string name="loading">Ielādējas…</string>
@@ -286,9 +286,9 @@
     <string name="compression_opt_list_small">Mazu</string>
     <string name="call">Zvans</string>
     <string name="call_connecting">Tiek veidots zvana savienojums…</string>
-    <string name="call_ended">Zvans beigts</string>
-    <string name="incoming_video_call">Ienākošs VIDEO zvans</string>
-    <string name="incoming_voice_call">Ienākošs AUDIO zvans</string>
+    <string name="call_ended">Zvans beidzās</string>
+    <string name="incoming_video_call">Ienākošs videozvans</string>
+    <string name="incoming_voice_call">Ienākošs balss zvans</string>
     <string name="call_in_progress">Notiek zvans…</string>
     <string name="call_error_user_not_responding">Adresāts neatbildēja uz zvanu.</string>
     <string name="permissions_rationale_popup_title">Element informācija</string>
@@ -475,7 +475,7 @@
         <item quantity="one">%d istabas</item>
         <item quantity="other">%d istabu</item>
     </plurals>
-    <string name="notification_unread_notified_messages_in_room">%1$s iekš %2$s</string>
+    <string name="notification_unread_notified_messages_in_room">%1$s %2$s</string>
     <string name="font_size">Burtu izmērs</string>
     <string name="tiny">Sīks</string>
     <string name="small">Mazs</string>
@@ -486,11 +486,11 @@
     <string name="huge">Milzīgs</string>
     <string name="widget_delete_message_confirmation">Vai tiešām izdzēst logrīku šajā istabā\?</string>
     <plurals name="active_widgets">
-        <item quantity="zero">%d aktīvs vidžets</item>
-        <item quantity="one">%d aktīvi vidžeti</item>
-        <item quantity="other">%d aktīvu vidžetu</item>
+        <item quantity="zero">%d aktīvu ekrānvadīklu</item>
+        <item quantity="one">%d aktīva ekrānvadīkla</item>
+        <item quantity="other">%d aktīvas ekrānvadīkla</item>
     </plurals>
-    <string name="widget_integration_unable_to_create">Neizdevās uzstādīt vidžetu.</string>
+    <string name="widget_integration_unable_to_create">Neizdevās izveidot ekrānvadīklu.</string>
     <string name="widget_integration_failed_to_send_request">Neizdevās nosūtīt pieprasījumu.</string>
     <string name="widget_integration_positive_power_level">Pieejas līmenim jābūt lielākam par 0.</string>
     <string name="widget_integration_must_be_in_room">Tu neesi šajā istabā.</string>
@@ -506,7 +506,7 @@
     <string name="command_error">Komandas kļūda</string>
     <string name="unrecognized_command">Nepazīstama komanda: %s</string>
     <string name="notification_off">Izslēgts</string>
-    <string name="notification_noisy">Ar skaņu</string>
+    <string name="notification_noisy">Skaļš</string>
     <string name="encrypted_message">Šifrēta ziņa</string>
     <string name="create">Izveidot</string>
     <string name="group_details_home">Sākums</string>
@@ -743,7 +743,7 @@
     <string name="room_participants_leave_private_warning">Šī istaba nav publiska. Tai nebūs iespējams atkārtoti pievienoties bez uzaicinājuma.</string>
     <string name="permissions_denied_add_contact">Jānodrošina atļauja piekļuvei kontaktpersonām.</string>
     <string name="permissions_denied_qr_code">Lai nolasītu kvadrātkodu, jāatļauj piekļuve kamerai.</string>
-    <string name="video_call_in_progress">Notiek video zvans…</string>
+    <string name="video_call_in_progress">Notiek videozvans…</string>
     <string name="auth_login_sso">Pieteikties ar vienoto pierakstīšanos</string>
     <string name="call_camera_back">Atpakaļ</string>
     <string name="sound_device_phone">Tālrunis</string>
@@ -906,7 +906,7 @@
     <string name="notification_new_messages">Jaunas ziņas</string>
     <string name="notification_unknown_new_event">Jauns notikums</string>
     <string name="notification_unread_notified_messages_and_invitation">%1$s un %2$s</string>
-    <string name="notification_unread_notified_messages_in_room_and_invitation">%1$s iekš %2$s un %3$s</string>
+    <string name="notification_unread_notified_messages_in_room_and_invitation">%1$s %2$s un %3$s</string>
     <string name="encryption_exported_successfully">Atslēgas ir sekmīgi izgūtas</string>
     <string name="encryption_export_notice">Lūgums izveidot paroles vārdkopu izsgūstamo atslēgu šifrēšanai. Būs jaievada tā pati paroles vārdkopa, lai varētu ievietot atslēgas.</string>
     <string name="room_settings_room_version_title">Istabas versija</string>
@@ -1016,7 +1016,7 @@
     <string name="verification_request_other_cancelled">%s atcēla</string>
     <string name="verification_request_waiting">Gaida…</string>
     <string name="sent_a_reaction">Atsaucās ar %s</string>
-    <string name="create_room_disable_federation_title">Bloķēt pievienošanos šai istabai ikvienam, kas nav daļa no %s</string>
+    <string name="create_room_disable_federation_title">Liegt pievienošanos šai istabai ikvienam, kas nav no %s</string>
     <string name="create_room_encryption_title">Iespējot šifrēšanu</string>
     <string name="notification_initial_sync">Sākotnējā sinhronizēšana…</string>
     <string name="soft_logout_title">Tu esi atteicies</string>
@@ -1250,7 +1250,7 @@
     <string name="keys_backup_settings_deleting_backup">Izdzēš dublējumu…</string>
     <string name="keys_backup_settings_delete_backup_button">Izdzēst rezerves kopiju</string>
     <string name="keys_backup_restore_success_title">Atjaunots no rezerves kopijas %s.</string>
-    <string name="keys_backup_unlock_button">Atbloķēt Vēsturi</string>
+    <string name="keys_backup_unlock_button">Atslēgt vēsturi</string>
     <string name="keys_backup_restoring_importing_keys_waiting_message">Ievieto atslēgas…</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">Lejupielādē atslēgas…</string>
     <string name="keys_backup_restore_with_recovery_key">Izmanto savu atkopes atslēgu, lai atslēgtu savu šifrēto ziņu vēsturi</string>
@@ -1290,7 +1290,7 @@
     <string name="e2e_re_request_encryption_key_dialog_content">Lūgums palaist ${app_name} citā ierīcē, kas var atšifrēt ziņu, lai tā varētu nosūtīt šīs sesijas atslēgas.</string>
     <string name="error_unauthorized">Neautorizēts, trūkstošas autentifikācijas apliecības</string>
     <string name="error_no_external_application_found">Atvainojamies, netika atrasta neviena ārēja lietotne, lai pabeigtu šo darbību.</string>
-    <string name="call_failed_no_connection">${app_name} Zvans Neizdevās</string>
+    <string name="call_failed_no_connection">${app_name} zvans neizdevās</string>
     <string name="send_bug_report_include_key_share_history">Nosūtīt atslēgu kopīgošanas pieprasījumu vēsturi</string>
     <string name="settings_room_directory_show_all_rooms_summary">Rādīt visas istabas istabu rādītājā, tostarp istabas ar vecumam ierobežotu saturu.</string>
     <string name="settings_room_directory_show_all_rooms">Rādīt istabas ar vecuma ierobežojumu</string>
@@ -1314,7 +1314,7 @@
     <string name="notice_direct_room_update">%s atjaunināti šeit.</string>
     <string name="system_alerts_header">Sistēmas brīdinājumi</string>
     <string name="action_unpublish">Nepublicēt</string>
-    <string name="call_notification_hangup">Nolikt</string>
+    <string name="call_notification_hangup">Pārtraukt</string>
     <string name="failed_to_remove_widget">Neizdevās noņemt logrīku</string>
     <string name="failed_to_add_widget">Neizdevās ielādēt logrīku</string>
     <string name="event_status_sent_message">Ziņa aizsūtīta</string>
@@ -1371,7 +1371,7 @@
     <string name="room_no_active_widgets">Nav aktīvu logrīku</string>
     <string name="room_widget_webview_access_microphone">Izmantot mikrofonu</string>
     <string name="room_widget_webview_access_camera">Izmantot kameru</string>
-    <string name="room_widget_resource_decline_permission">Bloķēt Visu</string>
+    <string name="room_widget_resource_decline_permission">Liegt visu</string>
     <string name="room_widget_resource_grant_permission">Atļaut</string>
     <string name="room_widget_resource_permission_title">Šis logrīks vēlas izmantos tālāk norādītos resursus:</string>
     <string name="jitsi_leave_conf_to_join_another_one_content">Pamest pašreizējo apspriedi un pārslēgties uz otru\?</string>
@@ -1453,8 +1453,8 @@
     <string name="settings_troubleshoot_diagnostic_success_status">Pamata pārbaude bija sekmīga. Ja joprojām netiek saņemti paziņojumi, lūgums iesniegt kļūdu ziņojumu, lai palīdzētu mums izpētīt cēloni.</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Palaist Testus</string>
     <string name="settings_troubleshoot_diagnostic">Nepilnību novēršanas diagnostika</string>
-    <string name="settings_notification_troubleshoot">Paziņojumu pārbaude</string>
-    <string name="settings_notification_by_event">Paziņojumu svarīgums</string>
+    <string name="settings_notification_troubleshoot">Paziņojumu traucējummeklēšana</string>
+    <string name="settings_notification_by_event">Paziņojumu svarīgums pēc notikuma</string>
     <string name="settings_notification_advanced">Paziņojumu papildu iestatījumi</string>
     <string name="call_held_by_you">Tu aizturēji zvanu</string>
     <string name="call_held_by_user">%s apturēja zvanu</string>
@@ -1494,7 +1494,7 @@
     <string name="notice_room_update_by_you">Tu atjaunināji šo istabu.</string>
     <string name="notice_room_update">%s atjaunināja šo istabu.</string>
     <string name="recovery_passphrase">Atkopes paroles vārdkopa</string>
-    <string name="e2e_use_keybackup">Atbloķēt šifrēto ziņu vēsturi</string>
+    <string name="e2e_use_keybackup">Atslēgt šifrēto ziņu vēsturi</string>
     <string name="login_default_session_public_name">${app_name} Android</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">Atslēgas jau ir atjauninātas!</string>
     <string name="event_redacted_by_admin_reason_with_reason">Pasākumu moderē telpas administrators, iemesls: %1$s</string>
@@ -1608,9 +1608,9 @@
         <item quantity="other">%d paziņojumi</item>
     </plurals>
     <plurals name="notification_compat_summary_line_for_room">
-        <item quantity="zero">%1$s: %2$d ziņojumu</item>
-        <item quantity="one">%1$s: %2$d ziņojums</item>
-        <item quantity="other">%1$s: %2$d ziņojumi</item>
+        <item quantity="zero">%1$s: %2$d ziņu</item>
+        <item quantity="one">%1$s: %2$d ziņa</item>
+        <item quantity="other">%1$s: %2$d ziņas</item>
     </plurals>
     <plurals name="notification_invitations">
         <item quantity="zero">%d uzaicinājumu</item>
@@ -1714,23 +1714,23 @@
     <string name="call_transfer_users_tab_title">Lietotāji</string>
     <string name="call_transfer_connect_action">Savienoties</string>
     <string name="call_tap_to_return">%1$s Pieskarieties, lai atgrieztos</string>
-    <string name="call_one_active">Aktīvs zvans (%1$s) ·</string>
-    <string name="call_only_active">Aktīvs zvans (%1$s)</string>
+    <string name="call_one_active">Notiekošs zvans (%1$s) ·</string>
+    <string name="call_only_active">Notiekošs zvans (%1$s)</string>
     <string name="call_dial_pad_lookup_error">Tika pieļauta kļūda, meklējot tālruņa numuru</string>
     <string name="call_dial_pad_title">Zvanu taustiņi</string>
     <string name="call_tile_no_answer">Nav atbildes</string>
-    <string name="call_tile_video_missed">Neatbildēts video zvans</string>
-    <string name="call_tile_voice_missed">Neatbildēts zvans</string>
-    <string name="call_tile_video_declined">Video zvans atteikts</string>
-    <string name="call_tile_voice_declined">Zvans atteikts</string>
-    <string name="call_tile_video_call_has_ended">Video zvans beidzās • %1$s</string>
+    <string name="call_tile_video_missed">Neatbildēts videozvans</string>
+    <string name="call_tile_voice_missed">Neatbildēts balss zvans</string>
+    <string name="call_tile_video_declined">Videozvans atteikts</string>
+    <string name="call_tile_voice_declined">Balss zvans atteikts</string>
+    <string name="call_tile_video_call_has_ended">Videozvans beidzās • %1$s</string>
     <string name="call_tile_voice_call_has_ended">Balss zvans beidzās • %1$s</string>
-    <string name="call_tile_video_active">Aktīvs video zvans</string>
-    <string name="call_tile_voice_active">Aktīvs zvans</string>
-    <string name="call_tile_video_incoming">Ienākošs video zvans</string>
-    <string name="call_tile_voice_incoming">Ienākošs zvans</string>
+    <string name="call_tile_video_active">Notiekošs videozvans</string>
+    <string name="call_tile_voice_active">Notiekošs balss zvans</string>
+    <string name="call_tile_video_incoming">Ienākošs videozvans</string>
+    <string name="call_tile_voice_incoming">Ienākošs balss zvans</string>
     <string name="call_tile_call_back">Piezvanīt atpakaļ</string>
-    <string name="call_tile_ended">Zvans beidzās</string>
+    <string name="call_tile_ended">Šis zvans beidzās</string>
     <string name="call_tile_other_declined">%1$s atteica zvanu</string>
     <string name="call_tile_you_declined_this_call">Tu atteici šo zvanu</string>
     <string name="warning_room_not_created_yet">Telpa vēl nav izveidota. Atcelt telpas izveidi\?</string>
@@ -1972,12 +1972,12 @@
     <string name="settings_notification_new_keyword">Pievienot jaunu atslēgvārdu</string>
     <string name="settings_notification_your_keywords">Tavi atslēgvārdi</string>
     <string name="settings_notification_notify_me_for">Paziņot man par</string>
-    <string name="settings_notification_other">Cits</string>
+    <string name="settings_notification_other">Citi</string>
     <string name="settings_notification_mentions_and_keywords">Pieminēšanas un atslēgvārdi</string>
     <string name="settings_notification_default">Noklusējuma paziņojumi</string>
     <string name="settings_notification_emails_enable_for_email">Iespējot e-pasta paziņojumus %s</string>
     <string name="settings_notification_emails_no_emails">Lai saņemtu e-pasta ziņojumu ar paziņojumu, lūgums piesaistīt e-pasta adresi Matrix kontam</string>
-    <string name="settings_notification_emails_category">E-pasta paziņojumi</string>
+    <string name="settings_notification_emails_category">E-pasta paziņojums</string>
     <string name="room_settings_none">Nekas</string>
     <string name="room_settings_mention_and_keyword_only">Tikai pieminēšanas un atslēgvārdi</string>
     <string name="room_permissions_upgrade_the_space">Atjaunināt Telpu</string>
@@ -1999,11 +1999,11 @@
     <string name="call_ended_user_busy_description">Lietotājs, kuram zvanījāt, ir aizņemts.</string>
     <string name="call_ended_user_busy_title">Lietotājs aizņemts</string>
     <string name="audio_call_with_participant">Zvans ar %s</string>
-    <string name="video_call_with_participant">Video zvans ar %s</string>
+    <string name="video_call_with_participant">Videozvans ar %s</string>
     <plurals name="missed_video_call">
-        <item quantity="zero">%d neatbildētu video zvanu</item>
-        <item quantity="one">%d neatbildēts video zvans</item>
-        <item quantity="other">%d neatbildēti zvans</item>
+        <item quantity="zero">%d neatbildētu videozvanu</item>
+        <item quantity="one">%d neatbildēts videozvans</item>
+        <item quantity="other">%d neatbildēti videozvani</item>
     </plurals>
     <plurals name="missed_audio_call">
         <item quantity="zero">%d neatbildētu zvanu</item>
