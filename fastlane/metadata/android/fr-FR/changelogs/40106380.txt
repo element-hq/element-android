@@ -1,0 +1,2 @@
+Principaux changements pour cette version : Filtrage des liens mobiles : ouverture des liens seulement s'ils ont explicitement un chemin vide.
+Intégralité des changements : https://github.com/element-hq/element-android/releases

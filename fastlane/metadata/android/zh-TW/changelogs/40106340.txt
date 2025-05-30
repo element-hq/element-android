@@ -1,0 +1,2 @@
+此版本的主要變更：改善安全性。
+完整的變更紀錄：https://github.com/element-hq/element-android/releases

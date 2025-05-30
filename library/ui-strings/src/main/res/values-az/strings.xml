@@ -4,10 +4,10 @@
     <string name="notice_room_invite">%1$s dəvət etdi %2$s</string>
     <string name="notice_room_invite_you">%1$s sizi dəvət etdi</string>
     <string name="notice_room_join">%1$s qoşuldu</string>
-    <string name="notice_room_leave">%1$s qalıb</string>
-    <string name="notice_room_reject">%1$s dəvəti rədd etdi</string>
-    <string name="notice_room_remove">%1$s %2$s-i xaric etdi</string>
-    <string name="notice_room_unban">%1$s %2$s-i blokdan açdı</string>
+    <string name="notice_room_leave">%1$s otağı tərk etdi</string>
+    <string name="notice_room_reject">%1$s dəvəti qəbul etmədi</string>
+    <string name="notice_room_remove">%1$s %2$s-i çıxartdı</string>
+    <string name="notice_room_unban">%1$s %2$s-i blokdan çıxartdı</string>
     <string name="notice_room_ban">%1$s %2$s-i blokladı</string>
     <string name="notice_room_withdraw">%1$s %2$s-in dəvətini geri götürdü</string>
     <string name="notice_avatar_url_changed">%1$s avatarı dəyişdi</string>
@@ -78,7 +78,7 @@
     <string name="notice_direct_room_created_by_you">Müzakirə yaratdınız</string>
     <string name="notice_room_created">%1$s otağı yaratdı</string>
     <string name="notification_noisy_notifications">Səsli bildirişlər</string>
-    <string name="notification_listening_for_notifications">Bildirişləri dinləmək</string>
+    <string name="notification_listening_for_notifications">Bildirişləri dinləmə</string>
     <string name="create_spaces_default_public_room_name">Ümumi</string>
     <string name="settings_general_title">Ümumi</string>
     <string name="room_participants_action_ignore_prompt_msg">Bu istifadəçiyə məhəl qoymamaq onun mesajlarını paylaşdığınız otaqlardan siləcək.
@@ -117,11 +117,11 @@
     <string name="notice_avatar_url_changed_by_you">Avatarınızı dəyişdirmisiniz</string>
     <string name="notice_room_withdraw_by_you">%1$s dəvətini geri götürdünüz</string>
     <string name="notice_room_ban_by_you">%1$s adlı istifadəçini qadağan etdiniz</string>
-    <string name="notice_room_unban_by_you">%1$s adlı istifadəçini qadağan etdiniz</string>
+    <string name="notice_room_unban_by_you">%1$s adlı istifadəçini əngəllədiz</string>
     <string name="notice_room_remove_by_you">%1$s adlı istifadəçini qovdunuz</string>
-    <string name="notice_room_reject_by_you">Dəvəti rədd etdiniz</string>
+    <string name="notice_room_reject_by_you">Dəvəti ləğv etdiniz</string>
     <string name="notice_direct_room_leave_by_you">Otağı tərk etdiniz</string>
-    <string name="notice_direct_room_leave">%1$s otaqdan çıxdı</string>
+    <string name="notice_direct_room_leave">%1$s otağı tərk etdi</string>
     <string name="notice_room_leave_by_you">Otağı tərk etdiniz</string>
     <string name="notice_direct_room_join_by_you">Qoşuldunuz</string>
     <string name="notice_direct_room_created">%1$s müzakirə yaratdı</string>
@@ -234,7 +234,7 @@
     <string name="power_level_custom">Fərdi (%1$d)</string>
     <string name="power_level_default">Defolt</string>
     <string name="power_level_moderator">Münsif</string>
-    <string name="power_level_admin">Müdir</string>
+    <string name="power_level_admin">Rəhbər</string>
     <string name="notice_widget_modified_by_you">%1$s vidcetini dəyişdirdiniz</string>
     <string name="notice_widget_modified">%1$s, %2$s vidcetini dəyişdirdi</string>
     <string name="notice_widget_removed_by_you">%1$s vidcetini sildiniz</string>
@@ -290,5 +290,18 @@
     <plurals name="notice_room_canonical_alias_alternative_removed">
         <item quantity="one">%1$s bu otaq üçün %2$s alternativ ünvanın sildi.</item>
         <item quantity="other">%1$s bu otaq üçün %2$s alternativ ünvanın sildi.</item>
+    </plurals>
+    <string name="notice_room_guest_access_can_join">%1$s qonaqlara otağa qoşulmağa icazə verdi.</string>
+    <string name="notice_room_guest_access_can_join_by_you">Qonaqların otağa qoşulmasına icazə verdiniz.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">Bu otaq üçün əsas və seçmə ünvanları dəyişdirdiniz.</string>
+    <string name="notice_room_canonical_alias_no_change">%1$s bu otaq üçün ünvanları dəyişdi.</string>
+    <string name="notice_direct_room_guest_access_can_join_by_you">Qonaqların buraya qoşulmasına icazə verdiniz.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed">%1$s bu otaq üçün əsas və seçmə ünvanları dəyişdirildi.</string>
+    <string name="notice_direct_room_guest_access_can_join">%1$s qonaqlara bura qoşulmağa icazə verdi.</string>
+    <string name="notice_room_canonical_alias_no_change_by_you">Bu otağın ünvanlarını dəyişdirmisiniz.</string>
+    <string name="notice_room_guest_access_forbidden">%1$s qonaqların otağa qoşulmasına mane oldu.</string>
+    <plurals name="notice_room_canonical_alias_alternative_removed_by_you">
+        <item quantity="one">Bu otaq üçün seçmə %1$s ünvanını sildiniz.</item>
+        <item quantity="other">Bu otaq üçün seçmə %1$s ünvanların sildiniz.</item>
     </plurals>
 </resources>
