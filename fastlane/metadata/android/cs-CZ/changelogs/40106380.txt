@@ -1,0 +1,2 @@
+Hlavní změny v této verzi: Filtrace mobilních odkazů: otevírat pouze odkazy, které mají explicitně prázdnou cestu.
+Úplný seznam změn: https://github.com/element-hq/element-android/releases
