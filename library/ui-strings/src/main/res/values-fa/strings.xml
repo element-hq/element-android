@@ -493,7 +493,7 @@
     <string name="settings_active_sessions_show_all">نمایش همه نشست‌ها</string>
     <string name="settings_active_sessions_manage">مدیریت نشست‌ها</string>
     <plurals name="settings_active_sessions_count">
-        <item quantity="one">۱ نشست فعّال</item>
+        <item quantity="one">%d نشست فعّال</item>
         <item quantity="other">%d نشست فعّال</item>
     </plurals>
     <string name="room_member_profile_failed_to_get_devices">شکست در گرفتن نشست‌ها</string>
@@ -1238,8 +1238,8 @@
     <string name="search_no_results">نتیجه‌ای در پی نداشت</string>
     <string name="search_banned_user_hint">فیلترکردن کاربران مسدود شده</string>
     <plurals name="room_details_selected">
-        <item quantity="one">۱ مورد</item>
-        <item quantity="other">%d مورد</item>
+        <item quantity="one">%d گزیده</item>
+        <item quantity="other">%d گزیده</item>
     </plurals>
     <string name="ssl_only_accept">تنها اگر مدیر کارساز، اثرانگشتی منتشر کرده که با بالایی مطابق است، بپذیرید.</string>
     <string name="ssl_expected_existing_expl">گواهی از آنی که مورد اطمینان بوده، تغییر کرده. ممکن است کارساز، گواهیش را نوسازی کرده باشد. برای دریافت اثر انگشت مورد انتظار، با مدیر کارساز تماس بگیرید.</string>
@@ -1682,7 +1682,7 @@
     <string name="identity_server_error_outdated_home_server">این عملیات ممکن نیست. کارساز خانگی منقضی شده است.</string>
     <string name="invite_users_to_room_failure">نتوانستیم کاربران را دعوت کنیم. لطفاً کاربرانی که می‌خواهید دعوت کنید را بررسی کرده و دوباره تلاش کنید.</string>
     <string name="create_room_dm_failure">نتوانستیم پیامتان را ایجاد کنیم. لطفاً کاربرانی که می‌خواهید دعوت کنید را بررسی کرده و دوباره تلاش کنید.</string>
-    <string name="create_room_disable_federation_title">انسداد هرکسی خارج از %s از پیوستن به این اتاق</string>
+    <string name="create_room_disable_federation_title">انسداد پیوستن هرکسی خارج از %s به این اتاق</string>
     <string name="warning_unsaved_change_discard">دور ریختن تغییرات</string>
     <string name="warning_unsaved_change">تغییرات ذخیره‌نشده‌ای وجود دارد. دور ریختن تغییرات؟</string>
     <string name="warning_room_not_created_yet">اتاق هنوز ایجاد نشده است. لغو ایجاد اتاق؟</string>
@@ -1742,8 +1742,8 @@
     <string name="confirm_your_identity_quad_s">هویت خود را تأیید کنید تا به پیام‌های رمز شده دسترسی پیدا کنید.</string>
     <string name="confirm_your_identity">هویت خود را با تأیید این ورود به سیستم از یکی دیگر از نشست‌های خود، تأیید کنید تا به پیام‌های رمز شده دسترسی پیدا کنید.</string>
     <plurals name="secure_backup_reset_devices_you_can_verify">
-        <item quantity="one">دستگاهی را که می‌توانید با استفاده از آن‌ها خود را تایید کنید نشان بده</item>
-        <item quantity="other">%d دستگاهی را که می‌توانید با استفاده از آن‌ها خود را تایید کنید نشان بده</item>
+        <item quantity="one">نمایش افزاره‌ای که می‌توانید با آن تأیید کنید</item>
+        <item quantity="other">نمایش %d افزاره‌ای که می‌توانید با آن‌ها تأیید کنید</item>
     </plurals>
     <string name="settings_discovery_consent_notice_on">رضاییتان را برای فرستادن نشانی‌های رایانامه و شماره‌های تلفن به این کارساز هویت به منظور کشف دیگر کاربران از آشنایانتان، داده‌اید.</string>
     <string name="room_preview_not_found">در حال حاضر این اتاق قابل دسترسی نیست.
@@ -2279,7 +2279,7 @@
         <item quantity="other">نتیجهٔ نهایی بر مبنای %1$d رأی</item>
     </plurals>
     <plurals name="poll_total_vote_count_before_ended_and_not_voted">
-        <item quantity="one">۱ رأی داده شده. برای دیدن نتیجه، رأی دهید</item>
+        <item quantity="one">%1$d رأی داده شده. برای دیدن نتیجه، رأی دهید</item>
         <item quantity="other">%1$d رأی داده شده. برای دیدن نتیجه، رأی دهید</item>
     </plurals>
     <plurals name="poll_total_vote_count_before_ended_and_voted">
@@ -2496,8 +2496,8 @@
     <string name="settings_troubleshoot_test_current_distributor">در حال استفاده از %s.</string>
     <string name="settings_troubleshoot_test_current_distributor_title">روش</string>
     <plurals name="settings_troubleshoot_test_distributors_many">
-        <item quantity="one">۱ روش پیدا شد.</item>
-        <item quantity="other">%d روش پیدا شد.</item>
+        <item quantity="one">%d روش پیدا شد.</item>
+        <item quantity="other">%d روش پیدا شدند.</item>
     </plurals>
     <string name="settings_troubleshoot_test_distributors_fdroid">روشی جز همگام سازی پس‌زمینه پیدا نشد.</string>
     <string name="settings_troubleshoot_test_distributors_gplay">روشی جز خدمت پلی گوگل پیدا نشد.</string>
@@ -2526,8 +2526,8 @@
     <string name="settings_troubleshoot_test_endpoint_registration_success">نقطهٔ پایانی با موفّقیت روی کارساز خانگی ثبت شد.</string>
     <string name="settings_troubleshoot_test_endpoint_registration_title">ثبت نقطهٔ پایانی</string>
     <plurals name="room_removed_messages">
-        <item quantity="one">۱ پیام برداشته شد</item>
-        <item quantity="other">%d پیام برداشته شد</item>
+        <item quantity="one">%d پیام برداشته شد</item>
+        <item quantity="other">%d پیام برداشته شدند</item>
     </plurals>
     <string name="live_location_share_location_item_share">هم‌رسانی مکان</string>
     <string name="live_location_not_enough_permission_dialog_description">برای هم‌رسانی مکان زنده در این اتاق باید اجازه‌های درست را داشته باشید.</string>
@@ -2588,7 +2588,7 @@
     <string name="ftue_auth_sign_in_choose_server_header">زیستگاه گفت‌وگوهایتان</string>
     <string name="updating_your_data">به‌روز رساندن داده‌هایتان…</string>
     <plurals name="search_space_multiple_parents">
-        <item quantity="one">%1$s و ۱ والد دیگر</item>
+        <item quantity="one">%1$s و %2$d والد دیگر</item>
         <item quantity="other">%1$s و %2$d والد دیگر</item>
     </plurals>
     <string name="search_space_two_parents">%1$s و %2$s</string>
@@ -2638,7 +2638,7 @@
     <string name="home_empty_space_no_rooms_title">%s
 \nکمی خالی به نظر می‌رسد.</string>
     <plurals name="device_manager_inactive_sessions_description">
-        <item quantity="one">در نظر گرفتن خروج از نشست‌های قدیمی (۱ روز یا بیش‌تر) که دیگر استفاده نمی‌کنید.</item>
+        <item quantity="one">در نظر گرفتن خروج از نشست‌های قدیمی (%1$d روز یا بیش‌تر) که دیگر استفاده نمی‌کنید.</item>
         <item quantity="other">در نظر گرفتن خروج از نشست‌های قدیمی (%1$d روز یا بیش‌تر) که دیگر استفاده نمی‌کنید.</item>
     </plurals>
     <string name="device_manager_unverified_sessions_description">تأیید یا خروج از نشست‌های تأییدنشده.</string>
@@ -2698,7 +2698,7 @@
     <string name="labs_enable_new_app_layout_title">به کار انداختن چینش جدید</string>
     <string name="device_manager_other_sessions_recommendation_description_unverified">تأیید نشست‌هایتان برای پیام‌رسانی امن بهبود یافته یا خروج از آن‌هایی که تشخیصشان نداده یا دیگر استفاده نمی‌کنید.</string>
     <plurals name="device_manager_filter_option_inactive_description">
-        <item quantity="one">غیرفعّال برای ۱ روز یا بیش‌تر</item>
+        <item quantity="one">غیرفعّال برای %1$d روز یا بیش‌تر</item>
         <item quantity="other">غیرفعّال برای %1$d روز یا بیش‌تر</item>
     </plurals>
     <string name="device_manager_other_sessions_description_unverified_current_session">تأیید نشده · نشست کنونیتان</string>
@@ -2796,7 +2796,7 @@
     <string name="action_deselect_all">ناگزینش همه</string>
     <string name="action_select_all">گزینش همه</string>
     <plurals name="x_selected">
-        <item quantity="one">۱ گزیده</item>
+        <item quantity="one">%1$d گزیده</item>
         <item quantity="other">%1$d گزیده</item>
     </plurals>
     <string name="error_voice_broadcast_permission_denied_message">اجازه‌های لازم برای آغاز پخش صوتی در این اتاق را ندارید. برای ارتقای اجازه‌هایتان با یک مدیر اتاق تماس بگیرید.</string>
@@ -2808,7 +2808,7 @@
     <string name="labs_enable_client_info_recording_summary">ضبط نام کارخواه، نگارش و نشانی برای بازشناسی آسان‌تر نشست‌ها در مدیر نشست.</string>
     <string name="room_settings_global_block_unverified_info_text">🔒 رمزگذاری به نشست‌های تأیید شده را فقط برای تمامی اتاق‌ها در تنظیمات امنیت به کار انداخته‌اید.</string>
     <plurals name="device_manager_other_sessions_recommendation_description_inactive">
-        <item quantity="one">خارج شدن از نشست‌های قدیمی (۱ روز یا بیش‌تر) که دیگر استفاده نمی‌کنید را در نظر داشته باشید.</item>
+        <item quantity="one">خارج شدن از نشست‌های قدیمی (%1$d روز یا بیش‌تر) که دیگر استفاده نمی‌کنید را در نظر داشته باشید.</item>
         <item quantity="other">خارج شدن از نشست‌های قدیمی (%1$d روز یا بیش‌تر) که دیگر استفاده نمی‌کنید را در نظر داشته باشید.</item>
     </plurals>
     <string name="labs_enable_voice_broadcast_summary">توانایی ضبط و فرستادن پخش صدا در خط زمانی اتاق.</string>
@@ -2824,7 +2824,7 @@
     <string name="attachment_type_selector_text_formatting">قالب‌بندی متن</string>
     <string name="device_manager_other_sessions_multi_signout_selection">خروج</string>
     <plurals name="device_manager_other_sessions_multi_signout_all">
-        <item quantity="one">خروج از ۱ نشست</item>
+        <item quantity="one">خروج از %1$d نشست</item>
         <item quantity="other">خروج از %1$d نشست</item>
     </plurals>
     <string name="voice_broadcast_recording_time_left">%1$s مانده</string>
