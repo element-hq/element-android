@@ -1,0 +1,2 @@
+Bu sürümdeki ana değişiklikler: Oda, alan, kullanıcı ve mesajlara ait kalıcı bağlantılar artık zaman akışında birer etiket olarak görüntüleniyor. Ayrıca özel çıkartmalar ve geçmişte takılı kalan okuma işareti ile ilgili bazı sorunlar giderildi.
+Tam değişiklik günlüğü: https://github.com/element-hq/element-android/releases
