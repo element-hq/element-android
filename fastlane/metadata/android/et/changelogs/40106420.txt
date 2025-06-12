@@ -1,0 +1,2 @@
+Põhilised muutused selles versioonis: veaparandused ja kohendused
+Kogu ingliskeelne muudatuste logi: https://github.com/element-hq/element-android/releases
