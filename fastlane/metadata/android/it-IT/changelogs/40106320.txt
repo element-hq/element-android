@@ -1,0 +1,2 @@
+Cambiamenti principali in questa versione: Aggiungere azione alla stanza report.
+Changelog completo: https://github.com/element-hq/element-android/releases

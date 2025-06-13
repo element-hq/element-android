@@ -1,0 +1,2 @@
+此版本中的主要變動：過濾行動連結：僅開啟有明確空路徑的連結。
+完整的變更紀錄：https://github.com/element-hq/element-android/releases
