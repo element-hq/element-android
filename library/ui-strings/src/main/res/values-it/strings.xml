@@ -2963,4 +2963,13 @@
 \n
 \nSe non vuoi più vedere contenuti da questo utente, puoi ignorarlo per nascondere i suoi messaggi.</string>
     <string name="message_report_user">Segnala utente</string>
+    <string name="error_mas_not_supported_title">Non puoi più creare un account con %1$s usando questa app</string>
+    <string name="microphone_in_use_title">Microfono in utilizzo</string>
+    <string name="call_unsupported">Chiamata non supportata</string>
+    <string name="call_unsupported_matrix_rtc_call">Chiamata non supportata. La nuova app Element X è necessaria per entrare in questa chiamata.</string>
+    <string name="view_download_replacement_app_subtitle">Più veloce, più sicuro, e attrezzato con potenti strumenti di collaborazione.</string>
+    <string name="room_profile_section_more_report">Stanza delle segnalazioni</string>
+    <string name="room_profile_section_more_report_success_content">La stanza è stata segnalata con successo.</string>
+    <string name="error_mas_not_supported_subtitle">Scarica %1$s per utilizzare %2$s per il tuo account o scegli un homeserver diverso.</string>
+    <string name="view_download_replacement_app_title">Scarica %1$s</string>
 </resources>

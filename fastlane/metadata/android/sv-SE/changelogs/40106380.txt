@@ -1,0 +1,2 @@
+Huvudsakliga ändringar i den här versionen: Filtrera mobila länkar: öppna bara länkar som har en explicit tom sökväg.
+Full ändringslogg: https://github.com/element-hq/element-android/releases

@@ -1,0 +1,2 @@
+تغییرات عمده در این نگارش: بالا بردن کتابخانهٔ SDK.
+گزارش دگرگونی کامل: https://github.com/element-hq/element-android/releases

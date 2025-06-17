@@ -3080,4 +3080,6 @@
     <string name="microphone_in_use_title">Используется микрофон</string>
     <string name="call_unsupported">Неподдерживаемый вызов</string>
     <string name="call_unsupported_matrix_rtc_call">Вызов не поддерживается. Для подключения к этому вызову необходимо новое приложение Element X.</string>
+    <string name="room_profile_section_more_report">Пожаловаться на комнату</string>
+    <string name="room_profile_section_more_report_success_content">Жалоба на комнату отправлена.</string>
 </resources>

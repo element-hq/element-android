@@ -1,0 +1,2 @@
+此版本的主要變更：無重大變更。
+完整的變更紀錄：https://github.com/element-hq/element-android/releases

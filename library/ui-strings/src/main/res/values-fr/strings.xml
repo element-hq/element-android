@@ -2979,4 +2979,6 @@
     <string name="error_mas_not_supported_subtitle">Téléchargez %1$s pour utiliser %2$s avec votre compte, ou choisissez un autre serveur d’accueil.</string>
     <string name="view_download_replacement_app_title">Télécharger %1$s</string>
     <string name="view_download_replacement_app_subtitle">Plus rapide, plus sécurisé et fourni avec des outils de collaboration efficaces.</string>
+    <string name="room_profile_section_more_report">Signaler le salon</string>
+    <string name="room_profile_section_more_report_success_content">Ce salon a été signalé.</string>
 </resources>

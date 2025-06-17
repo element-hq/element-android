@@ -1,0 +1,2 @@
+التغييرات الرئيسية في هذا الإصدار: إصلاحات عاجلة للإصدار 1.1.5
+سجل التغييرات الكامل: https://github.com/element-hq/element-android/releases/tag/v1.1.6
