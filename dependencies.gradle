@@ -7,7 +7,7 @@ ext.versions = [
         'jvmTarget'         : "21",
 ]
 
-def gradle = "8.4.2"
+def gradle = "8.11.0"
 // Ref: https://kotlinlang.org/releases.html
 def kotlin = "1.9.24"
 def kotlinCoroutines = "1.8.1"
