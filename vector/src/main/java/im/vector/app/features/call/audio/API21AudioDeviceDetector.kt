@@ -43,6 +43,11 @@ internal class API21AudioDeviceDetector(
         return HashSet<CallAudioManager.Device>().apply {
             if (isBluetoothHeadsetOn()) {
                 connectedBlueToothHeadset?.connectedDevices?.forEach {
+                    // Call requires permission which may be rejected by user: code should explicitly
+                    // check to see if permission is available (with checkPermission) or explicitly
+                    // handle a potential SecurityException
+                    // But it should not happen on API 21/22.
+                    @Suppress("MissingPermission")
                     add(CallAudioManager.Device.WirelessHeadset(it.name))
                 }
             }
