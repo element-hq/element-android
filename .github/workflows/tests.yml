@@ -15,7 +15,7 @@ env:
 jobs:
   tests:
     name: Runs all tests
-    runs-on: buildjet-4vcpu-ubuntu-2204
+    runs-on: ubuntu-22.04
     timeout-minutes: 90 # We might need to increase it if the time for tests grows
     strategy:
       matrix:
