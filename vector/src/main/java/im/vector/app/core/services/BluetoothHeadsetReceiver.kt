@@ -20,7 +20,7 @@ import java.lang.ref.WeakReference
 
 /**
  * It's only used in API 21 and 22 so we will not have security exception on these OS,
- * so it's safe to use @Suppress("MissingPermission")
+ * so it's safe to use @Suppress("MissingPermission").
  */
 class BluetoothHeadsetReceiver : BroadcastReceiver() {
 
