@@ -7,9 +7,12 @@
 
 package im.vector.app.features.location.live.tracking
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.IBinder
 import android.os.Parcelable
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.di.ActiveSessionHolder
@@ -95,7 +98,11 @@ class LocationSharingAndroidService : VectorAndroidService(), LocationTracker.Ca
             // Show a sticky notification
             val notification = liveLocationNotificationBuilder.buildLiveLocationSharingNotification(roomArgs.roomId)
             if (foregroundModeStarted) {
-                NotificationManagerCompat.from(this).notify(FOREGROUND_SERVICE_NOTIFICATION_ID, notification)
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                    Timber.w("Not allowed to notify.")
+                } else {
+                    NotificationManagerCompat.from(this).notify(FOREGROUND_SERVICE_NOTIFICATION_ID, notification)
+                }
             } else {
                 startForegroundCompat(FOREGROUND_SERVICE_NOTIFICATION_ID, notification)
                 foregroundModeStarted = true
@@ -146,10 +153,14 @@ class LocationSharingAndroidService : VectorAndroidService(), LocationTracker.Ca
     }
 
     private fun updateNotification() {
-        if (liveInfoSet.isNotEmpty()) {
-            val roomId = liveInfoSet.last().roomArgs.roomId
-            val notification = liveLocationNotificationBuilder.buildLiveLocationSharingNotification(roomId)
-            NotificationManagerCompat.from(this).notify(FOREGROUND_SERVICE_NOTIFICATION_ID, notification)
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            Timber.w("Not allowed to notify.")
+        } else {
+            if (liveInfoSet.isNotEmpty()) {
+                val roomId = liveInfoSet.last().roomArgs.roomId
+                val notification = liveLocationNotificationBuilder.buildLiveLocationSharingNotification(roomId)
+                NotificationManagerCompat.from(this).notify(FOREGROUND_SERVICE_NOTIFICATION_ID, notification)
+            }
         }
     }
 
