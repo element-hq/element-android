@@ -7,6 +7,7 @@
 
 package im.vector.app.features.location.live.map
 
+import android.Manifest
 import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -14,6 +15,7 @@ import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.core.utils.PermissionChecker
 import im.vector.app.features.location.LocationData
 import im.vector.app.features.location.LocationTracker
 import im.vector.app.features.location.live.StopLiveLocationShareUseCase
@@ -23,6 +25,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.location.UpdateLiveLocationShareResult
+import timber.log.Timber
 
 class LiveLocationMapViewModel @AssistedInject constructor(
         @Assisted private val initialState: LiveLocationMapViewState,
@@ -31,6 +34,7 @@ class LiveLocationMapViewModel @AssistedInject constructor(
         private val locationSharingServiceConnection: LocationSharingServiceConnection,
         private val stopLiveLocationShareUseCase: StopLiveLocationShareUseCase,
         private val locationTracker: LocationTracker,
+        private val permissionChecker: PermissionChecker,
 ) :
         VectorViewModel<LiveLocationMapViewState, LiveLocationMapAction, LiveLocationMapViewEvents>(initialState),
         LocationSharingServiceConnection.Callback,
@@ -123,7 +127,15 @@ class LiveLocationMapViewModel @AssistedInject constructor(
                 copy(isLoadingUserLocation = true)
             }
             viewModelScope.launch(session.coroutineDispatchers.main) {
-                locationTracker.start()
+                if (permissionChecker.checkPermission(
+                                Manifest.permission.ACCESS_COARSE_LOCATION,
+                                Manifest.permission.ACCESS_FINE_LOCATION,
+                        )
+                ) {
+                    locationTracker.start()
+                } else {
+                    Timber.w("Not allowed to use location api.")
+                }
                 locationTracker.requestLastKnownLocation()
             }
         }

@@ -18,6 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.startForegroundCompat
 import im.vector.app.core.services.VectorAndroidService
+import im.vector.app.core.utils.PermissionChecker
 import im.vector.app.features.location.LocationData
 import im.vector.app.features.location.LocationTracker
 import im.vector.app.features.location.live.GetLiveLocationShareSummaryUseCase
@@ -55,6 +56,7 @@ class LocationSharingAndroidService : VectorAndroidService(), LocationTracker.Ca
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var getLiveLocationShareSummaryUseCase: GetLiveLocationShareSummaryUseCase
     @Inject lateinit var checkIfEventIsRedactedUseCase: CheckIfEventIsRedactedUseCase
+    @Inject lateinit var permissionChecker: PermissionChecker
 
     private var binder: LocationSharingAndroidServiceBinder? = null
 
@@ -77,7 +79,15 @@ class LocationSharingAndroidService : VectorAndroidService(), LocationTracker.Ca
     private fun initLocationTracking() {
         // Start tracking location
         locationTracker.addCallback(this)
-        locationTracker.start()
+        if (permissionChecker.checkPermission(
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                )
+        ) {
+            locationTracker.start()
+        } else {
+            Timber.w("Not allowed to use location api.")
+        }
 
         launchWithActiveSession { session ->
             val job = locationTracker.locations
