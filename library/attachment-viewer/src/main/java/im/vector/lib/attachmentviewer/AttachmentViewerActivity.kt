@@ -131,12 +131,15 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
         // the touch coordinates
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             // New API instead of SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN and SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+            @Suppress("DEPRECATION")
             window.setDecorFitsSystemWindows(false)
             // New API instead of SYSTEM_UI_FLAG_IMMERSIVE
             window.decorView.windowInsetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
             // New API instead of FLAG_TRANSLUCENT_STATUS
+            @Suppress("DEPRECATION")
             window.statusBarColor = ContextCompat.getColor(this, R.color.half_transparent_status_bar)
             // new API instead of FLAG_TRANSLUCENT_NAVIGATION
+            @Suppress("DEPRECATION")
             window.navigationBarColor = ContextCompat.getColor(this, R.color.half_transparent_status_bar)
         } else {
             @Suppress("DEPRECATION")
@@ -318,6 +321,7 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
     protected open fun shouldAnimateDismiss(): Boolean = true
 
     protected open fun animateClose() {
+        @Suppress("DEPRECATION")
         window.statusBarColor = Color.TRANSPARENT
         finish()
     }
@@ -334,14 +338,17 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
         // Or for "sticky immersive," replace it with SYSTEM_UI_FLAG_IMMERSIVE_STICKY
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             // New API instead of SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN and SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+            @Suppress("DEPRECATION")
             window.setDecorFitsSystemWindows(false)
             // new API instead of SYSTEM_UI_FLAG_HIDE_NAVIGATION
             window.decorView.windowInsetsController?.hide(WindowInsets.Type.navigationBars())
             // New API instead of SYSTEM_UI_FLAG_IMMERSIVE
             window.decorView.windowInsetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
             // New API instead of FLAG_TRANSLUCENT_STATUS
+            @Suppress("DEPRECATION")
             window.statusBarColor = ContextCompat.getColor(this, R.color.half_transparent_status_bar)
             // New API instead of FLAG_TRANSLUCENT_NAVIGATION
+            @Suppress("DEPRECATION")
             window.navigationBarColor = ContextCompat.getColor(this, R.color.half_transparent_status_bar)
         } else {
             @Suppress("DEPRECATION")
@@ -363,6 +370,7 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
         systemUiVisibility = true
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             // New API instead of SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN and SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+            @Suppress("DEPRECATION")
             window.setDecorFitsSystemWindows(false)
         } else {
             @Suppress("DEPRECATION")

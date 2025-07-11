@@ -247,7 +247,9 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
         if (vectorPreferences.isNewAppLayoutEnabled()) {
             tryOrNull { // Add to XML theme when feature flag is removed
                 val toolbarBackground = MaterialColors.getColor(views.root, im.vector.lib.ui.styles.R.attr.vctr_toolbar_background)
+                @Suppress("DEPRECATION")
                 window.statusBarColor = toolbarBackground
+                @Suppress("DEPRECATION")
                 window.navigationBarColor = toolbarBackground
             }
         }
@@ -467,12 +469,15 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     private fun setFullScreen() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             // New API instead of SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN and SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+            @Suppress("DEPRECATION")
             window.setDecorFitsSystemWindows(false)
             // New API instead of SYSTEM_UI_FLAG_IMMERSIVE
             window.decorView.windowInsetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
             // New API instead of FLAG_TRANSLUCENT_STATUS
+            @Suppress("DEPRECATION")
             window.statusBarColor = ContextCompat.getColor(this, im.vector.lib.ui.styles.R.color.half_transparent_status_bar)
             // New API instead of FLAG_TRANSLUCENT_NAVIGATION
+            @Suppress("DEPRECATION")
             window.navigationBarColor = ContextCompat.getColor(this, im.vector.lib.ui.styles.R.color.half_transparent_status_bar)
         } else {
             @Suppress("DEPRECATION")

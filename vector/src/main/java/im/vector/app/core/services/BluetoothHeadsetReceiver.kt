@@ -18,6 +18,10 @@ import androidx.core.content.ContextCompat
 import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 import java.lang.ref.WeakReference
 
+/**
+ * It's only used in API 21 and 22 so we will not have security exception on these OS,
+ * so it's safe to use @Suppress("MissingPermission").
+ */
 class BluetoothHeadsetReceiver : BroadcastReceiver() {
 
     interface EventListener {
@@ -53,12 +57,15 @@ class BluetoothHeadsetReceiver : BroadcastReceiver() {
         }
 
         val device = intent.getParcelableExtraCompat<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
+        @Suppress("MissingPermission")
         val deviceName = device?.name
+        @Suppress("MissingPermission")
         when (device?.bluetoothClass?.deviceClass) {
             BluetoothClass.Device.AUDIO_VIDEO_HANDSFREE,
             BluetoothClass.Device.AUDIO_VIDEO_CAR_AUDIO,
             BluetoothClass.Device.AUDIO_VIDEO_WEARABLE_HEADSET -> {
                 // filter only device that we care about for
+                @Suppress("MissingPermission")
                 delegate?.get()?.onBTHeadsetEvent(
                         BTHeadsetPlugEvent(
                                 plugged = headsetConnected,

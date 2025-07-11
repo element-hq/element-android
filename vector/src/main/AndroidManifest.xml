@@ -369,8 +369,8 @@
 
         <service
             android:name=".core.services.CallAndroidService"
-            android:foregroundServiceType="phoneCall"
-            android:exported="false">
+            android:exported="false"
+            android:foregroundServiceType="phoneCall">
             <!-- in order to get headset button events -->
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
@@ -387,7 +387,8 @@
         <service
             android:name=".features.call.telecom.VectorConnectionAndroidService"
             android:exported="false"
-            android:permission="android.permission.BIND_TELECOM_CONNECTION_SERVICE">
+            android:permission="android.permission.BIND_TELECOM_CONNECTION_SERVICE"
+            tools:targetApi="M">
             <intent-filter>
                 <action android:name="android.telecom.ConnectionService" />
             </intent-filter>
@@ -413,8 +414,7 @@
             android:name=".features.call.audio.MicrophoneAccessService"
             android:exported="false"
             android:foregroundServiceType="microphone"
-            android:permission="android.permission.FOREGROUND_SERVICE_MICROPHONE">
-        </service>
+            android:permission="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
 
         <!-- Receivers -->
 

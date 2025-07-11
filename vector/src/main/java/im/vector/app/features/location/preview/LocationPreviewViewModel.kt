@@ -7,6 +7,7 @@
 
 package im.vector.app.features.location.preview
 
+import android.Manifest
 import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -14,6 +15,7 @@ import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.core.utils.PermissionChecker
 import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
 import im.vector.app.features.location.LocationData
 import im.vector.app.features.location.LocationTracker
@@ -23,12 +25,14 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
+import timber.log.Timber
 
 class LocationPreviewViewModel @AssistedInject constructor(
         @Assisted private val initialState: LocationPreviewViewState,
         private val session: Session,
         private val locationPinProvider: LocationPinProvider,
         private val locationTracker: LocationTracker,
+        private val permissionChecker: PermissionChecker,
 ) : VectorViewModel<LocationPreviewViewState, LocationPreviewAction, LocationPreviewViewEvents>(initialState), LocationTracker.Callback {
 
     @AssistedFactory
@@ -89,7 +93,15 @@ class LocationPreviewViewModel @AssistedInject constructor(
                 copy(isLoadingUserLocation = true)
             }
             viewModelScope.launch(session.coroutineDispatchers.main) {
-                locationTracker.start()
+                if (permissionChecker.checkPermission(
+                                Manifest.permission.ACCESS_COARSE_LOCATION,
+                                Manifest.permission.ACCESS_FINE_LOCATION,
+                        )
+                ) {
+                    locationTracker.start()
+                } else {
+                    Timber.w("Not allowed to use location api.")
+                }
                 locationTracker.requestLastKnownLocation()
             }
         }

@@ -8,11 +8,14 @@
 
 package im.vector.app.core.services
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Binder
 import android.support.v4.media.session.MediaSessionCompat
 import android.view.KeyEvent
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.media.session.MediaButtonReceiver
@@ -150,7 +153,8 @@ class CallAndroidService : VectorAndroidService() {
         val isVideoCall = call.mxCall.isVideoCall
         val fromBg = intent.getBooleanExtra(EXTRA_IS_IN_BG, false)
         Timber.tag(loggerTag.value).v("displayIncomingCallNotification : display the dedicated notification")
-        val incomingCallAlert = IncomingCallAlert(callId,
+        val incomingCallAlert = IncomingCallAlert(
+                callId,
                 shouldBeDisplayedIn = { activity ->
                     if (activity is VectorCallActivity) {
                         activity.intent.getParcelableExtraCompat<CallArgs>(Mavericks.KEY_ARG)?.callId != call.callId
@@ -176,7 +180,11 @@ class CallAndroidService : VectorAndroidService() {
         if (knownCalls.isEmpty()) {
             startForegroundCompat(callId.hashCode(), notification)
         } else {
-            notificationManager.notify(callId.hashCode(), notification)
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                Timber.w("Not allowed to notify.")
+            } else {
+                notificationManager.notify(callId.hashCode(), notification)
+            }
         }
         knownCalls[callId] = callInformation
     }
@@ -234,7 +242,11 @@ class CallAndroidService : VectorAndroidService() {
         if (knownCalls.isEmpty()) {
             startForegroundCompat(callId.hashCode(), notification)
         } else {
-            notificationManager.notify(callId.hashCode(), notification)
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                Timber.w("Not allowed to notify.")
+            } else {
+                notificationManager.notify(callId.hashCode(), notification)
+            }
         }
         knownCalls[callId] = callInformation
     }
@@ -258,7 +270,11 @@ class CallAndroidService : VectorAndroidService() {
         if (knownCalls.isEmpty()) {
             startForegroundCompat(callId.hashCode(), notification)
         } else {
-            notificationManager.notify(callId.hashCode(), notification)
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                Timber.w("Not allowed to notify.")
+            } else {
+                notificationManager.notify(callId.hashCode(), notification)
+            }
         }
         knownCalls[callId] = callInformation
     }

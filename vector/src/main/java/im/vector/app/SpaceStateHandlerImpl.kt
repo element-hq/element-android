@@ -137,7 +137,7 @@ class SpaceStateHandlerImpl @Inject constructor(
 
     override fun popSpaceBackstack(): String? {
         vectorPreferences.getSpaceBackstack().toMutableList().apply {
-            val poppedSpaceId = removeLast()
+            val poppedSpaceId = removeAt(lastIndex)
             vectorPreferences.setSpaceBackstack(this)
             return poppedSpaceId
         }

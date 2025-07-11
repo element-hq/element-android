@@ -94,6 +94,7 @@ class RoomDetailActivity :
 
         // For dealing with insets and status bar background color
         WindowCompat.setDecorFitsSystemWindows(window, false)
+        @Suppress("DEPRECATION")
         window.statusBarColor = Color.TRANSPARENT
 
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentLifecycleCallbacks, false)

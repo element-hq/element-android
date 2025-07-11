@@ -9,6 +9,7 @@
 
 package im.vector.app.features.notifications
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
@@ -16,6 +17,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.net.Uri
@@ -27,6 +29,7 @@ import androidx.annotation.AttrRes
 import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.RemoteInput
@@ -153,55 +156,59 @@ class NotificationUtils @Inject constructor(
          * Default notification importance: shows everywhere, makes noise, but does not visually
          * intrude.
          */
-        notificationManager.createNotificationChannel(NotificationChannel(
-                NOISY_NOTIFICATION_CHANNEL_ID,
-                stringProvider.getString(CommonStrings.notification_noisy_notifications).ifEmpty { "Noisy notifications" },
-                NotificationManager.IMPORTANCE_DEFAULT
-        )
-                .apply {
-                    description = stringProvider.getString(CommonStrings.notification_noisy_notifications)
-                    enableVibration(true)
-                    enableLights(true)
-                    lightColor = accentColor
-                })
+        notificationManager.createNotificationChannel(
+                NotificationChannel(
+                        NOISY_NOTIFICATION_CHANNEL_ID,
+                        stringProvider.getString(CommonStrings.notification_noisy_notifications).ifEmpty { "Noisy notifications" },
+                        NotificationManager.IMPORTANCE_DEFAULT
+                )
+                        .apply {
+                            description = stringProvider.getString(CommonStrings.notification_noisy_notifications)
+                            enableVibration(true)
+                            enableLights(true)
+                            lightColor = accentColor
+                        })
 
         /**
          * Low notification importance: shows everywhere, but is not intrusive.
          */
-        notificationManager.createNotificationChannel(NotificationChannel(
-                SILENT_NOTIFICATION_CHANNEL_ID,
-                stringProvider.getString(CommonStrings.notification_silent_notifications).ifEmpty { "Silent notifications" },
-                NotificationManager.IMPORTANCE_LOW
-        )
-                .apply {
-                    description = stringProvider.getString(CommonStrings.notification_silent_notifications)
-                    setSound(null, null)
-                    enableLights(true)
-                    lightColor = accentColor
-                })
+        notificationManager.createNotificationChannel(
+                NotificationChannel(
+                        SILENT_NOTIFICATION_CHANNEL_ID,
+                        stringProvider.getString(CommonStrings.notification_silent_notifications).ifEmpty { "Silent notifications" },
+                        NotificationManager.IMPORTANCE_LOW
+                )
+                        .apply {
+                            description = stringProvider.getString(CommonStrings.notification_silent_notifications)
+                            setSound(null, null)
+                            enableLights(true)
+                            lightColor = accentColor
+                        })
 
-        notificationManager.createNotificationChannel(NotificationChannel(
-                LISTENING_FOR_EVENTS_NOTIFICATION_CHANNEL_ID,
-                stringProvider.getString(CommonStrings.notification_listening_for_events).ifEmpty { "Listening for events" },
-                NotificationManager.IMPORTANCE_MIN
-        )
-                .apply {
-                    description = stringProvider.getString(CommonStrings.notification_listening_for_events)
-                    setSound(null, null)
-                    setShowBadge(false)
-                })
+        notificationManager.createNotificationChannel(
+                NotificationChannel(
+                        LISTENING_FOR_EVENTS_NOTIFICATION_CHANNEL_ID,
+                        stringProvider.getString(CommonStrings.notification_listening_for_events).ifEmpty { "Listening for events" },
+                        NotificationManager.IMPORTANCE_MIN
+                )
+                        .apply {
+                            description = stringProvider.getString(CommonStrings.notification_listening_for_events)
+                            setSound(null, null)
+                            setShowBadge(false)
+                        })
 
-        notificationManager.createNotificationChannel(NotificationChannel(
-                CALL_NOTIFICATION_CHANNEL_ID,
-                stringProvider.getString(CommonStrings.call).ifEmpty { "Call" },
-                NotificationManager.IMPORTANCE_HIGH
-        )
-                .apply {
-                    description = stringProvider.getString(CommonStrings.call)
-                    setSound(null, null)
-                    enableLights(true)
-                    lightColor = accentColor
-                })
+        notificationManager.createNotificationChannel(
+                NotificationChannel(
+                        CALL_NOTIFICATION_CHANNEL_ID,
+                        stringProvider.getString(CommonStrings.call).ifEmpty { "Call" },
+                        NotificationManager.IMPORTANCE_HIGH
+                )
+                        .apply {
+                            description = stringProvider.getString(CommonStrings.call)
+                            setSound(null, null)
+                            enableLights(true)
+                            lightColor = accentColor
+                        })
     }
 
     fun getChannel(channelId: String): NotificationChannel? {
@@ -997,7 +1004,11 @@ class NotificationUtils @Inject constructor(
     }
 
     fun showNotificationMessage(tag: String?, id: Int, notification: Notification) {
-        notificationManager.notify(tag, id, notification)
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            Timber.w("Not allowed to notify.")
+        } else {
+            notificationManager.notify(tag, id, notification)
+        }
     }
 
     fun cancelNotificationMessage(tag: String?, id: Int) {
@@ -1025,30 +1036,34 @@ class NotificationUtils @Inject constructor(
 
     @SuppressLint("LaunchActivityFromNotification")
     fun displayDiagnosticNotification() {
-        val testActionIntent = Intent(context, TestNotificationReceiver::class.java)
-        testActionIntent.action = actionIds.diagnostic
-        val testPendingIntent = PendingIntent.getBroadcast(
-                context,
-                0,
-                testActionIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
-        )
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            Timber.w("Not allowed to notify.")
+        } else {
+            val testActionIntent = Intent(context, TestNotificationReceiver::class.java)
+            testActionIntent.action = actionIds.diagnostic
+            val testPendingIntent = PendingIntent.getBroadcast(
+                    context,
+                    0,
+                    testActionIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
+            )
 
-        notificationManager.notify(
-                "DIAGNOSTIC",
-                888,
-                NotificationCompat.Builder(context, NOISY_NOTIFICATION_CHANNEL_ID)
-                        .setContentTitle(buildMeta.applicationName)
-                        .setContentText(stringProvider.getString(CommonStrings.settings_troubleshoot_test_push_notification_content))
-                        .setSmallIcon(R.drawable.ic_notification)
-                        .setLargeIcon(getBitmap(context, im.vector.lib.ui.styles.R.drawable.element_logo_green))
-                        .setColor(ContextCompat.getColor(context, im.vector.lib.ui.styles.R.color.notification_accent_color))
-                        .setPriority(NotificationCompat.PRIORITY_MAX)
-                        .setCategory(NotificationCompat.CATEGORY_STATUS)
-                        .setAutoCancel(true)
-                        .setContentIntent(testPendingIntent)
-                        .build()
-        )
+            notificationManager.notify(
+                    "DIAGNOSTIC",
+                    888,
+                    NotificationCompat.Builder(context, NOISY_NOTIFICATION_CHANNEL_ID)
+                            .setContentTitle(buildMeta.applicationName)
+                            .setContentText(stringProvider.getString(CommonStrings.settings_troubleshoot_test_push_notification_content))
+                            .setSmallIcon(R.drawable.ic_notification)
+                            .setLargeIcon(getBitmap(context, im.vector.lib.ui.styles.R.drawable.element_logo_green))
+                            .setColor(ContextCompat.getColor(context, im.vector.lib.ui.styles.R.color.notification_accent_color))
+                            .setPriority(NotificationCompat.PRIORITY_MAX)
+                            .setCategory(NotificationCompat.CATEGORY_STATUS)
+                            .setAutoCancel(true)
+                            .setContentIntent(testPendingIntent)
+                            .build()
+            )
+        }
     }
 
     private fun getBitmap(context: Context, @DrawableRes drawableRes: Int): Bitmap? {

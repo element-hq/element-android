@@ -32,7 +32,7 @@ class VectorActivityLifecycleCallbacks constructor(private val popupAlertManager
     /**
      * The activities information collected from the app manifest.
      */
-    private var activitiesInfo: Array<ActivityInfo> = emptyArray()
+    private var activitiesInfo: List<ActivityInfo>? = null
 
     private val coroutineScope = CoroutineScope(SupervisorJob())
 
@@ -51,24 +51,32 @@ class VectorActivityLifecycleCallbacks constructor(private val popupAlertManager
     override fun onActivityStopped(activity: Activity) {}
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-        if (activitiesInfo.isEmpty()) {
+        if (activitiesInfo == null) {
             val context = activity.applicationContext
             val packageManager: PackageManager = context.packageManager
 
             // Get all activities from element android
-            activitiesInfo = packageManager.getPackageInfoCompat(context.packageName, PackageManager.GET_ACTIVITIES).activities
-
+            val activities = packageManager
+                    .getPackageInfoCompat(context.packageName, PackageManager.GET_ACTIVITIES)
+                    .activities
+                    .orEmpty()
+                    .toList()
             // Get all activities from PermissionController module
             // See https://source.android.com/docs/core/architecture/modular-system/permissioncontroller#package-format
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.S_V2) {
-                activitiesInfo += tryOrNull {
+            val otherActivities = if (Build.VERSION.SDK_INT > Build.VERSION_CODES.S_V2) {
+                (tryOrNull {
                     packageManager.getPackageInfoCompat("com.google.android.permissioncontroller", PackageManager.GET_ACTIVITIES).activities
                 } ?: tryOrNull {
                     packageManager.getModuleInfo("com.google.android.permission", 1).packageName?.let {
                         packageManager.getPackageInfoCompat(it, PackageManager.GET_ACTIVITIES or PackageManager.MATCH_APEX).activities
                     }
-                }.orEmpty()
+                })
+                        .orEmpty()
+                        .toList()
+            } else {
+                emptyList()
             }
+            activitiesInfo = activities + otherActivities
         }
 
         // restart the app if the task contains an unknown activity
@@ -144,5 +152,5 @@ class VectorActivityLifecycleCallbacks constructor(private val popupAlertManager
      * @param activity the activity of the task
      * @return true if the activity is potentially malicious
      */
-    private fun isPotentialMaliciousActivity(activity: ComponentName): Boolean = activitiesInfo.none { it.name == activity.className }
+    private fun isPotentialMaliciousActivity(activity: ComponentName): Boolean = activitiesInfo.orEmpty().none { it.name == activity.className }
 }

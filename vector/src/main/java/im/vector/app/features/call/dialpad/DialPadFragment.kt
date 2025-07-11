@@ -12,7 +12,6 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.res.ColorStateList
 import android.os.Bundle
-import android.telephony.PhoneNumberFormattingTextWatcher
 import android.telephony.PhoneNumberUtils
 import android.text.Editable
 import android.text.InputType
@@ -78,7 +77,8 @@ class DialPadFragment : Fragment(), TextWatcher {
         digits.inputType = InputType.TYPE_CLASS_PHONE
         digits.keyListener = DialerKeyListener.getInstance()
         digits.setTextColor(ThemeUtils.getColor(requireContext(), im.vector.lib.ui.styles.R.attr.vctr_content_primary))
-        digits.addTextChangedListener(PhoneNumberFormattingTextWatcher(if (formatAsYouType) regionCode else ""))
+        @Suppress("DEPRECATION")
+        digits.addTextChangedListener(android.telephony.PhoneNumberFormattingTextWatcher(if (formatAsYouType) regionCode else ""))
         digits.addTextChangedListener(this)
         dialpadView.findViewById<View>(R.id.zero).setOnClickListener { keyPressed(KeyEvent.KEYCODE_0, "0") }
         dialpadView.findViewById<View>(R.id.one).setOnClickListener { keyPressed(KeyEvent.KEYCODE_1, "1") }
