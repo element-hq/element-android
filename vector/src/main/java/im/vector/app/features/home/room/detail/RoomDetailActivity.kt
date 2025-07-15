@@ -14,7 +14,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.core.view.GravityCompat
-import androidx.core.view.WindowCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -93,7 +92,6 @@ class RoomDetailActivity :
         super.onCreate(savedInstanceState)
 
         // For dealing with insets and status bar background color
-        WindowCompat.setDecorFitsSystemWindows(window, false)
         @Suppress("DEPRECATION")
         window.statusBarColor = Color.TRANSPARENT
 
