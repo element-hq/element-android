@@ -4,7 +4,8 @@
     android:id="@+id/signedOut"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:colorBackground">
+    android:background="?android:colorBackground"
+    android:fitsSystemWindows="true">
 
     <androidx.core.widget.NestedScrollView
         style="@style/LoginFormScrollView"
