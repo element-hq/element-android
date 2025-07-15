@@ -1,0 +1,2 @@
+التغييرات الرئيسية في هذا الإصدار: تحسينات رئيسية على ميزة البث الصوتي.
+سجل التغييرات الكامل: https://github.com/element-hq/element-android/releases

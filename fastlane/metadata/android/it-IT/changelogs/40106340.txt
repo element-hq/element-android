@@ -1,0 +1,2 @@
+Cambiamenti principali in questa versione: Migliorare la sicurezza.
+Changelog completo: https://github.com/element-hq/element-android/releases

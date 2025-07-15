@@ -1,0 +1,2 @@
+Olulisemad muutused selles versioonis: SDK versiooni suurendus.
+Ingliskeelne muudatuste logi täismahus: https://github.com/element-hq/element-android/releases

@@ -1,0 +1,2 @@
+Põhilised muutused selles versioonis: nutiseadme linkide filtreerimine; avatakse vaid lingid, mille kohalik osa on tühi.
+Kogu ingliskeelne muudatuste logi: https://github.com/element-hq/element-android/releases
