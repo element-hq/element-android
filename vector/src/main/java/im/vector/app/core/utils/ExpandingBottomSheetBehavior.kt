@@ -658,7 +658,8 @@ class ExpandingBottomSheetBehavior<V : View> : CoordinatorLayout.Behavior<V> {
         val insetsType = WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.ime()
         val imeInsets = insets.getInsets(insetsType)
         insetTop = imeInsets.top
-        insetBottom = imeInsets.bottom
+        // Now that edgeToEdge is enabled, disable the bottom padding.
+        insetBottom = 0
         insetLeft = imeInsets.left
         insetRight = imeInsets.right
 
