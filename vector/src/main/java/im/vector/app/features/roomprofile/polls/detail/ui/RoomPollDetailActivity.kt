@@ -10,6 +10,7 @@ package im.vector.app.features.roomprofile.polls.detail.ui
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import com.airbnb.mvrx.Mavericks
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
@@ -24,6 +25,11 @@ import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 class RoomPollDetailActivity : VectorBaseActivity<ActivitySimpleBinding>() {
 
     override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
+
+    override fun getCoordinatorLayout() = views.coordinatorLayout
+
+    override val rootView: View
+        get() = views.coordinatorLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

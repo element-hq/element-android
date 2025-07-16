@@ -10,6 +10,7 @@ package im.vector.app.features.location
 import android.content.Context
 import android.content.Intent
 import android.os.Parcelable
+import android.view.View
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.VectorBaseActivity
@@ -30,6 +31,9 @@ data class LocationSharingArgs(
 class LocationSharingActivity : VectorBaseActivity<ActivityLocationSharingBinding>() {
 
     override fun getBinding() = ActivityLocationSharingBinding.inflate(layoutInflater)
+
+    override val rootView: View
+        get() = views.mainRoot
 
     override fun initUiAndData() {
         val locationSharingArgs: LocationSharingArgs? = intent?.extras?.getParcelableCompat(EXTRA_LOCATION_SHARING_ARGS)

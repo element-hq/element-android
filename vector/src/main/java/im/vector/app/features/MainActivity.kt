@@ -12,6 +12,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
@@ -392,4 +393,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
         val className = componentName.className
         return packageName == buildMeta.applicationId && className in allowList
     }
+
+    override val rootView: View
+        get() = views.mainRoot
 }

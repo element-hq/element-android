@@ -410,11 +410,11 @@ class TimelineFragment :
             }
         }
 
-        ViewCompat.setOnApplyWindowInsetsListener(views.coordinatorLayout) { _, insets ->
-            val imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime())
-            views.voiceMessageRecorderContainer.updatePadding(bottom = imeInsets.bottom)
-            insets
-        }
+        //ViewCompat.setOnApplyWindowInsetsListener(views.coordinatorLayout) { _, insets ->
+        //    val imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime())
+        //    views.voiceMessageRecorderContainer.updatePadding(bottom = imeInsets.bottom)
+        //    insets
+        //}
     }
 
     private fun setupBackPressHandling() {

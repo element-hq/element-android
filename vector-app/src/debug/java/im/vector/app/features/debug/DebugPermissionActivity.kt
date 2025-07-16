@@ -10,6 +10,7 @@ package im.vector.app.features.debug
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
+import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -31,6 +32,9 @@ class DebugPermissionActivity : VectorBaseActivity<ActivityDebugPermissionBindin
     override fun getBinding() = ActivityDebugPermissionBinding.inflate(layoutInflater)
 
     override fun getCoordinatorLayout() = views.coordinatorLayout
+
+    override val rootView: View
+        get() = views.coordinatorLayout
 
     // For debug
     private val allPermissions = listOf(

@@ -20,6 +20,7 @@ import android.content.IntentFilter
 import android.graphics.drawable.Icon
 import android.os.Build
 import android.util.Rational
+import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.core.app.PictureInPictureModeChangedInfo
 import androidx.core.content.ContextCompat
@@ -76,6 +77,9 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
     private val permissionViewModel: RoomWidgetPermissionViewModel by viewModel()
 
     override fun getBinding() = ActivityWidgetBinding.inflate(layoutInflater)
+
+    override val rootView: View
+        get() = views.mainRoot
 
     override fun getTitleRes() = CommonStrings.room_widget_activity_title
 

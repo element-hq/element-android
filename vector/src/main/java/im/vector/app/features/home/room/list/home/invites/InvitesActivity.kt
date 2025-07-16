@@ -7,6 +7,7 @@
 
 package im.vector.app.features.home.room.list.home.invites
 
+import android.view.View
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.VectorBaseActivity
@@ -22,4 +23,8 @@ class InvitesActivity : VectorBaseActivity<ActivitySimpleBinding>() {
             addFragment(views.simpleFragmentContainer, InvitesFragment::class.java)
         }
     }
+
+    override fun getCoordinatorLayout() = views.coordinatorLayout
+    override val rootView: View
+        get() = views.coordinatorLayout
 }

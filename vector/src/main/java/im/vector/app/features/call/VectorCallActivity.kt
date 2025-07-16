@@ -187,6 +187,9 @@ class VectorCallActivity :
 
     override fun getMenuRes() = R.menu.vector_call
 
+    override val rootView: View
+        get() = views.constraintLayout
+
     override fun onUserLeaveHint() {
         super.onUserLeaveHint()
         enterPictureInPictureIfRequired()

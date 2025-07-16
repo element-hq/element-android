@@ -13,6 +13,7 @@ import android.graphics.Typeface
 import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
@@ -54,6 +55,9 @@ class EmojiReactionPickerActivity :
     override fun getBinding() = ActivityEmojiReactionPickerBinding.inflate(layoutInflater)
 
     override fun getCoordinatorLayout() = views.coordinatorLayout
+
+    override val rootView: View
+        get() = views.coordinatorLayout
 
     override fun getTitleRes() = CommonStrings.title_activity_emoji_reaction_picker
 

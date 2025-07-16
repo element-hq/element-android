@@ -81,6 +81,9 @@ class RoomDetailActivity :
 
     override fun getCoordinatorLayout() = views.coordinatorLayout
 
+    override val rootView: View
+        get() = views.coordinatorLayout
+
     @Inject lateinit var playbackTracker: AudioMessagePlaybackTracker
     private lateinit var sharedActionViewModel: RoomDetailSharedActionViewModel
     private val requireActiveMembershipViewModel: RequireActiveMembershipViewModel by viewModel()

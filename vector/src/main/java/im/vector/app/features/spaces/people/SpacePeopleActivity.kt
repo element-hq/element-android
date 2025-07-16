@@ -10,6 +10,7 @@ package im.vector.app.features.spaces.people
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
@@ -31,6 +32,11 @@ import kotlinx.coroutines.flow.onEach
 class SpacePeopleActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>() {
 
     override fun getBinding() = ActivitySimpleLoadingBinding.inflate(layoutInflater)
+
+    override fun getCoordinatorLayout() = views.coordinatorLayout
+
+    override val rootView: View
+        get() = views.coordinatorLayout
 
     private lateinit var sharedActionViewModel: SpacePeopleSharedActionViewModel
 

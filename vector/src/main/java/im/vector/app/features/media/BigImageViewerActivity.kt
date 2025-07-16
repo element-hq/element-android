@@ -10,6 +10,7 @@ package im.vector.app.features.media
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.core.net.toUri
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.di.ActiveSessionHolder
@@ -25,6 +26,9 @@ class BigImageViewerActivity : VectorBaseActivity<ActivityBigImageViewerBinding>
     @Inject lateinit var sessionHolder: ActiveSessionHolder
 
     override fun getBinding() = ActivityBigImageViewerBinding.inflate(layoutInflater)
+
+    override val rootView: View
+        get() = views.mainRoot
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

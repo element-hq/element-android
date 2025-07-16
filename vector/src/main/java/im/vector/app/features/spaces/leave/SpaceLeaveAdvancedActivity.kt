@@ -10,6 +10,7 @@ package im.vector.app.features.spaces.leave
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
@@ -32,6 +33,11 @@ import im.vector.lib.strings.CommonStrings
 class SpaceLeaveAdvancedActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>() {
 
     override fun getBinding(): ActivitySimpleLoadingBinding = ActivitySimpleLoadingBinding.inflate(layoutInflater)
+
+    override fun getCoordinatorLayout() = views.coordinatorLayout
+
+    override val rootView: View
+        get() = views.coordinatorLayout
 
     private val leaveViewModel: SpaceLeaveAdvancedViewModel by viewModel()
 

@@ -9,6 +9,7 @@ package im.vector.app.features.roomprofile
 
 import android.content.Context
 import android.content.Intent
+import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Mavericks
@@ -67,6 +68,9 @@ class RoomProfileActivity :
     }
 
     override fun getCoordinatorLayout() = views.coordinatorLayout
+
+    override val rootView: View
+        get() = views.coordinatorLayout
 
     override fun initUiAndData() {
         sharedActionViewModel = viewModelProvider.get(RoomProfileSharedActionViewModel::class.java)

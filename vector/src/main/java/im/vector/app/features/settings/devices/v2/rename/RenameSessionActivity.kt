@@ -10,6 +10,7 @@ package im.vector.app.features.settings.devices.v2.rename
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.view.WindowManager
 import com.airbnb.mvrx.Mavericks
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,6 +26,11 @@ import im.vector.lib.core.utils.compat.getParcelableExtraCompat
 class RenameSessionActivity : VectorBaseActivity<ActivitySimpleBinding>() {
 
     override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
+
+    override fun getCoordinatorLayout() = views.coordinatorLayout
+
+    override val rootView: View
+        get() = views.coordinatorLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -10,6 +10,7 @@ package im.vector.app.features.spaces
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Mavericks
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,6 +29,11 @@ class SpacePreviewActivity : VectorBaseActivity<ActivitySimpleBinding>() {
     lateinit var sharedActionViewModel: SpacePreviewSharedActionViewModel
 
     override fun getBinding(): ActivitySimpleBinding = ActivitySimpleBinding.inflate(layoutInflater)
+
+    override fun getCoordinatorLayout() = views.coordinatorLayout
+
+    override val rootView: View
+        get() = views.coordinatorLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
