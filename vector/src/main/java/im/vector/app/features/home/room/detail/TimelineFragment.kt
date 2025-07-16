@@ -411,8 +411,7 @@ class TimelineFragment :
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(views.coordinatorLayout) { _, insets ->
-            val imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime() or WindowInsetsCompat.Type.systemBars())
-            views.appBarLayout.updatePadding(top = imeInsets.top)
+            val imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime())
             views.voiceMessageRecorderContainer.updatePadding(bottom = imeInsets.bottom)
             insets
         }
