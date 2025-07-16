@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/vector_coordinator_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -18,9 +17,9 @@
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/callTransferToolbar"
+                app:title="@string/call_transfer_title"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:title="@string/call_transfer_title" />
+                android:layout_height="wrap_content" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/callTransferTabLayout"

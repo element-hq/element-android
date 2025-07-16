@@ -4,8 +4,7 @@
     android:id="@+id/jitsi_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black"
-    android:fitsSystemWindows="true">
+    android:background="@android:color/black">
 
     <!-- Note: A org.jitsi.meet.sdk.JitsiMeetView will be added here and so add tools:ignore="UselessParent" -->
 
