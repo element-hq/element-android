@@ -8,6 +8,7 @@
 package im.vector.app.features.debug.jitsi
 
 import android.annotation.SuppressLint
+import android.view.View
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.application.databinding.ActivityDebugJitsiBinding
@@ -19,6 +20,8 @@ class DebugJitsiActivity : VectorBaseActivity<ActivityDebugJitsiBinding>() {
     override fun getBinding() = ActivityDebugJitsiBinding.inflate(layoutInflater)
 
     override fun getCoordinatorLayout() = views.coordinatorLayout
+    override val rootView: View
+        get() = views.coordinatorLayout
 
     @SuppressLint("SetTextI18n")
     override fun initUiAndData() {

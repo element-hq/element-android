@@ -45,7 +45,6 @@
             android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fitsSystemWindows="true"
             app:layout_constraintTop_toBottomOf="@id/syncStateView">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout

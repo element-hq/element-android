@@ -10,6 +10,7 @@ package im.vector.app.features.location.live.map
 import android.content.Context
 import android.content.Intent
 import android.os.Parcelable
+import android.view.View
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.VectorBaseActivity
@@ -28,6 +29,9 @@ data class LiveLocationMapViewArgs(
 class LiveLocationMapViewActivity : VectorBaseActivity<ActivityLocationSharingBinding>() {
 
     override fun getBinding() = ActivityLocationSharingBinding.inflate(layoutInflater)
+
+    override val rootView: View
+        get() = views.mainRoot
 
     override fun initUiAndData() {
         val mapViewArgs: LiveLocationMapViewArgs? = intent?.extras?.getParcelableCompat(EXTRA_LIVE_LOCATION_MAP_VIEW_ARGS)

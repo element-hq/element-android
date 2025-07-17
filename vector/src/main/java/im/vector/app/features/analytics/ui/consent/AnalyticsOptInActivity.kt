@@ -7,6 +7,7 @@
 
 package im.vector.app.features.analytics.ui.consent
 
+import android.view.View
 import com.airbnb.mvrx.viewModel
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
@@ -28,6 +29,9 @@ class AnalyticsOptInActivity : VectorBaseActivity<ActivitySimpleBinding>() {
     override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
 
     override fun getCoordinatorLayout() = views.coordinatorLayout
+
+    override val rootView: View
+        get() = views.coordinatorLayout
 
     override fun initUiAndData() {
         orientationLocker.lockPhonesToPortrait(this)

@@ -10,6 +10,7 @@ package im.vector.app.features.onboarding
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.view.View
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.lazyViewModel
 import im.vector.app.core.extensions.validateBackPressed
@@ -32,6 +33,9 @@ class OnboardingActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
     override fun getBinding() = ActivityLoginBinding.inflate(layoutInflater)
 
     override fun getCoordinatorLayout() = views.coordinatorLayout
+
+    override val rootView: View
+        get() = views.coordinatorLayout
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)

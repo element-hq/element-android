@@ -12,6 +12,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Intent
 import android.os.Build
+import android.view.View
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
 import androidx.core.content.getSystemService
@@ -49,7 +50,9 @@ import javax.inject.Inject
 class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
 
     override fun getBinding() = ActivityDebugMenuBinding.inflate(layoutInflater)
-
+    override fun getCoordinatorLayout() = views.coordinatorLayout
+    override val rootView: View
+        get() = views.coordinatorLayout
     @Inject lateinit var clock: Clock
 
     private lateinit var buffer: ByteArray

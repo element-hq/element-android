@@ -7,6 +7,7 @@
 
 package im.vector.app.features.settings.font
 
+import android.view.View
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.VectorBaseActivity
@@ -16,6 +17,11 @@ import im.vector.app.databinding.ActivitySimpleBinding
 class FontScaleSettingActivity : VectorBaseActivity<ActivitySimpleBinding>() {
 
     override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
+
+    override fun getCoordinatorLayout() = views.coordinatorLayout
+
+    override val rootView: View
+        get() = views.coordinatorLayout
 
     override fun initUiAndData() {
         if (isFirstCreation()) {
