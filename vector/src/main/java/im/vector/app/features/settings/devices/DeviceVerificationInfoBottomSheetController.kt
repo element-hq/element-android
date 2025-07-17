@@ -17,6 +17,7 @@ import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.core.ui.list.genericItem
 import im.vector.app.core.ui.views.toDrawableRes
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
+import im.vector.app.features.settings.VectorPreferences
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -26,7 +27,8 @@ import javax.inject.Inject
 
 class DeviceVerificationInfoBottomSheetController @Inject constructor(
         private val stringProvider: StringProvider,
-        private val colorProvider: ColorProvider
+        private val colorProvider: ColorProvider,
+        private val vectorPreferences: VectorPreferences
 ) :
         TypedEpoxyController<DeviceVerificationInfoBottomSheetViewState>() {
 
@@ -244,17 +246,19 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
 
     private fun addVerifyActions(cryptoDeviceInfo: CryptoDeviceInfo) {
         val host = this
-        bottomSheetDividerItem {
-            id("verifyDiv")
-        }
-        bottomSheetVerificationActionItem {
-            id("verify_text")
-            title(host.stringProvider.getString(CommonStrings.cross_signing_verify_by_text))
-            titleColor(host.colorProvider.getColorFromAttribute(com.google.android.material.R.attr.colorPrimary))
-            iconRes(R.drawable.ic_arrow_right)
-            iconColor(host.colorProvider.getColorFromAttribute(com.google.android.material.R.attr.colorPrimary))
-            listener {
-                host.callback?.onAction(DevicesAction.VerifyMyDeviceManually(cryptoDeviceInfo.deviceId))
+        if (vectorPreferences.developerMode()) {
+            bottomSheetDividerItem {
+                id("verifyDiv")
+            }
+            bottomSheetVerificationActionItem {
+                id("verify_text")
+                title(host.stringProvider.getString(CommonStrings.cross_signing_verify_by_text))
+                titleColor(host.colorProvider.getColorFromAttribute(com.google.android.material.R.attr.colorPrimary))
+                iconRes(R.drawable.ic_arrow_right)
+                iconColor(host.colorProvider.getColorFromAttribute(com.google.android.material.R.attr.colorPrimary))
+                listener {
+                    host.callback?.onAction(DevicesAction.VerifyMyDeviceManually(cryptoDeviceInfo.deviceId))
+                }
             }
         }
         bottomSheetDividerItem {
