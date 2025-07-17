@@ -10,6 +10,7 @@ package im.vector.app.features.roomprofile.settings.joinrule
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -39,6 +40,11 @@ import im.vector.lib.core.utils.compat.getParcelableCompat
 class RoomJoinRuleActivity : VectorBaseActivity<ActivitySimpleBinding>() {
 
     override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
+
+    override fun getCoordinatorLayout() = views.coordinatorLayout
+
+    override val rootView: View
+        get() = views.coordinatorLayout
 
     private lateinit var roomProfileArgs: RoomProfileArgs
 

@@ -13,6 +13,7 @@ import android.media.MediaFormat
 import android.os.Build
 import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.VisibleForTesting
+import im.vector.app.core.utils.PermissionChecker
 import im.vector.app.features.VectorFeatures
 import io.element.android.opusencoder.OggOpusEncoder
 import kotlinx.coroutines.Dispatchers
@@ -23,12 +24,13 @@ class VoiceRecorderProvider @Inject constructor(
         private val context: Context,
         private val vectorFeatures: VectorFeatures,
         private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
+        private val permissionChecker: PermissionChecker,
 ) {
     fun provideVoiceRecorder(): VoiceRecorder {
         return if (useNativeRecorder()) {
             VoiceRecorderQ(context)
         } else {
-            VoiceRecorderL(context, Dispatchers.IO, OggOpusEncoder.create())
+            VoiceRecorderL(context, Dispatchers.IO, OggOpusEncoder.create(), permissionChecker)
         }
     }
 

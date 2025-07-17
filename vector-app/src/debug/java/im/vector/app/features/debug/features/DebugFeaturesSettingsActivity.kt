@@ -8,6 +8,7 @@
 package im.vector.app.features.debug.features
 
 import android.os.Bundle
+import android.view.View
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -23,6 +24,9 @@ class DebugFeaturesSettingsActivity : VectorBaseActivity<FragmentGenericRecycler
     @Inject lateinit var controller: FeaturesController
 
     override fun getBinding() = FragmentGenericRecyclerBinding.inflate(layoutInflater)
+
+    override val rootView: View
+        get() = views.mainRoot
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

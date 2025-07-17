@@ -11,6 +11,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.View
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.tabs.TabLayoutMediator
@@ -36,6 +37,9 @@ class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>() {
     override fun getBinding() = ActivityCallTransferBinding.inflate(layoutInflater)
 
     override fun getCoordinatorLayout() = views.vectorCoordinatorLayout
+
+    override val rootView: View
+        get() = views.vectorCoordinatorLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

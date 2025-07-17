@@ -6,6 +6,7 @@
  */
 package im.vector.app.core.platform
 
+import android.view.View
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import im.vector.app.core.extensions.hideKeyboard
@@ -19,6 +20,9 @@ abstract class SimpleFragmentActivity : VectorBaseActivity<ActivityBinding>() {
     final override fun getBinding() = ActivityBinding.inflate(layoutInflater)
 
     final override fun getCoordinatorLayout() = views.coordinatorLayout
+
+    override val rootView: View
+        get() = views.coordinatorLayout
 
     override fun initUiAndData() {
         setupToolbar(views.toolbar)

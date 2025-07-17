@@ -9,6 +9,7 @@ package im.vector.app.features.roommemberprofile
 
 import android.content.Context
 import android.content.Intent
+import android.view.View
 import android.widget.Toast
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
@@ -36,6 +37,11 @@ class RoomMemberProfileActivity : VectorBaseActivity<ActivitySimpleBinding>() {
     override fun getBinding(): ActivitySimpleBinding {
         return ActivitySimpleBinding.inflate(layoutInflater)
     }
+
+    override fun getCoordinatorLayout() = views.coordinatorLayout
+
+    override val rootView: View
+        get() = views.coordinatorLayout
 
     override fun initUiAndData() {
         if (isFirstCreation()) {

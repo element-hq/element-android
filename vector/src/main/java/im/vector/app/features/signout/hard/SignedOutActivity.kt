@@ -10,6 +10,7 @@ package im.vector.app.features.signout.hard
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySignedOutBinding
@@ -25,6 +26,9 @@ import timber.log.Timber
 class SignedOutActivity : VectorBaseActivity<ActivitySignedOutBinding>() {
 
     override fun getBinding() = ActivitySignedOutBinding.inflate(layoutInflater)
+
+    override val rootView: View
+        get() = views.signedOut
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

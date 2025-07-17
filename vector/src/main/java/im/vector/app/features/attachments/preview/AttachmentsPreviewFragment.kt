@@ -163,6 +163,7 @@ class AttachmentsPreviewFragment :
 
     private fun applyInsets() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            @Suppress("DEPRECATION")
             activity?.window?.setDecorFitsSystemWindows(false)
         } else {
             @Suppress("DEPRECATION")

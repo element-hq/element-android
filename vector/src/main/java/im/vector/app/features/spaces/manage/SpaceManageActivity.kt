@@ -11,6 +11,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.View
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
@@ -48,6 +49,11 @@ class SpaceManageActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>() {
     private lateinit var sharedDirectoryActionViewModel: RoomDirectorySharedActionViewModel
 
     override fun getBinding(): ActivitySimpleLoadingBinding = ActivitySimpleLoadingBinding.inflate(layoutInflater)
+
+    override fun getCoordinatorLayout() = views.coordinatorLayout
+
+    override val rootView: View
+        get() = views.coordinatorLayout
 
     override fun getTitleRes(): Int = CommonStrings.space_add_existing_rooms
 
